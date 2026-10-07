@@ -41,7 +41,7 @@ step arbitrated by the smokes, every real bug found live, not by the smokes. Bad
 ### §1 Phase I — The boilerplate era (the factory + the governance trio)
 The setup: three independent hooks (package-governor, package-pinner, cargo-governor) + the mdash,
 consolidated onto one factory service (15 methods), one transform contract, module-owned ledger
-strings. *Source*: Handoff Package-01–03, Package-05; commits `49e5b3b`, `859f16a`, `018919c`.
+strings. *Source*: Handoff Package-01–03, Package-05; commits `49e5b3d`, `859f16a`, `018919c`.
 - **Beat — challenge → decision → technique → outcome**: duplicated machinery across four hooks →
   build the factory as THE service → the `Wire`/`Attach`/`Continue` seam trio + the transform leaf
   contract → 5 bundles green, 231 checks, byte-identical ledger strings.
@@ -168,7 +168,7 @@ The inversions to name explicitly: the actor gate inverting the event path into 
 | Section | Primary source | Site target | Style elements |
 |---------|---------------|-------------|----------------|
 | §0 Overview | Handoff Package-02 + Package-13 (smoke counts) | new `pages/case-study.astro` | PageHero; Badge row (`12 PACKAGES`, `DUAL RELEASE`) |
-| §1 Boilerplate era | Handoff Package-01–03, 05; `49e5b3b`, `859f16a` | links to plugins.astro + factory plugin page | Seams table (the 15-method surface); Card grid of the 5 original bundles |
+| §1 Boilerplate era | Handoff Package-01–03, 05; `49e5b3d`, `859f16a` | links to plugins.astro + factory plugin page | Seams table (the 15-method surface); Card grid of the 5 original bundles |
 | §2 Findings & fixes | Handoff Package-04 (REV), 09; P6 pitfalls 20–25 | case-study page | finding→fix Card pairs; Badge per finding; Terminal for the `28ebc30` fix commit chain |
 | §3 Going live | Handoff Package-10–10-FINAL | case-study page | Terminal blocks with real journal records; before/after pair (1 module vs 4 modules); the jobs envelope callout |
 | §4 Stream family | Handoff Package-11–12; `98be27b`…`9d6e195` | links to workbench + matrix | before/after payload pairs (RawPayload/CleanPayload pattern); flavor Badge strip |

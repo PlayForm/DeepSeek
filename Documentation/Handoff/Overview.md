@@ -29,7 +29,7 @@ produces modules.
 
 **Repo**: `~/.dsh` git — committed at `859f16a`
 (`refactor(factory): convert the governance trio into plugin-factory flavors and add the mdash output normalizer`) +
-`49e5b3b` (`feat(factory): introduce the dsh-plugin-factory service bundle`) — the working tree is
+`49e5b3d` (`feat(factory): introduce the dsh-plugin-factory service bundle`) — the working tree is
 CLEAN. `~/.hermes` is a private home repo — NEVER commit it unprompted.
 
 ---

@@ -220,6 +220,38 @@ The user will run the whole process again - the review-driven pass:
 15. **THE NPM PUBLISHING AGENT** (user-instructed 2026-10-07 - LATER,
    a separate future session): allow publishing the packages to npmjs
    for easy installation. NOT dispatched in this batch.
+16. **THE RESTRUCTURING AGENT** (user-instructed 2026-10-07, in the queue
+   AFTER the corrections agent, applied SYSTEMATICALLY ON EACH PAGE):
+   the diagram-first concept-block treatment - one independently
+   explainable concept per block, each block in the order: a visible
+   diagram placeholder (dashed, with a stable `data-diagram` id +
+   implementation instructions for a future diagram agent) → a short
+   descriptive heading → one or two short paragraphs explaining only
+   that concept. Preserve technical meaning, identifiers, literals,
+   caveats ("may"/"only"/"never"); separate ownership, composition,
+   policy, activation, entry points; keep sequential steps together;
+   no repetition; semantic elements + CSS gaps for spacing (never <br>
+   or line breaks); <code> for identifiers; quotes of ledger strings
+   stay byte-exact. PLUS: replace ALL ASCII arrows (the "→" and "->"
+   glyphs) with actual colored visual icons (an inline SVG arrow icon
+   in the Harness Blue, sized to the text) except where the arrow is
+   part of a code/ledger literal. The site-wide sweep: every page's
+   dense prose + every arrow occurrence (191 "→" + 82 "->" measured).
+17. **THE DIAGRAM-IMPLEMENTATION AGENT** (noted for a later batch): the
+   diagram placeholders get implemented as real diagrams per their
+   data-diagram ids + embedded instructions. NOT dispatched yet.
+18. **THE SYNTAX-HIGHLIGHTING AGENT** (user-instructed 2026-10-07, in
+   the queue AFTER the restructuring agent): add syntax highlighting to
+   the code/JSON/YAML blocks on the site pages (e.g. /setup/ - the JSON
+   currently looks unhinted). BORROW the
+   ~/Developer/Application/CodeEditorLand/WebSite approach (verified:
+   Astro markdown + Shiki, `syntaxHighlight: "shiki"`, `theme:
+   "github-dark"`, the `--shiki-dark` CSS-variable bridge in its
+   Base.astro) - adapted for the site's manual <pre><code> blocks in
+   .astro pages (e.g. Shiki's codeToHtml in the frontmatter, or the
+   markdown route) - with the DeepSeek style (the Harness Blue voice,
+   the bumped typography, IBM Plex Mono for code). No attribution
+   prose (the WebSite is the user's own).
 
 ## 5. THE RUNNING FACTS (for the re-run)
 
