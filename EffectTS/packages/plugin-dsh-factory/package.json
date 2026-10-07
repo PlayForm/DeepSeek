@@ -50,7 +50,7 @@
 		"zod": "4.6.5"
 	},
 	"dependencies": {
-		"effect": "4.0.1"
+		"effect": "4.0.2"
 	},
 	"license": "CC0-1.0",
 	"dsh": {

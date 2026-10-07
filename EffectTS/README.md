@@ -1,9 +1,11 @@
-# Classic - the DeepSeek Harness Plugin Family for PlayForm
+# EffectTS - the DeepSeek Harness Plugin Family for PlayForm
 
-The CLASSIC release of the PlayForm plugin family for DeepSeek Harness: twelve TypeScript packages
-under `packages/`, each one a verified, smoke-arbitrated bundle - the core, the factory service, the
-governance trio (package governor, version pinner, Cargo.toml governor) and the seven-member
-normalize family (six stream flavors plus the file tool).
+The EFFECT-TS release of the PlayForm plugin family for DeepSeek Harness: the same twelve
+TypeScript contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers - same behavior,
+same smokes (the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime
+plumbing. The packages live under `packages/`, each one a verified, smoke-arbitrated bundle - the
+core, the factory service, the governance trio (package governor, version pinner, Cargo.toml
+governor) and the seven-member normalize family (six stream flavors plus the file tool).
 
 The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
 identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the
@@ -11,23 +13,23 @@ family/type marker leads - `hook-dsh-*` and `plugin-dsh-*` - so a package name r
 about what it is: a DeepSeek Harness hook, or the DeepSeek Harness plugin factory. Each package
 carries its own one-sentence self-description (its @-sentence), quoted in the inventory below.
 
-[![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](packages/)
-[![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../EffectTS/)
+[![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](packages/)
+[![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../Classic/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ## The variants (CLASSIC vs EFFECT-TS)
 
-- **CLASSIC** (this tree): the twelve contracts in plain TypeScript — classes, Maps and plain
-  functions, zero runtime framework dependencies; the release built here and verified by the twelve
-  smokes below.
-- **EFFECT-TS** (the sibling tree, `../EffectTS/`): the same twelve contracts re-expressed on
-  Effect-TS services and layers — same behavior, same smokes, different runtime plumbing.
+- **EFFECT-TS** (this tree): the same twelve contracts re-expressed on Effect-TS services and
+  layers - the tracing spans, the typed effects, the fiber-owned seams; the release built here and
+  verified by the twelve smokes below.
+- **CLASSIC** (the sibling tree, `../Classic/`): the twelve contracts in plain TypeScript - classes,
+  Maps and plain functions, zero runtime framework dependencies.
 
 ## The twelve packages
 
 | Package (`@playform/...`)      | Identity sentence                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `hook-dsh-core`                | The pure, dependency-free commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, the refusal guard and the normalize/Stream machinery.                                                                                       |
+| `hook-dsh-core`                | The pure, effect-backed commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, the refusal guard and the normalize/Stream machinery.                                                                                         |
 | `plugin-dsh-factory`           | The family's first service: the ledger, the exclusion match, the discovery, the keep-list union, the gate set, the version-guarded fenced write, the refresh, the detached contained continuation, the State builder, the wiring, the effects, the schema factory and the probe-once seam. |
 | `hook-dsh-governor-package`    | The silent package.json governor: hooks fs/observed, rewrites chain-governed pins to the effective registry's resolved versions, and runs the update stage as a detached, contained continuation.                                                                                          |
 | `hook-dsh-pinner-package`      | The silent package.json version pinner: hooks fs/observed and deterministically rewrites every ranged dependency version to its static version, protected by a pin-policy keep-list.                                                                                                       |
@@ -43,7 +45,7 @@ carries its own one-sentence self-description (its @-sentence), quoted in the in
 ## Layout
 
 ```
-Classic/
+EffectTS/
   packages/          the twelve bundles, one directory each
   smokes/            the twelve smoke suites, one per bundle
 ```
@@ -79,13 +81,13 @@ the `packages/<consumer>/node_modules/@playform/` directory links:
 
 ## Test (the smokes are the arbiter)
 
-One suite per bundle, run from `Classic/smokes/`; each prints its count and exits non-zero on any
+One suite per bundle, run from `EffectTS/smokes/`; each prints its count and exits non-zero on any
 failure:
 
 ```
-node smokes/core-smoke.mjs            # 14
-node smokes/factory-smoke.mjs         # 34
-node smokes/governor-smoke.mjs        # 78
+node smokes/core-smoke.mjs            # 17
+node smokes/factory-smoke.mjs         # 41
+node smokes/governor-smoke.mjs        # 81
 node smokes/pinner-smoke.mjs          # 32
 node smokes/cargo-smoke.mjs           # 62
 node smokes/normalize-dash-smoke.mjs  # 132

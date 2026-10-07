@@ -1,5 +1,4 @@
-# Package-Governor — Commutative Scheme & Diagram (v1.2, TypeScript, anywhere mode)
-
+# Package-Governor — Commutative Scheme & Diagram (v1.3, TypeScript, anywhere mode)
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-CASCADES.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
 > handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
@@ -7,10 +6,17 @@
 Status: **IMPLEMENTED and LIVE-VERIFIED.** This document ships inside the bundle as `SCHEME.md`
 (alongside the usage README).
 
+**v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
+machinery is consumed from the injected `@playform/plugin-dsh-factory` service (v0.1.0),
+`inject: ["fs", "pluginFactory"]`; the absorbed modules (Append, Journal, Open, Match, Discover,
+Parse, Continue, Govern, Refresh) are deleted from this tree and the ledger strings, the silence
+invariant, the chain semantics, the exemptions and the loader contract are byte-identical (see §2
+for the module/factory split).
+
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
 (`Source/` → `Target/`, `prepublishOnly` build hook), with kind-folder categorization
 (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication),
-the publish identity `@playform/dsh-hook-package-governor`, granularized install paths (npm
+the publish identity `@playform/hook-dsh-governor-package`, granularized install paths (npm
 dependency auto-activation / git clone + build / native `dsh plugin add`), and devDependencies typed
 from the published seam packages at the HOST's exact versions —
 `@deepseek-ai/dsh-fs`/`dsh-subprocess`/`dsh-sandbox` at 0.2.0-rc.2, `@deepseek-ai/cordis` ^4.0.4,
@@ -65,20 +71,42 @@ triggered the complete pass).
 
 ## 2. The governor pipeline G = U ∘ P
 
-- **Context discovery (no roots)**: the nearest `registry.json` is found by walking UP from the
-  written file's directory (stopping at `node_modules` boundaries and the filesystem root). Its
-  `update-policy.json` (co-located, or the file's own directory, or the configured global
-  `policyFile`) drives U; without any policy, U uses a built-in default (reject the learned
-  tailwindcss exception, all dep groups, target latest, no verifyCommand).
-- **P — chain pass** (pure, deterministic, idempotent): when a registry was found, rewrite
-  chain-governed pins (`dep ∈ registry.effectiveLatest`) to `^<resolved>` when out of chain; unknown
-  deps: leave for U unless `strict` is explicit (never default-delete). Without a registry, P is
-  skipped (everything is public). `P(P(c)) = P(c)`.
-- **U — update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a **detached contained
-  continuation** (`Dispatch` → `Execute` — NOT a `ctx.jobs` job; the jobs registry is agent-scoped
-  and serves no root plugin) with the config-selected mode `updateMode` — **`"programmatic"`
-  (default)**: the `npm-check-updates` library (a declared dependency in the bundle's own
-  `node_modules`) imported only inside that continuation and driven through
+This module is a FACTORY MODULE (the family's shared machinery lives in the injected
+`@playform/plugin-dsh-factory` service — its SCHEME.md is the machinery contract; this section is
+the MODULE contract). `inject: ["fs", "pluginFactory"]`; the built Target never imports the factory
+— the service resolves from the profile through the injector, and the module's compilation declares
+the contract structurally (Source/Interface/Factory.ts). What the factory absorbed from v0.4 of this
+bundle: the ledger (Append), the P5 journal, the exclusion match, the registry walk-up + sidecar
+parse, the union keep-list (ResolvePolicy), the g1 gate set, the guarded write (GuardedWrite — the
+P4 fence + Stash pre-registration), the P₃/U₂ refresh, the detached contained continuation
+scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refresh), the State
+builder, the wiring and the lifecycle effects (P1/P2/P5). What stayed module-owned: the transform
+(the chain pass: decode → Satisfy → the refusal guard, Function/Transform), the update engine
+(Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
+(Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
+string.
+
+- **Context discovery (no roots)** — `Factory.Discover`/`Factory.Parse`: the nearest `registry.json`
+  is found by walking UP from the written file's directory (stopping at `node_modules` boundaries
+  and the filesystem root). Its `update-policy.json` (co-located, or the file's own directory, or
+  the configured global `policyFile`) drives U; without any policy, U uses a built-in default
+  (reject the learned tailwindcss exception, all dep groups, target latest, no verifyCommand).
+- **P — chain pass** (pure, deterministic, idempotent — the FLAVOR'S transform, run inside
+  `Factory.Continue`): when a registry was found, rewrite chain-governed pins
+  (`dep ∈ registry.effectiveLatest`) to `^<resolved>` when out of chain; unknown deps: leave for U
+  unless `strict` is explicit (never default-delete). Without a registry, P is skipped (everything
+  is public). `P(P(c)) = P(c)`. The rewrite is the factory's `GuardedWrite` (replaceIfVersion + the
+  P4 sandbox fence + Stash pre-registration), the `governed <path> → <version>` line is the
+  transform's `message`, and the update stage is chained off the settled continuation
+  (Function/Follow) — skipped on refusal, decode failure or a failed guarded write (the message
+  callback runs only post-write).
+- **U — update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a harness JOB when the P1
+  controller (attached by `Factory.Attach` from the root context) serves this composition —
+  `ctx.jobs.start({kind: "governor-update", owner: undefined, run})` — with the historical
+  **detached contained continuation** as the probed fallback (`Dispatch` → `Execute`) for
+  deployments without a jobs registry or on a `start` preflight rejection. Mode `updateMode` —
+  **`"programmatic"` (default)**: the `npm-check-updates` library (a declared dependency in the
+  bundle's own `node_modules`) imported only inside that continuation and driven through
   `ncu.run({packageFile, upgrade: true, silent: true, dep, concurrency, target, reject, allow, filter})`
   — no external binary; **`"bin"`**: the `ncu` binary from `ncuBin`, resolved via
   `ctx.subprocess.resolveExecutable` and spawned through `ctx.subprocess` with the same
@@ -91,9 +119,10 @@ triggered the complete pass).
   runner unavailable, non-fatal), only when cooldown elapsed and no update is already in flight for
   that directory. External-process writes (ncu, pnpm) dispatch no events. **U₂ (required for the
   silence invariant)**: the continuation's settlement (`Settle`) must re-emit `fs/observed` with the
-  fresh version from `ctx.fs.stat(target)` (same actor, captured in the listener closure). ncu
-  mutates package.json after P₃; without U₂ the policy record stays at the pre-ncu version and the
-  author's next guarded write/edit would fail `FS_STALE_VERSION` — a notification leak.
+  fresh version from `ctx.fs.stat(target)` handed to `Factory.Refresh` (same actor, captured in the
+  listener closure). ncu mutates package.json after P₃; without U₂ the policy record stays at the
+  pre-ncu version and the author's next guarded write/edit would fail `FS_STALE_VERSION` — a
+  notification leak.
 
 ## 3. Trigger law and non-trigger law
 
@@ -223,17 +252,20 @@ Non-edges (proven absent, marked ∄):
 
 ## 7. Registration
 
-1. Source: `Source/Library.ts` (loader contract: `name`, `apply`, `Config`, `inject: ["fs"]`,
-   default `{ name, apply, Config, inject }` — all four on the default object; `apply` returns
-   nothing) + `Source/Function/*` + `Source/Interface/*` + `Source/Variable/*`. Built by
-   `@playform/build` (`Configuration/ESBuild.ts`) into `Target/` (.js + .d.ts).
+1. Source: `Source/Library.ts` (loader contract: `name`, `apply`, `Config`,
+   `inject: ["fs", "pluginFactory"]`, default `{ name, apply, Config, inject }` — all four on the
+   default object; `apply` returns nothing) + `Source/Function/*` + `Source/Interface/*` +
+   `Source/Variable/*`. Built by `@playform/build` (`Configuration/ESBuild.ts`) into `Target/`
+   (.js + .d.ts). The `pluginFactory` inject makes the loader hold this bundle PENDING until the
+   factory service exists (load order never matters); no config row beyond the existing one is
+   needed — the factory provides no Config.
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
    `files: ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
    artifact ships only the built output), `prepublishOnly` = the build, `cordis.patch.yml` (row
-   `id: package-governor`, `name: "@playform/dsh-hook-package-governor"`, config),
+   `id: hook-dsh-governor-package`, `name: "@playform/hook-dsh-governor-package"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
-    - **Remote/dependency**: `pnpm add @playform/dsh-hook-package-governor` in a profile →
+    - **Remote/dependency**: `pnpm add @playform/hook-dsh-governor-package` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → `pnpm build` →
@@ -251,16 +283,16 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ```yaml
 - insert:
-      - id: package-governor
-        name: "@playform/dsh-hook-package-governor"
+      - id: hook-dsh-governor-package
+        name: "@playform/hook-dsh-governor-package"
         config:
             log: true
-            logFile: $DSH_HOME/governor.log # global ledger (default: $DSH_HOME/governor.log)
+            logFile: ~/.dsh/hook-dsh-governor-package.log # global ledger (default: ~/.dsh/hook-dsh-governor-package.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
             maxUpdateFailures: 3 # circuit breaker: pause a dir after N consecutive failures
-            ncuBin: ncu # binary name resolved via the host PATH (or an absolute path)
+            ncuBin: /usr/local/bin/ncu # absolute — host PATH is not the shell PATH
             updateMode: programmatic # "programmatic" (default) | "bin" (ncu binary via ncuBin)
             policyFile: "" # optional global update-policy.json; else discovery; else built-in default
             exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
@@ -277,6 +309,18 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
 6. Loop check: after all of the above, `governor.log` shows no runaway recursion.
 7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
-8. Smoke suite (47 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
+8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
    inject/Config, no apply return).
+
+## 10. Interplay — the governor family
+
+The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
+`package.json` / `Cargo.toml`) and writing its own ledger (`governor.log` / `pinner.log` /
+`cargo-governor.log`); the fs/observed trigger law and the exclusion-first rule are shared.
+Composition semantics: **pin → bump-exact** (a fully pinned manifest leaves the npm governor's
+update stage nothing to do; its chain pass may still re-canonicalize chain pins to `^resolved`);
+**chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the pinner's
+`pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same sidecar —
+wins over normalization, never over the chain). Activation of one never implies another; the user
+decides.

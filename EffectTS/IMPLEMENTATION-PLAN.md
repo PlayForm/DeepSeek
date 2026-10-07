@@ -8,7 +8,7 @@ checkout, the DSH seam docs
 `Documentation/Reports/Commonalization-AUDIT.md`). Deliverable
 dir: `DeepSeek/EffectTS/` (already in the root `pnpm-workspace.yaml` as `EffectTS/packages/*`).
 
-Goal restated: re-implement all twelve packages on **Effect-TS 4.0.1** so the family gains (a)
+Goal restated: re-implement all twelve packages on **Effect-TS 4.0.2** so the family gains (a)
 composition with other Effect transformers, (b) external trace-ability via Effect spans, (c)
 ecosystem interop - while the **ledger strings stay byte-identical** (Classic
 smokes are the arbiter; the EffectTS smokes add coverage - 746 checks vs Classic's 733) and

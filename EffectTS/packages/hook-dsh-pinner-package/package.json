@@ -24,7 +24,7 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
 	},
 	"dependencies": {
-		"effect": "4.0.1"
+		"effect": "4.0.2"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",

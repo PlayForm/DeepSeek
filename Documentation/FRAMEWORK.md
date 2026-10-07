@@ -33,7 +33,7 @@ description: The distilled requirements + the skill framework + the tomorrow TOD
 - The **boilerplate** (the reference - personal paths intact, internal,
   never released - gitignore or a private submodule decision pending).
 - The **Classic release** (the anonymized normal implementation).
-- The **Effect-TS release** (Effect v4.0.1 - the tracing, the ecosystem
+- The **Effect-TS release** (Effect v4.0.2 - the tracing, the ecosystem
   interaction, the parallel-govern toggle designed in).
 - All release packages at **0.0.1**; the parity: the ledger strings are
   the byte-identical smoke contract across all three implementations.
