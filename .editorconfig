@@ -1,6 +1,6 @@
 # ============================================================
 # EditorConfig for the DeepSeek Harness Plugin Family monorepo.
-# The tab standard (Land + Aphrodite): indent_style = tab,
+# The tab standard: indent_style = tab,
 # indent_size = 4 - matching the .prettierrc for EVERYTHING.
 # Markdown keeps trailing whitespace (two-space hard breaks).
 # ============================================================

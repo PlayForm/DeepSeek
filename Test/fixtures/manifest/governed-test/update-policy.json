@@ -1,5 +1,5 @@
 {
-  "comment": "Public-dep test policy. Mirrors ~/Developer/Maintain/Fn/Update/NPM.sh: everything updates except tailwindcss (learned: newer majors break codebases). verifyCommand empty for this bare test (no lockfile intent).",
+  "comment": "Public-dep test policy. Mirrors Maintain/Fn/Update/NPM.sh: everything updates except tailwindcss (learned: newer majors break codebases). verifyCommand empty for this bare test (no lockfile intent).",
   "reject": ["tailwindcss"],
   "allow": [],
   "depGroups": ["prod", "dev", "optional"],

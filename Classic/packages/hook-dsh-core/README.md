@@ -236,7 +236,7 @@ try {
 // Source/Function/Transform.ts - the refusal guard before any write:
 if (Refusal(Append, Path, Section, Document, Next)) {
 	return null; // the byte-identical line went to the ledger, the write did not happen
-	// -> `REFUSED rewrite of /Volumes/.../package.json: non-dependency section "scripts" would change`
+	// -> `REFUSED rewrite of /x/package.json: non-dependency section "scripts" would change`
 }
 ```
 
