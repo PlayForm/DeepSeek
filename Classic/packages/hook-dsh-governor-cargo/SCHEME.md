@@ -56,7 +56,7 @@ updates, so the update stage operates at the **exclusionary level** through the 
 | Version normalization    | none                                   | **FULL-VERSION: `1.0`→`1.0.0`, `=1.0`→`=1.0.0`; complex ranges as-is; the keep-list wins**                                         |
 | Update driver            | npm-check-updates (library or ncu bin) | **`cargo upgrade` (cargo-edit) via ctx.subprocess — the only path**                                                                |
 | Exclusion enforcement    | ncu `-x` (one comma argument)          | **`--exclude` one flag per crate (comma ignored)**                                                                                 |
-| Ledger                   | the governor's ledger                  | **`cargo-governor.log`** (separate)                                                                                                |
+| Ledger                   | the governor's ledger                  | **`hook-dsh-governor-cargo.log`** (separate)                                                                                       |
 | Strip semantics (strict) | delete the dep key                     | **remove the whole `name = "…"` entry; inherited (`workspace = true`) and path/git entries are never stripped**                    |
 
 ## 2. Cargo.toml semantics handled

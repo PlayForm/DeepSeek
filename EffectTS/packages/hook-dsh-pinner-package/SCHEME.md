@@ -161,7 +161,7 @@ everything, and the ledger is best-effort).
         │               fs/observed from the service                         │
         │            P₃ re-emit fs/observed(outcome.version) ── refreshes    │
         │               policy; re-enters P as a no-op                       │
-        │            L  ledger: <logFile> (global, SEPARATE: pinner.log) +   │
+        │            L  ledger: <logFile> (global, SEPARATE: hook-dsh-pinner-package.log) +   │
         │               ctx.logger + activation line in apply()              │
         └─────────────────────────────────────────────────────────────────────┘
                  │
@@ -175,14 +175,14 @@ everything, and the ledger is best-effort).
 
 Non-edges (proven absent, marked ∄):
 
-| edge                                           | why it cannot exist                                                  |
-| ---------------------------------------------- | -------------------------------------------------------------------- |
-| P's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing |
-| P → tool result amendment                      | result envelope uses the tool's own content, not disk                |
-| P → transcript/session event                   | P emits only `fs/observed` (internal bus) and writes `pinner.log`    |
-| author's next guarded write → FS_STALE_VERSION | P₃ refreshes the policy record (same owner)                          |
-| P's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                               |
-| P → ctx.jobs / subprocess                      | P is P-only: no update stage exists to run                           |
+| edge                                           | why it cannot exist                                                                |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
+| P's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing               |
+| P → tool result amendment                      | result envelope uses the tool's own content, not disk                              |
+| P → transcript/session event                   | P emits only `fs/observed` (internal bus) and writes `hook-dsh-pinner-package.log` |
+| author's next guarded write → FS_STALE_VERSION | P₃ refreshes the policy record (same owner)                                        |
+| P's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                                             |
+| P → ctx.jobs / subprocess                      | P is P-only: no update stage exists to run                                         |
 
 ## 8. Registration
 
@@ -249,12 +249,12 @@ harness (real temp-dir I/O with `dev:ino:size:mtimeNs:ctimeNs` version tokens en
 ## 11. Interplay — the governor family
 
 The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
-`package.json` / `Cargo.toml`) and writing its own ledger (`pinner.log` / `governor.log` /
-`cargo-governor.log`); the fs/observed trigger law and the exclusion-first rule are shared.
-Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
-manifest leaves the npm governor's update stage nothing to do — ncu's no-op case is an exact pin —
-while its chain pass may still re-canonicalize chain pins to `^resolved`); **chain > strip >
-normalize** (the cargo module's precedence); **keep-list wins** (the pinner's `pin-policy.json`
-protects ranges as authored; the cargo module's keep-list — the same sidecar — wins over
-normalization, never over the chain). Activation of one never implies another; order between two npm
-listeners is defined only by registration.
+`package.json` / `Cargo.toml`) and writing its own ledger (`hook-dsh-pinner-package.log` /
+`hook-dsh-governor-package.log` / `hook-dsh-governor-cargo.log`); the fs/observed trigger law and
+the exclusion-first rule are shared. Composition semantics: **pin → bump-exact** (the pinner pins
+`^0.3.4` → `0.3.4`; a fully pinned manifest leaves the npm governor's update stage nothing to do —
+ncu's no-op case is an exact pin — while its chain pass may still re-canonicalize chain pins to
+`^resolved`); **chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the
+pinner's `pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same
+sidecar — wins over normalization, never over the chain). Activation of one never implies another;
+order between two npm listeners is defined only by registration.

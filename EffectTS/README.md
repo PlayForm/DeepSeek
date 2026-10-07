@@ -1,11 +1,11 @@
 # EffectTS - the DeepSeek Harness Plugin Family for PlayForm
 
-The EFFECT-TS release of the PlayForm plugin family for DeepSeek Harness: the same twelve
-TypeScript contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers - same behavior,
-same smokes (the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime
-plumbing. The packages live under `packages/`, each one a verified, smoke-arbitrated bundle - the
-core, the factory service, the governance trio (package governor, version pinner, Cargo.toml
-governor) and the seven-member normalize family (six stream flavors plus the file tool).
+The EFFECT-TS release of the PlayForm plugin family for DeepSeek Harness: the same twelve TypeScript
+contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers - same behavior, same smokes
+(the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime plumbing. The
+packages live under `packages/`, each one a verified, smoke-arbitrated bundle - the core, the
+factory service, the governance trio (package governor, version pinner, Cargo.toml governor) and the
+seven-member normalize family (six stream flavors plus the file tool).
 
 The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
 identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the

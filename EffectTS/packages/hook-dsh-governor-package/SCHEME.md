@@ -237,15 +237,15 @@ and the ledger is best-effort).
 
 Non-edges (proven absent, marked ∄):
 
-| edge                                           | why it cannot exist                                                  |
-| ---------------------------------------------- | -------------------------------------------------------------------- |
-| G's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing |
-| ncu/pnpm → new `fs/observed`                   | external processes dispatch nothing                                  |
-| G → tool result amendment                      | result envelope uses the tool's own content, not disk                |
-| G → transcript/session event                   | G emits only `fs/observed` (internal bus) and writes `governor.log`  |
-| author's next guarded write → FS_STALE_VERSION | P₃/U₂ refresh the policy record (same owner)                         |
-| G's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                               |
-| G → ctx.jobs job                               | jobs registry is agent-scoped; root plugins use the continuation     |
+| edge                                           | why it cannot exist                                                                  |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------ |
+| G's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing                 |
+| ncu/pnpm → new `fs/observed`                   | external processes dispatch nothing                                                  |
+| G → tool result amendment                      | result envelope uses the tool's own content, not disk                                |
+| G → transcript/session event                   | G emits only `fs/observed` (internal bus) and writes `hook-dsh-governor-package.log` |
+| author's next guarded write → FS_STALE_VERSION | P₃/U₂ refresh the policy record (same owner)                                         |
+| G's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                                               |
+| G → ctx.jobs job                               | jobs registry is agent-scoped; root plugins use the continuation                     |
 
 ## 7. Registration
 
@@ -297,14 +297,14 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `governor.log` shows the activation line.
+1. Restart with the bundle active; `hook-dsh-governor-package.log` shows the activation line.
 2. Write a stale-pins `package.json` with the write tool:
     - chain pass corrects chain pins; file lands governed; tool result shows the author's content
       only; transcript contains no governor traces.
 3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
 4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
 5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `governor.log` shows no runaway recursion.
+6. Loop check: after all of the above, `hook-dsh-governor-package.log` shows no runaway recursion.
 7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
 8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
@@ -313,11 +313,11 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 ## 10. Interplay — the governor family
 
 The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
-`package.json` / `Cargo.toml`) and writing its own ledger (`governor.log` / `pinner.log` /
-`cargo-governor.log`); the fs/observed trigger law and the exclusion-first rule are shared.
-Composition semantics: **pin → bump-exact** (a fully pinned manifest leaves the npm governor's
-update stage nothing to do; its chain pass may still re-canonicalize chain pins to `^resolved`);
-**chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the pinner's
-`pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same sidecar —
-wins over normalization, never over the chain). Activation of one never implies another; the user
-decides.
+`package.json` / `Cargo.toml`) and writing its own ledger (`hook-dsh-governor-package.log` /
+`hook-dsh-pinner-package.log` / `hook-dsh-governor-cargo.log`); the fs/observed trigger law and the
+exclusion-first rule are shared. Composition semantics: **pin → bump-exact** (a fully pinned
+manifest leaves the npm governor's update stage nothing to do; its chain pass may still
+re-canonicalize chain pins to `^resolved`); **chain > strip > normalize** (the cargo module's
+precedence); **keep-list wins** (the pinner's `pin-policy.json` protects ranges as authored; the
+cargo module's keep-list — the same sidecar — wins over normalization, never over the chain).
+Activation of one never implies another; the user decides.

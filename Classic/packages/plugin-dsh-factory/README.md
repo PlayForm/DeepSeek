@@ -239,7 +239,7 @@ The write the factory performs for that return value (a `package.json` whose
 
 ```text
 transcript:  the write tool result shows exactly what the author wrote
-pinner.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
+hook-dsh-pinner-package.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
 ```
 
 The factory's part of that one pass: Gate decided the actor and the path, Discover found the nearest

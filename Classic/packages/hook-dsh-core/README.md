@@ -29,7 +29,7 @@ parent of none, child of none: zero runtime dependencies, consumed by all eleven
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
   update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults). The
-  [`plugin-dsh-factory`](../plugin-dsh-factory) re-exports NOTHING from the core (its 16-method
+  [`plugin-dsh-factory`](../plugin-dsh-factory) re-exports NOTHING from the core (its 19-method
   service surface stays stable).
 - **Consumed by the six stream normalizers** -
   [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash) and the five `hook-dsh-normalize-*`

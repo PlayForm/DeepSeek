@@ -50,9 +50,9 @@ Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, neve
 ## 2. The 19 callable methods (18 sections; Write + GuardedWrite share §2.7), exact signatures
 
 > Added in v0.2: the **direct-govern registry and entry** — `RegisterGovern` and `Govern`
-> (§2.17–§2.18), the raw-write tool's per-call `govern` path. The callable count is now 19
-> (Write + GuardedWrite share §2.7; the GovernSteps registry instance field is state, not a
-> method). §2.16's `UpdateKey` is the v0.1.1 P2 helper, factory-side since the cargo collision.
+> (§2.17–§2.18), the raw-write tool's per-call `govern` path. The callable count is now 19 (Write +
+> GuardedWrite share §2.7; the GovernSteps registry instance field is state, not a method). §2.16's
+> `UpdateKey` is the v0.1.1 P2 helper, factory-side since the cargo collision.
 
 ### 2.1 `Append(state, message): void`
 
@@ -251,8 +251,8 @@ since the cargo collision). The chain pass (§2.9) registers its own controller 
 `String(targetKey)`; the two passes share the one `Inflight` map (Attach's disposal aborts every
 entry on unload), so a collision would let the chain pass's settlement silently drop the running
 update's controller while its engine is still in flight — the cargo collision lesson (the cargo
-fixed it flavor-side with `update:` before the factory existed; now the helper is factory-side
-and both governors adopt it).
+fixed it flavor-side with `update:` before the factory existed; now the helper is factory-side and
+both governors adopt it).
 
 ### 2.17 `RegisterGovern(basename, name, run): void` — the direct-govern registry
 

@@ -12,8 +12,8 @@ gets cleared.
 - Fixtures: the smokes self-create their temp trees; the live-fixture directories live under the
   family workspace root (the monorepo root).
 - Bundle paths: the smokes import the bundles from the monorepo-relative
-  `../packages/<bundle>/Target/...` (the bundles live in `EffectTS/packages/<bundle>/`, each with its
-  own node_modules restored via `pnpm install --ignore-scripts` from the bundle's directory).
+  `../packages/<bundle>/Target/...` (the bundles live in `EffectTS/packages/<bundle>/`, each with
+  its own node_modules restored via `pnpm install --ignore-scripts` from the bundle's directory).
 - The counts are the CLASSIC numbers plus the additive EffectTS coverage (core +3, factory +7,
   governor +3): 746 total vs Classic's 733.
 

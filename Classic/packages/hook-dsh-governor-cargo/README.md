@@ -33,11 +33,11 @@ helpers; the Rust-sided sibling of the two npm governance hooks on the same `fs/
 One of three governance hooks sharing the `fs/observed` seam, each gating on its own basename and
 writing its own ledger:
 
-| plugin                                                      | basename gate  | ledger               | pass                                                 |
-| ----------------------------------------------------------- | -------------- | -------------------- | ---------------------------------------------------- |
-| [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `governor.log`       | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`hook-dsh-pinner-package`](../hook-dsh-pinner-package)     | `package.json` | `pinner.log`         | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| `hook-dsh-governor-cargo` (this bundle)                     | `Cargo.toml`   | `cargo-governor.log` | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| plugin                                                      | basename gate  | ledger                          | pass                                                 |
+| ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
+| [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`hook-dsh-pinner-package`](../hook-dsh-pinner-package)     | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| `hook-dsh-governor-cargo` (this bundle)                     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
 never see a `Cargo.toml` event. Composition semantics: **chain > strip > normalize** (this module's

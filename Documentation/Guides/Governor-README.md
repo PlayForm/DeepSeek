@@ -1,4 +1,5 @@
 # @playform/hook-dsh-governor-package
+
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-CASCADES.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
 > handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
@@ -33,11 +34,11 @@ helpers; it has no hook children of its own.
 One of three governance hooks sharing the `fs/observed` seam, each gating on its own basename and
 writing its own ledger:
 
-| plugin                                                  | basename gate  | ledger               | pass                                                 |
-| ------------------------------------------------------- | -------------- | -------------------- | ---------------------------------------------------- |
-| `hook-dsh-governor-package` (this bundle)               | `package.json` | `governor.log`       | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`hook-dsh-pinner-package`](../hook-dsh-pinner-package) | `package.json` | `pinner.log`         | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo) | `Cargo.toml`   | `cargo-governor.log` | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| plugin                                                  | basename gate  | ledger                          | pass                                                 |
+| ------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
+| `hook-dsh-governor-package` (this bundle)               | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`hook-dsh-pinner-package`](../hook-dsh-pinner-package) | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo) | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
 leaves ncu nothing to do; the chain pass may still re-canonicalize chain pins), **chain > strip >

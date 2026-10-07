@@ -16,20 +16,21 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> _One runtime dependency: effect v4.0.2. Not a plugin - the muscle under the plugins._ _The @-sentence
-> identity: **Hook @ DSH @ Core** - the machinery every other family package stands on._
+> _One runtime dependency: effect v4.0.2. Not a plugin - the muscle under the plugins._ _The
+> @-sentence identity: **Hook @ DSH @ Core** - the machinery every other family package stands on._
 
 ---
 
 ## Where It Fits
 
 **Family position**: the base library of the whole family (the @-sentence **Hook @ DSH @ Core**) -
-parent of none, child of none: one runtime dependency (effect v4.0.2), consumed by all eleven other packages.
+parent of none, child of none: one runtime dependency (effect v4.0.2), consumed by all eleven other
+packages.
 
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
   update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults). The
-  [`plugin-dsh-factory`](../plugin-dsh-factory) re-exports NOTHING from the core (its 16-method
+  [`plugin-dsh-factory`](../plugin-dsh-factory) re-exports NOTHING from the core (its 19-method
   service surface stays stable).
 - **Consumed by the six stream normalizers** -
   [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash) and the five `hook-dsh-normalize-*`
@@ -198,8 +199,8 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 
 ### The Conventions
 
-- One runtime dependency (effect v4.0.2); the same `Source/` → `Target/` layout as the family bundles;
-  `prepublishOnly`-only build (the deterministic sequence:
+- One runtime dependency (effect v4.0.2); the same `Source/` → `Target/` layout as the family
+  bundles; `prepublishOnly`-only build (the deterministic sequence:
   `Build ... --TypeScript Configuration/TypeScript.noemit.json` then explicit `tsc && tsc-alias`).
 - The module ledger strings stay MODULE-side: the core owns the mechanics, never a module's strings.
 - The unit smoke (`core-smoke.mjs` in the family's `smokes/` directory) exercises every helper with

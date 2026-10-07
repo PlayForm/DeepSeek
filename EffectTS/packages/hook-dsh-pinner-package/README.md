@@ -29,17 +29,18 @@ helpers; a sibling of the package governor on the same `fs/observed` seam.
 One of three governance hooks sharing the `fs/observed` seam, each gating on its own basename and
 writing its own ledger:
 
-| plugin                                                      | basename gate  | ledger               | pass                                                 |
-| ----------------------------------------------------------- | -------------- | -------------------- | ---------------------------------------------------- |
-| [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `governor.log`       | chain pass (→ `^resolved`) + update stage (ncu)      |
-| `hook-dsh-pinner-package` (this bundle)                     | `package.json` | `pinner.log`         | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo)     | `Cargo.toml`   | `cargo-governor.log` | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| plugin                                                      | basename gate  | ledger                          | pass                                                 |
+| ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
+| [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| `hook-dsh-pinner-package` (this bundle)                     | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo)     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
 manifest then leaves the governor's update stage nothing to do, while its chain pass may still
 re-canonicalize chain pins), **keep-list wins** (the pinner's `pin-policy.json` keeps ranges as
-authored). The ledgers are separate (`pinner.log` vs `governor.log`); activating one never implies
-another - order between two npm listeners is defined only by registration.
+authored). The ledgers are separate (`hook-dsh-pinner-package.log` vs
+`hook-dsh-governor-package.log`); activating one never implies another - order between two npm
+listeners is defined only by registration.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
