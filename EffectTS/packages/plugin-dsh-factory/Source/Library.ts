@@ -23,8 +23,12 @@
 //     queue-offer bridge): `Effect.runSync(Effect.provide(Tag.use(...),
 //     runtime))` - sync in, sync out, byte-identical behavior;
 //   * PROMISE seams (Write/GuardedWrite/Continue/Govern): `Effect.runPromise
-//     (Effect.provide(...), options?)` - the RunOptions `signal` maps the
-//     harness abort to fiber interruption on the write path;
+//     (Effect.provide(...))` - NO RunOptions are passed, so the caller's
+//     abort signal is never mapped onto the fiber: it rides the write SEAM
+//     only (forwarded to `writeText` end to end, exactly like the Classic
+//     promise chain). A fiber interruption would replace the seam's own
+//     rejection with Effect's "All fibers interrupted without error" and
+//     break the abort path's byte parity (see Write);
 //   * the fs/observed registration (Wire) stays the sync listener shape the
 //     harness requires; the Attach lifecycle effects stay the ctx.effect
 //     seams - those two are Function-owned (Wire/Attach), untouched;

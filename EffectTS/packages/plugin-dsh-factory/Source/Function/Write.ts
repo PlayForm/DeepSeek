@@ -46,8 +46,11 @@
 //     the idempotence gate (the guarded path's behavior);
 //   * `transform` - the caller's content step, applied before the write
 //     (raw-write's six-fold Rewrite chain);
-//   * `signal` - forwarded to `writeText` end to end (and mapped onto the
-//     fiber at the shell's runPromise boundary);
+//   * `signal` - forwarded to `writeText` end to end; NOT mapped onto the
+//     fiber at the shell's runPromise boundary (a fiber interruption would
+//     replace the seam's own rejection with "All fibers interrupted without
+//     error" - the abort path's byte parity lives with the seam, see
+//     Library's Write);
 //   * `actor` - the fs/observed actor and the fs/write-intent waterfall's
 //     actor (the tool's `exec`; `undefined` for family-internal writes).
 //     PASSED THROUGH VERBATIM - the executor never mutates an actor; the
@@ -79,8 +82,9 @@ export interface Over {
 	/** An explicit intent skips the waterfall; `{ waterfall: true }` (the
 	 *  default) runs the fs/write-intent waterfall, `next() => undefined`. */
 	intent?: FsWriteIntent | { waterfall: true };
-	/** Forwarded to `writeText` end to end (and to the fiber at the shell's
-	 *  runPromise boundary). */
+	/** Forwarded to `writeText` end to end (never mapped onto the fiber at
+	 *  the shell's runPromise boundary - the seam keeps the abort path's
+	 *  byte parity). */
 	signal?: AbortSignal | undefined;
 	/** `"standing"` (default): the built-in's no-escalation replica. `"p4"`:
 	 *  the sandbox-mode-decided per-call fence. Or an explicit policy. */

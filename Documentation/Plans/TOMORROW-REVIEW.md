@@ -55,8 +55,8 @@ EffectTS:    core 17 / factory 41 / governor 81 / pinner 32 / cargo 62 /
    Models, Case Study, Workbench), the setup page's truthfulness
    completions (the pnpm-workspace trap, the removed --dump-config
    claim), the site at 21 pages. Precision: the smoke totals - Classic/
-   Boilerplate 733 checks, EffectTS 808 (~800) - the case-study's
-   "~800" refers to the EffectTS total.
+   Boilerplate 733 checks, EffectTS 746 - the case-study cites the
+   attributed pair (733 Classic · 746 EffectTS).
 4. **The Test/ rebuild** (65e17808) - COMPLETE: the curated family-only
    archive (fixtures/manifest + fixtures/markdown + probes + the README
    index), the unrelated experiments removed, the kept fixtures moved
@@ -252,6 +252,33 @@ The user will run the whole process again - the review-driven pass:
    markdown route) - with the DeepSeek style (the Harness Blue voice,
    the bumped typography, IBM Plex Mono for code). No attribution
    prose (the WebSite is the user's own).
+19. **THE CORE-PAGE RESTRUCTURE AGENT** (user-instructed 2026-10-07 -
+   DEDICATED to the hook-dsh-core page treatment, PAUSED for now - the
+   restructuring agent #16 treats EVERY page EXCEPT the core page; this
+   agent owns hook-dsh-core.astro): implement the reusable
+   `@Component/Concept.astro` component (Props: Id / Title / Diagram;
+   `data-diagram={Id}` + `data-diagram-status="placeholder"` on the
+   dashed placeholder; label + brief; h3 title; slot body; the
+   .concept/.concept__diagram/.concept__title/.concept__body styles;
+   the shared .concept-list + .concept-values styles) + restructure the
+   core page per the user's spec: "How It Works" -> "Core Architecture"
+   (Two halves, one library; Structure versus substitution), "Governance
+   Helpers" (Section / Default / Suppress / Policy / Refusal / Update
+   envelope / Activate), "Normalization Helpers" (the six tables /
+   Replace / ReplaceMap / the {text, count} contract), "Stream Dispatch"
+   (Chunk / Block / ToolArgs / the raw marker / dispatch guarantees) -
+   each as a diagram-first Concept block; the remaining sections per the
+   block plan (Hero / Where It Fits / In the DeepSeek Harness / The
+   Problem / In Action / The Config / The Ledger); remove the old
+   Diagram constant. FIRST FLAG (never silently fix or guess) the
+   content conflicts: the dependency-free CLASSIC vs EFFECT-TS variant
+   wording (badge + family-position), library vs plugin wording, the
+   ReplaceMap quote-map example (the em dash should survive a
+   quote-only map), "the core owns no ledger strings" breadth, the
+   `<Module>:` prefix vs Suppress(module, kind, cause), the
+   "all twelve plugins" vs library wording, the identity-preservation
+   wording. Keep exceptions beside their rules, examples beside their
+   helpers, literals byte-exact.
 
 ## 5. THE RUNNING FACTS (for the re-run)
 
