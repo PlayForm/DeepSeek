@@ -39,7 +39,7 @@ The factory is the **hub** of the eleven-package DSH family:
 | `hook-dsh-normalize-dash` + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
 The pure layer it deliberately does **not** re-export is [`hook-dsh-core`](../hook-dsh-core) (its
-16-method service surface stays stable); the hooks import the core's helpers directly.
+19-method service surface stays stable); the hooks import the core's helpers directly.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -107,7 +107,7 @@ to be applied three times. The factory makes it apply **once**.
 
 ```text
   THE CONSUMERS BRING THEIR OWN METAL         THE FACTORY POURS THE MOLD
-  (model logic: a Config extension,           (16 methods on ctx.pluginFactory,
+  (model logic: a Config extension,           (19 methods on ctx.pluginFactory,
    a pure transform, an update engine          inject: ["fs"] - it calls ctx.fs)
    and every ledger string)
 
@@ -178,7 +178,7 @@ method, because the loader needs `Config` before any context exists. Full contra
 
 - `tsc --noEmit` - zero errors (TypeScript 7, `@playform/build/tsconfig`).
 - `pnpm run prepublishOnly` - minified `Target/` (+ `.d.ts` twins).
-- `node factory-smoke.mjs` (in the family's `smokes/` directory) - 30 checks, ALL PASS: a fake ctx +
+- `node factory-smoke.mjs` (in the family's `smokes/` directory) - 41 checks, ALL PASS: a fake ctx +
   a REAL instance (the class/service registered as `ctx.pluginFactory`), covering every primitive,
   the Gate matrix, both GuardedWrite postures, the full Continue lifecycle (Inflight
   registration/removal, no-op paths, throw containment, message forms, the P3 union), State
