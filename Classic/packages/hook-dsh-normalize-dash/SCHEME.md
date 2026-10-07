@@ -5,8 +5,8 @@ with a fake ctx + the REAL factory — ALL PASS).
 
 ## 0. What this plugin is
 
-The dash normalizer for **model output**. The user's hermes hook
-(`~/.hermes/agent-hooks/normalize-dashes.sh`) rewrites the unicode dash family to ASCII hyphen-minus
+The dash normalizer for **model output**. The hermes normalize-dashes hook
+rewrites the unicode dash family to ASCII hyphen-minus
 **in files after the fact**. A DSH plugin can go where hermes cannot: the **`llm/stream` waterfall**
 — the interceptable wrapper around every streaming model call (retry, replay, routing), bound to the
 LlmRuntime (`docs/subsystems/llm-streaming.md:1108-1125`). The rewrite flows into both the live UI

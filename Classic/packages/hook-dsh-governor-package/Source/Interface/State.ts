@@ -15,7 +15,7 @@
 //   Strict  — strict chain pass (strip unknown deps in a governed workspace);
 //   Wait    — cooldown between update-stage dispatches, per directory;
 //   Limit   — circuit breaker: consecutive update-stage failures before pause;
-//   Binary  — ncu binary for bin mode (absolute path);
+//   Binary  — ncu binary for bin mode (binary name or absolute path);
 //   Mode    — update stage: "programmatic" (ncu library) or "bin";
 //   Stamp   — directory → epoch ms of the last update-stage dispatch;
 //   Set     — directories with an update run in flight;
@@ -40,8 +40,8 @@ export default interface State extends Shared {
 	Wait: number;
 	/** Circuit breaker: consecutive update-stage failures per directory. */
 	Limit: number;
-	/** ncu binary for bin mode (absolute path — the host PATH is not the
-	 *  user's shell PATH). */
+	/** ncu binary for bin mode (binary name or absolute path — resolved via
+	 *  the host PATH). */
 	Binary: string;
 	/** Update stage mode: "programmatic" (ncu library in-process) or "bin". */
 	Mode: string;

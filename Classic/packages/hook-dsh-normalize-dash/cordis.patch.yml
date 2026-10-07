@@ -3,7 +3,7 @@
 # waterfall listener — the interceptable wrapper around every streaming model
 # call (retry, replay, routing) — and rewrites the unicode dash family to
 # ASCII hyphen-minus in text/reasoning deltas and in the assembled block-end
-# blocks, exactly mirroring the user's ~/.hermes/agent-hooks/
+# blocks, exactly mirroring the hermes agent-hooks
 # normalize-dashes.sh hook, but at the injection point hermes itself does not
 # have: model output. Unlike the governance family (fs/observed, silent), the
 # rewrite is deliberately VISIBLE — it flows into both the live UI and the

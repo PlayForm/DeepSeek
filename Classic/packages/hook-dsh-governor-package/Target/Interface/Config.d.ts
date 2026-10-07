@@ -13,7 +13,7 @@ export default interface Config {
     maxUpdateFailures: number;
     /** Update stage mode: "programmatic" (ncu library in-process) or "bin". */
     updateMode: string;
-    /** ncu binary for bin mode (absolute path — the host PATH is not the user's shell PATH). */
+    /** ncu binary for bin mode (binary name or absolute path — resolved via the host PATH). */
     ncuBin: string;
     /** Global update-policy.json; empty means discovery + built-in default. */
     policyFile: string;

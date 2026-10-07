@@ -10,7 +10,7 @@ gets cleared.
 - The ledger strings are the CONTRACT: every assertion is byte-identical; the smokes are the arbiter
   after every change.
 - Fixtures: the smokes self-create their temp trees; the live-fixture directories live under the
-  family workspace root (`DeepSeek/`, e.g. `~/Developer/Application/PlayForm/DeepSeek/`).
+  family workspace root (the monorepo root).
 - Bundle paths: the smokes import the bundles from the monorepo-relative
   `../packages/<bundle>/Target/...` (the bundles live in `Classic/packages/<bundle>/`, each with its
   own node_modules restored via `pnpm install --ignore-scripts` from the bundle's directory).

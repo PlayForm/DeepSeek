@@ -6,7 +6,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-dash)
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
-[![license](https://img.shields.io/static/v1?label=license&message=MIT&color=lightgrey)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 > [!NOTE]
 >
@@ -15,7 +15,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > and normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes,
 > en dashes and seventeen exotic relatives → `-`.
 >
-> _Exactly the user's hermes hook (`~/.hermes/agent-hooks/normalize-dashes.sh`), at exactly the
+> _Exactly the hermes normalize-dashes hook, at exactly the
 > injection point hermes itself does not have._
 >
 > _A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
@@ -402,4 +402,4 @@ and only when N > 0 (a thrown-away stream writes no ledger line).
 
 ## License 📜
 
-MIT.
+CC0-1.0.

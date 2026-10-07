@@ -6,7 +6,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-file)
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
-[![license](https://img.shields.io/static/v1?label=license&message=MIT&color=lightgrey)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 > [!NOTE]
 >
@@ -53,8 +53,8 @@ transform tables and the generic `Replace`/`ReplaceMap` replacers:
 The six stream flavors cover only what the model is emitting right now; the raw-write tool's
 `normalize: true` covers only content being written. This flavor covers the gap in between:
 pre-existing files, git-cloned material, script-created files - anything already on disk that the
-agent did not just write. The hermes heritage is direct: the user's
-`~/.hermes/agent-hooks/normalize-dashes-for-execute-code.sh` swept script-created files after the
+agent did not just write. The hermes heritage is direct: the
+`normalize-dashes-for-execute-code.sh` hook swept script-created files after the
 fact; DSH makes the same rewrite an explicit, visible, opt-in TOOL call instead of a background hook
 (and `normalize-tabs.sh` - the repair hook for a repair hook - is the cautionary tale that keeps it
 that way).
@@ -253,4 +253,4 @@ complete record.
 
 ## License 📜
 
-MIT.
+CC0-1.0.

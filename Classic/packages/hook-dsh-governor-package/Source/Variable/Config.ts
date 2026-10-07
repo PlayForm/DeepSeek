@@ -53,7 +53,7 @@ export default Compose(
 		maxUpdateFailures: Schema.number().default(3),
 		// Update stage mode: "programmatic" (ncu library in-process) or "bin".
 		updateMode: Schema.string().default("programmatic"),
-		// ncu binary for bin mode (absolute path — the host PATH is not the user's shell PATH).
-		ncuBin: Schema.string().default("/Volumes/CORSAIR/Tool/macOS/pnpm/global/bin/ncu"),
+		// ncu binary for bin mode (binary name or absolute path — resolved via the host PATH).
+		ncuBin: Schema.string().default("ncu"),
 	},
 );

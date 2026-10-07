@@ -6,7 +6,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
-[![license](https://img.shields.io/static/v1?label=license&message=MIT&color=lightgrey)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 > [!NOTE]
 >
@@ -271,4 +271,4 @@ the prefix) and stay byte-identical when a consumer keeps its historical name.
 
 ## License 📜
 
-MIT.
+CC0-1.0.
