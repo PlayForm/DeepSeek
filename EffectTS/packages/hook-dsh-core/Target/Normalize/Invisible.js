@@ -1,0 +1,1 @@
+var u=/[\u00AD\u200B\u200C\u200D\u200E\u200F\u202A-\u202E\u2060\uFEFF]/g;export{u as default};

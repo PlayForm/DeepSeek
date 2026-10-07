@@ -1,0 +1,116 @@
+{
+  "log": [
+    {
+      "seq": 1,
+      "at": "2026-10-02T11:34:23.496Z",
+      "by": "steward",
+      "entries": [
+        {
+          "dep": "lodash",
+          "from": "^4.17.20",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "axios",
+          "from": "^1.5.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "tailwindcss",
+          "from": "^3.3.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        }
+      ]
+    },
+    {
+      "seq": 2,
+      "at": "2026-10-02T11:34:28.317Z",
+      "by": "steward",
+      "entries": [
+        {
+          "dep": "lodash",
+          "from": "^4.18.1",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "axios",
+          "from": "^1.20.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "tailwindcss",
+          "from": "^3.3.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        }
+      ]
+    },
+    {
+      "seq": 3,
+      "at": "2026-10-02T11:34:31.187Z",
+      "by": "steward",
+      "entries": [
+        {
+          "dep": "lodash",
+          "from": "^4.18.1",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "axios",
+          "from": "^1.20.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "tailwindcss",
+          "from": "^3.3.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        }
+      ]
+    },
+    {
+      "seq": 4,
+      "at": "2026-10-02T11:36:29.701Z",
+      "by": "steward",
+      "entries": [
+        {
+          "dep": "lodash",
+          "from": "^4.17.16",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "axios",
+          "from": "^1.4.0",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        },
+        {
+          "dep": "tailwindcss",
+          "from": "^3.2.4",
+          "action": "PASS_TO_UPDATE",
+          "reason": "public dep — availability layer (ncu)",
+          "scope": "@local/test-author"
+        }
+      ]
+    }
+  ]
+}

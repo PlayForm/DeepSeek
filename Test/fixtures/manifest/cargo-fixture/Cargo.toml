@@ -1,0 +1,11 @@
+# Fixture manifest — adopted cargo flavor, shorthand + public dep.
+[package]
+name = "cargo-fixture"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# serde: chain-governed — canonicalizes to the registry's full resolved form.
+serde = "1.0.228"
+# toml: public dep — normalization pads 0.1 → 0.1.0, cargo upgrade may bump it.
+toml = "0.1.30"

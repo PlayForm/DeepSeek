@@ -1,0 +1,12 @@
+packages:
+    - "Boilerplate/packages/*"
+    - "Classic/packages/*"
+    - "EffectTS/packages/*"
+
+preferWorkspacePackages: true
+
+linkWorkspacePackages: deep
+
+minimumReleaseAge: 0
+
+nodeLinker: hoisted

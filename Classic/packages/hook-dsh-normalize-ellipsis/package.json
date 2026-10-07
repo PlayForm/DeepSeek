@@ -1,0 +1,41 @@
+{
+	"name": "@playform/hook-dsh-normalize-ellipsis",
+	"version": "0.0.1",
+	"description": "The ellipsis hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the horizontal ellipsis (U+2026 — the typographic three-dot run collapsed into one code point by text processors) in model output streams, the family's ellipsis flavor — the CLASS flavor: the core's Ellipsis class replaced by the configurable replacement string (default \"...\" — the ASCII three-dot sequence), applied to text/reasoning deltas and assembled block-end blocks while tool-call deltas pass through untouched.",
+	"type": "module",
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.4",
+		"tsc-alias": "1.9.7",
+		"typescript": "7.0.2",
+		"@deepseek-ai/cordis": "4.0.4",
+		"@deepseek-ai/schemastery": "3.18.4",
+		"@deepseek-ai/dsh-llm": "0.2.0-rc.2"
+	},
+	"license": "MIT",
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

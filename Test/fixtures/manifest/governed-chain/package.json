@@ -1,0 +1,11 @@
+{
+  "name": "@local/test-author",
+  "version": "0.1.0",
+  "description": "Adopted trio interlock test - live battery.",
+  "dependencies": {
+    "@deepseek-ai/cordis": "^0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^0.1.0-rc.6",
+    "lodash": "4.18.1",
+    "tailwindcss": "3.0.5"
+  }
+}

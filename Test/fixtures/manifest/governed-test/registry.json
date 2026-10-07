@@ -1,0 +1,8 @@
+{
+  "protoOrdinate": "@local/test-author",
+  "providers": ["@local/test-author"],
+  "chain": ["@local/is-inference-provider", "@local/is-inference-supported", "@local/steward"],
+  "effectiveLatest": {},
+  "fallback": "ncu",
+  "note": "Public-dependency test workspace: chain deps are governed by effectiveLatest (empty here); everything else passes to the availability layer (ncu + update-policy.json)."
+}

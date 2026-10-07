@@ -1,0 +1,46 @@
+{
+	"name": "@playform/hook-dsh-governor-cargo",
+	"version": "0.0.1",
+	"description": "Silent Cargo.toml governor — the RUST-SIDED FLAVOR of the package.json governor (@playform/hook-dsh-governor-package): same architecture, same API-awareness discipline, same PlayForm TypeScript layout — but for Rust manifests. Hooks fs/observed — the cordis event every tool-layer file write dispatches — for basename Cargo.toml, parses with smol-toml ONLY to identify dependency entries ([dependencies], [dev-dependencies], [build-dependencies], [target.'cfg(...)'.dependencies], [workspace.dependencies]) and rewrites chain-governed pins SURGICALLY on the raw text lines (comments and formatting survive; an internal calculation, not a TOML stringify), then runs the update stage as a detached, contained continuation that drives the RUST-SIDE CLI — cargo upgrade (cargo-edit) — through the ctx.subprocess seam with the exclusion list enforced AT THE CLI LEVEL (--exclude, one flag per crate; chain deps merged in so cargo upgrade can never bump a chain-governed pin). The Rust/TS boundary is exclusionary: Rust does not co-opt into the TypeScript ecosystem, and there is no npm-library equivalent for cargo manifest updates — the cargo CLI is the only update path. Fully API-aware: the governed manifest is read/rewritten through ctx.fs with a version-guarded replaceIfVersion write (the service owns version tokens), configuration is a validated Schemastery Config schema with defaults, and the authoring agent is never notified: the tool result is built from the author's own content, and the observation-policy's version record is refreshed by re-emitting fs/observed with the service-issued fresh version (P₃ after the chain rewrite; U₂ after the cargo upgrade).",
+	"type": "module",
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
+	},
+	"dependencies": {
+		"smol-toml": "1.9.0"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.4",
+		"tsc-alias": "1.9.7",
+		"typescript": "7.0.2",
+		"@deepseek-ai/cordis": "4.0.4",
+		"@deepseek-ai/schemastery": "3.18.4",
+		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2"
+	},
+	"license": "MIT",
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

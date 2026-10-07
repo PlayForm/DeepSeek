@@ -1,0 +1,1 @@
+import{Schema as e}from"@playform/plugin-dsh-factory";import o from"@deepseek-ai/schemastery";import r from"./Section.js";import t from"./Default.js";var p=e({logFile:"~/.dsh/hook-dsh-pinner-package.log",mutationTools:["write","edit","str_replace_editor","raw-write"],exclude:t},{sections:o.array(o.string()).default(r)});export{p as default};

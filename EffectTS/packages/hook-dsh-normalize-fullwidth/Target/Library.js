@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-fullwidth",n=t,r=["pluginFactory"],e=o;var c={name:p,apply:e,Config:n,inject:r};export{n as Config,e as apply,c as default,r as inject,p as name};

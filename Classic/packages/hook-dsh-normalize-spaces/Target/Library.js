@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-spaces",e=t,n=["pluginFactory"],r=o;var s={name:p,apply:r,Config:e,inject:n};export{e as Config,r as apply,s as default,n as inject,p as name};

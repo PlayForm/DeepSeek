@@ -1,0 +1,1 @@
+import a from"./Write.js";import{Activate as i}from"@playform/hook-dsh-core";var p=(t,r)=>{const o=t.pluginFactory,e=o.State(t,r,{module:"hook-dsh-normalize-file",fields:{Replacement:"replacement"}});e.Factory=o,o.Append(e,i([["replacement",e.Replacement],["logFile",e.Ledger]])),t.tools.register(a(t,e)),t.__hookDshNormalizeFileState=e};export{p as default};

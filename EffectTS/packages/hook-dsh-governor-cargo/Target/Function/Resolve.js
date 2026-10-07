@@ -1,0 +1,1 @@
+import*as r from"node:fs";import{join as t,dirname as n}from"node:path";var a=(e,i,s)=>{switch(!0){case(!!e.Policy&&r.existsSync(e.Policy)):return e.Policy;case r.existsSync(t(i,"update-policy.json")):return t(i,"update-policy.json");case(!!s&&r.existsSync(t(n(s),"update-policy.json"))):return t(n(s),"update-policy.json");default:return""}};export{a as default};

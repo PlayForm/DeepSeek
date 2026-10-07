@@ -1,0 +1,43 @@
+# Bundle patch for @playform/hook-dsh-normalize-invisible.
+# The invisible hook NORMALIZES MODEL OUTPUT: it registers one llm/stream
+# waterfall listener — the interceptable wrapper around every streaming model
+# call (retry, replay, routing) — and removes the zero-width/invisible
+# character family (soft hyphen, zero-width spaces/joiners, bidi embedding
+# controls, word joiner, zero-width no-break space) from text/reasoning
+# deltas and from the assembled block-end blocks. The characters carry no
+# visible width and frequently smuggle hidden instructions into model output
+# (U+202E is the classic visual-spoofing override) — removing them makes the
+# stream what the user actually sees. Unlike the governance family
+# (fs/observed, silent), the rewrite is deliberately VISIBLE — it flows into
+# both the live UI and the durable transcript, because the normalization IS
+# the feature.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) — a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "…" not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the app
+# is restarted (bundle layers compose at host boot). A file: dependency alone
+# is NOT activation.
+#
+# `replacement` is the transform's only knob (volatile: hot-editable) — its
+# default is the EMPTY string, i.e. REMOVAL: the invisible characters are
+# deleted, not rewritten to a visible glyph. The log/logFile cells are
+# volatile for the same reason. `normalizeReasoning` defaults to ON (the
+# deltas AND the assembled block must agree); `normalizeToolArguments` is
+# IMPLEMENTED (the argumentsDelta text and the assembled ToolCallBlock
+# arguments are rewritten by the same transform when on, with two exemptions:
+# an `edit` call passes through by identity (old_string must match real file
+# bytes) and a call whose arguments open with the `{"__normalize":false`
+# first-key marker passes through unnormalized with the marker entry
+# stripped) with the SCHEMA
+# default OFF — tool-call arguments are execution-critical raw JSON — and
+# this example patch turns it ON (opt-in: the user accepts the risk).
+- insert:
+      - id: hook-dsh-normalize-invisible
+        name: "@playform/hook-dsh-normalize-invisible"
+        config:
+            log: true
+            logFile: ~/.dsh/hook-dsh-normalize-invisible.log
+            replacement: ""
+            normalizeReasoning: true
+            normalizeToolArguments: true

@@ -1,0 +1,58 @@
+{
+	"name": "@playform/plugin-dsh-factory",
+	"version": "0.0.1",
+	"description": "The FACTORY: a DeepSeek Harness service (@playform/plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate — the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list resolution, the g1 gate set, the version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained continuation, the State builder, the wiring helpers, the effects (jobs controller, in-flight disposal, storage domain), the Schemastery schema factory and the probe-once seam accessor. A new governance flavor reduces to a Config extension, a pure transform and an update engine; the factory owns the scaffolding and never the flavor's ledger strings.",
+	"type": "module",
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.4",
+		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage-domain": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.4",
+		"@effect/opentelemetry": "4.0.1",
+		"@opentelemetry/api": "1.9.1",
+		"@opentelemetry/api-logs": "0.222.0",
+		"@opentelemetry/context-async-hooks": "2.11.0",
+		"@opentelemetry/exporter-trace-otlp-http": "0.222.0",
+		"@opentelemetry/resources": "2.11.0",
+		"@opentelemetry/sdk-logs": "0.222.0",
+		"@opentelemetry/sdk-metrics": "2.11.0",
+		"@opentelemetry/sdk-trace-base": "2.11.0",
+		"@opentelemetry/sdk-trace-node": "2.11.0",
+		"@opentelemetry/sdk-trace-web": "2.11.0",
+		"@opentelemetry/semantic-conventions": "1.43.0",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.4",
+		"tsc-alias": "1.9.7",
+		"typescript": "7.0.2",
+		"zod": "4.6.5"
+	},
+	"license": "MIT",
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

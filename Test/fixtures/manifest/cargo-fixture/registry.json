@@ -1,0 +1,6 @@
+{
+  "effectiveLatest": {
+    "serde": "1.0.228",
+    "anyhow": "2.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "reject": ["tailwindcss"],
+  "allow": [],
+  "depGroups": ["dev", "optional", "peer", "prod", "bundle"],
+  "concurrency": 8,
+  "targets": {
+    "default": "latest",
+    "overrides": []
+  },
+  "verifyCommand": "pnpm install",
+  "note": "chain deps are excluded by the governor's reject merge (GOVERNOR_CHAIN_DEPS)."
+}

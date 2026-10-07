@@ -1,0 +1,19 @@
+{
+	"name": "@playform/dsh-family-monorepo",
+	"version": "0.1.0",
+	"private": true,
+	"description": "The DeepSeek Harness Plugin Family for PlayForm - the monorepo: the Boilerplate reference, the Classic release, the Effect-TS release, the Site, and the Test archive.",
+	"scripts": {
+		"build:boilerplate": "pnpm -r --workspace-concurrency=1 --filter \"./Boilerplate/packages/**\" run prepublishOnly",
+		"build:classic": "pnpm -r --workspace-concurrency=1 --filter \"./Classic/packages/**\" run prepublishOnly",
+		"build:effect-ts": "pnpm -r --workspace-concurrency=1 --filter \"./EffectTS/packages/**\" run prepublishOnly",
+		"test": "node Boilerplate/smokes/run-all.mjs",
+		"site": "node Site/server.mjs",
+		"format": "bash Maintain/Format.sh",
+		"format:prettier": "bash Maintain/Format.sh prettier",
+		"format:check": "prettier --check --ignore-path .prettierignore ."
+	},
+	"devDependencies": {
+		"prettier": "3.9.9"
+	}
+}

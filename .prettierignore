@@ -1,0 +1,39 @@
+# ============================================================
+# Prettier exclusions for the DeepSeek Harness Plugin Family
+# monorepo - adapted to THIS repository's actual structure:
+#   Boilerplate/packages/*, Classic/packages/*,
+#   EffectTS/packages/* (each with Target/ build dirs),
+#   Site/, docs/, Test/, root node_modules + pnpm-lock.
+# ============================================================
+
+# Dependencies
+node_modules
+**/node_modules
+
+# Lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Build output (per-package Target/ dirs + generic build trees)
+Target
+**/Target
+**/Target/**
+target
+**/target
+**/target/**
+dist
+**/dist
+**/dist/**
+
+# Caches
+.cache
+**/.cache
+.eslintcache
+**/.eslintcache
+.turbo
+**/.turbo
+
+# Test fixtures - frozen by design, never reformat
+Test
+Test/**

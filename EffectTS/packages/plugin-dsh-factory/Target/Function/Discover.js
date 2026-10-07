@@ -1,0 +1,1 @@
+import*as s from"node:fs";import{basename as a,dirname as t,join as l}from"node:path";var o=r=>{let e=r;for(;e&&e!=="/"&&e.length>1;){const n=l(e,"registry.json");switch(!0){case a(e)==="node_modules":return null;case s.existsSync(n):return n;case t(e)===e:return null}e=t(e)}return null};export{o as default};

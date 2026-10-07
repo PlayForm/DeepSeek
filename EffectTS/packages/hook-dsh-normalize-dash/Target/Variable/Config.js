@@ -1,0 +1,1 @@
+import{Schema as o}from"@playform/plugin-dsh-factory";import e from"@deepseek-ai/schemastery";var t=o(!1,{logFile:e.string().default("~/.dsh/hook-dsh-normalize-dash.log").volatile(),replacement:e.string().default("-").volatile(),normalizeReasoning:e.boolean().default(!0),normalizeToolArguments:e.boolean().default(!1)});export{t as default};

@@ -1,0 +1,11 @@
+{
+  "protoOrdinate": "@local/test-author",
+  "providers": ["@local/test-author"],
+  "chain": ["@local/is-inference-provider", "@local/is-inference-supported", "@local/steward"],
+  "effectiveLatest": {
+    "@deepseek-ai/cordis": "0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "0.1.0-rc.6"
+  },
+  "fallback": "ncu",
+  "note": "Chain-governance test workspace: effectiveLatest pins the vendored fork versions; naive npm-latest would break the chain (the cordis trap)."
+}

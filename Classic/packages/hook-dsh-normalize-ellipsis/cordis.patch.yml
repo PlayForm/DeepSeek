@@ -1,0 +1,41 @@
+# Bundle patch for @playform/hook-dsh-normalize-ellipsis.
+# The ellipsis hook NORMALIZES MODEL OUTPUT: it registers one llm/stream
+# waterfall listener — the interceptable wrapper around every streaming model
+# call (retry, replay, routing) — and replaces the horizontal ellipsis
+# (U+2026, the typographic three-dot run collapsed into one code point by
+# text processors) with the ASCII "..." three-dot sequence in text/reasoning
+# deltas and in the assembled block-end blocks. The single-code-point form
+# renders inconsistently across fonts and terminals; the plain three-dot
+# sequence is what every reader, shell and diff understands. Unlike the
+# governance family (fs/observed, silent), the rewrite is deliberately
+# VISIBLE — it flows into both the live UI and the durable transcript,
+# because the normalization IS the feature.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) — a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "…" not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the app
+# is restarted (bundle layers compose at host boot). A file: dependency alone
+# is NOT activation.
+#
+# `replacement` is the transform's only knob (volatile: hot-editable) — its
+# default is "..." (the ASCII three-dot sequence, the ellipsis's own ASCII
+# spelling). The log/logFile cells are volatile for the same reason.
+# `normalizeReasoning` defaults to ON (the deltas AND the assembled block
+# must agree); `normalizeToolArguments` is IMPLEMENTED (the argumentsDelta
+# text and the assembled ToolCallBlock arguments are rewritten by the same
+# transform when on, with two exemptions: an `edit` call passes through by
+# identity (old_string must match real file bytes) and a call whose
+# arguments open with the `{"__normalize":false` first-key marker passes
+# through unnormalized with the marker entry stripped) with the SCHEMA default OFF — tool-call arguments are
+# execution-critical raw JSON — and this example patch turns it ON (opt-in:
+# the user accepts the risk).
+- insert:
+      - id: hook-dsh-normalize-ellipsis
+        name: "@playform/hook-dsh-normalize-ellipsis"
+        config:
+            log: true
+            logFile: ~/.dsh/hook-dsh-normalize-ellipsis.log
+            replacement: "..."
+            normalizeReasoning: true
+            normalizeToolArguments: true

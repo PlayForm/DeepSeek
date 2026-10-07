@@ -1,0 +1,28 @@
+# ============================================================
+# EditorConfig for the DeepSeek Harness Plugin Family monorepo.
+# The tab standard (Land + Aphrodite): indent_style = tab,
+# indent_size = 4 - matching the .prettierrc for EVERYTHING.
+# Markdown keeps trailing whitespace (two-space hard breaks).
+# ============================================================
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# Markdown - keep trailing whitespace (two-space hard breaks)
+[*.md]
+trim_trailing_whitespace = false
+
+# YAML - Prettier emits spaces for YAML regardless of useTabs
+# (tabs are invalid YAML indentation); 4-space visual width matches.
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 4
+tab_width = 4

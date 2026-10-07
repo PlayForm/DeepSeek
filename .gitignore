@@ -1,0 +1,34 @@
+# ============================================================
+# Git ignore for the DeepSeek Harness Plugin Family monorepo.
+# Note: the per-package repos (Boilerplate/, Classic/, EffectTS/
+# packages) may become git submodules later - their own .gitignore
+# files will govern their contents; this root file governs the
+# monorepo workspace only. The pre-existing rule is kept verbatim.
+# ============================================================
+
+Test/fixtures/*/target
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Lockfile (the workspace lockfile is regenerated per install)
+pnpm-lock.yaml
+
+# Build output (per-bundle Target/ dirs and generic build trees)
+Target/
+target/
+dist/
+*.tsbuildinfo
+
+# Logs + caches
+*.log
+.eslintcache
+.turbo/
+.cache/
+
+# OS noise
+.DS_Store
+
+Boilerplate/
+Site/

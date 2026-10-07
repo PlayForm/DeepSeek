@@ -1,0 +1,1 @@
+import{Context as n,Effect as i,Layer as a}from"effect";import{basename as p}from"node:path";import c from"../Function/Govern.js";class f extends n.Service()("dsh.factory.Govern"){}const v=()=>a.succeed(f,{run:(r,e,t,o,s)=>c(r,e,t,o,s).pipe(i.withSpan("dsh.govern",{attributes:{target:e.displayPath,basename:p(e.displayPath)}}))});export{f as Govern,v as layer};
