@@ -16,7 +16,7 @@ import * as Path from "node:path";
 // this file so the smoke works regardless of the process CWD.
 const FACTORY_DIR = Path.resolve(import.meta.dirname, "../packages/plugin-dsh-factory");
 const GOVERNOR_DIR = Path.resolve(import.meta.dirname, "../packages/hook-dsh-governor-package");
-const NCU_BIN = "/Volumes/CORSAIR/Tool/macOS/pnpm/global/bin/ncu";
+const NCU_BIN = "ncu";
 const EXCLUDE = ["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"];
 const TOOLS = ["write", "edit", "str_replace_editor", "raw-write"];
 
@@ -498,7 +498,7 @@ ok("jobs envelope: `update stage dispatched …` line byte-identical + dispatche
 
 // the bin-mode run through the subprocess seam
 assert.equal(
-	find("update: mode=bin (ncu binary /Volumes/CORSAIR/Tool/macOS/pnpm/global/bin/ncu)").length,
+	find(`update: mode=bin (ncu binary ${NCU_BIN})`).length,
 	1,
 );
 const spec = spawnSpecs.at(-1);

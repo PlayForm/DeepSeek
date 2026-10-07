@@ -3,7 +3,7 @@ import type { BuildOptions, Plugin } from "esbuild";
 /**
  * @module ESBuild
  *
- * Custom ESBuild configuration for the FACTORY (@playform/dsh-plugin-factory),
+ * Custom ESBuild configuration for the FACTORY (@playform/plugin-dsh-factory),
  * passed to `@playform/build` via `--ESBuild Configuration/ESBuild.ts` (the
  * Compress-package convention, byte-identical to the trio's configuration).
  * The base configuration from the build tool already applies: `format: esm`,

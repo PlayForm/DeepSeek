@@ -11,7 +11,7 @@
 // catches this).
 //
 // @playform/hook-dsh-normalize-dash — the dash normalizer for MODEL OUTPUT. The
-// hermes hook (~/.hermes/agent-hooks/normalize-dashes.sh) rewrites the
+// the hermes normalize-dashes.sh hook rewrites the
 // unicode dash family to ASCII hyphen-minus in files after the fact; the
 // dsh plugin family can go where hermes cannot: the llm/stream waterfall,
 // the interceptable wrapper around EVERY streaming model call (retry,

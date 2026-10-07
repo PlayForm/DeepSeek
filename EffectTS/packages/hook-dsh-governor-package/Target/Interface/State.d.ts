@@ -8,8 +8,8 @@ export default interface State extends Shared {
     Wait: number;
     /** Circuit breaker: consecutive update-stage failures per directory. */
     Limit: number;
-    /** ncu binary for bin mode (absolute path — the host PATH is not the
-     *  user's shell PATH). */
+    /** ncu binary for bin mode (binary name or absolute path — resolved via
+     *  the host PATH). */
     Binary: string;
     /** Update stage mode: "programmatic" (ncu library in-process) or "bin". */
     Mode: string;

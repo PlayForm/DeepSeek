@@ -24,7 +24,8 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
 	},
 	"dependencies": {
-		"effect": "4.0.1"
+		"smol-toml": "1.9.0",
+		"effect": "4.0.2"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
@@ -37,7 +38,7 @@
 		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2"
 	},
-	"license": "MIT",
+	"license": "CC0-1.0",
 	"dsh": {
 		"bundle": {
 			"patch": "./cordis.patch.yml"

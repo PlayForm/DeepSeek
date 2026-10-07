@@ -3,20 +3,20 @@
 _The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-core&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-core)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-core)
-[![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
-[![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
-[![license](https://img.shields.io/static/v1?label=license&message=MIT&color=lightgrey)](https://opensource.org/licenses/MIT)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-core)
+[![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](../../README.md)
+[![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../../README.md)
+[![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 > [!NOTE]
 >
-> The **pure machinery layer** of the DSH plugin family: the dependency-free, harness-free
+> The **pure machinery layer** of the DSH plugin family: the effect-backed, harness-free
 > commonalities that both halves of the family are built from - the governance hooks' helpers
 > (Section/Default/Suppress/Policy/Refusal, the update-stage envelope and the activation-line
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> _Zero runtime dependencies. Not a plugin - the muscle under the plugins._ _The @-sentence
+> _One runtime dependency: effect v4.0.1. Not a plugin - the muscle under the plugins._ _The @-sentence
 > identity: **Hook @ DSH @ Core** - the machinery every other family package stands on._
 
 ---
@@ -24,7 +24,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position**: the base library of the whole family (the @-sentence **Hook @ DSH @ Core**) -
-parent of none, child of none: zero runtime dependencies, consumed by all eleven other packages.
+parent of none, child of none: one runtime dependency (effect v4.0.1), consumed by all eleven other packages.
 
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
@@ -198,7 +198,7 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 
 ### The Conventions
 
-- Zero runtime dependencies; the same `Source/` → `Target/` layout as the family bundles;
+- One runtime dependency (effect v4.0.1); the same `Source/` → `Target/` layout as the family bundles;
   `prepublishOnly`-only build (the deterministic sequence:
   `Build ... --TypeScript Configuration/TypeScript.noemit.json` then explicit `tsc && tsc-alias`).
 - The module ledger strings stay MODULE-side: the core owns the mechanics, never a module's strings.
@@ -236,7 +236,7 @@ try {
 // Source/Function/Transform.ts - the refusal guard before any write:
 if (Refusal(Append, Path, Section, Document, Next)) {
 	return null; // the byte-identical line went to the ledger, the write did not happen
-	// -> `REFUSED rewrite of /Volumes/.../package.json: non-dependency section "scripts" would change`
+	// -> `REFUSED rewrite of /x/package.json: non-dependency section "scripts" would change`
 }
 ```
 
@@ -271,4 +271,4 @@ mechanics only; the fields are the module's.
 
 ## License 📜
 
-MIT.
+CC0-1.0.

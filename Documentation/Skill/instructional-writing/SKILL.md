@@ -48,7 +48,7 @@ em dash" has the literal em dash present - never a hyphen standing in.
 ## 3. The fixture conventions
 
 1. The live fixtures live under
-   `~/Developer/Application/PlayForm/DeepSeek/Test/` (the archived family
+   `Test/` (the archived family
    fixtures: `fixtures-md/` for the markdown proofs, `fixtures/` for the
    manifest/Cargo fixtures). The archive holds ONLY the family's fixtures.
 2. Each fixture's purpose is one line in its content ("the RAW call",

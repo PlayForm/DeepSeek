@@ -12,7 +12,7 @@
 //
 // @playform/hook-dsh-normalize-file - the FILE-CONTENT normalizer, the
 // hermes heritage beyond the tool layer: rewriting family characters in files
-// ALREADY on disk. The ancestry is the user's ~/.hermes/agent-hooks/
+// ALREADY on disk. The ancestry is the hermes agent-hooks
 // normalize-dashes-for-execute-code.sh hook, which swept files created inside
 // scripts (write_file(), open()) that never passed through a write tool - the
 // gap DSH's tool layer leaves open too, since only raw-write's explicit

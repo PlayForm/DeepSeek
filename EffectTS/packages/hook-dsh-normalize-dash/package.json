@@ -1,7 +1,7 @@
 {
 	"name": "@playform/hook-dsh-normalize-dash",
 	"version": "0.0.1",
-	"description": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015, U+2E17, U+2E1A, U+2E3A–U+2E3B, U+2E40, U+2E5D, U+301C, U+3030, U+30A0, U+FE31–U+FE32, U+FE58, U+FE63, U+FF0D) to ASCII hyphen-minus in model output, mirroring the user's ~/.hermes/agent-hooks/normalize-dashes.sh hook at exactly the injection point hermes itself lacks: model output. Text and reasoning deltas and the fully-assembled block-end blocks are rewritten (chunk-boundary-safe single-character replacement, no context rules, exactly like the hermes regex); block-start, usage and finish pass through BY IDENTITY; the tool-call-delta's raw-JSON argumentsDelta (and the assembled ToolCallBlock.arguments) is rewritten only when normalizeToolArguments is on — IMPLEMENTED, default OFF (execution-critical; enabling it is the user's accepted risk, and this profile's patch turns it on). The rewrite flows into both the live UI and the durable transcript — that is why the point was chosen: unlike the governance family, this plugin is deliberately VISIBLE.",
+	"description": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015, U+2E17, U+2E1A, U+2E3A–U+2E3B, U+2E40, U+2E5D, U+301C, U+3030, U+30A0, U+FE31–U+FE32, U+FE58, U+FE63, U+FF0D) to ASCII hyphen-minus in model output, mirroring the hermes normalize-dashes hook at exactly the injection point hermes itself lacks: model output. Text and reasoning deltas and the fully-assembled block-end blocks are rewritten (chunk-boundary-safe single-character replacement, no context rules, exactly like the hermes regex); block-start, usage and finish pass through BY IDENTITY; the tool-call-delta's raw-JSON argumentsDelta (and the assembled ToolCallBlock.arguments) is rewritten only when normalizeToolArguments is on — IMPLEMENTED, default OFF (execution-critical; enabling it is the user's accepted risk, and this profile's patch turns it on). The rewrite flows into both the live UI and the durable transcript — that is why the point was chosen: unlike the governance family, this plugin is deliberately VISIBLE.",
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
@@ -33,7 +33,7 @@
 		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
 		"@deepseek-ai/schemastery": "3.18.4"
 	},
-	"license": "MIT",
+	"license": "CC0-1.0",
 	"dsh": {
 		"bundle": {
 			"patch": "./cordis.patch.yml"

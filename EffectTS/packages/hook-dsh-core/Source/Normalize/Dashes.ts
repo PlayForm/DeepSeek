@@ -1,5 +1,5 @@
 // Dashes — the unicode dash-family character class, the hermes dash pattern
-// VERBATIM (the user's ~/.hermes/agent-hooks/normalize-dashes.sh regex, its
+// VERBATIM (the hermes normalize-dashes.sh regex, its
 // perl -CSD form):
 //
 //   [\u058A\u05BE\u1400\u1806\u2010-\u2015\u2E17\u2E1A\u2E3A-\u2E3B\u2E40

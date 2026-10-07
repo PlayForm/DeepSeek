@@ -1,7 +1,7 @@
 {
 	"name": "@playform/hook-dsh-core",
 	"version": "0.0.1",
-	"description": "The CORE: the pure, dependency-free, harness-free commonalities of the governance family (@playform/hook-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard. A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"description": "The CORE: the pure, effect-backed, harness-free commonalities of the governance family (@playform/hook-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard. A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
@@ -20,7 +20,7 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
 	},
 	"dependencies": {
-		"effect": "4.0.1"
+		"effect": "4.0.2"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
@@ -28,5 +28,5 @@
 		"tsc-alias": "1.9.7",
 		"typescript": "7.0.2"
 	},
-	"license": "MIT"
+	"license": "CC0-1.0"
 }

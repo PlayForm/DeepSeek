@@ -251,14 +251,14 @@ for (const f of [
 ok("config: shared volatile cells + plain module fields");
 
 const cfg1 = Cargo.Config({
-	cargoBin: "/Volumes/CORSAIR/Tool/macOS/rust/cargo/bin/cargo",
+	cargoBin: "cargo",
 	strict: true,
 	keepFile: "/k.json",
 	updateMode: "cargo",
 });
 assert.equal(
 	cfg1.cargoBin.get?.() ?? cfg1.cargoBin,
-	"/Volumes/CORSAIR/Tool/macOS/rust/cargo/bin/cargo",
+	"cargo",
 );
 assert.equal(cfg1.strict, true);
 assert.equal(cfg1.keepFile, "/k.json");

@@ -52,7 +52,7 @@
 	"dependencies": {
 		"effect": "4.0.1"
 	},
-	"license": "MIT",
+	"license": "CC0-1.0",
 	"dsh": {
 		"bundle": {
 			"patch": "./cordis.patch.yml"

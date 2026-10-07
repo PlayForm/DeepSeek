@@ -3,7 +3,7 @@ import type { BuildOptions, Plugin } from "esbuild";
 /**
  * @module ESBuild
  *
- * Custom ESBuild configuration for the CORE (@playform/dsh-hook-core),
+ * Custom ESBuild configuration for the CORE (@playform/hook-dsh-core),
  * passed to `@playform/build` via `--ESBuild Configuration/ESBuild.ts` (the
  * Compress-package convention, byte-identical to the family's
  * configuration). The base configuration from the build tool already

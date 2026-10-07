@@ -9,5 +9,5 @@ This file contains em-dashes and en-dashes on purpose:
 
 The question under test: does any hook rewrite these to a plain hyphen (-)?
 Expected: no hook touches file contents - the governor/pinner/cargo govern
-manifest versions only, and the mdash normalizes model output streams, not
+manifest versions only, and the dash hook normalizes model output streams, not
 files. This file should stay byte-identical.

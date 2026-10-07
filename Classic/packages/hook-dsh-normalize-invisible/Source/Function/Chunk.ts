@@ -13,7 +13,7 @@
 // tool-args gate) and the per-call `Raw` marker flag the stream wrapper
 // (Function/Normalize) tracks by tool-call id.
 //
-// The behavior is the CLASS flavor of the family's dispatch (the mdash
+// The behavior is the CLASS flavor of the family's dispatch (the dash
 // template shape, with the Invisible class substituted for Dashes) - the
 // invisible smoke is the arbiter.
 import { Chunk as CoreChunk } from "@playform/hook-dsh-core";

@@ -1,6 +1,6 @@
 // Factory — the STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory
 // service (the family's class/service plugin, factory SCHEME.md §0–§2). The
-// stream-normalization flavors are NON-MANIFEST factory consumers (the mdash
+// stream-normalization flavors are NON-MANIFEST factory consumers (the dash
 // was the first): they consume the State builder (cell unwrap + shared
 // fields, §2.10), the ledger (Append, §2.1) and the probe-once Seam accessor
 // (§2.15) — but NOT the fs/observed Wire (§2.11, fs/observed-hardwired to

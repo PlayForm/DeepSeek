@@ -12,7 +12,7 @@
 // marker flag forwarded by the per-chunk dispatch so the deltas AND the
 // block agree.
 //
-// The behavior is the CLASS flavor of the family's dispatch (the mdash
+// The behavior is the CLASS flavor of the family's dispatch (the dash
 // template shape, with the Invisible class substituted for Dashes) - the
 // invisible smoke is the arbiter.
 import { Block as CoreBlock } from "@playform/hook-dsh-core";
