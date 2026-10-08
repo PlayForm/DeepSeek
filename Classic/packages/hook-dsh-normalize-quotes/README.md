@@ -10,8 +10,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 
 > [!NOTE]
 >
-> The **quote normalizer for model output** - a DeepSeek Harness plugin that hooks the `llm/stream`
-> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime)
+> The **quote normalizer for model output** - a DeepSeek Harness plugin that hooks the [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
+> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts))
 > and normalizes the curly quote family in model output, live in the transcript: the eight
 > typographic quote code points each map to their ASCII straight counterpart -
 > U+2018/U+2019/U+201A/U+201B to the ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F to the ASCII
@@ -43,7 +43,7 @@ generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 | flavor                                                            | table                  | substitution                  |
 | ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
 | [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)           | core `Dashes` class    | `→ replacement` (default `-`) |
-| `hook-dsh-normalize-quotes` (this bundle)                         | core `Quotes` MAP      | curly → straight              |
+| [hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-quotes/Source) (this bundle)                         | core `Quotes` MAP      | curly → straight              |
 | [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
@@ -51,9 +51,9 @@ generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no fs/observed
-dead fields. It touches no files, so fs/write-intent and fs/observed never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other `llm/stream` listeners
+by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+dead fields. It touches no files, so [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; it wraps the
+downstream result and always calls `next()`, so it composes with other [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners
 regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -81,7 +81,7 @@ Verify with the `hook-dsh-normalize-quotes: activated (...)` ledger line.
 
 ### Usage
 
-The bundle is configured through its `cordis.patch.yml` row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-quotes/cordis.patch.yml) row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -154,7 +154,7 @@ the straight form the one that reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Quotes` map (`@playform/hook-dsh-core`'s `Normalize/Quotes`), applied per text
+Exactly the core's `Quotes` map ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s `Normalize/Quotes`), applied per text
 segment through the core's `ReplaceMap` - eight entries, each typographic quote code point to its
 ASCII straight counterpart:
 
@@ -225,7 +225,7 @@ the raw-marker calls passing through unnormalized.)
 
 ## The Ledger
 
-Two lines, both written through the factory's `Append` (the `hook-dsh-normalize-quotes:` prefix is
+Two lines, both written through the factory's `Append` (the hook-dsh-normalize-quotes: prefix is
 the logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text

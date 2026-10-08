@@ -32,7 +32,7 @@ c2beb06  refactor(core): the stream dispatch durably dependency-free (generic st
    claims).
 3. **The tool-args gate** (1d827ad): `normalizeToolArguments` implemented (was a documented no-op) -
    the core's Chunk/Block normalize tool-call deltas/blocks when the flag is on; ENABLED in the
-   user's profile (all six cordis.patch.yml `true`) with the schema defaults staying `false` ("just
+   user's profile (all six [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) `true`) with the schema defaults staying `false` ("just
    for me, defaults off" - the schema-default + profile-override pattern).
 4. **The three-way gate** (9d6e195): (a) the EDIT exemption - `edit` calls pass by identity (the
    old_string must match real bytes; LIVE-PROVEN: an edit with real em-dashes in the old_string
@@ -60,12 +60,13 @@ The design (user-approved): the mdash registers a `raw-write` tool via
 ~604) with input `{ file_path, content, normalize? }`; `normalize: true` → the tool applies the
 family's SIX transforms itself (the core's Replace/ReplaceMap +
 Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth) before writing via the same `ctx.fs.writeText`
-path as the built-in write (the governance hooks' fs/observed still fire); false/absent → VERBATIM.
-The name joins `edit` in the stream exemption (the hook disabled for its calls, structurally). The
-agent was also pointed at the local deepseek-harness docs checkout (the tool.md +
-adding-a-tool.md sections), with
-the INSTALLED source (dsh-tool-fs) as the tiebreaker. Check its result on disk + verify (tsc ×7,
-rebuilds, the smokes with the new raw-write coverage) + the user commits.
+path as the built-in write (the governance hooks'
+[fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+still fire); false/absent → VERBATIM. The name joins `edit` in the stream exemption (the hook
+disabled for its calls, structurally). The agent was also pointed at the local deepseek-harness docs
+checkout (the tool.md + adding-a-tool.md sections), with the INSTALLED source (dsh-tool-fs) as the
+tiebreaker. Check its result on disk + verify (tsc ×7, rebuilds, the smokes with the new raw-write
+coverage) + the user commits.
 
 ## The smoke counts (the current baseline)
 
@@ -109,9 +110,11 @@ through subagents; the user commits; the smokes are the arbiter.
 
 The family now has MULTIPLE write executions that repeat the same machinery:
 
-1. **The harness's built-in write tool** (dsh-tool-fs): `ctx.fs.resolve` → the `fs/write-intent`
+1. **The harness's built-in write tool** (dsh-tool-fs): `ctx.fs.resolve` → the
+   [`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
    waterfall → the standing sandbox policy (the no-escalation controller) → `ctx.fs.writeText(...)`
-   → `ctx.emit("fs/observed", ...)`.
+   →
+   `ctx.emit("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)", ...)`.
 2. **The family's `raw-write` tool** (the mdash's Function/Write.ts): mirrors that path VERBATIM (by
    design - so the governance hooks' events fire) - ~90 lines of near-duplicate orchestration.
 3. **The factory's GuardedWrite** (Function/Write.ts): the version-guarded write + the P4 sandbox

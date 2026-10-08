@@ -16,8 +16,9 @@
    was `update stage skipped … (in-flight)`.
 3. **The update stages as real jobs** — the governor's programmatic ncu (`update: ncu (base) → {}` +
    the policy's `verifyCommand: pnpm install` → `verifyCommand failed (status 1)` — the fixture's
-   vendored forks aren't on the registry, the documented cordis trap — breaker `consecutive=1`); the
-   cargo's REAL `cargo upgrade` with the full argv
+   vendored forks aren't on the registry, the documented
+   [cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis) trap —
+   breaker `consecutive=1`); the cargo's REAL `cargo upgrade` with the full argv
    (`--exclude serde --exclude anyhow --incompatible ignore --pinned ignore` — the chain keys always
    excluded) + the digest + `DONE`.
 4. **The cargo normalization** — `serde = "1.0"` → `"1.0.228"`, `toml = "0.1"` → `"0.1.30"`,
@@ -27,15 +28,17 @@
 6. **The collision window** — the in-flight gate live (`skipped (in-flight)` during the
    verifyCommand window) + back-to-back cargo runs each completing cleanly (no orphan; the
    namespaced UpdateKey smoke covers the controller survival).
-7. **THE P5 LIVE FINDING (fixed, commit `952eaa1`)** — the harness's dsh-storage-domain enforces ONE
-   open per domain name (verified in the installed 0.2.0-rc.2: "concurrent opens of one name fail
-   loud"), so the SHARED package_governance domain was single-winner per boot: at this boot only the
-   PINNER's records landed in the domain (`storages/package_governance.json`), the governor's +
-   cargo's silently never did (the human ledgers remained the complete record). Fix: the FIRST
-   successful Open binds its table put on the factory instance (`SharedJournal` — every module holds
-   the same injected service) and the Journal method routes all modules' records through it (Attach
-   probes the service via ctx.get "pluginFactory", try/catch). Smoke-verified (all six); LIVE
-   CONFIRMATION: the next restart should show ALL modules' records in the shared domain.
+7. **THE P5 LIVE FINDING (fixed, commit `952eaa1`)** — the harness's
+   [dsh-storage-domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+   enforces ONE open per domain name (verified in the installed 0.2.0-rc.2: "concurrent opens of one
+   name fail loud"), so the SHARED package_governance domain was single-winner per boot: at this
+   boot only the PINNER's records landed in the domain (`storages/package_governance.json`), the
+   governor's + cargo's silently never did (the human ledgers remained the complete record). Fix:
+   the FIRST successful Open binds its table put on the factory instance (`SharedJournal` — every
+   module holds the same injected service) and the Journal method routes all modules' records
+   through it (Attach probes the service via ctx.get "pluginFactory", try/catch). Smoke-verified
+   (all six); LIVE CONFIRMATION: the next restart should show ALL modules' records in the shared
+   domain.
 
 ## THE FAMILY IS LIVE AND COMPLETE
 
@@ -51,10 +54,11 @@ future granularization the user wants (none left in the queue).
 
 - `952eaa1` — the shared journal sink: the FIRST successful Open binds its put on the factory
   instance (`SharedJournal`); the Journal method routes every module's records through it (the
-  harness's storageDomain is single-open per name — verified in dsh-storage-domain 0.2.0-rc.2:
-  "concurrent opens of one name fail loud"). LIVE-CONFIRMED at the next boot: the governor's
-  `governed` + `dispatched` records landed in the shared domain (15:09:07) — previously they never
-  would.
+  harness's storageDomain is single-open per name — verified in
+  [dsh-storage-domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+  0.2.0-rc.2: "concurrent opens of one name fail loud"). LIVE-CONFIRMED at the next boot: the
+  governor's `governed` + `dispatched` records landed in the shared domain (15:09:07) — previously
+  they never would.
 - `aa53c91` — the BOOT-WINDOW RACE closed (delegated to a coder subagent per the user's working
   directive — see below): the non-first modules' pre-bind records (their `activated` records,
   journaled before ANY open completes) now buffer in the factory-level `PendingJournal` (capped 256,

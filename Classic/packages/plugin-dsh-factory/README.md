@@ -16,7 +16,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every
 > piece of common machinery the family's hooks used to duplicate.
 >
-> _One service. Nineteen methods (the direct-govern pair `RegisterGovern` + `Govern` and the
+> _One service. Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
 > `GovernSteps` registry among them). The hooks bring their own metal; the factory pours the mold.
 > The @-sentence identity: **Plugin @ DSH @ Factory**._
 
@@ -33,10 +33,10 @@ The factory is the **hub** of the eleven-package DSH family:
 
 | Consumer                                                            | injects                   | uses                                                                                                   |
 | ------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `hook-dsh-governor-package`                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
-| `hook-dsh-pinner-package`                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
-| `hook-dsh-governor-cargo`                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
-| `hook-dsh-normalize-dash` + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
+| [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
+| [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
+| [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
 The pure layer it deliberately does **not** re-export is [`hook-dsh-core`](../hook-dsh-core) (its
 19-method service surface stays stable); the hooks import the core's helpers directly.

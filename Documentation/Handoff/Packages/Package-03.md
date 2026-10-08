@@ -21,10 +21,13 @@ vocabulary):
    continuation
 8. `State(ctx, config, {module, fields?, policyFileName?})` — the State builder (cell unwrap +
    probe-once)
-9. `Wire(ctx, state, observe)` — fs/observed registration (MANIFEST-hardwired — a non-manifest
-   module wires its own `ctx.on`)
+9. `Wire(ctx, state, observe)` —
+   [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+   registration (MANIFEST-hardwired — a non-manifest module wires its own `ctx.on`)
 10. `Attach(ctx, {state, name})` — P1 jobs controller + P2 in-flight disposal + P5 storage journal
-11. `Journal(state, event, path, detail, at?)` — the storage domain writer (silent skip when absent)
+11. `Journal(state, event, path, detail, at?)` —
+    [the storage domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+    writer (silent skip when absent)
 12. `Schema(shared?, module?)` — the Schemastery schema factory (volatile shared fields; instance
     method — see [Package 4 §4.2](Package-04.md))
 13. `Seam(state, name)` — probe-once via `ctx.get` (never the dead accessor)

@@ -17,12 +17,15 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > written back through the factory's ONE shared write executor. N = 0 writes NOTHING - the no-op
 > no-write rule.
 >
-> _The family's first LISTENER-LESS flavor: no `llm/stream`, no `fs/observed` - nothing runs without
-> an explicit agent action. The background-rewrite posture is deliberately NOT shipped (it would
-> break the edit tool's `old_string` contract); the design report ships the tool arm only. The
-> @-sentence identity: **Hook @ DSH @ Normalize @ File**._
+> _The family's first LISTENER-LESS flavor: no
+> [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts),
+> no
+> [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) -
+> nothing runs without an explicit agent action. The background-rewrite posture is deliberately NOT
+> shipped (it would break the edit tool's `old_string` contract); the design report ships the tool
+> arm only. The @-sentence identity: **Hook @ DSH @ Normalize @ File**._
 >
-> _This bundle's own tool calls are name-exempt in the stream gate beside `edit` and `raw-write` -
+> _This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Stream) beside `edit` and `raw-write` -
 > its arguments carry a FILE PATH, and a normalized dash inside a filename would corrupt the
 > target._
 
@@ -48,16 +51,15 @@ transform tables and the generic `Replace`/`ReplaceMap` replacers:
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | model output (stream)            | core `Spaces` class -> `" "`                       |
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | model output (stream)            | core `Invisible` class -> removed                  |
 | [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | model output (stream)            | core `Fullwidth` MAP -> full-width -> half-width   |
-| `hook-dsh-normalize-file` (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through `Factory.Write`    |
+| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/Source) (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts)    |
 
 The six stream flavors cover only what the model is emitting right now; the raw-write tool's
 `normalize: true` covers only content being written. This flavor covers the gap in between:
 pre-existing files, git-cloned material, script-created files - anything already on disk that the
-agent did not just write. The hermes heritage is direct: the
-`normalize-dashes-for-execute-code.sh` hook swept script-created files after the
-fact; DSH makes the same rewrite an explicit, visible, opt-in TOOL call instead of a background hook
-(and `normalize-tabs.sh` - the repair hook for a repair hook - is the cautionary tale that keeps it
-that way).
+agent did not just write. The hermes heritage is direct: the `normalize-dashes-for-execute-code.sh`
+hook swept script-created files after the fact; DSH makes the same rewrite an explicit, visible,
+opt-in TOOL call instead of a background hook (and `normalize-tabs.sh` - the repair hook for a
+repair hook - is the cautionary tale that keeps it that way).
 
 A **non-manifest factory consumer**: it injects `["pluginFactory", "fs", "tools"]` and uses `State`
 (cell unwrap + shared `Ledger`/`Enabled` mappings + its own field), `Append` (the ledger), `Journal`
@@ -89,7 +91,7 @@ Verify with the `hook-dsh-normalize-file: activated (...)` ledger line.
 ### Usage
 
 The tool is called by the agent like any built-in tool - the bundle is configured through its
-`cordis.patch.yml` row (or the profile's `dsh.bundle` manifest), and the full config table is in
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/cordis.patch.yml) row (or the profile's `dsh.bundle` manifest), and the full config table is in
 [The Config](#the-config):
 
 ```
@@ -174,13 +176,14 @@ count is the ledger's N and the no-op condition in one.
 
 **The conflict map, honored by construction**
 
-- Governance bounded passes: the write goes through `Factory.Write` and emits `fs/observed`, but the
-  governors' Gate requires the actor tool name in their `mutationTools` pin - `normalize-file` is
-  never added to any such list, so these writes never trigger a chain pass.
+- Governance bounded passes: the write goes through [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts) and emits
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts),
+  but the governors' Gate requires the actor tool name in their `mutationTools` pin -
+  `normalize-file` is never added to any such list, so these writes never trigger a chain pass.
 - Edit `old_string` contract: safe because visible - the diff card shows the before/after in the
   same turn, and the tool description says to re-read before editing (the same obligation as after
   any `normalize: true` write).
-- raw-write read-before-write: tool calls are serialized and `Factory.Write`'s `before` is read at
+- raw-write read-before-write: tool calls are serialized and [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts)'s `before` is read at
   write time, so a prior normalize-file in the same turn is already reflected. No race.
 
 ---
@@ -234,7 +237,7 @@ with no write. Because the file's bytes change under you, re-read before editing
 
 ## The Ledger
 
-Two lines, both written through the factory's `Append` (the `hook-dsh-normalize-file:` prefix is the
+Two lines, both written through the factory's `Append` (the hook-dsh-normalize-file: prefix is the
 logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text
@@ -244,7 +247,7 @@ hook-dsh-normalize-file: normalized N char(s) in <path>
 
 The activation line is written by `apply()`; the count line follows only a successful N > 0 write -
 a no-op writes no line, and a failed read or an aborted call writes none either. Each N > 0 write
-also journals one `normalized` record into the shared `package_governance` v2 domain (event
+also journals one `normalized` record into the shared `package_governance` [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Journal.ts) (event
 `normalized`, path = the target's display path, detail byte-identical to the count line),
 best-effort: with no storage facility the record buffers or drops and the human ledger stays the
 complete record.

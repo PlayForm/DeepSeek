@@ -46,9 +46,11 @@ pass with ZERO assertion changes.
    `Inflight` key collided with the factory's plain `String(targetKey)` — fixed flavor-side with
    `update:<targetKey>`). The factory should document the plain-key contract AND/OR offer a
    namespaced registration helper so future modules don't repeat it.
-4. **Schema's optional shared block** — `Schema(shared?, module?)` hardcodes the fs/observed shared
-   fields (updateCooldownMs/mutationTools/policyFile/ exclude) — a non-manifest module (the mdash)
-   cannot omit them. Make the shared block optional (`shared: false` or a minimal-shared option).
+4. **Schema's optional shared block** — `Schema(shared?, module?)` hardcodes the
+   [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+   shared fields (updateCooldownMs/mutationTools/policyFile/ exclude) — a non-manifest module (the
+   mdash) cannot omit them. Make the shared block optional (`shared: false` or a minimal-shared
+   option).
 
 ## 4.3 THE @playform/dsh-hook-core EXTRACTION (the pure TS package)
 

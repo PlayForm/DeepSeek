@@ -10,8 +10,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 
 > [!NOTE]
 >
-> The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks the `llm/stream`
-> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime)
+> The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks the [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
+> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts))
 > and normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes,
 > en dashes and seventeen exotic relatives → `-`.
 >
@@ -40,7 +40,7 @@ siblings share the hermes-style whole-chunk replacement approach:
 
 | flavor                                                            | table                  | substitution                  |
 | ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
-| `hook-dsh-normalize-dash` (this bundle)                           | core `Dashes` class    | `→ replacement` (default `-`) |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-dash/Source) (this bundle)                           | core `Dashes` class    | `→ replacement` (default `-`) |
 | [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)       | core `Quotes` MAP      | curly → straight              |
 | [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
@@ -50,9 +50,9 @@ siblings share the hermes-style whole-chunk replacement approach:
 It is also the factory's **first NON-MANIFEST module** and its **second consumer**: it injects
 `["pluginFactory"]` and uses only `State` (cell unwrap + shared `Ledger`/`Enabled` mappings + its
 own fields) and `Append`. NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's
-silence; the normalize-dash implements its own `llm/stream` registration), `Attach` (no jobs /
+silence; the normalize-dash implements its own [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) registration), `Attach` (no jobs /
 inflight / storage), `Journal` (governance domain - the normalize-dash logs via Append only), and
-the gate/write/refresh/continue machinery (no fs/observed path).
+the gate/write/refresh/continue machinery (no [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) path).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -61,11 +61,14 @@ the same conventions as every other @playform package.
 ### The Interplay
 
 - **The governance trio and the factory**: pure additive - no shared event, no shared state. The
-  STREAM listener touches no files, so fs/write-intent and fs/observed never see it; the `raw-write`
+  STREAM listener touches no files, so
+  [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and
+  [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; the `raw-write`
   TOOL does write files, and does so through the built-in write's exact fs path - resolve →
-  fs/write-intent → writeText → fs/observed - so the governance hooks treat its writes exactly like
+  [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) → writeText →
+  [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) - so the governance hooks treat its writes exactly like
   built-in write calls.
-- **Other llm/stream listeners**: the normalize-dash wraps the downstream result and always calls
+- **Other [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners**: the normalize-dash wraps the downstream result and always calls
   `next()`, so it composes regardless of registration order; it neither short-circuits nor yields
   its own chunks.
 - **Chunk identity**: untouched chunks pass through by object identity; a rewritten delta/block is a
@@ -98,7 +101,7 @@ A file: dependency alone is NOT activation.
 
 ### Usage
 
-The bundle is configured through its `cordis.patch.yml` row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-dash/cordis.patch.yml) row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -119,7 +122,7 @@ manifest) - the full config table is in [The Config](#the-config):
 The user's hermes hook rewrites the unicode dash family to ASCII hyphen-minus **in files after the
 fact** - `perl -CSD -pe` over whatever was already written. Model output, however, is born in the
 stream: the live UI and the durable transcript see the em dashes first, no matter what a file hook
-does later. A DSH plugin can go where hermes cannot: the `llm/stream` waterfall, where every
+does later. A DSH plugin can go where hermes cannot: the [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) waterfall, where every
 streaming model call passes through.
 
 Unlike the governance family ([`hook-dsh-governor-package`](../hook-dsh-governor-package),
@@ -188,7 +191,7 @@ Waterfall discipline:
 - **`options` is NEVER touched**: a LOOP-built request arrives **deep-frozen** (mutation throws) and
   its content is a pure function of the session log - listeners read it, never rewrite it.
 - **Order preserved, no buffering**: one chunk in, one chunk out; upstream throws propagate (the
-  LlmRuntime normalizes adapter failures to a terminal error/aborted finish - a thrown-away stream
+  [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) normalizes adapter failures to a terminal error/aborted finish - a thrown-away stream
   writes no ledger line).
 
 ### The transform
@@ -235,7 +238,7 @@ direct-govern registry (factory SCHEME.md §2.16–§2.17), applied after a succ
 
 | `govern`                        | what the exec runs                                                                                                                                                                              |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| absent or `false` (**default**) | **NO governance chain** — the current posture, the "skip everything" escape hatch (the write still emits `fs/observed` exactly like a built-in write, so the event-path hooks behave as always) |
+| absent or `false` (**default**) | **NO governance chain** — the current posture, the "skip everything" escape hatch (the write still emits [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) exactly like a built-in write, so the event-path hooks behave as always) |
 | `true` or `"all"`               | **ALL registered governance steps** for the target's basename (`package.json`: canonicalize + update; `Cargo.toml`: cargo + update)                                                             |
 | `["canonicalize", ...]`         | **ONLY the named steps** (`canonicalize`, `pin`, `cargo`, `update`); unknown names are rejected by the schema and ignored by the registry                                                       |
 
@@ -243,11 +246,11 @@ Governance is **best-effort and contained**: the steps run through the factory's
 `Govern(target, selection, actor, version)` with the written outcome's fresh version — a failing
 step never affects the write's outcome, and an empty registry makes the call a contained no-op.
 
-The exec mirrors the **built-in write's fs path exactly** - `ctx.fs.resolve` → the `fs/write-intent`
+The exec mirrors the **built-in write's fs path exactly** - `ctx.fs.resolve` → the [`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
 waterfall (the observation policy's single-slot guarded-write decision) → the standing sandbox
 policy (resolved like the built-in's no-escalation path; `raw-write` advertises no escalation of its
-own) → `ctx.fs.writeText(target, content, intent, exec.signal, policy)` → the `fs/observed` emit
-with the written version - so the governance family's fs/observed chain fires for these writes the
+own) → `ctx.fs.writeText(target, content, intent, exec.signal, policy)` → the [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) emit
+with the written version - so the governance family's [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) chain fires for these writes the
 same way it fires for built-in writes. `exec.signal` is honored end to end (a pre-aborted call never
 writes). The registration is readonly after registration; the presenters are pure and recompute the
 same selection-aware chain, so the diff card always matches the file. Inject:
@@ -285,7 +288,7 @@ Source/Interface/*.ts        - Config/State shapes, the factory service view (ch
 | `normalizeReasoning`     | boolean | `true`                               | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `normalizeToolArguments` | boolean | `false`                              | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
-Volatile cells commit without remounting the plugin (the fiber - and with it the llm/stream
+Volatile cells commit without remounting the plugin (the fiber - and with it the [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 registration - stays alive); the factory's State builder unwraps them defensively.
 
 ---
@@ -369,7 +372,7 @@ And the governance direction, per call: a raw-write to a `package.json` with `go
 registered chain pass (canonicalize) and the update stage through the factory's direct-govern
 registry after the write lands; `govern: ["pin"]` runs only the pinner's chain pass;
 `govern: ["update"]` runs only the update stage. The default — `govern` absent — writes the file and
-lets the fs/observed event path govern it exactly as before:
+lets the [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) event path govern it exactly as before:
 
 ```text
 raw-write  package.json, govern: ["canonicalize"]
@@ -387,7 +390,7 @@ raw-write  Cargo.toml, govern: ["cargo", "update"]
 
 ## The Ledger
 
-Two lines, both written through the factory's `Append` (the `hook-dsh-normalize-dash:` prefix is the
+Two lines, both written through the factory's `Append` (the hook-dsh-normalize-dash: prefix is the
 logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text

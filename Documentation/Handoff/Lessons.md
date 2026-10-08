@@ -41,7 +41,7 @@
 
 ## Session 2026-10-06 (Package 13)
 
-- **THE PATCH-LAYER SHADOWING (the saga's lesson)**: the bundle cordis.patch.yml layers can shadow
+- **THE PATCH-LAYER SHADOWING (the saga's lesson)**: the bundle [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) layers can shadow
   the schema defaults - the patch config REPLACES the entry config wholesale. Verify the LIVE
   effective config from the BUNDLE layers, never just the schema projection or the profile patch.
   The Config inspect provider projects the SCHEMA.

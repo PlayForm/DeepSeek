@@ -12,8 +12,9 @@
 - **The core** (`98be27b` + `c2beb06`) now owns the PURE normalization machinery:
   `Normalize/Replace` (class→string, function replacer, per- call regex) + `ReplaceMap` (char→char),
   the six tables (Dashes — the hermes regex verbatim — Quotes, Ellipsis, Spaces, Invisible,
-  Fullwidth), and `Stream/Chunk` + `Stream/Block` — GENERIC over structural shapes (no dsh-llm
-  import, devDep or symlink anywhere: a fragile node_modules symlink workaround for a cross-bundle
+  Fullwidth), and `Stream/Chunk` + `Stream/Block` — GENERIC over structural shapes (no
+  [dsh-llm](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm) import,
+  devDep or symlink anywhere: a fragile node_modules symlink workaround for a cross-bundle
   nominal-type clash was replaced by the durable generic design; the guarded casts are documented —
   the `{ type: string }` catch-all survives every narrowing). The mdash is a thin delegate (45/45,
   zero assertion changes).

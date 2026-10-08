@@ -1,27 +1,27 @@
 # The Handoff — Overview
 
-> The DSH Plugin Family handoff: the overview. Restructured from the pre-restructure flat
-> HANDOFF record
-> (written 2026-10-04, in sequential additions — each package one focused addition): this file holds
-> the family snapshot, the verified state, and the architecture at a glance (Packages 1–3). The
-> session-by-session packages live in `Packages/Package-01.md` … `Packages/Package-13.md`, the
-> future-work register in `Register.md`, and the working lessons in `Lessons.md`. The next session
-> should pick up at **Package 4 (the queue)** after confirming **Package 2 (the verified state)**.
+> The DSH Plugin Family handoff: the overview. Restructured from the pre-restructure flat HANDOFF
+> record (written 2026-10-04, in sequential additions — each package one focused addition): this
+> file holds the family snapshot, the verified state, and the architecture at a glance (Packages
+> 1–3). The session-by-session packages live in `Packages/Package-01.md` … `Packages/Package-13.md`,
+> the future-work register in `Register.md`, and the working lessons in `Lessons.md`. The next
+> session should pick up at **Package 4 (the queue)** after confirming **Package 2 (the verified
+> state)**.
 
 ---
 
 ## The family snapshot (Package 1)
 
-**Five bundles + the factory** — all under `~/.dsh/profiles/desktop/bundles/` (one git
-repo: `~/.dsh`):
+**Five bundles + the factory** — all under `~/.dsh/profiles/desktop/bundles/` (one git repo:
+`~/.dsh`):
 
-| Bundle                      | Identity                                                            | Mission                                                         | Layout                                              |
-| --------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------- |
-| `dsh-plugin-factory`        | `@playform/dsh-plugin-factory` v0.1.0 · service `ctx.pluginFactory` | the furnace: 15 methods centralizing the shared machinery       | class/service plugin, `Source/` TS, `Target/` built |
-| `dsh-hook-package-governor` | `@playform/dsh-hook-package-governor`                               | package.json chain-canonicalize + ncu update (programmatic/bin) | thin module + transform leaf + engines              |
-| `dsh-hook-package-pinner`   | `@playform/dsh-hook-package-pinner`                                 | package.json static pinning (`^`/`~`/`=` stripped), keep-list   | thin module, P-only                                 |
-| `dsh-hook-cargo-governor`   | `@playform/dsh-hook-cargo-governor`                                 | Cargo.toml chain + full-version normalization + `cargo upgrade` | thin module + TOML transform + engine               |
-| `dsh-hook-mdash`            | `@playform/dsh-hook-mdash`                                          | model-output dash normalization (llm/stream waterfall)          | thin module, NON-manifest consumer                  |
+| Bundle                      | Identity                                                            | Mission                                                                                                                                             | Layout                                              |
+| --------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `dsh-plugin-factory`        | `@playform/dsh-plugin-factory` v0.1.0 · service `ctx.pluginFactory` | the furnace: 15 methods centralizing the shared machinery                                                                                           | class/service plugin, `Source/` TS, `Target/` built |
+| `dsh-hook-package-governor` | `@playform/dsh-hook-package-governor`                               | package.json chain-canonicalize + ncu update (programmatic/bin)                                                                                     | thin module + transform leaf + engines              |
+| `dsh-hook-package-pinner`   | `@playform/dsh-hook-package-pinner`                                 | package.json static pinning (`^`/`~`/`=` stripped), keep-list                                                                                       | thin module, P-only                                 |
+| `dsh-hook-cargo-governor`   | `@playform/dsh-hook-cargo-governor`                                 | Cargo.toml chain + full-version normalization + `cargo upgrade`                                                                                     | thin module + TOML transform + engine               |
+| `dsh-hook-mdash`            | `@playform/dsh-hook-mdash`                                          | model-output dash normalization ([llm/stream waterfall](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)) | thin module, NON-manifest consumer                  |
 
 **Terminology**: the factory's consumers are **MODULES** (renamed from "flavor" — the spec docs say
 Module; the CODE still says `Flavor` — see Package 4 §4.1 for the exact rename scope). The factory
@@ -83,10 +83,13 @@ vocabulary):
    continuation
 8. `State(ctx, config, {module, fields?, policyFileName?})` — the State builder (cell unwrap +
    probe-once)
-9. `Wire(ctx, state, observe)` — fs/observed registration (MANIFEST-hardwired — a non-manifest
-   module wires its own `ctx.on`)
+9. `Wire(ctx, state, observe)` —
+   [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+   registration (MANIFEST-hardwired — a non-manifest module wires its own `ctx.on`)
 10. `Attach(ctx, {state, name})` — P1 jobs controller + P2 in-flight disposal + P5 storage journal
-11. `Journal(state, event, path, detail, at?)` — the storage domain writer (silent skip when absent)
+11. `Journal(state, event, path, detail, at?)` —
+    [the storage domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+    writer (silent skip when absent)
 12. `Schema(shared?, module?)` — the Schemastery schema factory (volatile shared fields; instance
     method — see Package 4 §4.2)
 13. `Seam(state, name)` — probe-once via `ctx.get` (never the dead accessor)
@@ -108,9 +111,10 @@ path (the module logs its own lines).
 ### The cascade matrix
 
 `Documentation/Guides/Governor-CASCADES.md` — the full nuanced matrix (10 cascades,
-element-by-element, the async boundary, the data flow) and `Documentation/Guides/Governor-TRIO-GRAPH.md`
-(the API-surface graph + the research verdict, P1–P9). Both docs use the Module vocabulary now (the
-literal `activated (cargo flavor, …)` ledger string stays — smoke-asserted).
+element-by-element, the async boundary, the data flow) and
+`Documentation/Guides/Governor-TRIO-GRAPH.md` (the API-surface graph + the research verdict, P1–P9).
+Both docs use the Module vocabulary now (the literal `activated (cargo flavor, …)` ledger string
+stays — smoke-asserted).
 
 ### The four live-verified fixes (never regress them)
 

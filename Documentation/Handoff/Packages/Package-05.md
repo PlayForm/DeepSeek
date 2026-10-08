@@ -7,7 +7,7 @@
 
 - `~/.dsh/skills/code-authoring/SKILL.md` — the tool discipline (content edits ONLY via write/edit;
   content reads ONLY via read/grep/glob; `rm` allowed as a command; terminal = builds/tests/metadata
-  only; THE MECHANISM: terminal edits are invisible to the plugin system — `fs/observed` fires only
+  only; THE MECHANISM: terminal edits are invisible to the plugin system — [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) fires only
   on tool-layer writes) + §1b the GUARDIAN vision (the future programmatic enforcement: a
   tools/pre-execute guardian detecting terminal file-edit commands; Mode A surface-the-error; Mode B
   the silent rewrite flag — implementation deferred) + the atomized Rust-style writing conventions

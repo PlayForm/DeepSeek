@@ -4,7 +4,7 @@
 >
 > Tame the model's output and govern the project's files. Twelve TypeScript packages - the factory,
 > the core, the governance trio and the seven-member normalize family - in three implementations
-> (the Boilerplate baseline, the Classic release, the Effect-TS release), one ledger-string
+> (the Boilerplate baseline, [the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic), [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one ledger-string
 > contract, 733 + 746 smoke assertions. _One monorepo. Every ledger byte-checked._
 
 [![smokes](https://img.shields.io/static/v1?label=smokes&message=classic%20733%20%2F%20effect-ts%20746&color=blue)](Classic/smokes/README.md)
@@ -39,7 +39,7 @@ pnpm install --ignore-scripts
 pnpm run prepublishOnly
 ```
 
-The two base bundles first (`hook-dsh-core`, `plugin-dsh-factory`), then the ten consumers; the
+The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source)), then the ten consumers; the
 consumers import their siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
@@ -78,7 +78,7 @@ exists.
     `pnpm add  @playform/<pkg>` in the profile directory, or
     `dsh plugin --profile <name> add <tarball>`.
 
-2. **Add the patch entries** (the profile's `cordis.patch.yml`) - one insert row per bundle, the
+2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) - one insert row per bundle, the
    config fields straight from the bundle's schema:
 
     ```yaml
@@ -138,7 +138,10 @@ Two quiet kinds of rot in every agent session:
   under them, ranged dependencies resolve differently on every machine, `Cargo.toml` entries
   accumulate versions no one canonicalized.
 
-The DeepSeek Harness exposes the seams to fix both - `fs/observed` for file events, the `llm/stream`
+The DeepSeek Harness exposes the seams to fix both -
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+for file events, the
+[`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall for model output - and ships no plugins that use them for this. The family is those
 plugins.
 
@@ -156,21 +159,24 @@ Three seams, three behaviors, one service underneath:
     RAW-WRITE ──────► the direct-govern registry (factory.Govern) ─► the same chain, per call
 ```
 
-- **The stream gate** - each normalize flavor hooks the `llm/stream` waterfall (the interceptable
-  wrapper around every streaming model call) and rewrites its character family live in the
-  transcript: the dash family to `-`, the eight curly quote code points to their straight
-  counterparts, the ellipsis to `...`, the unicode space family to the plain space, the
+- **[The stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Stream)** - each normalize flavor hooks the
+  [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
+  waterfall (the interceptable wrapper around every streaming model call) and rewrites its character
+  family live in the transcript: the dash family to `-`, the eight curly quote code points to their
+  straight counterparts, the ellipsis to `...`, the unicode space family to the plain space, the
   zero-width/invisible family removed, the fullwidth forms to their ASCII half-width counterparts.
   The dispatch machinery (`Chunk`/`Block`, the assembled reasoning block, the tool-arguments gate)
   is shared from the core; each flavor contributes one table and one replacement.
-- **The observed-file seam** - the governance trio hooks `fs/observed`: a governed write by a
-  mutation tool passes the gate set, then the pass runs as a detached, contained continuation (the
-  chain pass for the governor, the pin pass for the pinner, the TOML surgery for the cargo
-  governor), and the update stage dispatches on a cooldown with a circuit breaker. Every plugin
-  writes its own ledger (`~/.dsh/<identity>.log`) and journals to the shared `package_governance`
-  storage domain.
-- **The direct-govern registry** - the `raw-write` tool's per-call `govern` selection drives the
-  same chain directly through `factory.Govern` (the sequential fold: one step's chain completes
+- **The observed-file seam** - the governance trio hooks
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts):
+  a governed write by a mutation tool passes the gate set, then the pass runs as a detached,
+  contained continuation (the chain pass for the governor, the pin pass for the pinner, the TOML
+  surgery for the cargo governor), and the update stage dispatches on a cooldown with a circuit
+  breaker. Every plugin writes its own ledger (`~/.dsh/<identity>.log`) and journals to the shared
+  `package_governance`
+  [storage domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain).
+- **[The direct-govern registry](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts)** - the `raw-write` tool's per-call `govern` selection drives the
+  same chain directly through [factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) ([the sequential fold](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts): one step's chain completes
   before the next step reads the file), instead of waiting for an event.
 
 ---
@@ -191,49 +197,55 @@ One contract, three trees - the ledger strings are byte-identical across all of 
 
 Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 
-- **`plugin-dsh-factory`** (Plugin @ DSH @ Factory) - the family's first service: loading it
+- **[plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source)** (Plugin @ DSH @ Factory) - the family's first service: loading it
   registers one class plugin (`static inject = ["fs"]`) that exposes `ctx.pluginFactory`, nineteen
   callable methods covering everything the hooks used to duplicate - the ledger (`Append`), the
   exclusion match (`Match`), the registry discovery (`Discover`/`Parse`), the union keep-list
-  (`ResolvePolicy`), the gate set (`Gate`), the shared write executor (`Write`/`GuardedWrite` - the
-  version-guarded fenced writes), the fs/observed re-emit (`Refresh`), the detached contained
-  continuation (`Continue`), the State builder, the fiber-owned wiring (`Wire`), the effect
-  registrations (`Attach` - jobs, inflight, storage), the P5 journal (`Journal`), the schema factory
-  (`Schema`), the probe-once seam (`Seam`), the Inflight key (`UpdateKey`) and the direct-govern
-  registry and entry (`RegisterGovern`/`Govern` - the sequential fold).
+  (`ResolvePolicy`), the gate set (`Gate`), [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts) (`Write`/`GuardedWrite` - the
+  version-guarded fenced writes), the
+  [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+  re-emit (`Refresh`), the detached contained continuation (`Continue`), the State builder, the
+  fiber-owned wiring (`Wire`), the effect registrations (`Attach` - jobs, inflight, storage), the P5
+  journal (`Journal`), the schema factory (`Schema`), the probe-once seam (`Seam`), the Inflight key
+  (`UpdateKey`) and [the direct-govern registry](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) and entry (`RegisterGovern`/`Govern` - the sequential
+  fold).
 - **`hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, not
   a plugin: the dependency-section lists, the exclusion segments, the suppression-line composer, the
-  update-policy loader, the refusal guard, the update envelope, the activation-line composer, and
+  update-policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), the update envelope, the activation-line composer, and
   the normalize/stream machinery (the six tables, `Replace`/`ReplaceMap`, `Chunk`/`Block`).
-- **`hook-dsh-governor-package`** (Hook @ DSH @ Governor @ Package) - the silent `package.json`
-  governor: hooks `fs/observed`, rewrites chain-governed pins (`^x`, `~x`, `workspace:*`) to the
-  effective registry's resolved versions, runs the update stage (`ncu`, programmatic library or
-  external binary through the subprocess seam) on a cooldown with a circuit breaker; `strict` strips
-  unknown dependencies - explicit only, never a default-delete.
-- **`hook-dsh-pinner-package`** (Hook @ DSH @ Pinner @ Package) - the silent version pinner:
+- **[hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source)** (Hook @ DSH @ Governor @ Package) - the silent `package.json`
+  governor: hooks
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts),
+  rewrites chain-governed pins (`^x`, `~x`, `workspace:*`) to the effective registry's resolved
+  versions, runs the update stage (`ncu`, programmatic library or external binary through
+  [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess))
+  on a cooldown with a circuit breaker; `strict` strips unknown dependencies - explicit only, never
+  a default-delete.
+- **[hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source)** (Hook @ DSH @ Pinner @ Package) - the silent version pinner:
   deterministically rewrites every ranged dependency version to its static version (`^0.3.4` ->
-  `0.3.4`), protected by the `pin-policy.json` keep-list; the keep-list wins over pinning, never
+  `0.3.4`), protected by the [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) keep-list; the keep-list wins over pinning, never
   over the chain.
-- **`hook-dsh-governor-cargo`** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the
+- **[hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source)** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the
   governor: surgical chain-pin rewrites on the raw TOML lines (comments survive), full-version
-  normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through the subprocess seam -
+  normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through
+  [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess) -
   the only update path, because Rust does not co-opt into the TypeScript ecosystem; `strict` removes
   the whole `name = "..."` entry, never inherited or path/git entries.
-- **`hook-dsh-normalize-dash`** (Hook @ DSH @ Normalize @ Dash) - the dash flavor: em and en dashes
+- **[hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source)** (Hook @ DSH @ Normalize @ Dash) - the dash flavor: em and en dashes
   and their exotic relatives to ASCII hyphen-minus, at the injection point the reference tooling
   lacks.
-- **`hook-dsh-normalize-quotes`** (Hook @ DSH @ Normalize @ Quotes) - the quotes flavor: the eight
+- **[hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-quotes/Source)** (Hook @ DSH @ Normalize @ Quotes) - the quotes flavor: the eight
   curly quote code points to their ASCII straight counterparts.
-- **`hook-dsh-normalize-ellipsis`** (Hook @ DSH @ Normalize @ Ellipsis) - the ellipsis flavor: the
+- **[hook-dsh-normalize-ellipsis](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-ellipsis/Source)** (Hook @ DSH @ Normalize @ Ellipsis) - the ellipsis flavor: the
   horizontal ellipsis (U+2026) to the plain three-dot sequence.
-- **`hook-dsh-normalize-spaces`** (Hook @ DSH @ Normalize @ Spaces) - the spaces flavor: the unicode
+- **[hook-dsh-normalize-spaces](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-spaces/Source)** (Hook @ DSH @ Normalize @ Spaces) - the spaces flavor: the unicode
   space family (Zs minus the ASCII space) to the plain space.
-- **`hook-dsh-normalize-invisible`** (Hook @ DSH @ Normalize @ Invisible) - the invisible flavor:
+- **[hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-invisible/Source)** (Hook @ DSH @ Normalize @ Invisible) - the invisible flavor:
   the zero-width/invisible character family (soft hyphen, zero-width spaces and joiners, bidi
   controls, BOM) removed.
-- **`hook-dsh-normalize-fullwidth`** (Hook @ DSH @ Normalize @ Fullwidth) - the fullwidth flavor:
+- **[hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/Source)** (Hook @ DSH @ Normalize @ Fullwidth) - the fullwidth flavor:
   the entire FULLWIDTH FORMS range (U+FF01-FF5E) to its ASCII half-width counterparts.
-- **`hook-dsh-normalize-file`** (Hook @ DSH @ Normalize @ File) - the file-content normalizer: the
+- **[hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-file/Source)** (Hook @ DSH @ Normalize @ File) - the file-content normalizer: the
   read, count, write pipeline applying all six transforms to a file already on disk - writing only
   when something changed.
 
@@ -289,7 +301,7 @@ Two tools ship with the family:
 
 | Tool             | What it does                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `raw-write`      | The write wrapper registered by the stream flavors: an explicit `normalize` parameter (default **false = verbatim**) - absent/false writes byte-for-byte, `true` applies all six transforms, an array applies the named flavors only. Exempt from stream normalization by name, like `edit`. The per-call `govern` selection (`true`, a name array, or `false` = the escape hatch) drives the direct-govern fold. |
+| `raw-write`      | The write wrapper registered by the stream flavors: an explicit `normalize` parameter (default **false = verbatim**) - absent/false writes byte-for-byte, `true` applies all six transforms, an array applies the named flavors only. Exempt from stream normalization by name, like `edit`. The per-call `govern` selection (`true`, a name array, or `false` = the escape hatch) drives [the direct-govern fold](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts). |
 | `normalize-file` | The whole-file pass: reads the file, applies the transforms (all six by default, or the flavor selection), reports the count, writes only when something changed.                                                                                                                                                                                                                                                 |
 
 ---
@@ -300,19 +312,19 @@ Every plugin's config schema is built through the factory's `Schema` factory: on
 block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the module's own fields. The
 surface, grouped by plugin kind:
 
-| Kind                | Field                                    | Effect                                                                                                            |
-| ------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| The governance trio | `log` / `logFile`                        | the durable ledger file (each plugin keeps its own, separate by default)                                          |
-|                     | `mutationTools`                          | which actor tools count as triggers - the deployed layers set `[write, edit, str_replace_editor, raw-write]`      |
-|                     | `exclude`                                | the exclusion segments - the plugin's own fence (`node_modules`, `.git`, `.dsh`, ...)                             |
-|                     | `updateCooldownMs` / `maxUpdateFailures` | the update stage's pacing and its circuit breaker (3 failures pause a directory)                                  |
-|                     | `updateMode` + `ncuBin` / `cargoBin`     | programmatic (library) vs bin (external binary via the subprocess seam); absolute paths - host PATH != shell PATH |
-|                     | `strict`                                 | strip unknown dependencies - explicit only, never a default-delete                                                |
-|                     | `policyFile` / `keepFile` / `sections`   | the update-policy and keep-list sidecars, and which dependency sections the pinner touches                        |
-| The stream flavors  | `replacement`                            | the transform's only knob on class flavors (`-`, `"`, `...`, plain space, empty) - hot-editable, no remount       |
-|                     | `normalizeReasoning`                     | default ON - normalize reasoning deltas and the assembled reasoning block too                                     |
-|                     | `normalizeToolArguments`                 | default OFF - tool-call arguments are execution-critical raw JSON; opt-in                                         |
-| The file tool       | `normalize` (per call)                   | absent/false = verbatim, `true` = all six transforms, or the flavor-name array                                    |
+| Kind                | Field                                    | Effect                                                                                                                                                                                                          |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The governance trio | `log` / `logFile`                        | the durable ledger file (each plugin keeps its own, separate by default)                                                                                                                                        |
+|                     | `mutationTools`                          | which actor tools count as triggers - the deployed layers set `[write, edit, str_replace_editor, raw-write]`                                                                                                    |
+|                     | `exclude`                                | the exclusion segments - the plugin's own fence (`node_modules`, `.git`, `.dsh`, ...)                                                                                                                           |
+|                     | `updateCooldownMs` / `maxUpdateFailures` | the update stage's pacing and its circuit breaker (3 failures pause a directory)                                                                                                                                |
+|                     | `updateMode` + `ncuBin` / `cargoBin`     | programmatic (library) vs bin (external binary via [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess)); absolute paths - host PATH != shell PATH |
+|                     | `strict`                                 | strip unknown dependencies - explicit only, never a default-delete                                                                                                                                              |
+|                     | `policyFile` / `keepFile` / `sections`   | the update-policy and keep-list sidecars, and which dependency sections the pinner touches                                                                                                                      |
+| The stream flavors  | `replacement`                            | the transform's only knob on class flavors (`-`, `"`, `...`, plain space, empty) - hot-editable, no remount                                                                                                     |
+|                     | `normalizeReasoning`                     | default ON - normalize reasoning deltas and the assembled reasoning block too                                                                                                                                   |
+|                     | `normalizeToolArguments`                 | default OFF - tool-call arguments are execution-critical raw JSON; opt-in                                                                                                                                       |
+| The file tool       | `normalize` (per call)                   | absent/false = verbatim, `true` = all six transforms, or the flavor-name array                                                                                                                                  |
 
 The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off -
 the family changes nothing until it is told to. The escape hatches: the `exclude` fence, the
@@ -342,13 +354,13 @@ The family extends the [DeepSeek Harness](https://github.com/deepseek-ai/deepsee
 the desktop agent platform published as the `@deepseek-ai` packages. Everything the family builds on
 is the harness's own public plugin API:
 
-| Harness package               | What the family uses it for                                                                   |
-| ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `@deepseek-ai/cordis`         | the loader contract: the service/class plugins, the patch inserts, the fiber-owned hooks      |
-| `@deepseek-ai/schemastery`    | the config schemas (the factory's `Schema` factory emits real schemastery instances)          |
-| `@deepseek-ai/dsh-fs`         | `ctx.fs` - the governed reads, the version-guarded writes, the `fs/observed` event vocabulary |
-| `@deepseek-ai/dsh-subprocess` | the subprocess seam - the `ncu` and `cargo upgrade` dispatches                                |
-| `@deepseek-ai/dsh-sandbox`    | the sandbox policy - the fenced write postures                                                |
+| Harness package                                                                                                             | What the family uses it for                                                                                                                                                              |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@deepseek-ai/cordis`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis)                          | the loader contract: the service/class plugins, the patch inserts, the fiber-owned hooks                                                                                                 |
+| [`@deepseek-ai/schemastery`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/schemastery)                | the config schemas (the factory's `Schema` factory emits real schemastery instances)                                                                                                     |
+| [`@deepseek-ai/dsh-fs`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs)                         | `ctx.fs` - the governed reads, the version-guarded writes, the [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) event vocabulary |
+| [`@deepseek-ai/dsh-subprocess`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess) | [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess) - the `ncu` and `cargo upgrade` dispatches                             |
+| [`@deepseek-ai/dsh-sandbox`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/sandbox/sandbox)          | the sandbox policy - the fenced write postures                                                                                                                                           |
 
 The harness ships the seams and no plugins that use them this way; the family adds the normalization
 and the governance on top.

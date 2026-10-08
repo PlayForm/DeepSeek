@@ -153,7 +153,7 @@ The skills are the project's operating manuals. The framework:
    "zero runtime dependencies" line (the effect-backed rewrite, landed).
 6. **The live battery**: the whole family re-verified live after any
    source change (the ledgers, the interlock, the escape hatch, the
-   direct-govern, the v2 domain).
+   direct-govern, the [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).
 7. **The loadability check**: the Documentation/Skill bundles verified
    discovered by the filesystem provider.
 8. **The docs restructure verification**: the Documentation/ tree's

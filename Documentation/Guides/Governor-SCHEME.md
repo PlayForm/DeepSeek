@@ -8,7 +8,7 @@ Status: **IMPLEMENTED and LIVE-VERIFIED.** This document ships inside the bundle
 (alongside the usage README).
 
 **v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
-machinery is consumed from the injected `@playform/plugin-dsh-factory` service (v0.1.0),
+machinery is consumed from the injected [@playform/plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service (v0.1.0),
 `inject: ["fs", "pluginFactory"]`; the absorbed modules (Append, Journal, Open, Match, Discover,
 Parse, Continue, Govern, Refresh) are deleted from this tree and the ledger strings, the silence
 invariant, the chain semantics, the exemptions and the loader contract are byte-identical (see §2
@@ -17,17 +17,22 @@ for the module/factory split).
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
 (`Source/` → `Target/`, `prepublishOnly` build hook), with kind-folder categorization
 (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication),
-the publish identity `@playform/hook-dsh-governor-package`, granularized install paths (npm
+the publish identity [@playform/hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source), granularized install paths (npm
 dependency auto-activation / git clone + build / native `dsh plugin add`), and devDependencies typed
 from the published seam packages at the HOST's exact versions —
-`@deepseek-ai/dsh-fs`/`dsh-subprocess`/`dsh-sandbox` at 0.2.0-rc.2, `@deepseek-ai/cordis` ^4.0.4,
-`@deepseek-ai/schemastery` ^3.18.4 (the `@deepseek-ai/dsh` npm package is the CLI APPLICATION, not a
-types package — its vocabulary lives in the seam packages; installing the CLI as a devDependency
-would drag the whole app into the bundle). These types now cover the event payloads
-(`FsTarget`/`FsObservation` with the `fs/observed` `Context`/`Events` augmentation), the Config
-schema, and the service calls (`ctx.fs.readText/writeText/stat` signatures including the sandbox
-policy arg, the probed `ctx.subprocess` spawn seam). The runtime behavior, the ledger strings, and
-the silence invariant are byte-identical to the verified v0.4.x line.
+[`@deepseek-ai/dsh-fs`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs)/`dsh-subprocess`/`dsh-sandbox`
+at 0.2.0-rc.2,
+[`@deepseek-ai/cordis`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis)
+^4.0.4,
+[`@deepseek-ai/schemastery`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/schemastery)
+^3.18.4 (the `@deepseek-ai/dsh` npm package is the CLI APPLICATION, not a types package — its
+vocabulary lives in the seam packages; installing the CLI as a devDependency would drag the whole
+app into the bundle). These types now cover the event payloads (`FsTarget`/`FsObservation` with the
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+`Context`/`Events` augmentation), the Config schema, and the service calls
+(`ctx.fs.readText/writeText/stat` signatures including the sandbox policy arg, the probed
+`ctx.subprocess` spawn seam). The runtime behavior, the ledger strings, and the silence invariant
+are byte-identical to the verified v0.4.x line.
 
 **Verified corrections folded in (2026-10-03, each cost live debugging time):**
 
@@ -42,38 +47,46 @@ the silence invariant are byte-identical to the verified v0.4.x line.
 - Peers are dropped (the `@deepseek-ai/*` runtime resolution comes from the installation scope);
   devDependencies are kept for the type checker.
 
-All mechanism claims below were verified against the **live runtime**: host cordis Event catalog;
-`dsh-tool-fs`, `dsh-fs-local`, `dsh-fs`, `dsh-fs-sandbox`, `dsh-fs-observation-policy` sources
-(asar-extracted); `docs/subsystems/filesystem.md`, `docs/subsystems/jobs.md`,
+All mechanism claims below were verified against the **live runtime**: host
+[cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis) Event catalog;
+[`dsh-tool-fs`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/tool-fs),
+[`dsh-fs-local`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs-local),
+[`dsh-fs`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs),
+[`dsh-fs-sandbox`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs-sandbox),
+[`dsh-fs-observation-policy`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs-observation-policy)
+sources (asar-extracted); `docs/subsystems/filesystem.md`, `docs/subsystems/jobs.md`,
 `docs/event-producer-consumer.md`, `docs/user/develop/basic/*`.
 
 ---
 
-## 0. Why `fs/observed`, not the `fs/write-intent` waterfall
+## 0. Why [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts), not the [`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) waterfall
 
 The intent waterfall carries only a version guard (`{kind:"createIfAbsent"}` |
 `{kind:"replaceIfVersion", version}`) — **never content** (`docs/subsystems/filesystem.md:515-526`).
 The write content travels only in the tool's own arguments → `ctx.fs.writeText`. The only hook that
-runs _after_ content is on disk is the synchronous broadcast `fs/observed`. Hence the post-hoc
-rewrite design. (`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was
-the fatal bug of the previous attempt.)
+runs _after_ content is on disk is the synchronous broadcast
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts).
+Hence the post-hoc rewrite design. (`FsTarget` has only `targetKey` + `displayPath` — the
+`target.path` assumption was the fatal bug of the previous attempt.)
 
 ## 1. The domain — every harness write path
 
-`fs/observed` is dispatched **only by the tool layer** (`dsh-tool-fs`,
-`dsh-tool-str-replace-editor`), for **every** write/edit/read issued through the harness fs tools,
-by **any** thread: main agent, subagent, workflow child. The fs _service_ and every other writer
-(bash, git, ncu, plain `node:fs`) dispatch **nothing**.
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+is dispatched **only by the tool layer** (`dsh-tool-fs`, `dsh-tool-str-replace-editor`), for
+**every** write/edit/read issued through the harness fs tools, by **any** thread: main agent,
+subagent, workflow child. The fs _service_ and every other writer (bash, git, ncu, plain `node:fs`)
+dispatch **nothing**.
 
 Write paths `𝒲 = { write tool, edit tool, str-replace-editor, any tool issuing ctx.fs.writeText }`.
-Every `w ∈ 𝒲` emits exactly one `fs/observed` with `(target, {kind:"present", version}, actor)` —
-full writes AND single-line edits dispatch the identical payload (live-verified: a one-line `edit`
-triggered the complete pass).
+Every `w ∈ 𝒲` emits exactly one
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+with `(target, {kind:"present", version}, actor)` — full writes AND single-line edits dispatch the
+identical payload (live-verified: a one-line `edit` triggered the complete pass).
 
 ## 2. The governor pipeline G = U ∘ P
 
 This module is a FACTORY MODULE (the family's shared machinery lives in the injected
-`@playform/plugin-dsh-factory` service — its SCHEME.md is the machinery contract; this section is
+[@playform/plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service — its SCHEME.md is the machinery contract; this section is
 the MODULE contract). `inject: ["fs", "pluginFactory"]`; the built Target never imports the factory
 — the service resolves from the profile through the injector, and the module's compilation declares
 the contract structurally (Source/Interface/Factory.ts). What the factory absorbed from v0.4 of this
@@ -82,7 +95,7 @@ parse, the union keep-list (ResolvePolicy), the g1 gate set, the guarded write (
 P4 fence + Stash pre-registration), the P₃/U₂ refresh, the detached contained continuation
 scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refresh), the State
 builder, the wiring and the lifecycle effects (P1/P2/P5). What stayed module-owned: the transform
-(the chain pass: decode → Satisfy → the refusal guard, Function/Transform), the update engine
+(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), Function/Transform), the update engine
 (Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
 (Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
 string.
@@ -112,34 +125,39 @@ string.
   — no external binary; **`"bin"`**: the `ncu` binary from `ncuBin`, resolved via
   `ctx.subprocess.resolveExecutable` and spawned through `ctx.subprocess` with the same
   policy-derived CLI arguments (reject/allow/dep/concurrency/ target/filter; a minimal child-process
-  fallback runs inside the continuation when the deployment has no subprocess seam). Both modes
-  preserve every policy option (`reject`/`allow`/`depGroups`/`concurrency`/
+  fallback runs inside the continuation when the deployment has no
+  [subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess)).
+  Both modes preserve every policy option (`reject`/`allow`/`depGroups`/`concurrency`/
   `targets`/`verifyCommand`) and both merge the **chain-governed dep names into the reject list** —
   the cordis-trap guard: ncu must never bump a chain pin to public npm latest; `-x`/`--reject` is
   ONE comma-delimited argument (ncu 23.x) — then the policy's `verifyCommand` if any (exit 127 =
   runner unavailable, non-fatal), only when cooldown elapsed and no update is already in flight for
   that directory. External-process writes (ncu, pnpm) dispatch no events. **U₂ (required for the
-  silence invariant)**: the continuation's settlement (`Settle`) must re-emit `fs/observed` with the
-  fresh version from `ctx.fs.stat(target)` handed to `Factory.Refresh` (same actor, captured in the
-  listener closure). ncu mutates package.json after P₃; without U₂ the policy record stays at the
-  pre-ncu version and the author's next guarded write/edit would fail `FS_STALE_VERSION` — a
-  notification leak.
+  silence invariant)**: the continuation's settlement (`Settle`) must re-emit
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+  with the fresh version from `ctx.fs.stat(target)` handed to `Factory.Refresh` (same actor,
+  captured in the listener closure). ncu mutates package.json after P₃; without U₂ the policy record
+  stays at the pre-ncu version and the author's next guarded write/edit would fail
+  `FS_STALE_VERSION` — a notification leak.
 
 ## 3. Trigger law and non-trigger law
 
-- **Trigger law**: G fires ⟺ `fs/observed` carries `observation.kind === "present"`,
-  **`actor.name ∈ mutationTools`** (`write`, `edit`, `str_replace_editor` — reads also emit
-  `kind:"present"` with a stat version, so the actor gate is required), and
-  `basename(target.displayPath) === "package.json"`. **No root check — anywhere.** Precedent:
-  `dsh-skill-filesystem/lib/index.js:57-60`.
+- **Trigger law**: G fires ⟺
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+  carries `observation.kind === "present"`, **`actor.name ∈ mutationTools`** (`write`, `edit`,
+  `str_replace_editor` — reads also emit `kind:"present"` with a stat version, so the actor gate is
+  required), and `basename(target.displayPath) === "package.json"`. **No root check — anywhere.**
+  Precedent: `dsh-skill-filesystem/lib/index.js:57-60`.
 - **Exclusion law (first)**: if any path segment of `displayPath` matches the config `exclude` list
   (defaults: `node_modules`, `.git`, `.dsh`, `.pnpm`, `.store`, `DeepSeek Harness.app`), G records
   `skipped (excluded)` and does nothing — internals are never governed.
 - **Idempotence gate**: `Stash.get(targetKey) === observation.version` → skip. Covers G's own
   refresh re-emit (re-enters the listener as a no-op) and any re-read of a governed file.
 - **Non-trigger law (no recursion)**: G's own writes go through the `ctx.fs` service (the fs service
-  dispatches no `fs/observed` — only the tool layer does) and the update stage is a continuation —
-  neither is an author tool call. **G ∉ 𝒲.**
+  dispatches no
+  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+  — only the tool layer does) and the update stage is a continuation — neither is an author tool
+  call. **G ∉ 𝒲.**
 - **Re-entrancy is still handled**: G's deliberate refresh re-emit (below) reaches G's own listener
   again; the version-token gate makes it a no-op.
 
@@ -181,17 +199,19 @@ envelope.
 refreshing the record, the author's next guarded write/edit fails **FS_STALE_VERSION** — an error
 the model _sees_ → notification leak. Therefore G must, after every mutation:
 
-- **P**: re-emit `ctx.emit("fs/observed", target, {kind:"present", version: v'}, <same actor>)` with
-  `v'` taken from the `ctx.fs.writeText` outcome (`FsWriteOutcome.version` — the service owns the
-  version token; it is never computed or parsed locally). Same actor ⇒ same owner bucket ⇒ record
-  refreshed.
+- **P**: re-emit
+  `ctx.emit("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)", target, {kind:"present", version: v'}, <same actor>)`
+  with `v'` taken from the `ctx.fs.writeText` outcome (`FsWriteOutcome.version` — the service owns
+  the version token; it is never computed or parsed locally). Same actor ⇒ same owner bucket ⇒
+  record refreshed.
 - **U**: in the continuation's settlement, re-stat via `ctx.fs.stat(target)` and re-emit with the
   fresh version (same actor), covering ncu/verifyCommand mutations.
 
-G never: participates in `fs/write-intent`/`fs/edit-intent` waterfalls, touches `tools/*` waterfalls
-(`tools/post-execute` is the only sanctioned result amendment — it is _louder_, so forbidden),
-spawns LLM calls, adds messages, or throws (a listener throw fails the tool call; wrap everything,
-and the ledger is best-effort).
+G never: participates in
+[`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)/[`fs/edit-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+waterfalls, touches `tools/*` waterfalls (`tools/post-execute` is the only sanctioned result
+amendment — it is _louder_, so forbidden), spawns LLM calls, adds messages, or throws (a listener
+throw fails the tool call; wrap everything, and the ledger is best-effort).
 
 ## 6. Diagram
 
@@ -241,15 +261,15 @@ and the ledger is best-effort).
 
 Non-edges (proven absent, marked ∄):
 
-| edge                                           | why it cannot exist                                                                  |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------ |
-| G's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing                 |
-| ncu/pnpm → new `fs/observed`                   | external processes dispatch nothing                                                  |
-| G → tool result amendment                      | result envelope uses the tool's own content, not disk                                |
-| G → transcript/session event                   | G emits only `fs/observed` (internal bus) and writes `hook-dsh-governor-package.log` |
-| author's next guarded write → FS_STALE_VERSION | P₃/U₂ refresh the policy record (same owner)                                         |
-| G's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                                               |
-| G → ctx.jobs job                               | jobs registry is agent-scoped; root plugins use the continuation                     |
+| edge                                                                                                                       | why it cannot exist                                                                                                                                                             |
+| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| G's rewrite → new [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) | only the tool layer dispatches; `ctx.fs` service writes emit nothing                                                                                                            |
+| ncu/pnpm → new [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)    | external processes dispatch nothing                                                                                                                                             |
+| G → tool result amendment                                                                                                  | result envelope uses the tool's own content, not disk                                                                                                                           |
+| G → transcript/session event                                                                                               | G emits only [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) (internal bus) and writes `hook-dsh-governor-package.log` |
+| author's next guarded write → FS_STALE_VERSION                                                                             | P₃/U₂ refresh the policy record (same owner)                                                                                                                                    |
+| G's re-entrant pass → rewrite loop                                                                                         | P idempotent ⇒ re-entrant P is a no-op                                                                                                                                          |
+| G → ctx.jobs job                                                                                                           | jobs registry is agent-scoped; root plugins use the continuation                                                                                                                |
 
 ## 7. Registration
 
@@ -261,8 +281,8 @@ Non-edges (proven absent, marked ∄):
    factory service exists (load order never matters); no config row beyond the existing one is
    needed — the factory provides no Config.
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
-   `files: ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
-   artifact ships only the built output), `prepublishOnly` = the build, `cordis.patch.yml` (row
+   `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
+   artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) (row
    `id: hook-dsh-governor-package`, `name: "@playform/hook-dsh-governor-package"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
@@ -316,12 +336,15 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ## 10. Interplay — the governor family
 
-The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
-`package.json` / `Cargo.toml`) and writing its own ledger (`hook-dsh-governor-package.log` /
-`hook-dsh-pinner-package.log` / `hook-dsh-governor-cargo.log`); the fs/observed trigger law and the
-exclusion-first rule are shared. Composition semantics: **pin → bump-exact** (a fully pinned
-manifest leaves the npm governor's update stage nothing to do; its chain pass may still
+The three plugins coexist on
+[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts),
+each gating on its own basename (`package.json` / `package.json` / `Cargo.toml`) and writing its own
+ledger (`hook-dsh-governor-package.log` / `hook-dsh-pinner-package.log` /
+`hook-dsh-governor-cargo.log`); the
+[fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+trigger law and the exclusion-first rule are shared. Composition semantics: **pin → bump-exact** (a
+fully pinned manifest leaves the npm governor's update stage nothing to do; its chain pass may still
 re-canonicalize chain pins to `^resolved`); **chain > strip > normalize** (the cargo module's
-precedence); **keep-list wins** (the pinner's `pin-policy.json` protects ranges as authored; the
+precedence); **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) protects ranges as authored; the
 cargo module's keep-list — the same sidecar — wins over normalization, never over the chain).
 Activation of one never implies another; the user decides.

@@ -35,7 +35,7 @@ parent of none, child of none: zero runtime dependencies, consumed by all eleven
   [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash) and the five `hook-dsh-normalize-*`
   flavors are each a table plus a closure over `Replace`/`ReplaceMap`, dispatched through
   `Chunk`/`Block`.
-- The core is **not a plugin bundle**: no `cordis.patch.yml`, no loader contract, publishable on its
+- The core is **not a plugin bundle**: no [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml), no loader contract, publishable on its
   own - consumers link it as a plain library dependency, not as a bundle row.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -70,7 +70,7 @@ import { Replace, ReplaceMap, Dashes, Chunk } from "@playform/hook-dsh-core";
 ## The Problem
 
 The family's hooks kept re-implementing the same pure functions: the NPM section list, the exclusion
-segments, the suppression-line composer, the policy loader, the refusal guard - and, for the
+segments, the suppression-line composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts) - and, for the
 normalize flavors, the same per-chunk dispatch, block-end normalizer and character tables,
 copy-pasted per flavor. Every fix had to be applied N times. The core makes each of them exist
 **once**, importable by any consumer - inside the DeepSeek Harness or entirely outside it.

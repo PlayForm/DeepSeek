@@ -2,7 +2,8 @@
 
 > User-requested consolidation (2026-10-05): all future work + the new rename item, in one register.
 > Restructured from the HANDOFF's Package 12-REVISION-2; the sessions' context lives in
-> [`Packages/Package-12.md`](Packages/Package-12.md) and [`Packages/Package-13.md`](Packages/Package-13.md).
+> [`Packages/Package-12.md`](Packages/Package-12.md) and
+> [`Packages/Package-13.md`](Packages/Package-13.md).
 
 ---
 
@@ -10,7 +11,9 @@
 
 1. **The raw-write tool live confirmation** - the tool (mdash's Function/Write.ts + the Rewrite
    chain, the name-exemption) activates in the agent toolset at the next restart; verify it live (a
-   raw write verbatim + a normalize:true write + the fs/observed events for the governance hooks).
+   raw write verbatim + a normalize:true write + the
+   [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+   events for the governance hooks).
 2. **The README dash-example pass** - rewrite the family's READMEs: normalized prose (the gate) +
    the dash-example sections with LITERAL em-dashes, landed via exempt edits (the user-designed
    workflow).
@@ -22,7 +25,7 @@
    the naming outlier - its five siblings are all normalize-*; "mdash" is the typographic shorthand
    for em dash, the family's anchor name predating the convention). Scope: the module identity, the
    ledger prefix "mdash: " in every activation/count line, the log path ~/.dsh/mdash.log, the
-   profile entry + cordis.patch.yml id, the smokes' assertions (the ledger strings change BY
+   profile entry + [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) id, the smokes' assertions (the ledger strings change BY
    DESIGN - they are the module's own identity), the docs (README/SCHEME/Library comments), the
    smoke archive filename. The smokes are the arbiter (they get updated with the new prefix; every
    OTHER ledger string stays). Alternative kept on the table: keep "mdash" as the family's original.
@@ -36,7 +39,9 @@
 7. **The file-content normalizer flavor** - the hermes heritage: rewriting family characters in
    files ALREADY on disk (beyond the tool layer).
 8. **P5 storage journaling for the normalize family** - the `normalized N ... char(s)` events into
-   the shared storage domain (new event names → a domain version bump).
+   the shared
+   [storage domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+   (new event names → a domain version bump).
 9. **The update-stage envelope extraction** - the governor/cargo Dispatch/Settle sharing via the
    core (the deferred P3 candidate).
 10. **Further flavors** (optional) - bullets/dots, control characters, emoji, case - new siblings on
@@ -49,15 +54,15 @@
 12. **THE ANONYMIZATION + RELEASE-PREP PASS (user-requested 2026-10-06)** - the plugins are about to
     be released as SEPARATE REPOSITORIES under one "DeepSeek Harness Plugin Family for PlayForm".
     Scope: (a) COMPLETELY ANONYMIZE + DE-PERSONALIZE the release versions: remove every reference to
-    the user's name and the personal use case from the twelve bundles' READMEs, SCHEME.md docs, Source
-    comments, package.json descriptions, and the bundle cordis.patch.yml examples (the "just for me"
-    language, the personal home paths, the volume paths, the user-specific
-    fixture names). The RUNTIME ledger strings stay byte-identical (the smoke contract); the LIVE
-    profile's own cordis.patch.yml values keep the user's paths (the release ships GENERIC
-    defaults - the patch files' config values become per-user/example); (b) RE-STRUCTURE the READMEs
-    BETTER with the README conventions (the badges, the install/usage/API/license skeleton) applied
-    to the family's unified skeleton); (c) the release framing: each bundle = one repository, the family
-    brand "DeepSeek Harness Plugin Family for PlayForm" in the README headers + the Where-It-Fits
+    the user's name and the personal use case from the twelve bundles' READMEs, SCHEME.md docs,
+    Source comments, package.json descriptions, and the bundle [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) examples (the "just
+    for me" language, the personal home paths, the volume paths, the user-specific fixture names).
+    The RUNTIME ledger strings stay byte-identical (the smoke contract); the LIVE profile's own
+    [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) values keep the user's paths (the release ships GENERIC defaults - the patch
+    files' config values become per-user/example); (b) RE-STRUCTURE the READMEs BETTER with the
+    README conventions (the badges, the install/usage/API/license skeleton) applied to the family's
+    unified skeleton); (c) the release framing: each bundle = one repository, the family brand
+    "DeepSeek Harness Plugin Family for PlayForm" in the README headers + the Where-It-Fits
     sections. Do this BEFORE the release; the smokes are NOT affected (docs + comments + release
     metadata only). The READMEs' literal In Action examples (the raw-write workflow) stay.
 13. **THE EFFECT-TS V4 RE-IMPLEMENTATION (user-requested 2026-10-06, for TOMORROW 2026-10-07)** -
@@ -74,29 +79,28 @@
     envelope, Activate, Suppress, the Stream gate) → Effect's pure pipeline/Effect/Stream
     constructs; the factory's service machinery (State/Append/Journal/
     Write/Govern/Continue/Refresh/Attach/Wire) → Effect services + layers
-    - Effect's tracing; the governance chain (the compositional loops, the fs/observed event path,
-      the direct Govern path, the idempotence/ version guards) → Effect's typed effects + the
-      tracing spans; the ledger strings stay the smoke contract (byte-identical) in BOTH
-      implementations. Research first (the Effect v4 constructs + the DSH hook seams), then a coder
-      package per bundle, the smokes as the arbiter, nothing committed by agents. THE RESEARCH
+    - Effect's tracing; the governance chain (the compositional loops, the
+      [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+      event path, the direct Govern path, the idempotence/ version guards) → Effect's typed
+      effects + the tracing spans; the ledger strings stay the smoke contract (byte-identical) in
+      BOTH implementations. Research first (the Effect v4 constructs + the DSH hook seams), then a
+      coder package per bundle, the smokes as the arbiter, nothing committed by agents. THE RESEARCH
       SOURCES (user- pointed 2026-10-06): the local effect-ts v4.0.1 monorepo checkout
-      (`packages/effect` the core (Effect/Layer/Stream/Fiber/Tracing),
-      `packages/ai` the LLM integration, `packages/opentelemetry` the tracing, `packages/ platform`
-      the fs/services, `packages/sql` + `packages/tools` the ecosystem transformers,
-      `packages/vitest` the testing), the local effect-ts-website checkout (the
-      docs site content), the local effect-ts-examples checkout (the worked
-      examples incl. create-effect-app), plus the existing
-      deepseek-harness docs checkout (the DSH seams the Effect-TS hooks
-      must implement).
+      (`packages/effect` the core (Effect/Layer/Stream/Fiber/Tracing), `packages/ai` the LLM
+      integration, `packages/opentelemetry` the tracing, `packages/ platform` the fs/services,
+      `packages/sql` + `packages/tools` the ecosystem transformers, `packages/vitest` the testing),
+      the local effect-ts-website checkout (the docs site content), the local effect-ts-examples
+      checkout (the worked examples incl. create-effect-app), plus the existing deepseek-harness
+      docs checkout (the DSH seams the Effect-TS hooks must implement).
 14. **THE PARALLEL-GOVERN TOGGLE (user-requested 2026-10-06, for BOTH the NORMAL and the EFFECT-TS
-    versions)** - the direct-govern path is currently SEQUENTIAL (the awaited fold: each step's
+    versions)** - [the direct-govern path](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) is currently SEQUENTIAL (the awaited fold: each step's
     chain completes before the next reads - the live-verified race fix; the EVENT path is inherently
     concurrent, bounded by the version guards + the idempotence). Future: a per-call TOGGLE to run
     the direct-govern steps CONCURRENTLY (`Promise.all`) when the caller KNOWS the chain's
     propagation is race-free - the safety condition to document: the selected steps' writes must not
     conflict (same-file steps like canonicalize+pin on one package.json DO race - the version guards
     make the outcome nondeterministic; disjoint targets/basenames or verified transform disjointness
-    are the parallel-safe cases). The default stays the sequential fold; the toggle rides the same
+    are the parallel-safe cases). The default stays [the sequential fold](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts); the toggle rides the same
     `govern` flag shape (e.g. a `govern.parallel` marker or a separate option) in BOTH
     implementations - design it into the Effect-TS version's layer/effect composition from the start
     (Effect's `Effect.all`/`Fiber` concurrency is the natural home) and retrofit the normal version
@@ -105,10 +109,10 @@
 15. **THE REVERSED HIERARCHICAL NAMING (user-requested 2026-10-06, for the NEW versions)** - reverse
     the hierarchical order of every package name so that, read as a sentence with each word a
     segment, it reads as "<kind> @ <platform> @ <role> @ <domain>": `dsh-hook-cargo-governor` →
-    `hook-dsh-governor-cargo` ("Hook @ DSH @ Governor @ Cargo"), applied to ALL:
-    `dsh-plugin-factory` → `plugin-dsh-factory`; `dsh-hook-core` → `hook-dsh-core`;
-    `dsh-hook-package-governor` → `hook-dsh-governor-package`; `dsh-hook-package-pinner` →
-    `hook-dsh-pinner-package`; `dsh-hook-cargo-governor` → `hook-dsh-governor-cargo`; the normalize
+    [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source) ("Hook @ DSH @ Governor @ Cargo"), applied to ALL:
+    `dsh-plugin-factory` → [plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source); `dsh-hook-core` → `hook-dsh-core`;
+    `dsh-hook-package-governor` → [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source); `dsh-hook-package-pinner` →
+    [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source); `dsh-hook-cargo-governor` → [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source); the normalize
     family → `hook-dsh-normalize-{dash,quotes,ellipsis,spaces,invisible,fullwidth, file}`.
     Alphabetically the names then group perfectly: the kind (hook/plugin) first, the ROLE families
     contiguous (core, governor- cargo/governor-package, normalize-*, pinner-package,

@@ -11,8 +11,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **fullwidth normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> `llm/stream` waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> LlmRuntime) and normalizes the full-width family in model output, live in the transcript: the
+> [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
+> [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)) and normalizes the full-width family in model output, live in the transcript: the
 > entire FULLWIDTH FORMS range U+FF01-U+FF5E maps to its ASCII half-width counterpart
 > U+0021-U+007E - the whole story, letters, punctuation and digits included.
 >
@@ -46,13 +46,13 @@ the generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 | [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
-| `hook-dsh-normalize-fullwidth` (this bundle)                      | core `Fullwidth` MAP   | full-width → half-width       |
+| [hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/Source) (this bundle)                      | core `Fullwidth` MAP   | full-width → half-width       |
 
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no fs/observed
-dead fields. It touches no files, so fs/write-intent and fs/observed never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other `llm/stream` listeners
+by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+dead fields. It touches no files, so [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; it wraps the
+downstream result and always calls `next()`, so it composes with other [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners
 regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -81,7 +81,7 @@ Verify with the `hook-dsh-normalize-fullwidth: activated (...)` ledger line.
 
 ### Usage
 
-The bundle is configured through its `cordis.patch.yml` row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/cordis.patch.yml) row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -154,7 +154,7 @@ reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Fullwidth` map (`@playform/hook-dsh-core`'s `Normalize/Fullwidth`), applied per
+Exactly the core's `Fullwidth` map ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s `Normalize/Fullwidth`), applied per
 text segment through the core's `ReplaceMap` - the standard fullwidth-to-halfwidth mapping over the
 whole range, described by code point here (the literal characters are in the In Action block below):
 
@@ -228,7 +228,7 @@ raw-marker calls passing through unnormalized.)
 
 ## The Ledger
 
-Two lines, both written through the factory's `Append` (the `hook-dsh-normalize-fullwidth:` prefix
+Two lines, both written through the factory's `Append` (the hook-dsh-normalize-fullwidth: prefix
 is the logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text

@@ -11,8 +11,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **invisible-character normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> `llm/stream` waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> LlmRuntime) and normalizes the zero-width/invisible character family in model output, live in the
+> [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
+> [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)) and normalizes the zero-width/invisible character family in model output, live in the
 > transcript - by REMOVING it: zero-width spaces, joiners, bidi controls and the BOM character
 > simply vanish (the default replacement is the empty string).
 >
@@ -45,14 +45,14 @@ the generic `Replace`/`Chunk`/`Block` dispatch:
 | [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)       | core `Quotes` MAP      | curly → straight              |
 | [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
-| `hook-dsh-normalize-invisible` (this bundle)                      | core `Invisible` class | removed (default `""`)        |
+| [hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-invisible/Source) (this bundle)                      | core `Invisible` class | removed (default `""`)        |
 | [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
 
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no fs/observed
-dead fields. It touches no files, so fs/write-intent and fs/observed never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other `llm/stream` listeners
+by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+dead fields. It touches no files, so [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; it wraps the
+downstream result and always calls `next()`, so it composes with other [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners
 regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -81,7 +81,7 @@ Activation is at boot; verify with `dsh --profile <name> --dump-config` and the
 
 ### Usage
 
-The bundle is configured through its `cordis.patch.yml` row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-invisible/cordis.patch.yml) row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -237,7 +237,7 @@ unnormalized.
 
 ## The Ledger
 
-Two lines, both written through the factory's `Append` (the `hook-dsh-normalize-invisible:` prefix
+Two lines, both written through the factory's `Append` (the hook-dsh-normalize-invisible: prefix
 is the logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text
