@@ -1,0 +1,26 @@
+# ============================================================
+# Git ignore for this release package. Anticipates the submodule
+# extraction (#16): when this package becomes its own repository,
+# this file governs its contents (the layout follows the monorepo
+# root's .gitignore).
+# ============================================================
+
+# Dependencies (the per-package node_modules)
+node_modules/
+.pnpm-store/
+
+# Lockfile (regenerated per install, per the monorepo's policy)
+pnpm-lock.yaml
+
+# Build output (the bundle lives in Target/)
+Target/
+dist/
+*.tsbuildinfo
+
+# Logs + caches
+*.log
+.eslintcache
+.cache/
+
+# OS noise
+.DS_Store

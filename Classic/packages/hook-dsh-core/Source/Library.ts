@@ -3,7 +3,7 @@
 // as named exports (the harness convention — the core is NOT a plugin
 // bundle: no cordis patch, no loader contract, publishable on its own). The
 // modules' transforms import the helpers directly; the factory re-exports
-// NOTHING from the core (its 16-method surface stays stable).
+// NOTHING from the core (its 19-method surface stays stable).
 //
 // Two halves:
 //

@@ -1,0 +1,18 @@
+# Lychee ignore list for the DeepSeek monorepo
+# Patterns: URLs containing these are skipped entirely (never checked, never
+# reported). Keep this list minimal - only what is genuinely unverifiable.
+
+# shields.io badges are dynamic images and fail randomly under load; the
+# badge URLs carry no stable status to verify
+https://img.shields.io/
+
+# Social/donation endpoints that block link checkers outright
+https://twitter.com/
+https://x.com/
+https://www.paypal.com/
+https://www.patreon.com/
+https://tidelift.com/
+
+# Placeholder/example domains (never real targets)
+example.com
+localhost

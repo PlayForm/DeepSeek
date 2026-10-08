@@ -14,7 +14,7 @@
 // augment the cordis `Context` interface itself, so the consumer declares
 // the `pluginFactory` property — the instance side of the default-exported
 // class (a type-only import of a class default gives the instance shape).
-// The pre-v0.1.1 STRUCTURAL MIRROR of the factory's 16-method signature is
+// The pre-v0.1.1 STRUCTURAL MIRROR of the factory's 19-method signature is
 // gone (the declaration fix ships relative specifiers — the real type
 // resolves; the runtime factory instance satisfies it structurally).
 //

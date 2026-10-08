@@ -1,0 +1,78 @@
+# Lychee Link Checker - the PlayForm DeepSeek monorepo
+# Pass 1 of 2 (the repo sources): the READMEs, the Documentation, the package
+# sources, and the Site sources (the markdown, the TS/JS sources, the JSON
+# manifests). Pass 2 (the built Site) lives in Site/lychee.toml.
+# Run: pnpm lychee (Maintain/Lychee.sh) - the script composes lychee-report.md.
+
+# The file types to scan for links
+extensions = [
+	".md",   # the READMEs, the Documentation, the reports
+	".ts",   # the package sources (URLs in the comments and the constants)
+	".tsx",  # the JSX sources
+	".js",   # the scripts
+	".json", # the manifests (the repository/homepage fields)
+]
+
+# Exclude these URL patterns outright (never checked, never reported)
+exclude = [
+	# Local development links
+	"http://localhost:*",
+	"http://127.0.0.1:*",
+	"https://localhost:*",
+
+	# Email links
+	"mailto:*",
+
+	# Placeholder/example links
+	"example.com",
+
+	# GitHub README/line-number anchors (#readme, #L123) are hydrated by
+	# client-side JS and never present in the static HTML lychee fetches -
+	# these always false-positive as "Cannot find fragment" regardless of
+	# whether the link is actually valid. Verify these by hand instead.
+	"github\\.com/[^\\s)]+#(readme|L\\d+)$",
+]
+
+# Exclude file paths from the scan (the dependencies, the build output,
+# the VCS internals, the local smoke fixtures, the lockfiles)
+exclude_path = [
+	"node_modules",
+	"Target",
+	"dist",
+	".git",
+	".astro",
+	"Test/fixtures",
+	"pnpm-lock.yaml",
+]
+
+# The request schemes to check
+scheme = ["https", "http"]
+require_https = false
+
+# Request behavior
+method = "get"
+timeout = 30
+max_concurrency = 10
+max_redirects = 5
+max_retries = 3
+retry_wait_time = 2
+
+# Cache successful/failed lookups for a day so repeated runs stay fast
+cache = true
+max_cache_age = "1d"
+
+# Accepted status codes (redirects are followed then accepted; 429 keeps the
+# rate-limited hosts from flagging their own throttling as dead links)
+accept = [200, 204, 301, 302, 307, 308, 429]
+
+# Verify that the fragment targets exist on the fetched pages (anchor-only
+# keeps non-fragment URLs out of the fragment pass)
+include_fragments = "anchor-only"
+
+# Report format (the output path is set per pass by Maintain/Lychee.sh)
+format = "markdown"
+
+# Headers (must be last - TOML table)
+[header]
+User-Agent = "Mozilla/5.0 (compatible; Lychee/PlayForm)"
+Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
