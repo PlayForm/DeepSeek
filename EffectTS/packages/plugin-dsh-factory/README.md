@@ -11,7 +11,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **furnace of the DSH governance family** - the first _service-provider_ bundle in the DeepSeek
-> Harness plugin family. Loading it registers one class plugin
+> Harness plugin family.
+>
+> Loading it registers one class plugin
 > (`export default class PluginFactory extends Service`, `super(ctx, "pluginFactory")`,
 > `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every
 > piece of common machinery the family's hooks used to duplicate.
@@ -89,15 +91,21 @@ export async function apply(ctx) {
 
 ## The Problem
 
-Three independent consumers of the _same_ machinery already existed. The governor, the pinner and
+Three independent consumers of the _same_ machinery already existed.
+
+The governor, the pinner and
 the cargo governor each maintained their own copy of: the ledger (`Append`), the exclusion match
 (`Match`), the registry / policy walk-up discovery (`Discover`/`Parse`), the union keep-list
 resolution with the P3 chain-keys interlock, the g1 gate set, the version-guarded write with the P4
 sandbox fence, the P3/U2 observation-policy refresh, the detached contained continuation
 scaffolding, the `State` construction with defensive cell unwrap, the `ctx.on` wiring, the P1/P2/P5
-lifecycle effects, the Schemastery schema shape, and the probe-once optional-service accessor. Every
+lifecycle effects, the Schemastery schema shape, and the probe-once optional-service accessor.
+
+Every
 bug fix or hardening pass - the sandbox fence, the stale-version leak, the in-flight disposal - had
-to be applied three times. The factory makes it apply **once**.
+to be applied three times.
+
+The factory makes it apply **once**.
 
 ---
 
@@ -171,7 +179,9 @@ loader holds it PENDING until the factory exists) and supplies only its own thre
 Only the entry carries named exports: the six **type re-exports** (`State`, `Options`, `Gate`,
 `Transform`, `Output`, `Journal` - the consumer contract, shipped as relative `.d.ts` specifiers)
 and the standalone **`Schema`** function (factory v0.1.1) - the module-load use of the instance
-method, because the loader needs `Config` before any context exists. Full contract:
+method, because the loader needs `Config` before any context exists.
+
+Full contract:
 [SCHEME.md](./SCHEME.md).
 
 ### Verification
@@ -199,13 +209,19 @@ method, because the loader needs `Config` before any context exists. Full contra
 
 ## The Config
 
-The factory registers no Config schema of its own - it **is** the config machinery. Its
+The factory registers no Config schema of its own - it **is** the config machinery.
+
+Its
 `Schema(shared?, m)` instance method is the Schemastery schema factory every consumer builds its
 schema with, and the standalone named **`Schema`** export (factory v0.1.1) makes the same factory
 usable at module-evaluation time, before any service instance exists (the loader needs `Config` at
-load). `shared: false` emits the minimal block (no
+load).
+
+`shared: false` emits the minimal block (no
 `logFile`/`updateCooldownMs`/`mutationTools`/`policyFile`/`exclude`) for non-manifest modules like
-the normalize flavors; the shared defaults carry the family's block. Volatile cells (`log`,
+the normalize flavors; the shared defaults carry the family's block.
+
+Volatile cells (`log`,
 `logFile` and any consumer's own hot fields) commit without remounting the plugin; the factory's
 `State` builder unwraps them defensively.
 
@@ -213,7 +229,9 @@ the normalize flavors; the shared defaults carry the family's block. Volatile ce
 
 ## In Action
 
-A governed write, end to end. The consumer supplies the transform; the factory drives the rest (the
+A governed write, end to end.
+
+The consumer supplies the transform; the factory drives the rest (the
 excerpt is the pinner's pin pass, condensed to its shape):
 
 ```js
@@ -245,7 +263,9 @@ hook-dsh-pinner-package.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/
 The factory's part of that one pass: Gate decided the actor and the path, Discover found the nearest
 registry.json, Continue ran the transform detached and contained, GuardedWrite carried
 `replaceIfVersion` past the P4 sandbox fence, Refresh re-emitted the fresh version with the same
-actor, and Append composed the loggers line from the module's message. The consumer composed the
+actor, and Append composed the loggers line from the module's message.
+
+The consumer composed the
 only string in the chain.
 
 ---
@@ -253,6 +273,7 @@ only string in the chain.
 ## The Ledger
 
 The factory registers no activation line and owns no ledger strings - it is a service, not a module.
+
 Its `Append(state, message)` is the family's one ledger mechanism, and it composes exactly two
 wrappers around the CONSUMER's message:
 
@@ -263,7 +284,9 @@ ledger:  [<ISO timestamp>] <message>    (appendFileSync, best-effort, when log i
 
 Every string a hook logs - `skipped (excluded) ...`, `governed <path> → <version>`,
 `pinned <path> (N versions)`, the `activated (...)` proof - is composed and logged by the hook,
-through the factory's `Append`. The factory's own composed strings are parameterized machinery (the
+through the factory's `Append`.
+
+The factory's own composed strings are parameterized machinery (the
 unreadable-policy line takes the policy file name; the suppressed-error lines take `state.Module` as
 the prefix) and stay byte-identical when a consumer keeps its historical name.
 

@@ -17,7 +17,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > quads and quirs alike.
 >
 > _A CLASS flavor of the normalize family: the core's `Spaces` class plus a configurable
-> `replacement` string (default `" "`, the plain ASCII space). The @-sentence identity: **Hook @ DSH
+> `replacement` string (default `" "`, the plain ASCII space)._
+>
+> _The @-sentence identity: **Hook @ DSH
 > @ Normalize @ Spaces**._
 >
 > _The family's `raw-write` tool (registered by
@@ -51,7 +53,9 @@ generic `Replace`/`Chunk`/`Block` dispatch:
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed][dsh-fs]
-dead fields. It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps the
+dead fields.
+
+It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm] listeners
 regardless of registration order.
 
@@ -98,8 +102,12 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 Model output picks up exotic spaces - the no-break space from copy-pasted prose, the thin space from
-typographic text, the ideographic space from CJK input. Markdown renderers and shell quoting do not
-treat them as spaces; a command with a U+00A0 in it fails for no visible reason. This flavor makes
+typographic text, the ideographic space from CJK input.
+
+Markdown renderers and shell quoting do not
+treat them as spaces; a command with a U+00A0 in it fails for no visible reason.
+
+This flavor makes
 the plain ASCII space the one that reaches the transcript.
 
 ---
@@ -190,8 +198,12 @@ defensively.
 
 ## In Action
 
-One stream, one transformation. The model emits copy-pasted typographic spacing; the live UI and the
-transcript receive plain ASCII spaces. In the incoming line below the three gaps are the no-break
+One stream, one transformation.
+
+The model emits copy-pasted typographic spacing; the live UI and the
+transcript receive plain ASCII spaces.
+
+In the incoming line below the three gaps are the no-break
 space U+00A0, the em quad U+2003 and the ideographic space U+3000, in that order:
 
 ```text

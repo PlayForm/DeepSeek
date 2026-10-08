@@ -12,11 +12,15 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 >
 > The **silent package.json governor** of the DeepSeek Harness - a plugin on the [`fs/observed`][dsh-fs] event
 > (the cordis event **every harness file write dispatches**; the tool layer is the only dispatcher)
-> that governs every `package.json` written by any agent, anywhere: a pure chain pass canonicalizes
+> that governs every `package.json` written by any agent, anywhere.
+>
+> A pure chain pass canonicalizes
 > chain-governed dependency pins, then an update stage lets npm-check-updates bump the public ones -
 > and the author never learns.
 >
-> _A factory flavor: the family's furnace does the plumbing; this package is the model logic. The
+> _A factory flavor: the family's furnace does the plumbing; this package is the model logic._
+>
+> _The
 > @-sentence identity: **Hook @ DSH @ Governor @ Package**._
 
 ---
@@ -39,7 +43,9 @@ writing its own ledger:
 Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
 leaves ncu nothing to do; the chain pass may still re-canonicalize chain pins), **chain > strip >
 normalize** (the cargo module's precedence), **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts)
-keeps ranges as authored). The ledgers are separate; activating one never implies another.
+keeps ranges as authored).
+
+The ledgers are separate; activating one never implies another.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
@@ -94,9 +100,13 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 Agents edit `package.json` files constantly - and every edit can leave stale pins, stray version
-ranges, or deps that should track a governed registry. The fix must happen where the write happens,
+ranges, or deps that should track a governed registry.
+
+The fix must happen where the write happens,
 on every write path (full writes, single-line edits, `str_replace_editor` patches alike), without
-the author's tool result changing by a single byte. [`fs/observed`][dsh-fs] is the only hook that runs _after_
+the author's tool result changing by a single byte.
+
+[`fs/observed`][dsh-fs] is the only hook that runs _after_
 content is on disk - the [`fs/write-intent`][dsh-fs] waterfall carries a version guard but never the content.
 
 ---
@@ -195,7 +205,9 @@ hook-dsh-governor-package/
 ```
 
 The published artifact contains **only the built output** - `files` whitelists `Target/`,
-[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
+[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships.
+
+There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
 (`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`); invoke it ad hoc with
 `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` (or `--Watch` for the dev loop).
@@ -221,7 +233,9 @@ the only npm script is `prepublishOnly`
 ## The Config
 
 The exported `Config` schema (the factory's `Schema` helper extended with the module's own fields)
-validates and fills every default at load - invalid configuration fails loudly. New patch entries
+validates and fills every default at load - invalid configuration fails loudly.
+
+New patch entries
 are declared with `insert:` (a bare `id:` row patches an existing entry; the loader rejects unknown
 ids with `entry "..." not found`).
 
@@ -246,7 +260,9 @@ ids with `entry "..." not found`).
 
 ## In Action
 
-One governed write. The author writes a `package.json` anywhere with the `write` tool - one dep that
+One governed write.
+
+The author writes a `package.json` anywhere with the `write` tool - one dep that
 should track the governed registry, one public dep left on a range:
 
 ```json
@@ -262,7 +278,9 @@ should track the governed registry, one public dep left on a range:
 
 The chain pass finds `@acme/chain-core` in the nearest `registry.json` (effective 0.4.5) and
 canonicalizes it to `^0.4.5`; the public dep stays a range until the update stage's ncu run bumps
-it. The transcript shows only what the author wrote; the ledger shows what actually happened:
+it.
+
+The transcript shows only what the author wrote; the ledger shows what actually happened:
 
 ```text
 [2026-10-03T09:15:22.411Z] activated (anywhere mode, logFile=~/.dsh/hook-dsh-governor-package.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
@@ -273,7 +291,9 @@ it. The transcript shows only what the author wrote; the ledger shows what actua
 
 Read the file back and `@acme/chain-core` is `^0.4.5` (or already bumped by ncu if the policy
 allowed it); write it again immediately and nothing complains - no `FS_STALE_VERSION`, the re-emit
-made the second pass a no-op. Write inside `node_modules`/`.git`/`.dsh` and the ledger gains one
+made the second pass a no-op.
+
+Write inside `node_modules`/`.git`/`.dsh` and the ledger gains one
 line, `skipped (excluded) ...`, while the file stays untouched.
 
 ---
@@ -281,7 +301,9 @@ line, `skipped (excluded) ...`, while the file stays untouched.
 ## The Ledger
 
 One global log (`logFile`, default `~/.dsh/hook-dsh-governor-package.log`) records activation,
-exclusions, chain-pass results, and every update-stage dispatch. The strings this module composes
+exclusions, chain-pass results, and every update-stage dispatch.
+
+The strings this module composes
 (the hook-dsh-governor-package: logger prefix is the factory's `Append`; each line is
 `[<ISO>] <message>` in the file):
 
@@ -296,7 +318,9 @@ update: DONE / update: FAILED
 
 (The registry-miss line ends with an em dash followed by `chain pass skipped`; the DONE/FAILED lines
 are `update: DONE` + em dash + reason and `update: FAILED` + em dash + reason - byte-exact forms are
-in the In Action excerpt above. Those em dashes are part of the literal ledger strings, so they live
+in the In Action excerpt above.
+
+Those em dashes are part of the literal ledger strings, so they live
 only in the example block.)
 
 The activation line is written by `apply()` - "did it activate" must be answerable from the ledger

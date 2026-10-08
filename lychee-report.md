@@ -54,34 +54,24 @@ The script exits non-zero when any pass reports errors, so it can gate CI.
 A link that fails here is either fixed in place (the URL correction only -
 the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
+# Pass 1 - the repo sources (.lychee.toml)
+
 # Summary
 
 | Status         | Count |
 |----------------|-------|
 | 🔍 Total       | 1273  |
-| 🔗 Unique      | 209   |
-| ✅ Successful  | 1077  |
+| 🔗 Unique      | 205   |
+| ✅ Successful  | 1084  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
 | 👻 Excluded    | 189   |
 | ❓ Unknown     | 0     |
-| 🚫 Errors      | 7     |
+| 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |
 
-## Errors per input
 
-### Errors in Boilerplate/packages/dsh-hook-normalize-dash/SCHEME.md
-
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Boilerplate/Developer/Documentation/Module/deepseek-harness/docs/subsystems/llm-streaming.md> (at 13:2) | File not found. Check if file exists and path is correct
-
-### Errors in Documentation/Guides/Governor-README.md
-
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-core> (at 33:63) | File not found. Check if file exists and path is correct
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-core> (at 55:28) | File not found. Check if file exists and path is correct
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-governor-cargo> (at 44:3) | File not found. Check if file exists and path is correct
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-pinner-package> (at 43:3) | File not found. Check if file exists and path is correct
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/plugin-dsh-factory> (at 33:1) | File not found. Check if file exists and path is correct
-* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/plugin-dsh-factory> (at 54:20) | File not found. Check if file exists and path is correct
+# Pass 2 - the built Site (Site/lychee.toml)
 
 # Summary
 
@@ -96,6 +86,9 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 | ❓ Unknown     | 0     |
 | 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |
+
+
+# Pass 3 - the generated API docs (Site/lychee.toml)
 
 # Summary
 

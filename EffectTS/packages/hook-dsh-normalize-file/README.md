@@ -12,9 +12,13 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 >
 > The **file-content normalizer** - a DeepSeek Harness plugin that registers the normalize family's
 > `normalize-file` TOOL: the read → count → write pipeline over files ALREADY on disk, beyond the
-> tool layer. One agent-chosen file per call: the target's content is read, the family's SIX
+> tool layer.
+>
+> One agent-chosen file per call: the target's content is read, the family's SIX
 > transforms are applied with a per-character count, and only when N > 0 is the rewritten content
-> written back through the factory's ONE shared write executor. N = 0 writes NOTHING - the no-op
+> written back through the factory's ONE shared write executor.
+>
+> N = 0 writes NOTHING - the no-op
 > no-write rule.
 >
 > _The family's first LISTENER-LESS flavor: no
@@ -54,18 +58,26 @@ transform tables and the generic `Replace`/`ReplaceMap` replacers:
 | [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/Source) (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write][ours-write]    |
 
 The six stream flavors cover only what the model is emitting right now; the raw-write tool's
-`normalize: true` covers only content being written. This flavor covers the gap in between:
+`normalize: true` covers only content being written.
+
+This flavor covers the gap in between:
 pre-existing files, git-cloned material, script-created files - anything already on disk that the
-agent did not just write. The hermes heritage is direct: the `normalize-dashes-for-execute-code.sh`
+agent did not just write.
+
+The hermes heritage is direct: the `normalize-dashes-for-execute-code.sh`
 hook swept script-created files after the fact; DSH makes the same rewrite an explicit, visible,
 opt-in TOOL call instead of a background hook (and `normalize-tabs.sh` - the repair hook for a
 repair hook - is the cautionary tale that keeps it that way).
 
 A **non-manifest factory consumer**: it injects `["pluginFactory", "fs", "tools"]` and uses `State`
 (cell unwrap + shared `Ledger`/`Enabled` mappings + its own field), `Append` (the ledger), `Journal`
-(the P5 storage record) and - uniquely in the family - `Write`, the ONE shared write executor. The
+(the P5 storage record) and - uniquely in the family - `Write`, the ONE shared write executor.
+
+The
 config is composed by the factory's standalone `Schema` helper with `shared: false` - the minimal
-block plus the two knobs. The tool's writes carry the call's exec as the actor, so the governance
+block plus the two knobs.
+
+The tool's writes carry the call's exec as the actor, so the governance
 trio's Gate (which pins `mutationTools` to `write`/`edit`/`str_replace_editor`) never treats them as
 a trigger - the same protection raw-write already has.
 
@@ -107,15 +119,22 @@ normalize-file { file_path: "notes/report.md" }
 
 Files that never passed through a write tool are invisible to every normalization layer DSH has:
 `raw-write`'s `normalize: true` is an explicit per-call opt-in for NEW writes, and the six stream
-flavors only rewrite model output - they never touch disk. Left unnormalized, a pre-existing file
+flavors only rewrite model output - they never touch disk.
+
+Left unnormalized, a pre-existing file
 keeps every typographic dash, curly quote, ellipsis, unicode space, zero-width character and
 full-width character it was born with - exactly the characters that break parsers, shells, diffs and
 byte-exact edit matches downstream.
 
-But the fix cannot be another silent rewriter. Files are rewritten behind the agent only at the
+But the fix cannot be another silent rewriter.
+
+Files are rewritten behind the agent only at the
 price of the edit tool's `old_string` contract: the agent read bytes X, a background rewriter
-silently changed them to X', and the next edit fails or half-matches. Hermes learned this the hard
+silently changed them to X', and the next edit fails or half-matches.
+
+Hermes learned this the hard
 way - its `normalize-tabs.sh` exists to repair the damage its own after-the-fact rewriting caused.
+
 The tool is the answer: explicit, visible, discoverable, zero background activity.
 
 ---
@@ -170,7 +189,9 @@ The tool is the answer: explicit, visible, discoverable, zero background activit
 ```
 
 The transformation is exactly the raw-write `normalize: true` chain - the core's tables and
-replacers, applied whole at write time. There is no stream dispatch to gate: the tool registers NO
+replacers, applied whole at write time.
+
+There is no stream dispatch to gate: the tool registers NO
 event listener, so the six transforms are applied to the entire file content in one pass, and the
 count is the ledger's N and the no-op condition in one.
 
@@ -199,6 +220,7 @@ count is the ledger's N and the no-op condition in one.
 There are no stream flags (`normalizeReasoning`, `normalizeToolArguments`) and no fs/observed fields
 (`updateCooldownMs`, `mutationTools`, `policyFile`, `exclude`): the minimal `shared: false` block
 plus the two knobs is the whole config surface, because the tool registers no listener of any kind.
+
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
 
@@ -206,7 +228,9 @@ defensively.
 
 ## In Action
 
-One call, one file, one count. The file already on disk carries the family's characters; the tool
+One call, one file, one count.
+
+The file already on disk carries the family's characters; the tool
 rewrites what changed and reports it:
 
 ```text
@@ -220,7 +244,9 @@ after (what the tool writes back):
 ```
 
 Every em dash (U+2014) becomes the ASCII hyphen-minus, the curly quotes become straight ones, the
-ellipsis becomes three periods; five characters replaced, so N = 5 and the write happens. The result
+ellipsis becomes three periods; five characters replaced, so N = 5 and the write happens.
+
+The result
 carries the outcome and the diff card shows the before/after in the same turn; the ledger gets the
 count line:
 
@@ -229,8 +255,12 @@ hook-dsh-normalize-file: normalized 5 char(s) in ~/Projects/notes/report.md
 ```
 
 A file with nothing to replace is a no-op: `changed: false`, the file stays byte-identical, no
-write, no count line, no journal record. A missing, binary or undecodable target is an error result
-with no write. Because the file's bytes change under you, re-read before editing - the edit tool's
+write, no count line, no journal record.
+
+A missing, binary or undecodable target is an error result
+with no write.
+
+Because the file's bytes change under you, re-read before editing - the edit tool's
 `old_string` must match the new content.
 
 ---
@@ -246,7 +276,9 @@ hook-dsh-normalize-file: normalized N char(s) in <path>
 ```
 
 The activation line is written by `apply()`; the count line follows only a successful N > 0 write -
-a no-op writes no line, and a failed read or an aborted call writes none either. Each N > 0 write
+a no-op writes no line, and a failed read or an aborted call writes none either.
+
+Each N > 0 write
 also journals one `normalized` record into the shared `package_governance` [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Journal.ts) (event
 `normalized`, path = the target's display path, detail byte-identical to the count line),
 best-effort: with no storage facility the record buffers or drops and the human ledger stays the

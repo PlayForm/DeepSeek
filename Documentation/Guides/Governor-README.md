@@ -30,7 +30,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service and the [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)
 helpers; it has no hook children of its own.
 
 One of three governance hooks sharing the
@@ -40,8 +40,8 @@ seam, each gating on its own basename and writing its own ledger:
 | plugin                                                  | basename gate  | ledger                          | pass                                                 |
 | ------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
 | [hook-dsh-governor-package][ours-hook-dsh-governor-package] (this bundle)               | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`hook-dsh-pinner-package`](../hook-dsh-pinner-package) | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo) | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| [`hook-dsh-pinner-package`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source) | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`hook-dsh-governor-cargo`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source) | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
 leaves ncu nothing to do; the chain pass may still re-canonicalize chain pins), **chain > strip >
@@ -51,8 +51,8 @@ keeps ranges as authored). The ledgers are separate; activating one never implie
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
-  schema come from [`plugin-dsh-factory`](../plugin-dsh-factory); the pure helpers (`Suppress`, the
-  policy loader) come from [`hook-dsh-core`](../hook-dsh-core). This bundle keeps only its own
+  schema come from [`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source); the pure helpers (`Suppress`, the
+  policy loader) come from [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source). This bundle keeps only its own
   vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
   (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
   [`fs/observed`][dsh-fs]

@@ -4,8 +4,8 @@
 #
 # Pass 1: the repo sources (the READMEs, the Documentation, the
 #         package sources, the Site sources) - .lychee.toml.
-# Pass 2: the built Site (Site/Target) + the generated API docs
-#         (Site/docs) - Site/lychee.toml.
+# Pass 2: the built Site (Site/Target) - Site/lychee.toml.
+# Pass 3: the generated API docs (Site/docs) - Site/lychee.toml.
 #
 # The passes compose lychee-report.md at the monorepo root: the
 # methodology header, then each pass's summary + failures.
@@ -38,6 +38,7 @@ lychee --config .lychee.toml --output "$Work/Files.md" \
 echo "==> Pass 2: the built Site (Site/lychee.toml)"
 # The static build uses root-relative links; --root-dir resolves them
 # against the build root (and the docs root for the generated API docs).
+printf '# Pass 2 - the built Site (Site/lychee.toml)\n\n' > "$Work/Site.md"
 lychee --config Site/lychee.toml --root-dir Site/Target \
 	--output "$Work/Site.md" Site/Target || Failed=1
 lychee --config Site/lychee.toml --root-dir Site/docs \
@@ -103,8 +104,11 @@ A link that fails here is either fixed in place (the URL correction only -
 the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
 HEADER
+	printf '# Pass 1 - the repo sources (.lychee.toml)\n\n'
 	cat "$Work/Files.md"
+	printf '\n# Pass 2 - the built Site (Site/lychee.toml)\n\n'
 	cat "$Work/Site.md"
+	printf '\n# Pass 3 - the generated API docs (Site/lychee.toml)\n\n'
 	cat "$Work/Docs.md"
 } > lychee-report.md
 

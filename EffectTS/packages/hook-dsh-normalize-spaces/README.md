@@ -54,7 +54,9 @@ A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses onl
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
-dead fields. It touches no files, so
+dead fields.
+
+It touches no files, so
 [fs/write-intent][dsh-fs] and
 [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
@@ -104,8 +106,12 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 Model output picks up exotic spaces - the no-break space from copy-pasted prose, the thin space from
-typographic text, the ideographic space from CJK input. Markdown renderers and shell quoting do not
-treat them as spaces; a command with a U+00A0 in it fails for no visible reason. This flavor makes
+typographic text, the ideographic space from CJK input.
+
+Markdown renderers and shell quoting do not
+treat them as spaces; a command with a U+00A0 in it fails for no visible reason.
+
+This flavor makes
 the plain ASCII space the one that reaches the transcript.
 
 ---
@@ -196,8 +202,12 @@ defensively.
 
 ## In Action
 
-One stream, one transformation. The model emits copy-pasted typographic spacing; the live UI and the
-transcript receive plain ASCII spaces. In the incoming line below the three gaps are the no-break
+One stream, one transformation.
+
+The model emits copy-pasted typographic spacing; the live UI and the
+transcript receive plain ASCII spaces.
+
+In the incoming line below the three gaps are the no-break
 space U+00A0, the em quad U+2003 and the ideographic space U+3000, in that order:
 
 ```text
@@ -212,9 +222,13 @@ text-delta out (what reaches the transcript):
 
 Each non-ASCII space in the Zs-minus-ASCII class - U+00A0 between `deploy` and `the`, U+2003 between
 `agent` and `to`, U+3000 between `ring` and `buffer` in the sample above - becomes exactly one ASCII
-space (U+0020); ASCII spaces that were already there are untouched. This is what makes a pasted
+space (U+0020); ASCII spaces that were already there are untouched.
+
+This is what makes a pasted
 command executable again: `echo a — b` with a hidden no-break space between the arguments runs after
-the pass, where before the pass the shell saw one mangled word. When a stream finishes normally with
+the pass, where before the pass the shell saw one mangled word.
+
+When a stream finishes normally with
 replacements made, the ledger gets the count line (note the `replacement= ` field renders the
 default as a bare space):
 

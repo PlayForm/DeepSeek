@@ -52,7 +52,9 @@ A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses onl
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
-dead fields. It touches no files, so
+dead fields.
+
+It touches no files, so
 [fs/write-intent][dsh-fs] and
 [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
@@ -104,6 +106,7 @@ manifest) - the full config table is in [The Config](#the-config):
 
 CJK input methods emit full-width punctuation, digits and letters - and a full-width comma or digit
 in a command, code block or path is invisible on screen and wrong for every parser, shell and diff.
+
 This flavor maps the whole fullwidth range to the unambiguous ASCII half-width forms before it
 reaches the transcript.
 
@@ -191,14 +194,18 @@ whole range, described by code point here (the literal characters are in the In 
 | `normalizeReasoning`     | boolean | `true`                                    | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `normalizeToolArguments` | boolean | `false`                                   | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
-There is **no `replacement` field** (MAP flavor). Volatile cells commit without remounting the
+There is **no `replacement` field** (MAP flavor).
+
+Volatile cells commit without remounting the
 plugin; the factory's State builder unwraps them defensively.
 
 ---
 
 ## In Action
 
-One stream, one transformation. The model emits CJK-typing artifacts - a full-width word, a
+One stream, one transformation.
+
+The model emits CJK-typing artifacts - a full-width word, a
 full-width path punctuation run, a full-width digit; the live UI and the transcript receive the
 half-width ASCII forms:
 
@@ -214,10 +221,16 @@ text-delta out (what reaches the transcript):
 
 Every full-width code point in the incoming text - the solidus U+FF0F, the letters U+FF55-U+FF4E,
 the digits U+FF11-U+FF13 and the exclamation U+FF01 - becomes its U+0021-U+007E half-width
-counterpart; ASCII characters that were already half-width are untouched. This is what keeps a
-pasted path openable and a pasted number parseable. The backslash, circumflex, vertical bar and
+counterpart; ASCII characters that were already half-width are untouched.
+
+This is what keeps a
+pasted path openable and a pasted number parseable.
+
+The backslash, circumflex, vertical bar and
 tilde entries are exactly the characters a naive string replacement would corrupt - hence the
-function replacer. When a stream finishes normally with replacements made, the ledger gets the count
+function replacer.
+
+When a stream finishes normally with replacements made, the ledger gets the count
 line:
 
 ```text

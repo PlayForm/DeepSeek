@@ -17,7 +17,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > at the exclusionary level through the cargo CLI.
 >
 > _A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
-> `cargo upgrade --exclude` - comments survive._ _The @-sentence identity: **Hook @ DSH @ Governor @
+> `cargo upgrade --exclude` - comments survive._
+>
+> _The @-sentence identity: **Hook @ DSH @ Governor @
 > Cargo**._
 >
 > Every claim below is live-verified (2026-10-03, live).
@@ -40,8 +42,12 @@ writing its own ledger:
 | [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo] (this bundle)                     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
-never see a `Cargo.toml` event. Composition semantics: **chain > strip > normalize** (this module's
-precedence), **keep-list wins** over normalization - never over the chain. The ledgers are separate;
+never see a `Cargo.toml` event.
+
+Composition semantics: **chain > strip > normalize** (this module's
+precedence), **keep-list wins** over normalization - never over the chain.
+
+The ledgers are separate;
 activating one never implies another.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
@@ -96,7 +102,9 @@ manifest) - the full config table is in [The Config](#the-config):
 
 Rust manifests drift the same way npm manifests do - but `Cargo.toml` is a TOML document people
 decorate with comments, and there is no in-process library path: the only update tool is the cargo
-CLI. A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and
+CLI.
+
+A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and
 delegate its update stage across the Rust/TS boundary - while still hooking the same [`fs/observed`][dsh-fs]
 event the npm hooks use, so one trigger law covers the whole machine.
 
@@ -177,8 +185,12 @@ Precedence, in order: **(1) chain** - a dep in `registry.effectiveLatest` is can
 FULL resolved form (even a shorthand registry entry yields a full output); **(2) strip** -
 strict-mode unknown deps; **(3) normalize** - every other simple version, UNLESS the name is in the
 **keep-list** ([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) via `keepFile` - the same sidecar the pinner uses; discovery:
-global `keepFile` → the file's own directory → registry-adjacent, the union). **The keep-list wins
-over normalization; the chain is never suppressed.** Cargo semantics are unchanged: a bare full
+global `keepFile` → the file's own directory → registry-adjacent, the union).
+
+**The keep-list wins
+over normalization; the chain is never suppressed.**
+
+Cargo semantics are unchanged: a bare full
 version is still Cargo's implicit caret.
 
 ### The TOML rewrite (why comments survive)
@@ -186,12 +198,20 @@ version is still Cargo's implicit caret.
 `smol-toml` (the ONE runtime dependency, carried by the bundle's own `node_modules`) is used for
 **PARSING ONLY** - identification of the dep entries in `[dependencies]`, `[dev-dependencies]`,
 `[build-dependencies]`, `[target.'cfg(...)'.dependencies]` (and its dev/build variants), and
-**`[workspace.dependencies]`** (the shared dep table - handled natively). The rewrite itself
+**`[workspace.dependencies]`** (the shared dep table - handled natively).
+
+The rewrite itself
 (Function/Pin) is **surgical line-level string manipulation on the raw text** - so comments, inline
-comments, blank lines, and spacing survive byte-for-byte. Handled entry shapes: `name = "0.3.4"`,
+comments, blank lines, and spacing survive byte-for-byte.
+
+Handled entry shapes: `name = "0.3.4"`,
 `name = { version = "0.3.4", ... }` (single line or pretty-printed), `[dependencies.name]` table
-style. Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspace = true` -
-the version lives in the workspace table, walked separately). Non-dependency sections are NEVER
+style.
+
+Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspace = true` -
+the version lives in the workspace table, walked separately).
+
+Non-dependency sections are NEVER
 touched: [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts) refuses any plan entry outside an identified dependency table
 (`REFUSED rewrite of ...: non-dependency section "..." would change`), and `Pin` aborts (never a
 partial rewrite) if a planned entry cannot be located in the text.
@@ -305,7 +325,9 @@ declared with `insert:`.
 
 ## In Action
 
-One governed write. The author saves a `Cargo.toml` with comments, a shorthand version, and a
+One governed write.
+
+The author saves a `Cargo.toml` with comments, a shorthand version, and a
 chain-governed dep:
 
 ```toml
@@ -337,9 +359,15 @@ The transcript shows only what the author wrote; the ledger shows the pass:
 
 (Here the policy's chain deps plus rejects became one `--exclude` flag per crate; `serde` and
 `tokio` are protected from the CLI bump - tokio by the chain, serde by the normalization pass
-already writing its full form.) Read the file back to see the governed state; write it again
-immediately and nothing complains - no `FS_STALE_VERSION`. Write inside `node_modules`/`.git`/`.dsh`
-and the ledger gains `skipped (excluded) ...` while the file stays untouched. Remove cargo-edit and
+already writing its full form.)
+
+Read the file back to see the governed state; write it again
+immediately and nothing complains - no `FS_STALE_VERSION`.
+
+Write inside `node_modules`/`.git`/`.dsh`
+and the ledger gains `skipped (excluded) ...` while the file stays untouched.
+
+Remove cargo-edit and
 the pass fails gracefully: `update: cargo-edit unavailable: ...`, the manifest untouched, the
 breaker counting the failure.
 
@@ -349,7 +377,9 @@ breaker counting the failure.
 
 One global log (`logFile`, default `~/.dsh/hook-dsh-governor-cargo.log` - SEPARATE from the npm
 ledgers) records activation, exclusions, chain-pass results, refusals, and every update-stage
-dispatch. The strings this module composes (the hook-dsh-governor-cargo: logger prefix is the
+dispatch.
+
+The strings this module composes (the hook-dsh-governor-cargo: logger prefix is the
 factory's `Append`; each line is `[<ISO>] <message>` in the file):
 
 ```text
@@ -364,7 +394,9 @@ update: cargo-edit unavailable: <cause>
 ```
 
 (The registry-miss line ends with an em dash followed by `chain pass skipped`; the DONE line is
-`update: DONE` + em dash + reason - byte-exact forms are in the In Action excerpt above. Those em
+`update: DONE` + em dash + reason - byte-exact forms are in the In Action excerpt above.
+
+Those em
 dashes are part of the literal ledger strings, so they live only in the example block.)
 
 The activation line is written by `apply()` - "did it activate" must be answerable from the ledger

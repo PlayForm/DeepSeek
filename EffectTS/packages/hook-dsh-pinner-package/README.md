@@ -13,7 +13,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > The **silent version pinner** of the DeepSeek Harness - a plugin on the
 > [`fs/observed`][dsh-fs] event that
 > pins every dependency version in a written `package.json` to its STATIC version:
-> `"@playform/build": "^0.3.4"` becomes `"0.3.4"`. One leading range prefix (`^`, `~`, or `=`) is
+> `"@playform/build": "^0.3.4"` becomes `"0.3.4"`.
+>
+> One leading range prefix (`^`, `~`, or `=`) is
 > stripped, in every dependency section the config declares - and the author never learns.
 >
 > _A factory flavor: pure P-only - no ncu, no jobs, no subprocess, no cooldown. Just the pin. The
@@ -41,7 +43,9 @@ writing its own ledger:
 Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
 manifest then leaves the governor's update stage nothing to do, while its chain pass may still
 re-canonicalize chain pins), **keep-list wins** (the pinner's [pin-policy.json][ours-transform] keeps ranges as
-authored). The ledgers are separate (`hook-dsh-pinner-package.log` vs
+authored).
+
+The ledgers are separate (`hook-dsh-pinner-package.log` vs
 `hook-dsh-governor-package.log`); activating one never implies another - order between two npm
 listeners is defined only by registration.
 
@@ -74,7 +78,9 @@ the same conventions as every other @playform package.
 
 All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
 inserts the [hook-dsh-pinner-package][ours-hook-dsh-pinner-package] row, and the ledger logs `activated (pinner, ...)` at the next
-host start. CAVEAT (verified live): pnpm does NOT auto-install a linked package's dependencies - the
+host start.
+
+CAVEAT (verified live): pnpm does NOT auto-install a linked package's dependencies - the
 linked checkout must carry its own `node_modules` or the entry load fails silently (no activation
 line).
 
@@ -97,9 +103,13 @@ manifest) - the full config block is in [The Config](#the-config):
 
 ## The Problem
 
-Ranged versions make builds drift: `"^0.3.4"` today is `"0.3.5"` next week. Teams that want
+Ranged versions make builds drift: `"^0.3.4"` today is `"0.3.5"` next week.
+
+Teams that want
 reproducible installs want static versions - but writing them by hand (or remembering to) is exactly
-the kind of discipline an agent workflow loses. The pinner makes static versions the default outcome
+the kind of discipline an agent workflow loses.
+
+The pinner makes static versions the default outcome
 of every write, invisibly.
 
 ---
@@ -187,7 +197,9 @@ hook-dsh-pinner-package/
 ```
 
 The published artifact contains **only the built output** - `files` whitelists `Target/`,
-[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
+[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships.
+
+There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
 (`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`).
 
@@ -207,7 +219,9 @@ the only npm script is `prepublishOnly`
 ## The Config
 
 The exported `Config` schema (the factory's `Schema` helper extended with `sections`) validates and
-fills every default at load - invalid configuration fails loudly. New patch entries are declared
+fills every default at load - invalid configuration fails loudly.
+
+New patch entries are declared
 with `insert:`.
 
 ```yaml
@@ -227,7 +241,9 @@ with `insert:`.
 
 ## In Action
 
-One pinned write. The author drops a `package.json` with two ranged versions and a keep-listed
+One pinned write.
+
+The author drops a `package.json` with two ranged versions and a keep-listed
 package nearby:
 
 ```json
@@ -243,7 +259,9 @@ package nearby:
 ```
 
 A [pin-policy.json][ours-transform] (`{"keep":["tailwindcss"]}`) sits beside the file, so tailwindcss keeps its
-range; the other two dependencies are pinned. The transcript shows only what the author wrote; the
+range; the other two dependencies are pinned.
+
+The transcript shows only what the author wrote; the
 ledger shows the pin:
 
 ```text
@@ -252,10 +270,16 @@ ledger shows the pin:
 ```
 
 Read the file back and `"@playform/build"` is `"0.3.4"`, `"@acme/core"` is `"1.2.3"`,
-`"tailwindcss"` is still `"^3.0.5"`, and `"scripts"` is byte-identical. Write the pinned file again
-and the pass is a no-op with its own line: `no changes to pin for ...`. Write inside
+`"tailwindcss"` is still `"^3.0.5"`, and `"scripts"` is byte-identical.
+
+Write the pinned file again
+and the pass is a no-op with its own line: `no changes to pin for ...`.
+
+Write inside
 `node_modules`/`.git`/`.dsh` and the ledger gains `skipped (excluded) ...` while the file stays
-untouched. (A non-JSON `package.json` - or a refusal, if a non-dependency section would change -
+untouched.
+
+(A non-JSON `package.json` - or a refusal, if a non-dependency section would change -
 gets its own line, e.g. `observed non-JSON package.json ... - skipped`, before the silence.)
 
 ---
@@ -264,6 +288,7 @@ gets its own line, e.g. `observed non-JSON package.json ... - skipped`, before t
 
 One global log (`logFile`, default `~/.dsh/hook-dsh-pinner-package.log` - SEPARATE from the
 governor's ledger) records activation, exclusions, non-JSON skips, refusals, and every pin result.
+
 The strings this module composes (the hook-dsh-pinner-package: logger prefix is the factory's
 `Append`; each line is `[<ISO>] <message>` in the file):
 

@@ -34,7 +34,9 @@ machinery; the first of six stream normalizer siblings.
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
 [`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
 `shared: false`, for the config), [`hook-dsh-core`](../hook-dsh-core) for the `Dashes` table and the
-generic `Chunk`/`Block` dispatch. The normalize-dash is the family's **CLASS flavor with a
+generic `Chunk`/`Block` dispatch.
+
+The normalize-dash is the family's **CLASS flavor with a
 `replacement` knob** and the direct descendant of the hermes dashes hook - its regex verbatim; the
 siblings share the hermes-style whole-chunk replacement approach:
 
@@ -49,7 +51,9 @@ siblings share the hermes-style whole-chunk replacement approach:
 
 It is also the factory's **first NON-MANIFEST module** and its **second consumer**: it injects
 `["pluginFactory"]` and uses only `State` (cell unwrap + shared `Ledger`/`Enabled` mappings + its
-own fields) and `Append`. NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's
+own fields) and `Append`.
+
+NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's
 silence; the normalize-dash implements its own [`llm/stream`][dsh-llm] registration), `Attach` (no jobs /
 inflight / storage), `Journal` (governance domain - the normalize-dash logs via Append only), and
 the gate/write/refresh/continue machinery (no [fs/observed][dsh-fs] path).
@@ -97,6 +101,7 @@ pnpm add @playform/hook-dsh-normalize-dash
 
 Activation is at boot (bundle layers compose at host restart); verify with
 `dsh --profile <name> --dump-config` and the `hook-dsh-normalize-dash: activated (...)` ledger line.
+
 A file: dependency alone is NOT activation.
 
 ### Usage
@@ -120,9 +125,13 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 The user's hermes hook rewrites the unicode dash family to ASCII hyphen-minus **in files after the
-fact** - `perl -CSD -pe` over whatever was already written. Model output, however, is born in the
+fact** - `perl -CSD -pe` over whatever was already written.
+
+Model output, however, is born in the
 stream: the live UI and the durable transcript see the em dashes first, no matter what a file hook
-does later. A DSH plugin can go where hermes cannot: the [`llm/stream`][dsh-llm] waterfall, where every
+does later.
+
+A DSH plugin can go where hermes cannot: the [`llm/stream`][dsh-llm] waterfall, where every
 streaming model call passes through.
 
 Unlike the governance family ([`hook-dsh-governor-package`](../hook-dsh-governor-package),
@@ -251,9 +260,15 @@ waterfall (the observation policy's single-slot guarded-write decision) → the 
 policy (resolved like the built-in's no-escalation path; `raw-write` advertises no escalation of its
 own) → `ctx.fs.writeText(target, content, intent, exec.signal, policy)` → the [`fs/observed`][dsh-fs] emit
 with the written version - so the governance family's [fs/observed][dsh-fs] chain fires for these writes the
-same way it fires for built-in writes. `exec.signal` is honored end to end (a pre-aborted call never
-writes). The registration is readonly after registration; the presenters are pure and recompute the
-same selection-aware chain, so the diff card always matches the file. Inject:
+same way it fires for built-in writes.
+
+`exec.signal` is honored end to end (a pre-aborted call never
+writes).
+
+The registration is readonly after registration; the presenters are pure and recompute the
+same selection-aware chain, so the diff card always matches the file.
+
+Inject:
 `["pluginFactory", "fs", "tools"]`.
 
 ### The Source Layout
@@ -295,7 +310,9 @@ registration - stays alive); the factory's State builder unwraps them defensivel
 
 ## In Action
 
-One stream, one transformation. The model emits prose with typographic dashes; the live UI and the
+One stream, one transformation.
+
+The model emits prose with typographic dashes; the live UI and the
 transcript receive the ASCII forms:
 
 ```text
@@ -311,7 +328,9 @@ text-delta out (what reaches the transcript):
 ```
 
 The em dash (U+2014), the en dash (U+2013) and the horizontal bar (U+2015) each become `-`; the
-ASCII hyphens that were already there are untouched (count only counts replacements). The same pass
+ASCII hyphens that were already there are untouched (count only counts replacements).
+
+The same pass
 runs over reasoning deltas (`normalizeReasoning`, default on) and - with the example patch enabling
 `normalizeToolArguments` - over tool-call arguments, where the three-way gate keeps the sensitive
 calls intact:
@@ -330,7 +349,9 @@ tool-call-delta, name "write",
 
 And the `raw-write` tool in the file-writing direction: its content lands verbatim by default, or
 runs the family's six-fold chain when called with `normalize: true` - the em dash above would
-survive the default call and become a hyphen under `normalize: true`. When a stream finishes
+survive the default call and become a hyphen under `normalize: true`.
+
+When a stream finishes
 normally with replacements made, the ledger gets the count line:
 
 ```text
@@ -338,7 +359,9 @@ hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
 ```
 
 The selection can also be FINE-GRAINED - the same call that wrote the prose above, done with the
-raw-write tool per call. The literal characters in these examples are written with the RAW-WRITE
+raw-write tool per call.
+
+The literal characters in these examples are written with the RAW-WRITE
 tool itself (this is exactly the stream-exempt path the tool exists for):
 
 raw-write, content
@@ -371,7 +394,9 @@ dashes first.
 And the governance direction, per call: a raw-write to a `package.json` with `govern: true` runs the
 registered chain pass (canonicalize) and the update stage through the factory's direct-govern
 registry after the write lands; `govern: ["pin"]` runs only the pinner's chain pass;
-`govern: ["update"]` runs only the update stage. The default — `govern` absent — writes the file and
+`govern: ["update"]` runs only the update stage.
+
+The default — `govern` absent — writes the file and
 lets the [fs/observed][dsh-fs] event path govern it exactly as before:
 
 ```text

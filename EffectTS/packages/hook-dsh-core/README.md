@@ -53,7 +53,9 @@ pnpm add @playform/hook-dsh-core
 
 Not a bundle, so no `dsh plugin add` row: add the package as a plain dependency of whatever consumes
 it (the command above, or the profile's `link:` dependency for the dev loop) and build it with the
-same `prepublishOnly` sequence as the family bundles. Consumers link it as a library dependency; the
+same `prepublishOnly` sequence as the family bundles.
+
+Consumers link it as a library dependency; the
 bundles carry their own `node_modules` (`pnpm install --ignore-workspace` inside each - pnpm does
 not install a linked package's dependencies).
 
@@ -73,7 +75,11 @@ import { Replace, ReplaceMap, Dashes, Chunk } from "@playform/hook-dsh-core";
 The family's hooks kept re-implementing the same pure functions: the NPM section list, the exclusion
 segments, the suppression-line composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Function/Refusal.ts) - and, for the
 normalize flavors, the same per-chunk dispatch, block-end normalizer and character tables,
-copy-pasted per flavor. Every fix had to be applied N times. The core makes each of them exist
+copy-pasted per flavor.
+
+Every fix had to be applied N times.
+
+The core makes each of them exist
 **once**, importable by any consumer - inside the DeepSeek Harness or entirely outside it.
 
 ---
@@ -211,7 +217,9 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 ## The Config
 
 The core registers no Config and needs none - it is not a plugin: no loader contract, no context, no
-Schemastery schema, nothing to validate at load. Every knob it exposes is a function parameter
+Schemastery schema, nothing to validate at load.
+
+Every knob it exposes is a function parameter
 (`Policy`'s `defaults`, `Replace`'s replacement, `Chunk`'s injected transform), decided by the
 consuming module's own config.
 
@@ -254,17 +262,23 @@ ReplaceMap("he said ‘hello’ — loudly", Quotes);
 ```
 
 `count === 0` means "unchanged": the caller keeps the original string by identity instead of
-allocating a copy. The policy loader, in its `Quiet` form, reads the same `update-policy.json` the
+allocating a copy.
+
+The policy loader, in its `Quiet` form, reads the same `update-policy.json` the
 update engine will honor and returns the built-in defaults - with the diagnostics, or without them.
 
 ---
 
 ## The Ledger
 
-The core owns no ledger strings and writes nothing - no plugin, no logger, no ledger file. The
+The core owns no ledger strings and writes nothing - no plugin, no logger, no ledger file.
+
+The
 module ledger strings stay MODULE-side: the core supplies the mechanics (the `Suppress` composer,
 the `Policy` diagnostics, the `Refusal` line, the `Activate` template), and every consumer logs them
-through its own `Append` (the factory's ledger service). Nothing in the core ever composes a
+through its own `Append` (the factory's ledger service).
+
+Nothing in the core ever composes a
 `<Module>:` prefix or an activation proof's field list - the `activated (...)` template is the
 mechanics only; the fields are the module's.
 

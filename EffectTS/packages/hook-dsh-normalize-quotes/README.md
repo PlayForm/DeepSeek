@@ -55,7 +55,9 @@ A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses onl
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
-dead fields. It touches no files, so
+dead fields.
+
+It touches no files, so
 [fs/write-intent][dsh-fs] and
 [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
@@ -105,8 +107,12 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 Smart-quote processors and code editors emit typographic quotes; every parser, shell and diff
-understands the straight ASCII ones. Left in model output, a curly quote is a silent correctness
-hazard - in code blocks, commands and file paths it is simply the wrong character. This flavor makes
+understands the straight ASCII ones.
+
+Left in model output, a curly quote is a silent correctness
+hazard - in code blocks, commands and file paths it is simply the wrong character.
+
+This flavor makes
 the straight form the one that reaches the transcript.
 
 ---
@@ -193,14 +199,18 @@ ASCII straight counterpart:
 | `normalizeReasoning`     | boolean | `true`                                 | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `normalizeToolArguments` | boolean | `false`                                | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
-There is **no `replacement` field** (MAP flavor). Volatile cells commit without remounting the
+There is **no `replacement` field** (MAP flavor).
+
+Volatile cells commit without remounting the
 plugin; the factory's State builder unwraps them defensively.
 
 ---
 
 ## In Action
 
-One stream, one transformation. The model emits smart-quoted prose; the live UI and the transcript
+One stream, one transformation.
+
+The model emits smart-quoted prose; the live UI and the transcript
 receive the straight ASCII forms:
 
 ```text
@@ -215,8 +225,12 @@ text-delta out (what reaches the transcript):
 
 Every typographic quote in the incoming text - the four single forms and the four double forms -
 becomes its ASCII counterpart; straight quotes that were already there are untouched (the count only
-counts replacements). In code blocks, commands and file paths this is the difference between a
-command that runs and one that fails for no visible reason. When a stream finishes normally with
+counts replacements).
+
+In code blocks, commands and file paths this is the difference between a
+command that runs and one that fails for no visible reason.
+
+When a stream finishes normally with
 replacements made, the ledger gets the count line:
 
 ```text

@@ -52,7 +52,9 @@ A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses onl
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
-dead fields. It touches no files, so
+dead fields.
+
+It touches no files, so
 [fs/write-intent][dsh-fs] and
 [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
@@ -102,10 +104,14 @@ manifest) - the full config table is in [The Config](#the-config):
 
 ## The Problem
 
-Zero-width and format characters carry no visible width - which makes them the perfect smugglers. A
+Zero-width and format characters carry no visible width - which makes them the perfect smugglers.
+
+A
 zero-width joiner inside a file path, a right-to-left mark inside a command, the U+202E
 visual-spoofing override in what looks like plain text: none of them show up in the transcript, all
-of them change what a parser, shell or diff sees. This flavor deletes the whole family before it
+of them change what a parser, shell or diff sees.
+
+This flavor deletes the whole family before it
 reaches the transcript.
 
 ---
@@ -205,9 +211,13 @@ defensively.
 
 ## In Action
 
-One stream, one deletion. The model emits text carrying invisible smugglers; the live UI and the
+One stream, one deletion.
+
+The model emits text carrying invisible smugglers; the live UI and the
 transcript receive clean text - and the two lines below look identical in print, because the removed
-characters are invisible. The incoming line carries, in order: a soft hyphen (U+00AD), a zero-width
+characters are invisible.
+
+The incoming line carries, in order: a soft hyphen (U+00AD), a zero-width
 space (U+200B), a zero-width joiner (U+200D), a left-to-right mark (U+200E), a right-to-left mark
 (U+200F), a word joiner (U+2060) and a BOM character (U+FEFF):
 
@@ -223,8 +233,12 @@ text-delta out (what reaches the transcript):
 
 In the incoming line the smugglers sit inside the word `password` and around the colon; a diff would
 see a `password` that does not match the author's text, a parser would tokenize differently, a shell
-could splice a command. After the pass all of them are simply gone - the output line is what the
-reader should see. When a stream finishes normally with replacements made, the ledger gets the count
+could splice a command.
+
+After the pass all of them are simply gone - the output line is what the
+reader should see.
+
+When a stream finishes normally with replacements made, the ledger gets the count
 line:
 
 ```text
@@ -249,7 +263,9 @@ hook-dsh-normalize-invisible: activated (replacement=, reasoning=on, toolArgs=of
 hook-dsh-normalize-invisible: normalized N invisible char(s) in one stream
 ```
 
-The empty default replacement renders as the empty `replacement=`. The activation line is written by
+The empty default replacement renders as the empty `replacement=`.
+
+The activation line is written by
 `apply()`; the count line only follows a normal stream completion and only when N > 0 (a thrown-away
 stream writes no ledger line).
 

@@ -51,7 +51,9 @@ A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses onl
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
-dead fields. It touches no files, so
+dead fields.
+
+It touches no files, so
 [fs/write-intent][dsh-fs] and
 [fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
@@ -102,8 +104,12 @@ manifest) - the full config table is in [The Config](#the-config):
 ## The Problem
 
 Text processors collapse the typographic three-dot run into a single code point - U+2026, the
-horizontal ellipsis. In code blocks, commands and diffs the collapsed form is simply wrong: three
-literal dots are what every parser, shell and search expects. This flavor makes the ASCII spelling
+horizontal ellipsis.
+
+In code blocks, commands and diffs the collapsed form is simply wrong: three
+literal dots are what every parser, shell and search expects.
+
+This flavor makes the ASCII spelling
 the one that reaches the transcript.
 
 ---
@@ -193,7 +199,9 @@ defensively.
 
 ## In Action
 
-One stream, one transformation. The model emits the collapsed typographic ellipsis; the live UI and
+One stream, one transformation.
+
+The model emits the collapsed typographic ellipsis; the live UI and
 the transcript receive three ASCII dots:
 
 ```text
@@ -207,7 +215,9 @@ text-delta out (what reaches the transcript):
 ```
 
 The single U+2026 code point becomes the three-dot ASCII sequence `...`; dots that were already
-ASCII are untouched. Each replaced code point counts once in the ledger even though it expands to
+ASCII are untouched.
+
+Each replaced code point counts once in the ledger even though it expands to
 three characters - which is why one ellipsis can show up as `normalized 3 ellipsis char(s)` for
 three collapsed code points, not nine output characters:
 
@@ -216,7 +226,9 @@ hook-dsh-normalize-ellipsis: normalized 3 ellipsis char(s) in one stream
 ```
 
 The `replacement` is hot-editable: change it in the config (say to `. . .`) and the very next stream
-picks it up with no remount. The same pass runs over reasoning deltas when `normalizeReasoning` is
+picks it up with no remount.
+
+The same pass runs over reasoning deltas when `normalizeReasoning` is
 on, and over tool-call arguments when the example patch enables `normalizeToolArguments` - with the
 `edit` name exempt and raw-marker calls passing through unnormalized.
 
