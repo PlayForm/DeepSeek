@@ -9,8 +9,9 @@ export interface Over {
     intent?: FsWriteIntent | {
         waterfall: true;
     };
-    /** Forwarded to `writeText` end to end (and to the fiber at the shell's
-     *  runPromise boundary). */
+    /** Forwarded to `writeText` end to end (never mapped onto the fiber at
+     *  the shell's runPromise boundary - the seam keeps the abort path's
+     *  byte parity). */
     signal?: AbortSignal | undefined;
     /** `"standing"` (default): the built-in's no-escalation replica. `"p4"`:
      *  the sandbox-mode-decided per-call fence. Or an explicit policy. */
