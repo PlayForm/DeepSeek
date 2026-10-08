@@ -19,7 +19,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > chain-governed dependency pins, then an update stage lets npm-check-updates bump the public ones -
 > and the author never learns.
 >
-> _A factory flavor: the family's furnace does the plumbing; this package is the model logic. The
+> _A factory flavor: the family's furnace does the plumbing; this package is the model logic._
+>
+> _The
 > @-sentence identity: **Hook @ DSH @ Governor @ Package**._
 
 ---

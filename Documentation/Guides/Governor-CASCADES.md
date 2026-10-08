@@ -5,7 +5,9 @@
 > handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
 The family matrix deepened: per-plugin identity, exact ledger strings per step, call/data
-signatures, sync/async boundaries, and failure containment for every element. **S** = seam · **F** =
+signatures, sync/async boundaries, and failure containment for every element.
+
+**S** = seam · **F** =
 factory · **M** = module · **X** = exemption.
 
 ---

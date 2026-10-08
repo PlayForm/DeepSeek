@@ -25,9 +25,13 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts),
 > no
 > [`fs/observed`][dsh-fs] -
-> nothing runs without an explicit agent action. The background-rewrite posture is deliberately NOT
+> nothing runs without an explicit agent action._
+>
+> _The background-rewrite posture is deliberately NOT
 > shipped (it would break the edit tool's `old_string` contract); the design report ships the tool
-> arm only. The @-sentence identity: **Hook @ DSH @ Normalize @ File**._
+> arm only._
+>
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ File**._
 >
 > _This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Stream) beside `edit` and `raw-write` -
 > its arguments carry a FILE PATH, and a normalized dash inside a filename would corrupt the

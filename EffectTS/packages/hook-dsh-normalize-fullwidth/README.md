@@ -17,7 +17,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > U+0021-U+007E - the whole story, letters, punctuation and digits included.
 >
 > _A MAP flavor of the normalize family: the core's `Fullwidth` char-to-char table owns the
-> substitution - no `replacement` config knob. The @-sentence identity: **Hook @ DSH @ Normalize @
+> substitution - no `replacement` config knob._
+>
+> _The @-sentence identity: **Hook @ DSH @ Normalize @
 > Fullwidth**._
 >
 > _The family's `raw-write` tool (registered by

@@ -19,9 +19,13 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > injection point hermes itself does not have._
 >
 > _A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
-> `replacement` (default `-`). It also registers the family's **`raw-write` tool** - a write wrapper
+> `replacement` (default `-`)._
+>
+> _It also registers the family's **`raw-write` tool** - a write wrapper
 > with an explicit `normalize` parameter (default **false = verbatim**), exempt from the stream
-> normalization by name like `edit`. The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**._
+> normalization by name like `edit`._
+>
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**._
 
 ---
 

@@ -218,9 +218,13 @@ text-delta out (what reaches the transcript):
 
 Each non-ASCII space in the Zs-minus-ASCII class - U+00A0 between `deploy` and `the`, U+2003 between
 `agent` and `to`, U+3000 between `ring` and `buffer` in the sample above - becomes exactly one ASCII
-space (U+0020); ASCII spaces that were already there are untouched. This is what makes a pasted
+space (U+0020); ASCII spaces that were already there are untouched.
+
+This is what makes a pasted
 command executable again: `echo a — b` with a hidden no-break space between the arguments runs after
-the pass, where before the pass the shell saw one mangled word. When a stream finishes normally with
+the pass, where before the pass the shell saw one mangled word.
+
+When a stream finishes normally with
 replacements made, the ledger gets the count line (note the `replacement= ` field renders the
 default as a bare space):
 

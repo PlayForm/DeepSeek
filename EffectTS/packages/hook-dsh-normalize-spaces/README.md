@@ -19,7 +19,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > quads and quirs alike.
 >
 > _A CLASS flavor of the normalize family: the core's `Spaces` class plus a configurable
-> `replacement` string (default `" "`, the plain ASCII space). The @-sentence identity: **Hook @ DSH
+> `replacement` string (default `" "`, the plain ASCII space)._
+>
+> _The @-sentence identity: **Hook @ DSH
 > @ Normalize @ Spaces**._
 >
 > _The family's `raw-write` tool (registered by

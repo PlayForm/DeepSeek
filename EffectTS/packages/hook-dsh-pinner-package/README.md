@@ -18,7 +18,11 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > One leading range prefix (`^`, `~`, or `=`) is
 > stripped, in every dependency section the config declares - and the author never learns.
 >
-> _A factory flavor: pure P-only - no ncu, no jobs, no subprocess, no cooldown. Just the pin. The
+> _A factory flavor: pure P-only - no ncu, no jobs, no subprocess, no cooldown._
+>
+> _Just the pin._
+>
+> _The
 > @-sentence identity: **Hook @ DSH @ Pinner @ Package**._
 
 ---

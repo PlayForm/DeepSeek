@@ -4,7 +4,9 @@
 > `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder; the handoff
 > context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
-Static analysis of all 89 Source files (2026-10-03, post-equalization pass in flight). What the code
+Static analysis of all 89 Source files (2026-10-03, post-equalization pass in flight).
+
+What the code
 CALLS (the DeepSeek Harness API) vs. what it DOESN'T (the deliberate exemptions), per plugin, plus
 the shared anatomy.
 

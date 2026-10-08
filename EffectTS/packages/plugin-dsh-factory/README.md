@@ -18,9 +18,14 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every
 > piece of common machinery the family's hooks used to duplicate.
 >
-> _One service. Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
-> `GovernSteps` registry among them). The hooks bring their own metal; the factory pours the mold.
-> The @-sentence identity: **Plugin @ DSH @ Factory**._
+> _One service._
+>
+> _Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
+> `GovernSteps` registry among them)._
+>
+> _The hooks bring their own metal; the factory pours the mold._
+>
+> _The @-sentence identity: **Plugin @ DSH @ Factory**._
 
 ---
 

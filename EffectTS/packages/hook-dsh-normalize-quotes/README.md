@@ -20,7 +20,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > double quote.
 >
 > _A MAP flavor of the normalize family: the core's `Quotes` char-to-char table owns the
-> substitution - no `replacement` config knob. The @-sentence identity: **Hook @ DSH @ Normalize @
+> substitution - no `replacement` config knob._
+>
+> _The @-sentence identity: **Hook @ DSH @ Normalize @
 > Quotes**._
 >
 > _The family's `raw-write` tool (registered by

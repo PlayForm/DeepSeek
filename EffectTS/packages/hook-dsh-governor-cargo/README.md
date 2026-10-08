@@ -17,7 +17,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > at the exclusionary level through the cargo CLI.
 >
 > _A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
-> `cargo upgrade --exclude` - comments survive._ _The @-sentence identity: **Hook @ DSH @ Governor @
+> `cargo upgrade --exclude` - comments survive._
+>
+> _The @-sentence identity: **Hook @ DSH @ Governor @
 > Cargo**._
 >
 > Every claim below is live-verified (2026-10-03, live).

@@ -16,7 +16,11 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> _One runtime dependency: effect v4.0.2. Not a plugin - the muscle under the plugins._ _The
+> _One runtime dependency: effect v4.0.2._
+>
+> _Not a plugin - the muscle under the plugins._
+>
+> _The
 > @-sentence identity: **Hook @ DSH @ Core** - the machinery every other family package stands on._
 
 ---

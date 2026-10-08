@@ -17,7 +17,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > simply vanish (the default replacement is the empty string).
 >
 > _A CLASS flavor of the normalize family: the core's `Invisible` class plus a configurable
-> `replacement` string (default `""` - removal).
+> `replacement` string (default `""` - removal)._
 >
 > _The @-sentence identity: **Hook @ DSH @ Normalize @
 > Invisible**._

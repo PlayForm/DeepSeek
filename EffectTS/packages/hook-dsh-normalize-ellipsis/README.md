@@ -16,7 +16,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > typographic three-dot ellipsis code point becomes the ASCII three-dot sequence - U+2026 to `...`.
 >
 > _A CLASS flavor of the normalize family: the core's `Ellipsis` class plus a configurable
-> `replacement` string (default `...`). The @-sentence identity: **Hook @ DSH @ Normalize @
+> `replacement` string (default `...`)._
+>
+> _The @-sentence identity: **Hook @ DSH @ Normalize @
 > Ellipsis**._
 >
 > _The family's `raw-write` tool (registered by
