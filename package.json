@@ -14,9 +14,11 @@
 		"lychee": "bash Maintain/Lychee.sh",
 		"format": "bash Maintain/Format.sh",
 		"format:prettier": "bash Maintain/Format.sh prettier",
-		"format:check": "prettier --check --ignore-path .prettierignore ."
+		"format:newlines": "bash Maintain/Format.sh newlines",
+		"format:check": "prettier --check --ignore-path .prettierignore . && node Maintain/Check-Newlines.mjs"
 	},
 	"devDependencies": {
-		"prettier": "3.9.9"
+		"prettier": "3.9.9",
+		"prettier-plugin-sh": "0.20.2"
 	}
 }

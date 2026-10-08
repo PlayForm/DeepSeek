@@ -33,7 +33,7 @@
 # ============================================================
 set -euo pipefail
 
-Root=$(cd -- "$(dirname -- "$0")" >/dev/null 2>&1 && pwd)/..
+Root=$(cd -- "$(dirname -- "$0")" > /dev/null 2>&1 && pwd)/..
 
 Names="hook-dsh-core
 hook-dsh-governor-cargo
