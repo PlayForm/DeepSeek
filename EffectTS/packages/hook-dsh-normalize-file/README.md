@@ -20,7 +20,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > _The family's first LISTENER-LESS flavor: no
 > [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts),
 > no
-> [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) -
+> [`fs/observed`][dsh-fs] -
 > nothing runs without an explicit agent action. The background-rewrite posture is deliberately NOT
 > shipped (it would break the edit tool's `old_string` contract); the design report ships the tool
 > arm only. The @-sentence identity: **Hook @ DSH @ Normalize @ File**._
@@ -51,7 +51,7 @@ transform tables and the generic `Replace`/`ReplaceMap` replacers:
 | [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | model output (stream)            | core `Spaces` class -> `" "`                       |
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | model output (stream)            | core `Invisible` class -> removed                  |
 | [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | model output (stream)            | core `Fullwidth` MAP -> full-width -> half-width   |
-| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/Source) (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts)    |
+| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/Source) (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write][ours-write]    |
 
 The six stream flavors cover only what the model is emitting right now; the raw-write tool's
 `normalize: true` covers only content being written. This flavor covers the gap in between:
@@ -176,14 +176,14 @@ count is the ledger's N and the no-op condition in one.
 
 **The conflict map, honored by construction**
 
-- Governance bounded passes: the write goes through [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts) and emits
-  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts),
+- Governance bounded passes: the write goes through [Factory.Write][ours-write] and emits
+  [`fs/observed`][dsh-fs],
   but the governors' Gate requires the actor tool name in their `mutationTools` pin -
   `normalize-file` is never added to any such list, so these writes never trigger a chain pass.
 - Edit `old_string` contract: safe because visible - the diff card shows the before/after in the
   same turn, and the tool description says to re-read before editing (the same obligation as after
   any `normalize: true` write).
-- raw-write read-before-write: tool calls are serialized and [Factory.Write](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts)'s `before` is read at
+- raw-write read-before-write: tool calls are serialized and [Factory.Write][ours-write]'s `before` is read at
   write time, so a prior normalize-file in the same turn is already reflected. No race.
 
 ---
@@ -257,3 +257,6 @@ complete record.
 ## License 📜
 
 CC0-1.0.
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+[ours-write]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts

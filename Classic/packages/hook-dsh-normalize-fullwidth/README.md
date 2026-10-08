@@ -11,8 +11,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **fullwidth normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)) and normalizes the full-width family in model output, live in the transcript: the
+> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
+> [LlmRuntime][dsh-llm]) and normalizes the full-width family in model output, live in the transcript: the
 > entire FULLWIDTH FORMS range U+FF01-U+FF5E maps to its ASCII half-width counterpart
 > U+0021-U+007E - the whole story, letters, punctuation and digits included.
 >
@@ -50,9 +50,9 @@ the generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
-dead fields. It touches no files, so [fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and [fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners
+by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed][dsh-fs]
+dead fields. It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps the
+downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm] listeners
 regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -244,3 +244,6 @@ and only when N > 0 (a thrown-away stream writes no ledger line).
 ## License 📜
 
 CC0-1.0.
+
+[dsh-llm]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

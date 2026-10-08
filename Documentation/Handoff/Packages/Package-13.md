@@ -30,7 +30,7 @@ normalize-dash 132 · quotes 62 · ellipsis 62 · spaces 62 · invisible 62
    inspect provider projects the SCHEMA not the resolved entry config - the verification blind
    spot); (b) the emit-context + listener-scope theories were misdiagnoses (the events were
    delivered all along - the
-   [cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis) single realm,
+   [cordis][dsh-cordis] single realm,
    the shared registry; the research verdict in `Documentation/Reports/FSOBSERVED-DELIVERY.md`); (c)
    the Wire root-registration + the root emit kept (correct posture, harmless). LIVE RESOLUTION: a
    default raw-write of the de-canonical governed-chain fixture fires `governed` + `pinned` + the
@@ -85,7 +85,7 @@ normalize-dash 132 · quotes 62 · ellipsis 62 · spaces 62 · invisible 62
 - The built-in write/edit → governed via the event path (the interlock).
 - The [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts): the per-record migration + the records flowing.
 - The update stage's verifyCommand failures are the documented
-  [cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis) trap (the
+  [cordis][dsh-cordis] trap (the
   fixture's vendored forks - not a bug).
 
 ## The working lessons of this session
@@ -112,3 +112,5 @@ The boilerplate is complete: twelve packages, all 12 smokes green (core 14 / fac
 clean at `5982aa8`, the full live matrix passed. The codebase now serves as the boilerplate for the
 two official releases (Classic + Effect-TS), one repository per package, under the DeepSeek Harness
 Plugin Family for PlayForm.
+
+[dsh-cordis]: https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis

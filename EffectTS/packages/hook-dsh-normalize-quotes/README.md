@@ -11,9 +11,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **quote normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
+> [`llm/stream`][dsh-llm]
 > waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> [LlmRuntime](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts))
+> [LlmRuntime][dsh-llm])
 > and normalizes the curly quote family in model output, live in the transcript: the eight
 > typographic quote code points each map to their ASCII straight counterpart -
 > U+2018/U+2019/U+201A/U+201B to the ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F to the ASCII
@@ -54,12 +54,12 @@ generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
 unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
-[fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[fs/observed][dsh-fs]
 dead fields. It touches no files, so
-[fs/write-intent](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) and
-[fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) never see it; it wraps the
+[fs/write-intent][dsh-fs] and
+[fs/observed][dsh-fs] never see it; it wraps the
 downstream result and always calls `next()`, so it composes with other
-[`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts) listeners
+[`llm/stream`][dsh-llm] listeners
 regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -247,3 +247,6 @@ and only when N > 0 (a thrown-away stream writes no ledger line).
 ## License 📜
 
 CC0-1.0.
+
+[dsh-llm]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

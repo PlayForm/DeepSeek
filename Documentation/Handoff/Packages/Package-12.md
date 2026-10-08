@@ -61,7 +61,7 @@ The design (user-approved): the mdash registers a `raw-write` tool via
 family's SIX transforms itself (the core's Replace/ReplaceMap +
 Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth) before writing via the same `ctx.fs.writeText`
 path as the built-in write (the governance hooks'
-[fs/observed](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[fs/observed][dsh-fs]
 still fire); false/absent → VERBATIM. The name joins `edit` in the stream exemption (the hook
 disabled for its calls, structurally). The agent was also pointed at the local deepseek-harness docs
 checkout (the tool.md + adding-a-tool.md sections), with the INSTALLED source (dsh-tool-fs) as the
@@ -111,7 +111,7 @@ through subagents; the user commits; the smokes are the arbiter.
 The family now has MULTIPLE write executions that repeat the same machinery:
 
 1. **The harness's built-in write tool** (dsh-tool-fs): `ctx.fs.resolve` → the
-   [`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+   [`fs/write-intent`][dsh-fs]
    waterfall → the standing sandbox policy (the no-escalation controller) → `ctx.fs.writeText(...)`
    →
    `ctx.emit("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)", ...)`.
@@ -138,3 +138,5 @@ The family now has MULTIPLE write executions that repeat the same machinery:
   family-side (the raw-write tool + the factory's writes share ONE executor the family owns).
 - The arbiter: the smokes (zero assertion changes) + the live battery after a restart. Develop
   through subagents, no commits (the user's regime).
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

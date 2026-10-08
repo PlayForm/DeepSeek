@@ -29,7 +29,7 @@
    verifyCommand window) + back-to-back cargo runs each completing cleanly (no orphan; the
    namespaced UpdateKey smoke covers the controller survival).
 7. **THE P5 LIVE FINDING (fixed, commit `952eaa1`)** — the harness's
-   [dsh-storage-domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+   [dsh-storage-domain][dsh-storage-domain]
    enforces ONE open per domain name (verified in the installed 0.2.0-rc.2: "concurrent opens of one
    name fail loud"), so the SHARED package_governance domain was single-winner per boot: at this
    boot only the PINNER's records landed in the domain (`storages/package_governance.json`), the
@@ -55,7 +55,7 @@ future granularization the user wants (none left in the queue).
 - `952eaa1` — the shared journal sink: the FIRST successful Open binds its put on the factory
   instance (`SharedJournal`); the Journal method routes every module's records through it (the
   harness's storageDomain is single-open per name — verified in
-  [dsh-storage-domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain)
+  [dsh-storage-domain][dsh-storage-domain]
   0.2.0-rc.2: "concurrent opens of one name fail loud"). LIVE-CONFIRMED at the next boot: the
   governor's `governed` + `dispatched` records landed in the shared domain (15:09:07) — previously
   they never would.
@@ -99,3 +99,5 @@ PRE-BIND BUFFER (aa53c91 — the boot-window activations of the non-first module
 pinner's `pinned (2 versions)` and the governor's ncu/verifyCommand cascade all still run as
 designed (the fixtures return canonical). THE FAMILY IS FULLY LIVE: the queue, the granularization,
 the smokes (8/31/71/28/58/45), and every P5 record path.
+
+[dsh-storage-domain]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain

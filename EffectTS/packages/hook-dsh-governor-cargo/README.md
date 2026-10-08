@@ -29,17 +29,17 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Cargo**): a hook child of the
 [`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
 helpers; the Rust-sided sibling of the two npm governance hooks on the same
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) seam.
+[`fs/observed`][dsh-fs] seam.
 
 One of three governance hooks sharing the
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) seam, each gating on its own basename and
+[`fs/observed`][dsh-fs] seam, each gating on its own basename and
 writing its own ledger:
 
 | plugin                                                      | basename gate  | ledger                          | pass                                                 |
 | ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
 | [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
 | [`hook-dsh-pinner-package`](../hook-dsh-pinner-package)     | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/Source) (this bundle)                     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo] (this bundle)                     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
 never see a `Cargo.toml` event. Composition semantics: **chain > strip > normalize** (this module's
@@ -53,7 +53,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
   loader and the suppression composer come from [`hook-dsh-core`](../hook-dsh-core). This bundle
   keeps the Cargo-specific residue: the TOML identification, the surgical pin, the full-version
   directive, and the `cargo upgrade` bridge. Besides the
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) event path, its two steps are
+[`fs/observed`][dsh-fs] event path, its two steps are
   registered with the factory's direct-govern registry at apply
   (`Factory.RegisterGovern("Cargo.toml", "cargo" | "update", …)` — factory SCHEME.md §2.16), so the
   `raw-write` tool's per-call `govern` selection can drive the same chain + normalization pass and
@@ -74,13 +74,13 @@ the same conventions as every other @playform package.
 3. **Native dsh install:**
    `dsh plugin --profile <name> add ./local-hook-dsh-governor-cargo-<v>.tgz`.
 
-All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/cordis.patch.yml)
-inserts the [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/Source) row, and the ledger logs `activated (cargo flavor, ...)` at
+All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
+inserts the [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo] row, and the ledger logs `activated (cargo flavor, ...)` at
 the next host start.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/cordis.patch.yml) row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -101,7 +101,7 @@ Rust manifests drift the same way npm manifests do - but `Cargo.toml` is a TOML 
 decorate with comments, and there is no in-process library path: the only update tool is the cargo
 CLI. A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and
 delegate its update stage across the Rust/TS boundary - while still hooking the same
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[`fs/observed`][dsh-fs]
 event the npm hooks use, so one trigger law covers the whole machine.
 
 ---
@@ -380,3 +380,7 @@ alone.
 ## License 📜
 
 CC0-1.0.
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+[ours-hook-dsh-governor-cargo]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/Source
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/cordis.patch.yml

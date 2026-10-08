@@ -15,7 +15,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > [!NOTE]
 >
 > The **silent package.json governor** of the DeepSeek Harness - a plugin on the
-> [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+> [`fs/observed`][dsh-fs]
 > event (the [cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis)
 > event **every harness file write dispatches**; the tool layer is the only dispatcher) that governs
 > every `package.json` written by any agent, anywhere: a pure chain pass canonicalizes
@@ -34,12 +34,12 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 helpers; it has no hook children of its own.
 
 One of three governance hooks sharing the
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[`fs/observed`][dsh-fs]
 seam, each gating on its own basename and writing its own ledger:
 
 | plugin                                                  | basename gate  | ledger                          | pass                                                 |
 | ------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source) (this bundle)               | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [hook-dsh-governor-package][ours-hook-dsh-governor-package] (this bundle)               | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
 | [`hook-dsh-pinner-package`](../hook-dsh-pinner-package) | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
 | [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo) | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
@@ -55,7 +55,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
   policy loader) come from [`hook-dsh-core`](../hook-dsh-core). This bundle keeps only its own
   vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
   (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
-  [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+  [`fs/observed`][dsh-fs]
   event path, its two steps are registered with the factory's direct-govern registry at apply
   (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory SCHEME.md
   §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain pass and
@@ -78,13 +78,13 @@ the same conventions as every other @playform package.
 3. **Native dsh install:**
    `dsh plugin --profile <name> add ./local-hook-dsh-governor-package-<v>.tgz`.
 
-All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)
-inserts the [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source) row, and the ledger logs `activated (anywhere mode, ...)` at
+All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
+inserts the [hook-dsh-governor-package][ours-hook-dsh-governor-package] row, and the ledger logs `activated (anywhere mode, ...)` at
 the next host start.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's `dsh.bundle`
 manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
@@ -105,9 +105,9 @@ Agents edit `package.json` files constantly - and every edit can leave stale pin
 ranges, or deps that should track a governed registry. The fix must happen where the write happens,
 on every write path (full writes, single-line edits, `str_replace_editor` patches alike), without
 the author's tool result changing by a single byte.
-[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[`fs/observed`][dsh-fs]
 is the only hook that runs _after_ content is on disk - the
-[`fs/write-intent`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)
+[`fs/write-intent`][dsh-fs]
 waterfall carries a version guard but never the content.
 
 ---
@@ -206,7 +206,7 @@ hook-dsh-governor-package/
 ```
 
 The published artifact contains **only the built output** - `files` whitelists `Target/`,
-[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml), and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
+[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
 (`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`); invoke it ad hoc with
 `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` (or `--Watch` for the dev loop).
@@ -318,3 +318,7 @@ alone.
 ## License 📜
 
 CC0-1.0.
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+[ours-hook-dsh-governor-package]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml

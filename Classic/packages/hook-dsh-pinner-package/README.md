@@ -10,7 +10,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 
 > [!NOTE]
 >
-> The **silent version pinner** of the DeepSeek Harness - a plugin on the [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) event that
+> The **silent version pinner** of the DeepSeek Harness - a plugin on the [`fs/observed`][dsh-fs] event that
 > pins every dependency version in a written `package.json` to its STATIC version:
 > `"@playform/build": "^0.3.4"` becomes `"0.3.4"`. One leading range prefix (`^`, `~`, or `=`) is
 > stripped, in every dependency section the config declares - and the author never learns.
@@ -24,20 +24,20 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 
 **Family position** (the @-sentence **Hook @ DSH @ Pinner @ Package**): a hook child of the
 [`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
-helpers; a sibling of the package governor on the same [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) seam.
+helpers; a sibling of the package governor on the same [`fs/observed`][dsh-fs] seam.
 
-One of three governance hooks sharing the [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) seam, each gating on its own basename and
+One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own basename and
 writing its own ledger:
 
 | plugin                                                      | basename gate  | ledger                          | pass                                                 |
 | ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
 | [`hook-dsh-governor-package`](../hook-dsh-governor-package) | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source) (this bundle)                     | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [hook-dsh-pinner-package][ours-hook-dsh-pinner-package] (this bundle)                     | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
 | [`hook-dsh-governor-cargo`](../hook-dsh-governor-cargo)     | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
 manifest then leaves the governor's update stage nothing to do, while its chain pass may still
-re-canonicalize chain pins), **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) keeps ranges as
+re-canonicalize chain pins), **keep-list wins** (the pinner's [pin-policy.json][ours-transform] keeps ranges as
 authored). The ledgers are separate (`hook-dsh-pinner-package.log` vs
 `hook-dsh-governor-package.log`); activating one never implies another - order between two npm
 listeners is defined only by registration.
@@ -48,7 +48,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
   the effects and the schema come from [`plugin-dsh-factory`](../plugin-dsh-factory); the refusal
   guard and the suppression composer come from [`hook-dsh-core`](../hook-dsh-core). This bundle
   keeps the module leaf: the range law (Function/Pin), the decode, and every ledger string. Besides
-  the [`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts) event path, its chain pass is registered with the factory's direct-govern
+  the [`fs/observed`][dsh-fs] event path, its chain pass is registered with the factory's direct-govern
   registry at apply (`Factory.RegisterGovern("package.json", "pin", …)` — factory SCHEME.md §2.16),
   so the `raw-write` tool's per-call `govern` selection can drive the same pin pass directly through
   [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger strings).
@@ -68,15 +68,15 @@ the same conventions as every other @playform package.
 3. **Native dsh install:**
    `dsh plugin --profile <name> add ./local-hook-dsh-pinner-package-<v>.tgz`.
 
-All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/cordis.patch.yml)
-inserts the [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source) row, and the ledger logs `activated (pinner, ...)` at the next
+All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
+inserts the [hook-dsh-pinner-package][ours-hook-dsh-pinner-package] row, and the ledger logs `activated (pinner, ...)` at the next
 host start. CAVEAT (verified live): pnpm does NOT auto-install a linked package's dependencies - the
 linked checkout must carry its own `node_modules` or the entry load fails silently (no activation
 line).
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/cordis.patch.yml) row (or the profile's `dsh.bundle`
+The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's `dsh.bundle`
 manifest) - the full config block is in [The Config](#the-config):
 
 ```yaml
@@ -144,7 +144,7 @@ in order:
 - **Idempotent**: an already-static version has no leading prefix, so rule 2 passes it through -
   pinning a pinned file is a no-op rewrite (the ledger shows `no changes to pin for ...`).
   `P(P(c)) = P(c)`.
-- **Keep-list policy**: a [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) (`{ "keep": ["tailwindcss"] }`) protects packages whose
+- **Keep-list policy**: a [pin-policy.json][ours-transform] (`{ "keep": ["tailwindcss"] }`) protects packages whose
   ranges must stay EXACTLY as the author wrote them; the effective keep-list is the **union** of
   every readable discovered policy, and the P3 chain-keys interlock means the governor's `^resolved`
   chain pins are never stripped. A file that exists but does not parse is logged
@@ -183,7 +183,7 @@ hook-dsh-pinner-package/
 ```
 
 The published artifact contains **only the built output** - `files` whitelists `Target/`,
-[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/cordis.patch.yml), and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
+[cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships. There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
 (`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`).
 
@@ -238,7 +238,7 @@ package nearby:
 }
 ```
 
-A [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) (`{"keep":["tailwindcss"]}`) sits beside the file, so tailwindcss keeps its
+A [pin-policy.json][ours-transform] (`{"keep":["tailwindcss"]}`) sits beside the file, so tailwindcss keeps its
 range; the other two dependencies are pinned. The transcript shows only what the author wrote; the
 ledger shows the pin:
 
@@ -283,3 +283,8 @@ alone.
 ## License 📜
 
 CC0-1.0.
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+[ours-hook-dsh-pinner-package]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source
+[ours-transform]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/cordis.patch.yml
