@@ -15,8 +15,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > and normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes,
 > en dashes and seventeen exotic relatives → `-`.
 >
-> _Exactly the hermes normalize-dashes hook, at exactly the
-> injection point hermes itself does not have._
+> _The normalize-dashes hook, at the injection point the harness itself does not have._
 >
 > _A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
 > `replacement` (default `-`)._
@@ -41,8 +40,8 @@ One of **six siblings** in the stream-normalization family, all built on the sha
 generic `Chunk`/`Block` dispatch.
 
 The normalize-dash is the family's **CLASS flavor with a
-`replacement` knob** and the direct descendant of the hermes dashes hook - its regex verbatim; the
-siblings share the hermes-style whole-chunk replacement approach:
+`replacement` knob** - the core's `Dashes` class applied verbatim; the
+siblings share the same whole-chunk replacement approach:
 
 | flavor                                                            | table                  | substitution                  |
 | ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
@@ -127,14 +126,14 @@ manifest) - the full config table is in [The Config](#the-config):
 
 ## The Problem
 
-The user's hermes hook rewrites the unicode dash family to ASCII hyphen-minus **in files after the
-fact** - `perl -CSD -pe` over whatever was already written.
+The established file-hook approach rewrites the unicode dash family to ASCII hyphen-minus **in files
+after the fact** - `perl -CSD -pe` over whatever was already written.
 
 Model output, however, is born in the
 stream: the live UI and the durable transcript see the em dashes first, no matter what a file hook
 does later.
 
-A DSH plugin can go where hermes cannot: the [`llm/stream`][dsh-llm] waterfall, where every
+A DSH plugin can go where a file hook cannot: the [`llm/stream`][dsh-llm] waterfall, where every
 streaming model call passes through.
 
 Unlike the governance family ([`hook-dsh-governor-package`](../hook-dsh-governor-package),
@@ -208,8 +207,8 @@ Waterfall discipline:
 
 ### The transform
 
-Exactly the hermes hook's perl pattern (`perl -CSD -pe` in `normalize-dashes.sh`), applied per text
-segment - the core's `Dashes` class, verbatim:
+The core's `Dashes` class, verbatim - the same perl pattern (`perl -CSD -pe`), applied per text
+segment:
 
 ```text
 [\u058A\u05BE\u1400\u1806\u2010-\u2015\u2E17\u2E1A\u2E3A-\u2E3B\u2E40
@@ -223,7 +222,7 @@ katakana-hiragana double hyphen, the vertical presentation dashes, small em dash
 and the fullwidth hyphen-minus - all become the config `replacement` (default `-`, ASCII
 hyphen-minus U+002D).
 
-- **No context rules** - hermes has none.
+- **No context rules** - a class match and replace, no lookahead, no context.
 - **Chunk-boundary-safe**: single-character replacement, no lookahead, no multi-character
   sequences - per-chunk application can never disagree with whole-text application.
 - The replacement is applied with a **function replacer**, so a custom `replacement` containing `$`

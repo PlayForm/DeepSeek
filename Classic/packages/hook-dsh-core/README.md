@@ -110,7 +110,7 @@ The core makes each of them exist
      │    suffix, skip-absent); the field list stays module-side
      │
      └─ NORMALIZE HALF ─────────────────────────────────────────────────► consumed by
-          Normalize/Dashes     the hermes dash class (verbatim)          the six stream
+          Normalize/Dashes     the em/en/unicode dash class             the six stream
           Normalize/Quotes     curly → straight MAP (8 entries)          normalizers
           Normalize/Ellipsis   U+2026 class                              (normalize-dash, quotes,
           Normalize/Spaces     Zs-minus-ASCII class                       ellipsis, spaces,
