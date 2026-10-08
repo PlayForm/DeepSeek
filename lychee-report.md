@@ -60,19 +60,13 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 |----------------|-------|
 | 🔍 Total       | 1273  |
 | 🔗 Unique      | 209   |
-| ✅ Successful  | 701   |
+| ✅ Successful  | 702   |
 | ⏳ Timeouts    | 0     |
-| 🔀 Redirected  | 5     |
+| 🔀 Redirected  | 0     |
 | 👻 Excluded    | 571   |
 | ❓ Unknown     | 0     |
-| 🚫 Errors      | 1     |
+| 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |
-
-## Errors per input
-
-### Errors in Site/components.json
-
-* [404] <https://json.schemastore.org/components.json> (at 2:14) | Rejected status code: 404 Not Found
 
 # Summary
 

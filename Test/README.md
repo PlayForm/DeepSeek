@@ -1,10 +1,12 @@
 # Test
 
-The DeepSeek plugin family's fixture archive. This folder holds ONLY the
-fixtures used to develop and prove the family's functionality: the
-governance/normalize family, the raw-write/normalize-file tools, the P5
-journaling, and the live batteries. Everything else (the unrelated
-experiments and examples) has been removed.
+The DeepSeek plugin family's fixture archive.
+
+This folder holds ONLY the fixtures used to develop and prove the family's functionality: the
+governance/normalize family, the raw-write/normalize-file tools, the P5 journaling, and the live
+batteries.
+
+Everything else (the unrelated experiments and examples) has been removed.
 
 ## Layout
 

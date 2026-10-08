@@ -2,10 +2,15 @@
 
 > [!NOTE]
 >
-> Tame the model's output and govern the project's files. Twelve TypeScript packages - the factory,
-> the core, the governance trio and the seven-member normalize family - in three implementations
-> (the Boilerplate baseline, [the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic), [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one ledger-string
-> contract, 733 + 746 smoke assertions. _One monorepo. Every ledger byte-checked._
+> Tame the model's output and govern the project's files.
+>
+> Twelve TypeScript packages - the factory, the core, the governance trio and the seven-member
+> normalize family - in three implementations (the Boilerplate baseline, [the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic), [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one ledger-string
+> contract, 733 + 746 smoke assertions.
+>
+> _One monorepo._
+>
+> _Every ledger byte-checked._
 
 [![smokes](https://img.shields.io/static/v1?label=smokes&message=classic%20733%20%2F%20effect-ts%20746&color=blue)](Classic/smokes/README.md)
 [![packages](https://img.shields.io/static/v1?label=packages&message=12%20%C3%97%203&color=white)](Classic/packages/)
@@ -142,8 +147,9 @@ The DeepSeek Harness exposes the seams to fix both -
 [`fs/observed`][dsh-fs]
 for file events, the
 [`llm/stream`][dsh-llm]
-waterfall for model output - and ships no plugins that use them for this. The family is those
-plugins.
+waterfall for model output - and ships no plugins that use them for this.
+
+The family is those plugins.
 
 ---
 
@@ -264,10 +270,14 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 ### The ledger-string contract
 
 Every activation line, refusal line, chain-pass line and journal record is asserted byte-identically
-by the smokes. The strings are the contract: they must not change, and they are the same strings in
-all three implementations. One ledger per plugin, `~/.dsh/<identity>.log`; the smokes load the real
-built `Target/Library.js` of each bundle and assert the full behavioral contract on top of the
-strings - the loader contract, the identity assertions, the effect wiring.
+by the smokes.
+
+The strings are the contract: they must not change, and they are the same strings in all three
+implementations.
+
+One ledger per plugin, `~/.dsh/<identity>.log`; the smokes load the real built `Target/Library.js`
+of each bundle and assert the full behavioral contract on top of the strings - the loader contract,
+the identity assertions, the effect wiring.
 
 ### The smokes (the arbiter)
 
@@ -291,6 +301,7 @@ One suite per bundle per tree, run with `node <name>-smoke.mjs` from `Classic/sm
 | **Total**      | **733** |  **746** |
 
 The EffectTS suites add coverage (core +3, factory +7, governor +3) on the same behavioral contract.
+
 The counts are the release contract: they must not change.
 
 ---
@@ -309,8 +320,9 @@ Two tools ship with the family:
 ## Configuration
 
 Every plugin's config schema is built through the factory's `Schema` factory: one shared volatile
-block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the module's own fields. The
-surface, grouped by plugin kind:
+block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the module's own fields.
+
+The surface, grouped by plugin kind:
 
 | Kind                | Field                                    | Effect                                                                                                                                                                                                          |
 | ------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -327,8 +339,10 @@ surface, grouped by plugin kind:
 | The file tool       | `normalize` (per call)                   | absent/false = verbatim, `true` = all six transforms, or the flavor-name array                                                                                                                                  |
 
 The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off -
-the family changes nothing until it is told to. The escape hatches: the `exclude` fence, the
-keep-list sidecars, the raw-marker opt-out, the `govern: false` selection.
+the family changes nothing until it is told to.
+
+The escape hatches: the `exclude` fence, the keep-list sidecars, the raw-marker opt-out, the
+`govern: false` selection.
 
 ---
 
@@ -351,8 +365,9 @@ The smokes are the arbiter after every change: they must stay green at the same 
 ## Relationship to deepseek-ai/deepseek-harness
 
 The family extends the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) -
-the desktop agent platform published as the `@deepseek-ai` packages. Everything the family builds on
-is the harness's own public plugin API:
+the desktop agent platform published as the `@deepseek-ai` packages.
+
+Everything the family builds on is the harness's own public plugin API:
 
 | Harness package                                                                                                             | What the family uses it for                                                                                                                                                              |
 | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -2,16 +2,19 @@
 
 The EFFECT-TS release of the PlayForm plugin family for DeepSeek Harness: the same twelve TypeScript
 contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers - same behavior, same smokes
-(the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime plumbing. The
-packages live under `packages/`, each one a verified, smoke-arbitrated bundle - the core, the
+(the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime plumbing.
+
+The packages live under `packages/`, each one a verified, smoke-arbitrated bundle - the core, the
 factory service, the governance trio (package governor, version pinner, Cargo.toml governor) and the
 seven-member normalize family (six stream flavors plus the file tool).
 
 The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
 identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the
 family/type marker leads - `hook-dsh-*` and `plugin-dsh-*` - so a package name reads as a sentence
-about what it is: a DeepSeek Harness hook, or the DeepSeek Harness plugin factory. Each package
-carries its own one-sentence self-description (its @-sentence), quoted in the inventory below.
+about what it is: a DeepSeek Harness hook, or the DeepSeek Harness plugin factory.
+
+Each package carries its own one-sentence self-description (its @-sentence), quoted in the inventory
+below.
 
 [![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](packages/)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../Classic/)
@@ -70,9 +73,12 @@ cd packages/<bundle> && pnpm run prepublishOnly
 ```
 
 Standalone-workspace bundles (`hook-dsh-core` and the flavors with their own `pnpm-workspace.yaml`)
-also take a per-bundle `pnpm install --ignore-scripts`. The remaining bundles resolve their dev
-dependencies from the family workspace root. The ten consumer bundles import their siblings through
-the `packages/<consumer>/node_modules/@playform/` directory links:
+also take a per-bundle `pnpm install --ignore-scripts`.
+
+The remaining bundles resolve their dev dependencies from the family workspace root.
+
+The ten consumer bundles import their siblings through the
+`packages/<consumer>/node_modules/@playform/` directory links:
 
 ```
 @playform/hook-dsh-core      -> ../../../hook-dsh-core
@@ -102,7 +108,8 @@ node smokes/normalize-file-smoke.mjs  # 71
 Every suite loads the REAL built Target of its bundle (plus the REAL factory service where the
 bundle consumes it) and asserts the full behavioral contract: the loader contract, the byte-exact
 ledger strings, the identity assertions (`name`, `State.Module`, the `<module>: ` logger prefixes,
-the `~/.dsh/<identity>.log` ledger defaults) and the effect wiring. The counts above are the release
-contract: they must not change.
+the `~/.dsh/<identity>.log` ledger defaults) and the effect wiring.
+
+The counts above are the release contract: they must not change.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

@@ -34,7 +34,8 @@ exclude = [
 ]
 
 # Exclude file paths from the scan (the dependencies, the build output,
-# the VCS internals, the local smoke fixtures, the lockfiles)
+# the VCS internals, the local smoke fixtures, the lockfiles, the
+# generated report itself)
 exclude_path = [
 	"node_modules",
 	"Target",
@@ -43,6 +44,7 @@ exclude_path = [
 	".astro",
 	"Test/fixtures",
 	"pnpm-lock.yaml",
+	"lychee-report.md",
 ]
 
 # The request schemes to check
