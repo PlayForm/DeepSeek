@@ -1,5 +1,5 @@
 import { Context, Effect, Layer } from "effect";
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 export declare const EVENTS: readonly ["activated", "governed", "dispatched", "update-failed", "excluded", "normalized"];
 export declare const DOMAIN: {
     readonly name: "package_governance";

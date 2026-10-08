@@ -1,4 +1,4 @@
-import type Plan from "../Interface/Plan.js";
+import type Plan from "@Interface/Plan.js";
 export interface Outcome {
     /** The rewritten text (unchanged when nothing matched or on refusal). */
     Text: string;
