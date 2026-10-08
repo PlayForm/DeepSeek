@@ -189,7 +189,8 @@ hook-dsh-pinner-package/
 │   │                          + default { name, apply, Config, inject }
 │   ├── Function/            ← the module leaf - Apply.ts (thin wire-up),
 │   │                          Observe.ts (thin listener), Transform.ts
-│   │                          (the range law), Pin.ts, Decode.ts
+│   │                          (the range law), Pin.ts, Direct.ts (the
+│   │                          direct-govern driver), Decode.ts
 │   ├── Interface/           ← typed contracts (State, Factory, Manifest, ...)
 │   └── Variable/            ← constants, defaults, the Config schema
 ├── Configuration/
@@ -205,7 +206,7 @@ The published artifact contains **only the built output** - `files` whitelists `
 
 There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`).
+(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`).
 
 ### The Hard Lessons
 
@@ -235,8 +236,9 @@ with `insert:`.
         config:
             log: true
             logFile: ~/.dsh/hook-dsh-pinner-package.log # SEPARATE ledger (own plugin)
-            mutationTools: [write, edit, str_replace_editor]
+            mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: "" # optional global pin-policy.json (else discovery, else built-in)
+            updateCooldownMs: 3000 # carried by the shared block, never read (no update stage)
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
             exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
 ```

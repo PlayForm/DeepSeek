@@ -497,10 +497,7 @@ assert.ok(
 ok("jobs envelope: `update stage dispatched …` line byte-identical + dispatched journal record");
 
 // the bin-mode run through the subprocess seam
-assert.equal(
-	find(`update: mode=bin (ncu binary ${NCU_BIN})`).length,
-	1,
-);
+assert.equal(find(`update: mode=bin (ncu binary ${NCU_BIN})`).length, 1);
 const spec = spawnSpecs.at(-1);
 assert.equal(spec.cwd, projA);
 assert.deepEqual(spec.argv.slice(0, 3), [`resolved:${NCU_BIN}`, "-u", "--dep"]);

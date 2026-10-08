@@ -38,11 +38,20 @@ lychee --config .lychee.toml --output "$Work/Files.md" \
 echo "==> Pass 2: the built Site (Site/lychee.toml)"
 # The static build uses root-relative links; --root-dir resolves them
 # against the build root (and the docs root for the generated API docs).
-printf '# Pass 2 - the built Site (Site/lychee.toml)\n\n' > "$Work/Site.md"
-lychee --config Site/lychee.toml --root-dir Site/Target \
-	--output "$Work/Site.md" Site/Target || Failed=1
-lychee --config Site/lychee.toml --root-dir Site/docs \
-	--output "$Work/Docs.md" Site/docs || Failed=1
+# The Site passes run when the Site tree is present (the local dev tree);
+# the monorepo CI checkout carries no Site tree (the Site is its own
+# repository) - the passes are skipped there, Pass 1 stays the CI gate.
+if [ -d "Site" ]; then
+	printf '# Pass 2 - the built Site (Site/lychee.toml)\n\n' > "$Work/Site.md"
+	lychee --config Site/lychee.toml --root-dir Site/Target \
+		--output "$Work/Site.md" Site/Target || Failed=1
+	lychee --config Site/lychee.toml --root-dir Site/docs \
+		--output "$Work/Docs.md" Site/docs || Failed=1
+else
+	echo "==> Pass 2: skipped - the Site tree is absent (the CI checkout)"
+	printf '# Pass 2 - the built Site (Site/lychee.toml)\n\nSkipped: the Site tree is absent (the CI checkout - the Site is its own repository).\n\n' > "$Work/Site.md"
+	printf '# Pass 3 - the generated API docs (Site/lychee.toml)\n\nSkipped: the Site tree is absent (the CI checkout - the Site is its own repository).\n\n' > "$Work/Docs.md"
+fi
 
 echo "==> Composing lychee-report.md"
 {

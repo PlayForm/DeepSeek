@@ -1,12 +1,30 @@
 {
 	"name": "@playform/hook-dsh-core",
 	"version": "0.0.1",
-	"description": "The CORE: the pure, effect-backed, harness-free commonalities of the governance family (@playform/hook-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard. A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"description": "The CORE: the pure, harness-free commonalities of the governance family (@playform/hook-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard — shipped in BOTH builds under ONE name: the CLASSIC (dependency-free, the default) and the EFFECT-TS (effect-backed, toggled at the loader level via the effect-ts condition). A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
 	"exports": {
 		".": {
+			"effect-ts": {
+				"types": "./Target/Library.d.ts",
+				"default": "./Target/Library.js"
+			},
+			"classic": {
+				"types": "./Target-Classic/Library.d.ts",
+				"default": "./Target-Classic/Library.js"
+			},
+			"default": {
+				"types": "./Target/Library.d.ts",
+				"default": "./Target/Library.js"
+			}
+		},
+		"./classic": {
+			"types": "./Target-Classic/Library.d.ts",
+			"default": "./Target-Classic/Library.js"
+		},
+		"./effect-ts": {
 			"types": "./Target/Library.d.ts",
 			"default": "./Target/Library.js"
 		},
@@ -14,6 +32,7 @@
 	},
 	"files": [
 		"Target",
+		"Target-Classic",
 		"README.md"
 	],
 	"scripts": {

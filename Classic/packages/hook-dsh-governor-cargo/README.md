@@ -195,7 +195,7 @@ version is still Cargo's implicit caret.
 
 ### The TOML rewrite (why comments survive)
 
-`smol-toml` (the ONE runtime dependency, carried by the bundle's own `node_modules`) is used for
+`smol-toml` (the one non-@playform tool dependency, carried by the bundle's own `node_modules`) is used for
 **PARSING ONLY** - identification of the dep entries in `[dependencies]`, `[dev-dependencies]`,
 `[build-dependencies]`, `[target.'cfg(...)'.dependencies]` (and its dev/build variants), and
 **`[workspace.dependencies]`** (the shared dep table - handled natively).
@@ -260,7 +260,8 @@ hook-dsh-governor-cargo/
 │   │                          + default { name, apply, Config, inject }
 │   ├── Function/            ← Apply.ts (thin wire-up), Observe.ts,
 │   │   │                      Transform.ts (the TOML pipeline leaf),
-│   │   │                      ParseToml.ts, Pin.ts (+ Pin/KeyOf, Name,
+│   │   │                      Direct.ts (the direct-govern driver), Transform/Guard.ts,
+│   │   │                      Transform/Keep.ts, ParseToml.ts, Pin.ts (+ Pin/KeyOf, Name,
 │   │   │                      SpliceVersion, SplitPath), Normalize.ts,
 │   │   │                      Satisfy.ts, Filter.ts, Resolve.ts, Run.ts,
 │   │   │                      Dispatch.ts, Verify.ts, Settle.ts, Decode.ts
@@ -277,7 +278,7 @@ hook-dsh-governor-cargo/
 ```
 
 The published artifact contains **only the built output**; the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`).
+(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`).
 
 ### The Hard Lessons
 
@@ -312,9 +313,10 @@ declared with `insert:`.
             logFile: ~/.dsh/hook-dsh-governor-cargo.log # SEPARATE ledger - never the npm ledgers
             updateCooldownMs: 3000
             strict: false # strip unknown deps - explicit only, never a default
-            mutationTools: [write, edit, str_replace_editor]
+            mutationTools: [write, edit, str_replace_editor, raw-write]
             maxUpdateFailures: 3 # circuit breaker: pause a dir's update stage
-            cargoBin: /usr/local/bin/cargo # absolute - host PATH != shell PATH
+            cargoBin: /usr/local/bin/cargo # the update-stage binary; the schema default is the bare
+            # "cargo" (resolveExecutable) - an absolute path when the host PATH lacks it
             updateMode: cargo # the ONLY mode (the Rust-side CLI)
             policyFile: "" # optional global update-policy.json
             keepFile: "" # optional global pin-policy.json (the keep-list)
@@ -390,11 +392,26 @@ governed <path> → <version>
 update stage dispatched for <dir> (cargo via ..., policy ...)
 update: cargo upgrade <argv> → {"exitCode":0}
 update: DONE / update: FAILED
-update: cargo-edit unavailable: <cause>
+unreadable registry.json at <found> — chain pass skipped for <path>
+observed non-JSON/TOML Cargo.toml <path> — skipped
+REFUSED rewrite of <path>: non-dependency section "<name>" would change
+REFUSED rewrite of <path>: dependency "<key>" in section "<section>" has an unsupported value shape — rewrite aborted
+REFUSED rewrite of <path>: dependency "<name>" in section "<section>" not found in text — rewrite aborted
+update stage paused for <dir> (N consecutive failures ≥ limit)
+update stage skipped for <dir> (in-flight)
+update stage skipped for <dir> (cooldown)
+update stage FAILED (<code>) for <dir>; consecutive=N
+update: cargo upgrade failed (<label>) status N
+update: running verifyCommand: <command>
+update: verifyCommand ok
+update: verifyCommand failed (status N)
+update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
+unreadable pin-policy.json at <keepFile> — using built-in default
 ```
 
-(The registry-miss line ends with an em dash followed by `chain pass skipped`; the DONE line is
-`update: DONE` + em dash + reason - byte-exact forms are in the In Action excerpt above.
+(The registry-miss line, the three REFUSED forms, the runner-unavailable line and the
+unreadable-policy line end with em dashes; the DONE line is `update: DONE` + em dash + reason -
+byte-exact forms are in the In Action excerpt above.
 
 Those em
 dashes are part of the literal ledger strings, so they live only in the example block.)
@@ -403,6 +420,28 @@ The activation line is written by `apply()` - "did it activate" must be answerab
 alone.
 
 ---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
+(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
+effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
+builds, no user-side compilation:
+
+- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-governor-cargo"` resolves to
+  `Target/` with zero framework dependencies.
+- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
+  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  graph):
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
+    `resolve.conditionNames: ["effect-ts"]`.
+- **The per-import escape hatch** (no loader config at all): `import ... from
+  "@playform/hook-dsh-governor-cargo/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+
+`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
+(the CLASSIC build never imports it).
 
 ## License 📜
 

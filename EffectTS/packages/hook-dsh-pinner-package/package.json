@@ -7,6 +7,24 @@
 	"types": "./Target/Library.d.ts",
 	"exports": {
 		".": {
+			"effect-ts": {
+				"types": "./Target/Library.d.ts",
+				"default": "./Target/Library.js"
+			},
+			"classic": {
+				"types": "./Target-Classic/Library.d.ts",
+				"default": "./Target-Classic/Library.js"
+			},
+			"default": {
+				"types": "./Target/Library.d.ts",
+				"default": "./Target/Library.js"
+			}
+		},
+		"./classic": {
+			"types": "./Target-Classic/Library.d.ts",
+			"default": "./Target-Classic/Library.js"
+		},
+		"./effect-ts": {
 			"types": "./Target/Library.d.ts",
 			"default": "./Target/Library.js"
 		},
@@ -16,6 +34,7 @@
 	},
 	"files": [
 		"Target",
+		"Target-Classic",
 		"cordis.patch.yml",
 		"README.md",
 		"SCHEME.md"
@@ -24,7 +43,9 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
 	},
 	"dependencies": {
-		"effect": "4.0.2"
+		"effect": "4.0.2",
+		"@playform/hook-dsh-core": "0.0.1",
+		"@playform/plugin-dsh-factory": "0.0.1"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",

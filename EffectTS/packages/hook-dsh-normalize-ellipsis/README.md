@@ -49,8 +49,9 @@ the generic `Replace`/`Chunk`/`Block` dispatch:
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
 | [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
+unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
+`Journal` (the shared P5 record on every N > 0 pass); the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
 dead fields.
@@ -143,9 +144,13 @@ the one that reaches the transcript.
        │                        on) - the assembled ToolCallBlock.arguments
        │                        follows the same flag via block-end
        │                        The gate is THREE-WAY with the flag on: a
-       │                        delta/block whose `name` is "edit" passes
-       │                        through BY IDENTITY (the edit tool's
-       │                        `old_string` must match the real file bytes),
+       │                        delta/block whose `name` is "edit", "raw-write"
+       │                        or "normalize-file" passes through BY IDENTITY
+       │                        (the edit tool's `old_string` must match the real
+       │                        file bytes; the raw-write tool owns its content
+       │                        normalization; the normalize-file tool's arguments
+       │                        carry a file path - a normalized dash inside a
+       │                        filename would corrupt the target),
        │                        and a call whose arguments open with the
        │                        `{"__normalize":false` marker (FIRST key,
        │                        tracked per call id) passes through
@@ -184,6 +189,17 @@ ellipsis's own ASCII spelling).
 
 ---
 
+## The Pitfalls
+
+- **U+2026 only** - the class matches exactly the horizontal ellipsis; a pre-existing three-dot
+  sequence and Unicode's other ellipsis forms are never touched.
+- **A dependency alone is NOT activation** - the package must be in `dsh.profile.bundles` (or the
+  patch row inserted), or no listener registers and no ledger exists.
+- **The stream gate rewrites model output only** - it never touches disk; files already on disk are
+  the `normalize-file` tool's job.
+- **The count is per replaced code point** - N counts matched characters, not output characters; N =
+  0 and an upstream throw both write no count line and no journal record.
+
 ## The Config
 
 | Field                    | Type    | Default                                  | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -192,7 +208,7 @@ ellipsis's own ASCII spelling).
 | `logFile`                | string  | `~/.dsh/hook-dsh-normalize-ellipsis.log` | yes      | the ellipsis ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `replacement`            | string  | `...`                                    | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                               |
 | `normalizeReasoning`     | boolean | `true`                                   | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                                  | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| `normalizeToolArguments` | boolean | `false`                                  | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
@@ -209,19 +225,19 @@ the transcript receive three ASCII dots:
 ```text
 text-delta in (what the model wrote):
 
-  "loading the modules, one by one, until the whole set is ready and then …"
+  "loading the modules, one by one … then the whole set … and then …"
 
 text-delta out (what reaches the transcript):
 
-  "loading the modules, one by one, until the whole set is ready and then ..."
+  "loading the modules, one by one ... then the whole set ... and then ..."
 ```
 
-The single U+2026 code point becomes the three-dot ASCII sequence `...`; dots that were already
+Each U+2026 code point becomes the three-dot ASCII sequence `...`; dots that were already
 ASCII are untouched.
 
 Each replaced code point counts once in the ledger even though it expands to
-three characters - which is why one ellipsis can show up as `normalized 3 ellipsis char(s)` for
-three collapsed code points, not nine output characters:
+three characters - which is why the sample's three U+2026 code points show up as `normalized 3
+ellipsis char(s)`, not nine output characters:
 
 ```text
 hook-dsh-normalize-ellipsis: normalized 3 ellipsis char(s) in one stream
@@ -232,7 +248,8 @@ picks it up with no remount.
 
 The same pass runs over reasoning deltas when `normalizeReasoning` is
 on, and over tool-call arguments when the example patch enables `normalizeToolArguments` - with the
-`edit` name exempt and raw-marker calls passing through unnormalized.
+`edit`, `raw-write` and `normalize-file` names exempt and the raw-marker calls passing through
+unnormalized.
 
 ---
 
@@ -248,6 +265,11 @@ hook-dsh-normalize-ellipsis: normalized N ellipsis char(s) in one stream
 
 The activation line is written by `apply()`; the count line only follows a normal stream completion
 and only when N > 0 (a thrown-away stream writes no ledger line).
+
+Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
+count line - best-effort: with no storage facility the record buffers or drops, and the human
+ledger stays the complete record.
 
 ---
 

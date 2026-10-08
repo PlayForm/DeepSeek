@@ -44,3 +44,21 @@ Test/
 | Entry | What it proves |
 |---|---|
 | `raw-write-probe/` | The raw-write governance probes against a real package manifest |
+
+## Pitfalls
+
+The documented gaps of this archive, stated as they are:
+
+- **The verifyCommand trap.** The `governed-chain/` fixture's `update-policy.json` carries
+  `"verifyCommand": "pnpm install"` - on a vendored-fork workspace the forks are not on the
+  public registry, so the verify fails and the fixture's `governor.log` records
+  `update: verifyCommand failed (status 1)` (and the earlier `update stage FAILED (1);
+  consecutive=2`). The failure is the documented cordis registry trap - the expected outcome of
+  the live battery, not a bug. The `registry.json` note pins the same lesson: effectiveLatest
+  pins the vendored fork versions; naive npm-latest would break the chain.
+- **The fixture paths.** The fixture ledgers carry the neutralized display forms
+  (`<repo-root>/governed-chain/package.json`, `$DSH_HOME/...`) - the factory renders the
+  workspace root that way. The personal absolute paths exist only in the internal Boilerplate
+  copies; never copy a live battery into this archive as-is.
+- **The timestamp confusion.** The ledger lines are ISO UTC; the storage records are epoch
+  milliseconds; the local display adds +03 - reconcile before hunting for "missing" records.

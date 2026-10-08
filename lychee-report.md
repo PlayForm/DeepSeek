@@ -60,9 +60,9 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
 | Status         | Count |
 |----------------|-------|
-| 🔍 Total       | 1273  |
-| 🔗 Unique      | 205   |
-| ✅ Successful  | 1084  |
+| 🔍 Total       | 1279  |
+| 🔗 Unique      | 209   |
+| ✅ Successful  | 1090  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
 | 👻 Excluded    | 189   |
@@ -77,9 +77,9 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
 | Status         | Count |
 |----------------|-------|
-| 🔍 Total       | 1001  |
+| 🔍 Total       | 1006  |
 | 🔗 Unique      | 96    |
-| ✅ Successful  | 995   |
+| ✅ Successful  | 1000  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
 | 👻 Excluded    | 6     |

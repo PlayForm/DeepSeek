@@ -17,6 +17,8 @@ pnpm-lock.yaml
 
 # Build output (per-bundle Target/ dirs and generic build trees)
 Target/
+Target-Classic/
+Target-EffectTS/
 target/
 dist/
 *.tsbuildinfo

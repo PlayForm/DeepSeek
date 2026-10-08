@@ -185,7 +185,8 @@ hook-dsh-pinner-package/
 │   │                          + default { name, apply, Config, inject }
 │   ├── Function/            ← the module leaf - Apply.ts (thin wire-up),
 │   │                          Observe.ts (thin listener), Transform.ts
-│   │                          (the range law), Pin.ts, Decode.ts
+│   │                          (the range law), Pin.ts, Direct.ts (the
+│   │                          direct-govern driver), Decode.ts
 │   ├── Interface/           ← typed contracts (State, Factory, Manifest, ...)
 │   └── Variable/            ← constants, defaults, the Config schema
 ├── Configuration/
@@ -201,7 +202,7 @@ The published artifact contains **only the built output** - `files` whitelists `
 
 There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`).
+(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`).
 
 ### The Hard Lessons
 
@@ -231,8 +232,9 @@ with `insert:`.
         config:
             log: true
             logFile: ~/.dsh/hook-dsh-pinner-package.log # SEPARATE ledger (own plugin)
-            mutationTools: [write, edit, str_replace_editor]
+            mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: "" # optional global pin-policy.json (else discovery, else built-in)
+            updateCooldownMs: 3000 # carried by the shared block, never read (no update stage)
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
             exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
 ```
@@ -308,6 +310,28 @@ The activation line is written by `apply()` - "did it activate" must be answerab
 alone.
 
 ---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
+(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
+effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
+builds, no user-side compilation:
+
+- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-pinner-package"` resolves to
+  `Target/` with zero framework dependencies.
+- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
+  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  graph):
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
+    `resolve.conditionNames: ["effect-ts"]`.
+- **The per-import escape hatch** (no loader config at all): `import ... from
+  "@playform/hook-dsh-pinner-package/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+
+`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
+(the CLASSIC build never imports it).
 
 ## License 📜
 

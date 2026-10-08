@@ -5,18 +5,20 @@
 #
 # Usage:
 #   sh Maintain/Format.sh               # Run all formatters
-#   sh Maintain/Format.sh prettier      # Format TS/JS/MD/JSON/YAML/CSS/HTML
+#   sh Maintain/Format.sh prettier      # Format TS/JS/JSON/YAML/CSS/HTML
 #   sh Maintain/Format.sh line-endings  # Normalize line endings only (dos2unix)
 #
 # Configuration:
 #   .prettierrc     - Prettier options
-#   .prettierignore - Paths excluded from Prettier formatting (Target/, Test/)
+#   .prettierignore - Paths excluded from Prettier formatting
+#                     (the markdown, the Site/, Target/, Test/)
 #
-# Prettier runs over the packages' Source trees, the docs/, and the Site/,
-# but NOT the Test/ fixtures or the per-bundle Target/ build output (both
-# excluded via .prettierignore). The Boilerplate/Classic/EffectTS
-# package-level configs are untouched - this formats only from the
-# monorepo root config.
+# Prettier runs over the packages' Source trees and the docs/, but NOT the
+# markdown (the family prose is byte-integrity-protected), the Site tree
+# (its own repository, its own prettier config), the Test/ fixtures, or the
+# per-bundle Target/ build output (all excluded via .prettierignore). The
+# Boilerplate/Classic/EffectTS package-level configs are untouched - this
+# formats only from the monorepo root config.
 #===============================================================================
 
 set -e
@@ -68,7 +70,7 @@ FormatPrettier() {
 	\echo "========================================"
 	\echo "Format Prettier"
 	\echo "========================================"
-	\echo "Tooling: Prettier (ts, js, md, json, yml, css, html)"
+	\echo "Tooling: Prettier (ts, js, json, yml, css, html)"
 	\echo "Ignore:  .prettierignore"
 	\echo "========================================"
 	\echo ""
@@ -103,7 +105,7 @@ prettier)
 	\echo "Usage: $0 [line-endings|prettier]"
 	\echo ""
 	\echo "  line-endings  Normalize line endings (CRLF -> LF) with dos2unix"
-	\echo "  prettier      Format TS/JS/MD/JSON/YAML/CSS/HTML with Prettier"
+	\echo "  prettier      Format TS/JS/JSON/YAML/CSS/HTML with Prettier"
 	\echo "  (no arg)      Run all in order"
 	;;
 *)

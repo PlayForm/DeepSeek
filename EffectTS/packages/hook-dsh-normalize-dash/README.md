@@ -59,7 +59,7 @@ own fields) and `Append`.
 
 NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's
 silence; the normalize-dash implements its own [`llm/stream`][dsh-llm] registration), `Attach` (no jobs /
-inflight / storage), `Journal` (governance domain - the normalize-dash logs via Append only), and
+inflight / storage), `Journal` (the shared P5 record on every N > 0 pass), and
 the gate/write/refresh/continue machinery (no [fs/observed][dsh-fs] path).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -103,8 +103,10 @@ pnpm add @playform/hook-dsh-normalize-dash
 4. **Git**: fetches sources, not builds - requires a `prepare` script and an `allowBuilds` entry, or
    a published tarball.
 
-Activation is at boot (bundle layers compose at host restart); verify with
-`dsh --profile <name> --dump-config` and the `hook-dsh-normalize-dash: activated (...)` ledger line.
+Activation is at boot (bundle layers compose at host restart); verify with the
+`hook-dsh-normalize-dash: activated (...)` ledger line (the `--dump-config` verification path is
+gone behind the app-managed profile guard - the ledger and the runtime's inspect providers are the
+activation assessors).
 
 A file: dependency alone is NOT activation.
 
@@ -297,6 +299,18 @@ Source/Interface/*.ts        - Config/State shapes, the factory service view (ch
 
 ---
 
+## The Pitfalls
+
+- **The stream gate rewrites model output only** - it never touches disk; files already on disk are
+  the `normalize-file` tool's job (or `raw-write`'s explicit `normalize` parameter).
+- **The count is per replaced code point** - N counts matched characters, not output characters; N =
+  0 and an upstream throw both write no count line and no journal record.
+- **One class, one table** - the em/en dash family is this flavor's class; the quotes map never
+  touches a dash (and this table never touches a quote) - run the flavors the session's characters
+  call for.
+- **The replacement is a literal string** - a `$` pattern in `replacement` is never interpreted
+  (the function replacer inserts it verbatim).
+
 ## The Config
 
 | Field                    | Type    | Default                              | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -305,7 +319,7 @@ Source/Interface/*.ts        - Config/State shapes, the factory service view (ch
 | `logFile`                | string  | `~/.dsh/hook-dsh-normalize-dash.log` | yes      | the normalize-dash ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `replacement`            | string  | `-`                                  | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                               |
 | `normalizeReasoning`     | boolean | `true`                               | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                              | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| `normalizeToolArguments` | boolean | `false`                              | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 Volatile cells commit without remounting the plugin (the fiber - and with it the [llm/stream][dsh-llm]
 registration - stays alive); the factory's State builder unwraps them defensively.
@@ -429,6 +443,11 @@ hook-dsh-normalize-dash: normalized N dash char(s) in one stream
 
 The activation line is written by `apply()`; the count line only follows a normal stream completion
 and only when N > 0 (a thrown-away stream writes no ledger line).
+
+Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
+count line - best-effort: with no storage facility the record buffers or drops, and the human
+ledger stays the complete record.
 
 ---
 

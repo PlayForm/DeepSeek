@@ -25,6 +25,39 @@ below.
 - **EFFECT-TS** (the sibling tree, `../EffectTS/`): the same twelve contracts re-expressed on
   Effect-TS services and layers — same behavior, same smokes, different runtime plumbing.
 
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: every package in this tree ships BOTH implementations in the same tarball -
+`Target/` (the CLASSIC build, the default) and `Target-EffectTS/` (the EFFECT-TS build, assembled
+byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
+
+**Install once, toggle at the loader.**
+
+```sh
+pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
+```
+
+One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
+the EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall
+builds, no user-side compilation - the toggle is pure resolution:
+
+- **CLASSIC (default):** just import - `import { Govern } from "@playform/plugin-dsh-factory"`.
+- **EFFECT-TS (whole family, one flag):**
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`)
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
+    webpack: `resolve.conditionNames: ["effect-ts"]`
+- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
+  (or `/classic`) - deterministic in every toolchain.
+
+The whole family toggles together - never mix variants in one graph (the effect-ts `Update`
+returns Effect envelopes, not the classic dispatch envelope). `effect` v4.0.2 comes as a
+dependency with the same single install.
+
+This tree is the canonical publish home: the published tarball ships `Target/` +
+`Target-EffectTS/` (the manifests' `files` whitelists); the EffectTS tree's tarball is the mirror
+(`Target/` + `Target-Classic/`). In-tree, each tree's `default` condition routes to its own build.
+
 ## The twelve packages
 
 | Package (`@playform/...`)      | Identity sentence                                                                                                                                                                                                                                                                            |
@@ -108,5 +141,24 @@ ledger strings, the identity assertions (`name`, `State.Module`, the `<module>: 
 the `~/.dsh/<identity>.log` ledger defaults) and the effect wiring.
 
 The counts above are the release contract: they must not change.
+
+## Known limits
+
+The documented gaps, stated as they are:
+
+- **The verifyCommand trap** - an update-policy `verifyCommand` can fail with a non-zero status on
+  a vendored-fork workspace (the forks are not on the public registry): the ledger records
+  `update: verifyCommand failed (status 1)` - the documented cordis registry trap, the expected
+  outcome, not a bug. Exit 127 (the runner unavailable) is non-fatal; any other failure trips the
+  circuit breaker.
+- **Load order is not list order** - the pinner can activate before the governor at boot; the
+  sequential fold and the fresh-version writes make the order irrelevant.
+- **The smoke/live fidelity gap** - the smokes prove the mechanics; the live battery proves the
+  wiring; every real bug was found live, not by the smokes.
+- **The fixture paths** - the `Test/` fixtures carry the neutralized display forms
+  (`<repo-root>/`, `$DSH_HOME/`), never the personal absolute paths of the internal Boilerplate
+  copies.
+- **The byte-integrity law** - a write that emits bytes the file's format forbids corrupts the
+  file (the NUL-byte incident class); verbatim is the default and the byte-scan is the arbiter.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

@@ -256,10 +256,7 @@ const cfg1 = Cargo.Config({
 	keepFile: "/k.json",
 	updateMode: "cargo",
 });
-assert.equal(
-	cfg1.cargoBin.get?.() ?? cfg1.cargoBin,
-	"cargo",
-);
+assert.equal(cfg1.cargoBin.get?.() ?? cfg1.cargoBin, "cargo");
 assert.equal(cfg1.strict, true);
 assert.equal(cfg1.keepFile, "/k.json");
 ok("config: overrides validated (patch-row values)");

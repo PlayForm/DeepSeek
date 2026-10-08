@@ -16,7 +16,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> _Zero runtime dependencies._
+> _The CLASSIC build: zero runtime dependencies. The EFFECT-TS build: one - effect v4.0.2 (the
+> variant toggle's dependency). Both builds ship under this one name._
 >
 > _Not a plugin - the muscle under the plugins._
 >
@@ -28,7 +29,8 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position**: the base library of the whole family (the @-sentence **Hook @ DSH @ Core**) -
-parent of none, child of none: zero runtime dependencies, consumed by all eleven other packages.
+parent of none, child of none: the CLASSIC build has zero runtime dependencies (the EFFECT-TS
+build adds effect v4.0.2 - the variant toggle), consumed by all eleven other packages.
 
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
@@ -208,7 +210,8 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 
 ### The Conventions
 
-- Zero runtime dependencies; the same `Source/` → `Target/` layout as the family bundles;
+- The CLASSIC build: zero runtime dependencies (the EFFECT-TS build: effect v4.0.2); the same
+  `Source/` → `Target/` layout as the family bundles;
   `prepublishOnly`-only build (the deterministic sequence:
   `Build ... --TypeScript Configuration/TypeScript.noemit.json` then explicit `tsc && tsc-alias`).
 - The module ledger strings stay MODULE-side: the core owns the mechanics, never a module's strings.
@@ -286,6 +289,28 @@ Nothing in the core ever composes a
 mechanics only; the fields are the module's.
 
 ---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
+(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
+effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
+builds, no user-side compilation:
+
+- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-core"` resolves to
+  `Target/` with zero framework dependencies.
+- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
+  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  graph):
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
+    `resolve.conditionNames: ["effect-ts"]`.
+- **The per-import escape hatch** (no loader config at all): `import ... from
+  "@playform/hook-dsh-core/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+
+`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
+(the CLASSIC build never imports it).
 
 ## License 📜
 

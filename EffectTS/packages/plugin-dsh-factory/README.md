@@ -136,6 +136,10 @@ The factory makes it apply **once**.
                                            │                        registry-adjacent → + P3 chain keys
                                            ├─ Gate(...) ───────────► g1 gates: target → actor → kind →
                                            │                        Stash idempotence → basename → excluded
+                                           ├─ Write(...) ──────────► the ONE shared write executor
+                                           │                        (intent → waterfall → sandbox posture →
+                                           │                        writeText → fs/observed emit; the Over
+                                           │                        bundle, below)
                                            ├─ GuardedWrite(...) ──► replaceIfVersion + the P4 sandbox fence
                                            ├─ Refresh(...) ───────► Stash seed + fs/observed re-emit (same actor)
                                            ├─ Continue(..., tfm) ─► Inflight → readText → keep-list →
@@ -165,6 +169,22 @@ loader holds it PENDING until the factory exists) and supplies only its own thre
 3. **An update engine** (optional) - ncu/cargo dispatch, cooldowns, circuit breakers, the first-wins
    update-policy path pick: model logic, built on
    `GuardedWrite`/`Refresh`/`Seam`/`Journal`/`UpdateKey`.
+
+**The shared write executor (`Write`)** - the one write path in the family. Every governed or
+tool-driven write goes through it (GuardedWrite is the guarded alias): the `Over` bundle carries
+the intent (an explicit `replaceIfVersion` skips the [fs/write-intent][dsh-fs] waterfall - the
+default `{ waterfall: true }` runs it), the sandbox posture (`"standing"` = the built-in's
+no-escalation replica, `"p4"` = the per-call fence, or an explicit policy object), the
+root-context fs/observed emit (default true), the Stash pre-registration and the caller's content
+transform. It logs nothing - the caller composes its own ledger line from the outcome.
+
+**The direct-govern entry (`Govern`)** - the raw-write tool's post-write call: resolves the
+registered steps for the target's basename, filters them by the selection (`true`/`"all"` = every
+registered step; an array or a single name = the named steps; unknown names ignored; `false`/absent
+= none), and runs each contained - one try/catch per step, never throws. The SEQUENTIAL FOLD
+(v0.2.1): the steps are awaited one at a time, so each step's chain (its guarded write + its
+ledger line) completes before the next step reads the file. An empty registry (no module
+registered for the basename) is a contained no-op.
 
 ### What the factory deliberately does NOT own
 
@@ -211,6 +231,21 @@ Full contract:
   these paths.
 
 ---
+
+### The Hard Lessons
+
+1. **The loader holds consumers PENDING until the factory exists** - the service resolves at boot;
+   load order never matters, but the factory bundle must be present in the profile.
+2. **`Config` must be built through the standalone named `Schema` export** - the loader reads
+   `Config` at module-evaluation time, before any service instance exists; the instance method
+   cannot be used there (the pre-v0.1.1 stub-context workaround is gone).
+3. **Root-context writes need an explicit sandbox posture** - the deployment default
+   (`workspace-write`) denies paths outside the canonical workspace; the governance modules pass
+   `{ mode: "danger-full-access" }` because their own exclude list IS their fence.
+4. **The journal sink binds once** - the first successful open wins the shared `package_governance`
+   table; records before that buffer in the pre-bind queue (cap 256) and drain on the first open.
+5. **An empty govern registry is a no-op** - a raw-write `govern` call against a registry no module
+   has populated resolves to nothing, contained; the registry fills at apply.
 
 ## The Config
 
@@ -295,7 +330,16 @@ The factory's own composed strings are parameterized machinery (the
 unreadable-policy line takes the policy file name; the suppressed-error lines take `state.Module` as
 the prefix) and stay byte-identical when a consumer keeps its historical name.
 
+The P5 records (the consumers' `Journal` calls) route to ONE shared sink: the harness's
+storageDomain allows one open per domain name, so the first module whose open succeeds binds the
+shared `package_governance` table and every module's records land there. Records journaled before
+any open succeeds buffer in the factory's pre-bind queue (capped at 256, drained by the first
+successful open) - the boot-window race is closed by construction.
+
+
 ---
+
+[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
 
 ## License 📜
 

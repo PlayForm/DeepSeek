@@ -50,8 +50,9 @@ the generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
 | [hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/Source) (this bundle)                      | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
+unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
+`Journal` (the shared P5 record on every N > 0 pass); the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed][dsh-fs]
 dead fields.
 
@@ -137,9 +138,13 @@ reaches the transcript.
        │                       on) - the assembled ToolCallBlock.arguments
        │                       follows the same flag via block-end
        │                       The gate is THREE-WAY with the flag on: a
-       │                       delta/block whose `name` is "edit" passes
-       │                       through BY IDENTITY (the edit tool's
-       │                       `old_string` must match the real file bytes),
+       │                       delta/block whose `name` is "edit", "raw-write"
+       │                       or "normalize-file" passes through BY IDENTITY
+       │                       (the edit tool's `old_string` must match the real
+       │                       file bytes; the raw-write tool owns its content
+       │                       normalization; the normalize-file tool's arguments
+       │                       carry a file path - a normalized dash inside a
+       │                       filename would corrupt the target),
        │                       and a call whose arguments open with the
        │                       `{"__normalize":false` marker (FIRST key,
        │                       tracked per call id) passes through
@@ -183,6 +188,17 @@ whole range, described by code point here (the literal characters are in the In 
 
 ---
 
+## The Pitfalls
+
+- **The range is exact** - only U+FF01-U+FF5E maps to its ASCII half-width counterpart; the
+  fullwidth space U+3000 is the spaces flavor's character, not this table's.
+- **A dependency alone is NOT activation** - the package must be in `dsh.profile.bundles` (or the
+  patch row inserted), or no listener registers and no ledger exists.
+- **The stream gate rewrites model output only** - it never touches disk; files already on disk are
+  the `normalize-file` tool's job.
+- **The count is per replaced code point** - N counts matched characters; N = 0 and an upstream
+  throw both write no count line and no journal record.
+
 ## The Config
 
 | Field                    | Type    | Default                                   | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -190,7 +206,7 @@ whole range, described by code point here (the literal characters are in the In 
 | `log`                    | boolean | `true`                                    | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `logFile`                | string  | `~/.dsh/hook-dsh-normalize-fullwidth.log` | yes      | the fullwidth ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `normalizeReasoning`     | boolean | `true`                                    | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                                   | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| `normalizeToolArguments` | boolean | `false`                                   | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 There is **no `replacement` field** (MAP flavor).
 
@@ -236,7 +252,7 @@ hook-dsh-normalize-fullwidth: normalized 4 fullwidth char(s) in one stream
 ```
 
 (The same pass runs over reasoning deltas when `normalizeReasoning` is on, and over tool-call
-arguments when the example patch enables `normalizeToolArguments` - with the `edit` name exempt and
+arguments when the example patch enables `normalizeToolArguments` - with the `edit`, `raw-write` and `normalize-file` names exempt and
 raw-marker calls passing through unnormalized.)
 
 ---
@@ -254,7 +270,34 @@ hook-dsh-normalize-fullwidth: normalized N fullwidth char(s) in one stream
 The activation line is written by `apply()`; the count line only follows a normal stream completion
 and only when N > 0 (a thrown-away stream writes no ledger line).
 
+Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
+count line - best-effort: with no storage facility the record buffers or drops, and the human
+ledger stays the complete record.
+
 ---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
+(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
+effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
+builds, no user-side compilation:
+
+- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-normalize-fullwidth"` resolves to
+  `Target/` with zero framework dependencies.
+- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
+  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  graph):
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
+    `resolve.conditionNames: ["effect-ts"]`.
+- **The per-import escape hatch** (no loader config at all): `import ... from
+  "@playform/hook-dsh-normalize-fullwidth/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+
+`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
+(the CLASSIC build never imports it).
 
 ## License 📜
 

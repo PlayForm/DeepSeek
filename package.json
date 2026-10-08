@@ -7,6 +7,8 @@
 		"build:boilerplate": "pnpm -r --workspace-concurrency=1 --filter \"./Boilerplate/packages/**\" run prepublishOnly",
 		"build:classic": "pnpm -r --workspace-concurrency=1 --filter \"./Classic/packages/**\" run prepublishOnly",
 		"build:effect-ts": "pnpm -r --workspace-concurrency=1 --filter \"./EffectTS/packages/**\" run prepublishOnly",
+		"build:dual-source": "pnpm run build:classic && pnpm run build:effect-ts && bash Maintain/DualSource.sh",
+		"verify:dual-source": "node Maintain/Verify-DualSource.mjs",
 		"test": "for Smoke in Classic/smokes/*-smoke.mjs EffectTS/smokes/*-smoke.mjs; do node \"$Smoke\" || exit 1; done",
 		"site": "pnpm --dir Site run Run",
 		"lychee": "bash Maintain/Lychee.sh",

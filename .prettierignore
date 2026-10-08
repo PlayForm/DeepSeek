@@ -26,6 +26,16 @@ dist
 **/dist
 **/dist/**
 
+# The dual-source builds (the DUAL-SOURCE BUNDLING layout: the Classic
+# packages' Target-EffectTS/ + the EffectTS packages' Target-Classic/ -
+# the second flavor's build output, the same law as Target/).
+Target-EffectTS
+**/Target-EffectTS
+**/Target-EffectTS/**
+Target-Classic
+**/Target-Classic
+**/Target-Classic/**
+
 # Caches
 .cache
 **/.cache
@@ -33,6 +43,16 @@ dist
 **/.eslintcache
 .turbo
 **/.turbo
+
+# Markdown - the family prose (the short-line @-sentence style, the
+# two-space hard breaks) is byte-integrity-protected; prettier's
+# proseWrap would reflow it. Markdown is not prettier-formatted.
+**/*.md
+
+# The Site tree - a separate repository with its own prettier config
+# (Site/prettier.config.js); the root config does not govern it.
+Site
+Site/**
 
 # Test fixtures - frozen by design, never reformat
 Test

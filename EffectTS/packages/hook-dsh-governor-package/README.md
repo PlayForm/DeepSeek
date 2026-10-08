@@ -192,7 +192,8 @@ hook-dsh-governor-package/
 │   │                          + default { name, apply, Config, inject }
 │   ├── Function/            ← the module residue - Apply.ts (thin wire-up),
 │   │   │                      Observe.ts (thin listener), Transform.ts (the
-│   │   │                      chain-pass leaf), Follow.ts (the update-stage
+│   │   │                      chain-pass leaf), Direct.ts (the direct-govern
+│   │   │                      driver), Follow.ts (the update-stage
 │   │   │                      trigger), Dispatch.ts, Execute.ts, Settle.ts,
 │   │   │                      Filter / Resolve / Satisfy / Decode
 │   │   └── Update/          ← the update-stage engines (Run, Bin, Bin/*,
@@ -212,8 +213,8 @@ The published artifact contains **only the built output** - `files` whitelists `
 
 There are no `build`/`watch` npm scripts:
 the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts`); invoke it ad hoc with
-`npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` (or `--Watch` for the dev loop).
+(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`); invoke it ad hoc with
+`npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json` (or `--Watch` for the dev loop).
 
 ### The Hard Lessons
 
@@ -251,9 +252,10 @@ ids with `entry "..." not found`).
             logFile: ~/.dsh/hook-dsh-governor-package.log # global ledger
             updateCooldownMs: 3000
             strict: false # explicit only; never default-delete unknown deps
-            mutationTools: [write, edit, str_replace_editor]
+            mutationTools: [write, edit, str_replace_editor, raw-write]
             maxUpdateFailures: 3 # circuit breaker: pause a dir's update stage
-            ncuBin: /usr/local/bin/ncu # absolute - host PATH != shell PATH
+            ncuBin: /usr/local/bin/ncu # bin-mode binary; the schema default is the bare "ncu" (host
+            # PATH) - an absolute path when the host PATH lacks it
             updateMode: programmatic # "programmatic" (default) | "bin"
             policyFile: "" # optional global update-policy.json (else discovery, else built-in)
             exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
@@ -316,15 +318,35 @@ skipped (excluded) <path>
 no registry.json found for <path>
 governed <path> → <version>
 update stage dispatched for <dir> (mode=..., ncu via ..., policy ...)
+unreadable registry.json at <found> — chain pass skipped for <path>
+observed non-JSON package.json <path> — skipped
+REFUSED rewrite of <path>: non-dependency section "<name>" would change
+update stage paused for <dir> (N consecutive failures ≥ limit)
+update stage skipped for <dir> (in-flight)
+update stage skipped for <dir> (cooldown)
+update stage FAILED (<code>) for <dir>; consecutive=N
+update: mode=programmatic (npm-check-updates library)
+update: mode=bin (ncu binary <bin>)
+update: ncu (<label>) → <results>
+update: ncu failed (<label>): <cause>
+update: npm-check-updates library unavailable: <cause>
+update: npm-check-updates run() not found in library exports
+update: running verifyCommand: <command>
+update: verifyCommand ok
+update: verifyCommand failed (status N)
+update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
 update: DONE / update: FAILED
 ```
 
-(The registry-miss line ends with an em dash followed by `chain pass skipped`; the DONE/FAILED lines
-are `update: DONE` + em dash + reason and `update: FAILED` + em dash + reason - byte-exact forms are
-in the In Action excerpt above.
+(The registry-miss line, the runner-unavailable line and the DONE/FAILED lines end with em
+dashes (`update: DONE` + em dash + reason, `update: FAILED` + em dash + reason) - byte-exact
+forms are in the In Action excerpt above.
 
 Those em dashes are part of the literal ledger strings, so they live
 only in the example block.)
+
+The REFUSED line comes from the core's `Refusal` guard: a difference outside the declared
+dependency sections is never written - the byte-identical line, then no rewrite.
 
 The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
 alone.

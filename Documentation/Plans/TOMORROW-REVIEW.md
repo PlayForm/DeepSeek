@@ -293,3 +293,22 @@ The user will run the whole process again - the review-driven pass:
 - The regime: development through coder subagents; the smokes + the
   site build as the arbiters; the user commits; nothing committed by
   agents.
+
+---
+
+## 6. THE NEXT BATCH (user-instructed 2026-10-08 - the 10 halted agents for the site + the plugins, executed IN PAIRS, 2 at a time)
+
+1. **REMAINING-DIAGRAMS** - the ~250 remaining [data-diagram] placeholders -> the full diagram set via the established pipeline (the .mmd sources -> Render.mjs -> the vendored SVGs; the LR orientation, the full-width bands, the label-space law, the byte-integrity) - the proof set of 10 done.
+2. **ICON-MARGINS** - the optical margins/spacing on the icons (the BrandIcon placements: the footer, the badges, the pills, the showcases) - the consistent icon-to-text gaps, the baseline alignment, the optical centering.
+3. **DESIGN-PASS** - the overall better design pass (the rhythm, the section transitions, the hierarchy, the cohesion) + the PARENT'S DESIGN SUGGESTIONS: the dark terminal-theme variant (a light/dark toggle - the shiki --shiki-dark bridge exists in the borrowed approach), the scroll-driven micro-interactions (the section reveals, the scroll progress on the case-study), the hero's engineering-grid background texture, the stats band (12 packages / 733+746 checks / 0.0.1).
+4. **SHOWCASE** - showcase the functionality (the workbench/matrix/index/plugin pages presenting what the family DOES) + the PARENT'S SUGGESTION: a shared Compare component (the draggable before/after slider - raw vs normalized) + the terminal-chrome presentation of the stream surfaces.
+5. **UPDATES** - the current-state truthfulness across the site + the READMEs (the effect 4.0.2 declared vs installed, the publishConfigs, the pending items' notes - the docs never claim what is not live).
+6. **PITFALLS** - the lessons/known-gaps surfaced (the load-order, the verifyCommand trap, the fixture paths, the ledger/live gaps - the engineering pitfalls in the site + the READMEs).
+7. **DUAL-SOURCE BUNDLING** - the SAME npm target from the two sources: `@playform/dsh-hook-*` published once, carrying the Classic + the Effect-TS builds, the user installs once + TOGGLES (the npm-native mechanism - the exports-map conditions or the package config - no postinstall builds; the smokes verify both builds) - the design + the package-layout prep, NOT the publishing (the npm agent later).
+8. **COMPRESS-BORROW** - the .github (the Auto/NPM/Node/Dependabot workflows) + the other folders from ~/Developer/Application/PlayForm/Compress (the user's own repo) adapted to the family's per-repo conventions - no attribution.
+9. **README/functionality completeness** - the missing bits in the READMEs + the functional gaps (the install flows, the configuration, the troubleshooting, the features undocumented).
+10. **WEBSITE-ADOPTION** - adopt the website we built: the deployment/ops (the wrangler/Cloudflare deploy to deepseek.playform.cloud, the _headers/404/robots/sitemap live, the deploy pipeline in the .github, the monitoring) - taking the site live.
+
+## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
+
+The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in ~/Developer/Application/PlayForm/Aphrodite/Site, specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.

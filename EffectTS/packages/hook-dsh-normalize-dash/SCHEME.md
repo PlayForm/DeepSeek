@@ -120,7 +120,7 @@ Consumes from `@playform/plugin-dsh-factory` (the service, via `inject: ["plugin
 
 Not consumed, deliberately: `Wire` (§2.11 — fs/observed-hardwired; the normalize-dash implements its
 own `ctx.on("llm/stream", …)` plain registration), `Attach` (§2.12 — no jobs/inflight/storage),
-`Journal` (§2.13 — governance domain; the normalize-dash logs via Append only), `Gate`/
+`Journal` (§2.13 — consumed: the P5 `normalized` record on every N > 0 pass), `Gate`/
 `GuardedWrite`/`Refresh`/`Continue` (§2.6-2.9 — no fs/observed path).
 
 This is the factory's **first

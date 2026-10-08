@@ -213,6 +213,17 @@ count is the ledger's N and the no-op condition in one.
 
 ---
 
+## The Pitfalls
+
+- **The file's bytes change under you** - re-read before editing: the edit tool's `old_string`
+  must match the NEW content; the diff card shows the before/after in the same turn.
+- **A no-op is a no-write** - N = 0 leaves the file byte-identical: no write, no ledger line, no
+  journal record; a missing, binary or undecodable target errors out the same way.
+- **No governor triggers** - the write emits fs/observed with the call's exec as the actor, but
+  `normalize-file` is never in a governor's `mutationTools`, so no chain pass runs.
+- **Name-exempt in the stream gate** - the tool's arguments carry a file path and pass through the
+  stream unnormalized, beside `edit` and `raw-write`.
+
 ## The Config
 
 | Field         | Type    | Default                              | Volatile | Meaning                                                     |

@@ -213,6 +213,17 @@ count is the ledger's N and the no-op condition in one.
 
 ---
 
+## The Pitfalls
+
+- **The file's bytes change under you** - re-read before editing: the edit tool's `old_string`
+  must match the NEW content; the diff card shows the before/after in the same turn.
+- **A no-op is a no-write** - N = 0 leaves the file byte-identical: no write, no ledger line, no
+  journal record; a missing, binary or undecodable target errors out the same way.
+- **No governor triggers** - the write emits fs/observed with the call's exec as the actor, but
+  `normalize-file` is never in a governor's `mutationTools`, so no chain pass runs.
+- **Name-exempt in the stream gate** - the tool's arguments carry a file path and pass through the
+  stream unnormalized, beside `edit` and `raw-write`.
+
 ## The Config
 
 | Field         | Type    | Default                              | Volatile | Meaning                                                     |
@@ -291,6 +302,28 @@ best-effort: with no storage facility the record buffers or drops and the human 
 complete record.
 
 ---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
+(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
+effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
+builds, no user-side compilation:
+
+- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-normalize-file"` resolves to
+  `Target/` with zero framework dependencies.
+- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
+  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  graph):
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
+    `resolve.conditionNames: ["effect-ts"]`.
+- **The per-import escape hatch** (no loader config at all): `import ... from
+  "@playform/hook-dsh-normalize-file/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+
+`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
+(the CLASSIC build never imports it).
 
 ## License 📜
 

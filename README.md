@@ -80,8 +80,9 @@ exists.
     The linked checkout carries its own `node_modules` and its own `pnpm-workspace.yaml`
     (`packages: [.]`) - an install inside a bundle under the profile's workspace acts on the
     workspace root and does nothing to the bundle. Remote routes into the same list:
-    `pnpm add  @playform/<pkg>` in the profile directory, or
-    `dsh plugin --profile <name> add <tarball>`.
+    `dsh plugin --profile <name> add <tarball>` for a built bundle today, or
+    `pnpm add @playform/<pkg>` in the profile directory once the family publishes to npm (the
+    publishing is a later item).
 
 2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) - one insert row per bundle, the
    config fields straight from the bundle's schema:
@@ -128,6 +129,38 @@ exists.
     hook-dsh-pinner-package: activated (pinner, logFile=~/.dsh/hook-dsh-pinner-package.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
     hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/hook-dsh-normalize-dash.log)
     ```
+
+---
+
+## The variant toggle (CLASSIC vs EFFECT-TS)
+
+**Install once, toggle at the loader.**
+
+```sh
+pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
+```
+
+One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
+the EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall
+builds, no user-side compilation - the toggle is pure resolution:
+
+- **CLASSIC (default):** just import - `import { Govern } from "@playform/plugin-dsh-factory"`.
+- **EFFECT-TS (whole family, one flag):**
+  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`)
+  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
+  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
+    webpack: `resolve.conditionNames: ["effect-ts"]`
+- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
+  (or `/classic`) - deterministic in every toolchain.
+
+The whole family toggles together - never mix variants in one graph (the effect-ts `Update`
+returns Effect envelopes, not the classic dispatch envelope). `effect` v4.0.2 comes as a
+dependency with the same single install.
+
+From source, each tree's `default` condition routes to its own build (`Target/`); the sibling
+variant is assembled byte-exactly by `Maintain/DualSource.sh` (`pnpm run build:dual-source`,
+verified by `pnpm run verify:dual-source` - 110 checks). The npm publication is the later item;
+this section is the published-package story.
 
 ---
 
@@ -359,6 +392,76 @@ The suites are the speed and coverage story:
   byte-identical ledger strings on every rebuild.
 
 The smokes are the arbiter after every change: they must stay green at the same counts.
+
+---
+
+## Development
+
+The workflow, root-first - every step is a root `package.json` script:
+
+| Script                | What it does                                                                                       |
+| --------------------- | -------------------------------------------------------------------------------------------------- |
+| `pnpm install`        | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install |
+| `pnpm run build:classic` / `build:effect-ts` | the twelve bundles of one tree, one workspace pass (`prepublishOnly` per bundle)   |
+| `pnpm run build:dual-source` | both trees + `Maintain/DualSource.sh` - the sibling variant dirs assembled byte-exactly |
+| `pnpm run verify:dual-source` | `Maintain/Verify-DualSource.mjs` - 110 resolution checks, the toggle arbiter       |
+| `pnpm test`           | all 24 smokes (12 Classic + 12 EffectTS) - the behavioral arbiter, exit non-zero on any failure    |
+| `pnpm site`           | the static site build (`Site/` - 21 pages)                                                          |
+| `pnpm lychee`         | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                       |
+| `pnpm format` / `format:check` | `Maintain/Format.sh` - line endings + Prettier (never the markdown - byte-integrity-protected) |
+
+The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings
+stay byte-identical at the same counts; the byte-scan stays clean (no NUL bytes in the tracked
+tree); the tree is committed by the maintainer, never by tooling.
+
+The hazards, documented:
+
+- **The duplicate-name relink.** The workspace carries two trees with the same twelve names; a
+  `pnpm install` can re-relink a consumer's `@playform/*` links to the OTHER tree (glob-last),
+  which silently breaks the Classic suites. Re-run the 24 smokes after every install.
+- **The verifyCommand trap.** An update-policy `verifyCommand` fails on a vendored-fork workspace
+  (no registry to install from) - the ledger records it, the expected outcome.
+- **The smoke/live fidelity gap.** The smokes prove the mechanics; the live battery proves the
+  wiring; the ledgers answer "did it activate".
+
+---
+
+## Troubleshooting
+
+The known gaps, stated as they are - the corrected claims stay; no marketing gloss.
+
+- **Load order is not list order.** The pinner can activate before the governor at boot; the
+  registration order is not controlled. Never rely on the bundle-list order for step ordering -
+  the sequential fold and the fresh-version writes make the order irrelevant, and each plugin's
+  ledger answers for its own activation.
+- **The verifyCommand trap.** An update-policy `verifyCommand` can fail with a non-zero status:
+  on a vendored-fork workspace (the family's own live battery), `pnpm install` has no registry to
+  install from, and the ledger records the failure - the documented cordis registry trap, the
+  expected outcome, not a bug. Exit 127 (the runner unavailable) is non-fatal; any other failure
+  fails the stage and counts toward the circuit breaker (`maxUpdateFailures`):
+
+    ```text
+    update: running verifyCommand: pnpm install
+    update: verifyCommand failed (status 1)
+    update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
+    update stage FAILED (1) for <dir>; consecutive=2
+    ```
+
+- **The smoke/live fidelity gap.** The smokes prove the mechanics; the live battery proves the
+  wiring. Every real bug (the patch layers, the v2 journal open, the version guard) was found
+  live, not by the smokes - both green does not prove the profile wiring; the ledgers do.
+- **The fixture paths.** The `Test/` fixtures carry the neutralized display forms
+  (`<repo-root>/`, `$DSH_HOME/`); the personal absolute paths exist only in the internal
+  Boilerplate copies. Never copy a live battery into the release archive as-is.
+- **The byte-integrity law.** The NUL-byte incident class: a write that emits bytes the file's
+  format forbids (NUL bytes) corrupts the file - the URL-registry corruption lesson. Verbatim is
+  the default; the normalize family restores the integrity; the byte-scan is the arbiter.
+- **The timestamp confusion.** The ledger lines are ISO UTC; the storage records are epoch
+  milliseconds; the local display adds +03. The "missing records" scares were filter mistakes,
+  not lost data.
+- **The raw-write marker semantics.** `govern` absent = no chain (the escape hatch); the raw
+  marker (`__normalize: false`) passes a call through unnormalized. Markers are stripped before
+  the tool validates - the harness tools reject unknown argument keys.
 
 ---
 

@@ -52,8 +52,9 @@ generic `Replace`/`Chunk`/`Block` dispatch:
 | [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
 | [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses only `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields) and `Append`; the config is composed
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
+unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
+`Journal` (the shared P5 record on every N > 0 pass); the config is composed
 by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
 [fs/observed][dsh-fs]
 dead fields.
@@ -145,9 +146,13 @@ the plain ASCII space the one that reaches the transcript.
        │                       on) - the assembled ToolCallBlock.arguments
        │                       follows the same flag via block-end
        │                       The gate is THREE-WAY with the flag on: a
-       │                       delta/block whose `name` is "edit" passes
-       │                       through BY IDENTITY (the edit tool's
-       │                       `old_string` must match the real file bytes),
+       │                       delta/block whose `name` is "edit", "raw-write"
+       │                       or "normalize-file" passes through BY IDENTITY
+       │                       (the edit tool's `old_string` must match the real
+       │                       file bytes; the raw-write tool owns its content
+       │                       normalization; the normalize-file tool's arguments
+       │                       carry a file path - a normalized dash inside a
+       │                       filename would corrupt the target),
        │                       and a call whose arguments open with the
        │                       `{"__normalize":false` marker (FIRST key,
        │                       tracked per call id) passes through
@@ -187,6 +192,17 @@ space) - exactly Unicode's Zs category minus the ASCII space - become the config
 
 ---
 
+## The Pitfalls
+
+- **Zs minus ASCII** - the class is the unicode space family (U+00A0, U+1680, U+2000-U+200A, U+202F,
+  U+205F, U+3000); tabs and newlines are not spaces and never match.
+- **A dependency alone is NOT activation** - the package must be in `dsh.profile.bundles` (or the
+  patch row inserted), or no listener registers and no ledger exists.
+- **The stream gate rewrites model output only** - it never touches disk; files already on disk are
+  the `normalize-file` tool's job.
+- **The count is per replaced code point** - N counts matched characters; N = 0 and an upstream
+  throw both write no count line and no journal record.
+
 ## The Config
 
 | Field                    | Type    | Default                                | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -195,7 +211,7 @@ space) - exactly Unicode's Zs category minus the ASCII space - become the config
 | `logFile`                | string  | `~/.dsh/hook-dsh-normalize-spaces.log` | yes      | the spaces ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `replacement`            | string  | `" "`                                  | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                               |
 | `normalizeReasoning`     | boolean | `true`                                 | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                                | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with two exemptions: an `edit` call passes through by identity, its `old_string` must match the real file bytes; and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| `normalizeToolArguments` | boolean | `false`                                | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
@@ -227,7 +243,7 @@ Each non-ASCII space in the Zs-minus-ASCII class - U+00A0 between `deploy` and `
 space (U+0020); ASCII spaces that were already there are untouched.
 
 This is what makes a pasted
-command executable again: `echo a — b` with a hidden no-break space between the arguments runs after
+command executable again: `echo a b` with the no-break space U+00A0 between the arguments runs after
 the pass, where before the pass the shell saw one mangled word.
 
 When a stream finishes normally with
@@ -240,7 +256,7 @@ hook-dsh-normalize-spaces: normalized 3 space char(s) in one stream
 
 The `replacement` is hot-editable (say to `_` for debugging), and the same pass runs over reasoning
 deltas when `normalizeReasoning` is on and over tool-call arguments when the example patch enables
-`normalizeToolArguments` - with the `edit` name exempt and raw-marker calls passing through
+`normalizeToolArguments` - with the `edit`, `raw-write` and `normalize-file` names exempt and raw-marker calls passing through
 unnormalized.
 
 ---
@@ -260,6 +276,11 @@ as a trailing blank.)
 
 The activation line is written by `apply()`; the count line only follows a normal stream completion
 and only when N > 0 (a thrown-away stream writes no ledger line).
+
+Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
+count line - best-effort: with no storage facility the record buffers or drops, and the human
+ledger stays the complete record.
 
 ---
 
