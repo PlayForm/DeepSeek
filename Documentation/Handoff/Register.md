@@ -36,7 +36,7 @@
    into ONE shared executor (the factory's natural home), plus the broader audit (the activation
    compositions, the smokes' fake-ctx harnesses across eleven suites, the deferred update-stage
    envelopes).
-7. **The file-content normalizer flavor** - the hermes heritage: rewriting family characters in
+7. **The file-content normalizer flavor** - rewriting family characters in
    files ALREADY on disk (beyond the tool layer).
 8. **P5 storage journaling for the normalize family** - the `normalized N ... char(s)` events into
    the shared

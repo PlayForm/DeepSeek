@@ -82,7 +82,7 @@ mdash 66 · quotes 51 · ellipsis 51 · spaces 51 · invisible 51 · fullwidth 5
    em-dashes, landed via exempt edits - the workflow the user designed).
 3. The handoff maintenance (this document; the smoke-count tables updated here).
 4. The cosmetic comment pass (the agents' ASCII-hyphen prose in the new comments).
-5. The optional candidates: the file-content normalizer flavor (the hermes heritage); P5 storage
+5. The optional candidates: the file-content normalizer flavor; P5 storage
    journaling for the normalize family (new event names → a domain version bump); the update-stage
    envelope extraction; further flavors (bullets/control/emoji).
 

@@ -136,9 +136,8 @@ Files are rewritten behind the agent only at the
 price of the edit tool's `old_string` contract: the agent read bytes X, a background rewriter
 silently changed them to X', and the next edit fails or half-matches.
 
-The lesson is real
-way - `normalize-tabs.sh`, a repair hook for a repair hook, exists to repair the damage
-after-the-fact rewriting caused.
+The lesson is real: `normalize-tabs.sh`, a repair hook for a
+repair hook, exists to repair the damage after-the-fact rewriting caused.
 
 The tool is the answer: explicit, visible, discoverable, zero background activity.
 

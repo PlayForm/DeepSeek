@@ -181,7 +181,7 @@ U+2026 (horizontal ellipsis - the typographic three-dot run collapsed into one c
 processors) becomes the config `replacement` (default `...`, the ASCII three-dot sequence - the
 ellipsis's own ASCII spelling).
 
-- **No context rules** - hermes-style whole-chunk replacement, no lookahead; chunk-boundary-safe.
+- **No context rules** - whole-chunk replacement, no lookahead; chunk-boundary-safe.
 - The replacement is applied with a **function replacer**, so a custom `replacement` containing `$`
   patterns is inserted literally.
 - Replaced characters are **counted per stream** for the ledger line - each replaced ellipsis code

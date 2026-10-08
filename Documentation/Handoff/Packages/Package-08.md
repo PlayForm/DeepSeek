@@ -19,7 +19,7 @@
 - The repo: `~/.dsh` (git; the bundles under `profiles/desktop/bundles/`; the profile under
   `profiles/desktop/`).
 - The family's ecosystem: the `@playform` packages (the conventions,
-  @playform/build, @playform/compress as the reference packages).
+  @playform/build as the reference package).
 
 ## FINAL WORD FOR THE NEXT SESSION
 

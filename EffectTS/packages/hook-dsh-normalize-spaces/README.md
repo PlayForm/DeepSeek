@@ -185,7 +185,7 @@ space), U+202F (narrow no-break space), U+205F (medium mathematical space) and U
 space) - exactly Unicode's Zs category minus the ASCII space - become the config `replacement`
 (default `" "`, the plain ASCII space U+0020).
 
-- **No context rules** - hermes-style whole-chunk replacement, no lookahead; chunk-boundary-safe.
+- **No context rules** - whole-chunk replacement, no lookahead; chunk-boundary-safe.
 - The replacement is applied with a **function replacer**, so a custom `replacement` containing `$`
   patterns is inserted literally.
 - Replaced characters are **counted per stream** for the ledger line.

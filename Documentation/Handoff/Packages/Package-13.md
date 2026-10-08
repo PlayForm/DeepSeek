@@ -44,7 +44,7 @@ normalize-dash 132 · quotes 62 · ellipsis 62 · spaces 62 · invisible 62
    journal to the shared domain).
 5. The normalize-file bundle (#7, the 12th package) - the tool: read → count → N=0 NO write → N>0
    write through the shared executor; [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Stream) name-exempts it (its args carry a path); LIVE:
-   normalized 9 chars in the fixture ✓. The hermes-heritage design report:
+   normalized 9 chars in the fixture ✓. The file-content flavor's design report:
    `Documentation/Reports/FileContent-FLAVOR-DESIGN.md` (the event-driven rewriter verdict: NOT
    advisable - breaks the edit contract + the bounded passes).
 6. The commonalization (#6 + #9 + the activation template): [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts)

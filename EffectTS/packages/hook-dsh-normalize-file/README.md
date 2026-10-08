@@ -68,7 +68,7 @@ This flavor covers the gap in between:
 pre-existing files, git-cloned material, script-created files - anything already on disk that the
 agent did not just write.
 
-The hermes heritage is direct: the `normalize-dashes-for-execute-code.sh`
+The file-hook precedent is direct: the `normalize-dashes-for-execute-code.sh`
 hook swept script-created files after the fact; DSH makes the same rewrite an explicit, visible,
 opt-in TOOL call instead of a background hook (and `normalize-tabs.sh` - the repair hook for a
 repair hook - is the cautionary tale that keeps it that way).
@@ -136,8 +136,8 @@ Files are rewritten behind the agent only at the
 price of the edit tool's `old_string` contract: the agent read bytes X, a background rewriter
 silently changed them to X', and the next edit fails or half-matches.
 
-Hermes learned this the hard
-way - its `normalize-tabs.sh` exists to repair the damage its own after-the-fact rewriting caused.
+The lesson is real: `normalize-tabs.sh`, a repair hook for a
+repair hook, exists to repair the damage after-the-fact rewriting caused.
 
 The tool is the answer: explicit, visible, discoverable, zero background activity.
 
