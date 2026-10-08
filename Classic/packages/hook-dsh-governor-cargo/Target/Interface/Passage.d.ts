@@ -1,4 +1,4 @@
-import type Manifest from "@Interface/Manifest.js";
+import type Manifest from "./Manifest.js";
 export default interface Passage {
     /** The decoded manifest from the transform — the update stage's input. */
     Manifest: Manifest | null;

@@ -1,4 +1,4 @@
-import type Job from "@Interface/Job.js";
+import type Job from "./Job.js";
 export default interface Jobs {
     /** Register this plugin as a root-level job controller (Function/Apply). */
     attachController(name: string): unknown;
