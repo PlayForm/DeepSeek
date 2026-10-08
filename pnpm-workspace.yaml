@@ -10,3 +10,6 @@ linkWorkspacePackages: deep
 minimumReleaseAge: 0
 
 nodeLinker: hoisted
+
+onlyBuiltDependencies:
+    - puppeteer
