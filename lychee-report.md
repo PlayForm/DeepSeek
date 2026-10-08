@@ -60,13 +60,28 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 |----------------|-------|
 | 🔍 Total       | 1273  |
 | 🔗 Unique      | 209   |
-| ✅ Successful  | 702   |
+| ✅ Successful  | 1077  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
-| 👻 Excluded    | 571   |
+| 👻 Excluded    | 189   |
 | ❓ Unknown     | 0     |
-| 🚫 Errors      | 0     |
+| 🚫 Errors      | 7     |
 | ⛔ Unsupported | 0     |
+
+## Errors per input
+
+### Errors in Boilerplate/packages/dsh-hook-normalize-dash/SCHEME.md
+
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Boilerplate/Developer/Documentation/Module/deepseek-harness/docs/subsystems/llm-streaming.md> (at 13:2) | File not found. Check if file exists and path is correct
+
+### Errors in Documentation/Guides/Governor-README.md
+
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-core> (at 33:63) | File not found. Check if file exists and path is correct
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-core> (at 55:28) | File not found. Check if file exists and path is correct
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-governor-cargo> (at 44:3) | File not found. Check if file exists and path is correct
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/hook-dsh-pinner-package> (at 43:3) | File not found. Check if file exists and path is correct
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/plugin-dsh-factory> (at 33:1) | File not found. Check if file exists and path is correct
+* [ERROR] <file:///Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Documentation/plugin-dsh-factory> (at 54:20) | File not found. Check if file exists and path is correct
 
 # Summary
 
@@ -74,10 +89,10 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 |----------------|-------|
 | 🔍 Total       | 1001  |
 | 🔗 Unique      | 96    |
-| ✅ Successful  | 316   |
+| ✅ Successful  | 995   |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
-| 👻 Excluded    | 685   |
+| 👻 Excluded    | 6     |
 | ❓ Unknown     | 0     |
 | 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |
@@ -88,10 +103,10 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 |----------------|-------|
 | 🔍 Total       | 67    |
 | 🔗 Unique      | 26    |
-| ✅ Successful  | 10    |
+| ✅ Successful  | 63    |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
-| 👻 Excluded    | 57    |
+| 👻 Excluded    | 4     |
 | ❓ Unknown     | 0     |
 | 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |

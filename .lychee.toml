@@ -47,8 +47,11 @@ exclude_path = [
 	"lychee-report.md",
 ]
 
-# The request schemes to check
-scheme = ["https", "http"]
+# The request schemes to check. "file" is required: without it lychee skips
+# every local cross-link (the READMEs linking to each other, the package
+# cross-references, the docs' relative paths) as "excluded" instead of
+# verifying the target exists.
+scheme = ["https", "http", "file"]
 require_https = false
 
 # Request behavior
