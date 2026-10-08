@@ -14,26 +14,38 @@ version in a written package.json to its static version** — `"^0.3.4"` → `"0
 
 The intent waterfall carries only a version guard (`{kind:"createIfAbsent"}` |
 `{kind:"replaceIfVersion", version}`) — **never content** (`docs/subsystems/filesystem.md:515-526`).
-The write content travels only in the tool's own arguments → `ctx.fs.writeText`. The only hook that
-runs _after_ content is on disk is the synchronous broadcast `fs/observed`. Hence the post-hoc
-rewrite design. (`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was
+
+The write content travels only in the tool's own arguments → `ctx.fs.writeText`.
+
+The only hook that
+runs _after_ content is on disk is the synchronous broadcast `fs/observed`.
+
+Hence the post-hoc
+rewrite design.
+
+(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was
 the fatal bug of the governor's first attempt.)
 
 ## 1. The domain — every harness write path
 
 `fs/observed` is dispatched **only by the tool layer** (`dsh-tool-fs`,
 `dsh-tool-str-replace-editor`), for **every** write/edit/read issued through the harness fs tools,
-by **any** thread: main agent, subagent, workflow child. The fs _service_ and every other writer
+by **any** thread: main agent, subagent, workflow child.
+
+The fs _service_ and every other writer
 (bash, git, pnpm, plain `node:fs`) dispatch **nothing**.
 
 Write paths `𝒲 = { write tool, edit tool, str-replace-editor, any tool issuing ctx.fs.writeText }`.
+
 Every `w ∈ 𝒲` emits exactly one `fs/observed` with `(target, {kind:"present", version}, actor)` —
 full writes AND single-line edits dispatch the identical payload.
 
 ## 2. The pipeline — P only
 
 There is NO update stage: the pinner is a **pure deterministic rewrite** — no ncu, no jobs, no
-subprocess, no cooldown/breaker. One pass:
+subprocess, no cooldown/breaker.
+
+One pass:
 
 ```
 P = Rewrite ∘ Pin ∘ Resolve ∘ Decode
@@ -66,7 +78,9 @@ Idempotence: an already-static version has no leading prefix, so rule 2 passes i
 
 **Documented edge decision (wildcards with a prefix)**: `"^1.*"` IS stripped to `"1.*"` — the law
 strips the notation (the prefix) and leaves the content untouched; the static-version rule targets
-the common caret/tilde/exact case, and the pinner never invents content. Protect wildcards with the
+the common caret/tilde/exact case, and the pinner never invents content.
+
+Protect wildcards with the
 keep-list (`pin-policy.json`) if a deployment needs them preserved.
 
 **Protocol safety**: none of `workspace:*`, `file:`, `link:`, `git+…`, `npm:` begins with
@@ -116,15 +130,27 @@ The parent thread's observable state — tool result envelope, transcript, sessi
 
 Proof (same as the governor's): the tool result `{path, operation, before, after}` is built from the
 `writeText` **outcome**, where `after = normalizeLineEndings(author content)` — the tool's own
-content, **not a disk re-read**. No checksum. A post-emit rewrite is invisible to the envelope.
+content, **not a disk re-read**.
+
+No checksum.
+
+A post-emit rewrite is invisible to the envelope.
 
 **Required hygiene (the leak vector)**: the observation-policy (active via `dsh-base` patch) records
-`{kind:"present", version}` per `owner = actor.agent.session`. If P mutates the file without
+`{kind:"present", version}` per `owner = actor.agent.session`.
+
+If P mutates the file without
 refreshing the record, the author's next guarded write/edit fails **FS_STALE_VERSION** — an error
-the model _sees_ → notification leak. Therefore P, after every mutation, re-emits
+the model _sees_ → notification leak.
+
+Therefore P, after every mutation, re-emits
 `ctx.emit("fs/observed", target, {kind:"present", version: v'}, <same actor>)` with `v'` taken from
 the `ctx.fs.writeText` outcome (`FsWriteOutcome.version` — the service owns the version token; it is
-never computed or parsed locally). Same actor ⇒ same owner bucket ⇒ record refreshed. The version is
+never computed or parsed locally).
+
+Same actor ⇒ same owner bucket ⇒ record refreshed.
+
+The version is
 pre-registered in the Stash before the re-emit so the re-entrant pass is a no-op.
 
 P never: participates in `fs/write-intent`/`fs/edit-intent` waterfalls, touches `tools/*` waterfalls
@@ -210,7 +236,9 @@ Non-edges (proven absent, marked ∄):
 ## 9. Config (validated schema — every tunable is a field)
 
 The exported `Config` schema validates and fills every default at load (invalid configuration fails
-loudly). New entries are declared with `insert:` — a bare `id:` row patches an existing entry and
+loudly).
+
+New entries are declared with `insert:` — a bare `id:` row patches an existing entry and
 the loader rejects unknown ids with `entry "…" not found`.
 
 ```yaml
@@ -251,10 +279,14 @@ harness (real temp-dir I/O with `dev:ino:size:mtimeNs:ctimeNs` version tokens en
 The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
 `package.json` / `Cargo.toml`) and writing its own ledger (`hook-dsh-pinner-package.log` /
 `hook-dsh-governor-package.log` / `hook-dsh-governor-cargo.log`); the fs/observed trigger law and
-the exclusion-first rule are shared. Composition semantics: **pin → bump-exact** (the pinner pins
+the exclusion-first rule are shared.
+
+Composition semantics: **pin → bump-exact** (the pinner pins
 `^0.3.4` → `0.3.4`; a fully pinned manifest leaves the npm governor's update stage nothing to do —
 ncu's no-op case is an exact pin — while its chain pass may still re-canonicalize chain pins to
 `^resolved`); **chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the
 pinner's `pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same
-sidecar — wins over normalization, never over the chain). Activation of one never implies another;
+sidecar — wins over normalization, never over the chain).
+
+Activation of one never implies another;
 order between two npm listeners is defined only by registration.

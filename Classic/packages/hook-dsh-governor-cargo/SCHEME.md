@@ -1,6 +1,8 @@
 # SCHEME — @playform/hook-dsh-governor-cargo
 
-The design document of the **CARGO.TOML MODULE** of the silent package.json governor. The module
+The design document of the **CARGO.TOML MODULE** of the silent package.json governor.
+
+The module
 delineation is the point: identical architecture and API-awareness discipline, but the update stage
 is **Rust-side only** — `cargo upgrade` (cargo-edit) driven through `ctx.subprocess` — because Rust
 does not co-opt into the TypeScript ecosystem: there is no npm-library equivalent for cargo manifest
@@ -222,9 +224,15 @@ update stage FAILED (N) for …; consecutive=N
 ## 11. Interplay note
 
 The three plugins coexist on `fs/observed`: the package.json governor, the package.json pinner, and
-this Cargo.toml module. Each gates on its own basename (`package.json` / `package.json` /
+this Cargo.toml module.
+
+Each gates on its own basename (`package.json` / `package.json` /
 `Cargo.toml`), so the cargo module never processes an npm event and vice versa; each writes its own
-ledger. The user decides which to activate — activation of one never implies another. Composition
+ledger.
+
+The user decides which to activate — activation of one never implies another.
+
+Composition
 semantics when several are activated: **pin → bump-exact** (a fully pinned manifest leaves the npm
 governor's update stage nothing to do — ncu's no-op case is an exact pin); **chain > strip >
 normalize** (this module's precedence, §3); **keep-list wins** (the pinner's `pin-policy.json` keeps

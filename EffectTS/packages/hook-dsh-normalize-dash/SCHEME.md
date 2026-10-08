@@ -5,11 +5,17 @@ with a fake ctx + the REAL factory — ALL PASS).
 
 ## 0. What this plugin is
 
-The dash normalizer for **model output**. The hermes normalize-dashes hook
+The dash normalizer for **model output**.
+
+The hermes normalize-dashes hook
 rewrites the unicode dash family to ASCII hyphen-minus
-**in files after the fact**. A DSH plugin can go where hermes cannot: the **`llm/stream` waterfall**
+**in files after the fact**.
+
+A DSH plugin can go where hermes cannot: the **`llm/stream` waterfall**
 — the interceptable wrapper around every streaming model call (retry, replay, routing), bound to the
-LlmRuntime (`docs/subsystems/llm-streaming.md:1108-1125`). The rewrite flows into both the live UI
+LlmRuntime (`docs/subsystems/llm-streaming.md:1108-1125`).
+
+The rewrite flows into both the live UI
 and the durable transcript — **the normalization is deliberately VISIBLE** (it IS the feature), the
 opposite of the governance family's silence.
 
@@ -42,11 +48,19 @@ Per text segment, verbatim from the hermes hook's perl pattern:
 | FE63          | SMALL HYPHEN-MINUS                                                         |
 | FF0D          | FULLWIDTH HYPHEN-MINUS                                                     |
 
-All → the config `replacement` (default `-`, ASCII hyphen-minus U+002D). No context rules — hermes
-has none. Whole-chunk single-character replacement is **chunk-boundary-safe**: no
+All → the config `replacement` (default `-`, ASCII hyphen-minus U+002D).
+
+No context rules — hermes
+has none.
+
+Whole-chunk single-character replacement is **chunk-boundary-safe**: no
 lookahead/lookbehind, no multi-character sequences, so per-chunk application can never disagree with
-whole-text application. The replacement uses a **function replacer**, so a custom `replacement`
-containing `$` patterns is inserted literally. The replaced characters are counted per stream for
+whole-text application.
+
+The replacement uses a **function replacer**, so a custom `replacement`
+containing `$` patterns is inserted literally.
+
+The replaced characters are counted per stream for
 the ledger line.
 
 ## 2. The injection point — the llm/stream waterfall
@@ -107,8 +121,12 @@ Consumes from `@playform/plugin-dsh-factory` (the service, via `inject: ["plugin
 Not consumed, deliberately: `Wire` (§2.11 — fs/observed-hardwired; the normalize-dash implements its
 own `ctx.on("llm/stream", …)` plain registration), `Attach` (§2.12 — no jobs/inflight/storage),
 `Journal` (§2.13 — governance domain; the normalize-dash logs via Append only), `Gate`/
-`GuardedWrite`/`Refresh`/`Continue` (§2.6-2.9 — no fs/observed path). This is the factory's **first
-NON-MANIFEST module** and its **second consumer**. The chunk vocabulary (`StreamChunk`,
+`GuardedWrite`/`Refresh`/`Continue` (§2.6-2.9 — no fs/observed path).
+
+This is the factory's **first
+NON-MANIFEST module** and its **second consumer**.
+
+The chunk vocabulary (`StreamChunk`,
 `ContentBlock`, `GenerateOptions`) comes from `@deepseek-ai/dsh-llm` (host-pinned devDep, type-only
 imports — erased at build, so the Target has no runtime import of it).
 
@@ -117,11 +135,17 @@ imports — erased at build, so the Target has no runtime import of it).
 The schema is COMPOSED by the factory's STANDALONE helper (factory v0.1.1, P1 —
 `Schema(shared?, module?)` as a module-level named export, the module-load use): the normalize-dash
 passes `shared: false` — the MINIMAL shared block, ONLY the two universal volatile cells (`log`,
-`logFile`). The pre-v0.1.1 deviation (hand-defining the schema here, because the factory's Schema
+`logFile`).
+
+The pre-v0.1.1 deviation (hand-defining the schema here, because the factory's Schema
 always emitted the family's shared block — `updateCooldownMs`, `mutationTools`, `policyFile`,
 `exclude` — fs/observed machinery the normalize-dash has none of) is gone: `shared: false` emits
-nothing the module does not use. The normalize-dash's own `logFile` default (its SEPARATE ledger) is
-supplied through its own fields, which override the minimal block's. The shape: `log` (bool, true,
+nothing the module does not use.
+
+The normalize-dash's own `logFile` default (its SEPARATE ledger) is
+supplied through its own fields, which override the minimal block's.
+
+The shape: `log` (bool, true,
 volatile), `logFile` (`~/.dsh/hook-dsh-normalize-dash.log`, volatile), `replacement` (`-`, volatile
 — the transform's only knob), `normalizeReasoning` (bool, true), `normalizeToolArguments` (bool,
 false).
