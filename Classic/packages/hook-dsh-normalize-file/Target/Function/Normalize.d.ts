@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 /** The target type is the shared write executor's own second parameter. */
 type Target = Parameters<State["Factory"]["Write"]>[1];
 /** What the tool's exec returns (the tool's output schema shape). */

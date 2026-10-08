@@ -40,7 +40,7 @@
 		"SCHEME.md"
 	],
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
 	},
 	"dependencies": {
 		"effect": "4.0.2",
