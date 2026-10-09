@@ -24,7 +24,7 @@
 	"dependencies": {
 		"@playform/ets-dsh-hook": "0.0.1",
 		"@playform/ets-hook-dsh-core": "0.0.1",
-		"@playform/ets-dsh-plugin-factory": "0.0.1",
+		"@playform/ets-plugin-dsh-factory": "0.0.1",
 		"effect": "4.0.2"
 	},
 	"devDependencies": {

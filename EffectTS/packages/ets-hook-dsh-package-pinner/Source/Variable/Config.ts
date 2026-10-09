@@ -22,7 +22,7 @@
 // the schema factory is a pure delegate with no Context use). The REAL
 // service instance (`ctx.pluginFactory`, from inject) is what every runtime
 // call goes through.
-import { Schema as Compose } from "@playform/ets-dsh-plugin-factory";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
 import Section from "./Section.js";
 import Default from "./Default.js";

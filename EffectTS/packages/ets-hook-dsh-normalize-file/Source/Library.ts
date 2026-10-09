@@ -69,7 +69,7 @@ export const name = "hook-dsh-normalize-file";
 export const Config = Definition;
 
 // Required services (skill: declare, never rely on load order). The factory
-// (@playform/ets-dsh-plugin-factory) provides the State builder (cell unwrap +
+// (@playform/ets-plugin-dsh-factory) provides the State builder (cell unwrap +
 // shared fields), the ledger, the journal and the shared write executor;
 // `fs` serves the tool's read path (resolve + readText - the vocabulary
 // arrives type-only through the factory's own declarations, which import

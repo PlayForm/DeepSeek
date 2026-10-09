@@ -4,8 +4,8 @@
 # from THIS monorepo in the L0 -> L1 -> L2 topological order:
 #   L0: @playform/ets-dsh-hook (the base)
 #   L1: the four foundations (the classical hook-dsh-core +
-#       dsh-plugin-factory, the ets-hook-dsh-core +
-#       ets-dsh-plugin-factory)
+#       plugin-dsh-factory, the ets-hook-dsh-core +
+#       ets-plugin-dsh-factory)
 #   L2: the twenty consumers
 # The npm publish itself remains the USER'S call (their token):
 # this workflow runs only via workflow_dispatch / release in CI.
@@ -102,16 +102,16 @@ jobs:
               working-directory: Classic/packages/hook-dsh-core
               run: npm publish --access public --ignore-scripts
 
-            - name: Publish L1 - @playform/dsh-plugin-factory
-              working-directory: Classic/packages/dsh-plugin-factory
+            - name: Publish L1 - @playform/plugin-dsh-factory
+              working-directory: Classic/packages/plugin-dsh-factory
               run: npm publish --access public --ignore-scripts
 
             - name: Publish L1 - @playform/ets-hook-dsh-core
               working-directory: EffectTS/packages/ets-hook-dsh-core
               run: npm publish --access public --ignore-scripts
 
-            - name: Publish L1 - @playform/ets-dsh-plugin-factory
-              working-directory: EffectTS/packages/ets-dsh-plugin-factory
+            - name: Publish L1 - @playform/ets-plugin-dsh-factory
+              working-directory: EffectTS/packages/ets-plugin-dsh-factory
               run: npm publish --access public --ignore-scripts
 
             # ------------------------------------------------------------

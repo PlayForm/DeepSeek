@@ -5,4 +5,4 @@
 // outcomes it cares about — the `excluded` one (`skipped (excluded) <path>`).
 // The reasons enumerate the g1 gate order exactly: target / actor / kind /
 // idempotent / basename / excluded (exclusion-first).
-export type { Gate } from "@playform/ets-dsh-plugin-factory";
+export type { Gate } from "@playform/ets-plugin-dsh-factory";

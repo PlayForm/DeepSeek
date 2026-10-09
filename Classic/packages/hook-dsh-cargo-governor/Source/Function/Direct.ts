@@ -42,7 +42,7 @@ import { Suppress } from "@playform/hook-dsh-core";
 import type State from "@Interface/State.js";
 import type Registry from "@Interface/Registry.js";
 import type Passage from "@Interface/Passage.js";
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import type Manifest from "@Interface/Manifest.js";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 

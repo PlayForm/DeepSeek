@@ -34,13 +34,13 @@ packages.
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
   update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults). The
-  [`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory) re-exports NOTHING from the core (its 19-method
+  [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) re-exports NOTHING from the core (its 19-method
   service surface stays stable).
 - **Consumed by the six stream normalizers** -
   [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash) and the five `ets-hook-dsh-normalize-*`
   flavors are each a table plus a closure over `Replace`/`ReplaceMap`, dispatched through
   `Chunk`/`Block`.
-- The core is **not a plugin bundle**: no [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-dsh-plugin-factory/cordis.patch.yml), no loader contract, publishable on its
+- The core is **not a plugin bundle**: no [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/cordis.patch.yml), no loader contract, publishable on its
   own - consumers link it as a plain library dependency, not as a bundle row.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:

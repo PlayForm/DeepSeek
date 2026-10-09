@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Cargo**): a hook child of the
-[`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
 helpers; the Rust-sided sibling of the two npm governance hooks on the same
 [`fs/observed`][dsh-fs] seam.
 
@@ -55,7 +55,7 @@ activating one never implies another.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - gates, discovery, the guarded write, the refresh, the continuation, the effects, the schema and
-  the namespaced `UpdateKey` come from [`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory); the policy
+  the namespaced `UpdateKey` come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the policy
   loader and the suppression composer come from [`ets-hook-dsh-core`](../ets-hook-dsh-core). This bundle
   keeps the Cargo-specific residue: the TOML identification, the surgical pin, the full-version
   directive, and the `cargo upgrade` bridge. Besides the
@@ -63,7 +63,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
   registered with the factory's direct-govern registry at apply
   (`Factory.RegisterGovern("Cargo.toml", "cargo" | "update", …)` — factory SCHEME.md §2.16), so the
   `raw-write` tool's per-call `govern` selection can drive the same chain + normalization pass and
-  update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-dsh-plugin-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger
+  update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger
   strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:

@@ -47,7 +47,7 @@ Check(
 		JSON.stringify([
 			"@deepseek-ai/dsh-base",
 			"@deepseek-ai/dsh-web-app",
-			"@playform/dsh-plugin-factory",
+			"@playform/plugin-dsh-factory",
 			"@playform/hook-dsh-package-governor",
 			"@playform/hook-dsh-package-pinner",
 			"@playform/hook-dsh-cargo-governor",
@@ -117,7 +117,7 @@ const Expected = [
 	"hook-dsh-normalize-spaces",
 	"hook-dsh-package-governor",
 	"hook-dsh-package-pinner",
-	"dsh-plugin-factory",
+	"plugin-dsh-factory",
 ];
 const RealDirs = Expected.filter((Name) => {
 	const Entry = Path.join(PlayformDir, Name);
@@ -128,7 +128,7 @@ Check(RealDirs.length === 12, "every @playform entry is a real directory (copied
 // THE FILE: INSTALL IS PUBLISH-IDENTICAL - the installed build bytes match
 // the monorepo build (the plan's checksum-compare assertion, §2.2).
 const CompareTargets = [
-	["@playform/dsh-plugin-factory", "dsh-plugin-factory"],
+	["@playform/plugin-dsh-factory", "plugin-dsh-factory"],
 	["@playform/hook-dsh-normalize-dash", "hook-dsh-normalize-dash"],
 ];
 const TarballOf = (Name) => {

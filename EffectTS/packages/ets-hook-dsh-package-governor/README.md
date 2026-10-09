@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
 helpers; it has no hook children of its own.
 
 One of three governance hooks sharing the
@@ -52,14 +52,14 @@ The ledgers are separate; activating one never implies another.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
-  schema come from [`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory); the pure helpers (`Suppress`, the
+  schema come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the pure helpers (`Suppress`, the
   policy loader) come from [`ets-hook-dsh-core`](../ets-hook-dsh-core). This bundle keeps only its own
   vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
   (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
   [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's direct-govern registry
   at apply (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory
   SCHEME.md §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain
-  pass and update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-dsh-plugin-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same
+  pass and update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same
   ledger strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:

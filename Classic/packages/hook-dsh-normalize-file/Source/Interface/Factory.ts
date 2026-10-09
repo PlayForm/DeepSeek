@@ -1,4 +1,4 @@
-// Factory - the STRUCTURAL VIEW of the injected @playform/dsh-plugin-factory
+// Factory - the STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory
 // service (the family's class/service plugin, factory SCHEME.md §0-§2). The
 // file-content normalizer is a NON-MANIFEST factory consumer: it consumes the
 // State builder (cell unwrap + shared fields, §2.10), the ledger (Append,
@@ -23,11 +23,11 @@
 // fs/observed) that the shared executor dispatches arrives through the
 // factory's own declarations, which import @deepseek-ai/dsh-fs - importing
 // this module's types pulls the augmentation chain in.
-import type Factory from "@playform/dsh-plugin-factory";
+import type Factory from "@playform/plugin-dsh-factory";
 
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/dsh-plugin-factory). */
+		/** The plugin-factory service (@playform/plugin-dsh-factory). */
 		pluginFactory: Factory;
 	}
 }

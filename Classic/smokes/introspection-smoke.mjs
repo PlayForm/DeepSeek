@@ -32,7 +32,7 @@ const Home = Wiring.ScratchHome();
 // id and package name (the names the runtime projection resolves).
 const Dump = await Wiring.DumpConfig("plain");
 const Families = [
-	["dsh-plugin-factory", "@playform/dsh-plugin-factory"],
+	["plugin-dsh-factory", "@playform/plugin-dsh-factory"],
 	["hook-dsh-package-governor", "@playform/hook-dsh-package-governor"],
 	["hook-dsh-package-pinner", "@playform/hook-dsh-package-pinner"],
 	["hook-dsh-cargo-governor", "@playform/hook-dsh-cargo-governor"],
@@ -81,9 +81,9 @@ Check(
 	Core.status === 0 && Core.stdout.includes("@playform/hook-dsh-core@0.0.1"),
 	"the plugin surface resolves the core bundle",
 );
-const Factory = await Wiring.PluginWhy("@playform/dsh-plugin-factory");
+const Factory = await Wiring.PluginWhy("@playform/plugin-dsh-factory");
 Check(
-	Factory.status === 0 && Factory.stdout.includes("@playform/dsh-plugin-factory@0.0.1"),
+	Factory.status === 0 && Factory.stdout.includes("@playform/plugin-dsh-factory@0.0.1"),
 	"the plugin surface resolves the factory bundle",
 );
 

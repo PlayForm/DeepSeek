@@ -60,7 +60,7 @@ export const name = "hook-dsh-normalize-dash";
 export const Config = Definition;
 
 // Required services (skill: declare, never rely on load order). The factory
-// (@playform/dsh-plugin-factory) provides the State builder (cell unwrap +
+// (@playform/plugin-dsh-factory) provides the State builder (cell unwrap +
 // shared fields) and the ledger — the dash normalizer is the factory's SECOND
 // consumer, and the first NON-MANIFEST module. `fs` + `tools` serve the
 // family's raw-write tool (Function/Write): the tool registry receives the

@@ -22,14 +22,14 @@ they are `excluded` events from fs-observation scans inside the still-running pr
 
 ## Path 1 - the v2 open (CONFIRMED, the live failure)
 
-**Family side.** `dsh-plugin-factory/Source/Function/Open.ts:68-90` declares the domain with
+**Family side.** `plugin-dsh-factory/Source/Function/Open.ts:68-90` declares the domain with
 `version: 2` (line 71) and the six-value enum (75-82); any failure hits the final `catch` and is
 dropped with no log line (135-137). Installed Target identical (`Target/Function/Open.js`).
 
 **Harness side.**
 
 - `@deepseek-ai/dsh-storage-domain` 0.2.0-rc.2 (installed at
-  `dsh-plugin-factory/node_modules/@deepseek-ai/dsh-storage-domain/lib/index.js`):
+  `plugin-dsh-factory/node_modules/@deepseek-ai/dsh-storage-domain/lib/index.js`):
   `DomainFacility.open` (line 355) rejects a second open of the same name via the `reserved` set
   (356-357, the one-open-per-domain rule); backend errors such as `version-mismatch` pass through
   unmodified (doc lines 338-341), and the reservation is released on failure (386/395) so the next
@@ -138,7 +138,7 @@ records landing through the bound sink).
 
 ## Key citations
 
-- `dsh-plugin-factory/Source/Function/{Open.ts:68-90,108-137; Journal.ts:41-59; Attach.ts:68-105; State.ts:36-62; Library.ts:118,255-283}`
+- `plugin-dsh-factory/Source/Function/{Open.ts:68-90,108-137; Journal.ts:41-59; Attach.ts:68-105; State.ts:36-62; Library.ts:118,255-283}`
   — v2 spec, three-stage routing, probes, caps (all under `~/.dsh/profiles/desktop/bundles/`)
 - `@deepseek-ai/dsh-storage-domain` 0.2.0-rc.2 lib/index.js:355-395 — single-open enforcement, error
   pass-through

@@ -44,7 +44,7 @@ pnpm install --ignore-scripts
 pnpm run prepublishOnly
 ```
 
-The two base bundles first (`hook-dsh-core`, [dsh-plugin-factory][ours-dsh-plugin-factory]), then the ten consumers; the
+The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the ten consumers; the
 consumers import their siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
@@ -59,7 +59,7 @@ exists.
     {
     	"name": "my-dsh-profile",
     	"dependencies": {
-    		"@playform/dsh-plugin-factory": "link:../bundles/dsh-plugin-factory",
+    		"@playform/plugin-dsh-factory": "link:../bundles/plugin-dsh-factory",
     		"@playform/hook-dsh-package-governor": "link:../bundles/hook-dsh-package-governor",
     		"@playform/hook-dsh-package-pinner": "link:../bundles/hook-dsh-package-pinner",
     		"@playform/hook-dsh-normalize-dash": "link:../bundles/hook-dsh-normalize-dash"
@@ -67,7 +67,7 @@ exists.
     	"dsh": {
     		"profile": {
     			"bundles": [
-    				"@playform/dsh-plugin-factory",
+    				"@playform/plugin-dsh-factory",
     				"@playform/hook-dsh-package-governor",
     				"@playform/hook-dsh-package-pinner",
     				"@playform/hook-dsh-normalize-dash"
@@ -84,13 +84,13 @@ exists.
     `pnpm add @playform/<pkg>` in the profile directory once the family publishes to npm (the
     publishing is a later item).
 
-2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml)) - one insert row per bundle, the
+2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) - one insert row per bundle, the
    config fields straight from the bundle's schema:
 
     ```yaml
     - insert:
-          - id: dsh-plugin-factory
-            name: "@playform/dsh-plugin-factory"
+          - id: plugin-dsh-factory
+            name: "@playform/plugin-dsh-factory"
             config: {}
     - insert:
           - id: hook-dsh-package-governor
@@ -137,9 +137,9 @@ exists.
 Two published groups, one contract: the CLASSIC packages (`@playform/dsh-*` - plain TypeScript)
 and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run:
 
-- **CLASSIC:** `pnpm add @playform/hook-dsh-core @playform/dsh-plugin-factory @playform/hook-dsh-package-governor` -
-  plain TypeScript, zero framework dependencies; `import { Govern } from "@playform/dsh-plugin-factory"`.
-- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-dsh-plugin-factory @playform/ets-hook-dsh-package-governor` -
+- **CLASSIC:** `pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor` -
+  plain TypeScript, zero framework dependencies; `import { Govern } from "@playform/plugin-dsh-factory"`.
+- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-plugin-dsh-factory @playform/ets-hook-dsh-package-governor` -
   the same contracts on Effect-TS services and layers, with `effect` v4.0.2 as the shared runtime
   dependency and the base `@playform/ets-dsh-hook` package carrying the plumbing every ets-*
   package builds on.
@@ -224,11 +224,11 @@ One contract, three trees - the ledger strings are byte-identical across all of 
 
 Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 
-- **[dsh-plugin-factory][ours-dsh-plugin-factory]** (Plugin @ DSH @ Factory) - the family's first service: loading it
+- **[plugin-dsh-factory][ours-plugin-dsh-factory]** (Plugin @ DSH @ Factory) - the family's first service: loading it
   registers one class plugin (`static inject = ["fs"]`) that exposes `ctx.pluginFactory`, nineteen
   callable methods covering everything the hooks used to duplicate - the ledger (`Append`), the
   exclusion match (`Match`), the registry discovery (`Discover`/`Parse`), the union keep-list
-  (`ResolvePolicy`), the gate set (`Gate`), [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Write.ts) (`Write`/`GuardedWrite` - the
+  (`ResolvePolicy`), the gate set (`Gate`), [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts) (`Write`/`GuardedWrite` - the
   version-guarded fenced writes), the
   [fs/observed][dsh-fs]
   re-emit (`Refresh`), the detached contained continuation (`Continue`), the State builder, the
@@ -491,8 +491,8 @@ stay byte-identical; the tree is committed by the maintainer, never by tooling.
 
 Released under [CC0-1.0](LICENSE) - public domain.
 
-[ours-dsh-plugin-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source
+[ours-plugin-dsh-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
 [dsh-llm]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts
-[ours-govern]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Govern.ts
+[ours-govern]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts
 [dsh-subprocess]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess

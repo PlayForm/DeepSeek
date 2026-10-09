@@ -17,7 +17,7 @@
 // write, the observation-policy refresh, the detached contained continuation,
 // the State builder, the wiring, the lifecycle effects (jobs controller,
 // in-flight disposal, storage domain) — is CONSUMED from the injected
-// @playform/ets-dsh-plugin-factory service (ctx.pluginFactory); the module keeps
+// @playform/ets-plugin-dsh-factory service (ctx.pluginFactory); the module keeps
 // only its own vocabulary: the Config extension, the chain-pass transform
 // (Function/Transform), the update engine (Function/Dispatch → Execute →
 // the Update/ family, Function/Settle) and every ledger string. The module
@@ -98,7 +98,7 @@ export const Config = Definition;
 
 // Required services (skill: declare, never rely on load order). `fs` — read
 // and rewrite the governed manifest, stat for the U₂ refresh. `pluginFactory`
-// — the injected family factory (@playform/ets-dsh-plugin-factory): the loader
+// — the injected family factory (@playform/ets-plugin-dsh-factory): the loader
 // holds this plugin PENDING until both services exist. `ctx.jobs` is
 // AGENT-SCOPED (verified live: "no job controller serves this agent" for a
 // root plugin) so the update stage runs through the P1 controller

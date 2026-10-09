@@ -43,14 +43,14 @@
 // so the field stays undefined there with no effect on behavior. Not closed
 // by the loader: the normalizer's disposal semantics stay the Classic ones
 // (the tool unregisters with the plugin's fiber; the Scope holds nothing).
-import type Factory from "@playform/ets-dsh-plugin-factory";
-import type { State as Shared } from "@playform/ets-dsh-plugin-factory";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
 
 export default interface State extends Shared {
 	/** The dash replacement - the transform's only knob (config `replacement`). */
 	Replacement: string;
-	/** The injected @playform/ets-dsh-plugin-factory service - the ledger
+	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append), the P5 journal (Factory.Journal) and the ONE shared
 	 *  write executor (Factory.Write) are consumed through it; assigned once in
 	 *  Function/Apply. */

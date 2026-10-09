@@ -11,7 +11,7 @@
 // catches this).
 //
 // @playform/hook-dsh-cargo-governor — THE CARGO TOML MODULE of the silent
-// package.json governor, now a CONSUMER of the @playform/dsh-plugin-factory
+// package.json governor, now a CONSUMER of the @playform/plugin-dsh-factory
 // service (the family's first service provider): the shared machinery — the
 // State builder (cell unwrap, fixed shared mappings, the P9 probe-once
 // "subprocess" seam), the g1 gate set, the auxiliary registry discovery, the

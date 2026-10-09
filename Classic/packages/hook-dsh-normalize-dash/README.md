@@ -31,11 +31,11 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Dash**): a hook child of the
-[`dsh-plugin-factory`](../dsh-plugin-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
 machinery; the first of six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
-[`dsh-plugin-factory`](../dsh-plugin-factory) for `State`/`Append` (and the named `Schema` helper,
+[`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
 `shared: false`, for the config), [`hook-dsh-core`](../hook-dsh-core) for the `Dashes` table and the
 generic `Chunk`/`Block` dispatch.
 

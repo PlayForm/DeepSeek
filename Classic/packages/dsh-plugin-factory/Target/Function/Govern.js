@@ -1,1 +1,0 @@
-import{basename as u}from"node:path";var p=async(n,r,e,a,i)=>{const o=n[u(r.displayPath)]??[];let t;switch(!0){case(e===!0||e==="all"):t=null;break;case Array.isArray(e):t=new Set(e);break;case(typeof e=="string"&&e.length>0):t=new Set([e]);break;default:return}for(const s of o)if(!0!==(t!==null&&!t.has(s.name)))try{await s.run(r,a,i)}catch{}};export{p as default};

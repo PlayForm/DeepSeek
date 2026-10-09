@@ -7,7 +7,7 @@
 // contributes nothing. The keep-list wins over full-version NORMALIZATION,
 // never over the chain.
 import * as FileSystem from "node:fs";
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import type State from "@Interface/State.js";
 
 export default (Factory: PluginFactory, State: State, Keep: string[]): string[] => {

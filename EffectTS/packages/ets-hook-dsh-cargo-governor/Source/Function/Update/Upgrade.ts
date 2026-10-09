@@ -39,7 +39,7 @@
 // spawn path), Child (the child-process fallback) and Collect (the stream
 // reader) — the same role names the package.json governor's Bin split uses
 // (the naming unification, P4).
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import type Invocation from "@Interface/Invocation.js";
 import type Policy from "@Interface/Policy.js";

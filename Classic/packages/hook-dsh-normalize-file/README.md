@@ -42,12 +42,12 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ File**): a tool-child of the
-[`dsh-plugin-factory`](../dsh-plugin-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
 machinery; the seventh sibling - the one flavor that works on files already on disk instead of model
 output.
 
 One of **seven siblings** in the normalize family, all built on the shared machinery -
-[`dsh-plugin-factory`](../dsh-plugin-factory) for `State`/`Append`/`Journal`/`Write` (and the named
+[`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append`/`Journal`/`Write` (and the named
 `Schema` helper, `shared: false`, for the config), [`hook-dsh-core`](../hook-dsh-core) for the six
 transform tables and the generic `Replace`/`ReplaceMap` replacers:
 
@@ -296,7 +296,7 @@ The activation line is written by `apply()`; the count line follows only a succe
 a no-op writes no line, and a failed read or an aborted call writes none either.
 
 Each N > 0 write
-also journals one `normalized` record into the shared `package_governance` [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Journal.ts) (event
+also journals one `normalized` record into the shared `package_governance` [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts) (event
 `normalized`, path = the target's display path, detail byte-identical to the count line),
 best-effort: with no storage facility the record buffers or drops and the human ledger stays the
 complete record.
@@ -317,4 +317,4 @@ its runtime dependency. Install the group you run and never mix the groups in on
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-write]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Write.ts
+[ours-write]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts

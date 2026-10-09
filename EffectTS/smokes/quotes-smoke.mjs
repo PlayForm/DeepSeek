@@ -1,12 +1,12 @@
 // Classic/smokes/quotes-smoke.mjs — the family smoke pattern: a
-// fake ctx (on capture, get returning the REAL @playform/ets-dsh-plugin-factory
+// fake ctx (on capture, get returning the REAL @playform/ets-plugin-dsh-factory
 // instance from its built Target, logger capture) + the REAL quotes apply
 // (from the built Target) → assert the full llm/stream waterfall contract
 // for the MAP flavor (the core's Quotes char→char table — no replacement
 // knob).
 import { appendFileSync, rmSync, readFileSync, existsSync } from "node:fs";
 import Quotes from "../packages/ets-hook-dsh-normalize-quotes/Target/Library.js";
-import FactoryClass from "../packages/ets-dsh-plugin-factory/Target/Library.js";
+import FactoryClass from "../packages/ets-plugin-dsh-factory/Target/Library.js";
 
 const Ledger = "/tmp/quotes-smoke-ledger.log";
 let Pass = 0,

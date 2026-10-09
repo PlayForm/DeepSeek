@@ -42,7 +42,7 @@
 // Pure internal calculations (the standing exemptions): the smol-toml parse,
 // the surgical line rewrite, Normalize's padding, and the auxiliary
 // pin-policy.json read (plain fs, never the governed manifest).
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import Decode from "./Decode.js";
 import Pin from "./Pin.js";
 import Resolve from "./Resolve.js";

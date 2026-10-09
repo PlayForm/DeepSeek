@@ -43,7 +43,7 @@
 // update run's controller) and removed on settlement (Function/Settle / the
 // defensive catch); the FACTORY's Attach disposal effect aborts every
 // remaining controller on unload.
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import { Update } from "@playform/hook-dsh-core";
 import Run from "./Run.js";
 import type State from "@Interface/State.js";

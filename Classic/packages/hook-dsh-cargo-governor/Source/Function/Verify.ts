@@ -17,7 +17,7 @@
 // The ledger lines go through the FACTORY's Append (State.Module supplies
 // the "hook-dsh-governor-cargo" prefix — the strings stay the module's).
 import * as ChildProcess from "node:child_process";
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
 

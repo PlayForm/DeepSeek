@@ -30,7 +30,7 @@
 // (subsystems/filesystem.md). Test probes read the state through the
 // `ctx.__hookDshGovernorPackageState` attachment (never a return value from `apply` — the
 // loader treats apply returns specially, a live-verified lesson).
-import type { State as Shared } from "@playform/dsh-plugin-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 import type Factory from "@Interface/Factory.js";
 
 export default interface State extends Shared {
@@ -51,7 +51,7 @@ export default interface State extends Shared {
 	Set: Set<string>;
 	/** Directory → consecutive update-stage failures (circuit breaker). */
 	Count: Map<string, number>;
-	/** The injected @playform/dsh-plugin-factory service — every absorbed
+	/** The injected @playform/plugin-dsh-factory service — every absorbed
 	 *  primitive (Append/Journal/Gate/Discover/Parse/Continue/Refresh) is
 	 *  consumed through it; assigned once in Function/Apply. */
 	Factory: Factory;

@@ -20,7 +20,7 @@
 //        (P2), reads the manifest through ctx.fs.readText, resolves the union
 //        keep-list (with the P3 chain-keys interlock), and calls the MODULE'S
 //        transform (Function/Transform — the range law).
-import type Factory from "@playform/ets-dsh-plugin-factory";
+import type Factory from "@playform/ets-plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import Transform from "./Transform.js";
 import { Suppress } from "@playform/ets-hook-dsh-core";

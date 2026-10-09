@@ -2,7 +2,7 @@
 // no subprocess seam exists in this deployment. Async (the continuation owns
 // the wait); the abort signal kills the child. The process management is not
 // exempt — only the cargo CLI is.
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import type Invocation from "@Interface/Invocation.js";
 import type Job from "@Interface/Job.js";

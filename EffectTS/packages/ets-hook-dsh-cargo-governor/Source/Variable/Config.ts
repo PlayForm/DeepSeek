@@ -22,7 +22,7 @@
 // fields built with the same @deepseek-ai/schemastery import the loader
 // consumes (the schema must be a real schemastery instance — the Standard
 // Schema `~standard` interface).
-import { Schema as Compose } from "@playform/ets-dsh-plugin-factory";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
 
 export default Compose(

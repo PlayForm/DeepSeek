@@ -1,12 +1,12 @@
 // Classic/smokes/invisible-smoke.mjs — the family smoke pattern: a
-// fake ctx (on capture, get returning the REAL @playform/dsh-plugin-factory
+// fake ctx (on capture, get returning the REAL @playform/plugin-dsh-factory
 // instance from its built Target, logger capture) + the REAL invisible apply
 // (from the built Target) → assert the full llm/stream waterfall contract
 // for the CLASS flavor (the core's Invisible class + the configured
 // replacement, default "" — REMOVAL).
 import { appendFileSync, rmSync, readFileSync, existsSync } from "node:fs";
 import Invisible from "../packages/hook-dsh-normalize-invisible/Target/Library.js";
-import FactoryClass from "../packages/dsh-plugin-factory/Target/Library.js";
+import FactoryClass from "../packages/plugin-dsh-factory/Target/Library.js";
 
 const Ledger = "/tmp/invisible-smoke-ledger.log";
 let Pass = 0,

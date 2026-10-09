@@ -1,12 +1,12 @@
 // Classic/smokes/spaces-smoke.mjs — the family smoke pattern: a
-// fake ctx (on capture, get returning the REAL @playform/ets-dsh-plugin-factory
+// fake ctx (on capture, get returning the REAL @playform/ets-plugin-dsh-factory
 // instance from its built Target, logger capture) + the REAL spaces apply
 // (from the built Target) → assert the full llm/stream waterfall contract
 // for the CLASS flavor (the core's Spaces class + the configured
 // replacement, default the plain ASCII space).
 import { appendFileSync, rmSync, readFileSync, existsSync } from "node:fs";
 import Spaces from "../packages/ets-hook-dsh-normalize-spaces/Target/Library.js";
-import FactoryClass from "../packages/ets-dsh-plugin-factory/Target/Library.js";
+import FactoryClass from "../packages/ets-plugin-dsh-factory/Target/Library.js";
 
 const Ledger = "/tmp/spaces-smoke-ledger.log";
 let Pass = 0,

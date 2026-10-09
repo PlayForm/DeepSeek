@@ -31,7 +31,7 @@
 //     null, 2) + "\n"), performs the guarded write (GuardedWrite:
 //     replaceIfVersion + the P4 fence + Stash pre-registration), logs the
 //     message and refreshes the observation-policy's record (same actor).
-import type Factory from "@playform/dsh-plugin-factory";
+import type Factory from "@playform/plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import Decode from "./Decode.js";
 import Pin from "./Pin.js";

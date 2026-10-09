@@ -17,5 +17,5 @@ pnpm add @playform/ets-dsh-hook
 ```
 
 The `ets-*` packages (`@playform/ets-hook-dsh-*`,
-`@playform/ets-dsh-plugin-factory`) build on this base; the classical
+`@playform/ets-plugin-dsh-factory`) build on this base; the classical
 `@playform/hook-dsh-*` group is the independent Effect-free sibling group.

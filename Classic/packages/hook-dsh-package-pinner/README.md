@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Pinner @ Package**): a hook child of the
-[`dsh-plugin-factory`](../dsh-plugin-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
 helpers; a sibling of the package governor on the same [`fs/observed`][dsh-fs] seam.
 
 One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own basename and
@@ -53,13 +53,13 @@ listeners is defined only by registration.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gate, the discovery, the union keep-list, the guarded write, the refresh, the continuation,
-  the effects and the schema come from [`dsh-plugin-factory`](../dsh-plugin-factory); the refusal
+  the effects and the schema come from [`plugin-dsh-factory`](../plugin-dsh-factory); the refusal
   guard and the suppression composer come from [`hook-dsh-core`](../hook-dsh-core). This bundle
   keeps the module leaf: the range law (Function/Pin), the decode, and every ledger string. Besides
   the [`fs/observed`][dsh-fs] event path, its chain pass is registered with the factory's direct-govern
   registry at apply (`Factory.RegisterGovern("package.json", "pin", …)` — factory SCHEME.md §2.16),
   so the `raw-write` tool's per-call `govern` selection can drive the same pin pass directly through
-  [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger strings).
+  [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -

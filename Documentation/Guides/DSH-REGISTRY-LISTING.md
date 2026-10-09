@@ -31,7 +31,7 @@
 
 The splice has executed (SPLICE-ETS §8 S2/S4): the trees carry UNIQUE names - the Classic
 tree the plain `@playform/dsh-*` names, the EffectTS tree the `@playform/ets-hook-dsh-*` /
-`@playform/ets-dsh-plugin-factory` names plus the base `@playform/ets-dsh-hook` (verified in the
+`@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-dsh-hook` (verified in the
 manifests). The registry listing uses exactly these.
 
 **The classical group (12, `Classic/packages/*`):**
@@ -39,7 +39,7 @@ manifests). The registry listing uses exactly these.
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
 | 1 | `@playform/hook-dsh-core` | `pnpm add @playform/hook-dsh-core` | the core contract + the normalize machinery |
-| 2 | `@playform/dsh-plugin-factory` | `pnpm add @playform/dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
+| 2 | `@playform/plugin-dsh-factory` | `pnpm add @playform/plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
 | 3 | `@playform/hook-dsh-package-governor` | `pnpm add @playform/hook-dsh-package-governor` | the package.json governor |
 | 4 | `@playform/hook-dsh-package-pinner` | `pnpm add @playform/hook-dsh-package-pinner` | the package.json pinner |
 | 5 | `@playform/hook-dsh-cargo-governor` | `pnpm add @playform/hook-dsh-cargo-governor` | the Cargo.toml governor |
@@ -57,7 +57,7 @@ manifests). The registry listing uses exactly these.
 | - | ------- | ---------------------------- | ---- |
 | 1 | `@playform/ets-dsh-hook` | `pnpm add @playform/ets-dsh-hook` | the shared Effect-TS plumbing (the base) |
 | 2 | `@playform/ets-hook-dsh-core` | `pnpm add @playform/ets-hook-dsh-core` | the core contract + the normalize machinery |
-| 3 | `@playform/ets-dsh-plugin-factory` | `pnpm add @playform/ets-dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
+| 3 | `@playform/ets-plugin-dsh-factory` | `pnpm add @playform/ets-plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
 | 4 | `@playform/ets-hook-dsh-package-governor` | `pnpm add @playform/ets-hook-dsh-package-governor` | the package.json governor |
 | 5 | `@playform/ets-hook-dsh-package-pinner` | `pnpm add @playform/ets-hook-dsh-package-pinner` | the package.json pinner |
 | 6 | `@playform/ets-hook-dsh-cargo-governor` | `pnpm add @playform/ets-hook-dsh-cargo-governor` | the Cargo.toml governor |

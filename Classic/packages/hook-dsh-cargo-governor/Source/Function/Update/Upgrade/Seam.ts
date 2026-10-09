@@ -2,7 +2,7 @@
 // path is verified/resolved through the seam's resolveExecutable first (the
 // host PATH is not the user's shell PATH); a spawn/provider failure rejects
 // Handle.done — mapped to the graceful unavailable path.
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import type Invocation from "@Interface/Invocation.js";
 import type Job from "@Interface/Job.js";

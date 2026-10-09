@@ -33,11 +33,11 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Invisible**): a hook child of the
-[`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
 machinery; the fifth of the six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
-[`ets-dsh-plugin-factory`](../ets-dsh-plugin-factory) for `State`/`Append` (and the named `Schema` helper,
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
 `shared: false`, for the config), [`ets-hook-dsh-core`](../ets-hook-dsh-core) for the `Invisible` class and
 the generic `Replace`/`Chunk`/`Block` dispatch:
 

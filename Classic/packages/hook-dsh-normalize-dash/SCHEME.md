@@ -110,7 +110,7 @@ it on).
 
 ## 3. Factory consumption (the second consumer, non-manifest module)
 
-Consumes from `@playform/dsh-plugin-factory` (the service, via `inject: ["pluginFactory"]`):
+Consumes from `@playform/plugin-dsh-factory` (the service, via `inject: ["pluginFactory"]`):
 
 | Method                                         | Use                                                                                                                                                |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |

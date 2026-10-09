@@ -1,0 +1,17 @@
+# Bundle patch for @playform/plugin-dsh-factory.
+# The FACTORY is a SERVICE-PROVIDER bundle: it registers nothing observable on
+# its own — loading it makes the `pluginFactory` service available on the
+# context so the governance flavors (the package.json governor, the package.json
+# pinner, the Cargo.toml governor) can consume it. New entries are declared
+# with `insert:` (docs/user/develop/basic/publish.md) — a bare `id:` row
+# PATCHES an existing entry and the loader rejects unknown ids with
+# 'entry "…" not found'. Activated when the profile's package.json lists the
+# package in dsh.profile.bundles AND the app is restarted (bundle layers
+# compose at host boot). A file: dependency alone is NOT activation.
+# The class plugin (`export default class PluginFactory extends Service`)
+# declares `static inject = ["fs"]` and registers itself as `pluginFactory`
+# via `super(ctx, "pluginFactory")` — no Config schema, no config row needed.
+- insert:
+      - id: plugin-dsh-factory
+        name: "@playform/plugin-dsh-factory"
+        config: {}

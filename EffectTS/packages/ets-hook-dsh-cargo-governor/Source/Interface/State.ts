@@ -29,12 +29,12 @@
 // `FsVersion` are branded strings the backend owns — the governor stores and
 // compares them but never parses or computes them (subsystems/filesystem.md).
 import type { Scope } from "effect";
-import type { State as Shared } from "@playform/ets-dsh-plugin-factory";
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
 export default interface State extends Shared {
 	// ── the cargo module's own fields ────────────────────────────────────────
-	/** The injected @playform/ets-dsh-plugin-factory service (the P2 UpdateKey
+	/** The injected @playform/ets-plugin-dsh-factory service (the P2 UpdateKey
 	 *  helper and the ledger/journal delegates; assigned once in
 	 *  Function/Apply — the governor-family pattern). */
 	Factory: PluginFactory;

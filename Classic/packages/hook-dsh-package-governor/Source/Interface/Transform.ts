@@ -6,4 +6,4 @@
 // inside), `section` the module's own Section state field, `keep` the union
 // keep-list from the factory's ResolvePolicy — returning Interface/Output on
 // change or `null` for every no-op path).
-export type { Transform } from "@playform/dsh-plugin-factory";
+export type { Transform } from "@playform/plugin-dsh-factory";

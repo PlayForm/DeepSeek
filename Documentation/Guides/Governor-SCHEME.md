@@ -10,7 +10,7 @@ This document ships inside the bundle as `SCHEME.md`
 (alongside the usage README).
 
 **v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
-machinery is consumed from the injected [@playform/dsh-plugin-factory][ours-dsh-plugin-factory] service (v0.1.0),
+machinery is consumed from the injected [@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service (v0.1.0),
 `inject: ["fs", "pluginFactory"]`; the absorbed modules (Append, Journal, Open, Match, Discover,
 Parse, Continue, Govern, Refresh) are deleted from this tree and the ledger strings, the silence
 invariant, the chain semantics, the exemptions and the loader contract are byte-identical (see §2
@@ -101,7 +101,7 @@ identical payload (live-verified: a one-line `edit` triggered the complete pass)
 ## 2. The governor pipeline G = U ∘ P
 
 This module is a FACTORY MODULE (the family's shared machinery lives in the injected
-[@playform/dsh-plugin-factory][ours-dsh-plugin-factory] service — its SCHEME.md is the machinery contract; this section is
+[@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service — its SCHEME.md is the machinery contract; this section is
 the MODULE contract).
 
 `inject: ["fs", "pluginFactory"]`; the built Target never imports the factory
@@ -311,7 +311,7 @@ Non-edges (proven absent, marked ∄):
    needed — the factory provides no Config.
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
    `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
-   artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml) (row
+   artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) (row
    `id: hook-dsh-package-governor`, `name: "@playform/hook-dsh-package-governor"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
@@ -383,7 +383,7 @@ cargo module's keep-list — the same sidecar — wins over normalization, never
 
 Activation of one never implies another; the user decides.
 
-[ours-dsh-plugin-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source
+[ours-plugin-dsh-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs
 [dsh-cordis]: https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis
 [dsh-fs-2]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

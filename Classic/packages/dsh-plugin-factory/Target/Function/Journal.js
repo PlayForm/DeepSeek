@@ -1,1 +1,0 @@
-var s=(e,i,n,r,t,a)=>{try{switch(!0){case!!e.SharedJournal:e.SharedJournal(n,r,t,a);break;case Array.isArray(e.PendingJournal):e.PendingJournal.length<256===!0&&e.PendingJournal.push({event:n,path:r,detail:t,at:a??Date.now()});break;default:i.Journal(n,r,t,a)}}catch{}};export{s as default};

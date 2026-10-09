@@ -20,7 +20,7 @@
 // prefixed by the factory's Append); this module supplies the built-in
 // default.
 import { Policy } from "@playform/ets-hook-dsh-core";
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import type State from "@Interface/State.js";
 import type PolicyShape from "@Interface/Policy.js";
 

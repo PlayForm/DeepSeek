@@ -1,5 +1,5 @@
 // Apply — the plugin entry function (CARGO MODULE), now a THIN COMPOSITION
-// of the @playform/ets-dsh-plugin-factory service (the family's first service
+// of the @playform/ets-plugin-dsh-factory service (the family's first service
 // provider, injected as `pluginFactory` — see Library.ts):
 //
 //   1. State — the factory's State builder (cell unwrap, the fixed shared

@@ -12,7 +12,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * (the runtime imports of `@deepseek-ai/schemastery` and `@deepseek-ai/dsh-tools`
  * are never bundled, and the TYPE-ONLY imports of the factory's and the core's
  * vocabularies are erased - the built Target has NO runtime import of
- * `@playform/dsh-plugin-factory` or `@playform/hook-dsh-core`: at runtime the
+ * `@playform/plugin-dsh-factory` or `@playform/hook-dsh-core`: at runtime the
  * service resolves from the profile through the injector and the transforms
  * arrive through the core package the profile links), and tsconfig `paths`
  * aliases are rewritten to relative output paths.

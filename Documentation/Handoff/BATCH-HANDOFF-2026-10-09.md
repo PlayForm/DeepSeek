@@ -366,10 +366,13 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   most counter-intuitive one: "hook-dsh-<role>" - the imperative reading "hook
   the DSH!"): THE CLASSICAL: hook-dsh-core, hook-dsh-cargo-governor, hook-dsh-
   package-governor, hook-dsh-package-pinner, hook-dsh-normalize-{dash,quotes,
-  ellipsis,spaces,invisible,fullwidth,file} + dsh-plugin-factory (the plugin,
-  unchanged). THE ETS GROUP (the ets- prefix + the same scheme): ets-hook-dsh-
-  core, ets-hook-dsh-package-governor, ets-hook-dsh-cargo-governor, ets-hook-
-  dsh-package-pinner, ets-hook-dsh-normalize-{...} + ets-dsh-plugin-factory.
+  ellipsis,spaces,invisible,fullwidth,file} + plugin-dsh-factory (the ONE
+  plugin - the mechanism-first mirror of the hooks: "plugin the DSH!" - the
+  user's correction: was dsh-plugin-factory, renamed to mirror the scheme,
+  applied EVERYWHERE). THE ETS GROUP (the ets- prefix + the same scheme):
+  ets-hook-dsh-core, ets-hook-dsh-package-governor, ets-hook-dsh-cargo-
+  governor, ets-hook-dsh-package-pinner, ets-hook-dsh-normalize-{...} +
+  ets-plugin-dsh-factory.
   THE BASE: @playform/ets-dsh-hook (unchanged). The definitive re-rename is
   executing; the gates: 733 + 746 must stay exact.
   route (the task-routing violation) - the explicit GLM routing is binding from

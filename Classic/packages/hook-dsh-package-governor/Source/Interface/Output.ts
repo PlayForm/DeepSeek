@@ -6,4 +6,4 @@
 // raw STRING for a text-surgery module; `count` is the number of changed
 // items (0 = the designed no-op); `message` is the module's ledger line,
 // verbatim or composed from the write outcome.
-export type { Output } from "@playform/dsh-plugin-factory";
+export type { Output } from "@playform/plugin-dsh-factory";

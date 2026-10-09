@@ -1,5 +1,5 @@
 // Observe — the fs/observed listener body for the CARGO MODULE (basename
-// Cargo.toml), now a THIN COMPOSITION of the @playform/ets-dsh-plugin-factory
+// Cargo.toml), now a THIN COMPOSITION of the @playform/ets-plugin-dsh-factory
 // service. The critical path stays AWAIT-FREE and THROW-FREE (a throw inside
 // an fs/observed listener fails the tool call AFTER the mutation already
 // succeeded): the g1 gate set runs as ONE factory call (Factory.Gate — it
@@ -32,7 +32,7 @@ import { Suppress } from "@playform/ets-hook-dsh-core";
 import type State from "@Interface/State.js";
 import type RegistryView from "@Interface/Registry.js";
 import type Passage from "@Interface/Passage.js";
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import type { FsTarget, FsObservation } from "@deepseek-ai/dsh-fs";
 
 export default (

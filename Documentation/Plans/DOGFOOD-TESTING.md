@@ -89,7 +89,7 @@ consumes after publishing.
 ```bash
 # from the monorepo root: pack each release package (Classic/ = the release names)
 mkdir -p "$SCRATCH/tarballs"
-for p in dsh-plugin-factory hook-dsh-core hook-dsh-package-governor \
+for p in plugin-dsh-factory hook-dsh-core hook-dsh-package-governor \
          hook-dsh-package-pinner hook-dsh-cargo-governor \
          hook-dsh-normalize-dash hook-dsh-normalize-quotes \
          hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
@@ -103,7 +103,7 @@ done
 
 ```bash
 # in $SCRATCH/profiles/dsh-test/package.json, dependencies section:
-#   "@playform/dsh-plugin-factory": "file:../../../tarballs/playform-dsh-plugin-factory-0.0.1.tgz"
+#   "@playform/plugin-dsh-factory": "file:../../../tarballs/playform-plugin-dsh-factory-0.0.1.tgz"
 # verify NO symlinks after install:
 find "$SCRATCH" -type l | grep -v node_modules/.pnpm || echo "no symlinks"
 ```
@@ -141,7 +141,7 @@ the #15 release naming):
 			"bundles": [
 				"@deepseek-ai/dsh-base",
 				"@deepseek-ai/dsh-web-app",
-				"@playform/dsh-plugin-factory",
+				"@playform/plugin-dsh-factory",
 				"@playform/hook-dsh-package-governor",
 				"@playform/hook-dsh-package-pinner",
 				"@playform/hook-dsh-cargo-governor",
@@ -265,7 +265,7 @@ SCRATCH="$HOME/.dsh/profiles/dsh-test"        # method A; method B: SCRATCH="$TM
 mkdir -p "$SCRATCH" "$SCRATCH/tarballs"
 
 # pack from the monorepo (release tree = Classic/)
-for p in dsh-plugin-factory hook-dsh-core hook-dsh-package-governor \
+for p in plugin-dsh-factory hook-dsh-core hook-dsh-package-governor \
 	hook-dsh-package-pinner hook-dsh-cargo-governor hook-dsh-normalize-dash \
 	hook-dsh-normalize-quotes hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
 	hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth hook-dsh-normalize-file; do
@@ -273,7 +273,7 @@ for p in dsh-plugin-factory hook-dsh-core hook-dsh-package-governor \
 done
 
 # dependencies (file: copies - never link:, never workspace:)
-# "@playform/dsh-plugin-factory": "file:./tarballs/playform-dsh-plugin-factory-0.0.1.tgz"
+# "@playform/plugin-dsh-factory": "file:./tarballs/playform-plugin-dsh-factory-0.0.1.tgz"
 (cd "$SCRATCH" && pnpm install)
 
 # the invariant:

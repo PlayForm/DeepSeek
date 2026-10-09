@@ -46,7 +46,7 @@ export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages"
 // directory names (the tree's package directories were renamed hook-dsh-* →
 // hook-dsh-* mid-batch; both spellings are accepted).
 const Bundles = [
-	["@playform/dsh-plugin-factory", ["dsh-plugin-factory", "dsh-plugin-factory"]],
+	["@playform/plugin-dsh-factory", ["plugin-dsh-factory", "plugin-dsh-factory"]],
 	["@playform/hook-dsh-core", ["hook-dsh-core", "hook-dsh-core"]],
 	[
 		"@playform/hook-dsh-package-governor",
@@ -478,9 +478,9 @@ const CreateScratch = (Home) => {
 		WorkspaceSettings({
 			"@playform/hook-dsh-core":
 				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/hook-dsh-core"]),
-			"@playform/dsh-plugin-factory":
+			"@playform/plugin-dsh-factory":
 				"file:../../tarballs/" +
-				Path.basename(TarballByPackage["@playform/dsh-plugin-factory"]),
+				Path.basename(TarballByPackage["@playform/plugin-dsh-factory"]),
 		}),
 	);
 

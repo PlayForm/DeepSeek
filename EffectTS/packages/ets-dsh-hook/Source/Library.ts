@@ -7,7 +7,7 @@
 // contract types (Source/Interface - the structural contracts the factory
 // re-exports to its consumers). Every ets-* package depends on this base;
 // the ten consumers additionally depend on ets-hook-dsh-core and
-// ets-dsh-plugin-factory. Usable outside the harness entirely (the PlayForm
+// ets-plugin-dsh-factory. Usable outside the harness entirely (the PlayForm
 // ecosystem).
 //
 // The named exports (the contract surface): the structural types keep the

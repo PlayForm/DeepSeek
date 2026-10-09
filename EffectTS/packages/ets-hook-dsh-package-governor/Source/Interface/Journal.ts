@@ -6,4 +6,4 @@
 // the fresh version token, the update mode, the exit code) — never a full
 // duplicate of the ledger line: the human ledger stays the complete record,
 // the storage journal is the structured one.
-export type { Journal } from "@playform/ets-dsh-plugin-factory";
+export type { Journal } from "@playform/ets-plugin-dsh-factory";

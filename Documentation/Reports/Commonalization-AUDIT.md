@@ -79,7 +79,7 @@ continuation-style (`GuardedWrite`/`Continue`) writes already depend on. The har
 `write` tool is **OUT of scope** (harness-owned `dsh-tool-fs`); the abstraction is family-side and
 mirrors the built-in's mechanics so `fs/observed` chains stay identical.
 
-Proposed signature - `dsh-plugin-factory/Source/Function/Write.ts` becomes the shared executor
+Proposed signature - `plugin-dsh-factory/Source/Function/Write.ts` becomes the shared executor
 (`GuardedWrite` folds into it; SCHEME.md §2.7 keeps the name as the guarded alias):
 
 ```ts

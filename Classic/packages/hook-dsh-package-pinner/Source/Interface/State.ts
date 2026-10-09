@@ -1,6 +1,6 @@
 // State — the per-apply plugin state. Since the factory refactor it is the
 // FACTORY'S shared shape (the shape Function/State of
-// @playform/dsh-plugin-factory builds, consumed by every factory primitive)
+// @playform/plugin-dsh-factory builds, consumed by every factory primitive)
 // extended with the pinner's own field:
 //
 //   Section — the dependency sections the pinner may rewrite (config
@@ -35,7 +35,7 @@
 // contract: `FsTargetKey` and `FsVersion` are branded strings the backend owns
 // — the pinner stores and compares them but never parses or computes them
 // (subsystems/filesystem.md).
-import type { State as Shared } from "@playform/dsh-plugin-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 
 export default interface State extends Shared {
 	/** Dependency sections the pinner may rewrite (config `sections`). */

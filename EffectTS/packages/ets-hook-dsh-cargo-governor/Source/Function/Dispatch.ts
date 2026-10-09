@@ -69,7 +69,7 @@
 // defensive catch); the FACTORY's Attach disposal effect aborts every
 // remaining controller on unload.
 import { Effect, Scope } from "effect";
-import type PluginFactory from "@playform/ets-dsh-plugin-factory";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 import { Update } from "@playform/ets-dsh-hook";
 import Run from "./Run.js";
 import type State from "@Interface/State.js";

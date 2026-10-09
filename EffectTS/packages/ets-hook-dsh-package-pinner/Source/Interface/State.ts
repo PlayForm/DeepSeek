@@ -1,6 +1,6 @@
 // State — the per-apply plugin state. Since the factory refactor it is the
 // FACTORY'S shared shape (the shape Function/State of
-// @playform/ets-dsh-plugin-factory builds, consumed by every factory primitive)
+// @playform/ets-plugin-dsh-factory builds, consumed by every factory primitive)
 // extended with the pinner's own field:
 //
 //   Section — the dependency sections the pinner may rewrite (config
@@ -49,7 +49,7 @@
 // never dispatches anything, so the field stays undefined there with no effect
 // on behavior. Not closed by the loader: the pinner's disposal semantics stay
 // the Classic ones (the P2 Inflight abort, the factory's Attach effect).
-import type { State as Shared } from "@playform/ets-dsh-plugin-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
 
 export default interface State extends Shared {

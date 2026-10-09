@@ -21,7 +21,7 @@
 // completion (its guarded write + its ledger line) before any other
 // registered step reads the file — the version-guarded writes can never race.
 import { dirname as Parent } from "node:path";
-import type Factory from "@playform/dsh-plugin-factory";
+import type Factory from "@playform/plugin-dsh-factory";
 import Transform from "./Transform.js";
 import { Suppress } from "@playform/hook-dsh-core";
 import type State from "@Interface/State.js";

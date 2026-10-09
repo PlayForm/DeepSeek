@@ -1,4 +1,4 @@
-// Factory — the STRUCTURAL VIEW of the injected @playform/ets-dsh-plugin-factory
+// Factory — the STRUCTURAL VIEW of the injected @playform/ets-plugin-dsh-factory
 // service (the family's class/service plugin, factory SCHEME.md §0–§2). The
 // quotes hook is a NON-MANIFEST factory consumer: it consumes the State
 // builder (cell unwrap + shared fields, §2.10), the ledger (Append, §2.1)
@@ -16,11 +16,11 @@
 // NOT re-declared here: @deepseek-ai/dsh-llm already augments `Events` with
 // `'llm/stream'` (options: GenerateOptions, next) => AsyncIterable<StreamChunk>
 // — re-declaring it would be a conflicting duplicate.
-import type Factory from "@playform/ets-dsh-plugin-factory";
+import type Factory from "@playform/ets-plugin-dsh-factory";
 
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The plugin-factory service (@playform/ets-dsh-plugin-factory). */
+		/** The plugin-factory service (@playform/ets-plugin-dsh-factory). */
 		pluginFactory: Factory;
 	}
 }

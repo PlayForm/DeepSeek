@@ -14,7 +14,7 @@
 // Never rejects: every stage is contained; the promise always resolves a code.
 // The ledger lines go through the FACTORY's Append (State.Module supplies the
 // "hook-dsh-governor-cargo" prefix — the strings stay the module's).
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import Policy from "./Update/Policy.js";
 import Upgrade from "./Update/Upgrade.js";
 import Verify from "./Verify.js";

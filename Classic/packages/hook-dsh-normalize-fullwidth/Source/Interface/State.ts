@@ -31,8 +31,8 @@
 // (never a return value from `apply` — the loader treats apply returns
 // specially, a live-verified lesson recorded in the plugin-development
 // skill).
-import type Factory from "@playform/dsh-plugin-factory";
-import type { State as Shared } from "@playform/dsh-plugin-factory";
+import type Factory from "@playform/plugin-dsh-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
 
 export default interface State extends Shared {
 	/** Normalize reasoning deltas and the assembled reasoning block too. */
@@ -40,7 +40,7 @@ export default interface State extends Shared {
 	/** Normalize tool-call arguments too (config `normalizeToolArguments`;
 	 *  schema default OFF — this profile's patch yml enables it). */
 	ToolArgs: boolean;
-	/** The injected @playform/dsh-plugin-factory service — the ledger
+	/** The injected @playform/plugin-dsh-factory service — the ledger
 	 *  (Factory.Append) is consumed through it; assigned once in
 	 *  Function/Apply. */
 	Factory: Factory;

@@ -12,7 +12,7 @@
 //
 // @playform/hook-dsh-package-pinner — silent package.json VERSION PINNER
 // (anywhere mode). A thin MODULE over the family's first service provider,
-// @playform/dsh-plugin-factory (`ctx.pluginFactory`, injectable): the factory
+// @playform/plugin-dsh-factory (`ctx.pluginFactory`, injectable): the factory
 // owns the shared machinery — the ledger (Append), the exclusion match, the
 // auxiliary registry/policy discovery, the union keep-list resolution with
 // the P3 chain-keys interlock, the g1 gate set, the version-guarded

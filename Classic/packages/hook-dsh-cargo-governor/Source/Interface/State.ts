@@ -28,12 +28,12 @@
 // The opaque identity types come from @deepseek-ai/dsh-fs: `FsTargetKey` and
 // `FsVersion` are branded strings the backend owns — the governor stores and
 // compares them but never parses or computes them (subsystems/filesystem.md).
-import type { State as Shared } from "@playform/dsh-plugin-factory";
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type { State as Shared } from "@playform/plugin-dsh-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 
 export default interface State extends Shared {
 	// ── the cargo module's own fields ────────────────────────────────────────
-	/** The injected @playform/dsh-plugin-factory service (the P2 UpdateKey
+	/** The injected @playform/plugin-dsh-factory service (the P2 UpdateKey
 	 *  helper and the ledger/journal delegates; assigned once in
 	 *  Function/Apply — the governor-family pattern). */
 	Factory: PluginFactory;

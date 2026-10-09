@@ -6,7 +6,7 @@ This document ships inside the bundle as `SCHEME.md`
 (alongside the usage README).
 
 **v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
-machinery is consumed from the injected `@playform/dsh-plugin-factory` service (v0.1.0),
+machinery is consumed from the injected `@playform/plugin-dsh-factory` service (v0.1.0),
 `inject: ["fs", "pluginFactory"]`; the absorbed modules (Append, Journal, Open, Match, Discover,
 Parse, Continue, Govern, Refresh) are deleted from this tree and the ledger strings, the silence
 invariant, the chain semantics, the exemptions and the loader contract are byte-identical (see §2
@@ -85,7 +85,7 @@ triggered the complete pass).
 ## 2. The governor pipeline G = U ∘ P
 
 This module is a FACTORY MODULE (the family's shared machinery lives in the injected
-`@playform/dsh-plugin-factory` service — its SCHEME.md is the machinery contract; this section is
+`@playform/plugin-dsh-factory` service — its SCHEME.md is the machinery contract; this section is
 the MODULE contract).
 
 `inject: ["fs", "pluginFactory"]`; the built Target never imports the factory

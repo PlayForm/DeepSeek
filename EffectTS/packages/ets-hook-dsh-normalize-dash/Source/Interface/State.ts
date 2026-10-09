@@ -53,8 +53,8 @@
 // attachment (never a return value from `apply` - the loader treats apply
 // returns specially, a live-verified lesson recorded in the plugin-development
 // skill).
-import type Factory from "@playform/ets-dsh-plugin-factory";
-import type { State as Shared } from "@playform/ets-dsh-plugin-factory";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
 
 export default interface State extends Shared {
@@ -65,7 +65,7 @@ export default interface State extends Shared {
 	/** Normalize tool-call arguments too (config `normalizeToolArguments`;
 	 *  schema default OFF - this profile's patch yml enables it). */
 	ToolArgs: boolean;
-	/** The injected @playform/ets-dsh-plugin-factory service - the ledger
+	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append) and the raw-write tool's Write/Govern are consumed
 	 *  through it; assigned once in Function/Apply. */
 	Factory: Factory;

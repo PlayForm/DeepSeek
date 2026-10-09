@@ -58,7 +58,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 ├── Boilerplate/                      # THE REFERENCE (frozen at 5982aa8)
 │   ├── README.md                     # the boilerplate readme (the package inventory table)
 │   ├── packages/                     # the twelve bundles, as-is:
-│   │   ├── dsh-plugin-factory/       #   (Source/, Target/, Configuration/, package.json,
+│   │   ├── plugin-dsh-factory/       #   (Source/, Target/, Configuration/, package.json,
 │   │   ├── hook-dsh-core/            #    cordis.patch.yml example, pnpm-workspace.yaml,
 │   │   ├── hook-dsh-package-governor/ #   tsconfig.json - NO node_modules)
 │   │   ├── hook-dsh-package-pinner/
@@ -76,7 +76,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 │       └── normalize-file-smoke.mjs
 ├── Classic/                          # THE CLASSIC RELEASE (developed here, published per-repo)
 │   └── packages/                     # the twelve release packages (the #15 names, the #12 cleanup):
-│       ├── dsh-plugin-factory/       #   hook-dsh-core, hook-dsh-package-governor,
+│       ├── plugin-dsh-factory/       #   hook-dsh-core, hook-dsh-package-governor,
 │       ├── hook-dsh-core/             #   hook-dsh-package-pinner, hook-dsh-cargo-governor,
 │       ├── hook-dsh-package-governor/ #  hook-dsh-normalize-{dash,quotes,ellipsis,spaces,
 │       ├── hook-dsh-package-pinner/  #    invisible,fullwidth,file}
@@ -85,7 +85,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 │                                     #    README, the smoke, the publish config)
 ├── EffectTS/                         # THE EFFECT-TS V4 RELEASE (register #13 + #14)
 │   └── packages/                     # the same package identities, the Effect internals:
-│       ├── dsh-plugin-factory/       #   the service as Effect layers; the tracing spans
+│       ├── plugin-dsh-factory/       #   the service as Effect layers; the tracing spans
 │       ├── hook-dsh-core/             #   the pure helpers as Effect pipelines/Streams
 │       ├── hook-dsh-package-governor/ #  the chain as typed effects; the parallel-govern toggle
 │       ├── ... (the same twelve)     #   the smokes proving parity (the ledger strings)

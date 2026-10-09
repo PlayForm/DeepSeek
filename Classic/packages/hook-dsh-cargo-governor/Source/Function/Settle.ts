@@ -21,7 +21,7 @@
 // the State's maps, the factory delegates and the module's own ledger
 // strings, byte-identical: the smokes are the arbiter); the explicit Factory
 // parameter stays the module's.
-import type PluginFactory from "@playform/dsh-plugin-factory";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 import { Envelope } from "./Dispatch.js";
 import type State from "@Interface/State.js";
 import type { FsTarget } from "@deepseek-ai/dsh-fs";

@@ -33,7 +33,7 @@
 // This is the ONLY module in the tree with a runtime import of
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance —
 // the loader consumes it through the Standard Schema `~standard` interface).
-import { Schema as Compose } from "@playform/dsh-plugin-factory";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
 import Default from "./Default.js";
 

@@ -21,7 +21,7 @@ outcome is silent:
   explicitly; a patch layer's `config` **replaces the entry config wholesale**, so the schema
   default (which _does_ include `raw-write`, added in commit `3687d11`, 2026-10-05 17:20) is
   shadowed.
-- `Gate` step 2 (`dsh-plugin-factory/Source/Function/Gate.ts:47`) returns
+- `Gate` step 2 (`plugin-dsh-factory/Source/Function/Gate.ts:47`) returns
   `{ pass: false, reason: "actor" }`, and `Observe` logs **nothing** for that outcome
   (`hook-dsh-package-governor/Source/Function/Observe.ts:47-48` - only `excluded` logs, at :42-44).
   Hence "no gate outcome of any kind appears".
@@ -73,7 +73,7 @@ Single realm, one event bus, no scope filter on plain emits:
   `ctx.emit("fs/observed", target, {kind:"present",version}, exec)`
   (`dsh-tool-fs/lib/index.js:360,590,743,1031`); the factory's shared executor
   `State.Context.root.emit("fs/observed", Target, {kind:"present",version}, Over.actor)`
-  (`dsh-plugin-factory/Source/Function/Write.ts:165-169`; compiled `Target/Function/Write.js` is
+  (`plugin-dsh-factory/Source/Function/Write.ts:165-169`; compiled `Target/Function/Write.js` is
   byte-equivalent, built Oct 6 01:00). `dsh-tools` passes the same exec object to every tool
   (`lib/index.js:3136`, `:3310`); the exec carries `.name` = the called name.
 - Simulation with the family's own bundled cordis 4.0.4 copy (byte-identical to the asar copy,

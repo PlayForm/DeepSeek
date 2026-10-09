@@ -28,7 +28,7 @@ const Dump = await Wiring.DumpConfig("plain");
 // load-order evidence this suite asserts).
 await Wiring.Exercise();
 const FamilyIds = [
-	"dsh-plugin-factory",
+	"plugin-dsh-factory",
 	"hook-dsh-package-governor",
 	"hook-dsh-package-pinner",
 	"hook-dsh-cargo-governor",
@@ -41,7 +41,7 @@ const FamilyIds = [
 	"hook-dsh-normalize-file",
 ];
 const FamilyNames = [
-	"@playform/dsh-plugin-factory",
+	"@playform/plugin-dsh-factory",
 	"@playform/hook-dsh-package-governor",
 	"@playform/hook-dsh-package-pinner",
 	"@playform/hook-dsh-cargo-governor",
@@ -56,7 +56,7 @@ const FamilyNames = [
 
 // THE BUNDLE LIST -> THE COMPOSED LAYERS (the real resolution).
 const IdIndex = (Id) => Dump.indexOf(`- id: ${Id}`);
-Check(IdIndex("dsh-plugin-factory") > 0, "the factory bundle layer is composed");
+Check(IdIndex("plugin-dsh-factory") > 0, "the factory bundle layer is composed");
 const Positions = FamilyIds.map((Id) => IdIndex(Id));
 Check(
 	Positions.every((Position) => Position > 0),
@@ -78,7 +78,7 @@ Check(
 Check(Dump.includes("# == @deepseek-ai/dsh-base"), "the dsh-base bundle layer is composed");
 Check(Dump.includes("@deepseek-ai/dsh-web-app"), "the dsh-web-app bundle layer is composed");
 Check(
-	Dump.indexOf("# == @deepseek-ai/dsh-base") < Dump.indexOf("# == @playform/dsh-plugin-factory"),
+	Dump.indexOf("# == @deepseek-ai/dsh-base") < Dump.indexOf("# == @playform/plugin-dsh-factory"),
 	"the base layers sit before the family layers",
 );
 

@@ -63,7 +63,7 @@ export const name = "hook-dsh-normalize-spaces";
 export const Config = Definition;
 
 // Required services (skill: declare, never rely on load order). The factory
-// (@playform/dsh-plugin-factory) provides the State builder (cell unwrap +
+// (@playform/plugin-dsh-factory) provides the State builder (cell unwrap +
 // shared fields) and the ledger — the stream-normalization flavors are
 // NON-MANIFEST factory consumers. Nothing else: the chunk vocabulary arrives
 // through the llm/stream waterfall, not an import.
