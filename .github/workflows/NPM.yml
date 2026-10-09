@@ -129,6 +129,6 @@ jobs:
             - name: Publish L2 - the ets consumers
               working-directory: EffectTS/packages
               run: |
-                  for d in ets-hook-dsh-governor-cargo ets-hook-dsh-governor-package ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-hook-dsh-normalize-file ets-hook-dsh-normalize-fullwidth ets-hook-dsh-normalize-invisible ets-hook-dsh-normalize-quotes ets-hook-dsh-normalize-spaces ets-hook-dsh-pinner-package; do
+                  for d in ets-hook-dsh-cargo-governor ets-hook-dsh-package-governor ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-hook-dsh-normalize-file ets-hook-dsh-normalize-fullwidth ets-hook-dsh-normalize-invisible ets-hook-dsh-normalize-quotes ets-hook-dsh-normalize-spaces ets-hook-dsh-package-pinner; do
                       (cd "$d" && npm publish --access public --ignore-scripts)
                   done

@@ -1,9 +1,9 @@
-# @playform/ets-hook-dsh-pinner-package
+# @playform/ets-hook-dsh-package-pinner
 
 *The DeepSeek Harness Plugin Family for PlayForm.*
 
-[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-pinner-package&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-pinner-package)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-pinner-package)
+[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-package-pinner&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-package-pinner)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-package-pinner)
 [![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../../README.md)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
@@ -40,17 +40,17 @@ writing its own ledger:
 
 | plugin                                                      | basename gate  | ledger                          | pass                                                 |
 | ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [`ets-hook-dsh-governor-package`](../ets-hook-dsh-governor-package) | `package.json` | `ets-hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [ets-hook-dsh-pinner-package][ours-ets-hook-dsh-pinner-package] (this bundle)                     | `package.json` | `ets-hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`ets-hook-dsh-governor-cargo`](../ets-hook-dsh-governor-cargo)     | `Cargo.toml`   | `ets-hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| [`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor) | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [ets-hook-dsh-package-pinner][ours-ets-hook-dsh-package-pinner] (this bundle)                     | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`ets-hook-dsh-cargo-governor`](../ets-hook-dsh-cargo-governor)     | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
 manifest then leaves the governor's update stage nothing to do, while its chain pass may still
 re-canonicalize chain pins), **keep-list wins** (the pinner's [pin-policy.json][ours-transform] keeps ranges as
 authored).
 
-The ledgers are separate (`ets-hook-dsh-pinner-package.log` vs
-`ets-hook-dsh-governor-package.log`); activating one never implies another - order between two npm
+The ledgers are separate (`ets-hook-dsh-package-pinner.log` vs
+`ets-hook-dsh-package-governor.log`); activating one never implies another - order between two npm
 listeners is defined only by registration.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
@@ -71,17 +71,17 @@ the same conventions as every other @playform package.
 
 ### Install
 
-1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-pinner-package`
+1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-package-pinner`
    in the profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`) - installed
    automatically and activated at the next host start.
 2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
    node_modules) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
    `dsh plugin --profile <name> add <this directory>`.
 3. **Native dsh install:**
-   `dsh plugin --profile <name> add ./local-ets-hook-dsh-pinner-package-<v>.tgz`.
+   `dsh plugin --profile <name> add ./local-ets-hook-dsh-package-pinner-<v>.tgz`.
 
 All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
-inserts the [ets-hook-dsh-pinner-package][ours-ets-hook-dsh-pinner-package] row, and the ledger logs `activated (pinner, ...)` at the next
+inserts the [ets-hook-dsh-package-pinner][ours-ets-hook-dsh-package-pinner] row, and the ledger logs `activated (pinner, ...)` at the next
 host start.
 
 CAVEAT (verified live): pnpm does NOT auto-install a linked package's dependencies - the
@@ -95,11 +95,11 @@ manifest) - the full config block is in [The Config](#the-config):
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-pinner-package
-        name: "@playform/ets-hook-dsh-pinner-package"
+      - id: ets-hook-dsh-package-pinner
+        name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-pinner-package.log
+            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
 ```
 
@@ -186,7 +186,7 @@ in order:
 TypeScript-first, built with `@playform/build` (ESBuild + tsc type-check):
 
 ```text
-ets-hook-dsh-pinner-package/
+ets-hook-dsh-package-pinner/
 ├── Source/                  ← TypeScript (NOT shipped)
 │   ├── Library.ts           ← entry: name / apply / Config / inject
 │   │                          + default { name, apply, Config, inject }
@@ -234,11 +234,11 @@ with `insert:`.
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-pinner-package
-        name: "@playform/ets-hook-dsh-pinner-package"
+      - id: ets-hook-dsh-package-pinner
+        name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-pinner-package.log # SEPARATE ledger (own plugin)
+            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
             mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: "" # optional global pin-policy.json (else discovery, else built-in)
             updateCooldownMs: 3000 # carried by the shared block, never read (no update stage)
@@ -274,7 +274,7 @@ The transcript shows only what the author wrote; the
 ledger shows the pin:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (pinner, logFile=~/.dsh/ets-hook-dsh-pinner-package.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
+[2026-10-03T09:15:22.411Z] activated (pinner, logFile=~/.dsh/ets-hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
 [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (2 versions)
 ```
 
@@ -295,10 +295,10 @@ gets its own line, e.g. `observed non-JSON package.json ... - skipped`, before t
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/ets-hook-dsh-pinner-package.log` - SEPARATE from the
+One global log (`logFile`, default `~/.dsh/ets-hook-dsh-package-pinner.log` - SEPARATE from the
 governor's ledger) records activation, exclusions, non-JSON skips, refusals, and every pin result.
 
-The strings this module composes (the ets-hook-dsh-pinner-package: logger prefix is the factory's
+The strings this module composes (the ets-hook-dsh-package-pinner: logger prefix is the factory's
 `Append`; each line is `[<ISO>] <message>` in the file):
 
 ```text
@@ -323,6 +323,6 @@ alone.
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-ets-hook-dsh-pinner-package]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-pinner-package/Source
-[ours-transform]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-pinner-package/Source/Function/Transform.ts
-[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-pinner-package/cordis.patch.yml
+[ours-ets-hook-dsh-package-pinner]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source
+[ours-transform]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/cordis.patch.yml

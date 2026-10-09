@@ -10,7 +10,7 @@
 // inject` (live-verified 2026-10-03; a smoke that calls apply directly never
 // catches this).
 //
-// @playform/ets-hook-dsh-pinner-package — silent package.json VERSION PINNER
+// @playform/ets-hook-dsh-package-pinner — silent package.json VERSION PINNER
 // (anywhere mode). A thin MODULE over the family's first service provider,
 // @playform/ets-dsh-plugin-factory (`ctx.pluginFactory`, injectable): the factory
 // owns the shared machinery — the ledger (Append), the exclusion match, the

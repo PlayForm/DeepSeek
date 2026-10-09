@@ -4,7 +4,7 @@ Status: **IMPLEMENTED and SMOKE-VERIFIED** (the smoke suite proves the pipeline 
 output; the API contracts are the governor's, live-verified against the same runtime on
 2026-10-02/03).
 
-A SEPARATE plugin from `@playform/ets-hook-dsh-governor-package`, with the same TypeScript/PlayForm
+A SEPARATE plugin from `@playform/ets-hook-dsh-package-governor`, with the same TypeScript/PlayForm
 layout and the same API-awareness discipline, but a different mission: **pin every dependency
 version in a written package.json to its static version** — `"^0.3.4"` → `"0.3.4"`.
 
@@ -187,7 +187,7 @@ everything, and the ledger is best-effort).
         │               fs/observed from the service                         │
         │            P₃ re-emit fs/observed(outcome.version) ── refreshes    │
         │               policy; re-enters P as a no-op                       │
-        │            L  ledger: <logFile> (global, SEPARATE: ets-hook-dsh-pinner-package.log) +   │
+        │            L  ledger: <logFile> (global, SEPARATE: ets-hook-dsh-package-pinner.log) +   │
         │               ctx.logger + activation line in apply()              │
         └─────────────────────────────────────────────────────────────────────┘
                  │
@@ -205,7 +205,7 @@ Non-edges (proven absent, marked ∄):
 | ---------------------------------------------- | ---------------------------------------------------------------------------------- |
 | P's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing               |
 | P → tool result amendment                      | result envelope uses the tool's own content, not disk                              |
-| P → transcript/session event                   | P emits only `fs/observed` (internal bus) and writes `ets-hook-dsh-pinner-package.log` |
+| P → transcript/session event                   | P emits only `fs/observed` (internal bus) and writes `ets-hook-dsh-package-pinner.log` |
 | author's next guarded write → FS_STALE_VERSION | P₃ refreshes the policy record (same owner)                                        |
 | P's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                                             |
 | P → ctx.jobs / subprocess                      | P is P-only: no update stage exists to run                                         |
@@ -220,10 +220,10 @@ Non-edges (proven absent, marked ∄):
    `files: ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
    artifact ships only the built output), `dependencies: {}` (schemastery resolves from the host
    installation scope), `prepublishOnly` = the build, `cordis.patch.yml` (row
-   `id: ets-hook-dsh-pinner-package`, `name: "@playform/ets-hook-dsh-pinner-package"`, config),
+   `id: ets-hook-dsh-package-pinner`, `name: "@playform/ets-hook-dsh-package-pinner"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
-    - **Remote/dependency**: `pnpm add @playform/ets-hook-dsh-pinner-package` in a profile →
+    - **Remote/dependency**: `pnpm add @playform/ets-hook-dsh-package-pinner` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → build
@@ -243,11 +243,11 @@ the loader rejects unknown ids with `entry "…" not found`.
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-pinner-package
-        name: "@playform/ets-hook-dsh-pinner-package"
+      - id: ets-hook-dsh-package-pinner
+        name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-pinner-package.log # SEPARATE ledger (own plugin)
+            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
             policyFile: "" # optional global pin-policy.json; else discovery; else built-in default
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
@@ -277,8 +277,8 @@ harness (real temp-dir I/O with `dev:ino:size:mtimeNs:ctimeNs` version tokens en
 ## 11. Interplay — the governor family
 
 The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
-`package.json` / `Cargo.toml`) and writing its own ledger (`ets-hook-dsh-pinner-package.log` /
-`ets-hook-dsh-governor-package.log` / `ets-hook-dsh-governor-cargo.log`); the fs/observed trigger law and
+`package.json` / `Cargo.toml`) and writing its own ledger (`ets-hook-dsh-package-pinner.log` /
+`ets-hook-dsh-package-governor.log` / `ets-hook-dsh-cargo-governor.log`); the fs/observed trigger law and
 the exclusion-first rule are shared.
 
 Composition semantics: **pin → bump-exact** (the pinner pins

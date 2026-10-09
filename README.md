@@ -139,7 +139,7 @@ and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the grou
 
 - **CLASSIC:** `pnpm add @playform/hook-dsh-core @playform/dsh-plugin-factory @playform/hook-dsh-package-governor` -
   plain TypeScript, zero framework dependencies; `import { Govern } from "@playform/dsh-plugin-factory"`.
-- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-dsh-plugin-factory @playform/ets-hook-dsh-governor-package` -
+- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-dsh-plugin-factory @playform/ets-hook-dsh-package-governor` -
   the same contracts on Effect-TS services and layers, with `effect` v4.0.2 as the shared runtime
   dependency and the base `@playform/ets-dsh-hook` package carrying the plumbing every ets-*
   package builds on.

@@ -142,9 +142,9 @@ does later.
 A DSH plugin can go where a file hook cannot: the [`llm/stream`][dsh-llm] waterfall, where every
 streaming model call passes through.
 
-Unlike the governance family ([`ets-hook-dsh-governor-package`](../ets-hook-dsh-governor-package),
-[`ets-hook-dsh-pinner-package`](../ets-hook-dsh-pinner-package),
-[`ets-hook-dsh-governor-cargo`](../ets-hook-dsh-governor-cargo)), whose rewrites are SILENT, this plugin's
+Unlike the governance family ([`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor),
+[`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner),
+[`ets-hook-dsh-cargo-governor`](../ets-hook-dsh-cargo-governor)), whose rewrites are SILENT, this plugin's
 normalization is **deliberately VISIBLE - it IS the feature**: the rewrite flows into both the live
 UI and the durable transcript.
 

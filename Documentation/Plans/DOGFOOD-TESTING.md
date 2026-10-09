@@ -142,16 +142,16 @@ the #15 release naming):
 				"@deepseek-ai/dsh-base",
 				"@deepseek-ai/dsh-web-app",
 				"@playform/dsh-plugin-factory",
-				"@playform/dsh-package-governor-hook",
-				"@playform/dsh-package-pinner-hook",
-				"@playform/dsh-cargo-governor-hook",
-				"@playform/dsh-normalize-dash-hook",
-				"@playform/dsh-normalize-quotes-hook",
-				"@playform/dsh-normalize-ellipsis-hook",
-				"@playform/dsh-normalize-spaces-hook",
-				"@playform/dsh-normalize-invisible-hook",
-				"@playform/dsh-normalize-fullwidth-hook",
-				"@playform/dsh-normalize-file-hook"
+				"@playform/hook-dsh-package-governor",
+				"@playform/hook-dsh-package-pinner",
+				"@playform/hook-dsh-cargo-governor",
+				"@playform/hook-dsh-normalize-dash",
+				"@playform/hook-dsh-normalize-quotes",
+				"@playform/hook-dsh-normalize-ellipsis",
+				"@playform/hook-dsh-normalize-spaces",
+				"@playform/hook-dsh-normalize-invisible",
+				"@playform/hook-dsh-normalize-fullwidth",
+				"@playform/hook-dsh-normalize-file"
 			]
 		}
 	}

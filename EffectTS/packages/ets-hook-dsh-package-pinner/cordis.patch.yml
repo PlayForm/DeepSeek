@@ -1,4 +1,4 @@
-# Bundle patch for @playform/ets-hook-dsh-pinner-package.
+# Bundle patch for @playform/ets-hook-dsh-package-pinner.
 # ANYWHERE MODE, EXCLUSION-FIRST: no roots allowlist — every tool-layer
 # package.json write is pinned unless its path contains an excluded segment.
 # New entries are declared with `insert:` (docs/user/develop/basic/
@@ -8,15 +8,15 @@
 # loader rule applies here). Activated when the profile's package.json lists
 # the package in dsh.profile.bundles AND the app is restarted (bundle layers
 # compose at host boot). A file: dependency alone is NOT activation.
-# The `name` row below is the PUBLISH IDENTITY (@playform/ets-hook-dsh-pinner-package).
+# The `name` row below is the PUBLISH IDENTITY (@playform/ets-hook-dsh-package-pinner).
 # The pinner is a SEPARATE plugin from the package governor with its
-# OWN ledger (ets-hook-dsh-pinner-package.log) — both may coexist (see README, "Interplay").
+# OWN ledger (ets-hook-dsh-package-pinner.log) — both may coexist (see README, "Interplay").
 - insert:
-      - id: ets-hook-dsh-pinner-package
-        name: "@playform/ets-hook-dsh-pinner-package"
+      - id: ets-hook-dsh-package-pinner
+        name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-pinner-package.log
+            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log
             mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: ""
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]

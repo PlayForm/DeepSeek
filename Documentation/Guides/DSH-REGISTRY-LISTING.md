@@ -24,7 +24,7 @@
 - **The source of the install form:** the site already ships the final command
   shape on every plugin page and in the hero: `pnpm add @playform/<pkg>`
   (`Site/Source/Component/Terminal.astro` defaults to
-  `pnpm add @playform/dsh-core-hook`; `Site/Source/pages/plugins.astro` carries
+  `pnpm add @playform/hook-dsh-core`; `Site/Source/pages/plugins.astro` carries
   one install row per package). The listing below repeats that form BYTE-EXACT.
 
 ## 2. THE ROSTER - the OPERATING NAMES (the two groups + the base)
@@ -38,36 +38,36 @@ manifests). The registry listing uses exactly these.
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
-| 1 | `@playform/dsh-core-hook` | `pnpm add @playform/dsh-core-hook` | the core contract + the normalize machinery |
+| 1 | `@playform/hook-dsh-core` | `pnpm add @playform/hook-dsh-core` | the core contract + the normalize machinery |
 | 2 | `@playform/dsh-plugin-factory` | `pnpm add @playform/dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
-| 3 | `@playform/dsh-package-governor-hook` | `pnpm add @playform/dsh-package-governor-hook` | the package.json governor |
-| 4 | `@playform/dsh-package-pinner-hook` | `pnpm add @playform/dsh-package-pinner-hook` | the package.json pinner |
-| 5 | `@playform/dsh-cargo-governor-hook` | `pnpm add @playform/dsh-cargo-governor-hook` | the Cargo.toml governor |
-| 6 | `@playform/dsh-normalize-dash-hook` | `pnpm add @playform/dsh-normalize-dash-hook` | dashes → the module's replacement |
-| 7 | `@playform/dsh-normalize-quotes-hook` | `pnpm add @playform/dsh-normalize-quotes-hook` | curly → straight quotes |
-| 8 | `@playform/dsh-normalize-ellipsis-hook` | `pnpm add @playform/dsh-normalize-ellipsis-hook` | ... → ... |
-| 9 | `@playform/dsh-normalize-spaces-hook` | `pnpm add @playform/dsh-normalize-spaces-hook` | unicode → ASCII spaces |
-| 10 | `@playform/dsh-normalize-invisible-hook` | `pnpm add @playform/dsh-normalize-invisible-hook` | invisible characters removed |
-| 11 | `@playform/dsh-normalize-fullwidth-hook` | `pnpm add @playform/dsh-normalize-fullwidth-hook` | fullwidth → halfwidth |
-| 12 | `@playform/dsh-normalize-file-hook` | `pnpm add @playform/dsh-normalize-file-hook` | the file normalize composition |
+| 3 | `@playform/hook-dsh-package-governor` | `pnpm add @playform/hook-dsh-package-governor` | the package.json governor |
+| 4 | `@playform/hook-dsh-package-pinner` | `pnpm add @playform/hook-dsh-package-pinner` | the package.json pinner |
+| 5 | `@playform/hook-dsh-cargo-governor` | `pnpm add @playform/hook-dsh-cargo-governor` | the Cargo.toml governor |
+| 6 | `@playform/hook-dsh-normalize-dash` | `pnpm add @playform/hook-dsh-normalize-dash` | dashes → the module's replacement |
+| 7 | `@playform/hook-dsh-normalize-quotes` | `pnpm add @playform/hook-dsh-normalize-quotes` | curly → straight quotes |
+| 8 | `@playform/hook-dsh-normalize-ellipsis` | `pnpm add @playform/hook-dsh-normalize-ellipsis` | ... → ... |
+| 9 | `@playform/hook-dsh-normalize-spaces` | `pnpm add @playform/hook-dsh-normalize-spaces` | unicode → ASCII spaces |
+| 10 | `@playform/hook-dsh-normalize-invisible` | `pnpm add @playform/hook-dsh-normalize-invisible` | invisible characters removed |
+| 11 | `@playform/hook-dsh-normalize-fullwidth` | `pnpm add @playform/hook-dsh-normalize-fullwidth` | fullwidth → halfwidth |
+| 12 | `@playform/hook-dsh-normalize-file` | `pnpm add @playform/hook-dsh-normalize-file` | the file normalize composition |
 
 **The effect-ts group (12 + the base, `EffectTS/packages/ets-*`):**
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
 | 1 | `@playform/ets-dsh-hook` | `pnpm add @playform/ets-dsh-hook` | the shared Effect-TS plumbing (the base) |
-| 2 | `@playform/ets-dsh-core-hook` | `pnpm add @playform/ets-dsh-core-hook` | the core contract + the normalize machinery |
+| 2 | `@playform/ets-hook-dsh-core` | `pnpm add @playform/ets-hook-dsh-core` | the core contract + the normalize machinery |
 | 3 | `@playform/ets-dsh-plugin-factory` | `pnpm add @playform/ets-dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
-| 4 | `@playform/ets-hook-dsh-governor-package` | `pnpm add @playform/ets-hook-dsh-governor-package` | the package.json governor |
-| 5 | `@playform/ets-hook-dsh-pinner-package` | `pnpm add @playform/ets-hook-dsh-pinner-package` | the package.json pinner |
-| 6 | `@playform/ets-hook-dsh-governor-cargo` | `pnpm add @playform/ets-hook-dsh-governor-cargo` | the Cargo.toml governor |
-| 7 | `@playform/ets-dsh-normalize-dash-hook` | `pnpm add @playform/ets-dsh-normalize-dash-hook` | dashes → the module's replacement |
-| 8 | `@playform/ets-dsh-normalize-quotes-hook` | `pnpm add @playform/ets-dsh-normalize-quotes-hook` | curly → straight quotes |
-| 9 | `@playform/ets-dsh-normalize-ellipsis-hook` | `pnpm add @playform/ets-dsh-normalize-ellipsis-hook` | ... → ... |
-| 10 | `@playform/ets-dsh-normalize-spaces-hook` | `pnpm add @playform/ets-dsh-normalize-spaces-hook` | unicode → ASCII spaces |
-| 11 | `@playform/ets-dsh-normalize-invisible-hook` | `pnpm add @playform/ets-dsh-normalize-invisible-hook` | invisible characters removed |
-| 12 | `@playform/ets-dsh-normalize-fullwidth-hook` | `pnpm add @playform/ets-dsh-normalize-fullwidth-hook` | fullwidth → halfwidth |
-| 13 | `@playform/ets-dsh-normalize-file-hook` | `pnpm add @playform/ets-dsh-normalize-file-hook` | the file normalize composition |
+| 4 | `@playform/ets-hook-dsh-package-governor` | `pnpm add @playform/ets-hook-dsh-package-governor` | the package.json governor |
+| 5 | `@playform/ets-hook-dsh-package-pinner` | `pnpm add @playform/ets-hook-dsh-package-pinner` | the package.json pinner |
+| 6 | `@playform/ets-hook-dsh-cargo-governor` | `pnpm add @playform/ets-hook-dsh-cargo-governor` | the Cargo.toml governor |
+| 7 | `@playform/ets-hook-dsh-normalize-dash` | `pnpm add @playform/ets-hook-dsh-normalize-dash` | dashes → the module's replacement |
+| 8 | `@playform/ets-hook-dsh-normalize-quotes` | `pnpm add @playform/ets-hook-dsh-normalize-quotes` | curly → straight quotes |
+| 9 | `@playform/ets-hook-dsh-normalize-ellipsis` | `pnpm add @playform/ets-hook-dsh-normalize-ellipsis` | ... → ... |
+| 10 | `@playform/ets-hook-dsh-normalize-spaces` | `pnpm add @playform/ets-hook-dsh-normalize-spaces` | unicode → ASCII spaces |
+| 11 | `@playform/ets-hook-dsh-normalize-invisible` | `pnpm add @playform/ets-hook-dsh-normalize-invisible` | invisible characters removed |
+| 12 | `@playform/ets-hook-dsh-normalize-fullwidth` | `pnpm add @playform/ets-hook-dsh-normalize-fullwidth` | fullwidth → halfwidth |
+| 13 | `@playform/ets-hook-dsh-normalize-file` | `pnpm add @playform/ets-hook-dsh-normalize-file` | the file normalize composition |
 
 The duplicate-name collision (#15) is resolved: every `@playform/*` dependency resolves to
 exactly one workspace package, so the publish order is the layer order (§5).

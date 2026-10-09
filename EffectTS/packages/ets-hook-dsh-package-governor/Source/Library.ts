@@ -10,7 +10,7 @@
 // inject` (live-verified 2026-10-03; a smoke that calls apply directly never
 // catches this).
 //
-// @playform/ets-hook-dsh-governor-package — silent package.json governor
+// @playform/ets-hook-dsh-package-governor — silent package.json governor
 // (anywhere mode). A FACTORY MODULE (SCHEME.md §3): the shared machinery —
 // the ledger (Append), the exclusion match, the registry/policy discovery,
 // the union keep-list, the g1 gate set, the version-guarded sandbox-fenced

@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/ets-hook-dsh-pinner-package (0.0.1), one
+Welcome to our community! This repository holds @playform/ets-hook-dsh-package-pinner (0.0.1), one
 of the release packages of the DeepSeek Harness Plugin Family: the silent package.json version pinner: hooking fs/observed and deterministically rewriting every ranged dependency version to its static version.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

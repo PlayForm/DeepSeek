@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/ets-hook-dsh-governor-package (0.0.1), one
+Welcome to our community! This repository holds @playform/ets-hook-dsh-package-governor (0.0.1), one
 of the release packages of the DeepSeek Harness Plugin Family: the silent package.json governor: hooking fs/observed, rewriting the chain-governed pins to the effective registry's resolved ranges and running the update stage.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

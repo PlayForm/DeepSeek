@@ -1,4 +1,4 @@
-# Bundle patch for @playform/ets-hook-dsh-governor-package.
+# Bundle patch for @playform/ets-hook-dsh-package-governor.
 # ANYWHERE MODE, EXCLUSION-FIRST: no roots allowlist — every tool-layer
 # package.json write is governed unless its path contains an excluded
 # segment. New entries are declared with `insert:` (docs/user/develop/basic/
@@ -8,14 +8,14 @@
 # this same defect). Activated when the profile's package.json lists the
 # package in dsh.profile.bundles AND the app is restarted (bundle layers
 # compose at host boot). A file: dependency alone is NOT activation.
-# The `name` row below is the PUBLISH IDENTITY (@playform/ets-hook-dsh-governor-package);
+# The `name` row below is the PUBLISH IDENTITY (@playform/ets-hook-dsh-package-governor);
 # the config fields are unchanged from v0.4.7.
 - insert:
-      - id: ets-hook-dsh-governor-package
-        name: "@playform/ets-hook-dsh-governor-package"
+      - id: ets-hook-dsh-package-governor
+        name: "@playform/ets-hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-governor-package.log
+            logFile: ~/.dsh/ets-hook-dsh-package-governor.log
             updateCooldownMs: 3000
             strict: false
             mutationTools: [write, edit, str_replace_editor, raw-write]

@@ -10,7 +10,7 @@
 // inject` (live-verified 2026-10-03; a smoke that calls apply directly never
 // catches this).
 //
-// @playform/ets-hook-dsh-governor-cargo — THE CARGO TOML MODULE of the silent
+// @playform/ets-hook-dsh-cargo-governor — THE CARGO TOML MODULE of the silent
 // package.json governor, now a CONSUMER of the @playform/ets-dsh-plugin-factory
 // service (the family's first service provider): the shared machinery — the
 // State builder (cell unwrap, fixed shared mappings, the P9 probe-once

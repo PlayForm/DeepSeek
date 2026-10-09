@@ -19,7 +19,7 @@ for the module/factory split).
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
 (`Source/` → `Target/`, `prepublishOnly` build hook), with kind-folder categorization
 (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication),
-the publish identity [@playform/dsh-package-governor-hook](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-governor-hook/Source), granularized install paths (npm
+the publish identity [@playform/hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source), granularized install paths (npm
 dependency auto-activation / git clone + build / native `dsh plugin add`), and devDependencies typed
 from the published seam packages at the HOST's exact versions —
 [`@deepseek-ai/dsh-fs`][dsh-fs]/`dsh-subprocess`/`dsh-sandbox`
@@ -116,7 +116,7 @@ scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refres
 builder, the wiring and the lifecycle effects (P1/P2/P5).
 
 What stayed module-owned: the transform
-(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-core-hook/Source/Function/Refusal.ts), Function/Transform), the update engine
+(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), Function/Transform), the update engine
 (Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
 (Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
 string.
@@ -295,7 +295,7 @@ Non-edges (proven absent, marked ∄):
 | G's rewrite → new [`fs/observed`][dsh-fs-2] | only the tool layer dispatches; `ctx.fs` service writes emit nothing                                                                                                            |
 | ncu/pnpm → new [`fs/observed`][dsh-fs-2]    | external processes dispatch nothing                                                                                                                                             |
 | G → tool result amendment                                                                                                  | result envelope uses the tool's own content, not disk                                                                                                                           |
-| G → transcript/session event                                                                                               | G emits only [`fs/observed`][dsh-fs-2] (internal bus) and writes `dsh-package-governor-hook.log` |
+| G → transcript/session event                                                                                               | G emits only [`fs/observed`][dsh-fs-2] (internal bus) and writes `hook-dsh-package-governor.log` |
 | author's next guarded write → FS_STALE_VERSION                                                                             | P₃/U₂ refresh the policy record (same owner)                                                                                                                                    |
 | G's re-entrant pass → rewrite loop                                                                                         | P idempotent ⇒ re-entrant P is a no-op                                                                                                                                          |
 | G → ctx.jobs job                                                                                                           | jobs registry is agent-scoped; root plugins use the continuation                                                                                                                |
@@ -312,10 +312,10 @@ Non-edges (proven absent, marked ∄):
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
    `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
    artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml) (row
-   `id: dsh-package-governor-hook`, `name: "@playform/dsh-package-governor-hook"`, config),
+   `id: hook-dsh-package-governor`, `name: "@playform/hook-dsh-package-governor"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
-    - **Remote/dependency**: `pnpm add @playform/dsh-package-governor-hook` in a profile →
+    - **Remote/dependency**: `pnpm add @playform/hook-dsh-package-governor` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → `pnpm build` →
@@ -335,11 +335,11 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ```yaml
 - insert:
-      - id: dsh-package-governor-hook
-        name: "@playform/dsh-package-governor-hook"
+      - id: hook-dsh-package-governor
+        name: "@playform/hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/dsh-package-governor-hook.log # global ledger (default: ~/.dsh/dsh-package-governor-hook.log)
+            logFile: ~/.dsh/hook-dsh-package-governor.log # global ledger (default: ~/.dsh/hook-dsh-package-governor.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
@@ -352,14 +352,14 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `dsh-package-governor-hook.log` shows the activation line.
+1. Restart with the bundle active; `hook-dsh-package-governor.log` shows the activation line.
 2. Write a stale-pins `package.json` with the write tool:
     - chain pass corrects chain pins; file lands governed; tool result shows the author's content
       only; transcript contains no governor traces.
 3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
 4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
 5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `dsh-package-governor-hook.log` shows no runaway recursion.
+6. Loop check: after all of the above, `hook-dsh-package-governor.log` shows no runaway recursion.
 7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
 8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
@@ -370,15 +370,15 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 The three plugins coexist on
 [`fs/observed`][dsh-fs-2],
 each gating on its own basename (`package.json` / `package.json` / `Cargo.toml`) and writing its own
-ledger (`dsh-package-governor-hook.log` / `dsh-package-pinner-hook.log` /
-`dsh-cargo-governor-hook.log`); the
+ledger (`hook-dsh-package-governor.log` / `hook-dsh-package-pinner.log` /
+`hook-dsh-cargo-governor.log`); the
 [fs/observed][dsh-fs-2]
 trigger law and the exclusion-first rule are shared.
 
 Composition semantics: **pin → bump-exact** (a
 fully pinned manifest leaves the npm governor's update stage nothing to do; its chain pass may still
 re-canonicalize chain pins to `^resolved`); **chain > strip > normalize** (the cargo module's
-precedence); **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-pinner-hook/Source/Function/Transform.ts) protects ranges as authored; the
+precedence); **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts) protects ranges as authored; the
 cargo module's keep-list — the same sidecar — wins over normalization, never over the chain).
 
 Activation of one never implies another; the user decides.

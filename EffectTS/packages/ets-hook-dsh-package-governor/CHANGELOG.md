@@ -6,5 +6,5 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/ets-hook-dsh-governor-package: the silent package.json governor: hooking fs/observed, rewriting the chain-governed pins to the effective registry's resolved ranges and running the update stage
+- The initial release of @playform/ets-hook-dsh-package-governor: the silent package.json governor: hooking fs/observed, rewriting the chain-governed pins to the effective registry's resolved ranges and running the update stage
   (the Effect-TS release of the DeepSeek Harness Plugin Family).

@@ -245,8 +245,8 @@ try {
 	// ... the pass ...
 } catch (Error) {
 	// every contained throw logs the same shape of line:
-	Context.logger.warn(Suppress("ets-hook-dsh-governor-package", "listener", String(Error)));
-	// -> "ets-hook-dsh-governor-package: listener error (suppressed): cannot get property ..."
+	Context.logger.warn(Suppress("ets-hook-dsh-package-governor", "listener", String(Error)));
+	// -> "ets-hook-dsh-package-governor: listener error (suppressed): cannot get property ..."
 }
 
 // Source/Function/Transform.ts - the refusal guard before any write:

@@ -1,9 +1,9 @@
-# @playform/ets-hook-dsh-governor-cargo
+# @playform/ets-hook-dsh-cargo-governor
 
 *The DeepSeek Harness Plugin Family for PlayForm.*
 
-[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-governor-cargo&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-governor-cargo)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-governor-cargo)
+[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-cargo-governor&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
 [![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../../README.md)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
@@ -39,9 +39,9 @@ writing its own ledger:
 
 | plugin                                                      | basename gate  | ledger                          | pass                                                 |
 | ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [`ets-hook-dsh-governor-package`](../ets-hook-dsh-governor-package) | `package.json` | `ets-hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`ets-hook-dsh-pinner-package`](../ets-hook-dsh-pinner-package)     | `package.json` | `ets-hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [ets-hook-dsh-governor-cargo][ours-ets-hook-dsh-governor-cargo] (this bundle)                     | `Cargo.toml`   | `ets-hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| [`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor) | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner)     | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] (this bundle)                     | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
 never see a `Cargo.toml` event.
@@ -72,16 +72,16 @@ the same conventions as every other @playform package.
 
 ### Install
 
-1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-governor-cargo`
+1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-cargo-governor`
    in the profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`).
 2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
    node_modules - smol-toml) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
    `dsh plugin --profile <name> add <this directory>`.
 3. **Native dsh install:**
-   `dsh plugin --profile <name> add ./local-ets-hook-dsh-governor-cargo-<v>.tgz`.
+   `dsh plugin --profile <name> add ./local-ets-hook-dsh-cargo-governor-<v>.tgz`.
 
 All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
-inserts the [ets-hook-dsh-governor-cargo][ours-ets-hook-dsh-governor-cargo] row, and the ledger logs `activated (cargo flavor, ...)` at
+inserts the [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] row, and the ledger logs `activated (cargo flavor, ...)` at
 the next host start.
 
 ### Usage
@@ -91,11 +91,11 @@ manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-governor-cargo
-        name: "@playform/ets-hook-dsh-governor-cargo"
+      - id: ets-hook-dsh-cargo-governor
+        name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-governor-cargo.log
+            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log
             updateMode: cargo
 ```
 
@@ -191,7 +191,7 @@ dependency version is expanded to its MOST SPECIFIC form:
 Precedence, in order: **(1) chain** - a dep in `registry.effectiveLatest` is canonicalized to the
 FULL resolved form (even a shorthand registry entry yields a full output); **(2) strip** -
 strict-mode unknown deps; **(3) normalize** - every other simple version, UNLESS the name is in the
-**keep-list** ([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-pinner-package/Source/Function/Transform.ts) via `keepFile` - the same sidecar the pinner uses; discovery:
+**keep-list** ([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts) via `keepFile` - the same sidecar the pinner uses; discovery:
 global `keepFile` → the file's own directory → registry-adjacent, the union).
 
 **The keep-list wins
@@ -262,7 +262,7 @@ The built-in default mirrors `cargo upgrade`'s own semantics: no rejects, `incom
 TypeScript-first, built with `@playform/build` (ESBuild + tsc type-check):
 
 ```text
-ets-hook-dsh-governor-cargo/
+ets-hook-dsh-cargo-governor/
 ├── Source/                  ← TypeScript (NOT shipped)
 │   ├── Library.ts           ← entry: name / apply / Config / inject
 │   │                          + default { name, apply, Config, inject }
@@ -280,7 +280,7 @@ ets-hook-dsh-governor-cargo/
 ├── Configuration/
 │   └── ESBuild.ts           ← the @playform/build custom config (+ .js twin)
 ├── Target/                  ← built output (SHIPPED: .js + .d.ts)
-├── cordis.patch.yml         ← the loader row (id: ets-hook-dsh-governor-cargo)
+├── cordis.patch.yml         ← the loader row (id: ets-hook-dsh-cargo-governor)
 ├── package.json             ← main → Target/Library.js
 └── README.md / SCHEME.md    ← usage + the design document
 ```
@@ -314,11 +314,11 @@ declared with `insert:`.
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-governor-cargo
-        name: "@playform/ets-hook-dsh-governor-cargo"
+      - id: ets-hook-dsh-cargo-governor
+        name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-governor-cargo.log # SEPARATE ledger - never the npm ledgers
+            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log # SEPARATE ledger - never the npm ledgers
             updateCooldownMs: 3000
             strict: false # strip unknown deps - explicit only, never a default
             mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -360,7 +360,7 @@ tokio = { version = "0.4.5", features = ["full"] }  # chain-governed
 The transcript shows only what the author wrote; the ledger shows the pass:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (cargo flavor, logFile=~/.dsh/ets-hook-dsh-governor-cargo.log, updateMode=cargo, cargoBin=/usr/local/bin/cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))
+[2026-10-03T09:15:22.411Z] activated (cargo flavor, logFile=~/.dsh/ets-hook-dsh-cargo-governor.log, updateMode=cargo, cargoBin=/usr/local/bin/cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))
 [2026-10-03T09:16:01.880Z] governed ~/Projects/acme/engine/Cargo.toml → 42
 [2026-10-03T09:16:34.120Z] update stage dispatched for ~/Projects/acme/engine (cargo via /usr/local/bin/cargo, built-in default policy)
 [2026-10-03T09:16:41.502Z] update: cargo upgrade --manifest-path ~/Projects/acme/engine/Cargo.toml --exclude serde tokio → {"exitCode":0}
@@ -385,11 +385,11 @@ breaker counting the failure.
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/ets-hook-dsh-governor-cargo.log` - SEPARATE from the npm
+One global log (`logFile`, default `~/.dsh/ets-hook-dsh-cargo-governor.log` - SEPARATE from the npm
 ledgers) records activation, exclusions, chain-pass results, refusals, and every update-stage
 dispatch.
 
-The strings this module composes (the ets-hook-dsh-governor-cargo: logger prefix is the
+The strings this module composes (the ets-hook-dsh-cargo-governor: logger prefix is the
 factory's `Append`; each line is `[<ISO>] <message>` in the file):
 
 ```text
@@ -434,5 +434,5 @@ alone.
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-ets-hook-dsh-governor-cargo]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-governor-cargo/Source
-[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-governor-cargo/cordis.patch.yml
+[ours-ets-hook-dsh-cargo-governor]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/cordis.patch.yml

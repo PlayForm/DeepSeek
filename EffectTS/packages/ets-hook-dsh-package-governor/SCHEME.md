@@ -15,7 +15,7 @@ for the module/factory split).
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
 (`Source/` → `Target/`, `prepublishOnly` build hook), with kind-folder categorization
 (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication),
-the publish identity `@playform/ets-hook-dsh-governor-package`, granularized install paths (npm
+the publish identity `@playform/ets-hook-dsh-package-governor`, granularized install paths (npm
 dependency auto-activation / git clone + build / native `dsh plugin add`), and devDependencies typed
 from the published seam packages at the HOST's exact versions —
 `@deepseek-ai/dsh-fs`/`dsh-subprocess`/`dsh-sandbox` at 0.2.0-rc.2, `@deepseek-ai/cordis` ^4.0.4,
@@ -272,7 +272,7 @@ Non-edges (proven absent, marked ∄):
 | G's rewrite → new `fs/observed`                | only the tool layer dispatches; `ctx.fs` service writes emit nothing                 |
 | ncu/pnpm → new `fs/observed`                   | external processes dispatch nothing                                                  |
 | G → tool result amendment                      | result envelope uses the tool's own content, not disk                                |
-| G → transcript/session event                   | G emits only `fs/observed` (internal bus) and writes `ets-hook-dsh-governor-package.log` |
+| G → transcript/session event                   | G emits only `fs/observed` (internal bus) and writes `ets-hook-dsh-package-governor.log` |
 | author's next guarded write → FS_STALE_VERSION | P₃/U₂ refresh the policy record (same owner)                                         |
 | G's re-entrant pass → rewrite loop             | P idempotent ⇒ re-entrant P is a no-op                                               |
 | G → ctx.jobs job                               | jobs registry is agent-scoped; root plugins use the continuation                     |
@@ -289,10 +289,10 @@ Non-edges (proven absent, marked ∄):
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
    `files: ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
    artifact ships only the built output), `prepublishOnly` = the build, `cordis.patch.yml` (row
-   `id: ets-hook-dsh-governor-package`, `name: "@playform/ets-hook-dsh-governor-package"`, config),
+   `id: ets-hook-dsh-package-governor`, `name: "@playform/ets-hook-dsh-package-governor"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
-    - **Remote/dependency**: `pnpm add @playform/ets-hook-dsh-governor-package` in a profile →
+    - **Remote/dependency**: `pnpm add @playform/ets-hook-dsh-package-governor` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → `pnpm build` →
@@ -312,11 +312,11 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ```yaml
 - insert:
-      - id: ets-hook-dsh-governor-package
-        name: "@playform/ets-hook-dsh-governor-package"
+      - id: ets-hook-dsh-package-governor
+        name: "@playform/ets-hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-governor-package.log # global ledger (default: ~/.dsh/ets-hook-dsh-governor-package.log)
+            logFile: ~/.dsh/ets-hook-dsh-package-governor.log # global ledger (default: ~/.dsh/ets-hook-dsh-package-governor.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
@@ -329,14 +329,14 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `ets-hook-dsh-governor-package.log` shows the activation line.
+1. Restart with the bundle active; `ets-hook-dsh-package-governor.log` shows the activation line.
 2. Write a stale-pins `package.json` with the write tool:
     - chain pass corrects chain pins; file lands governed; tool result shows the author's content
       only; transcript contains no governor traces.
 3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
 4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
 5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `ets-hook-dsh-governor-package.log` shows no runaway recursion.
+6. Loop check: after all of the above, `ets-hook-dsh-package-governor.log` shows no runaway recursion.
 7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
 8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
@@ -345,8 +345,8 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 ## 10. Interplay — the governor family
 
 The three plugins coexist on `fs/observed`, each gating on its own basename (`package.json` /
-`package.json` / `Cargo.toml`) and writing its own ledger (`ets-hook-dsh-governor-package.log` /
-`ets-hook-dsh-pinner-package.log` / `ets-hook-dsh-governor-cargo.log`); the fs/observed trigger law and the
+`package.json` / `Cargo.toml`) and writing its own ledger (`ets-hook-dsh-package-governor.log` /
+`ets-hook-dsh-package-pinner.log` / `ets-hook-dsh-cargo-governor.log`); the fs/observed trigger law and the
 exclusion-first rule are shared.
 
 Composition semantics: **pin → bump-exact** (a fully pinned

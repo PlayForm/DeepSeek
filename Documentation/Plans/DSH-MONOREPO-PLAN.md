@@ -59,17 +59,17 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 │   ├── README.md                     # the boilerplate readme (the package inventory table)
 │   ├── packages/                     # the twelve bundles, as-is:
 │   │   ├── dsh-plugin-factory/       #   (Source/, Target/, Configuration/, package.json,
-│   │   ├── dsh-core-hook/            #    cordis.patch.yml example, pnpm-workspace.yaml,
-│   │   ├── dsh-package-governor-hook/ #   tsconfig.json - NO node_modules)
-│   │   ├── dsh-package-pinner-hook/
-│   │   ├── dsh-cargo-governor-hook/
-│   │   ├── dsh-normalize-dash-hook/
-│   │   ├── dsh-normalize-quotes-hook/
-│   │   ├── dsh-normalize-ellipsis-hook/
-│   │   ├── dsh-normalize-spaces-hook/
-│   │   ├── dsh-normalize-invisible-hook/
-│   │   ├── dsh-normalize-fullwidth-hook/
-│   │   └── dsh-normalize-file-hook/
+│   │   ├── hook-dsh-core/            #    cordis.patch.yml example, pnpm-workspace.yaml,
+│   │   ├── hook-dsh-package-governor/ #   tsconfig.json - NO node_modules)
+│   │   ├── hook-dsh-package-pinner/
+│   │   ├── hook-dsh-cargo-governor/
+│   │   ├── hook-dsh-normalize-dash/
+│   │   ├── hook-dsh-normalize-quotes/
+│   │   ├── hook-dsh-normalize-ellipsis/
+│   │   ├── hook-dsh-normalize-spaces/
+│   │   ├── hook-dsh-normalize-invisible/
+│   │   ├── hook-dsh-normalize-fullwidth/
+│   │   └── hook-dsh-normalize-file/
 │   └── smokes/                       # the twelve smoke suites (the paths adapted to the monorepo)
 │       ├── core-smoke.mjs · factory-smoke.mjs · governor-smoke.mjs · pinner-smoke.mjs
 │       ├── cargo-smoke.mjs · normalize-dash-smoke.mjs · the five flavor smokes

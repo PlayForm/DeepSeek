@@ -40,9 +40,9 @@ The factory is the **hub** of the eleven-package DSH family:
 
 | Consumer                                                            | injects                   | uses                                                                                                   |
 | ------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [ets-hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-governor-package/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
-| [ets-hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-pinner-package/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
-| [ets-hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-governor-cargo/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
+| [ets-hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
+| [ets-hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
+| [ets-hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
 | [ets-hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-dash/Source) + the five `ets-hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
 The pure layer it deliberately does **not** re-export is [`ets-hook-dsh-core`](../ets-hook-dsh-core) (its
@@ -127,9 +127,9 @@ The factory makes it apply **once**.
    a pure transform, an update engine          inject: ["fs"] - it calls ctx.fs)
    and every ledger string)
 
-  ets-hook-dsh-governor-package ────►┐
-  ets-hook-dsh-pinner-package ───────┤       ctx.pluginFactory (Service)
-  ets-hook-dsh-governor-cargo ───────┤         │
+  ets-hook-dsh-package-governor ────►┐
+  ets-hook-dsh-package-pinner ───────┤       ctx.pluginFactory (Service)
+  ets-hook-dsh-cargo-governor ───────┤         │
   ets-hook-dsh-normalize-dash ───────┤         ├─ Append(state, msg) ──► "<Module>: <msg>" on the logger
   ets-hook-dsh-normalize-quotes ─────┤         │                        + "[<ISO>] <msg>" appended to the ledger file
   ets-hook-dsh-normalize-ellipsis ───┤         ├─ Match(path, list) ───► the exclusion-first segment match
@@ -300,7 +300,7 @@ The write the factory performs for that return value (a `package.json` whose
 
 ```text
 transcript:  the write tool result shows exactly what the author wrote
-ets-hook-dsh-pinner-package.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
+ets-hook-dsh-package-pinner.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
 ```
 
 The factory's part of that one pass: Gate decided the actor and the path, Discover found the nearest

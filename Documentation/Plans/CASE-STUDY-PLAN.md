@@ -52,7 +52,7 @@ strings. *Source*: Handoff Package-01–03, Package-05; commits `49e5b3d`, `859f
 The confirmation agent's three criticals (Package 4-REV): the `.d.ts` alias leak (TS2310 circular
 bases), the nondeterministic build (the unawaited `exec()` race), the governor's live Inflight
 collision. Then the executed queue: the Module rename, the Schema helper, the type-import flip, the
-`@playform/dsh-core-hook` extraction, the P4 granularization. *Source*: Handoff Package-04 (REV),
+`@playform/hook-dsh-core` extraction, the P4 granularization. *Source*: Handoff Package-04 (REV),
 09, 09-REV; commits `28ebc30`, `3c29108`, `060e3b6`, `1ed3564`, `c6a72ce`, `1fef4ca`, `e78c05c`,
 `711d5b2`.
 - **Beats** (each a decision card): type-only imports are erased → the "only Config imports the

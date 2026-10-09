@@ -1,9 +1,9 @@
-# Bundle patch for @playform/ets-hook-dsh-governor-cargo — the CARGO.TOML FLAVOR
+# Bundle patch for @playform/ets-hook-dsh-cargo-governor — the CARGO.TOML FLAVOR
 # of the package.json governor (Rust-side updates via cargo-edit; the Rust/TS
-# boundary). Its ledger is SEPARATE (ets-hook-dsh-governor-cargo.log) and its trigger gate
+# boundary). Its ledger is SEPARATE (ets-hook-dsh-cargo-governor.log) and its trigger gate
 # is the basename "Cargo.toml", so it coexists cleanly with
-# @playform/ets-hook-dsh-governor-package (basename "package.json") and
-# @playform/ets-hook-dsh-pinner-package on the same fs/observed seam — each gates
+# @playform/ets-hook-dsh-package-governor (basename "package.json") and
+# @playform/ets-hook-dsh-package-pinner on the same fs/observed seam — each gates
 # on its own basename; the user decides which to activate.
 #
 # New entries are declared with `insert:` (docs/user/develop/basic/
@@ -18,11 +18,11 @@
 # subprocess seam's resolveExecutable — set an absolute path when the host
 # PATH is not the shell PATH.
 - insert:
-      - id: ets-hook-dsh-governor-cargo
-        name: "@playform/ets-hook-dsh-governor-cargo"
+      - id: ets-hook-dsh-cargo-governor
+        name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-governor-cargo.log
+            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log
             updateCooldownMs: 3000
             strict: false
             mutationTools: [write, edit, str_replace_editor, raw-write]

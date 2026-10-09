@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/ets-hook-dsh-governor-cargo (0.0.1), one
+Welcome to our community! This repository holds @playform/ets-hook-dsh-cargo-governor (0.0.1), one
 of the release packages of the DeepSeek Harness Plugin Family: the silent Cargo.toml governor: the rust-sided flavor of the package.json governor, hooking fs/observed and deterministically governing the rust manifest's dependencies.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 
