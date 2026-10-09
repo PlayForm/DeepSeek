@@ -203,6 +203,12 @@ The user will run the whole process again - the review-driven pass:
    after any source change - the `~/.dsh` originals stay live.
 13. **The commit protocol**: the user commits (incrementally per folder
    with `git gcommit-hermes` when they decide); the agents never commit.
+   (ANNOTATED record: `git gcommit-hermes` refers to the gcommit
+   command's hermes heritage - the historical attribution; this line is
+   record-only, a future-pass candidate; RESOLVED - the hermes
+   de-branding is already done across the family, and this line itself
+   is the residue: it stays as the record, marked as the historical
+   artifact - annotate-only, no deletion.)
 14. **THE README AGENT** (user-instructed 2026-10-07, in the queue AFTER
    the corrections): the monorepo root `README.md` + the other READMEs
    (EffectTS/README.md, Boilerplate/README.md - both MISSING - and the
@@ -304,7 +310,7 @@ The user will run the whole process again - the review-driven pass:
 4. **SHOWCASE** - showcase the functionality (the workbench/matrix/index/plugin pages presenting what the family DOES) + the PARENT'S SUGGESTION: a shared Compare component (the draggable before/after slider - raw vs normalized) + the terminal-chrome presentation of the stream surfaces.
 5. **UPDATES** - the current-state truthfulness across the site + the READMEs (the effect 4.0.2 declared vs installed, the publishConfigs, the pending items' notes - the docs never claim what is not live).
 6. **PITFALLS** - the lessons/known-gaps surfaced (the load-order, the verifyCommand trap, the fixture paths, the ledger/live gaps - the engineering pitfalls in the site + the READMEs).
-7. **DUAL-SOURCE BUNDLING** - the SAME npm target from the two sources: `@playform/dsh-hook-*` published once, carrying the Classic + the Effect-TS builds, the user installs once + TOGGLES (the npm-native mechanism - the exports-map conditions or the package config - no postinstall builds; the smokes verify both builds) - the design + the package-layout prep, NOT the publishing (the npm agent later).
+7. **DUAL-SOURCE BUNDLING** - the SAME npm target from the two sources: `@playform/dsh-hook-*` published once, carrying the Classic + the Effect-TS builds, the user installs once + TOGGLES (the npm-native mechanism - the exports-map conditions or the package config - no postinstall builds; the smokes verify both builds) - the design + the package-layout prep, NOT the publishing (the npm agent later). [SUPERSEDED 2026-10-09 by SPLICE-ETS.md: the one-name dual-build shape is replaced by the ets-* namespace split - the two trees publish distinct names; historical record, not rewritten.]
 8. **COMPRESS-BORROW** - the .github (the Auto/NPM/Node/Dependabot workflows) + the other folders from ~/Developer/Application/PlayForm/Compress (the user's own repo) adapted to the family's per-repo conventions - no attribution.
 9. **README/functionality completeness** - the missing bits in the READMEs + the functional gaps (the install flows, the configuration, the troubleshooting, the features undocumented).
 10. **WEBSITE-ADOPTION** - adopt the website we built: the deployment/ops (the Cloudflare Pages DASHBOARD INTEGRATION deploys deepseek.playform.cloud automatically on push to Current - the wrangler/Cloudflare-deploy arm was RETRACTED per the user: no workflow publish step, no deploy command, no Cloudflare secrets; the freshness fix is simply committing + pushing Current; the _headers/404/robots/sitemap live, the monitoring) - taking the site live.

@@ -1,0 +1,26 @@
+# Bundle patch for @playform/hook-dsh-package-governor.
+# ANYWHERE MODE, EXCLUSION-FIRST: no roots allowlist — every tool-layer
+# package.json write is governed unless its path contains an excluded
+# segment. New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) — a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "…" not found' (verified via
+# `dsh --profile <x> --dump-config` on 2026-10-02; the 0.1.0-dev.2 patch had
+# this same defect). Activated when the profile's package.json lists the
+# package in dsh.profile.bundles AND the app is restarted (bundle layers
+# compose at host boot). A file: dependency alone is NOT activation.
+# The `name` row below is the PUBLISH IDENTITY (@playform/hook-dsh-package-governor);
+# the config fields are unchanged from v0.4.7.
+- insert:
+      - id: hook-dsh-package-governor
+        name: "@playform/hook-dsh-package-governor"
+        config:
+            log: true
+            logFile: ~/.dsh/hook-dsh-package-governor.log
+            updateCooldownMs: 3000
+            strict: false
+            mutationTools: [write, edit, str_replace_editor, raw-write]
+            maxUpdateFailures: 3
+            ncuBin: /usr/local/bin/ncu
+            updateMode: programmatic
+            policyFile: ""
+            exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]

@@ -1,5 +1,5 @@
 // Classic/smokes/normalize-file-smoke.mjs - the family smoke pattern: a fake ctx
-// (on capture, get returning the REAL @playform/plugin-dsh-factory instance from
+// (on capture, get returning the REAL @playform/dsh-plugin-factory instance from
 // its built Target, logger capture) + the REAL normalize-file apply (from the
 // built Target) → assert the full tool contract: the read → count → write
 // pipeline through Factory.Write (the shared executor), the N=0 no-op no-write
@@ -8,7 +8,7 @@
 // flavor with NO event listener).
 import { rmSync, readFileSync, existsSync } from "node:fs";
 import NormalizeFile from "../packages/hook-dsh-normalize-file/Target/Library.js";
-import FactoryClass from "../packages/plugin-dsh-factory/Target/Library.js";
+import FactoryClass from "../packages/dsh-plugin-factory/Target/Library.js";
 
 const Ledger = "/tmp/normalize-file-smoke-ledger.log";
 let Pass = 0,

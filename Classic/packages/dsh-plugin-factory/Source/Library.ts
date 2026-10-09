@@ -1,4 +1,4 @@
-// Library — the entry module of the FACTORY (@playform/plugin-dsh-factory),
+// Library — the entry module of the FACTORY (@playform/dsh-plugin-factory),
 // the FIRST class/service plugin in the governance family
 // (docs/user/develop/framework/service.md). Loader contract: the class form —
 // `export default class PluginFactory extends Service` with
@@ -74,25 +74,25 @@ import type {
 	Registry as GovernRegistry,
 	Selection as GovernSelection,
 } from "./Function/Govern.js";
-import type Shape from "@Interface/State.js";
-import type Setup from "@Interface/Options.js";
-import type Decision from "@Interface/Gate.js";
-import type Transform from "@Interface/Transform.js";
+import type Shape from "./Interface/State.js";
+import type Setup from "./Interface/Options.js";
+import type Decision from "./Interface/Gate.js";
+import type Transform from "./Interface/Transform.js";
 import type { Context as Ctx } from "@deepseek-ai/cordis";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,
-// Options, Gate, Transform, Output } from "@playform/plugin-dsh-factory"`
+// Options, Gate, Transform, Output } from "@playform/dsh-plugin-factory"`
 // instead of deriving them through `Parameters<Factory["…"]>[0]` — and
 // instead of mirroring the shapes locally (the pre-fix structural mirrors).
 // The declarations ship RELATIVE specifiers (the deterministic build emits
 // ./Interface/*.js), so a consumer's tsconfig paths never re-map them.
-export type { default as State } from "@Interface/State.js";
-export type { default as Options } from "@Interface/Options.js";
-export type { default as Gate } from "@Interface/Gate.js";
-export type { default as Transform } from "@Interface/Transform.js";
-export type { default as Output } from "@Interface/Output.js";
-export type { default as Journal } from "@Interface/Journal.js";
+export type { default as State } from "./Interface/State.js";
+export type { default as Options } from "./Interface/Options.js";
+export type { default as Gate } from "./Interface/Gate.js";
+export type { default as Transform } from "./Interface/Transform.js";
+export type { default as Output } from "./Interface/Output.js";
+export type { default as Journal } from "./Interface/Journal.js";
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields — `Schema(shared?, module?)`,

@@ -1,1 +1,0 @@
-import{dirname as p}from"node:path";import m from"./Transform.js";import{Suppress as a}from"@playform/hook-dsh-core";const d=(e,r,o,i,s)=>{try{r.Stash.set(o.targetKey,s);const t=p(o.displayPath);return e.Continue(r,o,i,t,e.Discover(t),s,m(e,r,o.displayPath))}catch(t){try{r.Context.logger.error?.(a(r.Module,"listener",t))}catch{}}};export{d as Pin};

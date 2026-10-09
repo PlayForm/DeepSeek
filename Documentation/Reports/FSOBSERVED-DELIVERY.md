@@ -23,14 +23,14 @@ outcome is silent:
   shadowed.
 - `Gate` step 2 (`dsh-plugin-factory/Source/Function/Gate.ts:47`) returns
   `{ pass: false, reason: "actor" }`, and `Observe` logs **nothing** for that outcome
-  (`dsh-hook-package-governor/Source/Function/Observe.ts:47-48` - only `excluded` logs, at :42-44).
+  (`dsh-package-governor-hook/Source/Function/Observe.ts:47-48` - only `excluded` logs, at :42-44).
   Hence "no gate outcome of any kind appears".
 - The root-registration fix in `Wire.ts:39` was aimed at a misdiagnosis (scope isolation); it is
   harmless and arguably the better posture, but it could not fix this.
 
 **Recommendation (one fix):** add `"raw-write"` to `mutationTools` in the three bundle patch
-layers - `dsh-hook-package-governor/cordis.patch.yml:21`,
-`dsh-hook-package-pinner/cordis.patch.yml:20`, `dsh-hook-cargo-governor/cordis.patch.yml:29` - and
+layers - `dsh-package-governor-hook/cordis.patch.yml:21`,
+`dsh-package-pinner-hook/cordis.patch.yml:20`, `dsh-cargo-governor-hook/cordis.patch.yml:29` - and
 restart. One-line config-manifest edits; zero architecture cost; the existing root-bus wiring then
 delivers everything (the `excluded` line, the chain pass, the update stage, `governed`/`pinned`
 lines). `mutationTools` is marked volatile (`x-cordis.volatile`), so it can also be hot-edited; for
@@ -90,9 +90,9 @@ discriminator between the working control and the silent raw-write is the **gate
 ## The live `mutationTools` (why fact 6's verification missed it)
 
 - Deployed schema default **includes** `raw-write`:
-  `dsh-hook-package-governor/Target/Variable/Config.js` -
+  `dsh-package-governor-hook/Target/Variable/Config.js` -
   `mutationTools:["write","edit","str_replace_editor","raw-write"]`.
-- But the bundle patch layer overrides it: `dsh-hook-package-governor/cordis.patch.yml:21` →
+- But the bundle patch layer overrides it: `dsh-package-governor-hook/cordis.patch.yml:21` →
   `mutationTools: [write, edit, str_replace_editor]`. Same in the pinner (:20) and the cargo
   governor (:29).
 - Bundle layers compose at boot in `dsh.profile.bundles` order over an empty root, then the user

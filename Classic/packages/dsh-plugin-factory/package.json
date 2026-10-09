@@ -1,32 +1,14 @@
 {
-	"name": "@playform/plugin-dsh-factory",
+	"name": "@playform/dsh-plugin-factory",
 	"version": "0.0.1",
-	"description": "The FACTORY: a DeepSeek Harness service (@playform/plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate — the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list resolution, the g1 gate set, the version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained continuation, the State builder, the wiring helpers, the effects (jobs controller, in-flight disposal, storage domain), the Schemastery schema factory and the probe-once seam accessor. A new governance flavor reduces to a Config extension, a pure transform and an update engine; the factory owns the scaffolding and never the flavor's ledger strings.",
+	"description": "The FACTORY: a DeepSeek Harness service (@playform/dsh-plugin-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate — the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list resolution, the g1 gate set, the version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained continuation, the State builder, the wiring helpers, the effects (jobs controller, in-flight disposal, storage domain), the Schemastery schema factory and the probe-once seam accessor. A new governance flavor reduces to a Config extension, a pure transform and an update engine; the factory owns the scaffolding and never the flavor's ledger strings.",
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
 	"exports": {
 		".": {
-			"effect-ts": {
-				"types": "./Target-EffectTS/Library.d.ts",
-				"default": "./Target-EffectTS/Library.js"
-			},
-			"classic": {
-				"types": "./Target/Library.d.ts",
-				"default": "./Target/Library.js"
-			},
-			"default": {
-				"types": "./Target/Library.d.ts",
-				"default": "./Target/Library.js"
-			}
-		},
-		"./classic": {
 			"types": "./Target/Library.d.ts",
 			"default": "./Target/Library.js"
-		},
-		"./effect-ts": {
-			"types": "./Target-EffectTS/Library.d.ts",
-			"default": "./Target-EffectTS/Library.js"
 		},
 		"./cordis.patch.yml": "./cordis.patch.yml",
 		"./SCHEME.md": "./SCHEME.md",
@@ -34,16 +16,12 @@
 	},
 	"files": [
 		"Target",
-		"Target-EffectTS",
 		"cordis.patch.yml",
 		"README.md",
 		"SCHEME.md"
 	],
 	"scripts": {
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
-	},
-	"dependencies": {
-		"effect": "4.0.2"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.4",
@@ -76,5 +54,8 @@
 		"bundle": {
 			"patch": "./cordis.patch.yml"
 		}
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

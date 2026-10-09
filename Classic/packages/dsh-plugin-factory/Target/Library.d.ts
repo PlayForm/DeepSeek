@@ -4,17 +4,17 @@ import type { FsTarget, FsObservation, FsVersion, FsWriteOutcome } from "@deepse
 import type { Over as WriteOver } from "./Function/Write.js";
 import SchemaFn from "./Function/Schema.js";
 import type { Registry as GovernRegistry, Selection as GovernSelection } from "./Function/Govern.js";
-import type Shape from "@Interface/State.js";
-import type Setup from "@Interface/Options.js";
-import type Decision from "@Interface/Gate.js";
-import type Transform from "@Interface/Transform.js";
+import type Shape from "./Interface/State.js";
+import type Setup from "./Interface/Options.js";
+import type Decision from "./Interface/Gate.js";
+import type Transform from "./Interface/Transform.js";
 import type { Context as Ctx } from "@deepseek-ai/cordis";
-export type { default as State } from "@Interface/State.js";
-export type { default as Options } from "@Interface/Options.js";
-export type { default as Gate } from "@Interface/Gate.js";
-export type { default as Transform } from "@Interface/Transform.js";
-export type { default as Output } from "@Interface/Output.js";
-export type { default as Journal } from "@Interface/Journal.js";
+export type { default as State } from "./Interface/State.js";
+export type { default as Options } from "./Interface/Options.js";
+export type { default as Gate } from "./Interface/Gate.js";
+export type { default as Transform } from "./Interface/Transform.js";
+export type { default as Output } from "./Interface/Output.js";
+export type { default as Journal } from "./Interface/Journal.js";
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;

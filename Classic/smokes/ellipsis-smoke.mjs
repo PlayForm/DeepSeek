@@ -1,12 +1,12 @@
 // Classic/smokes/ellipsis-smoke.mjs — the family smoke pattern: a
-// fake ctx (on capture, get returning the REAL @playform/plugin-dsh-factory
+// fake ctx (on capture, get returning the REAL @playform/dsh-plugin-factory
 // instance from its built Target, logger capture) + the REAL ellipsis apply
 // (from the built Target) → assert the full llm/stream waterfall contract
 // for the CLASS flavor (the core's Ellipsis class + the configured
 // replacement, default "...").
 import { appendFileSync, rmSync, readFileSync, existsSync } from "node:fs";
 import Ellipsis from "../packages/hook-dsh-normalize-ellipsis/Target/Library.js";
-import FactoryClass from "../packages/plugin-dsh-factory/Target/Library.js";
+import FactoryClass from "../packages/dsh-plugin-factory/Target/Library.js";
 
 const Ledger = "/tmp/ellipsis-smoke-ledger.log";
 let Pass = 0,

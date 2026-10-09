@@ -1,0 +1,32 @@
+{
+	"name": "@playform/hook-dsh-core",
+	"version": "0.0.1",
+	"description": "The CORE: the pure, harness-free commonalities of the governance family (@playform/hook-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard — the CLASSIC, dependency-free build of the classical group. A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"type": "module",
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Target",
+		"README.md"
+	],
+	"scripts": {
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.4",
+		"tsc-alias": "1.9.7",
+		"typescript": "7.0.2"
+	},
+	"license": "CC0-1.0",
+	"publishConfig": {
+		"access": "public"
+	}
+}

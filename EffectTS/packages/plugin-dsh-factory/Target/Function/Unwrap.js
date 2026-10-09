@@ -1,1 +1,0 @@
-var u=o=>{const n={...o??{}};for(const t of Object.keys(n)){const e=n[t];switch(!0){case(e!==null&&typeof e=="object"&&typeof e.get=="function"):try{n[t]=e.get?.()}catch{}break}}return n};export{u as default};

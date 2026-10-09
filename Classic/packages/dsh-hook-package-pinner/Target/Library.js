@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-pinner-package",n=t,e=["fs","pluginFactory"],r=o;var a={name:p,apply:r,Config:n,inject:e};export{n as Config,r as apply,a as default,e as inject,p as name};

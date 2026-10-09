@@ -1,1 +1,0 @@
-var i=(r,t,s,n,o)=>{for(const e of Object.keys(n))if(!0===(!s.includes(e)&&JSON.stringify(n[e])!==JSON.stringify(o[e])))return r(`REFUSED rewrite of ${t}: non-dependency section "${e}" would change`),!0;return!1};export{i as default};

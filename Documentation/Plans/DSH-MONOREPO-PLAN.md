@@ -25,6 +25,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
   developed inside the monorepo first): the cleaned, de-personalized, restructured implementations -
   register #12 (anonymization + the Aphrodite README borrow), #15 (the reversed hierarchical names:
   `hook-dsh-governor-cargo` etc.).
+  [ANNOTATED 2026-10-09: SPLICE-ETS.md resolved #15 - the trees now carry unique names, the Classic the plain @playform/dsh-* forms (with the three token-reordered names) and the EffectTS the @playform/ets-* forms + the base @playform/ets-dsh-hook.]
 - **`DeepSeek/EffectTS` = the Effect-TS v4 release** (register #13): the same package identities as
   the Classic, the internals re-implemented on Effect-TS (the tracing, the ecosystem interop, the
   parallel-govern toggle from #14 designed in from the start). Its smokes prove parity against the
@@ -58,17 +59,17 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 │   ├── README.md                     # the boilerplate readme (the package inventory table)
 │   ├── packages/                     # the twelve bundles, as-is:
 │   │   ├── dsh-plugin-factory/       #   (Source/, Target/, Configuration/, package.json,
-│   │   ├── dsh-hook-core/            #    cordis.patch.yml example, pnpm-workspace.yaml,
-│   │   ├── dsh-hook-package-governor/ #   tsconfig.json - NO node_modules)
-│   │   ├── dsh-hook-package-pinner/
-│   │   ├── dsh-hook-cargo-governor/
-│   │   ├── dsh-hook-normalize-dash/
-│   │   ├── dsh-hook-normalize-quotes/
-│   │   ├── dsh-hook-normalize-ellipsis/
-│   │   ├── dsh-hook-normalize-spaces/
-│   │   ├── dsh-hook-normalize-invisible/
-│   │   ├── dsh-hook-normalize-fullwidth/
-│   │   └── dsh-hook-normalize-file/
+│   │   ├── dsh-core-hook/            #    cordis.patch.yml example, pnpm-workspace.yaml,
+│   │   ├── dsh-package-governor-hook/ #   tsconfig.json - NO node_modules)
+│   │   ├── dsh-package-pinner-hook/
+│   │   ├── dsh-cargo-governor-hook/
+│   │   ├── dsh-normalize-dash-hook/
+│   │   ├── dsh-normalize-quotes-hook/
+│   │   ├── dsh-normalize-ellipsis-hook/
+│   │   ├── dsh-normalize-spaces-hook/
+│   │   ├── dsh-normalize-invisible-hook/
+│   │   ├── dsh-normalize-fullwidth-hook/
+│   │   └── dsh-normalize-file-hook/
 │   └── smokes/                       # the twelve smoke suites (the paths adapted to the monorepo)
 │       ├── core-smoke.mjs · factory-smoke.mjs · governor-smoke.mjs · pinner-smoke.mjs
 │       ├── cargo-smoke.mjs · normalize-dash-smoke.mjs · the five flavor smokes

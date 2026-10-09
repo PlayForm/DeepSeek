@@ -173,7 +173,7 @@ const tracingLayer = (): TracingLayer =>
 			),
 		),
 		resource: {
-			serviceName: tracing.config?.serviceName ?? "@playform/plugin-dsh-factory",
+			serviceName: tracing.config?.serviceName ?? "@playform/ets-dsh-plugin-factory",
 		},
 	}));
 

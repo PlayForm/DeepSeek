@@ -1,0 +1,56 @@
+{
+	"name": "@playform/ets-hook-dsh-package-governor",
+	"version": "0.0.1",
+	"description": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage (npm-check-updates, programmatic by default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained continuation. Fully API-aware: the governed manifest is read/rewritten through ctx.fs with a version-guarded replaceIfVersion write (the service owns version tokens), configuration is a validated Schemastery Config schema with defaults, and the authoring agent is never notified: the tool result is built from the author's own content, and the observation-policy's version record is refreshed by re-emitting fs/observed with the service-issued fresh version.",
+	"type": "module",
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+	},
+	"dependencies": {
+		"@playform/ets-dsh-hook": "0.0.1",
+		"@playform/ets-hook-dsh-core": "0.0.1",
+		"@playform/ets-dsh-plugin-factory": "0.0.1",
+		"effect": "4.0.2",
+		"npm-check-updates": "23.1.0"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.4",
+		"tsc-alias": "1.9.7",
+		"typescript": "7.0.2",
+		"@deepseek-ai/cordis": "4.0.4",
+		"@deepseek-ai/schemastery": "3.18.4",
+		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage-domain": "0.2.0-rc.2",
+		"zod": "4.6.5"
+	},
+	"license": "CC0-1.0",
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

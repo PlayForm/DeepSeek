@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-quotes",e=t,n=["pluginFactory"],r=o;var m={name:p,apply:r,Config:e,inject:n};export{e as Config,r as apply,m as default,n as inject,p as name};

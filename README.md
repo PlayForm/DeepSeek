@@ -44,7 +44,7 @@ pnpm install --ignore-scripts
 pnpm run prepublishOnly
 ```
 
-The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the ten consumers; the
+The two base bundles first (`hook-dsh-core`, [dsh-plugin-factory][ours-dsh-plugin-factory]), then the ten consumers; the
 consumers import their siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
@@ -59,17 +59,17 @@ exists.
     {
     	"name": "my-dsh-profile",
     	"dependencies": {
-    		"@playform/plugin-dsh-factory": "link:../bundles/plugin-dsh-factory",
-    		"@playform/hook-dsh-governor-package": "link:../bundles/hook-dsh-governor-package",
-    		"@playform/hook-dsh-pinner-package": "link:../bundles/hook-dsh-pinner-package",
+    		"@playform/dsh-plugin-factory": "link:../bundles/dsh-plugin-factory",
+    		"@playform/hook-dsh-package-governor": "link:../bundles/hook-dsh-package-governor",
+    		"@playform/hook-dsh-package-pinner": "link:../bundles/hook-dsh-package-pinner",
     		"@playform/hook-dsh-normalize-dash": "link:../bundles/hook-dsh-normalize-dash"
     	},
     	"dsh": {
     		"profile": {
     			"bundles": [
-    				"@playform/plugin-dsh-factory",
-    				"@playform/hook-dsh-governor-package",
-    				"@playform/hook-dsh-pinner-package",
+    				"@playform/dsh-plugin-factory",
+    				"@playform/hook-dsh-package-governor",
+    				"@playform/hook-dsh-package-pinner",
     				"@playform/hook-dsh-normalize-dash"
     			]
     		}
@@ -84,20 +84,20 @@ exists.
     `pnpm add @playform/<pkg>` in the profile directory once the family publishes to npm (the
     publishing is a later item).
 
-2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) - one insert row per bundle, the
+2. **Add the patch entries** (the profile's [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml)) - one insert row per bundle, the
    config fields straight from the bundle's schema:
 
     ```yaml
     - insert:
-          - id: plugin-dsh-factory
-            name: "@playform/plugin-dsh-factory"
+          - id: dsh-plugin-factory
+            name: "@playform/dsh-plugin-factory"
             config: {}
     - insert:
-          - id: hook-dsh-governor-package
-            name: "@playform/hook-dsh-governor-package"
+          - id: hook-dsh-package-governor
+            name: "@playform/hook-dsh-package-governor"
             config:
                 log: true
-                logFile: ~/.dsh/hook-dsh-governor-package.log
+                logFile: ~/.dsh/hook-dsh-package-governor.log
                 updateCooldownMs: 3000
                 strict: false
                 mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -125,42 +125,30 @@ exists.
    ledger alone:
 
     ```text
-    hook-dsh-governor-package: activated (anywhere mode, logFile=~/.dsh/hook-dsh-governor-package.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
-    hook-dsh-pinner-package: activated (pinner, logFile=~/.dsh/hook-dsh-pinner-package.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
+    hook-dsh-package-governor: activated (anywhere mode, logFile=~/.dsh/hook-dsh-package-governor.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
+    hook-dsh-package-pinner: activated (pinner, logFile=~/.dsh/hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
     hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/hook-dsh-normalize-dash.log)
     ```
 
 ---
 
-## The variant toggle (CLASSIC vs EFFECT-TS)
+## The two release groups (CLASSIC vs EFFECT-TS)
 
-**Install once, toggle at the loader.**
+Two published groups, one contract: the CLASSIC packages (`@playform/dsh-*` - plain TypeScript)
+and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run:
 
-```sh
-pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
-```
+- **CLASSIC:** `pnpm add @playform/hook-dsh-core @playform/dsh-plugin-factory @playform/hook-dsh-package-governor` -
+  plain TypeScript, zero framework dependencies; `import { Govern } from "@playform/dsh-plugin-factory"`.
+- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-dsh-plugin-factory @playform/ets-hook-dsh-governor-package` -
+  the same contracts on Effect-TS services and layers, with `effect` v4.0.2 as the shared runtime
+  dependency and the base `@playform/ets-dsh-hook` package carrying the plumbing every ets-*
+  package builds on.
 
-One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
-the EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall
-builds, no user-side compilation - the toggle is pure resolution:
-
-- **CLASSIC (default):** just import - `import { Govern } from "@playform/plugin-dsh-factory"`.
-- **EFFECT-TS (whole family, one flag):**
-  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`)
-  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
-  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
-    webpack: `resolve.conditionNames: ["effect-ts"]`
-- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
-  (or `/classic`) - deterministic in every toolchain.
-
-The whole family toggles together - never mix variants in one graph (the effect-ts `Update`
-returns Effect envelopes, not the classic dispatch envelope). `effect` v4.0.2 comes as a
-dependency with the same single install.
-
-From source, each tree's `default` condition routes to its own build (`Target/`); the sibling
-variant is assembled byte-exactly by `Maintain/DualSource.sh` (`pnpm run build:dual-source`,
-verified by `pnpm run verify:dual-source` - 110 checks). The npm publication is the later item;
-this section is the published-package story.
+Never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic
+dispatch envelope). From source, each tree is its own workspace slice: the Classic tree under
+`Classic/packages/dsh-*`, the Effect-TS tree under `EffectTS/packages/ets-*` (+ the base), each
+built by its own `prepublishOnly` sequence. The npm publication is the later item; this section is
+the published-package story.
 
 ---
 
@@ -236,11 +224,11 @@ One contract, three trees - the ledger strings are byte-identical across all of 
 
 Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 
-- **[plugin-dsh-factory][ours-plugin-dsh-factory]** (Plugin @ DSH @ Factory) - the family's first service: loading it
+- **[dsh-plugin-factory][ours-dsh-plugin-factory]** (Plugin @ DSH @ Factory) - the family's first service: loading it
   registers one class plugin (`static inject = ["fs"]`) that exposes `ctx.pluginFactory`, nineteen
   callable methods covering everything the hooks used to duplicate - the ledger (`Append`), the
   exclusion match (`Match`), the registry discovery (`Discover`/`Parse`), the union keep-list
-  (`ResolvePolicy`), the gate set (`Gate`), [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts) (`Write`/`GuardedWrite` - the
+  (`ResolvePolicy`), the gate set (`Gate`), [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Write.ts) (`Write`/`GuardedWrite` - the
   version-guarded fenced writes), the
   [fs/observed][dsh-fs]
   re-emit (`Refresh`), the detached contained continuation (`Continue`), the State builder, the
@@ -252,7 +240,7 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
   a plugin: the dependency-section lists, the exclusion segments, the suppression-line composer, the
   update-policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), the update envelope, the activation-line composer, and
   the normalize/stream machinery (the six tables, `Replace`/`ReplaceMap`, `Chunk`/`Block`).
-- **[hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source)** (Hook @ DSH @ Governor @ Package) - the silent `package.json`
+- **[hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)** (Hook @ DSH @ Governor @ Package) - the silent `package.json`
   governor: hooks
   [`fs/observed`][dsh-fs],
   rewrites chain-governed pins (`^x`, `~x`, `workspace:*`) to the effective registry's resolved
@@ -260,11 +248,11 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
   [the subprocess seam][dsh-subprocess])
   on a cooldown with a circuit breaker; `strict` strips unknown dependencies - explicit only, never
   a default-delete.
-- **[hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source)** (Hook @ DSH @ Pinner @ Package) - the silent version pinner:
+- **[hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)** (Hook @ DSH @ Pinner @ Package) - the silent version pinner:
   deterministically rewrites every ranged dependency version to its static version (`^0.3.4` ->
-  `0.3.4`), protected by the [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) keep-list; the keep-list wins over pinning, never
+  `0.3.4`), protected by the [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts) keep-list; the keep-list wins over pinning, never
   over the chain.
-- **[hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source)** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the
+- **[hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the
   governor: surgical chain-pin rewrites on the raw TOML lines (comments survive), full-version
   normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through
   [the subprocess seam][dsh-subprocess] -
@@ -403,8 +391,7 @@ The workflow, root-first - every step is a root `package.json` script:
 | --------------------- | -------------------------------------------------------------------------------------------------- |
 | `pnpm install`        | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install |
 | `pnpm run build:classic` / `build:effect-ts` | the twelve bundles of one tree, one workspace pass (`prepublishOnly` per bundle)   |
-| `pnpm run build:dual-source` | both trees + `Maintain/DualSource.sh` - the sibling variant dirs assembled byte-exactly |
-| `pnpm run verify:dual-source` | `Maintain/Verify-DualSource.mjs` - 110 resolution checks, the toggle arbiter       |
+| `pnpm run build` | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger |
 | `pnpm test`           | all 24 smokes (12 Classic + 12 EffectTS) - the behavioral arbiter, exit non-zero on any failure    |
 | `pnpm site`           | the static site build (`Site/` - 21 pages)                                                          |
 | `pnpm lychee`         | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                       |
@@ -416,9 +403,10 @@ tree); the tree is committed by the maintainer, never by tooling.
 
 The hazards, documented:
 
-- **The duplicate-name relink.** The workspace carries two trees with the same twelve names; a
-  `pnpm install` can re-relink a consumer's `@playform/*` links to the OTHER tree (glob-last),
-  which silently breaks the Classic suites. Re-run the 24 smokes after every install.
+- ~~The duplicate-name relink.~~ Resolved by the namespace split (SPLICE-ETS.md): the two trees
+  now carry unique names (`@playform/dsh-*` vs `@playform/ets-*`), so no install can re-relink a
+  consumer's `@playform/*` links to the other tree. Re-run the 24 smokes after every install
+  anyway.
 - **The verifyCommand trap.** An update-policy `verifyCommand` fails on a vendored-fork workspace
   (no registry to install from) - the ledger records it, the expected outcome.
 - **The smoke/live fidelity gap.** The smokes prove the mechanics; the live battery proves the
@@ -490,7 +478,7 @@ and the governance on top.
 | Want to...            | Start here                                                                      |
 | --------------------- | ------------------------------------------------------------------------------- |
 | Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`       |
-| Add a flavor          | `hook-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle          |
+| Add a flavor          | `hook-dsh-core` (one table) + a new `dsh-hook-normalize-<name>` bundle          |
 | Change behavior       | the smokes first - the counts (733/746) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`        |
 
@@ -503,8 +491,8 @@ stay byte-identical; the tree is committed by the maintainer, never by tooling.
 
 Released under [CC0-1.0](LICENSE) - public domain.
 
-[ours-plugin-dsh-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source
+[ours-dsh-plugin-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
 [dsh-llm]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts
-[ours-govern]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts
+[ours-govern]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Govern.ts
 [dsh-subprocess]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess

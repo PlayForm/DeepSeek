@@ -6,7 +6,7 @@
 
 Status: **AUDIT COMPLETE, DESIGN PROPOSED (read-only; nothing edited, nothing committed).** Scope:
 the eleven family packages at `~/.dsh/profiles/desktop/bundles/` (post-rename state:
-`dsh-hook-normalize-dash` already carries the new name) and the archived smokes at `~/.dsh/smokes/`.
+`dsh-normalize-dash-hook` already carries the new name) and the archived smokes at `~/.dsh/smokes/`.
 The built-in write tool source was extracted from the installed app's asar for the tiebreaker
 (`dsh/node_modules/@deepseek-ai/dsh-tool-fs/lib/index.js`, v0.2.0-rc.2; cited below as
 `tool-fs/index.js:N` with the line numbers of the extracted file). Doc contract:

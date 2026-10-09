@@ -1,1 +1,0 @@
-import{Policy as o}from"@playform/hook-dsh-core";var p=(e,t)=>o(r=>e.Factory.Append(e,r),t,{reject:["tailwindcss"],depGroups:["dev","optional","peer","prod","bundle"],concurrency:8,targets:{default:"latest",overrides:[]},verifyCommand:null});export{p as default};

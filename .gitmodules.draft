@@ -15,11 +15,12 @@
 # regenerate the entries). Do NOT activate before the per-package
 # repositories exist.
 #
-# Naming note (pending the lib-/manifest refinement, #15): the two
-# flavors publish the SAME npm names (@playform/<package-name>), so
-# the draft repo names are <package-name> for the Classic flavor and
-# <package-name>-effectts for the Effect-TS flavor; the suffix is a
-# placeholder until the naming is decided.
+# Naming note (decided, SPLICE-ETS §2/§5.2): the two flavors publish
+# DIFFERENT npm names - the Classic flavor under @playform/dsh-* (the
+# plain names) and the Effect-TS flavor under @playform/ets-* (+ the
+# base @playform/ets-dsh-hook); the draft repo names are the package
+# directory names (dsh-* for the Classic flavor, ets-* for the
+# Effect-TS flavor, ets-dsh-hook for the base).
 #
 # The per-package .gitignore files (node_modules/, Target/,
 # pnpm-lock.yaml, ...) already anticipate the extraction: once each
@@ -29,100 +30,100 @@
 
 # ---- Classic/packages ----
 
-[submodule "hook-dsh-core"]
-	path = Classic/packages/hook-dsh-core
-	url = https://github.com/PlayForm/hook-dsh-core.git
+[submodule "dsh-hook-core"]
+	path = Classic/packages/dsh-hook-core
+	url = https://github.com/PlayForm/dsh-hook-core.git
 
-[submodule "hook-dsh-governor-cargo"]
-	path = Classic/packages/hook-dsh-governor-cargo
-	url = https://github.com/PlayForm/hook-dsh-governor-cargo.git
+[submodule "dsh-hook-cargo-governor"]
+	path = Classic/packages/dsh-hook-cargo-governor
+	url = https://github.com/PlayForm/dsh-hook-cargo-governor.git
 
-[submodule "hook-dsh-governor-package"]
-	path = Classic/packages/hook-dsh-governor-package
-	url = https://github.com/PlayForm/hook-dsh-governor-package.git
+[submodule "dsh-hook-package-governor"]
+	path = Classic/packages/dsh-hook-package-governor
+	url = https://github.com/PlayForm/dsh-hook-package-governor.git
 
-[submodule "hook-dsh-normalize-dash"]
-	path = Classic/packages/hook-dsh-normalize-dash
-	url = https://github.com/PlayForm/hook-dsh-normalize-dash.git
+[submodule "dsh-hook-normalize-dash"]
+	path = Classic/packages/dsh-hook-normalize-dash
+	url = https://github.com/PlayForm/dsh-hook-normalize-dash.git
 
-[submodule "hook-dsh-normalize-ellipsis"]
-	path = Classic/packages/hook-dsh-normalize-ellipsis
-	url = https://github.com/PlayForm/hook-dsh-normalize-ellipsis.git
+[submodule "dsh-hook-normalize-ellipsis"]
+	path = Classic/packages/dsh-hook-normalize-ellipsis
+	url = https://github.com/PlayForm/dsh-hook-normalize-ellipsis.git
 
-[submodule "hook-dsh-normalize-file"]
-	path = Classic/packages/hook-dsh-normalize-file
-	url = https://github.com/PlayForm/hook-dsh-normalize-file.git
+[submodule "dsh-hook-normalize-file"]
+	path = Classic/packages/dsh-hook-normalize-file
+	url = https://github.com/PlayForm/dsh-hook-normalize-file.git
 
-[submodule "hook-dsh-normalize-fullwidth"]
-	path = Classic/packages/hook-dsh-normalize-fullwidth
-	url = https://github.com/PlayForm/hook-dsh-normalize-fullwidth.git
+[submodule "dsh-hook-normalize-fullwidth"]
+	path = Classic/packages/dsh-hook-normalize-fullwidth
+	url = https://github.com/PlayForm/dsh-hook-normalize-fullwidth.git
 
-[submodule "hook-dsh-normalize-invisible"]
-	path = Classic/packages/hook-dsh-normalize-invisible
-	url = https://github.com/PlayForm/hook-dsh-normalize-invisible.git
+[submodule "dsh-hook-normalize-invisible"]
+	path = Classic/packages/dsh-hook-normalize-invisible
+	url = https://github.com/PlayForm/dsh-hook-normalize-invisible.git
 
-[submodule "hook-dsh-normalize-quotes"]
-	path = Classic/packages/hook-dsh-normalize-quotes
-	url = https://github.com/PlayForm/hook-dsh-normalize-quotes.git
+[submodule "dsh-hook-normalize-quotes"]
+	path = Classic/packages/dsh-hook-normalize-quotes
+	url = https://github.com/PlayForm/dsh-hook-normalize-quotes.git
 
-[submodule "hook-dsh-normalize-spaces"]
-	path = Classic/packages/hook-dsh-normalize-spaces
-	url = https://github.com/PlayForm/hook-dsh-normalize-spaces.git
+[submodule "dsh-hook-normalize-spaces"]
+	path = Classic/packages/dsh-hook-normalize-spaces
+	url = https://github.com/PlayForm/dsh-hook-normalize-spaces.git
 
-[submodule "hook-dsh-pinner-package"]
-	path = Classic/packages/hook-dsh-pinner-package
-	url = https://github.com/PlayForm/hook-dsh-pinner-package.git
+[submodule "dsh-hook-package-pinner"]
+	path = Classic/packages/dsh-hook-package-pinner
+	url = https://github.com/PlayForm/dsh-hook-package-pinner.git
 
-[submodule "plugin-dsh-factory"]
-	path = Classic/packages/plugin-dsh-factory
-	url = https://github.com/PlayForm/plugin-dsh-factory.git
+[submodule "dsh-plugin-factory"]
+	path = Classic/packages/dsh-plugin-factory
+	url = https://github.com/PlayForm/dsh-plugin-factory.git
 
 # ---- EffectTS/packages ----
 
-[submodule "hook-dsh-core-effectts"]
-	path = EffectTS/packages/hook-dsh-core
-	url = https://github.com/PlayForm/hook-dsh-core-effectts.git
+[submodule "dsh-hook-core-effectts"]
+	path = EffectTS/packages/dsh-hook-core
+	url = https://github.com/PlayForm/dsh-hook-core-effectts.git
 
-[submodule "hook-dsh-governor-cargo-effectts"]
-	path = EffectTS/packages/hook-dsh-governor-cargo
-	url = https://github.com/PlayForm/hook-dsh-governor-cargo-effectts.git
+[submodule "dsh-hook-cargo-governor-effectts"]
+	path = EffectTS/packages/dsh-hook-cargo-governor
+	url = https://github.com/PlayForm/dsh-hook-cargo-governor-effectts.git
 
-[submodule "hook-dsh-governor-package-effectts"]
-	path = EffectTS/packages/hook-dsh-governor-package
-	url = https://github.com/PlayForm/hook-dsh-governor-package-effectts.git
+[submodule "dsh-hook-package-governor-effectts"]
+	path = EffectTS/packages/dsh-hook-package-governor
+	url = https://github.com/PlayForm/dsh-hook-package-governor-effectts.git
 
-[submodule "hook-dsh-normalize-dash-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-dash
-	url = https://github.com/PlayForm/hook-dsh-normalize-dash-effectts.git
+[submodule "dsh-hook-normalize-dash-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-dash
+	url = https://github.com/PlayForm/dsh-hook-normalize-dash-effectts.git
 
-[submodule "hook-dsh-normalize-ellipsis-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-ellipsis
-	url = https://github.com/PlayForm/hook-dsh-normalize-ellipsis-effectts.git
+[submodule "dsh-hook-normalize-ellipsis-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-ellipsis
+	url = https://github.com/PlayForm/dsh-hook-normalize-ellipsis-effectts.git
 
-[submodule "hook-dsh-normalize-file-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-file
-	url = https://github.com/PlayForm/hook-dsh-normalize-file-effectts.git
+[submodule "dsh-hook-normalize-file-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-file
+	url = https://github.com/PlayForm/dsh-hook-normalize-file-effectts.git
 
-[submodule "hook-dsh-normalize-fullwidth-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-fullwidth
-	url = https://github.com/PlayForm/hook-dsh-normalize-fullwidth-effectts.git
+[submodule "dsh-hook-normalize-fullwidth-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-fullwidth
+	url = https://github.com/PlayForm/dsh-hook-normalize-fullwidth-effectts.git
 
-[submodule "hook-dsh-normalize-invisible-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-invisible
-	url = https://github.com/PlayForm/hook-dsh-normalize-invisible-effectts.git
+[submodule "dsh-hook-normalize-invisible-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-invisible
+	url = https://github.com/PlayForm/dsh-hook-normalize-invisible-effectts.git
 
-[submodule "hook-dsh-normalize-quotes-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-quotes
-	url = https://github.com/PlayForm/hook-dsh-normalize-quotes-effectts.git
+[submodule "dsh-hook-normalize-quotes-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-quotes
+	url = https://github.com/PlayForm/dsh-hook-normalize-quotes-effectts.git
 
-[submodule "hook-dsh-normalize-spaces-effectts"]
-	path = EffectTS/packages/hook-dsh-normalize-spaces
-	url = https://github.com/PlayForm/hook-dsh-normalize-spaces-effectts.git
+[submodule "dsh-hook-normalize-spaces-effectts"]
+	path = EffectTS/packages/dsh-hook-normalize-spaces
+	url = https://github.com/PlayForm/dsh-hook-normalize-spaces-effectts.git
 
-[submodule "hook-dsh-pinner-package-effectts"]
-	path = EffectTS/packages/hook-dsh-pinner-package
-	url = https://github.com/PlayForm/hook-dsh-pinner-package-effectts.git
+[submodule "dsh-hook-package-pinner-effectts"]
+	path = EffectTS/packages/dsh-hook-package-pinner
+	url = https://github.com/PlayForm/dsh-hook-package-pinner-effectts.git
 
-[submodule "plugin-dsh-factory-effectts"]
-	path = EffectTS/packages/plugin-dsh-factory
-	url = https://github.com/PlayForm/plugin-dsh-factory-effectts.git
+[submodule "dsh-plugin-factory-effectts"]
+	path = EffectTS/packages/dsh-plugin-factory
+	url = https://github.com/PlayForm/dsh-plugin-factory-effectts.git

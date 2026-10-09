@@ -12,20 +12,25 @@ whenToUse: Mandatory for the agent-batch regime in this monorepo: whenever the u
 4. MONITOR: the queue bookkeeping (active / paused / queued), the SURFACE-CONFLICT analysis (which agents may run concurrently - only when their files are provably disjoint; serialize everything else), the activation cascade (idle agents fire as their surfaces free up), the stall recovery (no file activity -> send a checkpoint nudge: "report your state; STOP reading; move to the ACTION phase"; then a hard deadline nudge if needed), the failure handling (an agent that died: verify the tree for partial edits first, then re-dispatch with the same or a corrected spec).
 5. VERIFY: the ARBITERS ARE THE LANES' OWN - every activation carries the
    arbiter mandate (the 24 smokes print their own totals - Classic 733 /
-   EffectTS 746; the site lanes run the astro build (21 pages) + the dev-server
-   curls + the built-HTML/CSS + the measured checks themselves, and report the
-   numbers). THE ORCHESTRATOR DOES NOT EXECUTE (the user-mandated law, 2026-10-09
-   - the slip lesson, enforced after the orchestrator ran a build that cleared
-   Target/ + pre-investigated feedback surfaces): no builds, no site edits, no
-   measurement runs, NO surface-location investigation before relaying feedback -
-   the feedback goes to the idlers VERBATIM and the idlers investigate + locate +
-   execute + build + verify. The orchestrator's hands-on work is LIMITED to: (a)
-   relaying the user's feedback verbatim to the idle agents; (b) keeping the
-   records (the handoff, the Tasks/, the process records); (c) read-only
-   spot-checks of the agents' REPORTED claims (greps over the committed/built
-   output only - trust the agents' printed totals over prose claims; a claim that
-   contradicts the printed totals is wrong - e.g. 795/808 were arithmetic
-   phantoms). The user commits mid-session - the index state is theirs.
+   EffectTS 746; the site lanes run the build + the built-HTML/CSS + the
+   measured checks themselves, and report the numbers). THE ORCHESTRATOR DOES
+   NOT EXECUTE (the user-mandated law, 2026-10-09 - the slip lesson, enforced
+   after the orchestrator ran a build that cleared Target/ + pre-investigated
+   feedback surfaces): no builds, no site edits, no measurement runs, NO
+   surface-location investigation before relaying feedback - the feedback goes
+   to the idlers VERBATIM and the idlers investigate + locate + execute +
+   build + verify. The orchestrator's hands-on work is LIMITED to: (a) relaying
+   the user's feedback verbatim to the idle agents; (b) keeping the records
+   (the handoff, the Tasks/, the process records); (c) read-only spot-checks of
+   the agents' REPORTED claims (greps over the committed/built output only -
+   trust the agents' printed totals over prose claims; a claim that contradicts
+   the printed totals is wrong - e.g. 795/808 were arithmetic phantoms). The
+   user commits mid-session - the index state is theirs.
+   THE LANES' ARBITER FORM (the user's side note, 2026-10-09): the lanes do NOT
+   launch the dev server (no astro dev/preview - the port conflicts) and run NO
+   tsc checks and NO git checks - when a build is needed the lane runs
+   `cd Site && pnpm prepublishOnly` (the site's build script) + the
+   built-HTML/CSS verification over Target/ + the measured checks only.
 6. REPORT: the per-agent results, the residuals + the decisions for the user, the queue's next steps. The user decides the commit protocol.
 
 ## The spec-reconfiguration authority (user-granted)
@@ -50,15 +55,16 @@ The totals: Classic 733 / EffectTS 746 (the suites print them); the per-suite pa
    count, the scope + the off-limits surfaces); the surgical-edit + the
    build-verified disciplines bind every lane; the verify-and-close lanes first
    (the files marked "fix landed + committed - verify") - then the idle ones.
-3. THE ROUTING NON-NEGOTIABLE (the slip lesson - binding): every subagent launch
-   passes provider=cloudflare-workers-ai + model=@cf/zai-org/glm-5.3-flash +
-   the exact reasoningEffort (high for the routine coding; low for the
-   exploration; DeepSeek max ONLY for the planning/advanced lane + the
-   escalations). The OMISSION inherits the parent route (the DeepSeek - the
-   expensive lane) - an omission IS the violation (it slipped once - the recent
-   lanes ran on the wrong route - the cost was sunk). The routing-enforcer
-   plugin (Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md) will automate this
-   silently - until then, the explicit routing is the law.
+3. THE ROUTING NON-NEGOTIABLE (the slip lesson + the user's amendment - binding):
+   EVERY subagent launch passes provider=cloudflare-workers-ai +
+   model=@cf/zai-org/glm-5.3-flash + reasoningEffort=low - the coder route,
+   ALWAYS, no exceptions (the user's amendment 2026-10-09: "the agents you're
+   launching must always be coder glm 5.3 low - always" - the DeepSeek-max
+   planning clause is RETIRED; the planning lanes also run GLM flash low). The
+   OMISSION inherits the parent route - an omission IS the violation (it slipped
+   once - the cost was sunk). The routing-enforcer plugin
+   (Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md) will automate this silently -
+   until then, the explicit routing is the law.
 4. THE ENVIRONMENT DISCIPLINE: the user commits MID-SESSION (HEAD moves under
    you + the lanes); the tree may be mid-edit by the concurrent lanes (the
    read-before-edit always); the handoff + the process records are the durable

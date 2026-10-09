@@ -1,4 +1,4 @@
-# @playform/hook-dsh-governor-package
+# @playform/dsh-package-governor-hook
 
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-CASCADES.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
@@ -6,8 +6,8 @@
 
 _The DeepSeek Harness Plugin Family for PlayForm._
 
-[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-governor-package&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-package)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-package)
+[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fdsh-package-governor-hook&color=blue)](https://www.npmjs.com/package/@playform/dsh-package-governor-hook)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/dsh-package-governor-hook)
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
@@ -34,7 +34,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service and the [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)
+[`dsh-plugin-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source) service and the [`dsh-core-hook`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-core-hook/Source)
 helpers; it has no hook children of its own.
 
 One of three governance hooks sharing the
@@ -43,13 +43,13 @@ seam, each gating on its own basename and writing its own ledger:
 
 | plugin                                                  | basename gate  | ledger                          | pass                                                 |
 | ------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [hook-dsh-governor-package][ours-hook-dsh-governor-package] (this bundle)               | `package.json` | `hook-dsh-governor-package.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`hook-dsh-pinner-package`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source) | `package.json` | `hook-dsh-pinner-package.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`hook-dsh-governor-cargo`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source) | `Cargo.toml`   | `hook-dsh-governor-cargo.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| [dsh-package-governor-hook][ours-dsh-package-governor-hook] (this bundle)               | `package.json` | `dsh-package-governor-hook.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`dsh-package-pinner-hook`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-pinner-hook/Source) | `package.json` | `dsh-package-pinner-hook.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`dsh-cargo-governor-hook`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-cargo-governor-hook/Source) | `Cargo.toml`   | `dsh-cargo-governor-hook.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
 leaves ncu nothing to do; the chain pass may still re-canonicalize chain pins), **chain > strip >
-normalize** (the cargo module's precedence), **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts)
+normalize** (the cargo module's precedence), **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-pinner-hook/Source/Function/Transform.ts)
 keeps ranges as authored).
 
 The ledgers are separate; activating one never implies another.
@@ -57,15 +57,15 @@ The ledgers are separate; activating one never implies another.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
-  schema come from [`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source); the pure helpers (`Suppress`, the
-  policy loader) come from [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source). This bundle keeps only its own
+  schema come from [`dsh-plugin-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source); the pure helpers (`Suppress`, the
+  policy loader) come from [`dsh-core-hook`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-core-hook/Source). This bundle keeps only its own
   vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
   (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
   [`fs/observed`][dsh-fs]
   event path, its two steps are registered with the factory's direct-govern registry at apply
   (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory SCHEME.md
   §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain pass and
-  update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger
+  update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger
   strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
@@ -76,18 +76,18 @@ the same conventions as every other @playform package.
 
 1. **Remote / dependency install (auto-activation):** add the package as a plain dependency of a
    profile - the `dsh.bundle` manifest makes it a harness bundle, installed automatically and
-   activated at the next host start: `pnpm add @playform/hook-dsh-governor-package` in the profile
+   activated at the next host start: `pnpm add @playform/dsh-package-governor-hook` in the profile
    dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`).
 2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
    node_modules) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
    `dsh plugin --profile <name> add <this directory>`.
 3. **Native dsh install:**
-   `dsh plugin --profile <name> add ./local-hook-dsh-governor-package-<v>.tgz`.
+   `dsh plugin --profile <name> add ./local-dsh-package-governor-hook-<v>.tgz`.
 
 All three end the same way.
 
 The loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
-inserts the [hook-dsh-governor-package][ours-hook-dsh-governor-package] row, and the ledger logs `activated (anywhere mode, ...)` at
+inserts the [dsh-package-governor-hook][ours-dsh-package-governor-hook] row, and the ledger logs `activated (anywhere mode, ...)` at
 the next host start.
 
 ### Usage
@@ -97,11 +97,11 @@ manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
 - insert:
-      - id: hook-dsh-governor-package
-        name: "@playform/hook-dsh-governor-package"
+      - id: dsh-package-governor-hook
+        name: "@playform/dsh-package-governor-hook"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-governor-package.log
+            logFile: ~/.dsh/dsh-package-governor-hook.log
             updateMode: programmatic
 ```
 
@@ -186,7 +186,7 @@ Key properties, all enforced by construction:
   contained logger-only (the core's `Suppress` composer); the ledger is best-effort.
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s
+envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/dsh-core-hook](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-core-hook/Source)'s
 `Function/Update`); this module is a thin delegate that injects its own collections, child stage and
 ledger strings, so the flow is not forked per governance module.
 
@@ -195,7 +195,7 @@ ledger strings, so the flow is not forked per governance module.
 TypeScript-first, built with `@playform/build` (ESBuild + tsc type-check):
 
 ```text
-hook-dsh-governor-package/
+dsh-package-governor-hook/
 ├── Source/                  ← TypeScript (NOT shipped)
 │   ├── Library.ts           ← entry: name / apply / Config / inject
 │   │                          + default { name, apply, Config, inject }
@@ -253,11 +253,11 @@ ids with `entry "..." not found`).
 
 ```yaml
 - insert:
-      - id: hook-dsh-governor-package
-        name: "@playform/hook-dsh-governor-package"
+      - id: dsh-package-governor-hook
+        name: "@playform/dsh-package-governor-hook"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-governor-package.log # global ledger
+            logFile: ~/.dsh/dsh-package-governor-hook.log # global ledger
             updateCooldownMs: 3000
             strict: false # explicit only; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -296,7 +296,7 @@ it.
 The transcript shows only what the author wrote; the ledger shows what actually happened:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (anywhere mode, logFile=~/.dsh/hook-dsh-governor-package.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
+[2026-10-03T09:15:22.411Z] activated (anywhere mode, logFile=~/.dsh/dsh-package-governor-hook.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
 [2026-10-03T09:16:01.880Z] governed ~/Projects/acme/tool/package.json → 42
 [2026-10-03T09:16:34.120Z] update stage dispatched for ~/Projects/acme/tool (mode=programmatic, ncu via /usr/local/bin/ncu, built-in default policy)
 [2026-10-03T09:16:41.502Z] update: DONE — pins bumped per policy
@@ -313,11 +313,11 @@ line, `skipped (excluded) ...`, while the file stays untouched.
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/hook-dsh-governor-package.log`) records activation,
+One global log (`logFile`, default `~/.dsh/dsh-package-governor-hook.log`) records activation,
 exclusions, chain-pass results, and every update-stage dispatch.
 
 The strings this module composes
-(the hook-dsh-governor-package: logger prefix is the factory's `Append`; each line is
+(the dsh-package-governor-hook: logger prefix is the factory's `Append`; each line is
 `[<ISO>] <message>` in the file):
 
 ```text
@@ -361,32 +361,25 @@ alone.
 
 ---
 
-## The variant toggle (CLASSIC vs EFFECT-TS)
+## The two release groups (CLASSIC vs EFFECT-TS)
 
-One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
-(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
-effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
-builds, no user-side compilation:
+Two published groups, one contract: the CLASSIC packages (`@playform/dsh-*` - plain TypeScript)
+and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run:
 
-- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-governor-package"` resolves to
-  `Target/` with zero framework dependencies.
-- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
-  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
-  graph):
-  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
-  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
-  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
-    `resolve.conditionNames: ["effect-ts"]`.
-- **The per-import escape hatch** (no loader config at all): `import ... from
-  "@playform/hook-dsh-governor-package/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+- **The CLASSIC group.** `import ... from "@playform/dsh-package-governor-hook"` - zero framework
+  dependencies.
+- **The EFFECT-TS group.** `import ... from "@playform/ets-hook-dsh-governor-package"` - the same
+  contract on Effect-TS services and layers, with `effect` v4.0.2 as the runtime dependency and
+  the base `@playform/ets-dsh-hook` package carrying the plumbing every ets-* package builds on.
 
-`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
-(the CLASSIC build never imports it).
+Never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic
+dispatch envelope). From source, each tree is its own workspace slice: the Classic tree under
+`Classic/packages/dsh-*`, the Effect-TS tree under `EffectTS/packages/ets-*`.
 
 ## License 📜
 
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-hook-dsh-governor-package]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source
-[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml
+[ours-dsh-package-governor-hook]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-governor-hook/Source
+[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml

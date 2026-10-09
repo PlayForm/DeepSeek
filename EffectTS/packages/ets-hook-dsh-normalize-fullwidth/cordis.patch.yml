@@ -1,0 +1,42 @@
+# Bundle patch for @playform/ets-hook-dsh-normalize-fullwidth.
+# The fullwidth hook NORMALIZES MODEL OUTPUT: it registers one llm/stream
+# waterfall listener — the interceptable wrapper around every streaming model
+# call (retry, replay, routing) — and maps the full-width family to its ASCII
+# half-width counterparts in text/reasoning deltas and in the assembled
+# block-end blocks. Full-width letters, digits and punctuation arrive from
+# CJK input methods and localized tooling; the half-width ASCII forms are the
+# unambiguous characters every parser, shell and diff understands — the
+# entire FULLWIDTH FORMS range U+FF01–U+FF5E (94 code points) maps to its
+# ASCII counterpart U+0021–U+007E (the standard fullwidth-to-halfwidth
+# mapping). Unlike the governance family (fs/observed, silent), the rewrite
+# is deliberately VISIBLE — it flows into both the live UI and the durable
+# transcript, because the normalization IS the feature.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) — a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "…" not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the app
+# is restarted (bundle layers compose at host boot). A file: dependency alone
+# is NOT activation.
+#
+# NO `replacement` FIELD: this is a MAP flavor — the substitution is the
+# core's Fullwidth table (one full-width character in, its half-width
+# counterpart out), which carries no configured knob, so the config carries
+# none either. The log/logFile cells are volatile (hot-editable).
+# `normalizeReasoning` defaults to ON (the deltas AND the assembled block
+# must agree); `normalizeToolArguments` is IMPLEMENTED (the argumentsDelta
+# text and the assembled ToolCallBlock arguments are rewritten by the same
+# map when on, with two exemptions: an `edit` call passes through by
+# identity (old_string must match real file bytes) and a call whose
+# arguments open with the `{"__normalize":false` first-key marker passes
+# through unnormalized with the marker entry stripped) with the SCHEMA default OFF — tool-call arguments are
+# execution-critical raw JSON — and this example patch turns it ON (opt-in:
+# the user accepts the risk).
+- insert:
+      - id: ets-hook-dsh-normalize-fullwidth
+        name: "@playform/ets-hook-dsh-normalize-fullwidth"
+        config:
+            log: true
+            logFile: ~/.dsh/ets-hook-dsh-normalize-fullwidth.log
+            normalizeReasoning: true
+            normalizeToolArguments: true

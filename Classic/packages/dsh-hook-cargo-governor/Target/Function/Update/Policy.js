@@ -1,1 +1,0 @@
-import{Policy as p}from"@playform/hook-dsh-core";var l=(e,t,o,r=!1)=>p(i=>e.Append(t,i),o,{reject:[],depGroups:["prod","dev","build"],pinStyle:"caret",incompatible:"ignore",pinned:"ignore",verifyCommand:null},r);export{l as default};

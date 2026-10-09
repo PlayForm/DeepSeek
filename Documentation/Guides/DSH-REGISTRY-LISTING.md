@@ -24,54 +24,53 @@
 - **The source of the install form:** the site already ships the final command
   shape on every plugin page and in the hero: `pnpm add @playform/<pkg>`
   (`Site/Source/Component/Terminal.astro` defaults to
-  `pnpm add @playform/hook-dsh-core`; `Site/Source/pages/plugins.astro` carries
+  `pnpm add @playform/dsh-core-hook`; `Site/Source/pages/plugins.astro` carries
   one install row per package). The listing below repeats that form BYTE-EXACT.
 
-## 2. THE ROSTER - the CURRENT OPERATING NAMES (12)
+## 2. THE ROSTER - the OPERATING NAMES (the two groups + the base)
 
-The trees today carry the `@playform/hook-dsh-*` + `@playform/plugin-dsh-factory`
-names (verified in the manifests, `Classic/packages/*/package.json` and
-`EffectTS/packages/*/package.json`); the site installs by these names. Until the
-splice executes, THIS is the namespace the registry listing uses.
+The splice has executed (SPLICE-ETS §8 S2/S4): the trees carry UNIQUE names - the Classic
+tree the plain `@playform/dsh-*` names, the EffectTS tree the `@playform/ets-hook-dsh-*` /
+`@playform/ets-dsh-plugin-factory` names plus the base `@playform/ets-dsh-hook` (verified in the
+manifests). The registry listing uses exactly these.
+
+**The classical group (12, `Classic/packages/*`):**
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
-| 1 | `@playform/hook-dsh-core` | `pnpm add @playform/hook-dsh-core` | the core contract + the normalize machinery |
-| 2 | `@playform/plugin-dsh-factory` | `pnpm add @playform/plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
-| 3 | `@playform/hook-dsh-governor-package` | `pnpm add @playform/hook-dsh-governor-package` | the package.json governor |
-| 4 | `@playform/hook-dsh-pinner-package` | `pnpm add @playform/hook-dsh-pinner-package` | the package.json pinner |
-| 5 | `@playform/hook-dsh-governor-cargo` | `pnpm add @playform/hook-dsh-governor-cargo` | the Cargo.toml governor |
-| 6 | `@playform/hook-dsh-normalize-dash` | `pnpm add @playform/hook-dsh-normalize-dash` | dashes → the module's replacement |
-| 7 | `@playform/hook-dsh-normalize-quotes` | `pnpm add @playform/hook-dsh-normalize-quotes` | curly → straight quotes |
-| 8 | `@playform/hook-dsh-normalize-ellipsis` | `pnpm add @playform/hook-dsh-normalize-ellipsis` | ... → ... |
-| 9 | `@playform/hook-dsh-normalize-spaces` | `pnpm add @playform/hook-dsh-normalize-spaces` | unicode → ASCII spaces |
-| 10 | `@playform/hook-dsh-normalize-invisible` | `pnpm add @playform/hook-dsh-normalize-invisible` | invisible characters removed |
-| 11 | `@playform/hook-dsh-normalize-fullwidth` | `pnpm add @playform/hook-dsh-normalize-fullwidth` | fullwidth → halfwidth |
-| 12 | `@playform/hook-dsh-normalize-file` | `pnpm add @playform/hook-dsh-normalize-file` | the file normalize composition |
+| 1 | `@playform/dsh-core-hook` | `pnpm add @playform/dsh-core-hook` | the core contract + the normalize machinery |
+| 2 | `@playform/dsh-plugin-factory` | `pnpm add @playform/dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
+| 3 | `@playform/dsh-package-governor-hook` | `pnpm add @playform/dsh-package-governor-hook` | the package.json governor |
+| 4 | `@playform/dsh-package-pinner-hook` | `pnpm add @playform/dsh-package-pinner-hook` | the package.json pinner |
+| 5 | `@playform/dsh-cargo-governor-hook` | `pnpm add @playform/dsh-cargo-governor-hook` | the Cargo.toml governor |
+| 6 | `@playform/dsh-normalize-dash-hook` | `pnpm add @playform/dsh-normalize-dash-hook` | dashes → the module's replacement |
+| 7 | `@playform/dsh-normalize-quotes-hook` | `pnpm add @playform/dsh-normalize-quotes-hook` | curly → straight quotes |
+| 8 | `@playform/dsh-normalize-ellipsis-hook` | `pnpm add @playform/dsh-normalize-ellipsis-hook` | ... → ... |
+| 9 | `@playform/dsh-normalize-spaces-hook` | `pnpm add @playform/dsh-normalize-spaces-hook` | unicode → ASCII spaces |
+| 10 | `@playform/dsh-normalize-invisible-hook` | `pnpm add @playform/dsh-normalize-invisible-hook` | invisible characters removed |
+| 11 | `@playform/dsh-normalize-fullwidth-hook` | `pnpm add @playform/dsh-normalize-fullwidth-hook` | fullwidth → halfwidth |
+| 12 | `@playform/dsh-normalize-file-hook` | `pnpm add @playform/dsh-normalize-file-hook` | the file normalize composition |
 
-Both trees (Classic + EffectTS) carry these SAME twelve names today - the
-duplicate-name collision is the #15 registration (SPLICE-ETS §2 preamble); only
-ONE of the two can publish under a given name, which is exactly what the splice
-resolves.
+**The effect-ts group (12 + the base, `EffectTS/packages/ets-*`):**
 
-## 3. THE PENDING NAMESPACES (after the splice - SPLICE-ETS §2)
+| # | Package | Install command (byte-exact) | Role |
+| - | ------- | ---------------------------- | ---- |
+| 1 | `@playform/ets-dsh-hook` | `pnpm add @playform/ets-dsh-hook` | the shared Effect-TS plumbing (the base) |
+| 2 | `@playform/ets-dsh-core-hook` | `pnpm add @playform/ets-dsh-core-hook` | the core contract + the normalize machinery |
+| 3 | `@playform/ets-dsh-plugin-factory` | `pnpm add @playform/ets-dsh-plugin-factory` | the factory service (`ctx.pluginFactory`) |
+| 4 | `@playform/ets-hook-dsh-governor-package` | `pnpm add @playform/ets-hook-dsh-governor-package` | the package.json governor |
+| 5 | `@playform/ets-hook-dsh-pinner-package` | `pnpm add @playform/ets-hook-dsh-pinner-package` | the package.json pinner |
+| 6 | `@playform/ets-hook-dsh-governor-cargo` | `pnpm add @playform/ets-hook-dsh-governor-cargo` | the Cargo.toml governor |
+| 7 | `@playform/ets-dsh-normalize-dash-hook` | `pnpm add @playform/ets-dsh-normalize-dash-hook` | dashes → the module's replacement |
+| 8 | `@playform/ets-dsh-normalize-quotes-hook` | `pnpm add @playform/ets-dsh-normalize-quotes-hook` | curly → straight quotes |
+| 9 | `@playform/ets-dsh-normalize-ellipsis-hook` | `pnpm add @playform/ets-dsh-normalize-ellipsis-hook` | ... → ... |
+| 10 | `@playform/ets-dsh-normalize-spaces-hook` | `pnpm add @playform/ets-dsh-normalize-spaces-hook` | unicode → ASCII spaces |
+| 11 | `@playform/ets-dsh-normalize-invisible-hook` | `pnpm add @playform/ets-dsh-normalize-invisible-hook` | invisible characters removed |
+| 12 | `@playform/ets-dsh-normalize-fullwidth-hook` | `pnpm add @playform/ets-dsh-normalize-fullwidth-hook` | fullwidth → halfwidth |
+| 13 | `@playform/ets-dsh-normalize-file-hook` | `pnpm add @playform/ets-dsh-normalize-file-hook` | the file normalize composition |
 
-Once SPLICE-ETS executes, the roster renames and the listing updates to:
-
-- **The classical group (12):** the plain `@playform/dsh-*` names -
-  `@playform/dsh-hook-core`, `@playform/dsh-plugin-factory`,
-  `@playform/dsh-hook-cargo-governor`, `@playform/dsh-hook-package-governor`,
-  `@playform/dsh-hook-package-pinner`, `@playform/dsh-hook-normalize-*` x7,
-  `@playform/dsh-hook-normalize-file` (the three token-REORDERED names are the
-  easy-to-miss mappings - SPLICE-ETS §2.1 is the checklist).
-- **The effect-ts group (12):** the `ets-` pre-pendage - `@playform/ets-hook-dsh-core`,
-  `@playform/ets-plugin-dsh-factory`, `@playform/ets-hook-dsh-governor-*`,
-  `@playform/ets-hook-dsh-pinner-package`, `@playform/ets-hook-dsh-normalize-*` x8.
-- **The base (1):** `@playform/ets-dsh-hook` - the shared Effect-TS plumbing
-  every ets-* package depends on (the L0 publish).
-
-Install form after the splice, unchanged in shape:
-`pnpm add @playform/dsh-...` (classical) / `pnpm add @playform/ets-...` (effect-ts).
+The duplicate-name collision (#15) is resolved: every `@playform/*` dependency resolves to
+exactly one workspace package, so the publish order is the layer order (§5).
 
 ## 4. THE BYTE-EXACT RULE
 
@@ -102,12 +101,12 @@ the byte-identical contract:
 
 ## 6. THE RESIDUALS
 
-- The listing's Section 2 names are PRE-SPLICE - after SPLICE-ETS §8 S2 lands,
-  Section 2 rewrites to the §2.1/§2.2 names and Section 3 collapses.
-- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the
-  manifests - adding them is part of the npm lane's manifest pass, not this
-  lane.
-- The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action - the
-  user's call, outside the tree.
-- The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm
-  lane arms it after the S4 gate.
+- ~~The listing's Section 2 names are PRE-SPLICE~~ Resolved: the splice landed (SPLICE-ETS §8
+  S2/S4) and Section 2 now carries both groups' operating names; the PENDING_NAMESPACES section is
+  collapsed into the roster.
+- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the manifests - adding
+  them is part of the npm lane's manifest pass, not this lane.
+- The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action - the user's call,
+  outside the tree.
+- The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm lane arms it after
+  the S4 gate.

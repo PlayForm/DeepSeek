@@ -92,7 +92,7 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
 | The versions page's distinct purpose (2026-10-09 - NEW feedback) | PENDING (the versions page must STAND OUT as the release/operating-state page - the changelog maintained there + the operating set + the distinct visual, not a plain listing - the VERSIONS-PAGE lane seated) |
 | The CLASSIC/EFFECT-TS marks enrichment (2026-10-09 - NEW feedback) | ADDRESSED (the versions hero line now carries the typescript + effect marks via the new additive PageHero "sub-1" slot; the every-page audit: the already-marked surfaces enumerated + the enrichment across index/versions/hook-dsh-core/setup/plugins (7 files); built counts verified (versions typescript 4 + effect 5 etc.); the residuals recorded: the plain-string props with no markup hook + the prose-narrative uses kept plain per the identity-word rule) |
 | The header re-order (2026-10-09 - NEW feedback) | ADDRESSED (the nav re-ordered by importance + usage: Overview, Plugins, Workbench, Models, Versions, Setup, Flavors, Case Study - the rationale comment added; the footer + the mobile nav share the array so they match; the built pages verified; /matrix/ was never in the nav - flagged, out of scope) |
-| The governor pipeline's long unformatted text (2026-10-09 - NEW feedback) | ADDRESSED (the graph-mechanics conversion landed: the new govpkg-pipeline.mmd diagram - fs/observed trigger → G1 gate (excluded → the ledger line) → G2 discovery → the detached contained G3 chain pass (canonicalize → GuardedWrite → the P3 re-emit) → G4 update stage (programmatic/bin dispatch → verify → the U2 refresh) → silence - rendered via the established pipeline (all labels present, 0 failures) and placed as the "The pipeline, gate by gate" Concept opening the How It Works section, diagram-first; the ASCII code block KEPT byte-exact right below as the reference text; built verification: 21 pages, the page carries 19/19 implemented diagrams) |
+| The governor pipeline's long unformatted text (2026-10-09 - NEW feedback) | ADDRESSED (FINAL: the Pipeline ASCII ladder REMOVED + replaced by the graph mechanics - the govpkg-pipeline.mmd rewritten as the top-down G1-G4 flowchart (the fs/observed entry -> the G1 Factory.Gate chain with the excluded-skip ledger line -> the G2 walk-up miss line -> the Stash seed -> the detached G3 CHAIN PASS -> the G4 UPDATE STAGE ladder -> the SILENCE end) rendered in-page via the shared diagram pipeline; the fact-preservation check automated: 43 semantic facts all present in the built HTML; the byte-exact ledger strings stay in the page's Ledger section; the diagram placeholders render as (path)/(version) per the Mermaid constraint; 21 pages + the dev curls 200; nothing committed) |
 | The index's overflow (2026-10-09 - NEW feedback) | ADDRESSED - NO FIX NEEDED (the overflow was a TRANSIENT: the astro preview served the old index.html referencing the DELETED hashed CSS during the concurrent lane rebuilds - the page rendered unstyled (reads as massive overflow); the current build measured ZERO horizontal overflow at 375/768/803/1024/1280/1440, both themes (the only flags are the internally-scrollable trays, by design); a hard refresh resolves it; the recommendation: the lane rebuilds quiesce while the user is looking at 9999 - recorded; the measure script Scripts/index-overflow-measure.cjs added) |
 | The batch-residuals fix-all (2026-10-09 - the decision) | ADDRESSED: the pinner.log 1px cases - verified a measurement artifact (real -0.83px, no stylesheet fix possible without regressing the 74 zeros; the script-formula lever is the user's call); the models pills +0.5px -> 0.0px (16/16 measured, the span-vs-button text-item root cause + the tag-qualified rule); the runtime pills WIRED (classic 1 chunk/tick vs the effect fibered 2 - headless-verified divergent + the status line); the "120 tps" honested everywhere (the workbench + the matrix/models sweep - zero tps copy in the built output); the info-icon gap 8->12px (--space-md in both unit rules, built-verified); the stale dev lock: PID 21884 already exited - nothing to kill |
 | The separator dots (2026-10-09 - NEW feedback) | ADDRESSED (the REFINED direction: REPLACED with the designed grayed-out bigger dot - the new .dot-sep span (0.375em filled circle, --color-outline gray, both themes, aria-hidden) + the DotSep() renderer; 41 middots across 11 files swept - the kicker keeps the colored words with the gray dots between; built verified: zero raw "·" in any built page, the dot-sep spans per page, the kicker markup confirmed) |
@@ -148,10 +148,7 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   values) + the VERSIONS-PAGE distinct purpose (the changelog + the operating
   set) + the DEPLOY-ARMING (the Cloudflare Pages freshness) + the DOGFOOD-
   TESTING plan (the ~/.dsh integration suites - no symlinks) - all seated.
-- The theme-toggle 768-803px clip (the design call); the footer's dark-mode playform
-  glyph; the Boilerplate baseline's NUL bytes (the restore-or-leave call); the
-  TOMORROW-REVIEW.md's gcommit-hermes line (the process record - a future-pass
-  candidate).
+- The theme-toggle 768-803px clip (the design call - EXECUTED + measured 2026-10-09: the band rule, clip-free all 8 cases, committed a3c54208); the Boilerplate baseline's NUL bytes (EXECUTED 2026-10-09 - restored: 51 NULs in 31 runs across 10 Boilerplate READMEs blanked the seam names (llm/stream, fs/observed, fs/write-intent) - replaced byte-exactly with the seam names, zero NULs left on the text surfaces, a smoke sanity pass green; the binaries intentionally left); the TOMORROW-REVIEW.md's gcommit-hermes line (annotated - the process record); the submodule #16 activation (deferred per the splice decision - the submodule migration is the later best-case, mapped in SPLICE-ETS.md §5.2).
 - The maxActiveSubagents is now 10 in ~/.dsh/profiles/desktop/cordis.patch.yml
   (2026-10-09 - raised from 1 per the user: the main conversation may launch up
   to 10 children, seated as IDLE agents (specs retained - they settle + release
@@ -184,6 +181,146 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   pinner.log 1px baseline cases (lane 1), the models pills' +0.5px (lane 8),
   the plain-string PageHero/Description GLM mentions (lane 7 - covered by the
   adjacent marks) - all recorded in the Tasks/ files.
+- THE FAILOVER RETRY CONFIG (2026-10-09 - the user's requirement): the
+  llm-pi-ai provider's cloudflare-workers-ai gained the retryPolicy (mode
+  normal, maxRetries 500, backoff initialDelayMs 10000 + maxDelayMs 10000 - the
+  ~10s fixed intervals) in ~/.dsh/profiles/desktop/cordis.patch.yml - the
+  retryable codes (RATE_LIMIT/TIMEOUT/SERVER/TRANSPORT/empty) retry ~83 minutes
+  before giving up; the @deepseek-ai/dsh-llm-retry plugin is ALREADY loaded via
+  the dsh-base bundle (rowId llm-retry) so the policy executes on the agent
+  loop's recovery extension point; the config applies at the next profile load.
+  The session-keepalive pair: the goal (armed) + the 5-minute heartbeat job -
+  the session survives errors/timeouts; the API errors retry instead of killing
+  the sessions.
+- THE SPLICE EXECUTION STATE (2026-10-09 - SPLICE-RENAME lane, checkpointed):
+  S0 gate GREEN (the untouched tree: Classic 733 + EffectTS 746, zero
+  failures). S1 base extraction COMPLETE + THE S1 GATE PASSED: 746 green after
+  the extraction (the per-suite breakdown identical to the baseline: cargo 62,
+  core 17, ellipsis 62, factory 41, fullwidth 62, governor 81, invisible 62,
+  dash 132, file 71, pinner 32, quotes 62, spaces 62 = 746, zero failures); the
+  base @playform/ets-dsh-hook built (Target with the Function/Interface/
+  Service/Stream + Library.js). S2 IN PROGRESS (the 25-package rename matrix +
+  the import rewrites + the manifest/exports cleanup) -> then the safe install
+  (post-rename per the plan §2.4) -> the build -> the full 733+746 gate. THE
+  PLAN DEVIATIONS flagged: (1) the governors' fiber-home dedup (State.Scope ??
+  Scope.makeUnsafe) NOT collapsed - a logic edit that would violate the
+  byte-integrity rule; (2) the Function/Append's 2 additional import sites
+  (Open/Resolve) needed a base export the plan's inventory missed - fixed by
+  the base export + the rewiring.
+- THE SPLICE EXECUTION - THE INSTALL MILESTONE (2026-10-09, checkpoint 5): S2
+  COMPLETE (24 dirs renamed, the 25 manifests per the matrix, the import
+  rewrites zero-residual, the smoke-path updates + the 2 READMEs done - the
+  module-identity strings deliberately left byte-identical per the plan). THE
+  POST-RENAME pnpm INSTALL COMPLETED CLEAN (exit 0, 38 workspace projects, 3s,
+  47 stale packages pruned) with the SAME-TREE LINKS VERIFIED - the Classic
+  consumers -> the dsh-hook-* names, the EffectTS consumers -> the ets-* names,
+  NO cross-tree relink - THE DISTINCT NAMES KILLED THE SYMLINK BREAK AT THE
+  ROOT (40 dangling stale links removed by the lane). RUNNING: build:classic +
+  build:effect-ts -> the 24-smoke matrix -> the totals (733/746 expected).
+- THE SPLICE EXECUTION - COMPLETE (2026-10-09 - all gates green through S4):
+  S0 baseline 733/746; S1 the base extraction (ets-dsh-hook) + the 746 gate
+  before the renames; S2 the full 25-package matrix (24 dirs + 25 manifests per
+  the plan, the by-name imports, the Classic effect residue dropped, the
+  dual-source exports/subpaths/variant entries removed from all 24, the smoke
+  paths updated, the clean install with the same-tree links only + 40 stale
+  links pruned); S3 the wiring (the root scripts: build = build:classic &&
+  build:effect-ts pure pnpm -r, test = node Maintain/Run-Smokes.mjs (the new
+  runner, first-fail), the dual-source scripts + the 24 stale Target-Classic/
+  Target-EffectTS dirs deleted, the ignore-file residue cleaned, format:check
+  green); S4 the FINAL GATE: the builds 0 TS errors + pnpm test = ALL 24 suites
+  passed. THE RESIDUALS: (1) the fiber-home dedup (State.Scope ?? Scope.
+  makeUnsafe) skipped - a logic edit conflicting with the byte-integrity rule;
+  (2) the tsc-alias under pnpm -r root cause + the fallback applied (the
+  factory's Library.ts direct relative specifiers); (3) the §7 site/docs
+  renames (the SITE-DOCS-RENAME lane), the NPM.yml arm (§5.1 - the NPM-PUBLISH
+  lane) + the .gitmodules.draft (§5.2 - the later submodule migration) out of
+  this lane's scope; (4) nothing committed.
+- THE SITE-DOCS-RENAME COMPLETE (2026-10-09 - the decision B applied): the
+  per-package docs (104 files: README/SCHEME/CONTRIBUTING/CHANGELOG/patch per
+  package - classical to the @playform/dsh-* forms + the 12 ets READMEs with
+  the base note); the root README + the Governor guides (the variant-toggle
+  replaced with the two-group wording + the base line); the registry listing's
+  pending namespace COLLAPSED into the operating roster (25 rows with the
+  byte-exact install commands); the site (94 files: the 12 plugin routes
+  renamed to /plugins/dsh-*/ + the Live.ts dir filters + the Mermaid sources);
+  the VERSIONS row flip: both rows OPERATING (the CLASSIC dsh-* x 12 + the
+  EFFECT-TS ets-* x 12 + the base, the effect pin 4.0.2) - built shows 6
+  OPERATING / 0 PENDING; the build 21 pages exit 0 with ZERO stale
+  hook-dsh/plugin-dsh names in Target. THE RESIDUALS (the user's calls): (1)
+  the classical READMEs' dual-source "variant toggle" prose - factually stale
+  after the S2 simplification, prose surgery beyond the name rule; (2) the
+  base ships no README/CHANGELOG; (3) the plans keep the old names as the
+  historical records; (4) the CHANGELOG 0.0.1 annotation skipped; (5) the
+  .gitmodules.draft = the later submodule phase (S7); (6) the pre-existing
+  uncommitted site changes preserved.
+- THE SMOKES-AFTER-SPLICE COMPLETE (2026-10-09 - the definitive settled matrix,
+  ran after the TEST-SUITES lane's wiring suites landed + the trees quieted):
+  ALL GREEN, ZERO REGRESSIONS - the 38-suite matrix (24 mechanics + 14 wiring):
+  Classic 733 EXACT (core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 /
+  dash 132 / file 71 / the five flavors 62) + EffectTS 746 EXACT (17/41/81 +
+  the rest), zero failures; the 7 wiring suites per tree self-skip cleanly
+  ("SKIPPED (no scratch home)" / the silent refusal-path); the builds green
+  from the root (the no-sh-scripts mechanism + the regular-dependency trigger
+  holding); nothing committed.
+- THE NPM-PUBLISH-ARM COMPLETE (2026-10-09 - the SPLICE-ETS §5.1 armed +
+  verified; no publish performed): the NPM.yml armed (the L0 ets-dsh-hook base
+  -> the L1 four foundations -> the L2 20 consumers, the topological order,
+  --ignore-scripts, the dispatch/release-gated); the 25 manifests verified
+  (all 0.0.1, the effect pin 4.0.2, no dual-source residue, the prepublishOnly
+  present); the pack readiness (25/25 clean tarballs); THE FRESH-INSTALL GATE
+  GREEN: all 38 suites passed on the scratch file: install (733 + 746 = 1479
+  exactly) - the one gate failure (the optional dsh-storage/dsh-invariants
+  peers of dsh-storage-domain) fixed in the scratch; the EXACT publish sequence
+  delivered for the user's token (or the armed workflow's dispatch). THE
+  RESIDUALS: the cargo-governor description's old-name prose (one-line fix
+  recommended pre-publish), 58 stale untracked .md-f snapshots, the scratch
+  peer set documented, the 1830 uncommitted splice changes (the user's commit
+  review), the dormant per-package workflow copies (the submodule phase).
+- THE CONFIGURATOR COMPLETE (2026-10-09 - the user-mandated requirement): the
+  setup page's interactive configurator (the NEW Source/Component/
+  Configurator.astro - 969 lines - + the setup page's "SELECT · GENERATE ·
+  COPY" section): the ENGINE toggle (CLASSIC/EFFECT-TS) + the profile name +
+  the 12 package toggles; the 3 generated panels (INSTALL-ALL - the byte-exact
+  pnpm add per the selected group + the "PUBLISHED ROUTE · ONCE ON NPM"
+  qualifier, PROFILE WIRING - the bundles package.json + the cordis.patch.yml
+  inserts byte-EXACT vs the real files of both trees (the automated diff: 11/11
+  per tree), VERIFY - the activation ledger lines); the persistence (the URL
+  query + the localStorage); the headless interaction check 15/15 PASS (the
+  engine swap, the selection changes, the profile propagation, the URL
+  restore, the copy feedback, both themes); the 21-page build green. THE
+  RESIDUALS: the cargo/flavors/file verify lines are format-consistent
+  compositions (only governor/pinner page-verified byte-exact - truthful).
+- THE TEST-SUITES COMPLETE (2026-10-09 - the ~/.dsh integration battery
+  landed + run + green): the 7 wiring suites per tree (byte-identical copies,
+  tree-agnostic - the scratch-profile, profile-assembly, patch-layer,
+  live-ledger, governed-write, refusal-path, introspection + the wiring-live
+  helper + the Maintain/Run-Wiring.mjs runner + the pnpm test:wiring script);
+  the run: 101 checks per tree = 202 wiring checks total ALL PASS (the fresh
+  scratch home - DSH_HOME redirect, the file: installs with zero symlinks, the
+  real dsh CLI + the real flows through the harness's own event loop, the
+  byte-exact ledger assertions incl. the pinner-before-governor ordering); the
+  mechanics totals untouched (733/746 re-verified); the self-skip behavior
+  verified; the real ~/.dsh untouched. THE FIDELITY-GAP RESIDUALS recorded
+  (each a candidate mechanics regression): the bundle layers' ~/.dsh logFile
+  defaults do not resolve under the redirected DSH_HOME (silent-catch era);
+  the normalize-file update path requires an fs/write-intent replaceIfVersion
+  owner (a live agent session); the built-in write/edit tools not invokable
+  from the plugin scope (UNKNOWN_TOOL - the factory's shared Write executor
+  used with a plain write actor); the package-governor's refusal guard is
+  defensive by construction (the REFUSED case covered via the cargo Pin guard);
+  the cordis_inspect surfaces are session-only (the introspection asserts the
+  composed tree + the config schema); --dump-config-schema exits 1 on the
+  unrelated web-app validation warnings (the document complete on stdout).
+- THE FINAL NAMING DECISION (2026-10-09 - THE USER'S FINAL, deliberately the
+  most counter-intuitive one: "hook-dsh-<role>" - the imperative reading "hook
+  the DSH!"): THE CLASSICAL: hook-dsh-core, hook-dsh-cargo-governor, hook-dsh-
+  package-governor, hook-dsh-package-pinner, hook-dsh-normalize-{dash,quotes,
+  ellipsis,spaces,invisible,fullwidth,file} + dsh-plugin-factory (the plugin,
+  unchanged). THE ETS GROUP (the ets- prefix + the same scheme): ets-hook-dsh-
+  core, ets-hook-dsh-package-governor, ets-hook-dsh-cargo-governor, ets-hook-
+  dsh-package-pinner, ets-hook-dsh-normalize-{...} + ets-dsh-plugin-factory.
+  THE BASE: @playform/ets-dsh-hook (unchanged). The definitive re-rename is
+  executing; the gates: 733 + 746 must stay exact.
 - The ROUTING DISCIPLINE: the recent lanes slipped to the parent-inherited DeepSeek
   route (the task-routing violation) - the explicit GLM routing is binding from
   here; the routing-enforcer plugin (the plan) automates it silently.

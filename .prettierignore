@@ -26,16 +26,6 @@ dist
 **/dist
 **/dist/**
 
-# The dual-source builds (the DUAL-SOURCE BUNDLING layout: the Classic
-# packages' Target-EffectTS/ + the EffectTS packages' Target-Classic/ -
-# the second flavor's build output, the same law as Target/).
-Target-EffectTS
-**/Target-EffectTS
-**/Target-EffectTS/**
-Target-Classic
-**/Target-Classic
-**/Target-Classic/**
-
 # Caches
 .cache
 **/.cache

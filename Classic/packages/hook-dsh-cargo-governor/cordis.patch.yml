@@ -1,0 +1,34 @@
+# Bundle patch for @playform/hook-dsh-cargo-governor — the CARGO.TOML FLAVOR
+# of the package.json governor (Rust-side updates via cargo-edit; the Rust/TS
+# boundary). Its ledger is SEPARATE (hook-dsh-cargo-governor.log) and its trigger gate
+# is the basename "Cargo.toml", so it coexists cleanly with
+# @playform/hook-dsh-package-governor (basename "package.json") and
+# @playform/hook-dsh-package-pinner on the same fs/observed seam — each gates
+# on its own basename; the user decides which to activate.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) — a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "…" not found' (verified via
+# `dsh --profile <x> --dump-config` on 2026-10-02). Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the app
+# is restarted (bundle layers compose at host boot). A file: dependency alone
+# is NOT activation.
+#
+# cargoBin: the schema default is the bare "cargo", resolved via the
+# subprocess seam's resolveExecutable — set an absolute path when the host
+# PATH is not the shell PATH.
+- insert:
+      - id: hook-dsh-cargo-governor
+        name: "@playform/hook-dsh-cargo-governor"
+        config:
+            log: true
+            logFile: ~/.dsh/hook-dsh-cargo-governor.log
+            updateCooldownMs: 3000
+            strict: false
+            mutationTools: [write, edit, str_replace_editor, raw-write]
+            maxUpdateFailures: 3
+            cargoBin: cargo
+            updateMode: cargo
+            policyFile: ""
+            keepFile: ""
+            exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]

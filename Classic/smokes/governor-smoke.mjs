@@ -14,8 +14,8 @@ import * as Path from "node:path";
 
 // The monorepo bundles live one directory up from the smokes; resolve against
 // this file so the smoke works regardless of the process CWD.
-const FACTORY_DIR = Path.resolve(import.meta.dirname, "../packages/plugin-dsh-factory");
-const GOVERNOR_DIR = Path.resolve(import.meta.dirname, "../packages/hook-dsh-governor-package");
+const FACTORY_DIR = Path.resolve(import.meta.dirname, "../packages/dsh-plugin-factory");
+const GOVERNOR_DIR = Path.resolve(import.meta.dirname, "../packages/hook-dsh-package-governor");
 const NCU_BIN = "ncu";
 const EXCLUDE = ["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"];
 const TOOLS = ["write", "edit", "str_replace_editor", "raw-write"];
@@ -207,7 +207,7 @@ const walk = (dir) => {
 		else if (p.endsWith(".js")) {
 			const source = FileSystem.readFileSync(p, "utf8");
 			targetSources.push(source);
-			if (source.includes("plugin-dsh-factory")) factoryImporters.push(p);
+			if (source.includes("dsh-plugin-factory")) factoryImporters.push(p);
 		}
 	}
 };

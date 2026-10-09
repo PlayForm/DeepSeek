@@ -1,5 +1,12 @@
 # DUAL-SOURCE-BUNDLING - The one-name, two-builds publish mechanism (batch #7)
 
+> [!WARNING]
+> SUPERSEDED 2026-10-09 by [SPLICE-ETS.md](SPLICE-ETS.md): the one-name dual-build publish shape
+> described here is replaced by the ets-* namespace split - the Classic tree publishes the plain
+> `@playform/dsh-*` names and the Effect-TS tree the `@playform/ets-*` names (+ the base
+> `@playform/ets-dsh-hook`), no conditions/exports toggle. This document is the historical record
+> of the pre-splice design - not rewritten.
+
 > The dual-source bundling design + prep for the family: ONE npm package name per identity
 > (`@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`, ...) carries BOTH the Classic build
 > and the Effect-TS build in the same tarball; the user installs ONCE and TOGGLES at the loader

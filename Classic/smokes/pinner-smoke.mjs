@@ -1,6 +1,6 @@
 // pinner-smoke.mjs — the @playform/hook-dsh-pinner-package smoke suite,
 // post-factory-refactor edition. A fake ctx + the REAL built pinner entry
-// (Target/Library.js) + the REAL factory service (@playform/plugin-dsh-factory
+// (Target/Library.js) + the REAL factory service (@playform/dsh-plugin-factory
 // Target/Library.js, instantiated against the same fake ctx — the service the
 // pinner consumes through inject: ["fs", "pluginFactory"]).
 //
@@ -16,8 +16,8 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 
 const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pinner-smoke-"));
-const FACTORY = "../packages/plugin-dsh-factory/Target/Library.js";
-const PINNER = "../packages/hook-dsh-pinner-package/Target/Library.js";
+const FACTORY = "../packages/dsh-plugin-factory/Target/Library.js";
+const PINNER = "../packages/hook-dsh-package-pinner/Target/Library.js";
 
 // ── the fake ctx (mirrors the factory smoke's harness) ──────────────────────
 const loggerLines = { info: [], error: [] };
@@ -990,7 +990,7 @@ const FoldCan = (P) => (text, section, keep) => {
 
 // ══ 9. Factory wiring — the transform contract, driven directly ═════════════
 const { default: Leaf } =
-	await import("../packages/hook-dsh-pinner-package/Target/Function/Transform.js");
+	await import("../packages/hook-dsh-package-pinner/Target/Function/Transform.js");
 const appends = [];
 const leafFurnace = { Append: (s, m) => appends.push(m) };
 const leafState = {

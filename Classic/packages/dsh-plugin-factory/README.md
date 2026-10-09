@@ -1,9 +1,9 @@
-# @playform/plugin-dsh-factory
+# @playform/dsh-plugin-factory
 
 *The DeepSeek Harness Plugin Family for PlayForm.*
 
-[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fplugin-dsh-factory&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
+[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fdsh-plugin-factory&color=blue)](https://www.npmjs.com/package/@playform/dsh-plugin-factory)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/dsh-plugin-factory)
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../../README.md)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
@@ -20,7 +20,7 @@
 >
 > *One service.*
 >
-> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
+> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
 > `GovernSteps` registry among them).*
 >
 > *The hooks bring their own metal; the factory pours the mold.*
@@ -40,10 +40,10 @@ The factory is the **hub** of the eleven-package DSH family:
 
 | Consumer                                                            | injects                   | uses                                                                                                   |
 | ------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
-| [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
-| [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
-| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
+| [hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
+| [hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
+| [hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `normalize-*-dsh-hook` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
 The pure layer it deliberately does **not** re-export is [`hook-dsh-core`](../hook-dsh-core) (its
 19-method service surface stays stable); the hooks import the core's helpers directly.
@@ -57,14 +57,14 @@ the same conventions as every other @playform package.
 **`Terminal`** (registry)
 
 ```sh
-pnpm add @playform/plugin-dsh-factory
+pnpm add @playform/dsh-plugin-factory
 ```
 
-1. **Remote / dependency install (auto-activation):** `pnpm add @playform/plugin-dsh-factory` in a
+1. **Remote / dependency install (auto-activation):** `pnpm add @playform/dsh-plugin-factory` in a
    profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`) - installed
    automatically and activated at the next host start.
 2. **Profile link (the dev loop):** the profile's `package.json` lists
-   `"@playform/plugin-dsh-factory": "link:.../bundles/ plugin-dsh-factory"` in `dependencies` and
+   `"@playform/dsh-plugin-factory": "link:.../bundles/ dsh-plugin-factory"` in `dependencies` and
    the package in `dsh.profile.bundles`; the bundle dir carries its own `node_modules`
    (`pnpm install --ignore-workspace` inside it - pnpm does not install a linked package's
    dependencies). Every rebuild of `Target/` is fresh on the next restart.
@@ -124,9 +124,9 @@ The factory makes it apply **once**.
    a pure transform, an update engine          inject: ["fs"] - it calls ctx.fs)
    and every ledger string)
 
-  hook-dsh-governor-package ────►┐
-  hook-dsh-pinner-package ───────┤       ctx.pluginFactory (Service)
-  hook-dsh-governor-cargo ───────┤         │
+  hook-dsh-package-governor ────►┐
+  hook-dsh-package-pinner ───────┤       ctx.pluginFactory (Service)
+  hook-dsh-cargo-governor ───────┤         │
   hook-dsh-normalize-dash ───────┤         ├─ Append(state, msg) ──► "<Module>: <msg>" on the logger
   hook-dsh-normalize-quotes ─────┤         │                        + "[<ISO>] <msg>" appended to the ledger file
   hook-dsh-normalize-ellipsis ───┤         ├─ Match(path, list) ───► the exclusion-first segment match
@@ -297,7 +297,7 @@ The write the factory performs for that return value (a `package.json` whose
 
 ```text
 transcript:  the write tool result shows exactly what the author wrote
-hook-dsh-pinner-package.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
+hook-dsh-package-pinner.log:  [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (7 versions)
 ```
 
 The factory's part of that one pass: Gate decided the actor and the path, Discover found the nearest
@@ -346,17 +346,17 @@ One name, two builds: this package ships BOTH implementations in the same tarbal
 effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
 builds, no user-side compilation:
 
-- **The default is the CLASSIC build.** `import ... from "@playform/plugin-dsh-factory"` resolves to
+- **The default is the CLASSIC build.** `import ... from "@playform/dsh-plugin-factory"` resolves to
   `Target/` with zero framework dependencies.
 - **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
-  `@playform/hook-dsh-*` package at once (the family stays coherent - never mix variants in one
+  `@playform/dsh-hook-*` package at once (the family stays coherent - never mix variants in one
   graph):
   - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
   - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
   - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
     `resolve.conditionNames: ["effect-ts"]`.
 - **The per-import escape hatch** (no loader config at all): `import ... from
-  "@playform/plugin-dsh-factory/effect-ts"` (or `/classic`) - deterministic in every toolchain.
+  "@playform/dsh-plugin-factory/effect-ts"` (or `/classic`) - deterministic in every toolchain.
 
 `effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
 (the CLASSIC build never imports it).

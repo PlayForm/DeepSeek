@@ -1,1 +1,0 @@
-import{Schema as o}from"@playform/plugin-dsh-factory";import e from"@deepseek-ai/schemastery";var t=o({logFile:"~/.dsh/hook-dsh-governor-cargo.log"},{strict:e.boolean().default(!1),maxUpdateFailures:e.number().default(3),cargoBin:e.string().default("cargo"),keepFile:e.string().default(""),updateMode:e.string().default("cargo")});export{t as default};

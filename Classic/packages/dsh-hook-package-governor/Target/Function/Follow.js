@@ -1,1 +1,0 @@
-import n from"./Filter.js";import p from"./Resolve.js";import c from"./Dispatch.js";import{Suppress as f}from"@playform/hook-dsh-core";var d=async(e,s,i,r,a,t,o)=>{try{if(!0===!o.Proceed||!0===!n(o.Current,t))return;await c(e,s,i,r,t,p(e,r,a))}catch(m){try{e.Context.logger.error?.(f(e.Module,"continuation",m))}catch{}}};export{d as default};

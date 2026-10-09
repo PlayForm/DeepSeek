@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-governor-package",r=t,e=["fs","pluginFactory"],n=o;var a={name:p,apply:n,Config:r,inject:e};export{r as Config,n as apply,a as default,e as inject,p as name};

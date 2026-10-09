@@ -1,1 +1,0 @@
-var a=u=>{const s=[];let r="",e=null;for(const t of u)switch(!0){case e!==null:!0===(t===e)?e=null:r+=t;break;case(t==='"'||t==="'"):e=t;break;case t===".":s.push(r.trim()),r="";break;default:r+=t}return s.push(r.trim()),s};export{a as default};

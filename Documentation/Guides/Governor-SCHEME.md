@@ -10,7 +10,7 @@ This document ships inside the bundle as `SCHEME.md`
 (alongside the usage README).
 
 **v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
-machinery is consumed from the injected [@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service (v0.1.0),
+machinery is consumed from the injected [@playform/dsh-plugin-factory][ours-dsh-plugin-factory] service (v0.1.0),
 `inject: ["fs", "pluginFactory"]`; the absorbed modules (Append, Journal, Open, Match, Discover,
 Parse, Continue, Govern, Refresh) are deleted from this tree and the ledger strings, the silence
 invariant, the chain semantics, the exemptions and the loader contract are byte-identical (see §2
@@ -19,7 +19,7 @@ for the module/factory split).
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
 (`Source/` → `Target/`, `prepublishOnly` build hook), with kind-folder categorization
 (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication),
-the publish identity [@playform/hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source), granularized install paths (npm
+the publish identity [@playform/dsh-package-governor-hook](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-governor-hook/Source), granularized install paths (npm
 dependency auto-activation / git clone + build / native `dsh plugin add`), and devDependencies typed
 from the published seam packages at the HOST's exact versions —
 [`@deepseek-ai/dsh-fs`][dsh-fs]/`dsh-subprocess`/`dsh-sandbox`
@@ -101,7 +101,7 @@ identical payload (live-verified: a one-line `edit` triggered the complete pass)
 ## 2. The governor pipeline G = U ∘ P
 
 This module is a FACTORY MODULE (the family's shared machinery lives in the injected
-[@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service — its SCHEME.md is the machinery contract; this section is
+[@playform/dsh-plugin-factory][ours-dsh-plugin-factory] service — its SCHEME.md is the machinery contract; this section is
 the MODULE contract).
 
 `inject: ["fs", "pluginFactory"]`; the built Target never imports the factory
@@ -116,7 +116,7 @@ scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refres
 builder, the wiring and the lifecycle effects (P1/P2/P5).
 
 What stayed module-owned: the transform
-(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), Function/Transform), the update engine
+(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-core-hook/Source/Function/Refusal.ts), Function/Transform), the update engine
 (Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
 (Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
 string.
@@ -295,7 +295,7 @@ Non-edges (proven absent, marked ∄):
 | G's rewrite → new [`fs/observed`][dsh-fs-2] | only the tool layer dispatches; `ctx.fs` service writes emit nothing                                                                                                            |
 | ncu/pnpm → new [`fs/observed`][dsh-fs-2]    | external processes dispatch nothing                                                                                                                                             |
 | G → tool result amendment                                                                                                  | result envelope uses the tool's own content, not disk                                                                                                                           |
-| G → transcript/session event                                                                                               | G emits only [`fs/observed`][dsh-fs-2] (internal bus) and writes `hook-dsh-governor-package.log` |
+| G → transcript/session event                                                                                               | G emits only [`fs/observed`][dsh-fs-2] (internal bus) and writes `dsh-package-governor-hook.log` |
 | author's next guarded write → FS_STALE_VERSION                                                                             | P₃/U₂ refresh the policy record (same owner)                                                                                                                                    |
 | G's re-entrant pass → rewrite loop                                                                                         | P idempotent ⇒ re-entrant P is a no-op                                                                                                                                          |
 | G → ctx.jobs job                                                                                                           | jobs registry is agent-scoped; root plugins use the continuation                                                                                                                |
@@ -311,11 +311,11 @@ Non-edges (proven absent, marked ∄):
    needed — the factory provides no Config.
 2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
    `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
-   artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) (row
-   `id: hook-dsh-governor-package`, `name: "@playform/hook-dsh-governor-package"`, config),
+   artifact ships only the built output), `prepublishOnly` = the build, [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml) (row
+   `id: dsh-package-governor-hook`, `name: "@playform/dsh-package-governor-hook"`, config),
    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
 3. Install (granularized):
-    - **Remote/dependency**: `pnpm add @playform/hook-dsh-governor-package` in a profile →
+    - **Remote/dependency**: `pnpm add @playform/dsh-package-governor-hook` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → `pnpm build` →
@@ -335,11 +335,11 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ```yaml
 - insert:
-      - id: hook-dsh-governor-package
-        name: "@playform/hook-dsh-governor-package"
+      - id: dsh-package-governor-hook
+        name: "@playform/dsh-package-governor-hook"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-governor-package.log # global ledger (default: ~/.dsh/hook-dsh-governor-package.log)
+            logFile: ~/.dsh/dsh-package-governor-hook.log # global ledger (default: ~/.dsh/dsh-package-governor-hook.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
@@ -352,14 +352,14 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `hook-dsh-governor-package.log` shows the activation line.
+1. Restart with the bundle active; `dsh-package-governor-hook.log` shows the activation line.
 2. Write a stale-pins `package.json` with the write tool:
     - chain pass corrects chain pins; file lands governed; tool result shows the author's content
       only; transcript contains no governor traces.
 3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
 4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
 5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `hook-dsh-governor-package.log` shows no runaway recursion.
+6. Loop check: after all of the above, `dsh-package-governor-hook.log` shows no runaway recursion.
 7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
 8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
@@ -370,20 +370,20 @@ the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02
 The three plugins coexist on
 [`fs/observed`][dsh-fs-2],
 each gating on its own basename (`package.json` / `package.json` / `Cargo.toml`) and writing its own
-ledger (`hook-dsh-governor-package.log` / `hook-dsh-pinner-package.log` /
-`hook-dsh-governor-cargo.log`); the
+ledger (`dsh-package-governor-hook.log` / `dsh-package-pinner-hook.log` /
+`dsh-cargo-governor-hook.log`); the
 [fs/observed][dsh-fs-2]
 trigger law and the exclusion-first rule are shared.
 
 Composition semantics: **pin → bump-exact** (a
 fully pinned manifest leaves the npm governor's update stage nothing to do; its chain pass may still
 re-canonicalize chain pins to `^resolved`); **chain > strip > normalize** (the cargo module's
-precedence); **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source/Function/Transform.ts) protects ranges as authored; the
+precedence); **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-package-pinner-hook/Source/Function/Transform.ts) protects ranges as authored; the
 cargo module's keep-list — the same sidecar — wins over normalization, never over the chain).
 
 Activation of one never implies another; the user decides.
 
-[ours-plugin-dsh-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source
+[ours-dsh-plugin-factory]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/Source
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs
 [dsh-cordis]: https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis
 [dsh-fs-2]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

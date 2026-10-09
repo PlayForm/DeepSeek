@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-ellipsis",e=t,i=["pluginFactory"],n=o;var s={name:p,apply:n,Config:e,inject:i};export{e as Config,n as apply,s as default,i as inject,p as name};

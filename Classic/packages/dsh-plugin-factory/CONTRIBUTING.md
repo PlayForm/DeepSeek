@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/plugin-dsh-factory (0.0.1), one
+Welcome to our community! This repository holds @playform/dsh-plugin-factory (0.0.1), one
 of the release packages of the DeepSeek Harness Plugin Family: the factory service (ctx.pluginFactory): the shared machinery of the governance and normalization families (the ledger, the exclusions, the storage journal, the activation and the 19-method tool surface).
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

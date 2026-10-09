@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-file",e=t,n=["pluginFactory","fs","tools"],r=o;var l={name:p,apply:r,Config:e,inject:n};export{e as Config,r as apply,l as default,n as inject,p as name};

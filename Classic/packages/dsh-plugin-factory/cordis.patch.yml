@@ -1,4 +1,4 @@
-# Bundle patch for @playform/plugin-dsh-factory.
+# Bundle patch for @playform/dsh-plugin-factory.
 # The FACTORY is a SERVICE-PROVIDER bundle: it registers nothing observable on
 # its own — loading it makes the `pluginFactory` service available on the
 # context so the governance flavors (the package.json governor, the package.json
@@ -12,6 +12,6 @@
 # declares `static inject = ["fs"]` and registers itself as `pluginFactory`
 # via `super(ctx, "pluginFactory")` — no Config schema, no config row needed.
 - insert:
-      - id: plugin-dsh-factory
-        name: "@playform/plugin-dsh-factory"
+      - id: dsh-plugin-factory
+        name: "@playform/dsh-plugin-factory"
         config: {}
