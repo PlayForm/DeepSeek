@@ -73,4 +73,53 @@ The totals: Classic 733 / EffectTS 746 (the suites print them); the per-suite pa
    handoff (the BATCH-HANDOFF date-stamped new file + the Tasks/ states updated -
    the completed lanes marked, the new feedback appended) so the next session
    resumes from the fresh states. The user's feedback ALWAYS lands in the handoff
-   the same session it arrives.
+   the same session it arrives. [2026-10-10 amendment: the handoff docs are
+   TEMPORARY by the user's decree - erased at the session's close; the SKILL.md +
+   the Plans/ + the Reports/ stay as the durable records.]
+
+## 6. THE 2026-10-10 LESSONS (the user-instructed erase: "learn from this workflow,
+preserve the necessary skills, + erase all temporary handoff documentation and
+temporary files")
+
+The handoff docs (Documentation/Handoff/) are TEMPORARY by the user's decree -
+erased at the session's close; the SKILL.md + the Plans/ + the Reports/ stay as the
+durable records. The lessons the 2026-10-09/10 workflow taught (each one earned):
+
+1. THE SKILL IS NOT IN THE SESSION CATALOG - load it from the repo FIRST. The
+   orchestrator slipped the non-execution law (ran lychee, edited a README,
+   committed 23a313d, byte-grepped + curled the dev server) partly because the
+   skill was not registered in the session's catalog - the session-start ritual
+   must read Documentation/Skill/orchestrator-batch/SKILL.md from the tree before
+   any delegation. The slip record: TOMORROW-REVIEW.md §9.
+2. THE IDLE-LANE SEATING PROTOCOL WORKS: launch with the fully self-contained
+   spec + the routing (cloudflare-workers-ai/@cf/zai-org/glm-5.3-flash, low),
+   then send_message the seating line ("ACK: SPEC RECEIVED - IDLE"), activate
+   with "ACTIVATE" when a slot frees, amend mid-flight with "SPEC AMENDED" when
+   the new feedback lands on an active lane's surface (the spec-reconfiguration
+   authority). The 2026-10-09 evening queue ran 2 active + up to 4 idle cleanly.
+3. THE STALE-ARTIFACT CLASS: several user reports (the ONCE-PUBLISHED install
+   block, the "lost" red Pause cursor, the duplicated homepage buttons, the
+   missing media queries, the broken quote glyphs) were STALE browser/dev-server
+   caches or transient intermediate commits - the lane's evidence-gathering
+   (fetch the live page, byte-compare the deployed CSS, count the occurrences in
+   the BUILT output) resolved them without a fix. The orchestrator relays the
+   verdict + the user's remedy (hard refresh / SW unregister) verbatim.
+4. THE "NO FIX NEEDED" VERDICT IS A RESULT: the media-query question was
+   BY-DESIGN (fluid clamp typography, the legacy->range minifier translation,
+   the space-stripped `@media (width>=768px)`), the red pause cursor was never
+   removed (b9138c89, git log -S proof), the raw-marker brace was a REAL fix
+   (FileIcon.ts:161 regex). The lane reports the evidence either way; the
+   orchestrator does not pre-judge.
+5. THE SITE'S AUTO-COMMIT HOOK: the Site repo has a governor hook that auto-
+   commits lane changes mid-build and can sweep one lane's edits into a sibling
+   lane's commit - the lanes split history (soft reset, two clean commits) when
+   that happens; the orchestrator checks for the split in the final report.
+6. THE UNICODE-GLYPH RULE BITES EVERY WRITE: the normalize hooks are active in
+   the profile - the plain write tool's placements get their glyphs replaced;
+   the lanes use raw-write (exempt) or the identity-exempt edit tool for real
+   unicode. The glyph-loss report class (Mapping/QuotesMap tables) is caused by
+   this exact mechanism.
+7. THE PUBLISH CLOSE-OUT: the tolerance pattern (continue-on-error + || true)
+   absorbs the E403s of already-published packages; the run status may report
+   green while individual publishes fail - the registry (curl dist-tags.latest)
+   is the arbiter, not the run badge. The 25/25 publish completed 2026-10-09.
