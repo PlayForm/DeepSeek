@@ -89,8 +89,8 @@ consumes after publishing.
 ```bash
 # from the monorepo root: pack each release package (Classic/ = the release names)
 mkdir -p "$SCRATCH/tarballs"
-for p in plugin-dsh-factory hook-dsh-core hook-dsh-governor-package \
-         hook-dsh-pinner-package hook-dsh-governor-cargo \
+for p in dsh-plugin-factory hook-dsh-core hook-dsh-package-governor \
+         hook-dsh-package-pinner hook-dsh-cargo-governor \
          hook-dsh-normalize-dash hook-dsh-normalize-quotes \
          hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
          hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth \
@@ -265,8 +265,8 @@ SCRATCH="$HOME/.dsh/profiles/dsh-test"        # method A; method B: SCRATCH="$TM
 mkdir -p "$SCRATCH" "$SCRATCH/tarballs"
 
 # pack from the monorepo (release tree = Classic/)
-for p in plugin-dsh-factory hook-dsh-core hook-dsh-governor-package \
-	hook-dsh-pinner-package hook-dsh-governor-cargo hook-dsh-normalize-dash \
+for p in dsh-plugin-factory hook-dsh-core hook-dsh-package-governor \
+	hook-dsh-package-pinner hook-dsh-cargo-governor hook-dsh-normalize-dash \
 	hook-dsh-normalize-quotes hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
 	hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth hook-dsh-normalize-file; do
 	(cd "Classic/packages/$p" && pnpm pack --pack-destination "$SCRATCH/tarballs")

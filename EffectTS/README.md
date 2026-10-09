@@ -37,20 +37,20 @@ build, assembled byte-exactly from the sibling tree by `Maintain/DualSource.sh`)
 **Install once, toggle at the loader.**
 
 ```sh
-pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
+pnpm add @playform/ets-hook-dsh-core @playform/ets-dsh-plugin-factory @playform/ets-hook-dsh-package-governor
 ```
 
 One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
 the EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall
 builds, no user-side compilation - the toggle is pure resolution:
 
-- **CLASSIC (default):** just import - `import { Govern } from "@playform/plugin-dsh-factory"`.
+- **CLASSIC (default):** just import - `import { Govern } from "@playform/ets-dsh-plugin-factory"`.
 - **EFFECT-TS (whole family, one flag):**
   - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`)
   - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
   - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
     webpack: `resolve.conditionNames: ["effect-ts"]`
-- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
+- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/ets-hook-dsh-core/effect-ts"`
   (or `/classic`) - deterministic in every toolchain.
 
 The whole family toggles together - never mix variants in one graph (the effect-ts `Update`
@@ -66,18 +66,18 @@ own build.
 
 | Package (`@playform/...`)      | Identity sentence                                                                                                                                                                                                                                                                            |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hook-dsh-core`                | The pure, effect-backed commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Function/Refusal.ts) and the normalize/Stream machinery.                                                                                           |
-| [plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source)           | The family's first service: the ledger, the exclusion match, the discovery, the keep-list union, the gate set, the version-guarded fenced write, the refresh, the detached contained continuation, the State builder, the wiring, the effects, the schema factory and the probe-once seam.   |
-| [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-package/Source)    | The silent package.json governor: hooks [fs/observed][dsh-fs], rewrites chain-governed pins to the effective registry's resolved versions, and runs the update stage as a detached, contained continuation. |
-| [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-pinner-package/Source)      | The silent package.json version pinner: hooks [fs/observed][dsh-fs] and deterministically rewrites every ranged dependency version to its static version, protected by a pin-policy keep-list.              |
-| [hook-dsh-governor-cargo](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-governor-cargo/Source)      | The Cargo.toml governor: the Rust-sided flavor of the package governor - surgical chain-pin rewrites on the raw TOML lines and cargo upgrade driven through [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess).               |
-| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-dash/Source)      | The dash flavor: normalizes the unicode dash family to ASCII hyphen-minus in model output streams, mirroring the core's dash class at the injection point a file hook lacks.                                                                                                                           |
-| [hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-quotes/Source)    | The quotes flavor: maps the eight curly quote code points to their ASCII straight counterparts in model output streams.                                                                                                                                                                      |
-| [hook-dsh-normalize-ellipsis](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-ellipsis/Source)  | The ellipsis flavor: replaces the horizontal ellipsis (U+2026) with the plain ASCII three-dot sequence in model output streams.                                                                                                                                                              |
-| [hook-dsh-normalize-spaces](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-spaces/Source)    | The spaces flavor: normalizes the unicode space family (Zs minus the ASCII space) to the plain space in model output streams.                                                                                                                                                                |
-| [hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-invisible/Source) | The invisible flavor: removes the zero-width/invisible character family (soft hyphen, zero-width spaces and joiners, bidi controls, BOM) from model output streams.                                                                                                                          |
-| [hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-fullwidth/Source) | The fullwidth flavor: maps the entire FULLWIDTH FORMS range (U+FF01-U+FF5E) to its ASCII half-width counterparts in model output streams.                                                                                                                                                    |
-| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-normalize-file/Source)      | The file-content normalizer: the `normalize-file` tool - the read, count, write pipeline applying all six transforms to a file already on disk, writing only when something changed.                                                                                                         |
+| `hook-dsh-core`                | The pure, effect-backed commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source/Function/Refusal.ts) and the normalize/Stream machinery.                                                                                           |
+| [ets-dsh-plugin-factory](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-dsh-plugin-factory/Source)           | The family's first service: the ledger, the exclusion match, the discovery, the keep-list union, the gate set, the version-guarded fenced write, the refresh, the detached contained continuation, the State builder, the wiring, the effects, the schema factory and the probe-once seam.   |
+| [ets-hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/Source)    | The silent package.json governor: hooks [fs/observed][dsh-fs], rewrites chain-governed pins to the effective registry's resolved versions, and runs the update stage as a detached, contained continuation. |
+| [ets-hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source)      | The silent package.json version pinner: hooks [fs/observed][dsh-fs] and deterministically rewrites every ranged dependency version to its static version, protected by a pin-policy keep-list.              |
+| [ets-hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source)      | The Cargo.toml governor: the Rust-sided flavor of the package governor - surgical chain-pin rewrites on the raw TOML lines and cargo upgrade driven through [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess).               |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-dash/Source)      | The dash flavor: normalizes the unicode dash family to ASCII hyphen-minus in model output streams, mirroring the core's dash class at the injection point a file hook lacks.                                                                                                                           |
+| [hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-quotes/Source)    | The quotes flavor: maps the eight curly quote code points to their ASCII straight counterparts in model output streams.                                                                                                                                                                      |
+| [hook-dsh-normalize-ellipsis](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-ellipsis/Source)  | The ellipsis flavor: replaces the horizontal ellipsis (U+2026) with the plain ASCII three-dot sequence in model output streams.                                                                                                                                                              |
+| [hook-dsh-normalize-spaces](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-spaces/Source)    | The spaces flavor: normalizes the unicode space family (Zs minus the ASCII space) to the plain space in model output streams.                                                                                                                                                                |
+| [hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-invisible/Source) | The invisible flavor: removes the zero-width/invisible character family (soft hyphen, zero-width spaces and joiners, bidi controls, BOM) from model output streams.                                                                                                                          |
+| [hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-fullwidth/Source) | The fullwidth flavor: maps the entire FULLWIDTH FORMS range (U+FF01-U+FF5E) to its ASCII half-width counterparts in model output streams.                                                                                                                                                    |
+| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-file/Source)      | The file-content normalizer: the `normalize-file` tool - the read, count, write pipeline applying all six transforms to a file already on disk, writing only when something changed.                                                                                                         |
 
 ## Layout
 
@@ -88,7 +88,7 @@ EffectTS/
 ```
 
 Each bundle is self-contained: its own `package.json`, its own deterministic build (`Source/` ->
-`Target/` via ESBuild + `tsc` + `tsc-alias`), and its own [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/cordis.patch.yml) where the bundle ships
+`Target/` via ESBuild + `tsc` + `tsc-alias`), and its own [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-dsh-plugin-factory/cordis.patch.yml) where the bundle ships
 one.
 
 ## Build (per bundle, deterministic)
@@ -96,8 +96,8 @@ one.
 The two base bundles first, then the consumers:
 
 ```
-cd packages/hook-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
-cd packages/plugin-dsh-factory && pnpm run prepublishOnly
+cd packages/ets-hook-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
+cd packages/ets-dsh-plugin-factory && pnpm run prepublishOnly
 ```
 
 Then each consumer bundle (the governance trio, the seven normalize flavors):
@@ -115,8 +115,8 @@ The ten consumer bundles import their siblings through the
 `packages/<consumer>/node_modules/@playform/` directory links:
 
 ```
-@playform/hook-dsh-core      -> ../../../hook-dsh-core
-@playform/plugin-dsh-factory -> ../../../plugin-dsh-factory
+@playform/ets-hook-dsh-core      -> ../../../hook-dsh-core
+@playform/ets-dsh-plugin-factory -> ../../../ets-dsh-plugin-factory
 ```
 
 ## Test (the smokes are the arbiter)

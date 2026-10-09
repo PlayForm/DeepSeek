@@ -75,7 +75,7 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
   is 19 callable methods (Library.ts lists Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/
   GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/
   Govern), the SCHEME numbers 17 sections with Write+GuardedWrite sharing §2.7 and UpdateKey
-  absent, and the factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139) -
+  absent, and the factory plugin page says "Nineteen methods" (dsh-plugin-factory.astro:13,139) -
   see Correction C1. The 15-method era figure itself is correct (Handoff Overview Package 3).
 
 ### Phase II - the audit and the fixes
@@ -196,7 +196,7 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
   packages/` hold the same 12 names; `Classic/smokes/`, `EffectTS/smokes/`, `Boilerplate/smokes/`
   hold 12 suites each (the #15 names, verified: hook-dsh-core, governor-cargo, governor-package,
   normalize-dash/-file/-quotes/-ellipsis/-spaces/-invisible/-fullwidth, pinner-package,
-  plugin-dsh-factory).
+  dsh-plugin-factory).
 - **The smoke counts**: per-suite call sites match TOMORROW-REVIEW §1 exactly - Classic core 14 /
   factory 34 / governor 78 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 each /
   dash 132; EffectTS core 17 / factory 41 / governor 81, the rest identical. Totals: Classic and
@@ -271,14 +271,14 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
 - **"15 -> 16 -> 17 methods" and "the 16th method"** (Phase I + decision 8 + Phase II card 3):
   the actual surface is 19 callable methods (Library.ts:38-55); the SCHEME numbers 17 sections
   (Write+GuardedWrite share §2.7) and omits UpdateKey; the factory plugin page says "Nineteen
-  methods" (plugin-dsh-factory.astro:13,139); the page itself calls BOTH UpdateKey (card 3) and
+  methods" (dsh-plugin-factory.astro:13,139); the page itself calls BOTH UpdateKey (card 3) and
   Write (decision 8) "the 16th method"; SCHEME.md:15 says "16 methods" and SCHEME.md:50 says
   "15 surface methods (+ 1 auxiliary)". The ordinal story is internally inconsistent and stale
   (C1).
 - **The "~800" total**: unattributed on the page; TOMORROW-REVIEW §2.3's "Classic/Boilerplate
   733" is arithmetically wrong (795 - 62 = 733: exactly one flavor short - the §1 listing itself
   sums to 795); matrix.astro:191 carries "12 suites · 671 checks · ALL PASS", which matches
-  neither 795 nor 808; plugin-dsh-factory.astro:312 says "30 checks" for the factory suite, which
+  neither 795 nor 808; dsh-plugin-factory.astro:312 says "30 checks" for the factory suite, which
   has 34 call sites today (the 30 was the Package-2 era count). Four different totals are in
   circulation; only 795/808 are real (C2).
 - **"Zero assertion changes"**: the Effect-TS suites ADD 13 checks (core 17 vs 14, factory 41 vs
@@ -314,8 +314,8 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
   everything after it), plus aliases (GuardedWrite) and uncounted helpers (UpdateKey); an ordinal
   story cannot survive that; the canonical inventory (count, numbering, aliases) is the structural
   fact the case study, the SCHEME and the factory plugin page must all agree on. Scope:
-  `Classic/packages/plugin-dsh-factory/SCHEME.md` (the §0 "16 methods" + §2 "15 (+1 auxiliary)"
-  headers vs §2.1-2.17; add UpdateKey), `Site/Source/pages/plugins/plugin-dsh-factory.astro`
+  `Classic/packages/dsh-plugin-factory/SCHEME.md` (the §0 "16 methods" + §2 "15 (+1 auxiliary)"
+  headers vs §2.1-2.17; add UpdateKey), `Site/Source/pages/plugins/dsh-plugin-factory.astro`
   (the "19 methods" line), `Site/Source/pages/case-study.astro` (Phase I's "15 -> 16 -> 17",
   Phase II card 3's "the 16th method", decision 8's "the 16th method"). Arbiter: the site build +
   the factory suite (the smoke asserts behavior, not counts - the count lives in the docs).
@@ -327,7 +327,7 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
   drift. Scope: run all 36 suites, count the `ok(`/`Check(` call sites, fix `Site/Source/pages/
   matrix.astro:191` (671 -> the Classic total 795 or the attributed per-engine pair),
   `Documentation/Plans/TOMORROW-REVIEW.md` §1 + §2.3 (733 -> 795; keep the note that the case
-  study's "~800" is the Effect-TS 808), `Site/Source/pages/plugins/plugin-dsh-factory.astro:312`
+  study's "~800" is the Effect-TS 808), `Site/Source/pages/plugins/dsh-plugin-factory.astro:312`
   ("30 checks" -> 34), `Site/Source/pages/case-study.astro:289` (attribute "~800" to the Effect-
   TS total + give the Classic total), and the plan's `49e5b3b` typo -> `49e5b3d` in the same
   sweep. Arbiter: the smokes (the suites print "N checks - ALL PASS").
@@ -391,14 +391,14 @@ study's own numbers and excerpts are the least-structural artifacts on the page.
   (Library.ts:25-27 and Function/Write.ts:49-50 vs Library.ts:230-236 + the dash smoke's
   pre-aborted scenario) - the exact kind of "verify the live effective config, never the
   projection" residue the family's own meta-lesson condemns, in the family's own release tree.
-  Scope: `EffectTS/packages/plugin-dsh-factory/Source/Library.ts:25-27`,
-  `EffectTS/packages/plugin-dsh-factory/Source/Function/Write.ts:49-50` (comments only; the
+  Scope: `EffectTS/packages/ets-dsh-plugin-factory/Source/Library.ts:25-27`,
+  `EffectTS/packages/ets-dsh-plugin-factory/Source/Function/Write.ts:49-50` (comments only; the
   behavior is already correct). Arbiter: the smokes (unchanged assertions) + the site build.
 
 - **C11 (P2) - THE SCHEME INVENTORY - NEW PACKAGE.** Title: fold the SCHEME's self-inconsistency
   (16 / 15+1 / 17 sections, UpdateKey missing) into C1's canonical inventory. Why: the SCHEME is
   the factory's contract doc; three different counts in one file propagate the method-count
-  confusion the case study repeats. Scope: `Classic/packages/plugin-dsh-factory/SCHEME.md` §0 +
+  confusion the case study repeats. Scope: `Classic/packages/dsh-plugin-factory/SCHEME.md` §0 +
   §2 headers. Arbiter: the site build.
 
 - **C12 (P3) - THE MATRIX LINK - site-build-arbitrated.** Title: link matrix.astro from Phase

@@ -32,11 +32,11 @@ The family is organized hierarchically - read every name as a sentence of segmen
 
 | Package                        | The @-sentence                     | Role                                                                                                |
 | ------------------------------ | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `plugin-dsh-factory`           | Plugin @ DSH @ Factory             | The service: 17 methods - state, ledger, journal, the shared write executor, the direct-govern fold |
-| `lib-dsh-core`                 | Lib @ DSH @ Core                   | The pure library: transforms, tables, the stream gate, the update envelope, the activation composer |
-| `hook-dsh-governor-package`    | Hook @ DSH @ Governor @ Package    | Canonicalize package.json chain pins + the update stage                                             |
-| `hook-dsh-pinner-package`      | Hook @ DSH @ Pinner @ Package      | Pin package.json public deps to exact versions                                                      |
-| `hook-dsh-governor-cargo`      | Hook @ DSH @ Governor @ Cargo      | The Cargo.toml governor (chain + normalization + cargo upgrade)                                     |
+| `dsh-plugin-factory`           | Plugin @ DSH @ Factory             | The service: 17 methods - state, ledger, journal, the shared write executor, the direct-govern fold |
+| `hook-dsh-core`                 | Lib @ DSH @ Core                   | The pure library: transforms, tables, the stream gate, the update envelope, the activation composer |
+| `hook-dsh-package-governor`    | Hook @ DSH @ Governor @ Package    | Canonicalize package.json chain pins + the update stage                                             |
+| `hook-dsh-package-pinner`      | Hook @ DSH @ Pinner @ Package      | Pin package.json public deps to exact versions                                                      |
+| `hook-dsh-cargo-governor`      | Hook @ DSH @ Governor @ Cargo      | The Cargo.toml governor (chain + normalization + cargo upgrade)                                     |
 | `hook-dsh-normalize-dash`      | Hook @ DSH @ Normalize @ Dash      | Em/en dashes -> hyphen in model output                                                              |
 | `hook-dsh-normalize-quotes`    | Hook @ DSH @ Normalize @ Quotes    | Curly quotes -> straight                                                                            |
 | `hook-dsh-normalize-ellipsis`  | Hook @ DSH @ Normalize @ Ellipsis  | U+2026 -> "..."                                                                                     |

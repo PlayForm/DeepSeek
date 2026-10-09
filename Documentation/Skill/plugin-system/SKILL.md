@@ -1,6 +1,6 @@
 ---
 name: plugin-system
-description: THE operating manual for developing and extending the DeepSeek Harness Plugin Family (the @playform/dsh-plugin-factory + dsh-hook-* packages) - the DSH plugin contract this family implements, the bundle anatomy, the deterministic build, the smokes as the arbiter, the ledger-string contract, the module leaves vs the shared machinery, and the direct-govern steps. Load before writing, extending, or debugging any family plugin code.
+description: THE operating manual for developing and extending the DeepSeek Harness Plugin Family (the @playform/dsh-plugin-factory + hook-dsh-* packages) - the DSH plugin contract this family implements, the bundle anatomy, the deterministic build, the smokes as the arbiter, the ledger-string contract, the module leaves vs the shared machinery, and the direct-govern steps. Load before writing, extending, or debugging any family plugin code.
 whenToUse: Mandatory before ANY plugin code work in this family - the twelve packages under the monorepo (Boilerplate/, Classic/, EffectTS/) or the live profile bundles. If you are about to touch a bundle's Source without knowing the contract (the loader surface, the build, the smoke arbiter, the ledger strings), STOP and read this manual first.
 ---
 

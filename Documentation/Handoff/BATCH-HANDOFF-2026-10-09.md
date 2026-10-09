@@ -351,6 +351,17 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   canonical matrix pnpm test - "All 38 smoke suites passed": Classic 733 +
   EffectTS 746 EXACT (the per-suite breakdowns), zero failures, the 7 wiring
   suites per tree self-skipping per the plan. Nothing to fix, nothing committed.
+- THE STALE-NAME RESIDUE SWEEP COMPLETE (2026-10-09): the "Pkg: @playform/
+  dsh-hook-core" the user saw was the STALE BUILT SITE OUTPUT (regenerated with
+  the final names); fixed the Configurator comment, case-study's dsh-hook-mdash,
+  the index/models "dsh-hook-* hooks", the .gitmodules.draft (all 25 entries to
+  the final scheme), the NPM.yml L1/L2 remap, the tree READMEs + the docs/
+  brand/reports/skill; the re-grep zero stale forms in the operational set (the
+  remaining hits only: node_modules third-party, the drift-guard's own
+  detection regex, the Boilerplate importers, the 4 historical records
+  deliberately untouched - DUAL-SOURCE-BUNDLING (SUPERSEDED), TOMORROW-REVIEW,
+  IMPLEMENTATION-PLAN, SPLICE-ETS (the NAMING UPDATE banner added)); the site
+  rebuilt 21 pages + the drift-guard 219/219 + the builds exit 0.
 - THE FINAL NAMING DECISION (2026-10-09 - THE USER'S FINAL, deliberately the
   most counter-intuitive one: "hook-dsh-<role>" - the imperative reading "hook
   the DSH!"): THE CLASSICAL: hook-dsh-core, hook-dsh-cargo-governor, hook-dsh-

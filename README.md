@@ -478,7 +478,7 @@ and the governance on top.
 | Want to...            | Start here                                                                      |
 | --------------------- | ------------------------------------------------------------------------------- |
 | Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`       |
-| Add a flavor          | `hook-dsh-core` (one table) + a new `dsh-hook-normalize-<name>` bundle          |
+| Add a flavor          | `hook-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle          |
 | Change behavior       | the smokes first - the counts (733/746) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`        |
 

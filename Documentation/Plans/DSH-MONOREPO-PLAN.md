@@ -24,7 +24,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 - **`DeepSeek/Classic` = the Classic release** (one package per repository at publish time;
   developed inside the monorepo first): the cleaned, de-personalized, restructured implementations -
   register #12 (anonymization + the Aphrodite README borrow), #15 (the reversed hierarchical names:
-  `hook-dsh-governor-cargo` etc.).
+  `hook-dsh-cargo-governor` etc.).
   [ANNOTATED 2026-10-09: SPLICE-ETS.md resolved #15 - the trees now carry unique names, the Classic the plain @playform/dsh-* forms (with the three token-reordered names) and the EffectTS the @playform/ets-* forms + the base @playform/ets-dsh-hook.]
 - **`DeepSeek/EffectTS` = the Effect-TS v4 release** (register #13): the same package identities as
   the Classic, the internals re-implemented on Effect-TS (the tracing, the ecosystem interop, the
@@ -76,18 +76,18 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
 │       └── normalize-file-smoke.mjs
 ├── Classic/                          # THE CLASSIC RELEASE (developed here, published per-repo)
 │   └── packages/                     # the twelve release packages (the #15 names, the #12 cleanup):
-│       ├── plugin-dsh-factory/       #   lib-dsh-core, hook-dsh-governor-package,
-│       ├── lib-dsh-core/             #   hook-dsh-pinner-package, hook-dsh-governor-cargo,
-│       ├── hook-dsh-governor-package/ #  hook-dsh-normalize-{dash,quotes,ellipsis,spaces,
-│       ├── hook-dsh-pinner-package/  #    invisible,fullwidth,file}
-│       ├── hook-dsh-governor-cargo/
+│       ├── dsh-plugin-factory/       #   hook-dsh-core, hook-dsh-package-governor,
+│       ├── hook-dsh-core/             #   hook-dsh-package-pinner, hook-dsh-cargo-governor,
+│       ├── hook-dsh-package-governor/ #  hook-dsh-normalize-{dash,quotes,ellipsis,spaces,
+│       ├── hook-dsh-package-pinner/  #    invisible,fullwidth,file}
+│       ├── hook-dsh-cargo-governor/
 │       └── hook-dsh-normalize-*/     #   (each: the de-personalized Sources, the Aphrodite
 │                                     #    README, the smoke, the publish config)
 ├── EffectTS/                         # THE EFFECT-TS V4 RELEASE (register #13 + #14)
 │   └── packages/                     # the same package identities, the Effect internals:
-│       ├── plugin-dsh-factory/       #   the service as Effect layers; the tracing spans
-│       ├── lib-dsh-core/             #   the pure helpers as Effect pipelines/Streams
-│       ├── hook-dsh-governor-package/ #  the chain as typed effects; the parallel-govern toggle
+│       ├── dsh-plugin-factory/       #   the service as Effect layers; the tracing spans
+│       ├── hook-dsh-core/             #   the pure helpers as Effect pipelines/Streams
+│       ├── hook-dsh-package-governor/ #  the chain as typed effects; the parallel-govern toggle
 │       ├── ... (the same twelve)     #   the smokes proving parity (the ledger strings)
 ├── Site/                             # THE STATIC SITE (the stitch design)
 │   ├── index.html                    # the landing (the stitch code.html adopted: the hero,

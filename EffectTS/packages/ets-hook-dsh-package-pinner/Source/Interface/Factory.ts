@@ -7,7 +7,7 @@
 // `declare module`) that types `ctx.pluginFactory` for every call site.
 //
 // The runtime resolution is profile-owned: the factory bundle
-// (profiles/<profile>/bundles/plugin-dsh-factory) registers the service when it
+// (profiles/<profile>/bundles/dsh-plugin-factory) registers the service when it
 // loads; the loader holds this bundle PENDING until `pluginFactory` exists
 // (docs: a plugin with inject stays pending until every service exists — load
 // order in cordis.yml does not matter).
