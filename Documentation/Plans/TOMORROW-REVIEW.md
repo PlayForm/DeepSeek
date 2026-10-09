@@ -307,7 +307,7 @@ The user will run the whole process again - the review-driven pass:
 7. **DUAL-SOURCE BUNDLING** - the SAME npm target from the two sources: `@playform/dsh-hook-*` published once, carrying the Classic + the Effect-TS builds, the user installs once + TOGGLES (the npm-native mechanism - the exports-map conditions or the package config - no postinstall builds; the smokes verify both builds) - the design + the package-layout prep, NOT the publishing (the npm agent later).
 8. **COMPRESS-BORROW** - the .github (the Auto/NPM/Node/Dependabot workflows) + the other folders from ~/Developer/Application/PlayForm/Compress (the user's own repo) adapted to the family's per-repo conventions - no attribution.
 9. **README/functionality completeness** - the missing bits in the READMEs + the functional gaps (the install flows, the configuration, the troubleshooting, the features undocumented).
-10. **WEBSITE-ADOPTION** - adopt the website we built: the deployment/ops (the wrangler/Cloudflare deploy to deepseek.playform.cloud, the _headers/404/robots/sitemap live, the deploy pipeline in the .github, the monitoring) - taking the site live.
+10. **WEBSITE-ADOPTION** - adopt the website we built: the deployment/ops (the Cloudflare Pages DASHBOARD INTEGRATION deploys deepseek.playform.cloud automatically on push to Current - the wrangler/Cloudflare-deploy arm was RETRACTED per the user: no workflow publish step, no deploy command, no Cloudflare secrets; the freshness fix is simply committing + pushing Current; the _headers/404/robots/sitemap live, the monitoring) - taking the site live.
 
 ## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
 
