@@ -11,13 +11,13 @@
 // catches this).
 //
 // @playform/hook-dsh-normalize-file - the FILE-CONTENT normalizer, the
-// hermes heritage beyond the tool layer: rewriting family characters in files
-// ALREADY on disk. The ancestry is the hermes agent-hooks
+// family's rewrite beyond the tool layer: rewriting family characters in files
+// ALREADY on disk. The ancestry is the file-hook precedent - the
 // normalize-dashes-for-execute-code.sh hook, which swept files created inside
 // scripts (write_file(), open()) that never passed through a write tool - the
 // gap DSH's tool layer leaves open too, since only raw-write's explicit
 // `normalize: true` touches disk today, and only for NEW writes. The
-// inversion of the trigger is the design: hermes rewrote silently after the
+// inversion of the trigger is the design: the file hook rewrote silently after the
 // fact (and its normalize-tabs.sh hook is the cautionary tale - a repair hook
 // for the first layer's own collateral damage); DSH makes it an explicit,
 // visible, opt-in TOOL call instead - zero background activity by

@@ -4,7 +4,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * @module ESBuild
  *
  * Custom ESBuild configuration for the quotes hook, passed to `@playform/build`
- * via `--ESBuild Configuration/ESBuild.ts` (the Compress-package convention —
+ * via `--ESBuild Configuration/ESBuild.ts` (the twin-file convention —
  * byte-identical with the factory's and the trio's template). The base
  * configuration from the build tool already applies: `format: esm`,
  * `platform: node`, `bundle: false` — each Source file transpiles to its own

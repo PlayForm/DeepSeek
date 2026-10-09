@@ -5,7 +5,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  *
  * Custom ESBuild configuration for the spaces hook, passed to
  * `@playform/build` via `--ESBuild Configuration/ESBuild.ts` (the
- * Compress-package convention — byte-identical with the factory's and the
+ * twin-file convention — byte-identical with the factory's and the
  * trio's template). The base configuration from the build tool already
  * applies: `format: esm`, `platform: node`, `bundle: false` — each Source
  * file transpiles to its own Target file, imports stay external (the runtime

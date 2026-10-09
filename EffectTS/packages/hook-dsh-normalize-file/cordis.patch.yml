@@ -1,5 +1,5 @@
 # Bundle patch for @playform/hook-dsh-normalize-file.
-# The file-content normalizer flavor: the hermes heritage beyond the tool
+# The file-content normalizer flavor: the family's rewrite beyond the tool
 # layer - rewriting the normalize family's characters in files ALREADY on
 # disk. It registers NO event listener (the family's first listener-less
 # flavor): the trigger is an explicit agent call of the `normalize-file` TOOL

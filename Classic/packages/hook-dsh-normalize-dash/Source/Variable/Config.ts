@@ -41,11 +41,11 @@ export default Compose(false, {
 	// the minimal shared block's empty default).
 	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-dash.log").volatile(),
 	// The dash replacement — the transform's ONLY knob. ASCII hyphen-minus by
-	// default (the hermes hook's literal `-`). Volatile: hot-editable; the
+	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next stream picks it up with no remount.
 	replacement: Schema.string().default("-").volatile(),
-	// Normalize reasoning deltas and the assembled ReasoningBlock too (hermes
-	// normalizes whatever the model wrote; the deltas AND the block must
+	// Normalize reasoning deltas and the assembled ReasoningBlock too (the
+	// transform applies to whatever the model wrote; the deltas AND the block must
 	// agree, or consumers see inconsistencies).
 	normalizeReasoning: Schema.boolean().default(true),
 	// IMPLEMENTED (default OFF — the SCHEMA default stays off for

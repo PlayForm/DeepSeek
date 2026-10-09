@@ -11,16 +11,16 @@
 // catches this).
 //
 // @playform/hook-dsh-normalize-dash — the dash normalizer for MODEL OUTPUT. The
-// the hermes normalize-dashes.sh hook rewrites the
+// the file-hook precedent rewrites the
 // unicode dash family to ASCII hyphen-minus in files after the fact; the
-// dsh plugin family can go where hermes cannot: the llm/stream waterfall,
+// dsh plugin family can go where a file hook cannot: the llm/stream waterfall,
 // the interceptable wrapper around EVERY streaming model call (retry,
 // replay, routing), bound to the LlmRuntime. The normalization there flows
 // into both the live UI and the durable transcript — VISIBLE by design, the
 // opposite of the governance family's silence, because the normalization IS
 // the feature.
 //
-// The transform is exactly the hermes regex — no context rules, whole-chunk
+// The transform is exactly the core's dash class — no context rules, whole-chunk
 // single-character replacement, chunk-boundary safe (no lookahead):
 //   text-delta / reasoning-delta (when on) → the `text` field;
 //   block-end → the assembled TextBlock.text / ReasoningBlock.text (plus a

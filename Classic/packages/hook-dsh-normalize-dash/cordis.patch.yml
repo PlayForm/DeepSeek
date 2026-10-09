@@ -3,9 +3,8 @@
 # waterfall listener — the interceptable wrapper around every streaming model
 # call (retry, replay, routing) — and rewrites the unicode dash family to
 # ASCII hyphen-minus in text/reasoning deltas and in the assembled block-end
-# blocks, exactly mirroring the hermes agent-hooks
-# normalize-dashes.sh hook, but at the injection point hermes itself does not
-# have: model output. Unlike the governance family (fs/observed, silent), the
+# blocks, exactly mirroring the core's dash class, but at the injection point
+# a file hook does not have: model output. Unlike the governance family (fs/observed, silent), the
 # rewrite is deliberately VISIBLE — it flows into both the live UI and the
 # durable transcript, because the normalization IS the feature.
 #
@@ -18,7 +17,7 @@
 #
 # `replacement` is the transform's only knob (volatile: hot-editable); the
 # log/logFile cells are volatile for the same reason. `normalizeReasoning`
-# defaults to ON (hermes normalizes whatever the model wrote, and the deltas
+# defaults to ON (whatever the model wrote is normalized, and the deltas
 # AND the assembled block must agree); `normalizeToolArguments` is
 # IMPLEMENTED (the argumentsDelta text and the assembled ToolCallBlock
 # arguments are rewritten by the same transform when on, with two exemptions:

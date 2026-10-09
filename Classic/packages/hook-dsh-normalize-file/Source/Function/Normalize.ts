@@ -1,7 +1,7 @@
 // Normalize - the read → count → write pipeline, the file-content
 // normalizer's ONE execution path (the tool's exec calls exactly this): read
 // the target's content, apply the family's SIX transforms with a per-character
-// count, and write ONLY when something changed. The inversion of the hermes
+// count, and write ONLY when something changed. The inversion of the file-hook
 // trigger is the design: everything happens inside one explicit agent tool
 // call - there is NO event listener behind it (the family's first
 // listener-less flavor), so this function is the whole behavior.
@@ -14,7 +14,7 @@
 //                  reject here and are re-thrown with the tool's context
 //                  prefix (`normalize-file: cannot read <path>: ...`), so the
 //                  registry turns the failure into an error result - NO
-//                  write, NO ledger line, NO journal record (the hermes mime
+//                  write, NO ledger line, NO journal record (the mime
 //                  check, tool-shaped: the backend owns binary rejection, the
 //                  pipeline never sees undecodable bytes).
 //   2. COUNT     - the six-fold chain (the raw-write `normalize: true`

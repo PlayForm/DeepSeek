@@ -167,7 +167,7 @@ assert.deepEqual(
 assert.equal(
 	Dashes.source,
 	"[\\u058A\\u05BE\\u1400\\u1806\\u2010-\\u2015\\u2E17\\u2E1A\\u2E3A-\\u2E3B\\u2E40\\u2E5D\\u301C\\u3030\\u30A0\\uFE31-\\uFE32\\uFE58\\uFE63\\uFF0D]",
-	"the Dashes source is the hermes pattern verbatim",
+	"the Dashes source is the dash pattern verbatim",
 );
 assert.equal(Ellipsis.source, "[\\u2026]", "the Ellipsis source is the single ellipsis character");
 assert.equal(
@@ -181,7 +181,7 @@ assert.equal(
 	"the Invisible source is the zero-width/invisible class",
 );
 ok(
-	"tables: the four character classes carry their exact patterns (Dashes = the hermes identity, verbatim)",
+	"tables: the four character classes carry their exact patterns (Dashes = the dash identity, verbatim)",
 );
 
 assert.deepEqual(

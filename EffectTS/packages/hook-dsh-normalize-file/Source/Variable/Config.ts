@@ -19,7 +19,7 @@
 // supplied through its own fields, which override the minimal block's.
 //
 // `replacement` - the dash step's ONLY knob, exactly like the dash flavor's:
-// ASCII hyphen-minus by default (the hermes hook's literal `-`). Volatile:
+// ASCII hyphen-minus by default (the transform's literal `-`). Volatile:
 // hot-editable; the next tool call picks it up with no remount.
 //
 // P8 - VOLATILE CELLS: `log`, `logFile` and `replacement` are `.volatile()`
@@ -41,7 +41,7 @@ export default Compose(false, {
 	// (overrides the minimal shared block's empty default).
 	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-file.log").volatile(),
 	// The dash replacement - the transform's ONLY knob. ASCII hyphen-minus by
-	// default (the hermes hook's literal `-`). Volatile: hot-editable; the
+	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next tool call picks it up with no remount.
 	replacement: Schema.string().default("-").volatile(),
 });

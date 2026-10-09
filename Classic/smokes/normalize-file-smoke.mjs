@@ -416,7 +416,7 @@ Check(
 );
 Check(
 	BinaryError !== null && BinaryError.message.includes("FS_NOT_TEXT"),
-	"the binary error keeps the backend's FS_NOT_TEXT code (the hermes mime check, tool-shaped)",
+	"the binary error keeps the backend's FS_NOT_TEXT code (the mime check, tool-shaped)",
 );
 Check(Run1.Writes.length === WritesBeforeNoop, "a binary target: NO write");
 

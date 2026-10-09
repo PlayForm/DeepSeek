@@ -4,7 +4,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * @module ESBuild
  *
  * Custom ESBuild configuration for the normalize-dash hook, passed to `@playform/build`
- * via `--ESBuild Configuration/ESBuild.ts` (the Compress-package convention —
+ * via `--ESBuild Configuration/ESBuild.ts` (the twin-file convention —
  * byte-identical with the factory's and the trio's template). The base
  * configuration from the build tool already applies: `format: esm`,
  * `platform: node`, `bundle: false` — each Source file transpiles to its own
@@ -19,7 +19,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * built at call time and written through Factory.Append → ctx.logger +
  * appendFileSync), so minification cannot touch them, and the loader contract
  * is name/export based (`name`, `apply`, `Config`, `inject`, the default
- * object) — none of it is affected by minified internals. The hermes dash
+ * object) — none of it is affected by minified internals. The dash
  * pattern is a regex literal evaluated at call time — also untouched. No
  * `define` block — the normalize-dash needs no build-time constants.
  *

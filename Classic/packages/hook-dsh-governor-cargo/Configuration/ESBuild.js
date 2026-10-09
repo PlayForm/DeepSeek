@@ -1,8 +1,8 @@
 // Configuration/ESBuild.js — the plain-ESM twin of ESBuild.ts, kept byte-
 // equivalent by hand. The `@playform/build` config loader imports the
 // `--ESBuild` path with `.ts` swapped to `.js` (Target/Function/File.js), so
-// a real `.js` file must exist beside the TypeScript source — the Compress
-// package (@playform/compress) ships exactly this triple (.ts + .js + .d.ts).
+// a real `.js` file must exist beside the TypeScript source — the published
+// package ships exactly this triple (.ts + .js + .d.ts).
 // KEEP IN SYNC: an edit to ESBuild.ts must be mirrored here. This flavor is
 // the Cargo.toml governor — the configuration is identical to the package.json
 // governor's because the build layout is identical; only the Source tree it

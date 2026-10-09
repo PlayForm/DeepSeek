@@ -4,7 +4,7 @@
 // construction, the `{ text, count }` contract) lives in
 // @playform/hook-dsh-core's Normalize/Replace + Normalize/Dashes; this file
 // supplies only the two arguments that make it THE NORMALIZE-DASH: the Dashes class
-// (the hermes pattern verbatim) and the configured ASCII hyphen-minus
+// (the dash pattern verbatim) and the configured ASCII hyphen-minus
 // replacement.
 //
 // The core resolves through the profile's node_modules link (the package is

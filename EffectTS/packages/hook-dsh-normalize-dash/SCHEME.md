@@ -7,11 +7,10 @@ with a fake ctx + the REAL factory — ALL PASS).
 
 The dash normalizer for **model output**.
 
-The hermes normalize-dashes hook
-rewrites the unicode dash family to ASCII hyphen-minus
+The file-hook precedent rewrites the unicode dash family to ASCII hyphen-minus
 **in files after the fact**.
 
-A DSH plugin can go where hermes cannot: the **`llm/stream` waterfall**
+A DSH plugin can go where a file hook cannot: the **`llm/stream` waterfall**
 — the interceptable wrapper around every streaming model call (retry, replay, routing), bound to the
 LlmRuntime (`docs/subsystems/llm-streaming.md:1108-1125`).
 
@@ -19,9 +18,9 @@ The rewrite flows into both the live UI
 and the durable transcript — **the normalization is deliberately VISIBLE** (it IS the feature), the
 opposite of the governance family's silence.
 
-## 1. The transform (exact hermes fidelity)
+## 1. The transform (exact fidelity)
 
-Per text segment, verbatim from the hermes hook's perl pattern:
+Per text segment, verbatim from the core's Dashes class:
 
 ```
 [\u058A\u05BE\u1400\u1806\u2010-\u2015\u2E17\u2E1A\u2E3A-\u2E3B\u2E40
@@ -50,8 +49,8 @@ Per text segment, verbatim from the hermes hook's perl pattern:
 
 All → the config `replacement` (default `-`, ASCII hyphen-minus U+002D).
 
-No context rules — hermes
-has none.
+No context rules —
+none.
 
 Whole-chunk single-character replacement is **chunk-boundary-safe**: no
 lookahead/lookbehind, no multi-character sequences, so per-chunk application can never disagree with

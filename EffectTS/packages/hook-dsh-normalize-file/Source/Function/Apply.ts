@@ -15,7 +15,7 @@
 //     X, a rewriter silently changed them to X′, the next edit fails or
 //     half-matches - the live lesson that made raw-write's verbatim default
 //     the right call) and interleave with the governance trio's bounded
-//     passes. The hermes precedent (`normalize-tabs.sh`, a repair hook for a
+//     passes. The file-hook precedent (`normalize-tabs.sh`, a repair hook for a
 //     repair hook) is why the after-the-fact rewriting stays OUT; the design
 //     report ships the tool arm only and defers any watch arm until an
 //     edit-contract mechanism exists. Nothing runs without an explicit agent
