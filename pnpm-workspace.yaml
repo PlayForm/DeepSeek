@@ -13,3 +13,4 @@ nodeLinker: hoisted
 
 onlyBuiltDependencies:
     - puppeteer
+    - esbuild
