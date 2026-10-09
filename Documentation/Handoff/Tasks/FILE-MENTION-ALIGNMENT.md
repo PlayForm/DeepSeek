@@ -11,6 +11,14 @@
   user's example contexts). The source + the built CSS carry `baseline-source:
   last` for both units. The residual: the 2 pinner.log 1px cases - the user's
   call whether to micro-refine (the fix is their commit; the drift is 1px).
+- THE RESIDUAL RE-INVESTIGATION (2026-10-09 - the "fix all" dispatch): NO CSS
+  EDIT MADE + recommended - the pixel-truth measurement (deviceScaleFactor 3,
+  same-font control) shows the real offset is -0.83px BOTH themes (under the
+  1px pass criterion), quantized to 1.00 by the caret-rect formula; the root is
+  Chrome's half-leading rounding for a 13px/18px chip inside a 14px/20px table
+  cell - a shared-rule nudge would shift ALL chips equally and regress the 74
+  zeros. The honest lever if the script must read 0: the measurement script's
+  formula (the caret-rect height ratio), NOT the stylesheet - the user's call.
 
 ## THE TASK (the spec given)
 Fix the .file-mention units' vertical alignment in the prose: the file-type icon +
