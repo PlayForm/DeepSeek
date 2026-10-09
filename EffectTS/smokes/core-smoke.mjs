@@ -36,7 +36,7 @@ import {
 	Chunk,
 	StreamGate as Gate,
 } from "../packages/ets-base-dsh/Target/Library.js";
-import { Effect, Stream } from "../packages/ets-hook-dsh-core/node_modules/effect/dist/index.js";
+import { Effect, Stream } from "effect";
 
 let N = 0;
 const ok = (label) => {

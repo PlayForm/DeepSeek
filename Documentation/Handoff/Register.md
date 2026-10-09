@@ -111,8 +111,8 @@
     segment, it reads as "<kind> @ <platform> @ <role> @ <domain>": `dsh-hook-cargo-governor` →
     [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo] ("Hook @ DSH @ Governor @ Cargo"), applied to ALL:
     `dsh-plugin-factory` → [plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source); `dsh-hook-core` → `hook-dsh-core`;
-    `dsh-hook-package-governor` → [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-package/Source); `dsh-hook-package-pinner` →
-    [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-pinner-package/Source); `dsh-hook-cargo-governor` → [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo]; the normalize
+    `dsh-hook-package-governor` → [hook-dsh-governor-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source); `dsh-hook-package-pinner` →
+    [hook-dsh-pinner-package](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source); `dsh-hook-cargo-governor` → [hook-dsh-governor-cargo][ours-hook-dsh-governor-cargo]; the normalize
     family → `hook-dsh-normalize-{dash,quotes,ellipsis,spaces,invisible,fullwidth, file}`.
     Alphabetically the names then group perfectly: the kind (hook/plugin) first, the ROLE families
     contiguous (core, governor- cargo/governor-package, normalize-*, pinner-package,
@@ -145,4 +145,4 @@ profile carries the eleven packages.
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
 [ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml
 [ours-govern]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts
-[ours-hook-dsh-governor-cargo]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-governor-cargo/Source
+[ours-hook-dsh-governor-cargo]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source

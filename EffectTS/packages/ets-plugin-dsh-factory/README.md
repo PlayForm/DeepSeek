@@ -20,7 +20,7 @@
 >
 > *One service.*
 >
-> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
+> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
 > `GovernSteps` registry among them).*
 >
 > *The hooks bring their own metal; the factory pours the mold.*

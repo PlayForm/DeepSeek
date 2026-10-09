@@ -59,7 +59,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
   [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's direct-govern registry
   at apply (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory
   SCHEME.md §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain
-  pass and update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/Source/Function/Govern.ts) (Function/Direct — same machinery, same
+  pass and update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts) (Function/Direct — same machinery, same
   ledger strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
