@@ -452,7 +452,7 @@ ledger stays the complete record.
 Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
 zero framework dependencies: `import ... from "@playform/hook-dsh-normalize-dash"` resolves to `Target/`.
 The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-hook-dsh-normalize-dash` -
-effect-backed, built on the shared `@playform/ets-dsh-hook` base with `effect` v4.0.2 as
+effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as
 its runtime dependency. Install the group you run and never mix the groups in one graph
 (the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
 

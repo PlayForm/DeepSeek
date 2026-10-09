@@ -27,8 +27,8 @@
 // controller/effect label stem (the module name — "hook-dsh-governor-package" —
 // reproduces the trio's effect labels byte-identically).
 import Open from "./Open.js";
-import type { State as State } from "@playform/ets-dsh-hook";
-import type { Jobs as JobsRegistry } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
+import type { Jobs as JobsRegistry } from "@playform/ets-base-dsh";
 import type { Context } from "@deepseek-ai/cordis";
 
 export default (Context: Context, Module: { state: State; name: string }): void => {

@@ -1,4 +1,4 @@
-// Library - the entry module of the BASE (@playform/ets-dsh-hook), the
+// Library - the entry module of the BASE (@playform/ets-base-dsh), the
 // single owner of the shared Effect-TS plumbing of the ets-* group: the
 // runtime wiring (Source/Service - the Context services, the layer graph
 // and the materialize() runtime assembled for the factory shell), the

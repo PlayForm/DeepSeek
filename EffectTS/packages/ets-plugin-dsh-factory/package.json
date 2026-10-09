@@ -24,7 +24,7 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
 	},
 	"dependencies": {
-		"@playform/ets-dsh-hook": "0.0.1",
+		"@playform/ets-base-dsh": "0.0.1",
 		"effect": "4.0.2"
 	},
 	"devDependencies": {

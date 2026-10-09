@@ -349,7 +349,7 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
   packed from `Classic/packages` with pre-#15 directory candidates and
   patched entry ids `hook-dsh-*` that the ets bundles don't register (their
   ids are `ets-hook-dsh-*`), and the ets packages' dependency on the base
-  `@playform/ets-dsh-hook` was neither packed nor overridden (a registry 404
+  `@playform/ets-base-dsh` was neither packed nor overridden (a registry 404
   at install). Fixed: the scaffold packs from `EffectTS/packages` (13
   tarballs incl. the base), overrides all three internal names, targets the
   `ets-` entry ids, and the suites assert the ets names.

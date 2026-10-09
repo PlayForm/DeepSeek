@@ -70,7 +70,7 @@
 // remaining controller on unload.
 import { Effect, Scope } from "effect";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-import { Update } from "@playform/ets-dsh-hook";
+import { Update } from "@playform/ets-base-dsh";
 import Run from "./Run.js";
 import type State from "@Interface/State.js";
 import type Registry from "@Interface/Registry.js";

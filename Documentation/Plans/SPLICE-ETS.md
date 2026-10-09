@@ -3,7 +3,7 @@
 > The splice: the module family splits into TWO groups with DISTINCT names so the pnpm workspace
 > can never cross-link again - the classical group (the plain `@playform/dsh-*` names, no effect
 > dependency) + the effect-ts powered group (the `@playform/ets-*` names) under the new shared base
-> `@playform/ets-dsh-hook`. The symlink break dies at the root: no postinstall relink, no preinstall
+> `@playform/ets-base-dsh`. The symlink break dies at the root: no postinstall relink, no preinstall
 > hooks. The whole build triggers from inside this monorepo via REGULAR dependencies (no sh scripts,
 > no shell glue); the packages stay nested for development; npm publishing happens from this SINGLE
 > repository (25 packages); the per-package submodule repos are the later best case (mapped, not
@@ -15,7 +15,7 @@
 > names used during this plan's execution and in the tables below: the classical group is
 > `@playform/hook-dsh-*` (+ `@playform/plugin-dsh-factory`), the Effect-TS group is
 > `@playform/ets-hook-dsh-*` (+ `@playform/ets-plugin-dsh-factory`), the base stays
-> `@playform/ets-dsh-hook`. The tables record the names as they were at execution time
+> `@playform/ets-base-dsh`. The tables record the names as they were at execution time
 > (the classical intermediate `dsh-hook-*`, the ets intermediate `ets-hook-dsh-*`); read every
 > classical `dsh-hook-*` below as `hook-dsh-*`.
 
@@ -47,7 +47,7 @@
 2. **THE NAMESPACE PER VERSION.** `ets-` is the standard pre-pendage inside the ONLY available
    scope `@playform`: `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory`,
    `@playform/ets-hook-dsh-cargo-governor`, ... (the twelve current EffectTS names, `ets-`
-   prepended). The base package is `@playform/ets-dsh-hook` - the shared Effect-TS plumbing (the
+   prepended). The base package is `@playform/ets-base-dsh` - the shared Effect-TS plumbing (the
    runtime wiring, the fiber/stream machinery, the hook contract types - the full inventory in §2.3)
    that EVERY ets-* package depends on. The classical group keeps the plain `@playform/dsh-*`
    names - exactly the Boilerplate baseline's naming (§2.1).
@@ -117,12 +117,12 @@ The `ets-` pre-pendage on the CURRENT names (decision 2's standard):
 
 - Every ets-* package keeps its exact `effect: 4.0.2` pin (decision: the pin stays, §9.4).
 - The ten ets consumers depend on `@playform/ets-hook-dsh-core` + `@playform/ets-plugin-dsh-factory`
-  AND on the new base `@playform/ets-dsh-hook`; the two foundations (ets-hook-dsh-core,
+  AND on the new base `@playform/ets-base-dsh`; the two foundations (ets-hook-dsh-core,
   ets-plugin-dsh-factory) depend on the base only (+ effect).
 
-### 2.3 The new base `@playform/ets-dsh-hook` (the scope inventory)
+### 2.3 The new base `@playform/ets-base-dsh` (the scope inventory)
 
-NEW package at `EffectTS/packages/ets-dsh-hook` (version 0.0.1, `effect: 4.0.2` the only external
+NEW package at `EffectTS/packages/ets-base-dsh` (version 0.0.1, `effect: 4.0.2` the only external
 dependency). Its scope - what it EXTRACTS from the current EffectTS tree (the shared Effect-TS
 plumbing, verified locations):
 
@@ -132,7 +132,7 @@ plumbing, verified locations):
 | **The fiber/stream machinery** | `EffectTS/packages/hook-dsh-core/Source/Stream/{Gate,Strip,Block,Chunk}.ts` - the `Gate` (the per-materialization `Stream.suspend` gate; the harness adapter seam `Stream.fromAsyncIterable -> Gate -> Stream.toAsyncIterable`), the stream utilities; `hook-dsh-core/Source/Function/Update.ts` - the Update envelope (the Dispatch/Settle pair, `Effect`+`Exit`+`Scope`); the governors' fiber-home pattern (`State.Scope ?? Scope.makeUnsafe("sequential")` - currently DUPLICATED in `hook-dsh-governor-cargo/Source/Function/Dispatch.ts` + `hook-dsh-governor-package/Source/Function/Dispatch.ts`) - the duplication collapses into the base |
 | **The hook contract types** | `hook-dsh-core/Source/Library.ts`'s named exports (the contract: `Section`, `Default`, `Suppress`, `Refusal`, `Policy`, `Activate`, `Update`, the `Normalize/*` maps, the `Stream/*` machinery) + `plugin-dsh-factory/Source/Interface/*` (`Transform`, `Actor`, `Gate`, `Jobs`, `State`, `Journal`, `Options`, `Output`) |
 
-- **The dependency rule:** EVERY ets-* package (all 12) depends on `@playform/ets-dsh-hook`; the
+- **The dependency rule:** EVERY ets-* package (all 12) depends on `@playform/ets-base-dsh`; the
   ten consumers additionally depend on `ets-hook-dsh-core` + `ets-plugin-dsh-factory`. The base is
   the single owner of the shared plumbing; `ets-hook-dsh-core` may keep re-export shims ONLY where
   its public contract requires (flagged per export during the extraction; the consumers' imports
@@ -237,7 +237,7 @@ therefore comes from the packages' own `dependencies` edges, with no scripts:
 Classic tree  (build:classic):   { hook-dsh-core, plugin-dsh-factory }            (no @playform deps)
                                 -> the ten dsh-hook-* consumers                    (edges: core + factory)
 
-EffectTS tree (build:effect-ts): ets-dsh-hook                                      (the base, L0)
+EffectTS tree (build:effect-ts): ets-base-dsh                                      (the base, L0)
                                 -> { ets-hook-dsh-core, ets-plugin-dsh-factory }   (edges: the base)
                                 -> the ten ets-hook-* consumers                    (edges: base + core + factory)
 ```
@@ -263,7 +263,7 @@ splice's guarantee).
      `Normalize/*` maps, `Dashes`, `Chunk`...);
   2. `@playform/plugin-dsh-factory` -> `@playform/ets-plugin-dsh-factory` (the factory contract
      imports: `Schema as Compose`, the `Interface/*` re-exports, the `Factory`/`State` types);
-  3. the MOVED plumbing imports -> `@playform/ets-dsh-hook` (the machinery §2.3: `Activate`, `Gate`,
+  3. the MOVED plumbing imports -> `@playform/ets-base-dsh` (the machinery §2.3: `Activate`, `Gate`,
      `Update`, the `Stream/*` utilities, the `Scope` types, the runtime/service layer imports).
 - **Classic tree: 90 files** import the two names (47 core + 58 factory) -> the §2.1 names
   (`@playform/hook-dsh-core` -> `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory` ->
@@ -275,7 +275,7 @@ splice's guarantee).
 
 - `name`: per §2.1/§2.2; the base gets the new manifest (§2.3).
 - `dependencies`: the sibling entries take the NEW names at the EXACT `0.0.1`; the ets consumers +
-  the ets foundations ADD `@playform/ets-dsh-hook: 0.0.1`; the classical manifests DROP
+  the ets foundations ADD `@playform/ets-base-dsh: 0.0.1`; the classical manifests DROP
   `effect: 4.0.2` (residue); `smol-toml: 1.9.0` / `npm-check-updates: 23.1.0` stay in their
   governors; the `@deepseek-ai/*` runtime imports stay in `devDependencies` (the family convention).
 - **The dual-source exports simplification (all 24):** the condition maps (`effect-ts`/`classic` +
@@ -308,11 +308,11 @@ splice's guarantee).
 ### 5.1 The single-repo npm publishing (the 25 packages - decision 3, the best case)
 
 All 25 publish from THIS monorepo: 12 classical (`@playform/dsh-*`) + 12 ets (`@playform/ets-*`) +
-the base (`@playform/ets-dsh-hook`). The publish order is the dependency graph, in layers:
+the base (`@playform/ets-base-dsh`). The publish order is the dependency graph, in layers:
 
 | Layer | The packages (publish in this order; within a layer, arbitrary) |
 | ----- | --------------------------------------------------------------- |
-| L0    | `@playform/ets-dsh-hook` (the base; deps: `effect` only) |
+| L0    | `@playform/ets-base-dsh` (the base; deps: `effect` only) |
 | L1    | `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory` (classical foundations) AND `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory` (ets foundations; deps: the base + effect) |
 | L2    | the twenty consumers (ten per group; each deps: its group's core + factory + the base for ets + `smol-toml`/`npm-check-updates` for the governors) |
 
@@ -330,7 +330,7 @@ the base (`@playform/ets-dsh-hook`). The publish order is the dependency graph, 
 - The `.gitmodules.draft` already anticipates per-package repos at `github.com/PlayForm/<name>`;
   its naming placeholder (the `-effectts` suffix note) is REPLACED by the decided names: the
   classical repos `github.com/PlayForm/hook-dsh-core` ... `plugin-dsh-factory` (12), the ets repos
-  `github.com/PlayForm/ets-hook-dsh-core` ... `ets-plugin-dsh-factory` (12) + `github.com/PlayForm/ets-dsh-hook` (the base).
+  `github.com/PlayForm/ets-hook-dsh-core` ... `ets-plugin-dsh-factory` (12) + `github.com/PlayForm/ets-base-dsh` (the base).
 - The readiness already exists: every package ships its own `pnpm-workspace.yaml` (`packages: [.]`),
   its own `pnpm-lock.yaml`, its own `.github/workflows/` (the per-repo NPM/Node/Dependabot/Auto/GitHub
   workflows) and its own `.gitignore` - each package is standalone-installable and standalone-
@@ -338,7 +338,7 @@ the base (`@playform/ets-dsh-hook`). The publish order is the dependency graph, 
 - The migration triggers (later, per package, when feasible): create the per-package repo, `git
   submodule add` at the package dir (the `.gitmodules.draft` entries), retire the package from the
   root workspace glob if/when the tree structure changes, publish from the package's own NPM.yml.
-  The classical + ets groups migrate independently; the base `ets-dsh-hook` migrates with the ets
+  The classical + ets groups migrate independently; the base `ets-base-dsh` migrates with the ets
   group. NOT part of this plan's execution.
 
 ---
@@ -414,7 +414,7 @@ The surfaces carrying the current names; the SITE-DOCS-RENAME lane rewrites them
 
 - `README.md` (root): the `link:../bundles/...` rows (lines 62-73, 93-111), the install command
   (line 140), the CLASSIC/effect-ts toggle wording (lines 147-153 - REPLACED by the two-group
-  install wording: `pnpm add @playform/dsh-...` vs `pnpm add @playform/ets-...`, the `@playform/ets-dsh-hook` base line; the `/effect-ts` subpath escape hatch disappears with the dual-source shape).
+  install wording: `pnpm add @playform/dsh-...` vs `pnpm add @playform/ets-...`, the `@playform/ets-base-dsh` base line; the `/effect-ts` subpath escape hatch disappears with the dual-source shape).
 - `Documentation/Guides/Governor-README.md` + `Governor-SCHEME.md`: the `@playform/hook-dsh-*` names
   + the `/effect-ts` subpath + the variant-toggle wording.
 - `Documentation/Skill/plugin-system/SKILL.md`: the `@playform/plugin-dsh-factory` + `hook-dsh-*`
@@ -447,7 +447,7 @@ historical, leave the content.
 | Phase | What happens | The gate |
 | ----- | ------------ | -------- |
 | **S0** | The baseline lock: `pnpm test` = 733 + 746 (the CURRENT tree, before any edit); `git status` clean; the working tree's manually-restored links documented. NO install in S0 (any install can re-break the pre-splice tree - §9.1). | the 733/746 run + the user's commit |
-| **S1** | The base extraction: `git mv` the §2.3 plumbing into `EffectTS/packages/ets-dsh-hook`; scaffold the manifest/tsconfig/Configuration; rewrite the moved modules' internal imports + the consumers' plumbing imports (rule 3, §4.1); build + run the 12 EffectTS suites. | **746 green BEFORE any rename** |
+| **S1** | The base extraction: `git mv` the §2.3 plumbing into `EffectTS/packages/ets-base-dsh`; scaffold the manifest/tsconfig/Configuration; rewrite the moved modules' internal imports + the consumers' plumbing imports (rule 3, §4.1); build + run the 12 EffectTS suites. | **746 green BEFORE any rename** |
 | **S2** | The rename pass (one atomic change set): the 24 dir renames + the 24 manifest renames (§2.1/§2.2) + the by-name import rewrites (§4.1) + the manifest deps (§4.2) + the dual-source exports simplification + the classical effect-dep removal + the smoke reference updates (§6.2). | the renamed tree builds; `git status` reviewed by the user |
 | **S3** | The workspace wiring: the root scripts (§3.2); `Maintain/Run-Smokes.mjs`; delete `Maintain/DualSource.sh` + `Maintain/Verify-DualSource.mjs`; the `.prettierignore`/`.gitignore` residue cleanup; `pnpm-workspace.yaml` verified unchanged (§3.1). | `pnpm format:check` green |
 | **S4** | The fresh-install gate: `pnpm install` -> `pnpm run build` -> `pnpm test`. | **733 + 746, zero failures** (the splice is proven) |

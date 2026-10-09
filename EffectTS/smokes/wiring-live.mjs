@@ -50,7 +50,7 @@ const Bundles = [
 	["@playform/ets-hook-dsh-core", ["ets-hook-dsh-core", "ets-hook-dsh-core"]],
 	// The ets base: not a bundle (no dsh.bundle), but a dependency of every
 	// ets package - packed and overridden so the install never leaves home.
-	["@playform/ets-dsh-hook", ["ets-dsh-hook", "ets-dsh-hook"]],
+	["@playform/ets-base-dsh", ["ets-base-dsh", "ets-base-dsh"]],
 	[
 		"@playform/ets-hook-dsh-package-governor",
 		["ets-hook-dsh-package-governor", "ets-hook-dsh-package-governor"],
@@ -312,7 +312,7 @@ const ProfileManifest = (Deps) =>
 						...Bundles.filter(
 							([Name]) =>
 								Name !== "@playform/ets-hook-dsh-core" &&
-								Name !== "@playform/ets-dsh-hook",
+								Name !== "@playform/ets-base-dsh",
 						).map(([Name]) => Name),
 					],
 				},
@@ -496,8 +496,8 @@ const CreateScratch = (Home) => {
 			"@playform/ets-hook-dsh-core":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/ets-hook-dsh-core"]),
-			"@playform/ets-dsh-hook":
-				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/ets-dsh-hook"]),
+			"@playform/ets-base-dsh":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/ets-base-dsh"]),
 			"@playform/ets-plugin-dsh-factory":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/ets-plugin-dsh-factory"]),

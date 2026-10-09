@@ -58,14 +58,14 @@
 // preserved) and retires it (`PendingJournal = undefined` — the pre-bind
 // stage is over; after that, records route straight through the shared
 // sink).
-import { Append } from "@playform/ets-dsh-hook";
-import type { State as State } from "@playform/ets-dsh-hook";
+import { Append } from "@playform/ets-base-dsh";
+import type { State as State } from "@playform/ets-base-dsh";
 // The v2 domain spec's single source of truth: the shared package_governance
 // vocabulary (`EVENTS`) and open contract (`DOMAIN` — name/version/layout/
 // compatibleVersions/invalidRecords) live on the JournalService — the
 // storage journal's shape belongs to the storage service, the open
 // mechanics stay here.
-import { DOMAIN, EVENTS } from "@playform/ets-dsh-hook";
+import { DOMAIN, EVENTS } from "@playform/ets-base-dsh";
 
 export default async (
 	State: State,

@@ -106,7 +106,7 @@ Check(
 const PlayformDir = Path.join(Profile, "node_modules", "@playform");
 Check(existsSync(PlayformDir), "node_modules/@playform exists");
 const Expected = [
-	"ets-dsh-hook",
+	"ets-base-dsh",
 	"ets-hook-dsh-cargo-governor",
 	"ets-hook-dsh-core",
 	"ets-hook-dsh-normalize-dash",

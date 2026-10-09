@@ -73,7 +73,7 @@ import { Replace, ReplaceMap, Dashes, Chunk } from "@playform/ets-hook-dsh-core"
 ```
 
 
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-dsh-hook`](../ets-dsh-hook) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 

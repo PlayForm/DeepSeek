@@ -26,9 +26,9 @@
 // never touched here.
 import * as FileSystem from "node:fs";
 import { join as Join, dirname as Parent } from "node:path";
-import { Append } from "@playform/ets-dsh-hook";
+import { Append } from "@playform/ets-base-dsh";
 import Parse from "./Parse.js";
-import type { State as State } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
 
 export default (
 	State: State,

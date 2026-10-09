@@ -31,7 +31,7 @@
 
 The splice has executed (SPLICE-ETS §8 S2/S4): the trees carry UNIQUE names - the Classic
 tree the plain `@playform/dsh-*` names, the EffectTS tree the `@playform/ets-hook-dsh-*` /
-`@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-dsh-hook` (verified in the
+`@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-base-dsh` (verified in the
 manifests). The registry listing uses exactly these.
 
 **The classical group (12, `Classic/packages/*`):**
@@ -55,7 +55,7 @@ manifests). The registry listing uses exactly these.
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
-| 1 | `@playform/ets-dsh-hook` | `pnpm add @playform/ets-dsh-hook` | the shared Effect-TS plumbing (the base) |
+| 1 | `@playform/ets-base-dsh` | `pnpm add @playform/ets-base-dsh` | the shared Effect-TS plumbing (the base) |
 | 2 | `@playform/ets-hook-dsh-core` | `pnpm add @playform/ets-hook-dsh-core` | the core contract + the normalize machinery |
 | 3 | `@playform/ets-plugin-dsh-factory` | `pnpm add @playform/ets-plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
 | 4 | `@playform/ets-hook-dsh-package-governor` | `pnpm add @playform/ets-hook-dsh-package-governor` | the package.json governor |
@@ -92,7 +92,7 @@ the byte-identical contract:
 
 1. The splice lands first (the unique names) - a pre-splice publish would ship
    the collision into the registry.
-2. `NPM.yml` armed per layer: L0 `@playform/ets-dsh-hook` → L1 the four
+2. `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` → L1 the four
    foundations → L2 the twenty consumers (SPLICE-ETS §5.1).
 3. Fresh-install gate green: `pnpm install` → `pnpm run build` → `pnpm test` =
    733 + 746, zero failures (SPLICE-ETS §6.3).

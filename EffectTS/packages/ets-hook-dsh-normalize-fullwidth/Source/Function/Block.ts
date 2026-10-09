@@ -14,7 +14,7 @@
 //
 // The behavior is byte-identical to a hand-rolled in-file implementation -
 // the fullwidth smoke is the arbiter.
-import { Block as CoreBlock } from "@playform/ets-dsh-hook";
+import { Block as CoreBlock } from "@playform/ets-base-dsh";
 import Replace from "./Replace.js";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 

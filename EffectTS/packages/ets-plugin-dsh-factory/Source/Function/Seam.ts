@@ -7,7 +7,7 @@
 // shape) — including a cached `undefined` for a genuinely absent service.
 // The State builder uses this exact accessor for the "subprocess" seam; new
 // optional seams (storageDomain, jobs) should prefer it over ad-hoc probes.
-import type { State as State } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
 
 export default (State: State, Name: string): unknown => {
 	switch (true) {

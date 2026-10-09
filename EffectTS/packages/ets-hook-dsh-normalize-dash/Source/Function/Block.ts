@@ -13,7 +13,7 @@
 //
 // The behavior is byte-identical to the previous in-file implementation
 // (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is the arbiter.
-import { Block as CoreBlock } from "@playform/ets-dsh-hook";
+import { Block as CoreBlock } from "@playform/ets-base-dsh";
 import Replace from "./Replace.js";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 

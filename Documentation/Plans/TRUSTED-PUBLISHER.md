@@ -28,7 +28,7 @@ order (L0 -> L1 -> L2):
 set -euo pipefail
 NAMES=(
   # L0 - the base
-  "@playform/ets-dsh-hook"
+  "@playform/ets-base-dsh"
   # L1 - the four foundations
   "@playform/hook-dsh-core"
   "@playform/plugin-dsh-factory"
@@ -97,7 +97,7 @@ all 25 entries (the Compress screenshot's pattern):
 
 The 25 package pages to configure (same shape each):
 
-`@playform/ets-dsh-hook`, `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`,
+`@playform/ets-base-dsh`, `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`,
 `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory`,
 `@playform/hook-dsh-cargo-governor`, `@playform/hook-dsh-normalize-dash`,
 `@playform/hook-dsh-normalize-ellipsis`, `@playform/hook-dsh-normalize-file`,

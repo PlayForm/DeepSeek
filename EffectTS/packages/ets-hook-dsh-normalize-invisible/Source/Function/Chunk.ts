@@ -16,7 +16,7 @@
 // The behavior is the CLASS flavor of the family's dispatch (the dash
 // template shape, with the Invisible class substituted for Dashes) - the
 // invisible smoke is the arbiter.
-import { Chunk as CoreChunk } from "@playform/ets-dsh-hook";
+import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
 import Replace from "./Replace.js";
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
 

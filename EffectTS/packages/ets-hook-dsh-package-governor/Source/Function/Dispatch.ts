@@ -61,7 +61,7 @@
 // on settlement.
 import { Effect, Scope } from "effect";
 import Execute from "./Execute.js";
-import { Update } from "@playform/ets-dsh-hook";
+import { Update } from "@playform/ets-base-dsh";
 import type State from "@Interface/State.js";
 import type Registry from "@Interface/Registry.js";
 import type JobsRegistry from "@Interface/Jobs.js";

@@ -373,8 +373,11 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   ets-hook-dsh-core, ets-hook-dsh-package-governor, ets-hook-dsh-cargo-
   governor, ets-hook-dsh-package-pinner, ets-hook-dsh-normalize-{...} +
   ets-plugin-dsh-factory.
-  THE BASE: @playform/ets-dsh-hook (unchanged). The definitive re-rename is
-  executing; the gates: 733 + 746 must stay exact.
+  THE BASE: @playform/ets-base-dsh (THE USER'S FINAL base name 2026-10-09 -
+  the most counter-intuitive: "ets, base the DSH!" - the verb-first imperative
+  completing the family: hook-dsh-<role> / plugin-dsh-factory / ets-base-dsh;
+  the base = the shared Effect-TS foundation usable by the hooks AND the
+  non-hook plugins - was ets-dsh-hook, renamed everywhere).
 - THE FACTORY MIRROR RENAME COMPLETE (2026-10-09 - the user's correction): the
   factory now mirrors the mechanism-first scheme: @playform/plugin-dsh-factory
   (was dsh-plugin-factory) + @playform/ets-plugin-dsh-factory (was

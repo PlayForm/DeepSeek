@@ -83,7 +83,7 @@ import Discover from "./Function/Discover.js";
 import Parse from "./Function/Parse.js";
 import Resolve from "./Function/Resolve.js";
 import Gate from "./Function/Gate.js";
-import type { Over as WriteOver } from "@playform/ets-dsh-hook";
+import type { Over as WriteOver } from "@playform/ets-base-dsh";
 import RefreshFn from "./Function/Refresh.js";
 import Continue from "./Function/Continue.js";
 import Build from "./Function/State.js";
@@ -92,20 +92,20 @@ import AttachEffects from "./Function/Attach.js";
 import SchemaFn from "./Function/Schema.js";
 import SeamFn from "./Function/Seam.js";
 import UpdateKey from "./Function/UpdateKey.js";
-import { LedgerService } from "@playform/ets-dsh-hook";
-import { JournalService } from "@playform/ets-dsh-hook";
-import { WriteService } from "@playform/ets-dsh-hook";
-import { GovernService } from "@playform/ets-dsh-hook";
-import { materialize } from "@playform/ets-dsh-hook";
-import type { Services as FactoryRuntime } from "@playform/ets-dsh-hook";
+import { LedgerService } from "@playform/ets-base-dsh";
+import { JournalService } from "@playform/ets-base-dsh";
+import { WriteService } from "@playform/ets-base-dsh";
+import { GovernService } from "@playform/ets-base-dsh";
+import { materialize } from "@playform/ets-base-dsh";
+import type { Services as FactoryRuntime } from "@playform/ets-base-dsh";
 import type {
 	Registry as GovernRegistry,
 	Selection as GovernSelection,
-} from "@playform/ets-dsh-hook";
-import type { State as Shape } from "@playform/ets-dsh-hook";
-import type { Options as Setup } from "@playform/ets-dsh-hook";
-import type { Gate as Decision } from "@playform/ets-dsh-hook";
-import type { Transform as Transform } from "@playform/ets-dsh-hook";
+} from "@playform/ets-base-dsh";
+import type { State as Shape } from "@playform/ets-base-dsh";
+import type { Options as Setup } from "@playform/ets-base-dsh";
+import type { Gate as Decision } from "@playform/ets-base-dsh";
+import type { Transform as Transform } from "@playform/ets-base-dsh";
 import type { Context as Ctx } from "@deepseek-ai/cordis";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
@@ -115,12 +115,12 @@ import type { Context as Ctx } from "@deepseek-ai/cordis";
 // instead of mirroring the shapes locally (the pre-fix structural mirrors).
 // The declarations ship RELATIVE specifiers (the deterministic build emits
 // ./Interface/*.js), so a consumer's tsconfig paths never re-map them.
-export type { State } from "@playform/ets-dsh-hook";
-export type { Options } from "@playform/ets-dsh-hook";
-export type { Gate } from "@playform/ets-dsh-hook";
-export type { Transform } from "@playform/ets-dsh-hook";
-export type { Output } from "@playform/ets-dsh-hook";
-export type { Journal } from "@playform/ets-dsh-hook";
+export type { State } from "@playform/ets-base-dsh";
+export type { Options } from "@playform/ets-base-dsh";
+export type { Gate } from "@playform/ets-base-dsh";
+export type { Transform } from "@playform/ets-base-dsh";
+export type { Output } from "@playform/ets-base-dsh";
+export type { Journal } from "@playform/ets-base-dsh";
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields - `Schema(shared?, module?)`,

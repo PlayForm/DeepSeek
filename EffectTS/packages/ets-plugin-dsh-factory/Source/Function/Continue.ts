@@ -57,10 +57,10 @@ import { Cause, Effect, Exit } from "effect";
 import Parse from "./Parse.js";
 import RefreshFn from "./Refresh.js";
 import Resolve from "./Resolve.js";
-import { LedgerService } from "@playform/ets-dsh-hook";
-import { WriteService } from "@playform/ets-dsh-hook";
-import type { State as State } from "@playform/ets-dsh-hook";
-import type { Transform as Transform } from "@playform/ets-dsh-hook";
+import { LedgerService } from "@playform/ets-base-dsh";
+import { WriteService } from "@playform/ets-base-dsh";
+import type { State as State } from "@playform/ets-base-dsh";
+import type { Transform as Transform } from "@playform/ets-base-dsh";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 
 export default (

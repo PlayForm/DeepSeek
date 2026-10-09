@@ -370,7 +370,7 @@ and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the grou
   dependencies.
 - **The EFFECT-TS group.** `import ... from "@playform/ets-hook-dsh-package-governor"` - the same
   contract on Effect-TS services and layers, with `effect` v4.0.2 as the runtime dependency and
-  the base `@playform/ets-dsh-hook` package carrying the plumbing every ets-* package builds on.
+  the base `@playform/ets-base-dsh` package carrying the plumbing every ets-* package builds on.
 
 Never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic
 dispatch envelope). From source, each tree is its own workspace slice: the Classic tree under

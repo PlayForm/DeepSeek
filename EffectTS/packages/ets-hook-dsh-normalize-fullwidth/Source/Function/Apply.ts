@@ -82,7 +82,7 @@
 import { Effect, Scope, Stream } from "effect";
 import Normalize from "./Normalize.js";
 import Replace from "./Replace.js";
-import { Activate, StreamGate as Gate } from "@playform/ets-dsh-hook";
+import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";

@@ -14,7 +14,7 @@
 //
 // The behavior is byte-identical to the previous in-file implementation
 // (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is the arbiter.
-import { Chunk as CoreChunk } from "@playform/ets-dsh-hook";
+import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
 import Replace from "./Replace.js";
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
 

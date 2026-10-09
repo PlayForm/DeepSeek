@@ -2,7 +2,7 @@
 # NPM - the publish workflow (ARMED, the single-repo shape per
 # Documentation/Plans/SPLICE-ETS.md §5.1). All 25 packages publish
 # from THIS monorepo in the L0 -> L1 -> L2 topological order:
-#   L0: @playform/ets-dsh-hook (the base)
+#   L0: @playform/ets-base-dsh (the base)
 #   L1: the four foundations (the classical hook-dsh-core +
 #       plugin-dsh-factory, the ets-hook-dsh-core +
 #       ets-plugin-dsh-factory)
@@ -95,8 +95,8 @@ jobs:
             # L0: the base. Every ets-* package depends on it - it must
             # exist on the registry first (SPLICE-ETS.md §5.1, §9.3).
             # ------------------------------------------------------------
-            - name: Publish L0 - @playform/ets-dsh-hook
-              working-directory: EffectTS/packages/ets-dsh-hook
+            - name: Publish L0 - @playform/ets-base-dsh
+              working-directory: EffectTS/packages/ets-base-dsh
               run: npm publish --provenance --access public --ignore-scripts
 
             # ------------------------------------------------------------

@@ -28,12 +28,14 @@ import {
 	Spaces,
 	Invisible,
 	Fullwidth,
-	Chunk,
-	Block,
+} from "../packages/ets-hook-dsh-core/Target/Library.js";
+import {
 	Activate,
 	Update,
-	Gate,
-} from "../packages/ets-hook-dsh-core/Target/Library.js";
+	Block,
+	Chunk,
+	StreamGate as Gate,
+} from "../packages/ets-base-dsh/Target/Library.js";
 import { Effect, Stream } from "../packages/ets-hook-dsh-core/node_modules/effect/dist/index.js";
 
 let N = 0;

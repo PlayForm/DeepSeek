@@ -25,7 +25,7 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
   developed inside the monorepo first): the cleaned, de-personalized, restructured implementations -
   register #12 (anonymization + the Aphrodite README borrow), #15 (the reversed hierarchical names:
   `hook-dsh-cargo-governor` etc.).
-  [ANNOTATED 2026-10-09: SPLICE-ETS.md resolved #15 - the trees now carry unique names, the Classic the plain @playform/dsh-* forms (with the three token-reordered names) and the EffectTS the @playform/ets-* forms + the base @playform/ets-dsh-hook.]
+  [ANNOTATED 2026-10-09: SPLICE-ETS.md resolved #15 - the trees now carry unique names, the Classic the plain @playform/dsh-* forms (with the three token-reordered names) and the EffectTS the @playform/ets-* forms + the base @playform/ets-base-dsh.]
 - **`DeepSeek/EffectTS` = the Effect-TS v4 release** (register #13): the same package identities as
   the Classic, the internals re-implemented on Effect-TS (the tracing, the ecosystem interop, the
   parallel-govern toggle from #14 designed in from the start). Its smokes prove parity against the

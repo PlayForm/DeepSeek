@@ -46,7 +46,7 @@
 import { Effect, Scope } from "effect";
 import Observe from "./Observe.js";
 import { Pin } from "./Direct.js";
-import { Activate } from "@playform/ets-dsh-hook";
+import { Activate } from "@playform/ets-base-dsh";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";

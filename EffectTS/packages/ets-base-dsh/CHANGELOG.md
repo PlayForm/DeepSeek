@@ -6,7 +6,7 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/ets-dsh-hook: the base of the ets-* group -
+- The initial release of @playform/ets-base-dsh: the base of the ets-* group -
   the shared Effect-TS plumbing every `@playform/ets-*` package depends on: the
   runtime wiring (the Context services, the layer graph and the `materialize()`
   runtime assembled for the factory shell), the fiber/stream machinery (the

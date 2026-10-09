@@ -25,9 +25,9 @@
 // that renamed the field can point at it.
 import { basename as Base } from "node:path";
 import Match from "./Match.js";
-import type { State as State } from "@playform/ets-dsh-hook";
-import type { Gate as Decision } from "@playform/ets-dsh-hook";
-import type { Actor as ActorView } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
+import type { Gate as Decision } from "@playform/ets-base-dsh";
+import type { Actor as ActorView } from "@playform/ets-base-dsh";
 import type { FsTarget, FsObservation, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
 
 export default (

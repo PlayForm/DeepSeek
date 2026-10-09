@@ -25,7 +25,7 @@
 // `activated (…)` summary line and logs it through Factory.Append (and
 // Factory.Journal with the "activated" event) before/after calling Wire —
 // the factory never owns the string.
-import type { State as State } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
 import type { Context } from "@deepseek-ai/cordis";
 import type { FsTarget, FsObservation } from "@deepseek-ai/dsh-fs";
 

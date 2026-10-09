@@ -15,9 +15,9 @@
 // 2026-10-03); modules expose state via a context attachment instead.
 import Seam from "./Seam.js";
 import Unwrap from "./Unwrap.js";
-import type { State as State } from "@playform/ets-dsh-hook";
-import type { Options as Options } from "@playform/ets-dsh-hook";
-import type { Journal as Entry } from "@playform/ets-dsh-hook";
+import type { State as State } from "@playform/ets-base-dsh";
+import type { Options as Options } from "@playform/ets-base-dsh";
+import type { Journal as Entry } from "@playform/ets-base-dsh";
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
 import type { Context } from "@deepseek-ai/cordis";
 

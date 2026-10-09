@@ -1,7 +1,7 @@
 {
-	"name": "@playform/ets-dsh-hook",
+	"name": "@playform/ets-base-dsh",
 	"version": "0.0.1",
-	"description": "The BASE of the ets-* group (@playform/ets-dsh-hook): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell), the fiber/stream machinery (the Gate transformer and the pure reducers, the Update envelope) and the hook contract types (the factory's Interface/* structural contracts). Usable outside the harness entirely (the PlayForm ecosystem).",
+	"description": "The BASE of the ets-* group (@playform/ets-base-dsh): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell), the fiber/stream machinery (the Gate transformer and the pure reducers, the Update envelope) and the shared contract types (the factory's Interface/* structural contracts). Usable outside the harness entirely (the PlayForm ecosystem).",
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
@@ -31,6 +31,10 @@
 		"@types/node": "26.6.4",
 		"tsc-alias": "1.9.7",
 		"typescript": "7.0.2"
+	},
+	"peerDependencies": {
+		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2"
 	},
 	"license": "CC0-1.0",
 	"publishConfig": {
