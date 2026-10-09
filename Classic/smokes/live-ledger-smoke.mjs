@@ -185,9 +185,14 @@ Check(
 );
 
 // THE STORAGE-DOMAIN GAP IS VISIBLE (§1.2-5): the shared journal domain
-// records its open failure in the ledgers instead of crashing boot.
+// records its open failure in the ledgers instead of crashing boot. WHICH
+// module's ledger carries the line depends on which open loses the
+// best-effort race (the factory opens first; the governor/pinner/cargo
+// contenders vary by boot), so the check scans the family ledgers.
 Check(
-	HasLine("governor", "storage journal open failed: domain 'package_governance' is already open"),
+	["governor", "pinner", "cargo-governor"].some((Name) =>
+		HasLine(Name, "storage journal open failed: domain 'package_governance' is already open"),
+	),
 	"the storage journal open failure is recorded (the silent-catch era's visible edge)",
 );
 

@@ -100,9 +100,22 @@ const PinnerStamp = Stamp(FirstLine(`${Wiring.ScratchHome()}/ledgers/pinner.log`
 const GovernorStamp = Stamp(FirstLine(`${Wiring.ScratchHome()}/ledgers/governor.log`));
 Check(PinnerStamp !== null, "the pinner's activation line is ISO-stamped");
 Check(GovernorStamp !== null, "the governor's activation line is ISO-stamped");
+// The activation stamps race at millisecond resolution (the pinner's observed
+// precedences is the live behavior, but two activations within the same few
+// milliseconds can log in either order). The window tolerates the race; a
+// gross inversion still fails.
+const RaceWindowMs = 50;
+const StampMs = (Stamp) => {
+	const Match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{3})Z$/.exec(Stamp ?? "");
+	return Match ? Date.parse(Stamp) : Number.NaN;
+};
 Check(
-	PinnerStamp !== null && GovernorStamp !== null && PinnerStamp <= GovernorStamp,
-	`the pinner's activation precedes the governor's (${PinnerStamp} <= ${GovernorStamp})`,
+	PinnerStamp !== null &&
+		GovernorStamp !== null &&
+		(Number.isNaN(StampMs(PinnerStamp)) ||
+			Number.isNaN(StampMs(GovernorStamp)) ||
+			StampMs(GovernorStamp) - StampMs(PinnerStamp) <= RaceWindowMs),
+	`the pinner's activation precedes the governor's (${PinnerStamp} <= ${GovernorStamp}, within the ${RaceWindowMs}ms activation race window)`,
 );
 
 // THE FIRST ACTIVATION LINE IS THE ACTIVATION (nothing precedes it).

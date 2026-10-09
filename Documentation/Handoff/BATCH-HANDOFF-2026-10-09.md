@@ -385,6 +385,34 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   NameForm accepts the new forms + the StaleForm flags the two old factory
   forms; the gates: the builds 0 TS errors + the full matrix EXACT (733 + 746)
   + the link integrity + format:check + the drift-guard 219/219.
+  - THE VERIFIED-PUBLISHING PREP COMPLETE (2026-10-09 - the Compress-parity OIDC
+  publishing): the NPM.yml's job permissions at parity (contents: read +
+  id-token: write) + all 7 publish commands now npm publish --provenance
+  --access public --ignore-scripts + the header comment documenting the
+  trusted-publisher contract (PlayForm/DeepSeek + NPM.yml + the Release env,
+  no NODE_AUTH_TOKEN in CI); provenance: true added to all 25 publishConfigs
+  (verified 25/25 + the spot packs clean); the deliverable Documentation/Plans/
+  TRUSTED-PUBLISHER.md - the copy-paste empty-first-publish script (all 25
+  names at 0.0.0, the L0->L1->L2 order, the temp-dir scaffolds), the version
+  strategy (0.0.0 placeholder -> the real 0.0.1, the ONCE ON NPM immutability
+  caveat), and the paste-ready trusted-publisher table (25 identical entries:
+  PlayForm / DeepSeek / NPM.yml / Release / npm publish). THE USER'S REMAINING
+  STEPS: the 25 placeholder publishes (local, their token) -> the 25 npm-UI
+  trusted-publisher forms -> the first provenance run.
+- THE DOGFOOD-PROFILE COMPLETE (2026-10-09 - the user's requirement): the
+  dedicated DSH_HOME ~/.dsh-dogfood with TWO subhomes (classic + ets - each
+  scaffolding the dsh-test profile, the family installed via the no-symlink
+  file: tarballs, the exercise driver + the ledgers + the workspaces, the
+  .wiring-ready marker); the HEADLESS integration (DSH_HOME=... dsh --profile
+  dsh-test --dump-config + dsh headless "task" - the profile implicitly
+  selected; the full model round-trip needs the DEEPSEEK_API_KEY at launch; the
+  real flows need no model - the exercise driver runs in-boot); the battery:
+  DSH_WIRING_HOME=~/.dsh-dogfood pnpm test:wiring (the fast path) vs the
+  throwaway scratch - ALL 202 checks green twice consecutively via the
+  persistent profile; the ets battery fixed (the pack source, the base
+  tarball, the Run-Wiring per-tree subhome + the deterministic resets, the
+  ledger journal-open + assembly-order race windows); the mechanics 733/746
+  untouched; the DOGFOOD-TESTING plan updated (§2.6 + §7).
   - THE BODY-SCROLLBAR ROOT CAUSE + FIX (2026-10-09 - the user's deployed-site
   feedback): the real bug was NOT a stale deploy nor a headless-detectable
   overflow: the index hero's full-bleed backdrop (.hero--grid::before, left:

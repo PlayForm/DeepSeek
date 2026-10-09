@@ -69,7 +69,10 @@ try {
 				if (Entry.isDirectory()) {
 					for (const File of FileSystem.readdirSync(Sub)) {
 						if (File !== "registry.json")
-							FileSystem.rmSync(Path.join(Sub, File), { force: true, recursive: true });
+							FileSystem.rmSync(Path.join(Sub, File), {
+								force: true,
+								recursive: true,
+							});
 					}
 				} else {
 					FileSystem.rmSync(Sub, { force: true });

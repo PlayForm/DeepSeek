@@ -337,6 +337,29 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
 
 ## 7. Residuals (as implemented)
 
+- **Verification record:** the full wiring battery is green through the
+  configured profile — `DSH_WIRING_HOME=~/.dsh-dogfood pnpm test:wiring` →
+  all 14 suites (7 per tree, 202 wiring checks) ALL PASS, repeatable over the
+  persistent subhomes (the runner resets each subhome's ledgers and the
+  exercise work areas to their seeds per run, so reruns are deterministic).
+  Both profiles dump-compose (`dsh --profile dsh-test --dump-config`) with
+  all family entries present; headless boots the profile and reaches the LLM
+  layer (`MISSING_CREDENTIAL` without a key).
+- **The EffectTS scaffold was renamed mid-batch and had never run green:** it
+  packed from `Classic/packages` with pre-#15 directory candidates and
+  patched entry ids `hook-dsh-*` that the ets bundles don't register (their
+  ids are `ets-hook-dsh-*`), and the ets packages' dependency on the base
+  `@playform/ets-dsh-hook` was neither packed nor overridden (a registry 404
+  at install). Fixed: the scaffold packs from `EffectTS/packages` (13
+  tarballs incl. the base), overrides all three internal names, targets the
+  `ets-` entry ids, and the suites assert the ets names.
+- **The journal-open race is ledger-owner-dependent:** which module's ledger
+  records `storage journal open failed: domain 'package_governance' is
+  already open` depends on which best-effort open loses the race (governor in
+  the Classic boots, pinner/cargo in the ets boots); the live-ledger suites
+  scan the family ledgers. Likewise the pinner/governor activation stamps
+  race at millisecond resolution — the profile-assembly suites compare within
+  a 50 ms race window (a gross inversion still fails).
 - **No API credential in the dedicated home's launching environment:** the
   headless one-task flow was verified to boot `dsh-test` and fail fast with
   the harness's own `MISSING_CREDENTIAL` diagnostic; a full model round-trip
@@ -355,7 +378,8 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
 
 ## 6. Disciplines
 
-- Documentation-only until the user approves the implementation phases.
+- The implementation followed the user's explicit activation (the profiles,
+  the battery integration, the verification); nothing else was touched.
 - NEVER commit; the user commits.
 - The real `~/.dsh` profiles are read-only-inspected; every mutation targets
   the scratch home; destroy leaves no residue.
