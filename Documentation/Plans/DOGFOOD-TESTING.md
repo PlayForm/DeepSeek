@@ -200,6 +200,59 @@ assert, now read from the scratch home's real log files:
 - Ordering: the pinner's activation precedes the governor's (the live load
   order - the gap §1.2-1, now asserted instead of anecdotal).
 
+### 2.6 The CONFIGURED persistent profile + the dsh headless mode (implemented)
+
+The throwaway scratch (§2.4) is the isolation variant. The persistent variant
+is the same scaffold, created ONCE and left in place:
+
+- **Location:** `~/.dsh-dogfood` (a dedicated `DSH_HOME` — the user's real
+  `~/.dsh` is never written), with **one subhome per tree**: `classic/` and
+  `ets/`. The profile name is `dsh-test` in both, but the two scaffolds
+  install different package groups (the Classic `@playform/hook-dsh-*` /
+  `@playform/plugin-dsh-factory` names vs the EffectTS
+  `@playform/ets-hook-dsh-*` / `@playform/ets-plugin-dsh-factory` group), so
+  a single home cannot serve both trees — the subhome split is the plan's
+  variant of §2.1's isolation levels. Each profile is produced by the
+  wiring-live scaffold (`wiring-live.mjs` → `EnsureScratch`), which is the
+  configurator of record: the 12 `file:` tarball deps (no symlinks beyond
+  pnpm's own `.bin` shims), the empty `cordis.yml` root, the minimal user
+  layer, `overlay.yml` / `overlay-nf.yml`, the scratch-only exercise driver
+  (`@local/dsh-wiring-exercise`), the fake cargo shim, and the exercise
+  workspaces with their registries. The `.wiring-ready.json` marker makes
+  subsequent runs reuse a subhome as-is.
+- **CLI verification (read-only):**
+  `DSH_HOME=~/.dsh-dogfood dsh --profile dsh-test --dump-config` — the
+  composed tree shows the base stack plus all family plugins
+  (`plugin-dsh-factory`, the governor/pinner/cargo hooks, the six flavors
+  and normalize-file); `--dump-config-schema` prints the profile entry/patch
+  schema.
+- **Headless one-task mode:** `dsh headless "<task>"` with the dedicated home
+  exported selects the profile implicitly (it is the only profile there):
+  `DSH_HOME=~/.dsh-dogfood dsh headless "run the tests"`. It answers one
+  task, prints the result to stdout (diagnostics to stderr), and exits;
+  `--json` emits newline-delimited run events, `--session-id` resumes. A
+  model round-trip needs a provider credential in the launching environment
+  (see the residual in §7); the profile boots and reaches the LLM layer
+  without one. The REAL flows (normalize / governor / pinner / cargo) need
+  no model at all — they are driven by the exercise driver inside the booted
+  profile, which is how the wiring suites exercise them today; a credentialed
+  headless task is the variant that triggers the same flows through an
+  agent's tool calls and asserts the ledgers afterwards.
+- **Battery integration:** `Maintain/Run-Wiring.mjs` honours
+  `DSH_WIRING_HOME=<base home>` — the fast path (each tree reuses its
+  configured subhome, no repack/reinstall, nothing destroyed). Without it,
+  the temp scratch lifecycle (create → … → destroy) runs as before, one
+  throwaway home per tree. Both paths run the same 7 suites × 2 trees.
+
+```bash
+# the fast path (the configured profile):
+DSH_WIRING_HOME="$HOME/.dsh-dogfood" pnpm test:wiring
+# the isolation path (throwaway scratch, destroyed at exit):
+pnpm test:wiring
+# the headless one-task flow against the dedicated profile:
+DSH_HOME="$HOME/.dsh-dogfood" dsh headless "run the tests"
+```
+
 ---
 
 ## 3. The test-case suite structure to ADD
@@ -279,6 +332,24 @@ done
 # the invariant:
 test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
 ```
+
+---
+
+## 7. Residuals (as implemented)
+
+- **No API credential in the dedicated home's launching environment:** the
+  headless one-task flow was verified to boot `dsh-test` and fail fast with
+  the harness's own `MISSING_CREDENTIAL` diagnostic; a full model round-trip
+  needs `DEEPSEEK_API_KEY` (or the cloudflare route config + key) exported
+  at launch. The flows under test need no model — the exercise driver path
+  is credential-free and fully verified.
+- **pnpm `.bin` shims:** the only symlinks in the dedicated home are pnpm's
+  own `node_modules/.bin` entries (npm-check-updates/ncu); every package
+  directory is a real copied file: install — the no-symlink invariant holds.
+- **The persistent subhomes are not auto-refreshed:** after package changes,
+  delete `~/.dsh-dogfood/classic` / `~/.dsh-dogfood/ets` (or just its
+  `.wiring-ready.json`) and let the scaffold recreate them; the temp scratch
+  path always packs fresh.
 
 ---
 

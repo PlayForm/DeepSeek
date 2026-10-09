@@ -375,6 +375,28 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   ets-plugin-dsh-factory.
   THE BASE: @playform/ets-dsh-hook (unchanged). The definitive re-rename is
   executing; the gates: 733 + 746 must stay exact.
+- THE FACTORY MIRROR RENAME COMPLETE (2026-10-09 - the user's correction): the
+  factory now mirrors the mechanism-first scheme: @playform/plugin-dsh-factory
+  (was dsh-plugin-factory) + @playform/ets-plugin-dsh-factory (was
+  ets-dsh-plugin-factory) - "plugin the DSH!" - applied EVERYWHERE (2 dirs +
+  the 281-file content pass: the manifests, imports, paths, site pages + the
+  plugin-dsh-factory.astro route + the Configurator + the registry + the
+  versions + the docs + the NPM.yml + the .gitmodules.draft); the drift-guard's
+  NameForm accepts the new forms + the StaleForm flags the two old factory
+  forms; the gates: the builds 0 TS errors + the full matrix EXACT (733 + 746)
+  + the link integrity + format:check + the drift-guard 219/219.
+  - THE BODY-SCROLLBAR ROOT CAUSE + FIX (2026-10-09 - the user's deployed-site
+  feedback): the real bug was NOT a stale deploy nor a headless-detectable
+  overflow: the index hero's full-bleed backdrop (.hero--grid::before, left:
+  calc(50% - 50vw); width: 100vw) - 100vw counts the vertical scrollbar while
+  the layout viewport does not, so the backdrop's right edge overhangs ~7-8px
+  in REAL browsers -> the body's horizontal scrollbar at every width (headless
+  sweeps reported clean because headless has no scrollbars). THE FIX: .page {
+  overflow-x: clip } (the full-width shell - trims only the invisible
+  overhang; the full-bleed preserved; no scroll container; the fixed header
+  unaffected). VERIFIED: 21 pages + the multi-page sweep (8 pages x 6 widths x
+  2 themes) ZERO overflow + the computed clip. The deployed site predates the
+  fix - the user's commit + push lands it.
   route (the task-routing violation) - the explicit GLM routing is binding from
   here; the routing-enforcer plugin (the plan) automates it silently.
 

@@ -27,14 +27,40 @@ if (spawnSync("dsh", ["--version"], { encoding: "utf8" }).status !== 0) {
 	process.exit(1);
 }
 
-const Scratch = FileSystem.mkdtempSync(Path.join(Os.tmpdir(), "dsh-wiring-"));
-console.log(`Run-Wiring: scratch home ${Scratch} (destroyed at exit)`);
-
+// The fast path: a PERSISTENT pre-configured home (the dedicated dogfood
+// profile per Documentation/Plans/DOGFOOD-TESTING.md §2 — created once via
+// the wiring-live scaffold, e.g. ~/.dsh-dogfood with the dsh-test profile).
+// DSH_WIRING_HOME selects the base; each tree gets its own subhome
+// (`classic/`, `ets/`) because both scaffolds build a profile named
+// `dsh-test` with different package names (the Classic vs the ets group) —
+// one home cannot serve both. The .wiring-ready.json marker makes
+// EnsureScratch reuse a subhome as-is (no repack, no reinstall). Without
+// DSH_WIRING_HOME the runner builds a throwaway temp scratch per tree (the
+// isolation variant) and destroys it at exit — persistent subhomes are
+// NEVER destroyed here.
+const Persistent = process.env.DSH_WIRING_HOME ?? "";
+const ScratchFor = (Tree) =>
+	Persistent
+		? Path.join(Persistent, Tree === "EffectTS" ? "ets" : "classic")
+		: FileSystem.mkdtempSync(Path.join(Os.tmpdir(), `dsh-wiring-${Tree}-`));
+const TempHomes = [];
 let Failed = 0;
 const Totals = [];
 
 try {
 	for (const Tree of Trees) {
+		const Scratch = ScratchFor(Tree);
+		if (!Persistent) TempHomes.push(Scratch);
+		// Deterministic reruns: the persistent subhome keeps its configured
+		// profile, but the ledgers are reset per run (they are the test
+		// profile's own logs - the suites assert activation lines and the
+		// exercised flow lines against a known-fresh trail).
+		FileSystem.rmSync(Path.join(Scratch, "ledgers"), { recursive: true, force: true });
+		FileSystem.mkdirSync(Path.join(Scratch, "ledgers"), { recursive: true });
+		console.log(
+			`\nRun-Wiring: ${Tree} home ${Scratch}` +
+				(Persistent ? " (persistent, left in place)" : " (destroyed at exit)"),
+		);
 		for (const Suite of WiringSuites) {
 			const File = Path.join(Tree, "smokes", Suite);
 			console.log(`\n=== ${Tree}/${Suite}`);
@@ -50,8 +76,8 @@ try {
 		}
 	}
 } finally {
-	// DESTROY - no residue.
-	FileSystem.rmSync(Scratch, { recursive: true, force: true });
+	// DESTROY - no residue (the persistent subhomes are left in place).
+	for (const Home of TempHomes) FileSystem.rmSync(Home, { recursive: true, force: true });
 }
 
 console.log(

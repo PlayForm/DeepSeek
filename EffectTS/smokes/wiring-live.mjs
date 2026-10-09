@@ -39,54 +39,57 @@ export const ScratchHome = () => process.env.DSH_TEST_SCRATCH ?? "";
 export const MonorepoRoot = () =>
 	process.env.DSH_WIRING_MONOREPO ?? Path.resolve(import.meta.dirname, "..", "..");
 
-/** The Classic release tree - the packing source per the plan (§2.2). */
-export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages");
+/** The EffectTS release tree - the packing source for the ets group. */
+export const PackagesDir = () => Path.join(MonorepoRoot(), "EffectTS", "packages");
 
 // The twelve release packages: the bundle-list name and the candidate source
 // directory names (the tree's package directories were renamed hook-dsh-* →
 // hook-dsh-* mid-batch; both spellings are accepted).
 const Bundles = [
-	["@playform/ets-plugin-dsh-factory", ["plugin-dsh-factory", "plugin-dsh-factory"]],
-	["@playform/ets-hook-dsh-core", ["hook-dsh-core", "hook-dsh-core"]],
+	["@playform/ets-plugin-dsh-factory", ["ets-plugin-dsh-factory", "ets-plugin-dsh-factory"]],
+	["@playform/ets-hook-dsh-core", ["ets-hook-dsh-core", "ets-hook-dsh-core"]],
+	// The ets base: not a bundle (no dsh.bundle), but a dependency of every
+	// ets package - packed and overridden so the install never leaves home.
+	["@playform/ets-dsh-hook", ["ets-dsh-hook", "ets-dsh-hook"]],
 	[
 		"@playform/ets-hook-dsh-package-governor",
-		["hook-dsh-package-governor", "hook-dsh-package-governor"],
+		["ets-hook-dsh-package-governor", "ets-hook-dsh-package-governor"],
 	],
 	[
 		"@playform/ets-hook-dsh-package-pinner",
-		["hook-dsh-package-pinner", "hook-dsh-package-pinner"],
+		["ets-hook-dsh-package-pinner", "ets-hook-dsh-package-pinner"],
 	],
 	[
 		"@playform/ets-hook-dsh-cargo-governor",
-		["hook-dsh-cargo-governor", "hook-dsh-cargo-governor"],
+		["ets-hook-dsh-cargo-governor", "ets-hook-dsh-cargo-governor"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-dash",
-		["hook-dsh-normalize-dash", "hook-dsh-normalize-dash"],
+		["ets-hook-dsh-normalize-dash", "ets-hook-dsh-normalize-dash"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-quotes",
-		["hook-dsh-normalize-quotes", "hook-dsh-normalize-quotes"],
+		["ets-hook-dsh-normalize-quotes", "ets-hook-dsh-normalize-quotes"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-ellipsis",
-		["hook-dsh-normalize-ellipsis", "hook-dsh-normalize-ellipsis"],
+		["ets-hook-dsh-normalize-ellipsis", "ets-hook-dsh-normalize-ellipsis"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-spaces",
-		["hook-dsh-normalize-spaces", "hook-dsh-normalize-spaces"],
+		["ets-hook-dsh-normalize-spaces", "ets-hook-dsh-normalize-spaces"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-invisible",
-		["hook-dsh-normalize-invisible", "hook-dsh-normalize-invisible"],
+		["ets-hook-dsh-normalize-invisible", "ets-hook-dsh-normalize-invisible"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-fullwidth",
-		["hook-dsh-normalize-fullwidth", "hook-dsh-normalize-fullwidth"],
+		["ets-hook-dsh-normalize-fullwidth", "ets-hook-dsh-normalize-fullwidth"],
 	],
 	[
 		"@playform/ets-hook-dsh-normalize-file",
-		["hook-dsh-normalize-file", "hook-dsh-normalize-file"],
+		["ets-hook-dsh-normalize-file", "ets-hook-dsh-normalize-file"],
 	],
 ];
 
@@ -306,9 +309,11 @@ const ProfileManifest = (Deps) =>
 					bundles: [
 						"@deepseek-ai/dsh-base",
 						"@deepseek-ai/dsh-web-app",
-						...Bundles.filter(([Name]) => Name !== "@playform/ets-hook-dsh-core").map(
-							([Name]) => Name,
-						),
+						...Bundles.filter(
+							([Name]) =>
+								Name !== "@playform/ets-hook-dsh-core" &&
+								Name !== "@playform/ets-dsh-hook",
+						).map(([Name]) => Name),
 					],
 				},
 			},
@@ -491,6 +496,8 @@ const CreateScratch = (Home) => {
 			"@playform/ets-hook-dsh-core":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/ets-hook-dsh-core"]),
+			"@playform/ets-dsh-hook":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/ets-dsh-hook"]),
 			"@playform/ets-plugin-dsh-factory":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/ets-plugin-dsh-factory"]),

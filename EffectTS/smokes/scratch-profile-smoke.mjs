@@ -90,7 +90,7 @@ Check(existsSync(Path.join(Profile, "pnpm-lock.yaml")), "the profile has a produ
 
 // THE TARBALLS (Method 1 - publish-identical).
 const Tarballs = readdirSync(Scratch.Tarballs).filter((Entry) => Entry.endsWith(".tgz"));
-Check(Tarballs.length === 12, `the 12 release tarballs were packed (${Tarballs.length})`);
+Check(Tarballs.length === 13, `the 13 release tarballs were packed (${Tarballs.length})`);
 Check(
 	Tarballs.every((Entry) => Entry.startsWith("playform-")),
 	"every tarball is a @playform pack artifact",
