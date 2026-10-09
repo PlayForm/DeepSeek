@@ -11,6 +11,6 @@ minimumReleaseAge: 0
 
 nodeLinker: hoisted
 
-onlyBuiltDependencies:
+allowBuilds:
     - puppeteer
     - esbuild
