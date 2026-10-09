@@ -16,45 +16,35 @@
   NPM tools - the tsc -p forbidden - committed 1cab7a7/c206dad).
 - The site: 21 pages green (the dark theme, 259 diagrams, the concept blocks, the
   showcases + the Compare sliders, the token systems, the mobile nav, the official
-  marks incl. the Zhipu pending, the stats band, the hover-pause, the full-width
-  use-cases, the deployment via the classical Cloudflare Pages, the footer + the
-  JSON-LD "PlayForm Cloud").
+  marks incl. the Zhipu mark (landed 2026-10-09), the stats band, the hover-pause,
+  the full-width use-cases, the deployment via the classical Cloudflare Pages, the
+  footer + the JSON-LD "PlayForm Cloud" + the "DSH Family @ PlayForm" brand).
 - The provenance: the hermes/Compress/Land/borrowed references REMOVED everywhere
   (the release surface + the residuals - the sweep-clean proof).
 - The queue records: TOMORROW-REVIEW.md (the process record), the DUAL-SOURCE-
   BUNDLING.md, the BATCH-STATE-PLUGIN.md, the ROUTING-ENFORCER-PLUGIN.md, the
   CASE-STUDY-PLAN.md, the DSH-REGISTRY-LISTING.md.
 
-## 2. THE IDLE AGENTS (queued - all specs retained in their contexts)
+## 2. THE IDLE AGENTS - ALL 8 LANES CLOSED (2026-10-09, this session)
 
-Activate ONE at a time (the user's rule: max 1-2, the ~/.dsh maxActiveSubagents is
-now 1 - the concurrency flood's fix). Each activation carries the STATE BLOCK (the
-running lanes + the pending + the scope) + the surgical-edit + the build-verified
-disciplines + the EXPLICIT GLM routing (provider=cloudflare-workers-ai,
-model=@cf/zai-org/glm-5.3-flash, effort high - the ROUTING DISCIPLINE IS BINDING:
-omission = the violation - the routing-enforcer plugin will automate it later).
-
-1. FILE-MENTION ALIGNMENT (3f17ce20) - RE-DISPATCH (died mid-investigation, no
-   edits): the .file-mention units' baseline vs the prose text ("The silent
-   package.json version pinner" example) - the .log-chip same pattern.
-2. EFFECT-CARD-FOOTER (91c4d5d9) - RE-DISPATCH (died on the 502 mid-verification;
-   its edits landed - verify + finish): the effect mark WHITE on the blue cards +
-   the footer links' top padding.
-3. PIN-GOVERN COLORS (ae5cc62c): PIN red (a new contrast-checked token) / GOVERN
-   the Harness Blue / NORMALIZE the gray - the use-cases kicker + the card titles +
-   the identity labels - the word-level RAW-style treatment.
-4. DESCRIPTIVE-TITLES (050c666b): the case-study + the site's descriptive titles -
-   the larger heading + the grayed tone + the info icon on the left.
-5. HEADER-BRAND (c2c51b2f): the logo's right padding + the rename to "DSH Family
-   @ PlayForm" across the header/og/JSON-LD/titles (the user's naming judgment:
-   "DSH Family @ PlayForm").
-6. PATH-MENTION (4f3579f8): the file-icon renderer skips the path-embedded
-   filenames ("~/.dsh/profiles/<name>/package.json" - the full path gets no icon;
-   the bare mentions keep theirs; the log-chip same rule).
-7. ZHIPU-ICON (d5a5e3f5): the official Zhipu AI mark beside the GLM/flash-model
-   mentions (the models/index/workbench/matrix) - the official-marks discipline.
-8. ENGINE-PILL (ccc68bb2): the workbench/matrix/models engine pills' icons
-   vertically aligned to the text (the measured optical-center check).
+The full queue landed + verified + closed (each Tasks/ file carries its record):
+1. FILE-MENTION ALIGNMENT - VERIFIED (the baseline-source fix 5ddb6e2c: 74/76
+   measurements at 0.0px drift via the committed baseline-measure.cjs; the 2
+   pinner.log 1px cases recorded as the user's call).
+2. EFFECT-CARD-FOOTER - VERIFIED (7fb6a862: the white glyph + the 16px footer
+   clearance, both themes - no edits needed).
+3. PIN-GOVERN COLORS - COMPLETE (the --color-pin-red token + the word-level
+   treatment; committed 960fcede).
+4. DESCRIPTIVE-TITLES - COMPLETE (the headline-lg grayed titles + the info
+   icon; committed 960fcede).
+5. HEADER-BRAND - COMPLETE (the rename across 27 files + the gap step;
+   committed 960fcede).
+6. PATH-MENTION - COMPLETE (the IsPathEmbedded rule + the hardcoded-span sweep;
+   committed 960fcede).
+7. ZHIPU-ICON - COMPLETE (the official Z.ai mark + 7 built placements;
+   committed 0506601f).
+8. ENGINE-PILL - COMPLETE (the lift-rule removal - measured -2.1..-2.6px before
+   / 0.0..+0.5px after; committed 0506601f).
 
 ## 3. THE USER'S FEEDBACK - ADDRESSED (the requirements' resolutions)
 
@@ -72,7 +62,7 @@ omission = the violation - the routing-enforcer plugin will automate it later).
 | The LIVE-DOT conflict | The tray markers only (the Dot prop removed structurally) |
 | The logo (official Asset glyph) + the P avatar | The header's official glyph + the hamburger + the mobile nav (the contract fix) |
 | The dark theme | The full token block + the toggle + the shiki bridge |
-| The file icons + log chips | The file-type icons + the Mention renderer + the log chips (the path rule pending) |
+| The file icons + log chips | The file-type icons + the Mention renderer + the log chips (the path rule LANDED - lane 6) + the baseline alignment (lane 1 - the baseline-source fix verified 74/76 at 0.0px) |
 | The unicode/code-token identity | The .code-token system + the Mention pass |
 | The copyright + JSON-LD | "© 2025 PlayForm Cloud" everywhere |
 | The provenance removal | The hermes/Compress/borrowed zero everywhere |
@@ -85,11 +75,12 @@ omission = the violation - the routing-enforcer plugin will automate it later).
 | The entity leaks | The real characters + the JS-expression props |
 | The PIN/GOVERN/NORMALIZE colors | ADDRESSED (lane 3 - 2026-10-09: the --color-pin-red token #C62828/#E57373 + the word-level .word-pin/.word-govern/.word-normalize treatment - the kicker + the card titles + the identity labels; the control labels left neutral by judgment) |
 | The descriptive titles | ADDRESSED (lane 4 - 2026-10-09: the headline-lg grayed descriptive titles + the created info mechanic icon on the left - the concept/era-story/showcase coverage, the SectionHeader h2s untouched) |
-| The DSH Family @ PlayForm | PENDING (lane 5) |
+| The DSH Family @ PlayForm | ADDRESSED (lane 5 - 2026-10-09: the rename across 27 files + the header gap token step; committed 960fcede) |
 | The Zhipu icon | ADDRESSED (lane 7 - 2026-10-09: the official Z.ai mark sourced from the docs.z.ai brand asset + the "zhipu" BrandIcon + 7 built marks across index/models/workbench/matrix) |
-| The engine-pill alignment | PENDING (lane 8) |
-| The path-mention icon | PENDING (lane 6) |
-| The effect white-on-blue + the footer padding | PENDING (lane 2) |
+| The engine-pill alignment | ADDRESSED (lane 8 - 2026-10-09: the optical-lift rule removed - measured -2.13..-2.63px before / 0.0..+0.5px after; committed 0506601f) |
+| The path-mention icon | ADDRESSED (lane 6 - 2026-10-09: the IsPathEmbedded rule - path-embedded mentions plain, the bare ones iconed; committed 960fcede) |
+| The effect white-on-blue + the footer padding | ADDRESSED (lane 2 - 2026-10-09 verified: the white glyph + the 16px footer clearance, both themes, no edits needed - the fix committed 7fb6a862) |
+| The info icon's scope (2026-10-09 - NEW feedback) | ADDRESSED (lane 4 RE-DISPATCH: the Showcase revert landed + verified - 0 info icons on the index's use-cases cards (was 3), the 45 kept on the case-study, the identity-word colors intact; the card titles restored to their card-name styling) |
 
 ## 4. THE DECISIONS + THE OPEN ITEMS
 
@@ -113,8 +104,21 @@ omission = the violation - the routing-enforcer plugin will automate it later).
   (interrupt_agent) any lane that would exceed the concurrent working set, and
   resumes (send_message) ONE lane at a time (max 1-2); the paused lanes keep
   their specs + their partial edits in the tree and resume from there
-  (read-before-edit). The final arbiter after ALL lanes settle: one clean
-  `cd Site && npx astro build` over the whole tree + the spot sweep.
+  (read-before-edit).
+- THE ORCHESTRATOR'S NON-MODIFICATION RULE (2026-10-09 - the user's nit): the
+  orchestrator does NOT run site modifications or builds - the lanes do (each
+  lane's arbiter is its own build); the orchestrator relays the user's feedback
+  to the idlers, spot-checks read-only, and maintains the records only. (A
+  stray orchestrator `astro build` aborted mid-run cleared Target/ once - it
+  was restored from the user's committed state, no rebuild.)
+- THE BATCH'S COMMITS (2026-10-09 - the user committed as the lanes landed):
+  960fcede (the rebrand + the descriptive titles + the identity words + the
+  path-mention rule + the two measurement scripts) + 0506601f (the Zhipu mark +
+  the engine-pill lift removal + the card icons) - the working tree is clean
+  aside from the .astro build metadata. The lane residuals ledger: the 2
+  pinner.log 1px baseline cases (lane 1), the models pills' +0.5px (lane 8),
+  the plain-string PageHero/Description GLM mentions (lane 7 - covered by the
+  adjacent marks) - all recorded in the Tasks/ files.
 - The ROUTING DISCIPLINE: the recent lanes slipped to the parent-inherited DeepSeek
   route (the task-routing violation) - the explicit GLM routing is binding from
   here; the routing-enforcer plugin (the plan) automates it silently.

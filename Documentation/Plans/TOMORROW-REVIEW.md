@@ -312,3 +312,19 @@ The user will run the whole process again - the review-driven pass:
 ## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
 
 The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in ~/Developer/Application/PlayForm/Aphrodite/Site, specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.
+
+## 8. BATCH COMPLETE (2026-10-09 - the 8-lane site queue closed)
+
+All 8 lanes (file-mention alignment, effect-card-footer, pin-govern colors,
+descriptive-titles, header-brand, path-mention, zhipu-icon, engine-pill) landed +
+verified + closed this session - each Tasks/ file carries its record, the handoff
+BATCH-HANDOFF-2026-10-09.md is refreshed to the all-closed state. The user
+committed mid-session (960fcede: the rebrand + the descriptive titles + the
+identity words + the path-mention rule + the measurement scripts; 0506601f: the
+Zhipu mark + the engine-pill lift removal + the card icons). The residuals ledger
+(the 2 pinner.log 1px baselines, the models +0.5px, the plain-string GLM mentions)
+is recorded in the handoff §4 + the Tasks/ files. The process lessons recorded:
+the paused-dispatch protocol (the rate-limit lesson) + the orchestrator's
+non-modification rule (no builds - the lanes build; the orchestrator relays the
+feedback + keeps the records). The routing discipline held (all GLM flash low).
+Next: §5's future work (the plugins, the npm publishing, the Aphrodite session).

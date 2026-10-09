@@ -1,6 +1,6 @@
 # TASK: DESCRIPTIVE-TITLES (agent 050c666b)
 
-## STATUS: LANDED + VERIFIED (2026-10-09 - the orchestrator's spot-check: the .concept__title headline-lg/--color-on-surface-variant rule confirmed in the built Badge CSS; the handoff matrix item 11 flipped to ADDRESSED)
+## STATUS: LANDED + VERIFIED + SCOPED (2026-10-09 - the orchestrator's spot-check: the .concept__title headline-lg/--color-on-surface-variant rule confirmed in the built Badge CSS; the handoff matrix item 11 flipped to ADDRESSED; the user's scope feedback (the info icon was only meant for the case-study descriptive titles) landed as the SHOWCASE REVERT - verified: 0 info icons on the index's use-cases cards (was 3), the 45 kept on the case-study, the identity-word colors intact)
 - The treatment: every descriptive title now renders at the headline-lg scale
   (28px/36px, weight 600, tracking -0.015em — one full step above the
   section-header's headline-md) in the muted `--color-on-surface-variant` tone
@@ -12,12 +12,16 @@
   stroke-width 1.375 = the family's crop-compensated 1.5-on-24, currentColor,
   round caps/joins — same optics as the chain glyph).
 - The coverage: the Concept titles (case-study + setup/versions/models/matrix/
-  flavors/plugins + 13 plugin pages — the era-story titles included), the pinner
-  page's 14 `concept-block__title` h3s, and the Showcase use-case titles (the
-  "THE PIN"-pattern). The SectionHeader h2s untouched, per spec.
+  flavors/plugins + 13 plugin pages — the era-story titles included), and the
+  pinner page's 14 `concept-block__title` h3s. The Showcase use-case card titles
+  were REVERTED after user feedback (the icon was only meant for the
+  case-study-style pages' titles-before-paragraphs, not the index's card names):
+  Showcase.astro restored to the pre-lane headline-md/on-surface card-title
+  styling, no icon; the lane-3 identity-word coloring on those cards kept. The
+  SectionHeader h2s untouched, per spec.
 - The shared law: the scale/tone block in Source/Stylesheet/Global.css
-  (.concept__title) + the per-component layout in Concept.astro, Showcase.astro
-  and the pinner page's scoped styles.
+  (.concept__title) + the per-component layout in Concept.astro and the pinner
+  page's scoped styles.
 - Verified: npx astro build — 21 pages; the built HTML carries the
   brand-icon--info svg (viewBox "1 1 22 22", stroke 1.375) inside every
   concept__title h3 and the headline-lg/on-surface-variant rule in the built CSS;
