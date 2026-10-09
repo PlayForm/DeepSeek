@@ -1,11 +1,20 @@
 # TASK: ENGINE-PILL ALIGNMENT (agent ccc68bb2)
 
 ## TEMPORARY CURRENT STATE (inspected 2026-10-09)
-- STATUS: IDLE - never activated - no work done. The agent's session holds the
-  spec. The current pills: the workbench's Runtime pills ("Classic Pipeline" with
-  the typescript mark + "Effect-TS v4 Fiber" with the effect mark), the matrix's
-  Architecture engine pills, the models page's engine pills - the icons sit
-  misaligned against the pill text (the user's feedback).
+- STATUS: COMPLETE + VERIFIED (2026-10-09 - the IDLE-lane activation + two
+  resumes after the deaths/pauses; landed in the user's commit 0506601f):
+  the headless geometry (Scripts/engine-pill-measure.cjs - committed) measured
+  the icon/dot optical centers -2.13..-2.63px ABOVE the text ink centers with
+  the .engine-pill .brand-icon/.dot optical-lift rule (margin-block
+  -0.1875em) - the lift was the CAUSE, not the counter-fix; the fix removed
+  those two selectors from the shared lift rule in Global.css (the other lift
+  contexts untouched) + the measured verdict documented in the rule's comment.
+  AFTER: workbench 0.0px, matrix 0.0px, models +0.5px, both themes - inside
+  the ±0.5px badge-lane class. Coverage: the .engine-pill pattern exists only
+  on workbench/matrix/models + the shared CSS - the fix covers all. Built
+  verification: 21 pages + the preview curls 200. NEVER committed by the lane
+  (the user committed). Residual: the models pills' +0.5px (line-height/font
+  context, within the tolerance).
 
 ## THE TASK (the spec given)
 The user: "'Runtime: Classic Pipeline / Effect-TS v4 Fiber' icons TypeScript and

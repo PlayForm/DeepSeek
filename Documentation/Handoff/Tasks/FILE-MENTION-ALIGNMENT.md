@@ -1,15 +1,16 @@
 # TASK: FILE-MENTION ALIGNMENT (agent 3f17ce20)
 
 ## TEMPORARY CURRENT STATE (inspected 2026-10-09)
-- THE FIX HAS LANDED + COMMITTED: commit 5ddb6e2c "Baseline the file-mention and
-  log-chip to the filename via baseline-source and rebuild Target" - the
-  .file-mention + .log-chip units are baselined to the filename via
-  baseline-source - the user's feedback ("The silent package.json version pinner:
-  hooks" - the package.json not vertically aligned) is ADDRESSED in the tree.
-- The lane itself died mid-investigation (no edits by the agent; the user's commit
-  captured the fix). The agent's session still holds the spec.
-- STATUS: VERIFY + CLOSE - the next session confirms the alignment (the measured
-  baseline check on the user's example + the prose contexts) + reports.
+- STATUS: VERIFIED + CLOSED (2026-10-09 - the orchestrator ran the committed
+  Scripts/baseline-measure.cjs - the user's fix 5ddb6e2c + the script itself are
+  committed): 76 measurements across /, /plugins/, /setup/, /case-study/,
+  /flavors/, /plugins/hook-dsh-pinner-package/ (both themes) - 74 PASS at 0.0px
+  drift (the user's example "The silent package.json version pinner" + the prose
+  contexts + the .log-chips), 2 FAIL at 1px drift (the pinner page's "pinner.log"
+  log-chip, 24px context, both themes - a sub-pixel rounding scale, NOT the
+  user's example contexts). The source + the built CSS carry `baseline-source:
+  last` for both units. The residual: the 2 pinner.log 1px cases - the user's
+  call whether to micro-refine (the fix is their commit; the drift is 1px).
 
 ## THE TASK (the spec given)
 Fix the .file-mention units' vertical alignment in the prose: the file-type icon +

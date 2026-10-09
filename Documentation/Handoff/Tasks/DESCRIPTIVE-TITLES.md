@@ -1,10 +1,31 @@
 # TASK: DESCRIPTIVE-TITLES (agent 050c666b)
 
-## TEMPORARY CURRENT STATE (inspected 2026-10-09)
-- STATUS: IDLE - never activated - no work done. The agent's session holds the
-  spec. The current state (the global-sweep verified): the section-header h2 =
-  the headline-md 20px ink; the concept h3 plain; the showcase title the
-  headline-md - the descriptive-title treatment not yet applied.
+## STATUS: LANDED + VERIFIED (2026-10-09 - the orchestrator's spot-check: the .concept__title headline-lg/--color-on-surface-variant rule confirmed in the built Badge CSS; the handoff matrix item 11 flipped to ADDRESSED)
+- The treatment: every descriptive title now renders at the headline-lg scale
+  (28px/36px, weight 600, tracking -0.015em — one full step above the
+  section-header's headline-md) in the muted `--color-on-surface-variant` tone
+  (dark theme flips via the token), with the info icon on the LEFT through the
+  flex layout + the `--gap-icon` token; the icon inherits the muted tone via
+  currentColor.
+- The info icon: CREATED — the `info` mechanic added to
+  Source/Component/BrandIcon.astro (the circled-i, viewBox cropped to "1 1 22 22",
+  stroke-width 1.375 = the family's crop-compensated 1.5-on-24, currentColor,
+  round caps/joins — same optics as the chain glyph).
+- The coverage: the Concept titles (case-study + setup/versions/models/matrix/
+  flavors/plugins + 13 plugin pages — the era-story titles included), the pinner
+  page's 14 `concept-block__title` h3s, and the Showcase use-case titles (the
+  "THE PIN"-pattern). The SectionHeader h2s untouched, per spec.
+- The shared law: the scale/tone block in Source/Stylesheet/Global.css
+  (.concept__title) + the per-component layout in Concept.astro, Showcase.astro
+  and the pinner page's scoped styles.
+- Verified: npx astro build — 21 pages; the built HTML carries the
+  brand-icon--info svg (viewBox "1 1 22 22", stroke 1.375) inside every
+  concept__title h3 and the headline-lg/on-surface-variant rule in the built CSS;
+  dev-server curls 200 on /, /case-study/, /plugins/hook-dsh-pinner-package/,
+  /versions/, /setup/, /flavors/ (45 info icons in the served case-study).
+- Residual: InstallDemo step titles and Card package names left as-is (not
+  descriptive headings, by judgment); the coverage-matrix item 11 can be marked
+  ADDRESSED by the orchestrator.
 
 ## THE TASK (the spec given)
 The user: "on the case-study page and other pages like it: descriptive titles like

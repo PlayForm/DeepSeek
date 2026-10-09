@@ -1,12 +1,20 @@
 # TASK: ZHIPU-AI ICON (agent d5a5e3f5)
 
 ## TEMPORARY CURRENT STATE (inspected 2026-10-09)
-- STATUS: IDLE - never activated - no work done. The agent's session holds the
-  spec. The GLM/flash-model mentions exist at: the index's stats/independence area
-  (index.astro:389), the workbench's engine pill (workbench.astro:88), the
-  matrix's engine route + pill (matrix.astro:83 + :113), the models page's cards +
-  the diagram + the prose (models.astro:18, :41, :54, :108, :112) - no Zhipu mark
-  anywhere yet.
+- STATUS: COMPLETE (2026-10-09 - the IDLE-lane activation + one resume after
+  the pause) + VERIFIED by the orchestrator: the official Zhipu AI / Z.ai mark
+  sourced verbatim from the official docs.z.ai brand asset (the mintcdn
+  logo/dark.svg - the 160x160 black rounded square + the white Z glyph in the
+  official three paths - the source URL in the BrandIcon comment block, never
+  invented); the "zhipu" Name added to BrandIcon.astro (30 lines, the existing
+  pattern - em-sized, self-contained); the placements via the additive Card Icon
+  prop + the zero-footprint Concept "diagram-brand" slot + the pills: BUILT
+  counts 7 marks total (index 1, models 4, workbench 1, matrix 1 - the built
+  HTML is the arbiter). The flash-family wording covered (GLM 5.3 Flash is the
+  site's flash model); the root README verified GLM-free. Built verification:
+  21 pages clean + the curls 200. NEVER committed. Residuals recorded: the
+  plain-string PageHero/Description GLM mentions + the generated Mermaid art
+  (no byte-exact-safe hook) - covered by the adjacent marks.
 
 ## THE TASK (the spec given)
 The user: "GLM models and flash models are missing the zhipu ai icon / logo

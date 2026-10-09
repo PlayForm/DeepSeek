@@ -1,10 +1,19 @@
 # TASK: PIN-GOVERN COLORS (agent ae5cc62c)
 
 ## TEMPORARY CURRENT STATE (inspected 2026-10-09)
-- STATUS: IDLE - never activated - no work done. The agent's session holds the
-  spec. The site currently renders the use-cases kicker ("PIN · GOVERN ·
-  NORMALIZE") + the THE PIN/THE GOVERN/THE NORMALIZE card titles in the Harness
-  Blue (the global-sweep verified: the PIN red / NORMALIZE gray not yet present).
+- STATUS: COMPLETE (2026-10-09 - the IDLE-lane activation + one resume after
+  the pause) + VERIFIED by the orchestrator: the --color-pin-red token added
+  (light #C62828 - 5.62:1 on white / 5.37:1 on the trays - dark #E57373 -
+  6.41:1 on the dark canvas, documented in the tokens block); the word-level
+  treatment via the .word-pin/.word-govern/.word-normalize utility classes
+  (the IdentityWords whole-word pass in SectionHeader - the use-cases kicker +
+  the pinner pipeline meta's PIN - the Showcase kickers THE PIN / THE GOVERN /
+  THE NORMALIZE with THE neutralized - the governor-cargo NORMALIZE stage
+  label); the prose verbs + the byte-exact trays untouched. Built verification:
+  21 pages, the spans + both token values in the built HTML/CSS, the curls 200.
+  NEVER committed. The handoff matrix row flipped to landed. Residuals: the
+  control labels (filter chips, the CHAIN/STRIP brief) left neutral by
+  judgment - recorded.
 
 ## THE TASK (the spec given)
 The user: "in 'PIN · GOVERN · NORMALIZE' PIN needs to be red (everywhere on the

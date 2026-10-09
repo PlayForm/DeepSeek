@@ -83,10 +83,10 @@ omission = the violation - the routing-enforcer plugin will automate it later).
 | The heading-after-text spacing | The section-kicker clearance rule |
 | The line-break rendering | The paragraph spacing law (the blank-line separation) |
 | The entity leaks | The real characters + the JS-expression props |
-| The PIN/GOVERN/NORMALIZE colors | PENDING (lane 3) |
-| The descriptive titles | PENDING (lane 4) |
+| The PIN/GOVERN/NORMALIZE colors | ADDRESSED (lane 3 - 2026-10-09: the --color-pin-red token #C62828/#E57373 + the word-level .word-pin/.word-govern/.word-normalize treatment - the kicker + the card titles + the identity labels; the control labels left neutral by judgment) |
+| The descriptive titles | ADDRESSED (lane 4 - 2026-10-09: the headline-lg grayed descriptive titles + the created info mechanic icon on the left - the concept/era-story/showcase coverage, the SectionHeader h2s untouched) |
 | The DSH Family @ PlayForm | PENDING (lane 5) |
-| The Zhipu icon | PENDING (lane 7) |
+| The Zhipu icon | ADDRESSED (lane 7 - 2026-10-09: the official Z.ai mark sourced from the docs.z.ai brand asset + the "zhipu" BrandIcon + 7 built marks across index/models/workbench/matrix) |
 | The engine-pill alignment | PENDING (lane 8) |
 | The path-mention icon | PENDING (lane 6) |
 | The effect white-on-blue + the footer padding | PENDING (lane 2) |
