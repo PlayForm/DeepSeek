@@ -60,15 +60,21 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
 | Status         | Count |
 |----------------|-------|
-| 🔍 Total       | 1279  |
-| 🔗 Unique      | 209   |
-| ✅ Successful  | 1090  |
+| 🔍 Total       | 1324  |
+| 🔗 Unique      | 236   |
+| ✅ Successful  | 1103  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
-| 👻 Excluded    | 189   |
+| 👻 Excluded    | 220   |
 | ❓ Unknown     | 0     |
-| 🚫 Errors      | 0     |
+| 🚫 Errors      | 1     |
 | ⛔ Unsupported | 0     |
+
+## Errors per input
+
+### Errors in EffectTS/packages/ets-hook-dsh-normalize-file/README.md
+
+* [404] <https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source/Stream> (at 36:52) | Rejected status code: 404 Not Found
 
 
 # Pass 2 - the built Site (Site/lychee.toml)
@@ -77,12 +83,12 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 
 | Status         | Count |
 |----------------|-------|
-| 🔍 Total       | 1006  |
-| 🔗 Unique      | 96    |
-| ✅ Successful  | 1000  |
+| 🔍 Total       | 1061  |
+| 🔗 Unique      | 98    |
+| ✅ Successful  | 1052  |
 | ⏳ Timeouts    | 0     |
 | 🔀 Redirected  | 0     |
-| 👻 Excluded    | 6     |
+| 👻 Excluded    | 9     |
 | ❓ Unknown     | 0     |
 | 🚫 Errors      | 0     |
 | ⛔ Unsupported | 0     |
@@ -98,7 +104,7 @@ the prose stays byte-identical) or moved to `.lycheeignore` with a reason.
 | 🔗 Unique      | 26    |
 | ✅ Successful  | 63    |
 | ⏳ Timeouts    | 0     |
-| 🔀 Redirected  | 0     |
+| 🔀 Redirected  | 1     |
 | 👻 Excluded    | 4     |
 | ❓ Unknown     | 0     |
 | 🚫 Errors      | 0     |
