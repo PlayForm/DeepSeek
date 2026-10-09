@@ -13,9 +13,9 @@ Usable outside the harness entirely (the PlayForm ecosystem). The only
 external dependency is `effect` (pinned at exactly `4.0.2`).
 
 ```sh
-npm install @playform/ets-dsh-hook
+pnpm add @playform/ets-dsh-hook
 ```
 
 The `ets-*` packages (`@playform/ets-hook-dsh-*`,
 `@playform/ets-dsh-plugin-factory`) build on this base; the classical
-`@playform/dsh-*` group is the independent Effect-free sibling group.
+`@playform/hook-dsh-*` group is the independent Effect-free sibling group.

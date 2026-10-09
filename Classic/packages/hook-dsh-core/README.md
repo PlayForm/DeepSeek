@@ -16,8 +16,8 @@
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> *The CLASSIC build: zero runtime dependencies. The EFFECT-TS build: one - effect v4.0.2 (the
-> variant toggle's dependency). Both builds ship under this one name.*
+> *The CLASSIC build: zero runtime dependencies. The EFFECT-TS implementation: the separate
+> `@playform/ets-hook-dsh-core` package - it adds effect v4.0.2.*
 >
 > *Not a plugin - the muscle under the plugins.*
 >
@@ -30,7 +30,7 @@
 
 **Family position**: the base library of the whole family (the @-sentence **Hook @ DSH @ Core**) -
 parent of none, child of none: the CLASSIC build has zero runtime dependencies (the EFFECT-TS
-build adds effect v4.0.2 - the variant toggle), consumed by all eleven other packages.
+implementation, `@playform/ets-hook-dsh-core`, adds effect v4.0.2), consumed by all eleven other packages.
 
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
@@ -38,7 +38,7 @@ build adds effect v4.0.2 - the variant toggle), consumed by all eleven other pac
   [`dsh-plugin-factory`](../dsh-plugin-factory) re-exports NOTHING from the core (its 19-method
   service surface stays stable).
 - **Consumed by the six stream normalizers** -
-  [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash) and the five `normalize-*-dsh-hook`
+  [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash) and the five `hook-dsh-normalize-*`
   flavors are each a table plus a closure over `Replace`/`ReplaceMap`, dispatched through
   `Chunk`/`Block`.
 - The core is **not a plugin bundle**: no [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/dsh-plugin-factory/cordis.patch.yml), no loader contract, publishable on its
@@ -210,7 +210,8 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 
 ### The Conventions
 
-- The CLASSIC build: zero runtime dependencies (the EFFECT-TS build: effect v4.0.2); the same
+- The CLASSIC build: zero runtime dependencies (the EFFECT-TS implementation,
+  `@playform/ets-hook-dsh-core`: effect v4.0.2); the same
   `Source/` → `Target/` layout as the family bundles;
   `prepublishOnly`-only build (the deterministic sequence:
   `Build ... --TypeScript Configuration/TypeScript.noemit.json` then explicit `tsc && tsc-alias`).
@@ -290,27 +291,14 @@ mechanics only; the fields are the module's.
 
 ---
 
-## The variant toggle (CLASSIC vs EFFECT-TS)
+## The two release groups (CLASSIC vs EFFECT-TS)
 
-One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
-(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
-effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
-builds, no user-side compilation:
-
-- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-core"` resolves to
-  `Target/` with zero framework dependencies.
-- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
-  `@playform/dsh-hook-*` package at once (the family stays coherent - never mix variants in one
-  graph):
-  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
-  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
-  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
-    `resolve.conditionNames: ["effect-ts"]`.
-- **The per-import escape hatch** (no loader config at all): `import ... from
-  "@playform/hook-dsh-core/effect-ts"` (or `/classic`) - deterministic in every toolchain.
-
-`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
-(the CLASSIC build never imports it).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
+zero framework dependencies: `import ... from "@playform/hook-dsh-core"` resolves to `Target/`.
+The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-hook-dsh-core` -
+effect-backed, built on the shared `@playform/ets-dsh-hook` base with `effect` v4.0.2 as
+its runtime dependency. Install the group you run and never mix the groups in one graph
+(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
 
 ## License 📜
 

@@ -269,27 +269,14 @@ ledger stays the complete record.
 
 ---
 
-## The variant toggle (CLASSIC vs EFFECT-TS)
+## The two release groups (CLASSIC vs EFFECT-TS)
 
-One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
-(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
-effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
-builds, no user-side compilation:
-
-- **The default is the CLASSIC build.** `import ... from "@playform/hook-dsh-normalize-ellipsis"` resolves to
-  `Target/` with zero framework dependencies.
-- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
-  `@playform/dsh-hook-*` package at once (the family stays coherent - never mix variants in one
-  graph):
-  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
-  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
-  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
-    `resolve.conditionNames: ["effect-ts"]`.
-- **The per-import escape hatch** (no loader config at all): `import ... from
-  "@playform/hook-dsh-normalize-ellipsis/effect-ts"` (or `/classic`) - deterministic in every toolchain.
-
-`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
-(the CLASSIC build never imports it).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
+zero framework dependencies: `import ... from "@playform/hook-dsh-normalize-ellipsis"` resolves to `Target/`.
+The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-hook-dsh-normalize-ellipsis` -
+effect-backed, built on the shared `@playform/ets-dsh-hook` base with `effect` v4.0.2 as
+its runtime dependency. Install the group you run and never mix the groups in one graph
+(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
 
 ## License 📜
 

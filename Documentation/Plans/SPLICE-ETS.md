@@ -10,6 +10,15 @@
 > executed). Prepared by the SPLICE-PLAN lane. DOCUMENTATION ONLY - the only tree edit is this plan
 > file; nothing is committed (the user commits).
 
+
+> **NAMING UPDATE (post-execution, locked):** the final naming scheme supersedes the intermediate
+> names used during this plan's execution and in the tables below: the classical group is
+> `@playform/hook-dsh-*` (+ `@playform/dsh-plugin-factory`), the Effect-TS group is
+> `@playform/ets-hook-dsh-*` (+ `@playform/ets-dsh-plugin-factory`), the base stays
+> `@playform/ets-dsh-hook`. The tables record the names as they were at execution time
+> (the classical intermediate `dsh-hook-*`, the ets intermediate `ets-hook-dsh-*`); read every
+> classical `dsh-hook-*` below as `hook-dsh-*`.
+
 ---
 
 ## 0. THE SUPERSEDED PLAN (marked per the binding decision #4)

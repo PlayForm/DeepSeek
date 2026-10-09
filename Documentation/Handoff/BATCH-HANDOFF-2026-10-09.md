@@ -328,6 +328,29 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   (the build must precede - the CI order does), the reverse freshness
   direction unchecked, the name-form regexes' one-line update IF the convention
   ever flips (it is FINAL - hook-dsh-*/ets-hook-dsh-*).
+- THE CLEANUP COMPLETE (2026-10-09 - the user's residual sweep): the 58 *.md-f
+  stale snapshots deleted (zero remaining tree-wide); the cargo-governor
+  descriptions fixed in BOTH trees (-> the current package-governor identity
+  hook-dsh-package-governor); the base ets-dsh-hook's README corrected (the
+  pnpm add install form + the hook-dsh-* classical-sibling line) + the missing
+  CHANGELOG.md created (the sibling 0.0.1 form, the §2.3 role); the 12
+  classical READMEs' stale dual-source "variant toggle" prose replaced with the
+  two-group truth (this package = the CLASSIC plain-TS build; the EFFECT-TS =
+  the separate ets-* package on the base with effect 4.0.2; never mix groups) -
+  zero residue; the drift-guard 219 checks green EXCEPT the 25 Target-freshness
+  staleness (the rename/rebuild cycle - the final rebuild dispatched).
+- THE TOGGLE-LABEL COMPLETE (2026-10-09): the theme-toggle's persistence cell
+  "PIN" -> "LOCK" (the rationale: avoids the PINNER vocabulary, the 4-char mono
+  rhythm next to OS, "your saved choice wins over the system"; the static OS
+  default + the semantics unchanged; verified: OS -> click -> LOCK -> reload
+  keeps LOCK, both themes).
+- THE FINAL REBUILD + RE-VERIFICATION - ALL GREEN (2026-10-09): pnpm run build
+  from the root (build:classic && build:effect-ts, pure pnpm -r) exit 0 - all
+  25 packages' Targets fresh; the drift-guard node Site/Scripts/Drift-Guard.mjs
+  - 219/219 checks GREEN (the 25 Target-freshness staleness RESOLVED); the
+  canonical matrix pnpm test - "All 38 smoke suites passed": Classic 733 +
+  EffectTS 746 EXACT (the per-suite breakdowns), zero failures, the 7 wiring
+  suites per tree self-skipping per the plan. Nothing to fix, nothing committed.
 - THE FINAL NAMING DECISION (2026-10-09 - THE USER'S FINAL, deliberately the
   most counter-intuitive one: "hook-dsh-<role>" - the imperative reading "hook
   the DSH!"): THE CLASSICAL: hook-dsh-core, hook-dsh-cargo-governor, hook-dsh-

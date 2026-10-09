@@ -3,9 +3,9 @@
 # Documentation/Plans/SPLICE-ETS.md §5.1). All 25 packages publish
 # from THIS monorepo in the L0 -> L1 -> L2 topological order:
 #   L0: @playform/ets-dsh-hook (the base)
-#   L1: the four foundations (the classical dsh-hook-core +
+#   L1: the four foundations (the classical hook-dsh-core +
 #       dsh-plugin-factory, the ets-hook-dsh-core +
-#       ets-plugin-dsh-factory)
+#       ets-dsh-plugin-factory)
 #   L2: the twenty consumers
 # The npm publish itself remains the USER'S call (their token):
 # this workflow runs only via workflow_dispatch / release in CI.
@@ -98,8 +98,8 @@ jobs:
             # L1: the four foundations (the classical pair + the ets pair;
             # the ets pair depends on the L0 base + effect).
             # ------------------------------------------------------------
-            - name: Publish L1 - @playform/dsh-hook-core
-              working-directory: Classic/packages/dsh-hook-core
+            - name: Publish L1 - @playform/hook-dsh-core
+              working-directory: Classic/packages/hook-dsh-core
               run: npm publish --access public --ignore-scripts
 
             - name: Publish L1 - @playform/dsh-plugin-factory
@@ -110,8 +110,8 @@ jobs:
               working-directory: EffectTS/packages/ets-hook-dsh-core
               run: npm publish --access public --ignore-scripts
 
-            - name: Publish L1 - @playform/ets-plugin-dsh-factory
-              working-directory: EffectTS/packages/ets-plugin-dsh-factory
+            - name: Publish L1 - @playform/ets-dsh-plugin-factory
+              working-directory: EffectTS/packages/ets-dsh-plugin-factory
               run: npm publish --access public --ignore-scripts
 
             # ------------------------------------------------------------
@@ -122,7 +122,7 @@ jobs:
             - name: Publish L2 - the classical consumers
               working-directory: Classic/packages
               run: |
-                  for d in dsh-hook-cargo-governor dsh-hook-normalize-dash dsh-hook-normalize-ellipsis dsh-hook-normalize-file dsh-hook-normalize-fullwidth dsh-hook-normalize-invisible dsh-hook-normalize-quotes dsh-hook-normalize-spaces dsh-hook-package-governor dsh-hook-package-pinner; do
+                  for d in hook-dsh-cargo-governor hook-dsh-normalize-dash hook-dsh-normalize-ellipsis hook-dsh-normalize-file hook-dsh-normalize-fullwidth hook-dsh-normalize-invisible hook-dsh-normalize-quotes hook-dsh-normalize-spaces hook-dsh-package-governor hook-dsh-package-pinner; do
                       (cd "$d" && npm publish --access public --ignore-scripts)
                   done
 

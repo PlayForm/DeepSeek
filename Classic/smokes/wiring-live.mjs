@@ -44,7 +44,7 @@ export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages"
 
 // The twelve release packages: the bundle-list name and the candidate source
 // directory names (the tree's package directories were renamed hook-dsh-* →
-// dsh-hook-* mid-batch; both spellings are accepted).
+// hook-dsh-* mid-batch; both spellings are accepted).
 const Bundles = [
 	["@playform/dsh-plugin-factory", ["dsh-plugin-factory", "dsh-plugin-factory"]],
 	["@playform/hook-dsh-core", ["hook-dsh-core", "hook-dsh-core"]],

@@ -43,7 +43,7 @@ The factory is the **hub** of the eleven-package DSH family:
 | [hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
 | [hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
 | [hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
-| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `normalize-*-dsh-hook` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
 The pure layer it deliberately does **not** re-export is [`hook-dsh-core`](../hook-dsh-core) (its
 19-method service surface stays stable); the hooks import the core's helpers directly.
@@ -339,29 +339,14 @@ successful open) - the boot-window race is closed by construction.
 
 ---
 
-## The variant toggle (CLASSIC vs EFFECT-TS)
+## The two release groups (CLASSIC vs EFFECT-TS)
 
-One name, two builds: this package ships BOTH implementations in the same tarball - `Target/`
-(the CLASSIC build - plain TypeScript, the default) and `Target-EffectTS/` (the EFFECT-TS build -
-effect-backed, the same contract). Install ONCE and toggle at the LOADER level - no postinstall
-builds, no user-side compilation:
-
-- **The default is the CLASSIC build.** `import ... from "@playform/dsh-plugin-factory"` resolves to
-  `Target/` with zero framework dependencies.
-- **The whole-family toggle to the EFFECT-TS build** - one flag, applied to every
-  `@playform/dsh-hook-*` package at once (the family stays coherent - never mix variants in one
-  graph):
-  - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`).
-  - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions` (TS 5.0+).
-  - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`; webpack:
-    `resolve.conditionNames: ["effect-ts"]`.
-- **The per-import escape hatch** (no loader config at all): `import ... from
-  "@playform/dsh-plugin-factory/effect-ts"` (or `/classic`) - deterministic in every toolchain.
-
-`effect` v4.0.2 ships as a dependency so the EFFECT-TS build resolves with the same single install
-(the CLASSIC build never imports it).
-
-[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
+zero framework dependencies: `import ... from "@playform/dsh-plugin-factory"` resolves to `Target/`.
+The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-dsh-plugin-factory` -
+effect-backed, built on the shared `@playform/ets-dsh-hook` base with `effect` v4.0.2 as
+its runtime dependency. Install the group you run and never mix the groups in one graph
+(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
 
 ## License 📜
 
