@@ -2,6 +2,10 @@
 	"name": "@playform/hook-dsh-package-governor",
 	"version": "0.0.1",
 	"description": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage (npm-check-updates, programmatic by default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained continuation. Fully API-aware: the governed manifest is read/rewritten through ctx.fs with a version-guarded replaceIfVersion write (the service owns version tokens), configuration is a validated Schemastery Config schema with defaults, and the authoring agent is never notified: the tool result is built from the author's own content, and the observation-policy's version record is refreshed by re-emitting fs/observed with the service-issued fresh version.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",

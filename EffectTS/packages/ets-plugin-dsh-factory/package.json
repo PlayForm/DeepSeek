@@ -2,6 +2,10 @@
 	"name": "@playform/ets-plugin-dsh-factory",
 	"version": "0.0.1",
 	"description": "The FACTORY: a DeepSeek Harness service (@playform/ets-plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate — the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list resolution, the g1 gate set, the version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained continuation, the State builder, the wiring helpers, the effects (jobs controller, in-flight disposal, storage domain), the Schemastery schema factory and the probe-once seam accessor. A new governance flavor reduces to a Config extension, a pure transform and an update engine; the factory owns the scaffolding and never the flavor's ledger strings.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
 	"type": "module",
 	"main": "./Target/Library.js",
 	"types": "./Target/Library.d.ts",
