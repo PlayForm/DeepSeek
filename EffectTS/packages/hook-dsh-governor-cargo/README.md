@@ -1,6 +1,6 @@
 # @playform/hook-dsh-governor-cargo
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-governor-cargo&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-cargo)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-cargo)
@@ -16,11 +16,11 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > into the TypeScript ecosystem, so there is no npm-library equivalent - the update stage operates
 > at the exclusionary level through the cargo CLI.
 >
-> _A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
-> `cargo upgrade --exclude` - comments survive._
+> *A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
+> `cargo upgrade --exclude` - comments survive.*
 >
-> _The @-sentence identity: **Hook @ DSH @ Governor @
-> Cargo**._
+> *The @-sentence identity: **Hook @ DSH @ Governor @
+> Cargo**.*
 >
 > Every claim below is live-verified (2026-10-03, live).
 

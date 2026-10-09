@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-fullwidth
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-fullwidth&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-fullwidth)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-fullwidth)
@@ -16,17 +16,17 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > entire FULLWIDTH FORMS range U+FF01-U+FF5E maps to its ASCII half-width counterpart
 > U+0021-U+007E - the whole story, letters, punctuation and digits included.
 >
-> _A MAP flavor of the normalize family: the core's `Fullwidth` char-to-char table owns the
-> substitution - no `replacement` config knob._
+> *A MAP flavor of the normalize family: the core's `Fullwidth` char-to-char table owns the
+> substitution - no `replacement` config knob.*
 >
-> _The @-sentence identity: **Hook @ DSH @ Normalize @
-> Fullwidth**._
+> *The @-sentence identity: **Hook @ DSH @ Normalize @
+> Fullwidth**.*
 >
-> _The family's `raw-write` tool (registered by
+> *The family's `raw-write` tool (registered by
 > [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
 > the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
 > call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies._
+> is the only normalization it applies.*
 
 ---
 

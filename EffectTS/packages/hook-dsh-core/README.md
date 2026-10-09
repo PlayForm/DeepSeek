@@ -1,6 +1,6 @@
 # @playform/hook-dsh-core
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-core&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-core)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-core)
@@ -16,12 +16,12 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> _One runtime dependency: effect v4.0.2._
+> *One runtime dependency: effect v4.0.2.*
 >
-> _Not a plugin - the muscle under the plugins._
+> *Not a plugin - the muscle under the plugins.*
 >
-> _The
-> @-sentence identity: **Hook @ DSH @ Core** - the machinery every other family package stands on._
+> *The
+> @-sentence identity: **Hook @ DSH @ Core** - the machinery every other family package stands on.*
 
 ---
 

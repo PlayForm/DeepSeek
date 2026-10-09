@@ -1,6 +1,6 @@
 # @playform/hook-dsh-governor-package
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-governor-package&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-package)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-governor-package)
@@ -19,10 +19,10 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > chain-governed dependency pins, then an update stage lets npm-check-updates bump the public ones -
 > and the author never learns.
 >
-> _A factory flavor: the family's furnace does the plumbing; this package is the model logic._
+> *A factory flavor: the family's furnace does the plumbing; this package is the model logic.*
 >
-> _The
-> @-sentence identity: **Hook @ DSH @ Governor @ Package**._
+> *The
+> @-sentence identity: **Hook @ DSH @ Governor @ Package**.*
 
 ---
 
@@ -108,7 +108,7 @@ The fix must happen where the write happens,
 on every write path (full writes, single-line edits, `str_replace_editor` patches alike), without
 the author's tool result changing by a single byte.
 
-[`fs/observed`][dsh-fs] is the only hook that runs _after_
+[`fs/observed`][dsh-fs] is the only hook that runs *after*
 content is on disk - the
 [`fs/write-intent`][dsh-fs] waterfall carries a version guard but never the content.
 

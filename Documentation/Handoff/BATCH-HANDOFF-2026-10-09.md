@@ -87,13 +87,32 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
 | The npm icon's size + padding (2026-10-09 - NEW feedback) | ADDRESSED (all 3 inline npm mentions - governor-package:223, governor-cargo:114, plugin-dsh-factory:542 - sized to 0.75em (the wide 3.12-aspect wordmark) + the new .page-hero__sub .brand-icon--npm margin-inline: var(--gap-icon) rule for the both-sides padding; the rule + the sizing verified in the built output, text bytes untouched) |
 | The literal _ underscores in the prose (2026-10-09 - NEW feedback) | ADDRESSED (12/12 leaked "_The DeepSeek Harness Plugin Family for PlayForm._" runs - one per plugin page's page-hero sub - now render as the <em> emphasis, markup-level surgical (2 substitutions per file), the legit identifier underscores untouched; verified: zero literal underscore runs in the built output, the <em> on all 12 pages; the stale astro dev lock (port 10001, PID 21884) noted as the residual) |
 | The info icons' right padding (2026-10-09 - NEW feedback) | ADDRESSED (the 15 info-icon placements - the Concept titles + the pinner page's 14 concept-block titles incl. "Family position" - the icon-title gap widened --gap-icon (4px) to --space-sm (8px) in both unit rules, the text pushed inward; verified in the built CSS (both rules carry gap:var(--space-sm)); the next step --space-md (12px) noted as available) |
-| The setup page's JSON minified + the code blocks unhighlighted (2026-10-09 - NEW feedback) | PENDING (https://deepseek.playform.cloud/setup/: the JSON code block renders minified (one line) while localhost shows the pretty form + the YAML/JSON blocks have NO syntax highlighting - dispatched to the PATH-MENTION agent: the minification cause + the highlighting path, the smallest faithful fixes) |
+| The setup page's JSON minified + the code blocks unhighlighted (2026-10-09 - NEW feedback) | ADDRESSED (the minified one-liner was the InstallDemo step-1 screen - the build's HTML minifier collapses newlines in regular element text; the screens now render as <pre> (InstallDemo + the same latent collapse fixed in Compare + Showcase), verified byte-exact in the built output (real newlines + the indents); the syntax highlighting was NOT broken - the live deployed page carries the shiki markup (151 refs/139 spans, both themes) - the user's report was a stale cache or the unhighlighted demo screen; appears on deploy) |
 
 ## 4. THE DECISIONS + THE OPEN ITEMS
 
 - The SYMLINK BREAK (any pnpm install re-links the Classic consumers to the
   EffectTS tree - the durable fix: distinct names per tree / a postinstall relink /
   a preinstall hook - the user's call).
+- THE SPLICE PROPOSAL (2026-10-09 - the user's decision candidate, discussed
+  with the orchestrator): completely unlink + splice the module family into TWO
+  GROUPS - the classical (@playform/dsh-*, no effect) + the effect-ts powered
+  (a distinct namespace, a NEW BASE `dsh-hook` carrying the shared effect
+  plumbing) - killing the symlink break at the root (distinct names = no
+  workspace collision; no postinstall relink/preinstall hooks needed). The two
+  OPEN NAMING/REPO QUESTIONS for the user: (a) the registry-valid name for the
+  base - "@playform/effect-ts/dsh-hook" as written is INVALID (a scope cannot
+  contain "/") - the options: the base @playform/effect-ts + the group
+  @playform/effect-ts-hook-dsh-core etc., or the separate scope
+  @playform-effect-ts/dsh-hook + @playform-effect-ts/hook-dsh-core; (b) the
+  "completely unlink" depth - distinct names within this monorepo fully unlink
+  the graphs (names-only), or the EffectTS group moves to its own git repo
+  (repos-too - more isolation, more CI duplication). Consequences: the
+  DUAL-SOURCE-BUNDLING plan becomes SUPERSEDED (2x12+1 packages published
+  separately instead of 12 with the toggle); the site + the READMEs + the
+  workflows carry the group's new names (a rename-sweep lane); the smokes stay
+  per tree (733/746). Pending the user's answers, the splice-plan lane (the
+  planner grade - DeepSeek max, the routing law) turns it into the full plan.
 - The theme-toggle 768-803px clip (the design call); the footer's dark-mode playform
   glyph; the Boilerplate baseline's NUL bytes (the restore-or-leave call); the
   TOMORROW-REVIEW.md's gcommit-hermes line (the process record - a future-pass

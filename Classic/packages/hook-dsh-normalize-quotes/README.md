@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-quotes
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-quotes&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-quotes)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-quotes)
@@ -17,17 +17,17 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > U+2018/U+2019/U+201A/U+201B to the ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F to the ASCII
 > double quote.
 >
-> _A MAP flavor of the normalize family: the core's `Quotes` char-to-char table owns the
-> substitution - no `replacement` config knob._
+> *A MAP flavor of the normalize family: the core's `Quotes` char-to-char table owns the
+> substitution - no `replacement` config knob.*
 >
-> _The @-sentence identity: **Hook @ DSH @ Normalize @
-> Quotes**._
+> *The @-sentence identity: **Hook @ DSH @ Normalize @
+> Quotes**.*
 >
-> _The family's `raw-write` tool (registered by
+> *The family's `raw-write` tool (registered by
 > [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
 > the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
 > call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies._
+> is the only normalization it applies.*
 
 ---
 
