@@ -28,4 +28,6 @@ for (const Suite of Suites) {
 	}
 }
 
-console.log(`\nAll ${Suites.length} smoke suites passed (the wiring suites self-skip without DSH_TEST_SCRATCH; see Maintain/Run-Wiring.mjs).`);
+console.log(
+	`\nAll ${Suites.length} smoke suites passed (the wiring suites self-skip without DSH_TEST_SCRATCH; see Maintain/Run-Wiring.mjs).`,
+);

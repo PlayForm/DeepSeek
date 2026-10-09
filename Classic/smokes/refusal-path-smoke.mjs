@@ -27,7 +27,9 @@ const Home = Wiring.ScratchHome();
 const Ledgers = `${Home}/ledgers`;
 const Lines = (Name) =>
 	existsSync(`${Ledgers}/${Name}.log`)
-		? readFileSync(`${Ledgers}/${Name}.log`, "utf8").split("\n").filter((Line) => Line.trim() !== "")
+		? readFileSync(`${Ledgers}/${Name}.log`, "utf8")
+				.split("\n")
+				.filter((Line) => Line.trim() !== "")
 		: [];
 
 const { Paths } = await Wiring.Exercise();

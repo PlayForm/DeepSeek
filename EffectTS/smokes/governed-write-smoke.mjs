@@ -28,7 +28,9 @@ const Home = Wiring.ScratchHome();
 const Ledgers = `${Home}/ledgers`;
 const Lines = (Name) =>
 	existsSync(`${Ledgers}/${Name}.log`)
-		? readFileSync(`${Ledgers}/${Name}.log`, "utf8").split("\n").filter((Line) => Line.trim() !== "")
+		? readFileSync(`${Ledgers}/${Name}.log`, "utf8")
+				.split("\n")
+				.filter((Line) => Line.trim() !== "")
 		: [];
 
 const { Paths } = await Wiring.Exercise();
@@ -53,19 +55,23 @@ Check(
 // THE ESCAPE HATCH - a raw-write with govern OFF (the wrapped actor's
 // falsy marker) does NOT trigger the event path: no governor line for it.
 const SilentGovernor = !Lines("governor").some((Line) => Line.includes(Paths.packageJson));
-Check(SilentGovernor, "the raw-write govern:false escape hatch kept the event path silent for the manifest");
+Check(
+	SilentGovernor,
+	"the raw-write govern:false escape hatch kept the event path silent for the manifest",
+);
 
 // THE DIRECT FOLD - the raw-write govern:true chain pass rewrote the Cargo
 // chain pin to the full resolved form, surgically (comments/formatting kept).
 Check(
 	readFileSync(Paths.cargoToml, "utf8") === '[dependencies]\nserde = "1.2.3"\n',
-	"the cargo direct fold rewrote the chain pin to the bare resolved version (serde = \"1.2.3\")",
+	'the cargo direct fold rewrote the chain pin to the bare resolved version (serde = "1.2.3")',
 );
 
 // THE NORMALIZATION-ONLY CARGO PATH (no registry): simple forms padded to
 // X.Y.Z by the cargo flavor's normalization rule.
 Check(
-	readFileSync(Paths.cargoRefusal2, "utf8") === '[dependencies]\nserde = { version = "1.0.0" }\nleftover = "2.0.0"\n',
+	readFileSync(Paths.cargoRefusal2, "utf8") ===
+		'[dependencies]\nserde = { version = "1.0.0" }\nleftover = "2.0.0"\n',
 	"the cargo normalization pass padded the simple version forms inline (1.0 → 1.0.0)",
 );
 
@@ -84,8 +90,13 @@ Check(
 	Lines("normalize-file").some((Line) => Line.endsWith(NFLine)),
 	`the normalize-file ledger logged "${NFLine}"`,
 );
-const NFGovernorSilent = !Lines("governor").some((Line) => Line.includes(NFPaths.normalizeFileTarget));
-Check(NFGovernorSilent, "the normalize-file write is not a governance event (no governor line for it)");
+const NFGovernorSilent = !Lines("governor").some((Line) =>
+	Line.includes(NFPaths.normalizeFileTarget),
+);
+Check(
+	NFGovernorSilent,
+	"the normalize-file write is not a governance event (no governor line for it)",
+);
 
 console.log(`\n${Pass} checks - ${Fail === 0 ? "ALL PASS" : `${Fail} FAIL`}`);
 process.exit(Fail === 0 ? 0 : 1);

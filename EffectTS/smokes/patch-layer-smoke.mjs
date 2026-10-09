@@ -60,7 +60,8 @@ Check(
 );
 const DashOverlay = EntryConfig(Overlay, "hook-dsh-normalize-dash");
 Check(
-	DashOverlay.includes("replacement: '-'") && DashOverlay.includes("normalizeToolArguments: true"),
+	DashOverlay.includes("replacement: '-'") &&
+		DashOverlay.includes("normalizeToolArguments: true"),
 	"the dash flavor's overlay config is projected exactly",
 );
 
@@ -85,10 +86,7 @@ try {
 
 // THE PATCH TOGGLE - a one-row overlay flips a family Config value.
 const TogglePath = `${Home}/overlay-toggle.yml`;
-writeFileSync(
-	TogglePath,
-	"- id: hook-dsh-normalize-dash\n  config:\n    replacement: \">\"\n",
-);
+writeFileSync(TogglePath, '- id: hook-dsh-normalize-dash\n  config:\n    replacement: ">"\n');
 try {
 	const Toggled = await Wiring.DumpConfig("toggle", TogglePath);
 	Check(
@@ -110,7 +108,9 @@ writeFileSync(
 try {
 	const WithHome = await Wiring.DumpConfig("home-patch");
 	Check(
-		EntryConfig(WithHome, "hook-dsh-package-pinner").includes(`logFile: ${Home}/ledgers/home-pinner.log`),
+		EntryConfig(WithHome, "hook-dsh-package-pinner").includes(
+			`logFile: ${Home}/ledgers/home-pinner.log`,
+		),
 		"the home-level patch layer is applied over the profile's own layer",
 	);
 } finally {

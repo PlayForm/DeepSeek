@@ -48,15 +48,33 @@ export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages"
 const Bundles = [
 	["@playform/dsh-plugin-factory", ["dsh-plugin-factory", "dsh-plugin-factory"]],
 	["@playform/hook-dsh-core", ["hook-dsh-core", "hook-dsh-core"]],
-	["@playform/hook-dsh-package-governor", ["hook-dsh-package-governor", "hook-dsh-package-governor"]],
+	[
+		"@playform/hook-dsh-package-governor",
+		["hook-dsh-package-governor", "hook-dsh-package-governor"],
+	],
 	["@playform/hook-dsh-package-pinner", ["hook-dsh-package-pinner", "hook-dsh-package-pinner"]],
 	["@playform/hook-dsh-cargo-governor", ["hook-dsh-cargo-governor", "hook-dsh-cargo-governor"]],
 	["@playform/hook-dsh-normalize-dash", ["hook-dsh-normalize-dash", "hook-dsh-normalize-dash"]],
-	["@playform/hook-dsh-normalize-quotes", ["hook-dsh-normalize-quotes", "hook-dsh-normalize-quotes"]],
-	["@playform/hook-dsh-normalize-ellipsis", ["hook-dsh-normalize-ellipsis", "hook-dsh-normalize-ellipsis"]],
-	["@playform/hook-dsh-normalize-spaces", ["hook-dsh-normalize-spaces", "hook-dsh-normalize-spaces"]],
-	["@playform/hook-dsh-normalize-invisible", ["hook-dsh-normalize-invisible", "hook-dsh-normalize-invisible"]],
-	["@playform/hook-dsh-normalize-fullwidth", ["hook-dsh-normalize-fullwidth", "hook-dsh-normalize-fullwidth"]],
+	[
+		"@playform/hook-dsh-normalize-quotes",
+		["hook-dsh-normalize-quotes", "hook-dsh-normalize-quotes"],
+	],
+	[
+		"@playform/hook-dsh-normalize-ellipsis",
+		["hook-dsh-normalize-ellipsis", "hook-dsh-normalize-ellipsis"],
+	],
+	[
+		"@playform/hook-dsh-normalize-spaces",
+		["hook-dsh-normalize-spaces", "hook-dsh-normalize-spaces"],
+	],
+	[
+		"@playform/hook-dsh-normalize-invisible",
+		["hook-dsh-normalize-invisible", "hook-dsh-normalize-invisible"],
+	],
+	[
+		"@playform/hook-dsh-normalize-fullwidth",
+		["hook-dsh-normalize-fullwidth", "hook-dsh-normalize-fullwidth"],
+	],
 	["@playform/hook-dsh-normalize-file", ["hook-dsh-normalize-file", "hook-dsh-normalize-file"]],
 ];
 
@@ -81,8 +99,13 @@ const ResolveDirs = () => {
 		.map((Entry) => Entry.name);
 	return Bundles.map(([Name, Candidates]) => {
 		const Dir = Candidates.find((Candidate) => Available.includes(Candidate));
-		if (!Dir) throw new Error(`wiring: no source directory for ${Name} (tried ${Candidates.join(", ")})`);
-		const Manifest = JSON.parse(FileSystem.readFileSync(Path.join(PackagesDir(), Dir, "package.json"), "utf8"));
+		if (!Dir)
+			throw new Error(
+				`wiring: no source directory for ${Name} (tried ${Candidates.join(", ")})`,
+			);
+		const Manifest = JSON.parse(
+			FileSystem.readFileSync(Path.join(PackagesDir(), Dir, "package.json"), "utf8"),
+		);
 		return { Name, Dir, Manifest };
 	});
 };
@@ -96,7 +119,14 @@ export const SixCounts = { dash: 2, quote: 2, ellipsis: 1, space: 1, invisible: 
 // One stream event per flavor: a-b(1 dash) " q"(2 quotes) ...(1) nbsp(1 space)
 // ZWJ(1 invisible) ;(1 fullwidth).
 export const StreamText = "a\u2014b \u201c q\u201d \u2026 \u00a0 \u200b \uff1b";
-export const StreamCounts = { dash: 1, quote: 2, ellipsis: 1, space: 1, invisible: 1, fullwidth: 1 };
+export const StreamCounts = {
+	dash: 1,
+	quote: 2,
+	ellipsis: 1,
+	space: 1,
+	invisible: 1,
+	fullwidth: 1,
+};
 export const StreamLedger = {
 	"normalize-dash": "normalized 1 dash char(s) in one stream",
 	quotes: "normalized 2 quote char(s) in one stream",
@@ -106,7 +136,8 @@ export const StreamLedger = {
 	fullwidth: "normalized 1 fullwidth char(s) in one stream",
 };
 
-const ExerciseSource = () => `// The wiring-exercise driver: a scratch-only plugin (NEVER shipped, never in
+const ExerciseSource =
+	() => `// The wiring-exercise driver: a scratch-only plugin (NEVER shipped, never in
 // the user's real profiles) that exercises the family's REAL flows through
 // the harness's own event loop after boot, writes a JSON results marker, and
 // leaves the shutdown to the suite (SIGTERM - the bounded profile shutdown).
@@ -263,7 +294,9 @@ const ProfileManifest = (Deps) =>
 					bundles: [
 						"@deepseek-ai/dsh-base",
 						"@deepseek-ai/dsh-web-app",
-						...Bundles.filter(([Name]) => Name !== "@playform/hook-dsh-core").map(([Name]) => Name),
+						...Bundles.filter(([Name]) => Name !== "@playform/hook-dsh-core").map(
+							([Name]) => Name,
+						),
 					],
 				},
 			},
@@ -393,9 +426,9 @@ const Registry = (Entries) =>
 	) + "\n";
 
 const ProbeManifest = (LodashPin) =>
-	'{\n  "name": "@local/scratch-probe",\n  "version": "0.1.0",\n  "dependencies": {\n    "lodash": "'
-	+ LodashPin
-	+ '"\n  }\n}\n';
+	'{\n  "name": "@local/scratch-probe",\n  "version": "0.1.0",\n  "dependencies": {\n    "lodash": "' +
+	LodashPin +
+	'"\n  }\n}\n';
 
 const ChainManifest = () =>
 	'{\n  "name": "@local/scratch-chain",\n  "version": "0.1.0",\n  "dependencies": {\n    "lodash": "1.0.0"\n  }\n}\n';
@@ -419,8 +452,7 @@ const CreateScratch = (Home) => {
 		if (Packed.status !== 0) {
 			throw new Error(`wiring: pnpm pack failed for ${Name}: ${Packed.stderr.trim()}`);
 		}
-		const Match = FileSystem
-			.readdirSync(Tarballs)
+		const Match = FileSystem.readdirSync(Tarballs)
 			.filter((Entry) => Entry.startsWith(`playform-${Short}-`) && Entry.endsWith(".tgz"))
 			.sort();
 		if (Match.length === 0) {
@@ -444,8 +476,11 @@ const CreateScratch = (Home) => {
 	FileSystem.writeFileSync(
 		Path.join(Profile, "pnpm-workspace.yaml"),
 		WorkspaceSettings({
-			"@playform/hook-dsh-core": "file:../../tarballs/" + Path.basename(TarballByPackage["@playform/hook-dsh-core"]),
-			"@playform/dsh-plugin-factory": "file:../../tarballs/" + Path.basename(TarballByPackage["@playform/dsh-plugin-factory"]),
+			"@playform/hook-dsh-core":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/hook-dsh-core"]),
+			"@playform/dsh-plugin-factory":
+				"file:../../tarballs/" +
+				Path.basename(TarballByPackage["@playform/dsh-plugin-factory"]),
 		}),
 	);
 
@@ -462,8 +497,7 @@ const CreateScratch = (Home) => {
 	FileSystem.writeFileSync(Path.join(Home, "overlay.yml"), Overlay(Home));
 	FileSystem.writeFileSync(
 		Path.join(Home, "overlay-nf.yml"),
-		Overlay(Home)
-			+ "- id: fs-observation-policy\n  disabled: true\n",
+		Overlay(Home) + "- id: fs-observation-policy\n  disabled: true\n",
 	);
 
 	// 5 - install (file: copies - the no-symlink invariant is §2.2's).
@@ -479,8 +513,14 @@ const CreateScratch = (Home) => {
 	for (const Dir of ["chain", "refusal", "refusal2", "probe"]) {
 		FileSystem.mkdirSync(Path.join(Work, Dir), { recursive: true });
 	}
-	FileSystem.writeFileSync(Path.join(Work, "chain", "registry.json"), Registry({ lodash: "1.2.3", serde: "1.2.3" }));
-	FileSystem.writeFileSync(Path.join(Work, "probe", "registry.json"), Registry({ lodash: "4.2.0" }));
+	FileSystem.writeFileSync(
+		Path.join(Work, "chain", "registry.json"),
+		Registry({ lodash: "1.2.3", serde: "1.2.3" }),
+	);
+	FileSystem.writeFileSync(
+		Path.join(Work, "probe", "registry.json"),
+		Registry({ lodash: "4.2.0" }),
+	);
 
 	return { Home, Profile, Tarballs, Ledgers, Work };
 };
@@ -605,7 +645,8 @@ export const Exercise = async () => {
 	const Scratch = await EnsureScratch();
 	if (!Scratch) return null;
 	const Key = `${Scratch.Home}:exercise`;
-	if (!Cache.has(Key)) Cache.set(Key, Boot(Scratch, Path.join(Scratch.Home, "overlay.yml"), "main"));
+	if (!Cache.has(Key))
+		Cache.set(Key, Boot(Scratch, Path.join(Scratch.Home, "overlay.yml"), "main"));
 	return Cache.get(Key);
 };
 
@@ -646,11 +687,10 @@ export const DumpSchema = async () => {
 	if (!Scratch) return null;
 	const Key = `${Scratch.Home}:schema`;
 	if (!Cache.has(Key)) {
-		const Result = Sh(
-			"dsh",
-			["--profile", "dsh-test", "--dump-config-schema"],
-			{ cwd: Scratch.Home, env: { ...process.env, DSH_HOME: Scratch.Home } },
-		);
+		const Result = Sh("dsh", ["--profile", "dsh-test", "--dump-config-schema"], {
+			cwd: Scratch.Home,
+			env: { ...process.env, DSH_HOME: Scratch.Home },
+		});
 		// The CLI exits non-zero on unrelated web-app entry validation
 		// warnings even though the schema document is complete on stdout -
 		// a live finding the battery records; the document is what matters.
@@ -663,18 +703,18 @@ export const DumpSchema = async () => {
 export const PluginWhy = async (Pkg) => {
 	const Scratch = await EnsureScratch();
 	if (!Scratch) return null;
-	const Result = Sh(
-		"dsh",
-		["plugin", "--profile", "dsh-test", "why", Pkg],
-		{ cwd: Scratch.Home, env: { ...process.env, DSH_HOME: Scratch.Home } },
-	);
+	const Result = Sh("dsh", ["plugin", "--profile", "dsh-test", "why", Pkg], {
+		cwd: Scratch.Home,
+		env: { ...process.env, DSH_HOME: Scratch.Home },
+	});
 	return { status: Result.status, stdout: Result.stdout, stderr: Result.stderr };
 };
 
 /** The raw bytes of one file inside a packed tarball (publish-identical proof). */
 export const TarballFile = (Tarball, Entry) => {
 	const Result = Sh("tar", ["-xOzf", Tarball, Entry]);
-	if (Result.status !== 0) throw new Error(`wiring: tar -xOzf failed for ${Entry}: ${Result.stderr}`);
+	if (Result.status !== 0)
+		throw new Error(`wiring: tar -xOzf failed for ${Entry}: ${Result.stderr}`);
 	return Result.stdout;
 };
 
@@ -683,7 +723,10 @@ export const SymlinksOutsideStore = (Home) => {
 	const Result = Sh("find", [Home, "-type", "l"]);
 	return Result.stdout
 		.split("\n")
-		.filter((Line) => Line && !Line.includes("node_modules/.pnpm") && !Line.includes("node_modules/.bin"));
+		.filter(
+			(Line) =>
+				Line && !Line.includes("node_modules/.pnpm") && !Line.includes("node_modules/.bin"),
+		);
 };
 
 export { delay };

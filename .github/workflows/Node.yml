@@ -102,6 +102,23 @@ jobs:
             - run: pnpm test
               working-directory: .
 
+            # The drift-guard: the Site's content-integrity gate - the
+            # rendered values vs this checkout's repo (the smoke counts, the
+            # totals, the versions, the post-splice name forms, the Live.ts
+            # layer, the ledger-line samples' byte-verification, and the
+            # built Target's freshness). The Site is its own repository, so
+            # fetch it (the root checkout carries no Site tree); the guard
+            # reads this checkout's Classic/EffectTS trees and the Target
+            # bundles the build step above just produced. It exits 1 on any
+            # drift - failing the pipeline.
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  repository: PlayForm/Site-DeepSeek
+                  path: Site
+
+            - run: node Site/Scripts/Drift-Guard.mjs
+              working-directory: .
+
             - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
               with:
                   name: Classic-Node-${{ matrix.node-version }}-Target

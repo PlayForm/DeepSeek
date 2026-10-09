@@ -54,5 +54,7 @@ try {
 	FileSystem.rmSync(Scratch, { recursive: true, force: true });
 }
 
-console.log(Failed === 0 ? "\nAll 14 wiring suites passed." : `\n${Failed} wiring suite(s) FAILED.`);
+console.log(
+	Failed === 0 ? "\nAll 14 wiring suites passed." : `\n${Failed} wiring suite(s) FAILED.`,
+);
 process.exit(Failed === 0 ? 0 : 1);

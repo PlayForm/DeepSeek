@@ -68,7 +68,9 @@ Check(
 );
 const NamePositions = FamilyNames.map((Name) => Dump.indexOf(`name: '${Name}'`));
 Check(
-	NamePositions.every((Position, Index) => Position > 0 && (Index === 0 || Position > NamePositions[Index - 1])),
+	NamePositions.every(
+		(Position, Index) => Position > 0 && (Index === 0 || Position > NamePositions[Index - 1]),
+	),
 	"each composed entry carries the package's real name (the bundle alias -> the identity)",
 );
 
@@ -88,7 +90,11 @@ const Stamp = (Line) => {
 	return Match ? Match[1] : null;
 };
 const FirstLine = (File) =>
-	existsSync(File) ? readFileSync(File, "utf8").split("\n").find((Line) => Line.trim() !== "") ?? null : null;
+	existsSync(File)
+		? (readFileSync(File, "utf8")
+				.split("\n")
+				.find((Line) => Line.trim() !== "") ?? null)
+		: null;
 const PinnerStamp = Stamp(FirstLine(`${Wiring.ScratchHome()}/ledgers/pinner.log`));
 const GovernorStamp = Stamp(FirstLine(`${Wiring.ScratchHome()}/ledgers/governor.log`));
 Check(PinnerStamp !== null, "the pinner's activation line is ISO-stamped");

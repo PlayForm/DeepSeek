@@ -1,5 +1,5 @@
-// cargo-smoke.mjs — the @playform/hook-dsh-governor-cargo smoke suite.
-// A fake ctx + the REAL built Target + the REAL @playform/plugin-dsh-factory
+// cargo-smoke.mjs — the @playform/ets-hook-dsh-cargo-governor smoke suite.
+// A fake ctx + the REAL built Target + the REAL @playform/ets-dsh-plugin-factory
 // service instance (imported from the factory bundle's built Target,
 // instantiated against the fake ctx — the class/service form).
 //
@@ -21,8 +21,8 @@ import * as Path from "node:path";
 
 // The monorepo bundles live one directory up from the smokes; resolve against
 // this file so the smoke works regardless of the process CWD.
-const FactoryDir = Path.resolve(import.meta.dirname, "../packages/plugin-dsh-factory");
-const CargoDir = Path.resolve(import.meta.dirname, "../packages/hook-dsh-governor-cargo");
+const FactoryDir = Path.resolve(import.meta.dirname, "../packages/ets-dsh-plugin-factory");
+const CargoDir = Path.resolve(import.meta.dirname, "../packages/ets-hook-dsh-cargo-governor");
 const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "cargo-smoke-"));
 
 const { default: PluginFactory } = await import(Path.join(FactoryDir, "Target/Library.js"));

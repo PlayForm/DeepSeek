@@ -311,6 +311,23 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   the cordis_inspect surfaces are session-only (the introspection asserts the
   composed tree + the config schema); --dump-config-schema exits 1 on the
   unrelated web-app validation warnings (the document complete on stdout).
+- THE DRIFT-GUARD-EXT COMPLETE (2026-10-09 - the ledger §1 item 9, the user's
+  "IMPORTANT"): the guard rewritten to 219 checks (all data-driven from the
+  filesystem - the dir/version/npm-name/effect-pin checks, the name-form checks
+  for the FINAL hook-dsh-*/ets-hook-dsh-* convention (zero stale forms), the
+  Live.ts layer (8 checks, SKIP on Node <23.6), THE LEDGER-LINE BYTE-
+  VERIFICATION (69 samples across every site page must appear byte-exact in the
+  repo corpus - the path-token normalization tolerated), THE TARGET FRESHNESS
+  (every Source compiled + no Target older than its Source)); the drift fixed
+  to green (the Live.ts normalize filter, the versions Detail strings, 2
+  ledger samples); the CI WIRING (the root Node.yml Gates job - the drift-
+  guard runs after pnpm test, exit 1 fails the pipeline); the MUTATION TEST
+  proved the guard (one ledger byte -> FAIL -> restored -> green, "219 checks
+  run"). THE RESIDUALS: the Live.ts SKIP on Node <23.6 (CI legs 20/22), the
+  case-study LiveMatrix excluded (no repo source), the mtime-based freshness
+  (the build must precede - the CI order does), the reverse freshness
+  direction unchecked, the name-form regexes' one-line update IF the convention
+  ever flips (it is FINAL - hook-dsh-*/ets-hook-dsh-*).
 - THE FINAL NAMING DECISION (2026-10-09 - THE USER'S FINAL, deliberately the
   most counter-intuitive one: "hook-dsh-<role>" - the imperative reading "hook
   the DSH!"): THE CLASSICAL: hook-dsh-core, hook-dsh-cargo-governor, hook-dsh-
@@ -321,7 +338,6 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   dsh-package-pinner, ets-hook-dsh-normalize-{...} + ets-dsh-plugin-factory.
   THE BASE: @playform/ets-dsh-hook (unchanged). The definitive re-rename is
   executing; the gates: 733 + 746 must stay exact.
-- The ROUTING DISCIPLINE: the recent lanes slipped to the parent-inherited DeepSeek
   route (the task-routing violation) - the explicit GLM routing is binding from
   here; the routing-enforcer plugin (the plan) automates it silently.
 

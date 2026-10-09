@@ -28,7 +28,9 @@ const Home = Wiring.ScratchHome();
 const Ledgers = `${Home}/ledgers`;
 const Lines = (Name) =>
 	existsSync(`${Ledgers}/${Name}.log`)
-		? readFileSync(`${Ledgers}/${Name}.log`, "utf8").split("\n").filter((Line) => Line.trim() !== "")
+		? readFileSync(`${Ledgers}/${Name}.log`, "utf8")
+				.split("\n")
+				.filter((Line) => Line.trim() !== "")
 		: [];
 const HasLine = (Name, Line) => Lines(Name).some((Entry) => Entry.endsWith(Line));
 const Iso = (Line) => /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] .+/.test(Line);
@@ -50,25 +52,50 @@ for (const Name of [
 	"fullwidth",
 	"normalize-file",
 ]) {
-	Check(existsSync(`${Ledgers}/${Name}.log`), `the ${Name}.log ledger exists under the scratch home`);
+	Check(
+		existsSync(`${Ledgers}/${Name}.log`),
+		`the ${Name}.log ledger exists under the scratch home`,
+	);
 }
 
 // THE ACTIVATION LINES - byte-identical to the smoke contract, with the
 // scratch paths substituted (the logFile value is part of the string).
 Check(
-	HasLine("governor", "activated (anywhere mode, logFile=" + Ledgers + "/governor.log, updateMode=programmatic, ncuBin=ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))"),
+	HasLine(
+		"governor",
+		"activated (anywhere mode, logFile=" +
+			Ledgers +
+			"/governor.log, updateMode=programmatic, ncuBin=ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))",
+	),
 	"the governor's activation line is byte-identical",
 );
 Check(
-	HasLine("pinner", "activated (pinner, logFile=" + Ledgers + "/pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])"),
+	HasLine(
+		"pinner",
+		"activated (pinner, logFile=" +
+			Ledgers +
+			"/pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])",
+	),
 	"the pinner's activation line is byte-identical",
 );
 Check(
-	HasLine("cargo-governor", "activated (cargo flavor, logFile=" + Ledgers + "/cargo-governor.log, updateMode=cargo, cargoBin=" + Home + "/fake-cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))"),
+	HasLine(
+		"cargo-governor",
+		"activated (cargo flavor, logFile=" +
+			Ledgers +
+			"/cargo-governor.log, updateMode=cargo, cargoBin=" +
+			Home +
+			"/fake-cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))",
+	),
 	"the cargo governor's activation line is byte-identical",
 );
 Check(
-	HasLine("normalize-dash", "activated (replacement=-, reasoning=on, toolArgs=on, logFile=" + Ledgers + "/normalize-dash.log)"),
+	HasLine(
+		"normalize-dash",
+		"activated (replacement=-, reasoning=on, toolArgs=on, logFile=" +
+			Ledgers +
+			"/normalize-dash.log)",
+	),
 	"the dash flavor's activation line is byte-identical",
 );
 Check(
@@ -76,30 +103,52 @@ Check(
 	"the quotes flavor's activation line is byte-identical",
 );
 Check(
-	HasLine("ellipsis", "activated (replacement=..., reasoning=on, toolArgs=on, logFile=" + Ledgers + "/ellipsis.log)"),
+	HasLine(
+		"ellipsis",
+		"activated (replacement=..., reasoning=on, toolArgs=on, logFile=" +
+			Ledgers +
+			"/ellipsis.log)",
+	),
 	"the ellipsis flavor's activation line is byte-identical",
 );
 Check(
-	HasLine("spaces", "activated (replacement= , reasoning=on, toolArgs=on, logFile=" + Ledgers + "/spaces.log)"),
+	HasLine(
+		"spaces",
+		"activated (replacement= , reasoning=on, toolArgs=on, logFile=" + Ledgers + "/spaces.log)",
+	),
 	"the spaces flavor's activation line is byte-identical",
 );
 Check(
-	HasLine("invisible", "activated (replacement=, reasoning=on, toolArgs=on, logFile=" + Ledgers + "/invisible.log)"),
+	HasLine(
+		"invisible",
+		"activated (replacement=, reasoning=on, toolArgs=on, logFile=" +
+			Ledgers +
+			"/invisible.log)",
+	),
 	"the invisible flavor's activation line is byte-identical",
 );
 Check(
-	HasLine("fullwidth", "activated (reasoning=on, toolArgs=on, logFile=" + Ledgers + "/fullwidth.log)"),
+	HasLine(
+		"fullwidth",
+		"activated (reasoning=on, toolArgs=on, logFile=" + Ledgers + "/fullwidth.log)",
+	),
 	"the fullwidth flavor's activation line is byte-identical",
 );
 Check(
-	HasLine("normalize-file", "activated (replacement=-, logFile=" + Ledgers + "/normalize-file.log)"),
+	HasLine(
+		"normalize-file",
+		"activated (replacement=-, logFile=" + Ledgers + "/normalize-file.log)",
+	),
 	"the normalize-file activation line is byte-identical",
 );
 
 // EVERY LEDGER LINE IS THE `[ISO] message` FORM (the storage domain's
 // real append semantics, not the smokes' synthetic captures).
 const GovernorLines = Lines("governor");
-Check(GovernorLines.length > 0 && GovernorLines.every(Iso), "every governor ledger line is ISO-stamped");
+Check(
+	GovernorLines.length > 0 && GovernorLines.every(Iso),
+	"every governor ledger line is ISO-stamped",
+);
 
 // THE FLAVOR COUNTS INCREMENT PER EXERCISED STREAM - the one root
 // llm/stream waterfall produces the exact per-flavor count lines.
@@ -121,11 +170,17 @@ Check(
 	"the cargo direct fold logged the governed line for the chain Cargo.toml",
 );
 Check(
-	HasLine("cargo-governor", `no registry.json found for ${Paths.cargoRefusal} — chain pass skipped`),
+	HasLine(
+		"cargo-governor",
+		`no registry.json found for ${Paths.cargoRefusal} — chain pass skipped`,
+	),
 	"the cargo chain discovery logged the no-registry line",
 );
 Check(
-	HasLine("cargo-governor", `REFUSED rewrite of ${Paths.cargoRefusal}: dependency "leftover" in section "dependencies" not found in text — rewrite aborted`),
+	HasLine(
+		"cargo-governor",
+		`REFUSED rewrite of ${Paths.cargoRefusal}: dependency "leftover" in section "dependencies" not found in text — rewrite aborted`,
+	),
 	"the refusal attempt logged the byte-identical REFUSED line",
 );
 

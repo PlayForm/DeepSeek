@@ -62,7 +62,10 @@ Check(
 // surface parses and describes the entry-list/patch dialect the family
 // plugs into.
 const Schema = JSON.parse(await Wiring.DumpSchema());
-Check(Schema.title === "Cordis configuration for profile dsh-test", "the schema document titles the dsh-test profile");
+Check(
+	Schema.title === "Cordis configuration for profile dsh-test",
+	"the schema document titles the dsh-test profile",
+);
 Check(
 	typeof Schema.$defs === "object" && Schema.$defs.entry !== undefined,
 	"the schema document defines the entry dialect",
@@ -74,9 +77,15 @@ Check(
 
 // THE PLUGIN-MANAGER SURFACE - the installed bundles resolve by name.
 const Core = await Wiring.PluginWhy("@playform/ets-hook-dsh-core");
-Check(Core.status === 0 && Core.stdout.includes("@playform/ets-hook-dsh-core@0.0.1"), "the plugin surface resolves the core bundle");
+Check(
+	Core.status === 0 && Core.stdout.includes("@playform/ets-hook-dsh-core@0.0.1"),
+	"the plugin surface resolves the core bundle",
+);
 const Factory = await Wiring.PluginWhy("@playform/ets-dsh-plugin-factory");
-Check(Factory.status === 0 && Factory.stdout.includes("@playform/ets-dsh-plugin-factory@0.0.1"), "the plugin surface resolves the factory bundle");
+Check(
+	Factory.status === 0 && Factory.stdout.includes("@playform/ets-dsh-plugin-factory@0.0.1"),
+	"the plugin surface resolves the factory bundle",
+);
 
 // THE SESSION-ONLY PROJECTION IS A RESIDUAL - `cordis_inspect_list` /
 // `cordis_inspect_query` require a live agent session; the headless battery

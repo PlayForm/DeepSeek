@@ -1,4 +1,4 @@
-// core-smoke.mjs — the @playform/hook-dsh-core unit smoke: the pure helpers
+// core-smoke.mjs — the @playform/ets-hook-dsh-core unit smoke: the pure helpers
 // exercised WITHOUT any harness context (no fake ctx, no factory — the core
 // is dependency-free by design). Loads the REAL built entry
 // (hook-dsh-core/Target/Library.js).
@@ -33,8 +33,8 @@ import {
 	Activate,
 	Update,
 	Gate,
-} from "../packages/hook-dsh-core/Target/Library.js";
-import { Effect, Stream } from "../packages/hook-dsh-core/node_modules/effect/dist/index.js";
+} from "../packages/ets-hook-dsh-core/Target/Library.js";
+import { Effect, Stream } from "../packages/ets-hook-dsh-core/node_modules/effect/dist/index.js";
 
 let N = 0;
 const ok = (label) => {

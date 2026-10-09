@@ -1,4 +1,4 @@
-// factory-smoke.mjs — the @playform/plugin-dsh-factory smoke suite.
+// factory-smoke.mjs — the @playform/ets-dsh-plugin-factory smoke suite.
 // A fake ctx + a REAL PluginFactory instance (class/service registered as
 // ctx.pluginFactory via the cordis Service base). ≥ 25 numbered checks.
 //
@@ -123,7 +123,8 @@ const makeCtx = (over = {}) => {
 const ctx = makeCtx({ files: {} });
 
 // The REAL instance — the class/service registered as ctx.pluginFactory.
-const { default: PluginFactory } = await import("../packages/plugin-dsh-factory/Target/Library.js");
+const { default: PluginFactory } =
+	await import("../packages/ets-dsh-plugin-factory/Target/Library.js");
 
 let N = 0;
 const ok = (label) => console.log(`ok ${++N} — ${label}`);
@@ -153,7 +154,7 @@ if (TRACING) {
 	});
 	tracingServer.unref();
 	await new Promise((resolve) => tracingServer.listen(0, "127.0.0.1", resolve));
-	const Runtime = await import("../packages/plugin-dsh-factory/Target/Service/Runtime.js");
+	const Runtime = await import("../packages/ets-dsh-plugin-factory/Target/Service/Runtime.js");
 	const enabled = await Runtime.enableTracing({
 		endpoint: `http://127.0.0.1:${tracingServer.address().port}`,
 		serviceName: "factory-smoke",
@@ -817,9 +818,9 @@ ok("Attach: P5 failed open → loud ledger line, no throw, no sink bound");
 
 // ── 15. Schema: shared volatile fields + module fields ──────────────────
 const { default: Unwrap } =
-	await import("../packages/plugin-dsh-factory/Target/Function/Unwrap.js");
+	await import("../packages/ets-dsh-plugin-factory/Target/Function/Unwrap.js");
 const { default: SectionList } =
-	await import("../packages/plugin-dsh-factory/Target/Variable/Default.js");
+	await import("../packages/ets-dsh-plugin-factory/Target/Variable/Default.js");
 const schema = factory.Schema(
 	{ logFile: flavorLedger },
 	{ sections: factory.Schema.constructor ? undefined : undefined },

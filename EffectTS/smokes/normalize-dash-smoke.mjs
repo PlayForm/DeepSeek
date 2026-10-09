@@ -1,10 +1,10 @@
 // Classic/smokes/normalize-dash-smoke.mjs — the family smoke pattern: a fake ctx (on capture,
-// get returning the REAL @playform/plugin-dsh-factory instance from its built
+// get returning the REAL @playform/ets-dsh-plugin-factory instance from its built
 // Target, logger capture) + the REAL dash apply (from the built Target) →
 // assert the full llm/stream waterfall contract.
 import { appendFileSync, rmSync, readFileSync, existsSync } from "node:fs";
-import NormalizeDash from "../packages/hook-dsh-normalize-dash/Target/Library.js";
-import FactoryClass from "../packages/plugin-dsh-factory/Target/Library.js";
+import NormalizeDash from "../packages/ets-hook-dsh-normalize-dash/Target/Library.js";
+import FactoryClass from "../packages/ets-dsh-plugin-factory/Target/Library.js";
 
 const Ledger = "/tmp/normalize-dash-smoke-ledger.log";
 let Pass = 0,

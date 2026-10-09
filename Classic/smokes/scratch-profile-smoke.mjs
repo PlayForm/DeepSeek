@@ -33,7 +33,10 @@ const Profile = Scratch.Profile;
 
 // ISOLATION - the scratch home is never the user's real ~/.dsh.
 Check(Home !== Path.join(os.homedir(), ".dsh"), "the scratch home is not the real ~/.dsh");
-Check(Home.startsWith(os.tmpdir()) || process.env.DSH_TEST_SCRATCH !== undefined, "the scratch home is the suite's own DSH_TEST_SCRATCH");
+Check(
+	Home.startsWith(os.tmpdir()) || process.env.DSH_TEST_SCRATCH !== undefined,
+	"the scratch home is the suite's own DSH_TEST_SCRATCH",
+);
 Check(existsSync(Profile), "the dsh-test profile directory exists");
 
 // THE SKELETON (§2.3).
@@ -66,13 +69,19 @@ Check(
 );
 
 const UserPatch = readFileSync(Path.join(Profile, "cordis.patch.yml"), "utf8");
-Check(!/apiKey|providers|cloudflare|baseUrl/i.test(UserPatch), "the user patch layer carries no personal config");
+Check(
+	!/apiKey|providers|cloudflare|baseUrl/i.test(UserPatch),
+	"the user patch layer carries no personal config",
+);
 Check(
 	!/updateCooldownMs|mutationTools|logFile/.test(UserPatch),
 	"the user patch layer is empty of family overrides (the wiring overlay is separate)",
 );
 
-Check(existsSync(Path.join(Profile, "pnpm-workspace.yaml")), "pnpm-workspace.yaml exists (pnpm 11 settings home)");
+Check(
+	existsSync(Path.join(Profile, "pnpm-workspace.yaml")),
+	"pnpm-workspace.yaml exists (pnpm 11 settings home)",
+);
 Check(
 	readFileSync(Path.join(Profile, "pnpm-workspace.yaml"), "utf8").includes("nodeLinker: hoisted"),
 	"the install is hoisted like the live desktop profile",
@@ -89,7 +98,10 @@ Check(
 
 // THE NO-SYMLINK INVARIANT (§2.2).
 const Links = Wiring.SymlinksOutsideStore(Home);
-Check(Links.length === 0, `find $SCRATCH -type l is empty outside pnpm's own layout (${Links.length})`);
+Check(
+	Links.length === 0,
+	`find $SCRATCH -type l is empty outside pnpm's own layout (${Links.length})`,
+);
 
 const PlayformDir = Path.join(Profile, "node_modules", "@playform");
 Check(existsSync(PlayformDir), "node_modules/@playform exists");
@@ -130,7 +142,8 @@ for (const [Name, Dir] of CompareTargets) {
 	const Installed = Path.join(PlayformDir, Name.split("/")[1], "Target", "Library.js");
 	const Tarball = TarballOf(Name);
 	const InstalledBytes = existsSync(Installed) ? readFileSync(Installed, "utf8") : null;
-	const TarballBytes = Tarball !== null ? Wiring.TarballFile(Tarball, "package/Target/Library.js") : null;
+	const TarballBytes =
+		Tarball !== null ? Wiring.TarballFile(Tarball, "package/Target/Library.js") : null;
 	Check(
 		InstalledBytes !== null && TarballBytes !== null && InstalledBytes === TarballBytes,
 		`the installed ${Name} Target/Library.js bytes match the packed tarball (publish-identical)`,
@@ -139,7 +152,9 @@ for (const [Name, Dir] of CompareTargets) {
 
 // THE EXERCISE DRIVER (scratch-only, never in the user's profiles).
 Check(
-	existsSync(Path.join(Profile, "node_modules", "@local", "dsh-wiring-exercise", "Target", "Library.js")),
+	existsSync(
+		Path.join(Profile, "node_modules", "@local", "dsh-wiring-exercise", "Target", "Library.js"),
+	),
 	"the wiring-exercise driver is installed in the scratch profile",
 );
 
