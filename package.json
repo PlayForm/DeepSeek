@@ -2,6 +2,7 @@
 	"name": "@playform/dsh-family-monorepo",
 	"version": "0.1.0",
 	"private": true,
+	"packageManager": "pnpm@11.18.0",
 	"description": "The DeepSeek Harness Plugin Family for PlayForm - the monorepo: the Boilerplate reference, the Classic release, the Effect-TS release, the Site, and the Test archive.",
 	"scripts": {
 		"build:boilerplate": "pnpm -r --workspace-concurrency=1 --filter \"./Boilerplate/packages/**\" run prepublishOnly",
