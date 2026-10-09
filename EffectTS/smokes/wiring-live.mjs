@@ -352,7 +352,7 @@ const Overlay = (Home) =>
 - insert:
     - id: dsh-wiring-exercise
       name: "@local/dsh-wiring-exercise"
-- id: hook-dsh-package-governor
+- id: ets-hook-dsh-package-governor
   config:
     log: true
     logFile: ${Home}/ledgers/governor.log
@@ -362,7 +362,7 @@ const Overlay = (Home) =>
     updateMode: programmatic
     policyFile: ""
     exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
-- id: hook-dsh-package-pinner
+- id: ets-hook-dsh-package-pinner
   config:
     log: true
     logFile: ${Home}/ledgers/pinner.log
@@ -370,7 +370,7 @@ const Overlay = (Home) =>
     policyFile: ""
     sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
     exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
-- id: hook-dsh-cargo-governor
+- id: ets-hook-dsh-cargo-governor
   config:
     log: true
     logFile: ${Home}/ledgers/cargo-governor.log
@@ -382,47 +382,47 @@ const Overlay = (Home) =>
     policyFile: ""
     keepFile: ""
     exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
-- id: hook-dsh-normalize-dash
+- id: ets-hook-dsh-normalize-dash
   config:
     log: true
     logFile: ${Home}/ledgers/normalize-dash.log
     replacement: "-"
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-quotes
+- id: ets-hook-dsh-normalize-quotes
   config:
     log: true
     logFile: ${Home}/ledgers/quotes.log
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-ellipsis
+- id: ets-hook-dsh-normalize-ellipsis
   config:
     log: true
     logFile: ${Home}/ledgers/ellipsis.log
     replacement: "..."
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-spaces
+- id: ets-hook-dsh-normalize-spaces
   config:
     log: true
     logFile: ${Home}/ledgers/spaces.log
     replacement: " "
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-invisible
+- id: ets-hook-dsh-normalize-invisible
   config:
     log: true
     logFile: ${Home}/ledgers/invisible.log
     replacement: ""
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-fullwidth
+- id: ets-hook-dsh-normalize-fullwidth
   config:
     log: true
     logFile: ${Home}/ledgers/fullwidth.log
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-file
+- id: ets-hook-dsh-normalize-file
   config:
     log: true
     logFile: ${Home}/ledgers/normalize-file.log

@@ -106,30 +106,31 @@ Check(
 const PlayformDir = Path.join(Profile, "node_modules", "@playform");
 Check(existsSync(PlayformDir), "node_modules/@playform exists");
 const Expected = [
-	"hook-dsh-cargo-governor",
-	"hook-dsh-core",
-	"hook-dsh-normalize-dash",
-	"hook-dsh-normalize-ellipsis",
-	"hook-dsh-normalize-file",
-	"hook-dsh-normalize-fullwidth",
-	"hook-dsh-normalize-invisible",
-	"hook-dsh-normalize-quotes",
-	"hook-dsh-normalize-spaces",
-	"hook-dsh-package-governor",
-	"hook-dsh-package-pinner",
-	"plugin-dsh-factory",
+	"ets-dsh-hook",
+	"ets-hook-dsh-cargo-governor",
+	"ets-hook-dsh-core",
+	"ets-hook-dsh-normalize-dash",
+	"ets-hook-dsh-normalize-ellipsis",
+	"ets-hook-dsh-normalize-file",
+	"ets-hook-dsh-normalize-fullwidth",
+	"ets-hook-dsh-normalize-invisible",
+	"ets-hook-dsh-normalize-quotes",
+	"ets-hook-dsh-normalize-spaces",
+	"ets-hook-dsh-package-governor",
+	"ets-hook-dsh-package-pinner",
+	"ets-plugin-dsh-factory",
 ];
 const RealDirs = Expected.filter((Name) => {
 	const Entry = Path.join(PlayformDir, Name);
 	return existsSync(Entry) && statSync(Entry).isDirectory();
 });
-Check(RealDirs.length === 12, "every @playform entry is a real directory (copied, never linked)");
+Check(RealDirs.length === 13, "every @playform entry is a real directory (copied, never linked)");
 
 // THE FILE: INSTALL IS PUBLISH-IDENTICAL - the installed build bytes match
 // the monorepo build (the plan's checksum-compare assertion, §2.2).
 const CompareTargets = [
-	["@playform/ets-plugin-dsh-factory", "plugin-dsh-factory"],
-	["@playform/ets-hook-dsh-normalize-dash", "hook-dsh-normalize-dash"],
+	["@playform/ets-plugin-dsh-factory", "ets-plugin-dsh-factory"],
+	["@playform/ets-hook-dsh-normalize-dash", "ets-hook-dsh-normalize-dash"],
 ];
 const TarballOf = (Name) => {
 	const Short = Name.split("/")[1];

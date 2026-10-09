@@ -37,28 +37,28 @@ const EntryConfig = (Dump, Id) => {
 
 // THE BUNDLE LAYER DEFAULTS (no user patch, no overlay).
 const Plain = await Wiring.DumpConfig("plain");
-const GovernorDefault = EntryConfig(Plain, "hook-dsh-package-governor");
+const GovernorDefault = EntryConfig(Plain, "ets-hook-dsh-package-governor");
 Check(
 	GovernorDefault.includes("updateCooldownMs: 3000"),
 	"the bundle layer's governor config carries updateCooldownMs: 3000 before any patch",
 );
 Check(
-	GovernorDefault.includes("logFile: ~/.dsh/hook-dsh-package-governor.log"),
+	GovernorDefault.includes("logFile: ~/.dsh/ets-hook-dsh-package-governor.log"),
 	"the bundle layer's logFile default is the un-expanded ~/.dsh form (the silent-catch ledger gap)",
 );
 
 // THE WIRING OVERLAY - the wholesale replacement.
 const Overlay = await Wiring.DumpConfig("overlay", `${Home}/overlay.yml`);
-const GovernorOverlay = EntryConfig(Overlay, "hook-dsh-package-governor");
+const GovernorOverlay = EntryConfig(Overlay, "ets-hook-dsh-package-governor");
 Check(
 	GovernorOverlay.includes(`logFile: ${Home}/ledgers/governor.log`),
 	"the overlay's governor logFile replaces the entry config",
 );
 Check(
-	EntryConfig(Plain, "hook-dsh-normalize-dash").includes("normalizeToolArguments: true"),
+	EntryConfig(Plain, "ets-hook-dsh-normalize-dash").includes("normalizeToolArguments: true"),
 	"the bundle layer's dash normalizeToolArguments is true before any patch",
 );
-const DashOverlay = EntryConfig(Overlay, "hook-dsh-normalize-dash");
+const DashOverlay = EntryConfig(Overlay, "ets-hook-dsh-normalize-dash");
 Check(
 	DashOverlay.includes("replacement: '-'") &&
 		DashOverlay.includes("normalizeToolArguments: true"),
@@ -72,12 +72,12 @@ Check(
 const WholesalePath = `${Home}/overlay-wholesale.yml`;
 writeFileSync(
 	WholesalePath,
-	`- id: hook-dsh-normalize-dash\n  config:\n    log: true\n    logFile: ${Home}/ledgers/wholesale-dash.log\n`,
+	`- id: ets-hook-dsh-normalize-dash\n  config:\n    log: true\n    logFile: ${Home}/ledgers/wholesale-dash.log\n`,
 );
 try {
 	const Wholesale = await Wiring.DumpConfig("wholesale", WholesalePath);
 	Check(
-		!EntryConfig(Wholesale, "hook-dsh-normalize-dash").includes("normalizeToolArguments"),
+		!EntryConfig(Wholesale, "ets-hook-dsh-normalize-dash").includes("normalizeToolArguments"),
 		"the patch config REPLACES the entry config wholesale: the omitted cell is absent from the composed config (the schema default wins at runtime, not the bundle layer's true)",
 	);
 } finally {
@@ -86,11 +86,11 @@ try {
 
 // THE PATCH TOGGLE - a one-row overlay flips a family Config value.
 const TogglePath = `${Home}/overlay-toggle.yml`;
-writeFileSync(TogglePath, '- id: hook-dsh-normalize-dash\n  config:\n    replacement: ">"\n');
+writeFileSync(TogglePath, '- id: ets-hook-dsh-normalize-dash\n  config:\n    replacement: ">"\n');
 try {
 	const Toggled = await Wiring.DumpConfig("toggle", TogglePath);
 	Check(
-		EntryConfig(Toggled, "hook-dsh-normalize-dash").includes("replacement: '>'"),
+		EntryConfig(Toggled, "ets-hook-dsh-normalize-dash").includes("replacement: '>'"),
 		"a one-row patch flips the dash replacement as the harness projects it",
 	);
 } finally {
@@ -103,12 +103,12 @@ const HomePatch = `${Home}/cordis.patch.yml`;
 const WroteHomePatch = !existsSync(HomePatch);
 writeFileSync(
 	HomePatch,
-	`- id: hook-dsh-package-pinner\n  config:\n    logFile: ${Home}/ledgers/home-pinner.log\n`,
+	`- id: ets-hook-dsh-package-pinner\n  config:\n    logFile: ${Home}/ledgers/home-pinner.log\n`,
 );
 try {
 	const WithHome = await Wiring.DumpConfig("home-patch");
 	Check(
-		EntryConfig(WithHome, "hook-dsh-package-pinner").includes(
+		EntryConfig(WithHome, "ets-hook-dsh-package-pinner").includes(
 			`logFile: ${Home}/ledgers/home-pinner.log`,
 		),
 		"the home-level patch layer is applied over the profile's own layer",

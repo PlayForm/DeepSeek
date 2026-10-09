@@ -28,17 +28,17 @@ const Dump = await Wiring.DumpConfig("plain");
 // load-order evidence this suite asserts).
 await Wiring.Exercise();
 const FamilyIds = [
-	"plugin-dsh-factory",
-	"hook-dsh-package-governor",
-	"hook-dsh-package-pinner",
-	"hook-dsh-cargo-governor",
-	"hook-dsh-normalize-dash",
-	"hook-dsh-normalize-quotes",
-	"hook-dsh-normalize-ellipsis",
-	"hook-dsh-normalize-spaces",
-	"hook-dsh-normalize-invisible",
-	"hook-dsh-normalize-fullwidth",
-	"hook-dsh-normalize-file",
+	"ets-plugin-dsh-factory",
+	"ets-hook-dsh-package-governor",
+	"ets-hook-dsh-package-pinner",
+	"ets-hook-dsh-cargo-governor",
+	"ets-hook-dsh-normalize-dash",
+	"ets-hook-dsh-normalize-quotes",
+	"ets-hook-dsh-normalize-ellipsis",
+	"ets-hook-dsh-normalize-spaces",
+	"ets-hook-dsh-normalize-invisible",
+	"ets-hook-dsh-normalize-fullwidth",
+	"ets-hook-dsh-normalize-file",
 ];
 const FamilyNames = [
 	"@playform/ets-plugin-dsh-factory",
@@ -56,7 +56,7 @@ const FamilyNames = [
 
 // THE BUNDLE LIST -> THE COMPOSED LAYERS (the real resolution).
 const IdIndex = (Id) => Dump.indexOf(`- id: ${Id}`);
-Check(IdIndex("plugin-dsh-factory") > 0, "the factory bundle layer is composed");
+Check(IdIndex("ets-plugin-dsh-factory") > 0, "the factory bundle layer is composed");
 const Positions = FamilyIds.map((Id) => IdIndex(Id));
 Check(
 	Positions.every((Position) => Position > 0),

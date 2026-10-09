@@ -32,17 +32,17 @@ const Home = Wiring.ScratchHome();
 // id and package name (the names the runtime projection resolves).
 const Dump = await Wiring.DumpConfig("plain");
 const Families = [
-	["plugin-dsh-factory", "@playform/ets-plugin-dsh-factory"],
-	["hook-dsh-package-governor", "@playform/ets-hook-dsh-package-governor"],
-	["hook-dsh-package-pinner", "@playform/ets-hook-dsh-package-pinner"],
-	["hook-dsh-cargo-governor", "@playform/ets-hook-dsh-cargo-governor"],
-	["hook-dsh-normalize-dash", "@playform/ets-hook-dsh-normalize-dash"],
-	["hook-dsh-normalize-quotes", "@playform/ets-hook-dsh-normalize-quotes"],
-	["hook-dsh-normalize-ellipsis", "@playform/ets-hook-dsh-normalize-ellipsis"],
-	["hook-dsh-normalize-spaces", "@playform/ets-hook-dsh-normalize-spaces"],
-	["hook-dsh-normalize-invisible", "@playform/ets-hook-dsh-normalize-invisible"],
-	["hook-dsh-normalize-fullwidth", "@playform/ets-hook-dsh-normalize-fullwidth"],
-	["hook-dsh-normalize-file", "@playform/ets-hook-dsh-normalize-file"],
+	["ets-plugin-dsh-factory", "@playform/ets-plugin-dsh-factory"],
+	["ets-hook-dsh-package-governor", "@playform/ets-hook-dsh-package-governor"],
+	["ets-hook-dsh-package-pinner", "@playform/ets-hook-dsh-package-pinner"],
+	["ets-hook-dsh-cargo-governor", "@playform/ets-hook-dsh-cargo-governor"],
+	["ets-hook-dsh-normalize-dash", "@playform/ets-hook-dsh-normalize-dash"],
+	["ets-hook-dsh-normalize-quotes", "@playform/ets-hook-dsh-normalize-quotes"],
+	["ets-hook-dsh-normalize-ellipsis", "@playform/ets-hook-dsh-normalize-ellipsis"],
+	["ets-hook-dsh-normalize-spaces", "@playform/ets-hook-dsh-normalize-spaces"],
+	["ets-hook-dsh-normalize-invisible", "@playform/ets-hook-dsh-normalize-invisible"],
+	["ets-hook-dsh-normalize-fullwidth", "@playform/ets-hook-dsh-normalize-fullwidth"],
+	["ets-hook-dsh-normalize-file", "@playform/ets-hook-dsh-normalize-file"],
 ];
 for (const [Id, Name] of Families) {
 	const Start = Dump.indexOf(`- id: ${Id}\n`);
