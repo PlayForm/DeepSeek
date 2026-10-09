@@ -33,7 +33,7 @@
 >
 > *The @-sentence identity: **Hook @ DSH @ Normalize @ File**.*
 >
-> *This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source/Stream) beside `edit` and `raw-write` -
+> *This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source/Library.ts) beside `edit` and `raw-write` -
 > its arguments carry a FILE PATH, and a normalized dash inside a filename would corrupt the
 > target.*
 
