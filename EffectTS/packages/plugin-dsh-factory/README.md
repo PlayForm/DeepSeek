@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-factory
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fplugin-dsh-factory&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
@@ -10,7 +10,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 
 > [!NOTE]
 >
-> The **furnace of the DSH governance family** - the first _service-provider_ bundle in the DeepSeek
+> The **furnace of the DSH governance family** - the first *service-provider* bundle in the DeepSeek
 > Harness plugin family.
 >
 > Loading it registers one class plugin
@@ -18,14 +18,14 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every
 > piece of common machinery the family's hooks used to duplicate.
 >
-> _One service._
+> *One service.*
 >
-> _Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
-> `GovernSteps` registry among them)._
+> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
+> `GovernSteps` registry among them).*
 >
-> _The hooks bring their own metal; the factory pours the mold._
+> *The hooks bring their own metal; the factory pours the mold.*
 >
-> _The @-sentence identity: **Plugin @ DSH @ Factory**._
+> *The @-sentence identity: **Plugin @ DSH @ Factory**.*
 
 ---
 
@@ -96,7 +96,7 @@ export async function apply(ctx) {
 
 ## The Problem
 
-Three independent consumers of the _same_ machinery already existed.
+Three independent consumers of the *same* machinery already existed.
 
 The governor, the pinner and
 the cargo governor each maintained their own copy of: the ledger (`Append`), the exclusion match
@@ -191,7 +191,7 @@ registered for the basename) is a contained no-op.
 - **The consumer ledger strings.** Every message a hook logs (`skipped (excluded) ...`,
   `observed non-JSON package.json ... - skipped`, `REFUSED rewrite ...`, `pinned ...`,
   `governed ... → ...`, the `activated (...)` proof) is composed and logged by the hook - through
-  the factory's `Append`. The factory's own composed strings are _parameterized machinery_ (the
+  the factory's `Append`. The factory's own composed strings are *parameterized machinery* (the
   unreadable-policy line takes the policy file name; the suppressed-error lines take `state.Module`
   as the prefix) and stay byte-identical when a consumer keeps its historical name.
 - **The transforms.** The consumer supplies the pure function; the factory only drives it inside

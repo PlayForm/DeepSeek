@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-invisible
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-invisible&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-invisible)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-invisible)
@@ -16,17 +16,17 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > transcript - by REMOVING it: zero-width spaces, joiners, bidi controls and the BOM character
 > simply vanish (the default replacement is the empty string).
 >
-> _A CLASS flavor of the normalize family: the core's `Invisible` class plus a configurable
-> `replacement` string (default `""` - removal)._
+> *A CLASS flavor of the normalize family: the core's `Invisible` class plus a configurable
+> `replacement` string (default `""` - removal).*
 >
-> _The @-sentence identity: **Hook @ DSH @ Normalize @
-> Invisible**._
+> *The @-sentence identity: **Hook @ DSH @ Normalize @
+> Invisible**.*
 >
-> _The family's `raw-write` tool (registered by
+> *The family's `raw-write` tool (registered by
 > [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
 > the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
 > call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies._
+> is the only normalization it applies.*
 
 ---
 

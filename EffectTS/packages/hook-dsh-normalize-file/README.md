@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-file
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-file&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-file)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-file)
@@ -21,21 +21,21 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > N = 0 writes NOTHING - the no-op
 > no-write rule.
 >
-> _The family's first LISTENER-LESS flavor: no
+> *The family's first LISTENER-LESS flavor: no
 > [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts),
 > no
 > [`fs/observed`][dsh-fs] -
-> nothing runs without an explicit agent action._
+> nothing runs without an explicit agent action.*
 >
-> _The background-rewrite posture is deliberately NOT
+> *The background-rewrite posture is deliberately NOT
 > shipped (it would break the edit tool's `old_string` contract); the design report ships the tool
-> arm only._
+> arm only.*
 >
-> _The @-sentence identity: **Hook @ DSH @ Normalize @ File**._
+> *The @-sentence identity: **Hook @ DSH @ Normalize @ File**.*
 >
-> _This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Stream) beside `edit` and `raw-write` -
+> *This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/hook-dsh-core/Source/Stream) beside `edit` and `raw-write` -
 > its arguments carry a FILE PATH, and a normalized dash inside a filename would corrupt the
-> target._
+> target.*
 
 ---
 

@@ -1,6 +1,6 @@
 # @playform/hook-dsh-pinner-package
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-pinner-package&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-pinner-package)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-pinner-package)
@@ -18,12 +18,12 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > One leading range prefix (`^`, `~`, or `=`) is
 > stripped, in every dependency section the config declares - and the author never learns.
 >
-> _A factory flavor: pure P-only - no ncu, no jobs, no subprocess, no cooldown._
+> *A factory flavor: pure P-only - no ncu, no jobs, no subprocess, no cooldown.*
 >
-> _Just the pin._
+> *Just the pin.*
 >
-> _The
-> @-sentence identity: **Hook @ DSH @ Pinner @ Package**._
+> *The
+> @-sentence identity: **Hook @ DSH @ Pinner @ Package**.*
 
 ---
 

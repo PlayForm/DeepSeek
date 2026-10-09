@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-dash
 
-_The DeepSeek Harness Plugin Family for PlayForm._
+*The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-dash&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-dash)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-dash)
@@ -15,16 +15,16 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > and normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes,
 > en dashes and seventeen exotic relatives → `-`.
 >
-> _The normalize-dashes hook, at the injection point the harness itself does not have._
+> *The normalize-dashes hook, at the injection point the harness itself does not have.*
 >
-> _A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
-> `replacement` (default `-`)._
+> *A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
+> `replacement` (default `-`).*
 >
-> _It also registers the family's **`raw-write` tool** - a write wrapper
+> *It also registers the family's **`raw-write` tool** - a write wrapper
 > with an explicit `normalize` parameter (default **false = verbatim**), exempt from the stream
-> normalization by name like `edit`._
+> normalization by name like `edit`.*
 >
-> _The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**._
+> *The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**.*
 
 ---
 
