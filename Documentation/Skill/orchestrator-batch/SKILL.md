@@ -10,7 +10,22 @@ whenToUse: Mandatory for the agent-batch regime in this monorepo: whenever the u
 2. FORMALIZE it: structure it (scope, the surface, the exclusions, the sequence), bind it to the shared facts (the totals 733/746, the 19-method ledger, the versions 0.0.1 / effect 4.0.2, the byte-exact ledger quotes), bind it to the conventions (tabs, the typography laws, the Harness Blue + zero elevation, never-commit, the smokes/site-build as the arbiters), and shape the report format. If the user's wording is ambiguous, formalize the most faithful reading and state it.
 3. DELEGATE: either an ACTIVE agent (its slot in the serialized queue - one agent at a time) or an IDLE agent (the paused pattern: a fully self-contained spec + the activation rules + the confirmation line). The spec must be self-contained - the subagent's conversation cannot see this one.
 4. MONITOR: the queue bookkeeping (active / paused / queued), the SURFACE-CONFLICT analysis (which agents may run concurrently - only when their files are provably disjoint; serialize everything else), the activation cascade (idle agents fire as their surfaces free up), the stall recovery (no file activity -> send a checkpoint nudge: "report your state; STOP reading; move to the ACTION phase"; then a hard deadline nudge if needed), the failure handling (an agent that died: verify the tree for partial edits first, then re-dispatch with the same or a corrected spec).
-5. VERIFY: run the arbiters yourself (or spot-check the agent's claims): the 24 smokes print their own totals (Classic 733 / EffectTS 746 - trust the printed suite totals over any prose claims; a claim that contradicts the printed totals is wrong - e.g. 795/808 were arithmetic phantoms), the astro build (21 pages), the dev-server curls (200). The user commits mid-session - the index state is theirs.
+5. VERIFY: the ARBITERS ARE THE LANES' OWN - every activation carries the
+   arbiter mandate (the 24 smokes print their own totals - Classic 733 /
+   EffectTS 746; the site lanes run the astro build (21 pages) + the dev-server
+   curls + the built-HTML/CSS + the measured checks themselves, and report the
+   numbers). THE ORCHESTRATOR DOES NOT EXECUTE (the user-mandated law, 2026-10-09
+   - the slip lesson, enforced after the orchestrator ran a build that cleared
+   Target/ + pre-investigated feedback surfaces): no builds, no site edits, no
+   measurement runs, NO surface-location investigation before relaying feedback -
+   the feedback goes to the idlers VERBATIM and the idlers investigate + locate +
+   execute + build + verify. The orchestrator's hands-on work is LIMITED to: (a)
+   relaying the user's feedback verbatim to the idle agents; (b) keeping the
+   records (the handoff, the Tasks/, the process records); (c) read-only
+   spot-checks of the agents' REPORTED claims (greps over the committed/built
+   output only - trust the agents' printed totals over prose claims; a claim that
+   contradicts the printed totals is wrong - e.g. 795/808 were arithmetic
+   phantoms). The user commits mid-session - the index state is theirs.
 6. REPORT: the per-agent results, the residuals + the decisions for the user, the queue's next steps. The user decides the commit protocol.
 
 ## The spec-reconfiguration authority (user-granted)

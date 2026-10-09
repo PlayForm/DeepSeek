@@ -81,6 +81,13 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
 | The path-mention icon | ADDRESSED (lane 6 - 2026-10-09: the IsPathEmbedded rule - path-embedded mentions plain, the bare ones iconed; committed 960fcede) |
 | The effect white-on-blue + the footer padding | ADDRESSED (lane 2 - 2026-10-09 verified: the white glyph + the 16px footer clearance, both themes, no edits needed - the fix committed 7fb6a862) |
 | The info icon's scope (2026-10-09 - NEW feedback) | ADDRESSED (lane 4 RE-DISPATCH: the Showcase revert landed + verified - 0 info icons on the index's use-cases cards (was 3), the 45 kept on the case-study, the identity-word colors intact; the card titles restored to their card-name styling) |
+| The hero tagline's top padding (2026-10-09 - NEW feedback) | ADDRESSED (the h1.hero__title gained padding-top: var(--space-xl) - 24px - the badge-row clearance, both themes, token-based; verified in the built CSS, the tagline byte-exact) |
+| The DeepSeek mark on the battle-tested line (2026-10-09 - NEW feedback) | ADDRESSED (the deepseek mark before the DeepSeek V4 Flash mention on the battle-tested line - index:388 + models:114, symmetric to the zhipu one; verified in the built HTML: the mark sits right before the mention, the counts index deepseek 2/zhipu 1, models deepseek 3/zhipu 4) |
+| The workbench engine selection inert (2026-10-09 - NEW feedback) | ADDRESSED (the Ingest-source pills now drive the simulation: the per-engine seed pools + tick rates - deepseek 900ms original seeds, glm 450ms flash seeds, raw 1400ms dirty seeds - the click handler switches the pool + cadence; headless click-through verified: distinct output per engine; the runtime pills' cosmetics + the nominal "120 tps" label recorded as the residuals) |
+| The npm icon's size + padding (2026-10-09 - NEW feedback) | ADDRESSED (all 3 inline npm mentions - governor-package:223, governor-cargo:114, plugin-dsh-factory:542 - sized to 0.75em (the wide 3.12-aspect wordmark) + the new .page-hero__sub .brand-icon--npm margin-inline: var(--gap-icon) rule for the both-sides padding; the rule + the sizing verified in the built output, text bytes untouched) |
+| The literal _ underscores in the prose (2026-10-09 - NEW feedback) | ADDRESSED (12/12 leaked "_The DeepSeek Harness Plugin Family for PlayForm._" runs - one per plugin page's page-hero sub - now render as the <em> emphasis, markup-level surgical (2 substitutions per file), the legit identifier underscores untouched; verified: zero literal underscore runs in the built output, the <em> on all 12 pages; the stale astro dev lock (port 10001, PID 21884) noted as the residual) |
+| The info icons' right padding (2026-10-09 - NEW feedback) | ADDRESSED (the 15 info-icon placements - the Concept titles + the pinner page's 14 concept-block titles incl. "Family position" - the icon-title gap widened --gap-icon (4px) to --space-sm (8px) in both unit rules, the text pushed inward; verified in the built CSS (both rules carry gap:var(--space-sm)); the next step --space-md (12px) noted as available) |
+| The setup page's JSON minified + the code blocks unhighlighted (2026-10-09 - NEW feedback) | PENDING (https://deepseek.playform.cloud/setup/: the JSON code block renders minified (one line) while localhost shows the pretty form + the YAML/JSON blocks have NO syntax highlighting - dispatched to the PATH-MENTION agent: the minification cause + the highlighting path, the smallest faithful fixes) |
 
 ## 4. THE DECISIONS + THE OPEN ITEMS
 
@@ -105,12 +112,16 @@ The full queue landed + verified + closed (each Tasks/ file carries its record):
   resumes (send_message) ONE lane at a time (max 1-2); the paused lanes keep
   their specs + their partial edits in the tree and resume from there
   (read-before-edit).
-- THE ORCHESTRATOR'S NON-MODIFICATION RULE (2026-10-09 - the user's nit): the
-  orchestrator does NOT run site modifications or builds - the lanes do (each
-  lane's arbiter is its own build); the orchestrator relays the user's feedback
-  to the idlers, spot-checks read-only, and maintains the records only. (A
-  stray orchestrator `astro build` aborted mid-run cleared Target/ once - it
-  was restored from the user's committed state, no rebuild.)
+- THE ORCHESTRATOR'S NON-EXECUTION LAW (2026-10-09 - the user's nits, the slip
+  lesson - now in the orchestrator-batch skill step 5): the orchestrator does
+  NOT execute on the feedback - no builds (a stray orchestrator `astro build`
+  aborted mid-run cleared Target/ once - restored from the user's committed
+  state, no rebuild), no site edits, no measurement runs, NO surface-location
+  investigation before relaying - the feedback goes to the idlers VERBATIM and
+  the idlers investigate + locate + execute + build + verify (their own
+  arbiters). The orchestrator's hands-on work: relaying verbatim + the records
+  (the handoff, the Tasks/, the process records) + read-only spot-checks of the
+  agents' reported claims over the committed/built output.
 - THE BATCH'S COMMITS (2026-10-09 - the user committed as the lanes landed):
   960fcede (the rebrand + the descriptive titles + the identity words + the
   path-mention rule + the two measurement scripts) + 0506601f (the Zhipu mark +

@@ -57,7 +57,7 @@ jobs:
         strategy:
             matrix:
                 # The family floor: the smokes use import.meta.dirname
-                # (Node 20.11+); the borrowed 18/19/20 matrix predates it.
+                # (Node 20.11+); the older 18/19/20 matrices predate it.
                 node-version: [20, 22, 24]
 
         steps:
