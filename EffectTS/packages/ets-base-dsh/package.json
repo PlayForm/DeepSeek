@@ -14,7 +14,8 @@
 	},
 	"files": [
 		"Target",
-		"README.md"
+		"README.md",
+		"CHANGELOG.md"
 	],
 	"scripts": {
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
