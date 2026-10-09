@@ -19,3 +19,37 @@ whenToUse: Mandatory for the agent-batch regime in this monorepo: whenever the u
 
 ## The shared facts (the truth the whole batch must not contradict)
 The totals: Classic 733 / EffectTS 746 (the suites print them); the per-suite pairs (core 14/17, factory 34/41, governor 78/81, pinner 32, cargo 62, dash 132, five flavors 62, file 71); the factory surface: 19 callable methods (the SCHEME sections: §2.7 Write+GuardedWrite, §2.16 UpdateKey, §2.17 RegisterGovern, §2.18 Govern); the releases at 0.0.1; the effect pin 4.0.2; the ncuBin default "ncu" (PATH-resolved - the re-pin landed); the releases are CC0-1.0; the Boilerplate + the live ~/.dsh are the internal baselines (their personal paths stay - the pending gitignore/submodule decision); Documentation/Plans/ + Reports/ are the process records (agents leave them, the orchestrator updates them).
+
+## The session-resume protocol (user-mandated 2026-10-09 - the next session's starting ritual)
+
+1. READ THE HANDOFF FIRST: Documentation/Handoff/BATCH-HANDOFF-*.md (the LATEST
+   dated file is the current brief: the project state, the idle lanes, the
+   feedback ledger - addressed + pending, the decisions, the future work) + the
+   per-task files in Documentation/Handoff/Tasks/*.md (each carries the TEMPORARY
+   CURRENT STATE - the inspected progress - the task spec - the enhancements).
+   The session picks off from those states - never re-investigate what the files
+   already state.
+2. THE QUEUE'S ACTIVATION PROTOCOL: one lane at a time (the user's rules: max
+   1-2 agents; the ~/.dsh maxActiveSubagents is 1); every activation message
+   carries the STATE BLOCK (the running lanes + their current tasks, the pending
+   count, the scope + the off-limits surfaces); the surgical-edit + the
+   build-verified disciplines bind every lane; the verify-and-close lanes first
+   (the files marked "fix landed + committed - verify") - then the idle ones.
+3. THE ROUTING NON-NEGOTIABLE (the slip lesson - binding): every subagent launch
+   passes provider=cloudflare-workers-ai + model=@cf/zai-org/glm-5.3-flash +
+   the exact reasoningEffort (high for the routine coding; low for the
+   exploration; DeepSeek max ONLY for the planning/advanced lane + the
+   escalations). The OMISSION inherits the parent route (the DeepSeek - the
+   expensive lane) - an omission IS the violation (it slipped once - the recent
+   lanes ran on the wrong route - the cost was sunk). The routing-enforcer
+   plugin (Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md) will automate this
+   silently - until then, the explicit routing is the law.
+4. THE ENVIRONMENT DISCIPLINE: the user commits MID-SESSION (HEAD moves under
+   you + the lanes); the tree may be mid-edit by the concurrent lanes (the
+   read-before-edit always); the handoff + the process records are the durable
+   fallbacks (the batch-state plugin will automate the live state later).
+5. THE HANDOFF MAINTENANCE: at the session's end, the orchestrator REFRESHES the
+   handoff (the BATCH-HANDOFF date-stamped new file + the Tasks/ states updated -
+   the completed lanes marked, the new feedback appended) so the next session
+   resumes from the fresh states. The user's feedback ALWAYS lands in the handoff
+   the same session it arrives.
