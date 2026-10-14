@@ -33,7 +33,7 @@
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
-		"@types/node": "26.6.4",
+		"@types/node": "26.6.5",
 		"tsc-alias": "1.9.7",
 		"typescript": "7.0.2",
 		"@deepseek-ai/cordis": "4.0.4",
