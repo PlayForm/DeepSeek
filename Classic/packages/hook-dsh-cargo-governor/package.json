@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@playform/hook-dsh-core": "0.0.1",
 		"@playform/plugin-dsh-factory": "0.0.1",
-		"smol-toml": "1.9.0"
+		"smol-toml": "1.9.1"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
