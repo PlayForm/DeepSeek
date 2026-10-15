@@ -29,7 +29,7 @@
 		"@playform/ets-base-dsh": "0.0.1",
 		"@playform/ets-hook-dsh-core": "0.0.1",
 		"@playform/ets-plugin-dsh-factory": "0.0.1",
-		"effect": "4.0.2"
+		"effect": "4.0.3"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
