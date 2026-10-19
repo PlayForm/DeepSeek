@@ -564,7 +564,10 @@ const RawV = { log: true, logFile: Ledger, replacement: { get: () => FlipValue }
 const RunV = Make(RawV);
 const ToolV = RunV.Registered[0];
 const ActivationsV = () => RunV.Lines.filter((L) => L.includes("activated (")).length;
-Check(RunV.Listeners["loader/volatile-update"] !== undefined, "P10: the refresh listener is registered");
+Check(
+	RunV.Listeners["loader/volatile-update"] !== undefined,
+	"P10: the refresh listener is registered",
+);
 Check(ActivationsV() === 1, "P10: exactly one activation line after the mount");
 Check(RunV.State.Replacement === "-", "P10: the mount-time replacement is the default");
 const StateRefV = RunV.State;
@@ -573,7 +576,10 @@ const GateFixture = "/tmp/normalize-file-smoke-gate-fixture.txt";
 RunV.Files.set(`key:${FlipFixture}`, All6);
 FlipValue = "-*-";
 RunV.Listeners["loader/volatile-update"]([["replacement"]]);
-Check(RunV.State.Replacement === "-*-", "P10: the volatile dispatch refreshed State.Replacement in place");
+Check(
+	RunV.State.Replacement === "-*-",
+	"P10: the volatile dispatch refreshed State.Replacement in place",
+);
 Check(StateRefV === RunV.State, "P10: the State object identity is preserved (no rebuild)");
 Check(ActivationsV() === 1, "P10: still exactly one activation line (NO remount, no re-apply)");
 const OutV = await ToolV.execute({ file_path: FlipFixture }, Exec());
@@ -704,9 +710,7 @@ const OutO2 = await PostO(
 	NextAcceptO,
 );
 Check(
-	OutO2.kind === "accept" &&
-		OutO2.content.length === 1 &&
-		OutO2.content[0].text === Normalized6,
+	OutO2.kind === "accept" && OutO2.content.length === 1 && OutO2.content[0].text === Normalized6,
 	"overpass: toolResults on -> the six-fold chain rewrites the text block",
 );
 Check(
@@ -742,7 +746,10 @@ Check(
 	OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u2014"}',
 	"overpass: tool-call/argument blocks pass untouched (execution-critical JSON)",
 );
-Check(OutO4.content[1].text === "x - y", "overpass: the text block in the same content IS rewritten");
+Check(
+	OutO4.content[1].text === "x - y",
+	"overpass: the text block in the same content IS rewritten",
+);
 
 // O5: N = 0 -> decision unchanged, no ledger line.
 const LinesBeforeO5 = RunO.Lines.length;
@@ -751,7 +758,10 @@ const OutO5 = await PostO(
 	{ isError: false, value: {}, content: [{ type: "text", text: "plain text" }] },
 	NextAcceptO,
 );
-Check(OutO5.kind === "accept" && !("content" in OutO5), "overpass: N=0 payload -> decision unchanged");
+Check(
+	OutO5.kind === "accept" && !("content" in OutO5),
+	"overpass: N=0 payload -> decision unchanged",
+);
 Check(RunO.Lines.length === LinesBeforeO5, "overpass: N=0 -> no ledger line");
 
 // O6/O7: value-carrying decision untouched; ccr marker guard.
@@ -818,7 +828,10 @@ Check(
 	SweepBadO.kind === "error" && SweepBadO.text.includes("cannot sweep"),
 	"overpass: a failing path fails the command with the context prefix",
 );
-const SweepNoPathO = await CommandO.handler({ rawInput: "files", signal: new AbortController().signal });
+const SweepNoPathO = await CommandO.handler({
+	rawInput: "files",
+	signal: new AbortController().signal,
+});
 Check(SweepNoPathO.kind === "error", "overpass: 'files' without paths is a usage error");
 
 // O9: batch off by default -> pass-through; the arm on the six-fold.
@@ -857,9 +870,15 @@ Check(
 		ReportO.text.includes("files=on"),
 	"overpass: the scopes report is the read-only effective-values summary",
 );
-const ResultsBadO = await CommandO.handler({ rawInput: "results", signal: new AbortController().signal });
+const ResultsBadO = await CommandO.handler({
+	rawInput: "results",
+	signal: new AbortController().signal,
+});
 Check(ResultsBadO.kind === "error", "overpass: 'results' without on|off is a usage error");
-const ResultsO = await CommandO.handler({ rawInput: "results off", signal: new AbortController().signal });
+const ResultsO = await CommandO.handler({
+	rawInput: "results off",
+	signal: new AbortController().signal,
+});
 Check(
 	ResultsO.kind === "success" &&
 		(ResultsO.text.includes("settings") || ResultsO.text.includes("config")),

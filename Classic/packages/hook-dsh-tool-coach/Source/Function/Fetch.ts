@@ -106,7 +106,8 @@ export default (Tools: ToolsService | undefined, Log: (Message: string) => void)
 			}
 			Tools_.set(Schema.name, {
 				description: Sentence,
-				param: PrimaryParam(Schema.parameters) || STATIC_TOOL_LINES[Schema.name]?.param || "",
+				param:
+					PrimaryParam(Schema.parameters) || STATIC_TOOL_LINES[Schema.name]?.param || "",
 			});
 		}
 		if (Tools_.size === 0) {

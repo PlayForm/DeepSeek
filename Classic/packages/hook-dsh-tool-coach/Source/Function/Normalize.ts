@@ -62,8 +62,7 @@ export const StripHeredocs = (Command: string): string => {
 
 /** Remove quote layers and backslashes: 'x', "x", \x -> x. */
 export const StripQuotes = (Text: string): string =>
-	Text
-		.replace(/\\(.)/g, "$1")
+	Text.replace(/\\(.)/g, "$1")
 		.replace(/'([^']*)'/g, "$1")
 		.replace(/"([^"]*)"/g, "$1");
 
@@ -93,7 +92,9 @@ export default Normalize;
 
 /** Split a pipeline into its pipe segments (the unit of classification). */
 export const Segments = (Pipeline: string): string[] =>
-	Pipeline.split("|").map((Segment) => Segment.trim()).filter((Segment) => Segment.length > 0);
+	Pipeline.split("|")
+		.map((Segment) => Segment.trim())
+		.filter((Segment) => Segment.length > 0);
 
 /** The pipeline's head command word (its first segment's first token). */
 export const Head = (Pipeline: string): string => {

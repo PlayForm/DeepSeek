@@ -21,7 +21,11 @@ import { appendFileSync, rmSync, readFileSync, writeFileSync, existsSync } from 
 import * as Http from "node:http";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { ThresholdBytes, Eligible, Decide } from "../packages/ets-hook-dsh-ccr/Target/Function/Engine.js";
+import {
+	ThresholdBytes,
+	Eligible,
+	Decide,
+} from "../packages/ets-hook-dsh-ccr/Target/Function/Engine.js";
 
 // ── TRACING MODE setup (the OPT-IN knob, before ANY shell is built) ──────
 // The runtime is materialized synchronously in the factory constructor, so
@@ -256,7 +260,8 @@ Check(
 	"the tools/post-execute listener is registered",
 );
 Check(
-	Object.keys(Run1.Listeners).length === 2 && Run1.Listeners["loader/volatile-update"] !== undefined,
+	Object.keys(Run1.Listeners).length === 2 &&
+		Run1.Listeners["loader/volatile-update"] !== undefined,
 	"tools/post-execute plus the State builder's P10 loader/volatile-update refresh",
 );
 Check(
@@ -276,7 +281,10 @@ Check(
 );
 Check(Run1.State.Enabled === true, "volatile unwrap: log cell unwrapped to State.Enabled=true");
 Check(Run1.State.Threshold === 2048, "volatile unwrap: thresholdBytes cell → State.Threshold=2048");
-Check(Run1.State.PreviewMax === 240, "volatile unwrap: previewMaxChars cell → State.PreviewMax=240");
+Check(
+	Run1.State.PreviewMax === 240,
+	"volatile unwrap: previewMaxChars cell → State.PreviewMax=240",
+);
 Check(
 	Run1.State.Multipliers && Run1.State.Multipliers.error === 8,
 	"volatile unwrap: multipliers cell → State.Multipliers (error ×8)",
@@ -293,7 +301,9 @@ Check(
 );
 Check(
 	Furnace.PendingJournal.some(
-		(R) => R.event === "activated" && R.detail === "activated (bundle 0.0.1, targets 8, budget 268435456)",
+		(R) =>
+			R.event === "activated" &&
+			R.detail === "activated (bundle 0.0.1, targets 8, budget 268435456)",
 	),
 	"the activation record journals to the shared storage domain with the identical detail",
 );
@@ -308,7 +318,10 @@ const Retrieve = Run1.Registered[0];
 	const Result = { isError: false, value: { out: "short bash output" }, content: Content };
 	const Decision = { kind: "accept" };
 	const Out = await Listener(Exec("bash"), Result, async () => Decision);
-	Check(Out === Decision, "under-threshold bash result: the downstream decision passes through unchanged");
+	Check(
+		Out === Decision,
+		"under-threshold bash result: the downstream decision passes through unchanged",
+	);
 	Check(
 		!Run1.Lines.some((L) => L.includes("compressed") || L.includes("stored")),
 		"under-threshold result writes NO ledger line (no compress, no store)",
@@ -328,7 +341,10 @@ const Listener1b = Run1b.Listeners["tools/post-execute"];
 	const Out = await Listener1b(Exec("bash"), Result, async () => Decision);
 	const Hash = HashOf(Content);
 	const Size = SizeOf(Content);
-	Check(Out !== Decision && Out && Out.kind === "accept", "oversized bash result is replaced (not passed through)");
+	Check(
+		Out !== Decision && Out && Out.kind === "accept",
+		"oversized bash result is replaced (not passed through)",
+	);
 	Check(
 		JSON.stringify(Out.content) ===
 			JSON.stringify([
@@ -436,9 +452,16 @@ const Run3 = Make(Validate({ logFile: Ledger }));
 	const Content = TextBlock(Text);
 	const Result = { isError: false, value: {}, content: Content };
 	const Decision = { kind: "accept" };
-	const Out = await Run3.Listeners["tools/post-execute"](Exec("bash"), Result, async () => Decision);
+	const Out = await Run3.Listeners["tools/post-execute"](
+		Exec("bash"),
+		Result,
+		async () => Decision,
+	);
 	const Hash = HashOf(Content);
-	Check(Out === Decision, "auto-expand: the downstream decision passes through (FULL content, no marker)");
+	Check(
+		Out === Decision,
+		"auto-expand: the downstream decision passes through (FULL content, no marker)",
+	);
 	Check(
 		!(Out.content ?? []).some?.((B) => (B.text ?? "").includes("<<<CCR:")) ?? true,
 		"auto-expand: NO marker reaches the model",
@@ -480,12 +503,26 @@ const Run3 = Make(Validate({ logFile: Ledger }));
 // ---------- Run 4: exempt tools pass through byte-identical ----------
 rm();
 const Run4 = Make(Validate({ autoExpand: false, logFile: Ledger }));
-for (const Name of ["write", "edit", "raw-write", "subagent", "ask_user_question", "ccr_retrieve"]) {
+for (const Name of [
+	"write",
+	"edit",
+	"raw-write",
+	"subagent",
+	"ask_user_question",
+	"ccr_retrieve",
+]) {
 	const Content = TextBlock(PlainText(5000));
 	const Result = { isError: false, value: {}, content: Content };
 	const Decision = { kind: "accept" };
-	const Out = await Run4.Listeners["tools/post-execute"](Exec(Name), Result, async () => Decision);
-	Check(Out === Decision, `exempt tool '${Name}' passes through byte-identical (no marker, no store)`);
+	const Out = await Run4.Listeners["tools/post-execute"](
+		Exec(Name),
+		Result,
+		async () => Decision,
+	);
+	Check(
+		Out === Decision,
+		`exempt tool '${Name}' passes through byte-identical (no marker, no store)`,
+	);
 }
 Check(
 	!Run4.Lines.some((L) => L.includes("compressed") || L.includes("stored")),
@@ -521,8 +558,16 @@ const Run5b = Make(Validate({ logFile: Ledger, storeBudgetBytes: 5000 }));
 	const A = TextBlock(TerminalText("a".repeat(80), 40)); // ~3.5KB serialized
 	const B = TextBlock(TerminalText("b".repeat(80), 40));
 	const ExecBash = Exec("bash");
-	await Run5b.Listeners["tools/post-execute"](ExecBash, { isError: false, value: {}, content: A }, NextAccept);
-	await Run5b.Listeners["tools/post-execute"](ExecBash, { isError: false, value: {}, content: B }, NextAccept);
+	await Run5b.Listeners["tools/post-execute"](
+		ExecBash,
+		{ isError: false, value: {}, content: A },
+		NextAccept,
+	);
+	await Run5b.Listeners["tools/post-execute"](
+		ExecBash,
+		{ isError: false, value: {}, content: B },
+		NextAccept,
+	);
 	const HashA = HashOf(A);
 	const HashB = HashOf(B);
 	Check(
@@ -535,10 +580,14 @@ const Run5b = Make(Validate({ logFile: Ledger, storeBudgetBytes: 5000 }));
 	} catch (E) {
 		GoneError = E;
 	}
-	Check(GoneError !== null && /not in the store/.test(GoneError.message), "the evicted entry is gone (unknown hash)");
+	Check(
+		GoneError !== null && /not in the store/.test(GoneError.message),
+		"the evicted entry is gone (unknown hash)",
+	);
 	const Kept = await Run5b.Registered[0].execute({ hash: HashB }, Exec("ccr_retrieve"));
 	Check(
-		Kept.text === `${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"b".repeat(80)}`).join("\n")}`,
+		Kept.text ===
+			`${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"b".repeat(80)}`).join("\n")}`,
 		"the surviving entry is still retrievable with the ORIGINAL bytes",
 	);
 }
@@ -550,8 +599,15 @@ const Run6 = Make(Validate({ autoExpand: false, logFile: Ledger }));
 	const Content = TextBlock(PlainText(5000));
 	const Failure = { isError: true, error: { message: "boom" }, content: Content };
 	const Decision = { kind: "accept" };
-	const Out = await Run6.Listeners["tools/post-execute"](Exec("bash"), Failure, async () => Decision);
-	Check(Out === Decision, "a failing result passes through byte-identical with compressFailures=false");
+	const Out = await Run6.Listeners["tools/post-execute"](
+		Exec("bash"),
+		Failure,
+		async () => Decision,
+	);
+	Check(
+		Out === Decision,
+		"a failing result passes through byte-identical with compressFailures=false",
+	);
 	// A value-carrying decision is canonical - never replaced.
 	const ValueDecision = { kind: "accept", value: { ok: true } };
 	const Out2 = await Run6.Listeners["tools/post-execute"](
@@ -559,7 +615,10 @@ const Run6 = Make(Validate({ autoExpand: false, logFile: Ledger }));
 		{ isError: false, value: { ok: true }, content: TextBlock(PlainText(5000)) },
 		async () => ValueDecision,
 	);
-	Check(Out2 === ValueDecision, "a value-carrying accepted decision passes through (content is never replaced)");
+	Check(
+		Out2 === ValueDecision,
+		"a value-carrying accepted decision passes through (content is never replaced)",
+	);
 	// A block decision passes through untouched.
 	const BlockDecision = { kind: "block", feedback: [{ type: "text", text: "no" }] };
 	const Out3 = await Run6.Listeners["tools/post-execute"](
@@ -643,7 +702,10 @@ const Run7 = Make(
 			{ isError: false, value: {}, content: Content },
 			async () => Decision,
 		);
-		Check(Out === Decision, `'${Name}' at 3000 bytes stays UNDER its ×2 gate (4096) - multiplier respected`);
+		Check(
+			Out === Decision,
+			`'${Name}' at 3000 bytes stays UNDER its ×2 gate (4096) - multiplier respected`,
+		);
 	}
 	// The shape fallback for a non-table target name: JSON → 'json', text → 'default'.
 	const JsonText = JSON.stringify({ key: "v".repeat(2900) });
@@ -723,11 +785,15 @@ const Run8 = Make(Validate({ autoExpand: false, logFile: Ledger }));
 await new Promise((R) => setTimeout(R, 10));
 const Log1 = existsSync(Ledger) ? readFileSync(Ledger, "utf8") : "";
 Check(
-	Log1.split("\n").some((L) => /^\[[^\]]+\] activated \(bundle 0\.0\.1, targets 8, budget 268435456\)$/.test(L)),
+	Log1.split("\n").some((L) =>
+		/^\[[^\]]+\] activated \(bundle 0\.0\.1, targets 8, budget 268435456\)$/.test(L),
+	),
 	"the durable ledger file: '[ISO] activated (bundle 0.0.1, targets 8, budget 268435456)' (the file form has no module prefix)",
 );
 Check(
-	Log1.split("\n").some((L) => /^\[[^\]]+\] compressed bash terminal \d+ -> [0-9a-f]{24}$/.test(L)),
+	Log1.split("\n").some((L) =>
+		/^\[[^\]]+\] compressed bash terminal \d+ -> [0-9a-f]{24}$/.test(L),
+	),
 	"the durable ledger file: '[ISO] compressed bash terminal <bytes> -> <hash>'",
 );
 
@@ -737,7 +803,11 @@ const Run9 = Make(Validate({ logFile: Ledger, journalPath: Journal }));
 {
 	Check(Run9.State.Store.Path === Journal, "journalPath is wired into the store");
 	const Content = TextBlock(TerminalText("j".repeat(80), 40));
-	await Run9.Listeners["tools/post-execute"](Exec("bash"), { isError: false, value: {}, content: Content }, NextAccept);
+	await Run9.Listeners["tools/post-execute"](
+		Exec("bash"),
+		{ isError: false, value: {}, content: Content },
+		NextAccept,
+	);
 	const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
 	Check(Lines.length === 1, "the journal: exactly one JSONL record after one store");
 	const Record = Lines.length > 0 ? JSON.parse(Lines[0]) : undefined;
@@ -770,9 +840,19 @@ const Run9 = Make(Validate({ logFile: Ledger, journalPath: Journal }));
 	// The "restart": a fresh apply over the same journal file loads + compacts.
 	const Run9b = Make(Validate({ logFile: Ledger, journalPath: Journal }));
 	const Surviving = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
-	Check(Surviving.length === 1, "boot compaction: the corrupt and expired records are dropped, one survives");
-	const Retrieved = await Run9b.Registered[0].execute({ hash: HashOf(Content) }, Exec("ccr_retrieve"));
-	Check(Retrieved.text === `${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"j".repeat(80)}`).join("\n")}`, "the journal survives the fake restart: the entry is retrievable again");
+	Check(
+		Surviving.length === 1,
+		"boot compaction: the corrupt and expired records are dropped, one survives",
+	);
+	const Retrieved = await Run9b.Registered[0].execute(
+		{ hash: HashOf(Content) },
+		Exec("ccr_retrieve"),
+	);
+	Check(
+		Retrieved.text ===
+			`${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"j".repeat(80)}`).join("\n")}`,
+		"the journal survives the fake restart: the entry is retrievable again",
+	);
 }
 
 // ---------- Run 9b (additive): the journal's boot-compaction edges ----------
@@ -833,7 +913,8 @@ const Run10 = Make(Validate({ logFile: Ledger }));
 		"engine flag OFF (default): no engine runtime is built",
 	);
 	Check(
-		Object.keys(Run10.Listeners).length === 2 && Run10.Listeners["agent/pre-step"] === undefined,
+		Object.keys(Run10.Listeners).length === 2 &&
+			Run10.Listeners["agent/pre-step"] === undefined,
 		"engine flag OFF: NO agent/pre-step listener is registered (the engine's no-op posture; the extra listener is the State builder's P10 volatile-update refresh)",
 	);
 	// Post-execute traffic leaves no engine traces: no observation, no lines.
@@ -861,7 +942,9 @@ rm();
 	);
 	Check(ThresholdBytes(10000, 30) === 3000, "ThresholdBytes: 30% of 10000 = 3000");
 	Check(
-		ThresholdBytes(10000, 0) === 0 && Decide([{ turn: 1, name: "bash", isError: false, size: 5 }], 9, 10000, 0, 2, 4) === undefined,
+		ThresholdBytes(10000, 0) === 0 &&
+			Decide([{ turn: 1, name: "bash", isError: false, size: 5 }], 9, 10000, 0, 2, 4) ===
+				undefined,
 		"ThresholdBytes: 0% yields a zero limit and Decide never crosses it",
 	);
 	// The protect windows: first-2 head, last-4 tail relative to CurrentTurn.
@@ -878,7 +961,13 @@ rm();
 		JSON.stringify(Eligible([Turn3], 6, 2, 4)) === "[]",
 		"Eligible: a record inside the last-4 window (turn 3 at CurrentTurn 6) is protected",
 	);
-	const Turn4Current = { turn: 4, name: "bash", isError: false, size: 10, content: TextBlock("c") };
+	const Turn4Current = {
+		turn: 4,
+		name: "bash",
+		isError: false,
+		size: 10,
+		content: TextBlock("c"),
+	};
 	Check(
 		JSON.stringify(Eligible([Turn4Current], 4, 2, 4)) === "[]",
 		"Eligible: the current turn itself sits inside the last-4 window and is never eligible",
@@ -896,7 +985,10 @@ rm();
 		Plan !== undefined && Plan.archive.length === 2,
 		"Decide: the crossing archives the MIDDLE records only (turns 3,4 of 3,4,9)",
 	);
-	Check(Plan !== undefined && Plan.bytes === 3000, "Decide: the archived bytes are the middle records' sizes");
+	Check(
+		Plan !== undefined && Plan.bytes === 3000,
+		"Decide: the archived bytes are the middle records' sizes",
+	);
 	Check(
 		Plan !== undefined && Plan.archive.every((R) => R.turn !== 9),
 		"Decide: the last-4 turn stays protected",
@@ -905,9 +997,7 @@ rm();
 
 // ---------- Run 12 (additive): the context engine flag ON - end to end ----------
 rm();
-const Run12 = Make(
-	Validate({ contextEngine: true, logFile: Ledger, storeBudgetBytes: 10000 }),
-);
+const Run12 = Make(Validate({ contextEngine: true, logFile: Ledger, storeBudgetBytes: 10000 }));
 {
 	// Threshold: 30% of 10000 = 3000 bytes; autoExpand stays on (default).
 	const Pre = Run12.Listeners["agent/pre-step"];
@@ -934,7 +1024,10 @@ const Run12 = Make(
 	const ExecBash = Exec("bash");
 	// pre-step turn 1: nothing observed yet; the decision passes through.
 	const Out1 = await PreCall(1);
-	Check(Out1 !== undefined && Out1.kind === "accept", "pre-step: the downstream decision is returned unchanged");
+	Check(
+		Out1 !== undefined && Out1.kind === "accept",
+		"pre-step: the downstream decision is returned unchanged",
+	);
 	Check(EngineLines().length === 0, "pre-step turn 1: no archive, no engine line");
 	// post-execute at turn 1: a small pass-through (content record).
 	const Small = TextBlock(PlainText(1800)); // ~1825 serialized bytes: under the 2048 gate
@@ -995,7 +1088,10 @@ const Run12 = Make(
 	// pre-step turn 8: CurrentTurn 7 -> eligible = turns >2 and <=3 -> the two
 	// turn-3 records archive; the head-protected turn-1 record stays.
 	const Out8 = await PreCall(8);
-	Check(Out8 !== undefined && Out8.kind === "accept", "pre-step turn 8: the decision still passes through");
+	Check(
+		Out8 !== undefined && Out8.kind === "accept",
+		"pre-step turn 8: the decision still passes through",
+	);
 	const Lines8 = EngineLines();
 	Check(
 		Lines8.length === 1 && Lines8[0] === "ccr: engine archived 2 results",

@@ -37,9 +37,7 @@ export interface CoachNotes {
 
 /** The result of one Detect pass over a judged terminal call. */
 export type Detection =
-	| { kind: "offense"; match: Match }
-	| { kind: "exempt"; pattern: string }
-	| null;
+	{ kind: "offense"; match: Match } | { kind: "exempt"; pattern: string } | null;
 
 /** One fetched (or static) tool entry: first-sentence description + key param. */
 export interface ToolEntry {

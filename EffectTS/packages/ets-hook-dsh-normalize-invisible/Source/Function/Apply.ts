@@ -142,7 +142,7 @@ export default (Context: Context, Options: Config): void => {
 		Activate([
 			["replacement", State.Replacement],
 			["reasoning", State.Reasoning ? "on" : "off"],
-			["toolArgs", (State.ToolArgs || State.Scopes?.toolInput === true) ? "on" : "off"],
+			["toolArgs", State.ToolArgs || State.Scopes?.toolInput === true ? "on" : "off"],
 			["logFile", State.Ledger],
 		]),
 	);
@@ -197,7 +197,6 @@ export default (Context: Context, Options: Config): void => {
 		),
 	);
 
-
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,
 	// PREPENDED: the family's bundle order places the ccr hook before the
@@ -209,12 +208,10 @@ export default (Context: Context, Options: Config): void => {
 	// (off -> the downstream decision passes untouched), so their listeners
 	// must exist even while their scopes are off: a scope flipped on later
 	// lands through the P10 volatile-refresh without any re-registration.
-	// 
-	Context.on(
-		"tools/post-execute",
-		(Exec, Result, Next) => Overpass(Exec, Result, Next, State),
-		{ prepend: true },
-	);
+	//
+	Context.on("tools/post-execute", (Exec, Result, Next) => Overpass(Exec, Result, Next, State), {
+		prepend: true,
+	});
 	Context.on("agent/pre-step", (Payload, Next) => StepBatch(Payload, Next, State));
 
 	// THE HUMAN COMMAND (`normalize-overpass`, the plan's §5): registered

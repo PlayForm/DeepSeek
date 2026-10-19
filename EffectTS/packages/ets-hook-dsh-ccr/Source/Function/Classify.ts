@@ -29,9 +29,7 @@ import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 // joined; non-text blocks fall through to their JSON projection). Shared by
 // the classifier's shape fallback and the preview builders.
 export const Text = (Content: ContentBlock[]): string => {
-	const Parts = Content.filter((Block) => Block.type === "text").map(
-		(Block) => Block.text,
-	);
+	const Parts = Content.filter((Block) => Block.type === "text").map((Block) => Block.text);
 	switch (true) {
 		case Parts.length > 0:
 			return Parts.join("\n");

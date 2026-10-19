@@ -53,11 +53,7 @@
 // Pure per call: no module-level state - two concurrent dispatches share
 // nothing, and an HMR reload rebinds the closure cleanly.
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type {
-	PostToolDecision,
-	ToolExecution,
-	ToolExecutionResult,
-} from "@deepseek-ai/dsh-tools";
+import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
 import { Rewrite } from "./Normalize.js";
 import type State from "@Interface/State.js";
 

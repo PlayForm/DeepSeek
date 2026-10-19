@@ -15,8 +15,16 @@ import { rmSync, readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import Coach from "../packages/ets-hook-dsh-tool-coach/Target/Library.js";
 import Detect from "../packages/ets-hook-dsh-tool-coach/Target/Function/Detect.js";
-import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../packages/ets-hook-dsh-tool-coach/Target/Variable/Patterns.js";
-import { NOTE_FIRST, NOTE_PERSISTENT, NOTE_DENIED, STATIC_TOOL_LINES } from "../packages/ets-hook-dsh-tool-coach/Target/Variable/Notes.js";
+import {
+	DEFAULT_EXEMPTS,
+	DEFAULT_PATTERNS,
+} from "../packages/ets-hook-dsh-tool-coach/Target/Variable/Patterns.js";
+import {
+	NOTE_FIRST,
+	NOTE_PERSISTENT,
+	NOTE_DENIED,
+	STATIC_TOOL_LINES,
+} from "../packages/ets-hook-dsh-tool-coach/Target/Variable/Notes.js";
 import FactoryClass from "../packages/ets-plugin-dsh-factory/Target/Library.js";
 
 // ---- TRACING MODE setup (the OPT-IN knob, before ANY shell is built) -----
@@ -187,13 +195,25 @@ const Agent = (Id) => ({ id: Id });
 const AgentA = Agent("agent-a");
 const Post = (Run, Command, Who = AgentA, Name = "bash") =>
 	Run.Listeners["tools/post-execute"](
-		{ callId: "call_smoke", name: Name, arguments: { command: Command }, agent: Who, signal: undefined },
+		{
+			callId: "call_smoke",
+			name: Name,
+			arguments: { command: Command },
+			agent: Who,
+			signal: undefined,
+		},
 		{ isError: false, value: "", content: [] },
 		async () => ACCEPT,
 	);
 const Pre = (Run, Command, Who = AgentA, Name = "bash") =>
 	Run.Listeners["tools/pre-execute"](
-		{ callId: "call_smoke", name: Name, arguments: { command: Command }, agent: Who, signal: undefined },
+		{
+			callId: "call_smoke",
+			name: Name,
+			arguments: { command: Command },
+			agent: Who,
+			signal: undefined,
+		},
 		async () => ALLOW,
 	);
 const Assemble = async (Run, Who = AgentA) => {
@@ -215,7 +235,10 @@ const Raw1 = Validate({ logFile: Ledger });
 Check(typeof Raw1.log.get === "function", "volatile cell: log arrives as { get }");
 Check(typeof Raw1.enabled.get === "function", "volatile cell: enabled arrives as { get }");
 Check(typeof Raw1.fetchLive.get === "function", "volatile cell: fetchLive arrives as { get }");
-Check(typeof Raw1.notes.get === "function", "volatile cell: notes arrives as { get } (object cell)");
+Check(
+	typeof Raw1.notes.get === "function",
+	"volatile cell: notes arrives as { get } (object cell)",
+);
 Check(Raw1.threshold.get() === 3, "config default threshold=3");
 Check(Raw1.window.get() === 8, "config default window=8");
 Check(Raw1.cooldown.get() === 10, "config default cooldown=10");
@@ -246,9 +269,13 @@ Check(
 const Run1 = Make(Raw1);
 Check(Run1.Returned === undefined, "apply returns NOTHING (the loader contract)");
 Check(
-	["tools/post-execute", "tools/pre-execute", "agent/pre-step", "system-prompt/assemble", "tools/change"].every(
-		(Name) => typeof Run1.Listeners[Name] === "function",
-	),
+	[
+		"tools/post-execute",
+		"tools/pre-execute",
+		"agent/pre-step",
+		"system-prompt/assemble",
+		"tools/change",
+	].every((Name) => typeof Run1.Listeners[Name] === "function"),
 	"all FIVE coaching listeners are registered",
 );
 Check(
@@ -273,7 +300,10 @@ Check(
 	JSON.stringify(Coach.inject) === JSON.stringify(["pluginFactory", "tools"]),
 	"inject = [pluginFactory, tools]",
 );
-Check(Run1.State.Module === "hook-dsh-tool-coach", "state module = hook-dsh-tool-coach (the ledger prefix)");
+Check(
+	Run1.State.Module === "hook-dsh-tool-coach",
+	"state module = hook-dsh-tool-coach (the ledger prefix)",
+);
 Check(Run1.State.Factory === Furnace, "state carries the REAL factory instance");
 Check(Run1.State.On === true, "volatile unwrap: enabled cell -> State.On=true");
 Check(Run1.State.Threshold === 3, "volatile unwrap: threshold cell -> State.Threshold=3");
@@ -285,9 +315,10 @@ Check(
 	"activation ledger line byte-exact",
 );
 Check(
-	existsSync(Ledger) && readFileSync(Ledger, "utf8").includes(
-		"] activated (bundle 0.0.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
-	),
+	existsSync(Ledger) &&
+		readFileSync(Ledger, "utf8").includes(
+			"] activated (bundle 0.0.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
+		),
 	"the durable ledger file carries the [ISO] activation line",
 );
 
@@ -296,7 +327,18 @@ Check(
 // -----------------------------------------------------------------------
 rm();
 const RunR1 = Make(Validate({ logFile: Ledger }));
-const Legit = ["git status", "pnpm build", "node x.js", "ls", "rm -rf build", "python script.py", "make", "docker ps", "echo hello", "true"];
+const Legit = [
+	"git status",
+	"pnpm build",
+	"node x.js",
+	"ls",
+	"rm -rf build",
+	"python script.py",
+	"make",
+	"docker ps",
+	"echo hello",
+	"true",
+];
 let R1Passthrough = true;
 for (const Command of Legit) {
 	const Out = await Post(RunR1, Command);
@@ -305,8 +347,10 @@ for (const Command of Legit) {
 	}
 }
 Check(R1Passthrough, "R1: all 10 legitimate calls pass through with NO additionalContexts");
-Check(RunR1.Lines.filter((L) => L.startsWith("hook-dsh-tool-coach: activated")).length === 1,
-	"R1: the only ledger line is the activation");
+Check(
+	RunR1.Lines.filter((L) => L.startsWith("hook-dsh-tool-coach: activated")).length === 1,
+	"R1: the only ledger line is the activation",
+);
 Check(RunR1.Warns.length === 0, "R1: no warnings (no listener ever throws)");
 
 // -----------------------------------------------------------------------
@@ -329,13 +373,25 @@ Check(
 	LinesWith(RunR2, `: offense bash write ${SED_ROW}`).length === 1,
 	"R2: one offense line for the write-class sed -i, byte-exact pattern",
 );
-Check(LinesWith(RunR2, ": strike ").length === 0, "R2: no note below the threshold (mixed classes, read at 2)");
+Check(
+	LinesWith(RunR2, ": strike ").length === 0,
+	"R2: no note below the threshold (mixed classes, read at 2)",
+);
 const R2Out = await RunR2.Listeners["tools/post-execute"](
-	{ callId: "call_smoke", name: "bash", arguments: { command: "cat a.md" }, agent: AgentR2, signal: undefined },
+	{
+		callId: "call_smoke",
+		name: "bash",
+		arguments: { command: "cat a.md" },
+		agent: AgentR2,
+		signal: undefined,
+	},
 	{ isError: false, value: "", content: [] },
 	async () => ACCEPT,
 );
-Check(R2Out !== ACCEPT && R2Out.kind === "accept", "R2: the 4th read offense returns a NEW decision");
+Check(
+	R2Out !== ACCEPT && R2Out.kind === "accept",
+	"R2: the 4th read offense returns a NEW decision",
+);
 Check(
 	JSON.stringify(R2Out.additionalContexts?.[0]?.source) ===
 		JSON.stringify({ kind: "tool-coach", form: "notice", summary: "bash read × 4" }),
@@ -357,7 +413,8 @@ Check(
 	"R2: the strike ledger line is byte-exact: 'strike 4/3 bash read -> note read'",
 );
 Check(
-	existsSync(Ledger) && readFileSync(Ledger, "utf8").includes(`] strike 4/3 bash read -> note read`),
+	existsSync(Ledger) &&
+		readFileSync(Ledger, "utf8").includes(`] strike 4/3 bash read -> note read`),
 	"the durable ledger file carries the [ISO] strike line",
 );
 
@@ -420,14 +477,19 @@ Check(
 );
 const Before = await Assemble(RunR4, AgentR4);
 Check(Before.sections.length === 2, "R4: the assembled sections are base + the coach's");
-Check(Before.sections[0].name === "base" && Before.sections[0].text === "BASE", "R4: the base section untouched");
+Check(
+	Before.sections[0].name === "base" && Before.sections[0].text === "BASE",
+	"R4: the base section untouched",
+);
 Check(Before.sections[1].name === "hook-dsh-tool-coach", "R4: the appended section is the coach's");
 Check(
 	Before.sections[1].text.startsWith("Tool discipline (persistent, from tool-coach):"),
 	"R4: the section text starts with the verbatim heading",
 );
-Check(Before.contexts.length === 1 && Before.variables.v === "1" && Before.tools.length === 1,
-	"R4: contexts, tools and variables are DEEP-EQUAL untouched (PTC + structured-output preserved)");
+Check(
+	Before.contexts.length === 1 && Before.variables.v === "1" && Before.tools.length === 1,
+	"R4: contexts, tools and variables are DEEP-EQUAL untouched (PTC + structured-output preserved)",
+);
 Check(
 	Before.sections[1].text.includes(
 		'- NEVER read file content through the terminal: "cat a.md-style" commands',
@@ -444,10 +506,15 @@ Check(
 const Table = Before.sections[1].text.split("| tool | purpose |")[1] ?? "";
 const Rows_ = Table.split("\n").filter((Row) => Row.startsWith("| ") && !Row.startsWith("| ---"));
 Check(Rows_.length === 8, "R4: the tool table has exactly maxSectionTools (8) rows");
-Check(Rows_[0] === "| edit | Edit an existing UTF-8 text file by replacing literal text. |",
-	"R4: the first row is the write-class mapped tool (edit), live description");
-Check(Rows_[2] === "| read | Read a UTF-8 text file (live fixture) and return line-numbered content. |",
-	"R4: the third row is the read-class mapped tool with the LIVE description");
+Check(
+	Rows_[0] === "| edit | Edit an existing UTF-8 text file by replacing literal text. |",
+	"R4: the first row is the write-class mapped tool (edit), live description",
+);
+Check(
+	Rows_[2] ===
+		"| read | Read a UTF-8 text file (live fixture) and return line-numbered content. |",
+	"R4: the third row is the read-class mapped tool with the LIVE description",
+);
 Check(
 	!Rows_.some((Row) => Row.includes("zzz_fixture")),
 	"R4: the cap holds - with 11 mapped tools the 8 rows are all mapped (the top-up appears in D3b)",
@@ -527,11 +594,19 @@ Check(
 rm();
 const RunR6 = Make(Validate({ logFile: Ledger }));
 const AgentR6 = Agent("agent-r6");
-for (const Command of ["rm -rf build", "git commit -m x", "cp a b", "echo hi", "python script.py"]) {
+for (const Command of [
+	"rm -rf build",
+	"git commit -m x",
+	"cp a b",
+	"echo hi",
+	"python script.py",
+]) {
 	await Post(RunR6, Command, AgentR6);
 }
-Check(RunR6.Lines.every((L) => !L.includes(": offense") && !L.includes(": exempt")),
-	"R6: rm/git commit/cp/echo/python script.py write NO lines (not even exempt)");
+Check(
+	RunR6.Lines.every((L) => !L.includes(": offense") && !L.includes(": exempt")),
+	"R6: rm/git commit/cp/echo/python script.py write NO lines (not even exempt)",
+);
 await Post(RunR6, "cat f.json | jq", AgentR6);
 Check(
 	LinesWith(RunR6, `: exempt bash ${JQ_EXEMPT}`).length === 1,
@@ -557,7 +632,10 @@ Check(
 	R6offOut === ACCEPT,
 	"R6: enabled=false - every listener returns next() untouched (full passthrough)",
 );
-Check(RunR6off.Lines.every((L) => !L.includes(": offense")), "R6: enabled=false writes no offense lines");
+Check(
+	RunR6off.Lines.every((L) => !L.includes(": offense")),
+	"R6: enabled=false writes no offense lines",
+);
 rm();
 const RunR6n0 = Make(Validate({ logFile: Ledger, patternTable: [] }));
 const R6n0Out = await Post(RunR6n0, "cat a.md", Agent("agent-r6-n0"));
@@ -565,7 +643,10 @@ Check(
 	R6n0Out.kind === "accept" && R6n0Out.additionalContexts === undefined,
 	"R6: an emptied pattern table = N=0 passthrough",
 );
-Check(RunR6n0.Lines.every((L) => !L.includes(": offense")), "R6: N=0 writes no offense lines");
+Check(
+	RunR6n0.Lines.every((L) => !L.includes(": offense")),
+	"R6: N=0 writes no offense lines",
+);
 
 // -----------------------------------------------------------------------
 // D2: the fetch failure - schemas() throws, the note degrades to the static
@@ -610,7 +691,9 @@ for (let Index = 0; Index < 9; Index += 1) {
 }
 const D3Assembly = await Assemble(RunD3, AgentD3);
 const D3Table = D3Assembly.sections[1].text.split("| tool | purpose |")[1] ?? "";
-const D3Rows = D3Table.split("\n").filter((Row) => Row.startsWith("| ") && !Row.startsWith("| ---"));
+const D3Rows = D3Table.split("\n").filter(
+	(Row) => Row.startsWith("| ") && !Row.startsWith("| ---"),
+);
 Check(D3Rows.length === 3, "D3: exactly maxSectionTools (3) rows");
 Check(
 	JSON.stringify(D3Rows.map((Row) => Row.split(" | ")[0].slice(2))) ===
@@ -719,8 +802,16 @@ RawD5.fetchLive = { get: () => true };
 RawD5.maxSectionTools = { get: () => 24 };
 RawD5.threshold = { get: () => 2 };
 RawD5.enabled = { get: () => true };
-RunD5.Listeners["loader/volatile-update"]([["fetchLive"], ["maxSectionTools"], ["threshold"], ["enabled"]]);
-Check(RunD5.State.FetchLive === true, "D5: the fetchLive flip lands on the State without a remount");
+RunD5.Listeners["loader/volatile-update"]([
+	["fetchLive"],
+	["maxSectionTools"],
+	["threshold"],
+	["enabled"],
+]);
+Check(
+	RunD5.State.FetchLive === true,
+	"D5: the fetchLive flip lands on the State without a remount",
+);
 // The flipped fetchLive needs a working registry fixture again.
 RunD5.Context.tools = { schemas: LiveSchemas };
 Check(RunD5.State.MaxSectionTools === 24, "D5: the maxSectionTools flip lands on the State");
@@ -737,7 +828,6 @@ Check(
 	"D5: the flipped threshold=2 is picked up too (byte-exact strike line)",
 );
 
-
 // -----------------------------------------------------------------------
 // The craft library (plan §2.7c): every obfuscated variant classifies
 // correctly, including the catch-all and the exemption rows.
@@ -748,7 +838,9 @@ const Expect = (Command, Kind, Cls) => {
 	Check(
 		Kind === "none"
 			? R === null
-			: R !== null && R.kind === Kind && (Cls === undefined || (Kind === "offense" ? R.match.class === Cls : true)),
+			: R !== null &&
+					R.kind === Kind &&
+					(Cls === undefined || (Kind === "offense" ? R.match.class === Cls : true)),
 		`craft: ${JSON.stringify(Command)} -> ${Kind}${Cls ? `/${Cls}` : ""}`,
 	);
 };
@@ -780,7 +872,10 @@ const FailOpenOut = await RunR1.Listeners["tools/post-execute"](
 	{ isError: false, value: "", content: [] },
 	async () => ACCEPT,
 );
-Check(FailOpenOut === ACCEPT, "a malformed (cyclic) payload returns the downstream decision unchanged");
+Check(
+	FailOpenOut === ACCEPT,
+	"a malformed (cyclic) payload returns the downstream decision unchanged",
+);
 Check(
 	RunR1.Warns.some((W) => W.startsWith("hook-dsh-tool-coach: ")),
 	"the fail-open envelope logs a prefixed warning instead of throwing",
@@ -797,7 +892,11 @@ Check(
 );
 Threw = null;
 try {
-	Make(Validate({ patternTable: [...DEFAULT_PATTERNS, { pattern: CAT_ROW, class: "read", tool: "read" }] }));
+	Make(
+		Validate({
+			patternTable: [...DEFAULT_PATTERNS, { pattern: CAT_ROW, class: "read", tool: "read" }],
+		}),
+	);
 } catch (Error) {
 	Threw = Error;
 }
@@ -812,7 +911,8 @@ try {
 	Threw = Error;
 }
 Check(
-	Threw !== null && Threw.message === "hook-dsh-tool-coach: maxSectionTools must be between 1 and 24",
+	Threw !== null &&
+		Threw.message === "hook-dsh-tool-coach: maxSectionTools must be between 1 and 24",
 	"fail-loud validation: maxSectionTools outside 1-24 is rejected",
 );
 
@@ -821,7 +921,10 @@ rm();
 const RunNJ = Make(Validate({ logFile: Ledger }));
 await Post(RunNJ, "cat a.md", Agent("agent-nj"), "read");
 await Post(RunNJ, "sed -i s/x/y/ f", Agent("agent-nj"), "write");
-Check(RunNJ.Lines.every((L) => !L.includes(": offense")), "the dedicated tools are never judged (read/write calls)");
+Check(
+	RunNJ.Lines.every((L) => !L.includes(": offense")),
+	"the dedicated tools are never judged (read/write calls)",
+);
 
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);

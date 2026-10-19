@@ -240,7 +240,9 @@ export default (Context: Context, Options: Config): void => {
 	// fetch-failure line is ever logged.
 	const Catalog = () =>
 		State.FetchLive
-			? Fetch(Context.tools as ToolsService, (Message: string) => Factory.Append(State, Message))
+			? Fetch(Context.tools as ToolsService, (Message: string) =>
+					Factory.Append(State, Message),
+				)
 			: StaticCatalog();
 
 	// Whether a call is judged: only the configured terminal tools.
@@ -360,10 +362,16 @@ export default (Context: Context, Options: Config): void => {
 					);
 				}
 				if (Decision.tier2On) {
-					Factory.Append(State, `escalated persistent section (${Decision.strikes} strikes)`);
+					Factory.Append(
+						State,
+						`escalated persistent section (${Decision.strikes} strikes)`,
+					);
 				}
 				if (Decision.tier2Off) {
-					Factory.Append(State, `persistent section cleared (${State.Clean} clean calls)`);
+					Factory.Append(
+						State,
+						`persistent section cleared (${State.Clean} clean calls)`,
+					);
 				}
 				return Downstream;
 			} catch (Error) {
@@ -428,7 +436,9 @@ export default (Context: Context, Options: Config): void => {
 			} catch (Error) {
 				// Fail-open: a broken deny must never break the call either.
 				try {
-					Context.logger?.warn(`hook-dsh-tool-coach: ${String(Error)}; the call is allowed`);
+					Context.logger?.warn(
+						`hook-dsh-tool-coach: ${String(Error)}; the call is allowed`,
+					);
 				} catch {
 					/* logger optional */
 				}
@@ -443,32 +453,41 @@ export default (Context: Context, Options: Config): void => {
 	// agent's counters, while the tier-2 section (and its cache) persist -
 	// its exit condition is the clean window, not the conversation boundary.
 	// ------------------------------------------------------------------
-	Context.on(
-		"agent/pre-step",
-		async (Payload, Next) => {
-			// next() FIRST: the downstream listeners settle before any decision.
-			const Downstream = await Next();
-			try {
-				const Step = Payload as { agent?: unknown; messages?: { source?: { kind?: string } }[] };
-				if (Array.isArray(Step.messages) && Step.messages.some((M) => M?.source?.kind === "user")) {
-					const AgentState = Agent(Step.agent);
-					AgentState.window = [];
-					AgentState.sinceNote = Number.MAX_SAFE_INTEGER;
-					AgentState.strikesSinceNote = 0;
-					AgentState.classStrikes = { write: 0, read: 0, search: 0, discovery: 0, control: 0 };
-					AgentState.sinceClean = 0;
-				}
-			} catch (Error) {
-				// Fail-open: the reset never breaks a step.
-				try {
-					Context.logger?.warn(`hook-dsh-tool-coach: ${String(Error)}; the reset is skipped`);
-				} catch {
-					/* logger optional */
-				}
+	Context.on("agent/pre-step", async (Payload, Next) => {
+		// next() FIRST: the downstream listeners settle before any decision.
+		const Downstream = await Next();
+		try {
+			const Step = Payload as {
+				agent?: unknown;
+				messages?: { source?: { kind?: string } }[];
+			};
+			if (
+				Array.isArray(Step.messages) &&
+				Step.messages.some((M) => M?.source?.kind === "user")
+			) {
+				const AgentState = Agent(Step.agent);
+				AgentState.window = [];
+				AgentState.sinceNote = Number.MAX_SAFE_INTEGER;
+				AgentState.strikesSinceNote = 0;
+				AgentState.classStrikes = {
+					write: 0,
+					read: 0,
+					search: 0,
+					discovery: 0,
+					control: 0,
+				};
+				AgentState.sinceClean = 0;
 			}
-			return Downstream;
-		},
-	);
+		} catch (Error) {
+			// Fail-open: the reset never breaks a step.
+			try {
+				Context.logger?.warn(`hook-dsh-tool-coach: ${String(Error)}; the reset is skipped`);
+			} catch {
+				/* logger optional */
+			}
+		}
+		return Downstream;
+	});
 
 	// ------------------------------------------------------------------
 	// Listener 4: system-prompt/assemble (the tier-2 persistent section).
@@ -525,7 +544,9 @@ export default (Context: Context, Options: Config): void => {
 			} catch (Error) {
 				// Fail-open: the section never breaks an assembly.
 				try {
-					Context.logger?.warn(`hook-dsh-tool-coach: ${String(Error)}; the assembly passes through`);
+					Context.logger?.warn(
+						`hook-dsh-tool-coach: ${String(Error)}; the assembly passes through`,
+					);
 				} catch {
 					/* logger optional */
 				}

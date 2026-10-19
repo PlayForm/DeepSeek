@@ -43,13 +43,25 @@ export default Compose(false, {
 	// The target allow-list: tools whose oversized results are compressed (the
 	// terminal/search/fetch family). Structural: remounts on edit.
 	targets: Schema.array(String).default([
-		"bash", "glob", "grep", "read", "web_fetch", "web_search", "list", "search",
+		"bash",
+		"glob",
+		"grep",
+		"read",
+		"web_fetch",
+		"web_search",
+		"list",
+		"search",
 	]),
 	// The exemption list: never compressed (execution-critical mutators and
 	// their own echo, the plugin's own retrieval tool, another agent's brief,
 	// a user gate). Structural: remounts on edit.
 	exempt: Schema.array(String).default([
-		"write", "edit", "raw-write", "subagent", "ask_user_question", "ccr_retrieve",
+		"write",
+		"edit",
+		"raw-write",
+		"subagent",
+		"ask_user_question",
+		"ccr_retrieve",
 	]),
 	// The one byte gate for all tools (volatile: hot-editable).
 	thresholdBytes: Schema.number().default(2048).volatile(),
@@ -68,10 +80,14 @@ export default Compose(false, {
 	// are high-signal and compress late (x8); grep/paths/web compress early
 	// (x2); the rest at parity (x1).
 	multipliers: Schema.object({
-		terminal: Schema.number().default(1), error: Schema.number().default(8),
-		grep: Schema.number().default(2), paths: Schema.number().default(2),
-		file: Schema.number().default(1), json: Schema.number().default(1),
-		web: Schema.number().default(2), default: Schema.number().default(1),
+		terminal: Schema.number().default(1),
+		error: Schema.number().default(8),
+		grep: Schema.number().default(2),
+		paths: Schema.number().default(2),
+		file: Schema.number().default(1),
+		json: Schema.number().default(1),
+		web: Schema.number().default(2),
+		default: Schema.number().default(1),
 	}).volatile(),
 	// Hard character cap on every preview line (volatile: hot-editable).
 	previewMaxChars: Schema.number().default(240).volatile(),

@@ -31,10 +31,7 @@ const Entry = (Catalog: ToolCatalog, Name: string): ToolEntry => {
 };
 
 /** Single-pass template fill (no re-scanning of inserted values). */
-export const Fill = (
-	Template: string,
-	Values: Record<string, string | number>,
-): string => {
+export const Fill = (Template: string, Values: Record<string, string | number>): string => {
 	let Output = "";
 	let Index = 0;
 	while (Index < Template.length) {
@@ -74,18 +71,12 @@ const Values = (Decision: Decision, Catalog: ToolCatalog): Record<string, string
 };
 
 /** The tier-1 note text (the fetched description line + traceability). */
-export const First = (
-	Decision: Decision,
-	Catalog: ToolCatalog,
-	Template: string,
-): string => Fill(Template, Values(Decision, Catalog));
+export const First = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
+	Fill(Template, Values(Decision, Catalog));
 
 /** The tier-3 deny reason (the same forbidden phrasing). */
-export const Denied = (
-	Decision: Decision,
-	Catalog: ToolCatalog,
-	Template: string,
-): string => Fill(Template, Values(Decision, Catalog));
+export const Denied = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
+	Fill(Template, Values(Decision, Catalog));
 
 /** The tier-2 section text (3 fixed rules + the tool table). */
 export const Persistent = (

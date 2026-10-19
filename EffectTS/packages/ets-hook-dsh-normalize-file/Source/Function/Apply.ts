@@ -117,7 +117,6 @@ export default (Context: Context, Options: Config): void => {
 		]),
 	);
 
-
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,
 	// PREPENDED: the family's bundle order places the ccr hook before the
@@ -131,11 +130,9 @@ export default (Context: Context, Options: Config): void => {
 	// lands through the P10 volatile-refresh without any re-registration.
 	// The file flavor's transform is the SIX-FOLD chain (the same Rewrite
 	// the tool body runs).
-	Context.on(
-		"tools/post-execute",
-		(Exec, Result, Next) => Overpass(Exec, Result, Next, State),
-		{ prepend: true },
-	);
+	Context.on("tools/post-execute", (Exec, Result, Next) => Overpass(Exec, Result, Next, State), {
+		prepend: true,
+	});
 	Context.on("agent/pre-step", (Payload, Next) => StepBatch(Payload, Next, State));
 
 	// THE HUMAN COMMAND (`normalize-overpass`, the plan's §5): registered

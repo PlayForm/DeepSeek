@@ -39,19 +39,23 @@ export default (State: State) => {
 		}
 		const Lines = Text.split("\n");
 		const Start = Math.max(0, Math.min(Range.start ?? 0, Lines.length));
-		const Count = Math.max(0, Math.min(Range.count ?? Lines.length - Start, Lines.length - Start));
+		const Count = Math.max(
+			0,
+			Math.min(Range.count ?? Lines.length - Start, Lines.length - Start),
+		);
 		return Lines.slice(Start, Start + Count).join("\n");
 	};
 
 	return defineTool({
 		name: "ccr_retrieve",
 		description:
-			'Retrieve the ORIGINAL content of a compressed tool result by its CCR hash. Some tool output arrives replaced by a short preview plus a marker like <<<CCR:<24hex>|<type>|<size>>>; pass the marker\'s 24-hex hash to restore the full original text. The hash is matched exactly - no prefix or fuzzy matching. Optionally pass range { start, count } for a granular slice: start is the 0-based line index (default 0) and count the number of lines from there (default to the end). Unknown or expired hashes return an error telling you to re-run the original tool.',
+			"Retrieve the ORIGINAL content of a compressed tool result by its CCR hash. Some tool output arrives replaced by a short preview plus a marker like <<<CCR:<24hex>|<type>|<size>>>; pass the marker's 24-hex hash to restore the full original text. The hash is matched exactly - no prefix or fuzzy matching. Optionally pass range { start, count } for a granular slice: start is the 0-based line index (default 0) and count the number of lines from there (default to the end). Unknown or expired hashes return an error telling you to re-run the original tool.",
 		parameters: {
 			hash: {
 				type: "string",
 				required: true,
-				description: "The 24-hex hash from the CCR marker (matched exactly, no prefix matching).",
+				description:
+					"The 24-hex hash from the CCR marker (matched exactly, no prefix matching).",
 			},
 			range: {
 				type: "object",
@@ -63,7 +67,8 @@ export default (State: State) => {
 					},
 					count: {
 						type: "integer",
-						description: "Number of lines to return from start (default to the end of the content).",
+						description:
+							"Number of lines to return from start (default to the end of the content).",
 					},
 				},
 				description:

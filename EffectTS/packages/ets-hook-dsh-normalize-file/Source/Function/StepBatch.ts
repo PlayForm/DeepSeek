@@ -80,7 +80,11 @@ export default async (
 			if (!Array.isArray(Content)) {
 				return Message;
 			}
-			const NextContent = RewriteBlocks(Content, (Text) => Rewrite(Text, State.Replacement), Count);
+			const NextContent = RewriteBlocks(
+				Content,
+				(Text) => Rewrite(Text, State.Replacement),
+				Count,
+			);
 			switch (true) {
 				case NextContent === Content:
 					return Message;

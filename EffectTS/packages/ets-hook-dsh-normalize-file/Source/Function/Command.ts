@@ -39,9 +39,7 @@ export type CommandsService = {
 };
 
 /** The structural CommandResult (success/error with text). */
-export type CommandResult =
-	| { kind: "success"; text?: string }
-	| { kind: "error"; text: string };
+export type CommandResult = { kind: "success"; text?: string } | { kind: "error"; text: string };
 
 /** Structural views of the optional config-writing services. */
 export type SettingsService = {
@@ -105,14 +103,18 @@ export default async (
 			}
 			// First path: the settings service (the Web UI's own seam).
 			try {
-				if (typeof Settings?.describe === "function" && typeof Settings?.update === "function") {
+				if (
+					typeof Settings?.describe === "function" &&
+					typeof Settings?.update === "function"
+				) {
 					const Forms = (await Settings.describe()) as {
 						ns?: unknown;
 						value?: { scopes?: Record<string, unknown> };
 					}[];
 					const Mine = Array.isArray(Forms)
 						? Forms.find(
-								(Form) => typeof Form?.ns === "string" && Form.ns.includes(State.Module),
+								(Form) =>
+									typeof Form?.ns === "string" && Form.ns.includes(State.Module),
 							)
 						: undefined;
 					if (Mine && typeof Mine.ns === "string") {
@@ -142,7 +144,8 @@ export default async (
 						await Editor.edit(Mine, (Current) => ({
 							...(Current as object),
 							scopes: {
-								...((Current as { scopes?: Record<string, unknown> })?.scopes ?? {}),
+								...((Current as { scopes?: Record<string, unknown> })?.scopes ??
+									{}),
 								toolResults: On,
 							},
 						}));
@@ -172,7 +175,8 @@ export default async (
 			if (Rest.length === 0) {
 				return { kind: "error", text: Usage(State.Module) };
 			}
-			const Signal = Invocation?.signal instanceof AbortSignal ? Invocation.signal : undefined;
+			const Signal =
+				Invocation?.signal instanceof AbortSignal ? Invocation.signal : undefined;
 			// exactOptionalPropertyTypes: only carry the key when a signal exists.
 			const Options = Signal === undefined ? {} : { signal: Signal };
 			let Swept = 0;

@@ -152,7 +152,7 @@ export default (Context: Context, Options: Config): void => {
 		"activated",
 		"",
 		`activated (bundle ${Version}, targets ${State.Targets.length}, budget ${State.Budget})`,
-	);	// The eviction lines: the store reports them, the module composes them.
+	); // The eviction lines: the store reports them, the module composes them.
 	const LogEvictions = (Evicted: Eviction[]): void => {
 		for (const Eviction of Evicted) {
 			State.Factory.Append(State, `evicted ${Eviction.hash} (${Eviction.reason})`);
@@ -343,7 +343,10 @@ export default (Context: Context, Options: Config): void => {
 						EngineRuntime.Records.push(...Kept);
 						// The module's own new ledger line (asserted byte-identical
 						// by the smoke): one aggregate line per archive event.
-						State.Factory.Append(State, `engine archived ${Plan.archive.length} results`);
+						State.Factory.Append(
+							State,
+							`engine archived ${Plan.archive.length} results`,
+						);
 					}
 					EngineRuntime.Turn = Turn;
 				}

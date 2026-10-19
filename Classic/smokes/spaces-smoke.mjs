@@ -443,17 +443,23 @@ const RunS = (Scopes, Flags) =>
 	});
 const DriveS = async (Run, Chunks) => {
 	const Out = [];
-	for await (const C of Run.Listeners["llm/stream"](Object.freeze({ model: "x", messages: [] }), () =>
-		(async function* () {
-			yield* Chunks;
-		})(),
+	for await (const C of Run.Listeners["llm/stream"](
+		Object.freeze({ model: "x", messages: [] }),
+		() =>
+			(async function* () {
+				yield* Chunks;
+			})(),
 	))
 		Out.push(C);
 	return Out;
 };
 const TextChunkS = { type: "text-delta", index: 0, text: "a\u00A0b" };
 const ReasonChunkS = { type: "reasoning-delta", index: 0, text: "\u00A0x" };
-const TextBlockChunkS = { type: "block-end", index: 0, block: { type: "text", text: "\u00A0kept" } };
+const TextBlockChunkS = {
+	type: "block-end",
+	index: 0,
+	block: { type: "text", text: "\u00A0kept" },
+};
 const ArgsChunkS = {
 	type: "tool-call-delta",
 	index: 1,
@@ -466,7 +472,10 @@ const ArgsChunkS = {
 const S1 = RunS({ ...SCOPES_DEFAULT, conversation: false });
 const OutS1 = await DriveS(S1, [TextChunkS]);
 Check(OutS1[0] === TextChunkS, "scopes.conversation off: text-delta passes by identity");
-Check(S1.Lines.every((L) => !L.includes("normalized")), "scopes.conversation off: no count line");
+Check(
+	S1.Lines.every((L) => !L.includes("normalized")),
+	"scopes.conversation off: no count line",
+);
 // S2: reasoning scope off -> reasoning-delta passes even with normalizeReasoning on.
 const S2 = RunS({ ...SCOPES_DEFAULT, reasoning: false });
 const OutS2 = await DriveS(S2, [ReasonChunkS]);
@@ -474,7 +483,10 @@ Check(OutS2[0] === ReasonChunkS, "scopes.reasoning off: reasoning-delta passes b
 // S3: conversation off -> the assembled TEXT block passes by identity too.
 const S3 = RunS({ ...SCOPES_DEFAULT, conversation: false });
 const OutS3 = await DriveS(S3, [TextBlockChunkS]);
-Check(OutS3[0].block === TextBlockChunkS.block, "scopes.conversation off: text block passes by identity");
+Check(
+	OutS3[0].block === TextBlockChunkS.block,
+	"scopes.conversation off: text block passes by identity",
+);
 // S4: the effective toolInput gate is an OR of the deprecated field and the scope.
 const S4 = RunS({ ...SCOPES_DEFAULT }, { toolArgs: true });
 const OutS4 = await DriveS(S4, [ArgsChunkS]);
@@ -514,7 +526,7 @@ const LiveScopesO = { ...SCOPES_DEFAULT };
 const RawO = {
 	log: true,
 	logFile: Ledger,
-replacement: " ",
+	replacement: " ",
 	normalizeReasoning: true,
 	normalizeToolArguments: false,
 	scopes: { get: () => LiveScopesO },
@@ -568,9 +580,7 @@ const OutO2 = await PostO(
 	NextAcceptO,
 );
 Check(
-	OutO2.kind === "accept" &&
-		OutO2.content.length === 1 &&
-		OutO2.content[0].text === "a   b",
+	OutO2.kind === "accept" && OutO2.content.length === 1 && OutO2.content[0].text === "a   b",
 	"overpass: toolResults on -> the text block is rewritten (em dash -> hyphen)",
 );
 Check(
@@ -607,11 +617,13 @@ const OutO4 = await PostO(
 	NextAcceptO,
 );
 Check(
-	OutO4.content[0] === ToolBlockO &&
-		OutO4.content[0].arguments === '{"a":"\u00A0"}',
+	OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u00A0"}',
 	"overpass: tool-call/argument blocks pass untouched (execution-critical JSON)",
 );
-Check(OutO4.content[1].text === "x   y", "overpass: the text block in the same content IS rewritten");
+Check(
+	OutO4.content[1].text === "x   y",
+	"overpass: the text block in the same content IS rewritten",
+);
 
 // O5: N = 0 -> the decision unchanged and NO ledger line.
 const LinesBeforeO5 = RunO.Lines.length;
@@ -671,12 +683,17 @@ Check(
 // O9: the batch scope is OFF by default -> the enter decision passes.
 const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
 const OutO9 = await PreO(
-	{ agent: {}, messages: [MsgO("a \u00A0 batch")], turn: 3, step: 1, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("a \u00A0 batch")],
+		turn: 3,
+		step: 1,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "enter", messages: [MsgO("a \u00A0 batch")] }),
 );
 Check(
-	OutO9.kind === "enter" &&
-		OutO9.messages[0].content[0].text === "a \u00A0 batch",
+	OutO9.kind === "enter" && OutO9.messages[0].content[0].text === "a \u00A0 batch",
 	"overpass: batch off (default) -> the enter decision passes untouched",
 );
 
@@ -685,12 +702,17 @@ LiveScopesO.batch = true;
 RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
 const LinesBeforeO10 = RunO.Lines.length;
 const OutO10 = await PreO(
-	{ agent: {}, messages: [MsgO("a \u00A0 batch")], turn: 3, step: 1, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("a \u00A0 batch")],
+		turn: 3,
+		step: 1,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "enter", messages: [MsgO("a \u00A0 batch")] }),
 );
 Check(
-	OutO10.kind === "enter" &&
-		OutO10.messages[0].content[0].text === "a   batch",
+	OutO10.kind === "enter" && OutO10.messages[0].content[0].text === "a   batch",
 	"overpass: batch on -> the text blocks in the incoming batch are rewritten",
 );
 Check(
@@ -703,7 +725,13 @@ Check(
 // O11: N=0 batch -> decision unchanged, no ledger line.
 const LinesBeforeO11 = RunO.Lines.length;
 const OutO11 = await PreO(
-	{ agent: {}, messages: [MsgO("plain")], turn: 3, step: 2, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("plain")],
+		turn: 3,
+		step: 2,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "enter", messages: [MsgO("plain")] }),
 );
 Check(OutO11.kind === "enter", "overpass: N=0 batch -> the decision unchanged");
@@ -719,7 +747,13 @@ Check(
 	"overpass: the command's batch grammar arms the one-shot flag",
 );
 const OutO12 = await PreO(
-	{ agent: {}, messages: [MsgO("a \u00A0 batch")], turn: 4, step: 0, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("a \u00A0 batch")],
+		turn: 4,
+		step: 0,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "enter", messages: [MsgO("a \u00A0 batch")] }),
 );
 Check(
@@ -732,9 +766,18 @@ Check(
 	),
 	"overpass: the one-shot batch ledger line is byte-exact",
 );
-Check(RunO.State.Overpass === false, "overpass: the one-shot flag is consumed (cleared after one use)");
+Check(
+	RunO.State.Overpass === false,
+	"overpass: the one-shot flag is consumed (cleared after one use)",
+);
 const OutO12b = await PreO(
-	{ agent: {}, messages: [MsgO("a \u00A0 batch")], turn: 4, step: 1, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("a \u00A0 batch")],
+		turn: 4,
+		step: 1,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "enter", messages: [MsgO("a \u00A0 batch")] }),
 );
 Check(
@@ -744,7 +787,13 @@ Check(
 
 // O13: a rejected step is never touched.
 const OutO13 = await PreO(
-	{ agent: {}, messages: [MsgO("a \u00A0")], turn: 5, step: 0, signal: new AbortController().signal },
+	{
+		agent: {},
+		messages: [MsgO("a \u00A0")],
+		turn: 5,
+		step: 0,
+		signal: new AbortController().signal,
+	},
 	async () => ({ kind: "reject" }),
 );
 Check(OutO13.kind === "reject", "overpass: a reject decision passes untouched");
