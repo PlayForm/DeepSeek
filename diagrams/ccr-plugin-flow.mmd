@@ -1,0 +1,55 @@
+---
+title: dsh-hook-ccr - tool-output compression pipeline
+line9:
+  theme: boardroom
+---
+flowchart LR
+  START["Tool result<br>normalized"]:::term
+  LSN["tools/post-execute<br>waterfall listener"]
+  NEXT["await next()<br>downstream decision"]
+  D1{accept &<br>no value?}:::decide
+  D2{exempt tool?}:::decide
+  D3{over gate?<br>2048 B x mult}:::decide
+  CLS["Classify<br>7 types"]
+  D4{<= auto-expand<br>102400 B?}:::decide
+  STORE[("CCR store<br>sha256-24 key<br>LRU 256 MiB . TTL 3600s")]:::store
+  REPL["Replace content<br>[type:preview]<br>CCR:hash|type|size"]
+  MODEL["Model sees<br>preview + marker"]
+  D5{needs full<br>content?}:::decide
+  RET["ccr_retrieve<br>hash, range?"]
+  BACK["Original bytes<br>restored"]
+  MISS["Self-describing<br>error"]
+  LEDGER["Ledger ~/.dsh/ccr.log<br>compressed . evicted . retrieved"]
+  FAIL["On error: warn,<br>keep inline content"]:::fail
+  PASS["Return decision<br>unchanged"]
+  subgraph ENGINE["Context engine (optional - off by default)"]
+    ENG["agent/pre-step<br>listener"]
+    D6{fill > 30%<br>of budget?}:::decide
+    ARCH["Archive middle results<br>protect first 2 . last 4"]
+  end
+  START ==> LSN
+  LSN --> NEXT
+  NEXT --> D1
+  D1 -- No --> PASS
+  D1 -- Yes --> D2
+  D2 -- Yes --> PASS
+  D2 -- No --> D3
+  D3 -- No --> PASS
+  D3 -- Yes --> CLS
+  CLS --> D4
+  D4 -- Yes --> STORE
+  D4 -- No --> STORE
+  STORE --> REPL
+  REPL --> MODEL
+  STORE -.-> MODEL
+  MODEL --> D5
+  D5 -- Yes --> RET
+  RET --> BACK
+  RET -.-> MISS
+  STORE -.-> LEDGER
+  RET -.-> LEDGER
+  LSN -.-> FAIL
+  FAIL --> PASS
+  ENG --> D6
+  D6 -- Yes --> ARCH
+  ARCH -.-> STORE

@@ -1,0 +1,81 @@
+# Bundle patch for @playform/ets-hook-dsh-ccr.
+# The CCR hook COMPRESSES TOOL OUTPUT: it registers one tools/post-execute
+# waterfall listener - the interceptable wrapper around every NORMALIZED
+# dispatch result, before it becomes model content - and replaces oversized
+# results of the allow-listed target tools with a one-line type-aware preview
+# plus a retrieval marker (<<<CCR:<24hex>|<type>|<size>>>), keeping the
+# original retrievable through the registered ccr_retrieve tool (the plugin's
+# one dynamic tool). Ported from Aphrodite's CCR pipeline
+# (Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# The listener calls next() FIRST and returns the downstream decision
+# unchanged for pass-through (the spill-policy precedent); replacement is
+# fail-open (an internal error logs a warning and keeps the inline content,
+# never throwing into the waterfall). `thresholdBytes`, `previewMaxChars`
+# and `multipliers` are volatile (hot-editable without remounting, matching
+# Aphrodite's hot-reload thresholds); the structural knobs (targets, exempt,
+# the store, the journal, auto-expand, the phase-4 context-engine flags)
+# remount on edit. With autoExpand on (the default), results at or under
+# autoExpandLimitBytes are stored but returned FULL - no marker reaches the
+# model while the content is cheap enough to keep inline. Failures pass
+# through unless compressFailures is turned on (the error ×8 tier is the
+# only beneficiary). journalPath is empty (memory-only) by default; set it
+# to a JSONL file path to persist the store across restarts (loaded and
+# TTL-compacted on boot). The phase-4 context engine is implemented but OFF
+# by default (contextEngine: false): when on, one agent/pre-step listener
+# runs the middle-turn archive decision (protectFirst/protectLast windows)
+# at each step boundary and archives through the existing compress path -
+# `ccr: engine archived <n> results`. Honest-MVP scope: the engine stores
+# and tracks; it does not rewrite the model's history (the pre-step decision
+# contract covers only newly claimed input messages).
+- insert:
+      - id: ccr
+        name: "@playform/ets-hook-dsh-ccr"
+        config:
+            log: true
+            logFile: /Users/nikola/.dsh/ccr.log
+            targets:
+                - bash
+                - glob
+                - grep
+                - read
+                - web_fetch
+                - web_search
+                - list
+                - search
+            exempt:
+                - write
+                - edit
+                - raw-write
+                - subagent
+                - ask_user_question
+                - ccr_retrieve
+            thresholdBytes: 2048
+            inlineThresholdBytes: 1024
+            autoExpand: true
+            autoExpandLimitBytes: 102400
+            compressFailures: false
+            multipliers:
+                terminal: 1
+                error: 8
+                grep: 2
+                paths: 2
+                file: 1
+                json: 1
+                web: 2
+                default: 1
+            previewMaxChars: 240
+            ttlSeconds: 3600
+            storeBudgetBytes: 268435456
+            journalPath: ""
+            contextEngine: false
+            contextEngineThresholdPct: 30
+            protectFirstTurns: 2
+            protectLastTurns: 4

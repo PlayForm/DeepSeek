@@ -154,7 +154,7 @@ if (TRACING) {
 	});
 	tracingServer.unref();
 	await new Promise((resolve) => tracingServer.listen(0, "127.0.0.1", resolve));
-	const Runtime = await import("../packages/ets-plugin-dsh-factory/Target/Service/Runtime.js");
+	const Runtime = await import("../packages/ets-base-dsh/Target/Service/Runtime.js");
 	const enabled = await Runtime.enableTracing({
 		endpoint: `http://127.0.0.1:${tracingServer.address().port}`,
 		serviceName: "factory-smoke",
