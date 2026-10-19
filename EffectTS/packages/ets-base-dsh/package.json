@@ -25,7 +25,7 @@
 		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
 	},
 	"dependencies": {
-		"effect": "4.0.3"
+		"effect": "4.0.5"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.4",
