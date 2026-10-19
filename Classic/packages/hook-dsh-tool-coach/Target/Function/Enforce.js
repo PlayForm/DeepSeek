@@ -1,0 +1,1 @@
+const s=e=>{switch(e){case"write":return new Set(["write"]);case"all":return new Set(["write","read","search"]);default:return new Set}};var a=(e,t,r)=>r.enforce==="off"||!s(r.enforce).has(t.class)||e.classStrikes[t.class]<r.enforceThreshold?!1:(e.sinceNote=0,e.strikesSinceNote=0,e.classStrikes={write:0,read:0,search:0,discovery:0,control:0},!0);export{a as default};

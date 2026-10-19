@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="ccr",r=t,n=["pluginFactory","tools"],e=o;var f={name:p,apply:e,Config:r,inject:n};export{r as Config,e as apply,f as default,n as inject,p as name};

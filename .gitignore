@@ -16,8 +16,6 @@ node_modules/
 pnpm-lock.yaml
 
 # Build output (per-bundle Target/ dirs and generic build trees)
-Target/
-target/
 dist/
 *.tsbuildinfo
 
