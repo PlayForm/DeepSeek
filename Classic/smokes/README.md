@@ -1,8 +1,8 @@
 # The family smokes (the arbiter)
 
-The thirteen smoke suites — **core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 /
+The fourteen smoke suites — **core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 /
 normalize-dash 132 / quotes 62 / ellipsis 62 / spaces 62 / invisible 62 / fullwidth 62 /
-normalize-file 71 / ccr 146** — live in this directory (`Classic/smokes/`), kept out of `/tmp` because `/tmp`
+normalize-file 71 / ccr 146 / tool-coach 129** — live in this directory (`Classic/smokes/`), kept out of `/tmp` because `/tmp`
 gets cleared.
 
 - Each smoke loads the REAL built `Target/Library.js` of its bundle (the factory's own smoke + the

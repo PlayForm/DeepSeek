@@ -13,6 +13,7 @@
 //   schema fetch failed -> static fallback / disabled (enabled=false).
 import { rmSync, readFileSync, existsSync } from "node:fs";
 import Coach from "../packages/hook-dsh-tool-coach/Target/Library.js";
+import Detect from "../packages/hook-dsh-tool-coach/Target/Function/Detect.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../packages/hook-dsh-tool-coach/Target/Variable/Patterns.js";
 import { NOTE_FIRST, NOTE_PERSISTENT, NOTE_DENIED, STATIC_TOOL_LINES } from "../packages/hook-dsh-tool-coach/Target/Variable/Notes.js";
 import FactoryClass from "../packages/plugin-dsh-factory/Target/Library.js";
@@ -694,6 +695,39 @@ Check(
 	LinesWith(RunD5, ": strike 2/2 bash read -> note read").length === 1,
 	"D5: the flipped threshold=2 is picked up too (byte-exact strike line)",
 );
+
+
+// -----------------------------------------------------------------------
+// The craft library (plan §2.7c): every obfuscated variant classifies
+// correctly, including the catch-all and the exemption rows.
+// -----------------------------------------------------------------------
+const Craft = (Command) => Detect(Command, DEFAULT_PATTERNS, DEFAULT_EXEMPTS);
+const Expect = (Command, Kind, Cls) => {
+	const R = Craft(Command);
+	Check(
+		Kind === "none"
+			? R === null
+			: R !== null && R.kind === Kind && (Cls === undefined || (Kind === "offense" ? R.match.class === Cls : true)),
+		`craft: ${JSON.stringify(Command)} -> ${Kind}${Cls ? `/${Cls}` : ""}`,
+	);
+};
+Expect("sed -i.bak s/x/y/ f", "offense", "write");
+Expect('perl -pi -e "s/x/y/" f', "offense", "write");
+Expect('echo "${TXT}" > f.md', "offense", "write");
+Expect("printf '%s\\n' x | tee -a f", "offense", "write");
+Expect("cat <<'EOF' > f.md\nbody\nEOF", "offense", "write");
+Expect("python3 -c \"open('f','w').write(x)\"", "offense", "write");
+Expect("echo a2V5 | base64 -d | sh", "offense", "write");
+Expect("x='sed'; $x -i s/a/b/ f", "offense", "write");
+Expect("grep x f > /dev/null", "offense", "search");
+Expect("cat f | sed s/a/b/ > f", "offense", "write");
+Expect("find . -name '*.ts' -exec sed -i s/a/b/ {} +", "offense", "write");
+Expect("ssh host 'cat f'", "none");
+Expect("git diff > patch.txt", "exempt");
+Expect("journalctl > log.txt", "offense", "write");
+Expect("git stash", "none");
+Expect("echo x > tracked.md", "offense", "write");
+Expect("cat a; sed -i s/x/y/ b", "offense", "write");
 
 // -----------------------------------------------------------------------
 // The fail-open envelope + fail-loud validation.

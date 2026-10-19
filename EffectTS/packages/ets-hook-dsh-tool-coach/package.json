@@ -36,12 +36,12 @@
 	"devDependencies": {
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.7",
 		"typescript": "7.0.2",
-		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/cordis": "4.0.4",
 		"@deepseek-ai/dsh-llm": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
-		"@deepseek-ai/schemastery": "3.18.5"
+		"@deepseek-ai/schemastery": "3.18.4"
 	},
 	"license": "CC0-1.0",
 	"dsh": {

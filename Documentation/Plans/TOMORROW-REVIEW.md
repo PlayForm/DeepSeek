@@ -352,3 +352,22 @@ sighting, the homepage buttons row) goes to an IDLE lane VERBATIM; the lane
 investigates + locates + verifies + reports its own numbers; the orchestrator
 relays + records only. The lane's spec + its reported totals land in this record
 on completion.
+
+---
+
+## QUEUE ADDITION (2026-10-19) - Smoke-suite restructure (user-mandated, NOT yet implemented)
+
+The user dictated a future restructuring of the family's smoke tests; the full
+spec lives in `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-NOTE.md`. Summary:
+per-test folders under `EachPlugin/Source/Test/<name>/` (one singular test file
+with a deeply nested assertion hierarchy + a `README.md` describing exactly what
+the test verifies), runnable one-by-one and aggregated by the main Smoke file;
+full TypeScript rewrite (both Classic + EffectTS, the @playform/build Tool
+Suite); `.npmignore` excludes `Target/Test` + `Source/Test` so tests never
+publish; a separate ESBuild pre-compile step for `Source/Test` (Test -> Source ->
+Run Test -> Run Source) via a `prepublishOnly.sh` per plugin, mirroring the
+two-step compilation at
+`~/Developer/Application/CodeEditorLand/Land/Element` (study
+`Output/Source/prepublishOnly.sh` + `Run.sh` first). Future-transformable into a
+full test suite (vitest-shaped). Implement only after the in-flight
+normalization + tool-coach work settles.
