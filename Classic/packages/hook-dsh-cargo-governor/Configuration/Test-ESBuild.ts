@@ -3,7 +3,7 @@ import type { BuildOptions, Plugin } from "esbuild";
 /**
  * @module Test-ESBuild
  *
- * Test ESBuild configuration for the PACKAGE PINNER
+ * Test ESBuild configuration for the CARGO GOVERNOR
  * (@playform/hook-dsh-cargo-governor): compiles the Source/Test TypeScript
  * tree to Target/Test, one output file per source file (bundle: false - the
  * base configuration from the build tool already applies: each Source file
