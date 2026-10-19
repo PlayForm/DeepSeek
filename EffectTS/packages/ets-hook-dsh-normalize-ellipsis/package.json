@@ -19,11 +19,13 @@
 	},
 	"files": [
 		"Target",
+		"!Target/Test",
 		"cordis.patch.yml",
 		"README.md"
 	],
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+		"prepublishOnly": "sh prepublishOnly.sh",
+		"Run": "sh Run.sh"
 	},
 	"dependencies": {
 		"@playform/ets-base-dsh": "0.0.1",
