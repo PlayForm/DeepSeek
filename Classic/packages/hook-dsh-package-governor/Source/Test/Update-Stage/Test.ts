@@ -15,9 +15,11 @@ import * as Path from "node:path";
 import {
 	Boot,
 	Check,
+	Controllers,
 	Detached,
 	Emitted,
 	Events,
+	Files,
 	Finish,
 	JobRings,
 	JobStarts,
@@ -26,6 +28,7 @@ import {
 	NCU_BIN,
 	Probe,
 	Root,
+	Services,
 	Spawn,
 	SpawnSpecs,
 	StorageRecords,
@@ -46,7 +49,7 @@ export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Boot();
 	Probe.Mode = "bin";
-	const Listener = Events.find((e) => e[0] === "fs/observed")[1];
+	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
 	// Group: pure leaves.
 	{
 		const Sub = "pure leaves: Decode \u2014 contained parse, null on failure/non-object";
@@ -107,7 +110,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "update gates: circuit breaker \u2192 `paused for \u2026` line, no job";
 		{
 			Check(Count, Sub, () => {
-				assert.equal(find(`update stage paused for ${projF} (3 consecutive failures \u2265 3)`).length, 1);
+				assert.equal(
+					find(`update stage paused for ${projF} (3 consecutive failures \u2265 3)`).length,
+					1,
+				);
 				assert.equal(JobStarts.length, jobsBefore, "paused \u2192 no job");
 				Probe.Count.delete(projF);
 			});
@@ -136,9 +142,9 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 	}
-	// Group: the FAILED path.
+	// Group: the FAILED path (exit 1 \u2192 breaker increments + update-failed
+	// journal + the U\u2082 refresh).
 	Spawn.Exits = [1];
-	const failedBefore = ledgerLines().length;
 	Emitted.length = 0;
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
@@ -175,11 +181,11 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(failedEmit[2].version, "stat-v9", "U\u2082 refresh ran even on failure");
 				Probe.Count.delete(projF);
 				Spawn.Exits = [];
-				assert.ok(failedBefore >= 0, "the failed run's ledger baseline was captured");
 			});
 		}
 	}
-	// Group: the first-wins policy pick (ENGINE INPUT - module-owned).
+	// Group: the first-wins policy pick (ENGINE INPUT \u2014 module-owned, not the
+	// union).
 	const projG = Path.join(Root, "proj-g");
 	FileSystem.mkdirSync(projG);
 	const dirPolicy = Path.join(projG, "update-policy.json");
@@ -188,13 +194,17 @@ export const runTest = async (): Promise<number> => {
 	FileSystem.writeFileSync(globalPolicy, JSON.stringify({ reject: ["x"] }));
 	const regAdjacent = Path.join(Root, "registry-adjacent");
 	FileSystem.mkdirSync(regAdjacent);
-	FileSystem.writeFileSync(Path.join(regAdjacent, "update-policy.json"), JSON.stringify({ reject: ["y"] }));
+	FileSystem.writeFileSync(
+		Path.join(regAdjacent, "update-policy.json"),
+		JSON.stringify({ reject: ["y"] }),
+	);
 	const regFile = Path.join(regAdjacent, "registry.json");
 	FileSystem.writeFileSync(regFile, "{}");
 	const bare = Path.join(Root, "proj-g2");
 	FileSystem.mkdirSync(bare);
 	{
-		const Sub = "Resolve: FIRST-WINS engine-input pick (global \u2192 own dir \u2192 registry-adjacent \u2192 default)";
+		const Sub =
+			"Resolve: FIRST-WINS engine-input pick (global \u2192 own dir \u2192 registry-adjacent \u2192 default)";
 		{
 			Check(Count, Sub, () => {
 				assert.equal(Resolve(Probe, projG, null), dirPolicy, "the file's own directory wins first");
@@ -219,6 +229,7 @@ export const runTest = async (): Promise<number> => {
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, dirPolicy);
 	await settle();
+	const doneCount = find("update: DONE \u2014 pins bumped per policy").length;
 	{
 		const Sub = "policy engine: policy file read + verifyCommand through the seam + merged rejects";
 		{
@@ -231,7 +242,6 @@ export const runTest = async (): Promise<number> => {
 					"verifyCommand via /bin/sh -c through the seam",
 				);
 				assert.equal(find("update: verifyCommand ok").length, 1);
-				const doneCount = find("update: DONE \u2014 pins bumped per policy").length;
 				assert.equal(
 					find("update: DONE \u2014 pins bumped per policy").length,
 					doneCount,
@@ -245,16 +255,21 @@ export const runTest = async (): Promise<number> => {
 					"policy reject used as-is (no registry \u2192 no chain deps to merge; the merge itself is asserted in the happy path)",
 				);
 				assert.equal(
-					find(`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, policy ${dirPolicy})`)
-						.length,
+					find(
+						`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, policy ${dirPolicy})`,
+					).length,
 					1,
 					"dispatched line names the resolved policy path",
 				);
 			});
 		}
 	}
-	// Group: verifyCommand exit codes.
+	// Group: verifyCommand exit codes (127 non-fatal; other fails the stage).
 	Spawn.Exits = [0, 127];
+	Probe.Stamp.delete(projF);
+	await Dispatch(Probe, tF, actor, projF, null, dirPolicy);
+	await settle();
+	Spawn.Exits = [0, 2];
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, dirPolicy);
 	await settle();
@@ -266,23 +281,11 @@ export const runTest = async (): Promise<number> => {
 					find("update: verifyCommand runner unavailable (exit 127) \u2014 skipped, non-fatal").length,
 					1,
 				);
-				const doneCount = find("update: DONE \u2014 pins bumped per policy").length;
 				assert.equal(
 					find("update: DONE \u2014 pins bumped per policy").length,
-					doneCount,
+					doneCount + 1,
 					"127 non-fatal \u2192 DONE",
 				);
-			});
-		}
-	}
-	Spawn.Exits = [0, 2];
-	Probe.Stamp.delete(projF);
-	await Dispatch(Probe, tF, actor, projF, null, dirPolicy);
-	await settle();
-	{
-		const Sub = "verifyCommand: exit 0 ok / 127 non-fatal / other fails the stage (failure half)";
-		{
-			Check(Count, Sub, () => {
 				assert.equal(find("update: verifyCommand failed (status 2)").length, 1);
 				const failedCount = find("update: FAILED \u2014 see lines above").length;
 				assert.equal(
@@ -309,6 +312,11 @@ export const runTest = async (): Promise<number> => {
 			"/no/such/policy.json",
 		);
 		await settle();
+		const badPolicy = Path.join(projNoPolicy, "bad-policy.json");
+		FileSystem.writeFileSync(badPolicy, "{ nope");
+		Probe.Stamp.delete(projNoPolicy);
+		await Dispatch(Probe, mkTarget(projNoPolicy, "k-np2"), actor, projNoPolicy, null, badPolicy);
+		await settle();
 		const Sub = "policy fallbacks: absent + unparsable policy files \u2192 built-in default lines";
 		{
 			Check(Count, Sub, () => {
@@ -317,23 +325,10 @@ export const runTest = async (): Promise<number> => {
 					1,
 				);
 				assert.equal(find("update: using built-in default policy").length, defaultCount + 1);
-				Probe.Count.delete(projNoPolicy);
-				const badPolicy = Path.join(projNoPolicy, "bad-policy.json");
-				FileSystem.writeFileSync(badPolicy, "{ nope");
-				assert.ok(badPolicy.endsWith("bad-policy.json"), "the unparsable fixture is in place");
-			});
-		}
-	}
-	{
-		const projNoPolicy = Path.join(Root, "proj-np");
-		const badPolicy = Path.join(projNoPolicy, "bad-policy.json");
-		Probe.Stamp.delete(projNoPolicy);
-		await Dispatch(Probe, mkTarget(projNoPolicy, "k-np2"), actor, projNoPolicy, null, badPolicy);
-		await settle();
-		const Sub = "policy fallbacks: absent + unparsable policy files \u2192 built-in default lines (bad half)";
-		{
-			Check(Count, Sub, () => {
-				assert.equal(find(`update: unreadable policy at ${badPolicy} \u2014 using built-in default`).length, 1);
+				assert.equal(
+					find(`update: unreadable policy at ${badPolicy} \u2014 using built-in default`).length,
+					1,
+				);
 				Probe.Count.delete(projNoPolicy);
 			});
 		}
@@ -365,7 +360,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 	}
-	// Group: P1 job-ring piping (bin mode).
+	// Group: P1 job-ring piping (bin mode: collected output piped raw into the
+	// ring).
 	Spawn.Out = "ncu says hi";
 	const pipeBefore = ledgerLines().length;
 	JobRings.length = 0;
@@ -395,9 +391,9 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 	}
-	// Group: detached fallbacks.
+	// Group: detached fallbacks (no job registry / preflight rejection \u2192 the
+	// contained detached chain).
 	Services["jobs"] = undefined;
-	const fallbackBefore = ledgerLines().length;
 	const dispatchedBefore = find(
 		`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
 	).length;
@@ -405,21 +401,6 @@ export const runTest = async (): Promise<number> => {
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
-	{
-		const Sub = "fallbacks: no-registry and preflight-rejection \u2192 the contained detached chain";
-		{
-			Check(Count, Sub, () => {
-				assert.equal(
-					find(
-						`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
-					).length,
-					dispatchedBefore + 1,
-					"detached fallback still dispatches the full chain",
-				);
-				assert.equal(JobStarts.length, jobsBeforeFallback, "no new job without the registry");
-			});
-		}
-	}
 	// preflight rejection \u2192 detached
 	Services["jobs"] = {
 		attachController: (n: string) => {
@@ -435,9 +416,17 @@ export const runTest = async (): Promise<number> => {
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
 	{
-		const Sub = "fallbacks: no-registry and preflight-rejection \u2192 the contained detached chain (preflight)";
+		const Sub = "fallbacks: no-registry and preflight-rejection \u2192 the contained detached chain";
 		{
 			Check(Count, Sub, () => {
+				assert.equal(
+					find(
+						`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
+					).length,
+					dispatchedBefore + 1,
+					"detached fallback still dispatches the full chain",
+				);
+				assert.equal(JobStarts.length, jobsBeforeFallback, "no new job without the registry");
 				assert.equal(JobStarts.length, jobsBeforeFallback, "throwing start left nothing registered");
 				assert.equal(
 					find("update: DONE \u2014 pins bumped per policy").length,
@@ -470,15 +459,6 @@ export const runTest = async (): Promise<number> => {
 		Current: { dependencies: { a: "1" } },
 		Proceed: false,
 	});
-	{
-		const Sub = "Follow: passage gate + Filter gate before the first-wins pick and dispatch";
-		{
-			Check(Count, Sub, () => {
-				assert.equal(ledgerLines().length, followBefore, "closed passage \u2192 no update stage");
-				assert.ok(followBefore >= 0, "the Follow baseline was captured");
-			});
-		}
-	}
 	await Follow(
 		Probe,
 		tF,
@@ -489,9 +469,10 @@ export const runTest = async (): Promise<number> => {
 		{ Current: { dependencies: { a: "1" } }, Proceed: true },
 	);
 	{
-		const Sub = "Follow: passage gate + Filter gate before the first-wins pick and dispatch (Filter half)";
+		const Sub = "Follow: passage gate + Filter gate before the first-wins pick and dispatch";
 		{
 			Check(Count, Sub, () => {
+				assert.equal(ledgerLines().length, followBefore, "closed passage \u2192 no update stage");
 				assert.equal(ledgerLines().length, followBefore, "all-chain manifest \u2192 Filter blocks");
 			});
 		}
@@ -506,7 +487,8 @@ export const runTest = async (): Promise<number> => {
 		Files[Path.join(projK, "package.json")] = JSON.stringify({ dependencies: { chalk: "^5.0.0" } });
 		Listener(mkTarget(projK, "k-k"), { kind: "present", version: "v1" }, actor);
 		await settle();
-		const Sub = "factory wiring: ResolvePolicy union discovery runs on the observe path (State.PolicyName)";
+		const Sub =
+			"factory wiring: ResolvePolicy union discovery runs on the observe path (State.PolicyName)";
 		{
 			Check(Count, Sub, () => {
 				assert.equal(

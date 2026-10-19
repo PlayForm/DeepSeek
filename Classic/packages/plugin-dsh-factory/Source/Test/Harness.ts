@@ -19,6 +19,8 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import FactoryClass from "../../Target/Library.js";
 
+export { FactoryClass };
+
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
  * by reference so Check can bump it from inside its callback.

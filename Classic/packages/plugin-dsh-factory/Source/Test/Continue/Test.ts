@@ -13,7 +13,6 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import {
-	Check,
 	CheckAsync,
 	Finish,
 	MakeCounter,
@@ -43,7 +42,7 @@ export const runTest = async (): Promise<number> => {
 	const flavorLedger = Path.join(Root, "flavor-ledger.log");
 	const factory: any = new FactoryClass(Make(null, { files: {} }).Context);
 	let CURRENT: any = null;
-	const miniTransform = (text: any, section: any, keep: any) => {
+	const miniTransform = (text: any, _section: any, keep: any) => {
 		CURRENT.inflightAtTransform = CURRENT.Inflight.size;
 		if (text === null) {
 			factory.Append(

@@ -104,8 +104,8 @@ export const runTest = async (): Promise<number> => {
 			await CheckAsync(Count, Sub, async () => {
 				factory.PendingJournal = [];
 				factory.SharedJournal = undefined;
-				const controllers = [];
-				const detached = [];
+				const controllers: any[] = [];
+				const detached: any[] = [];
 				services["jobs"] = {
 					attachController: (name: unknown) => {
 						controllers.push(name);
@@ -142,7 +142,7 @@ export const runTest = async (): Promise<number> => {
 				// package_governance v2 events table is asserted below - v2 BY DESIGN
 				// (register item #8: the "normalized" event is a new event name, and a
 				// new event name requires a new domain version).
-				const records = [];
+				const records: any[] = [];
 				let domainClosed = false;
 				let domainSpec: any = null;
 				services["storageDomain"] = {
@@ -188,7 +188,8 @@ export const runTest = async (): Promise<number> => {
 				// version equality, so the per-record backend's legacy bootstrap
 				// migrates the pre-existing v1-stamped file instead of hard-failing
 				// `version-mismatch` - and the corrupt-record policy so one bad stored
-				// record can never brick the open.				assert.equal(
+				// record can never brick the open.
+				assert.equal(
 					domainSpec.layout,
 					"per-record",
 					"P5 spec: per-record LAYOUT (the v1\u2192v2 self-migration path)",

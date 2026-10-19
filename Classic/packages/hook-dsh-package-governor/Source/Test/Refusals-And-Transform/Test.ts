@@ -42,7 +42,7 @@ export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Boot();
 	Probe.Mode = "bin";
-	const Listener = Events.find((e) => e[0] === "fs/observed")[1];
+	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
 	// -- the silent replay fixture (source suite section 5, unasserted) --
 	const projA = Path.join(Root, "proj-a");
 	FileSystem.mkdirSync(projA);

@@ -180,8 +180,8 @@ export const runTest = async (): Promise<number> => {
 				);
 				const Refresh = events
 					.slice(Mark)
-					.filter((e) => e[0] === "loader/volatile-update")
-					.map((e) => e[1])
+					.filter((e: any) => e[0] === "loader/volatile-update")
+					.map((e: any) => e[1])
 					.at(-1);
 				assert.ok(Refresh, "the State builder registers one loader/volatile-update listener");
 				assert.equal(stV.Replacement, "first", "initial unwrap: the cell's mount-time value");
@@ -203,8 +203,8 @@ export const runTest = async (): Promise<number> => {
 				);
 				const ObjRefresh = events
 					.slice(events.length - 1)
-					.filter((e) => e[0] === "loader/volatile-update")
-					.map((e) => e[1])
+					.filter((e: any) => e[0] === "loader/volatile-update")
+					.map((e: any) => e[1])
 					.at(-1);
 				assert.deepEqual(stO.Scopes, { conversation: true, toolInput: false });
 				ObjCell.get = () => ({ conversation: false, toolInput: true });
@@ -236,7 +236,7 @@ export const runTest = async (): Promise<number> => {
 				// The refresh is the ONLY observable effect of the dispatch: no
 				// activation line was re-emitted, no listener churned - one listener
 				// per State build.
-				assert.ok(events.filter((e) => e[0] === "loader/volatile-update").length >= 3);
+				assert.ok(events.filter((e: any) => e[0] === "loader/volatile-update").length >= 3);
 			});
 		}
 	}

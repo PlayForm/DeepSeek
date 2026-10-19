@@ -171,11 +171,28 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				const proj = Path.join(Root, "proj");
+				// The source suite unlinks both pin-policy files before this scenario
+				// (they must stay out of the module's keep-list); this folder mirrors
+				// the same removal after the earlier ResolvePolicy scenarios used
+				// them.
+				try {
+					FileSystem.unlinkSync(Path.join(proj, "pin-policy.json"));
+				} catch {}
+				try {
+					FileSystem.unlinkSync(Path.join(Root, "pin-policy.json"));
+				} catch {}
 				const stQ: any = factory.State(
 					ctx,
 					{ logFile: Ledger, policyFile: Path.join(Root, "nope-policy.json") },
 					{ module: "f", policyFileName: "pin-policy.json" },
 				);
+				// The durable ledger file must exist before the byte-length comparison
+				// (the source suite reaches this scenario after earlier sections have
+				// appended to it; this folder creates the empty file instead - the
+				// assertion is about the count staying UNCHANGED).
+				if (!FileSystem.existsSync(Ledger)) {
+					FileSystem.writeFileSync(Ledger, "");
+				}
 				const linesQ = FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean).length;
 				assert.deepEqual(factory.ResolvePolicy(stQ, proj, null, []), []);
 				assert.equal(

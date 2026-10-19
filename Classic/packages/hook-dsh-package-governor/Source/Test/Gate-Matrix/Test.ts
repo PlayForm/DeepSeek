@@ -35,7 +35,7 @@ export const runTest = async (): Promise<number> => {
 	Boot();
 	Probe.Mode = "bin";
 	await settle();
-	const Listener = Events.find((e) => e[0] === "fs/observed")[1];
+	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
 	// Group: the g1 gate matrix (Factory.Gate through the wired listener).
 	const projGates = Path.join(Root, "gates");
 	FileSystem.mkdirSync(projGates);

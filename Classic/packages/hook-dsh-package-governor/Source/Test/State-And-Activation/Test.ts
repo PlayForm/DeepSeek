@@ -147,7 +147,7 @@ export const runTest = async (): Promise<number> => {
 			Check(Count, Sub, () => {
 				assert.equal(Probe.Queue.length, 0, "P5: pre-open queue drained into the stub domain");
 				assert.equal(StorageRecords.length, 1);
-				assert.equal(StorageRecords[0][1].event, "activated");
+				assert.equal(StorageRecords[0]![1].event, "activated");
 			});
 		}
 	}

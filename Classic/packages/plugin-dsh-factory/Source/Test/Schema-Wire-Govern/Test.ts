@@ -88,11 +88,11 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(validated.policyFile, "", "non-volatile policyFile validates to the plain default");
 				const unwrapped = Unwrap(validated);
 				assert.deepEqual(
-					unwrapped.mutationTools,
+					(unwrapped as any).mutationTools,
 					["write", "edit", "str_replace_editor", "raw-write"],
 					"volatile cell unwrapped by State machinery",
 				);
-				assert.equal(unwrapped.log, true);
+				assert.equal((unwrapped as any).log, true);
 			});
 		}
 	}
