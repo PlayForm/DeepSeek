@@ -455,6 +455,51 @@ restructure settles.
   but NOT a bundle row; hook-dsh-tool-coach NOT in the profile at all (in the
   repo, not wired - a profile change + restart to add it).
 
+## BATCH WAVE-3 PROGRESS (2026-10-19 - L1 + L2 landed, L3 + L4 ACTIVE)
+
+- **L2 COMPLETE + VERIFIED** (`bd7f9126`): the dash + normalize-file pairs
+  converted - 8 dash folders (incl. the approved Raw-Write-Tool for the +52
+  tool surface) + 7 file folders, sums == the FRESH baselines exactly (dash
+  184, file 112 - the blueprint's 132/71 were stale); the parity diffs = 1-2
+  lines per file; the runner untouched ("All 140 smoke suites passed" = 42
+  .mjs + 98 folders: the pilot's 18 + L1's 50 + L2's 30); the monorepo build
+  exit 0; npm pack 0 Test paths; the .mjs suites byte-identical + green.
+- **L1's folders are on disk + committed** (`9b029e29` - the five flavors, 5
+  folders each: Config-And-State/Overpass/Runs/Scopes/Stream-Contract; the
+  user committed 534c1db / 916cbc8 / f44d237 as the lanes went; the runner
+  counts L1's 50 folders). The lane's final report was NUDGED (checkpoint
+  message) - pending.
+- **L1 FINAL REPORT IN (2026-10-19)**: the five flavor pairs, 50 folders,
+  sums == the FRESH baseline 104 PASS each (the blueprint's 62 was stale -
+  the flavors grew too); the parity independently audited (all 20 Classic/ETS
+  diffs = only the tree-identity substitutions; the assertion-fidelity
+  script verified all 104 Check messages byte-identical across the 10 Test
+  trees); runner unchanged (the 140 total); pack/format/alias/tsc/builds all
+  green; the user already committed everything. VERIFIED by the
+  orchestrator's spot-checks (quotes Overpass 34 + ETS fullwidth Runs 23
+  standalone).
+- **L1's residuals + the decisions**: (a) the README/SCHEME Source/Test
+  mentions (acceptance item 10) are NOT done for the flavors/dash/file - a
+  small L7 DOCS-SWEEP lane runs AFTER L6 (the pilot did its core READMEs
+  only); (b) the discipline note: L1 used one perl -pi pass on 3 of its own
+  files + cp/sed for the ETS generation - all diff-verified + green, recorded
+  as the boundary case of "generate, never retype" (the mechanical ETS
+  generation is sanctioned; the terminal edits are a recorded slip, no
+  rework); (c) the Runs-folder silent seed (the cumulative-journal replay)
+  follows the L2 precedent; (d) the .mjs suites stay until L5 retires them -
+  each flavor's assertions run twice meanwhile (by design).
+- **THE USER COMMITTED MID-SESSION, THE TREE IS CLEAN** (the git log: the
+  pilot series 4e7fc74..cb6d403 incl. the pilot-fix commit "negate the plugin
+  glob, harden the runner guard, correct the ccr emits", then 534c1db /
+  916cbc8 / f44d237 for L1 + L2).
+- **THE NEXT PAIR IS ACTIVE**: L3 (`5f7ee878` - the governance trio:
+  package-governor, package-pinner, cargo-governor, in that order) + L4
+  (`ecac74bc` - the factory FIRST, then the ccr, the dependency edge). Both
+  GLM flash high, the pilot pattern + the 11 binding corrections; the lanes
+  record FRESH baselines (the suite totals may have grown post-blueprint).
+  After them: L5 (tool-coach + the 7 wiring suites + the Run-Wiring list) +
+  L6 (ets-base-dsh), then the site-update lanes (B/A/C).
+
 ## BATCH WAVE-2 COMPLETE (2026-10-19 - the restructure pilot LANDED + VERIFIED)
 
 - **The pilot lane** `2b336307` COMPLETE: hook-dsh-core (8 folders, 14 checks) +
@@ -543,3 +588,97 @@ researcher's deliverable, dispatched 2026-10-19).
   profile rows on via plugin_manager, factory FIRST then the hooks; the
   tool-coach is not installed - wire it into the profile too, as one of "our
   plugins") and keep the LIVE-CONTAINERS plugin IDLE (never enabled).
+
+## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 2 (the cargo blocks + the live tool-call transformation - RESEARCH IN PROGRESS)
+
+The user extended the live-containers idea (the origin: proposed by
+~/Developer/Application/PlayForm/Aphrodite; the precedent: Hermes's delegate
+poll processes - fire-and-forget): the SIX CANs, broken into separate
+requirement files by the research agent `2a322db2` (GLM flash low, dispatched
+2026-10-19):
+- CAN-1 LIVE TOOL-CALL BLOCKS ("cargo blocks"): every tool call (cargo
+  build, multiple commands) auto-transforms into a live-container call -
+  propagated back WITHOUT telling the LLM, the chain modified as if executed
+  + completed, the live marker appended ("This command's output is still
+  running, you can proceed reasoning"), returned to the LLM, the conversation
+  progresses while the build runs in the background, and on completion a
+  block (or the same one) shows how it executed - EVERY tool call becomes
+  programmable, non-awaited, live (the micro-interaction loop: the LLM
+  schedules more without realizing it).
+- CAN-2 PLANTED LIVE BLOCKS: child subagents plant a live block in the
+  parent's conversation (a plantType block programmed with the active-agent
+  count - all agents report progress into the one block; the TODO-list
+  fills); multi-step, multi-level macro coordination.
+- CAN-3 THE TEMPLATE HOST: the plugin ships a host of block
+  templates/placeholders.
+- CAN-4 TASK-BASED FAILSAFES: task-based automatic failsafes (the
+  tool-coach-style automatic behavior modification, "not even notifying the
+  conversation or the user").
+- CAN-5 THE MINI-CONVERSATION SUGGESTER: a side mini-conversation with a
+  much smaller model infers from the idea + the templates whether a live
+  block fits the user's request and suggests it to the main conversation.
+- CAN-6 BETTER IDEAS: the research's own extensions (the user asked "let me
+  know if you have better ideas for this").
+- THE DELIVERABLE: Documentation/Plans/LiveContainers/Requirements/ (one
+  file per CAN + the overview + the seam map - the durable spec for the next
+  two agents).
+- THE CHAIN (the user's mandated sequence): R2 (research - ACTIVE) ->
+  D2 (the implementation design, deepseek-v4-flash-0731 max per the routing
+  law - the design lane) -> C2 (the coder, GLM flash high). The A1-A3 trio of
+  wave 1 stays IDLE (the v1 plugin); wave 2's code lands after the design.
+- **WAVE-2 RESEARCH COMPLETE (2026-10-19, `2a322db2`)**: the 8 requirement
+  files verified on disk (Documentation/Plans/LiveContainers/Requirements/
+  00-OVERVIEW + 01-LIVE-TOOL-CALL-BLOCKS + 02-PLANTED-BLOCKS +
+  03-BLOCK-TEMPLATES + 04-TASK-FAILSAFES + 05-MINI-CONVERSATION-SUGGESTER +
+  06-BETTER-IDEAS + 07-SEAM-MAP; 1202 lines). Grounded: CAN-1's interception
+  at tools/pre-execute (tool-coach Apply.ts:395-445), the detach home at
+  ctx.jobs (dsh-jobs-local), the completion append via the dsh-tool-jobs
+  notice path; the Aphrodite origin verified (its live container is
+  RESULT-side; CAN-1 goes further to CALL-side detachment). Biggest gaps:
+  G1 (whether a pre-execute deny-reason renders as a model-visible tool
+  result - gates CAN-1's carrier), G2 (the producer re-dispatch of the exact
+  intercepted call), G5 (the child->parent report pickup event). Residuals:
+  the withdrawal/KV-cache position (honesty beats cache - for D2's
+  ratification), the suggester privacy (default redact), the idle-wake turns
+  (channel 4 ratification), and the phase note: wave 2 EXTENDS the same
+  package (A1's surface), not a fork - the design must specify the v1-then-
+  wave-2 phase order.
+- **THE IDLE-IMPROVEMENT QUEUE (2026-10-19 - the IDLE-AMENDMENT LAW in
+  force)**: the user's rule - suggestions/improvements/subsequents NEVER
+  amend a working lane; they land as NEW IDLE lanes and the orchestrator
+  folds their reports into the subsequent dispatches (codified in the
+  orchestrator-batch SKILL, section 11). The 8 improvements seated IDLE
+  (all "SPEC RETAINED - IDLE"): I1 REQUIREMENT-GUARD (`326cbda8` - the
+  command-only detach + sandbox/fail-open constraints -> ACTIVATED, amending
+  the requirement files now), I2 DESIGN-AWAIT-MARKER (`003f0eb5` - the
+  {"__await":true block-on-demand marker), I3 DESIGN-APPEND-SEAM (`a06e2f3b`
+  - the completion-append path resolution), I4 DESIGN-COMPLETION-ERGONOMICS
+  (`0d1d5e06` - the batched appends + resume hints), I5 DESIGN-PLANTED-LEASE
+  (`e4d97c23` - the planted-block lease + stale declaration), I6
+  DESIGN-SUGGESTER-CONFIGURED (`04afa73b` - configured-block suggestions),
+  I7 COACH-GRAMMAR (`95e565e5` - teach the grammar via the tool-coach note),
+  I8 WRAPUP-RETIRE-LEDGER (`0ce2c18d` - the .mjs retirement + the before/
+  after totals ledger, fires after L5/L6). The design addenda (I2-I6) write
+  to Documentation/Plans/LiveContainers/Design/ and feed the D2 brief; the
+  drain continues at 2-3 active until all is met.
+- **I1 COMPLETE (2026-10-19)**: the two hard constraints folded (append-only,
+  verified): 01-LIVE-TOOL-CALL-BLOCKS.md:322 (section 12: 12.1 the
+  command-only detach rule - the mutation family permanently non-detachable
+  in ANY mode, the read-only observation tools may detach under selected
+  only; 12.2 the sandbox + fail-open rule - G2 through the governed bash
+  execution path, the liveTimeoutMs <= inline deadline, the ring caps as the
+  output caps, the fail-open transform listener, the orphaned markers render
+  status: lost), 07-SEAM-MAP.md:92 (the constraints mapped onto G2/G4 - G2
+  narrowed to a command-runner-only wrapper), 00-OVERVIEW.md:105 (the
+  non-negotiables 6 -> 8). The Requirements/ dir is untracked (the user
+  commits).
+- **D2 DISPATCHED (2026-10-19, `3c36688c` - deepseek-v4-flash-0731 max, the
+  design lane)**: the implementation design for the ONE package (v1 +
+  wave 2); it resolves G1 (the pre-execute carrier), G2 (the command-runner
+  wrapper), G5 (the planted-block report pickup), the four residuals (the
+  withdrawal/KV-cache ratification, the suggester privacy, the idle-wake
+  channel, THE PHASE ORDER v1-then-wave-2 so A1 and C2 never collide), and
+  writes Documentation/Plans/LiveContainers/Design/IMPLEMENTATION-DESIGN.md
+  with the byte-ready design + the C2 coder brief. The I2-I6 addenda fire as
+  slots free; D2 incorporates those that land mid-run and flags the rest for
+  ratification at the C2 dispatch.
