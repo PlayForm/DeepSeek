@@ -65,7 +65,7 @@ export const runTest = async (): Promise<number> => {
 			Cooldown: (Dir) => `update stage skipped for ${Dir} (cooldown)`,
 			Failed: (Dir, Code, Consecutive) =>
 				`update stage FAILED (${Code}) for ${Dir}; consecutive=${Consecutive}`,
-			Dispatched: (State, Dir, PolicyPath) =>
+			Dispatched: (_State, Dir, PolicyPath) =>
 				`update stage dispatched for ${Dir} (mode=smoke, ncu via /bin/ncu, ${PolicyPath})`,
 		};
 		const UpdateState = (): SmokeState => ({
@@ -86,10 +86,10 @@ export const runTest = async (): Promise<number> => {
 			Inflight: (State) => State.Inflight,
 			Limit: () => 2,
 			Wait: () => 0,
-			UpdateKey: (State, Target) => `update:${Target}`,
+			UpdateKey: (_State, Target) => `update:${Target}`,
 			Append: (State, Message) => State.Ledger.push(Message),
 			Journal: (State, Event, Dir, Detail) => State.Journal.push([Event, Dir, Detail]),
-			Refresh: (State, Target, Actor, Version) => State.Refreshed.push([Target, Version]),
+			Refresh: (State, Target, _Actor, Version) => State.Refreshed.push([Target, Version]),
 			Stat: async () => ({ version: 7 }),
 			Start: (State, Spec, Detached) => {
 				State.Spec = Spec;
@@ -292,7 +292,7 @@ export const runTest = async (): Promise<number> => {
 					// the breaker and resolves `failed` with the module's rejected
 					// detail (containment).
 					const State = UpdateState();
-					const BoomStage = async (
+					const BoomStage: SmokeDeps["Stage"] = async (
 						_State,
 						_Dir,
 						_Target,
@@ -387,7 +387,7 @@ export const runTest = async (): Promise<number> => {
 					// interruption aborts the task-owned controller - the Classic
 					// Inflight-disposal semantics.
 					const State = UpdateState();
-					const HangStage = (
+					const HangStage: SmokeDeps["Stage"] = (
 						_State,
 						_Dir,
 						_Target,

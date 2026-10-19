@@ -8,7 +8,7 @@
 // This folder is the ETS-only additive coverage re-homed from the ETS core
 // smoke's section 10; there is no Classic twin.
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter } from "../Harness.js";
+import { CheckAsync, Finish, MakeCounter } from "../Harness.js";
 import { Dashes, Replace } from "../../../Target/Library.js";
 import { Chunk, StreamGate as Gate } from "../../../../ets-base-dsh/Target/Library.js";
 import { Stream } from "effect";
@@ -21,10 +21,10 @@ export const runTest = async (): Promise<number> => {
 	{
 		// The Check label is the source suite's ok label, verbatim (the em
 		// dash is escaped for an ASCII source file).
-		Check(
+		await CheckAsync(
 			Count,
 			"Gate: the stream transformer \u2014 reducer equivalence, per-call raw state, error propagation, completion-only count summary, fresh state per materialization",
-			() => {
+			async () => {
 				const ToDash = (Text: string) => Replace(Text, Dashes, "-");
 				type AnyChunk = { type: string; [key: string]: unknown };
 				const Replay = (Chunks: AnyChunk[]) => ({
