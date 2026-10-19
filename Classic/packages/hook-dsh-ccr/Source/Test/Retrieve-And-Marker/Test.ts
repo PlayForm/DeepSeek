@@ -279,7 +279,12 @@ export const runTest = async (): Promise<number> => {
 				NextAccept,
 			);
 			assert.ok(
-				!(Out.content ?? []).some?.((B: any) => (B.text ?? "").includes("<<<CCR:")) ?? true,
+				// The runtime semantics of the source expression
+				// `!(Out.content ?? []).some?.(...) ?? true`: the left operand is
+				// always a boolean (some() returns false for an empty array, and a
+				// missing some() makes the optional call undefined, which `!` turns
+				// into true), so the `?? true` fallback was unreachable there too.
+				!(Out.content ?? []).some?.((B: any) => (B.text ?? "").includes("<<<CCR:")),
 			);
 		});
 	}

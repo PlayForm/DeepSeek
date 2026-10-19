@@ -1,16 +1,750 @@
-import i from"node:assert/strict";import{existsSync as D,readFileSync as F}from"node:fs";import{Check as z,CheckAsync as u,Finish as _,MakeCounter as H,Make as m,Rm as E,Validate as k,Ledger as w,TextBlock as r,Exec as n,NextAccept as l,TerminalText as b,PlainText as p,HashOf as d,SizeOf as x}from"../Harness.js";const N=async()=>{const o=H(),O=k({logFile:w});E();const g=m(k({autoExpand:!1,logFile:w})),L=g.Listeners["tools/post-execute"];await u(o,"oversized bash result is replaced (not passed through)",async()=>{const t=b("y".repeat(96),26),e=r(t),s={isError:!1,value:{},content:e},a={kind:"accept"},h=await L(n("bash"),s,async()=>a);i.ok(h!==a&&h&&h.kind==="accept")}),await u(o,"replacement content is exactly [terminal:preview] + newline + the exact marker bytes",async()=>{const t=b("y".repeat(96),26),e=r(t),s={isError:!1,value:{},content:e},a={kind:"accept"},h=await L(n("bash"),s,async()=>a),R=d(e),v=x(e);i.ok(JSON.stringify(h.content)===JSON.stringify([{type:"text",text:`[terminal:exit 0 | ${t.split(`
-`).length} lines | make: starting]
-<<<CCR:${R}|terminal|${v}>>>`}]))}),await u(o,"round-trip: ccr_retrieve restores the ORIGINAL bytes for the marker's hash",async()=>{const t=b("y".repeat(96),26),e=r(t);await L(n("bash"),{isError:!1,value:{},content:e},async()=>({kind:"accept"}));const s=d(e),a=await g.Registered[0].execute({hash:s},n("ccr_retrieve"));i.ok(a.text===t)}),await u(o,"retrieval echoes hash/type/size from the stored entry",async()=>{const t=b("y".repeat(96),26),e=r(t);await L(n("bash"),{isError:!1,value:{},content:e},async()=>({kind:"accept"}));const s=d(e),a=x(e),h=await g.Registered[0].execute({hash:s},n("ccr_retrieve"));i.ok(h.hash===s&&h.type==="terminal"&&h.size===a)}),await u(o,"compressed ledger line byte-exact: 'ccr: compressed bash terminal <bytes> -> <hash>'",async()=>{const t=r(b("y".repeat(96),26)),e=x(t),s=d(t);await L(n("bash"),{isError:!1,value:{},content:t},async()=>({kind:"accept"})),i.ok(g.Lines.includes(`ccr: compressed bash terminal ${e} -> ${s}`))}),await u(o,"retrieval ledger line: 'ccr: retrieved <hash>'",async()=>{const t=r(b("y".repeat(96),26)),e=d(t);await L(n("bash"),{isError:!1,value:{},content:t},async()=>({kind:"accept"})),await g.Registered[0].execute({hash:e},n("ccr_retrieve")),i.ok(g.Lines.includes(`ccr: retrieved ${e}`))}),await u(o,"the compressed case writes NO stored line (compressed \u2260 auto-expand store)",async()=>{const t=r(b("y".repeat(96),26));await L(n("bash"),{isError:!1,value:{},content:t},async()=>({kind:"accept"})),i.ok(!g.Lines.some(e=>e.includes("-> ")&&e.includes("stored ")))}),await u(o,"unknown hash \u2192 the self-describing error (re-run the original tool; no fuzzy matching)",async()=>{let t=null;try{await g.Registered[0].execute({hash:"f".repeat(24)},n("ccr_retrieve"))}catch(e){t=e}i.ok(t!==null&&/not in the store/.test(t.message)&&/Re-run the original tool/.test(t.message))}),await u(o,"unknown-hash ledger line: 'ccr: retrieval miss <hash> (unknown)'",async()=>{try{await g.Registered[0].execute({hash:"f".repeat(24)},n("ccr_retrieve"))}catch{}i.ok(g.Lines.includes(`ccr: retrieval miss ${"f".repeat(24)} (unknown)`))}),await u(o,"a 12-char hash PREFIX does not retrieve (no prefix or fuzzy matching)",async()=>{const t=r(b("y".repeat(96),26)),e=d(t);let s=null;try{await g.Registered[0].execute({hash:e.slice(0,12)},n("ccr_retrieve"))}catch(a){s=a}i.ok(s!==null)}),E();const C=m(k({autoExpand:!1,logFile:w}));await u(o,"the marker parses strictly (24-hex hash, type, size)",async()=>{const t=`${p(2400)}
-${p(300)}`,e=r(t),s={isError:!1,value:{},content:e},a=await C.Listeners["tools/post-execute"](n("read"),s,l),h=/^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/.exec(a.content[0].text.split(`
-`)[1]??"");i.ok(h!==null)}),await u(o,"read result marker: the full-content hash, type 'file', the exact serialized size",async()=>{const t=`${p(2400)}
-${p(300)}`,e=r(t),s={isError:!1,value:{},content:e},a=await C.Listeners["tools/post-execute"](n("read"),s,l),h=d(e),R=x(e),v=/^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/.exec(a.content[0].text.split(`
-`)[1]??"");i.ok(v!==null&&v[1]===h&&v[2]==="file"&&Number(v[3])===R)}),await u(o,"the preview line is the [file:...] type-tagged one-liner",async()=>{const t=`${p(2400)}
-${p(300)}`,e=r(t),s={isError:!1,value:{},content:e},a=await C.Listeners["tools/post-execute"](n("read"),s,l);i.ok(a.content[0].text.startsWith("[file:"))}),await u(o,"range {start:1,count:1} returns only the second line (granular retrieval)",async()=>{const t=`${p(2400)}
-${p(300)}`,e=r(t);await C.Listeners["tools/post-execute"](n("read"),{isError:!1,value:{},content:e},l);const s=d(e),a=await C.Registered[0].execute({hash:s,range:{start:1,count:1}},n("ccr_retrieve"));i.ok(a.text===p(300))}),await u(o,"an out-of-range start clamps to an empty slice (never an error)",async()=>{const t=`${p(2400)}
-${p(300)}`,e=r(t);await C.Listeners["tools/post-execute"](n("read"),{isError:!1,value:{},content:e},l);const s=d(e),a=await C.Registered[0].execute({hash:s,range:{start:99,count:5}},n("ccr_retrieve"));i.ok(a.text==="")}),E();const S=m(k({logFile:w}));await u(o,"auto-expand: the downstream decision passes through (FULL content, no marker)",async()=>{const t=b("z".repeat(80),40),e=r(t),s={isError:!1,value:{},content:e},a={kind:"accept"},h=await S.Listeners["tools/post-execute"](n("bash"),s,async()=>a);i.ok(h===a)}),await u(o,"auto-expand: NO marker reaches the model",async()=>{const t=b("z".repeat(80),40),e=r(t),s=await S.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:e},l);i.ok(!(s.content??[]).some?.(a=>(a.text??"").includes("<<<CCR:")))}),await u(o,"auto-expand: the entry is STILL retrievable by hash",async()=>{const t=b("z".repeat(80),40),e=r(t);await S.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:e},l);const s=d(e),a=await S.Registered[0].execute({hash:s},n("ccr_retrieve"));i.ok(a.text===t)}),await u(o,"auto-expand ledger line: 'ccr: stored bash terminal <bytes> -> <hash>'",async()=>{const t=r(b("z".repeat(80),40));await S.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:t},l),i.ok(S.Lines.includes(`ccr: stored bash terminal ${x(t)} -> ${d(t)}`))}),await u(o,"auto-expand writes NO compressed line (nothing was replaced)",async()=>{const t=r(b("z".repeat(80),40));await S.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:t},l),i.ok(!S.Lines.some(e=>e.includes("compressed ")))}),await u(o,"above autoExpandLimitBytes the preview + marker replacement returns (preview hard-cut at 240 chars)",async()=>{const t=p(102500),e=r(t),s=await S.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:e},l);i.ok(s!==void 0&&s.kind==="accept"&&JSON.stringify(s.content)===JSON.stringify([{type:"text",text:`[terminal:${`exit ? | 1 lines | ${"x".repeat(221)}`}]
-<<<CCR:${d(e)}|terminal|${x(e)}>>>`}]))}),E();const $=m(k({logFile:w,ttlSeconds:0}));await u(o,"TTL expiry (ttlSeconds: 0): retrieval reports the entry expired",async()=>{const t=r(b("t".repeat(80),40)),e={isError:!1,value:{},content:t};await $.Listeners["tools/post-execute"](n("bash"),e,l);const s=d(t);let a=null;try{await $.Registered[0].execute({hash:s},n("ccr_retrieve"))}catch(h){a=h}i.ok(a!==null&&/expired/.test(a.message))}),await u(o,"expired ledger line: 'ccr: retrieval miss <hash> (expired)'",async()=>{const t=r(b("t".repeat(80),40));await $.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:t},l);const e=d(t);try{await $.Registered[0].execute({hash:e},n("ccr_retrieve"))}catch{}i.ok($.Lines.includes(`ccr: retrieval miss ${e} (expired)`))}),E();const f=m(k({logFile:w,storeBudgetBytes:5e3}));await u(o,"LRU eviction at budget: 'ccr: evicted <hash> (budget)' for the least-recently-used entry",async()=>{const t=r(b("a".repeat(80),40)),e=r(b("b".repeat(80),40)),s=n("bash");await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:t},l),await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:e},l);const a=d(t);i.ok(f.Lines.includes(`ccr: evicted ${a} (budget)`))}),await u(o,"the evicted entry is gone (unknown hash)",async()=>{const t=r(b("a".repeat(80),40)),e=r(b("b".repeat(80),40)),s=n("bash");await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:t},l),await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:e},l);const a=d(t);let h=null;try{await f.Registered[0].execute({hash:a},n("ccr_retrieve"))}catch(R){h=R}i.ok(h!==null&&/not in the store/.test(h.message))}),await u(o,"the surviving entry is still retrievable with the ORIGINAL bytes",async()=>{const t=r(b("a".repeat(80),40)),e=r(b("b".repeat(80),40)),s=n("bash");await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:t},l),await f.Listeners["tools/post-execute"](s,{isError:!1,value:{},content:e},l);const a=d(e),h=await f.Registered[0].execute({hash:a},n("ccr_retrieve"));i.ok(h.text===`make: starting
-exit code: 0
-${Array.from({length:40},(R,v)=>`row ${v} ${"b".repeat(80)}`).join(`
-`)}`)}),E();const T=m(k({autoExpand:!1,logFile:w,compressFailures:!0}));await u(o,"compressFailures=true: an oversized failure compresses with the error preview (first content line, hard-cut) and the |error| marker",async()=>{const t=r(p(17e3)),e={isError:!0,error:{message:"boom"},content:t},s=await T.Listeners["tools/post-execute"](n("bash"),e,l),a=d(t);i.ok(s.kind==="accept"&&s.content[0].text===`[error:${"x".repeat(240)}]
-<<<CCR:${a}|error|${x(t)}>>>`)}),await u(o,"the failure's original content is retrievable",async()=>{const t=r(p(17e3)),e={isError:!0,error:{message:"boom"},content:t};await T.Listeners["tools/post-execute"](n("bash"),e,l);const s=d(t),a=await T.Registered[0].execute({hash:s},n("ccr_retrieve"));i.ok(a.text===p(17e3))}),E();const y=m(k({autoExpand:!1,logFile:w,targets:[...O.targets,"probe"]}));await u(o,"'bash' \u2192 type 'terminal' marker (\xD71 gate: 3000 bytes compresses)",async()=>{const t=p(3e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|terminal|${x(e)}>>>`))}),await u(o,"'read' \u2192 type 'file' marker (\xD71 gate: 3000 bytes compresses)",async()=>{const t=p(3e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("read"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|file|${x(e)}>>>`))}),await u(o,"'grep' \u2192 type 'grep' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("grep"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|grep|${x(e)}>>>`))}),await u(o,"'glob' \u2192 type 'paths' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("glob"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|paths|${x(e)}>>>`))}),await u(o,"'web_fetch' \u2192 type 'web' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("web_fetch"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|web|${x(e)}>>>`))}),await u(o,"'web_search' \u2192 type 'web' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("web_search"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|web|${x(e)}>>>`))}),await u(o,"'list' \u2192 type 'paths' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("list"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|paths|${x(e)}>>>`))}),await u(o,"'search' \u2192 type 'grep' marker (\xD72 gate: 5000 bytes compresses)",async()=>{const t=p(5e3),e=r(t),s=await y.Listeners["tools/post-execute"](n("search"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.endsWith(`|grep|${x(e)}>>>`))}),await u(o,"'grep' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected",async()=>{const t=p(3e3),e=r(t),s={kind:"accept"},a=await y.Listeners["tools/post-execute"](n("grep"),{isError:!1,value:{},content:e},async()=>s);i.ok(a===s)}),await u(o,"'glob' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected",async()=>{const t=p(3e3),e=r(t),s={kind:"accept"},a=await y.Listeners["tools/post-execute"](n("glob"),{isError:!1,value:{},content:e},async()=>s);i.ok(a===s)}),await u(o,"'web_fetch' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected",async()=>{const t=p(3e3),e=r(t),s={kind:"accept"},a=await y.Listeners["tools/post-execute"](n("web_fetch"),{isError:!1,value:{},content:e},async()=>s);i.ok(a===s)}),await u(o,"a non-table target with JSON content classifies as 'json' (shape fallback) and compresses at \xD71",async()=>{const t=JSON.stringify({key:"v".repeat(2900)}),e=r(t),s=await y.Listeners["tools/post-execute"](n("probe"),{isError:!1,value:{},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.includes("|json|"))}),await u(o,"a non-table target with plain text classifies as 'default' (shape fallback) and compresses at \xD71",async()=>{const t=r(p(3e3)),e=await y.Listeners["tools/post-execute"](n("probe"),{isError:!1,value:{},content:t},l);i.ok(e.kind==="accept"&&e.content[0].text.includes("|default|"))}),await u(o,"a tool outside targets is never compressed (the allow-list)",async()=>{const t={kind:"accept"},e=await y.Listeners["tools/post-execute"](n("alien_tool"),{isError:!1,value:{},content:r(p(2e4))},async()=>t);i.ok(e===t)}),await u(o,"the error \xD78 gate: 5000 bytes compresses for terminal \xD71 but NOT for error \xD78 (gate 16384)",async()=>{const t=m(k({autoExpand:!1,logFile:w,compressFailures:!0,targets:[...O.targets,"probe"]})),e=r(p(5e3)),s={isError:!0,error:{message:"x".repeat(4900)},content:e},a={kind:"accept"},h=await t.Listeners["tools/post-execute"](n("bash"),s,async()=>a);i.ok(h===a)}),await u(o,"a failure over the \xD78 gate (17000 > 16384) compresses with the |error| marker",async()=>{const t=m(k({autoExpand:!1,logFile:w,compressFailures:!0,targets:[...O.targets,"probe"]})),e=r(p(17e3)),s=await t.Listeners["tools/post-execute"](n("bash"),{isError:!0,error:{message:"y".repeat(16900)},content:e},l);i.ok(s.kind==="accept"&&s.content[0].text.includes("|error|"))}),E();{const c="the durable ledger file: '[ISO] compressed bash terminal <bytes> -> <hash>'",t=m(k({autoExpand:!1,logFile:w}));{const s=r(b("l".repeat(96),26));await t.Listeners["tools/post-execute"](n("bash"),{isError:!1,value:{},content:s},l)}await new Promise(s=>setTimeout(s,10));const e=D(w)?F(w,"utf8"):"";z(o,c,()=>{i.ok(e.split(`
-`).some(s=>/^\[[^\]]+\] compressed bash terminal \d+ -> [0-9a-f]{24}$/.test(s)))})}return _(o,"Retrieve-And-Marker")},B=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(B){const o=await N();console.log(`${o} PASS - Retrieve-And-Marker`)}export{N as runTest};
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Make,
+  Rm,
+  Validate,
+  Ledger,
+  TextBlock,
+  Exec,
+  NextAccept,
+  TerminalText,
+  PlainText,
+  HashOf,
+  SizeOf
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Raw1 = Validate({ logFile: Ledger });
+  Rm();
+  const Run1b = Make(Validate({ autoExpand: false, logFile: Ledger }));
+  const Listener1b = Run1b.Listeners["tools/post-execute"];
+  {
+    const Sub = "oversized bash result is replaced (not passed through)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("y".repeat(96), 26);
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Decision = { kind: "accept" };
+      const Out = await Listener1b(Exec("bash"), Result, async () => Decision);
+      assert.ok(Out !== Decision && Out && Out.kind === "accept");
+    });
+  }
+  {
+    const Sub = "replacement content is exactly [terminal:preview] + newline + the exact marker bytes";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("y".repeat(96), 26);
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Decision = { kind: "accept" };
+      const Out = await Listener1b(Exec("bash"), Result, async () => Decision);
+      const Hash = HashOf(Content);
+      const Size = SizeOf(Content);
+      assert.ok(
+        JSON.stringify(Out.content) === JSON.stringify([
+          {
+            type: "text",
+            text: `[terminal:exit 0 | ${Text.split("\n").length} lines | make: starting]
+<<<CCR:${Hash}|terminal|${Size}>>>`
+          }
+        ])
+      );
+    });
+  }
+  {
+    const Sub = "round-trip: ccr_retrieve restores the ORIGINAL bytes for the marker's hash";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("y".repeat(96), 26);
+      const Content = TextBlock(Text);
+      await Listener1b(Exec("bash"), { isError: false, value: {}, content: Content }, async () => ({
+        kind: "accept"
+      }));
+      const Hash = HashOf(Content);
+      const Retrieved = await Run1b.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      assert.ok(Retrieved.text === Text);
+    });
+  }
+  {
+    const Sub = "retrieval echoes hash/type/size from the stored entry";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("y".repeat(96), 26);
+      const Content = TextBlock(Text);
+      await Listener1b(Exec("bash"), { isError: false, value: {}, content: Content }, async () => ({
+        kind: "accept"
+      }));
+      const Hash = HashOf(Content);
+      const Size = SizeOf(Content);
+      const Retrieved = await Run1b.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      assert.ok(Retrieved.hash === Hash && Retrieved.type === "terminal" && Retrieved.size === Size);
+    });
+  }
+  {
+    const Sub = "compressed ledger line byte-exact: 'ccr: compressed bash terminal <bytes> -> <hash>'";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("y".repeat(96), 26));
+      const Size = SizeOf(Content);
+      const Hash = HashOf(Content);
+      await Listener1b(Exec("bash"), { isError: false, value: {}, content: Content }, async () => ({
+        kind: "accept"
+      }));
+      assert.ok(Run1b.Lines.includes(`ccr: compressed bash terminal ${Size} -> ${Hash}`));
+    });
+  }
+  {
+    const Sub = "retrieval ledger line: 'ccr: retrieved <hash>'";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("y".repeat(96), 26));
+      const Hash = HashOf(Content);
+      await Listener1b(Exec("bash"), { isError: false, value: {}, content: Content }, async () => ({
+        kind: "accept"
+      }));
+      await Run1b.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      assert.ok(Run1b.Lines.includes(`ccr: retrieved ${Hash}`));
+    });
+  }
+  {
+    const Sub = "the compressed case writes NO stored line (compressed \u2260 auto-expand store)";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("y".repeat(96), 26));
+      await Listener1b(Exec("bash"), { isError: false, value: {}, content: Content }, async () => ({
+        kind: "accept"
+      }));
+      assert.ok(!Run1b.Lines.some((L) => L.includes("-> ") && L.includes("stored ")));
+    });
+  }
+  {
+    const Sub = "unknown hash \u2192 the self-describing error (re-run the original tool; no fuzzy matching)";
+    await CheckAsync(Count, Sub, async () => {
+      let UnknownError = null;
+      try {
+        await Run1b.Registered[0].execute({ hash: "f".repeat(24) }, Exec("ccr_retrieve"));
+      } catch (E) {
+        UnknownError = E;
+      }
+      assert.ok(
+        UnknownError !== null && /not in the store/.test(UnknownError.message) && /Re-run the original tool/.test(UnknownError.message)
+      );
+    });
+  }
+  {
+    const Sub = "unknown-hash ledger line: 'ccr: retrieval miss <hash> (unknown)'";
+    await CheckAsync(Count, Sub, async () => {
+      try {
+        await Run1b.Registered[0].execute({ hash: "f".repeat(24) }, Exec("ccr_retrieve"));
+      } catch {
+      }
+      assert.ok(Run1b.Lines.includes(`ccr: retrieval miss ${"f".repeat(24)} (unknown)`));
+    });
+  }
+  {
+    const Sub = "a 12-char hash PREFIX does not retrieve (no prefix or fuzzy matching)";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("y".repeat(96), 26));
+      const Hash = HashOf(Content);
+      let PrefixError = null;
+      try {
+        await Run1b.Registered[0].execute({ hash: Hash.slice(0, 12) }, Exec("ccr_retrieve"));
+      } catch (E) {
+        PrefixError = E;
+      }
+      assert.ok(PrefixError !== null);
+    });
+  }
+  Rm();
+  const Run2 = Make(Validate({ autoExpand: false, logFile: Ledger }));
+  {
+    const Sub = "the marker parses strictly (24-hex hash, type, size)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = `${PlainText(2400)}
+${PlainText(300)}`;
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Out = await Run2.Listeners["tools/post-execute"](Exec("read"), Result, NextAccept);
+      const Marker = /^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/.exec(
+        Out.content[0].text.split("\n")[1] ?? ""
+      );
+      assert.ok(Marker !== null);
+    });
+  }
+  {
+    const Sub = "read result marker: the full-content hash, type 'file', the exact serialized size";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = `${PlainText(2400)}
+${PlainText(300)}`;
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Out = await Run2.Listeners["tools/post-execute"](Exec("read"), Result, NextAccept);
+      const Hash = HashOf(Content);
+      const Size = SizeOf(Content);
+      const Marker = /^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/.exec(
+        Out.content[0].text.split("\n")[1] ?? ""
+      );
+      assert.ok(Marker !== null && Marker[1] === Hash && Marker[2] === "file" && Number(Marker[3]) === Size);
+    });
+  }
+  {
+    const Sub = "the preview line is the [file:...] type-tagged one-liner";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = `${PlainText(2400)}
+${PlainText(300)}`;
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Out = await Run2.Listeners["tools/post-execute"](Exec("read"), Result, NextAccept);
+      assert.ok(Out.content[0].text.startsWith("[file:"));
+    });
+  }
+  {
+    const Sub = "range {start:1,count:1} returns only the second line (granular retrieval)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = `${PlainText(2400)}
+${PlainText(300)}`;
+      const Content = TextBlock(Text);
+      await Run2.Listeners["tools/post-execute"](
+        Exec("read"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      const Hash = HashOf(Content);
+      const Ranged = await Run2.Registered[0].execute(
+        { hash: Hash, range: { start: 1, count: 1 } },
+        Exec("ccr_retrieve")
+      );
+      assert.ok(Ranged.text === PlainText(300));
+    });
+  }
+  {
+    const Sub = "an out-of-range start clamps to an empty slice (never an error)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = `${PlainText(2400)}
+${PlainText(300)}`;
+      const Content = TextBlock(Text);
+      await Run2.Listeners["tools/post-execute"](
+        Exec("read"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      const Hash = HashOf(Content);
+      const Tail = await Run2.Registered[0].execute(
+        { hash: Hash, range: { start: 99, count: 5 } },
+        Exec("ccr_retrieve")
+      );
+      assert.ok(Tail.text === "");
+    });
+  }
+  Rm();
+  const Run3 = Make(Validate({ logFile: Ledger }));
+  {
+    const Sub = "auto-expand: the downstream decision passes through (FULL content, no marker)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("z".repeat(80), 40);
+      const Content = TextBlock(Text);
+      const Result = { isError: false, value: {}, content: Content };
+      const Decision = { kind: "accept" };
+      const Out = await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        Result,
+        async () => Decision
+      );
+      assert.ok(Out === Decision);
+    });
+  }
+  {
+    const Sub = "auto-expand: NO marker reaches the model";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("z".repeat(80), 40);
+      const Content = TextBlock(Text);
+      const Out = await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        // The runtime semantics of the source expression
+        // `!(Out.content ?? []).some?.(...) ?? true`: the left operand is
+        // always a boolean (some() returns false for an empty array, and a
+        // missing some() makes the optional call undefined, which `!` turns
+        // into true), so the `?? true` fallback was unreachable there too.
+        !(Out.content ?? []).some?.((B) => (B.text ?? "").includes("<<<CCR:"))
+      );
+    });
+  }
+  {
+    const Sub = "auto-expand: the entry is STILL retrievable by hash";
+    await CheckAsync(Count, Sub, async () => {
+      const Text = TerminalText("z".repeat(80), 40);
+      const Content = TextBlock(Text);
+      await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      const Hash = HashOf(Content);
+      const Retrieved = await Run3.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      assert.ok(Retrieved.text === Text);
+    });
+  }
+  {
+    const Sub = "auto-expand ledger line: 'ccr: stored bash terminal <bytes> -> <hash>'";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("z".repeat(80), 40));
+      await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Run3.Lines.includes(`ccr: stored bash terminal ${SizeOf(Content)} -> ${HashOf(Content)}`)
+      );
+    });
+  }
+  {
+    const Sub = "auto-expand writes NO compressed line (nothing was replaced)";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("z".repeat(80), 40));
+      await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(!Run3.Lines.some((L) => L.includes("compressed ")));
+    });
+  }
+  {
+    const Sub = "above autoExpandLimitBytes the preview + marker replacement returns (preview hard-cut at 240 chars)";
+    await CheckAsync(Count, Sub, async () => {
+      const Big = PlainText(102500);
+      const BigContent = TextBlock(Big);
+      const BigOut = await Run3.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: BigContent },
+        NextAccept
+      );
+      assert.ok(
+        BigOut !== void 0 && BigOut.kind === "accept" && JSON.stringify(BigOut.content) === JSON.stringify([
+          {
+            // The preview is hard-cut to exactly 240 chars: the 19-char
+            // `exit ? | 1 lines | ` prefix + 221 fill chars.
+            type: "text",
+            text: `[terminal:${`exit ? | 1 lines | ${"x".repeat(221)}`}]
+<<<CCR:${HashOf(BigContent)}|terminal|${SizeOf(BigContent)}>>>`
+          }
+        ])
+      );
+    });
+  }
+  Rm();
+  const Run5 = Make(Validate({ logFile: Ledger, ttlSeconds: 0 }));
+  {
+    const Sub = "TTL expiry (ttlSeconds: 0): retrieval reports the entry expired";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("t".repeat(80), 40));
+      const Result = { isError: false, value: {}, content: Content };
+      await Run5.Listeners["tools/post-execute"](Exec("bash"), Result, NextAccept);
+      const Hash = HashOf(Content);
+      let ExpiredError = null;
+      try {
+        await Run5.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      } catch (E) {
+        ExpiredError = E;
+      }
+      assert.ok(ExpiredError !== null && /expired/.test(ExpiredError.message));
+    });
+  }
+  {
+    const Sub = "expired ledger line: 'ccr: retrieval miss <hash> (expired)'";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(TerminalText("t".repeat(80), 40));
+      await Run5.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      const Hash = HashOf(Content);
+      try {
+        await Run5.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      } catch {
+      }
+      assert.ok(Run5.Lines.includes(`ccr: retrieval miss ${Hash} (expired)`));
+    });
+  }
+  Rm();
+  const Run5b = Make(Validate({ logFile: Ledger, storeBudgetBytes: 5e3 }));
+  {
+    const Sub = "LRU eviction at budget: 'ccr: evicted <hash> (budget)' for the least-recently-used entry";
+    await CheckAsync(Count, Sub, async () => {
+      const A = TextBlock(TerminalText("a".repeat(80), 40));
+      const B = TextBlock(TerminalText("b".repeat(80), 40));
+      const ExecBash = Exec("bash");
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: A },
+        NextAccept
+      );
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: B },
+        NextAccept
+      );
+      const HashA = HashOf(A);
+      assert.ok(Run5b.Lines.includes(`ccr: evicted ${HashA} (budget)`));
+    });
+  }
+  {
+    const Sub = "the evicted entry is gone (unknown hash)";
+    await CheckAsync(Count, Sub, async () => {
+      const A = TextBlock(TerminalText("a".repeat(80), 40));
+      const B = TextBlock(TerminalText("b".repeat(80), 40));
+      const ExecBash = Exec("bash");
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: A },
+        NextAccept
+      );
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: B },
+        NextAccept
+      );
+      const HashA = HashOf(A);
+      let GoneError = null;
+      try {
+        await Run5b.Registered[0].execute({ hash: HashA }, Exec("ccr_retrieve"));
+      } catch (E) {
+        GoneError = E;
+      }
+      assert.ok(GoneError !== null && /not in the store/.test(GoneError.message));
+    });
+  }
+  {
+    const Sub = "the surviving entry is still retrievable with the ORIGINAL bytes";
+    await CheckAsync(Count, Sub, async () => {
+      const A = TextBlock(TerminalText("a".repeat(80), 40));
+      const B = TextBlock(TerminalText("b".repeat(80), 40));
+      const ExecBash = Exec("bash");
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: A },
+        NextAccept
+      );
+      await Run5b.Listeners["tools/post-execute"](
+        ExecBash,
+        { isError: false, value: {}, content: B },
+        NextAccept
+      );
+      const HashB = HashOf(B);
+      const Kept = await Run5b.Registered[0].execute({ hash: HashB }, Exec("ccr_retrieve"));
+      assert.ok(
+        Kept.text === `${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"b".repeat(80)}`).join("\n")}`
+      );
+    });
+  }
+  Rm();
+  const Run6b = Make(Validate({ autoExpand: false, logFile: Ledger, compressFailures: true }));
+  {
+    const Sub = "compressFailures=true: an oversized failure compresses with the error preview (first content line, hard-cut) and the |error| marker";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(PlainText(17e3));
+      const Failure = { isError: true, error: { message: "boom" }, content: Content };
+      const Out = await Run6b.Listeners["tools/post-execute"](Exec("bash"), Failure, NextAccept);
+      const Hash = HashOf(Content);
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text === `[error:${"x".repeat(240)}]
+<<<CCR:${Hash}|error|${SizeOf(Content)}>>>`
+      );
+    });
+  }
+  {
+    const Sub = "the failure's original content is retrievable";
+    await CheckAsync(Count, Sub, async () => {
+      const Content = TextBlock(PlainText(17e3));
+      const Failure = { isError: true, error: { message: "boom" }, content: Content };
+      await Run6b.Listeners["tools/post-execute"](Exec("bash"), Failure, NextAccept);
+      const Hash = HashOf(Content);
+      const Retrieved = await Run6b.Registered[0].execute({ hash: Hash }, Exec("ccr_retrieve"));
+      assert.ok(Retrieved.text === PlainText(17e3));
+    });
+  }
+  Rm();
+  const Run7 = Make(
+    Validate({ autoExpand: false, logFile: Ledger, targets: [...Raw1.targets, "probe"] })
+  );
+  {
+    const Sub = "'bash' \u2192 type 'terminal' marker (\xD71 gate: 3000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text3000 = PlainText(3e3);
+      const Content = TextBlock(Text3000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|terminal|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'read' \u2192 type 'file' marker (\xD71 gate: 3000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text3000 = PlainText(3e3);
+      const Content = TextBlock(Text3000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("read"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|file|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'grep' \u2192 type 'grep' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("grep"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|grep|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'glob' \u2192 type 'paths' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("glob"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|paths|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'web_fetch' \u2192 type 'web' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("web_fetch"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|web|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'web_search' \u2192 type 'web' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("web_search"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|web|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'list' \u2192 type 'paths' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("list"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|paths|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'search' \u2192 type 'grep' marker (\xD72 gate: 5000 bytes compresses)";
+    await CheckAsync(Count, Sub, async () => {
+      const Text5000 = PlainText(5e3);
+      const Content = TextBlock(Text5000);
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("search"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+      assert.ok(
+        Out.kind === "accept" && Out.content[0].text.endsWith(`|grep|${SizeOf(Content)}>>>`)
+      );
+    });
+  }
+  {
+    const Sub = "'grep' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    await CheckAsync(Count, Sub, async () => {
+      const Text3000 = PlainText(3e3);
+      const Content = TextBlock(Text3000);
+      const Decision = { kind: "accept" };
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("grep"),
+        { isError: false, value: {}, content: Content },
+        async () => Decision
+      );
+      assert.ok(Out === Decision);
+    });
+  }
+  {
+    const Sub = "'glob' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    await CheckAsync(Count, Sub, async () => {
+      const Text3000 = PlainText(3e3);
+      const Content = TextBlock(Text3000);
+      const Decision = { kind: "accept" };
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("glob"),
+        { isError: false, value: {}, content: Content },
+        async () => Decision
+      );
+      assert.ok(Out === Decision);
+    });
+  }
+  {
+    const Sub = "'web_fetch' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    await CheckAsync(Count, Sub, async () => {
+      const Text3000 = PlainText(3e3);
+      const Content = TextBlock(Text3000);
+      const Decision = { kind: "accept" };
+      const Out = await Run7.Listeners["tools/post-execute"](
+        Exec("web_fetch"),
+        { isError: false, value: {}, content: Content },
+        async () => Decision
+      );
+      assert.ok(Out === Decision);
+    });
+  }
+  {
+    const Sub = "a non-table target with JSON content classifies as 'json' (shape fallback) and compresses at \xD71";
+    await CheckAsync(Count, Sub, async () => {
+      const JsonText = JSON.stringify({ key: "v".repeat(2900) });
+      const JsonContent = TextBlock(JsonText);
+      const JsonOut = await Run7.Listeners["tools/post-execute"](
+        Exec("probe"),
+        { isError: false, value: {}, content: JsonContent },
+        NextAccept
+      );
+      assert.ok(JsonOut.kind === "accept" && JsonOut.content[0].text.includes("|json|"));
+    });
+  }
+  {
+    const Sub = "a non-table target with plain text classifies as 'default' (shape fallback) and compresses at \xD71";
+    await CheckAsync(Count, Sub, async () => {
+      const PlainContent = TextBlock(PlainText(3e3));
+      const PlainOut = await Run7.Listeners["tools/post-execute"](
+        Exec("probe"),
+        { isError: false, value: {}, content: PlainContent },
+        NextAccept
+      );
+      assert.ok(PlainOut.kind === "accept" && PlainOut.content[0].text.includes("|default|"));
+    });
+  }
+  {
+    const Sub = "a tool outside targets is never compressed (the allow-list)";
+    await CheckAsync(Count, Sub, async () => {
+      const Decision = { kind: "accept" };
+      const AlienOut = await Run7.Listeners["tools/post-execute"](
+        Exec("alien_tool"),
+        { isError: false, value: {}, content: TextBlock(PlainText(2e4)) },
+        async () => Decision
+      );
+      assert.ok(AlienOut === Decision);
+    });
+  }
+  {
+    const Sub = "the error \xD78 gate: 5000 bytes compresses for terminal \xD71 but NOT for error \xD78 (gate 16384)";
+    await CheckAsync(Count, Sub, async () => {
+      const Run7b = Make(
+        Validate({
+          autoExpand: false,
+          logFile: Ledger,
+          compressFailures: true,
+          targets: [...Raw1.targets, "probe"]
+        })
+      );
+      const FailContent = TextBlock(PlainText(5e3));
+      const Failure = { isError: true, error: { message: "x".repeat(4900) }, content: FailContent };
+      const FailDecision = { kind: "accept" };
+      const FailOut = await Run7b.Listeners["tools/post-execute"](
+        Exec("bash"),
+        Failure,
+        async () => FailDecision
+      );
+      assert.ok(FailOut === FailDecision);
+    });
+  }
+  {
+    const Sub = "a failure over the \xD78 gate (17000 > 16384) compresses with the |error| marker";
+    await CheckAsync(Count, Sub, async () => {
+      const Run7b = Make(
+        Validate({
+          autoExpand: false,
+          logFile: Ledger,
+          compressFailures: true,
+          targets: [...Raw1.targets, "probe"]
+        })
+      );
+      const BigFailContent = TextBlock(PlainText(17e3));
+      const BigFailOut = await Run7b.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: true, error: { message: "y".repeat(16900) }, content: BigFailContent },
+        NextAccept
+      );
+      assert.ok(
+        BigFailOut.kind === "accept" && BigFailOut.content[0].text.includes("|error|")
+      );
+    });
+  }
+  Rm();
+  {
+    const Sub = "the durable ledger file: '[ISO] compressed bash terminal <bytes> -> <hash>'";
+    const Run8 = Make(Validate({ autoExpand: false, logFile: Ledger }));
+    {
+      const Content = TextBlock(TerminalText("l".repeat(96), 26));
+      await Run8.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+    }
+    await new Promise((R) => setTimeout(R, 10));
+    const Log1 = existsSync(Ledger) ? readFileSync(Ledger, "utf8") : "";
+    Check(Count, Sub, () => {
+      assert.ok(
+        Log1.split("\n").some(
+          (L) => /^\[[^\]]+\] compressed bash terminal \d+ -> [0-9a-f]{24}$/.test(L)
+        )
+      );
+    });
+  }
+  return Finish(Count, "Retrieve-And-Marker");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Retrieve-And-Marker`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

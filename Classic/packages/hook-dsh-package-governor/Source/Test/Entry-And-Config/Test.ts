@@ -68,14 +68,14 @@ export const runTest = async (): Promise<number> => {
 				const raw = Governor.Config({ logFile: Ledger });
 				assert.equal(raw.logFile.get(), Ledger, "volatile logFile cell");
 				assert.equal(raw.log.get(), true, "volatile log cell default true");
-				assert.equal(raw.updateCooldownMs.get(), 3000, "volatile cooldown cell");
-				assert.deepEqual(raw.mutationTools.get(), TOOLS, "volatile mutationTools cell");
-				assert.equal(raw.strict, false);
-				assert.equal(raw.maxUpdateFailures, 3);
-				assert.equal(raw.updateMode, "programmatic");
-				assert.equal(raw.ncuBin, NCU_BIN);
-				assert.equal(raw.policyFile, "");
-				assert.deepEqual(raw.exclude, EXCLUDE);
+				assert.equal(raw["updateCooldownMs"].get(), 3000, "volatile cooldown cell");
+				assert.deepEqual(raw["mutationTools"].get(), TOOLS, "volatile mutationTools cell");
+				assert.equal(raw["strict"], false);
+				assert.equal(raw["maxUpdateFailures"], 3);
+				assert.equal(raw["updateMode"], "programmatic");
+				assert.equal(raw["ncuBin"], NCU_BIN);
+				assert.equal(raw["policyFile"], "");
+				assert.deepEqual(raw["exclude"], EXCLUDE);
 			});
 		}
 	}

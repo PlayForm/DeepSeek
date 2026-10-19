@@ -195,7 +195,9 @@ export const runTest = async (): Promise<number> => {
 	const passage: any = { Current: null, Proceed: false };
 	const transform = BuildTransform(
 		Probe,
-		{ targetKey: "k-t", displayPath: pathA },
+		// Fixture-only scaffolding: a plain runtime string for the branded
+		// FsTargetKey, exactly like the source suite passes.
+		{ targetKey: "k-t", displayPath: pathA } as any,
 		{ effectiveLatest: { leftpad: "1.0.0" } },
 		passage,
 	);

@@ -38,73 +38,57 @@ import {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	// Group: Run 9 - the JSONL journal (opt-in) round-trip + boot compaction.
+	// ONE store, exactly as the source suite does: the record checks read the
+	// journal after that single store, and the corruption + restart follows.
 	Rm();
 	const Run9 = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+	const Content9 = TextBlock(TerminalText("j".repeat(80), 40));
 	{
 		const Sub = "journalPath is wired into the store";
 		Check(Count, Sub, () => {
 			assert.ok(Run9.State.Store.Path === Journal);
 		});
 	}
+	await Run9.Listeners["tools/post-execute"](
+		Exec("bash"),
+		{ isError: false, value: {}, content: Content9 },
+		NextAccept,
+	);
 	{
 		const Sub = "the journal: exactly one JSONL record after one store";
-		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(TerminalText("j".repeat(80), 40));
-			await Run9.Listeners["tools/post-execute"](
-				Exec("bash"),
-				{ isError: false, value: {}, content: Content },
-				NextAccept,
-			);
+		Check(Count, Sub, () => {
 			const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
 			assert.ok(Lines.length === 1);
 		});
 	}
 	{
 		const Sub = "the journal record carries {hash, type, size, ttlAt}";
-		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(TerminalText("j".repeat(80), 40));
-			await Run9.Listeners["tools/post-execute"](
-				Exec("bash"),
-				{ isError: false, value: {}, content: Content },
-				NextAccept,
-			);
+		Check(Count, Sub, () => {
 			const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
-			const Record = Lines.length > 0 ? JSON.parse(Lines[0]) : undefined;
+			const Record = Lines.length > 0 ? JSON.parse(Lines[0] as string) : undefined;
 			assert.ok(
 				Record !== undefined &&
-					Record.hash === HashOf(Content) &&
+					Record.hash === HashOf(Content9) &&
 					Record.type === "terminal" &&
-					Record.size === SizeOf(Content) &&
+					Record.size === SizeOf(Content9) &&
 					typeof Record.ttlAt === "number",
 			);
 		});
 	}
 	{
 		const Sub = "the journal payload is the base64 of the content's JSON serialization";
-		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(TerminalText("j".repeat(80), 40));
-			await Run9.Listeners["tools/post-execute"](
-				Exec("bash"),
-				{ isError: false, value: {}, content: Content },
-				NextAccept,
-			);
+		Check(Count, Sub, () => {
 			const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
-			const Record = Lines.length > 0 ? JSON.parse(Lines[0]) : undefined;
+			const Record = Lines.length > 0 ? JSON.parse(Lines[0] as string) : undefined;
 			assert.ok(
 				Record !== undefined &&
-					Buffer.from(Record.payload, "base64").toString("utf8") === JSON.stringify(Content),
+					Buffer.from(Record.payload, "base64").toString("utf8") === JSON.stringify(Content9),
 			);
 		});
 	}
 	{
 		const Sub = "boot compaction: the corrupt and expired records are dropped, one survives";
-		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(TerminalText("j".repeat(80), 40));
-			await Run9.Listeners["tools/post-execute"](
-				Exec("bash"),
-				{ isError: false, value: {}, content: Content },
-				NextAccept,
-			);
+		Check(Count, Sub, () => {
 			// Corrupt the journal: one broken line + one expired record.
 			appendFileSync(Journal, "\n");
 			appendFileSync(
@@ -121,6 +105,7 @@ export const runTest = async (): Promise<number> => {
 			// The "restart": a fresh apply over the same journal file loads +
 			// compacts.
 			const Run9b = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+			void Run9b; // the boot compaction happens in the Make; the file is the evidence
 			const Surviving = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
 			assert.ok(Surviving.length === 1);
 		});
@@ -128,27 +113,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Sub = "the journal survives the fake restart: the entry is retrievable again";
 		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(TerminalText("j".repeat(80), 40));
-			await Run9.Listeners["tools/post-execute"](
-				Exec("bash"),
-				{ isError: false, value: {}, content: Content },
-				NextAccept,
-			);
-			appendFileSync(Journal, "\n");
-			appendFileSync(
-				Journal,
-				`${JSON.stringify({
-					hash: "e".repeat(24),
-					type: "terminal",
-					size: 3,
-					ttlAt: Date.now() - 1000,
-					payload: Buffer.from("[]", "utf8").toString("base64"),
-				})}\n`,
-			);
-			appendFileSync(Journal, "{not json at all\n");
 			const Run9b = Make(Validate({ logFile: Ledger, journalPath: Journal }));
 			const Retrieved = await Run9b.Registered[0].execute(
-				{ hash: HashOf(Content) },
+				{ hash: HashOf(Content9) },
 				Exec("ccr_retrieve"),
 			);
 			assert.ok(

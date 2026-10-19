@@ -279,6 +279,10 @@ export const runTest = async (): Promise<number> => {
 		const before = ledgerLines().length;
 		await Furnace.Govern(mkTarget(projDn, "k-dn2"), ["bogus"], actor, "v-direct4");
 		await settle();
+		// The source suite asserted the unknown-names no-op BETWEEN the two
+		// governs; capture that intermediate count in the fixture phase so the
+		// single check asserts the same point in the flow.
+		const afterBogus = ledgerLines().length;
 		const jobsBeforeBoth = JobStarts.length;
 		await Furnace.Govern(mkTarget(Path.join(Root, "proj-direct"), "k-dc2"), true, actor, "v-direct5");
 		await settle();
@@ -296,10 +300,9 @@ export const runTest = async (): Promise<number> => {
 			)
 			.lastIndexOf(true);
 		const Sub =
-			"direct-govern: selection \u2014 unknown names ignored, `true` runs the registered steps in order (sequential fold)";
+			"direct-govern: sequential fold \u2014 the canonicalize chain (`governed` line + write) completes before the update step (deterministic order)";
 		{
 			Check(Count, Sub, () => {
-				assert.equal(ledgerLines().length, before, "selection: unknown step names run nothing");
 				assert.equal(Probe.Stash.has("k-dc2"), true, "selection: both steps seeded their Stash token");
 				assert.ok(JobStarts.length >= jobsBeforeBoth, "selection: `true` reached the update step too");
 				assert.equal(
@@ -322,6 +325,16 @@ export const runTest = async (): Promise<number> => {
 					"^1.0.0",
 					"selection: the update step read the file as the canonicalize left it (no write race)",
 				);
+			});
+		}
+		const SubSelection =
+			"direct-govern: selection \u2014 unknown names ignored, `true` runs the registered steps in order (sequential fold)";
+		{
+			Check(Count, SubSelection, () => {
+				// The unknown-names no-op, asserted at its source-flow point via the
+				// captured intermediate count (the check itself runs after the `true`
+				// govern, which legitimately added lines).
+				assert.equal(afterBogus, before, "selection: unknown step names run nothing");
 				Probe.Stash.delete("k-dc2");
 			});
 		}

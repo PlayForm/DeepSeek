@@ -312,6 +312,10 @@ export const runTest = async (): Promise<number> => {
 			"/no/such/policy.json",
 		);
 		await settle();
+		// The source suite asserted the generic line's count BETWEEN the two
+		// dispatches; capture that intermediate count in the fixture phase so the
+		// single check asserts the same point in the flow.
+		const afterAbsentGeneric = find("update: using built-in default policy").length;
 		const badPolicy = Path.join(projNoPolicy, "bad-policy.json");
 		FileSystem.writeFileSync(badPolicy, "{ nope");
 		Probe.Stamp.delete(projNoPolicy);
@@ -324,7 +328,7 @@ export const runTest = async (): Promise<number> => {
 					find("update: no policy at /no/such/policy.json \u2014 using built-in default").length,
 					1,
 				);
-				assert.equal(find("update: using built-in default policy").length, defaultCount + 1);
+				assert.equal(afterAbsentGeneric, defaultCount + 1);
 				assert.equal(
 					find(`update: unreadable policy at ${badPolicy} \u2014 using built-in default`).length,
 					1,
@@ -401,6 +405,12 @@ export const runTest = async (): Promise<number> => {
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
+	// The source suite asserted the dispatched count BETWEEN the two fallback
+	// runs; capture that intermediate count in the fixture phase so the single
+	// check asserts the same point in the flow.
+	const afterFirstDispatched = find(
+		`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
+	).length;
 	// preflight rejection \u2192 detached
 	Services["jobs"] = {
 		attachController: (n: string) => {
@@ -415,21 +425,20 @@ export const runTest = async (): Promise<number> => {
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
+	const afterPreflightDone = find("update: DONE \u2014 pins bumped per policy").length;
 	{
 		const Sub = "fallbacks: no-registry and preflight-rejection \u2192 the contained detached chain";
 		{
 			Check(Count, Sub, () => {
 				assert.equal(
-					find(
-						`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
-					).length,
+					afterFirstDispatched,
 					dispatchedBefore + 1,
 					"detached fallback still dispatches the full chain",
 				);
 				assert.equal(JobStarts.length, jobsBeforeFallback, "no new job without the registry");
 				assert.equal(JobStarts.length, jobsBeforeFallback, "throwing start left nothing registered");
 				assert.equal(
-					find("update: DONE \u2014 pins bumped per policy").length,
+					afterPreflightDone,
 					doneBeforePreflight + 1,
 					"the detached chain still ran",
 				);

@@ -722,6 +722,92 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
 - **I3 ACTIVATED (2026-10-19, `a06e2f3b`)**: the APPEND-SEAM ratification
   pass - its independent completion-append resolution vs D2's section 3.3,
   with the conflict table (the addendum wins for the C2 dispatch).
+- **I3 COMPLETE (2026-10-19, `a06e2f3b`)**: the APPEND-SEAM addendum written
+  (Design/APPEND-SEAM.md) - THE SEAM DECISION: the completion block is a
+  registered DYNAMIC CONTEXT (ctx.systemPrompt.context, optional,
+  provider-backed) - a SOURCED USER-ROLE SNAPSHOT appended to model history
+  "only when present", NOT a section edit (sections render into the system
+  prompt as a system/message surface node) and NOT a session-log append
+  (plugins cannot append surface events - appendPluginRecord is forbidden).
+  Withdrawal = ABSENCE (no event, no rewrite; the delivered snapshot stays
+  in history permanently - the durable "how it executed" record);
+  emit-at-most-once via consume-on-LOGGED-SNAPSHOT (never consume-on-read -
+  aborted attempts must re-deliver). CONFLICT TABLE vs D2's 3.3/4.2: 4 wins
+  (the carrier, the withdrawal cost - NO withdrawal event at all vs the
+  prompt-tail rewrite, the cache model - in-history routes append the full
+  prompt per section change + incapable routes = node-0 full-prefix miss,
+  the emit-once consume-on-logged-snapshot), 1 one-line delta (the wrapper
+  line "[live] completion report (harness-appended; not a user request):"
+  over D2's verbatim block bytes), 2 adopted agreements (the idle-agent
+  wake dependency explicit; the not-composable notice + batched merge +
+  owner-gone skip + lost markers unchanged). C2 RESIDUALS R1-R5 recorded:
+  verify the optional-context admission semantics (one snapshot per change
+  vs per request; fallback = the amended section carrier), the
+  suppressRuntimeContext interaction (frames stay pending, never dropped),
+  the SCHEME carries the two cache-cost statements + the wrapper line in
+  the ledger list, the getContextOrder/getSectionOrder allocation at
+  attach, the session/event observation scope reach for the consume
+  observer.
+- **I4 ACTIVATED (2026-10-19, `0d1d5e06`)**: the COMPLETION-ERGONOMICS
+  ratification pass - the batched-appends + resume-hint design vs D2's
+  section 4.2 + I3's dynamic-context carrier (the addendum wins on
+  conflict for the C2 dispatch).
+- **I4 COMPLETE (2026-10-19, `0d1d5e06`)**: the COMPLETION-ERGONOMICS
+  addendum written (Design/COMPLETION-ERGONOMICS.md): the batched-append
+  rule with the aggregation window = PER TURN (admission-to-admission; the
+  settles merge into the I3 pending slot; the byte cap 4 KiB per merged
+  text with the oldest-frame truncation + the >=512 B error-tail
+  protection), the resume-hint rule (ONE composed line `[live] next: <hint>`
+  <=200 B, priority: failed/killed -> fix-and-rerun, k/n -> review +
+  continue, fleet drained -> all done), the byte-exact shape (the I3
+  wrapper line + D2's frame bytes + the per-frame job_output pointer + the
+  one hint line), the ordering (settle order with the failures-first
+  deviation + the dispatch order reconstructible from ids/timestamps), the
+  failed entries (D2's failure variant + the explicit `exit: <code>` / `kill
+  reason:` lines). KEY FINDING: D2's section 4.2 contains NO resume-hint
+  line (its last line is the per-frame job_output pointer) - I4 supplies
+  the missing line (conflict-table row 2). 6 wins + 1 no-conflict. C2
+  RESIDUALS R1-R5: the exit-code source field in the settled view's detail,
+  the coarse domain-noun heuristic for mixed batches, the non-monotonic k/n
+  denominator across turn-sets (smoke asserts the line shape only), the 4
+  KiB cap as a Config field if real batches exceed it, the failures-first
+  sort smoke-seeded explicitly.
+- **I5 ACTIVATED (2026-10-19, `e4d97c23`)**: the PLANTED-LEASE ratification
+  pass - the planted-block lease + STALE declaration vs D2's sections
+  3.4/4.4, aligned with the I3 carrier + the I4 ergonomics + the G5
+  agent/inbox/spliced pickup (the addendum wins on conflict for the C2
+  dispatch).
+- **I5 COMPLETE (2026-10-19, `e4d97c23`)**: the PLANTED-LEASE addendum
+  written (Design/PLANTED-LEASE.md): the lease grammar with the PRIMARY
+  UNIT = PARENT TURNS (N=3 default, knob plant.leaseTurns, volatile) + the
+  wall-clock backstop (stallMs 45s, orphaned-parent case only); the
+  byte-exact STALE self-declaration (`[stale] <agentId> - unreported for
+  <n> parent turns; re-dispatch or mark failed`) + the composed re-dispatch
+  hint (`[live] next: ... (live_plant prune <plantId> <agentId>)` - the
+  prune surfaced as the model's own call, config-gated); the CAN-4
+  interplay: the stale declaration IS the failsafe trigger (D2's parallel
+  timer replaced - one truth source); the row still renders under
+  failsafes "off" (board honesty is CAN-2; only prune+hint are gated); the
+  count-mismatch handling (idempotent reports per (plantId, agentId, turn),
+  dead-agent settlement removes the lease, lease-wins when no settlement
+  reaches L6, late enrollees get the full window); the report-rate
+  coalescing (reportRateMs 2000 - the coalesced reports bump the payload
+  but reset the lease at most once per window); the closing-line variant
+  `board closed: 3/5 done, 2 pruned stale in 41s`. CONFLICT TABLE: 10 rows,
+  all won or additive (the parent-turns unit vs D2's wall-clock - the 45s
+  clock falsely stales slow-thinking parents; the declaration-is-the-
+  trigger; the [stale] row bytes; the <s> stale union; the composed hint +
+  prune twin; the lease-wins-for-no-truth; the coalescing flood guard; the
+  aggregate recompute rule; the late-enrollment full window; the row-flip
+  always-on). C2 RESIDUALS R1-R5: the assemble admission discriminator
+  (turn counting keys on admission, not render), the child-turn windows
+  rejected for v1 (heartbeat is FUTURE), no per-board leaseTurns override
+  (deferred), the [stale] label into the SCHEME grammar list + the smoke
+  byte assertions, the prune-never-kills default (observe, don't cancel).
+- **I6 ACTIVATED (2026-10-19, `04afa73b`)**: the SUGGESTER-CONFIGURED
+  ratification pass - the configured-block suggestion design vs D2's
+  section 2.6 + the ratified privacy default (the addendum wins on
+  conflict for the C2 dispatch - the LAST addendum; C2 fires after it).
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
