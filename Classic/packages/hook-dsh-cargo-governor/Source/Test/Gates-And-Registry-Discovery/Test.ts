@@ -32,7 +32,7 @@ export const runTest = async (): Promise<number> => {
 		const m = MakeContext({ services: { subprocess: SeamStub() } });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("gates");
-		const { listener } = Boot(m);
+		Boot(m);
 		const baseline = Ledger(m.ledger).length; // the activation line
 		const t = { targetKey: "k1", displayPath: Path.join(dir, "Cargo.toml") };
 		Fire(m, t, "v1", "grep"); // reads emit too - the actor gate is required
@@ -56,7 +56,7 @@ export const runTest = async (): Promise<number> => {
 		const m = MakeContext({ services: { subprocess: SeamStub() } });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("gates2");
-		const { listener } = Boot(m);
+		Boot(m);
 		const baseline = Ledger(m.ledger).length;
 		const t = { targetKey: "k1", displayPath: Path.join(dir, "package.json") };
 		Fire(m, t, "v1", "edit");
@@ -80,7 +80,7 @@ export const runTest = async (): Promise<number> => {
 		const m = MakeContext({ services: { subprocess: SeamStub() } });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("excl");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: Path.join(dir, "node_modules", "x", "Cargo.toml") };
 		FileSystem.mkdirSync(Path.dirname(t.displayPath), { recursive: true });
 		FileSystem.writeFileSync(t.displayPath, '[dependencies]\nserde = "1.0"\n');
@@ -104,7 +104,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "2.1.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("idem");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: Path.join(dir, "Cargo.toml") };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -138,7 +138,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("noreg1");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -159,7 +159,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("badreg");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);

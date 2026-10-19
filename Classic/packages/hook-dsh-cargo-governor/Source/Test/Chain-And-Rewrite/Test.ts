@@ -40,7 +40,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "2.1" }); // a SHORTHAND registry value...
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("chain1");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -71,7 +71,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "2.1.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("chain2");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -102,7 +102,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.1.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("exact");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -123,7 +123,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { winapi: "0.3.9" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("target1");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -146,7 +146,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { anyhow: "1.0.1" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("wsdeps");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -173,7 +173,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { tokio: "0.3.1" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("inline");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -235,7 +235,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.1.0", tokio: "0.3.1", winapi: "0.3.9", anyhow: "1.0.1" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("comments");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -270,7 +270,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.1.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("govline");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -311,7 +311,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.1.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("strict1");
-		const { listener } = Boot(m, { strict: true });
+		Boot(m, { strict: true });
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -354,7 +354,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.0.0", x: "1.0.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("strict2");
-		const { listener } = Boot(m, { strict: true });
+		Boot(m, { strict: true });
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -376,7 +376,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("strict3");
-		const { listener } = Boot(m, { strict: true });
+		Boot(m, { strict: true });
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const writes = m.captured.writes;
@@ -402,7 +402,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("norm1");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const Out = m.captured.writes[0].content;
@@ -424,7 +424,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("norm2");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const Out = m.captured.writes[0].content;

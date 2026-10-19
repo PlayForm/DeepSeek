@@ -39,7 +39,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.0.0" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("filterskip");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const dispatched = Ledger(m.ledger).filter((l) => l.startsWith("update stage dispatched"))
@@ -62,7 +62,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("noreg2");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -94,7 +94,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("cooldown");
-		const { listener } = Boot(m, { updateCooldownMs: 60000 });
+		Boot(m, { updateCooldownMs: 60000 });
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -129,7 +129,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("inflight");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -162,7 +162,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("breaker");
-		const { listener } = Boot(m, { maxUpdateFailures: 2 });
+		Boot(m, { maxUpdateFailures: 2 });
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -200,7 +200,7 @@ export const runTest = async (): Promise<number> => {
 		Registry(dir, { serde: "1.0.0", tokio: "0.3.1" });
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("cli");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -252,7 +252,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("digest");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -291,7 +291,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("fail");
-		const { listener } = Boot(m, { maxUpdateFailures: 99 });
+		Boot(m, { maxUpdateFailures: 99 });
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -387,7 +387,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("verify1");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const argvs = m.services.subprocess.calls.map((c: any) => c.argv);
@@ -428,7 +428,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("verify2");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -486,7 +486,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("u2");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -520,7 +520,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("jobs");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush(); // the dispatch happens inside the detached continuation
 		const started = m.captured.started.at(-1);

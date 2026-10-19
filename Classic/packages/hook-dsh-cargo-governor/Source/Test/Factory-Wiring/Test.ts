@@ -68,7 +68,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("wire1");
-		const { listener } = Boot(m);
+		Boot(m);
 		const t = { targetKey: "k1", displayPath: file };
 		Fire(m, t, "v1", "edit");
 		await Flush();
@@ -99,7 +99,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("wire2");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const inflightDuring = m.captured.writes[0].inflight;
@@ -123,7 +123,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("wire3");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const W = m.captured.writes[0];
@@ -147,7 +147,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("wire4");
-		const { listener } = Boot(m);
+		Boot(m);
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
@@ -187,7 +187,7 @@ export const runTest = async (): Promise<number> => {
 					open: async () => ({
 						close: async () => {},
 						table: () => ({
-							put: async (k: any, v: any) => {
+							put: async (_k: any, v: any) => {
 								records.push(v);
 							},
 						}),
@@ -212,7 +212,7 @@ export const runTest = async (): Promise<number> => {
 						open: async () => ({
 							close: async () => {},
 							table: () => ({
-								put: async (k: any, v: any) => {
+								put: async (_k: any, v: any) => {
 									records.push(v);
 								},
 							}),
