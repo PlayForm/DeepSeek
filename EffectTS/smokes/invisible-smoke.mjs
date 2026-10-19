@@ -404,6 +404,90 @@ Check(
 	"tool-args removals journal too (delta + block in one count record)",
 );
 
+// ---------- Run S (additive): the granular scope gates ----------
+// Each scope gate on/off with everything else at defaults; the config is
+// hand-built with a `scopes` volatile cell whose getter returns a mutable
+// object (the stable-reference simulation). Defaults = the previous
+// behavior exactly. The invisible flavor REMOVES (replacement ""): the
+// normalized expectations below have the invisible char gone.
+const SCOPES_DEFAULT = {
+	conversation: true,
+	reasoning: true,
+	toolInput: false,
+	toolResults: false,
+	files: true,
+	batch: false,
+};
+const RunS = (Scopes, Flags) =>
+	Make({
+		log: true,
+		logFile: Ledger,
+		replacement: "",
+		normalizeReasoning: Flags?.reasoning ?? true,
+		normalizeToolArguments: Flags?.toolArgs ?? false,
+		scopes: { get: () => Scopes },
+	});
+const DriveS = async (Run, Chunks) => {
+	const Out = [];
+	for await (const C of Run.Listeners["llm/stream"](Object.freeze({ model: "x", messages: [] }), () =>
+		(async function* () {
+			yield* Chunks;
+		})(),
+	))
+		Out.push(C);
+	return Out;
+};
+const TextChunkS = { type: "text-delta", index: 0, text: "a\u200Bb" };
+const ReasonChunkS = { type: "reasoning-delta", index: 0, text: "\u200Bx" };
+const TextBlockChunkS = { type: "block-end", index: 0, block: { type: "text", text: "\u200Bkept" } };
+const ArgsChunkS = {
+	type: "tool-call-delta",
+	index: 1,
+	id: "call_s",
+	name: "bash",
+	argumentsDelta: '{"a":"\u200B"}',
+};
+
+// S1: conversation off -> text-delta passes by identity (count 0, no line).
+const S1 = RunS({ ...SCOPES_DEFAULT, conversation: false });
+const OutS1 = await DriveS(S1, [TextChunkS]);
+Check(OutS1[0] === TextChunkS, "scopes.conversation off: text-delta passes by identity");
+Check(S1.Lines.every((L) => !L.includes("normalized")), "scopes.conversation off: no count line");
+// S2: reasoning scope off -> reasoning-delta passes even with normalizeReasoning on.
+const S2 = RunS({ ...SCOPES_DEFAULT, reasoning: false });
+const OutS2 = await DriveS(S2, [ReasonChunkS]);
+Check(OutS2[0] === ReasonChunkS, "scopes.reasoning off: reasoning-delta passes by identity");
+// S3: conversation off -> the assembled TEXT block passes by identity too.
+const S3 = RunS({ ...SCOPES_DEFAULT, conversation: false });
+const OutS3 = await DriveS(S3, [TextBlockChunkS]);
+Check(OutS3[0].block === TextBlockChunkS.block, "scopes.conversation off: text block passes by identity");
+// S4: the effective toolInput gate is an OR of the deprecated field and the scope.
+const S4 = RunS({ ...SCOPES_DEFAULT }, { toolArgs: true });
+const OutS4 = await DriveS(S4, [ArgsChunkS]);
+Check(
+	OutS4[0].argumentsDelta === '{"a":""}',
+	"effective toolInput (deprecated field on, scope off): still normalizes (removal)",
+);
+const S4b = RunS({ ...SCOPES_DEFAULT }, { toolArgs: false });
+const OutS4b = await DriveS(S4b, [ArgsChunkS]);
+Check(OutS4b[0] === ArgsChunkS, "toolInput both off: passes by identity");
+const S4c = RunS({ ...SCOPES_DEFAULT, toolInput: true });
+const OutS4c = await DriveS(S4c, [ArgsChunkS]);
+Check(
+	OutS4c[0].argumentsDelta === '{"a":""}',
+	"effective toolInput (scope on, deprecated field off): normalizes (removal)",
+);
+// S5: the volatile scope flip -> the NEXT stream's gate changes without remount.
+const LiveScopes = { ...SCOPES_DEFAULT };
+const S5 = RunS(LiveScopes);
+LiveScopes.conversation = false;
+S5.Listeners["loader/volatile-update"]([["scopes", "conversation"]]);
+const OutS5 = await DriveS(S5, [TextChunkS]);
+Check(
+	OutS5[0] === TextChunkS,
+	"volatile scope flip: conversation off applies to the NEXT stream without remount",
+);
+
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);
 process.exit(Fail === 0 ? 0 : 1);

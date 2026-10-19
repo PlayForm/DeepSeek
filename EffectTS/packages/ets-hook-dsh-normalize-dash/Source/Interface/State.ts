@@ -20,6 +20,13 @@
 //   ToolArgs    - normalize tool-call arguments too (config
 //                 `normalizeToolArguments`; IMPLEMENTED - schema default
 //                 OFF, this profile's patch yml enables it);
+//   Scopes      - the granular scope gates (config `scopes`, the WHOLE
+//                 object volatile - refreshed in place by the factory's P10
+//                 volatile-update listener; optional because a hand-built
+//                 config may omit it, the code falls back to the schema
+//                 defaults);
+//   Exempt      - the tool-results exemption list (config
+//                 `toolResultsExempt`, volatile - same refresh path);
 //   Factory     - the injected factory service itself, consumed by the count
 //                 callback (the post-stream ledger line) AND by the raw-write
 //                 tool's exec (the shared Write executor and the direct
@@ -56,6 +63,7 @@
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
+import type { Scopes } from "@Interface/Config.js";
 
 export default interface State extends Shared {
 	/** The dash replacement - the transform's only knob (config `replacement`). */
@@ -65,6 +73,12 @@ export default interface State extends Shared {
 	/** Normalize tool-call arguments too (config `normalizeToolArguments`;
 	 *  schema default OFF - this profile's patch yml enables it). */
 	ToolArgs: boolean;
+	/** The granular scope gates (config `scopes`, volatile - refreshed in
+	 *  place by the factory's P10 volatile-update listener). */
+	Scopes?: Scopes | undefined;
+	/** The tool-results exemption list (config `toolResultsExempt`,
+	 *  volatile - same refresh path). */
+	Exempt?: string[] | undefined;
 	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append) and the raw-write tool's Write/Govern are consumed
 	 *  through it; assigned once in Function/Apply. */

@@ -553,6 +553,7 @@ Check(ActivationsV() === 1, "P10: exactly one activation line after the mount");
 Check(RunV.State.Replacement === "-", "P10: the mount-time replacement is the default");
 const StateRefV = RunV.State;
 const FlipFixture = "/tmp/normalize-file-smoke-flip-fixture.txt";
+const GateFixture = "/tmp/normalize-file-smoke-gate-fixture.txt";
 RunV.Files.set(`key:${FlipFixture}`, All6);
 FlipValue = "-*-";
 RunV.Listeners["loader/volatile-update"]([["replacement"]]);
@@ -569,6 +570,55 @@ Check(
 	"P10: the flipped tool call still writes its normal count line",
 );
 Check(ActivationsV() === 1, "P10: the flipped tool call added NO activation line");
+
+// ---------- Run F (additive): the FILES scope gate ----------
+// scopes.files off -> the tool returns the unchanged changed:false result
+// with NO resolve, NO read, NO write, NO ledger line (the volatile scope
+// flip re-arms the tool without remount).
+rm();
+let FilesOn = true;
+const RawF = {
+	log: true,
+	logFile: Ledger,
+	replacement: "-",
+	scopes: {
+		get: () => ({
+			conversation: true,
+			reasoning: true,
+			toolInput: false,
+			toolResults: false,
+			files: FilesOn,
+			batch: false,
+		}),
+	},
+};
+const RunF = Make(RawF);
+const ToolF = RunF.Registered[0];
+RunF.Files.set(`key:${GateFixture}`, All6);
+FilesOn = false;
+RunF.Listeners["loader/volatile-update"]([["scopes", "files"]]);
+const ReadsBeforeF = RunF.Reads.length;
+const WritesBeforeF = RunF.Writes.length;
+const LinesBeforeF = RunF.Lines.length;
+const OutF = await ToolF.execute({ file_path: GateFixture }, Exec());
+Check(
+	OutF.changed === false && OutF.count === 0 && OutF.path === GateFixture,
+	"scopes.files off: the tool returns the unchanged changed:false result",
+);
+Check(
+	RunF.Reads.length === ReadsBeforeF &&
+		RunF.Writes.length === WritesBeforeF &&
+		RunF.Lines.length === LinesBeforeF,
+	"scopes.files off: no resolve/read/write/ledger line",
+);
+// The volatile flip back re-arms the tool live.
+FilesOn = true;
+RunF.Listeners["loader/volatile-update"]([["scopes", "files"]]);
+const OutF2 = await ToolF.execute({ file_path: GateFixture }, Exec());
+Check(
+	OutF2.changed === true && OutF2.after === Normalized6,
+	"scopes.files flipped back on: the NEXT tool call normalizes again (no remount)",
+);
 
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);

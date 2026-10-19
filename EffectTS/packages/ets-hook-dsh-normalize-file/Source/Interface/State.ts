@@ -15,6 +15,13 @@
 //
 //   Replacement - the dash replacement (config `replacement`, volatile -
 //                 the transform's only knob);
+//   Scopes      - the granular scope gates (config `scopes`, the WHOLE
+//                 object volatile - refreshed in place by the factory's P10
+//                 volatile-update listener; only `files` is consumed by this
+//                 flavor; optional because a hand-built config may omit it,
+//                 the code falls back to the schema defaults);
+//   Exempt      - the tool-results exemption list (config
+//                 `toolResultsExempt`, volatile - same refresh path);
 //   Factory     - the injected factory service itself, consumed by the tool
 //                 (the ledger Append, the Journal record and the ONE shared
 //                 write executor `Factory.Write` are consumed through it) -
@@ -46,10 +53,18 @@
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
+import type { Scopes } from "@Interface/Config.js";
 
 export default interface State extends Shared {
 	/** The dash replacement - the transform's only knob (config `replacement`). */
 	Replacement: string;
+	/** The granular scope gates (config `scopes`, volatile - refreshed in
+	 *  place by the factory's P10 volatile-update listener; only `files` is
+	 *  consumed by this flavor). */
+	Scopes?: Scopes | undefined;
+	/** The tool-results exemption list (config `toolResultsExempt`,
+	 *  volatile - same refresh path). */
+	Exempt?: string[] | undefined;
 	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append), the P5 journal (Factory.Journal) and the ONE shared
 	 *  write executor (Factory.Write) are consumed through it; assigned once in

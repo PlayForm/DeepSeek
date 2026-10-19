@@ -94,6 +94,14 @@ ${value.changed ? `Normalized ${value.count} character(s)` : "Already normalized
 					: { changed: false, path: value.path },
 		},
 		async execute(args, exec) {
+			// The FILES scope gate (the granular scope control): when
+			// `scopes.files` is off, the tool is a true no-op — the unchanged
+			// `changed:false` result, no resolve, no read, no write, no ledger
+			// line (the schema default is on = the previous behavior; the
+			// fallback covers a hand-built config that omits `scopes`).
+			if (State.Scopes?.files === false) {
+				return { path: args.file_path, count: 0, changed: false };
+			}
 			// The caller-side resolve; the shared pipeline owns the rest.
 			const target = await Context.fs.resolve(args.file_path, {
 				signal: exec.signal,

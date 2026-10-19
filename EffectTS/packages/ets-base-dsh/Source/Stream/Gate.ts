@@ -89,6 +89,10 @@ export default <T extends ChunkShape, E, R>(
 	Reasoning: boolean,
 	ToolArgs = false,
 	OnCount?: (Count: number) => void,
+	// The CONVERSATION scope gate (the granular control, default ON = today's
+	// behavior): forwarded to the core dispatch, which passes text-delta text
+	// and text/reasoning blocks through by identity while it is off.
+	Conversation = true,
 ): Stream.Stream<T, E, R> =>
 	Stream.suspend(() => {
 		// The per-materialization state (see the header).
@@ -106,7 +110,7 @@ export default <T extends ChunkShape, E, R>(
 					break;
 				}
 			}
-			const Result = Chunk(Original, Replace, Reasoning, ToolArgs, RawCall);
+			const Result = Chunk(Original, Replace, Reasoning, ToolArgs, RawCall, Conversation);
 			Count += Result.count;
 			// The fan-out: one chunk in, the (possibly rewritten) chunk out -
 			// sequential by default, so the order contract holds by construction.

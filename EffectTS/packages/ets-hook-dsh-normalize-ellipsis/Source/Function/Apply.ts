@@ -101,6 +101,13 @@ export default (Context: Context, Options: Config): void => {
 			Replacement: "replacement",
 			Reasoning: "normalizeReasoning",
 			ToolArgs: "normalizeToolArguments",
+			// The granular scope gates + the tool-results exemption list —
+			// volatile, refreshed in place by the factory's P10
+			// loader/volatile-update listener (no remount, no new activation
+			// line — which is why the activation line below reports only the
+			// mount-time effective values).
+			Scopes: "scopes",
+			Exempt: "toolResultsExempt",
 		},
 	});
 	State.Factory = Factory;
@@ -117,13 +124,17 @@ export default (Context: Context, Options: Config): void => {
 	// ledger alone. Format (asserted by the smoke):
 	//   hook-dsh-normalize-ellipsis: activated (replacement=..., reasoning=on, toolArgs=off, logFile=...)
 	// The line's string mechanics live in the core's Activate composer; the
-	// FIELD LIST is the module's own.
+	// FIELD LIST is the module's own. The toolArgs value is the EFFECTIVE
+	// gate (`normalizeToolArguments` OR `scopes.toolInput` — the scope gate
+	// OR-ed in per the compatibility decision); with the schema defaults the
+	// value is identical to the old expression, so the line stays
+	// byte-identical. The scopes themselves are NOT on the line.
 	Factory.Append(
 		State,
 		Activate([
 			["replacement", State.Replacement],
 			["reasoning", State.Reasoning ? "on" : "off"],
-			["toolArgs", State.ToolArgs ? "on" : "off"],
+			["toolArgs", (State.ToolArgs || State.Scopes?.toolInput === true) ? "on" : "off"],
 			["logFile", State.Ledger],
 		]),
 	);
@@ -141,6 +152,19 @@ export default (Context: Context, Options: Config): void => {
 	//   * the returned wrapped iterable is what every downstream consumer
 	//     (live UI and durable transcript) sees - the normalization is
 	//     VISIBLE by construction.
+	// The effective scope gates (the granular scope control, defaults = the
+	// previous behavior): read per DISPATCH (the listener body), so a volatile
+	// scope flip applies from the next stream. The fallback object covers a
+	// hand-built config that omits `scopes` entirely.
+	const SCOPES_DEFAULT = {
+		conversation: true,
+		reasoning: true,
+		toolInput: false,
+		toolResults: false,
+		files: true,
+		batch: false,
+	};
+	const ScopesOf = () => State.Scopes ?? SCOPES_DEFAULT;
 	Context.on("llm/stream", (_Request, Next) =>
 		Stream.toAsyncIterable(
 			Gate(
@@ -152,10 +176,14 @@ export default (Context: Context, Options: Config): void => {
 				// replacement - read from State per chunk, so a volatile hot-edit
 				// takes effect on the next chunk exactly like the Classic read.
 				(Text) => Replace(Text, State.Replacement),
-				State.Reasoning,
-				State.ToolArgs,
+				// The reasoning gate: `normalizeReasoning` AND the scope sub-gate.
+				State.Reasoning && ScopesOf().reasoning,
+				// The tool-args gate: the deprecated field OR-ed with the scope.
+				State.ToolArgs || ScopesOf().toolInput,
 				// The post-stream ledger line (only when anything was replaced).
 				Normalize(State),
+				// The conversation scope gate (the text paths).
+				ScopesOf().conversation,
 			),
 		),
 	);

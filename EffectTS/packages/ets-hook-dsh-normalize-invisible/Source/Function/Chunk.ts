@@ -5,7 +5,7 @@
 // since the edit exemption and the per-call raw marker: a delta whose
 // `name` is "edit" passes through BY IDENTITY, and a call whose arguments
 // open with the `{"__normalize":false` marker passes through UNNORMALIZED
-// with the marker stripped) lives in @playform/ets-hook-dsh-core's
+// with the marker stripped) lives in @playform/ets-base-dsh's
 // Stream/Chunk; this file supplies only the flavor - a closure that applies
 // the invisible hook's Invisible class and its configured replacement
 // (default "" - REMOVAL) to one text segment - plus the three config values
@@ -26,5 +26,9 @@ export default (
 	Reasoning: boolean,
 	ToolArgs: boolean,
 	Raw: boolean,
+	// The conversation scope gate (default ON = the previous behavior):
+	// forwarded to the core dispatch, which passes text-delta text and
+	// text/reasoning blocks through by identity while it is off.
+	Conversation = true,
 ): { chunk: StreamChunk; count: number } =>
-	CoreChunk(Input, (Text) => Replace(Text, Replacement), Reasoning, ToolArgs, Raw);
+	CoreChunk(Input, (Text) => Replace(Text, Replacement), Reasoning, ToolArgs, Raw, Conversation);

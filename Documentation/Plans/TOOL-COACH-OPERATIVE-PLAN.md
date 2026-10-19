@@ -27,9 +27,8 @@ claim anchored `file:line`; harness docs at
    per visible tool" (`tools.md:563-570`). The allowlist is explicit:
    `output`/`execute`/`projectContent`/`finalizeContent`/`timeoutMs`/
    `isConcurrencySafe`/`presentCall`/`presentResult` "must never leak into
-   a model request" (`tools.md:11`); `timeoutMs` is "NEVER sent to the
-   model — `schemas()` whitelists only name/description/parameters"
-   (`tools.md:79-84`).
+   a model request" (`tools.md:11`); `schemas()` "whitelists only
+   name/description/parameters" (`tools.md:79-84`).
 3. `ToolSchema` is exactly three (+1) fields (live-verified via the host
    Service inspect provider, method `listService`, input
    `{"service":"tools"}`, `referencedTypes.ToolSchema`):
@@ -66,30 +65,30 @@ claim anchored `file:line`; harness docs at
 
 ### 1.2 What the model sees per tool (exact description style, quoted)
 
-Live cross-check: the host `Tool.listTools` inspect query matches these
-descriptions verbatim. Style: imperative, capability-first, one dense
-paragraph; parameters each carry a one-line description; enums inline.
+Live cross-check: the host `Tool.listTools` inspect query matches these descriptions verbatim. Style: imperative, capability-first; parameters carry one-line descriptions; enums inline.
+(`web_search` "Search the web for current information. Returns an optional
+summary answer and a list of source URLs.", `catalog.md:2800-2802`;
+`present`, `catalog.md:696-698`; `skill`, `catalog.md:1809-1811` — quoted
+in Part 2/3 where used.)
 
 | Tool | Catalog anchor | Exact model-facing description (verbatim) |
 |---|---|---|
 | `read` | `catalog.md:1036-1038` | "Read a UTF-8 text file and return line-numbered content." |
 | `write` | `catalog.md:1086-1088` | "Create or fully replace a UTF-8 text file." |
-| `edit` | `catalog.md:1001` | "Edit an existing UTF-8 text file by replacing literal text." (params add: "Literal text to replace." / "Literal replacement text. Use an empty string to delete the match." — `catalog.md:1008-1012`) |
+| `edit` | `catalog.md:1001` | "Edit an existing UTF-8 text file by replacing literal text." (params: "Literal text to replace." / "Literal replacement text. Use an empty string to delete the match." — `catalog.md:1008-1012`) |
 | `glob` | `catalog.md:1118-1120` | "Find files, not directories, whose paths match a glob pattern, including hidden and ignored files. Returns up to 100 paths in modification-time order …" |
 | `grep` | `catalog.md:1143-1145` | "Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file …" |
 | `bash` | `catalog.md:652-654` | "Execute a bash command (`bash -c`) and return its stdout/stderr. Each call runs in a fresh shell; pass `workdir` instead of using `cd` …" |
 | `web_fetch` | `catalog.md:2779-2781` | "Fetch the content of a specific HTTP(S) URL and return it decoded to text." |
-| `skill` | `catalog.md:1809-1811` | "Load the full instructions for a skill. Call it before acting on a task that names or clearly matches a skill in the session skill catalog." |
-| `present` | `catalog.md:696-698` | "Declare existing files as final deliverables for the user. Use it when the user needs a separate file … The user opens the current files; their contents are not copied." |
 
 Note: `web_fetch`/`web_search` "keep provider selection behind ctx.web so
 model-visible schemas stay stable across backend swaps" (`catalog.md:2824`)
 — fetched descriptions are deployment-stable, keeping cached sections
-honest. `bash` documents truncation + spill-file behavior
-(`catalog.md:652-654`) — useful note text: read returns line-numbered
-content directly, no spill round-trip. `job_output` (`catalog.md:2240`),
-`todo_write` (`catalog.md:2565`), and `web_search` (`catalog.md:2800-2802`)
-complete the live registry set quoted here.
+honest. `bash` documents truncation + spill behavior (`catalog.md:652-654`):
+read returns line-numbered content directly, no spill round-trip.
+`job_output` (`catalog.md:2240`), `todo_write` (`catalog.md:2565`),
+`skill` (`catalog.md:1809-1811`), `present` (`catalog.md:696-698`) complete
+the live registry set.
 
 ### 1.3 Why we prevent shell content-mutation (the traceability argument)
 
@@ -113,11 +112,10 @@ discipline above must NOT depend on the model's understanding or memory of
 this skill. It must become MODEL-INDEPENDENT, enforced by the plugin system
 itself" (`code-authoring/SKILL.md:66-69`) — the coach (tier 1 notes + tier
 3 deny, the guardian's Mode A, `code-authoring/SKILL.md:73-79`) is exactly
-that realization; a sibling coder agent implements the bundle only after
-this document lands. The read side matters equally: `task-routing/
-SKILL.md:165-170` (quoted in RESEARCH §3) forbids terminal content reads
-because their output enters the conversation un-line-numbered, un-spilled,
-ungoverned — and habitual terminal reads are the first step back to edits.
+that realization. The read side matters equally: `task-routing/
+SKILL.md:165-170` (quoted in RESEARCH §3) forbids terminal content reads —
+their output is un-line-numbered, un-spilled, ungoverned, and habitual
+terminal reads are the first step back to edits.
 
 ### 1.4 "A better version of itself" — the capability set for instruction
 
@@ -138,14 +136,13 @@ background-job controller"); **Web** `web_fetch`, `web_search`;
 `plugin_manager`, `cordis_inspect_list/query`, `lsp`, `session_*` query
 tools, `load_workspace_dependencies`.
 
-This inventory is what tier 2's persistent section compresses — fetched,
-not copied into the bundle source (Part 3).
+This inventory is what tier 2's persistent section compresses — fetched, not copied into the bundle source (Part 3).
 
 ---
 
 ## PART 2 — THE GRANULAR MAP (tool ↔ shell-alternative)
 
-Boundary rule (from `task-routing/SKILL.md:165-170` +
+Boundary rule (`task-routing/SKILL.md:165-170` +
 `code-authoring/SKILL.md:25-32`): **the terminal runs COMMANDS; the tools
 handle CONTENT.** Any bash segment that (a) reads file content into the
 conversation or (b) mutates file content on disk is a regression class
@@ -181,11 +178,9 @@ judged (PLAN §1, RESEARCH §4).
 | `grep` | `grep -rn`, `grep -n <pattern> <path>`, `egrep`, `rg`, `ack`, `ag`, `sift` on workspace paths | search | use the grep tool — grouped, capped, spill-backed (`catalog.md:1143-1145`) |
 | `grep` / `glob` | `find <dir> ( -name \| -path ) …` | search | glob for names (`catalog.md:1118`), grep for content predicates |
 
-### 2.4 Discovery & control classes (decision: strike + tier-1 note at
-threshold; never denied even at `enforce: 'all'`)
-
-Discovery is note-only (harmless — flagging it hard would dilute the
-write/read signal); control regressions are rare and count the same way.
+### 2.4 Discovery & control classes (strike + tier-1 note at threshold;
+never denied even at `enforce: 'all'`. Discovery is note-only — harmless;
+flagging it hard would dilute the write/read signal)
 
 | Harness tool | Shell/CLI alternatives | Class | Note text |
 |---|---|---|---|
@@ -201,9 +196,7 @@ write/read signal); control regressions are rare and count the same way.
 
 ### 2.6 The LEGITIMATE bash classes (never flagged — `exemptPatterns` defaults)
 
-Verified against the family's own discipline (`task-routing/SKILL.md:165-170`,
-`code-authoring/SKILL.md:25-32`, RESEARCH §4). **1. Builds/tests/package
-managers**: `pnpm`, `npm`, `npx`, `node`, `tsc`, `esbuild`, `vite`,
+Verified against the family's own discipline (`task-routing/SKILL.md:165-170`, `code-authoring/SKILL.md:25-32`, RESEARCH §4). **1. Builds/tests/package managers**: `pnpm`, `npm`, `npx`, `node`, `tsc`, `esbuild`, `vite`,
 `pytest`, `cargo`, `make`, `ctest`, `go build/test`, `swift build`.
 **2. VCS**: any `git <op>` (`code-authoring/SKILL.md:33`). **3.
 Process/network/data CLIs**: `curl` for **API calls** (vs web_fetch for
@@ -223,26 +216,17 @@ read strike (no "quick cat" carve-out — that carve-out IS the regression
 slope); `cat f.json | jq` → exempt (data transformation needs stdin);
 bare `ls` → exempt; `find . -name '*.ts' | wc -l` → discovery strike;
 bare `echo` → exempt, `echo > file` → write; `python script.py` → exempt,
-`python -c '…'` reading/writing files → the matched class.
-
-Segment-aware matching stays as in PLAN §5 Detect: split on `&&`, `||`,
-`;`, `|` outside quotes/heredocs; heredoc bodies skipped; patternTable
-rows appended after DEFAULT_PATTERNS; exemptPatterns win first (fail-open
-envelope, PLAN §2).
+`python -c '…'` reading/writing files → the matched class. Segment-aware
+matching stays as in PLAN §5 Detect: split on `&&`, `||`, `;`, `|`
+outside quotes/heredocs; heredoc bodies skipped; patternTable rows
+appended after DEFAULT_PATTERNS; exemptPatterns win first (fail-open,
+PLAN §2).
 
 ### 2.7 ADVERSARIAL DETECTION (parent amendment — never exact-match only)
 
-LLMs get crafty and invent advanced/obfuscated forms. Detection is
-NORMALIZATION + INTENT MARKERS + CATCH-ALL, with the pattern table as
-one input, not the authority:
+LLMs get crafty and invent advanced/obfuscated forms. Detection is NORMALIZATION + INTENT MARKERS + CATCH-ALL; the pattern table is one input, not the authority:
 
-**(a) Command normalization** (before any matching, `Function/Normalize.ts`):
-strip quote layers (`'x'`, `"x"`, `\x`), collapse whitespace, lowercase the
-command word, decode `$IFS`→space, expand `$VAR`/`${VAR}` to a `«var»`
-marker (treat as path if adjacent to `>`/`|`), REPLACE `$(…)`/backtick
-bodies with `«sub»` (keep normalizing inside), mark chain boundaries
-`; && || & |` and heredoc start/end. Chained segments are classified
-INDIVIDUALLY — `cat a; sed -i …` yields one read match and one write match.
+**(a) Command normalization** (before any matching, `Function/Normalize.ts`): strip quote layers (`'x'`, `"x"`, `\x`), collapse whitespace, lowercase the command word, decode `$IFS`→space, expand `$VAR`/`${VAR}` to a `«var»` marker (treat as path if adjacent to `>`/`|`), replace `$(…)`/backtick bodies with `«sub»` (keep normalizing inside), mark chain boundaries `; && || & |` and heredoc start/end. Chained segments are classified INDIVIDUALLY — `cat a; sed -i …` yields one read match and one write match.
 
 **(b) Intent-marker scan** (class determined by markers, not vocabulary —
 the craft library below all resolves through this):
@@ -270,18 +254,17 @@ the craft library below all resolves through this):
 | `echo a2V5... \| base64 -d \| sh` | `echo «sub» \| base64 -d \| sh` | write (decode-execute) |
 | `x='sed'; $x -i s/a/b/ f` | env-var indirection: `«var» -i … f` | write (catch-all via `-i` marker) |
 | `grep x f > /dev/null` | unchanged | search (redirect to `/dev/null` is NOT a write) |
-| `cat f \| sed s/a/b/ > f` | unchanged | write (final redirect wins for the pipe) |
-| `find . -name '*.ts' -exec sed -i s/a/b/ {} +` | inner `sed -i` | write |
+| `cat f \| sed s/a/b/ > f`; `find . -name '*.ts' -exec sed -i s/a/b/ {} +` | unchanged / inner `sed -i` | write (final redirect wins; `-exec` inner payload re-classified) |
 | `ssh host 'cat f'` | remote command — EXEMPT (not local content) | exempt |
 | `git diff > patch.txt` | exempt head `git`, redirect tail | exempt (§2.6 r5: head dominates) |
 
-**(d) CATCH-ALL fallback**: any segment with a write-intent marker
-(§b rows 1–9) targeting a non-`/dev/null` path is classified **write**
-EVEN IF no pattern row matches — novel zero-day forms still land.
-Catch-all match: `{class: 'write', tool: 'edit', pattern: '<catch-all>'}`
-(note: "full command analysis unavailable; use the edit tool"). Residual
-risk, honestly: legitimate-but-odd commands (e.g. `journalctl > log.txt`)
-get false positives — mitigated by `exemptPatterns` overrides, the
+**(d) CATCH-ALL fallback**: any segment with a write-intent marker (§b
+row 1) targeting a non-`/dev/null` path is classified **write** EVEN IF
+no pattern row matches — novel zero-day forms still land. Catch-all
+match: `{class: 'write', tool: 'edit', pattern: '<catch-all>'}` (note:
+"full command analysis unavailable; use the edit tool"). Residual risk,
+honestly: legitimate-but-odd commands (e.g. `journalctl > log.txt`) get
+false positives — mitigated by `exemptPatterns` overrides, the
 threshold/cooldown ladder (a single odd command never notes), and tier 3
 deny requiring `enforce` explicitly enabled. **(e)** The §2.6 legitimate
 boundary is checked AFTER normalization, BEFORE the catch-all: an exempt
@@ -297,39 +280,37 @@ User requirement (verbatim intent): the instruction set is "static text +
 dynamic tool description, e.g. the tools should actually be fetched and
 provided from the harnesses capabilities itself, meaning, the same way you
 are provided the tools, this is how we should 'fetch' and suggest them +
-our instruction (formatted `${command} is forbidden` etc.)". Design:
+our instruction (formatted `${command} is forbidden` etc.)".
 
 ### 3.1 The fetch
 
-- **Call**: `ctx.tools.schemas()` — no scope argument (the coach's
-  listeners are plain `ctx.on` global listeners; `schemas()` with omitted
-  scope returns the global view, `tools.md:563-570`). Signature and return
-  (live-verified via host Service.listService `tools`): `schemas(scope?:
-  ScopeKey): ToolSchema[]` → "one deep-cloned schema per visible tool",
-  projected onto the allowlist (`tools.md:563-570`).
+- **Call**: `ctx.tools.schemas()` — no scope argument (plain `ctx.on`
+  global listeners; omitted scope = global view). Signature (live-verified
+  via host Service.listService `tools`): `schemas(scope?: ScopeKey):
+  ToolSchema[]` → "one deep-cloned schema per visible tool", projected
+  onto the allowlist (`tools.md:563-570`).
 - **Projection fields to embed**: exactly `name`, `description`,
   `parameters` (§1.1). The coach embeds `name` + the FIRST SENTENCE of
-  `description` (hard cap 120 chars) in notes and in the tier 2 table;
-  never `parameters` in the persistent section (budget). Tier 1 notes name
-  the tool and the parameter that matters (e.g. `file_path`,
-  `old_string`/`new_string`, `pattern`) — from the fetched
-  `parameters.properties` keys when present.
-- **Freshness — decision: fetch per note** (tier 1/tier 3 compose right
-  before returning their decision): these fire at most once per
-  `cooldown` (default 10) judged calls and `schemas()` is a deep-clone
-  projection of an in-memory registry — trivial cost (`tools.md:568-570`);
-  fetching per note guarantees the note reflects the set visible at the
-  offense moment, including `tools/change`-driven swaps (`tools.md:608-610`).
-  **Tier 2 caches**: rebuilt when `sectionTtl` (default 20 tool calls)
-  elapsed or on `tools/change` (a cache-invalidating listener — cheap,
-  exact), truncated to `maxSectionTools` rows ordered: patternTable-mapped
-  tools first (write, read, search, discovery, control), then remaining
-  live tools by name.
+  `description` (hard cap 120 chars) in notes and the tier 2 table; never
+  `parameters` in the persistent section (budget). Tier 1 notes name the
+  tool and the parameter that matters (e.g. `file_path`,
+  `old_string`/`new_string`, `pattern`) — from `parameters.properties`
+  keys when present.
+- **Freshness — fetch per note** (tier 1/tier 3 compose right before
+  returning their decision): these fire at most once per `cooldown`
+  (default 10) judged calls and `schemas()` is a deep-clone projection of
+  an in-memory registry — trivial cost (`tools.md:568-570`); per-note
+  fetching guarantees the note reflects the set visible at the offense
+  moment, including `tools/change` swaps (`tools.md:608-610`). **Tier 2
+  caches**: rebuilt when `sectionTtl` (default 20 tool calls) elapsed or
+  on `tools/change` (cache-invalidating listener), truncated to
+  `maxSectionTools` rows: patternTable-mapped tools first (write, read,
+  search, discovery, control), then remaining live tools by name.
 - **Error handling**: fetch + compose run inside the fail-open envelope
   (PLAN §2, ccr precedent): if `ctx.get("tools")` is undefined,
   `schemas()` throws, or a mapped tool's description is missing → fall
-  back to the static `STATIC_TOOL_LINES` table (a short name→one-liner
-  constant in `Variable/Notes.ts`, derived from §1.2) and log
+  back to the static `STATIC_TOOL_LINES` table (name→one-liner constant
+  in `Variable/Notes.ts`, derived from §1.2) and log
   `hook-dsh-tool-coach: schema fetch failed -> static fallback`. A note
   NEVER fails the waterfall.
 - **`fetchLive` (default true)**: false → `STATIC_TOOL_LINES`
@@ -346,12 +327,10 @@ our instruction (formatted `${command} is forbidden` etc.)". Design:
 
 ### 3.3 The template system (verbatim)
 
-Placeholders: `${command}` (the offending command segment, first 200
-chars), `${class}`, `${tool.name}`, `${tool.description}` (fetched first
-sentence), `${tool.param}` (primary parameter key for the tool, from
-fetched `parameters.properties` order), `${traceability}` (the fs/observed
-one-liner below), `${count}` (current strike count).
-
+Placeholders: `${command}` (offending command segment, first 200 chars),
+`${class}`, `${tool.name}`, `${tool.description}` (fetched first sentence),
+`${tool.param}` (primary parameter key, from fetched
+`parameters.properties` order), `${count}` (current strike count).
 `${traceability}` (static, from `code-authoring/SKILL.md:39-46`):
 `terminal edits produce no fs/observed event, so the governor/pinner/normalize plugins never see them`.
 
@@ -398,8 +377,7 @@ three tiers; the deny reason materializes as the model-facing tool result
 
 ### 3.4 Config surface (final verbatim Schemastery schema)
 
-Merges PLAN §3; new dynamic knobs at the end. `Compose(false, {...})`
-from `@playform/plugin-dsh-factory`; every cell `.volatile()` (RESEARCH §6).
+Merges PLAN §3; new dynamic knobs at the end. `Compose(false, {...})` from `@playform/plugin-dsh-factory`; every cell `.volatile()` (RESEARCH §6).
 
 ```ts
 export default Compose(false, {
@@ -438,33 +416,14 @@ in the live registry — the static fallback covers unknown names).
 
 ### 3.5 The data flow (function contracts; coder-implementable)
 
-1. **`Detect(exec, cfg) → Match | undefined`** — as PLAN §5, plus: a
-   `Match` gains `command: string` (the matched segment, ≤200 chars).
-2. **`Count(state, match, cfg) → Decision`** — as PLAN §5; Decision is
-   `{ tier: 0|1|2on|2off|3, match, strikes, sinceNote, clean }`; the
-   per-agent `WeakMap<Agent, State>` also holds
-   `sectionCache?: { built: number; text: string }`.
-3. **`Fetch(cfg) → ToolCatalog`** (`Function/Fetch.ts`): `!cfg.fetchLive`
-   → `{source:'static'}`. Else `ctx.tools.schemas()` → map `name →
-   {first sentence, paramKeys}`; on any throw/undefined → static fallback
-   + ledger `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
-4. **`Compose(decision, fetch, cfg) → string`** (`Function/Compose.ts`):
-   fills the §3.3 templates; per-row `notes[].note` overrides the tier-1
-   body when its row declares one; any placeholder missing a fetched value
-   degrades to the static line — output must never contain an unfilled
-   `${…}` (smoke D1).
-5. **`Note(exec, result, next, decision)`** — PLAN §5 verbatim: always
-   `await next()` first; prepend `UserMessage` with source
-   `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <count>'}`.
-6. **`Enforce(decision) → {kind:'deny', reason} | undefined`** — PLAN §5;
-   discovery/control never deny even at `enforce:'all'` (§2.4).
-7. **`Assemble(assembly, agentState, fetch, cfg)`** (in Apply.ts): while
-   tier 2 on, rebuild when `sectionCache` stale (TTL or `tools/change`),
-   append to `next()`'s assembly, return; else return untouched. Tier 2
-   OFF = simply not appending (the waterfall re-runs per request).
-8. **Ledger** — every step writes its line (§4.2) through the family's
-   one-log-per-module writer; ledger = durable record, WeakMap = live
-   state (RESEARCH §7).
+1. **`Detect(exec, cfg) → Match | undefined`** — as PLAN §5 plus normalization, intent-marker scan, and catch-all (§2.7); `Match` gains `command: string` (matched segment, ≤200 chars).
+2. **`Count(state, match, cfg) → Decision`** — as PLAN §5; Decision is `{ tier: 0|1|2on|2off|3, match, strikes, sinceNote, clean }`; the per-agent `WeakMap<Agent, State>` also holds `sectionCache?: { built: number; text: string }`.
+3. **`Fetch(cfg) → ToolCatalog`** (`Function/Fetch.ts`): `!cfg.fetchLive` → `{source:'static'}`. Else `ctx.tools.schemas()` → map `name → {first sentence, paramKeys}`; on any throw/undefined → static fallback + ledger `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
+4. **`Compose(decision, fetch, cfg) → string`** (`Function/Compose.ts`): fills the §3.3 templates; per-row `notes[].note` overrides the tier-1 body when its row declares one; any placeholder missing a fetched value degrades to the static line — output must never contain an unfilled `${…}` (smoke D1).
+5. **`Note(exec, result, next, decision)`** — PLAN §5 verbatim: always `await next()` first; prepend `UserMessage` with source `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <count>'}`.
+6. **`Enforce(decision) → {kind:'deny', reason} | undefined`** — PLAN §5; discovery/control never deny even at `enforce:'all'` (§2.4).
+7. **`Assemble(assembly, agentState, fetch, cfg)`** (in Apply.ts): while tier 2 on, rebuild when `sectionCache` stale (TTL or `tools/change`), append to `next()`'s assembly, return; else return untouched. Tier 2 OFF = simply not appending (the waterfall re-runs per request).
+8. **Ledger** — every step writes its line (§4.2) through the family's one-log-per-module writer; ledger = durable record, WeakMap = live state (RESEARCH §7).
 
 ---
 
@@ -480,9 +439,9 @@ in the live registry — the static fallback covers unknown names).
 | `system-prompt/assemble` | waterfall | after `next()`; append-only (§3.5 step 7) | tier-2 section |
 | `tools/change` | emit | cache-invalidate only | tier-2 section freshness |
 
-All fail-open wrapped (PLAN §2); `apply` returns NOTHING (PLAN §2,
-ccr Apply.ts:53-55); `inject: ['tools']` (§3.1) — the coach registers no
-fs/observed listener and does not use factory Wire/Attach/Schema.
+All fail-open wrapped (PLAN §2); `apply` returns NOTHING (PLAN §2, ccr
+Apply.ts:53-55); `inject: ['tools']` (§3.1) — no fs/observed listener, no
+factory Wire/Attach/Schema.
 
 ### 4.2 Ledger strings (byte-exact, module prefix `hook-dsh-tool-coach: `)
 
@@ -499,67 +458,40 @@ hook-dsh-tool-coach: schema fetch failed -> static fallback
 hook-dsh-tool-coach: disabled (enabled=false)
 ```
 
-### 4.3 Smoke battery (fake ctx + real built Target; zero changes to
-existing suites; byte-identical ledger assertions)
+### 4.3 Smoke battery (fake ctx + real built Target; zero changes to existing suites; byte-identical ledger assertions)
 
 R1–R6 exactly as PLAN §7. NEW dynamic-fetch smokes:
 
-- **D1 projection embedded**: tier-1 note contains the fetched
-  `${tool.description}` first sentence and `${tool.param}`; no literal
-  `${` remains in any composed note.
-- **D2 fallback**: fake `ctx.tools.schemas()` throws → note uses
-  STATIC_TOOL_LINES text; ledger carries `schema fetch failed -> static
-  fallback`; waterfall continues.
-- **D3 section cap**: `maxSectionTools: 3` with 6 mapped tools → exactly
-  3 rows, mapped-class priority order (write, read, search first).
-- **D4 TTL + tools/change**: rebuild at `sectionTtl` judged calls and on
-  `tools/change` (ledger `section rebuilt` line for each path).
-- **D5 fetchLive=false**: static lines only; no fetch-failure line ever.
+- **D1**: tier-1 note contains the fetched `${tool.description}` first sentence and `${tool.param}`; no literal `${` remains in any composed note.
+- **D2**: fake `ctx.tools.schemas()` throws → STATIC_TOOL_LINES text; ledger carries `schema fetch failed -> static fallback`; waterfall continues.
+- **D3**: `maxSectionTools: 3` with 6 mapped tools → exactly 3 rows, mapped-class priority order (write, read, search first).
+- **D4**: rebuild at `sectionTtl` judged calls and on `tools/change` (ledger `section rebuilt` line for each path).
+- **D5**: `fetchLive=false` → static lines only; no fetch-failure line ever.
 
 ### 4.4 Phases with arbiters (extends PLAN §6)
 
 1. Bundle skeleton (both trees) — arbiter: `tsc` clean.
-2. Patterns + Notes (incl. STATIC_TOOL_LINES + templates) + Config
-   (§3.4 verbatim) — arbiter: build + schema defaults instantiate.
-3. Detect (with Normalize + adversarial scan) + Count + Fetch + Compose
-   (pure) — arbiter: unit smokes incl. every §2.7 craft-library row,
-   exemption precedence, `${`-absence, fallback.
-4. Apply wiring (5 listeners) + Note + Enforce + Assemble gate — arbiter:
-   R1–R6 + D1–D5, byte-identical ledger strings.
+2. Patterns + Notes (incl. STATIC_TOOL_LINES + templates) + Config (§3.4 verbatim) — arbiter: build + schema defaults instantiate.
+3. Detect (with Normalize + adversarial scan) + Count + Fetch + Compose (pure) — arbiter: unit smokes incl. every §2.7 craft-library row, exemption precedence, `${`-absence, fallback.
+4. Apply wiring (5 listeners) + Note + Enforce + Assemble gate — arbiter: R1–R6 + D1–D5, byte-identical ledger strings.
 5. EffectTS mirror — arbiter: ledger strings byte-identical.
-6. Serialized workspace build `--workspace-concurrency=1` — arbiter:
-   full suite green.
+6. Serialized workspace build `--workspace-concurrency=1` — arbiter: full suite green.
 
 ### 4.5 Acceptance criteria (extends PLAN §8)
 
 1. All PLAN §8 items hold.
-2. A tier-1 note in a live session names a tool with its LIVE registry
-   description (verify against `Tool.listTools` output for that tool).
-3. Every §2.7 craft-library variant passes a unit smoke (obfuscated
-   forms classify correctly, incl. the catch-all row).
-4. `fetchLive` and `maxSectionTools` volatile flips pick up on the next
-   judged call without remount.
-5. The tier-2 section never exceeds `maxSectionTools` rows and never
-   alters any other assembly field (deep-equal smoke, R4).
+2. A tier-1 note in a live session names a tool with its LIVE registry description (verify against `Tool.listTools` for that tool).
+3. Every §2.7 craft-library variant passes a unit smoke (obfuscated forms classify correctly, incl. the catch-all row).
+4. `fetchLive` and `maxSectionTools` volatile flips pick up on the next judged call without remount.
+5. The tier-2 section never exceeds `maxSectionTools` rows and never alters any other assembly field (deep-equal smoke, R4).
 
 ---
 
 ## RISKS / OPEN QUESTIONS
 
-1. **False positives from the catch-all** (§2.7d) on legitimate-but-odd
-   commands — mitigated by `exemptPatterns`, the threshold/cooldown
-   ladder (a single odd command never notes), tier 3 default-off, and
-   `patternTable` per-deployment correction.
-2. **First-sentence extraction** (§3.1) with parentheticals: split on the
-   first sentence-ending punctuation not inside parentheses, cap 120
-   chars at a word boundary; fallback = static line.
-3. **`schemas()` cost**: deep-clone per call; bounded by cooldown (notes)
-   and `sectionTtl` (section); escape hatch `fetchLive: false`.
-4. **PTC swallows additionalContexts** (`pipeline.md:63`) — tier 2 is the
-   carrier; unchanged from RESEARCH §8.2.
-5. **`${command}` containing `${`** — escape `${` → `$${` in user data
-   before template fill (smoke D1 asserts template placeholders only).
-6. Open for the parent: (a) `control` as fifth class vs folding into
-   `discovery` (doc assumes 5 classes, control never-denied); (b) should
-   the tier-2 table top up from the live registry beyond mapped tools
-   (doc assumes yes, alphabetical); (c) confirm `sectionTtl` default 20.
+1. **Catch-all false positives** (§2.7d) on legitimate-but-odd commands — mitigated by `exemptPatterns`, the threshold/cooldown ladder (a single odd command never notes), tier 3 default-off, and `patternTable` per-deployment correction.
+2. **First-sentence extraction** (§3.1) with parentheticals: split on the first sentence-ending punctuation not inside parentheses, cap 120 chars at a word boundary; fallback = static line.
+3. **`schemas()` cost**: deep-clone per call; bounded by cooldown (notes) and `sectionTtl` (section); escape hatch `fetchLive: false`.
+4. **PTC swallows additionalContexts** (`pipeline.md:63`) — tier 2 is the carrier; unchanged from RESEARCH §8.2.
+5. **`${command}` containing `${`** — escape `${` → `$${` in user data before template fill (smoke D1 asserts template placeholders only).
+6. Open for the parent: (a) `control` as fifth class vs folding into `discovery` (doc assumes 5 classes, control never-denied); (b) should the tier-2 table top up from the live registry beyond mapped tools (doc assumes yes, alphabetical); (c) confirm `sectionTtl` default 20.
