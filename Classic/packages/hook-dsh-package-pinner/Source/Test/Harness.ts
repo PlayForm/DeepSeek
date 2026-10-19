@@ -112,7 +112,11 @@ export const Race: { Armed: null | { path: string; content: string } } = { Armed
  */
 export const token = (p: string): string => {
 	const s = FileSystem.statSync(p);
-	return `dev:${s.dev}:${s.size}:${s.mtimeNs}:${s.ctimeNs}`;
+	// The source suite reads `s.mtimeNs`/`s.ctimeNs` verbatim: on a plain
+	// (non-bigint) Stats those fields are absent, so the token carries the
+	// string "undefined" for them - a consistent, collision-free token either
+	// way. Cast for the type system only.
+	return `dev:${s.dev}:${s.size}:${(s as any).mtimeNs}:${(s as any).ctimeNs}`;
 };
 
 /**
@@ -168,7 +172,7 @@ export const MakeContext = (): any => {
 			// throws when the file vanished - the backend contract
 			return FileSystem.readFileSync(target.displayPath, "utf8");
 		},
-		writeText: async (target: any, content: string, intent: unknown, signal: any, fence: unknown) => {
+		writeText: async (target: any, content: string, intent: any, signal: any, fence: unknown) => {
 			const current = FileSystem.existsSync(target.displayPath)
 				? token(target.displayPath)
 				: null;
@@ -249,7 +253,9 @@ export const Validate = (Raw: Record<string, unknown>): any =>
  */
 export const Boot = () => {
 	const ctx = MakeContext();
-	const Factory = new FactoryClass(ctx);
+	// Fixture-only scaffolding: the factory typed as `any` so the fixtures can
+	// pass plain runtime strings/targets exactly like the source suite does.
+	const Factory: any = new FactoryClass(ctx);
 	const cfg = Validate({ log: true, logFile: Ledger });
 	const Returned = Pinner.apply(ctx, cfg);
 	const st = ctx.__hookDshPinnerPackageState;
@@ -282,7 +288,7 @@ if (InvokedDirectly) {
 	const World = Boot();
 	Check(Count, "selfcheck: the real-token fs registers the pinner's apply-time wiring", () => {
 		assert.ok(World.ctx.events.some((e: any) => e[0] === "fs/observed"));
-		assert.equal(World.st.Factory, World.Factory);
+		assert.equal(World.ctx.pluginFactory, World.Factory);
 		assert.equal(World.st.Module, "hook-dsh-pinner-package");
 	});
 	if (Count.N === 3 && Count.F === 1) {

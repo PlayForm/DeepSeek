@@ -193,7 +193,10 @@ export const runTest = async (): Promise<number> => {
 		);
 		Write(Path.join(h2, "pin-policy.json"), JSON.stringify({ keep: ["g2"] }));
 		const ctxG = MakeContext();
-		const FactoryG = new FactoryClass(ctxG);
+		// The factory creation is required (the apply-time Attach probes
+		// ctx.pluginFactory); the binding itself is unused - discard it, exactly
+		// like the source suite's unused factoryG/factoryA locals.
+		new FactoryClass(ctxG);
 		const cfgG = (Pinner.Config as any)({
 			log: true,
 			logFile: Path.join(Root, "ledger-keep2.log"),

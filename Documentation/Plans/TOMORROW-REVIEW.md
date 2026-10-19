@@ -846,6 +846,38 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   orchestrator checks the id against the table BEFORE sending any
   amendment.
 
+## BATCH PAUSE (2026-10-19 - the user's restart; resume from this record)
+
+- **THE USER'S DECISION (verbatim)**: "keep the original, I just want to
+  restart (pause for now)" - NO profile changes before this restart (the
+  enable-all + the tool-coach wiring stay sequenced AFTER the site batch +
+  a later restart; the profile remains: factory + normalize-file live, the
+  other 10 disabled, the tool-coach NOT installed).
+- **THE ACTIVE LANES WERE STOPPED**: L3 (`5f7ee878`, the governance trio:
+  governor pair DONE + committed - the Classic governor in 3529db3, the
+  ETS governor in b68effb - the pinner pair IN FLIGHT - the Classic
+  pinner's Harness.ts is the ONE uncommitted file at pause; cargo
+  pending) + L4 (`ecac74bc`, the factory + ccr: the ccr two-step build +
+  the ETS ccr lanes committed in c758a6d - the remaining delta unknown at
+  pause; the tree was otherwise clean).
+- **THE RESUME POINTS (the next session's starting ritual)**: read this
+  record FIRST; re-arm the goal; continue the drain from the exact points:
+  (1) L3's pinner pair + cargo pair (the pinner Harness.ts delta is on
+  disk); (2) L4's remainder (verify what landed vs the committed log);
+  (3) L5 (tool-coach + the 7 wiring suites + the Run-Wiring list) + L6
+  (ets-base-dsh); (4) I8 (the .mjs retirement + the totals ledger); (5)
+  the site-update lanes B/A/C (the E2 blueprint + the granularity story);
+  (6) the enable-all + the tool-coach wiring (the user's restart then);
+  (7) the live-containers implementation (A1 -> A2+A3 -> C2 -> R3 -> D3 ->
+  C3 -> I7). The 9 IDLE lanes (A1/A2/A3/C2/I7/I8/R3/D3/C3) survive this
+  session's end - their specs are retained in this record; the next
+  session re-seats them (the ids die with the session).
+- **THE TREE AT PAUSE**: git status = 1 modified file (the pinner
+  Harness.ts); everything else committed by the user mid-session (the
+  runner state at the last full run: 42 .mjs + 18 pilot + 50 L1 + 30 L2 +
+  the L3 governor folders = 154 suites green; the L3/L4 completion
+  re-runs land post-resume).
+
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
 The user's third wave of the live-containers idea (his words): "to me all of
