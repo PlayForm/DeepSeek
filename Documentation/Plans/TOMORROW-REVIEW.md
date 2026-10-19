@@ -703,6 +703,25 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   its text folds over the corresponding section (the addendum wins on
   conflict). The I2-I6 lanes now fire as RATIFICATION lanes; the C2 brief
   rides in the doc (section 9).
+- **I2 COMPLETE (2026-10-19, `003f0eb5`)**: the AWAIT-MARKER addendum written
+  (Design/AWAIT-MARKER.md - the byte-exact first-key prefix
+  {"__await":true, the effective-gate order: DETACH = ON AND mode!=off AND
+  NOT non-detachable(tool) AND NOT await-marker AND NOT dedup-live AND NOT
+  escalation AND Policy.Decide, the marker as a negative gate only, the
+  non-command marker IGNORED with a ledger line never refused, the
+  {"__await":false explicit non-marker spelling, the KV-cache invariant - an
+  awaited call's transcript shape is byte-identical to the inline shape).
+  CONFLICT TABLE vs D2's 4.3: 3 wins (the statistical-guard override order,
+  the non-command ignore-not-refuse, the __await:false spelling), 2 ratified
+  agreements (the gate order vs D2 3.2, the teaching line). The C2 dispatch
+  folds the addendum over D2's section (the addendum wins). Residuals: the
+  first-key emission propensity is smoke-unverifiable (the teaching line
+  covers it), the history feedback loop accepted as honest (a future tune
+  could exclude explicit-marker calls), the dsh-tools no-strip limitation
+  respected.
+- **I3 ACTIVATED (2026-10-19, `a06e2f3b`)**: the APPEND-SEAM ratification
+  pass - its independent completion-append resolution vs D2's section 3.3,
+  with the conflict table (the addendum wins for the C2 dispatch).
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 

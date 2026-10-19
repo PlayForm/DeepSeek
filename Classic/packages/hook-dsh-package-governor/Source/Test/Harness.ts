@@ -203,7 +203,7 @@ export const Services: Record<string, any> = {};
 // The MAIN context, exactly like the source suite's: built from the shared
 // files map, with the readText probe patch installed (the Inflight-lifecycle
 // seam; the folder resets Inflight.DuringRead before the pass it measures).
-export const Context: any = MakeContext({ Files });
+export const Context: any = MakeContext({ files: Files });
 Context.__spy = {
 	onRead: () => {
 		/* set later, after the probe exists */

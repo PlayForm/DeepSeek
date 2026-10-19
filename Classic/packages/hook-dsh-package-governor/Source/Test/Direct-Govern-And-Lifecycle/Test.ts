@@ -424,8 +424,12 @@ export const runTest = async (): Promise<number> => {
 	{
 		// reverse registered order on a fresh factory instance: sim-pin FIRST,
 		// sim-canonicalize second - the same convergence from the other direction.
-		const CtxR = MakeContext({ Files });
-		const FactoryR = new FactoryClass(CtxR);
+		const CtxR = MakeContext({ files: Files });
+		// Fixture-only scaffolding: the reverse-fold factory is typed as `any` so
+		// the sim steps can pass plain runtime strings exactly like the source
+		// suite does (the branded FsVersion / Transform types are build-time
+		// constraints on real consumers, not on this fixture).
+		const FactoryR: any = new FactoryClass(CtxR);
 		const projFoldR = Path.join(Root, "proj-fold-r");
 		FileSystem.mkdirSync(projFoldR);
 		FileSystem.writeFileSync(
@@ -554,7 +558,7 @@ export const runTest = async (): Promise<number> => {
 	}
 	{
 		// P5 absent -> silent skip, sink retired
-		const Ctx2 = MakeContext({ Files: {} });
+		const Ctx2 = MakeContext({ files: {} });
 		Ctx2.get = (name: string) => (name === "storageDomain" ? undefined : Services[name]);
 		const StOff = Furnace.State(Ctx2, { logFile: Ledger }, { module: "package-governor" });
 		Furnace.Attach(Ctx2, { state: StOff, name: "probe-off" });

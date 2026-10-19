@@ -466,7 +466,7 @@ export const runTest = async (): Promise<number> => {
 		const Sub =
 			"compressFailures=true: an oversized failure compresses with the error preview (first content line, hard-cut) and the |error| marker";
 		await CheckAsync(Count, Sub, async () => {
-			const Content = TextBlock(PlainText(17000)); // > 2048 × 8 (the error tier)
+			const Content = TextBlock(PlainText(17000)); // > 2048 \u00D7 8 (the error tier)
 			const Failure = { isError: true, error: { message: "boom" }, content: Content };
 			const Out = await Run6b.Listeners["tools/post-execute"](Exec("bash"), Failure, NextAccept);
 			const Hash = HashOf(Content);
