@@ -682,3 +682,50 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   with the byte-ready design + the C2 coder brief. The I2-I6 addenda fire as
   slots free; D2 incorporates those that land mid-run and flags the rest for
   ratification at the C2 dispatch.
+
+## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
+
+The user's third wave of the live-containers idea (his words): "to me all of
+the files on my file system are halted processes" - a live block puts a file
+into OPERATIONAL MODE: wraps it in a sandbox whose output propagates
+automatically to the live blocks (the monitor-stats box above the file the
+agent edits); each turn the edits + the subsequent requests see the monitor's
+output changing (the harness recomputes BEHIND THE SCENES and replaces the
+output, with the "there does not exist" no-problem indicator); the live views
+become the LLM's actual operational view of the system - more information per
+turn while remaining conversational; the token-waste problem solved (the LLM
+stops pre-baking cargo check / tsc runs around its edits); operational edits
+over live-running software - "the LLM's conversation behaves like a mind that
+does things, not a back-and-forth wasting tokens".
+- THE FEASIBILITY READ (the orchestrator's answer to "is something like this
+  possible"): YES - every seam is verified: fs/observed for the edit events
+  (the governor/pinner precedent), ctx.jobs for the background checks (the
+  wave-2 research), the system-prompt/assemble for the per-request recompute
+  (the v1 research), the I1 sandbox/deadline/ring-cap constraints, the
+  storage domain for the cross-restart persistence. The caveats: the KV-cache
+  cost of always-changing sections (TTL + compact bands), the stale-truth
+  risk (a check that ran before the file changed again - the freshness
+  metadata answers it), the monitor band's own token budget (the 2 KiB
+  ring-cap precedent).
+- THE ORCHESTRATOR'S 10 PROPOSALS (embedded in R3's mandate as binding
+  consideration points, each adopted-or-rejected-with-reason in the
+  requirement file): freshness+provenance metadata per line, the no-problem
+  indicator grammar (the "there does not exist" sign, ASCII-safe) + the
+  one-line summary band, the check taxonomy (fast per-edit debounced / slow
+  on-demand+scheduled, via jobs between turns), the token budget (only the
+  changed lines differ per turn), the per-file watchlist config (globs ->
+  check sets per file type), the escape hatch (the __await synergy - the
+  model can still check deeply), the honesty (the "not run yet" states, the
+  fail-open, never a false pass), the plantType synergy (the child agents'
+  monitors into the parent's boards), the cross-restart persistence, the
+  control-loop framing (the monitor section IS the state vector; the edits
+  are the control inputs; the loop closes per request).
+- THE WAVE-3 TRIO SEATED IDLE (2026-10-19, the IDLE-AMENDMENT LAW): R3 the
+  LIVE-FILE-MONITORS RESEARCH (`e525cd61` - GLM flash low; writes
+  Documentation/Plans/LiveContainers/Requirements/08-LIVE-FILE-MONITORS.md
+  with the 10 consideration points + a D3 brief), D3 the DESIGN (`48c0c30d` -
+  deepseek max; writes Design/FILE-MONITORS-DESIGN.md + the C3 coder brief,
+  the phase order from D2's design), C3 the CODER (`62896685` - GLM flash
+  high; codes the wave-3 phase after C2). The drain order: the wave-2 chain
+  first (I2-I6 -> D2 -> C2), then the wave-3 trio (R3 -> D3 -> C3), then
+  I7/I8.
