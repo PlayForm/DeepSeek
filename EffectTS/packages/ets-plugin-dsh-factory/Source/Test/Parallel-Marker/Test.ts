@@ -19,7 +19,6 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import {
-	Check,
 	CheckAsync,
 	Finish,
 	MakeCounter,
@@ -83,7 +82,7 @@ export const runTest = async (): Promise<number> => {
 	// Group: 18b - REAL overlap (unbounded concurrency, not just acceptance).
 	{
 		const Sub =
-			"#14 parallel: real unbounded overlap — both steps started before either finished";
+			"#14 parallel: real unbounded overlap \u2014 both steps started before either finished";
 		{
 			await CheckAsync(Count, Sub, async () => {
 				eventsP.length = 0;
@@ -107,7 +106,7 @@ export const runTest = async (): Promise<number> => {
 	// Group: 18c - the INNER SELECTION still applies in parallel mode.
 	{
 		const Sub =
-			"#14 parallel: the inner selection still applies — array and single-name forms run only the selected steps";
+			"#14 parallel: the inner selection still applies \u2014 array and single-name forms run only the selected steps";
 		{
 			await CheckAsync(Count, Sub, async () => {
 				FileSystem.rmSync(fileB, { force: true });
@@ -165,7 +164,7 @@ export const runTest = async (): Promise<number> => {
 	// Group: 18e - CONTAINMENT in parallel mode.
 	{
 		const Sub =
-			"#14 parallel: containment — a throwing step never propagates and the other step still runs and settles";
+			"#14 parallel: containment \u2014 a throwing step never propagates and the other step still runs and settles";
 		{
 			await CheckAsync(Count, Sub, async () => {
 				factoryP.RegisterGovern("package.json", "par-boom", () => {

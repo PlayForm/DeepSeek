@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import { Check, EXCLUDE, Finish, Ledger, MakeCounter, NCU_BIN, TOOLS } from "../Harness.js";
-import Governor from "../../../Target/Library.js";
+import * as Governor from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

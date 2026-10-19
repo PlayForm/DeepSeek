@@ -19,7 +19,7 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
-import Governor from "../../Target/Library.js";
+import * as Governor from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
 /**
@@ -293,6 +293,10 @@ export const Validate = (Raw: Record<string, unknown>): any =>
  * process.
  */
 export const Furnace: any = new FactoryClass(Context);
+// The source suite's explicit wiring: the factory registers through the
+// reflect capture, and the ctx property is assigned right after construction
+// (the Attach probe reads it via `services[name] ?? ctx[name]`).
+Context.pluginFactory = Furnace;
 
 /**
  * The governor probe (the source suite's `Probe`): set by Boot once the
