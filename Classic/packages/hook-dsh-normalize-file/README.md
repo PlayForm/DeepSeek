@@ -241,7 +241,81 @@ kind.
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
 
+## The Granular Scopes (all volatile)
+
+The `scopes` object gates every arm of the hook-dsh-normalize-file hook independently — the defaults are exactly the
+pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
+override in the profile patch turns the whole family off in one edit (see the patch fragment at the
+end of this section). The whole object carries the volatile marker (its leaves stay plain —
+schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
+`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
+silent, no remount, no new activation line.
+
+| Scope        | Default | Gates                                                                 |
+| ------------ | ------- | --------------------------------------------------------------------- |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
+| files        | on      | the normalize-file tool — off = the tool returns the unchanged `changed:false` result, no read, no write, no ledger line                                                            |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+
+`normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
+`scopes.toolInput`), so every existing profile keeps working.
+
+`toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
+by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
+`ask_user_question` by default.
+
+## The Overpass Arms
+
+Two additional listeners, both registered at apply and both opt-in (gated at RUNTIME on the scope
+cells, so flipping a scope lands through the P10 volatile-refresh without any re-registration):
+
+- **Tool results** — `tools/post-execute`, `{ prepend: true }` (OUTERMOST vs the ccr hook's own
+  prepended gate: the ccr compression sees the NORMALIZED bytes; the `<<<CCR:` marker guard makes
+  any load order safe). Accepted, non-value-carrying decisions only; TEXT blocks only (never
+  tool-call/argument blocks); N = 0 is a true no-op — no ledger line; fail-open.
+- **Step batch** — `agent/pre-step`, default order. While `scopes.batch` is on every incoming batch
+  is normalized; the command's one-shot arm fires ONCE regardless of the scope value and is cleared
+  after one use. Text blocks only; never the assistant/tool history.
+
+The file overpass lines (N > 0 only):
+
+```text
+hook-dsh-normalize-file: overpass: normalized N char(s) in tool result <toolName> <callId>
+hook-dsh-normalize-file: overpass: normalized N char(s) in step batch (turn T step S)
+hook-dsh-normalize-file: overpass: swept K file(s), normalized M char(s)
+```
+
+## The normalize-overpass Command
+
+Registered through the `commands` service when it is present (probe-once — a missing service simply
+skips the registration). Grammar:
+
+| Input              | Effect                                                                            |
+| ------------------ | --------------------------------------------------------------------------------- |
+| `files <path…>`    | run the file sweep — the normalize-file pipeline per path, each changed file written through the shared executor with its own count line, then the summary                                                                       |
+| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
+| `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
+| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+
+## The Patch-Level Global Off
+
+```yaml
+- id: hook-dsh-normalize-file
+  config:
+    scopes:
+      conversation: false
+      reasoning: false
+      toolInput: false
+      toolResults: false
+      files: false
+      batch: false
+```
+
 ---
+
 
 ## In Action
 

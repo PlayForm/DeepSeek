@@ -88,8 +88,12 @@ export interface Outcome {
 
 // The COUNTING six-fold chain: the raw-write tool's Rewrite order, but
 // keeping the counts (the core's `{ text, count }` contract, summed) - the
-// count is the ledger line's N and the no-op condition.
-const Rewrite = (Content: string, Replacement: string): { text: string; count: number } => {
+// count is the ledger line's N and the no-op condition. EXPORTED (additive,
+// the overpass arms' reuse): the tool-results and step-batch arms
+// (Function/Overpass, Function/StepBatch) run this same chain over tool
+// result text and incoming batch text - the file flavor's overpass
+// transform IS the whole six-fold chain, exactly like its tool body.
+export const Rewrite = (Content: string, Replacement: string): { text: string; count: number } => {
 	let Text = Content;
 	let Count = 0;
 	const DashesStep = Replace(Text, Dashes, Replacement);

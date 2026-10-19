@@ -356,14 +356,63 @@ The surface, grouped by plugin kind:
 |                     | `policyFile` / `keepFile` / `sections`   | the update-policy and keep-list sidecars, and which dependency sections the pinner touches                                                                                                                      |
 | The stream flavors  | `replacement`                            | the transform's only knob on class flavors (`-`, `"`, `...`, plain space, empty) - hot-editable, no remount                                                                                                     |
 |                     | `normalizeReasoning`                     | default ON - normalize reasoning deltas and the assembled reasoning block too                                                                                                                                   |
-|                     | `normalizeToolArguments`                 | default OFF - tool-call arguments are execution-critical raw JSON; opt-in                                                                                                                                       |
+|                     | `normalizeToolArguments`                 | default OFF - tool-call arguments are execution-critical raw JSON; opt-in (deprecated in favor of `scopes.toolInput`, kept and OR-ed in)                                                                        |
+|                     | `scopes`                                 | the granular scope gates - all volatile, per hook: `conversation` (text/block-end, ON), `reasoning` (sub-gate, ON), `toolInput` (OR-ed with `normalizeToolArguments`, OFF), `toolResults` (the `tools/post-execute` arm, OFF), `files` (the `normalize-file` tool, ON), `batch` (the `agent/pre-step` arm, OFF) |
+|                     | `toolResultsExempt`                      | volatile list of exec names that pass the tool-results arm by identity (`read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question`)                                          |
 | The file tool       | `normalize` (per call)                   | absent/false = verbatim, `true` = all six transforms, or the flavor-name array                                                                                                                                  |
 
-The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off -
+The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off,
+`scopes.toolInput` / `scopes.toolResults` / `scopes.batch` off -
 the family changes nothing until it is told to.
 
 The escape hatches: the `exclude` fence, the keep-list sidecars, the raw-marker opt-out, the
 `govern: false` selection.
+
+### The granular scopes and the overpass arms
+
+Because the `scopes` schema shape is identical in every family hook, one grouped override in the
+profile patch (`cordis.patch.yml`) turns the whole family off in one edit - live and silent, no
+remount, no new activation line:
+
+```yaml
+- id: hook-dsh-normalize-dash
+  config:
+    scopes:
+      conversation: false
+      reasoning: false
+      toolInput: false
+      toolResults: false
+      files: false
+      batch: false
+```
+
+Repeat the block for the other flavors (or just the ones you want dark). Every scope is volatile:
+flipping it applies to the next dispatch.
+
+The overpass arms (both opt-in, off by default) normalize content at its natural boundaries
+without ever rewriting the durable transcript:
+
+- `tools/post-execute` - the tool result is normalized before it re-enters the model and is appended
+  to the transcript going forward (text blocks only; the `read`/`edit`/`raw-write`/`normalize-file`/
+  `ccr_retrieve`/`subagent`/`ask_user_question` exec names pass by identity via
+  `toolResultsExempt`; the `<<<CCR:` marker bytes make the arm order-safe against the ccr hook).
+- `agent/pre-step` - the incoming user-role batch is normalized before the model sees it (never the
+  assistant/tool history, which is append-only).
+
+Each hook also registers a human command, `normalize-overpass`:
+
+```text
+normalize-overpass batch          # arm a one-shot step-batch overpass (one use)
+normalize-overpass results on     # flip scopes.toolResults via the settings service
+normalize-overpass results off
+normalize-overpass scopes         # read-only report of the current effective values
+normalize-overpass files <path…>  # the file sweep - implemented by the normalize-file hook only
+```
+
+The command writes one ledger line per action:
+`overpass: normalized N char(s) in tool result <toolName> <callId>`,
+`overpass: normalized N char(s) in step batch (turn T step S)`,
+`overpass: swept K file(s), normalized M char(s)`.
 
 ---
 

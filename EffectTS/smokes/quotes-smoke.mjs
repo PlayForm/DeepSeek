@@ -32,19 +32,31 @@ const Furnace = new FactoryClass({ reflect: { provide: () => undefined } });
 // captures lines; effect not needed (Apply registers none).
 const Make = (Raw) => {
 	const Listeners = {},
+		ListenerOptions = {},
 		Lines = [];
+	const CommandsRegistered = [];
 	const Context = {
 		// The service accessor (typed via Interface/Factory's augmentation): the
 		// REAL factory instance, guaranteed present by `inject: ["pluginFactory"]`.
 		pluginFactory: Furnace,
-		on: (Name, Listener) => {
+		on: (Name, Listener, Options) => {
 			Listeners[Name] = Listener;
+			ListenerOptions[Name] = Options;
 			return () => true;
 		},
 		get: (Name) => {
 			switch (Name) {
 				case "pluginFactory":
 					return Furnace;
+				// The human-command registry seam (the `normalize-overpass`
+				// registration): records every registered definition.
+				case "commands":
+					return {
+						register: (Definition) => {
+							CommandsRegistered.push(Definition);
+							return () => true;
+						},
+					};
 				default:
 					throw new Error(`unknown service: ${Name}`);
 			}
@@ -56,7 +68,14 @@ const Make = (Raw) => {
 		},
 	};
 	apply(Context, Raw); // the loader contract: apply(ctx, config)
-	return { Context, Listeners, Lines, State: Context.__hookDshQuotesState };
+	return {
+		Context,
+		Listeners,
+		ListenerOptions,
+		Lines,
+		CommandsRegistered,
+		State: Context.__hookDshQuotesState,
+	};
 };
 
 const Quotes0 = Quotes; // (apply + Config live on both named and default)
@@ -85,8 +104,11 @@ const Run1 = Make(Raw1);
 
 Check(typeof Run1.Listeners["llm/stream"] === "function", "the llm/stream listener is registered");
 Check(
-	Object.keys(Run1.Listeners).length === 2 && Run1.Listeners["loader/volatile-update"] !== undefined,
-	"llm/stream plus the State builder's P10 loader/volatile-update refresh",
+	Object.keys(Run1.Listeners).length === 4 &&
+		Run1.Listeners["loader/volatile-update"] !== undefined &&
+		Run1.Listeners["tools/post-execute"] !== undefined &&
+		Run1.Listeners["agent/pre-step"] !== undefined,
+	"llm/stream + the P10 volatile-update refresh + the two overpass arms (post-execute prepended, pre-step default order)",
 );
 Check(Run1.State && Run1.State.Factory === Furnace, "state carries the REAL factory instance");
 Check(
@@ -487,6 +509,277 @@ Check(
 	"volatile scope flip: conversation off applies to the NEXT stream without remount",
 );
 
+// ---------- Run O (additive): the overpass arms + the command ----------
+// The tool-results arm (tools/post-execute), the step-batch arm
+// (agent/pre-step), the normalize-overpass command, the ordering guard and
+// the history-safety invariant. Hand-built config with a MUTABLE scopes
+// object (the stable-reference simulation) so the scope flips go through
+// the factory's volatile-update dispatch like Run V / Run S. The fixtures
+// use this flavor's own character class.
+rm();
+const LiveScopesO = { ...SCOPES_DEFAULT };
+const RawO = {
+	log: true,
+	logFile: Ledger,
+	normalizeReasoning: true,
+	normalizeToolArguments: false,
+	scopes: { get: () => LiveScopesO },
+};
+const RunO = Make(RawO);
+const PostO = RunO.Listeners["tools/post-execute"];
+const PreO = RunO.Listeners["agent/pre-step"];
+const NextAcceptO = async () => ({ kind: "accept" });
+const ExecO = (Name) => ({
+	callId: "call_smoke",
+	name: Name,
+	arguments: {},
+	signal: new AbortController().signal,
+});
+
+// O0: registration facts (the ordering contract is the prepend flag +
+// the marker guard, together making any load order safe).
+Check(typeof PostO === "function", "overpass: the tools/post-execute arm is registered");
+Check(typeof PreO === "function", "overpass: the agent/pre-step arm is registered");
+Check(
+	RunO.ListenerOptions["tools/post-execute"]?.prepend === true,
+	"overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)",
+);
+Check(
+	RunO.ListenerOptions["agent/pre-step"] === undefined,
+	"overpass: the pre-step arm uses default ordering (nothing needs to precede it)",
+);
+Check(
+	RunO.CommandsRegistered.length === 1 &&
+		RunO.CommandsRegistered[0].name === "normalize-overpass" &&
+		typeof RunO.CommandsRegistered[0].handler === "function",
+	"overpass: the normalize-overpass command is registered (name without slash)",
+);
+
+// O1: the tool-results scope is OFF by default -> the bare decision passes.
+const OutO1 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "a \u201C b" }] },
+	NextAcceptO,
+);
+Check(
+	OutO1.kind === "accept" && !("content" in OutO1),
+	"overpass: toolResults off (default) -> the decision passes untouched",
+);
+// O2: scope ON via the volatile flip -> normalization + the exact ledger line.
+LiveScopesO.toolResults = true;
+RunO.Listeners["loader/volatile-update"]([["scopes", "toolResults"]]);
+const OutO2 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "a \u201C b" }] },
+	NextAcceptO,
+);
+Check(
+	OutO2.kind === "accept" &&
+		OutO2.content.length === 1 &&
+		OutO2.content[0].text === 'a " b',
+	"overpass: toolResults on -> the text block is rewritten (em dash -> hyphen)",
+);
+Check(
+	RunO.Lines.includes(
+		"hook-dsh-normalize-quotes: overpass: normalized 1 char(s) in tool result bash call_smoke",
+	),
+	"overpass: the tool-result ledger line is byte-exact",
+);
+Check(
+	RunO.State.Factory === Furnace,
+	"overpass: the arm runs against the REAL factory (no direct fs access)",
+);
+
+// O3: the exemption list -> `read` passes by identity even with the scope on.
+const OutO3 = await PostO(
+	ExecO("read"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "a \u201C b" }] },
+	NextAcceptO,
+);
+Check(
+	OutO3.kind === "accept" && !("content" in OutO3),
+	"overpass: exempt tool (read) passes through by identity",
+);
+
+// O4: non-text blocks are never touched; a mixed content rewrites only text.
+const ToolBlockO = { type: "tool-call", name: "bash", arguments: '{"a":"\u201C"}' };
+const OutO4 = await PostO(
+	ExecO("bash"),
+	{
+		isError: false,
+		value: {},
+		content: [ToolBlockO, { type: "text", text: "x \u201C y" }],
+	},
+	NextAcceptO,
+);
+Check(
+	OutO4.content[0] === ToolBlockO &&
+		OutO4.content[0].arguments === '{"a":"\u201C"}',
+	"overpass: tool-call/argument blocks pass untouched (execution-critical JSON)",
+);
+Check(OutO4.content[1].text === 'x " y', "overpass: the text block in the same content IS rewritten");
+
+// O5: N = 0 -> the decision unchanged and NO ledger line.
+const LinesBeforeO5 = RunO.Lines.length;
+const OutO5 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "plain text" }] },
+	NextAcceptO,
+);
+Check(
+	OutO5.kind === "accept" && !("content" in OutO5),
+	"overpass: N=0 payload -> the bare decision unchanged",
+);
+Check(RunO.Lines.length === LinesBeforeO5, "overpass: N=0 -> no ledger line (the no-op rule)");
+
+// O6: a value-carrying decision is canonical -> untouched.
+const OutO6 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "a \u201C b" }] },
+	async () => ({ kind: "accept", value: { ok: 1 } }),
+);
+Check(
+	OutO6.kind === "accept" && OutO6.value.ok === 1 && !("content" in OutO6),
+	"overpass: value-carrying decision passes untouched",
+);
+
+// O7: the CCR marker guard -> marker-bearing content passes unchanged
+// (the ordering guard: normalization never touches a ccr replacement).
+const MarkerBlockO = {
+	type: "text",
+	text: "[text:preview]\n<<<CCR:0123456789abcdef01234567|text|42>>>",
+};
+const OutO7 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [MarkerBlockO] },
+	NextAcceptO,
+);
+Check(
+	OutO7.kind === "accept" && !("content" in OutO7),
+	"overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)",
+);
+Check(
+	RunO.Lines.length === LinesBeforeO5,
+	"overpass: O5/O6/O7 added NO ledger lines (the no-op and pass-through rules)",
+);
+
+// O8: the content basis is the DOWNSTREAM decision's content when present.
+const OutO8 = await PostO(
+	ExecO("bash"),
+	{ isError: false, value: {}, content: [{ type: "text", text: "raw \u201C result" }] },
+	async () => ({ kind: "accept", content: [{ type: "text", text: "downstream \u201C shaped" }] }),
+);
+Check(
+	OutO8.content[0].text === 'downstream " shaped',
+	"overpass: the downstream decision's content is the basis (not the raw result)",
+);
+
+// O9: the batch scope is OFF by default -> the enter decision passes.
+const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+const OutO9 = await PreO(
+	{ agent: {}, messages: [MsgO("a \u201C batch")], turn: 3, step: 1, signal: new AbortController().signal },
+	async () => ({ kind: "enter", messages: [MsgO("a \u201C batch")] }),
+);
+Check(
+	OutO9.kind === "enter" &&
+		OutO9.messages[0].content[0].text === "a \u201C batch",
+	"overpass: batch off (default) -> the enter decision passes untouched",
+);
+
+// O10: batch ON via the volatile flip -> normalized messages + exact ledger.
+LiveScopesO.batch = true;
+RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
+const LinesBeforeO10 = RunO.Lines.length;
+const OutO10 = await PreO(
+	{ agent: {}, messages: [MsgO("a \u201C batch")], turn: 3, step: 1, signal: new AbortController().signal },
+	async () => ({ kind: "enter", messages: [MsgO("a \u201C batch")] }),
+);
+Check(
+	OutO10.kind === "enter" &&
+		OutO10.messages[0].content[0].text === 'a " batch',
+	"overpass: batch on -> the text blocks in the incoming batch are rewritten",
+);
+Check(
+	RunO.Lines.includes(
+		"hook-dsh-normalize-quotes: overpass: normalized 1 char(s) in step batch (turn 3 step 1)",
+	),
+	"overpass: the step-batch ledger line is byte-exact",
+);
+
+// O11: N=0 batch -> decision unchanged, no ledger line.
+const LinesBeforeO11 = RunO.Lines.length;
+const OutO11 = await PreO(
+	{ agent: {}, messages: [MsgO("plain")], turn: 3, step: 2, signal: new AbortController().signal },
+	async () => ({ kind: "enter", messages: [MsgO("plain")] }),
+);
+Check(OutO11.kind === "enter", "overpass: N=0 batch -> the decision unchanged");
+Check(RunO.Lines.length === LinesBeforeO11, "overpass: N=0 batch -> no ledger line");
+
+// O12: the one-shot arm from the command fires ONCE regardless of the scope.
+LiveScopesO.batch = false;
+RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
+const CommandO = RunO.CommandsRegistered[0];
+const ArmO = await CommandO.handler({ rawInput: "batch" });
+Check(
+	ArmO.kind === "success" && RunO.State.Overpass === true,
+	"overpass: the command's batch grammar arms the one-shot flag",
+);
+const OutO12 = await PreO(
+	{ agent: {}, messages: [MsgO("a \u201C batch")], turn: 4, step: 0, signal: new AbortController().signal },
+	async () => ({ kind: "enter", messages: [MsgO("a \u201C batch")] }),
+);
+Check(
+	OutO12.messages[0].content[0].text === 'a " batch',
+	"overpass: the one-shot arm normalizes the next batch with the scope off",
+);
+Check(
+	RunO.Lines.includes(
+		"hook-dsh-normalize-quotes: overpass: normalized 1 char(s) in step batch (turn 4 step 0)",
+	),
+	"overpass: the one-shot batch ledger line is byte-exact",
+);
+Check(RunO.State.Overpass === false, "overpass: the one-shot flag is consumed (cleared after one use)");
+const OutO12b = await PreO(
+	{ agent: {}, messages: [MsgO("a \u201C batch")], turn: 4, step: 1, signal: new AbortController().signal },
+	async () => ({ kind: "enter", messages: [MsgO("a \u201C batch")] }),
+);
+Check(
+	OutO12b.messages[0].content[0].text === "a \u201C batch",
+	"overpass: the second batch after the one-shot passes untouched (exactly one use)",
+);
+
+// O13: a rejected step is never touched.
+const OutO13 = await PreO(
+	{ agent: {}, messages: [MsgO("a \u201C")], turn: 5, step: 0, signal: new AbortController().signal },
+	async () => ({ kind: "reject" }),
+);
+Check(OutO13.kind === "reject", "overpass: a reject decision passes untouched");
+
+// O14: the command's other grammars.
+const ReportO = await CommandO.handler({ rawInput: "scopes" });
+Check(
+	ReportO.kind === "success" &&
+		ReportO.text.includes("conversation=on") &&
+		ReportO.text.includes("toolResults=on") &&
+		ReportO.text.includes("batch=off") &&
+		ReportO.text.includes("exempt: read, edit"),
+	"overpass: the scopes report is the read-only effective-values summary",
+);
+const FilesO = await CommandO.handler({ rawInput: "files /tmp/x.txt" });
+Check(
+	FilesO.kind === "error" && FilesO.text.includes("normalize-file"),
+	"overpass: the files sweep is declined by a stream flavor (owned by normalize-file)",
+);
+const ResultsBadO = await CommandO.handler({ rawInput: "results" });
+Check(ResultsBadO.kind === "error", "overpass: 'results' without on|off is a usage error");
+const JunkO = await CommandO.handler({ rawInput: "nonsense" });
+Check(JunkO.kind === "error", "overpass: an unknown grammar is a usage error");
+const ResultsO = await CommandO.handler({ rawInput: "results on" });
+Check(
+	ResultsO.kind === "success" &&
+		(ResultsO.text.includes("settings") || ResultsO.text.includes("config")),
+	"overpass: 'results on' with no settings/config-editor service reports the settings path (config stays the source of truth)",
+);
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);
 process.exit(Fail === 0 ? 0 : 1);

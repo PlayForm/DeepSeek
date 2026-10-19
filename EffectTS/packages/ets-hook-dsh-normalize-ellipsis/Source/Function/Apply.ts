@@ -84,6 +84,13 @@ import { Effect, Scope, Stream } from "effect";
 import Normalize from "./Normalize.js";
 import Replace from "./Replace.js";
 import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
+import Overpass from "./Overpass.js";
+import StepBatch from "./StepBatch.js";
+import Command, {
+	type CommandsService,
+	type ConfigEditorService,
+	type SettingsService,
+} from "./Command.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";
@@ -187,6 +194,46 @@ export default (Context: Context, Options: Config): void => {
 			),
 		),
 	);
+
+
+	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
+	// tools/post-execute arm (Function/Overpass — the tool-results scope,
+	// PREPENDED: the family's bundle order places the ccr hook before the
+	// normalize hooks, so the arm that prepends later is OUTERMOST and the
+	// ccr gate compresses the NORMALIZED bytes; the ccr marker guard makes
+	// any load order safe) and the agent/pre-step arm (Function/StepBatch —
+	// the step-batch scope plus the one-shot `Overpass` flag armed by the
+	// command below). Both are gated at RUNTIME on the volatile scope cells
+	// (off -> the downstream decision passes untouched), so their listeners
+	// must exist even while their scopes are off: a scope flipped on later
+	// lands through the P10 volatile-refresh without any re-registration.
+	// 
+	Context.on(
+		"tools/post-execute",
+		(Exec, Result, Next) => Overpass(Exec, Result, Next, State),
+		{ prepend: true },
+	);
+	Context.on("agent/pre-step", (Payload, Next) => StepBatch(Payload, Next, State));
+
+	// THE HUMAN COMMAND (`normalize-overpass`, the plan's §5): registered
+	// through the probe-once Seam (never the dead accessor — a missing
+	// commands service simply skips the registration, the command is a
+	// convenience not a requirement). Name lowercase without the leading
+	// slash (the registry's rule); the grammar lives in Function/Command.
+	const Commands = Factory.Seam(State, "commands") as CommandsService | undefined;
+	if (Commands && typeof Commands.register === "function") {
+		// The config-writing seams are probed the same way — the command's
+		// `results on|off` path uses them when present and falls back to
+		// reporting the settings-UI path when absent.
+		const Settings = Factory.Seam(State, "settings") as SettingsService | undefined;
+		const Editor = Factory.Seam(State, "configEditor") as ConfigEditorService | undefined;
+		Commands.register({
+			name: "normalize-overpass",
+			description:
+				"Arm a one-shot overpass: 'files' <path…> | 'batch' | 'results on|off' | 'scopes'",
+			handler: (Invocation) => Command(State, Invocation, Settings, Editor),
+		});
+	}
 
 	// The loader ignores any return value; the smoke harness probes the built
 	// State through this debug attachment instead (a bare `return State` is

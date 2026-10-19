@@ -25,6 +25,9 @@
 //                 defaults);
 //   Exempt      - the tool-results exemption list (config
 //                 `toolResultsExempt`, volatile - same refresh path);
+//   Overpass    - the one-shot step-batch overpass arm (set by the
+//                 `normalize-overpass batch` command, consumed by the next
+//                 incoming batch - Function/StepBatch);
 //   Factory     - the injected factory service itself, consumed by the count
 //                 callback (the post-stream ledger line) - assigned once in
 //                 Function/Apply, never a module-level global, so HMR
@@ -75,6 +78,11 @@ export default interface State extends Shared {
 	/** The tool-results exemption list (config `toolResultsExempt`,
 	 *  volatile - same refresh path). */
 	Exempt?: string[] | undefined;
+	/** The one-shot step-batch overpass arm (set by the
+	 *  `normalize-overpass batch` command, consumed and cleared by the next
+	 *  incoming batch regardless of the `scopes.batch` value - Function/
+	 *  StepBatch). */
+	Overpass?: boolean | undefined;
 	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append) is consumed through it; assigned once in
 	 *  Function/Apply. */

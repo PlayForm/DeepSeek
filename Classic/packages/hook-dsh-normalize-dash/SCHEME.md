@@ -147,7 +147,11 @@ supplied through its own fields, which override the minimal block's.
 The shape: `log` (bool, true,
 volatile), `logFile` (`~/.dsh/hook-dsh-normalize-dash.log`, volatile), `replacement` (`-`, volatile
 — the transform's only knob), `normalizeReasoning` (bool, true), `normalizeToolArguments` (bool,
-false).
+false), `scopes` (object, volatile — the granular scope gates of §7), `toolResultsExempt` (string
+array, volatile — the tool-results exemption list of §7). The `scopes` object itself carries the
+volatile marker (its leaves stay plain — schemastery rejects volatile leaves under an enclosing
+volatile field), so one leaf change commits one update whose whole object the State's refresh
+listener re-reads.
 
 ## 5. Ledger lines (stable, asserted by the smoke)
 
@@ -156,7 +160,9 @@ hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, l
 hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
 ```
 
-Written only when N > 0; the count line follows a normal stream completion only.
+Written only when N > 0; the count line follows a normal stream completion only. The overpass arms
+add their own N > 0 lines (§7); the activation line NEVER changes for a volatile edit (observability
+lives in the read-only `normalize-overpass scopes` report).
 
 ## 6. Interplay
 
@@ -169,3 +175,60 @@ Written only when N > 0; the count line follows a normal stream completion only.
 - **Chunk identity**: untouched chunks pass through by object identity; a rewritten delta/block is a
   shallow copy with only the text field replaced (the one exception: the raw-marker strip rewrites
   the arguments text while the count stays 0 - marker removal is not normalization).
+
+## 7. The granular scopes, the overpass arms and the command (P10–P12)
+
+**The scopes.** One `scopes` object (whole-object volatile) gates every arm of the hook
+independently: `conversation` (text-delta text + the assembled text/reasoning blocks, default ON),
+`reasoning` (the reasoning-delta sub-gate, ANDed with `normalizeReasoning`, default ON), `toolInput`
+(the tool-call arguments arm, OR-ed with the deprecated `normalizeToolArguments` — the old field
+keeps working, effective toolInput = field || scope — default OFF), `toolResults` (the
+`tools/post-execute` arm, default OFF), `files` (inert in a stream flavor but present in the schema
+so one patch override drives the whole family), `batch` (the `agent/pre-step` arm, default OFF).
+Defaults are exactly the pre-scopes behavior. `toolResultsExempt` (volatile string array, default
+`read, edit, raw-write, normalize-file, ccr_retrieve, subagent, ask_user_question`) passes a listed
+tool result by identity. The factory's P10 `loader/volatile-update` listener refreshes `Scopes` /
+`Exempt` / `Replacement` in place — no remount, no new activation line.
+
+**The overpass arms.** Two additional listeners, both registered at apply and both opt-in (gated at
+runtime on the scope cells, so flipping a scope lands through the volatile-refresh without any
+re-registration):
+
+- `tools/post-execute`, `{ prepend: true }` — OUTERMOST vs the ccr hook's own prepended gate (the
+  family's bundle order places ccr before the normalize hooks, so the arm that prepends later
+  compresses AFTER normalization; the `<<<CCR:` marker guard makes ANY load order safe). Accepted,
+  non-value-carrying decisions only; the content basis is `decision.content ?? result.content`;
+  TEXT blocks only (never tool-call/argument blocks); N = 0 is a true no-op; fail-open.
+- `agent/pre-step`, default order — while `scopes.batch` is on every incoming batch is normalized;
+  the command's one-shot arm (`State.Overpass`) fires once regardless of the scope value and is
+  cleared after one use. Only an `enter` decision can be replaced; text blocks only; never the
+  assistant/tool history; re-normalizing injected content across steps is harmless (the transforms
+  are idempotent on their own output).
+
+**The command.** `normalize-overpass` (registered through the probe-once `commands` Seam — silently
+skipped when the service is absent): `files <path…>` is declined by a stream flavor (owned by
+normalize-file), `batch` arms the one-shot flag, `results on|off` flips `scopes.toolResults` through
+the settings service / config editor (never direct State mutation; absent services → reports the
+settings-UI path), `scopes` is the read-only effective-values report.
+
+**The new ledger lines (N > 0 only, byte-asserted by the smoke):**
+
+```
+hook-dsh-normalize-dash: overpass: normalized N char(s) in tool result <toolName> <callId>
+hook-dsh-normalize-dash: overpass: normalized N char(s) in step batch (turn T step S)
+```
+
+**The patch-level global off.** The `scopes` shape is identical in every family hook, so one
+grouped override in `cordis.patch.yml` turns the whole family off in one edit — live and silent:
+
+```yaml
+- id: hook-dsh-normalize-dash
+  config:
+    scopes:
+      conversation: false
+      reasoning: false
+      toolInput: false
+      toolResults: false
+      files: false
+      batch: false
+```
