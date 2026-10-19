@@ -386,3 +386,81 @@ section for the tool-coach plugin in coachy colors (red/orange) with a
 distinct structure; (5) a separate tool-coach page under Site/Source/pages/
 plugins/ like the other plugins have. Implement after the smoke-suite
 restructure settles.
+
+## BATCH DISPATCH (2026-10-19 - the restart session, the two queue additions in execution)
+
+- **The pre-restart in-flight work landed + committed** (the git log): the CCR
+  hook (a4287c1), the granular scope gates + live volatile refresh (48626ac,
+  82ad175), the overpass arms + normalize-overpass + the tool-coach hook
+  (2676702), the EffectTS tool-coach twin (085e2bd), the craft-library battery
+  + the family planning notes (de45887), the site-update plan (0299053), the
+  prettier pass (fba0107), the Target tracking (f10cfbb), the live-testing
+  methodology update (d2efca0). The wrap-up report for the tool-coach batch is
+  the commit series + this record; the tree is CLEAN (nothing uncommitted).
+- **The arbiter baseline re-verified at dispatch time**: `Maintain/Run-Smokes.mjs`
+  -> "All 42 smoke suites passed" (the queue's earlier 41 count is now 42 with
+  the tool-coach suite added; the tool-coach suite prints 129 PASS). Both queue
+  additions are now ACTIONABLE (the gating condition - the in-flight
+  normalization + tool-coach work - has settled).
+- **The dispatch plan (the 2-active law, all routes cloudflare-workers-ai /
+  @cf/zai-org/glm-5.3-flash)**: Wave 1 = the two READ-ONLY blueprint explorers
+  (both dispatched 2026-10-19): `6ca70e6f` (the smoke-restructure blueprint ->
+  `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`) + `19ffb358` (the
+  site-update blueprint -> `Documentation/Plans/SITE-UPDATE-BLUEPRINT.md`).
+  Wave 2 = the restructure PILOT (one plugin pair end-to-end: the Source/Test
+  folders + the TS rewrite + the two-step compile + prepublishOnly.sh/Run.sh +
+  the aggregate runner), effort high. Wave 3 = the fan-out lanes over the
+  remaining pairs (disjoint directories). Wave 4 = the site-update lanes
+  (AFTER the restructure settles, per the dictated sequence; the README updates
+  overlap the restructure's doc updates, so they serialize).
+- **The environment facts for the lanes**: the site dev server runs at
+  localhost:9999 (the USER's own `astro dev --host`); the site lanes verify via
+  `cd Site && pnpm prepublishOnly` + the built-HTML/CSS greps only (never the
+  dev server, never tsc, never git). The family baseline: 14 packages per tree
+  (13 hooks + the factory + ets-base-dsh), 21 suites per tree.
+
+## BATCH WAVE-1 RESULTS (2026-10-19 - both blueprint explorers COMPLETE)
+
+- **The smoke-restructure blueprint**: `6ca70e6f` COMPLETE ->
+  `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md` (643 lines). The
+  inventory: 28 packages, 42 suites (21 per tree - the note's "41" is stale,
+  flagged), ~248 proposed test folders (124 per tree, 3-8 per suite); the exact
+  folder splits for core/dash/ccr; the byte-ready templates (TS test skeleton
+  with the runTest() -> PASS-count contract, the README template, prepublishOnly.sh
+  with the MANDATORY Source-first/Test-second order - the plugin build wipes
+  Target/ recursively, Test-ESBuild.ts wiping only Target/Test, .npmignore,
+  package.json wiring); the aggregate-runner integration (keep the .mjs pass,
+  add the Target/Test enumeration pass with the printed-count-vs-README
+  vacuously-green guard); the pilot = hook-dsh-core + ets-hook-dsh-core; the
+  fan-out L1-L6; the traps (parity-by-generation, no aliases in tests, tabs,
+  ASCII with \u escapes, baseline-recording).
+- **The site-update blueprint**: `19ffb358` COMPLETE ->
+  `Documentation/Plans/SITE-UPDATE-BLUEPRINT.md` (767 lines). The inventory: 21
+  pages mapped (THE PIN Showcase index.astro:328-337, THE GOVERN 338-347; the
+  Showcase has no bottom slot - the blueprint adds a slot="supports" line); the
+  supports-button use-case copy extracted from the real READMEs (pinner =
+  package.json only, pure P pass; governor = package.json chain canonicalize +
+  detached ncu + Cargo.toml via the cargo sibling); the coachy colors ALREADY
+  in the tokens (--color-pin-red #c62828, --color-accent-orange #bf3003 - no
+  new hex); the two-column "coaching board" section design (tier ladder + an
+  interactive bash-call judge demo); the DRIFT FLAG confirmed: the Classic
+  tool-coach README is a byte-copy of the ETS twin (wrong H1) - a fix item for
+  the README lane; the lane split B (Content.ts + sweep pages) -> A (index +
+  SupportsButton + the 2 new plugin pages, 21->23 pages) -> C (READMEs); the
+  verification protocol (cd Site && pnpm prepublishOnly + pnpm Drift + the
+  built-Target greps; never the dev server).
+- **The live profile (the user's question, answered)**: 12 family bundles
+  installed (linked to Classic/packages), factory + normalize-file ACTIVE, the
+  other 10 disabled per the control panel; hook-dsh-core is a link: dependency
+  but NOT a bundle row; hook-dsh-tool-coach NOT in the profile at all (in the
+  repo, not wired - a profile change + restart to add it).
+
+## BATCH WAVE-2 (2026-10-19 - the restructure pilot ACTIVE)
+
+- **The pilot lane** `2b336307` (GLM flash high): converts hook-dsh-core +
+  ets-hook-dsh-core end-to-end per the blueprint (the 9+2 folders, the
+  templates, the two-step sh scripts, the aggregate-runner change, the full
+  acceptance battery). The lane runs its own arbiters and reports the
+  READY-TO-COMMIT list. The next lanes fire in the blueprint's order L1-L6;
+  the site-update lanes (the E2 split B/A/C) fire AFTER the restructure
+  settles, per the dictated sequence.

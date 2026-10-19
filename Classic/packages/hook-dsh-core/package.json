@@ -21,7 +21,8 @@
 		"README.md"
 	],
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+		"prepublishOnly": "sh prepublishOnly.sh",
+		"Run": "sh Run.sh"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
