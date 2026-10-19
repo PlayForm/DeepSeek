@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | Volatile knobs (`scopes.*`, `thresholdBytes`, `multipliers`, `previewMaxChars`, `replacement`, `normalizeReasoning`, `normalizeToolArguments`, tool-coach `enabled`/`enforce`/`threshold`/`window`/`cooldown`/`patternTable`/`notes.*`/`fetchLive`/`maxSectionTools`/`sectionTtl`, ccr `thresholdBytes`/`multipliers`, the `log` cells) | **LIVE** - next use, no remount, no new activation line | the `loader/volatile-update` in-place refresh (landed in HEAD - both factories, `State.ts`) |
 | Plain/structural fields (`targets`, `exempt`, `toolResultsExempt` array, `journalPath`, `autoExpand`, `autoExpandLimitBytes`, `ttlSeconds`, `storeBudgetBytes`) | **LIVE** - via the loader's update flow (re-apply/remount; a new activation ledger line appears) | `internal/update` (the tutorial 05-config ordinary-field flow) |
-| Loader-level `disabled: true` (the control-panel rows) | **LIVE via `plugin_manager`** `set_plugin` (the sanctioned runtime toggle; "live profiles apply changes immediately"). Direct patch-file edits are picked up at the next mount/boot. | plugin_manager + the loader's mount decisions |
+| Loader-level `disabled: true` (the control-panel rows) | **LIVE via `plugin_manager`** `set_plugin` (empirically proven 2026-10-19: enabling `include:plugin-dsh-factory` + `include:hook-dsh-normalize-file` applied immediately - `fiberPhase: active` + the `normalize-file` tool appeared in the live registry, no restart). CAVEATS: (a) target = the EXACT entryId WITH the `include:` prefix (`include:hook-dsh-normalize-file`, not the bare id); (b) DEPENDENCY ORDER - the hooks wait for the factory's `pluginFactory` service, so enabling a hook while the factory is disabled leaves it `pending (waiting for service: pluginFactory)` - enable the factory first; (c) direct patch-file edits are picked up at the next mount/boot. | plugin_manager + the loader's mount decisions |
 | Profile structural changes (adding/removing bundles in `package.json` `dsh.profile.bundles`, new plugin installs) | **RESTART** required (bundle layers compose at boot) | - |
 
 **The loaded-but-not-running posture (the user's ask):** YES, it exists:
@@ -78,9 +78,17 @@ For EACH plugin under test, run this loop:
 ## 5. THE OBSERVATION SURFACES
 
 - `~/.dsh/<plugin>.log` - the per-module ledgers (activation + behavior lines).
+  **LIVE-BATTERY FINDING (2026-10-19)**: the ledger writer does NOT resolve `~`
+  in `logFile` config values - a `logFile: ~/.dsh/x.log` silently fails to
+  write (no file, no error). ALWAYS use absolute paths
+  (`/Users/nikola/.dsh/x.log`) in the profile config rows. (The Classic bundle
+  patches' own `~/.dsh/...` logFile defaults carry the same latent issue when
+  running live - a future family fix.)
 - `~/.dsh/governor.log`, `pinner.log`, `cargo-governor.log` - the governance
   trail (update stages, pins).
-- `plugin_manager` list_plugins - enabled/fiberPhase per entry.
+- `plugin_manager` list_plugins - enabled/fiberPhase per entry (the entryId
+  carries the `include:` prefix; `fiberPhase: active` = running, `null` =
+  pending/disabled).
 - The GUI transcript - the model-visible effects (notes, markers, denials).
 
 ## 6. THE CONVERSATION STARTER (paste into the new conversation)
