@@ -147,9 +147,9 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "version coherence: the factory re-emits fs/observed with the SAME actor";
 		{
 			Check(Count, Sub, () => {
-				const reEmit = Emitted.filter((e) => e[0] === "fs/observed" && e[2]?.version === "fresh-1").at(
-					-1,
-				);
+				const reEmit = Emitted.filter(
+					(e) => e[0] === "fs/observed" && e[2]?.version === "fresh-1",
+				).at(-1)!;
 				assert.deepEqual(reEmit.slice(1, 3), [
 					mkTarget(projA, "k-a"),
 					{ kind: "present", version: "fresh-1" },
@@ -257,7 +257,7 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "settlement: U\u2082 stat-based refresh re-emitted with the same actor";
 		{
 			Check(Count, Sub, () => {
-				const lastEmit = Emitted.filter((e) => e[0] === "fs/observed").at(-1);
+				const lastEmit = Emitted.filter((e) => e[0] === "fs/observed").at(-1)!;
 				assert.deepEqual(
 					lastEmit.slice(1, 3),
 					[mkTarget(projA, "k-a"), { kind: "present", version: "stat-v9" }],

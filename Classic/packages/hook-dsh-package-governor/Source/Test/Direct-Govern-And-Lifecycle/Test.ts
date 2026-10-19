@@ -316,7 +316,7 @@ export const runTest = async (): Promise<number> => {
 					true,
 					"selection: the canonicalize chain's `governed` line precedes the update step's dispatch (sequential fold order)",
 				);
-				const fileAfterFold = JSON.parse(Files[pathDc]);
+				const fileAfterFold = JSON.parse(Files[pathDc] as string);
 				assert.equal(
 					fileAfterFold.dependencies.leftpad,
 					"^1.0.0",
@@ -391,7 +391,7 @@ export const runTest = async (): Promise<number> => {
 					"v-fold",
 					"the observed version handed to the fold is never the second step's write basis",
 				);
-				const foldFinal = JSON.parse(Files[pathFold]);
+				const foldFinal = JSON.parse(Files[pathFold] as string);
 				assert.equal(
 					foldFinal.dependencies.leftpad,
 					"^1.0.0",
@@ -486,7 +486,7 @@ export const runTest = async (): Promise<number> => {
 					{ kind: "replaceIfVersion", version: "stat-v9" },
 					"reverse fold step 2 (sim-canonicalize): fresh-stat CURRENT version (not the stale observed 'v-fold-r')",
 				);
-				const foldRFinal = JSON.parse(Files[pathFoldR]);
+				const foldRFinal = JSON.parse(Files[pathFoldR] as string);
 				assert.deepEqual(
 					foldRFinal.dependencies,
 					{ leftpad: "^1.0.0", chalk: "5.0.0" },
