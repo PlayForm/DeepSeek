@@ -765,3 +765,45 @@ the grep protocol once.
    (`{ prepend: true }`), so the ccr compression sees the NORMALIZED
    bytes; the `<<<CCR:` marker guard makes any load order safe. State it
    exactly this way wherever both features appear together.
+
+## THE GRANULARITY STORY (the user's 2026-10-19 clarification - BINDING for the scopes/overpass copy)
+
+The user confirmed the granularity of control the family must present. Every
+place the site/READMEs describe the scopes surface or the tool-argument
+control MUST include these four facts (verified against the code 2026-10-19):
+
+1. **The per-call raw marker**: a tool call whose argumentsDelta opens with
+   the `{"__normalize":false` FIRST-key marker passes the tool-arguments arm
+   UNNORMALIZED, and the core's Stream/Strip removes the marker entry so the
+   executed call carries no unknown key (Function/Normalize.ts:65-69, the
+   core's Stream/Strip). This is the per-call "leave that search alone"
+   control: a deliberate search for an irregular character (an em dash, a
+   curly quote, a full-width form as a PATTERN) survives byte-exact while the
+   rest of the call stream normalizes. Documented edges: the marker must be
+   the FIRST key; a pathologically tiny first delta (shorter than the marker)
+   is invisible to the startsWith probe and the call normalizes normally.
+2. **The effective-gate formula** (the docs must state it exactly): effective
+   tool-input normalization = `normalizeToolArguments || scopes.toolInput`;
+   the scopes (conversation/reasoning/toolInput/toolResults/files/batch) are
+   ALL volatile (live toggles, no remount); the tool-args arm is the only
+   execution-critical one and the marker is its escape hatch.
+3. **The structural exemptions** (never rewritten): the `edit` call (its
+   `old_string` must match the real file bytes), the `raw-write` call (it
+   owns its content normalization through its explicit `normalize`
+   parameter), the `normalize-file` call (its arguments carry a file path -
+   a normalized dash inside a filename would corrupt the target).
+4. **The invisibility contract of the overpass**: tool-RESULT normalization
+   (scopes.toolResults, the tools/post-execute arm) replaces the bytes
+   PRE-COMMIT - the waterfall settles before the result is appended to the
+   durable log - so the model only ever sees the normalized output and never
+   notices the replacement; the exemption list + the CCR marker guard define
+   what passes untouched. The write-path counterpart (the never-notify
+   precedent of the governance trio): the tool result is built from the
+   author's own content and the observation-policy's version record is
+   refreshed by the re-emitted fs/observed - the model believes its write
+   landed verbatim.
+
+The FUTURE item (NOT in this batch's scope - flag in the residuals): the
+model is not yet TAUGHT the marker (no system-prompt note, no tool-coach
+note); teaching it (a tool-coach note or a system-prompt line) is a small
+follow-up feature so the model uses the marker instead of extraneous methods.

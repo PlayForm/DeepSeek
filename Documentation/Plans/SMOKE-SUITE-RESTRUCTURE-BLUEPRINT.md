@@ -63,13 +63,13 @@ Baseline printed counts (README + note; the coder lanes re-read each suite's fin
 | governor-smoke | 78 | fake ctx + real factory + real governor Target; ledger byte-strings; policy files | 7 |
 | pinner-smoke | 32 | fake ctx + real factory; REAL-token fs (the version guards exercised with actual tokens - the pinning writes go through the capturing fs with real version objects) | 6 |
 | cargo-smoke | 62 | fake ctx + real factory; journal file fixtures in /tmp; ledger strings | 6 |
-| normalize-dash-smoke | 132 PASS (largest flavor) | fake ctx (on/get/logger/tools/fs/waterfall/emit capture) + REAL factory + real dash apply; live-volatile flips (loader/volatile-update dispatches: Run V, S5, O2, O10) | 7 (exact split in 1.4) |
+| normalize-dash-smoke | 184 PASS (fresh 2026-10-19 - the blueprint's 132 was STALE; the +52 is the raw-write TOOL surface: Run 8 tool registration+exec 23, Run 9 per-call flavor selection 10, Run 10+addendum govern path 19) | fake ctx (on/get/logger/tools/fs/waterfall/emit capture) + REAL factory + real dash apply; live-volatile flips (loader/volatile-update dispatches: Run V, S5, O2, O10) | 8 (the 7 exact names of 1.4 + ONE new `Raw-Write-Tool/` folder for the post-blueprint tool surface; sums == 184 exactly) |
 | quotes-smoke | 62 | fake ctx + real factory; byte-twin of fullwidth/ellipsis/spaces/invisible | 5 |
 | ellipsis-smoke | 62 | same pattern | 5 |
 | spaces-smoke | 62 | same pattern | 5 |
 | invisible-smoke | 62 | same pattern | 5 |
 | fullwidth-smoke | 62 | same pattern | 5 |
-| normalize-file-smoke | 71 | fake ctx + real factory; real-token fs for the file rewriting (the tool writes actual bytes through the fs seam) | 6 |
+| normalize-file-smoke | 112 PASS (fresh 2026-10-19 - the blueprint's 71 was STALE; the +41 = Run V volatile flip 9 + Run F files scope gate 3 + Run O overpass 29) | fake ctx + real factory; real-token fs for the file rewriting (the tool writes actual bytes through the fs seam) | 7 (Config-And-Registration 18, Read-Write-Pipeline 24, No-Op-Rule 11, Error-Paths 10, Presenters 8, Volatile-Live-Flip 12, Overpass 29; sums == 112 exactly) |
 | ccr-smoke | 146 | fake ctx + real factory; live-volatile dispatches (P10 loader/volatile-update refresh); journal compaction fixtures; strict marker parsing | 7 (split in 1.4) |
 | tool-coach-smoke | 129 | fake ctx + real factory; tool registry seam; coach lines | 6 |
 | scratch-profile-smoke | wiring | SELF-SKIPS without DSH_TEST_SCRATCH (env-gated at top) | 2 |

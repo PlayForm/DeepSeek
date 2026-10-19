@@ -495,3 +495,27 @@ restructure settles.
   inherit the fix. The pilot is re-verifying: both sh scripts, every standalone
   run, the parity diffs, the full runner, npm pack, format, alias grep, AND the
   full serialized monorepo build (the user runs it).
+
+## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS (the dynamic conversation blocks plugin - researched, NOT implemented)
+
+The user dictated a new plugin idea: LIVE CONTAINERS - dynamically
+modifiable conversation blocks that are RECOMPUTED + re-inserted into the
+conversation EVERY time the harness sends the full conversation to the LLM
+API, without touching anything else (the working example: a block holding the
+current time at ask-time, recomputed per request). The later stage (a future
+date): the blocks become PROGRAMMABLE (TypeScript / Rhai / Rust / whatever
+the harness can run dynamically) - a validator / variable holder (conversation
+length, scores) the LLM itself can program and display, e.g. the pseudo-code
+`(if this.context.message.length > 10) { echo "This conversation is exceeding
+the set limit" }`. The user mandated: a researcher agent (glm-5.3-flash LOW -
+the user's explicit route) researches + brainstorms feasibility + prepares
+THREE more agent specs; the 3 agents are seated IDLE and execute later; the
+plugin itself stays IDLE in the profile (never enabled). The full spec +
+brainstorm land in `Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md` (the
+researcher's deliverable, dispatched 2026-10-19).
+- **PENDING USER INSTRUCTION (the restart sequence)**: AFTER the site-update
+  batch is done, the user will restart the application - BEFORE that restart
+  the orchestrator must ENABLE ALL CURRENT PLUGINS (flip the 10 disabled
+  profile rows on via plugin_manager, factory FIRST then the hooks; the
+  tool-coach is not installed - wire it into the profile too, as one of "our
+  plugins") and keep the LIVE-CONTAINERS plugin IDLE (never enabled).
