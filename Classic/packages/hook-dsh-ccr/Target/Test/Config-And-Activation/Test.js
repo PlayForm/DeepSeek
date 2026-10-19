@@ -1,2 +1,229 @@
-import o from"node:assert/strict";import{existsSync as d,readFileSync as b}from"node:fs";import{Check as s,Finish as S,MakeCounter as h,Make as u,Rm as l,Validate as c,Ledger as r,Furnace as p,TextBlock as m,Exec as k,NextAccept as v,TerminalText as y}from"../Harness.js";const x=async()=>{const t=h();l();const n=c({logFile:r});s(t,"volatile cell: log arrives as { get }",()=>{o.ok(typeof n.log.get=="function")}),s(t,"volatile cell: logFile arrives as { get }",()=>{o.ok(typeof n.logFile.get=="function")}),s(t,"volatile cell: thresholdBytes arrives as { get }",()=>{o.ok(typeof n.thresholdBytes.get=="function")}),s(t,"volatile cell: previewMaxChars arrives as { get }",()=>{o.ok(typeof n.previewMaxChars.get=="function")}),s(t,"volatile cell: multipliers arrives as { get }",()=>{o.ok(typeof n.multipliers.get=="function")}),s(t,"config default thresholdBytes=2048",()=>{o.ok(n.thresholdBytes.get()===2048)}),s(t,"config default inlineThresholdBytes=1024",()=>{o.ok(n.inlineThresholdBytes===1024)}),s(t,"config default autoExpand=true",()=>{o.ok(n.autoExpand===!0)}),s(t,"config default autoExpandLimitBytes=102400",()=>{o.ok(n.autoExpandLimitBytes===102400)}),s(t,"config default compressFailures=false",()=>{o.ok(n.compressFailures===!1)}),s(t,"config default previewMaxChars=240",()=>{o.ok(n.previewMaxChars.get()===240)}),s(t,"config default ttlSeconds=3600",()=>{o.ok(n.ttlSeconds===3600)}),s(t,"config default storeBudgetBytes=268435456",()=>{o.ok(n.storeBudgetBytes===268435456)}),s(t,"config default journalPath='' (memory-only)",()=>{o.ok(n.journalPath==="")}),s(t,"config default contextEngine=false (phase 4, inert)",()=>{o.ok(n.contextEngine===!1)}),s(t,"config default contextEngineThresholdPct=30",()=>{o.ok(n.contextEngineThresholdPct===30)}),s(t,"config default protectFirstTurns=2",()=>{o.ok(n.protectFirstTurns===2)}),s(t,"config default protectLastTurns=4",()=>{o.ok(n.protectLastTurns===4)}),s(t,"config default multipliers: error \xD78, grep/paths/web \xD72, the rest \xD71",()=>{o.ok(JSON.stringify(n.multipliers.get())===JSON.stringify({terminal:1,error:8,grep:2,paths:2,file:1,json:1,web:2,default:1}))}),s(t,"config default targets: the 8-tool terminal/search/fetch family",()=>{o.ok(JSON.stringify(n.targets)===JSON.stringify(["bash","glob","grep","read","web_fetch","web_search","list","search"]))}),s(t,"config default exempt: mutators, the plugin's own tool, agents' briefs, user gates",()=>{o.ok(JSON.stringify(n.exempt)===JSON.stringify(["write","edit","raw-write","subagent","ask_user_question","ccr_retrieve"]))});const g=u(n);s(t,"activation ledger line byte-exact: 'ccr: activated (bundle 0.0.1, targets 8, budget 268435456)'",()=>{o.ok(g.Lines.includes("ccr: activated (bundle 0.0.1, targets 8, budget 268435456)"))}),s(t,"the activation record journals to the shared storage domain with the identical detail",()=>{o.ok(p.PendingJournal.some(i=>i.event==="activated"&&i.detail==="activated (bundle 0.0.1, targets 8, budget 268435456)"))}),l();{const e="the durable ledger file: '[ISO] activated (bundle 0.0.1, targets 8, budget 268435456)' (the file form has no module prefix)",i=u(c({autoExpand:!1,logFile:r}));{const a=m(y("l".repeat(96),26));await i.Listeners["tools/post-execute"](k("bash"),{isError:!1,value:{},content:a},v)}await new Promise(a=>setTimeout(a,10));const f=d(r)?b(r,"utf8"):"";s(t,e,()=>{o.ok(f.split(`
-`).some(a=>/^\[[^\]]+\] activated \(bundle 0\.0\.1, targets 8, budget 268435456\)$/.test(a)))})}return S(t,"Config-And-Activation")},w=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(w){const t=await x();console.log(`${t} PASS - Config-And-Activation`)}export{x as runTest};
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import {
+  Check,
+  Finish,
+  MakeCounter,
+  Make,
+  Rm,
+  Validate,
+  Ledger,
+  Furnace,
+  TextBlock,
+  Exec,
+  NextAccept,
+  TerminalText
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Rm();
+  const Raw1 = Validate({ logFile: Ledger });
+  {
+    const Sub = "volatile cell: log arrives as { get }";
+    Check(Count, Sub, () => {
+      assert.ok(typeof Raw1.log.get === "function");
+    });
+  }
+  {
+    const Sub = "volatile cell: logFile arrives as { get }";
+    Check(Count, Sub, () => {
+      assert.ok(typeof Raw1.logFile.get === "function");
+    });
+  }
+  {
+    const Sub = "volatile cell: thresholdBytes arrives as { get }";
+    Check(Count, Sub, () => {
+      assert.ok(typeof Raw1.thresholdBytes.get === "function");
+    });
+  }
+  {
+    const Sub = "volatile cell: previewMaxChars arrives as { get }";
+    Check(Count, Sub, () => {
+      assert.ok(typeof Raw1.previewMaxChars.get === "function");
+    });
+  }
+  {
+    const Sub = "volatile cell: multipliers arrives as { get }";
+    Check(Count, Sub, () => {
+      assert.ok(typeof Raw1.multipliers.get === "function");
+    });
+  }
+  {
+    const Sub = "config default thresholdBytes=2048";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.thresholdBytes.get() === 2048);
+    });
+  }
+  {
+    const Sub = "config default inlineThresholdBytes=1024";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.inlineThresholdBytes === 1024);
+    });
+  }
+  {
+    const Sub = "config default autoExpand=true";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.autoExpand === true);
+    });
+  }
+  {
+    const Sub = "config default autoExpandLimitBytes=102400";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.autoExpandLimitBytes === 102400);
+    });
+  }
+  {
+    const Sub = "config default compressFailures=false";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.compressFailures === false);
+    });
+  }
+  {
+    const Sub = "config default previewMaxChars=240";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.previewMaxChars.get() === 240);
+    });
+  }
+  {
+    const Sub = "config default ttlSeconds=3600";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.ttlSeconds === 3600);
+    });
+  }
+  {
+    const Sub = "config default storeBudgetBytes=268435456";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.storeBudgetBytes === 268435456);
+    });
+  }
+  {
+    const Sub = "config default journalPath='' (memory-only)";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.journalPath === "");
+    });
+  }
+  {
+    const Sub = "config default contextEngine=false (phase 4, inert)";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.contextEngine === false);
+    });
+  }
+  {
+    const Sub = "config default contextEngineThresholdPct=30";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.contextEngineThresholdPct === 30);
+    });
+  }
+  {
+    const Sub = "config default protectFirstTurns=2";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.protectFirstTurns === 2);
+    });
+  }
+  {
+    const Sub = "config default protectLastTurns=4";
+    Check(Count, Sub, () => {
+      assert.ok(Raw1.protectLastTurns === 4);
+    });
+  }
+  {
+    const Sub = "config default multipliers: error \xD78, grep/paths/web \xD72, the rest \xD71";
+    Check(Count, Sub, () => {
+      assert.ok(
+        JSON.stringify(Raw1.multipliers.get()) === JSON.stringify({
+          terminal: 1,
+          error: 8,
+          grep: 2,
+          paths: 2,
+          file: 1,
+          json: 1,
+          web: 2,
+          default: 1
+        })
+      );
+    });
+  }
+  {
+    const Sub = "config default targets: the 8-tool terminal/search/fetch family";
+    Check(Count, Sub, () => {
+      assert.ok(
+        JSON.stringify(Raw1.targets) === JSON.stringify([
+          "bash",
+          "glob",
+          "grep",
+          "read",
+          "web_fetch",
+          "web_search",
+          "list",
+          "search"
+        ])
+      );
+    });
+  }
+  {
+    const Sub = "config default exempt: mutators, the plugin's own tool, agents' briefs, user gates";
+    Check(Count, Sub, () => {
+      assert.ok(
+        JSON.stringify(Raw1.exempt) === JSON.stringify([
+          "write",
+          "edit",
+          "raw-write",
+          "subagent",
+          "ask_user_question",
+          "ccr_retrieve"
+        ])
+      );
+    });
+  }
+  const Run1 = Make(Raw1);
+  {
+    const Sub = "activation ledger line byte-exact: 'ccr: activated (bundle 0.0.1, targets 8, budget 268435456)'";
+    Check(Count, Sub, () => {
+      assert.ok(
+        Run1.Lines.includes("ccr: activated (bundle 0.0.1, targets 8, budget 268435456)")
+      );
+    });
+  }
+  {
+    const Sub = "the activation record journals to the shared storage domain with the identical detail";
+    Check(Count, Sub, () => {
+      assert.ok(
+        Furnace.PendingJournal.some(
+          (R) => R.event === "activated" && R.detail === "activated (bundle 0.0.1, targets 8, budget 268435456)"
+        )
+      );
+    });
+  }
+  Rm();
+  {
+    const Sub = "the durable ledger file: '[ISO] activated (bundle 0.0.1, targets 8, budget 268435456)' (the file form has no module prefix)";
+    const Run8 = Make(Validate({ autoExpand: false, logFile: Ledger }));
+    {
+      const Content = TextBlock(TerminalText("l".repeat(96), 26));
+      await Run8.Listeners["tools/post-execute"](
+        Exec("bash"),
+        { isError: false, value: {}, content: Content },
+        NextAccept
+      );
+    }
+    await new Promise((R) => setTimeout(R, 10));
+    const Log1 = existsSync(Ledger) ? readFileSync(Ledger, "utf8") : "";
+    Check(Count, Sub, () => {
+      assert.ok(
+        Log1.split("\n").some(
+          (L) => /^\[[^\]]+\] activated \(bundle 0\.0\.1, targets 8, budget 268435456\)$/.test(L)
+        )
+      );
+    });
+  }
+  return Finish(Count, "Config-And-Activation");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Config-And-Activation`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

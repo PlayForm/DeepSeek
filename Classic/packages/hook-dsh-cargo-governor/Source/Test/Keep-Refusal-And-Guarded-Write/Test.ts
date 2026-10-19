@@ -229,7 +229,7 @@ export const runTest = async (): Promise<number> => {
 		await CheckAsync(Count, "P3: same-actor re-emit after the write; the re-entry is a no-op", async () => {
 			assert.deepEqual(reEmit.slice(1, 3), [t, { kind: "present", version: "fresh-v2" }]);
 			assert.equal(reEmit[3].name, "edit", "SAME actor \u21d2 same owner bucket");
-			assert.equal(after, before, "...and is a no-op via the Stash gate");
+			assert.equal(after, before, "\u2026and is a no-op via the Stash gate");
 		});
 	}
 	{

@@ -242,7 +242,7 @@ export const runTest = async (): Promise<number> => {
 							l ===
 							`update stage dispatched for ${dir} (cargo via cargo, built-in default policy)`,
 					),
-					"update step: `update stage dispatched ...` line byte-identical",
+					"update step: `update stage dispatched \u2026` line byte-identical",
 				);
 				assert.ok(
 					lines.includes("update: using built-in default policy"),

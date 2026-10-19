@@ -256,8 +256,8 @@ export const runTest = async (): Promise<number> => {
 		Fire(m, { targetKey: "k1", displayPath: file }, "v1", "edit");
 		await Flush();
 		const lines = Ledger(m.ledger);
-		const governedIdx = lines.indexOf(lines.find((l) => l === `governed ${file} \u2192 fresh-v2`));
-		const dispatchedIdx = lines.indexOf(lines.find((l) => l.startsWith("update stage dispatched")));
+		const governedIdx = lines.indexOf(lines.find((l) => l === `governed ${file} \u2192 fresh-v2`) as string);
+		const dispatchedIdx = lines.indexOf(lines.find((l) => l.startsWith("update stage dispatched")) as string);
 		await CheckAsync(
 			Count,
 			"CLI: digest line, collected output appended, ledger order preserved",
@@ -277,7 +277,7 @@ export const runTest = async (): Promise<number> => {
 				assert.ok(lines.includes("update: DONE \u2014 pins bumped per policy"));
 				assert.ok(
 					governedIdx < dispatchedIdx,
-					"ledger order preserved: governed ... before update stage dispatched ...",
+					"ledger order preserved: governed \u2026 before update stage dispatched \u2026",
 				);
 			},
 		);

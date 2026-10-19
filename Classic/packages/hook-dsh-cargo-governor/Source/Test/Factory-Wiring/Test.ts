@@ -110,7 +110,7 @@ export const runTest = async (): Promise<number> => {
 				1,
 				"the factory's Continue held the in-flight entry DURING the guarded write",
 			);
-			assert.equal(inflightAfter, 0, "...and removed it after settlement (finally)");
+			assert.equal(inflightAfter, 0, "\u2026and removed it after settlement (finally)");
 		});
 	}
 	// Group: the GuardedWrite signal + fence.

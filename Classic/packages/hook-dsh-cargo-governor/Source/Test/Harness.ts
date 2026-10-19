@@ -1,7 +1,7 @@
 // Source/Test/Harness.ts - the shared test harness for the CARGO GOVERNOR
 // tests: the fake ctx (on/emit/effect/get/fs capture with the services/files/
 // sandboxMode/freshVersion knobs + the root seam) + the REAL
-// @play/plugin-dsh-factory instance + the cargo governor's REAL built Target
+// @playform/plugin-dsh-factory instance + the cargo governor's REAL built Target
 // - the seams from the source suite (Classic/smokes/cargo-smoke.mjs),
 // written ONCE per package and imported by every test folder. The suite-level
 // fixtures (the tmp Root, the provided services map, the logger capture, the
@@ -194,6 +194,8 @@ export const MakeContext = (Over: any = {}): any => {
 
 // The REAL factory instance - class/service registered as ctx.pluginFactory.
 // Created ONCE per folder process (the source suite's module-level instance).
+// The `as any` is fixture-only scaffolding: the harness passes the plain
+// fake-logger/reflect/fs seams exactly like the source suite does.
 export const Furnace: any = new FactoryClass({
 	logger: fakeLogger,
 	reflect: {
@@ -202,7 +204,7 @@ export const Furnace: any = new FactoryClass({
 		},
 	},
 	fs: { sandboxMode: undefined },
-});
+} as any);
 
 /**
  * The per-scenario directory fixture: a fresh dir under the tmp Root.

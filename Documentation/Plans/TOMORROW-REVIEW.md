@@ -954,6 +954,59 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   reuses the seated lanes (A1/A2/A3, C2, R3/D3/C3, I7). The most-advanced
   case scenario is the default for any ambiguity; every decision is
   logged here.
+- **THE OVERNIGHT RUN (2026-10-19 - the user: "I'm going to bed, don't
+  ask me anything, proceed until all is done")**: the automation runs to
+  completion. THE SITE-LANE DISPATCH PREP (mechanical, per the E2
+  blueprint - Documentation/Plans/SITE-UPDATE-BLUEPRINT.md): SITE-B (the
+  data layer: Content.ts Counts.Packages 12->14 + Groups.Guardians + the
+  Configurator roster + the suite-count surfaces + the description sweep
+  across matrix/flavors/versions/workbench/setup/models/case-study; the
+  build = cd Site && pnpm prepublishOnly + the built-Target greps; never
+  the dev server/tsc/git; GLM flash high), SITE-A (the homepage: the
+  supports-buttons under the THE PIN/THE GOVERN Showcases (index.astro
+  328-347) + the slot="supports" Showcase line + the coachy tool-coach
+  section (the --color-pin-red/--color-accent-orange tokens + the
+  two-column coaching board) + the two new plugin pages
+  (plugins/hook-dsh-ccr.astro + plugins/hook-dsh-tool-coach.astro
+  mirroring the governor page template) + the 21->23 sweep; GLM flash
+  high), SITE-C (the READMEs: the new-functionality sections + the
+  tool-coach Classic README H1 drift fix + the granularity story from the
+  blueprint's THE GRANULARITY STORY section; GLM flash low). The pair
+  order: SITE-B first (its slot pairs with I8 - disjoint surfaces), then
+  SITE-A + SITE-C. After the site batch: the ENABLE-ALL + TOOL-COACH
+  WIRING (the orchestrator's own task: the 10 plugin_manager flips,
+  factory first then the hooks; the tool-coach profile row - the link dep
+  + the bundle row + the patch row with the absolute logFile
+  /Users/nikola/.dsh/hook-dsh-tool-coach.log + the safe defaults
+  (enforce off); reported READY-FOR-RESTART). Then the live-containers
+  implementation: A1 (phase 1) -> A2 + A3 (the pair; A2 carries the
+  scratch-profile live-battery note) -> C2 -> R3 -> D3 -> C3 + I7. The
+  final wrap-up: the totals ledger + the READY-TO-COMMIT state + the
+  residuals ledger.
+- **L3-RESUME COMPLETE + VERIFIED (2026-10-19, `c799be84`)**: the ETS
+  cargo twin landed - 8 test folders (Chain-And-Rewrite, Direct-Govern,
+  Factory-Wiring, Gates-And-Registry-Discovery, Keep-Refusal-And-Guarded-
+  Write, Loader-And-Config, State-And-Activation, Update-Stage) +
+  Harness.ts + the configs + the sh scripts; the lane verified all 8
+  folders + the selfcheck + the Test-tree tsc; the orchestrator's
+  spot-checks confirmed the folders on disk + the standalone runs print
+  the expected counts (Chain-And-Rewrite 13, Update-Stage 13). The
+  delta is UNCOMMITTED (the user is asleep; the READY-TO-COMMIT list
+  accumulates for the morning commit). ANOMALY RECORDED: the lane's
+  closing report carried PHANTOM CLAIMS from a corrupted context (a
+  "Bluefin/Qubes" block, rm -rf/lunar/distro-deletion commands, a sudo
+  mdutil -E "you ran" - none of which occurred in this session; the lane
+  itself stated nothing destructive was executed, and the git status
+  confirms only test files + the record changed). The disk verification
+  is the arbiter: the work is green; the phantom turns are ignored.
+- **SITE-B DISPATCHED (2026-10-19, `1b3e719d` - GLM flash high)**: the
+  site's data layer + description sweep (Content.ts 12->14,
+  Groups.Guardians=2, the Configurator roster +2, the SCHEME-sourced
+  suite totals byte-exact, the granularity story, the sweep pages) - the
+  pair with L5 (disjoint surfaces); the build = cd Site && pnpm
+  prepublishOnly + the built-Target greps; never the dev server. I8
+  (the ets-base re-home + retirement + ledger) fires when L5 lands (its
+  retirement needs the full folder inventory).
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
