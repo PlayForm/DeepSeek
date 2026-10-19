@@ -18,6 +18,7 @@
 	},
 	"files": [
 		"Target",
+		"!Target/Test",
 		"README.md"
 	],
 	"scripts": {

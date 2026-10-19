@@ -455,12 +455,43 @@ restructure settles.
   but NOT a bundle row; hook-dsh-tool-coach NOT in the profile at all (in the
   repo, not wired - a profile change + restart to add it).
 
-## BATCH WAVE-2 (2026-10-19 - the restructure pilot ACTIVE)
+## BATCH WAVE-2 COMPLETE (2026-10-19 - the restructure pilot LANDED + VERIFIED)
 
-- **The pilot lane** `2b336307` (GLM flash high): converts hook-dsh-core +
-  ets-hook-dsh-core end-to-end per the blueprint (the 9+2 folders, the
-  templates, the two-step sh scripts, the aggregate-runner change, the full
-  acceptance battery). The lane runs its own arbiters and reports the
-  READY-TO-COMMIT list. The next lanes fire in the blueprint's order L1-L6;
-  the site-update lanes (the E2 split B/A/C) fire AFTER the restructure
-  settles, per the dictated sequence.
+- **The pilot lane** `2b336307` COMPLETE: hook-dsh-core (8 folders, 14 checks) +
+  ets-hook-dsh-core (10 folders, 17 checks) converted end-to-end; baselines recorded
+  fresh (14/17); parity diffs = the identity line + the ets-base-dsh import split
+  only; Harness.ts byte-identical; the runner's new pass enumerates
+  Target/Test/*/Test.js with the vacuously-green count guard -> "All 60 smoke suites
+  passed" (42 .mjs + 18 folders); the full serialized monorepo build exit 0; npm
+  pack 0 Test paths (via `"!Target/Test"` in files - npm's allowlist overrides
+  .npmignore); format + newline gates clean; alias grep 0; the Test trees
+  type-check via the new Configuration/TypeScript-Test.noemit.json.
+- **THE USER COMMITTED MID-SESSION** (f71e8a4, e774b49, c07526a - the pilot's
+  earlier phases); the tree's remaining delta is the pilot's final state, verified
+  by the orchestrator's spot-checks (folders on disk, the negation scripts, 3
+  standalone runs printing their expected counts: Data-Lists 2 / Stream-Gate 1 /
+  Chunk 1). READY-TO-COMMIT list + suggested commit message delivered by the lane.
+- **The pilot's 11 corrections are now BINDING** - recorded in the blueprint's new
+  section 8 (the import depth ../../../, the tsc-after-every-Build trap + the
+  tsconfig exclude + the Test noemit config, the files-array negation, the
+  Check-per-ok-group granularity, set -e, CheckAsync, the \u-escape discipline, the
+  runner's Source-README counts, the smallest-pair merge rule, the strict-tsconfig
+  scaffolding, the .mjs fallback). The L1+ lanes copy the pilot's packages as the
+  pattern reference.
+- **The next pair is ACTIVE**: L1 (`9b029e29` - the five byte-twin normalize
+  flavors, GLM flash high) + L2 (normalize-dash + normalize-file, GLM flash high).
+
+- **BUILD FAILURE FOUND + FIXED (2026-10-19, mid-pilot)**: the user's monorepo
+  build failed on `Source/Test/Stream-Gate/Test.ts:56` ("await" outside an
+  "async" function) - TWO root causes: (1) the plugin build glob
+  `Source/**/*.ts` swallows the Test tree (the Build CLI globs with
+  fast-glob) - FIX: the plugin-build step passes the negation as a second
+  positional pattern, `Build "Source/**/*.ts" "!Source/Test/**/*.ts"` (fast-glob
+  honors `!`-negation within the pattern array; verified empirically: 28 -> 19
+  files on the core package, zero Test leaks); (2) the test file's own syntax
+  bug (an `await` in a non-async callback) + possibly more of the same class
+  ("and others") - the lane sweeps every test file via tsc + the Test build.
+  The blueprint was amended (section 2.3 + new trap 11) so the L1+ lanes
+  inherit the fix. The pilot is re-verifying: both sh scripts, every standalone
+  run, the parity diffs, the full runner, npm pack, format, alias grep, AND the
+  full serialized monorepo build (the user runs it).

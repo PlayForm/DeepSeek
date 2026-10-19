@@ -324,8 +324,12 @@ are the contract - they may change ONLY when the module's identity changes.>
 # The plugin ESBuild config's Target plugin WIPES outdir "Target" recursively
 # on start; running the test build first would have its output destroyed.
 # The test config wipes only Target/Test, so it is safe last.
+# THE NEGATION IS MANDATORY (trap 11): 'Source/**/*.ts' matches the Test tree
+# (fast-glob); the second positional pattern excludes it (verified 2026-10-19:
+# 28 -> 19 files on the core package). Without it the plugin build fails on
+# test-only syntax and would ship Test output inside Target.
 
-Build "Source/**/*.ts" \
+Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts \
 	--TypeScript Configuration/TypeScript.noemit.json
 
@@ -590,6 +594,17 @@ folders exist.
 10. **The baseline recording.** Before splitting, each lane records the suite's printed
     total from a fresh run of the CURRENT suite (never from this document) - the note's
     counts and the README's counts may both be stale by the time a lane starts.
+11. **The plugin build glob swallows Source/Test (found by the pilot, 2026-10-19).**
+    `Build 'Source/**/*.ts'` matches the Test tree (the CLI globs with fast-glob), so
+    the plugin build compiles the tests with the PLUGIN config and fails on test-only
+    syntax (a top-level `await` or an `await` in a non-async callback) and would ship
+    the compiled tests inside `Target`. The plugin-build step MUST pass the negation as
+    a SECOND positional pattern - `Build "Source/**/*.ts" "!Source/Test/**/*.ts"` -
+    which fast-glob honors within the pattern array (verified: 28 -> 19 files on the
+    core package; zero `Source/Test/` leaks). The Test build globs only
+    `Source/Test/**/*.ts`, so it needs no negation. Also: every test file must be
+    syntax-swept for `await` outside `async` callbacks before the first build; the
+    standalone guard's top-level `await` is fine under the Test config (esm, esnext).
 
 ---
 
@@ -621,7 +636,62 @@ For each converted package pair (Classic + ETS):
 
 ---
 
-## RESIDUALS / OPEN QUESTIONS
+## 8. THE PILOT CORRECTIONS (2026-10-19 - the pilot lane's findings, BINDING for every later lane)
+
+The pilot (hook-dsh-core + ets-hook-dsh-core, green: 14/17 checks preserved, "All 60
+smoke suites passed" = 42 .mjs + 18 folders, monorepo build exit 0). Its deviations
+correct the templates above - later lanes copy the PILOT'S PACKAGES as the pattern
+reference (Classic/packages/hook-dsh-core + EffectTS/packages/ets-hook-dsh-core) and
+apply these rules:
+
+1. **The import depth (template 2.1 corrected).** From `Source/Test/<Name>/`, the
+   own-bundle import is `../../../Target/Library.js` (the `../../` of template 2.1
+   resolves to `Source/Target` - proved by tsc trace). Cross-bundle:
+   `../../../../<pkg>/Target/Library.js` (e.g. the ETS Chunk/Block import
+   `../../../../ets-base-dsh/Target/Library.js`). Valid from BOTH the Source and the
+   Target trees (every compiled test runs standalone).
+2. **The tsc-after-every-Build trap.** The Build CLI runs `tsc -p <tsconfig>` after
+   EVERY Build step; with the Test files in that program, their imports of the built
+   Target d.ts chain collide (TS5056/TS5055) and `Target/Library.d.ts` gets DELETED by
+   the failing pass. Fix per package: the root `tsconfig.json` gains
+   `"exclude": ["Source/Test"]`; the plugin type gate is
+   `Configuration/TypeScript.noemit.json` (passed via `--TypeScript` in the sh
+   scripts); the TEST tree type-checks via a NEW
+   `Configuration/TypeScript-Test.noemit.json` (include `../Source/Test/**`). Later
+   lanes should add that test type-check as a THIRD prepublishOnly step (the pilot ran
+   it in acceptance but left the two-step script per the spec).
+3. **npm's files allowlist beats .npmignore.** The `.npmignore` Test lines do NOT stop
+   npm shipping `Target/Test` under `files: ["Target"]` - add `"!Target/Test"` to the
+   package.json `files` array (keep BOTH the .npmignore lines AND the files negation;
+   verified: 0 Test paths in the tarballs).
+4. **Check granularity.** One Check per source ok-group, so the folder sums equal the
+   .mjs baselines EXACTLY (a per-assertion Check would break the sum==baseline law);
+   the "deeply nested hierarchy" lives as Sub-blocks between Checks and branch-blocks
+   inside the big single-Check folders (Chunk/Block/Update-Envelope).
+5. **The sh scripts.** `set -e` at the top (enforces both-steps-green); the negation
+   is mirrored into Run.sh's plugin step; `--Watch` on the LAST Build only (the
+   Element pattern).
+6. **The harness.** `CheckAsync` (an async variant) exists for awaited branches; the
+   ETS Harness.ts stays byte-identical to the Classic one.
+7. **Unicode.** Assertion messages/labels use `\u2192`/`\u2014`/`\u2082`-style escapes
+   (runtime bytes identical to the source suite, source files pure ASCII); the
+   READMEs are ASCII, quoting U+2014 ledger strings with an ASCII hyphen plus an
+   explicit "(U+2014)" note.
+8. **The runner's expected-count source.** The runner reads each folder's expected
+   count from the SOURCE README (`Source/Test/<Name>/README.md` - READMEs are not
+   compiled into Target/Test).
+9. **Folder counts.** A 9-folder split merges the SMALLEST pair (the pilot merged
+   Replace+Replace-Map -> 8 Classic folders); the ETS trees keep their additive
+   folders (8 shared + 2 ETS-only = 10). The >8 ceiling applies to the shared twins.
+10. **The strict-tsconfig scaffolding.** The Update-Envelope folder's type scaffolding
+    (SmokeState/SmokeDeps, `_State`-style renames for noUnusedParameters, `State.Spec!`
+    non-null assertions, `State.Ledger[0] ?? ""` for noUncheckedIndexedAccess) is
+    fixture-only - ZERO assertion changes.
+11. **The migration fallback.** The .mjs suites stay byte-identical (the runner still
+    globs them) until a later lane retires them; the ETS-only folders double-assert
+    the R1 sections with the .mjs until L6 re-homes them.
+
+---
 
 1. The note's "41 smoke suites" is stale: the current runner globs 21 per tree = 42.
    Recount at implementation time.

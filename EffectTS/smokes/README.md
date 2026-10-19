@@ -24,3 +24,17 @@ gets cleared.
 
 Run them with `node <name>-smoke.mjs` from this directory - the imports resolve relative to each
 smoke file, so the CWD does not matter.
+
+## The migration (per-test folders)
+
+The restructure moves each suite into the package's own `Source/Test/<test-name>/` folders
+(one singular TS test file + one README.md per folder, compiled by the package's
+`Configuration/Test-ESBuild.ts` step into `Target/Test/`). `ets-hook-dsh-core` is converted:
+its eight shared folders are byte-twins of the Classic tree's folders under the
+tree-identity substitutions, and its two ETS-only folders (`Stream-Gate/`,
+`Update-Envelope/`) re-home this suite's additive R1 sections. The folders run standalone
+(`node EffectTS/packages/ets-hook-dsh-core/Target/Test/<Name>/Test.js`) and under the
+aggregate (`node Maintain/Run-Smokes.mjs`, which also guards each folder's printed PASS
+count against its README). The `.mjs` suites stay here unchanged during the migration -
+they are the byte-identical fallback and remain the arbiter until a later lane retires
+each one.

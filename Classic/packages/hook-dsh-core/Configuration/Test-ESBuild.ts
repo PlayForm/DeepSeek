@@ -4,13 +4,14 @@ import type { BuildOptions, Plugin } from "esbuild";
  * @module Test-ESBuild
  *
  * Test ESBuild configuration for the CORE (@playform/hook-dsh-core): compiles
- * `Source/Test/**/*.ts` to `Target/Test/`, one output file per source file
- * (bundle: false — the base configuration from the build tool already applies:
- * each Source file transpiles to its own Target file, imports stay external),
- * so each test folder runs standalone (`node Target/Test/<Name>/Test.js`) AND
- * under the aggregate runner. The mirrored `outbase` keeps the relative import
- * depth valid from BOTH trees (Source/Test/<Name>/ and Target/Test/<Name>/
- * resolve `../../Target/...` alike).
+ * the Source/Test TypeScript tree to Target/Test, one output file per source
+ * file (bundle: false — the base configuration from the build tool already
+ * applies: each Source file transpiles to its own Target file, imports stay
+ * external), so each test folder runs standalone
+ * (`node Target/Test/<Name>/Test.js`) AND under the aggregate runner. The
+ * mirrored `outbase` keeps the relative import depth valid from BOTH trees
+ * (Source/Test/<Name>/ and Target/Test/<Name>/ reach the built Target with the
+ * same specifier).
  *
  * NOT minified; sourcemaps on for the standalone runs.
  *

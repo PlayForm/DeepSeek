@@ -44,7 +44,7 @@ export const runTest = async (): Promise<number> => {
 	}
 	// Sub-scenario 2: readable file -> the file's policy, silence.
 	{
-		const Sub = "Policy: readable file -> the file's policy, silent";
+		const Sub = "Policy: readable file \u2192 the file's policy, silent";
 		{
 			Check(Count, Sub, () => {
 				Lines.length = 0;

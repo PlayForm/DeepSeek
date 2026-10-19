@@ -1,5 +1,5 @@
 import type { Eviction } from "./Store.js";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 export type Verdict = {
     action: "pass";

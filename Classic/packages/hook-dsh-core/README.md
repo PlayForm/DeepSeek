@@ -300,6 +300,22 @@ effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v
 its runtime dependency. Install the group you run and never mix the groups in one graph
 (the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
 
+## The Test tree
+
+The package's unit tests live in `Source/Test/` - one folder per test, each holding
+one singular TypeScript test file (`Test.ts`, the assertions moved verbatim from
+`Classic/smokes/core-smoke.mjs`) and a `README.md` describing the intent, the scenario
+tree, the fixtures, the expected ledger strings and the expected PASS count. The shared
+harness (`Source/Test/Harness.ts`) owns the Check counter and the tmpdir fixture. The
+tests compile to `Target/Test/` in a separate ESBuild step (`Configuration/Test-ESBuild.ts`)
+that runs SECOND in `prepublishOnly.sh`, after the plugin build (which wipes `Target/`
+recursively). Each test runs standalone (`node Target/Test/<Name>/Test.js`) and under the
+aggregate (`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count
+against its README). Neither tree is ever published: `.npmignore` excludes `Source/Test/`
+and `Target/Test/`, and the package `files` field negates `Target/Test`. The smoke suite
+`Classic/smokes/core-smoke.mjs` stays in place as the migration fallback until a later
+lane retires it.
+
 ## License 📜
 
 CC0-1.0.

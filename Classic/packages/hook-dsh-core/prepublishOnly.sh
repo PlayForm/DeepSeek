@@ -6,11 +6,16 @@
 # The plugin ESBuild config's Target plugin WIPES outdir "Target" recursively
 # on start; running the test build first would have its output destroyed.
 # The test config wipes only Target/Test, so it is safe last.
+# THE NEGATION IS MANDATORY (trap 11): 'Source/**/*.ts' matches the Test tree
+# (fast-glob); the second positional pattern excludes it (verified 2026-10-19:
+# 28 -> 19 files on the core package). Without it the plugin build fails on
+# test-only syntax and would ship Test output inside Target.
 
 set -e
 
-Build "Source/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts
+Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
+	--ESBuild Configuration/ESBuild.ts \
+	--TypeScript Configuration/TypeScript.noemit.json
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts
