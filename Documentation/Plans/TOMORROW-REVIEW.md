@@ -371,3 +371,18 @@ two-step compilation at
 `Output/Source/prepublishOnly.sh` + `Run.sh` first). Future-transformable into a
 full test suite (vitest-shaped). Implement only after the in-flight
 normalization + tool-coach work settles.
+
+## QUEUE ADDITION (2026-10-19) - Site update for the new family functionality (user-mandated, NOT yet implemented)
+
+Full spec: `Documentation/Plans/SITE-UPDATE-NOTE.md`. Summary: (1) reflect all
+new functionality on the site + update the plugin READMEs - the CCR hook, the
+granular scopes + live volatile toggles, the overpass mechanism, and the
+tool-coach guardian; (2) homepage: under the "Pinned manifests,
+deterministically" + "Governed pins, silently" boxes (Site/Source/pages/
+index.astro:331,341) add "supports: Cargo.toml, package.json" texts rendered as
+clickable buttons that display the use cases; (3) weave the new functionality
+into ALL site descriptions + pages; (4) a dedicated, interactive homepage
+section for the tool-coach plugin in coachy colors (red/orange) with a
+distinct structure; (5) a separate tool-coach page under Site/Source/pages/
+plugins/ like the other plugins have. Implement after the smoke-suite
+restructure settles.
