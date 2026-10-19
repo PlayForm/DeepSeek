@@ -255,7 +255,10 @@ Check(
 	typeof Run1.Listeners["tools/post-execute"] === "function",
 	"the tools/post-execute listener is registered",
 );
-Check(Object.keys(Run1.Listeners).length === 1, "only tools/post-execute registered");
+Check(
+	Object.keys(Run1.Listeners).length === 2 && Run1.Listeners["loader/volatile-update"] !== undefined,
+	"tools/post-execute plus the State builder's P10 loader/volatile-update refresh",
+);
 Check(
 	Run1.ListenerOptions["tools/post-execute"] !== undefined &&
 		Run1.ListenerOptions["tools/post-execute"].prepend === true,
@@ -830,8 +833,8 @@ const Run10 = Make(Validate({ logFile: Ledger }));
 		"engine flag OFF (default): no engine runtime is built",
 	);
 	Check(
-		Object.keys(Run10.Listeners).length === 1 && Run10.Listeners["agent/pre-step"] === undefined,
-		"engine flag OFF: NO agent/pre-step listener is registered (the engine's no-op posture)",
+		Object.keys(Run10.Listeners).length === 2 && Run10.Listeners["agent/pre-step"] === undefined,
+		"engine flag OFF: NO agent/pre-step listener is registered (the engine's no-op posture; the extra listener is the State builder's P10 volatile-update refresh)",
 	);
 	// Post-execute traffic leaves no engine traces: no observation, no lines.
 	await Run10.Listeners["tools/post-execute"](
@@ -916,10 +919,10 @@ const Run12 = Make(
 		);
 	Check(typeof Pre === "function", "engine flag ON: the agent/pre-step listener is registered");
 	Check(
-		Object.keys(Run12.Listeners).length === 2 &&
+		Object.keys(Run12.Listeners).length === 3 &&
 			Run12.Listeners["tools/post-execute"] !== undefined &&
 			Run12.Listeners["tools/post-execute"] !== Pre,
-		"engine flag ON: exactly two listeners (tools/post-execute + agent/pre-step)",
+		"engine flag ON: tools/post-execute + agent/pre-step, plus the State builder's P10 volatile-update refresh",
 	);
 	Check(
 		Run12.State.EngineRuntime !== undefined &&

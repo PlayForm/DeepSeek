@@ -24,4 +24,9 @@ export default (
 	Reasoning: boolean,
 	ToolArgs: boolean,
 	Raw: boolean,
-): { chunk: StreamChunk; count: number } => CoreChunk(Input, Replace, Reasoning, ToolArgs, Raw);
+	// The conversation scope gate (default ON = the previous behavior):
+	// forwarded to the core dispatch, which passes text-delta text and
+	// text/reasoning blocks through by identity while it is off.
+	Conversation = true,
+): { chunk: StreamChunk; count: number } =>
+	CoreChunk(Input, Replace, Reasoning, ToolArgs, Raw, Conversation);

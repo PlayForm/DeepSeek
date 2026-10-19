@@ -161,7 +161,10 @@ Check(Raw1.normalizeToolArguments === false, "config default normalizeToolArgume
 const Run1 = Make(Raw1);
 
 Check(typeof Run1.Listeners["llm/stream"] === "function", "the llm/stream listener is registered");
-Check(Object.keys(Run1.Listeners).length === 1, "only llm/stream registered");
+Check(
+	Object.keys(Run1.Listeners).length === 2 && Run1.Listeners["loader/volatile-update"] !== undefined,
+	"llm/stream plus the State builder's P10 loader/volatile-update refresh",
+);
 Check(Run1.State && Run1.State.Factory === Furnace, "state carries the REAL factory instance");
 Check(
 	Run1.State.Ledger === "/tmp/normalize-dash-smoke-ledger.log",
@@ -1057,6 +1060,53 @@ Check(
 	SlowRuns[0].actor && JSON.stringify(SlowRuns[0].actor.govern) === "true",
 	"govern sequential fold: the async step receives the wrapped actor like the sync steps",
 );
+
+// ---------- Run V (additive): the P10 volatile live-flip ----------
+// The KEY new smoke: a fresh mount whose `replacement` arrives as a volatile
+// cell (the schema freezes its own cells, so the fake loader simulation here
+// builds the STABLE reference by hand — a cell whose getter reads a mutable
+// outer binding, exactly the loader's "commit into the running reference"
+// semantics). The factory's loader/volatile-update listener is dispatched;
+// the next stream picks the new replacement up WITHOUT remount: no second
+// activation line, State identity preserved.
+rm();
+let FlipValue = "-";
+const RawV = {
+	log: true,
+	logFile: Ledger,
+	replacement: { get: () => FlipValue },
+	normalizeReasoning: true,
+	normalizeToolArguments: false,
+};
+const RunV = Make(RawV);
+const Activations = () => RunV.Lines.filter((L) => L.includes("activated (")).length;
+Check(RunV.Listeners["loader/volatile-update"] !== undefined, "P10: the refresh listener is registered");
+Check(Activations() === 1, "P10: exactly one activation line after the mount");
+Check(RunV.State.Replacement === "-", "P10: the mount-time replacement is the default");
+const StateRefV = RunV.State;
+FlipValue = "-*-";
+RunV.Listeners["loader/volatile-update"]([["replacement"]]);
+Check(RunV.State.Replacement === "-*-", "P10: the volatile dispatch refreshed State.Replacement in place");
+Check(StateRefV === RunV.State, "P10: the State object identity is preserved (no rebuild)");
+Check(Activations() === 1, "P10: still exactly one activation line (NO remount, no re-apply)");
+const ListenerV = RunV.Listeners["llm/stream"];
+const OutV = [];
+for await (const ChunkV of ListenerV(Object.freeze({ model: "x", messages: [] }), () =>
+	(async function* () {
+		yield { type: "text-delta", index: 0, text: "a \u2014 b" };
+	})(),
+)) {
+	OutV.push(ChunkV);
+}
+Check(
+	OutV[0].text === "a -*- b",
+	"P10: the NEXT stream normalizes with the NEW replacement without remount",
+);
+Check(
+	RunV.Lines.some((L) => L.includes("normalized 1 dash char(s) in one stream")),
+	"P10: the flipped stream still writes its normal count line",
+);
+Check(Activations() === 1, "P10: the flipped stream added NO activation line");
 
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);

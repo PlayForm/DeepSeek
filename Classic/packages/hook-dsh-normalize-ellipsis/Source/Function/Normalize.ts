@@ -70,7 +70,28 @@ export default async function* (
 				break;
 			}
 		}
-		const Result = Chunk(Original, State.Replacement, State.Reasoning, State.ToolArgs, RawCall);
+		// The effective gates (the granular scope control, defaults = the
+		// previous behavior): the conversation scope gates the text paths, the
+		// reasoning scope is the sub-gate of `normalizeReasoning` (ANDed), and
+		// the tool-input scope is OR-ed into `normalizeToolArguments` (the
+		// deprecated field keeps working). The fallback object covers a
+		// hand-built config that omits `scopes` entirely.
+		const Scopes = State.Scopes ?? {
+			conversation: true,
+			reasoning: true,
+			toolInput: false,
+			toolResults: false,
+			files: true,
+			batch: false,
+		};
+		const Result = Chunk(
+			Original,
+			State.Replacement,
+			State.Reasoning && Scopes.reasoning,
+			State.ToolArgs || Scopes.toolInput,
+			RawCall,
+			Scopes.conversation,
+		);
 		Count += Result.count;
 		yield Result.chunk;
 	}

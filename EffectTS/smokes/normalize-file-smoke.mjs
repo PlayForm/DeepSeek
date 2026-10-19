@@ -184,8 +184,9 @@ Check(
 const Run1 = Make(Raw1);
 
 Check(
-	Object.keys(Run1.Listeners).length === 0,
-	"NO event listener registered (the family's first listener-less flavor)",
+	Object.keys(Run1.Listeners).length === 1 &&
+		Run1.Listeners["loader/volatile-update"] !== undefined,
+	"no hook listener (the family's first listener-less flavor); the one listener is the State builder's P10 volatile-update refresh",
 );
 Check(Run1.Registered.length === 1, "exactly one tool registered");
 const Tool = Run1.Registered[0];
@@ -533,6 +534,41 @@ Check(
 	First !== Second && First.Replacement === "-" && Second.Replacement === "$&",
 	"each apply builds a FRESH state (no module-level globals)",
 );
+
+// ---------- Run V (additive): the P10 volatile live-flip ----------
+// The replacement arrives as a STABLE volatile cell (built by hand — the
+// schema freezes its own cells; the getter reads a mutable outer binding,
+// exactly the loader's "commit into the running reference" semantics). The
+// factory's loader/volatile-update listener is dispatched; the NEXT tool call
+// picks the new replacement up WITHOUT remount: no second activation line,
+// State identity preserved.
+rm();
+let FlipValue = "-";
+const RawV = { log: true, logFile: Ledger, replacement: { get: () => FlipValue } };
+const RunV = Make(RawV);
+const ToolV = RunV.Registered[0];
+const ActivationsV = () => RunV.Lines.filter((L) => L.includes("activated (")).length;
+Check(RunV.Listeners["loader/volatile-update"] !== undefined, "P10: the refresh listener is registered");
+Check(ActivationsV() === 1, "P10: exactly one activation line after the mount");
+Check(RunV.State.Replacement === "-", "P10: the mount-time replacement is the default");
+const StateRefV = RunV.State;
+const FlipFixture = "/tmp/normalize-file-smoke-flip-fixture.txt";
+RunV.Files.set(`key:${FlipFixture}`, All6);
+FlipValue = "-*-";
+RunV.Listeners["loader/volatile-update"]([["replacement"]]);
+Check(RunV.State.Replacement === "-*-", "P10: the volatile dispatch refreshed State.Replacement in place");
+Check(StateRefV === RunV.State, "P10: the State object identity is preserved (no rebuild)");
+Check(ActivationsV() === 1, "P10: still exactly one activation line (NO remount, no re-apply)");
+const OutV = await ToolV.execute({ file_path: FlipFixture }, Exec());
+Check(
+	OutV.changed === true && OutV.after === 'a-*-b"c"...d efAg',
+	"P10: the NEXT tool call normalizes with the NEW replacement without remount",
+);
+Check(
+	RunV.Lines.some((L) => L.includes(`normalized 7 char(s) in ${FlipFixture}`)),
+	"P10: the flipped tool call still writes its normal count line",
+);
+Check(ActivationsV() === 1, "P10: the flipped tool call added NO activation line");
 
 rm();
 console.log(`\n${Pass} PASS, ${Fail} FAIL`);

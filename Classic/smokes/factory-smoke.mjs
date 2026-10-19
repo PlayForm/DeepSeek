@@ -1035,5 +1035,79 @@ ok(
 	"Govern: the direct-govern registry — RegisterGovern storage, selection resolution (true/all/array/name/false), basename routing, per-step containment, in-place re-registration",
 );
 
+// ── 15. P10 volatile refresh (additive): in-place State updates, no remount ──
+{
+	// A module field mapped from a volatile cell, plus the shared mappings.
+	const Cell = { get: () => "first" };
+	const LogCell = { get: () => false };
+	const Mark = events.length;
+	const stV = factory.State(
+		ctx,
+		{ logFile: Ledger, log: LogCell, replacement: Cell },
+		{ module: "volatile-flavor", fields: { Replacement: "replacement" } },
+	);
+	const Refresh = events
+		.slice(Mark)
+		.filter((e) => e[0] === "loader/volatile-update")
+		.map((e) => e[1])
+		.at(-1);
+	assert.ok(Refresh, "the State builder registers one loader/volatile-update listener");
+	assert.equal(stV.Replacement, "first", "initial unwrap: the cell's mount-time value");
+	assert.equal(stV.Enabled, false, "initial unwrap: the log cell's mount-time value");
+	const Same = stV;
+	Cell.get = () => "second";
+	Refresh([["replacement"]]);
+	assert.equal(stV.Replacement, "second", "key-array path: the field refreshes in place");
+	assert.equal(Same, stV, "State object identity preserved (no remount, no rebuild)");
+	Cell.get = () => "third";
+	Refresh(["replacement"]);
+	assert.equal(stV.Replacement, "third", "dotted-string path: the same refresh");
+	// Nested path under an object key: the top-level key maps the whole cell.
+	const ObjCell = { get: () => ({ conversation: true, toolInput: false }) };
+	const stO = factory.State(
+		ctx,
+		{ logFile: Ledger, scopes: ObjCell },
+		{ module: "volatile-flavor", fields: { Scopes: "scopes" } },
+	);
+	const ObjRefresh = events
+		.slice(events.length - 1)
+		.filter((e) => e[0] === "loader/volatile-update")
+		.map((e) => e[1])
+		.at(-1);
+	assert.deepEqual(stO.Scopes, { conversation: true, toolInput: false });
+	ObjCell.get = () => ({ conversation: false, toolInput: true });
+	ObjRefresh([["scopes", "toolInput"]]);
+	assert.deepEqual(
+		stO.Scopes,
+		{ conversation: false, toolInput: true },
+		"nested object key: the whole object cell re-reads (top-level key)",
+	);
+	// Shared mapping: the log cell refreshes State.Enabled.
+	LogCell.get = () => true;
+	Refresh([["log"]]);
+	assert.equal(stV.Enabled, true, "shared mapping: log -> Enabled refreshes in place");
+	// Unknown / non-volatile / malformed paths: ignored, never throwing.
+	Cell.get = () => "kept";
+	Refresh([["replacement"]]);
+	assert.equal(stV.Replacement, "kept", "valid path still refreshes before the ignore tests");
+	assert.doesNotThrow(() => Refresh([["nonsense"], "a.b.c", 42, undefined]));
+	assert.equal(stV.Replacement, "kept", "unknown key paths are ignored");
+	// A plain (non-cell) key path is ignored too — State is untouched.
+	assert.doesNotThrow(() => Refresh([["logFile"]]));
+	assert.equal(stV.Ledger, Ledger, "non-volatile key path: no refresh");
+	// A failed refresh keeps the previous value (the Unwrap defensive rule).
+	Cell.get = () => {
+		throw new Error("boom");
+	};
+	assert.doesNotThrow(() => Refresh([["replacement"]]));
+	assert.equal(stV.Replacement, "kept", "failed refresh keeps the previous value");
+	// The refresh is the ONLY observable effect of the dispatch: no activation
+	// line was re-emitted, no listener churned — one listener per State build.
+	assert.ok(events.filter((e) => e[0] === "loader/volatile-update").length >= 3);
+}
+ok(
+	"P10 volatile refresh: one instance-local listener, in-place field updates (key-array + dotted + nested-object paths), identity preserved, unknown/failed paths safe",
+);
+
 // ── done ─────────────────────────────────────────────────────────────────
 console.log(`\n${N} checks — ALL PASS`);

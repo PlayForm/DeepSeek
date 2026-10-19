@@ -60,6 +60,13 @@ export default (Context: Context, Options: Config): void => {
 			Replacement: "replacement",
 			Reasoning: "normalizeReasoning",
 			ToolArgs: "normalizeToolArguments",
+			// The granular scope gates + the tool-results exemption list —
+			// volatile, refreshed in place by the factory's P10
+			// loader/volatile-update listener (no remount, no new activation
+			// line — which is why the activation line below reports only the
+			// mount-time effective values).
+			Scopes: "scopes",
+			Exempt: "toolResultsExempt",
 		},
 	});
 	State.Factory = Factory;
@@ -70,12 +77,19 @@ export default (Context: Context, Options: Config): void => {
 	// The line's string mechanics (the `activated (` prefix, the `k=v` join,
 	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
 	// the module's own (the replacement-less flavors just omit the pair).
+	// The toolArgs value is the EFFECTIVE gate (`normalizeToolArguments` OR
+	// `scopes.toolInput` — the scope gate OR-ed in per the compatibility
+	// decision); with the schema defaults the value is identical to the old
+	// expression, so the line stays byte-identical. The scopes themselves are
+	// NOT on the line (the activation line never changes for volatile
+	// edits — observability goes through the read-only
+	// `normalize-overpass scopes` report instead).
 	Factory.Append(
 		State,
 		Activate([
 			["replacement", State.Replacement],
 			["reasoning", State.Reasoning ? "on" : "off"],
-			["toolArgs", State.ToolArgs ? "on" : "off"],
+			["toolArgs", (State.ToolArgs || State.Scopes?.toolInput === true) ? "on" : "off"],
 			["logFile", State.Ledger],
 		]),
 	);

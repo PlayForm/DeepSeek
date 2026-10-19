@@ -118,9 +118,15 @@ export default <T extends ChunkShape>(
 	Reasoning: boolean,
 	ToolArgs = false,
 	Raw = false,
+	// The CONVERSATION scope gate (the granular control, default ON = today's
+	// behavior): when off, the text-delta text and the assembled TEXT blocks
+	// pass through by identity. The reasoning-delta gate (the caller's
+	// Reasoning flag, ANDed with the scopes.reasoning sub-gate by the caller)
+	// and the tool-args gate are NOT affected by this flag.
+	Conversation = true,
 ): { chunk: T; count: number } => {
 	switch (true) {
-		case Input.type === "text-delta": {
+		case Input.type === "text-delta" && Conversation: {
 			const Result = Replace((Input as { text: string }).text);
 			return {
 				chunk: (Result.count > 0 ? { ...Input, text: Result.text } : Input) as T,
@@ -142,7 +148,7 @@ export default <T extends ChunkShape>(
 			// original block by identity whenever it changed nothing, so the
 			// comparison is exact.
 			const Original = (Input as { block: BlockShape }).block;
-			const Result = Block(Original, Replace, ToolArgs, Raw);
+			const Result = Block(Original, Replace, ToolArgs, Raw, Conversation);
 			return {
 				chunk: (Result.block !== Original ? { ...Input, block: Result.block } : Input) as T,
 				count: Result.count,
@@ -184,9 +190,10 @@ export default <T extends ChunkShape>(
 				count: Result.count,
 			};
 		}
-		// block-start, usage, finish - and reasoning-delta while the reasoning
-		// flag is off; tool-call-delta while the tool-args flag is off, while
-		// the call is name-exempt (edit, raw-write, normalize-file), or while it is raw-marked:
+		// block-start, usage, finish - text-delta while the conversation scope
+		// is off; reasoning-delta while the reasoning flag is off; tool-call-delta
+		// while the tool-args flag is off, while the call is name-exempt (edit,
+		// raw-write, normalize-file), or while it is raw-marked:
 		// passthrough by identity.
 		default:
 			return { chunk: Input, count: 0 };

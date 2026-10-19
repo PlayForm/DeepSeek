@@ -53,5 +53,41 @@ export default Compose(false, {
 	// ToolCallBlock.arguments are rewritten by the transform too. The
 	// arguments are execution-critical raw JSON, so enabling it is the
 	// user's accepted risk — this profile's cordis.patch.yml turns it on.
+	// DEPRECATED in favor of `scopes.toolInput`: kept and OR-ed in (effective
+	// toolInput = this field || scopes.toolInput) so every existing profile
+	// keeps working; new configs should use the scope gate.
 	normalizeToolArguments: Schema.boolean().default(false),
+	// Granular scope gates — ALL volatile (live toggling, no remount):
+	// conversation=text/block-end, reasoning=its sub-gate, toolInput=tool-call
+	// arguments arm, toolResults=tools/post-execute arm, files=the
+	// normalize-file tool (inert in stream flavors so one patch override drives
+	// the whole family), batch=agent/pre-step arm. The OBJECT carries the
+	// volatile marker (its leaves stay plain — schemastery rejects volatile
+	// leaves under an enclosing volatile field): one leaf change commits one
+	// update whose whole object the State's refresh listener re-reads.
+	scopes: Schema.object({
+		conversation: Schema.boolean().default(true),
+		reasoning: Schema.boolean().default(true),
+		toolInput: Schema.boolean().default(false),
+		toolResults: Schema.boolean().default(false),
+		files: Schema.boolean().default(true),
+		batch: Schema.boolean().default(false),
+	}).volatile(),
+	// Tool-results exemption list (the name-exempt precedent of the core's
+	// stream gate, made configurable): a tool result whose exec name is listed
+	// passes through by identity — read/edit are byte-contracted, raw-write/
+	// normalize-file own their normalization, ccr_retrieve's bytes are the
+	// retrieval contract, subagent/ask_user_question carry prompt material
+	// matched verbatim.
+	toolResultsExempt: Schema.array(Schema.string())
+		.default([
+			"read",
+			"edit",
+			"raw-write",
+			"normalize-file",
+			"ccr_retrieve",
+			"subagent",
+			"ask_user_question",
+		])
+		.volatile(),
 });

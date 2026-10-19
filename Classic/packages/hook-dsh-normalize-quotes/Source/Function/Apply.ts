@@ -52,6 +52,13 @@ export default (Context: Context, Options: Config): void => {
 		fields: {
 			Reasoning: "normalizeReasoning",
 			ToolArgs: "normalizeToolArguments",
+			// The granular scope gates + the tool-results exemption list —
+			// volatile, refreshed in place by the factory's P10
+			// loader/volatile-update listener (no remount, no new activation
+			// line — which is why the activation line below reports only the
+			// mount-time effective values).
+			Scopes: "scopes",
+			Exempt: "toolResultsExempt",
 		},
 	});
 	State.Factory = Factory;
@@ -61,12 +68,17 @@ export default (Context: Context, Options: Config): void => {
 	//   hook-dsh-normalize-quotes: activated (reasoning=on, toolArgs=off, logFile=…)
 	// The line's string mechanics live in the core's Activate composer; the
 	// FIELD LIST is the module's own — a MAP flavor has NO replacement field,
-	// so the `replacement=` pair is simply absent from the list.
+	// so the `replacement=` pair is simply absent from the list. The toolArgs
+	// value is the EFFECTIVE gate (`normalizeToolArguments` OR
+	// `scopes.toolInput` — the scope gate OR-ed in per the compatibility
+	// decision); with the schema defaults the value is identical to the old
+	// expression, so the line stays byte-identical. The scopes themselves are
+	// NOT on the line.
 	Factory.Append(
 		State,
 		Activate([
 			["reasoning", State.Reasoning ? "on" : "off"],
-			["toolArgs", State.ToolArgs ? "on" : "off"],
+			["toolArgs", (State.ToolArgs || State.Scopes?.toolInput === true) ? "on" : "off"],
 			["logFile", State.Ledger],
 		]),
 	);

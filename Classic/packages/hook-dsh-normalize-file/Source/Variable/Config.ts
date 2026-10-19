@@ -44,4 +44,40 @@ export default Compose(false, {
 	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next tool call picks it up with no remount.
 	replacement: Schema.string().default("-").volatile(),
+	// Granular scope gates - ALL volatile (live toggling, no remount):
+	// conversation=text/block-end, reasoning=its sub-gate, toolInput=tool-call
+	// arguments arm, toolResults=tools/post-execute arm, files=the
+	// normalize-file tool (the ONLY arm this tool flavor has - off means the
+	// tool returns the unchanged changed:false result with no read, no write,
+	// no ledger line), batch=agent/pre-step arm. The OTHER five scopes are
+	// inert in this flavor but present in the schema so one patch override
+	// drives the whole family. The OBJECT carries the volatile marker (its
+	// leaves stay plain - schemastery rejects volatile leaves under an
+	// enclosing volatile field): one leaf change commits one update whose
+	// whole object the State's refresh listener re-reads.
+	scopes: Schema.object({
+		conversation: Schema.boolean().default(true),
+		reasoning: Schema.boolean().default(true),
+		toolInput: Schema.boolean().default(false),
+		toolResults: Schema.boolean().default(false),
+		files: Schema.boolean().default(true),
+		batch: Schema.boolean().default(false),
+	}).volatile(),
+	// Tool-results exemption list (the name-exempt precedent of the core's
+	// stream gate, made configurable): a tool result whose exec name is listed
+	// passes through by identity - read/edit are byte-contracted, raw-write/
+	// normalize-file own their normalization, ccr_retrieve's bytes are the
+	// retrieval contract, subagent/ask_user_question carry prompt material
+	// matched verbatim.
+	toolResultsExempt: Schema.array(Schema.string())
+		.default([
+			"read",
+			"edit",
+			"raw-write",
+			"normalize-file",
+			"ccr_retrieve",
+			"subagent",
+			"ask_user_question",
+		])
+		.volatile(),
 });

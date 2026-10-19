@@ -97,10 +97,21 @@ export default <T extends BlockShape>(
 	Replace: (Text: string) => { text: string; count: number },
 	ToolArgs = false,
 	Raw = false,
+	// The CONVERSATION scope gate (the granular control, default ON = today's
+	// behavior): when off, the TEXT and REASONING blocks pass through by
+	// identity (prose is not normalized). The tool-call block's gate (the
+	// tool-args flag, the name exemptions, the raw marker) is NOT affected by
+	// this flag. Note the pre-existing posture that is deliberately preserved:
+	// the reasoning block is NOT gated by the caller's reasoning flag (only
+	// the reasoning-delta is) — the conversation flag is its only gate here,
+	// exactly as before plus the new flag.
+	Conversation = true,
 ): { block: T; count: number } => {
 	switch (true) {
 		// TextBlock: the visible text payload.
-		case Input.type === "text" && typeof (Input as { text?: unknown }).text === "string": {
+		case Input.type === "text" &&
+			Conversation &&
+			typeof (Input as { text?: unknown }).text === "string": {
 			const Result = Replace((Input as { text: string }).text);
 			return {
 				block: (Result.count > 0 ? { ...Input, text: Result.text } : Input) as T,
@@ -109,8 +120,9 @@ export default <T extends BlockShape>(
 		}
 		// ReasoningBlock: the reasoning payload - `text` per the published
 		// 0.2.0-rc.2 type, `thinking` per the doc prose; normalize whichever
-		// string field is present (both, defensively).
-		case Input.type === "reasoning": {
+		// string field is present (both, defensively) while the conversation
+		// scope is on.
+		case Input.type === "reasoning" && Conversation: {
 			let Count = 0;
 			const Next: { type: string; text?: string | undefined } = { ...Input };
 			switch (true) {
@@ -167,7 +179,8 @@ export default <T extends BlockShape>(
 			};
 		}
 		// ImageBlock, FileBlock, tool-change blocks, unknown merge-extensible
-		// types - and ToolCallBlock while the tool-args flag is off, while the
+		// types - the TextBlock and ReasoningBlock while the conversation scope
+		// is off - and ToolCallBlock while the tool-args flag is off, while the
 		// call is name-exempt (edit, raw-write, normalize-file), or while it is raw-marked:
 		// passthrough by identity.
 		default:

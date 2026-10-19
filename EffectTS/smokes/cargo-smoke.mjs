@@ -333,11 +333,11 @@ ok("state: factory-built shared shape + module fields + activation journal recor
 	);
 	assert.equal(
 		m.captured.events.filter((e) => e[0] !== "fs/observed").length,
-		0,
-		"no other hooks (never fs/write-intent, never tools/*)",
+		1,
+		"one other hook: the State builder's P10 loader/volatile-update refresh (never fs/write-intent, never tools/*)",
 	);
 }
-ok("wire: exactly one fiber-owned fs/observed registration, no other hooks");
+ok("wire: exactly one fiber-owned fs/observed registration, plus the P10 volatile-update refresh");
 
 {
 	const m = makeCtx({ services: { subprocess: seamStub() } });

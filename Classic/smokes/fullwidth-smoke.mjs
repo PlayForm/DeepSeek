@@ -84,7 +84,10 @@ Check(Raw1.normalizeToolArguments === false, "config default normalizeToolArgume
 const Run1 = Make(Raw1);
 
 Check(typeof Run1.Listeners["llm/stream"] === "function", "the llm/stream listener is registered");
-Check(Object.keys(Run1.Listeners).length === 1, "only llm/stream registered");
+Check(
+	Object.keys(Run1.Listeners).length === 2 && Run1.Listeners["loader/volatile-update"] !== undefined,
+	"llm/stream plus the State builder's P10 loader/volatile-update refresh",
+);
 Check(Run1.State && Run1.State.Factory === Furnace, "state carries the REAL factory instance");
 Check(
 	Run1.State.Ledger === "/tmp/fullwidth-smoke-ledger.log",
