@@ -808,6 +808,43 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   ratification pass - the configured-block suggestion design vs D2's
   section 2.6 + the ratified privacy default (the addendum wins on
   conflict for the C2 dispatch - the LAST addendum; C2 fires after it).
+- **I6 COMPLETE (2026-10-19, `04afa73b`)**: the SUGGESTER-CONFIGURED
+  addendum written (Design/SUGGESTER-CONFIGURED.md): the strict JSON
+  suggestion {fit, templateId, rationale<=240B, tokens:{expectAgents,
+  steps[]}} with the opening variables pre-filled; the LEASE always
+  config-derived (never model-chosen); the plugin clamps every token
+  (ledger `suggestion clamped <sid> <field>`); the suggestion arrives AS A
+  PLANTED BLOCK (the byte-exact `--- LIVE SUGGESTION <sid> (template: <id>;
+  configured) ---` frame <=1200B); the one-word accept/dismiss
+  (`live_container_set accept=<sid>` instantiates the stored clamped
+  config verbatim - zero drift; `dismiss=<sid>`); the triggers = the first
+  user message of the turn AND length >= 40 AND no skip words AND the rate
+  cap (6/hour - the complexity-only gate rejected); the privacy default
+  "redact" (first 200 chars + length); the cost/latency (one mini call per
+  qualifying turn, timeout 8000ms, fully detached, failures = ledger-only).
+  CONFLICT TABLE: 10 rows (7 wins: the carrier, the one-word accept, the
+  lease non-model-choice, the token clamping, the sid definition, the
+  conjunctive trigger, the autoPlant header; 2 D2 survives: the redact
+  default, the no-action expiry). C2 RESIDUALS R1-R5: the token grammar
+  frozen (richer templates fall back to the section tier), the catalog
+  built at process start, the complexity knob deferred, the two new verbs
+  need the SCHEME + the additive smokes, the accept-on-expired = "accept
+  failed <sid> (expired)".
+- **ALL FIVE RATIFICATIONS LANDED (2026-10-19)**: I2-I6 complete. THE C2
+  LAUNCH (corrected): the wave-2 coder was NEVER seated before - the
+  orchestrator misaddressed its brief to the wave-3 coder's lane id
+  (62896685 = C3, which correctly flagged the mismatch and was reverted
+  with "<C3> SPEC CORRECTED - IDLE"); the REAL wave-2 coder is now seated:
+  C2 (`96669721` - GLM flash high, "<C2> SPEC RETAINED - IDLE" pending)
+  with the FULL brief (the design doc section 9 + the five addenda + the
+  phase-order rule + the ratifiers' residuals R1-R5 folded in). C2
+  executes only on the ACTIVATE after PHASE 1 (A1's package + the R/D
+  smokes) lands and verifies post-restart; its edits are additive-only,
+  the phase-1 smokes pass with ZERO assertion changes, the phases never
+  run concurrently. LESSON RECORDED: the lane-ids table in this record is
+  the addressing source of truth - the C2/C3 names collide; the
+  orchestrator checks the id against the table BEFORE sending any
+  amendment.
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 

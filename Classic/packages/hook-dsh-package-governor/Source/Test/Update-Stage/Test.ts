@@ -79,11 +79,12 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.deepEqual(
-					Satisfy(
+					// Fixture-only scaffolding: `as any` for the branded/unknown leaf.
+					(Satisfy(
 						{ dependencies: { leftpad: "2.0.0" } },
 						{ effectiveLatest: { leftpad: "1.0.0" } },
 						false,
-					)?.dependencies.leftpad,
+					) as any)?.["dependencies"]?.leftpad,
 					"^1.0.0",
 				);
 				assert.equal(
@@ -177,7 +178,7 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "FAILED path: U\u2082 refresh runs even on failure";
 		{
 			Check(Count, Sub, () => {
-				const failedEmit = Emitted.filter((e) => e[0] === "fs/observed").at(-1);
+				const failedEmit = Emitted.filter((e) => e[0] === "fs/observed").at(-1)!;
 				assert.equal(failedEmit[2].version, "stat-v9", "U\u2082 refresh ran even on failure");
 				Probe.Count.delete(projF);
 				Spawn.Exits = [];
@@ -389,7 +390,7 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "P1 piping: the same text piped raw into the job's output ring";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(JobRings.at(-1).includes("ncu says hi"), "the same text piped into the job ring");
+				assert.ok(JobRings.at(-1)!.includes("ncu says hi"), "the same text piped into the job ring");
 				Spawn.Out = "";
 				Probe.Count.delete(projF);
 			});

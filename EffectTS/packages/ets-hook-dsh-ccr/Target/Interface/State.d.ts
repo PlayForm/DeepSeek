@@ -1,8 +1,8 @@
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type { EngineRuntime } from "@Function/Engine.js";
-import type Store from "@Function/Store.js";
-import type Config from "@Interface/Config.js";
+import type { EngineRuntime } from "../Function/Engine.js";
+import type Store from "../Function/Store.js";
+import type Config from "./Config.js";
 export default interface State extends Shared {
     /** The allow-list of compressible tool names (config `targets`). */
     Targets: string[];

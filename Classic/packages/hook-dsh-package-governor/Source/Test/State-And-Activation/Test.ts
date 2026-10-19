@@ -160,11 +160,11 @@ export const runTest = async (): Promise<number> => {
 				const lines = ledgerLines();
 				assert.equal(lines.length, 1, "exactly one ledger line so far");
 				assert.match(
-					lines[0],
+					lines[0] as string,
 					/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] activated \(anywhere mode, logFile=/,
 				);
 				assert.ok(
-					lines[0].includes(
+					(lines[0] as string).includes(
 						`logFile=${Ledger}, updateMode=programmatic, ncuBin=${NCU_BIN}, exclude=[${EXCLUDE.join(
 							", ",
 						)}], policyFile=(discovery))`,
