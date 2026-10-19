@@ -1,9 +1,9 @@
-// Source/Test/Run-One-State/Test.ts - one singular test: one apply's posture
-// - the listener set (tools/post-execute registered, PREPENDing), the single
-// tool registration (named ccr_retrieve), the State's volatile unwraps
-// (Ledger, Enabled, Threshold, PreviewMax, Multipliers), the module identity,
-// the memory-only store, the 8 copied targets, and the first exercised call
-// (the under-threshold pass-through, byte-identical and silent).
+// Source/Test/Run-One-State/Test.ts - one singular test: one State instance's
+// posture - the registered listener set (tools/post-execute, prepending), the
+// single ccr_retrieve tool registration, the State fields (the REAL factory,
+// the volatile unwraps, the module identity, the memory-only store, the 8
+// copied targets), and the under-threshold pass-through the listener starts
+// from.
 // Runs standalone (`node Target/Test/Run-One-State/Test.js`) AND under the
 // aggregate (`Maintain/Run-Smokes.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-ccr: the fake ctx + the REAL factory +
@@ -25,7 +25,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
-	// Group: Run 1 - the listener set, the tool registration, the State.
+	// Group: Run 1 - the listener set, the tool registration and the State.
 	Rm();
 	const Raw1 = Validate({ logFile: Ledger });
 	const Run1 = Make(Raw1);
@@ -36,8 +36,7 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 	{
-		const Sub =
-			"the listener PREPENDS (the gate runs before the other post-execute listeners)";
+		const Sub = "the listener PREPENDS (the gate runs before the other post-execute listeners)";
 		Check(Count, Sub, () => {
 			assert.ok(
 				Run1.ListenerOptions["tools/post-execute"] !== undefined &&
@@ -111,12 +110,9 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Run1.State.Targets.length === 8);
 		});
 	}
-	// Group: Run 1a - under-threshold pass-through (byte-identical): the first
-	// exercised call of the listener, and the suite's standing negative
-	// control for the compression gate.
+	// Group: Run 1a - under-threshold pass-through (byte-identical).
 	{
-		const Sub =
-			"under-threshold bash result: the downstream decision passes through unchanged";
+		const Sub = "under-threshold bash result: the downstream decision passes through unchanged";
 		await CheckAsync(Count, Sub, async () => {
 			const Listener = Run1.Listeners["tools/post-execute"];
 			const Content = TextBlock("short bash output");
@@ -128,7 +124,12 @@ export const runTest = async (): Promise<number> => {
 	}
 	{
 		const Sub = "under-threshold result writes NO ledger line (no compress, no store)";
-		Check(Count, Sub, () => {
+		await CheckAsync(Count, Sub, async () => {
+			const Listener = Run1.Listeners["tools/post-execute"];
+			const Content = TextBlock("short bash output");
+			const Result = { isError: false, value: { out: "short bash output" }, content: Content };
+			const Decision = { kind: "accept" };
+			await Listener(Exec("bash"), Result, async () => Decision);
 			assert.ok(
 				!Run1.Lines.some((L: string) => L.includes("compressed") || L.includes("stored")),
 			);

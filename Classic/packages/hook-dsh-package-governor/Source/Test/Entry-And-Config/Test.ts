@@ -38,6 +38,11 @@ export const runTest = async (): Promise<number> => {
 				const GovernorDir = Path.resolve(import.meta.dirname, "../../..");
 				const factoryImporters: string[] = [];
 				const walk = (dir: string) => {
+					// The compiled Test tree lives under Target/Test and mentions the
+					// factory only in its harness imports - skip it (fixture-only
+					// adaptation; the source suite ran this walk before the Test tree
+					// existed).
+					if (dir.endsWith(Path.join("Target", "Test"))) return;
 					for (const e of FileSystem.readdirSync(dir, { withFileTypes: true })) {
 						const p = Path.join(dir, e.name);
 						if (e.isDirectory()) walk(p);

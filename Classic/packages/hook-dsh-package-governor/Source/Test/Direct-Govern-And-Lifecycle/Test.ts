@@ -41,7 +41,7 @@ import {
 	actor,
 	settle,
 } from "../Harness.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import FactoryClass from "../../../../plugin-dsh-factory/Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

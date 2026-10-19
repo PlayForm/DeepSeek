@@ -672,16 +672,37 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   narrowed to a command-runner-only wrapper), 00-OVERVIEW.md:105 (the
   non-negotiables 6 -> 8). The Requirements/ dir is untracked (the user
   commits).
-- **D2 DISPATCHED (2026-10-19, `3c36688c` - deepseek-v4-flash-0731 max, the
-  design lane)**: the implementation design for the ONE package (v1 +
-  wave 2); it resolves G1 (the pre-execute carrier), G2 (the command-runner
-  wrapper), G5 (the planted-block report pickup), the four residuals (the
-  withdrawal/KV-cache ratification, the suggester privacy, the idle-wake
-  channel, THE PHASE ORDER v1-then-wave-2 so A1 and C2 never collide), and
-  writes Documentation/Plans/LiveContainers/Design/IMPLEMENTATION-DESIGN.md
-  with the byte-ready design + the C2 coder brief. The I2-I6 addenda fire as
-  slots free; D2 incorporates those that land mid-run and flags the rest for
-  ratification at the C2 dispatch.
+- **D2 COMPLETE (2026-10-19, `3c36688c`)**: the implementation design
+  verified on disk - Documentation/Plans/LiveContainers/Design/
+  IMPLEMENTATION-DESIGN.md (1487 lines, 14 sections). THE DECISIONS: G1 - a
+  pre-execute decision CANNOT carry a synthetic result (only allow/deny/ask/
+  cancel; deny renders Error:... isError:true); the carrier is the plugin's
+  OWN tools/execute arm (the pre-execute listener decides+starts+tags via
+  WeakMap, the execute listener returns the fabricated canonical-value
+  result {kind:"foreground", exitCode:0, stdout:{text:<marker>}} WITHOUT
+  calling next() - the cordis veto - rendered through the bash tool's own
+  output.render into a successful result; the harness's renderPromoted is the
+  shipped precedent). G2 - the producer re-dispatch is a command-runner
+  wrapper ONLY, replicating dsh-tool-bash's background adapter over the
+  governed path; the mutation family permanently non-detachable (hardcoded in
+  Policy.ts); the completion tail = the producer's own bounded 2 KiB capture
+  (settled events carry no ring content - verified). G5 - the parent's plugin
+  listens to agent/inbox/spliced (host scope, emit mode); a child's
+  send_message is an insertion; the board folds [live-report] <plantId>
+  <agentId> <status> <payload> messages. THE PHASE ORDER: strictly
+  sequential - PHASE 1 = the v1 assemble-side plugin (A1/A2/A3), PHASE 2 =
+  C2's wave-2 on the SAME package with the file-ownership collision rule
+  (C2 additive-only; phase-1 smokes pass with ZERO assertion changes; phases
+  never run concurrently). RATIFIED: honesty-beats-cache; the suggester
+  privacy default "redact" (verbatim only by explicit config + disclosure);
+  idle-wake as channel 4; liveTimeoutMs default 120000 (amending 01's
+  600000 to satisfy the I1 <= inline-deadline rule). ADDENDA COVERAGE: none
+  of I2-I6 had landed - D2 designed all five itself (AWAIT-MARKER in 4.3,
+  APPEND-SEAM in 3.3, COMPLETION-ERGONOMICS in 4.2, PLANTED-LEASE in 3.4/4.4,
+  SUGGESTER-CONFIGURED in 2.6); if an addendum lands before the C2 dispatch,
+  its text folds over the corresponding section (the addendum wins on
+  conflict). The I2-I6 lanes now fire as RATIFICATION lanes; the C2 brief
+  rides in the doc (section 9).
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
