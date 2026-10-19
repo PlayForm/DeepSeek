@@ -1,0 +1,50 @@
+# Bundle patch for @playform/ets-hook-dsh-tool-coach.
+# The tool-coach hook TEACHES THE MODEL to stop using the terminal for file
+# content: a four-tier coaching ladder over the TERMINAL tool calls (bash,
+# pwsh by default) - tier 0 ledger lines for every detected content-class
+# offense, tier 1 labeled additionalContexts notices with the LIVE registry
+# tool descriptions (ctx.tools.schemas()), tier 2 a persistent
+# system-prompt/assemble section with a live-fetched tool table, and tier 3
+# (opt-in) tools/pre-execute denies whose reason text is the model-facing
+# lesson. Detection is adversarial: command normalization, intent markers, a
+# craft library, and a write-intent catch-all (Documentation/Plans/
+# TOOL-COACH-OPERATIVE-PLAN.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# All five listeners (tools/post-execute, tools/pre-execute, agent/pre-step,
+# system-prompt/assemble, tools/change) are fail-open and await next() first.
+# EVERY knob below is volatile (hot-editable without remounting): enabled,
+# enforce, threshold/window/cooldown, escalateThreshold/cleanWindow,
+# enforceThreshold, judgeTools, fetchLive, maxSectionTools, sectionTtl, the
+# notes templates, exemptPatterns and patternTable all land on the next
+# judged call via the loader/volatile-update event. The pattern rows and
+# exemptions omitted here are the schema defaults (the built-in adversarial
+# table); user rows are APPENDED after the built-ins at runtime and may not
+# duplicate a built-in pattern (fail-loud at load). enforce is "off" by
+# default - the deny tier is the configurable last resort.
+- insert:
+      - id: hook-dsh-tool-coach
+        name: "@playform/ets-hook-dsh-tool-coach"
+        config:
+            log: true
+            logFile: ~/.dsh/hook-dsh-tool-coach.log
+            enabled: true
+            judgeTools:
+                - bash
+                - pwsh
+            threshold: 3
+            window: 8
+            cooldown: 10
+            escalateThreshold: 6
+            cleanWindow: 12
+            enforce: off
+            enforceThreshold: 4
+            fetchLive: true
+            maxSectionTools: 8
+            sectionTtl: 20

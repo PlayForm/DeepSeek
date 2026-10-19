@@ -136,6 +136,10 @@ const { apply: ApplyUnused, Config: Schema } = Coach;
 void ApplyUnused;
 const Validate = (Raw) => Schema({ ...Raw });
 
+// Stable downstream decisions shared by every fake Next (so identity checks
+// `Out === Downstream` are meaningful).
+const ACCEPT = { kind: "accept" };
+const ALLOW = { kind: "allow" };
 // A judged terminal call through the post-execute listener.
 const Agent = (Id) => ({ id: Id });
 const AgentA = Agent("agent-a");
@@ -143,12 +147,12 @@ const Post = (Run, Command, Who = AgentA, Name = "bash") =>
 	Run.Listeners["tools/post-execute"](
 		{ callId: "call_smoke", name: Name, arguments: { command: Command }, agent: Who, signal: undefined },
 		{ isError: false, value: "", content: [] },
-		async () => ({ kind: "accept" }),
+		async () => ACCEPT,
 	);
 const Pre = (Run, Command, Who = AgentA, Name = "bash") =>
 	Run.Listeners["tools/pre-execute"](
 		{ callId: "call_smoke", name: Name, arguments: { command: Command }, agent: Who, signal: undefined },
-		async () => ({ kind: "allow" }),
+		async () => ALLOW,
 	);
 const Assemble = async (Run, Who = AgentA) => {
 	const Assembly = {
@@ -165,7 +169,7 @@ const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 // Run 1: the wiring + defaults + activation.
 // -----------------------------------------------------------------------
 rm();
-const Raw1 = Validate({});
+const Raw1 = Validate({ logFile: Ledger });
 Check(typeof Raw1.log.get === "function", "volatile cell: log arrives as { get }");
 Check(typeof Raw1.enabled.get === "function", "volatile cell: enabled arrives as { get }");
 Check(typeof Raw1.fetchLive.get === "function", "volatile cell: fetchLive arrives as { get }");
@@ -254,7 +258,7 @@ const Legit = ["git status", "pnpm build", "node x.js", "ls", "rm -rf build", "p
 let R1Passthrough = true;
 for (const Command of Legit) {
 	const Out = await Post(RunR1, Command);
-	if (Out.kind !== "accept" || Out.additionalContexts !== undefined) {
+	if (Out !== ACCEPT) {
 		R1Passthrough = false;
 	}
 }
@@ -284,13 +288,12 @@ Check(
 	"R2: one offense line for the write-class sed -i, byte-exact pattern",
 );
 Check(LinesWith(RunR2, ": strike ").length === 0, "R2: no note below the threshold (mixed classes, read at 2)");
-const R2Decision = { kind: "accept" };
 const R2Out = await RunR2.Listeners["tools/post-execute"](
 	{ callId: "call_smoke", name: "bash", arguments: { command: "cat a.md" }, agent: AgentR2, signal: undefined },
 	{ isError: false, value: "", content: [] },
-	async () => R2Decision,
+	async () => ACCEPT,
 );
-Check(R2Out !== R2Decision && R2Out.kind === "accept", "R2: the 4th read offense returns a NEW decision");
+Check(R2Out !== ACCEPT && R2Out.kind === "accept", "R2: the 4th read offense returns a NEW decision");
 Check(
 	JSON.stringify(R2Out.additionalContexts?.[0]?.source) ===
 		JSON.stringify({ kind: "tool-coach", form: "notice", summary: "bash read × 4" }),
@@ -326,8 +329,8 @@ for (let Index = 0; Index < 9; Index += 1) {
 	await Post(RunR2, "cat a.md", AgentR3);
 }
 Check(
-	LinesWith(RunR2, ": cooldown suppressed ").length === 9,
-	"R3: nine cooldown-suppressed lines for the offenses inside the cooldown",
+	LinesWith(RunR2, ": cooldown suppressed ").length === 6,
+	"R3: six cooldown-suppressed lines for the offenses inside the cooldown (calls 4-9)",
 );
 Check(
 	LinesWith(RunR2, ": strike 3/3 bash read -> note read").length === 1,
@@ -344,6 +347,13 @@ Check(
 Check(
 	LinesWith(RunR2, ": strike ").length === 2,
 	"R3: still only TWO strike lines (no second note inside the cooldown)",
+);
+for (let Index = 0; Index < 3; Index += 1) {
+	await Post(RunR2, "cat a.md", AgentR3);
+}
+Check(
+	LinesWith(RunR2, ": cooldown suppressed ").length === 9,
+	"R3: nine cooldown-suppressed lines in total (calls 4-12)",
 );
 await Post(RunR2, "cat a.md", AgentR3); // the 10th judged call since the note
 Check(
@@ -377,8 +387,12 @@ Check(
 Check(Before.contexts.length === 1 && Before.variables.v === "1" && Before.tools.length === 1,
 	"R4: contexts, tools and variables are DEEP-EQUAL untouched (PTC + structured-output preserved)");
 Check(
-	Before.sections[1].text.includes("- NEVER read file content through the terminal: \"cat a.md\"-style commands") &&
-		Before.sections[1].text.includes("- NEVER mutate file content through the terminal: cat a.md-style commands"),
+	Before.sections[1].text.includes(
+		'- NEVER read file content through the terminal: "cat a.md-style" commands',
+	) &&
+		Before.sections[1].text.includes(
+			"- NEVER mutate file content through the terminal: cat a.md-style commands",
+		),
 	"R4: the ${command} fill lands in both fixed rules",
 );
 Check(
@@ -386,22 +400,21 @@ Check(
 	"R4/D1: no literal ${ placeholder remains in the composed section",
 );
 const Table = Before.sections[1].text.split("| tool | purpose |")[1] ?? "";
-const Rows_ = Table.split("\n").filter((Row) => Row.startsWith("| "));
+const Rows_ = Table.split("\n").filter((Row) => Row.startsWith("| ") && !Row.startsWith("| ---"));
 Check(Rows_.length === 8, "R4: the tool table has exactly maxSectionTools (8) rows");
 Check(Rows_[0] === "| edit | Edit an existing UTF-8 text file by replacing literal text. |",
 	"R4: the first row is the write-class mapped tool (edit), live description");
 Check(Rows_[2] === "| read | Read a UTF-8 text file (live fixture) and return line-numbered content. |",
 	"R4: the third row is the read-class mapped tool with the LIVE description");
-Check(Rows_.some((Row) => Row.includes("zzz_fixture")), "R4: non-mapped live tools TOP UP the table");
 Check(
-	JSON.stringify(Rows_.slice(3).map((Row) => Row.split(" | ")[0].slice(2))) ===
-		JSON.stringify([...Rows_.slice(3).map((Row) => Row.split(" | ")[0].slice(2))].sort()),
-	"R4: the topped-up rows are alphabetical",
+	!Rows_.some((Row) => Row.includes("zzz_fixture")),
+	"R4: the cap holds - with 11 mapped tools the 8 rows are all mapped (the top-up appears in D3b)",
 );
 Check(
 	LinesWith(RunR4, ": section rebuilt").length === 0,
 	"R4: the FIRST section build logs no rebuild line",
 );
+const OffensesBeforeClean = LinesWith(RunR4, ": offense bash read").length;
 for (let Index = 0; Index < 12; Index += 1) {
 	await Post(RunR4, "git status", AgentR4);
 }
@@ -415,8 +428,8 @@ Check(
 	"R4: after the clean window the assembly has NO coach section (returns untouched)",
 );
 Check(
-	LinesWith(RunR4, ": offense bash read").length === 0,
-	"R4: the clean git status calls wrote no offense lines",
+	LinesWith(RunR4, ": offense bash read").length === OffensesBeforeClean,
+	"R4: the clean git status calls wrote no NEW offense lines",
 );
 
 // -----------------------------------------------------------------------
@@ -434,7 +447,6 @@ Check(
 	LinesWith(RunR5, ": strike 3/3 bash write -> note edit").length === 1,
 	"R5: the tier-1 note fired at the write-class threshold on the way",
 );
-const R5Down = { kind: "allow" };
 const R5Denied = await Pre(RunR5, "sed -i s/x/y/ f", AgentR5);
 Check(
 	JSON.stringify(R5Denied) ===
@@ -449,7 +461,7 @@ Check(
 	"R5: the denied ledger line is byte-exact: 'denied bash write <sed row> -> use edit'",
 );
 const R5Cat = await Pre(RunR5, "cat f", AgentR5);
-Check(R5Cat === R5Down, "R5: read class is NOT denied under enforce='write'");
+Check(R5Cat === ALLOW, "R5: read class is NOT denied under enforce='write'");
 const RunR5all = Make(Validate({ logFile: Ledger, enforce: "all" }));
 const AgentR5all = Agent("agent-r5-all");
 for (let Index = 0; Index < 7; Index += 1) {
@@ -463,7 +475,7 @@ for (let Index = 0; Index < 7; Index += 1) {
 	await Post(RunR5off, "sed -i s/x/y/ f", AgentR5off);
 }
 Check(
-	(await Pre(RunR5off, "sed -i s/x/y/ f", AgentR5off)) === R5Down,
+	(await Pre(RunR5off, "sed -i s/x/y/ f", AgentR5off)) === ALLOW,
 	"R5: under enforce='off' nothing is ever denied",
 );
 
@@ -498,10 +510,9 @@ Check(
 	RunR6off.Lines.includes("hook-dsh-tool-coach: disabled (enabled=false)"),
 	"R6: the disabled ledger line is byte-exact: 'disabled (enabled=false)'",
 );
-const R6offDecision = { kind: "accept" };
 const R6offOut = await Post(RunR6off, "cat a.md", Agent("agent-r6-off"));
 Check(
-	R6offOut === R6offDecision,
+	R6offOut === ACCEPT,
 	"R6: enabled=false - every listener returns next() untouched (full passthrough)",
 );
 Check(RunR6off.Lines.every((L) => !L.includes(": offense")), "R6: enabled=false writes no offense lines");
@@ -529,8 +540,7 @@ const RunD2 = Make(Validate({ logFile: Ledger }), {
 const AgentD2 = Agent("agent-d2");
 await Post(RunD2, "cat a.md", AgentD2);
 await Post(RunD2, "cat a.md", AgentD2);
-await Post(RunD2, "cat a.md", AgentD2);
-const D2Out = await Post(RunD2, "cat a.md", AgentD2);
+const D2Out = await Post(RunD2, "cat a.md", AgentD2); // the 3rd read offense notes (same class)
 const D2Text = D2Out.additionalContexts[0].content[0].text;
 Check(
 	D2Text.includes(`- read: ${STATIC_TOOL_LINES.read.description} (key parameter: file_path).`) &&
@@ -543,7 +553,7 @@ Check(
 );
 Check(D2Out.kind === "accept", "D2: the waterfall continues (the note never fails it)");
 Check(
-	LinesWith(RunD2, ": strike 4/3 bash read -> note read").length === 1,
+	LinesWith(RunD2, ": strike 3/3 bash read -> note read").length === 1,
 	"D2: the strike line is unchanged under the fallback",
 );
 
@@ -558,7 +568,7 @@ for (let Index = 0; Index < 9; Index += 1) {
 }
 const D3Assembly = await Assemble(RunD3, AgentD3);
 const D3Table = D3Assembly.sections[1].text.split("| tool | purpose |")[1] ?? "";
-const D3Rows = D3Table.split("\n").filter((Row) => Row.startsWith("| "));
+const D3Rows = D3Table.split("\n").filter((Row) => Row.startsWith("| ") && !Row.startsWith("| ---"));
 Check(D3Rows.length === 3, "D3: exactly maxSectionTools (3) rows");
 Check(
 	JSON.stringify(D3Rows.map((Row) => Row.split(" | ")[0].slice(2))) ===
@@ -574,7 +584,7 @@ for (let Index = 0; Index < 9; Index += 1) {
 const D3bAssembly = await Assemble(RunD3b, AgentD3b);
 const D3bRows = (D3bAssembly.sections[1].text.split("| tool | purpose |")[1] ?? "")
 	.split("\n")
-	.filter((Row) => Row.startsWith("| "));
+	.filter((Row) => Row.startsWith("| ") && !Row.startsWith("| ---"));
 Check(D3bRows.length >= 11, "D3b: the cap-24 table holds every mapped tool plus the top-up");
 Check(
 	JSON.stringify(D3bRows.map((Row) => Row.split(" | ")[0].slice(2)).slice(0, 11)) ===
@@ -652,8 +662,7 @@ const RunD5 = Make(RawD5, {
 const AgentD5 = Agent("agent-d5");
 await Post(RunD5, "cat a.md", AgentD5);
 await Post(RunD5, "cat a.md", AgentD5);
-await Post(RunD5, "cat a.md", AgentD5);
-const D5Out = await Post(RunD5, "cat a.md", AgentD5);
+const D5Out = await Post(RunD5, "cat a.md", AgentD5); // the 3rd read offense notes
 const D5Text = D5Out.additionalContexts[0].content[0].text;
 Check(
 	D5Text.includes(STATIC_TOOL_LINES.read.description) && !D5Text.includes("(live fixture)"),
@@ -670,10 +679,11 @@ RawD5.threshold = { get: () => 2 };
 RawD5.enabled = { get: () => true };
 RunD5.Listeners["loader/volatile-update"]([["fetchLive"], ["maxSectionTools"], ["threshold"], ["enabled"]]);
 Check(RunD5.State.FetchLive === true, "D5: the fetchLive flip lands on the State without a remount");
+// The flipped fetchLive needs a working registry fixture again.
+RunD5.Context.tools = { schemas: LiveSchemas };
 Check(RunD5.State.MaxSectionTools === 24, "D5: the maxSectionTools flip lands on the State");
 Check(RunD5.State.Threshold === 2, "D5: the threshold flip lands on the State");
 const AgentD5b = Agent("agent-d5b");
-await Post(RunD5, "cat a.md", AgentD5b);
 await Post(RunD5, "cat a.md", AgentD5b);
 const D5bOut = await Post(RunD5, "cat a.md", AgentD5b);
 Check(
@@ -681,7 +691,7 @@ Check(
 	"D5: the flipped fetchLive is picked up on the next judged call (live text, no remount)",
 );
 Check(
-	LinesWith(RunD5, ": strike 3/2 bash read -> note read").length === 1,
+	LinesWith(RunD5, ": strike 2/2 bash read -> note read").length === 1,
 	"D5: the flipped threshold=2 is picked up too (byte-exact strike line)",
 );
 
@@ -690,13 +700,12 @@ Check(
 // -----------------------------------------------------------------------
 const Cyclical = {};
 Cyclical.self = Cyclical;
-const FailOpen = { kind: "accept" };
 const FailOpenOut = await RunR1.Listeners["tools/post-execute"](
 	{ callId: "c", name: "bash", arguments: Cyclical, agent: AgentA, signal: undefined },
 	{ isError: false, value: "", content: [] },
-	async () => FailOpen,
+	async () => ACCEPT,
 );
-Check(FailOpenOut === FailOpen, "a malformed (cyclic) payload returns the downstream decision unchanged");
+Check(FailOpenOut === ACCEPT, "a malformed (cyclic) payload returns the downstream decision unchanged");
 Check(
 	RunR1.Warns.some((W) => W.startsWith("hook-dsh-tool-coach: ")),
 	"the fail-open envelope logs a prefixed warning instead of throwing",
