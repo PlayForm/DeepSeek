@@ -4,22 +4,25 @@ What this test verifies.
 
 ## Intent
 
-The chain pass's canonicalization and rewrite contract: the member table
-canonicalized to the FULL resolved form (padded from a shorthand registry
-value), the idempotence `P(P(c)) = P(c)` (an already-canonical manifest maps
-to no plan, no write), the manifest-level `pinStyle: "exact"` (`=<resolved>`),
-the `[target.'cfg(...)'.dependencies]` and `[workspace.dependencies]` tables,
-the inline-table splice on its own line; the rewrite contract through the
-string-next path (comments, inline comments, blank lines and untouched lines
-byte-identical - never a TOML stringify) and the
-`governed <path> → fresh-v2` ledger line; the strict stripping (the
-whole-entry strip of unknown deps with inherited/path entries surviving, the
-table-style `[dependencies.bad]` block removed through the next header, and
-the no-registry case where strict strips nothing but normalization still
-runs); and the full-version normalization (shorthand cores padded to X.Y.Z,
-the `=` prefix kept, prerelease/build preserved as authored, the complex
-forms left untouched). The assertions are moved verbatim from
-`Classic/smokes/cargo-smoke.mjs` sections 6-8.
+The chain pass's rewrite engine. Canonicalization: a member table dep is
+rewritten to the bare FULL resolved form (padded from a shorthand registry
+value); an already-canonical manifest maps to no plan and no write
+(idempotence: P(P(c)) = P(c)); `pinStyle: "exact"` in the update-policy
+produces the `=<resolved>` form (manifest-level, no --exact flag); the
+`[target.'cfg(windows)'.dependencies]` and `[workspace.dependencies]`
+tables canonicalize; inline-table entries are spliced on their own line.
+The rewrite contract: comments, inline comments, blank lines and untouched
+lines are preserved BYTE-IDENTICALLY through the string-next path (the
+surgically spliced text, never a TOML stringify, and `next` is a raw
+string), and the ledger carries exactly one `governed <path> -> <version>`
+line composed from the fresh version. Strict stripping: an unknown dep is
+stripped whole while inherited/path entries survive; a table-style
+`[dependencies.bad]` block is removed through the next header; without a
+registry strict strips nothing while the normalization still runs.
+Normalization: shorthand cores are padded to X.Y.Z; the `=` prefix is kept;
+prerelease and build metadata are preserved as authored; the complex forms
+(>=, ~, *, comma lists) are left untouched. The assertions are moved
+verbatim from `Classic/smokes/cargo-smoke.mjs` sections 6-8.
 
 ## Scenario
 
@@ -42,7 +45,7 @@ forms left untouched). The assertions are moved verbatim from
     - Sub: "rewrite: comment/formatting preservation byte-equality (the
       string-next path)"
 - Group: the governed ledger line.
-    - Sub: "rewrite: `governed <path> → fresh-v2` ledger line
+    - Sub: "rewrite: `governed <path> -> fresh-v2` ledger line
       (message-from-version path)"
 - Group: strict stripping.
     - Sub: "strict: whole-entry strip of unknown deps; inherited and path
@@ -56,23 +59,24 @@ forms left untouched). The assertions are moved verbatim from
 
 ## Fixtures
 
-Per-scenario harness worlds with the `subprocess` SeamStub and the in-memory
-files map seeded with the manifest text; `registry.json` and
-`update-policy.json` written on disk per scenario. The comments scenario pins
-the full 19-line Original/Expected pair (the U+2014-free byte contract).
+Per-scenario harness worlds with the `subprocess` SeamStub, the in-memory
+files map seeded with the TOML bodies, `registry.json` /
+`update-policy.json` written per scenario; the comments scenario carries the
+19-line Original manifest and its Expected byte-image verbatim.
 
 ## Expected ledger strings (byte-identical)
 
-- `governed <path> → fresh-v2` (U+2192; the message-from-version path).
+- `governed <path> → fresh-v2` (U+2192; exactly one, in the govline
+  scenario)
 
 ## Edge cases
 
-- The idempotence check re-fires with a genuinely fresh version (`v2`) and
-  asserts BOTH no write and no new ledger line.
-- The strict3 case proves strict without a registry strips nothing while the
-  normalization alone still pads `0.8` to `0.8.0`.
-- The norm2 case covers eight spellings in one manifest, including the
-  four complex forms that must be left as-is.
+- The byte-equality check compares the written content line-by-line against
+  the Expected array - any reorder or reformat fails it.
+- The idempotence scenario re-fires with a genuinely fresh version (`v2`)
+  to prove the no-plan comes from the canonical content, not the version.
+- The normalization scenario asserts all eight shapes in one written body
+  (`=1.0` keeps its prefix; `*` and comma lists untouched).
 
 ## Expected count
 
