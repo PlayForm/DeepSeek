@@ -6,10 +6,9 @@
 			"@Function/*": ["./Source/Function/*"],
 			"@Interface/*": ["./Source/Interface/*"],
 			"@Variable/*": ["./Source/Variable/*"]
-		},
-		"allowJs": false,
-		"checkJs": false
+		}
 	},
 	"extends": "@playform/build/tsconfig",
-	"include": ["Source"]
+	"include": ["Source"],
+	"exclude": ["Source/Test"]
 }
