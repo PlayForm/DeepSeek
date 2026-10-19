@@ -19,7 +19,6 @@ import {
 	CheckAsync,
 	Finish,
 	Ledger,
-	LedgerCount,
 	LedgerHas,
 	Lines,
 	MakeContext,
@@ -111,7 +110,7 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	// Group: the two-chain-writer fold (the live failure mode, enforced fs).
-	const FoldCan = (P: string) => (text: any, section: any, keep: any) => {
+	const FoldCan = (P: string) => (text: any, _section: any, _keep: any) => {
 		if (text === null) return null;
 		let doc;
 		try {
@@ -217,10 +216,10 @@ export const runTest = async (): Promise<number> => {
 		Pinner.apply(ctxFold, (Pinner.Config as any)({ log: true, logFile: Ledger })); // registers "pin" AFTER the sim step
 		const writesBeforeFoldR = ctxFold.writes.length;
 		await FactoryFold.Govern(
-			{ targetKey: "fold-reverse", displayPath: pathR },
+			{ targetKey: "fold-reverse" as any, displayPath: pathR },
 			true,
 			actor,
-			vFoldR,
+			vFoldR as any,
 		);
 		await Settle(ctxFold.__hookDshPinnerPackageState);
 		const foldRWrites = ctxFold.writes.slice(writesBeforeFoldR);
@@ -265,8 +264,14 @@ export const runTest = async (): Promise<number> => {
 	// Group: factory wiring - the transform contract, driven directly.
 	{
 		const appends: string[] = [];
-		const leafFurnace = { Append: (s: unknown, m: string) => appends.push(m) };
-		const leafState = {
+		// Fixture-only scaffolding: the module leaf's furnace is a stub, not a
+		// full PluginFactory - cast it so the fixtures pass plain runtime values
+		// exactly like the source suite does.
+		const leafFurnace: any = { Append: (_s: unknown, m: string) => appends.push(m) };
+		// Fixture-only scaffolding: a partial State probe is enough for the
+		// module leaf under test - cast it so the fixtures pass plain runtime
+		// values exactly like the source suite does.
+		const leafState: any = {
 			Context: { logger: { info: (m: string) => LoggerLines.info.push(m) } },
 			Ledger: Ledger,
 			Enabled: true,

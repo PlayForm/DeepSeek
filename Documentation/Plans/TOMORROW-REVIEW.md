@@ -878,6 +878,83 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   the L3 governor folders = 154 suites green; the L3/L4 completion
   re-runs land post-resume).
 
+## BATCH RESUME (2026-10-19 - the user restarted; the batch continues)
+
+- **THE POST-RESTART VERIFICATION**: the tree is CLEAN (the user committed
+  d537a69 "Harden the Classic pinner fixture typing and record the batch
+  pause resume point"); the factory pair is CONFIRMED COMPLETE (Classic 6
+  folders + ETS 7 incl. the Parallel-Marker additive - committed), the ccr
+  pair CONFIRMED COMPLETE (7+7 - committed), the Classic pinner COMPLETE
+  (6 folders - committed). L4 = CLOSED as complete. The REMAINDERS: the
+  ETS pinner twin (empty) + the cargo pair (both trees, no Source/Test
+  yet).
+- **L3-RESUME DISPATCHED (2026-10-19, `c799be84` - GLM flash high)**: the
+  ETS pinner twin (generated mechanically from the committed Classic
+  pinner under the tree-identity substitutions) + the cargo pair (both
+  trees from scratch, the baselines recorded fresh), per the pilot
+  pattern + the 11 binding corrections; the full acceptance battery + the
+  runner's final line (which now covers everything) + the READY-TO-COMMIT
+  delta. The drain continues after it: L5 (tool-coach + the 7 wiring
+  suites + the Run-Wiring list) + L6 (ets-base-dsh) -> I8 (the .mjs
+  retirement + the totals ledger) -> the site lanes B/A/C -> the
+  enable-all + the tool-coach wiring (the user's next restart) -> the
+  live-containers implementation (A1 -> A2+A3 -> C2 -> R3 -> D3 -> C3 ->
+  I7).
+- **THE POST-RESTART RESUME CORRECTION (2026-10-19 - the user's question
+  "can't you see them?")**: the subagents ARE VISIBLE after a restart
+  (list_agents shows the whole lineage under the persisted session id,
+  all [inactive]) AND RESUMABLE - send_message delivers + restarts their
+  turns from the persisted sessions (verified: the re-seat message to A1
+  was delivered and acknowledged "<A1> SPEC RETAINED - IDLE"). The
+  pause-record claim "the ids die with the session" was WRONG - the
+  correct protocol: after a restart, message the existing idle lanes to
+  re-confirm the retention (no re-dispatch needed). ALL 9 IDLE LANES
+  RE-SEATED IN PLACE (2026-10-19): A1 (3583a479 - CONFIRMED), A2
+  (ab274084), A3 (4a09a152), C2 (96669721), I7 (95e565e5), I8 (0ce2c18d),
+  R3 (e525cd61), D3 (48c0c30d), C3 (62896685) - each sent the re-seat
+  check with the state block; the confirmations are in flight. The
+  L3-RESUME fresh lane (c799be84) stays as the active work (the old L3's
+  in-flight context was mid-pinner; the fresh lane carries the full
+  state). LESSON: resume the lanes by message FIRST; re-dispatch only
+  when the message is undeliverable.
+- **THE USER'S FULL ORCHESTRATION DELEGATION (2026-10-19)**: "proceed in
+  steps with all 2 at a time agents, and don't ask me questions just
+  resume and orchestrate all (but don't launch all at once)". The
+  orchestrator proceeds mechanically: 2 active lanes at a time, no
+  questions - the recorded recommendations ARE the decisions: the .mjs
+  retirement with the totals ledger (I8 as spec'd), the tool-coach
+  profile config = the shipped safe defaults + the absolute logFile path,
+  the deploy stays the user's push (agents never push), the live-
+  verification = a scratch-profile battery (DSH_TEST_SCRATCH-style) folded
+  into A2's activation, the suggester's mini-model route = GLM flash low
+  (the cheapest allowed lane, no third model), C2 verifies the admission
+  semantics first with the design's fallback ready. THE PAIR IS NOW:
+  L3-RESUME (`c799be84` - the ETS pinner + the cargo) + L5 (`791603ca` -
+  the tool-coach pair fully + the 7 wiring suite pairs shallow per the
+  blueprint sanction + the Run-Wiring list update). Next: L6 (ets-base)
+  as a slot frees, then I8, then the site lanes B/A/C, then the
+  enable-all + the tool-coach wiring, then the live-containers
+  implementation (A1 -> A2+A3 -> C2 -> R3 -> D3 -> C3 -> I7).
+- **THE AUTOMATION DIRECTIVE (2026-10-19 - the user's second message)**:
+  "if you have questions, or the results from the agents need more
+  assumptions or insertions, just implement the most advanced case
+  scenario, log everything and others and orchestrate everything from
+  here on out is fully automated, don't create new agents unless
+  necessary" + "and you already have the agents, don't create new ones".
+  DECISIONS TAKEN: (a) the goal re-armed + the objective EXTENDED to the
+  full pipeline (revision 4, active - the automatic continuation rounds
+  keep the session working through every lane); (b) NO NEW AGENT for the
+  ets-base lane - I8 (`0ce2c18d`) is AMENDED to absorb it (at activation:
+  (1) the ets-base re-home first - the 2 folders re-homed from the ets
+  core smoke + the baseline arithmetic, (2) the .mjs retirement, (3) the
+  totals ledger); (c) the site-update lanes B/A/C remain the ONE
+  necessary new-agent creation (the user's mandated queue addition; no
+  seated agent covers the site surface - they are created when the
+  restructure settles, per the E2 blueprint's split); (d) everything else
+  reuses the seated lanes (A1/A2/A3, C2, R3/D3/C3, I7). The most-advanced
+  case scenario is the default for any ambiguity; every decision is
+  logged here.
+
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
 The user's third wave of the live-containers idea (his words): "to me all of

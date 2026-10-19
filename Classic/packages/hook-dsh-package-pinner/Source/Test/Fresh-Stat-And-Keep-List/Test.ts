@@ -287,7 +287,10 @@ export const runTest = async (): Promise<number> => {
 	{
 		// H5 \u2014 a configured-but-absent global policy is silently not a source
 		const ctxA = MakeContext();
-		const FactoryA = new FactoryClass(ctxA);
+		// The factory creation is required (the apply-time Attach probes
+		// ctx.pluginFactory); the binding itself is unused - discard it, exactly
+		// like the source suite's unused factoryA local.
+		new FactoryClass(ctxA);
 		const ledgerA = Path.join(Root, "ledger-absent.log");
 		Pinner.apply(
 			ctxA,
