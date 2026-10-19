@@ -99,7 +99,9 @@ export const Rm = (): void => {
 // ctx.reflect.provide; the stub context is used once and discarded). One
 // instance per folder process - the journal arithmetic inside a folder
 // accumulates on it exactly like the source suite's arithmetic does.
-export const Furnace = new FactoryClass({ reflect: { provide: () => undefined } });
+export const Furnace: any = new FactoryClass({
+	reflect: { provide: () => undefined },
+} as any);
 
 const { apply, Config: Schema } = NormalizeDash;
 
@@ -124,15 +126,15 @@ export const Validate = (Raw: Record<string, unknown>): any =>
  * exact expressions.
  */
 export const Make = (Raw: any): any => {
-	const Listeners = {},
-		ListenerOptions = {},
-		Lines = [];
-	const Registered = [],
-		CommandsRegistered = [],
-		Resolved = [],
-		Writes = [],
-		Intents = [],
-		Observations = [];
+	const Listeners: Record<string, any> = {},
+		ListenerOptions: Record<string, any> = {},
+		Lines: string[] = [];
+	const Registered: any[] = [],
+		CommandsRegistered: any[] = [],
+		Resolved: any[] = [],
+		Writes: any[] = [],
+		Intents: any[] = [],
+		Observations: any[] = [];
 	const Files = new Map();
 	const Context: any = {
 		// The service accessor (typed via Interface/Factory's augmentation): the
@@ -202,7 +204,7 @@ export const Make = (Raw: any): any => {
 		},
 		// The fs/write-intent waterfall: next() delegates to the unconditional
 		// default (no observation policy in the smoke harness).
-		waterfall: async (Name: string, Target: unknown, Actor: unknown, Next: () => unknown) => {
+		waterfall: async (Name: string, Target: unknown, _Actor: unknown, Next: () => unknown) => {
 			Intents.push({ name: Name, target: Target });
 			return Next();
 		},

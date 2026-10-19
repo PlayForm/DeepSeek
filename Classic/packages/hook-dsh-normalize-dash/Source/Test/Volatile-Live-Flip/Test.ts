@@ -9,7 +9,7 @@
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
+import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

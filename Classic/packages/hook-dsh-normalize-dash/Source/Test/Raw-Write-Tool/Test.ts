@@ -111,8 +111,8 @@ export const runTest = async (): Promise<number> => {
 			callId: "call_smoke",
 		});
 		// normalize ABSENT \u2192 verbatim (the default).
+		const Verbatim = "a\u2014b\u201Cc\u201D";
 		{
-			const Verbatim = "a\u2014b\u201Cc\u201D";
 			const Out8a = await Tool.execute(
 				{ file_path: "/tmp/normalize-dash-smoke-verbatim.txt", content: Verbatim },
 				Exec(),
@@ -634,11 +634,11 @@ export const runTest = async (): Promise<number> => {
 			{
 				const Sub = "govern sequential fold: the write completes with an async registered step in the chain";
 				Check(Count, Sub, () => {
-					// +2 relative to the recaptured baseline: the actor probe's own
-					// write, then the gov-actor-false verbatim write that precedes
-					// this call - the same arithmetic as the source suite's
+					// +3 relative to the recaptured baseline: the actor probe's own
+					// write, then the gov-actor-false verbatim write, then this
+					// call - the same arithmetic as the source suite's
 					// "Writes10+8" measured from its single Run-10 baseline.
-					assert.ok(Run8.Writes.length === Writes10 + 2 && OutSlow.after === All6);
+					assert.ok(Run8.Writes.length === Writes10 + 3 && OutSlow.after === All6);
 				});
 			}
 			{

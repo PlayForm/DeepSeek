@@ -10,7 +10,7 @@
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate } from "../Harness.js";
+import { Check, Finish, MakeCounter, Make, Rm, Furnace, Ledger } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -98,6 +98,7 @@ export const runTest = async (): Promise<number> => {
 		}
 		const WritesO = RunO.Writes.length;
 		const ObservationsO = RunO.Observations.length;
+		let LinesBeforeO5 = 0;
 		// O2: scope ON via the volatile flip -> normalization + the exact ledger line.
 		{
 			LiveScopesO.toolResults = true;
@@ -171,7 +172,7 @@ export const runTest = async (): Promise<number> => {
 		}
 		// O5: N = 0 -> the decision unchanged and NO ledger line.
 		{
-			const LinesBeforeO5 = RunO.Lines.length;
+			LinesBeforeO5 = RunO.Lines.length;
 			const OutO5 = await PostO(
 				ExecO("bash"),
 				{ isError: false, value: {}, content: [{ type: "text", text: "plain text" }] },
@@ -261,7 +262,6 @@ export const runTest = async (): Promise<number> => {
 		{
 			LiveScopesO.batch = true;
 			RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
-			const LinesBeforeO10 = RunO.Lines.length;
 			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
 			const OutO10 = await PreO(
 				{

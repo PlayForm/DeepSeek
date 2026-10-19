@@ -513,6 +513,30 @@ THREE more agent specs; the 3 agents are seated IDLE and execute later; the
 plugin itself stays IDLE in the profile (never enabled). The full spec +
 brainstorm land in `Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md` (the
 researcher's deliverable, dispatched 2026-10-19).
+- **RESEARCH COMPLETE (2026-10-19, `b45ae200`)**: the verdict = POSSIBLE for
+  the core mechanic via the system-prompt/assemble waterfall (the tool-coach's
+  tier-2 section is the live precedent, Apply.ts:499-556; the assemble
+  listener fires once per request, its returned assembly is authoritative).
+  The caveat: the block lives in the SYSTEM PROMPT (or a sourced dynamic
+  context), NOT in the conversation body - the request build
+  (header.config + deriveMessages() + header.tools) deep-freezes message
+  identities, so no in-body marker-rewrite seam exists (an upstream follow-up
+  proposal). V1 = the "live section" with the fixed frame
+  `--- LIVE CONTAINER <id> ... --- END ---`, the kinds time/counter/manifest/
+  gauge/note/template, {{token}} substitution only (no eval), all knobs
+  volatile, refresh "request"|"ttl", interpolate:false (the harness's own
+  {{}} engine collision). The programmable stage grounded: model-written
+  TypeScript runs TODAY in fresh Node processes under the Bash platform
+  sandbox / a confined per-agent REPL (dsh-ptc-runtime-node - never
+  new Function/eval); Rust later via koffi + the prebuilt dylib with a
+  JSON-string C ABI; Rhai/WASM deferred. 14 block types in the brainstorm.
+- **THE 3 AGENTS SEATED IDLE (2026-10-19)**: A1 the LIVE-CONTAINERS CODER
+  (`3583a479`), A2 the SMOKE/HARNESS WRITER (`ab274084`), A3 the DOCS/SITE
+  WRITER (`4a09a152`) - all spec-retained, zero work, awaiting ACTIVATE
+  (execution happens after the user's restart; A1's effort may rise to high
+  at activation per the routing law). The IDLE-forever posture honored: the
+  plugin ships disabled, never in the profile, the activation proof logs
+  "disabled (enabled=false)".
 - **PENDING USER INSTRUCTION (the restart sequence)**: AFTER the site-update
   batch is done, the user will restart the application - BEFORE that restart
   the orchestrator must ENABLE ALL CURRENT PLUGINS (flip the 10 disabled
