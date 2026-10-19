@@ -5,7 +5,7 @@
 // unknown-block passthrough.
 // Runs standalone (`node Target/Test/Block/Test.js`) AND under the aggregate
 // (`Maintain/Run-Smokes.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-core: the REAL built entry only.
+// Unit smoke of @playform/hook-dsh-core: the REAL built Target only.
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's fixture naming stays untouched.
 import assert from "node:assert/strict";

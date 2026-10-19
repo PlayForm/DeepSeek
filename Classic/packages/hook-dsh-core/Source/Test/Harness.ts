@@ -48,6 +48,27 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 };
 
 /**
+ * The async variant of Check, for folders whose assertions await (the
+ * typed-effect envelope). Same counting and printing; the caller must await
+ * it so checks stay sequential and Finish sees the final counts.
+ */
+export const CheckAsync = async (
+	Count: Counter,
+	Label: string,
+	Assertions: () => Promise<void>,
+): Promise<void> => {
+	Count.N++;
+	try {
+		await Assertions();
+		console.log(`PASS - ${Label}`);
+	} catch (_Error) {
+		Count.F++;
+		console.log(`FAIL - ${Label}`);
+		console.log(_Error instanceof Error ? _Error.message : String(_Error));
+	}
+};
+
+/**
  * End-of-folder guard: any failed assertion is a folder failure. Returns the
  * PASS count for the runner's `N PASS - <Name>` line (the vacuously-green
  * backstop: the runner compares it against the folder README's expected

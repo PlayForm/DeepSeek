@@ -6,7 +6,7 @@
 // text/reasoning/thinking fields, and the second-flavor injection.
 // Runs standalone (`node Target/Test/Chunk/Test.js`) AND under the aggregate
 // (`Maintain/Run-Smokes.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-core: the REAL built entry only.
+// Unit smoke of @playform/hook-dsh-core: the REAL built Target only.
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's `Finish` chunk fixture keeps its name.
 import assert from "node:assert/strict";
