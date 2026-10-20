@@ -237,14 +237,14 @@ export const Start = async (
 			? undefined
 			: await (Wave.WorkingDirectory?.ensure(Exec.agent) ?? Promise.resolve(undefined));
 	const Workdir = ResolveWorkdir(Args.workdir, Cwd);
-	const DshEnv =
+	const DSHEnv =
 		Wave.ShellEnv === undefined ? undefined : Wave.ShellEnv.collect({ agent: Exec.agent });
 	const Policy = StandingPolicy(Wave.SandboxPolicy, Session);
 	const Spec = Wave.Shell.resolve({
 		command: Args.command,
 		...(Workdir !== undefined ? { workdir: Workdir } : {}),
 		...(Args.timeoutMs !== undefined ? { timeoutMs: Args.timeoutMs } : {}),
-		dshEnv: DshEnv,
+		dshEnv: DSHEnv,
 		...(Policy !== undefined ? { sandboxPolicy: Policy } : {}),
 		onExpiry: "none",
 	});

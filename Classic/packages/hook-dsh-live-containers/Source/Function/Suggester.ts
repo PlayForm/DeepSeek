@@ -23,7 +23,7 @@ import type State from "@Interface/State.js";
 import { Compressed, Entry } from "@Variable/Catalog.js";
 
 /** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
-export const NewId = (): string => {
+export const NewID = (): string => {
 	const Hex = Math.floor(Math.random() * 0x10000)
 		.toString(16)
 		.padStart(4, "0");
@@ -129,12 +129,12 @@ export const Parse = (Output: unknown): ParsedSuggestion | undefined => {
 	try {
 		const Raw = JSON.parse(Output.slice(Start, End + 1)) as Record<string, unknown>;
 		const Fit = Raw["fit"];
-		const TemplateId = Raw["templateId"];
+		const TemplateID = Raw["templateId"];
 		const Rationale = Raw["rationale"];
 		if (typeof Fit !== "string" || !["yes", "no", "unknown"].includes(Fit)) {
 			return undefined;
 		}
-		if (typeof TemplateId !== "string" || !Entry(TemplateId)) {
+		if (typeof TemplateID !== "string" || !Entry(TemplateID)) {
 			return undefined;
 		}
 		if (typeof Rationale !== "string") {
@@ -156,7 +156,7 @@ export const Parse = (Output: unknown): ParsedSuggestion | undefined => {
 		}
 		const Result: ParsedSuggestion = {
 			fit: Fit as "yes" | "no" | "unknown",
-			templateId: TemplateId,
+			templateId: TemplateID,
 			rationale: Rationale.slice(0, 240),
 		};
 		if (Tokens !== undefined) {
@@ -173,11 +173,11 @@ export const Parse = (Output: unknown): ParsedSuggestion | undefined => {
  * value and each clamp is ledgered. Returns the clamped tokens. */
 export const Clamp = (
 	Id: string,
-	TemplateId: string,
+	TemplateID: string,
 	Tokens: { expectAgents?: number; steps?: string[] } | undefined,
 	Append: Log,
 ): { expectAgents?: number; steps?: string[] } => {
-	const Catalog = Entry(TemplateId);
+	const Catalog = Entry(TemplateID);
 	const Clamped: { expectAgents?: number; steps?: string[] } = {};
 	if (Catalog?.shape === "board") {
 		const Raw = Tokens?.expectAgents;
@@ -364,7 +364,7 @@ export const Spawn = (
 				}
 				// The suggestion id is assigned BEFORE the clamping so each clamp
 				// ledger line carries it (I6 A5).
-				const Id = NewId();
+				const Id = NewID();
 				const Clamped = Clamp(Id, Parsed.templateId, Parsed.tokens, Append);
 				Store(Agent, AgentId, Id, Parsed, Clamped, Append);
 			})
