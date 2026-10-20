@@ -19,13 +19,21 @@ statuses:
 
 ---
 
-Read the four research docs + the plan.
-Route EVERY subagent to cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low.
-NEVER mutate git (READY-TO-COMMIT reports only).
-Write files ONLY through the tool API.
-The arbiters are the serialized build, the 207-suite runner with the expected-PASS guard, the site build verified on Target/, and the live client inspect with the GUI page OPEN.
-Phase 0 resolves the mount-failure class and captures the live slot trees BEFORE ANY client half is written.
-The central package is @playform/dsh-panel-family (contract-only) and the 13 adapters import its types ONLY.
-The tool-coach is the FIRST adapter and carries the marker-usage rule.
-The Typert endpoint is spiked standalone with the registry-only fallback pre-decided.
-The trajectory screen stays untouched until upstream ships conversation.trajectory.sections.
+- **THE READING**: read the four research docs + the plan.
+- **THE ROUTING**: route EVERY subagent to cloudflare-workers-ai /
+  @cf/zai-org/glm-5.3-flash / low.
+- **THE GIT LAW**: NEVER mutate git (READY-TO-COMMIT reports only).
+- **THE WRITE LAW**: write files ONLY through the tool API.
+- **THE ARBITERS**: the serialized build, the 207-suite runner with the
+  expected-PASS guard, the site build verified on Target/, and the live
+  client inspect with the GUI page OPEN.
+- **THE PHASE 0 GATE**: phase 0 resolves the mount-failure class and
+  captures the live slot trees BEFORE ANY client half is written.
+- **THE CENTRAL PACKAGE**: @playform/dsh-panel-family (contract-only) and
+  the 13 adapters import its types ONLY.
+- **THE FIRST ADAPTER**: the tool-coach - and it carries the marker-usage
+  rule.
+- **THE TYPORT ENDPOINT**: spiked standalone with the registry-only
+  fallback pre-decided.
+- **THE TRAJECTORY**: the screen stays untouched until upstream ships
+  conversation.trajectory.sections.

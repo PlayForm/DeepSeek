@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 export declare const EVENTS: readonly ["activated", "governed", "dispatched", "update-failed", "excluded", "normalized"];
 export declare const DOMAIN: {
