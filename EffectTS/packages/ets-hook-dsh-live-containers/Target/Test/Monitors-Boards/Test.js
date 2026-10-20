@@ -44,8 +44,8 @@ const runTest = async () => {
     FireObserved(Run, "/repo/src/App.ts", "1", { agent: { id: "child-1", session: void 0 } });
     Advance(2e3);
     await BoardText(Run);
-    const JobId = Jobs.started[0].id;
-    FireJobs(Run, Jobs.settled(JobId, { owner: "child-1", detail: "exit code: 0" }));
+    const JobID = Jobs.started[0].id;
+    FireJobs(Run, Jobs.settled(JobID, { owner: "child-1", detail: "exit code: 0" }));
     const Text = await BoardText(Run);
     Check(Count, "R1: the member's monitor settle feeds the monitors board row", () => {
       const Board = Run.State.Boards.get("agent-a")?.get("b1");

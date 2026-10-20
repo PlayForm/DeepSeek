@@ -111,8 +111,8 @@ const MakeClocked = (Raw) => {
   Run.State.Now = FakeClock;
   return Run;
 };
-const Block = (Id, Kind, Template, Extra = {}) => ({
-  id: Id,
+const Block = (ID, Kind, Template, Extra = {}) => ({
+  id: ID,
   kind: Kind,
   template: Template,
   enabled: true,
@@ -263,9 +263,9 @@ const FakeJobsHub = () => {
   Hub.registry = {
     start: (Spec) => {
       Hub.next += 1;
-      const Id = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
-      Hub.started.push({ id: Id, spec: Spec });
-      return Id;
+      const ID = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
+      Hub.started.push({ id: ID, spec: Spec });
+      return ID;
     },
     events: {
       subscribe: (_Filter, Listener) => {
@@ -273,8 +273,8 @@ const FakeJobsHub = () => {
         return () => true;
       }
     },
-    kill: (Id, Caller, Reason) => {
-      Hub.killed.push({ id: Id, caller: Caller, reason: Reason });
+    kill: (ID, Caller, Reason) => {
+      Hub.killed.push({ id: ID, caller: Caller, reason: Reason });
       return "requested";
     },
     list: () => [],
@@ -284,11 +284,11 @@ const FakeJobsHub = () => {
     remove: () => void 0,
     attachController: () => void 0
   };
-  Hub.settled = (JobId, Options = {}) => ({
+  Hub.settled = (JobID, Options = {}) => ({
     type: "settled",
     job: {
-      id: JobId,
-      kind: Hub.started.find((S) => S.id === JobId)?.spec.kind ?? "bash",
+      id: JobID,
+      kind: Hub.started.find((S) => S.id === JobID)?.spec.kind ?? "bash",
       label: "cargo build",
       ...Options.owner !== void 0 ? { owner: Options.owner } : {},
       status: Options.status ?? "completed",
@@ -345,9 +345,9 @@ const FakeSubagent = () => {
   };
   return Sub;
 };
-const FakeAgents = (...Ids) => {
-  const Map_ = new Map(Ids.map((Id) => [Id, { id: Id, status: "idle" }]));
-  return { get: (Id) => Map_.get(Id) };
+const FakeAgents = (...IDs) => {
+  const Map_ = new Map(IDs.map((ID) => [ID, { id: ID, status: "idle" }]));
+  return { get: (ID) => Map_.get(ID) };
 };
 const MakeWave = (Raw, Services = {}) => {
   const Run = Make(Raw, (Context, Run_) => {

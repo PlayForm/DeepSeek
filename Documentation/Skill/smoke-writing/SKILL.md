@@ -1,3 +1,5 @@
+> Specialized working copy (repo): synced from ~/.dsh/skills/smoke-writing/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
+
 ---
 name: smoke-writing
 description: THE discipline for the family's smoke suites (the arbiter) - the fake-ctx + real-factory harness pattern, the byte-identical ledger assertions, the additive coverage for new features, the vacuously-green trap, and the smoke/live fidelity gap. Load before writing, extending, or debugging any smoke suite in the DeepSeek Harness Plugin Family.

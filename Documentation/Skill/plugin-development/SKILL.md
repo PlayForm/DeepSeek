@@ -1,3 +1,5 @@
+> Specialized working copy (repo): synced from ~/.dsh/skills/plugin-development/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
+
 ---
 name: plugin-development
 description: THE operating manual for authoring DeepSeek Harness (DSH) plugins against the Cordis plugin API — the five dispatch modes, plugin anatomy, Config schemas, services, fibers/effects/HMR, tools, packaging, performance pressure rules, the well-integrated checklist, and a verified pitfalls catalog. Load before writing, refactoring, or reviewing ANY dsh plugin.
