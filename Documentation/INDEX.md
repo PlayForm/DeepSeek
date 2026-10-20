@@ -73,7 +73,7 @@ statuses:
 | ----------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (23)
+### Plans - the living + queued hubs (24)
 
 | Document (Documentation/Plans/)     | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -95,6 +95,7 @@ statuses:
 | [RELEASE-0.1.0.md](Plans/RELEASE-0.1.0.md) | active | one-shot-record (the release runbook) |
 | [PATTERN-GRAPH-PLUGIN.md](Plans/PATTERN-GRAPH-PLUGIN.md) | planned | queued-plan (the general suggestion model) |
 | [SEARCH-SUGGESTER-PLUGIN.md](Plans/SEARCH-SUGGESTER-PLUGIN.md) | planned | queued-plan (the pattern graph's first consumer) |
+| [PASS-ON-AND-INGESTER.md](Plans/PASS-ON-AND-INGESTER.md) | planned | queued-plan (the batch decision flow) |
 | [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md) | planned | queued-plan (site content and wording) |
 | [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md) | planned | queued-plan (duplication, functionality, placement) |
 | [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md) | active | living-plan (the decision record and workstreams) |
