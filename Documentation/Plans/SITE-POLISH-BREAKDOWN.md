@@ -14,8 +14,8 @@ statuses:
     state: in-progress
     evidence: landed - the count bugs, the false absolutes, the ccr prefix, the profile path, the pinner captions, the model page; open - the npm claim, the hero CTA, the totals, the verify step
   - name: the P1 structure fixes
-    state: open
-    evidence: the detail template, the nav and 404 parity, the demo split, the registry affordances
+    state: in-progress
+    evidence: landed - the nav and 404 parity, the demo distinction, the self-hosted 404; open - the detail template, the registry affordances, the setup completeness
   - name: the P2 wording rewrite
     state: open
     evidence: the voice standard and the per-page briefs in this document
