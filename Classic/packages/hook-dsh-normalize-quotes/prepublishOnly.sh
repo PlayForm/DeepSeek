@@ -14,7 +14,9 @@
 # chain (pilot correction 2: the Build CLI runs tsc after every Build step,
 # so the Test files must be excluded from the plugin program —
 # tsconfig.json excludes Source/Test, and the Test tree gets its own
-# noemit config here).
+# noemit config here). NOTE: `pnpm exec` instead of `./node_modules/.bin/tsc`
+# because the workspace installs with `nodeLinker: hoisted` - the package-local
+# .bin does not exist in this trio; pnpm resolves tsc from the root store.
 
 set -e
 
@@ -27,7 +29,7 @@ Build "Source/Test/**/*.ts" \
 
 node Target/Test/Harness.js --selfcheck || exit 1
 
-./node_modules/.bin/tsc -p Configuration/TypeScript-Test.noemit.json
+pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json
 
 # Awaited raw-tsc emit + alias rewrite (the L5A finding): the Build CLI runs
 # tsc and tsc-alias fire-and-forget, so a slow emit can land after tsc-alias

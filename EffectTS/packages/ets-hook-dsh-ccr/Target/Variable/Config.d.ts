@@ -1,22 +1,23 @@
-declare const _default: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
+import Schema from "@deepseek-ai/schemastery";
+declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
-}>>, "plain"> | import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
-    updateCooldownMs: import("@deepseek-ai/schemastery").default<number, number, "volatile-defined">;
-    mutationTools: import("@deepseek-ai/schemastery").default<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
-    policyFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
-    exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
+}>>, "plain"> | Schema<Schemastery.ObjectS<NoInfer<{
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
+    updateCooldownMs: Schema<number, number, "volatile-defined">;
+    mutationTools: Schema<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
+    policyFile: Schema<string, string, "defined">;
+    exclude: Schema<string[], string[], "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
-    log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
-    logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
-    updateCooldownMs: import("@deepseek-ai/schemastery").default<number, number, "volatile-defined">;
-    mutationTools: import("@deepseek-ai/schemastery").default<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
-    policyFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
-    exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
+    logFile: Schema<string, string, "volatile-defined">;
+    updateCooldownMs: Schema<number, number, "volatile-defined">;
+    mutationTools: Schema<NoInfer<string[]>, NoInfer<string[]>, "volatile-defined">;
+    policyFile: Schema<string, string, "defined">;
+    exclude: Schema<string[], string[], "defined">;
 }>>, "plain">;
 export default _default;
