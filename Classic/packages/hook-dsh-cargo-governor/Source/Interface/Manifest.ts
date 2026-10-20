@@ -19,7 +19,7 @@ export default interface Manifest {
 		 *  "build-dependencies", "workspace.dependencies",
 		 *  "target.cfg(windows).dependencies". */
 		path: string;
-		/** Dep name → the parsed entry value: a string (the version requirement)
+		/** Dependency name → the parsed entry value: a string (the version requirement)
 		 *  or a table ({ version: "…", features: [...] } | { workspace: true } |
 		 *  { path: "…" } | { git: "…", rev: "…" } | …). */
 		deps: Record<string, unknown>;

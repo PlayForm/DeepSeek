@@ -1,5 +1,5 @@
 /** One resolved shell execution spec (the ctx.shell.resolve product). */
-export interface ShellSpec {
+export interface ShellSpecification {
     command: string;
     workdir?: string | undefined;
     timeoutMs?: number | undefined;
@@ -58,8 +58,8 @@ export interface ShellExecution extends ShellProcess {
 }
 /** The shell capability seam (verified against dsh-shell/dsh-bash-local). */
 export interface Shell {
-    resolve(request: Partial<ShellSpec>): ShellSpec;
-    execute(spec: ShellSpec): Promise<ShellExecution>;
+    resolve(request: Partial<ShellSpecification>): ShellSpecification;
+    execute(spec: ShellSpecification): Promise<ShellExecution>;
     sandboxMode?: string;
 }
 /** The trusted-environment collector (verified against dsh-tool-bash usage). */
@@ -84,7 +84,7 @@ export interface JobSource {
     };
 }
 /** The producer-facing job spec (verified against dsh-jobs-local start()). */
-export interface JobSpec {
+export interface JobSpecification {
     kind: string;
     label: string;
     toolCall?: {
@@ -140,7 +140,7 @@ export type JobEvent = {
 };
 /** The jobs capability seam (verified against dsh-jobs-local). */
 export interface JobsRegistry {
-    start(spec: JobSpec): string;
+    start(spec: JobSpecification): string;
     list(caller?: string): JobView[];
     get(id: string, caller?: string): JobView;
     read(id: string, caller?: string): {
@@ -391,7 +391,7 @@ export interface SuggesterState {
 /** One check-set specification (the config `checksets` dict's values; design
  * section 3.2). A set with a `command` is executable; a set with a `link` is
  * a linked governance set - it renders the linked form and is never re-run. */
-export interface CheckSetSpec {
+export interface CheckSetSpecification {
     /** The catalog glob this set applies to (the explicit-enrollment classification). */
     glob?: string;
     /** The command template (`{{path}}`, `{{basename}}`, `{{dir}}`); template

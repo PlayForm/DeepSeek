@@ -13,7 +13,12 @@
 //
 // The wrapper is command-runner-only BY CONSTRUCTION (Policy.ts's detachable
 // set); the non-detachable mutation family never reaches it.
-import type { JobSource, JobSpec, ShellProcess, ShellSpec } from "@Interface/Events.js";
+import type {
+	JobSource,
+	JobSpecification,
+	ShellProcess,
+	ShellSpecification,
+} from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
 /** The per-job private tail (bounded; the completion frame's output source). */
@@ -142,9 +147,9 @@ export const Sources = (Process: () => ShellProcess | undefined, Tail: JobTail):
  * in shape): the starter spawns the process with job-owned cancellation; the
  * outcome maps killed/completed + exit code + sandbox notes. */
 export const Producer = (
-	Execute: (spec: ShellSpec) => Promise<ShellProcess>,
-	Spec: ShellSpec,
-): { run: JobSpec["run"]; Process: () => ShellProcess | undefined } => {
+	Execute: (spec: ShellSpecification) => Promise<ShellProcess>,
+	Specification: ShellSpecification,
+): { run: JobSpecification["run"]; Process: () => ShellProcess | undefined } => {
 	let Process: ShellProcess | undefined;
 	const Cancel = new AbortController();
 	const Outcome = (
@@ -171,7 +176,7 @@ export const Producer = (
 				detail?: string;
 			}> => {
 				try {
-					const Started = await Execute({ ...Spec, signal: Cancel.signal });
+					const Started = await Execute({ ...Specification, signal: Cancel.signal });
 					Process = Started;
 					if (Cancel.signal.aborted) {
 						Started.kill();
@@ -226,7 +231,7 @@ export const Start = async (
 		rootCallId: string;
 		agent?: { id: string; session?: unknown } | undefined;
 	},
-): Promise<{ jobId: string; tail: JobTail; spec: ShellSpec }> => {
+): Promise<{ jobId: string; tail: JobTail; spec: ShellSpecification }> => {
 	const Wave = Agent.Wave;
 	if (Wave?.Jobs === undefined || Wave?.Shell === undefined) {
 		throw new Error("jobs or shell unavailable");
@@ -240,7 +245,7 @@ export const Start = async (
 	const DSHEnv =
 		Wave.ShellEnv === undefined ? undefined : Wave.ShellEnv.collect({ agent: Exec.agent });
 	const Policy = StandingPolicy(Wave.SandboxPolicy, Session);
-	const Spec = Wave.Shell.resolve({
+	const Specification = Wave.Shell.resolve({
 		command: Args.command,
 		...(Workdir !== undefined ? { workdir: Workdir } : {}),
 		...(Args.timeoutMs !== undefined ? { timeoutMs: Args.timeoutMs } : {}),
@@ -249,7 +254,7 @@ export const Start = async (
 		onExpiry: "none",
 	});
 	const Tail = new JobTail(Args.head === true);
-	const Adapter = Producer((WithSignal) => Wave.Shell!.execute(WithSignal), Spec);
+	const Adapter = Producer((WithSignal) => Wave.Shell!.execute(WithSignal), Specification);
 	const JobID = Wave.Jobs.start({
 		kind: Args.kind ?? "bash",
 		label: Args.label ?? (Args.command.length > 80 ? Args.command.slice(0, 80) : Args.command),
@@ -259,20 +264,20 @@ export const Start = async (
 		output: Sources(Adapter.Process, Tail),
 		run: Adapter.run,
 	});
-	return { jobId: JobID, tail: Tail, spec: Spec };
+	return { jobId: JobID, tail: Tail, spec: Specification };
 };
 
 /** The label the marker shows: the first 80 bytes of the command, single line
  * (newlines replaced by " | "). */
-export const CommandHead = (Command: string, Max = 80): string => {
+export const CommandHead = (Command: string, Maximum = 80): string => {
 	const Single = Command.replace(/\r?\n/g, " | ");
-	return Single.length > Max ? Single.slice(0, Max) : Single;
+	return Single.length > Maximum ? Single.slice(0, Maximum) : Single;
 };
 
 /** The standing frame's cmd line: the first 120 bytes. */
-export const CommandLine = (Command: string, Max = 120): string => {
+export const CommandLine = (Command: string, Maximum = 120): string => {
 	const Single = Command.replace(/\r?\n/g, " | ");
-	return Single.length > Max ? Single.slice(0, Max) : Single;
+	return Single.length > Maximum ? Single.slice(0, Maximum) : Single;
 };
 
 /** The clock-stable start time string (HH:MM:SS) for the standing frame. */

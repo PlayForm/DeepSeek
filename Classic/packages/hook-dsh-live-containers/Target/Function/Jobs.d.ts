@@ -1,4 +1,4 @@
-import type { JobSource, JobSpec, ShellProcess, ShellSpec } from "@Interface/Events.js";
+import type { JobSource, JobSpecification, ShellProcess, ShellSpecification } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 /** The per-job private tail (bounded; the completion frame's output source). */
 export declare class JobTail {
@@ -45,8 +45,8 @@ export declare const Sources: (Process: () => ShellProcess | undefined, Tail: Jo
 /** The producer adapter (processJob + processOutcome, dsh-tool-bash verbatim
  * in shape): the starter spawns the process with job-owned cancellation; the
  * outcome maps killed/completed + exit code + sandbox notes. */
-export declare const Producer: (Execute: (spec: ShellSpec) => Promise<ShellProcess>, Spec: ShellSpec) => {
-    run: JobSpec["run"];
+export declare const Producer: (Execute: (spec: ShellSpecification) => Promise<ShellProcess>, Specification: ShellSpecification) => {
+    run: JobSpecification["run"];
     Process: () => ShellProcess | undefined;
 };
 /** Start one detached job for an agent session: resolve the spec at detach
@@ -77,12 +77,12 @@ export declare const Start: (Agent: State, AgentID: string, Args: {
 }) => Promise<{
     jobId: string;
     tail: JobTail;
-    spec: ShellSpec;
+    spec: ShellSpecification;
 }>;
 /** The label the marker shows: the first 80 bytes of the command, single line
  * (newlines replaced by " | "). */
-export declare const CommandHead: (Command: string, Max?: number) => string;
+export declare const CommandHead: (Command: string, Maximum?: number) => string;
 /** The standing frame's cmd line: the first 120 bytes. */
-export declare const CommandLine: (Command: string, Max?: number) => string;
+export declare const CommandLine: (Command: string, Maximum?: number) => string;
 /** The clock-stable start time string (HH:MM:SS) for the standing frame. */
 export declare const StartedAt: (At: number) => string;

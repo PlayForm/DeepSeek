@@ -21,7 +21,7 @@ export default interface State extends Shared {
     /** The per-type gate multipliers (config `multipliers`, volatile). */
     Multipliers: Config["multipliers"];
     /** The hard preview character cap (config `previewMaxChars`, volatile). */
-    PreviewMax: number;
+    PreviewMaximum: number;
     /** Store TTL in seconds (config `ttlSeconds`). */
     Ttl: number;
     /** The LRU budget in bytes (config `storeBudgetBytes`). */

@@ -56,12 +56,12 @@ const runTest = async () => {
     }
   }
   {
-    const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)";
+    const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
     {
       Check(Count, Sub, () => {
         assert.ok(
           RunO.ListenerOptions["tools/post-execute"]?.prepend === true,
-          "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)"
+          "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)"
         );
       });
     }
@@ -245,12 +245,12 @@ const runTest = async () => {
     NextAcceptO
   );
   {
-    const Sub = "overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)";
+    const Sub = "overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)";
     {
       Check(Count, Sub, () => {
         assert.ok(
           OutO7.kind === "accept" && !("content" in OutO7),
-          "overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)"
+          "overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)"
         );
       });
     }

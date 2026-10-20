@@ -86,8 +86,8 @@ const Recover = (
 			// The newest check per check set (one result per set, first-seen order).
 			const Newest = new Map<string, MonitorRecord>();
 			for (const Row of Group.checks) {
-				const Prev = Newest.get(Row.checkSetId);
-				if (Prev === undefined || Row.ranAt >= Prev.ranAt) {
+				const Previous = Newest.get(Row.checkSetId);
+				if (Previous === undefined || Row.ranAt >= Previous.ranAt) {
 					Newest.set(Row.checkSetId, Row);
 				}
 			}

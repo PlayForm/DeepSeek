@@ -77,7 +77,7 @@ export const Envelope = (Factory: PluginFactory) =>
 		// The jobs runtime, probed (get — never the direct accessor, which
 		// throws on the live root context; live-verified 2026-10-03). Undefined
 		// or not a runtime → the detached fallback.
-		Start: (State, Spec, Detached) => {
+		Start: (State, Specification, Detached) => {
 			let Runtime: Jobs | undefined;
 			try {
 				Runtime = State.Context.get?.("jobs") as Jobs | undefined;
@@ -86,7 +86,7 @@ export const Envelope = (Factory: PluginFactory) =>
 			}
 			switch (true) {
 				case !!Runtime && typeof Runtime.start === "function":
-					Runtime.start(Spec);
+					Runtime.start(Specification);
 					break;
 				default:
 					// Detached, contained, never awaited by the listener. The

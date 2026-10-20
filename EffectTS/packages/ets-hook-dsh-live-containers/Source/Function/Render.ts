@@ -27,7 +27,7 @@ import { Table } from "@Function/Counters.js";
 import {
 	RENDERED_KINDS,
 	type AgentState,
-	type BlockSpec,
+	type BlockSpecification,
 	type Frame as FrameRow,
 	type Variables,
 } from "@Interface/Execution.js";
@@ -102,7 +102,7 @@ const View = (Kind: string, Table_: Variables, Own: Record<string, string>): Var
  * in phase 1 (the wave-2 kinds skip - reason "unknown kind"). */
 export const RenderBlock = (
 	Agent: State,
-	Block: BlockSpec,
+	Block: BlockSpecification,
 	Scope: AgentState,
 	At: number,
 	Label: string,
@@ -119,7 +119,7 @@ export const RenderBlock = (
 
 /** Whether the block is stale (needs a re-render) under its trigger and the
  * section refresh policy. */
-const Stale = (Agent: State, Block: BlockSpec, Scope: AgentState): boolean => {
+const Stale = (Agent: State, Block: BlockSpecification, Scope: AgentState): boolean => {
 	const Cache = Scope.blocks.get(Block.id);
 	switch (Block.trigger) {
 		case "event":
@@ -140,7 +140,7 @@ const Stale = (Agent: State, Block: BlockSpec, Scope: AgentState): boolean => {
 
 /** The skip decision outside the render path (config-shaped, not state).
  * Only the phase-1 kinds render; the wave-2 kinds skip until C2's engine. */
-const SkipReason = (Block: BlockSpec): string | null => {
+const SkipReason = (Block: BlockSpecification): string | null => {
 	switch (true) {
 		case !(RENDERED_KINDS as readonly string[]).includes(Block.kind):
 			return "unknown kind";

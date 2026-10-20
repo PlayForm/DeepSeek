@@ -237,12 +237,12 @@ export const Check = (Agent: State, Append: Log) =>
 			const Started: string[] = [];
 			let Pending = 0;
 			for (const SetID of Entry.sets) {
-				const Spec = Agent.CheckSets[SetID];
-				if (Spec === undefined) {
+				const Specification = Agent.CheckSets[SetID];
+				if (Specification === undefined) {
 					Append(`monitor check unknown ${SetID}`);
 					continue;
 				}
-				if (Spec.link !== undefined) {
+				if (Specification.link !== undefined) {
 					continue;
 				}
 				if (Agent.MonitorJobs.size >= Agent.Monitor.maxMonitorJobs) {
@@ -250,7 +250,14 @@ export const Check = (Agent: State, Append: Log) =>
 					Pending += 1;
 					continue;
 				}
-				const JobID = await Monitors.Dispatch(Agent, AgentID, Entry, SetID, Spec, Append);
+				const JobID = await Monitors.Dispatch(
+					Agent,
+					AgentID,
+					Entry,
+					SetID,
+					Specification,
+					Append,
+				);
 				if (JobID !== undefined) {
 					Started.push(JobID);
 				}

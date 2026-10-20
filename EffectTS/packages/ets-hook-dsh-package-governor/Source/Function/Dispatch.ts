@@ -93,12 +93,12 @@ export const Envelope = Update<State, FsTarget, FsVersion, Registry>({
 	// The jobs probe: the registry is probed (optional, never injected); a
 	// throwing starter leaves nothing registered (jobs.md), so the preflight
 	// rejection falls back to the detached continuation — no double-start.
-	Start: (State, Spec, Detached) => {
+	Start: (State, Specification, Detached) => {
 		const Start = (State.Context.get?.("jobs") as JobsRegistry | undefined)?.start;
 		switch (true) {
 			case typeof Start === "function":
 				try {
-					Start(Spec);
+					Start(Specification);
 				} catch {
 					Detached(); // preflight rejection — today's detached continuation
 				}

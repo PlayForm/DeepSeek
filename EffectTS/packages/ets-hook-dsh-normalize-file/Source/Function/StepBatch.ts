@@ -17,7 +17,7 @@
 //     by the next batch (cleared after one use, scope value irrelevant);
 //   * both off -> the downstream decision passes through UNTOUCHED;
 //   * TEXT blocks only, with the same CCR MARKER GUARD as the tool-results
-//     arm (Function/Overpass) - normalization never touches a ccr
+//     arm (Function/Overpass) - normalization never touches a CCR
 //     replacement; never assistant/tool history;
 //   * N = 0 -> the downstream decision unchanged (no ledger line);
 //   * N > 0 -> `{ ...Decision, messages: <rewritten> }` and the ledger line

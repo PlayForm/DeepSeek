@@ -11,7 +11,7 @@
 // templates whose opening variables are richer (countdown targetAt, validator
 // thresholds) are NOT suggestable-configured - they fall back to the
 // "section" tier's plain note even in "plant" mode.
-import type { BlockSpec } from "@Interface/Execution.js";
+import type { BlockSpecification } from "@Interface/Execution.js";
 
 /** One catalog entry: the block spec plus the suggester's projection fields. */
 export interface CatalogEntry {
@@ -146,21 +146,21 @@ export const CATALOG: CatalogEntry[] = [
 /** The compressed catalog text the suggester prompt embeds (I6 section 2:
  * one line per template - `<id>: <one-line use>. vars: <variable list>` -
  * capped at 2000 bytes, built once). */
-export const Compressed = (At: number, Max = 2000): string => {
+export const Compressed = (At: number, Maximum = 2000): string => {
 	const Lines = CATALOG.map(
 		(Entry) =>
 			`${Entry.id}: ${Entry.use}. vars: ${Entry.tokens.length > 0 ? Entry.tokens.join(", ") : "(none)"}`,
 	);
 	const Text = Lines.join("\n");
 	const Bytes = (Value: string): number => Buffer.byteLength(Value, "utf8");
-	if (Bytes(Text) <= Max) {
+	if (Bytes(Text) <= Maximum) {
 		return Text;
 	}
 	const Kept: string[] = [];
 	let Used = 0;
 	for (const Line of Lines) {
 		const Cost = Bytes(Line) + 1;
-		if (Used + Cost > Max) {
+		if (Used + Cost > Maximum) {
 			break;
 		}
 		Kept.push(Line);
@@ -179,4 +179,5 @@ export const Entry = (ID: string): CatalogEntry | undefined =>
 
 /** The default table's specs for one kind (the accept path instantiates from
  * the default table's template). */
-export const Specs = (DefaultBlocks: BlockSpec[]): BlockSpec[] => DefaultBlocks;
+export const Specifications = (DefaultBlocks: BlockSpecification[]): BlockSpecification[] =>
+	DefaultBlocks;

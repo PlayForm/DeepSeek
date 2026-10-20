@@ -49,12 +49,12 @@ const runTest = async () => {
     });
     Check(Count, "J1: the fake registry gained one start with the exact re-dispatch spec", () => {
       assert.equal(Jobs.started.length, 1);
-      const Spec = Shell.resolved[0];
-      assert.equal(Spec.command, "cargo build");
-      assert.equal(Spec.workdir, "/session");
-      assert.deepEqual(Spec.dshEnv, { DSH_SESSION: "agent-a" });
-      assert.deepEqual(Spec.sandboxPolicy, { mode: "workspace-write", session: void 0 });
-      assert.equal(Spec.onExpiry, "none");
+      const Specification = Shell.resolved[0];
+      assert.equal(Specification.command, "cargo build");
+      assert.equal(Specification.workdir, "/session");
+      assert.deepEqual(Specification.dshEnv, { DSH_SESSION: "agent-a" });
+      assert.deepEqual(Specification.sandboxPolicy, { mode: "workspace-write", session: void 0 });
+      assert.equal(Specification.onExpiry, "none");
       assert.equal(Jobs.started[0].spec.kind, "bash");
       assert.equal(Jobs.started[0].spec.label, "cargo build");
       assert.equal(Jobs.started[0].spec.owner, "agent-a");
@@ -133,8 +133,8 @@ const runTest = async () => {
   {
     const Jobs = FakeJobsHub();
     const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), {
-      jobs: { ...Jobs, registry: { ...Jobs.registry, start: (Spec) => {
-        void Spec;
+      jobs: { ...Jobs, registry: { ...Jobs.registry, start: (Specification) => {
+        void Specification;
         throw new Error("preflight refused");
       } } },
       shell: FakeShell()

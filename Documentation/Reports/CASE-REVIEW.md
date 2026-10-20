@@ -174,7 +174,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The plan's §4 rule ("the case study never describes a decision in the abstract") is violated exactly where the naming/packaging structure lives (C9).
   The evidence column mixes commit hashes with doc refs.
   It could carry file refs so the proof is locatable in the tree (E7).
-- **Unsupported/stale**: "12 DECISIONS + 1 FIX" (the eyebrow) vs "13 DECISIONS" (the section Meta) is a label mismatch, harmless but noisy.
+- **Unsupported/stale**: "12 DECISIONS + 1 FIX" (the eyebrow) vs "13 DECISIONS" (the section Metadata) is a label mismatch, harmless but noisy.
   The verdict row count is right (13 rows).
 
 ### The working lessons (Section 8)
@@ -194,7 +194,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 ### Verified against the code and the record
 
 - **The 5 bundles / 231 checks of the boilerplate era**: factory 30 + governor 70 + pinner 28 + cargo 58 + mdash 45 = 231 (Handoff Overview, the Package-2 table).
-  The page's Phase 0 Meta and Phase I text are exact.
+  The page's Phase 0 Metadata and Phase I text are exact.
 - **12 packages x 12 smoke suites x 3 implementations**: `Classic/packages/` and `EffectTS/packages/` hold the same 12 names.
   `Classic/smokes/`, `EffectTS/smokes/`, `Boilerplate/smokes/` hold 12 suites EACH (the #15 names, verified: hook-dsh-core, governor-cargo, governor-package, normalize-dash/-file/-quotes/-ellipsis/-spaces/-invisible/-fullwidth, pinner-package, plugin-dsh-factory).
 - **The smoke counts**: per-suite call sites match TOMORROW-REVIEW §1 exactly.

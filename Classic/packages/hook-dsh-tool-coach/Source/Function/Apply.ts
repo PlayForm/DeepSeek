@@ -3,7 +3,7 @@
 // activation proof, and the FIVE listeners of the coaching ladder (plan Part
 // 3 §3.2 + Part 4 §4.1):
 //
-//   1. tools/post-execute  (waterfall, plain ctx.on - AFTER the ccr
+//   1. tools/post-execute  (waterfall, plain ctx.on - AFTER the CCR
 //      {prepend:true} listener and normalize's post-execute, since plain
 //      registration order guarantees it; detection is order-independent
 //      because exec is immutable): tier 0 ledger + tier 1 note + tier 2
@@ -78,35 +78,35 @@ const IsDefaultRows = (Rows: CoachRow[]): boolean =>
 /** The fail-loud validation (plan Part 3 §3.4 + TOOL-COACH-PLAN.md §3). */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
-	const Num = (Key: string): number => Number(Cell(Raw[Key]));
+	const Numeric = (Key: string): number => Number(Cell(Raw[Key]));
 	const Fail = (Message: string): never => {
 		throw new Error(`hook-dsh-tool-coach: ${Message}`);
 	};
-	if (!(Num("threshold") >= 1)) {
+	if (!(Numeric("threshold") >= 1)) {
 		Fail("threshold must be >= 1");
 	}
-	if (!(Num("window") >= Num("threshold"))) {
+	if (!(Numeric("window") >= Numeric("threshold"))) {
 		Fail("window must be >= threshold");
 	}
-	if (!(Num("cooldown") >= 1)) {
+	if (!(Numeric("cooldown") >= 1)) {
 		Fail("cooldown must be >= 1");
 	}
-	if (!(Num("escalateThreshold") >= Num("threshold"))) {
+	if (!(Numeric("escalateThreshold") >= Numeric("threshold"))) {
 		Fail("escalateThreshold must be >= threshold");
 	}
-	if (!(Num("cleanWindow") >= 1)) {
+	if (!(Numeric("cleanWindow") >= 1)) {
 		Fail("cleanWindow must be >= 1");
 	}
-	if (!(Num("enforceThreshold") >= 1)) {
+	if (!(Numeric("enforceThreshold") >= 1)) {
 		Fail("enforceThreshold must be >= 1");
 	}
 	if (!["off", "write", "all"].includes(String(Cell(Raw["enforce"])))) {
 		Fail('enforce must be one of "off" | "write" | "all"');
 	}
-	if (!(Num("maxSectionTools") >= 1 && Num("maxSectionTools") <= 24)) {
+	if (!(Numeric("maxSectionTools") >= 1 && Numeric("maxSectionTools") <= 24)) {
 		Fail("maxSectionTools must be between 1 and 24");
 	}
-	if (!(Num("sectionTtl") >= 1)) {
+	if (!(Numeric("sectionTtl") >= 1)) {
 		Fail("sectionTtl must be >= 1");
 	}
 	const Judge = Cell(Raw["judgeTools"]);
@@ -196,7 +196,7 @@ export default (Context: Context, Options: Config): void => {
 			Patterns: "patternTable",
 			Notes: "notes",
 			FetchLive: "fetchLive",
-			MaxSectionTools: "maxSectionTools",
+			MaximumSectionTools: "maxSectionTools",
 			SectionTtl: "sectionTtl",
 		},
 	});
@@ -287,7 +287,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// ------------------------------------------------------------------
 	// Listener 1: tools/post-execute (tier 0 ledger, tier 1 note, tier 2
-	// strike accounting). Plain registration - runs AFTER the ccr
+	// strike accounting). Plain registration - runs AFTER the CCR
 	// {prepend:true} listener and normalize's post-execute.
 	// ------------------------------------------------------------------
 	Context.on(
@@ -527,7 +527,7 @@ export default (Context: Context, Options: Config): void => {
 							AgentState,
 							Live,
 							State.Notes.persistent,
-							{ maxSectionTools: State.MaxSectionTools },
+							{ maxSectionTools: State.MaximumSectionTools },
 							Mapped(),
 							[...Live.tools.keys()],
 						),

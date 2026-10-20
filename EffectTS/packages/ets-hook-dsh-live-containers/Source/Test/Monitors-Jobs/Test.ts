@@ -33,8 +33,8 @@ const Setup = (Config: any = {}, BreakStart = false): { Jobs: any; Shell: any; R
 	if (BreakStart) {
 		Jobs.registry = {
 			...Jobs.registry,
-			start: (Spec: any) => {
-				void Spec;
+			start: (Specification: any) => {
+				void Specification;
 				throw new Error("preflight refused");
 			},
 		};
@@ -73,12 +73,12 @@ export const runTest = async (): Promise<number> => {
 		await Dispatch(Run);
 		Check(Count, "J1: the monitor job carries the design's spec", () => {
 			assert.equal(Jobs.started.length, 1);
-			const Spec = Jobs.started[0].spec;
-			assert.equal(Spec.kind, "monitor");
-			assert.equal(Spec.label, "monitor tsc /repo/src/App.ts");
-			assert.equal(Spec.owner, "agent-a");
-			assert.equal(Spec.outputLimitBytes, 2048);
-			assert.ok(Spec.toolCall.callId.startsWith("monitor-"));
+			const Specification = Jobs.started[0].spec;
+			assert.equal(Specification.kind, "monitor");
+			assert.equal(Specification.label, "monitor tsc /repo/src/App.ts");
+			assert.equal(Specification.owner, "agent-a");
+			assert.equal(Specification.outputLimitBytes, 2048);
+			assert.ok(Specification.toolCall.callId.startsWith("monitor-"));
 		});
 		Check(Count, "J1: the resolved shell spec preserves the governed path", () => {
 			const Resolved = Shell.resolved[0];

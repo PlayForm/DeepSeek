@@ -166,12 +166,12 @@ export const BudgetEntry = (
 	AgentID: string,
 	Turn: number,
 ): { turn: number; used: number } => {
-	const Existing = Agent.MetaBudget.get(AgentID);
+	const Existing = Agent.MetadataBudget.get(AgentID);
 	if (Existing !== undefined && Existing.turn === Turn) {
 		return Existing;
 	}
 	const Fresh = { turn: Turn, used: 0 };
-	Agent.MetaBudget.set(AgentID, Fresh);
+	Agent.MetadataBudget.set(AgentID, Fresh);
 	return Fresh;
 };
 
@@ -187,7 +187,7 @@ export const SpendBudget = (Agent: State, AgentID: string, Turn: number): void =
 
 /** Whether the meta-budget just ran out (the one summary line per turn). */
 export const BudgetExhausted = (Agent: State, AgentID: string, Turn: number): boolean => {
-	const Entry = Agent.MetaBudget.get(AgentID);
+	const Entry = Agent.MetadataBudget.get(AgentID);
 	return Entry !== undefined && Entry.turn === Turn && Entry.used >= Agent.FailsafesPerTurn;
 };
 

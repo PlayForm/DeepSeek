@@ -261,10 +261,10 @@ const FakeJobsHub = () => {
     processes: []
   };
   Hub.registry = {
-    start: (Spec) => {
+    start: (Specification) => {
       Hub.next += 1;
       const ID = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
-      Hub.started.push({ id: ID, spec: Spec });
+      Hub.started.push({ id: ID, spec: Specification });
       return ID;
     },
     events: {
@@ -310,13 +310,13 @@ const FakeShell = () => {
   Shell.registry = {
     sandboxMode: void 0,
     resolve: (Request) => {
-      const Spec = { ...Request };
-      Shell.resolved.push(Spec);
-      return Spec;
+      const Specification = { ...Request };
+      Shell.resolved.push(Specification);
+      return Specification;
     },
-    execute: async (Spec) => {
+    execute: async (Specification) => {
       const Process = FakeProcess();
-      Shell.executed.push(Spec);
+      Shell.executed.push(Specification);
       Shell.processes.push(Process);
       return Process;
     }
@@ -330,8 +330,8 @@ const FakePolicy = (Mode = "workspace-write") => ({
 const FakeSubagent = () => {
   const Sub = { spawns: [], resolvers: [] };
   Sub.registry = {
-    startActivation: (Spec) => {
-      Sub.spawns.push(Spec);
+    startActivation: (Specification) => {
+      Sub.spawns.push(Specification);
       let ResolveResult = () => void 0;
       const Result = new Promise((Resolve) => {
         ResolveResult = Resolve;
@@ -390,11 +390,11 @@ const FakeStorage = (Options = {}) => {
     failOpen: Options.failOpen === true
   };
   Store.facility = {
-    open: async (Spec) => {
+    open: async (Specification) => {
       if (Store.failOpen) {
         throw new Error("storage unavailable");
       }
-      Store.spec = Spec;
+      Store.spec = Specification;
       return {
         close: async () => void 0,
         table: (_Name) => ({

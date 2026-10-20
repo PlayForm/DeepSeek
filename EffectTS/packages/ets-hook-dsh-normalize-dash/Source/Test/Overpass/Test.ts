@@ -2,7 +2,7 @@
 // command - the registration facts (the two arms with their ordering
 // contract, the normalize-overpass command), the tool-results arm (default
 // off, the O2 volatile flip with the exact ledger line, the read exemption,
-// the block rules, the N=0 no-op, the value-carrying and ccr-marker
+// the block rules, the N=0 no-op, the value-carrying and CCR-marker
 // pass-throughs, the downstream basis), the step-batch arm (default off, the
 // O10 flip, the one-shot command arm), and the history-safety invariant.
 // Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
@@ -63,7 +63,7 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)";
+			const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
 			Check(Count, Sub, () => {
 				assert.ok(RunO.ListenerOptions["tools/post-execute"]?.prepend === true);
 			});
@@ -204,7 +204,7 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		// O7: the CCR marker guard -> marker-bearing content passes unchanged
-		// (the ordering guard: normalization never touches a ccr replacement).
+		// (the ordering guard: normalization never touches a CCR replacement).
 		{
 			const MarkerBlockO = {
 				type: "text",
@@ -216,7 +216,7 @@ export const runTest = async (): Promise<number> => {
 				NextAcceptO,
 			);
 			{
-				const Sub = "overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)";
+				const Sub = "overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)";
 				Check(Count, Sub, () => {
 					assert.ok(OutO7.kind === "accept" && !("content" in OutO7));
 				});

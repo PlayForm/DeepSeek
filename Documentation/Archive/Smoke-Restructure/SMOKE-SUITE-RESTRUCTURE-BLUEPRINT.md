@@ -33,7 +33,7 @@ statuses:
 # SMOKE-SUITE-RESTRUCTURE-BLUEPRINT
 
 Status: BLUEPRINT (explorer output, 2026-10-19). Implementing coder lanes execute this
-verbatim. Spec: Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md (read in full).
+verbatim. Specification: Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md (read in full).
 Reference studied: /Users/nikola/Developer/Application/CodeEditorLand/Land/Element/Output
 (Source/prepublishOnly.sh, Source/Run.sh, Source/ESBuild.ts, Source/ESBuild/Output.ts,
 package.json scripts). No code was changed by this exploration; no tests were run.
@@ -729,7 +729,7 @@ apply these rules:
    Replace+Replace-Map -> 8 Classic folders); the ETS trees keep their additive
    folders (8 shared + 2 ETS-only = 10). The >8 ceiling applies to the shared twins.
 10. **The strict-tsconfig scaffolding.** The Update-Envelope folder's type scaffolding
-    (SmokeState/SmokeDeps, `_State`-style renames for noUnusedParameters, `State.Spec!`
+    (SmokeState/SmokeDependencies, `_State`-style renames for noUnusedParameters, `State.Specification!`
     non-null assertions, `State.Ledger[0] ?? ""` for noUncheckedIndexedAccess) is
     fixture-only - ZERO assertion changes.
 11. **The migration fallback.** The .mjs suites stay byte-identical (the runner still

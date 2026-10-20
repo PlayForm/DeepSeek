@@ -19,9 +19,9 @@
 // live_container_set state) render LITERALLY (research section 3: unknown
 // tokens are never a failure) and log `render unknown <id> <token>` - the
 // frames of the dormant entries are inert by construction (enabled: false).
-import type { BlockSpec } from "@Interface/Execution.js";
+import type { BlockSpecification } from "@Interface/Execution.js";
 
-export const DEFAULT_BLOCKS: BlockSpec[] = [
+export const DEFAULT_BLOCKS: BlockSpecification[] = [
 	{
 		id: "todo-list",
 		kind: "todo-list",

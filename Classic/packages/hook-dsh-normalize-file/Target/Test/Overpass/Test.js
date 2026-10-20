@@ -41,7 +41,7 @@ const runTest = async () => {
       });
     }
     {
-      const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)";
+      const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
       Check(Count, Sub, () => {
         assert.ok(RunO.ListenerOptions["tools/post-execute"]?.prepend === true);
       });

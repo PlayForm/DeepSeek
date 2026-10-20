@@ -42,18 +42,18 @@ export const runTest = async (): Promise<number> => {
 		m.ctx.pluginFactory = Furnace;
 		m.ledger = LedgerFile("silence");
 		const { listener } = Boot(m);
-		let Sync = false;
+		let Synchronous = false;
 		listener(
 			{ targetKey: "k1", displayPath: file },
 			{ kind: "present", version: "v1" },
 			{ name: "edit" },
 		);
-		Sync = true; // the listener must return before any async stage runs
+		Synchronous = true; // the listener must return before any async stage runs
 		const writesBeforeFlush = m.captured.writes.length;
 		await Flush();
 		const writesAfterFlush = m.captured.writes.length;
 		await CheckAsync(Count, "silence: the listener is synchronous and await-free; the stages are detached", async () => {
-			assert.equal(Sync, true, "the fs/observed listener is synchronous");
+			assert.equal(Synchronous, true, "the fs/observed listener is synchronous");
 			assert.equal(writesBeforeFlush, 0, "no write has happened yet (detached)");
 			assert.ok(writesAfterFlush > 0, "the detached continuation did the work");
 		});

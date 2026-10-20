@@ -7,7 +7,7 @@
 // Runs standalone (`node Target/Test/Run-One-State/Test.js`) AND under the
 // aggregate (`Maintain/Run-Smokes.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL ccr apply, from the Harness.
+// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -81,9 +81,9 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 	{
-		const Sub = "volatile unwrap: previewMaxChars cell \u2192 State.PreviewMax=240";
+		const Sub = "volatile unwrap: previewMaxChars cell \u2192 State.PreviewMaximum=240";
 		Check(Count, Sub, () => {
-			assert.ok(Run1.State.PreviewMax === 240);
+			assert.ok(Run1.State.PreviewMaximum === 240);
 		});
 	}
 	{

@@ -7,7 +7,7 @@
 // Runs standalone (`node Target/Test/Config-And-Activation/Test.js`) AND
 // under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL ccr apply, from the Harness.
+// the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {

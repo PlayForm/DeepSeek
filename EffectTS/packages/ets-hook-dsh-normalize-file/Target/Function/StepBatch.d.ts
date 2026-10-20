@@ -1,5 +1,5 @@
 import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 /** A structural pre-step payload: only the fields the arm reads. */
 type Payload = {
     turn?: unknown;

@@ -1,5 +1,5 @@
 export default _default;
-declare function _default<S, T, V, R>(Dep: Dependencies<S, T, V, R>): {
+declare function _default<S, T, V, R>(Dependency: Dependencies<S, T, V, R>): {
     Dispatch: (State: S, Target: T, Actor: object | undefined, Dir: string, Registry: R | null, PolicyPath: string) => Promise<void>;
     Settle: (State: S, Dir: string, Target: T, Actor: object | undefined, Code: number) => Promise<number>;
 };
@@ -42,7 +42,7 @@ export interface Dependencies<S, T, V, R> {
      *  registry and EITHER start the spec's job OR invoke the detached
      *  fallback — the module owns the probe semantics (the guard, the
      *  starter's containment) and the core owns the spec and the hooks. */
-    Start: (State: S, Spec: {
+    Start: (State: S, Specification: {
         /** Producer kind — also the id prefix. */
         kind: string;
         /** One-line label (the child stage's command and directory). */

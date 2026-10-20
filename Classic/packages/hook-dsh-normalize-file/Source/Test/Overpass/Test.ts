@@ -3,7 +3,7 @@
 // contract, the normalize-overpass command as the files sweep owner), the
 // tool-results arm (default off, the volatile flip with the SIX-FOLD rewrite
 // and the exact ledger line, the read exemption, the block rules, the N=0
-// no-op, the value-carrying and ccr-marker pass-throughs), the files sweep
+// no-op, the value-carrying and CCR-marker pass-throughs), the files sweep
 // through the command, the step-batch arm, the command's other grammars, and
 // the history-safety invariant. Runs standalone (`node
 // Target/Test/Overpass/Test.js`) AND under the aggregate
@@ -58,7 +58,7 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)";
+			const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
 			Check(Count, Sub, () => {
 				assert.ok(RunO.ListenerOptions["tools/post-execute"]?.prepend === true);
 			});
@@ -182,7 +182,7 @@ export const runTest = async (): Promise<number> => {
 					assert.ok(RunO.Lines.length === LinesBeforeO5);
 				});
 			}
-			// O6/O7: value-carrying decision untouched; ccr marker guard.
+			// O6/O7: value-carrying decision untouched; CCR marker guard.
 			{
 				const All6 = "a\u2014b\u201Cc\u201D\u2026d\u00A0e\u200Bf\uFF21g";
 				const OutO6 = await PostO(

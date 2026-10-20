@@ -25,7 +25,7 @@ import Clock from "@Function/Clock.js";
 import * as Jobs from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
-import type { DetachRecord, ShellSpec, TagRecord } from "@Interface/Events.js";
+import type { DetachRecord, ShellSpecification, TagRecord } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
 /** The inline marker (design section 4.1, byte-exact):
@@ -243,7 +243,7 @@ export const PreExecute = async (
 		}
 		// THE TRANSFORM: start the job with the exact re-dispatch spec (cwd/env/
 		// policy preserved - G2), record the pair, and tag the exec.
-		let Started: { jobId: string; tail: DetachRecord["tail"]; spec: ShellSpec };
+		let Started: { jobId: string; tail: DetachRecord["tail"]; spec: ShellSpecification };
 		try {
 			Started = await Jobs.Start(
 				Agent,

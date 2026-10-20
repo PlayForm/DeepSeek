@@ -135,7 +135,7 @@ ${value.changed ? `Normalized ${value.count} character(s)` : "Already normalized
 			if (result.isError) return undefined;
 			// The presentation metadata projected by the output declaration
 			// (guarded cast - the meta is the tool's own projector's shape).
-			const Meta = result.meta as
+			const Metadata = result.meta as
 				| {
 						changed?: boolean;
 						path?: string;
@@ -143,15 +143,15 @@ ${value.changed ? `Normalized ${value.count} character(s)` : "Already normalized
 						after?: string;
 				  }
 				| undefined;
-			if (!Meta || Meta.changed !== true) return undefined;
+			if (!Metadata || Metadata.changed !== true) return undefined;
 			return {
 				card: "diff",
 				title: `Normalize ${args.file_path}`,
 				diffs: [
 					{
-						path: Meta.path ?? args.file_path,
-						oldText: Meta.before ?? null,
-						newText: Meta.after ?? "",
+						path: Metadata.path ?? args.file_path,
+						oldText: Metadata.before ?? null,
+						newText: Metadata.after ?? "",
 					},
 				],
 			};

@@ -155,8 +155,8 @@ const Body = (State: State, Entry: MonitorEntry, Now: number): BodyLine[] => {
 			Lines.push({ set: SetID, ...ResultLine(State, Entry, Result, Now) });
 			continue;
 		}
-		const Spec = State.CheckSets[SetID];
-		if (Spec && Spec.link !== undefined) {
+		const Specification = State.CheckSets[SetID];
+		if (Specification && Specification.link !== undefined) {
 			Lines.push({ set: undefined, text: LinkedLine(Entry), state: "not-run" });
 			continue;
 		}

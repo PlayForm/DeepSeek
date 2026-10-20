@@ -86,7 +86,7 @@ import * as SetTool from "@Function/Set.js";
 import * as Storage from "@Function/Storage.js";
 import * as Suggester from "@Function/Suggester.js";
 import type Config from "@Interface/Config.js";
-import { KINDS, type AgentState, type BlockSpec } from "@Interface/Execution.js";
+import { KINDS, type AgentState, type BlockSpecification } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/hook-dsh-core";
 
@@ -103,7 +103,7 @@ const Cell = (Value: unknown): unknown =>
 /** The fail-loud validation (research section 3 + design section 2). */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
-	const Num = (Key: string): number => Number(Cell(Raw[Key]));
+	const Numeric = (Key: string): number => Number(Cell(Raw[Key]));
 	const Fail = (Message: string): never => {
 		throw new Error(`hook-dsh-live-containers: ${Message}`);
 	};
@@ -116,13 +116,13 @@ const Validate = (Options: unknown): void => {
 	if (!["request", "ttl"].includes(String(Cell(Raw["refresh"])))) {
 		Fail('refresh must be one of "request" | "ttl"');
 	}
-	if (!(Num("ttlCalls") >= 1)) {
+	if (!(Numeric("ttlCalls") >= 1)) {
 		Fail("ttlCalls must be >= 1");
 	}
 	if (typeof Cell(Raw["separator"]) !== "string" || String(Cell(Raw["separator"])).length === 0) {
 		Fail("separator must be a non-empty string");
 	}
-	if (!(Num("sectionBudgetBytes") >= 1)) {
+	if (!(Numeric("sectionBudgetBytes") >= 1)) {
 		Fail("sectionBudgetBytes must be >= 1");
 	}
 	const Blocks = Cell(Raw["blocks"]);
@@ -131,7 +131,7 @@ const Validate = (Options: unknown): void => {
 		return;
 	}
 	const Seen = new Set<string>();
-	for (const Block of Blocks as BlockSpec[]) {
+	for (const Block of Blocks as BlockSpecification[]) {
 		if (!Block || typeof Block.id !== "string" || Block.id.length === 0) {
 			Fail("every block needs a non-empty id");
 		}
@@ -254,12 +254,12 @@ const Validate = (Options: unknown): void => {
 		}
 	}
 	const CheckSets = (Cell(Raw["checksets"]) ?? {}) as Record<string, unknown>;
-	for (const [ID, Spec] of Object.entries(CheckSets)) {
-		if (Spec === null || typeof Spec !== "object") {
+	for (const [ID, Specification] of Object.entries(CheckSets)) {
+		if (Specification === null || typeof Specification !== "object") {
 			Fail(`checksets.${ID} must be an object`);
 			continue;
 		}
-		const S = Spec as {
+		const S = Specification as {
 			command?: unknown;
 			link?: unknown;
 			fast?: unknown;
@@ -311,46 +311,46 @@ const Validate = (Options: unknown): void => {
 	// A strict numeric helper for the monitor knobs: absent or non-finite
 	// values fail loud (the schema always fills them; a hand-built config
 	// without them is invalid).
-	const MNum = (Value: unknown): number =>
+	const MonitorNumber = (Value: unknown): number =>
 		typeof Value === "number" && Number.isFinite(Value) ? Value : -1;
-	if (!(MNum(MonitorCell["debounceMs"]) >= 1)) {
+	if (!(MonitorNumber(MonitorCell["debounceMs"]) >= 1)) {
 		Fail("monitor.debounceMs must be >= 1");
 	}
-	if (!(MNum(MonitorCell["maxMonitors"]) >= 1)) {
+	if (!(MonitorNumber(MonitorCell["maxMonitors"]) >= 1)) {
 		Fail("monitor.maxMonitors must be >= 1");
 	}
-	if (!(MNum(MonitorCell["maxMonitorJobs"]) >= 1)) {
+	if (!(MonitorNumber(MonitorCell["maxMonitorJobs"]) >= 1)) {
 		Fail("monitor.maxMonitorJobs must be >= 1");
 	}
-	if (!(MNum(MonitorCell["retireMs"]) >= 1)) {
+	if (!(MonitorNumber(MonitorCell["retireMs"]) >= 1)) {
 		Fail("monitor.retireMs must be >= 1");
 	}
-	if (!(MNum(MonitorCell["staleMs"]) >= 1)) {
+	if (!(MonitorNumber(MonitorCell["staleMs"]) >= 1)) {
 		Fail("monitor.staleMs must be >= 1");
 	}
-	if (!(MNum(MonitorCell["slowCheckIntervalMs"]) >= 0)) {
+	if (!(MonitorNumber(MonitorCell["slowCheckIntervalMs"]) >= 0)) {
 		Fail("monitor.slowCheckIntervalMs must be >= 0");
 	}
-	if (!(MNum(MonitorCell["bandCapBytes"]) >= 256)) {
+	if (!(MonitorNumber(MonitorCell["bandCapBytes"]) >= 256)) {
 		Fail("monitor.bandCapBytes must be >= 256");
 	}
 	if (
-		!(MNum(MonitorCell["checkTimeoutMs"]) >= 1000) ||
-		!(MNum(MonitorCell["checkTimeoutMs"]) <= 120000)
+		!(MonitorNumber(MonitorCell["checkTimeoutMs"]) >= 1000) ||
+		!(MonitorNumber(MonitorCell["checkTimeoutMs"]) <= 120000)
 	) {
 		Fail(
 			"monitor.checkTimeoutMs must be >= 1000 and <= 120000 (the inline deadline - the composition contract, like detach.liveTimeoutMs)",
 		);
 	}
-	if (!(MNum(MonitorCell["linkageAlertVersions"]) >= 0)) {
+	if (!(MonitorNumber(MonitorCell["linkageAlertVersions"]) >= 0)) {
 		Fail("monitor.linkageAlertVersions must be >= 0");
 	}
-	if (!(MNum(MonitorCell["dedupWindowMs"]) >= 0)) {
+	if (!(MonitorNumber(MonitorCell["dedupWindowMs"]) >= 0)) {
 		Fail("monitor.dedupWindowMs must be >= 0");
 	}
 };
 
-/** A number-or-default helper for the wave-2 validation (the phase-1 Num
+/** A number-or-default helper for the wave-2 validation (the phase-1 Numeric
  * helper throws on absent keys; the wave-2 knobs always have schema defaults,
  * but a hand-built config in tests may omit them). */
 const Num2 = (Value: unknown): number =>
@@ -524,7 +524,7 @@ export default (Context: Context, Options: Config): void => {
 	const RouteCell = (Cell(Options.suggesterRoute) ?? {}) as Record<string, unknown>;
 	const Str = (Value: unknown, Fallback: string): string =>
 		typeof Value === "string" && Value.length > 0 ? Value : Fallback;
-	const Num = (Value: unknown, Fallback: number): number =>
+	const Numeric = (Value: unknown, Fallback: number): number =>
 		typeof Value === "number" && Number.isFinite(Value) ? Value : Fallback;
 	const StrArray = (Value: unknown, Fallback: string[]): string[] =>
 		Array.isArray(Value)
@@ -549,47 +549,47 @@ export default (Context: Context, Options: Config): void => {
 			"tsc -b",
 			"next build",
 		]),
-		minHistoricalMs: Num(DetachCell["minHistoricalMs"], 20000),
-		historyWindow: Num(DetachCell["historyWindow"], 5),
+		minHistoricalMs: Numeric(DetachCell["minHistoricalMs"], 20000),
+		historyWindow: Numeric(DetachCell["historyWindow"], 5),
 		selectedTools: StrArray(DetachCell["selectedTools"], []),
 		selectedPatterns: StrArray(DetachCell["selectedPatterns"], []),
-		maxLivePerAgent: Num(DetachCell["maxLivePerAgent"], 5),
-		minLatencyMs: Num(DetachCell["minLatencyMs"], 2000),
-		liveTimeoutMs: Num(DetachCell["liveTimeoutMs"], 120000),
+		maxLivePerAgent: Numeric(DetachCell["maxLivePerAgent"], 5),
+		minLatencyMs: Numeric(DetachCell["minLatencyMs"], 2000),
+		liveTimeoutMs: Numeric(DetachCell["liveTimeoutMs"], 120000),
 		dedup: DetachCell["dedup"] !== false,
-		retryFailsafeCount: Num(DetachCell["retryFailsafeCount"], 3),
+		retryFailsafeCount: Numeric(DetachCell["retryFailsafeCount"], 3),
 	};
 	State.Plant = {
-		stallMs: Num(PlantCell["stallMs"], 45000),
-		closeMs: Num(PlantCell["closeMs"], 300000),
-		reportRateMs: Num(PlantCell["reportRateMs"], 2000),
-		stallBudgetMs: Num(PlantCell["stallBudgetMs"], 180000),
+		stallMs: Numeric(PlantCell["stallMs"], 45000),
+		closeMs: Numeric(PlantCell["closeMs"], 300000),
+		reportRateMs: Numeric(PlantCell["reportRateMs"], 2000),
+		stallBudgetMs: Numeric(PlantCell["stallBudgetMs"], 180000),
 		stallAction: PlantCell["stallAction"] === "prune" ? "prune" : "warn-only",
-		orphanBudgetMs: Num(PlantCell["orphanBudgetMs"], 600000),
-		boardsPerAgent: Num(PlantCell["boardsPerAgent"], 4),
-		leaseTurns: Num(PlantCell["leaseTurns"], 3),
+		orphanBudgetMs: Numeric(PlantCell["orphanBudgetMs"], 600000),
+		boardsPerAgent: Numeric(PlantCell["boardsPerAgent"], 4),
+		leaseTurns: Numeric(PlantCell["leaseTurns"], 3),
 	};
 	State.Failsafes = Cell(Options.failsafes) === "on" ? "on" : "off";
-	State.HangBudgetMs = Num(Cell(Options.hangBudgetMs), 120000);
+	State.HangBudgetMs = Numeric(Cell(Options.hangBudgetMs), 120000);
 	State.HangAction = Cell(Options.hangAction) === "kill" ? "kill" : "warn-only";
-	State.FailsafesPerTurn = Num(Cell(Options.failsafesPerTurn), 5);
+	State.FailsafesPerTurn = Numeric(Cell(Options.failsafesPerTurn), 5);
 	State.Suggester = (["off", "section", "plant"] as const).includes(
 		Cell(Options.suggester) as never,
 	)
 		? (Cell(Options.suggester) as "off" | "section" | "plant")
 		: "off";
 	State.SuggesterPrivacy = Cell(Options.suggesterPrivacy) === "verbatim" ? "verbatim" : "redact";
-	State.SuggestGateMinChars = Num(Cell(Options.suggestGateMinChars), 40);
-	State.MaxSuggestionsPerHour = Num(Cell(Options.maxSuggestionsPerHour), 6);
-	State.MaxPromptBytes = Num(Cell(Options.maxPromptBytes), 4000);
-	State.SuggestTimeoutMs = Num(Cell(Options.suggestTimeoutMs), 8000);
+	State.SuggestGateMinChars = Numeric(Cell(Options.suggestGateMinChars), 40);
+	State.MaximumSuggestionsPerHour = Numeric(Cell(Options.maxSuggestionsPerHour), 6);
+	State.MaximumPromptBytes = Numeric(Cell(Options.maxPromptBytes), 4000);
+	State.SuggestTimeoutMs = Numeric(Cell(Options.suggestTimeoutMs), 8000);
 	State.AutoPlant = Cell(Options.autoPlant) === true;
 	State.SuggesterRoute = {
 		provider: Str(RouteCell["provider"], "cloudflare-workers-ai"),
 		model: Str(RouteCell["model"], "@cf/zai-org/glm-5.3-flash"),
 		reasoningEffort: Str(RouteCell["reasoningEffort"], "low"),
 	};
-	State.CompletionCapBytes = Num(Cell(Options.completionCapBytes), 4096);
+	State.CompletionCapBytes = Numeric(Cell(Options.completionCapBytes), 4096);
 	State.Detached = new Map();
 	State.Tagged = new WeakMap();
 	State.Pending = new Map();
@@ -597,7 +597,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Suggestions = new Map();
 	State.SuggesterTicks = new Map();
 	State.DedupCounts = new Map();
-	State.MetaBudget = new Map();
+	State.MetadataBudget = new Map();
 	State.TurnCounts = new Map();
 	State.History = new Map();
 	State.CallStarts = new Map();
@@ -749,7 +749,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// ------------------------------------------------------------------
 	// Listener L4: tools/post-execute (the counter observer). Plain
-	// registration - runs AFTER the ccr {prepend:true} listener and
+	// registration - runs AFTER the CCR {prepend:true} listener and
 	// normalize's post-execute. Pure observer: records the tool fact for the
 	// counter/gauge variables and marks event-trigger blocks dirty; the
 	// downstream decision is returned unchanged.

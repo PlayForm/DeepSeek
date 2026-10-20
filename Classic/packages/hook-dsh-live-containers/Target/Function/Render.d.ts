@@ -1,4 +1,4 @@
-import { type AgentState, type BlockSpec, type Variables } from "@Interface/Execution.js";
+import { type AgentState, type BlockSpecification, type Variables } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
 /** The ledger sink Apply passes down (Factory.Append with the State bound). */
 export type Log = (Message: string) => void;
@@ -10,7 +10,7 @@ export declare const Substitute: (Template: string, Vars: Variables, ID: string,
 export declare const Frame: (Separator: string, ID: string, Body: string) => string;
 /** Render one block to its frame, or null when the kind is not renderable
  * in phase 1 (the wave-2 kinds skip - reason "unknown kind"). */
-export declare const RenderBlock: (Agent: State, Block: BlockSpec, Scope: AgentState, At: number, Label: string, Append: Log) => string | null;
+export declare const RenderBlock: (Agent: State, Block: BlockSpecification, Scope: AgentState, At: number, Label: string, Append: Log) => string | null;
 export default _default;
 /** Build the section body for one assembly (research section 3: "the
  * system-prompt/assemble 'live section'"). Returns the body text, or ""

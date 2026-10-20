@@ -8,7 +8,7 @@ import * as Board from "@Function/Board.js";
 import type { Log } from "@Function/Render.js";
 import type State from "@Interface/State.js";
 
-/** Build the tool definition (the ccr Retrieve.ts idiom). */
+/** Build the tool definition (the CCR Retrieve.ts idiom). */
 export default (Agent: State, Append: Log) => {
 	const Text = (Args: unknown, Key: string): string | undefined => {
 		if (Args === null || typeof Args !== "object" || Array.isArray(Args)) {

@@ -90,7 +90,7 @@ const ThroughSeam = async (
 };
 
 // ThroughChild: the fallback when no subprocess seam exists in this
-// deployment. Async; the abort signal kills the child.
+// deployment. Asynchronous; the abort signal kills the child.
 const ThroughChild = (
 	Factory: PluginFactory,
 	State: State,

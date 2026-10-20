@@ -87,8 +87,12 @@ export const WatchlistMatch = (State: State, Path: string): WatchlistEntry | und
  * Malformed or absent specs are skipped (runtime fail-open). */
 export const CatalogSets = (State: State, Path: string): string[] => {
 	const Sets: string[] = [];
-	for (const [ID, Spec] of Object.entries(State.CheckSets ?? {})) {
-		if (Spec && typeof Spec.glob === "string" && Matches(Spec.glob, Path)) {
+	for (const [ID, Specification] of Object.entries(State.CheckSets ?? {})) {
+		if (
+			Specification &&
+			typeof Specification.glob === "string" &&
+			Matches(Specification.glob, Path)
+		) {
 			Sets.push(ID);
 		}
 	}

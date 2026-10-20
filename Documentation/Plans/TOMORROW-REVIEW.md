@@ -1813,3 +1813,94 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
 ## THE SKILL CATALOG RESTRUCTURE COMPLETE (2026-10-20 - `3031ec6c`)
 
 - All 11 skills converted to the canonical structure (SKILL.md pointer index + the references/ folder + the scripts/ rule) in BOTH the live ~/.dsh/skills/ and the repo's Documentation/Skill/ - 162 reference files, the canonical template at code-authoring/references/skill-structure-template.md, the RELATIVE pointer format (./references/<name>.md - the user's correction), zero old-format remnants, byte scans clean. The naming amendment (Configuration over Config, Environment over Env + the two documented exceptions) in naming-rules-full-words.md; the DIFFICULTY-FIRST amendment (mechanical=trivial/low, semantic=routine/high, the file count never decides - the user's routing correction of 2026-10-20) reflected in the task-routing's difficulty-first.md (the routing table amended live too). The repo sync: cp + diff verification + the header re-applied via the edit tool (SKILL.md only - the existing convention; the references byte-faithful). THE RECORD: the copy-style lane (`7ad6fa01`) + the CCR lane (`29a79248`) still running.
+
+## THE BATCH-EDIT-TOOL FEATURE LOG (2026-10-20 - the user's directive, FOR THE FUTURE)
+
+- THE FEATURE: a NEW family plugin - the BATCH EDIT TOOL - a tool the model
+  calls INSTEAD of the bash-sed replaces and the literal per-file manual
+  edits. IT FUNCTIONS LIKE A LIVE CONTAINER (borrowing the live-containers
+  plugin's features - the live view / framework style). THE DESIGN: the
+  agent prepares itself a SCHEMA and dynamically inserts FILES into it;
+  the inserted files process like a STATE MACHINE - all in one go - like a
+  code execution block - FULLY propagated + controlled by the plugin
+  system: the state machine is SPONSORED / TRACKED / EVENTED by the event
+  system (the fs/observed + the tools/post-execute + the lifecycle events)
+  - so it is much better than the regular bash calls for: SEARCH, BATCH
+  EDITS, MONITORING. THE PHILOSOPHY (the user's paradigm): EACH FILE ON
+  THE SYSTEM IS A PROCESS (Process<Halted>) - it just depends on whether
+  it is running or not - the files are no longer just files, they are
+  LIVING BEINGS, PROCESSES - the reversed/counter-intuitive view opposing
+  the default UNIX view - this types the system so the developer/agent
+  holds all these processes. THE COMMONALITIES: the live container + the
+  new tool's shared machinery split into a SEPARATE package (the live-view
+  framework). THE PHASES: agent 1 = the research (the feasibility of the
+  crate/plugin), agent 2 = the suggestions + improvements, agent 3 = the
+  implementation (after the two land). THE RESEARCH AGENTS DISPATCHED:
+  R-BET-1 (`...`) + R-BET-2 (`...`).
+- THE REPRESENTATION-FIRST WORKSPACE RESEARCH PERSISTED (2026-10-20): the
+  external research distilled to Documentation/Plans/REPRESENTATION-FIRST-
+  WORKSPACE-RESEARCH.md - the framing (the representation-first agent
+  workspace - the intent vs the side effect), the six layers (filesystem
+  adapter, representation store, semantic model, operation engine,
+  governance pipeline, agent-facing projection - the store separate from
+  the context!), the tightened claims (the tool-choreography replacement
+  vs the elimination; ProcessHalted = the workspace lifecycle separate
+  from the OS execution; the licenses = concrete authority records with
+  the weight in separate fields; the never-escape = the security
+  requirement over every write path), the workspace.propose interaction
+  (the 6-step harness contract), the seven research questions (identity/
+  freshness/authority/commit/recovery/context-economy/semantic-uncertainty)
+  and the first-experiment scope (one language, symbol rename,
+  preview/apply, revisions, audit - the State:State -> State:Operational
+  reference case). The family's design connection: the layers map to the
+  batch-edit engine + the code-block stage + the government layers + the
+  live-view framework; the questions become the implementation's
+  acceptance criteria; the first experiment = the v1 scope. R-BET-1
+  (`78bea51c`) + the GRAND-SWEEP (`3b165bf9`) still running.
+- THE REPRESENTATION-FIRST RESEARCH ROUND 2 PERSISTED (2026-10-20): the
+  external research's extension distilled into REPRESENTATION-FIRST-
+  WORKSPACE-RESEARCH.md - the central inversion (the intent -> the
+  proposed transformation -> the workspace validation -> the authorized
+  reconciliation -> the verified result; the execution subordinate to the
+  workspace protocol), the representation contracts (the ManagedRepresen-
+  tation: identifier/resource/revisions/origin/completeness/freshness
+  (the qualified claim!)/permittedOperations/pendingChanges - the prove-
+  nance principle), the connected views (resource/semantic/authority/
+  work/history - the weight != permission!), the bidirectional transfor-
+  mations (the lenses: observe/propose/reconcile - the refusal-to-guess
+  first-class), the authority-vs-residency split (capability/ownership
+  lease/residency policy - the object capabilities validated inside the
+  harness), the non-destructive eviction (release/checkpoint/suspend/
+  discard/revoke + the revocation timing), the typed proposals (the 6-op
+  vocabulary + the LSP WorkspaceEdit seam), the meaning-preserving execu-
+  tion (the intent + the constraints attached to the changes), the reco-
+  very-before-rollback (the workItem + the undo as a new reconciliation),
+  the governance failure explicitness (the fail-open revised: the manda-
+  tory protections never silently disappear + the recursion prevention),
+  the hypothesis test (the 3 implementations × the same tasks + the diffi-
+  cult cases - the strongest claim = the coordination/control improvement).
+  R-BET-1 (`78bea51c`) + the GRAND-SWEEP (`3b165bf9`) still running.
+- THE WORKSPACE PLUGIN FAMILY DECOMPOSITION (2026-10-20 - the user's
+  distribution directive): the batch-edit idea is DISTRIBUTED across MANY
+  plugins - NEVER one monolith - the decomposition doc (Documentation/
+  Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md) names the family: the
+  WORKSPACE AGENT (@playform/plugin-dsh-workspace - the ONLY operational
+  view, what the conversation sees - the graph-like, self-correcting
+  living view) + the 14 invisible hooks (observe, semantics, operate,
+  govern, authority, journal, live, merge, monitor, context, approve,
+  audit, evidence, + the later-stage graph + reflect) + the shared
+  lib-dsh-live-view library. The orchestration: observe stamps ->
+  semantics resolve -> operate proposes -> govern gates -> authority
+  licenses -> approve binds -> merge commits (through Factory.Write) ->
+  journal records -> audit lines -> live presents - all evented, all
+  governed by the plugin harness. The phased delivery (the ablation-
+  aligned: the engine -> the safety -> the operational view -> the
+  reflective ops -> the monitors -> the graph/reflect later stages). The
+  visibility rule: the conversation sees only the operational view; the
+  machinery is invisible until an event surfaces it. The third-round
+  distillation appended to REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md
+  (the four kinds of truth, the evidence dependencies, the unseen
+  changes, the private candidates, the knowledge boundaries, the
+  attention projection, the exact approvals, the narrow guarantees, the
+  useful failures, the ablation study). R-BET-1/2 + the external
+  research = the full brief; the GRAND-SWEEP (`3b165bf9`) still running.

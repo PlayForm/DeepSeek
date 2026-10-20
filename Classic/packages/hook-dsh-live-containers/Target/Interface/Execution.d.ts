@@ -8,7 +8,7 @@ export type BlockTrigger = "request" | "event" | "ttl" | "manual";
 /** When a block participates at all (config `scope`). */
 export type BlockScope = "always" | "when-agents-active" | "when-tasks-live" | "never";
 /** One block spec (config `blocks` entries). */
-export interface BlockSpec {
+export interface BlockSpecification {
     /** Stable label; the block's key (unique across the table - fail-loud). */
     id: string;
     /** The block kind (see KINDS). */

@@ -57,7 +57,7 @@ export const Gate = (
 	}
 	const Ticks = Agent.SuggesterTicks.get(AgentID);
 	const Hour = Ticks?.ticks.filter((At) => Clock(Agent) - At < 3600000) ?? [];
-	if (Hour.length >= Agent.MaxSuggestionsPerHour) {
+	if (Hour.length >= Agent.MaximumSuggestionsPerHour) {
 		return false;
 	}
 	if (Ticks?.lastTurn === (Agent.TurnCounts.get(AgentID) ?? 0)) {
@@ -71,7 +71,9 @@ export const Gate = (
  * maxPromptBytes. */
 export const Excerpt = (Agent: State, Text: string): string => {
 	if (Agent.SuggesterPrivacy === "verbatim") {
-		return Text.length > Agent.MaxPromptBytes ? Text.slice(0, Agent.MaxPromptBytes) : Text;
+		return Text.length > Agent.MaximumPromptBytes
+			? Text.slice(0, Agent.MaximumPromptBytes)
+			: Text;
 	}
 	if (Text.length <= 200) {
 		return Text;

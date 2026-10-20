@@ -1,4 +1,4 @@
-import type { BlockSpec } from "@Interface/Execution.js";
+import type { BlockSpecification } from "@Interface/Execution.js";
 /** The detach policy knobs (design section 2.3, volatile). */
 export interface DetachOptions {
     mode: "off" | "long-running" | "all" | "selected";
@@ -76,7 +76,7 @@ export default interface Config {
     /** When the section body exceeds this many bytes, the oldest frames collapse (volatile). */
     sectionBudgetBytes: number;
     /** The block table - the ARRAY is the volatile cell, its leaves plain (volatile). */
-    blocks: BlockSpec[];
+    blocks: BlockSpecification[];
     /** The detach policy (design section 2.3, volatile). */
     detach: DetachOptions;
     /** The planted-block knobs (design section 2.4 + I5 section 8, volatile). */

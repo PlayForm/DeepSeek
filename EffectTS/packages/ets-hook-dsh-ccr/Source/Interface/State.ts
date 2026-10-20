@@ -20,7 +20,7 @@
 //   AutoExpandLimit- the auto-expand ceiling in bytes;
 //   Failures       - compress failing results too (config `compressFailures`);
 //   Multipliers    - the per-type gate multipliers (config `multipliers`, volatile);
-//   PreviewMax     - the hard preview character cap (config `previewMaxChars`, volatile);
+//   PreviewMaximum     - the hard preview character cap (config `previewMaxChars`, volatile);
 //   Ttl            - store TTL in seconds (config `ttlSeconds`);
 //   Budget         - the LRU budget in bytes (config `storeBudgetBytes`);
 //   JournalPath    - the optional JSONL journal path (config `journalPath`; "" = memory-only);
@@ -62,7 +62,7 @@ export default interface State extends Shared {
 	/** The per-type gate multipliers (config `multipliers`, volatile). */
 	Multipliers: Config["multipliers"];
 	/** The hard preview character cap (config `previewMaxChars`, volatile). */
-	PreviewMax: number;
+	PreviewMaximum: number;
 	/** Store TTL in seconds (config `ttlSeconds`). */
 	Ttl: number;
 	/** The LRU budget in bytes (config `storeBudgetBytes`). */

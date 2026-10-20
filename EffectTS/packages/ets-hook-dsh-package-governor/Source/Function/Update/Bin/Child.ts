@@ -1,5 +1,5 @@
 // Child — the minimal fallback path of the bin-mode runner: used when no
-// subprocess seam exists in this deployment. Async (the continuation owns
+// subprocess seam exists in this deployment. Asynchronous (the continuation owns
 // the wait); the abort signal kills the child.
 import * as ChildProcess from "node:child_process";
 

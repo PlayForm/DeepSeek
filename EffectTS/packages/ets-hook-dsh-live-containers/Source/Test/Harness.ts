@@ -477,10 +477,10 @@ export const FakeJobsHub = () => {
 		processes: [] as any[],
 	};
 	Hub.registry = {
-		start: (Spec: any) => {
+		start: (Specification: any) => {
 			Hub.next += 1;
 			const ID = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
-			Hub.started.push({ id: ID, spec: Spec });
+			Hub.started.push({ id: ID, spec: Specification });
 			return ID;
 		},
 		events: {
@@ -534,13 +534,13 @@ export const FakeShell = () => {
 	Shell.registry = {
 		sandboxMode: undefined,
 		resolve: (Request: any) => {
-			const Spec = { ...Request };
-			Shell.resolved.push(Spec);
-			return Spec;
+			const Specification = { ...Request };
+			Shell.resolved.push(Specification);
+			return Specification;
 		},
-		execute: async (Spec: any) => {
+		execute: async (Specification: any) => {
 			const Process = FakeProcess();
-			Shell.executed.push(Spec);
+			Shell.executed.push(Specification);
 			Shell.processes.push(Process);
 			return Process;
 		},
@@ -564,8 +564,8 @@ export const FakePolicy = (Mode = "workspace-write"): any => ({
 export const FakeSubagent = () => {
 	const Sub: any = { spawns: [] as any[], resolvers: [] as any[] };
 	Sub.registry = {
-		startActivation: (Spec: any) => {
-			Sub.spawns.push(Spec);
+		startActivation: (Specification: any) => {
+			Sub.spawns.push(Specification);
 			let ResolveResult: (Value: any) => void = () => undefined;
 			const Result = new Promise((Resolve) => {
 				ResolveResult = Resolve;
@@ -670,11 +670,11 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 		failOpen: Options.failOpen === true,
 	};
 	Store.facility = {
-		open: async (Spec: any) => {
+		open: async (Specification: any) => {
 			if (Store.failOpen) {
 				throw new Error("storage unavailable");
 			}
-			Store.spec = Spec;
+			Store.spec = Specification;
 			return {
 				close: async () => undefined,
 				table: (_Name: string) => ({

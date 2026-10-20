@@ -244,7 +244,7 @@ export const runTest = async (): Promise<number> => {
 		// The flipped fetchLive needs a working registry fixture again.
 		RunD5.Context.tools = { schemas: LiveSchemas };
 		await CheckAsync(Count, "D5: the maxSectionTools flip lands on the State", async () => {
-			assert.ok(RunD5.State.MaxSectionTools === 24);
+			assert.ok(RunD5.State.MaximumSectionTools === 24);
 		});
 		await CheckAsync(Count, "D5: the threshold flip lands on the State", async () => {
 			assert.ok(RunD5.State.Threshold === 2);

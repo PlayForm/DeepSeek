@@ -124,7 +124,7 @@ export const DEFAULT_PATTERNS: PatternRow[] = [
 	// --- SEARCH class --------------------------------------------------------
 	// Terminal reads of the family's CCR ledger bypass the ledger contract.
 	{
-		pattern: String.raw`\bgrep\b[^|;&]*ccr\.db|\bsqlite3\b[^|;&]*(ccr|ledger)`,
+		pattern: String.raw`\bgrep\b[^|;&]*CCR\.db|\bsqlite3\b[^|;&]*(CCR|ledger)`,
 		class: "search",
 		tool: "ccr_retrieve",
 	},

@@ -23,9 +23,9 @@ import type State from "@Interface/State.js";
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
 /** Cap one string to N bytes, single line (the row payload cap). */
-const Cap = (Text: string, Max: number): string => {
+const Cap = (Text: string, Maximum: number): string => {
 	const Cut = Text.split("\n")[0] ?? "";
-	return Cut.length > Max ? Cut.slice(0, Max) : Cut;
+	return Cut.length > Maximum ? Cut.slice(0, Maximum) : Cut;
 };
 
 /** The boards of one agent. */

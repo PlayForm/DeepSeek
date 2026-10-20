@@ -61,12 +61,12 @@ export default (Text: unknown): Manifest | null => {
 						continue;
 				}
 				for (const Kind of ["dependencies", "dev-dependencies", "build-dependencies"]) {
-					const Deps = (Value as Record<string, unknown>)[Kind];
+					const Dependencies = (Value as Record<string, unknown>)[Kind];
 					switch (true) {
-						case IsTable(Deps):
+						case IsTable(Dependencies):
 							Sections.push({
 								path: `target.${Name}.${Kind}`,
-								deps: Deps as Record<string, unknown>,
+								deps: Dependencies as Record<string, unknown>,
 							});
 							break;
 					}

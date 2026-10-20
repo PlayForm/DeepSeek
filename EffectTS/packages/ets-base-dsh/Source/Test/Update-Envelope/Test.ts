@@ -26,10 +26,10 @@ interface SmokeState {
 	Journal: Array<[string, string, string]>;
 	Ledger: string[];
 	Refreshed: Array<[unknown, number]>;
-	Spec: Parameters<Dependencies<SmokeState, unknown, number, null>["Start"]>[1] | null;
+	Specification: Parameters<Dependencies<SmokeState, unknown, number, null>["Start"]>[1] | null;
 	Detached: unknown;
 }
-type SmokeDeps = Dependencies<SmokeState, unknown, number, null>;
+type SmokeDependencies = Dependencies<SmokeState, unknown, number, null>;
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -58,7 +58,7 @@ export const runTest = async (): Promise<number> => {
 	}
 	// Group: Update - the typed-effect envelope (EffectTS additive).
 	{
-		const UpdateLines: SmokeDeps["Lines"] = {
+		const UpdateLines: SmokeDependencies["Lines"] = {
 			Paused: (Dir, Count, Limit) =>
 				`update stage paused for ${Dir} (consecutive=${Count}, limit=${Limit})`,
 			InFlight: (Dir) => `update stage skipped for ${Dir} (in-flight)`,
@@ -76,10 +76,10 @@ export const runTest = async (): Promise<number> => {
 			Journal: [],
 			Ledger: [],
 			Refreshed: [],
-			Spec: null,
+			Specification: null,
 			Detached: null,
 		});
-		const UpdateDeps = (Over: Partial<SmokeDeps> = {}): SmokeDeps => ({
+		const UpdateDeps = (Over: Partial<SmokeDependencies> = {}): SmokeDependencies => ({
 			Count: (State) => State.Count,
 			Stamp: (State) => State.Stamp,
 			Set: (State) => State.Set,
@@ -91,8 +91,8 @@ export const runTest = async (): Promise<number> => {
 			Journal: (State, Event, Dir, Detail) => State.Journal.push([Event, Dir, Detail]),
 			Refresh: (State, Target, _Actor, Version) => State.Refreshed.push([Target, Version]),
 			Stat: async () => ({ version: 7 }),
-			Start: (State, Spec, Detached) => {
-				State.Spec = Spec;
+			Start: (State, Specification, Detached) => {
+				State.Specification = Specification;
 				State.Detached = Detached;
 			},
 			Lines: UpdateLines,
@@ -189,7 +189,7 @@ export const runTest = async (): Promise<number> => {
 						["update stage paused for /x (consecutive=2, limit=2)"],
 						"the breaker gate: the paused line (the raw map read)",
 					);
-					assert.equal(State.Spec, null, "the breaker gate: no job started");
+					assert.equal(State.Specification, null, "the breaker gate: no job started");
 					assert.equal(
 						State.Journal.length,
 						0,
@@ -207,7 +207,7 @@ export const runTest = async (): Promise<number> => {
 						["update stage skipped for /x (in-flight)"],
 						"the in-flight gate: one update run per directory",
 					);
-					assert.equal(State.Spec, null, "the in-flight gate: no job started");
+					assert.equal(State.Specification, null, "the in-flight gate: no job started");
 				}
 				{
 					const State = UpdateState();
@@ -227,7 +227,7 @@ export const runTest = async (): Promise<number> => {
 						["update stage skipped for /x (cooldown)"],
 						"the cooldown gate",
 					);
-					assert.equal(State.Spec, null, "the cooldown gate: no job started");
+					assert.equal(State.Specification, null, "the cooldown gate: no job started");
 				}
 				{
 					// Branch: Dispatch - the dispatched path - the P2 registration,
@@ -254,15 +254,15 @@ export const runTest = async (): Promise<number> => {
 						/^update stage dispatched for \/x \(mode=smoke/,
 						"the dispatched ledger line comes after the journal record",
 					);
-					const Spec = State.Spec!;
-					assert.equal(Spec.kind, "governor-update", "the spec's producer kind");
-					assert.equal(Spec.label, "ncu /x", "the spec's one-line label");
+					const Specification = State.Specification!;
+					assert.equal(Specification.kind, "governor-update", "the spec's producer kind");
+					assert.equal(Specification.label, "ncu /x", "the spec's one-line label");
 					assert.equal(
 						State.Inflight.has("update:/x/package.json"),
 						true,
 						"the P2 registration under the namespaced key",
 					);
-					const Job = Spec.run({ append: () => {} });
+					const Job = Specification.run({ append: () => {} });
 					assert.equal(
 						typeof Job.cancel,
 						"function",
@@ -292,7 +292,7 @@ export const runTest = async (): Promise<number> => {
 					// the breaker and resolves `failed` with the module's rejected
 					// detail (containment).
 					const State = UpdateState();
-					const BoomStage: SmokeDeps["Stage"] = async (
+					const BoomStage: SmokeDependencies["Stage"] = async (
 						_State,
 						_Dir,
 						_Target,
@@ -317,7 +317,7 @@ export const runTest = async (): Promise<number> => {
 							"/p",
 						),
 					);
-					const Job = State.Spec!.run({ append: () => {} });
+					const Job = State.Specification!.run({ append: () => {} });
 					Job.cancel();
 					const Outcome = await Job.done;
 					assert.deepEqual(
@@ -349,7 +349,7 @@ export const runTest = async (): Promise<number> => {
 					await RunScoped(
 						Effect.gen(function* () {
 							yield Update(
-								UpdateDeps({ Start: (_State, _Spec, Detached) => Detached() }),
+								UpdateDeps({ Start: (_State, _Specification, Detached) => Detached() }),
 							).Dispatch(
 								State,
 								"/x/package.json",
@@ -387,7 +387,7 @@ export const runTest = async (): Promise<number> => {
 					// interruption aborts the task-owned controller - the Classic
 					// Inflight-disposal semantics.
 					const State = UpdateState();
-					const HangStage: SmokeDeps["Stage"] = (
+					const HangStage: SmokeDependencies["Stage"] = (
 						_State,
 						_Dir,
 						_Target,
@@ -404,7 +404,7 @@ export const runTest = async (): Promise<number> => {
 							yield Update(
 								UpdateDeps({
 									Stage: HangStage,
-									Start: (_State, _Spec, Detached) => Detached(),
+									Start: (_State, _Specification, Detached) => Detached(),
 								}),
 							).Dispatch(
 								State,

@@ -82,12 +82,12 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
-		const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)";
+		const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
 					RunO.ListenerOptions["tools/post-execute"]?.prepend === true,
-					"overpass: the post-execute arm PREPENDS (outermost vs the ccr arm's own prepend)",
+					"overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)",
 				);
 			});
 		}
@@ -278,7 +278,7 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	// O7: the CCR marker guard -> marker-bearing content passes unchanged
-	// (the ordering guard: normalization never touches a ccr replacement).
+	// (the ordering guard: normalization never touches a CCR replacement).
 	const MarkerBlockO = {
 		type: "text",
 		text: "[text:preview]\n<<<CCR:0123456789abcdef01234567|text|42>>>",
@@ -290,12 +290,12 @@ export const runTest = async (): Promise<number> => {
 	);
 	{
 		const Sub =
-			"overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)";
+			"overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
 					OutO7.kind === "accept" && !("content" in OutO7),
-					"overpass: marker-bearing content passes through the arm unchanged (N=0 on a ccr replacement)",
+					"overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)",
 				);
 			});
 		}

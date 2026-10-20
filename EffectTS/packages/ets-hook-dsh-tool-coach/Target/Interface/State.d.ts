@@ -29,7 +29,7 @@ export default interface State extends Shared {
     /** Live-fetch toggle (config `fetchLive`, volatile). */
     FetchLive: boolean;
     /** Maximum tier-2 tool-table rows (config `maxSectionTools`, volatile). */
-    MaxSectionTools: number;
+    MaximumSectionTools: number;
     /** Judged calls between tier-2 rebuilds (config `sectionTtl`, volatile). */
     SectionTtl: number;
     /** The injected factory service itself (the ledger) - set once in Apply. */

@@ -5,7 +5,7 @@
 // tool result here is PRE-COMMIT (the waterfall settles before the result is
 // appended to the durable log), so rewriting it is not history rewriting.
 //
-// Semantics (each decision point follows the ccr precedent,
+// Semantics (each decision point follows the CCR precedent,
 // hook-dsh-ccr/Source/Function/Apply.ts:201-218):
 //   * next() is ALWAYS awaited first - omitting it short-circuits the
 //     downstream listeners;
@@ -24,9 +24,9 @@
 //     downstream listeners already shaped, or the raw result;
 //   * TEXT blocks only: never tool-call/argument blocks (the execution-
 //     critical-JSON rule of the core's stream gate);
-//   * the CCR MARKER GUARD: a text block already carrying the ccr spill
+//   * the CCR MARKER GUARD: a text block already carrying the CCR spill
 //     marker bytes passes through untouched - normalization never touches a
-//     ccr replacement, which makes the arm order-safe against the ccr hook's
+//     CCR replacement, which makes the arm order-safe against the CCR hook's
 //     own prepended post-execute listener under ANY bundle load order;
 //   * N = 0 -> the downstream decision is returned unchanged (no ledger
 //     line - the normalize-file no-op precedent);
@@ -40,8 +40,8 @@
 //     pipeline failure.
 //
 // The registration is `{ prepend: true }`: the family's bundle order places
-// the ccr hook before the normalize hooks, so the arm that prepends later is
-// OUTERMOST - the ccr gate compresses the NORMALIZED bytes (its size stats
+// the CCR hook before the normalize hooks, so the arm that prepends later is
+// OUTERMOST - the CCR gate compresses the NORMALIZED bytes (its size stats
 // then describe what the model actually sees). The marker guard above makes
 // any load order safe regardless.
 //
@@ -78,7 +78,7 @@ export const DefaultExempt = [
 	"ask_user_question",
 ];
 
-/** The ccr spill marker's opening bytes - content carrying them is a ccr
+/** The CCR spill marker's opening bytes - content carrying them is a CCR
  *  replacement and passes through untouched (the order-safety guard). */
 export const CCRMarker = "<<<CCR:";
 
@@ -100,7 +100,7 @@ export const RewriteBlocks = (
 			case Block?.type !== "text" || typeof Block?.text !== "string":
 				return Block; // never tool-call/argument or unknown blocks
 			case String(Block.text).includes(CCRMarker):
-				return Block; // the ccr marker guard
+				return Block; // the CCR marker guard
 		}
 		const Result = Transform(Block.text as string);
 		switch (true) {
@@ -165,12 +165,12 @@ export default async (
 				return Decision;
 		}
 		const Name = typeof Exec?.name === "string" ? Exec.name : "";
-		const CallId = typeof Exec?.callId === "string" ? Exec.callId : "";
-		const Line = `overpass: normalized ${Count.value} char(s) in tool result ${Name} ${CallId}`;
+		const CallID = typeof Exec?.callId === "string" ? Exec.callId : "";
+		const Line = `overpass: normalized ${Count.value} char(s) in tool result ${Name} ${CallID}`;
 		State.Factory.Append(State, Line);
 		// P5 journal - the shared `normalized` event with the scope in the
 		// path slot, best-effort (with no storage facility this is a no-op).
-		State.Factory.Journal(State, "normalized", `tool result ${Name} ${CallId}`, Line);
+		State.Factory.Journal(State, "normalized", `tool result ${Name} ${CallID}`, Line);
 		// The replacement: `{ kind: "accept", content: <rewritten blocks> }`
 		// (the plan's exact decision shape; the value case was excluded
 		// above). The blocks are guarded casts: the rewrite only replaces the

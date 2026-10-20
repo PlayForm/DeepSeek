@@ -150,7 +150,15 @@ The core makes each of them exist
                            passthrough by identity)
 ```
 
-The tool-argument control in one formula: effective tool-input normalization = `normalizeToolArguments || scopes.toolInput` - the granular scopes (conversation/reasoning/toolInput/toolResults/files/batch, plus the `toolResultsExempt` list) are ALL volatile live toggles delivered by the `loader/volatile-update` dispatch (no remount), and the tool-args arm is the only execution-critical one - the per-call `{"__normalize":false` first-key marker its escape hatch (first key only; a pathologically tiny first delta shorter than the marker is invisible to the startsWith probe and the call normalizes normally).
+The tool-argument control in one formula:
+effective tool-input normalization = `normalizeToolArguments || scopes.toolInput`.
+The granular scopes (conversation/reasoning/toolInput/toolResults/files/batch, plus the
+`toolResultsExempt` list) are ALL volatile live toggles
+delivered by the `loader/volatile-update` dispatch (no remount).
+The tool-args arm is the only execution-critical one.
+The per-call `{"__normalize":false` first-key marker is its escape hatch
+(first key only; a pathologically tiny first delta shorter than the marker
+is invisible to the startsWith probe and the call normalizes normally).
 
 The dispatch owns the **structure** (which fields of which chunk types); the flavor owns the
 **substitution** - a new normalization flavor is a table plus a closure, not a fork of the dispatch:

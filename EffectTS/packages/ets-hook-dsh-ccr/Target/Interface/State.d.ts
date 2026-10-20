@@ -1,6 +1,6 @@
-import type { EngineRuntime } from "../Function/Engine.js";
-import type Store from "../Function/Store.js";
-import type Config from "./Config.js";
+import type { EngineRuntime } from "@Function/Engine.js";
+import type Store from "@Function/Store.js";
+import type Config from "@Interface/Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {
@@ -21,7 +21,7 @@ export default interface State extends Shared {
     /** The per-type gate multipliers (config `multipliers`, volatile). */
     Multipliers: Config["multipliers"];
     /** The hard preview character cap (config `previewMaxChars`, volatile). */
-    PreviewMax: number;
+    PreviewMaximum: number;
     /** Store TTL in seconds (config `ttlSeconds`). */
     Ttl: number;
     /** The LRU budget in bytes (config `storeBudgetBytes`). */

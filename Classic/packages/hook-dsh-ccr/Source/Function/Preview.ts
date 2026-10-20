@@ -8,7 +8,7 @@
 //
 // Pure functions of (type, content, max): no I/O, no clock, no session
 // state. Every builder goes through the SAME hard-cut truncation: a preview
-// longer than `max` (the volatile `previewMaxChars`, default 240) is cut to
+// longer than `max` (the volatile `previewMaximumChars`, default 240) is cut to
 // exactly `max` characters - the cap is a hard ceiling, never a graceful
 // ellipsis, so a smoke can assert the cut bytes. `error` previews are just
 // the first significant line (the failure message is the preview).
@@ -16,11 +16,11 @@ import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 
 import { Text as Joined } from "./Classify.js";
 
-export default (Type: string, Content: ContentBlock[], Max: number): string => {
+export default (Type: string, Content: ContentBlock[], Maximum: number): string => {
 	const Full = Body(Type, Joined(Content), Content);
 	switch (true) {
-		case Max >= 0 && Full.length > Max:
-			return Full.slice(0, Max);
+		case Maximum >= 0 && Full.length > Maximum:
+			return Full.slice(0, Maximum);
 		default:
 			return Full;
 	}

@@ -23,7 +23,12 @@ import { INLINE_DEADLINE_MS } from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
 import * as Storage from "@Function/Storage.js";
 import * as Watchlist from "@Function/Watchlist.js";
-import type { CheckResult, CheckSetSpec, MonitorEntry, TailBuffer } from "@Interface/Events.js";
+import type {
+	CheckResult,
+	CheckSetSpecification,
+	MonitorEntry,
+	TailBuffer,
+} from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
 /** The structural fs/observed types (the factory's Wire signature, verified
@@ -173,8 +178,12 @@ export const OnObserved = (
 			// coalescing - only the newest pending run survives). The slow
 			// sets never auto-run per-edit.
 			for (const SetID of Fresh.sets) {
-				const Spec = State.CheckSets[SetID];
-				if (Spec === undefined || Spec.link !== undefined || Spec.fast === false) {
+				const Specification = State.CheckSets[SetID];
+				if (
+					Specification === undefined ||
+					Specification.link !== undefined ||
+					Specification.fast === false
+				) {
 					continue;
 				}
 				Fresh.pending.set(SetID, { since: Now });
@@ -233,14 +242,17 @@ export const Dispatch = async (
 	AgentID: string,
 	Entry: MonitorEntry,
 	SetID: string,
-	Spec: CheckSetSpec,
+	Specification: CheckSetSpecification,
 	Append: Log,
 ): Promise<string | undefined> => {
 	const At = Clock(State);
 	const Seq = State.MonitorCallSeq + 1;
 	State.MonitorCallSeq = Seq;
-	const Command = Substitute(Spec.command ?? "", Entry.path, SetID, Append);
-	const Timeout = Math.min(Spec.timeoutMs ?? State.Monitor.checkTimeoutMs, INLINE_DEADLINE_MS);
+	const Command = Substitute(Specification.command ?? "", Entry.path, SetID, Append);
+	const Timeout = Math.min(
+		Specification.timeoutMs ?? State.Monitor.checkTimeoutMs,
+		INLINE_DEADLINE_MS,
+	);
 	const Placeholder = `pending-${Seq}`;
 	State.MonitorJobs.set(Placeholder, {
 		agentId: AgentID,
@@ -328,12 +340,12 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 						continue;
 					}
 					Entry.pending.delete(SetID);
-					const Spec = State.CheckSets[SetID];
-					if (Spec === undefined || Spec.link !== undefined) {
+					const Specification = State.CheckSets[SetID];
+					if (Specification === undefined || Specification.link !== undefined) {
 						Append(`monitor check unknown ${SetID}`);
 						continue;
 					}
-					void Dispatch(State, Entry.agentId, Entry, SetID, Spec, Append);
+					void Dispatch(State, Entry.agentId, Entry, SetID, Specification, Append);
 				}
 			}
 		}
@@ -346,8 +358,12 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 			for (const [AgentID, PerAgent] of State.Monitors) {
 				for (const [PathKey, Entry] of PerAgent) {
 					for (const SetID of Entry.sets) {
-						const Spec = State.CheckSets[SetID];
-						if (Spec === undefined || Spec.link !== undefined || Spec.fast !== false) {
+						const Specification = State.CheckSets[SetID];
+						if (
+							Specification === undefined ||
+							Specification.link !== undefined ||
+							Specification.fast !== false
+						) {
 							continue;
 						}
 						const Last = State.MonitorSlowLast.get(AgentID)?.get(PathKey)?.get(SetID);
@@ -366,7 +382,7 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 						const PerSet = PerPath.get(PathKey) ?? new Map<string, number>();
 						PerPath.set(PathKey, PerSet);
 						PerSet.set(SetID, At);
-						void Dispatch(State, AgentID, Entry, SetID, Spec, Append);
+						void Dispatch(State, AgentID, Entry, SetID, Specification, Append);
 					}
 				}
 			}

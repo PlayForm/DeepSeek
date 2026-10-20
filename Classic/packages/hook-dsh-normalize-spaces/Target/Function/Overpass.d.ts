@@ -11,7 +11,7 @@ export declare const DefaultScopes: {
 };
 /** The schema-default exemption list (the fallback for a hand-built config). */
 export declare const DefaultExempt: string[];
-/** The ccr spill marker's opening bytes - content carrying them is a ccr
+/** The CCR spill marker's opening bytes - content carrying them is a CCR
  *  replacement and passes through untouched (the order-safety guard). */
 export declare const CCRMarker = "<<<CCR:";
 /** A structural content block: the only field the arm reads is the text. */

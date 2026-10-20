@@ -1,5 +1,5 @@
 import type { Log } from "@Function/Render.js";
-import type { CheckSetSpec, MonitorEntry } from "@Interface/Events.js";
+import type { CheckSetSpecification, MonitorEntry } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 /** The structural fs/observed types (the factory's Wire signature, verified
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module
@@ -28,7 +28,7 @@ export declare const OnObserved: (State: State, Target: FsTarget, Observation: F
  * last-known result and renders STALE at the next request). The dispatch
  * RESERVES one admission slot for the in-flight start (the async gap would
  * otherwise let every pending set pass the admission check at once). */
-export declare const Dispatch: (State: State, AgentID: string, Entry: MonitorEntry, SetID: string, Spec: CheckSetSpec, Append: Log) => Promise<string | undefined>;
+export declare const Dispatch: (State: State, AgentID: string, Entry: MonitorEntry, SetID: string, Specification: CheckSetSpecification, Append: Log) => Promise<string | undefined>;
 /** The checkpoint scan (called at every checkpoint, fail-open): the deadline
  * scan at every phase; the debounce dispatch at every phase; the slow
  * schedule and the retirement scan at the assemble phase only. */

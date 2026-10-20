@@ -116,7 +116,7 @@ export interface Dependencies<S, T, V, R> {
 	 *  starter's containment) and the core owns the spec and the hooks. */
 	Start: (
 		State: S,
-		Spec: {
+		Specification: {
 			/** Producer kind — also the id prefix. */
 			kind: string;
 			/** One-line label (the child stage's command and directory). */
@@ -175,7 +175,7 @@ export interface Dependencies<S, T, V, R> {
 }
 
 export default <S, T, V, R>(
-	Dep: Dependencies<S, T, V, R>,
+	Dependency: Dependencies<S, T, V, R>,
 ): {
 	Dispatch: (
 		State: S,
@@ -207,25 +207,35 @@ export default <S, T, V, R>(
 		Code: number,
 	): Effect.Effect<number> =>
 		Effect.gen(function* () {
-			Dep.Set(State).delete(Dir);
-			Dep.Inflight(State).delete(Dep.UpdateKey(State, Target));
+			Dependency.Set(State).delete(Dir);
+			Dependency.Inflight(State).delete(Dependency.UpdateKey(State, Target));
 			switch (true) {
 				case Code === 0:
-					Dep.Count(State).set(Dir, 0);
+					Dependency.Count(State).set(Dir, 0);
 					break;
 				default:
-					Dep.Count(State).set(Dir, (Dep.Count(State).get(Dir) ?? 0) + 1);
-					Dep.Append(State, Dep.Lines.Failed(Dir, Code, Dep.Count(State).get(Dir)));
-					Dep.Journal(State, Dep.FailedEvent, Dir, String(Code));
+					Dependency.Count(State).set(Dir, (Dependency.Count(State).get(Dir) ?? 0) + 1);
+					Dependency.Append(
+						State,
+						Dependency.Lines.Failed(Dir, Code, Dependency.Count(State).get(Dir)),
+					);
+					Dependency.Journal(State, Dependency.FailedEvent, Dir, String(Code));
 			}
 			// U₂ — refresh the module's policy record after the child stage
 			// mutated the manifest, or the author's next guarded write/edit would
 			// fail FS_STALE_VERSION (a notification leak). Best-effort: any
 			// failure is swallowed here.
-			const Info = yield* Effect.exit(Effect.tryPromise(() => Dep.Stat(State, Target)));
+			const Information = yield* Effect.exit(
+				Effect.tryPromise(() => Dependency.Stat(State, Target)),
+			);
 			switch (true) {
-				case Exit.isSuccess(Info) && !!Info.value:
-					Dep.Refresh(State, Target, Actor, (Info.value as { version: V }).version);
+				case Exit.isSuccess(Information) && !!Information.value:
+					Dependency.Refresh(
+						State,
+						Target,
+						Actor,
+						(Information.value as { version: V }).version,
+					);
 					break;
 			}
 			return Code;
@@ -245,30 +255,34 @@ export default <S, T, V, R>(
 	): Effect.Effect<void, never, Scope.Scope> =>
 		Effect.gen(function* () {
 			switch (true) {
-				case (Dep.Count(State).get(Dir) ?? 0) >= Dep.Limit(State):
-					Dep.Append(
+				case (Dependency.Count(State).get(Dir) ?? 0) >= Dependency.Limit(State):
+					Dependency.Append(
 						State,
-						Dep.Lines.Paused(Dir, Dep.Count(State).get(Dir), Dep.Limit(State)),
+						Dependency.Lines.Paused(
+							Dir,
+							Dependency.Count(State).get(Dir),
+							Dependency.Limit(State),
+						),
 					);
 					return;
-				case Dep.Set(State).has(Dir):
-					Dep.Append(State, Dep.Lines.InFlight(Dir));
+				case Dependency.Set(State).has(Dir):
+					Dependency.Append(State, Dependency.Lines.InFlight(Dir));
 					return; // one update run per directory
 			}
 			const Now = Date.now();
 			switch (true) {
-				case Now - (Dep.Stamp(State).get(Dir) ?? 0) < Dep.Wait(State):
-					Dep.Append(State, Dep.Lines.Cooldown(Dir));
+				case Now - (Dependency.Stamp(State).get(Dir) ?? 0) < Dependency.Wait(State):
+					Dependency.Append(State, Dependency.Lines.Cooldown(Dir));
 					return;
 			}
-			Dep.Stamp(State).set(Dir, Now);
-			Dep.Set(State).add(Dir);
+			Dependency.Stamp(State).set(Dir, Now);
+			Dependency.Set(State).add(Dir);
 			// P2 — the task-owned abort signal belongs to this continuation
 			// (published work outlives the event dispatch); it is registered under
 			// the FACTORY's namespaced key (UpdateKey) so the inflight disposal
 			// effect can abort in-flight work on unload, and removed on settlement.
 			const Control = new AbortController();
-			Dep.Inflight(State).set(Dep.UpdateKey(State, Target), {
+			Dependency.Inflight(State).set(Dependency.UpdateKey(State, Target), {
 				controller: Control,
 			});
 			// The child stage, called once per continuation: `Job` is the job's
@@ -276,15 +290,15 @@ export default <S, T, V, R>(
 			// fallback. The plain promise seam lifted into an effect.
 			const Stage = (Signal: AbortSignal, Job: Job | undefined) =>
 				Effect.tryPromise(() =>
-					Dep.Stage(State, Dir, Target, Actor, Registry, PolicyPath, Signal, Job),
+					Dependency.Stage(State, Dir, Target, Actor, Registry, PolicyPath, Signal, Job),
 				);
 			// The defensive containment (the Classic catch blocks): drop the
 			// in-flight markers and count the failure — no failure line, no
 			// journal record (Settle never ran).
 			const Contain = (): void => {
-				Dep.Set(State).delete(Dir);
-				Dep.Inflight(State).delete(Dep.UpdateKey(State, Target));
-				Dep.Count(State).set(Dir, (Dep.Count(State).get(Dir) ?? 0) + 1);
+				Dependency.Set(State).delete(Dir);
+				Dependency.Inflight(State).delete(Dependency.UpdateKey(State, Target));
+				Dependency.Count(State).set(Dir, (Dependency.Count(State).get(Dir) ?? 0) + 1);
 			};
 			// The NEVER-REJECTING contained chain: Stage → Settle → the outcome
 			// map. Both exit points are `Effect.exit`-contained — a bug-level
@@ -309,13 +323,13 @@ export default <S, T, V, R>(
 									Contain();
 									return {
 										status: "failed" as const,
-										detail: Dep.RejectedDetail,
+										detail: Dependency.RejectedDetail,
 									};
 							}
 						}
 						default:
 							Contain();
-							return { status: "failed" as const, detail: Dep.RejectedDetail };
+							return { status: "failed" as const, detail: Dependency.RejectedDetail };
 					}
 				});
 			// The plugin's scope — the continuation's fiber home. `Dispatch` runs
@@ -349,11 +363,11 @@ export default <S, T, V, R>(
 			// the starter is called, guarded, or replaced by the detached fallback
 			// is the module's Start hook (the probe semantics differ legitimately -
 			// the cargo module contains its probe, the parent governor does not).
-			Dep.Start(
+			Dependency.Start(
 				State,
 				{
-					kind: Dep.Kind,
-					label: Dep.Label(Dir),
+					kind: Dependency.Kind,
+					label: Dependency.Label(Dir),
 					run: (Job) => ({
 						cancel: () => Control.abort("killed"),
 						// Never rejects: the child stage and the settlement are contained,
@@ -370,8 +384,13 @@ export default <S, T, V, R>(
 			);
 			// The P5 dispatched record + the ledger line (the governor-family
 			// order: journal first, then the line).
-			Dep.Journal(State, Dep.DispatchedEvent, Dir, Dep.DispatchedDetail(State));
-			Dep.Append(State, Dep.Lines.Dispatched(State, Dir, PolicyPath));
+			Dependency.Journal(
+				State,
+				Dependency.DispatchedEvent,
+				Dir,
+				Dependency.DispatchedDetail(State),
+			);
+			Dependency.Append(State, Dependency.Lines.Dispatched(State, Dir, PolicyPath));
 		});
 	return { Dispatch, Settle };
 };

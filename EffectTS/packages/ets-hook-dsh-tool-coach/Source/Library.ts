@@ -46,7 +46,7 @@
 // count. The dedicated tools are never judged; legitimate bash (builds,
 // tests, git, package managers, file lifecycle) is exempt by default.
 //
-// FULLY CONTRACT-AWARE: the post-execute listener runs AFTER the ccr
+// FULLY CONTRACT-AWARE: the post-execute listener runs AFTER the CCR
 // {prepend:true} listener and normalize's post-execute (plain registration
 // order); every listener awaits next() FIRST and is fail-open (never throws
 // into a waterfall). The coach does NOT use factory Wire/Attach/Schema: it is

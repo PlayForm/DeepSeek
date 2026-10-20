@@ -40,7 +40,7 @@ export const runTest = async (): Promise<number> => {
 			}
 		}
 		{
-			const Meta7 = Tool.output.presentationMeta(
+			const Metadata7 = Tool.output.presentationMeta(
 				{},
 				{ path: Fixture, count: 7, changed: true, before: All6, after: Normalized6 },
 			);
@@ -48,14 +48,14 @@ export const runTest = async (): Promise<number> => {
 				const Sub = "presentationMeta projects the changed outcome's before/after";
 				Check(Count, Sub, () => {
 					assert.ok(
-						Meta7.changed === true &&
-							Meta7.path === Fixture &&
-							Meta7.before === All6 &&
-							Meta7.after === Normalized6,
+						Metadata7.changed === true &&
+							Metadata7.path === Fixture &&
+							Metadata7.before === All6 &&
+							Metadata7.after === Normalized6,
 					);
 				});
 			}
-			const Card7 = Tool.presentResult({ file_path: Fixture }, { isError: false, content: [], meta: Meta7 });
+			const Card7 = Tool.presentResult({ file_path: Fixture }, { isError: false, content: [], meta: Metadata7 });
 			{
 				const Sub = "presentResult: the diff card for a changed file";
 				Check(Count, Sub, () => {
@@ -75,18 +75,18 @@ export const runTest = async (): Promise<number> => {
 			}
 		}
 		{
-			const MetaNoop = Tool.output.presentationMeta({}, { path: Clean, count: 0, changed: false });
+			const MetadataNoop = Tool.output.presentationMeta({}, { path: Clean, count: 0, changed: false });
 			{
 				const Sub = "presentationMeta for a no-op: changed=false, no before/after";
 				Check(Count, Sub, () => {
-					assert.ok(MetaNoop.changed === false && MetaNoop.path === Clean);
+					assert.ok(MetadataNoop.changed === false && MetadataNoop.path === Clean);
 				});
 			}
 			{
 				const Sub = "presentResult: no diff card for a no-op (the generic result renders)";
 				Check(Count, Sub, () => {
 					assert.ok(
-						Tool.presentResult({ file_path: Clean }, { isError: false, content: [], meta: MetaNoop }) ===
+						Tool.presentResult({ file_path: Clean }, { isError: false, content: [], meta: MetadataNoop }) ===
 							undefined,
 					);
 				});

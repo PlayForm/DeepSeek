@@ -1,5 +1,5 @@
-import type { BoardState, CheckSetSpec, CompletionSlot, DetachRecord, MonitorEntry, MonitorJobRecord, MonitorRecord, SuggesterState, Suggestion, TagRecord, WatchlistEntry } from "@Interface/Events.js";
-import type { AgentState, BlockSpec } from "@Interface/Execution.js";
+import type { BoardState, CheckSetSpecification, CompletionSlot, DetachRecord, MonitorEntry, MonitorJobRecord, MonitorRecord, SuggesterState, Suggestion, TagRecord, WatchlistEntry } from "@Interface/Events.js";
+import type { AgentState, BlockSpecification } from "@Interface/Execution.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
@@ -16,7 +16,7 @@ export default interface State extends Shared {
     /** The section budget in bytes (config `sectionBudgetBytes`, volatile). */
     Budget: number;
     /** The block table (config `blocks`, volatile). */
-    Blocks: BlockSpec[];
+    Blocks: BlockSpecification[];
     /** The injected factory service itself (the ledger) - set once in Apply. */
     Factory: Factory;
     /** The per-scope states (WeakMap keyed on the scope/agent object). */
@@ -48,9 +48,9 @@ export default interface State extends Shared {
     /** The suggester gate length in chars (config `suggestGateMinChars`, volatile). */
     SuggestGateMinChars: number;
     /** The hourly suggestion rate cap (config `maxSuggestionsPerHour`, volatile). */
-    MaxSuggestionsPerHour: number;
+    MaximumSuggestionsPerHour: number;
     /** The verbatim excerpt cap in bytes (config `maxPromptBytes`, volatile). */
-    MaxPromptBytes: number;
+    MaximumPromptBytes: number;
     /** The suggester timeout in ms (config `suggestTimeoutMs`, volatile). */
     SuggestTimeoutMs: number;
     /** The auto-plant flip (config `autoPlant`, volatile). */
@@ -78,7 +78,7 @@ export default interface State extends Shared {
     /** The dedup retry counters, per agent id -> normalized command. */
     DedupCounts: Map<string, Map<string, number>>;
     /** The failsafe meta-budget counters, per agent id -> { turn, used }. */
-    MetaBudget: Map<string, {
+    MetadataBudget: Map<string, {
         turn: number;
         used: number;
     }>;
@@ -107,7 +107,7 @@ export default interface State extends Shared {
     /** The watchlist (config `watchlist`, volatile). */
     Watchlist: WatchlistEntry[];
     /** The check-set catalog (config `checksets`, volatile). */
-    CheckSets: Record<string, CheckSetSpec>;
+    CheckSets: Record<string, CheckSetSpecification>;
     /** The per-agent monitor sets: agent id -> path key -> entry. */
     Monitors: Map<string, Map<string, MonitorEntry>>;
     /** The live monitor jobs: job id -> record (the settle fold, the board

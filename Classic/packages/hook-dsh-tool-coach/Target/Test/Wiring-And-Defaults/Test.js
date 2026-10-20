@@ -115,7 +115,7 @@ const runTest = async () => {
     });
     Check(
       Count,
-      "tools/post-execute is a PLAIN registration (runs AFTER ccr's {prepend:true})",
+      "tools/post-execute is a PLAIN registration (runs AFTER CCR's {prepend:true})",
       () => {
         assert.equal(Run1.ListenerOptions["tools/post-execute"], void 0);
       }

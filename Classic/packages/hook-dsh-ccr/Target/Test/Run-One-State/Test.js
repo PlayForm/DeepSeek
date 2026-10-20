@@ -68,9 +68,9 @@ const runTest = async () => {
     });
   }
   {
-    const Sub = "volatile unwrap: previewMaxChars cell \u2192 State.PreviewMax=240";
+    const Sub = "volatile unwrap: previewMaxChars cell \u2192 State.PreviewMaximum=240";
     Check(Count, Sub, () => {
-      assert.ok(Run1.State.PreviewMax === 240);
+      assert.ok(Run1.State.PreviewMaximum === 240);
     });
   }
   {

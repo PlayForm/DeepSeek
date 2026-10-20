@@ -12,7 +12,7 @@
 // governs the DURABLE ledger file only; the plugin's own `enabled` cell is
 // the master switch (the IDLE-forever posture: false is the shipped
 // default).
-import type { BlockSpec } from "@Interface/Execution.js";
+import type { BlockSpecification } from "@Interface/Execution.js";
 
 /** The detach policy knobs (design section 2.3, volatile). */
 export interface DetachOptions {
@@ -97,7 +97,7 @@ export default interface Config {
 	/** When the section body exceeds this many bytes, the oldest frames collapse (volatile). */
 	sectionBudgetBytes: number;
 	/** The block table - the ARRAY is the volatile cell, its leaves plain (volatile). */
-	blocks: BlockSpec[];
+	blocks: BlockSpecification[];
 	// WAVE-2 FIELDS (the C2 extension - appended only; the phase-1 fields
 	// above keep their shape and defaults).
 	/** The detach policy (design section 2.3, volatile). */

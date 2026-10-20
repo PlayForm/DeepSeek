@@ -43,12 +43,12 @@ const runTest = async () => {
     const Store = FakeStorage();
     await OpenStorage(Run, Store.facility);
     Check(Count, "P1: the domain spec is name/version/layout/invalidRecords/one checks table", () => {
-      const Spec = Store.spec;
-      assert.equal(Spec.name, "live_containers_monitors");
-      assert.equal(Spec.version, 1);
-      assert.equal(Spec.layout, "per-record");
-      assert.equal(Spec.invalidRecords, "backup-and-skip");
-      assert.ok(Spec.tables.checks !== void 0);
+      const Specification = Store.spec;
+      assert.equal(Specification.name, "live_containers_monitors");
+      assert.equal(Specification.version, 1);
+      assert.equal(Specification.layout, "per-record");
+      assert.equal(Specification.invalidRecords, "backup-and-skip");
+      assert.ok(Specification.tables.checks !== void 0);
     });
     Check(Count, "P1: a successful open binds the sink and sets the persistence flag", () => {
       assert.equal(Run.State.MonitorsPersist, true);

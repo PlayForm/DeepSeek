@@ -41,7 +41,7 @@ const runTest = async () => {
       Journal: [],
       Ledger: [],
       Refreshed: [],
-      Spec: null,
+      Specification: null,
       Detached: null
     });
     const UpdateDeps = (Over = {}) => ({
@@ -56,8 +56,8 @@ const runTest = async () => {
       Journal: (State, Event, Dir, Detail) => State.Journal.push([Event, Dir, Detail]),
       Refresh: (State, Target, _Actor, Version) => State.Refreshed.push([Target, Version]),
       Stat: async () => ({ version: 7 }),
-      Start: (State, Spec, Detached) => {
-        State.Spec = Spec;
+      Start: (State, Specification, Detached) => {
+        State.Specification = Specification;
         State.Detached = Detached;
       },
       Lines: UpdateLines,
@@ -142,7 +142,7 @@ const runTest = async () => {
             ["update stage paused for /x (consecutive=2, limit=2)"],
             "the breaker gate: the paused line (the raw map read)"
           );
-          assert.equal(State.Spec, null, "the breaker gate: no job started");
+          assert.equal(State.Specification, null, "the breaker gate: no job started");
           assert.equal(
             State.Journal.length,
             0,
@@ -160,7 +160,7 @@ const runTest = async () => {
             ["update stage skipped for /x (in-flight)"],
             "the in-flight gate: one update run per directory"
           );
-          assert.equal(State.Spec, null, "the in-flight gate: no job started");
+          assert.equal(State.Specification, null, "the in-flight gate: no job started");
         }
         {
           const State = UpdateState();
@@ -180,7 +180,7 @@ const runTest = async () => {
             ["update stage skipped for /x (cooldown)"],
             "the cooldown gate"
           );
-          assert.equal(State.Spec, null, "the cooldown gate: no job started");
+          assert.equal(State.Specification, null, "the cooldown gate: no job started");
         }
         {
           const State = UpdateState();
@@ -204,15 +204,15 @@ const runTest = async () => {
             /^update stage dispatched for \/x \(mode=smoke/,
             "the dispatched ledger line comes after the journal record"
           );
-          const Spec = State.Spec;
-          assert.equal(Spec.kind, "governor-update", "the spec's producer kind");
-          assert.equal(Spec.label, "ncu /x", "the spec's one-line label");
+          const Specification = State.Specification;
+          assert.equal(Specification.kind, "governor-update", "the spec's producer kind");
+          assert.equal(Specification.label, "ncu /x", "the spec's one-line label");
           assert.equal(
             State.Inflight.has("update:/x/package.json"),
             true,
             "the P2 registration under the namespaced key"
           );
-          const Job = Spec.run({ append: () => {
+          const Job = Specification.run({ append: () => {
           } });
           assert.equal(
             typeof Job.cancel,
@@ -257,7 +257,7 @@ const runTest = async () => {
               "/p"
             )
           );
-          const Job = State.Spec.run({ append: () => {
+          const Job = State.Specification.run({ append: () => {
           } });
           Job.cancel();
           const Outcome = await Job.done;
@@ -287,7 +287,7 @@ const runTest = async () => {
           await RunScoped(
             Effect.gen(function* () {
               yield Update(
-                UpdateDeps({ Start: (_State, _Spec, Detached) => Detached() })
+                UpdateDeps({ Start: (_State, _Specification, Detached) => Detached() })
               ).Dispatch(
                 State,
                 "/x/package.json",
@@ -324,7 +324,7 @@ const runTest = async () => {
               yield Update(
                 UpdateDeps({
                   Stage: HangStage,
-                  Start: (_State, _Spec, Detached) => Detached()
+                  Start: (_State, _Specification, Detached) => Detached()
                 })
               ).Dispatch(
                 State,

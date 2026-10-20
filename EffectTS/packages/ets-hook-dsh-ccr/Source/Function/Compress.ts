@@ -93,7 +93,7 @@ export default (State: State, Name: string, IsError: boolean, Content: ContentBl
 		type: Type,
 		size: Size,
 		hash: Hash24,
-		preview: Preview(Type, Content, State.PreviewMax),
+		preview: Preview(Type, Content, State.PreviewMaximum),
 		evicted: Evicted,
 	};
 };

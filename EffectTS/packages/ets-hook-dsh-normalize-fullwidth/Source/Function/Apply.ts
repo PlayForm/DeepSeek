@@ -197,9 +197,9 @@ export default (Context: Context, Options: Config): void => {
 
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,
-	// PREPENDED: the family's bundle order places the ccr hook before the
+	// PREPENDED: the family's bundle order places the CCR hook before the
 	// normalize hooks, so the arm that prepends later is OUTERMOST and the
-	// ccr gate compresses the NORMALIZED bytes; the ccr marker guard makes
+	// CCR gate compresses the NORMALIZED bytes; the CCR marker guard makes
 	// any load order safe) and the agent/pre-step arm (Function/StepBatch —
 	// the step-batch scope plus the one-shot `Overpass` flag armed by the
 	// command below). Both are gated at RUNTIME on the volatile scope cells

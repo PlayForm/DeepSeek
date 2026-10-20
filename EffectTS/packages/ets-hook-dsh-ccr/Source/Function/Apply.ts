@@ -102,7 +102,7 @@ export default (Context: Context, Options: Config): void => {
 			AutoExpandLimit: "autoExpandLimitBytes",
 			Failures: "compressFailures",
 			Multipliers: "multipliers",
-			PreviewMax: "previewMaxChars",
+			PreviewMaximum: "previewMaxChars",
 			Ttl: "ttlSeconds",
 			Budget: "storeBudgetBytes",
 			JournalPath: "journalPath",

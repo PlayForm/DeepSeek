@@ -1,5 +1,5 @@
 // Child — the minimal fallback path of the cargo upgrade runner: used when
-// no subprocess seam exists in this deployment. Async (the continuation owns
+// no subprocess seam exists in this deployment. Asynchronous (the continuation owns
 // the wait); the abort signal kills the child. The process management is not
 // exempt — only the cargo CLI is.
 import * as ChildProcess from "node:child_process";
