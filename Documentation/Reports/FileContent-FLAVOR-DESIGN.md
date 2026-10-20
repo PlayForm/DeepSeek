@@ -1,13 +1,25 @@
+---
+title: The File-Content Normalizer Flavor design (register item #7)
+category: Reports
+kind: report
+date: 2026-10-06
+status: complete
+registry: Documentation/Reports/FileContent-FLAVOR-DESIGN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the file-content normalizer flavor (normalize-file)
+    state: implemented
+    evidence: hook-dsh-normalize-file shipped in both trees; 112 checks per tree
+  - name: the fs/observed rewriter (not advisable)
+    state: rejected
+    evidence: the edit old_string contract and the governors' passes
+---
+
 # FileContent-FLAVOR-DESIGN - Register Item #7: The File-Content Normalizer Flavor
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Reports/FileContent-FLAVOR-DESIGN.md |
-| Category | Reports                              |
-| Kind     | Report                               |
-| Date     | 2026-10-06                           |
-| State    | Complete                             |
-| Index    | Documentation/INDEX.md               |
+Status:
+- The file-content normalizer flavor (normalize-file): implemented (hook-dsh-normalize-file shipped in both trees; 112 checks per tree)
+- The fs/observed rewriter (not advisable): rejected (the edit old_string contract + the governors' passes)
 
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Register.md` (item #7) and `../Handoff/Packages/Package-13.md` (the normalize-file
@@ -186,12 +198,3 @@ disk"; the background rewrite stays out.
 - An `fs/observed` rewriter is **not advisable now**: it breaks the edit old_string contract (the
   live lesson) and interleaves with the governors' bounded passes. Revisit only with a harness-side
   edit-contract mechanism.
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The file-content normalizer flavor (normalize-file)      | implemented | hook-dsh-normalize-file shipped in both trees; 112 checks per tree | 2026-10-20 |
-| The fs/observed rewriter (not advisable)                 | rejected    | the edit old_string contract + the governors' passes              | 2026-10-06 |

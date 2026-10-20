@@ -1,13 +1,25 @@
+---
+title: The commonalization audit (register item #6)
+category: Reports
+kind: report
+date: 2026-10-06
+status: complete
+registry: Documentation/Reports/Commonalization-AUDIT.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the shared write executor (Factory.Write/GuardedWrite)
+    state: implemented
+    evidence: shipped in plugin-dsh-factory; documented in Package-13.md
+  - name: the follow-on candidates (Dispatch/Settle pair, the activation template, the shared fake-ctx)
+    state: open
+    evidence: listed in the audit; not executed
+---
+
 # Commonalization Audit - Write Executors + Family Machinery (register item #6)
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Reports/Commonalization-AUDIT.md |
-| Category | Reports                              |
-| Kind     | Report                               |
-| Date     | 2026-10-06                           |
-| State    | Complete                             |
-| Index    | Documentation/INDEX.md               |
+Status:
+- The shared write executor (Factory.Write/GuardedWrite): implemented (shipped in plugin-dsh-factory; documented in Package-13.md)
+- The follow-on candidates (Dispatch/Settle pair, the activation template, the shared fake-ctx): open (listed in the audit; not executed)
 
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Register.md` (item #6) and `../Handoff/Packages/Package-13.md` (the pass executed).

@@ -1,13 +1,24 @@
-# TRUSTED-PUBLISHER - the OIDC empty-first-publish runbook (the 25 packages)
+---
+title: Trusted-Publisher - the OIDC empty-first-publish runbook
+category: Plans
+kind: queued-plan
+date: 2026-10-08
+status: planned
+registry: Documentation/Plans/TRUSTED-PUBLISHER.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the OIDC runbook (the 25 packages)
+    state: open
+    evidence: the runbook prepared; the two manual steps not performed
+  - name: the armed NPM.yml workflow (L0 to L1 to L2)
+    state: implemented
+    evidence: .github/workflows/NPM.yml exists, per the runbook
+  - name: the npm publishing itself
+    state: deferred
+    evidence: a later session; the packages are published from source only
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/TRUSTED-PUBLISHER.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-08                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# TRUSTED-PUBLISHER - the OIDC empty-first-publish runbook (the 25 packages)
 
 > The Compress-style publishing: the packages must EXIST on npm before the
 > trusted publishers can bind. The user performs two manual steps, everything
@@ -140,13 +151,3 @@ workflow encodes this; locally, run the same sequence).
   immediately after the trusted publishers bind.
 - The local placeholder publishes have NO provenance (correct - provenance
   requires the GitHub OIDC context of the workflow run).
-
----
-
-## STATUS TABLE
-
-| Functionality                                    | Status   | Evidence                                                       | Date       |
-| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
-| The OIDC runbook (the 25 packages)               | open     | the runbook prepared; the two manual steps not performed        | 2026-10-08 |
-| The armed NPM.yml workflow (L0 -> L1 -> L2)      | implemented | .github/workflows/NPM.yml exists (per the runbook)            | 2026-10-08 |
-| The npm publishing itself                        | deferred | a later session; the packages are published from source only    | 2026-10-08 |

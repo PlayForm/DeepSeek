@@ -1,3 +1,23 @@
+---
+title: The CCR family gap report
+category: Archive/CCR
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/CCR/CCR-FAMILY-GAP-REPORT.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the ccr hook derivation (Classic + EffectTS)
+    state: implemented
+    evidence: the derivation commit; both trees; live-proven
+  - name: the gap analysis (the derivation checklist)
+    state: resolved
+    evidence: the report's items closed by the landing
+  - name: the ccr live anomalies (the range parameter; the preview header count)
+    state: open
+    evidence: flagged in the 2026-10-20 live testing
+---
+
 # CCR-FAMILY-GAP-REPORT - deriving `dsh-hook-ccr` into Classic + EffectTS
 
 Date: 2026-10-19 (Europe/Sofia). Explorer lane, read-only except this document.

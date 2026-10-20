@@ -1,3 +1,26 @@
+---
+title: AWAIT-MARKER (I2) — the per-call block-on-demand design
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/AWAIT-MARKER.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the await marker (the first-key __await true prefix)
+    state: resolved
+    evidence: 3 wins in the conflict table; ratified
+  - name: the effective-gate order
+    state: resolved
+    evidence: detach AND mode not off AND not non-detachable AND not await-marker AND policy decides
+  - name: the KV-cache invariant
+    state: resolved
+    evidence: an awaited call's transcript shape is byte-identical to the inline shape
+  - name: the implementation
+    state: implemented
+    evidence: the Detach module; the J-series smokes
+---
+
 # AWAIT-MARKER - The Per-Call Block-On-Demand Design (I2 Addendum)
 
 Status: ratified design for the live tool-call transformation (CAN-1).

@@ -1,3 +1,26 @@
+---
+title: The full-granularity normalization control plan
+category: Archive/Normalize
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Normalize/NORMALIZE-GRANULAR-PLAN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the granular scope gates (six scopes, all volatile)
+    state: implemented
+    evidence: in every family hook, both trees
+  - name: the overpass arms (tools/post-execute + agent/pre-step)
+    state: implemented
+    evidence: off by default; the marker guard keeps the arm order-safe
+  - name: the normalize-overpass command
+    state: implemented
+    evidence: registered per flavor; the I9 fail-open on collision
+  - name: the I9 fail-open registration fix
+    state: implemented
+    evidence: 14 Apply.ts files; one new ledger line; zero assertion changes
+---
+
 # NORMALIZE-GRANULAR-PLAN — full-granularity normalization control for the DSH plugin family
 
 Date: 2026-10-19 · Author: PLAN agent (drafting lane) · Inputs:

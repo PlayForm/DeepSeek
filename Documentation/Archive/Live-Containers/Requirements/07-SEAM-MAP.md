@@ -1,3 +1,23 @@
+---
+title: The Seam Map - verified machinery vs gaps
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/07-SEAM-MAP.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the seam verification (G1-G5 gaps identified)
+    state: resolved
+    evidence: the design agent's work list; D2 resolved all five
+  - name: the I1 constraints mapping (G2/G4 narrowed)
+    state: resolved
+    evidence: the command-runner-only wrapper
+  - name: the gaps' closure in code
+    state: implemented
+    evidence: C2 closed all residuals against first-hand asar verification
+---
+
 # SEAM MAP - verified machinery vs gaps (the design agent's work list)
 
 All anchors verified first-hand this wave (2026-10-19) unless marked

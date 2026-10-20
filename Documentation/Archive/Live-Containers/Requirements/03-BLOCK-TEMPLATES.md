@@ -1,3 +1,20 @@
+---
+title: CAN-3 The Template Host - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/03-BLOCK-TEMPLATES.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-3 requirement spec
+    state: resolved
+    evidence: the durable spec
+  - name: the template host implementation
+    state: implemented
+    evidence: the events catalog and the SUGGESTER-CONFIGURED template flow; the S-series smokes
+---
+
 # CAN-3 - THE TEMPLATE HOST (block templates out of the box)
 
 ## 1. The requirement statement (the user's intent, faithful)

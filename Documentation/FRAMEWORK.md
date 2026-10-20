@@ -4,6 +4,32 @@ name: family-framework
 description: The distilled requirements + the skill framework + the tomorrow TODOs for the DeepSeek Harness Plugin Family - the operating constraints gathered from the user's directives across the sessions, the meta-structure for the Documentation/Skill tree, and the referential documents for the next session's review.
 ---
 
+---
+title: The Family Framework - Requirements, Skills, TODOs
+category: Documentation root
+kind: living-record
+date: 2026-10-07
+status: active
+registry: Documentation/FRAMEWORK.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the requirements distillation (sections 1.1-1.7)
+    state: implemented
+    evidence: the framework the skills implement
+  - name: the skill framework (the taxonomy, the format)
+    state: implemented
+    evidence: the skill tree under Documentation/Skill
+  - name: the three core skills (instructional-writing, plugin-system, smoke-writing)
+    state: implemented
+    evidence: loadable bundles
+  - name: the future skill branches (live-battery, case-study-writing, site-development)
+    state: open
+    evidence: candidates
+  - name: the TODOs (section 3)
+    state: in-progress
+    evidence: the docs restructure verification is this conversion; the live battery and the release polish remain
+---
+
 # The Family Framework - Requirements, Skills, TODOs
 
 > The distillation of every requirement the user has given, in the

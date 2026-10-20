@@ -1,13 +1,21 @@
-# The Trio — Cascade Matrix, Nuanced Edition
+---
+title: The Trio — Cascade Matrix, Nuanced Edition
+category: Guides
+kind: guide
+date: 2026-10-03
+status: active
+registry: Documentation/Guides/Governor-CASCADES.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the cascade matrix documentation (all 10 sections)
+    state: implemented
+    evidence: documents the shipped trio; the behaviors are in the packages
+  - name: the async boundary and the data flow tables
+    state: implemented
+    evidence: documented; the governors live-proven 2026-10-20
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Guides/Governor-CASCADES.md |
-| Category | Guides                               |
-| Kind     | Guide                                |
-| Date     | 2026-10-03                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# The Trio — Cascade Matrix, Nuanced Edition
 
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
@@ -182,12 +190,3 @@ settle code (0/1/2)            ──▶ breaker + jobs done{status, detail}
 ```
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The cascade matrix documentation (all 10 sections)       | implemented | documents the shipped trio; the behaviors are in the packages     | 2026-10-20 |
-| The async boundary + the data flow tables                | implemented | documented; the governors live-proven 2026-10-20                  | 2026-10-20 |

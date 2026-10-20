@@ -1,3 +1,32 @@
+---
+title: Smoke-Suite Restructure - the durable specification
+category: Archive/Smoke-Restructure
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the per-test folder structure (one folder per test, Source/Test/<name>/)
+    state: implemented
+    evidence: the full restructure landed; see the blueprint's record
+  - name: the full TypeScript rewrite (Classic + EffectTS)
+    state: implemented
+    evidence: all suites converted; the legacy .mjs retired
+  - name: the two-step compile (Source first, Test second)
+    state: implemented
+    evidence: the blueprint's shape, in every package
+  - name: the aggregate runner (the vacuously-green guard)
+    state: implemented
+    evidence: all 207 smoke suites passed - node Maintain/Run-Smokes.mjs
+  - name: the separate ESBuild pre-compile step
+    state: implemented
+    evidence: per package; the Test build regenerates Target/Test
+  - name: the npm exclusion (tests never publish)
+    state: implemented
+    evidence: npm pack shows zero Test paths; the files-array negation added
+---
+
 # Smoke-Suite Restructure - NOTE FOR A FUTURE AGENT (2026-10-19)
 
 > Status: **NOTED, NOT IMPLEMENTED.** This is the durable specification for a

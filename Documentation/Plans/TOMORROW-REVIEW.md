@@ -1,13 +1,87 @@
-# TOMORROW-REVIEW - The Descriptive Plan (preserved 2026-10-07 for tomorrow's review)
+---
+title: TOMORROW-REVIEW - the descriptive plan and the living record
+category: Plans
+kind: living-record
+date: 2026-10-07
+status: active
+registry: Documentation/Plans/TOMORROW-REVIEW.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the descriptive record (sections 1-9, the preserved state)
+    state: resolved
+    evidence: superseded by the dated sections that follow; kept as the record
+  - name: the smoke-suite restructure
+    state: implemented
+    evidence: all 207 smoke suites passed - node Maintain/Run-Smokes.mjs
+  - name: the site update (supports, coachy section, plugin pages)
+    state: implemented
+    evidence: 24 pages, build green, drift guard 310 of 310; Site is gitignored here - the site repo commits it
+  - name: the site diagrams (57 new sources, zero placeholders)
+    state: implemented
+    evidence: 319 of 319 mmd+svg integrated
+  - name: the live containers (v1 + wave 2 + wave 3)
+    state: implemented
+    evidence: hook-dsh-live-containers and the ets twin; 203 checks per package across 14 folders
+  - name: the live containers activation
+    state: deferred
+    evidence: IDLE-forever - the plugin ships enabled=false, never in the profile
+  - name: the tool coach
+    state: implemented
+    evidence: Classic and EffectTS; the 129-check suite; wired into the profile with the teaching note
+  - name: the ccr hook
+    state: implemented
+    evidence: both trees; live-proven - the volatile flip produced the marker, the retrieval worked
+  - name: the ccr anomalies (the range parameter; the preview header count)
+    state: open
+    evidence: flagged in the live testing findings
+  - name: the granular scopes and live volatile refresh
+    state: implemented
+    evidence: the 14 flavor Apply.ts files with the I9 fail-open
+  - name: the overpass arms and the normalize-overpass command
+    state: implemented
+    evidence: Run-Wiring - all 28 wiring suites passed, 272 checks
+  - name: the enable-all and the tool-coach profile wiring
+    state: implemented
+    evidence: 13 @playform bundles live; ready for restart
+  - name: the dependency upgrade pass
+    state: implemented
+    evidence: cordis 4.0.5, tsc-alias 1.9.8, schemastery 3.18.5, astro 7.4.1; two blocked with reasons
+  - name: the live testing (the family fully mounted)
+    state: resolved
+    evidence: governance trio, ccr, tool coach verified from the ledgers
+  - name: the UI research set (R-UI-1/2/3 + R-INTERACT)
+    state: resolved
+    evidence: Documentation/Researches - four research docs delivered
+  - name: the UI implementation (the family panel + adapters)
+    state: open
+    evidence: Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md - awaiting the user's dispatch
+  - name: the interaction improvements (R1-R10)
+    state: open
+    evidence: Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md - ready for lanes
+  - name: the orchestration plugins (BATCH-STATE, ROUTING-ENFORCER, SUBAGENT-QUEUE, HONEST-FEEDBACK)
+    state: open
+    evidence: Documentation/Plans - documents only
+  - name: the submodule structure (#16)
+    state: open
+    evidence: not started
+  - name: the Boilerplate gitignore decision
+    state: open
+    evidence: undecided
+  - name: the governor's ncuBin residual
+    state: open
+    evidence: the CORSAIR path in the default, a smoke-asserted constant
+  - name: the naming refinements (#15)
+    state: open
+    evidence: undecided; the user's approved names in use
+  - name: the npm publishing
+    state: deferred
+    evidence: a later session; Documentation/Plans/TRUSTED-PUBLISHER.md
+  - name: the anonymization / inconsistency / term-linking / lychee / disclosure agents
+    state: open
+    evidence: not dispatched yet
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/TOMORROW-REVIEW.md |
-| Category | Plans                                |
-| Kind     | Living record                        |
-| Date     | 2026-10-07                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# TOMORROW-REVIEW - The Descriptive Plan (preserved 2026-10-07 for tomorrow's review)
 
 > The complete state + the plan for the next session. The user will run the
 > whole process again - this document is the descriptive reference: what
@@ -1817,34 +1891,3 @@ browser refresh).
   the interaction improvements R1-R10) - the user dispatches them on his
   word. The SITE-DEMO + the SITE-DIAGRAMS deltas await the user's commit +
   push; the plugin-Target freshness drift clears with a serialized rebuild.
-
----
-
-## STATUS TABLE
-
-| Functionality                                                  | Status      | Evidence                                                                        | Date       |
-| -------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------- | ---------- |
-| The descriptive record (sections 1-9, the preserved state)     | resolved    | superseded by the dated sections that follow; kept as the record                  | 2026-10-09 |
-| The smoke-suite restructure                                    | implemented | "All 207 smoke suites passed" - node Maintain/Run-Smokes.mjs                      | 2026-10-20 |
-| The site update (supports, coachy section, plugin pages)       | implemented | 24 pages, build green, Drift 310/310; Site/ is gitignored here - the site repo commits it | 2026-10-20 |
-| The site diagrams (57 new sources, zero placeholders)          | implemented | 319/319 mmd+svg integrated                                                        | 2026-10-20 |
-| The live containers (v1 + wave 2 + wave 3)                     | implemented | hook-dsh-live-containers + ets twin; 203 checks per package across 14 folders     | 2026-10-20 |
-| The live containers activation                                 | deferred    | IDLE-forever: the plugin ships enabled=false, never in the profile                | 2026-10-20 |
-| The tool coach                                                 | implemented | Classic + EffectTS; the 129-check suite; wired into the profile with the teaching note | 2026-10-20 |
-| The CCR hook                                                   | implemented | both trees; live-proven (the volatile flip produced the marker; retrieval worked) | 2026-10-20 |
-| The CCR anomalies (the range parameter; the preview header count) | open     | flagged in the live testing findings                                              | 2026-10-20 |
-| The granular scopes + live volatile refresh                    | implemented | the 14 flavor Apply.ts files with the I9 fail-open                                | 2026-10-20 |
-| The overpass arms + normalize-overpass command                 | implemented | Run-Wiring: "All 28 wiring suites passed (272 checks)"                            | 2026-10-20 |
-| The enable-all + the tool-coach profile wiring                 | implemented | 13 @playform bundles live; READY-FOR-RESTART                                      | 2026-10-20 |
-| The dependency upgrade pass                                    | implemented | cordis 4.0.5, tsc-alias 1.9.8, schemastery 3.18.5, astro 7.4.1; two blocked with reasons | 2026-10-20 |
-| The live testing (the family fully mounted)                    | resolved    | governance trio, CCR, tool coach verified from the ledgers                        | 2026-10-20 |
-| The UI research set (R-UI-1/2/3 + R-INTERACT)                  | resolved    | Documentation/Researches/ - four research docs delivered                          | 2026-10-20 |
-| The UI implementation (the family panel + adapters)            | open        | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md - awaiting the user's dispatch | 2026-10-20 |
-| The interaction improvements (R1-R10)                          | open        | Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md - ready for lanes        | 2026-10-20 |
-| The orchestration plugins (BATCH-STATE, ROUTING-ENFORCER, SUBAGENT-QUEUE, HONEST-FEEDBACK) | open | Documentation/Plans/ - documents only                                            | 2026-10-09 |
-| The submodule structure (#16)                                  | open        | not started                                                                       | 2026-10-07 |
-| The Boilerplate gitignore decision                             | open        | undecided                                                                         | 2026-10-07 |
-| The governor's ncuBin residual                                 | open        | the CORSAIR path in the default, a smoke-asserted constant                        | 2026-10-07 |
-| The naming refinements (#15)                                   | open        | undecided; the user's approved names in use                                       | 2026-10-07 |
-| The npm publishing                                             | deferred    | a later session; Documentation/Plans/TRUSTED-PUBLISHER.md                         | 2026-10-07 |
-| The anonymization / inconsistency / term-linking / lychee / disclosure agents (section 4 items 6-11) | open | not dispatched yet                                                         | 2026-10-07 |

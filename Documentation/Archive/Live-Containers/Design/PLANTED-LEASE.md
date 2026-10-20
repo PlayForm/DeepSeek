@@ -1,3 +1,26 @@
+---
+title: PLANTED-LEASE (I5) — the planted-block lease + the stale declaration
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/PLANTED-LEASE.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the lease grammar (parent turns, N=3 default)
+    state: resolved
+    evidence: 10 conflict rows, all won or additive
+  - name: the stale self-declaration
+    state: resolved
+    evidence: byte-exact; the SCHEME grammar list entry
+  - name: the CAN-4 interplay (the stale declaration IS the trigger)
+    state: resolved
+    evidence: one truth source
+  - name: the implementation
+    state: implemented
+    evidence: C2 closed residuals R1-R5; leaseTurns config shipped; prune never kills
+---
+
 # PLANTED-LEASE (I5) - the planted-block lease + the stale declaration, independently resolved
 
 Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 3.4

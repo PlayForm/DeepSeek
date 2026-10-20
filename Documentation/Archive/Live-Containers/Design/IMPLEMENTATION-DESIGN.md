@@ -1,3 +1,32 @@
+---
+title: Live Containers Implementation Design (D2)
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/IMPLEMENTATION-DESIGN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the D2 design (14 sections, byte-ready)
+    state: implemented
+    evidence: C2 executed it; the phase-1 then wave-2 order held
+  - name: the G1 decision (the plugin's own tools/execute arm as the carrier)
+    state: implemented
+    evidence: the fabricated canonical-value result via the cordis veto
+  - name: the G2 decision (the command-runner wrapper only)
+    state: implemented
+    evidence: the mutation family non-detachable, hardcoded in Policy.ts
+  - name: the G5 decision (agent/inbox/spliced pickup)
+    state: implemented
+    evidence: the session-event carrier correction
+  - name: the addenda coverage (I2-I6 designed in)
+    state: resolved
+    evidence: each addendum landed; the addendum wins on conflict
+  - name: the C2 residuals R1-R5 (per I3)
+    state: implemented
+    evidence: closed against first-hand asar verification
+---
+
 # LIVE CONTAINERS - IMPLEMENTATION DESIGN (D2)
 
 Date: 2026-10-19

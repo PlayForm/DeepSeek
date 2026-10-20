@@ -1,3 +1,29 @@
+---
+title: Live File Monitors Implementation Design (D3)
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-20
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/FILE-MONITORS-DESIGN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the D3 design (the engine, the check runner, the assemble band, the persistence)
+    state: implemented
+    evidence: C3 executed it; the wave-3 modules
+  - name: the M5 decision (a new storage domain live_containers_monitors)
+    state: implemented
+    evidence: extension records rejected to avoid the v3 bump
+  - name: the check runner sharing (the G2 wrapper, one wrapper two callers)
+    state: implemented
+    evidence: checkTimeoutMs capped at 120000, validated at load
+  - name: the no-problem indicator grammar (bounded hard)
+    state: implemented
+    evidence: observed settle + exit 0 + exact version + live provenance
+  - name: the C3 brief (section 16.2)
+    state: resolved
+    evidence: executed; the phase alignment held
+---
+
 # LIVE FILE MONITORS - IMPLEMENTATION DESIGN (D3, CAN-7, wave 3)
 
 Date: 2026-10-20

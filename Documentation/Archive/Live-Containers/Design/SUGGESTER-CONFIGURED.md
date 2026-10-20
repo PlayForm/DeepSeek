@@ -1,3 +1,26 @@
+---
+title: SUGGESTER-CONFIGURED (I6) — the configured-block suggestion flow
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/SUGGESTER-CONFIGURED.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the strict JSON suggestion (fit/templateId/rationale)
+    state: resolved
+    evidence: 7 wins, 2 where D2 survives
+  - name: the one-word accept/dismiss (live_container_set)
+    state: resolved
+    evidence: accept instantiates the clamped config verbatim
+  - name: the token clamping (the ledger line per clamp)
+    state: resolved
+    evidence: the suggestion-clamped ledger line
+  - name: the implementation
+    state: implemented
+    evidence: C2 closed residuals R1-R5; the S-series smokes; accept-on-expired handled
+---
+
 # SUGGESTER-CONFIGURED (I6) - the configured-block suggestion flow, independently resolved
 
 Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 2.6

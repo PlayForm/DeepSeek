@@ -1,13 +1,24 @@
-# NORMALIZE-OVERPASS-RESEARCH — post-hoc normalization design for the DSH plugin family
+---
+title: Normalize Overpass Research
+category: Researches
+kind: research-output
+date: 2026-10-19
+status: complete
+registry: Documentation/Researches/NORMALIZE-OVERPASS-RESEARCH.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the overpass design (the tools/post-execute + agent/pre-step arms)
+    state: implemented
+    evidence: landed via Archive/Normalize/NORMALIZE-GRANULAR-PLAN.md; live and smoke-verified
+  - name: the normalize-overpass command
+    state: implemented
+    evidence: registered by every flavor; the I9 fail-open keeps the mount
+  - name: the open questions (section 5)
+    state: open
+    evidence: five questions listed, unresolved
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Researches/NORMALIZE-OVERPASS-RESEARCH.md |
-| Category | Researches                           |
-| Kind     | Research output                      |
-| Date     | 2026-10-19                           |
-| State    | Complete                             |
-| Index    | Documentation/INDEX.md               |
+# NORMALIZE-OVERPASS-RESEARCH — post-hoc normalization design for the DSH plugin family
 
 Date: 2026-10-19
 Author: explorer subagent (session-6111eae9 delegate), read-only research.
@@ -365,13 +376,3 @@ assert byte-equality across both stacks.
    the file sweep ever writes through paths other than `Factory.Write`) never
    need the `mutationTools` pin (design rule: never add the tool to any list —
    `Normalize.ts:46-50`).
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The overpass design (the tools/post-execute + agent/pre-step arms) | implemented | landed via Archive/Normalize/NORMALIZE-GRANULAR-PLAN.md; live and smoke-verified | 2026-10-19 |
-| The normalize-overpass command                           | implemented | registered by every flavor (the I9 fail-open keeps the mount)     | 2026-10-20 |
-| The open questions (section 5)                           | open        | five questions listed, unresolved                                 | 2026-10-19 |

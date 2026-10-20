@@ -1,3 +1,20 @@
+---
+title: CAN-6 Better Ideas - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/06-BETTER-IDEAS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-6 requirement spec (the research's own extensions)
+    state: resolved
+    evidence: the durable spec
+  - name: the better-ideas implementation status
+    state: open
+    evidence: the extensions are documented; not all wired into code
+---
+
 # CAN-6 - BETTER IDEAS
 
 The user's explicit ask: "let me know if you have better ideas for this."

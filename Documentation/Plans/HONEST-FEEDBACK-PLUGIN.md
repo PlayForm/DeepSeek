@@ -1,13 +1,21 @@
-# HONEST-FEEDBACK PLUGIN - the fourth orchestration member (dedicated 2026-10-09)
+---
+title: The Honest-Feedback Plugin - the fourth orchestration member
+category: Plans
+kind: queued-plan
+date: 2026-10-09
+status: planned
+registry: Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the honest-feedback plugin (the fourth member)
+    state: open
+    evidence: this document only - spec, no package
+  - name: the transferred-unread feedback block
+    state: open
+    evidence: the spec's mechanism
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-09                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# HONEST-FEEDBACK PLUGIN - the fourth orchestration member (dedicated 2026-10-09)
 
 > The user's mandate: "an HONEST feedback footer, which inserts a dynamic HONEST
 > feedback block which can be transferred (without being read) - it's always
@@ -126,12 +134,3 @@ READ-STATUS: unread / read-at <session>   <- the recipient's choice, recorded
 - The read is always the recipient's choice (the know/disknow - never force-read).
 - The family's plugin discipline (the smokes, the loader contract, the no-commit).
 - The user's override wins (the honest signals are his knowledge).
-
----
-
-## STATUS TABLE
-
-| Functionality                                    | Status   | Evidence                                                       | Date       |
-| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
-| The honest-feedback plugin (the fourth member)   | open     | this document only - spec, no package                           | 2026-10-09 |
-| The transferred-unread feedback block            | open     | the spec's mechanism                                            | 2026-10-09 |

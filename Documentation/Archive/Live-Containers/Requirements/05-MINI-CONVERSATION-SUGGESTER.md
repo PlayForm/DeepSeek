@@ -1,3 +1,26 @@
+---
+title: CAN-5 The Mini-Conversation Suggester - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/05-MINI-CONVERSATION-SUGGESTER.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-5 requirement spec
+    state: resolved
+    evidence: the durable spec
+  - name: the CAN-5 implementation (the Suggester module)
+    state: implemented
+    evidence: C2's wave-2 Suggester module; the S-series smokes
+  - name: the suggester route (GLM flash low)
+    state: implemented
+    evidence: the cheapest allowed lane; no third model
+  - name: the privacy default (redact)
+    state: resolved
+    evidence: verbatim only by explicit config and disclosure
+---
+
 # CAN-5 - THE MINI-CONVERSATION SUGGESTER
 
 ## 1. The requirement statement (the user's intent, faithful)

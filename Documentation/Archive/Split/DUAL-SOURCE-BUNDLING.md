@@ -1,3 +1,20 @@
+---
+title: The one-name two-builds publish mechanism (superseded)
+category: Archive/Split
+kind: one-shot-record
+date: 2026-10-08
+status: superseded
+registry: Documentation/Archive/Split/DUAL-SOURCE-BUNDLING.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the one-name dual-build publish mechanism
+    state: superseded
+    evidence: by Archive/Split/SPLICE-ETS.md - the ets-* namespace split
+  - name: the historical record status
+    state: resolved
+    evidence: not rewritten; kept as the batch #7 record per the original instruction
+---
+
 # DUAL-SOURCE-BUNDLING - The one-name, two-builds publish mechanism (batch #7)
 
 > [!WARNING]

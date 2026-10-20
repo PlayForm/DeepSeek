@@ -1,13 +1,24 @@
-# ROUTING-ENFORCER PLUGIN - the silent auto-routing plan (dedicated 2026-10-09)
+---
+title: The Routing-Enforcer Plugin - the silent auto-routing plan
+category: Plans
+kind: queued-plan
+date: 2026-10-09
+status: planned
+registry: Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the routing-enforcer plugin (the silent auto-routing)
+    state: open
+    evidence: this document only - spec, no package
+  - name: the policy reader and keyword table
+    state: open
+    evidence: the spec's mechanism
+  - name: the manual routing discipline (the interim)
+    state: implemented
+    evidence: the task-routing skill - enforced by convention
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-09                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# ROUTING-ENFORCER PLUGIN - the silent auto-routing plan (dedicated 2026-10-09)
 
 > The user's mandate: prevent the orchestrator from slipping out of the model-routing
 > discipline - but SILENTLY: the plugin automatically chooses the behavior, so the
@@ -149,13 +160,3 @@ Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 - The ledger + the audit format.
 - The batch-state integration (the routing gates).
 - The probe's findings (the launch-path mechanics).
-
----
-
-## STATUS TABLE
-
-| Functionality                                    | Status   | Evidence                                                       | Date       |
-| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
-| The routing-enforcer plugin (the silent auto-routing) | open | this document only - spec, no package                           | 2026-10-09 |
-| The policy reader + keyword table                | open     | the spec's mechanism                                            | 2026-10-09 |
-| The manual routing discipline (the interim)      | implemented | the task-routing skill; enforced by convention                  | 2026-10-20 |

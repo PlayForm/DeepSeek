@@ -1,13 +1,36 @@
-# DSH-MONOREPO-PLAN - The DeepSeek Harness Plugin Family Monorepo
+---
+title: The DeepSeek Harness Plugin Family Monorepo
+category: Plans
+kind: living-plan
+date: 2026-10-07
+status: active
+registry: Documentation/Plans/DSH-MONOREPO-PLAN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the monorepo layout (Boilerplate/Classic/EffectTS/Site/Test/Documentation/Maintain)
+    state: implemented
+    evidence: the directories exist; 25 published packages
+  - name: the Classic release (the anonymized packages)
+    state: implemented
+    evidence: Classic/packages - 15 packages at 0.0.1
+  - name: the EffectTS release (the ets-* split)
+    state: implemented
+    evidence: EffectTS/packages - 16 packages including ets-base-dsh
+  - name: the Site (the static showcase)
+    state: implemented
+    evidence: 24 pages, build green
+  - name: the Test archive (the curated fixtures)
+    state: implemented
+    evidence: Test/fixtures plus the README index
+  - name: the submodule structure (each package its own repo)
+    state: open
+    evidence: not started
+  - name: the npm publishing
+    state: deferred
+    evidence: a later session - see Documentation/Plans/TRUSTED-PUBLISHER.md
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/DSH-MONOREPO-PLAN.md |
-| Category | Plans                                |
-| Kind     | Living plan                          |
-| Date     | 2026-10-07                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# DSH-MONOREPO-PLAN - The DeepSeek Harness Plugin Family Monorepo
 
 > One of the planning documents migrated to `Documentation/Plans/` (the BRANDING constraints it
 > cites live in `../Brand/BRANDING.md`). See also `TOMORROW-REVIEW.md` (the descriptive state of the
@@ -173,17 +196,3 @@ monorepo (the DeepSeek dir is one of its projects, like Aphrodite).
   committed by agents.
 - The live fixtures' new home (`DeepSeek/Test/`) becomes the sandbox fixtures root for the future
   live batteries - the handoff's fixture references update.
-
----
-
-## STATUS TABLE
-
-| Functionality                                        | Status      | Evidence                                                            | Date       |
-| ---------------------------------------------------- | ----------- | -------------------------------------------------------------------- | ---------- |
-| The monorepo layout (Boilerplate/Classic/EffectTS/Site/Test/Documentation/Maintain) | implemented | the directories exist; the 25 published packages | 2026-10-08 |
-| The Classic release (the anonymized packages)        | implemented | Classic/packages/ - 15 packages at 0.0.1                             | 2026-10-20 |
-| The EffectTS release (the ets-* split)               | implemented | EffectTS/packages/ - 16 packages (incl. ets-base-dsh)                | 2026-10-20 |
-| The Site (the static showcase)                       | implemented | 24 pages, build green (Site/Target)                                  | 2026-10-20 |
-| The Test archive (the curated fixtures)              | implemented | Test/fixtures/ + Test/README.md                                      | 2026-10-07 |
-| The submodule structure (each package its own repo)  | open        | not started                                                          | 2026-10-07 |
-| The npm publishing (the packages on the registry)    | deferred    | a later session; see Documentation/Plans/TRUSTED-PUBLISHER.md        | 2026-10-08 |

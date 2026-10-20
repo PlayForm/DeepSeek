@@ -1,3 +1,20 @@
+---
+title: The planned orchestration plugin family, as documents
+category: Plugins
+kind: living-record
+date: 2026-10-09
+status: planned
+registry: Documentation/Plugins/ORCHESTRATION-PLUGINS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the four planned members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK)
+    state: open
+    evidence: documents only; source of truth in Documentation/Plans
+  - name: the working mechanism for now (the skills)
+    state: implemented
+    evidence: Documentation/Skill - the idle-agent-protocol, orchestrator-batch, task-routing, worker-strains family
+---
+
 # ORCHESTRATION-PLUGINS - the planned orchestration plugin family, as documents
 
 > **Status: PLANNED - documents only.** Nothing here is implemented, scaffolded,

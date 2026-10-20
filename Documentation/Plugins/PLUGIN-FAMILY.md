@@ -1,3 +1,26 @@
+---
+title: The authoritative registry of the 25 published packages
+category: Plugins
+kind: living-record
+date: 2026-10-10
+status: active
+registry: Documentation/Plugins/PLUGIN-FAMILY.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the 25 published packages (1 base + 12 Classic + 12 EffectTS at 0.0.1)
+    state: implemented
+    evidence: the packages exist and are published from source
+  - name: the registry document content (the names, the links, the rules)
+    state: implemented
+    evidence: this document; byte-accurate names
+  - name: the 30-package expansion (the newer packages beyond the 25)
+    state: implemented
+    evidence: the family now carries 15 per tree plus the base
+  - name: the planned orchestration plugins (not in this registry)
+    state: open
+    evidence: Documentation/Plugins/ORCHESTRATION-PLUGINS.md
+---
+
 # PLUGIN-FAMILY - the authoritative registry of the 25 published packages
 
 > This document is the "plugins saved as documents" registry: the full family at

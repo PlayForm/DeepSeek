@@ -1,3 +1,20 @@
+---
+title: The brand brief
+category: Brand
+kind: living-record
+date: 2026-10-07
+status: active
+registry: Documentation/Brand/BRANDING.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the brand brief (the colors, the type, the voice)
+    state: implemented
+    evidence: the Site follows it; blue and white, Inter and IBM Plex Mono
+  - name: the remote-agent generation briefs
+    state: implemented
+    evidence: the self-contained brief in this file
+---
+
 # BRANDING.md - The DeepSeek Harness Plugin Family for PlayForm
 
 > The brand brief migrated to `Documentation/Brand/` — referenced by

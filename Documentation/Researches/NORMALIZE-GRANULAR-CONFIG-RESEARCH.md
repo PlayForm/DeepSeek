@@ -1,13 +1,24 @@
-# Normalize Family — Config Surfaces & Live-Toggling Research
+---
+title: Normalize Family — Config Surfaces & Live-Toggling Research
+category: Researches
+kind: research-output
+date: 2026-10-19
+status: complete
+registry: Documentation/Researches/NORMALIZE-GRANULAR-CONFIG-RESEARCH.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the granular scopes (conversation/reasoning/toolInput/toolResults/files/batch)
+    state: implemented
+    evidence: landed via Archive/Normalize/NORMALIZE-GRANULAR-PLAN.md; in every family hook
+  - name: the live toggling (volatile fields, no remount)
+    state: implemented
+    evidence: the settings service and the control panel flips proven live
+  - name: the open questions (section 5)
+    state: open
+    evidence: five questions listed, unresolved
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Researches/NORMALIZE-GRANULAR-CONFIG-RESEARCH.md |
-| Category | Researches                           |
-| Kind     | Research output                      |
-| Date     | 2026-10-19                           |
-| State    | Complete                             |
-| Index    | Documentation/INDEX.md               |
+# Normalize Family — Config Surfaces & Live-Toggling Research
 
 Date: 2026-10-19 · Explorer research for a granular per-scope normalization control
 (conversation / tool input / tool output / files) with live toggling while the harness is open.
@@ -266,13 +277,3 @@ export default Compose(false, {
 5. `settings.mutate` path-op edits against volatile fields — confirm the revision/
    redaction contract (`SettingsDescriptor.secrets`) does not block boolean patches
    for these entries in the Web settings UI.
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The granular scopes (conversation/reasoning/toolInput/toolResults/files/batch) | implemented | landed via Archive/Normalize/NORMALIZE-GRANULAR-PLAN.md; in every family hook | 2026-10-19 |
-| The live toggling (volatile fields, no remount)          | implemented | the settings service + the control panel flips proven live        | 2026-10-20 |
-| The open questions (section 5)                           | open        | five questions listed, unresolved                                 | 2026-10-19 |

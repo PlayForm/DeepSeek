@@ -1,13 +1,24 @@
-# SUBAGENT-QUEUE PLUGIN - the task-queue specification (dedicated 2026-10-09)
+---
+title: The Subagent-Queue Plugin - the task-queue specification
+category: Plans
+kind: queued-plan
+date: 2026-10-09
+status: planned
+registry: Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the subagent-queue plugin (the task queue)
+    state: open
+    evidence: this document only - spec, no package
+  - name: the capacity model (10 held / 2 children)
+    state: open
+    evidence: the spec's model; the runtime's own limits still apply
+  - name: the pool and reservation surface (the probe)
+    state: open
+    evidence: the probe's findings recorded in the spec
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-09                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# SUBAGENT-QUEUE PLUGIN - the task-queue specification (dedicated 2026-10-09)
 
 > The third orchestration-layer plugin (next to BATCH-STATE + ROUTING-ENFORCER).
 > The user's mandate: "the subagent QUEUE specification, which allows you to QUEUE
@@ -148,13 +159,3 @@
 - The capacity model + the child-cap enforcement.
 - The batch-state + the routing integrations.
 - The probe's findings (the pool + the reservation surface).
-
----
-
-## STATUS TABLE
-
-| Functionality                                    | Status   | Evidence                                                       | Date       |
-| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
-| The subagent-queue plugin (the task queue)       | open     | this document only - spec, no package                           | 2026-10-09 |
-| The capacity model (10 held / 2 children)        | open     | the spec's model; the runtime's own limits still apply          | 2026-10-09 |
-| The pool + reservation surface (the probe)       | open     | the probe's findings recorded in the spec                       | 2026-10-09 |

@@ -1,3 +1,23 @@
+---
+title: CAN-1 Live Tool-Call Blocks - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/01-LIVE-TOOL-CALL-BLOCKS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-1 requirement spec
+    state: resolved
+    evidence: the durable spec; the I1 constraints folded into section 12
+  - name: the CAN-1 implementation (the tool-call detach + the live marker)
+    state: implemented
+    evidence: C2's wave-2 modules; the J-series smokes
+  - name: the command-only detach rule (the mutation family non-detachable)
+    state: implemented
+    evidence: hardcoded in Policy.ts, per the design
+---
+
 # CAN-1 - LIVE TOOL-CALL BLOCKS
 
 ## 1. The requirement statement (the user's intent, faithful)

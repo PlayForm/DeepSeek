@@ -1,4 +1,33 @@
+---
+title: The case study's structural rationale review
+category: Reports
+kind: report
+date: 2026-10-07
+status: complete
+registry: Documentation/Reports/CASE-REVIEW.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the structural-rationale verdict (the WHY mandate)
+    state: resolved
+    evidence: sections 1-2; the case study's spine assessed
+  - name: the claim verification (section 3)
+    state: resolved
+    evidence: the claims checked against the tree
+  - name: the corrections batch (section 4)
+    state: resolved
+    evidence: the JournalExcerpt re-quotes landed via the SITE-C lane, 2026-10-20
+  - name: the enhancements (section 5)
+    state: open
+    evidence: discovered during verification; the site stays untouched
+---
+
 # CASE-REVIEW - the case study's structural rationale (2026-10-07)
+
+Status:
+- The structural-rationale verdict (the WHY mandate): resolved (sections 1-2; the case study's spine assessed)
+- The claim verification (section 3): resolved (the claims checked against the tree)
+- The corrections batch (section 4): resolved (the JournalExcerpt re-quotes landed via the SITE-C lane, 2026-10-20)
+- The enhancements (section 5): open (discovered during verification; the site stays untouched)
 
 > The case-review agent's report (user mandate 2026-10-07): the review of the case study must
 > emphasize THE STRUCTURE OF WHY IT WAS WRITTEN LIKE THIS - the structural rationale (why the

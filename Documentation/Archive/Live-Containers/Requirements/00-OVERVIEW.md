@@ -1,3 +1,23 @@
+---
+title: Live Containers Wave 2 - requirements overview
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/00-OVERVIEW.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the wave-2 requirements (the six CANs, broken into files)
+    state: resolved
+    evidence: the requirement files verified on disk; 1202 lines
+  - name: the non-negotiables (8 after the I1 fold-in)
+    state: resolved
+    evidence: I1's two hard constraints folded
+  - name: the wave-2 implementation
+    state: implemented
+    evidence: C2 landed the nine modules and the additive smokes
+---
+
 # LIVE CONTAINERS - WAVE 2 - Requirements Overview
 
 Date: 2026-10-19

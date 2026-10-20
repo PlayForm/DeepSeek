@@ -1,3 +1,26 @@
+---
+title: The symlink split and the ets-* namespace (the splice plan)
+category: Archive/Split
+kind: one-shot-record
+date: 2026-10-09
+status: complete
+registry: Documentation/Archive/Split/SPLICE-ETS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the ets-* namespace split
+    state: implemented
+    evidence: the 12 EffectTS packages ship distinct names; the relink hazard resolved
+  - name: the supersession of the one-name dual-build idea
+    state: resolved
+    evidence: DUAL-SOURCE-BUNDLING marked superseded; this plan replaced it
+  - name: the shared base package (ets-base-dsh)
+    state: implemented
+    evidence: the plumbing every ets-* package builds on
+  - name: the never-mix rule (one dependency graph per split)
+    state: implemented
+    evidence: documented; the packages enforce it
+---
+
 # SPLICE-ETS - The complete symlink split + the ets-* namespace (the splice plan)
 
 > The splice: the module family splits into TWO groups with DISTINCT names so the pnpm workspace

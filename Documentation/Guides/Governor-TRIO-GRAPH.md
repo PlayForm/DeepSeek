@@ -1,13 +1,21 @@
-# The Trio — Internals & API-Surface Graph
+---
+title: The Trio — Internals & API-Surface Graph
+category: Guides
+kind: guide
+date: 2026-10-03
+status: active
+registry: Documentation/Guides/Governor-TRIO-GRAPH.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the API-surface graph (what the trio calls / does not)
+    state: implemented
+    evidence: documents the shipped packages; the exemptions documented in-code
+  - name: the research verdict (section 6)
+    state: resolved
+    evidence: the exploration agent's docs-anchored verdict
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Guides/Governor-TRIO-GRAPH.md |
-| Category | Guides                               |
-| Kind     | Guide                                |
-| Date     | 2026-10-03                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# The Trio — Internals & API-Surface Graph
 
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder; the handoff
@@ -194,12 +202,3 @@ opaque per backend).
 
 [dsh-subprocess]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The API-surface graph (what the trio calls / does not)   | implemented | documents the shipped packages; the exemptions documented in-code | 2026-10-03 |
-| The research verdict (section 6)                         | resolved    | the exploration agent's docs-anchored verdict                     | 2026-10-03 |

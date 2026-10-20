@@ -1,3 +1,35 @@
+---
+title: The smoke-suite restructure blueprint
+category: Archive/Smoke-Restructure
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the blueprint (the inventory, the templates, the folder splits)
+    state: implemented
+    evidence: the coder lanes executed it; 187 mechanics suites plus the wiring
+  - name: the pilot (hook-dsh-core + the ETS twin)
+    state: implemented
+    evidence: the 11 corrections became binding; recorded in section 8
+  - name: the fan-out (L1-L6 over all packages)
+    state: implemented
+    evidence: the totals ledger in section 9 - all 28 mechanics rows delta-0
+  - name: the totals ledger (section 9)
+    state: implemented
+    evidence: Classic mechanics 1312 to 1417; ETS 1325 to 1430; the roll-up 187 units
+  - name: the legacy runner retirement
+    state: implemented
+    evidence: the 42 legacy suites removed; the folders are the arbiter
+  - name: the red-arbiter fix (the governor Target-walk)
+    state: resolved
+    evidence: both walks skip Target/Test; green until retirement
+  - name: the ets-base re-home
+    state: implemented
+    evidence: Stream-Gate 1 and Update-Envelope 2 moved; 17 = 14 + 3
+---
+
 # SMOKE-SUITE-RESTRUCTURE-BLUEPRINT
 
 Status: BLUEPRINT (explorer output, 2026-10-19). Implementing coder lanes execute this

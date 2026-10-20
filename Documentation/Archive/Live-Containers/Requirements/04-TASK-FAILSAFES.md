@@ -1,3 +1,23 @@
+---
+title: CAN-4 Task-Based Failsafes - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/04-TASK-FAILSAFES.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-4 requirement spec
+    state: resolved
+    evidence: the durable spec
+  - name: the CAN-4 implementation (the Failsafe module)
+    state: implemented
+    evidence: C2's wave-2 Failsafe module; the F-series smokes
+  - name: the failsafe-trigger unification (the stale declaration IS the trigger)
+    state: resolved
+    evidence: the PLANTED-LEASE addendum replaced D2's parallel timer
+---
+
 # CAN-4 - TASK-BASED FAILSAFES
 
 ## 1. The requirement statement (the user's intent, faithful)

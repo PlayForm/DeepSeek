@@ -1,13 +1,24 @@
-# DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
+---
+title: The npm registry listing for the DSH plugin family
+category: Guides
+kind: guide
+date: 2026-10-10
+status: active
+registry: Documentation/Guides/DSH-REGISTRY-LISTING.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the registry identity and the roster (the two groups + the base)
+    state: resolved
+    evidence: documented in this file
+  - name: the npm publish
+    state: deferred
+    evidence: publish-pending until the npm lane arms it; see Documentation/Plans/TRUSTED-PUBLISHER.md
+  - name: the GitHub repo topics
+    state: open
+    evidence: a repo-settings action - the user's call
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Guides/DSH-REGISTRY-LISTING.md |
-| Category | Guides                               |
-| Kind     | Guide                                |
-| Date     | 2026-10-10                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
 
 > The listing the family publishes under once the npm lane arms the publish
 > (`.github/workflows/NPM.yml` is PUBLISH-PENDING behind the `if: false` guard;
@@ -119,13 +130,3 @@ the byte-identical contract:
   outside the tree.
 - The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm lane arms it after
   the S4 gate.
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The registry identity + the roster (the two groups + the base) | resolved | documented in this file                                     | 2026-10-10 |
-| The npm publish                                          | deferred    | PUBLISH-PENDING (NPM.yml if: false); see Documentation/Plans/TRUSTED-PUBLISHER.md | 2026-10-10 |
-| The GitHub repo topics                                   | open        | a repo-settings action - the user's call                          | 2026-10-10 |

@@ -1,3 +1,26 @@
+---
+title: Tool-Usage Coach Research
+category: Researches
+kind: research-output
+date: 2026-10-19
+status: complete
+registry: Documentation/Researches/TOOL-COACH-RESEARCH.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the research (the tool map + the tier model)
+    state: resolved
+    evidence: this document; the claims anchored to file and line
+  - name: the tool-coach plugin
+    state: implemented
+    evidence: Archive/Tool-Coach/TOOL-COACH-PLAN.md; live-proven - the tier-1 notes fired
+  - name: the bundle name decision (tool-coach vs guardian)
+    state: resolved
+    evidence: hook-dsh-tool-coach shipped
+  - name: the parent's open questions (threshold/window, enforce default)
+    state: resolved
+    evidence: shipped with the safe defaults, enforce off
+---
+
 # TOOL-COACH-RESEARCH.md — Research for the Tool-Usage Coach plugin
 
 Status: research (explorer+plan). Companion plan: `TOOL-COACH-PLAN.md` (same directory).
@@ -323,13 +346,3 @@ coach assumes volatile cells reach `apply` as stable references after it lands
    mandate calls it "guardian"; tool-coach matches the broader read+write+search
    scope).
 
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The research (the tool map + the tier model)             | resolved    | this document; the claims anchored to file:line                  | 2026-10-19 |
-| The tool-coach plugin                                    | implemented | Archive/Tool-Coach/TOOL-COACH-PLAN.md; live-proven (the tier-1 notes fired) | 2026-10-20 |
-| The bundle name decision (tool-coach vs guardian)        | resolved    | hook-dsh-tool-coach shipped                                      | 2026-10-20 |
-| The parent's open questions (threshold/window, enforce default) | resolved | shipped with the safe defaults (enforce off)                 | 2026-10-20 |

@@ -1,3 +1,23 @@
+---
+title: The tool-coach operative realization plan
+category: Archive/Tool-Coach
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Tool-Coach/TOOL-COACH-OPERATIVE-PLAN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the operative plan (the harness tool map + the dynamic instruction engine)
+    state: implemented
+    evidence: the shipped plugin follows this realization
+  - name: the craft-library classification battery
+    state: implemented
+    evidence: landed with the plan notes (de45887)
+  - name: the EffectTS twin
+    state: implemented
+    evidence: the twin commit 085e2bd
+---
+
 # TOOL-COACH-OPERATIVE-PLAN.md — Operative realization: harness tool map + dynamic instruction engine
 
 Status: operative plan (Part 3 of the tool-coach research trio; completes

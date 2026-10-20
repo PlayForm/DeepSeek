@@ -1,3 +1,23 @@
+---
+title: The CCR desktop-profile activation materials
+category: Archive/CCR
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/CCR/CCR-PROFILE-WIRING.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the profile wiring materials (the patch row, the config)
+    state: implemented
+    evidence: the ccr enabled in the profile; the row validated
+  - name: the live activation proof
+    state: implemented
+    evidence: the ledger's stored line; the marker produced live; the retrieval round-trip worked
+  - name: the volatile knob flip (autoExpandLimitBytes)
+    state: implemented
+    evidence: the control panel flip took effect without a remount
+---
+
 # CCR PROFILE WIRING - the desktop-profile activation materials (2026-10-19)
 
 > Phase 5 MATERIALS for `@playform/dsh-hook-ccr` (plan:

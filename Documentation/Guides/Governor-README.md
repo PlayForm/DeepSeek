@@ -1,13 +1,21 @@
-# @playform/hook-dsh-package-governor
+---
+title: The package governor guide (hook-dsh-package-governor)
+category: Guides
+kind: guide
+date: 2026-10-03
+status: active
+registry: Documentation/Guides/Governor-README.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the package governor (the silent chain governor)
+    state: implemented
+    evidence: Classic and EffectTS packages; live-proven - the probe's canonicalization
+  - name: the documented README content (the seams, the config, the ledger)
+    state: implemented
+    evidence: this guide; the live ledgers agree
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Guides/Governor-README.md |
-| Category | Guides                               |
-| Kind     | Guide                                |
-| Date     | 2026-10-03                           |
-| State    | Active                               |
-| Index    | Documentation/INDEX.md               |
+# @playform/hook-dsh-package-governor
 
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-CASCADES.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
@@ -392,12 +400,3 @@ CC0-1.0.
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
 [ours-hook-dsh-package-governor]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source
 [ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                        | Date       |
-| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
-| The package governor (the silent chain governor)         | implemented | Classic + EffectTS packages; live-proven (the tab->2-space canonicalization on the probe) | 2026-10-20 |
-| The documented README content (the seams, the config, the ledger) | implemented | this guide; the live ledgers agree                     | 2026-10-20 |

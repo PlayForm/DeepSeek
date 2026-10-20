@@ -1,3 +1,26 @@
+---
+title: The Tool-Usage Coach implementation plan
+category: Archive/Tool-Coach
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Tool-Coach/TOOL-COACH-PLAN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the tool-coach implementation plan
+    state: implemented
+    evidence: the plugin shipped in both trees; the 129-check suite
+  - name: the tier model (the notes at thresholds, the enforce tiers)
+    state: implemented
+    evidence: the tier-1 notes fired live on bash tail and grep calls
+  - name: the judge demo compatibility
+    state: implemented
+    evidence: the shipped defaults; the pwsh judge gated
+  - name: the persistent notes section (notes.persistent)
+    state: implemented
+    evidence: the I7 teaching note in the profile
+---
+
 # TOOL-COACH-PLAN.md — Implementation plan for the Tool-Usage Coach plugin
 
 Status: implementation plan. Companion research: `TOOL-COACH-RESEARCH.md` (same

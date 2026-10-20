@@ -1,3 +1,29 @@
+---
+title: Live Containers - the v1 research
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the feasibility verdict (possible via the system-prompt/assemble waterfall)
+    state: resolved
+    evidence: the tool-coach tier-2 precedent
+  - name: the system-prompt-only caveat (no in-body seam)
+    state: resolved
+    evidence: the request build deep-freezes message identities
+  - name: the v1 shape (the live section, the fixed frame, the five kinds)
+    state: implemented
+    evidence: the phase-1 plugin; hook-dsh-live-containers
+  - name: the programmable stage (Node processes under the sandbox)
+    state: deferred
+    evidence: a future stage; Rust via koffi later; Rhai/WASM deferred
+  - name: the 14 block types in the brainstorm
+    state: in-progress
+    evidence: the phase-1 kinds; the wave-2 kinds skip as unknown until wired
+---
+
 # LIVE CONTAINERS - Research
 
 Date: 2026-10-19

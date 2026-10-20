@@ -1,3 +1,23 @@
+---
+title: CAN-7 Live File Monitors - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-20
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/08-LIVE-FILE-MONITORS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-7 requirement spec (all 10 consideration points adopted)
+    state: resolved
+    evidence: none rejected; the D3 brief included
+  - name: the CAN-7 implementation
+    state: implemented
+    evidence: C3's wave-3 modules; the M-series smokes; 12 monitors folders
+  - name: the gap analysis (M1-M7)
+    state: resolved
+    evidence: the design work, not missing machinery; D3 delivered
+---
+
 # CAN-7 - LIVE FILE MONITORS (operational edits over live-running software)
 
 Date: 2026-10-20

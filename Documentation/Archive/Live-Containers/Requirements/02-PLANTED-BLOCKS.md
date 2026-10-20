@@ -1,3 +1,23 @@
+---
+title: CAN-2 Planted Live Blocks - the requirements
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Requirements/02-PLANTED-BLOCKS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the CAN-2 requirement spec
+    state: resolved
+    evidence: the durable spec
+  - name: the CAN-2 implementation (child-to-parent planting + the progress board)
+    state: implemented
+    evidence: C2's wave-2 Board module; the B-series smokes
+  - name: the live-report and stale conventions
+    state: implemented
+    evidence: the planted board grammar; the lease's stale declaration
+---
+
 # CAN-2 - PLANTED LIVE BLOCKS (multi-level coordination)
 
 ## 1. The requirement statement (the user's intent, faithful)

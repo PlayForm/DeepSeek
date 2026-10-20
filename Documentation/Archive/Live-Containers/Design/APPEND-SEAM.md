@@ -1,3 +1,26 @@
+---
+title: APPEND-SEAM (I3) — the completion-append seam
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/APPEND-SEAM.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the seam decision (the dynamic context carrier; not a section edit)
+    state: resolved
+    evidence: the addendum won for the C2 dispatch
+  - name: the withdrawal-as-absence rule
+    state: resolved
+    evidence: no event, no rewrite; the delivered snapshot stays permanently
+  - name: the emit-at-most-once rule
+    state: resolved
+    evidence: consume-on-logged-snapshot
+  - name: the implementation
+    state: implemented
+    evidence: C2 closed the residuals R1-R5; the projection emits only on change
+---
+
 # APPEND-SEAM (I3) - the completion-append seam, independently resolved
 
 Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md section 3.3.

@@ -1,13 +1,24 @@
-# THE ORCHESTRATION FAMILY - the integrated message bus (dedicated 2026-10-09)
+---
+title: The Orchestration Family - the integrated message bus
+category: Plans
+kind: queued-plan
+date: 2026-10-09
+status: planned
+registry: Documentation/Plans/ORCHESTRATION-FAMILY.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the integrated message bus (the council hub)
+    state: open
+    evidence: this document only - design notes, no package
+  - name: the four members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK)
+    state: open
+    evidence: each documented separately in Documentation/Plans
+  - name: the interim mechanism (the skills)
+    state: implemented
+    evidence: Documentation/Skill/orchestrator-batch and worker-strains live
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/ORCHESTRATION-FAMILY.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-09                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# THE ORCHESTRATION FAMILY - the integrated message bus (dedicated 2026-10-09)
 
 > The user's mandate: think of the plugin family as an INTEGRATED MESSAGE BUS -
 > disperse the information with the blocks + the active communication /
@@ -284,13 +295,3 @@ Perm(a) = f( tool(a), modelFamily(a), role(a), pluginBehavior(a) )
   (the plugin funcs) consult it internally; the agents act on the compiled
   outputs without ever seeing the configuration (the user's responsibility,
   the system's silence).
-
----
-
-## STATUS TABLE
-
-| Functionality                                        | Status   | Evidence                                                            | Date       |
-| ---------------------------------------------------- | -------- | -------------------------------------------------------------------- | ---------- |
-| The integrated message bus (the council hub)         | open     | this document only - design notes, no package                        | 2026-10-09 |
-| The four members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK) | open | each documented separately in Documentation/Plans/ | 2026-10-09 |
-| The interim mechanism (the skills)                   | implemented | Documentation/Skill/orchestrator-batch/ + worker-strains/ live    | 2026-10-20 |

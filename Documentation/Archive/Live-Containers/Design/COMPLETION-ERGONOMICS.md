@@ -1,3 +1,29 @@
+---
+title: COMPLETION-ERGONOMICS (I4) — the completion-block ergonomics
+category: Archive/Live-Containers
+kind: one-shot-record
+date: 2026-10-19
+status: complete
+registry: Documentation/Archive/Live-Containers/Design/COMPLETION-ERGONOMICS.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the batched-append rule (per-turn aggregation, the 4 KiB cap)
+    state: resolved
+    evidence: 6 wins and 1 no-conflict
+  - name: the resume-hint rule (one composed line, at most 200 bytes)
+    state: resolved
+    evidence: the D2 gap filled by this addendum
+  - name: the failed-entry format (the exit code and kill reason lines)
+    state: resolved
+    evidence: the explicit lines
+  - name: the implementation
+    state: implemented
+    evidence: C2 closed residuals R1-R4; completionCapBytes 4096 shipped
+  - name: the failures-first sort smoke seed
+    state: open
+    evidence: implemented but not explicitly seeded - optional J-check
+---
+
 # COMPLETION-ERGONOMICS (I4) - the completion-block ergonomics, independently resolved
 
 Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md section 4.2,

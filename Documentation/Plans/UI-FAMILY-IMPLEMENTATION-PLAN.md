@@ -1,14 +1,34 @@
+---
+title: The UI Family Implementation Plan
+category: Plans
+kind: queued-plan
+date: 2026-10-20
+status: planned
+registry: Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the implementation plan (the expanded brief)
+    state: open
+    evidence: this document - awaiting the user's dispatch
+  - name: the four research inputs (R-UI-1/2/3 + R-INTERACT)
+    state: resolved
+    evidence: Documentation/Researches - all four delivered
+  - name: the central @playform/dsh-panel-family package
+    state: open
+    evidence: planned, no package exists
+  - name: the 13 per-plugin client adapters
+    state: open
+    evidence: planned, no package exists
+  - name: the tool-coach adapter (the first, with the marker-usage rule)
+    state: open
+    evidence: planned as the POC
+  - name: the trajectory family tab (Option A)
+    state: open
+    evidence: planned; the upstream trajectory.sections declaration is Option B
+---
+
 UI-FAMILY-IMPLEMENTATION-PLAN
 =============================
-
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-20                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
 The expanded, exact, step-by-step plan for implementing the researched DeepSeek
 Harness UI features for the @playform plugin family. Written 2026-10-20 by the
 PLAN-EXPANDER explorer agent. ASCII + tabs. This file is the handoff document
@@ -836,16 +856,3 @@ import its types only; the tool-coach is the first adapter and carries the
 marker-usage rule; the Typert endpoint is spiked standalone with the
 registry-only fallback pre-decided; and the trajectory screen stays untouched
 until upstream ships conversation.trajectory.sections.
-
----
-
-## STATUS TABLE
-
-| Functionality                                            | Status      | Evidence                                                          | Date       |
-| -------------------------------------------------------- | ----------- | ------------------------------------------------------------------ | ---------- |
-| The implementation plan (the expanded brief)              | open        | this document - awaiting the user's dispatch                       | 2026-10-20 |
-| The four research inputs (R-UI-1/2/3 + R-INTERACT)        | resolved    | Documentation/Researches/ - all four delivered                     | 2026-10-20 |
-| The central @playform/dsh-panel-family package            | open        | planned, no package exists                                         | 2026-10-20 |
-| The 13 per-plugin client adapters                         | open        | planned, no package exists                                         | 2026-10-20 |
-| The tool-coach adapter (the first, with the marker-usage rule) | open   | planned as the POC                                                 | 2026-10-20 |
-| The trajectory family tab (Option A)                      | open        | planned; upstream conversation.trajectory.sections is Option B     | 2026-10-20 |

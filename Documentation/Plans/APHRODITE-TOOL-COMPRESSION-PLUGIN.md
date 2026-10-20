@@ -1,13 +1,24 @@
-# APHRODITE TOOL-COMPRESSION PLUGIN - the CCR adaptation plan (dedicated 2026-10-19)
+---
+title: Aphrodite Tool-Compression Plugin - the CCR adaptation plan
+category: Plans
+kind: queued-plan
+date: 2026-10-19
+status: planned
+registry: Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md
+index: Documentation/INDEX.md
+statuses:
+  - name: the ccr adaptation plan for Aphrodite
+    state: open
+    evidence: this document only - no implementation
+  - name: the sibling precedent in this monorepo (hook-dsh-ccr)
+    state: implemented
+    evidence: Documentation/Archive/CCR/CCR-FAMILY-GAP-REPORT.md; the ccr live-proven
+  - name: the open questions (section 10)
+    state: open
+    evidence: four questions listed, unresolved
+---
 
-| Field    | Value                                |
-| -------- | ------------------------------------ |
-| Registry | Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md |
-| Category | Plans                                |
-| Kind     | Queued plan                          |
-| Date     | 2026-10-19                           |
-| State    | Planned                              |
-| Index    | Documentation/INDEX.md               |
+# APHRODITE TOOL-COMPRESSION PLUGIN - the CCR adaptation plan (dedicated 2026-10-19)
 
 > Source of truth: `Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md`
 > (cited below as **R§n**). Target: the DeepSeek Harness Plugin Family monorepo
@@ -370,13 +381,3 @@ Phases 1-3 are the MVP; 4-5 complete it. The EffectTS sibling
 4. The `subagent` tool's result often embeds a child's full report - compress
    it? It is the single largest consumer in orchestrator sessions; currently
    exempt (§2.1), review after live data.
-
----
-
-## STATUS TABLE
-
-| Functionality                                        | Status   | Evidence                                                        | Date       |
-| ---------------------------------------------------- | -------- | ---------------------------------------------------------------- | ---------- |
-| The CCR adaptation plan for Aphrodite                | open     | this document only - no implementation                            | 2026-10-19 |
-| The sibling precedent in this monorepo (hook-dsh-ccr)| implemented | Archive/CCR/CCR-FAMILY-GAP-REPORT.md; the CCR live-proven       | 2026-10-20 |
-| The open questions (section 10)                      | open     | four questions listed, unresolved                                 | 2026-10-19 |
