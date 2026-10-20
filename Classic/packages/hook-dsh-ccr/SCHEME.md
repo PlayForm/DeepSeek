@@ -152,7 +152,7 @@ governance domain's contract).
 
 ## 7. The ledger strings (the contract)
 
-One log per module - `logFile` (default `/Users/nikola/.dsh/ccr.log`),
+One log per module - `logFile` (default `~/.dsh/ccr.log`),
 volatile. The strings are the module's OWN (the factory never owns them) and
 asserted byte-identical by the smoke:
 

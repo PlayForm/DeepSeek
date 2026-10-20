@@ -95,6 +95,31 @@ A page is `Base` plus a sequence of sections:
 One `<h1>` per page (the hero). Headings descend in order. Every image
 has alt text; every icon that conveys meaning has an accessible label.
 
+## Voice and vocabulary
+
+The site speaks in the family's own terms. One word per concept, everywhere:
+
+| Term | Means | Not |
+| --- | --- | --- |
+| plugin | a loadable DSH package (the factory, a hook, a tool) | the npm artifact |
+| package | the npm artifact and its directory | a loaded plugin |
+| hook | an event listener registered on a seam | the package |
+| flavor | one normalize transform (dash, quotes, ...) | the whole family |
+| normalizer | the seven-package normalize family | one transform |
+| ledger | the durable per-module log | the console output |
+| bundle | the built package (`Target/`) | the source |
+
+Voice rules:
+
+1. One claim per sentence; the claim is checkable.
+2. Active voice, named actor.
+3. Concrete verbs; no "leverage", "seamless", "robust", "by construction".
+4. No absolutes unless true: every, always, zero, never.
+5. Short declaratives; one longer sentence per paragraph at most.
+6. Headings as claims, not labels.
+7. Second person for instructions, third for descriptions.
+8. Cut the page about itself; no internal notes.
+
 ## The design system
 
 - Blue and white only; `--color-primary` and `--color-primary-container`

@@ -22,3 +22,8 @@ export { materialize } from "./Service/Runtime.js";
 export type { Tags, Services } from "./Service/Runtime.js";
 export type { Registry, Selection, Step } from "./Function/Govern.js";
 export type { Over } from "./Function/Write.js";
+export { default as RewriteBlocks } from "./Overpass/Blocks.js";
+export { default as StepBatch } from "./Overpass/StepBatch.js";
+export { default as ToolResults } from "./Overpass/ToolResults.js";
+export { default as Command } from "./Overpass/Command.js";
+export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "./Overpass/Command.js";

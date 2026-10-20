@@ -55,7 +55,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(cfg0.log.get(), true, "log default");
 			assert.equal(
 				cfg0.logFile.get(),
-				"~/.dsh/hook-dsh-governor-cargo.log",
+				"~/.dsh/ets-hook-dsh-cargo-governor.log",
 				"the SEPARATE ledger default",
 			);
 			assert.equal(cfg0.updateCooldownMs.get(), 3000);

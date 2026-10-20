@@ -41,7 +41,7 @@ import Default from "./Default.js";
 export default Compose(
 	{
 		// Ledger file (one global log; defaults to the active profile's DSH_HOME).
-		logFile: "~/.dsh/hook-dsh-governor-package.log",
+		logFile: "~/.dsh/ets-hook-dsh-package-governor.log",
 		// Actor tool names whose fs/observed events trigger governing.
 		mutationTools: ["write", "edit", "str_replace_editor", "raw-write"],
 		// Excluded path segments (anywhere mode, exclusion-first) — Variable/Default.

@@ -170,7 +170,7 @@ Rewrite:
   each small flavor 104 vs 62, normalize-file 112 vs 71, factory 35 vs 34.
   Core, governor, pinner, cargo, ccr, and tool-coach match. The per-folder
   READMEs are the runner's arbiter (`Maintain/Run-Smokes.mjs`).
-- The real Classic total is 1,312 across the manifest suites, 1,592 with the
+- The real Classic total is 1,314 across the manifest suites, 1,594 with the
   live-containers folders. The EffectTS total needs the same per-folder sum;
   do not assume the additive delta alone.
 - Fix: make `Live.ts` sum the per-folder `## Expected count` values (or

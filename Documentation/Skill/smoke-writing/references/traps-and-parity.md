@@ -39,7 +39,7 @@ finding becomes a regression test where the harness can represent it.
 ## The parity rule
 
 - Classic and EffectTS carry the same assertion sets.
-- EffectTS adds coverage: core +3, factory +7, governor +3, plus the
+- EffectTS adds coverage: factory +7, governor +3, core at parity at 14, plus the
   tracing rerun for ccr and tool-coach.
 - The ledger strings and behaviors are the contract across both trees.
 - The old Boilerplate tree no longer exists; the parity pair is Classic

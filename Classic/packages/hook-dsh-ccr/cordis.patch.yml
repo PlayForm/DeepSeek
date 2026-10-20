@@ -40,7 +40,7 @@
         name: "@playform/hook-dsh-ccr"
         config:
             log: true
-            logFile: /Users/nikola/.dsh/ccr.log
+            logFile: ~/.dsh/ccr.log
             targets:
                 - bash
                 - glob

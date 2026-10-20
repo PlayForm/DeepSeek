@@ -27,8 +27,7 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.0.1",
-		"effect": "4.0.5"
+		"@playform/ets-base-dsh": "0.0.1"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",

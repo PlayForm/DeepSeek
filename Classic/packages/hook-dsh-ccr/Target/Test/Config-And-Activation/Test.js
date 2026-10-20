@@ -103,6 +103,16 @@ const runTest = async () => {
     });
   }
   {
+    const Sub = "config default logFile: ~/.dsh/ccr.log (the documented default)";
+    Check(Count, Sub, () => {
+      assert.equal(
+        Validate({}).logFile.get(),
+        "~/.dsh/ccr.log",
+        "logFile default (volatile cell) - the value the patch row and the site document"
+      );
+    });
+  }
+  {
     const Sub = "config default contextEngine=false (phase 4, inert)";
     Check(Count, Sub, () => {
       assert.ok(Raw1.contextEngine === false);

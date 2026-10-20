@@ -43,7 +43,7 @@ export const runTest = async (): Promise<number> => {
 				assert.equal(validated.log.get(), true, "log default (volatile cell)");
 				assert.equal(
 					validated.logFile.get(),
-					"~/.dsh/hook-dsh-pinner-package.log",
+					"~/.dsh/ets-hook-dsh-package-pinner.log",
 					"logFile default (volatile cell)",
 				);
 				assert.deepEqual(

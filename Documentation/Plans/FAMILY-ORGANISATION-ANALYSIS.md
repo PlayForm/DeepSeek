@@ -1,9 +1,9 @@
 ---
 title: The Family Organization and Functionality Analysis
 category: Plans
-kind: queued-plan
+kind: living-plan
 date: 2026-10-20
-status: planned
+status: active
 registry: Documentation/Plans/FAMILY-ORGANISATION-ANALYSIS.md
 index: Documentation/INDEX.md
 statuses:
@@ -17,20 +17,20 @@ statuses:
     state: resolved
     evidence: this document - the misplacement findings and the moves
   - name: the target design for the overpass scaffolding
-    state: open
-    evidence: this document - proposed, not implemented
+    state: implemented
+    evidence: the core and base Overpass files; the Classic and ETS delegates; the guard 40/40; the aggregate 207 suites exit 0
   - name: the EffectTS strategy decision
-    state: open
-    evidence: the fork is verified - 60,069 Classic lines mirrored; keep, generate, adapt, or delete is the user's call
+    state: resolved
+    evidence: keep the fork; the four unused direct effect deps removed; the ets-core claim corrected; seven ETS suites green
   - name: the P0 data-loss fix (the Site ignore rule)
     state: implemented
     evidence: .gitignore now /Site/; git check-ignore clean; the three archived docs are untracked and visible
   - name: the functionality fixes
-    state: open
-    evidence: the ccr path, the normalizeToolArguments patch, the ledger-path drift, the gate silence
+    state: implemented
+    evidence: ccr path and the ledger defaults aligned in both trees; default-path assertions; the aggregate 207 folders exit 0
   - name: the verification gate
-    state: open
-    evidence: smokes + build after every move; no behavioral change without a baseline decision
+    state: implemented
+    evidence: the aggregate 207 suites exit 0 with 3201 PASS; the site build 24 pages with zero content Drift failures
 ---
 
 # The Family Organization and Functionality Analysis
@@ -129,7 +129,7 @@ vs 132, each small flavor 104 vs 62, normalize-file 112 vs 71, factory 35
 vs 34. Core, governor, pinner, cargo, ccr, and tool-coach match. The
 per-folder READMEs are the runner's arbiter (`Maintain/Run-Smokes.mjs`).
 
-The real Classic total is 1,312 across the manifest suites, 1,592 with the
+The real Classic total is 1,314 across the manifest suites, 1,594 with the
 live-containers folders. The EffectTS total needs the same per-folder sum;
 the manifest's 1021 and the site's 1008/1021 are the stale line, not the
 test truth.

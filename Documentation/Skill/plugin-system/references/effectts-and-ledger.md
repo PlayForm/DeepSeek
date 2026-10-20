@@ -44,7 +44,7 @@ is the additive coverage for the tracing path.
 
 The smoke suites assert the strings byte-identically. The Classic and
 EffectTS suites are the same assertion sets; the EffectTS suites add
-coverage (core +3, factory +7, governor +3) on the same contract. The
+coverage (factory +7, governor +3; core at parity at 14) on the same contract. The
 smoke discipline itself lives in `smoke-writing`.
 
 ## Failure modes

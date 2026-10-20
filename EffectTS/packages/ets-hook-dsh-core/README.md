@@ -300,9 +300,11 @@ one singular TypeScript test file (`Test.ts`) and a `README.md` describing the i
 the scenario tree, the fixtures, the expected ledger strings and the expected PASS count.
 The eight shared folders are byte-twins of the Classic tree's folders (generated from
 them under the tree-identity substitutions only); `Chunk` and `Block` are served by the
-shared `@playform/ets-base-dsh` base, exactly as the source suite imports them, and the
-two ETS-only folders (`Stream-Gate/`, `Update-Envelope/`) carry the additive R1 coverage
-re-homed from `EffectTS/smokes/core-smoke.mjs`. The shared harness (`Source/Test/Harness.ts`)
+shared `@playform/ets-base-dsh` base, exactly as the source suite imports them, and
+there are no ETS-only folders: the stream gate and the Update envelope live in the
+base (`Source/Stream/Gate.ts`, `Source/Function/Update.ts`), so the additive R1
+coverage re-homed from `EffectTS/smokes/core-smoke.mjs` has no package-local folder.
+The shared harness (`Source/Test/Harness.ts`)
 owns the Check counter and the tmpdir fixture. The tests compile to `Target/Test/` in a
 separate ESBuild step (`Configuration/Test-ESBuild.ts`) that runs SECOND in
 `prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively). Each test

@@ -5,7 +5,7 @@
 // modules' transforms import the helpers directly; the factory re-exports
 // NOTHING from the core (its 19-method surface stays stable).
 //
-// Two halves:
+// Three halves:
 //
 //   Variable/Function — the governance family's shared mechanics: the
 //   dependency-section list, the exclusion-segment list, the suppression-
@@ -21,6 +21,13 @@
 //   dispatch (Chunk, Block) with the transform INJECTED — a new
 //   normalization flavor is a table plus a closure, not a fork of the
 //   dispatch.
+//
+//   Overpass — the post-hoc normalization scaffolding: the generic text-block
+//   rewrite (the CCR marker guard, the text-only selection, the
+//   identity-preserving no-op), the two arm factories (the step-batch
+//   pre-step listener and the tool-results post-execute listener) and the
+//   generic `normalize-overpass` command handler, with the flavor's
+//   transform, line composer and ledger sink INJECTED.
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";
@@ -38,3 +45,22 @@ export { default as Invisible } from "./Normalize/Invisible.js";
 export { default as Fullwidth } from "./Normalize/Fullwidth.js";
 export { default as Chunk } from "./Stream/Chunk.js";
 export { default as Block } from "./Stream/Block.js";
+
+// Overpass — the post-hoc normalization scaffolding: the generic text-block
+// rewrite (the CCR marker guard, the text-only selection, the
+// identity-preserving no-op), the two arm factories (the agent/pre-step
+// step-batch arm and the tools/post-execute tool-results arm) shared by every
+// stream flavor's overpass listeners, and the generic `normalize-overpass`
+// command handler. The factories take the flavor's transform, its ledger-line
+// composer and its ledger sink; the module keeps its strings and its State
+// identity.
+export { default as RewriteBlocks } from "./Overpass/Blocks.js";
+export { default as StepBatch } from "./Overpass/StepBatch.js";
+export { default as ToolResults } from "./Overpass/ToolResults.js";
+export { default as Command } from "./Overpass/Command.js";
+export type {
+	CommandResult,
+	CommandsService,
+	ConfigEditorService,
+	SettingsService,
+} from "./Overpass/Command.js";

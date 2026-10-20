@@ -15,3 +15,8 @@ export { default as Invisible } from "./Normalize/Invisible.js";
 export { default as Fullwidth } from "./Normalize/Fullwidth.js";
 export { default as Chunk } from "./Stream/Chunk.js";
 export { default as Block } from "./Stream/Block.js";
+export { default as RewriteBlocks } from "./Overpass/Blocks.js";
+export { default as StepBatch } from "./Overpass/StepBatch.js";
+export { default as ToolResults } from "./Overpass/ToolResults.js";
+export { default as Command } from "./Overpass/Command.js";
+export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "./Overpass/Command.js";

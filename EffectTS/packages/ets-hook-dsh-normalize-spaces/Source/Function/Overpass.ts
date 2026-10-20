@@ -1,59 +1,24 @@
-// Overpass - the TOOL-RESULTS arm of the post-hoc normalization (the plan's
-// §4.1): one tools/post-execute waterfall listener per flavor, registered in
-// Function/Apply next to the llm/stream listener. The principle (R2 §5):
-// overpass normalizes only what re-enters the model or lands in a file - a
-// tool result here is PRE-COMMIT (the waterfall settles before the result is
-// appended to the durable log), so rewriting it is not history rewriting.
+// Overpass - the ets-hook-dsh-normalize-spaces's THIN DELEGATE over the ETS
+// base's tool-results arm factory (@playform/ets-base-dsh/Overpass/
+// ToolResults). The generic machinery lives in the base; this file supplies
+// only what makes it THE NORMALIZE-SPACES:
 //
-// Semantics (each decision point follows the CCR precedent,
-// hook-dsh-ccr/Source/Function/Apply.ts:201-218):
-//   * next() is ALWAYS awaited first - omitting it short-circuits the
-//     downstream listeners;
-//   * the scope gate (`State.Scopes.toolResults`, refreshed in place by the
-//     factory's P10 volatile-update listener): off -> the downstream decision
-//     passes through UNTOUCHED (the default - the arm is opt-in);
-//   * the exemption list (`State.Exempt` - config `toolResultsExempt`): a
-//     result whose exec name is listed passes through by identity (read/edit
-//     are byte-contracted, raw-write/normalize-file own their normalization,
-//     ccr_retrieve's bytes are the retrieval contract, subagent/
-//     ask_user_question carry prompt material matched verbatim);
-//   * only an accepted, non-value-carrying decision can be replaced
-//     (`Object.hasOwn(Decision, "value")` - a value-carrying decision is
-//     canonical; its content is a derived projection);
-//   * the content basis is `Decision.content ?? Result.content` - what the
-//     downstream listeners already shaped, or the raw result;
-//   * TEXT blocks only: never tool-call/argument blocks (the execution-
-//     critical-JSON rule of the core's stream gate);
-//   * the CCR MARKER GUARD: a text block already carrying the CCR spill
-//     marker bytes passes through untouched - normalization never touches a
-//     CCR replacement, which makes the arm order-safe against the CCR hook's
-//     own prepended post-execute listener under ANY bundle load order;
-//   * N = 0 -> the downstream decision is returned unchanged (no ledger
-//     line - the normalize-file no-op precedent);
-//   * N > 0 -> `{ ...Decision, content: <rewritten blocks> }` and the
-//     ledger line `overpass: normalized N char(s) in tool result <toolName>
-//     <callId>` via Factory.Append, plus the shared `normalized` journal
-//     event with the scope in the path slot;
-//   * FAIL-OPEN: the whole arm is one try/catch - on any error the
-//     downstream decision is returned UNCHANGED. Never throw into the
-//     waterfall: a thrown listener would turn a good tool result into a
-//     pipeline failure.
+//   * the spaces transform - the core's Spaces class pinned to the configured
+//     replacement, read per call from the volatile-refreshed State;
+//   * the spaces ledger line - byte-identical with the Classic tree's line:
+//     `overpass: normalized N char(s) in tool result <name> <callId>`;
+//   * the spaces ledger sink - State.Factory.Append / State.Factory.Journal;
+//   * the spaces module identity - State.Module (the Classic identity,
+//     `hook-dsh-normalize-spaces`), prefixed by the factory's Append;
+//   * the schema-default exemption list, exported here because the module's
+//     `normalize-overpass scopes` command reports it (Function/Command).
 //
-// The registration is `{ prepend: true }`: the family's bundle order places
-// the CCR hook before the normalize hooks, so the arm that prepends later is
-// OUTERMOST - the CCR gate compresses the NORMALIZED bytes (its size stats
-// then describe what the model actually sees). The marker guard above makes
-// any load order safe regardless.
-//
-// The FLAVOR: the flavor transform - its own Replace delegate pinned to the
-// configured replacement (read from State at call time, so a volatile
-// hot-edit takes effect on the next dispatch exactly like the stream arm).
-//
-// Pure per call: no module-level state - two concurrent dispatches share
-// nothing, and an HMR reload rebinds the closure cleanly.
-import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
+// The default export is the listener itself (the factory's return), so
+// Function/Apply's `{ prepend: true }` registration and the import path stay
+// untouched.
+import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
 import type State from "@Interface/State.js";
+import { ToolResults } from "@playform/ets-base-dsh";
 
 import Replace from "./Replace.js";
 
@@ -78,111 +43,18 @@ export const DefaultExempt = [
 	"ask_user_question",
 ];
 
-/** The CCR spill marker's opening bytes - content carrying them is a CCR
- *  replacement and passes through untouched (the order-safety guard). */
-export const CCRMarker = "<<<CCR:";
-
-/** A structural content block: the only field the arm reads is the text. */
-export type Block = { type?: unknown; text?: unknown };
-
-/** Rewrite the TEXT blocks of one content array through the given transform.
- *  Returns a copy with the text blocks rewritten, or the ORIGINAL array by
- *  identity when nothing changed (the N = 0 no-op rule). `Count` accumulates
- *  the replaced characters. */
-export const RewriteBlocks = (
-	Content: readonly Block[],
-	Transform: (Text: string) => { text: string; count: number },
-	Count: { value: number },
-): Block[] => {
-	let Changed = false;
-	const Next = Content.map((Block) => {
-		switch (true) {
-			case Block?.type !== "text" || typeof Block?.text !== "string":
-				return Block; // never tool-call/argument or unknown blocks
-			case String(Block.text).includes(CCRMarker):
-				return Block; // the CCR marker guard
-		}
-		const Result = Transform(Block.text as string);
-		switch (true) {
-			case Result.count === 0:
-				return Block;
-		}
-		Changed = true;
-		Count.value += Result.count;
-		return { ...Block, text: Result.text };
-	});
-	// Unchanged -> the ORIGINAL array by identity (the caller's
-	// identity-preservation checks rely on this).
-	return Changed ? Next : (Content as Block[]);
-};
-
-/** The tools/post-execute arm (the listener body; Function/Apply registers
- *  it with `{ prepend: true }`). */
-export default async (
-	Exec: ToolExecution,
-	Result: ToolExecutionResult,
-	Next: () => Promise<PostToolDecision>,
-	State: State,
-): Promise<PostToolDecision> => {
-	// next() FIRST: the downstream listeners settle before any decision.
-	const Decision = await Next();
-	try {
-		// The scope gate: off -> the downstream decision passes untouched.
-		const Scopes = State.Scopes ?? DefaultScopes;
-		switch (true) {
-			case !Scopes.toolResults:
-				return Decision;
-		}
-		// The exemption list: a listed exec name passes by identity.
-		const Exempt = State.Exempt ?? DefaultExempt;
-		switch (true) {
-			case typeof Exec?.name === "string" && Exempt.includes(Exec.name):
-				return Decision;
-		}
-		// Only an accepted, non-value-carrying decision can be replaced.
-		switch (true) {
-			case Decision.kind !== "accept":
-			case Object.hasOwn(Decision, "value"):
-				return Decision;
-		}
-		// The content basis: what downstream shaped, or the raw result.
-		const Content = Decision.content ?? Result.content;
-		if (!Array.isArray(Content)) {
-			return Decision;
-		}
-		const Count = { value: 0 };
-		const Rewritten = RewriteBlocks(
-			Content,
-			// The FLAVOR: the spaces transform pinned to the configured
-			// replacement, read per dispatch from the (volatile-refreshed)
-			// State.
-			(Text) => Replace(Text, State.Replacement),
-			Count,
-		);
-		switch (true) {
-			// N = 0 -> the downstream decision unchanged (no ledger line).
-			case Count.value === 0:
-				return Decision;
-		}
-		const Name = typeof Exec?.name === "string" ? Exec.name : "";
-		const CallID = typeof Exec?.callId === "string" ? Exec.callId : "";
-		const Line = `overpass: normalized ${Count.value} char(s) in tool result ${Name} ${CallID}`;
-		State.Factory.Append(State, Line);
-		// P5 journal - the shared `normalized` event with the scope in the
-		// path slot, best-effort (with no storage facility this is a no-op).
-		State.Factory.Journal(State, "normalized", `tool result ${Name} ${CallID}`, Line);
-		// The replacement: `{ kind: "accept", content: <rewritten blocks> }`
-		// (the plan's exact decision shape; the value case was excluded
-		// above). The blocks are guarded casts: the rewrite only replaces the
-		// `text` field of text blocks and spreads the rest verbatim, so the
-		// structural copy preserves each block's full shape.
-		return {
-			kind: "accept",
-			content: Rewritten as ContentBlock[],
-		};
-	} catch {
-		// Fail-open: keep the downstream decision, never throw into the
-		// waterfall (a thrown listener would fail the tool result).
-		return Decision;
-	}
-};
+export default ToolResults<State, PostToolDecision>(
+	// The FLAVOR: the spaces transform pinned to the configured replacement,
+	// read per call from the (volatile-refreshed) State.
+	(Text, State) => Replace(Text, State.Replacement),
+	// The MODULE's ledger line (the base owns only the mechanics).
+	(Count, Name, CallID) =>
+		`overpass: normalized ${Count} char(s) in tool result ${Name} ${CallID}`,
+	// The MODULE's ledger sink (the factory service, injected).
+	{
+		Append: (State, Line) => State.Factory.Append(State, Line),
+		Journal: (State, Event, Path, Value) => State.Factory.Journal(State, Event, Path, Value),
+	},
+	// The MODULE's schema-default exemption list.
+	DefaultExempt,
+);

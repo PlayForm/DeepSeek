@@ -31,7 +31,7 @@ import Section from "./Section.js";
 export default Compose(
 	{
 		// Ledger file (SEPARATE from the governor's — the pinner is its own plugin).
-		logFile: "~/.dsh/hook-dsh-pinner-package.log",
+		logFile: "~/.dsh/hook-dsh-package-pinner.log",
 		// Actor tool names whose fs/observed events trigger pinning.
 		mutationTools: ["write", "edit", "str_replace_editor", "raw-write"],
 		// Excluded path segments (anywhere mode, exclusion-first) — Variable/Default.

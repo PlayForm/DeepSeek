@@ -85,7 +85,7 @@ before trusting the pass.
 ## The parity rule
 
 - Classic and EffectTS carry the same assertion sets.
-- EffectTS adds coverage (core +3, factory +7, governor +3) on the same
+- EffectTS adds coverage (factory +7, governor +3; core at parity at 14) on the same
   contract.
 - Tracing-on mode (`FACTORY_SMOKE_TRACING=1`) must produce byte-identical
   stdout and ledgers; the spans never alter strings, ordering, or timing.

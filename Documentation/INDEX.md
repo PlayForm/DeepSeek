@@ -73,7 +73,7 @@ statuses:
 | ----------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (17)
+### Plans - the living + queued hubs (18)
 
 | Document (Documentation/Plans/)     | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -94,6 +94,7 @@ statuses:
 | [TRUSTED-PUBLISHER.md](Plans/TRUSTED-PUBLISHER.md) | planned | queued-plan |
 | [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md) | planned | queued-plan (site content and wording) |
 | [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md) | planned | queued-plan (duplication, functionality, placement) |
+| [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md) | active | living-plan (the decision record and workstreams) |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (18)
 

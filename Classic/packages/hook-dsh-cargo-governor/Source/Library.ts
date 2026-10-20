@@ -81,7 +81,7 @@
 //     gracefully with a clear ledger line
 //     (`update: cargo-edit unavailable: …`).
 //   * ledger: one SEPARATE log (config logFile, default
-//     ~/.dsh/hook-dsh-governor-cargo.log — never the package governor's
+//     ~/.dsh/hook-dsh-cargo-governor.log — never the package governor's
 //     log), written through the factory's Append.
 //
 // Silence: the parent thread sees exactly what it wrote. The model-facing

@@ -1,8 +1,8 @@
 # The family smokes (the arbiter)
 
-The fourteen mechanics suites - **core 17 / factory 41 / governor 81 / pinner 32 / cargo 62 /
-normalize-dash 132 / quotes 62 / ellipsis 62 / spaces 62 / invisible 62 / fullwidth 62 /
-normalize-file 71 / ccr 146 / tool-coach 129** - live as per-test folders under their
+The fourteen mechanics suites - **core 14 / factory 42 / governor 82 / pinner 32 / cargo 62 /
+normalize-dash 184 / quotes 104 / ellipsis 104 / spaces 104 / invisible 104 / fullwidth 104 /
+normalize-file 112 / ccr 147 / tool-coach 129** - live as per-test folders under their
 packages (`EffectTS/packages/<bundle>/Source/Test/`, compiled into `Target/Test/`); the seven
 wiring suites' folders live in this directory (see below). The `.mjs` fallback files are
 RETIRED (the wrap-up lane, I8): the folders are the arbiter now, and the per-suite
@@ -18,13 +18,14 @@ before/after totals live in the totals ledger of
 - Bundle paths: the tests import the bundles from the package-relative
   `../../Target/...` specifiers (the bundles live in `EffectTS/packages/<bundle>/`, each with
   its own node_modules restored via `pnpm install --ignore-scripts` from the bundle's directory).
-- The counts are the CLASSIC numbers plus the additive EffectTS coverage (core +3, factory +7,
-  governor +3): 892 total vs Classic's 879 (both totals include the shared ccr suite at 146).
+- The counts are the CLASSIC numbers plus the additive EffectTS coverage (factory +7,
+  governor +3; core is at parity at 14): 1324 total vs Classic's 1314 (both totals include
+  the shared ccr suite at 147).
 - The ccr and tool-coach tests add the family's tracing-hygiene mode as their additive
   EffectTS coverage: their core assertions run a second time with `FACTORY_SMOKE_TRACING=1` (the traced runtime lives
   in `@playform/ets-base-dsh`) and the rerun must be byte-identical - stdout AND the durable
   ledger log (the `[ISO]` stamps normalized). The comparison is silent (`node:assert`), so the
-  printed PASS stream is the same 146 in both modes.
+  printed PASS stream is the same 147 in both modes.
 
 Run a single mechanics test with `node EffectTS/packages/<bundle>/Target/Test/<Name>/Test.js`;
 run the whole tree with `node Maintain/Run-Smokes.mjs` (the aggregate, which also guards each

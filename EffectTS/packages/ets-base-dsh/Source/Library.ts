@@ -52,3 +52,19 @@ export { materialize } from "./Service/Runtime.js";
 export type { Tags, Services } from "./Service/Runtime.js";
 export type { Registry, Selection, Step } from "./Function/Govern.js";
 export type { Over } from "./Function/Write.js";
+
+// The overpass scaffolding (mirrored from the Classic core's Source/Overpass -
+// the same dependency-free code; the base owns the ETS machinery home): the
+// generic text-block rewrite, the two arm factories and the generic
+// `normalize-overpass` command handler, with the flavor's transform, line
+// composer and ledger sink INJECTED.
+export { default as RewriteBlocks } from "./Overpass/Blocks.js";
+export { default as StepBatch } from "./Overpass/StepBatch.js";
+export { default as ToolResults } from "./Overpass/ToolResults.js";
+export { default as Command } from "./Overpass/Command.js";
+export type {
+	CommandResult,
+	CommandsService,
+	ConfigEditorService,
+	SettingsService,
+} from "./Overpass/Command.js";

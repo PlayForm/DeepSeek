@@ -7,7 +7,7 @@
 // module's historical one) followed by the module's OWN fields verbatim.
 //
 // Defaults mirror the package.json governor except for the module-specific
-// fields: the SEPARATE ledger (hook-dsh-governor-cargo.log — never the package
+// fields: the SEPARATE ledger (ets-hook-dsh-cargo-governor.log — never the package
 // governor's log, passed as the `shared.logFile` default), `cargoBin` (bare
 // name resolved by the subprocess seam; set an absolute path when the host
 // PATH lacks cargo), and `updateMode: "cargo"` — the only implemented mode
@@ -29,7 +29,7 @@ export default Compose(
 	{
 		// Ledger file — the CARGO MODULE's OWN ledger (separate from
 		// the package governor's).
-		logFile: "~/.dsh/hook-dsh-governor-cargo.log",
+		logFile: "~/.dsh/ets-hook-dsh-cargo-governor.log",
 	},
 	{
 		// Strict chain pass: strip unknown deps (the whole `name = "…"` entry) in

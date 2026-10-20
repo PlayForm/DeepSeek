@@ -61,7 +61,7 @@
 //     chain pin to public npm latest — -x is one comma-delimited argument,
 //     ncu 23.0.0).
 //   * ledger (Factory.Append): one global log (config logFile, default
-//     ~/.dsh/hook-dsh-governor-package.log) — there is no per-root ledger anymore.
+//     ~/.dsh/hook-dsh-package-governor.log) — there is no per-root ledger anymore.
 //
 // Silence: the parent thread sees exactly what it wrote. The model-facing
 // write result is built from the author's own content; the governor's

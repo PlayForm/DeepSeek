@@ -62,6 +62,18 @@ const runTest = async () => {
       });
     }
   }
+  {
+    const Sub = "Config: the default logFile is the documented ledger path";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          Governor.Config({}).logFile.get(),
+          "~/.dsh/ets-hook-dsh-package-governor.log",
+          "logFile default (volatile cell) - must equal the cordis.patch.yml row and the README"
+        );
+      });
+    }
+  }
   return Finish(Count, "Entry-And-Config");
 };
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

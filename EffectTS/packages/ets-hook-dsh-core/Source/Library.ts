@@ -22,13 +22,10 @@
 //   normalization flavor is a table plus a closure, not a fork of the
 //   dispatch.
 //
-// Effect-TS v4 additions (the plan's R1): the stream gate as a REAL
-// `Stream<A, E, R>` transformer (Stream/Gate) — the ecosystem hook point
-// the harness adapter consumes via Stream.fromAsyncIterable → Gate →
-// Stream.toAsyncIterable — and the Update envelope's Dispatch/Settle
-// returned as typed effects (Effect.forkIn on the plugin scope for the
-// detached continuation). The export NAMES stay identical; the additions
-// are additive.
+// The stream gate and the Update envelope live in @playform/ets-base-dsh
+// (Source/Stream/Gate.ts, Source/Function/Update.ts); this package imports
+// nothing from effect and re-exports neither. Its surface is the thirteen
+// names below.
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";

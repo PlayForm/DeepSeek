@@ -1,8 +1,8 @@
 # The family smokes (the arbiter)
 
-The fourteen mechanics suites — **core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 /
-normalize-dash 132 / quotes 62 / ellipsis 62 / spaces 62 / invisible 62 / fullwidth 62 /
-normalize-file 71 / ccr 146 / tool-coach 129** — live as per-test folders under their
+The fourteen mechanics suites — **core 14 / factory 35 / governor 79 / pinner 32 / cargo 62 /
+normalize-dash 184 / quotes 104 / ellipsis 104 / spaces 104 / invisible 104 / fullwidth 104 /
+normalize-file 112 / ccr 147 / tool-coach 129** — live as per-test folders under their
 packages (`Classic/packages/<bundle>/Source/Test/`, compiled into `Target/Test/`); the seven
 wiring suites' folders live in this directory (see below). The `.mjs` fallback files are
 RETIRED (the wrap-up lane, I8): the folders are the arbiter now, and the per-suite
