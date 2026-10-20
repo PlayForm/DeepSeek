@@ -106,10 +106,10 @@ const runTest = async () => {
       assert.deepEqual(Value.jobs, Jobs.started.map((S) => S.id));
     });
     Check(Count, "T5: the rendered text is byte-exact", () => {
-      const Ids = Jobs.started.map((S) => S.id).join(", ");
+      const IDs = Jobs.started.map((S) => S.id).join(", ");
       assert.equal(
         Rendered(Run, "live_monitor_check", Value),
-        `[monitor] deep check started /repo/src/App.ts (2 checks) - job_output ${Ids} for the full tail.`
+        `[monitor] deep check started /repo/src/App.ts (2 checks) - job_output ${IDs} for the full tail.`
       );
     });
   }

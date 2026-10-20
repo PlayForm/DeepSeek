@@ -21,7 +21,7 @@ import {
   Post
 } from "../Harness.js";
 const Now0 = ClockBox.Now;
-const Frame1 = (Id, Body) => Frame("---", Id, Body);
+const Frame1 = (ID, Body) => Frame("---", ID, Body);
 const ExpectedFrames = {
   t: Frame1("t", `${ExpectedTime(Now0)} | ${ExpectedDate(Now0)} | ${Zone()}`),
   c: Frame1("c", "m=0 t=0 s=none"),
@@ -73,12 +73,12 @@ const runTest = async () => {
       assert.equal(Live.text.includes("wave2"), false);
     });
     Check(Count, "ledger: one block rendered line per rendered block (byte-exact)", () => {
-      for (const [Id, FrameText] of Object.entries(ExpectedFrames)) {
-        const Lines = LinesWith(Run1, `block rendered ${Id} (`);
+      for (const [ID, FrameText] of Object.entries(ExpectedFrames)) {
+        const Lines = LinesWith(Run1, `block rendered ${ID} (`);
         assert.equal(Lines.length, 1);
         assert.equal(
           Lines[0],
-          `hook-dsh-live-containers: block rendered ${Id} (${Buffer.byteLength(
+          `hook-dsh-live-containers: block rendered ${ID} (${Buffer.byteLength(
             FrameText,
             "utf8"
           )} bytes)`

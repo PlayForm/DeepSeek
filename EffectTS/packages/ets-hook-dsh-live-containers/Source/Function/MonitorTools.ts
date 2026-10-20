@@ -125,7 +125,7 @@ export const Monitor = (Agent: State, Append: Log) =>
 						agent: Entry.agentId,
 						version: Entry.lastVersion ?? "",
 						writer: "",
-						checkSetID: "",
+						checkSetId: "",
 						ranAt: Clock(Agent),
 						exit: null,
 						infra: null,

@@ -38,7 +38,7 @@ const SKIP_WORDS: readonly string[] = ["live container", "plant", "suggestion"];
  * most one suggestion per user turn. */
 export const Gate = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Text: string,
 	FirstOfTurn: boolean,
 ): boolean => {
@@ -55,12 +55,12 @@ export const Gate = (
 	if (SKIP_WORDS.some((Word) => Lower.includes(Word))) {
 		return false;
 	}
-	const Ticks = Agent.SuggesterTicks.get(AgentId);
+	const Ticks = Agent.SuggesterTicks.get(AgentID);
 	const Hour = Ticks?.ticks.filter((At) => Clock(Agent) - At < 3600000) ?? [];
 	if (Hour.length >= Agent.MaxSuggestionsPerHour) {
 		return false;
 	}
-	if (Ticks?.lastTurn === (Agent.TurnCounts.get(AgentId) ?? 0)) {
+	if (Ticks?.lastTurn === (Agent.TurnCounts.get(AgentID) ?? 0)) {
 		return false;
 	}
 	return true;
@@ -81,22 +81,22 @@ export const Excerpt = (Agent: State, Text: string): string => {
 
 /** The composed prompt (I6 section 2): the excerpt + the compressed catalog +
  * the task facts the plugin already holds. */
-export const Compose = (Agent: State, AgentId: string, Text: string): string => {
-	const Records = Agent.Detached.get(AgentId);
+export const Compose = (Agent: State, AgentID: string, Text: string): string => {
+	const Records = Agent.Detached.get(AgentID);
 	let LiveJobs = 0;
 	for (const Record of Records?.values() ?? []) {
 		if (Record.status === undefined) {
 			LiveJobs += 1;
 		}
 	}
-	const Boards = Agent.Boards.get(AgentId);
+	const Boards = Agent.Boards.get(AgentID);
 	let OpenBoards = 0;
 	for (const Board of Boards?.values() ?? []) {
 		if (Board.lease.state === "open") {
 			OpenBoards += 1;
 		}
 	}
-	const Facts = `live jobs: ${LiveJobs}; open boards: ${OpenBoards}; turns: ${Agent.TurnCounts.get(AgentId) ?? 0}`;
+	const Facts = `live jobs: ${LiveJobs}; open boards: ${OpenBoards}; turns: ${Agent.TurnCounts.get(AgentID) ?? 0}`;
 	return [
 		"Decide whether a live container block fits this request.",
 		"Request excerpt:",
@@ -172,7 +172,7 @@ export const Parse = (Output: unknown): ParsedSuggestion | undefined => {
  * mini-model; out-of-range or malformed tokens clamp to the nearest legal
  * value and each clamp is ledgered. Returns the clamped tokens. */
 export const Clamp = (
-	Id: string,
+	ID: string,
 	TemplateID: string,
 	Tokens: { expectAgents?: number; steps?: string[] } | undefined,
 	Append: Log,
@@ -183,10 +183,10 @@ export const Clamp = (
 		const Raw = Tokens?.expectAgents;
 		if (typeof Raw !== "number" || !Number.isFinite(Raw)) {
 			Clamped.expectAgents = 1;
-			Append(`suggestion clamped ${Id} expectAgents`);
+			Append(`suggestion clamped ${ID} expectAgents`);
 		} else if (Raw < 1 || Raw > 8) {
 			Clamped.expectAgents = Math.min(8, Math.max(1, Math.round(Raw)));
-			Append(`suggestion clamped ${Id} expectAgents`);
+			Append(`suggestion clamped ${ID} expectAgents`);
 		} else {
 			Clamped.expectAgents = Math.round(Raw);
 		}
@@ -197,14 +197,14 @@ export const Clamp = (
 			Step.length > 64 ? Step.slice(0, 64) : Step,
 		);
 		if (Steps.length < 1) {
-			Append(`suggestion clamped ${Id} steps`);
+			Append(`suggestion clamped ${ID} steps`);
 		}
 		while (Steps.length > 8) {
 			Steps.pop();
 		}
 		if (Steps.length === 0) {
 			Steps.push("step-1");
-			Append(`suggestion clamped ${Id} steps`);
+			Append(`suggestion clamped ${ID} steps`);
 		}
 		Clamped.steps = Steps;
 	}
@@ -215,28 +215,28 @@ export const Clamp = (
  * caller before the clamping. */
 export const Store = (
 	Agent: State,
-	AgentId: string,
-	Id: string,
+	AgentID: string,
+	ID: string,
 	Parsed: ParsedSuggestion,
 	Clamped: { expectAgents?: number; steps?: string[] },
 	Append: Log,
 ): Suggestion => {
 	const Suggestion_: Suggestion = {
-		id: Id,
-		agentId: AgentId,
+		id: ID,
+		agentId: AgentID,
 		templateId: Parsed.templateId,
 		fit: Parsed.fit,
 		rationale: Parsed.rationale,
 		tokens: Clamped,
-		createdTurn: Agent.TurnCounts.get(AgentId) ?? 0,
+		createdTurn: Agent.TurnCounts.get(AgentID) ?? 0,
 		renderedTurn: undefined,
 		withdrawn: false,
 		planted: false,
 	};
-	const PerAgent = Agent.Suggestions.get(AgentId) ?? new Map<string, Suggestion>();
-	PerAgent.set(Id, Suggestion_);
-	Agent.Suggestions.set(AgentId, PerAgent);
-	Append(`suggested ${Id} ${Parsed.templateId} (fit ${Parsed.fit})`);
+	const PerAgent = Agent.Suggestions.get(AgentID) ?? new Map<string, Suggestion>();
+	PerAgent.set(ID, Suggestion_);
+	Agent.Suggestions.set(AgentID, PerAgent);
+	Append(`suggested ${ID} ${Parsed.templateId} (fit ${Parsed.fit})`);
 	// autoPlant (I6 5.5): skip the preview frame and instantiate the suggestion
 	// DIRECTLY as a DORMANT planted block.
 	if (Agent.AutoPlant && Parsed.fit === "yes") {
@@ -252,7 +252,7 @@ export const Store = (
 		Suggestion_.planted = true;
 		PlantDormant(
 			Agent,
-			AgentId,
+			AgentID,
 			Suggestion_,
 			PlantType as "agent-board" | "todo-fill" | "custom",
 			Expect,
@@ -266,11 +266,11 @@ export const Store = (
  * cycle: Board imports nothing from Suggester). */
 type BoardOpenFn = (
 	Agent: State,
-	AgentId: string,
-	Id: string,
+	AgentID: string,
+	ID: string,
 	PlantType: "agent-board" | "todo-fill" | "aggregate" | "custom",
 	Expect: number,
-	MemberIds: string[] | undefined,
+	MemberIDs: string[] | undefined,
 	Template: string | undefined,
 	Append: Log,
 ) => BoardState;
@@ -285,7 +285,7 @@ export const BindBoard = (Open_: BoardOpenFn): void => {
  * accept=<sid> activates it; dismiss=<sid> withdraws it. */
 const PlantDormant = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Suggestion_: Suggestion,
 	PlantType: "agent-board" | "todo-fill" | "custom",
 	Expect: number,
@@ -296,7 +296,7 @@ const PlantDormant = (
 	}
 	const Board = BoardOpen(
 		Agent,
-		AgentId,
+		AgentID,
 		`suggested-${Suggestion_.id}`,
 		PlantType,
 		Expect,
@@ -312,7 +312,7 @@ const PlantDormant = (
  * the exploration strain's route. Failures produce ONLY a ledger line. */
 export const Spawn = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Text: string,
 	Parent: { id: string },
 	Append: Log,
@@ -323,10 +323,10 @@ export const Spawn = (
 		return;
 	}
 	// The rate bookkeeping before the spawn (one suggestion per user turn).
-	const Ticks = Agent.SuggesterTicks.get(AgentId) ?? { ticks: [], lastTurn: 0 };
+	const Ticks = Agent.SuggesterTicks.get(AgentID) ?? { ticks: [], lastTurn: 0 };
 	Ticks.ticks.push(Clock(Agent));
-	Ticks.lastTurn = Agent.TurnCounts.get(AgentId) ?? 0;
-	Agent.SuggesterTicks.set(AgentId, Ticks);
+	Ticks.lastTurn = Agent.TurnCounts.get(AgentID) ?? 0;
+	Agent.SuggesterTicks.set(AgentID, Ticks);
 	const Controller = new AbortController();
 	const Timer = setTimeout(
 		() => Controller.abort(new Error("suggest timeout")),
@@ -335,7 +335,7 @@ export const Spawn = (
 	if (typeof Timer === "object" && Timer !== null && "unref" in Timer) {
 		(Timer as { unref: () => void }).unref();
 	}
-	const Prompt = Compose(Agent, AgentId, Text);
+	const Prompt = Compose(Agent, AgentID, Text);
 	try {
 		const Activation = Subagent.startActivation({
 			provider: Agent.SuggesterRoute.provider,
@@ -364,9 +364,9 @@ export const Spawn = (
 				}
 				// The suggestion id is assigned BEFORE the clamping so each clamp
 				// ledger line carries it (I6 A5).
-				const Id = NewID();
-				const Clamped = Clamp(Id, Parsed.templateId, Parsed.tokens, Append);
-				Store(Agent, AgentId, Id, Parsed, Clamped, Append);
+				const ID = NewID();
+				const Clamped = Clamp(ID, Parsed.templateId, Parsed.tokens, Append);
+				Store(Agent, AgentID, ID, Parsed, Clamped, Append);
 			})
 			.catch(() => {
 				Append("suggestion skipped (spawn failed)");
@@ -381,7 +381,7 @@ export const Spawn = (
  * message and spawn when it passes. Called from the L8 listener. */
 export const OnUserMessage = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Text: string,
 	Parent: { id: string } | undefined,
 	Append: Log,
@@ -390,10 +390,10 @@ export const OnUserMessage = (
 		if (Parent === undefined) {
 			return;
 		}
-		if (!Gate(Agent, AgentId, Text, true)) {
+		if (!Gate(Agent, AgentID, Text, true)) {
 			return;
 		}
-		Spawn(Agent, AgentId, Text, Parent, Append);
+		Spawn(Agent, AgentID, Text, Parent, Append);
 	} catch (Err) {
 		try {
 			Append(`suggestion skipped (${Err instanceof Error ? Err.message : String(Err)})`);
@@ -438,17 +438,17 @@ export const PlainFrame = (Suggestion_: Suggestion, Separator: string): string =
  * one-assembly window: render once, then withdraw with the expiry line). */
 export const SectionBody = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Separator: string,
 	Append: Log,
 ): string => {
 	const Parts: string[] = [];
-	const PerAgent = Agent.Suggestions.get(AgentId);
+	const PerAgent = Agent.Suggestions.get(AgentID);
 	if (PerAgent === undefined) {
 		return "";
 	}
-	const Turn = Agent.TurnCounts.get(AgentId) ?? 0;
-	for (const [Id, Suggestion_] of [...PerAgent]) {
+	const Turn = Agent.TurnCounts.get(AgentID) ?? 0;
+	for (const [ID, Suggestion_] of [...PerAgent]) {
 		if (Suggestion_.withdrawn) {
 			continue;
 		}
@@ -473,7 +473,7 @@ export const SectionBody = (
 		if (Turn > Suggestion_.renderedTurn) {
 			// No action: the frame withdraws after one assembly (I6 5.3).
 			Suggestion_.withdrawn = true;
-			Append(`suggestion expired ${Id}`);
+			Append(`suggestion expired ${ID}`);
 		}
 	}
 	return Parts.join("\n");
@@ -481,11 +481,11 @@ export const SectionBody = (
 
 /** Accept one suggestion (I6 5.1): instantiate the stored, clamped
  * configuration verbatim. Returns the ledger line. */
-export const Accept = (Agent: State, AgentId: string, Id: string, Append: Log): string => {
-	const PerAgent = Agent.Suggestions.get(AgentId);
-	const Suggestion_ = PerAgent?.get(Id);
+export const Accept = (Agent: State, AgentID: string, ID: string, Append: Log): string => {
+	const PerAgent = Agent.Suggestions.get(AgentID);
+	const Suggestion_ = PerAgent?.get(ID);
 	if (Suggestion_ === undefined || Suggestion_.withdrawn) {
-		return `accept failed ${Id} (expired)`;
+		return `accept failed ${ID} (expired)`;
 	}
 	const Catalog = Entry(Suggestion_.templateId);
 	const PlantType =
@@ -499,21 +499,21 @@ export const Accept = (Agent: State, AgentId: string, Id: string, Append: Log): 
 		(Catalog?.shape === "list" ? (Suggestion_.tokens.steps?.length ?? 1) : 1);
 	if (Suggestion_.planted) {
 		// Activate the dormant block (open the lease, start expecting reports).
-		const Boards = Agent.Boards.get(AgentId);
-		const Dormant = [...(Boards?.values() ?? [])].find((Board) => Board.suggestionId === Id);
+		const Boards = Agent.Boards.get(AgentID);
+		const Dormant = [...(Boards?.values() ?? [])].find((Board) => Board.suggestionId === ID);
 		if (Dormant !== undefined) {
 			Dormant.suggested = undefined;
 		}
 		Suggestion_.withdrawn = true;
-		return `suggestion accepted ${Id} (${Suggestion_.templateId})`;
+		return `suggestion accepted ${ID} (${Suggestion_.templateId})`;
 	}
 	if (BoardOpen === undefined) {
-		return `accept failed ${Id} (expired)`;
+		return `accept failed ${ID} (expired)`;
 	}
 	BoardOpen(
 		Agent,
-		AgentId,
-		`planted-${Id}`,
+		AgentID,
+		`planted-${ID}`,
 		PlantType as "agent-board" | "todo-fill" | "aggregate" | "custom",
 		Expect,
 		undefined,
@@ -521,8 +521,8 @@ export const Accept = (Agent: State, AgentId: string, Id: string, Append: Log): 
 		Append,
 	);
 	if (PlantType === "todo-fill" && Suggestion_.tokens.steps !== undefined) {
-		const Boards = Agent.Boards.get(AgentId);
-		const Board = Boards?.get(`planted-${Id}`);
+		const Boards = Agent.Boards.get(AgentID);
+		const Board = Boards?.get(`planted-${ID}`);
 		if (Board !== undefined) {
 			Board.items = Suggestion_.tokens.steps.map((Step) => ({
 				label: Step,
@@ -533,37 +533,37 @@ export const Accept = (Agent: State, AgentId: string, Id: string, Append: Log): 
 		}
 	}
 	Suggestion_.withdrawn = true;
-	return `suggestion accepted ${Id} (${Suggestion_.templateId})`;
+	return `suggestion accepted ${ID} (${Suggestion_.templateId})`;
 };
 
 /** Dismiss one suggestion (I6 5.2/5.3/5.5): the frame or dormant block
  * withdraws with the distinct ledger line. */
 export const Dismiss = (
 	Agent: State,
-	AgentId: string,
-	Id: string,
+	AgentID: string,
+	ID: string,
 	Reason: string | undefined,
 	Append: Log,
 ): string => {
-	const PerAgent = Agent.Suggestions.get(AgentId);
-	const Suggestion_ = PerAgent?.get(Id);
+	const PerAgent = Agent.Suggestions.get(AgentID);
+	const Suggestion_ = PerAgent?.get(ID);
 	if (Suggestion_ !== undefined && !Suggestion_.withdrawn) {
 		Suggestion_.withdrawn = true;
 		if (Suggestion_.planted) {
-			const Boards = Agent.Boards.get(AgentId);
-			for (const [BoardId, Board] of Boards ?? []) {
-				if (Board.suggestionId === Id) {
-					Boards?.delete(BoardId);
+			const Boards = Agent.Boards.get(AgentID);
+			for (const [BoardID, Board] of Boards ?? []) {
+				if (Board.suggestionId === ID) {
+					Boards?.delete(BoardID);
 				}
 			}
-			Append(`suggestion dismissed ${Id} (dormant)`);
-			return `suggestion dismissed ${Id} (dormant)`;
+			Append(`suggestion dismissed ${ID} (dormant)`);
+			return `suggestion dismissed ${ID} (dormant)`;
 		}
 	}
 	const Line =
 		Reason === undefined
-			? `suggestion dismissed ${Id}`
-			: `suggestion dismissed ${Id} (${Reason})`;
+			? `suggestion dismissed ${ID}`
+			: `suggestion dismissed ${ID} (${Reason})`;
 	Append(Line);
 	return Line;
 };

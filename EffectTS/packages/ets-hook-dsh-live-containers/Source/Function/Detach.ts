@@ -251,7 +251,7 @@ export const PreExecute = async (
 				{ command: Command },
 				{
 					callId: Exec.callId,
-					rootCallID: Exec.rootCallID,
+					rootCallId: Exec.rootCallId,
 					agent: Exec.agent as { id: string; session?: unknown } | undefined,
 				},
 			);
