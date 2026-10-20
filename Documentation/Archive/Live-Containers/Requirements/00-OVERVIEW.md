@@ -3,7 +3,7 @@
 Date: 2026-10-19
 Status: requirements only (the durable spec for the DESIGN agent and the
 CODER agent; written by the wave-2 research agent).
-Base: Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md (the v1 research: the
+Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (the v1 research: the
 system-prompt/assemble seam, the KV-cache honesty, the ptc-runtime
 programmable stage, the 14 block types, the 3-agent specs). Wave 2 EXTENDS
 that idea and never contradicts its verified seams.

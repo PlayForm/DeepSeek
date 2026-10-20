@@ -6,7 +6,7 @@ PLAN-EXPANDER explorer agent. ASCII + tabs. This file is the handoff document
 for a NEW conversation that begins implementation.
 
 Foundations (read these first, in this order):
-	Documentation/Plans/HARNESS-UI-PLUGIN-RESEARCH.md      (R-UI-1: the Plugins page slots)
+	Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md      (R-UI-1: the Plugins page slots)
 	Documentation/Plans/HARNESS-UI-OPTIONS-RESEARCH.md     (R-UI-2: the volatile config chain)
 	Documentation/Plans/HARNESS-UI-TRAJECTORY-RESEARCH.md  (R-UI-3: the panel contract + adapters)
 	Documentation/Plans/FAMILY-INTERACTIONS-RESEARCH.md    (R-INTERACT: the ccr truth + R1-R10)

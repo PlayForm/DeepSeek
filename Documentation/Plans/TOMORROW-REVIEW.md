@@ -619,7 +619,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   block fits the user's request and suggests it to the main conversation.
 - CAN-6 BETTER IDEAS: the research's own extensions (the user asked "let me
   know if you have better ideas for this").
-- THE DELIVERABLE: Documentation/Plans/LiveContainers/Requirements/ (one
+- THE DELIVERABLE: Documentation/Archive/Live-Containers/Requirements/ (one
   file per CAN + the overview + the seam map - the durable spec for the next
   two agents).
 - THE CHAIN (the user's mandated sequence): R2 (research - ACTIVE) ->
@@ -627,7 +627,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   law - the design lane) -> C2 (the coder, GLM flash high). The A1-A3 trio of
   wave 1 stays IDLE (the v1 plugin); wave 2's code lands after the design.
 - **WAVE-2 RESEARCH COMPLETE (2026-10-19, `2a322db2`)**: the 8 requirement
-  files verified on disk (Documentation/Plans/LiveContainers/Requirements/
+  files verified on disk (Documentation/Archive/Live-Containers/Requirements/
   00-OVERVIEW + 01-LIVE-TOOL-CALL-BLOCKS + 02-PLANTED-BLOCKS +
   03-BLOCK-TEMPLATES + 04-TASK-FAILSAFES + 05-MINI-CONVERSATION-SUGGESTER +
   06-BETTER-IDEAS + 07-SEAM-MAP; 1202 lines). Grounded: CAN-1's interception
@@ -659,7 +659,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   I7 COACH-GRAMMAR (`95e565e5` - teach the grammar via the tool-coach note),
   I8 WRAPUP-RETIRE-LEDGER (`0ce2c18d` - the .mjs retirement + the before/
   after totals ledger, fires after L5/L6). The design addenda (I2-I6) write
-  to Documentation/Plans/LiveContainers/Design/ and feed the D2 brief; the
+  to Documentation/Archive/Live-Containers/Design/ and feed the D2 brief; the
   drain continues at 2-3 active until all is met.
 - **I1 COMPLETE (2026-10-19)**: the two hard constraints folded (append-only,
   verified): 01-LIVE-TOOL-CALL-BLOCKS.md:322 (section 12: 12.1 the
@@ -673,7 +673,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   non-negotiables 6 -> 8). The Requirements/ dir is untracked (the user
   commits).
 - **D2 COMPLETE (2026-10-19, `3c36688c`)**: the implementation design
-  verified on disk - Documentation/Plans/LiveContainers/Design/
+  verified on disk - Documentation/Archive/Live-Containers/Design/
   IMPLEMENTATION-DESIGN.md (1487 lines, 14 sections). THE DECISIONS: G1 - a
   pre-execute decision CANNOT carry a synthetic result (only allow/deny/ask/
   cancel; deny renders Error:... isError:true); the carrier is the plugin's
@@ -1359,7 +1359,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   enable-all + the tool-coach wiring -> the wrap-up (the totals
   roll-up + the READY-TO-COMMIT state + the residuals ledger).
 - **R3 COMPLETE + VERIFIED (2026-10-20, `e525cd61`)**: the wave-3
-  research landed - Documentation/Plans/LiveContainers/Requirements/
+  research landed - Documentation/Archive/Live-Containers/Requirements/
   08-LIVE-FILE-MONITORS.md (230 lines): the seam verdict POSSIBLE with
   first-hand anchors (fs/observed Write.ts:149-157 + the governor
   consumer precedent, ctx.jobs as the check home, the assemble
@@ -1419,7 +1419,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   wrap-up report (the totals roll-up + the READY-TO-COMMIT state + the
   residuals ledger).
 - **D3 COMPLETE + VERIFIED (2026-10-20, `48c0c30d` - deepseek max)**:
-  the wave-3 design delivered - Documentation/Plans/LiveContainers/
+  the wave-3 design delivered - Documentation/Archive/Live-Containers/
   Design/FILE-MONITORS-DESIGN.md (1198 lines). THE M5 DECISION: a NEW
   storage domain live_containers_monitors (v1, per-record, one checks
   table) - extension records REJECTED (the v2 open contract would
@@ -1557,7 +1557,7 @@ does things, not a back-and-forth wasting tokens".
   are the control inputs; the loop closes per request).
 - THE WAVE-3 TRIO SEATED IDLE (2026-10-19, the IDLE-AMENDMENT LAW): R3 the
   LIVE-FILE-MONITORS RESEARCH (`e525cd61` - GLM flash low; writes
-  Documentation/Plans/LiveContainers/Requirements/08-LIVE-FILE-MONITORS.md
+  Documentation/Archive/Live-Containers/Requirements/08-LIVE-FILE-MONITORS.md
   with the 10 consideration points + a D3 brief), D3 the DESIGN (`48c0c30d` -
   deepseek max; writes Design/FILE-MONITORS-DESIGN.md + the C3 coder brief,
   the phase order from D2's design), C3 the CODER (`62896685` - GLM flash

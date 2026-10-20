@@ -1,7 +1,7 @@
 # SMOKE-SUITE-RESTRUCTURE-BLUEPRINT
 
 Status: BLUEPRINT (explorer output, 2026-10-19). Implementing coder lanes execute this
-verbatim. Spec: Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-NOTE.md (read in full).
+verbatim. Spec: Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md (read in full).
 Reference studied: /Users/nikola/Developer/Application/CodeEditorLand/Land/Element/Output
 (Source/prepublishOnly.sh, Source/Run.sh, Source/ESBuild.ts, Source/ESBuild/Output.ts,
 package.json scripts). No code was changed by this exploration; no tests were run.

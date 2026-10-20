@@ -1,7 +1,7 @@
 # NORMALIZE-GRANULAR-PLAN — full-granularity normalization control for the DSH plugin family
 
 Date: 2026-10-19 · Author: PLAN agent (drafting lane) · Inputs:
-`Documentation/Plans/NORMALIZE-GRANULAR-CONFIG-RESEARCH.md` (R1) and
+`Documentation/Researches/NORMALIZE-GRANULAR-CONFIG-RESEARCH.md` (R1) and
 `Documentation/Plans/NORMALIZE-OVERPASS-RESEARCH.md` (R2). All code claims verified
 on disk in this repo (`Classic/packages/`, `EffectTS/packages/`); harness-doc claims
 anchored to `/Users/nikola/Developer/Documentation/Module/deepseek-harness/docs/`.

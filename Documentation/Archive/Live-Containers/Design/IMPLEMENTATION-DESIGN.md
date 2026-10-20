@@ -12,7 +12,7 @@ PACKAGE (07 section 3.8); this design specifies the phase boundaries so the
 v1 coders (A1/A2/A3) and the wave-2 coder (C2) never collide.
 Addenda coverage: the DESIGN ADDENDA (I2-I6: AWAIT-MARKER, APPEND-SEAM,
 COMPLETION-ERGONOMICS, PLANTED-LEASE, SUGGESTER-CONFIGURED) had NOT landed in
-Documentation/Plans/LiveContainers/Design/ at write time (checked at start and
+Documentation/Archive/Live-Containers/Design/ at write time (checked at start and
 twice during the run). Those five areas are designed HERE (sections 4, 5, 6,
 3.4 and 2) and flagged in the report for ratification against the lanes'
 final texts at the C2 dispatch.
@@ -1234,7 +1234,7 @@ Wave 2 (this design; the SCHEME owns the final list - C2 ships it):
 
 ROLE: implement the wave-2 extension of @playform/hook-dsh-live-containers
 (the Classic twin first; the ETS twin after Classic acceptance) per
-Documentation/Plans/LiveContainers/Design/IMPLEMENTATION-DESIGN.md
+Documentation/Archive/Live-Containers/Design/IMPLEMENTATION-DESIGN.md
 sections 2-7 (the config schema, the listener set, the marker grammars,
 the jobs integration, the failsafe engine, the smokes) and this brief.
 

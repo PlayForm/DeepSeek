@@ -309,7 +309,7 @@ pnpm run test --workspace-concurrency=1   # all smokes, the arbiter
 
 Phases 1-3 are the MVP; 4-5 complete it. The EffectTS sibling
 (`ets-hook-dsh-ccr`) is a separate later item per the SPLICE-ETS pattern
-(Documentation/Plans/SPLICE-ETS.md).
+(Documentation/Archive/Split/SPLICE-ETS.md).
 
 ## 8. Feature scoping table (R§3/§4/§6)
 

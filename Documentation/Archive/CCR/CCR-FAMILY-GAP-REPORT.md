@@ -46,7 +46,7 @@ ccr's exact consumption pattern, for the record: `Factory.State<State>(Context, 
 
 ## 3. The SPLICE-ETS derivation recipe (as it applies to ccr)
 
-From `Documentation/Plans/SPLICE-ETS.md` (508 lines) and `EffectTS/IMPLEMENTATION-PLAN.md` (245 lines):
+From `Documentation/Archive/Split/SPLICE-ETS.md` (508 lines) and `EffectTS/IMPLEMENTATION-PLAN.md` (245 lines):
 
 1. **Naming** (SPLICE-ETS §2, :67-121, esp. the post-execution naming note :14-20): the classical group is `@playform/hook-dsh-*` + `@playform/plugin-dsh-factory`; the EffectTS group is `@playform/ets-*` with the `ets-` pre-pendage + the base `@playform/ets-base-dsh`. So ccr derives to `@playform/hook-dsh-ccr` (dir `Classic/packages/hook-dsh-ccr`) and `@playform/ets-hook-dsh-ccr` (dir `EffectTS/packages/ets-hook-dsh-ccr`).
 2. **Import rewrites** (§4.1 :256-270): the three rules - `@playform/dsh-hook-core` → group core; `@playform/dsh-plugin-factory` → group factory; and for EffectTS the **moved-plumbing rule** (`Activate`, `Gate`, `Update`, `Stream/*`) → `@playform/ets-base-dsh` (:266-267). For ccr that means exactly one line changes per tree beyond the two name swaps: the `Activate` import in `Source/Function/Apply.ts` moves to the base.

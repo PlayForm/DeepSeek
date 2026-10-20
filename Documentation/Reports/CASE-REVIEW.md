@@ -3,7 +3,7 @@
 > The case-review agent's report (user mandate 2026-10-07): the review of the case study must
 > emphasize THE STRUCTURE OF WHY IT WAS WRITTEN LIKE THIS - the structural rationale (why the
 > architecture and the decisions are shaped the way they are), NOT the how (the process mechanics).
-> Scope: `Site/Source/pages/case-study.astro`, `Documentation/Plans/CASE-STUDY-PLAN.md`, the third-pass
+> Scope: `Site/Source/pages/case-study.astro`, `Documentation/Archive/Site/CASE-STUDY-PLAN.md`, the third-pass
 > summary (`Documentation/Plans/TOMORROW-REVIEW.md` §2.3), the handoff
 > (`Documentation/Handoff/`: Overview, Packages 01-13, Register, Lessons), the reports
 > (`Documentation/Reports/`), and the code (`Classic/packages/*`, `EffectTS/packages/*`, both

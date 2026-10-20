@@ -23,7 +23,7 @@
 
 ## 0. THE SUPERSEDED PLAN (marked per the binding decision #4)
 
-- **`Documentation/Plans/DUAL-SOURCE-BUNDLING.md` is SUPERSEDED by this plan.** The one-name,
+- **`Documentation/Archive/Split/DUAL-SOURCE-BUNDLING.md` is SUPERSEDED by this plan.** The one-name,
   two-builds publish mechanism (one npm name per identity carrying the Classic + the Effect-TS
   builds in the same tarball, toggled via the `effect-ts`/`classic` exports conditions, assembled by
   `Maintain/DualSource.sh`) is REPLACED by the complete split: separate sources, separate names.
@@ -419,7 +419,7 @@ The surfaces carrying the current names; the SITE-DOCS-RENAME lane rewrites them
   + the `/effect-ts` subpath + the variant-toggle wording.
 - `Documentation/Skill/plugin-system/SKILL.md`: the `@playform/plugin-dsh-factory` + `hook-dsh-*`
   references.
-- `Documentation/Plans/DUAL-SOURCE-BUNDLING.md`: the SUPERSEDED banner + the cross-reference to this
+- `Documentation/Archive/Split/DUAL-SOURCE-BUNDLING.md`: the SUPERSEDED banner + the cross-reference to this
   plan (§0); `TOMORROW-REVIEW.md` (line 307) + `DSH-MONOREPO-PLAN.md` (register #15) get the
   annotation.
 - `.github/workflows/Node.yml` + `NPM.yml`: the comments (the totals sentence stays; the NPM.yml

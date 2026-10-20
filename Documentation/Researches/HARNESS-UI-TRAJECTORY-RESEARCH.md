@@ -13,7 +13,7 @@ Sources read in place (never extracted):
 	-> dsh/node_modules/@deepseek-ai/dsh-client-ui-plugin-manager/lib/client.js
 	-> dsh/node_modules/@deepseek-ai/dsh-client-ui-conversation/lib/client.js
 - ~/Developer/Documentation/Module/deepseek-harness/docs/subsystems/slots.md
-- Sibling research: Documentation/Plans/HARNESS-UI-PLUGIN-RESEARCH.md
+- Sibling research: Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md
 - Family packages: Classic/packages/* (15 dirs, 13 bundles + core + factory)
 
 

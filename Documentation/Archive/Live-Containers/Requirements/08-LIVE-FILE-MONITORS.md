@@ -3,7 +3,7 @@
 Date: 2026-10-20
 Status: requirements only (the durable spec for the D3 DESIGN agent; written by
 the wave-3 research agent, R3).
-Base: Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md (v1) + Requirements 00-07
+Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (v1) + Requirements 00-07
 (wave 2, incl. 01's BINDING CONSTRAINTS 12.1/12.2 - the command-only detach and
 the sandbox/fail-open rules). Wave 3 EXTENDS the same package
 (Classic/packages/hook-dsh-live-containers) and never contradicts the verified

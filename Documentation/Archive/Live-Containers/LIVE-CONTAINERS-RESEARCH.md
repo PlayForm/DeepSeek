@@ -317,7 +317,7 @@ listeners + the waterfall discipline + the State build), the tool-coach
 README.md + SCHEME.md, Classic/packages/plugin-dsh-factory/SCHEME.md (the
 State builder + volatile cells), Classic/packages/hook-dsh-normalize-dash/
 Source/Variable/Config.ts (the volatile Config schema pattern),
-Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md sections 3-5 (the v1 shape,
+Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md sections 3-5 (the v1 shape,
 the ledger strings, the block kinds).
 
 DELIVERABLES:

@@ -440,7 +440,7 @@ VERDICTS:
 ================================================================================================
 6. ACCEPTANCE CRITERIA
 ================================================================================================
-- A1. This document exists at Documentation/Plans/FAMILY-INTERACTIONS-RESEARCH.md, ASCII +
+- A1. This document exists at Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md, ASCII +
   tabs, and is the ONLY file written by this research task. [MET]
 - A2. Every per-plugin one-pager names the plugin's one job, hook points (exact event
   names), factory registrations, ledger/storage surfaces, and key config defaults, sourced

@@ -4,10 +4,10 @@ Date: 2026-10-20
 Status: implementation design - the byte-ready spec the CODER (C3) executes
 Prepared by: the DESIGN lane D3 (cloudflare-workers-ai / @cf/deepseek-ai/
 deepseek-v4-flash-0731 / max)
-Base: Documentation/Plans/LiveContainers/Requirements/08-LIVE-FILE-MONITORS.md
+Base: Documentation/Archive/Live-Containers/Requirements/08-LIVE-FILE-MONITORS.md
 (R3, the durable requirement - read in full, 338 lines, all 10 consideration
 points + the M1-M7 gap list + the 10 acceptance criteria + the
-D3-DESIGN-BRIEF) + Documentation/Plans/LiveContainers/Design/
+D3-DESIGN-BRIEF) + Documentation/Archive/Live-Containers/Design/
 IMPLEMENTATION-DESIGN.md (D2, the wave-1+2 design - the marker grammars, the
 listener set, the config schema, the jobs integration, the failsafe engine;
 the monitors EXTEND it) + the wave-2 requirement files as needed (01 section
@@ -1083,7 +1083,7 @@ acceptance)
 
 ROLE: implement the wave-3 monitor layer of @playform/hook-dsh-live-
 containers (the Classic twin first; the ETS twin after the Classic
-acceptance) per Documentation/Plans/LiveContainers/Design/
+acceptance) per Documentation/Archive/Live-Containers/Design/
 FILE-MONITORS-DESIGN.md (THIS file - sections 1-13 are the byte-ready
 spec) and this brief.
 
