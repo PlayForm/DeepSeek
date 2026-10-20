@@ -92,8 +92,8 @@ export const Open = (
 		pruned: 0,
 		lastTurnAt: undefined,
 	};
-	Boards.set(Id, Board);
-	Append(`plant opened ${Id} (expect ${Expect})`);
+	Boards.set(ID, Board);
+	Append(`plant opened ${ID} (expect ${Expect})`);
 	// The pinned members enroll through Enroll (the ledger line per member);
 	// more pins than slots overflow.
 	for (const MemberID of Pinned) {

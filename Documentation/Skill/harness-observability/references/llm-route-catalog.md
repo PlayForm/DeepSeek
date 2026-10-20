@@ -30,7 +30,7 @@ route, not the default, is the contract.
    provider/model/effort are omitted, the delegation inherits the parent
    route (or the configured child defaults) silently. The caller never sees
    which route fired; the first symptom is a wrong cost, a wrong latency, or
-   a wrong quality class. See SKILL/references/honest-limits.md - the
+   a wrong quality class. See ./references/honest-limits.md - the
    role-routing internals are explicitly NOT observable.
 2. **The catalog says what exists; the policy says what to use.** The
    catalog is inventory: two models on one provider, with the efforts each
