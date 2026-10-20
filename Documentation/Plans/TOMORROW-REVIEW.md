@@ -1707,3 +1707,20 @@ browser refresh).
   moved to Source/ + the tsc-alias/awaited-tsc step removed, the arbiters:
   the serialized 29-package build + the 207 suites + the declaration
   hygiene + the parity. EDIT-TOOL-ONLY (the hard lesson).
+- **THE ALIAS-REVERT LANE COMPLETE + VERIFIED (2026-10-20, `d7227988`)**: the
+  whole-tree reconcile landed - 215 Source .ts files reverted to the
+  @Function/@Interface/@Variable aliases (the ultimate arbiter: `git diff
+  94b9f66 --name-only -- '*/Source/*.ts'` = 0 files - every Source tree
+  byte-identical to the alias baseline; the user's mid-flight commit
+  cd013dd captured part of the lane's state - the reverts stand as unstaged
+  on top); the scripts: all 31 packages with Source/prepublishOnly.sh +
+  Source/Run.sh + the correct shape (the Build plugin + the Test Build + the
+  selfcheck + the test-tree tsc; zero awaited-tsc/tsc-alias steps); the
+  tsconfigs: 31/31 with the rootDir + the paths; the CRLF repair (9 cargo
+  Test files - the earlier scripted pass's residue - the newline gate clean
+  1490 files); the serialized build exit 0 + "All 207 smoke suites passed".
+  READY-TO-COMMIT: 360 files (215 alias reverts + 9 CRLF repairs + ~136
+  rebuilt Targets). The CORRECTED-SWEEP lane's mandate is fulfilled by this
+  lane (the former was stopped - its destructive fan-out plan). The
+  SITE-DEMO-FIX lane (`7273f92e`) is the remaining active lane (the
+  repeating-stream + the coach state machine + the supports placement).
