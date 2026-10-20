@@ -23,7 +23,7 @@ export declare const IsInteractive: (Command: string) => boolean;
 /** The dedup key (design section 5.2): (agent id, normalized command, resolved
  * workdir). Normalized = trim + collapse runs of whitespace + strip leading
  * `cd x && ` prefixes whose target equals the resolved workdir. */
-export declare const DedupKey: (AgentId: string, Command: string, Workdir: string | undefined) => string;
+export declare const DedupKey: (AgentID: string, Command: string, Workdir: string | undefined) => string;
 /** The command prefix the long-running history keys on (the first two words:
  * `cargo build`, `npm install` - cheap and pure-observer). */
 export declare const CommandPrefix: (Command: string) => string;
@@ -31,9 +31,9 @@ export declare const CommandPrefix: (Command: string) => string;
  * (the wave-2 observer feeding the long-running heuristic; an awaited call's
  * duration is recorded like any inline call - the I2 7.7 honesty rule, no
  * marker-based exclusion). */
-export declare const RecordDuration: (Agent: State, AgentId: string, Command: string, Ms: number) => void;
+export declare const RecordDuration: (Agent: State, AgentID: string, Command: string, Ms: number) => void;
 /** The same-prefix history average (undefined when no history). */
-export declare const HistoryAverage: (Agent: State, AgentId: string, Command: string) => number | undefined;
+export declare const HistoryAverage: (Agent: State, AgentID: string, Command: string) => number | undefined;
 /** Whether the command matches any long-running marker (substring match on
  * the command line, the I1 heuristic's cheap shape). */
 export declare const MatchesMarker: (Command: string, Markers: readonly string[]) => boolean;
@@ -41,21 +41,21 @@ export declare const MatchesMarker: (Command: string, Markers: readonly string[]
  * malformed pattern matches nothing - fail-open). */
 export declare const MatchesPattern: (Command: string, Patterns: readonly string[]) => boolean;
 /** The per-agent live-job count for the admission guard. */
-export declare const LiveCount: (Agent: State, AgentId: string) => number;
+export declare const LiveCount: (Agent: State, AgentID: string) => number;
 /** The per-turn meta-budget bookkeeping (design section 6 scenario 7): the
  * meta-budget bounds the layer's automatic modifications - the detach
  * transform and the failsafe actions - per agent per turn. */
-export declare const BudgetEntry: (Agent: State, AgentId: string, Turn: number) => {
+export declare const BudgetEntry: (Agent: State, AgentID: string, Turn: number) => {
     turn: number;
     used: number;
 };
 /** The per-agent failsafe meta-budget check: true when a modification may
  * proceed; false means pass-through for the rest of the turn. */
-export declare const WithinBudget: (Agent: State, AgentId: string, Turn: number) => boolean;
+export declare const WithinBudget: (Agent: State, AgentID: string, Turn: number) => boolean;
 /** Spend one unit of the meta-budget (call only after the action happened). */
-export declare const SpendBudget: (Agent: State, AgentId: string, Turn: number) => void;
+export declare const SpendBudget: (Agent: State, AgentID: string, Turn: number) => void;
 /** Whether the meta-budget just ran out (the one summary line per turn). */
-export declare const BudgetExhausted: (Agent: State, AgentId: string, Turn: number) => boolean;
+export declare const BudgetExhausted: (Agent: State, AgentID: string, Turn: number) => boolean;
 /** The fail-loud config checks (design section 2.3): mode "all" FAILS LOUD at
  * load unless allRequiresConfirm is true; liveTimeoutMs is validated against
  * the composition contract. */
@@ -70,6 +70,6 @@ export type Decision = {
     reason: string;
     ledger: string;
 };
-export declare const Decide: (Agent: State, AgentId: string, Tool: string, Command: string, Turn: number) => Decision;
+export declare const Decide: (Agent: State, AgentID: string, Tool: string, Command: string, Turn: number) => Decision;
 /** The elapsed seconds a standing frame shows (clock-driven). */
 export declare const ElapsedSeconds: (Agent: State, From: number) => number;

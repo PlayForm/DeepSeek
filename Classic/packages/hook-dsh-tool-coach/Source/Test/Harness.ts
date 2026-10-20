@@ -245,7 +245,7 @@ export const ALLOW: any = { kind: "allow" };
 /**
  * A judged terminal call through the post-execute listener.
  */
-export const Agent = (Id: string): any => ({ id: Id });
+export const Agent = (ID: string): any => ({ id: ID });
 export const AgentA: any = Agent("agent-a");
 
 export const Post = async (Run: any, Command: string, Who: any = AgentA, Name = "bash"): Promise<any> =>

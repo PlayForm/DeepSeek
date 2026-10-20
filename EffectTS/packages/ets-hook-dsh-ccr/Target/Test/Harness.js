@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { rmSync } from "node:fs";
-import Ccr from "../../Target/Library.js";
+import CCR from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
@@ -47,7 +47,7 @@ const Rm = () => {
 const Furnace = new FactoryClass({
   reflect: { provide: () => void 0 }
 });
-const { Config: Schema } = Ccr;
+const { Config: Schema } = CCR;
 const Validate = (Raw) => Schema({ ...Raw });
 const Make = (Raw) => {
   const Listeners = {};
@@ -93,7 +93,7 @@ const Make = (Raw) => {
       return Context;
     }
   };
-  Ccr.apply(Context, Raw);
+  CCR.apply(Context, Raw);
   return {
     Context,
     Listeners,

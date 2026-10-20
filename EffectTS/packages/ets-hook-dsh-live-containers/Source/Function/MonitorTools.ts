@@ -21,8 +21,8 @@ import type State from "@Interface/State.js";
 
 /** The caller's agent id from the exec. */
 const CallerOf = (Exec: unknown): string => {
-	const Id = (Exec as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
-	return typeof Id === "string" && Id.length > 0 ? Id : "";
+	const ID = (Exec as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
+	return typeof ID === "string" && ID.length > 0 ? ID : "";
 };
 
 /** Build the live_monitor tool definition. */
@@ -125,7 +125,7 @@ export const Monitor = (Agent: State, Append: Log) =>
 						agent: Entry.agentId,
 						version: Entry.lastVersion ?? "",
 						writer: "",
-						checkSetId: "",
+						checkSetID: "",
 						ranAt: Clock(Agent),
 						exit: null,
 						infra: null,
@@ -215,8 +215,8 @@ export const Check = (Agent: State, Append: Log) =>
 			if (typeof Path !== "string" || Path.length === 0) {
 				throw new Error("invalid path: expected a non-empty string");
 			}
-			const AgentId = CallerOf(exec);
-			const PerAgent = Agent.Monitors.get(AgentId);
+			const AgentID = CallerOf(exec);
+			const PerAgent = Agent.Monitors.get(AgentID);
 			const Existing =
 				PerAgent?.get(Path) ??
 				[...(PerAgent?.values() ?? [])].find((Entry) => Entry.path === Path);
@@ -224,10 +224,10 @@ export const Check = (Agent: State, Append: Log) =>
 				Existing ??
 				Monitors.Enroll(
 					Agent,
-					AgentId,
+					AgentID,
 					Path,
 					Path,
-					AgentId,
+					AgentID,
 					Watchlist.ExplicitSets(Agent, Path),
 					"",
 					Append,
@@ -236,23 +236,23 @@ export const Check = (Agent: State, Append: Log) =>
 			// the linked sets never run - they render the linked form).
 			const Started: string[] = [];
 			let Pending = 0;
-			for (const SetId of Entry.sets) {
-				const Spec = Agent.CheckSets[SetId];
+			for (const SetID of Entry.sets) {
+				const Spec = Agent.CheckSets[SetID];
 				if (Spec === undefined) {
-					Append(`monitor check unknown ${SetId}`);
+					Append(`monitor check unknown ${SetID}`);
 					continue;
 				}
 				if (Spec.link !== undefined) {
 					continue;
 				}
 				if (Agent.MonitorJobs.size >= Agent.Monitor.maxMonitorJobs) {
-					Entry.pending.set(SetId, { since: Clock(Agent) });
+					Entry.pending.set(SetID, { since: Clock(Agent) });
 					Pending += 1;
 					continue;
 				}
-				const JobId = await Monitors.Dispatch(Agent, AgentId, Entry, SetId, Spec, Append);
-				if (JobId !== undefined) {
-					Started.push(JobId);
+				const JobID = await Monitors.Dispatch(Agent, AgentID, Entry, SetID, Spec, Append);
+				if (JobID !== undefined) {
+					Started.push(JobID);
 				}
 			}
 			if (Started.length > 0) {

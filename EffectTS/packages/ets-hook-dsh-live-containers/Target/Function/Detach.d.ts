@@ -3,11 +3,11 @@ import type { Log } from "@Function/Render.js";
 import type State from "@Interface/State.js";
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
-export declare const Marker: (JobId: string, CmdHead: string) => string;
+export declare const Marker: (JobID: string, CmdHead: string) => string;
 /** The dedup variant's second line (design section 4.1, byte-exact). */
-export declare const AlreadyLine: (JobId: string) => string;
+export declare const AlreadyLine: (JobID: string) => string;
 /** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
-export declare const RetryLine: (JobId: string, Attempt: number) => string;
+export declare const RetryLine: (JobID: string, Attempt: number) => string;
 /** The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the
  * arguments - `{"__await":true` - exactly like the normalize family's
  * first-key marker; no whitespace variants, no JSON re-parse. The parsed-
@@ -40,4 +40,4 @@ export declare const PostExecute: (Agent: State, Exec: {
 }) => void;
 /** The start-time stamp for the duration observer (bounded: a long-lived
  * process without settlements cannot grow the map unboundedly). */
-export declare const StampStart: (Agent: State, CallId: string) => void;
+export declare const StampStart: (Agent: State, CallID: string) => void;

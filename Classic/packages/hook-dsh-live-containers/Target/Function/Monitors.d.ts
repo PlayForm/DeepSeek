@@ -8,7 +8,7 @@ export type FsTarget = {
     displayPath?: unknown;
     targetKey?: unknown;
 } | undefined;
-export type FsObservation = {
+export type FSObservation = {
     kind?: unknown;
     version?: unknown;
 } | undefined;
@@ -16,11 +16,11 @@ export type FsObservation = {
  * deadline scan; "assemble" adds the slow schedule and the retirement scan. */
 export type Phase = "event" | "assemble";
 /** Enroll (or refresh) one file in an agent's monitor set. Returns the entry. */
-export declare const Enroll: (State: State, AgentId: string, Path: string, PathKey: string, Writer: string, Sets: string[], Version: string, Append: Log) => MonitorEntry;
+export declare const Enroll: (State: State, AgentID: string, Path: string, PathKey: string, Writer: string, Sets: string[], Version: string, Append: Log) => MonitorEntry;
 /** L11 - the fs/observed observer (registered through the factory's Wire on
  * the ROOT context, so every write the harness emits is heard). Pure
  * observer, fail-open, NEVER throws into the dispatch. */
-export declare const OnObserved: (State: State, Target: FsTarget, Observation: FsObservation, Actor: object | undefined, Append: Log) => void;
+export declare const OnObserved: (State: State, Target: FsTarget, Observation: FSObservation, Actor: object | undefined, Append: Log) => void;
 /** Dispatch one check job through the SHIPPED G2 wrapper (the R3 brief
  * point 6's "one wrapper, two callers" is literal - NO second execution
  * path). Returns the job id, or undefined when the start failed (the
@@ -28,7 +28,7 @@ export declare const OnObserved: (State: State, Target: FsTarget, Observation: F
  * last-known result and renders STALE at the next request). The dispatch
  * RESERVES one admission slot for the in-flight start (the async gap would
  * otherwise let every pending set pass the admission check at once). */
-export declare const Dispatch: (State: State, AgentId: string, Entry: MonitorEntry, SetId: string, Spec: CheckSetSpec, Append: Log) => Promise<string | undefined>;
+export declare const Dispatch: (State: State, AgentID: string, Entry: MonitorEntry, SetID: string, Spec: CheckSetSpec, Append: Log) => Promise<string | undefined>;
 /** The checkpoint scan (called at every checkpoint, fail-open): the deadline
  * scan at every phase; the debounce dispatch at every phase; the slow
  * schedule and the retirement scan at the assemble phase only. */
@@ -42,4 +42,4 @@ export declare const OnSettled: (State: State, Event: unknown, Append: Log) => v
  * overflow collapsed lines and the retirement closing lines). Returns []
  * when nothing renders (the section body is then byte-identical with the
  * wave-2 behavior). */
-export declare const SectionParts: (State: State, AgentId: string, Separator: string, Append: Log) => string[];
+export declare const SectionParts: (State: State, AgentID: string, Separator: string, Append: Log) => string[];

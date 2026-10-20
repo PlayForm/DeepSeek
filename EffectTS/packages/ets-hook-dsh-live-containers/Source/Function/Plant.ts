@@ -84,9 +84,9 @@ export default (Agent: State, Append: Log) => {
 			],
 		},
 		async execute(args, exec) {
-			const Id = Text(args, "id") ?? "";
+			const ID = Text(args, "id") ?? "";
 			const PlantType = Text(args, "plantType") ?? "";
-			if (Id.length === 0) {
+			if (ID.length === 0) {
 				throw new Error("invalid id: expected a non-empty string");
 			}
 			if (
@@ -96,9 +96,9 @@ export default (Agent: State, Append: Log) => {
 					`invalid plantType: expected one of "agent-board" | "todo-fill" | "aggregate" | "custom" | "monitors", got ${JSON.stringify(PlantType)}`,
 				);
 			}
-			const AgentId =
+			const AgentID =
 				(exec as { agent?: { id?: string } | undefined } | undefined)?.agent?.id ?? "";
-			const Boards = Board.For(Agent, AgentId);
+			const Boards = Board.For(Agent, AgentID);
 			if (Boards.size >= Agent.Plant.boardsPerAgent) {
 				throw new Error(
 					`planted board limit reached for this agent (limit: ${Agent.Plant.boardsPerAgent}); close or prune an existing board first`,
@@ -107,8 +107,8 @@ export default (Agent: State, Append: Log) => {
 			const Expect = Math.min(8, Math.max(1, Math.round(Number_(args, "expectAgents") ?? 3)));
 			const Board_ = Board.Open(
 				Agent,
-				AgentId,
-				Id,
+				AgentID,
+				ID,
 				PlantType as "agent-board" | "todo-fill" | "aggregate" | "custom" | "monitors",
 				Expect,
 				StrArray(args, "memberIds"),

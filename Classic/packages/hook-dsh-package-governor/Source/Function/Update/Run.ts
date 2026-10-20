@@ -23,7 +23,7 @@ export default async (
 	Signal: AbortSignal,
 	Emit?: (text: string) => void,
 ): Promise<boolean> => {
-	let Ok = true;
+	let OK = true;
 	switch (true) {
 		case Mode === "bin": {
 			State.Factory.Append(State, `update: mode=bin (ncu binary ${Binary})`);
@@ -41,7 +41,7 @@ export default async (
 						Signal,
 						Emit,
 					)):
-						Ok = false;
+						OK = false;
 						break;
 				}
 			}
@@ -60,11 +60,11 @@ export default async (
 						Reject,
 						Allow,
 					)):
-						Ok = false;
+						OK = false;
 						break;
 				}
 			}
 		}
 	}
-	return Ok;
+	return OK;
 };

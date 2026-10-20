@@ -43,8 +43,8 @@ export const CONTEXT_NAME = "live-containers-completion";
 export const Wrapper = "[live] completion report (harness-appended; not a user request):";
 
 /** The per-frame resume pointer (design section 4.2, byte-exact). */
-export const FrameHint = (JobId: string): string =>
-	`[live] job_output ${JobId} to read the full output.`;
+export const FrameHint = (JobID: string): string =>
+	`[live] job_output ${JobID} to read the full output.`;
 
 /** The domain tokens the hint's domain noun recognizes (I4 2.3: cargo/npm/
  * pnpm/make/bash -> "the <token> steps"; unknown -> "the build steps"). */
@@ -148,8 +148,8 @@ export const ComposeFrame = (
 };
 
 /** The elided-tail marker (I4 1.3, byte-exact). */
-const Elided = (JobId: string): string =>
-	`output (tail elided; cap reached - job_output ${JobId} for the full output)`;
+const Elided = (JobID: string): string =>
+	`output (tail elided; cap reached - job_output ${JobID} for the full output)`;
 
 /** The truncation pass (I4 1.3): when the merged text would exceed the cap,
  * the OLDEST frames are truncated first - header/status/elapsed always kept,
@@ -201,7 +201,7 @@ const Fit = (Agent: State, Frames: DetachRecord[], Append: Log): string[] => {
 /** The resume hint (I4 2.2, byte-exact, one line, <= 200 bytes). */
 export const ResumeHint = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Frames: DetachRecord[],
 	TurnSet: number,
 ): string => {
@@ -212,7 +212,7 @@ export const ResumeHint = (
 		return `[live] next: ${Failed.jobId} failed (${Failed.cause ?? "kill"}) - read job_output ${Failed.jobId}, fix, and re-run the failed steps before continuing the remaining ones.`;
 	}
 	const Domain = DomainNoun(Frames);
-	const Records = Agent.Detached.get(AgentId);
+	const Records = Agent.Detached.get(AgentID);
 	let Live = 0;
 	for (const Record of Records?.values() ?? []) {
 		if (Record.status === undefined) {
@@ -235,7 +235,7 @@ const RESERVE_HINT_BYTES = 200;
  * below the last frame with NO blank line before it. */
 export const ComposePending = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Frames: DetachRecord[],
 	TurnSet: number,
 	Append: Log,
@@ -252,28 +252,28 @@ export const ComposePending = (
 	// The last-line stack is intentional: the per-frame pointer is per-job,
 	// the hint is per-batch - and there is NO blank line between the last
 	// frame's job_output line and the hint (I4 section 3).
-	return [Wrapper, ...Bodies].join("\n\n") + "\n" + ResumeHint(Agent, AgentId, Sorted, TurnSet);
+	return [Wrapper, ...Bodies].join("\n\n") + "\n" + ResumeHint(Agent, AgentID, Sorted, TurnSet);
 };
 
 /** The pending slot accessor. */
 const Slot = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 ): { frames: DetachRecord[]; delivered: string; turnSet: number; rendered: boolean } => {
-	const Existing = Agent.Pending.get(AgentId);
+	const Existing = Agent.Pending.get(AgentID);
 	if (Existing !== undefined) {
 		return Existing;
 	}
 	const Fresh = { frames: [], delivered: "", turnSet: 0, rendered: false };
-	Agent.Pending.set(AgentId, Fresh);
+	Agent.Pending.set(AgentID, Fresh);
 	return Fresh;
 };
 
 /** The detach hook: the turn-set counter for the k/n hint denominator (I4
  * R3: a job dispatched mid-turn-set after an earlier snapshot is counted in
  * the NEXT batch's n - the counts may look non-monotonic across turns). */
-export const OnDetach = (Agent: State, AgentId: string): void => {
-	const Current = Slot(Agent, AgentId);
+export const OnDetach = (Agent: State, AgentID: string): void => {
+	const Current = Slot(Agent, AgentID);
 	Current.turnSet += 1;
 };
 
@@ -283,25 +283,25 @@ export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
 	if (Event.type !== "settled") {
 		return;
 	}
-	const JobId = Event.job.id;
+	const JobID = Event.job.id;
 	const Owner = Event.job.owner;
 	if (Owner === undefined) {
 		return;
 	}
 	const Records = Agent.Detached.get(Owner);
-	const Record = Records?.get(JobId);
+	const Record = Records?.get(JobID);
 	if (Record === undefined) {
 		return;
 	}
 	// The skips (design section 3.6 steps 3+5).
 	if (Event.cause === "teardown") {
-		Records?.delete(JobId);
-		Append(`owner gone ${JobId}`);
+		Records?.delete(JobID);
+		Append(`owner gone ${JobID}`);
 		return;
 	}
 	if (Event.awaited) {
-		Records?.delete(JobId);
-		Append(`completion skipped ${JobId} (awaited)`);
+		Records?.delete(JobID);
+		Append(`completion skipped ${JobID} (awaited)`);
 		return;
 	}
 	// The settled facts (the frame renders ONLY from the observed event).
@@ -317,24 +317,24 @@ export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
 	Record.awaited = false;
 	const Current = Slot(Agent, Owner);
 	Current.frames.push(Record);
-	Records?.delete(JobId);
+	Records?.delete(JobID);
 };
 
 /** The rendered pending text for one agent (the dynamic context's provider).
  * Frames pending: the merged batch; otherwise: the stable delivered tail
  * (never empty after a delivery - see the module header). */
-export const Provider = (Agent: State, AgentId: string | undefined): string => {
-	if (AgentId === undefined || AgentId.length === 0) {
+export const Provider = (Agent: State, AgentID: string | undefined): string => {
+	if (AgentID === undefined || AgentID.length === 0) {
 		return "";
 	}
-	const Current = Agent.Pending.get(AgentId);
+	const Current = Agent.Pending.get(AgentID);
 	if (Current === undefined) {
 		return "";
 	}
 	if (Current.frames.length > 0) {
 		return ComposePending(
 			Agent,
-			AgentId,
+			AgentID,
 			Current.frames,
 			Math.max(Current.turnSet, Current.frames.length),
 			() => undefined,
@@ -371,13 +371,13 @@ export const OnSessionEvent = (
 	if (typeof Text !== "string" || Text.length === 0) {
 		return;
 	}
-	for (const [AgentId, Current] of Agent.Pending) {
+	for (const [AgentID, Current] of Agent.Pending) {
 		if (Current.frames.length === 0) {
 			continue;
 		}
 		const Pending = ComposePending(
 			Agent,
-			AgentId,
+			AgentID,
 			Current.frames,
 			Math.max(Current.turnSet, Current.frames.length),
 			Append,

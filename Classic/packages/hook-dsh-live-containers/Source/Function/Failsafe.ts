@@ -31,7 +31,7 @@ export const DRIFT_SINCE_LAST_TOOL_MS = 300000;
  * or "" - the caller appends it to the wave-2 section body. */
 export const Drift = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Scope: { messages: number; lastToolAt: number | undefined },
 	Append: Log,
 ): string => {
@@ -39,7 +39,7 @@ export const Drift = (
 		if (Agent.Failsafes !== "on") {
 			return "";
 		}
-		const Boards = Agent.Boards.get(AgentId);
+		const Boards = Agent.Boards.get(AgentID);
 		const Open = [...(Boards?.values() ?? [])].some((Board) => Board.lease.state === "open");
 		if (!Open) {
 			return "";

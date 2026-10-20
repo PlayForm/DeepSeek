@@ -52,7 +52,7 @@ export default async (
 			filter: Choice.filter,
 		})),
 	];
-	let Ok = await Run(
+	let OK = await Run(
 		State,
 		State.Mode,
 		Invocations,
@@ -66,12 +66,12 @@ export default async (
 		Emit,
 	);
 	switch (true) {
-		case Ok && !!Chosen.verifyCommand:
-			Ok = await Verify(State, Chosen.verifyCommand as string, Root, Signal);
+		case OK && !!Chosen.verifyCommand:
+			OK = await Verify(State, Chosen.verifyCommand as string, Root, Signal);
 			break;
 	}
 	switch (true) {
-		case Ok:
+		case OK:
 			State.Factory.Append(State, `update: DONE — pins bumped per policy`);
 			return 0;
 		default:

@@ -111,7 +111,7 @@ export default (
 	Over: Over = {},
 ): Effect.Effect<FsWriteOutcome, unknown> =>
 	Effect.gen(function* () {
-		const Fs = State.Context.fs;
+		const FS = State.Context.fs;
 		// The caller's content step (raw-write's six-fold Rewrite chain), applied
 		// before anything else. A throwing transform fails the effect with the
 		// original error (the Classic rejection, preserved identity).
@@ -153,7 +153,7 @@ export default (
 		const policy = yield* Effect.tryPromise<SandboxExecutionPolicy | undefined, unknown>({
 			try: async () => {
 				if (Over.policy === undefined || Over.policy === "standing") {
-					const Mode = Fs.sandboxMode;
+					const Mode = FS.sandboxMode;
 					const Service =
 						Mode === undefined ? undefined : State.Context.get("sandboxPolicy");
 					if (Mode !== undefined && Service === undefined) {
@@ -169,7 +169,7 @@ export default (
 					// passes no sandbox policy (the service keeps its own default
 					// posture); a configured mode declares the per-call policy rooted
 					// at the target's own directory.
-					return Fs.sandboxMode === undefined
+					return FS.sandboxMode === undefined
 						? undefined
 						: ({
 								mode: "workspace-write",
@@ -191,7 +191,7 @@ export default (
 			typeof Over.policy === "string" ? Over.policy : "explicit",
 		);
 		const Outcome = yield* Effect.tryPromise<FsWriteOutcome, unknown>({
-			try: async () => Fs.writeText(Target, Written, intent, Over.signal, policy),
+			try: async () => FS.writeText(Target, Written, intent, Over.signal, policy),
 			catch: (error) => error,
 		});
 		// The fresh version, pre-registered BEFORE the emit so a re-entrant

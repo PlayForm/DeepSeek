@@ -144,18 +144,18 @@ type BodyLine = { set: string | undefined; text: string; state: ResultState };
  * linked form, a set with a result the result line, a set with no result the
  * not-run-yet form - plus the `checks: none` line for an entry with no sets. */
 const Body = (State: State, Entry: MonitorEntry, Now: number): BodyLine[] => {
-	const ById = new Map<string, CheckResult>();
+	const ByID = new Map<string, CheckResult>();
 	for (const Result of Entry.checks) {
-		ById.set(Result.setId, Result);
+		ByID.set(Result.setId, Result);
 	}
 	const Lines: BodyLine[] = [];
-	for (const SetId of Entry.sets) {
-		const Result = ById.get(SetId);
+	for (const SetID of Entry.sets) {
+		const Result = ByID.get(SetID);
 		if (Result !== undefined) {
-			Lines.push({ set: SetId, ...ResultLine(State, Entry, Result, Now) });
+			Lines.push({ set: SetID, ...ResultLine(State, Entry, Result, Now) });
 			continue;
 		}
-		const Spec = State.CheckSets[SetId];
+		const Spec = State.CheckSets[SetID];
 		if (Spec && Spec.link !== undefined) {
 			Lines.push({ set: undefined, text: LinkedLine(Entry), state: "not-run" });
 			continue;
@@ -203,14 +203,14 @@ export const Frame = (
 	// The primary (worst-state) line first; ties keep the set order.
 	const Ordered = [...Lines].sort((Left, Right) => RANK[Right.state] - RANK[Left.state]);
 	const Primary = Ordered[0];
-	const ById = new Map<string, CheckResult>();
+	const ByID = new Map<string, CheckResult>();
 	for (const Result of Entry.checks) {
-		ById.set(Result.setId, Result);
+		ByID.set(Result.setId, Result);
 	}
 	// The tail block: only when the primary line carries a problem outcome
 	// (a non-zero exit).
 	const PrimaryResult =
-		Primary !== undefined && Primary.set !== undefined ? ById.get(Primary.set) : undefined;
+		Primary !== undefined && Primary.set !== undefined ? ByID.get(Primary.set) : undefined;
 	const WithProblem =
 		Primary !== undefined &&
 		(Primary.state === "problem" ||

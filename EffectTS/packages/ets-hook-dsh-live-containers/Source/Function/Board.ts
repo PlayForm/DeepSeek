@@ -29,19 +29,19 @@ const Cap = (Text: string, Max: number): string => {
 };
 
 /** The boards of one agent. */
-export const For = (Agent: State, AgentId: string): Map<string, BoardState> => {
-	const Existing = Agent.Boards.get(AgentId);
+export const For = (Agent: State, AgentID: string): Map<string, BoardState> => {
+	const Existing = Agent.Boards.get(AgentID);
 	if (Existing !== undefined) {
 		return Existing;
 	}
 	const Fresh = new Map<string, BoardState>();
-	Agent.Boards.set(AgentId, Fresh);
+	Agent.Boards.set(AgentID, Fresh);
 	return Fresh;
 };
 
 /** The fresh member row. */
-const NewMember = (AgentId: string): BoardMember => ({
-	agentId: AgentId,
+const NewMember = (AgentID: string): BoardMember => ({
+	agentId: AgentID,
 	status: "running",
 	lastReport: "",
 	lastReportAt: undefined,
@@ -53,20 +53,20 @@ const NewMember = (AgentId: string): BoardMember => ({
  * first, then the enrollments (I5: enrollment opens the lease entries). */
 export const Open = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Id: string,
 	PlantType: BoardState["plantType"],
 	Expect: number,
-	MemberIds: string[] | undefined,
+	MemberIDs: string[] | undefined,
 	Template: string | undefined,
 	Append: Log,
 ): BoardState => {
-	const Boards = For(Agent, AgentId);
+	const Boards = For(Agent, AgentID);
 	const At = Clock(Agent);
-	const Pinned = MemberIds ?? [];
+	const Pinned = MemberIDs ?? [];
 	const Board: BoardState = {
 		id: Id,
-		agentId: AgentId,
+		agentId: AgentID,
 		plantType: PlantType,
 		template: Template,
 		expect: Expect,
@@ -96,10 +96,10 @@ export const Open = (
 	Append(`plant opened ${Id} (expect ${Expect})`);
 	// The pinned members enroll through Enroll (the ledger line per member);
 	// more pins than slots overflow.
-	for (const MemberId of Pinned) {
-		const Enrolled = Enroll(Agent, Board, MemberId, Append);
-		if (!Enrolled && !Board.members.some((Member) => Member.agentId === MemberId)) {
-			Board.overflow.push({ agentId: MemberId, summary: "" });
+	for (const MemberID of Pinned) {
+		const Enrolled = Enroll(Agent, Board, MemberID, Append);
+		if (!Enrolled && !Board.members.some((Member) => Member.agentId === MemberID)) {
+			Board.overflow.push({ agentId: MemberID, summary: "" });
 		}
 	}
 	return Board;
@@ -107,15 +107,15 @@ export const Open = (
 
 /** Enroll one member with the FULL lease window (I5 5.3: a late enrollee
  * gets the full window; the board's open time does not eat the grace). */
-export const Enroll = (Agent: State, Board: BoardState, AgentId: string, Append: Log): boolean => {
-	if (Board.members.some((Member) => Member.agentId === AgentId)) {
+export const Enroll = (Agent: State, Board: BoardState, AgentID: string, Append: Log): boolean => {
+	if (Board.members.some((Member) => Member.agentId === AgentID)) {
 		return false;
 	}
 	if (Board.members.length >= Board.expect) {
 		return false;
 	}
-	Board.members.push(NewMember(AgentId));
-	Board.lease.reporters.set(AgentId, {
+	Board.members.push(NewMember(AgentID));
+	Board.lease.reporters.set(AgentID, {
 		turnWindow: Agent.Plant.leaseTurns,
 		remaining: Agent.Plant.leaseTurns,
 		declared: false,
@@ -125,7 +125,7 @@ export const Enroll = (Agent: State, Board: BoardState, AgentId: string, Append:
 		lastReportAt: 0,
 		stalledLedged: false,
 	});
-	Append(`member enrolled ${Board.id} ${AgentId}`);
+	Append(`member enrolled ${Board.id} ${AgentID}`);
 	return true;
 };
 
@@ -137,21 +137,21 @@ export const Enroll = (Agent: State, Board: BoardState, AgentId: string, Append:
 export const Report = (
 	Agent: State,
 	Board: BoardState,
-	AgentId: string,
+	AgentID: string,
 	Status: string,
 	Payload: string,
 	Append: Log,
 ): void => {
 	const At = Clock(Agent);
 	const RateMs = Agent.Plant.reportRateMs;
-	const Entry = Board.lease.reporters.get(AgentId);
+	const Entry = Board.lease.reporters.get(AgentID);
 	let Reset = true;
 	if (Entry !== undefined && At - Entry.lastReportAt < RateMs) {
 		// The coalescing window: overwrite the payload, bump the clock, do NOT
 		// reset the lease again (one reset per window is the bound).
 		Reset = false;
 	}
-	const Member = Board.members.find((Candidate) => Candidate.agentId === AgentId);
+	const Member = Board.members.find((Candidate) => Candidate.agentId === AgentID);
 	if (Member !== undefined) {
 		Member.lastReport = Cap(Payload, 240);
 		Member.lastReportAt = At;
@@ -163,16 +163,16 @@ export const Report = (
 			Member.status = "failed";
 			Member.summary = Cap(Payload, 64);
 			Member.settledAt = At;
-			Board.lease.reporters.delete(AgentId);
+			Board.lease.reporters.delete(AgentID);
 		} else if (Status === "done") {
 			Member.status = "done";
 			Member.summary = Cap(Payload, 48);
 			Member.settledAt = At;
-			Board.lease.reporters.delete(AgentId);
+			Board.lease.reporters.delete(AgentID);
 		}
-	} else if (Board.overflow.some((Item) => Item.agentId === AgentId)) {
+	} else if (Board.overflow.some((Item) => Item.agentId === AgentID)) {
 		// An unboarded child's report is folded into the counts only (I5 5.4).
-		const Item = Board.overflow.find((Candidate) => Candidate.agentId === AgentId);
+		const Item = Board.overflow.find((Candidate) => Candidate.agentId === AgentID);
 		if (Item !== undefined) {
 			Item.summary = Cap(Payload, 48);
 		}
@@ -186,7 +186,7 @@ export const Report = (
 			const Item = Board.items[Number(Match[1]) - 1];
 			if (Item !== undefined) {
 				Item.state = Match[2] === "done" ? "done" : "running";
-				Item.by = AgentId;
+				Item.by = AgentID;
 				Item.at = At;
 			}
 		}
@@ -206,11 +206,11 @@ export const Report = (
 		if (Text !== undefined && RowPath.length > 0) {
 			let Item = Board.items.find((Candidate) => Candidate.label === RowPath);
 			if (Item === undefined) {
-				Item = { label: RowPath, state: Text, by: AgentId, at: At };
+				Item = { label: RowPath, state: Text, by: AgentID, at: At };
 				Board.items.push(Item);
 			}
 			Item.state = Text;
-			Item.by = AgentId;
+			Item.by = AgentID;
 			Item.at = At;
 		}
 	}
@@ -220,7 +220,7 @@ export const Report = (
 	if (Entry !== undefined) {
 		Entry.lastReportAt = At;
 	}
-	Append(`report ${Board.id} ${AgentId} (${Bytes(Payload)} bytes)`);
+	Append(`report ${Board.id} ${AgentID} (${Bytes(Payload)} bytes)`);
 };
 
 /** The L6 settle hook: a child job's settlement flips the member's row (the
@@ -277,9 +277,9 @@ export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
  * had no foldable report in the last turn window and decrements; any report
  * folded since resets to the full window. The declaration renders in the SAME
  * assembly's frame (the decrement runs before render). */
-export const OnTurn = (Agent: State, AgentId: string, Append: Log): void => {
+export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 	const At = Clock(Agent);
-	for (const [, Board] of For(Agent, AgentId)) {
+	for (const [, Board] of For(Agent, AgentID)) {
 		if (Board.lease.state !== "open") {
 			continue;
 		}
@@ -299,8 +299,8 @@ export const OnTurn = (Agent: State, AgentId: string, Append: Log): void => {
 				}
 			}
 		}
-		for (const [MemberId, Entry] of Board.lease.reporters) {
-			const Member = Board.members.find((Candidate) => Candidate.agentId === MemberId);
+		for (const [MemberID, Entry] of Board.lease.reporters) {
+			const Member = Board.members.find((Candidate) => Candidate.agentId === MemberID);
 			const LastAt = Member?.lastReportAt ?? Entry.lastReportAt;
 			const ReportedLastWindow =
 				LastAt !== undefined &&
@@ -312,11 +312,11 @@ export const OnTurn = (Agent: State, AgentId: string, Append: Log): void => {
 			Entry.remaining -= 1;
 			if (Entry.remaining <= 0 && !Entry.declared) {
 				Entry.declared = true;
-				Entry.declaredTurn = Agent.TurnCounts.get(AgentId) ?? 0;
+				Entry.declaredTurn = Agent.TurnCounts.get(AgentID) ?? 0;
 				if (Member !== undefined) {
 					Member.status = "stale";
 				}
-				Append(`lease expired ${Board.id} ${MemberId} (after ${Entry.turnWindow} turns)`);
+				Append(`lease expired ${Board.id} ${MemberID} (after ${Entry.turnWindow} turns)`);
 			}
 		}
 		Board.lastTurnAt = At;
@@ -324,38 +324,38 @@ export const OnTurn = (Agent: State, AgentId: string, Append: Log): void => {
 };
 
 /** The stale declaration row (I5 3.1, byte-exact). */
-export const StaleRow = (AgentId: string, Turns: number): string =>
-	`[stale]     ${AgentId} - unreported for ${Turns} parent turns; re-dispatch or mark failed`;
+export const StaleRow = (AgentID: string, Turns: number): string =>
+	`[stale]     ${AgentID} - unreported for ${Turns} parent turns; re-dispatch or mark failed`;
 
 /** The failsafe hook (I5 4.1): the declaration IS the trigger - on prune,
  * drop the member from the expect count (only after the stale row rendered
  * at least one assembly, I5 4.2). The prune is the lease's only automatic
  * modification and counts against failsafesPerTurn (I5 4.3). */
-export const FailsafeStall = (Agent: State, AgentId: string, Append: Log): void => {
+export const FailsafeStall = (Agent: State, AgentID: string, Append: Log): void => {
 	if (Agent.Failsafes !== "on" || Agent.Plant.stallAction !== "prune") {
 		return;
 	}
-	const Turn = Agent.TurnCounts.get(AgentId) ?? 0;
-	for (const [, Board] of For(Agent, AgentId)) {
+	const Turn = Agent.TurnCounts.get(AgentID) ?? 0;
+	for (const [, Board] of For(Agent, AgentID)) {
 		if (Board.lease.state !== "open") {
 			continue;
 		}
-		for (const [MemberId, Entry] of [...Board.lease.reporters]) {
+		for (const [MemberID, Entry] of [...Board.lease.reporters]) {
 			if (!Entry.declared || Entry.declaredTurn >= Turn) {
 				continue;
 			}
-			const Member = Board.members.find((Candidate) => Candidate.agentId === MemberId);
+			const Member = Board.members.find((Candidate) => Candidate.agentId === MemberID);
 			if (Member === undefined || Member.status !== "stale") {
 				continue;
 			}
-			if (!Policy.WithinBudget(Agent, AgentId, Turn)) {
+			if (!Policy.WithinBudget(Agent, AgentID, Turn)) {
 				continue;
 			}
-			Board.members = Board.members.filter((Candidate) => Candidate.agentId !== MemberId);
-			Board.lease.reporters.delete(MemberId);
+			Board.members = Board.members.filter((Candidate) => Candidate.agentId !== MemberID);
+			Board.lease.reporters.delete(MemberID);
 			Board.pruned += 1;
-			Policy.SpendBudget(Agent, AgentId, Turn);
-			Append(`member dropped ${Board.id} ${MemberId} (pruned)`);
+			Policy.SpendBudget(Agent, AgentID, Turn);
+			Append(`member dropped ${Board.id} ${MemberID} (pruned)`);
 		}
 	}
 };
@@ -515,7 +515,7 @@ export const ClosingLine = (Board: BoardState, Seconds: number): string =>
  * collapse pass needs per-frame granularity). Returns [] when nothing renders. */
 export const SectionParts = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Separator: string,
 	Append: Log,
 ): string[] => {
@@ -525,7 +525,7 @@ export const SectionParts = (
 	// plugin; the next event is the bound, matching "acts at the next request").
 	ScanDeadlines(Agent, Append);
 	// The live jobs (the fleet).
-	const Records = Agent.Detached.get(AgentId);
+	const Records = Agent.Detached.get(AgentID);
 	const Live = [...(Records?.values() ?? [])].filter((Record) => Record.status === undefined);
 	const Parts: string[] = [];
 	const Jobs = Live;
@@ -542,7 +542,7 @@ export const SectionParts = (
 		);
 	}
 	// The boards.
-	for (const [, Board] of For(Agent, AgentId)) {
+	for (const [, Board] of For(Agent, AgentID)) {
 		if (Board.lease.state === "closed") {
 			// The closing line rendered one request already - withdraw.
 			continue;
@@ -583,18 +583,18 @@ export const SectionParts = (
  * "" when nothing renders (the phase-1 section is then byte-identical). */
 export const SectionBody = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Separator: string,
 	Append: Log,
-): string => SectionParts(Agent, AgentId, Separator, Append).join("\n");
+): string => SectionParts(Agent, AgentID, Separator, Append).join("\n");
 
 /** The deadline scan: the live-timeout kill (J7) and the hang failsafe (F1).
  * Called at every assemble pass and on every jobs event - the checkpoint
  * design (no real timers; the next event is the bound). */
 export const ScanDeadlines = (Agent: State, Append: Log): void => {
 	const At = Clock(Agent);
-	for (const [AgentId, Records] of Agent.Detached) {
-		for (const [JobId, Record] of [...Records]) {
+	for (const [AgentID, Records] of Agent.Detached) {
+		for (const [JobID, Record] of [...Records]) {
 			if (Record.status !== undefined) {
 				continue;
 			}
@@ -602,7 +602,7 @@ export const ScanDeadlines = (Agent: State, Append: Log): void => {
 			// (onExpiry "none"; the inline timeout policy does not apply).
 			if (At >= Record.deadlineAt) {
 				try {
-					Agent.Wave?.Jobs?.kill(JobId, AgentId, "live-timeout");
+					Agent.Wave?.Jobs?.kill(JobID, AgentID, "live-timeout");
 				} catch {
 					/* the kill is best-effort */
 				}
@@ -614,23 +614,23 @@ export const ScanDeadlines = (Agent: State, Append: Log): void => {
 				continue;
 			}
 			const Total = Record.tail.Stdout.length + Record.tail.Stderr.length;
-			const Watch = Agent.HangWatch.get(JobId);
+			const Watch = Agent.HangWatch.get(JobID);
 			if (Watch === undefined || Total > Watch.bytes) {
-				Agent.HangWatch.set(JobId, { bytes: Total, since: At });
+				Agent.HangWatch.set(JobID, { bytes: Total, since: At });
 				continue;
 			}
 			if (At - Watch.since >= Agent.HangBudgetMs) {
 				Append(
-					`failsafe hang ${JobId} (${Math.round((At - Watch.since) / 1000)}s no output)`,
+					`failsafe hang ${JobID} (${Math.round((At - Watch.since) / 1000)}s no output)`,
 				);
 				if (Agent.HangAction === "kill") {
 					try {
-						Agent.Wave?.Jobs?.kill(JobId, AgentId, "live-hang");
+						Agent.Wave?.Jobs?.kill(JobID, AgentID, "live-hang");
 					} catch {
 						/* the kill is best-effort */
 					}
 				}
-				Agent.HangWatch.set(JobId, { bytes: Total, since: At });
+				Agent.HangWatch.set(JobID, { bytes: Total, since: At });
 			}
 		}
 	}

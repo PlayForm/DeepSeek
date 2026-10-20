@@ -19,9 +19,9 @@ export declare const CATALOG: CatalogEntry[];
  * capped at 2000 bytes, built once). */
 export declare const Compressed: (At: number, Max?: number) => string;
 /** Whether a catalog id exists (the suggestion parser's unknown-template check). */
-export declare const Known: (Id: string) => boolean;
+export declare const Known: (ID: string) => boolean;
 /** The catalog entry for one id (undefined when unknown). */
-export declare const Entry: (Id: string) => CatalogEntry | undefined;
+export declare const Entry: (ID: string) => CatalogEntry | undefined;
 /** The default table's specs for one kind (the accept path instantiates from
  * the default table's template). */
 export declare const Specs: (DefaultBlocks: BlockSpec[]) => BlockSpec[];

@@ -1,4 +1,4 @@
-import { Service, type Context, type Context as Ctx } from "@deepseek-ai/cordis";
+import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import { type Registry as GovernRegistry, type Selection as GovernSelection } from "./Function/Govern.js";
 import SchemaFn from "./Function/Schema.js";
@@ -61,11 +61,11 @@ export default class PluginFactory extends Service {
     /** The detached contained continuation (the module supplies the transform). */
     Continue(State: Shape, Target: FsTarget, Actor: object | undefined, Dir: string, Found: string | null, Version: FsVersion, Transform: Transform): Promise<void>;
     /** The State builder: cell unwrap + shared fields + module extras. */
-    State<Extra extends object = Record<string, unknown>>(Context: Ctx, Config: unknown, Setup: Setup): Shape & Extra;
+    State<Extra extends object = Record<string, unknown>>(Context: Context, Config: unknown, Setup: Setup): Shape & Extra;
     /** The fs/observed registration (the module supplies its observe). */
-    Wire(Context: Ctx, State: Shape, Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void): void;
+    Wire(Context: Context, State: Shape, Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void): void;
     /** The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage. */
-    Attach(Context: Ctx, Module: {
+    Attach(Context: Context, Module: {
         state: Shape;
         name: string;
     }): void;

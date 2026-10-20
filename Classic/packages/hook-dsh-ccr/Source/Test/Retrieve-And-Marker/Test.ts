@@ -667,14 +667,14 @@ export const runTest = async (): Promise<number> => {
 		const Sub =
 			"a non-table target with JSON content classifies as 'json' (shape fallback) and compresses at \u00D71";
 		await CheckAsync(Count, Sub, async () => {
-			const JsonText = JSON.stringify({ key: "v".repeat(2900) });
-			const JsonContent = TextBlock(JsonText);
-			const JsonOut = await Run7.Listeners["tools/post-execute"](
+			const JSONText = JSON.stringify({ key: "v".repeat(2900) });
+			const JSONContent = TextBlock(JSONText);
+			const JSONOut = await Run7.Listeners["tools/post-execute"](
 				Exec("probe"),
-				{ isError: false, value: {}, content: JsonContent },
+				{ isError: false, value: {}, content: JSONContent },
 				NextAccept,
 			);
-			assert.ok(JsonOut.kind === "accept" && JsonOut.content[0].text.includes("|json|"));
+			assert.ok(JSONOut.kind === "accept" && JSONOut.content[0].text.includes("|json|"));
 		});
 	}
 	{

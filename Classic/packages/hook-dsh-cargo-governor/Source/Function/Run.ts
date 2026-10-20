@@ -59,7 +59,7 @@ export default async (
 			],
 		},
 	];
-	let Ok = true;
+	let OK = true;
 	for (const Call of Invocations) {
 		switch (true) {
 			case !(await Upgrade(
@@ -73,17 +73,17 @@ export default async (
 				Signal,
 				Sink,
 			)):
-				Ok = false;
+				OK = false;
 				break;
 		}
 	}
 	switch (true) {
-		case Ok && !!Chosen.verifyCommand:
-			Ok = await Verify(Factory, State, Chosen.verifyCommand as string, Root, Signal);
+		case OK && !!Chosen.verifyCommand:
+			OK = await Verify(Factory, State, Chosen.verifyCommand as string, Root, Signal);
 			break;
 	}
 	switch (true) {
-		case Ok:
+		case OK:
 			Factory.Append(State, `update: DONE — pins bumped per policy`);
 			return 0;
 		default:

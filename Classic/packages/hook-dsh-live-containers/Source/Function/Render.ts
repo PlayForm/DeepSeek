@@ -45,7 +45,7 @@ const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 /** Substitute {{token}} groups from the variable table. A token the table
  * does not resolve stays literal and logs `render unknown <id> <token>`
  * (once per token per pass). */
-export const Substitute = (Template: string, Vars: Variables, Id: string, Append: Log): string => {
+export const Substitute = (Template: string, Vars: Variables, ID: string, Append: Log): string => {
 	const Unknown = new Set<string>();
 	const Text = Template.replace(Token, (Whole, Name: string) => {
 		const Key = String(Name);
@@ -59,18 +59,18 @@ export const Substitute = (Template: string, Vars: Variables, Id: string, Append
 		}
 	});
 	for (const Name of Unknown) {
-		Append(`render unknown ${Id} ${Name}`);
+		Append(`render unknown ${ID} ${Name}`);
 	}
 	return Text;
 };
 
 /** The fixed frame around one block body (the model-facing contract). */
-export const Frame = (Separator: string, Id: string, Body: string): string =>
-	`${Separator} LIVE CONTAINER ${Id} (recomputed each request; not harness state) ${Separator}\n${Body}\n${Separator} END LIVE CONTAINER ${Id} ${Separator}`;
+export const Frame = (Separator: string, ID: string, Body: string): string =>
+	`${Separator} LIVE CONTAINER ${ID} (recomputed each request; not harness state) ${Separator}\n${Body}\n${Separator} END LIVE CONTAINER ${ID} ${Separator}`;
 
 /** The one-line summary a collapsed frame leaves behind (never silent). */
-const Summary = (Separator: string, Id: string, Length: number): string =>
-	`${Separator} LIVE CONTAINER ${Id} (collapsed, ${Length} bytes; not harness state) ${Separator}`;
+const Summary = (Separator: string, ID: string, Length: number): string =>
+	`${Separator} LIVE CONTAINER ${ID} (collapsed, ${Length} bytes; not harness state) ${Separator}`;
 
 /** The built-in tokens each kind resolves (phase 1; `template` resolves the
  * whole table). Per-block `vars` override the built-ins. */
@@ -155,14 +155,14 @@ const SkipReason = (Block: BlockSpec): string | null => {
 
 /** One skip, logged only when the reason changes (the ledger stays quiet on
  * steady state). */
-const Skip = (Scope: AgentState, Id: string, Reason: string, Append: Log): void => {
-	const Previous = Scope.skips.get(Id);
+const Skip = (Scope: AgentState, ID: string, Reason: string, Append: Log): void => {
+	const Previous = Scope.skips.get(ID);
 	switch (Previous) {
 		case Reason:
 			break;
 		default:
-			Scope.skips.set(Id, Reason);
-			Append(`block skipped ${Id} (${Reason})`);
+			Scope.skips.set(ID, Reason);
+			Append(`block skipped ${ID} (${Reason})`);
 	}
 };
 
@@ -214,13 +214,13 @@ export default (Agent: State, Scope: AgentState, Label: string, Append: Log): st
 			// Fail-open: a broken block skips; the assembly still resolves.
 			Frames.push(null);
 			try {
-				const Id = Block.id;
+				const ID = Block.id;
 				try {
-					Scope.blocks.set(Id, { built: Scope.calls, text: "", dirty: false });
+					Scope.blocks.set(ID, { built: Scope.calls, text: "", dirty: false });
 				} catch {
 					/* the cache is best-effort */
 				}
-				Append(`render failed ${Id} -> skipped`);
+				Append(`render failed ${ID} -> skipped`);
 			} catch {
 				/* even the block id threw - the listener's warn records it */
 			}

@@ -30,7 +30,7 @@ import type State from "@Interface/State.js";
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module
  * reads). */
 export type FsTarget = { displayPath?: unknown; targetKey?: unknown } | undefined;
-export type FsObservation = { kind?: unknown; version?: unknown } | undefined;
+export type FSObservation = { kind?: unknown; version?: unknown } | undefined;
 
 /** The checkpoint phases: "event" runs the debounce dispatch and the
  * deadline scan; "assemble" adds the slow schedule and the retirement scan. */
@@ -38,21 +38,21 @@ export type Phase = "event" | "assemble";
 
 /** The writer display of an actor: the writing exec's agent id, "-" when absent. */
 const WriterOf = (Actor: object | undefined): string => {
-	const Id = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
-	return typeof Id === "string" && Id.length > 0 ? Id : "-";
+	const ID = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
+	return typeof ID === "string" && ID.length > 0 ? ID : "-";
 };
 
 /** The owning agent of an observed write: the writing exec's agent id, or
  * the phase-1 unowned label. */
 const AgentOf = (Actor: object | undefined): string => {
-	const Id = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
-	return typeof Id === "string" && Id.length > 0 ? Id : "(unowned)";
+	const ID = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
+	return typeof ID === "string" && ID.length > 0 ? ID : "(unowned)";
 };
 
 /** Enroll (or refresh) one file in an agent's monitor set. Returns the entry. */
 export const Enroll = (
 	State: State,
-	AgentId: string,
+	AgentID: string,
 	Path: string,
 	PathKey: string,
 	Writer: string,
@@ -61,8 +61,8 @@ export const Enroll = (
 	Append: Log,
 ): MonitorEntry => {
 	const Now = Clock(State);
-	const PerAgent = State.Monitors.get(AgentId) ?? new Map<string, MonitorEntry>();
-	State.Monitors.set(AgentId, PerAgent);
+	const PerAgent = State.Monitors.get(AgentID) ?? new Map<string, MonitorEntry>();
+	State.Monitors.set(AgentID, PerAgent);
 	const Existing =
 		PerAgent.get(PathKey) ?? [...PerAgent.values()].find((Entry) => Entry.path === Path);
 	if (Existing !== undefined) {
@@ -76,7 +76,7 @@ export const Enroll = (
 	const Entry: MonitorEntry = {
 		path: Path,
 		pathKey: PathKey,
-		agentId: AgentId,
+		agentId: AgentID,
 		enrolledAt: Now,
 		lastVersion: Version.length > 0 ? Version : undefined,
 		lastWriter: Writer,
@@ -90,7 +90,7 @@ export const Enroll = (
 	Storage.Record(State, {
 		event: "monitor-enrolled",
 		path: Path,
-		agent: AgentId,
+		agent: AgentID,
 		version: Version,
 		writer: Writer,
 		checkSetId: "",
@@ -109,7 +109,7 @@ export const Enroll = (
 export const OnObserved = (
 	State: State,
 	Target: FsTarget,
-	Observation: FsObservation,
+	Observation: FSObservation,
 	Actor: object | undefined,
 	Append: Log,
 ): void => {
@@ -131,16 +131,16 @@ export const OnObserved = (
 		if (typeof Version !== "string") {
 			return;
 		}
-		const AgentId = AgentOf(Actor);
+		const AgentID = AgentOf(Actor);
 		const Writer = WriterOf(Actor);
 		const Now = Clock(State);
 		// The enrolled session (the check jobs' sandbox policy resolution).
 		const Session = (Actor as { agent?: { session?: unknown } | undefined } | undefined)?.agent
 			?.session;
 		if (Session !== undefined) {
-			State.MonitorSessions.set(AgentId, Session);
+			State.MonitorSessions.set(AgentID, Session);
 		}
-		const PerAgent = State.Monitors.get(AgentId);
+		const PerAgent = State.Monitors.get(AgentID);
 		const Entry =
 			PerAgent?.get(PathKey) ??
 			[...(PerAgent?.values() ?? [])].find((Candidate) => Candidate.path === Path);
@@ -160,24 +160,24 @@ export const OnObserved = (
 		} else {
 			// The enrollment: watchlist-gated (the R3 3.1 rule - a file that
 			// matches NOTHING and is not enrolled is NEVER monitored).
-			const Sets = Watchlist.AutoSets(State, AgentId, Path);
+			const Sets = Watchlist.AutoSets(State, AgentID, Path);
 			if (Sets === undefined) {
 				return;
 			}
-			Enroll(State, AgentId, Path, PathKey, Writer, Sets, Version, Append);
+			Enroll(State, AgentID, Path, PathKey, Writer, Sets, Version, Append);
 		}
-		const Fresh = State.Monitors.get(AgentId)?.get(PathKey);
+		const Fresh = State.Monitors.get(AgentID)?.get(PathKey);
 		if (Fresh !== undefined) {
 			// The fast-check scheduling: each fast check set gets a pending
 			// record; an existing pending record is OVERWRITTEN (the
 			// coalescing - only the newest pending run survives). The slow
 			// sets never auto-run per-edit.
-			for (const SetId of Fresh.sets) {
-				const Spec = State.CheckSets[SetId];
+			for (const SetID of Fresh.sets) {
+				const Spec = State.CheckSets[SetID];
 				if (Spec === undefined || Spec.link !== undefined || Spec.fast === false) {
 					continue;
 				}
-				Fresh.pending.set(SetId, { since: Now });
+				Fresh.pending.set(SetID, { since: Now });
 			}
 		}
 		// The checkpoint scan: an edit whose debounce already elapsed
@@ -191,7 +191,7 @@ export const OnObserved = (
 /** Substitute the command template's tokens (the Render.ts-style replace
  * ONLY, no eval): {{path}}, {{basename}}, {{dir}}; an unresolved token
  * renders literally and logs `render unknown <setId> <token>`. */
-const Substitute = (Template: string, Path: string, SetId: string, Append: Log): string => {
+const Substitute = (Template: string, Path: string, SetID: string, Append: Log): string => {
 	const Unknown = new Set<string>();
 	const Out = Template.replace(/\{\{([^{}]+)\}\}/g, (Whole, Name: string) => {
 		switch (Name) {
@@ -207,7 +207,7 @@ const Substitute = (Template: string, Path: string, SetId: string, Append: Log):
 		}
 	});
 	for (const Token of Unknown) {
-		Append(`render unknown ${SetId} {{${Token}}}`);
+		Append(`render unknown ${SetID} {{${Token}}}`);
 	}
 	return Out;
 };
@@ -230,23 +230,23 @@ const EmptyTail = (): TailBuffer => ({
  * otherwise let every pending set pass the admission check at once). */
 export const Dispatch = async (
 	State: State,
-	AgentId: string,
+	AgentID: string,
 	Entry: MonitorEntry,
-	SetId: string,
+	SetID: string,
 	Spec: CheckSetSpec,
 	Append: Log,
 ): Promise<string | undefined> => {
 	const At = Clock(State);
 	const Seq = State.MonitorCallSeq + 1;
 	State.MonitorCallSeq = Seq;
-	const Command = Substitute(Spec.command ?? "", Entry.path, SetId, Append);
+	const Command = Substitute(Spec.command ?? "", Entry.path, SetID, Append);
 	const Timeout = Math.min(Spec.timeoutMs ?? State.Monitor.checkTimeoutMs, INLINE_DEADLINE_MS);
 	const Placeholder = `pending-${Seq}`;
 	State.MonitorJobs.set(Placeholder, {
-		agentId: AgentId,
+		agentId: AgentID,
 		path: Entry.path,
 		pathKey: Entry.pathKey,
-		setId: SetId,
+		setId: SetID,
 		startedAt: At,
 		checkedVersion: Entry.lastVersion ?? "",
 		writer: Entry.lastWriter ?? "-",
@@ -256,38 +256,38 @@ export const Dispatch = async (
 	try {
 		Started = await Jobs.Start(
 			State,
-			AgentId,
+			AgentID,
 			{
 				command: Command,
 				workdir: Parent(Entry.path),
 				timeoutMs: Timeout,
 				kind: "monitor",
-				label: Label(`monitor ${SetId} ${Entry.path}`),
+				label: Label(`monitor ${SetID} ${Entry.path}`),
 				head: true,
 			},
 			{
 				callId: `monitor-${Seq}`,
 				rootCallId: `monitor-${Seq}`,
-				agent: { id: AgentId, session: State.MonitorSessions.get(AgentId) },
+				agent: { id: AgentID, session: State.MonitorSessions.get(AgentID) },
 			},
 		);
 	} catch {
 		State.MonitorJobs.delete(Placeholder);
-		Append(`monitor check failed ${Entry.path} ${SetId} (start)`);
+		Append(`monitor check failed ${Entry.path} ${SetID} (start)`);
 		return undefined;
 	}
 	State.MonitorJobs.delete(Placeholder);
 	State.MonitorJobs.set(Started.jobId, {
-		agentId: AgentId,
+		agentId: AgentID,
 		path: Entry.path,
 		pathKey: Entry.pathKey,
-		setId: SetId,
+		setId: SetID,
 		startedAt: At,
 		checkedVersion: Entry.lastVersion ?? "",
 		writer: Entry.lastWriter ?? "-",
 		tail: Started.tail,
 	});
-	Append(`monitor check dispatched ${Entry.path} ${SetId} -> ${Started.jobId}`);
+	Append(`monitor check dispatched ${Entry.path} ${SetID} -> ${Started.jobId}`);
 	return Started.jobId;
 };
 
@@ -305,10 +305,10 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 		const At = Clock(State);
 		// The DEADLINE scan: the plugin's own deadline kills overdue monitor
 		// jobs through the registry's kill - never a subprocess force-kill.
-		for (const [JobId, Job] of [...State.MonitorJobs]) {
+		for (const [JobID, Job] of [...State.MonitorJobs]) {
 			if (At >= Job.startedAt + State.Monitor.checkTimeoutMs) {
 				try {
-					State.Wave?.Jobs?.kill(JobId, Job.agentId, "monitor-deadline");
+					State.Wave?.Jobs?.kill(JobID, Job.agentId, "monitor-deadline");
 				} catch {
 					/* the kill is best-effort */
 				}
@@ -320,20 +320,20 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 		// record STAYS (coalesce-not-queue; its `since` is not bumped).
 		for (const [, PerAgent] of State.Monitors) {
 			for (const [, Entry] of PerAgent) {
-				for (const [SetId, Pending] of [...Entry.pending]) {
+				for (const [SetID, Pending] of [...Entry.pending]) {
 					if (At - Pending.since < State.Monitor.debounceMs) {
 						continue;
 					}
 					if (State.MonitorJobs.size >= State.Monitor.maxMonitorJobs) {
 						continue;
 					}
-					Entry.pending.delete(SetId);
-					const Spec = State.CheckSets[SetId];
+					Entry.pending.delete(SetID);
+					const Spec = State.CheckSets[SetID];
 					if (Spec === undefined || Spec.link !== undefined) {
-						Append(`monitor check unknown ${SetId}`);
+						Append(`monitor check unknown ${SetID}`);
 						continue;
 					}
-					void Dispatch(State, Entry.agentId, Entry, SetId, Spec, Append);
+					void Dispatch(State, Entry.agentId, Entry, SetID, Spec, Append);
 				}
 			}
 		}
@@ -343,14 +343,14 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 		// The SLOW schedule (the assemble checkpoint only - the slow cadence
 		// is request-aligned): one job per slow check set per interval.
 		if (State.Monitor.slowCheckIntervalMs > 0) {
-			for (const [AgentId, PerAgent] of State.Monitors) {
+			for (const [AgentID, PerAgent] of State.Monitors) {
 				for (const [PathKey, Entry] of PerAgent) {
-					for (const SetId of Entry.sets) {
-						const Spec = State.CheckSets[SetId];
+					for (const SetID of Entry.sets) {
+						const Spec = State.CheckSets[SetID];
 						if (Spec === undefined || Spec.link !== undefined || Spec.fast !== false) {
 							continue;
 						}
-						const Last = State.MonitorSlowLast.get(AgentId)?.get(PathKey)?.get(SetId);
+						const Last = State.MonitorSlowLast.get(AgentID)?.get(PathKey)?.get(SetID);
 						if (Last !== undefined && At - Last < State.Monitor.slowCheckIntervalMs) {
 							continue;
 						}
@@ -360,13 +360,13 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 						// The stamp advances at the dispatch (admission-guarded
 						// like the debounce).
 						const PerPath =
-							State.MonitorSlowLast.get(AgentId) ??
+							State.MonitorSlowLast.get(AgentID) ??
 							new Map<string, Map<string, number>>();
-						State.MonitorSlowLast.set(AgentId, PerPath);
+						State.MonitorSlowLast.set(AgentID, PerPath);
 						const PerSet = PerPath.get(PathKey) ?? new Map<string, number>();
 						PerPath.set(PathKey, PerSet);
-						PerSet.set(SetId, At);
-						void Dispatch(State, AgentId, Entry, SetId, Spec, Append);
+						PerSet.set(SetID, At);
+						void Dispatch(State, AgentID, Entry, SetID, Spec, Append);
 					}
 				}
 			}
@@ -419,11 +419,11 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 		if (Settled?.type !== "settled") {
 			return;
 		}
-		const JobId = Settled.job?.id;
-		if (typeof JobId !== "string" || JobId.length === 0) {
+		const JobID = Settled.job?.id;
+		if (typeof JobID !== "string" || JobID.length === 0) {
 			return;
 		}
-		const Record = State.MonitorJobs.get(JobId);
+		const Record = State.MonitorJobs.get(JobID);
 		if (Record === undefined) {
 			return;
 		}
@@ -434,7 +434,7 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 			// The owner session died - the check is NOT recorded; the band
 			// keeps the last-known result.
 			Append(`monitor check lost ${Record.path} ${Record.setId} (teardown)`);
-			State.MonitorJobs.delete(JobId);
+			State.MonitorJobs.delete(JobID);
 			return;
 		}
 		let Exit: number | null = null;
@@ -456,7 +456,7 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 		}
 		const Result: CheckResult = {
 			setId: Record.setId,
-			jobId: JobId,
+			jobId: JobID,
 			ranAt: Clock(State),
 			checkedVersion: Record.checkedVersion,
 			writer: Record.writer,
@@ -465,7 +465,7 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 			tail: Record.tail.Render(),
 			provenance: "live",
 		};
-		State.MonitorJobs.delete(JobId);
+		State.MonitorJobs.delete(JobID);
 		const Entry = State.Monitors.get(Record.agentId)?.get(Record.pathKey);
 		if (Entry !== undefined) {
 			// One result per set, newest wins, first-seen order preserved.
@@ -473,7 +473,7 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 			Entry.checks.push(Result);
 		}
 		Append(
-			`monitor check settled ${Record.path} ${Record.setId} (${JobId}, exit ${Exit === null ? "null" : Exit})`,
+			`monitor check settled ${Record.path} ${Record.setId} (${JobID}, exit ${Exit === null ? "null" : Exit})`,
 		);
 		Storage.Record(State, {
 			event: "monitor-check",
@@ -538,7 +538,7 @@ const FoldBoards = (
  * wave-2 behavior). */
 export const SectionParts = (
 	State: State,
-	AgentId: string,
+	AgentID: string,
 	Separator: string,
 	Append: Log,
 ): string[] => {
@@ -549,7 +549,7 @@ export const SectionParts = (
 		// The assemble-pass checkpoint (the deadline, slow and retirement
 		// scans - no real timers in the plugin; the next event is the bound).
 		Scan(State, Append, "assemble");
-		const PerAgent = State.Monitors.get(AgentId);
+		const PerAgent = State.Monitors.get(AgentID);
 		const Live = [...(PerAgent?.values() ?? [])];
 		if (Live.length === 0) {
 			return [];

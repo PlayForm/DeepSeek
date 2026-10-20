@@ -74,7 +74,7 @@
 // (the unreadable-policy line, the suppressed-error lines prefixed with
 // State.Module) and stay byte-identical when the module keeps its historical
 // name.
-import { Service, type Context, type Context as Ctx } from "@deepseek-ai/cordis";
+import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import {
 	GovernService,
@@ -305,7 +305,7 @@ export default class PluginFactory extends Service {
 
 	/** The State builder: cell unwrap + shared fields + module extras. */
 	State<Extra extends object = Record<string, unknown>>(
-		Context: Ctx,
+		Context: Context,
 		Config: unknown,
 		Setup: Setup,
 	): Shape & Extra {
@@ -313,7 +313,7 @@ export default class PluginFactory extends Service {
 	}
 	/** The fs/observed registration (the module supplies its observe). */
 	Wire(
-		Context: Ctx,
+		Context: Context,
 		State: Shape,
 		Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void,
 	): void {
@@ -321,7 +321,7 @@ export default class PluginFactory extends Service {
 	}
 
 	/** The lifecycle effects: P1 jobs controller, P2 inflight disposal, P5 storage. */
-	Attach(Context: Ctx, Module: { state: Shape; name: string }): void {
+	Attach(Context: Context, Module: { state: Shape; name: string }): void {
 		AttachEffects(Context, Module);
 	}
 

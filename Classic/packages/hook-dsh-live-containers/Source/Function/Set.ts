@@ -79,28 +79,28 @@ export default (Agent: State, Append: Log) => {
 		},
 		async execute(args, exec) {
 			const Parsed = ParseArgs(args as unknown);
-			const AgentId =
+			const AgentID =
 				(exec as { agent?: { id?: string } | undefined } | undefined)?.agent?.id ?? "";
 			// I6 5.2: any OTHER action while a suggestion is open also dismisses
 			// it - the model moved on.
 			const Supersede = (Action: string): void => {
-				const PerAgent = Agent.Suggestions.get(AgentId);
+				const PerAgent = Agent.Suggestions.get(AgentID);
 				for (const [Id, Suggestion_] of PerAgent ?? []) {
 					if (!Suggestion_.withdrawn && Suggestion_.renderedTurn !== undefined) {
-						Suggester.Dismiss(Agent, AgentId, Id, "superseded", Append);
+						Suggester.Dismiss(Agent, AgentID, Id, "superseded", Append);
 						void Action;
 					}
 				}
 			};
 			if (typeof Parsed["accept"] === "string") {
-				const Line = Suggester.Accept(Agent, AgentId, Parsed["accept"], Append);
+				const Line = Suggester.Accept(Agent, AgentID, Parsed["accept"], Append);
 				Append(Line);
 				return { set: !Line.startsWith("accept failed"), kind: "accept", detail: Line };
 			}
 			if (typeof Parsed["dismiss"] === "string") {
 				const Line = Suggester.Dismiss(
 					Agent,
-					AgentId,
+					AgentID,
 					Parsed["dismiss"],
 					undefined,
 					Append,
@@ -108,10 +108,10 @@ export default (Agent: State, Append: Log) => {
 				return { set: true, kind: "dismiss", detail: Line };
 			}
 			if (typeof Parsed["prune"] === "string") {
-				const [PlantId, MemberId] = Parsed["prune"].split("/");
-				const Boards = Agent.Boards.get(AgentId);
+				const [PlantId, MemberID] = Parsed["prune"].split("/");
+				const Boards = Agent.Boards.get(AgentID);
 				const Board_ = PlantId === undefined ? undefined : Boards?.get(PlantId);
-				if (Board_ === undefined || MemberId === undefined) {
+				if (Board_ === undefined || MemberID === undefined) {
 					Append(`set unknown prune ${Parsed["prune"] ?? ""}`);
 					return {
 						set: false,
@@ -119,14 +119,14 @@ export default (Agent: State, Append: Log) => {
 						detail: `no planted board matches ${Parsed["prune"] ?? ""}`,
 					};
 				}
-				Board_.members = Board_.members.filter((Member) => Member.agentId !== MemberId);
-				Board_.lease.reporters.delete(MemberId);
+				Board_.members = Board_.members.filter((Member) => Member.agentId !== MemberID);
+				Board_.lease.reporters.delete(MemberID);
 				Board_.pruned += 1;
-				Append(`member dropped ${Board_.id} ${MemberId} (pruned)`);
+				Append(`member dropped ${Board_.id} ${MemberID} (pruned)`);
 				return {
 					set: true,
 					kind: "prune",
-					detail: `member ${MemberId} dropped from ${Board_.id}`,
+					detail: `member ${MemberID} dropped from ${Board_.id}`,
 				};
 			}
 			if (typeof Parsed["plant"] === "string") {
@@ -146,7 +146,7 @@ export default (Agent: State, Append: Log) => {
 							: "custom";
 				Board.Open(
 					Agent,
-					AgentId,
+					AgentID,
 					BoardId,
 					PlantType,
 					Expect,
@@ -164,9 +164,9 @@ export default (Agent: State, Append: Log) => {
 			if (typeof Parsed["key"] === "string" && Parsed["key"].length > 0) {
 				const Key = Parsed["key"];
 				const Value = Parsed["value"] ?? "";
-				const Vars = Agent.Variables.get(AgentId) ?? new Map<string, string>();
+				const Vars = Agent.Variables.get(AgentID) ?? new Map<string, string>();
 				Vars.set(Key, Value);
-				Agent.Variables.set(AgentId, Vars);
+				Agent.Variables.set(AgentID, Vars);
 				Append(`set ${Key}`);
 				Supersede("set");
 				return { set: true, kind: "set", detail: `${Key} = ${Value}` };

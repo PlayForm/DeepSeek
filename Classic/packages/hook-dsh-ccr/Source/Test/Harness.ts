@@ -17,7 +17,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { rmSync } from "node:fs";
-import Ccr from "../../Target/Library.js";
+import CCR from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
 /**
@@ -110,7 +110,7 @@ export const Furnace: any = new FactoryClass({
 	reflect: { provide: () => undefined },
 } as any);
 
-const { Config: Schema } = Ccr;
+const { Config: Schema } = CCR;
 
 /**
  * The real-config shape the loader hands to apply: volatile fields arrive as
@@ -175,7 +175,7 @@ export const Make = (Raw: any): any => {
 			return Context;
 		},
 	};
-	Ccr.apply(Context, Raw); // the loader contract: apply(ctx, config)
+	CCR.apply(Context, Raw); // the loader contract: apply(ctx, config)
 	return {
 		Context,
 		Listeners,

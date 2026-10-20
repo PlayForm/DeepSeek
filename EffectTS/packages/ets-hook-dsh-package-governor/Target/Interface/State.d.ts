@@ -1,4 +1,4 @@
-import type Factory from "./Factory.js";
+import type Factory from "@Interface/Factory.js";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
 export default interface State extends Shared {

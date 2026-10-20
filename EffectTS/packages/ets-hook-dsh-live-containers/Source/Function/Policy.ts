@@ -70,7 +70,7 @@ export const IsInteractive = (Command: string): boolean => {
 /** The dedup key (design section 5.2): (agent id, normalized command, resolved
  * workdir). Normalized = trim + collapse runs of whitespace + strip leading
  * `cd x && ` prefixes whose target equals the resolved workdir. */
-export const DedupKey = (AgentId: string, Command: string, Workdir: string | undefined): string => {
+export const DedupKey = (AgentID: string, Command: string, Workdir: string | undefined): string => {
 	let Normalized = Command.trim().replace(/\s+/g, " ");
 	if (Workdir !== undefined) {
 		const Match = /^cd\s+(\S+)\s*&&\s*(.*)$/.exec(Normalized);
@@ -82,7 +82,7 @@ export const DedupKey = (AgentId: string, Command: string, Workdir: string | und
 			}
 		}
 	}
-	return `${AgentId}\u0000${Normalized}\u0000${Workdir ?? ""}`;
+	return `${AgentID}\u0000${Normalized}\u0000${Workdir ?? ""}`;
 };
 
 /** The command prefix the long-running history keys on (the first two words:
@@ -98,11 +98,11 @@ export const CommandPrefix = (Command: string): string => {
  * marker-based exclusion). */
 export const RecordDuration = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Command: string,
 	Ms: number,
 ): void => {
-	const PerAgent = Agent.History.get(AgentId) ?? new Map<string, number[]>();
+	const PerAgent = Agent.History.get(AgentID) ?? new Map<string, number[]>();
 	const Key = CommandPrefix(Command);
 	const Window = Agent.Detach.historyWindow;
 	const Series = PerAgent.get(Key) ?? [];
@@ -111,16 +111,16 @@ export const RecordDuration = (
 		Series.shift();
 	}
 	PerAgent.set(Key, Series);
-	Agent.History.set(AgentId, PerAgent);
+	Agent.History.set(AgentID, PerAgent);
 };
 
 /** The same-prefix history average (undefined when no history). */
 export const HistoryAverage = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Command: string,
 ): number | undefined => {
-	const Series = Agent.History.get(AgentId)?.get(CommandPrefix(Command));
+	const Series = Agent.History.get(AgentID)?.get(CommandPrefix(Command));
 	if (Series === undefined || Series.length === 0) {
 		return undefined;
 	}
@@ -144,8 +144,8 @@ export const MatchesPattern = (Command: string, Patterns: readonly string[]): bo
 	});
 
 /** The per-agent live-job count for the admission guard. */
-export const LiveCount = (Agent: State, AgentId: string): number => {
-	const Records = Agent.Detached.get(AgentId);
+export const LiveCount = (Agent: State, AgentID: string): number => {
+	const Records = Agent.Detached.get(AgentID);
 	if (Records === undefined) {
 		return 0;
 	}
@@ -163,31 +163,31 @@ export const LiveCount = (Agent: State, AgentId: string): number => {
  * transform and the failsafe actions - per agent per turn. */
 export const BudgetEntry = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Turn: number,
 ): { turn: number; used: number } => {
-	const Existing = Agent.MetaBudget.get(AgentId);
+	const Existing = Agent.MetaBudget.get(AgentID);
 	if (Existing !== undefined && Existing.turn === Turn) {
 		return Existing;
 	}
 	const Fresh = { turn: Turn, used: 0 };
-	Agent.MetaBudget.set(AgentId, Fresh);
+	Agent.MetaBudget.set(AgentID, Fresh);
 	return Fresh;
 };
 
 /** The per-agent failsafe meta-budget check: true when a modification may
  * proceed; false means pass-through for the rest of the turn. */
-export const WithinBudget = (Agent: State, AgentId: string, Turn: number): boolean =>
-	BudgetEntry(Agent, AgentId, Turn).used < Agent.FailsafesPerTurn;
+export const WithinBudget = (Agent: State, AgentID: string, Turn: number): boolean =>
+	BudgetEntry(Agent, AgentID, Turn).used < Agent.FailsafesPerTurn;
 
 /** Spend one unit of the meta-budget (call only after the action happened). */
-export const SpendBudget = (Agent: State, AgentId: string, Turn: number): void => {
-	BudgetEntry(Agent, AgentId, Turn).used += 1;
+export const SpendBudget = (Agent: State, AgentID: string, Turn: number): void => {
+	BudgetEntry(Agent, AgentID, Turn).used += 1;
 };
 
 /** Whether the meta-budget just ran out (the one summary line per turn). */
-export const BudgetExhausted = (Agent: State, AgentId: string, Turn: number): boolean => {
-	const Entry = Agent.MetaBudget.get(AgentId);
+export const BudgetExhausted = (Agent: State, AgentID: string, Turn: number): boolean => {
+	const Entry = Agent.MetaBudget.get(AgentID);
 	return Entry !== undefined && Entry.turn === Turn && Entry.used >= Agent.FailsafesPerTurn;
 };
 
@@ -214,7 +214,7 @@ export type Decision =
 
 export const Decide = (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Tool: string,
 	Command: string,
 	Turn: number,
@@ -222,18 +222,18 @@ export const Decide = (
 	const Detach = Agent.Detach;
 	// Capacity: maxLivePerAgent (the registry's own per-owner cap is checked by
 	// the registry's start() itself).
-	if (LiveCount(Agent, AgentId) >= Detach.maxLivePerAgent) {
-		return { detach: false, reason: "capacity", ledger: `capacity full ${AgentId} -> inline` };
+	if (LiveCount(Agent, AgentID) >= Detach.maxLivePerAgent) {
+		return { detach: false, reason: "capacity", ledger: `capacity full ${AgentID} -> inline` };
 	}
 	// The meta-budget (scenario 7): when exhausted, pass-through everywhere.
 	// The budget is a FAILSAFE gate - with `failsafes: "off"` the CAN-1
 	// transform is a feature, not a failsafe, and is not budget-gated.
-	if (Agent.Failsafes === "on" && !WithinBudget(Agent, AgentId, Turn)) {
+	if (Agent.Failsafes === "on" && !WithinBudget(Agent, AgentID, Turn)) {
 		return { detach: false, reason: "meta-budget", ledger: `failsafe meta-budget (${Turn})` };
 	}
 	// minLatencyMs: the call is too short to pay for the detach (estimated by
 	// the same-prefix history average when one exists).
-	const Average = HistoryAverage(Agent, AgentId, Command);
+	const Average = HistoryAverage(Agent, AgentID, Command);
 	if (Average !== undefined && Average < Detach.minLatencyMs) {
 		return { detach: false, reason: "min-latency", ledger: "failed" };
 	}

@@ -132,8 +132,8 @@ export default async (
 					const Entries = Editor.entries() as { id?: unknown; name?: unknown }[];
 					const Mine = Array.isArray(Entries)
 						? Entries.find((Entry) => {
-								const Id = `${Entry?.id ?? ""} ${Entry?.name ?? ""}`;
-								return Id.includes(State.Module);
+								const ID = `${Entry?.id ?? ""} ${Entry?.name ?? ""}`;
+								return ID.includes(State.Module);
 							})
 						: undefined;
 					if (Mine) {

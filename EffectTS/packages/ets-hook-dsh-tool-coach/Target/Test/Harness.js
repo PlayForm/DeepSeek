@@ -134,7 +134,7 @@ const Make = (Raw, Options = {}) => {
 const Validate = (Raw) => Coach.Config({ ...Raw });
 const ACCEPT = { kind: "accept" };
 const ALLOW = { kind: "allow" };
-const Agent = (Id) => ({ id: Id });
+const Agent = (ID) => ({ id: ID });
 const AgentA = Agent("agent-a");
 const Post = async (Run, Command, Who = AgentA, Name = "bash") => Run.Listeners["tools/post-execute"](
   {

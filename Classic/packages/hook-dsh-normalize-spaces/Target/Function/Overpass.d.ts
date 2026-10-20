@@ -13,7 +13,7 @@ export declare const DefaultScopes: {
 export declare const DefaultExempt: string[];
 /** The ccr spill marker's opening bytes - content carrying them is a ccr
  *  replacement and passes through untouched (the order-safety guard). */
-export declare const CcrMarker = "<<<CCR:";
+export declare const CCRMarker = "<<<CCR:";
 /** A structural content block: the only field the arm reads is the text. */
 export type Block = {
     type?: unknown;

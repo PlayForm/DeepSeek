@@ -368,8 +368,8 @@ const runTest = async () => {
     }
   }
   {
-    const CtxR = MakeContext({ files: Files });
-    const FactoryR = new FactoryClass(CtxR);
+    const ContextR = MakeContext({ files: Files });
+    const FactoryR = new FactoryClass(ContextR);
     const projFoldR = Path.join(Root, "proj-fold-r");
     FileSystem.mkdirSync(projFoldR);
     FileSystem.writeFileSync(
@@ -379,7 +379,7 @@ const runTest = async () => {
     const pathFoldR = Path.join(projFoldR, "package.json");
     Files[pathFoldR] = JSON.stringify({ dependencies: { leftpad: "^2.0.0", chalk: "^5.0.0" } });
     const StFoldR = FactoryR.State(
-      CtxR,
+      ContextR,
       { log: true, logFile: Ledger, exclude: [] },
       { module: "package-governor", policyFileName: "pin-policy.json" }
     );
@@ -675,10 +675,10 @@ const runTest = async () => {
     }
   }
   {
-    const Ctx2 = MakeContext({ files: {} });
-    Ctx2.get = (name) => name === "storageDomain" ? void 0 : Services[name];
-    const StOff = Furnace.State(Ctx2, { logFile: Ledger }, { module: "package-governor" });
-    Furnace.Attach(Ctx2, { state: StOff, name: "probe-off" });
+    const Context2 = MakeContext({ files: {} });
+    Context2.get = (name) => name === "storageDomain" ? void 0 : Services[name];
+    const StOff = Furnace.State(Context2, { logFile: Ledger }, { module: "package-governor" });
+    Furnace.Attach(Context2, { state: StOff, name: "probe-off" });
     StOff.Journal("activated", "", "should not queue");
     const Sub = "lifecycle: P5 absent \u2192 silent skip, the journal sink retired";
     {

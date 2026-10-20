@@ -81,7 +81,7 @@ export const DefaultExempt = [
 
 /** The ccr spill marker's opening bytes - content carrying them is a ccr
  *  replacement and passes through untouched (the order-safety guard). */
-export const CcrMarker = "<<<CCR:";
+export const CCRMarker = "<<<CCR:";
 
 /** A structural content block: the only field the arm reads is the text. */
 export type Block = { type?: unknown; text?: unknown };
@@ -100,7 +100,7 @@ export const RewriteBlocks = (
 		switch (true) {
 			case Block?.type !== "text" || typeof Block?.text !== "string":
 				return Block; // never tool-call/argument or unknown blocks
-			case String(Block.text).includes(CcrMarker):
+			case String(Block.text).includes(CCRMarker):
 				return Block; // the ccr marker guard
 		}
 		const Result = Transform(Block.text as string);

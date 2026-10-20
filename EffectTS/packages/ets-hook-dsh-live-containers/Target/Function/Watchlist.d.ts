@@ -20,9 +20,9 @@ export declare const CatalogSets: (State: State, Path: string) => string[];
 export declare const ExplicitSets: (State: State, Path: string) => string[];
 /** Whether the path is opted out for one agent (the per-glob opt-outs; the
  * `live_monitor off <glob>` records). */
-export declare const OptedOut: (State: State, AgentId: string, Path: string) => boolean;
+export declare const OptedOut: (State: State, AgentID: string, Path: string) => boolean;
 /** The automatic enrollment classification (the fs/observed path):
  * watchlist-gated and opt-out filtered. Returns undefined when the file
  * must NOT be enrolled (no watchlist match, or opted out); an array (even
  * empty) when it enrolls - an empty array enrolls with `checks: none`. */
-export declare const AutoSets: (State: State, AgentId: string, Path: string) => string[] | undefined;
+export declare const AutoSets: (State: State, AgentID: string, Path: string) => string[] | undefined;

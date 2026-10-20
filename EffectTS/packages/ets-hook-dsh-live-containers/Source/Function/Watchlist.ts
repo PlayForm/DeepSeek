@@ -87,9 +87,9 @@ export const WatchlistMatch = (State: State, Path: string): WatchlistEntry | und
  * Malformed or absent specs are skipped (runtime fail-open). */
 export const CatalogSets = (State: State, Path: string): string[] => {
 	const Sets: string[] = [];
-	for (const [Id, Spec] of Object.entries(State.CheckSets ?? {})) {
+	for (const [ID, Spec] of Object.entries(State.CheckSets ?? {})) {
 		if (Spec && typeof Spec.glob === "string" && Matches(Spec.glob, Path)) {
-			Sets.push(Id);
+			Sets.push(ID);
 		}
 	}
 	return Sets;
@@ -100,15 +100,15 @@ export const CatalogSets = (State: State, Path: string): string[] => {
 export const ExplicitSets = (State: State, Path: string): string[] => {
 	const Entry = WatchlistMatch(State, Path);
 	if (Entry !== undefined) {
-		return (Entry.checks ?? []).filter((Id) => typeof Id === "string");
+		return (Entry.checks ?? []).filter((ID) => typeof ID === "string");
 	}
 	return CatalogSets(State, Path);
 };
 
 /** Whether the path is opted out for one agent (the per-glob opt-outs; the
  * `live_monitor off <glob>` records). */
-export const OptedOut = (State: State, AgentId: string, Path: string): boolean =>
-	(State.MonitorOptOuts.get(AgentId) ?? []).some(
+export const OptedOut = (State: State, AgentID: string, Path: string): boolean =>
+	(State.MonitorOptOuts.get(AgentID) ?? []).some(
 		(Glob) => typeof Glob === "string" && Matches(Glob, Path),
 	);
 
@@ -116,13 +116,13 @@ export const OptedOut = (State: State, AgentId: string, Path: string): boolean =
  * watchlist-gated and opt-out filtered. Returns undefined when the file
  * must NOT be enrolled (no watchlist match, or opted out); an array (even
  * empty) when it enrolls - an empty array enrolls with `checks: none`. */
-export const AutoSets = (State: State, AgentId: string, Path: string): string[] | undefined => {
-	if (OptedOut(State, AgentId, Path)) {
+export const AutoSets = (State: State, AgentID: string, Path: string): string[] | undefined => {
+	if (OptedOut(State, AgentID, Path)) {
 		return undefined;
 	}
 	const Entry = WatchlistMatch(State, Path);
 	if (Entry === undefined) {
 		return undefined;
 	}
-	return (Entry.checks ?? []).filter((Id) => typeof Id === "string");
+	return (Entry.checks ?? []).filter((ID) => typeof ID === "string");
 };

@@ -5,9 +5,9 @@ export type Log = (Message: string) => void;
 /** Substitute {{token}} groups from the variable table. A token the table
  * does not resolve stays literal and logs `render unknown <id> <token>`
  * (once per token per pass). */
-export declare const Substitute: (Template: string, Vars: Variables, Id: string, Append: Log) => string;
+export declare const Substitute: (Template: string, Vars: Variables, ID: string, Append: Log) => string;
 /** The fixed frame around one block body (the model-facing contract). */
-export declare const Frame: (Separator: string, Id: string, Body: string) => string;
+export declare const Frame: (Separator: string, ID: string, Body: string) => string;
 /** Render one block to its frame, or null when the kind is not renderable
  * in phase 1 (the wave-2 kinds skip - reason "unknown kind"). */
 export declare const RenderBlock: (Agent: State, Block: BlockSpec, Scope: AgentState, At: number, Label: string, Append: Log) => string | null;

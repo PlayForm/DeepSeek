@@ -212,7 +212,7 @@ export const Producer = (
  * command as the label, the newest-bytes tail). */
 export const Start = async (
 	Agent: State,
-	AgentId: string,
+	AgentID: string,
 	Args: {
 		command: string;
 		workdir?: string;
@@ -237,29 +237,29 @@ export const Start = async (
 			? undefined
 			: await (Wave.WorkingDirectory?.ensure(Exec.agent) ?? Promise.resolve(undefined));
 	const Workdir = ResolveWorkdir(Args.workdir, Cwd);
-	const DshEnv =
+	const DSHEnv =
 		Wave.ShellEnv === undefined ? undefined : Wave.ShellEnv.collect({ agent: Exec.agent });
 	const Policy = StandingPolicy(Wave.SandboxPolicy, Session);
 	const Spec = Wave.Shell.resolve({
 		command: Args.command,
 		...(Workdir !== undefined ? { workdir: Workdir } : {}),
 		...(Args.timeoutMs !== undefined ? { timeoutMs: Args.timeoutMs } : {}),
-		dshEnv: DshEnv,
+		dshEnv: DSHEnv,
 		...(Policy !== undefined ? { sandboxPolicy: Policy } : {}),
 		onExpiry: "none",
 	});
 	const Tail = new JobTail(Args.head === true);
 	const Adapter = Producer((WithSignal) => Wave.Shell!.execute(WithSignal), Spec);
-	const JobId = Wave.Jobs.start({
+	const JobID = Wave.Jobs.start({
 		kind: Args.kind ?? "bash",
 		label: Args.label ?? (Args.command.length > 80 ? Args.command.slice(0, 80) : Args.command),
 		toolCall: { callId: Exec.callId, rootCallId: Exec.rootCallId },
-		...(Exec.agent !== undefined ? { owner: AgentId } : {}),
+		...(Exec.agent !== undefined ? { owner: AgentID } : {}),
 		outputLimitBytes: 2048,
 		output: Sources(Adapter.Process, Tail),
 		run: Adapter.run,
 	});
-	return { jobId: JobId, tail: Tail, spec: Spec };
+	return { jobId: JobID, tail: Tail, spec: Spec };
 };
 
 /** The label the marker shows: the first 80 bytes of the command, single line

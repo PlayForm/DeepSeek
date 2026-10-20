@@ -8,7 +8,7 @@ export declare const DRIFT_SINCE_LAST_TOOL_MS = 300000;
 /** The drift guard (scenario 4): while a live board is open, session shape
  * crossing a threshold gains a WARN line (channel 4). Returns the WARN line
  * or "" - the caller appends it to the wave-2 section body. */
-export declare const Drift: (Agent: State, AgentId: string, Scope: {
+export declare const Drift: (Agent: State, AgentID: string, Scope: {
     messages: number;
     lastToolAt: number | undefined;
 }, Append: Log) => string;

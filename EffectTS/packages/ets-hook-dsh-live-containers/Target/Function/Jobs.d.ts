@@ -60,7 +60,7 @@ export declare const Producer: (Execute: (spec: ShellSpec) => Promise<ShellProce
  * `head: true` (the head-keep tail) - the same governed path, one wrapper,
  * two callers. The detach path's defaults are unchanged (kind "bash", the
  * command as the label, the newest-bytes tail). */
-export declare const Start: (Agent: State, AgentId: string, Args: {
+export declare const Start: (Agent: State, AgentID: string, Args: {
     command: string;
     workdir?: string;
     timeoutMs?: number;

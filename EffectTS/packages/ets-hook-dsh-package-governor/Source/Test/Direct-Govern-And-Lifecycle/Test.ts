@@ -438,12 +438,12 @@ export const runTest = async (): Promise<number> => {
 	{
 		// reverse registered order on a fresh factory instance: sim-pin FIRST,
 		// sim-canonicalize second - the same convergence from the other direction.
-		const CtxR = MakeContext({ files: Files });
+		const ContextR = MakeContext({ files: Files });
 		// Fixture-only scaffolding: the reverse-fold factory is typed as `any` so
 		// the sim steps can pass plain runtime strings exactly like the source
 		// suite does (the branded FsVersion / Transform types are build-time
 		// constraints on real consumers, not on this fixture).
-		const FactoryR: any = new FactoryClass(CtxR);
+		const FactoryR: any = new FactoryClass(ContextR);
 		const projFoldR = Path.join(Root, "proj-fold-r");
 		FileSystem.mkdirSync(projFoldR);
 		FileSystem.writeFileSync(
@@ -453,7 +453,7 @@ export const runTest = async (): Promise<number> => {
 		const pathFoldR = Path.join(projFoldR, "package.json");
 		Files[pathFoldR] = JSON.stringify({ dependencies: { leftpad: "^2.0.0", chalk: "^5.0.0" } });
 		const StFoldR = FactoryR.State(
-			CtxR,
+			ContextR,
 			{ log: true, logFile: Ledger, exclude: [] },
 			{ module: "package-governor", policyFileName: "pin-policy.json" },
 		);
@@ -780,10 +780,10 @@ export const runTest = async (): Promise<number> => {
 	}
 	{
 		// P5 absent -> silent skip, sink retired
-		const Ctx2 = MakeContext({ files: {} });
-		Ctx2.get = (name: string) => (name === "storageDomain" ? undefined : Services[name]);
-		const StOff = Furnace.State(Ctx2, { logFile: Ledger }, { module: "package-governor" });
-		Furnace.Attach(Ctx2, { state: StOff, name: "probe-off" });
+		const Context2 = MakeContext({ files: {} });
+		Context2.get = (name: string) => (name === "storageDomain" ? undefined : Services[name]);
+		const StOff = Furnace.State(Context2, { logFile: Ledger }, { module: "package-governor" });
+		Furnace.Attach(Context2, { state: StOff, name: "probe-off" });
 		StOff.Journal("activated", "", "should not queue");
 		const Sub = "lifecycle: P5 absent \u2192 silent skip, the journal sink retired";
 		{

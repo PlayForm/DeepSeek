@@ -1091,7 +1091,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   (the ets-base re-home + retirement + ledger) fires when L5 lands (its
   retirement needs the full folder inventory).
 - **SITE-B COMPLETE + VERIFIED (2026-10-19, `1b3e719d`)**: the data layer
-  landed (24 Site files: Content.ts with Counts.Ccr{146,146}/
+  landed (24 Site files: Content.ts with Counts.CCR{146,146}/
   Coach{129,129} + Families + Groups.Guardians + the 4.0.5 effect pin,
   Live.ts, the Configurator with the REAL ccr/coach patch bodies, the
   registry rows 13/14, the 7 normalize pages with the scopes/overpass

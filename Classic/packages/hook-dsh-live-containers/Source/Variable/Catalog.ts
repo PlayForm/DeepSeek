@@ -171,11 +171,11 @@ export const Compressed = (At: number, Max = 2000): string => {
 };
 
 /** Whether a catalog id exists (the suggestion parser's unknown-template check). */
-export const Known = (Id: string): boolean => CATALOG.some((Entry) => Entry.id === Id);
+export const Known = (ID: string): boolean => CATALOG.some((Entry) => Entry.id === ID);
 
 /** The catalog entry for one id (undefined when unknown). */
-export const Entry = (Id: string): CatalogEntry | undefined =>
-	CATALOG.find((Item) => Item.id === Id);
+export const Entry = (ID: string): CatalogEntry | undefined =>
+	CATALOG.find((Item) => Item.id === ID);
 
 /** The default table's specs for one kind (the accept path instantiates from
  * the default table's template). */

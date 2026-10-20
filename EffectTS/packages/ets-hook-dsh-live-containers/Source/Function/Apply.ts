@@ -254,9 +254,9 @@ const Validate = (Options: unknown): void => {
 		}
 	}
 	const CheckSets = (Cell(Raw["checksets"]) ?? {}) as Record<string, unknown>;
-	for (const [Id, Spec] of Object.entries(CheckSets)) {
+	for (const [ID, Spec] of Object.entries(CheckSets)) {
 		if (Spec === null || typeof Spec !== "object") {
-			Fail(`checksets.${Id} must be an object`);
+			Fail(`checksets.${ID} must be an object`);
 			continue;
 		}
 		const S = Spec as {
@@ -267,30 +267,30 @@ const Validate = (Options: unknown): void => {
 			timeoutMs?: unknown;
 		};
 		if (S.link !== undefined && !["none", "governance"].includes(String(S.link))) {
-			Fail(`checksets.${Id}.link must be one of "none" | "governance"`);
+			Fail(`checksets.${ID}.link must be one of "none" | "governance"`);
 		}
 		if (S.link === undefined && (typeof S.command !== "string" || S.command.length === 0)) {
-			Fail(`checksets.${Id} needs a non-empty command when link is absent`);
+			Fail(`checksets.${ID} needs a non-empty command when link is absent`);
 		}
 		if (S.fast !== undefined && typeof S.fast !== "boolean") {
-			Fail(`checksets.${Id}.fast must be a boolean`);
+			Fail(`checksets.${ID}.fast must be a boolean`);
 		}
 		if (S.intervalMs !== undefined && !(Number(S.intervalMs) >= 0)) {
-			Fail(`checksets.${Id}.intervalMs must be >= 0`);
+			Fail(`checksets.${ID}.intervalMs must be >= 0`);
 		}
 		if (
 			S.timeoutMs !== undefined &&
 			!(Number(S.timeoutMs) >= 1000 && Number(S.timeoutMs) <= 120000)
 		) {
 			Fail(
-				`checksets.${Id}.timeoutMs must be >= 1000 and <= 120000 (the inline deadline - checks never buy extra runtime)`,
+				`checksets.${ID}.timeoutMs must be >= 1000 and <= 120000 (the inline deadline - checks never buy extra runtime)`,
 			);
 		}
 	}
 	for (const Entry of Watchlist as { checks?: unknown }[]) {
-		for (const Id of (Entry.checks as unknown[] | undefined) ?? []) {
-			if (typeof Id === "string" && !(Id in CheckSets)) {
-				Fail(`watchlist references an unknown check set: ${Id}`);
+		for (const ID of (Entry.checks as unknown[] | undefined) ?? []) {
+			if (typeof ID === "string" && !(ID in CheckSets)) {
+				Fail(`watchlist references an unknown check set: ${ID}`);
 			}
 		}
 	}
@@ -373,7 +373,7 @@ const Dirty = (Agent: State, Scope: AgentState): void => {
 /** The agent id of an assemble context (assembleContextFor sets scope = agent
  * - verified against dsh-agent; the opaque-key rule still applies to the
  * phase-1 counters, which stay module-global). */
-const AgentIdOf = (Context_: AssembleContext | undefined): string => {
+const AgentIDOf = (Context_: AssembleContext | undefined): string => {
 	const Agent = (Context_ as { agent?: { id?: string } | undefined } | undefined)?.agent?.id;
 	return typeof Agent === "string" && Agent.length > 0 ? Agent : "(unowned)";
 };
@@ -391,31 +391,31 @@ const WaveAssemble = (
 		if (!Agent.On) {
 			return "";
 		}
-		const AgentId = AgentIdOf(Context_);
+		const AgentID = AgentIDOf(Context_);
 		const At = Clock(Agent);
 		// One assemble pass = one parent turn (I5 1.4): the count advances
 		// before render; the previous-pass clock is overwritten only AFTER the
 		// render, so the orphan check sees the real gap (I5 2.4).
-		Agent.TurnCounts.set(AgentId, (Agent.TurnCounts.get(AgentId) ?? 0) + 1);
+		Agent.TurnCounts.set(AgentID, (Agent.TurnCounts.get(AgentID) ?? 0) + 1);
 		// The lease decrement runs BEFORE render, so the declaration appears in
 		// the SAME assembly's frame (I5 4.2).
-		Board.OnTurn(Agent, AgentId, Append);
+		Board.OnTurn(Agent, AgentID, Append);
 		// The wave-2 parts, in order: the live jobs + boards (per frame), the
 		// monitors stanza, the suggestions, the drift guard - per-frame
 		// granularity for the collapse. The monitors stanza is ONE part (the
 		// design section 5.1: the section collapse treats it as a unit, the
 		// summary band stays inside it).
 		const Parts: string[] = [
-			...Board.SectionParts(Agent, AgentId, Agent.Separator, Append),
-			...Monitors.SectionParts(Agent, AgentId, Agent.Separator, Append),
+			...Board.SectionParts(Agent, AgentID, Agent.Separator, Append),
+			...Monitors.SectionParts(Agent, AgentID, Agent.Separator, Append),
 		];
-		const Suggestions = Suggester.SectionBody(Agent, AgentId, Agent.Separator, Append);
+		const Suggestions = Suggester.SectionBody(Agent, AgentID, Agent.Separator, Append);
 		if (Suggestions.length > 0) {
 			Parts.push(Suggestions);
 		}
 		const Warn = Failsafe.Drift(
 			Agent,
-			AgentId,
+			AgentID,
 			{ messages: Scope.messages, lastToolAt: Scope.lastToolAt },
 			Append,
 		);
@@ -427,9 +427,9 @@ const WaveAssemble = (
 		}
 		// The post-render prune (I5 4.2: the prune acts after the render and
 		// mutates the state for the NEXT assembly).
-		Board.FailsafeStall(Agent, AgentId, Append);
+		Board.FailsafeStall(Agent, AgentID, Append);
 		// The previous-pass clock updates after the render (the orphan check).
-		Agent.LastTurnAt.set(AgentId, At);
+		Agent.LastTurnAt.set(AgentID, At);
 		// The wave-2 section-collapse pass (scenario 8) over the wave parts.
 		return Failsafe.Collapse(Agent, Parts, Append);
 	} catch (Error) {
@@ -464,10 +464,10 @@ const WavePreStep = (Agent: State, Payload: unknown, Append: (Message: string) =
 		const Text = (First.content ?? [])
 			.map((Block) => (Block?.type === "text" ? (Block.text ?? "") : ""))
 			.join("");
-		const AgentId = Step.agent?.id ?? "";
+		const AgentID = Step.agent?.id ?? "";
 		Suggester.OnUserMessage(
 			Agent,
-			AgentId,
+			AgentID,
 			Text,
 			Step.agent as { id: string } | undefined,
 			Append,
@@ -982,8 +982,8 @@ export default (Context: Context, Options: Config): void => {
 						// only a MATCHING report is folded).
 						continue;
 					}
-					const PlantId = Match[1] ?? "";
-					const MemberId = Match[2] ?? "";
+					const PlantID = Match[1] ?? "";
+					const MemberID = Match[2] ?? "";
 					const Status = Match[3] ?? "";
 					const Payload = Match[4] ?? "";
 					// The board of the agent whose inbox spliced: the session's
@@ -992,9 +992,9 @@ export default (Context: Context, Options: Config): void => {
 					// per-agent-keyed; a matching id is the fold target).
 					let Folded = false;
 					for (const [, Boards] of State.Boards) {
-						const Board_ = Boards.get(PlantId);
+						const Board_ = Boards.get(PlantID);
 						if (Board_ !== undefined) {
-							Board.Report(State, Board_, MemberId, Status, Payload, Append);
+							Board.Report(State, Board_, MemberID, Status, Payload, Append);
 							Folded = true;
 						}
 					}

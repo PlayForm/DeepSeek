@@ -87,7 +87,7 @@ export default async (
 	Content: string,
 	Over: Over = {},
 ): Promise<FsWriteOutcome> => {
-	const Fs = State.Context.fs;
+	const FS = State.Context.fs;
 	// The caller's content step (raw-write's six-fold Rewrite chain), applied
 	// before anything else.
 	const Written = Over.transform === undefined ? Content : Over.transform(Content);
@@ -111,7 +111,7 @@ export default async (
 	// path's only caller is the raw-write tool).
 	let policy: SandboxExecutionPolicy | undefined;
 	if (Over.policy === undefined || Over.policy === "standing") {
-		const Mode = Fs.sandboxMode;
+		const Mode = FS.sandboxMode;
 		const Service = Mode === undefined ? undefined : State.Context.get("sandboxPolicy");
 		if (Mode !== undefined && Service === undefined) {
 			throw new Error(
@@ -126,7 +126,7 @@ export default async (
 		// a configured mode declares the per-call policy rooted at the target's
 		// own directory.
 		policy =
-			Fs.sandboxMode === undefined
+			FS.sandboxMode === undefined
 				? undefined
 				: ({
 						mode: "workspace-write",
@@ -136,7 +136,7 @@ export default async (
 		// An explicitly resolved policy, stamped onto the call verbatim.
 		policy = Over.policy;
 	}
-	const Outcome: FsWriteOutcome = await Fs.writeText(
+	const Outcome: FsWriteOutcome = await FS.writeText(
 		Target,
 		Written,
 		intent,
