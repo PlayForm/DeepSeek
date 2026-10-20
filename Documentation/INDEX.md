@@ -25,10 +25,10 @@ statuses:
 
 # INDEX - The Documentation Archive
 
-> The archive index: every document in the Documentation tree, its
-> category, and its document-level status. The template (the single
-> style) is Documentation/ARCHIVE-STYLE.md - the YAML frontmatter schema
-> every document carries. Statuses are derived from the ACTUAL state:
+> The archive index: EVERY document in the Documentation tree, its
+> category, and its document-level status.
+> The template (the single style) is Documentation/ARCHIVE-STYLE.md - the YAML frontmatter schema EVERY document carries.
+> Statuses are derived from the ACTUAL state:
 > Documentation/Plans/TOMORROW-REVIEW.md (the full record), the git log,
 > the runner (`node Maintain/Run-Smokes.mjs` - its last line: all 207
 > smoke suites passed), and the built site (24 pages).

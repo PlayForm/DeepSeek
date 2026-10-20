@@ -17,15 +17,13 @@ statuses:
 
 # The Trio — Cascade Matrix, Nuanced Edition
 
-> One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
-> `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
-> handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
+> ONE of the four Governor guides migrated to `Documentation/Guides/`.
+> The companion docs are `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder.
+> The handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
-The family matrix deepened: per-plugin identity, exact ledger strings per step, call/data
-signatures, sync/async boundaries, and failure containment for every element.
+The family matrix deepened: per-plugin identity, exact ledger strings per step, call/data signatures, sync/async boundaries, and failure containment for EVERY element.
 
-**S** = seam · **F** =
-factory · **M** = module · **X** = exemption.
+**S** = seam · **F** = factory · **M** = module · **X** = exemption.
 
 ---
 

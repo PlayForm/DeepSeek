@@ -141,3 +141,64 @@ export const readManifest = ...   named export outside the contract
 - The full-words table: any abbreviation identifier outside the
   documented exceptions is a finding, with `Configuration` and
   `Environment` as the canonical replacements.
+
+## The Expanded Full-Words Philosophy (user-mandated 2026-10-20 - "expand my philosophy always and extend it")
+
+THE PRINCIPLE, EXPANDED: the user speaks tersely - every stated example is
+one instance of a CLASS. The class: WORD-ABBREVIATIONS expand to their full
+words wherever they are not (a) genuine standard acronyms, or (b) documented
+contract exceptions. The canonical examples accumulate; the table below is
+the growing arbiter.
+
+### The word-abbreviation table (abbreviation -> full word)
+
+```
+Env      -> Environment          Id       -> Identifier
+Spec     -> Specification        Config   -> Configuration (see the exception)
+Ctx      -> Context              Util     -> Utility
+Param    -> Parameter            Init     -> Initialize
+Impl     -> Implementation       Dep      -> Dependency
+Expr     -> Expression           Attr     -> Attribute
+Info     -> Information          Repo     -> Repository
+Exec     -> Execute              Msg      -> Message
+Txt      -> Text                 El       -> Element
+Temp     -> Temporary            Prev     -> Previous
+Cur      -> Current              Req      -> Request
+Resp     -> Response             Val      -> Value
+Num      -> Number               Max      -> Maximum
+Min      -> Minimum              Meta     -> Metadata
+Sync     -> Synchronize          Async    -> Asynchronous
+Doc      -> Documentation        App      -> Application
+Btn      -> Button               Fac      -> Factory
+Gov      -> Governor             Pin      -> (a real verb/noun - not an
+                                            abbreviation - stays)
+```
+
+### The genuine-acronym class (stays all-caps, never expanded)
+
+CCR, SVG, FS, JSON, HTML, URL, HTTP, UI, TTL, NPM, ETS, DSH, OK - the
+standard/technical acronyms and the product names. The distinction:
+an acronym names a THING (the protocol, the format, the product); a
+word-abbreviation shortens a WORD (Environment, Specification). When in
+doubt, expand - the full word is always acceptable, the abbreviation is
+only acceptable when it is a documented genuine acronym.
+
+### The documented exceptions (the only places abbreviations survive)
+
+1. The loader-contract `Config` export (machine-read by the cordis loader).
+2. The machine-read contract names: the config-schema keys, the tool-schema
+   fields, the package names, the entry ids, the ledger strings - fixed by
+   the consumers, not chosen by style.
+3. The `State`, `Set`, `Count` map names (the established domain vocabulary).
+4. The upstream API names (the @deepseek-ai/dsh-fs types, the harness LLM
+   type names) - external symbols are never renamed.
+
+### Application
+
+- EVERY identifier in the family's code, the site, and the docs passes the
+  table: a word-abbreviation outside the exceptions is a finding.
+- The future sweeps (the full-word passes) convert the abbreviation class
+  mechanically at low effort, with the arbiters (the build + the smokes +
+  the site build + the Drift) as the verification.
+- The user's terse examples always expand into the class - the table grows
+  as the philosophy grows; never treat a stated example as the whole rule.

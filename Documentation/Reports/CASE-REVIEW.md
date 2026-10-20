@@ -44,83 +44,75 @@ Status:
 
 ## 1. THE VERDICT
 
-The case study explains most of the family's structural why, but not all of it, and it is strongest
-exactly where the structure lives in a seam - the factory consolidation, the three-stage journal
-routing, the gate inversion, the sequential fold, the per-record v2 domain - and weakest where the
-structure lives in a naming or packaging decision: the reversed hierarchical naming, the
-three-implementation split, and the tracing opt-in are each asserted as facts of the era without
-their structural reason. The smoke-ledger contract - the family's central structural device - is
-stated but not elevated: byte-identical ledger strings are the family's public interface, the only
-observable that survives a framework port, and that is WHY renames are safe, the Effect-TS port is
-provable, and the smokes are implementation-agnostic; the page treats this as decision 1 of 13
-rather than the spine of the whole family. The port's purpose never appears: Register #13's three
-goals (external traceability, ecosystem interop, hooking other transformers) are absent, so the
-Effect-TS mapping reads as a release event, not as the structural claim it is. Where the page
-lapses, it lapses into process ("executed in one session", the subagent quirks - fine in the
-lessons, wrong in the phases) and into unverified arithmetic: the 15 -> 16 -> 17 method arc does
-not match the actual 19-method surface and contradicts itself about which method is "the 16th";
-the "~800" total is unattributed; the submodule structure is presented as achieved when register
-#16 is explicitly NOT STARTED. Claim verification against the code: nearly every structural claim
-checks out - the five-step executor merge, the sequential fold + fresh-stat guard, the v2
-per-record domain + loud failure line, the patch-layer shadowing, the govern-marker inversion, the
-stream gate's identity exemptions, the abort-signal fix, the #14 parallel marker, the tracing
-opt-in, and every commit hash on the page (including one place where the page is right and the
-plan is wrong: `49e5b3d`, not the plan's `49e5b3b`). The remaining failures are concentrated in
-one habit: counting things that were never counted canonically (methods, checks, totals) and
-quoting things that were never quoted verbatim. That is a structural finding in itself - the case
-study's own numbers and excerpts are the least-structural artifacts on the page.
+The case study explains most of the family's structural why, but NOT all of it.
+It is strongest exactly where the structure lives in a seam - the factory consolidation, the three-stage journal routing, the gate inversion, the sequential fold, the per-record v2 domain.
+It is weakest where the structure lives in a naming or packaging decision.
+The reversed hierarchical naming, the three-implementation split, and the tracing opt-in are EACH asserted as facts of the era WITHOUT their structural reason.
+The smoke-ledger contract - the family's central structural device - is stated but NOT elevated.
+Byte-identical ledger strings are the family's public interface, the ONLY observable that survives a framework port.
+That is WHY renames are safe, the Effect-TS port is provable, and the smokes are implementation-agnostic.
+The page treats this as decision 1 of 13 rather than the spine of the whole family.
+The port's purpose NEVER appears.
+Register #13's three goals (external traceability, ecosystem interop, hooking other transformers) are absent.
+So the Effect-TS mapping reads as a release event, NOT as the structural claim it is.
+Where the page lapses, it lapses into process ("executed in one session", the subagent quirks - fine in the lessons, wrong in the phases).
+It also lapses into unverified arithmetic.
+The 15 -> 16 -> 17 method arc does NOT match the actual 19-method surface and contradicts itself about which method is "the 16th".
+The "~800" total is unattributed.
+The submodule structure is presented as achieved when register #16 is explicitly NOT STARTED.
+Claim verification against the code: nearly every structural claim checks out.
+And EVERY commit hash on the page checks out (including ONE place where the page is right and the plan is wrong: `49e5b3d`, NOT the plan's `49e5b3b`).
+The remaining failures are concentrated in ONE habit.
+Counting things that were NEVER counted canonically (methods, checks, totals).
+Quoting things that were NEVER quoted verbatim.
+That is a structural finding in itself.
+The case study's own numbers and excerpts are the least-structural artifacts on the page.
 
 ## 2. PER-SECTION STRUCTURAL-WHY ASSESSMENT
 
 ### The overview (Section 0)
 
-- **Structural why exposed**: the smoke/live asymmetry is named as the story's spine ("what the
-  suites caught, what only a restart could catch") - a structural claim about the verification
-  regime, and honest ("which two theories died on the way to the truth").
-- **How lapse**: none of consequence; the overview is mostly structural.
-- **Unsupported/stale**: "~800 checks across twelve suites as the final count" is unattributed -
-  the Effect-TS total is 808, the Classic is 795; both round to "~800" but the third-pass summary
-  (TOMORROW-REVIEW §2.3) pins the intent to the Effect-TS total, which the page never says. "Zero
-  assertion changes across refactors, renames and a framework port" needs the additive-coverage
-  nuance: the Effect-TS suites add 13 checks (core +3, factory +7, governor +3), so "zero changes"
-  means zero rewrites, not zero growth. The overview never announces the three-implementation
-  structure (Boilerplate / Classic / EffectTS) even though the "framework port" sentence implies
-  it - the triad's roles are the family's most visible structural fact.
+- **Structural why exposed**: the smoke/live asymmetry is named as the story's spine ("what the suites caught, what only a restart could catch").
+  It is a structural claim about the verification regime, and honest ("which two theories died on the way to the truth").
+- **How lapse**: NONE of consequence.
+  The overview is mostly structural.
+- **Unsupported/stale**: "~800 checks across twelve suites as the final count" is unattributed.
+  The Effect-TS total is 808, the Classic is 795.
+  BOTH round to "~800", but the third-pass summary (TOMORROW-REVIEW §2.3) pins the intent to the Effect-TS total, which the page NEVER says.
+  "Zero assertion changes across refactors, renames and a framework port" needs the additive-coverage nuance.
+  The Effect-TS suites add 13 checks (core +3, factory +7, governor +3).
+  So "zero changes" means zero rewrites, NOT zero growth.
+  The overview NEVER announces the three-implementation structure (Boilerplate / Classic / EffectTS) even though the "framework port" sentence implies it.
+  The triad's roles are the family's most visible structural fact.
 
 ### Phase I - the boilerplate era
 
-- **Structural why exposed**: the duplication -> consolidation rationale (three hooks carrying six
-  copies of the same machinery -> one factory service) and the transform-leaf contract ("the
-  factory drives but never absorbs - each hook's transforms stay its identity") are the right
-  structural beats, and they are the page's best statement of why the factory exists: the harness
-  plugin seam is the only stable extension point, so everything shared lives behind ONE service
-  and the hooks stay thin leaves.
-- **How lapse**: the two live-verified fixes (inject/Config on the default export; apply must
-  return nothing) are loader-contract facts stated as anecdotes; they ARE structural (the loader
-  contract is a seam property) but the paragraph reads as folklore - the why (a returned value
-  silently kills event delivery; named-only exports are shadowed) is present in one clause each,
-  which is enough.
-- **Unsupported/stale**: "it has since grown 15 -> 16 -> 17 methods" - the actual current surface
-  is 19 callable methods (Library.ts lists Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/
-  GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/
-  Govern), the SCHEME numbers 17 sections with Write+GuardedWrite sharing §2.7 and UpdateKey
-  absent, and the factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139) -
-  see Correction C1. The 15-method era figure itself is correct (Handoff Overview Package 3).
+- **Structural why exposed**: the duplication -> consolidation rationale (three hooks carrying six copies of the same machinery -> one factory service) and the transform-leaf contract ("the factory drives but never absorbs - each hook's transforms stay its identity") are the right structural beats.
+  They are the page's best statement of why the factory exists.
+  The harness plugin seam is the ONLY stable extension point.
+  So everything shared lives behind ONE service and the hooks stay thin leaves.
+- **How lapse**: the two live-verified fixes (inject/Config on the default export; apply must return nothing) are loader-contract facts stated as anecdotes.
+  They ARE structural (the loader contract is a seam property), but the paragraph reads as folklore.
+  The why (a returned value silently kills event delivery; named-only exports are shadowed) is present in ONE clause EACH, which is enough.
+- **Unsupported/stale**: "it has since grown 15 -> 16 -> 17 methods".
+  The actual current surface is 19 callable methods (Library.ts lists Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/Govern).
+  The SCHEME numbers 17 sections with Write+GuardedWrite sharing §2.7 and UpdateKey absent.
+  The factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139).
+  See Correction C1.
+  The 15-method era figure itself is correct (Handoff Overview Package 3).
 
 ### Phase II - the audit and the fixes
 
-- **Structural why exposed**: the three criticals are structural findings with structural fixes,
-  and the type-import flip carries the best structural why on the page ("type-only imports are
-  erased, so the consumers' only-Config-imports-the-factory posture survives the flip untouched" -
-  the erased-at-build property is what makes the import topology durable).
-- **How lapse**: "The rest of the queue executed in one session" is pure process; the module
-  terminology rename's why (spec vocabulary vs code vocabulary; the `cargo flavor` literal
-  survives because ledger strings are module-owned) is present but compressed. The smoke-archival
-  beat ("the arbiter must not be disposable") is process-as-lesson and correctly placed.
-- **Unsupported/stale**: Critical card 3 calls UpdateKey "the 16th method"; decision 8 calls
-  Write "the 16th method" - the same ordinal, two different methods (C1). Everything else in the
-  section verifies (commits 28ebc30, c6a72ce, 1ed3564, 3c29108, 060e3b6, 1fef4ca, 711d5b2 all in
-  `git -C ~/.dsh log`).
+- **Structural why exposed**: the three criticals are structural findings with structural fixes.
+  The type-import flip carries the best structural why on the page ("type-only imports are erased, so the consumers' only-Config-imports-the-factory posture survives the flip untouched").
+  The erased-at-build property is what makes the import topology durable.
+- **How lapse**: "The rest of the queue executed in one session" is pure process.
+  The module terminology rename's why (spec vocabulary vs code vocabulary; the `cargo flavor` literal survives because ledger strings are module-owned) is present but compressed.
+  The smoke-archival beat ("the arbiter must not be disposable") is process-as-lesson and correctly placed.
+- **Unsupported/stale**: Critical card 3 calls UpdateKey "the 16th method".
+  Decision 8 calls Write "the 16th method".
+  It is the same ordinal, two different methods (C1).
+  Everything else in the section verifies (commits 28ebc30, c6a72ce, 1ed3564, 3c29108, 060e3b6, 1fef4ca, 711d5b2 ALL in `git -C ~/.dsh log`).
 
 ### Phase III - going live
 

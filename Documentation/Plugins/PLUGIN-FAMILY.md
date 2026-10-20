@@ -28,7 +28,7 @@ statuses:
 > EVERY name is byte-accurate and EVERY repo link is absolute.
 > It is a DOCUMENT, NOT an implementation.
 > The packages it describes are already published.
-> NOTHING here scaffolds new code.
+> Nothing here scaffolds new code.
 > The planned (NOT yet implemented) orchestration plugins live separately in [ORCHESTRATION-PLUGINS.md](ORCHESTRATION-PLUGINS.md).
 > Source of truth: the packages' own READMEs/SCHEMs/Sources under `Classic/packages/` and `EffectTS/packages/`, plus the root README.
 
@@ -134,19 +134,14 @@ Absolute-link rule for any repo target in docs/prompts/skills:
 
 ### The seven normalize flavors
 
-All flavors hook `llm/stream` (the interceptable wrapper around every streaming
-model call) and rewrite their character family live in the transcript - both the
-live UI and the durable transcript; the normalization is deliberately visible.
-Per-chunk, single-character replacement (chunk-boundary-safe by construction):
-no lookahead/lookbehind, no multi-character sequences. Two register tools:
-`raw-write` (per-call `normalize` selection, default false = verbatim) and
-`normalize-file` (the whole-file pass, write only when something changed).
+ALL flavors hook `llm/stream` (the interceptable wrapper around EVERY streaming model call).
+They rewrite their character family LIVE in the transcript - BOTH the live UI and the durable transcript.
+The normalization is deliberately visible.
+The replacement is per-chunk, single-character (chunk-boundary-safe by construction): NO lookahead/lookbehind, NO multi-character sequences.
+Two register tools: `raw-write` (per-call `normalize` selection, default false = verbatim) and `normalize-file` (the whole-file pass, write ONLY when something changed).
 
-- **`@playform/hook-dsh-normalize-dash`** - the dash flavor: em and en dashes
-  and their exotic relatives (U+058A, U+05BE, U+1400, U+1806, U+2010-2015,
-  U+2E17, U+2E1A, U+2E3A-2E3B, U+2E40, U+2E5D, U+301C, U+3030, U+30A0,
-  U+FE31-FE32, U+FE58, U+FE63, U+FF0D) to ASCII hyphen-minus via the config
-  `replacement` (default `-`).
+- **`@playform/hook-dsh-normalize-dash`** - the dash flavor.
+  It maps em and en dashes and their exotic relatives (U+058A, U+05BE, U+1400, U+1806, U+2010-2015, U+2E17, U+2E1A, U+2E3A-2E3B, U+2E40, U+2E5D, U+301C, U+3030, U+30A0, U+FE31-FE32, U+FE58, U+FE63, U+FF0D) to ASCII hyphen-minus via the config `replacement` (default `-`).
 - **`@playform/hook-dsh-normalize-quotes`** - the eight curly quote code points
   to their ASCII straight counterparts.
 - **`@playform/hook-dsh-normalize-ellipsis`** - the horizontal ellipsis
@@ -158,15 +153,16 @@ no lookahead/lookbehind, no multi-character sequences. Two register tools:
   BOM) removed.
 - **`@playform/hook-dsh-normalize-fullwidth`** - the entire FULLWIDTH FORMS
   range (U+FF01-FF5E) to its ASCII half-width counterparts.
-- **`@playform/hook-dsh-normalize-file`** - the file-content normalizer: the
-  read, count, write pipeline applying all six transforms to a file already on
-  disk - writing only when something changed (the `normalize-file` tool).
+- **`@playform/hook-dsh-normalize-file`** - the file-content normalizer.
+  It is the read, count, write pipeline applying ALL six transforms to a file already on disk.
+  It writes ONLY when something changed (the `normalize-file` tool).
 
 ## 3. The config keys (from the packages' SCHEMs/READMEs)
 
-Every plugin's config schema is built through the factory's `Schema` factory:
-one shared volatile block plus the module's own fields. Invalid configuration
-fails at load; every default is validated and filled.
+EVERY plugin's config schema is built through the factory's `Schema` factory.
+The schema is ONE shared volatile block plus the module's own fields.
+Invalid configuration fails at load.
+EVERY default is validated and filled.
 
 | Key | Owner | Effect | Default |
 |-----|-------|--------|---------|
@@ -187,41 +183,36 @@ fails at load; every default is validated and filled.
 | `normalize` (per call) | `raw-write` | absent/false = verbatim, true = all six transforms, or the flavor-name array | false |
 | `govern` (per call) | `raw-write` | the direct-govern selection: true / "all" / a step-name array / false = the escape hatch | absent |
 
-The defaults-off posture: `strict` off, `normalizeToolArguments` off,
-`raw-write` `normalize` off - the family changes nothing until it is told to.
-The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker
-(`__normalize: false`), the `govern: false` selection.
+The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off.
+The family changes nothing until it is told to.
+The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` selection.
 
 ## 4. The ledger / logFile conventions
 
-- One ledger per plugin, `~/.dsh/<identity>.log` (the plugin's Module name is
-  the logger/ledger prefix; the identity strings are byte-identical across all
-  three trees - Boilerplate, Classic, EffectTS - and asserted by the smokes).
-- The activation line at boot is the "did it activate" answer, readable from the
-  ledger alone, e.g.:
+- ONE ledger per plugin, `~/.dsh/<identity>.log`.
+  The plugin's Module name is the logger/ledger prefix.
+  The identity strings are byte-identical across ALL three trees - Boilerplate, Classic, EffectTS - and asserted by the smokes.
+- The activation line at boot is the "did it activate" answer.
+  It is readable from the ledger ALONE, e.g.:
   `hook-dsh-package-governor: activated (anywhere mode, logFile=..., updateMode=programmatic, ...)`.
-- Refusal lines, chain-pass lines and update-stage lines are also ledger
-  strings - part of the contract, must not change.
-- The journals flow to the shared `package_governance` storage domain (the P5
-  journal, pre-open queue capped 256); ISO UTC timestamps in the ledger lines,
-  epoch milliseconds in the storage records.
-- The smokes load the real built `Target/Library.js` of each bundle and assert
-  the full behavioral contract on top of the strings; 733 Classic / 746
-  EffectTS assertions are the release contract.
+- Refusal lines, chain-pass lines and update-stage lines are also ledger strings.
+  They are part of the contract and must NOT change.
+- The journals flow to the shared `package_governance` storage domain (the P5 journal, pre-open queue capped 256).
+  Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the storage records.
+- The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral contract on top of the strings.
+  733 Classic / 746 EffectTS assertions are the release contract.
 
 ## 5. The wiring (the four steps)
 
-1. Add the bundles to the profile (`~/.dsh/profiles/<name>/package.json`) as
-   `link:` dependencies and in `dsh.profile.bundles` (the list is what
-   activates them).
-2. Add the patch entries (the profile's `cordis.patch.yml`) - one insert row per
-   bundle (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`),
-   the config fields straight from the bundle's schema.
-3. Restart the host - the loader activates the entry from `Target/Library.js`
-   and inserts the patch rows at startup.
-4. Verify the ledgers - each plugin's activation line in its own
-   `~/.dsh/<identity>.log`.
+1. Add the bundles to the profile (`~/.dsh/profiles/<name>/package.json`) as `link:` dependencies and in `dsh.profile.bundles`.
+   The list is what activates them.
+2. Add the patch entries (the profile's `cordis.patch.yml`) - ONE insert row per bundle (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`).
+   The config fields come straight from the bundle's schema.
+3. Restart the host.
+   The loader activates the entry from `Target/Library.js` and inserts the patch rows at startup.
+4. Verify the ledgers.
+   Look for EACH plugin's activation line in its own `~/.dsh/<identity>.log`.
 
-Note: load order is not list order (the pinner can activate before the governor)
-- never rely on the bundle-list order for step ordering; each plugin's ledger
-  answers for its own activation.
+Note: load order is NOT list order (the pinner can activate before the governor).
+NEVER rely on the bundle-list order for step ordering.
+EACH plugin's ledger answers for its own activation.

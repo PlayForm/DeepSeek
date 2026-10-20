@@ -17,13 +17,14 @@ statuses:
 
 # The Trio — Internals & API-Surface Graph
 
-> One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
-> `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder; the handoff
+> One of the four Governor guides migrated to `Documentation/Guides/`.
+> The companion docs are `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder.
+> The handoff
 > context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
 Static analysis of all 89 Source files (2026-10-03, post-equalization pass in flight).
 
-What the code
+This document covers what the code
 CALLS (the DeepSeek Harness API) vs. what it DOESN'T (the deliberate exemptions), per plugin, plus
 the shared anatomy.
 
@@ -78,11 +79,11 @@ Legend: `⟶` = call / event flow · `✗` = deliberately absent · `EX` = exemp
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | --------------------------------------------- | --------------------------------------------------------------------------- |
 | `ctx.on("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)")`                                                                                                     | all three        | `Function/Apply`                              | the ONLY consumed event — root listener                                     |
 | `ctx.emit("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)")`                                                                                                   | all three        | `Govern`/`Rewrite`/`Refresh`/`Library`        | P₃ + U₂ refreshes — re-enters our own listener as a Stash-gated no-op       |
-| `ctx.fs.readText/stat`                                                                                                                                                                                                     | all three        | `Continue`/`Govern`/`Settle`/`Refresh`        | the service owns tokens — never parsed locally                              |
+| `ctx.fs.readText/stat`                                                                                                                                                                                                     | all three        | `Continue`/`Govern`/`Settle`/`Refresh`        | the service owns tokens — NEVER parsed locally                              |
 | `ctx.fs.writeText`                                                                                                                                                                                                         | all three        | `Govern`/`Rewrite`                            | `replaceIfVersion` + explicit `{mode:"danger-full-access"}` policy          |
 | `ctx.get("subprocess")`                                                                                                                                                                                                    | governor + cargo | `Update/Bin`·`Update/Verify`·`Update/Upgrade` | the optional-seam probe (accessor law: direct access throws without inject) |
 | `ctx.subprocess.spawn/resolveExecutable`                                                                                                                                                                                   | governor + cargo | same files                                    | cargo upgrade / ncu bin / verifyCommand — collect-mode stdio                |
-| `ctx.logger`                                                                                                                                                                                                               | all three        | `Append`·`Continue`·`Observe`                 | best-effort info/error — never rethrown                                     |
+| `ctx.logger`                                                                                                                                                                                                               | all three        | `Append`·`Continue`·`Observe`                 | best-effort info/error — NEVER rethrown                                     |
 | `inject: ["fs"]`                                                                                                                                                                                                           | all three        | `Library` (default object!)                   | loader contract — default object carries name/apply/Config/inject           |
 | Schemastery `Config`                                                                                                                                                                                                       | all three        | `Variable/Config`                             | validated at load, fail-loud, settings-ready                                |
 | cordis [`Context`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis/src/context.ts)/`Plugin` types                                                                                                | all three        | `Interface/State`·`Apply`                     | type-only (erased)                                                          |
@@ -95,7 +96,7 @@ Legend: `⟶` = call / event flow · `✗` = deliberately absent · `EX` = exemp
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **npm-check-updates library**                                                                                                                                                                                                  | governor `Update/Programmatic` (dynamic import)       | THE standing exemption — the external update engine                                                                                                                                      |
 | **cargo CLI** (`cargo upgrade`)                                                                                                                                                                                                | cargo `Update/Upgrade`                                | the Rust side doesn't co-opt into TS — CLI-only, driven through the seam                                                                                                                 |
-| **`node:fs` plain reads**                                                                                                                                                                                                      | `Discover`·`Parse`·`Resolve`·`Keep`·`Update/Policy`   | AUXILIARY discovery files only (registry.json, [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts), update-policy.json) — needed synchronously for the await-free listener; the GOVERNED manifest is never read on this path |
+| **`node:fs` plain reads**                                                                                                                                                                                                      | `Discover`·`Parse`·`Resolve`·`Keep`·`Update/Policy`   | AUXILIARY discovery files ONLY (registry.json, [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts), update-policy.json) — needed synchronously for the await-free listener; the GOVERNED manifest is never read on this path |
 | **`node:fs` ledger append**                                                                                                                                                                                                    | `Append`                                              | ctx.fs has no append; re-reading + rewriting a shared log would be racy                                                                                                                  |
 | **`node:child_process` fallback**                                                                                                                                                                                              | `Bin`·`Verify`·`Upgrade`·`Verify`                     | ONLY when [the subprocess seam][dsh-subprocess] is absent (probed) — process management is NOT exempt        |
 | **`node:path`**                                                                                                                                                                                                                | `Match`·`Observe`·`Discover`·`Resolve`·`Programmatic` | pure path math — internal calculation                                                                                                                                                    |
@@ -104,9 +105,9 @@ Legend: `⟶` = call / event flow · `✗` = deliberately absent · `EX` = exemp
 | **`ctx.jobs`**                                                                                                                                                                                                                 | ✗ never                                               | agent-scoped — a root plugin has no job controller (verified)                                                                                                                            |
 | **`tools/*` waterfalls**                                                                                                                                                                                                       | ✗ never                                               | tools/post-execute is the louder result amendment — violates the silence invariant                                                                                                       |
 | **[`fs/write-intent`][dsh-fs] / [`fs/edit-intent`][dsh-fs]** | ✗ never                                               | single-slot, owned by the observation policy — registering would veto it                                                                                                                 |
-| **session events / notifications**                                                                                                                                                                                             | ✗ never                                               | the silence invariant — the author never learns                                                                                                                                          |
+| **session events / notifications**                                                                                                                                                                                             | ✗ never                                               | the silence invariant — the author NEVER learns                                                                                                                                          |
 | **service provisioning**                                                                                                                                                                                                       | ✗ none                                                | the registers-no-service archetype (like the observation policy)                                                                                                                         |
-| **agent-scoped listeners**                                                                                                                                                                                                     | ✗ root only                                           | fs events are unscoped; root hears every dispatcher                                                                                                                                      |
+| **agent-scoped listeners**                                                                                                                                                                                                     | ✗ root only                                           | fs events are unscoped; root hears EVERY dispatcher                                                                                                                                      |
 
 ## 4. Per-plugin call structure (the intra-tree graph)
 
@@ -139,10 +140,11 @@ CARGO (Cargo.toml — chain + normalize + cargo upgrade):
   contract, the lifecycle (no apply return), the version coherence (P₃/U₂), the logger.
 - **Own versions (exempt)**: the two update ENGINES (ncu + cargo — no TS-side equivalent exists),
   auxiliary discovery reads (the sync-listener constraint), the ledger (no append in the API), the
-  parse/transform math, the child_process fallback (only when the seam is absent).
+  parse/transform math, the child_process fallback (ONLY when the seam is absent).
 
 The research agent (running) is comparing this surface against the full API to propose better
-injection points — the candidates under evaluation: settings/UI forms, a shared governance service,
+injection points.
+The candidates under evaluation: settings/UI forms, a shared governance service,
 editText for surgical rewrites, ctx.timer/schedule-based deferral, HMR effects, and the newer
 0.2.1-alpha.1 surface.
 
@@ -151,26 +153,36 @@ editText for surgical rewrites, ctx.timer/schedule-based deferral, HMR effects, 
 ## 6. Research verdict (exploration agent, 2026-10-03) — docs-anchored
 
 Sources: the local deepseek-harness docs checkout (0.2.0-rc.2), the three Source trees, the skill,
-plus byte-level type diffs of the 0.2.1-alpha.1 seam packages (byte-identical to rc.2 — nothing new
+plus byte-level type diffs of the 0.2.1-alpha.1 seam packages (byte-identical to rc.2 — NOTHING new
 to adopt).
 
 ### The headline corrections
 
 - **F1 — `ctx.jobs` is NOT off-limits at root.** `JobRegistry.attachController(name)` is callable
-  from any context; an unscoped controller "serves every owner"; `start({owner: undefined})` = an
-  UNOWNED job "open to any caller until service disposal" (jobs.md:398, 42-46, 488-493). Our live
-  probe failed on ADMISSION ("no job controller serves this agent"), not on scoping. The sanctioned
+  from any context.
+  An unscoped controller "serves every owner".
+  `start({owner: undefined})` = an
+  UNOWNED job "open to any caller until service disposal" (jobs.md:398, 42-46, 488-493).
+  Our live
+  probe failed on ADMISSION ("no job controller serves this agent"), NOT on scoping.
+  The sanctioned
   root-plugin background pattern is a jobs controller + unowned jobs (detached continuation as the
   probed fallback when the deployment has no jobs service) — proposal P1.
-- **F3 — LIVE PING-PONG BUG (governor × pinner).** Both hook package.json. Governor canonicalizes
-  chain pins to `^resolved` → re-emits; pinner strips the `^` → re-emits; each consumes the other's
-  fresh version, so `replaceIfVersion` never fails — an **infinite rewrite loop when both are active
-  in a registry-governed workspace** (earlier live tests didn't trip it only because the sandbox
-  root has no registry). Minimal fix (P3): the pinner unions its keep-list with
-  `registry.effectiveLatest` keys — chain pins are never stripped.
+- **F3 — LIVE PING-PONG BUG (governor × pinner).** Both hook package.json.
+  Governor canonicalizes
+  chain pins to `^resolved` → re-emits.
+  Pinner strips the `^` → re-emits.
+  EACH consumes the other's
+  fresh version, so `replaceIfVersion` never fails.
+  This is an **infinite rewrite loop when both are active
+  in a registry-governed workspace** (earlier live tests didn't trip it ONLY because the sandbox
+  root has no registry).
+  Minimal fix (P3): the pinner unions its keep-list with
+  `registry.effectiveLatest` keys — chain pins are NEVER stripped.
 - **F2 — no disposal of in-flight updates**: the unowned AbortControllers in Dispatch violate
-  defensive-patterns.md:19-21 ("dispose must reach quiescence"). P1 fixes it via registry disposal;
-  otherwise State must own the controllers + a `ctx.effect` disposer.
+  defensive-patterns.md:19-21 ("dispose must reach quiescence").
+  P1 fixes it via registry disposal.
+  Otherwise State must own the controllers + a `ctx.effect` disposer.
 
 ### The adopt/stay verdict
 
@@ -189,7 +201,7 @@ to adopt).
 **Stays exempt (with proof)**: the ncu library + cargo CLI (no harness update service exists
 anywhere in capability-seams), the ledger append (no append in the fs Service Definition;
 read-modify-write of a shared log would race), pure calculations (the docs' own policy plugin does
-the same), auxiliary discovery reads (N awaited ctx.fs round-trips for zero semantic gain), the
+the same), auxiliary discovery reads (N awaited ctx.fs round-trips for ZERO semantic gain), the
 child_process fallback (sanctioned optional-dep posture), session events (REJECTED — root plugin has
 no session; the model-history pipeline would see it — the silence invariant), OTel (needs explicit
 transport).
@@ -197,7 +209,7 @@ transport).
 **Misused affordances**: unowned AbortControllers; the `danger-full-access` type-cast; the dead
 accessor fallback; hand-rolled cooldown stamps; ncu/cargo stdout folded into the ledger instead of a
 JobHandle ring; `Context.__governorState` debug attachments (acceptable smoke plumbing);
-displayPath-keyed in-flight vs targetKey-keyed idempotence (key both on targetKey — targetKey is
+displayPath-keyed in-flight vs targetKey-keyed idempotence (key BOTH on targetKey — targetKey is
 opaque per backend).
 
 [dsh-subprocess]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess

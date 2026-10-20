@@ -19,9 +19,14 @@ statuses:
 ---
 
 # HARNESS-UI-OPTIONS-RESEARCH - making the family's per-plugin config options UI-accessible and UI-powered
-Author: R-UI-2 (research subagent). Date: 2026-10-20. Read-only research; this is the only file written.
+Author: R-UI-2 (research subagent). Date: 2026-10-20.
+Read-only research; this is the ONLY file written.
 
-Scope: the DeepSeek Harness Plugin Family's per-plugin config options (the governors' policy/cooldown, the pinner's sections, the normalize flavors, the ccr thresholds, the tool-coach tiers, the live-containers blocks) - are they UI-accessible today, and can they become UI-powered (editable + controllable through the harness UI, including the live volatile reloads).
+Scope: the DeepSeek Harness Plugin Family's per-plugin config options (the governors'
+policy/cooldown, the pinner's sections, the normalize flavors, the ccr thresholds, the
+tool-coach tiers, the live-containers blocks).
+Are they UI-accessible today, and can they become UI-powered (editable + controllable
+through the harness UI, including the live volatile reloads)?
 
 Sources: the running harness implementation read in place from
 /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/ (never extracted),
@@ -38,19 +43,20 @@ Legend: `<DSH>` = /Applications/DeepSeek Harness.app/Contents/Resources/app.asar
 
 ### 1.1 Backend: the full UI-power chain already exists and is live
 
-The harness ships a complete "per-plugin options" backend that needs no family change:
+The harness ships a complete "per-plugin options" backend that needs NO family change:
 
 - `<DSH>/node_modules/@deepseek-ai/dsh-settings/lib/index.js` (`SettingsForms`, the
   `settings` service; DOCS anchor: docs/subsystems/settings.md §1):
-	- `describe()` walks every ACTIVE profile entry that is uniquely addressed by
+	- `describe()` walks EVERY ACTIVE profile entry that is uniquely addressed by
 	  the root Include (via `configEditor.entries()`), takes the entry's Schemastery
 	  `Config` schema, and projects ONLY the schema-declared `.volatile()` fields
 	  into a form (`volatileForm()`), keyed by the profile patch id as the namespace
-	  (`ns`). Each descriptor carries the serialized schema (`schema.toJSON()`),
+	  (`ns`).
+	  Each descriptor carries the serialized schema (`schema.toJSON()`),
 	  resolved `value`, inherited `base`, the profile-layer `user` override, and a
 	  revision. `autoGenerate` defaults to true.
-	- `update/replace/mutate` validate against the schema and refuse any field
-	  whose path is not under a volatile node (`isVolatilePath()`), then call
+	- `update/replace/mutate` validate against the schema and refuse ANY field
+	  whose path is NOT under a volatile node (`isVolatilePath()`), then call
 	  `configEditor.edit(...)`.
 - `<DSH>/node_modules/@deepseek-ai/dsh-config-editor/lib/index.js` (`configEditor`
   service; DOCS anchor: docs/subsystems/settings.md §1,
@@ -62,11 +68,11 @@ The harness ships a complete "per-plugin options" backend that needs no family c
 - `<DSH>/node_modules/@deepseek-ai/cordis-plugin-loader/lib/index.js`
   (`Entry.update()` + `_commitVolatile()`; DOCS anchor:
   docs/cordis-tutorial/05-config.md §"Volatile fields"):
-	- On the reconciled patch change, if the only changed key is `config` and the
+	- On the reconciled patch change, if the ONLY changed key is `config` and the
 	  difference is schema-declared-volatile only (`equalExceptVvolent` semantics,
 	  `equal()` short-circuits on `schema.meta.volatile`), the Loader commits the
 	  new values into the RUNNING fiber's volatile references and emits one
-	  instance-local `loader/volatile-update` event - no remount.
+	  instance-local `loader/volatile-update` event - NO remount.
 - The wire: `<DSH>/node_modules/@deepseek-ai/dsh-api-settings-controller/`
   exposes `settings.describe/update/replace/mutate` as `@Remote` methods (its
   zod schemas literally document `autoGenerate`: "Generate a page if no custom
@@ -82,7 +88,7 @@ loader/volatile-update" is fully built, running, and remote-reachable.
 
 ### 1.2 The family's schemas are already shaped for it
 
-Every family module marks its hot knobs `.volatile()` (verified against the
+EVERY family module marks its hot knobs `.volatile()` (verified against the
 projected JSON schemas of the LIVE entries via the harness Config inspect
 provider - e.g. entry `include:ccr` shows `x-cordis: {volatile: true}` on
 log/logFile/thresholdBytes/multipliers/previewMaxChars):
@@ -100,18 +106,18 @@ The Plugins page (`<DSH>/node_modules/@deepseek-ai/dsh-client-ui-plugin-manager/
 renders configuration ONLY from slot registrations that a plugin's own browser
 half makes: `plugins.item` (official plugins), `plugins.bundle.config` (keyed by
 package name), `plugins.row.config` (keyed by `<package>#<row id>`)
-(`configLedgerSource()` at lib/client.js:40, slot rendering at :2818). There is
-NO generic fallback form: when no entry exists for a row, the row's config
-section renders empty and the row gets no Configure control. `autoGenerate`
-is plumbed through the wire but no client page currently consumes it to
+(`configLedgerSource()` at lib/client.js:40, slot rendering at :2818).
+There is NO generic fallback form: when NO entry exists for a row, the row's config
+section renders empty and the row gets NO Configure control. `autoGenerate`
+is plumbed through the wire but NO client page currently consumes it to
 auto-generate a form.
 
-The family packages are hook plugins with NO browser half (no `dsh.client`
-declaration, no `./client` export), so on the running desktop/web profile:
+The family packages are hook plugins with NO browser half (NO `dsh.client`
+declaration, NO `./client` export), so on the running desktop/web profile:
 
 - Plugins sidebar → the family bundles appear as "Installed plugins" bundles with
   enable/disable switches per row - but NO Configure control, NO options form.
-- Settings → Built-in plugins is the read-only inventory only
+- Settings → Built-in plugins is the read-only inventory ONLY
   (`<DSH>/node_modules/@deepseek-ai/dsh-client-ui-settings-plugins/README.md`).
 - Net: today the ONLY ways to change a family knob are (a) editing the profile's
   cordis.patch.yml by hand (which the loader HMRs live, including volatile-only

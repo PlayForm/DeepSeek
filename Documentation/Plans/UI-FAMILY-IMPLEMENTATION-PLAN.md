@@ -30,9 +30,10 @@ statuses:
 UI-FAMILY-IMPLEMENTATION-PLAN
 =============================
 The expanded, exact, step-by-step plan for implementing the researched DeepSeek
-Harness UI features for the @playform plugin family. Written 2026-10-20 by the
-PLAN-EXPANDER explorer agent. ASCII + tabs. This file is the handoff document
-for a NEW conversation that begins implementation.
+Harness UI features for the @playform plugin family.
+Written 2026-10-20 by the PLAN-EXPANDER explorer agent.
+ASCII + tabs.
+This file is the handoff document for a NEW conversation that begins implementation.
 
 Foundations (read these first, in this order):
 	Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md      (R-UI-1: the Plugins page slots)
@@ -50,19 +51,21 @@ What exists and is committed (git working tree clean at the time of writing;
 HEAD ef58564):
 - The four research documents above (all committed).
 - The published family: 25 @playform packages at 0.0.1 (Classic + EffectTS +
-	ets-base-dsh); the Classic sources live in Classic/packages/<name>/.
+	ets-base-dsh).
+	The Classic sources live in Classic/packages/<name>/.
 - 13 family bundles installed in the live desktop profile
 	(~/.dsh/profiles/desktop/node_modules/@playform/, wired through
 	~/.dsh/profiles/desktop/cordis.patch.yml).
 - The site: Site/ (Astro, 21 pages), build = `cd Site && pnpm prepublishOnly`
-	(outDir ./Target), verified against the BUILT output only.
+	(outDir ./Target).
+	It is verified against the BUILT output only.
 - The smokes: 207 suites across the Classic/ETS twins, run via the aggregate
-	runner (Maintain/Run-Smokes.mjs); each folder's README records its expected
-	PASS count and the runner compares printed vs expected (the vacuously-green
-	guard).
+	runner (Maintain/Run-Smokes.mjs).
+	Each folder's README records its expected PASS count.
+	The runner compares printed vs expected (the vacuously-green guard).
 - The harness docs repo: ~/Developer/Documentation/Module/deepseek-harness/
 	(NOT ~/Developer/Documentation/deepseek-harness - that path does not exist).
-- The running harness implementation, read in place, never extracted:
+- The running harness implementation, read in place, NEVER extracted:
 	/Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/.
 
 What is PENDING (nothing is implemented yet):
@@ -85,11 +88,11 @@ What is PENDING (nothing is implemented yet):
 0.3 THE ROUTING (the law, from Documentation/Skill/task-routing and
 Documentation/Skill/worker-strains)
 
-	Every subagent delegation: provider cloudflare-workers-ai, model
-	@cf/zai-org/glm-5.3-flash, reasoningEffort low. The explicit triple is
-	ALWAYS passed. Exploration = low; coding = low then high; planning =
-	DeepSeek V4 Flash max; escalate only on explicit ESCALATION markers or
-	verification failures.
+	EVERY subagent delegation: provider cloudflare-workers-ai, model
+	@cf/zai-org/glm-5.3-flash, reasoningEffort low.
+	The explicit triple is ALWAYS passed.
+	Exploration = low; coding = low then high; planning = DeepSeek V4 Flash max.
+	Escalate ONLY on explicit ESCALATION markers or verification failures.
 
 0.4 THE ARBITERS (what proves each step done)
 
@@ -98,40 +101,40 @@ Documentation/Skill/worker-strains)
 	- "All 207 smoke suites passed" + the per-folder expected-PASS-count
 		comparison (Maintain/Run-Smokes.mjs; vacuously-green guard).
 	- The site build: cd Site && pnpm prepublishOnly, then grep the BUILT
-		Target/ HTML - never a dev server, never the source alone.
+		Target/ HTML.
+		NEVER a dev server, NEVER the source alone.
 	- The Drift (the declare-then-verify discipline): the exact declared
-		acceptance lines of each phase, checked one by one.
+		acceptance lines of EACH phase, checked ONE by ONE.
 	- The live inspect: cordis_inspect_query against the CLIENT providers
-		(Slots.listSubTree, Service.listService) - these REQUIRE the Web GUI
-		page open (the GUI URL is http://127.0.0.1:52252 as of 2026-10-20; a
-		closed page makes every client query time out - see the risk register).
+		(Slots.listSubTree, Service.listService).
+		These REQUIRE the Web GUI page open (the GUI URL is http://127.0.0.1:52252 as of 2026-10-20).
+		A closed page makes EVERY client query time out (see the risk register).
 
 0.5 THE DISCIPLINES (non-negotiable)
 
-	- NEVER mutate git. Checks only (status/log/diff/show/rev-parse/ls-files/
-		fetch). Every deliverable that needs a commit is reported
-		READY-TO-COMMIT: the exact file list + the suggested message; the user
-		commits and pushes.
-	- All file writes go through the write/raw-write/edit tool API - never
-		terminal content edits. The normalize hooks are active: prefer ASCII;
-		use raw-write/edit for any real unicode glyph.
-	- No dev servers anywhere. The site verifies via its built output; the
-		harness GUI verifies via the live inspect + the open page.
-	- The harness checkout (the .asar path) is read-only ground truth - never
-		modified, never extracted. Everything the family adds lives in family
-		packages.
-	- The tool-coach is live and watching: the terminal runs COMMANDS (builds,
-		tests, git, package managers); the tools handle CONTENT (read/grep/glob
-		for file reads and searches - not head/cat/terminal grep).
+	- NEVER mutate git.
+		Checks ONLY (status/log/diff/show/rev-parse/ls-files/fetch).
+		Every deliverable that needs a commit is reported READY-TO-COMMIT: the exact file list + the suggested message.
+		The user commits and pushes.
+	- ALL file writes go through the write/raw-write/edit tool API - NEVER terminal content edits.
+		The normalize hooks are active: prefer ASCII.
+		Use raw-write/edit for ANY real unicode glyph.
+	- NO dev servers anywhere.
+		The site verifies via its built output.
+		The harness GUI verifies via the live inspect + the open page.
+	- The harness checkout (the .asar path) is read-only ground truth.
+		NEVER modified, NEVER extracted.
+		Everything the family adds lives in family packages.
+	- The tool-coach is live and watching.
+		The terminal runs COMMANDS (builds, tests, git, package managers).
+		The tools handle CONTENT (read/grep/glob for file reads and searches - not head/cat/terminal grep).
 
 0.6 THE NAMING ARBITRATION (decided here; do not re-litigate)
 
 	R-UI-1 sketched @playform/dsh-family-panel; R-UI-3 sketched
-	@playform/dsh-panel-family with the contract design. THE DECISION: the
-	central package is @playform/dsh-panel-family (the contract-first design
-	wins; R-UI-1's registration surface folds into it as phase 2's first
-	consumer). One central package, 13 per-bundle adapters, no second panel
-	package.
+	@playform/dsh-panel-family with the contract design.
+	THE DECISION: the central package is @playform/dsh-panel-family (the contract-first design wins; R-UI-1's registration surface folds into it as phase 2's first consumer).
+	ONE central package, 13 per-bundle adapters, NO second panel package.
 
 ================================================================================
 1. THE MASTER PLAN
@@ -170,25 +173,25 @@ EXACT STEPS
 	and the whileServed namespaces later), and whether tool-coach and
 	live-containers rows default (R-UI-1 residual: they carry no explicit
 	disabled flag).
-3. THE MOUNT-FAILURE INVESTIGATION. R-UI-1/R-UI-3 record that a prior client
-	install attempt produced live-containers "fiberPhase:failed". Investigate
-	the class before writing any client half:
+3. THE MOUNT-FAILURE INVESTIGATION.
+	R-UI-1/R-UI-3 record that a prior client install attempt produced live-containers "fiberPhase:failed".
+	Investigate the class before writing ANY client half:
 	a. Query the host inspect providers for the live-containers entry's
 		pluginManager/fiber status (cordis_inspect_query, host platform).
 	b. Read the live-containers bundle's current cordis.patch.yml row and its
 		Config (Classic/packages/hook-dsh-live-containers/) for a config-shape
-		mismatch (the most likely cause: a patch row whose config does not
-		validate against the schema => the fiber fails at mount).
+		mismatch.
+		The most likely cause: a patch row whose config does not validate against the schema => the fiber fails at mount.
 	c. Determine whether the failure was (i) a config validation failure,
-		(ii) a client-half load error, or (iii) an apply() throw. Record the
-		cause in this file's section 2.3 (the risk register) as RESOLVED with
-		the evidence, or as an open risk with the mitigation.
+		(ii) a client-half load error, or (iii) an apply() throw.
+		Record the cause in this file's section 2.3 (the risk register) as RESOLVED with the evidence, or as an open risk with the mitigation.
 	d. Verify the GUI's error surface: with the GUI open, find where
 		fiberPhase:failed is displayed (the Plugins page row status / the
-		shell overlay), so every later install failure is diagnosed in the GUI,
-		not just in logs. This is also the "apply simulation" surface.
-4. THE LIVE INSPECT BASELINE. With the Web GUI open (the page must stay open
-	for the duration):
+		shell overlay).
+		Then EVERY later install failure is diagnosed in the GUI, not just in logs.
+		This is also the "apply simulation" surface.
+4. THE LIVE INSPECT BASELINE.
+	With the Web GUI open (the page must stay open for the duration):
 	a. cordis_inspect_query (client) Slots.listSubTree root:"plugins.detail.section"
 		- capture the exact owner-prop bag of an existing entry (subject, t,
 		and whatever else ships) - the R-UI-1 residual.
@@ -200,12 +203,12 @@ EXACT STEPS
 		ctx.reflect "pluginNavigation" is visible from a client provider.
 	e. Save all five captures into this file as an appendix comment block
 		(edit this file) so later phases do not re-query.
-5. Confirm the plugin_manager install path end-to-end with a THROWAWAY: install
-	a minimal do-nothing client package (copy the shape from
+5. Confirm the plugin_manager install path end-to-end with a THROWAWAY.
+	Install a minimal do-nothing client package (copy the shape from
 	<DSH>/node_modules/@deepseek-ai/dsh-agent-preset/skills/cordis-plugin-
-	development/templates/decoration/package.json + client.js), verify the
-	row appears in the GUI without a restart, then remove it. This exercises
-	install_bundle + HMR + uninstall on THIS profile before real work lands.
+	development/templates/decoration/package.json + client.js).
+	Verify the row appears in the GUI WITHOUT a restart, then remove it.
+	This exercises install_bundle + HMR + uninstall on THIS profile before real work lands.
 
 ANCHORS: plugins.detail.section/badge/actions, plugins.row.config,
 plugins.bundle.config, plugins.item, plugins.bundle.activation (the nine child
@@ -224,10 +227,10 @@ A0.3 The throwaway client package installed, rendered, and uninstalled cleanly
 PHASE 1 - THE SITE COMMIT + PUSH
 --------------------------------------------------------------------------------
 
-THE GOAL: land the pending site delta (the research-era site changes, if any
-remain uncommitted; verify first) so the implementation phases start from a
-clean tree, and the site carries the family's new UI story when phases 2-5
-land. Per the git law this phase PREPARES; the user commits.
+THE GOAL: land the pending site delta (the research-era site changes, if any remain uncommitted; verify first).
+So the implementation phases start from a clean tree, and the site carries the family's new UI story when phases 2-5 land.
+Per the git law this phase PREPARES.
+The user commits.
 
 EXACT LOCATIONS
 - Site/ (the Astro tree; build outDir Site/Target)
@@ -235,18 +238,16 @@ EXACT LOCATIONS
 - Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md, Documentation/Archive/Site/SITE-UPDATE-NOTE.md
 
 EXACT STEPS
-1. git status --porcelain and git log --oneline -10 (checks only). If the tree
-	is clean and HEAD contains the site work, mark this phase SKIPPED-CLEAN
-	with the HEAD hash and move to phase 2.
-2. If deltas exist: classify each file (site content / docs / family code) and
-	group into ONE READY-TO-COMMIT package per logical unit. Suggested
-	messages follow the repo convention seen in git log
+1. git status --porcelain and git log --oneline -10 (checks ONLY).
+	If the tree is clean and HEAD contains the site work, mark this phase SKIPPED-CLEAN with the HEAD hash and move to phase 2.
+2. If deltas exist: classify EACH file (site content / docs / family code) and group into ONE READY-TO-COMMIT package per logical unit.
+	Suggested messages follow the repo convention seen in git log
 	(e.g. "docs: Add UI-FAMILY-IMPLEMENTATION-PLAN for the UI expansion").
 3. Verify the site builds BEFORE requesting the commit: cd Site &&
 	pnpm prepublishOnly, then grep the built Target/ for the changed content.
-4. Report READY-TO-COMMIT to the user: exact file list + message(s) + the
-	build evidence. The user commits and pushes. Do NOT run git add/commit/
-	push under any circumstances.
+4. Report READY-TO-COMMIT to the user: exact file list + message(s) + the build evidence.
+	The user commits and pushes.
+	Do NOT run git add/commit/push under ANY circumstances.
 
 ANCHORS: Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md (the site's page
 inventory and lane laws); session-orientation section 6 (the lane laws).
@@ -260,8 +261,8 @@ A1.2 Site/Target contains the built verification for any changed content.
 PHASE 2 - THE PANEL CONTRACT: @playform/dsh-panel-family
 --------------------------------------------------------------------------------
 
-THE GOAL: create the central package that owns the PANEL CONTRACT (the types,
-the registry service, the mount points) and nothing else. No adapter logic.
+THE GOAL: create the central package that owns the PANEL CONTRACT (the types, the registry service, the mount points) and nothing else.
+NO adapter logic.
 This is R-UI-3 section 2.2 verbatim, made concrete.
 
 EXACT LOCATIONS
@@ -303,27 +304,26 @@ EXACT STEPS
 1. Scaffold the package following the family conventions (copy the structure
 	of Classic/packages/hook-dsh-tool-coach: Configuration/, cordis.patch.yml,
 	package.json, Source/{Function,Interface,Variable,Test}, tsconfig.json).
-2. Write the contract types first (Source/Interface/Panel.ts) - they are the
-	only shared artifact in the whole design.
+2. Write the contract types first (Source/Interface/Panel.ts).
+	They are the ONLY shared artifact in the whole design.
 3. Implement the client half: the registry service + the two mount-point
-	slot registrations. Hand-write the lazy-CJS client file (small); if the
-	volume grows, add a clientBundle build step to Source/prepublishOnly.sh
+	slot registrations.
+	Hand-write the lazy-CJS client file (small).
+	If the volume grows, add a clientBundle build step to Source/prepublishOnly.sh
 	(modeled on <DSH>/packages/client/tsdown.client.ts - the R-UI-2 build gap).
-4. The locale: Source/Variable/locale strings via ./locale/*.json; every
-	visible string routes through the client locale service (A6 of R-UI-1).
-5. Write the smoke suite (fake-ctx + real-factory pattern per the
-	smoke-writing skill); add the folder to the runner's expected counts.
+4. The locale: Source/Variable/locale strings via ./locale/*.json.
+	EVERY visible string routes through the client locale service (A6 of R-UI-1).
+5. Write the smoke suite (fake-ctx + real-factory pattern per the smoke-writing skill).
+	Add the folder to the runner's expected counts.
 6. Build (Source/prepublishOnly.sh) and run the smokes.
-7. Install into the desktop profile via plugin_manager install_bundle with
-	the absolute package directory. Verify no restart is needed (pure client
-	package - R-UI-1 finding) and that the mount-failure class from phase 0
-	does NOT reproduce (if it does: STOP, diagnose against the phase 0
-	findings, record in section 2.3 before continuing).
+7. Install into the desktop profile via plugin_manager install_bundle with the absolute package directory.
+	Verify NO restart is needed (pure client package - R-UI-1 finding).
+	Verify the mount-failure class from phase 0 does NOT reproduce (if it does: STOP, diagnose against the phase 0 findings, record in section 2.3 before continuing).
 8. Live-verify with the GUI open: Slots.listSubTree root:"conversation.view"
-	shows id=playform-family next to id=chat and id=trajectory; the empty
-	family tab renders (no sections yet).
-9. Publish decision: keep at 0.0.1 in-tree until phase 3 proves the contract;
-	then bump and note in Documentation/Plugins/PLUGIN-FAMILY.md.
+	shows id=playform-family next to id=chat and id=trajectory.
+	The empty family tab renders (no sections yet).
+9. Publish decision: keep at 0.0.1 in-tree until phase 3 proves the contract.
+	Then bump and note in Documentation/Plugins/PLUGIN-FAMILY.md.
 
 ANCHORS: R-UI-3 sections 2.1-2.2 and 3; <DOCS>/docs/subsystems/slots.md
 ("Declaration and lifecycle", "Component inputs", the extension rules incl.
@@ -347,11 +347,8 @@ A2.4 No runtime import exists between the central package and any adapter
 PHASE 3 - THE FIRST ADAPTER: hook-dsh-tool-coach
 --------------------------------------------------------------------------------
 
-THE GOAL: prove the entire chain with ONE bundle - the coach gets (a) a
-client half registering its ladder section into the central registry, (b) the
-first plugins.row.config form (its schema is 100% volatile - the easiest
-whileServed proof), and (c) the marker-usage teaching rule (R5/R6 from
-R-INTERACT, do them here while the bundle is open).
+THE GOAL: prove the entire chain with ONE bundle.
+The coach gets (a) a client half registering its ladder section into the central registry, (b) the first plugins.row.config form (its schema is 100% volatile - the easiest whileServed proof), and (c) the marker-usage teaching rule (R5/R6 from R-INTERACT, do them here while the bundle is open).
 
 EXACT LOCATIONS
 - Classic/packages/hook-dsh-tool-coach/
@@ -371,16 +368,11 @@ EXACT LOCATIONS
 	(the row id captured in phase 0 step 2).
 
 EXACT STEPS
-1. Add the panel Config block and the client-half scaffold; keep
-	inject = [] toward the central package (contract via import type only;
-	the adapter no-ops when ctx.reflect.get("playformFamilyPanel") is absent).
-2. Implement the ladder section (mount "family-tab", order 30): the coach's
-	strike/escalation state rendered from the section's own read of the
-	coach's ledger tail via the phase 5 endpoint OR, for this phase, from the
-	coach's runtime state exposed through the section props - pick the
-	simplest data path that does not require the Typert endpoint yet (the
-	ladder can be static-structure + counts in phase 3; live tails arrive in
-	phase 5).
+1. Add the panel Config block and the client-half scaffold.
+	Keep inject = [] toward the central package (contract via import type only; the adapter no-ops when ctx.reflect.get("playformFamilyPanel") is absent).
+2. Implement the ladder section (mount "family-tab", order 30).
+	The coach's strike/escalation state is rendered from the section's own read of the coach's ledger tail via the phase 5 endpoint OR, for this phase, from the coach's runtime state exposed through the section props.
+	Pick the simplest data path that does not require the Typert endpoint yet (the ladder can be static-structure + counts in phase 3; live tails arrive in phase 5).
 3. The form POC (this is the R-UI-2 POC verbatim):
 	a. Register the plugins.row.config slot via whileServed.
 	b. Render the form from ctx.configForms.describe() for the namespace:
@@ -388,16 +380,14 @@ EXACT STEPS
 		current value + base + user provenance + revision.
 	c. Save via form.mutate(operations, expectedRevision) (revision-fenced).
 4. THE MARKER RULE (R5+R6, host-side, while the bundle is open):
-	a. Add a detection row: any tool result containing "<<<CCR:" teaches
+	a. Add a detection row: ANY tool result containing "<<<CCR:" teaches
 		"extract the 24-hex hash and call ccr_retrieve {hash, range?}".
-	b. Re-scope the "grep ccr.db / sqlite3 ledger" teaching text: point to
-		the harness grep tool on the plain-text ~/.dsh/*.log ledgers for
-		search intent; ccr_retrieve ONLY when a marker/hash is in hand.
-	c. Additive smoke coverage: byte-identical existing ledger strings
-		untouched; new rule gets its own assertions.
-5. Build; smokes green; install the bundle via install_bundle; restart the
-	harness ONCE (the R-UI-2 finding: the client half is discovered on
-	composition - one restart, then HMR keeps it live).
+	b. Re-scope the "grep ccr.db / sqlite3 ledger" teaching text: point to the harness grep tool on the plain-text ~/.dsh/*.log ledgers for search intent.
+		ccr_retrieve ONLY when a marker/hash is in hand.
+	c. Additive smoke coverage: byte-identical existing ledger strings untouched.
+		The new rule gets its own assertions.
+5. Build; smokes green; install the bundle via install_bundle; restart the harness ONCE.
+	The R-UI-2 finding: the client half is discovered on composition - ONE restart, then HMR keeps it live.
 6. VERIFY (the R-UI-2 POC verification, all four):
 	a. Plugins -> the coach bundle -> row shows Configure; the form renders.
 	b. Edit a volatile knob (threshold); save; the profile patch

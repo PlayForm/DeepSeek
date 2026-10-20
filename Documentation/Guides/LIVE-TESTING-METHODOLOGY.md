@@ -25,7 +25,8 @@ statuses:
 
 > A framework for LIVE-TESTING the DSH plugin family from a NEW conversation
 > (e.g. after restarting the app and opening a conversation in the DeepSeek
-> folder), WITHOUT restarting the app between tests. The loop: toggle a
+> folder), WITHOUT restarting the app between tests.
+> The loop: toggle a
 > setting -> launch a quick low-effort subagent with a mock execution task ->
 > observe the feedback (ledgers + transcript) -> tune the knobs -> verify.
 
@@ -61,14 +62,17 @@ For EACH plugin under test, run this loop:
 2. **Toggle/knob**: change a volatile knob via the in-app settings/config
    editor (the live `ctx.configEditor` path - writes the patch under lock) OR
    directly in `~/.dsh/profiles/desktop/cordis.patch.yml` (the control-panel
-   rows own the whole config). Volatile = next use picks it up.
+   rows own the whole config).
+   Volatile = next use picks it up.
 3. **Probe**: launch a QUICK LOW-EFFORT SUBAGENT (`glm-5.3-flash` low) with
-   a plugin-specific MOCK EXECUTION TASK (the library below). The subagent
+   a plugin-specific MOCK EXECUTION TASK (the library below).
+   The subagent
    performs the task exactly (the mock task must trigger the plugin's
    behavior deterministically) and reports what it did + what it observed.
 4. **Observe**: check the plugin's ledger (new lines), the transcript (the
    subagent's turn), and `plugin_manager` state where relevant.
-5. **Tune**: adjust the knob per the feedback; repeat 2-4 until the behavior
+5. **Tune**: adjust the knob per the feedback.
+   Repeat 2-4 until the behavior
    matches the smoke-proven semantics.
 6. **Verify**: re-run the plugin's smoke suite (`node <tree>/smokes/
    <plugin>-smoke.mjs`) to confirm the live behavior matches the arbiter.
@@ -93,18 +97,22 @@ For EACH plugin under test, run this loop:
   (quick + cheap; correctness is verified by the deterministic observations).
 - The prompt: SELF-CONTAINED (the subagent sees no session context): the
   exact mock task, the exact commands/files, and a report format ("what I
-  did; what I observed; the exact outputs"). Instruct it to use the harness
-  TOOLS (never bash content edits) so the governed chain fires.
-- One subagent per probe; the parent (the testing LLM) reads the ledgers
-  afterwards - never trust the subagent's prose over the ledgers.
+  did; what I observed; the exact outputs").
+  Instruct it to use the harness
+  TOOLS (NEVER bash content edits) so the governed chain fires.
+- One subagent per probe.
+  The parent (the testing LLM) reads the ledgers
+  afterwards - NEVER trust the subagent's prose over the ledgers.
 
 ## 5. THE OBSERVATION SURFACES
 
 - `~/.dsh/<plugin>.log` - the per-module ledgers (activation + behavior lines).
   **LIVE-BATTERY FINDING (2026-10-19)**: the ledger writer does NOT resolve `~`
   in `logFile` config values - a `logFile: ~/.dsh/x.log` silently fails to
-  write (no file, no error). ALWAYS use absolute paths
-  (`/Users/nikola/.dsh/x.log`) in the profile config rows. (The Classic bundle
+  write (no file, no error).
+  ALWAYS use absolute paths
+  (`/Users/nikola/.dsh/x.log`) in the profile config rows.
+  (The Classic bundle
   patches' own `~/.dsh/...` logFile defaults carry the same latent issue when
   running live - a future family fix.)
 - `~/.dsh/governor.log`, `pinner.log`, `cargo-governor.log` - the governance

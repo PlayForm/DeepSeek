@@ -74,51 +74,55 @@ READ-STATUS: unread / read-at <session>   <- the recipient's choice, recorded
 
 ### 2.2 The transfer service (the mechanical chain)
 
-- `feedback/push(block, path)` - the block's transfer through the parentage: the
-  child's block pushed to its parent's session log; the parent appends its deltas
-  + pushes onward - the mechanical FIFO through the lineage (the parentage is the
-  queue: the feedback flows the tree upward, one hop per session boundary).
+- `feedback/push(block, path)` - the block's transfer through the parentage.
+  The child's block is pushed to its parent's session log.
+  The parent appends its deltas + pushes onward.
+  The transfer is a mechanical FIFO through the lineage (the parentage is the
+  queue: the feedback flows the tree upward, ONE hop per session boundary).
 - `feedback/read(agentId, session)` - the recipient's OPTIONAL read (the
-  know/disknow choice): the block is never force-read; the read-status recorded
-  when the recipient opens it.
+  know/disknow choice).
+  The block is NEVER force-read.
+  The read-status is recorded when the recipient opens it.
 - `feedback/summary(session)` - the council view: the session's aggregate signals
-  (the liked/disliked clusters) - for the recipient's deliberate review.
+  (the liked/disliked clusters).
+  It exists for the recipient's deliberate review.
 
 ### 2.3 The integration with the orchestration layer
 
 - The batch-state plugin: the feedback journal's state (the blocks' count, the
-  unread signals, the latest deltas) in the compiled context - the council hub's
-  visibility per session.
-- The subagent-queue plugin: the task completions emit the feedback blocks (the
-  queue's dispatcher attaches the block to the completion report).
+  unread signals, the latest deltas) in the compiled context.
+  That is the council hub's visibility per session.
+- The subagent-queue plugin: the task completions emit the feedback blocks.
+  The queue's dispatcher attaches the block to the completion report.
 - The routing-enforcer: the DISLIKED signals about the routing feed the ledger
   (the "the routing felt wrong" observations - the config's review material).
 
 ## 3. The council hub (the eventual system)
 
 - When a conversation runs, the orchestration members activate INVISIBLY (the
-  user + the orchestrator do not see them - the plugins work in the background):
-  the batch-state compiles the context, the queue dispatches, the routing
-  resolves, the feedback accumulates - the COUNCIL HUB holds the per-session
-  knowledge (the state + the signals + the routes).
-- The TRIBE system (the future - recorded, not implemented now): the conversation
-  is (conversation + n members of it) - the members are the sessions' councils;
-  the tribe needs a LEADER (the designated conversation that adjudicates) - the
-  cross-conversation knowledge (the tribe's shared feedback + the state) - the
-  user's "we can then later figure out the tribe system".
+  user + the orchestrator do NOT see them - the plugins work in the background).
+  The batch-state compiles the context, the queue dispatches, the routing
+  resolves, the feedback accumulates.
+  The COUNCIL HUB holds the per-session knowledge (the state + the signals + the routes).
+- The TRIBE system (the future - recorded, NOT implemented now): the conversation
+  is (conversation + n members of it).
+  The members are the sessions' councils.
+  The tribe needs a LEADER (the designated conversation that adjudicates).
+  It carries the cross-conversation knowledge (the tribe's shared feedback + the state) -
+  the user's "we can then later figure out the tribe system".
 - For now: the council hub = the per-session knowledge store (the batch-state +
-  the feedback journal + the queue + the routes) - the four members combined in
-  effectuallity, separate in functionality.
+  the feedback journal + the queue + the routes).
+  It is the four members combined in effectuallity, separate in functionality.
 
 ## 4. The exploration items
 
-1. The transfer mechanics: the parentage's session boundaries (how a child's
-  block reaches the parent's session log mechanically - the same inbox/session
-  machinery the batch-state probe investigates).
+1. The transfer mechanics: the parentage's session boundaries.
+  The question is how a child's block reaches the parent's session log mechanically.
+  It uses the same inbox/session machinery the batch-state probe investigates.
 2. The know/disknow UX: the read-status + the optional surfaces (the council
   view - the user's deliberate access).
 3. The honesty guarantee: the block survives the chain un-sanitized (the
-  parents append, never edit - the policy).
+  parents append, NEVER edit - the policy).
 4. The aggregation: the liked/disliked clusters (the session's signal summary).
 
 ## 5. The implementation phases
@@ -133,7 +137,7 @@ READ-STATUS: unread / read-at <session>   <- the recipient's choice, recorded
 ## 6. The safety + the compatibility
 
 - The honest content is NEVER sanitized or filtered (the policy: the parents
-  append deltas, never rewrite the agents' signals).
-- The read is always the recipient's choice (the know/disknow - never force-read).
+  append deltas, NEVER rewrite the agents' signals).
+- The read is ALWAYS the recipient's choice (the know/disknow - NEVER force-read).
 - The family's plugin discipline (the smokes, the loader contract, the no-commit).
 - The user's override wins (the honest signals are his knowledge).

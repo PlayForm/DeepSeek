@@ -110,20 +110,20 @@ Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 ## 4. The exploration items
 
 1. The launch-path interception: where exactly the harness decides the route for a
-   subagent launch (the agent-loop's role mapping vs the parent-inheritance - the
-   probe: the same probe as the batch-state plan's inbox mechanics - the two
-   plugins share the investigation).
-2. The task-type inference's accuracy: the keyword table's precision (the false
-   positives - a "fix the docs" task is coding, not exploration - the table +
-   the user's policy overrides).
+   subagent launch.
+   The open question: the agent-loop's role mapping vs the parent-inheritance.
+   The probe: the same probe as the batch-state plan's inbox mechanics.
+   The TWO plugins share the investigation.
+2. The task-type inference's accuracy: the keyword table's precision.
+   The false positives are the risk - a "fix the docs" task is coding, NOT exploration.
+   The table + the user's policy override.
 3. The explicit-launch correction: the silent override vs the user's "his
-   responsibility" - if the orchestrator explicitly passes a WRONG route, the
-   plugin corrects it (the policy is the law) + the ledger notes it.
-4. The escalation automation: the attempts ladder's automatic triggering (the
-   ESCALATION: marker detection in the agent reports + the automatic DeepSeek
-   re-dispatch with the artifacts).
-5. The user's review surface: the ledger's format (the audit log the user reads
-   when he reviews his configuration).
+   responsibility".
+   If the orchestrator explicitly passes a WRONG route, the plugin corrects it (the policy is the law).
+   The ledger notes it.
+4. The escalation automation: the attempts ladder's automatic triggering.
+   It covers the ESCALATION: marker detection in the agent reports + the automatic DeepSeek re-dispatch with the artifacts.
+5. The user's review surface: the ledger's format (the audit log the user reads when he reviews his configuration).
 
 ## 5. The implementation phases
 
@@ -137,15 +137,16 @@ Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 
 ## 6. The safety + the compatibility
 
-- The user's configuration is the law - the plugin enforces, never decides the
-  policy itself.
-- The silent-by-design: the orchestrator's workflow unchanged (the launches succeed
-  the same); the corrections logged, never surfaced.
+- The user's configuration is the law.
+  The plugin enforces it.
+  It NEVER decides the policy itself.
+- The silent-by-design: the orchestrator's workflow unchanged (the launches succeed the same).
+  The corrections are logged, NEVER surfaced.
 - The family's plugin discipline (the smokes, the loader contract, the no-commit).
-- The fallbacks: if the launch-path hook is not exposed, the plugin sits as a
-  pre-launch validation service the orchestrator's tooling consults (the
-  subagent-model-selection-settings the profile patch already defines - the plugin
-  ensures the catalog + the policy agree).
+- The fallbacks: if the launch-path hook is NOT exposed, the plugin sits as a
+  pre-launch validation service the orchestrator's tooling consults.
+  It covers the subagent-model-selection-settings the profile patch already defines.
+  The plugin ensures the catalog + the policy agree.
 
 ## 7. The deliverables
 

@@ -20,39 +20,34 @@ statuses:
 
 # DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
 
-> The listing the family publishes under once the npm lane arms the publish
-> (`.github/workflows/NPM.yml` is PUBLISH-PENDING behind the `if: false` guard;
-> everything sits at version `0.0.1`, never published). This file is the filled
-> template: the registry identity, the package roster with the exact install
-> commands, and the byte-exact rule the listing text must obey. Prepared by the
-> PLUGIN-REG lane. DOCUMENTATION ONLY - nothing is committed (the user commits).
+> The listing the family publishes under once the npm lane arms the publish.
+> `.github/workflows/NPM.yml` is PUBLISH-PENDING behind the `if: false` guard.
+> Everything sits at version `0.0.1`, never published.
+> This file is the filled template: the registry identity, the package roster with the exact install commands, and the byte-exact rule the listing text must obey.
+> Prepared by the PLUGIN-REG lane.
+> DOCUMENTATION ONLY - nothing is committed (the user commits).
 
 ---
 
 ## 1. THE REGISTRY IDENTITY
 
-- **The scope:** `@playform` - the only available scope, shared by the whole
-  family (SPLICE-ETS §1.2).
-- **The topic:** the family lists under the **`dsh-plugin`** topic - the DeepSeek
-  Harness plugin topic that the registry surfaces (npm keywords + the GitHub
-  repo topics) carry. Every package's `keywords` include `dsh-plugin` alongside
-  `deepseek`, `harness`, and `plugin`.
-- **The version:** `0.0.1` across the family - the sibling entries in every
-  manifest pin the EXACT `0.0.1`, so the first publish must land the layers in
-  the dependency order (SPLICE-ETS §5.1) or the dependent tarballs resolve
-  against nothing.
-- **The source of the install form:** the site already ships the final command
-  shape on every plugin page and in the hero: `pnpm add @playform/<pkg>`
-  (`Site/Source/Component/Terminal.astro` defaults to
-  `pnpm add @playform/hook-dsh-core`; `Site/Source/pages/plugins.astro` carries
-  one install row per package). The listing below repeats that form BYTE-EXACT.
+- **The scope:** `@playform` - the ONLY available scope, shared by the whole family (SPLICE-ETS §1.2).
+- **The topic:** the family lists under the **`dsh-plugin`** topic - the DeepSeek Harness plugin topic that the registry surfaces (npm keywords + the GitHub repo topics) carry.
+  EVERY package's `keywords` include `dsh-plugin` alongside `deepseek`, `harness`, and `plugin`.
+- **The version:** `0.0.1` across the family.
+  The sibling entries in EVERY manifest pin the EXACT `0.0.1`.
+  So the FIRST publish must land the layers in the dependency order (SPLICE-ETS §5.1), or the dependent tarballs resolve against nothing.
+- **The source of the install form:** the site already ships the final command shape on EVERY plugin page and in the hero: `pnpm add @playform/<pkg>`.
+  `Site/Source/Component/Terminal.astro` defaults to `pnpm add @playform/hook-dsh-core`.
+  `Site/Source/pages/plugins.astro` carries ONE install row per package.
+  The listing below repeats that form BYTE-EXACT.
 
 ## 2. THE ROSTER - the OPERATING NAMES (the two groups + the base)
 
-The splice has executed (SPLICE-ETS §8 S2/S4): the trees carry UNIQUE names - the Classic
-tree the plain `@playform/dsh-*` names, the EffectTS tree the `@playform/ets-hook-dsh-*` /
-`@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-base-dsh` (verified in the
-manifests). The registry listing uses exactly these.
+The splice has executed (SPLICE-ETS §8 S2/S4): the trees carry UNIQUE names.
+The Classic tree carries the plain `@playform/dsh-*` names.
+The EffectTS tree carries the `@playform/ets-hook-dsh-*` / `@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-base-dsh` (verified in the manifests).
+The registry listing uses exactly these.
 
 **The classical group (12, `Classic/packages/*`):**
 
@@ -89,24 +84,22 @@ manifests). The registry listing uses exactly these.
 | 12 | `@playform/ets-hook-dsh-normalize-fullwidth` | `pnpm add @playform/ets-hook-dsh-normalize-fullwidth` | fullwidth → halfwidth |
 | 13 | `@playform/ets-hook-dsh-normalize-file` | `pnpm add @playform/ets-hook-dsh-normalize-file` | the file normalize composition |
 
-The duplicate-name collision (#15) is resolved: every `@playform/*` dependency resolves to
-exactly one workspace package, so the publish order is the layer order (§5).
+The duplicate-name collision (#15) is resolved.
+Every `@playform/*` dependency resolves to exactly ONE workspace package.
+So the publish order is the layer order (§5).
 
 ## 4. THE BYTE-EXACT RULE
 
 The install command strings in this listing, on the site, and in the READMEs are
 the byte-identical contract:
 
-- Every install row is exactly `pnpm add @playform/<pkg>` - no `--save`, no
-  `-D`, no registry URL, no version suffix in the display form.
-- The package tokens must match the manifest `name` byte-for-byte - a renamed
-  package (the splice) rewrites the command AND the listing row in the same
-  change set.
-- The smoke suite reference strings and the ledger totals (733 Classic / 746
-  EffectTS) are untouched by any listing edit - the suites are the arbiter
-  (SPLICE-ETS §6.1, §10).
-- `Site/Target/**` is build output - the site's install rows are edited in
-  `Site/Source/**` only, never hand-edited in Target.
+- Every install row is exactly `pnpm add @playform/<pkg>` - NO `--save`, NO `-D`, NO registry URL, NO version suffix in the display form.
+- The package tokens must match the manifest `name` byte-for-byte.
+  A renamed package (the splice) rewrites the command AND the listing row in the same change set.
+- The smoke suite reference strings and the ledger totals (733 Classic / 746 EffectTS) are untouched by ANY listing edit.
+  The suites are the arbiter (SPLICE-ETS §6.1, §10).
+- `Site/Target/**` is build output.
+  The site's install rows are edited in `Site/Source/**` ONLY, NEVER hand-edited in Target.
 
 ## 5. THE PUBLISH GATES (the residual checklist)
 
@@ -121,11 +114,11 @@ the byte-identical contract:
 
 ## 6. THE RESIDUALS
 
-- ~~The listing's Section 2 names are PRE-SPLICE~~ Resolved: the splice landed (SPLICE-ETS §8
-  S2/S4) and Section 2 now carries both groups' operating names; the PENDING_NAMESPACES section is
-  collapsed into the roster.
-- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the manifests - adding
-  them is part of the npm lane's manifest pass, not this lane.
+- ~~The listing's Section 2 names are PRE-SPLICE~~ Resolved: the splice landed (SPLICE-ETS §8 S2/S4).
+  Section 2 now carries BOTH groups' operating names.
+  The PENDING_NAMESPACES section is collapsed into the roster.
+- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the manifests.
+  Adding them is part of the npm lane's manifest pass, NOT this lane.
 - The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action - the user's call,
   outside the tree.
 - The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm lane arms it after

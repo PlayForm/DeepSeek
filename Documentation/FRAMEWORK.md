@@ -78,60 +78,47 @@ statuses:
 
 ### 1.5 The design + the content
 
-- **Blue + white only** (primary #003ec7 / primary-container #0052ff /
-  the white surfaces / Inter + IBM Plex Mono), clean headers, no
-  gradients.
-- **Truthful + direct**: the real mechanics, never an invented UI or
-  fabricated metrics; the ledger strings verbatim.
-- **The product's own voice**: NEVER the literal instruction/requirement
-  phrasing - the requirements translate into the designed showcase.
-- **Showcase the usage + the integration**, not the file-facing
-  structure: the before/after examples (the internals before + after),
-  the truthful injection points (where the family enters the DeepSeek
-  internals), the integration with the other dsh packages.
-- **The UI adapted to the functionality**: the real benchmarks (the
-  integration surface, the smoke coverage - Classic 733 / EffectTS 746,
-  the exposed failure cases + the solutions), the configure-ability +
-  the optionality (the multi-step ~/.dsh profile setup, the knobs, the
-  defaults-off posture, the escape hatches).
-- **The case study emphasizes the WHY** (the structural rationale -
-  why the architecture is shaped this way), NOT the HOW (the process of
-  writing it).
+- **Blue + white only** (primary #003ec7 / primary-container #0052ff / the white surfaces / Inter + IBM Plex Mono).
+  Clean headers, NO gradients.
+- **Truthful + direct**: the real mechanics, NEVER an invented UI or fabricated metrics.
+  The ledger strings verbatim.
+- **The product's own voice**: NEVER the literal instruction/requirement phrasing.
+  The requirements translate into the designed showcase.
+- **Showcase the usage + the integration**, NOT the file-facing structure.
+  The before/after examples (the internals before + after).
+  The truthful injection points (where the family enters the DeepSeek internals).
+  The integration with the other dsh packages.
+- **The UI adapted to the functionality**: the real benchmarks (the integration surface, the smoke coverage - Classic 733 / EffectTS 746, the exposed failure cases + the solutions).
+  The configure-ability + the optionality (the multi-step ~/.dsh profile setup, the knobs, the defaults-off posture, the escape hatches).
+- **The case study emphasizes the WHY** (the structural rationale - why the architecture is shaped this way).
+  NOT the HOW (the process of writing it).
 
 ### 1.6 The skills
 
-- The skills live at `Documentation/Skill/<name>/SKILL.md` (the
-  loadable bundles; the filesystem provider discovers the project
-  roots).
-- The skills are operating manuals - DIRECT, no deliberation (the
-  "we might not want to express deliberation" instruction).
-- The skill tree branches: `instructional-writing` (the raw-write-only
-  discipline for the literal-typography files), `plugin-system` (the
-  family's plugin development manual), `smoke-writing` (the smoke
-  suite discipline) - more branches as the functionality grows.
+- The skills live at `Documentation/Skill/<name>/SKILL.md` (the loadable bundles).
+  The filesystem provider discovers the project roots.
+- The skills are operating manuals - DIRECT, NO deliberation (the "we might not want to express deliberation" instruction).
+- The skill tree branches: `instructional-writing` (the raw-write-only discipline for the literal-typography files), `plugin-system` (the family's plugin development manual), `smoke-writing` (the smoke suite discipline).
+  More branches as the functionality grows.
 
 ### 1.7 The test archive
 
-- `Test/` is the curated family-only archive: `fixtures/manifest/` +
-  `fixtures/markdown/` + `probes/` + the README index - ONLY the
-  family's fixtures; the unrelated experiments removed.
-- The instructional fixtures keep their LITERAL typography (the "this
-  file has an em dash" notes are truthful) - written via the raw-write
-  tool.
+- `Test/` is the curated family-only archive: `fixtures/manifest/` + `fixtures/markdown/` + `probes/` + the README index - ONLY the family's fixtures.
+  The unrelated experiments removed.
+- The instructional fixtures keep their LITERAL typography (the "this file has an em dash" notes are truthful).
+  The instructional fixtures are written via the raw-write tool.
 
 ## 2. THE SKILL FRAMEWORK (the meta-structure for Documentation/Skill)
 
-The skills are the project's operating manuals. The framework:
+The skills are the project's operating manuals.
+The framework:
 
 ### 2.1 The format
 
-- Each skill = a `<name>/SKILL.md` directory bundle (the loadable
-  form), with the YAML frontmatter: `name`, `description` (what it
-  covers + when), `whenToUse` (the trigger + the stop-condition).
-- The body: the operating manual - numbered sections, direct
-  statements, no deliberation (the decisions are stated, not argued).
-- The name: a single lowercase word or compound (instructional-writing,
-  plugin-system, smoke-writing).
+- EACH skill = a `<name>/SKILL.md` directory bundle (the loadable form), with the YAML frontmatter: `name`, `description` (what it covers + when), `whenToUse` (the trigger + the stop-condition).
+- The body: the operating manual - numbered sections, direct statements, NO deliberation.
+  The decisions are stated, NOT argued.
+- The name: a single lowercase word or compound (instructional-writing, plugin-system, smoke-writing).
 
 ### 2.2 The taxonomy (the branches)
 
@@ -144,35 +131,26 @@ The skills are the project's operating manuals. The framework:
 
 ### 2.3 The hierarchy
 
-- The skills implement the framework (this document): each skill's
-  statements are the framework's requirements operationalized.
-- The skills are loadable from the project; the framework is the
-  reference the skills point to.
+- The skills implement the framework (this document).
+  EACH skill's statements are the framework's requirements operationalized.
+- The skills are loadable from the project.
+  The framework is the reference the skills point to.
 
 ## 3. THE TODOS (the referential documents for tomorrow)
 
-1. **The review** (per `Documentation/Plans/TOMORROW-REVIEW.md`): the
-   user reviews the preserved state; the corrections land as new
-   packages.
-2. **The case-review agent** (the WHY mandate): the case study's spine
-   = the structural rationale, not the writing process.
-3. **THE SITE FIXES**: the `/workbench/` page does not work (reproduce
-   + repair or rebuild); the site's remaining feedback per the
-   directions.
-4. **The submodule structure (#16)**: the per-package repositories as
-   submodules + the per-repo gitignores; the Boilerplate's gitignore
-   decision.
-5. **The release polish**: the naming refinements (lib-/manifest - decide), the
-   per-package publish configs + CHANGELOGs, the EffectTS core README's
-   "zero runtime dependencies" line (the effect-backed rewrite, landed).
-6. **The live battery**: the whole family re-verified live after any
-   source change (the ledgers, the interlock, the escape hatch, the
-   direct-govern, the [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).
-7. **The loadability check**: the Documentation/Skill bundles verified
-   discovered by the filesystem provider.
-8. **The docs restructure verification**: the Documentation/ tree's
-   integrity (the facts preserved, the cross-references updated) after
-   the restructure agent lands.
+1. **The review** (per `Documentation/Plans/TOMORROW-REVIEW.md`): the user reviews the preserved state.
+   The corrections land as new packages.
+2. **The case-review agent** (the WHY mandate): the case study's spine = the structural rationale, NOT the writing process.
+3. **THE SITE FIXES**: the `/workbench/` page does NOT work (reproduce + repair or rebuild).
+   The site's remaining feedback per the directions.
+4. **The submodule structure (#16)**: the per-package repositories as submodules + the per-repo gitignores.
+   The Boilerplate's gitignore decision.
+5. **The release polish**: the naming refinements (lib-/manifest - decide).
+   The release polish: the per-package publish configs + CHANGELOGs.
+   The release polish: the EffectTS core README's "zero runtime dependencies" line (the effect-backed rewrite, landed).
+6. **The live battery**: the whole family re-verified LIVE after ANY source change (the ledgers, the interlock, the escape hatch, the direct-govern, the [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).
+7. **The loadability check**: the Documentation/Skill bundles verified discovered by the filesystem provider.
+8. **The docs restructure verification**: the Documentation/ tree's integrity (the facts preserved, the cross-references updated) after the restructure agent lands.
 
 ---
 

@@ -42,43 +42,47 @@ statuses:
 
 ## 2. The message bus (the combined effectuallity)
 
-- The four members share the primitives: the BLOCKS (the context blocks - the
-  batch-state compiles them, the queue dispatches them, the routing resolves
-  them, the feedback appends them), the QUEUES (FIFO/LIFO + the parentage - the
-  tasks' dispatch order, the feedback's lineage flow), the EVENTS (the cordis
-  events - the state changes, the completions, the signals).
-- The members LOOP the paradigms in different ways: the state is a shared block;
-  the tasks are a FIFO queue with the priority; the feedback is a LIFO-ish
-  lineage chain (the newest delta first); the routing is a pure function - the
-  same primitives, different combinations = the dynamic workflows (a
-  conversation is one such workflow: the state compiled, the tasks dispatched,
-  the routes resolved, the signals accumulated - all invisibly).
-- The eventual system: when a conversation runs, the members activate (the
-  user + the orchestrator don't see them) - the COUNCIL HUB holds the
-  per-session knowledge (the state + the queue + the routes + the feedback).
+- The four members share the primitives: the BLOCKS (the context blocks - the batch-state compiles
+  them, the queue dispatches them, the routing resolves them, the feedback appends them).
+  They share the QUEUES (FIFO/LIFO + the parentage - the tasks' dispatch order, the feedback's
+  lineage flow).
+  They share the EVENTS (the cordis events - the state changes, the completions, the signals).
+- The members LOOP the paradigms in different ways.
+  The state is a shared block.
+  The tasks are a FIFO queue with the priority.
+  The feedback is a LIFO-ish lineage chain (the newest delta first).
+  The routing is a pure function.
+  The same primitives, different combinations = the dynamic workflows.
+  A conversation is ONE such workflow: the state compiled, the tasks dispatched, the routes
+  resolved, the signals accumulated - ALL invisibly.
+- The eventual system: when a conversation runs, the members activate (the user + the orchestrator
+  do NOT see them).
+  The COUNCIL HUB holds the per-session knowledge (the state + the queue + the routes + the
+  feedback).
 
 ## 3. The council hub (the per-session knowledge)
 
 - The hub = the four members' stores unified: the batch state (the lanes, the
   gates), the queue (the tasks + the states), the routes (the resolved ledger),
-  the feedback journal (the signals + the deltas). All journaled (the family
-  conventions) + all compiled (the batch-state's context blocks).
-- The hub's activation: invisible - the members' services run in the harness's
-  background; the orchestrator's tooling stays unchanged (the queue's
-  dispatcher + the routing's resolver + the feedback's collector are the
-  harness's own machinery).
-- The hub's knowledge: per session (the session's state + signals) - the raw
-  material for the tribe system.
+  the feedback journal (the signals + the deltas).
+  ALL are journaled (the family conventions) + ALL are compiled (the batch-state's context blocks).
+- The hub's activation: invisible.
+  The members' services run in the harness's background.
+  The orchestrator's tooling stays unchanged (the queue's dispatcher + the routing's resolver +
+  the feedback's collector are the harness's own machinery).
+- The hub's knowledge: per session (the session's state + signals).
+  It is the raw material for the tribe system.
 
 ## 4. The tribe system (the future - recorded, not implemented)
 
-- The conversation is (conversation + n members of it): the members are the
-  conversations' councils; the tribe = the connected conversations sharing the
-  knowledge (the cross-session feedback + the state + the leaders).
+- The conversation is (conversation + n members of it).
+  The members are the conversations' councils.
+  The tribe = the connected conversations sharing the knowledge (the cross-session feedback + the
+  state + the leaders).
 - The tribe needs a LEADER (the designated conversation that adjudicates the
   shared signals + the cross-tribe dispatch).
-- The user's direction: "we can then later figure out the tribe system" - the
-  council hub is the foundation (the per-session knowledge) the tribe builds on.
+- The user's direction: "we can then later figure out the tribe system".
+  The council hub is the foundation (the per-session knowledge) the tribe builds on.
 
 ## 5. The shared probe (the one investigation, three consumers)
 
@@ -91,14 +95,13 @@ The three implementation investigations share the same probe phase:
 
 ## 6. The family's rules
 
-- The members' functionality SEPARATE (each plugin owns its one concern); the
-  effectuallity COMBINED (the stores integrated, the context compiled, the
-  events shared).
+- The members' functionality SEPARATE (EACH plugin owns its one concern).
+  The effectuallity COMBINED (the stores integrated, the context compiled, the events shared).
 - The user's configuration is the law (the routing policy + the capacity model +
   the honest content's sanctity).
 - The family's plugin discipline (the smokes, the loader contracts, the
   no-commit, the ledger conventions).
-- The invisible operation: the members never surface to the user or the
+- The invisible operation: the members NEVER surface to the user or the
   orchestrator unless asked (the council view is the deliberate access).
 
 ## 7. The deliverables
@@ -142,7 +145,8 @@ Family(t)    = Loop( Activate, Compile, Inject, Act, Report, Append, Recompile )
 - The + = the history's accumulation (the conversation's own blocks).
 - The ⊕ = the block composition: the compiled members, ordered, bounded, pre-baked.
 - The equation's instances: the conversation is Family(t) - the council is its
-  state; the tribe is the composition of the councils: Tribe(t) = Σ Council_i(t)
+  state.
+  The tribe is the composition of the councils: Tribe(t) = Σ Council_i(t)
   with a Leader.
 
 ### 8.4 THE COMBINATION SPACE (all the ways the members combine)
@@ -158,22 +162,25 @@ Family(t)    = Loop( Activate, Compile, Inject, Act, Report, Append, Recompile )
 | 7 | F -> R | the disliked routing feeds the policy review | the config's feedback loop |
 | 8 | S -> F | the parents' deltas appended (the state observations) | the lineage deltas |
 | 9 | Q -> F | the completions attach their feedback footers | the honest reports |
-| 10 | P -> all | the parentage composes every member (the parents see the children's compiled summaries) | the tree's inheritance |
-| 11 | Scope -> C | the projection (each agent sees the council filtered by its role) | the per-agent pre-baked view |
-| 12 | t -> all | the recompilation on every state change | the constant-state-slot |
+| 10 | P -> all | the parentage composes EVERY member (the parents see the children's compiled summaries) | the tree's inheritance |
+| 11 | Scope -> C | the projection (EACH agent sees the council filtered by its role) | the per-agent pre-baked view |
+| 12 | t -> all | the recompilation on EVERY state change | the constant-state-slot |
 | 13 | Loop | the closed cycles (Family, the dispatch loop, the feedback loop) | the dynamic workflows |
 | 14 | Council -> Tribe | the councils composed + a leader | the future tribe system |
 
-- Every combination is the same primitives looped differently - the family's
-  message bus: the blocks composed by the Compile operator, the queues
-  (FIFO/LIFO) + the parentage for the ordering, the events for the triggers, the
-  maximal utilization = the 14 rows' cross-feeding.
+- EVERY combination is the same primitives looped differently - the family's
+  message bus.
+  The blocks are composed by the Compile operator.
+  The queues (FIFO/LIFO) + the parentage provide the ordering.
+  The events provide the triggers.
+  The maximal utilization = the 14 rows' cross-feeding.
 
 ## 9. THE SPHERE COMPACTION (the layered visualization - user-mandated 2026-10-09)
 
-The context blocks are the MIDDLE LAYER of a nested sphere: the tool calls
-OVERWRITE them (the outer surface), the behaviors UNDERWRITE them (the inner
-generators). The whole is sphere compaction - the layers feed inward, the
+The context blocks are the MIDDLE LAYER of a nested sphere.
+The tool calls OVERWRITE them (the outer surface).
+The behaviors UNDERWRITE them (the inner generators).
+The whole is sphere compaction - the layers feed inward, the
 volume is held (the state replaced, the blocks bounded).
 
 ```
@@ -206,23 +213,25 @@ volume is held (the state replaced, the blocks bounded).
            the bounded history, the budgeted context).
 ```
 
-- The OVERWRITE semantics: a tool call's effect lands on the sphere's surface -
-  the state-change event fires - the Compile re-generates the middle layer - the
-  stale block is REPLACED (the tool call "overwrites" the block - the sphere's
+- The OVERWRITE semantics: a tool call's effect lands on the sphere's surface.
+  The state-change event fires.
+  The Compile re-generates the middle layer.
+  The stale block is REPLACED (the tool call "overwrites" the block - the sphere's
   outer action compacts into the inner state).
-- The UNDERWRITE semantics: the behaviors are the sphere's foundation - the
-  policies + the functions guarantee the blocks' content (the "underwriting" =
-  the middle layer is backed by the deterministic generators - the blocks are
-  the policies' compiled outputs).
-- The sphere compaction: the volume is CONSTANT-ish - the state slot replaced
-  (never grown), the blocks bounded (the context budgets), the history's
-  accumulation the only growth (+H - itself budgeted) - the family's maximal
-  utilization: the same sphere, the 14 combinations looping inside it.
+- The UNDERWRITE semantics: the behaviors are the sphere's foundation.
+  The policies + the functions guarantee the blocks' content.
+  The "underwriting" = the middle layer is backed by the deterministic generators - the blocks are
+  the policies' compiled outputs.
+- The sphere compaction: the volume is CONSTANT-ish.
+  The state slot is replaced (NEVER grown).
+  The blocks are bounded (the context budgets).
+  The history's accumulation is the ONLY growth (+H - itself budgeted).
+  The family's maximal utilization: the same sphere, the 14 combinations looping inside it.
 
 ## 10. THE SUB-BLOCKS + THE PERMISSIONS (user-mandated 2026-10-09)
 
-The middle-layer context blocks are not monolithic: they are COMPOSED OF
-SUB-BLOCKS, each with a PERMISSION level - per tool, per model family, per
+The middle-layer context blocks are NOT monolithic: they are COMPOSED OF
+SUB-BLOCKS, EACH with a PERMISSION level - per tool, per model family, per
 plugin functionality/behavior. The Compile operator becomes permission-aware:
 
 ```
@@ -231,67 +240,70 @@ Context(a, t) = Compile( Council(t) ⊙ Scope(a) ⊙ Perm(a) ) + H(a, t)
 Perm(a) = f( tool(a), modelFamily(a), role(a), pluginBehavior(a) )
 ```
 
-- The ⊙ = the SCOPE + PERMISSION projection: the agent sees only the sub-blocks
-  its permissions admit - the pre-baked block filtered at compile time, never at
-  read time (the permission is the compiler's input, not the agent's gate).
+- The ⊙ = the SCOPE + PERMISSION projection.
+  The agent sees ONLY the sub-blocks its permissions admit.
+  The pre-baked block is filtered at compile time, NEVER at read time.
+  The permission is the compiler's input, NOT the agent's gate.
 
 ### 10.1 The sub-block catalog (the compiled block's internal structure)
 
 | Sub-block | Content | The permission dimensions |
 |---|---|---|
-| TOC | the batch state (the lanes, the statuses, the queue view) | all agents (the universal baseline) |
+| TOC | the batch state (the lanes, the statuses, the queue view) | ALL agents (the universal baseline) |
 | Scope | the agent's surfaces + the off-limits | role-bound (the coder sees the code surfaces, the explorer the read surfaces) |
 | Gates | the arbiter truth (the build/smokes states) | tool-bound (the execution lanes see the gates, the explorers the summary) + model-family (the planner sees the full gate ledger, the GLM lanes the compact) |
-| Routing | the resolved routes + the policy facts | model-family-bound (the planner's lane sees the routing truth for the review; the coder's lane sees only its own route) - the routing-enforcer's ledger is the planner/council sub-block |
-| Queue | the tasks + the states + the next dispatch | parent-bound (the orchestrator's view: the full queue; the agents' view: their own task only) |
-| Feedback | the honest signals + the deltas | READ-PERMISSION-bound (the know/disknow - the recipient's opt-in - the sub-block excluded until the read-permission is granted; the transfer never force-reads) |
-| Policy | the user's config facts | plugin-behavior-bound (the routing-enforcer + the queue consult it; the agents never see it - the "you don't have to know" doctrine) |
+| Routing | the resolved routes + the policy facts | model-family-bound (the planner's lane sees the routing truth for the review; the coder's lane sees ONLY its own route) - the routing-enforcer's ledger is the planner/council sub-block |
+| Queue | the tasks + the states + the next dispatch | parent-bound (the orchestrator's view: the full queue; the agents' view: their own task ONLY) |
+| Feedback | the honest signals + the deltas | READ-PERMISSION-bound (the know/disknow - the recipient's opt-in - the sub-block excluded until the read-permission is granted; the transfer NEVER force-reads) |
+| Policy | the user's config facts | plugin-behavior-bound (the routing-enforcer + the queue consult it; the agents NEVER see it - the "you don't have to know" doctrine) |
 
 ### 10.2 The permission matrix (the alignment)
 
-- PER TOOL: a sub-block's visibility follows the tooling - e.g. the Gates
-  sub-block's full detail for the lanes running the build; the queue's internal
-  state only via the dispatcher's surface; the write-tool's lanes see the
-  ownership matrix (the Scope sub-block's file-level detail), the read-only
-  lanes the summary.
-- PER MODEL FAMILY: the sub-blocks' detail levels differ per the routing's
-  family - the DeepSeek planner lane receives the FULL compiled view (the
+- PER TOOL: a sub-block's visibility follows the tooling.
+  Example: the Gates sub-block's full detail for the lanes running the build.
+  The queue's internal state is visible ONLY via the dispatcher's surface.
+  The write-tool's lanes see the ownership matrix (the Scope sub-block's file-level detail).
+  The read-only lanes see the summary.
+- PER MODEL FAMILY: the sub-blocks' detail levels differ per the routing's family.
+  The DeepSeek planner lane receives the FULL compiled view (the
   council's depth: the routes, the gates' ledger, the feedback summary - its
-  planning needs the whole sphere); the GLM coder/explorer lanes receive the
-  COMPACT pre-baked sub-blocks (their scope + the gates' summary + their own
-  route - the minimal surface their behavior requires). The model family is the
-  permission dimension - the routing-enforcer resolves the family, the Compile
-  applies its detail level.
-- PER PLUGIN BEHAVIOR: each member's functionality owns its sub-block's
-  permissions - the feedback's read-permission (the know/disknow), the
-  routing's policy-hiding (the agents never see the config - the
-  "you don't have to know" doctrine), the queue's parent-bound visibility.
+  planning needs the whole sphere).
+  The GLM coder/explorer lanes receive the COMPACT pre-baked sub-blocks (their scope + the gates'
+  summary + their own route - the minimal surface their behavior requires).
+  The model family is the permission dimension.
+  The routing-enforcer resolves the family; the Compile applies its detail level.
+- PER PLUGIN BEHAVIOR: EACH member's functionality owns its sub-block's
+  permissions.
+  The feedback's read-permission (the know/disknow).
+  The routing's policy-hiding (the agents NEVER see the config - the
+  "you don't have to know" doctrine).
+  The queue's parent-bound visibility.
 
 ### 10.3 The sphere's alignment (the compaction + the permissions)
 
-- The sphere's middle layer = the permissioned sub-blocks: the Compile outputs
-  the filtered composition (Perm(a) is the compiler's input - the baked block
-  arrives ALREADY filtered - the agent reads exactly what its permissions
-  admit, nothing more - the "read mechanically" doctrine extends to the
-  sub-block level).
+- The sphere's middle layer = the permissioned sub-blocks.
+  The Compile outputs the filtered composition (Perm(a) is the compiler's input).
+  The baked block arrives ALREADY filtered - the agent reads exactly what its permissions
+  admit, NOTHING more - the "read mechanically" doctrine extends to the sub-block level.
 - The compaction with the permissions: the sub-blocks' volume is bounded per
   permission class (the planner's full view vs the coder's compact view - the
   sphere's per-agent volume varies by the permission, the total held by the
   budgets).
 - The sub-blocks' events: a permission change (the read-permission granted,
-  the model-family switched) recompiles the affected sub-blocks - the
-  sphere's surface updates in place.
+  the model-family switched) recompiles the affected sub-blocks.
+  The sphere's surface updates in place.
 
 ### 10.4 The examples (the system's behavior)
 
-- The FEEDBACK sub-block: excluded from every agent's compiled block by default
-  (the read-permission off) - the recipient's deliberate grant compiles it in
-  (the know); otherwise it transfers mechanically unread (the disknow) - the
-  honest signals never surface uninvited.
+- The FEEDBACK sub-block: excluded from EVERY agent's compiled block by default
+  (the read-permission off).
+  The recipient's deliberate grant compiles it in (the know).
+  Otherwise it transfers mechanically unread (the disknow).
+  The honest signals NEVER surface uninvited.
 - The ROUTING sub-block: the planner's compiled view carries the routing ledger
-  (the council's review material); the coder's view carries only its own
-  resolved route (the model-family permission).
-- The POLICY sub-block: never compiled into any agent's block - the behaviors
-  (the plugin funcs) consult it internally; the agents act on the compiled
-  outputs without ever seeing the configuration (the user's responsibility,
-  the system's silence).
+  (the council's review material).
+  The coder's view carries ONLY its own resolved route (the model-family permission).
+- The POLICY sub-block: NEVER compiled into ANY agent's block.
+  The behaviors (the plugin funcs) consult it internally.
+  The agents act on the compiled outputs WITHOUT ever seeing the configuration.
+  That is the user's responsibility, the system's silence.
