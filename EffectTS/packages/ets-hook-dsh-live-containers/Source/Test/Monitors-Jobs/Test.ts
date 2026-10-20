@@ -100,8 +100,8 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		Check(Count, "J2: an observed exit 0 folds a live clean result", () => {
 			const Result = Entry(Run).checks[0];
 			assert.ok(Result !== undefined);
@@ -111,7 +111,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "J2: the settled line is byte-exact", () => {
 			assert.deepEqual(LinesWith(Run, "monitor check settled"), [
-				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobId}, exit 0)`,
+				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobID}, exit 0)`,
 			]);
 		});
 	}
@@ -121,8 +121,8 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		FireObserved(Run, "/repo/src/App.ts", "2");
 		await WaveAssemble(Run);
 		Check(Count, "J3: a settle-less version bump starts no re-run", () => {
@@ -134,9 +134,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
+		const JobID = Jobs.started[0].id;
 		FireObserved(Run, "/repo/src/App.ts", "2");
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		const Text = await WaveAssemble(Run).then(
 			(A: any) => A.sections.find((S: any) => S.name === "live-containers")?.text ?? "",
 		);
@@ -151,9 +151,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		Run.State.MonitorJobs.get(JobId)?.tail.Append("stdout", "error TS2345: first\n");
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 3" }));
+		const JobID = Jobs.started[0].id;
+		Run.State.MonitorJobs.get(JobID)?.tail.Append("stdout", "error TS2345: first\n");
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 3" }));
 		const Text = await WaveAssemble(Run).then(
 			(A: any) => A.sections.find((S: any) => S.name === "live-containers")?.text ?? "",
 		);
@@ -163,7 +163,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "J4: the settled line carries the non-zero exit", () => {
 			assert.deepEqual(LinesWith(Run, "monitor check settled"), [
-				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobId}, exit 3)`,
+				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobID}, exit 3)`,
 			]);
 		});
 	}
@@ -193,11 +193,11 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", status: "killed", detail: "signal: SIGTERM" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", status: "killed", detail: "signal: SIGTERM" }));
 		Check(Count, "J6: a killed producer outcome maps to the infrastructure form", () => {
 			assert.deepEqual(LinesWith(Run, "monitor check settled"), [
-				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobId}, exit null)`,
+				`hook-dsh-live-containers: monitor check settled /repo/src/App.ts tsc (${JobID}, exit null)`,
 			]);
 			assert.equal(Entry(Run).checks[0]?.infra, "producer:signal: SIGTERM");
 		});
@@ -208,10 +208,10 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
+		const JobID = Jobs.started[0].id;
 		FireJobs(
 			Run,
-			Jobs.settled(JobId, {
+			Jobs.settled(JobID, {
 				owner: "agent-a",
 				status: "killed",
 				detail: "[sandbox: file access denied under workspace-write mode]",
@@ -265,8 +265,8 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		FireObserved(Run, "/repo/src/App.ts", "2");
 		Run.State.Wave = {
 			...Run.State.Wave,
@@ -297,8 +297,8 @@ export const runTest = async (): Promise<number> => {
 	{
 		const { Jobs, Run } = Setup();
 		await Dispatch(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", cause: "teardown" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", cause: "teardown" }));
 		Check(Count, "J10: a teardown settle records nothing and logs the loss", () => {
 			assert.deepEqual(LinesWith(Run, "monitor check lost"), [
 				"hook-dsh-live-containers: monitor check lost /repo/src/App.ts tsc (teardown)",

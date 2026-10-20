@@ -71,8 +71,8 @@ const runTest = async () => {
     });
     Check(Count, "config default blocks: the three day-one enabled blocks are enabled", () => {
       const Blocks = Raw1.blocks.get();
-      for (const Id of ["todo-list", "command-runner", "session-stats"]) {
-        assert.equal(Blocks.find((B) => B.id === Id).enabled, true);
+      for (const ID of ["todo-list", "command-runner", "session-stats"]) {
+        assert.equal(Blocks.find((B) => B.id === ID).enabled, true);
       }
     });
     Check(Count, "config default blocks: the dormant catalog entries are disabled", () => {

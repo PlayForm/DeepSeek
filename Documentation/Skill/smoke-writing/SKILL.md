@@ -7,66 +7,48 @@ whenToUse: Mandatory before creating or modifying ANY smoke suite for the family
 # Smoke Writing - Operating Manual
 
 The smokes are the arbiter: after every change, the suites must pass.
-This manual states the conventions directly.
+The full philosophy of each rule lives in the references; this file is
+the index of pointers.
 
-## 1. The harness pattern
+## 1. The arbiter status
 
-1. Every suite loads the REAL built `Target/Library.js` of its bundle
-   (and the REAL factory instance where the bundle consumes it) against a
-   FAKE ctx: the capture seams (on/emit/effect/get/reflect/fs/waterfall/
-   logger) + the `root` seam (`get root() { return Context; }` - the
-   fs/observed listeners register on the root) + the `__<name>State`
-   probe attachments.
-2. The fake fs varies per suite: the capturing fs (the reads/writes/
-   intents/observations arrays) vs the real-token fs (the version guards
-   exercised with actual tokens - the pinner's suite).
-3. The suites run from their smokes dir with the monorepo-relative
-   imports (`../packages/<bundle>/Target/...`); the sibling symlinks in
-   the bundles' node_modules are NOT pnpm-managed - recreate them after
-   installs.
+- **The smokes are the arbiter** - see ./references/arbiter-status.md
+  After every change the suites must pass; the suites judge the change, never the reverse.
 
-## 2. The assertion contract
+## 2. The harness pattern
 
-1. The ledger strings are asserted BYTE-IDENTICAL (the logger-prefixed
-   `<module>: ...` forms + the ledger file's `[ISO] message` forms) -
-   they are the contract.
-2. The identity-driven strings (the `<module>: ` prefixes, the logFile
-   defaults) change ONLY when the module's identity changes (BY DESIGN -
-   the mdash → normalize-dash precedent). Every OTHER assertion stays
-   byte-identical through every refactor.
-3. New features GROW the suites (additive checks) - the existing
-   assertions never weaken. The counts are recorded per suite (the
-   handoff's baseline).
-4. A failing smoke means the change is wrong - never weaken an
-   assertion to pass.
+1. **Fake ctx + real built library** - see ./references/harness-pattern-fake-ctx-real-factory.md
+   Every suite loads the REAL `Target/Library.js` (and the REAL factory where consumed) against a FAKE ctx: the capture seams (on/emit/effect/get/reflect/fs/waterfall/logger), the `root` seam (`get root() { return Context; }`), and the `__<name>State` probes.
+2. **The fake fs varies per suite** - see ./references/fake-fs-variants.md
+   The capturing fs (the reads/writes/intents/observations arrays) vs the real-token fs (the version guards exercised with actual tokens - the pinner's suite).
+3. **Run from the smokes dir, monorepo-relative imports, sibling symlinks** - see ./references/smokes-dir-imports-symlinks.md
+   The suites run from their smokes dir with `../packages/<bundle>/Target/...` imports; the bundles' node_modules sibling symlinks are NOT pnpm-managed - recreate them after installs.
 
-## 3. The traps
+## 3. The assertion contract
 
-1. THE VACUOUSLY-GREEN TRAP: a smoke whose fixture wiring is wrong can
-   pass checks without exercising the code (the cargo's `boot()` once
-   never assigned the listener - checks 1-12 passed vacuously). When a
-   smoke "passes but the world is weird", verify the harness wiring
-   first.
-2. THE SWAPPED/REVERSED ASSERTS: `assert.equal(boolean, string)` and
-   count drifts - read the assertion's INTENT before "fixing" the code.
-3. THE SMOKE/LIVE FIDELITY GAP: the smokes prove the MECHANICS - the
-   LIVE battery proves the WIRING. The smokes do NOT cover: the profile
-   + bundle patch layers (the effective config - the patch config
-   replaces the entry config wholesale), the load order (the pinner
-   activates before the governor at this boot), the version-guard
-   interplay across a multi-step fold, the storage-domain open failures
-   (the silent-catch era). Every live finding must become a smoke
-   regression test where the harness can represent it.
+1. **Byte-identical ledger assertions** - see ./references/byte-identical-ledger-assertions.md
+   The logger-prefixed `<module>: ...` forms and the ledger file's `[ISO] message` forms are asserted byte-identical - they are the contract.
+2. **Identity-driven strings are the only exception** - see ./references/byte-identical-ledger-assertions.md
+   The `<module>: ` prefixes and the logFile defaults change ONLY when the module's identity changes (BY DESIGN - the mdash -> normalize-dash precedent); every OTHER assertion stays byte-identical through every refactor.
+3. **Additive coverage** - see ./references/additive-coverage-rule.md
+   New features GROW the suites; existing assertions never weaken; the counts are recorded per suite (the handoff's baseline).
+4. **A failing smoke means the change is wrong** - see ./references/failing-smoke-means-change-is-wrong.md
+   Never weaken an assertion to pass; read the failure's intent and fix the change.
 
-## 4. The parity discipline (the three implementations)
+## 4. The traps
 
-1. The Classic + EffectTS suites are the SAME assertion sets (the
-   EffectTS adds its additive coverage: the Stream pipeline, the typed
-   envelope, the parallel marker). The Boilerplate's suites are the
-   reference (the original counts).
-2. The parity rule: an EffectTS suite passes with the Classic's
-   assertions byte-identical - the ledger strings + the behaviors are
-   the contract across the implementations.
-3. The tracing-on mode (FACTORY_SMOKE_TRACING=1) must produce
-   byte-identical stdout + ledgers (the hygiene rule) - the spans never
-   alter the strings/ordering/timing.
+1. **The vacuously-green trap** - see ./references/vacuously-green-trap.md
+   Wrong fixture wiring can pass checks without exercising the code (the cargo's `boot()` once never assigned the listener - checks 1-12 passed vacuously); when a smoke "passes but the world is weird", verify the harness wiring first.
+2. **Swapped/reversed asserts and count drifts** - see ./references/swapped-reversed-asserts.md
+   `assert.equal(boolean, string)` and drifting counts - read the assertion's INTENT before "fixing" the code.
+3. **The smoke/live fidelity gap** - see ./references/smoke-live-fidelity-gap.md
+   The smokes prove the MECHANICS, the LIVE battery proves the WIRING; not covered: the profile + bundle patch layers (the patch config replaces the entry config wholesale), the load order (the pinner activates before the governor at this boot), the version-guard interplay across a multi-step fold, the storage-domain open failures (the silent-catch era); every live finding must become a smoke regression test where the harness can represent it.
+
+## 5. The parity discipline (the three implementations)
+
+1. **The three suites and the reference** - see ./references/parity-three-implementations.md
+   Classic + EffectTS are the SAME assertion sets (EffectTS adds its additive coverage: the Stream pipeline, the typed envelope, the parallel marker); the Boilerplate's suites are the reference (the original counts).
+2. **The parity rule** - see ./references/parity-three-implementations.md
+   An EffectTS suite passes with the Classic's assertions byte-identical - the ledger strings + the behaviors are the contract across the implementations.
+3. **The tracing hygiene rule** - see ./references/tracing-hygiene-rule.md
+   Tracing-on mode (FACTORY_SMOKE_TRACING=1) must produce byte-identical stdout + ledgers - the spans never alter the strings/ordering/timing.

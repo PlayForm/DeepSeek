@@ -54,7 +54,7 @@ const NewMember = (AgentID: string): BoardMember => ({
 export const Open = (
 	Agent: State,
 	AgentID: string,
-	Id: string,
+	ID: string,
 	PlantType: BoardState["plantType"],
 	Expect: number,
 	MemberIDs: string[] | undefined,
@@ -65,7 +65,7 @@ export const Open = (
 	const At = Clock(Agent);
 	const Pinned = MemberIDs ?? [];
 	const Board: BoardState = {
-		id: Id,
+		id: ID,
 		agentId: AgentID,
 		plantType: PlantType,
 		template: Template,
@@ -92,8 +92,8 @@ export const Open = (
 		pruned: 0,
 		lastTurnAt: undefined,
 	};
-	Boards.set(Id, Board);
-	Append(`plant opened ${Id} (expect ${Expect})`);
+	Boards.set(ID, Board);
+	Append(`plant opened ${ID} (expect ${Expect})`);
 	// The pinned members enroll through Enroll (the ledger line per member);
 	// more pins than slots overflow.
 	for (const MemberID of Pinned) {

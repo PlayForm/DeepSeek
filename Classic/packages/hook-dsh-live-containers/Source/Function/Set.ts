@@ -85,9 +85,9 @@ export default (Agent: State, Append: Log) => {
 			// it - the model moved on.
 			const Supersede = (Action: string): void => {
 				const PerAgent = Agent.Suggestions.get(AgentID);
-				for (const [Id, Suggestion_] of PerAgent ?? []) {
+				for (const [ID, Suggestion_] of PerAgent ?? []) {
 					if (!Suggestion_.withdrawn && Suggestion_.renderedTurn !== undefined) {
-						Suggester.Dismiss(Agent, AgentID, Id, "superseded", Append);
+						Suggester.Dismiss(Agent, AgentID, ID, "superseded", Append);
 						void Action;
 					}
 				}
@@ -108,9 +108,9 @@ export default (Agent: State, Append: Log) => {
 				return { set: true, kind: "dismiss", detail: Line };
 			}
 			if (typeof Parsed["prune"] === "string") {
-				const [PlantId, MemberID] = Parsed["prune"].split("/");
+				const [PlantID, MemberID] = Parsed["prune"].split("/");
 				const Boards = Agent.Boards.get(AgentID);
-				const Board_ = PlantId === undefined ? undefined : Boards?.get(PlantId);
+				const Board_ = PlantID === undefined ? undefined : Boards?.get(PlantID);
 				if (Board_ === undefined || MemberID === undefined) {
 					Append(`set unknown prune ${Parsed["prune"] ?? ""}`);
 					return {
@@ -130,14 +130,14 @@ export default (Agent: State, Append: Log) => {
 				};
 			}
 			if (typeof Parsed["plant"] === "string") {
-				const TemplateId = Parsed["plant"];
-				const Catalog = Entry(TemplateId);
+				const TemplateID = Parsed["plant"];
+				const Catalog = Entry(TemplateID);
 				if (Catalog === undefined) {
-					Append(`set unknown plant ${TemplateId}`);
-					return { set: false, kind: "plant", detail: `unknown template: ${TemplateId}` };
+					Append(`set unknown plant ${TemplateID}`);
+					return { set: false, kind: "plant", detail: `unknown template: ${TemplateID}` };
 				}
 				const Expect = Math.min(8, Math.max(1, Number(Parsed["expect"] ?? 3) || 3));
-				const BoardId = Parsed["id"] ?? `planted-${TemplateId}`;
+				const BoardID = Parsed["id"] ?? `planted-${TemplateID}`;
 				const PlantType =
 					Catalog.shape === "board"
 						? "agent-board"
@@ -147,7 +147,7 @@ export default (Agent: State, Append: Log) => {
 				Board.Open(
 					Agent,
 					AgentID,
-					BoardId,
+					BoardID,
 					PlantType,
 					Expect,
 					undefined,
@@ -158,7 +158,7 @@ export default (Agent: State, Append: Log) => {
 				return {
 					set: true,
 					kind: "plant",
-					detail: `planted ${BoardId} (${TemplateId}; expect ${Expect})`,
+					detail: `planted ${BoardID} (${TemplateID}; expect ${Expect})`,
 				};
 			}
 			if (typeof Parsed["key"] === "string" && Parsed["key"].length > 0) {
