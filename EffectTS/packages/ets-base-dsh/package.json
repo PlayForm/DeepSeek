@@ -28,13 +28,13 @@
 		"effect": "4.0.5"
 	},
 	"devDependencies": {
-		"@deepseek-ai/cordis": "4.0.4",
+		"@deepseek-ai/cordis": "4.0.5",
 		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.7",
+		"tsc-alias": "1.9.8",
 		"typescript": "7.0.2"
 	},
 	"peerDependencies": {
