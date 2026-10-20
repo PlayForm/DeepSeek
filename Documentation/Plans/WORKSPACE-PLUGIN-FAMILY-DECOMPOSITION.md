@@ -1,16 +1,26 @@
 # Workspace Plugin Family Decomposition
 
-> The user's directive (2026-10-20, binding): the workspace idea and
-> everything around it must be distributed across MANY PLUGINS - NOT one
-> batch-edit plugin - each commonality broken down, each separate package
-> named, very specific functionality, all orchestrating in the WORKSPACE
-> AGENT plugin. The OPERATIONAL VIEW (what the conversation sees) is the
-> workspace plugin's surface; the rest is INVISIBLE - entirely handled by
-> the core/plugin flow, itself governed by the plugin harness
-> (~/Developer/Documentation/Module/deepseek-harness). The vision: not
-> only simple edits with a conversational view - a GRAPH-LIKE view
-> systematically correcting itself, interacting with itself like a LIVING
-> SYSTEM, all through the agent's actions.
+> THE FRAMING (the user's reframing, 2026-10-20 - binding): this is NOT
+> one single plugin - it is a TOTALLY NEW REFACTOR + REFRAMING OF THE
+> DEEPSEEK HARNESS ITSELF, through a workspace family of plugins POWERED
+> BY the DeepSeek Harness plugin family for PlayForm. The harness's
+> evolution: from the tool-dispatch shell (the commands that escape) to
+> the WORKSPACE-CENTRIC RUNTIME - where the workspace family (the 16+
+> packages) becomes the harness's new operating surface, built on the
+> existing @playform family (the factory's shared machinery, the
+> governors' silence, the ccr's compression, the coach's teaching, the
+> live-containers' assembly): the files live as processes in state, the
+> representations are managed, the edits never escape, the graph-like
+> view corrects itself like a living system - all through the agent's
+> actions.
+>
+> The user's directives (2026-10-20, binding): everything distributed
+> across MANY PLUGINS - each commonality broken down, each separate
+> package named, very specific functionality, all orchestrating in the
+> WORKSPACE AGENT plugin. The OPERATIONAL VIEW (what the conversation
+> sees) is the workspace plugin's surface; the rest is INVISIBLE -
+> entirely handled by the core/plugin flow, itself governed by the
+> plugin harness (~/Developer/Documentation/Module/deepseek-harness).
 
 ## The naming by role (refined 2026-10-20 - they are NOT all hooks)
 

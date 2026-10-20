@@ -20,7 +20,16 @@ statuses:
 
 # BATCH EDIT TOOL - THE FEATURE HUB
 
-> The user's feature: a new family plugin - the batch edit tool - a tool the
+> The user's framing (binding): this is NOT one single plugin. It is the
+> entry point of a TOTALLY NEW REFACTORING OF THE DEEPSEEK HARNESS ITSELF -
+> the evolution from the tool-dispatch shell (the calls that escape) to the
+> WORKSPACE-CENTRIC RUNTIME: the files live as processes in state, the
+> representations are managed, the edits never escape, the graph-like view
+> corrects itself like a living system. The workspace family of packages is
+> the harness's new operating surface, POWERED BY the @playform plugin
+> family (the factory, the governors, the ccr, the coach, the live-
+> containers - the existing foundation). The batch edit tool is the first
+> citizen of that reframing: a tool the
 > model calls INSTEAD of the bash-sed replaces and the per-file manual edits.
 > It functions like a live container: the agent prepares a schema, inserts
 > files into it, and the files process like a state machine in one go -

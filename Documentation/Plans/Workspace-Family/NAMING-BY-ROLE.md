@@ -1,0 +1,38 @@
+---
+title: The Workspace Family - the naming by role
+category: Plans/Workspace-Family
+kind: living-plan
+date: 2026-10-20
+status: planned
+registry: Documentation/Plans/Workspace-Family/NAMING-BY-ROLE.md
+index: Documentation/INDEX.md
+statuses:
+	- name: the naming by role (refined - they are NOT all hooks)
+		state: resolved
+		evidence: this document - the five role prefixes
+---
+
+# THE WORKSPACE FAMILY - THE NAMING BY ROLE
+
+> Granular document of the Workspace Plugin Family Decomposition.
+> The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
+> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
+> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
+> plugin family - never a single plugin.
+
+---
+
+The family's existing conventions distinguish the package roles; the
+blanket `hook-` prefix was wrong for the service + library + client
+members:
+
+- `plugin-dsh-*` = the SERVICE PROVIDERS + the agent (the factory
+  precedent - the shared services the others consume).
+- `hook-dsh-*` = the EVENT HOOKS (the listeners the events fire).
+- `client-dsh-*` = the UI/CLIENT halves (the browser half).
+- `lib-dsh-*` = the LIBRARIES (no Config/apply; the consumers keep their
+  own ledger strings, tools, configs; the module leaves never absorbed).
+- The TOOLS live inside their owning hooks (per the family's pattern:
+  the ccr registers ccr_retrieve) - the operate/merge register the
+  workspace tools.
+- The twins (Classic + ETS) per the family contract.
