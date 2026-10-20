@@ -1,0 +1,1 @@
+var n=l=>{let t=l.trim();switch(!0){case/^[~^><*]/.test(t):case/\s/.test(t):case t.includes(","):return null}let r="";t.startsWith("=")&&(r="=",t=t.slice(1).trim());const s=/^(\d+(?:\.\d+)*)(?:([-+].*))?$/.exec(t);if(!0===!s)return null;const e=s[1].split(".");if(!0===e.length>3)return null;for(;e.length<3;)e.push("0");return`${r}${e.join(".")}${s[2]??""}`};export{n as default};

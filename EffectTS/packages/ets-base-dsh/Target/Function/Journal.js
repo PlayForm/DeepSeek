@@ -1,0 +1,1 @@
+import{Effect as r}from"effect";var c=(u,o,e,n,i,a)=>r.suspend(()=>{try{const t=u.SharedJournal;if(!0===!!t)return t?.(e,n,i,a),r.void;const s=u.PendingJournal;return!0===Array.isArray(s)?(s.length<256===!0&&s.push({event:e,path:n,detail:i,at:a??Date.now()}),r.void):(o.Journal(e,n,i,a),r.void)}catch(t){return r.fail(t)}});export{c as default};

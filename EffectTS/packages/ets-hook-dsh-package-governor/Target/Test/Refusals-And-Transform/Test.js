@@ -1,0 +1,273 @@
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as Path from "node:path";
+import {
+  Boot,
+  Check,
+  Context,
+  Events,
+  Files,
+  Finish,
+  JobStarts,
+  MakeCounter,
+  Probe,
+  Root,
+  StorageRecords,
+  Writes,
+  find,
+  ledgerLines,
+  mkTarget,
+  actor,
+  settle
+} from "../Harness.js";
+import BuildTransform from "../../../Target/Function/Transform.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Boot();
+  Probe.Mode = "bin";
+  const Listener = Events.find((e) => e[0] === "fs/observed")[1];
+  const projA = Path.join(Root, "proj-a");
+  FileSystem.mkdirSync(projA);
+  FileSystem.writeFileSync(
+    Path.join(projA, "registry.json"),
+    JSON.stringify({ effectiveLatest: { leftpad: "1.0.0" } })
+  );
+  const pathA = Path.join(projA, "package.json");
+  Files[pathA] = JSON.stringify({
+    name: "x",
+    dependencies: { leftpad: "^2.0.0", chalk: "^5.0.0" },
+    scripts: { build: "tsc" }
+  });
+  Listener(mkTarget(projA, "k-a"), { kind: "present", version: "v1" }, actor);
+  await settle();
+  {
+    const projH = Path.join(Root, "proj-h");
+    FileSystem.mkdirSync(projH);
+    Files[Path.join(projH, "package.json")] = "{ nope";
+    const before = ledgerLines().length;
+    Listener(mkTarget(projH, "k-h"), { kind: "present", version: "v1" }, actor);
+    await settle();
+    const Sub = "transform: undecodable manifest \u2192 `observed non-JSON \u2026 \u2014 skipped`, no write, no update";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          find(
+            `no registry.json found for ${Path.join(projH, "package.json")} \u2014 chain pass skipped`
+          ).length,
+          1,
+          "the g2 line comes first (same order as the pre-refactor flow)"
+        );
+        assert.equal(
+          find(`observed non-JSON package.json ${Path.join(projH, "package.json")} \u2014 skipped`).length,
+          1
+        );
+        assert.equal(
+          ledgerLines().length,
+          before + 2,
+          "non-JSON \u2192 exactly the g2 + non-JSON lines"
+        );
+        assert.equal(JobStarts.length, 1, "non-JSON \u2192 no update stage (passage closed)");
+      });
+    }
+  }
+  {
+    const projB = Path.join(Root, "proj-b");
+    FileSystem.mkdirSync(projB);
+    Files[Path.join(projB, "package.json")] = JSON.stringify({
+      dependencies: { chalk: "^5.0.0" }
+    });
+    Listener(mkTarget(projB, "k-b"), { kind: "present", version: "v1" }, actor);
+    await settle();
+    const Sub = "chain semantics: no registry.json \u2192 pass skipped, everything public, update still gated";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          find(
+            `no registry.json found for ${Path.join(projB, "package.json")} \u2014 chain pass skipped`
+          ).length,
+          1
+        );
+        assert.equal(
+          find(
+            `update stage dispatched for ${projB} (mode=bin, ncu via ncu, built-in default policy)`
+          ).length,
+          1,
+          "no registry \u2192 straight to the update stage (the chain pass wrote nothing)"
+        );
+        assert.equal(
+          Writes.filter((w) => w.path === Path.join(projB, "package.json")).length,
+          0,
+          "no registry \u2192 no chain rewrite"
+        );
+      });
+    }
+  }
+  {
+    const projD = Path.join(Root, "proj-d");
+    FileSystem.mkdirSync(projD);
+    FileSystem.writeFileSync(Path.join(projD, "registry.json"), "{ nope");
+    Files[Path.join(projD, "package.json")] = JSON.stringify({
+      dependencies: { leftpad: "^2.0.0" }
+    });
+    Listener(mkTarget(projD, "k-d"), { kind: "present", version: "v1" }, actor);
+    await settle();
+    const Sub = "chain semantics: unreadable registry \u2192 `unreadable registry.json \u2026 skipped for <path>`";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          find(
+            `unreadable registry.json at ${Path.join(projD, "registry.json")} \u2014 chain pass skipped for ${Path.join(projD, "package.json")}`
+          ).length,
+          1
+        );
+        assert.equal(
+          find(
+            `update stage dispatched for ${projD} (mode=bin, ncu via ncu, built-in default policy)`
+          ).length,
+          1,
+          "unreadable registry \u2192 chain pass skipped but the update stage still runs (pre-refactor semantics)"
+        );
+        assert.equal(
+          Probe.Stash.get("k-d"),
+          "stat-v9",
+          "Stash seeded, then advanced by the update stage's U\u2082"
+        );
+      });
+    }
+  }
+  {
+    const projE = Path.join(Root, "proj-e");
+    FileSystem.mkdirSync(projE);
+    FileSystem.writeFileSync(
+      Path.join(projE, "registry.json"),
+      JSON.stringify({ effectiveLatest: { leftpad: "1.0.0" } })
+    );
+    Files[Path.join(projE, "package.json")] = JSON.stringify({
+      dependencies: { leftpad: "^2.0.0", unknown: "^1.0.0" }
+    });
+    Probe.Strict = true;
+    Listener(mkTarget(projE, "k-e"), { kind: "present", version: "v1" }, actor);
+    await settle();
+    Probe.Strict = false;
+    const writtenE = JSON.parse(
+      Writes.filter((w) => w.path === Path.join(projE, "package.json")).at(-1).content
+    );
+    const Sub = "chain semantics: strict strip of unknown deps (never a default) + canonicalization";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(writtenE.dependencies.leftpad, "^1.0.0");
+        assert.equal(writtenE.dependencies.unknown, void 0, "strict:true strips unknown deps");
+        assert.ok(find(`governed ${Path.join(projE, "package.json")} \u2192 fresh-`).length >= 1);
+      });
+    }
+  }
+  const passage = { Current: null, Proceed: false };
+  const transform = BuildTransform(
+    Probe,
+    // Fixture-only scaffolding: a plain runtime string for the branded
+    // FsTargetKey, exactly like the source suite passes.
+    { targetKey: "k-t", displayPath: pathA },
+    { effectiveLatest: { leftpad: "1.0.0" } },
+    passage
+  );
+  const out = transform(
+    JSON.stringify({ dependencies: { leftpad: "^2.0.0", a: "^2.0.0" } }),
+    void 0,
+    ["a", "leftpad"]
+  );
+  if (out === null) throw new Error("a decodable manifest yields a message");
+  const Decoded = out.next;
+  {
+    const Sub = "transform: raw text in, decode inside; keep-list ignored (governor closes over its sections)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(out.count, 1);
+        assert.equal(
+          Decoded.dependencies.leftpad,
+          "^1.0.0",
+          "decode inside the transform (raw text in)"
+        );
+        assert.equal(
+          Decoded.dependencies.a,
+          "^2.0.0",
+          "the keep-list does NOT pin (governor ignores it)"
+        );
+        assert.equal(typeof out.message, "function");
+      });
+    }
+  }
+  const Compose = out.message;
+  const msg = Compose({ version: "fresh-9" });
+  {
+    const Sub = "transform: the message composes `governed <path> \u2192 <version>` from the outcome";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          msg,
+          `governed ${pathA} \u2192 fresh-9`,
+          "message composes the module's version-bearing line"
+        );
+      });
+    }
+  }
+  {
+    const Sub = "transform: the post-write message marks the passage + journals the governed record";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(passage.Proceed, true, "message marks the passage (post-write only)");
+        assert.equal(
+          passage.Current.dependencies.leftpad,
+          "^2.0.0",
+          "passage carries the decoded manifest"
+        );
+        assert.ok(StorageRecords.some(([, r]) => r.event === "governed" && r.detail === "fresh-9"));
+      });
+    }
+  }
+  const noopOut = transform(JSON.stringify({ dependencies: { leftpad: "^1.0.0" } }), void 0, []);
+  {
+    const Sub = "transform: idempotent manifest \u2192 null; the no-change path opens the passage";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(noopOut, null, "idempotent manifest \u2192 null (the factory's designed no-op)");
+        assert.equal(passage.Proceed, true, "no-change path opens the passage synchronously");
+      });
+    }
+  }
+  {
+    Context.fs.sandboxMode = "workspace-write";
+    const projFence = Path.join(Root, "proj-fence");
+    FileSystem.mkdirSync(projFence);
+    FileSystem.writeFileSync(
+      Path.join(projFence, "registry.json"),
+      JSON.stringify({ effectiveLatest: { leftpad: "1.0.0" } })
+    );
+    Files[Path.join(projFence, "package.json")] = JSON.stringify({
+      dependencies: { leftpad: "^2.0.0" }
+    });
+    Listener(mkTarget(projFence, "k-fence"), { kind: "present", version: "v1" }, actor);
+    await settle();
+    Context.fs.sandboxMode = void 0;
+    const writeFence = Writes.filter((w) => w.path === Path.join(projFence, "package.json")).at(-1);
+    const Sub = "P4: confined backend \u2192 workspace-write fence rooted at the manifest's own directory";
+    {
+      Check(Count, Sub, () => {
+        assert.deepEqual(
+          writeFence.fence,
+          { mode: "workspace-write", workspaceRoot: projFence },
+          "confined backend \u2192 fence rooted at the manifest's own directory"
+        );
+      });
+    }
+  }
+  return Finish(Count, "Refusals-And-Transform");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Refusals-And-Transform`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

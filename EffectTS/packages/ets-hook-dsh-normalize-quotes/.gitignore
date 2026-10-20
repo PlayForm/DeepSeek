@@ -13,8 +13,6 @@ node_modules/
 pnpm-lock.yaml
 
 # Build output (the bundle lives in Target/)
-Target/
-dist/
 *.tsbuildinfo
 
 # Logs + caches
