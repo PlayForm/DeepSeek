@@ -1,48 +1,102 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/idle-agent-protocol/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: idle-agent-protocol
-description: THE protocol for agents launched as IDLE (paused) agents in the DeepSeek Harness Plugin Family batch - the retain-and-wait contract: launch with a fully self-contained spec, do NO work until activated, confirm with the exact idle line, then execute the retained spec exactly with the arbiter. Load before you are launched with a "STATUS: PAUSED" instruction.
-whenToUse: Mandatory whenever you are launched with a "STATUS: PAUSED - you are being launched to RETAIN the following spec" instruction. Until the parent's activation message arrives: no file operations, no reads, no work - only the confirmation line.
+description: "The contract for an agent launched IDLE: retain the spec verbatim, do no work until activated, confirm with the exact line, then execute the retained spec and report against its arbiter."
+whenToUse: Whenever you are launched with a paused-status instruction and a spec to retain, and whenever the parent amends or activates an idle lane. Also load it when a batch stalls because a lane acknowledged an amendment but did not execute.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
-# Idle-Agent Protocol - Operating Manual
+# Idle Agent Protocol
 
-The retain-and-wait contract for agents launched PAUSED in the DeepSeek Harness Plugin Family batch: hold the spec verbatim, do nothing until the parent activates you, confirm with the exact line, then execute the retained spec exactly inside the concurrent batch. The environment and scope discipline is user-mandated 2026-10-08. The full philosophy lives in the references; this file is the index.
+An idle lane is a held spec, not a paused worker. It costs nothing until
+it is activated, and it starts from the exact spec it retained. This
+contract is what makes a queue of idle lanes safe: no lane acts on a
+stale reading of the conversation, and every activation is explicit.
 
-## The contract (while IDLE)
+## When to use
 
-1. **Spec retention** - see ./references/idle-contract.md
-   Retain the full spec verbatim; it is your only authority, and the parent's amendments override the base spec where they conflict.
-2. **Do no work** - see ./references/idle-contract.md
-   Until activation: no file operations, no reads, no builds, no git commands - only the confirmation line.
-3. **Exact confirmation line** - see ./references/idle-contract.md
-   Reply exactly "<NAME> SPEC RETAINED - IDLE"; for an amendment, "<NAME> SPEC AMENDED - IDLE".
+- You are launched with `STATUS: PAUSED` and a spec to retain.
+- You receive an amendment while idle.
+- You receive an activation with a current-state block.
+- Do not use for: the parent's queue (`orchestrator-batch`) or the spec's
+  content (`worker-strains`).
 
-## The execution (when ACTIVATED)
+## The contract while idle
 
-1. **Execute the spec exactly** - see ./references/activated-execution.md
-   Your scope, the exclusions, the sequence, and the report format are constraints, not suggestions.
-2. **Verify and adjust minimally** - see ./references/activated-execution.md
-   A "if X exists when you activate, verify and adjust" clause means verify first, then adjust minimally.
-3. **The universal rules** - see ./references/universal-batch-rules.md
-   Never git add/commit; the smokes + the site build are the arbiters; tabs (tabWidth 4, printWidth 100) with YAML in spaces; Inter + IBM Plex Mono at the 13px floor; Harness Blue tokens + zero elevation; byte-exact ledger strings; the truthful corrected facts (733 Classic / 746 EffectTS, the 19-method ledger, 0.0.1 / effect 4.0.2).
-4. **Flag, never silently fix** - see ./references/flag-and-report.md
-   Content conflicts, stale claims, and shared-fact contradictions go to the parent; never guess.
-5. **The final report format** - see ./references/flag-and-report.md
-   Per-item before -> after with file:line anchors, the decisions, the printed arbiter results, the residuals + decisions for the user.
+1. **Retain the full spec verbatim.** It is your only authority. Do not
+   summarize it, reinterpret it, or start preparing for it.
+2. **Do no work.** No reads, no writes, no builds, no git commands, no
+   investigation. The only output is the confirmation line.
+3. **Confirm exactly.** Reply:
 
-## The environment + the scope discipline (user-mandated 2026-10-08)
+   ```text
+   <NAME> SPEC RETAINED - IDLE
+   ```
 
-1. **You are never alone** - see ./references/batch-environment.md
-   Lanes run in pairs; 1-3 other agents edit the same repo at any moment with a dozen queued; read the CURRENT STATE block as part of your spec.
-2. **Runtime facts are verified** - see ./references/batch-environment.md
-   Check the tree state before + during your work; the user commits mid-session so HEAD moves under you; never assume a clean tree or sole writer.
-3. **Stay in your scope** - see ./references/batch-environment.md
-   Other lanes' surfaces are off-limits; read-before-edit always, coordinate via the report, never fight over a file region.
-4. **The surgical-edit discipline** - see ./references/edit-and-verify-discipline.md
-   Read tool then edit tool only; bash/python run commands, never edits; bulk transformations forbidden.
-5. **The build-verified rule** - see ./references/edit-and-verify-discipline.md
-   After every touched file the relevant arbiter must pass before you continue; never leave the tree broken.
-6. **The common skills** - see ./references/batch-environment.md
-   The global ~/.dsh/skills/ and the project's Documentation/Skill/ sets bind every agent; load the relevant one when in doubt.
+   For an amendment:
+
+   ```text
+   <NAME> SPEC AMENDED - IDLE
+   ```
+
+4. **An amendment replaces the conflicting part of the base spec.** The
+   rest stands.
+
+## The execution on activation
+
+1. Read the current-state block in the activation; it is part of the spec.
+2. Check the tree state before writing: `git status --short`,
+   `git log --oneline -5`, and `git -C Site status --short` when the site
+   is in scope.
+3. Execute the spec exactly: the scope, the exclusions, the sequence, and
+   the report format are constraints.
+4. Where the spec says "if X exists, verify and adjust", verify first,
+   then adjust minimally.
+5. Run the arbiter named in the spec; report its printed result.
+6. Flag, do not silently fix, any conflict: a contradiction with the
+   shared facts, a stale claim, a file another lane owns.
+7. End with the report format the spec names, plus READY-TO-COMMIT.
+
+## The laws that still apply
+
+- File content only through the write/raw-write/edit tools
+  (`code-authoring`).
+- Git is checks only; never commit.
+- The route is the one in the spec; do not re-route yourself
+  (`task-routing`).
+- Stay in your scope; other lanes are working beside you
+  (`worker-strains`).
+
+## Decision table
+
+| Situation                                | Action                                  |
+| ---------------------------------------- | --------------------------------------- |
+| Launched paused with a spec              | Retain; reply the exact IDLE line       |
+| Amendment arrives while idle             | Retain; reply the exact AMENDED line    |
+| Amendment arrives while working          | Apply only if compatible; flag if not   |
+| Activation arrives                       | Execute the retained spec; run the arbiter |
+| The spec conflicts with the tree         | Verify the tree, flag the conflict      |
+| A shared file is already modified        | Read before edit; report the conflict   |
+
+## Verification
+
+- The idle turn contains exactly one line: the confirmation.
+- The activation turn runs the spec's arbiter and prints its result.
+- The report has `file:line` anchors and READY-TO-COMMIT.
+- No work happened before activation.
+
+## Anti-patterns
+
+| Mistake                                  | Cost                                    | Do instead                        |
+| ---------------------------------------- | --------------------------------------- | --------------------------------- |
+| Starting work before activation          | Works on a spec that may change         | Wait for ACTIVATE                 |
+| Acknowledging an amendment and stopping  | The queue looks busy; nothing executes  | Execute at ACTIVATE               |
+| Paraphrasing the spec in the report      | The parent cannot match work to spec    | Quote the spec's items            |
+| Silently fixing a conflict               | The change is invisible to the parent   | Flag it in the report             |
+
+## References
+
+| File                        | Covers                                            | Read when                    |
+| --------------------------- | ------------------------------------------------- | ---------------------------- |
+| `references/contract.md`    | The idle contract, the exact lines, and amendments | You are launched idle        |
+| `references/execution.md`   | Activation, verification, flagging, and the report | You are activated            |

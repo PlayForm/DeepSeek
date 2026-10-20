@@ -1,109 +1,183 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/plugin-system/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: plugin-system
-description: THE operating manual for developing and extending the DeepSeek Harness Plugin Family (the @playform/plugin-dsh-factory + hook-dsh-* packages) - the DSH plugin contract this family implements, the bundle anatomy, the deterministic build, the smokes as the arbiter, the ledger-string contract, the module leaves vs the shared machinery, and the direct-govern steps. Load before writing, extending, or debugging any family plugin code.
-whenToUse: Mandatory before ANY plugin code work in this family - the twelve packages under the monorepo (Boilerplate/, Classic/, EffectTS/) or the live profile bundles. If you are about to touch a bundle's Source without knowing the contract (the loader surface, the build, the smoke arbiter, the ledger strings), STOP and read this manual first.
+description: "The DeepSeek Harness Plugin Family contract: the package inventory and roles, the loader contract and identity, the bundle anatomy and deterministic build, the factory-versus-module ownership split, the governance steps and the direct-govern channel, the EffectTS variant, and the ledger-string law."
+whenToUse: Before writing, extending, or debugging any family bundle; when adding a package, a config field, a governance step, or a ledger string; when wiring bundles into a profile; when a build, an activation, or a ledger line behaves unexpectedly.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
-# Plugin System - Operating Manual
+# The Plugin System
 
-The DeepSeek Harness Plugin Family: twelve packages, one contract. This
-manual states the conventions directly - it does not deliberate. The
-full philosophy lives in the references; this file is the index.
+The family is one contract expressed twice: plain TypeScript in `Classic/`
+and Effect services in `EffectTS/`. This skill states the contract both
+trees implement. The generic Cordis API is `plugin-development`; the smoke
+discipline is `smoke-writing`.
 
-## The Family Overview
+## When to use
 
-- **Twelve packages, one contract** - see ./references/family-overview.md
-  One contract binds the factory and every hook-dsh-* module; the
-  three tiers (live `~/.dsh`, Boilerplate/ reference, Classic/EffectTS/
-  releases) stay distinct.
+- Any change under `Classic/packages/` or `EffectTS/packages/`.
+- Adding a bundle, a config field, a ledger line, or a governance step.
+- Wiring a bundle into a profile (`dsh.profile.bundles`,
+  `cordis.patch.yml`).
+- Diagnosing an activation that did not happen, a build that failed, or a
+  ledger line that is missing.
+- Do not use for: the Cordis API itself (`plugin-development`) or writing
+  and running smoke suites (`smoke-writing`).
 
-## 1. The loader contract (every plugin)
+## The inventory
 
-1. **The default export is a cordis plugin** - see ./references/loader-contract.md
-   `name`, `apply` (returns NOTHING - a returned value silently kills
-   event delivery), `Config` (Schemastery; validated + defaults at
-   load, invalid fails LOUD), `inject` (factory + fs + tools; PENDING
-   orders the loads).
-2. **The identity lives in four agreeing places** - see ./references/identity-and-ledger-ownership.md
-   The package name, the `name` export, the `module:` option of the
-   State build, and the ledger logFile default; the ledger strings are
-   the module's OWN - the factory never owns them.
-3. **Bundle layers compose at boot** - see ./references/bundle-activation-and-patches.md
-   The profile's `dsh.profile.bundles` list + `link:` dependencies are
-   activation; `file:` alone is not; `cordis.patch.yml` declares
-   (`insert:`) or patches (bare `id:` row - config REPLACES wholesale,
-   unknown ids rejected).
+Two release groups, one contract:
 
-## 2. The bundle anatomy
+| Group    | Names                                                        | Runtime                  |
+| -------- | ------------------------------------------------------------ | ------------------------ |
+| Classic  | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`        | Plain TypeScript         |
+| EffectTS | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers |
 
-1. **The four-layer Source/** - see ./references/bundle-anatomy.md
-   `Library.ts` (the entry), `Function/`, `Interface/`, `Variable/`
-   (Config schema + defaults); the tsconfig `paths` aliases
-   `@Function/*`, `@Interface/*`, `@Variable/*` are rewritten to
-   relative output paths by the build.
-2. **Configuration/ holds the build config** - see ./references/build-configuration.md
-   `ESBuild.ts` plus the hand-kept `ESBuild.js` twin the build loader
-   swaps to, and `TypeScript.noemit.json`; the build wipes +
-   regenerates `Target/`.
-3. **The deterministic build (`prepublishOnly`)** - see ./references/deterministic-build.md
-   `Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts
-   --TypeScript Configuration/TypeScript.noemit.json && tsc -p
-   tsconfig.json && tsc-alias -f -p tsconfig.json`; a red tsc FAILS
-   the build; consumers type-check against the factory's BUILT Target
-   (rebuild the factory first); workspace builds run serialized
-   (`--workspace-concurrency=1`) - concurrent builds race the shared
-   Targets.
+The package roles:
 
-## 3. The family architecture (module leaves vs shared machinery)
+| Role              | Packages                                                        |
+| ----------------- | --------------------------------------------------------------- |
+| Service           | `plugin-dsh-factory` (19 methods, `ctx.pluginFactory`)          |
+| Machinery library | `hook-dsh-core` (not a plugin)                                  |
+| Governance trio   | `package-governor`, `package-pinner`, `cargo-governor`          |
+| Normalize family  | six stream flavors + `normalize-file`                           |
+| Guardians         | `ccr`, `tool-coach`                                             |
+| Live blocks       | `live-containers` (ships disabled)                              |
 
-1. **The FACTORY owns the shared machinery** - see ./references/factory-owns-machinery.md
-   The ledger (Append), the storage journal (Journal - the v2
-   per-record domain, the 3-stage routing), the write executor (Write
-   - the ONE shared path: fresh-stat version guard, P4 fence, Stash,
-   root-emit), the direct-govern fold (Govern + RegisterGovern steps),
-   the gate, the continuation (Continue/Refresh), the State builder,
-   the wire/attach.
-2. **The MODULE leaves are NEVER absorbed** - see ./references/module-leaves-never-absorbed.md
-   The transforms, the update engines, the update gates + breaker
-   maps, the ledger STRINGS, the config extensions + docs stay in the
-   modules.
-3. **Governance modules register their steps at apply** - see ./references/governance-steps-registration.md
-   Canonicalize/pin/cargo/update run through the direct fold
-   (sequential by default; the parallel marker is gated on proven
-   disjointness).
-4. **The direct path is the raw-write's ONLY governance channel** - see ./references/direct-govern-channel.md
-   The actor carries the `govern` marker; the gate's `govern` reason
-   skips the marked events; absent/false = the escape hatch (no
-   chain).
-5. **The EffectTS variant keeps the SAME contract behind Effect v4** - see ./references/effectts-variant.md
-   The cordis shell + the Effect services/layers + the tracing (the
-   no-op default); the ledger strings byte-identical.
+Verify the inventory:
 
-## 4. The smokes are the arbiter
+```sh
+ls Classic/packages EffectTS/packages
+grep -h '"version"' Classic/packages/*/package.json
+```
 
-1. **Every Source change passes its bundle's smoke with ZERO assertion changes** - see ./references/smoke-arbiter.md
-   Exceptions: identity-driven strings change BY DESIGN (the module's
-   own identity) and additive coverage for new features.
-2. **Smokes prove the MECHANICS; the live battery proves the WIRING** - see ./references/smokes-prove-mechanics.md
-   The smokes load the REAL built Targets (fake ctx + real factory);
-   they do not cover the patch layers, the load order, or the
-   version-guard interplay - the live findings came from the battery.
-3. **The vacuously-green trap** - see ./references/vacuously-green-trap.md
-   A smoke whose fixture wiring is wrong can pass without exercising
-   the code - when a smoke "passes but the world is weird", verify the
-   harness wiring first.
-4. **The ledger strings are the contract: byte-identical everywhere** - see ./references/ledger-strings-byte-identical.md
-   Rename ONLY the mechanics, never the strings.
+Never mix the groups in one dependency graph: the EffectTS `Update`
+returns Effect envelopes, not the Classic dispatch envelope.
 
-## 5. The working conventions
+## The loader contract
 
-1. **One file per response; read before editing** - see ./references/working-conventions.md
-   Content via write/edit; the terminal for builds/tests/metadata only.
-2. **No commits by agents** - see ./references/working-conventions.md
-   The user commits.
-3. **The family runs LIVE in the profile** - see ./references/working-conventions.md
-   The `~/.dsh` originals are never modified by monorepo development -
-   the copies (Boilerplate/) are the reference; the releases
-   (Classic/EffectTS) derive from it.
+Every plugin's default export carries exactly:
+
+- `name` - the identity, agreeing with the package name;
+- `apply` - returns nothing (a returned value silently kills event
+  delivery);
+- `Config` - a Schemastery schema, validated at load, failing loud;
+- `inject` - the services it needs, so the loader's PENDING state orders
+  the loads.
+
+The identity lives in four agreeing places: the package name, the `name`
+export, the State build's `module:` option, and the ledger logFile
+default.
+
+## The bundle anatomy
+
+```text
+<bundle>/
+  Source/
+    Library.ts            the entry: name, apply, Config, inject
+    Function/             the behavior, one definition per file
+    Interface/            the types
+    Variable/             the Config schema and defaults
+  Configuration/
+    ESBuild.ts            the build config
+    ESBuild.js            the twin the build loader swaps to
+    TypeScript.noemit.json
+  Target/                 the build output (never hand-edited)
+```
+
+The tsconfig path aliases (`@Function/*`, `@Interface/*`,
+`@Variable/*`) are rewritten to relative output paths by the build.
+
+## The build
+
+`prepublishOnly` runs, in order:
+
+```text
+Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts \
+  --TypeScript Configuration/TypeScript.noemit.json
+&& tsc -p tsconfig.json
+&& tsc-alias -f -p tsconfig.json
+```
+
+A red `tsc` fails the build; there is no waiver. Rebuild the factory
+before any consumer: consumers type-check against its built `Target/`.
+Workspace builds run serialized (`--workspace-concurrency=1`) because the
+packages share Targets.
+
+## The ownership split
+
+- **The factory owns the shared machinery**: the ledger append, the
+  storage journal, the write executor (fresh-stat version guard, fence,
+  stash, root emit), the direct-govern fold, the gate, the continuation,
+  the State builder, the wiring.
+- **The modules own their leaves**: the transforms, the update engines,
+  the gates and breaker maps, the ledger strings, the config extensions,
+  and the docs. Modules are never absorbed into the factory.
+
+## Governance and the direct path
+
+Governance modules register their steps at apply. The steps run through
+the direct fold, sequentially by default; a parallel marker is allowed
+only with proven disjointness.
+
+The direct path is the `raw-write` tool's only governance channel:
+
+1. The actor carries the `govern` marker.
+2. The gate's `govern` reason skips the marked events.
+3. An absent or false marker is the escape hatch: no chain.
+
+There is no second channel.
+
+## The EffectTS variant
+
+The same contract behind Effect v4.0.5: a Cordis shell, Effect services
+and layers, and tracing that defaults to no-op. The ledger strings are
+byte-identical to the Classic tree.
+
+## The ledger-string law
+
+Every activation line, refusal line, chain-pass line, and journal record
+is asserted byte-identically. Rename mechanics, never strings. The one
+exception is an identity change by design (a package rename), which
+changes that module's own strings and is recorded as a rename.
+
+## Decision table
+
+| Situation                              | Action                                           |
+| -------------------------------------- | ------------------------------------------------ |
+| New bundle                             | Copy the anatomy; wire the profile; add a smoke  |
+| New config field                       | Schema in `Variable/`, README, site config surface |
+| New ledger line                        | Module-owned string; smoke asserts it byte-exactly |
+| New governance step                    | Register at apply; go through the fold            |
+| Build fails in a consumer              | Rebuild the factory first, then serialized        |
+| Plugin loaded but receives no events   | Check `apply` for a return value                  |
+| Ledger line missing                    | Check the four identity places and the logFile    |
+
+## Verification
+
+- The bundle's smoke suite passes at its recorded count
+  (`smoke-writing`).
+- The build chain is green, serialized, and the factory built first.
+- The activation line appears in the ledger at boot.
+- The ledger strings diff empty against the baseline.
+
+## Anti-patterns
+
+| Mistake                                | Cost                                      | Do instead                        |
+| -------------------------------------- | ----------------------------------------- | --------------------------------- |
+| `apply` returns a disposer             | Event delivery stops silently             | Return nothing                    |
+| Consumer built before the factory      | Stale-Target type errors                  | Rebuild the factory first         |
+| Parallel workspace builds              | Half-written Targets, phantom errors      | `--workspace-concurrency=1`       |
+| Factory owning a module's strings      | Every module's output changes at once     | Strings live in the module        |
+| A second governance channel            | Unattributed mutations                    | The `govern` marker only          |
+| Mixing Classic and EffectTS            | Envelope mismatch                         | One group per graph               |
+
+## References
+
+| File                                  | Covers                                                   | Read when                        |
+| ------------------------------------- | -------------------------------------------------------- | -------------------------------- |
+| `references/inventory.md`             | The full package roster, roles, versions, and counts      | You need the family's shape      |
+| `references/loader-and-identity.md`   | The loader contract and the four identity places          | Adding or renaming a plugin      |
+| `references/bundle-and-build.md`      | Anatomy, build chain, activation, and patch rows          | Building or wiring a bundle      |
+| `references/ownership-and-governance.md` | Factory versus module ownership, steps, direct path    | Adding a governance behavior     |
+| `references/effectts-and-ledger.md`   | The EffectTS variant and the byte-identical ledger law    | Touching ETS or a ledger string  |

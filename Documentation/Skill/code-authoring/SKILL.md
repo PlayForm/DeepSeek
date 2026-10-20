@@ -1,151 +1,159 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/code-authoring/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: code-authoring
-description: THE authoring discipline for every file operation and every code write in this harness - hard rule: file modifications ONLY through the write/edit tool API (never sed/awk/python/terminal edits), plus the atomized Rust-style writing conventions (one definition per file, nameless default exports, single-word PascalCase names, inlined single-use bindings, switch (true) guards). Load before editing any file or writing any code.
-whenToUse: Mandatory before EVERY file modification and every code-writing task (plugin code, scripts, docs). If you are about to run sed, awk, perl, python in-place rewrites, or shell heredoc file surgery instead of the write/edit tools, STOP and use the tool API. If you are about to write code that is not atomized per the style section, STOP and apply the style.
+description: "The authoring discipline for every file operation and every code write in this repository: the write/raw-write/edit tool API, byte integrity, git checks-only, and the atomized writing style (one definition per file, nameless default exports, full-word PascalCase names, inlined single-use bindings, switch (true) guards)."
+whenToUse: Before every file modification and every code-writing task, including docs, scripts, and manifests. Also load it when a write might contain a deliberate unicode glyph, when a bulk transformation is proposed, or when a commit is requested.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
-# Code Authoring - Operating Manual
+# Code Authoring
 
-Two halves, both hard rules: **tool discipline** (how files get
-modified) and **writing style** (how code gets structured). User-mandated
-2026-10-03. This file is the index: every rule's full philosophy lives in
-its reference file under `references/`, and the canonical skill structure
-(all skills) is defined in
-./references/skill-structure-template.md.
+Two halves, both hard rules: how files are modified, and how code is
+structured. The first half is the tool discipline; it exists because
+terminal content operations are invisible to the model's own record and
+bypass the governance hooks. The second half is the writing style; it
+exists so any definition can be borrowed in isolation.
 
-## 1. Tool discipline (how files are read and modified)
+## When to use
 
-1. **Never edit file content through the terminal** (no `sed -i`, `awk`,
-   `perl -pi`, Python in-place rewrites, heredoc surgery) - see
-   ./references/never-terminal-content-edits.md
-2. **Deletion via `rm` IS allowed** (a command operation, not a content
-   edit; verify the resolved absolute path first) - see
-   ./references/deletion-via-rm-allowed.md
-3. **Never read file content through the terminal either** (`cat`,
-   `head`/`tail`, content `grep` are forbidden; read/grep/glob tools own
-   the read surface; the terminal runs commands, not content) - see
-   ./references/never-terminal-content-reads.md
-4. **Every modification uses the write/edit tool API** (`write` = create
-   or fully replace; `edit` = validated literal replace) - see
-   ./references/all-modifications-via-write-edit.md
-5. **The same rules bind every subagent**: coder prompts explicitly
-   forbid terminal content edits AND terminal content reads; `rm`
-   deletions permitted - see
-   ./references/subagents-bound-to-discipline.md
-6. **Edit mismatch: read first, copy the exact bytes, retry with the
-   edit tool - never fall back to the terminal** - see
-   ./references/edit-mismatch-read-first.md
-7. **The incident rationale (2026-10-03)**: a Python in-place patch
-   injected `await` into a sync function; the edit tool validates matches
-   and preserves the API contract - see
-   ./references/why-terminal-edits-fail-incident.md
-8. **The mechanism rationale**: terminal edits are invisible to the
-   plugin system - the `fs/observed` chain (governor, pinner, Cargo
-   plugins) fires only on tool-layer writes, so using write/edit IS the
-   plugin usage - see
-   ./references/mechanism-fs-observed-governance.md
+- Any file creation, replacement, or edit.
+- Any code write: plugin source, site source, scripts, tests, configs.
+- Any bulk transformation or rename sweep.
+- Any commit request: the answer is READY-TO-COMMIT, never a commit.
+- Do not use for: reading files (use the `read` tool directly) or for the
+  typographic-fixture rationale (that is `instructional-writing`).
 
-## 1b. Future - programmatic enforcement (the guardian plugin; note only, implementation deferred)
+## The rules
 
-The discipline must become model-independent, enforced by the plugin
-system itself - the full mandate, status, and part list: see
-./references/guardian-plugin-future.md
+### Tool discipline
 
-1. **The guardian hook**: intercept bash via `tools/pre-execute` and
-   detect the terminal file-edit patterns - see
-   ./references/guardian-hook-detection.md
-2. **Mode A - surface the error**: deny with a structured reason so the
-   agent infers the constraint from the plugin's own feedback - see
-   ./references/guardian-mode-a-surface-error.md
-3. **Mode B - the silent rewrite flag (the ideal, later)**: rewrite the
-   terminal command into the equivalent tool call invisibly - see
-   ./references/guardian-mode-b-silent-rewrite.md
-4. **The note lives here AND in plugin-development** (the guardian is a
-   new plugin archetype: a discipline-enforcement hook) - see
-   ./references/guardian-placement-home.md
+1. **Modify content only through `write`, `raw-write`, or `edit`.** Never
+   `sed -i`, `awk`, `perl -pi`, Python in-place rewrites, or heredoc
+   surgery. The tools validate, record, and fire the governance hooks;
+   the shell does none of those.
+2. **Read content only through `read`, `grep`, and `glob`.** Never `cat`,
+   `head`, `tail`, or content `grep` in the terminal. The terminal runs
+   commands: builds, tests, package managers, git checks, listings.
+3. **Read before edit.** The `edit` tool matches literal text; if the
+   match fails, re-read the exact bytes and retry. Never fall back to a
+   shell rewrite.
+4. **Choose the writer by the content, not by habit.**
+   - `write`: ordinary content. Streamed text is normalized (dashes,
+     quotes, ellipsis, spaces, invisibles, fullwidth), so write ASCII.
+   - `raw-write`: content whose bytes must survive exactly (typographic
+     fixtures, exact copies, demo before/after pairs). Read the file
+     first; it refuses to overwrite an unseen file. Use absolute paths:
+     relative paths resolve against the profile root, not the cwd.
+   - `edit`: a literal replacement inside an existing file; identity-exempt,
+     so it preserves any glyph outside the replaced span.
+5. **`rm` is allowed for deletion.** It is a command operation, not a
+   content edit. Verify the resolved absolute path first; never delete a
+   path built from an unverified variable.
+6. **The same rules bind every subagent.** A coder prompt states both
+   prohibitions (no terminal content edits, no terminal content reads),
+   the allowed `rm`, and the read-before-edit rule.
 
-## 1c. Byte-integrity - no NUL/control bytes, ever (post-incident 2026-10-07)
+### Byte integrity
 
-A bulk markdown conversion wrote NUL bytes into 25 files; the write tool
-writes VERBATIM, so the risk surface is the content generated before the
-write - the incident and the hard rule: see
-./references/byte-no-null-control-bytes.md
+7. **Never write NUL bytes or control characters** outside `\n`, `\r`,
+   `\t`.
+8. **Never build content through NUL-terminated or NUL-separated
+   conventions** (`printf '%s\0'`, `-print0` into a file, buffer padding).
+9. **Never generate the escape representation of NUL** (`\0`, `\x00`,
+   `\u0000`) in content that could materialize it.
+10. **After any bulk transformation, scan the touched files** for zero
+    NUL bytes and valid UTF-8, and spot-read one file, before reporting
+    done.
 
-1. **Never write NUL bytes or control characters** (outside `\n \r \t`)
-   into file content - see
-   ./references/byte-no-null-control-bytes.md
-2. **Never build content through NUL-terminated/separated conventions**
-   (no `printf '%s\0'`, no `-print0`/`-0` into files, no C-string
-   truncation, no buffer padding) - see
-   ./references/byte-no-nul-conventions.md
-3. **Never generate the escape-representation of null** (`\0`, `\x00`,
-   `\u0000` that could materialize); regenerate BEFORE the write - see
-   ./references/byte-no-escape-representation.md
-4. **After any bulk transformation, verify the written bytes before
-   reporting done**: the byte-level scan (zero NUL, zero stray controls,
-   valid UTF-8) plus a spot-check read - see
-   ./references/byte-verify-after-bulk.md
-5. **The verification gate is part of the prompt**: every
-   bulk-transformation agent spec mandates the byte scan as an arbiter -
-   see ./references/byte-verification-gate-in-prompt.md
+### Git
 
-## 1d. Git: checks only - never mutate (user-mandated 2026-10-10)
+11. **Git is read-only checks.** Allowed: `status`, `log`, `diff`, `show`,
+    `rev-parse`, `ls-files`, `fetch`, `log --diff-filter=D`. Forbidden:
+    `add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`,
+    `merge`, `stash`, `clean`.
+12. **Report READY-TO-COMMIT.** A finished deliverable lists the exact
+    files and a suggested commit message; the user commits.
 
-No `git add/commit/reset/push/tag/rm/checkout/branch/merge/stash/clean`;
-agents' git work is read-only checks (`status`, `log`, `diff`, `show`,
-`rev-parse`, `ls-files`, `fetch`); the user owns every mutation; commits
-are reported as READY-TO-COMMIT - see
-./references/git-checks-only.md
+### Writing style
 
-## 2. Writing style (how code is structured)
+13. **One definition per file.** One exported function or type per leaf,
+    in its own folder; small private helpers used only by that
+    definition may share the leaf. The assembly surface (the entry) is
+    wiring only.
+14. **Nameless default exports.** `export default async () => {}`
+    everywhere. Only the plugin entry carries the loader-contract names:
+    `name`, `apply`, `Config`, `inject`, and the assembled default
+    object.
+15. **Names: PascalCase, one word, action-oriented, present tense,
+    singular, full words.** `Configuration`, not `Config`; `Environment`,
+    not `Env`. Genuine acronyms stay (DSH, ETS, CCR, JSON, URL).
+    Documented exceptions: the loader's `Config` export, machine-read
+    contract names, and the `State`/`Set`/`Count` domain vocabulary.
+16. **Inline single-use bindings.** A binding survives only if used more
+    than once, or if it names a setup-time invariant the rest of the
+    code must not recompute.
+17. **`switch (true)` for guard chains.** Three or more `if (x) return
+    y;` lines become a `switch (true)` with a returning arm per case and
+    a `default` that returns or throws. Do not force it on a single
+    `if`, loops, or arms with side effects.
+18. **Depth is earned by specificity; barrels group siblings; the
+    most-used modules sit shallowest.**
 
-The atomized Rust-style tree, battle-tested on
-`@local/dsh-hook-package-governor` (mirrors `Cargo/Run`'s
-`Source/Library.rs` + `Fn/` + `Struct/` pattern):
+## The workflow
 
-1. **One definition per file** - every function and type in its own
-   deeply nested folder/file so any piece can be borrowed in isolation -
-   see ./references/one-definition-per-file.md
-2. **Nameless default exports** - `export default async () => {}`
-   everywhere; only the plugin ENTRY carries the loader-contract named
-   exports (`name`, `apply`, `Config`, `inject`) - see
-   ./references/nameless-default-exports.md
-3. **Naming rules** - PascalCase, one word, action-oriented, present
-   tense, singular, full words (Configuration not Config, Environment
-   not Env); exceptions only when documented - see
-   ./references/naming-rules-full-words.md
-4. **Inline every single-use binding** - a binding survives only when
-   used more than once or as a documented setup-time invariant - see
-   ./references/inline-single-use-bindings.md
-5. **`switch (true)` guards** - if-chains become Rust-style switch with
-   returns inside every arm - see
-   ./references/switch-true-guards.md
-6. **Hierarchy** - barrels for grouped folders; depth grows with
-   specificity; least-utility modules float to the top - see
-   ./references/hierarchy-barrels-depth.md
-7. **Behavior-identical refactors** - ledger strings, observable
-   behavior, and the silence invariant stay byte-identical; the smoke
-   suite is the arbiter - see
-   ./references/behavior-identical-refactors.md
+1. Read the target file (and its neighbours) with the `read` tool.
+2. Decide the writer: `write` for ordinary content, `raw-write` for
+   byte-faithful content, `edit` for a literal replacement.
+3. Make one logical change per call. For a refactor, keep the change
+   behavior-identical (section: refactors).
+4. Verify: the relevant arbiter. Package code: the bundle's smoke suite
+   (`smoke-writing`). Site: `cd Site && pnpm prepublishOnly`, then
+   inspect `Site/Target/`. Docs: re-read the changed span.
+5. If a bulk transformation was involved, run the byte scan (rule 10).
+6. Report: files touched, the arbiter's printed result, and
+   READY-TO-COMMIT with the suggested message.
 
-## 3. Application
+## Decision table
 
-- **Coder agents receive this discipline in their prompt** (the rules
-  verbatim, plus the one-file-per-response protocol when relevant) - see
-  ./references/coder-prompt-receipt.md
-- **Review passes check**: no terminal edits in the session log, one
-  definition per file, nameless defaults, naming rules, inlined
-  bindings - see ./references/review-pass-checklist.md
-- **The division of labor**: plugin-development covers the API contract;
-  THIS skill covers how every file is modified and how every piece of
-  code is written - see
-  ./references/skill-division-of-labor.md
+| Situation                              | Writer        | Note                                         |
+| -------------------------------------- | ------------- | -------------------------------------------- |
+| New file, ordinary ASCII               | `write`       | Streamed content is normalized              |
+| Exact bytes matter (fixture, copy)     | `raw-write`   | Read first; absolute path                    |
+| One literal replacement                | `edit`        | Re-read on mismatch; never shell-rewrite     |
+| Delete a file                          | `rm`          | Verify the absolute path                     |
+| Rename a symbol across many files      | `edit` each   | Mechanical sweep, guarded exceptions list    |
+| Bulk transformation with a script      | Tool API only | Then the byte scan; never a shell rewrite    |
 
-## Skill structure (the canonical template for all skills)
+## Verification
 
-Every skill (this one included) follows one structure: SKILL.md as the
-summary + pointer index, `references/` for text, `scripts/` for scripts,
-every bullet expanded fully in its reference - the template and the
-conversion protocol: see ./references/skill-structure-template.md
+- **Tool discipline:** the transcript shows every content change as a
+  `write`/`raw-write`/`edit` call; no shell command modified content.
+- **Byte integrity:** the scan prints zero NUL bytes and valid UTF-8.
+- **Git:** the session contains no mutating git command; the report
+  carries READY-TO-COMMIT.
+- **Style:** every non-entry leaf has one anonymous default export; the
+  naming table passes; guard chains of three or more are `switch (true)`.
+
+A failure is fixed before the next file, not reported as a residual.
+
+## Anti-patterns
+
+| Mistake                                   | Cost                                              | Do instead                        |
+| ----------------------------------------- | ------------------------------------------------- | --------------------------------- |
+| `sed -i` or a heredoc to patch a file     | Invisible to the record; unverifiable bytes       | `edit` with a literal match       |
+| `cat`/`head` to inspect a file            | Bypasses the read surface and the hooks           | `read` with offset and limit      |
+| Streaming a curly quote into `write`      | The normalize hooks replace it silently           | ASCII, or `raw-write`             |
+| Weakening a smoke to pass a change        | The arbiter stops arbitrating                     | Fix the change (`smoke-writing`)  |
+| Committing because the work "looks ready" | The user loses control of the tree                | READY-TO-COMMIT report            |
+| Named exports spreading through the tree  | Uniformity decays; import sites multiply          | Anonymous defaults; contract only |
+| Abbreviations "just this once"            | The table becomes advisory                        | Full words, documented exceptions |
+
+## References
+
+| File                                | Covers                                                       | Read when                              |
+| ----------------------------------- | ------------------------------------------------------------ | -------------------------------------- |
+| `references/tool-discipline.md`     | The writers, the mismatch path, subagent rules, the incident | A write behaves unexpectedly           |
+| `references/byte-integrity.md`      | NUL and control bytes, the scan procedure, the incident      | Any bulk transformation                |
+| `references/git-law.md`             | The allowed list and the READY-TO-COMMIT format              | A commit is requested                  |
+| `references/writing-style.md`       | The seven style rules with examples                          | Writing or reviewing code              |
+| `references/review-and-refactors.md`| The behavior-identical refactor law and the review checklist | A refactor or a review pass            |

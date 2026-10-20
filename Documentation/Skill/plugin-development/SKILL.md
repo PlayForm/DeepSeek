@@ -1,135 +1,151 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/plugin-development/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: plugin-development
-description: THE operating manual for authoring DeepSeek Harness (DSH) plugins against the Cordis plugin API — the five dispatch modes, plugin anatomy, Config schemas, services, fibers/effects/HMR, tools, packaging, performance pressure rules, the well-integrated checklist, and a verified pitfalls catalog. Load before writing, refactoring, or reviewing ANY dsh plugin.
-whenToUse: Mandatory before creating a plugin bundle, hooking a cordis event, exporting a Config schema, providing/consuming a service, registering a tool, packing a bundle, or diagnosing why a plugin did not activate. If you are about to write plugin code without having applied this manual, stop and read it first.
+description: "The DeepSeek Harness (Cordis) plugin API: the five dispatch modes, plugin anatomy, Config schemas, services, fibers and effects, tools and the execution pipeline, the performance rules for event listeners, packaging, the review checklist, and the verified pitfalls catalog."
+whenToUse: Before creating a DSH plugin or hooking a Cordis event, exporting a Config schema, providing or consuming a service, registering a tool, packing a bundle, or diagnosing why a plugin did not activate. For this repository's family contract, load plugin-system as well.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
-# DSH Plugin Development - Operating Manual
+# DSH Plugin Development
 
-THE operating manual for authoring DSH plugins against the Cordis plugin
-API. Sources: `~/Developer/Documentation/Module/deepseek-harness/docs/`
-(citations `file.md:line`), plus live verification against the running host
-and a fully shipped production plugin (`@local/dsh-hook-package-governor`,
-this machine). A DSH plugin is a cordis plugin: it receives `ctx` and
-`config`, declares what it needs, and integrates ONLY through the API - the
-harness is a microkernel with no privileged core to patch, so free-floating
-Node.js inside a plugin is the anti-pattern. The full philosophy lives in
-the references; this file is the index.
+A DSH plugin is a Cordis plugin: it receives `ctx` and `config`, declares
+what it needs, and integrates only through the API. The harness is a
+microkernel with no privileged core to patch, so free-floating Node.js
+inside a plugin is the anti-pattern. This skill is the API manual; the
+family's conventions are `plugin-system`.
 
-## The One Sentence
+## When to use
 
-- **Plugin equals cordis plugin** - see ./references/one-sentence.md
-  Integrates only through events, services, tools, config schemas, effects;
-  the microkernel has no privileged core to patch.
+- Creating a plugin, hook, or tool for the harness.
+- Choosing an event mode, a service shape, or a config schema.
+- Diagnosing an activation, an event that never fires, or a tool that
+  fails after a mutation.
+- Do not use for: the family's bundle anatomy, build, and ledger
+  (`plugin-system`) or the smoke suites (`smoke-writing`).
 
-## The API Map
+## The API map
 
-- **The eight seams** - see ./references/api-map.md
-  Events, Config, Services, Tools, Effects, Logger, Subprocess/Sandbox,
-  Jobs - each seam a capability with the three roles (definition, provider,
-  consumer).
+| Seam      | What it provides                                              |
+| --------- | ------------------------------------------------------------- |
+| Events    | `ctx.on`, `ctx.emit`, `ctx.parallel`, `ctx.serial`, `ctx.bail`, `ctx.waterfall` |
+| Config    | The `Config` schema; validated at load, hot-replaced on edit   |
+| Services  | `Service` base, `provide`/`get`, PENDING-until-satisfied       |
+| Tools     | `defineTool`, the execution pipeline, presenters               |
+| Effects   | `ctx.effect` for resources; fiber-owned disposal               |
+| Logger    | `ctx.logger`, never `console`                                  |
+| Subprocess| The subprocess seam; absolute binaries, the host PATH          |
+| Jobs      | `ctx.jobs` with a controller at root                           |
 
-## Event Bus - the Five Dispatch Modes
+## The five dispatch modes
 
-- **The dispatch table** - see ./references/dispatch-modes.md
-  `emit | parallel | serial | bail | waterfall`; awaited, order, and return
-  semantics per mode; the mode is public contract.
-- **Waterfall discipline** - see ./references/waterfall.md
-  Observers MUST call `next()`; omitting it silently swallows the default
-  behavior downstream; `prepend: true` only when ordering matters.
-- **Listener registration and scoping** - see ./references/event-listeners.md
-  `ctx.on` returns a disposer owned by the fiber; `ctx.once`; `global?`;
-  `Context.filter` consulted on every dispatch; root listeners hear all.
+| Mode        | Awaited | Order             | Return |
+| ----------- | ------- | ----------------- | ------ |
+| `emit`      | No      | registration      | No     |
+| `waterfall` | Via `next()` | registration | Yes    |
+| `parallel`  | Yes     | all in parallel   | No     |
+| `serial`    | Yes     | registration      | Yes    |
+| `bail`      | No      | until one bails   | Yes    |
 
-## Plugin Anatomy
+The mode is the event's public contract. A listener cannot opt out of it.
 
-- **Export shapes, loading, Inject** - see ./references/plugin-anatomy.md
-  Function/Constructor/Object shapes; loud load failure; `inject` array vs
-  intercept-object form; never return from `apply`.
-- **Typed vocabulary** - see ./references/declaration-merging.md
-  Declaration merging into `Context` and `Events` for typed accessors and
-  events.
+- `emit` is fire-and-forget: returned promises are dropped. Listeners must
+  be synchronous recorders.
+- `waterfall` observers must call `next()`. Omitting it silently swallows
+  the default behavior downstream. Use `prepend: true` only when ordering
+  matters.
 
-## Config Contract
+## Plugin anatomy
 
-- **Schema, validation, tunables, volatile, hot-replace** - see
-  ./references/config-contract.md
-  Real `Schema.object` with defaults, fail-loud validation, every tunable a
-  config field (the cordis.yml test), volatile cells, `!!js` scope, config
-  edits hot-replace the plugin.
+- The default export is a function, a constructor, or an object with
+  `name`, `apply`, `Config`, `inject`.
+- `apply` returns nothing. A returned value silently kills event delivery.
+- A bad config fails loud at load.
+- `inject` declares the services; the loader's PENDING state orders the
+  loads.
+- Declaration merging into `Context` and `Events` gives typed accessors
+  and typed events.
+
+## Config
+
+- A real `Schema.object` with defaults, not a plain object.
+- Every tunable is a config field (the cordis.yml test).
+- Volatile cells apply on the next dispatch without a remount.
+- `!!js` scope for computed values.
+- A config edit hot-replaces the plugin.
 
 ## Services
 
-- **Service base class, provide/get/set, dependency tracking** - see
-  ./references/services.md
-  `super(ctx, name)`, static hooks, PENDING-until-satisfied (load order
-  never matters), optional deps by probing, the no-service archetype.
+- Extend `Service`, call `super(ctx, name)`.
+- `provide`/`get`; static hooks for typed access.
+- PENDING-until-satisfied: load order never matters.
+- Optional dependencies by probing; a plugin with no service is a valid
+  archetype.
 
-## Fibers & Effects
+## Fibers and effects
 
-- **Lifecycle, disposal order, raw resources, HMR** - see
-  ./references/fibers-and-effects.md
-  Fiber state machine, reverse-order disposal, async disposers run
-  concurrently, wrap raw resources in `ctx.effect`, stable row ids for
-  HMR diffs.
+- A fiber owns its registrations; disposal runs in reverse order.
+- Async disposers run concurrently.
+- Wrap raw resources in `ctx.effect`.
+- Stable row ids for HMR diffs; HMR idempotence is part of the checklist.
 
 ## Tools
 
-- **defineTool and the output contract** - see ./references/tools.md
-  Typed parameters, one canonical JSON value, pure render, readonly after
-  registration, honor `exec.signal`.
-- **The execution pipeline and selection rule** - see
-  ./references/tool-pipeline.md
-  pre-execute -> guard -> execute -> projectContent -> post-execute ->
-  finalizeContent -> result; guard monotonic; presenters pure.
+- `defineTool` with typed parameters.
+- One canonical JSON value per result; render purely.
+- Readonly after registration; honor `exec.signal`.
+- The pipeline: pre-execute, guard, execute, projectContent,
+  post-execute, finalizeContent, result.
+- The guard is monotonic; presenters are pure.
 
-## Performance & Pressure Rules
+## Performance rules
 
-- **emit listeners are synchronous recorders** - see
-  ./references/performance-pressure.md
-  The fs/observed rule (no awaits, no throws, no I/O), heavy work via
-  `ctx.jobs.start`, config-owned throttles, contained exceptions,
-  model-visible means logged.
+- `emit` listeners are synchronous recorders: no awaits, no throws, no
+  I/O. A throw in an `emit` listener fails the tool call after the
+  mutation.
+- Heavy work goes through `ctx.jobs.start`.
+- Throttles belong in config.
+- Contained exceptions log to the logger and the ledger only.
+- Model-visible behavior is logged.
 
-## Packaging & Activation
+## Packaging
 
-- **Bundles, patch rows, profiles, layers, installs** - see
-  ./references/packaging.md
-  `dsh.bundle` patch layers, `- insert:` vs override-by-id (config replaced,
-  not merged), layer order, peer deps, the directory-link dev loop,
-  same-version reinstall is a no-op.
+- `dsh.bundle` patch layers: `- insert:` for new rows, a bare `id:` to
+  override.
+- An override replaces the config wholesale, not merge.
+- Layer order matters; peer dependencies must be declared.
+- The directory-link dev loop; same-version reinstall is a no-op.
 
-## Well-Integrated Plugin Checklist
+## The review checklist
 
-- **The 15-item review list** - see ./references/checklist.md
-  Single entry, declared injects, real schema, tunables as config fields,
-  effects everywhere, one-disposer teardown, waterfall discipline,
-  synchronous emit recorders, seam-only I/O, policy as listeners,
-  defineTool rules, declaration merging, logger not console, packaging per
-  publish.md, HMR idempotence.
+A well-integrated plugin has: one entry, declared injects, a real schema,
+tunables as config fields, effects everywhere, one-disposer teardown,
+waterfall discipline, synchronous emit recorders, seam-only I/O, policy as
+listeners, `defineTool` rules, declaration merging, logger not console,
+packaging per the publish rules, and HMR idempotence.
 
-## Pitfalls Catalog (verified on this machine)
+## Verification
 
-- **The 19 verified pitfalls** - see ./references/pitfalls-catalog.md
-  FsTarget shape, positional fs/observed payload, bare id rows, ncu argv,
-  unawaited emit, unresolvable imports, import.meta.dirname, stale
-  versions, shadowed globals, PATH, CJS defaults, activation verification,
-  ambiguous-install, emit-throw after mutation, default-object shadowing,
-  apply return values, root jobs controller, sandbox policy at root, pnpm
-  workspace swallowing.
+- The plugin loads with a valid config and announces its activation.
+- The activation is verified by Inspect and a durable ledger line, not by
+  a restart.
+- The event mode matches the listener's behavior.
+- The tool's result is one canonical JSON value and its presenter is pure.
 
-## Documented Gaps
+## Anti-patterns
 
-- **Known incompleteness, don't over-document** - see
-  ./references/documented-gaps.md
-  No-schema pass-through, Plugin.Transform without examples, the waterfall
-  "Awaited? No" cell, cooldowns are not a framework concept.
+| Mistake                              | Cost                                       | Do instead                     |
+| ------------------------------------ | ------------------------------------------ | ------------------------------ |
+| Returning a value from `apply`       | Event delivery stops silently              | Return nothing                 |
+| Async listener on `emit`             | Dropped promise; rejection after mutation  | Synchronous recorder           |
+| Omitting `next()` in a waterfall     | The default behavior downstream vanishes   | Call `next()`                  |
+| `console` logging                    | Invisible to the harness's log surface     | `ctx.logger`                   |
+| Free-floating Node.js                | No seam, no lifecycle, no governance       | Use the API                    |
 
-## Source Documents
+## References
 
-- **Where the truth lives** - see ./references/source-documents.md
-  The cited docs (cordis-api, user/develop, subsystems, cookbooks) and the
-  live template `@local/dsh-hook-package-governor`; live behavior wins on
-  conflict.
+| File                                | Covers                                                  | Read when                      |
+| ----------------------------------- | ------------------------------------------------------- | ------------------------------ |
+| `references/dispatch-and-events.md` | The modes, the waterfall, listeners, and scoping         | Hooking an event               |
+| `references/anatomy-and-config.md`  | Export shapes, inject, Config, services, declaration     | Creating a plugin              |
+| `references/fibers-and-tools.md`    | Fiber lifecycle, effects, HMR, `defineTool`, the pipeline | Resources and tools           |
+| `references/packaging-and-pitfalls.md` | Bundles, patch layers, the 19 verified pitfalls      | Packing or debugging           |

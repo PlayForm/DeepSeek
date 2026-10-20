@@ -1,97 +1,96 @@
-# The Repository Map (What This Monorepo Is)
+# The Repository Map
 
-> Source: SKILL.md, section 1 ("The repository itself").
-> Converted to the canonical skill structure on 2026-10-20.
-> This file carries the full philosophy; SKILL.md only points here.
+The monorepo has seven working trees. Know which one you are in before you
+edit; most early mistakes are wrong-tree mistakes.
 
-## The Rule
+## The trees
 
-The working repository is the PlayForm DeepSeek monorepo: the DeepSeek
-Harness (DSH) plugin family for PlayForm. A session must be able to state
-its composition and layout before working in it:
+| Path             | Role                                                                 | Git                        |
+| ---------------- | -------------------------------------------------------------------- | -------------------------- |
+| `Classic/`       | The plain-TypeScript release: 15 packages, each with its own `Target/` | Root repo                 |
+| `EffectTS/`      | The Effect-TS release: 15 packages plus `ets-base-dsh`                | Root repo                  |
+| `Site/`          | The Astro static site, built into `Site/Target/`                      | Its own repository         |
+| `Test/`          | Fixture archives, governance batteries, probes                        | Root repo                  |
+| `Documentation/` | Framework, guides, plans, skills, reports, research, archive          | Root repo                  |
+| `Maintain/`      | `Run-Smokes.mjs`, `Run-Wiring.mjs`, `Format.sh`, `Lychee.sh`          | Root repo                  |
+| `diagrams/`      | Source diagrams                                                       | Root repo                  |
 
-- **The family**: the factory, the core, the governance trio, and the
-  seven-member normalize family.
-- **The trees**: published trees Classic + EffectTS, plus the internal
-  Boilerplate baseline that was never released.
-- **The site**: the published static site under `Site/` - 21 pages: the
-  landing page, the plugins registry + 12 plugin detail pages, the
-  workbench, versions, setup, flavors, matrix, models, case-study.
-- **The layout**: `Classic/`, `EffectTS/`, `Boilerplate/`, `Site/`,
-  `Test/`, `Documentation/`, `Maintain/`.
-- **The site build**: `cd Site && pnpm prepublishOnly` (astro build, outDir
-  `./Target`). The site verifies via its built HTML/CSS, never via a dev
-  server.
+`Site/` is listed in the root `.gitignore`. Commit site work in `Site/`,
+never from the root.
 
-## Why: The Full Philosophy
+`Boilerplate/` no longer exists. Any document that still calls it a third
+implementation is stale.
 
-1. **A map prevents misdirected work.** The most common early error of a
-   fresh session is editing or building in the wrong tree - e.g. treating
-   `Boilerplate/` (internal, never released) as a publishable tree, or
-   editing `Site/` source and believing the site changed without a build.
-   Knowing the seven top-level directories and what each is for makes every
-   subsequent path decision mechanical.
-2. **The two published splits are separate by design.** `Classic/` and
-   `EffectTS/` are two published trees of the same family; `Boilerplate/`
-   is the internal baseline they were generated from and is never released.
-   Keeping the three conceptually distinct prevents cross-tree "fixes" that
-   would mix generated and source code.
-3. **The 21-page site inventory is part of the map.** The site is a
-   deliverable of the family, and its page list (landing, plugins registry +
-   12 plugin detail pages, workbench, versions, setup, flavors, matrix,
-   models, case-study) is how a session verifies completeness of site work.
-   Counting pages is a real check, not trivia.
-4. **The build command is the single verification path for the site.**
-   `cd Site && pnpm prepublishOnly` runs the astro build into `./Target`.
-   The site is verified via the built HTML/CSS in `Target/` - never via a
-   dev server. This is a lane law for the site (see
-   ./references/lane-laws.md); the map states it because the build
-   command is part of the repository's basic description.
-5. **`Test/`, `Documentation/`, `Maintain/` are first-class.** Tests,
-   documentation (including the specialized skill copies and plans), and
-   maintenance tooling live in the monorepo proper. A session that only
-   knows the code trees will not know where the governance documents or the
-   smoke suites live.
+## The two release groups
 
-## Examples
+| Group     | Names                                                     | Runtime                    |
+| --------- | --------------------------------------------------------- | -------------------------- |
+| Classic   | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`     | Plain TypeScript, no framework |
+| EffectTS  | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers |
 
-### Good
+All packages sit at `0.0.1`. Never mix the groups in one dependency graph:
+the EffectTS `Update` returns Effect envelopes, not the Classic dispatch
+envelope.
 
-- A session asked to change a plugin detail page edits the site source and
-  then runs `cd Site && pnpm prepublishOnly`, verifying the built HTML/CSS
-  under `Site/Target/`.
-- A session looking for the active plan first opens `Documentation/Plans/`
-  rather than guessing from the code trees.
+Verify the inventory:
 
-### Bad
+```sh
+ls Classic/packages EffectTS/packages
+grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.json
+```
 
-- A session publishes or modifies `Boilerplate/` as if it were a released
-  tree - it is the internal baseline, never released.
-- A session starts a dev server to "check the site" instead of building and
-  inspecting `Target/`.
-- A session counts site pages against the 21-page inventory and finds fewer,
-  then assumes the inventory was wrong instead of investigating what was
-  removed or renamed.
+## The package roles
 
-## Exceptions
+- **`plugin-dsh-factory`** - the family's service. Loading it registers
+  `ctx.pluginFactory` with 19 callable methods: ledger, exclusion match,
+  registry discovery, keep-list, gate, the shared write executor, re-emit,
+  continuation, State, wiring, effect registrations, journal, schema,
+  seam, inflight key, and the direct-govern registry and fold.
+- **`hook-dsh-core`** - the machinery library, not a plugin: the section
+  lists, exclusion segments, suppression composer, update-policy loader,
+  refusal guard, update envelope, activation-line composer, and the
+  normalize/stream machinery.
+- **The governance trio** - `hook-dsh-package-governor` (chain pins and the
+  update stage), `hook-dsh-package-pinner` (ranges to static versions),
+  `hook-dsh-cargo-governor` (the Rust TOML flavor). They hook `fs/observed`
+  and the tool surface.
+- **The normalize family** - six stream flavors (`dash`, `quotes`,
+  `ellipsis`, `spaces`, `invisible`, `fullwidth`) on `llm/stream`, plus
+  `normalize-file`, the file tool.
+- **The guardians** - `hook-dsh-ccr` (tool-result compression and retrieval)
+  and `hook-dsh-tool-coach` (behavioral coaching through the tool surface).
+- **`hook-dsh-live-containers`** - live system-prompt blocks recomputed per
+  request. It ships disabled by default.
 
-- None documented. The map is descriptive; the only flexibility is the order
-  in which a session internalizes it, not whether the facts hold.
+## The event surfaces
 
-## Failure Modes
+| Surface        | Who uses it                                             |
+| -------------- | ------------------------------------------------------- |
+| `llm/stream`   | The six stream flavors (the waterfall rewrite point)     |
+| `fs/observed`  | The governance trio (the observed-file trigger)          |
+| Tool surface   | The factory's gating, ccr, tool-coach, normalize-file    |
+| Loader         | The profile's bundle list and `cordis.patch.yml` inserts |
 
-- Wrong-tree edits: changes made in `Boilerplate/` expecting release effects,
-  or changes made in one published split expecting the other to follow.
-- Unbuilt site claims: reporting site changes as done when only the source
-  was edited and `pnpm prepublishOnly` was never run into `./Target`.
-- Page-inventory drift: site pages added or removed without reconciling the
-  21-page inventory, so later sessions inherit a wrong count.
+## The site
 
-## Arbiters
+The site is an Astro static build: `Source/` in, `Target/` out. Its own
+`package.json`, `astro.config.ts`, and `README.md`. 25 built HTML pages:
+the landing page, the plugins registry, 15 plugin detail pages, setup,
+versions, flavors, models, workbench, matrix, case study, and the 404.
 
-- The directory listing: the seven top-level directories (`Classic/`,
-  `EffectTS/`, `Boilerplate/`, `Site/`, `Test/`, `Documentation/`,
-  `Maintain/`) are checkable with a single listing.
-- The built output: `Site/Target/` is the verification surface for the site;
-  grep the built HTML/CSS, never trust the source alone.
-- The page count: the site's 21 pages are enumerable from the built output.
+Verify:
+
+```sh
+find Site/Target -name "*.html" | wc -l
+```
+
+## Where to look for what
+
+| Question                          | Look at                                              |
+| --------------------------------- | ---------------------------------------------------- |
+| What a package does               | `Classic/packages/<pkg>/README.md` and `SCHEME.md`   |
+| What a package ships              | `<pkg>/Source/`, `<pkg>/Target/`, `<pkg>/package.json` |
+| Why a behavior exists             | `Documentation/Plans/`, `Documentation/Reports/`     |
+| How to operate the governance trio| `Documentation/Guides/Governor-*.md`                 |
+| The site's content model          | `Site/Source/Library/Content.ts` and `Live.ts`       |
+| The smoke baselines               | `<tree>/smokes/README.md` and the per-folder READMEs |

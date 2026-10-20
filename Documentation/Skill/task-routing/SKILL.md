@@ -1,87 +1,157 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/task-routing/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: task-routing
-description: THE model-routing policy for every delegation - exploration always GLM-5.3-Flash at low; coding GLM-5.3-Flash low then high; planning and advanced tasks DeepSeek at max (deepseek-v4.1-flash-1017 primary, deepseek-v4-flash-0731 fallback); failover escalation on explicit ESCALATION markers or verification failures. Load before delegating anything.
-whenToUse: Mandatory before every subagent delegation, workflow launch, or model choice for any task. If you are about to delegate a coding, exploration, planning, or advanced-reasoning task without having followed this policy, stop and apply it.
+description: "The model-routing policy for every delegation: the three-model catalog, the difficulty-first classification, the routing table, the attempts ladder, the spec requirements, and the adjudication protocol that makes cheap exploration safe."
+whenToUse: Before every subagent call, workflow agent() call, or any decision about which model and reasoning effort to use. Also load it when a delegation fails and you must decide whether to retry or escalate.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
-# Task Routing Policy - Operating Manual
+# Task Routing
 
-The single source of truth for how this harness spends tokens on
-delegation: which model and effort every parent, child, and workflow
-phase uses, and how results are verified. Derived from 27 benchmark runs
-across 3 rounds (2026-10), all independently adjudicated. The full
-philosophy lives in the references; this file is the index.
+This skill is the single authority on model choice and reasoning effort.
+Every other skill that mentions routing points here. The policy exists to
+spend tokens where judgment is needed and nowhere else; its safety depends
+on the parent verifying results deterministically, not on trusting a cheap
+model.
 
-## The Mandate
+## When to use
 
-- **Policy scope** - see ./references/policy-scope.md
-  One policy binding every agent (parent, child, workflow phase); deviating without a user instruction is a policy violation.
+- Before any `subagent`, `subagent_fork`, or workflow `agent()` call.
+- When choosing the model for a task you will do yourself (the main
+  agent's lane is part of the table).
+- When a delegated attempt fails and the next step is a retry, an
+  escalation, or a stop.
+- Do not use for: strain definitions and delegation methodology
+  (`worker-strains`), or batch queue mechanics (`orchestrator-batch`).
 
-## Non-Negotiables (every delegation, always)
+## The non-negotiables
 
-1. **Explicit routing fields** - see ./references/non-negotiables.md
-   Every `subagent` and workflow `agent()` call passes `provider: cloudflare-workers-ai`, the exact model, and `reasoning_effort: low | high | max` explicitly; never rely on defaults or inheritance.
-2. **allowedModels only** - see ./references/non-negotiables.md
-   Never use a model outside `allowedModels` in the profile patch (`subagent-model-selection-settings`); the allowed set is exactly the three catalog models.
-3. **User override wins** - see ./references/non-negotiables.md
-   The user's explicit override wins for the task it names; nothing else overrides this policy.
-4. **Crash recovery and config safety** - see ./references/non-negotiables.md
-   On a harness crash or dead agent, recover persisted sessions/artifacts and never re-run finished work; never edit `agent-loop` config while subagents are running (live re-apply destroys inbox projections and can crash the host).
+1. **Pass the route explicitly.** Every delegation passes `provider`,
+   `model`, and `reasoning_effort`. Omission inherits the parent's route,
+   which is the expensive lane.
+2. **Use only the three catalog models.** `@cf/zai-org/glm-5.3-flash`,
+   `@cf/deepseek-ai/deepseek-v4.1-flash-1017`,
+   `@cf/deepseek-ai/deepseek-v4-flash-0731`. The provider is
+   `cloudflare-workers-ai`; the effort tokens are exactly `low`, `high`,
+   `max`.
+3. **The user's explicit override wins** for the task it names. It does
+   not extend to other tasks and does not become a new default.
+4. **Recover, do not re-run.** After a crash or a dead agent, read the
+   persisted sessions and artifacts and resume the unfinished work. Never
+   edit the agent-loop config while subagents run; a live re-apply can
+   destroy inbox projections and crash the host.
 
-## Model Catalog
+## The catalog
 
-- **The three allowed models** - see ./references/model-catalog.md
-  Exactly 3 models: `@cf/zai-org/glm-5.3-flash` ($0.15/$0.50/$0.03 per 1M in/out/cached, 1M ctx), `@cf/deepseek-ai/deepseek-v4.1-flash-1017` ($0.30/$1.20/$0.006, 1M ctx, vision) and `@cf/deepseek-ai/deepseek-v4-flash-0731` ($0.44/$1.32/$0.044, 1M ctx). The DeepSeek lane's primary is deepseek-v4.1-flash-1017 (added 2026-10-20, cheaper on every axis); deepseek-v4-flash-0731 stays as the fallback and the current `agent-default-model` until the v4-vs-v4.1 comparison concludes.
-- **Removed models** - see ./references/model-catalog.md
-  Never request removed models: qwen3-30b-a3b-fp8 (verified `400 INVALID_REQUEST` deaths, 2026-10-02), six cost removals (>= $0.95/M in or $3.20/M out), glm-4.7-flash (lost 2026-09 exploration comparison).
+| Model                                   | Input $/1M | Output $/1M | Cached $/1M | Context |
+| --------------------------------------- | ---------: | ----------: | ----------: | ------: |
+| `@cf/zai-org/glm-5.3-flash`             |       0.15 |        0.50 |        0.03 |      1M |
+| `@cf/deepseek-ai/deepseek-v4.1-flash-1017` |     0.30 |        1.20 |       0.006 |      1M |
+| `@cf/deepseek-ai/deepseek-v4-flash-0731` |      0.44 |        1.32 |       0.044 |      1M |
 
-## Routing Table and the Difficulty-First Principle
+The DeepSeek lane's primary is `deepseek-v4.1-flash-1017` (cheaper than
+0731 on every axis); `deepseek-v4-flash-0731` is the fallback. Verify the
+live catalog with `list_subagent_models`; verify the allowed set against
+the profile's `allowedModels`.
 
-- **Difficulty-first principle** - see ./references/difficulty-first.md
-  User-mandated 2026-10-20, binding: infer the effort from the task's ACTUAL difficulty - MECHANICAL operations (sweeps, renames, conversions, well-specified multi-file edits with a guarded exceptions list) are trivial regardless of file count; SEMANTIC operations (naming judgment, authoring, design, ambiguous refactors) are routine; the file count alone never decides.
-- **The complete routing table** - see ./references/routing-table.md
-  Exploration ALWAYS glm-5.3-flash `low`; trivial/mechanical coding `low`; routine/semantic coding `high`; exhaustive verification `max` (explicit user request only); planning and deepest reasoning a DeepSeek model at `max` - deepseek-v4.1-flash-1017 (primary) or deepseek-v4-flash-0731 (fallback).
-- **The main agent's lane** - see ./references/routing-table.md
-  The main agent runs `deepseek-v4-flash-0731` at `max` (`agent-default-model`) - that IS the planning/advanced lane; planning must never be delegated to a GLM flash-tier model. (Round 1 of the 2026-10-20 comparison keeps 0731; round 2 flips the default to `deepseek-v4.1-flash-1017`.)
+Never request a removed model: `qwen3-30b-a3b-fp8` (400 failures in
+agentic loops), the cost removals (`deepseek-v4-pro-0813`, `kimi-k2.6`,
+`kimi-k2.7-code`, `glm-5.2`, `glm-5.3`, `qwen3.8-27b`), or `glm-4.7-flash`
+(lost the exploration comparison).
 
-## Exploration Protocol
+## Difficulty first
 
-- **Low is always the answer** - see ./references/exploration-protocol.md
-  Every exploration task runs glm-5.3-flash at `low` with no stakes-based exceptions (correctness is identical across efforts; validation is deterministic and free); the ONLY exception is one re-run at `high` for an unusably thin survey feeding a coding task, and user-requested "archaeology" is the one permitted `max`.
+Classify by what the operation demands, not by the task's label or file
+count:
 
-## Coding Protocol
+- **Mechanical**: a complete spec, no ambiguity, lookup-and-replace,
+  renames, conversions, a guarded exceptions list. File count does not
+  raise the tier.
+- **Semantic**: naming judgment, authored prose, design decisions,
+  ambiguous refactors, integration.
 
-- **The attempts ladder** - see ./references/coding-ladder.md
-  Attempt 1 per routing tier; attempt 2 at `high`; then ONE parent-owned escalation to a DeepSeek model at `max` (deepseek-v4.1-flash-1017; deepseek-v4-flash-0731 as fallback) with the failed run's artifacts and failure summary; if that also fails, STOP and report both summaries - no looping.
-- **Failure signals** - see ./references/failure-signals.md
-  An attempt fails on any of: the `ESCALATION: <concrete reason>` marker, a silent give-up (missing build/tests/artifacts/empty workspace), or the parent's own verification failing.
-- **Spec-writing rules** - see ./references/spec-writing.md
-  Every coding prompt ships a verification protocol (build command + explicit test cases + expected outputs incl. adversarial edge cases), the verbatim `ESCALATION:` give-up instruction, and a no-reference-implementations clause for replication benchmarks.
+A multi-file mechanical sweep is still mechanical. A one-line naming
+judgment is still semantic.
 
-## Adjudication Protocol
+## The routing table
 
-- **Verify before accepting** - see ./references/adjudication-protocol.md
-  Docs-over-disk (never trust README/AGENTS.md over the filesystem - the measured 4-of-6 stale-doc failure), 2-3 shell spot-checks on novel claims, coding adjudication with edge cases BEYOND the spec's list, cost extraction from session logs (`data.usage`: inputTokens/outputTokens/cacheReadTokens), and NEVER spending LLM tokens on verification - that is why `low` is safe.
+| Task                                                  | Model                        | Effort |
+| ----------------------------------------------------- | ---------------------------- | ------ |
+| Exploration, any, always                              | `glm-5.3-flash`              | `low`  |
+| Coding, trivial or mechanical (complete spec)         | `glm-5.3-flash`              | `low`  |
+| Coding, routine or semantic                           | `glm-5.3-flash`              | `high` |
+| Coding, exhaustive verification (user request only)   | `glm-5.3-flash`              | `max`  |
+| Planning, architecture, design, advanced debugging    | `deepseek-v4.1-flash-1017`   | `max`  |
+| The deepest reasoning (the ceiling)                   | `deepseek-v4.1-flash-1017`   | `max`  |
 
-## Benchmark Evidence
+The DeepSeek rows accept either DeepSeek id at `max`; 1017 is primary and
+0731 is the fallback. The main agent runs the DeepSeek lane at `max`; its
+current default is `deepseek-v4.1-flash-1017`. Planning is never delegated
+to the GLM tier.
 
-- **The numbers behind the policy** - see ./references/benchmark-evidence.md
-  27 runs/3 rounds/2 task classes; correctness identical across `low`/`high`/`max`; coding `max` = 6.4x `low` ($0.112 vs $0.018, 83k vs 11k output tokens), exploration `max` = 5.8x ($0.065 vs $0.011); `high` = 1.5-3x with no correctness gain; failover proven twice; blended cost ~$50 per billion tokens.
+## The ladder
 
-## Authoring Discipline
+1. Attempt 1 at the task's tier (`low` or `high`).
+2. If it fails, attempt 2 at `high`.
+3. If it fails, the parent escalates once to the DeepSeek lane at `max`,
+   passing the failed run's artifacts and a failure summary.
+4. If that fails, stop and report both summaries. No fourth attempt.
 
-- **File rules live in code-authoring** - see ./references/authoring-discipline.md
-  Never edit or read files through the terminal; always use the read/write/edit tool API - because `fs/observed` fires only on tool-layer writes, tool edits are what make the governor/pinner/cargo plugins run.
+An attempt fails on any of: the `ESCALATION: <reason>` marker, a silent
+give-up (no build, no tests, no artifacts, an empty workspace), or the
+parent's own verification failing.
 
-## Operational Rules
+## The spec
 
-- **Workflow scripts follow the same routing** - see ./references/operational-rules.md
-  Every `agent()` call in a workflow passes `provider`/`model`/`reasoning_effort` explicitly per phase.
-- **Pinned roles match this policy** - see ./references/operational-rules.md
-  `agent-loop` pinned roles: `coder` -> glm-5.3-flash `high`, `explorer` -> glm-5.3-flash `low`, `planner` -> deepseek-v4-flash `max` (the deepseek lane; deepseek-v4.1-flash-1017 is the lane's primary candidate - the pin moves to the winner of the 2026-10-20 comparison).
-- **No overreach** - see ./references/operational-rules.md
-  Do not escalate a succeeded task, re-run completed work, or use `max` to compensate for a vague prompt - fix the prompt instead.
-- **Tie-breaker** - see ./references/operational-rules.md
-  When in doubt: exploration -> `low`; anything producing code -> coding ladder; anything deciding architecture/plans -> main agent (a deepseek model at `max`).
+Every coding prompt carries:
+
+1. The verification protocol: the build command, explicit test cases, and
+   expected outputs, including adversarial cases (non-repo directories,
+   permissions, empty inputs, stale locks, binary or UTF-8 input).
+2. The verbatim instruction: "If you cannot complete this task, do not
+   silently give up. End your report with a section starting exactly with
+   `ESCALATION: <concrete reason>`."
+3. For a replication benchmark, a no-reference-implementations clause.
+
+## The adjudication
+
+The parent verifies before accepting:
+
+1. **Docs lose to disk.** Check every claimed path with `ls`, `test -e`,
+   or `git ls-tree`.
+2. **Spot-check 2-3 surprising claims.** Watch for name association
+   ("Next" assumed to be Next.js), phantom paths, and stale doc
+   references.
+3. **Coding:** build it, run the battery, then add edge cases beyond the
+   spec's list.
+4. **Cost:** extract `inputTokens`, `outputTokens`, and `cacheReadTokens`
+   from the subagent's session log when reporting.
+5. **Never spend LLM tokens on verification.** Shell checks are free and
+   deterministic; that is why `low` is safe.
+
+## Verification
+
+- Every delegation in the transcript carries the explicit triple.
+- The model ids match the catalog exactly, including suffixes.
+- A failed task shows at most three attempts.
+- Each accepted result has a logged parent verification.
+
+## Anti-patterns
+
+| Mistake                                   | Cost                                          | Do instead                          |
+| ----------------------------------------- | --------------------------------------------- | ----------------------------------- |
+| Omitting the route                        | Inherits the expensive lane; unauditable      | Pass provider, model, effort        |
+| Sending exploration to DeepSeek           | 5.8x cost for identical correctness           | GLM at `low`                        |
+| Calling a mechanical sweep "routine"      | Pays `high` for no gain                       | Difficulty first                    |
+| Self-authorizing coding `max`             | 6.4x cost for identical correctness           | Only on explicit user request       |
+| Escalating without artifacts              | Reproduces the failure                        | Pass the failure state              |
+| LLM re-review of a report                 | Destroys the economics                        | Shell checks only                   |
+
+## References
+
+| File                            | Covers                                              | Read when                     |
+| ------------------------------- | --------------------------------------------------- | ----------------------------- |
+| `references/catalog.md`         | The models, prices, removed list, and verification  | Choosing or auditing a model  |
+| `references/routing-table.md`   | Difficulty classification and the full table        | Classifying a task            |
+| `references/ladder-and-specs.md`| Attempts, failure signals, and the spec template    | A delegation failed           |
+| `references/adjudication.md`    | Verification, spot checks, and cost extraction      | Accepting a delegated result  |

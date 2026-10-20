@@ -1,24 +1,89 @@
-> Specialized working copy (repo): synced from ~/.dsh/skills/instructional-writing/ on 2026-10-20, byte-faithful. This is the specialized truth for this monorepo's sessions; the global copy is the fallback. Sync future changes to BOTH.
-
 ---
 name: instructional-writing
-description: Writing files whose value is the presence of typographic characters the family's normalization behavior would normally rewrite (instructional prose, fixtures, demo examples). Hard rules: such files are written with the raw-write tool ONLY (its verbatim path - the normalized write would destroy the deliberate characters); the deliberate characters are NEVER replaced with ASCII stand-ins; the "this file has an em dash" style instructional notes stay truthful (the literal character is present).
-whenToUse: Writing or editing any file in this repository whose body must carry literal typographic characters - Test fixtures, the fixtures-md/ and fixtures/ archives, README/site demo examples with before/after content - and for any question about where such fixtures live, how they document themselves, or how they are verified.
+description: "Writing files whose value is the literal presence of typographic characters the normalize hooks would rewrite: fixtures, demo before/after pairs, and instructional prose. Raw-write is the only writer, the characters are never replaced with ASCII stand-ins, and the notes about them stay truthful."
+whenToUse: Writing or editing a fixture, a byte-faithful copy, a demo pair that must show a curly quote or an em dash, or any file whose point is the exact glyph. Also load it when a written glyph arrives as ASCII and you need to know why.
+version: 2.0.0
+updated: 2026-10-20
 ---
 
 # Instructional Writing
 
-This skill governs the files whose value is the presence of typographic characters that the family's normalization would normally rewrite: instructional prose, Test fixtures, the fixtures-md/ and fixtures/ archives, and demo examples with before/after content. The user mandate of 2026-10-07 set aside the usual normalization discipline for exactly these files; this SKILL.md is the index, and every rule's full philosophy lives in the reference files under ./references/.
+The normalize hooks rewrite streamed text: dashes become hyphens, curly
+quotes become straight, the ellipsis becomes three dots, unicode spaces
+become ASCII. That is the product for ordinary prose. Some files exist
+because the glyph itself is the subject - a fixture proving the transform,
+a demo showing before and after. Those files are written with
+`raw-write`, and their characters are never replaced with stand-ins.
 
-## The Rules
+## When to use
 
-1. **The mandate** - why instructional/fixture files deliberately carry typographic characters, and what the 2026-10-07 mandate establishes - see ./references/mandate.md
-2. **Raw-write is the only writer** - the verbatim path vs the normalized write; these files are never plain-written - see ./references/raw-write-only-writer.md
-3. **Read before overwrite** - raw-write refuses to overwrite a file it has not seen; read first, then write - see ./references/raw-write-read-before-overwrite.md
-4. **Absolute paths** - raw-write resolves relative paths against the profile root; pass absolute paths for repo and workspace targets - see ./references/raw-write-absolute-paths.md
-5. **The raw-write flags** - normalize re-applies the six transforms (for output demos); govern routes manifest writes through the governance chain - see ./references/raw-write-flags.md
-6. **The deliberate character inventory** - every normalizable codepoint the fixtures carry, grouped by the transform it exercises - see ./references/deliberate-characters.md
-7. **Truthful instructional notes** - a claim about a character must match the bytes; the "this file has an em dash" pattern; never ASCII stand-ins - see ./references/truthful-notes.md
-8. **Fixture conventions** - locations (Test/, fixtures-md/, fixtures/), exclusivity of the archive, purpose lines, the Test/README.md index, the proof style - see ./references/fixture-conventions.md
-9. **Verification** - read-only Python byte-checks after every write; the smokes' fixture assertions are the arbiter; no in-place rewrites - see ./references/verification.md
-10. **Demo examples** - before/after content follows the fixture law; the exempt-edit pattern for subagents whose streams still normalize - see ./references/demo-examples.md
+- A fixture whose bytes are asserted by a suite.
+- A demo pair: raw input and normalized output side by side.
+- Instructional prose that says "this file contains an em dash" and must
+  be true.
+- A byte-faithful copy of an existing file.
+- Do not use for: ordinary prose, code, or docs. Those are ASCII, written
+  with `write` (`code-authoring`).
+
+## The rules
+
+1. **`raw-write` is the only writer.** It is exempt from normalization by
+   name. A plain `write` would destroy the deliberate characters.
+2. **Read before overwrite.** `raw-write` refuses to overwrite a file it
+   has not seen in the session.
+3. **Pass absolute paths.** `raw-write` resolves relative paths against
+   the profile root, not the current directory.
+4. **The flags:** `normalize` absent or false writes verbatim; `true`
+   applies all six transforms; an array applies the named flavors.
+   `govern` routes a manifest write through the direct-govern chain.
+5. **Never replace a deliberate character with an ASCII stand-in.** The
+   file's value is the byte. A "safe" substitution turns the fixture into
+   a lie.
+6. **Keep the notes truthful.** A claim about a character must match the
+   bytes; the `write` tool would normalize the claim's own glyph.
+7. **Verify after writing.** A byte check proves the characters arrived;
+   the suite that consumes the fixture is the final arbiter.
+8. **Fixtures are exclusive.** Do not copy a fixture into a second
+   location; the archive is the single source.
+
+## The character inventory
+
+| Family    | Examples                                  | Transform              |
+| --------- | ----------------------------------------- | ---------------------- |
+| Dash      | em dash, en dash, horizontal bar          | `-`                    |
+| Quotes    | curly single and double, low quotes       | straight quotes        |
+| Ellipsis  | horizontal ellipsis (U+2026)              | `...`                  |
+| Spaces    | no-break, en/em space, thin space         | plain space            |
+| Invisible | soft hyphen, zero-width, bidi, BOM        | removed                |
+| Fullwidth | U+FF01-FF5E forms                         | ASCII halfwidth        |
+
+## Decision table
+
+| The file's value is...                    | Writer       |
+| ----------------------------------------- | ------------ |
+| Ordinary text or code                     | `write`      |
+| The exact glyph (fixture, copy, demo)     | `raw-write`  |
+| A literal replacement in an existing file | `edit`       |
+| A whole-file normalization                | `normalize-file` |
+
+## Verification
+
+- The byte check shows the expected code points in the file.
+- The note and the bytes agree.
+- The consuming suite passes; its fixture assertions are the arbiter.
+
+## Anti-patterns
+
+| Mistake                                  | Cost                                    | Do instead                     |
+| ---------------------------------------- | --------------------------------------- | ------------------------------ |
+| Plain `write` for a fixture              | The glyphs become ASCII; the fixture lies | `raw-write`                  |
+| ASCII stand-in in a demo                 | The demo no longer shows the transform  | The real character             |
+| A note that says "em dash" over a hyphen | The file contradicts itself             | Match the bytes                |
+| Relative path to `raw-write`             | It resolves against the profile root    | Absolute path                  |
+
+## References
+
+| File                              | Covers                                              | Read when                    |
+| --------------------------------- | --------------------------------------------------- | ---------------------------- |
+| `references/raw-write.md`         | The tool's semantics, flags, paths, and read-first   | Writing a byte-faithful file |
+| `references/fixtures-and-characters.md` | The fixture archives, the codepoint table, and the notes | Adding or verifying a fixture |
