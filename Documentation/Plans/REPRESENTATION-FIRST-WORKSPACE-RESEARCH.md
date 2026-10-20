@@ -374,3 +374,133 @@ completion AND the correct refusal of the unsafe continuation. THE
 STRONGEST RESULT: which guarantees require the infrastructure, which
 benefit from the model reasoning, which should NEVER depend on the
 conversational memory.
+
+## The fourth round (distilled 2026-10-20 - the reconciliation mandate)
+
+THE MAIN SUGGESTION: STOP EXPANDING THE CONCEPT - RECONCILE THE DOCUMENTS
+into ONE EXECUTABLE CONTRACT (a short normative WORKSPACE-CONTRACT.md with
+the explicit "supersedes" links + the acceptance tests; the research
+documents preserved as the RATIONALE, never the competing implementation
+instructions).
+
+### The contradictions to settle (before the implementation dispatch)
+
+- FIRST RELEASE: the research names the one-language SEMANTIC RENAME as
+  v1; the batch plans start with the TEXT operations + defer the
+  semantics -> the text engine is an INTERNAL MILESTONE; the semantic
+  rename is the first END-TO-END experiment.
+- AUTHORITY: the feature plan treats the machine IDs + version stamps as
+  licenses; the research separates the capabilities, the ownership
+  leases, the residency -> the newer separation is adopted EVERYWHERE -
+  an identifier LOCATES the authority, it does not ESTABLISH it.
+- FAILURE BEHAVIOR: the suggestions make the layers independently
+  fail-open; the research requires the authorization/mandatory
+  validation/recovery protections to BLOCK when unavailable -> the
+  failure behavior is declared PER OBLIGATION, not per plugin.
+- ATOMICITY: the suggestions promise the all-or-nothing batches; the
+  feature plan describes the individually guarded writes + the per-file
+  failures -> the validation atomicity, the visibility, the crash
+  recovery, the compensation are specified SEPARATELY.
+- CONTEXT DELIVERY: the batch-state proposes replacing the injected
+  slots; the feature research says the conversation-body rewriting is
+  unavailable + uses the prompt assembly -> the supported carrier is made
+  EXPLICIT; "replace in place" never remains an assumed capability.
+
+### The commit governance (the approved preview = the exact change on disk)
+
+THE TRANSACTION-WIDE PREPARATION SEQUENCE: (1) resolve the semantic
+intent into the candidate edits; (2) run the permitted normalization +
+governance transformations against the STAGED candidate; (3) expand the
+affected-resource set if the transformations introduce additional
+changes; (4) validate the resulting candidate + obtain the approval for
+that EXACT changeset; (5) recheck the authority + the base revisions
+before the persistence; (6) verify the persisted result + record the
+final revisions. THE CHANGESET DIGEST: if a governor changes the
+candidate afterward, the approval INVALIDATES - the approval never
+silently expands. "The preview matches the applied bytes" becomes a
+property of the ENTIRE pipeline, not just the text-edit engine.
+
+### The partial failure honesty (the recovery states)
+
+prepared -> approved -> commit-decided -> applying -> verified; applying
+-> recovery-required -> verified | compensation-required | conflict. For
+each transition: what is DURABLE + what a restarted process must INSPECT.
+Include the case where the file write succeeded but the success-record
+failed. THE RECOVERY vs THE UNDO: completing an interrupted approved
+operation is DIFFERENT from proposing a new operation that reverses a
+completed one - the revision-checked undo carries the distinction into
+the engine API.
+
+### The authority beneath the plugins
+
+- ONE MANDATORY authorization boundary immediately before the external
+  effects.
+- The effective permissions = the INTERSECTION of the applicable
+  restrictions.
+- The delegation NARROWS the authority, never enlarges it.
+- The policy + capability revisions attach to the approval records.
+- The revocation is handled BEFORE and AFTER the durable commit decision.
+- The plugin-per-protection architecture stays, but the OPTIONAL
+  EXTENSIONS are distinguished from the REQUIRED PROTECTIONS - disabling
+  a required protection disables the affected mutation, never quietly
+  removes its restriction.
+
+### The observations as evidence (the qualified freshness)
+
+The feature plan sometimes describes the fs/observed stamp as reality's
+attestation; the research qualifies the freshness by the observation
+mechanism - ADOPT the qualified formulation throughout: the resource
+identity + the content digest + the observation source + the observed
+revision + the known completeness limits. THE TWO TESTS: (a) an external
+edit occurs WITHOUT the corresponding harness event; (b) the resource
+changes BETWEEN the final freshness check and the persistence. The
+adapter documents its ACTUAL concurrency guarantee - a fresh check, a
+cooperative lease, and the exclusion of the arbitrary external writers
+never share the same label.
+
+### The orchestration recoverability (the queue's three quantities)
+
+The queue plan's capacity table still says the idle lanes need the active
+slots despite the documented release - model THREE separate quantities:
+the queued work, the retained continuable sessions, the active execution
+slots. Add the attempt ids, the reservation ids, the ownership fencing,
+the duplicate-completion handling to the dispatch records. THE TEST: a
+parent occupying the capacity while waiting for the children that cannot
+acquire the capacity - specify the reservation/yielding/admission before
+claiming the fan-out policy prevents the workflow floods. THE ROUTING:
+keep the silent execution, but provide the INSPECTABLE EXPLANATION (the
+resolved role, the matching rule, the policy revision, the correction,
+the escalation budget) - the uncertainty gets a deterministic policy
+outcome, never an implied certainty.
+
+### The two integration assumptions (to fix)
+
+- THE COMPRESSION NEEDS A RETRIEVAL CONTRACT, not just a marker format:
+  the ccr plan defaults to the full-output expansion below 102400 bytes
+  while a live test expects a marker for a 2048-byte result - the
+  expectations reconcile; the retrieval binds to the caller's permitted
+  session/resource scope; the replayable reads are distinguished from the
+  non-repeatable tool results; an expired marker never generically tells
+  the agent to rerun an operation unless the rerun is KNOWN safe.
+- THE NATIVE INTEGRATION cannot promise the host survival merely by
+  wrapping the FFI calls (its own risk table acknowledges the native
+  crash can take down the host!) - the crash containment is a SEPARATE
+  decision from the transport: test a process-isolated native host
+  against the in-process FFI + require the authenticated, version-
+  compatible fallback (never accept any healthy local endpoint).
+
+### What to build next (the ONE narrow vertical slice)
+
+1. Reconcile the normative contract (WORKSPACE-CONTRACT.md).
+2. Implement the TypeScript symbol rename with the preview, the scoped
+   authority, the revision checks, the durable recovery, the verified
+   results.
+3. Inject the interruptions + the conflicting external edits at EVERY
+   persistence boundary.
+4. Compare the conventional editing, the semantic adapter alone, the
+   governed workspace on the IDENTICAL tasks.
+5. Extract the shared infrastructure ONLY after the slice exposes the
+   real commonality.
+The three-way experiment is the strongest next step: it tests whether the
+persistent governance adds value beyond merely offering a better semantic
+editing interface.

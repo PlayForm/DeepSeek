@@ -1904,3 +1904,57 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
   attention projection, the exact approvals, the narrow guarantees, the
   useful failures, the ablation study). R-BET-1/2 + the external
   research = the full brief; the GRAND-SWEEP (`3b165bf9`) still running.
+- THE GRAND-SWEEP COMPLETE (2026-10-20, `3b165bf9` - the single
+  consolidated agent, NO subagents, per the user's directive): all four
+  mandates + every arbiter green. M1: the naming sweep - Ccr/Svg = 0
+  everywhere (incl. the live profile patches); the 220+ lowercase-ccr
+  prose sites -> CCR (the machine-read contracts byte-preserved:
+  ccr_retrieve, __ccrState, the package names, the ccr: ledger prefix);
+  CallId->CallID; the FULL WORDS (mirrored both trees): Spec->
+  Specification (162 + the compounds), Dep->Dependency, Max->Maximum,
+  Meta->Metadata (196 site sites!), Prev->Previous, Info->Information,
+  Sync->Synchronous, El->Element, Async->Asynchronous, Repo->Repository;
+  the DELIBERATE deviation: Num->Numeric/MonitorNumber (the Number
+  shadow - a smoke caught a partial pass mid-run!); the deferred
+  residuals with reasons (CheckAsync ~150, OurRepo ~90, the docs' Spec
+  vocabulary, one demo string); the exception classes respected. M2: the
+  diagram labels (~45 across 28 files) + the latent render defect fix
+  (coach-family-position's long token!) + the FULL 319 re-render, 0
+  failures. M3: the copy-style - the docs already reflowed by the user's
+  commits, one dense paragraph reflowed, the frontmatter untouched. M4:
+  the build exit 0 + "All 207 smoke suites passed" + the astro build 24
+  pages zero errors + the Drift 310/310 (twice) + the guards 0/0. THE
+  USER committed the sweep mid-run (77ad96a - 383 files). THE RESIDUE:
+  35 EffectTS Target .d.ts files - the tsc-alias import-form churn -
+  the user's choice: discard (git checkout -- EffectTS) or commit as
+  "chore(build): Regenerate EffectTS Target declarations (tsc-alias
+  import-form)". NO ESCALATION - the consolidated mandate complete.
+- THE RECONCILIATION MANDATE DISTILLED (2026-10-20 - the fourth external
+  round, appended to REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md): STOP
+  EXPANDING - RECONCILE the docs into ONE executable WORKSPACE-CONTRACT.md
+  (the supersedes links + the acceptance tests; the research docs = the
+  rationale). The contradictions settled: the semantic rename = the first
+  end-to-end experiment (the text engine = the internal milestone); the
+  authority = the capabilities/leases/residency separation everywhere; the
+  failure behavior per OBLIGATION (the mandatory protections block); the
+  atomicity = the validation/visibility/crash/compensation specified
+  separately; the prompt assembly = the supported context carrier. The
+  commit governance: the 6-step transaction-wide preparation + the
+  changeset digest (a governor change invalidates the approval). The
+  recovery states (prepared/approved/commit-decided/applying/verified +
+  recovery-required/compensation-required/conflict) + the recovery-vs-
+  undo distinction. The authority beneath the plugins: ONE mandatory
+  authorization boundary + the intersecting permissions + the narrowing
+  delegation + the revisions attached + the revocation before/after the
+  commit - the required protections never quietly disable. The
+  observations = the qualified evidence (the digest/source/revision/
+  completeness + the two external-edit tests). The orchestration: three
+  capacity quantities + the attempt/reservation/fencing/duplicate
+  handling + the reservation test + the inspectable routing explanation.
+  The two integration fixes: the ccr retrieval contract (the scope-bound
+  retrieval + the replayable-vs-non-repeatable + the safe-rerun rule) +
+  the native crash containment (process-isolated vs in-process FFI +
+  the authenticated fallback). THE NEXT SLICE: the WORKSPACE-CONTRACT.md
+  reconciliation -> the TS symbol rename vertical slice -> the
+  interruption injections -> the three-way comparison -> the shared
+  extraction after. This becomes agent 3's first mandate.

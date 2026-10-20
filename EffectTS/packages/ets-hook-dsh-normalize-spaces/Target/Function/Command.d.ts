@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /** The structural CommandInvocation: only the fields the handler reads. */
 type Invocation = {
     rawInput?: unknown;
