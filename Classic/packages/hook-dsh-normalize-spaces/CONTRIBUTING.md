@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/hook-dsh-normalize-spaces (0.0.1), one
+Welcome to our community! This repository holds @playform/hook-dsh-normalize-spaces (0.1.0), one
 of the release packages of the DeepSeek Harness Plugin Family: the stream hook normalizing the unicode space family in model output.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

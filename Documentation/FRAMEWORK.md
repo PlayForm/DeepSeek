@@ -55,7 +55,7 @@ statuses:
   The gitignore or a private submodule decision: pending.
 - The **Classic release** (the anonymized normal implementation).
 - The **Effect-TS release** (Effect v4.0.2 - the tracing, the ecosystem interaction, the parallel-govern toggle designed in).
-- All release packages at **0.0.1**.
+- All release packages at **0.1.0**.
   The parity: the ledger strings are the byte-identical smoke contract across all three implementations.
 - The future structure: EACH release package its own repository, added as **submodules** to the parent.
   The future structure: the per-repo gitignores.

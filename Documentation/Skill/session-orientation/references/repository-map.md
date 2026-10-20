@@ -28,7 +28,7 @@ implementation is stale.
 | Classic   | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`     | Plain TypeScript, no framework |
 | EffectTS  | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers |
 
-All packages sit at `0.0.1`. Never mix the groups in one dependency graph:
+All packages sit at `0.1.0`. Never mix the groups in one dependency graph:
 the EffectTS `Update` returns Effect envelopes, not the Classic dispatch
 envelope.
 
@@ -74,7 +74,7 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
 ## The site
 
 The site is an Astro static build: `Source/` in, `Target/` out. Its own
-`package.json`, `astro.config.ts`, and `README.md`. 25 built HTML pages:
+`package.json`, `astro.config.ts`, and `README.md`. 24 built HTML pages:
 the landing page, the plugins registry, 15 plugin detail pages, setup,
 versions, flavors, models, workbench, matrix, case study, and the 404.
 

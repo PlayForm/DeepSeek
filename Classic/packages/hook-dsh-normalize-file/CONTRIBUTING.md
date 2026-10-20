@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/hook-dsh-normalize-file (0.0.1), one
+Welcome to our community! This repository holds @playform/hook-dsh-normalize-file (0.1.0), one
 of the release packages of the DeepSeek Harness Plugin Family: the file-content normalizer: the normalize family's normalize-file tool over files already on disk.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

@@ -9,10 +9,10 @@ index: Documentation/INDEX.md
 statuses:
   - name: the monorepo layout (Boilerplate/Classic/EffectTS/Site/Test/Documentation/Maintain)
     state: implemented
-    evidence: the directories exist; 25 published packages
+    evidence: the directories exist; 31 published packages
   - name: the Classic release (the anonymized packages)
     state: implemented
-    evidence: Classic/packages - 15 packages at 0.0.1
+    evidence: Classic/packages - 15 packages at 0.1.0
   - name: the EffectTS release (the ets-* split)
     state: implemented
     evidence: EffectTS/packages - 16 packages including ets-base-dsh

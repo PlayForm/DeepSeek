@@ -1,5 +1,5 @@
 ---
-title: The authoritative registry of the 25 published packages
+title: The authoritative registry of the 31 published packages
 category: Plugins
 kind: living-record
 date: 2026-10-10
@@ -7,13 +7,13 @@ status: active
 registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
-  - name: the 25 published packages (1 base + 12 Classic + 12 EffectTS at 0.0.1)
+  - name: the 31 published packages (1 base + 15 Classic + 15 EffectTS at 0.1.0)
     state: implemented
     evidence: the packages exist and are published from source
   - name: the registry document content (the names, the links, the rules)
     state: implemented
     evidence: this document; byte-accurate names
-  - name: the 30-package expansion (the newer packages beyond the 25)
+  - name: the expansion beyond the original 25 (the newer packages)
     state: implemented
     evidence: the family now carries 15 per tree plus the base
   - name: the planned orchestration plugins (not in this registry)
@@ -21,10 +21,10 @@ statuses:
     evidence: Documentation/Plugins/ORCHESTRATION-PLUGINS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 25 published packages
+# PLUGIN-FAMILY - the authoritative registry of the 31 published packages
 
 > This document is the "plugins saved as documents" registry.
-> The registry covers the full family at version **0.0.1**.
+> The registry covers the full family at version **0.1.0**.
 > EVERY name is byte-accurate and EVERY repo link is absolute.
 > It is a DOCUMENT, NOT an implementation.
 > The packages it describes are already published.
@@ -34,10 +34,10 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.0.1 for ALL 25 packages.**
+- **Version: 0.1.0 for ALL 31 packages.**
   Names are byte-accurate as below.
   The legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
-- **Two published trees, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`, `@playform/plugin-dsh-*` - plain TypeScript, zero runtime framework dependencies, 733 smoke assertions) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on Effect v4.0.2 services and layers, 746 assertions, with `@playform/ets-base-dsh` as the plumbing base).
+- **Two published trees, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`, `@playform/plugin-dsh-*` - plain TypeScript, zero runtime framework dependencies, 1314 smoke assertions) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on Effect v4.0.5 services and layers, 1324 assertions, with `@playform/ets-base-dsh` as the plumbing base).
   NEVER mix the two splits in ONE dependency graph.
   The EffectTS `Update` returns Effect envelopes, NOT the classic dispatch envelope.
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal record is asserted byte-identically by the smokes, in ALL implementations.
@@ -48,7 +48,7 @@ statuses:
   The tool execution surface (the mutation tools - write/edit/str_replace_editor/raw-write) via the factory's pre/post-execute gating and the direct-govern registry.
   Plus the loader surface (cordis patch inserts at profile startup).
 
-## 1. The 25 names (the registry list)
+## 1. The 31 names (the registry list)
 
 **EffectTS base (1):**
 
@@ -56,7 +56,7 @@ statuses:
 |---|---------|-----------|---------------|
 | 1 | `@playform/ets-base-dsh` | Base | (library - the plumbing every ets-* package builds on) |
 
-**Classic (12):**
+**Classic (15):**
 
 | # | Package | Archetype | Event surface |
 |---|---------|-----------|---------------|
@@ -72,23 +72,29 @@ statuses:
 | 11 | `@playform/hook-dsh-normalize-invisible` | Hook | `llm/stream` |
 | 12 | `@playform/hook-dsh-normalize-fullwidth` | Hook | `llm/stream` |
 | 13 | `@playform/hook-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
+| 14 | `@playform/hook-dsh-ccr` | Hook (guardian) | `tools/post-execute` + the `ccr_retrieve` tool |
+| 15 | `@playform/hook-dsh-tool-coach` | Hook (guardian) | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
+| 16 | `@playform/hook-dsh-live-containers` | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute` |
 
-**EffectTS (12):**
+**EffectTS (15):**
 
 | # | Package | Archetype | Event surface |
 |---|---------|-----------|---------------|
-| 14 | `@playform/ets-hook-dsh-core` | Hook (library) | none (pure machinery on Effect layers) |
-| 15 | `@playform/ets-plugin-dsh-factory` | Plugin (service) | same surface as the Classic factory, Effect envelopes |
-| 16 | `@playform/ets-hook-dsh-cargo-governor` | Hook | `fs/observed` + tool post-execute |
-| 17 | `@playform/ets-hook-dsh-package-governor` | Hook | `fs/observed` + tool post-execute |
-| 18 | `@playform/ets-hook-dsh-package-pinner` | Hook | `fs/observed` + tool post-execute |
-| 19 | `@playform/ets-hook-dsh-normalize-dash` | Hook | `llm/stream` |
-| 20 | `@playform/ets-hook-dsh-normalize-quotes` | Hook | `llm/stream` |
-| 21 | `@playform/ets-hook-dsh-normalize-ellipsis` | Hook | `llm/stream` |
-| 22 | `@playform/ets-hook-dsh-normalize-spaces` | Hook | `llm/stream` |
-| 23 | `@playform/ets-hook-dsh-normalize-invisible` | Hook | `llm/stream` |
-| 24 | `@playform/ets-hook-dsh-normalize-fullwidth` | Hook | `llm/stream` |
-| 25 | `@playform/ets-hook-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
+| 17 | `@playform/ets-hook-dsh-core` | Hook (library) | none (pure machinery on Effect layers) |
+| 18 | `@playform/ets-plugin-dsh-factory` | Plugin (service) | same surface as the Classic factory, Effect envelopes |
+| 19 | `@playform/ets-hook-dsh-cargo-governor` | Hook | `fs/observed` + tool post-execute |
+| 20 | `@playform/ets-hook-dsh-package-governor` | Hook | `fs/observed` + tool post-execute |
+| 21 | `@playform/ets-hook-dsh-package-pinner` | Hook | `fs/observed` + tool post-execute |
+| 22 | `@playform/ets-hook-dsh-normalize-dash` | Hook | `llm/stream` |
+| 23 | `@playform/ets-hook-dsh-normalize-quotes` | Hook | `llm/stream` |
+| 24 | `@playform/ets-hook-dsh-normalize-ellipsis` | Hook | `llm/stream` |
+| 25 | `@playform/ets-hook-dsh-normalize-spaces` | Hook | `llm/stream` |
+| 26 | `@playform/ets-hook-dsh-normalize-invisible` | Hook | `llm/stream` |
+| 27 | `@playform/ets-hook-dsh-normalize-fullwidth` | Hook | `llm/stream` |
+| 28 | `@playform/ets-hook-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
+| 29 | `@playform/ets-hook-dsh-ccr` | Hook (guardian) | `tools/post-execute` + the `ccr_retrieve` tool |
+| 30 | `@playform/ets-hook-dsh-tool-coach` | Hook (guardian) | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
+| 31 | `@playform/ets-hook-dsh-live-containers` | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute` |
 
 Absolute-link rule for any repo target in docs/prompts/skills:
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
@@ -101,7 +107,7 @@ Absolute-link rule for any repo target in docs/prompts/skills:
 - **`@playform/ets-base-dsh`** (Base) - the EffectTS plumbing package.
   It provides the shared Effect types, service tags, layer helpers and runtime conveniences EVERY `ets-*` package builds on.
   The EffectTS tree's twelve contracts share ONE base instead of duplicating the plumbing per package.
-  Effect v4.0.2 is the single shared runtime dependency.
+  Effect v4.0.5 is the single shared runtime dependency.
 - **`@playform/hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, NOT itself a plugin.
   It provides the dependency-section lists, the exclusion segments, the suppression-line composer, the update-policy loader, the refusal guard, the update envelope, the activation-line composer, and the normalize/stream machinery.
   The normalize/stream machinery is the six character tables plus `Replace`/`ReplaceMap` and the `Chunk`/`Block` dispatch (per-chunk application, the assembled reasoning block, the tool-arguments gate).
@@ -157,6 +163,15 @@ Two register tools: `raw-write` (per-call `normalize` selection, default false =
   It is the read, count, write pipeline applying ALL six transforms to a file already on disk.
   It writes ONLY when something changed (the `normalize-file` tool).
 
+### The guardians and the live block
+
+- **`@playform/hook-dsh-ccr`** - the compress-cache-retrieve guardian.
+  It hooks `tools/post-execute`, replaces oversized allow-listed results with a one-line type-aware preview plus a `<<<CCR:<24hex>|<type>|<size>>>` marker, stores the original under a sha256-24 hash in the LRU, and registers `ccr_retrieve` for the byte-exact restore.
+- **`@playform/hook-dsh-tool-coach`** - the terminal-content coaching guardian.
+  It runs the four-tier ladder (ledger, notice, persistent system-prompt section, opt-in deny) over terminal calls and names the correct dedicated tool with its live registry description.
+- **`@playform/hook-dsh-live-containers`** - the dynamic system-prompt blocks.
+  It appends one `live-containers` section whose labeled stanzas are recomputed at request time; it ships DISABLED and enables only by an explicit activate.
+
 ## 3. The config keys (from the packages' SCHEMs/READMEs)
 
 EVERY plugin's config schema is built through the factory's `Schema` factory.
@@ -191,7 +206,7 @@ The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker 
 
 - ONE ledger per plugin, `~/.dsh/<identity>.log`.
   The plugin's Module name is the logger/ledger prefix.
-  The identity strings are byte-identical across ALL three trees - Boilerplate, Classic, EffectTS - and asserted by the smokes.
+  The identity strings are byte-identical across BOTH release trees - Classic and EffectTS - and asserted by the smokes.
 - The activation line at boot is the "did it activate" answer.
   It is readable from the ledger ALONE, e.g.:
   `hook-dsh-package-governor: activated (anywhere mode, logFile=..., updateMode=programmatic, ...)`.
@@ -200,7 +215,7 @@ The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker 
 - The journals flow to the shared `package_governance` storage domain (the P5 journal, pre-open queue capped 256).
   Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral contract on top of the strings.
-  733 Classic / 746 EffectTS assertions are the release contract.
+  1314 Classic / 1324 EffectTS assertions are the release contract.
 
 ## 5. The wiring (the four steps)
 

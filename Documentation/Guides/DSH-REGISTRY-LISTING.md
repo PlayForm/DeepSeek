@@ -21,8 +21,8 @@ statuses:
 # DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
 
 > The listing the family publishes under once the npm lane arms the publish.
-> `.github/workflows/NPM.yml` is PUBLISH-PENDING behind the `if: false` guard.
-> Everything sits at version `0.0.1`, never published.
+> `.github/workflows/NPM.yml` is armed for the 0.1.0 release (the publish itself is the user's call).
+> Everything sits at version `0.1.0`; the 0.0.1 release remains on the registry and is immutable.
 > This file is the filled template: the registry identity, the package roster with the exact install commands, and the byte-exact rule the listing text must obey.
 > Prepared by the PLUGIN-REG lane.
 > DOCUMENTATION ONLY - nothing is committed (the user commits).
@@ -34,8 +34,8 @@ statuses:
 - **The scope:** `@playform` - the ONLY available scope, shared by the whole family (SPLICE-ETS section 1.2).
 - **The topic:** the family lists under the **`dsh-plugin`** topic - the DeepSeek Harness plugin topic that the registry surfaces (npm keywords + the GitHub repo topics) carry.
   EVERY package's `keywords` include `dsh-plugin` alongside `deepseek`, `harness`, and `plugin`.
-- **The version:** `0.0.1` across the family.
-  The sibling entries in EVERY manifest pin the EXACT `0.0.1`.
+- **The version:** `0.1.0` across the family.
+  The sibling entries in EVERY manifest pin the EXACT `0.1.0`.
   So the FIRST publish must land the layers in the dependency order (SPLICE-ETS section 5.1), or the dependent tarballs resolve against nothing.
 - **The source of the install form:** the site already ships the final command shape on EVERY plugin page and in the hero: `pnpm add @playform/<pkg>`.
   `Site/Source/Component/Terminal.astro` defaults to `pnpm add @playform/hook-dsh-core`.
@@ -49,7 +49,7 @@ The Classic tree carries the plain `@playform/dsh-*` names.
 The EffectTS tree carries the `@playform/ets-hook-dsh-*` / `@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-base-dsh` (verified in the manifests).
 The registry listing uses exactly these.
 
-**The classical group (12, `Classic/packages/*`):**
+**The classical group (15, `Classic/packages/*`):**
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
@@ -65,8 +65,11 @@ The registry listing uses exactly these.
 | 10 | `@playform/hook-dsh-normalize-invisible` | `pnpm add @playform/hook-dsh-normalize-invisible` | invisible characters removed |
 | 11 | `@playform/hook-dsh-normalize-fullwidth` | `pnpm add @playform/hook-dsh-normalize-fullwidth` | fullwidth -> halfwidth |
 | 12 | `@playform/hook-dsh-normalize-file` | `pnpm add @playform/hook-dsh-normalize-file` | the file normalize composition |
+| 13 | `@playform/hook-dsh-ccr` | `pnpm add @playform/hook-dsh-ccr` | the CCR compressor and the `ccr_retrieve` tool |
+| 14 | `@playform/hook-dsh-tool-coach` | `pnpm add @playform/hook-dsh-tool-coach` | the terminal-content coaching guardian |
+| 15 | `@playform/hook-dsh-live-containers` | `pnpm add @playform/hook-dsh-live-containers` | the dynamic system-prompt blocks (ships disabled) |
 
-**The effect-ts group (12 + the base, `EffectTS/packages/ets-*`):**
+**The effect-ts group (15 + the base, `EffectTS/packages/ets-*`):**
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
@@ -83,6 +86,9 @@ The registry listing uses exactly these.
 | 11 | `@playform/ets-hook-dsh-normalize-invisible` | `pnpm add @playform/ets-hook-dsh-normalize-invisible` | invisible characters removed |
 | 12 | `@playform/ets-hook-dsh-normalize-fullwidth` | `pnpm add @playform/ets-hook-dsh-normalize-fullwidth` | fullwidth -> halfwidth |
 | 13 | `@playform/ets-hook-dsh-normalize-file` | `pnpm add @playform/ets-hook-dsh-normalize-file` | the file normalize composition |
+| 14 | `@playform/ets-hook-dsh-ccr` | `pnpm add @playform/ets-hook-dsh-ccr` | the CCR compressor and the `ccr_retrieve` tool |
+| 15 | `@playform/ets-hook-dsh-tool-coach` | `pnpm add @playform/ets-hook-dsh-tool-coach` | the terminal-content coaching guardian |
+| 16 | `@playform/ets-hook-dsh-live-containers` | `pnpm add @playform/ets-hook-dsh-live-containers` | the dynamic system-prompt blocks (ships disabled) |
 
 The duplicate-name collision (#15) is resolved.
 Every `@playform/*` dependency resolves to exactly ONE workspace package.
@@ -96,7 +102,7 @@ the byte-identical contract:
 - Every install row is exactly `pnpm add @playform/<pkg>` - NO `--save`, NO `-D`, NO registry URL, NO version suffix in the display form.
 - The package tokens must match the manifest `name` byte-for-byte.
   A renamed package (the splice) rewrites the command AND the listing row in the same change set.
-- The smoke suite reference strings and the ledger totals (733 Classic / 746 EffectTS) are untouched by ANY listing edit.
+- The smoke suite reference strings and the ledger totals (1314 Classic / 1324 EffectTS) are untouched by ANY listing edit.
   The suites are the arbiter (SPLICE-ETS section 6.1, section 10).
 - `Site/Target/**` is build output.
   The site's install rows are edited in `Site/Source/**` ONLY, NEVER hand-edited in Target.
@@ -106,9 +112,9 @@ the byte-identical contract:
 1. The splice lands first (the unique names) - a pre-splice publish would ship
    the collision into the registry.
 2. `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four
-   foundations -> L2 the twenty consumers (SPLICE-ETS section 5.1).
+   foundations -> L2 the twenty-six consumers (SPLICE-ETS section 5.1).
 3. Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` =
-   733 + 746, zero failures (SPLICE-ETS section 6.3).
+   1314 + 1324, zero failures (SPLICE-ETS section 6.3).
 4. The site's `Install:` rows + the `/setup/` flow copy already match the
    `pnpm add` form - verified byte-exact against this roster at publish time.
 
@@ -121,5 +127,5 @@ the byte-identical contract:
   Adding them is part of the npm lane's manifest pass, NOT this lane.
 - The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action - the user's call,
   outside the tree.
-- The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm lane arms it after
-  the S4 gate.
+- The publish remains the user's call (`NPM.yml` runs only via
+  `workflow_dispatch`/`release`; the workflow is armed for 0.1.0).

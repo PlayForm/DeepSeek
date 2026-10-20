@@ -225,7 +225,7 @@ the live-feature lines:
 
 ```
 live-containers: disabled (enabled=false)
-live-containers: activated (bundle 0.0.1, blocks=<n>, refresh=<policy>)
+live-containers: activated (bundle 0.1.0, blocks=<n>, refresh=<policy>)
 live-containers: block rendered <id> (<len> bytes)
 live-containers: block skipped <id> (<reason>)
 live-containers: section rebuilt (ttl <n>)
@@ -281,7 +281,7 @@ on steady state.
 An activated session with the default table reads, for example:
 
 ```
-live-containers: activated (bundle 0.0.1, blocks=14, refresh=request)
+live-containers: activated (bundle 0.1.0, blocks=14, refresh=request)
 live-containers: block rendered time (113 bytes)
 live-containers: block skipped agent-progress-board (unknown kind)
 live-containers: section rebuilt (ttl 8)

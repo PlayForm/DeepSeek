@@ -89,12 +89,12 @@ if (!Wiring.ScratchHome()) {
 {
 	const Core = (await Wiring.PluginWhy("@playform/hook-dsh-core"))!;
 	Check(
-		Core.status === 0 && Core.stdout.includes("@playform/hook-dsh-core@0.0.1"),
+		Core.status === 0 && Core.stdout.includes("@playform/hook-dsh-core@0.1.0"),
 		"the plugin surface resolves the core bundle",
 	);
 	const Factory = (await Wiring.PluginWhy("@playform/plugin-dsh-factory"))!;
 	Check(
-		Factory.status === 0 && Factory.stdout.includes("@playform/plugin-dsh-factory@0.0.1"),
+		Factory.status === 0 && Factory.stdout.includes("@playform/plugin-dsh-factory@0.1.0"),
 		"the plugin surface resolves the factory bundle",
 	);
 }

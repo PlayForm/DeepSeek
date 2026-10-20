@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-live-containers (v0.0.1, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-live-containers (v0.1.0, TypeScript, function plugin)
 
 Status: **IMPLEMENTED and VERIFIED** (deterministic build zero errors; minified
 build; the package-internal per-test suite green - 203 checks across 14
@@ -206,7 +206,7 @@ and the timestamp - never the module):
 
 ```
 live-containers: disabled (enabled=false)
-live-containers: activated (bundle 0.0.1, blocks=<n>, refresh=<policy>)
+live-containers: activated (bundle 0.1.0, blocks=<n>, refresh=<policy>)
 live-containers: block rendered <id> (<len> bytes)
 live-containers: block skipped <id> (<reason>)
 live-containers: section rebuilt (ttl <n>)

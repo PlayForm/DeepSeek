@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.0
+
+### Changed
+
+- The family version: all 31 packages (15 Classic, 16 Effect-TS) ship at
+  0.1.0, and every internal sibling pin moves with them.
+- The ledger defaults: the cargo governor, the package governor, the pinner
+  and the ccr hook write the documented `~/.dsh/<identity>.log` paths; the
+  ccr default replaces the absolute `/Users/nikola/...` form.
+- The default-path assertions: the ccr suite (24 to 25 PASS) and the
+  governor suite (3 to 4 PASS) pin the documented ledger defaults, so the
+  schema default, the patch row and the README cannot drift apart.
+- The overpass move: the shared overpass scaffolding (the text-block
+  rewrite, the two arm factories and the `normalize-overpass` handler)
+  lives in the Classic core and the EffectTS base; each flavor keeps its
+  transform, its ledger strings and its listener signature.
+- The Effect-TS cleanup: the four unused direct `effect` dependencies
+  (ccr, tool-coach, live-containers, core) are removed; the `ets-*`
+  packages ride on `@playform/ets-base-dsh`, and the core's stream-gate
+  claim is corrected.
+- The site corrections: the site reads the release version from the
+  manifests, the fallbacks agree at 0.1.0, and the install and ledger
+  samples carry the new version.
+
 ## 0.0.1
 
 ### Added

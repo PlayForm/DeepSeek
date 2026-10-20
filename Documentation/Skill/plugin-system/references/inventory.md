@@ -7,8 +7,8 @@ the source of truth; the prose counts in older documents lag.
 
 | Group    | Names                                                          | Runtime                  | Version |
 | -------- | -------------------------------------------------------------- | ------------------------ | ------- |
-| Classic  | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`          | Plain TypeScript         | 0.0.1   |
-| EffectTS | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers | 0.0.1 |
+| Classic  | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`          | Plain TypeScript         | 0.1.0   |
+| EffectTS | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers | 0.1.0 |
 
 Counts: 15 Classic packages, 15 EffectTS packages plus the base (16
 directories). The old "25 packages" figure counted 12 + 12 + 1; the tree

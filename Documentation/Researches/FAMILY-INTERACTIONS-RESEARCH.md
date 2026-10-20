@@ -368,7 +368,7 @@ FRICTION:	The coach NEVER teaches the actual happy path: "see a <<<CCR:...>>> ma
 - The ccr does NOT use the factory's package_governance storage domain - deliberately (blob
   sizes would corrupt the governance record contract).
   Its factory Journal usage is limited to the single lifecycle line
-  "activated (bundle 0.0.1, targets 8, budget 268435456)".
+  "activated (bundle 0.1.0, targets 8, budget 268435456)".
 - createdAt/lastAccessed are memory-only: a journal reload restores content but restarts the
   LRU clock; evicted entries' journal lines linger until the next boot compaction.
 

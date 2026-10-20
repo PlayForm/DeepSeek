@@ -7,7 +7,7 @@ status: planned
 registry: Documentation/Plans/TRUSTED-PUBLISHER.md
 index: Documentation/INDEX.md
 statuses:
-  - name: the OIDC runbook (the 25 packages)
+  - name: the OIDC runbook (the 31 packages)
     state: open
     evidence: the runbook prepared; the two manual steps not performed
   - name: the armed NPM.yml workflow (L0 to L1 to L2)
@@ -18,7 +18,7 @@ statuses:
     evidence: a later session; the packages are published from source only
 ---
 
-# TRUSTED-PUBLISHER - the OIDC empty-first-publish runbook (the 25 packages)
+# TRUSTED-PUBLISHER - the OIDC empty-first-publish runbook (the 31 packages)
 
 > The Compress-style publishing: the packages must EXIST on npm before the trusted publishers can bind.
 > The user performs TWO manual steps.
@@ -26,23 +26,24 @@ statuses:
 > Prepared by the VERIFIED-PUBLISHING lane.
 > Nothing committed - the user commits.
 
-## 0. THE VERSION STRATEGY (documented once, applies to all 25)
+## 0. THE VERSION STRATEGY (documented once, applies to all 31)
 
-- The placeholder is published at **0.0.0** - deliberately BELOW the real **0.0.1**.
+- The placeholder is published at **0.0.0** - deliberately BELOW the real **0.1.0**.
   So the real releases NEVER collide with the placeholders.
 - **ONCE ON NPM, A VERSION IS IMMUTABLE.**
   0.0.0 can NEVER be republished or overwritten.
   It stays as the permanent placeholder history.
   This is why the placeholder carries a MINIMAL package.json (name + version + access) and nothing else.
   It is NEVER intended to be installed.
-  The real 0.0.1 follows from the monorepo publish.
+  The real 0.1.0 follows from the monorepo publish.
+  The 0.0.1 release is already on the registry and stays immutable.
 - `npm unpublish` within 72h can remove a mistaken publish, but do NOT rely on it.
   Treat EVERY publish as permanent.
 
 ## 1. THE EMPTY-FIRST-PUBLISH SEQUENCE (the user runs locally, with their token)
 
 Run from the repository root.
-It scaffolds a throwaway minimal package per name in a temp dir and publishes 0.0.0 for ALL 25 names in the topological order (L0 -> L1 -> L2):
+It scaffolds a throwaway minimal package per name in a temp dir and publishes 0.0.0 for ALL 31 names in the topological order (L0 -> L1 -> L2):
 
 ```bash
 set -euo pipefail
@@ -54,8 +55,10 @@ NAMES=(
   "@playform/plugin-dsh-factory"
   "@playform/ets-hook-dsh-core"
   "@playform/ets-plugin-dsh-factory"
-  # L2 - the twenty consumers (order within the layer is arbitrary)
+  # L2 - the twenty-six consumers (order within the layer is arbitrary)
   "@playform/hook-dsh-cargo-governor"
+  "@playform/hook-dsh-ccr"
+  "@playform/hook-dsh-live-containers"
   "@playform/hook-dsh-normalize-dash"
   "@playform/hook-dsh-normalize-ellipsis"
   "@playform/hook-dsh-normalize-file"
@@ -65,7 +68,10 @@ NAMES=(
   "@playform/hook-dsh-normalize-spaces"
   "@playform/hook-dsh-package-governor"
   "@playform/hook-dsh-package-pinner"
+  "@playform/hook-dsh-tool-coach"
   "@playform/ets-hook-dsh-cargo-governor"
+  "@playform/ets-hook-dsh-ccr"
+  "@playform/ets-hook-dsh-live-containers"
   "@playform/ets-hook-dsh-normalize-dash"
   "@playform/ets-hook-dsh-normalize-ellipsis"
   "@playform/ets-hook-dsh-normalize-file"
@@ -75,6 +81,7 @@ NAMES=(
   "@playform/ets-hook-dsh-normalize-spaces"
   "@playform/ets-hook-dsh-package-governor"
   "@playform/ets-hook-dsh-package-pinner"
+  "@playform/ets-hook-dsh-tool-coach"
 )
 WORK="$(mktemp -d)"
 for NAME in "${NAMES[@]}"; do
@@ -101,8 +108,8 @@ done
 
 ## 2. THE TRUSTED-PUBLISHER SPEC (the user pastes into each npm package page)
 
-After ALL 25 names exist: for EACH package, npm web UI -> the package page -> Settings -> Publishing access -> "Connect a supported source code repository" (or npmjs.com -> account -> Package settings).
-The values are IDENTICAL for ALL 25 entries (the Compress screenshot's pattern):
+After ALL 31 names exist: for EACH package, npm web UI -> the package page -> Settings -> Publishing access -> "Connect a supported source code repository" (or npmjs.com -> account -> Package settings).
+The values are IDENTICAL for ALL 31 entries (the Compress screenshot's pattern):
 
 | Field                | Value                          |
 | -------------------- | ------------------------------ |
@@ -112,20 +119,24 @@ The values are IDENTICAL for ALL 25 entries (the Compress screenshot's pattern):
 | Environment          | `Release`                      |
 | Permissions          | `npm publish` (+ `npm stage publish` if the form offers it) |
 
-The 25 package pages to configure (same shape each):
+The 31 package pages to configure (same shape each):
 
 `@playform/ets-base-dsh`, `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`,
 `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory`,
-`@playform/hook-dsh-cargo-governor`, `@playform/hook-dsh-normalize-dash`,
+`@playform/hook-dsh-cargo-governor`, `@playform/hook-dsh-ccr`,
+`@playform/hook-dsh-live-containers`, `@playform/hook-dsh-normalize-dash`,
 `@playform/hook-dsh-normalize-ellipsis`, `@playform/hook-dsh-normalize-file`,
 `@playform/hook-dsh-normalize-fullwidth`, `@playform/hook-dsh-normalize-invisible`,
 `@playform/hook-dsh-normalize-quotes`, `@playform/hook-dsh-normalize-spaces`,
 `@playform/hook-dsh-package-governor`, `@playform/hook-dsh-package-pinner`,
-`@playform/ets-hook-dsh-cargo-governor`, `@playform/ets-hook-dsh-normalize-dash`,
+`@playform/hook-dsh-tool-coach`,
+`@playform/ets-hook-dsh-cargo-governor`, `@playform/ets-hook-dsh-ccr`,
+`@playform/ets-hook-dsh-live-containers`, `@playform/ets-hook-dsh-normalize-dash`,
 `@playform/ets-hook-dsh-normalize-ellipsis`, `@playform/ets-hook-dsh-normalize-file`,
 `@playform/ets-hook-dsh-normalize-fullwidth`, `@playform/ets-hook-dsh-normalize-invisible`,
 `@playform/ets-hook-dsh-normalize-quotes`, `@playform/ets-hook-dsh-normalize-spaces`,
-`@playform/ets-hook-dsh-package-governor`, `@playform/ets-hook-dsh-package-pinner`.
+`@playform/ets-hook-dsh-package-governor`, `@playform/ets-hook-dsh-package-pinner`,
+`@playform/ets-hook-dsh-tool-coach`.
 
 Notes:
 - The environment must be named exactly `Release` in the GitHub repository settings too.
@@ -134,7 +145,7 @@ Notes:
 
 ## 3. THE FIRST REAL PUBLISH (the verification run)
 
-With the trusted publishers bound, the first run of the workflow (or the user's local equivalent with `--provenance`) publishes the REAL 0.0.1 for ALL 25 packages with OIDC provenance attestations.
+With the trusted publishers bound, the first run of the workflow (or the user's local equivalent with `--provenance`) publishes the REAL 0.1.0 for ALL 31 packages with OIDC provenance attestations.
 Order: L0 -> L1 -> L2 (the workflow encodes this; locally, run the same sequence).
 
 ## 4. THE CAVEATS (repeated for emphasis)
@@ -144,5 +155,5 @@ Order: L0 -> L1 -> L2 (the workflow encodes this; locally, run the same sequence
 - The placeholders ship with NO code.
   ANYONE installing `@playform/*@0.0.0` gets an empty package.
   Acceptable for a brief window.
-  The real 0.0.1 lands immediately after the trusted publishers bind.
+  The real 0.1.0 lands immediately after the trusted publishers bind.
 - The local placeholder publishes have NO provenance (correct - provenance requires the GitHub OIDC context of the workflow run).

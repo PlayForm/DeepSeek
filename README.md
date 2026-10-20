@@ -4,16 +4,17 @@
 >
 > Tame the model's output and govern the project's files.
 >
-> Twelve TypeScript packages - the factory, the core, the governance trio and the seven-member
-> normalize family - in three implementations (the Boilerplate baseline, [the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic), [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one ledger-string
-> contract, 733 + 746 smoke assertions.
+> Thirty-one TypeScript packages - the factory, the core, the governance trio, the seven-member
+> normalize family, the two guardians and the live block - in two implementations ([the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic), [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one ledger-string
+> contract, 1314 + 1324 smoke assertions.
 >
 > _One monorepo._
 >
 > _Every ledger byte-checked._
 
-[![smokes](https://img.shields.io/static/v1?label=smokes&message=classic%20733%20%2F%20effect-ts%20746&color=blue)](Classic/smokes/README.md)
-[![packages](https://img.shields.io/static/v1?label=packages&message=12%20%C3%97%203&color=white)](Classic/packages/)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](CHANGELOG.md)
+[![smokes](https://img.shields.io/static/v1?label=smokes&message=classic%201314%20%2F%20effect-ts%201324&color=blue)](Classic/smokes/README.md)
+[![packages](https://img.shields.io/static/v1?label=packages&message=31&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
 ---
@@ -30,9 +31,9 @@ binary.
 
 ```sh
 pnpm install --ignore-scripts
-pnpm run build:classic   # the twelve Classic bundles, one workspace pass
-pnpm run build:effect-ts # the twelve EffectTS bundles
-pnpm run test            # all 24 smokes - the arbiter
+pnpm run build:classic   # the fifteen Classic bundles, one workspace pass
+pnpm run build:effect-ts # the fifteen EffectTS bundles
+pnpm run test            # all 207 smoke folders - the arbiter
 ```
 
 Per bundle the build is the same three steps (`Source/` -> `Target/` via ESBuild + `tsc` +
@@ -44,7 +45,7 @@ pnpm install --ignore-scripts
 pnpm run prepublishOnly
 ```
 
-The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the ten consumers; the
+The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the thirteen consumers; the
 consumers import their siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
@@ -216,10 +217,10 @@ One contract, three trees - the ledger strings are byte-identical across all of 
 
 | Tree           | What it is                                                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`     | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 733 smoke assertions.           |
-| `EffectTS/`    | The Effect v4 port - the same twelve contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.2 pin). 746 assertions. |
+| `Classic/`     | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 1314 smoke assertions.           |
+| `EffectTS/`    | The Effect v4 port - the same fifteen contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 1324 assertions. |
 
-### The twelve packages
+### The fifteen packages
 
 Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 
@@ -274,13 +275,22 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 - **[hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-file/Source)** (Hook @ DSH @ Normalize @ File) - the file-content normalizer: the
   read, count, write pipeline applying all six transforms to a file already on disk - writing only
   when something changed.
+- **[hook-dsh-ccr](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-ccr/Source)** (Hook @ DSH @ CCR) - the compress-cache-retrieve guardian: oversized
+  allow-listed tool results become a one-line type-aware preview plus a retrieval marker, with the
+  original bytes restored on demand by the `ccr_retrieve` tool.
+- **[hook-dsh-tool-coach](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-tool-coach/Source)** (Hook @ DSH @ Tool @ Coach) - the terminal-content coaching
+  guardian: the four-tier ladder (ledger, notice, persistent section, opt-in deny) over terminal
+  calls, naming the correct dedicated tool with its live registry description.
+- **[hook-dsh-live-containers](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-live-containers/Source)** (Hook @ DSH @ Live @ Containers) - the dynamic system-prompt
+  blocks: one `live-containers` section whose labeled stanzas are recomputed at request time; it
+  ships disabled and enables only by an explicit activate.
 
 ### The layout
 
 ```text
-    Classic/         the plain-TypeScript release: 12 packages + 12 smokes
-    EffectTS/        the Effect v4 port: the same 12 packages + 12 smokes
-    Site/            the static site: 21 pages (the plugins, the flavors, the setup, the case study)
+    Classic/         the plain-TypeScript release: 15 packages + 15 smokes
+    EffectTS/        the Effect v4 port: the same 15 packages + 15 smokes
+    Site/            the static site: 24 pages (the plugins, the flavors, the setup, the case study)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes
     Documentation/   the framework, the guides, the skills, the handoff
     Maintain/        the formatting entry point

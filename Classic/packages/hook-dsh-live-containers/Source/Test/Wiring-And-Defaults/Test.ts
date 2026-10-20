@@ -155,21 +155,21 @@ export const runTest = async (): Promise<number> => {
 		);
 		Check(Count, "activation ledger line byte-exact", () => {
 			assert.deepEqual(Run2.Lines, [
-				"hook-dsh-live-containers: activated (bundle 0.0.1, blocks=2, refresh=request)",
+				"hook-dsh-live-containers: activated (bundle 0.1.0, blocks=2, refresh=request)",
 			]);
 		});
 		Check(Count, "the durable ledger file carries the [ISO] activation line", () => {
 			assert.equal(LedgerLines().length, 1);
 			assert.match(
 				LedgerLines()[0]!,
-				/^\[.*\] activated \(bundle 0\.0\.1, blocks=2, refresh=request\)$/,
+				/^\[.*\] activated \(bundle 0\.1\.0, blocks=2, refresh=request\)$/,
 			);
 		});
 		Check(Count, "activation ttl flavor byte-exact (refresh=ttl)", () => {
 			rm();
 			const Run3 = Make(Validate({ logFile: Ledger, enabled: true, refresh: "ttl" }));
 			assert.deepEqual(Run3.Lines, [
-				"hook-dsh-live-containers: activated (bundle 0.0.1, blocks=14, refresh=ttl)",
+				"hook-dsh-live-containers: activated (bundle 0.1.0, blocks=14, refresh=ttl)",
 			]);
 		});
 	}

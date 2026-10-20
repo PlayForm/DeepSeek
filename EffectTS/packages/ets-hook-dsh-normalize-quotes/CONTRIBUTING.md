@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/ets-hook-dsh-normalize-quotes (0.0.1), one
+Welcome to our community! This repository holds @playform/ets-hook-dsh-normalize-quotes (0.1.0), one
 of the release packages of the DeepSeek Harness Plugin Family: the stream hook normalizing the curly quote family in model output.
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

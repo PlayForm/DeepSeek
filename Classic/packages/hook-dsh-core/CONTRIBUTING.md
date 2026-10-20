@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/hook-dsh-core (0.0.1), one
+Welcome to our community! This repository holds @playform/hook-dsh-core (0.1.0), one
 of the release packages of the DeepSeek Harness Plugin Family: the pure, harness-free commonalities of the families: the governance mechanics (the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader, the refusal guard and the update engine) and the stream-normalization machinery (dependency-free).
 Contributions are welcome under the CC0 dedication in the LICENSE file.
 

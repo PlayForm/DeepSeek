@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-base-dsh",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "The BASE of the ets-* group (@playform/ets-base-dsh): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell), the fiber/stream machinery (the Gate transformer and the pure reducers, the Update envelope) and the shared contract types (the factory's Interface/* structural contracts). Usable outside the harness entirely (the PlayForm ecosystem).",
 	"repository": {
 		"type": "git",

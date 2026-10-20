@@ -92,7 +92,7 @@ import { Activate } from "@playform/hook-dsh-core";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.0.1";
+const Version = "0.1.0";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
 const Cell = (Value: unknown): unknown =>

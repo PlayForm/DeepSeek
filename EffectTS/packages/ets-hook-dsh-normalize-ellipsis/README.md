@@ -3,7 +3,7 @@
 *The DeepSeek Harness Plugin Family for PlayForm.*
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-normalize-ellipsis&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-ellipsis)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.0.1&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-ellipsis)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-ellipsis)
 [![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](../../README.md)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../../README.md)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)

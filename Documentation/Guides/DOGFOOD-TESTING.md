@@ -119,7 +119,7 @@ done
 
 ```bash
 # in $SCRATCH/profiles/dsh-test/package.json, dependencies section:
-#   "@playform/plugin-dsh-factory": "file:../../../tarballs/playform-plugin-dsh-factory-0.0.1.tgz"
+#   "@playform/plugin-dsh-factory": "file:../../../tarballs/playform-plugin-dsh-factory-0.1.0.tgz"
 # verify NO symlinks after install:
 find "$SCRATCH" -type l | grep -v node_modules/.pnpm || echo "no symlinks"
 ```
@@ -325,7 +325,7 @@ for p in plugin-dsh-factory hook-dsh-core hook-dsh-package-governor \
 done
 
 # dependencies (file: copies - never link:, never workspace:)
-# "@playform/plugin-dsh-factory": "file:./tarballs/playform-plugin-dsh-factory-0.0.1.tgz"
+# "@playform/plugin-dsh-factory": "file:./tarballs/playform-plugin-dsh-factory-0.1.0.tgz"
 (cd "$SCRATCH" && pnpm install)
 
 # the invariant:

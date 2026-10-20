@@ -29,9 +29,9 @@ documented as a residual.
   - Leaf 14: the schema document defines the entry dialect.
   - Leaf 15: the schema document states the wholesale-replacement rule.
 - Group: the plugin-manager surface
-  - Leaf 16: the plugin surface resolves the core bundle (`<core>@0.0.1`).
+  - Leaf 16: the plugin surface resolves the core bundle (`<core>@0.1.0`).
   - Leaf 17: the plugin surface resolves the factory bundle
-    (`<factory>@0.0.1`).
+    (`<factory>@0.1.0`).
 
 ## Fixtures
 
@@ -49,7 +49,7 @@ documented as a residual.
 This folder asserts command output, not ledger lines. The asserted strings
 are the composed entries (`- id: <id>` with `name: '<package>'` within 200
 characters), the schema document's title/comment, and the `why` output's
-`<package>@0.0.1`.
+`<package>@0.1.0`.
 
 ## Edge cases
 
