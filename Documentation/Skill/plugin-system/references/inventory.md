@@ -51,8 +51,13 @@ grep -h '"effect"' EffectTS/packages/*/package.json
 
 The smoke manifest line lists 14 mechanics suites: core, factory, governor,
 pinner, cargo, dash, quotes, ellipsis, spaces, invisible, fullwidth,
-normalize-file, ccr, tool-coach. The manifest totals are 1008 Classic and
-1021 EffectTS.
+normalize-file, ccr, tool-coach.
+
+The manifest line is a summary that lags the per-folder tests. On
+2026-10-20 it read 1008 Classic / 1021 EffectTS, while the per-folder sums
+gave 1312 Classic across those suites (1592 with the live-containers
+folders). The per-folder READMEs are the arbiter; the manifest must be
+regenerated or derived, never quoted as-is.
 
 The `live-containers` package carries 14 internal test folders (280
 checks per tree). The aggregate runner executes them, but the manifest

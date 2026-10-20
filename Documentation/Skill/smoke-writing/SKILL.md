@@ -63,9 +63,13 @@ Each test folder's `README.md` declares its expected count under
 (`Maintain/Run-Smokes.mjs`) compares the printed `N PASS - <Name>` line
 with that number. A folder without a parseable count fails.
 
-The manifest line in `<tree>/smokes/README.md` is the suite-level
-baseline. It lists 14 mechanics suites; the `live-containers` package's
-internal folders are run by the aggregate but are not in that line.
+The per-folder READMEs are the arbiter; the aggregate compares each printed
+count with them. The manifest line in `<tree>/smokes/README.md` is a
+summary, not the truth: it can lag the folders. Verify it before quoting a
+total (2026-10-20: dash 184 vs 132, each small flavor 104 vs 62,
+normalize-file 112 vs 71, factory 35 vs 34; core, governor, pinner, cargo,
+ccr, and tool-coach match). The `live-containers` folders are run by the
+aggregate but are not in that line.
 
 ## The traps
 

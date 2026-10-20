@@ -121,39 +121,74 @@ envelope, the `Continue` Cause/Exit channel, and the normalize
 - **Docs**: six flavor READMEs of 372-406 lines each; `SCHEME.md` in 8 of
   15 Classic packages; `CODE_OF_CONDUCT.md` in 24 package directories.
 
+### 2.4 The smoke manifest is stale
+
+The manifest line (`Classic/smokes/README.md`, `EffectTS/smokes/README.md`)
+is the source the site parses, and it lags the per-folder tests: dash 184
+vs 132, each small flavor 104 vs 62, normalize-file 112 vs 71, factory 35
+vs 34. Core, governor, pinner, cargo, ccr, and tool-coach match. The
+per-folder READMEs are the runner's arbiter (`Maintain/Run-Smokes.mjs`).
+
+The real Classic total is 1,312 across the manifest suites, 1,592 with the
+live-containers folders. The EffectTS total needs the same per-folder sum;
+the manifest's 1021 and the site's 1008/1021 are the stale line, not the
+test truth.
+
 ## 3. The target design
 
-### 3.1 Move the overpass scaffolding into `hook-dsh-core`
+### 3.1 Move the overpass scaffolding into the machinery library
 
-`hook-dsh-core` already owns the six tables, `Replace`/`ReplaceMap`,
-`Chunk`/`Block`, and every flavor already depends on it. The target:
+The scaffolding is structure, not a leaf: the gate order, the CCR marker
+guard, the decision-kind/value checks, the identity-preserving no-op, the
+fail-open, and the journal shape. It has no flavor-specific behavior and no
+flavor-specific strings.
 
-```text
-hook-dsh-core/Source/Function/
-  Overpass/
-    Command.ts        one command handler (State, services) -> CommandResult
-    StepBatch.ts      one arm factory (transform) -> pre-step listener
-    Overpass.ts       one RewriteBlocks + marker guard
-```
+Target homes, forced by the existing trees:
 
-Each flavor keeps:
+| Tree | Home | Why |
+| --- | --- | --- |
+| Classic | `hook-dsh-core/Source/Overpass/` | core already owns the tables, `Replace`/`Chunk`/`Block`; every flavor depends on it |
+| EffectTS | `ets-base-dsh/Source/Overpass/` | the ETS machinery already lives in base (`Stream/`, `Function/Activate`); `ets-hook-dsh-core` has no `Stream/` |
 
-- its transform table and its `Replace` delegate;
-- its `State.Module` identity and ledger strings;
-- its `Config` schema and defaults (imported from one `Variable/Default.ts`).
+Files: `Blocks.ts`, `ToolResults.ts`, `StepBatch.ts`, `Command.ts`, plus
+the Library exports in core and the same in base.
 
-The flavor's `Apply.ts` calls the core builders with its transform. The
-import direction stays consumer -> core, which is the existing direction.
+The parameterization boundary is four parameters:
 
-Why this respects the ownership rule: the scaffolding is not a leaf. It
-has no flavor-specific behavior, no flavor-specific strings, and no
-flavor-specific config. The flavor-specific parts (table, replacement,
-module identity) stay in the module.
+1. `Transform(Text, State)` - the flavor's replacement, read per call so a
+   volatile flip lands; the one-argument fullwidth delegate ignores State.
+2. `Line` - the module's ledger-line composer (required; the module names
+   core's composer or inlines its own).
+3. `Ledger { Append, Journal }` - injected, so core never names the
+   factory's type and the `Append(State: Shape)` bivariance is avoided.
+4. `Files` - the files sweep, normalize-file only.
 
-Risk: medium. The built `Target/` changes, the smokes load the real
-Target, and the normalize suites' import graph changes. The ledger strings
-do not change because they are parameterized by `State.Module`. The
-migration must keep the smoke counts identical.
+Module identity is not a parameter: `State.Module` already carries it.
+Each flavor keeps a thin delegate so `Apply.ts`, the import paths, and the
+smoke harness stay untouched; that is what makes the rollback two files.
+The import direction stays consumer -> core or base; no cross-tree edge.
+
+Migration, with a canary:
+
+1. M0 capture the per-folder printed counts and the ledger files.
+2. M1 core `Blocks.ts` and exports (additive).
+3. M2 core arms, zero consumers (additive; hard rollback).
+4. M3 dash canary: 184 PASS and a byte-diff of its ledger (behavioral gate).
+5. M4 the five small flavors: 104 each.
+6. M5 normalize-file: 112.
+7. M6 core `Command.ts`, six delegates, and the file delegate.
+8. M7 mirror to `ets-base-dsh`; build base, core, factory, consumers;
+   parity rerun.
+9. M8 docs and manifest; M9 the aggregate.
+
+Risks: `RewriteBlocks` must return the original array by identity; the
+transform must read State per call; the registration keeps
+`{ prepend: true }`; core must stay dependency-free; a stale core Target
+makes all seven consumers fail to resolve exports; the additive core and
+base exports are the only public-surface change.
+
+Risk: medium. The ledger strings do not change because they are
+parameterized by `State.Module`; the smoke counts must not change.
 
 ### 3.2 Export the factory's service type and delete the 26 mirrors
 

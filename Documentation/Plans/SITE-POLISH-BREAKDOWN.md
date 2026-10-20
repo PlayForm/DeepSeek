@@ -146,6 +146,25 @@ Rewrite:
 - Acceptance: every "every/each/zero/never" is either true in code or
   gone.
 
+### P0.7 The smoke totals are understated
+
+- Files: `Site/Source/Library/Content.ts:73-76` (the 1008/1021 fallback),
+  `Site/Source/Library/Live.ts` (parses the manifest line), and the manifest
+  itself in `Classic/smokes/README.md` and `EffectTS/smokes/README.md`.
+- The manifest line is stale against the per-folder tests: dash 184 vs 132,
+  each small flavor 104 vs 62, normalize-file 112 vs 71, factory 35 vs 34.
+  Core, governor, pinner, cargo, ccr, and tool-coach match. The per-folder
+  READMEs are the runner's arbiter (`Maintain/Run-Smokes.mjs`).
+- The real Classic total is 1,312 across the manifest suites, 1,592 with the
+  live-containers folders. The EffectTS total needs the same per-folder sum;
+  do not assume the additive delta alone.
+- Fix: make `Live.ts` sum the per-folder `## Expected count` values (or
+  regenerate the manifest from them), then let every page read the derived
+  total. Do not hardcode a new number.
+- Acceptance: the displayed total equals the sum the runner guards;
+  `pnpm Drift` passes; the root README and `Site/README.md` quote the same
+  derived number.
+
 ## 3. P1 - structure and discovery
 
 ### P1.1 One detail-page template
