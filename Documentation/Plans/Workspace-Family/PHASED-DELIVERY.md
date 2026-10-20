@@ -24,6 +24,9 @@ statuses:
 
 - **THE ORDER**: the ablation-aligned delivery - each phase adds ONE
   capability layer so the family's value is testable at every step:
+- **THE REGIME**: the whole delivery builds the WORKSPACE REGIME (the
+  third axis) - the physical + execution regimes already exist; the
+  phases add the OPERABILITY layer by layer.
 - **PHASE 1 - THE ENGINE**: lib-dsh-workspace-live + the observe + the
   operate + the merge (the v1 engine: the schema, the state machine, the
   per-file commits, the smokes with the fake clocks).

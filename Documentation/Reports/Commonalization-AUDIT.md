@@ -39,7 +39,7 @@ for maintainability cost optimization."_
 ## 1. The write-path audit - three executors, one shared pipeline
 
 All three executors implement the same five-step pipeline the harness's `write` tool owns.
-The pipeline is filesystem.md:278 - resolve → `fs/write-intent` waterfall → sandbox policy → `writeText` → `fs/observed`.
+The pipeline is filesystem.md:278 - resolve -> `fs/write-intent` waterfall -> sandbox policy -> `writeText` -> `fs/observed`.
 The per-step inventory:
 
 | Shared step                    | Built-in `write` (tool-fs/index.js)                                                                                                               | Family `raw-write` (normalize-dash)                                                                            | Factory `GuardedWrite`                                                                             |
@@ -55,11 +55,11 @@ The per-step inventory:
 
 Duplication quantification (lines implementing the shared pipeline):
 
-- **Built-in**: execute body :575-600 ≈ 26 lines (+ the ~120-line controller, shared with `edit`).
+- **Built-in**: execute body :575-600 ~= 26 lines (+ the ~120-line controller, shared with `edit`).
 - **raw-write**: execute body Write.ts:110-147 = 38 lines, of which ~35 mirror the built-in's steps 1-5 verbatim (the file's own header admits it: Write.ts:16-31).
   Plus presenters ~30 lines.
 - **GuardedWrite**: 55 lines, of which ~17 overlap (policy resolution + `writeText`).
-  Its Stash and P4-fence behavior is unique but the _resolution mechanics_ (sandboxMode ternary → policy shape) are the third hand-rolled copy of the same decision.
+  Its Stash and P4-fence behavior is unique but the _resolution mechanics_ (sandboxMode ternary -> policy shape) are the third hand-rolled copy of the same decision.
 
 Bottom line: **three implementations of the sandbox-posture decision, three of the `writeText` call shape, two of the `fs/observed` present emit, plus a third variant (`Refresh`)** - the exact repetition the user flagged.
 
@@ -77,8 +77,8 @@ Variance: real-I/O vs capturing fs, effect-disposal semantics, the `ProbeState`/
 Roughly **~300 duplicated harness lines** across the eleven suites.
 
 **Update-stage envelopes.** package-governor `Dispatch.ts` (156 lines) vs cargo-governor `Dispatch.ts` (166).
-Identical gates (breaker → in-flight → cooldown), identical jobs envelope (unowned job, `cancel`/`done` semantics, P2 `Inflight` under `Factory.UpdateKey`).
-`Settle.ts` 52 vs 66 lines: identical breaker update, failure-line string, P5 journal record, and U₂ (stat → `Factory.Refresh`).
+Identical gates (breaker -> in-flight -> cooldown), identical jobs envelope (unowned job, `cancel`/`done` semantics, P2 `Inflight` under `Factory.UpdateKey`).
+`Settle.ts` 52 vs 66 lines: identical breaker update, failure-line string, P5 journal record, and U2 (stat -> `Factory.Refresh`).
 ONLY drift: the child execution stage and cargo's explicit `Factory` parameter.
 This pair is the next-highest-value commonalization after the write path.
 
@@ -88,7 +88,7 @@ The factory is the family's service and the ONLY package BOTH tool-style (`raw-w
 The harness's built-in `write` tool is **OUT of scope** (harness-owned `dsh-tool-fs`).
 The abstraction is family-side and mirrors the built-in's mechanics so `fs/observed` chains stay identical.
 
-Proposed signature - `plugin-dsh-factory/Source/Function/Write.ts` becomes the shared executor (`GuardedWrite` folds into it; SCHEME.md §2.7 keeps the name as the guarded alias):
+Proposed signature - `plugin-dsh-factory/Source/Function/Write.ts` becomes the shared executor (`GuardedWrite` folds into it; SCHEME.md section 2.7 keeps the name as the guarded alias):
 
 ```ts
 export default async (
@@ -109,7 +109,7 @@ export default async (
 
 **Migration shapes.**
 
-1. **raw-write** (normalize-dash Write.ts:110-147): collapses to `resolve` (unchanged, 3 lines) + one `Factory.Write(State, target, AsWritten(...), { signal: exec.signal, actor: exec, policy: "standing" })` call - ~35 lines → ~10.
+1. **raw-write** (normalize-dash Write.ts:110-147): collapses to `resolve` (unchanged, 3 lines) + one `Factory.Write(State, target, AsWritten(...), { signal: exec.signal, actor: exec, policy: "standing" })` call - ~35 lines -> ~10.
    Schema, presenters, and `AsWritten` (shared with the presenters, Write.ts:51-52) are untouched.
    The missing-policy error message moves into the executor (keep the exact string: Write.ts:129).
 2. **GuardedWrite** (factory Write.ts): the executor itself - `intent: { kind:"replaceIfVersion", version }`, `policy: "p4"`, `stash: true`, `observe: false`.
@@ -123,13 +123,13 @@ export default async (
 - **GuardedWrite / chain pass**: factory-smoke.mjs:229-240 (intent deep-equal, both P4 postures,
   Stash pre-registration), :473-478 (signal forwarding), :296 (chain-pass intent);
   governor-smoke.mjs:327-360 (chain pass via `Factory.Continue` - intent, bare fence, task-owned
-  signal, serialization), :512+ (confined fence posture), :410-419 (U₂ same-actor refresh);
-  cargo-smoke.mjs factory-wiring checks + :911 (FS_STALE_VERSION propagation). → gates Stage 1.
+  signal, serialization), :512+ (confined fence posture), :410-419 (U2 same-actor refresh);
+  cargo-smoke.mjs factory-wiring checks + :911 (FS_STALE_VERSION propagation). -> gates Stage 1.
 - **raw-write**: normalize-dash-smoke.mjs Run 8 (:298-355 - schema, verbatim default,
   `normalize: true` six transforms, replacement knob, explicit false, update before/after,
   pre-aborted signal, `fs/observed` shape, `intent === undefined` passthrough, bare-backend
   `policy === undefined`); core-smoke.mjs:276-295 (the `raw-write` **name** exemption in the
-  stream - the tool name must not change). → gates Stage 2.
+  stream - the tool name must not change). -> gates Stage 2.
 - **Arbiter**: every smoke suite must pass with **zero assertion edits**. The executor must be
   behavior-preserving byte-for-byte: intent passthrough, fence values, Stash side effect, emit
   shape/actor, outcome envelope, abort semantics, ledger strings.
@@ -151,5 +151,5 @@ write proves the union before the tool depends on it. If the maintainer prefers 
 is safe only with all eleven smokes run between the two commits.
 
 **Follow-on candidates (same lens, separate items)**: the governor/cargo `Dispatch`/`Settle` pair
-(§2), the activation-line template, and a shared smoke fake-ctx module (~300 duplicated harness
+(section 2), the activation-line template, and a shared smoke fake-ctx module (~300 duplicated harness
 lines).

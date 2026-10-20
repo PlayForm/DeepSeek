@@ -33,7 +33,7 @@ Status:
 > emphasize THE STRUCTURE OF WHY IT WAS WRITTEN LIKE THIS - the structural rationale (why the
 > architecture and the decisions are shaped the way they are), NOT the how (the process mechanics).
 > Scope: `Site/Source/pages/case-study.astro`, `Documentation/Archive/Site/CASE-STUDY-PLAN.md`, the third-pass
-> summary (`Documentation/Plans/TOMORROW-REVIEW.md` §2.3), the handoff
+> summary (`Documentation/Plans/TOMORROW-REVIEW.md` section 2.3), the handoff
 > (`Documentation/Handoff/`: Overview, Packages 01-13, Register, Lessons), the reports
 > (`Documentation/Reports/`), and the code (`Classic/packages/*`, `EffectTS/packages/*`, both
 > `smokes/` trees, `Boilerplate/`, `Test/`, `Site/`). READ-ONLY everywhere except this file. Commit
@@ -78,7 +78,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The overview is mostly structural.
 - **Unsupported/stale**: "~800 checks across twelve suites as the final count" is unattributed.
   The Effect-TS total is 808, the Classic is 795.
-  BOTH round to "~800", but the third-pass summary (TOMORROW-REVIEW §2.3) pins the intent to the Effect-TS total, which the page NEVER says.
+  BOTH round to "~800", but the third-pass summary (TOMORROW-REVIEW section 2.3) pins the intent to the Effect-TS total, which the page NEVER says.
   "Zero assertion changes across refactors, renames and a framework port" needs the additive-coverage nuance.
   The Effect-TS suites add 13 checks (core +3, factory +7, governor +3).
   So "zero changes" means zero rewrites, NOT zero growth.
@@ -96,7 +96,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The why (a returned value silently kills event delivery; named-only exports are shadowed) is present in ONE clause EACH, which is enough.
 - **Unsupported/stale**: "it has since grown 15 -> 16 -> 17 methods".
   The actual current surface is 19 callable methods (Library.ts lists Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/Govern).
-  The SCHEME numbers 17 sections with Write+GuardedWrite sharing §2.7 and UpdateKey absent.
+  The SCHEME numbers 17 sections with Write+GuardedWrite sharing section 2.7 and UpdateKey absent.
   The factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139).
   See Correction C1.
   The 15-method era figure itself is correct (Handoff Overview Package 3).
@@ -135,7 +135,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   "The system normalizes itself" is the family's self-awareness beat and is well placed.
   But the page misses that its OWN ledger excerpt (C3) is a LIVE instance of that beat.
 - **Unsupported/stale**: the matrix page is named ("the workbench and the matrix pages run exactly these flavors live") but ONLY workbench is linked.
-  The plan's §4 asked for BOTH (C12).
+  The plan's section 4 asked for BOTH (C12).
 
 ### Phase V - the raw-write saga
 
@@ -144,7 +144,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The patch-layer shadowing's why is the config-composition inversion (a patch layer replaces the entry config wholesale; the schema projection is the blind spot).
   The v2 migration's why is exact-equality version check + swallowed catch + never-drained buffer -> silence made it undiagnosable -> the loud line.
   The commonalization is three executors -> ONE shared five-step pipeline, with the per-step divergence table.
-  The fold race, then the deeper same-version bug and the stat-before-write guard, are ALL verified against Commonalization-AUDIT §1, Function/Write.ts, Function/Govern.ts, Function/Open.ts.
+  The fold race, then the deeper same-version bug and the stat-before-write guard, are ALL verified against Commonalization-AUDIT section 1, Function/Write.ts, Function/Govern.ts, Function/Open.ts.
 - **How lapse**: the two-wrong-theories narrative is process by nature, but it is the plan's required honest voice and it terminates in the structural discovery.
   Acceptable.
 - **Unsupported/stale**: the abort-signal fix (the 13th decision row) is verified (Library.ts:230-236 + the dash suite's pre-aborted scenario, EffectTS/smokes/normalize-dash-smoke.mjs:787-807).
@@ -161,8 +161,8 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The tracing opt-in (no-op default, best-effort, NodeSdk.layer + OTLP - Runtime.ts:26-49) appears nowhere except ONE table cell (C6).
   The naming inversion is stated as a property ("read as @-sentences, group alphabetically"), NOT a why (C8).
 - **Unsupported/stale**: "one repository per package under submodule structure" reads as achieved.
-  Register #16 is NOT STARTED (NO commits, everything on disk) and TOMORROW-REVIEW §3.1 lists it as open (C4).
-  "Anonymized and de-personalized every bundle" glosses the known ncuBin residual (TOMORROW-REVIEW §3.3, a smoke-asserted code constant) (C14).
+  Register #16 is NOT STARTED (NO commits, everything on disk) and TOMORROW-REVIEW section 3.1 lists it as open (C4).
+  "Anonymized and de-personalized every bundle" glosses the known ncuBin residual (TOMORROW-REVIEW section 3.3, a smoke-asserted code constant) (C14).
 
 ### The decision index (Section 7)
 
@@ -171,7 +171,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   It covers the seam-only signal forwarding vs the fiber interruption, byte parity preserved, verified in code.
   Rows 1-9 and 11 name real seams.
 - **How lapse**: rows 10 and 12 name NO seam ("The dependency-pin discipline"; "Package naming; the monorepo layout").
-  The plan's §4 rule ("the case study never describes a decision in the abstract") is violated exactly where the naming/packaging structure lives (C9).
+  The plan's section 4 rule ("the case study never describes a decision in the abstract") is violated exactly where the naming/packaging structure lives (C9).
   The evidence column mixes commit hashes with doc refs.
   It could carry file refs so the proof is locatable in the tree (E7).
 - **Unsupported/stale**: "12 DECISIONS + 1 FIX" (the eyebrow) vs "13 DECISIONS" (the section Metadata) is a label mismatch, harmless but noisy.
@@ -184,7 +184,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The patch-layer shadowing as the meta-lesson (verify the LIVE effective config, NEVER the schema projection) closes the saga structurally.
   The load-order lesson connects to the fold ("the fold plus the fresh-version writes make the order irrelevant").
 - **How lapse**: the subagent quirks and the timestamp lessons are process by design.
-  The plan's §8 explicitly lists them.
+  The plan's section 8 explicitly lists them.
   They belong here, NOT in the phases.
 - **Unsupported/stale**: the known-gaps register's items (the verifyCommand trap, the raw-marker unreachability beyond the ONE honest sentence, the #14 Classic parallel coverage) are NOT surfaced in the close's "backlog of decisions already designed".
   A named backlog would be more structural than a vague ONE (E4).
@@ -197,15 +197,15 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The page's Phase 0 Metadata and Phase I text are exact.
 - **12 packages x 12 smoke suites x 3 implementations**: `Classic/packages/` and `EffectTS/packages/` hold the same 12 names.
   `Classic/smokes/`, `EffectTS/smokes/`, `Boilerplate/smokes/` hold 12 suites EACH (the #15 names, verified: hook-dsh-core, governor-cargo, governor-package, normalize-dash/-file/-quotes/-ellipsis/-spaces/-invisible/-fullwidth, pinner-package, plugin-dsh-factory).
-- **The smoke counts**: per-suite call sites match TOMORROW-REVIEW §1 exactly.
+- **The smoke counts**: per-suite call sites match TOMORROW-REVIEW section 1 exactly.
   Classic core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 EACH / dash 132.
   EffectTS core 17 / factory 41 / governor 81, the rest identical.
   Totals: Classic and Boilerplate 795, EffectTS 808.
   The page's "~800" is defensible as the Effect-TS total (see the stale-claims list for the 733/671 figures).
-- **The factory surface**: Write (the shared executor) and GuardedWrite (the guarded alias) at SCHEME.md §2.7, RegisterGovern at §2.16, Govern at §2.17 ("the SEQUENTIAL FOLD" per SCHEME).
+- **The factory surface**: Write (the shared executor) and GuardedWrite (the guarded alias) at SCHEME.md section 2.7, RegisterGovern at section 2.16, Govern at section 2.17 ("the SEQUENTIAL FOLD" per SCHEME).
   Function/Write.ts + Function/Govern.ts + Function/UpdateKey.ts exist.
   The 15-method era figure matches Handoff Package 3.
-- **The shared five-step pipeline**: the Executors table on the page is a faithful rendering of Commonalization-AUDIT §1's inventory (resolve / fs/write-intent waterfall / sandbox policy / writeText / fs/observed; the raw-write's no-cwd-option divergence; the identical `next() => undefined`; the P4 fence rooted at the target's own directory; the byte-identical emit shape; the factory's Refresh delegation).
+- **The shared five-step pipeline**: the Executors table on the page is a faithful rendering of Commonalization-AUDIT section 1's inventory (resolve / fs/write-intent waterfall / sandbox policy / writeText / fs/observed; the raw-write's no-cwd-option divergence; the identical `next() => undefined`; the P4 fence rooted at the target's own directory; the byte-identical emit shape; the factory's Refresh delegation).
   Classic Function/Write.ts:53-72, EffectTS Function/Write.ts:1-13.
 - **The sequential fold + the stat-before-write guard**: Function/Govern.ts:9,41,84,93 (the awaited fold).
   Commit 5982aa8 ("guard the chain pass's write against a fresh stat").
@@ -224,7 +224,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 - **The Effect-TS abort-signal fix**: Library.ts:230-236 ("forwarded to the write SEAM only... it is NOT mapped onto the fiber... break the byte parity of the abort path... the dash smoke asserts 'aborted before write'") + EffectTS/smokes/normalize-dash-smoke.mjs:787-807 (the pre-aborted scenario: the call rejects, nothing is written).
 - **The #14 parallel marker**: EffectTS Function/Govern.ts:23-30,47-48,79,89-95 (`{ steps, parallel }`; sequential DEFAULT; parallel opt-in via `Effect.all`; the safety condition - disjoint targets ONLY, same-file steps race).
   IMPLEMENTATION-PLAN.md:14,86-93 ("designed in from the start").
-- **The tracing opt-in**: EffectTS Function/Service/Runtime.ts:26-49,81-88 (no-op Tracer by default; the opt-in composes `@effect/opentelemetry`'s `NodeSdk.layer` with an OTLP exporter behind a BatchSpanProcessor; best-effort - an unloadable bundle degrades to the no-op Tracer; hygiene-proven per TOMORROW-REVIEW §1).
+- **The tracing opt-in**: EffectTS Function/Service/Runtime.ts:26-49,81-88 (no-op Tracer by default; the opt-in composes `@effect/opentelemetry`'s `NodeSdk.layer` with an OTLP exporter behind a BatchSpanProcessor; best-effort - an unloadable bundle degrades to the no-op Tracer; hygiene-proven per TOMORROW-REVIEW section 1).
   The package.json pins `@effect/opentelemetry` 4.0.1.
 - **The ledger strings as the cross-implementation contract**: spot-checked.
   The cargo's `["", "cargo flavor"]` ledger segment pair is identical (Classic Apply.ts:79 / EffectTS Apply.ts:97).
@@ -246,14 +246,14 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 ### Not verified / stale / wrong
 
 - **"15 -> 16 -> 17 methods" and "the 16th method"** (Phase I + decision 8 + Phase II card 3): the actual surface is 19 callable methods (Library.ts:38-55).
-  The SCHEME numbers 17 sections (Write+GuardedWrite share §2.7) and omits UpdateKey.
+  The SCHEME numbers 17 sections (Write+GuardedWrite share section 2.7) and omits UpdateKey.
   The factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139).
   The page itself calls BOTH UpdateKey (card 3) and Write (decision 8) "the 16th method".
   SCHEME.md:15 says "16 methods" and SCHEME.md:50 says "15 surface methods (+ 1 auxiliary)".
   The ordinal story is internally inconsistent and stale (C1).
 - **The "~800" total**: unattributed on the page.
-  TOMORROW-REVIEW §2.3's "Classic/Boilerplate 733" is arithmetically wrong (795 - 62 = 733: exactly ONE flavor short - the §1 listing itself sums to 795).
-  matrix.astro:191 carries "12 suites · 671 checks · ALL PASS", which matches neither 795 nor 808.
+  TOMORROW-REVIEW section 2.3's "Classic/Boilerplate 733" is arithmetically wrong (795 - 62 = 733: exactly ONE flavor short - the section 1 listing itself sums to 795).
+  matrix.astro:191 carries "12 suites - 671 checks - ALL PASS", which matches neither 795 nor 808.
   plugin-dsh-factory.astro:312 says "30 checks" for the factory suite, which has 34 call sites today (the 30 was the Package-2 era count).
   Four different totals are in circulation.
   ONLY 795/808 are real (C2).
@@ -261,13 +261,13 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   "Zero changes" must read as "zero rewrites, additive coverage only" (C13).
 - **The submodule structure as achieved** (Phase VI): Register #16 says NO COMMITS FOR NOW.
   The monorepo's gitignore ONLY anticipates it.
-  TOMORROW-REVIEW §3.1 marks it NOT STARTED (C4).
+  TOMORROW-REVIEW section 3.1 marks it NOT STARTED (C4).
 - **The journal excerpt verbatim rule**: the page's `...` and `<-` vs the handoff's ellipsis character and `<-`.
-  The plan §6's "verbatim from the handoff/reports" rule is violated.
+  The plan section 6's "verbatim from the handoff/reports" rule is violated.
   The normalize family normalized the case study's own quote (C3).
 - **The Effect-TS signal comments**: Library.ts:25-27 ("the RunOptions `signal` maps the harness abort to fiber interruption on the write path") and Function/Write.ts:49-50 ("mapped onto the fiber at the shell's runPromise boundary") describe the PRE-fix design that Library.ts:230-236 and the dash smoke's pre-aborted scenario removed.
   The shipped code contradicts its own headers (C10).
-- **"Anonymized and de-personalized every bundle"** (Phase VI): the known residual - the governor-package's `ncuBin` default VALUE, a smoke-asserted code constant (TOMORROW-REVIEW §3.3, Register #12's scope) - is NOT carried (C14).
+- **"Anonymized and de-personalized every bundle"** (Phase VI): the known residual - the governor-package's `ncuBin` default VALUE, a smoke-asserted code constant (TOMORROW-REVIEW section 3.3, Register #12's scope) - is NOT carried (C14).
 - **The plan's hash typo**: CASE-STUDY-PLAN.md and Handoff Overview write `49e5b3b`.
   The log has `49e5b3d`.
   The PAGE is correct.
@@ -282,17 +282,17 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 
 - **C1 (P0) - THE METHOD-COUNT LEDGER - NEW PACKAGE.** Title: settle the factory surface's canonical count and numbering.
   Structural why it fixes: the "15 -> 16 -> 17" arc is narrative arithmetic, NOT structure.
-  The surface grew by INSERTION (Write landed at §2.7, renumbering everything after it), plus aliases (GuardedWrite) and uncounted helpers (UpdateKey).
+  The surface grew by INSERTION (Write landed at section 2.7, renumbering everything after it), plus aliases (GuardedWrite) and uncounted helpers (UpdateKey).
   An ordinal story cannot survive that.
   The canonical inventory (count, numbering, aliases) is the structural fact the case study, the SCHEME and the factory plugin page must ALL agree on.
-  Scope: `Classic/packages/plugin-dsh-factory/SCHEME.md` (the §0 "16 methods" + §2 "15 (+1 auxiliary)" headers vs §2.1-2.17; add UpdateKey), `Site/Source/pages/plugins/plugin-dsh-factory.astro` (the "19 methods" line), `Site/Source/pages/case-study.astro` (Phase I's "15 -> 16 -> 17", Phase II card 3's "the 16th method", decision 8's "the 16th method").
+  Scope: `Classic/packages/plugin-dsh-factory/SCHEME.md` (the section0 "16 methods" + section2 "15 (+1 auxiliary)" headers vs section2.1-2.17; add UpdateKey), `Site/Source/pages/plugins/plugin-dsh-factory.astro` (the "19 methods" line), `Site/Source/pages/case-study.astro` (Phase I's "15 -> 16 -> 17", Phase II card 3's "the 16th method", decision 8's "the 16th method").
   Arbiter: the site build + the factory suite (the smoke asserts behavior, NOT counts - the count lives in the docs).
 
 - **C2 (P0) - THE SMOKE-TOTAL LEDGER - NEW PACKAGE.** Title: one authoritative total, computed from the suites.
   Structural why: the totals are the era's quantitative spine ("231 -> ~800").
-  Four figures are in circulation (671 on matrix.astro, 733 in TOMORROW-REVIEW §2.3, 795 and 808 in the scripts), and ONLY the scripts are real.
+  Four figures are in circulation (671 on matrix.astro, 733 in TOMORROW-REVIEW section 2.3, 795 and 808 in the scripts), and ONLY the scripts are real.
   A single counted-and-printed source ends the drift.
-  Scope: run ALL 36 suites, count the `ok(`/`Check(` call sites, fix `Site/Source/pages/matrix.astro:191` (671 -> the Classic total 795 or the attributed per-engine pair), `Documentation/Plans/TOMORROW-REVIEW.md` §1 + §2.3 (733 -> 795; keep the note that the case study's "~800" is the Effect-TS 808), `Site/Source/pages/plugins/plugin-dsh-factory.astro:312` ("30 checks" -> 34), `Site/Source/pages/case-study.astro:289` (attribute "~800" to the Effect-TS total + give the Classic total), and the plan's `49e5b3b` typo -> `49e5b3d` in the same sweep.
+  Scope: run ALL 36 suites, count the `ok(`/`Check(` call sites, fix `Site/Source/pages/matrix.astro:191` (671 -> the Classic total 795 or the attributed per-engine pair), `Documentation/Plans/TOMORROW-REVIEW.md` section 1 + section 2.3 (733 -> 795; keep the note that the case study's "~800" is the Effect-TS 808), `Site/Source/pages/plugins/plugin-dsh-factory.astro:312` ("30 checks" -> 34), `Site/Source/pages/case-study.astro:289` (attribute "~800" to the Effect-TS total + give the Classic total), and the plan's `49e5b3b` typo -> `49e5b3d` in the same sweep.
   Arbiter: the smokes (the suites print "N checks - ALL PASS").
 
 - **C3 (P0) - THE VERBATIM EXCERPT RULE - site-build-arbitrated.** Title: restore the journal excerpt's exact bytes.
@@ -336,7 +336,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   Scope: `Site/Source/pages/case-study.astro` Phase VI + decision 12.
   Arbiter: the site build.
 
-- **C9 (P1) - THE SEAM-LESS ROWS - site-build-arbitrated.** Title: give decisions 10 and 12 a seam, per the plan's §4 rule ("the case study never describes a decision in the abstract").
+- **C9 (P1) - THE SEAM-LESS ROWS - site-build-arbitrated.** Title: give decisions 10 and 12 a seam, per the plan's section 4 rule ("the case study never describes a decision in the abstract").
   Row 10's seam: the dependency-pin discipline lives in the package.json dependency fields + the smokes' host-era assertions (verify from app.asar, NEVER stale node_modules).
   Row 12's seam: the monorepo layout + the package naming itself.
   Scope: `Site/Source/pages/case-study.astro` decision table.
@@ -351,10 +351,10 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 - **C11 (P2) - THE SCHEME INVENTORY - NEW PACKAGE.** Title: fold the SCHEME's self-inconsistency (16 / 15+1 / 17 sections, UpdateKey missing) into C1's canonical inventory.
   Why: the SCHEME is the factory's contract doc.
   Three different counts in ONE file propagate the method-count confusion the case study repeats.
-  Scope: `Classic/packages/plugin-dsh-factory/SCHEME.md` §0 + §2 headers.
+  Scope: `Classic/packages/plugin-dsh-factory/SCHEME.md` section0 + section2 headers.
   Arbiter: the site build.
 
-- **C12 (P3) - THE MATRIX LINK - site-build-arbitrated.** Title: link matrix.astro from Phase IV (the plan's §4 asked for BOTH demo pages).
+- **C12 (P3) - THE MATRIX LINK - site-build-arbitrated.** Title: link matrix.astro from Phase IV (the plan's section 4 asked for BOTH demo pages).
   Why: the flavor family's structural story is the before/after payload pair.
   matrix.astro is the LIVE demo of exactly that.
   Scope: `Site/Source/pages/case-study.astro` Phase IV.
@@ -366,7 +366,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   Scope: `Site/Source/pages/case-study.astro` overview.
   Arbiter: the site build.
 
-- **C14 (P3) - THE ANONYMIZATION CAVEAT - site-build-arbitrated.** Title: Phase VI's "every bundle" should carry the known ncuBin residual (a smoke-asserted code constant, TOMORROW-REVIEW §3.3).
+- **C14 (P3) - THE ANONYMIZATION CAVEAT - site-build-arbitrated.** Title: Phase VI's "every bundle" should carry the known ncuBin residual (a smoke-asserted code constant, TOMORROW-REVIEW section 3.3).
   Why: the honest-voice rule applies to claims of cleanliness too.
   Scope: `Site/Source/pages/case-study.astro` Phase VI.
   Arbiter: the site build.

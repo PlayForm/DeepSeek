@@ -85,7 +85,7 @@ For EACH plugin under test, run this loop:
 | `hook-dsh-package-governor` | write a `package.json` with a stale pin (e.g. bump a dep version) | the governor's `update` stage in `~/.dsh/governor.log` (ncu re-bump) |
 | `hook-dsh-package-pinner` | same; then check the pins after the write | pinner ledger: pins restored/held |
 | `hook-dsh-cargo-governor` | edit a `Cargo.toml` in the Aphrodite folder | cargo-governor ledger (cargo update stage) |
-| `hook-dsh-normalize-file` | `write` a file containing `…`/em dashes/curly quotes, then call `normalize-file` on it | the file bytes + `normalize-file.log` count line |
+| `hook-dsh-normalize-file` | `write` a file containing `...`/em dashes/curly quotes, then call `normalize-file` on it | the file bytes + `normalize-file.log` count line |
 | `hook-dsh-normalize-{dash,ellipsis,quotes,spaces,invisible,fullwidth}` | enable the plugin + its scope; ask the subagent to produce output containing the char class (e.g. write a message with U+2026) | the stream output in the transcript (literal vs normalized) + the plugin ledger |
 | the `scopes` surface | flip `scopes.conversation` false vs true; same probe as above | the SAME model message renders differently per flip - NO restart between flips |
 | `hook-dsh-ccr` | run a bash command producing a large output (>102400 B, or set `autoExpandLimitBytes` low) | `~/.dsh/ccr.log` stored/compressed lines + the marker in the transcript + `ccr_retrieve` round-trip |

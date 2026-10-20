@@ -29,6 +29,11 @@ statuses:
   .ts files (the TypeScript language service), the .rs files (the
   rust-analyzer), the .docx files (the OOXML/word processing), the
   images, the binaries, the data files.
+- **THE REGIME**: the workspace regime (the third axis) - the adapters
+  make ANY file type OPERABLE in the workspace (the file's knowledge
+  graph); the OS execution axis stays orthogonal (a .rs file runs under
+  rustc in the execution regime while its adapter serves the workspace
+  regime).
 - **THE MANTRA**: THINK ADAPTERS, THINK GRAPHS, THINK METHODOLOGY - each
   file type gets its adapter that produces the file's KNOWLEDGE GRAPH
   (the blocks + the references + the semantics + the dependencies).

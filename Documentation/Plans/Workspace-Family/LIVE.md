@@ -26,6 +26,12 @@ statuses:
   half + the framework (the `client-dsh-*` role: the UI/CLIENT halves -
   the browser half).
 - **THE ROLE** (the family map): the presentation, stable-until-event.
+- **THE REGIME**: the workspace regime (the third axis) - the live view
+  presents the workspace's REPRESENTATIONS (the presentations of the
+  Entity/Presentation/Interaction model); the OS execution axis stays
+  orthogonal (the presentation never conflates a running OS process with
+  a managed entity). The typing home: INVERSE-REPRESENTATION.md (the
+  situated interaction protocols authoritative).
 - **THE STABLE-UNTIL-EVENT CONTRACT**: the presentation does NOT re-render
   continuously - it stays stable until an event surfaces a change (the
   live view presents at the END of the invisible flow: ... -> the audit

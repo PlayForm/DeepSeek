@@ -31,6 +31,13 @@ statuses:
   relevant state within a bounded context budget; the store holds the
   authoritative workspace state, the context is a selective, versioned
   VIEW of it (the Representation-First framing's key distinction).
+- **THE REGIME**: the workspace regime (the third axis) - the attention
+  projection is the SituatedView's economy (the participant's local
+  knowledge: {participant, endpoint, history, model, authority,
+  assumptions} - every claim distinguishes the OBSERVED / DERIVED /
+  MERELY ASSUMED); the OS execution axis stays orthogonal. The typing
+  home: INVERSE-REPRESENTATION.md (the situated interaction protocols
+  authoritative).
 - **THE PHASED DELIVERY**: the context serves phase 3 - the workspace
   agent's operational view (the graph-like projection + the attention
   projection via the context).

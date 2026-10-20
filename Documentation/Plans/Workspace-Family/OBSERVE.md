@@ -33,6 +33,10 @@ statuses:
   tools' waterfalls, the lifecycle), all governed by the plugin harness.
 - **THE VISIBILITY RULE**: the stamps are the INVISIBLE plugin flow - the
   conversation never sees them until an event surfaces them.
+- **THE REGIME**: the workspace regime (the third axis) - the observe
+  stamps are the Observation<Resource, Evidence> records of the managed
+  resource; the OS execution axis stays orthogonal. Operability is a
+  RELATION (Binding), never an intrinsic file state.
 - **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
   recursion prevention: every event carries the operation identifier, the
   parent identifier, the event category.

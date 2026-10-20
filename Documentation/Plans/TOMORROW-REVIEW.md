@@ -96,9 +96,15 @@ statuses:
 > MISSING-AND-OPEN-DECISIONS, TOMORROWS-PROCESS, RUNNING-FACTS,
 > NEXT-BATCH-2026-10-08, APHRODITE-WEBSITE-SESSION,
 > BATCH-COMPLETE-AND-SLIP-2026-10-09) - byte-preserved copies for per-topic
-> reading; THIS document remains the master record and the authoritative
-> source (its chronological batch log, sections 10 onward, is the part the
-> granular split has not yet covered).
+> reading. THE CHRONOLOGICAL BATCH LOG (the dated sections, 2026-10-19/20)
+> is likewise split into per-topic records under the same folder
+> (BATCH-LOG-RESTRUCTURE-2026-10-19, BATCH-LOG-SITE-UPDATE-2026-10-19,
+> BATCH-LOG-LIVE-CONTAINERS-2026-10-19, BATCH-LOG-DEPENDENCY-UPGRADE-2026-10-20,
+> BATCH-LOG-LIVE-TESTING-2026-10-20, BATCH-LOG-ALIAS-SWEEP-2026-10-20,
+> BATCH-LOG-ARCHIVE-AND-SKILL-RESTRUCTURE-2026-10-20,
+> BATCH-LOG-FEATURE-LOG-2026-10-20) - distilled per-topic views for
+> per-topic reading. THIS document remains the master record and the
+> authoritative source for BOTH parts.
 
 ---
 
@@ -2009,3 +2015,219 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
   workspace regime - THE THIRD AXIS - the plugin family is the difference
   between what exists and what's being built. The delineation persists
   into the Workspace-Family docs via the GRAND-REFINE (`acdb9d80`).
+- THE TYPED-BY-REFERENCE SYSTEM (2026-10-20 - the user's equation vision,
+  binding): the whole system types by reference: Paradigm<T> (the
+  filesystem's paradigm parameterized by the underlying system - T =
+  UNIX | Windows | POSIX | CloudBlockStore...), File<State> (State =
+  Halted | Running | Operable | Errored), Process<State> (the original
+  Process<Halted>!), PhysicalRegime<Paradigm<T>> (the halted default,
+  true for any T), ExecutionRegime<Runtime> (File<Halted> --runtime-->
+  File<Running>), WorkspaceRegime<Managed> (File<Halted> --enable-->
+  File<Operable>), Inverse<Paradigm<T>> (THE WORKSPACE = the inversion of
+  the paradigm - the roles inverted - parameterized by the same T so the
+  inversion works over UNIX/Windows/cloud without re-deriving the
+  philosophy), License<Authority, Weight> (the two independent
+  parameters), Representation<Resource, Revision>. THE EQUATIONS: forall
+  T: Paradigm<T> entails File<Halted>; the execution + the enable
+  transitions; Workspace = Inverse<Paradigm<T>>. The user's confirmation:
+  the UNIX filesystem reference = Paradigm<UNIX> - correct. The typing
+  persists into the Workspace-Family docs via the GRAND-REFINE.
+- THE UNIVERSAL PROCESS TYPE (2026-10-20 - the user's request: the
+  in-depth type describing BOTH the current system and the new one, typed
+  out now): Process<F, S extends State> - the entity F + the state S
+  (halted|running|operable|errored) + the regime (physical|execution|
+  workspace - the orthogonal lenses) + the Mode<S> (the operations the
+  state permits NOW: Mode<halted> = the physical default already true
+  everywhere; Mode<running> = the execution already true under the
+  runtimes; Mode<operable> = THE NEW workspace verbs; Mode<errored> = the
+  failure state) + the optional members: representation? (absent today -
+  the workspace regime makes it present), license? (Authority/Retention/
+  Weight - three independent parameters), evidence? (the qualified
+  freshness) + the transitions (execute/enable/halt/complete/observe/
+  merge/recover). THE DEEPEST STATEMENT: the plugin does NOT change the
+  file's type - it changes the file's STATE (halted -> operable) and
+  populates the members that were always there waiting - one type
+  describes the whole arc: what exists, what's being built, and the
+  transition between them. Also the algebraic refinement: Workspace =
+  Paradigm<T^-1> (the inversion inside the parameter) + Process<File,
+  State> (the entity/state separation) + Regime<Paradigm<T>, Physical|
+  Execution|Workspace> (the three instances of one type) + License<
+  Authority, Retention, Weight> (the three parameters). Persists via the
+  GRAND-REFINE.
+- THE ADVANCED TYPING (2026-10-20 - the best description, the categorical
+  form): Process : (F : File) -> State F -> Type (the DEPENDENT entity -
+  the file's own type determines its states); the regimes as the
+  FUNCTORS: Physical = the identity/algebra (the fold over the bytes),
+  Execution = the evaluation, Workspace = the COALGEBRA (the unfold - the
+  file emits its operations); THE INVERSION AS THE CONTRAVARIANCE:
+  Inverse : (Paradigm T)^op -> Paradigm (T^op) - the roles flip inside
+  the underlying type, never in the container; THE ADJUNCTION:
+  Physical F -> R ⊣ F -> Workspace R - the free-forgetful pair - the
+  representations ⇔ the behaviors - THE PLUGIN FAMILY IS THE ADJUNCTION
+  MADE REAL (the product's mathematical identity!); THE MODAL TYPING:
+  □ Halted F (the physical necessity) + ◇ Operable F (the workspace's
+  possibility) + □ (Halted F -> ◇ Operable F) - the enabling's necessity
+  - the modal formula IS the product's type; THE PROOF-CARRYING
+  OPERATIONS: merge : (f) -> (l : License f) -> (p : Approved f) ->
+  Process f Halted - a merge without the license + the approval is
+  UNTYPABLE - the governance is the TYPE, not a runtime check; THE FINAL
+  COALGEBRA: Process F ≅ νX. State F × (X -> Operations F × X) - the
+  greatest fixed point - the file's infinite behavior - the living
+  system typed (the physical gives the data; the final coalgebra gives
+  the soul). The TS Process<F, S> = the implementable form; this = the
+  truth it approximates. Persists via the GRAND-REFINE.
+- THE RESOURCE-REPRESENTATION-ACTIVITY MODEL ADOPTED (2026-10-20 - the
+  external critique, adopted in full per the user): THE CORRECTION: an
+  ordinary file is NOT literally a halted process - executing a program
+  CONSTRUCTS a process image from an executable resource (the exec/execve
+  semantics) - the "living file" framing stays as the DESIGN METAPHOR,
+  never the foundational assertion of the type system. THE SIX CONCEPTS
+  (the conflation dissolved): Resource<Backend, Kind> (the identity vs
+  the locators - the inode vs the path!), Representation<Resource,
+  Schema> (the multiple views - the knowledge graph = ONE representation,
+  never the universal substance), Activity<Inputs, Outputs, Effects>
+  (the execution state LIVES ON THE ACTIVITIES: Planned/Ready/Running/
+  Blocked/Suspended/Succeeded/Failed/Cancelled/Indeterminate - running/
+  blocked/failed are activity states, NOT file states!), Capability<
+  Subject, Action, Scope>, Observation<Resource, Evidence>, Binding<
+  Resource, Controller> (the management axis: attach/attached/detach -
+  OPERABILITY IS A RELATION (canAttempt -> Allowed/Denied/Undetermined),
+  not an intrinsic file state!). THE PLUGIN ADDS A MANAGEMENT SYSTEM -
+  not the first existence of state/representation/permissions (the Linux
+  inodes already carry the metadata/ownership/permissions!). THE CENTRAL
+  TYPE: the OPEN ComputationalEnvironment (backends/resources/repre-
+  sentations/activities/bindings/authorities/observations/relationships -
+  "open" = the changes may originate outside the controller). THE
+  BackendProfile REPLACES Paradigm<UNIX> (the semantic profiles: ident-
+  ity/naming/kinds/observation/revision/mutation/authorization/concur-
+  rency/failure semantics - the adapters defined against the properties
+  they require). THE MATHEMATICS' HONEST USE: the adjunction/inversion/
+  final-coalgebra assertions REMOVED (they lacked the structures); the
+  OPEN LABELED TRANSITION SYSTEM instead: s --e--> s' (e = a command,
+  observation, external mutation, revocation, failure) + the controller's
+  model m vs the external state s: o = observe(s), m' = update(m,o),
+  reconcile(m',s) ∈ {supported, conflict, unknown}. THE ADVANCED TYPING
+  SPENT ON THE LEGAL OPERATIONS + THE EVIDENCE DEPENDENCIES: prepare
+  (Intent -> SnapshotSet -> PreparedChange | PreparationFailure),
+  approve (PreparedChange -> Approval<ChangeDigest, Scope, Policy-
+  Revision>), commit (PreparedChange + ApprovalFor + AuthorityFor ->
+  Effect<ExternalMutation, CommitOutcome>) - the approval refers to the
+  EXACT change, the authority scoped, the outcomes include conflict/
+  denial/recovery-required - the types do NOT eliminate the runtime
+  checks (the external revisions + the revocations are facts the
+  execution must revalidate). THE ADOPTED DESCRIPTION: "A computer is an
+  open environment of resources, representations, authorities, and
+  activities. The workspace adds a controller that maintains evidence-
+  backed representations and coordinates authorized changes across them."
+- THE SITUATED INTERACTION PROTOCOLS ADOPTED (2026-10-20 - the external
+  critique round 3, adopted in full): THE DEEPER ABSTRACTION: NOT
+  "everything is a resource/process" - an entity has IDENTITY, but its
+  computational meaning is determined by the INTERACTIONS available
+  through a particular interface, to a particular participant, under
+  particular conditions. THE QUESTIONS: to whom, through which interface,
+  with what evidence + authority, under which interference assumptions?
+  THE THREE NOTIONS (never synonyms/states): Entity / Presentation /
+  Interaction - the arrows (parsedBy/analyzedBy/compiledBy/loadedInto)
+  have DIFFERENT meanings. THE CORRECTION: "the workspace does NOT
+  reveal a process secretly inside every file - it CREATES A NEW
+  INTERACTION PROTOCOL around existing entities + their representations."
+  THE FOUNDATIONAL TYPE: Interface = {State, Command : State -> Type,
+  Reply : (s) -> Command(s) -> Type, permits : Principal -> s ->
+  Command -> AuthorityContext -> Proposition, step, interfere : State ->
+  ExternalEvent -> State} - THE REPLY IS PART OF THE TYPE (CommitReply =
+  Applied<Receipt> | Conflict<ObservedRevisions> | Denied<Reason> |
+  Rejected<ValidationEvidence> | RecoveryRequired<RecoveryHandle> |
+  OutcomeUnknown<AttemptIdentity>). THE LOCAL KNOWLEDGE: SituatedView =
+  {participant, endpoint, history, model, authority, assumptions} - the
+  maintained model is NOT the external state; K(h) = the external states
+  consistent with the local history; the justified assertions = forall
+  s in K(h), P(s) - THE DESIGN RULE: every claim distinguishes the
+  OBSERVED / the DERIVED / the MERELY ASSUMED ("known at an observation"
+  is meaningful; "fresh forever" is not). THE SIMULTANEOUS DIMENSIONS:
+  EntityContext = {existence, accessibility, knowledge, management,
+  authority, activities} - each field answers a different question (no
+  contradiction!) + THE INVARIANTS BETWEEN THE DIMENSIONS (a commit
+  receipt must identify an attempted change; an approval must identify
+  the exact proposal; a semantic derivation must identify its input
+  observations; an activity cannot report verified success solely
+  because its local request was accepted). AUTHORITY IS NOT KNOWLEDGE:
+  Meaningful / SupportedByEvidence / Authorized / PreservesInvariant /
+  EstablishedOutcome - none implies another; the separation-logic
+  reasoning for the concurrency + the exclusivity token's LIMIT (it
+  establishes exclusivity only over the participants/operations that
+  respect the enforcement boundary). THE TRACE PROPERTIES: verified-
+  Success implies matchingPersistenceEvidence; effectfulAttempt implies
+  matchingAuthorizationDecision; recoveryRequired implies retained-
+  RecoveryIdentity - the state invariants / safety / progress (no
+  unconditional progress - the stated environmental assumptions!) /
+  recovery properties. THE WORKSPACE WITHOUT THE INVERSE OPERATOR: the
+  managed workspace = the existing environment + the maintained semantic
+  representations + the proposal protocols + the scoped authorization +
+  the validation obligations + the recovery protocols + the agent-facing
+  projections - THE KEY RELATIONSHIP = THE IMPLEMENTATION REFINEMENT
+  (high-level semantic command -> the governed implementation protocol
+  -> the backend interactions -> the evidence-backed outcome - the
+  RenameSymbol example's seven obligations). THE FINAL TYPE:
+  SituatedSystem<Interface, LocalHistory, Representation, Authority,
+  InterferenceAssumptions, Invariants, OutcomeEvidence>. THE DEEPEST
+  STATEMENT: "the workspace makes the relationship between intention,
+  knowledge, authority, and external effect a FIRST-CLASS COMPUTATIONAL
+  OBJECT" - not "a file that becomes alive" but "an interaction whose
+  meaning + legitimacy remain inspectable from proposal through
+  outcome."
+- THE INTENT MODEL ADOPTED (2026-10-20 - the external critique round 5,
+  adopted in full): MODEL INTENT AS A VERSIONED, ATTRIBUTED DECLARATION OF
+  A DESIRED OUTCOME - NOT as a command/permission/claim; model its
+  ANNOUNCEMENT separately: "an announcement establishes that something
+  was expressed; an interpretation establishes what the system thinks it
+  means; acceptance establishes agreement; authorization permits action;
+  evidence establishes what happened" - each a DIFFERENT object. THE SIX
+  CONCEPTS: IntentAnnouncement (what was expressed, by whom, to whom -
+  the speaker backed by the authentication evidence, recordedAt vs
+  assertedAt!, the content + the context + the provenance), IntentInter-
+  pretation (the derived meaning - derivedFrom + the interpreter + the
+  candidate specification + the unresolved/open questions + the assump-
+  tions + the confirmation (unconfirmed/confirmed/rejected) - an agent-
+  generated interpretation must NEVER silently become "what the user
+  said" - the W3C PROV provenance), IntentSpecification (identity/
+  revision/requestedBy/beneficiaries/GOAL (what should become true)/
+  SCOPE/CONSTRAINTS (what must not be violated)/PREFERENCES/ACTIVATION/
+  DURATION (one-time vs continuing obligation)/SATISFACTION (the assess-
+  ment contract - "preserve behavior" can be an intent even when the
+  system cannot prove it - the assessment EXPOSES the limitation),
+  Commitment (who accepted responsibility - acceptedScope/obligations/
+  acceptanceEvent/terminationConditions - answers "who undertook it",
+  NOT "may they perform every action"), Plan (how the outcome might be
+  achieved), Assessment (the evidence supporting fulfillment/violation/
+  uncertainty). THE DEEPEST MODEL: INTENT CONSTRAINS HISTORIES, not just
+  the final state: I = (G, C, P, D) - the goal + the permitted-history
+  constraints + the preference ranking + the activation/duration; for an
+  execution history tau: Acceptable_I(tau) = G(last(tau)) ^ C(tau) ^
+  D(tau); the FOUR INTENT KINDS: achievement / maintenance (keep true
+  during an interval!) / avoidance (never perform!) / investigation
+  (evidence-backed answer within the scope!) - the system needs all four,
+  not merely "change these files". THE AGREEMENT IS NOT THE AUTHORIZA-
+  TION: the execution boundary requires the independent checks (the
+  proposed action contributes to the accepted intent AND falls within
+  the authorized scope AND satisfies the policy AND meets the precondi-
+  tions) - AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS ("make the build
+  pass" does not authorize deleting the failing tests!). THE TRACEABIL-
+  ITY GRAPH: Announcement -> Interpretation -> IntentRevision ->
+  Commitment -> PlanRevision -> ProposedChange -> AuthorizationDecision
+  -> ExecutionAttempt -> OutcomeEvidence -> IntentAssessment - each edge
+  with a reason/evidence reference - the MISSING EDGE: ProposedChange
+  --contributesTo--> IntentRevision (why is each effect relevant? - "this
+  proposal changes the dependency configuration - which accepted intent
+  justifies that?") - a plan's success is NOT automatically the intent
+  fulfillment. THE MULTIDIMENSIONAL STATUSES (never a single lifecycle):
+  Interpretation (unresolved/confirmed/disputed), Commitment (unaccepted/
+  accepted/withdrawn), Execution (notStarted/active/blocked/settled/
+  indeterminate), Assessment (unassessed/supported/contradicted/incon-
+  clusive), Applicability (active/expired/superseded/revoked) - the
+  honest states: "Intent accepted. Execution settled. Fulfillment
+  inconclusive." The revisions immutable + linked by the amendment/
+  supersession events. THE ESSENCE: intent = a FIRST-CLASS, EVIDENCE-
+  LINKED NORMATIVE OBJECT - it records which histories are desired +
+  which forbidden + who expressed that + who accepted the responsibility
+  + how the fulfillment can be assessed - THE ANNOUNCEMENT IS ITS ORIGIN
+  (never its interpretation, its authority, or its outcome).

@@ -21,7 +21,7 @@ Status:
 - The file-content normalizer flavor (normalize-file): implemented (hook-dsh-normalize-file shipped in both trees; 112 checks per tree)
 - The fs/observed rewriter (not advisable): rejected (the edit old_string contract + the governors' passes)
 
-> One of the four research reports migrated from the pre-restructure flat documentation folder — see also
+> One of the four research reports migrated from the pre-restructure flat documentation folder - see also
 > `../Handoff/Register.md` (item #7) and `../Handoff/Packages/Package-13.md` (the normalize-file
 > bundle that shipped from this design).
 
@@ -40,8 +40,8 @@ Three sibling hooks live at `~/.hermes/agent-hooks/`:
 - **Scope**: that ONE file, only if it exists and `file --brief --mime-encoding` says non-binary.
 - **Transform**: `perl -i -CSD -pe` with the unicode dash class
   (`U+058A 05BE 1400 1806 2010-2015 2E17 2E1A 2E3A-2E3B 2E40 2E5D 301C 3030 30A0 FE31-FE32 FE58 FE63 FF0D`
-  → `-`) - in place, no context rules.
-- Already inherited by `hook-dsh-normalize-dash` at the model-output layer (its `SCHEME.md` §1 is
+  -> `-`) - in place, no context rules.
+- Already inherited by `hook-dsh-normalize-dash` at the model-output layer (its `SCHEME.md` section 1 is
   the regex verbatim).
 
 ### `normalize-dashes-for-execute-code.sh` - the gap this register item names
@@ -85,10 +85,10 @@ by design.
 ### (a) A `normalize-file` tool - the raw-write pattern
 
 - **Trigger**: the agent calls the tool with a `file_path`.
-- **Flow** (mirrors `Write.ts:113-130`): `ctx.fs.resolve` → `ctx.fs.readText` (count) → if N > 0,
-  one `Factory.Write(State, target, normalized, { actor: exec, policy: "standing" })` → outcome; if
+- **Flow** (mirrors `Write.ts:113-130`): `ctx.fs.resolve` -> `ctx.fs.readText` (count) -> if N > 0,
+  one `Factory.Write(State, target, normalized, { actor: exec, policy: "standing" })` -> outcome; if
   N = 0, **no write at all**.
-- **Scope**: one agent-chosen file; binary/undecodable → error result, no write (the hermes mime
+- **Scope**: one agent-chosen file; binary/undecodable -> error result, no write (the hermes mime
   check, tool-shaped).
 - **Transform**: all six (the `Rewrite` chain, `Rewrite.ts:34-50`), with a `replacement` config knob
   for the dash step.
@@ -101,12 +101,12 @@ by design.
 - **Trigger**: every `fs/observed { kind: "present" }` - i.e. every write by any actor.
 - **Fatal problem 1 - the edit contract**: the exemption works _only because files are not rewritten
   behind the agent_ (`Chunk.ts:19-28`; live-proven, the Handoff's
-  [Package 12](../Handoff/Packages/Package-12.md) — the edit-exemption live findings). A background
+  [Package 12](../Handoff/Packages/Package-12.md) - the edit-exemption live findings). A background
   rewriter invalidates every subsequent `edit` old_string on the same file: the agent read bytes X,
-  the rewriter silently changed them to X′, the edit fails or half-matches. This is the live lesson
+  the rewriter silently changed them to X', the edit fails or half-matches. This is the live lesson
   that made raw-write's verbatim default the right call.
-- **Fatal problem 2 - the governance loop**: a rewrite of `package.json` re-emits `fs/observed` →
-  re-triggers the governor's bounded pass. The Stash idempotence gate (factory `SCHEME.md` §2.6)
+- **Fatal problem 2 - the governance loop**: a rewrite of `package.json` re-emits `fs/observed` ->
+  re-triggers the governor's bounded pass. The Stash idempotence gate (factory `SCHEME.md` section 2.6)
   bounds the governor's _own_ same-actor re-emits, but a second rewriter sharing the event stream is
   a new actor interleaving with the bounded passes - untested territory.
 - **Fatal problem 3 - hermes precedent**: `normalize-tabs.sh` is what happens when
@@ -124,7 +124,7 @@ by design.
 
 | #   | Surface                     | Analysis for the tool                                                                                                                                                                                                                                                                                                                                                                                                                |
 | --- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| i   | Governance bounded passes   | The write goes through `Factory.Write` → `fs/observed` emit, but the governor Gate's actor check (`SCHEME.md` §2.6) requires the actor tool name ∈ `mutationTools`; all three governors pin `[write, edit, str_replace_editor]` (their `cordis.patch.yml`), so `normalize-file` writes never pass - no chain pass, no loop, same protection raw-write already has. **Rule: never add `normalize-file` to any `mutationTools` list.** |
+| i   | Governance bounded passes   | The write goes through `Factory.Write` -> `fs/observed` emit, but the governor Gate's actor check (`SCHEME.md` section 2.6) requires the actor tool name in `mutationTools`; all three governors pin `[write, edit, str_replace_editor]` (their `cordis.patch.yml`), so `normalize-file` writes never pass - no chain pass, no loop, same protection raw-write already has. **Rule: never add `normalize-file` to any `mutationTools` list.** |
 | ii  | Edit old_string contract    | Safe _because visible_: the tool result's diff shows before/after in the same turn (the raw-write `normalize: true` posture). The agent must re-read before editing - same obligation as after any normalize:true write. Document in the tool description.                                                                                                                                                                           |
 | iii | raw-write read-before-write | Tool calls are serialized; `Factory.Write`'s `before` is read at write time, so a prior normalize-file in the same turn is already reflected. No race.                                                                                                                                                                                                                                                                               |
 | iv  | P5 single-open domain       | Each module opens its own `package_governance` sink (`Factory` `Function/Open.ts`); the flavor journals via its own `Attach`. The `normalized` event name requires the domain version bump (register item #8, in flight by another agent) - sequence the Journal calls behind that enum, or ship without journaling first.                                                                                                           |
@@ -157,13 +157,13 @@ disk"; the background rewrite stays out.
       `hook-dsh-normalize-dash/Source/Function/Rewrite.ts`), plus a counting variant (sum the core's
       `{ text, count }` counts) for the ledger.
     - `Source/Function/File.ts` - the tool (`defineTool` from `@deepseek-ai/dsh-tools`): params
-      `file_path` (required); exec = resolve → `ctx.fs.readText` → count → N=0: return
+      `file_path` (required); exec = resolve -> `ctx.fs.readText` -> count -> N=0: return
       `{ path, count: 0, changed: false }` **without writing**; N>0:
       `Factory.Write(State, target, normalized, { signal: exec.signal, actor: exec, policy: "standing" })`;
-      decode failure/binary → error result; presenters: `presentResult` diff card from the outcome's
+      decode failure/binary -> error result; presenters: `presentResult` diff card from the outcome's
       before/after.
-    - `Source/Function/Apply.ts` - `Factory.State` (fields `{ Replacement: "replacement" }`) →
-      `Factory.Append(Activate([...]))` → `Context.tools.register(File(Context, State))` → **no**
+    - `Source/Function/Apply.ts` - `Factory.State` (fields `{ Replacement: "replacement" }`) ->
+      `Factory.Append(Activate([...]))` -> `Context.tools.register(File(Context, State))` -> **no**
       `Context.on` of any kind (the first flavor with no stream listener); attach State via
       `ctx.__normalizeFileState` for the smoke; optional `Factory.Attach` +
       `Factory.Journal("normalized", path, "N char(s)")` once register item #8 lands the enum.
@@ -179,9 +179,9 @@ disk"; the background rewrite stays out.
   `normalize-file: activated (replacement=-, logFile=...)` /
   `normalize-file: normalized 3 char(s) in /abs/path` (N > 0 only; no line for a no-op).
 - **Smoke** (`/tmp/normalize-file-smoke.mjs`, fake ctx + real factory, the family's shape): entry
-  contract; registration in the tools registry; fixture file with all six families → exec → bytes
-  match the chain, count and ledger line asserted; clean file → no write (mtime unchanged), no line;
-  undecodable content → error result, no write; `Factory.Write` pipeline assertions (waterfall
+  contract; registration in the tools registry; fixture file with all six families -> exec -> bytes
+  match the chain, count and ledger line asserted; clean file -> no write (mtime unchanged), no line;
+  undecodable content -> error result, no write; `Factory.Write` pipeline assertions (waterfall
   called, standing policy, fs/observed emit).
 - **Defaults**: ON for the _tool's existence_ (it is inert until called - the per-call opt-in is the
   design), OFF/absent for any future watch. This matches the user's "just for me, defaults off"

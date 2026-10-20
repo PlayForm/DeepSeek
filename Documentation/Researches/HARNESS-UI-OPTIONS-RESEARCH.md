@@ -46,7 +46,7 @@ Legend: `<DSH>` = /Applications/DeepSeek Harness.app/Contents/Resources/app.asar
 The harness ships a complete "per-plugin options" backend that needs NO family change:
 
 - `<DSH>/node_modules/@deepseek-ai/dsh-settings/lib/index.js` (`SettingsForms`, the
-  `settings` service; DOCS anchor: docs/subsystems/settings.md §1):
+  `settings` service; DOCS anchor: docs/subsystems/settings.md section 1):
 	- `describe()` walks EVERY ACTIVE profile entry that is uniquely addressed by
 	  the root Include (via `configEditor.entries()`), takes the entry's Schemastery
 	  `Config` schema, and projects ONLY the schema-declared `.volatile()` fields
@@ -59,7 +59,7 @@ The harness ships a complete "per-plugin options" backend that needs NO family c
 	  whose path is NOT under a volatile node (`isVolatilePath()`), then call
 	  `configEditor.edit(...)`.
 - `<DSH>/node_modules/@deepseek-ai/dsh-config-editor/lib/index.js` (`configEditor`
-  service; DOCS anchor: docs/subsystems/settings.md §1,
+  service; DOCS anchor: docs/subsystems/settings.md section 1,
   <DSH>/node_modules/@deepseek-ai/dsh-config-editor/README.md):
 	- `edit()` writes the entry's full raw config into the ACTIVE profile's
 	  cordis.patch.yml under the entry's id (YAML comment- and `!!js`-preserving,
@@ -67,7 +67,7 @@ The harness ships a complete "per-plugin options" backend that needs NO family c
 	  the normal Loader path.
 - `<DSH>/node_modules/@deepseek-ai/cordis-plugin-loader/lib/index.js`
   (`Entry.update()` + `_commitVolatile()`; DOCS anchor:
-  docs/cordis-tutorial/05-config.md §"Volatile fields"):
+  docs/cordis-tutorial/05-config.md section"Volatile fields"):
 	- On the reconciled patch change, if the ONLY changed key is `config` and the
 	  difference is schema-declared-volatile only (`equalExceptVvolent` semantics,
 	  `equal()` short-circuits on `schema.meta.volatile`), the Loader commits the
@@ -82,8 +82,8 @@ The harness ships a complete "per-plugin options" backend that needs NO family c
   controllers with revision-fenced writes, and `whileServed` for pages that
   exist exactly while the Host serves the namespace.
 
-So the chain "UI write → settings service → configEditor → profile patch →
-Loader reconcile → volatile-only commit → live references +
+So the chain "UI write -> settings service -> configEditor -> profile patch ->
+Loader reconcile -> volatile-only commit -> live references +
 loader/volatile-update" is fully built, running, and remote-reachable.
 
 ### 1.2 The family's schemas are already shaped for it
@@ -115,9 +115,9 @@ auto-generate a form.
 The family packages are hook plugins with NO browser half (NO `dsh.client`
 declaration, NO `./client` export), so on the running desktop/web profile:
 
-- Plugins sidebar → the family bundles appear as "Installed plugins" bundles with
+- Plugins sidebar -> the family bundles appear as "Installed plugins" bundles with
   enable/disable switches per row - but NO Configure control, NO options form.
-- Settings → Built-in plugins is the read-only inventory ONLY
+- Settings -> Built-in plugins is the read-only inventory ONLY
   (`<DSH>/node_modules/@deepseek-ai/dsh-client-ui-settings-plugins/README.md`).
 - Net: today the ONLY ways to change a family knob are (a) editing the profile's
   cordis.patch.yml by hand (which the loader HMRs live, including volatile-only
@@ -140,24 +140,24 @@ harness's own docs prescribe exactly this pattern.
   (`SettingsForms.describe/update/replace/mutate`) and `ctx.settingsController`
   (`@Remote`) contracts; `settings/document-updated` event.
 - <DOCS>/docs/cookbook/adding-a-settings-card.md - the cookbook for exactly this:
-  §1 declare `.volatile()` fields; §2 unique profile entry ids (base bundle mounts
-  settings + config-editor); §3 "Change a field in Plugins and save. Verify the
+  section 1 declare `.volatile()` fields; section 2 unique profile entry ids (base bundle mounts
+  settings + config-editor); section 3 "Change a field in Plugins and save. Verify the
   profile patch, the next consumer operation, unchanged plugin instance identity";
-  §5 where the browser half rides: a package declares `dsh.client` and a built
+  section 5 where the browser half rides: a package declares `dsh.client` and a built
   `./client` export in the client module system's lazy-CJS factory format, and a
   companion package registers into `plugins.item` through
   `ctx.configForms.whileServed` so the page exists while the Host serves the
   namespace.
-- <DOCS>/docs/cordis-tutorial/05-config.md §"Volatile fields" - the loader
+- <DOCS>/docs/cordis-tutorial/05-config.md section"Volatile fields" - the loader
   volatile-commit contract (paths arrays, `.get()`, what invalid candidates do).
 - <DOCS>/docs/user/develop/basic/config.md - the Config schema basics the family
   already follows.
 - Harness package READMEs (in-place):
-  dsh-client-ui-plugin-manager (§"Configuration pages" - the three slots, the
+  dsh-client-ui-plugin-manager (section"Configuration pages" - the three slots, the
   `form.state`/`form.mutate(operations, expectedRevision)` the page owner
   supplies, and the code sample registering `plugins.row.config`),
-  dsh-client-ui-settings-plugins (§the `settings.plugins.tab` shell),
-  dsh-config-editor (§Known limitations).
+  dsh-client-ui-settings-plugins (sectionthe `settings.plugins.tab` shell),
+  dsh-config-editor (sectionKnown limitations).
 
 ## 2. THE GAP MAP - which family knobs are UI-editable today vs which need the surface
 
@@ -183,7 +183,7 @@ Per-module (Config.ts sources under <FAM>/<pkg>/Source/Variable/Config.ts):
 Key gaps to close, in order of impact:
 
 1. THE SURFACE GAP (blocking): NO browser half / NO slot registration for any
-   family row → NO Configure control anywhere in the UI.
+   family row -> NO Configure control anywhere in the UI.
 2. THE PLAIN-FIELD GAP: the governors' policy knobs (strict, policyFile, exclude,
    sections, ncuBin/cargoBin, updateMode) and ccr's structural knobs are NOT
    expressible through the settings service (its writes hard-fail "Config field
@@ -197,7 +197,7 @@ Key gaps to close, in order of impact:
    row needs an explicit `plugins.row.config` registration.
 4. THE BUILD GAP: the family's factory does NOT build client bundles
    (`clientBundle` tsdown preset is harness-internal; the family must emit the
-   lazy-CJS factory format `./client` itself, per cookbook §5).
+   lazy-CJS factory format `./client` itself, per cookbook section 5).
 
 ## 3. THE DESIGN - the per-plugin options surface
 
@@ -207,8 +207,8 @@ One new family package, e.g. `ui-dsh-family-panel` (browser half only; the
 cookbook's companion-package pattern):
 
 - package.json:
-	- `"main"`/`"exports"`: `.` → an empty Host `apply` (a Loader row the client
-	  module system serves the browser half for), `./client` → the built client.
+	- `"main"`/`"exports"`: `.` -> an empty Host `apply` (a Loader row the client
+	  module system serves the browser half for), `./client` -> the built client.
 	- `"dsh": { "client": { "platform": "web",
 	  "inject": ["@deepseek-ai/dsh-client-ui-settings"] } }`.
 - Host half: `export function apply() {}` (no-op), so the row exists in the
@@ -240,8 +240,8 @@ cookbook's companion-package pattern):
 
 ### 3.2 Data flow
 
-1. User edits a volatile knob in the form → `configForms.get(ns).mutate([op],
-   revision)` → Remote `settings.mutate`.
+1. User edits a volatile knob in the form -> `configForms.get(ns).mutate([op],
+   revision)` -> Remote `settings.mutate`.
 2. Host `settings` service validates the path is volatile, calls
    `configEditor.edit(entry, ...)`: writes the id-keyed `config:` override into
    `~/.dsh/profiles/<profile>/cordis.patch.yml` (comment/`!!js`-preserving,
@@ -280,7 +280,7 @@ The smallest change that makes the family's options UI-editable, NO harness edit
 1. Pick ONE fully-volatile module - `hook-dsh-tool-coach` or
    `hook-dsh-live-containers` (EVERY knob is volatile; the settings service
    covers 100% of their fields).
-2. Add a client half to THAT package ONLY (cookbook §5 shape): package.json gains
+2. Add a client half to THAT package ONLY (cookbook section 5 shape): package.json gains
    `./client` export + `dsh.client` (`inject: ["@deepseek-ai/dsh-client-ui-settings"]`);
    build `./client` as the lazy-CJS factory format script (one file,
    `factory(require)`; hand-rolled or a small tsdown config copied from the
@@ -293,7 +293,7 @@ The smallest change that makes the family's options UI-editable, NO harness edit
    locale: '...' }, ({ form }) => <SchemaForm from form.state / form.mutate>)))`.
 4. Restart the harness ONCE (profile change: the client half is discovered by the
    client module graph on composition; HMR then keeps it live).
-5. Verify per cookbook §3: open Plugins → the package → the row → Configure; edit
+5. Verify per cookbook section 3: open Plugins -> the package -> the row -> Configure; edit
    `threshold`/`enforce`/a live-containers knob; Save; confirm (a) the profile's
    cordis.patch.yml gained the id-keyed override, (b) the plugin's very next
    operation uses the new value with unchanged instance identity (the family
@@ -308,7 +308,7 @@ Residual constraints to know before building:
 - ONLY entries uniquely addressed by the root Include are editable - true for
   EVERY family row in the desktop profile (each id appears once).
 - Edits target the active profile patch ONLY; home patches / CLI overlays are
-  read-only precedence (configEditor README §Known limitations).
+  read-only precedence (configEditor README sectionKnown limitations).
 - The desktop profile's family rows currently carry FULL explicit configs, so
   EVERY field shows as user-overridden; values edited in the UI update those
   overrides IN PLACE.
@@ -318,7 +318,7 @@ Residual constraints to know before building:
 
 ## 5. ACCEPTANCE CRITERIA
 
-1. Plugins → <family package> → row shows a Configure control; its page renders
+1. Plugins -> <family package> -> row shows a Configure control; its page renders
    a form generated from the entry's projected schema (volatile fields only for
    phase 1), with current values, base-vs-user provenance, and a revision.
 2. Saving a volatile knob:
@@ -342,7 +342,7 @@ Residual constraints to know before building:
 
 - NO client page currently consumes `autoGenerate`; a generic auto-form would
   remove the need for per-row registrations but is harness work, NOT family work.
-- `configEditor` has NO @Remote surface; the plain-field bridge (§3.2 step 5) is
+- `configEditor` has NO @Remote surface; the plain-field bridge (section 3.2 step 5) is
   a new family-host service and the ONLY place a family package must be trusted
   with full-config writes.
 - The family's factory currently has NO client build step; the POC hand-builds

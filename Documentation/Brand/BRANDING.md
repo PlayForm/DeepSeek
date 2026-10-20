@@ -17,8 +17,9 @@ statuses:
 
 # BRANDING.md - The DeepSeek Harness Plugin Family for PlayForm
 
-> The brand brief migrated to `Documentation/Brand/` — referenced by
-> `../Plans/DSH-MONOREPO-PLAN.md` (the Site design) and `../Handoff/Register.md` (item #12).
+> The brand brief migrated to `Documentation/Brand/` - referenced by
+> `../Plans/DSH-MONOREPO-PLAN.md` (the Site design) and `../Handoff/Register.md` (item #12 - the
+> Handoff tree was erased on 2026-10-09; the reference stays as the historical record).
 
 A self-contained brief.
 Give this file to a REMOTE agent to generate: **(A) a complete branding

@@ -191,6 +191,27 @@ are the active operators. THE INVERSE: the files are the ACTIVE PROCESSES
 state is the substrate - the representation INVERTS the roles: the file
 holds the process, the state holds the file.
 
+### The three regimes (the user's delineation, 2026-10-20 - binding)
+
+- THE PHYSICAL REGIME (the OS): a file on any UNIX system IS a halted
+  process - the dormant default - already true everywhere (the
+  file-as-halted-process is NOT our invention).
+- THE EXECUTION REGIME (the language runtimes): the same file becomes a
+  RUNNING process when a runtime executes it - the OS's own process
+  notion - the EXECUTION axis.
+- THE WORKSPACE REGIME (our plugin family - NEW): enabling the plugin
+  makes the file an OPERABLE process - the managed representation (the
+  Process<File> cells: observed/running/halted/done/errored + the
+  workspace verbs + the governance + the knowledge graph). What we build
+  = the workspace regime - THE THIRD AXIS.
+- THE CONTRADICTIONS RESOLVED: the plugin creates the OPERABILITY, not
+  the process-ness. The two "running" senses are DIFFERENT AXES (the OS
+  execution vs the workspace cell - orthogonal, never exclusive): a .rs
+  file can be halted on disk + running under rustc + operable in the
+  workspace SIMULTANEOUSLY. The operational mode determines the regime;
+  what exists today = the physical + execution regimes; what we build =
+  the workspace regime.
+
 ### The any-file adapters (NOT just .ts)
 
 The system applies to ANY TYPE of halted process: the .ts files (the

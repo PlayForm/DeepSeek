@@ -32,6 +32,18 @@ statuses:
 - **THE GATE SEMANTICS**: the proposals become the effects ONLY through
   the gates - the harness as the enforcement boundary (the governed-
   workspace framing).
+- **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): AN
+  INTENT MUST NOT AUTHORIZE ITS OWN MEANS - the govern gates run the
+  INDEPENDENT CHECKS (contributes + authorized scope + policy +
+  preconditions) on the ProposedChange BEFORE the AuthorizationDecision
+  on the traceability graph; the gates are the means-check, the intent
+  is never the permission.
+- **THE REGIME**: the workspace regime (the third axis) - the gates
+  constrain the workspace's INTERACTIONS (the permits of the Interface
+  type); the OS execution axis stays orthogonal (the OS's own
+  sandbox/licensing stack governs the physical + execution regimes). The
+  typing home: INVERSE-REPRESENTATION.md (the situated interaction
+  protocols authoritative).
 - **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
   recursion prevention: every event carries the operation identifier, the
   parent identifier, the event category.

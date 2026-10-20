@@ -26,6 +26,11 @@ statuses:
   STAGE (the service-provider role).
 - **THE ROLE** (the family map): the code-block reflective ops - the
   AST-aware rename/connect/replace from a SINGLE call.
+- **THE REGIME**: the workspace regime (the third axis) - the reflective
+  ops are the workspace's INTERACTIONS over the representations (the
+  reply IS part of the type); the OS execution axis stays orthogonal.
+  The typing home: INVERSE-REPRESENTATION.md (the situated interaction
+  protocols authoritative).
 - **THE ONE-CALL SEMANTICS**: the reflective operations bundle the
   whole transformation - the AST-aware rename/connect/replace across the
   affected references - one call instead of a tool choreography.

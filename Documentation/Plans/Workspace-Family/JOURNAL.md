@@ -32,6 +32,12 @@ statuses:
 - **THE SAFETY PHASE**: the journal is part of phase 2 of the phased
   delivery (the safety: the authorization, the leases/evictions, the
   recovery) - with the govern + the authority.
+- **THE REGIME**: the workspace regime (the third axis) - the journal is
+  the workspace's EVIDENCE record (the undo + the recovery checkpoints,
+  the trace properties: recoveryRequired/recoveryIdentity); the OS
+  execution axis stays orthogonal. The typing home:
+  INVERSE-REPRESENTATION.md (the situated interaction protocols
+  authoritative).
 - **THE CRASH SEMANTICS**: the recovery checkpoints + the crash recovery
   make the workspace's state survivable - a crash between the commit and
   the journal is a logged failure mode of the inverse representation.

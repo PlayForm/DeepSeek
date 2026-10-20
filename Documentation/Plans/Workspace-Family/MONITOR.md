@@ -29,6 +29,11 @@ statuses:
   wave-3 (the LIVE FILE MONITORS) precedent - "files are halted
   processes", the watch/sweep forms without real timers (the
   event-driven deadlines, the checkpoint debounce).
+- **THE REGIME**: the workspace regime (the third axis) - the monitor
+  watches the managed entities' interactions (the interference
+  assumptions of the situated model); the OS execution axis stays
+  orthogonal. The typing home: INVERSE-REPRESENTATION.md (the situated
+  interaction protocols authoritative).
 - **THE PHASED DELIVERY**: the monitor is part of phase 5 - with the live
   + the audit (the watch/sweep + the live view + the accountability).
 - **THE ORCHESTRATION POSITION**: the monitor's events feed the flow -

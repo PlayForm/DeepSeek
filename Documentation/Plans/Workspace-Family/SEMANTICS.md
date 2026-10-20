@@ -33,6 +33,9 @@ statuses:
   step of the invisible flow, right after the observe stamps.
 - **THE VISIBILITY RULE**: the indexes are the INVISIBLE plugin flow -
   the conversation never sees them until an event surfaces them.
+- **THE REGIME**: the workspace regime (the third axis) - the semantic
+  model is a Representation<Resource, Schema> (the knowledge graph = ONE
+  representation); the OS execution axis stays orthogonal.
 - **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
   recursion prevention: every event carries the operation identifier, the
   parent identifier, the event category.

@@ -29,6 +29,17 @@ statuses:
   the approval binds to the EXACT candidate - the human approves the
   concrete change set, never a fuzzy intent; the constraints travel with
   the approval.
+- **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): the
+  approval = the Commitment (who accepted responsibility - NOT the
+  authorization) + the AuthorizationDecision on the traceability graph
+  (between the ProposedChange and the ExecutionAttempt). AN INTENT MUST
+  NOT AUTHORIZE ITS OWN MEANS - the independent checks: contributes +
+  authorized scope + policy + preconditions. The approval of an
+  intention never authorizes the implementation the agent later
+  produces.
+- **THE REGIME**: the workspace regime (the third axis) - the approve
+  binds the workspace's candidate to a human decision; the OS execution
+  axis stays orthogonal.
 - **THE ORCHESTRATION POSITION**: "the approve binds" - the step after
   the authority licenses in the invisible flow: ... -> the authority
   licenses -> the approve binds -> the merge commits (through

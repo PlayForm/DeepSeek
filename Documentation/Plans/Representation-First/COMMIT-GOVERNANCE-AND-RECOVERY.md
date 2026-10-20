@@ -38,6 +38,17 @@ statuses:
 - **THE CHANGESET DIGEST**: if a governor changes the candidate
   afterward, the approval INVALIDATES - the approval never silently
   expands.
+- **THE INTENT-MODEL REFINEMENT** (the critique round 5, binding): the
+  "semantic intent" of step 1 is the IntentSpecification (the GOAL vs
+  the SCOPE vs the CONSTRAINTS vs the PREFERENCES - "preserve behavior"
+  is a valid intent even when unprovable - the assessment exposes the
+  limitation); the approval in step 4 = the Commitment + the
+  AuthorizationDecision on the traceability graph; the intent constrains
+  the histories (Acceptable_I(tau) = G(last(tau)) ^ C(tau) ^ D(tau)) -
+  a governor's change invalidating the approval IS the intent's
+  constraint firing. AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS - the
+  independent checks (contributes + authorized scope + policy +
+  preconditions) run before the authorization decision.
 - **THE PIPELINE PROPERTY**: "The preview matches the applied bytes"
   becomes a property of the ENTIRE pipeline, not just the text-edit
   engine.

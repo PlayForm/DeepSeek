@@ -26,6 +26,12 @@ statuses:
   STAGE (the service-provider role).
 - **THE ROLE** (the family map): the files as the weighted graphs in our
   internal carry - the license weights = the filesystem's representation.
+- **THE REGIME**: the workspace regime (the third axis) - the graph is
+  the managed entities' RELATIONSHIPS representation (the knowledge
+  graph = ONE representation of the Entity/Presentation/Interaction
+  model); the OS execution axis stays orthogonal. The typing home:
+  INVERSE-REPRESENTATION.md (the situated interaction protocols
+  authoritative).
 - **THE WEIGHT SEMANTICS**: the scheduling priority / graph weight live
   in SEPARATE fields from the license (the license is the authority; the
   weight is the representation) - the license/weight conflation is a

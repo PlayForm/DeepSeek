@@ -39,6 +39,14 @@ statuses:
   requires a NEW decision.
 - **THE INTENT LIMIT**: the approval of an intention never authorizes
   every implementation the agent later produces.
+- **THE INTENT-MODEL REFINEMENT** (the critique round 5, binding): the
+  approval = the Commitment (who accepted responsibility - NOT the
+  authorization) + the AuthorizationDecision on the traceability graph
+  (between the ProposedChange and the ExecutionAttempt); the intent's
+  SATISFACTION assessment contract closes the loop (the IntentAssessment
+  vs the IntentSpecification). AN INTENT MUST NOT AUTHORIZE ITS OWN
+  MEANS - the independent checks: contributes + authorized scope +
+  policy + preconditions; the types never eliminate the runtime checks.
 - **THE REVIEW PRESENTATION**: the review presents BOTH the semantic
   description AND the concrete diff - neither substitutes for the other.
 

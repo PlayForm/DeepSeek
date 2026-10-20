@@ -124,9 +124,9 @@ The framework:
 
 | Branch | Covers | Status |
 |---|---|---|
-| `instructional-writing` | the raw-write-only discipline for the literal-typography instructional/fixture files | ✅ |
-| `plugin-system` | the DSH plugin contract for the family: the loader surface, the bundle anatomy, the deterministic build, the module leaves vs the shared machinery, the smokes as the arbiter | ✅ |
-| `smoke-writing` | the smoke suites' discipline: the harness pattern, the byte-identical assertion contract, the vacuously-green trap, the smoke/live fidelity gap, the parity | ✅ |
+| `instructional-writing` | the raw-write-only discipline for the literal-typography instructional/fixture files | done |
+| `plugin-system` | the DSH plugin contract for the family: the loader surface, the bundle anatomy, the deterministic build, the module leaves vs the shared machinery, the smokes as the arbiter | done |
+| `smoke-writing` | the smoke suites' discipline: the harness pattern, the byte-identical assertion contract, the vacuously-green trap, the smoke/live fidelity gap, the parity | done |
 | Future branches (candidates) | `live-battery` (the live-testing protocol), `case-study-writing` (the WHY-emphasizing narrative), `site-development` (the blue/white site conventions) | pending |
 
 ### 2.3 The hierarchy

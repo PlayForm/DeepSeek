@@ -61,23 +61,66 @@ statuses:
   agent's actions - the corrections propagate, the dependencies
   invalidate, the evictions settle - all evented, all governed.
 
-## 4. The three regimes (the agent's place)
+## 4. The three regimes + the controller (the agent's place)
 
-- **THE PHYSICAL REGIME (the OS)**: a file on any UNIX system IS a
-  halted process - the dormant default - already true everywhere (the
-  file-as-halted-process is NOT our invention).
-- **THE EXECUTION REGIME (the language runtimes)**: the same file
-  becomes a RUNNING process when a runtime executes it - the OS's own
-  process notion - the EXECUTION axis.
-- **THE WORKSPACE REGIME (our plugin family - NEW)**: enabling the
-  plugin makes the file an OPERABLE process - the managed representation
-  (the Process<File> cells: observed/running/halted/done/errored + the
-  workspace verbs + the governance + the knowledge graph).
+- **THE PHYSICAL REGIME (the OS)**: the filesystem + the OS process
+  machinery - already true everywhere; the OS's inodes already carry the
+  metadata (the file-as-halted-process stays the DESIGN METAPHOR, never
+  the foundational assertion).
+- **THE EXECUTION REGIME (the language runtimes)**: a resource becomes a
+  RUNNING process when a runtime executes it - exec constructs a process
+  image from an executable resource - the OS's own process notion - the
+  EXECUTION axis.
+- **THE WORKSPACE REGIME (our plugin family - NEW)**: the plugin ADDS A
+  MANAGEMENT SYSTEM - the representations + the activities + the
+  bindings + the authorities (the resource-representation-activity
+  model).
 - **THE AGENT'S ROLE**: THE WORKSPACE AGENT is the workspace regime's
-  conversational surface - the OPERABLE view the conversation addresses;
-  the plugin creates the OPERABILITY, not the process-ness.
-- **THE ORTHOGONALITY**: the two "running" senses are DIFFERENT AXES
-  (the OS execution vs the workspace cell - orthogonal, never
-  exclusive): a .rs file can be halted on disk + running under rustc +
-  operable in the workspace SIMULTANEOUSLY. The operational mode
-  determines the regime.
+  conversational surface - the CONTROLLER the conversation addresses.
+  OPERABILITY IS A RELATION (Binding<Resource, Controller>:
+  canAttempt -> Allowed / Denied / Undetermined) - the plugin creates
+  the management, not a new process-ness.
+- **THE ORTHOGONALITY**: the axes are different - never exclusive: a
+  .rs file sits in the filesystem + runs under rustc + is managed by
+  the workspace SIMULTANEOUSLY. The operational mode determines the
+  regime.
+- **THE ADOPTED DESCRIPTION**: "A computer is an open environment of
+  resources, representations, authorities, and activities. The workspace
+  adds a controller that maintains evidence-backed representations and
+  coordinates authorized changes across them."
+
+## 5. The intent model (the conversational surface's flow - the critique round 5, binding)
+
+- **THE DEFINITION**: INTENT = a versioned, attributed declaration of a
+  DESIRED OUTCOME - not a command / permission / claim.
+- **THE SIX OBJECTS**:
+  - **IntentAnnouncement** - what was expressed / by whom / to whom -
+    the speaker backed by authentication evidence, recordedAt vs
+    assertedAt, the provenance.
+  - **IntentInterpretation** - the derived meaning - NEVER silently
+    becomes "what the user said" - the unresolved questions + the
+    assumptions + the confirmation states (the W3C PROV).
+  - **IntentSpecification** - the GOAL vs the SCOPE vs the CONSTRAINTS
+    vs the PREFERENCES vs the ACTIVATION vs the DURATION vs the
+    SATISFACTION assessment contract - "preserve behavior" is a valid
+    intent even when unprovable - the assessment exposes the
+    limitation.
+  - **Commitment** - who accepted responsibility - NOT the
+    authorization.
+  - **Plan** - the structured path toward the desired outcome.
+  - **Assessment** - the satisfaction judgment against the spec.
+- **INTENT CONSTRAINS HISTORIES**: I = (G, C, P, D) with
+  Acceptable_I(tau) = G(last(tau)) ^ C(tau) ^ D(tau); the FOUR INTENT
+  KINDS: achievement / maintenance / avoidance / investigation.
+- **AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS** - the independent
+  checks: contributes + authorized scope + policy + preconditions.
+- **THE TRACEABILITY GRAPH**: Announcement -> Interpretation ->
+  IntentRevision -> Commitment -> PlanRevision -> ProposedChange ->
+  AuthorizationDecision -> ExecutionAttempt -> OutcomeEvidence ->
+  IntentAssessment - with the MISSING EDGE ProposedChange
+  --contributesTo--> IntentRevision.
+- **THE MULTIDIMENSIONAL STATUSES**: interpretation / commitment /
+  execution / assessment / applicability - never a single lifecycle.
+- **THE ESSENCE**: intent = a first-class, evidence-linked NORMATIVE
+  OBJECT - the announcement is its origin, never its interpretation /
+  authority / outcome.

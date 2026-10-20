@@ -33,6 +33,13 @@ statuses:
   rules, the revocation; the scheduling priority / graph weight live in
   SEPARATE fields (the license is the authority; the weight is the
   representation) - the license/weight conflation is a logged pitfall.
+- **THE REGIME**: the workspace regime (the third axis) - the
+  capabilities/leases/evictions authorize the workspace's INTERACTIONS
+  (the scoped authorization; authority is NOT knowledge - the five
+  separate judgments); the OS's own licensing (the physical + execution
+  regimes) stays the root licensor - the representation never replaces
+  reality. The typing home: INVERSE-REPRESENTATION.md (the situated
+  interaction protocols authoritative).
 - **THE ORCHESTRATION POSITION**: "the authority licenses" - the step
   after the govern gates in the invisible flow: ... -> the govern gates ->
   the authority licenses -> the approve binds -> ...

@@ -25,17 +25,17 @@ Status:
 - The boot-window drain race (Path 2): rejected (not the live failure; closed)
 - The recommended fixes (the family-side minimal set): implemented (the fix shipped and verified)
 
-> ONE of the four research reports migrated from the pre-restructure flat documentation folder — see also
+> ONE of the four research reports migrated from the pre-restructure flat documentation folder - see also
 > `../Handoff/Packages/Package-13.md` (the fix it informed) and
 > `../Handoff/Packages/Package-10.md` (the P5 finding's origin).
 
-Date: 2026-10-06 · Read-only research, NO family files touched, NO commits.
+Date: 2026-10-06 - Read-only research, NO family files touched, NO commits.
 Scope: why `~/.dsh/storages/package_governance.json` stopped landing records after the v2 domain bump; BOTH suspected loss paths examined against the code and the empirical record.
 
 ## Verdict (one paragraph)
 
 The **v2 open fails at EVERY boot since commit `4c0e83b`** (Oct 5 17:21:22 UTC): the file backend's single-layout unit parser hard-rejects a `version: 2` open against an on-disk `unit.version: 1` file (`version-mismatch`), the Open's catch swallows it silently, NO sink is ever bound, and EVERY subsequent record from EVERY module drains into the never-retired `PendingJournal` buffer and dies with the process.
-The suspected residual boot-window drain race (`aa53c91` gap) **did NOT fire and is structurally closed** in the current code: the ledger↔journal `activated` record match is 1:1 across the entire v1 era.
+The suspected residual boot-window drain race (`aa53c91` gap) **did NOT fire and is structurally closed** in the current code: the ledger<->journal `activated` record match is 1:1 across the entire v1 era.
 The "20:34/20:50-boot exclusions without activations" were NOT boots - they are `excluded` events from fs-observation scans inside the still-running process activated at 15:46:52 UTC.
 
 ## Path 1 - the v2 open (CONFIRMED, the live failure)
@@ -59,13 +59,13 @@ Installed Target identical (`Target/Function/Open.js`).
   `unit.version !== descriptor.version` (100-102).
   **NO migration, NO leniency, NO `compatibleVersions` consultation - the exact-equality check is the whole rule for single layout.**
 - Mount config confirmed: dsh-base wires `storage-json` with root `dshHomePath('storages')` and
-  `storage-domain` with `backend: json` (asar embedded config) →
+  `storage-domain` with `backend: json` (asar embedded config) ->
   `~/.dsh/storages/package_governance.json` is the single-layout unit.
 
 **Why nothing persists.**
 The version is NEVER "persisted on open": the file is rewritten ONLY by `publish()` on a successful put, stamping `state.version` (serializer lines 72-84).
 A failed open writes nothing, so the file stays `unit.version: 1` forever.
-The zod schema is enforced **ONLY at open time** (`loadAll` → `parseRecord`, storage-domain lib 364-375); `KvTableImpl.put` does **NO** schema validation.
+The zod schema is enforced **ONLY at open time** (`loadAll` -> `parseRecord`, storage-domain lib 364-375); `KvTableImpl.put` does **NO** schema validation.
 ALL 76 stored v1 records use events that are a subset of the v2 enum, so the schema would accept them - the version check is the _ONLY_ blocker between the file and a successful v2 open.
 
 **Empirical confirmation.**
@@ -74,19 +74,19 @@ ALL 76 stored v1 records use events that are a subset of the v2 enum, so the sch
   17:50:07 / 17:50:13 UTC (Oct 5) - before THE FIRST post-v2 boot.
 - Ledgers (ISO UTC): governor `activated` at 19:21:31.954Z and 21:28:45.332Z - BOTH after the v2
   commit - with **zero** matching journal records.
-  EVERY `activated` ledger line from the v1 era (Oct 3 20:10:52Z → Oct 5 15:46:52Z, 13 boots) has
+  EVERY `activated` ledger line from the v1 era (Oct 3 20:10:52Z -> Oct 5 15:46:52Z, 13 boots) has
   exactly ONE journal `activated` record.
 - `normalize-dash.log` shows LIVE `normalized` stream lines at 21:49-21:50Z in the 21:28:45Z boot;
-  the flavors journal through the same factory wrapper, and nothing landed → **the sink was NEVER
+  the flavors journal through the same factory wrapper, and nothing landed -> **the sink was NEVER
   bound at those boots because the open failed** - the primary suspicion, confirmed.
 
 **Post-v2 boot mechanics (why EVERYTHING is lost, NOT just activations).**
 With the open failing, `SharedJournal` is NEVER bound and `PendingJournal` is NEVER drained/retired (`Open.ts:108-134` ALL sit after the failing `await`).
-`Journal.ts` stage 2 (45-56) then buffers _EVERY_ record from _EVERY_ module (ALL twelve hold the same factory instance) into the capped-256 buffer, which is dropped at process exit — total loss, replacing the v1-era pattern (activations buffered, later scan records landing through the bound sink).
+`Journal.ts` stage 2 (45-56) then buffers _EVERY_ record from _EVERY_ module (ALL twelve hold the same factory instance) into the capped-256 buffer, which is dropped at process exit - total loss, replacing the v1-era pattern (activations buffered, later scan records landing through the bound sink).
 
 ## Path 2 - the boot-window drain race (NOT the live failure; closed)
 
-- Routing order is `SharedJournal` → `PendingJournal` → per-State queue (`Journal.ts:41-59`).
+- Routing order is `SharedJournal` -> `PendingJournal` -> per-State queue (`Journal.ts:41-59`).
   `PendingJournal` is initialized as `[]` in the factory constructor (`Library.ts:118`), so stage 2 catches records from the very FIRST apply.
   Stage 3 (per-State queue) is reachable ONLY when `PendingJournal` is _NOT_ an array **and** NO sink is bound - impossible after a successful open: `Factory.SharedJournal = Sink` (Open.ts:109-112) and `PendingJournal = undefined` (131) execute in the same synchronous block after the `await` resolves.
 - A later module's `activated` journaled after the FIRST open's drain hits stage 1 and lands; journaled before the drain, it hits stage 2 and is drained by the FIRST open.
@@ -94,7 +94,7 @@ With the open failing, `SharedJournal` is NEVER bound and `PendingJournal` is NE
 - The file data agrees: in the whole v1 era NO boot has a missing `activated` (13/13 matched).
   The `excluded`-only stretches (Oct 4 16:34-17:49Z, Oct 5 11:02-11:52Z, 15:09-15:15Z, 17:34-17:50Z) fall between boot activations and come from `Observe.ts:45` (`State.Factory.Journal(State, "excluded", ...)`) - fs-observation scan events of a long-running process, NOT boot activations.
 - Residual weaknesses that _do_ exist (NOT currently firing):
-    1. If the factory probe fails in `Attach.ts:74-81` (`Factory` undefined), a successful open binds `State.Journal` but NEVER `SharedJournal`, and `PendingJournal` is NEVER retired → ALL later records still buffer into the un-drained stage 2.
+    1. If the factory probe fails in `Attach.ts:74-81` (`Factory` undefined), a successful open binds `State.Journal` but NEVER `SharedJournal`, and `PendingJournal` is NEVER retired -> ALL later records still buffer into the un-drained stage 2.
        Unlikely, but the same silent failure shape.
     2. A failed FIRST open makes stage 2 a permanent black hole (see Path 1) - NO retry, NO visibility.
        The `aa53c91` design assumed the FIRST open either wins or loses to an already-open _successful_ peer; it NEVER considered "the open itself always fails".
@@ -103,12 +103,12 @@ With the open failing, `SharedJournal` is NEVER bound and `PendingJournal` is NE
 
 **Path 1 - pick ONE of (a) or (b), plus (c) always:**
 
-- **(a) One-time rotation of the v1 file.** Rename (don't delete) `~/.dsh/storages/package_governance.json` → e.g. `...json.v1.bak`.
+- **(a) One-time rotation of the v1 file.** Rename (don't delete) `~/.dsh/storages/package_governance.json` -> e.g. `...json.v1.bak`.
   The next boot's v2 open sees NO file, creates it fresh, and stamps `version: 2` on the FIRST publish.
   Fits the family doctrine (Open.ts:14-18: the journal is "the structured, disposable one"; the ledgers are the complete record); precedent: `f4aaf6b` already removed the file from `~/.dsh` git tracking once.
-  **`~/.dsh` is the user's home — this is the user's call; the parent should ask before touching it.**
+  **`~/.dsh` is the user's home - this is the user's call; the parent should ask before touching it.**
 - **(b) Structural self-migration (NO user action needed):** declare `layout: "per-record"` + `compatibleVersions: [1]` in the v2 spec.
-  The per-record backend's legacy bootstrap (`bootstrapLegacyUnit`, storage-json lib 370-404) copies EVERY record of a v1-stamped single file into per-record documents when the file's version is in `acceptedStamps` (`[2, 1]`) — the 76 records migrate automatically on the next open, the legacy file is left untouched, and ALL of them validate against the widened enum.
+  The per-record backend's legacy bootstrap (`bootstrapLegacyUnit`, storage-json lib 370-404) copies EVERY record of a v1-stamped single file into per-record documents when the file's version is in `acceptedStamps` (`[2, 1]`) - the 76 records migrate automatically on the next open, the legacy file is left untouched, and ALL of them validate against the widened enum.
   Bonus: ONE small atomic write per record instead of whole-file rewrites.
   Note `compatibleVersions` alone (WITHOUT the layout switch) does **NOT** help: single-layout `parse()` checks exact equality ONLY.
 - **(c) ALWAYS: make the Open failure loud.** Replace the bare `catch` at `Open.ts:135-137` with a single ledger line (e.g. via the same `Factory.Append`/append path the modules use): `[ts] storage journal open failed (<code>): <message>`.
@@ -125,10 +125,10 @@ With the open failing, `SharedJournal` is NEVER bound and `PendingJournal` is NE
 ## Key citations
 
 - `plugin-dsh-factory/Source/Function/{Open.ts:68-90,108-137; Journal.ts:41-59; Attach.ts:68-105; State.ts:36-62; Library.ts:118,255-283}`
-  — v2 spec, three-stage routing, probes, caps (all under `~/.dsh/profiles/desktop/bundles/`)
-- `@deepseek-ai/dsh-storage-domain` 0.2.0-rc.2 lib/index.js:355-395 — single-open enforcement, error
+  - v2 spec, three-stage routing, probes, caps (all under `~/.dsh/profiles/desktop/bundles/`)
+- `@deepseek-ai/dsh-storage-domain` 0.2.0-rc.2 lib/index.js:355-395 - single-open enforcement, error
   pass-through
-- Harness asar `@deepseek-ai/dsh-storage-json` 0.2.0-rc.2 lib/index.js — `parse`/version-mismatch
+- Harness asar `@deepseek-ai/dsh-storage-json` 0.2.0-rc.2 lib/index.js - `parse`/version-mismatch
   91-119, `openSingleUnit` 178-191, serializer 72-84, per-record `acceptedStamps`/legacy bootstrap
   353-404
 - `~/.dsh/storages/package_governance.json`; `~/.dsh/governor.log`; `~/.dsh/normalize-dash.log`

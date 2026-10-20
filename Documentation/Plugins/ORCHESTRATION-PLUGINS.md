@@ -130,7 +130,7 @@ Do it ONCE:
 ## 3. PROPOSED: the git-mutation guard (from the 2026-10-10 lessons)
 
 - **Problem it solves (the live slip):** the orchestrator committed `23a313d` and `c920617` and ran `git rm` during a session close-out.
-  The git checks-only law now lives in the skills (code-authoring §1d, user-mandated 2026-10-10) - but skills are behavioral and CAN slip, exactly like the routing discipline.
+  The git checks-only law now lives in the skills (code-authoring section 1d, user-mandated 2026-10-10) - but skills are behavioral and CAN slip, exactly like the routing discipline.
   A proposed fifth member: `@playform/plugin-dsh-gitguard`.
 - **Purpose:** a tools/pre-execute DENY-LIST on the terminal/exec tool surface.
   It intercepts terminal commands before execution.
@@ -148,10 +148,10 @@ Do it ONCE:
 ## 4. The combined effectuallity (the council hub)
 
 - The four (+ proposed fifth) members share the primitives: the BLOCKS (the batch-state compiles them, the queue dispatches them, the routing resolves them, the feedback appends them), the QUEUES (FIFO/LIFO + parentage), the EVENTS (the state changes, the completions, the signals).
-- The underwriting equation (ORCHESTRATION-FAMILY.md §8): `Context(a,t) = Compile( S(t) + Q(t) + R(a,t) + F(t) + Scope(a) ) + H(a,t)`.
+- The underwriting equation (ORCHESTRATION-FAMILY.md section 8): `Context(a,t) = Compile( S(t) + Q(t) + R(a,t) + F(t) + Scope(a) ) + H(a,t)`.
   `Council(t) = { S, Q, R, F }`.
   The 14-row combination space (state drives the dispatch, the queue as a state dimension, the routes in the gates, the feedback loops into the policy review, the parentage composes EVERY member).
-- The sphere compaction (§9): tool calls OVERWRITE the outer surface.
+- The sphere compaction (section 9): tool calls OVERWRITE the outer surface.
   The context blocks are the MIDDLE layer (permissioned sub-blocks - TOC/Scope/Gates/Routing/Queue/Feedback/Policy, filtered per tool, per model family, per plugin behavior at COMPILE time).
   The behaviors UNDERWRITE the inner generators.
   Volume held: the state slot replaced, the blocks bounded.

@@ -20,19 +20,19 @@ statuses:
 
 # APHRODITE TOOL-COMPRESSION PLUGIN - the CCR adaptation plan (dedicated 2026-10-19)
 
-> Source of truth: `Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md` (cited below as **R§n**).
+> Source of truth: `Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md` (cited below as **Rsectionn**).
 > Target: the DeepSeek Harness Plugin Family monorepo
 > (`Documentation/FRAMEWORK.md`, `Documentation/Plugins/PLUGIN-FAMILY.md`).
 > Goal: bring Aphrodite's CCR pipeline - compress, cache, retrieve - to DSH agent
-> loops as ONE new family hook bundle, R§0/§1 (R:7-33, 37-53).
+> loops as ONE new family hook bundle, Rsection 0/section 1 (R:7-33, 37-53).
 
 ## 0. The problem
 
 EVERY DSH agent turn floods the context with raw tool output: `bash` runs,
 `grep` matches, `read` file slices, `web_fetch` pages, `glob` paths - the same
-problem Aphrodite states for Hermes (R§1, R:40-44).
-Aphrodite intercepts tool output before it reaches the LLM and replaces it with a ~15-token preview plus a retrieval marker (R§0, R:9-14).
-We port that pipeline to the harness, NOT the proxy (the proxy mode is a separate verdict, §8).
+problem Aphrodite states for Hermes (Rsection 1, R:40-44).
+Aphrodite intercepts tool output before it reaches the LLM and replaces it with a ~15-token preview plus a retrieval marker (Rsection 0, R:9-14).
+We port that pipeline to the harness, NOT the proxy (the proxy mode is a separate verdict, section 8).
 
 ## 1. Where interception happens in DSH (the decision)
 
@@ -65,7 +65,7 @@ Tool results flow through the ToolRuntime scheduler, and its normalized result p
 **Primary mechanism: a host-side plugin that registers ONE `tools/post-execute`
 waterfall listener** and REPLACES oversized results with preview + marker
 content blocks (the exact analog of Aphrodite's `transform_tool_result`,
-R§3, R:120-135 and `hooks.rs:317-426`). Rationale:
+Rsection 3, R:120-135 and `hooks.rs:317-426`). Rationale:
 
 1. It sees the normalized result of EVERY tool (bash, grep, read, glob,
    web_fetch, subagent) with name + parsed arguments + caller agent - the full
@@ -73,21 +73,21 @@ R§3, R:120-135 and `hooks.rs:317-426`). Rationale:
    event contract above.
    NO other point can replace model-visible output for ALL tools.
 2. It matches the family's plugin anatomy: ONE waterfall listener, like
-   normalize-dash's `llm/stream` listener (SCHEME.md §2,
+   normalize-dash's `llm/stream` listener (SCHEME.md section 2,
    `dsh-hook-normalize-dash/SCHEME.md`).
 3. Option (b) - the client `tool.call.toolview` keyed slots - ONLY changes what
    the USER sees in the GUI.
-   It cannot shrink the model's context, so it is a complementary display nicety at most (deferred, §8).
+   It cannot shrink the model's context, so it is a complementary display nicety at most (deferred, section 8).
 4. Option (c) - wrapping the `Tool` registry (`ToolRuntime.register`) would
    require wrapping EVERY tool definition at agent setup and re-fusing signals.
    `tools/execute` explicitly forbids result replacement.
-   Registry-level work is needed ONLY to REGISTER the retrieval tool, which is separate (§4.3).
+   Registry-level work is needed ONLY to REGISTER the retrieval tool, which is separate (section 4.3).
 
 ## 2. What gets compressed (the gate, mapped from Aphrodite)
 
 ### 2.1 Targets
 
-R§3: bash/cargo/glob/grep/read are the big consumers.
+Rsection 3: bash/cargo/glob/grep/read are the big consumers.
 DSH equivalents, default `targets` allow-list: `bash`, `glob`, `grep`, `read`, `web_fetch`,
 `web_search`, `list`, `search` (the terminal/search/fetch family; the
 `ToolCallKind` union - read/edit/delete/move/search/execute/fetch/other - is the
@@ -96,7 +96,7 @@ Exemptions mirror R:352-361: `write`, `edit`, `raw-write` (execution-critical; m
 echo), the plugin's own retrieval tool, and `subagent`/`ask_user_question`
 (NEVER compress another agent's brief or a user gate).
 
-### 2.2 Threshold mapping (R§3 + R§6, R:293-304)
+### 2.2 Threshold mapping (Rsection 3 + Rsection 6, R:293-304)
 
 | Aphrodite knob (R:293-298) | DSH knob (this plan) | Default | Meaning |
 | --- | --- | --- | --- |
@@ -104,24 +104,24 @@ echo), the plugin's own retrieval tool, and `subagent`/`ask_user_question`
 | `terminal_threshold` 256 | `terminalThresholdBytes` | 2048 | bash results; 256 was aggressive, DSH bash keeps parity with the general gate |
 | `inline_threshold` 1024 | `inlineThresholdBytes` | 1024 | results at/below this are inlined in the store and previewed fully |
 | `code_multiplier` 1.0 | `multipliers` map | see below | per-type multiplier on the byte gate |
-| error ×8 tier (R:213-135 → R:134) | `multipliers.error: 8` | 8 | errors are high-signal, compress late |
-| diff/git/text ×2 | `multipliers.diff: 2`, `multipliers.text: 2` | 2 | |
+| error x8 tier (R:213-135 -> R:134) | `multipliers.error: 8` | 8 | errors are high-signal, compress late |
+| diff/git/text x2 | `multipliers.diff: 2`, `multipliers.text: 2` | 2 | |
 | protect first/last (context engine, R:173-179) | `protectFirstTurns: 2`, `protectLastTurns: 4` | 2 / 4 | phase 4 (context engine), NOT the tool gate |
 | `auto_expand` / `auto_expand_limit` 102400 (R:181-186) | `autoExpand: true`, `autoExpandLimitBytes: 102400` | true | identical semantics: store + preview, but return full content while under the limit - NO marker reaches the model |
 | TTL 3600 (R:167-168) | `ttlSeconds: 3600` | 3600 | |
 | inline LRU 256 MB (R:109-111) | `storeBudgetBytes: 268435456` | 256 MiB | |
 
-Type tiers: a DSH classifier with a REDUCED set (NOT 30, §8): `terminal`
+Type tiers: a DSH classifier with a REDUCED set (NOT 30, section 8): `terminal`
 (bash), `grep`, `paths` (glob/list), `file` (read), `json`, `web`, `default` -
 7 types, EACH with a one-line preview builder and a multiplier, seeded from
-Aphrodite's preview formats (R§3 step 2, R:105-106; e.g.
+Aphrodite's preview formats (Rsection 3 step 2, R:105-106; e.g.
 `[build:1E 1W 142L | ...]` becomes `[terminal:exit 0 | 142 lines | first
 error line]`).
 
 ## 3. The compression store
 
 Aphrodite: inline LRU (<=256 MB) or SQLite `ccr.db` (hash, original BLOB, TTL,
-last_accessed) (R§3, R:107-115; schema R:152-160).
+last_accessed) (Rsection 3, R:107-115; schema R:152-160).
 
 Decision for DSH: **in-memory LRU keyed by hash + optional JSONL disk journal,
 NOT the factory's storage journal.**
@@ -162,7 +162,7 @@ Kept byte-identical in shape so the research vocabulary carries over, but:
   member of the harness's normalize family untouched (the dash class rewrites
   ONLY unicode dashes to `-`; the quotes/ellipsis/space classes NEVER touch
   ASCII pipes; `normalize-file` normalizes existing files, NOT model output -
-  `dsh-hook-normalize-dash/SCHEME.md` §1).
+  `dsh-hook-normalize-dash/SCHEME.md` section 1).
   The model can also re-read the marker from its own transcript intact.
 - The 24-hex hash is lowercase; "no prefix or fuzzy matching" carries over
   (R:142-146).
@@ -180,7 +180,7 @@ blocks shaped like Aphrodite's JSON payload (R:127-128):
 For `value`-carrying successes the listener emits the accepted decision with
 replaced `content`.
 Failures (isError) pass through unless `compressFailures`
-(ONLY the error ×8 tier benefits - default true for `terminal` errors, false
+(ONLY the error x8 tier benefits - default true for `terminal` errors, false
 otherwise).
 
 ### 4.3 Retrieval
@@ -200,7 +200,7 @@ NO prefix matching.
 
 The directive doc becomes a small system-prompt section the plugin can append
 via the `system-prompt/assemble` waterfall (LIVE Event directory) - phase 4
-optional item, mirroring Aphrodite's `ccr-handling.md` (R§3, R:199-203).
+optional item, mirroring Aphrodite's `ccr-handling.md` (Rsection 3, R:199-203).
 
 ## 5. Config schema (Schemastery, family conventions)
 
@@ -243,7 +243,7 @@ Volatile (hot-edit, NO remount): `logFile`, `previewMaxChars`,
 
 ## 6. Bundle layout
 
-New family member (Boilerplate → Classic/EffectTS later): **`dsh-hook-ccr`**
+New family member (Boilerplate -> Classic/EffectTS later): **`dsh-hook-ccr`**
 (published `@playform/dsh-hook-ccr`, loader id `ccr`), mirroring
 `dsh-hook-normalize-dash` anatomy:
 
@@ -262,12 +262,12 @@ dsh-hook-ccr/
       Marker.ts         // parse/format  <<<CCR:h|t|s>>>
       Retrieve.ts       // ccr_retrieve tool body (+ range)
   Interface/Config.ts Interface/State.ts Interface/Entry.ts
-  Variable/Config.ts    // the Schemastery schema (§5)
+  Variable/Config.ts    // the Schemastery schema (section 5)
 ```
 
 `cordis.patch.yml` follows the bundle-patch pattern
 (`dsh-hook-normalize-dash/cordis.patch.yml:32-40`): `insert:` with id `ccr`,
-name `@playform/dsh-hook-ccr`, the §5 config.
+name `@playform/dsh-hook-ccr`, the section 5 config.
 
 ### Smoke suite plan (`Classic/smokes/ccr-smoke.mjs`)
 
@@ -334,17 +334,17 @@ Phases 1-3 are the MVP; 4-5 complete it.
 The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate later item per the SPLICE-ETS pattern
 (Documentation/Archive/Split/SPLICE-ETS.md).
 
-## 8. Feature scoping table (R§3/§4/§6)
+## 8. Feature scoping table (Rsection 3/section 4/section 6)
 
 | Aphrodite feature | Verdict | One line |
 | --- | --- | --- |
-| Tool-output compression (CCR core) | PORT | the whole point: gate → classify → hash → store → preview + marker |
+| Tool-output compression (CCR core) | PORT | the whole point: gate -> classify -> hash -> store -> preview + marker |
 | Auto-expand | PORT | identical semantics, cheap once the store exists (R:181-186) |
-| 30-type classifier | ADAPT | 7 DSH types (§2.2) - the 30-type taxonomy is proxy-shaped |
-| Threshold tiers + multipliers | ADAPT | error ×8 etc. carried into the `multipliers` map |
+| 30-type classifier | ADAPT | 7 DSH types (section 2.2) - the 30-type taxonomy is proxy-shaped |
+| Threshold tiers + multipliers | ADAPT | error x8 etc. carried into the `multipliers` map |
 | Inline LRU store | PORT | memory LRU with budget cap |
 | SQLite ccr.db | ADAPT | JSONL disk journal instead; SQLite is a native dep the family does NOT carry |
-| Retrieval tool | ADAPT | `ccr_retrieve` as ONE registered ToolDefinition (Aphrodite's 13 relays → 1) |
+| Retrieval tool | ADAPT | `ccr_retrieve` as ONE registered ToolDefinition (Aphrodite's 13 relays -> 1) |
 | Directives | ADAPT | a `system-prompt/assemble` CCR-handling section, phase 4 |
 | Context engine (middle-turn archiving) | ADAPT | `agent/pre-step`-adjacent, feature-flagged, phase 4 |
 | Proxy mode (:9797/:9798) | SKIP | DSH is NOT an OpenAI-compatible relay; interception at the runtime is strictly better placed |
@@ -368,7 +368,7 @@ The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate later item per the SPLIC
   as preview + marker in the transcript; retrieval restores the bytes; exempt
   tools untouched.
 - Git: read-only checks ONLY - the deliverable is reported READY-TO-COMMIT
-  (routing law, `session-orientation` §3).
+  (routing law, `session-orientation` section 3).
 
 ## 10. Open questions
 
@@ -380,8 +380,8 @@ The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate later item per the SPLIC
    edit's `old_string` context)?
    Default yes (hash of full content, retrieval restores it) but the pilot should confirm NO edit-failure regression.
 3. Does the JSONL journal want rotation/capping (file growth at 256 MiB budget
-   × TTL churn), or is boot-compaction enough?
+   x TTL churn), or is boot-compaction enough?
 4. The `subagent` tool's result often embeds a child's full report - compress
    it?
    It is the single largest consumer in orchestrator sessions; currently
-   exempt (§2.1), review after LIVE data.
+   exempt (section 2.1), review after LIVE data.

@@ -27,6 +27,12 @@ statuses:
   services the others consume).
 - **THE ROLE** (the family map): the validation objects + the evidence
   deps + the four kinds of truth + the stale-validation invalidation.
+- **THE REGIME**: the workspace regime (the third axis) - the evidence
+  service validates the workspace's claims (the qualified freshness; the
+  OutcomeEvidence + the justified assertions forall s in K(h) of the
+  situated model); the OS execution axis stays orthogonal. The typing
+  home: INVERSE-REPRESENTATION.md (the situated interaction protocols
+  authoritative).
 - **THE FOUR KINDS OF TRUTH** (the Representation-First research): the
   evidence service owns the truth taxonomy - what counts as proof for a
   representation, an observation, a change.

@@ -25,6 +25,16 @@ statuses:
 - **THE PACKAGE**: `@playform/hook-dsh-workspace-audit` - the EVENT HOOK.
 - **THE ROLE** (the family map): the event records + the ledger lines -
   the ACCOUNTABILITY.
+- **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): the
+  audit lines = the OutcomeEvidence on the traceability graph
+  (Announcement -> Interpretation -> IntentRevision -> Commitment ->
+  PlanRevision -> ProposedChange -> AuthorizationDecision ->
+  ExecutionAttempt -> OutcomeEvidence -> IntentAssessment) - the
+  accountability is the graph's record; the IntentAssessment closes the
+  loop against the IntentSpecification's satisfaction contract.
+- **THE REGIME**: the workspace regime (the third axis) - the audit
+  lines record the workspace's interactions; the OS execution axis
+  stays orthogonal.
 - **THE ORCHESTRATION POSITION**: "the audit lines" - the step after the
   journal records in the invisible flow: ... -> the journal records ->
   the audit lines -> the live view presents - all evented by the plugin

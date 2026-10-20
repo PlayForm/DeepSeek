@@ -28,6 +28,10 @@ statuses:
 - **THE COMMONALITY SPLIT**: the shared machinery the family's members
   reuse - the state cells, the clock/deadline scans, the write wrapper,
   the P5 storage, the render/collapse, the ingest, the lease, the wiring.
+- **THE REGIME**: the workspace regime's substrate - the shared
+  machinery every managed-entity member stands on; the OS execution axis
+  stays orthogonal. The typing home: INVERSE-REPRESENTATION.md (the
+  situated interaction protocols authoritative).
 - **THE EXTRACTION RULE**: extracted AFTER TWO CONSUMERS exist - the
   commonality becomes a library only when the duplication is proven (the
   same rule as the batch-edit tool's live-view framework split).

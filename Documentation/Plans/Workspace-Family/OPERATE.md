@@ -35,6 +35,11 @@ statuses:
 - **THE REFUSAL-TO-GUESS**: a first-class rule - the typed proposals
   never guess; the resolution rules decide what CAN be proposed, the
   refusal declares what CANNOT.
+- **THE REGIME**: the workspace regime (the third axis) - the typed
+  proposals are the workspace's INTERACTION commands (the legal
+  operations: prepare / approve / commit); the OS execution axis stays
+  orthogonal. The typing home: INVERSE-REPRESENTATION.md (the situated
+  interaction protocols authoritative).
 - **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
   recursion prevention: every event carries the operation identifier, the
   parent identifier, the event category.
