@@ -23,8 +23,8 @@ statuses:
     state: open
     evidence: the fork is verified - 60,069 Classic lines mirrored; keep, generate, adapt, or delete is the user's call
   - name: the P0 data-loss fix (the Site ignore rule)
-    state: open
-    evidence: git check-ignore proves Documentation/Archive/Site is unversioned
+    state: implemented
+    evidence: .gitignore now /Site/; git check-ignore clean; the three archived docs are untracked and visible
   - name: the functionality fixes
     state: open
     evidence: the ccr path, the normalizeToolArguments patch, the ledger-path drift, the gate silence
@@ -190,6 +190,15 @@ base exports are the only public-surface change.
 Risk: medium. The ledger strings do not change because they are
 parameterized by `State.Module`; the smoke counts must not change.
 
+The red-team's counter-argument is recorded: each package ships these
+files in `Target/`, all fourteen are published at 0.0.1, and moving the
+logic changes the dependency graph and the tarball contents for a new
+version. That is why the sequence starts with the hash drift-guard (P1)
+and treats the move as a versioned refactor (P2), not a cleanup. The
+delegate files keep `Apply.ts` and the import paths unchanged; the dash
+canary proves the ledger strings and counts before the other flavors
+follow.
+
 ### 3.2 Export the factory's service type and delete the 26 mirrors
 
 `plugin-dsh-factory/Source/Library.ts` exports `State`, `Options`, `Gate`,
@@ -259,19 +268,23 @@ table in the module.
 
 | Finding | Evidence | Fix | Class |
 | --- | --- | --- | --- |
-| ccr writes to a hardcoded user path | `ccr/Source/Variable/Config.ts:42`, `ccr/cordis.patch.yml:43` `/Users/nikola/.dsh/ccr.log` | default `~/.dsh/ccr.log` | Behavioral (path) |
-| The shipped patch contradicts the schema | six `cordis.patch.yml` set `normalizeToolArguments: true`; `Variable/Config.ts:59` defaults `false` | set the patches to `false`, or change the documented default | Behavioral (shipped config) |
-| Ledger paths disagree | schema defaults `hook-dsh-governor-package.log` / `-pinner-package` / `-governor-cargo`; READMEs and patches use `hook-dsh-package-governor.log` etc. | one form everywhere; add a `governance-status` command first | Behavioral (default path) + additive |
+| ccr writes to a hardcoded user path (P0) | `ccr/Source/Variable/Config.ts:42`, `ccr/cordis.patch.yml:43` `/Users/nikola/.dsh/ccr.log`; `Append` swallows the failure (`Append.ts:24-33`), so the ledger is silently never written off-nikola; `setup.astro:772` tells users to verify that path | default `~/.dsh/ccr.log`; add a default-path assertion | Behavioral (path); silent ledger loss today |
+| `normalizeToolArguments` in the shipped patches | six patches set `true`; schema defaults `false`; the patch comment says it is the opt-in example and the field is deprecated in favour of `scopes.toolInput` | not a patch flip: fix the site Configurator (it prints `toolArgs=on` as if it were the schema) and the docs | Docs and site |
+| Ledger paths disagree | schema defaults `hook-dsh-governor-package.log` / `-pinner-package` / `-governor-cargo`; patches, READMEs, and the site use `hook-dsh-package-governor.log` etc.; no smoke catches it because every smoke overrides `logFile` | pick the schema-to-patch/README direction (majority and documented); add a default-path assertion; version bump | Behavioral, versioned |
 | Gate refusals are silent | `Gate.ts` returns seven reasons; only `excluded` reaches the ledger | `verboseGate` cell emitting `skipped (<reason>) <path>` | Additive |
-| ccr retrieval dies at restart | `journalPath: ""` (memory-only) | default a JSONL journal, or warn once | Behavioral |
 | No dry-run | normalize-file and the governor chain always write | `dry_run` arg / preview step | Additive |
 | No backup/restore | strict strips and full-file normalize are irreversible | opt-in `backupDir` + `restore` command | Additive |
 | No per-scope overrides | `strict`, `sections`, `replacement`, `exclude` are global | `govern-policy.json` keys resolved by the walk-up | Additive |
 | No numeric bounds | `maxUpdateFailures: 0`, negative thresholds load | schema `min`/`max` + fail-loud apply | Behavioral for invalid configs |
 | Stale model in a disabled package | `live-containers/Config.ts:143-150`, `Apply.ts:588-589` hardcode `glm-5.3-flash` | use the configured route or the current model | Behavioral (disabled package) |
-| Dead Effect dependency | zero imports in ccr, tool-coach, live-containers, core | remove the dependency or use it | Packaging |
+| ETS unused direct dependency and a false claim | zero `from "effect"` in ccr, tool-coach, live-containers, core, but all four import `ets-base-dsh` (transitively effect-backed); `ets-hook-dsh-core/Source/Library.ts:25-31` claims `Stream/Gate` and a typed Update, while its `Source/Stream/` is empty and the gate lives in `ets-base-dsh` | remove the unused direct dependency; correct the core claim | Packaging and docs |
 | Governance trio races on one write | per-target version guard + continuation, no lock; the loser fails `FS_STALE_VERSION` silently | per-target serialization in `Continue` + a `superseded` line | Additive |
-| Two prepend listeners claim to be outermost | normalize-file and ccr both register `tools/post-execute` with `prepend: true` | document the actual order and fix the claim | Docs + test |
+| Two prepend listeners claim to be outermost | normalize-file and ccr both register `tools/post-execute` with `prepend: true` | document the actual order and fix the claim | Docs and test |
+
+Not a fix: the ccr store's `journalPath` already implements a durable
+JSONL journal; `""` (memory-only) is deliberate. Defaulting it on writes
+tool-output payloads to disk and changes the retrieval contract, so it is
+a privacy and retention decision, not an audit fix.
 
 ### 4.2 What not to change
 
@@ -299,7 +312,7 @@ table in the module.
 | `.gitmodules.draft` is wrong | 25 entries vs 31 dirs, three wrong paths | delete or correct | Low |
 | `NPM.yml` count/path drift | "All 25 packages"; cites a moved plan | 31 packages; fix the path | Low |
 | Governor guides duplicate package docs | `Governor-README.md` 372 vs package 368; `Governor-SCHEME.md` 485 vs 358, diverged | keep the package docs canonical; the guides become pointers | Low |
-| README/CHANGELOG counts | twelve, 733/746, 21 pages | fifteen, 1008/1021, 24+404 | Low |
+| README/CHANGELOG counts | twelve, 733/746, 21 pages | fifteen, the derived per-folder totals, 24+404 | Low |
 
 ## 6. The execution order
 
@@ -307,32 +320,36 @@ table in the module.
 
 1. `.gitignore` `Site/` -> `/Site/`, re-add the three archived site docs.
 2. The site P0 fixes (see `Plans/SITE-POLISH-BREAKDOWN.md`): the npm
-   claim, the missing model, the pinner notes, the counts, the hero
-   install, the absolutes.
-3. `normalizeToolArguments` in the six shipped patches: decide the
-   intended default and make schema, patch, and docs agree.
+   claim, the missing model, the partial-green banner, the pinner notes,
+   the real count bugs, the hero CTA, the absolutes, the generated profile,
+   the verify step, the ccr prefix.
+3. The ccr hardcoded path: default `~/.dsh/ccr.log`; add the default-path
+   assertion. Today the ledger is silently never written off-nikola.
 
 ### P1 - safety and the small commonalities
 
-4. ccr path; ledger-path alignment (status command first).
-5. Gate observability (`verboseGate`, additive).
-6. The overpass scaffolding move to core (behavior-identical; smoke
-   counts unchanged).
+4. The smoke manifest and the "ALL PASS" scope: derive the totals from the
+   per-folder counts; state what ran and what skipped.
+5. Ledger-path alignment (schema to patch/README) plus the default-path
+   assertion; version bump.
+6. Gate observability (`verboseGate`, additive).
 7. The factory service type and the 26 mirrors.
 8. One build entry point; config defaults in one home.
+9. The overpass hash drift-guard (zero behavior change).
 
 ### P2 - placement and functionality
 
-9. Untrack `Target/`; the `Handoff` resolution; `Site/docs/` removal.
-10. Dry-run, backup/restore, per-scope overrides (additive).
-11. Per-target serialization in `Continue` (additive; concurrency
-    review).
-12. `live-containers` internal module split.
+10. The overpass move to core/base (versioned, canary, republish; see
+    section 3.1 and the red-team risk).
+11. Untrack `Target/`; the `Handoff` resolution; `Site/docs/` removal.
+12. Dry-run, backup/restore, per-scope overrides (additive).
+13. Per-target serialization in `Continue` (additive; concurrency review).
+14. `live-containers` internal module split.
 
 ### P3 - the strategic decisions
 
-13. The EffectTS decision (A/B/C/D) - the user's call, after P0-P2.
-14. `live-containers` package split, if the internal split proves the
+15. The EffectTS decision (A/B/C/D) - the user's call, after P0-P2.
+16. `live-containers` package split, if the internal split proves the
     boundaries.
 
 ## 7. What this analysis does not claim
@@ -347,11 +364,14 @@ table in the module.
 
 1. **The npm claim**: publish the three missing packages, or mark them
    publish-pending?
-2. **`normalizeToolArguments`**: keep the shipped `true` (and fix the
-   docs) or flip to `false` (and accept the behavior change)?
+2. **`normalizeToolArguments`**: the patch is documented opt-in, not drift.
+   Keep the shipped example (and fix the site Configurator and the docs),
+   or move the example out of the shipped patches?
 3. **EffectTS**: keep the fork (A), generate the twins (B), thin adapter
    (C), or delete (D)?
-4. **Behavioral fixes**: approve the ccr path, the ledger-path
-   alignment, and the ccr durable store as a batch, or one at a time?
+4. **Behavioral fixes**: approve the ccr path and the ledger-path
+   alignment (a version bump) as a batch, or one at a time?
 5. **Placement**: approve the `Target/` untracking and the `Handoff`
    restore?
+6. **The overpass move**: approve the versioned refactor after the
+   drift-guard, or defer it indefinitely and keep the copies?

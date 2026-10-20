@@ -11,8 +11,8 @@ statuses:
     state: resolved
     evidence: this document - every claim checked against Site/Source
   - name: the P0 correctness fixes
-    state: open
-    evidence: the npm claim, the missing model, the count drift, the pinner notes, the hero install, the false absolutes
+    state: in-progress
+    evidence: landed - the count bugs, the false absolutes, the ccr prefix, the profile path, the pinner captions, the model page; open - the npm claim, the hero CTA, the totals, the verify step
   - name: the P1 structure fixes
     state: open
     evidence: the detail template, the nav and 404 parity, the demo split, the registry affordances
@@ -112,39 +112,54 @@ Rewrite:
 
 ### P0.4 Package-count drift
 
-- Files: `case-study.astro:278,291,317,318,1248`; `versions.astro:87,145`
-  ("IDENTICAL FOURTEEN CONTRACTS"); `hook-dsh-core.astro:69,129`
-  ("thirteen other packages"); `Site/README.md:12,13,30,71`; root
+- Files: `versions.astro:145` ("IDENTICAL FOURTEEN CONTRACTS") and
+  `versions.astro:87` ("the twelve packages" inside the current 0.0.1
+  entry); `hook-dsh-core.astro:69,129` ("ALL thirteen other packages");
+  `Site/README.md:12,13,30,71`; root
   `README.md:7-16,35,222,281-282,442`.
-- Fix: fifteen packages, fourteen manifest suites, 24 content pages + the
-  404. Prefer `${Counts.Packages}` and `${Counts.Suites}` where the page
-  can import them.
-- Acceptance: a grep for `twelve|thirteen|fourteen` in `Site/Source/pages`
-  returns only legitimate historical uses (the case-study's era section,
-  where the number is the point).
+- The case-study's "twelve" is deliberate history: it describes the Oct
+  3-6 era and reconciles to fifteen on the same page (318, 323). Leave it.
+- Core's "thirteen" is the dependent count (14 dependency rows minus its
+  own name; the factory has none), but "ALL thirteen other packages" is
+  false because there are fourteen other packages. Say "thirteen
+  dependents" or "fourteen other packages".
+- Fix: fifteen packages, the derived suite count, 24 content pages + the
+  404. Prefer `${Counts.Packages}` and `${Counts.Suites}`.
+- Acceptance: a grep for `twelve|thirteen|fourteen` returns only the
+  case-study's era section and the corrected dependent wording.
 
-### P0.5 The landing installs a library
+### P0.5 The hero CTA has no next step
 
-- File: `index.astro:260` `<Terminal Pkg="hook-dsh-core" Rail />`.
-- Core is a library, not a plugin; a reader who copies the hero command
-  activates nothing.
-- Fix: install a bundle (the pinner or the factory) and link `/setup/` as
-  the next step. Say what the command does.
-- Acceptance: the hero command is a loader-activatable package; the next
-  step is one click away.
+- File: `index.astro:260` `<Terminal Pkg="hook-dsh-core" Rail />`, which
+  renders `npm install @playform/hook-dsh-core@0.0.1`
+  (`Terminal.astro:31-32`).
+- Installing core is legitimate; core is the library. The defect is that
+  the hero's only CTA installs a package that activates nothing: core has
+  no `cordis.patch.yml`, no ledger, and no tool. The working first action
+  is `/setup/`: bundles, patch, restart.
+- Fix: make the CTA the setup path, with the install as step 0 of 4. If a
+  package command stays, say that it does nothing until the profile is
+  wired.
+- Acceptance: a first-time reader's next click leads to a working
+  activation, not a no-op install.
 
 ### P0.6 False absolutes
 
 - Files: `index.astro:255` "EVERY model's output"; `models.astro:122-123`
   "run on EVERY token batch"; `hook-dsh-normalize-ellipsis.astro:248`
   "EVERY typographic three-dot ellipsis code point"; `setup.astro:716`
-  "EACH plugin writes its own durable ledger"; `hook-dsh-core.astro:74,77`
+  "EACH plugin writes its own durable ledger"; `index.astro:729` and
+  `models.astro:147` "zero runtime overhead"; `hook-dsh-core.astro:74,77`
   "PLUGIN DETAIL" beside "NOT A PLUGIN".
-- Fix: the tool-argument and step-batch arms are opt-in, so the stream
-  claims are false as written; the core and factory write no ledger; core
-  is a library, so its eyebrow should read "LIBRARY DETAIL".
-- Acceptance: every "every/each/zero/never" is either true in code or
-  gone.
+- The stream claims are false under shipped defaults: `toolInput`,
+  `toolResults`, and `batch` default off, and six flavors replace six
+  classes, not all non-ASCII. "Zero runtime overhead" is contradicted by
+  `appendFileSync` on every changed delta when `log` is on, and every
+  shipped patch sets `log: true`. The core and factory write no ledger;
+  core is a library.
+- Fix: state the arms that are on, the classes the flavors cover, and the
+  actual log cost; "LIBRARY DETAIL" for core.
+- Acceptance: every "every/each/zero/never" is true in code or gone.
 
 ### P0.7 The smoke totals are understated
 
@@ -164,6 +179,62 @@ Rewrite:
 - Acceptance: the displayed total equals the sum the runner guards;
   `pnpm Drift` passes; the root README and `Site/README.md` quote the same
   derived number.
+
+### P0.8 "ALL PASS" is a partial green
+
+- Files: `Site/Source/Library/Content.ts:213-214` (the "14 SUITES ·
+  1008 CHECKS · ALL PASS" banner) and `versions.astro:19` ("EVERY suite
+  loads the real built Target").
+- The seven wiring suites (scratch-profile, profile-assembly, patch-layer,
+  live-ledger, governed-write, refusal-path, introspection) exercise the
+  live `~/.dsh` harness, skip with exit 0 when `DSH_TEST_SCRATCH` is
+  unset, and are never forced green in the aggregate. The totals sum only
+  the 14 mechanics suites. The banner therefore claims a green that was
+  never executed.
+- Fix: make the banner state the coverage: "14 mechanics suites green;
+  7 wiring suites skipped without a scratch home; live-containers 280
+  checks" - and derive it, do not hardcode.
+- Acceptance: the banner names what ran and what skipped; no page says
+  "ALL PASS" without the scope.
+
+### P0.9 The generated profile does not resolve as printed
+
+- Files: `Configurator.astro:479` and `setup.astro:84` emit
+  `"<pkg>": "link:../bundles/<pkg>"` inside
+  `~/.dsh/profiles/<name>/package.json`, which resolves to
+  `~/.dsh/profiles/bundles/<pkg>`; the documented layout is
+  `~/.dsh/profiles/<name>/bundles/<pkg>`.
+- The same block emits `ncuBin: /usr/local/bin/ncu`, contradicting the
+  shipped default `"ncu"` and the case study's "personal-path constant
+  gone".
+- Fix: emit the correct relative link and `ncuBin: ncu`; add a copy-paste
+  check to the page.
+- Do not edit the ledger excerpts to match: they are byte-exact Drift
+  samples. Fix the default and the generated config, and leave the
+  samples as captured.
+- Acceptance: the generated package.json resolves from the profile
+  directory; no personal path appears.
+
+### P0.10 The verify step greps the wrong shape and files
+
+- Files: `setup.astro:747-777`, `Configurator.astro:511-522`.
+- The table lists patch-name ledgers that differ from the schema defaults;
+  `setup.astro:772` points at `~/.dsh/ccr.log`, which the hardcoded path
+  never creates off-nikola; the Configurator labels logger-form strings as
+  "the activation ledger lines", while the file form is
+  `[ISO] activated (...)` with no plugin prefix.
+- Fix: one canonical ledger path and one canonical line shape in the
+  table, the Configurator, and the verify instructions; add a default-path
+  assertion to the smoke.
+- Acceptance: the documented path and shape match what the code writes.
+
+### P0.11 The ccr page names the wrong ledger prefix
+
+- File: `hook-dsh-ccr.astro:831` says Append adds "the hook-dsh-ccr
+  prefix"; `State.Module` is `"ccr"`, so logger lines read `ccr: ...` and
+  the file line has no prefix.
+- Fix: say `ccr: ...`.
+- Acceptance: the page matches the smoke-asserted string.
 
 ## 3. P1 - structure and discovery
 
@@ -273,7 +344,10 @@ Rewrite:
 ## 5. P3 - the content model
 
 - Move hardcoded figures to `Content.ts`: fifteen/15, 0.0.1, 146/129,
-  "Four steps", "Eleven", "twelve", "thirteen other".
+  "Four steps", "Eleven". Keep the case-study's era "twelve" (it is
+  history); core's "thirteen" is a dependent count, not a package count.
+- Derive the totals and the green scope from the per-folder counts and the
+  wiring-suite state (P0.7 and P0.8).
 - Remove the unused exports (`Methods.Metadata`, `Copyright.Year`,
   `Fallback.Totals`) or use them.
 - Fix the stale comments: `StatsBand.astro:3` "12 packages / 733 + 746";
@@ -285,12 +359,14 @@ Rewrite:
 ## 6. Sequencing
 
 1. P0.1 and P0.2 - the broken install and the missing model.
-2. P0.3 and P0.4 - the drafting notes and the counts.
-3. P0.5 and P0.6 - the hero and the absolutes.
-4. P1.1 and P1.2 - the template and the nav/404.
-5. P1.3 to P1.5 - the demos, the registry, the setup.
-6. P2 - the rewrite, page by page, with the build after each page.
-7. P3 - the content model, then `pnpm Drift`.
+2. P0.8 - the partial-green banner (trust damage first).
+3. P0.3 and P0.4 - the drafting notes and the real count bugs.
+4. P0.5 and P0.6 - the hero CTA and the absolutes.
+5. P0.9 to P0.11 - the generated profile, the verify step, the ccr prefix.
+6. P1.1 and P1.2 - the template and the nav/404.
+7. P1.3 to P1.5 - the demos, the registry, the setup.
+8. P2 - the rewrite, page by page, with the build after each page.
+9. P3 - the content model, then `pnpm Drift`.
 
 ## 7. Acceptance (every item)
 

@@ -28,4 +28,7 @@ dist/
 # OS noise
 .DS_Store
 
-Site/
+# The Site is its own repository. The leading slash is deliberate: a bare
+# Site/ also matched Documentation/Archive/Site, silently unversioning the
+# archived site documents.
+/Site/
