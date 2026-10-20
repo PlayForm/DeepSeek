@@ -65,7 +65,7 @@ export const Open = (
 	const At = Clock(Agent);
 	const Pinned = MemberIDs ?? [];
 	const Board: BoardState = {
-		id: Id,
+		id: ID,
 		agentId: AgentID,
 		plantType: PlantType,
 		template: Template,
