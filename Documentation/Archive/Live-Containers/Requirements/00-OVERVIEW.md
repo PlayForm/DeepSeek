@@ -21,12 +21,10 @@ statuses:
 # LIVE CONTAINERS - WAVE 2 - Requirements Overview
 
 Date: 2026-10-19
-Status: requirements only (the durable spec for the DESIGN agent and the
-CODER agent; written by the wave-2 research agent).
-Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (the v1 research: the
-system-prompt/assemble seam, the KV-cache honesty, the ptc-runtime
-programmable stage, the 14 block types, the 3-agent specs). Wave 2 EXTENDS
-that idea and never contradicts its verified seams.
+Status: requirements ONLY (the durable spec for the DESIGN agent and the CODER agent; written by the wave-2 research agent).
+Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (the v1 research: the system-prompt/assemble seam, the KV-cache honesty, the ptc-runtime programmable stage, the 14 block types, the 3-agent specs).
+Wave 2 EXTENDS that idea.
+Wave 2 NEVER contradicts its verified seams.
 
 ---
 
@@ -65,17 +63,13 @@ that idea and never contradicts its verified seams.
 
 ## 2. The origin (Aphrodite)
 
-The cargo-block idea comes from the Aphrodite/Hermes work. The verified
-origin text is Aphrodite's own research note,
-~/Developer/Application/PlayForm/Aphrodite/docs/research/
-2026-10-19-hermes-aphrodite-research.md:120-146: a long cargo build flows
-through the CCR result transform (transform_tool_result_inner, hooks.rs:317-426)
-with a live-container fast path at :370-380 and the
-`<<<CCR:hash|type|size>>>` marker at the end. That is a RESULT-side
-transform: the build still blocks the turn, and the marker replaces the
-finished output. The user's wave-2 CAN-1 goes one step further: the CALL
-itself becomes non-awaited - the marker appears BEFORE the build has
-finished, and the completion report arrives later as a live append.
+The cargo-block idea comes from the Aphrodite/Hermes work.
+The verified origin text is Aphrodite's own research note, ~/Developer/Application/PlayForm/Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md:120-146.
+A long cargo build flows through the CCR result transform (transform_tool_result_inner, hooks.rs:317-426) with a live-container fast path at :370-380 and the `<<<CCR:hash|type|size>>>` marker at the end.
+That is a RESULT-side transform: the build still blocks the turn, and the marker replaces the finished output.
+The user's wave-2 CAN-1 goes ONE step further: the CALL itself becomes non-awaited.
+The marker appears BEFORE the build has finished.
+The completion report arrives later as a LIVE append.
 
 ## 3. The Hermes delegate/poll mapping
 
@@ -89,10 +83,10 @@ PROCESSES (fire-and-forget calls)". In this harness the mapping is exact:
 | list/kill | job_list() / job_kill(job_id, reason?) - dsh-tool-jobs |
 | completion report | the completion notice: busy agents get it injected into the next step; idle agents are woken with a follow-up turn; maxConsecutiveWakes caps the self-exciting chain |
 
-The v1 research hosted live blocks in the system-prompt/assemble seam.
-Wave 2 moves the center of gravity to the TOOL side: the assemble seam
-remains for standing blocks (templates, CAN-3), but CAN-1 and CAN-2 live on
-the jobs subsystem + the tools waterfall + completion notices.
+The v1 research hosted LIVE blocks in the system-prompt/assemble seam.
+Wave 2 moves the center of gravity to the TOOL side.
+The assemble seam remains for standing blocks (templates, CAN-3).
+CAN-1 and CAN-2 LIVE on the jobs subsystem + the tools waterfall + completion notices.
 
 ## 4. The requirement-file index
 
@@ -108,29 +102,23 @@ the jobs subsystem + the tools waterfall + completion notices.
 
 ## 5. The shared non-negotiables (inherited from the family)
 
-1. Never throw into a waterfall listener: next() FIRST, fail-open try/catch
-	(hook-dsh-ccr Apply.ts:207, 257-266; hook-dsh-tool-coach Apply.ts:402,
-	437-445).
-2. Ledger strings byte-exact, one log per module, prefix per the plugin's
-	name (the family ledger contract).
-3. Volatile Schemastery cells for hot-editable knobs (the normalize-dash
-	Config.ts pattern; the factory State builder unwraps `{ get }` cells).
-4. The IDLE-forever posture: ship DISABLED, enable only by explicit
-	ACTIVATE (the v1 research's residual 5).
-5. The LIVE CONTAINER frame stays the plugin's own output - never
-	impersonate harness state.
-6. KV-cache honesty: anything that rewrites the prompt tail loses provider
-	prefix reuse from its first changed token; append-only notices and
-	stable-until-event blocks are preferred (v1 research section 2-3).
-7. THE COMMAND-ONLY DETACH RULE (I1, binding - 01 section 12.1, 07
-	section 5.1): the live transform detaches ONLY command-executing
-	tools (bash, pwsh, cargo, npm, the command runners); content-mutating
-	tools (write, edit, raw-write, normalize-file) NEVER detach - the
-	fs/observed governance chain fires synchronously on tool-layer writes
-	and a detached write would race it, silently breaking pin/govern.
-8. THE SANDBOX + FAIL-OPEN RULE (I1, binding - 01 section 12.2, 07
-	section 5.2): detached commands run under the same sandbox/deadlines/
-	output-caps as the ptc runtime; the transform listener is fail-open
-	(never throws into the tools waterfall - the CCR/tool-coach
-	precedent); the "still running" marker is the failure fallback and no
-	completion is fabricated without an observed settle.
+1. NEVER throw into a waterfall listener.
+	`next()` FIRST, fail-open try/catch (hook-dsh-ccr Apply.ts:207, 257-266; hook-dsh-tool-coach Apply.ts:402, 437-445).
+2. Ledger strings byte-exact.
+	ONE log per module, prefix per the plugin's name (the family ledger contract).
+3. Volatile Schemastery cells for hot-editable knobs (the normalize-dash Config.ts pattern; the factory State builder unwraps `{ get }` cells).
+4. The IDLE-forever posture: ship DISABLED, enable ONLY by explicit ACTIVATE (the v1 research's residual 5).
+5. The LIVE CONTAINER frame stays the plugin's own output.
+	NEVER impersonate harness state.
+6. KV-cache honesty: anything that rewrites the prompt tail loses provider prefix reuse from its FIRST changed token.
+	Append-only notices and stable-until-event blocks are preferred (v1 research section 2-3).
+7. THE COMMAND-ONLY DETACH RULE (I1, binding - 01 section 12.1, 07 section 5.1).
+	The LIVE transform detaches ONLY command-executing tools (bash, pwsh, cargo, npm, the command runners).
+	Content-mutating tools (write, edit, raw-write, normalize-file) NEVER detach.
+	The fs/observed governance chain fires synchronously on tool-layer writes.
+	A detached write would race it, silently breaking pin/govern.
+8. THE SANDBOX + FAIL-OPEN RULE (I1, binding - 01 section 12.2, 07 section 5.2).
+	Detached commands run under the same sandbox/deadlines/output-caps as the ptc runtime.
+	The transform listener is fail-open (NEVER throws into the tools waterfall - the CCR/tool-coach precedent).
+	The "still running" marker is the failure fallback.
+	NO completion is fabricated WITHOUT an observed settle.

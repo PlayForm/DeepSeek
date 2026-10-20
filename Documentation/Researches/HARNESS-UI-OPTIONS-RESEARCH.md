@@ -123,13 +123,13 @@ declaration, NO `./client` export), so on the running desktop/web profile:
   cordis.patch.yml by hand (which the loader HMRs live, including volatile-only
   hot commits), or (b) restart.
 
-VERDICT: the family's options are UI-VISIBLE-ADJACENT but not UI-EDITABLE today
+VERDICT: the family's options are UI-VISIBLE-ADJACENT but NOT UI-EDITABLE today
 (the editable backend + wire exist and already describe the family's live
 values; the missing piece is a browser half that renders them). Making them
 UI-powered is FEASIBLE WITH A SMALL, WELL-SUPPORTED ADDITION: one family
 client half registering a `plugins.row.config` entry per family row (or one
 `plugins.item`/`plugins.tab` "family control panel") over
-`ctx.configForms.whileServed`. No harness code changes are required; the
+`ctx.configForms.whileServed`. NO harness code changes are required; the
 harness's own docs prescribe exactly this pattern.
 
 ### 1.4 Doc anchors for the pattern (primary material)
@@ -161,9 +161,9 @@ harness's own docs prescribe exactly this pattern.
 
 ## 2. THE GAP MAP - which family knobs are UI-editable today vs which need the surface
 
-Today NOTHING is UI-editable (no browser half). The map below shows what the
+Today NOTHING is UI-editable (NO browser half). The map below shows what the
 existing backend WOULD expose through a client half once one exists, split
-volatile (live-editable, no remount - the settings-service path) vs plain
+volatile (live-editable, NO remount - the settings-service path) vs plain
 (structural: excluded from settings forms; a write requires a full-config edit
 through configEditor, which remounts the plugin on apply).
 
@@ -182,19 +182,20 @@ Per-module (Config.ts sources under <FAM>/<pkg>/Source/Variable/Config.ts):
 
 Key gaps to close, in order of impact:
 
-1. THE SURFACE GAP (blocking): no browser half / no slot registration for any
-   family row → no Configure control anywhere in the UI.
+1. THE SURFACE GAP (blocking): NO browser half / NO slot registration for any
+   family row → NO Configure control anywhere in the UI.
 2. THE PLAIN-FIELD GAP: the governors' policy knobs (strict, policyFile, exclude,
    sections, ncuBin/cargoBin, updateMode) and ccr's structural knobs are NOT
    expressible through the settings service (its writes hard-fail "Config field
-   ... is not volatile"). UI-editing them requires either (a) a small host-side
-   remote wrapper around `configEditor.edit()` (configEditor has no @Remote
+   ... is not volatile").
+   UI-editing them requires either (a) a small host-side
+   remote wrapper around `configEditor.edit()` (configEditor has NO @Remote
    methods today), or (b) reclassifying the knob as `.volatile()` in the family
    schema when remounting is actually harmless, or (c) leaving them file-only.
-3. THE AUTOGENERATE GAP: `autoGenerate: true` is advertised on the wire but no
-   client page consumes it to auto-generate forms; until one does, each family
+3. THE AUTOGENERATE GAP: `autoGenerate: true` is advertised on the wire but NO
+   client page consumes it to auto-generate forms; until one does, EACH family
    row needs an explicit `plugins.row.config` registration.
-4. THE BUILD GAP: the family's factory does not build client bundles
+4. THE BUILD GAP: the family's factory does NOT build client bundles
    (`clientBundle` tsdown preset is harness-internal; the family must emit the
    lazy-CJS factory format `./client` itself, per cookbook §5).
 
@@ -219,16 +220,18 @@ cookbook's companion-package pattern):
 	  live-containers). The page then exists exactly while the Host serves them
 	  (i.e. while the family is composed) and withdraws when a row is switched off.
 	- Register into the Plugins page's `plugins.row.config` slot once per family
-	  row (key: `"<package>#<row id>"`) so each family row on its bundle page gets
+	  row (key: `"<package>#<row id>"`) so EACH family row on its bundle page gets
 	  a Configure control; and/or a single `plugins.item` entry ("Family control
-	  panel") that renders all family namespaces under one save.
+	  panel") that renders ALL family namespaces under one save.
 	- Rendering: read `ctx.configForms.describe()` for each namespace; the
 	  descriptor already carries the serialized schema, resolved value, base layer
-	  (what the composition supplies), and user layer. Rehydrate the schema with
+	  (what the composition supplies), and user layer.
+	  Rehydrate the schema with
 	  `new Schema(json)` (schemastery) and render it - either by reusing
 	  ui-primitives' `SettingsFormModel` + `ConfigField` (the same widgets the
 	  official Subagent/shell pages use) or a small generic renderer over the
-	  schema envelope. Save via `form.mutate(operations, expectedRevision)`
+	  schema envelope.
+	  Save via `form.mutate(operations, expectedRevision)`
 	  (revision-fenced; conflicts preserve drafts).
 	- Status/ledger strip: per namespace show `form.state` (writable/revision),
 	  the user-vs-base delta (which fields the profile patch overrides), and the
@@ -246,8 +249,8 @@ cookbook's companion-package pattern):
 3. Loader `Entry.update()` sees a config-only change; `equalExceptVolatile`
    says volatile-only; `_commitVolatile()` resolves the candidate through the
    plugin's `internal/config` hook, commits into the running references, emits
-   instance-local `loader/volatile-update` with the changed paths. The plugin's
-   next operation reads the new value via `.get()` - no remount, no restart.
+   instance-local `loader/volatile-update` with the changed paths.
+   The plugin's next operation reads the new value via `.get()` - NO remount, NO restart.
 4. `settings/document-updated` folds the answer into the browser mirror; the
    form and any ledger strip refresh; a refusal (invalid value, stale revision,
    higher-layer override) restores the file and reports, leaving live values
@@ -272,12 +275,12 @@ cookbook's companion-package pattern):
 
 ## 4. MINIMAL PROOF-OF-CONCEPT PATH
 
-The smallest change that makes the family's options UI-editable, no harness edits:
+The smallest change that makes the family's options UI-editable, NO harness edits:
 
 1. Pick ONE fully-volatile module - `hook-dsh-tool-coach` or
-   `hook-dsh-live-containers` (every knob is volatile; the settings service
+   `hook-dsh-live-containers` (EVERY knob is volatile; the settings service
    covers 100% of their fields).
-2. Add a client half to THAT package only (cookbook §5 shape): package.json gains
+2. Add a client half to THAT package ONLY (cookbook §5 shape): package.json gains
    `./client` export + `dsh.client` (`inject: ["@deepseek-ai/dsh-client-ui-settings"]`);
    build `./client` as the lazy-CJS factory format script (one file,
    `factory(require)`; hand-rolled or a small tsdown config copied from the
@@ -302,14 +305,14 @@ half to the remaining family rows (or folds them into one panel package);
 phase 3 adds the plain-field bridge service for the governors' policy knobs.
 
 Residual constraints to know before building:
-- Only entries uniquely addressed by the root Include are editable - true for
-  every family row in the desktop profile (each id appears once).
-- Edits target the active profile patch only; home patches / CLI overlays are
+- ONLY entries uniquely addressed by the root Include are editable - true for
+  EVERY family row in the desktop profile (each id appears once).
+- Edits target the active profile patch ONLY; home patches / CLI overlays are
   read-only precedence (configEditor README §Known limitations).
 - The desktop profile's family rows currently carry FULL explicit configs, so
-  every field shows as user-overridden; values edited in the UI update those
-  overrides in place.
-- The client page lives only while the host row is enabled (`dsh-client-modules`
+  EVERY field shows as user-overridden; values edited in the UI update those
+  overrides IN PLACE.
+- The client page lives ONLY while the host row is enabled (`dsh-client-modules`
   attaches the half to the row) - a switched-off family row loses its page,
   which is the desired behavior.
 
@@ -327,24 +330,24 @@ Residual constraints to know before building:
 	- is revision-fenced: a concurrent change yields a conflict that preserves
 	  the draft; an invalid value is refused with file AND live value unchanged.
 3. Switching the family row off removes the page; switching it on restores it
-   (whileServed semantics), with no orphaned registration.
+   (whileServed semantics), with NO orphaned registration.
 4. Survives restart: values persist in the profile patch and reload correctly.
 5. Phase 2 (plain fields): the governors' policy knobs become editable through
    the bridge with an explicit "applies on remount" marker, and the remount is
    observable in the UI's row status.
-6. No harness source changes are required for phases 1-2; any harness-side gap
-   found during the POC is filed as a documented residual, not a local monkey-patch.
+6. NO harness source changes are required for phases 1-2; ANY harness-side gap
+   found during the POC is filed as a documented residual, NOT a local monkey-patch.
 
 ## 6. RESIDUALS / OPEN QUESTS
 
-- No client page currently consumes `autoGenerate`; a generic auto-form would
-  remove the need for per-row registrations but is harness work, not family work.
-- `configEditor` has no @Remote surface; the plain-field bridge (§3.2 step 5) is
-  a new family-host service and the only place a family package must be trusted
+- NO client page currently consumes `autoGenerate`; a generic auto-form would
+  remove the need for per-row registrations but is harness work, NOT family work.
+- `configEditor` has NO @Remote surface; the plain-field bridge (§3.2 step 5) is
+  a new family-host service and the ONLY place a family package must be trusted
   with full-config writes.
-- The family's factory currently has no client build step; the POC hand-builds
+- The family's factory currently has NO client build step; the POC hand-builds
   one `./client` file, then the factory gains a reusable `clientBundle` step.
-- The live GUI page was not reachable from this session for a DOM-level
+- The live GUI page was NOT reachable from this session for a DOM-level
   confirmation (client inspect queries timed out with the page closed); the
   Plugins-page behavior was verified from the shipped client bundle source and
   package READMEs instead.

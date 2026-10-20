@@ -22,7 +22,7 @@ statuses:
 
 ## 1. The requirement statement (the user's intent, faithful)
 
-On the basis of task - not even notifying the conversation or the user -
+On the basis of task - NOT even notifying the conversation or the user -
 most tasks require live-block-ability as failsafes in different scenarios,
 like the tool-coach: fully modify the harness's behavior automatically.
 
@@ -33,14 +33,14 @@ a bad call at tier 3 with a reason text, silently resets on a user message -
 the model experiences the modification as ordinary harness behavior
 (hook-dsh-tool-coach Apply.ts:392-445, 456-490). The failsafe layer adopts
 that posture: when a task meets a trigger condition, the plugin modifies
-behavior WITHOUT a conversational announcement - the ledger (a file the user
-reads) is the only notice channel besides the log.
+behavior WITHOUT a conversational announcement. The ledger (a file the user
+reads) is the ONLY notice channel besides the log.
 
 The five notice channels, in escalating loudness (the config selects the
 ceiling per scenario):
 
 1. **ledger only** (default - CAN-4's "not even notifying the conversation"):
-	a byte-exact line in the plugin's ledger file. Nobody in the conversation
+	a byte-exact line in the plugin's ledger file. NOBODY in the conversation
 	knows.
 2. **log warn**: the context logger's warn line (the fail-open catch's
 	channel).
@@ -61,8 +61,8 @@ Each: trigger / automatic action / notice channel / containment.
 	`hangBudgetMs` (default 120000) with ZERO new output bytes.
 	Action: ledger `failsafe hang <job-id> (<n>s no output)`; on
 	`hangAction: "kill"` (default "warn-only") kill with reason
-	`live-hang`. Channel: ledger only. Containment: the kill is the
-	registry's, never a subprocess force-kill by our code.
+	`live-hang`. Channel: ledger ONLY. Containment: the kill is the
+	registry's, NEVER a subprocess force-kill by our code.
 2. **The delegation stalls** - a planted board's member is [stalled] past
 	`stallBudgetMs` (default 180000).
 	Action: the board row flips (model-visible at next request - that is
@@ -76,7 +76,7 @@ Each: trigger / automatic action / notice channel / containment.
 	thresholds (messages > N, sinceLastTool > S while a live board is open).
 	Action: shift the affected template blocks' severity rendering (a WARN
 	line inside the frame). Channel: 4 (+ledger). This is the validator
-	template's automatic twin: the user did not install the validator, the
+	template's automatic twin: the user did NOT install the validator, the
 	failsafe layer renders the same guard from thresholds it owns.
 5. **The retry loop** - the dedup counter (CAN-1 section 7) reaches
 	`retryFailsafeCount` (default 3) for the same normalized command.
@@ -85,47 +85,47 @@ Each: trigger / automatic action / notice channel / containment.
 	`[live] already running as <job-id> (3rd attempt) - use job_output.`
 	Channel: 4 (model guidance), ledger 1.
 6. **The orphaned board** - a planted board whose parent agent's requests
-	have not run for `orphanBudgetMs` (default 600000) while members are
+	have NOT run for `orphanBudgetMs` (default 600000) while members are
 	still live.
-	Action: ledger only; the board is NOT withdrawn (the parent may return);
+	Action: ledger ONLY; the board is NOT withdrawn (the parent may return);
 	its members' reports keep landing.
 7. **The silent modification budget** - the meta-failsafe: the failsafe
 	layer itself is capped (`failsafesPerTurn` default 5); exceeding it
 	disables automatic modification for the rest of the turn (pass-through
-	everywhere) and logs one summary line. The tool-coach never meta-limits;
+	everywhere) and logs ONE summary line. The tool-coach NEVER meta-limits;
 	we must, because CAN-4's posture is silent and an unbounded silent
-	modifier is the one unforgivable failure mode.
+	modifier is the ONE unforgivable failure mode.
 8. **The context-drift guard** - the standing live section's bytes exceed
 	`sectionBudgetBytes` (default 4096): the oldest blocks are collapsed to
-	one-line summaries (never dropped silently - the ledger records
+	one-line summaries (NEVER dropped silently - the ledger records
 	`failsafe section-collapse <n>`), so the prompt tail cannot grow without
 	bound.
 
 ## 4. The trigger conditions (the "basis of task")
 
 The user said "on the basis of task". Concrete reading: the triggers key on
-the task's observable shape, not its semantic content:
+the task's observable shape, NOT its semantic content:
 
 - task = (conversation with) live jobs, planted boards, detached calls,
 	their ages, their output rates, their counts.
 - The plugin observes these through ctx.jobs events, post-execute,
-	pre-step, and its own per-agent state - a pure observer; no message
+	pre-step, and its own per-agent state - a pure observer; NO message
 	content is read for trigger evaluation (privacy gate inherited from the
-	v1 programmable stage's `context: "full"` rule; triggers never need
+	v1 programmable stage's `context: "full"` rule; triggers NEVER need
 	content).
 
 ## 5. The safety (never throw into the waterfall)
 
-- Every failsafe action is wrapped in the family fail-open discipline; a
+- EVERY failsafe action is wrapped in the family fail-open discipline; a
 	failsafe that cannot act logs and passes through. The failsafe layer can
 	NEVER deny a call, drop content, or cancel a job because of its own
 	internal error.
-- Killing is the only destructive action and it goes through the registry's
+- Killing is the ONLY destructive action and it goes through the registry's
 	kill (a supported path), gated behind `hangAction`/explicit config.
 - The silent-modification budget (scenario 7) bounds the layer's own power.
 - The IDLE-forever posture applies: the failsafe layer ships disabled;
 	`failsafes: "off"` is the default mode even when the plugin is enabled
-	(on = only templates render; failsafes are a second explicit flip).
+	(on = ONLY templates render; failsafes are a second explicit flip).
 
 ## 6. The seam map
 
@@ -143,8 +143,8 @@ the task's observable shape, not its semantic content:
 	only if configured, a registry kill with a recorded reason.
 2. A stalled board member flips at the next request; a pruning action
 	closes the board honestly.
-3. All admission-limit events pass through inline with a ledger line - the
-	model never sees an unexplained inline-vs-detached inconsistency beyond
+3. ALL admission-limit events pass through inline with a ledger line - the
+	model NEVER sees an unexplained inline-vs-detached inconsistency beyond
 	the absence of the marker.
 4. The meta budget disables automatic modification after failsafesPerTurn
 	and logs the summary; no test can drive the layer to throw.

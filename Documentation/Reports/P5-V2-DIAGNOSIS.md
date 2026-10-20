@@ -103,40 +103,24 @@ With the open failing, `SharedJournal` is NEVER bound and `PendingJournal` is NE
 
 **Path 1 - pick ONE of (a) or (b), plus (c) always:**
 
-- **(a) One-time rotation of the v1 file.** Rename (don't delete)
-  `~/.dsh/storages/package_governance.json` → e.g. `...json.v1.bak`. The next boot's v2 open sees no
-  file, creates it fresh, and stamps `version: 2` on the first publish. Fits the family doctrine
-  (Open.ts:14-18: the journal is "the structured, disposable one"; the ledgers are the complete
-  record); precedent: `f4aaf6b` already removed the file from `~/.dsh` git tracking once. **`~/.dsh`
-  is the user's home — this is the user's call; the parent should ask before touching it.**
-- **(b) Structural self-migration (no user action needed):** declare `layout: "per-record"` +
-  `compatibleVersions: [1]` in the v2 spec. The per-record backend's legacy bootstrap
-  (`bootstrapLegacyUnit`, storage-json lib 370-404) copies every record of a v1-stamped single file
-  into per-record documents when the file's version is in `acceptedStamps` (`[2, 1]`) — the 76
-  records migrate automatically on the next open, the legacy file is left untouched, and all of them
-  validate against the widened enum. Bonus: one small atomic write per record instead of whole-file
-  rewrites. Note `compatibleVersions` alone (without the layout switch) does **not** help:
-  single-layout `parse()` checks exact equality only.
-- **(c) Always: make the Open failure loud.** Replace the bare `catch` at `Open.ts:135-137` with a
-  single ledger line (e.g. via the same `Factory.Append`/append path the modules use):
-  `[ts] storage journal open failed (<code>): <message>`. The silence is what made this
-  undiagnosable; the ledger stays the complete record either way. Also add
-  `invalidRecords: "backup-and-skip"` to the spec so one corrupt record can never brick the open
-  again (currently the whole open fails on a single invalid stored record).
+- **(a) One-time rotation of the v1 file.** Rename (don't delete) `~/.dsh/storages/package_governance.json` → e.g. `...json.v1.bak`.
+  The next boot's v2 open sees NO file, creates it fresh, and stamps `version: 2` on the FIRST publish.
+  Fits the family doctrine (Open.ts:14-18: the journal is "the structured, disposable one"; the ledgers are the complete record); precedent: `f4aaf6b` already removed the file from `~/.dsh` git tracking once.
+  **`~/.dsh` is the user's home — this is the user's call; the parent should ask before touching it.**
+- **(b) Structural self-migration (NO user action needed):** declare `layout: "per-record"` + `compatibleVersions: [1]` in the v2 spec.
+  The per-record backend's legacy bootstrap (`bootstrapLegacyUnit`, storage-json lib 370-404) copies EVERY record of a v1-stamped single file into per-record documents when the file's version is in `acceptedStamps` (`[2, 1]`) — the 76 records migrate automatically on the next open, the legacy file is left untouched, and ALL of them validate against the widened enum.
+  Bonus: ONE small atomic write per record instead of whole-file rewrites.
+  Note `compatibleVersions` alone (WITHOUT the layout switch) does **NOT** help: single-layout `parse()` checks exact equality ONLY.
+- **(c) ALWAYS: make the Open failure loud.** Replace the bare `catch` at `Open.ts:135-137` with a single ledger line (e.g. via the same `Factory.Append`/append path the modules use): `[ts] storage journal open failed (<code>): <message>`.
+  The silence is what made this undiagnosable; the ledger stays the complete record either way.
+  Also add `invalidRecords: "backup-and-skip"` to the spec so ONE corrupt record can NEVER brick the open again (currently the whole open fails on a single invalid stored record).
 
 **Path 2 - keep `aa53c91` as-is; fix the failure path, not the retirement:**
 
-- Do **not** defer the `PendingJournal` retirement: it is correct today (stage 1 is checked first,
-  so post-retirement records go straight through the shared sink); deferring only widens the window
-  in which records sit in a buffer a later failing open will never drain.
-- No need for "stage 3 drains through the shared sink": that is already the effective behavior of
-  stage 1; the per-State queue is dead weight on the happy path.
-- The real gap is the _failed_ open: (i) the loud log from (c) above; and (ii) optionally one lazy
-  re-open retry - in the `Journal.ts` stage-2 branch, when the buffer crosses a threshold (e.g. 64)
-  trigger a single re-attempt of the Open (a boolean flag prevents hammering), covering both the
-  current permanent failure and transient ones (storage service not yet ready at apply time). Stage
-  2 silently dropping at the 256 cap (`Journal.ts:46-55`) should also emit one ledger line per boot
-  at most.
+- Do **NOT** defer the `PendingJournal` retirement: it is correct today (stage 1 is checked FIRST, so post-retirement records go straight through the shared sink); deferring ONLY widens the window in which records sit in a buffer a later failing open will NEVER drain.
+- NO need for "stage 3 drains through the shared sink": that is already the effective behavior of stage 1; the per-State queue is dead weight on the happy path.
+- The real gap is the _failed_ open: (i) the loud log from (c) above; and (ii) optionally ONE lazy re-open retry - in the `Journal.ts` stage-2 branch, when the buffer crosses a threshold (e.g. 64) trigger a single re-attempt of the Open (a boolean flag prevents hammering), covering BOTH the current permanent failure and transient ones (storage service NOT yet ready at apply time).
+  Stage 2 silently dropping at the 256 cap (`Journal.ts:46-55`) should also emit ONE ledger line per boot at most.
 
 ## Key citations
 

@@ -167,12 +167,10 @@ EXACT LOCATIONS
 
 EXACT STEPS
 1. Re-read the four research documents and this plan. Recite section 0.
-2. Read the live profile patch (~/.dsh/profiles/desktop/cordis.patch.yml) and
-	confirm: which of the 13 bundles carry an explicit disabled flag, the exact
-	row ids for every family entry (these ids ARE the plugins.row.config keys
-	and the whileServed namespaces later), and whether tool-coach and
-	live-containers rows default (R-UI-1 residual: they carry no explicit
-	disabled flag).
+2. Read the live profile patch (~/.dsh/profiles/desktop/cordis.patch.yml) and confirm:
+	which of the 13 bundles carry an explicit disabled flag;
+	the exact row ids for EVERY family entry (these ids ARE the plugins.row.config keys and the whileServed namespaces later);
+	whether tool-coach and live-containers rows default (R-UI-1 residual: they carry NO explicit disabled flag).
 3. THE MOUNT-FAILURE INVESTIGATION.
 	R-UI-1/R-UI-3 record that a prior client install attempt produced live-containers "fiberPhase:failed".
 	Investigate the class before writing ANY client half:
@@ -430,17 +428,15 @@ A3.4 The coach's existing smokes stay byte-identical; the new coverage is
 PHASE 4 - THE OPTIONS FORMS: ALL VOLATILE ROWS
 --------------------------------------------------------------------------------
 
-THE GOAL: every family bundle's volatile knobs become GUI-editable. Phase 3
-proved the pattern on one bundle; this phase replicates it across the rest
-and adds the aggregate panel.
+THE GOAL: EVERY family bundle's volatile knobs become GUI-editable.
+Phase 3 proved the pattern on ONE bundle.
+This phase replicates it across the rest and adds the aggregate panel.
 
 EXACT LOCATIONS
-- The client-half pattern is per-bundle, but the FORM machinery is shared:
-	decide (and record here) whether each bundle ships its own ./client or the
-	central package registers forms for all rows. THE DECISION: per-bundle
-	client halves (the R-UI-3 architecture: visuals/config live in the owner;
-	the central package stays contract-only) - the forms use a small shared
-	renderer copied per bundle via the family's build (no runtime cross-import).
+- The client-half pattern is per-bundle, but the FORM machinery is shared.
+	Decide (and record here) whether EACH bundle ships its own ./client or the central package registers forms for all rows.
+	THE DECISION: per-bundle client halves (the R-UI-3 architecture: visuals/config live in the owner; the central package stays contract-only).
+	The forms use a small shared renderer copied per bundle via the family's build (NO runtime cross-import).
 - The bundles and their volatile coverage (from R-UI-2 section 2):
 	hook-dsh-package-governor, hook-dsh-package-pinner,
 	hook-dsh-cargo-governor  - shared block knobs (log, logFile,
@@ -465,24 +461,17 @@ EXACT STEPS
 	c. Additive smoke for the panel gate.
 	d. Build; smokes; install; live-verify one knob per bundle end-to-end
 		(patch override + no remount + refusal + persistence).
-2. THE STATUS STRIP: each form shows form.state (writable/revision), the
-	user-vs-base delta, and the applies:"live" marker; subscribe
-	settings/document-updated to refresh (R-UI-2 section 3.1 - this is the
-	"per-plugin ledger/status display" without any new backend).
-3. THE AGGREGATE: one plugins.item entry (id "family-panel") in the central
-	package listing all family namespaces under one view (read-only summary +
-	deep links via pluginNavigation; editing stays per-row).
-4. THE BADGE: plugins.detail.badge (id "playform-family-badge") - the
-	"family" tag on each of the 13 bundle pages (R-UI-1).
-5. THE SECTION: plugins.detail.section (id "playform-family") - the roster
-	card on every @playform bundle page: the 13 bundles grouped (factory /
-	governors / normalize flavors / ccr / tool-coach), live enabled states
-	from remote.pluginManager + ctx.remote.$on("plugin-manager/changed"),
-	deep links via pluginNavigation.openBundle (R-UI-1 section 3 - the
-	central package hosts this; it is contract-adjacent UI, not adapter
-	logic).
-6. Update Documentation/Plugins/PLUGIN-FAMILY.md with the new UI surface;
-	bump the affected packages; READY-TO-COMMIT report.
+2. THE STATUS STRIP: EACH form shows form.state (writable/revision), the user-vs-base delta, and the applies:"live" marker.
+	Subscribe settings/document-updated to refresh (R-UI-2 section 3.1 - this is the "per-plugin ledger/status display" WITHOUT ANY new backend).
+3. THE AGGREGATE: ONE plugins.item entry (id "family-panel") in the central package listing ALL family namespaces under one view (read-only summary + deep links via pluginNavigation; editing stays per-row).
+4. THE BADGE: plugins.detail.badge (id "playform-family-badge") - the "family" tag on EACH of the 13 bundle pages (R-UI-1).
+5. THE SECTION: plugins.detail.section (id "playform-family") - the roster card on EVERY @playform bundle page.
+	The 13 bundles grouped (factory / governors / normalize flavors / ccr / tool-coach).
+	Live enabled states from remote.pluginManager + ctx.remote.$on("plugin-manager/changed").
+	Deep links via pluginNavigation.openBundle (R-UI-1 section 3 - the central package hosts this; it is contract-adjacent UI, NOT adapter logic).
+6. Update Documentation/Plugins/PLUGIN-FAMILY.md with the new UI surface.
+	Bump the affected packages.
+	READY-TO-COMMIT report.
 
 ANCHORS: R-UI-2 sections 2-3 (the gap map + the design); the nine slots
 (plugin-manager client.js:4411-4461); the coach's schema qualification as the
@@ -506,9 +495,7 @@ A4.5 The aggregate family-panel item lists all namespaces with correct
 PHASE 5 - THE REMAINING ADAPTERS + THE LEDGER TAILS (the host/Typert endpoint)
 --------------------------------------------------------------------------------
 
-THE GOAL: the remaining 12 bundles register their visual sections into the
-central registry, and the panel gains LIVE data - the ledger tails and
-fiberPhases - through a family-host Typert remote endpoint.
+THE GOAL: the remaining 12 bundles register their visual sections into the central registry, and the panel gains LIVE data - the ledger tails and fiberPhases - through a family-host Typert remote endpoint.
 
 EXACT LOCATIONS
 - The adapters (each bundle's client half gains a section registration):
@@ -532,23 +519,14 @@ EXACT LOCATIONS
 	(the documented caveat; budget real build time for it).
 
 EXACT STEPS
-1. Build the Typert endpoint FIRST as a standalone spike (one method:
-	tail("hook-dsh-tool-coach", 20)) following adding-a-remote-api.md's five
-	steps; prove the descriptor generation from an external package. If the
-	generation cannot be reproduced outside the harness repo, record ESCALATE
-	or fall back to the v1 shortcut (expose only existing remote namespaces;
-	ledgers deferred - the pre-decided fallback from R-UI-1 section 3).
-2. On success, extend to the full endpoint: tail(namespace, lines) for each
-	family log + storeStats() (ccr) + nothing else (least privilege; the
-	endpoint reads ~/.dsh logs ONLY).
-3. Wire the endpoint into the central client: ctx.remote.<namespace> +
-	ctx.remote.$on for updates; sections consume props.open + the tail data.
-4. Implement the 12 adapters' sections (each in its OWN bundle's client
-	half; visuals live in the owner; the central package renders whatever is
-	registered).
-5. Each adapter: additive smoke (panel gate + section data shape), build,
-	smokes, install, live-verify (section renders; data refreshes while the
-	page stays open; the bundle's disable removes only its section).
+1. Build the Typert endpoint FIRST as a standalone spike (one method: tail("hook-dsh-tool-coach", 20)) following adding-a-remote-api.md's five steps.
+	Prove the descriptor generation from an external package.
+	If the generation cannot be reproduced outside the harness repo, record ESCALATE or fall back to the v1 shortcut (expose ONLY existing remote namespaces; ledgers deferred - the pre-decided fallback from R-UI-1 section 3).
+2. On success, extend to the full endpoint: tail(namespace, lines) for EACH family log + storeStats() (ccr) + nothing else (least privilege; the endpoint reads ~/.dsh logs ONLY).
+3. Wire the endpoint into the central client: ctx.remote.<namespace> + ctx.remote.$on for updates.
+	Sections consume props.open + the tail data.
+4. Implement the 12 adapters' sections (each in its OWN bundle's client half; visuals live in the owner; the central package renders whatever is registered).
+5. Each adapter: additive smoke (panel gate + section data shape), build, smokes, install, live-verify (section renders; data refreshes while the page stays open; the bundle's disable removes ONLY its section).
 6. The live-containers guard: its client half must NOT be enabled by default
 	(the bundle's Config.enabled is false by design - idle-forever until
 	explicit ACTIVATE). Its adapter section registers but renders an
@@ -572,8 +550,8 @@ A5.4 The fallback decision (if step 1 failed) is recorded with evidence and
 PHASE 6 - THE INTERACTION IMPROVEMENTS R1-R10
 --------------------------------------------------------------------------------
 
-THE GOAL: implement the R-INTERACT recommendations, in the section 5 order,
-each with additive smoke coverage and zero changes to existing ledger strings.
+THE GOAL: implement the R-INTERACT recommendations, in the section 5 order.
+EACH gets additive smoke coverage and ZERO changes to existing ledger strings.
 
 EXACT LOCATIONS (per recommendation)
 - R1  Classic/packages/hook-dsh-ccr/Source/ - a read-only ccr_list tool (or
@@ -609,14 +587,13 @@ EXACT LOCATIONS (per recommendation)
 	(or the platform-correct equivalent).
 
 EXACT STEPS
-1. Work R1-R10 in the order above; each is its own commit-sized unit
-	(READY-TO-COMMIT per unit).
-2. Every recommendation gets ADDITIVE smoke coverage only: the existing
-	byte-identical ledger assertions must not move (the smoke-writing law).
-3. R7 and R8 touch hot paths (the coach's waterfall, the factory's gate) -
-	run the full 207-suite runner after each, not just the folder.
-4. Update the two package READMEs (ccr, tool-coach) for the user-facing
-	deltas (R1, R2, R4, R7).
+1. Work R1-R10 in the order above.
+	EACH is its own commit-sized unit (READY-TO-COMMIT per unit).
+2. EVERY recommendation gets ADDITIVE smoke coverage ONLY.
+	The existing byte-identical ledger assertions must NOT move (the smoke-writing law).
+3. R7 and R8 touch hot paths (the coach's waterfall, the factory's gate).
+	Run the full 207-suite runner after each, not just the folder.
+4. Update the two package READMEs (ccr, tool-coach) for the user-facing deltas (R1, R2, R4, R7).
 5. READY-TO-COMMIT report per unit.
 
 ANCHORS: R-INTERACT sections 3.5 (the shortcomings), 5.1-5.3 (the
@@ -636,9 +613,7 @@ A6.4 Zero existing ledger strings changed (grep-diff the asserted strings).
 PHASE 7 - THE PLAIN-FIELD BRIDGE + THE OPTION B TRAJECTORY SECTIONS
 --------------------------------------------------------------------------------
 
-THE GOAL: close the two structural gaps the researches left open - the
-governors'/ccr's plain (non-volatile) knobs, and the trajectory screen's
-closed seam.
+THE GOAL: close the TWO structural gaps the researches left open - the governors'/ccr's plain (non-volatile) knobs, and the trajectory screen's closed seam.
 
 EXACT LOCATIONS
 - THE PLAIN-FIELD BRIDGE (R-UI-2 section 3.2 step 5):
@@ -657,25 +632,16 @@ EXACT LOCATIONS
 	harness work, NOT family work.
 
 EXACT STEPS
-1. The bridge service: minimal surface (one method), schema-validated patch
-	input, the same revision/higher-layer checks configEditor enforces.
-	Record in the README that this is the one place a family package is
-	trusted with full-config writes.
-2. UI: the phase 4 forms gain a "plain" section per bundle fed by the
-	bridge; each plain field carries the "applies on remount" marker; the
-	row status shows the remount observably.
-3. Verify: edit a plain knob (e.g. package-governor strict) -> the patch
-	override lands -> the bundle remounts -> the new value is live -> the
-	UI reflects the remount event.
-4. OPTION B: write the upstream request as a documented proposal
-	(this file's appendix + a note in Documentation/Plans/) with the exact
-	declaration, the render sites (TrajectoryTable equivalents), and the
-	R-UI-3 section 1.4 reasoning. Do NOT shadow trajectory via priority
-	re-registration (explicitly rejected in the research). If the harness
-	release adds the slot, the central package adds the in-trajectory mount
-	as a phase 8 follow-up.
-5. Re-run the full arbiters; final READY-TO-COMMIT + plan-status update
-	(mark the phases completed in section 3 below).
+1. The bridge service: minimal surface (one method), schema-validated patch input, the same revision/higher-layer checks configEditor enforces.
+	Record in the README that this is the ONE place a family package is trusted with full-config writes.
+2. UI: the phase 4 forms gain a "plain" section per bundle fed by the bridge.
+	Each plain field carries the "applies on remount" marker.
+	The row status shows the remount observably.
+3. Verify: edit a plain knob (e.g. package-governor strict) -> the patch override lands -> the bundle remounts -> the new value is live -> the UI reflects the remount event.
+4. OPTION B: write the upstream request as a documented proposal (this file's appendix + a note in Documentation/Plans/) with the exact declaration, the render sites (TrajectoryTable equivalents), and the R-UI-3 section 1.4 reasoning.
+	Do NOT shadow trajectory via priority re-registration (explicitly rejected in the research).
+	If the harness release adds the slot, the central package adds the in-trajectory mount as a phase 8 follow-up.
+5. Re-run the full arbiters; final READY-TO-COMMIT + plan-status update (mark the phases completed in section 3 below).
 
 ANCHORS: R-UI-2 section 3.2 step 5 and section 5 item 5; R-UI-3 section 1.4
 options A/B; configEditor README (Known limitations);
@@ -696,64 +662,53 @@ A7.3 The Option B proposal exists as a precise upstream request (exact
 ================================================================================
 
 2.1 THE CLIENT-INSPECT TIMEOUT RESIDUAL
-	Risk: every client-platform inspect query (Slots.listSubTree,
-	Service.listService) times out when the GUI page is not open/connected.
-	Mitigation: phase 0 step 4 makes "GUI open" a precondition; every phase's
-	live-verify step states it; if a query times out, fall back to the
-	asar source + docs anchors (the method all four researches used) and
-	retry with the page open. Never treat a timeout as proof of absence.
+	Risk: EVERY client-platform inspect query (Slots.listSubTree, Service.listService) times out when the GUI page is not open/connected.
+	Mitigation: phase 0 step 4 makes "GUI open" a precondition.
+	Every phase's live-verify step states it.
+	If a query times out, fall back to the asar source + docs anchors (the method ALL four researches used) and retry with the page open.
+	NEVER treat a timeout as proof of absence.
 
 2.2 THE TYPORT DESCRIPTOR GENERATION
-	Risk: the remote descriptor generation pipeline lives in the harness
-	repo; an external package must reproduce the build (adding-a-remote-api
-	caveat). Mitigation: phase 5 step 1 is a standalone spike BEFORE any
-	adapter work depends on it, with the pre-decided fallback (registry-only
-	data, ledgers deferred). Budget: if the spike exceeds a session, take
-	the fallback and record it.
+	Risk: the remote descriptor generation pipeline lives in the harness repo.
+	An external package must reproduce the build (adding-a-remote-api caveat).
+	Mitigation: phase 5 step 1 is a standalone spike BEFORE ANY adapter work depends on it, with the pre-decided fallback (registry-only data, ledgers deferred).
+	Budget: if the spike exceeds a session, take the fallback and record it.
 
 2.3 THE MOUNT-FAILURE CLASS
-	Risk: a prior client install produced live-containers fiberPhase:failed -
-	a live example of a client half failing at mount. Phase 0 step 3
-	investigates the cause (config-shape mismatch, client load error, or
-	apply throw are the candidates). Mitigation: the throwaway install in
-	phase 0 step 5 exercises the path before real work; every install step
-	phases 2-5 verifies the GUI row status immediately; a reproduced failure
-	STOPS the phase (recorded here). [TO BE RESOLVED IN PHASE 0 - the cause
-	and the GUI error surface go here.]
+	Risk: a prior client install produced live-containers fiberPhase:failed - a live example of a client half failing at mount.
+	Phase 0 step 3 investigates the cause (config-shape mismatch, client load error, or apply throw are the candidates).
+	Mitigation: the throwaway install in phase 0 step 5 exercises the path before real work.
+	Every install step phases 2-5 verifies the GUI row status immediately.
+	A reproduced failure STOPS the phase (recorded here).
+	[TO BE RESOLVED IN PHASE 0 - the cause and the GUI error surface go here.]
 
 2.4 THE MERMAID 12 RENDERER PINNED
-	Risk: any diagrams in docs/site content must render through the pinned
-	Mermaid 12 renderer. Mitigation: keep plan/diagram authoring ASCII-first
-	(this file is ASCII + tabs); when a Mermaid diagram is required (site
-	pages), validate via the Line9 CLI per the flowchart-line9 skill before
-	the site build.
+	Risk: ANY diagrams in docs/site content must render through the pinned Mermaid 12 renderer.
+	Mitigation: keep plan/diagram authoring ASCII-first (this file is ASCII + tabs).
+	When a Mermaid diagram is required (site pages), validate via the Line9 CLI per the flowchart-line9 skill before the site build.
 
 2.5 THE PLUGIN-TARGET FRESHNESS
-	Risk: the family's Target/ trees are build output; stale Target content
-	gets installed. Mitigation: every install step runs Source/prepublishOnly.sh
-	immediately before install_bundle; never hand-edit Target/; the smokes
-	run against the just-built tree.
+	Risk: the family's Target/ trees are build output.
+	Stale Target content gets installed.
+	Mitigation: EVERY install step runs Source/prepublishOnly.sh immediately before install_bundle.
+	NEVER hand-edit Target/.
+	The smokes run against the just-built tree.
 
 2.6 THE RESTART-ONCE WINDOW (phase 3)
-	Risk: the client-half discovery happens on composition - the first
-	client-half install needs exactly one harness restart; a mid-restart
-	state can look like the mount-failure class. Mitigation: do the restart
-	at a known-good point (after the smokes are green), and verify the row
-	status in the GUI immediately after.
+	Risk: the client-half discovery happens on composition - the FIRST client-half install needs exactly ONE harness restart.
+	A mid-restart state can look like the mount-failure class.
+	Mitigation: do the restart at a known-good point (after the smokes are green), and verify the row status in the GUI immediately after.
 
 2.7 THE SINGLE-CLIENT-FILE LIMIT
-	Risk: the lazy-CJS ./client files are hand-written single files; the
-	coach's ladder + forms may outgrow hand-rolling. Mitigation: the
-	pre-decided escalation path - add a clientBundle build step to the
-	factory (the R-UI-2 build gap) once any client file exceeds
-	hand-maintainable size, modeled on <DSH>/packages/client/tsdown.client.ts.
+	Risk: the lazy-CJS ./client files are hand-written single files.
+	The coach's ladder + forms may outgrow hand-rolling.
+	Mitigation: the pre-decided escalation path - add a clientBundle build step to the factory (the R-UI-2 build gap) once ANY client file exceeds hand-maintainable size, modeled on <DSH>/packages/client/tsdown.client.ts.
 
 2.8 THE PROFILE-PATCH SINGLE POINT
-	Risk: all form writes target the active profile patch; a corrupted
-	cordis.patch.yml breaks the whole profile. Mitigation: the form writes
-	are revision-fenced and comment/!!js-preserving by construction
-	(configEditor); keep a pre-phase-3 copy of the patch for manual recovery
-	(documented in the phase 3 step 6 verification).
+	Risk: ALL form writes target the active profile patch.
+	A corrupted cordis.patch.yml breaks the whole profile.
+	Mitigation: the form writes are revision-fenced and comment/!!js-preserving by construction (configEditor).
+	Keep a pre-phase-3 copy of the patch for manual recovery (documented in the phase 3 step 6 verification).
 
 ================================================================================
 3. THE PLAN STATUS LEDGER (updated as phases complete)
@@ -772,53 +727,36 @@ A7.3 The Option B proposal exists as a precise upstream request (exact
 4. THE "MORE" - THE EXTENSIONS THE RESEARCHES SUGGEST (beyond the phases)
 ================================================================================
 
-Ordered by value; each is a candidate follow-up phase, not in the core seven.
+Ordered by value.
+EACH is a candidate follow-up phase, not in the core seven.
 
 E1  THE FAMILY PANEL'S DATA SOURCES, DEEPER
-	- The live ledgers' tails via the host + Typert endpoint: phase 5 does
-		tails; the extension is FOLLOW mode (streaming updates on append) and
-		cross-ledger search view (grep-style filter over the combined tails).
-	- The fiberPhases via the pluginManager remote: surface each family
-		bundle's fiber status in the roster section (mount/failed/running) -
-		turns the mount-failure class from section 2.3 into a VISIBLE signal
-		permanently.
-	- The knob forms via the config schemas: the generic renderer is already
-		built in phase 4; the extension is autoGenerate consumption - if the
-		harness later ships a generic auto-form consumer, the per-row
-		registrations can collapse to one (a harness-side gap, filed not
-		monkey-patched; R-UI-2 residual 1).
+	- The live ledgers' tails via the host + Typert endpoint: phase 5 does tails.
+		The extension is FOLLOW mode (streaming updates on append) and cross-ledger search view (grep-style filter over the combined tails).
+	- The fiberPhases via the pluginManager remote: surface EACH family bundle's fiber status in the roster section (mount/failed/running).
+		This turns the mount-failure class from section 2.3 into a VISIBLE signal permanently.
+	- The knob forms via the config schemas: the generic renderer is already built in phase 4.
+		The extension is autoGenerate consumption - if the harness later ships a generic auto-form consumer, the per-row registrations can collapse to ONE (a harness-side gap, filed not monkey-patched; R-UI-2 residual 1).
 
 E2  THE COACH'S MARKER-USAGE RULE (E=the phase 3 step 4 scope, expanded)
-	- Beyond R5/R6: a persistent-section line that teaches the FULL ccr happy
-		path (marker -> hash -> ccr_retrieve {hash, range?}), and the
-		terminal_send parity (R7) as one grammar block, composed via config
-		(the live-containers precedent: the coach README's profile patch
-		pattern, R-INTERACT section 2.5).
+	- Beyond R5/R6: a persistent-section line that teaches the FULL ccr happy path (marker -> hash -> ccr_retrieve {hash, range?}), and the terminal_send parity (R7) as ONE grammar block, composed via config (the live-containers precedent: the coach README's profile patch pattern, R-INTERACT section 2.5).
 
 E3  THE CCR_SEARCH TOOL (R1 expanded)
-	- The R1 ccr_list is read-only stats + listing; the expansion is a real
-		ccr_search over the STORE's payloads (substring/type filter), keeping
-		the ledgers out of it (the ledgers stay grep-tool territory per R3).
-		Guard: zero changes to existing ccr smoke assertions; the store's
-		LRU semantics untouched (a search must not refresh lastAccessed).
+	- The R1 ccr_list is read-only stats + listing.
+		The expansion is a real ccr_search over the STORE's payloads (substring/type filter), keeping the ledgers out of it (the ledgers stay grep-tool territory per R3).
+		Guard: ZERO changes to existing ccr smoke assertions.
+		The store's LRU semantics untouched (a search must NOT refresh lastAccessed).
 
 E4  THE INTERACTION DOCUMENTATION
-	- R-INTERACT section 2.5's friction (the coach/live-containers coupling
-		is invisible in code): a short Documentation/Guides/FAMILY-COMPOSING.md
-		describing the load-order conventions (ccr before the normalize hooks,
-		the marker guard) and the config-level couplings.
+	- R-INTERACT section 2.5's friction (the coach/live-containers coupling is invisible in code): a short Documentation/Guides/FAMILY-COMPOSING.md describing the load-order conventions (ccr before the normalize hooks, the marker guard) and the config-level couplings.
 
 E5  THE DETACHED PANELS
-	- R-UI-3's shell.overlay / sidebar.panellist mounts (the contract's
-		"overlay"/"sidebar" PanelMounts) - phase 2 builds the mount points;
-		the extension is the sidebar panel showing the roster + the coach's
-		strikes without opening the Plugins page.
+	- R-UI-3's shell.overlay / sidebar.panellist mounts (the contract's "overlay"/"sidebar" PanelMounts) - phase 2 builds the mount points.
+		The extension is the sidebar panel showing the roster + the coach's strikes WITHOUT opening the Plugins page.
 
 E6  THE ETS PARITY
-	- The EffectTS twins get the client halves only after the Classic side is
-		proven (the client halves are platform code, identical for both trees;
-		only the host halves differ). A phase 8+ candidate; do not mix the
-		trees (the 25-package law).
+	- The EffectTS twins get the client halves ONLY after the Classic side is proven (the client halves are platform code, identical for BOTH trees; only the host halves differ).
+		A phase 8+ candidate; do NOT mix the trees (the 25-package law).
 
 ================================================================================
 APPENDIX A - THE LIVE INSPECT CAPTURES (phase 0 step 4 fills this)
@@ -834,15 +772,13 @@ bundles.]
 APPENDIX B - THE ONE-PARAGRAPH SUMMARY (what a fresh session must recite)
 ================================================================================
 
-Read the four research docs + this plan; route every subagent to
-cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low; never mutate git
-(READY-TO-COMMIT reports only); write files only through the tool API; the
-arbiters are the serialized build, the 207-suite runner with the
-expected-PASS guard, the site build verified on Target/, and the live client
-inspect with the GUI page OPEN; phase 0 resolves the mount-failure class and
-captures the live slot trees BEFORE any client half is written; the central
-package is @playform/dsh-panel-family (contract-only) and the 13 adapters
-import its types only; the tool-coach is the first adapter and carries the
-marker-usage rule; the Typert endpoint is spiked standalone with the
-registry-only fallback pre-decided; and the trajectory screen stays untouched
-until upstream ships conversation.trajectory.sections.
+Read the four research docs + this plan.
+Route EVERY subagent to cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low.
+NEVER mutate git (READY-TO-COMMIT reports only).
+Write files ONLY through the tool API.
+The arbiters are the serialized build, the 207-suite runner with the expected-PASS guard, the site build verified on Target/, and the live client inspect with the GUI page OPEN.
+Phase 0 resolves the mount-failure class and captures the live slot trees BEFORE ANY client half is written.
+The central package is @playform/dsh-panel-family (contract-only) and the 13 adapters import its types ONLY.
+The tool-coach is the FIRST adapter and carries the marker-usage rule.
+The Typert endpoint is spiked standalone with the registry-only fallback pre-decided.
+The trajectory screen stays untouched until upstream ships conversation.trajectory.sections.

@@ -21,13 +21,15 @@ family (13 bundles currently shown as generic plugin-manager rows)?
 
 0.	VERDICT
 
-YES - first-class, supported. The harness Web UI is itself assembled from client
-plugins, and the Plugins page (the thing that today renders the family as generic
-rows) declares child slots exactly so that OTHER plugins can extend it. No fork,
-no DOM hacks, no patching of the harness checkout. The registration surface is
-ctx.slots.inject() + ctx.slots.register() from a package's "./client" export.
+YES - first-class, supported.
+The harness Web UI is itself assembled from client plugins, and the Plugins page
+(the thing that today renders the family as generic rows) declares child slots
+exactly so that OTHER plugins can extend it.
+NO fork, NO DOM hacks, NO patching of the harness checkout.
+The registration surface is ctx.slots.inject() + ctx.slots.register() from a
+package's "./client" export.
 
-The user-cited doc path ~/Developer/Documentation/deepseek-harness does not exist.
+The user-cited doc path ~/Developer/Documentation/deepseek-harness does NOT exist.
 The real documentation repo is ~/Developer/Documentation/Module/deepseek-harness/
 (full harness doc monorepo); the running implementation is read in place from
 /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/.
@@ -44,8 +46,8 @@ Doc anchors (all paths relative to ~/Developer/Documentation/Module/deepseek-har
 - docs/cookbook/adding-a-settings-card.md - THE recipe for this exact case:
 	section 4 "Contribute to another plugin's page": plugins.detail.actions
 	(control at page head), plugins.detail.badge (tag by title),
-	plugins.detail.section (section under the page's own content). Every entry
-	receives the page's subject - {kind:'bundle',pkg} | {kind:'row',pkg,row} |
+	plugins.detail.section (section under the page's own content).
+	EVERY entry receives the page's subject - {kind:'bundle',pkg} | {kind:'row',pkg,row} |
 	{kind:'item',id} - and returns null for subjects it has nothing for.
 	Section 3: custom plugin pages receive form.state and
 	form.mutate(operations, expectedRevision) from the Plugins page owner;
@@ -90,17 +92,20 @@ Code anchors (app.asar .../node_modules/@deepseek-ai/..., read in place):
 
 Data surfaces confirmed live (host inspect):
 - Config.listConfigs name:"@playform/hook-dsh-tool-coach" -> entry
-	include:hook-dsh-tool-coach, status "schema", full JSON schema with every
+	include:hook-dsh-tool-coach, status "schema", full JSON schema with EVERY
 	knob marked x-cordis.volatile (log, enabled, judgeTools, threshold, window,
 	cooldown, escalateThreshold, enforce, enforceThreshold, exemptPatterns,
-	patternTable, notes, fetchLive, maxSectionTools, sectionTtl). So "the knobs"
-	are already machine-readable; they are simply not surfaced as forms today.
+	patternTable, notes, fetchLive, maxSectionTools, sectionTtl).
+	So "the knobs" are already machine-readable; they are simply NOT surfaced as
+	forms today.
 - remote namespaces the Plugins page already injects (client.js inject list,
 	lines 4360-4366): remote, remote.pluginManager, remote.pluginInventory,
-	remote.pluginRegistryProbe - live bundle/row/status data without any new
-	endpoint. (Client-side inspect queries for the live slot tree timed out in
-	this session - the GUI page was not connected; verified the declarations
-	from source instead. Open the page and re-run
+	remote.pluginRegistryProbe - live bundle/row/status data without ANY new
+	endpoint.
+	(Client-side inspect queries for the live slot tree timed out in
+	this session - the GUI page was NOT connected; verified the declarations
+	from source instead.
+	Open the page and re-run
 	cordis_inspect_query Slots.listSubTree to get the live tree.)
 
 Family state for the panel (host-side, ~/.dsh/):
@@ -112,39 +117,39 @@ Family state for the panel (host-side, ~/.dsh/):
 	listed without disabled -> default; live-containers present).
 - Ledger files: ~/.dsh/{governor,pinner,ccr,tool-coach,...}.log and
 	hook-dsh-*.log tails (e.g. tool-coach logs "section rebuilt", "offense ..."
-	lines) - what a family panel would stream; host-side files only.
+	lines) - what a family panel would stream; host-side files ONLY.
 
 2.	CURRENT DISPLAY OF THE FAMILY + LIMITS
 
-Today each of the 13 bundles appears in the Plugins page as one generic
+Today EACH of the 13 bundles appears in the Plugins page as one generic
 installed-bundle row (name, version tag, enable/disable, per-row enable/disable,
 source info). Limits:
-- No grouping: factory / governors / 7 normalize flavors / ccr / tool-coach are
-	flat, indistinguishable from any third-party row.
-- No knobs: the family's volatile Configs (verified above) are NOT shown - the
-	family bundles register no plugins.row.config / plugins.bundle.config forms,
+- NO grouping: factory / governors / 7 normalize flavors / ccr / tool-coach are
+	flat, indistinguishable from ANY third-party row.
+- NO knobs: the family's volatile Configs (verified above) are NOT shown - the
+	family bundles register NO plugins.row.config / plugins.bundle.config forms,
 	so nothing about threshold/enforce/exemptPatterns is editable in the UI.
-- No live state: enabled/disabled yes (via remote.pluginManager + the
-	"plugin-manager/changed" event), but no ledger tails, no fiberPhases, no
-	recent offenses, no "section rebuilt" activity.
+- NO live state: enabled/disabled yes (via remote.pluginManager + the
+	"plugin-manager/changed" event), but NO ledger tails, NO fiberPhases, NO
+	recent offenses, NO "section rebuilt" activity.
 - The Settings > builtin plugins page (dsh-client-ui-settings-plugin-inventory)
-	only covers built-in namespaces, not @playform.
+	ONLY covers built-in namespaces, NOT @playform.
 
 3.	DESIGN SKETCH - THE FAMILY PANEL
 
 One new package: @playform/dsh-family-panel (client half + optional Host half).
 
 Registration surface (all additive, per slots.md extension rules):
-- plugins.detail.section (list, id "playform-family"): when the subject is any
+- plugins.detail.section (list, id "playform-family"): when the subject is ANY
 	@playform bundle, render a "PlayForm family" section: family roster (the 13
 	bundles grouped: factory / governors / normalize flavors / ccr / tool-coach),
-	each with live enabled state from remote.pluginManager and a deep-link via
+	EACH with live enabled state from remote.pluginManager and a deep-link via
 	ctx.reflect "pluginNavigation".openBundle for cross-navigation.
 - plugins.detail.badge (id "playform-family-badge"): a small "family" tag on
-	each of the 13 bundle pages.
-- plugins.row.config / plugins.bundle.config keyed by each family package: knob
+	EACH of the 13 bundle pages.
+- plugins.row.config / plugins.bundle.config keyed by EACH family package: knob
 	form(s) bound to the Config schema. Volatile fields update live through
-	ConfigEditor + volatile HMR (loader/volatile-update) - no restart.
+	ConfigEditor + volatile HMR (loader/volatile-update) - NO restart.
 
 Data sources:
 - Live enable/row/status data: ctx.remote.pluginManager (already injected into
@@ -152,13 +157,15 @@ Data sources:
 	subscribes ctx.remote.$on("plugin-manager/changed")).
 - Knobs: the host Config system (the forms the Plugins page owner wires with
 	form.state / form.mutate). Values are volatile => current values, live.
-- Ledger tails + fiberPhases: host files. Host half of the same package (a
+- Ledger tails + fiberPhases: host files.
+	Host half of the same package (a
 	service in the same bundle) reads ~/.dsh/*.log tails and family state; to get
 	it into the browser it must be a Typert remote endpoint per
 	adding-a-remote-api.md (declare @Remote method, generate descriptors, consume
-	ctx.remote.<namespace>). That generation pipeline lives in the harness repo;
-	an external package must reproduce the build (same caveat the docs make for
-	the clientBundle format). Alternative v1 shortcut: expose only what the
+	ctx.remote.<namespace>).
+	That generation pipeline lives in the harness repo; an external package must
+	reproduce the build (same caveat the docs make for the clientBundle format).
+	Alternative v1 shortcut: expose ONLY what the
 	existing remote namespaces already carry, and defer ledgers.
 
 4.	MINIMAL PROOF-OF-CONCEPT PATH
@@ -179,15 +186,15 @@ Smallest UI plugin that adds the family panel:
 			 locale:"dshFamilyPanel"}, FamilySection));
 		FamilySection({t, subject}) returns null unless
 		subject.kind === "bundle" && subject.pkg.startsWith("@playform/"),
-		otherwise renders the roster card. For v1 keep it static-roster +
-		enable states; no new endpoint, no timers. Clean up any listeners with
-		ctx.effect/ctx.on and return disposers.
+		otherwise renders the roster card.
+		For v1 keep it static-roster + enable states; NO new endpoint, NO timers.
+		Clean up any listeners with ctx.effect/ctx.on and return disposers.
 	client.js is hand-written in the lazy-CJS format (small enough); locale/en.json
 	for the strings; icon.svg original.
 2. Install: plugin_manager install_bundle with the absolute package directory.
-	Live profile => changes apply immediately (HMR); no restart expected - the
+	Live profile => changes apply immediately (HMR); NO restart expected - the
 	restart reasons (host modules touched, package moved, unmanaged plugin) do
-	not apply to a pure client-only package.
+	NOT apply to a pure client-only package.
 3. Verify: open the GUI, open Plugins > any @playform bundle; the family section
 	renders. Confirm registration with client inspect
 	Slots.listSubTree root:"plugins.detail.section" (requires the page open;
@@ -198,7 +205,7 @@ Smallest UI plugin that adds the family panel:
 
 5.	ACCEPTANCE CRITERIA
 
-A1	Each of the 13 @playform bundle detail pages shows the family section with
+A1	EACH of the 13 @playform bundle detail pages shows the family section with
 	the family roster and the bundle's own group (factory/governor/normalize/
 	ccr/tool-coach); non-@playform subjects render nothing.
 A2	Enable/disable of a family bundle in the manager reflects in the section
@@ -207,14 +214,15 @@ A3	At least one family knob (e.g. tool-coach enforce or threshold) is editable
 	in the UI and the live value changes without restart (volatile HMR).
 A4	(v2) A ledger tail (e.g. hook-dsh-tool-coach.log last N lines) is visible
 	and refreshes while the page stays open.
-A5	No harness checkout files modified; the whole feature lives in one package;
+A5	NO harness checkout files modified; the whole feature lives in one package;
 	uninstall restores the stock Plugins page exactly.
-A6	All visible strings route through the client locale service; icon original.
+A6	ALL visible strings route through the client locale service; icon original.
 
 6.	RESIDUALS
 
 - Client inspect queries (Slots.listSubTree, Service.listService) timed out
-	this session - the GUI page was not connected. Live-tree verification and
+	this session - the GUI page was NOT connected.
+	Live-tree verification and
 	exact owner props of plugins.detail.section entries (beyond the documented
 	subject) must be confirmed with the page open before implementation.
 - plugins.detail.section's exact prop bag is documented in
@@ -223,8 +231,8 @@ A6	All visible strings route through the client locale service; icon original.
 - Ledger streaming needs the Typert remote generation pipeline; an external
 	package must reproduce that build itself (documented caveat). Cost is
 	nontrivial; deferred from v1 deliberately.
-- tool-coach and live-containers rows in the profile patch have no explicit
+- tool-coach and live-containers rows in the profile patch have NO explicit
 	disabled flag (default behavior) - confirm their row state in the UI when
 	populating the roster.
-- The user-named path ~/Developer/Documentation/deepseek-harness does not exist;
+- The user-named path ~/Developer/Documentation/deepseek-harness does NOT exist;
 	this report uses ~/Developer/Documentation/Module/deepseek-harness/.

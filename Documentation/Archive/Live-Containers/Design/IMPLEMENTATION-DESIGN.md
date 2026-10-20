@@ -37,14 +37,15 @@ Requirements/00-07 (wave 2) + the I1 binding constraints (00
 section 5.7-5.8, 01 section 12, 07 section 5).
 Scope: ONE package, two twins - Classic/packages/hook-dsh-live-containers +
 EffectTS/packages/ets-hook-dsh-live-containers. Wave 2 EXTENDS THE SAME
-PACKAGE (07 section 3.8); this design specifies the phase boundaries so the
-v1 coders (A1/A2/A3) and the wave-2 coder (C2) never collide.
+PACKAGE (07 section 3.8).
+This design specifies the phase boundaries so the v1 coders (A1/A2/A3) and
+the wave-2 coder (C2) never collide.
 Addenda coverage: the DESIGN ADDENDA (I2-I6: AWAIT-MARKER, APPEND-SEAM,
 COMPLETION-ERGONOMICS, PLANTED-LEASE, SUGGESTER-CONFIGURED) had NOT landed in
 Documentation/Archive/Live-Containers/Design/ at write time (checked at start and
-twice during the run). Those five areas are designed HERE (sections 4, 5, 6,
-3.4 and 2) and flagged in the report for ratification against the lanes'
-final texts at the C2 dispatch.
+twice during the run).
+Those five areas are designed HERE (sections 4, 5, 6, 3.4 and 2) and flagged in
+the report for ratification against the lanes' final texts at the C2 dispatch.
 
 ---
 

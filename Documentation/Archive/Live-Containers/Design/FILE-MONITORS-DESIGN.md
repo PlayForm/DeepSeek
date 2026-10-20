@@ -56,66 +56,79 @@ Deliverable: THIS file (the single write; everything else was read-only).
 1. M5 (the storage schema): a NEW storage domain `live_containers_monitors`
    (name/version/layout per-record/invalidRecords backup-and-skip, ONE table
    `checks`) - NOT extension records in the shared `package_governance`
-   domain. The v2 open contract (factory Open.ts header: "a NEW event name
-   requires a new domain version") makes extension records impossible without
-   bumping the shared domain to v3, whose blast radius is the whole
-   governance family (the single-layout parser enforces EXACT version
-   equality; every module's open would hard-fail `version-mismatch` on the
-   v2-stamped files). A new domain name has no collision (the harness
-   enforces ONE open per domain NAME) and the plugin owns its record schema
-   (section 1).
+   domain.
+   The v2 open contract (factory Open.ts header: "a NEW event name requires
+   a new domain version") makes extension records impossible WITHOUT bumping
+   the shared domain to v3.
+   The blast radius of a v3 bump is the whole governance family.
+   The single-layout parser enforces EXACT version equality.
+   EVERY module's open would hard-fail `version-mismatch` on the
+   v2-stamped files.
+   A new domain name has NO collision (the harness enforces ONE open per
+   domain NAME).
+   The plugin owns its record schema (section 1).
 2. The check producer is the SHIPPED G2 wrapper (Jobs.ts `Start`) - ONE
-   wrapper, TWO callers: the detach path and the monitor path. The monitor
-   path passes a SYNTHETIC exec (a plugin-owned call id, the enrolled
-   session) and the substituted command with workdir = dirname(path); the
-   12.2 inheritance is literal: the same governed path (shell.resolve/
-   execute + sandboxPolicy.resolve), checkTimeoutMs <= INLINE_DEADLINE_MS
-   (120000, validated at load), the ring caps + outputLimitBytes 2048, and
-   the plugin's OWN deadline scan kills overdue monitor jobs (reason
-   "monitor-deadline") - never a subprocess force-kill (section 4).
+   wrapper, TWO callers: the detach path and the monitor path.
+   The monitor path passes a SYNTHETIC exec (a plugin-owned call id, the
+   enrolled session) and the substituted command with workdir =
+   dirname(path).
+   The 12.2 inheritance is literal: the same governed path
+   (shell.resolve/execute + sandboxPolicy.resolve), checkTimeoutMs <=
+   INLINE_DEADLINE_MS (120000, validated at load), the ring caps +
+   outputLimitBytes 2048, and the plugin's OWN deadline scan kills overdue
+   monitor jobs (reason "monitor-deadline").
+   NEVER a subprocess force-kill (section 4).
 3. NO REAL TIMERS in the monitor engine: the debounce and the slow schedule
    are clock-based PENDING records evaluated at CHECKPOINTS (fs/observed,
    jobs events, assemble passes, the tool surfaces) - the D2 deadline-scan
-   pattern (Board.ScanDeadlines). The control-loop sample time is documented
-   (section 3.5 + section 5.4): debounceMs -> admission wait -> the job ->
-   the next request. The smokes drive every timing transition with the fake
-   clock, never sleeps.
+   pattern (Board.ScanDeadlines).
+   The control-loop sample time is documented (section 3.5 + section 5.4):
+   debounceMs -> admission wait -> the job -> the next request.
+   The smokes drive EVERY timing transition with the fake clock, NEVER
+   sleeps.
 4. The band grammar is a CONTRACT (section 6, byte-exact): the indicator
    glyphs `\u2204` / `\u2205` are written in source as escapes and rendered
-   as the characters; `!` problem, `~` stale, `x` infrastructure, the
-   STALE declarations byte-exact, the summary band arithmetic provable
-   (the R3 example's parenthetical/trailing counts were internally loose -
-   the pinned form is self-consistent and the smoke asserts the sum).
-5. The KV-cache honesty: the monitors stanza is stable-until-event; its text
-   changes ONLY on enrollment, settle, the fs/observed version bump, the
-   retirement, and the mount recovery - never on the clock, never per
-   request (no relative ages anywhere in the stanza; the check time is
-   HH:MM:SS) (section 5.2).
+   as the characters.
+   `!` problem, `~` stale, `x` infrastructure, the STALE declarations
+   byte-exact, the summary band arithmetic provable.
+   The R3 example's parenthetical/trailing counts were internally loose.
+   The pinned form is self-consistent and the smoke asserts the sum.
+5. The KV-cache honesty: the monitors stanza is stable-until-event.
+   Its text changes ONLY on enrollment, settle, the fs/observed version
+   bump, the retirement, and the mount recovery.
+   NEVER on the clock, NEVER per request (NO relative ages anywhere in the
+   stanza; the check time is HH:MM:SS) (section 5.2).
 6. The honesty cluster is HARD (R3 points 1, 2, 7): `\u2204` renders ONLY
    from an observed settle with exit 0 of the exact check set for the exact
-   version (checkedVersion == lastVersion, provenance live); every listener
-   path is fail-open; the linked-governance check NEVER produces `\u2204`
-   (it renders the `\u2205` form with the observed version facts - a
-   fabricated governance verdict is a false pass) (section 6.2 + 4.4).
+   version (checkedVersion == lastVersion, provenance live).
+   EVERY listener path is fail-open.
+   The linked-governance check NEVER produces `\u2204`.
+   It renders the `\u2205` form with the observed version facts - a
+   fabricated governance verdict is a false pass (section 6.2 + 4.4).
 7. The IDLE-forever posture: `monitors: "off"` default even when the plugin
-   is enabled; the stanza renders nothing until monitors are on AND at least
-   one file is enrolled; with monitors off the section body is byte-identical
-   with the wave-2 behavior (the phase-1 + wave-2 smokes pass with ZERO
-   assertion changes) (section 2 + 5.1).
+   is enabled.
+   The stanza renders NOTHING until monitors are on AND at least ONE file
+   is enrolled.
+   With monitors off the section body is byte-identical with the wave-2
+   behavior (the phase-1 + wave-2 smokes pass with ZERO assertion changes)
+   (section 2 + 5.1).
 8. The plantType synergy: a NEW plantType "monitors" on the EXISTING
    live_plant tool + the existing report grammar gains the "monitored"
-   status - NO new seam; the parent's board rows are fed by the L6 settle
-   truth (the member's monitor jobs) and the [live-report] monitored fold;
-   the Board.OnSettled gains ONE guard so a member's monitor settle never
+   status - NO new seam.
+   The parent's board rows are fed by the L6 settle truth (the member's
+   monitor jobs) and the [live-report] monitored fold.
+   The Board.OnSettled gains ONE guard so a member's monitor settle NEVER
    flips the member's TASK row (section 8).
 9. The module split: Monitors.ts (the engine), Watchlist.ts (the
    classification), Band.ts (the byte-exact renderer), Storage.ts (the
    P5-style domain open + recovery), MonitorTools.ts (the two tools),
-   Variable/DefaultCheckSets.ts (the shipped catalog - data, not code),
+   Variable/DefaultCheckSets.ts (the shipped catalog - data, NOT code),
    plus the additive Apply/Config/State/Events edits (section 10).
 10. The wave-3 phase is STRICTLY SEQUENTIAL after C2's wave-2 acceptance
-    (the D2 9.1 collision rule); C3's edits are additive only; the phase-1
-    and wave-2 smokes pass with ZERO assertion changes (section 16).
+    (the D2 9.1 collision rule).
+    C3's edits are additive ONLY.
+    The phase-1 and wave-2 smokes pass with ZERO assertion changes
+    (section 16).
 
 ---
 
@@ -123,33 +136,38 @@ Deliverable: THIS file (the single write; everything else was read-only).
 
 DECISION: a NEW storage domain, name `live_containers_monitors`, version 1,
 layout "per-record", invalidRecords "backup-and-skip", ONE table `checks`.
-The plugin opens it itself (its own P5-style effect) - the factory's Open.ts
-is hardwired to `package_governance` and cannot be reused for a second
-domain.
+The plugin opens it itself (its own P5-style effect).
+The factory's Open.ts is hardwired to `package_governance` and cannot be
+reused for a second domain.
 
 WHY NOT extension records in an existing domain (the rejected alternative):
 - The v2 open contract (factory Open.ts header, verbatim): "a NEW event name
-  requires a new domain version". The shared domain's events table carries a
-  FIXED enum (activated, governed, dispatched, update-failed, excluded,
-  normalized). The monitor vocabulary (monitor-enrolled, monitor-check,
-  monitor-retired) is a new enum -> a new domain version -> the shared
-  domain would bump to v3 -> the single-layout parser enforces EXACT version
-  equality, so every module of the governance family would hard-fail
+  requires a new domain version".
+  The shared domain's events table carries a FIXED enum (activated, governed,
+  dispatched, update-failed, excluded, normalized).
+  The monitor vocabulary (monitor-enrolled, monitor-check,
+  monitor-retired) is a new enum.
+  A new enum -> a new domain version -> the shared domain would bump to v3.
+  The single-layout parser enforces EXACT version equality.
+  So EVERY module of the governance family would hard-fail
   `version-mismatch` on the v2-stamped files until a coordinated migration
-  lands. One feature cannot carry that blast radius.
+  lands.
+  ONE feature cannot carry that blast radius.
 - The shared record shape { event, path, detail, at } cannot carry the
-  version-keyed check results (checkedVersion, exit, tail, provenance) -
-  JSON-in-detail is fragile and the D3-DESIGN-BRIEF point 4's state shape
-  demands structured fields.
+  version-keyed check results (checkedVersion, exit, tail, provenance).
+  JSON-in-detail is fragile.
+  The D3-DESIGN-BRIEF point 4's state shape demands structured fields.
 WHY a new domain is safe: the harness storageDomain enforces ONE open per
-domain NAME (the live single-open-domain finding) - a different name means
-no collision with `package_governance`, no cross-module coupling, and the
-plugin owns its schema. The open is best-effort and detached exactly like
-the factory's P5 arm (Attach.ts): an ABSENT facility is a SILENT SKIP
-(State.MonitorsPersist = false; after a restart the bands degrade to
-`not run yet` - the R3 scenario 6 honesty); a PRESENT facility whose open
-fails is LOUD (one best-effort ledger line `monitors storage open failed:
-<reason>` - the P5 v2 incident posture, never rethrown).
+domain NAME (the live single-open-domain finding).
+A different name means NO collision with `package_governance`, NO
+cross-module coupling, and the plugin owns its schema.
+The open is best-effort and detached exactly like the factory's P5 arm
+(Attach.ts).
+An ABSENT facility is a SILENT SKIP (State.MonitorsPersist = false; after a
+restart the bands degrade to `not run yet` - the R3 scenario 6 honesty).
+A PRESENT facility whose open fails is LOUD (ONE best-effort ledger line
+`monitors storage open failed: <reason>` - the P5 v2 incident posture,
+NEVER rethrown).
 
 THE OPEN MECHANICS (Function/Storage.ts):
 1. probe ctx.get("storageDomain") once inside a ctx.effect (the factory
@@ -191,36 +209,40 @@ THE RECORD SCHEMA (the zod object of the `checks` table):
 	}
 
 The `tailRef` field of the D3-DESIGN-BRIEF's state shape is the EMBEDDED
-bounded tail (the reference semantics = the persisted capture): the ring is
-owner-fenced (a host plugin cannot readAt an owned job), so the ONLY
-restart-surviving render source is the persisted tail itself; the 2 KiB cap
-makes embedding cheap and honest.
+bounded tail (the reference semantics = the persisted capture).
+The ring is owner-fenced (a host plugin cannot readAt an owned job).
+So the ONLY restart-surviving render source is the persisted tail itself.
+The 2 KiB cap makes embedding cheap and honest.
 
-THE WRITE CADENCE (best-effort, never on a caller path): one
-monitor-enrolled record at enrollment, one monitor-check record per settle,
-one monitor-retired record at retirement. The records are the DURABLE truth;
-the human ledger stays the complete record (the P5 posture).
+THE WRITE CADENCE (best-effort, NEVER on a caller path): ONE
+monitor-enrolled record at enrollment, ONE monitor-check record per settle,
+ONE monitor-retired record at retirement.
+The records are the DURABLE truth.
+The human ledger stays the complete record (the P5 posture).
 
-THE RECOVERY (on mount, once): the plugin loads the newest monitor-check
+THE RECOVERY (on mount, ONCE): the plugin loads the newest monitor-check
 record per (path, agent) when the facility exposes a read surface (the exact
 read/list surface of dsh-storage-domain is verified IN PLACE at the C3
-dispatch - the C3 brief's dispatch-time checks list); the loaded entries
-rebuild the monitor set with their checks stamped provenance "recovered";
-the enrolled records rebuild the enrollment (a file enrolled before the
-restart stays enrolled). When the read surface is absent or fails: no
-recovery - the bands render `not run yet` (the R3 scenario 6 honesty, never
-a fabricated clean). The recovery runs once, before the first band render;
-the ledger `monitor recovered <path> (<n> checks)` per loaded entry.
+dispatch - the C3 brief's dispatch-time checks list).
+The loaded entries rebuild the monitor set with their checks stamped
+provenance "recovered".
+The enrolled records rebuild the enrollment (a file enrolled before the
+restart stays enrolled).
+When the read surface is absent or fails: NO recovery - the bands render
+`not run yet` (the R3 scenario 6 honesty, NEVER a fabricated clean).
+The recovery runs ONCE, before the FIRST band render.
+The ledger prints `monitor recovered <path> (<n> checks)` per loaded entry.
 
 ---
 
 ## 2. THE CONFIG SURFACE (the wave-3 knobs, all volatile)
 
-The wave-2 Config.ts discipline continues: every knob is a volatile cell
-(the P10 in-place refresh; a flip lands on the next assembly). The wave-3
-fields are APPENDED to the existing schema (the phase-1/wave-2 cells
-untouched). The `monitors` knob is the SECOND explicit flip after the
-plugin's own `enabled` (R3 acceptance 9 - the CAN-4 posture).
+The wave-2 Config.ts discipline continues: EVERY knob is a volatile cell
+(the P10 in-place refresh; a flip lands on the next assembly).
+The wave-3 fields are APPENDED to the existing schema (the phase-1/wave-2
+cells untouched).
+The `monitors` knob is the SECOND explicit flip after the plugin's own
+`enabled` (R3 acceptance 9 - the CAN-4 posture).
 
 	monitors: "off" | "on", default "off"       (the IDLE-forever posture)
 	watchlist: array of { glob, checks }, default [] (EMPTY - enroll-on-write
@@ -248,9 +270,9 @@ plugin's own `enabled` (R3 acceptance 9 - the CAN-4 posture).
 
 THE VALIDATION (appended to Apply's Validate, fail-loud): monitors in
 ["off", "on"]; watchlist entries: glob non-empty string, checks an array of
-strings; every watchlist check name must exist in the effective checksets
+strings; EVERY watchlist check name must exist in the effective checksets
 (unknown names FAIL LOUD at load); checksets entries: command non-empty
-string when link is absent, link one of "none" | "governance" when present,
+string when link is absent, link ONE of "none" | "governance" when present,
 fast boolean, intervalMs number >= 0; monitor.debounceMs >= 1;
 monitor.maxMonitors >= 1; monitor.maxMonitorJobs >= 1; monitor.retireMs >= 1;
 monitor.staleMs >= 1; monitor.bandCapBytes >= 256;
@@ -279,7 +301,7 @@ State.MonitorsPersist (section 1).
 Registered via the factory's Wire (the governor precedent, Apply.ts:86-88):
 `Factory.Wire(Context, State, (Target, Observation, Actor) =>
 Monitors.OnObserved(State, Target, Observation, Actor))` - a ROOT-context
-listener (Wire.ts:39 `Context.root.on("fs/observed", Observe)`), so every
+listener (Wire.ts:39 `Context.root.on("fs/observed", Observe)`), so EVERY
 write the harness emits is heard: the built-in write/edit tools', the
 family's raw-write/normalize-file's, and the factory's own emits
 (Write.ts:149-157: `{ kind: "present", version: Outcome.version }`) and the
@@ -296,13 +318,14 @@ dispatch):
 4. the enrollment: when the target matches a watchlist glob (the effective
    classification, section 3.2): the entry enrolls (or refreshes) with the
    entry's check sets; ledger `monitor enrolled <path> (by <writer>)` on a
-   fresh enrollment. A file that matches NOTHING and is not enrolled is
-   NEVER monitored (no scan, no watch-all - the R3 3.1 rule).
-5. the fast-check scheduling: for each FAST check set of the entry: set the
-   pending record { since: now } (an existing pending record is OVERWRITTEN
-   - the coalescing: only the newest pending run survives; one pending per
-   (path, checkSet)). The slow sets NEVER auto-run per-edit (the R3 3
-   taxonomy).
+   fresh enrollment.
+   A file that matches NOTHING and is not enrolled is NEVER monitored
+   (NO scan, NO watch-all - the R3 3.1 rule).
+5. the fast-check scheduling: for EACH FAST check set of the entry: set the
+   pending record { since: now }.
+   An existing pending record is OVERWRITTEN - the coalescing: ONLY the
+   newest pending run survives; ONE pending per (path, checkSet).
+   The slow sets NEVER auto-run per-edit (the R3 3 taxonomy).
 6. the checkpoint scan (section 3.4) runs after the bookkeeping (an edit
    whose debounce already elapsed dispatches immediately).
 
@@ -311,21 +334,22 @@ dispatch):
 The effective check sets of a path:
 1. the WATCHLIST entries whose glob matches the path (the config override);
    the MOST-SPECIFIC glob wins (the longest pattern); ties -> the later
-   entry. The glob matcher is a small self-contained converter in
-   Watchlist.ts (the Policy.ts self-contained precedent): `*` within a
-   segment, `**` across segments, `?` single char; a malformed glob matches
-   nothing (fail-open).
-2. when no watchlist entry matches: the DEFAULT CATALOG globs - each
-   shipped check set declares the glob it applies to (tsc/format ->
+   entry.
+   The glob matcher is a small self-contained converter in Watchlist.ts (the
+   Policy.ts self-contained precedent): `*` within a segment, `**` across
+   segments, `?` single char; a malformed glob matches NOTHING (fail-open).
+2. when NO watchlist entry matches: the DEFAULT CATALOG globs - EACH shipped
+   check set declares the glob it applies to (tsc/format ->
    "**/*.ts", cargo -> "**/Cargo.toml", governance -> "**/package.json").
    This is the classification the EXPLICIT enrollment path (live_monitor
-   <path>) uses when the watchlist is empty - the model's escape hatch works
-   out of the box while the automatic enrollment stays watchlist-gated.
-3. no match anywhere: the effective set is [] - the band renders the
-   `checks: none` form (section 6.1) and nothing ever runs (honest: with no
-   checks, no verification is claimed).
+   <path>) uses when the watchlist is empty.
+   The model's escape hatch works out of the box while the automatic
+   enrollment stays watchlist-gated.
+3. NO match anywhere: the effective set is [] - the band renders the
+   `checks: none` form (section 6.1) and NOTHING ever runs (honest: with
+   NO checks, NO verification is claimed).
 
-The check-set catalog (Variable/DefaultCheckSets.ts - DATA, not code; the
+The check-set catalog (Variable/DefaultCheckSets.ts - DATA, NOT code; the
 same shape the `checksets` config cell holds):
 
 	tsc:   { glob: "**/*.ts",       command: "tsc --noEmit {{path}}",          fast: true }
@@ -335,71 +359,79 @@ same shape the `checksets` config cell holds):
 
 The command is a TEMPLATE with the substitution tokens {{path}} (the
 absolute display path), {{basename}}, {{dir}} (the dirname) - the
-Render.ts-style replace ONLY, no eval; an unresolved token renders literally
-+ ledger `render unknown <id> <token>` (the Render discipline reused). The
-`link: "governance"` set carries NO command - the band renders the linked
-form (section 6.1) and the plugin NEVER re-runs npm (the R3 3.2 rule: the
-governor/pinner's own verbs are not duplicated). An unknown check-set name
-at classification time skips that set + ledger `monitor check unknown
-<setId>` (runtime fail-open; the load-time validation already failed loud
-for configured names).
+Render.ts-style replace ONLY, NO eval.
+An unresolved token renders literally + ledger `render unknown <id>
+<token>` (the Render discipline reused).
+The `link: "governance"` set carries NO command - the band renders the
+linked form (section 6.1) and the plugin NEVER re-runs npm (the R3 3.2
+rule: the governor/pinner's own verbs are not duplicated).
+An unknown check-set name at classification time skips that set + ledger
+`monitor check unknown <setId>` (runtime fail-open; the load-time
+validation already failed loud for configured names).
 
 ### 3.3 The debounce + the coalescing (the checkpoint design)
 
 THE PENDING RECORD: per (path, checkSet) in the entry: { since } - the
-clock ms of the latest scheduling edit. The pending is plugin state; it is
-NEVER rendered (the band's not-run-yet form does not change when a check is
-pending - the KV stability).
+clock ms of the latest scheduling edit.
+The pending is plugin state.
+It is NEVER rendered (the band's not-run-yet form does not change when a
+check is pending - the KV stability).
 
 THE CHECKPOINTS (the only dispatch moments - NO real timers, the D2
-Board.ScanDeadlines pattern): (a) every fs/observed event, (b) every jobs
-event, (c) every assemble pass, (d) the tool surfaces (live_monitor_check).
+Board.ScanDeadlines pattern): (a) EVERY fs/observed event, (b) EVERY jobs
+event, (c) EVERY assemble pass, (d) the tool surfaces (live_monitor_check).
 
-THE SCAN (Monitors.Scan, called at every checkpoint, fail-open):
-1. the DEBOUNCE dispatch: for each entry, for each pending (setId, since):
+THE SCAN (Monitors.Scan, called at EVERY checkpoint, fail-open):
+1. the DEBOUNCE dispatch: for EACH entry, for EACH pending (setId, since):
    when Clock() - since >= debounceMs: dispatch the check (section 4) and
    DELETE the pending record (the run IS the coalesced run - the newest
-   pending survived). When the admission is full (live monitor jobs >=
-   maxMonitorJobs): the pending record STAYS (coalesce-not-queue - the
-   CAN-1 admission posture; its `since` is NOT bumped, so it retries at the
-   next checkpoint when admission frees).
-2. the DEADLINE scan: for each live monitor job: when Clock() >=
+   pending survived).
+   When the admission is full (live monitor jobs >= maxMonitorJobs): the
+   pending record STAYS (coalesce-not-queue - the CAN-1 admission posture;
+   its `since` is NOT bumped, so it retries at the next checkpoint when
+   admission frees).
+2. the DEADLINE scan: for EACH live monitor job: when Clock() >=
    startedAt + checkTimeoutMs: ctx.jobs.kill(jobId, agentId,
-   "monitor-deadline") (the registry's kill - never a subprocess
+   "monitor-deadline") (the registry's kill - NEVER a subprocess
    force-kill by the plugin's code; the settle then records infra
    "killed:monitor-deadline").
 3. the SLOW schedule: when slowCheckIntervalMs > 0: per (path, slow setId):
    when Clock() - lastRan >= intervalMs: dispatch (admission-guarded like
-   the debounce; the lastRan stamp advances at the dispatch). The schedule
-   runs ONLY at the assemble-pass checkpoint (the slow cadence is
-   request-aligned - the R3 3 "one job per slow check set per interval").
+   the debounce; the lastRan stamp advances at the dispatch).
+   The schedule runs ONLY at the assemble-pass checkpoint (the slow cadence
+   is request-aligned - the R3 3 "ONE job per slow check set per interval").
 4. the RETIREMENT scan (the assemble-pass checkpoint only): an entry whose
    Clock() - lastObservedAt >= retireMs renders ONE closing line
    (section 6.1) at the NEXT assembly, then withdraws (removed from the
    render set; the persisted history stays in the domain; ledger `monitor
-   retired <path>`). The closing line renders at most once.
+   retired <path>`).
+   The closing line renders at most ONCE.
 
 THE CONTROL-LOOP LATENCY (the R3 point 10 framing, documented): the loop's
 sample time = debounceMs (the coalescing window) + the admission wait (the
 checkpoint cadence - the next event is the bound) + the check run + the next
-request's assemble pass. The model edits; the check runs between turns; the
-band flips at the next request. This is the design's documented latency
-story - no machinery beyond sections 3-4.
+request's assemble pass.
+The model edits; the check runs between turns; the band flips at the next
+request.
+This is the design's documented latency story - NO machinery beyond
+sections 3-4.
 
 ### 3.4 The retirement + the overflow
 
-- retireMs (600000): section 3.3 step 4. The retirement clock starts at the
-  enrollment (the enrollment counts as a touch); every fs/observed event
-  resets it. A band whose file was never touched retires after retireMs -
-  standing blocks must not outlive their truth (the R3 3.5 discipline); the
-  model re-enrolls when it cares.
+- retireMs (600000): section 3.3 step 4.
+  The retirement clock starts at the enrollment (the enrollment counts as a
+  touch); EVERY fs/observed event resets it.
+  A band whose file was NEVER touched retires after retireMs - standing
+  blocks must not outlive their truth (the R3 3.5 discipline).
+  The model re-enrolls when it cares.
 - maxMonitors (8): the stanza renders the FULL bands of the NEWEST
   maxMonitors files (ordered by lastObservedAt DESC - the R3 scenario 2's
-  "ordered by last-change"); the older files render the one-line collapsed
-  forms (section 6.1) - never silently dropped: the ledger `monitors
-  overflow <n>` fires when the overflowed count CHANGES (the quiet-ledger
-  discipline). The summary band counts ALL enrolled files (the collapsed
-  included).
+  "ordered by last-change").
+  The older files render the ONE-line collapsed forms (section 6.1) - NEVER
+  silently dropped.
+  The ledger `monitors overflow <n>` fires when the overflowed count CHANGES
+  (the quiet-ledger discipline).
+  The summary band counts ALL enrolled files (the collapsed included).
 
 ### 3.5 The state shape (the D3-DESIGN-BRIEF point 4, verbatim shape)
 
@@ -427,13 +459,13 @@ story - no machinery beyond sections 3-4.
 		provenance: "live" | "recovered";
 	}
 
-STALENESS IS DERIVED AT RENDER TIME - never stored (the brief point 4): a
+STALENESS IS DERIVED AT RENDER TIME - NEVER stored (the brief point 4): a
 check is version-stale when checkedVersion != the entry's lastVersion (the
-raw tokens compared - never parsed, the family's capability rule); a
-recovered check is time-stale when ranAt < now - staleMs. The STALE
-declaration is computed per check at render (section 6.2). The state is
-per-agent (the multi-agent view: a parent and a child monitor the same file
-independently - the R3 scenario 7).
+raw tokens compared - NEVER parsed, the family's capability rule).
+A recovered check is time-stale when ranAt < now - staleMs.
+The STALE declaration is computed per check at render (section 6.2).
+The state is per-agent (the multi-agent view: a parent and a child monitor
+the same file independently - the R3 scenario 7).
 
 ---
 
@@ -442,8 +474,9 @@ independently - the R3 scenario 7).
 ### 4.1 The dispatch (Monitors.Dispatch - the ONE producer path)
 
 The check job is started through the SHIPPED G2 wrapper (Jobs.ts `Start`) -
-the R3 brief point 6's "one wrapper, two callers" is literal: NO second
-execution path. The monitor caller:
+the R3 brief point 6's "ONE wrapper, TWO callers" is literal: NO second
+execution path.
+The monitor caller:
 
 	Jobs.Start(Agent, AgentId, {
 		command: <the substituted check-set command>,
@@ -459,37 +492,39 @@ execution path. The monitor caller:
 The G2 wrapper resolves the spec AT START: workingDirectory.ensure(agent),
 shellEnv.collect, sandboxPolicy.resolve({ session }), shell.resolve({
 onExpiry: "none" }) - the SAME governed path, the sandbox policy UNMODIFIED
-(the 12.2.1 rule: detachment never buys weaker isolation). The job spec:
-kind "monitor", label `monitor <setId> <path>` (first 80 bytes),
-outputLimitBytes 2048, output = the pull sources + the private tail (the
-SAME JobTail).
+(the 12.2.1 rule: detachment NEVER buys weaker isolation).
+The job spec: kind "monitor", label `monitor <setId> <path>` (FIRST 80
+bytes), outputLimitBytes 2048, output = the pull sources + the private tail
+(the SAME JobTail).
 
 THE TAIL - the additive JobTail head mode: the detach path keeps the
 newest-2KiB-per-channel capture (unchanged - the phase-2 assertions never
-weaken); the monitor path uses the head mode (a constructor flag): the
-append keeps the FIRST cap bytes per channel, and the render cuts the
-combined stdout + [stderr] head to 2 KiB from the END (the earliest bytes
-survive). Reason: a problem band's diagnostic HEAD is what tells the model
-which edit to revert (the R3 scenario 5's "first lines of the stderr tail");
-one wrapper, one tail class, two modes.
+weaken).
+The monitor path uses the head mode (a constructor flag): the append keeps
+the FIRST cap bytes per channel, and the render cuts the combined stdout +
+[stderr] head to 2 KiB from the END (the earliest bytes survive).
+Reason: a problem band's diagnostic HEAD is what tells the model which edit
+to revert (the R3 scenario 5's "first lines of the stderr tail").
+ONE wrapper, ONE tail class, two modes.
 
 THE VERSION CAPTURE: checkedVersion = the entry's lastVersion AT DISPATCH
-(the version the check runs against). A settle whose checkedVersion != the
-entry's lastVersion AT SETTLE renders STALE (an edit landed while the check
-ran) - the exact-version rule.
+(the version the check runs against).
+A settle whose checkedVersion != the entry's lastVersion AT SETTLE renders
+STALE (an edit landed while the check ran) - the exact-version rule.
 
 ### 4.2 The settle fold (Monitors.OnSettled - the L6 dispatch)
 
 The existing L6 subscription (Apply.ts:678-708) dispatches the settled
 events; the wave-3 addition: `Monitors.OnSettled(State, Event, Append)`
-runs BEFORE Board.OnSettled (the monitors claim their jobs first):
+runs BEFORE Board.OnSettled (the monitors claim their jobs FIRST):
 1. the event's job id must be in State.MonitorJobs (the plugin's own
-   registry - nothing else is folded); the record is deleted after the fold.
+   registry - NOTHING else is folded); the record is deleted after the fold.
 2. the outcome mapping (the D2 Producer.Outcome's detail is the source):
    - cause "producer", job.status "completed": parse the detail
      `exit code: <n>` (the producer's own format, /^exit code: (\d+)$/) ->
-     exit = n. exit 0 -> the clean outcome; exit != 0 -> the problem
-     outcome (the tail from the captured head-tail).
+     exit = n.
+     exit 0 -> the clean outcome; exit != 0 -> the problem outcome (the
+     tail from the captured head-tail).
    - cause "producer", job.status "killed" or "failed" with the detail
      carrying the sandbox-denial marker -> infra "sandbox" (the band
      renders `check denied (sandbox)` - the J3-style fixture pins the
@@ -515,14 +550,15 @@ runs BEFORE Board.OnSettled (the monitors claim their jobs first):
   attempted), the band keeps its LAST-KNOWN result and - because the
   version moved (that is why the check was pending) - renders the STALE
   form at the next request (the R3 7: "the band renders last-known +
-  stale"). No last-known -> `not run yet`.
+  stale").
+  NO last-known -> `not run yet`.
 - a settle with infra: the x/denied forms (section 6.1) - the plugin NEVER
   renders a problem that came from its own plumbing as a code problem (the
   R3 scenario 5).
 - the renderer failure: the stanza skips + ledger `monitors render failed
   -> skipped`; the assembly still resolves.
 - EVERY listener path: next()-first where the event is a waterfall,
-  try/catch, never throws into any dispatch (the family discipline).
+  try/catch, NEVER throws into any dispatch (the family discipline).
 
 ---
 
@@ -531,22 +567,24 @@ runs BEFORE Board.OnSettled (the monitors claim their jobs first):
 ### 5.1 The stanza placement (one section, two stanzas)
 
 The wave-2 WaveAssemble (Apply.ts:236-278) composes the section parts:
-boards, suggestions, drift. The wave-3 addition: `Monitors.SectionParts
-(Agent, AgentId, Separator, Append)` returns ONE part (the whole monitors
-stanza - header + summary band + the file bands, the mandated order: the
-summary band FIRST inside the stanza). The parts order in the section:
-boards, MONITORS, suggestions, drift. The stanza renders when monitors are
-on AND at least one file is enrolled (or a retirement line is due); with
-monitors off or zero enrolled the section body is BYTE-IDENTICAL with the
-wave-2 behavior (the phase-1 + wave-2 smokes pass with ZERO assertion
-changes).
+boards, suggestions, drift.
+The wave-3 addition: `Monitors.SectionParts(Agent, AgentId, Separator,
+Append)` returns ONE part (the whole monitors stanza - header + summary
+band + the file bands, the mandated order: the summary band FIRST inside
+the stanza).
+The parts order in the section: boards, MONITORS, suggestions, drift.
+The stanza renders when monitors are on AND at least ONE file is enrolled
+(or a retirement line is due); with monitors off or zero enrolled the
+section body is BYTE-IDENTICAL with the wave-2 behavior (the phase-1 +
+wave-2 smokes pass with ZERO assertion changes).
 
 WHY ONE part: the section-level collapse (Failsafe.Collapse) collapses the
-OLDEST parts and never the LAST - a per-band parts order would either lose
-the summary band (the header part is the oldest) or violate the "summary
-band first" mandate (the header part last). The stanza atomically bounds
-itself (section 5.3) and the section collapse treats it as one unit
-(ledger `failsafe section-collapse`).
+OLDEST parts and NEVER the LAST.
+A per-band parts order would either lose the summary band (the header part
+is the oldest) or violate the "summary band first" mandate (the header part
+last).
+The stanza atomically bounds itself (section 5.3) and the section collapse
+treats it as ONE unit (ledger `failsafe section-collapse`).
 
 ### 5.2 The KV-cache honesty (stable-until-event, the brief point 8)
 
@@ -562,12 +600,14 @@ The stanza's text changes ONLY on these events:
    post-mount assembly).
 
 Between two events the stanza renders BYTE-IDENTICAL text: the check time
-is HH:MM:SS (no relative ages anywhere - a "3s ago" would churn the cache
-per request); the band ORDER (by lastObservedAt) changes only when an
-observed event lands; the pending/debounce state is never rendered; the
-summary arithmetic is event-driven. The retirement is the ONE clock-driven
-text change - a terminal one-time change (the R3 brief point 8's mutation
-set + this documented exception).
+is HH:MM:SS (NO relative ages anywhere - a "3s ago" would churn the cache
+per request).
+The band ORDER (by lastObservedAt) changes only when an observed event
+lands.
+The pending/debounce state is NEVER rendered.
+The summary arithmetic is event-driven.
+The retirement is the ONE clock-driven text change - a terminal one-time
+change (the R3 brief point 8's mutation set + this documented exception).
 
 ### 5.3 The token budget (the R3 point 4)
 
@@ -585,10 +625,13 @@ set + this documented exception).
 
 The stanza recomputes per assemble pass from the per-agent monitor state
 (the L1 waterfall append - the standing-section class; the R3 2's
-recompute seam). The control-loop framing (the R3 point 10): the monitor
-section IS the system's observable state vector; the model's edits are the
-control inputs; the checks are the observers; the loop closes per request;
-the sample time is documented in section 3.3.
+recompute seam).
+The control-loop framing (the R3 point 10): the monitor section IS the
+system's observable state vector.
+The model's edits are the control inputs.
+The checks are the observers.
+The loop closes per request.
+The sample time is documented in section 3.3.
 
 ---
 
@@ -611,12 +654,13 @@ file):
 	--- END MONITORS ---
 
 THE SUMMARY BAND arithmetic (pinned - the R3 example's parenthetical and
-trailing counts were internally loose; the pinned form is provable): each
+trailing counts were internally loose; the pinned form is provable): EACH
 enrolled file contributes its PRIMARY glyph - the STALE state dominates
 (the ~ counts the stale bands regardless of the underlying outcome), then
 problem (!), then infra (x), then clean (\u2204), then not-run-yet
-(\u2205); <total> = clean + problem + stale + pending + infra; the trailing
-phrase's four counts mirror the parenthetical's. The smoke asserts the sum.
+(\u2205); <total> = clean + problem + stale + pending + infra.
+The trailing phrase's four counts mirror the parenthetical's.
+The smoke asserts the sum.
 
 THE BAND FRAME (one frame per file; the separator from config, default
 "---"):
@@ -648,8 +692,9 @@ shape; total <= 2 KiB):
 	<the captured head>
 
 THE PRIMARY-GLYPH RULE: the file's PRIMARY state = the worst across its
-check sets (order: stale > problem > infra > clean > not-run-yet); the
-primary line renders FIRST; the summary counts the file once by its primary.
+check sets (order: stale > problem > infra > clean > not-run-yet).
+The primary line renders FIRST.
+The summary counts the file ONCE by its primary.
 A stale band keeps its underlying outcome facts (the STALE declaration
 prefixes the line - the R3 3.6's "render STALE with the persisted facts").
 
@@ -680,8 +725,9 @@ THE HONESTY BOUNDS (the R3 points 1/2/7, HARD - acceptance-testable): a
 producer, status completed), (b) the parse produced exit 0, (c) the set id
 matches, (d) checkedVersion == the current lastVersion (raw-token equality),
 (e) provenance "live" - NO synthesis, NO inference, NO carry-over across
-versions; a settle-less version bump NEVER renders `\u2204` (the false-pass
-guard, tested by injecting a settle-less bump).
+versions.
+A settle-less version bump NEVER renders `\u2204` (the false-pass guard,
+tested by injecting a settle-less bump).
 
 THE RETIREMENT CLOSING LINE (one line, rendered once, then withdrawn):
 
@@ -710,10 +756,12 @@ the schema and the open mechanics; this section owns the record content.
 
 The recovery (section 1): the newest monitor-check record per (path, agent)
 rebuilds the entry; the loaded checks stamp provenance "recovered"; the
-band treatment per section 6.2; the enrolled records rebuild the enrollment.
-Job state itself never resumes (the jobs-local contract, 01 9.10) - the
-persisted RESULTS do; a result whose backing process is gone is still a
-valid fact about a version (the R3 point 9's exact position).
+band treatment per section 6.2; the enrolled records rebuild the
+enrollment.
+Job state itself NEVER resumes (the jobs-local contract, 01 9.10) - the
+persisted RESULTS do.
+A result whose backing process is gone is still a valid fact about a
+version (the R3 point 9's exact position).
 
 ---
 
@@ -723,57 +771,65 @@ THE MECHANICS - no new seam, the existing Plant/Board machinery:
 
 1. THE plantType registry EXTENDS: "agent-board" | "todo-fill" |
    "aggregate" | "custom" | "monitors" (the BoardState.plantType union; the
-   Board.Frame gains the monitors branch). The monitors board's member slots
-   are the CHILD AGENTS (the lease applies to them exactly as the
-   agent-board's); its ROWS are the monitored FILES.
-2. THE ROW: `[monitored] <path> - <outcome> by <writer>` - the R3 byte; the
-   <outcome> is the file's primary outcome text (`clean (\u2204)` etc.). The
-   rows render from the board's items (the BoardState.items slot, the
+   Board.Frame gains the monitors branch).
+   The monitors board's member slots are the CHILD AGENTS (the lease
+   applies to them exactly as the agent-board's).
+   Its ROWS are the monitored FILES.
+2. THE ROW: `[monitored] <path> - <outcome> by <writer>` - the R3 byte.
+   The <outcome> is the file's primary outcome text (`clean (\u2204)` etc.).
+   The rows render from the board's items (the BoardState.items slot, the
    todo-fill precedent: label = path, state = the primary outcome).
 3. THE DATA CHANNELS (the two the boards already use):
    a. THE L6 SETTLE TRUTH: the parent's { owners: "scope" } subscription
-      already sees the boards' children's jobs (the D2 3.6 verified shape);
-      a member's monitor job settle (kind "monitor", label carrying the
+      already sees the boards' children's jobs (the D2 3.6 verified shape).
+      A member's monitor job settle (kind "monitor", label carrying the
       path) folds into the monitors board's item for that path - the same
       OnSettled fold, the monitors branch.
    b. THE REPORT GRAMMAR gains the "monitored" status: `[live-report]
       <plantId> <agentId> monitored <outcome> <path>` (the outcome word
-      FIRST - one of clean | problem | stale | not-run | infra | denied -
-      the path = the rest of the payload, so paths with spaces parse); the
-      Board.Report folds it into the monitors board's items (the existing
-      Report ledger `report <id> <agentId> (<n> bytes)` covers the fold).
-4. THE SKIP GUARD (the one additive Board.ts change): Board.OnSettled
+      FIRST - ONE of clean | problem | stale | not-run | infra | denied -
+      the path = the rest of the payload, so paths with spaces parse).
+      The Board.Report folds it into the monitors board's items (the
+      existing Report ledger `report <id> <agentId> (<n> bytes)` covers the
+      fold).
+4. THE SKIP GUARD (the ONE additive Board.ts change): Board.OnSettled
    consults State.MonitorJobs FIRST - a member's MONITOR settle must NEVER
-   flip the member's TASK row (a check is not a completion); the guard is
-   one early-return line, the phase-2 board semantics unchanged.
-5. THE PARENT PLANTS A MONITOR INTO A CHILD'S SCOPE: `live_monitor(path,
-   agent: <childId>)` - the host plugin's per-agent monitor state is keyed
-   on the agent id, so the enrollment lands in the CHILD's monitor set; the
-   child's next assemble renders the band in the CHILD's section (the
-   per-agent attribution), and the child's check settles feed the parent's
-   monitors board through channel (a). No transport change.
+   flip the member's TASK row (a check is not a completion).
+   The guard is ONE early-return line, the phase-2 board semantics
+   unchanged.
+5. THE PARENT PLANTS A MONITOR INTO A CHILD'S SCOPE:
+   `live_monitor(path, agent: <childId>)` - the host plugin's per-agent
+   monitor state is keyed on the agent id, so the enrollment lands in the
+   CHILD's monitor set.
+   The child's next assemble renders the band in the CHILD's section (the
+   per-agent attribution).
+   The child's check settles feed the parent's monitors board through
+   channel (a).
+   NO transport change.
 
 ---
 
 ## 9. THE ESCAPE HATCH (the R3 point 6)
 
 1. INLINE CHECKS UNDIMINISHED: the monitor layer adds NO tools/pre-execute
-   listener - the model's own `tsc --noEmit` etc. run exactly as without
-   the plugin (the detach transform's __await marker remains the model's
-   per-call inline opt-out for the DETACH path; the monitors never gate or
-   deny an edit, never detach a model call). The monitors only OBSERVE
-   writes (the fs/observed events) - the 12.1 rule has no conflict here.
+   listener - the model's own `tsc --noEmit` etc. run exactly as WITHOUT the
+   plugin (the detach transform's __await marker remains the model's
+   per-call inline opt-out for the DETACH path; the monitors NEVER gate or
+   deny an edit, NEVER detach a model call).
+   The monitors only OBSERVE writes (the fs/observed events) - the 12.1
+   rule has NO conflict here.
 2. THE DEEP CHECK: `live_monitor_check <path>` (section 9.1) - the full
-   check set once, bypassing the debounce, as a ctx.jobs job; the model
-   reads the full ring via job_output (the job's owner is the agent; the
-   tool returns the job id).
+   check set ONCE, bypassing the debounce, as a ctx.jobs job.
+   The model reads the full ring via job_output (the job's owner is the
+   agent; the tool returns the job id).
 3. THE PER-GLOB OPT-OUT: `live_monitor off <glob>` - the matching enrolled
-   files retire (the closing line + ledger `monitor off <glob>`; the glob is
-   added to the per-agent opt-outs so a later fs/observed event does not
-   re-enroll).
+   files retire (the closing line + ledger `monitor off <glob>`).
+   The glob is added to the per-agent opt-outs so a later fs/observed event
+   does NOT re-enroll.
 4. THE BAND'S JOB HINT: a settled check's band carries the job id in the
-   ledger; the model's recovery path for the full output is job_output
-   <job-id> (the marker-side honesty, 12.2.3's spirit).
+   ledger.
+   The model's recovery path for the full output is job_output <job-id>
+   (the marker-side honesty, 12.2.3's spirit).
 
 ### 9.1 The tool surfaces (MonitorTools.ts - the defineTool idiom, the
 Plant.ts shape; read-only semantics, never a write path)
@@ -785,13 +841,13 @@ agent (string) }.
   checks) - the band renders in the live section.`
 - off: the glob opt-out; output render: `monitor off <glob> - <n> file(s)
   retired.`
-- list: the enrolled files with their primary outcome one-liners; output
-  render: the lines.
+- list: the enrolled files with their primary outcome one-liners.
+  Output render: the lines.
 - agent: the target session id (the parent-into-child mechanics, section 8
   point 5); default the caller.
 
 `live_monitor_check`: parameters { path (string, required) }.
-- the file enrolls if not enrolled; ALL its check sets dispatch once
+- the file enrolls if not enrolled; ALL its check sets dispatch ONCE
   (fast + slow, bypassing the debounce), admission-guarded: when the
   admission is full the pending records are set (coalesced) and the tool
   answers the pending line; the settle updates the band like any check.
@@ -880,9 +936,9 @@ Target/Library.js against the fake ctx (the Harness.ts shape: on capture,
 get serving the REAL factory, logger capture, the root seam, the
 `ctx.__hookDshLiveContainersState` probe), run with `node Target/Test/
 <Folder>/Test.js` standalone AND under Maintain/Run-Smokes.mjs (the
-vacuously-green guard: each folder's README declares the PASS count). The
-phase-1 and wave-2 assertions NEVER weaken - the monitors default off makes
-the section byte-identical until enabled.
+vacuously-green guard: EACH folder's README declares the PASS count).
+The phase-1 and wave-2 assertions NEVER weaken - the monitors default off
+makes the section byte-identical until enabled.
 
 THE FIXTURES (extending the Harness):
 - the FAKE fs/observed trigger: the smoke fires the ROOT listener with
@@ -915,14 +971,14 @@ THE FOLDERS (the M-series):
    (watchlist override vs the default catalog globs; the most-specific
    wins); the debounce coalescing (three edits within 1500ms -> ONE job
    started after the clock crosses the window); the admission coalesce
-   (maxMonitorJobs 1: a second pending stays pending while the first is
-   live - no second job; it dispatches at the next checkpoint after the
-   settle); the retirement (advance past retireMs -> the closing line once
+   (maxMonitorJobs 1: a second pending stays pending while the FIRST is
+   live - NO second job; it dispatches at the next checkpoint after the
+   settle); the retirement (advance past retireMs -> the closing line ONCE
    -> withdrawn; the ledger); the overflow (maxMonitors 8 + 9 files -> the
    9th renders the collapsed one-liner + `monitors overflow <n>`); the
    opt-out (live_monitor off retires the matches; a later fs/observed event
    does not re-enroll).
-2. Monitors-Band - the R-series byte-identity: every outcome line of
+2. Monitors-Band - the R-series byte-identity: EVERY outcome line of
    section 6.1 byte-exact (the \u2204/\u2205 escapes RENDERED - the smoke
    asserts the character bytes); the STALE flips (a version bump -> `~
    STALE (file changed after check)` at the next request with NO re-run -
@@ -930,7 +986,7 @@ THE FOLDERS (the M-series):
    rule + the version-stale-after-mount form); the summary arithmetic
    (the counts sum to the total; the primary-glyph rule); the token budget
    (a > 2 KiB tail renders <= bandCapBytes; the stanza participates in the
-   section budget); the KV stability (two assemblies with no event render
+   section budget); the KV stability (two assemblies with NO event render
    byte-identical stanza text).
 3. Monitors-Jobs - the runner: the dispatch through the fake registry with
    the exact re-dispatch spec (the G2 shape; the sandbox policy preserved);
@@ -948,10 +1004,10 @@ THE FOLDERS (the M-series):
    byte-exact (name/version/layout/invalidRecords/tables); the put records
    (the enrolled/check/retired shapes); the pre-bind buffer (records fired
    before the open buffer, drain on success); the absent facility (silent
-   skip; after a "restart" the bands render `not run yet` - never a
+   skip; after a "restart" the bands render `not run yet` - NEVER a
    fabricated clean); the open failure (the loud ledger line, the sink
    degrades); the recovery (the read surface -> the recovered entries with
-   provenance + the staleMs treatment; the read absent -> no recovery).
+   provenance + the staleMs treatment; the read absent -> NO recovery).
 5. Monitors-Tools - live_monitor (enroll/off/list/agent - the per-agent
    enrollment lands in the named session's set); live_monitor_check (the
    deep path: the full set once, the job id in the output text, the band
@@ -960,10 +1016,10 @@ THE FOLDERS (the M-series):
    member's monitor settles (the `[monitored] <path> - <outcome> by
    <writer>` byte); the [live-report] monitored fold (the outcome-first
    payload, the path with spaces); the SKIP GUARD (a member's monitor
-   settle does NOT flip the member's task row - the phase-2 board semantics
-   intact); the close/withdraw lifecycle unchanged.
+   settle does NOT flip the member's task row - the phase-2 board
+   semantics intact); the close/withdraw lifecycle unchanged.
 
-THE COUNTS: the wave-3 suite is its own counted series (each folder's
+THE COUNTS: the wave-3 suite is its own counted series (EACH folder's
 README declares its PASS count - the reference: the wave-2's 180 checks
 across 8 folders; the M-series targets ~90-110 checks across 6 folders).
 The R3 M7's "R-series band renders, D-series fail-open/honesty/sandbox-
@@ -1009,36 +1065,38 @@ v1-of-monitors scope is sections 1-13; the extensions land after)
 SEVERE (next after the monitors' v1):
 1. THE LINKAGE ALERTS (the R3 7.1): when a file's problem persists across
    linkageAlertVersions (3) version-bumps (the check results: problem at
-   v, v+1, v+2), the band escalates to channel 4 (the model-visible note):
-   the band gains one line `[live] <path>: problem unchanged across <n>
+   v, v+1, v+2), the band escalates to channel 4 (the model-visible note).
+   The band gains ONE line `[live] <path>: problem unchanged across <n>
    edits - read the tail before the next edit.` + ledger `monitor linkage
-   <path> (<n> versions)`. Gated on failsafes "on" + linkageAlertVersions
-   > 0; counted against failsafesPerTurn (the CAN-4 posture).
+   <path> (<n> versions)`.
+   Gated on failsafes "on" + linkageAlertVersions > 0; counted against
+   failsafesPerTurn (the CAN-4 posture).
 2. THE CROSS-FILE PROBLEM ATTRIBUTION (the R3 7.2): config-gated
    (attrParse: "off" | "on", default "off" - the wave-3 config gains the
-   knob when the extension lands): a problem tail whose first lines match
+   knob when the extension lands): a problem tail whose FIRST lines match
    another enrolled file's path annotates that file's band with `problem
-   via <path>` + ledger `monitor via <path> <from-path>`. Text-level
-   parsing of the check tail only.
+   via <path>` + ledger `monitor via <path> <from-path>`.
+   Text-level parsing of the check tail ONLY.
 3. THE CI-PARITY CHECK SET (.live-monitors.json): a project-level config
    the USER authors ({ checksets, watchlist } per project); the plugin
    reads it READ-ONLY at enrollment (best-effort, cached per project root
-   with a TTL; never written - the read is node:fs, the governor's
+   with a TTL; NEVER written - the read is node:fs, the governor's
    policyFile-reading precedent).
 4. THE MONITOR-AWARE DEDUP (the R3 7.4 - the ONLY piece touching
    tools/post-execute; read-only-in-effect): the L2 pre-execute arm records
    a note-candidate (a model command whose (normalized command, cwd)
    matches a monitor job that SETTLED within dedupWindowMs, keyed on the
-   callId - never a deny, never a detach); the existing L4 post-execute
+   callId - NEVER a deny, NEVER a detach); the existing L4 post-execute
    observer appends ONE line to the tool result's text: `[monitor] same
    check ran <n>s ago (<job-id>) - job_output for the tail.` + ledger
-   `monitor dedup <path> (<job-id>)`. The decision passes through unchanged
-   - an observability note on an inline call, legal under 12.1.
+   `monitor dedup <path> (<job-id>)`.
+   The decision passes through unchanged - an observability note on an
+   inline call, legal under 12.1.
 
 COMPREHENSIVE (the later stage - design notes, FUTURE):
 5. THE PROGRAMMABLE MONITORS: per-glob `program:` checks executed by the
-   ptc-runtime under the v1 research section 5 caps (2s, 16 KiB, no fs
-   writes, no network) - the user's "wrap the file in a sandbox" fully
+   ptc-runtime under the v1 research section 5 caps (2s, 16 KiB, NO fs
+   writes, NO network) - the user's "wrap the file in a sandbox" fully
    realized: the sandbox is the ptc runtime, the program is arbitrary, the
    output contract is the band grammar.
 6. THE AGGREGATE HEALTH BLOCK: the `health` kind in the block catalog
@@ -1060,24 +1118,24 @@ COMPREHENSIVE (the later stage - design notes, FUTURE):
    check time, exit, and `\u2204` on exit 0 - with NO model check command
    (the Monitors-Band/Jobs smokes assert the call log).
 2. A second edit before the next request flips the earlier band to `~`
-   STALE at that request without a re-run; a later request shows the fresh
+   STALE at that request WITHOUT a re-run; a later request shows the fresh
    result (Monitors-Band).
 3. A non-zero exit renders `!` with a capped tail; an infrastructure
-   failure renders `x`, never `!` (Monitors-Jobs).
-4. Every internal error path is fail-open: no throw reaches fs/observed or
+   failure renders `x`, NEVER `!` (Monitors-Jobs).
+4. EVERY internal error path is fail-open: NO throw reaches fs/observed or
    assemble in any test; a broken renderer degrades to the ledger
    (Monitors-Jobs/Band D-series).
-5. No `\u2204` ever renders without a matching observed exit-0 settlement
+5. NO `\u2204` EVER renders WITHOUT a matching observed exit-0 settlement
    for the current version (the false-pass guard - Monitors-Jobs).
 6. Restart: persisted bands reload with original provenance; absent domain
-   renders `not run yet`; nothing fabricates (Monitors-Persist).
+   renders `not run yet`; NOTHING fabricates (Monitors-Persist).
 7. The command-only/sandbox rules hold: monitor jobs run through the
    governed G2 path; a sandbox-denied check renders `check denied
-   (sandbox)`; monitor checks never detach or gate a content-mutating tool
+   (sandbox)`; monitor checks NEVER detach or gate a content-mutating tool
    call (Monitors-Jobs; the 12.1 no-conflict is structural - the monitors
-   add no tools/pre-execute listener).
+   add NO tools/pre-execute listener).
 8. The token budget: band <= 2 KiB, the section <= 4 KiB with recorded
-   collapse; the summary band is one line (Monitors-Band).
+   collapse; the summary band is ONE line (Monitors-Band).
 9. The plugin ships disabled; the monitor layer is a second explicit flip
    after the plugin's own enable (the Wiring/Defaults assertions).
 10. Ledger strings byte-exact per the SCHEME (the D-series byte-identity
@@ -1094,15 +1152,16 @@ PHASE 2 (C2 - SHIPPED, on disk): the wave-2 extension (Policy, Jobs,
 Detach, Completion, Board, Failsafe, Suggester, Set, Plant, the J/B/F/S
 suite, the ETS twin).
 PHASE 3 (C3 - THIS design): the wave-3 monitor layer on the SAME package,
-STRICTLY SEQUENTIAL after the wave-2 acceptance is green. C3's edits to the
-existing files are ADDITIVE ONLY: the Validate block appends, the Config
-cells append, the State fields append, Apply appends the registrations
-(Wire, the L6 fold, the WaveAssemble part, the tools, the storage effect),
-Board gains the ONE skip-guard line. The phase-1 and wave-2 smokes pass
-with ZERO assertion changes (the family arbiter law); the new behaviors
-live in NEW modules (the module-leaves discipline). The ETS twin mirrors
-after the Classic acceptance (the D2 1.1 discipline; the ledger strings
-byte-identical).
+STRICTLY SEQUENTIAL after the wave-2 acceptance is green.
+C3's edits to the existing files are ADDITIVE ONLY: the Validate block
+appends, the Config cells append, the State fields append, Apply appends
+the registrations (Wire, the L6 fold, the WaveAssemble part, the tools, the
+storage effect), Board gains the ONE skip-guard line.
+The phase-1 and wave-2 smokes pass with ZERO assertion changes (the family
+arbiter law).
+The new behaviors live in NEW modules (the module-leaves discipline).
+The ETS twin mirrors after the Classic acceptance (the D2 1.1 discipline;
+the ledger strings byte-identical).
 
 ### 16.2 THE C3 CODER BRIEF (self-contained - dispatch after the wave-2
 acceptance)
@@ -1116,11 +1175,12 @@ spec) and this brief.
 SURFACE: ONLY Classic/packages/hook-dsh-live-containers/** and
 EffectTS/packages/ets-hook-dsh-live-containers/** (after the Classic
 acceptance) + the wave-3 sections of the package README/SCHEME + the site
-page's wave-3 section. The C2-shipped wave-2 files are READ FIRST (the
-monitors extend them): Source/Function/Apply.ts (the registration
+page's wave-3 section.
+The C2-shipped wave-2 files are READ FIRST (the monitors extend them):
+Source/Function/Apply.ts (the registration
 discipline + the L6 dispatch + WaveAssemble), Source/Function/Jobs.ts (the
 G2 wrapper - the check producer REUSES Start; the JobTail head mode is the
-only Jobs.ts edit), Source/Function/Board.ts (the skip guard + the
+ONLY Jobs.ts edit), Source/Function/Board.ts (the skip guard + the
 "monitors" plantType branch), Source/Variable/Config.ts (the append-only
 cells), Source/Function/Plant.ts (the defineTool idiom for MonitorTools),
 Source/Function/Policy.ts (INLINE_DEADLINE_MS - the check-deadline cap),
@@ -1143,23 +1203,23 @@ had in phase 1).
 
 ARBITERS: Maintain/Run-Smokes.mjs all green; the phase-1 + wave-2 suites
 pass with ZERO assertion changes; the ledger strings match the SCHEME
-byte-exactly; no other package modified.
+byte-exactly; NO other package modified.
 
-DISCIPLINES: never run git commands (checks only; report READY-TO-COMMIT);
+DISCIPLINES: NEVER run git commands (checks only; report READY-TO-COMMIT);
 ASCII only (the glyphs as escapes); tabs only; file content via the
-write/edit tool API only; no builds/dev-server/test runs beyond what the
-smoke harness performs when the orchestrator runs it; never enable the
-plugin or the monitors in the profile; every listener next()-first +
-fail-open; every ledger line byte-exact; the storage-domain read surface
+write/edit tool API only; NO builds/dev-server/test runs beyond what the
+smoke harness performs when the orchestrator runs it; NEVER enable the
+plugin or the monitors in the profile; EVERY listener next()-first +
+fail-open; EVERY ledger line byte-exact; the storage-domain read surface
 is verified IN PLACE at dispatch (the app.asar dsh-storage-domain package -
 the recovery load's exact read/list shape; when the surface differs from
 the design's assumption, implement to the verified surface and report the
-deviation with one line).
+deviation with ONE line).
 
-REPORT FORMAT: one message - the files created/edited per twin, per-file
-one-line summary, the exact ledger strings shipped, the smoke results
-(pass/fail counts per series), and any deviation from this design with a
-one-line reason.
+REPORT FORMAT: ONE message - the files created/edited per twin, per-file
+ONE-line summary, the exact ledger strings shipped, the smoke results
+(pass/fail counts per series), and ANY deviation from this design with a
+ONE-line reason.
 
 ROUTING TRIPLE: provider cloudflare-workers-ai, model @cf/zai-org/
 glm-5.3-flash, reasoningEffort low (the task-routing law - C3 is a coding
@@ -1170,11 +1230,12 @@ verification pass per the task-routing skill).
 
 C2's shipped code is the FLOOR: the monitors' jobs ride C2's G2 wrapper,
 the stanza rides C2's WaveAssemble, the band's settle rides C2's L6
-subscription, the boards' skip guard is the ONLY C2-file behavior edit (one
-early-return line in Board.OnSettled). C2's ledger strings and marker
-grammars are byte-untouched. A mismatch between C2's shipped bytes and this
-design's references is a defect to REPORT (the C3 report's deviation
-line), never to paper over (the A3/C2 precedent, D2 9.4).
+subscription, the boards' skip guard is the ONLY C2-file behavior edit (ONE
+early-return line in Board.OnSettled).
+C2's ledger strings and marker grammars are byte-untouched.
+A mismatch between C2's shipped bytes and this design's references is a
+defect to REPORT (the C3 report's deviation line), NEVER to paper over
+(the A3/C2 precedent, D2 9.4).
 
 ---
 
@@ -1182,17 +1243,19 @@ line), never to paper over (the A3/C2 precedent, D2 9.4).
 
 1. THE R3 SCENARIO-4 CROSS-FILE STALENESS: the v1 monitors derive
    staleness PER FILE (the brief point 4's rule - the same-file version
-   comparison, acceptance-tested). The Config.ts/State.ts dependency case
-   (a check's truth about a world whose OTHER files moved) is served by
-   the per-version provenance (the band's version stamp is the honest
-   signal) and fully solved only by the SEVERE cross-file attribution
-   (config-gated tail parsing) - the design scopes this explicitly; the
-   plugin never CLAIMS cross-file staleness it cannot compute.
+   comparison, acceptance-tested).
+   The Config.ts/State.ts dependency case (a check's truth about a world
+   whose OTHER files moved) is served by the per-version provenance (the
+   band's version stamp is the honest signal) and fully solved only by the
+   SEVERE cross-file attribution (config-gated tail parsing).
+   The design scopes this explicitly; the plugin NEVER CLAIMS cross-file
+   staleness it cannot compute.
 2. THE RECOVERY READ SURFACE: the exact dsh-storage-domain read/list
    shape is not pinned here (the factory only uses put; the harness tree
-   is not readable from this lane's sandbox). The C3 dispatch verifies it
-   IN PLACE; the absent/failing read degrades to `not run yet` (honesty,
-   never fabrication) - the residual is contained by design.
+   is not readable from this lane's sandbox).
+   The C3 dispatch verifies it IN PLACE; the absent/failing read degrades
+   to `not run yet` (honesty, NEVER fabrication) - the residual is
+   contained by design.
 3. THE VERSION TOKEN SHAPE: the fs/observed version token is opaque (the
    family's capability rule); the band renders it verbatim (12-byte
    display cap) and compares RAW tokens - a future token-shape change
@@ -1204,7 +1267,7 @@ line), never to paper over (the A3/C2 precedent, D2 9.4).
    trailing counts disagreed); the pinned summary (section 6.1) is
    self-consistent and provable - the R3 byte `monitors: <n> (...glyphs...)
    - <n> problem, <n> stale, <n> not run` shell is preserved.
-6. THE LINKED-GOVERNANCE BAND never renders `\u2204`: the plugin has no
+6. THE LINKED-GOVERNANCE BAND NEVER renders `\u2204`: the plugin has NO
    seam into the governor's verdict; the honest `\u2205 (linked
    governance; no re-run)` form with the observed version facts is the
    design's position (a fabricated governance verdict would violate the
@@ -1215,7 +1278,7 @@ line), never to paper over (the A3/C2 precedent, D2 9.4).
 ## 18. THE ROUTING + THE LANE NOTES
 
 - This design executed READ-ONLY: the single deliverable is this file
-  (write tool); no builds, no dev server, no test runs, no git mutations
+  (write tool); NO builds, NO dev server, NO test runs, NO git mutations
   (checks only; the whole work reports READY-TO-COMMIT when green).
 - The normalize hooks are active in the authoring profile: this document
   is ASCII-only, tabs-only, written through the write tool API; the

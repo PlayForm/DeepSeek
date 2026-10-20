@@ -41,7 +41,7 @@ We port that pipeline to the harness, NOT the proxy (the proxy mode is a separat
 The LIVE Host `Event` directory (cordis inspect `Event.listEvents`, this
 profile) declares these tool-traffic waterfalls:
 
-- `tools/pre-execute` - allow/deny/cancel/ask before dispatch (not our point).
+- `tools/pre-execute` - allow/deny/cancel/ask before dispatch (NOT our point).
 - `tools/execute` - around-dispatch waterfall for timeout, retry, metrics.
   Wrappers may change ONLY `exec.signal`, call identity immutable.
 - **`tools/post-execute`** - "Accept, replace, enrich, or block a normalized
@@ -100,18 +100,18 @@ echo), the plugin's own retrieval tool, and `subagent`/`ask_user_question`
 
 | Aphrodite knob (R:293-298) | DSH knob (this plan) | Default | Meaning |
 | --- | --- | --- | --- |
-| `tool_threshold_token` 256 / `tool_threshold_cache` 2048 | `thresholdBytes` | 2048 | one byte gate for all tools (DSH has no cache/token proxy split) |
+| `tool_threshold_token` 256 / `tool_threshold_cache` 2048 | `thresholdBytes` | 2048 | ONE byte gate for ALL tools (DSH has NO cache/token proxy split) |
 | `terminal_threshold` 256 | `terminalThresholdBytes` | 2048 | bash results; 256 was aggressive, DSH bash keeps parity with the general gate |
 | `inline_threshold` 1024 | `inlineThresholdBytes` | 1024 | results at/below this are inlined in the store and previewed fully |
 | `code_multiplier` 1.0 | `multipliers` map | see below | per-type multiplier on the byte gate |
 | error ×8 tier (R:213-135 → R:134) | `multipliers.error: 8` | 8 | errors are high-signal, compress late |
 | diff/git/text ×2 | `multipliers.diff: 2`, `multipliers.text: 2` | 2 | |
-| protect first/last (context engine, R:173-179) | `protectFirstTurns: 2`, `protectLastTurns: 4` | 2 / 4 | phase 4 (context engine), not the tool gate |
-| `auto_expand` / `auto_expand_limit` 102400 (R:181-186) | `autoExpand: true`, `autoExpandLimitBytes: 102400` | true | identical semantics: store + preview, but return full content while under the limit - no marker reaches the model |
+| protect first/last (context engine, R:173-179) | `protectFirstTurns: 2`, `protectLastTurns: 4` | 2 / 4 | phase 4 (context engine), NOT the tool gate |
+| `auto_expand` / `auto_expand_limit` 102400 (R:181-186) | `autoExpand: true`, `autoExpandLimitBytes: 102400` | true | identical semantics: store + preview, but return full content while under the limit - NO marker reaches the model |
 | TTL 3600 (R:167-168) | `ttlSeconds: 3600` | 3600 | |
 | inline LRU 256 MB (R:109-111) | `storeBudgetBytes: 268435456` | 256 MiB | |
 
-Type tiers: a DSH classifier with a REDUCED set (not 30, §8): `terminal`
+Type tiers: a DSH classifier with a REDUCED set (NOT 30, §8): `terminal`
 (bash), `grep`, `paths` (glob/list), `file` (read), `json`, `web`, `default` -
 7 types, EACH with a one-line preview builder and a multiplier, seeded from
 Aphrodite's preview formats (R§3 step 2, R:105-106; e.g.
@@ -160,8 +160,8 @@ Kept byte-identical in shape so the research vocabulary carries over, but:
 
 - Pure ASCII (digits, lowercase hex, letters, pipes) - it passes through EVERY
   member of the harness's normalize family untouched (the dash class rewrites
-  only unicode dashes to `-`; the quotes/ellipsis/space classes never touch
-  ASCII pipes; `normalize-file` normalizes existing files, not model output -
+  ONLY unicode dashes to `-`; the quotes/ellipsis/space classes NEVER touch
+  ASCII pipes; `normalize-file` normalizes existing files, NOT model output -
   `dsh-hook-normalize-dash/SCHEME.md` §1).
   The model can also re-read the marker from its own transcript intact.
 - The 24-hex hash is lowercase; "no prefix or fuzzy matching" carries over
@@ -343,19 +343,19 @@ The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate later item per the SPLIC
 | 30-type classifier | ADAPT | 7 DSH types (§2.2) - the 30-type taxonomy is proxy-shaped |
 | Threshold tiers + multipliers | ADAPT | error ×8 etc. carried into the `multipliers` map |
 | Inline LRU store | PORT | memory LRU with budget cap |
-| SQLite ccr.db | ADAPT | JSONL disk journal instead; SQLite is a native dep the family does not carry |
-| Retrieval tool | ADAPT | `ccr_retrieve` as one registered ToolDefinition (Aphrodite's 13 relays → 1) |
+| SQLite ccr.db | ADAPT | JSONL disk journal instead; SQLite is a native dep the family does NOT carry |
+| Retrieval tool | ADAPT | `ccr_retrieve` as ONE registered ToolDefinition (Aphrodite's 13 relays → 1) |
 | Directives | ADAPT | a `system-prompt/assemble` CCR-handling section, phase 4 |
 | Context engine (middle-turn archiving) | ADAPT | `agent/pre-step`-adjacent, feature-flagged, phase 4 |
-| Proxy mode (:9797/:9798) | SKIP | DSH is not an OpenAI-compatible relay; interception at the runtime is strictly better placed |
-| Live containers (progressive markers) | DEFER | requires streaming tool results; the post-execute point sees finalized results only |
+| Proxy mode (:9797/:9798) | SKIP | DSH is NOT an OpenAI-compatible relay; interception at the runtime is strictly better placed |
+| Live containers (progressive markers) | DEFER | requires streaming tool results; the post-execute point sees finalized results ONLY |
 | Poll worker (auto-backgrounding) | DEFER | needs scheduler integration beyond post-execute |
 | Chain split | SKIP | command splitting is Hermes shell-specific |
-| Rhai scripting | SKIP | no scripting runtime in the family |
+| Rhai scripting | SKIP | NO scripting runtime in the family |
 | Metrics/health/stats | ADAPT | ledger lines carry compressed/evicted/retrieved counts (family convention) |
-| TOML templates | SKIP | the DSH Config schema replaces TOML; no template engine |
+| TOML templates | SKIP | the DSH Config schema replaces TOML; NO template engine |
 | Centers | SKIP | v1-only in Aphrodite, roadmap elsewhere (R:233-235) |
-| Flow budget / injected context | DEFER | only if the context engine lands (phase 4) |
+| Flow budget / injected context | DEFER | ONLY if the context engine lands (phase 4) |
 | Prefetch | DEFER | low value while compression already caps the flood |
 
 ## 9. Acceptance (the whole plugin)

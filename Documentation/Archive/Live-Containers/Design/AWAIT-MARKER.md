@@ -25,28 +25,30 @@ statuses:
 
 Status: ratified design for the live tool-call transformation (CAN-1).
 Surface: this file is the durable input for the C2 coder brief (D2 dispatch
-section 9); where this file conflicts with IMPLEMENTATION-DESIGN.md section
-4.3, THIS FILE WINS (the conflict table is in the I2 report to the parent).
+section 9).
+Where this file conflicts with IMPLEMENTATION-DESIGN.md section 4.3, THIS FILE WINS (the conflict table is in the I2 report to the parent).
 
 ## 1. The Principle
 
-The live transformation detaches command calls by default: the model gets a
-marker line back immediately and keeps generating while the command runs.
-Fire-and-forget is the DEFAULT, but it is not universal - some calls are
-genuinely sequential: the model reads a file because the next emitted step
-depends on its content, or a short setup command must finish before the next
-command makes sense. Detaching those costs a wasted turn and a hallucinated
-continuation. The block-on-demand marker is the model's per-call escape
-hatch: ONE byte-exact first-key in the call arguments promotes a single call
-from detached back to synchronous. Per call, never per session, never per
-tool - the default stays fire-and-forget everywhere else.
+The LIVE transformation detaches command calls by default.
+The model gets a marker line back immediately.
+It keeps generating while the command runs.
+Fire-and-forget is the DEFAULT, but it is NOT universal.
+Some calls are genuinely sequential.
+The model reads a file because the next emitted step depends on its content.
+Or a short setup command must finish before the next command makes sense.
+Detaching those costs a wasted turn and a hallucinated continuation.
+The block-on-demand marker is the model's per-call escape hatch.
+ONE byte-exact first-key in the call arguments promotes a single call from detached back to synchronous.
+The marker applies per call, NEVER per session, NEVER per tool.
+The default stays fire-and-forget everywhere else.
 
 Symmetry with the normalize family: hook-dsh-normalize-dash detects the
 opt-out string prefix `{"__normalize":false` on the FIRST delta of a call
 (Normalize.ts:65-69, `RawCall = Original.argumentsDelta.startsWith('{"__normalize":false')`)
-and leaves it in the output (transparency, no stripping). The await marker
-reuses the same shape in a different carrier: not the text delta, the
-tool-call arguments delta.
+and leaves it in the output (transparency, NO stripping).
+The await marker reuses the same shape in a different carrier.
+It uses NOT the text delta, the tool-call arguments delta.
 
 ## 2. The Marker Grammar (byte-exact)
 
@@ -57,32 +59,34 @@ The marker is a FIRST-KEY prefix of the serialized tool-call arguments:
 Byte rules:
 - The arguments JSON object's first serialized key is `__await`, value
 	exactly the literal `true` (no quotes, no other value).
-- No whitespace variants are recognized: the detection is the same string
-	prefix test as the normalize family, `argumentsDelta.startsWith('{"__await":true')`,
+- NO whitespace variants are recognized.
+	The detection is the same string prefix test as the normalize family, `argumentsDelta.startsWith('{"__await":true')`,
 	applied to the FIRST arguments delta of the call (the delta that carries
-	the first bytes of the arguments string). `{"__await": true` (space),
-	`{'__await':true}`, `{"__await":"true"}` are NOT markers - they are
-	ordinary argument bytes that flow through untouched.
-- Detection is prefix-only: the rest of the arguments object is never parsed
-	to find the marker. If the model does not put it first, it is not a
-	marker; the extra key then simply rides along as an unknown property and
-	is harmless (see 3.1).
-- The marker is NOT stripped. The executed call and its log carry the extra
-	key (the same no-desync transparency rule as `{"__normalize":false`);
-	dsh-tools cannot rewrite arguments and nothing needs to - the key is
-	legal (3.1) and ignored by every runner body.
-- `{"__await":false` as the first key is NOT a marker: it is treated as
-	marker-absent (the call detaches per the normal policy). It exists so a
-	model that wants to be explicit about NOT awaiting has a legal spelling;
-	it must never be refused or misread as an await request.
+	the first bytes of the arguments string).
+	`{"__await": true` (space),
+	`{'__await':true}`, `{"__await":"true"}` are NOT markers.
+	They are ordinary argument bytes that flow through untouched.
+- Detection is prefix-only.
+	The rest of the arguments object is NEVER parsed to find the marker.
+	If the model does NOT put it first, it is NOT a marker.
+	The extra key then simply rides along as an unknown property and is harmless (see 3.1).
+- The marker is NOT stripped.
+	The executed call and its log carry the extra key (the same no-desync transparency rule as `{"__normalize":false`).
+	dsh-tools CANNOT rewrite arguments and nothing needs to.
+	The key is legal (3.1) and ignored by every runner body.
+- `{"__await":false` as the first key is NOT a marker.
+	It is treated as marker-absent (the call detaches per the normal policy).
+	It exists so a model that wants to be explicit about NOT awaiting has a legal spelling.
+	It must NEVER be refused or misread as an await request.
 
 Model-facing teaching line (the standing section's instructions, rendered
 only when the transform is active - detach.mode != "off"):
 
 	To run one command inline and wait for its real output, put {"__await":true first in the call arguments.
 
-One line, no examples beyond the literal - the marker is self-describing and
-the KV-cache note (6) forbids richer per-call explanation.
+One line, NO examples beyond the literal.
+The marker is self-describing.
+The KV-cache note (6) forbids richer per-call explanation.
 
 ## 3. The Effective-Gate Formula
 
@@ -97,21 +101,23 @@ here):
 	       AND NOT ESCALATION(call)              -- sandbox_permissions in args -> inline via the stock approval flow
 	       AND POLICY_DECIDE(Exec, State)        -- long-running | all | selected guards (capacity, minLatencyMs, interactive, meta-budget)
 
-So the INLINE conditions are the negations; `AWAIT_MARKER(call)` is the
-prefix test of section 2 evaluated on the first arguments delta. The marker
-check sits AFTER the non-detachable check and BEFORE dedup/escalation/policy:
-- After non-detachable: a marked call to a non-detachable tool is handled by
-	the tool-class rule (4.1), not the marker rule - the class rule wins
-	because the call was never detachable anyway.
-- Before escalation: a call carrying BOTH `{"__await":true` and
-	`sandbox_permissions` runs inline through the stock escalation approval
-	flow. The marker is then redundant but harmless; it must not bypass or
-	duplicate the approval path (the transform never re-implements approval).
-- Before policy: the marker is an explicit model override of the statistical
-	guards - minLatencyMs and the interactive detector do not veto a marked
-	call. The marker is the model saying "I know this looks short/interactive;
-	I need it inline." Capacity (maxLivePerAgent) is not part of the marker
-	shortcut's concern because an inline call consumes no live slot.
+So the INLINE conditions are the negations.
+`AWAIT_MARKER(call)` is the prefix test of section 2 evaluated on the FIRST arguments delta.
+The marker check sits AFTER the non-detachable check and BEFORE dedup/escalation/policy.
+After non-detachable: a marked call to a non-detachable tool is handled by
+the tool-class rule (4.1), NOT the marker rule.
+The class rule wins because the call was NEVER detachable anyway.
+Before escalation: a call carrying BOTH `{"__await":true` and
+`sandbox_permissions` runs inline through the stock escalation approval
+flow.
+The marker is then redundant but harmless.
+It must NOT bypass or duplicate the approval path (the transform NEVER re-implements approval).
+Before policy: the marker is an explicit model override of the statistical
+guards.
+minLatencyMs and the interactive detector do NOT veto a marked call.
+The marker is the model saying "I know this looks short/interactive; I need it inline."
+Capacity (maxLivePerAgent) is NOT part of the marker shortcut's concern.
+An inline call consumes NO live slot.
 
 Ledger line on the marker path: `await marker -> inline <tool>` (D2 4.3
 wording retained).
@@ -121,24 +127,29 @@ wording retained).
 ### 4.1 The marker in a NON-COMMAND or NON-DETACHABLE call - IGNORED, never refused
 
 A call to a tool outside the detachable set (the mutation family, or any
-tool whose Exec is not a spawned command) that carries the marker: the
-marker is IGNORED. The call was going to run inline regardless; refusing it
-(a validation error surfaced to the model) would penalize a harmless no-op
-and teach the model to fear the marker. Ledger: `await marker ignored (tool not detachable) <tool>`,
-emitted once per occurrence. The marker key itself still rides in the
-arguments (never stripped - the schema legality of 3.1 applies to every
-tool, not only command runners, since the compiled schemas all admit unknown
-keys).
+tool whose Exec is not a spawned command) that carries the marker:
+the marker is IGNORED.
+The call was going to run inline regardless.
+Refusing it (a validation error surfaced to the model) would penalize a harmless no-op and teach the model to fear the marker.
+Ledger: `await marker ignored (tool not detachable) <tool>`,
+emitted once per occurrence.
+The marker key itself still rides in the
+arguments (NEVER stripped).
+The schema legality of 3.1 applies to EVERY tool, NOT only command runners.
+The compiled schemas all admit unknown keys.
 
 ### 4.2 The marker arriving mid-stream, not first
 
-If the prefix test fails on the first arguments delta but the completed
-arguments happen to contain `{"__await":true` as a non-first key: NOT a
-marker. No re-parse, no retroactive promotion - the call detaches (or not)
-per the normal gates and the stray key is ignored by the runner body. This
-is the cost of prefix detection and it is accepted: the teaching line says
-FIRST, models that follow it get the behavior, and prefix detection keeps
-the hot path O(prefix) with zero JSON parsing.
+If the prefix test fails on the FIRST arguments delta but the completed
+arguments happen to contain `{"__await":true` as a non-first key:
+NOT a marker.
+NO re-parse, NO retroactive promotion.
+The call detaches (or not) per the normal gates.
+The stray key is ignored by the runner body.
+This is the cost of prefix detection and it is accepted.
+The teaching line says FIRST.
+Models that follow it get the behavior.
+Prefix detection keeps the hot path O(prefix) with ZERO JSON parsing.
 
 ### 4.3 The marker on a DEDUP or ESCALATION collision
 

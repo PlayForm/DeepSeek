@@ -136,7 +136,7 @@ NEVER crash the host: ALL FFI calls wrapped so an exception in `dispatch_tool` â
 
 ## 5. Integration points with the DSH plugin family
 
-- **Bundle:** new family plugin `@playform/dsh-hook-aphrodite` (or `dsh-plugin-aphrodite`) with the standard anatomy: `Source/` module leaves, deterministic `Target/` build, `cordis.patch.yml` registering via `dsh-plugin-factory` (same shape as the live profile bundles verified at `~/.dsh/profiles/desktop/bundles/`).
+- **Bundle:** new family plugin `@playform/dsh-hook-aphrodite` (or `dsh-plugin-aphrodite`) with the standard anatomy: `Source/` module leaves, deterministic `Target/` build, `cordis.patch.yml` registering via `dsh-plugin-factory` (same shape as the LIVE profile bundles verified at `~/.dsh/profiles/desktop/bundles/`).
 - **Config schema** (from the mechanism above): `mode` (`dylib`/`http`), `dylib_path`, `proxy_cache_url` (default `http://127.0.0.1:9797`), `proxy_token_url` (`:9798`), `mgmt_token`, `sha256` (per-platform map), `tool_thresholds` passthrough.
 - **DSH wiring:** tools = the 13 relay tools (`aphrodite_compress`, `aphrodite_retrieve`, `aphrodite_search`, `aphrodite_catalog`, ... - `dispatch_tool` maps 1:1, and `list_tools`/`get_schemas` give the DSH tool definitions dynamically).
   Hooks = `call_hook("transform_tool_result" | "transform_terminal_output" | "pre_llm_call" | "post_llm_call", args_json)` from `get_hooks()`.
@@ -147,7 +147,7 @@ NEVER crash the host: ALL FFI calls wrapped so an exception in `dispatch_tool` â
 
 1. Does koffi's bundled build inside the app remain reachable from a family bundle's plugin code at runtime (asar-unpacked path resolution), or do family bundles need their own dependency?
    Verified presence, NOT reachability from plugin code.
-2. Whether the release CI publishes the `.so`/`.dll` variants for other triples (only darwin-arm64 was verifiable on this machine).
+2. Whether the release CI publishes the `.so`/`.dll` variants for other triples (ONLY darwin-arm64 was verifiable on this machine).
 3. `catalog_mode` / `classifier_poll` are parsed-but-unwired upstream (`aphrodite.toml.example:102-103`) - skip in Config or accept-and-warn?
 4. Should the family reuse the user's existing `~/.hermes/aphrodite/` install (shared ccr.db and session) or isolate its own runtime home?
    Shared gives cross-session cache; isolated avoids coupling to Hermes.

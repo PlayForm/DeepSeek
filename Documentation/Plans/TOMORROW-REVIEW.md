@@ -200,21 +200,13 @@ The user will run the whole process again - the review-driven pass:
    the handoff + the site) - the staged/modified tree (nothing
    committed), the correctness agent's output, the case-study third
    pass's output.
-2. **The case-review agent's mandate** (user-set 2026-10-07): the review
-   of the case study must EMPHASIZE THE STRUCTURE OF WHY IT WAS WRITTEN
-   LIKE THIS - the structural rationale (why the architecture/decisions
-   are shaped the way they are), NOT the HOW (the process mechanics).
-3. **The site fixes**: the `/workbench/` page does not work (user-flagged
-   2026-10-07 - reproduce on the dev server, repair or rebuild per the
-   designed functionality); the site's remaining feedback per the
-   directions. THE TYPOGRAPHY DIRECTION (user-set 2026-10-07, for the
-   site-fix agent): INCREASE THE FONT SIZES, NEVER text-xs (no tiny
-   10-12px text); NO JetBrains Mono - use another open-source + sharper
-   mono where a mono is genuinely needed (IBM Plex Mono - the
-   CodeEditorLand/WebSite's choice), otherwise a great SANS for the
-   larger headings + NORMAL TEXT SIZES for the smaller ones; borrow
-   heavily from `~/Developer/Application/CodeEditorLand/WebSite`'s
-   design (its type system + conventions).
+2. **The case-review agent's mandate** (user-set 2026-10-07): the review of the case study must EMPHASIZE THE STRUCTURE OF WHY IT WAS WRITTEN LIKE THIS.
+   It covers the structural rationale (why the architecture/decisions are shaped the way they are), NOT the HOW (the process mechanics).
+3. **The site fixes**: the `/workbench/` page does NOT work (user-flagged 2026-10-07 - reproduce on the dev server, repair or rebuild per the designed functionality).
+   The site's remaining feedback per the directions.
+   THE TYPOGRAPHY DIRECTION (user-set 2026-10-07, for the site-fix agent): INCREASE THE FONT SIZES, NEVER text-xs (no tiny 10-12px text).
+   NO JetBrains Mono - use another open-source + sharper mono where a mono is genuinely needed (IBM Plex Mono - the CodeEditorLand/WebSite's choice), otherwise a great SANS for the larger headings + NORMAL TEXT SIZES for the smaller ones.
+   Borrow heavily from `~/Developer/Application/CodeEditorLand/WebSite`'s design (its type system + conventions).
 4. **The corrections**: the review's findings land as new packages
    (agents + the smokes/site-build as the arbiter).
 5. **The finishing work**: the submodule structure (#16), the gitignores,
@@ -223,13 +215,10 @@ The user will run the whole process again - the review-driven pass:
    CODE_OF_CONDUCT + CHANGELOG - adopted at the monorepo root, carried
    to each repository).
 6. **THE FULL-FILE ANONYMIZATION SCAN** (user-instructed 2026-10-07):
-   the user removed the "~/Developer/" links and text themselves - an
-   ANOTHER ANONYMIZATION AGENT runs tomorrow to scan ALL files for the
-   remaining personal references (the "~/Developer/", the
-   "/Volumes/CORSAIR", the "/Users/nikola", the "Nikola" mentions, the
-   personal use-case language) and removes them (the smokes/site-build
-   as the arbiter; the smoke-asserted code constants (the ncuBin value)
-   re-pinned + rebuilt per the decision).
+   The user removed the "~/Developer/" links and text themselves.
+   ANOTHER ANONYMIZATION AGENT runs tomorrow to scan ALL files for the remaining personal references (the "~/Developer/", the "/Volumes/CORSAIR", the "/Users/nikola", the "Nikola" mentions, the personal use-case language) and removes them.
+   The smokes/site-build is the arbiter.
+   The smoke-asserted code constants (the ncuBin value) are re-pinned + rebuilt per the decision.
 7. **THE GRANULAR INCONSISTENCY SCAN** (user-instructed 2026-10-07) -
    the MOST GRANULAR agent to discover the inconsistencies + the
    peculiar details missed. CONCRETE STARTING RESIDUES (quantified):
@@ -278,12 +267,14 @@ The user will run the whole process again - the review-driven pass:
    where the docs/site say "borrowed from" / "adopted from X" - even
    though the sources are the USER'S OWN projects
    (`~/Developer/Application/CodeEditorLand/*`, the style repositories
-   like Aphrodite, Compress, and the others): the disclosure passes
+   like Aphrodite, Compress, and the others). The disclosure passes
    get cleaned per the user's preference (the attribution statements
-   adjusted or removed where the sources are the user's own - the
-   methodology stays, the attribution prose cleaned; the site's
+   adjusted or removed where the sources are the user's own.
+   The
+   methodology stays, the attribution prose cleaned.
+   The site's
    DESIGN.md's source attribution + the docs' "adopted from" notes are
-   the starting points).
+   the starting points.
 12. **The live battery**: the whole family re-verified live (the ledgers,
    the interlock, the escape hatch, the direct-govern, the v2 domain)
    after any source change - the `~/.dsh` originals stay live.
@@ -314,21 +305,29 @@ The user will run the whole process again - the review-driven pass:
    for easy installation. NOT dispatched in this batch.
 16. **THE RESTRUCTURING AGENT** (user-instructed 2026-10-07, in the queue
    AFTER the corrections agent, applied SYSTEMATICALLY ON EACH PAGE):
-   the diagram-first concept-block treatment - one independently
-   explainable concept per block, each block in the order: a visible
+   the diagram-first concept-block treatment - ONE independently
+   explainable concept per block.
+   Each block is in the order: a visible
    diagram placeholder (dashed, with a stable `data-diagram` id +
    implementation instructions for a future diagram agent) → a short
-   descriptive heading → one or two short paragraphs explaining only
-   that concept. Preserve technical meaning, identifiers, literals,
-   caveats ("may"/"only"/"never"); separate ownership, composition,
-   policy, activation, entry points; keep sequential steps together;
-   no repetition; semantic elements + CSS gaps for spacing (never <br>
-   or line breaks); <code> for identifiers; quotes of ledger strings
-   stay byte-exact. PLUS: replace ALL ASCII arrows (the "→" and "->"
+   descriptive heading → one or two short paragraphs explaining ONLY
+   that concept.
+   Preserve technical meaning, identifiers, literals,
+   caveats ("may"/"only"/"never").
+   Separate ownership, composition, policy, activation, entry points.
+   Keep sequential steps together.
+   No repetition.
+   Semantic elements + CSS gaps for spacing (NEVER <br>
+   or line breaks).
+   <code> for identifiers.
+   Quotes of ledger strings
+   stay byte-exact.
+   PLUS: replace ALL ASCII arrows (the "→" and "->"
    glyphs) with actual colored visual icons (an inline SVG arrow icon
    in the Harness Blue, sized to the text) except where the arrow is
-   part of a code/ledger literal. The site-wide sweep: every page's
-   dense prose + every arrow occurrence (191 "→" + 82 "->" measured).
+   part of a code/ledger literal.
+   The site-wide sweep: EVERY page's
+   dense prose + EVERY arrow occurrence (191 "→" + 82 "->" measured).
 17. **THE DIAGRAM-IMPLEMENTATION AGENT** (noted for a later batch): the
    diagram placeholders get implemented as real diagrams per their
    data-diagram ids + embedded instructions. NOT dispatched yet.
@@ -404,22 +403,19 @@ The user will run the whole process again - the review-driven pass:
 ## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
 
 The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in ~/Developer/Application/PlayForm/Aphrodite/Site.
-The instructions are specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.
+The instructions are specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style).
+The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes.
+THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts.
+THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.
 
 ## 8. BATCH COMPLETE (2026-10-09 - the 8-lane site queue closed)
 
-ALL 8 lanes (file-mention alignment, effect-card-footer, pin-govern colors,
-descriptive-titles, header-brand, path-mention, zhipu-icon, engine-pill) landed +
-verified + closed this session.
+ALL 8 lanes (file-mention alignment, effect-card-footer, pin-govern colors, descriptive-titles, header-brand, path-mention, zhipu-icon, engine-pill) landed + verified + closed this session.
 EACH Tasks/ file carries its record.
-The handoff BATCH-HANDOFF-2026-10-09.md is refreshed to the all-closed state. The user
-committed mid-session (960fcede: the rebrand + the descriptive titles + the
-identity words + the path-mention rule + the measurement scripts; 0506601f: the
-Zhipu mark + the engine-pill lift removal + the card icons). The residuals ledger
-(the 2 pinner.log 1px baselines, the models +0.5px, the plain-string GLM mentions)
-is recorded in the handoff §4 + the Tasks/ files. The process lessons recorded:
-the paused-dispatch protocol (the rate-limit lesson) + the orchestrator's
-non-modification rule.
+The handoff BATCH-HANDOFF-2026-10-09.md is refreshed to the all-closed state.
+The user committed mid-session (960fcede: the rebrand + the descriptive titles + the identity words + the path-mention rule + the measurement scripts; 0506601f: the Zhipu mark + the engine-pill lift removal + the card icons).
+The residuals ledger (the 2 pinner.log 1px baselines, the models +0.5px, the plain-string GLM mentions) is recorded in the handoff §4 + the Tasks/ files.
+The process lessons recorded: the paused-dispatch protocol (the rate-limit lesson) + the orchestrator's non-modification rule.
 No builds - the lanes build.
 The orchestrator relays the feedback + keeps the records.
 The routing discipline held (ALL GLM flash low).
@@ -427,55 +423,37 @@ Next: §5's future work (the plugins, the npm publishing, the Aphrodite session)
 
 ## 9. THE ORCHESTRATOR SLIP + RE-ALIGNMENT (2026-10-09 - the same session)
 
-The non-execution law was SLIPPED during the publish-verification + the site-recovery
-span: the orchestrator ran lychee itself (a measurement run), edited the ets
-normalize-file README link + committed 23a313d (a site/doc edit), and did byte-level
-greps + localhost:9999 curl checks (surface-location investigation) instead of
-relaying the feedback to the idle lanes verbatim. The user called it out ("why are
-you not launching IDLE agents - do you not know about the skill, why are you doing
-the work?"). The re-alignment: the skill (Documentation/Skill/orchestrator-batch/
-SKILL.md) re-loaded from the tree - it is NOT registered in the session's skill
-catalog, which contributed to the drift; the pending user feedback (the em-dash
-Input Glyph visibility on the dash/quotes pages, the right-arrow padding on the
-ellipsis + sibling pages, the lost SVG animations, the "ONCE PUBLISHED" stale-text
-sighting, the homepage buttons row) goes to an IDLE lane VERBATIM; the lane
-investigates + locates + verifies + reports its own numbers; the orchestrator
-relays + records only. The lane's spec + its reported totals land in this record
-on completion.
+The non-execution law was SLIPPED during the publish-verification + the site-recovery span.
+The orchestrator ran lychee itself (a measurement run), edited the ets normalize-file README link + committed 23a313d (a site/doc edit), and did byte-level greps + localhost:9999 curl checks (surface-location investigation) instead of relaying the feedback to the idle lanes verbatim.
+The user called it out ("why are you not launching IDLE agents - do you not know about the skill, why are you doing the work?").
+The re-alignment: the skill (Documentation/Skill/orchestrator-batch/SKILL.md) re-loaded from the tree.
+It is NOT registered in the session's skill catalog, which contributed to the drift.
+The pending user feedback (the em-dash Input Glyph visibility on the dash/quotes pages, the right-arrow padding on the ellipsis + sibling pages, the lost SVG animations, the "ONCE PUBLISHED" stale-text sighting, the homepage buttons row) goes to an IDLE lane VERBATIM.
+The lane investigates + locates + verifies + reports its own numbers.
+The orchestrator relays + records only.
+The lane's spec + its reported totals land in this record on completion.
 
 ---
 
 ## QUEUE ADDITION (2026-10-19) - Smoke-suite restructure (user-mandated, NOT yet implemented)
 
-The user dictated a future restructuring of the family's smoke tests; the full
-spec lives in `Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md`. Summary:
-per-test folders under `EachPlugin/Source/Test/<name>/` (one singular test file
-with a deeply nested assertion hierarchy + a `README.md` describing exactly what
-the test verifies), runnable one-by-one and aggregated by the main Smoke file;
-full TypeScript rewrite (both Classic + EffectTS, the @playform/build Tool
-Suite); `.npmignore` excludes `Target/Test` + `Source/Test` so tests never
-publish; a separate ESBuild pre-compile step for `Source/Test` (Test -> Source ->
-Run Test -> Run Source) via a `prepublishOnly.sh` per plugin, mirroring the
-two-step compilation at
-`~/Developer/Application/CodeEditorLand/Land/Element` (study
-`Output/Source/prepublishOnly.sh` + `Run.sh` first). Future-transformable into a
-full test suite (vitest-shaped). Implement only after the in-flight
-normalization + tool-coach work settles.
+The user dictated a future restructuring of the family's smoke tests.
+The full spec lives in `Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md`.
+Summary: per-test folders under `EachPlugin/Source/Test/<name>/` (one singular test file with a deeply nested assertion hierarchy + a `README.md` describing exactly what the test verifies), runnable one-by-one and aggregated by the main Smoke file.
+Full TypeScript rewrite (BOTH Classic + EffectTS, the @playform/build Tool Suite).
+`.npmignore` excludes `Target/Test` + `Source/Test` so tests NEVER publish.
+A separate ESBuild pre-compile step for `Source/Test` (Test -> Source -> Run Test -> Run Source) via a `prepublishOnly.sh` per plugin, mirroring the two-step compilation at `~/Developer/Application/CodeEditorLand/Land/Element` (study `Output/Source/prepublishOnly.sh` + `Run.sh` first).
+Future-transformable into a full test suite (vitest-shaped). Implement ONLY after the in-flight normalization + tool-coach work settles.
 
 ## QUEUE ADDITION (2026-10-19) - Site update for the new family functionality (user-mandated, NOT yet implemented)
 
-Full spec: `Documentation/Archive/Site/SITE-UPDATE-NOTE.md`. Summary: (1) reflect all
-new functionality on the site + update the plugin READMEs - the CCR hook, the
-granular scopes + live volatile toggles, the overpass mechanism, and the
-tool-coach guardian; (2) homepage: under the "Pinned manifests,
-deterministically" + "Governed pins, silently" boxes (Site/Source/pages/
-index.astro:331,341) add "supports: Cargo.toml, package.json" texts rendered as
-clickable buttons that display the use cases; (3) weave the new functionality
-into ALL site descriptions + pages; (4) a dedicated, interactive homepage
-section for the tool-coach plugin in coachy colors (red/orange) with a
-distinct structure; (5) a separate tool-coach page under Site/Source/pages/
-plugins/ like the other plugins have. Implement after the smoke-suite
-restructure settles.
+Full spec: `Documentation/Archive/Site/SITE-UPDATE-NOTE.md`.
+Summary: (1) reflect ALL new functionality on the site + update the plugin READMEs - the CCR hook, the granular scopes + live volatile toggles, the overpass mechanism, and the tool-coach guardian.
+(2) Homepage: under the "Pinned manifests, deterministically" + "Governed pins, silently" boxes (Site/Source/pages/index.astro:331,341) add "supports: Cargo.toml, package.json" texts rendered as clickable buttons that display the use cases.
+(3) Weave the new functionality into ALL site descriptions + pages.
+(4) A dedicated, interactive homepage section for the tool-coach plugin in coachy colors (red/orange) with a distinct structure.
+(5) A separate tool-coach page under Site/Source/pages/plugins/ like the other plugins have.
+Implement after the smoke-suite restructure settles.
 
 ## BATCH DISPATCH (2026-10-19 - the restart session, the two queue additions in execution)
 
@@ -633,24 +611,17 @@ restructure settles.
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS (the dynamic conversation blocks plugin - researched, NOT implemented)
 
-The live container is a conversation block
-holding dynamically computed content.
-It is recomputed + re-inserted into the conversation EVERY time the harness
-sends the full conversation to the LLM API.
+The live container is a conversation block holding dynamically computed content.
+It is recomputed + re-inserted into the conversation EVERY time the harness sends the full conversation to the LLM API.
 Nothing else is touched.
-The working example: a block holding the current time at ask-time, recomputed
-per request.
-The later stage (a future date): the blocks become PROGRAMMABLE
-(TypeScript / Rhai / Rust / whatever the harness can run dynamically).
-That means a validator / variable holder (conversation length, scores) the
-LLM itself can program and display, e.g. the pseudo-code
+The working example: a block holding the current time at ask-time, recomputed per request.
+The later stage (a future date): the blocks become PROGRAMMABLE (TypeScript / Rhai / Rust / whatever the harness can run dynamically).
+That means a validator / variable holder (conversation length, scores) the LLM itself can program and display, e.g. the pseudo-code
 `(if this.context.message.length > 10) { echo "This conversation is exceeding
-the set limit" }`. The user mandated: a researcher agent (glm-5.3-flash LOW -
-the user's explicit route) researches + brainstorms feasibility + prepares
-THREE more agent specs; the 3 agents are seated IDLE and execute later; the
-plugin itself stays IDLE in the profile (never enabled). The full spec +
-brainstorm land in `Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md` (the
-researcher's deliverable, dispatched 2026-10-19).
+the set limit" }`. The user mandated: a researcher agent (glm-5.3-flash LOW - the user's explicit route) researches + brainstorms feasibility + prepares THREE more agent specs.
+The 3 agents are seated IDLE and execute later.
+The plugin itself stays IDLE in the profile (NEVER enabled).
+The full spec + brainstorm land in `Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md` (the researcher's deliverable, dispatched 2026-10-19).
 - **RESEARCH COMPLETE (2026-10-19, `b45ae200`)**: the verdict = POSSIBLE for
   the core mechanic via the system-prompt/assemble waterfall (the tool-coach's
   tier-2 section is the live precedent, Apply.ts:499-556; the assemble
@@ -670,25 +641,18 @@ researcher's deliverable, dispatched 2026-10-19).
   JSON-string C ABI; Rhai/WASM deferred. 14 block types in the brainstorm.
 - **THE 3 AGENTS SEATED IDLE (2026-10-19)**: A1 the LIVE-CONTAINERS CODER
   (`3583a479`), A2 the SMOKE/HARNESS WRITER (`ab274084`), A3 the DOCS/SITE
-  WRITER (`4a09a152`) - all spec-retained, zero work, awaiting ACTIVATE
-  (execution happens after the user's restart; A1's effort may rise to high
-  at activation per the routing law). The IDLE-forever posture honored: the
-  plugin ships disabled, never in the profile, the activation proof logs
-  "disabled (enabled=false)".
-- **PENDING USER INSTRUCTION (the restart sequence)**: AFTER the site-update
-  batch is done, the user will restart the application - BEFORE that restart
-  the orchestrator must ENABLE ALL CURRENT PLUGINS (flip the 10 disabled
-  profile rows on via plugin_manager, factory FIRST then the hooks; the
-  tool-coach is not installed - wire it into the profile too, as one of "our
-  plugins") and keep the LIVE-CONTAINERS plugin IDLE (never enabled).
+  WRITER (`4a09a152`).
+  All spec-retained, zero work, awaiting ACTIVATE.
+  Execution happens after the user's restart; A1's effort may rise to high at activation per the routing law.
+  The IDLE-forever posture honored: the plugin ships disabled, NEVER in the profile, the activation proof logs "disabled (enabled=false)".
+- **PENDING USER INSTRUCTION (the restart sequence)**: AFTER the site-update batch is done, the user will restart the application.
+  BEFORE that restart the orchestrator must ENABLE ALL CURRENT PLUGINS (flip the 10 disabled profile rows on via plugin_manager, factory FIRST then the hooks; the tool-coach is not installed - wire it into the profile too, as one of "our plugins").
+  Keep the LIVE-CONTAINERS plugin IDLE (NEVER enabled).
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 2 (the cargo blocks + the live tool-call transformation - RESEARCH IN PROGRESS)
 
-The user extended the live-containers idea (the origin: proposed by
-~/Developer/Application/PlayForm/Aphrodite; the precedent: Hermes's delegate
-poll processes - fire-and-forget): the SIX CANs, broken into separate
-requirement files by the research agent `2a322db2` (GLM flash low, dispatched
-2026-10-19):
+The user extended the live-containers idea (the origin: proposed by ~/Developer/Application/PlayForm/Aphrodite; the precedent: Hermes's delegate poll processes - fire-and-forget).
+The SIX CANs are broken into separate requirement files by the research agent `2a322db2` (GLM flash low, dispatched 2026-10-19):
 - CAN-1 LIVE TOOL-CALL BLOCKS ("cargo blocks"): every tool call (cargo
   build, multiple commands) auto-transforms into a live-container call.
   The call is propagated back WITHOUT telling the LLM.
@@ -1617,41 +1581,17 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
-The user's third wave of the live-containers idea (his words): "to me all of
-the files on my file system are halted processes" - a live block puts a file
-into OPERATIONAL MODE: wraps it in a sandbox whose output propagates
-automatically to the live blocks (the monitor-stats box above the file the
-agent edits); each turn the edits + the subsequent requests see the monitor's
-output changing (the harness recomputes BEHIND THE SCENES and replaces the
-output, with the "there does not exist" no-problem indicator); the live views
-become the LLM's actual operational view of the system - more information per
-turn while remaining conversational; the token-waste problem solved (the LLM
-stops pre-baking cargo check / tsc runs around its edits); operational edits
-over live-running software - "the LLM's conversation behaves like a mind that
-does things, not a back-and-forth wasting tokens".
+The user's third wave of the live-containers idea (his words): "to me all of the files on my file system are halted processes".
+A live block puts a file into OPERATIONAL MODE: it wraps the file in a sandbox whose output propagates automatically to the live blocks (the monitor-stats box above the file the agent edits).
+Each turn the edits + the subsequent requests see the monitor's output changing (the harness recomputes BEHIND THE SCENES and replaces the output, with the "there does not exist" no-problem indicator).
+The live views become the LLM's actual operational view of the system - more information per turn while remaining conversational.
+The token-waste problem is solved (the LLM stops pre-baking cargo check / tsc runs around its edits).
+Operational edits over live-running software - "the LLM's conversation behaves like a mind that does things, not a back-and-forth wasting tokens".
 - THE FEASIBILITY READ (the orchestrator's answer to "is something like this
-  possible"): YES - every seam is verified: fs/observed for the edit events
-  (the governor/pinner precedent), ctx.jobs for the background checks (the
-  wave-2 research), the system-prompt/assemble for the per-request recompute
-  (the v1 research), the I1 sandbox/deadline/ring-cap constraints, the
-  storage domain for the cross-restart persistence. The caveats: the KV-cache
-  cost of always-changing sections (TTL + compact bands), the stale-truth
-  risk (a check that ran before the file changed again - the freshness
-  metadata answers it), the monitor band's own token budget (the 2 KiB
-  ring-cap precedent).
-- THE ORCHESTRATOR'S 10 PROPOSALS (embedded in R3's mandate as binding
-  consideration points, each adopted-or-rejected-with-reason in the
-  requirement file): freshness+provenance metadata per line, the no-problem
-  indicator grammar (the "there does not exist" sign, ASCII-safe) + the
-  one-line summary band, the check taxonomy (fast per-edit debounced / slow
-  on-demand+scheduled, via jobs between turns), the token budget (only the
-  changed lines differ per turn), the per-file watchlist config (globs ->
-  check sets per file type), the escape hatch (the __await synergy - the
-  model can still check deeply), the honesty (the "not run yet" states, the
-  fail-open, never a false pass), the plantType synergy (the child agents'
-  monitors into the parent's boards), the cross-restart persistence, the
-  control-loop framing (the monitor section IS the state vector; the edits
-  are the control inputs; the loop closes per request).
+  possible"): YES - EVERY seam is verified.
+  fs/observed for the edit events (the governor/pinner precedent), ctx.jobs for the background checks (the wave-2 research), the system-prompt/assemble for the per-request recompute (the v1 research), the I1 sandbox/deadline/ring-cap constraints, the storage domain for the cross-restart persistence.
+  The caveats: the KV-cache cost of always-changing sections (TTL + compact bands), the stale-truth risk (a check that ran before the file changed again - the freshness metadata answers it), the monitor band's own token budget (the 2 KiB ring-cap precedent).
+- THE ORCHESTRATOR'S 10 PROPOSALS (embedded in R3's mandate as binding consideration points, EACH adopted-or-rejected-with-reason in the requirement file): freshness+provenance metadata per line, the no-problem indicator grammar (the "there does not exist" sign, ASCII-safe) + the one-line summary band, the check taxonomy (fast per-edit debounced / slow on-demand+scheduled, via jobs between turns), the token budget (only the changed lines differ per turn), the per-file watchlist config (globs -> check sets per file type), the escape hatch (the __await synergy - the model can still check deeply), the honesty (the "not run yet" states, the fail-open, NEVER a false pass), the plantType synergy (the child agents' monitors into the parent's boards), the cross-restart persistence, the control-loop framing (the monitor section IS the state vector; the edits are the control inputs; the loop closes per request).
 - THE WAVE-3 TRIO SEATED IDLE (2026-10-19, the IDLE-AMENDMENT LAW): R3 the
   LIVE-FILE-MONITORS RESEARCH (`e525cd61` - GLM flash low; writes
   Documentation/Archive/Live-Containers/Requirements/08-LIVE-FILE-MONITORS.md
@@ -1664,26 +1604,15 @@ does things, not a back-and-forth wasting tokens".
 
 ## SITE-FIX PASS (2026-10-20 - the user's three reports, all fixed + verified)
 
-The user reported (the dev server at :9999): (1) the supports help text
-placement, (2) the supports chips' dead clicks, (3) the coachy section dead.
-THE ROOT CAUSES (both real bugs in the shipped site): (a) THE SUPPORTS
-PANELS - the panel's `display:grid` class rule overrode the UA's `[hidden]`
-rule (the hidden attribute was INERT - the panels were always visible, the
-click-to-expand toggled nothing visible); FIXED: the `[hidden]` override
-rule added to the SupportsButton styles (built as
-`.supports__panel[data-astro-cid-mwh6yo7d][hidden]{display:none}` - the
-(0,3,0) specificity wins; verified in the built CSS). (b) THE COACH DEMO -
-the Judge() script read `data-coach-call` + `data-pattern` while the markup
-carries the kind in `data-call-kind` + the pattern in `data-call-pattern` (a
-bare attribute returns "" - NO branch ever matched - the screen stayed
-empty, the strikes mis-counted, the tier lights never lit); FIXED: the two
-getAttribute reads aligned to the markup. (c) THE PLACEMENT - the supports
-row right-aligned (justify-content:flex-end) so the chips sit at the
-card's bottom right under the whole box (the Showcase slot was already the
-closing row). REBUILT: 24 pages green; VERIFIED in the built output (the
-[hidden] rule + the flex-end row + the data-call-kind read) AND on the dev
-server (the recompiled page carries all three fixes - the user needs a
-browser refresh).
+The user reported (the dev server at :9999): (1) the supports help text placement, (2) the supports chips' dead clicks, (3) the coachy section dead.
+THE ROOT CAUSES (both real bugs in the shipped site):
+(a) THE SUPPORTS PANELS - the panel's `display:grid` class rule overrode the UA's `[hidden]` rule (the hidden attribute was INERT - the panels were always visible, the click-to-expand toggled nothing visible).
+FIXED: the `[hidden]` override rule added to the SupportsButton styles (built as `.supports__panel[data-astro-cid-mwh6yo7d][hidden]{display:none}` - the (0,3,0) specificity wins; verified in the built CSS).
+(b) THE COACH DEMO - the Judge() script read `data-coach-call` + `data-pattern` while the markup carries the kind in `data-call-kind` + the pattern in `data-call-pattern` (a bare attribute returns "" - NO branch ever matched - the screen stayed empty, the strikes mis-counted, the tier lights never lit).
+FIXED: the two getAttribute reads aligned to the markup.
+(c) THE PLACEMENT - the supports row right-aligned (justify-content:flex-end) so the chips sit at the card's bottom right under the whole box (the Showcase slot was already the closing row).
+REBUILT: 24 pages green.
+VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-call-kind read) AND on the dev server (the recompiled page carries all three fixes - the user needs a browser refresh).
 
 ## DEPENDENCY UPGRADE PASS (2026-10-20 - the user's instruction: "upgrade and update all dependencies to latest")
 
@@ -1721,24 +1650,16 @@ browser refresh).
   message: "chore(dsh-hooks): Finish the prepublishOnly tsc-runner
   migration - the ten normalize flavors' third step moves from
   ./node_modules/.bin/tsc to pnpm exec".
-- **THE LIVE NOTE**: the upgrade's rebuilds do not affect the RUNNING
-  process (the modules loaded at the restart); the upgraded Targets apply
-  at the NEXT restart. The user's live task tests the current family.
+- **THE LIVE NOTE**: the upgrade's rebuilds do NOT affect the RUNNING process (the modules loaded at the restart).
+  The upgraded Targets apply at the NEXT restart.
+  The user's live task tests the current family.
 
 ## LIVE-TESTING FINDINGS (2026-10-20 - the first probes + the mount incident)
 
-- **THE MOUNT INCIDENT (root cause of the "plugins not working")**: after
-  the user's second restart, only the factory + the tool-coach were
-  registered (the list total 207 vs 218; 11 family entries missing - the
-  governors, the pinner, the cargo, the 7 normalize flavors, the ccr - no
-  ccr ledger, no ccr_retrieve tool, the governance chain silent). ROOT
-  CAUSE: 17 package.json files (Classic quotes/spaces/invisible/governor/
-  pinner + 12 ETS) carried UNRESOLVED GIT MERGE CONFLICT MARKERS inside
-  the devDependencies (the user's mid-task commit 99891ef collided with
-  the upgrade lane's manifest edits; the invalid JSON -> the loader could
-  not register the plugins). THE USER RESOLVED ALL 17 (verified: all 30
-  package.json VALID, zero markers, the tree CLEAN - committed). The
-  family mounts fully at the NEXT restart.
+- **THE MOUNT INCIDENT (root cause of the "plugins not working")**: after the user's second restart, ONLY the factory + the tool-coach were registered (the list total 207 vs 218; 11 family entries missing - the governors, the pinner, the cargo, the 7 normalize flavors, the ccr - no ccr ledger, no ccr_retrieve tool, the governance chain silent).
+  ROOT CAUSE: 17 package.json files (Classic quotes/spaces/invisible/governor/pinner + 12 ETS) carried UNRESOLVED GIT MERGE CONFLICT MARKERS inside the devDependencies (the user's mid-task commit 99891ef collided with the upgrade lane's manifest edits; the invalid JSON -> the loader could not register the plugins).
+  THE USER RESOLVED ALL 17 (verified: all 30 package.json VALID, ZERO markers, the tree CLEAN - committed).
+  The family mounts fully at the NEXT restart.
 - **THE PROBE RESULTS (the current boot, the family partial)**: the CCR
   probe (seq 1 20000) - NO marker (the harness's own spill/truncation
   handled the output; the ccr was not mounted); the governance probe (the
@@ -1752,52 +1673,30 @@ browser refresh).
   verified from the ledgers + the disk truth)**: (1) THE GOVERNANCE TRIO
   PROVEN - the /tmp/dsh-live-probe package.json write was governed within
   9s: "left-pad": "^0.3.4" -> "left-pad": "1.3.0" (the pinner's exact-pin)
-  + the tab->2-space canonicalization (the governor); the Cargo.toml's
-  static serde correctly untouched. (2) THE CCR - the mount + the store
-  path proven (the ledger's "stored bash terminal 58355"); the marker was
-  initially masked: the harness's bash-output cap (~14-58KB) keeps every
-  bash result UNDER the autoExpandLimitBytes 102400, so the auto-expand
-  path always fired. THE LIVE-RELOAD PROVEN: the volatile cell
-  autoExpandLimitBytes lowered 102400 -> 1024 via the control panel, the
-  SAME `seq 1 60000` command then produced the marker
-  `<<<CCR:963aa7ace83af081797777cf|terminal|58222>>>` - the flip took
-  effect WITHOUT a remount (the volatile cell read live at the hook
-  execution) + the ccr_retrieve round-trip worked (the full 60000-line
-  restore). TWO CCR ANOMALIES FLAGGED (the follow-up items): (a) the
-  retrieve's range parameter indexes a DIFFERENT coordinate space
-  (start:1 -> the compressed-out middle segment's lines 49335-49339, not
-  the restored document's first lines); (b) the preview header's line
-  count/exit ("[terminal:exit ? | 8265 lines | 334]" - 8265 != the real
-  60000, the exit shown as ?). (3) The tool-coach's tier-1 notes + the I9
-  fail-open (the dash's mount with the skipped registration) proven live.
-  CURRENT KNOB STATE: the ccr's autoExpandLimitBytes is at 1024 (the test
-  flip - restore to 102400 via the panel if the aggressive compression is
-  not wanted).
+  + the tab->2-space canonicalization (the governor); the Cargo.toml's static serde correctly untouched.
+  (2) THE CCR - the mount + the store path proven (the ledger's "stored bash terminal 58355").
+  The marker was initially masked: the harness's bash-output cap (~14-58KB) keeps EVERY bash result UNDER the autoExpandLimitBytes 102400, so the auto-expand path always fired.
+  THE LIVE-RELOAD PROVEN: the volatile cell autoExpandLimitBytes lowered 102400 -> 1024 via the control panel, the SAME `seq 1 60000` command then produced the marker
+  `<<<CCR:963aa7ace83af081797777cf|terminal|58222>>>`.
+  The flip took effect WITHOUT a remount (the volatile cell read live at the hook execution) + the ccr_retrieve round-trip worked (the full 60000-line restore).
+  TWO CCR ANOMALIES FLAGGED (the follow-up items): (a) the retrieve's range parameter indexes a DIFFERENT coordinate space (start:1 -> the compressed-out middle segment's lines 49335-49339, not the restored document's first lines); (b) the preview header's line count/exit ("[terminal:exit ? | 8265 lines | 334]" - 8265 != the real 60000, the exit shown as ?).
+  (3) The tool-coach's tier-1 notes + the I9 fail-open (the dash's mount with the skipped registration) proven live.
+  CURRENT KNOB STATE: the ccr's autoExpandLimitBytes is at 1024 (the test flip - restore to 102400 via the panel if the aggressive compression is not wanted).
 
 ## THE ALIAS-SWEEP INCIDENT + THE CORRECTED DIRECTION (2026-10-20)
 
-- **THE INCIDENT**: the ALIAS-SWEEP lanes (dispatched per the orchestrator's
-  misreading of the user's tsc-alias instruction) ran a scripted conversion
-  pass that DELETED 97 source files (66 Classic + 31 ETS - the packages'
-  core sources + the scripts). The lanes were STOPPED immediately; the
-  orchestrator began the lawful manual restoration (the git show + the
-  write tool - never git mutations); THE USER took over + manually restored
-  all the deleted files (verified: 0 deletions remain; the restored files
-  carry the original bytes - the aliases + the tsc-alias steps intact).
-  LESSON (recorded): the file-write law's "scripted pass" allowance was the
-  hole - the corrected lanes are EDIT-TOOL-ONLY, no scripted filesystem
-  passes.
-- **THE USER'S CORRECTED DIRECTION** (their clarifications, binding): (1)
-  the tsconfig path ALIASES + the rootDir STAY (the Compress-style
-  tsconfigs - the user asked "why did the agents remove rootDir + paths");
-  (2) the MANUAL tsc-alias/awaited-tsc step is REMOVED - @playform/build
-  runs tsc + tsc-alias INTERNALLY awaited (verified against the Build repo:
-  Source/Function/Build.ts:160,163 - the L5A "fire-and-forget" finding was
-  wrong); (3) prepublishOnly.sh + Run.sh live in Source/ for every package
-  (the user's instruction); (4) the family borrows the Compress/Land
-  designs (the @playform/build/tsconfig base + the config conventions - the
-  ALIGN consideration recorded). The earlier alias-removal direction was
-  the orchestrator's misinterpretation - superseded.
+- **THE INCIDENT**: the ALIAS-SWEEP lanes (dispatched per the orchestrator's misreading of the user's tsc-alias instruction) ran a scripted conversion pass that DELETED 97 source files (66 Classic + 31 ETS - the packages' core sources + the scripts).
+  The lanes were STOPPED immediately.
+  The orchestrator began the lawful manual restoration (the git show + the write tool - NEVER git mutations).
+  THE USER took over + manually restored all the deleted files (verified: 0 deletions remain; the restored files carry the original bytes - the aliases + the tsc-alias steps intact).
+  LESSON (recorded): the file-write law's "scripted pass" allowance was the hole.
+  The corrected lanes are EDIT-TOOL-ONLY, NO scripted filesystem passes.
+- **THE USER'S CORRECTED DIRECTION** (their clarifications, binding):
+  (1) the tsconfig path ALIASES + the rootDir STAY (the Compress-style tsconfigs - the user asked "why did the agents remove rootDir + paths");
+  (2) the MANUAL tsc-alias/awaited-tsc step is REMOVED - @playform/build runs tsc + tsc-alias INTERNALLY awaited (verified against the Build repo: Source/Function/Build.ts:160,163 - the L5A "fire-and-forget" finding was wrong);
+  (3) prepublishOnly.sh + Run.sh live in Source/ for EVERY package (the user's instruction);
+  (4) the family borrows the Compress/Land designs (the @playform/build/tsconfig base + the config conventions - the ALIGN consideration recorded).
+  The earlier alias-removal direction was the orchestrator's misinterpretation - superseded.
 - **THE CORRECTED-SWEEP LANE** (`febb5997`, GLM flash high) DISPATCHED: the
   whole-tree reconcile - the tsconfigs' rootDir + paths restored, the
   partial relative-import conversions reverted to the aliases, the scripts
