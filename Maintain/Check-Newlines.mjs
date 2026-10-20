@@ -24,7 +24,6 @@
 // --fix appends the missing final LF only; the other violation classes are
 // reported, not auto-fixed (prettier + Format.sh's dos2unix step own them).
 //===============================================================================
-
 import { execFileSync } from "node:child_process";
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 

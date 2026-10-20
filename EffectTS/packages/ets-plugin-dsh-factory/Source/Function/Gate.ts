@@ -24,11 +24,11 @@
 // (default "Tool" — the State builder's fixed shared mapping) so a module
 // that renamed the field can point at it.
 import { basename as Base } from "node:path";
+
+import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
+import type { Actor as ActorView, Gate as Decision, State } from "@playform/ets-base-dsh";
+
 import Match from "./Match.js";
-import type { State as State } from "@playform/ets-base-dsh";
-import type { Gate as Decision } from "@playform/ets-base-dsh";
-import type { Actor as ActorView } from "@playform/ets-base-dsh";
-import type { FsTarget, FsObservation, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
 
 export default (
 	State: State,

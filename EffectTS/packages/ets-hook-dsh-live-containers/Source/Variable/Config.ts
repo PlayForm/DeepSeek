@@ -35,8 +35,8 @@
 // This is one of the modules in the tree with a runtime import of
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
 import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
 

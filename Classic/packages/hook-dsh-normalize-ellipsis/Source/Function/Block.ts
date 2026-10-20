@@ -13,9 +13,10 @@
 //
 // The behavior is byte-identical to a hand-rolled in-file implementation -
 // the ellipsis smoke is the arbiter.
-import { Block as CoreBlock } from "@playform/hook-dsh-core";
-import Replace from "./Replace.js";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import { Block as CoreBlock } from "@playform/hook-dsh-core";
+
+import Replace from "./Replace.js";
 
 export default (
 	Input: ContentBlock,

@@ -15,9 +15,10 @@
 //
 // The behavior is byte-identical to a hand-rolled in-file implementation -
 // the ellipsis smoke is the arbiter.
-import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
-import Replace from "./Replace.js";
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
+import { Chunk as CoreChunk } from "@playform/ets-base-dsh";
+
+import Replace from "./Replace.js";
 
 export default (
 	Input: StreamChunk,

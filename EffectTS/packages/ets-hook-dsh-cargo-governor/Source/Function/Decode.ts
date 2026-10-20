@@ -22,9 +22,10 @@
 // (Function/Satisfy); identification only records what exists.
 //
 // Pure internal calculation — one of the standing exemptions.
-import ParseToml from "./ParseToml.js";
-import Section from "@Variable/Section.js";
 import type Manifest from "@Interface/Manifest.js";
+import Section from "@Variable/Section.js";
+
+import ParseToml from "./ParseToml.js";
 
 export default (Text: unknown): Manifest | null => {
 	const Data = ParseToml(Text);

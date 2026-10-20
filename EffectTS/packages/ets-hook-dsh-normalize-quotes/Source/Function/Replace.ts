@@ -10,6 +10,6 @@
 // The core resolves through the profile's node_modules link (the package is
 // installed as a directory link there); the flavor is a table plus a
 // closure, not a fork of the dispatch.
-import { ReplaceMap, Quotes } from "@playform/ets-hook-dsh-core";
+import { Quotes, ReplaceMap } from "@playform/ets-hook-dsh-core";
 
 export default (Text: string): { text: string; count: number } => ReplaceMap(Text, Quotes);

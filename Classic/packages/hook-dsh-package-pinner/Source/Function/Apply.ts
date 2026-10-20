@@ -24,12 +24,13 @@
 // -- hook: fs/observed only. NEVER fs/write-intent / fs/edit-intent (the
 // single-slot waterfalls belong to the observation policy; registering
 // there would veto it). Never tools/* (result amendment is louder).
-import Observe from "./Observe.js";
-import { Pin } from "./Direct.js";
-import { Activate } from "@playform/hook-dsh-core";
+import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/hook-dsh-core";
+
+import { Pin } from "./Direct.js";
+import Observe from "./Observe.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The factory service — declared by `inject`; the accessor never throws

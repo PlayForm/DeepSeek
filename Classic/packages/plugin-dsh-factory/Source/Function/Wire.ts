@@ -25,9 +25,9 @@
 // `activated (…)` summary line and logs it through Factory.Append (and
 // Factory.Journal with the "activated" event) before/after calling Wire —
 // the factory never owns the string.
-import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";
-import type { FsTarget, FsObservation } from "@deepseek-ai/dsh-fs";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
 
 export default (
 	Context: Context,

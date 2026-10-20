@@ -7,8 +7,9 @@
 // contributes nothing. The keep-list wins over full-version NORMALIZATION,
 // never over the chain.
 import * as FileSystem from "node:fs";
-import type PluginFactory from "@playform/plugin-dsh-factory";
+
 import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
 
 export default (Factory: PluginFactory, State: State, Keep: string[]): string[] => {
 	const Merged = [...Keep];

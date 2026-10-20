@@ -47,14 +47,14 @@
 // module-level import of an unresolvable package would crash the whole
 // bundle load - and an unloadable bundle degrades to the no-op Tracer
 // (tracing is best-effort by design; it must never break the plugin).
-import { Effect, Layer } from "effect";
-import type { Context } from "effect";
+import { Effect, Layer, type Context } from "effect";
 import * as Scope from "effect/Scope";
-import * as LedgerService from "./Ledger.js";
-import * as JournalService from "./Journal.js";
-import * as WriteService from "./Write.js";
+
 import * as GovernService from "./Govern.js";
+import * as JournalService from "./Journal.js";
 import type { Host } from "./Journal.js";
+import * as LedgerService from "./Ledger.js";
+import * as WriteService from "./Write.js";
 
 // Tags - the union of the four service tags the graph provides.
 export type Tags =

@@ -44,10 +44,11 @@
 //   runs (strict is part of the CHAIN pass).
 //
 // Pure internal calculation — one of the two standing exemptions.
-import Normalize from "./Normalize.js";
-import type Plan from "@Interface/Plan.js";
 import type Manifest from "@Interface/Manifest.js";
+import type Plan from "@Interface/Plan.js";
 import type Registry from "@Interface/Registry.js";
+
+import Normalize from "./Normalize.js";
 
 export default (
 	Manifest: Manifest,

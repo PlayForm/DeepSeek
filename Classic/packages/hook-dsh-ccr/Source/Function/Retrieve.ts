@@ -25,8 +25,9 @@
 // post-execute listener). `exec.signal` is honored: the registry rejects a
 // pre-aborted invocation before the body runs, and the body rechecks.
 import { defineTool } from "@deepseek-ai/dsh-tools";
-import { Text as Joined } from "./Classify.js";
 import type State from "@Interface/State.js";
+
+import { Text as Joined } from "./Classify.js";
 
 export default (State: State) => {
 	// The restored text for one call: the joined original, or the requested

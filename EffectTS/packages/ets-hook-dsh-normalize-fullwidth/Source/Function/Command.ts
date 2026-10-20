@@ -19,6 +19,7 @@
 // dispatching UI renders it directly. Pure per call: the only State mutation
 // is the one-shot `Overpass` flag, which is the designed arm mechanism.
 import type State from "@Interface/State.js";
+
 import { DefaultExempt, DefaultScopes } from "./Overpass.js";
 
 /** The structural CommandInvocation: only the fields the handler reads. */

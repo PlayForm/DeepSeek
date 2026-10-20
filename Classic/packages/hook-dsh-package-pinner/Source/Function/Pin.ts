@@ -27,8 +27,8 @@
 // the pinner strips the prefix and leaves the rest untouched, never
 // inventing content. A deployment that wants wildcards protected adds the
 // package to the pin-policy keep-list.
-import Section from "@Variable/Section.js";
 import type Manifest from "@Interface/Manifest.js";
+import Section from "@Variable/Section.js";
 
 export default (
 	Current: Manifest,

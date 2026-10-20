@@ -15,15 +15,16 @@
 // exact version with provenance "live"; a settle-less version bump NEVER
 // renders clean; the linked-governance check never produces a verdict.
 import { basename as Base, dirname as Parent } from "node:path";
-import Clock from "@Function/Clock.js";
+
 import * as Band from "@Function/Band.js";
+import Clock from "@Function/Clock.js";
 import * as Jobs from "@Function/Jobs.js";
-import * as Storage from "@Function/Storage.js";
-import * as Watchlist from "@Function/Watchlist.js";
 import { INLINE_DEADLINE_MS } from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
+import * as Storage from "@Function/Storage.js";
+import * as Watchlist from "@Function/Watchlist.js";
+import type { CheckResult, CheckSetSpec, MonitorEntry, TailBuffer } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
-import type { CheckSetSpec, CheckResult, MonitorEntry, TailBuffer } from "@Interface/Events.js";
 
 /** The structural fs/observed types (the factory's Wire signature, verified
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module

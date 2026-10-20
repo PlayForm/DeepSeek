@@ -12,6 +12,7 @@
 // through `ctx.fs.writeText` would be both racy and wrong. Every write of a
 // GOVERNED file goes through `ctx.fs` (Function/Write).
 import * as FileSystem from "node:fs";
+
 import type State from "@Interface/State.js";
 
 export default (State: State, Message: string): void => {

@@ -18,10 +18,10 @@
 // this runner enforces the match (the vacuously-green guard, like
 // Maintain/Run-Smokes.mjs) and reports per-folder and combined wiring
 // counts, never the 733/746 mechanics numbers.
+import { spawn, spawnSync } from "node:child_process";
 import FileSystem from "node:fs";
 import Os from "node:os";
 import Path from "node:path";
-import { spawn, spawnSync } from "node:child_process";
 
 const Trees = ["Classic", "EffectTS"];
 const SuiteNames = [

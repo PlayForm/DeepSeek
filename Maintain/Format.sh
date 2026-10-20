@@ -10,9 +10,10 @@
 #   sh Maintain/Format.sh newlines      # Ensure every tracked text file ends with a single LF
 #
 # Configuration:
-#   .prettierrc     - Prettier options (prettier-plugin-sh formats the .sh scripts)
-#   .prettierignore - Paths excluded from Prettier formatting
-#                     (the markdown, the Site/, Target/, Test/)
+#   prettier.config.mjs - Prettier options and plugins (import sorting,
+#                         package.json sorting, shell, TOML, Tailwind classes)
+#   .prettierignore     - Paths excluded from Prettier formatting
+#                         (the markdown, the Site/, Target/, Test/)
 #
 # Prettier runs over the packages' Source trees and the docs/, but NOT the
 # markdown (the family prose is byte-integrity-protected), the Site tree

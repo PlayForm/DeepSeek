@@ -29,10 +29,11 @@
 // shape. The core runs it inside the contained dispatch chain, and the
 // module never invokes it standalone, so no runPromise boundary is added
 // here - the settlement half of the same pair.
-import type PluginFactory from "@playform/ets-plugin-dsh-factory";
-import { Envelope } from "./Dispatch.js";
-import type State from "@Interface/State.js";
 import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+
+import { Envelope } from "./Dispatch.js";
 
 export default (
 	Factory: PluginFactory,

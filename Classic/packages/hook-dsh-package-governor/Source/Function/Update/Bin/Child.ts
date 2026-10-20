@@ -1,9 +1,11 @@
 // Child — the minimal fallback path of the bin-mode runner: used when no
 // subprocess seam exists in this deployment. Async (the continuation owns
 // the wait); the abort signal kills the child.
-import type State from "@Interface/State.js";
-import type Invocation from "@Interface/Invocation.js";
 import * as ChildProcess from "node:child_process";
+
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
+
 import Pipe from "./Pipe.js";
 
 export default (

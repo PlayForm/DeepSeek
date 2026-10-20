@@ -10,7 +10,7 @@
 // The core resolves through the profile's node_modules link (the package is
 // installed as a directory link there); the behavior is the CLASS flavor of
 // the family's dispatch — the invisible smoke is the arbiter.
-import { Replace, Invisible } from "@playform/hook-dsh-core";
+import { Invisible, Replace } from "@playform/hook-dsh-core";
 
 export default (Text: string, Replacement: string): { text: string; count: number } =>
 	Replace(Text, Invisible, Replacement);

@@ -42,18 +42,19 @@
 // Pure internal calculations (the standing exemptions): the smol-toml parse,
 // the surgical line rewrite, Normalize's padding, and the auxiliary
 // pin-policy.json read (plain fs, never the governed manifest).
+import type { FsVersion } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/plugin-dsh-factory";
+
 import Decode from "./Decode.js";
 import Pin from "./Pin.js";
 import Resolve from "./Resolve.js";
 import Satisfy from "./Satisfy.js";
-import PolicyLoader from "./Update/Policy.js";
-import KeepFile from "./Transform/Keep.js";
 import Guard from "./Transform/Guard.js";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type Passage from "@Interface/Passage.js";
-import type { FsVersion } from "@deepseek-ai/dsh-fs";
+import KeepFile from "./Transform/Keep.js";
+import PolicyLoader from "./Update/Policy.js";
 
 export default (
 	Factory: PluginFactory,

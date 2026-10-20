@@ -33,8 +33,8 @@
 // the loader consumes it through the Standard Schema `~standard` interface;
 // the import resolves from the running dsh's own copy,
 // docs/user/develop/basic/publish.md:103).
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
 	// Ledger file — the fullwidth ledger, SEPARATE from the family's logs

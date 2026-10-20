@@ -74,39 +74,38 @@
 // (the unreadable-policy line, the suppressed-error lines prefixed with
 // State.Module) and stay byte-identical when the module keeps its historical
 // name.
+import { Service, type Context, type Context as Ctx } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import {
+	GovernService,
+	JournalService,
+	LedgerService,
+	materialize,
+	WriteService,
+	type Gate as Decision,
+	type Services as FactoryRuntime,
+	type Registry as GovernRegistry,
+	type Selection as GovernSelection,
+	type Options as Setup,
+	type State as Shape,
+	type Transform,
+	type Over as WriteOver,
+} from "@playform/ets-base-dsh";
 import { Effect } from "effect";
-import { Service } from "@deepseek-ai/cordis";
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsTarget, FsObservation, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
-import Match from "./Function/Match.js";
-import Discover from "./Function/Discover.js";
-import Parse from "./Function/Parse.js";
-import Resolve from "./Function/Resolve.js";
-import Gate from "./Function/Gate.js";
-import type { Over as WriteOver } from "@playform/ets-base-dsh";
-import RefreshFn from "./Function/Refresh.js";
-import Continue from "./Function/Continue.js";
-import Build from "./Function/State.js";
-import Wire from "./Function/Wire.js";
+
 import AttachEffects from "./Function/Attach.js";
+import Continue from "./Function/Continue.js";
+import Discover from "./Function/Discover.js";
+import Gate from "./Function/Gate.js";
+import Match from "./Function/Match.js";
+import Parse from "./Function/Parse.js";
+import RefreshFn from "./Function/Refresh.js";
+import Resolve from "./Function/Resolve.js";
 import SchemaFn from "./Function/Schema.js";
 import SeamFn from "./Function/Seam.js";
+import Build from "./Function/State.js";
 import UpdateKey from "./Function/UpdateKey.js";
-import { LedgerService } from "@playform/ets-base-dsh";
-import { JournalService } from "@playform/ets-base-dsh";
-import { WriteService } from "@playform/ets-base-dsh";
-import { GovernService } from "@playform/ets-base-dsh";
-import { materialize } from "@playform/ets-base-dsh";
-import type { Services as FactoryRuntime } from "@playform/ets-base-dsh";
-import type {
-	Registry as GovernRegistry,
-	Selection as GovernSelection,
-} from "@playform/ets-base-dsh";
-import type { State as Shape } from "@playform/ets-base-dsh";
-import type { Options as Setup } from "@playform/ets-base-dsh";
-import type { Gate as Decision } from "@playform/ets-base-dsh";
-import type { Transform as Transform } from "@playform/ets-base-dsh";
-import type { Context as Ctx } from "@deepseek-ai/cordis";
+import Wire from "./Function/Wire.js";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,

@@ -30,9 +30,9 @@
 // (subsystems/filesystem.md). Test probes read the state through the
 // `ctx.__hookDshGovernorPackageState` attachment (never a return value from `apply` — the
 // loader treats apply returns specially, a live-verified lesson).
+import type Factory from "@Interface/Factory.js";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
-import type Factory from "@Interface/Factory.js";
 
 export default interface State extends Shared {
 	/** Strict chain pass: strip unknown deps in a governed workspace. */

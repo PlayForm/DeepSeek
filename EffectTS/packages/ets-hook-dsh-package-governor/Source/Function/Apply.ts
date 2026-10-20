@@ -27,13 +27,14 @@
 // both fs and pluginFactory exist). The update stage runs through the
 // attached P1 controller (Factory.Attach); the subprocess seam (bin mode) is
 // probed once by the factory's State builder (P9).
-import { Effect, Scope } from "effect";
-import Observe from "./Observe.js";
-import * as Direct from "./Direct.js";
-import { Activate } from "@playform/ets-base-dsh";
+import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/ets-base-dsh";
+import { Effect, Scope } from "effect";
+
+import * as Direct from "./Direct.js";
+import Observe from "./Observe.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context

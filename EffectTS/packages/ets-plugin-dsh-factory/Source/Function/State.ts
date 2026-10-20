@@ -28,13 +28,12 @@
 // remount, no new activation line, zero consumer changes. A failed refresh
 // keeps the previous value (the same defensive rule as the initial unwrap);
 // unknown or non-volatile key paths are ignored.
+import type { Context } from "@deepseek-ai/cordis";
+import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type { Journal as Entry, Options, State } from "@playform/ets-base-dsh";
+
 import Seam from "./Seam.js";
 import Unwrap from "./Unwrap.js";
-import type { State as State } from "@playform/ets-base-dsh";
-import type { Options as Options } from "@playform/ets-base-dsh";
-import type { Journal as Entry } from "@playform/ets-base-dsh";
-import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type { Context } from "@deepseek-ai/cordis";
 
 export default <Extra extends object = Record<string, unknown>>(
 	Context: Context,

@@ -15,6 +15,7 @@
 // tool-reminder bundles the same helper instead of importing it, so the
 // built Target carries no runtime import of the harness's own packages.
 import { randomUUID } from "node:crypto";
+
 import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
 
 // The coach's own source kind, declared in the coach's own module (the

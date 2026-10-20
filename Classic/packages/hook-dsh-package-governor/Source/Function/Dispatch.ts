@@ -36,12 +36,13 @@
 // would let the chain pass's settlement delete silently drop the running
 // update's controller; the collision lesson is factory-side now) and removed
 // on settlement.
-import Execute from "./Execute.js";
-import { Update } from "@playform/hook-dsh-core";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type JobsRegistry from "@Interface/Jobs.js";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type JobsRegistry from "@Interface/Jobs.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Update } from "@playform/hook-dsh-core";
+
+import Execute from "./Execute.js";
 
 // The envelope, built once: every dependency is a closure over the State it
 // is handed per dispatch — no module-level State, so HMR reloads rebind it

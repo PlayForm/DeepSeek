@@ -48,9 +48,10 @@
 //     exactly as above, `parallel: true` switching the fold to unbounded;
 //   * `false`, `null` or absent - no governance at all (the escape hatch;
 //     the raw-write tool omits the Govern call entirely for these).
-import { Effect } from "effect";
 import { basename as Base } from "node:path";
+
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { Effect } from "effect";
 
 /** One registered step: the module's name plus its run closure. The closure
  *  captures the module's own State (built in that module's apply), so the

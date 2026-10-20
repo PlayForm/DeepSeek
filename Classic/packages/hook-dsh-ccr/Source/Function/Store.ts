@@ -25,6 +25,7 @@
 // its evictions to the CALLER: the ledger strings are the module's own
 // (Function/Apply composes them via Factory.Append), the store logs nothing.
 import * as FileSystem from "node:fs";
+
 import type Entry from "@Interface/Entry.js";
 
 // One eviction reported to the caller (the reason tags the ledger line).

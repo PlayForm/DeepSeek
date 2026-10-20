@@ -8,7 +8,7 @@
 // so the listener's g2 stage stays await-free. The walk-up never reads the
 // governed manifest.
 import * as FileSystem from "node:fs";
-import { basename as Base, dirname as Parent, join as Join } from "node:path";
+import { basename as Base, join as Join, dirname as Parent } from "node:path";
 
 export default (Dir: string): string | null => {
 	let Step = Dir;

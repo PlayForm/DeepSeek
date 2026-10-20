@@ -63,10 +63,10 @@
 // attachment (never a return value from `apply` - the loader treats apply
 // returns specially, a live-verified lesson recorded in the plugin-development
 // skill).
+import type { Scopes } from "@Interface/Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
-import type { Scopes } from "@Interface/Config.js";
 
 export default interface State extends Shared {
 	/** The dash replacement - the transform's only knob (config `replacement`). */

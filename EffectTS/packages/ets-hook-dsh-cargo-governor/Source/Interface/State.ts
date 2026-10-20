@@ -28,9 +28,9 @@
 // The opaque identity types come from @deepseek-ai/dsh-fs: `FsTargetKey` and
 // `FsVersion` are branded strings the backend owns — the governor stores and
 // compares them but never parses or computes them (subsystems/filesystem.md).
-import type { Scope } from "effect";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+import type { Scope } from "effect";
 
 export default interface State extends Shared {
 	// ── the cargo module's own fields ────────────────────────────────────────

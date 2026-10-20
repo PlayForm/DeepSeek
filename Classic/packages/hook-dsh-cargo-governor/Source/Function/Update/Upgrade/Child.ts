@@ -2,11 +2,13 @@
 // no subprocess seam exists in this deployment. Async (the continuation owns
 // the wait); the abort signal kills the child. The process management is not
 // exempt — only the cargo CLI is.
-import type PluginFactory from "@playform/plugin-dsh-factory";
-import type State from "@Interface/State.js";
+import * as ChildProcess from "node:child_process";
+
 import type Invocation from "@Interface/Invocation.js";
 import type Job from "@Interface/Job.js";
-import * as ChildProcess from "node:child_process";
+import type State from "@Interface/State.js";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 import Unavailable from "./Unavailable.js";
 
 export default (

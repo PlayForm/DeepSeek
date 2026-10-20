@@ -19,13 +19,15 @@
 // Continue catches its own, and Function/Follow catches its own, so neither
 // can ever surface as a tool error (the silence invariant).
 import { dirname as Parent } from "node:path";
-import Transform from "./Transform.js";
-import Follow from "./Follow.js";
-import { Suppress } from "@playform/hook-dsh-core";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
+
+import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 import type Passage from "@Interface/Passage.js";
-import type { FsTarget, FsObservation, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/hook-dsh-core";
+
+import Follow from "./Follow.js";
+import Transform from "./Transform.js";
 
 export default (
 	State: State,

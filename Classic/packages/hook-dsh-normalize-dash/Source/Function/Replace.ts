@@ -10,7 +10,7 @@
 // The core resolves through the profile's node_modules link (the package is
 // installed as a directory link there); the behavior is byte-identical to
 // the previous in-file implementation — the hook-dsh-normalize-dash smoke is the arbiter.
-import { Replace, Dashes } from "@playform/hook-dsh-core";
+import { Dashes, Replace } from "@playform/hook-dsh-core";
 
 export default (Text: string, Replacement: string): { text: string; count: number } =>
 	Replace(Text, Dashes, Replacement);

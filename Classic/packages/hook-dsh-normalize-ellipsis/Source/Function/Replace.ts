@@ -9,7 +9,7 @@
 // The core resolves through the profile's node_modules link (the package is
 // installed as a directory link there); the flavor is a table plus a
 // closure, not a fork of the dispatch.
-import { Replace, Ellipsis } from "@playform/hook-dsh-core";
+import { Ellipsis, Replace } from "@playform/hook-dsh-core";
 
 export default (Text: string, Replacement: string): { text: string; count: number } =>
 	Replace(Text, Ellipsis, Replacement);

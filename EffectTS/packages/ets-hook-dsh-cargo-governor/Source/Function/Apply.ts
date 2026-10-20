@@ -25,13 +25,14 @@
 // delivery (live-verified 2026-10-03). Test probes read the per-dir
 // in-flight/breaker maps through the `ctx.__hookDshGovernorCargoState` attachment
 // instead.
-import { Effect, Scope } from "effect";
-import Observe from "./Observe.js";
-import * as Direct from "./Direct.js";
-import { Activate } from "@playform/ets-base-dsh";
+import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type StateView from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/ets-base-dsh";
+import { Effect, Scope } from "effect";
+
+import * as Direct from "./Direct.js";
+import Observe from "./Observe.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (inject: ["fs", "pluginFactory"] — the

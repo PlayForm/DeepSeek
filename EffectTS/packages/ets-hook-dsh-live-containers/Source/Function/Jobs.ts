@@ -13,8 +13,8 @@
 //
 // The wrapper is command-runner-only BY CONSTRUCTION (Policy.ts's detachable
 // set); the non-detachable mutation family never reaches it.
+import type { JobSource, JobSpec, ShellProcess, ShellSpec } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
-import type { JobSpec, JobSource, ShellProcess, ShellSpec } from "@Interface/Events.js";
 
 /** The per-job private tail (bounded; the completion frame's output source). */
 export class JobTail {

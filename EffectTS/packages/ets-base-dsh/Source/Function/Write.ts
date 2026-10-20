@@ -71,11 +71,12 @@
 // (Function/Continue) contains it - and its suppression line must carry the
 // ORIGINAL message ("...continuation error (suppressed): boom"), not a
 // wrapper's.
-import { Effect } from "effect";
 import { dirname as Parent } from "node:path";
-import type State from "@Interface/State.js";
+
 import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
+import type State from "@Interface/State.js";
+import { Effect } from "effect";
 
 /** The option bundle: what the caller adds on top of the shared pipeline. */
 export interface Over {

@@ -12,8 +12,9 @@
 // exactly `max` characters - the cap is a hard ceiling, never a graceful
 // ellipsis, so a smoke can assert the cut bytes. `error` previews are just
 // the first significant line (the failure message is the preview).
-import { Text as Joined } from "./Classify.js";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+
+import { Text as Joined } from "./Classify.js";
 
 export default (Type: string, Content: ContentBlock[], Max: number): string => {
 	const Full = Body(Type, Joined(Content), Content);

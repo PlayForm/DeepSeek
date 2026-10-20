@@ -21,14 +21,15 @@
 // logger-only (`hook-dsh-governor-package: continuation error (suppressed): …`), never
 // the ledger, never a rethrow, never an unhandled rejection — the silence
 // invariant.
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/hook-dsh-core";
+
+import Dispatch from "./Dispatch.js";
 import Filter from "./Filter.js";
 import Resolve from "./Resolve.js";
-import Dispatch from "./Dispatch.js";
-import { Suppress } from "@playform/hook-dsh-core";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type Passage from "@Interface/Passage.js";
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
 
 export default async (
 	State: State,

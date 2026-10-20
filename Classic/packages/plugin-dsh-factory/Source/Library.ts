@@ -49,36 +49,33 @@
 // (the unreadable-policy line, the suppressed-error lines prefixed with
 // State.Module) and stay byte-identical when the module keeps its historical
 // name.
-import { Service } from "@deepseek-ai/cordis";
-import type { Context } from "@deepseek-ai/cordis";
-import type { FsTarget, FsObservation, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import { Service, type Context, type Context as Ctx } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+
 import Append from "./Function/Append.js";
-import Match from "./Function/Match.js";
-import Discover from "./Function/Discover.js";
-import Parse from "./Function/Parse.js";
-import Resolve from "./Function/Resolve.js";
-import Gate from "./Function/Gate.js";
-import WriteFn from "./Function/Write.js";
-import type { Over as WriteOver } from "./Function/Write.js";
-import RefreshFn from "./Function/Refresh.js";
-import Continue from "./Function/Continue.js";
-import Build from "./Function/State.js";
-import Wire from "./Function/Wire.js";
 import AttachEffects from "./Function/Attach.js";
+import Continue from "./Function/Continue.js";
+import Discover from "./Function/Discover.js";
+import Gate from "./Function/Gate.js";
+import GovernFn, {
+	type Registry as GovernRegistry,
+	type Selection as GovernSelection,
+} from "./Function/Govern.js";
 import Journal from "./Function/Journal.js";
+import Match from "./Function/Match.js";
+import Parse from "./Function/Parse.js";
+import RefreshFn from "./Function/Refresh.js";
+import Resolve from "./Function/Resolve.js";
 import SchemaFn from "./Function/Schema.js";
 import SeamFn from "./Function/Seam.js";
+import Build from "./Function/State.js";
 import UpdateKey from "./Function/UpdateKey.js";
-import GovernFn from "./Function/Govern.js";
-import type {
-	Registry as GovernRegistry,
-	Selection as GovernSelection,
-} from "./Function/Govern.js";
-import type Shape from "./Interface/State.js";
-import type Setup from "./Interface/Options.js";
+import Wire from "./Function/Wire.js";
+import WriteFn, { type Over as WriteOver } from "./Function/Write.js";
 import type Decision from "./Interface/Gate.js";
+import type Setup from "./Interface/Options.js";
+import type Shape from "./Interface/State.js";
 import type Transform from "./Interface/Transform.js";
-import type { Context as Ctx } from "@deepseek-ai/cordis";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,

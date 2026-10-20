@@ -61,19 +61,20 @@
 // adopt it via `Scope.provide`. The loader does not close it - the
 // normalizer's disposal semantics stay the Classic ones (the tool
 // unregisters with the plugin's fiber; the Scope holds nothing).
-import { Effect, Scope } from "effect";
-import Write from "./Write.js";
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
-import Overpass from "./Overpass.js";
-import StepBatch from "./StepBatch.js";
+import { Effect, Scope } from "effect";
+
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,
 	type SettingsService,
 } from "./Command.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import Overpass from "./Overpass.js";
+import StepBatch from "./StepBatch.js";
+import Write from "./Write.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context

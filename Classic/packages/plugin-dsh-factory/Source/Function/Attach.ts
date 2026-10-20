@@ -26,10 +26,11 @@
 // The module handle is `{ state, name }`: the built State, and the
 // controller/effect label stem (the module name — "hook-dsh-governor-package" —
 // reproduces the trio's effect labels byte-identically).
-import Open from "./Open.js";
-import type State from "@Interface/State.js";
-import type JobsRegistry from "@Interface/Jobs.js";
 import type { Context } from "@deepseek-ai/cordis";
+import type JobsRegistry from "@Interface/Jobs.js";
+import type State from "@Interface/State.js";
+
+import Open from "./Open.js";
 
 export default (Context: Context, Module: { state: State; name: string }): void => {
 	// P1 — the jobs controller (see header).

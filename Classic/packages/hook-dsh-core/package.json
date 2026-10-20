@@ -6,9 +6,8 @@
 		"type": "git",
 		"url": "git+https://github.com/PlayForm/DeepSeek.git"
 	},
+	"license": "CC0-1.0",
 	"type": "module",
-	"main": "./Target/Library.js",
-	"types": "./Target/Library.d.ts",
 	"exports": {
 		".": {
 			"types": "./Target/Library.d.ts",
@@ -16,14 +15,16 @@
 		},
 		"./package.json": "./package.json"
 	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
 	"files": [
 		"Target",
 		"!Target/Test",
 		"README.md"
 	],
 	"scripts": {
-		"prepublishOnly": "sh prepublishOnly.sh",
-		"Run": "sh Run.sh"
+		"Run": "sh Run.sh",
+		"prepublishOnly": "sh prepublishOnly.sh"
 	},
 	"devDependencies": {
 		"@playform/build": "0.3.4",
@@ -31,7 +32,6 @@
 		"tsc-alias": "1.9.8",
 		"typescript": "7.0.2"
 	},
-	"license": "CC0-1.0",
 	"publishConfig": {
 		"access": "public",
 		"provenance": true

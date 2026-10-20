@@ -53,10 +53,10 @@
 // so the field stays undefined there with no effect on behavior. Not closed
 // by the loader: the normalizer's disposal semantics stay the Classic ones
 // (the tool unregisters with the plugin's fiber; the Scope holds nothing).
+import type { Scopes } from "@Interface/Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
-import type { Scopes } from "@Interface/Config.js";
 
 export default interface State extends Shared {
 	/** The dash replacement - the transform's only knob (config `replacement`). */

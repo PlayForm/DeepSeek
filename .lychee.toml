@@ -6,11 +6,11 @@
 
 # The file types to scan for links
 extensions = [
-	".md",   # the READMEs, the Documentation, the reports
-	".ts",   # the package sources (URLs in the comments and the constants)
+	".md",  # the READMEs, the Documentation, the reports
+	".ts",  # the package sources (URLs in the comments and the constants)
 	".tsx",  # the JSX sources
-	".js",   # the scripts
-	".json", # the manifests (the repository/homepage fields)
+	".js",  # the scripts
+	".json",  # the manifests (the repository/homepage fields)
 ]
 
 # Exclude these URL patterns outright (never checked, never reported)

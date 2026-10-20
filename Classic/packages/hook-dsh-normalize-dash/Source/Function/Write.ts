@@ -84,10 +84,11 @@
 // llm/stream Wire). The presenters are PURE functions of the args (the
 // normalization they show is recomputed through the same Function/Rewrite
 // chain the exec uses - no I/O, no session state, no clock).
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import Rewrite from "./Rewrite.js";
-import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+
+import Rewrite from "./Rewrite.js";
 
 // The union shapes (the harness tools reject unknown keys - the schema must
 // declare the whole selection form for both flags). Declared `as const` so

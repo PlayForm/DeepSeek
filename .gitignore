@@ -1,6 +1,6 @@
 # ============================================================
 # Git ignore for the DeepSeek Harness Plugin Family monorepo.
-# Note: the per-package repos (Boilerplate/, Classic/, EffectTS/
+# Note: the per-package repos (Classic/, EffectTS/
 # packages) may become git submodules later - their own .gitignore
 # files will govern their contents; this root file governs the
 # monorepo workspace only. The pre-existing rule is kept verbatim.
@@ -28,5 +28,4 @@ dist/
 # OS noise
 .DS_Store
 
-Boilerplate/
 Site/

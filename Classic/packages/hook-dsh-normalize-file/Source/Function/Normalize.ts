@@ -57,17 +57,17 @@
 // Pure module: no module-level state (two concurrent calls share nothing -
 // every value is a local), so HMR reloads and parallel calls cannot
 // interfere.
+import type State from "@Interface/State.js";
 import {
+	Dashes,
+	Ellipsis,
+	Fullwidth,
+	Invisible,
+	Quotes,
 	Replace,
 	ReplaceMap,
-	Dashes,
-	Quotes,
-	Ellipsis,
 	Spaces,
-	Invisible,
-	Fullwidth,
 } from "@playform/hook-dsh-core";
-import type State from "@Interface/State.js";
 
 /** The target type is the shared write executor's own second parameter. */
 type Target = Parameters<State["Factory"]["Write"]>[1];

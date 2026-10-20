@@ -31,10 +31,11 @@
 // The registration is READONLY after registration (the skill's rule): the
 // definition object is never mutated - this file only BUILDS it; the
 // registration call itself lives in Function/Apply.
-import { defineTool } from "@deepseek-ai/dsh-tools";
-import Normalize from "./Normalize.js";
-import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import type State from "@Interface/State.js";
+
+import Normalize from "./Normalize.js";
 
 export default (Context: Context, State: State) =>
 	defineTool({

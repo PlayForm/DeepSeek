@@ -32,14 +32,14 @@
 //     flavors, applied in the family order (unknown names match nothing
 //     and are ignored by construction; an empty selection is verbatim).
 import {
+	Dashes,
+	Ellipsis,
+	Fullwidth,
+	Invisible,
+	Quotes,
 	Replace,
 	ReplaceMap,
-	Dashes,
-	Quotes,
-	Ellipsis,
 	Spaces,
-	Invisible,
-	Fullwidth,
 } from "@playform/ets-hook-dsh-core";
 
 // The family's fixed order - the flavor names the tool's schema enumerates.

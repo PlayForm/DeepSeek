@@ -12,9 +12,10 @@
 // not exempt — only the ncu binary/library is. Ledger lines go through the
 // FACTORY (State.Factory.Append).
 import * as ChildProcess from "node:child_process";
-import type State from "@Interface/State.js";
+
 // SubprocessService is the module's default export (dsh-subprocess 0.2.0-rc.2).
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type State from "@Interface/State.js";
 
 export default async (
 	State: State,

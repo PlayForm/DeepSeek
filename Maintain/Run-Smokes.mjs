@@ -18,9 +18,9 @@
 // battery lives in <tree>/smokes/Test/ (built by <tree>/smokes/Build-Tests.sh)
 // and runs under Maintain/Run-Wiring.mjs; without DSH_TEST_SCRATCH its
 // folders self-skip, and its `.mjs` originals are retired too.
+import { spawn } from "node:child_process";
 import FileSystem from "node:fs";
 import Path from "node:path";
-import { spawn } from "node:child_process";
 
 // The per-test folders: every package that carries a Target/Test/ tree.
 const Packages = [

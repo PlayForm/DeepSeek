@@ -33,10 +33,11 @@
 // header-path normalization), KeyOf (the plan key), Name (the declaration
 // matcher) and SpliceVersion (the in-line version splice).
 import type Plan from "@Interface/Plan.js";
-import SplitPath from "./Pin/SplitPath.js";
+
 import KeyOf from "./Pin/KeyOf.js";
 import Name from "./Pin/Name.js";
 import SpliceVersion from "./Pin/SpliceVersion.js";
+import SplitPath from "./Pin/SplitPath.js";
 
 export interface Outcome {
 	/** The rewritten text (unchanged when nothing matched or on refusal). */

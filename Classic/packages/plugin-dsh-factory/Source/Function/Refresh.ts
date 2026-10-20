@@ -10,9 +10,9 @@
 // stat-based Function/Refresh after ncu/cargo mutated the file) — the
 // caller stats first (`ctx.fs.stat(Target)`) and passes the stat's version.
 // The token is never computed or parsed locally.
-import type State from "@Interface/State.js";
-import type Actor from "@Interface/Actor.js";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Actor from "@Interface/Actor.js";
+import type State from "@Interface/State.js";
 
 export default (
 	State: State,

@@ -24,8 +24,13 @@
 // `render failed <id> -> skipped`; the assembly still resolves.
 import Clock from "@Function/Clock.js";
 import { Table } from "@Function/Counters.js";
-import type { AgentState, BlockSpec, Frame as FrameRow, Variables } from "@Interface/Execution.js";
-import { RENDERED_KINDS } from "@Interface/Execution.js";
+import {
+	RENDERED_KINDS,
+	type AgentState,
+	type BlockSpec,
+	type Frame as FrameRow,
+	type Variables,
+} from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
 
 /** The ledger sink Apply passes down (Factory.Append with the State bound). */

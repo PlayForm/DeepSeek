@@ -11,13 +11,14 @@
 // Never rejects: every stage is contained; the promise always resolves a code.
 // Ledger lines go through the FACTORY (State.Factory.Append) — the strings
 // are the module's.
+import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type Invocation from "@Interface/Invocation.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+
 import Policy from "./Update/Policy.js";
 import Run from "./Update/Run.js";
 import Verify from "./Update/Verify.js";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type Invocation from "@Interface/Invocation.js";
-import type { FsTarget } from "@deepseek-ai/dsh-fs";
 
 export default async (
 	State: State,

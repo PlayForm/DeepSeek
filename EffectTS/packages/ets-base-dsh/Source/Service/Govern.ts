@@ -20,11 +20,12 @@
 // Every step keeps its own contained error (`Effect.exit` per step - the
 // family's silence invariant), so a throwing step never propagates and
 // later steps still run, in both modes.
-import { Context, Effect, Layer } from "effect";
 import { basename as Base } from "node:path";
-import GovernFn from "../Function/Govern.js";
-import type { Registry, Selection } from "../Function/Govern.js";
+
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { Context, Effect, Layer } from "effect";
+
+import GovernFn, { type Registry, type Selection } from "../Function/Govern.js";
 
 // Govern - the service tag.
 export class Govern extends Context.Service<

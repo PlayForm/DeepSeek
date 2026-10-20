@@ -64,6 +64,7 @@
 // stream's total NORMALIZED-character count (marker strips excluded - the
 // reducers keep count 0 for those) exactly once, after the last chunk.
 import { Effect, Stream } from "effect";
+
 import Chunk from "./Chunk.js";
 
 type BlockShape =

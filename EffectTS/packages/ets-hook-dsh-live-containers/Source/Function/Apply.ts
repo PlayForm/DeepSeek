@@ -57,27 +57,8 @@
 // the State builder + the ledger; `tools` is declared per the design's
 // phase-1 inject list (the wave-2 listeners consume it; phase 1 never
 // touches it).
-import { Activate } from "@playform/ets-base-dsh";
-import Clock from "@Function/Clock.js";
-import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "@Function/Counters.js";
-import Build, { Cached } from "@Function/Render.js";
-import { KINDS } from "@Interface/Execution.js";
-import type { AgentState, BlockSpec } from "@Interface/Execution.js";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import type { Context } from "@deepseek-ai/cordis";
-// The wave-2 modules (the C2 extension - each behavior in its own module;
-// Apply only REGISTERS and wires).
-import * as Board from "@Function/Board.js";
-import * as Completion from "@Function/Completion.js";
-import * as Detach from "@Function/Detach.js";
-import * as Failsafe from "@Function/Failsafe.js";
-import * as Monitors from "@Function/Monitors.js";
-import * as MonitorTools from "@Function/MonitorTools.js";
-import * as Plant from "@Function/Plant.js";
-import * as SetTool from "@Function/Set.js";
-import * as Storage from "@Function/Storage.js";
-import * as Suggester from "@Function/Suggester.js";
+import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
 // The type-only imports below publish the EVENT signatures on the cordis
 // Events interface (the packages' own augmentations): dsh-tools declares the
 // tools/* waterfalls + tools/change (and transitively dsh-agent's
@@ -89,7 +70,25 @@ import type {
 	ToolExecution,
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
-import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
+// The wave-2 modules (the C2 extension - each behavior in its own module;
+// Apply only REGISTERS and wires).
+import * as Board from "@Function/Board.js";
+import Clock from "@Function/Clock.js";
+import * as Completion from "@Function/Completion.js";
+import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "@Function/Counters.js";
+import * as Detach from "@Function/Detach.js";
+import * as Failsafe from "@Function/Failsafe.js";
+import * as Monitors from "@Function/Monitors.js";
+import * as MonitorTools from "@Function/MonitorTools.js";
+import * as Plant from "@Function/Plant.js";
+import Build, { Cached } from "@Function/Render.js";
+import * as SetTool from "@Function/Set.js";
+import * as Storage from "@Function/Storage.js";
+import * as Suggester from "@Function/Suggester.js";
+import type Config from "@Interface/Config.js";
+import { KINDS, type AgentState, type BlockSpec } from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/ets-base-dsh";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).

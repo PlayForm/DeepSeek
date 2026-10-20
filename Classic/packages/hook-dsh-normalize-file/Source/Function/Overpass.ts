@@ -54,8 +54,9 @@
 // nothing, and an HMR reload rebinds the closure cleanly.
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import { Rewrite } from "./Normalize.js";
 import type State from "@Interface/State.js";
+
+import { Rewrite } from "./Normalize.js";
 
 /** The schema-default scopes (the fallback for a hand-built config). */
 export const DefaultScopes = {

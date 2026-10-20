@@ -10,11 +10,11 @@
 // Unknown targets log and no-op. Any other action while a suggestion is open
 // also dismisses it (the model moved on - I6 5.2).
 import { defineTool } from "@deepseek-ai/dsh-tools";
+import * as Board from "@Function/Board.js";
+import type { Log } from "@Function/Render.js";
+import * as Suggester from "@Function/Suggester.js";
 import type State from "@Interface/State.js";
 import { Entry } from "@Variable/Catalog.js";
-import * as Board from "@Function/Board.js";
-import * as Suggester from "@Function/Suggester.js";
-import type { Log } from "@Function/Render.js";
 
 /** Build the tool definition (the ccr Retrieve.ts idiom: this file only
  * BUILDS it; the registration call lives in Apply). */

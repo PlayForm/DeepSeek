@@ -33,18 +33,19 @@
 // matters. Nothing else is injected: the ledger append is the factory's own
 // plain-fs exemption, and the chunk vocabulary arrives through the
 // waterfall, not through an import.
-import Normalize from "./Normalize.js";
-import Overpass from "./Overpass.js";
-import StepBatch from "./StepBatch.js";
+import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
+import { Activate } from "@playform/hook-dsh-core";
+
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,
 	type SettingsService,
 } from "./Command.js";
-import { Activate } from "@playform/hook-dsh-core";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import Normalize from "./Normalize.js";
+import Overpass from "./Overpass.js";
+import StepBatch from "./StepBatch.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context

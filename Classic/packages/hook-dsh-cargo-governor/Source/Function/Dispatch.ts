@@ -43,13 +43,14 @@
 // update run's controller) and removed on settlement (Function/Settle / the
 // defensive catch); the FACTORY's Attach disposal effect aborts every
 // remaining controller on unload.
-import type PluginFactory from "@playform/plugin-dsh-factory";
-import { Update } from "@playform/hook-dsh-core";
-import Run from "./Run.js";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type Jobs from "@Interface/Jobs.js";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Jobs from "@Interface/Jobs.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Update } from "@playform/hook-dsh-core";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
+import Run from "./Run.js";
 
 // The envelope factory: the cargo module's explicit Factory parameter is the
 // drift the core's flow does not carry, so the injected dependencies close

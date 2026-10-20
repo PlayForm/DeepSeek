@@ -22,9 +22,6 @@
 // `ctx.__hookDshLiveContainersState` probe attachment - never a return value
 // from `apply` (the loader treats apply returns specially, a live-verified
 // lesson recorded in the plugin-development skill).
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type { AgentState, BlockSpec } from "@Interface/Execution.js";
 import type {
 	BoardState,
 	CheckSetSpec,
@@ -38,6 +35,9 @@ import type {
 	TagRecord,
 	WatchlistEntry,
 } from "@Interface/Events.js";
+import type { AgentState, BlockSpec } from "@Interface/Execution.js";
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 
 export default interface State extends Shared {
 	/** Master switch (config `enabled`, volatile) - false = full passthrough. */

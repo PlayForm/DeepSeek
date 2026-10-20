@@ -12,12 +12,12 @@
 // RENDER SURFACES (I5 1.3): the standing section carries running boards; the
 // stale declarations are section changes at the next parent request. There is
 // no completion-style dynamic context for boards - a board is RUNNING state.
-import type State from "@Interface/State.js";
-import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
 import Clock from "@Function/Clock.js";
+import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
+import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 
 /** The byte length of one string. */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");

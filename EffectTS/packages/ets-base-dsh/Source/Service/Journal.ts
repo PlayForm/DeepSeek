@@ -41,9 +41,10 @@
 //
 // The human ledger stays the complete record; the storage journal is the
 // structured, disposable one.
-import { Context, Effect, Layer } from "effect";
-import JournalFn from "../Function/Journal.js";
 import type State from "@Interface/State.js";
+import { Context, Effect, Layer } from "effect";
+
+import JournalFn from "../Function/Journal.js";
 
 // The P5 events enum - byte-identical order, asserted by the smoke.
 export const EVENTS = [

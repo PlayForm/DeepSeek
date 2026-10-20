@@ -21,13 +21,12 @@ import type {
 	ToolExecution,
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
-import type { DetachRecord, TagRecord } from "@Interface/Events.js";
 import Clock from "@Function/Clock.js";
 import * as Jobs from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";
 import type { Log } from "@Function/Render.js";
-import type { ShellSpec } from "@Interface/Events.js";
+import type { DetachRecord, ShellSpec, TagRecord } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */

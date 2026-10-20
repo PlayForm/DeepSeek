@@ -25,15 +25,17 @@
 //      byte-identical (`governed …` before `update stage dispatched …`),
 //      skipped entirely when Filter finds nothing public for cargo to do.
 import { dirname as Parent } from "node:path";
-import Transform from "./Transform.js";
+
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type RegistryView from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import { Suppress } from "@playform/hook-dsh-core";
+import type PluginFactory from "@playform/plugin-dsh-factory";
+
 import Dispatch from "./Dispatch.js";
 import Filter from "./Filter.js";
-import { Suppress } from "@playform/hook-dsh-core";
-import type State from "@Interface/State.js";
-import type RegistryView from "@Interface/Registry.js";
-import type Passage from "@Interface/Passage.js";
-import type PluginFactory from "@playform/plugin-dsh-factory";
-import type { FsTarget, FsObservation } from "@deepseek-ai/dsh-fs";
+import Transform from "./Transform.js";
 
 export default (
 	Factory: PluginFactory,

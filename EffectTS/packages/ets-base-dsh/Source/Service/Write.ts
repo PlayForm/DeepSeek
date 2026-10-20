@@ -21,11 +21,11 @@
 // the actor through verbatim to the waterfall and the root-emit, and the
 // Gate's second check is what honors it - the executor never mutates an
 // actor, so the Gate matrix and the emitted events stay byte-identical.
-import { Context, Effect, Layer } from "effect";
-import WriteFn from "../Function/Write.js";
-import type { Over } from "../Function/Write.js";
-import type State from "@Interface/State.js";
 import type { FsTarget, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
+import { Context, Effect, Layer } from "effect";
+
+import WriteFn, { type Over } from "../Function/Write.js";
 
 // Write - the service tag.
 export class Write extends Context.Service<

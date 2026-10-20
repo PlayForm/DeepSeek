@@ -47,7 +47,7 @@
 // never rewrites the decision, and fails open (a logger.warn plus the
 // unchanged decision - never a throw into the waterfall). There is NO
 // existing `agent/pre-step` listener precedent anywhere in the family (the
-// grep of Boilerplate/Classic/EffectTS Source trees and the live profile's
+// grep of Classic/EffectTS Source trees and the live profile's
 // bundles returned none, 2026-10-19) - this is the first, registered with
 // no options (default ordering: the engine does not need to precede
 // anyone, it only observes).

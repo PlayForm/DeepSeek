@@ -22,8 +22,8 @@
 // exempt (rule 5); otherwise every segment is classified individually and the
 // highest-priority class wins. Trailing redirect context belongs to the
 // segment it follows, so `cat f > out.txt` is one segment with a redirect.
-import { CLASS_PRIORITY } from "@Variable/Patterns.js";
 import type { CoachClass } from "@Interface/Execution.js";
+import { CLASS_PRIORITY } from "@Variable/Patterns.js";
 
 /** The class priority rank of a class (lower = more severe). */
 export const Rank = (Class: CoachClass): number => CLASS_PRIORITY.indexOf(Class);

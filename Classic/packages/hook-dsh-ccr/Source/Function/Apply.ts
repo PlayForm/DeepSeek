@@ -66,19 +66,17 @@
 // serves the ccr_retrieve registration (ToolRuntime.register). Nothing else:
 // the ledger append is the factory's own plain-fs exemption, and the store's
 // optional journal is the store's own plain-fs exemption (Function/Store).
-import { Activate } from "@playform/hook-dsh-core";
-import Compress from "./Compress.js";
-import { Decide } from "./Engine.js";
-import Marker from "./Marker.js";
-import Retrieve from "./Retrieve.js";
-import Store from "./Store.js";
-import type { Eviction } from "./Store.js";
-import type { Verdict } from "./Compress.js";
-import type { EngineRecord, EngineRuntime } from "./Engine.js";
+import type { Context } from "@deepseek-ai/cordis";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/hook-dsh-core";
+
+import Compress, { type Verdict } from "./Compress.js";
+import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
+import Marker from "./Marker.js";
+import Retrieve from "./Retrieve.js";
+import Store, { type Eviction } from "./Store.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together). Classic identity: the

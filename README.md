@@ -216,7 +216,6 @@ One contract, three trees - the ledger strings are byte-identical across all of 
 
 | Tree           | What it is                                                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `Boilerplate/` | The internal baseline - the original family copies, the live `~/.dsh` source, personal paths kept by design. Never released.           |
 | `Classic/`     | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 733 smoke assertions.           |
 | `EffectTS/`    | The Effect v4 port - the same twelve contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.2 pin). 746 assertions. |
 
@@ -279,7 +278,6 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 ### The layout
 
 ```text
-    Boilerplate/     the internal baseline (the original copies, personal paths; not a release)
     Classic/         the plain-TypeScript release: 12 packages + 12 smokes
     EffectTS/        the Effect v4 port: the same 12 packages + 12 smokes
     Site/            the static site: 21 pages (the plugins, the flavors, the setup, the case study)

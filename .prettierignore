@@ -1,7 +1,7 @@
 # ============================================================
 # Prettier exclusions for the DeepSeek Harness Plugin Family
 # monorepo - adapted to THIS repository's actual structure:
-#   Boilerplate/packages/*, Classic/packages/*,
+#   Classic/packages/*,
 #   EffectTS/packages/* (each with Target/ build dirs),
 #   Site/, docs/, Test/, root node_modules + pnpm-lock.
 # ============================================================

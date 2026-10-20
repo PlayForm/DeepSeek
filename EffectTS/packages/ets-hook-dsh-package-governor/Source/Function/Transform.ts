@@ -35,15 +35,16 @@
 // The registry is passed in by Function/Observe — the SAME parsed object the
 // listener's g2 stage checked for the `unreadable registry.json …` line — so
 // the transform never re-reads it.
-import Decode from "./Decode.js";
-import Satisfy from "./Satisfy.js";
+import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type Passage from "@Interface/Passage.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
+import type { Transform } from "@Interface/Transform.js";
 import { Refusal } from "@playform/ets-hook-dsh-core";
 import Section from "@Variable/Section.js";
-import type State from "@Interface/State.js";
-import type Registry from "@Interface/Registry.js";
-import type Passage from "@Interface/Passage.js";
-import type { Transform } from "@Interface/Transform.js";
-import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+
+import Decode from "./Decode.js";
+import Satisfy from "./Satisfy.js";
 
 export default (
 		State: State,

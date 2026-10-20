@@ -22,8 +22,8 @@
 // fields built with the same @deepseek-ai/schemastery import the loader
 // consumes (the schema must be a real schemastery instance — the Standard
 // Schema `~standard` interface).
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import Schema from "@deepseek-ai/schemastery";
+import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
 export default Compose(
 	{

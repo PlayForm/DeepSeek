@@ -6,9 +6,8 @@
 		"type": "git",
 		"url": "git+https://github.com/PlayForm/DeepSeek.git"
 	},
+	"license": "CC0-1.0",
 	"type": "module",
-	"main": "./Target/Library.js",
-	"types": "./Target/Library.d.ts",
 	"exports": {
 		".": {
 			"types": "./Target/Library.d.ts",
@@ -18,6 +17,8 @@
 		"./SCHEME.md": "./SCHEME.md",
 		"./package.json": "./package.json"
 	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
 	"files": [
 		"Target",
 		"!Target/Test",
@@ -26,8 +27,8 @@
 		"SCHEME.md"
 	],
 	"scripts": {
-		"prepublishOnly": "sh prepublishOnly.sh",
-		"Run": "sh Run.sh"
+		"Run": "sh Run.sh",
+		"prepublishOnly": "sh prepublishOnly.sh"
 	},
 	"dependencies": {
 		"@playform/hook-dsh-core": "0.0.1",
@@ -44,14 +45,13 @@
 		"tsc-alias": "1.9.8",
 		"typescript": "7.0.2"
 	},
-	"license": "CC0-1.0",
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
 	"dsh": {
 		"bundle": {
 			"patch": "./cordis.patch.yml"
 		}
-	},
-	"publishConfig": {
-		"access": "public",
-		"provenance": true
 	}
 }

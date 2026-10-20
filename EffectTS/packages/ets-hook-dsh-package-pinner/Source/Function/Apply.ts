@@ -43,13 +43,14 @@
 // adopt it via `Scope.provide`. The loader does not close it — the pinner's
 // disposal semantics stay the Classic ones (the P2 Inflight abort kills any
 // in-flight pass's controller; the factory's Attach effect owns that).
-import { Effect, Scope } from "effect";
-import Observe from "./Observe.js";
-import { Pin } from "./Direct.js";
-import { Activate } from "@playform/ets-base-dsh";
+import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import type { Context } from "@deepseek-ai/cordis";
+import { Activate } from "@playform/ets-base-dsh";
+import { Effect, Scope } from "effect";
+
+import { Pin } from "./Direct.js";
+import Observe from "./Observe.js";
 
 export default (Context: Context, Options: Config): void => {
 	// The factory service — declared by `inject`; the accessor never throws
