@@ -73,7 +73,7 @@ statuses:
 | ----------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (15)
+### Plans - the living + queued hubs (17)
 
 | Document (Documentation/Plans/)     | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -92,6 +92,8 @@ statuses:
 | [APHRODITE-RUST-DYLIB-INTEGRATION.md](Plans/APHRODITE-RUST-DYLIB-INTEGRATION.md) | planned | queued-plan |
 | [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md) | planned | queued-plan |
 | [TRUSTED-PUBLISHER.md](Plans/TRUSTED-PUBLISHER.md) | planned | queued-plan |
+| [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md) | planned | queued-plan (site content and wording) |
+| [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md) | planned | queued-plan (duplication, functionality, placement) |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (18)
 
