@@ -1958,3 +1958,21 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
   reconciliation -> the TS symbol rename vertical slice -> the
   interruption injections -> the three-way comparison -> the shared
   extraction after. This becomes agent 3's first mandate.
+- THE INVERSE-REPRESENTATION PARADIGM (2026-10-20 - the user's extension,
+  appended to WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md): the workspace =
+  the INVERSE REPRESENTATION of the standard UNIX filesystem (the files =
+  the ACTIVE processes/knowledge graphs; the harness's state = the
+  substrate - the roles inverted!). The ANY-FILE adapters (NOT just .ts -
+  the .rs, the .docx, the binaries, the data files - each type's adapter
+  produces its knowledge graph; the MAIN EVIDENCE = the code block - the
+  universal atom - start small + expand). The DATABASES + CLOUD: the
+  different databases powering/connecting the representation; the harness
+  lifted onto the cloud; the artifact-like block-based remote feeds. The
+  PITFALLS LOG + the RFC QUEUE (the adapter interface, the knowledge-
+  graph schema, the inverse-representation nomenclature, the remote-block
+  protocol, the storage adapters, the harness-integration RFCs) + the
+  RESEARCH PLACES (~/Developer/Documentation/Module/deepseek-harness
+  PRIMARY - the subsequent agents always read it: never discard any
+  functionality + search more integration ways + totally modify the
+  harness per the new nomenclature). The GRAND-REWRITE (`ad3a86f2`)
+  relayed the framing + this extension.
