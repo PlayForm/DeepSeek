@@ -53,12 +53,12 @@ const runTest = async () => {
     );
     await Pre(Run, Exec("cargo build"));
     await WaveAssemble(Run);
-    const JobId = Jobs.started[0].id;
+    const JobID = Jobs.started[0].id;
     Advance(6e3);
     await WaveAssemble(Run);
     Check(Count, "F1: zero output past hangBudgetMs logs the byte-exact line (warn-only: no kill)", () => {
       assert.deepEqual(LinesWith(Run, "failsafe hang"), [
-        `hook-dsh-live-containers: failsafe hang ${JobId} (6s no output)`
+        `hook-dsh-live-containers: failsafe hang ${JobID} (6s no output)`
       ]);
       assert.equal(Jobs.killed.length, 0);
     });
@@ -135,8 +135,8 @@ const runTest = async () => {
     const Result = await Execute(Run, Tagged, async () => ({ isError: false, value: {}, content: [] }));
     Check(Count, "F3: the 4th dedup hit extends the marker (byte-exact) and logs the loop", () => {
       const Text = Result.value.stdout.text;
-      const JobId = Jobs.started[0].id;
-      assert.ok(Text.includes(`[live] already running as ${JobId} (3rd attempt) - use job_output.`));
+      const JobID = Jobs.started[0].id;
+      assert.ok(Text.includes(`[live] already running as ${JobID} (3rd attempt) - use job_output.`));
       assert.deepEqual(LinesWith(Run, "failsafe retry-loop"), [
         "hook-dsh-live-containers: failsafe retry-loop cargo build"
       ]);

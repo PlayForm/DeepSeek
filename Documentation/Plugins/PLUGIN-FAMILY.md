@@ -23,37 +23,30 @@ statuses:
 
 # PLUGIN-FAMILY - the authoritative registry of the 25 published packages
 
-> This document is the "plugins saved as documents" registry: the full family at
-> version **0.0.1**, every name byte-accurate, every repo link absolute. It is a
-> DOCUMENT, not an implementation - the packages it describes are already
-> published; nothing here scaffolds new code. The planned (not yet implemented)
-> orchestration plugins live separately in
-> [ORCHESTRATION-PLUGINS.md](ORCHESTRATION-PLUGINS.md).
-> Source of truth: the packages' own READMEs/SCHEMs/Sources under
-> `Classic/packages/` and `EffectTS/packages/`, plus the root README.
+> This document is the "plugins saved as documents" registry.
+> The registry covers the full family at version **0.0.1**.
+> EVERY name is byte-accurate and EVERY repo link is absolute.
+> It is a DOCUMENT, NOT an implementation.
+> The packages it describes are already published.
+> NOTHING here scaffolds new code.
+> The planned (NOT yet implemented) orchestration plugins live separately in [ORCHESTRATION-PLUGINS.md](ORCHESTRATION-PLUGINS.md).
+> Source of truth: the packages' own READMEs/SCHEMs/Sources under `Classic/packages/` and `EffectTS/packages/`, plus the root README.
 
 ## 0. The family at a glance
 
-- **Version: 0.0.1 for all 25 packages.** Names byte-accurate as below; the
-  legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
-- **Two published trees, one contract:** the CLASSIC split
-  (`@playform/hook-dsh-*`, `@playform/plugin-dsh-*` - plain TypeScript, zero
-  runtime framework dependencies, 733 smoke assertions) and the EFFECT-TS split
-  (`@playform/ets-*` - the same contracts on Effect v4.0.2 services and layers,
-  746 assertions, with `@playform/ets-base-dsh` as the plumbing base).
-  Never mix the two splits in one dependency graph - the EffectTS `Update`
-  returns Effect envelopes, not the classic dispatch envelope.
-- **One ledger-string contract:** every activation line, refusal line,
-  chain-pass line and journal record is asserted byte-identically by the smokes,
-  in all implementations. One ledger per plugin: `~/.dsh/<identity>.log`.
-- **Every name reads as an @-sentence:** `<kind> @ <platform> @ <role> @
-  <domain>` (e.g. Hook @ DSH @ Normalize @ Dash).
-- **The event surfaces used by the family:** `llm/stream` (the streaming
-  waterfall - the normalize flavors' rewrite point), `fs/observed` (the
-  observed-file event - the governance trio's trigger), the tool execution
-  surface (the mutation tools - write/edit/str_replace_editor/raw-write - via
-  the factory's pre/post-execute gating and the direct-govern registry), plus
-  the loader surface (cordis patch inserts at profile startup).
+- **Version: 0.0.1 for ALL 25 packages.**
+  Names are byte-accurate as below.
+  The legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
+- **Two published trees, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`, `@playform/plugin-dsh-*` - plain TypeScript, zero runtime framework dependencies, 733 smoke assertions) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on Effect v4.0.2 services and layers, 746 assertions, with `@playform/ets-base-dsh` as the plumbing base).
+  NEVER mix the two splits in ONE dependency graph.
+  The EffectTS `Update` returns Effect envelopes, NOT the classic dispatch envelope.
+- **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal record is asserted byte-identically by the smokes, in ALL implementations.
+  ONE ledger per plugin: `~/.dsh/<identity>.log`.
+- **EVERY name reads as an @-sentence:** `<kind> @ <platform> @ <role> @ <domain>` (e.g. Hook @ DSH @ Normalize @ Dash).
+- **The event surfaces used by the family:** `llm/stream` (the streaming waterfall - the normalize flavors' rewrite point).
+  `fs/observed` (the observed-file event - the governance trio's trigger).
+  The tool execution surface (the mutation tools - write/edit/str_replace_editor/raw-write) via the factory's pre/post-execute gating and the direct-govern registry.
+  Plus the loader surface (cordis patch inserts at profile startup).
 
 ## 1. The 25 names (the registry list)
 
@@ -105,61 +98,39 @@ Absolute-link rule for any repo target in docs/prompts/skills:
 
 ### The base and the machinery
 
-- **`@playform/ets-base-dsh`** (Base) - the EffectTS plumbing package: the
-  shared Effect types, service tags, layer helpers and runtime conveniences
-  every `ets-*` package builds on, so the EffectTS tree's twelve contracts share
-  one base instead of duplicating the plumbing per package. Effect v4.0.2 is the
-  single shared runtime dependency.
-- **`@playform/hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer,
-  zero runtime dependencies, not itself a plugin: the dependency-section lists,
-  the exclusion segments, the suppression-line composer, the update-policy
-  loader, the refusal guard, the update envelope, the activation-line composer,
-  and the normalize/stream machinery - the six character tables plus
-  `Replace`/`ReplaceMap` and the `Chunk`/`Block` dispatch (per-chunk
-  application, the assembled reasoning block, the tool-arguments gate). Each
-  normalize flavor contributes one table and one replacement on top of this.
+- **`@playform/ets-base-dsh`** (Base) - the EffectTS plumbing package.
+  It provides the shared Effect types, service tags, layer helpers and runtime conveniences EVERY `ets-*` package builds on.
+  The EffectTS tree's twelve contracts share ONE base instead of duplicating the plumbing per package.
+  Effect v4.0.2 is the single shared runtime dependency.
+- **`@playform/hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, NOT itself a plugin.
+  It provides the dependency-section lists, the exclusion segments, the suppression-line composer, the update-policy loader, the refusal guard, the update envelope, the activation-line composer, and the normalize/stream machinery.
+  The normalize/stream machinery is the six character tables plus `Replace`/`ReplaceMap` and the `Chunk`/`Block` dispatch (per-chunk application, the assembled reasoning block, the tool-arguments gate).
+  EACH normalize flavor contributes ONE table and ONE replacement on top of this.
 
 ### The service
 
-- **`@playform/plugin-dsh-factory`** (Plugin @ DSH @ Factory) - the family's
-  first service: loading it registers one class plugin (`static inject = ["fs"]`)
-  exposing `ctx.pluginFactory`, nineteen callable methods covering everything
-  the hooks used to duplicate - the ledger (`Append`), the exclusion match
-  (`Match`), registry discovery (`Discover`/`Parse`), the union keep-list
-  (`ResolvePolicy`), the gate set (`Gate`), the shared write executor
-  (`Write`/`GuardedWrite`, version-guarded fenced writes), the `fs/observed`
-  re-emit (`Refresh`), the detached contained continuation (`Continue`), the
-  State builder, fiber-owned wiring (`Wire`), effect registrations (`Attach`),
-  the P5 journal (`Journal`), the schema factory (`Schema`), the probe-once seam
-  (`Seam`), the inflight key (`UpdateKey`), and the direct-govern registry and
-  entry (`RegisterGovern`/`Govern` - the sequential fold: one step's chain
-  completes before the next step reads the file). The loader contract is
-  `name`/`apply`/`Config`/`inject` on the default export.
+- **`@playform/plugin-dsh-factory`** (Plugin @ DSH @ Factory) - the family's FIRST service.
+  Loading it registers ONE class plugin (`static inject = ["fs"]`) exposing `ctx.pluginFactory`, nineteen callable methods covering everything the hooks used to duplicate.
+  The methods are: the ledger (`Append`), the exclusion match (`Match`), registry discovery (`Discover`/`Parse`), the union keep-list (`ResolvePolicy`), the gate set (`Gate`), the shared write executor (`Write`/`GuardedWrite`, version-guarded fenced writes), the `fs/observed` re-emit (`Refresh`), the detached contained continuation (`Continue`), the State builder, fiber-owned wiring (`Wire`), effect registrations (`Attach`), the P5 journal (`Journal`), the schema factory (`Schema`), the probe-once seam (`Seam`), the inflight key (`UpdateKey`), and the direct-govern registry and entry (`RegisterGovern`/`Govern`).
+  `RegisterGovern`/`Govern` is the sequential fold: ONE step's chain completes before the next step reads the file.
+  The loader contract is `name`/`apply`/`Config`/`inject` on the default export.
 
 ### The governance trio
 
-- **`@playform/hook-dsh-package-governor`** (Hook @ DSH @ Governor @ Package) -
-  the silent package.json governor: hooks `fs/observed`; a governed write by a
-  mutation tool passes the gate set, then the pass runs as a detached, contained
-  continuation - chain-governed pins (`^x`, `~x`, `workspace:*`) rewritten to
-  the effective registry's resolved versions, then the update stage (`ncu`,
-  programmatic library or external binary through the subprocess seam) on a
-  cooldown with a circuit breaker (`maxUpdateFailures` - 3 consecutive failures
-  pause a directory). `strict` strips unknown dependencies - explicit only,
-  never a default-delete.
-- **`@playform/hook-dsh-package-pinner`** (Hook @ DSH @ Pinner @ Package) - the
-  silent version pinner: deterministically rewrites every ranged dependency
-  version to its static version (`^0.3.4` -> `0.3.4`), protected by the
-  pin-policy.json keep-list (discovery order: configured `policyFile` -> repo
-  walk-up -> built-in default; the union of keep-lists). The keep-list wins over
-  pinning, never over the chain. Sections covered: dependencies,
-  devDependencies, peerDependencies, optionalDependencies.
-- **`@playform/hook-dsh-cargo-governor`** (Hook @ DSH @ Governor @ Cargo) - the
-  Rust-sided flavor: surgical chain-pin rewrites on the raw TOML lines
-  (comments survive), full-version normalization (`1.0` -> `1.0.0`), and
-  `cargo upgrade` (cargo-edit) through the subprocess seam - the only update
-  path, because Rust does not co-opt into the TypeScript ecosystem. `strict`
-  removes the whole `name = "..."` entry, never inherited or path/git entries.
+- **`@playform/hook-dsh-package-governor`** (Hook @ DSH @ Governor @ Package) - the silent package.json governor.
+  It hooks `fs/observed`.
+  A governed write by a mutation tool passes the gate set, then the pass runs as a detached, contained continuation.
+  The continuation chain-governs pins (`^x`, `~x`, `workspace:*`) rewritten to the effective registry's resolved versions, then the update stage (`ncu`, programmatic library or external binary through the subprocess seam) on a cooldown with a circuit breaker (`maxUpdateFailures` - 3 consecutive failures pause a directory).
+  `strict` strips unknown dependencies - explicit ONLY, NEVER a default-delete.
+- **`@playform/hook-dsh-package-pinner`** (Hook @ DSH @ Pinner @ Package) - the silent version pinner.
+  It deterministically rewrites EVERY ranged dependency version to its static version (`^0.3.4` -> `0.3.4`), protected by the pin-policy.json keep-list.
+  Discovery order: configured `policyFile` -> repo walk-up -> built-in default; the union of keep-lists.
+  The keep-list wins over pinning, NEVER over the chain.
+  Sections covered: dependencies, devDependencies, peerDependencies, optionalDependencies.
+- **`@playform/hook-dsh-cargo-governor`** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor.
+  It does surgical chain-pin rewrites on the raw TOML lines (comments survive), full-version normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through the subprocess seam.
+  `cargo upgrade` is the ONLY update path, because Rust does NOT co-opt into the TypeScript ecosystem.
+  `strict` removes the whole `name = "..."` entry, NEVER inherited or path/git entries.
 
 ### The seven normalize flavors
 

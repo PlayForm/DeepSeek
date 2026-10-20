@@ -250,9 +250,9 @@ export const Check = (Agent: State, Append: Log) =>
 					Pending += 1;
 					continue;
 				}
-				const JobId = await Monitors.Dispatch(Agent, AgentID, Entry, SetID, Spec, Append);
-				if (JobId !== undefined) {
-					Started.push(JobId);
+				const JobID = await Monitors.Dispatch(Agent, AgentID, Entry, SetID, Spec, Append);
+				if (JobID !== undefined) {
+					Started.push(JobID);
 				}
 			}
 			if (Started.length > 0) {

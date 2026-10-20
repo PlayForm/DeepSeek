@@ -28,9 +28,10 @@ statuses:
 
 # The Family Framework - Requirements, Skills, TODOs
 
-> The distillation of every requirement the user has given, in the
-> user's taste: direct, truthful, structured, minimal. This document is
-> the framework the skills implement and the TODOs reference.
+> The distillation of EVERY requirement the user has given, in the
+> user's taste: direct, truthful, structured, minimal.
+> This document is the framework the skills implement.
+> This document is the framework the TODOs reference.
 
 ---
 
@@ -38,51 +39,42 @@ statuses:
 
 ### 1.1 The family's identity
 
-- The **DeepSeek Harness Plugin Family for PlayForm** - a plugin system /
-  family for the DeepSeek Harness: model-output normalization +
-  manifest governance + file-content tools.
+- The **DeepSeek Harness Plugin Family for PlayForm** - a plugin system / family for the DeepSeek Harness.
+  The family: model-output normalization + manifest governance + file-content tools.
 - The mission: "Tame the model's output and govern the project's files."
-- Model-agnostic: normalizes ANY LLM's output (the reference models:
-  DeepSeek V4 Flash, GLM 5.3 Flash).
-- The **@-sentence identity**: every name reads as
-  `<kind> @ <platform> @ <role> @ <domain>` (Hook @ DSH @ Governor @
-  Cargo). The kind taxonomy: `plugin-` (the factory), `hook-` (the
-  behaviors), `lib-` (the core - a proposal, undecided); the domain
-  wording `manifest` vs `package` - undecided.
+- Model-agnostic: normalizes ANY LLM's output.
+  The reference models: DeepSeek V4 Flash, GLM 5.3 Flash.
+- The **@-sentence identity**: EVERY name reads as
+  `<kind> @ <platform> @ <role> @ <domain>` (Hook @ DSH @ Governor @ Cargo).
+  The kind taxonomy: `plugin-` (the factory), `hook-` (the behaviors), `lib-` (the core - a proposal, undecided).
+  The domain wording `manifest` vs `package` - undecided.
 
 ### 1.2 The versions
 
-- The **boilerplate** (the reference - personal paths intact, internal,
-  never released - gitignore or a private submodule decision pending).
+- The **boilerplate** (the reference - personal paths intact, internal, NEVER released).
+  The gitignore or a private submodule decision: pending.
 - The **Classic release** (the anonymized normal implementation).
-- The **Effect-TS release** (Effect v4.0.2 - the tracing, the ecosystem
-  interaction, the parallel-govern toggle designed in).
-- All release packages at **0.0.1**; the parity: the ledger strings are
-  the byte-identical smoke contract across all three implementations.
-- The future structure: each release package its own repository, added
-  as **submodules** to the parent; the per-repo gitignores.
+- The **Effect-TS release** (Effect v4.0.2 - the tracing, the ecosystem interaction, the parallel-govern toggle designed in).
+- All release packages at **0.0.1**.
+  The parity: the ledger strings are the byte-identical smoke contract across all three implementations.
+- The future structure: EACH release package its own repository, added as **submodules** to the parent.
+  The future structure: the per-repo gitignores.
 
 ### 1.3 The development regime
 
-- All development through coder subagents; the smokes (and the site
-  build) as the arbiter; the user commits (incrementally per folder,
-  innermost first, when they decide); the
-  agents never commit.
-- The working lessons are the regime's memory: the smoke/live fidelity
-  gap, the load-order nondeterminism, the subagent stall pattern
-  (scaffold-first + bounded-reading prompts), the local/UTC timestamp
-  confusion, the cross-agent git-checkout hazard, the patch-layer
-  shadowing as the meta-lesson.
+- All development through coder subagents.
+  The smokes (and the site build) as the arbiter.
+  The user commits (incrementally per folder, innermost first, when they decide).
+  The agents NEVER commit.
+- The working lessons are the regime's memory: the smoke/live fidelity gap, the load-order nondeterminism, the subagent stall pattern (scaffold-first + bounded-reading prompts), the local/UTC timestamp confusion, the cross-agent git-checkout hazard, the patch-layer shadowing as the meta-lesson.
 
 ### 1.4 The formatting + the style
 
-- **Tabs everywhere** (the monorepo standard - useTabs, tabWidth
-  4, printWidth 100, proseWrap always); the YAML exception (tabs are
-  invalid YAML indentation - spaces).
-- The merged config from ONLY the project references; the
-  dotfiles/global NOT consulted.
-- The .prettierignore adapted to the repository (the Targets, the
-  fixtures, the lockfiles, the node_modules - nothing else).
+- **Tabs everywhere** (the monorepo standard - useTabs, tabWidth 4, printWidth 100, proseWrap always).
+  The YAML exception: tabs are invalid YAML indentation - spaces.
+- The merged config from ONLY the project references.
+  The dotfiles/global NOT consulted.
+- The .prettierignore adapted to the repository (the Targets, the fixtures, the lockfiles, the node_modules - nothing else).
 
 ### 1.5 The design + the content
 

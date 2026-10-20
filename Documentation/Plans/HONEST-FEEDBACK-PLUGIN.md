@@ -27,18 +27,20 @@ statuses:
 
 ## 0. The concept (the honest signals)
 
-- Every agent's completion carries an HONEST feedback block: what it LIKED and
-  DISLIKED - the friction points, the spec ambiguities, the environment issues
-  (the concurrent lanes, the broken states, the tooling), the routing, the
-  coordination - the agent's genuine signals, free of the report's politeness.
+- EVERY agent's completion carries an HONEST feedback block.
+  The block records what it LIKED and DISLIKED - the friction points, the spec ambiguities,
+  the environment issues (the concurrent lanes, the broken states, the tooling), the routing,
+  the coordination.
+  These are the agent's genuine signals, free of the report's politeness.
 - The block is TRANSFERRED THROUGH THE PARENTAGE mechanically: child -> parent ->
-  grandparent sessions - always modified in the parent sessions (the parents
-  append their own observations + the deltas) - the block flows UP without being
-  READ by the passers (the transfer is mechanical; the reading is the recipient's
-  CHOICE - "to know / disknow" - the recipient decides when to read it, the
-  transfer never forces the reading).
-- The signals accumulate per session (the council knowledge) - the raw material
-  for the future TRIBE system (conversation + n members + a leader).
+  grandparent sessions.
+  The block is ALWAYS modified in the parent sessions (the parents append their own observations
+  + the deltas).
+  The block flows UP WITHOUT being READ by the passers (the transfer is mechanical).
+  The reading is the recipient's CHOICE - "to know / disknow".
+  The recipient decides when to read it; the transfer NEVER forces the reading.
+- The signals accumulate per session (the council knowledge).
+  They are the raw material for the future TRIBE system (conversation + n members + a leader).
 
 ## 1. The block format (the dynamic footer)
 
@@ -51,23 +53,24 @@ TRANSFERRED: <the path: child -> parent -> ... - the mechanical chain>
 READ-STATUS: unread / read-at <session>   <- the recipient's choice, recorded
 ```
 
-- The block is appended to the agent's completion report (the footer) + written
-  to the feedback journal (the family's conventions - the v2 domain).
+- The block is appended to the agent's completion report (the footer).
+  The block is written to the feedback journal (the family's conventions - the v2 domain).
 - The block's transfer: the parent sessions append their DELTAS (their own
-  observations - "this lane's friction matches the earlier lane's") - the block
-  is always modified as it passes - never sanitized, never filtered - the honest
-  content survives the chain.
+  observations - "this lane's friction matches the earlier lane's").
+  The block is ALWAYS modified as it passes - NEVER sanitized, NEVER filtered.
+  The honest content survives the chain.
 
 ## 2. The architecture: `@playform/plugin-dsh-feedback` (the fourth family member)
 
 ### 2.1 The feedback journal (the council knowledge)
 
-- The per-session feedback log (the family's journal conventions): every agent's
-  block appended at its completion; the parent sessions' deltas appended; the
-  read-statuses recorded.
+- The journal is the per-session feedback log (the family's journal conventions).
+  EVERY agent's block is appended at its completion.
+  The parent sessions' deltas are appended.
+  The read-statuses are recorded.
 - The journal is part of the batch-state plugin's store (the council knowledge is
-  a first-class state dimension - the compiler's context can surface the signals
-  pre-baked when the recipient opts in).
+  a first-class state dimension).
+  The compiler's context can surface the signals pre-baked when the recipient opts in.
 
 ### 2.2 The transfer service (the mechanical chain)
 

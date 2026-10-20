@@ -30,16 +30,16 @@ import type State from "@Interface/State.js";
 
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
-export const Marker = (JobId: string, CmdHead: string): string =>
-	`[live] ${JobId} running: ${CmdHead} - output pending; proceed reasoning.`;
+export const Marker = (JobID: string, CmdHead: string): string =>
+	`[live] ${JobID} running: ${CmdHead} - output pending; proceed reasoning.`;
 
 /** The dedup variant's second line (design section 4.1, byte-exact). */
-export const AlreadyLine = (JobId: string): string =>
-	`[live] already running as ${JobId}; job_output ${JobId} to check.`;
+export const AlreadyLine = (JobID: string): string =>
+	`[live] already running as ${JobID}; job_output ${JobID} to check.`;
 
 /** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
-export const RetryLine = (JobId: string, Attempt: number): string =>
-	`[live] already running as ${JobId} (${Attempt}rd attempt) - use job_output.`;
+export const RetryLine = (JobID: string, Attempt: number): string =>
+	`[live] already running as ${JobID} (${Attempt}rd attempt) - use job_output.`;
 
 /** The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the
  * arguments - `{"__await":true` - exactly like the normalize family's
@@ -86,18 +86,18 @@ const TimeoutOf = (Exec: ToolExecution, Fallback: number): number => {
 
 /** The per-agent turn number the meta-budget keys on (the assemble-pass count
  * is the admission count; zero before the first assemble). */
-const TurnOf = (Agent: State, AgentId: string): number => Agent.TurnCounts.get(AgentId) ?? 0;
+const TurnOf = (Agent: State, AgentID: string): number => Agent.TurnCounts.get(AgentID) ?? 0;
 
 /** The fail-open unwind for the two arms: kill the half-started job, untag,
- * drop the record, ledger both lines. Never throws. `StartedJobId` is the
+ * drop the record, ledger both lines. Never throws. `StartedJobID` is the
  * just-started job of the failing pass (the half-detached guard: a failure
  * between start and tag still kills the job). */
 const Unwind = (
 	Agent: State,
 	Exec: ToolExecution,
 	Append: Log,
-	StartedJobId: string | undefined,
-	AgentId: string | undefined,
+	StartedJobID: string | undefined,
+	AgentID: string | undefined,
 ): void => {
 	try {
 		const Tag = Agent.Tagged.get(Exec);
@@ -111,13 +111,13 @@ const Unwind = (
 			const Records = Agent.Detached.get(Tag.agentId);
 			Records?.delete(Tag.jobId);
 			Append(`marker failed ${Tag.jobId} -> inline`);
-		} else if (StartedJobId !== undefined) {
+		} else if (StartedJobID !== undefined) {
 			try {
-				Agent.Wave?.Jobs?.kill(StartedJobId, AgentId, "marker-failed");
+				Agent.Wave?.Jobs?.kill(StartedJobID, AgentID, "marker-failed");
 			} catch {
 				/* the kill is best-effort */
 			}
-			Append(`marker failed ${StartedJobId} -> inline`);
+			Append(`marker failed ${StartedJobID} -> inline`);
 		}
 		Append(`transform failed ${Exec.name} -> inline`);
 	} catch {
@@ -139,10 +139,10 @@ export const PreExecute = async (
 	const Downstream = await Next();
 	// The job started by this pass, if any (the half-detached guard: a failure
 	// between start and tag still kills the job).
-	let StartedJobId: string | undefined;
+	let StartedJobID: string | undefined;
 	const Tool = Exec.name;
-	const AgentId = Exec.agent?.id ?? "";
-	const AgentIdKey = AgentId.length > 0 ? AgentId : "(unowned)";
+	const AgentID = Exec.agent?.id ?? "";
+	const AgentIDKey = AgentID.length > 0 ? AgentID : "(unowned)";
 	try {
 		if (!Agent.On || Agent.Detach.mode === "off") {
 			return Downstream;
@@ -167,7 +167,7 @@ export const PreExecute = async (
 		// The inline duration observer's start stamp (the pass-through calls
 		// record their duration at post-execute; a transformed call's stamp is
 		// dropped - its body never runs).
-		if (AgentId.length > 0) {
+		if (AgentID.length > 0) {
 			StampStart(Agent, Exec.callId);
 		}
 		// The await marker (I2 section 3): the model's explicit inline opt-out,
@@ -197,8 +197,8 @@ export const PreExecute = async (
 		// The dedup gate: a still-live job for the same key returns the SAME
 		// marker via the execute arm's tag, referencing the same job id.
 		if (Agent.Detach.dedup) {
-			const Key = Policy.DedupKey(AgentIdKey, Command, Workdir);
-			const Records = Agent.Detached.get(AgentIdKey);
+			const Key = Policy.DedupKey(AgentIDKey, Command, Workdir);
+			const Records = Agent.Detached.get(AgentIDKey);
 			let Duplicate: string | undefined;
 			for (const Record of Records?.values() ?? []) {
 				if (Record.status === undefined && Record.dedupKey === Key) {
@@ -207,13 +207,13 @@ export const PreExecute = async (
 				}
 			}
 			if (Duplicate !== undefined) {
-				const PerAgent = Agent.DedupCounts.get(AgentIdKey) ?? new Map<string, number>();
+				const PerAgent = Agent.DedupCounts.get(AgentIDKey) ?? new Map<string, number>();
 				const Count = (PerAgent.get(Policy.CommandPrefix(Command)) ?? 0) + 1;
 				PerAgent.set(Policy.CommandPrefix(Command), Count);
-				Agent.DedupCounts.set(AgentIdKey, PerAgent);
+				Agent.DedupCounts.set(AgentIDKey, PerAgent);
 				const Tag: TagRecord = {
 					jobId: Duplicate,
-					agentId: AgentIdKey,
+					agentId: AgentIDKey,
 					tool: Tool,
 					cwd: undefined,
 					timeoutMs: TimeoutOf(Exec, Agent.Detach.liveTimeoutMs),
@@ -234,7 +234,7 @@ export const PreExecute = async (
 		}
 		// The policy guards (capacity, meta-budget, min-latency, interactive,
 		// mode logic) - every guard is a pass-through + ledger, never a deny.
-		const Decision = Policy.Decide(Agent, AgentIdKey, Tool, Command, TurnOf(Agent, AgentIdKey));
+		const Decision = Policy.Decide(Agent, AgentIDKey, Tool, Command, TurnOf(Agent, AgentIDKey));
 		if (!Decision.detach) {
 			if (Decision.ledger !== "failed") {
 				Append(Decision.ledger);
@@ -247,7 +247,7 @@ export const PreExecute = async (
 		try {
 			Started = await Jobs.Start(
 				Agent,
-				AgentIdKey,
+				AgentIDKey,
 				{ command: Command },
 				{
 					callId: Exec.callId,
@@ -260,26 +260,26 @@ export const PreExecute = async (
 			void Error;
 			return Downstream;
 		}
-		StartedJobId = Started.jobId;
+		StartedJobID = Started.jobId;
 		const At = Clock(Agent);
 		const Record: DetachRecord = {
 			jobId: Started.jobId,
-			agentId: AgentIdKey,
+			agentId: AgentIDKey,
 			tool: Tool,
 			cmdHead: Jobs.CommandHead(Command),
 			cmdLine: Jobs.CommandLine(Command),
-			dedupKey: Policy.DedupKey(AgentIdKey, Command, Workdir),
+			dedupKey: Policy.DedupKey(AgentIDKey, Command, Workdir),
 			startedAt: At,
 			deadlineAt: At + Agent.Detach.liveTimeoutMs,
 			tail: Started.tail,
 		};
-		const Records = Agent.Detached.get(AgentIdKey) ?? new Map<string, DetachRecord>();
+		const Records = Agent.Detached.get(AgentIDKey) ?? new Map<string, DetachRecord>();
 		Records.set(Started.jobId, Record);
-		Agent.Detached.set(AgentIdKey, Records);
+		Agent.Detached.set(AgentIDKey, Records);
 		Agent.CallStarts.delete(Exec.callId);
 		const Tag: TagRecord = {
 			jobId: Started.jobId,
-			agentId: AgentIdKey,
+			agentId: AgentIDKey,
 			tool: Tool,
 			cwd: Started.spec.workdir,
 			timeoutMs: TimeoutOf(Exec, Agent.Detach.liveTimeoutMs),
@@ -292,13 +292,13 @@ export const PreExecute = async (
 		// The meta-budget: the transform is an automatic modification (counted
 		// only when the failsafe layer is on - it is the failsafe's budget).
 		if (Agent.Failsafes === "on") {
-			Policy.SpendBudget(Agent, AgentIdKey, TurnOf(Agent, AgentIdKey));
+			Policy.SpendBudget(Agent, AgentIDKey, TurnOf(Agent, AgentIDKey));
 		}
 		return Downstream;
 	} catch (Error) {
 		// Fail-open (I1 12.2.2): kill any half-started job, untag, ledger, pass
 		// through - the call runs inline exactly as if the plugin were unmounted.
-		Unwind(Agent, Exec, Append, StartedJobId, AgentIdKey);
+		Unwind(Agent, Exec, Append, StartedJobID, AgentIDKey);
 		void Error;
 		return Downstream;
 	}
@@ -391,9 +391,9 @@ export const PostExecute = (
 
 /** The start-time stamp for the duration observer (bounded: a long-lived
  * process without settlements cannot grow the map unboundedly). */
-export const StampStart = (Agent: State, CallId: string): void => {
+export const StampStart = (Agent: State, CallID: string): void => {
 	if (Agent.CallStarts.size > 256) {
 		Agent.CallStarts.clear();
 	}
-	Agent.CallStarts.set(CallId, Clock(Agent));
+	Agent.CallStarts.set(CallID, Clock(Agent));
 };

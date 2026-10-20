@@ -78,8 +78,8 @@ export const runTest = async (): Promise<number> => {
 		FireObserved(Run, "/repo/src/App.ts", "1");
 		Advance(2000);
 		await Stanza(Run);
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		Advance(600001);
 		await Stanza(Run);
 		await OpenStorage(Run, Store.facility);

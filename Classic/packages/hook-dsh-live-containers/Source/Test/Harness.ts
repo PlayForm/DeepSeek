@@ -251,8 +251,8 @@ export const MakeClocked = (Raw: any): any => {
  * A block spec with the schema's defaults filled in (the harness builder;
  * the per-folder tables override exactly what they assert on).
  */
-export const Block = (Id: string, Kind: string, Template: string, Extra: any = {}): any => ({
-	id: Id,
+export const Block = (ID: string, Kind: string, Template: string, Extra: any = {}): any => ({
+	id: ID,
 	kind: Kind,
 	template: Template,
 	enabled: true,
@@ -479,9 +479,9 @@ export const FakeJobsHub = () => {
 	Hub.registry = {
 		start: (Spec: any) => {
 			Hub.next += 1;
-			const Id = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
-			Hub.started.push({ id: Id, spec: Spec });
-			return Id;
+			const ID = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
+			Hub.started.push({ id: ID, spec: Spec });
+			return ID;
 		},
 		events: {
 			subscribe: (_Filter: unknown, Listener: any) => {
@@ -489,8 +489,8 @@ export const FakeJobsHub = () => {
 				return () => true;
 			},
 		},
-		kill: (Id: string, Caller: string, Reason: string) => {
-			Hub.killed.push({ id: Id, caller: Caller, reason: Reason });
+		kill: (ID: string, Caller: string, Reason: string) => {
+			Hub.killed.push({ id: ID, caller: Caller, reason: Reason });
 			return "requested";
 		},
 		list: () => [],
@@ -503,11 +503,11 @@ export const FakeJobsHub = () => {
 	/** Fabricate one settled event (the smoke's controllable settle). The job
 	 * kind is taken from the started spec when the id was started through the
 	 * fake registry (the monitor jobs carry kind "monitor"), else "bash". */
-	Hub.settled = (JobId: string, Options: { owner?: string; status?: string; detail?: string; cause?: string; awaited?: boolean } = {}) => ({
+	Hub.settled = (JobID: string, Options: { owner?: string; status?: string; detail?: string; cause?: string; awaited?: boolean } = {}) => ({
 		type: "settled",
 		job: {
-			id: JobId,
-			kind: Hub.started.find((S: any) => S.id === JobId)?.spec.kind ?? "bash",
+			id: JobID,
+			kind: Hub.started.find((S: any) => S.id === JobID)?.spec.kind ?? "bash",
 			label: "cargo build",
 			...(Options.owner !== undefined ? { owner: Options.owner } : {}),
 			status: Options.status ?? "completed",
@@ -584,9 +584,9 @@ export const FakeSubagent = () => {
 /**
  * A fake agents registry (the owner resolution reads it).
  */
-export const FakeAgents = (...Ids: string[]): any => {
-	const Map_ = new Map(Ids.map((Id) => [Id, { id: Id, status: "idle" }]));
-	return { get: (Id: string) => Map_.get(Id) };
+export const FakeAgents = (...IDs: string[]): any => {
+	const Map_ = new Map(IDs.map((ID) => [ID, { id: ID, status: "idle" }]));
+	return { get: (ID: string) => Map_.get(ID) };
 };
 
 /**

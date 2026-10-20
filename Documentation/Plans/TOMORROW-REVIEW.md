@@ -83,19 +83,22 @@ statuses:
 
 # TOMORROW-REVIEW - The Descriptive Plan (preserved 2026-10-07 for tomorrow's review)
 
-> The complete state + the plan for the next session. The user will run the
-> whole process again - this document is the descriptive reference: what
-> exists, what is in flight, what is missing, and how tomorrow's process
-> runs. Originally preserved at the monorepo root; now migrated into
-> `Documentation/Plans/` with the rest of the documentation tree.
+> The complete state + the plan for the next session.
+> The user will run the whole process again.
+> This document is the descriptive reference.
+> It covers what exists, what is in flight, what is missing, and how tomorrow's process runs.
+> Originally preserved at the monorepo root.
+> Now migrated into `Documentation/Plans/` with the rest of the documentation tree.
 
 ---
 
 ## 1. THE CURRENT STATE (what exists)
 
-**The monorepo** (`~/Developer/Application/PlayForm/DeepSeek/` - the git
-repo inited by the user, everything STAGED or MODIFIED, NOTHING COMMITTED -
-the user holds all commits):
+**The monorepo** (`~/Developer/Application/PlayForm/DeepSeek/`):
+The git repo inited by the user.
+Everything STAGED or MODIFIED.
+NOTHING COMMITTED.
+The user holds all commits:
 
 | Area | State |
 |---|---|
@@ -400,22 +403,26 @@ The user will run the whole process again - the review-driven pass:
 
 ## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
 
-The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in ~/Developer/Application/PlayForm/Aphrodite/Site, specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.
+The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in ~/Developer/Application/PlayForm/Aphrodite/Site.
+The instructions are specialized for the Aphrodite branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the brutalist/cyberpunk display typography (the massive type statements), the compression visualization (the animated savings counters - the measured real-world savings), the kiss motif as the signature graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font sections.
 
 ## 8. BATCH COMPLETE (2026-10-09 - the 8-lane site queue closed)
 
-All 8 lanes (file-mention alignment, effect-card-footer, pin-govern colors,
+ALL 8 lanes (file-mention alignment, effect-card-footer, pin-govern colors,
 descriptive-titles, header-brand, path-mention, zhipu-icon, engine-pill) landed +
-verified + closed this session - each Tasks/ file carries its record, the handoff
-BATCH-HANDOFF-2026-10-09.md is refreshed to the all-closed state. The user
+verified + closed this session.
+EACH Tasks/ file carries its record.
+The handoff BATCH-HANDOFF-2026-10-09.md is refreshed to the all-closed state. The user
 committed mid-session (960fcede: the rebrand + the descriptive titles + the
 identity words + the path-mention rule + the measurement scripts; 0506601f: the
 Zhipu mark + the engine-pill lift removal + the card icons). The residuals ledger
 (the 2 pinner.log 1px baselines, the models +0.5px, the plain-string GLM mentions)
 is recorded in the handoff §4 + the Tasks/ files. The process lessons recorded:
 the paused-dispatch protocol (the rate-limit lesson) + the orchestrator's
-non-modification rule (no builds - the lanes build; the orchestrator relays the
-feedback + keeps the records). The routing discipline held (all GLM flash low).
+non-modification rule.
+No builds - the lanes build.
+The orchestrator relays the feedback + keeps the records.
+The routing discipline held (ALL GLM flash low).
 Next: §5's future work (the plugins, the npm publishing, the Aphrodite session).
 
 ## 9. THE ORCHESTRATOR SLIP + RE-ALIGNMENT (2026-10-09 - the same session)
@@ -626,14 +633,17 @@ restructure settles.
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS (the dynamic conversation blocks plugin - researched, NOT implemented)
 
-The user dictated a new plugin idea: LIVE CONTAINERS - dynamically
-modifiable conversation blocks that are RECOMPUTED + re-inserted into the
-conversation EVERY time the harness sends the full conversation to the LLM
-API, without touching anything else (the working example: a block holding the
-current time at ask-time, recomputed per request). The later stage (a future
-date): the blocks become PROGRAMMABLE (TypeScript / Rhai / Rust / whatever
-the harness can run dynamically) - a validator / variable holder (conversation
-length, scores) the LLM itself can program and display, e.g. the pseudo-code
+The live container is a conversation block
+holding dynamically computed content.
+It is recomputed + re-inserted into the conversation EVERY time the harness
+sends the full conversation to the LLM API.
+Nothing else is touched.
+The working example: a block holding the current time at ask-time, recomputed
+per request.
+The later stage (a future date): the blocks become PROGRAMMABLE
+(TypeScript / Rhai / Rust / whatever the harness can run dynamically).
+That means a validator / variable holder (conversation length, scores) the
+LLM itself can program and display, e.g. the pseudo-code
 `(if this.context.message.length > 10) { echo "This conversation is exceeding
 the set limit" }`. The user mandated: a researcher agent (glm-5.3-flash LOW -
 the user's explicit route) researches + brainstorms feasibility + prepares
@@ -680,18 +690,22 @@ poll processes - fire-and-forget): the SIX CANs, broken into separate
 requirement files by the research agent `2a322db2` (GLM flash low, dispatched
 2026-10-19):
 - CAN-1 LIVE TOOL-CALL BLOCKS ("cargo blocks"): every tool call (cargo
-  build, multiple commands) auto-transforms into a live-container call -
-  propagated back WITHOUT telling the LLM, the chain modified as if executed
-  + completed, the live marker appended ("This command's output is still
-  running, you can proceed reasoning"), returned to the LLM, the conversation
-  progresses while the build runs in the background, and on completion a
-  block (or the same one) shows how it executed - EVERY tool call becomes
-  programmable, non-awaited, live (the micro-interaction loop: the LLM
-  schedules more without realizing it).
+  build, multiple commands) auto-transforms into a live-container call.
+  The call is propagated back WITHOUT telling the LLM.
+  The chain is modified as if executed + completed.
+  The live marker is appended ("This command's output is still
+  running, you can proceed reasoning").
+  The result is returned to the LLM.
+  The conversation progresses while the build runs in the background.
+  On completion a block (or the same one) shows how it executed.
+  EVERY tool call becomes programmable, non-awaited, live.
+  The micro-interaction loop: the LLM schedules more without realizing it.
 - CAN-2 PLANTED LIVE BLOCKS: child subagents plant a live block in the
-  parent's conversation (a plantType block programmed with the active-agent
-  count - all agents report progress into the one block; the TODO-list
-  fills); multi-step, multi-level macro coordination.
+  parent's conversation.
+  It is a plantType block programmed with the active-agent count.
+  ALL agents report progress into the ONE block.
+  The TODO-list fills.
+  Multi-step, multi-level macro coordination.
 - CAN-3 THE TEMPLATE HOST: the plugin ships a host of block
   templates/placeholders.
 - CAN-4 TASK-BASED FAILSAFES: task-based automatic failsafes (the

@@ -21,18 +21,25 @@ statuses:
 # Aphrodite ↔ DeepSeek Harness: Rust Dylib Integration Plan
 
 **Date:** 2026-10-19
-**Scope:** How a DSH plugin-family bundle integrates with Aphrodite, and how the Rust binary ships (dylib vs alternatives) so the main DeepSeek Harness can use it.
-**Foundation:** `docs/research/2026-10-19-hermes-aphrodite-research.md` (parent-verified). All commands below were actually run against the live machine.
+**Scope:** How a DSH plugin-family bundle integrates with Aphrodite.
+**Scope:** How the Rust binary ships (dylib vs alternatives) so the main DeepSeek Harness can use it.
+**Foundation:** `docs/research/2026-10-19-hermes-aphrodite-research.md` (parent-verified).
+ALL commands below were actually run against the LIVE machine.
 
 ---
 
 ## Executive summary
 
-- The live artifact is `~/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` (4.9 MB, arm64) exporting **34 global C symbols**: 10 `aphrodite_hermes_*` bridge entrypoints (`dispatch_tool`, `call_hook`, `get_schemas`, `get_schema`, `list_tools`, `get_hooks`, `proxy_health`, `materialize_directives`, `version`, `free_string`) plus 22 core `aphrodite_*` symbols (`init`, `compress`, `retrieve`, `search`, `transform`, ...) and one stray `blake3_compress_in_place_portable`. Verified with `nm -gU`.
-- `otool -L` shows it depends only on system frameworks (CoreFoundation, CoreServices, Security, libc++, libiconv, libSystem) - **zero third-party dylib deps**, so it is trivially shippable. Its install name points at a CI path (`/Users/runner/work/...`), meaning it must be loaded by absolute path, not by install name - which the plugin can control anyway.
-- The Hermes-side contract is a simple JSON-string C ABI: every function takes `char*` UTF-8 JSON (or none) and returns a heap `*mut c_char` JSON string freed via `aphrodite_hermes_free_string` (`crates/aphrodite-hermes/src/lib.rs:603-651`). The Python loader proves it: `plugins/aphrodite/_bindings.py` binds `argtypes=[c_char_p, c_char_p]`, `restype=c_void_p` for each.
-- **Recommendation: load the same dylib from Node via `koffi`** - `koffi@3.1.1` is already bundled inside the shipping app at `app.asar.unpacked/dsh/node_modules/koffi` (verified), so a family bundle can call the FFI surface with **zero new native dependencies**. HTTP-proxy mode and sidecar spawn are evaluated as fallbacks.
-- **Shipping: prebuilt per-platform dylib inside the bundle's `Target/` output** (the family `files` field already includes `Target` - verified in the live profile bundle `dsh-plugin-factory/package.json`), mirroring Aphrodite's own `download.sh` + SHA-256 pattern. No Rust toolchain on user machines.
+- The LIVE artifact is `~/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` (4.9 MB, arm64) exporting **34 global C symbols**: 10 `aphrodite_hermes_*` bridge entrypoints (`dispatch_tool`, `call_hook`, `get_schemas`, `get_schema`, `list_tools`, `get_hooks`, `proxy_health`, `materialize_directives`, `version`, `free_string`) plus 22 core `aphrodite_*` symbols (`init`, `compress`, `retrieve`, `search`, `transform`, ...) and ONE stray `blake3_compress_in_place_portable`.
+  Verified with `nm -gU`.
+- `otool -L` shows it depends ONLY on system frameworks (CoreFoundation, CoreServices, Security, libc++, libiconv, libSystem) - **zero third-party dylib deps**, so it is trivially shippable.
+  Its install name points at a CI path (`/Users/runner/work/...`), meaning it must be loaded by absolute path, NOT by install name - which the plugin can control anyway.
+- The Hermes-side contract is a simple JSON-string C ABI: EVERY function takes `char*` UTF-8 JSON (or none) and returns a heap `*mut c_char` JSON string freed via `aphrodite_hermes_free_string` (`crates/aphrodite-hermes/src/lib.rs:603-651`).
+  The Python loader proves it: `plugins/aphrodite/_bindings.py` binds `argtypes=[c_char_p, c_char_p]`, `restype=c_void_p` for EACH.
+- **Recommendation: load the same dylib from Node via `koffi`** - `koffi@3.1.1` is already bundled inside the shipping app at `app.asar.unpacked/dsh/node_modules/koffi` (verified), so a family bundle can call the FFI surface with **zero new native dependencies**.
+  HTTP-proxy mode and sidecar spawn are evaluated as fallbacks.
+- **Shipping: prebuilt per-platform dylib inside the bundle's `Target/` output** (the family `files` field already includes `Target` - verified in the live profile bundle `dsh-plugin-factory/package.json`), mirroring Aphrodite's own `download.sh` + SHA-256 pattern.
+  NO Rust toolchain on user machines.
 
 ---
 

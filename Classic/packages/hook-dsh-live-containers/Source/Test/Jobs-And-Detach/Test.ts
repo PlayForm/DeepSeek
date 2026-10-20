@@ -28,8 +28,8 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
-	const MARKER = (JobId: string): string =>
-		`[live] ${JobId} running: cargo build - output pending; proceed reasoning.`;
+	const MARKER = (JobID: string): string =>
+		`[live] ${JobID} running: cargo build - output pending; proceed reasoning.`;
 	const DetachConfig = {
 		mode: "long-running",
 		allRequiresConfirm: false,
@@ -189,22 +189,22 @@ export const runTest = async (): Promise<number> => {
 		const Jobs = FakeJobsHub();
 		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
 		await Pre(Run, Exec("cargo build"));
-		const JobId = Jobs.started[0].id;
+		const JobID = Jobs.started[0].id;
 		await WaveAssemble(Run);
 		Check(Count, "J5: no completion frame before any settled event", () => {
 			assert.equal(PendingText(Run), "");
 		});
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", detail: "exit code: 0" }));
 		await WaveAssemble(Run);
 		const Text = PendingText(Run);
 		Check(Count, "J5: one settled event -> exactly one completed frame (byte-exact shape)", () => {
 			assert.ok(Text.includes("[live] completion report (harness-appended; not a user request):"));
-			assert.ok(Text.includes(`--- LIVE CONTAINER ${JobId} completed ---`));
+			assert.ok(Text.includes(`--- LIVE CONTAINER ${JobID} completed ---`));
 			assert.ok(Text.includes("status: completed (cause: producer)"));
 			assert.ok(Text.includes("elapsed: 0s"));
 			assert.ok(Text.includes("output (tail up to 2 KiB):"));
-			assert.ok(Text.includes(`--- END LIVE CONTAINER ${JobId} ---`));
-			assert.ok(Text.includes(`[live] job_output ${JobId} to read the full output.`));
+			assert.ok(Text.includes(`--- END LIVE CONTAINER ${JobID} ---`));
+			assert.ok(Text.includes(`[live] job_output ${JobID} to read the full output.`));
 			assert.ok(Text.endsWith("[live] next: all 1 finished - review the outputs above, then continue the cargo steps."));
 		});
 		// The delivery: the logged runtime-context snapshot drains the batch.
@@ -221,8 +221,8 @@ export const runTest = async (): Promise<number> => {
 			const Rendered = LinesWith(Run, "completion rendered ");
 			assert.ok(Rendered.length === 1);
 			assert.ok(Rendered[0]?.endsWith(" bytes"));
-			assert.deepEqual(LinesWith(Run, `withdrawn ${JobId}`), [
-				`hook-dsh-live-containers: withdrawn ${JobId} (completed)`,
+			assert.deepEqual(LinesWith(Run, `withdrawn ${JobID}`), [
+				`hook-dsh-live-containers: withdrawn ${JobID} (completed)`,
 			]);
 		});
 		const After = PendingText(Run);
@@ -270,13 +270,13 @@ export const runTest = async (): Promise<number> => {
 		const Jobs = FakeJobsHub();
 		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
 		await Pre(Run, Exec("cargo build"));
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", awaited: true }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", awaited: true }));
 		await WaveAssemble(Run);
 		Check(Count, "J8: an awaited settlement renders no frame (ledger byte-exact)", () => {
 			assert.equal(PendingText(Run), "");
 			assert.deepEqual(LinesWith(Run, "completion skipped"), [
-				`hook-dsh-live-containers: completion skipped ${JobId} (awaited)`,
+				`hook-dsh-live-containers: completion skipped ${JobID} (awaited)`,
 			]);
 		});
 	}
@@ -358,13 +358,13 @@ export const runTest = async (): Promise<number> => {
 		const Jobs = FakeJobsHub();
 		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
 		await Pre(Run, Exec("cargo build"));
-		const JobId = Jobs.started[0].id;
-		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", cause: "teardown" }));
+		const JobID = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobID, { owner: "agent-a", cause: "teardown" }));
 		await WaveAssemble(Run);
 		Check(Count, "teardown: owner gone -> nothing pending (ledger byte-exact)", () => {
 			assert.equal(PendingText(Run), "");
 			assert.deepEqual(LinesWith(Run, "owner gone"), [
-				`hook-dsh-live-containers: owner gone ${JobId}`,
+				`hook-dsh-live-containers: owner gone ${JobID}`,
 			]);
 		});
 	}

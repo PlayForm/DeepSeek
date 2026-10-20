@@ -594,7 +594,7 @@ export const SectionBody = (
 export const ScanDeadlines = (Agent: State, Append: Log): void => {
 	const At = Clock(Agent);
 	for (const [AgentID, Records] of Agent.Detached) {
-		for (const [JobId, Record] of [...Records]) {
+		for (const [JobID, Record] of [...Records]) {
 			if (Record.status !== undefined) {
 				continue;
 			}
@@ -602,7 +602,7 @@ export const ScanDeadlines = (Agent: State, Append: Log): void => {
 			// (onExpiry "none"; the inline timeout policy does not apply).
 			if (At >= Record.deadlineAt) {
 				try {
-					Agent.Wave?.Jobs?.kill(JobId, AgentID, "live-timeout");
+					Agent.Wave?.Jobs?.kill(JobID, AgentID, "live-timeout");
 				} catch {
 					/* the kill is best-effort */
 				}
@@ -614,23 +614,23 @@ export const ScanDeadlines = (Agent: State, Append: Log): void => {
 				continue;
 			}
 			const Total = Record.tail.Stdout.length + Record.tail.Stderr.length;
-			const Watch = Agent.HangWatch.get(JobId);
+			const Watch = Agent.HangWatch.get(JobID);
 			if (Watch === undefined || Total > Watch.bytes) {
-				Agent.HangWatch.set(JobId, { bytes: Total, since: At });
+				Agent.HangWatch.set(JobID, { bytes: Total, since: At });
 				continue;
 			}
 			if (At - Watch.since >= Agent.HangBudgetMs) {
 				Append(
-					`failsafe hang ${JobId} (${Math.round((At - Watch.since) / 1000)}s no output)`,
+					`failsafe hang ${JobID} (${Math.round((At - Watch.since) / 1000)}s no output)`,
 				);
 				if (Agent.HangAction === "kill") {
 					try {
-						Agent.Wave?.Jobs?.kill(JobId, AgentID, "live-hang");
+						Agent.Wave?.Jobs?.kill(JobID, AgentID, "live-hang");
 					} catch {
 						/* the kill is best-effort */
 					}
 				}
-				Agent.HangWatch.set(JobId, { bytes: Total, since: At });
+				Agent.HangWatch.set(JobID, { bytes: Total, since: At });
 			}
 		}
 	}
