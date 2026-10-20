@@ -39,7 +39,7 @@
 		"@deepseek-ai/cordis": "4.0.4",
 		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-llm": "0.2.0-rc.2",
-		"@deepseek-ai/schemastery": "3.18.4"
+		"@deepseek-ai/schemastery": "3.18.5"
 	},
 	"license": "CC0-1.0",
 	"dsh": {
