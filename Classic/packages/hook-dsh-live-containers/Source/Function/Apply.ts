@@ -391,31 +391,31 @@ const WaveAssemble = (
 		if (!Agent.On) {
 			return "";
 		}
-		const AgentId = AgentIdOf(Context_);
+		const AgentID = AgentIdOf(Context_);
 		const At = Clock(Agent);
 		// One assemble pass = one parent turn (I5 1.4): the count advances
 		// before render; the previous-pass clock is overwritten only AFTER the
 		// render, so the orphan check sees the real gap (I5 2.4).
-		Agent.TurnCounts.set(AgentId, (Agent.TurnCounts.get(AgentId) ?? 0) + 1);
+		Agent.TurnCounts.set(AgentID, (Agent.TurnCounts.get(AgentID) ?? 0) + 1);
 		// The lease decrement runs BEFORE render, so the declaration appears in
 		// the SAME assembly's frame (I5 4.2).
-		Board.OnTurn(Agent, AgentId, Append);
+		Board.OnTurn(Agent, AgentID, Append);
 		// The wave-2 parts, in order: the live jobs + boards (per frame), the
 		// monitors stanza, the suggestions, the drift guard - per-frame
 		// granularity for the collapse. The monitors stanza is ONE part (the
 		// design section 5.1: the section collapse treats it as a unit, the
 		// summary band stays inside it).
 		const Parts: string[] = [
-			...Board.SectionParts(Agent, AgentId, Agent.Separator, Append),
-			...Monitors.SectionParts(Agent, AgentId, Agent.Separator, Append),
+			...Board.SectionParts(Agent, AgentID, Agent.Separator, Append),
+			...Monitors.SectionParts(Agent, AgentID, Agent.Separator, Append),
 		];
-		const Suggestions = Suggester.SectionBody(Agent, AgentId, Agent.Separator, Append);
+		const Suggestions = Suggester.SectionBody(Agent, AgentID, Agent.Separator, Append);
 		if (Suggestions.length > 0) {
 			Parts.push(Suggestions);
 		}
 		const Warn = Failsafe.Drift(
 			Agent,
-			AgentId,
+			AgentID,
 			{ messages: Scope.messages, lastToolAt: Scope.lastToolAt },
 			Append,
 		);
@@ -427,9 +427,9 @@ const WaveAssemble = (
 		}
 		// The post-render prune (I5 4.2: the prune acts after the render and
 		// mutates the state for the NEXT assembly).
-		Board.FailsafeStall(Agent, AgentId, Append);
+		Board.FailsafeStall(Agent, AgentID, Append);
 		// The previous-pass clock updates after the render (the orphan check).
-		Agent.LastTurnAt.set(AgentId, At);
+		Agent.LastTurnAt.set(AgentID, At);
 		// The wave-2 section-collapse pass (scenario 8) over the wave parts.
 		return Failsafe.Collapse(Agent, Parts, Append);
 	} catch (Error) {
@@ -464,10 +464,10 @@ const WavePreStep = (Agent: State, Payload: unknown, Append: (Message: string) =
 		const Text = (First.content ?? [])
 			.map((Block) => (Block?.type === "text" ? (Block.text ?? "") : ""))
 			.join("");
-		const AgentId = Step.agent?.id ?? "";
+		const AgentID = Step.agent?.id ?? "";
 		Suggester.OnUserMessage(
 			Agent,
-			AgentId,
+			AgentID,
 			Text,
 			Step.agent as { id: string } | undefined,
 			Append,
