@@ -1,5 +1,14 @@
 # FileContent-FLAVOR-DESIGN - Register Item #7: The File-Content Normalizer Flavor
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Reports/FileContent-FLAVOR-DESIGN.md |
+| Category | Reports                              |
+| Kind     | Report                               |
+| Date     | 2026-10-06                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Register.md` (item #7) and `../Handoff/Packages/Package-13.md` (the normalize-file
 > bundle that shipped from this design).
@@ -177,3 +186,12 @@ disk"; the background rewrite stays out.
 - An `fs/observed` rewriter is **not advisable now**: it breaks the edit old_string contract (the
   live lesson) and interleaves with the governors' bounded passes. Revisit only with a harness-side
   edit-contract mechanism.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The file-content normalizer flavor (normalize-file)      | implemented | hook-dsh-normalize-file shipped in both trees; 112 checks per tree | 2026-10-20 |
+| The fs/observed rewriter (not advisable)                 | rejected    | the edit old_string contract + the governors' passes              | 2026-10-06 |

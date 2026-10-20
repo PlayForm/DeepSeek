@@ -1,5 +1,14 @@
 # Commonalization Audit - Write Executors + Family Machinery (register item #6)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Reports/Commonalization-AUDIT.md |
+| Category | Reports                              |
+| Kind     | Report                               |
+| Date     | 2026-10-06                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Register.md` (item #6) and `../Handoff/Packages/Package-13.md` (the pass executed).
 > Companion reports live alongside this file in `Documentation/Reports/`.

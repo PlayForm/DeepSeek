@@ -1,5 +1,14 @@
 # FS/OBSERVED DELIVERY - definitive diagnosis
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Reports/FSOBSERVED-DELIVERY.md |
+| Category | Reports                              |
+| Kind     | Report                               |
+| Date     | 2026-10-06                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Packages/Package-13.md` (the saga it resolved) and
 > `../Handoff/Packages/Package-12.md` (the raw-write tool it concerns).
@@ -123,3 +132,12 @@ discriminator between the working control and the silent raw-write is the **gate
   live now logs, exactly like the built-in control did.
 - No other changes needed: `Wire.ts:39` root registration, the shared executor's root emit, and the
   Stash idempotence gate all stay as they are.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The fs/observed delivery diagnosis (the asymmetry)       | resolved    | the one-line fix verified live in the same session                | 2026-10-06 |
+| The node_modules skip logging                            | implemented | "skipped (excluded) <path>" logs like the built-in control        | 2026-10-06 |

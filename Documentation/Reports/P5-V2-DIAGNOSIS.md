@@ -1,5 +1,14 @@
 # P5 v2 storage journal - live failure diagnosis
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Reports/P5-V2-DIAGNOSIS.md |
+| Category | Reports                              |
+| Kind     | Report                               |
+| Date     | 2026-10-06                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four research reports migrated from the pre-restructure flat documentation folder — see also
 > `../Handoff/Packages/Package-13.md` (the fix it informed) and
 > `../Handoff/Packages/Package-10.md` (the P5 finding's origin).
@@ -149,3 +158,13 @@ records landing through the bound sink).
   (timestamps above)
 - `~/.dsh` git: `4c0e83b` (v2 bump, Oct 5 17:21:22Z), `aa53c91` (pre-bind buffer), `952eaa1` (shared
   sink), `f4aaf6b` (file-removal precedent)
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The v2 open failure diagnosis (Path 1)                   | resolved    | confirmed as the live failure; the fix landed in Package-13.md    | 2026-10-06 |
+| The boot-window drain race (Path 2)                      | rejected    | not the live failure; closed                                      | 2026-10-06 |
+| The recommended fixes (the family-side minimal set)      | implemented | the fix shipped and verified                                      | 2026-10-06 |
