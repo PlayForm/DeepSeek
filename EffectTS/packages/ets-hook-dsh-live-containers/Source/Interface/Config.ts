@@ -12,7 +12,7 @@
 // governs the DURABLE ledger file only; the plugin's own `enabled` cell is
 // the master switch (the IDLE-forever posture: false is the shipped
 // default).
-import type { BlockSpec } from "./Execution.js";
+import type { BlockSpec } from "@Interface/Execution.js";
 
 /** The detach policy knobs (design section 2.3, volatile). */
 export interface DetachOptions {

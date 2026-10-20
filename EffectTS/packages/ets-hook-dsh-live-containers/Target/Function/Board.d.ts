@@ -1,6 +1,6 @@
-import type { BoardState, JobEvent } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
-import type { Log } from "./Render.js";
+import type { Log } from "@Function/Render.js";
+import type { BoardState, JobEvent } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 /** The boards of one agent. */
 export declare const For: (Agent: State, AgentId: string) => Map<string, BoardState>;
 /** Open one board (the live_plant path). The ledger order: plant opened

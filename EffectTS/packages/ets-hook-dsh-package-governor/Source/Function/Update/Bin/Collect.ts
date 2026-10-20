@@ -1,8 +1,8 @@
 // Collect — pipe one collected stream to the ledger + job ring (best-effort;
 // collect readers are offset-based and stay readable after exit).
 import type { SubprocessHandle } from "@deepseek-ai/dsh-subprocess";
+import type State from "@Interface/State.js";
 
-import type State from "../../../Interface/State.js";
 import Pipe from "./Pipe.js";
 
 export default (

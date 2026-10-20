@@ -11,14 +11,13 @@
 //                         the full ring via job_output (the job id is in the
 //                         output text).
 import { defineTool } from "@deepseek-ai/dsh-tools";
-
-import type State from "../Interface/State.js";
-import * as Band from "./Band.js";
-import Clock from "./Clock.js";
-import * as Monitors from "./Monitors.js";
-import type { Log } from "./Render.js";
-import * as Storage from "./Storage.js";
-import * as Watchlist from "./Watchlist.js";
+import * as Band from "@Function/Band.js";
+import Clock from "@Function/Clock.js";
+import * as Monitors from "@Function/Monitors.js";
+import type { Log } from "@Function/Render.js";
+import * as Storage from "@Function/Storage.js";
+import * as Watchlist from "@Function/Watchlist.js";
+import type State from "@Interface/State.js";
 
 /** The caller's agent id from the exec. */
 const CallerOf = (Exec: unknown): string => {

@@ -23,10 +23,10 @@
 import { dirname as Parent } from "node:path";
 
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
 import { Suppress } from "@playform/hook-dsh-core";
 import type Factory from "@playform/plugin-dsh-factory";
 
-import type State from "../Interface/State.js";
 import Transform from "./Transform.js";
 
 export const Pin = (

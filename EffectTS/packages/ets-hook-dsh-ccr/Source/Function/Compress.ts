@@ -32,8 +32,8 @@
 // (`decision.content ?? result.content`, the spill-policy precedent) - the
 // store keeps what the model would have seen.
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
+import type State from "@Interface/State.js";
 
-import type State from "../Interface/State.js";
 import Classify from "./Classify.js";
 import Hash from "./Hash.js";
 import Preview from "./Preview.js";

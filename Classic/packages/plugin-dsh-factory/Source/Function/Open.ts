@@ -58,7 +58,8 @@
 // preserved) and retires it (`PendingJournal = undefined` — the pre-bind
 // stage is over; after that, records route straight through the shared
 // sink).
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
+
 import Append from "./Append.js";
 
 export default async (

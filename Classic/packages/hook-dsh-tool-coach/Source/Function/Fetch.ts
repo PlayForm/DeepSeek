@@ -16,8 +16,8 @@
 // `schema fetch failed -> static fallback`. A note NEVER fails the waterfall.
 // `fetchLive: false` (the escape hatch) uses the static table unconditionally
 // and never logs a fetch-failure line.
-import type { ToolCatalog, ToolEntry } from "../Interface/Execution.js";
-import { STATIC_TOOL_LINES } from "../Variable/Notes.js";
+import type { ToolCatalog, ToolEntry } from "@Interface/Execution.js";
+import { STATIC_TOOL_LINES } from "@Variable/Notes.js";
 
 /** The tools-service surface Fetch needs (structural; the injected `tools`). */
 export interface ToolsService {

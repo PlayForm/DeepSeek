@@ -57,8 +57,7 @@ import { dirname as Parent } from "node:path";
 
 import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
-
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 
 /** The option bundle: what the caller adds on top of the shared pipeline. */
 export interface Over {

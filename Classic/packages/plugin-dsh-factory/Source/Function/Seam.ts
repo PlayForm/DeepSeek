@@ -7,7 +7,7 @@
 // shape) — including a cached `undefined` for a genuinely absent service.
 // The State builder uses this exact accessor for the "subprocess" seam; new
 // optional seams (storageDomain, jobs) should prefer it over ad-hoc probes.
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 
 export default (State: State, Name: string): unknown => {
 	switch (true) {

@@ -1,5 +1,5 @@
-import f from"./Clock.js";const l=200,u=3e5,m=(e,n,t,r)=>{try{if(e.Failsafes!=="on"||![...e.Boards.get(n)?.values()??[]].some(o=>o.lease.state==="open"))return"";const s=f(e);return t.messages>l?(r("failsafe drift (messages)"),`WARN: messages=${t.messages} exceeds ${l} while a live board is open - consider closing or pruning.`):t.lastToolAt!==void 0&&s-t.lastToolAt>u?(r("failsafe drift (sinceLastTool)"),`WARN: no tool for ${Math.round((s-t.lastToolAt)/1e3)}s while a live board is open - check the members with live_plant prune or job_output.`):""}catch{return""}},c=(e,n,t)=>`${e} LIVE (collapsed, ${t} bytes; not harness state) ${e} ${n}`,g=(e,n,t)=>{const r=o=>Buffer.byteLength(o,"utf8"),a=n.map(o=>o).join(`
-`);if(e.Budget<=0||n.length<=1||r(a)<=e.Budget)return a;const i=[...n];let s=0;for(;s<i.length-1&&r(i.join(`
-`))>e.Budget;){const o=i[s];if(o===void 0)break;i[s]=c(e.Separator,o.split(`
-`)[0]??"",r(o)),s+=1}return s>0&&t(`failsafe section-collapse ${s}`),i.join(`
-`)};export{g as Collapse,l as DRIFT_MESSAGES,u as DRIFT_SINCE_LAST_TOOL_MS,m as Drift,c as WaveSummary};
+import u from"./Clock.js";const l=200,f=3e5,m=(t,o,e,r)=>{try{if(t.Failsafes!=="on"||![...t.Boards.get(o)?.values()??[]].some(n=>n.lease.state==="open"))return"";const s=u(t);return e.messages>l?(r("failsafe drift (messages)"),`WARN: messages=${e.messages} exceeds ${l} while a live board is open - consider closing or pruning.`):e.lastToolAt!==void 0&&s-e.lastToolAt>f?(r("failsafe drift (sinceLastTool)"),`WARN: no tool for ${Math.round((s-e.lastToolAt)/1e3)}s while a live board is open - check the members with live_plant prune or job_output.`):""}catch{return""}},c=(t,o,e)=>`${t} LIVE (collapsed, ${e} bytes; not harness state) ${t} ${o}`,g=(t,o,e)=>{const r=n=>Buffer.byteLength(n,"utf8"),a=o.map(n=>n).join(`
+`);if(t.Budget<=0||o.length<=1||r(a)<=t.Budget)return a;const i=[...o];let s=0;for(;s<i.length-1&&r(i.join(`
+`))>t.Budget;){const n=i[s];if(n===void 0)break;i[s]=c(t.Separator,n.split(`
+`)[0]??"",r(n)),s+=1}return s>0&&e(`failsafe section-collapse ${s}`),i.join(`
+`)};export{g as Collapse,l as DRIFT_MESSAGES,f as DRIFT_SINCE_LAST_TOOL_MS,m as Drift,c as WaveSummary};

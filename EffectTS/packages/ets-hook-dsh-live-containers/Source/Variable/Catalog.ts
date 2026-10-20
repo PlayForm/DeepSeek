@@ -11,7 +11,7 @@
 // templates whose opening variables are richer (countdown targetAt, validator
 // thresholds) are NOT suggestable-configured - they fall back to the
 // "section" tier's plain note even in "plant" mode.
-import type { BlockSpec } from "../Interface/Execution.js";
+import type { BlockSpec } from "@Interface/Execution.js";
 
 /** One catalog entry: the block spec plus the suggester's projection fields. */
 export interface CatalogEntry {

@@ -16,9 +16,9 @@
 // NEVER deny a call, drop content, or cancel a job because of its own
 // internal error; killing goes through the registry's kill, gated behind
 // hangAction/config; `failsafes: "off"` is the default even when enabled.
-import type State from "../Interface/State.js";
-import Clock from "./Clock.js";
-import type { Log } from "./Render.js";
+import Clock from "@Function/Clock.js";
+import type { Log } from "@Function/Render.js";
+import type State from "@Interface/State.js";
 
 /** The drift thresholds the failsafe layer owns (the validator template's
  * automatic twin; 04 scenario 4 - thresholds are constants of the layer, the

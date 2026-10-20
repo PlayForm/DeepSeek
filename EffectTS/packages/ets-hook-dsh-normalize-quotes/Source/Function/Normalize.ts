@@ -36,7 +36,7 @@
 // re-running the same Stream value re-runs the thunk - fresh state per
 // materialization). This callback closes over only the State (the factory
 // service and the ledger file), which is per-apply, never module-level.
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 
 export default (State: State) =>
 	// The Gate's `OnCount` shape: one call per stream, after the last chunk,

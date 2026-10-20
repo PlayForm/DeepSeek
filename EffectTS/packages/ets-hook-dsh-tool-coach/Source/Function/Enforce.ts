@@ -10,7 +10,7 @@
 // fresh window of offenses. The denied call still flows through
 // tools/post-execute, where it is counted like any other offense
 // (repeat-tool-reminder README:83).
-import type { AgentState, CoachClass, Match } from "../Interface/Execution.js";
+import type { AgentState, CoachClass, Match } from "@Interface/Execution.js";
 
 /** The knobs Enforce reads (the live State values, already unwrapped). */
 export interface EnforceConfig {

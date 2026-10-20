@@ -23,8 +23,9 @@
 // confined spawn path), Child (the child-process fallback), Pipe (the
 // ledger+ring pipe) and Collect (the stream reader) — the same role names
 // the cargo governor's Upgrade split uses (the naming unification, P4).
-import type Invocation from "../../Interface/Invocation.js";
-import type State from "../../Interface/State.js";
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
+
 import Child from "./Bin/Child.js";
 import Seam from "./Bin/Seam.js";
 

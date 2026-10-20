@@ -26,11 +26,11 @@
 // in-flight/breaker maps through the `ctx.__hookDshGovernorCargoState` attachment
 // instead.
 import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type StateView from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
-import type Config from "../Interface/Config.js";
-import type StateView from "../Interface/State.js";
 import * as Direct from "./Direct.js";
 import Observe from "./Observe.js";
 

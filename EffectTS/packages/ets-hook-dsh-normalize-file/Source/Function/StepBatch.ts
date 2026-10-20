@@ -38,8 +38,8 @@
 // Pure per call: no module-level state - the one-shot flag lives on the
 // per-apply State object, so an HMR reload resets it cleanly.
 import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
+import type State from "@Interface/State.js";
 
-import type State from "../Interface/State.js";
 import { Rewrite } from "./Normalize.js";
 import { DefaultScopes, RewriteBlocks } from "./Overpass.js";
 

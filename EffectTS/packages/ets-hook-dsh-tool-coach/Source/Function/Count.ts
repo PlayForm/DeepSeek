@@ -25,7 +25,7 @@
 //   3. tier 3 is armed but NOT decided here: the deny fires in the
 //      tools/pre-execute listener (before the call runs) when the offense's
 //      class has reached enforceThreshold strikes since the last note.
-import type { AgentState, CoachClass, Decision, Match } from "../Interface/Execution.js";
+import type { AgentState, CoachClass, Decision, Match } from "@Interface/Execution.js";
 
 /** The per-call knobs Count reads (the live State values, already unwrapped). */
 export interface CountConfig {

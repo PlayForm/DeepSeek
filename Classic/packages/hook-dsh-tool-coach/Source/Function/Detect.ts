@@ -29,8 +29,8 @@
 //   - `--in-place` anywhere -> write;
 //   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
 //     the INNER payload is re-scanned through the same rows.
-import Normalize, { Rank, Segments } from "../Function/Normalize.js";
-import type { CoachRow, Detection, Match } from "../Interface/Execution.js";
+import Normalize, { Rank, Segments } from "@Function/Normalize.js";
+import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
 
 /** The command-word position markers that begin a wrapper payload. */
 const WRAPPERS = /^(sh|bash|zsh|dash|eval|source|nice|env|timeout|xargs)\b/;

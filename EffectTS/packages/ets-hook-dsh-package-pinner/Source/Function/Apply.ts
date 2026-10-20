@@ -44,11 +44,11 @@
 // disposal semantics stay the Classic ones (the P2 Inflight abort kills any
 // in-flight pass's controller; the factory's Attach effect owns that).
 import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
-import type Config from "../Interface/Config.js";
-import type State from "../Interface/State.js";
 import { Pin } from "./Direct.js";
 import Observe from "./Observe.js";
 

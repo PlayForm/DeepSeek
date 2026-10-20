@@ -13,7 +13,7 @@
 // GOVERNED file goes through `ctx.fs` (Function/Write).
 import * as FileSystem from "node:fs";
 
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 
 export default (State: State, Message: string): void => {
 	try {

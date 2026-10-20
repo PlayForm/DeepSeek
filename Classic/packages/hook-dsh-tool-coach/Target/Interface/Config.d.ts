@@ -1,4 +1,4 @@
-import type { CoachNotes, CoachRow } from "../Interface/Execution.js";
+import type { CoachNotes, CoachRow } from "./Execution.js";
 export default interface Config {
     /** Ledger enabled - write the durable log file (the shared `log` cell). */
     log: boolean;

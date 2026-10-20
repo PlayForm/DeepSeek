@@ -1,5 +1,5 @@
-import type { JobSource, JobSpec, ShellProcess, ShellSpec } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
+import type { JobSource, JobSpec, ShellProcess, ShellSpec } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 /** The per-job private tail (bounded; the completion frame's output source). */
 export declare class JobTail {
     Stdout: string;

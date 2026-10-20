@@ -11,8 +11,8 @@
 //
 // All time reads go through the Clock module (the smoke's fake clock). No
 // I/O, no eval - pure functions over the state.
-import type { AgentState, Variables } from "../Interface/Execution.js";
-import type State from "../Interface/State.js";
+import type { AgentState, Variables } from "@Interface/Execution.js";
+import type State from "@Interface/State.js";
 
 /** The module's default scope key (a dispatch without a scope shares it). */
 export const DefaultKey: object = {};

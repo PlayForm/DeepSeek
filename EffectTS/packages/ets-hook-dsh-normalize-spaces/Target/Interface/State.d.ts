@@ -1,7 +1,7 @@
+import type { Scopes } from "./Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";
-import type { Scopes } from "./Config.js";
 export default interface State extends Shared {
     /** The space replacement - the transform's only knob (config `replacement`). */
     Replacement: string;

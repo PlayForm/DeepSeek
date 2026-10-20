@@ -30,9 +30,9 @@
 // module never invokes it standalone, so no runPromise boundary is added
 // here - the settlement half of the same pair.
 import type { FsTarget } from "@deepseek-ai/dsh-fs";
+import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
-import type State from "../Interface/State.js";
 import { Envelope } from "./Dispatch.js";
 
 export default (

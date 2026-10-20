@@ -25,10 +25,10 @@
 // single-slot waterfalls belong to the observation policy; registering
 // there would veto it). Never tools/* (result amendment is louder).
 import type { Context } from "@deepseek-ai/cordis";
+import type Config from "@Interface/Config.js";
+import type State from "@Interface/State.js";
 import { Activate } from "@playform/hook-dsh-core";
 
-import type Config from "../Interface/Config.js";
-import type State from "../Interface/State.js";
 import { Pin } from "./Direct.js";
 import Observe from "./Observe.js";
 

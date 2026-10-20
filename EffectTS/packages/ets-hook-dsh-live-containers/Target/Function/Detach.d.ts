@@ -1,6 +1,6 @@
 import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
-import type State from "../Interface/State.js";
-import type { Log } from "./Render.js";
+import type { Log } from "@Function/Render.js";
+import type State from "@Interface/State.js";
 /** The inline marker (design section 4.1, byte-exact):
  * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
 export declare const Marker: (JobId: string, CmdHead: string) => string;

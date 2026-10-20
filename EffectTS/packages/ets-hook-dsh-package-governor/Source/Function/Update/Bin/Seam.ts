@@ -4,9 +4,9 @@
 // Handle.done — mapped to the same ledger line the old spawnSync error
 // branch produced.
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
+import type Invocation from "@Interface/Invocation.js";
+import type State from "@Interface/State.js";
 
-import type Invocation from "../../../Interface/Invocation.js";
-import type State from "../../../Interface/State.js";
 import Collect from "./Collect.js";
 
 export default async (

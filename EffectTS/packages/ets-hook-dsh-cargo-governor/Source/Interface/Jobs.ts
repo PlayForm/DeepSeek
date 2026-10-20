@@ -6,7 +6,7 @@
 // as the fallback (Function/Dispatch). The service is not part of the
 // published @deepseek-ai/cordis typings, so the shapes the plugin consumes
 // are mirrored here structurally.
-import type Job from "./Job.js";
+import type Job from "@Interface/Job.js";
 
 export default interface Jobs {
 	/** Register this plugin as a root-level job controller (Function/Apply). */

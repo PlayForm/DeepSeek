@@ -4,9 +4,9 @@
 // comparison is needed — no semver comparator to get wrong. Idempotent: an
 // already-canonical manifest maps to null (no change). Pure internal
 // calculation — one of the two standing exemptions.
-import type Manifest from "../Interface/Manifest.js";
-import type Registry from "../Interface/Registry.js";
-import Section from "../Variable/Section.js";
+import type Manifest from "@Interface/Manifest.js";
+import type Registry from "@Interface/Registry.js";
+import Section from "@Variable/Section.js";
 
 export default (
 	Manifest: Manifest,

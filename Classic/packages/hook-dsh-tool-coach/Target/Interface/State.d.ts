@@ -1,6 +1,6 @@
+import type { AgentState, CoachNotes, CoachRow } from "./Execution.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
-import type { AgentState, CoachNotes, CoachRow } from "../Interface/Execution.js";
 export default interface State extends Shared {
     /** Master switch (config `enabled`, volatile) - false = full passthrough. */
     On: boolean;

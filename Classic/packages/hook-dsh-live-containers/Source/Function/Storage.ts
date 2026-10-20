@@ -26,9 +26,9 @@
 // enrolled), and every loaded entry logs `monitor recovered <path> (<n>
 // checks)`. When the read surface is absent or fails: no recovery - the
 // bands render `not run yet` (honesty, never fabrication).
-import type { Log } from "../Function/Render.js";
-import type { MonitorEntry, MonitorRecord } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
+import type { Log } from "@Function/Render.js";
+import type { MonitorEntry, MonitorRecord } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 
 /** The queue cap for the pre-bind buffer (the factory Queue pattern). */
 const QUEUE_CAP = 256;

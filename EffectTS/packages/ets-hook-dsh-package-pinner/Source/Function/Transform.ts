@@ -31,12 +31,12 @@
 //     null, 2) + "\n"), performs the guarded write (GuardedWrite:
 //     replaceIfVersion + the P4 fence + Stash pre-registration), logs the
 //     message and refreshes the observation-policy's record (same actor).
+import type Manifest from "@Interface/Manifest.js";
+import type State from "@Interface/State.js";
 import { Refusal } from "@playform/ets-hook-dsh-core";
 import type Factory from "@playform/ets-plugin-dsh-factory";
+import SectionDefault from "@Variable/Section.js";
 
-import type Manifest from "../Interface/Manifest.js";
-import type State from "../Interface/State.js";
-import SectionDefault from "../Variable/Section.js";
 import Decode from "./Decode.js";
 import Pin from "./Pin.js";
 

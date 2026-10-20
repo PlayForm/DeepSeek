@@ -1,6 +1,6 @@
-import type { Log } from "../Function/Render.js";
-import type { CheckSetSpec, MonitorEntry } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
+import type { Log } from "@Function/Render.js";
+import type { CheckSetSpec, MonitorEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 /** The structural fs/observed types (the factory's Wire signature, verified
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module
  * reads). */

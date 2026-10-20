@@ -37,11 +37,11 @@
 // update's controller; the collision lesson is factory-side now) and removed
 // on settlement.
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import type JobsRegistry from "@Interface/Jobs.js";
+import type Registry from "@Interface/Registry.js";
+import type State from "@Interface/State.js";
 import { Update } from "@playform/hook-dsh-core";
 
-import type JobsRegistry from "../Interface/Jobs.js";
-import type Registry from "../Interface/Registry.js";
-import type State from "../Interface/State.js";
 import Execute from "./Execute.js";
 
 // The envelope, built once: every dependency is a closure over the State it

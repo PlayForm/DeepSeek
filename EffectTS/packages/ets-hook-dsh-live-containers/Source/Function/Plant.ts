@@ -4,10 +4,9 @@
 // twin lives on live_container_set's prune verb; the lease is never
 // model-chosen (the config's plant.leaseTurns is the only window source).
 import { defineTool } from "@deepseek-ai/dsh-tools";
-
-import type State from "../Interface/State.js";
-import * as Board from "./Board.js";
-import type { Log } from "./Render.js";
+import * as Board from "@Function/Board.js";
+import type { Log } from "@Function/Render.js";
+import type State from "@Interface/State.js";
 
 /** Build the tool definition (the ccr Retrieve.ts idiom). */
 export default (Agent: State, Append: Log) => {
