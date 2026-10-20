@@ -3,10 +3,13 @@ title: The UI Family Implementation Plan - the hub
 category: Plans
 kind: queued-plan
 date: 2026-10-20
-status: planned
+status: superseded
 registry: Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md
 index: Documentation/INDEX.md
 statuses:
+  - name: the v4.1 distillation
+    state: superseded
+    evidence: Documentation/Plans/UI-FAMILY-V4-1.md - the distilled plan; this hub and the granular set remain the detailed record
   - name: the implementation plan (the expanded brief)
     state: open
     evidence: this document - awaiting the user's dispatch

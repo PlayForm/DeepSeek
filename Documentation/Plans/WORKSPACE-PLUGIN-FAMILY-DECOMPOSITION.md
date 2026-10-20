@@ -3,10 +3,13 @@ title: The Workspace Plugin Family Decomposition - the hub
 category: Plans
 kind: living-plan
 date: 2026-10-20
-status: planned
+status: superseded
 registry: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md
 index: Documentation/INDEX.md
 statuses:
+	- name: the v4.1 distillation
+		state: superseded
+		evidence: Documentation/Plans/WORKSPACE-FAMILY-V4-1.md - the distilled plan; this hub and the granular set remain the detailed record
 	- name: the family decomposition (17 members + the shared library)
 		state: planned
 		evidence: this hub + the granular per-package documents under Documentation/Plans/Workspace-Family/ - nothing built yet

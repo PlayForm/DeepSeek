@@ -73,7 +73,7 @@ statuses:
 | ----------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (18)
+### Plans - the living + queued hubs (20)
 
 | Document (Documentation/Plans/)     | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -82,8 +82,8 @@ statuses:
 | [BATCH-EDIT-TOOL-FEATURE.md](Plans/BATCH-EDIT-TOOL-FEATURE.md) | active | living-plan (R-BET-1 hub) |
 | [BATCH-EDIT-TOOL-SUGGESTIONS.md](Plans/BATCH-EDIT-TOOL-SUGGESTIONS.md) | active | living-record (R-BET-2 hub) |
 | [REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md](Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md) | complete | research-output (hub) |
-| [WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md](Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md) | planned | living-plan (hub) |
-| [UI-FAMILY-IMPLEMENTATION-PLAN.md](Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md) | planned | queued-plan (hub) |
+| [WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md](Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md) | superseded | living-plan (hub; the v4.1 distilled) |
+| [UI-FAMILY-IMPLEMENTATION-PLAN.md](Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md) | superseded | queued-plan (hub; the v4.1 distilled) |
 | [ORCHESTRATION-FAMILY.md](Plans/ORCHESTRATION-FAMILY.md) | planned | queued-plan |
 | [BATCH-STATE-PLUGIN.md](Plans/BATCH-STATE-PLUGIN.md) | planned | queued-plan |
 | [ROUTING-ENFORCER-PLUGIN.md](Plans/ROUTING-ENFORCER-PLUGIN.md) | planned | queued-plan |
@@ -95,6 +95,8 @@ statuses:
 | [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md) | planned | queued-plan (site content and wording) |
 | [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md) | planned | queued-plan (duplication, functionality, placement) |
 | [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md) | active | living-plan (the decision record and workstreams) |
+| [UI-FAMILY-V4-1.md](Plans/UI-FAMILY-V4-1.md) | active | living-plan (the visual panel distilled) |
+| [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md) | active | living-plan (the dynamic workspace distilled) |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (18)
 
