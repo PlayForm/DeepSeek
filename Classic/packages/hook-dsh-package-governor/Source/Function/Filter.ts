@@ -1,9 +1,9 @@
 // Filter — true when any dependency name is NOT in the registry's
 // effectiveLatest — i.e. something public for ncu to do. Pure internal
 // calculation — part of the standing exemptions.
-import type Manifest from "@Interface/Manifest.js";
-import type Registry from "@Interface/Registry.js";
-import Section from "@Variable/Section.js";
+import type Manifest from "../Interface/Manifest.js";
+import type Registry from "../Interface/Registry.js";
+import Section from "../Variable/Section.js";
 
 export default (Manifest: Manifest | null, Registry: Registry | null): boolean => {
 	for (const Name of Section) {

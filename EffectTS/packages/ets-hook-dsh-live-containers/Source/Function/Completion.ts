@@ -31,10 +31,10 @@
 // user instruction, so the pending text is wrapped with one line above the
 // frames:
 //   [live] completion report (harness-appended; not a user request):
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { DetachRecord, JobEvent, SessionEvent } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
+import type { DetachRecord, JobEvent, SessionEvent } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
+import Clock from "./Clock.js";
+import type { Log } from "./Render.js";
 
 /** The context registration name (the SCHEME's seam evidence). */
 export const CONTEXT_NAME = "live-containers-completion";

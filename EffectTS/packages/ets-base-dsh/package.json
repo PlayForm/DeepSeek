@@ -23,7 +23,8 @@
 		"CHANGELOG.md"
 	],
 	"scripts": {
-		"prepublishOnly": "sh prepublishOnly.sh"
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
 		"effect": "4.0.5"

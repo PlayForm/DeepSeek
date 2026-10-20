@@ -1,5 +1,5 @@
-import { Effect } from "effect";
 import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
+import { Effect } from "effect";
 /** One registered step: the module's name plus its run closure. The closure
  *  captures the module's own State (built in that module's apply), so the
  *  chain pass, the update stage and every ledger line stay module-owned. The

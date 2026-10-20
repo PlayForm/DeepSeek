@@ -16,15 +16,15 @@
 // renders clean; the linked-governance check never produces a verdict.
 import { basename as Base, dirname as Parent } from "node:path";
 
-import * as Band from "@Function/Band.js";
-import Clock from "@Function/Clock.js";
-import * as Jobs from "@Function/Jobs.js";
-import { INLINE_DEADLINE_MS } from "@Function/Policy.js";
-import type { Log } from "@Function/Render.js";
-import * as Storage from "@Function/Storage.js";
-import * as Watchlist from "@Function/Watchlist.js";
-import type { CheckResult, CheckSetSpec, MonitorEntry, TailBuffer } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
+import type { CheckResult, CheckSetSpec, MonitorEntry, TailBuffer } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
+import * as Band from "./Band.js";
+import Clock from "./Clock.js";
+import * as Jobs from "./Jobs.js";
+import { INLINE_DEADLINE_MS } from "./Policy.js";
+import type { Log } from "./Render.js";
+import * as Storage from "./Storage.js";
+import * as Watchlist from "./Watchlist.js";
 
 /** The structural fs/observed types (the factory's Wire signature, verified
  * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module

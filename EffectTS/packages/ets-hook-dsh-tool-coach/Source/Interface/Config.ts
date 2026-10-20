@@ -11,7 +11,7 @@
 // The factory's shared `log` cell (added by the Compose(false, ...) wrapper)
 // governs the DURABLE ledger file only; the coach's own `enabled` cell is the
 // master switch for the coaching itself.
-import type { CoachNotes, CoachRow } from "@Interface/Execution.js";
+import type { CoachNotes, CoachRow } from "./Execution.js";
 
 export default interface Config {
 	/** Ledger enabled - write the durable log file (the shared `log` cell). */

@@ -1,1 +1,1 @@
-import{Replace as r,Invisible as i}from"@playform/ets-hook-dsh-core";var o=(t,e)=>r(t,i,e);export{o as default};
+import{Invisible as r,Replace as i}from"@playform/ets-hook-dsh-core";var o=(t,e)=>i(t,r,e);export{o as default};

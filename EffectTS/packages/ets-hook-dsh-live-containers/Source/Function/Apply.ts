@@ -70,25 +70,26 @@ import type {
 	ToolExecution,
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
+import { Activate } from "@playform/ets-base-dsh";
+
+import type Config from "../Interface/Config.js";
+import { KINDS, type AgentState, type BlockSpec } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
 // The wave-2 modules (the C2 extension - each behavior in its own module;
 // Apply only REGISTERS and wires).
-import * as Board from "@Function/Board.js";
-import Clock from "@Function/Clock.js";
-import * as Completion from "@Function/Completion.js";
-import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "@Function/Counters.js";
-import * as Detach from "@Function/Detach.js";
-import * as Failsafe from "@Function/Failsafe.js";
-import * as Monitors from "@Function/Monitors.js";
-import * as MonitorTools from "@Function/MonitorTools.js";
-import * as Plant from "@Function/Plant.js";
-import Build, { Cached } from "@Function/Render.js";
-import * as SetTool from "@Function/Set.js";
-import * as Storage from "@Function/Storage.js";
-import * as Suggester from "@Function/Suggester.js";
-import type Config from "@Interface/Config.js";
-import { KINDS, type AgentState, type BlockSpec } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
-import { Activate } from "@playform/ets-base-dsh";
+import * as Board from "./Board.js";
+import Clock from "./Clock.js";
+import * as Completion from "./Completion.js";
+import Counters, { DefaultKey, RecordTool, RecordTurn, ScopeLabel } from "./Counters.js";
+import * as Detach from "./Detach.js";
+import * as Failsafe from "./Failsafe.js";
+import * as Monitors from "./Monitors.js";
+import * as MonitorTools from "./MonitorTools.js";
+import * as Plant from "./Plant.js";
+import Build, { Cached } from "./Render.js";
+import * as SetTool from "./Set.js";
+import * as Storage from "./Storage.js";
+import * as Suggester from "./Suggester.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).

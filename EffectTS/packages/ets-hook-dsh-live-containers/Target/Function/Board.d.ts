@@ -1,5 +1,5 @@
-import type State from "../Interface/State.js";
 import type { BoardState, JobEvent } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 import type { Log } from "./Render.js";
 /** The boards of one agent. */
 export declare const For: (Agent: State, AgentId: string) => Map<string, BoardState>;

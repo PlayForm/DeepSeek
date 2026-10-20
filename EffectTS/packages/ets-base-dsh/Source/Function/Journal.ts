@@ -35,8 +35,9 @@
 // would trip `AsyncFiberError`. The factory fields are read at CALL time
 // through the captured instance - the shell resets them between scenarios,
 // so a snapshot would leak records.
-import type State from "@Interface/State.js";
 import { Effect } from "effect";
+
+import type State from "../Interface/State.js";
 
 export default (
 	Factory: {

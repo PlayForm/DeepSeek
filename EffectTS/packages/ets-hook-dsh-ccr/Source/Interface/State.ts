@@ -38,11 +38,12 @@
 // Test probes read the state through the `ctx.__ccrState` attachment (never a
 // return value from `apply` - the loader treats apply returns specially, a
 // live-verified lesson recorded in the plugin-development skill).
-import type { EngineRuntime } from "@Function/Engine.js";
-import type Store from "@Function/Store.js";
-import type Config from "@Interface/Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
+import type { EngineRuntime } from "../Function/Engine.js";
+import type Store from "../Function/Store.js";
+import type Config from "./Config.js";
 
 export default interface State extends Shared {
 	/** The allow-list of compressible tool names (config `targets`). */

@@ -26,10 +26,10 @@
 import { basename as Base } from "node:path";
 
 import type { FsObservation, FsTarget, FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
-import type ActorView from "@Interface/Actor.js";
-import type Decision from "@Interface/Gate.js";
-import type State from "@Interface/State.js";
 
+import type ActorView from "../Interface/Actor.js";
+import type Decision from "../Interface/Gate.js";
+import type State from "../Interface/State.js";
 import Match from "./Match.js";
 
 export default (

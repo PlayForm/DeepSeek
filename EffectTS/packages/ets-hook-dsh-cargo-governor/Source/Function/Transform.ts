@@ -43,11 +43,11 @@
 // the surgical line rewrite, Normalize's padding, and the auxiliary
 // pin-policy.json read (plain fs, never the governed manifest).
 import type { FsVersion } from "@deepseek-ai/dsh-fs";
-import type Passage from "@Interface/Passage.js";
-import type Registry from "@Interface/Registry.js";
-import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
+import type Passage from "../Interface/Passage.js";
+import type Registry from "../Interface/Registry.js";
+import type State from "../Interface/State.js";
 import Decode from "./Decode.js";
 import Pin from "./Pin.js";
 import Resolve from "./Resolve.js";

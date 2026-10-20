@@ -62,11 +62,11 @@
 // normalizer's disposal semantics stay the Classic ones (the tool
 // unregisters with the plugin's fiber; the Scope holds nothing).
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 import { Effect, Scope } from "effect";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,

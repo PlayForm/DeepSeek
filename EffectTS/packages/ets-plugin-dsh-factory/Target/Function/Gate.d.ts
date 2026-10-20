@@ -1,6 +1,5 @@
-import type { State as State } from "@playform/ets-base-dsh";
-import type { Gate as Decision } from "@playform/ets-base-dsh";
-import type { FsTarget, FsObservation } from "@deepseek-ai/dsh-fs";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import type { Gate as Decision, State } from "@playform/ets-base-dsh";
 export default _default;
 declare function _default(State: State, Target: FsTarget, Observation: FsObservation, Actor: object | undefined, Options: {
     basename: string;

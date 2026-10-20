@@ -18,9 +18,10 @@
 // @playform/ets-hook-dsh-core Policy loader — byte-identical lines, module-
 // prefixed by the factory's Append); this module supplies the built-in
 // default.
-import type PolicyShape from "@Interface/Policy.js";
-import type State from "@Interface/State.js";
 import { Policy } from "@playform/ets-hook-dsh-core";
+
+import type PolicyShape from "../../Interface/Policy.js";
+import type State from "../../Interface/State.js";
 
 export default (State: State, File: string): PolicyShape =>
 	Policy((Message) => State.Factory.Append(State, Message), File, {

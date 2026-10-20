@@ -14,8 +14,8 @@
 // No match anywhere: the effective set is [] - the band renders the
 // `checks: none` form and nothing ever runs (honest: with no checks, no
 // verification is claimed).
-import type { WatchlistEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
+import type { WatchlistEntry } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 
 /** Convert one glob to a RegExp (the small self-contained converter; the
  * Policy.ts self-contained precedent): a single star within a segment, a

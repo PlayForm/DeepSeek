@@ -1,4 +1,4 @@
-import type { Log } from "./Render.js";
+import type { Log } from "../Function/Render.js";
 import type State from "../Interface/State.js";
 /** Build the live_monitor tool definition. */
 export declare const Monitor: (Agent: State, Append: Log) => import("@deepseek-ai/dsh-tools").ToolDefinition;

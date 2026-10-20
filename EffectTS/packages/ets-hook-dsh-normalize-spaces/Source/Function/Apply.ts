@@ -81,11 +81,11 @@
 // plain-fs exemption, and the chunk vocabulary arrives through the
 // waterfall, not through an import.
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate, StreamGate as Gate } from "@playform/ets-base-dsh";
 import { Effect, Scope, Stream } from "effect";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,

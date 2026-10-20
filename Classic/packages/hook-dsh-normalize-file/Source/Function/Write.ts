@@ -33,8 +33,8 @@
 // registration call itself lives in Function/Apply.
 import type { Context } from "@deepseek-ai/cordis";
 import { defineTool } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
 
+import type State from "../Interface/State.js";
 import Normalize from "./Normalize.js";
 
 export default (Context: Context, State: State) =>

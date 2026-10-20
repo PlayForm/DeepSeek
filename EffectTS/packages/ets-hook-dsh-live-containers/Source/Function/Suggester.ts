@@ -16,11 +16,11 @@
 // produces ONLY a ledger line, never a conversation artifact, never a retry
 // within the same turn. With suggester "off" nothing spawns (the zero-subagent
 // guarantee, provable by the smoke harness's spawn counter).
-import Clock from "@Function/Clock.js";
-import type { Log } from "@Function/Render.js";
-import type { BoardState, Suggestion } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
-import { Compressed, Entry } from "@Variable/Catalog.js";
+import type { BoardState, Suggestion } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
+import { Compressed, Entry } from "../Variable/Catalog.js";
+import Clock from "./Clock.js";
+import type { Log } from "./Render.js";
 
 /** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
 export const NewId = (): string => {

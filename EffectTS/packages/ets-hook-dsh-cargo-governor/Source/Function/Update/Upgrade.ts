@@ -39,12 +39,12 @@
 // spawn path), Child (the child-process fallback) and Collect (the stream
 // reader) — the same role names the package.json governor's Bin split uses
 // (the naming unification, P4).
-import type Invocation from "@Interface/Invocation.js";
-import type Job from "@Interface/Job.js";
-import type Policy from "@Interface/Policy.js";
-import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
+import type Invocation from "../../Interface/Invocation.js";
+import type Job from "../../Interface/Job.js";
+import type Policy from "../../Interface/Policy.js";
+import type State from "../../Interface/State.js";
 import Child from "./Upgrade/Child.js";
 import Seam from "./Upgrade/Seam.js";
 

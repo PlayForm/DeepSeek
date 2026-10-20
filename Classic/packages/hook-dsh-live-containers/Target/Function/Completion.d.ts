@@ -1,6 +1,6 @@
-import type State from "../Interface/State.js";
+import type { Log } from "../Function/Render.js";
 import type { DetachRecord, JobEvent, SessionEvent } from "../Interface/Events.js";
-import type { Log } from "./Render.js";
+import type State from "../Interface/State.js";
 /** The context registration name (the SCHEME's seam evidence). */
 export declare const CONTEXT_NAME = "live-containers-completion";
 /** The wrapper line (I3 2.5, byte-exact). */

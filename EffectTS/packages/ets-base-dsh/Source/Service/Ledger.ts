@@ -19,10 +19,10 @@
 // The span carries the module identity as a read-only attribute
 // (`module`); it never alters the ledger bytes, the logger prefix, or the
 // ordering (logger first, then the file - both inside the span).
-import type State from "@Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 
 import AppendFn from "../Function/Append.js";
+import type State from "../Interface/State.js";
 
 // Ledger - the service tag: one method, `append`, the typed ledger writer.
 // The tag is a class-style `Context.Service` (the two-stage form): the

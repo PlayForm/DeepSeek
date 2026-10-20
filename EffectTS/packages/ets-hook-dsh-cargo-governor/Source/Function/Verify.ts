@@ -19,8 +19,9 @@
 import * as ChildProcess from "node:child_process";
 
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+
+import type State from "../Interface/State.js";
 
 export default async (
 	Factory: PluginFactory,

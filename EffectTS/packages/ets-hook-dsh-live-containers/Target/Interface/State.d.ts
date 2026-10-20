@@ -1,7 +1,7 @@
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
-import type { AgentState, BlockSpec } from "./Execution.js";
 import type { BoardState, CheckSetSpec, CompletionSlot, DetachRecord, MonitorEntry, MonitorJobRecord, MonitorRecord, SuggesterState, Suggestion, TagRecord, WatchlistEntry } from "./Events.js";
+import type { AgentState, BlockSpec } from "./Execution.js";
 export default interface State extends Shared {
     /** Master switch (config `enabled`, volatile) - false = full passthrough. */
     On: boolean;

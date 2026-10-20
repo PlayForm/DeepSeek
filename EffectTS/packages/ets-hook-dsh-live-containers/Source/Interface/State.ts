@@ -22,6 +22,9 @@
 // `ctx.__hookDshLiveContainersState` probe attachment - never a return value
 // from `apply` (the loader treats apply returns specially, a live-verified
 // lesson recorded in the plugin-development skill).
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
 import type {
 	BoardState,
 	CheckSetSpec,
@@ -34,10 +37,8 @@ import type {
 	Suggestion,
 	TagRecord,
 	WatchlistEntry,
-} from "@Interface/Events.js";
-import type { AgentState, BlockSpec } from "@Interface/Execution.js";
-import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+} from "./Events.js";
+import type { AgentState, BlockSpec } from "./Execution.js";
 
 export default interface State extends Shared {
 	/** Master switch (config `enabled`, volatile) - false = full passthrough. */
@@ -208,17 +209,17 @@ export interface PlantConfig {
 /** The wave-2 runtime composite the modules share (bound once in Apply). */
 export interface WaveContext {
 	/** The jobs registry (the producer + the kill path), when composed. */
-	Jobs: import("@Interface/Events.js").JobsRegistry | undefined;
+	Jobs: import("./Events.js").JobsRegistry | undefined;
 	/** The shell seam (the producer re-dispatch), when composed. */
-	Shell: import("@Interface/Events.js").Shell | undefined;
+	Shell: import("./Events.js").Shell | undefined;
 	/** The trusted-env collector, when composed. */
-	ShellEnv: import("@Interface/Events.js").ShellEnv | undefined;
+	ShellEnv: import("./Events.js").ShellEnv | undefined;
 	/** The working-directory seam, when composed. */
-	WorkingDirectory: import("@Interface/Events.js").WorkingDirectory | undefined;
+	WorkingDirectory: import("./Events.js").WorkingDirectory | undefined;
 	/** The subagent service (the suggester), when composed. */
-	Subagent: import("@Interface/Events.js").Subagent | undefined;
+	Subagent: import("./Events.js").Subagent | undefined;
 	/** The agents registry (owner resolution), when composed. */
-	Agents: import("@Interface/Events.js").AgentsRegistry | undefined;
+	Agents: import("./Events.js").AgentsRegistry | undefined;
 	/** The sandbox policy service (the standing policy the inline call would have used), when composed. */
 	SandboxPolicy: { resolve(input: { session?: unknown }): unknown } | undefined;
 }

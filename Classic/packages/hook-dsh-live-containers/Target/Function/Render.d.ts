@@ -1,4 +1,4 @@
-import type { AgentState, BlockSpec, Variables } from "../Interface/Execution.js";
+import { type AgentState, type BlockSpec, type Variables } from "../Interface/Execution.js";
 import type State from "../Interface/State.js";
 /** The ledger sink Apply passes down (Factory.Append with the State bound). */
 export type Log = (Message: string) => void;

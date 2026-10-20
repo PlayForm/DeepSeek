@@ -68,10 +68,10 @@
 // optional journal is the store's own plain-fs exemption (Function/Store).
 import type { Context } from "@deepseek-ai/cordis";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import Compress, { type Verdict } from "./Compress.js";
 import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
 import Marker from "./Marker.js";

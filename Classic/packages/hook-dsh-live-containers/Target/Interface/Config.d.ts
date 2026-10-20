@@ -1,4 +1,4 @@
-import type { BlockSpec } from "./Execution.js";
+import type { BlockSpec } from "../Interface/Execution.js";
 /** The detach policy knobs (design section 2.3, volatile). */
 export interface DetachOptions {
     mode: "off" | "long-running" | "all" | "selected";

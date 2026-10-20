@@ -1,6 +1,6 @@
-import type { Scope } from "effect";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+import type { Scope } from "effect";
 export default interface State extends Shared {
     /** The injected @playform/ets-plugin-dsh-factory service (the P2 UpdateKey
      *  helper and the ledger/journal delegates; assigned once in

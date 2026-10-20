@@ -17,7 +17,7 @@
 //             Pin refusal): the pre-refactor flow skipped the update stage
 //             entirely in that case, and Function/Observe honors the flag
 //             the same way.
-import type Manifest from "@Interface/Manifest.js";
+import type Manifest from "./Manifest.js";
 
 export default interface Passage {
 	/** The decoded manifest from the transform — the update stage's input. */

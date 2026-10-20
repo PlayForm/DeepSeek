@@ -86,8 +86,8 @@
 // chain the exec uses - no I/O, no session state, no clock).
 import type { Context } from "@deepseek-ai/cordis";
 import { defineTool } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
 
+import type State from "../Interface/State.js";
 import Rewrite from "./Rewrite.js";
 
 // The union shapes (the harness tools reject unknown keys - the schema must

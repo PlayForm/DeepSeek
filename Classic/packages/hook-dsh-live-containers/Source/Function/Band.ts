@@ -12,9 +12,9 @@
 // version tokens, so the text changes only on the events of the design
 // section 5.2 set (the retirement closing line is the one documented
 // exception - a terminal one-time change).
-import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
-import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
-import type State from "@Interface/State.js";
+import { StartedAt as JobsStartedAt } from "../Function/Jobs.js";
+import type { CheckResult, MonitorEntry } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 
 /** The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form). */
 const CLEAN = "\u2204";

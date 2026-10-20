@@ -8,9 +8,9 @@
 // never re-scanned. Any placeholder missing a fetched value degrades to the
 // static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
 // fails on a fetch gap.
-import { Escape } from "@Function/Normalize.js";
-import type { AgentState, Decision, ToolCatalog, ToolEntry } from "@Interface/Execution.js";
-import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
+import type { AgentState, Decision, ToolCatalog, ToolEntry } from "../Interface/Execution.js";
+import { STATIC_TOOL_LINES, TRACEABILITY } from "../Variable/Notes.js";
+import { Escape } from "./Normalize.js";
 
 /** The knob values the composers read (the live State values). */
 export interface ComposeConfig {

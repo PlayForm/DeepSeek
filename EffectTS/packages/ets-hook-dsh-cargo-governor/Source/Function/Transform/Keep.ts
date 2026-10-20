@@ -8,8 +8,9 @@
 // never over the chain.
 import * as FileSystem from "node:fs";
 
-import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
+
+import type State from "../../Interface/State.js";
 
 export default (Factory: PluginFactory, State: State, Keep: string[]): string[] => {
 	const Merged = [...Keep];

@@ -3,9 +3,8 @@
 // the wait); the abort signal kills the child.
 import * as ChildProcess from "node:child_process";
 
-import type Invocation from "@Interface/Invocation.js";
-import type State from "@Interface/State.js";
-
+import type Invocation from "../../../Interface/Invocation.js";
+import type State from "../../../Interface/State.js";
 import Pipe from "./Pipe.js";
 
 export default (

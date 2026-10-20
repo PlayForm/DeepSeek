@@ -48,10 +48,10 @@
 // import @deepseek-ai/dsh-fs). Nothing else is injected: the ledger append is
 // the factory's own plain-fs exemption.
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/hook-dsh-core";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,

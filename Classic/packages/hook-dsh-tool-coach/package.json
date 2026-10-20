@@ -27,8 +27,8 @@
 		"SCHEME.md"
 	],
 	"scripts": {
-		"Run": "sh Run.sh",
-		"prepublishOnly": "sh prepublishOnly.sh"
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
 		"@playform/hook-dsh-core": "0.0.1",

@@ -30,10 +30,10 @@
 // unknown or non-volatile key paths are ignored.
 import type { Context } from "@deepseek-ai/cordis";
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type Entry from "@Interface/Journal.js";
-import type Options from "@Interface/Options.js";
-import type State from "@Interface/State.js";
 
+import type Entry from "../Interface/Journal.js";
+import type Options from "../Interface/Options.js";
+import type State from "../Interface/State.js";
 import Seam from "./Seam.js";
 import Unwrap from "./Unwrap.js";
 

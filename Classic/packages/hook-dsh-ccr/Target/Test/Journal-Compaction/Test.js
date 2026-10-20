@@ -1,13 +1,169 @@
-import r from"node:assert/strict";import{appendFileSync as f,existsSync as S,readFileSync as p,rmSync as j,writeFileSync as m}from"node:fs";import{Check as s,CheckAsync as k,Finish as P,MakeCounter as v,Make as i,Rm as d,Validate as c,Ledger as u,JournalPath as t,TextBlock as R,Exec as b,NextAccept as x,TerminalText as w,HashOf as y,SizeOf as F}from"../Harness.js";const J=async()=>{const n=v();d();const h=i(c({logFile:u,journalPath:t})),l=R(w("j".repeat(80),40));s(n,"journalPath is wired into the store",()=>{r.ok(h.State.Store.Path===t)}),await h.Listeners["tools/post-execute"](b("bash"),{isError:!1,value:{},content:l},x),s(n,"the journal: exactly one JSONL record after one store",()=>{const o=S(t)?p(t,"utf8").trim().split(`
-`):[];r.ok(o.length===1)}),s(n,"the journal record carries {hash, type, size, ttlAt}",()=>{const o=S(t)?p(t,"utf8").trim().split(`
-`):[],a=o.length>0?JSON.parse(o[0]):void 0;r.ok(a!==void 0&&a.hash===y(l)&&a.type==="terminal"&&a.size===F(l)&&typeof a.ttlAt=="number")}),s(n,"the journal payload is the base64 of the content's JSON serialization",()=>{const o=S(t)?p(t,"utf8").trim().split(`
-`):[],a=o.length>0?JSON.parse(o[0]):void 0;r.ok(a!==void 0&&Buffer.from(a.payload,"base64").toString("utf8")===JSON.stringify(l))}),s(n,"boot compaction: the corrupt and expired records are dropped, one survives",()=>{f(t,`
-`),f(t,`${JSON.stringify({hash:"e".repeat(24),type:"terminal",size:3,ttlAt:Date.now()-1e3,payload:Buffer.from("[]","utf8").toString("base64")})}
-`),f(t,`{not json at all
-`);const o=i(c({logFile:u,journalPath:t})),a=S(t)?p(t,"utf8").trim().split(`
-`):[];r.ok(a.length===1)}),await k(n,"the journal survives the fake restart: the entry is retrievable again",async()=>{const a=await i(c({logFile:u,journalPath:t})).Registered[0].execute({hash:y(l)},b("ccr_retrieve"));r.ok(a.text===`make: starting
-exit code: 0
-${Array.from({length:40},(N,g)=>`row ${g} ${"j".repeat(80)}`).join(`
-`)}`)}),d();{m(t,"","utf8");const e=i(c({logFile:u,journalPath:t}));s(n,"boot compaction edge: an EMPTY journal file loads to an empty store (no crash)",()=>{r.ok(e.State.Store.Stats().count===0&&e.State.Store.Stats().bytes===0)})}{m(t,`${JSON.stringify({hash:"a".repeat(24),type:"terminal",size:3,ttlAt:Date.now()-1e3,payload:Buffer.from("[]","utf8").toString("base64")})}
-${JSON.stringify({hash:"b".repeat(24),type:"file",size:3,ttlAt:Date.now()-2e3,payload:Buffer.from("[]","utf8").toString("base64")})}
-`,"utf8");const e=i(c({logFile:u,journalPath:t}));s(n,"boot compaction edge: an ALL-EXPIRED journal compacts to an empty store",()=>{r.ok(e.State.Store.Stats().count===0)})}s(n,"boot compaction edge: the all-expired file is rewritten empty",()=>{r.ok(p(t,"utf8").trim()==="")});{const e="/tmp/ccr-smoke-journal-absent.jsonl";try{j(e)}catch{}const o=i(c({logFile:u,journalPath:e}));s(n,"boot compaction edge: a MISSING journal file is not created on boot (memory-only)",()=>{r.ok(o.State.Store.Path===e&&!S(e))})}return P(n,"Journal-Compaction")},A=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(A){const n=await J();console.log(`${n} PASS - Journal-Compaction`)}export{J as runTest};
+import assert from "node:assert/strict";
+import {
+  appendFileSync,
+  existsSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Make,
+  Rm,
+  Validate,
+  Ledger,
+  JournalPath as Journal,
+  TextBlock,
+  Exec,
+  NextAccept,
+  TerminalText,
+  HashOf,
+  SizeOf
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Rm();
+  const Run9 = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+  const Content9 = TextBlock(TerminalText("j".repeat(80), 40));
+  {
+    const Sub = "journalPath is wired into the store";
+    Check(Count, Sub, () => {
+      assert.ok(Run9.State.Store.Path === Journal);
+    });
+  }
+  await Run9.Listeners["tools/post-execute"](
+    Exec("bash"),
+    { isError: false, value: {}, content: Content9 },
+    NextAccept
+  );
+  {
+    const Sub = "the journal: exactly one JSONL record after one store";
+    Check(Count, Sub, () => {
+      const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
+      assert.ok(Lines.length === 1);
+    });
+  }
+  {
+    const Sub = "the journal record carries {hash, type, size, ttlAt}";
+    Check(Count, Sub, () => {
+      const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
+      const Record = Lines.length > 0 ? JSON.parse(Lines[0]) : void 0;
+      assert.ok(
+        Record !== void 0 && Record.hash === HashOf(Content9) && Record.type === "terminal" && Record.size === SizeOf(Content9) && typeof Record.ttlAt === "number"
+      );
+    });
+  }
+  {
+    const Sub = "the journal payload is the base64 of the content's JSON serialization";
+    Check(Count, Sub, () => {
+      const Lines = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
+      const Record = Lines.length > 0 ? JSON.parse(Lines[0]) : void 0;
+      assert.ok(
+        Record !== void 0 && Buffer.from(Record.payload, "base64").toString("utf8") === JSON.stringify(Content9)
+      );
+    });
+  }
+  {
+    const Sub = "boot compaction: the corrupt and expired records are dropped, one survives";
+    Check(Count, Sub, () => {
+      appendFileSync(Journal, "\n");
+      appendFileSync(
+        Journal,
+        `${JSON.stringify({
+          hash: "e".repeat(24),
+          type: "terminal",
+          size: 3,
+          ttlAt: Date.now() - 1e3,
+          payload: Buffer.from("[]", "utf8").toString("base64")
+        })}
+`
+      );
+      appendFileSync(Journal, "{not json at all\n");
+      const Run9b = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+      void Run9b;
+      const Surviving = existsSync(Journal) ? readFileSync(Journal, "utf8").trim().split("\n") : [];
+      assert.ok(Surviving.length === 1);
+    });
+  }
+  {
+    const Sub = "the journal survives the fake restart: the entry is retrievable again";
+    await CheckAsync(Count, Sub, async () => {
+      const Run9b = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+      const Retrieved = await Run9b.Registered[0].execute(
+        { hash: HashOf(Content9) },
+        Exec("ccr_retrieve")
+      );
+      assert.ok(
+        Retrieved.text === `${"make: starting\nexit code: 0\n"}${Array.from({ length: 40 }, (_, I) => `row ${I} ${"j".repeat(80)}`).join("\n")}`
+      );
+    });
+  }
+  Rm();
+  {
+    writeFileSync(Journal, "", "utf8");
+    const Run9c = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+    const Sub = "boot compaction edge: an EMPTY journal file loads to an empty store (no crash)";
+    Check(Count, Sub, () => {
+      assert.ok(
+        Run9c.State.Store.Stats().count === 0 && Run9c.State.Store.Stats().bytes === 0
+      );
+    });
+  }
+  {
+    writeFileSync(
+      Journal,
+      `${JSON.stringify({
+        hash: "a".repeat(24),
+        type: "terminal",
+        size: 3,
+        ttlAt: Date.now() - 1e3,
+        payload: Buffer.from("[]", "utf8").toString("base64")
+      })}
+${JSON.stringify({
+        hash: "b".repeat(24),
+        type: "file",
+        size: 3,
+        ttlAt: Date.now() - 2e3,
+        payload: Buffer.from("[]", "utf8").toString("base64")
+      })}
+`,
+      "utf8"
+    );
+    const Run9d = Make(Validate({ logFile: Ledger, journalPath: Journal }));
+    const Sub = "boot compaction edge: an ALL-EXPIRED journal compacts to an empty store";
+    Check(Count, Sub, () => {
+      assert.ok(Run9d.State.Store.Stats().count === 0);
+    });
+  }
+  {
+    const Sub = "boot compaction edge: the all-expired file is rewritten empty";
+    Check(Count, Sub, () => {
+      assert.ok(readFileSync(Journal, "utf8").trim() === "");
+    });
+  }
+  {
+    const Fresh = "/tmp/ccr-smoke-journal-absent.jsonl";
+    try {
+      rmSync(Fresh);
+    } catch {
+    }
+    const Run9e = Make(Validate({ logFile: Ledger, journalPath: Fresh }));
+    const Sub = "boot compaction edge: a MISSING journal file is not created on boot (memory-only)";
+    Check(Count, Sub, () => {
+      assert.ok(Run9e.State.Store.Path === Fresh && !existsSync(Fresh));
+    });
+  }
+  return Finish(Count, "Journal-Compaction");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Journal-Compaction`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

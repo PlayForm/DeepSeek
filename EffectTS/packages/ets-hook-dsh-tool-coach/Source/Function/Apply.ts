@@ -43,17 +43,18 @@ import type {
 	ToolExecution,
 	ToolExecutionResult,
 } from "@deepseek-ai/dsh-tools";
-import * as Compose from "@Function/Compose.js";
-import Count, { FreshState } from "@Function/Count.js";
-import Detect from "@Function/Detect.js";
-import Enforce from "@Function/Enforce.js";
-import Fetch, { StaticCatalog } from "@Function/Fetch.js";
-import BuildNote, { Prepend } from "@Function/Note.js";
-import type Config from "@Interface/Config.js";
-import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
-import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
+
+import type Config from "../Interface/Config.js";
+import type { AgentState, CoachRow, Decision, Detection } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
+import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../Variable/Patterns.js";
+import * as Compose from "./Compose.js";
+import Count, { FreshState } from "./Count.js";
+import Detect from "./Detect.js";
+import Enforce from "./Enforce.js";
+import Fetch, { StaticCatalog } from "./Fetch.js";
+import BuildNote, { Prepend } from "./Note.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).

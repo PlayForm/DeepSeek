@@ -4,11 +4,11 @@
 // exempt — only the cargo CLI is.
 import * as ChildProcess from "node:child_process";
 
-import type Invocation from "@Interface/Invocation.js";
-import type Job from "@Interface/Job.js";
-import type State from "@Interface/State.js";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
+import type Invocation from "../../../Interface/Invocation.js";
+import type Job from "../../../Interface/Job.js";
+import type State from "../../../Interface/State.js";
 import Unavailable from "./Unavailable.js";
 
 export default (

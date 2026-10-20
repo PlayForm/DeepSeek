@@ -1676,3 +1676,34 @@ browser refresh).
   CURRENT KNOB STATE: the ccr's autoExpandLimitBytes is at 1024 (the test
   flip - restore to 102400 via the panel if the aggressive compression is
   not wanted).
+
+## THE ALIAS-SWEEP INCIDENT + THE CORRECTED DIRECTION (2026-10-20)
+
+- **THE INCIDENT**: the ALIAS-SWEEP lanes (dispatched per the orchestrator's
+  misreading of the user's tsc-alias instruction) ran a scripted conversion
+  pass that DELETED 97 source files (66 Classic + 31 ETS - the packages'
+  core sources + the scripts). The lanes were STOPPED immediately; the
+  orchestrator began the lawful manual restoration (the git show + the
+  write tool - never git mutations); THE USER took over + manually restored
+  all the deleted files (verified: 0 deletions remain; the restored files
+  carry the original bytes - the aliases + the tsc-alias steps intact).
+  LESSON (recorded): the file-write law's "scripted pass" allowance was the
+  hole - the corrected lanes are EDIT-TOOL-ONLY, no scripted filesystem
+  passes.
+- **THE USER'S CORRECTED DIRECTION** (their clarifications, binding): (1)
+  the tsconfig path ALIASES + the rootDir STAY (the Compress-style
+  tsconfigs - the user asked "why did the agents remove rootDir + paths");
+  (2) the MANUAL tsc-alias/awaited-tsc step is REMOVED - @playform/build
+  runs tsc + tsc-alias INTERNALLY awaited (verified against the Build repo:
+  Source/Function/Build.ts:160,163 - the L5A "fire-and-forget" finding was
+  wrong); (3) prepublishOnly.sh + Run.sh live in Source/ for every package
+  (the user's instruction); (4) the family borrows the Compress/Land
+  designs (the @playform/build/tsconfig base + the config conventions - the
+  ALIGN consideration recorded). The earlier alias-removal direction was
+  the orchestrator's misinterpretation - superseded.
+- **THE CORRECTED-SWEEP LANE** (`febb5997`, GLM flash high) DISPATCHED: the
+  whole-tree reconcile - the tsconfigs' rootDir + paths restored, the
+  partial relative-import conversions reverted to the aliases, the scripts
+  moved to Source/ + the tsc-alias/awaited-tsc step removed, the arbiters:
+  the serialized 29-package build + the 207 suites + the declaration
+  hygiene + the parity. EDIT-TOOL-ONLY (the hard lesson).

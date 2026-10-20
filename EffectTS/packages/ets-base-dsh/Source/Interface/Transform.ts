@@ -23,7 +23,7 @@
 // refused rewrite — the module logs its own lines for those BEFORE returning
 // null, e.g. the refusal line of the governors). It must not throw for
 // expected conditions; an unexpected throw is contained by Function/Continue.
-import type Output from "@Interface/Output.js";
+import type Output from "./Output.js";
 
 export default interface Transform {
 	(current: string | null, section: unknown, keep: string[]): Output | null;

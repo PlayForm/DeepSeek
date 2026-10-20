@@ -1,6 +1,6 @@
-import type State from "../Interface/State.js";
+import type { Log } from "../Function/Render.js";
 import type { MonitorRecord } from "../Interface/Events.js";
-import type { Log } from "./Render.js";
+import type State from "../Interface/State.js";
 /** The record write path (best-effort, never on a caller path): through the
  * bound sink when the domain is open, else buffered in the pre-bind queue. */
 export declare const Record: (State: State, Entry: MonitorRecord) => void;

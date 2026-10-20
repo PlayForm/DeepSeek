@@ -28,10 +28,10 @@
 // attached P1 controller (Factory.Attach); the subprocess seam (bin mode) is
 // probed once by the factory's State builder (P9).
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/hook-dsh-core";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import * as Direct from "./Direct.js";
 import Observe from "./Observe.js";
 

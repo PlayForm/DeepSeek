@@ -29,8 +29,9 @@
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-import { NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
-import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
+
+import { NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT } from "./Notes.js";
+import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "./Patterns.js";
 
 export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/hook-dsh-tool-coach.log").volatile(),

@@ -24,7 +24,7 @@
 //      it just bound and retires it.
 //   3. PER-STATE FALLBACK — the defensive default (no shared sink, buffer
 //      retired): the per-State sink (queue or retired no-op), unchanged.
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 
 export default (
 	Factory: {

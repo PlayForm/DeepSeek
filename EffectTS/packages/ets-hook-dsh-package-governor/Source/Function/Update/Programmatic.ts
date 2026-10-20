@@ -8,8 +8,8 @@
 // ledger directly instead of the old child's inherited fd).
 import { join as Join } from "node:path";
 
-import type Invocation from "@Interface/Invocation.js";
-import type State from "@Interface/State.js";
+import type Invocation from "../../Interface/Invocation.js";
+import type State from "../../Interface/State.js";
 
 export default async (
 	State: State,

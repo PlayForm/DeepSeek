@@ -39,7 +39,8 @@
 // the import resolves from the running dsh's own copy,
 // docs/user/develop/basic/publish.md:103).
 import Schema from "@deepseek-ai/schemastery";
-import Default from "@Variable/Default.js";
+
+import Default from "../Variable/Default.js";
 
 export default (
 	Shared:

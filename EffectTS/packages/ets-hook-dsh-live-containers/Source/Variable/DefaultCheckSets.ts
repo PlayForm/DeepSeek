@@ -17,7 +17,7 @@
 // eval. The `link: "governance"` set carries NO command: the band renders
 // the linked form and the plugin never re-runs npm (the R3 3.2 rule: the
 // the governor/pinner's own verbs are not duplicated).
-import type { CheckSetSpec } from "@Interface/Events.js";
+import type { CheckSetSpec } from "../Interface/Events.js";
 
 export const DEFAULT_CHECK_SETS: Record<string, CheckSetSpec> = {
 	tsc: { glob: "**/*.ts", command: "tsc --noEmit {{path}}", fast: true },

@@ -1,6 +1,6 @@
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
-import type { Scopes } from "./Config.js";
+import type { Scopes } from "../Interface/Config.js";
 export default interface State extends Shared {
     /** The dash replacement — the transform's only knob (config `replacement`). */
     Replacement: string;

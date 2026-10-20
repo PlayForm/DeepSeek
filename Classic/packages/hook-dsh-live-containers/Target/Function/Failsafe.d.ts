@@ -1,5 +1,5 @@
+import type { Log } from "../Function/Render.js";
 import type State from "../Interface/State.js";
-import type { Log } from "./Render.js";
 /** The drift thresholds the failsafe layer owns (the validator template's
  * automatic twin; 04 scenario 4 - thresholds are constants of the layer, the
  * session-stats block's own vars are the user-facing twin). */

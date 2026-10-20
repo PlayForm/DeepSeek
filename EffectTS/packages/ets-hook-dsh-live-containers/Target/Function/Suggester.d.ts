@@ -1,5 +1,5 @@
-import type State from "../Interface/State.js";
 import type { BoardState, Suggestion } from "../Interface/Events.js";
+import type State from "../Interface/State.js";
 import type { Log } from "./Render.js";
 /** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
 export declare const NewId: () => string;

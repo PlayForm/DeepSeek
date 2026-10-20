@@ -1,6 +1,6 @@
-import type State from "../Interface/State.js";
+import type { Log } from "../Function/Render.js";
 import type { BoardState, Suggestion } from "../Interface/Events.js";
-import type { Log } from "./Render.js";
+import type State from "../Interface/State.js";
 /** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
 export declare const NewId: () => string;
 /** The gate (I6 6.1, conjunctive): first user message of a turn AND length

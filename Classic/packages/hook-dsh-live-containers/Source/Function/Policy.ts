@@ -21,9 +21,9 @@
 // owns the marker check and the waterfall branches.
 //
 // All time reads go through the State's clock seam (the smoke's fake clock).
-import Clock from "@Function/Clock.js";
-import type State from "@Interface/State.js";
-import type { DetachConfig } from "@Interface/State.js";
+import Clock from "../Function/Clock.js";
+import type State from "../Interface/State.js";
+import type { DetachConfig } from "../Interface/State.js";
 
 /** The permanently non-detachable content-mutating family (I1 12.1, HARD -
  * hardcoded, never config; rejected even under "all" and "selected"). */

@@ -34,10 +34,10 @@
 // plain-fs exemption, and the chunk vocabulary arrives through the
 // waterfall, not through an import.
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "@Interface/Config.js";
-import type State from "@Interface/State.js";
 import { Activate } from "@playform/hook-dsh-core";
 
+import type Config from "../Interface/Config.js";
+import type State from "../Interface/State.js";
 import Command, {
 	type CommandsService,
 	type ConfigEditorService,

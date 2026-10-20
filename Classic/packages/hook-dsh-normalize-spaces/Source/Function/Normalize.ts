@@ -50,8 +50,8 @@
 //     delta/block whose `name` is "edit" on every chunk individually (the
 //     edit tool's `old_string` must match the real file bytes).
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import type State from "@Interface/State.js";
 
+import type State from "../Interface/State.js";
 import Chunk from "./Chunk.js";
 
 export default async function* (

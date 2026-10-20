@@ -37,8 +37,9 @@
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
-import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
-import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
+
+import { DEFAULT_BLOCKS } from "./DefaultBlocks.js";
+import { DEFAULT_CHECK_SETS } from "./DefaultCheckSets.js";
 
 export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/live-containers.log").volatile(),
