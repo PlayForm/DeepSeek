@@ -1,4 +1,13 @@
 FAMILY-INTERACTIONS-RESEARCH - how the @playform DSH plugin family works alone and together
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md |
+| Category | Researches                           |
+| Kind     | Research output                      |
+| Date     | 2026-10-20                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
 Date: 2026-10-20 (Europe/Sofia). Author: research agent R-INTERACT (parent session-491a5774).
 Scope: Classic/packages/* (15 packages). Read-only: this file is the only artifact written.
 All claims anchored to Source/ reads in Classic/packages/, live ~/.dsh state, and Documentation/Plans/*.
@@ -465,3 +474,15 @@ RESIDUALS (not verified / out of scope):
   notes, not from a profile dump audit.
 - Exact byte-level smoke assertion coverage for the overpass marker guard was taken from
   the Source/Test/Overpass files' self-descriptions, not re-run.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The per-plugin one-pagers (the 15 Classic packages)      | resolved    | sections 2.1-2.8 + A3                                            | 2026-10-20 |
+| The interactions matrix (the synergies + the frictions)  | resolved    | the matrix; the ccr+normalize overpass ordering is the best synergy | 2026-10-20 |
+| The ccr truth (no ccr.db/sqlite; retrieval-only)         | resolved    | section 3; the user's example resolved                           | 2026-10-20 |
+| The recommendations R1-R10                               | open        | section 5 - ready for the implementation lanes                   | 2026-10-20 |
+| The best synergy wiring (ccr before normalize)           | implemented | the profile order; the marker guard in the overpass arm          | 2026-10-20 |

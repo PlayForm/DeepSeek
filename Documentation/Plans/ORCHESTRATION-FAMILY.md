@@ -1,5 +1,14 @@
 # THE ORCHESTRATION FAMILY - the integrated message bus (dedicated 2026-10-09)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/ORCHESTRATION-FAMILY.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-09                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 > The user's mandate: think of the plugin family as an INTEGRATED MESSAGE BUS -
 > disperse the information with the blocks + the active communication /
 > programming paradigms already in place, looped in a different way - structured
@@ -275,3 +284,13 @@ Perm(a) = f( tool(a), modelFamily(a), role(a), pluginBehavior(a) )
   (the plugin funcs) consult it internally; the agents act on the compiled
   outputs without ever seeing the configuration (the user's responsibility,
   the system's silence).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                        | Status   | Evidence                                                            | Date       |
+| ---------------------------------------------------- | -------- | -------------------------------------------------------------------- | ---------- |
+| The integrated message bus (the council hub)         | open     | this document only - design notes, no package                        | 2026-10-09 |
+| The four members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK) | open | each documented separately in Documentation/Plans/ | 2026-10-09 |
+| The interim mechanism (the skills)                   | implemented | Documentation/Skill/orchestrator-batch/ + worker-strains/ live    | 2026-10-20 |

@@ -1,5 +1,14 @@
 # HONEST-FEEDBACK PLUGIN - the fourth orchestration member (dedicated 2026-10-09)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-09                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 > The user's mandate: "an HONEST feedback footer, which inserts a dynamic HONEST
 > feedback block which can be transferred (without being read) - it's always
 > modified in parent sessions, to know / disknow what the sub agents liked /
@@ -117,3 +126,12 @@ READ-STATUS: unread / read-at <session>   <- the recipient's choice, recorded
 - The read is always the recipient's choice (the know/disknow - never force-read).
 - The family's plugin discipline (the smokes, the loader contract, the no-commit).
 - The user's override wins (the honest signals are his knowledge).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                    | Status   | Evidence                                                       | Date       |
+| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
+| The honest-feedback plugin (the fourth member)   | open     | this document only - spec, no package                           | 2026-10-09 |
+| The transferred-unread feedback block            | open     | the spec's mechanism                                            | 2026-10-09 |

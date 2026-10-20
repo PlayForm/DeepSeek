@@ -1,5 +1,14 @@
 # Package-Governor — Commutative Scheme & Diagram (v1.3, TypeScript, anywhere mode)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/Governor-SCHEME.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-03                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-CASCADES.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
 > handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
@@ -387,3 +396,13 @@ Activation of one never implies another; the user decides.
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs
 [dsh-cordis]: https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis
 [dsh-fs-2]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The commutative scheme (G = U composed with P)           | implemented | documents the shipped pipeline; verified live 2026-10-03          | 2026-10-03 |
+| The test plan (section 9)                                | resolved    | verified live against the built bundle                            | 2026-10-03 |
+| The silence invariant                                    | implemented | the probe showed the governed write with no user notification     | 2026-10-20 |

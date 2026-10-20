@@ -1,5 +1,14 @@
 # SUBAGENT-QUEUE PLUGIN - the task-queue specification (dedicated 2026-10-09)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-09                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 > The third orchestration-layer plugin (next to BATCH-STATE + ROUTING-ENFORCER).
 > The user's mandate: "the subagent QUEUE specification, which allows you to QUEUE
 > tasks, not the same as IDLING agents" + "increase the limit so the main
@@ -139,3 +148,13 @@
 - The capacity model + the child-cap enforcement.
 - The batch-state + the routing integrations.
 - The probe's findings (the pool + the reservation surface).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                    | Status   | Evidence                                                       | Date       |
+| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
+| The subagent-queue plugin (the task queue)       | open     | this document only - spec, no package                           | 2026-10-09 |
+| The capacity model (10 held / 2 children)        | open     | the spec's model; the runtime's own limits still apply          | 2026-10-09 |
+| The pool + reservation surface (the probe)       | open     | the probe's findings recorded in the spec                       | 2026-10-09 |

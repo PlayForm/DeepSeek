@@ -1,5 +1,14 @@
 # DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/DSH-REGISTRY-LISTING.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-10                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > The listing the family publishes under once the npm lane arms the publish
 > (`.github/workflows/NPM.yml` is PUBLISH-PENDING behind the `if: false` guard;
 > everything sits at version `0.0.1`, never published). This file is the filled
@@ -110,3 +119,13 @@ the byte-identical contract:
   outside the tree.
 - The publish remains PUBLISH-PENDING (`NPM.yml` `if: false`) until the npm lane arms it after
   the S4 gate.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The registry identity + the roster (the two groups + the base) | resolved | documented in this file                                     | 2026-10-10 |
+| The npm publish                                          | deferred    | PUBLISH-PENDING (NPM.yml if: false); see Documentation/Plans/TRUSTED-PUBLISHER.md | 2026-10-10 |
+| The GitHub repo topics                                   | open        | a repo-settings action - the user's call                          | 2026-10-10 |

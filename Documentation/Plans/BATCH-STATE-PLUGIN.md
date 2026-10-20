@@ -1,5 +1,14 @@
 # BATCH-STATE PLUGIN - the cooperative context plan (dedicated 2026-10-08)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/BATCH-STATE-PLUGIN.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-08                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 > The user's mandate: "harness the full agent's power harness" - the best, fullest, most
 > un-afraid compatibility with context modification + programmatic use. The goal: every
 > agent's context becomes a FUNCTION of the co-operative approach - a dynamic table of
@@ -234,3 +243,13 @@ Context(agent, t) = [ TOC | Scope(agent) | Gates | History(agent) ]   <- the bak
 OLD: BLOCK, BLOCK, BLOCK, NEW BLOCKS (the state descriptions accumulate in the history - repetitive, stale).
 NEW: DYNAMIC BLOCK (recompiled + replaced on every send - constant size, never extending the conversation) + BLOCK, BLOCK, BLOCK, NEW BLOCKS.
 And the refinement: the DYNAMIC BLOCK is not "understood" - it is COMPILED: the pre-baked outputs of the deterministic orchestration compiler, injected programmatically, read mechanically by the agents - "a context becomes a function of this co-operative approach": Context = Compile(State).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                  | Status   | Evidence                                                       | Date       |
+| ---------------------------------------------- | -------- | --------------------------------------------------------------- | ---------- |
+| The batch-state plugin (the compiled context)  | open     | this document only - spec, no package                           | 2026-10-08 |
+| The dynamic block concept (Context = Compile(State)) | open | the spec's final refinement                                    | 2026-10-08 |
+| The interim equivalent (the live-containers dynamic context) | implemented | hook-dsh-live-containers - the wave-2 dynamic-context carrier | 2026-10-20 |

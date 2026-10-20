@@ -1,5 +1,14 @@
 # ROUTING-ENFORCER PLUGIN - the silent auto-routing plan (dedicated 2026-10-09)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-09                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 > The user's mandate: prevent the orchestrator from slipping out of the model-routing
 > discipline - but SILENTLY: the plugin automatically chooses the behavior, so the
 > orchestrator is not even bothered and does not have to know about the model
@@ -140,3 +149,13 @@ Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 - The ledger + the audit format.
 - The batch-state integration (the routing gates).
 - The probe's findings (the launch-path mechanics).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                    | Status   | Evidence                                                       | Date       |
+| ------------------------------------------------ | -------- | --------------------------------------------------------------- | ---------- |
+| The routing-enforcer plugin (the silent auto-routing) | open | this document only - spec, no package                           | 2026-10-09 |
+| The policy reader + keyword table                | open     | the spec's mechanism                                            | 2026-10-09 |
+| The manual routing discipline (the interim)      | implemented | the task-routing skill; enforced by convention                  | 2026-10-20 |

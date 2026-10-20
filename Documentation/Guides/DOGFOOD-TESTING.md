@@ -1,5 +1,14 @@
 # DOGFOOD-TESTING - The `~/.dsh` Integration-Test Specialization
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/DOGFOOD-TESTING.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-09                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > Status: **PLAN** (documentation only; no code, no installs executed).
 > Scope: extend the family's test coverage from the 24 fake-ctx smokes to the
 > LIVE harness runtime, using a **scratch profile** that installs this
@@ -387,3 +396,13 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
   reworded, in smokes and in live assertions alike.
 - Totals stay truthful: 733 Classic / 746 EffectTS mechanics checks; the
   wiring checks are reported separately, never folded into those numbers.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The scratch-profile live battery (no symlinks)           | implemented | accepted in A2's activation; the DSH_TEST_SCRATCH-style battery   | 2026-10-20 |
+| The wiring suites (Run-Wiring, 28 suites / 272 checks)   | implemented | "All 28 wiring suites passed" after the I9 fix                    | 2026-10-20 |
+| The dogfood subhome freshness                            | open        | the subhome must be re-installed after any rebuild (the recorded pitfall) | 2026-10-20 |

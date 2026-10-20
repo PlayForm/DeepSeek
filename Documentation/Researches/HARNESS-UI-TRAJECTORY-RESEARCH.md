@@ -1,6 +1,15 @@
 HARNESS-UI-TRAJECTORY-RESEARCH
 ==============================
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Researches/HARNESS-UI-TRAJECTORY-RESEARCH.md |
+| Category | Researches                           |
+| Kind     | Research output                      |
+| Date     | 2026-10-20                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
+
 Agent: R-UI-3
 Date: 2026-10-20
 Question: can the harness TRAJECTORY screen (dsh-client-ui-trajectory) be
@@ -348,3 +357,15 @@ RESIDUALS
 	- Family adapters' client halves will need each linked checkout to
 		carry its own node_modules (pnpm --ignore-workspace) - known dev-loop
 		caveat, not a design blocker.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The trajectory verdict (no additive slots; the images slot only) | resolved | the asar sources + slots.md agree                          | 2026-10-20 |
+| The adapter architecture (the central panel + the 13 adapters) | resolved | section 3 - the architecture formalized                      | 2026-10-20 |
+| Option A (the sibling family tab via conversation.view)  | resolved    | designed, no harness changes needed                               | 2026-10-20 |
+| Option B (the upstream trajectory.sections declaration)  | open        | requires the upstream owner-only change                           | 2026-10-20 |
+| The POC (the tool-coach ladder)                          | open        | planned in Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md   | 2026-10-20 |

@@ -1,5 +1,14 @@
 # The Trio — Cascade Matrix, Nuanced Edition
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/Governor-CASCADES.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-03                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder; the
 > handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
@@ -173,3 +182,12 @@ settle code (0/1/2)            ──▶ breaker + jobs done{status, detail}
 ```
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The cascade matrix documentation (all 10 sections)       | implemented | documents the shipped trio; the behaviors are in the packages     | 2026-10-20 |
+| The async boundary + the data flow tables                | implemented | documented; the governors live-proven 2026-10-20                  | 2026-10-20 |

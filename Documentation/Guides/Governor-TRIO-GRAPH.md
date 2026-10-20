@@ -1,5 +1,14 @@
 # The Trio — Internals & API-Surface Graph
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/Governor-TRIO-GRAPH.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-03                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > One of the four Governor guides migrated to `Documentation/Guides/` — the companion docs are
 > `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder; the handoff
 > context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
@@ -185,3 +194,12 @@ opaque per backend).
 
 [dsh-subprocess]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The API-surface graph (what the trio calls / does not)   | implemented | documents the shipped packages; the exemptions documented in-code | 2026-10-03 |
+| The research verdict (section 6)                         | resolved    | the exploration agent's docs-anchored verdict                     | 2026-10-03 |

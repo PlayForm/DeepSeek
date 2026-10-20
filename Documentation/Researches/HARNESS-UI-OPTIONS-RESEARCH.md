@@ -1,4 +1,13 @@
 # HARNESS-UI-OPTIONS-RESEARCH - making the family's per-plugin config options UI-accessible and UI-powered
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Researches/HARNESS-UI-OPTIONS-RESEARCH.md |
+| Category | Researches                           |
+| Kind     | Research output                      |
+| Date     | 2026-10-20                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
 Author: R-UI-2 (research subagent). Date: 2026-10-20. Read-only research; this is the only file written.
 
 Scope: the DeepSeek Harness Plugin Family's per-plugin config options (the governors' policy/cooldown, the pinner's sections, the normalize flavors, the ccr thresholds, the tool-coach tiers, the live-containers blocks) - are they UI-accessible today, and can they become UI-powered (editable + controllable through the harness UI, including the live volatile reloads).
@@ -322,3 +331,13 @@ Residual constraints to know before building:
   confirmation (client inspect queries timed out with the page closed); the
   Plugins-page behavior was verified from the shipped client bundle source and
   package READMEs instead.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The config chain verdict (the settings services + the volatile fields) | resolved | the asar sources + the family Config.ts files agree          | 2026-10-20 |
+| The UI-powered options implementation (the config forms)  | open        | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md             | 2026-10-20 |
+| The DOM-level GUI confirmation                            | open        | the live GUI page was not reachable at query time                 | 2026-10-20 |

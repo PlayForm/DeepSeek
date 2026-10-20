@@ -1,5 +1,14 @@
 UI-FAMILY-IMPLEMENTATION-PLAN
 =============================
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-20                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
 The expanded, exact, step-by-step plan for implementing the researched DeepSeek
 Harness UI features for the @playform plugin family. Written 2026-10-20 by the
 PLAN-EXPANDER explorer agent. ASCII + tabs. This file is the handoff document
@@ -7,9 +16,9 @@ for a NEW conversation that begins implementation.
 
 Foundations (read these first, in this order):
 	Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md      (R-UI-1: the Plugins page slots)
-	Documentation/Plans/HARNESS-UI-OPTIONS-RESEARCH.md     (R-UI-2: the volatile config chain)
-	Documentation/Plans/HARNESS-UI-TRAJECTORY-RESEARCH.md  (R-UI-3: the panel contract + adapters)
-	Documentation/Plans/FAMILY-INTERACTIONS-RESEARCH.md    (R-INTERACT: the ccr truth + R1-R10)
+	Documentation/Researches/HARNESS-UI-OPTIONS-RESEARCH.md     (R-UI-2: the volatile config chain)
+	Documentation/Researches/HARNESS-UI-TRAJECTORY-RESEARCH.md  (R-UI-3: the panel contract + adapters)
+	Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md    (R-INTERACT: the ccr truth + R1-R10)
 
 ================================================================================
 0. THE NEW-CONVERSATION BRIEF (paste/read this section first)
@@ -203,7 +212,7 @@ land. Per the git law this phase PREPARES; the user commits.
 EXACT LOCATIONS
 - Site/ (the Astro tree; build outDir Site/Target)
 - Site/Documentation/TRACKING.md (the batch feedback ledger)
-- Documentation/Plans/SITE-UPDATE-BLUEPRINT.md, SITE-UPDATE-NOTE.md
+- Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md, Documentation/Archive/Site/SITE-UPDATE-NOTE.md
 
 EXACT STEPS
 1. git status --porcelain and git log --oneline -10 (checks only). If the tree
@@ -219,7 +228,7 @@ EXACT STEPS
 	build evidence. The user commits and pushes. Do NOT run git add/commit/
 	push under any circumstances.
 
-ANCHORS: Documentation/Plans/SITE-UPDATE-BLUEPRINT.md (the site's page
+ANCHORS: Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md (the site's page
 inventory and lane laws); session-orientation section 6 (the lane laws).
 
 ACCEPTANCE
@@ -827,3 +836,16 @@ import its types only; the tool-coach is the first adapter and carries the
 marker-usage rule; the Typert endpoint is spiked standalone with the
 registry-only fallback pre-decided; and the trajectory screen stays untouched
 until upstream ships conversation.trajectory.sections.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                          | Date       |
+| -------------------------------------------------------- | ----------- | ------------------------------------------------------------------ | ---------- |
+| The implementation plan (the expanded brief)              | open        | this document - awaiting the user's dispatch                       | 2026-10-20 |
+| The four research inputs (R-UI-1/2/3 + R-INTERACT)        | resolved    | Documentation/Researches/ - all four delivered                     | 2026-10-20 |
+| The central @playform/dsh-panel-family package            | open        | planned, no package exists                                         | 2026-10-20 |
+| The 13 per-plugin client adapters                         | open        | planned, no package exists                                         | 2026-10-20 |
+| The tool-coach adapter (the first, with the marker-usage rule) | open   | planned as the POC                                                 | 2026-10-20 |
+| The trajectory family tab (Option A)                      | open        | planned; upstream conversation.trajectory.sections is Option B     | 2026-10-20 |

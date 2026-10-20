@@ -322,3 +322,14 @@ coach assumes volatile cells reach `apply` as stable references after it lands
    (d) bundle name `hook-dsh-tool-coach` vs `hook-dsh-guardian` (the code-authoring
    mandate calls it "guardian"; tool-coach matches the broader read+write+search
    scope).
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The research (the tool map + the tier model)             | resolved    | this document; the claims anchored to file:line                  | 2026-10-19 |
+| The tool-coach plugin                                    | implemented | Archive/Tool-Coach/TOOL-COACH-PLAN.md; live-proven (the tier-1 notes fired) | 2026-10-20 |
+| The bundle name decision (tool-coach vs guardian)        | resolved    | hook-dsh-tool-coach shipped                                      | 2026-10-20 |
+| The parent's open questions (threshold/window, enforce default) | resolved | shipped with the safe defaults (enforce off)                 | 2026-10-20 |

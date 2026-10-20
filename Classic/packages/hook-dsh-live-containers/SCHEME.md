@@ -24,7 +24,7 @@ FIXED frame so the model cannot mistake it for harness state:
 ```
 
 Source of truth: `Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md` (sections
-3-5) and `Documentation/Plans/LiveContainers/Design/IMPLEMENTATION-DESIGN.md`
+3-5) and `Documentation/Archive/Live-Containers/Design/IMPLEMENTATION-DESIGN.md`
 (phase 1).
 
 ## 1. The injection point - the four phase-1 listeners

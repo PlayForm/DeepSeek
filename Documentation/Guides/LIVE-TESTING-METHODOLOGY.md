@@ -1,5 +1,14 @@
 # Live-Testing Methodology - the Family Test Loop (2026-10-19)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Guides/LIVE-TESTING-METHODOLOGY.md |
+| Category | Guides                               |
+| Kind     | Guide                                |
+| Date     | 2026-10-19                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > A framework for LIVE-TESTING the DSH plugin family from a NEW conversation
 > (e.g. after restarting the app and opening a conversation in the DeepSeek
 > folder), WITHOUT restarting the app between tests. The loop: toggle a
@@ -128,3 +137,14 @@ is needed ONLY for profile-structural changes (the restart matrix, section
 - Any profile structural change (new patch rows for plugins not yet loaded).
 Everything else - knobs, scopes, masters, enforce tiers, plain-field
 re-applies - is live.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The live-reload truth table (live vs restart)            | implemented | the methodology; used in the 2026-10-20 live testing              | 2026-10-20 |
+| The per-plugin test loop + the mock-task library         | implemented | used for the live probes (the governance trio, the CCR, the coach)| 2026-10-20 |
+| The restart matrix (when a restart is required)          | implemented | proven: the profile changes required the restart                  | 2026-10-20 |
+| The loader-level plugin behavior + the logging caveats   | resolved    | updated with the loader-level findings (d2efca0)                  | 2026-10-19 |

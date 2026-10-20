@@ -3,8 +3,8 @@
 Date: 2026-10-19
 Status: implementation design - the byte-ready spec the CODER (C2) executes
 Prepared by: the DESIGN lane D2 (cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low)
-Base: Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md (v1) + Documentation/Plans/
-LiveContainers/Requirements/00-07 (wave 2) + the I1 binding constraints (00
+Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (v1) + Documentation/Archive/Live-Containers/
+Requirements/00-07 (wave 2) + the I1 binding constraints (00
 section 5.7-5.8, 01 section 12, 07 section 5).
 Scope: ONE package, two twins - Classic/packages/hook-dsh-live-containers +
 EffectTS/packages/ets-hook-dsh-live-containers. Wave 2 EXTENDS THE SAME

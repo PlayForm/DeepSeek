@@ -1,5 +1,14 @@
 # Aphrodite ↔ DeepSeek Harness: Rust Dylib Integration Plan
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/APHRODITE-RUST-DYLIB-INTEGRATION.md |
+| Category | Plans                                |
+| Kind     | Queued plan                          |
+| Date     | 2026-10-19                           |
+| State    | Planned                              |
+| Index    | Documentation/INDEX.md               |
+
 **Date:** 2026-10-19
 **Scope:** How a DSH plugin-family bundle integrates with Aphrodite, and how the Rust binary ships (dylib vs alternatives) so the main DeepSeek Harness can use it.
 **Foundation:** `docs/research/2026-10-19-hermes-aphrodite-research.md` (parent-verified). All commands below were actually run against the live machine.
@@ -104,3 +113,13 @@ Config { mode, dylib_path?, proxy_url?, mgmt_token? }
 3. `catalog_mode` / `classifier_poll` are parsed-but-unwired upstream (`aphrodite.toml.example:102-103`) - skip in Config or accept-and-warn?
 4. Should the family reuse the user's existing `~/.hermes/aphrodite/` install (shared ccr.db and session) or isolate its own runtime home? Shared gives cross-session cache; isolated avoids coupling to Hermes.
 5. Can Electron's hardened runtime / code-signing reject `koffi.load` of a non-embedded dylib on macOS (Gatekeeper quarantine)? Needs a signed-build test.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                          | Status   | Evidence                                                            | Date       |
+| ------------------------------------------------------ | -------- | -------------------------------------------------------------------- | ---------- |
+| The dylib integration plan (Aphrodite <-> DeepSeek)     | open     | this document only - no integration work started                      | 2026-10-19 |
+| The command verification (all commands run live)        | resolved | the plan's stated basis - every command actually run                  | 2026-10-19 |
+| The open questions (sections 4-5, the signed-build test)| open     | listed in the body, unresolved                                        | 2026-10-19 |

@@ -1,5 +1,14 @@
 HARNESS-UI-PLUGIN-RESEARCH
 Research agent R-UI-1 - 2026-10-20
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md |
+| Category | Researches                           |
+| Kind     | Research output                      |
+| Date     | 2026-10-20                           |
+| State    | Complete                             |
+| Index    | Documentation/INDEX.md               |
 Question: can a PLUGIN modify the harness Web UI to better display the @playform
 family (13 bundles currently shown as generic plugin-manager rows)?
 
@@ -212,3 +221,12 @@ A6	All visible strings route through the client locale service; icon original.
 	populating the roster.
 - The user-named path ~/Developer/Documentation/deepseek-harness does not exist;
 	this report uses ~/Developer/Documentation/Module/deepseek-harness/.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                            | Status      | Evidence                                                        | Date       |
+| -------------------------------------------------------- | ----------- | ---------------------------------------------------------------- | ---------- |
+| The verdict (the Plugins page's child slots are extensible) | resolved  | the asar sources + the slot docs agree                           | 2026-10-20 |
+| The implementation (the family's client plugins)          | open        | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md             | 2026-10-20 |

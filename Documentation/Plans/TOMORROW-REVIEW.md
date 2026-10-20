@@ -1,5 +1,14 @@
 # TOMORROW-REVIEW - The Descriptive Plan (preserved 2026-10-07 for tomorrow's review)
 
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Registry | Documentation/Plans/TOMORROW-REVIEW.md |
+| Category | Plans                                |
+| Kind     | Living record                        |
+| Date     | 2026-10-07                           |
+| State    | Active                               |
+| Index    | Documentation/INDEX.md               |
+
 > The complete state + the plan for the next session. The user will run the
 > whole process again - this document is the descriptive reference: what
 > exists, what is in flight, what is missing, and how tomorrow's process
@@ -47,7 +56,7 @@ EffectTS:    core 17 / factory 41 / governor 81 / pinner 32 / cargo 62 /
    and the `/setup/` page (the 4-step profile wiring + the configurable
    surface + the optionality + the ledgers table). 20 pages.
 2. **The case-study research** - COMPLETE
-   (`Documentation/Plans/CASE-STUDY-PLAN.md`).
+   (`Documentation/Archive/Site/CASE-STUDY-PLAN.md`).
 3. **The third pass case-study agent** (76a9cc4a) - COMPLETE: the
    `/case-study/` narrative page (the 8-phase arc + the in-page index +
    the 13-row decision table incl. the signal-mapping beat + the
@@ -358,7 +367,7 @@ on completion.
 ## QUEUE ADDITION (2026-10-19) - Smoke-suite restructure (user-mandated, NOT yet implemented)
 
 The user dictated a future restructuring of the family's smoke tests; the full
-spec lives in `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-NOTE.md`. Summary:
+spec lives in `Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md`. Summary:
 per-test folders under `EachPlugin/Source/Test/<name>/` (one singular test file
 with a deeply nested assertion hierarchy + a `README.md` describing exactly what
 the test verifies), runnable one-by-one and aggregated by the main Smoke file;
@@ -374,7 +383,7 @@ normalization + tool-coach work settles.
 
 ## QUEUE ADDITION (2026-10-19) - Site update for the new family functionality (user-mandated, NOT yet implemented)
 
-Full spec: `Documentation/Plans/SITE-UPDATE-NOTE.md`. Summary: (1) reflect all
+Full spec: `Documentation/Archive/Site/SITE-UPDATE-NOTE.md`. Summary: (1) reflect all
 new functionality on the site + update the plugin READMEs - the CCR hook, the
 granular scopes + live volatile toggles, the overpass mechanism, and the
 tool-coach guardian; (2) homepage: under the "Pinned manifests,
@@ -405,8 +414,8 @@ restructure settles.
 - **The dispatch plan (the 2-active law, all routes cloudflare-workers-ai /
   @cf/zai-org/glm-5.3-flash)**: Wave 1 = the two READ-ONLY blueprint explorers
   (both dispatched 2026-10-19): `6ca70e6f` (the smoke-restructure blueprint ->
-  `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`) + `19ffb358` (the
-  site-update blueprint -> `Documentation/Plans/SITE-UPDATE-BLUEPRINT.md`).
+  `Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`) + `19ffb358` (the
+  site-update blueprint -> `Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md`).
   Wave 2 = the restructure PILOT (one plugin pair end-to-end: the Source/Test
   folders + the TS rewrite + the two-step compile + prepublishOnly.sh/Run.sh +
   the aggregate runner), effort high. Wave 3 = the fan-out lanes over the
@@ -422,7 +431,7 @@ restructure settles.
 ## BATCH WAVE-1 RESULTS (2026-10-19 - both blueprint explorers COMPLETE)
 
 - **The smoke-restructure blueprint**: `6ca70e6f` COMPLETE ->
-  `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md` (643 lines). The
+  `Documentation/Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md` (643 lines). The
   inventory: 28 packages, 42 suites (21 per tree - the note's "41" is stale,
   flagged), ~248 proposed test folders (124 per tree, 3-8 per suite); the exact
   folder splits for core/dash/ccr; the byte-ready templates (TS test skeleton
@@ -435,7 +444,7 @@ restructure settles.
   fan-out L1-L6; the traps (parity-by-generation, no aliases in tests, tabs,
   ASCII with \u escapes, baseline-recording).
 - **The site-update blueprint**: `19ffb358` COMPLETE ->
-  `Documentation/Plans/SITE-UPDATE-BLUEPRINT.md` (767 lines). The inventory: 21
+  `Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md` (767 lines). The inventory: 21
   pages mapped (THE PIN Showcase index.astro:328-337, THE GOVERN 338-347; the
   Showcase has no bottom slot - the blueprint adds a slot="supports" line); the
   supports-button use-case copy extracted from the real READMEs (pinner =
@@ -556,7 +565,7 @@ the set limit" }`. The user mandated: a researcher agent (glm-5.3-flash LOW -
 the user's explicit route) researches + brainstorms feasibility + prepares
 THREE more agent specs; the 3 agents are seated IDLE and execute later; the
 plugin itself stays IDLE in the profile (never enabled). The full spec +
-brainstorm land in `Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md` (the
+brainstorm land in `Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md` (the
 researcher's deliverable, dispatched 2026-10-19).
 - **RESEARCH COMPLETE (2026-10-19, `b45ae200`)**: the verdict = POSSIBLE for
   the core mechanic via the system-prompt/assemble waterfall (the tool-coach's
@@ -957,7 +966,7 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
 - **THE OVERNIGHT RUN (2026-10-19 - the user: "I'm going to bed, don't
   ask me anything, proceed until all is done")**: the automation runs to
   completion. THE SITE-LANE DISPATCH PREP (mechanical, per the E2
-  blueprint - Documentation/Plans/SITE-UPDATE-BLUEPRINT.md): SITE-B (the
+  blueprint - Documentation/Archive/Site/SITE-UPDATE-BLUEPRINT.md): SITE-B (the
   data layer: Content.ts Counts.Packages 12->14 + Groups.Guardians + the
   Configurator roster + the suite-count surfaces + the description sweep
   across matrix/flavors/versions/workbench/setup/models/case-study; the
@@ -1808,3 +1817,34 @@ browser refresh).
   the interaction improvements R1-R10) - the user dispatches them on his
   word. The SITE-DEMO + the SITE-DIAGRAMS deltas await the user's commit +
   push; the plugin-Target freshness drift clears with a serialized rebuild.
+
+---
+
+## STATUS TABLE
+
+| Functionality                                                  | Status      | Evidence                                                                        | Date       |
+| -------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------- | ---------- |
+| The descriptive record (sections 1-9, the preserved state)     | resolved    | superseded by the dated sections that follow; kept as the record                  | 2026-10-09 |
+| The smoke-suite restructure                                    | implemented | "All 207 smoke suites passed" - node Maintain/Run-Smokes.mjs                      | 2026-10-20 |
+| The site update (supports, coachy section, plugin pages)       | implemented | 24 pages, build green, Drift 310/310; Site/ is gitignored here - the site repo commits it | 2026-10-20 |
+| The site diagrams (57 new sources, zero placeholders)          | implemented | 319/319 mmd+svg integrated                                                        | 2026-10-20 |
+| The live containers (v1 + wave 2 + wave 3)                     | implemented | hook-dsh-live-containers + ets twin; 203 checks per package across 14 folders     | 2026-10-20 |
+| The live containers activation                                 | deferred    | IDLE-forever: the plugin ships enabled=false, never in the profile                | 2026-10-20 |
+| The tool coach                                                 | implemented | Classic + EffectTS; the 129-check suite; wired into the profile with the teaching note | 2026-10-20 |
+| The CCR hook                                                   | implemented | both trees; live-proven (the volatile flip produced the marker; retrieval worked) | 2026-10-20 |
+| The CCR anomalies (the range parameter; the preview header count) | open     | flagged in the live testing findings                                              | 2026-10-20 |
+| The granular scopes + live volatile refresh                    | implemented | the 14 flavor Apply.ts files with the I9 fail-open                                | 2026-10-20 |
+| The overpass arms + normalize-overpass command                 | implemented | Run-Wiring: "All 28 wiring suites passed (272 checks)"                            | 2026-10-20 |
+| The enable-all + the tool-coach profile wiring                 | implemented | 13 @playform bundles live; READY-FOR-RESTART                                      | 2026-10-20 |
+| The dependency upgrade pass                                    | implemented | cordis 4.0.5, tsc-alias 1.9.8, schemastery 3.18.5, astro 7.4.1; two blocked with reasons | 2026-10-20 |
+| The live testing (the family fully mounted)                    | resolved    | governance trio, CCR, tool coach verified from the ledgers                        | 2026-10-20 |
+| The UI research set (R-UI-1/2/3 + R-INTERACT)                  | resolved    | Documentation/Researches/ - four research docs delivered                          | 2026-10-20 |
+| The UI implementation (the family panel + adapters)            | open        | Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md - awaiting the user's dispatch | 2026-10-20 |
+| The interaction improvements (R1-R10)                          | open        | Documentation/Researches/FAMILY-INTERACTIONS-RESEARCH.md - ready for lanes        | 2026-10-20 |
+| The orchestration plugins (BATCH-STATE, ROUTING-ENFORCER, SUBAGENT-QUEUE, HONEST-FEEDBACK) | open | Documentation/Plans/ - documents only                                            | 2026-10-09 |
+| The submodule structure (#16)                                  | open        | not started                                                                       | 2026-10-07 |
+| The Boilerplate gitignore decision                             | open        | undecided                                                                         | 2026-10-07 |
+| The governor's ncuBin residual                                 | open        | the CORSAIR path in the default, a smoke-asserted constant                        | 2026-10-07 |
+| The naming refinements (#15)                                   | open        | undecided; the user's approved names in use                                       | 2026-10-07 |
+| The npm publishing                                             | deferred    | a later session; Documentation/Plans/TRUSTED-PUBLISHER.md                         | 2026-10-07 |
+| The anonymization / inconsistency / term-linking / lychee / disclosure agents (section 4 items 6-11) | open | not dispatched yet                                                         | 2026-10-07 |
