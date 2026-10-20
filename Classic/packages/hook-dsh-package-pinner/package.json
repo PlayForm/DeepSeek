@@ -39,7 +39,7 @@
 		"tsc-alias": "1.9.7",
 		"typescript": "7.0.2",
 		"@deepseek-ai/cordis": "4.0.4",
-		"@deepseek-ai/schemastery": "3.18.4",
+		"@deepseek-ai/schemastery": "3.18.5",
 		"@deepseek-ai/dsh-fs": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-subprocess": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-sandbox": "0.2.0-rc.2"
