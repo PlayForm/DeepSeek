@@ -2,12 +2,8 @@
 kind: framework
 name: family-framework
 description: The distilled requirements + the skill framework + the tomorrow TODOs for the DeepSeek Harness Plugin Family - the operating constraints gathered from the user's directives across the sessions, the meta-structure for the Documentation/Skill tree, and the referential documents for the next session's review.
----
-
----
 title: The Family Framework - Requirements, Skills, TODOs
 category: Documentation root
-kind: living-record
 date: 2026-10-07
 status: active
 registry: Documentation/FRAMEWORK.md
