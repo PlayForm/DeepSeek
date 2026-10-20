@@ -54,7 +54,7 @@ const NewMember = (AgentID: string): BoardMember => ({
 export const Open = (
 	Agent: State,
 	AgentID: string,
-	Id: string,
+	ID: string,
 	PlantType: BoardState["plantType"],
 	Expect: number,
 	MemberIDs: string[] | undefined,
