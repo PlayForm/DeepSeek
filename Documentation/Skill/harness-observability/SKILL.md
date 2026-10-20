@@ -37,7 +37,7 @@ user. The full philosophy lives in the references; this file is the index.
 1. **job_list / job_output / job_kill** - see ./references/background-job-tools.md
    the background jobs (bash tasks moved to the background; collect with wait or read incrementally).
 2. **list_subagent_models** - see ./references/llm-route-catalog.md
-   the LLM route catalog (this harness: cloudflare-workers-ai with exactly @cf/zai-org/glm-5.3-flash + @cf/deepseek-ai/deepseek-v4-flash-0731; the routing policy lives in the task-routing + worker-strains skills - ALWAYS pass provider/model/effort explicitly).
+   the LLM route catalog (this harness: cloudflare-workers-ai with exactly @cf/zai-org/glm-5.3-flash + @cf/deepseek-ai/deepseek-v4-flash-0731 + @cf/deepseek-ai/deepseek-v4.1-flash-1017 (added 2026-10-20); the routing policy lives in the task-routing + worker-strains skills - ALWAYS pass provider/model/effort explicitly).
 3. **plugin_manager** - see ./references/plugin-manager.md
    the profile's plugins/bundles: list, enable/disable, install/remove bundles, the version exemptions (changes affect every session in the profile).
 4. **get_goal / update_goal** - see ./references/goal-state-tools.md

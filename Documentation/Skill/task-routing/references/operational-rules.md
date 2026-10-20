@@ -9,13 +9,15 @@
   call passes `provider`/`model`/`reasoning_effort` explicitly per phase.
 - `agent-loop` pinned roles (from the profile patch): `coder` ->
   glm-5.3-flash `high`, `explorer` -> glm-5.3-flash `low`, `planner` ->
-  deepseek-v4-flash `max`. These match this policy.
+  deepseek-v4-flash `max` (the deepseek lane; `deepseek-v4.1-flash-1017`
+  is the lane's primary candidate and the pin moves to the winner of the
+  2026-10-20 comparison). These match this policy.
 - Do not "helpfully" escalate a task that succeeded. Do not re-run
   completed work. Do not use `max` to compensate for a vague prompt -
   fix the prompt instead.
 - When in doubt about which lane a task belongs to: exploration ->
   `low`; anything that produces code -> coding ladder; anything that
-  decides architecture/plans -> main agent (deepseek-v4-flash `max`).
+  decides architecture/plans -> main agent (a deepseek model at `max`).
 
 ## Why: The Full Philosophy
 
@@ -27,7 +29,9 @@
    phase would hide lane changes from the audit trail.
 2. **The pinned roles are the policy's mirror.** The `agent-loop`
    profile patch pins `coder` -> glm-5.3-flash `high`, `explorer` ->
-   glm-5.3-flash `low`, `planner` -> deepseek-v4-flash `max`. These are
+   glm-5.3-flash `low`, `planner` -> a deepseek model at `max` (today
+   `deepseek-v4-flash-0731`; the lane's primary candidate is
+   `deepseek-v4.1-flash-1017`). These are
    not separate rules to remember; they are the routing table rows
    encoded as defaults. That is why the check "these match this policy"
    matters: if the patch and the table drift apart, one of them is
@@ -43,7 +47,7 @@
 4. **The tie-breaker rule closes the classification gap.** When the
    lanes are unclear: exploration -> `low`; anything that produces code
    -> coding ladder; anything that decides architecture/plans -> main
-   agent (deepseek-v4-flash `max`). It resolves doubt into the three
+   agent (a deepseek model at `max`). It resolves doubt into the three
    lanes of the routing table instead of inventing a fourth.
 
 ## Examples

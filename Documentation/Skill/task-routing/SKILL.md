@@ -2,7 +2,7 @@
 
 ---
 name: task-routing
-description: THE model-routing policy for every delegation — exploration always GLM-5.3-Flash at low; coding GLM-5.3-Flash low then high; planning and advanced tasks DeepSeek V4 Flash max; failover escalation on explicit ESCALATION markers or verification failures. Load before delegating anything.
+description: THE model-routing policy for every delegation - exploration always GLM-5.3-Flash at low; coding GLM-5.3-Flash low then high; planning and advanced tasks DeepSeek at max (deepseek-v4.1-flash-1017 primary, deepseek-v4-flash-0731 fallback); failover escalation on explicit ESCALATION markers or verification failures. Load before delegating anything.
 whenToUse: Mandatory before every subagent delegation, workflow launch, or model choice for any task. If you are about to delegate a coding, exploration, planning, or advanced-reasoning task without having followed this policy, stop and apply it.
 ---
 
@@ -24,7 +24,7 @@ philosophy lives in the references; this file is the index.
 1. **Explicit routing fields** - see ./references/non-negotiables.md
    Every `subagent` and workflow `agent()` call passes `provider: cloudflare-workers-ai`, the exact model, and `reasoning_effort: low | high | max` explicitly; never rely on defaults or inheritance.
 2. **allowedModels only** - see ./references/non-negotiables.md
-   Never use a model outside `allowedModels` in the profile patch (`subagent-model-selection-settings`); the allowed set is exactly the two catalog models.
+   Never use a model outside `allowedModels` in the profile patch (`subagent-model-selection-settings`); the allowed set is exactly the three catalog models.
 3. **User override wins** - see ./references/non-negotiables.md
    The user's explicit override wins for the task it names; nothing else overrides this policy.
 4. **Crash recovery and config safety** - see ./references/non-negotiables.md
@@ -32,8 +32,8 @@ philosophy lives in the references; this file is the index.
 
 ## Model Catalog
 
-- **The two allowed models** - see ./references/model-catalog.md
-  Exactly 2 models: `@cf/zai-org/glm-5.3-flash` ($0.15/$0.50/$0.03 per 1M in/out/cached, 1.3M ctx) and `@cf/deepseek-ai/deepseek-v4-flash-0731` ($0.44/$1.32/$0.044, 1.3M ctx).
+- **The three allowed models** - see ./references/model-catalog.md
+  Exactly 3 models: `@cf/zai-org/glm-5.3-flash` ($0.15/$0.50/$0.03 per 1M in/out/cached, 1M ctx), `@cf/deepseek-ai/deepseek-v4.1-flash-1017` ($0.30/$1.20/$0.006, 1M ctx, vision) and `@cf/deepseek-ai/deepseek-v4-flash-0731` ($0.44/$1.32/$0.044, 1M ctx). The DeepSeek lane's primary is deepseek-v4.1-flash-1017 (added 2026-10-20, cheaper on every axis); deepseek-v4-flash-0731 stays as the fallback and the current `agent-default-model` until the v4-vs-v4.1 comparison concludes.
 - **Removed models** - see ./references/model-catalog.md
   Never request removed models: qwen3-30b-a3b-fp8 (verified `400 INVALID_REQUEST` deaths, 2026-10-02), six cost removals (>= $0.95/M in or $3.20/M out), glm-4.7-flash (lost 2026-09 exploration comparison).
 
@@ -42,9 +42,9 @@ philosophy lives in the references; this file is the index.
 - **Difficulty-first principle** - see ./references/difficulty-first.md
   User-mandated 2026-10-20, binding: infer the effort from the task's ACTUAL difficulty - MECHANICAL operations (sweeps, renames, conversions, well-specified multi-file edits with a guarded exceptions list) are trivial regardless of file count; SEMANTIC operations (naming judgment, authoring, design, ambiguous refactors) are routine; the file count alone never decides.
 - **The complete routing table** - see ./references/routing-table.md
-  Exploration ALWAYS glm-5.3-flash `low`; trivial/mechanical coding `low`; routine/semantic coding `high`; exhaustive verification `max` (explicit user request only); planning and deepest reasoning deepseek-v4-flash-0731 `max`.
+  Exploration ALWAYS glm-5.3-flash `low`; trivial/mechanical coding `low`; routine/semantic coding `high`; exhaustive verification `max` (explicit user request only); planning and deepest reasoning a DeepSeek model at `max` - deepseek-v4.1-flash-1017 (primary) or deepseek-v4-flash-0731 (fallback).
 - **The main agent's lane** - see ./references/routing-table.md
-  The main agent runs `deepseek-v4-flash-0731` at `max` (`agent-default-model`) - that IS the planning/advanced lane; planning must never be delegated to a GLM flash-tier model.
+  The main agent runs `deepseek-v4-flash-0731` at `max` (`agent-default-model`) - that IS the planning/advanced lane; planning must never be delegated to a GLM flash-tier model. (Round 1 of the 2026-10-20 comparison keeps 0731; round 2 flips the default to `deepseek-v4.1-flash-1017`.)
 
 ## Exploration Protocol
 
@@ -54,7 +54,7 @@ philosophy lives in the references; this file is the index.
 ## Coding Protocol
 
 - **The attempts ladder** - see ./references/coding-ladder.md
-  Attempt 1 per routing tier; attempt 2 at `high`; then ONE parent-owned escalation to deepseek-v4-flash `max` with the failed run's artifacts and failure summary; if that also fails, STOP and report both summaries - no looping.
+  Attempt 1 per routing tier; attempt 2 at `high`; then ONE parent-owned escalation to a DeepSeek model at `max` (deepseek-v4.1-flash-1017; deepseek-v4-flash-0731 as fallback) with the failed run's artifacts and failure summary; if that also fails, STOP and report both summaries - no looping.
 - **Failure signals** - see ./references/failure-signals.md
   An attempt fails on any of: the `ESCALATION: <concrete reason>` marker, a silent give-up (missing build/tests/artifacts/empty workspace), or the parent's own verification failing.
 - **Spec-writing rules** - see ./references/spec-writing.md
@@ -80,8 +80,8 @@ philosophy lives in the references; this file is the index.
 - **Workflow scripts follow the same routing** - see ./references/operational-rules.md
   Every `agent()` call in a workflow passes `provider`/`model`/`reasoning_effort` explicitly per phase.
 - **Pinned roles match this policy** - see ./references/operational-rules.md
-  `agent-loop` pinned roles: `coder` -> glm-5.3-flash `high`, `explorer` -> glm-5.3-flash `low`, `planner` -> deepseek-v4-flash `max`.
+  `agent-loop` pinned roles: `coder` -> glm-5.3-flash `high`, `explorer` -> glm-5.3-flash `low`, `planner` -> deepseek-v4-flash `max` (the deepseek lane; deepseek-v4.1-flash-1017 is the lane's primary candidate - the pin moves to the winner of the 2026-10-20 comparison).
 - **No overreach** - see ./references/operational-rules.md
   Do not escalate a succeeded task, re-run completed work, or use `max` to compensate for a vague prompt - fix the prompt instead.
 - **Tie-breaker** - see ./references/operational-rules.md
-  When in doubt: exploration -> `low`; anything producing code -> coding ladder; anything deciding architecture/plans -> main agent (deepseek-v4-flash `max`).
+  When in doubt: exploration -> `low`; anything producing code -> coding ladder; anything deciding architecture/plans -> main agent (a deepseek model at `max`).

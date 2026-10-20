@@ -12,9 +12,11 @@ current Agent:
 - provider - that provider's advertised models;
 - provider and model - that exact model and its reasoning efforts.
 
-This harness's catalog: the cloudflare-workers-ai provider with exactly two
-models - @cf/zai-org/glm-5.3-flash and
-@cf/deepseek-ai/deepseek-v4-flash-0731.
+This harness's catalog: the cloudflare-workers-ai provider with exactly three
+models - @cf/zai-org/glm-5.3-flash,
+@cf/deepseek-ai/deepseek-v4-flash-0731 and
+@cf/deepseek-ai/deepseek-v4.1-flash-1017 (added 2026-10-20; the deepseek
+lane's primary candidate, cheaper than 0731 on every axis).
 
 The routing POLICY - which strain gets which model at which effort - lives in
 the task-routing and worker-strains skills; load BOTH before delegating.
@@ -33,13 +35,14 @@ route, not the default, is the contract.
    a wrong quality class. See ./references/honest-limits.md - the
    role-routing internals are explicitly NOT observable.
 2. **The catalog says what exists; the policy says what to use.** The
-   catalog is inventory: two models on one provider, with the efforts each
+   catalog is inventory: three models on one provider, with the efforts each
    advertises. The policy is a decision: exploration always GLM-5.3-Flash at
    low, coding GLM-5.3-Flash low then high, planning and advanced tasks
-   DeepSeek V4 Flash max, escalation on explicit ESCALATION markers or
-   verification failures. Confusing the two produces arguments like "the
-   catalog has only one provider, so the default is fine" - which ignores
-   the effort half of the contract entirely.
+   the deepseek lane at max (deepseek-v4.1-flash-1017 primary,
+   deepseek-v4-flash-0731 fallback), escalation on explicit ESCALATION
+   markers or verification failures. Confusing the two produces arguments
+   like "the catalog has only one provider, so the default is fine" - which
+   ignores the effort half of the contract entirely.
 3. **Advisory membership is a trap as much as a freedom.** Because an
    adapter may accept an unlisted id, "it was accepted" proves nothing about
    correctness. The explicit pass is the only evidence of intent.

@@ -40,11 +40,16 @@ the index - the full philosophy lives in the references.
   `ESCALATION: <reason>` marker, never-commit, arbiters in every spec.
 - **PLANNER** - see ./references/planner-strain.md
   Planning, architecture, design, advanced debugging, the deepest
-  reasoning on @cf/deepseek-ai/deepseek-v4-flash-0731 at max - the main
+  reasoning on the deepseek lane at max - the primary is
+  @cf/deepseek-ai/deepseek-v4.1-flash-1017 (added 2026-10-20, cheaper
+  than 0731 on every axis), the fallback is
+  @cf/deepseek-ai/deepseek-v4-flash-0731 (the current agent-default-model
+  for round 1 of the comparison; round 2 flips to v4.1) - the main
   agent runs this lane itself (agent-default-model); planning is NEVER
   delegated to a GLM flash-tier model.
 - **Allowed models** - see ./references/allowed-models.md
-  Exactly two models (@cf/zai-org/glm-5.3-flash,
+  Exactly three models (@cf/zai-org/glm-5.3-flash,
+  @cf/deepseek-ai/deepseek-v4.1-flash-1017,
   @cf/deepseek-ai/deepseek-v4-flash-0731), provider
   `cloudflare-workers-ai`, efforts low | high | max - exact strings,
   never invent others.
@@ -57,7 +62,7 @@ the index - the full philosophy lives in the references.
    every workflow agent() call; the inherited default silently resolves
    to the planner lane and wastes tokens (a measured violation).
 2. **Allowed models only** - see ./references/allowed-models.md
-   Never use a model outside the exact two-model set.
+   Never use a model outside the exact three-model set.
 3. **The user's override wins** - see
    ./references/three-strains-overview.md
    Scoped to the task the user names; the strain defaults resume

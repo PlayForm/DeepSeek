@@ -24,12 +24,18 @@ exactly one row; the model id and reasoning_effort are copied verbatim.
 | Coding - trivial, well-specified (spec is complete, no ambiguity) - incl. ALL MECHANICAL lookup-and-replace / rename / pattern-conversion sweeps, EVEN multi-file, with the guarded exceptions list | `@cf/zai-org/glm-5.3-flash`              | `low`                                 |
 | Coding - routine / typical (any SEMANTIC feature, refactor, multi-file, integration; naming judgment; authored prose) | `@cf/zai-org/glm-5.3-flash`              | `high`                                |
 | Coding - exhaustive verification                                                 | `@cf/zai-org/glm-5.3-flash`              | `max` - ONLY on explicit user request |
-| Planning, architecture, design, advanced debugging                               | `@cf/deepseek-ai/deepseek-v4-flash-0731` | `max`                                 |
-| Deepest reasoning (the ceiling - there is no model above this)                   | `@cf/deepseek-ai/deepseek-v4-flash-0731` | `max`                                 |
+| Planning, architecture, design, advanced debugging                               | `@cf/deepseek-ai/deepseek-v4.1-flash-1017` | `max`                                 |
+| Deepest reasoning (the ceiling - there is no model above this lane)              | `@cf/deepseek-ai/deepseek-v4.1-flash-1017` | `max`                                 |
 
-The main agent itself runs `deepseek-v4-flash-0731` at `max`
-(`agent-default-model`) - that IS the planning/advanced lane. Planning
-tasks must never be delegated to a GLM flash-tier model.
+> The DeepSeek lane (the two bottom rows) accepts either deepseek id at
+> `max`: `deepseek-v4.1-flash-1017` (primary, added 2026-10-20 - cheaper
+> than 0731 on every axis) or `deepseek-v4-flash-0731` (fallback).
+> The main agent itself runs `deepseek-v4-flash-0731` at `max`
+> (`agent-default-model`) - that IS the planning/advanced lane; round 1
+> of the 2026-10-20 v4-vs-v4.1 comparison keeps 0731, round 2 flips the
+> default to `deepseek-v4.1-flash-1017`, and the comparison's outcome
+> settles the primary/fallback order. Planning tasks must never be
+> delegated to a GLM flash-tier model.
 
 ## Why: The Full Philosophy
 
@@ -62,12 +68,16 @@ tasks must never be delegated to a GLM flash-tier model.
    `max` exists in the table but only on an explicit user request - it is
    not a self-service option, because coding `max` measured 6.4x `low`
    for identical correctness (./references/benchmark-evidence.md).
-6. **The ceiling is explicit.** Deepseek-v4-flash at `max` is the top of
-   the system; there is no model above it, so no task is "too hard to
-   route". The two bottom rows are the same route on purpose: planning
-   and deepest reasoning are the same lane.
+6. **The ceiling is explicit.** The DeepSeek lane at `max` is the top
+   of the system; there is no model above it, so no task is "too hard to
+   route". The two bottom rows are the same lane on purpose: planning
+   and deepest reasoning are the same lane. The lane's primary is now
+   `deepseek-v4.1-flash-1017` (2026-10-20), with `deepseek-v4-flash-0731`
+   as the fallback until the comparison settles the order.
 7. **The main agent's own model is part of the table.** Because the main
-   agent runs `agent-default-model` = `deepseek-v4-flash-0731` at `max`,
+   agent runs `agent-default-model` = `deepseek-v4-flash-0731` at `max`
+   (round 1 of the 2026-10-20 comparison; round 2 flips it to
+   `deepseek-v4.1-flash-1017`),
    planning and architecture decisions should be made (or at least owned)
    by the main agent itself; delegating them to a GLM flash-tier model
    downgrades exactly the lane that model was chosen for.

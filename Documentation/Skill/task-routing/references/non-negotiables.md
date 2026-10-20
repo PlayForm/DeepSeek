@@ -15,7 +15,7 @@ task-type-dependent exceptions:
    - reasoning_effort values: `low` | `high` | `max` (exact strings)
 2. **Never use a model outside `allowedModels`** in the profile patch
    (`subagent-model-selection-settings`). The allowed set is exactly the
-   two models in the model catalog (./references/model-catalog.md).
+   three models in the model catalog (./references/model-catalog.md).
 3. **The user's explicit override wins** for the task it names. Nothing
    else overrides this policy.
 4. **If the harness crashes or an agent dies mid-run** (e.g.
@@ -41,7 +41,7 @@ task-type-dependent exceptions:
 3. **Rule 2 - the allowlist is the crash guard.** The profile patch's
    `allowedModels` exists because off-list models have already caused
    hard failures (qwen3-30b-a3b-fp8 died with `400 INVALID_REQUEST` in
-   agentic loops - see model-catalog). Requesting outside the two-model
+   agentic loops - see model-catalog). Requesting outside the three-model
    set bypasses that guard.
 4. **Rule 3 - user sovereignty.** The policy is derived from benchmarks,
    but the user's explicit instruction is the higher authority for the
@@ -109,5 +109,5 @@ subagent(
   ./references/adjudication-protocol.md). A route that does not
   match the routing table is a violation, whoever initiated it.
 - Profile check: `allowedModels` in the
-  `subagent-model-selection-settings` patch must contain exactly the two
-  catalog models. More or fewer entries = drift.
+  `subagent-model-selection-settings` patch must contain exactly the
+  three catalog models. More or fewer entries = drift.

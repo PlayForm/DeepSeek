@@ -13,7 +13,9 @@ Attempt ladder, in order, per coding task:
 2. **Attempt 2** (only if attempt 1 fails per the failure signals below):
    `glm-5.3-flash` at `high`.
 3. **Escalation** (only if attempt 2 fails): the PARENT re-delegates the
-   same task to `@cf/deepseek-ai/deepseek-v4-flash-0731` at `max`,
+   same task to the deepseek lane at `max` -
+   `@cf/deepseek-ai/deepseek-v4.1-flash-1017` (primary) or
+   `@cf/deepseek-ai/deepseek-v4-flash-0731` (fallback) -
    passing the failed run's artifacts (workspace files, build logs) and
    a failure summary as context. Escalate at most once per task.
 4. If the escalated run also fails: STOP. Report BOTH failure summaries
@@ -50,8 +52,9 @@ Attempt ladder, in order, per coding task:
 
 - Trivial one-file fix fails attempt 1 -> attempt 2 at `high` ->
   succeeds. Two attempts, no escalation needed.
-- Routine feature fails twice -> parent escalates once to
-  deepseek-v4-flash `max`, passing the workspace files, the build log,
+- Routine feature fails twice -> parent escalates once to the deepseek
+  lane at `max` (deepseek-v4.1-flash-1017, or deepseek-v4-flash-0731 as
+  fallback), passing the workspace files, the build log,
   and "attempt 2 failed: tests 3 and 7 fail, module import cycle" ->
   succeeds.
 - Escalated run also fails -> parent stops and reports both failure

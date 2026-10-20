@@ -45,6 +45,26 @@ Test/
 |---|---|
 | `raw-write-probe/` | The raw-write governance probes against a real package manifest |
 
+## model-comparison-v4-v41
+
+The v4-vs-v4.1 model comparison archive (started 2026-10-20): the four-run
+cross experiment deepseek-v4-flash-0731 vs deepseek-v4.1-flash-1017, each
+model as orchestrator and as worker on ONE shared coding task (the Markdown
+Table Normalizer CLI).
+
+| Entry | What it proves |
+|---|---|
+| `task/TASK.md` | The shared task description (the canonical spec, identical for all four runs) |
+| `task/CODING-PROMPT.md` | The general coding prompt template (self-contained; the orchestrator substitutes the results dir + spec path) |
+| `round-1-v4-orchestrator/` | Round 1: main agent = deepseek-v4-flash-0731 launching worker-v4 + worker-v4-1 (RUN.md + results/) |
+| `round-2-v4-1-orchestrator/` | Round 2: main agent = deepseek-v4.1-flash-1017 (default flipped + restart) launching worker-v4 + worker-v4-1 (RUN.md + results/) |
+
+It also proves the routing-policy change of 2026-10-20: the model catalog
+grew from two to three models (deepseek-v4.1-flash-1017, $0.30/$1.20/$0.006)
+and the deepseek lane's primary/fallback order is settled by this archive's
+adjudicated outcome (see Documentation/Skill/task-routing and
+~/.dsh/skills/task-routing).
+
 ## Pitfalls
 
 The documented gaps of this archive, stated as they are:

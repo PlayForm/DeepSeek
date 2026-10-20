@@ -106,5 +106,10 @@ The evidence base for the routing policy:
   - see ./references/adjudication-protocol.md.
 - The prices quoted here must remain consistent with the catalog in
   ./references/model-catalog.md ($0.15/$0.50/$0.03 for GLM,
-  $0.44/$1.32/$0.044 for deepseek); a mismatch means one of the two
+  $0.30/$1.20/$0.006 for deepseek-v4.1, $0.44/$1.32/$0.044 for
+  deepseek-v4); a mismatch means one of the two
   files is out of date.
+- 2026-10-20: the v4-vs-v4.1 comparison
+  (Test/model-comparison-v4-v41 - four runs: each model as orchestrator
+  and as worker on one shared task) is the v4.1 evidence base; update
+  this file with its adjudicated numbers when it concludes.

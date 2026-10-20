@@ -11,12 +11,16 @@
 |---|---|
 | Strain | PLANNER |
 | What it is for | planning, architecture, design, advanced debugging, the deepest reasoning |
-| Model (exact) | @cf/deepseek-ai/deepseek-v4-flash-0731 |
+| Model (exact) | @cf/deepseek-ai/deepseek-v4.1-flash-1017 (primary) / @cf/deepseek-ai/deepseek-v4-flash-0731 (fallback, current agent-default-model) |
 | Effort | max |
 
 ## The Lane Rule (exact)
 
 - The main agent itself runs this lane (the agent-default-model).
+- Round 1 of the 2026-10-20 v4-vs-v4.1 comparison keeps
+  deepseek-v4-flash-0731 as the default; round 2 flips it to
+  deepseek-v4.1-flash-1017 (the lane's primary candidate, cheaper on
+  every axis).
 - Planning tasks are NEVER delegated to a GLM flash-tier model.
 
 ## Why: The Full Philosophy
@@ -95,6 +99,8 @@
   delegation to a GLM flash-tier model anywhere in the transcript).
 - Plans cite the shared facts they depend on and land in the process
   record.
-- The routing check: @cf/deepseek-ai/deepseek-v4-flash-0731 + max for
-  the lane; the delegation-level arbiter is
+- The routing check: a deepseek id at max for the lane -
+  @cf/deepseek-ai/deepseek-v4.1-flash-1017 (primary) or
+  @cf/deepseek-ai/deepseek-v4-flash-0731 (fallback); the
+  delegation-level arbiter is
   ./references/explicit-routing-params.md.
