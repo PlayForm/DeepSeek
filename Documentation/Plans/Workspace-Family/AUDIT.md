@@ -16,8 +16,24 @@ statuses:
 
 > Granular document of the Workspace Plugin Family Decomposition.
 > The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
+> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
+> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
+> plugin family - never a single plugin.
 
 ---
 
-`@playform/hook-dsh-workspace-audit` - the EVENT HOOK: the event records
-+ the ledger lines - the accountability.
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-audit` - the EVENT HOOK.
+- **THE ROLE** (the family map): the event records + the ledger lines -
+  the ACCOUNTABILITY.
+- **THE ORCHESTRATION POSITION**: "the audit lines" - the step after the
+  journal records in the invisible flow: ... -> the journal records ->
+  the audit lines -> the live view presents - all evented by the plugin
+  system (fs/observed, the tools' waterfalls, the lifecycle), all
+  governed by the plugin harness.
+- **THE PHASED DELIVERY**: the audit is part of phase 5 - with the
+  monitor + the live (the watch/sweep + the live view + the
+  accountability).
+- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
+  recursion prevention: every event carries the operation identifier, the
+  parent identifier, the event category.
+- **THE TWINS**: the Classic + ETS twins per the family contract.

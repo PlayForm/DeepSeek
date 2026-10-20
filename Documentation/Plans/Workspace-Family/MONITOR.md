@@ -16,8 +16,24 @@ statuses:
 
 > Granular document of the Workspace Plugin Family Decomposition.
 > The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
+> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
+> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
+> plugin family - never a single plugin.
 
 ---
 
-`@playform/hook-dsh-workspace-monitor` - the EVENT HOOK: the watch + the
-sweep forms - the wave-3 machinery, no real timers.
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-monitor` - the EVENT HOOK.
+- **THE ROLE** (the family map): the watch + the sweep forms - the
+  wave-3 machinery, no real timers.
+- **THE WAVE-3 HERITAGE**: the machinery follows the live-containers
+  wave-3 (the LIVE FILE MONITORS) precedent - "files are halted
+  processes", the watch/sweep forms without real timers (the
+  event-driven deadlines, the checkpoint debounce).
+- **THE PHASED DELIVERY**: the monitor is part of phase 5 - with the live
+  + the audit (the watch/sweep + the live view + the accountability).
+- **THE ORCHESTRATION POSITION**: the monitor's events feed the flow -
+  the watch surfaces the changes the observe stamps record.
+- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
+  recursion prevention: every event carries the operation identifier, the
+  parent identifier, the event category.
+- **THE TWINS**: the Classic + ETS twins per the family contract.

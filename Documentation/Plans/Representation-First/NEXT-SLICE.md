@@ -33,6 +33,6 @@ statuses:
 5. Extract the shared infrastructure ONLY after the slice exposes the
    real commonality.
 
-The three-way experiment is the strongest next step: it tests whether the
-persistent governance adds value beyond merely offering a better semantic
-editing interface.
+- **THE STRONGEST NEXT STEP**: the three-way experiment - it tests
+  whether the persistent governance adds value beyond merely offering a
+  better semantic editing interface.

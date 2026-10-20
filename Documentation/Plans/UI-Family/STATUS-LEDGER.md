@@ -19,11 +19,13 @@ statuses:
 
 ---
 
-	Phase 0  pending   (the mount-failure cause + the five inspect captures)
-	Phase 1  pending   (site commit package - possibly SKIPPED-CLEAN)
-	Phase 2  pending   (the central package + the contract)
-	Phase 3  pending   (the coach: ladder + form + marker rule)
-	Phase 4  pending   (all volatile forms + roster/badge/section)
-	Phase 5  pending   (12 adapters + the Typert endpoint or the fallback)
-	Phase 6  pending   (R1-R10)
-	Phase 7  pending   (the plain-field bridge + the Option B proposal)
+| Phase | State | Carries |
+|---|---|---|
+| Phase 0 | pending | the mount-failure cause + the five inspect captures |
+| Phase 1 | pending | site commit package - possibly SKIPPED-CLEAN |
+| Phase 2 | pending | the central package + the contract |
+| Phase 3 | pending | the coach: ladder + form + marker rule |
+| Phase 4 | pending | all volatile forms + roster/badge/section |
+| Phase 5 | pending | 12 adapters + the Typert endpoint or the fallback |
+| Phase 6 | pending | R1-R10 |
+| Phase 7 | pending | the plain-field bridge + the Option B proposal |

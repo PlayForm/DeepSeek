@@ -36,13 +36,15 @@ statuses:
 
 ## 1. The framing (adopted)
 
-The proposal is a **representation-first agent workspace** - NOT merely a
-batch-edit tool: the agent expresses INTENT, and the harness owns
-validation, authorization, execution, and presentation of the result. The
-distinction: requesting a filesystem side effect vs proposing a
-transformation inside a managed workspace. The core question: "What would
-an agent environment look like if the workspace - not a sequence of tool
-calls - were the primary unit of interaction?"
+- **THE PROPOSAL**: a **representation-first agent workspace** - NOT
+  merely a batch-edit tool: the agent expresses INTENT, and the harness
+  owns validation, authorization, execution, and presentation of the
+  result.
+- **THE DISTINCTION**: requesting a filesystem side effect vs proposing a
+  transformation inside a managed workspace.
+- **THE CORE QUESTION**: "What would an agent environment look like if the
+  workspace - not a sequence of tool calls - were the primary unit of
+  interaction?"
 
 ## 2. The layers (adopted)
 
@@ -55,11 +57,12 @@ calls - were the primary unit of interaction?"
 | Governance pipeline | Scope, permissions, constraints, approvals, conflicts |
 | Agent-facing projection | Relevant state within a bounded context budget |
 
-THE KEY DISTINCTION: the representation store is separate from the agent's
-context - the store holds the authoritative workspace state; the context is
-a selective, versioned VIEW of it (the "immediately accessible" gets a
-testable meaning: address a known resource without re-requesting its
-contents, while being told when the view is stale).
+- **THE KEY DISTINCTION**: the representation store is SEPARATE from the
+  agent's context - the store holds the authoritative workspace state;
+  the context is a selective, versioned VIEW of it.
+- **THE TESTABLE MEANING**: the "immediately accessible" gets a testable
+  meaning - address a known resource without re-requesting its contents,
+  while being told when the view is stale.
 
 ## 3. The tightened claims (adopted, refining the user's vision)
 
@@ -90,9 +93,10 @@ workspace.propose:
   scope: project
 ```
 
-The harness contract: (1) resolve the target against the revision,
-(2) compute the affected references, (3) check the permissions + policy,
-(4) produce a reviewable change set, (5) reject or reconcile the
-intervening changes, (6) apply the approved result + report the new
-revision. Semantic operations never get authority merely because they are
-compact - they must expose their scope and evidence.
+- **THE HARNESS CONTRACT** (the six steps): (1) resolve the target
+  against the revision, (2) compute the affected references, (3) check
+  the permissions + policy, (4) produce a reviewable change set, (5)
+  reject or reconcile the intervening changes, (6) apply the approved
+  result + report the new revision.
+- **THE AUTHORITY RULE**: semantic operations never get authority merely
+  because they are compact - they must expose their scope and evidence.

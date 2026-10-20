@@ -25,22 +25,24 @@ statuses:
 
 ## 1. The central inversion (adopted)
 
-intent -> proposed transformation -> workspace validation -> authorized
-reconciliation -> verified result. The responsibility lives at the
-proposal-becomes-external-effect boundary: the harness enforces the
-restrictions there, instead of the agent remembering them. The execution
-becomes SUBORDINATE to the workspace protocol - never an independent
-source of authority.
+- **THE FLOW**: intent -> proposed transformation -> workspace
+  validation -> authorized reconciliation -> verified result.
+- **THE RESPONSIBILITY BOUNDARY**: the responsibility lives at the
+  proposal-becomes-external-effect boundary - the harness enforces the
+  restrictions there, instead of the agent remembering them.
+- **THE SUBORDINATION**: the execution becomes SUBORDINATE to the
+  workspace protocol - never an independent source of authority.
 
 ## 2. The representation contracts (adopted)
 
-A representation is more than cached content - it carries a CONTRACT:
-what it represents, where its evidence came from, how fresh it is, which
-changes it can express. The ManagedRepresentation shape: identifier,
-resource, observedRevision, representationRevision, origin (the
-ObservationRecord), completeness (complete|partial|unknown), freshness
-(current|stale|unverified - a QUALIFIED claim: current relative to a
-specified observation mechanism + revision, never a guarantee against
-external actors), permittedOperations, pendingChanges. THE PRINCIPLE: a
-representation without provenance is convenient state; with provenance it
-can support accountable decisions.
+- **THE CONTRACT**: a representation is more than cached content - it
+  carries a CONTRACT: what it represents, where its evidence came from,
+  how fresh it is, which changes it can express.
+- **THE MANAGEDREPRESENTATION SHAPE**: identifier, resource,
+  observedRevision, representationRevision, origin (the
+  ObservationRecord), completeness (complete|partial|unknown), freshness
+  (current|stale|unverified - a QUALIFIED claim: current relative to a
+  specified observation mechanism + revision, never a guarantee against
+  external actors), permittedOperations, pendingChanges.
+- **THE PRINCIPLE**: a representation without provenance is convenient
+  state; with provenance it can support accountable decisions.

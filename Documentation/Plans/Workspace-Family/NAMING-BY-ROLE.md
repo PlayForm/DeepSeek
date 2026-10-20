@@ -22,17 +22,20 @@ statuses:
 
 ---
 
-The family's existing conventions distinguish the package roles; the
-blanket `hook-` prefix was wrong for the service + library + client
-members:
+- **THE PROBLEM (refined 2026-10-20)**: the family's existing conventions
+  distinguish the package roles; the blanket `hook-` prefix was WRONG for
+  the service + library + client members.
+- **THE FIVE ROLE PREFIXES** (the naming contract, one prefix per role):
 
-- `plugin-dsh-*` = the SERVICE PROVIDERS + the agent (the factory
-  precedent - the shared services the others consume).
-- `hook-dsh-*` = the EVENT HOOKS (the listeners the events fire).
-- `client-dsh-*` = the UI/CLIENT halves (the browser half).
-- `lib-dsh-*` = the LIBRARIES (no Config/apply; the consumers keep their
-  own ledger strings, tools, configs; the module leaves never absorbed).
-- The TOOLS live inside their owning hooks (per the family's pattern:
-  the ccr registers ccr_retrieve) - the operate/merge register the
-  workspace tools.
-- The twins (Classic + ETS) per the family contract.
+| Prefix | Role | The precedent |
+|---|---|---|
+| `plugin-dsh-*` | the SERVICE PROVIDERS + the agent | the factory - the shared services the others consume |
+| `hook-dsh-*` | the EVENT HOOKS | the listeners the events fire |
+| `client-dsh-*` | the UI/CLIENT halves | the browser half |
+| `lib-dsh-*` | the LIBRARIES | no Config/apply; the consumers keep their own ledger strings, tools, configs; the module leaves never absorbed |
+
+- **THE TOOLS' HOME**: the TOOLS live inside their owning hooks (per the
+  family's pattern: the ccr registers `ccr_retrieve`) - the operate/merge
+  register the workspace tools.
+- **THE TWINS**: the Classic + ETS twins per the family contract - every
+  workspace package ships both trees.

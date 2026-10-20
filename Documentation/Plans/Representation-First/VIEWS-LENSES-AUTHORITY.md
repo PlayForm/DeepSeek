@@ -28,35 +28,44 @@ statuses:
 
 ## 1. The connected views (adopted - the multiple graphs!)
 
-NOT one graph - distinct views connected by stable identifiers: the
-RESOURCE view (which resources + which versions observed), the SEMANTIC
-view (the symbols/references/dependencies resolved), the AUTHORITY view
-(who may perform which operations on which resources), the WORK view
-(which task owns a proposal + what it waits for), the HISTORY view (which
-observations/decisions/effects produced the state). THE WEIGHTED-LICENSE
-IMPLICATION: priority, retention value, and permission are NOT
-interchangeable - a heavily weighted resource may deserve more context or
-longer retention WITHOUT any additional write authority.
+- **THE PRINCIPLE**: NOT one graph - distinct views connected by stable
+  identifiers.
+- **THE FIVE VIEWS**:
+
+| View | Carries |
+|---|---|
+| RESOURCE | which resources + which versions observed |
+| SEMANTIC | the symbols/references/dependencies resolved |
+| AUTHORITY | who may perform which operations on which resources |
+| WORK | which task owns a proposal + what it waits for |
+| HISTORY | which observations/decisions/effects produced the state |
+
+- **THE WEIGHTED-LICENSE IMPLICATION**: priority, retention value, and
+  permission are NOT interchangeable - a heavily weighted resource may
+  deserve more context or longer retention WITHOUT any additional write
+  authority.
 
 ## 2. The bidirectional transformations (the lenses - Pierce/Foster)
 
-observe(resource, revision) -> representation; propose(representation,
-operation) -> candidate change; reconcile(resource, candidate) ->
-applied | conflict | rejection. Every abstract edit may have multiple
-concrete interpretations (a displayed name = the symbol rename? the docs?
-the serialized key? the combination?) - the system must EXPOSE the
-ambiguity; the REFUSAL TO GUESS is a first-class result.
+- **THE LENSES**: observe(resource, revision) -> representation;
+  propose(representation, operation) -> candidate change;
+  reconcile(resource, candidate) -> applied | conflict | rejection.
+- **THE AMBIGUITY RULE**: every abstract edit may have multiple concrete
+  interpretations (a displayed name = the symbol rename? the docs? the
+  serialized key? the combination?) - the system must EXPOSE the
+  ambiguity.
+- **THE REFUSAL TO GUESS** is a first-class result.
 
 ## 3. Authority vs residency (three independent concepts)
 
-- CAPABILITY: the permission to perform a specific operation (the object-
-  capabilities model - the unforgeable references; the revocation via the
-  revocable intermediaries); the prototype validates the capability
-  references INSIDE the harness - an agent-created identifier or self-
-  declared permission is never proof of authority.
-- OWNERSHIP LEASE: the temporary coordination claim over the work
+- **CAPABILITY**: the permission to perform a specific operation (the
+  object-capabilities model - the unforgeable references; the revocation
+  via the revocable intermediaries); the prototype validates the
+  capability references INSIDE the harness - an agent-created identifier
+  or self-declared permission is never proof of authority.
+- **OWNERSHIP LEASE**: the temporary coordination claim over the work
   (another worker may acquire the claim on expiry).
-- RESIDENCY POLICY: whether a representation stays loaded (its in-memory
-  state may be evicted).
-The expiration consequences stay predictable because the three concepts
-are separate.
+- **RESIDENCY POLICY**: whether a representation stays loaded (its
+  in-memory state may be evicted).
+- **THE PREDICTABILITY RULE**: the expiration consequences stay
+  predictable because the three concepts are separate.

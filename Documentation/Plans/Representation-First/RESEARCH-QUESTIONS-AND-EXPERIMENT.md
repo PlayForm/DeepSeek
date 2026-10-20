@@ -45,23 +45,28 @@ statuses:
 
 ## 2. The first experiment (the recommended scope)
 
-ONE language, the symbol rename, the preview/apply, the revision checks,
-the audit record - compared against the conventional read/edit workflows
-on: correctness, tokens, interaction count, conflict handling, recovery
-effort. The user's `State: State -> State: Operational` example is the
-reference case. The implementation progress reported in the family's docs
-is BACKGROUND, not feasibility evidence - the relevant interfaces get
-validated independently before the architectural commitments.
+- **THE SCOPE**: ONE language, the symbol rename, the preview/apply, the
+  revision checks, the audit record.
+- **THE COMPARISON**: against the conventional read/edit workflows on:
+  correctness, tokens, interaction count, conflict handling, recovery
+  effort.
+- **THE REFERENCE CASE**: the user's `State: State -> State: Operational`
+  example.
+- **THE HONESTY RULE**: the implementation progress reported in the
+  family's docs is BACKGROUND, not feasibility evidence - the relevant
+  interfaces get validated independently before the architectural
+  commitments.
 
 ## 3. The connection to the family's design
 
-- The layers map onto the family's structure: the filesystem adapter +
-  representation store = the batch-edit engine's core; the semantic model +
-  operation engine = the code-block stage (the reflective API); the
-  governance pipeline = the five government layers; the agent-facing
-  projection = the live-view framework (the commonality split).
-- The research questions become the implementation agent's acceptance
-  criteria (the identity/freshness/authority/commit/recovery/context-
-  economy/semantic-uncertainty checks).
-- The first experiment's scope = the implementation's v1 (the symbol
-  rename, one language, the preview/apply, the revisions, the audit).
+- **THE LAYER MAPPING**: the filesystem adapter + representation store =
+  the batch-edit engine's core; the semantic model + operation engine =
+  the code-block stage (the reflective API); the governance pipeline =
+  the five government layers; the agent-facing projection = the live-view
+  framework (the commonality split).
+- **THE QUESTIONS AS ACCEPTANCE**: the research questions become the
+  implementation agent's acceptance criteria (the identity/freshness/
+  authority/commit/recovery/context-economy/semantic-uncertainty checks).
+- **THE EXPERIMENT AS V1**: the first experiment's scope = the
+  implementation's v1 (the symbol rename, one language, the
+  preview/apply, the revisions, the audit).

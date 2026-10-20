@@ -16,9 +16,24 @@ statuses:
 
 > Granular document of the Workspace Plugin Family Decomposition.
 > The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
+> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
+> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
+> plugin family - never a single plugin.
 
 ---
 
-`@playform/plugin-dsh-workspace-semantics` - the SERVICE: the semantic
-model: the symbols + the references + the deps + the index. The others
-consume it.
+- **THE PACKAGE**: `@playform/plugin-dsh-workspace-semantics` - the
+  SERVICE (the service-provider role - the factory precedent: the shared
+  services the others consume).
+- **THE ROLE** (the family map): the semantic model - the symbols + the
+  references + the deps + the index.
+- **THE CONSUMERS**: the OTHERS consume it - the semantic layer feeds the
+  operate proposals, the evidence validation, the graph carry.
+- **THE ORCHESTRATION POSITION**: "the semantics resolve" - the second
+  step of the invisible flow, right after the observe stamps.
+- **THE VISIBILITY RULE**: the indexes are the INVISIBLE plugin flow -
+  the conversation never sees them until an event surfaces them.
+- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
+  recursion prevention: every event carries the operation identifier, the
+  parent identifier, the event category.
+- **THE TWINS**: the Classic + ETS twins per the family contract.

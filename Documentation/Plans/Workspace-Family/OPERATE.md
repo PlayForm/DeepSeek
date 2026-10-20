@@ -16,9 +16,26 @@ statuses:
 
 > Granular document of the Workspace Plugin Family Decomposition.
 > The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
+> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
+> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
+> plugin family - never a single plugin.
 
 ---
 
-`@playform/hook-dsh-workspace-operate` - the operation engine: the typed
-proposals - rename/connect/replace + the resolution rules + the
-refusal-to-guess.
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-operate` - the operation
+  engine.
+- **THE ROLE** (the family map): the typed proposals - rename/connect/
+  replace + the resolution rules + the refusal-to-guess.
+- **THE TOOLS' HOME**: the TOOLS live inside their owning hooks - the
+  operate registers the workspace tools (per the family's pattern: the
+  ccr registers `ccr_retrieve`).
+- **THE ORCHESTRATION POSITION**: "the operate proposes" - the third step
+  of the invisible flow: the observe stamps -> the semantics resolve ->
+  the operate proposes -> the govern gates -> ...
+- **THE REFUSAL-TO-GUESS**: a first-class rule - the typed proposals
+  never guess; the resolution rules decide what CAN be proposed, the
+  refusal declares what CANNOT.
+- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the
+  recursion prevention: every event carries the operation identifier, the
+  parent identifier, the event category.
+- **THE TWINS**: the Classic + ETS twins per the family contract.
