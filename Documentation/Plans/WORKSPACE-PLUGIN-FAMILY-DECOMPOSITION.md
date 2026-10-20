@@ -16,9 +16,9 @@ statuses:
 	- name: the phased delivery (the ablation-aligned order)
 		state: open
 		evidence: Workspace-Family/PHASED-DELIVERY.md
-	- name: the granular split (19 topic documents)
+	- name: the granular split (25 topic documents)
 		state: implemented
-		evidence: Documentation/Plans/Workspace-Family/ - the naming, the agent, the 16 packages, the library, the phases
+		evidence: Documentation/Plans/Workspace-Family/ - the naming, the agent, the 16 packages, the library, the phases, the inverse representation, the adapters, the databases/cloud, the pitfalls, the RFC queue, the research places
 ---
 
 # Workspace Plugin Family Decomposition - The Hub
@@ -49,7 +49,9 @@ statuses:
 > Documentation/Plans/Workspace-Family/ (NAMING-BY-ROLE, WORKSPACE-AGENT,
 > OBSERVE, SEMANTICS, OPERATE, GOVERN, AUTHORITY, JOURNAL, LIVE, MERGE,
 > MONITOR, CONTEXT, APPROVE, AUDIT, EVIDENCE, GRAPH, REFLECT,
-> SHARED-LIBRARY, PHASED-DELIVERY) - every map node preserved verbatim
+> SHARED-LIBRARY, PHASED-DELIVERY, INVERSE-REPRESENTATION,
+> ANY-FILE-ADAPTERS, DATABASES-AND-CLOUD, PITFALLS-LOG, RFC-QUEUE,
+> RESEARCH-PLACES) - every map node preserved verbatim
 > there; this hub keeps the family map as the one-glance picture.
 
 ## The naming by role (refined 2026-10-20 - they are NOT all hooks)

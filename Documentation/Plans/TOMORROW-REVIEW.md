@@ -89,6 +89,16 @@ statuses:
 > It covers what exists, what is in flight, what is missing, and how tomorrow's process runs.
 > Originally preserved at the monorepo root.
 > Now migrated into `Documentation/Plans/` with the rest of the documentation tree.
+>
+> GRANULAR ACCESS: the descriptive plan's core sections (1-9) are also
+> distilled as per-topic documents under Documentation/Archive/Tomorrow-Review/
+> (CURRENT-STATE-2026-10-07, IN-FLIGHT-WORK-2026-10-07,
+> MISSING-AND-OPEN-DECISIONS, TOMORROWS-PROCESS, RUNNING-FACTS,
+> NEXT-BATCH-2026-10-08, APHRODITE-WEBSITE-SESSION,
+> BATCH-COMPLETE-AND-SLIP-2026-10-09) - byte-preserved copies for per-topic
+> reading; THIS document remains the master record and the authoritative
+> source (its chronological batch log, sections 10 onward, is the part the
+> granular split has not yet covered).
 
 ---
 
