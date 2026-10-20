@@ -32,6 +32,28 @@ statuses:
   substrate.
 - **THE ROLE INVERSION**: the representation INVERTS the roles - the
   file holds the process, the state holds the file.
+- **THE THREE REGIMES** (the user's delineation, 2026-10-20 - binding):
+  - **THE PHYSICAL REGIME (the OS)**: a file on any UNIX system IS a
+    halted process - the dormant default - already true everywhere. The
+    file-as-halted-process is NOT our invention; it is the OS's own
+    truth.
+  - **THE EXECUTION REGIME (the language runtimes)**: the same file
+    becomes a RUNNING process when a runtime executes it - the OS's own
+    process notion - the EXECUTION axis (the OS process, not the
+    workspace cell).
+  - **THE WORKSPACE REGIME (our plugin family - NEW)**: enabling the
+    plugin makes the file an OPERABLE process - the managed
+    representation (the Process<File> cells:
+    observed/running/halted/done/errored + the workspace verbs + the
+    governance + the knowledge graph). What we build = the workspace
+    regime - THE THIRD AXIS.
+- **THE CONTRADICTIONS RESOLVED**: the plugin creates the OPERABILITY,
+  not the process-ness. The two "running" senses are DIFFERENT AXES (the
+  OS execution vs the workspace cell - orthogonal, never exclusive): a
+  .rs file can be halted on disk + running under rustc + operable in the
+  workspace SIMULTANEOUSLY. The operational mode determines the regime;
+  what exists today = the physical + execution regimes; what we build =
+  the workspace regime.
 - **THE CONNECTED FRAMINGS** (the naming candidates, the hub): THE
   LIVING FILESYSTEM (the files as the active processes - the reversed
   UNIX view) + THE PROCESS-CENTRIC HARNESS (the halted processes as the

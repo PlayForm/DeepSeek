@@ -60,3 +60,24 @@ statuses:
 - **THE LIVING SYSTEM**: the graph interacts with itself through the
   agent's actions - the corrections propagate, the dependencies
   invalidate, the evictions settle - all evented, all governed.
+
+## 4. The three regimes (the agent's place)
+
+- **THE PHYSICAL REGIME (the OS)**: a file on any UNIX system IS a
+  halted process - the dormant default - already true everywhere (the
+  file-as-halted-process is NOT our invention).
+- **THE EXECUTION REGIME (the language runtimes)**: the same file
+  becomes a RUNNING process when a runtime executes it - the OS's own
+  process notion - the EXECUTION axis.
+- **THE WORKSPACE REGIME (our plugin family - NEW)**: enabling the
+  plugin makes the file an OPERABLE process - the managed representation
+  (the Process<File> cells: observed/running/halted/done/errored + the
+  workspace verbs + the governance + the knowledge graph).
+- **THE AGENT'S ROLE**: THE WORKSPACE AGENT is the workspace regime's
+  conversational surface - the OPERABLE view the conversation addresses;
+  the plugin creates the OPERABILITY, not the process-ness.
+- **THE ORTHOGONALITY**: the two "running" senses are DIFFERENT AXES
+  (the OS execution vs the workspace cell - orthogonal, never
+  exclusive): a .rs file can be halted on disk + running under rustc +
+  operable in the workspace SIMULTANEOUSLY. The operational mode
+  determines the regime.

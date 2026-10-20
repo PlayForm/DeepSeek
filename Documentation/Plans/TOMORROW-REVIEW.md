@@ -1986,3 +1986,26 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
   functionality + search more integration ways + totally modify the
   harness per the new nomenclature). The GRAND-REWRITE (`ad3a86f2`)
   relayed the framing + this extension.
+- THE THREE-REGIME DELINEATION (2026-10-20 - the user's clarification,
+  binding): (1) THE PHYSICAL REGIME (the OS - every computer, present
+  tense): a file on any UNIX system IS a halted process - the dormant
+  default - this is ALREADY TRUE everywhere (the file-as-halted-process
+  is not our invention); (2) THE EXECUTION REGIME (the language runtimes):
+  the same file becomes a RUNNING process when a runtime executes it -
+  the OS's own process notion - the EXECUTION axis; (3) THE WORKSPACE
+  REGIME (our plugin family - NEW, being built): enabling the plugin
+  makes the file an OPERABLE process - the managed representation (the
+  Process<File> cells: observed/running/halted/done/errored) + the
+  workspace verbs + the governance + the knowledge graph - genuinely new
+  (no OS and no runtime provides it today). THE CONTRADICTIONS RESOLVED:
+  (a) the plugin does NOT create the process-ness (the file was always
+  halted) - it creates the OPERABILITY; (b) the two "running" senses are
+  DIFFERENT AXES (the OS execution vs the workspace cell - orthogonal,
+  never exclusive: a .rs file can be halted on disk + running under rustc
+  + operable in the workspace simultaneously); (c) the operational mode
+  determines the regime (workspace = operable, Rust env = running, bare
+  disk = halted - the mode is the lens); (d) what computers have today =
+  the physical + the execution regimes; what we are building = the
+  workspace regime - THE THIRD AXIS - the plugin family is the difference
+  between what exists and what's being built. The delineation persists
+  into the Workspace-Family docs via the GRAND-REFINE (`acdb9d80`).
