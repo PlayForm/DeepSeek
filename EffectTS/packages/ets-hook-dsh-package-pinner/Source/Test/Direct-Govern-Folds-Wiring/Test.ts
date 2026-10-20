@@ -281,6 +281,11 @@ export const runTest = async (): Promise<number> => {
 		const leafPath = "/tmp/smoke-leaf/package.json";
 		const leaf = LeafDefault(leafFurnace, leafState, leafPath);
 		const out = leaf(JSON.stringify({ dependencies: { a: "^1.0.0" } }), ["dependencies"], []);
+		// Type-level narrowing for the raw-tsc emit (the L5A awaited step): the
+		// factory types the module transform's result `Output | null`; this
+		// manifest is decodable and changes, so narrow once — no assertion
+		// changes.
+		if (out === null) throw new Error("a changed manifest yields a message");
 		const Sub =
 			"the transform contract: (current: string|null, section, keep) \u2192 {next, count, message}|null \u2014 the module leaf";
 		{

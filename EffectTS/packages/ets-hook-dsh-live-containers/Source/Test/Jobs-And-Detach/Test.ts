@@ -1,0 +1,394 @@
+// Source/Test/Jobs-And-Detach/Test.ts - the J-series tests: the live
+// tool-call transform's decision arm, carrier arm, re-dispatch spec, dedup,
+// live-timeout, awaited skip, capacity, history heuristics, and the
+// {"__await":true first-key marker. Every ledger assertion is byte-exact;
+// every negative (fail-open) path proves the inline fallback.
+import assert from "node:assert/strict";
+import {
+	Advance,
+	Check,
+	ClockBox,
+	Execute,
+	Exec,
+	Finish,
+	FireJobs,
+	FireSession,
+	LinesWith,
+	MakeCounter,
+	MakeWave,
+	Pre,
+	PendingText,
+	FakeJobsHub,
+	FakeShell,
+	WaveAssemble,
+	Validate,
+	Ledger,
+	rm,
+} from "../Harness.js";
+
+export const runTest = async (): Promise<number> => {
+	const Count = MakeCounter();
+	const MARKER = (JobId: string): string =>
+		`[live] ${JobId} running: cargo build - output pending; proceed reasoning.`;
+	const DetachConfig = {
+		mode: "long-running",
+		allRequiresConfirm: false,
+		longRunningMarkers: ["cargo build"],
+		minHistoricalMs: 20000,
+		historyWindow: 5,
+		selectedTools: [],
+		selectedPatterns: [],
+		maxLivePerAgent: 5,
+		minLatencyMs: 2000,
+		liveTimeoutMs: 120000,
+		dedup: true,
+		retryFailsafeCount: 3,
+	};
+	// Group J1: the transform (detach + fabricated result).
+	rm();
+	ClockBox.Now = 1700000000000;
+	{
+		const Jobs = FakeJobsHub();
+		const Shell = FakeShell();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: Shell });
+		const { decision } = await Pre(Run, Exec("cargo build"));
+		Check(Count, "J1: the pre-execute arm returns the downstream decision (allow)", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+		});
+		Check(Count, "J1: the fake registry gained one start with the exact re-dispatch spec", () => {
+			assert.equal(Jobs.started.length, 1);
+			const Spec = Shell.resolved[0];
+			assert.equal(Spec.command, "cargo build");
+			assert.equal(Spec.workdir, "/session");
+			assert.deepEqual(Spec.dshEnv, { DSH_SESSION: "agent-a" });
+			assert.deepEqual(Spec.sandboxPolicy, { mode: "workspace-write", session: undefined });
+			assert.equal(Spec.onExpiry, "none");
+			assert.equal(Jobs.started[0].spec.kind, "bash");
+			assert.equal(Jobs.started[0].spec.label, "cargo build");
+			assert.equal(Jobs.started[0].spec.owner, "agent-a");
+			assert.equal(Jobs.started[0].spec.outputLimitBytes, 2048);
+		});
+		Check(Count, "J1: ledger detached bash -> <job-id> (byte-exact)", () => {
+			assert.deepEqual(LinesWith(Run, "detached "), [
+				`hook-dsh-live-containers: detached bash -> ${Jobs.started[0].id}`,
+			]);
+		});
+		const TaggedExec = Exec("cargo build --release");
+		// The same exec object the pre-execute arm tagged: re-run the decision
+		// on a fresh exec to tag it, then present the SAME object to execute.
+		await Pre(Run, TaggedExec);
+		let BodyRan = false;
+		const Result = await Execute(Run, TaggedExec, async () => {
+			BodyRan = true;
+			return { isError: false, value: { real: true }, content: [] };
+		});
+		Check(Count, "J1: the fabricated result is a successful value whose text is the byte-exact marker", () => {
+			assert.equal((Result as any).isError, false);
+			const Value = (Result as any).value;
+			assert.equal(Value.kind, "foreground");
+			assert.equal(Value.exitCode, 0);
+			assert.equal(Value.signal, null);
+			assert.equal(Value.timedOut, false);
+			assert.equal(Value.aborted, false);
+			assert.equal(Value.stdout.truncated, false);
+			assert.deepEqual(Value.stderr, { text: "", truncated: false });
+			assert.equal(
+				Value.stdout.text,
+				`[live] ${Jobs.started[1]?.id} running: cargo build --release - output pending; proceed reasoning.`,
+			);
+		});
+		Check(Count, "J1: next() was NOT called by the execute arm (the veto)", () => {
+			assert.equal(BodyRan, false);
+		});
+	}
+	// Group J2: the mutation family runs inline under mode "all".
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(
+			Validate({
+				logFile: Ledger,
+				enabled: true,
+				detach: { ...DetachConfig, mode: "all", allRequiresConfirm: true },
+			}),
+			{ jobs: Jobs, shell: FakeShell() },
+		);
+		const WriteExec = { ...Exec("anything"), name: "write", arguments: { path: "x", content: "y" } };
+		const { decision, nextCalled } = await Pre(Run, WriteExec);
+		const Result = await Execute(Run, WriteExec, async () => ({ isError: false, value: { inline: true }, content: [] }));
+		Check(Count, "J2: write under mode all passes through pre-execute (no start)", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+			assert.equal(nextCalled, true);
+			assert.equal(Jobs.started.length, 0);
+		});
+		Check(Count, "J2: write runs inline (the execute arm calls next)", () => {
+			assert.deepEqual(Result, { isError: false, value: { inline: true }, content: [] });
+		});
+	}
+	// Group J3: the sandbox inheritance + the producer outcome.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Shell = FakeShell();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: Shell });
+		const { decision } = await Pre(Run, Exec("cargo build --features slow"));
+		Check(Count, "J3: the transform passes through with the policy resolved", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+			assert.equal(Shell.resolved.length, 1);
+			assert.ok(Shell.resolved[0].sandboxPolicy.mode === "workspace-write");
+		});
+		Check(Count, "J3: escalation -> inline (ledger byte-exact)", () => {
+			assert.deepEqual(LinesWith(Run, "escalation -> inline"), []);
+		});
+	}
+	// Group J4: the fail-open paths.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), {
+			jobs: { ...Jobs, registry: { ...Jobs.registry, start: (Spec: any) => { void Spec; throw new Error("preflight refused"); } } },
+			shell: FakeShell(),
+		});
+		Run.State.Wave.Jobs = Run.Context.jobs;
+		const { decision } = await Pre(Run, Exec("cargo build"));
+		Check(Count, "J4: a start failure is inline + start failed -> inline (byte-exact)", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+			assert.deepEqual(LinesWith(Run, "start failed"), ["hook-dsh-live-containers: start failed bash -> inline"]);
+		});
+	}
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		// The per-agent record write throws (a Map subclass whose set throws -
+		// reads keep working): the just-started job is killed (marker-failed,
+		// the half-detached guard), the ledger carries both lines, and the call
+		// passes through.
+		class ThrowMap extends Map {
+			override set(): never {
+				throw new Error("no records allowed");
+			}
+		}
+		Run.State.Detached = new ThrowMap() as unknown as Map<string, Map<string, never>>;
+		const { decision } = await Pre(Run, Exec("cargo build"));
+		Check(Count, "J4: a thrown post-start write yields marker-failed + transform failed (byte-exact)", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+			assert.ok(Jobs.started.length === 1);
+			assert.deepEqual(LinesWith(Run, "marker failed"), [
+				`hook-dsh-live-containers: marker failed ${Jobs.started[0].id} -> inline`,
+			]);
+			assert.deepEqual(LinesWith(Run, "transform failed"), [
+				"hook-dsh-live-containers: transform failed bash -> inline",
+			]);
+			assert.deepEqual(Jobs.killed, [{ id: Jobs.started[0].id, caller: "agent-a", reason: "marker-failed" }]);
+		});
+	}
+	// Group J5: no completion without a settled event; the batched carrier.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		await Pre(Run, Exec("cargo build"));
+		const JobId = Jobs.started[0].id;
+		await WaveAssemble(Run);
+		Check(Count, "J5: no completion frame before any settled event", () => {
+			assert.equal(PendingText(Run), "");
+		});
+		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+		await WaveAssemble(Run);
+		const Text = PendingText(Run);
+		Check(Count, "J5: one settled event -> exactly one completed frame (byte-exact shape)", () => {
+			assert.ok(Text.includes("[live] completion report (harness-appended; not a user request):"));
+			assert.ok(Text.includes(`--- LIVE CONTAINER ${JobId} completed ---`));
+			assert.ok(Text.includes("status: completed (cause: producer)"));
+			assert.ok(Text.includes("elapsed: 0s"));
+			assert.ok(Text.includes("output (tail up to 2 KiB):"));
+			assert.ok(Text.includes(`--- END LIVE CONTAINER ${JobId} ---`));
+			assert.ok(Text.includes(`[live] job_output ${JobId} to read the full output.`));
+			assert.ok(Text.endsWith("[live] next: all 1 finished - review the outputs above, then continue the cargo steps."));
+		});
+		// The delivery: the logged runtime-context snapshot drains the batch.
+		FireSession(Run, {
+			type: "user/message",
+			data: {
+				message: {
+					source: { kind: "runtime-context", form: "snapshot" },
+					content: [{ type: "text", text: Text }],
+				},
+			},
+		});
+		Check(Count, "J5: the logged snapshot drains the batch (ledger byte-exact)", () => {
+			const Rendered = LinesWith(Run, "completion rendered ");
+			assert.ok(Rendered.length === 1);
+			assert.ok(Rendered[0]?.endsWith(" bytes"));
+			assert.deepEqual(LinesWith(Run, `withdrawn ${JobId}`), [
+				`hook-dsh-live-containers: withdrawn ${JobId} (completed)`,
+			]);
+		});
+		const After = PendingText(Run);
+		Check(Count, "J5: after delivery the provider returns the stable delivered tail (never the CLEARED shape)", () => {
+			assert.equal(After, Text);
+		});
+	}
+	// Group J6: the dedup.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		await Pre(Run, Exec("cargo build"));
+		const First = Jobs.started[0].id;
+		const Second = Exec("cargo build");
+		await Pre(Run, Second);
+		Check(Count, "J6: a re-issued identical command starts NO second job", () => {
+			assert.equal(Jobs.started.length, 1);
+			assert.deepEqual(LinesWith(Run, "dedup "), [`hook-dsh-live-containers: dedup bash -> ${First}`]);
+		});
+		const Result = await Execute(Run, Second, async () => ({ isError: false, value: { real: true }, content: [] }));
+		Check(Count, "J6: the dedup marker references the same job id with the already-running line", () => {
+			const Text = (Result as any).value.stdout.text;
+			assert.equal(Text, `${MARKER(First)}\n[live] already running as ${First}; job_output ${First} to check.`);
+		});
+	}
+	// Group J7: the live-timeout kill at the next checkpoint.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(
+			Validate({ logFile: Ledger, enabled: true, detach: { ...DetachConfig, liveTimeoutMs: 5000 } }),
+			{ jobs: Jobs, shell: FakeShell() },
+		);
+		await Pre(Run, Exec("cargo build"));
+		Advance(6000);
+		await WaveAssemble(Run);
+		Check(Count, "J7: the fake clock past liveTimeoutMs -> kill with reason live-timeout", () => {
+			assert.deepEqual(Jobs.killed, [{ id: Jobs.started[0].id, caller: "agent-a", reason: "live-timeout" }]);
+		});
+	}
+	// Group J8: the awaited skip.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		await Pre(Run, Exec("cargo build"));
+		const JobId = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", awaited: true }));
+		await WaveAssemble(Run);
+		Check(Count, "J8: an awaited settlement renders no frame (ledger byte-exact)", () => {
+			assert.equal(PendingText(Run), "");
+			assert.deepEqual(LinesWith(Run, "completion skipped"), [
+				`hook-dsh-live-containers: completion skipped ${JobId} (awaited)`,
+			]);
+		});
+	}
+	// Group J9: the capacity path.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(
+			Validate({ logFile: Ledger, enabled: true, detach: { ...DetachConfig, maxLivePerAgent: 1 } }),
+			{ jobs: Jobs, shell: FakeShell() },
+		);
+		await Pre(Run, Exec("cargo build"));
+		await Pre(Run, Exec("cargo build --release"));
+		Check(Count, "J9: at capacity the call passes through inline (ledger byte-exact)", () => {
+			assert.equal(Jobs.started.length, 1);
+			assert.deepEqual(LinesWith(Run, "capacity full"), [
+				"hook-dsh-live-containers: capacity full agent-a -> inline",
+			]);
+		});
+	}
+	// Group J10: the min-latency / history heuristics.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		// A short inline run records its duration; the same command then stays
+		// inline (min-latencyMs estimate from history).
+		const Quick = Exec("pnpm build");
+		await Pre(Run, Quick);
+		await Run.Listeners["tools/post-execute"](Quick, { isError: false, value: "", content: [] }, async () => ({ kind: "accept" }));
+		await Pre(Run, Exec("pnpm build"));
+		Check(Count, "J10: a short history keeps the command inline (min-latency)", () => {
+			assert.equal(Jobs.started.length, 0);
+		});
+		// A long history detaches the same command with no marker match: two
+		// slow runs (the clock advances between the pre-execute stamp and the
+		// post-execute record) lift the same-prefix average above
+		// minHistoricalMs.
+		for (let Index = 0; Index < 2; Index += 1) {
+			const Slow = Exec("pnpm build");
+			await Pre(Run, Slow);
+			Advance(40000);
+			await Run.Listeners["tools/post-execute"](Slow, { isError: false, value: "", content: [] }, async () => ({ kind: "accept" }));
+		}
+		const Third = Exec("pnpm build");
+		await Pre(Run, Third);
+		Check(Count, "J10: a long history detaches the command without any marker", () => {
+			assert.ok(Jobs.started.length >= 1);
+		});
+	}
+	// Group J11: the {"__await":true first-key marker.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		const Marked = { ...Exec("cargo build"), arguments: new Proxy({ __await: true, description: "d", command: "cargo build" }, {}) };
+		const { decision } = await Pre(Run, Marked);
+		Check(Count, "J11: the first-key __await marker runs the call inline (ledger byte-exact)", () => {
+			assert.deepEqual(decision, { kind: "allow" });
+			assert.equal(Jobs.started.length, 0);
+			assert.deepEqual(LinesWith(Run, "await marker -> inline"), [
+				"hook-dsh-live-containers: await marker -> inline bash",
+			]);
+		});
+		Check(Count, "J11: the marker key survives in the arguments (nothing stripped)", () => {
+			assert.equal((Marked.arguments as any)["__await"], true);
+			assert.equal((Marked.arguments as any).command, "cargo build");
+		});
+		const FalseMarker = { ...Exec("cargo build"), arguments: { __await: false, description: "d", command: "cargo build" } };
+		await Pre(Run, FalseMarker);
+		Check(Count, "J11: a first-key __await:false is NOT a marker (the call detaches)", () => {
+			assert.equal(Jobs.started.length, 1);
+			assert.equal(LinesWith(Run, "await marker -> inline").length, 1);
+		});
+	}
+	// Group: the owner-gone skip.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		await Pre(Run, Exec("cargo build"));
+		const JobId = Jobs.started[0].id;
+		FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", cause: "teardown" }));
+		await WaveAssemble(Run);
+		Check(Count, "teardown: owner gone -> nothing pending (ledger byte-exact)", () => {
+			assert.equal(PendingText(Run), "");
+			assert.deepEqual(LinesWith(Run, "owner gone"), [
+				`hook-dsh-live-containers: owner gone ${JobId}`,
+			]);
+		});
+	}
+	// Group: the escalation gate.
+	rm();
+	{
+		const Jobs = FakeJobsHub();
+		const Run = MakeWave(Validate({ logFile: Ledger, enabled: true, detach: DetachConfig }), { jobs: Jobs, shell: FakeShell() });
+		await Pre(Run, Exec("cargo build", { sandbox_permissions: "danger-full-access", justification: "need network" }));
+		Check(Count, "escalation: the approval flow stays inline (ledger byte-exact)", () => {
+			assert.equal(Jobs.started.length, 0);
+			assert.deepEqual(LinesWith(Run, "escalation -> inline"), [
+				"hook-dsh-live-containers: escalation -> inline bash",
+			]);
+		});
+	}
+	return Finish(Count, "Jobs-And-Detach");
+};
+
+// Standalone entry: `node Target/Test/Jobs-And-Detach/Test.js`.
+const InvokedDirectly =
+	process.argv[1] !== undefined &&
+	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+	const Pass = await runTest();
+	console.log(`${Pass} PASS - Jobs-And-Detach`);
+}

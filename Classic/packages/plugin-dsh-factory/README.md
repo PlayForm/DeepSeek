@@ -263,7 +263,10 @@ the normalize flavors; the shared defaults carry the family's block.
 
 Volatile cells (`log`,
 `logFile` and any consumer's own hot fields) commit without remounting the plugin; the factory's
-`State` builder unwraps them defensively.
+`State` builder unwraps them defensively. The volatile-refresh path: every volatile edit commits
+one `loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads -
+live, silent, no remount (the granular scopes of the normalize hooks ride the same path, and the
+scopes are all volatile live toggles).
 
 ---
 

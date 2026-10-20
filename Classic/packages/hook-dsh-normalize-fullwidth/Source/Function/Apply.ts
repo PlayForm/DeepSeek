@@ -131,12 +131,29 @@ export default (Context: Context, Options: Config): void => {
 		// reporting the settings-UI path when absent.
 		const Settings = Factory.Seam(State, "settings") as SettingsService | undefined;
 		const Editor = Factory.Seam(State, "configEditor") as ConfigEditorService | undefined;
-		Commands.register({
-			name: "normalize-overpass",
-			description:
-				"Arm a one-shot overpass: 'files' <path…> | 'batch' | 'results on|off' | 'scopes'",
-			handler: (Invocation) => Command(State, Invocation, Settings, Editor),
-		});
+		// The fail-open duplicate gate: the seven flavors share ONE global
+		// command name, so the second and later mounts hit the registry's
+		// "command ... is already registered" throw (the dsh-commands
+		// NamedEntries insert). A duplicate is a harmless no-op (the first
+		// flavor's definition serves the command) and ANY register failure is
+		// fail-open (the command is a convenience, not a requirement): log
+		// ONE ledger line and continue the mount - the stream listeners and
+		// the tool registration below must still attach.
+		try {
+			Commands.register({
+				name: "normalize-overpass",
+				description:
+					"Arm a one-shot overpass: 'files' <path…> | 'batch' | 'results on|off' | 'scopes'",
+				handler: (Invocation) => Command(State, Invocation, Settings, Editor),
+			});
+		} catch (Issue) {
+			Factory.Append(
+				State,
+				`command "normalize-overpass" registration skipped (the mount continues): ${
+					Issue instanceof Error ? Issue.message : String(Issue)
+				}`,
+			);
+		}
 	}
 
 	// The loader ignores any return value; the smoke harness probes the built

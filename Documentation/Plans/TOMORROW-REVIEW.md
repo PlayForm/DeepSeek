@@ -1007,6 +1007,516 @@ requirement files by the research agent `2a322db2` (GLM flash low, dispatched
   prepublishOnly + the built-Target greps; never the dev server. I8
   (the ets-base re-home + retirement + ledger) fires when L5 lands (its
   retirement needs the full folder inventory).
+- **SITE-B COMPLETE + VERIFIED (2026-10-19, `1b3e719d`)**: the data layer
+  landed (24 Site files: Content.ts with Counts.Ccr{146,146}/
+  Coach{129,129} + Families + Groups.Guardians + the 4.0.5 effect pin,
+  Live.ts, the Configurator with the REAL ccr/coach patch bodies, the
+  registry rows 13/14, the 7 normalize pages with the scopes/overpass
+  sections + the four granularity facts, the setup/versions/case-study/
+  flavors/matrix/workbench/models sweeps, Base.astro JSON-LD). The build:
+  ZERO errors (21 pages; the 2 new pages are Site-A's); the Drift guard:
+  all 262 content-layer checks pass; 34 pre-existing FAILs OUTSIDE the
+  site surface (5x the case-study JournalExcerpt lines whose corpus
+  source the restructure removed + 29x the family Target-freshness -
+  Sources touched without rebuilds - a wrap-up item: the family Targets
+  need a serialized rebuild + re-verify, folded into I8's acceptance);
+  one legit drift fixed (the effect pin 4.0.2 -> 4.0.5). Built-Target
+  greps verified byte-exact (the 14-count surfaces, the 1008/1021 totals,
+  the overpass lines, the marker + the gate formula, the guardians
+  group). NOTE: pnpm prepublishOnly's script form aborts on the puppeteer
+  build-script approval gate (one-time `pnpm approve-builds` unblocks it;
+  the build ran identically via ./node_modules/.bin/astro build).
+  READY-TO-COMMIT: 24 Site files (the user commits in the morning).
+- **SITE-A DISPATCHED (2026-10-19, `3b664fe6` - GLM flash high)**: the
+  homepage (the index "twelve"->"fourteen" sweep using the live exports,
+  the supports-buttons under the THE PIN/THE GOVERN Showcases with the
+  real manifest use cases, the coachy tool-coach section with the
+  --color-pin-red/--color-accent-orange tokens + the two-column coaching
+  board + the interactive judge demo) + the two new plugin pages
+  (plugins/hook-dsh-ccr.astro + plugins/hook-dsh-tool-coach.astro
+  mirroring the governor template) - the pair with L5 (disjoint
+  surfaces); 21 -> 23 pages. Then: I8 (when L5 lands) + Site-C (the
+  READMEs) as the pair, then the enable-all + the tool-coach wiring, then
+  the implementation queue.
+- **SITE-A COMPLETE + VERIFIED (2026-10-19, `3b664fe6`)**: the homepage +
+  the two new plugin pages landed - the build ZERO errors, 23 pages +
+  the sitemap regenerated; the built-Target greps verified: the
+  supports-buttons (the aria-expanded class-toggle chips + the hidden
+  panels + the real expand content: "ONLY gate", "keep-list wins", "no
+  ncu, no jobs, no subprocess", "surgical rewrites on the raw TOML
+  lines"), the coachy section (the two-column coaching board + the tier
+  ladder + the interactive judge demo with the strike accumulation +
+  the enforce toggle + the CSS aliases --coach-red/--coach-orange over
+  the EXISTING tokens, zero new hex), the fourteen sweep (9x fourteen,
+  0x twelve on the built index), the COMPRESS showcase with the
+  terminal example + the 24-hex marker, the byte-exact ledgers (the ccr
+  activation + the coach's ten strings). The ccr page Injects corrected
+  to the REAL seam (pluginFactory, tools). NOTE: Site/ is GITIGNORED in
+  this repo (.gitignore:32) - the site's change set is reported for the
+  site's own versioning/deployment (the site repo's auto-commit hook
+  precedent). RESIDUALS: the case-study JournalExcerpt[1-5] quote fix
+  (the byte source: Documentation/Handoff/Packages/Package-10.md:86-90 -
+  folded into Site-C), the ~29 plugin-Target staleness (folded into
+  I8's acceptance), the Mermaid sources' "twelve" (the puppeteer
+  Diagrams pipeline - deferred; the user's pnpm approve-builds unblocks
+  it), the ccr README's 48-hex marker example vs the sha256-24 store
+  (a README-lane fix - folded into Site-C).
+- **A1 ACTIVATED (2026-10-19, `3583a479` - GLM flash HIGH at activation,
+  the routing-law amendment)**: the live-containers PHASE-1 coder
+  started - the NEW packages (Classic/packages/hook-dsh-live-containers
+  + EffectTS/packages/ets-hook-dsh-live-containers), per the v1
+  research + the IMPLEMENTATION-DESIGN.md phase-1 scope + the family
+  conventions + the IDLE-forever posture; the pair with L5 (disjoint
+  surfaces). Then: A2 + A3 after A1 lands; I8 + Site-C when L5 lands;
+  then the enable-all + the tool-coach wiring; then C2 -> R3 -> D3 ->
+  C3 + I7.
+- **L5 DIED (2026-10-19, `791603ca` - "ran out of room before it
+  finished", no closing message)**: the CONTEXT-OVERFLOW failure class
+  (the tool-coach 129-check suite + the 7 wiring pairs was too big for
+  one agent context; it died in the reading phase - NOTHING landed on
+  disk for the tool-coach or the wiring suites, verified). THE
+  RE-DISPATCH (per the attempts ladder - the failed run's state
+  assessed, the task SPLIT): L5A (`9c6eb0d2` - GLM flash high, the
+  tool-coach pair ALONE) + L5B (`96f80e3c` - GLM flash high, the 7
+  wiring pairs SHALLOW + the Run-Wiring list) - both running now, the
+  pair with A1 (3 active - within the user's ceiling). LESSON: the
+  restructure's remaining tasks ship one-package-per-lane; the reading
+  is scaffold-first + bounded.
+- **A1 COMPLETE + VERIFIED (2026-10-19, `3583a479` - GLM flash high at
+  activation)**: the live-containers PHASE-1 twins landed - Classic +
+  ETS (the tree-identity substitutions only, the module id stays
+  hook-dsh-live-containers - the identical ledger prefix); the
+  cordis.patch.yml carries ONE insert with config ONLY enabled:false
+  (the IDLE-forever posture); the deterministic build + tsc + tsc-alias
+  green on both; the unit verification 25/25 on BOTH built Targets (the
+  cold-mount "disabled (enabled=false)" log, the fixed-frame integrity,
+  the time block changing under the injected fake clock, the counters,
+  the TTL rebuilds, the fail-open render, the bad-config fail-loud, the
+  volatile flips); the 9 ledger strings shipped byte-exact. DEVIATIONS
+  (recorded with reasons): README/SCHEME = A3's surface (files field
+  lists them), the Source/Test + the runner line = A2's surface (A1's
+  script guards the test Build on the dir existing), Function/Clock.ts
+  is an addition (the design's own fake-clock requirement), the
+  counters are module-global in phase 1 (the assemble ScopeKey is
+  opaque; the WeakMap structure stays keyed for wave 2), ttlCalls
+  default 8, the wave-2 kinds skip as "unknown kind" until C2, the
+  node_modules symlinks created manually (pnpm install to formalize -
+  the orchestrator runs it before the serialized family build), the
+  scratch scripts live in /tmp. READY-TO-COMMIT: the two new package
+  dirs (the user commits). Suggested message: "feat(live-containers):
+  phase-1 twins - the per-request live section with the fixed frame,
+  volatile knobs and the IDLE-forever posture (Classic + EffectTS)".
+- **A2 ACTIVATED (2026-10-19, `ab274084` - GLM flash HIGH at
+  activation)**: the phase-1 SMOKE writer started - the fake-ctx +
+  REAL-factory suite over A1's built Targets (the R/D suites per the
+  design section 7: the fake clock, the volatile flips, the TTL vs
+  request, the byte-identity ledger assertions, the fail-open
+  negatives, the vacuously-green guard) + the accepted scratch-profile
+  live-battery note (the enabled=false mount proof). The active trio:
+  L5A + L5B + A2 (3 - the ceiling). Next: A3 (docs/site) when a slot
+  frees; I8 + Site-C when L5A/L5B land; then C2 (after A3 - the phase
+  order); then R3 -> D3 -> C3 + I7; then the enable-all + the
+  tool-coach wiring.
+- **L5A COMPLETE + VERIFIED (2026-10-20, `9c6eb0d2`)**: the tool-coach
+  pair converted - 12 folders (6 per tree: Wiring-And-Defaults 36,
+  Passthrough-And-Guards 6, Notes-And-Cooldown 16, Persistent-Section
+  16, Enforce-And-Exempts 15, Dynamic-And-Craft 40), sum = 129 =
+  baseline EXACTLY in both trees (all 129 PASS messages byte-identical
+  to the source suite); the parity diffs = the tree-identity
+  substitutions only; the runner's folder guard 179/179 OK. TWO
+  FINDINGS (binding): (1) THE RED ARBITER - Maintain/Run-Smokes.mjs
+  stops at governor-smoke.mjs (exit 1): the old .mjs governor suite's
+  Target-walk (deepStrictEqual) trips on the converted governor's
+  gitignored compiled Target/Test - PRE-EXISTING (the full runner
+  never ran after the governor conversion; reproduced + verified by the
+  orchestrator). (2) THE DECLARATION-HYGIENE RULE - the Build CLI's
+  tsc/tsc-alias spawns are fire-and-forget (the raw-tsc emit can land
+  after tsc-alias, leaving @Interface aliases in the tracked
+  Target/*.d.ts); the tool-coach scripts gained a FOURTH awaited step
+  (`pnpm exec tsc -p tsconfig.json && pnpm exec tsc-alias -f -p
+  tsconfig.json`); the other converted packages need the same sweep.
+  PLUS the trap-11 ERRATUM: the "!Source/Test/**/*.ts" negation is a
+  NO-OP in build 0.3.4 (patterns globbed separately; the plugin build
+  compiles the Test tree harmlessly - the test build regenerates
+  Target/Test) - recorded in the blueprint; the scripts keep the
+  negation for future CLI versions.
+- **I8 ACTIVATED (2026-10-20, `0ce2c18d`)**: the wrap-up lane started
+  with the PRIORITY ORDER: (1) THE RED-ARBITER FIX (the governor .mjs
+  Target-walk skip of Target/Test, or the early retirement - then the
+  runner re-run); (2) the ets-base re-home; (3) THE RETIREMENT (after
+  L5B's wiring folders land - check the disk; the wiring suites stay
+  env-gated + self-skipping); (4) THE DECLARATION-HYGIENE SWEEP (the
+  fourth awaited step across the converted packages + the serialized
+  rebuild + the tracked Targets clean); (5) THE TOTALS LEDGER + the
+  Target-freshness drift closure (the 29 site-lane findings). Active
+  trio: L5B + A2 + I8 (3 - the ceiling).
+- **A2 COMPLETE + VERIFIED (2026-10-20, `ab274084` - GLM flash high at
+  activation)**: the phase-1 smoke suite landed - 4 folders per package
+  (Wiring-And-Defaults 42, Render-And-Frames 23, Recompute-And-Ttl 17,
+  Volatile-And-Failsafes 23) = 105 checks per tree, 210 overall, the
+  aggregate "All 229 smoke suites passed"; the coverage: the fake clock
+  via State.Now (recompute/changing-value), the volatile flips via the
+  REAL cosmokit.volatile.write seam + the captured volatile-update
+  listener (State identity preserved), the TTL-vs-request policies, the
+  byte-exact ledger assertions (incl. the durable [ISO] forms), the
+  fail-open negatives, the interpolate:false literals, the fixed-frame
+  integrity, the IDLE-forever cold-mount proof. FINDINGS (A1's surface,
+  relayed + the fix dispatched): the tsconfig "exclude": ["Source/Test"]
+  missing (the prepublish tsc tail fails with TS6059/TS5056 once the
+  test tree exists) + the prepublishOnly.sh third step (selfcheck +
+  the Test-tree tsc) - A1 amended + fixing.
+- **A3 ACTIVATED (2026-10-20, `4a09a152` - GLM flash low)**: the
+  phase-1 DOCS/SITE writer started - the live-containers READMEs
+  (both trees) + the SCHEME (the config table + the volatile markers +
+  the ledger strings byte-exact + the KV-cache honesty + the
+  programmable stage labeled FUTURE) + the site page
+  (plugins/hook-dsh-live-containers.astro mirroring the newest ccr
+  template + Content.ts 14->15 + the registry row; 23 -> 24 pages);
+  the site build via the astro binary + the greps. Active trio: L5B +
+  I8 + A3 (3 - the ceiling). Next: C2 (the wave-2 coder) after the
+  phase-1 fix + A3 land; then R3 -> D3 -> C3 + I7; then the pnpm
+  install + the enable-all + the tool-coach wiring; then the wrap-up.
+- **L5B COMPLETE + VERIFIED (2026-10-20, `96f80e3c`)**: the seven
+  wiring suite pairs converted with the SPLIT decision - Test/<Suite>/
+  Gate-And-Harness/ (5 checks: the self-skip negative control + the
+  env gate + the scratch completeness + the isolation) +
+  Test/<Suite>/Live-Assertions/ (the full live checks byte-identical in
+  source order), 28 folders in the smokes trees (the suites have no
+  owning package - the blueprint's home is the smokes trees), the
+  in-place esbuild Build-Tests.sh (Test.ts -> Test.mjs, git-ignored,
+  direct esbuild NOT the Build CLI - its base config wipes
+  destructively; the import-depth invariant forces it), Run-Wiring
+  rewritten to the folder list + the README count guard. Parity:
+  reverse-substitution diffs byte-exact except the documented
+  13-tarball/ets-base-dsh tree reality. THE RUNNER: "All 229 smoke
+  suites passed" (14 wiring self-skips); Run-Wiring honestly reports
+  4 PRE-EXISTING FAILURES (Live-Ledger 5 + Governed-Write 2, both
+  trees): ROOT CAUSE = the LIVE REGISTRATION COLLISION - `command
+  "normalize-overpass" is already registered` thrown when the second
+  flavor mounts, so every flavor after the first fails to finish
+  mounting (the stream listeners never attach + the normalize-file
+  tool never registers). A REAL PLUGIN-SOURCE BUG (the smoke/live
+  fidelity gap proven live) - NOT caused by any lane, preserved
+  byte-identically.
+- **I9-LIVE-FIX DISPATCHED (2026-10-20, `44362e05` - GLM flash high)**:
+  the minimal fix lane for the live registration collision - the
+  idempotent command registration across the 7 normalize flavors (both
+  trees; the commands-service API inspected in the harness checkout;
+  fail-open: the duplicate must NOT abort the mount - the listeners +
+  the tool registration still attach), the serialized rebuild, and the
+  LIVE battery verification (Run-Wiring - expect the Live-Ledger +
+  Governed-Write failures GONE - + Run-Smokes green, ZERO assertion
+  changes). Active trio: I8 + A3 + I9 (3 - the ceiling).
+- **A1 AMENDED FIX COMPLETE + VERIFIED (2026-10-20, `3583a479`)**: the
+  tsconfig "exclude": ["Source/Test"] + the four-step prepublishOnly.sh
+  (the awaited declaration pair closing the L5A race) on both twins;
+  the full rebuilds OK; the declaration hygiene verified (all the
+  .d.ts present, the @Interface/@Function/@Variable aliases fully
+  rewritten); the unit 25/25 + A2's 105/105 on both twins. CAVEAT
+  (outside its surface, recorded): the full runner aborts at
+  pinner-smoke.mjs - ERR_MODULE_NOT_FOUND "@Variable/Section.js" from
+  the pinner's Target/Function/Pin.js - a STALE un-aliased tracked
+  Target in the pinner package (the L5A race symptom, pre-existing) -
+  COVERED by I8's declaration-hygiene sweep (priority 4: the fourth
+  awaited step + the serialized rebuild + the tracked Targets clean);
+  the .mjs pinner suite loads the REAL built Target, so the sweep's
+  rebuild restores the green.
+- **A3 COMPLETE + VERIFIED (2026-10-20, `4a09a152` - GLM flash low)**:
+  the phase-1 docs + the site page landed - the live-containers
+  READMEs + SCHEMEs (both trees, the nine ledger strings byte-exact,
+  the KV-cache honesty, the programmable stage labeled FUTURE, the
+  wave-2 kinds documented as skipping "unknown kind", the IDLE-forever
+  posture) + the site's 15th page (plugins/hook-dsh-live-containers.
+  astro, governor-mirror) + Content.ts 14->15 + Families/Groups +
+  the registry row + the fourteen->fifteen sweep (the smoke-suite
+  counts correctly stay fourteen). ARBITER: astro build 24 pages
+  green + the byte-exact ledger greps + the Drift-Guard
+  live-containers checks pass. MISMATCH SYNCED: the design doc's
+  canonical activation string updated to A1's SHIPPED form
+  (activated (bundle 0.0.1, blocks=<n>, refresh=<policy>)). The
+  tool-coach Classic README H1 defect + the JournalExcerpt quote
+  failures are SITE-C's folded fixes (dispatched).
+- **SITE-C DISPATCHED (2026-10-20, `34bc7258` - GLM flash low)**: the
+  READMEs lane - the new-functionality sections + the four binding
+  granularity facts across the plugin READMEs (Classic + ETS) + the
+  three folded fixes (the tool-coach Classic README H1 drift, the ccr
+  48-hex marker example, the case-study JournalExcerpt re-quote) -
+  verified via the Drift-Guard + the astro build. Active trio: I8 +
+  I9 + SITE-C (3 - the ceiling).
+- **I8 COMPLETE + VERIFIED (2026-10-20, `0ce2c18d`) - THE RESTRUCTURE
+  IS DONE**: the runner's final line "All 187 smoke suites passed"
+  (exit 0; the 42 .mjs retired - the folders are the arbiter; the
+  wiring suites self-skip); the red-arbiter fix (both governor .mjs
+  walks skip the Target/Test subtree - green until retirement); the
+  ets-base re-home (Stream-Gate 1 + Update-Envelope 2 -> ets-base's
+  own tree; the arithmetic recorded: 17 = 14 + 3, zero weakening); the
+  retirement (42 .mjs removed via shell rm - the edit/write API has no
+  deletion - wiring-live.mjs kept; the runner rewritten to the
+  folders-only glob + the new counting header; both smokes READMEs
+  rewritten); the declaration-hygiene sweep (the awaited 4th step
+  appended to 28 scripts - no duplicates; the surfaced fixes: the
+  live-containers exclude, the governors'/pinner's strict-null test
+  typing (fixture-only, zero assertion changes), the ETS ccr dep skew
+  (cordis 4.0.5->4.0.4, tsc-alias 1.9.8->1.9.7); the serialized build
+  green; the tracked Targets alias-free); THE TOTALS LEDGER (the
+  blueprint section 9: 28 mechanics rows all delta-0 except the ets
+  core -3 re-homed; the wiring table 136/tree; the roll-up 229 -> 187
+  units; Classic mechanics 1312 -> 1417 = +105 live-containers new
+  coverage, ETS 1325 -> 1430 same). VERIFIED by the orchestrator's
+  spot-checks (0 .mjs remaining, the ets-base tree on disk, the ledger
+  section, a folder spot-run green). The READY-TO-COMMIT list: the
+  runner + the smokes READMEs + the 42 deletions + the 28 scripts +
+  the typing narrowings + the ets ccr dep + the ets-base tree.
+- **C2 ACTIVATED (2026-10-20, `96669721` - GLM flash high)**: the
+  wave-2 coder started (its gate met: phase 1 landed + verified) - the
+  detach/policy/jobs/completion/board/failsafe/suggester modules +
+  the J/B/F/S additive smokes + the wave-2 docs, per the design doc
+  section 9 + the five ratified addenda (the addenda win) + the
+  residuals R1-R5; additive-only on the phase-1 files; the phase-1
+  smokes pass with ZERO assertion changes. Active trio: I9 + SITE-C +
+  C2 (3 - the ceiling). Next: R3 (after the wave-2 chain) -> D3 ->
+  C3 + I7; then the pnpm install + the enable-all + the tool-coach
+  wiring; then the wrap-up.
+- **SITE-C COMPLETE + VERIFIED (2026-10-20, `34bc7258` - GLM flash
+  low)**: the README lane + the folded fixes landed - the Drift-Guard
+  310/310 (the 5 JournalExcerpt failures GONE), the astro build 24
+  pages ZERO errors; the four granularity facts in all 14 flavor
+  READMEs (the per-call marker paragraph with "leave that search
+  alone" + the two edges + the overpass invisibility contract) + the
+  effective-gate formula in both core READMEs + the volatile-refresh
+  path in both factory READMEs + the ccr overpass cross-reference; the
+  folded fixes: the tool-coach Classic README H1 identity fix, the ccr
+  24-hex marker examples (both trees), the case-study JournalExcerpt
+  re-quoted byte-exact (from the package READMEs' ledger samples -
+  Package-10.md is GONE, CASE-REVIEW.md has timestamps only); PLUS the
+  parser fix (the restructure's smokes-README format change crashed
+  the Drift-Guard ParseSmokeReadme - updated to the "live as per-test
+  folders" spelling). The READY-TO-COMMIT: 18 files (the 14 flavor
+  READMEs + the core/factory/ccr/tool-coach READMEs + the three Site
+  files). The RESIDUAL: the marker-not-taught FUTURE item stands - I7
+  (the coach-grammar lane) owns it, fires after C2's docs settle.
+- **I9-LIVE-FIX COMPLETE + VERIFIED (2026-10-20, `44362e05` - GLM flash
+  high)**: the duplicate normalize-overpass command collision fixed in
+  ALL 14 flavors (7 Classic + 7 ETS) - the registration-site finding:
+  the dsh-commands service has NO agent-free has/list surface (list/
+  find require an agent argument), so the fix is the fail-open
+  try/catch around the register call (one new ledger line: `command
+  "normalize-overpass" registration skipped (the mount continues):
+  <the registry's own message>`; ONE line per non-first flavor per
+  boot; ZERO lines when registration succeeds - all existing smoke
+  assertions byte-identical). Both trees rebuilt serialized + the
+  declaration hygiene verified. THE BATTERIES: Run-Wiring "All 28
+  wiring suites passed (272 checks)" exit 0 - the Live-Ledger 33 + the
+  Governed-Write 8 PASS in BOTH trees (the losses GONE); Run-Smokes
+  green. NOTE: I9's "All 229" runner line was a STALE pre-retirement
+  run (it ran during I8's overlap) - the current runner counts 187
+  folder units per its header (verified on disk). READY-TO-COMMIT:
+  exactly 14 Apply.ts files. RESIDUALS: the dogfood subhome staleness
+  (reset the subhome install after any rebuild - the wiring-ready
+  marker alone is not enough), the 6 skip-lines-per-boot by design
+  (observability), the new ledger string needs a doc reconciliation
+  (the flavors' READMEs' ledger sections - a wrap-up residual), the
+  stale "42 .mjs" comments in the two runners (cosmetic).
+- **C2 COMPLETE + VERIFIED (2026-10-20, `96669721` - GLM flash high) -
+  THE WAVE-2 CHAIN SETTLED**: the wave-2 extension landed on the
+  live-containers package - the nine Function modules (Policy/Jobs/
+  Detach/Completion/Board/Failsafe/Suggester/Set/Plant) + Events/
+  Catalog + the additive Config/Apply/Library extensions + 37 new
+  ledger strings + 4 new test folders (J 27 / B 17 / F 10 / S 21 =
+  75) - per-tree 180 checks (the phase-1 105 UNCHANGED, zero assertion
+  changes); the runner "All 195 smoke suites passed"; npm pack 0 Test
+  paths (the files negation added - phase 1 had shipped without it);
+  the ETS parity (diffs = the tree-identity substitutions only). ALL
+  THE RESIDUALS CLOSED against first-hand asar verification: I3 R1
+  (the RuntimeContextProjection emits a snapshot only when the rendered
+  context differs - the stable-tail refinement avoids the harness's
+  CLEARED snapshot), R2 (suppression keeps the pending frames), R3
+  (the SCHEME 12.3 cache statements + the wrapper line), R4 (the
+  context order 300, own allocation), R5 (the scope-chain emission);
+  I4 R1-R4 (the exit-code parse, the domain-noun heuristic, the k/n
+  counter, completionCapBytes 4096); I5 R1-R5 (the assemble-pass
+  admission discriminator, the child-turn windows deferred, leaseTurns
+  config, the [stale] SCHEME 12.4 + B-series byte assertions, prune
+  never kills); I6 R1-R5 (the token grammar v1-frozen, the catalog
+  static, the complexity non-feature, the accept/dismiss verbs + S-
+  series, accept-on-expired). ONE OPEN GAP (honest): I4 R5's
+  failures-first sort is implemented but not explicitly smoke-seeded -
+  recorded as an optional follow-up J-check. DEVIATIONS disclosed: the
+  ARMING GATE (the wave-2 listeners register only with the jobs stack
+  composed - the phase-1 wiring assertions stay byte-for-byte; in
+  production inject guarantees ctx.jobs), the agent/inbox/spliced
+  SESSION-event carrier correction (not emit), the addenda-won ledger
+  variants, the event-driven deadlines (no real timers). READY-TO-
+  COMMIT: the two package dirs.
+- **R3 + I7 ACTIVATED (2026-10-20)**: the wave-3 research (R3,
+  `e525cd61` - GLM flash low: the LIVE-FILE-MONITORS requirement file
+  with the 10 consideration points + the D3 brief) + the COACH-GRAMMAR
+  teaching (I7, `95e565e5` - GLM flash low: the byte-exact note text
+  teaching the markers + the planted conventions + the template names,
+  the tier decision, the ready-to-insert profile config snippet for
+  the enable-all wiring, the docs sections). The active pair. Next:
+  D3 (after R3) -> C3 (after D3) -> then the pnpm install + the
+  enable-all + the tool-coach wiring -> the wrap-up (the totals
+  roll-up + the READY-TO-COMMIT state + the residuals ledger).
+- **R3 COMPLETE + VERIFIED (2026-10-20, `e525cd61`)**: the wave-3
+  research landed - Documentation/Plans/LiveContainers/Requirements/
+  08-LIVE-FILE-MONITORS.md (230 lines): the seam verdict POSSIBLE with
+  first-hand anchors (fs/observed Write.ts:149-157 + the governor
+  consumer precedent, ctx.jobs as the check home, the assemble
+  standing section, the I1 sandbox rules inherited wholesale - the
+  monitor check producer can be the SAME governed-bash wrapper G2
+  designed for CAN-1 (one wrapper, two callers), the P5 storage domain
+  for the cross-restart persistence); the gaps M1-M7 are design work,
+  not missing machinery; ALL 10 consideration points ADOPTED (none
+  rejected - the freshness+provenance per line with the STALE flip, the
+  no-problem indicator grammar (\u2204/\u2205 escapes) + the one-line
+  summary band, the fast-debounced/slow-scheduled taxonomy, the 2 KiB
+  band / 4 KiB section caps + stable-until-event, the per-glob
+  watchlist default EMPTY, the escape hatch, the honesty (no false
+  pass - the no-problem indicator only from an observed exit-0 for the
+  exact version), the plantType aggregation, the version-keyed
+  persistence with the live/recovered provenance, the control-loop
+  framing); the SEVERE+COMPREHENSIVE extensions (the linkage alerts,
+  the .live-monitors.json project config, the monitor-aware dedup -
+  the only piece touching tools/post-execute, kept read-only-in-
+  effect, the ptc-runtime programmable monitors, the session health
+  gauge); the 10 acceptance criteria + the D3-DESIGN-BRIEF (10
+  mandates).
+- **D3 ACTIVATED (2026-10-20, `48c0c30d` - deepseek-v4-flash-0731
+  max)**: the wave-3 design lane - resolves M5 FIRST (the storage
+  schema: new domain vs extension records, the v2 open contract
+  constrains it), the monitor engine + the check runner (the SHARED G2
+  governed-bash wrapper) + the assemble band (the byte-exact indicator
+  grammar + the caps + the stable-until-event KV honesty) + the
+  persistence + the plantType synergy + the escape hatch + the
+  monitors:"off" default + the expected modules + the smokes/docs
+  plans + THE C3 CODER BRIEF + the phase alignment (after C2's wave-2
+  phase commits). The active pair: I7 + D3.
+- **THE ENABLE-ALL + THE TOOL-COACH WIRING COMPLETE (2026-10-20 - the
+  orchestrator's hands-on task, the site gate passed)**: ALL 10
+  disabled profile rows flipped on via plugin_manager (each
+  "application: applied": hook-dsh-package-governor, hook-dsh-
+  package-pinner, hook-dsh-cargo-governor, hook-dsh-normalize-
+  {dash,quotes,ellipsis,spaces,invisible,fullwidth}, ccr - the
+  factory + normalize-file were already live; the dependency order
+  held - the factory active first). THE TOOL-COACH WIRED INTO THE
+  PROFILE: the bundles list += "@playform/hook-dsh-tool-coach", the
+  dependencies += the link:/Users/nikola/.../Classic/packages/
+  hook-dsh-tool-coach, the cordis.patch.yml row (id:
+  hook-dsh-tool-coach, name, config: log true + the ABSOLUTE logFile
+  /Users/nikola/.dsh/hook-dsh-tool-coach.log + notes.persistent = I7's
+  byte-exact snippet (the Tool discipline template + the Live-container
+  grammar block - 1694 chars, validated)), the profile pnpm install
+  done (the link present in the profile node_modules). VALIDATED: the
+  patch YAML parses (28 rows; the tool-coach row + the grammar block +
+  both markers + the logFile verified). THE LIVE-CONTAINERS PLUGIN
+  STAYS IDLE (its patch carries enabled:false only; it is NOT in the
+  profile bundles - the IDLE-forever posture holds). READY-FOR-
+  RESTART: the user's next restart boots the full family live (13
+  @playform bundles) + the tool-coach with the teaching note.
+  REMAINING QUEUE: D3 (running) -> C3 -> the pnpm install (the
+  workspace formalization for the live-containers packages) + the
+  wrap-up report (the totals roll-up + the READY-TO-COMMIT state + the
+  residuals ledger).
+- **D3 COMPLETE + VERIFIED (2026-10-20, `48c0c30d` - deepseek max)**:
+  the wave-3 design delivered - Documentation/Plans/LiveContainers/
+  Design/FILE-MONITORS-DESIGN.md (1198 lines). THE M5 DECISION: a NEW
+  storage domain live_containers_monitors (v1, per-record, one checks
+  table) - extension records REJECTED (the v2 open contract would
+  force a package_governance v3 bump with the whole-family blast
+  radius); the plugin's OWN P5-style open effect. THE DESIGN: the
+  engine (fs/observed via Factory.Wire + the checkpoint debounce, no
+  real timers), the check runner (the check producer IS the shipped G2
+  wrapper - one wrapper, two callers, the literal 12.2 inheritance,
+  checkTimeoutMs <= 120000 validated at load), the assemble band (the
+  monitors stanza + the byte-exact grammar: the summary band with the
+  pinned arithmetic, the STALE declarations, the recovered forms, the
+  no-problem indicator bounded HARD - observed settle + exit 0 + exact
+  version + live provenance), the persistence (three record kinds +
+  the recovered provenance), the plantType "monitors" synergy (the ONE
+  additive Board.ts change = the settle skip guard), the escape hatch
+  (no pre-execute listener - the inline checks + the __await marker
+  untouched), the 6 M-series smokes, the docs, THE C3 CODER BRIEF
+  (section 16.2, self-contained). THE PHASE ALIGNMENT: PHASE 3
+  strictly after C2's wave-2 acceptance; additive-only; the phase-1 +
+  wave-2 smokes pass with ZERO assertion changes; Library.ts unchanged.
+  RESIDUALS: the cross-file staleness scoped to the per-file version
+  staleness in v1, the storage-domain read surface verified at the C3
+  dispatch (absent = honest "not run yet"), the opaque version tokens,
+  the retirement = the one clock-driven terminal text change, the
+  linked-governance band never renders the no-problem indicator.
+- **C3 ACTIVATED (2026-10-20, `62896685` - GLM flash high)**: the
+  wave-3 LIVE-FILE-MONITORS coder started - the Monitors/Watchlist/
+  Band/Storage/MonitorTools modules + the M-series smokes per the
+  design's C3 brief (the phase alignment: after C2's wave-2
+  acceptance - the C2 files are the floor; the Board skip guard the
+  only C2-file edit; the ETS twin after the Classic). After C3: the
+  workspace pnpm install (the live-containers packages' linking
+  formalization) + THE WRAP-UP REPORT (the totals roll-up + the
+  READY-TO-COMMIT state + the residuals ledger).
+- **C3 COMPLETE + VERIFIED (2026-10-20, `62896685`) - THE PIPELINE'S
+  LAST LANE**: the wave-3 live file monitors landed in both twins -
+  the Monitors/Watchlist/Band/Storage/MonitorTools modules +
+  DefaultCheckSets + the 12 Monitors smoke folders (100 checks per
+  twin; the package total 203 per twin across 14 folders; repo-wide
+  3404 PASS checks), the runner "All 207 smoke suites passed" (the
+  195 baseline folders with ZERO assertion changes + the 12 new); the
+  byte-exact band grammar + the 16 new ledger strings; the dispatch-
+  time storage-read check verified IN PLACE (KvTable sync entries -
+  no deviation); the process incident (a package.json devDeps edit
+  triggered the live ncu governance stage which auto-bumped pins -
+  FULLY REVERTED via raw-write with governance disabled + the shadow
+  node_modules removed; the lockfile reconciled by the workspace
+  install - "up to date", no git delta); two tool-discipline slips
+  disclosed + content-verified. READY-TO-COMMIT: the two package
+  dirs + Maintain/generate-ets-live-containers.mjs.
+
+## THE PIPELINE COMPLETE (2026-10-20 - the overnight run's wrap-up)
+
+- **THE TOTALS ROLL-UP**: the restructure = "All 187 smoke suites
+  passed" (the folders the arbiter; the .mjs retired; the totals
+  ledger in the blueprint section 9 - all 28 mechanics rows delta-0);
+  + the live-containers wave-2 (4 folders per twin) + wave-3 (6
+  folders per twin) = "All 207 smoke suites passed", 3404 PASS checks
+  repo-wide. THE SITE: 24 pages, the build green, the Drift-Guard
+  310/310. THE LIVE BATTERY: Run-Wiring 28/28 (272 checks - the
+  Live-Ledger + Governed-Write losses fixed by the I9 fail-open
+  registration). THE FAMILY: 14 packages per tree + the live-
+  containers twins (Classic + ETS) + the ets-base re-homed tree.
+- **THE READY-TO-COMMIT ROLL-UP (the user's morning commit - 161
+  working-tree entries; the areas): (1) the restructure: the 28
+  prepublishOnly.sh four-step scripts + the typed test narrowings +
+  the retired .mjs deletions + the runner rewrites + the smokes
+  READMEs + the ets-base tree; (2) the normalize I9 fix: 14 Apply.ts
+  files; (3) the tool-coach conversion: the Source/Test tree + the
+  configs + the README fixes; (4) the live-containers packages (NEW
+  dirs: Classic + ETS - phase 1 + wave 2 + wave 3, the 207-suite
+  coverage) + Maintain/generate-ets-live-containers.mjs; (5) the
+  README/SCHEME documentation sweeps (the granularity story + the
+  teaching note + the ledger reconciliations); (6) the
+  Documentation/Plans records (the blueprints + the requirement +
+  design docs + TOMORROW-REVIEW); (7) the SITE is gitignored here -
+  its 40+ files commit via the site's own repo. Suggested commit
+  grouping: one commit per area (the lanes' suggested messages are in
+  the record).
+- **THE RESIDUALS LEDGER**: (a) the I4 R5 failures-first smoke seed
+  (implemented, not explicitly seeded - optional one J-check); (b)
+  the I9 skip-line doc reconciliation (the flavors' READMEs' ledger
+  sections - optional); (c) the stale "42 .mjs" comments in the two
+  Maintain runners (cosmetic); (d) the dogfood subhome staleness
+  (reset after rebuilds); (e) the SEVERE/COMPREHENSIVE wave-3
+  extensions (inert knobs, documented - the ptc-runtime programmable
+  monitors + the health gauge + the GUI sidecar + the cross-session
+  memory + the linkage alerts + the cross-file attribution + the
+  .live-monitors.json + the monitor-aware dedup); (f) the
+  live-containers plugin stays IDLE-forever (never in the profile -
+  the smokes + the scratch battery prove it); (g) the reactive-only
+  teaching (the tier-2 section triggers; a proactive pointer is an
+  optional future line).
+- **THE PROFILE (READY-FOR-RESTART)**: all 13 @playform bundles live
+  (the 10 flips applied + the tool-coach wired with the teaching
+  note + the absolute logFile; the live-containers NOT in the
+  profile); the user's next restart boots the full family.
 
 ## QUEUE ADDITION (2026-10-19) - LIVE CONTAINERS WAVE 3 (the LIVE FILE MONITORS - "files are halted processes" - researched, NOT implemented)
 
@@ -1054,3 +1564,26 @@ does things, not a back-and-forth wasting tokens".
   high; codes the wave-3 phase after C2). The drain order: the wave-2 chain
   first (I2-I6 -> D2 -> C2), then the wave-3 trio (R3 -> D3 -> C3), then
   I7/I8.
+
+## SITE-FIX PASS (2026-10-20 - the user's three reports, all fixed + verified)
+
+The user reported (the dev server at :9999): (1) the supports help text
+placement, (2) the supports chips' dead clicks, (3) the coachy section dead.
+THE ROOT CAUSES (both real bugs in the shipped site): (a) THE SUPPORTS
+PANELS - the panel's `display:grid` class rule overrode the UA's `[hidden]`
+rule (the hidden attribute was INERT - the panels were always visible, the
+click-to-expand toggled nothing visible); FIXED: the `[hidden]` override
+rule added to the SupportsButton styles (built as
+`.supports__panel[data-astro-cid-mwh6yo7d][hidden]{display:none}` - the
+(0,3,0) specificity wins; verified in the built CSS). (b) THE COACH DEMO -
+the Judge() script read `data-coach-call` + `data-pattern` while the markup
+carries the kind in `data-call-kind` + the pattern in `data-call-pattern` (a
+bare attribute returns "" - NO branch ever matched - the screen stayed
+empty, the strikes mis-counted, the tier lights never lit); FIXED: the two
+getAttribute reads aligned to the markup. (c) THE PLACEMENT - the supports
+row right-aligned (justify-content:flex-end) so the chips sit at the
+card's bottom right under the whole box (the Showcase slot was already the
+closing row). REBUILT: 24 pages green; VERIFIED in the built output (the
+[hidden] rule + the flex-end row + the data-call-kind read) AND on the dev
+server (the recompiled page carries all three fixes - the user needs a
+browser refresh).

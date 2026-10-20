@@ -20,12 +20,14 @@
 	},
 	"files": [
 		"Target",
+		"!Target/Test",
 		"cordis.patch.yml",
 		"README.md",
 		"SCHEME.md"
 	],
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+		"prepublishOnly": "sh prepublishOnly.sh",
+		"Run": "sh Run.sh"
 	},
 	"dependencies": {
 		"@playform/hook-dsh-core": "0.0.1",

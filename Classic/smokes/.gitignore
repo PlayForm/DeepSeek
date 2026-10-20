@@ -1,0 +1,6 @@
+# Compiled wiring-test outputs (the Test.ts sources compile in place, beside
+# the sources - see Build-Tests.sh)
+Test/**/*.js
+Test/**/*.mjs
+Test/**/*.js.map
+Test/**/*.mjs.map

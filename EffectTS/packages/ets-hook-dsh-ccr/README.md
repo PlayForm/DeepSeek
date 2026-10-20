@@ -10,7 +10,7 @@ with a one-line type-aware preview plus a retrieval marker:
 
 ```
 [terminal:exit 0 | 142 lines | make: *** Error 1]
-<<<CCR:9d3c1f0a7b2e4d5c6a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d|terminal|5231>>>
+<<<CCR:9d3c1f0a7b2e4d5c6a8b9c0d|terminal|5231>>>
 ```
 
 ... while keeping the original retrievable through the registered
@@ -66,7 +66,9 @@ decision unchanged; only an accepted, non-value-carrying decision is
 replaced; the whole transform is fail-open (an internal error logs a warning
 and keeps the inline content - never throws into the waterfall); the listener
 prepends so the gate sees the pristine result. Verified against the harness
-pipeline docs and the production spill-policy precedent.
+pipeline docs and the production spill-policy precedent. The ccr hook and the
+normalize flavors' tool-results arm share the `tools/post-execute` waterfall;
+the `<<<CCR:` marker guard makes any load order safe.
 
 ## Config
 

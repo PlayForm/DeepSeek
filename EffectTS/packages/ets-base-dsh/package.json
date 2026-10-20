@@ -22,7 +22,7 @@
 		"CHANGELOG.md"
 	],
 	"scripts": {
-		"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"
+		"prepublishOnly": "sh prepublishOnly.sh"
 	},
 	"dependencies": {
 		"effect": "4.0.5"

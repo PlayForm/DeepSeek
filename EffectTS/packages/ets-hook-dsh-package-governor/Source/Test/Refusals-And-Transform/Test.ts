@@ -206,6 +206,12 @@ export const runTest = async (): Promise<number> => {
 		undefined,
 		["a", "leftpad"],
 	);
+	// Type-level narrowing for the raw-tsc emit (the L5A awaited step): the
+	// factory types the transform's result `Output | null` (idempotent
+	// manifests yield the designed no-op) and `next` unknown; this manifest
+	// is decodable, so narrow once — no assertion changes.
+	if (out === null) throw new Error("a decodable manifest yields a message");
+	const Decoded = out.next as { dependencies: { leftpad: string; a: string } };
 	{
 		const Sub =
 			"transform: raw text in, decode inside; keep-list ignored (governor closes over its sections)";
@@ -213,12 +219,12 @@ export const runTest = async (): Promise<number> => {
 			Check(Count, Sub, () => {
 				assert.equal(out.count, 1);
 				assert.equal(
-					out.next.dependencies.leftpad,
+					Decoded.dependencies.leftpad,
 					"^1.0.0",
 					"decode inside the transform (raw text in)",
 				);
 				assert.equal(
-					out.next.dependencies.a,
+					Decoded.dependencies.a,
 					"^2.0.0",
 					"the keep-list does NOT pin (governor ignores it)",
 				);
@@ -226,7 +232,10 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 	}
-	const msg = out.message({ version: "fresh-9" });
+	// The compose arm of the factory's `message?` union (string | composer);
+	// the assertion below already proves the composed bytes.
+	const Compose = out.message as (outcome: { version: string }) => string;
+	const msg = Compose({ version: "fresh-9" });
 	{
 		const Sub = "transform: the message composes `governed <path> \u2192 <version>` from the outcome";
 		{

@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const e="hook-dsh-live-containers",r=t,n=["pluginFactory","tools","systemPrompt","shell","shellEnv","workingDirectory","jobs"],p=o;var l={name:e,apply:p,Config:r,inject:n};export{r as Config,p as apply,l as default,n as inject,e as name};

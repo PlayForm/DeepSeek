@@ -1,0 +1,1 @@
+const t={tsc:{glob:"**/*.ts",command:"tsc --noEmit {{path}}",fast:!0},format:{glob:"**/*.ts",command:"npx prettier --check {{path}}",fast:!0},cargo:{glob:"**/Cargo.toml",command:"cargo check",fast:!1,intervalMs:0},governance:{glob:"**/package.json",link:"governance",fast:!1}};export{t as DEFAULT_CHECK_SETS};

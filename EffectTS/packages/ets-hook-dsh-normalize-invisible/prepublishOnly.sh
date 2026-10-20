@@ -28,3 +28,9 @@ Build "Source/Test/**/*.ts" \
 node Target/Test/Harness.js --selfcheck || exit 1
 
 ./node_modules/.bin/tsc -p Configuration/TypeScript-Test.noemit.json
+
+# Awaited raw-tsc emit + alias rewrite (the L5A finding): the Build CLI runs
+# tsc and tsc-alias fire-and-forget, so a slow emit can land after tsc-alias
+# and leave @Interface aliases in the tracked Target/*.d.ts. Running both
+# awaited, in order, closes the race.
+pnpm exec tsc -p tsconfig.json && pnpm exec tsc-alias -f -p tsconfig.json

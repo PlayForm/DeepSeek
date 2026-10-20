@@ -235,6 +235,13 @@ silent, no remount, no new activation line.
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
 
+The per-call `{"__normalize":false` first-key marker is the tool-args arm's escape hatch — the
+"leave that search alone" control: a deliberate search for an irregular character (an em dash, a
+curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
+normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
+normally.
+
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
 `ask_user_question` by default.
@@ -247,7 +254,12 @@ cells, so flipping a scope lands through the P10 volatile-refresh without any re
 - **Tool results** — `tools/post-execute`, `{ prepend: true }` (OUTERMOST vs the ccr hook's own
   prepended gate: the ccr compression sees the NORMALIZED bytes; the `<<<CCR:` marker guard makes
   any load order safe). Accepted, non-value-carrying decisions only; TEXT blocks only (never
-  tool-call/argument blocks); N = 0 is a true no-op — no ledger line; fail-open.
+  tool-call/argument blocks); N = 0 is a true no-op — no ledger line; fail-open. The invisibility
+  contract: the replacement is PRE-COMMIT — the waterfall settles before the result is appended to
+  the durable log — so the model only ever sees the normalized output and never notices the
+  replacement (the write-path counterpart is the governance trio's never-notify precedent: the tool
+  result is built from the author's own content, and the observation-policy's version record is
+  refreshed by the re-emitted fs/observed).
 - **Step batch** — `agent/pre-step`, default order. While `scopes.batch` is on every incoming batch
   is normalized; the command's one-shot arm fires ONCE regardless of the scope value and is cleared
   after one use. Text blocks only; never the assistant/tool history.

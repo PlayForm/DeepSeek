@@ -1,26 +1,42 @@
 // Run-Wiring - the wiring-battery runner (the live ~/.dsh integration test
 // per Documentation/Plans/DOGFOOD-TESTING.md). Owns the full scratch
-// lifecycle - create (12 pack tarballs, NO symlinks) → install (file: copy
-// deps) → activate (the real harness boot) → exercise (the governed-write
-// script through the harness's own event loop) → verify (the 7 wiring
-// suites) → destroy (`rm -rf`, no residue; the real profiles untouched).
-// The suites' printed totals are the arbiter; this runner only reports
-// per-suite and combined wiring counts, never the 733/746 mechanics numbers.
+// lifecycle - create (pack tarballs, NO symlinks) -> install (file: copy
+// deps) -> activate (the real harness boot) -> exercise (the governed-write
+// script through the harness's own event loop) -> verify (the wiring test
+// folders) -> destroy (`rm -rf`, no residue; the real profiles untouched).
+//
+// Since the wiring restructure, the verification units are the COMPILED
+// per-test folders under <tree>/smokes/Test/<Suite>/{Gate-And-Harness,
+// Live-Assertions}/ (one Test.mjs per folder, built by
+// <tree>/smokes/Build-Tests.sh). The former .mjs suite originals were
+// retired by the wrap-up lane (I8) - the folders are the arbiter. The
+// folders keep the same env gate (DSH_TEST_SCRATCH) and the same self-skip
+// behavior; this runner always sets the gate, so they never skip here.
+//
+// THE COUNTS: each folder prints `N PASS - <Suite>/<Folder>` and its README
+// declares the expected count under `## Expected count` (with the gate ON) -
+// this runner enforces the match (the vacuously-green guard, like
+// Maintain/Run-Smokes.mjs) and reports per-folder and combined wiring
+// counts, never the 733/746 mechanics numbers.
 import FileSystem from "node:fs";
 import Os from "node:os";
 import Path from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 
 const Trees = ["Classic", "EffectTS"];
-const WiringSuites = [
-	"scratch-profile-smoke.mjs",
-	"profile-assembly-smoke.mjs",
-	"patch-layer-smoke.mjs",
-	"live-ledger-smoke.mjs",
-	"governed-write-smoke.mjs",
-	"refusal-path-smoke.mjs",
-	"introspection-smoke.mjs",
+const SuiteNames = [
+	"Scratch-Profile",
+	"Profile-Assembly",
+	"Patch-Layer",
+	"Live-Ledger",
+	"Governed-Write",
+	"Refusal-Path",
+	"Introspection",
 ];
+const FolderNames = ["Gate-And-Harness", "Live-Assertions"];
+const WiringSuites = SuiteNames.flatMap((Suite) =>
+	FolderNames.map((Folder) => `Test/${Suite}/${Folder}`),
+);
 
 if (spawnSync("dsh", ["--version"], { encoding: "utf8" }).status !== 0) {
 	console.error("Run-Wiring: the dsh CLI is not available on PATH");
@@ -28,15 +44,15 @@ if (spawnSync("dsh", ["--version"], { encoding: "utf8" }).status !== 0) {
 }
 
 // The fast path: a PERSISTENT pre-configured home (the dedicated dogfood
-// profile per Documentation/Plans/DOGFOOD-TESTING.md §2 — created once via
+// profile per Documentation/Plans/DOGFOOD-TESTING.md Section 2 - created once via
 // the wiring-live scaffold, e.g. ~/.dsh-dogfood with the dsh-test profile).
 // DSH_WIRING_HOME selects the base; each tree gets its own subhome
 // (`classic/`, `ets/`) because both scaffolds build a profile named
-// `dsh-test` with different package names (the Classic vs the ets group) —
+// `dsh-test` with different package names (the Classic vs the ets group) -
 // one home cannot serve both. The .wiring-ready.json marker makes
 // EnsureScratch reuse a subhome as-is (no repack, no reinstall). Without
 // DSH_WIRING_HOME the runner builds a throwaway temp scratch per tree (the
-// isolation variant) and destroys it at exit — persistent subhomes are
+// isolation variant) and destroys it at exit - persistent subhomes are
 // NEVER destroyed here.
 const Persistent = process.env.DSH_WIRING_HOME ?? "";
 const ScratchFor = (Tree) =>
@@ -46,6 +62,22 @@ const ScratchFor = (Tree) =>
 const TempHomes = [];
 let Failed = 0;
 const Totals = [];
+
+// The expected PASS count, declared by the folder's README (`## Expected
+// count` -> `<N> PASS.`). A folder without a parseable count is a failure -
+// the count IS the vacuously-green guard.
+const Expected = (Directory) => {
+	const Text = FileSystem.readFileSync(Path.join(Directory, "README.md"), "utf8");
+	const Index = Text.indexOf("## Expected count");
+	if (Index < 0) {
+		throw new Error(`${Directory}: README has no "## Expected count"`);
+	}
+	const Match = /(\d+)\s*PASS/.exec(Text.slice(Index));
+	if (!Match) {
+		throw new Error(`${Directory}: README has no "<N> PASS." count`);
+	}
+	return Number(Match[1]);
+};
 
 try {
 	for (const Tree of Trees) {
@@ -84,17 +116,62 @@ try {
 				(Persistent ? " (persistent, left in place)" : " (destroyed at exit)"),
 		);
 		for (const Suite of WiringSuites) {
-			const File = Path.join(Tree, "smokes", Suite);
+			const Directory = Path.join(Tree, "smokes", Suite);
+			const File = Path.join(Directory, "Test.mjs");
 			console.log(`\n=== ${Tree}/${Suite}`);
+			if (!FileSystem.existsSync(File)) {
+				console.error(
+					`\nFAILED: ${Tree}/${Suite} - ${File} is missing (run sh ${Tree}/smokes/Build-Tests.sh first)`,
+				);
+				Failed += 1;
+				continue;
+			}
+			let Printed = null;
+			let Buffer = "";
 			const Child = spawn(process.execPath, [File], {
-				stdio: ["ignore", "inherit", "inherit"],
+				stdio: ["ignore", "pipe", "inherit"],
 				env: { ...process.env, DSH_TEST_SCRATCH: Scratch },
 			});
+			Child.stdout.setEncoding("utf8");
+			Child.stdout.on("data", (Data) => {
+				process.stdout.write(Data);
+				Buffer += Data;
+				const Lines = Buffer.split("\n");
+				Buffer = Lines.pop() ?? "";
+				for (const Line of Lines) {
+					const Match = /^(\d+) PASS - (.+)$/.exec(Line);
+					if (Match) {
+						Printed = Number(Match[1]);
+					}
+				}
+			});
 			const Code = await new Promise((Resolve) => Child.on("close", Resolve));
+			let Want;
+			try {
+				Want = Expected(Directory);
+			} catch (Error) {
+				console.error(String(Error));
+				Failed += 1;
+				continue;
+			}
 			if (Code !== 0) {
 				console.error(`\nFAILED: ${Tree}/${Suite} (exit ${Code})`);
 				Failed += 1;
+				continue;
 			}
+			if (Printed === null) {
+				console.error(`\nFAILED: ${Tree}/${Suite} printed no "N PASS - <Name>" line`);
+				Failed += 1;
+				continue;
+			}
+			if (Printed !== Want) {
+				console.error(
+					`\nFAILED: ${Tree}/${Suite} printed ${Printed} PASS, README expects ${Want} (the vacuously-green guard)`,
+				);
+				Failed += 1;
+				continue;
+			}
+			Totals.push(Printed);
 		}
 	}
 } finally {
@@ -102,7 +179,10 @@ try {
 	for (const Home of TempHomes) FileSystem.rmSync(Home, { recursive: true, force: true });
 }
 
+const Combined = Totals.reduce((Sum, N) => Sum + N, 0);
 console.log(
-	Failed === 0 ? "\nAll 14 wiring suites passed." : `\n${Failed} wiring suite(s) FAILED.`,
+	Failed === 0
+		? `\nAll ${WiringSuites.length * Trees.length} wiring suites passed (${Combined} checks; the wiring folders self-skip inside Run-Smokes without DSH_TEST_SCRATCH).`
+		: `\n${Failed} wiring suite(s) FAILED.`,
 );
 process.exit(Failed === 0 ? 0 : 1);

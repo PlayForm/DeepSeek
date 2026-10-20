@@ -1187,9 +1187,9 @@ behaviors live in their own Function modules, Apply.ts only REGISTERS).
 
 ### 9.2 The ledger-string contract (the byte-exact list, `live-containers: ` prefix)
 
-Phase 1 (research section 3, verbatim):
+Phase 1 (research section 3, verbatim; SYNCED 2026-10-20 to A1's SHIPPED form - the code ships the (bundle 0.0.1, ...) variant, canonical):
 	disabled (enabled=false)
-	activated blocks=<n> refresh=<policy>
+	activated (bundle 0.0.1, blocks=<n>, refresh=<policy>)
 	block rendered <id> (<len> bytes)
 	block skipped <id> (<reason>)
 	section rebuilt (ttl <n>)

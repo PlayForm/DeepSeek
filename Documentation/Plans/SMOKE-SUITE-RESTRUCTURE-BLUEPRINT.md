@@ -605,6 +605,19 @@ folders exist.
     `Source/Test/**/*.ts`, so it needs no negation. Also: every test file must be
     syntax-swept for `await` outside `async` callbacks before the first build; the
     standalone guard's top-level `await` is fine under the Test config (esm, esnext).
+    ERRATUM (2026-10-20, the L5A lane): in @playform/build 0.3.4 the negation
+    positional is a NO-OP (the CLI globs each pattern separately and concatenates;
+    lone negative patterns match nothing - verified) - the plugin build DOES compile
+    the Test tree with the plugin config. The end-state is harmless (the test build
+    wipes + regenerates Target/Test with the right config; the tarball clean), so the
+    scripts KEEP the negation for future CLI versions, but the "28 -> 19 files" claim
+    does not hold for 0.3.4. ADDITIONAL FINDING (the declaration-hygiene rule): the
+    Build CLI's tsc + tsc-alias spawns are FIRE-AND-FORGET (never awaited) - the
+    background raw-tsc emit can land AFTER its tsc-alias, leaving @Interface aliases
+    in the TRACKED Target/*.d.ts. Every converted prepublishOnly.sh gains a FOURTH
+    awaited step `pnpm exec tsc -p tsconfig.json && pnpm exec tsc-alias -f -p
+    tsconfig.json` after the Build children exit (the L5A precedent), so the shipped
+    declarations are deterministic.
 
 ---
 
@@ -711,3 +724,105 @@ apply these rules:
 5. ets-base-dsh's folders are new coverage (not a twin); its PASS baseline is derived
    from the ets core smoke's re-homed sections minus those sections - record the
    arithmetic in the L6 handoff so the ets core total stays >= baseline.
+
+---
+
+## 9. THE TOTALS LEDGER (the wrap-up lane, I8 - 2026-10-20)
+
+The restructure is complete: every converted package's `Source/Test/` folders cover its
+suite, the 42 `.mjs` fallback files (21 per tree) are REMOVED, the runner's glob counts
+ONLY the folders, and `node Maintain/Run-Smokes.m` is green. Baseline = the `.mjs`
+suite's printed count, recorded immediately before removal (each suite green at
+removal time). After = the sum of the package folder READMEs' expected counts (the
+vacuously-green guard holds: the runner compares printed vs README per folder).
+
+### 9.1 The mechanics suites (per tree)
+
+| Suite | .mjs baseline | Folder sum after | Delta |
+| --- | --- | --- | --- |
+| Classic/hook-dsh-core | 14 | 14 | 0 |
+| Classic/plugin-dsh-factory | 35 | 35 | 0 |
+| Classic/hook-dsh-package-governor | 78 | 78 | 0 |
+| Classic/hook-dsh-package-pinner | 32 | 32 | 0 |
+| Classic/hook-dsh-cargo-governor | 62 | 62 | 0 |
+| Classic/hook-dsh-normalize-dash | 184 | 184 | 0 |
+| Classic/hook-dsh-normalize-file | 112 | 112 | 0 |
+| Classic/hook-dsh-normalize-quotes | 104 | 104 | 0 |
+| Classic/hook-dsh-normalize-ellipsis | 104 | 104 | 0 |
+| Classic/hook-dsh-normalize-spaces | 104 | 104 | 0 |
+| Classic/hook-dsh-normalize-invisible | 104 | 104 | 0 |
+| Classic/hook-dsh-normalize-fullwidth | 104 | 104 | 0 |
+| Classic/hook-dsh-ccr | 146 | 146 | 0 |
+| Classic/hook-dsh-tool-coach | 129 | 129 | 0 |
+| EffectTS/ets-hook-dsh-core | 17 | 14 | -3 (re-homed) |
+| EffectTS/ets-plugin-dsh-factory | 42 | 42 | 0 |
+| EffectTS/ets-hook-dsh-package-governor | 81 | 81 | 0 |
+| EffectTS/ets-hook-dsh-package-pinner | 32 | 32 | 0 |
+| EffectTS/ets-hook-dsh-cargo-governor | 62 | 62 | 0 |
+| EffectTS/ets-hook-dsh-normalize-dash | 184 | 184 | 0 |
+| EffectTS/ets-hook-dsh-normalize-file | 112 | 112 | 0 |
+| EffectTS/ets-hook-dsh-normalize-quotes | 104 | 104 | 0 |
+| EffectTS/ets-hook-dsh-normalize-ellipsis | 104 | 104 | 0 |
+| EffectTS/ets-hook-dsh-normalize-spaces | 104 | 104 | 0 |
+| EffectTS/ets-hook-dsh-normalize-invisible | 104 | 104 | 0 |
+| EffectTS/ets-hook-dsh-normalize-fullwidth | 104 | 104 | 0 |
+| EffectTS/ets-hook-dsh-ccr | 146 | 146 | 0 |
+| EffectTS/ets-hook-dsh-tool-coach | 129 | 129 | 0 |
+
+Notes:
+
+- **The L6 re-home arithmetic (ets-base-dsh):** the ets core `.mjs` baseline 17 =
+  14 (the eight shared folders) + 1 (Stream-Gate) + 2 (Update-Envelope). The
+  Stream-Gate and Update-Envelope sections moved into the base's OWN test tree
+  (`EffectTS/packages/ets-base-dsh/Source/Test/`, new coverage, no Classic twin):
+  ets-base totals 0 -> 3 (1 + 2, derived from the re-homed sections); the ets core
+  sum stays >= its shared-folder share with ZERO weakening (17 = 14 + 3 across the
+  two packages, exactly preserved).
+- **hook-dsh-live-containers / ets-hook-dsh-live-containers:** new packages from the
+  site lanes (no `.mjs` suite ever existed); folder sums 105 per tree are pure NEW
+  coverage, not a conversion. They are excluded from the delta law below.
+- The ETS governor's +3 and the ETS factory's +7 over Classic are the additive
+  EffectTS coverage recorded at conversion (unchanged).
+
+### 9.2 The wiring suites (per tree, live battery)
+
+| Suite | .mjs baseline | Folder sum after (gate ON) | Delta |
+| --- | --- | --- | --- |
+| Scratch-Profile | self-skip (no scratch) | 23 | 0 |
+| Profile-Assembly | self-skip (no scratch) | 16 | 0 |
+| Patch-Layer | self-skip (no scratch) | 14 | 0 |
+| Live-Ledger | self-skip (no scratch) | 38 | 0 |
+| Governed-Write | self-skip (no scratch) | 13 | 0 |
+| Refusal-Path | self-skip (no scratch) | 10 | 0 |
+| Introspection | self-skip (no scratch) | 22 | 0 |
+
+Identical sums in both trees (136 checks per tree, 272 combined). The `.mjs`
+originals are removed too; the folders run under `Maintain/Run-Wiring.mjs` (which sets
+the gate) and self-skip inside the aggregate without `DSH_TEST_SCRATCH`. The
+`wiring-live.mjs` scaffold stays (it is not a counted suite).
+
+### 9.3 The roll-up
+
+| Measure | Before (the double-assertion window) | After (the retirement) |
+| --- | --- | --- |
+| Runner units (Maintain/Run-Smokes.mjs final line) | 229 (42 .mjs + 187 folders) | 187 (folders only) |
+| Mechanics PASS, Classic | 1312 | 1417 (+105 = live-containers new coverage) |
+| Mechanics PASS, EffectTS | 1325 | 1430 (+105 = live-containers; core -3 offset by ets-base +3) |
+| Converted-package deltas | - | ZERO weakening, ZERO growth (the additive growth happened at conversion, recorded in the lane handoffs) |
+
+### 9.4 The wrap-up lane's additional deliverables (BINDING)
+
+1. **The declaration-hygiene sweep (the L5A finding):** every converted
+   `prepublishOnly.sh` gained the awaited fourth step
+   `pnpm exec tsc -p tsconfig.json && pnpm exec tsc-alias -f -p tsconfig.json`
+   (28 scripts; tool-coach already carried it). Surfacing the awaited emit fixed:
+   the live-containers pair's missing `exclude: ["Source/Test"]` (duplicate-input
+   TS5055/TS5056), the governors' and pinner's strict-null test typing (fixture-only
+   narrowing, zero assertion changes), and the ETS ccr dep skew (cordis 4.0.5 ->
+   4.0.4, tsc-alias aligned; the stray package-local node_modules removed so the
+   hoisted root resolution applies). Tracked Targets verified alias-free.
+2. **The red-arbiter fix:** the old governor `.mjs` suites' Target-walk skipped the
+   gitignored `Target/Test` subtree (the converted folders' compiled output legitimately
+   imports the factory) - the minimal patch that kept the `.mjs` green until the
+   retirement.
+

@@ -1,0 +1,213 @@
+import assert from "node:assert/strict";
+import {
+  Advance,
+  Check,
+  ClockBox,
+  Finish,
+  FireJobs,
+  FireObserved,
+  LinesWith,
+  MakeCounter,
+  MakeWave,
+  FakeJobsHub,
+  FakeShell,
+  FakeStorage,
+  OpenStorage,
+  Validate,
+  Ledger,
+  rm,
+  MonitorConfig,
+  WaveAssemble
+} from "../Harness.js";
+const Setup = (Config = {}) => {
+  const Jobs = FakeJobsHub();
+  const Shell = FakeShell();
+  const Run = MakeWave(
+    Validate({
+      logFile: Ledger,
+      enabled: true,
+      ...MonitorConfig({ watchlist: [{ glob: "**/*.ts", checks: ["tsc"] }] }),
+      ...Config
+    }),
+    { jobs: Jobs, shell: Shell }
+  );
+  return { Jobs, Shell, Run };
+};
+const Stanza = async (Run) => (await WaveAssemble(Run)).sections.find((S) => S.name === "live-containers")?.text ?? "";
+const runTest = async () => {
+  const Count = MakeCounter();
+  rm();
+  ClockBox.Now = 17e11;
+  {
+    const { Run } = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    Check(Count, "P1: the domain spec is name/version/layout/invalidRecords/one checks table", () => {
+      const Spec = Store.spec;
+      assert.equal(Spec.name, "live_containers_monitors");
+      assert.equal(Spec.version, 1);
+      assert.equal(Spec.layout, "per-record");
+      assert.equal(Spec.invalidRecords, "backup-and-skip");
+      assert.ok(Spec.tables.checks !== void 0);
+    });
+    Check(Count, "P1: a successful open binds the sink and sets the persistence flag", () => {
+      assert.equal(Run.State.MonitorsPersist, true);
+      assert.ok(Run.State.MonitorDomain !== void 0);
+    });
+  }
+  rm();
+  {
+    const { Jobs, Run } = Setup();
+    const Store = FakeStorage();
+    FireObserved(Run, "/repo/src/App.ts", "1");
+    Advance(2e3);
+    await Stanza(Run);
+    const JobId = Jobs.started[0].id;
+    FireJobs(Run, Jobs.settled(JobId, { owner: "agent-a", detail: "exit code: 0" }));
+    Advance(600001);
+    await Stanza(Run);
+    await OpenStorage(Run, Store.facility);
+    const Records = [...Store.records.values()];
+    const Kinds = Records.map((R) => R.event);
+    Check(Count, "P2: the pre-bind queue drains on the open (the enrolled record lands)", () => {
+      assert.ok(Kinds.includes("monitor-enrolled"), `kinds: ${Kinds.join(",")}`);
+      const Enrolled = Records.find((R) => R.event === "monitor-enrolled");
+      assert.equal(Enrolled.path, "/repo/src/App.ts");
+      assert.equal(Enrolled.agent, "agent-a");
+      assert.equal(Enrolled.version, "1");
+      assert.equal(Enrolled.writer, "agent-a");
+      assert.equal(Enrolled.checkSetId, "");
+      assert.equal(Enrolled.exit, null);
+      assert.equal(Enrolled.infra, null);
+      assert.equal(Enrolled.tail, "");
+      assert.equal(Enrolled.provenance, "live");
+    });
+    Check(Count, "P2: the settled check record carries the full result", () => {
+      const CheckRecord = Records.find((R) => R.event === "monitor-check");
+      assert.equal(CheckRecord.checkSetId, "tsc");
+      assert.equal(CheckRecord.exit, 0);
+      assert.equal(CheckRecord.infra, null);
+      assert.equal(CheckRecord.provenance, "live");
+    });
+    Check(Count, "P2: the retired record closes the lifecycle", () => {
+      assert.ok(Kinds.includes("monitor-retired"), `kinds: ${Kinds.join(",")}`);
+      const Retired = Records.find((R) => R.event === "monitor-retired");
+      assert.equal(Retired.writer, "");
+      assert.equal(Retired.exit, null);
+    });
+  }
+  rm();
+  {
+    const { Run } = Setup();
+    for (let Index = 0; Index < 300; Index += 1) {
+      FireObserved(Run, `/repo/src/File${Index}.ts`, "1");
+    }
+    Check(Count, "P3: the pre-bind queue is capped at 256 records", () => {
+      assert.equal(Run.State.MonitorsQueue.length, 256);
+      assert.equal(Run.State.MonitorsPersist, false);
+    });
+  }
+  rm();
+  {
+    const { Jobs, Run } = Setup();
+    FireObserved(Run, "/repo/src/App.ts", "1");
+    Advance(2e3);
+    await Stanza(Run);
+    FireJobs(Run, Jobs.settled(Jobs.started[0].id, { owner: "agent-a", detail: "exit code: 0" }));
+    Check(Count, "P4: with no facility the clean result lives in memory only", () => {
+      assert.equal(Run.State.MonitorsPersist, false);
+      assert.ok(Run.State.Monitors.get("agent-a")?.get("/repo/src/App.ts")?.checks.length === 1);
+    });
+    const { Run: Reborn } = Setup();
+    FireObserved(Reborn, "/repo/src/App.ts", "1");
+    const Text = await Stanza(Reborn);
+    Check(Count, "P4: after the lossy restart the band renders not run yet, never a clean", () => {
+      assert.ok(Text.includes("not run yet (\u2205?)"), `missing in: ${Text.slice(0, 300)}`);
+      assert.ok(!Text.includes("clean (\u2204) | checked"), "a fabricated clean appeared");
+    });
+  }
+  rm();
+  {
+    const { Run } = Setup();
+    const Store = FakeStorage({ failOpen: true });
+    await OpenStorage(Run, Store.facility);
+    Check(Count, "P5: a failed open logs the byte-exact line and degrades", () => {
+      assert.deepEqual(LinesWith(Run, "monitors storage open failed"), [
+        "hook-dsh-live-containers: monitors storage open failed: storage unavailable"
+      ]);
+      assert.equal(Run.State.MonitorsPersist, false);
+      assert.equal(Run.State.MonitorsQueue.length, 0);
+    });
+  }
+  rm();
+  {
+    const { Jobs, Run } = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    FireObserved(Run, "/repo/src/App.ts", "1");
+    Advance(2e3);
+    await Stanza(Run);
+    FireJobs(Run, Jobs.settled(Jobs.started[0].id, { owner: "agent-a", detail: "exit code: 0" }));
+    const { Run: Reborn } = Setup();
+    await OpenStorage(Reborn, Store.facility);
+    Check(Count, "P6: the recovered entry carries the persisted result with recovered provenance", () => {
+      const Entry = Reborn.State.Monitors.get("agent-a")?.get("/repo/src/App.ts");
+      assert.ok(Entry !== void 0);
+      assert.equal(Entry.checks.length, 1);
+      assert.equal(Entry.checks[0]?.provenance, "recovered");
+      assert.equal(Entry.checks[0]?.exit, 0);
+      assert.deepEqual(LinesWith(Reborn, "monitor recovered"), [
+        "hook-dsh-live-containers: monitor recovered /repo/src/App.ts (1 checks)"
+      ]);
+    });
+    const Text = await Stanza(Reborn);
+    Check(Count, "P6: the recovered band renders the not-re-checked clause", () => {
+      assert.ok(
+        Text.includes("clean (\u2204) (recovered) | checked"),
+        `missing in: ${Text.slice(0, 400)}`
+      );
+      assert.ok(Text.includes("| not re-checked this session"));
+    });
+  }
+  rm();
+  {
+    const { Jobs, Run } = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    FireObserved(Run, "/repo/src/App.ts", "1");
+    Advance(2e3);
+    await Stanza(Run);
+    FireJobs(Run, Jobs.settled(Jobs.started[0].id, { owner: "agent-a", detail: "exit code: 0" }));
+    const { Run: Reborn } = Setup();
+    await OpenStorage(Reborn, Store.facility);
+    Advance(300001);
+    const Text = await Stanza(Reborn);
+    Check(Count, "P7: a recovered result older than staleMs renders the STALE form", () => {
+      assert.ok(
+        Text.includes("~ STALE (not re-checked this session) | checked"),
+        `missing in: ${Text.slice(0, 400)}`
+      );
+    });
+  }
+  rm();
+  {
+    const { Run } = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    FireObserved(Run, "/repo/src/App.ts", "1");
+    Check(Count, "P8: an empty store recovers nothing and the band stays honest", () => {
+      assert.deepEqual(LinesWith(Run, "monitor recovered"), []);
+      assert.equal(Run.State.Monitors.get("agent-a")?.get("/repo/src/App.ts")?.checks.length, 0);
+    });
+  }
+  return Finish(Count, "Monitors-Persist");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Monitors-Persist`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

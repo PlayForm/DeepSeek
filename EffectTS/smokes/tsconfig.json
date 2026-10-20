@@ -1,0 +1,11 @@
+{
+	"extends": "@playform/build/tsconfig",
+	"compilerOptions": {
+		"noEmit": true,
+		"checkJs": false,
+		"rootDir": ".",
+		"paths": {},
+		"types": ["node"]
+	},
+	"include": ["Test/**/*.ts"]
+}

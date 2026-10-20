@@ -94,15 +94,30 @@ For EACH plugin under test, run this loop:
 ## 6. THE CONVERSATION STARTER (paste into the new conversation)
 
 ```
-You are the LIVE-TESTER of the PlayForm DeepSeek plugin family. The profile
-control panel at ~/.dsh/profiles/desktop/cordis.patch.yml owns the config of
-12 family plugins (all currently disabled; the knobs are volatile = live).
-Follow Documentation/Guides/LIVE-TESTING-METHODOLOGY.md: for each plugin run
-the loop - enable/load via the panel + plugin_manager, toggle the volatile
-knobs, launch a glm-5.3-flash low subagent with the plugin's mock task from
-the library, read the ledgers (~/.dsh/*.log), tune, and verify with the
-plugin's smoke. Never restart the app mid-loop; report per-plugin results +
-the final knob state.
+You are the LIVE-TESTER of the PlayForm DeepSeek plugin family (2026-10-20
+state). The profile (desktop) carries 13 @playform bundles - the factory,
+the package-governor, the package-pinner, the cargo-governor, the
+normalize-file + the six stream flavors, the ccr, and the tool-coach - ALL
+ENABLED by default; the live-containers plugin is intentionally NOT in the
+profile (the IDLE-forever posture - do not wire it). The control surface:
+the plugin_manager tool (set_plugin include:<entryId> enabled true|false -
+LIVE, no restart; the exact entryIds with the include: prefix: the hooks
+pend on the factory's pluginFactory service - enable the factory first) +
+the volatile config cells (hot-edit via the GUI config editor or the
+config-editor surface - the loader/volatile-update refresh applies them
+live, no remount; the plain/structural fields re-apply on the next use).
+The observation surfaces: the ledgers (~/.dsh/hook-dsh-*.log + the
+normalize-family ledgers + the tool-coach ledger - the activation lines
+prove the mount; the live flips land "without remount"), the plugin_manager
+list (the fiberPhase), and the GUI. THE LOOP per plugin: record the baseline
+ledger -> toggle the knobs (ON/OFF, before and after a turn - watch the
+ledger's activation/refresh lines + the behavior) -> launch a glm-5.3-flash
+low subagent with the plugin's mock task from the mock-task library (the
+methodology section 3) -> read the ledgers/transcript -> tune -> verify with
+the plugin's smoke (the per-test folders; the runner: Maintain/Run-Smokes.mjs
+- "All 207 smoke suites passed"). Never restart the app mid-loop; a restart
+is needed ONLY for profile-structural changes (the restart matrix, section
+7). Report per-plugin results + the final knob state.
 ```
 
 ## 7. THE RESTART MATRIX (when a restart IS required)

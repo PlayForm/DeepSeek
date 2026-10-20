@@ -1,0 +1,38 @@
+# Bundle patch for @playform/ets-hook-dsh-live-containers.
+# The live-containers hook keeps DYNAMIC, MODIFIABLE CONVERSATION BLOCKS in
+# the system prompt: each enabled block is a labeled stanza recomputed at
+# every request (the canonical example is a time block that always holds the
+# current time at ask-time), appended as ONE system-prompt/assemble section
+# named live-containers with interpolate: false, each block inside a fixed
+# frame so the model cannot mistake it for harness state. Substitution is
+# {{token}} replace ONLY - no eval, no expressions (Documentation/Plans/
+# LIVE-CONTAINERS-RESEARCH.md section 3 + Documentation/Plans/LiveContainers/
+# Design/IMPLEMENTATION-DESIGN.md phase 1).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and every
+# listener no-ops to a passthrough (each checks State.On first). The schema
+# defaults are the truth; the full default surface (sectionName live-
+# containers, refresh request, ttlCalls 8, separator ---,
+# sectionBudgetBytes 4096, and the 14-entry default block catalog with
+# todo-list, command-runner and session-stats enabled) lives in the
+# Variable/Config.ts schema. EVERY knob is volatile (hot-editable without
+# remounting): enabled, log/logFile, sectionName, refresh, ttlCalls,
+# separator, sectionBudgetBytes and the whole block table (the ARRAY is the
+# volatile cell - its leaves stay plain; a kind change lands on the next
+# assembly, which is safe because the render engine dispatches per block id
+# and keeps no per-kind structural state).
+- insert:
+      - id: hook-dsh-live-containers
+        name: "@playform/ets-hook-dsh-live-containers"
+        config:
+            enabled: false
