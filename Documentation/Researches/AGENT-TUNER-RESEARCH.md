@@ -28,7 +28,10 @@ statuses:
   - name: child to parent tuning authority through an explicit grant
     state: open
     evidence: this document section 7.5; the harness adjacency precedent is packages/subagent/subagent/src/manager.ts:713
-  - name: settled child tuning applied on its next turn
+  - name: subtree and lineage authority for ancestor to descendant tuning
+    state: open
+    evidence: this document section 7.5; packages/subagent/subagent/src/manager.ts:713 and docs/subsystems/subagent.md:539
+  - name: settled descendant tuning applied on its next turn
     state: open
     evidence: this document section 7.4; cold resume rebuilds the launch route at packages/subagent/subagent/src/manager.ts:1363-1374
   - name: user-facing sampling controls
@@ -73,9 +76,12 @@ statuses:
 
 > The user's question: "Can we, through a plugin, create / modify and update
 > conversation parameters, such as the model's effort name and others, on the
-> fly?" - extended by the cross-agent requirement: a parent that launched a
-> child on `low` must be able to raise that RUNNING child to `max` and lower it
-> again, and a child must be able to tune its parent's conversation.
+> fly?" - extended twice. First by the cross-agent requirement: a parent that
+> launched a child on `low` must be able to raise that RUNNING child to `max`
+> and lower it again, and a child must be able to tune its parent's
+> conversation. Second by the SUBTREE requirement: the root must be able to
+> tune its direct child AND that child's own subagents (the grandchildren),
+> live or settled, without knowing their ids in advance.
 >
 > The verdict, stated before the evidence:
 >
@@ -89,15 +95,24 @@ statuses:
 >   `packages/api/session-controller/src/agent.ts:402-408`.
 > - **YES for cross-agent tuning through the request waterfall** - a host
 >   plugin can hold a per-session tuning store and apply it in `agent/request`
->   for any live agent, parent or child. That is the only seam that works for
->   both directions, and the only one that does not move the deployment
->   default.
+>   for any live agent, parent, child, or grandchild. That is the only seam
+>   that works for every direction, and the only one that does not move the
+>   deployment default.
+> - **YES for the subtree, and the answer to the direct question is yes.**
+>   The root can tune its direct child and the child's subagents. The
+>   authority is the durable `parentSession` chain rooted at the caller, and
+>   `ctx.subagents.listDescendants(rootSessionId)` already enumerates the
+>   whole reachable subtree with parent and depth without resuming anything
+>   (`docs/subsystems/subagent.md:523-539`, `:381`). A settled descendant is
+>   tuned in the store and applies on its next turn.
 > - **NO for inventing effort ids, renaming labels, mid-conversation preset
->   switching, or cross-agent permission/cwd escalation.** Those are owned by
->   the adapter catalog, the preset lifecycle, and the security boundary.
+>   switching, descendant -> ancestor or sibling tuning, or cross-agent
+>   permission/cwd escalation.** Those are owned by the adapter catalog, the
+>   preset lifecycle, the lineage direction, and the security boundary.
 > - The next plugin is the **Agent Tuner** (`@playform/plugin-dsh-tuner`): a
->   host service plus a `tune_agent` tool plus an authority policy plus a
->   ledger, targeting `self`, `parent`, `child`, or an authorized `sessionId`.
+>   host service plus a `tune_agent` tool plus a lineage authority policy plus
+>   a ledger, targeting `self`, `parent`, `child`, `descendant`, `subtree`, or
+>   an authorized `sessionId`.
 
 Verified 2026-10-21 against the harness checkout at HEAD `687f282e`
 (release 0.2.1-rc.2) and the running desktop profile at
@@ -114,15 +129,18 @@ The question decomposes into five questions that are easy to conflate:
 2. **Which parameters can a plugin mutate while a conversation is live?**
    Not "at launch" and not "in the profile" - during an existing Session.
 3. **Which of those mutations work ACROSS agents?** Parent to live child,
-   child to parent, and a settled child that will run again later.
+   child to parent, the whole subtree below an ancestor (a grandchild the
+   root never launched itself), and a settled child or descendant that will
+   run again later.
 4. **Does the harness already ship this?** If it does, a new plugin must add
    something the built-in path does not, or it is duplication.
 5. **What should the next family plugin actually be?** The smallest scope
    that owns a real gap.
 
 This document answers those five, per parameter, with the seam, the owner,
-the durability, the authority, and the failure mode. It is written for the
-implementer of the next plugin, not as a survey of the LLM subsystem.
+the durability, the authority, the discovery path, and the failure mode. It
+is written for the implementer of the next plugin, not as a survey of the LLM
+subsystem.
 
 ## 2. What a "conversation parameter" actually is
 
@@ -176,9 +194,9 @@ config its next request carries.
 
 | Parameter | Where it lives | Official mutation seam | Scope | Plugin at runtime | Cross-agent |
 |---|---|---|---|---|---|
-| provider + model | `model/selection` event, `request/header`, `modelSelection` projection | `ctx.sessionController.selectModel` | one Agent, next prompt assembly | YES | NO through selectModel; YES through `agent/request` |
-| reasoning effort | same carriers plus the adapter catalog | `selectModel`, or `agent/request` | one Agent, next request | YES, offered ids only | YES through `agent/request` |
-| temperature, maxTokens, stop | `request/header` (maxTokens also seeds from `AgentOptions`) | `agent/request` waterfall | one request, logged per change | YES, but no service or event | YES, the safest cross-agent parameter |
+| provider + model | `model/selection` event, `request/header`, `modelSelection` projection | `ctx.sessionController.selectModel` | one Agent, next prompt assembly | YES | NO through selectModel; YES through `agent/request`, self, child, and subtree |
+| reasoning effort | same carriers plus the adapter catalog | `selectModel`, or `agent/request` | one Agent, next request | YES, offered ids only | YES through `agent/request`, self, child, and subtree |
+| temperature, maxTokens, stop | `request/header` (maxTokens also seeds from `AgentOptions`) | `agent/request` waterfall | one request, logged per change | YES, but no service or event | YES, the safest; self, child, and subtree |
 | system prompt + variables | `system/message` derived history; assembly `variables` | `system-prompt/assemble` waterfall | per assembly, per agent scope | YES | NO, composition-like |
 | tool set + schemas | `request/header` `tools` plus `developer/message` additions | `ctx.tools.register` / `ctx.tools.restrict` | per agent scope | YES, the loop reconciles | NO, composition-like |
 | agent preset | `agent-preset/selected` plus the mounted composition | `ctx.agentPresets.select` / `recompose` | before the first turn only | NO | NO |
@@ -536,16 +554,23 @@ points over one state:
   siblings and deeper descendants are not targets
   (`packages/subagent/tool-subagent-control/README.md:48`, `:169`). The
   Tuner should mirror this authority shape exactly.
+- **An existing durable subtree enumeration**:
+  `ctx.subagents.listDescendants(rootSessionId)` reads the parent-owned
+  catalogs recursively, returns each row's `parentId` and root-relative
+  `depth`, and never loads or resumes an Agent
+  (`docs/subsystems/subagent.md:523-539`, `:381-390`). The discovery half of
+  subtree tuning already exists; only the tuning half does not.
 
 **The overlap question answered directly:** YES, we already have model and
 reasoning-effort switching for one conversation, and it is the harness's own
 feature, not a family plugin. YES, we already have adjacent cross-agent
-messaging, which proves the authority model but changes no parameter. NO, we
-do not have cross-agent parameter tuning: `selectModel` refuses subagent
-sessions, nothing exposes sampling as a user-facing control, nothing lets a
-child tune a parent, and nothing audits parameter changes in one ledger.
-Those are the parts a new plugin can own without duplicating the built-in
-path.
+messaging, which proves the authority model but changes no parameter, and a
+durable subtree enumeration, which finds the descendants but changes no
+parameter. NO, we do not have cross-agent parameter tuning: `selectModel`
+refuses subagent sessions, nothing exposes sampling as a user-facing
+control, nothing lets a child tune a parent, nothing tunes a grandchild or a
+whole subtree, and nothing audits parameter changes in one ledger. Those are
+the parts a new plugin can own without duplicating the built-in path.
 
 ## 7. Cross-agent tuning - the core of this research
 
@@ -593,9 +618,19 @@ logged header (`packages/core/agent-loop/src/agent.ts:573-592`).
 **The working seam** is a host-level `agent/request` listener plus a
 per-session tuning store:
 
-- A listener registered on the plugin's own (host) context receives every
-  agent's requests; only agent-scoped listeners are narrowed to one agent
-  (`docs/subsystems/core.md:973`). The Tuner filters on `payload.agent`.
+- A listener registered on the plugin's own (untagged) context is admitted
+  globally: `scopeTarget` admits an untagged listener for every dispatch
+  (`packages/core/scope/src/index.ts:159-181`, the `tag === undefined` branch
+  at `:176`), and only agent-scoped listeners are narrowed to one agent
+  (`docs/subsystems/core.md:973`). Event admission also extends UP a bound
+  scope chain (a listener tagged with an ancestor receives a descendant's
+  events, `packages/core/scope/src/index.ts:32-39`), but agent scopes are
+  bound to their preset generation, not to their parent agent
+  (`packages/preset/agent-preset-registry/src/index.ts:266`; the agent loop
+  creates its scope without a parent at
+  `packages/core/agent-loop/src/agent.ts:130`). The Tuner therefore uses the
+  untagged host listener, not agent-lineage scope nesting, and filters on
+  `payload.agent`.
 - The listener calls `next()` first and returns a replacement config with
   only the tuned fields changed, preserving the rest - the discipline
   `installModelSelection` uses
@@ -610,7 +645,9 @@ per-session tuning store:
 before the system prompt and the accepted user batch are committed
 (`docs/subsystems/core.md:955-977`). A child that is mid-stream keeps its
 current response; the tuning applies at its next step boundary. A child that
-is idle applies it when the next turn starts.
+is idle applies it when the next turn starts. The same applies to a
+grandchild: the root's listener sees the grandchild's requests and applies
+the tuning at its next step or turn, with no listener per child.
 
 **Effort-only versus model change.** The built-in model-switch notice is
 `installModelSelection`'s own `agent/pre-step` listener comparing its
@@ -657,8 +694,8 @@ no principal, and is never asked of `remoteAccess`. The Tuner's policy, not
 the Gateway, is therefore the boundary for the tool path.
 
 That is precisely why the Tuner must not expose a raw "session id" switch.
-The authority has to be the Tuner's own, and it must mirror the harness's
-adjacency rule:
+The authority has to be the Tuner's own, and for the UPWARD direction it must
+mirror the harness's adjacency rule:
 
 - **Caller identity** comes from `exec.agent` in the tool execution
   (`docs/subsystems/tools.md:207-208`) - never from a tool argument.
@@ -669,9 +706,12 @@ adjacency rule:
   the sender activation's `parent.id` must equal the target, the exact live
   sender is required, and anything else is `subagent/unauthorized`
   (`packages/subagent/subagent/src/manager.ts:549-574`).
-- **No siblings, no grandparents, no arbitrary ids.** `send_message` refuses
-  them (`packages/subagent/tool-subagent-control/README.md:169`), and the
-  Tuner must too.
+- **In the upward direction, no siblings, no grandparents, and no arbitrary
+  ids.** `send_message` refuses them
+  (`packages/subagent/tool-subagent-control/README.md:169`), and the Tuner
+  must too. Downward is different: section 7.5 authorizes an ancestor to tune
+  any descendant, so "no grandparents" applies only to a descendant reaching
+  UP, never to a root reaching DOWN.
 - **The parent must remain live.** `authorizeLineage` requires
   `parentSession === parent.id` and the exact live parent
   (`packages/subagent/subagent/src/manager.ts:713-731`).
@@ -681,51 +721,85 @@ adjacency rule:
   a Tuner-owned record (section 10.4), checked on every call; absent a
   grant, the tool refuses with a stable code and never silently no-ops.
 
-### 7.4 Idle and settled children
+### 7.4 Idle and settled children and descendants
 
 A settled child has no live activation; `list_agents` reports it as
 `inactive` (`docs/subsystems/subagent.md:377`), and `send_message` cold
 resumes it from persistence (`:176`, `:457-458`). Tuning must not force a
-resume, and it must not be lost.
+resume, and it must not be lost. The same holds for a settled grandchild,
+which the root may not even know by id until it lists the subtree (7.5).
 
 - **No direct mutation.** `selectModel` would take the resume path and then
   fail the ownership check on the observed header
   (`packages/api/session-controller/src/agent.ts:431-433`), so it cannot be
-  used to "pre-set" a cold child.
+  used to "pre-set" a cold child or descendant.
 - **Store and apply.** The Tuner records the desired tuning keyed by the
-  child's durable session id and applies it at the child's next
+  target's durable session id and applies it at the target's next
   `agent/request`, whenever that happens. A cold resume rebuilds the child's
   `agentOptions` from the descriptor
   (`packages/subagent/subagent/src/manager.ts:1363-1374`), so the launch
   route returns first and the Tuner's layer re-applies on the first request
   of the new activation. No resume is triggered by tuning.
-- **Authority for a cold child.** The durable `parentSession` is readable
-  from the attached session (`ctx.sessions.get`) or, when fully cold, from
-  `ctx.sessionQuery.observeSession` (the same read path the controller uses
-  at `packages/api/session-controller/src/agent.ts:413`). The parent must
-  still be the exact live caller, mirroring `authorizeLineage`.
-- **Refusing is the alternative** and is acceptable for v1: a settled child
+- **Authority for a cold target.** The durable `parentSession` chain is
+  readable from the attached session (`ctx.sessions.get`) or, when fully
+  cold, from `ctx.sessionQuery.observeSession` (the same read path the
+  controller uses at `packages/api/session-controller/src/agent.ts:413`), and
+  the subtree enumeration (7.5) reads the parent-owned catalogs without
+  loading an Agent. The caller must still be an ancestor of the target.
+- **Refusing is the alternative** and is acceptable for v1: a settled target
   cannot be tuned until it runs again. Storing is strictly better for the
   user's stated use case (tune, then dispatch the next task) and costs only
   a record.
 
-### 7.5 The authority model
+### 7.5 The authority model, the subtree, and discovery
+
+**Direct answer: can the root tune its child and the child's subagents?**
+YES. The root's host listener applies the tuning at each target's next
+request, and the authority is the durable `parentSession` chain rooted at
+the caller. A direct live child is also provable at runtime with
+`ctx.agents.isOwnedBy`; deeper descendants are proved by the chain, because
+`isOwnedBy` is direct-only (`packages/core/agent/src/index.ts:580-582`).
+
+The table:
 
 | Caller -> target | Rule | Basis |
 |---|---|---|
 | self | always | `exec.agent.session.id` |
-| parent -> direct live child | allowed | `ctx.agents.isOwnedBy(childId, caller)` (`packages/core/agent/src/index.ts:580-582`) or the child's `parentSession` while live |
-| parent -> direct settled child | allowed, stored and applied later | durable `parentSession` in the child header |
+| ancestor -> direct live child | allowed | `ctx.agents.isOwnedBy(childId, caller)` (`packages/core/agent/src/index.ts:580-582`) or the child's `parentSession` while live |
+| ancestor -> descendant, live or settled | allowed when the `parentSession` chain reaches the caller | `ctx.subagents.listDescendants(callerId)` membership (`docs/subsystems/subagent.md:523-539`) or the durable chain walk |
 | child -> direct parent | denied unless granted | `exec.agent.session.header.parentSession` + grant record |
-| child -> sibling or grandparent | denied | adjacency rule (`packages/subagent/tool-subagent-control/README.md:169`) |
+| descendant -> ancestor beyond the direct parent | denied | the chain only authorizes DOWN; no grandparent grant in v1 |
+| sibling, cousin, unrelated | denied | no ancestor relation in either direction |
 | anyone -> arbitrary `sessionId` | denied unless it resolves to one of the rows above | explicit resolution, never a free pass |
 | remote client -> any session | out of scope for v1 | `remoteAccess` applies to Peers, not to the tool (`docs/subsystems/typert.md:289`) |
 
-`ctx.agents.isOwnedBy` is the runtime truth: it returns true only while the
-exact child entry is live under that exact owner
-(`packages/core/agent/src/index.ts:572-582`). It is the right check for a
-live child and the wrong check for a settled one, which is why the durable
-`parentSession` is the second leg.
+**The chain, precisely.** For a target found in
+`ctx.subagents.listDescendants(caller.id)`, the caller is an ancestor by
+construction: the catalog is parent-owned, and each row carries its
+`parentId` and its root-relative `depth`
+(`docs/subsystems/subagent.md:381`, `:383-390`). The service reads those
+catalogs without loading or resuming an Agent
+(`docs/subsystems/subagent.md:523-539`), so a settled grandchild is
+discoverable and tunable without a resume. When the target is live but
+missing from the catalog (which should not happen for a local child), the
+fallback is the `parentSession` walk over `ctx.sessions.get` /
+`ctx.sessionQuery.observeSession`.
+
+**Discovery, because the root may not know a grandchild's id.** The Tuner's
+`list`/`tree` action reads `ctx.subagents.listDescendants(caller.id)` and
+joins it with `ctx.agents.list()` (`packages/core/agent/src/index.ts:588-590`)
+for live status and `ctx.sessions.list()`
+(`packages/core/session/src/index.ts:1360-1361`) for attached status. The
+desktop profile sets `maxDepth: 2`
+(`~/.dsh/profiles/desktop/cordis.patch.yml:186`), so a grandchild is the
+deepest local level there, but the code does not hard-code two.
+
+**What the subtree authority does not cover.** `listDescendants` omits
+ordinary Session forks and any subagents below those forks
+(`docs/subsystems/subagent.md:381`), so a fork branch is not in the Tuner's
+subtree. External subagent entries (codex, ACP, SDK) have no local Session
+and therefore no `agent/request` to tune; they are leaves in the catalog and
+the Tuner skips them.
 
 ### 7.6 Security and privilege escalation
 
@@ -733,7 +807,20 @@ live child and the wrong check for a settled one, which is why the durable
   plugin or tool can address any non-subagent session by id. The model only
   reaches that power through a tool, so the tool's policy is the entire
   boundary. A Tuner that accepts an arbitrary `sessionId` from the model
-  without resolving it to self/parent/child is a confused-deputy hole.
+  without resolving it to self/parent/child/descendant is a confused-deputy
+  hole.
+- **Lineage traversal is directional and bounded.** The chain authorizes
+  DOWN only: an ancestor may tune a descendant, a descendant may not tune an
+  ancestor beyond the granted direct parent, and siblings or cousins have no
+  relation in either direction. The traversal is capped by
+  `crossAgent.maxDepth` (default 2, matching the desktop profile's
+  `maxDepth` at `~/.dsh/profiles/desktop/cordis.patch.yml:186`), and every
+  target must be a member of the caller's subtree enumeration or of the
+  `parentSession` chain - never a raw id.
+- **Force is an ancestor-only privilege.** A `force` flag on a descendant's
+  tuning must be rejected; otherwise a child could pin a parent's parameter
+  against the parent's later intent. Only a caller that is an ancestor of
+  the target may force, and the ledger records the force.
 - **Permission presets are the dangerous parameter.** `permissionPresets.set`
   writes the sandbox and approval knobs
   (`packages/interaction/permission-presets/src/index.ts:398`); a child
@@ -795,7 +882,10 @@ deployment default. The alternatives:
 
 **Recommendation: (b) now, (d) upstream.** The Tuner never calls
 `selectModel`, so the deployment default never moves, and the same code
-path serves self, parent, and child.
+path serves self, parent, child, and every descendant in the subtree. The
+subtree requirement makes this choice stronger, not weaker: a root applying
+one tuning to a whole branch must not rewrite the deployment default once
+per target.
 
 ### 7.8 Which parameters are safe cross-agent
 
@@ -824,8 +914,12 @@ path serves self, parent, and child.
   seat to update (`packages/client/ui-model-selection/src/client/index.ts:9-11`).
 - Sampling values are already part of the assistant request config the UI
   records (`packages/client/ui-conversation/src/client/contract/records.ts:15-25`).
+- The root's own view of the subtree comes from the Tuner's `list`/`tree`
+  action (7.5), not from the UI: the client has no lineage-wide parameter
+  panel, and the per-child card keeps the launch route.
 - The Tuner's own ledger is the only surface that shows the full history of
-  who tuned what, when, and to which value.
+  who tuned what, when, and to which value, including the `tunedBy` session
+  and the `force` flag.
 
 ## 8. The family's position
 
@@ -877,8 +971,12 @@ path serves self, parent, and child.
 **B. Possible only with a new plugin**
 
 - Parent -> live child tuning of effort, sampling, and route.
+- Ancestor -> descendant tuning across the whole subtree, live or settled,
+  including a grandchild the root never launched itself.
+- Subtree discovery (`list`/`tree`) so the root can find the descendants it
+  does not know by id.
 - Child -> parent tuning, gated by an explicit parent grant.
-- Settled child tuning stored and applied on the child's next turn.
+- Settled child or descendant tuning stored and applied on the next turn.
 - A user-facing sampling control (temperature, maxTokens, stop) with
   validation, bounds, and a durable per-conversation intent.
 - Sampling and tuning that survive resume (the loop does not re-seed them).
@@ -894,6 +992,14 @@ path serves self, parent, and child.
 
 - **Cross-agent selection through `selectModel`.** Every subagent session is
   refused, live or cold (`packages/api/session-controller/src/agent.ts:402-408`).
+- **Descendant -> ancestor tuning beyond the granted direct parent, or
+  sibling/cousin tuning.** The lineage authorizes DOWN only (section 7.5);
+  there is no relation in the other direction and no common ancestor to
+  appeal to.
+- **Tuning a fork branch as part of the subtree.** `listDescendants` omits
+  ordinary Session forks and anything below them
+  (`docs/subsystems/subagent.md:381`), so a fork is not in the lineage
+  catalog.
 - **Inventing effort ids or renaming the built-in labels.** Adapter-owned;
   rejected before dispatch (`packages/llm/llm/src/index.ts:928-933`), name
   derived from the id (`packages/llm/llm-pi-ai/src/adapter.ts:207-210`).
@@ -927,10 +1033,10 @@ path serves self, parent, and child.
 - **A. Command only.** A `/tune` client command plus a Host method. Smallest,
   but it needs a client half and a Remote, which no family package does
   today, and it leaves the model unable to tune.
-- **B. Host service + `tune_agent` tool + authority policy + ledger
+- **B. Host service + `tune_agent` tool + lineage authority policy + ledger
   (recommended).** One Host plugin, one `agent/request` listener, one tool,
-  one store, one ledger. No client code, no new seat, no duplication of
-  `/model`.
+  one store, one ledger, covering self, parent, child, descendant, and
+  subtree. No client code, no new seat, no duplication of `/model`.
 - **C. B plus a settings page, named profiles UI, and per-role inheritance.**
   Larger; only worth it after B is proven live.
 
@@ -940,9 +1046,10 @@ v1 and a client surface deferred.
 ### 10.2 Host/client split and the exact seams
 
 - **Host only in v1.** `export const inject = ['agents', 'sessionController',
-  'sessionProjections', 'llm', 'tools']` (sessionController only for the
-  read/validation helpers and for a future session-only selection method;
-  the Tuner does not call `selectModel` in v1). The family's loader contract
+  'sessionProjections', 'subagents', 'llm', 'tools']` (sessionController only
+  for the read/validation helpers and for a future session-only selection
+  method; the Tuner does not call `selectModel` in v1; `subagents` supplies
+  `listDescendants` for subtree discovery). The family's loader contract
   (name, apply, Config, inject) applies
   (`Documentation/Skill/plugin-system/SKILL.md`, the loader section).
 - **Tuning** - one `agent/request` listener on the plugin's own context,
@@ -975,17 +1082,32 @@ parameter set (section 11).
 
 Inputs:
 
-- `target`: `self` | `parent` | `child` | `sessionId` (the last one is
-  resolved through the authority policy and is never a free pass).
-- `agent_id`: required only for `target: 'child'`.
-- `action`: `get` | `set` | `clear` | `grant` (the last is parent-only).
+- `target`: `self` | `parent` | `child` | `descendant` | `subtree` |
+  `sessionId` (the last one is resolved through the authority policy and is
+  never a free pass).
+- `agent_id`: required for `child` and `descendant`; the id must be a member
+  of the caller's subtree enumeration (7.5).
+- `action`: `get` | `set` | `clear` | `grant` | `list` (the grant is
+  parent-only; the list is the subtree read).
 - `parameters`: `reasoningEffort`, `temperature`, `maxTokens`, `stop`,
   `profile` (at least one for `set`).
+- `depth` / `filter`: optional for `subtree` - a depth cap and a filter over
+  `live` status or catalog mode; the default is every reachable local
+  descendant.
+- `force`: optional, ancestor-only, for the precedence rule (10.7).
 
 Behaviour:
 
 - Resolve the caller from `exec.agent`; resolve the target through the
   policy table (7.5). Refuse with a stable code on any failure.
+- `list` returns the subtree: id, parentId, depth, live/attached status, and
+  the current tuning per row, from
+  `ctx.subagents.listDescendants(caller.id)` joined with `ctx.agents.list()`
+  and `ctx.sessions.list()`.
+- `subtree` resolves the member set once, then applies the same tuning to
+  each local descendant and returns a per-target result; a target that
+  cannot be tuned (external execution, unknown mode) is reported, not
+  silently skipped.
 - Validate effort and route with `ctx.llm.resolveCallConfig` before storing
   (`packages/llm/llm/src/index.ts:884-896`); validate sampling against the
   plugin's bounds (section 4.3 explains why the runtime does not).
@@ -999,18 +1121,25 @@ Behaviour:
 
 ### 10.4 The authority policy
 
+- **Ancestor -> descendant is the lineage rule.** A direct live child is
+  proved with `ctx.agents.isOwnedBy(childId, caller)`
+  (`packages/core/agent/src/index.ts:580-582`). Any deeper live or settled
+  descendant is proved by membership in
+  `ctx.subagents.listDescendants(caller.id)`
+  (`docs/subsystems/subagent.md:523-539`) or by walking the durable
+  `parentSession` chain up to the caller. The traversal is capped by
+  `crossAgent.maxDepth` and never runs upward.
 - **Default deny for child -> parent.** A grant is a Tuner-owned record
   naming `(childSessionId, parentSessionId, allowedParameters)`. It is
   created only by the parent (`target: 'child'`, `action: 'grant'`), checked
   on every child call, and revoked when either session ends or the parent
-  clears it.
-- **Parent -> child is natural ownership**, checked with
-  `ctx.agents.isOwnedBy(childId, caller)` for a live child
-  (`packages/core/agent/src/index.ts:580-582`) and the durable
-  `parentSession` for a settled one.
-- **No arbitrary ids.** `target: 'sessionId'` resolves to self, direct
-  parent (with grant), or direct child (with ownership); anything else is
-  `tuner/unauthorized`.
+  clears it. A grandchild cannot obtain a grandparent grant in v1.
+- **No arbitrary ids.** `target: 'sessionId'` resolves to self, a direct
+  parent (with grant), or a descendant in the caller's subtree; anything
+  else is `tuner/unauthorized`. `target: 'subtree'` is resolved to the same
+  member set the `list` action shows.
+- **No siblings or cousins.** Two children of one parent have no relation in
+  either direction, and neither can tune the other.
 - **Parameter allow-list per direction.** v1: effort, sampling, and route.
   Permission and cwd are refused cross-agent (section 7.8). A grant may
   narrow the set but never widen it beyond the plugin's own allow-list.
@@ -1024,8 +1153,9 @@ logFile              string    default '~/.dsh/plugin-dsh-tuner.log'
 profiles             map of name -> { reasoningEffort?, temperature?, maxTokens?, stop? }
 defaultProfile       string    default ''
 allowed              string[]  default [reasoningEffort, temperature, maxTokens, stop]
-crossAgent           object    { parentToChild: true, childToParent: false,
-                                requireGrant: true, allowRoute: true }
+crossAgent           object    { parentToChild: true, parentToDescendant: true,
+                                subtree: true, childToParent: false,
+                                requireGrant: true, allowRoute: true, maxDepth: 2 }
 bounds               object    { temperatureMin 0, temperatureMax 2, maxTokensMax 131072,
                                 stopMax 4, stopMaxChars 64 }
 toolName             string    default 'tune_agent'
@@ -1051,7 +1181,11 @@ refusal - never a clamp - for anything outside them.
   If the plugin record is lost, the header still shows the truth; if the
   header is old, the next request re-applies the stored intent.
 - **Grants**: the same record mechanism, keyed by the child session id.
-- **Launch route**: for a child, the descriptor's `agentProvider`,
+- **Subtree records**: one record per target, not one per call, so a subtree
+  apply that touches five descendants writes five records and a later
+  `list`/`tree` can report each target's own tuning. The `tunedBy` field
+  keeps the caller identity per record.
+- **Launch route**: for a descendant, the descriptor's `agentProvider`,
   `agentModel`, and `agentReasoningEffort`
   (`packages/subagent/subagent/src/descriptor.ts:76-81`) are what a cold
   resume restores (`packages/subagent/subagent/src/manager.ts:1363-1374`);
@@ -1065,17 +1199,29 @@ refusal - never a clamp - for anything outside them.
    session clears the Tuner's route and effort tuning for that session
    before the next request, so `/model` is never silently defeated and the
    controller's pending selection is consumed normally
-   (`packages/api/session-controller/src/index.ts:210-219`).
+   (`packages/api/session-controller/src/index.ts:210-219`). This holds
+   against a forced ancestor tuning too: the user outranks the lineage.
 2. **The Tuner never writes `model/selection`.** It observes the event; it
    does not produce it (section 7.7c).
-3. **The Tuner yields to a pending controller selection.** If
+3. **An ancestor's `force` beats a descendant's later tuning.** The root is
+   the lineage owner; a forced record stays effective until the same
+   ancestor clears it or the user's `/model` overrides it. A descendant
+   cannot force.
+4. **Otherwise the most recent explicit tuning wins, per parameter.** Each
+   record carries `tunedBy` (the caller session), `at` (the record seq), and
+   the parameter set; the Tuner applies the newest value for each parameter
+   and the ledger line names the winner and the losers. This is what lets a
+   child raise its own effort after the root tuned it, while still letting
+   the root force a value back.
+5. **The Tuner yields to a pending controller selection.** If
    `ctx.sessionProjections.stateOf(session, 'modelSelection')` reports a
    pending selection (the read the controller itself uses at
    `packages/api/session-controller/src/agent.ts:292`), the Tuner skips its
    route override for that request.
-4. **A tuning never outlives its target.** Clearing a tuning or ending the
+6. **A tuning never outlives its target.** Clearing a tuning or ending the
    session removes the record; a resumed session starts from its launch or
-   selected route unless a tuning record still exists.
+   selected route unless a tuning record still exists. A subtree clear
+   removes the records for the enumerated members only.
 
 ### 10.8 Constraints the implementation must respect
 
@@ -1109,6 +1255,10 @@ refusal - never a clamp - for anything outside them.
 - `send_message` - the adjacent-agent authority shape: exact live sender,
   direct parent or direct child only, durable lineage checked separately
   (`packages/subagent/subagent/src/manager.ts:549-574`, `:713-731`).
+- `listDescendants` / `listChildren` - the durable parent-owned catalog
+  enumeration with parent and depth, no resume and no Agent load
+  (`docs/subsystems/subagent.md:523-539`, `:381-390`). This is the Tuner's
+  subtree discovery, not something to reimplement.
 - The webhook's scoped `agent/request` listener with a "until the first
   header exists" guard (`packages/experimental/webhook/src/session.ts:91-104`).
 - `ModelDirectory`'s generation counter for last-write-wins
@@ -1167,10 +1317,11 @@ cross-reference use the new name.
    mechanism is right; the in-repo caller gate says experimental only
    (`packages/core/session/src/index.ts:478-481`). Decide whether to depend
    on it or use a sidecar.
-6. **Should tuning inherit to grandchildren?** The adjacency rule says no
-   (`packages/subagent/tool-subagent-control/README.md:169`). A parent that
-   wants a grandchild tuned should tune its child and let the child tune
-   downward.
+6. **Should a root's subtree tuning reach fork branches?** The catalog
+   enumeration does not include ordinary Session forks or their subagents
+   (`docs/subsystems/subagent.md:381`), so a fork is outside the lineage.
+   The recommendation is to document that limit rather than walk forks by
+   hand; a fork is a new lineage root for tuning purposes.
 7. **What is the UI surface?** The composer seat is taken. Options are a
    `/tune` command (needs a client half and a Remote, a first for the
    family), a settings page, or a new seat contributed upstream. v1 can ship
@@ -1185,6 +1336,14 @@ cross-reference use the new name.
     available (`docs/subsystems/tools.md:398-428`), but adds friction; the
     config flag and the authority policy may be enough for a single-user
     desktop deployment.
+11. **Should a subtree apply require confirmation?** A `subtree` set can
+    touch many agents at once. The tool returns per-target results and the
+    ledger records each; an optional threshold (for example, more than N
+    targets) is a policy/UI decision, not a mechanism gap.
+12. **Should a grandchild ever get a grandparent grant?** v1 says no: the
+    grant is only for the direct parent, and a root reaches downward by
+    lineage. If a use case appears, the grant record can name an ancestor
+    distance later, but the default must stay deny.
 
 ## 13. Verification
 
@@ -1195,12 +1354,12 @@ Run on 2026-10-21. Harness checkout HEAD `687f282e` (0.2.1-rc.2).
    the Researches table, and the old `CONVERSATION-PARAMETERS` row is gone.
 3. The two Researches counts read 8 (the tree block and the section
    heading).
-4. `git -C <family repo> status --short` - this work is the rename pair
-   (`D Documentation/Researches/CONVERSATION-PARAMETERS-RESEARCH.md`,
-   `?? Documentation/Researches/AGENT-TUNER-RESEARCH.md`) plus
-   `M Documentation/INDEX.md`. A concurrent one-line change in
-   `Maintain/Generate-NPM-Placeholders.mjs` is not part of this work and was
-   not touched.
+4. `git -C <family repo> status --short` - this turn's only working-tree
+   change is `M Documentation/Researches/AGENT-TUNER-RESEARCH.md` (the
+   subtree extension). The earlier rename and the INDEX row were committed
+   by the user in `b3cb87b`; the concurrent
+   `Maintain/Generate-NPM-Placeholders.mjs` work was committed separately
+   (`5c5bded`, `602cc0f`) and was not touched.
 5. `git -C <harness checkout> status --short` - empty (the source checkout
    was not modified).
 6. ASCII check on this document - only tab and newline outside the ASCII
@@ -1216,7 +1375,12 @@ Run on 2026-10-21. Harness checkout HEAD `687f282e` (0.2.1-rc.2).
    (`docs/subsystems/tools.md:207-208`), the subagent adjacency rule
    (`packages/subagent/subagent/src/manager.ts:549-574`, `:713-731`), the
    cold-resume route rebuild
-   (`packages/subagent/subagent/src/manager.ts:1363-1374`), and the
+   (`packages/subagent/subagent/src/manager.ts:1363-1374`), the
    session default-field registration that puts a Remote `selectModel` call
    under `remoteAccess` (`packages/api/session-controller/src/index.ts:159`,
-   `packages/typert/protocol/README.md:63`).
+   `packages/typert/protocol/README.md:63`), the scope admission rules
+   (`packages/core/scope/src/index.ts:159-181`, `:32-39`), the live-agent
+   and session enumerations (`packages/core/agent/src/index.ts:588-590`,
+   `packages/core/session/src/index.ts:1360-1361`), the subtree enumeration
+   (`docs/subsystems/subagent.md:523-539`, `:381-390`), and the desktop
+   depth cap (`~/.dsh/profiles/desktop/cordis.patch.yml:186`).
