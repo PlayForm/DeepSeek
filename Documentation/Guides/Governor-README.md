@@ -49,7 +49,7 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service and the [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)
+[`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source) service and the [`lib-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)
 helpers.
 It has NO hook children of its own.
 
@@ -71,7 +71,7 @@ The ledgers are separate; activating ONE NEVER implies another.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the schema come from [`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source).
-  The pure helpers (`Suppress`, the policy loader) come from [`hook-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source).
+  The pure helpers (`Suppress`, the policy loader) come from [`lib-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source).
   This bundle keeps ONLY its own vocabulary: the Config extension, the chain pass (Function/Transform), the update engine (Function/Follow → Dispatch → Execute → Update/* → Settle) and EVERY ledger string.
   Besides the [`fs/observed`][dsh-fs]
   event path, its two steps are registered with the factory's direct-govern registry at apply
@@ -187,7 +187,7 @@ Key properties, all enforced by construction:
   A listener throw is contained logger-only (the core's `Suppress` composer).
   The ledger is best-effort.
 
-The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s `Function/Update`).
+The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s `Function/Update`).
 This module is a thin delegate that injects its own collections, child stage and ledger strings, so the flow is NOT forked per governance module.
 
 ### The Source Layout

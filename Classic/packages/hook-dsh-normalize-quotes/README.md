@@ -34,12 +34,12 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Quotes**): a hook child of the
-[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`lib-dsh-core`](../lib-dsh-core)
 machinery; the second of the six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
 [`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`hook-dsh-core`](../hook-dsh-core) for the `Quotes` table and the
+`shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the `Quotes` table and the
 generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
 | flavor                                                            | table                  | substitution                  |
@@ -167,7 +167,7 @@ the straight form the one that reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Quotes` map ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s `Normalize/Quotes`), applied per text
+Exactly the core's `Quotes` map ([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s `Normalize/Quotes`), applied per text
 segment through the core's `ReplaceMap` - eight entries, each typographic quote code point to its
 ASCII straight counterpart:
 

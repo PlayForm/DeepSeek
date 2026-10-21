@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
 helpers; it has no hook children of its own.
 
 One of three governance hooks sharing the
@@ -53,7 +53,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
   schema come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the pure helpers (`Suppress`, the
-  policy loader) come from [`ets-hook-dsh-core`](../ets-hook-dsh-core). This bundle keeps only its own
+  policy loader) come from [`ets-lib-dsh-core`](../ets-lib-dsh-core). This bundle keeps only its own
   vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
   (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
   [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's direct-govern registry
@@ -180,7 +180,7 @@ Key properties, all enforced by construction:
   contained logger-only (the core's `Suppress` composer); the ledger is best-effort.
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/ets-hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source)'s
+envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
 `Function/Update`); this module is a thin delegate that injects its own collections, child stage and
 ledger strings, so the flow is not forked per governance module.
 

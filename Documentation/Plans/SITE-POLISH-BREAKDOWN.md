@@ -114,7 +114,7 @@ Rewrite:
 
 - Files: `versions.astro:145` ("IDENTICAL FOURTEEN CONTRACTS") and
   `versions.astro:87` ("the twelve packages" inside the current 0.0.1
-  entry); `hook-dsh-core.astro:69,129` ("ALL thirteen other packages");
+  entry); `lib-dsh-core.astro:69,129` ("ALL thirteen other packages");
   `Site/README.md:12,13,30,71`; root
   `README.md:7-16,35,222,281-282,442`.
 - The case-study's "twelve" is deliberate history: it describes the Oct
@@ -130,8 +130,8 @@ Rewrite:
 
 ### P0.5 The hero CTA has no next step
 
-- File: `index.astro:260` `<Terminal Pkg="hook-dsh-core" Rail />`, which
-  renders `npm install @playform/hook-dsh-core@0.0.1`
+- File: `index.astro:260` `<Terminal Pkg="lib-dsh-core" Rail />`, which
+  renders `npm install @playform/lib-dsh-core@0.0.1`
   (`Terminal.astro:31-32`).
 - Installing core is legitimate; core is the library. The defect is that
   the hero's only CTA installs a package that activates nothing: core has
@@ -149,7 +149,7 @@ Rewrite:
   "run on EVERY token batch"; `hook-dsh-normalize-ellipsis.astro:248`
   "EVERY typographic three-dot ellipsis code point"; `setup.astro:716`
   "EACH plugin writes its own durable ledger"; `index.astro:729` and
-  `models.astro:147` "zero runtime overhead"; `hook-dsh-core.astro:74,77`
+  `models.astro:147` "zero runtime overhead"; `lib-dsh-core.astro:74,77`
   "PLUGIN DETAIL" beside "NOT A PLUGIN".
 - The stream claims are false under shipped defaults: `toolInput`,
   `toolResults`, and `batch` default off, and six flavors replace six

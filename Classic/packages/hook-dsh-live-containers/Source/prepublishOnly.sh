@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # prepublishOnly.sh for @playform/hook-dsh-live-containers - the two-step
-# build, mirroring the hook-dsh-core / hook-dsh-normalize-dash pattern:
+# build, mirroring the lib-dsh-core / hook-dsh-normalize-dash pattern:
 # multiple Build invocations in one script, one per source tree.
 # ORDER IS MANDATORY: the plugin build FIRST, the test build SECOND.
 # The plugin ESBuild config's Target plugin WIPES outdir "Target" recursively

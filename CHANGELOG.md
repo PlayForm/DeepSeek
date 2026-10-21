@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The package renames under the role-prefix contract (2026-10-21): the
+  core library is now `@playform/lib-dsh-core` (`ets-lib-dsh-core` in the
+  Effect-TS tree), the file-content tool is now
+  `@playform/plugin-dsh-normalize-file` (`ets-plugin-dsh-normalize-file`),
+  and the planned UI packages read `@playform/client-dsh-panel-family` and
+  `@playform/client-dsh-panel-family-host`. The `lib-` kind is decided:
+  `plugin-` for the service and tool plugins, `hook-` for the event
+  listeners, `client-` for the UI halves, `lib-` for the shared libraries.
+- The ledger-string identity: every ledger line, log path and activation
+  line that carries a renamed package's identity now carries the new name
+  (`~/.dsh/plugin-dsh-normalize-file.log`, the `plugin-dsh-normalize-file:`
+  prefix, and the `lib-dsh-core` package identity in the governance and
+  normalize samples). The strings stay byte-identical between the package
+  READMEs, the smoke batteries and the site samples - only the name inside
+  them changed.
+- The site: the two plugin detail pages move to `/plugins/lib-dsh-core/`
+  and `/plugins/plugin-dsh-normalize-file/`, with every nav entry, install
+  command, diagram label and repository link following the rename.
+- The docs: the @-sentence identity reads `Lib @ DSH @ Core` and
+  `Plugin @ DSH @ Normalize @ File`; the original names remain in git
+  history.
+
 ## 0.1.0
 
 ### Changed

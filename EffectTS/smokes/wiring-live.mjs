@@ -47,7 +47,7 @@ export const PackagesDir = () => Path.join(MonorepoRoot(), "EffectTS", "packages
 // hook-dsh-* mid-batch; both spellings are accepted).
 const Bundles = [
 	["@playform/ets-plugin-dsh-factory", ["ets-plugin-dsh-factory", "ets-plugin-dsh-factory"]],
-	["@playform/ets-hook-dsh-core", ["ets-hook-dsh-core", "ets-hook-dsh-core"]],
+	["@playform/ets-lib-dsh-core", ["ets-lib-dsh-core", "ets-lib-dsh-core"]],
 	// The ets base: not a bundle (no dsh.bundle), but a dependency of every
 	// ets package - packed and overridden so the install never leaves home.
 	["@playform/ets-base-dsh", ["ets-base-dsh", "ets-base-dsh"]],
@@ -88,8 +88,8 @@ const Bundles = [
 		["ets-hook-dsh-normalize-fullwidth", "ets-hook-dsh-normalize-fullwidth"],
 	],
 	[
-		"@playform/ets-hook-dsh-normalize-file",
-		["ets-hook-dsh-normalize-file", "ets-hook-dsh-normalize-file"],
+		"@playform/ets-plugin-dsh-normalize-file",
+		["ets-plugin-dsh-normalize-file", "ets-plugin-dsh-normalize-file"],
 	],
 ];
 
@@ -311,7 +311,7 @@ const ProfileManifest = (Deps) =>
 						"@deepseek-ai/dsh-web-app",
 						...Bundles.filter(
 							([Name]) =>
-								Name !== "@playform/ets-hook-dsh-core" &&
+								Name !== "@playform/ets-lib-dsh-core" &&
 								Name !== "@playform/ets-base-dsh",
 						).map(([Name]) => Name),
 					],
@@ -422,7 +422,7 @@ const Overlay = (Home) =>
     logFile: ${Home}/ledgers/fullwidth.log
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: ets-hook-dsh-normalize-file
+- id: ets-plugin-dsh-normalize-file
   config:
     log: true
     logFile: ${Home}/ledgers/normalize-file.log
@@ -493,9 +493,9 @@ const CreateScratch = (Home) => {
 	FileSystem.writeFileSync(
 		Path.join(Profile, "pnpm-workspace.yaml"),
 		WorkspaceSettings({
-			"@playform/ets-hook-dsh-core":
+			"@playform/ets-lib-dsh-core":
 				"file:../../tarballs/" +
-				Path.basename(TarballByPackage["@playform/ets-hook-dsh-core"]),
+				Path.basename(TarballByPackage["@playform/ets-lib-dsh-core"]),
 			"@playform/ets-base-dsh":
 				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/ets-base-dsh"]),
 			"@playform/ets-plugin-dsh-factory":

@@ -1,1 +1,1 @@
-import{Fullwidth as e,ReplaceMap as r}from"@playform/ets-hook-dsh-core";var l=t=>r(t,e);export{l as default};
+import{Fullwidth as e,ReplaceMap as r}from"@playform/ets-lib-dsh-core";var l=t=>r(t,e);export{l as default};

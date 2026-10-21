@@ -24,7 +24,7 @@ import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 import type Passage from "@Interface/Passage.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Suppress } from "@playform/hook-dsh-core";
+import { Suppress } from "@playform/lib-dsh-core";
 
 import Follow from "./Follow.js";
 import Transform from "./Transform.js";

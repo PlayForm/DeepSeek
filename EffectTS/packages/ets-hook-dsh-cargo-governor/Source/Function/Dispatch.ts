@@ -15,7 +15,7 @@
 //
 // THE EFFECT-TS RE-IMPLEMENTATION (register #13, R5, mirroring the R3
 // governor): the control flow is the CORE's shared update-stage envelope
-// (@playform/ets-hook-dsh-core, Function/Update), re-issued as an EFFECT BUILDER
+// (@playform/ets-lib-dsh-core, Function/Update), re-issued as an EFFECT BUILDER
 // - the pair is now
 //
 //   Dispatch: Effect<void, never, Scope.Scope> - the detached continuation

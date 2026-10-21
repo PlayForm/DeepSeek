@@ -12,7 +12,7 @@ statuses:
 		evidence: this document - pasted/read first by the implementing session
 	- name: the naming arbitration (the central package decision)
 		state: resolved
-		evidence: this document - @playform/dsh-panel-family, one central package, 13 adapters, no second panel package
+		evidence: this document - @playform/client-dsh-panel-family, one central package, 13 adapters, no second panel package
 ---
 
 # THE UI FAMILY IMPLEMENTATION PLAN - THE NEW-CONVERSATION BRIEF
@@ -53,7 +53,7 @@ statuses:
   - The running harness implementation, read in place, NEVER extracted:
     /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/.
 - **WHAT IS PENDING** (nothing is implemented yet):
-  - The central panel package @playform/dsh-panel-family does not exist.
+  - The central panel package @playform/client-dsh-panel-family does not exist.
   - No family bundle has a browser half (no dsh.client, no ./client
     export).
   - Zero family knobs are editable in the UI today.
@@ -64,7 +64,7 @@ statuses:
 - Phase 0 - Orientation + the mount-failure investigation + live inspect
 - Phase 1 - The site commit + push (READY-TO-COMMIT package; the user
   commits)
-- Phase 2 - The panel contract (@playform/dsh-panel-family)
+- Phase 2 - The panel contract (@playform/client-dsh-panel-family)
 - Phase 3 - The first adapter: hook-dsh-tool-coach (ladder + its form
   POC)
 - Phase 4 - The options forms (all volatile rows via whileServed)
@@ -120,9 +120,16 @@ Documentation/Skill/worker-strains)
 
 ## 6. The naming arbitration (decided here; do not re-litigate)
 
-- R-UI-1 sketched @playform/dsh-family-panel; R-UI-3 sketched
-  @playform/dsh-panel-family with the contract design.
-- **THE DECISION**: the central package is @playform/dsh-panel-family
+- R-UI-1 sketched @playform/dsh-family-panel; R-UI-3 sketched the
+  panel-family name with the contract design.
+- **THE DECISION**: the central package is @playform/client-dsh-panel-family
   (the contract-first design wins; R-UI-1's registration surface folds
   into it as phase 2's first consumer).
+- **THE 2026-10-21 SUPERSESSION**: the role-prefix contract
+  (Documentation/Plans/Workspace-Family/NAMING-BY-ROLE.md) put the central
+  panel package under the `client-` role prefix - the name is now
+  @playform/client-dsh-panel-family, and its companion host package is
+  @playform/client-dsh-panel-family-host.
+  The arbitration's substance stands - one central contract package, the
+  client role prefix only. Do not re-litigate the role prefix.
 - ONE central package, 13 per-bundle adapters, NO second panel package.

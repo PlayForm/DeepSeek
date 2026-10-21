@@ -60,7 +60,7 @@ statuses:
 
 | # | Package | Archetype | Event surface |
 |---|---------|-----------|---------------|
-| 2 | `@playform/hook-dsh-core` | Hook (library) | none (pure machinery layer - consumed by the other hooks) |
+| 2 | `@playform/lib-dsh-core` | Hook (library) | none (pure machinery layer - consumed by the other hooks) |
 | 3 | `@playform/plugin-dsh-factory` | Plugin (service) | tool pre/post-execute gating; `fs/observed` re-emit; direct-govern registry |
 | 4 | `@playform/hook-dsh-cargo-governor` | Hook | `fs/observed` + tool post-execute |
 | 5 | `@playform/hook-dsh-package-governor` | Hook | `fs/observed` + tool post-execute |
@@ -71,7 +71,7 @@ statuses:
 | 10 | `@playform/hook-dsh-normalize-spaces` | Hook | `llm/stream` |
 | 11 | `@playform/hook-dsh-normalize-invisible` | Hook | `llm/stream` |
 | 12 | `@playform/hook-dsh-normalize-fullwidth` | Hook | `llm/stream` |
-| 13 | `@playform/hook-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
+| 13 | `@playform/plugin-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
 | 14 | `@playform/hook-dsh-ccr` | Hook (guardian) | `tools/post-execute` + the `ccr_retrieve` tool |
 | 15 | `@playform/hook-dsh-tool-coach` | Hook (guardian) | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
 | 16 | `@playform/hook-dsh-live-containers` | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute` |
@@ -80,7 +80,7 @@ statuses:
 
 | # | Package | Archetype | Event surface |
 |---|---------|-----------|---------------|
-| 17 | `@playform/ets-hook-dsh-core` | Hook (library) | none (pure machinery on Effect layers) |
+| 17 | `@playform/ets-lib-dsh-core` | Hook (library) | none (pure machinery on Effect layers) |
 | 18 | `@playform/ets-plugin-dsh-factory` | Plugin (service) | same surface as the Classic factory, Effect envelopes |
 | 19 | `@playform/ets-hook-dsh-cargo-governor` | Hook | `fs/observed` + tool post-execute |
 | 20 | `@playform/ets-hook-dsh-package-governor` | Hook | `fs/observed` + tool post-execute |
@@ -91,7 +91,7 @@ statuses:
 | 25 | `@playform/ets-hook-dsh-normalize-spaces` | Hook | `llm/stream` |
 | 26 | `@playform/ets-hook-dsh-normalize-invisible` | Hook | `llm/stream` |
 | 27 | `@playform/ets-hook-dsh-normalize-fullwidth` | Hook | `llm/stream` |
-| 28 | `@playform/ets-hook-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
+| 28 | `@playform/ets-plugin-dsh-normalize-file` | Hook (tool) | tool surface (`normalize-file` tool) |
 | 29 | `@playform/ets-hook-dsh-ccr` | Hook (guardian) | `tools/post-execute` + the `ccr_retrieve` tool |
 | 30 | `@playform/ets-hook-dsh-tool-coach` | Hook (guardian) | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
 | 31 | `@playform/ets-hook-dsh-live-containers` | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute` |
@@ -108,7 +108,7 @@ Absolute-link rule for any repo target in docs/prompts/skills:
   It provides the shared Effect types, service tags, layer helpers and runtime conveniences EVERY `ets-*` package builds on.
   The EffectTS tree's twelve contracts share ONE base instead of duplicating the plumbing per package.
   Effect v4.0.5 is the single shared runtime dependency.
-- **`@playform/hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, NOT itself a plugin.
+- **`@playform/lib-dsh-core`** (Lib @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, NOT itself a plugin.
   It provides the dependency-section lists, the exclusion segments, the suppression-line composer, the update-policy loader, the refusal guard, the update envelope, the activation-line composer, and the normalize/stream machinery.
   The normalize/stream machinery is the six character tables plus `Replace`/`ReplaceMap` and the `Chunk`/`Block` dispatch (per-chunk application, the assembled reasoning block, the tool-arguments gate).
   EACH normalize flavor contributes ONE table and ONE replacement on top of this.
@@ -159,7 +159,7 @@ Two register tools: `raw-write` (per-call `normalize` selection, default false =
   BOM) removed.
 - **`@playform/hook-dsh-normalize-fullwidth`** - the entire FULLWIDTH FORMS
   range (U+FF01-FF5E) to its ASCII half-width counterparts.
-- **`@playform/hook-dsh-normalize-file`** - the file-content normalizer.
+- **`@playform/plugin-dsh-normalize-file`** - the file-content normalizer.
   It is the read, count, write pipeline applying ALL six transforms to a file already on disk.
   It writes ONLY when something changed (the `normalize-file` tool).
 

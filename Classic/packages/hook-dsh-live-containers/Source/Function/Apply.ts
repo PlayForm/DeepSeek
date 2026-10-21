@@ -88,7 +88,7 @@ import * as Suggester from "@Function/Suggester.js";
 import type Config from "@Interface/Config.js";
 import { KINDS, type AgentState, type BlockSpecification } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/hook-dsh-core";
+import { Activate } from "@playform/lib-dsh-core";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).

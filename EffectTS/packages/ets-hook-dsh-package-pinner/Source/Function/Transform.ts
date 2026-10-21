@@ -33,7 +33,7 @@
 //     message and refreshes the observation-policy's record (same actor).
 import type Manifest from "@Interface/Manifest.js";
 import type State from "@Interface/State.js";
-import { Refusal } from "@playform/ets-hook-dsh-core";
+import { Refusal } from "@playform/ets-lib-dsh-core";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import SectionDefault from "@Variable/Section.js";
 

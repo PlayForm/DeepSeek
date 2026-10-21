@@ -68,7 +68,7 @@ statuses:
    ROOT: the workspace install itself resolves correctly; there is NO postinstall relink and NO
    preinstall hook anywhere in the tree; the per-package `scripts` stay exactly `prepublishOnly`.
 2. **THE NAMESPACE PER VERSION.** `ets-` is the standard pre-pendage inside the ONLY available
-   scope `@playform`: `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory`,
+   scope `@playform`: `@playform/ets-lib-dsh-core`, `@playform/ets-plugin-dsh-factory`,
    `@playform/ets-hook-dsh-cargo-governor`, ... (the twelve current EffectTS names, `ets-`
    prepended). The base package is `@playform/ets-base-dsh` - the shared Effect-TS plumbing (the
    runtime wiring, the fiber/stream machinery, the hook contract types - the full inventory in §2.3)
@@ -101,12 +101,12 @@ The classical target names ARE the Boilerplate baseline names (the "plain" names
 
 | # | Current (`Classic/packages/<dir>`)      | New name + dir                        | Note |
 | - | --------------------------------------- | ------------------------------------- | ---- |
-| 1 | `hook-dsh-core`                         | `@playform/hook-dsh-core` / `hook-dsh-core` | unchanged token order |
+| 1 | `lib-dsh-core`                         | `@playform/lib-dsh-core` / `lib-dsh-core` | unchanged token order |
 | 2 | `hook-dsh-governor-cargo`               | `@playform/hook-dsh-cargo-governor` / `hook-dsh-cargo-governor` | **tokens REORDERED** |
 | 3 | `hook-dsh-governor-package`             | `@playform/hook-dsh-package-governor` / `hook-dsh-package-governor` | **tokens REORDERED** |
 | 4 | `hook-dsh-normalize-dash`               | `@playform/hook-dsh-normalize-dash` / `hook-dsh-normalize-dash` | |
 | 5 | `hook-dsh-normalize-ellipsis`           | `@playform/hook-dsh-normalize-ellipsis` / `hook-dsh-normalize-ellipsis` | |
-| 6 | `hook-dsh-normalize-file`               | `@playform/hook-dsh-normalize-file` / `hook-dsh-normalize-file` | |
+| 6 | `plugin-dsh-normalize-file`               | `@playform/plugin-dsh-normalize-file` / `plugin-dsh-normalize-file` | |
 | 7 | `hook-dsh-normalize-fullwidth`          | `@playform/hook-dsh-normalize-fullwidth` / `hook-dsh-normalize-fullwidth` | |
 | 8 | `hook-dsh-normalize-invisible`          | `@playform/hook-dsh-normalize-invisible` / `hook-dsh-normalize-invisible` | |
 | 9 | `hook-dsh-normalize-quotes`             | `@playform/hook-dsh-normalize-quotes` / `hook-dsh-normalize-quotes` | |
@@ -116,7 +116,7 @@ The classical target names ARE the Boilerplate baseline names (the "plain" names
 
 - The classical manifests DROP the residue `effect: 4.0.2` dependency (the Classical Sources never
   import effect - verified; the entry is dual-source prep residue, §0).
-- The ten classical consumers keep depending on their group's `hook-dsh-core` + `plugin-dsh-factory`
+- The ten classical consumers keep depending on their group's `lib-dsh-core` + `plugin-dsh-factory`
   (the by-name imports rewrite per §4.1).
 
 ### 2.2 The effect-ts group (12) - EffectTS/packages/*, the @playform/ets-* names
@@ -125,12 +125,12 @@ The `ets-` pre-pendage on the CURRENT names (decision 2's standard):
 
 | # | Current (`EffectTS/packages/<dir>`)     | New name + dir                         |
 | - | --------------------------------------- | -------------------------------------- |
-| 1 | `hook-dsh-core`                         | `@playform/ets-hook-dsh-core` / `ets-hook-dsh-core` |
+| 1 | `lib-dsh-core`                         | `@playform/ets-lib-dsh-core` / `ets-lib-dsh-core` |
 | 2 | `hook-dsh-governor-cargo`               | `@playform/ets-hook-dsh-cargo-governor` / `ets-hook-dsh-cargo-governor` |
 | 3 | `hook-dsh-governor-package`             | `@playform/ets-hook-dsh-package-governor` / `ets-hook-dsh-package-governor` |
 | 4 | `hook-dsh-normalize-dash`               | `@playform/ets-hook-dsh-normalize-dash` / `ets-hook-dsh-normalize-dash` |
 | 5 | `hook-dsh-normalize-ellipsis`           | `@playform/ets-hook-dsh-normalize-ellipsis` / `ets-hook-dsh-normalize-ellipsis` |
-| 6 | `hook-dsh-normalize-file`               | `@playform/ets-hook-dsh-normalize-file` / `ets-hook-dsh-normalize-file` |
+| 6 | `plugin-dsh-normalize-file`               | `@playform/ets-plugin-dsh-normalize-file` / `ets-plugin-dsh-normalize-file` |
 | 7 | `hook-dsh-normalize-fullwidth`          | `@playform/ets-hook-dsh-normalize-fullwidth` / `ets-hook-dsh-normalize-fullwidth` |
 | 8 | `hook-dsh-normalize-invisible`          | `@playform/ets-hook-dsh-normalize-invisible` / `ets-hook-dsh-normalize-invisible` |
 | 9 | `hook-dsh-normalize-quotes`             | `@playform/ets-hook-dsh-normalize-quotes` / `ets-hook-dsh-normalize-quotes` |
@@ -139,8 +139,8 @@ The `ets-` pre-pendage on the CURRENT names (decision 2's standard):
 | 12 | `plugin-dsh-factory`                   | `@playform/ets-plugin-dsh-factory` / `ets-plugin-dsh-factory` |
 
 - Every ets-* package keeps its exact `effect: 4.0.2` pin (decision: the pin stays, §9.4).
-- The ten ets consumers depend on `@playform/ets-hook-dsh-core` + `@playform/ets-plugin-dsh-factory`
-  AND on the new base `@playform/ets-base-dsh`; the two foundations (ets-hook-dsh-core,
+- The ten ets consumers depend on `@playform/ets-lib-dsh-core` + `@playform/ets-plugin-dsh-factory`
+  AND on the new base `@playform/ets-base-dsh`; the two foundations (ets-lib-dsh-core,
   ets-plugin-dsh-factory) depend on the base only (+ effect).
 
 ### 2.3 The new base `@playform/ets-base-dsh` (the scope inventory)
@@ -152,12 +152,12 @@ plumbing, verified locations):
 | The plumbing class | The current location (what moves) |
 | ------------------ | --------------------------------- |
 | **The runtime wiring** | `EffectTS/packages/plugin-dsh-factory/Source/Service/Runtime.ts` - the ONLY module owning the Effect runtime today: the `Context`/`Effect`/`Layer`/`Scope` construction, the layer graph, `materialize()`, the `Services` type - plus its five `Service/*.ts` siblings (`Govern`, `Ledger`, `Journal`, `Write` - the `Context` services + the `Layer` wiring that `Runtime.ts` assembles) |
-| **The fiber/stream machinery** | `EffectTS/packages/hook-dsh-core/Source/Stream/{Gate,Strip,Block,Chunk}.ts` - the `Gate` (the per-materialization `Stream.suspend` gate; the harness adapter seam `Stream.fromAsyncIterable -> Gate -> Stream.toAsyncIterable`), the stream utilities; `hook-dsh-core/Source/Function/Update.ts` - the Update envelope (the Dispatch/Settle pair, `Effect`+`Exit`+`Scope`); the governors' fiber-home pattern (`State.Scope ?? Scope.makeUnsafe("sequential")` - currently DUPLICATED in `hook-dsh-governor-cargo/Source/Function/Dispatch.ts` + `hook-dsh-governor-package/Source/Function/Dispatch.ts`) - the duplication collapses into the base |
-| **The hook contract types** | `hook-dsh-core/Source/Library.ts`'s named exports (the contract: `Section`, `Default`, `Suppress`, `Refusal`, `Policy`, `Activate`, `Update`, the `Normalize/*` maps, the `Stream/*` machinery) + `plugin-dsh-factory/Source/Interface/*` (`Transform`, `Actor`, `Gate`, `Jobs`, `State`, `Journal`, `Options`, `Output`) |
+| **The fiber/stream machinery** | `EffectTS/packages/lib-dsh-core/Source/Stream/{Gate,Strip,Block,Chunk}.ts` - the `Gate` (the per-materialization `Stream.suspend` gate; the harness adapter seam `Stream.fromAsyncIterable -> Gate -> Stream.toAsyncIterable`), the stream utilities; `lib-dsh-core/Source/Function/Update.ts` - the Update envelope (the Dispatch/Settle pair, `Effect`+`Exit`+`Scope`); the governors' fiber-home pattern (`State.Scope ?? Scope.makeUnsafe("sequential")` - currently DUPLICATED in `hook-dsh-governor-cargo/Source/Function/Dispatch.ts` + `hook-dsh-governor-package/Source/Function/Dispatch.ts`) - the duplication collapses into the base |
+| **The hook contract types** | `lib-dsh-core/Source/Library.ts`'s named exports (the contract: `Section`, `Default`, `Suppress`, `Refusal`, `Policy`, `Activate`, `Update`, the `Normalize/*` maps, the `Stream/*` machinery) + `plugin-dsh-factory/Source/Interface/*` (`Transform`, `Actor`, `Gate`, `Jobs`, `State`, `Journal`, `Options`, `Output`) |
 
 - **The dependency rule:** EVERY ets-* package (all 12) depends on `@playform/ets-base-dsh`; the
-  ten consumers additionally depend on `ets-hook-dsh-core` + `ets-plugin-dsh-factory`. The base is
-  the single owner of the shared plumbing; `ets-hook-dsh-core` may keep re-export shims ONLY where
+  ten consumers additionally depend on `ets-lib-dsh-core` + `ets-plugin-dsh-factory`. The base is
+  the single owner of the shared plumbing; `ets-lib-dsh-core` may keep re-export shims ONLY where
   its public contract requires (flagged per export during the extraction; the consumers' imports
   move to the base - §4.1).
 - The extraction is `git mv` + import-rewrite ONLY (no behavior edits - the byte-integrity
@@ -257,11 +257,11 @@ executes the selected packages in TOPOLOGICAL order - dependencies first - by de
 therefore comes from the packages' own `dependencies` edges, with no scripts:
 
 ```
-Classic tree  (build:classic):   { hook-dsh-core, plugin-dsh-factory }            (no @playform deps)
+Classic tree  (build:classic):   { lib-dsh-core, plugin-dsh-factory }            (no @playform deps)
                                 -> the ten dsh-hook-* consumers                    (edges: core + factory)
 
 EffectTS tree (build:effect-ts): ets-base-dsh                                      (the base, L0)
-                                -> { ets-hook-dsh-core, ets-plugin-dsh-factory }   (edges: the base)
+                                -> { ets-lib-dsh-core, ets-plugin-dsh-factory }   (edges: the base)
                                 -> the ten ets-hook-* consumers                    (edges: base + core + factory)
 ```
 
@@ -278,10 +278,10 @@ splice's guarantee).
 
 ### 4.1 The by-name sibling imports
 
-- **EffectTS tree: 105 import sites across the ten consumers** import `@playform/hook-dsh-core` and
+- **EffectTS tree: 105 import sites across the ten consumers** import `@playform/lib-dsh-core` and
   `@playform/plugin-dsh-factory` (verified; type-only imports included - they resolve by package
   name too). The rewrite rules, in order:
-  1. `@playform/hook-dsh-core` -> `@playform/ets-hook-dsh-core` (the core contract imports that STAY
+  1. `@playform/lib-dsh-core` -> `@playform/ets-lib-dsh-core` (the core contract imports that STAY
      in the core: `Suppress`, `Refusal`, `Section`, `Default`, `Policy`, `Replace*`, the
      `Normalize/*` maps, `Dashes`, `Chunk`...);
   2. `@playform/plugin-dsh-factory` -> `@playform/ets-plugin-dsh-factory` (the factory contract
@@ -289,7 +289,7 @@ splice's guarantee).
   3. the MOVED plumbing imports -> `@playform/ets-base-dsh` (the machinery §2.3: `Activate`, `Gate`,
      `Update`, the `Stream/*` utilities, the `Scope` types, the runtime/service layer imports).
 - **Classic tree: 90 files** import the two names (47 core + 58 factory) -> the §2.1 names
-  (`@playform/hook-dsh-core` -> `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory` ->
+  (`@playform/lib-dsh-core` -> `@playform/lib-dsh-core`, `@playform/plugin-dsh-factory` ->
   `@playform/plugin-dsh-factory`).
 - The moved modules' INTERNAL relative imports (inside the base's own file graph) are rewritten to
   the base's layout; the base's `Library.ts` re-exports the contract (§2.3).
@@ -307,8 +307,8 @@ splice's guarantee).
   `"." -> ./Target/Library.js (+ types)` map and `files: ["Target", "README.md", "cordis.patch.yml",
   "SCHEME.md"]` (the bundle packages only). The per-package `.gitignore` variant-dir rules +
   `.prettierignore`'s dual-source entries are cleaned by the exec lane.
-- `description`: the `hook-dsh-core` dual-build @-sentence is replaced per group (the classical
-  `hook-dsh-core` description drops the dual-build wording; the ets descriptions state the ets-*
+- `description`: the `lib-dsh-core` dual-build @-sentence is replaced per group (the classical
+  `lib-dsh-core` description drops the dual-build wording; the ets descriptions state the ets-*
   identity).
 
 ### 4.3 The tsconfig + build configs
@@ -316,7 +316,7 @@ splice's guarantee).
 - The per-package `tsconfig.json` tree-local `paths` aliases (`@Function/*`, `@Interface/*`,
   `@Variable/*`) are UNTOUCHED by the renames - they are relative to each package's own `Source`;
   `@playform/build` rewrites them to relative output paths at build time.
-- The NEW base package scaffolds the standard shape (clone `hook-dsh-core`'s): `package.json`
+- The NEW base package scaffolds the standard shape (clone `lib-dsh-core`'s): `package.json`
   (`"prepublishOnly": "Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts"`),
   `tsconfig.json`, `Configuration/ESBuild.ts` + `Configuration/TypeScript.noemit.json`,
   `Source/`, `README.md`, `LICENSE`, `.gitignore`, the per-package `pnpm-workspace.yaml` +
@@ -336,7 +336,7 @@ the base (`@playform/ets-base-dsh`). The publish order is the dependency graph, 
 | Layer | The packages (publish in this order; within a layer, arbitrary) |
 | ----- | --------------------------------------------------------------- |
 | L0    | `@playform/ets-base-dsh` (the base; deps: `effect` only) |
-| L1    | `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory` (classical foundations) AND `@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory` (ets foundations; deps: the base + effect) |
+| L1    | `@playform/lib-dsh-core`, `@playform/plugin-dsh-factory` (classical foundations) AND `@playform/ets-lib-dsh-core`, `@playform/ets-plugin-dsh-factory` (ets foundations; deps: the base + effect) |
 | L2    | the twenty consumers (ten per group; each deps: its group's core + factory + the base for ets + `smol-toml`/`npm-check-updates` for the governors) |
 
 - The two groups are INDEPENDENT (no cross-group edges - publishable in parallel by group); the
@@ -352,8 +352,8 @@ the base (`@playform/ets-base-dsh`). The publish order is the dependency graph, 
 
 - The `.gitmodules.draft` already anticipates per-package repos at `github.com/PlayForm/<name>`;
   its naming placeholder (the `-effectts` suffix note) is REPLACED by the decided names: the
-  classical repos `github.com/PlayForm/hook-dsh-core` ... `plugin-dsh-factory` (12), the ets repos
-  `github.com/PlayForm/ets-hook-dsh-core` ... `ets-plugin-dsh-factory` (12) + `github.com/PlayForm/ets-base-dsh` (the base).
+  classical repos `github.com/PlayForm/lib-dsh-core` ... `plugin-dsh-factory` (12), the ets repos
+  `github.com/PlayForm/ets-lib-dsh-core` ... `ets-plugin-dsh-factory` (12) + `github.com/PlayForm/ets-base-dsh` (the base).
 - The readiness already exists: every package ships its own `pnpm-workspace.yaml` (`packages: [.]`),
   its own `pnpm-lock.yaml`, its own `.github/workflows/` (the per-repo NPM/Node/Dependabot/Auto/GitHub
   workflows) and its own `.gitignore` - each package is standalone-installable and standalone-
@@ -395,9 +395,9 @@ Each of the 24 suite files + the two READMEs:
   `@playform/hook-dsh-governor-package`, `pinner-smoke.mjs`, `cargo-smoke.mjs`, `core-smoke.mjs`,
   `factory-smoke.mjs`, the normalize suite headers' `@playform/plugin-dsh-factory` mentions);
 - The core suite's effect import path:
-  `../packages/hook-dsh-core/node_modules/effect/dist/index.js` ->
-  `../packages/ets-hook-dsh-core/node_modules/effect/dist/index.js` (EffectTS) /
-  `../packages/hook-dsh-core/...` (Classic - its own effect import disappears with the classical
+  `../packages/lib-dsh-core/node_modules/effect/dist/index.js` ->
+  `../packages/ets-lib-dsh-core/node_modules/effect/dist/index.js` (EffectTS) /
+  `../packages/lib-dsh-core/...` (Classic - its own effect import disappears with the classical
   residue removal if the suite imports effect; verify per suite);
 - The two `smokes/README.md` files: the bundle-path wording; the 733/746 total sentences stay
   verbatim.
@@ -424,14 +424,14 @@ The surfaces carrying the current names; the SITE-DOCS-RENAME lane rewrites them
 | `Site/Source/pages/plugins.astro` | the 12-card inventory (`Name`, `Install`, `Desc` + the `Ours:Classic/packages/...` links, the diagram strings, the `/plugins/...` hrefs) |
 | `Site/Source/pages/plugins/<name>.astro` x12 | titles, hero names, the `Terminal Command="pnpm add @playform/..."` install rows, the `hook-tally` spans, the flavor arrays, the ledger-path strings, the `cordis.patch.yml` snippets, the `Link(Links.OurRepo, "Classic/packages/...")` source links, the diagram strings, the related-package lists |
 | `Site/Source/pages/setup.astro` | the `link:../bundles/<name>` rows + the plugin config examples (`id:`/`name:`/`logFile: ~/.dsh/hook-dsh-*.log`) |
-| `Site/Source/pages/case-study.astro` | the `pnpm add @playform/hook-dsh-core` START HERE terminal |
+| `Site/Source/pages/case-study.astro` | the `pnpm add @playform/lib-dsh-core` START HERE terminal |
 | `Site/Source/pages/matrix.astro` | the `Package` column + the `Pipeline` array |
 | `Site/Source/pages/flavors.astro` | the flavor `Package` fields + the `hook-dsh-governor-*`/`hook-dsh-pinner-*` badges |
 | `Site/Source/pages/models.astro` | the `hook-dsh-*` prose |
 | `Site/Source/pages/versions.astro` | the `Name` fields |
 | `Site/Source/pages/workbench.astro` | the workbench labels |
-| `Site/Source/Component/Terminal.astro` | the default `pnpm add @playform/hook-dsh-core` command |
-| `Site/Source/Content/Mermaid/*.mmd` + the paired `*.svg` | the `@playform/hook-dsh-core` labels |
+| `Site/Source/Component/Terminal.astro` | the default `pnpm add @playform/lib-dsh-core` command |
+| `Site/Source/Content/Mermaid/*.mmd` + the paired `*.svg` | the `@playform/lib-dsh-core` labels |
 
 ### 7.2 The repo docs
 

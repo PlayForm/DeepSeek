@@ -45,7 +45,7 @@ if (!Wiring.ScratchHome()) {
 		["ets-hook-dsh-normalize-spaces", "@playform/ets-hook-dsh-normalize-spaces"],
 		["ets-hook-dsh-normalize-invisible", "@playform/ets-hook-dsh-normalize-invisible"],
 		["ets-hook-dsh-normalize-fullwidth", "@playform/ets-hook-dsh-normalize-fullwidth"],
-		["ets-hook-dsh-normalize-file", "@playform/ets-hook-dsh-normalize-file"],
+		["ets-plugin-dsh-normalize-file", "@playform/ets-plugin-dsh-normalize-file"],
 	];
 	for (const [Id, Name] of Families) {
 		const Start = Dump.indexOf(`- id: ${Id}\n`);
@@ -87,9 +87,9 @@ if (!Wiring.ScratchHome()) {
 
 // Group: the plugin-manager surface - the installed bundles resolve by name.
 {
-	const Core = (await Wiring.PluginWhy("@playform/ets-hook-dsh-core"))!;
+	const Core = (await Wiring.PluginWhy("@playform/ets-lib-dsh-core"))!;
 	Check(
-		Core.status === 0 && Core.stdout.includes("@playform/ets-hook-dsh-core@0.1.0"),
+		Core.status === 0 && Core.stdout.includes("@playform/ets-lib-dsh-core@0.1.0"),
 		"the plugin surface resolves the core bundle",
 	);
 	const Factory = (await Wiring.PluginWhy("@playform/ets-plugin-dsh-factory"))!;

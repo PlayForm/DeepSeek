@@ -46,7 +46,7 @@ statuses:
   The reference models: DeepSeek V4 Flash, GLM 5.3 Flash.
 - The **@-sentence identity**: EVERY name reads as
   `<kind> @ <platform> @ <role> @ <domain>` (Hook @ DSH @ Governor @ Cargo).
-  The kind taxonomy: `plugin-` (the factory), `hook-` (the behaviors), `lib-` (the core - a proposal, undecided).
+  The kind taxonomy (DECIDED 2026-10-21): `plugin-` (the factory + the tool/service plugins), `hook-` (the event behaviors), `client-` (the UI halves), `lib-` (the shared libraries - the core is `lib-dsh-core`).
   The domain wording `manifest` vs `package` - undecided.
 
 ### 1.2 The versions
@@ -145,7 +145,7 @@ The framework:
    The site's remaining feedback per the directions.
 4. **The submodule structure (#16)**: the per-package repositories as submodules + the per-repo gitignores.
    The Boilerplate's gitignore decision.
-5. **The release polish**: the naming refinements (lib-/manifest - decide).
+5. **The release polish**: the naming refinements (the `lib-` kind decided 2026-10-21; the `manifest` domain wording still open).
    The release polish: the per-package publish configs + CHANGELOGs.
    The release polish: the EffectTS core README's "zero runtime dependencies" line (the effect-backed rewrite, landed).
 6. **The live battery**: the whole family re-verified LIVE after ANY source change (the ledgers, the interlock, the escape hatch, the direct-govern, the [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).

@@ -58,7 +58,7 @@ Tool output to files = the `normalize-file` tool (explicit, only-on-invocation).
 | `hook-dsh-normalize-spaces` | `logFile`, `replacement " "`, both flags | `log`,`logFile`,`replacement` | `llm/stream` (`Apply.ts:85`) | `activated (replacement= , ...)`; `normalized N space char(s) in one stream` (`Normalize.ts:77`) |
 | `hook-dsh-normalize-invisible` | `logFile`, `replacement ""` (removal), both flags | `log`,`logFile`,`replacement` | `llm/stream` (`Apply.ts:89`) | `activated (replacement=, ...)`; `normalized N invisible char(s) in one stream` (`Normalize.ts:77`) |
 | `hook-dsh-normalize-fullwidth` | `logFile`, both flags - **no `replacement`** (fixed table) | `log`,`logFile` | `llm/stream` (`Apply.ts:85`) | `activated (reasoning=on, toolArgs=off, logFile=...)`; `normalized N fullwidth char(s) in one stream` (`Normalize.ts:77`) |
-| `hook-dsh-normalize-file` | `logFile`, `replacement "-"` - no flags | `log`,`logFile`,`replacement` | **none** - only `tools.register(normalize-file)` (`Apply.ts:6,15-22`; `Write.ts:26-32`) | `activated (replacement=-, logFile=...)` (`Apply.ts:72`); `normalized N char(s) in <path>` (`Normalize.ts:146`) |
+| `plugin-dsh-normalize-file` | `logFile`, `replacement "-"` - no flags | `log`,`logFile`,`replacement` | **none** - only `tools.register(normalize-file)` (`Apply.ts:6,15-22`; `Write.ts:26-32`) | `activated (replacement=-, logFile=...)` (`Apply.ts:72`); `normalized N char(s) in <path>` (`Normalize.ts:146`) |
 
 Notes:
 - `log` (boolean, default `true`) is NEVER re-declared per-hook.
@@ -66,7 +66,7 @@ Notes:
 - ALL hooks call `Compose(false, {...})`.
   `shared: false` emits **ONLY** `log` + `logFile` volatile cells, deliberately omitting `updateCooldownMs`/`mutationTools`/`policyFile`/`exclude` because NONE of these hooks use fs/observed machinery (`Schema.ts:18-23`; per-hook `Config.ts` header, e.g. dash `Config.ts:9-20`).
 - `normalizeReasoning`/`normalizeToolArguments` are deliberately **plain** fields ("they change the dispatch SEMANTICS, so they remount on edit", dash `Config.ts:27-28`).
-- The activation-line composer is `hook-dsh-core/Source/Function/Activate.ts:23-34` (`undefined` pair -> absent; empty key -> bare segment; empty string -> present).
+- The activation-line composer is `lib-dsh-core/Source/Function/Activate.ts:23-34` (`undefined` pair -> absent; empty key -> bare segment; empty string -> present).
 
 ### 2.2 EffectTS tree (`DeepSeek/EffectTS/packages/ets-hook-*`)
 
@@ -87,7 +87,7 @@ LIVE harness events verified via the Host Event provider and `docs/event-produce
 
 | Scope | Event / mechanism | Current coverage |
 |---|---|---|
-| **Conversation** (model prose output) | `llm/stream` waterfall (`llm/llm/src/index.ts:75`; live Event catalog: "Waterfall around every streaming model call") | **Yes** - the 6 stream hooks rewrite `text-delta.text` + `block-end` TextBlock (`hook-dsh-core/Source/Stream/Chunk.ts:12,46-51`; `Stream/Block.ts`). Currently all 6 are `disabled: true` in the live profile (`cordis.patch.yml:161-185`, comment: user wants literal unicode in conversation) |
+| **Conversation** (model prose output) | `llm/stream` waterfall (`llm/llm/src/index.ts:75`; live Event catalog: "Waterfall around every streaming model call") | **Yes** - the 6 stream hooks rewrite `text-delta.text` + `block-end` TextBlock (`lib-dsh-core/Source/Stream/Chunk.ts:12,46-51`; `Stream/Block.ts`). Currently all 6 are `disabled: true` in the live profile (`cordis.patch.yml:161-185`, comment: user wants literal unicode in conversation) |
 | **Reasoning** (model thinking output) | same `llm/stream` chunks (`reasoning-delta`, ReasoningBlock + runtime `thinking` defense) | Yes, gated by `normalizeReasoning` (default true) - part of the conversation scope (`Chunk.ts:13-15`) |
 | **Tool input** (the model's tool-call arguments) | same `llm/stream` chunks: `tool-call-delta.argumentsDelta` + assembled `ToolCallBlock.arguments` (`Chunk.ts:16-38`) | **Partially** - `normalizeToolArguments` flag (default OFF) on all 6 stream flavors; three-way gate: name-exempt (`edit`, `raw-write`, `normalize-file`), per-call raw marker `{"__normalize":false` stripped by `Stream/Strip`, else normalize (`Chunk.ts:21-38`) |
 | **Tool output -> files** (what a write tool puts on disk) | `fs/write-intent` waterfall + `fs/observed` emit (`event-producer-consumer.md:50-51`); the family instead uses its **own tool** | Yes - `normalize-file` tool: read -> six-transform count -> write **only if N>0** through the factory's shared write executor (`normalize-file/Write.ts:3-25`, `Normalize.ts:51-148`). The 6 stream hooks are also registered as the `raw-write` tool (dash only) with an explicit `normalize` parameter defaulting verbatim (dash `Apply.ts:7-10`, `Write.ts`) |
@@ -113,7 +113,7 @@ So the user's four scopes map to: conversation = `llm/stream` (6 hooks), tool in
   The plugin's `State.Replacement` / `State.Ledger` / `State.Enabled` keep the mount-time values.
 - Consequence: the "hot-editable, the next stream picks it up with no remount" comments in EVERY hook's `Config.ts` (e.g. dash `Config.ts:43-46`) describe what volatile marking *prevents* (NO remount), NOT what it *delivers*.
   The actual delivery is missing.
-  The LIVE Host Config projection confirms the volatile markers are real (`x-cordis.volatile: true` on `log`, `logFile`, `replacement` in the projected JSON Schema of `include:hook-dsh-normalize-file`, LIVE `cordis_inspect` query).
+  The LIVE Host Config projection confirms the volatile markers are real (`x-cordis.volatile: true` on `log`, `logFile`, `replacement` in the projected JSON Schema of `include:plugin-dsh-normalize-file`, LIVE `cordis_inspect` query).
 - Contrast: `@deepseek-ai/dsh-agent-default-model` declares its whole config as `Volatile<T>` and reads the references at use time (docs/config-catalog.md:44-55).
   That is the working pattern the factory should adopt.
 
@@ -150,7 +150,7 @@ Two routes, with opposite outcomes:
    **Route 2 is the ONE that should power LIVE toggling and is currently dead** for anything routed through `Factory.State`.
 
 The Host Inspect surface for config is read-only.
-The `Config` provider lists paged entries (`patchId`, `status: "schema"`) and one entry's projected JSON Schema (verified LIVE for `include:hook-dsh-normalize-file`).
+The `Config` provider lists paged entries (`patchId`, `status: "schema"`) and one entry's projected JSON Schema (verified LIVE for `include:plugin-dsh-normalize-file`).
 It exposes NO update method - updates go through `settings`/`configEditor` services.
 
 ## 5. Gap analysis (top items)
@@ -194,12 +194,12 @@ export default Compose(false, {
   Rewrite `ToolExecutionResult` content blocks IN PLACE.
   Keep the ledger contract `normalized N ... char(s) in one tool result` additive to the smoke.
 - If a single family-wide control surface is wanted, prefer ONE aggregate config (or a preset-level patch entry driving ALL seven entries through the `settings` service) over new shared machinery in the factory.
-- Smoke parity: EVERY new flag must appear in the `activated (...)` ledger line (`hook-dsh-core/Source/Function/Activate.ts:23-34`) and the count-line vocabulary must stay byte-identical per flavor (section 2.1 ledger column).
+- Smoke parity: EVERY new flag must appear in the `activated (...)` ledger line (`lib-dsh-core/Source/Function/Activate.ts:23-34`) and the count-line vocabulary must stay byte-identical per flavor (section 2.1 ledger column).
 
 ## 7. Open questions
 
 1. Does a volatile-only edit ever re-run `apply` in practice on the pinned loader (docs say NO, tutorial 05-config.md:93)?
-   A LIVE probe (edit `replacement` while watching `~/.dsh/hook-dsh-normalize-file.log`) would settle the snapshot-gap claim empirically.
+   A LIVE probe (edit `replacement` while watching `~/.dsh/plugin-dsh-normalize-file.log`) would settle the snapshot-gap claim empirically.
 2. Should per-scope flags live per-flavor (7x duplication, current pattern) or in ONE new family aggregator plugin reading/writing the others via `configEditor`?
 3. Does `tools/post-execute` allow content rewriting of text blocks WITHOUT breaking the `old_string` edit-contract invariants the family documents for the file rewriter (`normalize-file/Apply.ts:13-22`)?
    The same concern applies to results of `edit`/`read` (byte-matching tools) - an exemption list will be needed there too.

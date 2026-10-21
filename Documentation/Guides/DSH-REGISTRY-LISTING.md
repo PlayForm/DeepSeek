@@ -38,7 +38,7 @@ statuses:
   The sibling entries in EVERY manifest pin the EXACT `0.1.0`.
   So the FIRST publish must land the layers in the dependency order (SPLICE-ETS section 5.1), or the dependent tarballs resolve against nothing.
 - **The source of the install form:** the site already ships the final command shape on EVERY plugin page and in the hero: `pnpm add @playform/<pkg>`.
-  `Site/Source/Component/Terminal.astro` defaults to `pnpm add @playform/hook-dsh-core`.
+  `Site/Source/Component/Terminal.astro` defaults to `pnpm add @playform/lib-dsh-core`.
   `Site/Source/pages/plugins.astro` carries ONE install row per package.
   The listing below repeats that form BYTE-EXACT.
 
@@ -53,7 +53,7 @@ The registry listing uses exactly these.
 
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
-| 1 | `@playform/hook-dsh-core` | `pnpm add @playform/hook-dsh-core` | the core contract + the normalize machinery |
+| 1 | `@playform/lib-dsh-core` | `pnpm add @playform/lib-dsh-core` | the core contract + the normalize machinery |
 | 2 | `@playform/plugin-dsh-factory` | `pnpm add @playform/plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
 | 3 | `@playform/hook-dsh-package-governor` | `pnpm add @playform/hook-dsh-package-governor` | the package.json governor |
 | 4 | `@playform/hook-dsh-package-pinner` | `pnpm add @playform/hook-dsh-package-pinner` | the package.json pinner |
@@ -64,7 +64,7 @@ The registry listing uses exactly these.
 | 9 | `@playform/hook-dsh-normalize-spaces` | `pnpm add @playform/hook-dsh-normalize-spaces` | unicode -> ASCII spaces |
 | 10 | `@playform/hook-dsh-normalize-invisible` | `pnpm add @playform/hook-dsh-normalize-invisible` | invisible characters removed |
 | 11 | `@playform/hook-dsh-normalize-fullwidth` | `pnpm add @playform/hook-dsh-normalize-fullwidth` | fullwidth -> halfwidth |
-| 12 | `@playform/hook-dsh-normalize-file` | `pnpm add @playform/hook-dsh-normalize-file` | the file normalize composition |
+| 12 | `@playform/plugin-dsh-normalize-file` | `pnpm add @playform/plugin-dsh-normalize-file` | the file normalize composition |
 | 13 | `@playform/hook-dsh-ccr` | `pnpm add @playform/hook-dsh-ccr` | the CCR compressor and the `ccr_retrieve` tool |
 | 14 | `@playform/hook-dsh-tool-coach` | `pnpm add @playform/hook-dsh-tool-coach` | the terminal-content coaching guardian |
 | 15 | `@playform/hook-dsh-live-containers` | `pnpm add @playform/hook-dsh-live-containers` | the dynamic system-prompt blocks (ships disabled) |
@@ -74,7 +74,7 @@ The registry listing uses exactly these.
 | # | Package | Install command (byte-exact) | Role |
 | - | ------- | ---------------------------- | ---- |
 | 1 | `@playform/ets-base-dsh` | `pnpm add @playform/ets-base-dsh` | the shared Effect-TS plumbing (the base) |
-| 2 | `@playform/ets-hook-dsh-core` | `pnpm add @playform/ets-hook-dsh-core` | the core contract + the normalize machinery |
+| 2 | `@playform/ets-lib-dsh-core` | `pnpm add @playform/ets-lib-dsh-core` | the core contract + the normalize machinery |
 | 3 | `@playform/ets-plugin-dsh-factory` | `pnpm add @playform/ets-plugin-dsh-factory` | the factory service (`ctx.pluginFactory`) |
 | 4 | `@playform/ets-hook-dsh-package-governor` | `pnpm add @playform/ets-hook-dsh-package-governor` | the package.json governor |
 | 5 | `@playform/ets-hook-dsh-package-pinner` | `pnpm add @playform/ets-hook-dsh-package-pinner` | the package.json pinner |
@@ -85,7 +85,7 @@ The registry listing uses exactly these.
 | 10 | `@playform/ets-hook-dsh-normalize-spaces` | `pnpm add @playform/ets-hook-dsh-normalize-spaces` | unicode -> ASCII spaces |
 | 11 | `@playform/ets-hook-dsh-normalize-invisible` | `pnpm add @playform/ets-hook-dsh-normalize-invisible` | invisible characters removed |
 | 12 | `@playform/ets-hook-dsh-normalize-fullwidth` | `pnpm add @playform/ets-hook-dsh-normalize-fullwidth` | fullwidth -> halfwidth |
-| 13 | `@playform/ets-hook-dsh-normalize-file` | `pnpm add @playform/ets-hook-dsh-normalize-file` | the file normalize composition |
+| 13 | `@playform/ets-plugin-dsh-normalize-file` | `pnpm add @playform/ets-plugin-dsh-normalize-file` | the file normalize composition |
 | 14 | `@playform/ets-hook-dsh-ccr` | `pnpm add @playform/ets-hook-dsh-ccr` | the CCR compressor and the `ccr_retrieve` tool |
 | 15 | `@playform/ets-hook-dsh-tool-coach` | `pnpm add @playform/ets-hook-dsh-tool-coach` | the terminal-content coaching guardian |
 | 16 | `@playform/ets-hook-dsh-live-containers` | `pnpm add @playform/ets-hook-dsh-live-containers` | the dynamic system-prompt blocks (ships disabled) |

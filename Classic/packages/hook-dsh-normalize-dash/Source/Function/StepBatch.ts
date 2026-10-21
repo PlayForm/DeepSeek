@@ -1,5 +1,5 @@
 // StepBatch - the hook-dsh-normalize-dash's THIN DELEGATE over the core's
-// step-batch arm factory (@playform/hook-dsh-core/Overpass/StepBatch). The
+// step-batch arm factory (@playform/lib-dsh-core/Overpass/StepBatch). The
 // generic machinery (next() first, the continuous scope gate, the one-shot
 // `Overpass` flag and its consumption, the text-only block rewrite, the CCR
 // marker guard, the fail-open, the identity-preserving no-op) lives in the
@@ -18,7 +18,7 @@
 // Function/Apply's registration and the import path stay untouched.
 import type { PreStepDecision } from "@deepseek-ai/dsh-agent";
 import type State from "@Interface/State.js";
-import { StepBatch } from "@playform/hook-dsh-core";
+import { StepBatch } from "@playform/lib-dsh-core";
 
 import Replace from "./Replace.js";
 

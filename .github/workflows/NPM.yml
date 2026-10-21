@@ -3,8 +3,8 @@
 # Documentation/Plans/SPLICE-ETS.md §5.1). All 31 packages publish
 # from THIS monorepo in the L0 -> L1 -> L2 topological order:
 #   L0: @playform/ets-base-dsh (the base)
-#   L1: the four foundations (the classical hook-dsh-core +
-#       plugin-dsh-factory, the ets-hook-dsh-core +
+#   L1: the four foundations (the classical lib-dsh-core +
+#       plugin-dsh-factory, the ets-lib-dsh-core +
 #       ets-plugin-dsh-factory)
 #   L2: the twenty-six consumers
 # The npm publish itself remains the USER'S call (their token):
@@ -106,8 +106,8 @@ jobs:
             # L1: the four foundations (the classical pair + the ets pair;
             # the ets pair depends on the L0 base + effect).
             # ------------------------------------------------------------
-            - name: Publish L1 - @playform/hook-dsh-core
-              working-directory: Classic/packages/hook-dsh-core
+            - name: Publish L1 - @playform/lib-dsh-core
+              working-directory: Classic/packages/lib-dsh-core
               run: npm publish --provenance --access public --ignore-scripts
               continue-on-error: true
 
@@ -116,8 +116,8 @@ jobs:
               run: npm publish --provenance --access public --ignore-scripts
               continue-on-error: true
 
-            - name: Publish L1 - @playform/ets-hook-dsh-core
-              working-directory: EffectTS/packages/ets-hook-dsh-core
+            - name: Publish L1 - @playform/ets-lib-dsh-core
+              working-directory: EffectTS/packages/ets-lib-dsh-core
               run: npm publish --provenance --access public --ignore-scripts
               continue-on-error: true
 
@@ -134,13 +134,13 @@ jobs:
             - name: Publish L2 - the classical consumers
               working-directory: Classic/packages
               run: |
-                  for d in hook-dsh-cargo-governor hook-dsh-ccr hook-dsh-live-containers hook-dsh-normalize-dash hook-dsh-normalize-ellipsis hook-dsh-normalize-file hook-dsh-normalize-fullwidth hook-dsh-normalize-invisible hook-dsh-normalize-quotes hook-dsh-normalize-spaces hook-dsh-package-governor hook-dsh-package-pinner hook-dsh-tool-coach; do
+                  for d in hook-dsh-cargo-governor hook-dsh-ccr hook-dsh-live-containers hook-dsh-normalize-dash hook-dsh-normalize-ellipsis plugin-dsh-normalize-file hook-dsh-normalize-fullwidth hook-dsh-normalize-invisible hook-dsh-normalize-quotes hook-dsh-normalize-spaces hook-dsh-package-governor hook-dsh-package-pinner hook-dsh-tool-coach; do
                       (cd "$d" && npm publish --provenance --access public --ignore-scripts) || true
                   done
 
             - name: Publish L2 - the ets consumers
               working-directory: EffectTS/packages
               run: |
-                  for d in ets-hook-dsh-cargo-governor ets-hook-dsh-ccr ets-hook-dsh-live-containers ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-hook-dsh-normalize-file ets-hook-dsh-normalize-fullwidth ets-hook-dsh-normalize-invisible ets-hook-dsh-normalize-quotes ets-hook-dsh-normalize-spaces ets-hook-dsh-package-governor ets-hook-dsh-package-pinner ets-hook-dsh-tool-coach; do
+                  for d in ets-hook-dsh-cargo-governor ets-hook-dsh-ccr ets-hook-dsh-live-containers ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-plugin-dsh-normalize-file ets-hook-dsh-normalize-fullwidth ets-hook-dsh-normalize-invisible ets-hook-dsh-normalize-quotes ets-hook-dsh-normalize-spaces ets-hook-dsh-package-governor ets-hook-dsh-package-pinner ets-hook-dsh-tool-coach; do
                       (cd "$d" && npm publish --provenance --access public --ignore-scripts) || true
                   done

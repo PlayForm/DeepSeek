@@ -45,7 +45,7 @@ The factory is the **hub** of the eleven-package DSH family:
 | [hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
 | [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
 
-The pure layer it deliberately does **not** re-export is [`hook-dsh-core`](../hook-dsh-core) (its
+The pure layer it deliberately does **not** re-export is [`lib-dsh-core`](../lib-dsh-core) (its
 19-method service surface stays stable); the hooks import the core's helpers directly.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:

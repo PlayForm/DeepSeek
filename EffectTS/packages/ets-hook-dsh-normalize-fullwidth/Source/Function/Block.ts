@@ -5,7 +5,7 @@
 // tool-args flag - three-way since the edit exemption and the per-call raw
 // marker: a block whose `name` is "edit" passes through BY IDENTITY, and a
 // raw-marked block passes through UNNORMALIZED with the marker stripped -
-// everything else by identity) lives in @playform/ets-hook-dsh-core's
+// everything else by identity) lives in @playform/ets-lib-dsh-core's
 // Stream/Block; this file supplies only the flavor - the fullwidth
 // transform (the ReplaceMap over the Fullwidth map) - plus the per-call
 // `Raw` marker flag forwarded by the per-chunk dispatch so the deltas AND

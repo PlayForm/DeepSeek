@@ -69,7 +69,7 @@ const PlayformDir = path.join(Profile, "node_modules", "@playform");
 				"@playform/ets-hook-dsh-normalize-spaces",
 				"@playform/ets-hook-dsh-normalize-invisible",
 				"@playform/ets-hook-dsh-normalize-fullwidth",
-				"@playform/ets-hook-dsh-normalize-file",
+				"@playform/ets-plugin-dsh-normalize-file",
 			]),
 		"the bundle list mirrors the live desktop profile (13 entries, ordered)",
 	);
@@ -141,10 +141,10 @@ const PlayformDir = path.join(Profile, "node_modules", "@playform");
 	const Expected = [
 		"ets-base-dsh",
 		"ets-hook-dsh-cargo-governor",
-		"ets-hook-dsh-core",
+		"ets-lib-dsh-core",
 		"ets-hook-dsh-normalize-dash",
 		"ets-hook-dsh-normalize-ellipsis",
-		"ets-hook-dsh-normalize-file",
+		"ets-plugin-dsh-normalize-file",
 		"ets-hook-dsh-normalize-fullwidth",
 		"ets-hook-dsh-normalize-invisible",
 		"ets-hook-dsh-normalize-quotes",

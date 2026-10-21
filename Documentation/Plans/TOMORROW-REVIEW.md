@@ -119,7 +119,7 @@ The user holds all commits:
 | Area | State |
 |---|---|
 | **Boilerplate/** | The reference: 12 bundles + 12 smokes (the original `~/.dsh` copies, the personal paths intact - the internal baseline, NOT anonymized; decision pending: gitignore it or its own private submodule) |
-| **Classic/** | The release: 12 packages under the #15 names (`plugin-dsh-factory`, `hook-dsh-core`, `hook-dsh-governor-package`, `hook-dsh-pinner-package`, `hook-dsh-governor-cargo`, `hook-dsh-normalize-*`), anonymized (#12 - zero personal references in the release docs; one residual: the governor's `ncuBin` default VALUE, a smoke-asserted code constant), the Aphrodite-borrowed READMEs, v0.0.1, all 12 smokes green (core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 each / dash 132) |
+| **Classic/** | The release: 12 packages under the #15 names (`plugin-dsh-factory`, `lib-dsh-core`, `hook-dsh-governor-package`, `hook-dsh-pinner-package`, `hook-dsh-governor-cargo`, `hook-dsh-normalize-*`), anonymized (#12 - zero personal references in the release docs; one residual: the governor's `ncuBin` default VALUE, a smoke-asserted code constant), the Aphrodite-borrowed READMEs, v0.0.1, all 12 smokes green (core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 each / dash 132) |
 | **EffectTS/** | The release: all 12 packages on Effect v4.0.1, parity-green (core 17 / factory 41 / governor 81 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 each / dash 132 - the same assertions as the Classic + additive coverage), the opt-in tracing (`@effect/opentelemetry` NodeSdk + OTLP, no-op default, hygiene-proven), the #14 parallel marker (sequential default), v0.0.1 |
 | **Site/** | An Astro fork of PlayForm/Starter (the user merged Fork/Current into Current); the build fixed (the @Stylesheet alias wiring + the CSS-chunk pruning fix); the Reference + Stitch adaptations woven in (9+ pages: index, plugins/products, versions, flavors, models, workbench, matrix, package detail, brand - the brand page being removed per the user); the Cloudflare readiness (wrangler.toml, _headers, 404, the deployment README) - THE CORRECTNESS AGENT IS MID-PASS (the Products→Plugins rename + the real package-docs adoption + the direction updates + the content-voice rule + the /brand/ removal) |
 | **Test/** | The family-only fixture archive: `fixtures/manifest/` (the governed-chain, governed-test, cargo-fixture, the sandbox-root manifest), `fixtures/markdown/` (the mdash, raw-marker, raw-write, tool-args, granular-normalize, normalize-file proof fixtures), `probes/raw-write-probe/` + the README index - the unrelated experiments (the coder/locktree/prun trees, the node_modules litter) removed |
@@ -181,9 +181,11 @@ EffectTS:    core 17 / factory 41 / governor 81 / pinner 32 / cargo 62 /
 3. **The governor's `ncuBin` residual** - the CORSAIR path in the
    governor-package's Config default (a smoke-asserted code constant) -
    re-pin + rebuild when the releases must be fully clean.
-4. **The naming refinements (#15)** - the `lib-`/`manifest` proposals
-   (lib-dsh-core vs hook-dsh-core, manifest vs package) - UNDECIDED;
-   the Site + the READMEs currently use the user's exact approved names.
+4. **The naming refinements (#15)** - the `lib-` kind is DECIDED
+   (2026-10-21: the core is `lib-dsh-core`, the file normalizer is
+   `plugin-dsh-normalize-file`); the `manifest` vs `package` wording
+   remains UNDECIDED;
+   the Site + the READMEs carry the applied names.
 5. **The releases' polish** - the per-package publish configs (the
    registry, the publish flow), the license/attribution per repo, the
    CHANGELOGs.
@@ -360,9 +362,9 @@ The user will run the whole process again - the review-driven pass:
    the bumped typography, IBM Plex Mono for code). No attribution
    prose (the WebSite is the user's own).
 19. **THE CORE-PAGE RESTRUCTURE AGENT** (user-instructed 2026-10-07 -
-   DEDICATED to the hook-dsh-core page treatment, PAUSED for now - the
+   DEDICATED to the lib-dsh-core page treatment, PAUSED for now - the
    restructuring agent #16 treats EVERY page EXCEPT the core page; this
-   agent owns hook-dsh-core.astro): implement the reusable
+   agent owns lib-dsh-core.astro): implement the reusable
    `@Component/Concept.astro` component (Props: Id / Title / Diagram;
    `data-diagram={Id}` + `data-diagram-status="placeholder"` on the
    dashed placeholder; label + brief; h3 title; slot body; the
@@ -515,7 +517,7 @@ Implement after the smoke-suite restructure settles.
   Target/ recursively, Test-ESBuild.ts wiping only Target/Test, .npmignore,
   package.json wiring); the aggregate-runner integration (keep the .mjs pass,
   add the Target/Test enumeration pass with the printed-count-vs-README
-  vacuously-green guard); the pilot = hook-dsh-core + ets-hook-dsh-core; the
+  vacuously-green guard); the pilot = lib-dsh-core + ets-lib-dsh-core; the
   fan-out L1-L6; the traps (parity-by-generation, no aliases in tests, tabs,
   ASCII with \u escapes, baseline-recording).
 - **The site-update blueprint**: `19ffb358` COMPLETE ->
@@ -535,7 +537,7 @@ Implement after the smoke-suite restructure settles.
   built-Target greps; never the dev server).
 - **The live profile (the user's question, answered)**: 12 family bundles
   installed (linked to Classic/packages), factory + normalize-file ACTIVE, the
-  other 10 disabled per the control panel; hook-dsh-core is a link: dependency
+  other 10 disabled per the control panel; lib-dsh-core is a link: dependency
   but NOT a bundle row; hook-dsh-tool-coach NOT in the profile at all (in the
   repo, not wired - a profile change + restart to add it).
 
@@ -586,8 +588,8 @@ Implement after the smoke-suite restructure settles.
 
 ## BATCH WAVE-2 COMPLETE (2026-10-19 - the restructure pilot LANDED + VERIFIED)
 
-- **The pilot lane** `2b336307` COMPLETE: hook-dsh-core (8 folders, 14 checks) +
-  ets-hook-dsh-core (10 folders, 17 checks) converted end-to-end; baselines recorded
+- **The pilot lane** `2b336307` COMPLETE: lib-dsh-core (8 folders, 14 checks) +
+  ets-lib-dsh-core (10 folders, 17 checks) converted end-to-end; baselines recorded
   fresh (14/17); parity diffs = the identity line + the ets-base-dsh import split
   only; Harness.ts byte-identical; the runner's new pass enumerates
   Target/Test/*/Test.js with the vacuously-green count guard -> "All 60 smoke suites
@@ -1804,7 +1806,7 @@ VERIFIED in the built output (the [hidden] rule + the flex-end row + the data-ca
   recommended); (e) the detached panels via the shell overlay/sidebar.
   Option B = an upstream conversation.trajectory.sections declaration
   (owner-only, harness-side). THE ARCHITECTURE (the user's dictates
-  formalized): the central @playform/dsh-panel-family client half provides
+  formalized): the central @playform/client-dsh-panel-family client half provides
   the contract (PanelSection types + the registry service
   ctx.reflect.provide("playformFamilyPanel") + the open() launch protocol);
   each of the 13 bundles gets its own client half that reflect-looks-up the

@@ -103,7 +103,7 @@ EVERY stream wrapper reads
 `State.Replacement` per chunk (dash `Normalize.ts:71`), `Factory.Append` reads
 `State.Enabled`/`State.Ledger` per call (`plugin-dsh-factory/Source/Function/
 Append.ts:24,27`), the file hook reads `State.Replacement` per tool call
-(`hook-dsh-normalize-file/Source/Function/Normalize.ts:133`).
+(`plugin-dsh-normalize-file/Source/Function/Normalize.ts:133`).
 ONLY the State
 fields themselves are stale.
 
@@ -157,7 +157,7 @@ In `Classic/packages/plugin-dsh-factory/Source/Function/State.ts` (and the
 
 Consumers inventory (ALL keep working unchanged, verified by grep over both trees):
 `State.Replacement` (per chunk in 6 Classic + 6 ets stream hooks;
-`hook-dsh-normalize-file/Normalize.ts:133`; dash `Write.ts:131`),
+`plugin-dsh-normalize-file/Normalize.ts:133`; dash `Write.ts:131`),
 `State.Reasoning`/`State.ToolArgs` (EACH hook's `Apply.ts` activation line +
 `Normalize.ts:71`), `State.Ledger`/`State.Enabled` (`Factory.Append`,
 `ets-base-dsh/Source/Function/Append.ts:24,27`), `State.List` (`Gate.ts:68`),
@@ -196,7 +196,7 @@ the existing fields:
 		batch: Schema.boolean().default(false).volatile(),
 	}).volatile(),
 	// Tool-results exemption list (the name-exempt precedent of
-	// hook-dsh-core/Source/Stream/Chunk.ts:19-32, made configurable): a result
+	// lib-dsh-core/Source/Stream/Chunk.ts:19-32, made configurable): a result
 	// whose Exec.name is listed passes through by identity.
 	toolResultsExempt: Schema.array(Schema.string())
 		.default(["read", "edit", "raw-write", "normalize-file", "ccr_retrieve", "subagent", "ask_user_question"])
@@ -291,7 +291,7 @@ background on files.
   return `{ kind: "accept", content: <rewritten blocks> }` and emit
   `overpass: normalized N char(s) in tool result <toolName> <callId>` via
   `Factory.Append` + the `normalized` journal event (R2 §6.1; format identical to
-  `hook-dsh-normalize-file/Normalize.ts:146-148` otherwise).
+  `plugin-dsh-normalize-file/Normalize.ts:146-148` otherwise).
 - **Exemptions**: `toolResultsExempt` (§3.1).
   `read`/`edit` are exempt because
   their text is byte-contracted (`old_string` must match real file bytes, the same
@@ -343,7 +343,7 @@ background on files.
 ### 4.3 What is explicitly NOT built
 
 NO `llm/stream` request rewriting (deep-frozen, R2 §2a); NO transcript rewriting
-(R2 §3b); NO background file watching (`hook-dsh-normalize-file/Apply.ts:12-20`); NO `SurfaceOp.replace` use (compaction-owned, R2 §3b).
+(R2 §3b); NO background file watching (`plugin-dsh-normalize-file/Apply.ts:12-20`); NO `SurfaceOp.replace` use (compaction-owned, R2 §3b).
 
 ## 5. The command and the tool
 
@@ -365,7 +365,7 @@ NO `llm/stream` request rewriting (deep-frozen, R2 §2a); NO transcript rewritin
   `scopes` →
   report the current effective values (read-only).
 - **Tool**: the existing `normalize-file` tool stays exactly as is
-  (`hook-dsh-normalize-file/Apply.ts:6,15-22`), now gated by `scopes.files`.
+  (`plugin-dsh-normalize-file/Apply.ts:6,15-22`), now gated by `scopes.files`.
   NO new
   tool: R2 §4c concluded an extra tool adds nothing the command and config cells
   do NOT already provide.

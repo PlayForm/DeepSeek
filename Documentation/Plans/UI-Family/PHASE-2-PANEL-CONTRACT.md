@@ -7,12 +7,12 @@ status: planned
 registry: Documentation/Plans/UI-Family/PHASE-2-PANEL-CONTRACT.md
 index: Documentation/INDEX.md
 statuses:
-	- name: the central panel package @playform/dsh-panel-family
+	- name: the central panel package @playform/client-dsh-panel-family
 		state: open
 		evidence: this document - the contract types, the registry service, the mount points, zero adapter logic
 ---
 
-# PHASE 2 - THE PANEL CONTRACT: @playform/dsh-panel-family
+# PHASE 2 - THE PANEL CONTRACT: @playform/client-dsh-panel-family
 
 > Granular document of the UI Family Implementation Plan.
 > The parent hub: Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md.
@@ -26,8 +26,8 @@ statuses:
 
 ## 1. Exact locations
 
-- **THE NEW PACKAGE**: Classic/packages/dsh-panel-family/
-  - package.json (name @playform/dsh-panel-family)
+- **THE NEW PACKAGE**: Classic/packages/client-dsh-panel-family/
+  - package.json (name @playform/client-dsh-panel-family)
   - cordis.patch.yml (one row named after the package, disabled:false)
   - Source/... (the family's standard layout: Source/Library.ts entry,
     Source/prepublishOnly.sh, Source/Run.sh, Source/Test/)

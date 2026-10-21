@@ -46,6 +46,8 @@ statuses:
 > frontmatter block (delimited by --- lines, YAML fields and nested
 > lists/objects).
 
+> **The 2026-10-21 role-prefix migration**: the four packages renamed that day read `lib-dsh-core`, `ets-lib-dsh-core`, `plugin-dsh-normalize-file` and `ets-plugin-dsh-normalize-file`, and the planned panel packages read `client-dsh-panel-family` and `client-dsh-panel-family-host`; the documents below carry the new names, and the original names remain in git history.
+
 ---
 
 ## 1. The two fixed parts

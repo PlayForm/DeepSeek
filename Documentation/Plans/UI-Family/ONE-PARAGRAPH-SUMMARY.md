@@ -29,7 +29,7 @@ statuses:
   client inspect with the GUI page OPEN.
 - **THE PHASE 0 GATE**: phase 0 resolves the mount-failure class and
   captures the live slot trees BEFORE ANY client half is written.
-- **THE CENTRAL PACKAGE**: @playform/dsh-panel-family (contract-only) and
+- **THE CENTRAL PACKAGE**: @playform/client-dsh-panel-family (contract-only) and
   the 13 adapters import its types ONLY.
 - **THE FIRST ADAPTER**: the tool-coach - and it carries the marker-usage
   rule.

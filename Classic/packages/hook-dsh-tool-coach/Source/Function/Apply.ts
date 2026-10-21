@@ -52,7 +52,7 @@ import BuildNote, { Prepend } from "@Function/Note.js";
 import type Config from "@Interface/Config.js";
 import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/hook-dsh-core";
+import { Activate } from "@playform/lib-dsh-core";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 
 // The bundle version, mirrored from package.json (the activation proof's

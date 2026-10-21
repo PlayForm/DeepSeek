@@ -16,7 +16,7 @@ statuses:
   - name: the four research inputs (R-UI-1/2/3 + R-INTERACT)
     state: resolved
     evidence: Documentation/Researches - all four delivered
-  - name: the central @playform/dsh-panel-family package
+  - name: the central @playform/client-dsh-panel-family package
     state: open
     evidence: planned, no package exists
   - name: the 13 per-plugin client adapters
@@ -58,7 +58,7 @@ Foundations (read these first, in this order):
 | [BRIEF.md](UI-Family/BRIEF.md) | the new-conversation brief: the state, the order, the routing law, the arbiters, the disciplines, the naming arbitration |
 | [PHASE-0-ORIENTATION.md](UI-Family/PHASE-0-ORIENTATION.md) | orientation, the mount-failure investigation, the five live-inspect captures, the throwaway install |
 | [PHASE-1-SITE-COMMIT.md](UI-Family/PHASE-1-SITE-COMMIT.md) | the site commit + push (READY-TO-COMMIT; possibly SKIPPED-CLEAN) |
-| [PHASE-2-PANEL-CONTRACT.md](UI-Family/PHASE-2-PANEL-CONTRACT.md) | the central package @playform/dsh-panel-family: the contract types, the registry service, the mount points |
+| [PHASE-2-PANEL-CONTRACT.md](UI-Family/PHASE-2-PANEL-CONTRACT.md) | the central package @playform/client-dsh-panel-family: the contract types, the registry service, the mount points |
 | [PHASE-3-FIRST-ADAPTER.md](UI-Family/PHASE-3-FIRST-ADAPTER.md) | the coach: the ladder section, the form POC, the marker-usage rule (R5/R6) |
 | [PHASE-4-OPTIONS-FORMS.md](UI-Family/PHASE-4-OPTIONS-FORMS.md) | all volatile rows via whileServed; the roster, the badge, the section |
 | [PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md](UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md) | the remaining 12 adapters; the Typert endpoint or the registry-only fallback |

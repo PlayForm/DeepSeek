@@ -30,7 +30,7 @@ import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
 import type Passage from "@Interface/Passage.js";
 import type RegistryView from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Suppress } from "@playform/hook-dsh-core";
+import { Suppress } from "@playform/lib-dsh-core";
 import type PluginFactory from "@playform/plugin-dsh-factory";
 
 import Dispatch from "./Dispatch.js";

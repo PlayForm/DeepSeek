@@ -49,7 +49,7 @@ const FamilyIds = [
 	"ets-hook-dsh-normalize-spaces",
 	"ets-hook-dsh-normalize-invisible",
 	"ets-hook-dsh-normalize-fullwidth",
-	"ets-hook-dsh-normalize-file",
+	"ets-plugin-dsh-normalize-file",
 ];
 const FamilyNames = [
 	"@playform/ets-plugin-dsh-factory",
@@ -62,7 +62,7 @@ const FamilyNames = [
 	"@playform/ets-hook-dsh-normalize-spaces",
 	"@playform/ets-hook-dsh-normalize-invisible",
 	"@playform/ets-hook-dsh-normalize-fullwidth",
-	"@playform/ets-hook-dsh-normalize-file",
+	"@playform/ets-plugin-dsh-normalize-file",
 ];
 
 // Group: the bundle list resolved to the composed layers (the real

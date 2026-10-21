@@ -4,7 +4,7 @@
 // sdk-minimal deployments).
 //
 // The control flow is the CORE's shared update-stage envelope
-// (@playform/hook-dsh-core, Function/Update): the gates (circuit breaker →
+// (@playform/lib-dsh-core, Function/Update): the gates (circuit breaker →
 // in-flight → cooldown), the jobs envelope (unowned job, `cancel`/`done`
 // semantics, the outcome mapping), the P2 Inflight registration under
 // Factory.UpdateKey, the breaker update on failure, the P5 journal records
@@ -40,7 +40,7 @@ import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 import type JobsRegistry from "@Interface/Jobs.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Update } from "@playform/hook-dsh-core";
+import { Update } from "@playform/lib-dsh-core";
 
 import Execute from "./Execute.js";
 

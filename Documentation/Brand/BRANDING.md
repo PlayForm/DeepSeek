@@ -57,7 +57,7 @@ The family is organized hierarchically - read EVERY name as a sentence of segmen
 | Package                        | The @-sentence                     | Role                                                                                                |
 | ------------------------------ | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
 | `plugin-dsh-factory`           | Plugin @ DSH @ Factory             | The service: 17 methods - state, ledger, journal, the shared write executor, the direct-govern fold |
-| `hook-dsh-core`                 | Lib @ DSH @ Core                   | The pure library: transforms, tables, the stream gate, the update envelope, the activation composer |
+| `lib-dsh-core`                 | Lib @ DSH @ Core                   | The pure library: transforms, tables, the stream gate, the update envelope, the activation composer |
 | `hook-dsh-package-governor`    | Hook @ DSH @ Governor @ Package    | Canonicalize package.json chain pins + the update stage                                             |
 | `hook-dsh-package-pinner`      | Hook @ DSH @ Pinner @ Package      | Pin package.json public deps to exact versions                                                      |
 | `hook-dsh-cargo-governor`      | Hook @ DSH @ Governor @ Cargo      | The Cargo.toml governor (chain + normalization + cargo upgrade)                                     |
@@ -67,7 +67,7 @@ The family is organized hierarchically - read EVERY name as a sentence of segmen
 | `hook-dsh-normalize-spaces`    | Hook @ DSH @ Normalize @ Spaces    | Unicode spaces -> ASCII                                                                             |
 | `hook-dsh-normalize-invisible` | Hook @ DSH @ Normalize @ Invisible | Zero-width/format chars removed                                                                     |
 | `hook-dsh-normalize-fullwidth` | Hook @ DSH @ Normalize @ Fullwidth | Full-width -> half-width                                                                            |
-| `hook-dsh-normalize-file`      | Hook @ DSH @ Normalize @ File      | Normalize files already on disk (the explicit tool)                                                 |
+| `plugin-dsh-normalize-file`    | Plugin @ DSH @ Normalize @ File    | Normalize files already on disk (the explicit tool)                                                 |
 
 The alphabetical order groups the family naturally: the kind first (hook/plugin/lib).
 Then the roles

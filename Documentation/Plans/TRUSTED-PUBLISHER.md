@@ -51,9 +51,9 @@ NAMES=(
   # L0 - the base
   "@playform/ets-base-dsh"
   # L1 - the four foundations
-  "@playform/hook-dsh-core"
+  "@playform/lib-dsh-core"
   "@playform/plugin-dsh-factory"
-  "@playform/ets-hook-dsh-core"
+  "@playform/ets-lib-dsh-core"
   "@playform/ets-plugin-dsh-factory"
   # L2 - the twenty-six consumers (order within the layer is arbitrary)
   "@playform/hook-dsh-cargo-governor"
@@ -61,7 +61,7 @@ NAMES=(
   "@playform/hook-dsh-live-containers"
   "@playform/hook-dsh-normalize-dash"
   "@playform/hook-dsh-normalize-ellipsis"
-  "@playform/hook-dsh-normalize-file"
+  "@playform/plugin-dsh-normalize-file"
   "@playform/hook-dsh-normalize-fullwidth"
   "@playform/hook-dsh-normalize-invisible"
   "@playform/hook-dsh-normalize-quotes"
@@ -74,7 +74,7 @@ NAMES=(
   "@playform/ets-hook-dsh-live-containers"
   "@playform/ets-hook-dsh-normalize-dash"
   "@playform/ets-hook-dsh-normalize-ellipsis"
-  "@playform/ets-hook-dsh-normalize-file"
+  "@playform/ets-plugin-dsh-normalize-file"
   "@playform/ets-hook-dsh-normalize-fullwidth"
   "@playform/ets-hook-dsh-normalize-invisible"
   "@playform/ets-hook-dsh-normalize-quotes"
@@ -121,18 +121,18 @@ The values are IDENTICAL for ALL 31 entries (the Compress screenshot's pattern):
 
 The 31 package pages to configure (same shape each):
 
-`@playform/ets-base-dsh`, `@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`,
-`@playform/ets-hook-dsh-core`, `@playform/ets-plugin-dsh-factory`,
+`@playform/ets-base-dsh`, `@playform/lib-dsh-core`, `@playform/plugin-dsh-factory`,
+`@playform/ets-lib-dsh-core`, `@playform/ets-plugin-dsh-factory`,
 `@playform/hook-dsh-cargo-governor`, `@playform/hook-dsh-ccr`,
 `@playform/hook-dsh-live-containers`, `@playform/hook-dsh-normalize-dash`,
-`@playform/hook-dsh-normalize-ellipsis`, `@playform/hook-dsh-normalize-file`,
+`@playform/hook-dsh-normalize-ellipsis`, `@playform/plugin-dsh-normalize-file`,
 `@playform/hook-dsh-normalize-fullwidth`, `@playform/hook-dsh-normalize-invisible`,
 `@playform/hook-dsh-normalize-quotes`, `@playform/hook-dsh-normalize-spaces`,
 `@playform/hook-dsh-package-governor`, `@playform/hook-dsh-package-pinner`,
 `@playform/hook-dsh-tool-coach`,
 `@playform/ets-hook-dsh-cargo-governor`, `@playform/ets-hook-dsh-ccr`,
 `@playform/ets-hook-dsh-live-containers`, `@playform/ets-hook-dsh-normalize-dash`,
-`@playform/ets-hook-dsh-normalize-ellipsis`, `@playform/ets-hook-dsh-normalize-file`,
+`@playform/ets-hook-dsh-normalize-ellipsis`, `@playform/ets-plugin-dsh-normalize-file`,
 `@playform/ets-hook-dsh-normalize-fullwidth`, `@playform/ets-hook-dsh-normalize-invisible`,
 `@playform/ets-hook-dsh-normalize-quotes`, `@playform/ets-hook-dsh-normalize-spaces`,
 `@playform/ets-hook-dsh-package-governor`, `@playform/ets-hook-dsh-package-pinner`,

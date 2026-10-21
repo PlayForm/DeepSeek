@@ -40,7 +40,7 @@ import {
 	Replace,
 	ReplaceMap,
 	Spaces,
-} from "@playform/hook-dsh-core";
+} from "@playform/lib-dsh-core";
 
 // The family's fixed order - the flavor names the tool's schema enumerates.
 const Flavors = ["dash", "quotes", "ellipsis", "spaces", "invisible", "fullwidth"];

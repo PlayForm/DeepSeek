@@ -182,7 +182,7 @@ They carry the exact reasoning from `task-routing/SKILL.md:165-170`, compressed 
 
 ## 6. Config schema sketch (profile-config style)
 
-`Compose(false, {...})` from `@playform/plugin-dsh-factory`, `.volatile()` cells for EVERY hot knob (pattern proven in `Classic/packages/hook-dsh-normalize-file/Source/Variable/Config.ts:45-58`):
+`Compose(false, {...})` from `@playform/plugin-dsh-factory`, `.volatile()` cells for EVERY hot knob (pattern proven in `Classic/packages/plugin-dsh-normalize-file/Source/Variable/Config.ts:45-58`):
 
 ```
 enabled        boolean  default true   volatile
@@ -205,7 +205,7 @@ notes          object { first: string, persistent: string, denied: string }
 
 LIVE toggling rides `loader/volatile-update` (consumer list `epc.md:106`).
 The granular-normalize feature is fixing the snapshot bug.
-The coach assumes volatile cells reach `apply` as stable references after it lands (factory State builder unwraps defensively, `hook-dsh-normalize-file/Source/Variable/Config.ts:32-35`).
+The coach assumes volatile cells reach `apply` as stable references after it lands (factory State builder unwraps defensively, `plugin-dsh-normalize-file/Source/Variable/Config.ts:32-35`).
 
 ## 7. Integration & parity plan (summary; details in PLAN doc)
 

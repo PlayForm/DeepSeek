@@ -5,7 +5,7 @@
 // tool-args flag - three-way since the edit exemption and the per-call raw
 // marker: a block whose `name` is "edit" passes through BY IDENTITY, and a
 // raw-marked block passes through UNNORMALIZED with the marker stripped -
-// everything else by identity) lives in @playform/hook-dsh-core's
+// everything else by identity) lives in @playform/lib-dsh-core's
 // Stream/Block; this file supplies only the flavor - a closure that applies
 // the invisible hook's Invisible class and its configured replacement
 // (default "" - REMOVAL) to one text segment - plus the per-call `Raw`
@@ -16,7 +16,7 @@
 // template shape, with the Invisible class substituted for Dashes) - the
 // invisible smoke is the arbiter.
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import { Block as CoreBlock } from "@playform/hook-dsh-core";
+import { Block as CoreBlock } from "@playform/lib-dsh-core";
 
 import Replace from "./Replace.js";
 

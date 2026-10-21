@@ -1,1 +1,1 @@
-import{StepBatch as o}from"@playform/hook-dsh-core";import n from"./Replace.js";var s=o(e=>n(e),(e,t,r)=>`overpass: normalized ${e} char(s) in step batch (turn ${t} step ${r})`,{Append:(e,t)=>e.Factory.Append(e,t),Journal:(e,t,r,p)=>e.Factory.Journal(e,t,r,p)});export{s as default};
+import{StepBatch as o}from"@playform/lib-dsh-core";import n from"./Replace.js";var s=o(e=>n(e),(e,t,r)=>`overpass: normalized ${e} char(s) in step batch (turn ${t} step ${r})`,{Append:(e,t)=>e.Factory.Append(e,t),Journal:(e,t,r,p)=>e.Factory.Journal(e,t,r,p)});export{s as default};

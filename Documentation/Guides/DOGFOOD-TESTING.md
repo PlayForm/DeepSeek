@@ -105,12 +105,12 @@ The goal is **copied artifacts** so the test exercises exactly what `npm install
 ```bash
 # from the monorepo root: pack each release package (Classic/ = the release names)
 mkdir -p "$SCRATCH/tarballs"
-for p in plugin-dsh-factory hook-dsh-core hook-dsh-package-governor \
+for p in plugin-dsh-factory lib-dsh-core hook-dsh-package-governor \
          hook-dsh-package-pinner hook-dsh-cargo-governor \
          hook-dsh-normalize-dash hook-dsh-normalize-quotes \
          hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
          hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth \
-         hook-dsh-normalize-file; do
+         plugin-dsh-normalize-file; do
 	(cd "Classic/packages/$p" && pnpm pack --pack-destination "$SCRATCH/tarballs")
 done
 ```
@@ -165,7 +165,7 @@ the #15 release naming):
 				"@playform/hook-dsh-normalize-spaces",
 				"@playform/hook-dsh-normalize-invisible",
 				"@playform/hook-dsh-normalize-fullwidth",
-				"@playform/hook-dsh-normalize-file"
+				"@playform/plugin-dsh-normalize-file"
 			]
 		}
 	}
@@ -317,10 +317,10 @@ SCRATCH="$HOME/.dsh/profiles/dsh-test"        # method A; method B: SCRATCH="$TM
 mkdir -p "$SCRATCH" "$SCRATCH/tarballs"
 
 # pack from the monorepo (release tree = Classic/)
-for p in plugin-dsh-factory hook-dsh-core hook-dsh-package-governor \
+for p in plugin-dsh-factory lib-dsh-core hook-dsh-package-governor \
 	hook-dsh-package-pinner hook-dsh-cargo-governor hook-dsh-normalize-dash \
 	hook-dsh-normalize-quotes hook-dsh-normalize-ellipsis hook-dsh-normalize-spaces \
-	hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth hook-dsh-normalize-file; do
+	hook-dsh-normalize-invisible hook-dsh-normalize-fullwidth plugin-dsh-normalize-file; do
 	(cd "Classic/packages/$p" && pnpm pack --pack-destination "$SCRATCH/tarballs")
 done
 

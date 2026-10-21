@@ -30,9 +30,9 @@
 
 # ---- Classic/packages ----
 
-[submodule "hook-dsh-core"]
-	path = Classic/packages/hook-dsh-core
-	url = https://github.com/PlayForm/hook-dsh-core.git
+[submodule "lib-dsh-core"]
+	path = Classic/packages/lib-dsh-core
+	url = https://github.com/PlayForm/lib-dsh-core.git
 
 [submodule "hook-dsh-cargo-governor"]
 	path = Classic/packages/hook-dsh-cargo-governor
@@ -50,9 +50,9 @@
 	path = Classic/packages/hook-dsh-normalize-ellipsis
 	url = https://github.com/PlayForm/hook-dsh-normalize-ellipsis.git
 
-[submodule "hook-dsh-normalize-file"]
-	path = Classic/packages/hook-dsh-normalize-file
-	url = https://github.com/PlayForm/hook-dsh-normalize-file.git
+[submodule "plugin-dsh-normalize-file"]
+	path = Classic/packages/plugin-dsh-normalize-file
+	url = https://github.com/PlayForm/plugin-dsh-normalize-file.git
 
 [submodule "hook-dsh-normalize-fullwidth"]
 	path = Classic/packages/hook-dsh-normalize-fullwidth
@@ -78,9 +78,9 @@
 	path = Classic/packages/dsh-plugin-factory
 	url = https://github.com/PlayForm/dsh-plugin-factory.git
 
-[submodule "ets-hook-dsh-core"]
-	path = EffectTS/packages/ets-hook-dsh-core
-	url = https://github.com/PlayForm/ets-hook-dsh-core.git
+[submodule "ets-lib-dsh-core"]
+	path = EffectTS/packages/ets-lib-dsh-core
+	url = https://github.com/PlayForm/ets-lib-dsh-core.git
 
 [submodule "ets-hook-dsh-cargo-governor"]
 	path = EffectTS/packages/ets-hook-dsh-cargo-governor
@@ -98,9 +98,9 @@
 	path = EffectTS/packages/ets-hook-dsh-normalize-ellipsis
 	url = https://github.com/PlayForm/ets-hook-dsh-normalize-ellipsis.git
 
-[submodule "ets-hook-dsh-normalize-file"]
-	path = EffectTS/packages/ets-hook-dsh-normalize-file
-	url = https://github.com/PlayForm/ets-hook-dsh-normalize-file.git
+[submodule "ets-plugin-dsh-normalize-file"]
+	path = EffectTS/packages/ets-plugin-dsh-normalize-file
+	url = https://github.com/PlayForm/ets-plugin-dsh-normalize-file.git
 
 [submodule "ets-hook-dsh-normalize-fullwidth"]
 	path = EffectTS/packages/ets-hook-dsh-normalize-fullwidth

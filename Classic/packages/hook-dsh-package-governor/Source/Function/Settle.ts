@@ -11,7 +11,7 @@
 // FACTORY — the strings are the module's.
 //
 // All of that is the CORE's shared update-stage envelope
-// (@playform/hook-dsh-core, Function/Update) — the family's one flow, shared
+// (@playform/lib-dsh-core, Function/Update) — the family's one flow, shared
 // with the cargo governor. This module is the delegate: the behavior comes
 // from the envelope built in Function/Dispatch (its injected Dependencies -
 // the State's maps, the factory delegates and the module's own ledger

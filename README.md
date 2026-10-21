@@ -45,7 +45,7 @@ pnpm install --ignore-scripts
 pnpm run prepublishOnly
 ```
 
-The two base bundles first (`hook-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the thirteen consumers; the
+The base library and the factory first (`lib-dsh-core`, [plugin-dsh-factory][ours-plugin-dsh-factory]), then the thirteen consumers; the
 consumers import their siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
@@ -138,9 +138,9 @@ exists.
 Two published groups, one contract: the CLASSIC packages (`@playform/dsh-*` - plain TypeScript)
 and the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run:
 
-- **CLASSIC:** `pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor` -
+- **CLASSIC:** `pnpm add @playform/lib-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor` -
   plain TypeScript, zero framework dependencies; `import { Govern } from "@playform/plugin-dsh-factory"`.
-- **EFFECT-TS:** `pnpm add @playform/ets-hook-dsh-core @playform/ets-plugin-dsh-factory @playform/ets-hook-dsh-package-governor` -
+- **EFFECT-TS:** `pnpm add @playform/ets-lib-dsh-core @playform/ets-plugin-dsh-factory @playform/ets-hook-dsh-package-governor` -
   the same contracts on Effect-TS services and layers, with `effect` v4.0.2 as the shared runtime
   dependency and the base `@playform/ets-base-dsh` package carrying the plumbing every ets-*
   package builds on.
@@ -187,7 +187,7 @@ Three seams, three behaviors, one service underneath:
     RAW-WRITE ──────► the direct-govern registry (factory.Govern) ─► the same chain, per call
 ```
 
-- **[The stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Stream)** - each normalize flavor hooks the
+- **[The stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Stream)** - each normalize flavor hooks the
   [`llm/stream`][dsh-llm]
   waterfall (the interceptable wrapper around every streaming model call) and rewrites its character
   family live in the transcript: the dash family to `-`, the eight curly quote code points to their
@@ -236,9 +236,9 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
   journal (`Journal`), the schema factory (`Schema`), the probe-once seam (`Seam`), the Inflight key
   (`UpdateKey`) and [the direct-govern registry][ours-govern] and entry (`RegisterGovern`/`Govern` - the sequential
   fold).
-- **`hook-dsh-core`** (Hook @ DSH @ Core) - the pure machinery layer, zero runtime dependencies, not
+- **`lib-dsh-core`** (Lib @ DSH @ Core) - the pure library layer, zero runtime dependencies, not
   a plugin: the dependency-section lists, the exclusion segments, the suppression-line composer, the
-  update-policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), the update envelope, the activation-line composer, and
+  update-policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts), the update envelope, the activation-line composer, and
   the normalize/stream machinery (the six tables, `Replace`/`ReplaceMap`, `Chunk`/`Block`).
 - **[hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)** (Hook @ DSH @ Governor @ Package) - the silent `package.json`
   governor: hooks
@@ -272,7 +272,7 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
   controls, BOM) removed.
 - **[hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/Source)** (Hook @ DSH @ Normalize @ Fullwidth) - the fullwidth flavor:
   the entire FULLWIDTH FORMS range (U+FF01-FF5E) to its ASCII half-width counterparts.
-- **[hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-file/Source)** (Hook @ DSH @ Normalize @ File) - the file-content normalizer: the
+- **[plugin-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/Source)** (Plugin @ DSH @ Normalize @ File) - the file-content normalizer plugin: the
   read, count, write pipeline applying all six transforms to a file already on disk - writing only
   when something changed.
 - **[hook-dsh-ccr](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-ccr/Source)** (Hook @ DSH @ CCR) - the compress-cache-retrieve guardian: oversized
@@ -535,7 +535,7 @@ and the governance on top.
 | Want to...            | Start here                                                                      |
 | --------------------- | ------------------------------------------------------------------------------- |
 | Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`       |
-| Add a flavor          | `hook-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle          |
+| Add a flavor          | `lib-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle          |
 | Change behavior       | the smokes first - the counts (733/746) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`        |
 

@@ -25,7 +25,7 @@ import type { FsTarget } from "@deepseek-ai/dsh-fs";
 import type Passage from "@Interface/Passage.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Suppress } from "@playform/ets-hook-dsh-core";
+import { Suppress } from "@playform/ets-lib-dsh-core";
 
 import Dispatch from "./Dispatch.js";
 import Filter from "./Filter.js";

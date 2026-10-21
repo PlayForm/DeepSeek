@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Pinner @ Package**): a hook child of the
-[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`lib-dsh-core`](../lib-dsh-core)
 helpers; a sibling of the package governor on the same [`fs/observed`][dsh-fs] seam.
 
 One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own basename and
@@ -54,7 +54,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gate, the discovery, the union keep-list, the guarded write, the refresh, the continuation,
   the effects and the schema come from [`plugin-dsh-factory`](../plugin-dsh-factory); the refusal
-  guard and the suppression composer come from [`hook-dsh-core`](../hook-dsh-core). This bundle
+  guard and the suppression composer come from [`lib-dsh-core`](../lib-dsh-core). This bundle
   keeps the module leaf: the range law (Function/Pin), the decode, and every ledger string. Besides
   the [`fs/observed`][dsh-fs] event path, its chain pass is registered with the factory's direct-govern
   registry at apply (`Factory.RegisterGovern("package.json", "pin", …)` — factory SCHEME.md §2.16),

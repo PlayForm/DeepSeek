@@ -38,9 +38,9 @@ The package roles:
 | Role              | Packages                                                        |
 | ----------------- | --------------------------------------------------------------- |
 | Service           | `plugin-dsh-factory` (19 methods, `ctx.pluginFactory`)          |
-| Machinery library | `hook-dsh-core` (not a plugin)                                  |
+| Machinery library | `lib-dsh-core` (not a plugin)                                  |
 | Governance trio   | `package-governor`, `package-pinner`, `cargo-governor`          |
-| Normalize family  | six stream flavors + `normalize-file`                           |
+| Normalize family  | six stream flavors + `plugin-dsh-normalize-file`                |
 | Guardians         | `ccr`, `tool-coach`                                             |
 | Live blocks       | `live-containers` (ships disabled)                              |
 

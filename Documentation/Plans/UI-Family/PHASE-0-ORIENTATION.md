@@ -35,7 +35,7 @@ statuses:
 - **THE LIVE LEDGERS**: ~/.dsh/*.log (ccr.log, hook-dsh-tool-coach.log,
   hook-dsh-governor-package.log, hook-dsh-governor-cargo.log,
   hook-dsh-package-pinner.log, hook-dsh-normalize-*.log,
-  hook-dsh-normalize-file.log, live-containers log per its config)
+  plugin-dsh-normalize-file.log, live-containers log per its config)
 - **THE HARNESS IMPLEMENTATION** (read-only): /Applications/DeepSeek
   Harness.app/Contents/Resources/app.asar/dsh/node_modules/@deepseek-ai/
 - **THE DOCS ANCHORS**: <DOCS>/docs/subsystems/slots.md;

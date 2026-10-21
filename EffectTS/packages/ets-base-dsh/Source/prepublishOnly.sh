@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # prepublishOnly.sh for @playform/ets-base-dsh — the two-step build,
-# mirroring the ets-hook-dsh-core pattern: multiple Build invocations in one
+# mirroring the ets-lib-dsh-core pattern: multiple Build invocations in one
 # script, one per source tree.
 # ORDER IS MANDATORY: the plugin build FIRST, the test build SECOND.
 # The plugin ESBuild config's Target plugin WIPES outdir "Target" recursively

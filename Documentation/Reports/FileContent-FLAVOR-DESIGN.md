@@ -9,7 +9,7 @@ index: Documentation/INDEX.md
 statuses:
   - name: the file-content normalizer flavor (normalize-file)
     state: implemented
-    evidence: hook-dsh-normalize-file shipped in both trees; 112 checks per tree
+    evidence: plugin-dsh-normalize-file shipped in both trees; 112 checks per tree
   - name: the fs/observed rewriter (not advisable)
     state: rejected
     evidence: the edit old_string contract and the governors' passes
@@ -18,7 +18,7 @@ statuses:
 # FileContent-FLAVOR-DESIGN - Register Item #7: The File-Content Normalizer Flavor
 
 Status:
-- The file-content normalizer flavor (normalize-file): implemented (hook-dsh-normalize-file shipped in both trees; 112 checks per tree)
+- The file-content normalizer flavor (normalize-file): implemented (plugin-dsh-normalize-file shipped in both trees; 112 checks per tree)
 - The fs/observed rewriter (not advisable): rejected (the edit old_string contract + the governors' passes)
 
 > One of the four research reports migrated from the pre-restructure flat documentation folder - see also
@@ -74,7 +74,7 @@ visible, opt-in tool call.
 | `raw-write` tool `normalize: true` | `bundles/hook-dsh-normalize-dash/Source/Function/Write.ts`, `Rewrite.ts`        | content **being written now**, all six transforms through the shared executor | explicit per-call opt-in; default verbatim; new writes only |
 | Six stream flavors                 | `bundles/hook-dsh-normalize-{dash,quotes,...}`                                  | **model output** only (llm/stream waterfall)                                  | never touches disk                                          |
 | Governance trio                    | `bundles/hook-dsh-{package-governor,package-pinner,cargo-governor}`             | governed manifests, their own rewrites                                        | not the family's six transforms                             |
-| Edit exemption                     | `bundles/hook-dsh-core/Source/Stream/Chunk.ts` (name-exempt `edit`/`raw-write`) | protects the old_string contract                                              | _defines_ the conflict surface below                        |
+| Edit exemption                     | `bundles/lib-dsh-core/Source/Stream/Chunk.ts` (name-exempt `edit`/`raw-write`) | protects the old_string contract                                              | _defines_ the conflict surface below                        |
 
 **Not covered**: any file already on disk that the agent did not just write - pre-existing files,
 git-cloned material, script-created files (the execute-code gap). No mechanism rewrites those today,
@@ -128,20 +128,20 @@ by design.
 | ii  | Edit old_string contract    | Safe _because visible_: the tool result's diff shows before/after in the same turn (the raw-write `normalize: true` posture). The agent must re-read before editing - same obligation as after any normalize:true write. Document in the tool description.                                                                                                                                                                           |
 | iii | raw-write read-before-write | Tool calls are serialized; `Factory.Write`'s `before` is read at write time, so a prior normalize-file in the same turn is already reflected. No race.                                                                                                                                                                                                                                                                               |
 | iv  | P5 single-open domain       | Each module opens its own `package_governance` sink (`Factory` `Function/Open.ts`); the flavor journals via its own `Attach`. The `normalized` event name requires the domain version bump (register item #8, in flight by another agent) - sequence the Journal calls behind that enum, or ship without journaling first.                                                                                                           |
-| v   | Exclusion list              | Not needed for a single-file tool (no walk). The core's list (`bundles/hook-dsh-core/Source/Variable/Default.ts`: `node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app`) applies only if the deferred watch arm is ever built; any future watch must also add the governed manifests (`package.json`, `Cargo.toml`, lock files).                                                                                           |
+| v   | Exclusion list              | Not needed for a single-file tool (no walk). The core's list (`bundles/lib-dsh-core/Source/Variable/Default.ts`: `node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app`) applies only if the deferred watch arm is ever built; any future watch must also add the governed manifests (`package.json`, `Cargo.toml`, lock files).                                                                                           |
 
 ## 5. Recommendation
 
-**Ship (a): a `normalize-file` tool as a new bundle `hook-dsh-normalize-file`, an eighth sibling in
+**Ship (a): a `normalize-file` tool as a new bundle `plugin-dsh-normalize-file`, an eighth sibling in
 the normalize family. Defer (b)/(c)'s watch arm - the edit-contract conflict is unsolved and the
 family has no mechanism for it.** The tool layer (raw-write) covers writes; this covers "already on
 disk"; the background rewrite stays out.
 
 ### Coder spec shape (the family's exact pattern)
 
-- **Bundle dir**: `~/.dsh/profiles/desktop/bundles/hook-dsh-normalize-file/`, files cloned from
+- **Bundle dir**: `~/.dsh/profiles/desktop/bundles/plugin-dsh-normalize-file/`, files cloned from
   `hook-dsh-normalize-quotes` (the plain flavor) minus the stream machinery: `package.json` (name
-  `@playform/hook-dsh-normalize-file`, `main ./Target/Library.js`, exports incl.
+  `@playform/plugin-dsh-normalize-file`, `main ./Target/Library.js`, exports incl.
   `./cordis.patch.yml` + `./SCHEME.md`, `prepublishOnly` script and devDeps verbatim from
   `hook-dsh-normalize-dash/package.json`, `dsh.bundle.patch` key), `cordis.patch.yml`, `SCHEME.md`,
   `README.md`, `tsconfig.json`, `Configuration/{ESBuild.ts,TypeScript.noemit.json}`.
@@ -168,10 +168,10 @@ disk"; the background rewrite stays out.
       `ctx.__normalizeFileState` for the smoke; optional `Factory.Attach` +
       `Factory.Journal("normalized", path, "N char(s)")` once register item #8 lands the enum.
 - **Stream-gate addition (small, in the core)**: add `"normalize-file"` to the name-exempt list in
-  `bundles/hook-dsh-core/Source/Stream/Chunk.ts` (and `Stream/Block.ts`) beside `edit`/`raw-write` -
+  `bundles/lib-dsh-core/Source/Stream/Chunk.ts` (and `Stream/Block.ts`) beside `edit`/`raw-write` -
   its args carry a _path_; normalizing a dash inside a filename would corrupt the target.
 - **Profile wiring**: `~/.dsh/profiles/desktop/package.json` - bundles list +=
-  `@playform/hook-dsh-normalize-file`, dependencies += `link:` entry; `cordis.patch.yml` (the
+  `@playform/plugin-dsh-normalize-file`, dependencies += `link:` entry; `cordis.patch.yml` (the
   bundle's own) - `insert:` with `id: normalize-file`,
   `config: { log: true, logFile: ..., replacement: "-" }`. No top-level profile patch entry needed
   (defaults are already "for me").

@@ -39,7 +39,7 @@ statuses:
   - hook-dsh-normalize-{dash,quotes,ellipsis,spaces,invisible,fullwidth}
     - 4-5 knobs each (log, logFile, replacement, normalizeReasoning,
     normalizeToolArguments where present)
-  - hook-dsh-normalize-file - scopes + toolResultsExempt + replacement
+  - plugin-dsh-normalize-file - scopes + toolResultsExempt + replacement
   - hook-dsh-ccr - log, logFile, thresholdBytes, multipliers (whole
     object), previewMaxChars
   - hook-dsh-tool-coach - done in phase 3

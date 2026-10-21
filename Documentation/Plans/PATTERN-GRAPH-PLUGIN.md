@@ -131,7 +131,7 @@ One core service, several consumers, and the patterns as data:
 
 | Package | Role |
 | --- | --- |
-| `plugin-dsh-pattern` (or `hook-dsh-pattern`) | the service: the registry, the matcher, the learner, the store, the confidence |
+| `plugin-dsh-pattern` | the service: the registry, the matcher, the learner, the store, the confidence |
 | `hook-dsh-search-suggester` | the search intent -> the targets |
 | `hook-dsh-edit-suggester` | the modification intent -> the standard file set |
 | `hook-dsh-doc-suggester` | the doc task -> the plans, guides, site |
@@ -231,8 +231,9 @@ measured, not assumed.
 
 ## 10. The open decisions
 
-1. The core's name and archetype: a service plugin (`plugin-dsh-pattern`)
-   or a hook (`hook-dsh-pattern`).
+1. The core's name and archetype: the service plugin
+   `plugin-dsh-pattern` (settled - the `hook-` alternative is superseded
+   by the role contract: a registry + matcher + store is a service).
 2. The storage: the KV domain (the family's storage) or a local JSON
    under `~/.dsh`.
 3. The pattern language: a JSON schema, or a TypeScript DSL compiled to

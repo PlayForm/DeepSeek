@@ -29,7 +29,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Cargo**): a hook child of the
-[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`lib-dsh-core`](../lib-dsh-core)
 helpers; the Rust-sided sibling of the two npm governance hooks on the same [`fs/observed`][dsh-fs] seam.
 
 One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own basename and
@@ -54,7 +54,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - gates, discovery, the guarded write, the refresh, the continuation, the effects, the schema and
   the namespaced `UpdateKey` come from [`plugin-dsh-factory`](../plugin-dsh-factory); the policy
-  loader and the suppression composer come from [`hook-dsh-core`](../hook-dsh-core). This bundle
+  loader and the suppression composer come from [`lib-dsh-core`](../lib-dsh-core). This bundle
   keeps the Cargo-specific residue: the TOML identification, the surgical pin, the full-version
   directive, and the `cargo upgrade` bridge. Besides the [`fs/observed`][dsh-fs] event path, its two steps are
   registered with the factory's direct-govern registry at apply
@@ -161,7 +161,7 @@ event the npm hooks use, so one trigger law covers the whole machine.
 ```
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s
+envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s
 `Function/Update`); this module is a thin delegate that injects its own collections, the cargo child
 runner and its ledger strings, so the flow is not forked per governance module.
 
@@ -212,7 +212,7 @@ Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspac
 the version lives in the workspace table, walked separately).
 
 Non-dependency sections are NEVER
-touched: [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts) refuses any plan entry outside an identified dependency table
+touched: [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts) refuses any plan entry outside an identified dependency table
 (`REFUSED rewrite of ...: non-dependency section "..." would change`), and `Pin` aborts (never a
 partial rewrite) if a planned entry cannot be located in the text.
 

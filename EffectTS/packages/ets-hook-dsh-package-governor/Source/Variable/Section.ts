@@ -4,6 +4,6 @@
 // differ between the author's manifest and the governed one — the governor
 // can never restructure a file; a difference in any other section refuses
 // the rewrite outright.
-import { Section } from "@playform/ets-hook-dsh-core";
+import { Section } from "@playform/ets-lib-dsh-core";
 
 export default Section;

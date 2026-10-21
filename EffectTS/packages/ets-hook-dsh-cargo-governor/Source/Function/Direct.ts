@@ -39,7 +39,7 @@ import type Manifest from "@Interface/Manifest.js";
 import type Passage from "@Interface/Passage.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Suppress } from "@playform/ets-hook-dsh-core";
+import { Suppress } from "@playform/ets-lib-dsh-core";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
 import Decode from "./Decode.js";

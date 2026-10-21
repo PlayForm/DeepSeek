@@ -99,7 +99,7 @@ The outer `~/Developer/Application/PlayForm/` remains the broader monorepo
 │   ├── README.md                     # the boilerplate readme (the package inventory table)
 │   ├── packages/                     # the twelve bundles, as-is:
 │   │   ├── plugin-dsh-factory/       #   (Source/, Target/, Configuration/, package.json,
-│   │   ├── hook-dsh-core/            #    cordis.patch.yml example, pnpm-workspace.yaml,
+│   │   ├── lib-dsh-core/            #    cordis.patch.yml example, pnpm-workspace.yaml,
 │   │   ├── hook-dsh-package-governor/ #   tsconfig.json - NO node_modules)
 │   │   ├── hook-dsh-package-pinner/
 │   │   ├── hook-dsh-cargo-governor/
@@ -109,15 +109,15 @@ The outer `~/Developer/Application/PlayForm/` remains the broader monorepo
 │   │   ├── hook-dsh-normalize-spaces/
 │   │   ├── hook-dsh-normalize-invisible/
 │   │   ├── hook-dsh-normalize-fullwidth/
-│   │   └── hook-dsh-normalize-file/
+│   │   └── plugin-dsh-normalize-file/
 │   └── smokes/                       # the twelve smoke suites (the paths adapted to the monorepo)
 │       ├── core-smoke.mjs · factory-smoke.mjs · governor-smoke.mjs · pinner-smoke.mjs
 │       ├── cargo-smoke.mjs · normalize-dash-smoke.mjs · the five flavor smokes
 │       └── normalize-file-smoke.mjs
 ├── Classic/                          # THE CLASSIC RELEASE (developed here, published per-repo)
 │   └── packages/                     # the twelve release packages (the #15 names, the #12 cleanup):
-│       ├── plugin-dsh-factory/       #   hook-dsh-core, hook-dsh-package-governor,
-│       ├── hook-dsh-core/             #   hook-dsh-package-pinner, hook-dsh-cargo-governor,
+│       ├── plugin-dsh-factory/       #   lib-dsh-core, hook-dsh-package-governor,
+│       ├── lib-dsh-core/             #   hook-dsh-package-pinner, hook-dsh-cargo-governor,
 │       ├── hook-dsh-package-governor/ #  hook-dsh-normalize-{dash,quotes,ellipsis,spaces,
 │       ├── hook-dsh-package-pinner/  #    invisible,fullwidth,file}
 │       ├── hook-dsh-cargo-governor/
@@ -126,7 +126,7 @@ The outer `~/Developer/Application/PlayForm/` remains the broader monorepo
 ├── EffectTS/                         # THE EFFECT-TS V4 RELEASE (register #13 + #14)
 │   └── packages/                     # the same package identities, the Effect internals:
 │       ├── plugin-dsh-factory/       #   the service as Effect layers; the tracing spans
-│       ├── hook-dsh-core/             #   the pure helpers as Effect pipelines/Streams
+│       ├── lib-dsh-core/             #   the pure helpers as Effect pipelines/Streams
 │       ├── hook-dsh-package-governor/ #  the chain as typed effects; the parallel-govern toggle
 │       ├── ... (the same twelve)     #   the smokes proving parity (the ledger strings)
 ├── Site/                             # THE STATIC SITE (the stitch design)

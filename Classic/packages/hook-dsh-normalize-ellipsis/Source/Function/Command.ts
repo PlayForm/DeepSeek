@@ -1,5 +1,5 @@
 // Command - the hook-dsh-normalize-ellipsis's THIN DELEGATE over the core's
-// generic `normalize-overpass` handler (@playform/hook-dsh-core/Overpass/
+// generic `normalize-overpass` handler (@playform/lib-dsh-core/Overpass/
 // Command). The grammar, the `scopes` report, the `batch` one-shot arm, the
 // `results on|off` settings/editor paths, the usage line and the `files`
 // decline line all live in the core; the module keeps:
@@ -13,13 +13,13 @@
 //
 // The service types are re-exported because Function/Apply imports them from
 // this module (the import path stays untouched).
-import { Command } from "@playform/hook-dsh-core";
+import { Command } from "@playform/lib-dsh-core";
 
 export type {
 	CommandResult,
 	CommandsService,
 	ConfigEditorService,
 	SettingsService,
-} from "@playform/hook-dsh-core";
+} from "@playform/lib-dsh-core";
 
 export default Command;

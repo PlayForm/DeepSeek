@@ -46,7 +46,7 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
   registry discovery, keep-list, gate, the shared write executor, re-emit,
   continuation, State, wiring, effect registrations, journal, schema,
   seam, inflight key, and the direct-govern registry and fold.
-- **`hook-dsh-core`** - the machinery library, not a plugin: the section
+- **`lib-dsh-core`** - the machinery library, not a plugin: the section
   lists, exclusion segments, suppression composer, update-policy loader,
   refusal guard, update envelope, activation-line composer, and the
   normalize/stream machinery.
@@ -56,7 +56,7 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
   and the tool surface.
 - **The normalize family** - six stream flavors (`dash`, `quotes`,
   `ellipsis`, `spaces`, `invisible`, `fullwidth`) on `llm/stream`, plus
-  `normalize-file`, the file tool.
+  `plugin-dsh-normalize-file`, the file tool.
 - **The guardians** - `hook-dsh-ccr` (tool-result compression and retrieval)
   and `hook-dsh-tool-coach` (behavioral coaching through the tool surface).
 - **`hook-dsh-live-containers`** - live system-prompt blocks recomputed per

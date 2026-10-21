@@ -32,7 +32,7 @@
 	},
 	"dependencies": {
 		"@playform/ets-base-dsh": "0.1.0",
-		"@playform/ets-hook-dsh-core": "0.1.0",
+		"@playform/ets-lib-dsh-core": "0.1.0",
 		"@playform/ets-plugin-dsh-factory": "0.1.0",
 		"effect": "4.0.5",
 		"smol-toml": "1.9.1"

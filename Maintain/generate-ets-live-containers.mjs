@@ -47,7 +47,7 @@ const Files = [
 const Substitute = (text) =>
 	text
 		// The core bundle import: the ETS twin binds @playform/ets-base-dsh.
-		.replaceAll("@playform/hook-dsh-core", "@playform/ets-base-dsh")
+		.replaceAll("@playform/lib-dsh-core", "@playform/ets-base-dsh")
 		// Cross-bundle import paths and comment mentions of the factory package.
 		.replaceAll("plugin-dsh-factory", "ets-plugin-dsh-factory");
 

@@ -1008,7 +1008,7 @@ family, restated with the search consumer's status:
 
 | Package | Role | Status |
 | --- | --- | --- |
-| `plugin-dsh-pattern` (or `hook-dsh-pattern`) | the service: the registry, the matcher, the learner, the store, the confidence | planned; extracted after two consumers |
+| `plugin-dsh-pattern` | the service: the registry, the matcher, the learner, the store, the confidence | planned; extracted after two consumers |
 | `hook-dsh-search-suggester` | the search intent -> the targets | THIS document; the first consumer |
 | `hook-dsh-edit-suggester` | the modification intent -> the standard file set | planned; the second consumer (the extraction trigger) |
 | `hook-dsh-doc-suggester` | the doc task -> the plans, guides, site | planned |

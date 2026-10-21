@@ -1,2 +1,2 @@
-import { Section } from "@playform/ets-hook-dsh-core";
+import { Section } from "@playform/ets-lib-dsh-core";
 export default Section;

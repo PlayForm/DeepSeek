@@ -38,7 +38,7 @@ is `Stream.flatMap` + `Stream.fromIterable`), `Queue.unbounded/bounded/offer/tak
 `NodeFileSystem.layer` (packages/platform/node/src/NodeFileSystem.ts:21), `@effect/vitest`
 `it.effect/layer/prop` (packages/vitest/src/index.ts:198/:249/:282).
 
-### 1.1 hook-dsh-core - the pure helpers
+### 1.1 lib-dsh-core - the pure helpers
 
 | Classic piece                                                                                           | Effect-TS v4 decision                                                                                                                                                                                                                                                                                                                                                            | Why                                                                                                      |
 | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -150,14 +150,14 @@ committed by agents - the user commits):
 
 | #    | Package (`EffectTS/packages/<name>`, same identity as Classic)  | Depends on     | Smoke     |
 | ---- | --------------------------------------------------------------- | -------------- | --------- |
-| 1    | `hook-dsh-core` (lib; one `effect` runtime dep)                 | -              | 17 checks |
+| 1    | `lib-dsh-core` (the library; one `effect` runtime dep)          | -              | 17 checks |
 | 2    | `plugin-dsh-factory`                                            | core           | 41        |
 | 3    | `hook-dsh-normalize-spaces` (the flavor pattern pilot)          | core + factory | 62        |
 | 4    | `hook-dsh-governor-package` (the deep consumer)                 | core + factory | 81        |
 | 5    | `hook-dsh-pinner-package`                                       | core + factory | 32        |
 | 6    | `hook-dsh-governor-cargo`                                       | core + factory | 62        |
 | 7-11 | `hook-dsh-normalize-{dash,quotes,ellipsis,invisible,fullwidth}` | core + factory | 132, 62×4 |
-| 12   | `hook-dsh-normalize-file`                                       | core + factory | 71        |
+| 12   | `plugin-dsh-normalize-file`                                     | core + factory | 71        |
 
 **Source layout** mirrors Classic (`Source/Function|Interface|Variable`, `Library.ts`,
 `Configuration/ESBuild.ts`, `cordis.patch.yml`) so diffs between the two releases are mechanical:

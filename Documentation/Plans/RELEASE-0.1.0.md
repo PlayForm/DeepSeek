@@ -53,9 +53,9 @@ layer the order is arbitrary.
 
 | # | Package | Tree |
 | - | ------- | ---- |
-| 2 | `@playform/hook-dsh-core` | Classic |
+| 2 | `@playform/lib-dsh-core` | Classic |
 | 3 | `@playform/plugin-dsh-factory` | Classic |
-| 4 | `@playform/ets-hook-dsh-core` | EffectTS |
+| 4 | `@playform/ets-lib-dsh-core` | EffectTS |
 | 5 | `@playform/ets-plugin-dsh-factory` | EffectTS |
 
 ### L2 - the twenty-six consumers (26)
@@ -67,7 +67,7 @@ layer the order is arbitrary.
 | 8 | `@playform/hook-dsh-live-containers` | Classic |
 | 9 | `@playform/hook-dsh-normalize-dash` | Classic |
 | 10 | `@playform/hook-dsh-normalize-ellipsis` | Classic |
-| 11 | `@playform/hook-dsh-normalize-file` | Classic |
+| 11 | `@playform/plugin-dsh-normalize-file` | Classic |
 | 12 | `@playform/hook-dsh-normalize-fullwidth` | Classic |
 | 13 | `@playform/hook-dsh-normalize-invisible` | Classic |
 | 14 | `@playform/hook-dsh-normalize-quotes` | Classic |
@@ -80,7 +80,7 @@ layer the order is arbitrary.
 | 21 | `@playform/ets-hook-dsh-live-containers` | EffectTS |
 | 22 | `@playform/ets-hook-dsh-normalize-dash` | EffectTS |
 | 23 | `@playform/ets-hook-dsh-normalize-ellipsis` | EffectTS |
-| 24 | `@playform/ets-hook-dsh-normalize-file` | EffectTS |
+| 24 | `@playform/ets-plugin-dsh-normalize-file` | EffectTS |
 | 25 | `@playform/ets-hook-dsh-normalize-fullwidth` | EffectTS |
 | 26 | `@playform/ets-hook-dsh-normalize-invisible` | EffectTS |
 | 27 | `@playform/ets-hook-dsh-normalize-quotes` | EffectTS |
@@ -115,16 +115,16 @@ The tree-level commands run the same publish form in the L0 -> L1 -> L2 order:
 (cd EffectTS/packages/ets-base-dsh && npm publish --provenance --access public --ignore-scripts)
 
 # L1 - the four foundations
-for d in hook-dsh-core plugin-dsh-factory; do
+for d in lib-dsh-core plugin-dsh-factory; do
   (cd "Classic/packages/$d" && npm publish --provenance --access public --ignore-scripts)
 done
-for d in ets-hook-dsh-core ets-plugin-dsh-factory; do
+for d in ets-lib-dsh-core ets-plugin-dsh-factory; do
   (cd "EffectTS/packages/$d" && npm publish --provenance --access public --ignore-scripts)
 done
 
 # L2 - the thirteen Classic consumers
 for d in hook-dsh-cargo-governor hook-dsh-ccr hook-dsh-live-containers \
-  hook-dsh-normalize-dash hook-dsh-normalize-ellipsis hook-dsh-normalize-file \
+  hook-dsh-normalize-dash hook-dsh-normalize-ellipsis plugin-dsh-normalize-file \
   hook-dsh-normalize-fullwidth hook-dsh-normalize-invisible hook-dsh-normalize-quotes \
   hook-dsh-normalize-spaces hook-dsh-package-governor hook-dsh-package-pinner \
   hook-dsh-tool-coach; do
@@ -133,7 +133,7 @@ done
 
 # L2 - the thirteen Effect-TS consumers
 for d in ets-hook-dsh-cargo-governor ets-hook-dsh-ccr ets-hook-dsh-live-containers \
-  ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-hook-dsh-normalize-file \
+  ets-hook-dsh-normalize-dash ets-hook-dsh-normalize-ellipsis ets-plugin-dsh-normalize-file \
   ets-hook-dsh-normalize-fullwidth ets-hook-dsh-normalize-invisible ets-hook-dsh-normalize-quotes \
   ets-hook-dsh-normalize-spaces ets-hook-dsh-package-governor ets-hook-dsh-package-pinner \
   ets-hook-dsh-tool-coach; do
@@ -168,7 +168,7 @@ Every line must print `0.1.0`. Then check:
 ```bash
 npm view @playform/hook-dsh-ccr@0.1.0 dist.attestations.provenance.predicateType
 npm view @playform/hook-dsh-ccr dist-tags
-npm view @playform/hook-dsh-core@0.0.1 version   # the old release stays immutable
+npm view @playform/lib-dsh-core@0.0.1 version   # expected 404 - 0.0.1 shipped under the pre-rename name (git history)
 ```
 
 The registry facts recorded at release preparation: 25 of the 31 names resolve at `0.0.1`;

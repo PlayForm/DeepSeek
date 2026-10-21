@@ -70,7 +70,7 @@ import type { Context } from "@deepseek-ai/cordis";
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
-import { Activate } from "@playform/hook-dsh-core";
+import { Activate } from "@playform/lib-dsh-core";
 
 import Compress, { type Verdict } from "./Compress.js";
 import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";

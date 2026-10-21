@@ -74,6 +74,15 @@ members:
   workspace tools.
 - The twins (Classic + ETS) per the family contract.
 
+**Applied 2026-10-21** (the existing family, the workspace family's
+precedent): the core took the `lib-` prefix (`lib-dsh-core`, the library
+role), the file normalizer took the `plugin-` prefix
+(`plugin-dsh-normalize-file`, the tool plugin role), and the planned
+panel packages took the `client-` prefix (`client-dsh-panel-family` +
+`client-dsh-panel-family-host`). The four role prefixes are the whole
+contract - plugin, hook, client, lib. The original names remain in git
+history.
+
 ## The family map
 
 ```

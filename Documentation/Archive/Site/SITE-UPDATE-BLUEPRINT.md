@@ -46,9 +46,9 @@ statuses:
 `Site/Source/pages/index.astro` (the landing page) + 8 top-level pages
 (`plugins`, `flavors`, `matrix`, `models`, `setup`, `versions`, `workbench`,
 `case-study`) + 12 plugin pages under `Source/pages/plugins/`
-(`hook-dsh-core`, `plugin-dsh-factory`, `hook-dsh-package-governor`,
+(`lib-dsh-core`, `plugin-dsh-factory`, `hook-dsh-package-governor`,
 `hook-dsh-package-pinner`, `hook-dsh-cargo-governor`, the 6 stream flavors,
-`hook-dsh-normalize-file`). This work adds exactly 2 new plugin pages
+`plugin-dsh-normalize-file`). This work adds exactly 2 new plugin pages
 (`hook-dsh-ccr.astro`, `hook-dsh-tool-coach.astro`) -> **23 pages**. Every
 hardcoded "twelve" on the site becomes "fourteen" (see 3.4).
 
@@ -202,7 +202,7 @@ Mirror the governor page template (`hook-dsh-package-governor.astro`,
    cheap.
 3. Terminal + inspect-card (Event: `tools/post-execute`; Injects: fs,
    pluginFactory, commands; Release badge).
-4. "Where It Fits": a hook child of plugin-dsh-factory + hook-dsh-core;
+4. "Where It Fits": a hook child of plugin-dsh-factory + lib-dsh-core;
    sibling table: the normalize flavors' tool-results overpass arm vs the
    ccr compression on the same waterfall, with the marker guard ordering
    note (the `<<<CCR:` marker guard makes any load order safe; the
@@ -306,12 +306,12 @@ homepage section:
 
 | Page | Changes |
 | --- | --- |
-| `hook-dsh-normalize-file.astro` | Add a "The scopes surface" section (or extend "The Config"): the volatile `scopes` table (conversation on / reasoning on / toolInput off / toolResults off / files on / batch off), `toolResultsExempt` defaults (read, edit, raw-write, normalize-file, ccr_retrieve, subagent, ask_user_question), the live `loader/volatile-update` refresh ("a flip lands without remounting"), and the file hook's `normalize-overpass` command table INCLUDING `files <path...>` (the file hook owns the sweep; the stream flavors decline it). |
+| `plugin-dsh-normalize-file.astro` | Add a "The scopes surface" section (or extend "The Config"): the volatile `scopes` table (conversation on / reasoning on / toolInput off / toolResults off / files on / batch off), `toolResultsExempt` defaults (read, edit, raw-write, normalize-file, ccr_retrieve, subagent, ask_user_question), the live `loader/volatile-update` refresh ("a flip lands without remounting"), and the file hook's `normalize-overpass` command table INCLUDING `files <path...>` (the file hook owns the sweep; the stream flavors decline it). |
 | `hook-dsh-normalize-{dash,quotes,ellipsis,spaces,invisible,fullwidth}.astro` (6 pages) | Add the same scopes/overpass section, adapted: the `files <path...>` row reads "declined - the sweep is owned by the normalize-file hook"; the flavor's own overpass ledger lines (`normalized N char(s) in tool result <toolName> <callId>` / `in step batch (turn T step S)`). Keep it one compact section per page (one Concept + the two tables), not a full rewrite. |
 | `hook-dsh-package-pinner.astro` | No feature change, but the Related-plugins grid should link the two new pages, and the "Where It Fits" sibling table already lists the trio - fine. Verify the supports-button facts (2a.3) match this page's claims. |
 | `hook-dsh-package-governor.astro` | Same as pinner (links + consistency). Optionally one Concept noting the CCR/overpass siblings now share the `tools/post-execute` waterfall. |
 | `plugin-dsh-factory.astro` | Add the volatile-refresh fact: the factory's State now keeps the raw config's `{ get }` cells and registers a `loader/volatile-update` listener that refreshes State fields in place (the granular plan's fix) - this belongs in "How It Works" / the Config section. Also Related links. |
-| `hook-dsh-core.astro`, the remaining flavor pages | Related links only if desired; core: mention the shared scopes shape if the README does. |
+| `lib-dsh-core.astro`, the remaining flavor pages | Related links only if desired; core: mention the shared scopes shape if the README does. |
 
 ### 1.6 `Site/Source/pages/matrix.astro`
 
@@ -624,7 +624,7 @@ after the use-cases section (after line 368). Design:
 The granular scopes + overpass sections already exist in the Classic
 normalize-family READMEs and the EffectTS stream-flavor twins (verified:
 `ets-hook-dsh-normalize-dash/README.md` carries the overpass section;
-`ets-hook-dsh-normalize-file/README.md` carries the scopes section). The
+`ets-plugin-dsh-normalize-file/README.md` carries the scopes section). The
 remaining README work:
 
 | README | Addition |
@@ -632,7 +632,7 @@ remaining README work:
 | `Classic/packages/hook-dsh-tool-coach/README.md` | The drift fix (3.1). No new sections needed (its content is current). |
 | `EffectTS/packages/ets-hook-dsh-tool-coach/README.md` | None (it is the source of the copy). |
 | `Classic/packages/hook-dsh-ccr/README.md`, `EffectTS/packages/ets-hook-dsh-ccr/README.md` | None structurally; optional one-line cross-reference to the normalize flavors' overpass arm ("the ccr hook and the flavors' tool-results arm share the `tools/post-execute` waterfall; the `<<<CCR:` marker guard makes any load order safe") if the lane wants parity with the normalize READMEs. |
-| `Classic/packages/hook-dsh-normalize-file/README.md` + its 6 flavor siblings + the EffectTS twins | Already carry scopes/overpass - verify only (no edits expected). |
+| `Classic/packages/plugin-dsh-normalize-file/README.md` + its 6 flavor siblings + the EffectTS twins | Already carry scopes/overpass - verify only (no edits expected). |
 | Governor/pinner/cargo-governor/core/factory READMEs (both trees) | Optional one-line mentions of the volatile-refresh fix if the factory README does not already document the `loader/volatile-update` State listener (the README lane checks `Classic/packages/plugin-dsh-factory/README.md` for a volatile section and adds one if missing). |
 
 ### 3.3 The README lane rule

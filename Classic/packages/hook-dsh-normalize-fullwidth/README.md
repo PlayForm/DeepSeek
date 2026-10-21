@@ -33,12 +33,12 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Fullwidth**): a hook child of the
-[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`hook-dsh-core`](../hook-dsh-core)
+[`plugin-dsh-factory`](../plugin-dsh-factory) service and the [`lib-dsh-core`](../lib-dsh-core)
 machinery; the sixth of the six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
 [`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`hook-dsh-core`](../hook-dsh-core) for the `Fullwidth` table and
+`shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the `Fullwidth` table and
 the generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
 | flavor                                                            | table                  | substitution                  |
@@ -164,7 +164,7 @@ reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Fullwidth` map ([@playform/hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source)'s `Normalize/Fullwidth`), applied per
+Exactly the core's `Fullwidth` map ([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s `Normalize/Fullwidth`), applied per
 text segment through the core's `ReplaceMap` - the standard fullwidth-to-halfwidth mapping over the
 whole range, described by code point here (the literal characters are in the In Action block below):
 

@@ -7,6 +7,6 @@
 // fence: its own rewrite declares the unfenced sandbox mode explicitly, and
 // these segments keep it out of internals — anywhere mode is exclusion-first,
 // never an allowlist.
-import { Default } from "@playform/hook-dsh-core";
+import { Default } from "@playform/lib-dsh-core";
 
 export default Default;

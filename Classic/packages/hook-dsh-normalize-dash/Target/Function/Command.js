@@ -1,1 +1,1 @@
-import{Command as o}from"@playform/hook-dsh-core";var r=o;export{r as default};
+import{Command as e}from"@playform/lib-dsh-core";var r=e;export{r as default};

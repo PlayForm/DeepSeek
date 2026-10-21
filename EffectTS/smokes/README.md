@@ -35,7 +35,7 @@ folder's printed PASS count against its README).
 
 Each suite lives in the package's own `Source/Test/<test-name>/` folders
 (one singular TS test file + one README.md per folder, compiled by the package's
-`Configuration/Test-ESBuild.ts` step into `Target/Test/`). `ets-hook-dsh-core`'s eight
+`Configuration/Test-ESBuild.ts` step into `Target/Test/`). `ets-lib-dsh-core`'s eight
 shared folders are byte-twins of the Classic tree's folders under the tree-identity
 substitutions; its two former ETS-only folders (`Stream-Gate/`, `Update-Envelope/`) are
 re-homed into the base's own tree (`EffectTS/packages/ets-base-dsh/Source/Test/`). The

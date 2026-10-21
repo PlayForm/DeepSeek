@@ -6,7 +6,7 @@
 // reducers; Source/Function/Update - the update envelope) and the hook
 // contract types (Source/Interface - the structural contracts the factory
 // re-exports to its consumers). Every ets-* package depends on this base;
-// the ten consumers additionally depend on ets-hook-dsh-core and
+// the ten consumers additionally depend on ets-lib-dsh-core and
 // ets-plugin-dsh-factory. Usable outside the harness entirely (the PlayForm
 // ecosystem).
 //

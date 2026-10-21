@@ -1,0 +1,39 @@
+{
+	"name": "@playform/lib-dsh-core",
+	"version": "0.1.0",
+	"description": "The CORE: the pure, harness-free commonalities of the governance family (@playform/lib-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard — the CLASSIC, dependency-free build of the classical group. A NEW governance module reduces to a Config extension, a pure transform and an update engine; the core owns the shared pure mechanics and the module's ledger strings stay module-side. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"README.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

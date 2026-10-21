@@ -33,10 +33,10 @@ statuses:
     endpoint)
   - hook-dsh-live-containers -> live block board
   - hook-dsh-normalize-* (6) -> per-flavor counters
-  - hook-dsh-normalize-file -> normalization counts
-  - hook-dsh-core / plugin-dsh-factory -> family roster / build info
+  - plugin-dsh-normalize-file -> normalization counts
+  - lib-dsh-core / plugin-dsh-factory -> family roster / build info
 - **THE ENDPOINT**: a family-host service in the central package (or a
-  small companion @playform/dsh-panel-family-host) exposing @Remote
+  small companion @playform/client-dsh-panel-family-host) exposing @Remote
   methods: tail(namespace, lines) -> the last N lines of the owning
   module's ~/.dsh log; stats() -> the ccr store stats + the fiberPhases
   from remote.pluginManager (already remote - prefer it; no new endpoint

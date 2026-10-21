@@ -28,7 +28,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type StateView from "@Interface/State.js";
-import { Activate } from "@playform/hook-dsh-core";
+import { Activate } from "@playform/lib-dsh-core";
 
 import * as Direct from "./Direct.js";
 import Observe from "./Observe.js";

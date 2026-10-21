@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { CheckAsync, Finish, MakeCounter } from "../Harness.js";
-import { Dashes, Replace } from "../../../../ets-hook-dsh-core/Target/Library.js";
+import { Dashes, Replace } from "../../../../ets-lib-dsh-core/Target/Library.js";
 import { Chunk, StreamGate as Gate } from "../../../Target/Library.js";
 import { Stream } from "effect";
 const runTest = async () => {

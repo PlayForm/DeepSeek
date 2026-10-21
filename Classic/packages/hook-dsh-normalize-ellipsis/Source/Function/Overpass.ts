@@ -1,5 +1,5 @@
 // Overpass - the hook-dsh-normalize-ellipsis's THIN DELEGATE over the core's
-// tool-results arm factory (@playform/hook-dsh-core/Overpass/ToolResults).
+// tool-results arm factory (@playform/lib-dsh-core/Overpass/ToolResults).
 // The generic machinery (next() first, the tool-results scope gate, the
 // exemption list, the accepted/non-value decision rules, the content basis,
 // the text-only block rewrite, the CCR marker guard, the fail-open, the
@@ -24,7 +24,7 @@
 // bundle order; the core's marker guard makes any load order safe.
 import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
 import type State from "@Interface/State.js";
-import { ToolResults } from "@playform/hook-dsh-core";
+import { ToolResults } from "@playform/lib-dsh-core";
 
 import Replace from "./Replace.js";
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run.sh for @playform/ets-base-dsh — the dev twin of prepublishOnly.sh,
-# mirroring the ets-hook-dsh-core pattern: the plugin build runs once, then
+# mirroring the ets-lib-dsh-core pattern: the plugin build runs once, then
 # the test build WATCHES Source/Test. Run a single test with
 # `node Target/Test/<Name>/Test.js`; run the whole folder tree through
 # `node Maintain/Run-Smokes.mjs` (the aggregate). The plugin-build step

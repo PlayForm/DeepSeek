@@ -1,2 +1,2 @@
-import { Default } from "@playform/hook-dsh-core";
+import { Default } from "@playform/lib-dsh-core";
 export default Default;

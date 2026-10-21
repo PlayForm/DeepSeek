@@ -100,19 +100,19 @@ statuses:
   package.json wiring); the aggregate-runner integration (keep the .mjs
   pass, add the Target/Test enumeration pass with the
   printed-count-vs-README vacuously-green guard); the pilot =
-  hook-dsh-core + ets-hook-dsh-core; the fan-out L1-L6; the traps
+  lib-dsh-core + ets-lib-dsh-core; the fan-out L1-L6; the traps
   (parity-by-generation, no aliases in tests, tabs, ASCII with \u
   escapes, baseline-recording).
 - THE LIVE PROFILE (the user's question, answered): 12 family bundles
   installed (linked to Classic/packages), factory + normalize-file ACTIVE,
-  the other 10 disabled per the control panel; hook-dsh-core is a link:
+  the other 10 disabled per the control panel; lib-dsh-core is a link:
   dependency but NOT a bundle row; hook-dsh-tool-coach NOT in the profile
   at all (in the repo, not wired - a profile change + restart to add it).
 
 ## 4. The wave-2 complete (2026-10-19 - the restructure pilot LANDED + VERIFIED)
 
-- THE PILOT LANE `2b336307` COMPLETE: hook-dsh-core (8 folders, 14
-  checks) + ets-hook-dsh-core (10 folders, 17 checks) converted
+- THE PILOT LANE `2b336307` COMPLETE: lib-dsh-core (8 folders, 14
+  checks) + ets-lib-dsh-core (10 folders, 17 checks) converted
   end-to-end; baselines recorded fresh (14/17); parity diffs = the
   identity line + the ets-base-dsh import split only; Harness.ts
   byte-identical; the runner's new pass enumerates Target/Test/*/Test.js

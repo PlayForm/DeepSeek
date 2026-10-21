@@ -28,12 +28,12 @@ grep -h '"effect"' EffectTS/packages/*/package.json
 | Role              | Package                       | What it does                                                     |
 | ----------------- | ----------------------------- | ---------------------------------------------------------------- |
 | Service           | `plugin-dsh-factory`          | `ctx.pluginFactory`, 19 methods: ledger, match, discovery, keep-list, gate, write executor, re-emit, continuation, State, wiring, attach, journal, schema, seam, inflight key, direct-govern |
-| Machinery         | `hook-dsh-core`               | Section lists, exclusions, suppression composer, policy loader, refusal guard, update envelope, activation composer, normalize machinery |
+| Machinery         | `lib-dsh-core`                | Section lists, exclusions, suppression composer, policy loader, refusal guard, update envelope, activation composer, normalize machinery |
 | Governor          | `hook-dsh-package-governor`   | Chain-pin rewrites and the update stage on `fs/observed`          |
 | Pinner            | `hook-dsh-package-pinner`     | Ranged versions to static versions, keep-list protected           |
 | Cargo governor    | `hook-dsh-cargo-governor`     | TOML surgery, full-version normalization, `cargo upgrade`         |
 | Stream flavors    | six `normalize-*` hooks       | `llm/stream` rewrites: dash, quotes, ellipsis, spaces, invisible, fullwidth |
-| File flavor       | `normalize-file`              | The read-count-write whole-file pass                              |
+| File plugin       | `plugin-dsh-normalize-file`   | The read-count-write whole-file pass                              |
 | Compression       | `ccr`                         | Tool-result compression, retrieval, the marker contract           |
 | Coach             | `tool-coach`                  | Behavioral coaching through the tool surface, tiered              |
 | Live blocks       | `live-containers`             | System-prompt blocks recomputed per request; ships disabled       |

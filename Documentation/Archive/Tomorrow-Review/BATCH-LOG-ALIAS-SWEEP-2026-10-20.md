@@ -169,7 +169,7 @@ statuses:
   (e) the detached panels via the shell overlay/sidebar. Option B = an
   upstream conversation.trajectory.sections declaration (owner-only,
   harness-side). THE ARCHITECTURE (the user's dictates formalized): the
-  central @playform/dsh-panel-family client half provides the contract
+  central @playform/client-dsh-panel-family client half provides the contract
   (PanelSection types + the registry service
   ctx.reflect.provide("playformFamilyPanel") + the open() launch
   protocol); each of the 13 bundles gets its own client half that

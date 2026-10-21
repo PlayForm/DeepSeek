@@ -10,7 +10,7 @@ statuses:
   - name: the blueprint (the inventory, the templates, the folder splits)
     state: implemented
     evidence: the coder lanes executed it; 187 mechanics suites plus the wiring
-  - name: the pilot (hook-dsh-core + the ETS twin)
+  - name: the pilot (lib-dsh-core + the ETS twin)
     state: implemented
     evidence: the 11 corrections became binding; recorded in section 8
   - name: the fan-out (L1-L6 over all packages)
@@ -52,7 +52,7 @@ Classic tree (14, in `Classic/packages/`):
 
 | # | Package | Has smoke? |
 |---|---|---|
-| 1 | hook-dsh-core | yes (`core-smoke.mjs`) |
+| 1 | lib-dsh-core | yes (`core-smoke.mjs`) |
 | 2 | plugin-dsh-factory | yes (`factory-smoke.mjs`) |
 | 3 | hook-dsh-cargo-governor | yes (`cargo-smoke.mjs`) |
 | 4 | hook-dsh-package-governor | yes (`governor-smoke.mjs`) |
@@ -63,12 +63,12 @@ Classic tree (14, in `Classic/packages/`):
 | 9 | hook-dsh-normalize-spaces | yes (`spaces-smoke.mjs`) |
 | 10 | hook-dsh-normalize-invisible | yes (`invisible-smoke.mjs`) |
 | 11 | hook-dsh-normalize-fullwidth | yes (`fullwidth-smoke.mjs`) |
-| 12 | hook-dsh-normalize-file | yes (`normalize-file-smoke.mjs`) |
+| 12 | plugin-dsh-normalize-file | yes (`normalize-file-smoke.mjs`) |
 | 13 | hook-dsh-ccr | yes (`ccr-smoke.mjs`) |
 | 14 | hook-dsh-tool-coach | yes (`tool-coach-smoke.mjs`) |
 
 EffectTS tree (14, in `EffectTS/packages/`): the exact ets- twins of all 14 above
-(`ets-hook-dsh-core`, `ets-plugin-dsh-factory`, `ets-hook-dsh-cargo-governor`,
+(`ets-lib-dsh-core`, `ets-plugin-dsh-factory`, `ets-hook-dsh-cargo-governor`,
 `ets-hook-dsh-package-governor`, `ets-hook-dsh-package-pinner`, the 7
 `ets-hook-dsh-normalize-*`, `ets-hook-dsh-ccr`, `ets-hook-dsh-tool-coach`), all with a
 smoke, PLUS:
@@ -522,7 +522,7 @@ race the shared Targets AND now also the per-package Target/Test wipes).
 
 ## 4. THE PILOT RECOMMENDATION
 
-Convert **`hook-dsh-core` + `ets-hook-dsh-core`** end-to-end first.
+Convert **`lib-dsh-core` + `ets-lib-dsh-core`** end-to-end first.
 
 Justification: the core smoke is the only suite with NO harness wiring (pure unit
 imports from one built Target), so the pilot exercises the entire mechanical surface -
@@ -683,10 +683,10 @@ For each converted package pair (Classic + ETS):
 
 ## 8. THE PILOT CORRECTIONS (2026-10-19 - the pilot lane's findings, BINDING for every later lane)
 
-The pilot (hook-dsh-core + ets-hook-dsh-core, green: 14/17 checks preserved, "All 60
+The pilot (lib-dsh-core + ets-lib-dsh-core, green: 14/17 checks preserved, "All 60
 smoke suites passed" = 42 .mjs + 18 folders, monorepo build exit 0). Its deviations
 correct the templates above - later lanes copy the PILOT'S PACKAGES as the pattern
-reference (Classic/packages/hook-dsh-core + EffectTS/packages/ets-hook-dsh-core) and
+reference (Classic/packages/lib-dsh-core + EffectTS/packages/ets-lib-dsh-core) and
 apply these rules:
 
 1. **The import depth (template 2.1 corrected).** From `Source/Test/<Name>/`, the
@@ -772,13 +772,13 @@ vacuously-green guard holds: the runner compares printed vs README per folder).
 
 | Suite | .mjs baseline | Folder sum after | Delta |
 | --- | --- | --- | --- |
-| Classic/hook-dsh-core | 14 | 14 | 0 |
+| Classic/lib-dsh-core | 14 | 14 | 0 |
 | Classic/plugin-dsh-factory | 35 | 35 | 0 |
 | Classic/hook-dsh-package-governor | 78 | 78 | 0 |
 | Classic/hook-dsh-package-pinner | 32 | 32 | 0 |
 | Classic/hook-dsh-cargo-governor | 62 | 62 | 0 |
 | Classic/hook-dsh-normalize-dash | 184 | 184 | 0 |
-| Classic/hook-dsh-normalize-file | 112 | 112 | 0 |
+| Classic/plugin-dsh-normalize-file | 112 | 112 | 0 |
 | Classic/hook-dsh-normalize-quotes | 104 | 104 | 0 |
 | Classic/hook-dsh-normalize-ellipsis | 104 | 104 | 0 |
 | Classic/hook-dsh-normalize-spaces | 104 | 104 | 0 |
@@ -786,13 +786,13 @@ vacuously-green guard holds: the runner compares printed vs README per folder).
 | Classic/hook-dsh-normalize-fullwidth | 104 | 104 | 0 |
 | Classic/hook-dsh-ccr | 146 | 146 | 0 |
 | Classic/hook-dsh-tool-coach | 129 | 129 | 0 |
-| EffectTS/ets-hook-dsh-core | 17 | 14 | -3 (re-homed) |
+| EffectTS/ets-lib-dsh-core | 17 | 14 | -3 (re-homed) |
 | EffectTS/ets-plugin-dsh-factory | 42 | 42 | 0 |
 | EffectTS/ets-hook-dsh-package-governor | 81 | 81 | 0 |
 | EffectTS/ets-hook-dsh-package-pinner | 32 | 32 | 0 |
 | EffectTS/ets-hook-dsh-cargo-governor | 62 | 62 | 0 |
 | EffectTS/ets-hook-dsh-normalize-dash | 184 | 184 | 0 |
-| EffectTS/ets-hook-dsh-normalize-file | 112 | 112 | 0 |
+| EffectTS/ets-plugin-dsh-normalize-file | 112 | 112 | 0 |
 | EffectTS/ets-hook-dsh-normalize-quotes | 104 | 104 | 0 |
 | EffectTS/ets-hook-dsh-normalize-ellipsis | 104 | 104 | 0 |
 | EffectTS/ets-hook-dsh-normalize-spaces | 104 | 104 | 0 |

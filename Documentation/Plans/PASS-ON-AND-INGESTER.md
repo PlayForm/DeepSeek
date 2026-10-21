@@ -220,7 +220,9 @@ plugin owns the loop.
 1. The batch schema owner: the batch edit tool package, or a shared
    `lib-batch`.
 2. The pass-on/ingester names and archetypes: `plugin-dsh-pass-on` +
-   `plugin-dsh-ingester`, or hooks.
+   `plugin-dsh-ingester` (the primary names; the earlier "or hooks"
+   alternative is superseded by the role contract - a prepared batch and
+   its apply path are services, not event listeners).
 3. The decision plugin: `hook-dsh-batch-decision`.
 4. The live view: the panel section first, the live-container later (or
    both).

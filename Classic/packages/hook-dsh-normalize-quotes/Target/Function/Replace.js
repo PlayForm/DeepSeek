@@ -1,1 +1,1 @@
-import{Quotes as e,ReplaceMap as r}from"@playform/hook-dsh-core";var n=t=>r(t,e);export{n as default};
+import{Quotes as e,ReplaceMap as r}from"@playform/lib-dsh-core";var n=t=>r(t,e);export{n as default};

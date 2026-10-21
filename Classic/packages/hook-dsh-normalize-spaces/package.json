@@ -29,7 +29,7 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/hook-dsh-core": "0.1.0",
+		"@playform/lib-dsh-core": "0.1.0",
 		"@playform/plugin-dsh-factory": "0.1.0"
 	},
 	"devDependencies": {

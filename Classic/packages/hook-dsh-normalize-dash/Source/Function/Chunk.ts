@@ -5,7 +5,7 @@
 // the edit exemption and the per-call raw marker: a delta whose `name` is
 // "edit" passes through BY IDENTITY, and a call whose arguments open with
 // the `{"__normalize":false` marker passes through UNNORMALIZED with the
-// marker stripped) lives in @playform/hook-dsh-core's Stream/Chunk; this
+// marker stripped) lives in @playform/lib-dsh-core's Stream/Chunk; this
 // file supplies only the flavor - a closure that applies the hook-dsh-normalize-dash's Dashes
 // class and its configured replacement to one text segment - plus the three
 // config values the generic signature needs (the replacement, the reasoning
@@ -15,7 +15,7 @@
 // The behavior is byte-identical to the previous in-file implementation
 // (which hardcoded its own Replace) - the hook-dsh-normalize-dash smoke is the arbiter.
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import { Chunk as CoreChunk } from "@playform/hook-dsh-core";
+import { Chunk as CoreChunk } from "@playform/lib-dsh-core";
 
 import Replace from "./Replace.js";
 

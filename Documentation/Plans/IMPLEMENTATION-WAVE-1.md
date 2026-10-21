@@ -49,7 +49,7 @@ high-effort agents; the mechanical edits go to low-effort agents.
    note states that the seven wiring suites are live-only and excluded.
 3. **EffectTS**: keep the fork for now. Remove the four unused direct
    `effect` dependencies (ccr, tool-coach, live-containers, core), correct
-   the false `Stream/Gate` claim in `ets-hook-dsh-core`, and defer the
+   the false `Stream/Gate` claim in `ets-lib-dsh-core`, and defer the
    generate/adapt/delete choice to a release decision.
 4. **Behavioral fixes**: the ccr default path becomes `~/.dsh/ccr.log`;
    the ledger defaults align to the patch/README names
@@ -84,7 +84,7 @@ high-effort agents; the mechanical edits go to low-effort agents.
 
 - Remove `"effect"` from the four package.json files; rebuild the four;
   run their smokes.
-- Correct the `ets-hook-dsh-core/Source/Library.ts` claim to point at
+- Correct the `ets-lib-dsh-core/Source/Library.ts` claim to point at
   `ets-base-dsh`.
 - Verify: builds and the four suites at their recorded counts.
 

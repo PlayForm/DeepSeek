@@ -1,14 +1,14 @@
 # Classic - the DeepSeek Harness Plugin Family for PlayForm
 
 The CLASSIC release of the PlayForm plugin family for DeepSeek Harness: twelve TypeScript packages
-under `packages/`, each one a verified, smoke-arbitrated bundle - the core, the factory service, the
+under `packages/`, each one a verified, smoke-arbitrated package - the core library, the factory service, the
 governance trio (package governor, version pinner, Cargo.toml governor) and the seven-member
 normalize family (six stream flavors plus the file tool).
 
 The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
 identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the
-family/type marker leads - `hook-dsh-*` and `plugin-dsh-*` - so a package name reads as a sentence
-about what it is: a DeepSeek Harness hook, or the DeepSeek Harness plugin factory.
+family/type marker leads - `hook-dsh-*`, `lib-dsh-*` and `plugin-dsh-*` - so a package name reads as a sentence
+about what it is: a DeepSeek Harness hook, a library, or the DeepSeek Harness plugin factory.
 
 Each package carries its own one-sentence self-description (its @-sentence), quoted in the inventory
 below.
@@ -34,7 +34,7 @@ byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
 **Install once, toggle at the loader.**
 
 ```sh
-pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor
+pnpm add @playform/lib-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor
 ```
 
 One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
@@ -47,7 +47,7 @@ builds, no user-side compilation - the toggle is pure resolution:
   - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
   - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
     webpack: `resolve.conditionNames: ["effect-ts"]`
-- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
+- **Per-import escape hatch** (no loader config): `import { ... } from "@playform/lib-dsh-core/effect-ts"`
   (or `/classic`) - deterministic in every toolchain.
 
 The whole family toggles together - never mix variants in one graph (the effect-ts `Update`
@@ -62,7 +62,7 @@ This tree is the canonical publish home: the published tarball ships `Target/` +
 
 | Package (`@playform/...`)      | Identity sentence                                                                                                                                                                                                                                                                            |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hook-dsh-core`                | The pure, dependency-free commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts) and the normalize/Stream machinery.                                                                                         |
+| `lib-dsh-core`                | The pure, dependency-free library commonalities of the family: the section lists, the exclusion segments, the suppression composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts) and the normalize/Stream machinery.                                                                                         |
 | [plugin-dsh-factory](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source)           | The family's first service: the ledger, the exclusion match, the discovery, the keep-list union, the gate set, the version-guarded fenced write, the refresh, the detached contained continuation, the State builder, the wiring, the effects, the schema factory and the probe-once seam.   |
 | [hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)    | The silent package.json governor: hooks [fs/observed][dsh-fs], rewrites chain-governed pins to the effective registry's resolved versions, and runs the update stage as a detached, contained continuation. |
 | [hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)      | The silent package.json version pinner: hooks [fs/observed][dsh-fs] and deterministically rewrites every ranged dependency version to its static version, protected by a pin-policy keep-list.              |
@@ -73,26 +73,26 @@ This tree is the canonical publish home: the published tarball ships `Target/` +
 | [hook-dsh-normalize-spaces](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-spaces/Source)    | The spaces flavor: normalizes the unicode space family (Zs minus the ASCII space) to the plain space in model output streams.                                                                                                                                                                |
 | [hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-invisible/Source) | The invisible flavor: removes the zero-width/invisible character family (soft hyphen, zero-width spaces and joiners, bidi controls, BOM) from model output streams.                                                                                                                          |
 | [hook-dsh-normalize-fullwidth](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-fullwidth/Source) | The fullwidth flavor: maps the entire FULLWIDTH FORMS range (U+FF01-U+FF5E) to its ASCII half-width counterparts in model output streams.                                                                                                                                                    |
-| [hook-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-file/Source)      | The file-content normalizer: the `normalize-file` tool - the read, count, write pipeline applying all six transforms to a file already on disk, writing only when something changed.                                                                                                         |
+| [plugin-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/Source)      | The file-content normalizer plugin: the `normalize-file` tool - the read, count, write pipeline applying all six transforms to a file already on disk, writing only when something changed.                                                                                                         |
 
 ## Layout
 
 ```
 Classic/
-  packages/          the twelve bundles, one directory each
+  packages/          the twelve packages, one directory each
   smokes/            the twelve smoke suites, one per bundle
 ```
 
-Each bundle is self-contained: its own `package.json`, its own deterministic build (`Source/` ->
+Each package is self-contained: its own `package.json`, its own deterministic build (`Source/` ->
 `Target/` via ESBuild + `tsc` + `tsc-alias`), and its own [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml) where the bundle ships
 one.
 
 ## Build (per bundle, deterministic)
 
-The two base bundles first, then the consumers:
+The base library and the factory first, then the consumers:
 
 ```
-cd packages/hook-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
+cd packages/lib-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
 cd packages/plugin-dsh-factory && pnpm run prepublishOnly
 ```
 
@@ -102,7 +102,7 @@ Then each consumer bundle (the governance trio, the seven normalize flavors):
 cd packages/<bundle> && pnpm run prepublishOnly
 ```
 
-Standalone-workspace bundles (`hook-dsh-core` and the flavors with their own `pnpm-workspace.yaml`)
+Standalone-workspace packages (`lib-dsh-core` and the flavors with their own `pnpm-workspace.yaml`)
 also take a per-bundle `pnpm install --ignore-scripts`.
 
 The remaining bundles resolve their dev dependencies from the family workspace root.
@@ -111,7 +111,7 @@ The ten consumer bundles import their siblings through the
 `packages/<consumer>/node_modules/@playform/` directory links:
 
 ```
-@playform/hook-dsh-core      -> ../../../hook-dsh-core
+@playform/lib-dsh-core      -> ../../../lib-dsh-core
 @playform/plugin-dsh-factory -> ../../../plugin-dsh-factory
 ```
 

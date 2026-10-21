@@ -45,7 +45,7 @@ The plan is technically detailed and grounded in the harness's client
 surface, but five load-bearing errors would stop it on day one:
 
 1. **The counts are wrong.** The live profile has 14 `@playform` rows,
-   not 13; `hook-dsh-core` is a library with no loader row and cannot
+   not 13; `lib-dsh-core` is a library with no loader row and cannot
    carry a client half. The family is 15 Classic + 16 EffectTS packages,
    not "25 at 0.0.1" as the brief says.
 2. **The routing law is dead.** The brief mandates
@@ -222,7 +222,7 @@ every phase needs a written source-level fallback.
 
 ## 4. The corrected counts and identities
 
-- The live profile has **14 `@playform` rows**; `hook-dsh-core` is not one
+- The live profile has **14 `@playform` rows**; `lib-dsh-core` is not one
   of them (a library, no loader row, no client half).
 - The loadable bundles are the factory plus the 13 hooks; the UI adapters
   are **one per loadable bundle that has something to show** (14
@@ -317,7 +317,7 @@ the panel (the convergence).
 - **Merge**: PHASE-1 into the site page; the duplicate restart guidance.
 - **Correct**: PHASE-4's per-bundle renderer copies contradict "the only
   shared artifact" - decide one shared renderer; PHASE-5 lists
-  `hook-dsh-core` as an adapter, but core has no loader row; PHASE-7
+  `lib-dsh-core` as an adapter, but core has no loader row; PHASE-7
   promises a phase 8 that did not exist; R-UI-2's "EVERY field shows as
   user-overridden" is false for the coach and live-containers rows;
   R-INTERACT says live-containers is `enabled: false`, but the live patch

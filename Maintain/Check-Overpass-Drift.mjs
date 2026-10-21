@@ -60,7 +60,7 @@ const Guarded = (Cluster) => (Cluster === "Command" ? Flavors : [...Flavors, Fil
 // The package name per tree/flavor. The two release groups share the flavor
 // suffix but never the prefix.
 const PackageName = (Tree, Flavor) =>
-	`${Tree === "Classic" ? "hook-dsh-normalize" : "ets-hook-dsh-normalize"}-${Flavor}`;
+	`${Tree === "Classic" ? "" : "ets-"}${Flavor === FileFlavor ? "plugin" : "hook"}-dsh-normalize-${Flavor}`;
 
 // The relative file path the baseline records (POSIX separators, so a
 // Windows checkout hashes the same key).

@@ -139,7 +139,7 @@ Sources read in place (never extracted):
 
 2.1 Topology (formalizing the user's dictates)
 
-	Central panel plugin:  @playform/dsh-panel-family
+	Central panel plugin:  @playform/client-dsh-panel-family
 	- New package; client half (./client, window.__ModuleLoader__.lazy-CJS, same shape as dsh-client-ui-trajectory) + optional tiny Host half (config ONLY).
 	- Owns: the PANEL CONTRACT (types + registry service + mount points).
 	Per-plugin adapters: EACH hook-dsh-* bundle gains a client half.
@@ -226,7 +226,7 @@ Sources read in place (never extracted):
 	- hook-dsh-ccr           -> store stats (CCR ledger tail)
 	- hook-dsh-live-containers -> live block board
 	- hook-dsh-normalize-* (6 flavors) -> per-flavor counters
-	- hook-dsh-core / plugin-dsh-factory -> family roster / build info
+	- lib-dsh-core / plugin-dsh-factory -> family roster / build info
 
 2.4 Enable/disable cascade (the toggles)
 
@@ -282,7 +282,7 @@ Sources read in place (never extracted):
 ----------------------------------------
 
 	Smallest: the tool-coach ladder. Steps:
-	1. Create @playform/dsh-panel-family: index.d.ts (contract types), lib/client.js (registry + family-tab registration).
+	1. Create @playform/client-dsh-panel-family: index.d.ts (contract types), lib/client.js (registry + family-tab registration).
 		 NO Host logic beyond a trivial Config.
 	2. Add "client" + "./client" to hook-dsh-tool-coach's package.json.
 		 Ship lib/client.js with the ladder section (reads its OWN config via the bundle's config plumbing; visuals inline in the adapter).

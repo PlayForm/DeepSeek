@@ -14,7 +14,7 @@
 // rejections can never surface as a tool error.
 //
 // The control flow is the CORE's shared update-stage envelope
-// (@playform/hook-dsh-core, Function/Update): the gates (circuit breaker →
+// (@playform/lib-dsh-core, Function/Update): the gates (circuit breaker →
 // in-flight → cooldown), the jobs envelope (unowned job, `cancel`/`done`
 // semantics, the settlement mapping), the P2 Inflight registration under
 // State.Factory.UpdateKey, the breaker update on failure, the P5 journal
@@ -47,7 +47,7 @@ import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 import type Jobs from "@Interface/Jobs.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
-import { Update } from "@playform/hook-dsh-core";
+import { Update } from "@playform/lib-dsh-core";
 import type PluginFactory from "@playform/plugin-dsh-factory";
 
 import Run from "./Run.js";

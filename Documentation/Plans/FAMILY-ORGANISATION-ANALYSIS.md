@@ -92,13 +92,13 @@ That is roughly 3,000 duplicated lines per tree of shared scaffolding.
 
 All 13 module packages are path-identical 1:1. Of the 344 module twin
 files, 134 are byte-identical, 180 differ by no more than 12 lines and only
-by the import rename (`@playform/hook-dsh-core` to
+by the import rename (`@playform/lib-dsh-core` to
 `@playform/ets-base-dsh`), and 30 are substantive. No twin exceeds 2x line
 divergence (the maximum is 1.91x, normalize `Normalize.ts`).
 
 The `effect` dependency is declared in `ets-hook-dsh-ccr`,
 `ets-hook-dsh-tool-coach`, `ets-hook-dsh-live-containers`, and
-`ets-hook-dsh-core`, and imported by zero files in each.
+`ets-lib-dsh-core`, and imported by zero files in each.
 
 EffectTS is therefore a textual fork, not an Effect port. The 30
 substantive files are the real port: the Stream gate, the typed Update
@@ -147,8 +147,8 @@ Target homes, forced by the existing trees:
 
 | Tree | Home | Why |
 | --- | --- | --- |
-| Classic | `hook-dsh-core/Source/Overpass/` | core already owns the tables, `Replace`/`Chunk`/`Block`; every flavor depends on it |
-| EffectTS | `ets-base-dsh/Source/Overpass/` | the ETS machinery already lives in base (`Stream/`, `Function/Activate`); `ets-hook-dsh-core` has no `Stream/` |
+| Classic | `lib-dsh-core/Source/Overpass/` | core already owns the tables, `Replace`/`Chunk`/`Block`; every flavor depends on it |
+| EffectTS | `ets-base-dsh/Source/Overpass/` | the ETS machinery already lives in base (`Stream/`, `Function/Activate`); `ets-lib-dsh-core` has no `Stream/` |
 
 Files: `Blocks.ts`, `ToolResults.ts`, `StepBatch.ts`, `Command.ts`, plus
 the Library exports in core and the same in base.
@@ -277,7 +277,7 @@ table in the module.
 | No per-scope overrides | `strict`, `sections`, `replacement`, `exclude` are global | `govern-policy.json` keys resolved by the walk-up | Additive |
 | No numeric bounds | `maxUpdateFailures: 0`, negative thresholds load | schema `min`/`max` + fail-loud apply | Behavioral for invalid configs |
 | Stale model in a disabled package | `live-containers/Config.ts:143-150`, `Apply.ts:588-589` hardcode `glm-5.3-flash` | use the configured route or the current model | Behavioral (disabled package) |
-| ETS unused direct dependency and a false claim | zero `from "effect"` in ccr, tool-coach, live-containers, core, but all four import `ets-base-dsh` (transitively effect-backed); `ets-hook-dsh-core/Source/Library.ts:25-31` claims `Stream/Gate` and a typed Update, while its `Source/Stream/` is empty and the gate lives in `ets-base-dsh` | remove the unused direct dependency; correct the core claim | Packaging and docs |
+| ETS unused direct dependency and a false claim | zero `from "effect"` in ccr, tool-coach, live-containers, core, but all four import `ets-base-dsh` (transitively effect-backed); `ets-lib-dsh-core/Source/Library.ts:25-31` claims `Stream/Gate` and a typed Update, while its `Source/Stream/` is empty and the gate lives in `ets-base-dsh` | remove the unused direct dependency; correct the core claim | Packaging and docs |
 | Governance trio races on one write | per-target version guard + continuation, no lock; the loser fails `FS_STALE_VERSION` silently | per-target serialization in `Continue` + a `superseded` line | Additive |
 | Two prepend listeners claim to be outermost | normalize-file and ccr both register `tools/post-execute` with `prepend: true` | document the actual order and fix the claim | Docs and test |
 

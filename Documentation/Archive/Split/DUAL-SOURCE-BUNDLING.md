@@ -25,7 +25,7 @@ statuses:
 > of the pre-splice design - not rewritten.
 
 > The dual-source bundling design + prep for the family: ONE npm package name per identity
-> (`@playform/hook-dsh-core`, `@playform/plugin-dsh-factory`, ...) carries BOTH the Classic build
+> (`@playform/lib-dsh-core`, `@playform/plugin-dsh-factory`, ...) carries BOTH the Classic build
 > and the Effect-TS build in the same tarball; the user installs ONCE and TOGGLES at the loader
 > level - fully npm-native (no postinstall builds, no user-side compilation). This resolves the
 > #15 naming collision (the Classic tree and the EffectTS tree share the twelve names): the SAME
@@ -136,8 +136,8 @@ All 24 `package.json` files (12 names x 2 trees) were rewritten to the dual-sour
 | `exports`     | the conditions map (`effect-ts` / `classic` / `default`) + the `./classic` + `./effect-ts` subpaths; the bundle packages keep `./cordis.patch.yml` + `./SCHEME.md` |
 | `files`       | the sibling variant dir added right after `Target`                                  |
 | `main`/`types`| the CLASSIC build entry (the default) - `./Target/...` (Classic) / `./Target-Classic/...` (EffectTS mirror) |
-| `dependencies`| the union: the existing deps + `effect: 4.0.2` + the runtime-imported @playform siblings (`@playform/hook-dsh-core`, `@playform/plugin-dsh-factory` at the exact `0.0.1`) for the ten consumers |
-| `description` | `hook-dsh-core` only: the dual-build @-sentence (the merged canonical wording, both trees) |
+| `dependencies`| the union: the existing deps + `effect: 4.0.2` + the runtime-imported @playform siblings (`@playform/lib-dsh-core`, `@playform/plugin-dsh-factory` at the exact `0.0.1`) for the ten consumers |
+| `description` | `lib-dsh-core` only: the dual-build @-sentence (the merged canonical wording, both trees) |
 | everything else (name, version 0.0.1, scripts, devDependencies, license CC0-1.0, `dsh`) | unchanged |
 
 The merged dependency sets (the union of the built Targets' runtime imports - the inventory came
@@ -145,7 +145,7 @@ from grepping the minified Target files):
 
 | Package                     | dependencies                                                                  |
 | --------------------------- | ----------------------------------------------------------------------------- |
-| `hook-dsh-core`             | `effect: 4.0.2`                                                               |
+| `lib-dsh-core`             | `effect: 4.0.2`                                                               |
 | `plugin-dsh-factory`        | `effect: 4.0.2`                                                               |
 | `hook-dsh-governor-package` | `npm-check-updates: 23.1.0`, `effect: 4.0.2`, the two @playform siblings       |
 | `hook-dsh-governor-cargo`   | `smol-toml: 1.9.0`, `effect: 4.0.2`, the two @playform siblings               |
@@ -192,7 +192,7 @@ other lanes' surface - the wording below is the next pass's text):
 > **Install once, toggle at the loader.**
 >
 > ```sh
-> pnpm add @playform/hook-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
+> pnpm add @playform/lib-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-governor-package
 > ```
 >
 > One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
@@ -205,7 +205,7 @@ other lanes' surface - the wording below is the next pass's text):
 >   - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
 >   - esbuild: `conditions: ["effect-ts"]`; Vite: `resolve.conditions: ["effect-ts"]`;
 >     webpack: `resolve.conditionNames: ["effect-ts"]`
-> - **Per-import escape hatch** (no loader config): `import { ... } from "@playform/hook-dsh-core/effect-ts"`
+> - **Per-import escape hatch** (no loader config): `import { ... } from "@playform/lib-dsh-core/effect-ts"`
 >   (or `/classic`) - deterministic in every toolchain.
 >
 > The whole family toggles together - never mix variants in one graph (the effect-ts `Update`

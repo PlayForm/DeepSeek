@@ -6,6 +6,6 @@
 // ONLY these to differ between the author's manifest and the pinned one —
 // the pinner can never restructure a file; a difference in any other section
 // refuses the rewrite outright.
-import { Section } from "@playform/hook-dsh-core";
+import { Section } from "@playform/lib-dsh-core";
 
 export default Section;

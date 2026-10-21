@@ -170,9 +170,9 @@ The user will run the whole process again - the review-driven pass:
     the bumped typography, IBM Plex Mono for code). No attribution
     prose (the WebSite is the user's own).
 19. **THE CORE-PAGE RESTRUCTURE AGENT** (user-instructed 2026-10-07 -
-    DEDICATED to the hook-dsh-core page treatment, PAUSED for now - the
+    DEDICATED to the lib-dsh-core page treatment, PAUSED for now - the
     restructuring agent #16 treats EVERY page EXCEPT the core page; this
-    agent owns hook-dsh-core.astro): implement the reusable
+    agent owns lib-dsh-core.astro): implement the reusable
     `@Component/Concept.astro` component (Props: Id / Title / Diagram;
     `data-diagram={Id}` + `data-diagram-status="placeholder"` on the
     dashed placeholder; label + brief; h3 title; slot body; the

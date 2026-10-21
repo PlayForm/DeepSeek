@@ -167,7 +167,7 @@ section 9.3).
 
 ### 1.3 The deterministic build + the two-step test compile
 
-prepublishOnly.sh (mirror hook-dsh-core's, ORDER MANDATORY):
+prepublishOnly.sh (mirror lib-dsh-core's, ORDER MANDATORY):
 
 	set -e
 	Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
@@ -189,7 +189,7 @@ test-only syntax and ships Test output inside Target. Then, in package.json:
 The test folders follow the family per-test layout: Source/Test/<Name>/
 {Test.ts, README.md} -> Target/Test/<Name>/Test.js, run standalone and under
 Maintain/Run-Smokes.mjs which guards each folder's printed PASS count against
-its README (the vacuously-green guard). Test-ESBuild.ts is the hook-dsh-core
+its README (the vacuously-green guard). Test-ESBuild.ts is the lib-dsh-core
 file verbatim (bundle: false, outbase Source/Test, sourcemaps on, the
 Target-Test wipe plugin).
 
@@ -199,7 +199,7 @@ Mirror hook-dsh-tool-coach's: name @playform/hook-dsh-live-containers, version
 0.0.1, type module, main ./Target/Library.js, exports { ".", "./cordis.patch
 .yml", "./SCHEME.md", "./package.json" }, files [Target, cordis.patch.yml,
 README.md, SCHEME.md], dsh.bundle.patch ./cordis.patch.yml. Dependencies:
-@playform/hook-dsh-core 0.0.1 + @playform/plugin-dsh-factory 0.0.1.
+@playform/lib-dsh-core 0.0.1 + @playform/plugin-dsh-factory 0.0.1.
 DevDependencies: @deepseek-ai/cordis 4.0.4, @deepseek-ai/dsh-llm
 0.2.0-rc.2, @deepseek-ai/dsh-system-prompt 0.2.0-rc.2, @deepseek-ai/dsh-tools
 0.2.0-rc.2, @deepseek-ai/dsh-jobs 0.2.0-rc.2, @deepseek-ai/schemastery 3.18.4,
@@ -234,7 +234,7 @@ patch. On a cold mount the State build logs `disabled (enabled=false)` (the
 byte-exact ledger line) and the listeners no-op (every listener checks
 State.On first). Enabling happens ONLY by an explicit ACTIVATE (the user
 edits the profile); the activation proof logs the Activate block (the
-hook-dsh-core Activate helper): `bundle 0.0.1`, `blocks <n>`, `refresh
+lib-dsh-core Activate helper): `bundle 0.0.1`, `blocks <n>`, `refresh
 <policy>`, `detach <mode>`, `failsafes <on|off>`, `suggester <mode>`.
 
 ---
@@ -1277,7 +1277,7 @@ this design document (sections 0-12), the v1 research sections 3-5,
 Requirements/00-07 (the I1 binding constraints in 01 section 12 and 07
 section 5 are HARD), Classic/packages/hook-dsh-tool-coach/Source/Function/
 Apply.ts (the listener discipline), Classic/packages/hook-dsh-ccr/Source/
-Function/Retrieve.ts (the defineTool idiom), Classic/packages/hook-dsh-core
+Function/Retrieve.ts (the defineTool idiom), Classic/packages/lib-dsh-core
 /prepublishOnly.sh (the two-step build), the tool-bash reference behavior
 (at /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/
 node_modules/@deepseek-ai/dsh-tool-bash/lib/index.js - read in place, never

@@ -16,12 +16,12 @@
 // upgrade horizon implicitly.
 //
 // The read → fallback → diagnostic mechanics are the CORE's (the
-// @playform/ets-hook-dsh-core Policy loader — byte-identical lines, module-
+// @playform/ets-lib-dsh-core Policy loader — byte-identical lines, module-
 // prefixed by the factory's Append); this module supplies the built-in
 // default.
 import type PolicyShape from "@Interface/Policy.js";
 import type State from "@Interface/State.js";
-import { Policy } from "@playform/ets-hook-dsh-core";
+import { Policy } from "@playform/ets-lib-dsh-core";
 import type PluginFactory from "@playform/ets-plugin-dsh-factory";
 
 export default (Factory: PluginFactory, State: State, File: string, Quiet = false): PolicyShape =>

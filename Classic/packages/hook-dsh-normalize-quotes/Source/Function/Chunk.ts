@@ -5,7 +5,7 @@
 // since the edit exemption and the per-call raw marker: a delta whose
 // `name` is "edit" passes through BY IDENTITY, and a call whose arguments
 // open with the `{"__normalize":false` marker passes through UNNORMALIZED
-// with the marker stripped) lives in @playform/hook-dsh-core's
+// with the marker stripped) lives in @playform/lib-dsh-core's
 // Stream/Chunk; this file supplies only the flavor - the quotes transform
 // (the ReplaceMap over the Quotes map) - plus the two config values the
 // generic signature needs (the reasoning gate and the tool-args gate) and
@@ -16,7 +16,7 @@
 // The behavior is byte-identical to a hand-rolled in-file implementation -
 // the quotes smoke is the arbiter.
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import { Chunk as CoreChunk } from "@playform/hook-dsh-core";
+import { Chunk as CoreChunk } from "@playform/lib-dsh-core";
 
 import Replace from "./Replace.js";
 

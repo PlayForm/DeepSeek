@@ -64,11 +64,7 @@ const Missing = [
 	["hook-dsh-live-containers", "Classic", "Documentation/Plans/RELEASE-0.1.0.md"],
 	["hook-dsh-tool-coach", "Classic", "Documentation/Plans/RELEASE-0.1.0.md"],
 	["ets-hook-dsh-ccr", "EffectTS", "Documentation/Plans/RELEASE-0.1.0.md"],
-	[
-		"ets-hook-dsh-live-containers",
-		"EffectTS",
-		"Documentation/Plans/RELEASE-0.1.0.md",
-	],
+	["ets-hook-dsh-live-containers", "EffectTS", "Documentation/Plans/RELEASE-0.1.0.md"],
 	["ets-hook-dsh-tool-coach", "EffectTS", "Documentation/Plans/RELEASE-0.1.0.md"],
 ];
 
@@ -81,31 +77,99 @@ const Planned = [
 	// The workspace family - Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md
 	// "The family map" and "The naming by role".
 	["plugin-dsh-workspace", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-observe", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-semantics", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-operate", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-govern", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-authority", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-journal", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-merge", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-monitor", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-context", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-approve", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["hook-dsh-workspace-audit", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-evidence", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-graph", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["plugin-dsh-workspace-reflect", true, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
+	[
+		"hook-dsh-workspace-observe",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-semantics",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-operate",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-govern",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-authority",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-journal",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-merge",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-monitor",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-context",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-approve",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"hook-dsh-workspace-audit",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-evidence",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-graph",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"plugin-dsh-workspace-reflect",
+		true,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
 	// The client half and the shared library - named in the same family map,
 	// but no document fixes an ets- form for a client-/lib- package.
-	["client-dsh-workspace-live", false, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
-	["lib-dsh-workspace-live", false, "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md"],
+	[
+		"client-dsh-workspace-live",
+		false,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
+	[
+		"lib-dsh-workspace-live",
+		false,
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md",
+	],
 	// The orchestration family - Documentation/Plugins/ORCHESTRATION-PLUGINS.md
 	// plus one plan per member.
 	["plugin-dsh-route", true, "Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md"],
 	["plugin-dsh-queue", true, "Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md"],
 	["plugin-dsh-feedback", true, "Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md"],
 	["plugin-dsh-batchstate", true, "Documentation/Plans/BATCH-STATE-PLUGIN.md"],
-	["plugin-dsh-batch-edit", true, "Documentation/Plans/Batch-Edit-Tool/PACKAGE-AND-GOVERNANCE.md"],
+	[
+		"plugin-dsh-batch-edit",
+		true,
+		"Documentation/Plans/Batch-Edit-Tool/PACKAGE-AND-GOVERNANCE.md",
+	],
 	["plugin-dsh-gitguard", true, "Documentation/Plugins/ORCHESTRATION-PLUGINS.md"],
 	// The suggester family - Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md
 	// "The package name" and the family table; PATTERN-GRAPH-PLUGIN.md repeats it.
@@ -117,24 +181,51 @@ const Planned = [
 	["hook-dsh-replay-suggester", true, "Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md"],
 	["hook-dsh-convention-suggester", true, "Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md"],
 	// The UI family's central package - Documentation/Plans/UI-Family/BRIEF.md
-	// ("THE DECISION: the central package is @playform/dsh-panel-family") and
-	// PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md for the companion host package.
+	// ("THE DECISION: the central package is @playform/client-dsh-panel-family")
+	// and PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md for the companion host package.
 	// These two carry no plugin-/hook- prefix, so no twin rule applies.
-	["dsh-panel-family", false, "Documentation/Plans/UI-Family/BRIEF.md"],
-	["dsh-panel-family-host", false, "Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md"],
+	["client-dsh-panel-family", false, "Documentation/Plans/UI-Family/BRIEF.md"],
+	[
+		"client-dsh-panel-family-host",
+		false,
+		"Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md",
+	],
 ];
 
 // Names a plan leaves open. Publishing one of these would permanently squat a
 // name the plan may reject - keep them out of the default publish path.
 const Candidates = [
-	["plugin-dsh-pattern", "Classic", "Documentation/Plans/PATTERN-GRAPH-PLUGIN.md (archetype open: plugin- vs hook-)"],
-	["hook-dsh-pattern", "Classic", "Documentation/Plans/PATTERN-GRAPH-PLUGIN.md (archetype open: plugin- vs hook-)"],
-	["plugin-dsh-pass-on", "Classic", "Documentation/Plans/PASS-ON-AND-INGESTER.md (name + archetype open)"],
-	["plugin-dsh-ingester", "Classic", "Documentation/Plans/PASS-ON-AND-INGESTER.md (name + archetype open)"],
+	[
+		"plugin-dsh-pattern",
+		"Classic",
+		"Documentation/Plans/PATTERN-GRAPH-PLUGIN.md (the chosen service)",
+	],
+	[
+		"plugin-dsh-pass-on",
+		"Classic",
+		"Documentation/Plans/PASS-ON-AND-INGESTER.md (name + archetype open)",
+	],
+	[
+		"plugin-dsh-ingester",
+		"Classic",
+		"Documentation/Plans/PASS-ON-AND-INGESTER.md (name + archetype open)",
+	],
 	["hook-dsh-batch-decision", "Classic", "Documentation/Plans/PASS-ON-AND-INGESTER.md (open)"],
-	["hook-dsh-batch-edit", "Classic", "Documentation/Plans/Batch-Edit-Tool/RANKED-SUGGESTIONS.md (rejected in favour of plugin-dsh-batch-edit)"],
-	["ets-client-dsh-workspace-live", "EffectTS", "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md (twin form not established)"],
-	["ets-lib-dsh-workspace-live", "EffectTS", "Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md (twin form not established)"],
+	[
+		"hook-dsh-batch-edit",
+		"Classic",
+		"Documentation/Plans/Batch-Edit-Tool/RANKED-SUGGESTIONS.md (rejected in favour of plugin-dsh-batch-edit)",
+	],
+	[
+		"ets-client-dsh-workspace-live",
+		"EffectTS",
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md (twin form not established)",
+	],
+	[
+		"ets-lib-dsh-workspace-live",
+		"EffectTS",
+		"Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md (twin form not established)",
+	],
 ];
 
 // ---------------------------------------------------------------------------
@@ -221,9 +312,7 @@ for (const Tier of ["1-missing", "2-planned", "3-candidates"]) {
 	const Members = ByTier(Tier);
 	console.log(`\n${Tier} (${Members.length})`);
 	for (const Row of Members)
-		console.log(
-			`  ${Row.Name}${Row.Registry ? ` -> ${Row.Registry}` : ""}  [${Row.Tree}]`,
-		);
+		console.log(`  ${Row.Name}${Row.Registry ? ` -> ${Row.Registry}` : ""}  [${Row.Tree}]`);
 }
 console.log(`\nTotal: ${Rows.length} placeholder name(s).`);
 
@@ -252,10 +341,7 @@ const Manifest = (Row) => ({
 for (const Row of Rows) {
 	const Dir = join(Out, Row.Tier, Row.Name.slice(Scope.length));
 	mkdirSync(Dir, { recursive: true });
-	writeFileSync(
-		join(Dir, "package.json"),
-		`${JSON.stringify(Manifest(Row), null, "\t")}\n`,
-	);
+	writeFileSync(join(Dir, "package.json"), `${JSON.stringify(Manifest(Row), null, "\t")}\n`);
 }
 
 writeFileSync(

@@ -30,7 +30,7 @@ statuses:
    governor-package's Config default (a smoke-asserted code constant) -
    re-pin + rebuild when the releases must be fully clean.
 4. **The naming refinements (#15)** - the `lib-`/`manifest` proposals
-   (lib-dsh-core vs hook-dsh-core, manifest vs package) - UNDECIDED;
+   (lib-dsh-core, manifest vs package) - UNDECIDED;
    the Site + the READMEs currently use the user's exact approved names.
 5. **The releases' polish** - the per-package publish configs (the
    registry, the publish flow), the license/attribution per repo, the

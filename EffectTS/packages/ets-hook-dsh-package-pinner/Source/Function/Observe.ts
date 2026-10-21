@@ -24,7 +24,7 @@ import { dirname as Parent } from "node:path";
 
 import type { FsObservation, FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 import type State from "@Interface/State.js";
-import { Suppress } from "@playform/ets-hook-dsh-core";
+import { Suppress } from "@playform/ets-lib-dsh-core";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 
 import Transform from "./Transform.js";

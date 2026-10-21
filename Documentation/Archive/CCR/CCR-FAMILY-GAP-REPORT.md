@@ -28,7 +28,7 @@ Derived-bundle targets: `Classic/packages/` and `EffectTS/packages/` (SPLICE-ETS
 ## Executive summary (the verdict in 5 lines)
 
 1. **Zero base changes are required in Classic.**
-   Every factory/core surface `dsh-hook-ccr` consumes exists verbatim in `Classic/packages/plugin-dsh-factory` and `Classic/packages/hook-dsh-core` (same method signatures, same `Activate` composer).
+   Every factory/core surface `dsh-hook-ccr` consumes exists verbatim in `Classic/packages/plugin-dsh-factory` and `Classic/packages/lib-dsh-core` (same method signatures, same `Activate` composer).
 2. **Zero base changes are required in EffectTS.**
    The `ets-plugin-dsh-factory` keeps `State` (ets Library.ts:307), `Append` (:181), `Journal` (:338), and the standalone `Schema` compose helper (:133).
    `Activate` moved to `@playform/ets-base-dsh` (ets-base-dsh Library.ts:37) and is **byte-identical** to Boilerplate's core `Activate.ts` (diff verified empty).
@@ -49,11 +49,11 @@ What `dsh-hook-ccr` imports from the base family (grep over `Boilerplate/package
 | `@playform/dsh-plugin-factory` - `{ Schema as Compose }` runtime (`Source/Variable/Config.ts:35`) | the standalone `Schema(shared?, module?)` compose helper; ccr calls `Compose(false, {...})` (`Config.ts:38`) | `@playform/plugin-dsh-factory` - same named export, used identically by `Classic/packages/hook-dsh-normalize-dash/Source/Variable/Config.ts:35` | `@playform/ets-plugin-dsh-factory` - same named export, `EffectTS/packages/ets-hook-dsh-normalize-dash/Source/Variable/Config.ts:35` |
 | `@playform/dsh-plugin-factory` - `import type Factory` default (`Source/Interface/Factory.ts:20`, `Source/Interface/State.ts:38`) | the Context augmentation `pluginFactory: Factory` (Factory.ts:25-29) | `@playform/plugin-dsh-factory` (`Classic/.../Interface/Factory.ts:19`) | `@playform/ets-plugin-dsh-factory` (`EffectTS/.../Interface/Factory.ts:19`) |
 | `@playform/dsh-plugin-factory` - `{ State as Shared }` type (`Source/Interface/State.ts:39`) | the shared State shape the ccr State intersects | `@playform/plugin-dsh-factory` (`Classic/.../Interface/State.ts:33`) | `@playform/ets-plugin-dsh-factory` (`EffectTS/.../Interface/State.ts:57`; the type re-export resolves to `@playform/ets-base-dsh`, ets factory Library.ts:118) |
-| `@playform/dsh-hook-core` - `{ Activate }` runtime (`Source/Function/Apply.ts:57`) | the activation-ledger-line composer (`Apply.ts:112-120`) | `@playform/hook-dsh-core` (`Classic/packages/hook-dsh-core/Source/Library.ts:29`) | **`@playform/ets-base-dsh`**, not `ets-hook-dsh-core` (`EffectTS/packages/ets-base-dsh/Source/Library.ts:37`; consumed that way by `EffectTS/.../ets-hook-dsh-normalize-dash/Source/Function/Apply.ts:96`) |
+| `@playform/dsh-hook-core` - `{ Activate }` runtime (`Source/Function/Apply.ts:57`) | the activation-ledger-line composer (`Apply.ts:112-120`) | `@playform/lib-dsh-core` (`Classic/packages/lib-dsh-core/Source/Library.ts:29`) | **`@playform/ets-base-dsh`**, not `ets-lib-dsh-core` (`EffectTS/packages/ets-base-dsh/Source/Library.ts:37`; consumed that way by `EffectTS/.../ets-hook-dsh-normalize-dash/Source/Function/Apply.ts:96`) |
 
 Note the EffectTS asymmetry the derivation recipe must honor: in the ets tree, `Activate` (and `Update`, `Block`, `Chunk`, `StreamGate`) live in the **base** package.
-`ets-hook-dsh-core` keeps ONLY the contract helpers (`Section`...`Fullwidth`, ets core Library.ts:32-44) and does **NOT** re-export `Activate` (grep: zero `Activate` in `ets-hook-dsh-core/Source/Library.ts`).
-The family's own evidence: `ets-hook-dsh-normalize-dash` imports `{ Activate, StreamGate as Gate }` from `@playform/ets-base-dsh` (Apply.ts:96) while importing `Replace, Dashes` from `@playform/ets-hook-dsh-core` (Replace.ts:13).
+`ets-lib-dsh-core` keeps ONLY the contract helpers (`Section`...`Fullwidth`, ets core Library.ts:32-44) and does **NOT** re-export `Activate` (grep: zero `Activate` in `ets-lib-dsh-core/Source/Library.ts`).
+The family's own evidence: `ets-hook-dsh-normalize-dash` imports `{ Activate, StreamGate as Gate }` from `@playform/ets-base-dsh` (Apply.ts:96) while importing `Replace, Dashes` from `@playform/ets-lib-dsh-core` (Replace.ts:13).
 
 Non-family imports stay identical in ALL trees: `@deepseek-ai/cordis`, `@deepseek-ai/dsh-llm`, `@deepseek-ai/dsh-tools` (which supplies the `tools/post-execute` event types - ccr deliberately does not re-declare them, Interface/Factory.ts:18-19), `@deepseek-ai/schemastery`, `node:crypto`, `node:fs`.
 
@@ -68,7 +68,7 @@ EVERY surface item the ccr bundle consumes, per tree (ALL verified in EACH facto
 | `Append(state, message)` ledger - logger + `appendFileSync`, never throws | Library.ts:139-141 | same | Library.ts:181-184 (delegates into `LedgerService.use`, the Effect boundary; the module-facing string contract unchanged) | **No** |
 | `Journal(state, event, path, detail, at?)` storage record | Library.ts:265-267 | Library.ts:265-267 | Library.ts:338+ (same signature; effect-wrapped best-effort) | **No** |
 | Type exports `State`/`Options`/`Gate`/`Transform`/`Output`/`Journal` | Library.ts:90-95 | Library.ts:90-95 | Library.ts:118-123 (re-exported from `@playform/ets-base-dsh`) | **No** |
-| `Activate([["k","v"],...])` composer (core hook) | `dsh-hook-core/Source/Library.ts:29` | `hook-dsh-core/Source/Library.ts:29` | `ets-base-dsh/Source/Library.ts:37` - file byte-identical to Boilerplate's (verified: `diff` of the two `Function/Activate.ts` = empty) | **No** (EffectTS: import source changes) |
+| `Activate([["k","v"],...])` composer (core hook) | `dsh-hook-core/Source/Library.ts:29` | `lib-dsh-core/Source/Library.ts:29` | `ets-base-dsh/Source/Library.ts:37` - file byte-identical to Boilerplate's (verified: `diff` of the two `Function/Activate.ts` = empty) | **No** (EffectTS: import source changes) |
 | Context augmentation name `pluginFactory` | factory Library.ts:122+ / `super(Context, "pluginFactory")` | same | ets factory Library.ts:154-157 (`static inject = ["fs"]`, `super(Context, "pluginFactory")`) - the injector name matches ccr's `inject: ["pluginFactory", "tools"]` (`ccr Source/Library.ts:51`) | **No** |
 | Factory machinery ccr deliberately does NOT use (`Wire`, `Attach`, `Govern`, `Write`, `Match`, `Seam`) | present | present | present (ets Library.ts:246-260, 278-280; `Govern` steps live in the base registry) | **No** (absence of use is fine) |
 
@@ -123,11 +123,11 @@ From `Documentation/Archive/Split/SPLICE-ETS.md` (508 lines) and `EffectTS/IMPLE
 
 ### (b) Core hook packages - **no change needed, one import-source note**
 
-- `Classic/packages/hook-dsh-core/` exports `Activate` (Library.ts:29) - used as-is.
-- EffectTS: `Activate` is **NOT** in `ets-hook-dsh-core`.
+- `Classic/packages/lib-dsh-core/` exports `Activate` (Library.ts:29) - used as-is.
+- EffectTS: `Activate` is **NOT** in `ets-lib-dsh-core`.
   It comes from `@playform/ets-base-dsh` (Library.ts:37).
   The derived `ets-hook-dsh-ccr/Source/Function/Apply.ts` must change line 57 to `import { Activate } from "@playform/ets-base-dsh";`.
-  Do **NOT** add an `Activate` re-export to `ets-hook-dsh-core`.
+  Do **NOT** add an `Activate` re-export to `ets-lib-dsh-core`.
   The base is the single owner of the shared plumbing (SPLICE-ETS §2.3 dependency rule :135-139).
   Adding a shim would diverge from the normalize-* precedent.
 
@@ -149,7 +149,7 @@ Compared manifests: `Boilerplate/packages/dsh-hook-normalize-dash/package.json` 
 | Key | Boilerplate (ccr today) | Classic derived | EffectTS derived |
 | --- | --- | --- | --- |
 | `name` | `@playform/dsh-hook-ccr` | `@playform/hook-dsh-ccr` | `@playform/ets-hook-dsh-ccr` |
-| `dependencies` | **absent** (see §6 fix) | `{"@playform/hook-dsh-core":"0.0.1","@playform/plugin-dsh-factory":"0.0.1"}` (mirror Classic normalize-dash :41-44) | `{"@playform/ets-base-dsh":"0.0.1","@playform/ets-hook-dsh-core":"0.0.1","@playform/ets-plugin-dsh-factory":"0.0.1","effect":"4.0.5"}` (mirror ETS normalize-dash :38-43) |
+| `dependencies` | **absent** (see §6 fix) | `{"@playform/lib-dsh-core":"0.0.1","@playform/plugin-dsh-factory":"0.0.1"}` (mirror Classic normalize-dash :41-44) | `{"@playform/ets-base-dsh":"0.0.1","@playform/ets-lib-dsh-core":"0.0.1","@playform/ets-plugin-dsh-factory":"0.0.1","effect":"4.0.5"}` (mirror ETS normalize-dash :38-43) |
 | `main`/`types`/`exports`/`files` | `./Target/Library.js`, exports `.`, `./cordis.patch.yml`, `./SCHEME.md`, `./package.json`; `files: ["Target","cordis.patch.yml","README.md","SCHEME.md"]` | identical shape | identical shape |
 | `dsh.bundle.patch` | `"./cordis.patch.yml"` | same | same |
 | `scripts.prepublishOnly` | `Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json` | the group convention drops the tsc tail: `Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` (Classic normalize-dash :46) | same group convention (ETS normalize-dash :46) |

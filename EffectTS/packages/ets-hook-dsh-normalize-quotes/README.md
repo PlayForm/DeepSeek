@@ -36,12 +36,12 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Quotes**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
 machinery; the second of the six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
 [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`ets-hook-dsh-core`](../ets-hook-dsh-core) for the `Quotes` table and the
+`shared: false`, for the config), [`ets-lib-dsh-core`](../ets-lib-dsh-core) for the `Quotes` table and the
 generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
 | flavor                                                            | table                  | substitution                  |
@@ -176,7 +176,7 @@ the straight form the one that reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Quotes` map ([@playform/ets-hook-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-core/Source)'s `Normalize/Quotes`), applied per text
+Exactly the core's `Quotes` map ([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s `Normalize/Quotes`), applied per text
 segment through the core's `ReplaceMap` - eight entries, each typographic quote code point to its
 ASCII straight counterpart:
 

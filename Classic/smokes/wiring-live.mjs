@@ -47,7 +47,7 @@ export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages"
 // hook-dsh-* mid-batch; both spellings are accepted).
 const Bundles = [
 	["@playform/plugin-dsh-factory", ["plugin-dsh-factory", "plugin-dsh-factory"]],
-	["@playform/hook-dsh-core", ["hook-dsh-core", "hook-dsh-core"]],
+	["@playform/lib-dsh-core", ["lib-dsh-core", "lib-dsh-core"]],
 	[
 		"@playform/hook-dsh-package-governor",
 		["hook-dsh-package-governor", "hook-dsh-package-governor"],
@@ -75,7 +75,10 @@ const Bundles = [
 		"@playform/hook-dsh-normalize-fullwidth",
 		["hook-dsh-normalize-fullwidth", "hook-dsh-normalize-fullwidth"],
 	],
-	["@playform/hook-dsh-normalize-file", ["hook-dsh-normalize-file", "hook-dsh-normalize-file"]],
+	[
+		"@playform/plugin-dsh-normalize-file",
+		["plugin-dsh-normalize-file", "plugin-dsh-normalize-file"],
+	],
 ];
 
 const Sh = (Command, Args, Options = {}) => {
@@ -294,7 +297,7 @@ const ProfileManifest = (Deps) =>
 					bundles: [
 						"@deepseek-ai/dsh-base",
 						"@deepseek-ai/dsh-web-app",
-						...Bundles.filter(([Name]) => Name !== "@playform/hook-dsh-core").map(
+						...Bundles.filter(([Name]) => Name !== "@playform/lib-dsh-core").map(
 							([Name]) => Name,
 						),
 					],
@@ -405,7 +408,7 @@ const Overlay = (Home) =>
     logFile: ${Home}/ledgers/fullwidth.log
     normalizeReasoning: true
     normalizeToolArguments: true
-- id: hook-dsh-normalize-file
+- id: plugin-dsh-normalize-file
   config:
     log: true
     logFile: ${Home}/ledgers/normalize-file.log
@@ -476,8 +479,8 @@ const CreateScratch = (Home) => {
 	FileSystem.writeFileSync(
 		Path.join(Profile, "pnpm-workspace.yaml"),
 		WorkspaceSettings({
-			"@playform/hook-dsh-core":
-				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/hook-dsh-core"]),
+			"@playform/lib-dsh-core":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/lib-dsh-core"]),
 			"@playform/plugin-dsh-factory":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/plugin-dsh-factory"]),

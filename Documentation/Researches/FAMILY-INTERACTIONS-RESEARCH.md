@@ -65,7 +65,7 @@ All claims anchored to Source/ reads in Classic/packages/, live ~/.dsh state, an
    The coach has NO marker-usage rule.
 
 ================================================================================================
-1. PER-PLUGIN ONE-PAGERS (15 packages; hook-dsh-core is NOT a bundle)
+1. PER-PLUGIN ONE-PAGERS (15 packages; lib-dsh-core is NOT a bundle)
 ================================================================================================
 
 1.1 plugin-dsh-factory (@playform/plugin-dsh-factory)
@@ -86,7 +86,7 @@ Ledger:	Owns NONE.
 Config:	Shared block: log, logFile, updateCooldownMs, mutationTools, policyFile, exclude
 	(default excludes: node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app).
 
-1.2 hook-dsh-core (@playform/hook-dsh-core)
+1.2 lib-dsh-core (@playform/lib-dsh-core)
 Job:	NOT a plugin ("no cordis patch, no loader contract").
 	The dependency-free common library: governance mechanics
 	(Section/Default/Suppress/Policy/Refusal/Activate/Update)
@@ -130,13 +130,13 @@ Config:	enabled false (idle-forever; activates only on explicit ACTIVATE); monit
 	guard, command-runner, countdown-expiry, session-stats, diff-summary, constraint-reminder,
 	scoreboard, live-manifest, memory-block, validator, environment-drift, delegation-inbox).
 
-1.5 hook-dsh-normalize-file
+1.5 plugin-dsh-normalize-file
 Job:	The normalize-file TOOL: explicit opt-in normalization of a file ALREADY on disk
 	(six transforms). The family's only listener-less flavor at the tool layer.
 Hooks:	Registers the normalize-file tool; optional tools/post-execute arm {prepend:true} +
 	agent/pre-step arm, both gated on volatile scopes; registers shared normalize-overpass
 	command. Writes via Factory.Write (governed path, fs/observed emit).
-Ledger:	~/.dsh/hook-dsh-normalize-file.log; package_governance domain (normalized records).
+Ledger:	~/.dsh/plugin-dsh-normalize-file.log; package_governance domain (normalized records).
 	No-op rule: 0 transformed chars -> NO write, NO ledger line.
 Config:	replacement "-"; scopes {conversation true, reasoning true, toolInput false,
 	toolResults false, files true, batch false}; toolResultsExempt

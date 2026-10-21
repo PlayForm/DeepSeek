@@ -159,7 +159,7 @@ scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refres
 builder, the wiring and the lifecycle effects (P1/P2/P5).
 
 What stayed module-owned: the transform
-(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-core/Source/Function/Refusal.ts), Function/Transform), the update engine
+(the chain pass: decode → Satisfy → [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts), Function/Transform), the update engine
 (Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
 (Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
 string.

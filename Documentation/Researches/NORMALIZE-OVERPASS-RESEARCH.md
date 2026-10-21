@@ -124,7 +124,7 @@ ALL contracts below were verified LIVE through the host `Event` inspect provider
 
 ---
 
-## 3. The normalize-file precedent (`Classic/packages/hook-dsh-normalize-file/`)
+## 3. The normalize-file precedent (`Classic/packages/plugin-dsh-normalize-file/`)
 
 The file normalizer is the family's first listener-less flavor.
 "Everything happens inside one explicit agent tool call - there is NO event listener behind it" (`Source/Function/Normalize.ts:1-7`).
@@ -133,7 +133,7 @@ Its pipeline is the overpass pattern in miniature:
 1. **READ** - `State.Context.fs.readText(Target, Exec.signal)`.
    Failures are re-thrown with a context prefix; NO write, NO ledger line (`Normalize.ts:121-131`).
 2. **COUNT** - the six-fold chain (dashes -> quotes -> ellipsis -> spaces -> invisible -> fullwidth), daisy-chaining `{ text, count }` and summing (`Normalize.ts:92-114`).
-   It is pure, shared with the stream flavors via `@playform/hook-dsh-core` (`Normalize.ts:29-33`).
+   It is pure, shared with the stream flavors via `@playform/lib-dsh-core` (`Normalize.ts:29-33`).
 3. **CONDITION** - N = 0 -> NO write at ALL, byte-identical file, NO ledger line (`Normalize.ts:134-137`).
 4. **WRITE via the ONE shared executor** - `State.Factory.Write(...)` owns fs/write-intent, standing policy, writeText, and the `fs/observed` emit with the call's exec as actor.
    The governance trio's gate NEVER matches because the tool name is deliberately NOT in any `mutationTools` pin (`Normalize.ts:138-150`, comment `Normalize.ts:43-50`).
@@ -161,7 +161,7 @@ Generalization:
 
 ### 4a. Config-change (volatile cells)
 
-The family's volatile config semantics: "`log`, `logFile` and `replacement` are `.volatile()` in the schema - the loader hands them to apply as stable `{ get() }` references ... Hot edits to the volatile fields commit WITHOUT remounting the plugin" (`hook-dsh-normalize-dash/Source/Interface/Config.ts:8-11`; same wording in `hook-dsh-normalize-file/Source/Interface/Config.ts:8-11`).
+The family's volatile config semantics: "`log`, `logFile` and `replacement` are `.volatile()` in the schema - the loader hands them to apply as stable `{ get() }` references ... Hot edits to the volatile fields commit WITHOUT remounting the plugin" (`hook-dsh-normalize-dash/Source/Interface/Config.ts:8-11`; same wording in `plugin-dsh-normalize-file/Source/Interface/Config.ts:8-11`).
 The factory's State builder unwraps them defensively, so EVERY read of `State.Replacement` re-reads the current value at the moment of use.
 
 Consequence for overpass: a user toggles a config knob (e.g. `normalizeToolResults: on`).
@@ -227,7 +227,7 @@ It NEVER rewrites the durable transcript, and it NEVER runs silently in the back
 ### 5.5 EffectTS parity note
 
 The `ets-hook-dsh-*` twins must mirror the design: same scope targets, same boundary events, same volatile-config trigger semantics, same N=0 no-op rule, and the same "never rewrite history" invariant.
-The transform tables stay in `@playform/hook-dsh-core`; the twins consume the same core composition.
+The transform tables stay in `@playform/lib-dsh-core`; the twins consume the same core composition.
 So the ONLY parity work is the two listeners (post-execute, pre-step), the command registration, and the ledger strings.
 The strings are identical, so the smokes can assert byte-equality across BOTH stacks.
 
@@ -265,7 +265,7 @@ The strings are identical, so the smokes can assert byte-equality across BOTH st
 
 ## 7. Open questions
 
-1. Should the post-execute listener be per-flavor (six tiny listeners) or ONE shared listener in `hook-dsh-core` gated by EACH flavor's enabled cell?
+1. Should the post-execute listener be per-flavor (six tiny listeners) or ONE shared listener in `lib-dsh-core` gated by EACH flavor's enabled cell?
    (Family "one log per module" suggests per-flavor ownership of strings, but a shared dispatcher could still route to per-flavor transforms.)
 2. Does `agent/pre-step` fire for EVERY model step in a turn (multi-step tool loops) or ONLY at turn entry?
    If EVERY step, the batch arm would re-see injected user-role context EACH step - one-shot arming must be per-step or per-turn (needs a LIVE trace to confirm).

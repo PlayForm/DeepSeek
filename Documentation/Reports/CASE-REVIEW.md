@@ -196,7 +196,7 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 - **The 5 bundles / 231 checks of the boilerplate era**: factory 30 + governor 70 + pinner 28 + cargo 58 + mdash 45 = 231 (Handoff Overview, the Package-2 table).
   The page's Phase 0 Metadata and Phase I text are exact.
 - **12 packages x 12 smoke suites x 3 implementations**: `Classic/packages/` and `EffectTS/packages/` hold the same 12 names.
-  `Classic/smokes/`, `EffectTS/smokes/`, `Boilerplate/smokes/` hold 12 suites EACH (the #15 names, verified: hook-dsh-core, governor-cargo, governor-package, normalize-dash/-file/-quotes/-ellipsis/-spaces/-invisible/-fullwidth, pinner-package, plugin-dsh-factory).
+  `Classic/smokes/`, `EffectTS/smokes/`, `Boilerplate/smokes/` hold 12 suites EACH (the #15 names, verified: lib-dsh-core, governor-cargo, governor-package, normalize-dash/-file/-quotes/-ellipsis/-spaces/-invisible/-fullwidth, pinner-package, plugin-dsh-factory).
 - **The smoke counts**: per-suite call sites match TOMORROW-REVIEW section 1 exactly.
   Classic core 14 / factory 34 / governor 78 / pinner 32 / cargo 62 / normalize-file 71 / six flavors 62 EACH / dash 132.
   EffectTS core 17 / factory 41 / governor 81, the rest identical.
@@ -217,9 +217,9 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
   The CURRENT patch layers carry the fixed value (governor-package/pinner-package/governor-cargo `cordis.patch.yml`, EACH `mutationTools: [write, edit, str_replace_editor, raw-write]`).
 - **The govern-marker inversion + the escape hatch**: Gate.ts:51-57 (the `govern` field check - ALWAYS present on raw-write's wrapped actor, so the event path skips it with reason "govern"; built-in write/edit execs carry NO field and keep governing).
   Dash Function/Write.ts:19-51 (NO flag -> NO direct chain; the write still emits fs/observed on the root context).
-- **The stream gate's exemptions**: hook-dsh-core Source/Stream/Chunk.ts:19-37 (name-exempt: edit/raw-write/normalize-file pass BY IDENTITY; the raw-marked `{"__normalize":false` opt-out).
+- **The stream gate's exemptions**: lib-dsh-core Source/Stream/Chunk.ts:19-37 (name-exempt: edit/raw-write/normalize-file pass BY IDENTITY; the raw-marked `{"__normalize":false` opt-out).
   Stream/Strip.ts (the marker remover, the two legal shapes).
-- **The dependency-free core**: zero `@deepseek-ai/dsh-llm` matches in `Classic/packages/hook-dsh-core/Source/`.
+- **The dependency-free core**: zero `@deepseek-ai/dsh-llm` matches in `Classic/packages/lib-dsh-core/Source/`.
   The flavors' StreamChunk/ContentBlock imports are type-only, erased at build (EACH flavor's Configuration/ESBuild.ts comment).
 - **The Effect-TS abort-signal fix**: Library.ts:230-236 ("forwarded to the write SEAM only... it is NOT mapped onto the fiber... break the byte parity of the abort path... the dash smoke asserts 'aborted before write'") + EffectTS/smokes/normalize-dash-smoke.mjs:787-807 (the pre-aborted scenario: the call rejects, nothing is written).
 - **The #14 parallel marker**: EffectTS Function/Govern.ts:23-30,47-48,79,89-95 (`{ steps, parallel }`; sequential DEFAULT; parallel opt-in via `Effect.all`; the safety condition - disjoint targets ONLY, same-file steps race).

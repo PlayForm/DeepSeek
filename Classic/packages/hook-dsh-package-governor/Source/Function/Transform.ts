@@ -40,7 +40,7 @@ import type Passage from "@Interface/Passage.js";
 import type Registry from "@Interface/Registry.js";
 import type State from "@Interface/State.js";
 import type { Transform } from "@Interface/Transform.js";
-import { Refusal } from "@playform/hook-dsh-core";
+import { Refusal } from "@playform/lib-dsh-core";
 import Section from "@Variable/Section.js";
 
 import Decode from "./Decode.js";

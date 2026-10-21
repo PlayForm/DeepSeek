@@ -18,7 +18,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * The `Target-Test` plugin wipes ONLY `Target/Test` on start - never the
  * whole `Target`: the plugin build owns that and runs BEFORE this step (the
  * plugin build's `Target` plugin wipes `Target/` recursively, so the test
- * build must be second in prepublishOnly.sh). The hook-dsh-core file
+ * build must be second in prepublishOnly.sh). The lib-dsh-core file
  * verbatim, header adapted.
  */
 export default {

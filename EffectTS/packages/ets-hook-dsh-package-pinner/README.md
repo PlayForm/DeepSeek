@@ -30,7 +30,7 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Pinner @ Package**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-hook-dsh-core`](../ets-hook-dsh-core)
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
 helpers; a sibling of the package governor on the same
 [`fs/observed`][dsh-fs] seam.
 
@@ -57,7 +57,7 @@ Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gate, the discovery, the union keep-list, the guarded write, the refresh, the continuation,
   the effects and the schema come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the refusal
-  guard and the suppression composer come from [`ets-hook-dsh-core`](../ets-hook-dsh-core). This bundle
+  guard and the suppression composer come from [`ets-lib-dsh-core`](../ets-lib-dsh-core). This bundle
   keeps the module leaf: the range law (Function/Pin), the decode, and every ledger string. Besides
   the
   [`fs/observed`][dsh-fs] event path, its chain pass is registered with the factory's direct-govern
