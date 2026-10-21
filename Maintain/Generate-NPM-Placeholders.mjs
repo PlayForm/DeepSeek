@@ -379,7 +379,7 @@ for T in "\${Tiers[@]}"; do
 		if [ "$Mode" = "--dry-run" ]; then
 			echo "DRY    (cd $Dir && npm publish --access public)   # $Name@$Version"
 			continue
-		}
+		fi
 		echo "PUBLISH $Name@$Version"
 		(cd "$Dir" && npm publish --access public) || echo "FAILED $Name@$Version - continue"
 	done

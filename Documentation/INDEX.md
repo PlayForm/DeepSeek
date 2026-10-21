@@ -127,7 +127,7 @@ Packages: [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agen
 
 | Document (Documentation/Researches/) | Status | Kind          |
 | ------------------------------------ | ------ | ------------- |
-| [CONVERSATION-PARAMETERS-RESEARCH.md](Researches/CONVERSATION-PARAMETERS-RESEARCH.md) | complete | research-output |
+| [AGENT-TUNER-RESEARCH.md](Researches/AGENT-TUNER-RESEARCH.md) | complete | research-output |
 | [FAMILY-INTERACTIONS-RESEARCH.md](Researches/FAMILY-INTERACTIONS-RESEARCH.md) | complete | research-output |
 | [HARNESS-UI-PLUGIN-RESEARCH.md](Researches/HARNESS-UI-PLUGIN-RESEARCH.md) | complete | research-output |
 | [HARNESS-UI-OPTIONS-RESEARCH.md](Researches/HARNESS-UI-OPTIONS-RESEARCH.md) | complete | research-output |
