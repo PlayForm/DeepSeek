@@ -47,7 +47,7 @@ statuses:
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
         Workspace-Family/          the workspace family's per-package docs (25)
-      Researches/                  the research outputs (7)
+      Researches/                  the research outputs (8)
       Guides/                      the operating manuals (7)
       Reports/                     the audits and diagnoses (5)
       Plugins/                     the registry documents (2)
@@ -123,10 +123,11 @@ Round 4: [RECONCILIATION-MANDATE](Plans/Representation-First/RECONCILIATION-MAND
 Frame: [NAMING-BY-ROLE](Plans/Workspace-Family/NAMING-BY-ROLE.md) · [PHASED-DELIVERY](Plans/Workspace-Family/PHASED-DELIVERY.md) · [INVERSE-REPRESENTATION](Plans/Workspace-Family/INVERSE-REPRESENTATION.md) · [ANY-FILE-ADAPTERS](Plans/Workspace-Family/ANY-FILE-ADAPTERS.md) · [DATABASES-AND-CLOUD](Plans/Workspace-Family/DATABASES-AND-CLOUD.md) · [PITFALLS-LOG](Plans/Workspace-Family/PITFALLS-LOG.md) · [RFC-QUEUE](Plans/Workspace-Family/RFC-QUEUE.md) · [RESEARCH-PLACES](Plans/Workspace-Family/RESEARCH-PLACES.md).
 Packages: [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agent) · [OBSERVE](Plans/Workspace-Family/OBSERVE.md) · [SEMANTICS](Plans/Workspace-Family/SEMANTICS.md) · [OPERATE](Plans/Workspace-Family/OPERATE.md) · [GOVERN](Plans/Workspace-Family/GOVERN.md) · [AUTHORITY](Plans/Workspace-Family/AUTHORITY.md) · [JOURNAL](Plans/Workspace-Family/JOURNAL.md) · [LIVE](Plans/Workspace-Family/LIVE.md) · [MERGE](Plans/Workspace-Family/MERGE.md) · [MONITOR](Plans/Workspace-Family/MONITOR.md) · [CONTEXT](Plans/Workspace-Family/CONTEXT.md) · [APPROVE](Plans/Workspace-Family/APPROVE.md) · [AUDIT](Plans/Workspace-Family/AUDIT.md) · [EVIDENCE](Plans/Workspace-Family/EVIDENCE.md) · [GRAPH](Plans/Workspace-Family/GRAPH.md) (later stage) · [REFLECT](Plans/Workspace-Family/REFLECT.md) (later stage) · [SHARED-LIBRARY](Plans/Workspace-Family/SHARED-LIBRARY.md) (lib-dsh-workspace-live).
 
-### Researches - the research outputs (7)
+### Researches - the research outputs (8)
 
 | Document (Documentation/Researches/) | Status | Kind          |
 | ------------------------------------ | ------ | ------------- |
+| [CONVERSATION-PARAMETERS-RESEARCH.md](Researches/CONVERSATION-PARAMETERS-RESEARCH.md) | complete | research-output |
 | [FAMILY-INTERACTIONS-RESEARCH.md](Researches/FAMILY-INTERACTIONS-RESEARCH.md) | complete | research-output |
 | [HARNESS-UI-PLUGIN-RESEARCH.md](Researches/HARNESS-UI-PLUGIN-RESEARCH.md) | complete | research-output |
 | [HARNESS-UI-OPTIONS-RESEARCH.md](Researches/HARNESS-UI-OPTIONS-RESEARCH.md) | complete | research-output |

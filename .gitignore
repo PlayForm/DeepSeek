@@ -32,3 +32,5 @@ dist/
 # Site/ also matched Documentation/Archive/Site, silently unversioning the
 # archived site documents.
 /Site/
+
+/Temporary/
