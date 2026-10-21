@@ -1,0 +1,40 @@
+---
+title: normalize-invisible - the invisible family in the stream
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["llm/stream<br>streaming model call"]):::host
+  NEXT["await next()<br>options untouched"]:::hook
+  LOOP["per-chunk dispatch<br>one in, one out"]:::hook
+  KIND{"chunk<br>kind"}
+  REP["Replace<br>class to removal"]:::hook
+  RG["reasoning<br>flag on: rewrite<br>flag off: pass"]:::hook
+  TG["tool args<br>flag on: gate<br>flag off: pass"]:::hook
+  EX{"exempt<br>tool?"}
+  PASS["pass through<br>by identity"]
+  TAB["Invisible class<br>U+00AD U+200B<br>U+202E U+FEFF"]:::hook
+  CNT{"count<br>&gt; 0?"}
+  OUT["yield<br>live UI + transcript"]:::host
+  LED[("~/.dsh/<br>hook-dsh-normalize-<br>invisible.log")]:::store
+  FAIL["upstream throw<br>propagates, no line"]:::fail
+  EV ==> NEXT
+  NEXT --> LOOP
+  LOOP --> KIND
+  KIND -- text --> REP
+  KIND -- reasoning --> RG
+  KIND -- tool args --> TG
+  KIND -. other .-> PASS
+  RG -- on --> REP
+  RG -. off .-> PASS
+  TG -- on --> EX
+  TG -. off .-> PASS
+  EX -- no --> REP
+  EX -- yes --> PASS
+  TAB --> REP
+  REP --> CNT
+  CNT -- yes --> OUT
+  CNT -. no .-> PASS
+  PASS --> OUT
+  OUT -.-> LED
+  LOOP -.-> FAIL

@@ -1,0 +1,27 @@
+---
+title: ets-lib-dsh-core - the thirteen pure helpers
+line9:
+  theme: boardroom
+---
+flowchart LR
+  S["Section + Default<br>4 NPM sections . 6 fence segments"]:::hook
+  G["Suppress . Policy . Refusal<br>composer . loader . guard"]:::hook
+  TAB["six tables<br>Dashes . Quotes . Ellipsis<br>Spaces . Invisible . Fullwidth"]:::hook
+  REP["Replace / ReplaceMap<br>fresh regex . fn replacer"]:::hook
+  BASE["ets-base-dsh<br>Chunk / Block / Update live here"]:::host
+  GH["ets governance trio"]:::host
+  FLV["six ets stream flavors"]:::host
+  NFR["ets-plugin-dsh-normalize-file"]:::host
+  TGT[("Target/<br>named exports only")]:::store
+  S --> GH
+  G --> GH
+  TAB --> REP
+  REP --> FLV
+  TAB --> NFR
+  S --> TGT
+  TAB --> TGT
+  TGT --> GH
+  TGT --> FLV
+  TGT --> NFR
+  BASE --> FLV
+  BASE --> NFR

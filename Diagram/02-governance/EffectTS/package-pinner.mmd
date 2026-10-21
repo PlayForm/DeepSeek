@@ -1,0 +1,21 @@
+---
+title: ets package-pinner - the pin pass, no update stage
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  SHELL["Cordis shell<br>apply"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  STAGE["same range law<br>same keep-list"]:::hook
+  FACT["factory WriteService<br>Effect.ensuring finalizer"]:::hook
+  SCOPE["Scope made in apply<br>unused by the pin pass"]:::host
+  LED[("~/.dsh/<br>ets-hook-dsh-<br>package-pinner.log")]:::store
+  FAIL["defect contained<br>never throws"]:::fail
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> STAGE
+  STAGE --> FACT
+  SCOPE --> STAGE
+  STAGE -.-> LED
+  FACT -.-> FAIL

@@ -1,0 +1,31 @@
+---
+title: ets-plugin-dsh-factory - the Effect service
+line9:
+  theme: boardroom
+---
+flowchart LR
+  SHELL(["Cordis shell<br>class extends Service"]):::host
+  TAG["Effect service tag<br>the factory identity"]:::hook
+  LAYER["the live Layer<br>built from ets-base-dsh"]:::hook
+  subgraph STAGES["the shared stages"]
+    L["ledger + policy<br>same 5 primitives"]:::hook
+    W["gate + write<br>same executor"]:::hook
+    ST["wire + state<br>same builder"]:::hook
+    J["journal + govern<br>same fold"]:::hook
+  end
+  BASE["ets-base-dsh<br>materialize()"]:::host
+  HOOKS["12 ets-hook bundles"]:::host
+  LED[("byte-identical strings<br>same ledger lines")]:::store
+  FAIL["Effect defect<br>contained per step"]:::fail
+  SHELL ==> TAG
+  TAG --> LAYER
+  LAYER --> L
+  LAYER --> W
+  LAYER --> ST
+  LAYER --> J
+  BASE --> LAYER
+  HOOKS --> TAG
+  L --> LED
+  J --> LED
+  W -.-> FAIL
+  L -.-> FAIL

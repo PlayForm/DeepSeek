@@ -1,0 +1,39 @@
+---
+title: lib-dsh-core - the shared machinery layer
+line9:
+  theme: boardroom
+---
+flowchart LR
+  subgraph GOV["Governance half"]
+    S["Section + Default<br>4 NPM sections . 6 fence segments"]:::hook
+    SUP["Suppress<br>contained-throw composer"]:::hook
+    POL["Policy + Refusal<br>sidecar loader . rewrite guard"]:::hook
+    UPD["Update envelope<br>Dispatch / Settle pair"]:::hook
+    ACT["Activate<br>activated (...) mechanics"]:::hook
+  end
+  subgraph NORM["Normalize half"]
+    TAB["six tables<br>Dashes . Quotes . Ellipsis<br>Spaces . Invisible . Fullwidth"]:::hook
+    REP["Replace / ReplaceMap<br>fresh regex . fn replacer"]:::hook
+    DIS["Chunk / Block<br>per-chunk . block-end"]:::hook
+  end
+  TGT[("Target/<br>named exports only")]:::store
+  GH["governance trio<br>governor . pinner . cargo"]:::host
+  FLV["six stream flavors<br>one table + one closure"]:::host
+  NFR["normalize-file<br>six transforms in order"]:::host
+  SILENT["no ledger<br>no logger, no Config"]:::fail
+  S --> GH
+  SUP --> GH
+  POL --> GH
+  UPD --> GH
+  ACT --> GH
+  TAB --> REP
+  REP --> DIS
+  DIS --> FLV
+  TAB --> NFR
+  S --> TGT
+  TAB --> TGT
+  TGT --> GH
+  TGT --> FLV
+  TGT --> NFR
+  SUP -.-> SILENT
+  POL -.-> SILENT

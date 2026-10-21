@@ -1,0 +1,21 @@
+---
+title: ets package-governor - the same chain behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  SHELL["Cordis shell<br>apply returns nothing"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  STAGE["same gate + chain pass<br>same module strings"]:::hook
+  DISP["Dispatch<br>Effect with Scope"]:::hook
+  FORK["forkIn caller Scope<br>interrupt on dispose"]:::hook
+  LED[("~/.dsh/<br>ets-hook-dsh-<br>package-governor.log")]:::store
+  FAIL["defect contained<br>per step"]:::fail
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> STAGE
+  STAGE --> DISP
+  DISP --> FORK
+  STAGE -.-> LED
+  DISP -.-> FAIL

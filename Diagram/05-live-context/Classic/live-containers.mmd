@@ -1,0 +1,41 @@
+---
+title: live-containers - labeled stanzas at request time
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["assemble<br>every request"]):::host
+  ON{"enabled?"}
+  OFF["disabled<br>every listener passes"]:::fail
+  SEC["append one section<br>live-containers"]:::hook
+  subgraph BLOCKS["the block table"]
+    B1["time<br>time . date . tz"]:::hook
+    B2["counter<br>messages . turns"]:::hook
+    B3["manifest<br>cwd . session"]:::hook
+    B4["note . template<br>vars fill"]:::hook
+  end
+  SUB["token replace only<br>unknown renders literal"]:::hook
+  BUD{"over<br>budget?"}
+  COL["oldest frames<br>collapse to summaries"]:::hook
+  FRAME["fixed frame<br>not harness state"]:::hook
+  OUT["request sees<br>the section"]:::host
+  STEP["agent/pre-step<br>counters"]:::host
+  POST["tools/post-execute<br>sinceLastTool"]:::host
+  LED[("~/.dsh/<br>live-containers.log")]:::store
+  EV ==> ON
+  ON -- no --> OFF
+  ON -- yes --> SEC
+  B1 --> SEC
+  B2 --> SEC
+  B3 --> SEC
+  B4 --> SEC
+  SEC --> SUB
+  SUB --> BUD
+  BUD -- yes --> COL
+  BUD -- no --> FRAME
+  COL --> FRAME
+  FRAME --> OUT
+  STEP --> B2
+  POST --> B2
+  SEC -.-> LED
+  OFF -.-> LED

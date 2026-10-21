@@ -1,0 +1,69 @@
+---
+title: the DSH plugin family - one contract, two trees, five groups
+line9:
+  theme: boardroom
+---
+flowchart LR
+  PROFILE[("profile bundles<br>+ insert rows")]:::store
+  LOADER["Cordis loader"]:::host
+  PLUGIN["plugin contract<br>name . apply . Config . inject"]:::host
+  SURF["five event surfaces"]:::host
+  TOOLS["tool pipeline"]:::host
+  LLM["LLM stream"]:::host
+  TREE["two trees<br>Classic . EffectTS"]:::host
+  subgraph FOUND["01-foundation"]
+    FAC["factory service<br>ctx.pluginFactory"]:::hook
+    LIB["core libraries<br>tables . gates . writes"]:::hook
+  end
+  subgraph GOV["02-governance"]
+    GOVH["three hooks<br>one basename each"]:::hook
+    PG["package-governor"]:::hook
+    PP["package-pinner"]:::hook
+    CG["cargo-governor"]:::hook
+  end
+  subgraph NORM["03-normalize"]
+    NORMH["seven siblings<br>one waterfall"]:::hook
+    NF["six stream flavors"]:::hook
+    NFR["normalize-file"]:::hook
+  end
+  subgraph GUARD["04-guardians"]
+    GUARDH["two guardians<br>context budget"]:::hook
+    CCR["ccr"]:::hook
+    COACH["tool-coach"]:::hook
+  end
+  subgraph LIVE["05-live-context"]
+    LC["live-containers<br>ships disabled"]:::hook
+  end
+  LED[("one ledger per plugin<br>~/.dsh/&lt;identity&gt;.log")]:::store
+  RULE["ledger strings<br>byte-identical"]:::host
+  MIX["mixed trees<br>envelope mismatch"]:::fail
+  PROFILE ==> LOADER
+  LOADER --> PLUGIN
+  PLUGIN --> FAC
+  TREE --> FAC
+  FAC --> GOVH
+  FAC --> NORMH
+  FAC --> GUARDH
+  FAC --> LC
+  LIB --> GOVH
+  LIB --> NORMH
+  SURF --> GOVH
+  SURF --> NORMH
+  SURF --> GUARDH
+  SURF --> LC
+  TOOLS --> GUARDH
+  TOOLS --> NORMH
+  LLM --> NORMH
+  GOVH --> PG
+  GOVH --> PP
+  GOVH --> CG
+  NORMH --> NF
+  NORMH --> NFR
+  GUARDH --> CCR
+  GUARDH --> COACH
+  PG -.-> LED
+  NF -.-> LED
+  CCR -.-> LED
+  LC -.-> LED
+  RULE --> LED
+  TREE -.-> MIX

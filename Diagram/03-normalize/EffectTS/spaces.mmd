@@ -1,0 +1,25 @@
+---
+title: ets normalize-spaces - the space family behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["llm/stream<br>streaming model call"]):::host
+  ADP["Stream.fromAsyncIterable<br>Next() called once"]:::hook
+  FLAGS["reasoning . toolArgs<br>same three-way gate"]:::hook
+  GATE["core Stream/Gate<br>chunk dispatch"]:::hook
+  TAB["Spaces class<br>U+00A0 U+2009<br>U+202F U+3000"]:::hook
+  SUS["Stream.suspend<br>per-stream count"]:::hook
+  ONC["OnCount callback<br>final, non-emitting"]:::hook
+  OUT["yield<br>live UI + transcript"]:::host
+  LED[("~/.dsh/<br>ets-hook-dsh-<br>normalize-spaces.log")]:::store
+  ABORT["abandoned stream<br>no ledger line"]:::fail
+  EV ==> ADP
+  ADP --> GATE
+  FLAGS --> GATE
+  TAB --> GATE
+  GATE --> SUS
+  SUS --> OUT
+  SUS --> ONC
+  ONC -.-> LED
+  GATE -.-> ABORT

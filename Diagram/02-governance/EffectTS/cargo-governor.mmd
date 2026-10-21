@@ -1,0 +1,24 @@
+---
+title: ets cargo-governor - TOML surgery behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  SHELL["Cordis shell<br>apply"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  STAGE["same plan + TOML rewrite<br>same refusal lines"]:::hook
+  UP["cargo upgrade<br>subprocess seam"]:::hook
+  DISP["Dispatch + Settle<br>Effect with Scope"]:::hook
+  FORK["forkIn caller Scope<br>interrupt on dispose"]:::hook
+  LED[("~/.dsh/<br>ets-hook-dsh-<br>cargo-governor.log")]:::store
+  FAIL["defect contained<br>per step"]:::fail
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> STAGE
+  STAGE --> DISP
+  DISP --> UP
+  DISP --> FORK
+  STAGE -.-> LED
+  UP -.-> LED
+  DISP -.-> FAIL

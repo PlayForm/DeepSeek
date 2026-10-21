@@ -1,0 +1,35 @@
+---
+title: tool-coach - four independent coaching channels
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["post-execute<br>terminal call"]):::host
+  DET["detect<br>normalize . rows . craft"]:::hook
+  CLS["classify<br>write . read . search<br>discovery . control"]:::hook
+  EXE{"exempt<br>head?"}
+  T0["tier 0<br>offense line"]:::hook
+  G1{"3 strikes<br>in 8?"}
+  NOTE["tier 1<br>notice + live tool"]:::hook
+  G2{"6 since<br>last note?"}
+  SEC["tier 2<br>persistent section"]:::hook
+  G3{"enforce and<br>4 strikes?"}
+  DENY["tier 3<br>deny with reason"]:::fail
+  LED[("~/.dsh/<br>hook-dsh-tool-<br>coach.log")]:::store
+  SP["system-prompt/assemble<br>appended section"]:::host
+  PRE["tools/pre-execute<br>blocked call"]:::host
+  EV ==> DET
+  DET --> CLS
+  CLS --> EXE
+  EXE -- yes --> LED
+  EXE -- no --> T0
+  T0 --> LED
+  T0 --> G1
+  G1 -- yes --> NOTE
+  NOTE --> LED
+  T0 --> G2
+  G2 -- yes --> SEC
+  SEC --> SP
+  T0 --> G3
+  G3 -- yes --> DENY
+  DENY --> PRE

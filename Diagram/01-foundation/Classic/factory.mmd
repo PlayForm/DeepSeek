@@ -1,0 +1,34 @@
+---
+title: plugin-dsh-factory - the ctx.pluginFactory service
+line9:
+  theme: boardroom
+---
+flowchart LR
+  LOAD(["loader apply<br>class extends Service"]):::host
+  SVC["ctx.pluginFactory<br>inject fs . 19 methods"]:::hook
+  subgraph CLUSTERS["the method clusters"]
+    L["ledger + policy<br>Append . Match . Discover<br>Parse . ResolvePolicy"]:::hook
+    W["gate + write<br>Gate . Write . GuardedWrite<br>Refresh . Continue"]:::hook
+    ST["wire + state<br>State . Wire . Attach<br>Schema . UpdateKey . Seam"]:::hook
+    J["journal + govern<br>Journal . RegisterGovern . Govern"]:::hook
+  end
+  FS[("ctx.fs<br>readText . writeText")]:::store
+  LED[("consumer ledgers<br>~/.dsh/&lt;identity&gt;.log")]:::store
+  GOV["governance trio"]:::host
+  FLV["six stream flavors"]:::host
+  NFR["normalize-file"]:::host
+  FAIL["consumer throw<br>contained, logger-only"]:::fail
+  LOAD ==> SVC
+  SVC --> L
+  SVC --> W
+  SVC --> ST
+  SVC --> J
+  W --> FS
+  ST --> FS
+  L --> LED
+  J --> LED
+  GOV --> SVC
+  FLV --> SVC
+  NFR --> SVC
+  W -.-> FAIL
+  L -.-> FAIL

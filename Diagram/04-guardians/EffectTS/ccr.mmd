@@ -1,0 +1,22 @@
+---
+title: ets ccr - the same compression behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["post-execute<br>tool result"]):::host
+  SHELL["Cordis shell<br>same prepend gate"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  GATE["same gate + classify<br>same 7 types"]:::hook
+  STORE[("LRU store<br>sha256-24")]:::store
+  RET["ccr_retrieve<br>same tool"]:::hook
+  LED[("~/.dsh/ccr.log<br>same file as Classic")]:::store
+  FAIL["defect contained<br>keep inline"]:::fail
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> GATE
+  GATE --> STORE
+  STORE --> RET
+  GATE -.-> LED
+  RET -.-> LED
+  GATE -.-> FAIL

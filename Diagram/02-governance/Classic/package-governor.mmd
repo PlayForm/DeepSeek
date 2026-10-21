@@ -1,0 +1,40 @@
+---
+title: package-governor - silent package.json governance
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  GATE["Factory.Gate<br>actor . kind . stash . basename"]:::hook
+  X{"gated<br>out?"}
+  SKIP["skipped (excluded)<br>ledger line"]
+  DISC["Discover + Parse<br>nearest registry.json"]:::hook
+  RD{"registry<br>found?"}
+  CHAIN["chain pass<br>chain pin to ^resolved"]:::hook
+  WRITE["GuardedWrite<br>replaceIfVersion + fence"]:::hook
+  REF1["Refresh P3<br>re-emit same actor"]:::hook
+  UP["update stage<br>ncu programmatic or bin"]:::hook
+  BRK{"breaker<br>open?"}
+  PAUSE["paused or cooldown<br>ledger line"]:::fail
+  REF2["Refresh U2<br>re-stat + re-emit"]:::hook
+  LED[("~/.dsh/<br>hook-dsh-package-<br>governor.log")]:::store
+  RESULT["author sees own bytes<br>never notified"]
+  EV ==> GATE
+  GATE --> X
+  X -- yes --> SKIP
+  X -- no --> DISC
+  DISC --> RD
+  RD -- no --> UP
+  RD -- yes --> CHAIN
+  CHAIN --> WRITE
+  WRITE --> REF1
+  REF1 --> UP
+  UP --> BRK
+  BRK -- yes --> PAUSE
+  BRK -- no --> REF2
+  REF2 --> RESULT
+  SKIP -.-> LED
+  WRITE -.-> LED
+  UP -.-> LED
+  PAUSE -.-> LED
+  RD -.-> LED

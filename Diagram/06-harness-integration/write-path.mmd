@@ -1,0 +1,30 @@
+---
+title: the write path - tool to governed disk
+line9:
+  theme: boardroom
+---
+flowchart LR
+  TOOL(["mutation tool<br>write . edit . raw-write"]):::host
+  PRE["tools/pre-execute<br>waterfall"]:::host
+  INTENT["fs/write-intent<br>version guard"]:::host
+  EXEC["the write executor<br>Factory.Write"]:::hook
+  TEXT["ctx.fs.writeText<br>atomic backend"]:::hook
+  OBS["fs/observed<br>kind present . version"]:::host
+  GATE["governance Gate<br>actor . basename . fence"]:::hook
+  CONT["contained continuation<br>transform . GuardedWrite"]:::hook
+  REF["Refresh<br>re-emit same actor"]:::hook
+  LED[("module ledger")]:::store
+  RESULT["tool result from<br>author's own content"]:::host
+  FAIL["contained throw<br>Suppress line"]:::fail
+  TOOL ==> PRE
+  PRE --> INTENT
+  INTENT --> EXEC
+  EXEC --> TEXT
+  TEXT --> OBS
+  OBS --> GATE
+  GATE --> CONT
+  CONT --> REF
+  CONT -.-> LED
+  REF -.-> OBS
+  PRE --> RESULT
+  CONT -.-> FAIL

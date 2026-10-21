@@ -1,0 +1,25 @@
+---
+title: ets normalize-file - the same tool behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  CALL(["normalize-file<br>tool call"]):::host
+  READ["ctx.fs.readText<br>error rejects, no write"]:::hook
+  REW["same six<br>Dashes . Quotes . Ellipsis<br>Spaces . Invisible . Fullwidth"]:::hook
+  CNT{"count<br>&gt; 0?"}
+  NO["changed false<br>no write, no line"]
+  WRITE["Factory.Write<br>Effect runtime"]:::hook
+  OBS["fs/observed<br>same emit shape"]:::host
+  LED[("~/.dsh/<br>ets-plugin-dsh-<br>normalize-file.log")]:::store
+  RESULT["result: path, count<br>changed, before, after"]:::host
+  FAIL["defect contained<br>error result"]:::fail
+  CALL ==> READ
+  READ --> REW
+  REW --> CNT
+  CNT -- no --> NO
+  CNT -- yes --> WRITE
+  WRITE --> OBS
+  OBS --> RESULT
+  WRITE -.-> LED
+  WRITE -.-> FAIL

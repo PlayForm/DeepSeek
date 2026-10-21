@@ -1,0 +1,25 @@
+---
+title: ets normalize-ellipsis - the ellipsis family behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["llm/stream<br>streaming model call"]):::host
+  ADP["Stream.fromAsyncIterable<br>Next() called once"]:::hook
+  FLAGS["reasoning . toolArgs<br>same three-way gate"]:::hook
+  GATE["core Stream/Gate<br>chunk dispatch"]:::hook
+  TAB["Ellipsis class<br>U+2026 only"]:::hook
+  SUS["Stream.suspend<br>per-stream count"]:::hook
+  ONC["OnCount callback<br>final, non-emitting"]:::hook
+  OUT["yield<br>live UI + transcript"]:::host
+  LED[("~/.dsh/<br>ets-hook-dsh-<br>normalize-ellipsis.log")]:::store
+  ABORT["abandoned stream<br>no ledger line"]:::fail
+  EV ==> ADP
+  ADP --> GATE
+  FLAGS --> GATE
+  TAB --> GATE
+  GATE --> SUS
+  SUS --> OUT
+  SUS --> ONC
+  ONC -.-> LED
+  GATE -.-> ABORT

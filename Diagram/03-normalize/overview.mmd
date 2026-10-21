@@ -1,0 +1,30 @@
+---
+title: 03-normalize - the model's typography, tamed live
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["llm/stream<br>streaming model call"]):::host
+  G1["normalizeReasoning<br>default on"]:::host
+  G2["normalizeToolArguments<br>default off"]:::host
+  F1["six Classic flavors<br>dash . quotes . ellipsis<br>spaces . invisible . fullwidth"]:::hook
+  F2["six ETS flavors<br>same tables, same bytes"]:::hook
+  RULE["single-character replace<br>boundary-safe . order-free"]:::host
+  FILE["normalize-file<br>the on-disk tool"]:::host
+  RAW["raw-write<br>per-call normalize"]:::host
+  OUT["live UI + transcript<br>deliberately visible"]:::host
+  LED[("one ledger per flavor<br>~/.dsh/&lt;identity&gt;.log")]:::store
+  EV ==> F1
+  EV ==> F2
+  G1 --> F1
+  G2 --> F1
+  G1 --> F2
+  G2 --> F2
+  F1 --> RULE
+  F2 --> RULE
+  FILE --> RULE
+  RAW --> RULE
+  RULE --> OUT
+  F1 -.-> LED
+  F2 -.-> LED
+  FILE -.-> LED

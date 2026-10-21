@@ -1,0 +1,31 @@
+---
+title: ets-base-dsh - the Effect plumbing base
+line9:
+  theme: boardroom
+---
+flowchart LR
+  UPD["Update + Activate<br>envelope . proof composer"]:::hook
+  STR["Chunk / Block / Strip<br>stream dispatch"]:::hook
+  GATE["StreamGate<br>the gate transformer"]:::hook
+  LEDS["Append . LedgerService<br>the ledger service"]:::hook
+  SVCS["Write . Journal . Govern<br>Effect services"]:::hook
+  MAT["materialize()<br>Layer.mergeAll -> scoped"]:::hook
+  TYP["Interface contracts<br>State . Options . Gate"]:::hook
+  OVR["Overpass scaffolding<br>RewriteBlocks . StepBatch"]:::hook
+  LIB["ets-lib-dsh-core<br>13 pure helpers"]:::host
+  FAC["ets-plugin-dsh-factory<br>the Cordis shell"]:::host
+  HOOKS["12 ets-hook bundles<br>governance . normalize"]:::host
+  EFF[("effect 4.0.5<br>one runtime dependency")]:::store
+  UPD --> HOOKS
+  STR --> HOOKS
+  GATE --> HOOKS
+  OVR --> HOOKS
+  LEDS --> SVCS
+  SVCS --> MAT
+  MAT --> FAC
+  TYP --> FAC
+  TYP --> LIB
+  TYP --> HOOKS
+  LIB --> HOOKS
+  FAC --> HOOKS
+  EFF --> MAT

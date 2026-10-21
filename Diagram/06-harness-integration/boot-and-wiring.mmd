@@ -1,0 +1,26 @@
+---
+title: boot and wiring - profile to ledger
+line9:
+  theme: boardroom
+---
+flowchart TD
+  PROFILE[("profile package.json<br>dsh.profile.bundles")]:::store
+  PATCH[("cordis.patch.yml<br>insert rows")]:::store
+  LOADER["Cordis loader<br>compose bundle layers"]:::host
+  APPLY["apply()<br>name . Config . inject"]:::hook
+  SVC["services<br>fs . tools . pluginFactory"]:::host
+  FACTORY["factory methods<br>State . Wire . Attach"]:::hook
+  LISTEN["listeners registered<br>llm/stream . fs/observed . tools/*"]:::hook
+  TOOLS["tools registered<br>raw-write . normalize-file<br>ccr_retrieve . live_container_set"]:::hook
+  LED[("activation line<br>~/.dsh/&lt;identity&gt;.log")]:::store
+  FAIL["apply returns a value<br>event delivery dies"]:::fail
+  PROFILE --> LOADER
+  PATCH --> LOADER
+  LOADER ==> APPLY
+  SVC --> APPLY
+  APPLY --> FACTORY
+  FACTORY --> LISTEN
+  APPLY --> TOOLS
+  LISTEN -.-> LED
+  APPLY -.-> LED
+  APPLY -.-> FAIL

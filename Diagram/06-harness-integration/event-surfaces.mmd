@@ -1,0 +1,31 @@
+---
+title: the five event surfaces and who attaches
+line9:
+  theme: boardroom
+---
+flowchart LR
+  subgraph HOST["the host surfaces"]
+    L["llm/stream<br>waterfall"]:::host
+    F["fs/observed<br>event"]:::host
+    PRE["tools/pre-execute<br>waterfall"]:::host
+    POST["tools/post-execute<br>waterfall"]:::host
+    ASM["system-prompt/assemble<br>waterfall"]:::host
+    STEP["agent/pre-step<br>waterfall"]:::host
+  end
+  subgraph GROUPS["which groups attach"]
+    N["03-normalize<br>6 stream flavors"]:::hook
+    G["02-governance<br>3 hooks"]:::hook
+    C["04-guardians<br>ccr . tool-coach"]:::hook
+    V["05-live-context<br>live-containers"]:::hook
+    F1["01-foundation<br>Wire . Write . Govern"]:::hook
+  end
+  L --> N
+  F --> G
+  F --> F1
+  PRE --> C
+  POST --> C
+  POST --> N
+  ASM --> C
+  ASM --> V
+  STEP --> C
+  STEP --> V

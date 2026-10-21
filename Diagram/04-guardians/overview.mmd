@@ -1,0 +1,40 @@
+---
+title: 04-guardians - the context budget, defended
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV1(["tools/post-execute<br>tool result"]):::host
+  EV2(["tools/pre-execute<br>tool call"]):::host
+  EV3(["system-prompt/assemble<br>request"]):::host
+  EV4(["agent/pre-step<br>step boundary"]):::host
+  subgraph CLASSIC["Classic tree"]
+    CCR["ccr<br>compress + retrieve"]:::hook
+    COACH["tool-coach<br>four-tier ladder"]:::hook
+  end
+  subgraph ETS["EffectTS tree"]
+    ECCR["ets ccr<br>same pipeline"]:::hook
+    ECOACH["ets tool-coach<br>same ladder"]:::hook
+  end
+  STORE[("CCR LRU<br>optional JSONL")]:::store
+  LED[("two ledgers per tree")]:::store
+  RULE["ccr prepends<br>sees the pristine result"]:::host
+  SAFE["marker guard<br>any load order safe"]:::host
+  EV1 ==> CCR
+  EV1 ==> ECCR
+  EV1 --> COACH
+  EV1 --> ECOACH
+  EV2 --> COACH
+  EV2 --> ECOACH
+  EV3 --> COACH
+  EV3 --> ECOACH
+  EV4 --> CCR
+  EV4 --> ECCR
+  CCR --> RULE
+  ECCR --> RULE
+  RULE --> STORE
+  STORE --> SAFE
+  CCR -.-> LED
+  COACH -.-> LED
+  ECCR -.-> LED
+  ECOACH -.-> LED

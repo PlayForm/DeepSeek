@@ -1,0 +1,34 @@
+---
+title: 02-governance - hands-off dependency hygiene
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  B["basename gate<br>disjoint per module"]
+  subgraph CLASSIC["Classic tree"]
+    PG["package-governor<br>package.json . chain + ncu"]:::hook
+    PP["package-pinner<br>package.json . pin only"]:::hook
+    CG["cargo-governor<br>Cargo.toml . cargo upgrade"]:::hook
+  end
+  subgraph ETS["EffectTS tree"]
+    EPG["ets package-governor<br>package.json . same chain"]:::hook
+    EPP["ets package-pinner<br>package.json . same law"]:::hook
+    ECG["ets cargo-governor<br>Cargo.toml . same plan"]:::hook
+  end
+  RULE["pin then bump-exact<br>chain &gt; strip &gt; normalize<br>keep-list wins"]:::host
+  LED[("six ledgers<br>one per module")]:::store
+  EV ==> B
+  B --> PG
+  B --> PP
+  B --> CG
+  B --> EPG
+  B --> EPP
+  B --> ECG
+  PG --> RULE
+  PP --> RULE
+  CG --> RULE
+  EPG --> RULE
+  EPP --> RULE
+  ECG --> RULE
+  RULE -.-> LED

@@ -1,0 +1,21 @@
+---
+title: ets live-containers - the same section behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["assemble<br>every request"]):::host
+  SHELL["Cordis shell<br>same listeners"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  SEC["same section name<br>same block table"]:::hook
+  SUB["token replace only<br>same frame"]:::hook
+  OUT["request sees<br>the section"]:::host
+  SHIP["ships disabled<br>enabled: false"]:::fail
+  LED[("~/.dsh/<br>live-containers.log<br>same file as Classic")]:::store
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> SEC
+  SEC --> SUB
+  SUB --> OUT
+  SHIP -.-> SEC
+  SEC -.-> LED

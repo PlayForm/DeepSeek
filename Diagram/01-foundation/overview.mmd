@@ -1,0 +1,46 @@
+---
+title: 01-foundation - the machinery every plugin stands on
+line9:
+  theme: boardroom
+---
+flowchart LR
+  LOAD(["DSH loader<br>profile bundle list"]):::host
+  subgraph CLASSIC["Classic tree"]
+    CL["lib-dsh-core<br>pure helpers"]:::hook
+    CF["plugin-dsh-factory<br>ctx.pluginFactory"]:::hook
+  end
+  subgraph ETS["EffectTS tree"]
+    EB["ets-base-dsh<br>Effect plumbing"]:::hook
+    EL["ets-lib-dsh-core<br>13 pure helpers"]:::hook
+    EF["ets-plugin-dsh-factory<br>ctx.pluginFactory"]:::hook
+  end
+  subgraph USE["the consumer bundles"]
+    G["governance trio<br>3 Classic + 3 ETS"]:::host
+    N["normalize family<br>7 Classic + 7 ETS"]:::host
+    X["guardians<br>ccr . tool-coach"]:::host
+    V["live-containers<br>1 Classic + 1 ETS"]:::host
+  end
+  LED[("one ledger per plugin<br>~/.dsh/&lt;identity&gt;.log")]:::store
+  MIX["mixed trees<br>envelope mismatch"]:::fail
+  LOAD ==> CF
+  LOAD ==> EF
+  EB --> EL
+  EB --> EF
+  CL --> G
+  CL --> N
+  CF --> G
+  CF --> N
+  CF --> X
+  CF --> V
+  EL --> G
+  EL --> N
+  EF --> G
+  EF --> N
+  EF --> X
+  EF --> V
+  G -.-> LED
+  N -.-> LED
+  X -.-> LED
+  V -.-> LED
+  CF -.-> MIX
+  EF -.-> MIX

@@ -1,0 +1,22 @@
+---
+title: ets tool-coach - the same four channels behind Effect
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["post-execute<br>terminal call"]):::host
+  SHELL["Cordis shell<br>same five listeners"]:::hook
+  SVC["ctx.pluginFactory<br>Effect runtime"]:::hook
+  CHAN["same four channels<br>same ten strings"]:::hook
+  NOTE["tier 1 notice<br>live registry tool"]:::hook
+  SEC["tier 2 section<br>system-prompt/assemble"]:::host
+  DENY["tier 3 deny<br>opt-in, default off"]:::fail
+  LED[("~/.dsh/<br>hook-dsh-tool-<br>coach.log")]:::store
+  EV ==> SHELL
+  SHELL --> SVC
+  SVC --> CHAN
+  CHAN --> NOTE
+  CHAN --> SEC
+  CHAN -.-> DENY
+  CHAN -.-> LED
+  NOTE -.-> LED

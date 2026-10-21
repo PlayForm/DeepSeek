@@ -1,0 +1,39 @@
+---
+title: cargo-governor - silent Cargo.toml governance
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["fs/observed<br>tool-layer write"]):::host
+  GATE["Factory.Gate<br>basename Cargo.toml"]:::hook
+  X{"gated<br>out?"}
+  SKIP["skipped (excluded)"]
+  DISC["Discover + Parse<br>nearest registry.json"]:::hook
+  PLAN["plan<br>chain . strip . normalize"]:::hook
+  TOML["surgical line rewrite<br>comments survive"]:::hook
+  REFU{"refusal<br>guard?"}
+  NO["REFUSED line<br>rewrite aborted"]:::fail
+  WRITE["GuardedWrite<br>replaceIfVersion"]:::hook
+  REF1["Refresh P3<br>re-emit same actor"]:::hook
+  UP["cargo upgrade<br>subprocess seam"]:::hook
+  VER["Verify<br>127 non-fatal"]:::hook
+  REF2["Refresh U2<br>re-stat + re-emit"]:::hook
+  LED[("~/.dsh/<br>hook-dsh-cargo-<br>governor.log")]:::store
+  EV ==> GATE
+  GATE --> X
+  X -- yes --> SKIP
+  X -- no --> DISC
+  DISC --> PLAN
+  PLAN --> TOML
+  TOML --> REFU
+  REFU -- yes --> NO
+  REFU -- no --> WRITE
+  WRITE --> REF1
+  REF1 --> UP
+  UP --> VER
+  VER --> REF2
+  SKIP -.-> LED
+  NO -.-> LED
+  WRITE -.-> LED
+  UP -.-> LED
+  VER -.-> LED

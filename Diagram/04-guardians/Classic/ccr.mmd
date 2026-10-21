@@ -1,0 +1,52 @@
+---
+title: ccr - compress, cache, retrieve tool output
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["post-execute<br>tool result"]):::host
+  EV2(["pre-step<br>engine on"]):::host
+  NEXT["await next()<br>always first"]:::hook
+  D0{"accept and<br>no value?"}
+  EX{"exempt<br>tool?"}
+  TG{"in targets?"}
+  SZ{"over gate?"}
+  PASS["decision unchanged"]
+  CLS["classify<br>7 types"]:::hook
+  STORE[("LRU store<br>sha256-24 . 256 MiB")]:::store
+  AE{"cheap<br>enough?"}
+  FULL["return full content"]
+  REPL["preview + marker<br>one line"]:::hook
+  MODEL["model sees preview<br>or full text"]:::host
+  RET["ccr_retrieve<br>hash, range?"]:::hook
+  BACK["original bytes<br>restored"]:::hook
+  MISS["self-describing<br>error"]:::fail
+  LED[("~/.dsh/ccr.log")]:::store
+  FAIL["on error: warn<br>keep inline"]:::fail
+  ENG["context engine<br>agent/pre-step, off"]:::hook
+  EV ==> NEXT
+  NEXT --> D0
+  D0 -- yes --> EX
+  D0 -- no --> PASS
+  EX -- yes --> PASS
+  EX -- no --> TG
+  TG -- no --> PASS
+  TG -- yes --> SZ
+  SZ -- no --> PASS
+  SZ -- yes --> CLS
+  CLS --> STORE
+  STORE --> AE
+  AE -- yes --> FULL
+  AE -- no --> REPL
+  FULL --> MODEL
+  REPL --> MODEL
+  MODEL -.-> RET
+  RET --> BACK
+  BACK -.-> MODEL
+  RET -.-> MISS
+  STORE -.-> LED
+  RET -.-> LED
+  NEXT -.-> FAIL
+  FAIL --> PASS
+  EV2 -.-> ENG
+  ENG -.-> STORE

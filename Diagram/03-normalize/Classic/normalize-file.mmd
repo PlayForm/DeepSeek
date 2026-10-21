@@ -1,0 +1,30 @@
+---
+title: normalize-file - the on-disk six-fold pass
+line9:
+  theme: boardroom
+---
+flowchart LR
+  CALL(["normalize-file<br>tool call"]):::host
+  RES["ctx.fs.resolve<br>caller-side target"]:::hook
+  READ["ctx.fs.readText<br>missing or binary rejects"]:::hook
+  FAIL["error result<br>no write"]:::fail
+  REW["Rewrite<br>Dashes . Quotes . Ellipsis<br>Spaces . Invisible . Fullwidth"]:::hook
+  CNT{"count<br>&gt; 0?"}
+  NO["changed false<br>no write, no line"]
+  WRITE["Factory.Write<br>standing policy"]:::hook
+  OBS["fs/observed<br>kind present"]:::host
+  GOV["governance Gate<br>actor not a trigger"]:::host
+  LED[("~/.dsh/<br>plugin-dsh-<br>normalize-file.log")]:::store
+  RESULT["result: path, count<br>changed, before, after"]:::host
+  CALL ==> RES
+  RES --> READ
+  READ -.-> FAIL
+  READ --> REW
+  REW --> CNT
+  CNT -- no --> NO
+  CNT -- yes --> WRITE
+  WRITE --> OBS
+  OBS --> GOV
+  GOV --> RESULT
+  WRITE -.-> LED
+  REW -.-> LED

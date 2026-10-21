@@ -28,14 +28,15 @@ statuses:
 
 ## 0. THE VERSION STRATEGY (documented once, applies to all 31)
 
-- The placeholder is published at **0.0.0** - deliberately BELOW the real **0.1.0**.
-  So the real releases NEVER collide with the placeholders.
+- The placeholder is published at **0.0.0** - deliberately BELOW the package's
+  current package.json version (the actuals; **0.1.0** today). So the real
+  releases NEVER collide with the placeholders.
 - **ONCE ON NPM, A VERSION IS IMMUTABLE.**
   0.0.0 can NEVER be republished or overwritten.
   It stays as the permanent placeholder history.
   This is why the placeholder carries a MINIMAL package.json (name + version + access) and nothing else.
   It is NEVER intended to be installed.
-  The real 0.1.0 follows from the monorepo publish.
+  The real package.json version follows from the monorepo publish.
   The 0.0.1 release is already on the registry and stays immutable.
 - `npm unpublish` within 72h can remove a mistaken publish, but do NOT rely on it.
   Treat EVERY publish as permanent.

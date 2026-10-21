@@ -1,0 +1,30 @@
+---
+title: 05-live-context - the system prompt, kept current
+line9:
+  theme: boardroom
+---
+flowchart LR
+  EV(["assemble<br>every request"]):::host
+  EV2(["agent/pre-step<br>step boundary"]):::host
+  EV3(["tools/post-execute<br>tool result"]):::host
+  C["live-containers<br>Classic"]:::hook
+  E["ets live-containers<br>EffectTS"]:::hook
+  BLOCKS["labeled stanzas<br>recomputed at request time"]:::hook
+  SEC["one appended section<br>interpolate false"]:::hook
+  SHIP["ships disabled<br>enabled: false"]:::fail
+  ACT["explicit activate<br>profile patch + restart"]:::host
+  LED[("~/.dsh/live-containers.log<br>same path in both trees")]:::store
+  EV ==> C
+  EV ==> E
+  EV2 --> C
+  EV3 --> C
+  EV2 --> E
+  EV3 --> E
+  C --> BLOCKS
+  E --> BLOCKS
+  BLOCKS --> SEC
+  ACT --> C
+  ACT --> E
+  SHIP -.-> ACT
+  C -.-> LED
+  E -.-> LED
