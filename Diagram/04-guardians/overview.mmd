@@ -4,10 +4,10 @@ line9:
   theme: boardroom
 ---
 flowchart LR
-  EV1(["tools/post-execute<br>tool result"]):::host
-  EV2(["tools/pre-execute<br>tool call"]):::host
-  EV3(["system-prompt/assemble<br>request"]):::host
-  EV4(["agent/pre-step<br>step boundary"]):::host
+  EV1(["post-execute<br>tool result"]):::host
+  EV2(["pre-execute<br>tool call"]):::host
+  EV3(["assemble<br>request"]):::host
+  EV4(["pre-step<br>step boundary"]):::host
   subgraph CLASSIC["Classic tree"]
     CCR["ccr<br>compress + retrieve"]:::hook
     COACH["tool-coach<br>four-tier ladder"]:::hook

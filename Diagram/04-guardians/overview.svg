@@ -48,22 +48,22 @@
     <g class="node" data-line9-node="EV1" transform="translate(100, 253)">
       <defs><clipPath id="clip-EV1"><rect x="-37" y="-35" width="74" height="70" /></clipPath></defs>
       <rect x="-60" y="-35" width="120" height="70" rx="35" ry="35" fill="#EDF1F8" stroke="#0A2555" stroke-width="1.25" />
-      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="12" font-weight="400" clip-path="url(#clip-EV1)"><tspan x="0" dy="-12.96">tools/post--</tspan><tspan x="0" dy="16.8">execute</tspan><tspan x="0" dy="16.8">tool result</tspan></text>
+      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="11" font-weight="400" clip-path="url(#clip-EV1)"><tspan x="0" dy="-4.18">post-execute</tspan><tspan x="0" dy="15.4">tool result</tspan></text>
     </g>
     <g class="node" data-line9-node="EV2" transform="translate(100, 122)">
       <defs><clipPath id="clip-EV2"><rect x="-37" y="-35" width="74" height="70" /></clipPath></defs>
       <rect x="-60" y="-35" width="120" height="70" rx="35" ry="35" fill="#EDF1F8" stroke="#0A2555" stroke-width="1.25" />
-      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="12" font-weight="400" clip-path="url(#clip-EV2)"><tspan x="0" dy="-12.96">tools/pre-e-</tspan><tspan x="0" dy="16.8">xecute</tspan><tspan x="0" dy="16.8">tool call</tspan></text>
+      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="12" font-weight="400" clip-path="url(#clip-EV2)"><tspan x="0" dy="-4.56">pre-execute</tspan><tspan x="0" dy="16.8">tool call</tspan></text>
     </g>
     <g class="node" data-line9-node="EV3" transform="translate(100, 445)">
       <defs><clipPath id="clip-EV3"><rect x="-37" y="-35" width="74" height="70" /></clipPath></defs>
       <rect x="-60" y="-35" width="120" height="70" rx="35" ry="35" fill="#EDF1F8" stroke="#0A2555" stroke-width="1.25" />
-      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="11" font-weight="400" clip-path="url(#clip-EV3)"><tspan x="0" dy="-19.58">system-pro-</tspan><tspan x="0" dy="15.4">mpt/assem-</tspan><tspan x="0" dy="15.4">ble</tspan><tspan x="0" dy="15.4">request</tspan></text>
+      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="12" font-weight="400" clip-path="url(#clip-EV3)"><tspan x="0" dy="-4.56">assemble</tspan><tspan x="0" dy="16.8">request</tspan></text>
     </g>
     <g class="node" data-line9-node="EV4" transform="translate(100, 576)">
       <defs><clipPath id="clip-EV4"><rect x="-37" y="-35" width="74" height="70" /></clipPath></defs>
       <rect x="-60" y="-35" width="120" height="70" rx="35" ry="35" fill="#EDF1F8" stroke="#0A2555" stroke-width="1.25" />
-      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="11" font-weight="400" clip-path="url(#clip-EV4)"><tspan x="0" dy="-19.58">agent/pre-s-</tspan><tspan x="0" dy="15.4">tep</tspan><tspan x="0" dy="15.4">step</tspan><tspan x="0" dy="15.4">boundary</tspan></text>
+      <text text-anchor="middle" fill="#111111" font-family="&#39;IBM Plex Sans&#39;, &#39;Segoe UI&#39;, system-ui, sans-serif" font-size="12" font-weight="400" clip-path="url(#clip-EV4)"><tspan x="0" dy="-12.96">pre-step</tspan><tspan x="0" dy="16.8">step</tspan><tspan x="0" dy="16.8">boundary</tspan></text>
     </g>
     <g class="node" data-line9-node="CCR" transform="translate(306, 253)">
       <defs><clipPath id="clip-CCR"><rect x="-70" y="-42.5" width="140" height="85" /></clipPath></defs>
