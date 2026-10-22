@@ -1,0 +1,1 @@
+import s from"./Emit.js";import i from"./Ensure.js";var d=(e,a,r)=>{const t=i(e,a);t.task=r,!0===(t.startedAt===0)&&(t.startedAt=Date.now()),!0===(t.status!=="active")&&(t.status="active",t.finishedAt=0),e.Factory.Append(e,`task ${a}: ${r}`),s(e,{batch:e.Batch,id:a,kind:"task"})};export{d as default};

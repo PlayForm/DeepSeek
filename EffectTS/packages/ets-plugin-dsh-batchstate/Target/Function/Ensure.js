@@ -1,0 +1,1 @@
+var n=(t,e)=>{const r=t.Members.get(e);if(!0===(r!==void 0))return r;const s={id:e,role:"unknown",task:"",status:"idle",queue:-1,scope:[],startedAt:0,finishedAt:0};return t.Members.set(e,s),s};export{n as default};

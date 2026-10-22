@@ -1,0 +1,1 @@
+import i from"./Emit.js";import o from"./Ensure.js";var s=(e,u)=>{if(!0===e.IdleQueue.includes(u))return;const r=o(e,u);e.IdleQueue.push(u),r.queue=e.IdleQueue.length-1,e.Factory.Append(e,`queued ${u} (position ${r.queue})`),i(e,{batch:e.Batch,id:u,kind:"queue"})};export{s as default};
