@@ -1,0 +1,30 @@
+# Bundle patch for @playform/plugin-dsh-gitguard.
+# The git guard is the tools/pre-execute DENY-LIST on the terminal/exec
+# tool surface: it intercepts terminal commands before execution and denies
+# ANY git mutation pattern (git add, commit, reset, push, tag, rm,
+# checkout, branch, merge, stash, clean, rebase, revert, ...) while
+# allowing the read-only checks (git status, log, diff, show, rev-parse,
+# ls-files, fetch). Denials surface ONCE as the refusal line, never
+# punish; every denied attempt is ledgered for the user's audit
+# (Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and
+# NOTHING else - the plugin never appears in the profile's bundles and
+# enables only by an explicit ACTIVATE (the user edits the profile and
+# restarts). On a cold mount the Apply logs `disabled (enabled=false)` and
+# wires NOTHING - no listener, no ledger. The schema defaults are the
+# truth: the full default deny list (the 23 mutation subcommands), the
+# allow list (the read-only checks + fetch), strict false (deny-list mode),
+# exclude empty. EVERY knob is volatile (hot-editable without remounting).
+- insert:
+      - id: plugin-dsh-gitguard
+        name: "@playform/ets-plugin-dsh-gitguard"
+        config:
+            enabled: false

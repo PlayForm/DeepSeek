@@ -1,0 +1,1 @@
+var s=n=>{const e=n.trim().split(/\s+/);let t=0;for(;t<e.length&&/^[A-Za-z_][A-Za-z0-9_]*=/.test(e[t]??"");)t+=1;if(!0!==(e[t]!=="git")){for(t+=1;t<e.length&&(e[t]??"").startsWith("-");)t+=1;return t<e.length?e[t].toLowerCase():""}};export{s as default};
