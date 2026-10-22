@@ -1,0 +1,29 @@
+# Bundle patch for @playform/plugin-dsh-workspace-semantics.
+# The semantics service owns the semantic model - the symbols + the
+# references + the deps + the index - and answers through the
+# workspaceSemantics service (the family map's SEMANTICS role, the second
+# step of the invisible flow, right after the observe stamps). The rename
+# semantics are per-adapter; a missing adapter is the refusal-to-guess
+# answer, never a guessed plan (Documentation/Plans/Workspace-Family/
+# SEMANTICS.md).
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with
+# 'entry "..." not found'. Activated when the profile's package.json lists
+# the package in dsh.profile.bundles AND the app is restarted.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the service never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE. On a cold mount the State build logs
+# `disabled (enabled=false)` and the service answers honestly from an empty
+# index (resolve still builds through the adapter once enabled). The schema
+# defaults are the truth; the full default surface (domain
+# workspace_semantics, maxEntries 256, the glob triple exclude, and the
+# logFile default) lives in the Variable/Config.ts schema. EVERY knob is
+# volatile (hot-editable without remounting): enabled, log/logFile, domain,
+# maxEntries and exclude.
+- insert:
+      - id: plugin-dsh-workspace-semantics
+        name: "@playform/ets-plugin-dsh-workspace-semantics"
+        config:
+            enabled: false
