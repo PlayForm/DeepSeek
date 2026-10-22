@@ -1,0 +1,1 @@
+var n=(e,r)=>{const o=e.Capabilities.get(r);switch(!0){case o===void 0:return e.Factory.Append(e,`revoke failed ${r} (unknown capability)`),!1;case o.revoked:return e.Factory.Append(e,`revoke ignored ${r} (already revoked)`),!1;default:}return o.revoked=!0,o.revokedAt=Date.now(),e.Factory.Append(e,`revoked ${r}`),!0};export{n as default};

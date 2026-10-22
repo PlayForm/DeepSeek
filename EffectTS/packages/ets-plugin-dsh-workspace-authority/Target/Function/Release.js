@@ -1,0 +1,1 @@
+var a=(e,r)=>{const s=e.Leases.get(r);switch(!0){case s===void 0:return e.Factory.Append(e,`release failed ${r} (unknown lease)`),!1;case s.closed:return e.Factory.Append(e,`release ignored ${r} (already closed)`),!1;default:}return s.closed=!0,e.Factory.Append(e,`released ${r}`),!0};export{a as default};
