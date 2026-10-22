@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import p from"./Variable/Config.js";const t="plugin-dsh-workspace",r=p,e=["workspaceGraph","pluginFactory","tools"],n=o;var s={name:t,apply:n,Config:r,inject:e};export{r as Config,n as apply,s as default,e as inject,t as name};

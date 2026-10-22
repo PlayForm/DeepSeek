@@ -1,0 +1,26 @@
+# Bundle patch for @playform/plugin-dsh-workspace.
+# The workspace agent is the workspace regime's conversational surface
+# (WORKSPACE-AGENT.md): the operational view the conversation addresses,
+# through the FOUR navigation tools (workspace_map, workspace_find,
+# workspace_expand, workspace_context) over the Wave-1 graph service
+# (Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.4-3.5).
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE. On a cold mount the State build logs
+# `disabled (enabled=false)` and every tool no-ops to a clear refusal. The
+# schema defaults are the truth; the full default surface lives in
+# Variable/Config.ts. EVERY knob is volatile (hot-editable without
+# remounting): enabled, log/logFile, mapDepth, mapMaxModules, findLimit,
+# findLimitMax, expandDepth, expandMaxNeighbors, packetTokenBudget,
+# packetTokenMax, tokenCharsPerToken and the kinds filter.
+- insert:
+      - id: plugin-dsh-workspace
+        name: "@playform/plugin-dsh-workspace"
+        config:
+            enabled: false
