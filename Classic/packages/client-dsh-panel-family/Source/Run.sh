@@ -13,6 +13,10 @@ Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts \
 	--TypeScript Configuration/TypeScript.noemit.json
 
+# The client half (the harness closure-factory bundle); regenerate on every
+# dev run so the served ./client export matches the source.
+node ../../../Maintain/Build-Client-Bundle.mjs . Source/Client.ts @playform/client-dsh-panel-family
+
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts \
 	--Watch

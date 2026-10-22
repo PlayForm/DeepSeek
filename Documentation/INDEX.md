@@ -42,11 +42,11 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
-      Plans/                       the living + queued plans (15) + 4 granular families (71)
+      Plans/                       the living + queued plans (19) + 4 granular families (72)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
-        Workspace-Family/          the workspace family's per-package docs (25)
+        Workspace-Family/          the workspace family's per-package docs (26)
       Researches/                  the research outputs (8)
       Guides/                      the operating manuals (7)
       Reports/                     the audits and diagnoses (5)
@@ -73,7 +73,7 @@ statuses:
 | ----------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (24)
+### Plans - the living + queued hubs (28)
 
 | Document (Documentation/Plans/)     | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -101,6 +101,10 @@ statuses:
 | [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md) | active | living-plan (the decision record and workstreams) |
 | [UI-FAMILY-V4-1.md](Plans/UI-FAMILY-V4-1.md) | active | living-plan (the visual panel distilled) |
 | [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md) | active | living-plan (the dynamic workspace distilled) |
+| [POC-BRIEF.md](Plans/POC-BRIEF.md) | complete | living-plan (the PoC-first delivery brief) |
+| [POC-LEDGER.md](Plans/POC-LEDGER.md) | active | living-record (the live matrix of the planned suite) |
+| [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md) | complete | living-plan (the 29-30 ETS twins' mirror brief) |
+| [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md) | complete | living-plan (the smoke pass brief) |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 

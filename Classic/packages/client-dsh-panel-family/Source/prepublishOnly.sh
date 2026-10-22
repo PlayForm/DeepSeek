@@ -25,6 +25,12 @@ Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts \
 	--TypeScript Configuration/TypeScript.noemit.json
 
+# The client half: the harness client-bundle contract (the closure factory
+# `window.__ModuleLoader__.load({ id, factory })` expects - the ESM build
+# above is NOT servable by the client module system). Runs after the plugin
+# build because that build wipes Target/.
+node ../../../Maintain/Build-Client-Bundle.mjs . Source/Client.ts @playform/client-dsh-panel-family
+
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts
 

@@ -13,7 +13,7 @@
 			"types": "./Target/Library.d.ts",
 			"default": "./Target/Library.js"
 		},
-		"./client": "./Target/Client.js",
+		"./client": "./Target/Client.bundle.js",
 		"./cordis.patch.yml": "./cordis.patch.yml",
 		"./SCHEME.md": "./SCHEME.md",
 		"./package.json": "./package.json"
@@ -38,7 +38,7 @@
 		"@types/node": "26.6.5",
 		"@types/react": "19.3.0",
 		"react": "19.3.1",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

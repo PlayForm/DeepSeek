@@ -11,8 +11,8 @@ statuses:
 		state: complete
 		evidence: the granular subdocuments under Documentation/Plans/Batch-Edit-Tool/; every seam verified against the family code and the harness docs
 	- name: the batch edit tool implementation
-		state: open
-		evidence: awaiting the user's dispatch
+		state: implemented (Classic PoC)
+		evidence: Classic/packages/plugin-dsh-batch-edit - 28 files, build exit 0, 46 smoke checks green across 3 folders (Machine-And-Contract 25, Commit-And-Ops 13, Observers-And-Waterfalls 8); the ETS twin ets-plugin-dsh-batch-edit builds green; the smokes forced five real engine fixes (the ApplyOp string-replace, the volatile-cell Validate, the expired-sweep loop, the pattern path resolution, the cell unwraps)
 	- name: the granular split of this research (12 topic documents)
 		state: implemented
 		evidence: Documentation/Plans/Batch-Edit-Tool/ - every section preserved byte-exact in its own document
