@@ -1,0 +1,21 @@
+# Bundle patch for @playform/client-dsh-workspace-live.
+#
+# The workspace family's live client: the client half of the workspace live
+# view (Documentation/Plans/Workspace-Family/LIVE.md). The presentation is
+# stable-until-event: it renders only when a workspace event surfaces a
+# change, never on a timer; it presents the workspace's representations of
+# the Entity/Presentation/Interaction model and never conflates a running OS
+# process with a managed entity.
+#
+# New entries are declared with `insert:`; activated when the profile's
+# package.json lists the package in dsh.profile.bundles AND the app restarts.
+# The PoC ships the row DISABLED (the PoC brief's mandatory anatomy:
+# `enabled: false`), matching the family's idle posture.
+- insert:
+      - id: client-dsh-workspace-live
+        name: "@playform/client-dsh-workspace-live"
+        config:
+            enabled: false
+            tabOrder: 25
+            maxEvents: 50
+            maxRepresentations: 100
