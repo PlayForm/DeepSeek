@@ -1,0 +1,39 @@
+# Bundle patch for @playform/hook-dsh-graph-suggester.
+# The graph-suggester hook upgrades the suggester family's candidate list
+# from paths and globs to the CONNECTED COMPONENT around the symbol: when
+# the model reads or greps a source file, the hook asks the workspace v4.1
+# graph service for the code-block neighborhood (the definition, the
+# callers, the tests, the doc block) and prepends ONE labeled
+# additionalContexts notice naming it. When the graph service is absent or
+# fails, the hook abstains with a `graph unavailable` ledger line - the
+# Neighborhood intent never guesses (Documentation/Plans/
+# SEARCH-SUGGESTER-PLUGIN.md sections 8, 9.2). READ-ONLY by design.
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with 'entry "..." not
+# found'. Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted. A file: dependency alone is
+# NOT activation. The hook declares inject: ["pluginFactory",
+# "workspaceGraph"] - the loader's PENDING state orders the graph service
+# first (WAVE-1-BRIEF.md).
+#
+# SHIPS DISABLED (enabled: false): a suggester's acceptance rate must be
+# measured before it is trusted (the plan's kill criterion, section 10.3);
+# the Lead enables it explicitly in the wiring pass. Every knob is volatile
+# (hot-editable without remounting).
+- insert:
+      - id: graph-suggester
+        name: "@playform/ets-hook-dsh-graph-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/graph-suggester.log
+            threshold: 0.75
+            maxCandidates: 7
+            maxNoteChars: 1200
+            cooldownCalls: 6
+            maxNotesPerTurn: 3
+            emitOn:
+                - glob
+                - grep
+                - read
