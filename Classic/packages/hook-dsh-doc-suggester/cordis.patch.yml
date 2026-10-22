@@ -1,0 +1,34 @@
+# Bundle patch for @playform/hook-dsh-doc-suggester.
+# The doc-task COMPANION SUGGESTER: it hooks the tools/post-execute
+# waterfall for the doc-task tools (read, grep, glob, write, edit, raw-write)
+# and, when the doc path the call names matches one of the documentation
+# families, prepends ONE labeled additionalContexts note naming the
+# doc-graph companions the task conventionally requires (the INDEX row, the
+# frontmatter block, the archive style, the site mirror). Deterministic path
+# rules; the note never replaces content and never claims the Transform (the
+# third consumer of the search-suggester's pattern algebra,
+# SEARCH-SUGGESTER-PLUGIN.md section 8).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE SILENCE-FIRST POSTURE: this entry ships with enabled: false and
+# NOTHING else - the plugin enables only by an explicit ACTIVATE (the user
+# edits the profile and restarts). On a cold mount the State build logs
+# `doc-suggester: disabled (enabled=false)` and every listener no-ops to a
+# passthrough (each checks State.On first). The schema defaults are the
+# truth; the full default surface (threshold 0.75, the six doc-task tools,
+# maxCompanions 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3)
+# lives in Variable/Config.ts. EVERY knob is volatile (hot-editable without
+# remounting).
+- insert:
+      - id: hook-dsh-doc-suggester
+        name: "@playform/hook-dsh-doc-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/doc-suggester.log
