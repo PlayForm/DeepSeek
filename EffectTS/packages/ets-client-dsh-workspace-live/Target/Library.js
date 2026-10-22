@@ -1,0 +1,1 @@
+import o from"./Variable/Config.js";const t="client-dsh-workspace-live",e=o,n=[];function i(){}var r={name:t,apply:i,Config:e,inject:n};export{e as Config,i as apply,r as default,n as inject,t as name};

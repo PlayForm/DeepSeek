@@ -1,0 +1,62 @@
+{
+	"name": "@playform/ets-client-dsh-workspace-live",
+	"version": "0.1.0",
+	"description": "The workspace family's live client: the client half of the workspace live view (Documentation/Plans/Workspace-Family/LIVE.md). The role: the presentation, stable-until-event - the live view does NOT re-render continuously; it stays stable until a workspace event surfaces a change, and it presents at the END of the invisible flow (... -> the audit lines -> the live view presents). It presents the workspace's REPRESENTATIONS of the Entity/Presentation/Interaction model, never a running OS process (the OS execution axis stays orthogonal). Self-contained PoC: the sibling workspace services (workspaceGraph, workspaceObserve, the workspace events) are declared locally in Source/Interface/Siblings.ts from the W1 frozen contract (Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md sections 4-5) - no runtime import of sibling packages exists yet; the end-phase wires the real imports. The client half provides the workspaceLive service (snapshot/subscribe) and mounts the conversation.view tab workspace-live, rendering the workspace's representations from the subscribed event stream.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./client": "./Target/Client.js",
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"@types/react": "19.3.0",
+		"react": "19.3.1",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		},
+		"client": {
+			"platform": "web",
+			"immediately": true,
+			"inject": [
+				"@deepseek-ai/dsh-client-locale",
+				"@deepseek-ai/dsh-client-ui-layout",
+				"@deepseek-ai/dsh-api-remotes"
+			]
+		}
+	}
+}

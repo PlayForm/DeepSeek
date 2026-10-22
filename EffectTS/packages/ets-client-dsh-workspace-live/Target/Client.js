@@ -1,0 +1,1 @@
+import e from"./Function/Client.js";const o=["slots","locale"];function p(t){e(t,{tabOrder:25,maxEvents:50,maxRepresentations:100})}var n={inject:o,apply:p};export{p as apply,n as default,o as inject};
