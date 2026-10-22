@@ -34,14 +34,9 @@ dist
 .turbo
 **/.turbo
 
-# Markdown - the family prose (the short-line @-sentence style, the
-# two-space hard breaks) is byte-integrity-protected; prettier's
-# proseWrap would reflow it. Markdown is not prettier-formatted.
-**/*.md
-
-# The suite summary is a standard, prettier-formatted document (the one
-# markdown exception; every other .md stays byte-integrity-protected).
-!Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md
+# Markdown is formatted like every other proper file. NOTE: prettier trims
+# trailing two-space hard breaks and reflows prose (proseWrap: always), so
+# the legacy family prose will re-render once formatted.
 
 # The Site tree - a separate repository with its own prettier config
 # (Site/prettier.config.js); the root config does not govern it.

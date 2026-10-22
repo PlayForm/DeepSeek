@@ -154,7 +154,7 @@ Packages: [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agen
 | [Governor-TRIO-GRAPH.md](Guides/Governor-TRIO-GRAPH.md) | active | guide |
 | [LIVE-TESTING-METHODOLOGY.md](Guides/LIVE-TESTING-METHODOLOGY.md) | active | guide |
 
-### Reports - the audits and diagnoses (5)
+### Reports - the audits and diagnoses (6)
 
 | Document (Documentation/Reports/)   | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
@@ -163,6 +163,7 @@ Packages: [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agen
 | [FileContent-FLAVOR-DESIGN.md](Reports/FileContent-FLAVOR-DESIGN.md) | complete | report |
 | [FSOBSERVED-DELIVERY.md](Reports/FSOBSERVED-DELIVERY.md) | complete | report |
 | [P5-V2-DIAGNOSIS.md](Reports/P5-V2-DIAGNOSIS.md) | complete | report |
+| [POC-GAP-ANALYSIS.md](Reports/POC-GAP-ANALYSIS.md) | complete | report (the PoC-vs-plan grades) |
 
 ### Plugins - the registry documents (3)
 
