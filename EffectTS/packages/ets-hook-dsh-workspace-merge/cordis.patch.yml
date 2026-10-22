@@ -1,0 +1,33 @@
+# Bundle patch for @playform/hook-dsh-workspace-merge.
+# The workspace-merge hook is the batch merge, the step after the approve
+# binds ("the merge commits, through Factory.Write"): the atomic gates, the
+# per-file commits through the factory's shared write executor (the
+# explicit replaceIfVersion intent, the P4 sandbox fence), and the commit
+# reply union (applied / conflict / denied / rejected / recovery-required /
+# outcome-unknown) derived from the v4.1 edit lifecycle
+# (Documentation/Plans/Workspace-Family/MERGE.md). The v1 engine promises
+# preview, version fence, and an explicit conflict - never a three-way
+# merge (W4.1 section 3.8). The tool lives inside its owning hook
+# (workspace_merge, registered from apply).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and nothing is
+# wired. The schema defaults are the truth; the full default surface (domain
+# workspace_merge, mode all-or-nothing, maxFiles 50, maxTotalBytes 1000000)
+# lives in the Variable/Config.ts schema. EVERY knob is volatile
+# (hot-editable without remounting): enabled, log/logFile, domain, mode,
+# maxFiles and maxTotalBytes.
+- insert:
+      - id: hook-dsh-workspace-merge
+        name: "@playform/ets-hook-dsh-workspace-merge"
+        config:
+            enabled: false
