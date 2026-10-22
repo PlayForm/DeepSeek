@@ -48,11 +48,15 @@ export const Config = Definition;
 // executor, the direct-govern entry and the ledger. `tools` serves the
 // batch_edit registration. `jobs` serves the background-branch deadline
 // overflow (the typed jobId handle); the still-probed accessor in Tools.ts
-// keeps an absent hub a graceful degradation to the halted state. The plan's
-// remaining inject entries (systemPrompt, shell, shellEnv, workingDirectory)
-// belong to the intercept/monitor layers that are later work - v1 does not
-// inject what it does not consume.
-export const inject = ["pluginFactory", "tools", "jobs"];
+// keeps an absent hub a graceful degradation to the halted state. `fs` backs
+// the machine's resolve/stat/read (Machine.ts, Ops.ts, Tools.ts read
+// State.Context.fs) - the LIVE dogfood caught it missing here: the fake-ctx
+// smokes provided `get("fs")`, so only the real harness surfaced the
+// `cannot get property "fs" without inject` failure. The plan's remaining
+// inject entries (systemPrompt, shell, shellEnv, workingDirectory) belong to
+// the intercept/monitor layers that are later work - v1 does not inject what
+// it does not consume.
+export const inject = ["fs", "pluginFactory", "tools", "jobs"];
 
 export const apply = Apply;
 

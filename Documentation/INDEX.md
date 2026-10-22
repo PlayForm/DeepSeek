@@ -50,7 +50,8 @@ statuses:
       Researches/                  the research outputs (8)
       Guides/                      the operating manuals (7)
       Reports/                     the audits and diagnoses (5)
-      Plugins/                     the registry documents (2)
+      Plugins/                     the registry documents (3)
+      Testing/                     the per-plugin live test plans (36)
       Archive/                     the one-shot records (37, in 8 topics)
         Smoke-Restructure/  Site/  Live-Containers/  Tool-Coach/
         Split/  CCR/  Normalize/  Tomorrow-Review/
@@ -163,12 +164,17 @@ Packages: [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agen
 | [FSOBSERVED-DELIVERY.md](Reports/FSOBSERVED-DELIVERY.md) | complete | report |
 | [P5-V2-DIAGNOSIS.md](Reports/P5-V2-DIAGNOSIS.md) | complete | report |
 
-### Plugins - the registry documents (2)
+### Plugins - the registry documents (3)
 
 | Document (Documentation/Plugins/)   | Status | Kind          |
 | ----------------------------------- | ------ | ------------- |
 | [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md) | active | living-record |
 | [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | planned | living-record |
+| [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md) | active | standard (the one-file suite summary) |
+
+### Testing - the per-plugin live test plans (36)
+
+The shared methodology + one plan per plugin: [README.md](Testing/README.md) (the activation check, the T1-T5 tiers, the fix loop, the safety rules) and 35 per-plugin files (`Documentation/Testing/<package>.md`) with the exact triggers, expected outputs, known gaps and the fix paths.
 
 ### Archive - the one-shot records (37, by topic)
 

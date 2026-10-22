@@ -607,3 +607,46 @@ fully reverted.
   changes in the patch were made by the APP's config editor at 14:17 (the
   file mtime + the user's own font-size 12 edit in the same save), not by
   the assembly (which preserves the prefix byte-for-byte).
+- THE ORIGINAL-ROW ASSEMBLY COMPLETE: 14/14 existing family rows replaced
+  with their full-default blocks (block-surgery preserving the column-0
+  section comments; the indented comments INSIDE the replaced rows are gone -
+  the fragments carry the values). Custom values preserved: governor
+  `ncuBin: /usr/local/bin/ncu`, the normalize family's `normalizeToolArguments`
+  + `normalizeReasoning` + `replacement`, the ccr multipliers, tool-coach's
+  `notes.persistent` verbatim, all logFile paths, live-containers
+  `enabled: true`. The factory row stays `config: {}` (it registers no Config
+  schema of its own; the shared block has no `enabled` field).
+- THE FINAL PROFILE: `cordis.patch.yml` 1,394 lines, 64 rows, 64 unique ids,
+  49 @playform rows (48 `enabled: true` + the factory `{}`); the mirror
+  composition dump exit 0 with 96 @playform refs and only the pre-existing
+  `entry "ccr" not found` stderr line (the ccr row id targets an entry that
+  is a dependency, not a bundle - pre-existing). THE PROFILE IS READY FOR
+  THE USER'S RESTART.
+
+## 6. The live dogfood (2026-10-22 14:35, after the restart)
+
+The app restarted CLEAN with all 54 bundles (no new crash log). The live
+activation is confirmed by the tool registry: `batch_edit`, `batch_decision`
+and the four `workspace_*` tools are callable by this agent; the suggesters
+are already emitting their notes in-session.
+
+- DEFECT 1 (fixed): `batch_edit` failed every call with
+  `cannot get property "fs" without inject` - the plugin's inject list was
+  `["pluginFactory","tools","jobs"]` while Machine.ts:223 / Ops.ts:235 /
+  Tools.ts:283 read `State.Context.fs`. The fake-ctx smokes provided
+  `get("fs")`, masking the missing declaration (the smoke/live fidelity
+  gap). FIXED: `"fs"` added to the inject list (Classic + the ETS twin), the
+  Machine-And-Contract assertion updated to the four-service list, both
+  packages rebuilt green (25/13/8 checks each). The running app keeps the
+  old code until the next restart.
+- DEFECT 2 (open, design): the workspace graph is EMPTY -
+  `workspace_map` returns `map @ 0: 0 files`, `workspace_find` 0 nodes. v0
+  has no indexing trigger (no `workspace_index` tool, no fs/observed
+  wiring); the read-only workspace tools have nothing to read. The fix is a
+  feature decision: an index tool vs the incremental wiring.
+- WORKING LIVE: `batch_decision` (correct empty list); the doc/edit/
+  convention suggesters (the notes); the 14 existing family hooks (their
+  ledgers keep writing).
+- THE TESTING METHODOLOGY: a lane is writing `Documentation/Testing/`
+  (a shared README + one plan per plugin) so the test/edit/fix loop can be
+  fanned out to separate low-level agents per plugin group.
