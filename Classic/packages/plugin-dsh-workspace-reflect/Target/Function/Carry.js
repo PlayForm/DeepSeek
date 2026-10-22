@@ -1,0 +1,1 @@
+var a=async(r,n)=>{try{const e=await Promise.resolve(r.Context.get?.("workspaceGraph"));if(e===void 0||typeof e.indexFile!="function")return;await e.indexFile(n),r.Factory.Append(r,`carried ${n} (graph reindexed)`)}catch(e){r.Factory.Append(r,`failed ${n} (carry: ${e instanceof Error?e.message:String(e)})`)}};export{a as default};

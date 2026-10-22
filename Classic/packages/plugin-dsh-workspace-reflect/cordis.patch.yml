@@ -1,0 +1,27 @@
+# Bundle patch for @playform/plugin-dsh-workspace-reflect.
+# The workspace-reflect service provides the LATER-STAGE code-block reflective
+# API: the AST-aware rename/connect/replace bundled as ONE call each, published
+# through the factory's guarded write, with the CommitReply union as the reply
+# type (Documentation/Plans/Workspace-Family/REFLECT.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)`, the service is
+# registered (every call answers denied with its own ledger line) and no
+# write path is armed. The schema defaults are the truth; the full default
+# surface (propagate block, maxFileBytes 1000000, maxBlockLines 5000) lives
+# in the Variable/Config.ts schema. Every knob is volatile (hot-editable
+# without remounting).
+- insert:
+      - id: plugin-dsh-workspace-reflect
+        name: "@playform/plugin-dsh-workspace-reflect"
+        config:
+            enabled: false
