@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-workspace-reflect",e=t,r=["pluginFactory","fs"],n=o;var f={name:p,apply:n,Config:e,inject:r};export{e as Config,n as apply,f as default,r as inject,p as name};

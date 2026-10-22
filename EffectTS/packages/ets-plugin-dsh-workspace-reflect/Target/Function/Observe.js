@@ -1,0 +1,2 @@
+var i=async(e,n)=>{const s=await e.Context.fs.resolve(n),t=await e.Context.fs.stat(s);if(t===void 0||t.type!=="file")return{Ok:!1,Reply:{status:"rejected",detail:"not an observed file",version:void 0}};if(typeof t.size=="number"&&e.MaxFileBytes>0&&t.size>e.MaxFileBytes)return{Ok:!1,Reply:{status:"rejected",detail:"file too large",version:void 0}};const r=await e.Context.fs.readText(s);return{Ok:!0,Observed:{target:s,version:String(t.version),lines:r.split(`
+`)}}};export{i as default};

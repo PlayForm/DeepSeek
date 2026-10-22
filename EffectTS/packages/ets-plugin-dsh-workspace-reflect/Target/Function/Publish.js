@@ -1,0 +1,1 @@
+var i=async(s,r,n,o)=>{try{const t=await s.Context.fs.resolve(r),e=await s.Factory.GuardedWrite(s,t,o,n);return{status:"applied",detail:e.operation,version:e.version}}catch(t){const e=t instanceof Error?t.message:String(t);return/stale|version/i.test(e)?{status:"conflict",detail:e,version:void 0}:{status:"outcome-unknown",detail:e,version:void 0}}};export{i as default};
