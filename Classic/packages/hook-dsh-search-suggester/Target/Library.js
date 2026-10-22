@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const e="hook-dsh-search-suggester",p=t,r=["pluginFactory"],n=o;var c={name:e,apply:n,Config:p,inject:r};export{p as Config,n as apply,c as default,r as inject,e as name};
