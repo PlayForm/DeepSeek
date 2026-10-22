@@ -1,0 +1,33 @@
+# Bundle patch for @playform/plugin-dsh-workspace-context.
+# The workspace-context service plays the workspace family's attention
+# projection role: the required/relevant/deferred - the context economy. The
+# service (registered as ctx.workspaceContext) builds the ORIENTATION PACKET
+# from the sibling workspace-graph's index: the eight fixed sections
+# WORKSPACE / SCOPE / MAP / FOCUS / NEIGHBORS / EVIDENCE / OPEN / STALE,
+# bounded by the budget (target 2k tokens, configurable hard cap; the
+# harness tokenMeter where available, else chars/4) and filtered through the
+# lenses (code, docs, tests). The model-facing surface is the read-only
+# workspace_context tool (Documentation/Plans/WORKSPACE-FAMILY-V4-1.md
+# section 3.5 + Documentation/Plans/Workspace-Family/CONTEXT.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)`, the service is
+# registered, and no tool is. The schema defaults are the truth; the full
+# default surface (budgetTokens 2000, budgetMaximum 4000, the three lenses,
+# lensDefault code, neighborLimit 20, evidenceLimit 12, mapLimit 12,
+# workspaceName workspace) lives in the Variable/Config.ts schema. EVERY
+# knob is volatile (hot-editable without remounting).
+- insert:
+      - id: plugin-dsh-workspace-context
+        name: "@playform/plugin-dsh-workspace-context"
+        config:
+            enabled: false

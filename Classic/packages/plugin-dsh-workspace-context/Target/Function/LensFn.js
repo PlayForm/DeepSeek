@@ -1,0 +1,1 @@
+var i=(e,t,d,r)=>{const n=e!==void 0&&t.includes(e)?e:d,s=r.find(o=>o.name===n);return!0===(s===void 0)?{name:n,nodes:new Set,edges:new Set,known:!1}:{name:n,nodes:new Set(s.nodes),edges:new Set(s.edges),known:!0}};export{i as default};
