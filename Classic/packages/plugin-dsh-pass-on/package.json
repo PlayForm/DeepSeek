@@ -1,0 +1,51 @@
+{
+	"name": "@playform/plugin-dsh-pass-on",
+	"version": "0.1.0",
+	"description": "The PASS-ON (ctx.passOn): the prepare direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 3). A DeepSeek Harness service that turns an intent - a suggestion from the search suggester, a user/agent intent, or a hand-authored batch - into a batch proposal: the resolved targets (path, version, why), the deterministic operations, the bounded before/after preview, and the content-derived digest that fences the apply. READ-ONLY: the pass-on never writes a file; the decision decides; the ingester (plugin-dsh-ingester) applies. If the proposal is empty or ambiguous the pass-on returns no batch, not an empty one.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

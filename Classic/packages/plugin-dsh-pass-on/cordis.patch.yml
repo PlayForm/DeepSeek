@@ -1,0 +1,18 @@
+# Bundle patch for @playform/plugin-dsh-pass-on.
+# The PASS-ON (ctx.passOn) is a SERVICE-PROVIDER bundle: loading it makes the
+# pass-on service available on the context - the prepare direction of the
+# batch flow (intent -> batch proposal, READ-ONLY). New entries are declared
+# with `insert:` (docs/user/develop/basic/publish.md) - a bare `id:` row
+# PATCHES an existing entry and the loader rejects unknown ids with
+# 'entry "..." not found'. Activated when the profile's package.json lists
+# the package in dsh.profile.bundles AND the app is restarted (bundle layers
+# compose at host boot). A file: dependency alone is NOT activation.
+#
+# The class plugin (`export default class PassOn extends Service`) declares a
+# static Config (validated before construction) and registers itself as
+# `passOn` via `super(ctx, "passOn")`.
+- insert:
+      - id: plugin-dsh-pass-on
+        name: "@playform/plugin-dsh-pass-on"
+        config:
+            enabled: true
