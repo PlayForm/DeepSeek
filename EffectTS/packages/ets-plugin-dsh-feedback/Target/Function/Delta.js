@@ -1,0 +1,1 @@
+import n from"./Journal.js";var d=(o,c,r,l)=>{const s=o.Sessions.get(c),e=s?.blocks.get(r);if(!0===(e===void 0))return null;const t={...e,deltas:[...e.deltas,l]};return s?.blocks.set(r,t),n(o,"delta",t),t};export{d as default};

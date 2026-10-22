@@ -1,0 +1,1 @@
+import a from"./Record.js";var o=(r,e,t)=>{switch(!0){case!r.Config.enabled:return;case t===e.session:return}const s=[...e.transferred,e.session];!0!==s.length>r.Config.maxChain&&a(r,{...e,session:t,transferred:s})};export{o as default};

@@ -1,0 +1,1 @@
+import c from"./Record.js";var u=(t,o,n,a)=>{const e=t.Sessions.get(o)?.blocks.get(n);if(e===void 0)return null;if(e.readStatus!=="unread")return e;const r={...e,readStatus:`read-at ${a}`};return c(t,r),r};export{u as default};
