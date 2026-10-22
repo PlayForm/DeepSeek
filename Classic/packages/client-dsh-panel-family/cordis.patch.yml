@@ -1,0 +1,23 @@
+# Bundle patch for @playform/client-dsh-panel-family.
+#
+# The central panel package of the UI family: it owns the PANEL CONTRACT
+# (the types, the playformFamilyPanel registry service, the family-tab and
+# shell.overlay mount points) and nothing else - zero adapter logic
+# (Documentation/Plans/UI-Family/PHASE-2-PANEL-CONTRACT.md). The host half of
+# the entry is an empty apply(): the row exists so the client module system
+# serves the package's ./client half (a pure browser module - installing it
+# needs no host restart, R-UI-1).
+#
+# New entries are declared with `insert:`; activated when the profile's
+# package.json lists the package in dsh.profile.bundles AND the app restarts
+# (bundle layers compose at host boot). The PoC ships the row DISABLED
+# (the PoC brief's mandatory anatomy: `enabled: false`); the end-phase wiring
+# pass flips the row per PHASE-2 (which wants the panel live by default).
+- insert:
+      - id: client-dsh-panel-family
+        name: "@playform/client-dsh-panel-family"
+        config:
+            enabled: false
+            tabOrder: 20
+            overlayMaxWidth: 720
+            locale: en
