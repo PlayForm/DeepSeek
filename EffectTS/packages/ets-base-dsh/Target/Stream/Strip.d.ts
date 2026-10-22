@@ -1,2 +1,2 @@
+declare const _default: (Text: string) => string;
 export default _default;
-declare function _default(Text: string): string;

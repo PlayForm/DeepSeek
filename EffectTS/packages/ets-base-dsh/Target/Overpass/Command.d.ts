@@ -44,5 +44,5 @@ export type ConfigEditorService = {
     entries?: () => unknown;
     edit?: (Entry: unknown, Change: (Current: object) => object) => Promise<void> | void;
 };
+declare const _default: (State: State, Invocation: Invocation, Settings: SettingsService | undefined, Editor: ConfigEditorService | undefined) => Promise<CommandResult>;
 export default _default;
-declare function _default(State: State, Invocation: Invocation, Settings: SettingsService | undefined, Editor: ConfigEditorService | undefined): Promise<CommandResult>;

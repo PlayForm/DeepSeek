@@ -22,5 +22,5 @@ export type Selection = boolean | string | string[] | null | undefined | {
     steps: boolean | string | string[] | null | undefined;
     parallel?: boolean;
 };
+declare const _default: (Steps: Registry, Target: FsTarget, Select: Selection, Actor: object | undefined, Version: FsVersion) => Effect.Effect<void>;
 export default _default;
-declare function _default(Steps: Registry, Target: FsTarget, Select: Selection, Actor: object | undefined, Version: FsVersion): Effect.Effect<void>;

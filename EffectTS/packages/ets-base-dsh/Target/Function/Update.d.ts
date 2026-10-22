@@ -87,8 +87,8 @@ export interface Dependencies<S, T, V, R> {
      *  to the outcome mapping and the module's failure line. Never rejects. */
     Stage: (State: S, Dir: string, Target: T, Actor: object | undefined, Registry: R | null, PolicyPath: string, Signal: AbortSignal, Job: Job | undefined) => Promise<number>;
 }
-export default _default;
-declare function _default<S, T, V, R>(Dependency: Dependencies<S, T, V, R>): {
+declare const _default: <S, T, V, R>(Dependency: Dependencies<S, T, V, R>) => {
     Dispatch: (State: S, Target: T, Actor: object | undefined, Dir: string, Registry: R | null, PolicyPath: string) => Effect.Effect<void, never, Scope.Scope>;
     Settle: (State: S, Dir: string, Target: T, Actor: object | undefined, Code: number) => Effect.Effect<number>;
 };
+export default _default;

@@ -32,8 +32,8 @@ type Ledger<S> = {
     Append: (State: S, Line: string) => void;
     Journal: (State: S, Event: string, Path: string, Value: string) => void;
 };
-export default _default;
-declare function _default<S extends State, D extends Decision = Decision>(Transform: (Text: string, State: S) => {
+declare const _default: <S extends State, D extends Decision = Decision>(Transform: (Text: string, State: S) => {
     text: string;
     count: number;
-}, Line: (Count: number, Name: string, CallID: string) => string, Ledger: Ledger<S>, Exempt: readonly string[]): (Exec: Execution, Result: Result, Next: () => Promise<D>, State: S) => Promise<D>;
+}, Line: (Count: number, Name: string, CallID: string) => string, Ledger: Ledger<S>, Exempt: readonly string[]) => (Exec: Execution, Result: Result, Next: () => Promise<D>, State: S) => Promise<D>;
+export default _default;
