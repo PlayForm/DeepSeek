@@ -41,6 +41,7 @@
 | Field | Type | Default |
 | --- | --- | --- |
 | `enabled` | boolean | `false` |
+| `log` | boolean | `true` |
 | `domain` | string | `workspace_operate` |
 | `maxProposals` | number | `500` |
 | `limitDefault` | number | `50` |

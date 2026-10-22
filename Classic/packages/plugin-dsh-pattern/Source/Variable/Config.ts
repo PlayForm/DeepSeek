@@ -4,12 +4,15 @@
 // volatile cells; the service hooks no fs/observed machinery). Every knob
 // is a volatile cell so a hot edit lands on the next service call without a
 // remount. The service class reads these through Configure; the defaults
-// here are the truth.
+// here are the truth. `enabled` defaults to FALSE - the idle-forever
+// posture: the patch row and the README ship the service disabled; a cold
+// mount logs `disabled (enabled=false)` and Match returns the empty result
+// (the abstention) while the service stays resolvable.
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(false).volatile(),
 	logFile: Schema.string().default("~/.dsh/pattern.log").volatile(),
 	storagePath: Schema.string().default("~/.dsh/pattern/registry.json").volatile(),
 	matchThreshold: Schema.number().default(0.35).volatile(),

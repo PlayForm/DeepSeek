@@ -62,7 +62,7 @@ The plugin registers the `dshQueue` service:
 | Field | Default | Meaning |
 | --- | --- | --- |
 | `enabled` | `false` | Master switch (ships disabled). |
-| `log` / `logFile` | - / `~/.dsh/queue.log` | The plugin's own ledger. |
+| `log` / `logFile` | `true` / `~/.dsh/queue.log` | The plugin's own ledger. |
 | `capacity.main` / `capacity.child` | 10 / 2 | The user's capacity model. |
 | `autoDispatch` | `true` | Freed slots trigger the next assignment. |
 | `routedDispatch` | `true` | Consult `dshRoute` at dispatch when present. |

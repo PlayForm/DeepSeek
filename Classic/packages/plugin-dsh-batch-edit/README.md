@@ -90,6 +90,7 @@ only by an explicit ACTIVATE in the profile). Every knob is volatile
 | Field | Default | Meaning |
 |---|---|---|
 | `enabled` | `false` | The master switch |
+| `log` | `true` | The ledger switch (the factory's shared volatile cell) |
 | `logFile` | `~/.dsh/batch-edit.log` | The module ledger |
 | `machinesPerAgent` | `2` | Open machines per agent |
 | `opsPerCommit` | `64` | Op lines per commit (overflow goes to `opfile`) |

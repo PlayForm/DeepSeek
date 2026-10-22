@@ -36,6 +36,7 @@ be measured, not assumed.
 | Field | Default | Notes |
 | --- | --- | --- |
 | `enabled` | `false` | ships disabled (idle-forever posture) |
+| `log` | `true` | the ledger switch (the factory's shared volatile cell) |
 | `logFile` | `~/.dsh/pattern.log` | the service's own ledger |
 | `storagePath` | `~/.dsh/pattern/registry.json` | the local snapshot |
 | `matchThreshold` | `0.35` | below this the match abstains |

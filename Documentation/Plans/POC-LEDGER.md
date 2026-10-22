@@ -548,3 +548,46 @@ fully reverted.
   they can be re-enabled. They stay out of the profile until then.
 - THE BACKUPS: `/tmp/dsh-profile-desktop-backup-2026-10-22/` (pre-install)
   and `/tmp/dsh-profile-desktop-rescue-2026-10-22/` (the rescue state).
+
+## 5c. The client-bundle fix and the full-defaults pass (2026-10-22 14:10)
+
+- THE CLIENT-BUNDLE FIX: `Maintain/Build-Client-Bundle.mjs` bundles each
+  client entry to CJS with esbuild (the tsconfig paths + the locale JSON
+  inlined; react external) and wraps it in the harness closure-factory
+  envelope (`window.__ModuleLoader__.load({ id, factory(require) })`). Both
+  client packages now emit `Target/Client.bundle.js`; `exports["./client"]`
+  points at it; `prepublishOnly.sh` and `Run.sh` rebuild it. The ESM
+  `Target/Client.js` stays the dev/test surface. Both packages build green;
+  the factory sandbox returns `{ inject: ["slots","locale"], apply, default }`
+  for both.
+- THE CLIENT REVIEW (a separate read-only lane): 5/5 checks PASS, zero
+  defects (the contract vs the harness template + tsdown.client.ts, the
+  bundles, the wiring, the factory execution, the smoke suites).
+- THE FULL-DEFAULTS PASS: four config-surface lanes enumerate every schema
+  option of the 35 bundles, add any documented-but-missing option to the
+  plugin (schema + README/SCHEME + rebuild + smokes), and write the full
+  default config block to `/tmp/profile-defaults/<pkg>.yml` for the Lead to
+  assemble into the desktop profile's patch.
+- THE PROFILE STATE: the 2 client packages reinstalled (deps 51, bundles 54);
+  the 35 override rows will be replaced by the full-default blocks.
+- THE CONFIG-SURFACE RESULT (all four lanes): 35 fragments, ZERO missing
+  schema options (the schemas already covered every documented option - the
+  audit compared each Config.ts against its README/SCHEME and the cited plan
+  docs). ONE real code fix: `plugin-dsh-pattern`'s `enabled` default was
+  `true` while its README/patch-row/posture say ships-disabled - flipped to
+  `false`, rebuilt green, its two smoke folders re-run green. Doc-table
+  corrections: batchstate/gitguard SCHEME `log` default true; operate
+  SCHEME + batch-edit/pattern READMEs gained the `log` row; queue README
+  `log` true. Note: plugin-dsh-pattern and hook-dsh-batch-decision are
+  Classic-only candidates (the MANIFEST declares no ETS twins for them), so
+  no twin sync is needed; do NOT re-run the ETS generator - it would
+  overwrite the hand-ported ETS batch-edit Shield fix.
+- THE ASSEMBLY: the 35 fragments replaced the appended override block in
+  `/Users/nikola/.dsh/profiles/desktop/cordis.patch.yml` (each row carries
+  `enabled: true` + the full schema field set). Verified: 64 rows, 64 unique
+  ids, 49 @playform rows (36 enabled), YAML parses; the mirror composition
+  dump exit 0 with 96 @playform refs and only the pre-existing
+  `entry "ccr" not found` stderr line.
+- THE REVIEW PASS (separate read-only lanes): the client-bundle reviewer
+  5/5 PASS, zero defects; two more reviewers in flight (the assembled
+  profile; the config-surface changes).

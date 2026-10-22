@@ -30,7 +30,7 @@ surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3).
 | Field | Type | Default | Meaning |
 | ----- | ---- | ------- | ------- |
 | `enabled` | boolean | `false` | The master switch (the IDLE-forever posture). |
-| `log` | boolean | `false` | Ledger enabled - write the durable log file. |
+| `log` | boolean | `true` | Ledger enabled - write the durable log file. |
 | `logFile` | string | `~/.dsh/plugin-dsh-gitguard.log` | The ledger file (one log per module). |
 | `denyPatterns` | string[] | the 23 mutation subcommands | The refused git subcommands (REPLACES the default list, not merge). |
 | `allowPatterns` | string[] | status, log, diff, show, rev-parse, ls-files, fetch | The allowed git subcommands (the allow-list wins over the deny-list). |

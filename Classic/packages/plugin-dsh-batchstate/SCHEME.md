@@ -31,7 +31,7 @@ The batch-state plugin: the cooperative batch's live state board
 | Field | Type | Default | Meaning |
 | ----- | ---- | ------- | ------- |
 | `enabled` | boolean | `false` | The master switch (the IDLE-forever posture). |
-| `log` | boolean | `false` | Ledger enabled - write the durable log file. |
+| `log` | boolean | `true` | Ledger enabled - write the durable log file. |
 | `logFile` | string | `~/.dsh/plugin-dsh-batchstate.log` | The ledger file (one log per module). |
 | `batch` | string | `default` | The batch key (multi-batch isolation). |
 | `stateFile` | string | `~/.dsh/batch-state.json` | The well-known JSON state file (the file-based fallback). |
