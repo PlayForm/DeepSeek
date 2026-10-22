@@ -1,0 +1,1 @@
+import p from"./Emit.js";import i from"./Ensure.js";var m=(o,r,t)=>{const e=i(o,r);e.scope=[...t],o.Factory.Append(o,`scope ${r}: ${t.length} surfaces`),p(o,{batch:o.Batch,id:r,kind:"scope"})};export{m as default};

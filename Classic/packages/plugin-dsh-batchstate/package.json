@@ -1,0 +1,53 @@
+{
+	"name": "@playform/plugin-dsh-batchstate",
+	"version": "0.1.0",
+	"description": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the queue position, the owned surfaces, the started/finished timestamps), the write API (setTask/setStatus/setScope - the parent's activations and the agents' phase reports), the read API (the batchstate service: getState/getContext/getScope/whoElse), the compiled presentation (the dynamic table-of-contents block, recompiled on every state change - Context = Compile(State)), and the ledger (one global log per module). Every state change emits the batch/state-change event and persists the snapshot into the well-known JSON state file (the plan's file-based fallback). The presentation is READ-ONLY for the agents - it never modifies their own content. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/BATCH-STATE-PLUGIN.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

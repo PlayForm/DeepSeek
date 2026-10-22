@@ -1,0 +1,33 @@
+# Bundle patch for @playform/plugin-dsh-batchstate.
+# The batch-state plugin is the cooperative batch's live state board: it
+# owns the open-batch state (the members: id, role, the CURRENT ACTIVITY
+# task, the status, the queue position, the owned surfaces, the
+# timestamps), the write API (setTask/setStatus/setScope/queue), the read
+# API (the batchstate service: getState/getContext/getScope/whoElse), the
+# compiled presentation (the dynamic table-of-contents block, recompiled
+# on every state change - Context = Compile(State)) and the ledger. Every
+# state change emits the batch/state-change event and persists the
+# snapshot into the well-known JSON state file (Documentation/Plans/
+# BATCH-STATE-PLUGIN.md sections 2 and 7).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and
+# NOTHING else - the plugin never appears in the profile's bundles and
+# enables only by an explicit ACTIVATE (the user edits the profile and
+# restarts). On a cold mount the Apply logs `disabled (enabled=false)`,
+# registers the service (it reads honestly from the empty state) and wires
+# NOTHING - no listener, no event, no state file. The schema defaults are
+# the truth; the full default surface (batch default, stateFile
+# ~/.dsh/batch-state.json, maxRecent 8) lives in the Variable/Config.ts
+# schema. EVERY knob is volatile (hot-editable without remounting).
+- insert:
+      - id: plugin-dsh-batchstate
+        name: "@playform/plugin-dsh-batchstate"
+        config:
+            enabled: false
