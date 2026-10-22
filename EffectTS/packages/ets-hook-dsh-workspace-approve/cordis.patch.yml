@@ -1,0 +1,28 @@
+# Bundle patch for @playform/hook-dsh-workspace-approve.
+# The workspace-approve hook binds the EXACT human approval: an approval binds
+# to the concrete change set (path + content fingerprint + the observed file
+# version), the constraints travel with the approval, and the merge/execute
+# side checks the exact fingerprint through the workspaceApprove service
+# (Documentation/Plans/Workspace-Family/APPROVE.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)`, the service is
+# registered (it reads honestly from the empty state) and every listener
+# stays unwired. The schema defaults are the truth; the full default surface
+# (domain workspace_approve, maxBindings 1000, requireConstraints true)
+# lives in the Variable/Config.ts schema. Every knob is volatile
+# (hot-editable without remounting).
+- insert:
+      - id: hook-dsh-workspace-approve
+        name: "@playform/ets-hook-dsh-workspace-approve"
+        config:
+            enabled: false

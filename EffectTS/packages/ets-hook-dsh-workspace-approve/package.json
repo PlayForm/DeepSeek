@@ -1,0 +1,55 @@
+{
+	"name": "@playform/ets-hook-dsh-workspace-approve",
+	"version": "0.1.0",
+	"description": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the merge commits). An approval binds to the EXACT candidate - the concrete change set identified by its path, its content fingerprint and the file version observed at the approval - never a fuzzy intent; the constraints travel with the approval and a changed constraint set is a rejection, not an approval. The approval records the Commitment (who accepted responsibility) and serves as the AuthorizationDecision the merge/execute side checks through the service: a check matches the exact fingerprint, and a file whose version moved after the approval is stale, not approved (the fs/observed listener invalidates such bindings; AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS - the approval of an intention never authorizes the implementation produced later). State lives in the hook's own KV domain named workspace_approve; the ledger strings are module-owned (approve: ...). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/APPROVE.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.1.0",
+		"@playform/ets-plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

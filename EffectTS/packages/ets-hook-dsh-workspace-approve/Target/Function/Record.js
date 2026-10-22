@@ -1,0 +1,1 @@
+var e=(i,d)=>{for(i.ById.set(d.id,d),i.Ring.push(d);i.Ring.length>i.MaxBindings;){const n=i.Ring.shift();n!==void 0&&i.Factory.Append(i,`capped ${n.id} (maxBindings ${i.MaxBindings})`)}try{const n=i.Handle;n!==void 0&&(n.table("bindings").put(d.id,d).catch(()=>{}),n.table("ring").put("__ring",[...i.Ring]).catch(()=>{}))}catch{}};export{e as default};
