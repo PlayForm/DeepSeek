@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";var a=e.object({enabled:e.boolean().default(!1).volatile(),logRoot:e.string().default("~/.dsh").volatile(),maxLines:e.number().default(200).min(1).max(2e3).volatile(),ccrLog:e.string().default("~/.dsh/ccr.log").volatile()});export{a as default};

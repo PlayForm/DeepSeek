@@ -1,0 +1,50 @@
+{
+	"name": "@playform/client-dsh-panel-family-host",
+	"version": "0.1.0",
+	"description": "The host half of the UI family's panel: the small companion package that gives the central panel LIVE data (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md - the family-host Typert remote endpoint). Two methods, least privilege, READ-ONLY: tail(namespace, lines) returns the last N lines of the owning module's ~/.dsh log (the family ledger tails), and stats() returns the CCR store stats; the fiberPhases come from the already-remote remote.pluginManager, so no new endpoint is added for them (PHASE-5 step 1: prefer the existing remote). The endpoint reads ~/.dsh family logs ONLY and has no write surface (A5.3). The Typert generation pipeline (TypertRemoteService + @Remote + generated descriptors) is documented as not reproducible from an external package (PHASE-5 caveat), so the PoC ships the endpoint as a plain host service under the name panelFamilyHost with the exact method surface tail(namespace, lines) and stats(); the end-phase decides between reproducing the generation pipeline and keeping the v1 shortcut (the pre-decided fallback: expose only existing remote namespaces, ledgers via this service).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
