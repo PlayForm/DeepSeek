@@ -1,0 +1,1 @@
+var s=(o,r)=>{const i=[];for(const e of o){const t=e.signals.reduce((c,n)=>{const a=new RegExp(n.pattern);return c+(a.test(r.path)?n.weight:0)},0);t!==0&&i.push({family:e,evidence:t})}return i.sort((e,t)=>t.evidence-e.evidence||e.family.priority-t.family.priority)};export{s as default};
