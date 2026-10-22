@@ -39,6 +39,10 @@ dist
 # proseWrap would reflow it. Markdown is not prettier-formatted.
 **/*.md
 
+# The suite summary is a standard, prettier-formatted document (the one
+# markdown exception; every other .md stays byte-integrity-protected).
+!Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md
+
 # The Site tree - a separate repository with its own prettier config
 # (Site/prettier.config.js); the root config does not govern it.
 Site
