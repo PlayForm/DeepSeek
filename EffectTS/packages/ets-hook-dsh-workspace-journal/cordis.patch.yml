@@ -1,0 +1,31 @@
+# Bundle patch for @playform/hook-dsh-workspace-journal.
+# The journal hook records the workspace's evidence: the per-batch records,
+# the revert data (the per-file pre-images), and the crash recovery
+# (JOURNAL.md; WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8). The batch is
+# journaled BEFORE its writes land, so a crash between the commit and the
+# seal is never an invisible intermediate state - the honest all-or-nothing
+# is "recoverable partial states, never an invisible intermediate state".
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and every
+# listener no-ops to a passthrough (it checks State.On first). The schema
+# defaults are the truth; the full default surface (logFile
+# ~/.dsh/workspace-journal.log, domain workspace_journal, maxBatches 200,
+# maxEntryBytes 65536, the default exclusion triple) lives in
+# Variable/Config.ts. EVERY knob is volatile (hot-editable without
+# remounting): enabled, log/logFile, domain, maxBatches, maxEntryBytes and
+# the exclusion list.
+- insert:
+      - id: hook-dsh-workspace-journal
+        name: "@playform/ets-hook-dsh-workspace-journal"
+        config:
+            enabled: false
