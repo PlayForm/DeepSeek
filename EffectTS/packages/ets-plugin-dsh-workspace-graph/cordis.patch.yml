@@ -1,0 +1,43 @@
+# Bundle patch for @playform/plugin-dsh-workspace-graph.
+# The workspace graph builds the W1 graph schema v0 over the workspace files:
+# four node kinds (File, Symbol, Block, Test) plus Markdown DocSections and two
+# edge kinds (contains, imports), with stable ids, content-derived
+# fingerprints, and the indexRevision the graph was built from. The v0 parser
+# is an honest line/regex scanner (no compiler API); every deferred node/edge
+# kind (ConfigKey, references, calls, tests) is NOT faked. Records live in the
+# KV facet through the storage domain (one record per path plus the __meta
+# revision), and the plugin writes NOTHING outside its own domain.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and the FULL
+# Config defaults as the row - the plugin never appears in the profile's
+# bundles and enables only by an explicit ACTIVATE (the user edits the
+# profile and restarts). With config enabled=false the mutating operations
+# (indexFile) skip with the byte-exact `graph: skipped <path> (disabled)`
+# ledger line while the service itself still registers. Every knob is
+# volatile; the schema defaults are the truth (Variable/Config.ts).
+- insert:
+      - id: plugin-dsh-workspace-graph
+        name: "@playform/ets-plugin-dsh-workspace-graph"
+        config:
+            enabled: false
+            domain: workspace_graph
+            languages:
+                - typescript
+                - javascript
+                - markdown
+            include: []
+            exclude:
+                - node_modules/**
+                - "**/Target/**"
+                - "**/.git/**"
+            maxFileBytes: 1000000
+            maxNodesPerFile: 5000
+            limitDefault: 50
+            limitMaximum: 500

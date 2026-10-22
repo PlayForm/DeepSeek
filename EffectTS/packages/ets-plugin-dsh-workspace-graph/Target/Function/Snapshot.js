@@ -1,0 +1,1 @@
+import i from"./IsRecord.js";import d from"./Store.js";var m=n=>{const r=n.Domain===void 0?Array.from(n.Records,([e,o])=>[e,o]):d.entries(n),s=[],t=[];for(const[e,o]of r)if(e!=="__meta"){if(!i(o)){n.Invalid+=1;continue}s.push(...o.nodes),t.push(...o.edges)}return{indexRevision:String(n.Revision),nodes:s,edges:t}};export{m as default};

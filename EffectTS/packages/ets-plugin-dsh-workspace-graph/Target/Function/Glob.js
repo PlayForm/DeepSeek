@@ -1,0 +1,1 @@
+var n=(r,e)=>{const l=r.replace(/[.+^${}()|[\]\\]/g,"\\$&").split("**").map(t=>t.replace(/\*/g,"[^/]*").replace(/\?/g,"[^/]")).join(".*"),s=new RegExp(`^(?:.*/)?${l}$`);if(s.test(e))return!0;if(!r.includes("/")){const t=e.split("/").at(-1)??e;return s.test(t)}return!1};export{n as default};

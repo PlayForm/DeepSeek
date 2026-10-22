@@ -1,0 +1,1 @@
+const e=/\bfrom\s+(['"])([^'"]+)\1/g,i=/\bimport\s*\(\s*(['"])([^'"]+)\1\s*\)/g,n=/^\s*(\/\/|\*|\/\*)/;var a=o=>{const t=[];return o.forEach((c,s)=>{if(!n.test(c)){for(const r of c.matchAll(e))t.push({specifier:r[2]??"",line:s+1});for(const r of c.matchAll(i))t.push({specifier:r[2]??"",line:s+1})}}),t};export{a as default};

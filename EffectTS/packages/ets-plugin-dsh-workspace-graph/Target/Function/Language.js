@@ -1,0 +1,1 @@
+var s=e=>{const t=e.toLowerCase();if(t.endsWith(".ts")||t.endsWith(".tsx")||t.endsWith(".mts")||t.endsWith(".cts"))return"typescript";if(t.endsWith(".js")||t.endsWith(".jsx")||t.endsWith(".mjs")||t.endsWith(".cjs"))return"javascript";if(t.endsWith(".md")||t.endsWith(".markdown"))return"markdown"};export{s as default};

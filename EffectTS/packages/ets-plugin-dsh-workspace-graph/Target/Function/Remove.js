@@ -1,0 +1,1 @@
+import a from"./Append.js";import e from"./Store.js";var l=async(r,t)=>{try{const o=(await r.Context.fs.resolve(t)).displayPath,s=r.Records.delete(o),n=await e.remove(r,o);return s||n?(r.Revision+=1,await e.putMeta(r,r.Revision),a(r,`removed ${o}`),!0):!1}catch{return!1}};export{l as default};

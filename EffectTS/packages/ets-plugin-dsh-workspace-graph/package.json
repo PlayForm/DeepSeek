@@ -1,0 +1,58 @@
+{
+	"name": "@playform/ets-plugin-dsh-workspace-graph",
+	"version": "0.1.0",
+	"description": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections, two edge kinds (contains, imports), stable ids, content-derived fingerprints, and the indexRevision the graph was built from. The v0 parser is a line/regex scanner (no compiler API): TypeScript/JavaScript declarations with brace-counted spans, relative-import edges, test-path detection, and one DocSection per Markdown heading; every deferred node/edge kind (ConfigKey, references, calls, tests) is NOT faked. Records live in the KV facet through the storage domain (one record per path plus the __meta revision), the ledger strings are module-owned and byte-stable, and the plugin writes nothing outside its own domain.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.1.0",
+		"@playform/ets-plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.2",
+		"@deepseek-ai/dsh-storage": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage-domain": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2",
+		"zod": "4.6.7"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
