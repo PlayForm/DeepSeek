@@ -1,0 +1,1 @@
+var n=(t,e)=>{t.Batches.set(e.id,e);const a=t.Handle;a!==void 0&&(async()=>{try{await a.table("batches").put(e.id,e),await a.table("meta").put("__meta",{sequence:t.Sequence})}catch{}})()};export{n as default};

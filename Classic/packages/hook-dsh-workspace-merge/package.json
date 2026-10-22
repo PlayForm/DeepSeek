@@ -1,0 +1,59 @@
+{
+	"name": "@playform/hook-dsh-workspace-merge",
+	"version": "0.1.0",
+	"description": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the root-context fs/observed emit), and the COMMIT REPLY UNION - applied / conflict / denied / rejected / recovery-required / outcome-unknown - derived from the v4.1 edit lifecycle, not a separate six-way enum. The gates decide how a batch lands: the preflight (empty batch, maxFiles, maxTotalBytes, duplicate paths, missing version fences, unresolved paths, stale fences) runs before any write; in all-or-nothing mode any gate failure rejects the whole batch, a mid-batch write failure marks the remaining files recovery-required (recoverable partial states, never an invisible intermediate state); in survivors mode conflicts and failures are per-file replies. The v1 engine promises preview, version fence, and an explicit conflict - never a three-way merge (W4.1 section 3.8). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/MERGE.md + Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.2",
+		"@deepseek-ai/dsh-storage": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-storage-domain": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2",
+		"zod": "4.6.7"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
