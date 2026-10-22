@@ -13,6 +13,9 @@ statuses:
 	- name: the government layers (the five control layers)
 		state: designed
 		evidence: this document - a protection around the process, a plugin per layer
+	- name: the demand shapes and the refusal boundary (which form serves which shape)
+		state: designed
+		evidence: this document + Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 6
 ---
 
 # THE VARIANTS/FORMS AND THE GOVERNANCE LAYERS
@@ -73,6 +76,20 @@ The form matrix gives the implementation a growth path: forms 1, 3, 5, 6 are
 the v1 core (one engine, one tool); forms 2, 4, 9 are the wave-2 additions;
 forms 7, 8 reuse the live-containers monitor machinery verbatim (the M5
 storage domain pattern: a NEW domain, never an extension record).
+
+### The demand the forms serve (and where the tool must refuse)
+
+The measured mutation runs fall into three shapes
+(Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 6): one
+edit across many files, many edits to one file, and one edit then
+verification then another edit. The first two are why forms 1, 2 and 5
+exist. The third is the REFUSAL BOUNDARY: when the next edit depends on the
+previous result, a batch removes the feedback the agent needs. No form above
+may absorb that shape - the tool refuses the batch and leaves the agent on
+the single-file read/edit tools, which stay the fallback (the paradigm
+deepening document, 1.0.b). The refusal rule itself is an open question: the
+count of interleaved reads vs an explicit dependency marker
+(RESIDUALS.md item 8).
 
 ## 2. THE GOVERNANCE LAYERS: the government of the halted processes
 

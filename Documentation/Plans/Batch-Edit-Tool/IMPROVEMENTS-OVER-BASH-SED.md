@@ -113,8 +113,12 @@ validator; the zod/schemastery precedent).
 	vs manual edits: the N-file scale, the cross-file consistency (the
 	                 process-tree ordering), the journal, the per-batch
 	                 ledger, the single tool call vs N tool calls (the
-	                 token economics: one batch call replaces the 10-30
-	                 read+edit round-trips).
+	                 token economics: one batch call replaces a run of
+	                 read+edit round-trips. The measured runs reach 10-17
+	                 on ONE file; the wide sweep averages about one
+	                 mutation per file, so the round-trip saving is the
+	                 narrow-rewrite shape's, not the sweep's -
+	                 TRAJECTORY-EVIDENCE.md section 6).
 	vs the status quo's hidden cost: the governor chain is ALREADY paid for;
 	                 the batch rides it instead of bypassing it. bash-sed is
 	                 the expensive option when governance is counted.

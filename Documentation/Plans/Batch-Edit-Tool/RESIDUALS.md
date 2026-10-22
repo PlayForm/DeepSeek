@@ -28,6 +28,9 @@ statuses:
 	- name: the graph stage edge-extraction source decision
 		state: open
 		evidence: the TS language service vs. the cheap import-scan - needed before any design
+	- name: the three measurement questions folded from the trajectory evidence
+		state: open
+		evidence: this document item 8; Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 8
 ---
 
 # THE BATCH EDIT TOOL - THE RESIDUALS
@@ -55,3 +58,14 @@ statuses:
    the first-cut defaults; they need the live tuning pass the monitors got.
 7. The graph stage needs an edge-extraction source decision
    (the TS language service vs. the cheap import-scan) before any design.
+8. The three measurement questions from the trajectory evidence
+   (Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 8),
+   tracked here so the plan answers them before the savings are claimed as
+   measured:
+   a. does a batch reduce cache reads in the same proportion, or does the
+      larger single payload defeat the prefix cache?
+   b. what is the right refusal rule for the interleaved edit-verify shape -
+      the count of interleaved reads, or an explicit dependency marker?
+   c. does a batch of 10 edits in one call cost less than 10 sequential
+      edits at the provider level, or does the larger request simply move
+      the cost?

@@ -94,6 +94,12 @@ renderer + the smokes); L = the new machinery beyond the family's precedents.
 	      not asserted - the harness-as-DSL adoption curve
 	      visible in the same ledger the governors hold.       S
 
+The baseline for rank 14 is the measured cost of one-edit-at-a-time in
+Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md: the per-mutation
+figure and the boundary arithmetic, not a guess. Its caveat binds the rank -
+no measured before/after exists until a batch tool actually runs, so the
+ledger records the calls replaced and the measurement follows the build.
+
 The package shape suggestion: ONE plugin (hook-dsh-batch-edit + the ETS twin)
 following the hook-dsh-live-containers anatomy (the Config/Catalog/Apply/
 Render split, the smokes as the arbiter, the ledger-string contract, the

@@ -14,7 +14,7 @@ statuses:
     evidence: this tree; the moves kept every byte
   - name: the granular split (the large plans/researches as per-topic subdocuments)
     state: implemented
-    evidence: Plans/Batch-Edit-Tool (18), Plans/Representation-First (14), Plans/UI-Family (14), Plans/Workspace-Family (25), Archive/Tomorrow-Review (8) - the parents became hubs; every section preserved
+    evidence: Plans/Batch-Edit-Tool (19), Plans/Representation-First (14), Plans/UI-Family (14), Plans/Workspace-Family (25), Archive/Tomorrow-Review (8) - the parents became hubs; every section preserved
   - name: the cross-reference updates to the new paths
     state: implemented
     evidence: the hub parents kept their paths - no external reference broke; the subdocs cross-link to their hubs
@@ -43,7 +43,7 @@ statuses:
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
       Plans/                       the living + queued plans (15) + 4 granular families (71)
-        Batch-Edit-Tool/           the batch edit tool's granular topics (18)
+        Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
         Workspace-Family/          the workspace family's per-package docs (25)
@@ -102,10 +102,11 @@ statuses:
 | [UI-FAMILY-V4-1.md](Plans/UI-FAMILY-V4-1.md) | active | living-plan (the visual panel distilled) |
 | [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md) | active | living-plan (the dynamic workspace distilled) |
 
-### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (18)
+### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 
 R-BET-1 topics: [VISION-AND-REPRESENTATION](Plans/Batch-Edit-Tool/VISION-AND-REPRESENTATION.md) (the why + the representation contract) · [EVICTION](Plans/Batch-Edit-Tool/EVICTION.md) (the four triggers) · [PARADIGM-CATALOG](Plans/Batch-Edit-Tool/PARADIGM-CATALOG.md) (13 paradigms ranked) · [FEASIBILITY](Plans/Batch-Edit-Tool/FEASIBILITY.md) (the verdict + the seams) · [SCHEMA](Plans/Batch-Edit-Tool/SCHEMA.md) (the input schema + Process<File>) · [STATE-MACHINE](Plans/Batch-Edit-Tool/STATE-MACHINE.md) (the events + the ledger contract) · [STATE-PRESENTATION](Plans/Batch-Edit-Tool/STATE-PRESENTATION.md) · [LIVE-VIEW-FRAMEWORK](Plans/Batch-Edit-Tool/LIVE-VIEW-FRAMEWORK.md) · [PACKAGE-AND-GOVERNANCE](Plans/Batch-Edit-Tool/PACKAGE-AND-GOVERNANCE.md) (the anatomy + the govern marker) · [ACCEPTANCE-CRITERIA](Plans/Batch-Edit-Tool/ACCEPTANCE-CRITERIA.md) (10 checks) · [RESIDUALS](Plans/Batch-Edit-Tool/RESIDUALS.md) (7 open) · [LATER-STAGES](Plans/Batch-Edit-Tool/LATER-STAGES.md) (the graph, the code-block, the token-waste).
 R-BET-2 topics: [PARADIGM-DEEPENING](Plans/Batch-Edit-Tool/PARADIGM-DEEPENING.md) (the call-escape WHY verbatim + the type system) · [FORMS-AND-GOVERNANCE-LAYERS](Plans/Batch-Edit-Tool/FORMS-AND-GOVERNANCE-LAYERS.md) (the nine forms + the five layers) · [IMPROVEMENTS-OVER-BASH-SED](Plans/Batch-Edit-Tool/IMPROVEMENTS-OVER-BASH-SED.md) · [COUNTER-INTUITIVE-IDEAS](Plans/Batch-Edit-Tool/COUNTER-INTUITIVE-IDEAS.md) · [RANKED-SUGGESTIONS](Plans/Batch-Edit-Tool/RANKED-SUGGESTIONS.md) (14 ranked) · [RESIDUALS-AND-MERGE-POINT](Plans/Batch-Edit-Tool/RESIDUALS-AND-MERGE-POINT.md).
+Evidence: [TRAJECTORY-EVIDENCE](Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md) (the measured cost of one-edit-at-a-time - the single owner of the figures).
 
 ### Plans/Representation-First - the research's topics (14)
 

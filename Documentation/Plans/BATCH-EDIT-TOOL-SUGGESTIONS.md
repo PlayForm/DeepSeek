@@ -28,6 +28,9 @@ statuses:
 	- name: the granular split of this research (6 topic documents)
 		state: implemented
 		evidence: Documentation/Plans/Batch-Edit-Tool/ - every section preserved byte-exact in its own document
+	- name: the trajectory evidence shared with R-BET-1 (the measured cost baseline)
+		state: integrated
+		evidence: Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md; RANKED-SUGGESTIONS rank 14 measures against it
 ---
 
 # BATCH EDIT TOOL - SUGGESTIONS + IMPROVEMENTS (R-BET-2) - THE HUB
@@ -60,3 +63,9 @@ R-BET-1 lives in the same folder as the granular set: the hub is
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](BATCH-EDIT-TOOL-FEATURE.md)
 with its own 12 topic documents (the vision, the eviction, the schema, the
 state machine, the governance...). Read both - the why is shared.
+
+The measured evidence both researches share:
+[Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md](Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md)
+- the cost of one-edit-at-a-time, the three mutation shapes and the refusal
+boundary. It is the single owner of the figures; the rank 14 measurement (the
+calls replaced) is judged against it, not against an assertion.

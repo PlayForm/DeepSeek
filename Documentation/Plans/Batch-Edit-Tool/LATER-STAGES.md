@@ -15,7 +15,7 @@ statuses:
 		evidence: this document only
 	- name: the token-waste elimination
 		state: open
-		evidence: this document only
+		evidence: this document; the measured split is in TRAJECTORY-EVIDENCE.md
 ---
 
 # THE BATCH EDIT TOOL - THE LATER STAGES (THE VISION)
@@ -62,3 +62,9 @@ The code-block ops present the mutation directly (the symbol, the kind of
 change, the scope) and the machine computes the edit - the AST layer rides
 the same license/reconciliation/eviction contract; only the op vocabulary
 grows.
+
+The measured cost puts a bound on this stage's worth
+(Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md): the dominant
+term is the step boundary, and the payload is the smaller one. The code-block
+stage attacks the payload, so its saving is real but secondary to the batch
+engine's boundary count - the engine first, the reflective surface after it.

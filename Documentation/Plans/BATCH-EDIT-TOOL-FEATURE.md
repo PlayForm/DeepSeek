@@ -16,6 +16,9 @@ statuses:
 	- name: the granular split of this research (12 topic documents)
 		state: implemented
 		evidence: Documentation/Plans/Batch-Edit-Tool/ - every section preserved byte-exact in its own document
+	- name: the trajectory evidence (the measured cost of one-edit-at-a-time)
+		state: resolved
+		evidence: Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md - the single owner of the figures; the hubs cite it
 ---
 
 # BATCH EDIT TOOL - THE FEATURE HUB
@@ -58,15 +61,18 @@ statuses:
 | 8 | [LIVE-VIEW-FRAMEWORK.md](Batch-Edit-Tool/LIVE-VIEW-FRAMEWORK.md) | the commonality split - the nine machinery extractions into `live-view/*` |
 | 9 | [PACKAGE-AND-GOVERNANCE.md](Batch-Edit-Tool/PACKAGE-AND-GOVERNANCE.md) | the plugin anatomy; the risks and mitigations (the recursive governance and the govern actor marker) |
 | 10 | [ACCEPTANCE-CRITERIA.md](Batch-Edit-Tool/ACCEPTANCE-CRITERIA.md) | the 10 checks the implementation must satisfy |
-| 11 | [RESIDUALS.md](Batch-Edit-Tool/RESIDUALS.md) | the 7 open residuals (the tool name, the regex scope, the framework package name, the tuning pass...) |
+| 11 | [RESIDUALS.md](Batch-Edit-Tool/RESIDUALS.md) | the 7 open residuals (the tool name, the regex scope, the framework package name, the tuning pass...) + the three measurement questions folded from the trajectory evidence (item 8) |
 | 12 | [LATER-STAGES.md](Batch-Edit-Tool/LATER-STAGES.md) | the vision: the graph stage, the code-block stage (the reflective surface), the token-waste elimination |
+| 13 | [TRAJECTORY-EVIDENCE.md](Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md) | the measured cost of one-edit-at-a-time (the single owner of the figures); the three mutation shapes and the refusal boundary; the open questions folded into the residuals |
 
 ## 2. The reading order for the implementation
 
-1. The VISION-AND-REPRESENTATION contract, then the EVICTION rule - the
+1. The TRAJECTORY-EVIDENCE - the measured cost of the status quo, the three
+   mutation shapes, and the shape the tool must refuse.
+2. The VISION-AND-REPRESENTATION contract, then the EVICTION rule - the
    philosophy every other document assumes.
-2. The FEASIBILITY seams - what already exists and is verified.
-3. The SCHEMA and the STATE-MACHINE - the immediate deliverable.
-4. The PACKAGE-AND-GOVERNANCE risks, then the ACCEPTANCE-CRITERIA - how the
+3. The FEASIBILITY seams - what already exists and is verified.
+4. The SCHEMA and the STATE-MACHINE - the immediate deliverable.
+5. The PACKAGE-AND-GOVERNANCE risks, then the ACCEPTANCE-CRITERIA - how the
    build is judged.
-5. The LATER-STAGES - the direction after v1.
+6. The LATER-STAGES - the direction after v1.

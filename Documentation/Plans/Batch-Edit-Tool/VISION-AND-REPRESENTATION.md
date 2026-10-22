@@ -19,6 +19,9 @@ statuses:
 	- name: the license flow (bidirectional) and the child processes
 		state: open
 		evidence: this document only
+	- name: the measured cost of the status quo (the trajectory evidence)
+		state: resolved
+		evidence: Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md - cited in section 3, the figures live there
 ---
 
 # THE BATCH EDIT TOOL - THE WHY AND THE REPRESENTATION CONTRACT
@@ -115,3 +118,33 @@ revoke  the license ends by: 'close' (voluntary), eviction (see
 		the eviction document),
 		or reality's veto (the sandbox denial, the version guard)
 ```
+
+---
+
+## 3. The measured cost of the status quo (addendum, 2026-10-22)
+
+The why above is the user's stated motivation. The measured case for building
+the tool is the cost of the status quo: 34,345 input tokens per file
+mutation, over 34 sessions and 811 mutations in one workspace on one day.
+
+The load-bearing part is the finding, not the total: cost tracks round trips,
+not edits. The wide-sweep lanes paid 4,400 input tokens per mutation because
+their context stayed small; a run of 17 edits on one file paid 17 step
+boundaries, each re-sending the whole conversation. A batch removes the step
+boundaries - not the reads, not the edits.
+
+The consequences for this document's claims:
+
+- The tool's worth is argued on the round-trip economics, not on the edit
+  payload: the payloads were small; the re-sent context was not.
+- The read elimination in 1.0.b (the state presented to the LLM without the
+  tool file calls) is NOT what the measurement shows. The reads still happen
+  and still enter the context. Whether the held representation removes them
+  is unmeasured.
+- The batch is worth building where the demand is a sweep or a rewrite; the
+  interleaved edit-verify-edit shape is where it must refuse rather than
+  guess (the shapes table, TRAJECTORY-EVIDENCE.md section 6).
+
+The method, the tables and the caveats live in
+Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md; this document
+cites the headline figure once and points there for the rest.
