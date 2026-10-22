@@ -1,0 +1,2 @@
+const e=(n,s)=>s.length===0?[`${n} (none)`]:s.map(t=>`${n} ${t}`);var o=n=>{const s=[`WORKSPACE ${n.workspace} @ ${n.indexRevision}`,`SCOPE ${n.scope}`,...e("MAP",n.map)];return n.focus!==void 0&&s.push(`FOCUS ${n.focus}`),s.push(...e("NEIGHBORS",n.neighbors)),s.push(...e("EVIDENCE",n.evidence)),s.push(...e("OPEN",n.open)),n.stale!==void 0&&s.push(`STALE ${n.stale}`),s.join(`
+`)};export{o as default};
