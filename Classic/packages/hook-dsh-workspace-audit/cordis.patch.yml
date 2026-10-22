@@ -1,0 +1,28 @@
+# Bundle patch for @playform/hook-dsh-workspace-audit.
+# The audit hook records the workspace's accountability: the event records
+# and the ledger lines - the OutcomeEvidence on the traceability graph
+# (AUDIT.md). Every line carries the operation identifier, the parent
+# identifier, and the event category (the recursion-prevention law).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and every
+# listener no-ops to a passthrough (it checks State.On first). The schema
+# defaults are the truth; the full default surface (logFile
+# ~/.dsh/workspace-audit.log, domain workspace_audit, maxLines 2000, the
+# default exclusion triple) lives in Variable/Config.ts. EVERY knob is
+# volatile (hot-editable without remounting): enabled, log/logFile, domain,
+# maxLines and the exclusion list.
+- insert:
+      - id: hook-dsh-workspace-audit
+        name: "@playform/hook-dsh-workspace-audit"
+        config:
+            enabled: false

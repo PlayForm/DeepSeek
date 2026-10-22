@@ -1,0 +1,1 @@
+const s=(e,n)=>e.Chains.get(n)??[],i=(e,n)=>{const t=[...e.Ring].reverse();return n===void 0?t:t.slice(0,n)},r=e=>({operations:e.Chains.size,lines:e.Ring.length,sequence:e.Sequence});export{s as Chain,i as Lines,r as Statistics};
