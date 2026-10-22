@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- The 2026-10-22 PoC delivery: 36 new Classic packages and 30 new EffectTS twins, all at 0.1.0 and
+  unpublished (the npm bootstrap tiers: 2-planned / 3-candidates):
+    - the workspace family (15 + the `lib-dsh-workspace-live` library): `plugin-dsh-workspace`,
+      `hook-dsh-workspace-{observe,operate,govern,approve,merge,journal,audit,monitor}`,
+      `plugin-dsh-workspace-{semantics,authority,context,evidence,graph,reflect}`;
+    - the client family: `client-dsh-panel-family`, `client-dsh-panel-family-host`,
+      `client-dsh-workspace-live`;
+    - the suggesters: `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`;
+    - the orchestration set: `plugin-dsh-batch-edit`, `plugin-dsh-batchstate`,
+      `plugin-dsh-gitguard`, `plugin-dsh-route`, `plugin-dsh-queue`, `plugin-dsh-feedback`,
+      `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, and
+      `hook-dsh-batch-decision`.
+- The delivery's documentation: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md` (the one-file suite
+  summary), `Documentation/Reports/POC-GAP-ANALYSIS.md` (the PoC-vs-plan grades),
+  `Documentation/Testing/` (the README plus 35 per-plugin live test plans),
+  `Documentation/Plans/POC-BRIEF.md`, `POC-LEDGER.md`, `ETS-TWINS-BRIEF.md`, `SMOKE-PASS-BRIEF.md`,
+  and `Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md`.
+- The verification: 97/97 package builds green; the aggregate `node Maintain/Run-Smokes.mjs` = 359
+  smoke suites / 5,337 checks, all green; the live desktop profile has 54 bundles enabled.
+- The live dogfood's first catch: `plugin-dsh-batch-edit`'s inject list was missing `"fs"` (fixed);
+  the empty-graph gap (no indexing trigger) is documented and open.
+
 ### Changed
 
 - The package renames under the role-prefix contract (2026-10-21): the core library is now

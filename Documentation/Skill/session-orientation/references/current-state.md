@@ -9,9 +9,9 @@ What it holds: the mission, the install routes, the two release groups, the pack
 the tools, the configuration surface, the smoke table, the development scripts, the troubleshooting
 notes.
 
-Known drift: the header still says twelve packages and 733/746 assertions, and the layout section
-still says 12 packages and 21 site pages. The tree has 15 Classic packages, 15 EffectTS packages
-plus the base, and 25 site pages. Treat the counts as stale until verified against the directories.
+Known drift: updated 2026-10-22 - the header and layout now reflect the full suite (51 Classic + 46
+EffectTS packages, 359 smoke suites / 5,337 checks). The tree is the arbiter; if the README and the
+directories disagree, the directories win.
 
 ## 2. `Documentation/INDEX.md` - the documentation map
 
@@ -24,13 +24,14 @@ Use it to find a document without listing the tree. Do not read it end to end.
 
 Every plan carries YAML frontmatter with `status`. The statuses are the routing signal:
 
-| Status       | Meaning                                              |
-| ------------ | ---------------------------------------------------- |
-| `active`     | The work in progress; read before touching its area  |
-| `planned`    | Designed, not implemented; never describe as shipped |
-| `researched` | Research complete, decision pending                  |
-| `complete`   | Done; keep as history                                |
-| `open`       | A question, not a commitment                         |
+| Status              | Meaning                                                       |
+| ------------------- | ------------------------------------------------------------- |
+| `active`            | The work in progress; read before touching its area           |
+| `planned`           | Designed, not implemented; never describe as shipped          |
+| `implemented (PoC)` | Built as a PoC; check the grades before claiming completeness |
+| `researched`        | Research complete, decision pending                           |
+| `complete`          | Done; keep as history                                         |
+| `open`              | A question, not a commitment                                  |
 
 Active at the last check: `DSH-MONOREPO-PLAN.md`, `TOMORROW-REVIEW.md`,
 `BATCH-EDIT-TOOL-FEATURE.md`, `BATCH-EDIT-TOOL-SUGGESTIONS.md`, and the active Batch-Edit-Tool
@@ -40,8 +41,9 @@ topics. Verify:
 grep -H '^status: active' Documentation/Plans/*.md
 ```
 
-The UI-Family, Workspace-Family, and orchestration plugin sets are `planned`. They are designs, not
-code. Do not put them on the site or in a skill as if they ship.
+The UI-Family, Workspace-Family, and orchestration plugin sets are now BUILT as PoCs (2026-10-22;
+status `implemented (PoC)`). Their completeness grades: Documentation/Reports/POC-GAP-ANALYSIS.md.
+Do not claim "complete" without checking the grades.
 
 ## 4. `Documentation/Guides/` - the deep manuals
 

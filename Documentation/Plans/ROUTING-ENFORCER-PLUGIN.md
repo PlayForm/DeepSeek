@@ -3,16 +3,19 @@ title: The Routing-Enforcer Plugin - the silent auto-routing plan
 category: Plans
 kind: queued-plan
 date: 2026-10-09
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
     - name: the routing-enforcer plugin (the silent auto-routing)
-      state: open
-      evidence: this document only - spec, no package
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-route under Classic/packages/ (with its ets-plugin-dsh-route twin); the
+          PoC-vs-plan grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the policy reader and keyword table
-      state: open
-      evidence: the spec's mechanism
+      state: implemented (PoC)
+      evidence:
+          the resolver in plugin-dsh-route; the grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the manual routing discipline (the interim)
       state: implemented
       evidence: the task-routing skill - enforced by convention

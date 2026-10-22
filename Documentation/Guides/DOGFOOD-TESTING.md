@@ -29,10 +29,12 @@ statuses:
 
 ## 1. What the current smokes cover - and what they cannot
 
-### 1.1 The current 24 suites (the mechanics arbiter)
+### 1.1 The mechanics suites (the arbiter, post-delivery)
 
-Twelve suites per tree (`Classic/smokes/` 733 checks, `EffectTS/smokes/` 746 checks). They run with
-`node <name>-smoke.mjs`:
+The original 12 mechanics suites per tree (the table below) have been restructured into per-test
+folders, and the 2026-10-22 delivery added suites for every new package. The current totals: **359
+smoke suites / 5,337 checks across both trees** via the aggregate `node Maintain/Run-Smokes.mjs`
+(`pnpm test`). The original per-suite checks (pre-restructure) were:
 
 | Suite (both trees)                                          | Classic | EffectTS | Proves                                             |
 | ----------------------------------------------------------- | ------- | -------- | -------------------------------------------------- |
@@ -374,5 +376,5 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
   Destroy leaves NO residue.
 - The ledger strings are the contract everywhere. They stay byte-identical, NEVER reworded, in
   smokes and in live assertions alike.
-- Totals stay truthful: 733 Classic / 746 EffectTS mechanics checks. The wiring checks are reported
-  separately, NEVER folded into those numbers.
+- Totals stay truthful: 359 smoke suites / 5,337 checks across both trees (the aggregate). The
+  wiring checks are reported separately, NEVER folded into those numbers.

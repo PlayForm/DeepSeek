@@ -60,10 +60,12 @@ statuses:
 - The **boilerplate** (the reference - personal paths intact, internal, NEVER released). The
   gitignore or a private submodule decision: pending.
 - The **Classic release** (the anonymized normal implementation).
-- The **Effect-TS release** (Effect v4.0.2 - the tracing, the ecosystem interaction, the
+- The **Effect-TS release** (Effect v4.0.5 - the tracing, the ecosystem interaction, the
   parallel-govern toggle designed in).
-- All release packages at **0.1.0**. The parity: the ledger strings are the byte-identical smoke
-  contract across all three implementations.
+- All release packages at **0.1.0**, all UNPUBLISHED. The family is now 97 packages: 51 Classic and
+  46 EffectTS - the original 14 plugins plus the 36 packages of the 2026-10-22 PoC delivery and
+  their 30 ETS twins. The parity: the ledger strings are the byte-identical smoke contract across
+  both trees.
 - The future structure: EACH release package its own repository, added as **submodules** to the
   parent. The future structure: the per-repo gitignores.
 
@@ -96,9 +98,9 @@ statuses:
   (the internals before + after). The truthful injection points (where the family enters the
   DeepSeek internals). The integration with the other dsh packages.
 - **The UI adapted to the functionality**: the real benchmarks (the integration surface, the smoke
-  coverage - Classic 733 / EffectTS 746, the exposed failure cases + the solutions). The
-  configure-ability + the optionality (the multi-step ~/.dsh profile setup, the knobs, the
-  defaults-off posture, the escape hatches).
+  coverage - 359 suites / 5,337 checks across both trees, the exposed failure cases + the
+  solutions). The configure-ability + the optionality (the multi-step ~/.dsh profile setup, the
+  knobs, the defaults-off posture, the escape hatches).
 - **The case study emphasizes the WHY** (the structural rationale - why the architecture is shaped
   this way). NOT the HOW (the process of writing it).
 
@@ -110,7 +112,9 @@ statuses:
   deliberation" instruction).
 - The skill tree branches: `instructional-writing` (the raw-write-only discipline for the
   literal-typography files), `plugin-system` (the family's plugin development manual),
-  `smoke-writing` (the smoke suite discipline). More branches as the functionality grows.
+  `smoke-writing` (the smoke suite discipline), plus the broader skills now present in the tree (the
+  session-orientation, code-authoring, task-routing, worker-strains, orchestrator-batch,
+  plugin-development, harness-observability and more). More branches as the functionality grows.
 
 ### 1.7 The test archive
 

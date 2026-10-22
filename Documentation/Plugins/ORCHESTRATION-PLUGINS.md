@@ -1,17 +1,21 @@
 ---
-title: The planned orchestration plugin family, as documents
+title: The orchestration plugin family (built as PoCs, 2026-10-22)
 category: Plugins
 kind: living-record
-date: 2026-10-09
-status: planned
+date: 2026-10-22
+status: active
 registry: Documentation/Plugins/ORCHESTRATION-PLUGINS.md
 index: Documentation/INDEX.md
 statuses:
     - name:
-          the four planned members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE /
-          HONEST-FEEDBACK)
-      state: open
-      evidence: documents only; source of truth in Documentation/Plans
+          the built members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK /
+          GITGUARD, plus PASS-ON / INGESTER / PATTERN / BATCH-DECISION)
+      state: implemented (PoC)
+      evidence:
+          the packages under Classic/packages/ (plugin-dsh-batchstate, plugin-dsh-route,
+          plugin-dsh-queue, plugin-dsh-feedback, plugin-dsh-gitguard, plugin-dsh-pass-on,
+          plugin-dsh-ingester, plugin-dsh-pattern, hook-dsh-batch-decision) with their ETS twins
+          where declared; the grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the working mechanism for now (the skills)
       state: implemented
       evidence:
@@ -19,15 +23,16 @@ statuses:
           worker-strains family
 ---
 
-# ORCHESTRATION-PLUGINS - the planned orchestration plugin family, as documents
+# ORCHESTRATION-PLUGINS - the orchestration plugin family (built as PoCs, 2026-10-22)
 
-> **Status: PLANNED - documents only.** Nothing here is implemented, scaffolded, or packaged. These
-> are the "plugins saved as documents": EACH section records a future plugin's purpose, trigger
-> surface, and the problem it solves, so a later session can implement them WITHOUT re-deriving the
-> intent. The working mechanism for NOW is the skills (Documentation/Skill/ - the
-> idle-agent-protocol, orchestrator-batch, task-routing, worker-strains family). Source of truth:
-> Documentation/Plans/BATCH-STATE-PLUGIN.md, ROUTING-ENFORCER-PLUGIN.md, SUBAGENT-QUEUE-PLUGIN.md,
-> ORCHESTRATION-FAMILY.md, HONEST-FEEDBACK-PLUGIN.md.
+> **Status: BUILT AS POCs (2026-10-22).** Every member below now has a package in
+> `Classic/packages/` (with ETS twins where the manifest declares them) - not just documents. The
+> design text below stays as the record of intent; the PoC-vs-plan grades (what a PoC covers and
+> what remains) are the truth: Documentation/Reports/POC-GAP-ANALYSIS.md. The per-plugin live test
+> plans: Documentation/Testing/. The working mechanism alongside is still the skills
+> (Documentation/Skill/ - the idle-agent-protocol, orchestrator-batch, task-routing, worker-strains
+> family). Source of truth: Documentation/Plans/BATCH-STATE-PLUGIN.md, ROUTING-ENFORCER-PLUGIN.md,
+> SUBAGENT-QUEUE-PLUGIN.md, ORCHESTRATION-FAMILY.md, HONEST-FEEDBACK-PLUGIN.md.
 
 ## 0. The user's mandate (why this family)
 
@@ -40,14 +45,21 @@ orchestrator don't see them) - the COUNCIL HUB is activated, ALWAYS pertaining k
 session. The TRIBE system (conversation + n members + a leader) comes later, on the council's
 foundation.
 
-## 1. The four planned members
+## 1. The four members (built 2026-10-22, plus the four supporting candidates)
 
-| Member           | Planned package name              | One-line function                                                  | The paradigm it realizes |
-| ---------------- | --------------------------------- | ------------------------------------------------------------------ | ------------------------ |
-| BATCH-STATE      | `@playform/plugin-dsh-batchstate` | the compiled context (the pre-baked TOC/Scope/Gates)               | the SHARED STATE         |
-| ROUTING-ENFORCER | `@playform/plugin-dsh-route`      | the silent auto-routing (the user's policy is the law)             | the POLICY               |
-| SUBAGENT-QUEUE   | `@playform/plugin-dsh-queue`      | the task queue + the capacity model (10 held / 2 children)         | the QUEUES               |
-| HONEST-FEEDBACK  | `@playform/plugin-dsh-feedback`   | the honest signals (the liked/disliked blocks, transferred unread) | the FEEDBACK             |
+| Member             | Package                                                          | One-line function                                                  | The paradigm it realizes | Status      |
+| ------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------ | ----------- |
+| BATCH-STATE        | `@playform/plugin-dsh-batchstate`                                | the compiled context (the pre-baked TOC/Scope/Gates)               | the SHARED STATE         | built (PoC) |
+| ROUTING-ENFORCER   | `@playform/plugin-dsh-route`                                     | the silent auto-routing (the user's policy is the law)             | the POLICY               | built (PoC) |
+| SUBAGENT-QUEUE     | `@playform/plugin-dsh-queue`                                     | the task queue + the capacity model (10 held / 2 children)         | the QUEUES               | built (PoC) |
+| HONEST-FEEDBACK    | `@playform/plugin-dsh-feedback`                                  | the honest signals (the liked/disliked blocks, transferred unread) | the FEEDBACK             | built (PoC) |
+| GITGUARD           | `@playform/plugin-dsh-gitguard`                                  | classify and deny dangerous git commands                           | the CANNOT               | built (PoC) |
+| PASS-ON / INGESTER | `@playform/plugin-dsh-pass-on` / `@playform/plugin-dsh-ingester` | the proposal handoff for the batch flow                            | the HANDOFF              | built (PoC) |
+| PATTERN            | `@playform/plugin-dsh-pattern`                                   | match/record/decay the learned patterns                            | the MEMORY               | built (PoC) |
+| BATCH-DECISION     | `@playform/hook-dsh-batch-decision`                              | the conservative auto-approve policy + the decision tool           | the GATE                 | built (PoC) |
+
+Each member's PoC grade (what the PoC covers, what remains toward the full plan):
+Documentation/Reports/POC-GAP-ANALYSIS.md.
 
 ### 1.1 BATCH-STATE (`@playform/plugin-dsh-batchstate`)
 
@@ -138,12 +150,13 @@ ALL three implementation investigations share the same probe phase. Do it ONCE:
     - SUBAGENT-QUEUE's capacity + ROUTING-ENFORCER's launch path).
 3. The config application (the patch-load at startup + the volatile settings).
 
-## 3. PROPOSED: the git-mutation guard (from the 2026-10-10 lessons)
+## 3. The git-mutation guard (built as `@playform/plugin-dsh-gitguard`)
 
 - **Problem it solves (the live slip):** the orchestrator committed `23a313d` and `c920617` and ran
   `git rm` during a session close-out. The git checks-only law now lives in the skills
   (code-authoring section 1d, user-mandated 2026-10-10) - but skills are behavioral and CAN slip,
-  exactly like the routing discipline. A proposed fifth member: `@playform/plugin-dsh-gitguard`.
+  exactly like the routing discipline. The proposed fifth member is now BUILT:
+  `@playform/plugin-dsh-gitguard` (with its `ets-plugin-dsh-gitguard` twin).
 - **Purpose:** a tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts
   terminal commands before execution. It denies ANY git mutation pattern - `git add`, `git commit`,
   `git reset`, `git push`, `git tag`, `git rm`, `git checkout/branch/merge/stash`, `git clean` -
@@ -162,9 +175,9 @@ ALL three implementation investigations share the same probe phase. Do it ONCE:
 
 ## 4. The combined effectuallity (the council hub)
 
-- The four (+ proposed fifth) members share the primitives: the BLOCKS (the batch-state compiles
-  them, the queue dispatches them, the routing resolves them, the feedback appends them), the QUEUES
-  (FIFO/LIFO + parentage), the EVENTS (the state changes, the completions, the signals).
+- The members share the primitives: the BLOCKS (the batch-state compiles them, the queue dispatches
+  them, the routing resolves them, the feedback appends them), the QUEUES (FIFO/LIFO + parentage),
+  the EVENTS (the state changes, the completions, the signals).
 - The underwriting equation (ORCHESTRATION-FAMILY.md section 8):
   `Context(a,t) = Compile( S(t) + Q(t) + R(a,t) + F(t) + Scope(a) ) + H(a,t)`.
   `Council(t) = { S, Q, R, F }`. The 14-row combination space (state drives the dispatch, the queue
@@ -174,8 +187,9 @@ ALL three implementation investigations share the same probe phase. Do it ONCE:
   the MIDDLE layer (permissioned sub-blocks - TOC/Scope/Gates/Routing/Queue/Feedback/Policy,
   filtered per tool, per model family, per plugin behavior at COMPILE time). The behaviors
   UNDERWRITE the inner generators. Volume held: the state slot replaced, the blocks bounded.
-- Implementation order (ALL planned): the shared probe first, then BATCH-STATE (the skeleton the
-  others integrate into), then ROUTING-ENFORCER + SUBAGENT-QUEUE (dispatch + routes), then
-  HONEST-FEEDBACK, then - when the user approves - the git-mutation guard. EVERY member: the loader
+- Implementation order (the probe first, then the members - DELIVERED as PoCs 2026-10-22 in this
+  order): the shared probe, BATCH-STATE (the skeleton the others integrate into), ROUTING-ENFORCER +
+  SUBAGENT-QUEUE (dispatch + routes), HONEST-FEEDBACK, the git-mutation guard, then the batch-flow
+  handoff (PASS-ON / INGESTER / BATCH-DECISION) and the PATTERN memory. EVERY member: the loader
   contract (name/apply/Config/inject), the family's ledger conventions, the smokes as the arbiter,
   the no-commit regime (READY-TO-COMMIT reporting).

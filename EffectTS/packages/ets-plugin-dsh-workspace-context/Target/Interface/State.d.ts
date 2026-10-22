@@ -1,4 +1,4 @@
-import type FactoryHandle from "@Interface/Factory.js";
+import type FactoryHandle from "./Factory.js";
 import type { State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `budgetTokens` - the budget target (volatile). */

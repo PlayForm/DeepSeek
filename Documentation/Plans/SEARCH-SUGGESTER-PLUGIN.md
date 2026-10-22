@@ -3,7 +3,7 @@ title: The Search-Suggester Plugin - the intent-indexed target plan
 category: Plans
 kind: queued-plan
 date: 2026-10-21
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
@@ -23,20 +23,30 @@ statuses:
       state: resolved
       evidence: this document, section 2.4
     - name: the deterministic classifier and the static repo index
-      state: open
-      evidence: the design only - no package, no index generator
+      state: implemented (PoC)
+      evidence:
+          hook-dsh-search-suggester under Classic/packages/ (with its ets twin); the PoC-vs-plan
+          grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the memory (the intent target index and the accept/reject journal)
-      state: open
-      evidence: the schema in section 5; nothing persisted yet
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-pattern as the pattern store; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the delivery (the additionalContexts note and the sticky section)
-      state: open
-      evidence: the tool-coach tier-1 precedent; the source label is declared here, not built
+      state: implemented (PoC)
+      evidence:
+          the suggester delivery in the built hooks; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the learning (the offline seed and the online update)
-      state: open
-      evidence: the update rule in section 6; the replay corpus is not extracted
+      state: implemented (PoC)
+      evidence:
+          the record/decay in plugin-dsh-pattern; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the plural family (the core pattern service and the seven consumers)
-      state: open
-      evidence: section 8; the packages are planned, none exists
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-pattern + the seven suggester hooks under Classic/packages/; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name:
           the in-depth variants (the oracle, the graph query, the replay, the convention compiler,
           the planner)

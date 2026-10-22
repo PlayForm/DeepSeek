@@ -3,16 +3,20 @@ title: The Honest-Feedback Plugin - the fourth orchestration member
 category: Plans
 kind: queued-plan
 date: 2026-10-09
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
     - name: the honest-feedback plugin (the fourth member)
-      state: open
-      evidence: this document only - spec, no package
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-feedback under Classic/packages/ (with its ets-plugin-dsh-feedback twin); the
+          PoC-vs-plan grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the transferred-unread feedback block
-      state: open
-      evidence: the spec's mechanism
+      state: implemented (PoC)
+      evidence:
+          the intake/classify/summary pipeline in plugin-dsh-feedback; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
 # HONEST-FEEDBACK PLUGIN - the fourth orchestration member (dedicated 2026-10-09)

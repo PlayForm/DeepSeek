@@ -3,16 +3,16 @@ title: The Planned Plugin Suite - the smoke pass brief (E3)
 category: Plans
 kind: living-plan
 date: 2026-10-22
-status: planned
+status: complete
 registry: Documentation/Plans/SMOKE-PASS-BRIEF.md
 index: Documentation/INDEX.md
 statuses:
 	- name: the smoke suites for the 36 new Classic packages
-		state: planned
-		evidence: this document; the build pass is green first
+		state: implemented
+		evidence: every new package carries its Source/Test suites; the build pass is green
 	- name: the aggregate run (Maintain/Run-Smokes.mjs)
-		state: planned
-		evidence: the Lead runs it after the lanes report
+		state: implemented
+		evidence: 359 suites / 5,337 checks, all green (the runner's last line)
 ---
 
 # THE PLANNED PLUGIN SUITE - THE SMOKE PASS BRIEF (E3)

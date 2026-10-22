@@ -2,7 +2,7 @@
 title: The archive index and status dashboard
 category: Documentation root
 kind: standard
-date: 2026-10-20
+date: 2026-10-22
 status: active
 registry: Documentation/INDEX.md
 statuses:
@@ -47,17 +47,17 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
-      Plans/                       the living + queued plans (19) + 4 granular families (72)
+      Plans/                       the living + queued plans (28) + 4 granular families (73)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
         Workspace-Family/          the workspace family's per-package docs (26)
       Researches/                  the research outputs (8)
       Guides/                      the operating manuals (7)
-      Reports/                     the audits and diagnoses (5)
+      Reports/                     the audits and diagnoses (6)
       Plugins/                     the registry documents (3)
       Testing/                     the per-plugin live test plans (36)
-      Archive/                     the one-shot records (37, in 8 topics)
+      Archive/                     the one-shot records (45, in 8 topics)
         Smoke-Restructure/  Site/  Live-Containers/  Tool-Coach/
         Split/  CCR/  Normalize/  Tomorrow-Review/
       Handoff/                     (untouched) the original delivery record
@@ -81,36 +81,36 @@ statuses:
 
 ### Plans - the living + queued hubs (28)
 
-| Document (Documentation/Plans/)                                                                | Status     | Kind                                                 |
-| ---------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------- |
-| [TOMORROW-REVIEW.md](Plans/TOMORROW-REVIEW.md)                                                 | active     | living-record                                        |
-| [DSH-MONOREPO-PLAN.md](Plans/DSH-MONOREPO-PLAN.md)                                             | active     | living-plan                                          |
-| [BATCH-EDIT-TOOL-FEATURE.md](Plans/BATCH-EDIT-TOOL-FEATURE.md)                                 | active     | living-plan (R-BET-1 hub)                            |
-| [BATCH-EDIT-TOOL-SUGGESTIONS.md](Plans/BATCH-EDIT-TOOL-SUGGESTIONS.md)                         | active     | living-record (R-BET-2 hub)                          |
-| [REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md](Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md) | complete   | research-output (hub)                                |
-| [WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md](Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md)     | superseded | living-plan (hub; the v4.1 distilled)                |
-| [UI-FAMILY-IMPLEMENTATION-PLAN.md](Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md)                     | superseded | queued-plan (hub; the v4.1 distilled)                |
-| [ORCHESTRATION-FAMILY.md](Plans/ORCHESTRATION-FAMILY.md)                                       | planned    | queued-plan                                          |
-| [BATCH-STATE-PLUGIN.md](Plans/BATCH-STATE-PLUGIN.md)                                           | planned    | queued-plan                                          |
-| [ROUTING-ENFORCER-PLUGIN.md](Plans/ROUTING-ENFORCER-PLUGIN.md)                                 | planned    | queued-plan                                          |
-| [SUBAGENT-QUEUE-PLUGIN.md](Plans/SUBAGENT-QUEUE-PLUGIN.md)                                     | planned    | queued-plan                                          |
-| [HONEST-FEEDBACK-PLUGIN.md](Plans/HONEST-FEEDBACK-PLUGIN.md)                                   | planned    | queued-plan                                          |
-| [APHRODITE-RUST-DYLIB-INTEGRATION.md](Plans/APHRODITE-RUST-DYLIB-INTEGRATION.md)               | planned    | queued-plan                                          |
-| [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md)             | planned    | queued-plan                                          |
-| [TRUSTED-PUBLISHER.md](Plans/TRUSTED-PUBLISHER.md)                                             | planned    | queued-plan                                          |
-| [RELEASE-0.1.0.md](Plans/RELEASE-0.1.0.md)                                                     | active     | one-shot-record (the release runbook)                |
-| [PATTERN-GRAPH-PLUGIN.md](Plans/PATTERN-GRAPH-PLUGIN.md)                                       | planned    | queued-plan (the general suggestion model)           |
-| [SEARCH-SUGGESTER-PLUGIN.md](Plans/SEARCH-SUGGESTER-PLUGIN.md)                                 | planned    | queued-plan (the pattern graph's first consumer)     |
-| [PASS-ON-AND-INGESTER.md](Plans/PASS-ON-AND-INGESTER.md)                                       | planned    | queued-plan (the batch decision flow)                |
-| [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md)                                     | planned    | queued-plan (site content and wording)               |
-| [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md)                       | planned    | queued-plan (duplication, functionality, placement)  |
-| [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md)                                     | active     | living-plan (the decision record and workstreams)    |
-| [UI-FAMILY-V4-1.md](Plans/UI-FAMILY-V4-1.md)                                                   | active     | living-plan (the visual panel distilled)             |
-| [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md)                                     | active     | living-plan (the dynamic workspace distilled)        |
-| [POC-BRIEF.md](Plans/POC-BRIEF.md)                                                             | complete   | living-plan (the PoC-first delivery brief)           |
-| [POC-LEDGER.md](Plans/POC-LEDGER.md)                                                           | active     | living-record (the live matrix of the planned suite) |
-| [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md)                                                 | complete   | living-plan (the 29-30 ETS twins' mirror brief)      |
-| [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete   | living-plan (the smoke pass brief)                   |
+| Document (Documentation/Plans/)                                                                | Status            | Kind                                                   |
+| ---------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------ |
+| [TOMORROW-REVIEW.md](Plans/TOMORROW-REVIEW.md)                                                 | active            | living-record                                          |
+| [DSH-MONOREPO-PLAN.md](Plans/DSH-MONOREPO-PLAN.md)                                             | active            | living-plan                                            |
+| [BATCH-EDIT-TOOL-FEATURE.md](Plans/BATCH-EDIT-TOOL-FEATURE.md)                                 | active            | living-plan (R-BET-1 hub)                              |
+| [BATCH-EDIT-TOOL-SUGGESTIONS.md](Plans/BATCH-EDIT-TOOL-SUGGESTIONS.md)                         | active            | living-record (R-BET-2 hub)                            |
+| [REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md](Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md) | complete          | research-output (hub)                                  |
+| [WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md](Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md)     | superseded        | living-plan (hub; the v4.1 distilled)                  |
+| [UI-FAMILY-IMPLEMENTATION-PLAN.md](Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md)                     | superseded        | queued-plan (hub; the v4.1 distilled)                  |
+| [ORCHESTRATION-FAMILY.md](Plans/ORCHESTRATION-FAMILY.md)                                       | implemented (PoC) | queued-plan (the orchestration family's design record) |
+| [BATCH-STATE-PLUGIN.md](Plans/BATCH-STATE-PLUGIN.md)                                           | implemented (PoC) | queued-plan                                            |
+| [ROUTING-ENFORCER-PLUGIN.md](Plans/ROUTING-ENFORCER-PLUGIN.md)                                 | implemented (PoC) | queued-plan                                            |
+| [SUBAGENT-QUEUE-PLUGIN.md](Plans/SUBAGENT-QUEUE-PLUGIN.md)                                     | implemented (PoC) | queued-plan                                            |
+| [HONEST-FEEDBACK-PLUGIN.md](Plans/HONEST-FEEDBACK-PLUGIN.md)                                   | implemented (PoC) | queued-plan                                            |
+| [APHRODITE-RUST-DYLIB-INTEGRATION.md](Plans/APHRODITE-RUST-DYLIB-INTEGRATION.md)               | planned           | queued-plan                                            |
+| [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md)             | planned           | queued-plan                                            |
+| [TRUSTED-PUBLISHER.md](Plans/TRUSTED-PUBLISHER.md)                                             | planned           | queued-plan                                            |
+| [RELEASE-0.1.0.md](Plans/RELEASE-0.1.0.md)                                                     | active            | one-shot-record (the release runbook)                  |
+| [PATTERN-GRAPH-PLUGIN.md](Plans/PATTERN-GRAPH-PLUGIN.md)                                       | implemented (PoC) | queued-plan (the general suggestion model)             |
+| [SEARCH-SUGGESTER-PLUGIN.md](Plans/SEARCH-SUGGESTER-PLUGIN.md)                                 | implemented (PoC) | queued-plan (the pattern graph's first consumer)       |
+| [PASS-ON-AND-INGESTER.md](Plans/PASS-ON-AND-INGESTER.md)                                       | implemented (PoC) | queued-plan (the batch decision flow)                  |
+| [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md)                                     | planned           | queued-plan (site content and wording)                 |
+| [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md)                       | planned           | queued-plan (duplication, functionality, placement)    |
+| [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md)                                     | active            | living-plan (the decision record and workstreams)      |
+| [UI-FAMILY-V4-1.md](Plans/UI-FAMILY-V4-1.md)                                                   | active            | living-plan (the visual panel distilled)               |
+| [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md)                                     | active            | living-plan (the dynamic workspace distilled)          |
+| [POC-BRIEF.md](Plans/POC-BRIEF.md)                                                             | complete          | living-plan (the PoC-first delivery brief)             |
+| [POC-LEDGER.md](Plans/POC-LEDGER.md)                                                           | active            | living-record (the live matrix of the planned suite)   |
+| [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md)                                                 | complete          | living-plan (the 29-30 ETS twins' mirror brief)        |
+| [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete          | living-plan (the smoke pass brief)                     |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 
@@ -169,7 +169,7 @@ Round 3: [RUNTIME-AND-TRUTH](Plans/Representation-First/RUNTIME-AND-TRUTH.md) ·
 [APPENDIX-INSPECT-CAPTURES](Plans/UI-Family/APPENDIX-INSPECT-CAPTURES.md) ·
 [ONE-PARAGRAPH-SUMMARY](Plans/UI-Family/ONE-PARAGRAPH-SUMMARY.md).
 
-### Plans/Workspace-Family - the decomposition's per-package docs (25)
+### Plans/Workspace-Family - the decomposition's per-package docs (26)
 
 Frame: [NAMING-BY-ROLE](Plans/Workspace-Family/NAMING-BY-ROLE.md) ·
 [PHASED-DELIVERY](Plans/Workspace-Family/PHASED-DELIVERY.md) ·
@@ -178,7 +178,8 @@ Frame: [NAMING-BY-ROLE](Plans/Workspace-Family/NAMING-BY-ROLE.md) ·
 [DATABASES-AND-CLOUD](Plans/Workspace-Family/DATABASES-AND-CLOUD.md) ·
 [PITFALLS-LOG](Plans/Workspace-Family/PITFALLS-LOG.md) ·
 [RFC-QUEUE](Plans/Workspace-Family/RFC-QUEUE.md) ·
-[RESEARCH-PLACES](Plans/Workspace-Family/RESEARCH-PLACES.md). Packages:
+[RESEARCH-PLACES](Plans/Workspace-Family/RESEARCH-PLACES.md) ·
+[WAVE-1-BRIEF](Plans/Workspace-Family/WAVE-1-BRIEF.md) (the delivery wave's brief). Packages:
 [WORKSPACE-AGENT](Plans/Workspace-Family/WORKSPACE-AGENT.md) (the agent) ·
 [OBSERVE](Plans/Workspace-Family/OBSERVE.md) · [SEMANTICS](Plans/Workspace-Family/SEMANTICS.md) ·
 [OPERATE](Plans/Workspace-Family/OPERATE.md) · [GOVERN](Plans/Workspace-Family/GOVERN.md) ·
@@ -228,11 +229,11 @@ stage) · [REFLECT](Plans/Workspace-Family/REFLECT.md) (later stage) ·
 
 ### Plugins - the registry documents (3)
 
-| Document (Documentation/Plugins/)                            | Status  | Kind                                  |
-| ------------------------------------------------------------ | ------- | ------------------------------------- |
-| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active  | living-record                         |
-| [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | planned | living-record                         |
-| [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active  | standard (the one-file suite summary) |
+| Document (Documentation/Plugins/)                            | Status | Kind                                  |
+| ------------------------------------------------------------ | ------ | ------------------------------------- |
+| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record                         |
+| [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | active | living-record (built as PoCs)         |
+| [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active | standard (the one-file suite summary) |
 
 ### Testing - the per-plugin live test plans (36)
 
@@ -241,7 +242,7 @@ the T1-T5 tiers, the fix loop, the safety rules) and 35 per-plugin files
 (`Documentation/Testing/<package>.md`) with the exact triggers, expected outputs, known gaps and the
 fix paths.
 
-### Archive - the one-shot records (37, by topic)
+### Archive - the one-shot records (45, by topic)
 
 Archive/Smoke-Restructure (2):
 [SMOKE-SUITE-RESTRUCTURE-NOTE.md](Archive/Smoke-Restructure/SMOKE-SUITE-RESTRUCTURE-NOTE.md) ·

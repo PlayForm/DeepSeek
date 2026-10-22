@@ -3,7 +3,7 @@ title: The Pass-On and the Ingester - the batch decision flow
 category: Plans
 kind: queued-plan
 date: 2026-10-21
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/PASS-ON-AND-INGESTER.md
 index: Documentation/INDEX.md
 statuses:
@@ -11,17 +11,21 @@ statuses:
       state: resolved
       evidence: this document - not one monolith; the batch is the shared contract
     - name: the batch contract (the proposal, the decision, the result)
-      state: open
-      evidence: section 2; the schema is proposed, not implemented
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-pass-on + plugin-dsh-ingester + hook-dsh-batch-decision under
+          Classic/packages/; the PoC-vs-plan grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the pass-on (the prepare direction, read-only)
-      state: open
-      evidence: section 3
+      state: implemented (PoC)
+      evidence: plugin-dsh-pass-on; the grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the ingester (the apply direction, the only writer)
-      state: open
-      evidence: section 4
+      state: implemented (PoC)
+      evidence: plugin-dsh-ingester; the grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the decision workflow and the live view
-      state: open
-      evidence: sections 5-6
+      state: implemented (PoC)
+      evidence:
+          hook-dsh-batch-decision + plugin-dsh-batchstate; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the relation to the batch edit tool, the suggester, the workspace, and the panel
       state: resolved
       evidence: section 7

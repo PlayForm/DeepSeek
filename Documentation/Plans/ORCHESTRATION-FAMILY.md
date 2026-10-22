@@ -3,16 +3,21 @@ title: The Orchestration Family - the integrated message bus
 category: Plans
 kind: queued-plan
 date: 2026-10-09
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/ORCHESTRATION-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
     - name: the integrated message bus (the council hub)
-      state: open
-      evidence: this document only - design notes, no package
+      state: implemented (PoC)
+      evidence:
+          the orchestration packages under Classic/packages/ (batchstate, route, queue, feedback,
+          gitguard, pass-on, ingester, pattern, batch-decision); the PoC-vs-plan grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the four members (BATCH-STATE / ROUTING-ENFORCER / SUBAGENT-QUEUE / HONEST-FEEDBACK)
-      state: open
-      evidence: each documented separately in Documentation/Plans
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-batchstate / plugin-dsh-route / plugin-dsh-queue / plugin-dsh-feedback under
+          Classic/packages/; the grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the interim mechanism (the skills)
       state: implemented
       evidence: Documentation/Skill/orchestrator-batch and worker-strains live

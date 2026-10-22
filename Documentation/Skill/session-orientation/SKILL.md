@@ -48,15 +48,15 @@ picture of the repository.
 
 ## The repository map
 
-| Path             | What it is                                                              |
-| ---------------- | ----------------------------------------------------------------------- |
-| `Classic/`       | The plain-TypeScript release: 15 packages + the smoke suites            |
-| `EffectTS/`      | The Effect-TS release: 15 packages + `ets-base-dsh` + the smoke suites  |
-| `Site/`          | The Astro static site; its own git repository, gitignored from the root |
-| `Test/`          | Fixture archives, governance batteries, probes                          |
-| `Documentation/` | Framework, guides, plans, skills, archive, reports                      |
-| `Maintain/`      | The formatting, smoke, wiring, and link-check entry points              |
-| `diagrams/`      | Source diagrams                                                         |
+| Path             | What it is                                                                   |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `Classic/`       | The plain-TypeScript release: 51 packages + the smoke suites                 |
+| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`) + the smoke suites |
+| `Site/`          | The Astro static site; its own git repository, gitignored from the root      |
+| `Test/`          | Fixture archives, governance batteries, probes                               |
+| `Documentation/` | Framework, guides, plans, skills, archive, reports                           |
+| `Maintain/`      | The formatting, smoke, wiring, and link-check entry points                   |
+| `diagrams/`      | Source diagrams                                                              |
 
 `Boilerplate/` no longer exists. Documentation that still calls it a third implementation is stale;
 the two release trees are the code.

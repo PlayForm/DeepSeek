@@ -1,45 +1,58 @@
 ---
-title: The authoritative registry of the 31 published packages
+title: The authoritative registry of the 97 packages (51 Classic + 46 EffectTS)
 category: Plugins
 kind: living-record
-date: 2026-10-10
+date: 2026-10-22
 status: active
 registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
-    - name: the 31 published packages (1 base + 15 Classic + 15 EffectTS at 0.1.0)
+    - name: the 97 packages at 0.1.0 (1 base + 51 Classic + 46 EffectTS, all UNPUBLISHED)
       state: implemented
-      evidence: the packages exist and are published from source
+      evidence: the packages exist and are built from source; 97/97 builds green
     - name: the registry document content (the names, the links, the rules)
       state: implemented
       evidence: this document; byte-accurate names
-    - name: the expansion beyond the original 25 (the newer packages)
-      state: implemented
-      evidence: the family now carries 15 per tree plus the base
-    - name: the planned orchestration plugins (not in this registry)
-      state: open
-      evidence: Documentation/Plugins/ORCHESTRATION-PLUGINS.md
+    - name:
+          the 36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the
+          orchestration set, the client panels)
+      state: implemented (PoC)
+      evidence:
+          the packages under Classic/packages/ with their 30 ets-* twins;
+          Documentation/Reports/POC-GAP-ANALYSIS.md
+    - name: the former "planned orchestration plugins"
+      state: implemented (PoC)
+      evidence:
+          the ten orchestration packages; Documentation/Plugins/ORCHESTRATION-PLUGINS.md and
+          Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 31 published packages
+# PLUGIN-FAMILY - the authoritative registry of the 97 packages
 
 > This document is the "plugins saved as documents" registry. The registry covers the full family at
-> version **0.1.0**. EVERY name is byte-accurate and EVERY repo link is absolute. It is a DOCUMENT,
-> NOT an implementation. The packages it describes are already published. Nothing here scaffolds new
-> code. The planned (NOT yet implemented) orchestration plugins live separately in
-> [ORCHESTRATION-PLUGINS.md](ORCHESTRATION-PLUGINS.md). Source of truth: the packages' own
-> READMEs/SCHEMs/Sources under `Classic/packages/` and `EffectTS/packages/`, plus the root README.
+> version **0.1.0** - all packages are built from source and UNPUBLISHED (the npm bootstrap tiers:
+> 2-planned or 3-candidates). EVERY name is byte-accurate and EVERY repo link is absolute. It is a
+> DOCUMENT, NOT an implementation. The one-line suite summary lives in
+> [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md); the per-plugin live test plans in
+> [../Testing/](../Testing/README.md); the PoC-vs-plan grades in
+> [../Reports/POC-GAP-ANALYSIS.md](../Reports/POC-GAP-ANALYSIS.md). Source of truth: the packages'
+> own READMEs/SCHEMs/Sources under `Classic/packages/` and `EffectTS/packages/`, plus the root
+> README.
 
 ## 0. The family at a glance
 
-- **Version: 0.1.0 for ALL 31 packages.** Names are byte-accurate as below. The legacy
-  `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
-- **Two published trees, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
-  `@playform/plugin-dsh-*` - plain TypeScript, zero runtime framework dependencies, 1314 smoke
-  assertions) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on Effect v4.0.5
-  services and layers, 1324 assertions, with `@playform/ets-base-dsh` as the plumbing base). NEVER
-  mix the two splits in ONE dependency graph. The EffectTS `Update` returns Effect envelopes, NOT
-  the classic dispatch envelope.
+- **Version: 0.1.0 for ALL 97 packages, all UNPUBLISHED.** Names are byte-accurate as below. The
+  legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
+- **Two trees, 51 + 46 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
+  `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript, zero
+  runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on
+  Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing base). NEVER mix
+  the two splits in ONE dependency graph. The EffectTS `Update` returns Effect envelopes, NOT the
+  classic dispatch envelope. 30 of the 36 packages added 2026-10-22 have ETS twins (all but the two
+  client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`,
+  `hook-dsh-batch-decision`).
+- **Verification: 97/97 package builds green; the aggregate `node Maintain/Run-Smokes.mjs` = 359
+  smoke suites / 5,337 checks, all green; the live desktop profile has 54 bundles enabled.**
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal
   record is asserted byte-identically by the smokes, in ALL implementations. ONE ledger per plugin:
   `~/.dsh/<identity>.log`.
@@ -51,7 +64,7 @@ statuses:
   factory's pre/post-execute gating and the direct-govern registry. Plus the loader surface (cordis
   patch inserts at profile startup).
 
-## 1. The 31 names (the registry list)
+## 1. The names (the registry list)
 
 **EffectTS base (1):**
 
@@ -98,6 +111,51 @@ statuses:
 | 29  | `@playform/ets-hook-dsh-ccr`                 | Hook (guardian)   | `tools/post-execute` + the `ccr_retrieve` tool                                |
 | 30  | `@playform/ets-hook-dsh-tool-coach`          | Hook (guardian)   | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
 | 31  | `@playform/ets-hook-dsh-live-containers`     | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute`              |
+
+**The 2026-10-22 delivery — Classic (36), roles only (full detail in
+[PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md)):**
+
+| #   | Package                                    | Role                                                      | ETS twin |
+| --- | ------------------------------------------ | --------------------------------------------------------- | -------- |
+| 32  | `@playform/plugin-dsh-workspace`           | the workspace agent + map/find/expand/context tools       | yes      |
+| 33  | `@playform/hook-dsh-workspace-observe`     | the fs/observed version stamps into the observation store | yes      |
+| 34  | `@playform/plugin-dsh-workspace-semantics` | symbol/reference resolution, rename planning              | yes      |
+| 35  | `@playform/hook-dsh-workspace-operate`     | typed proposals (rename/connect/replace)                  | yes      |
+| 36  | `@playform/hook-dsh-workspace-govern`      | the four means-checks on every tool call                  | yes      |
+| 37  | `@playform/plugin-dsh-workspace-authority` | capability/lease/residency service                        | yes      |
+| 38  | `@playform/hook-dsh-workspace-approve`     | exact-candidate approval bindings                         | yes      |
+| 39  | `@playform/hook-dsh-workspace-merge`       | the atomic batch merge                                    | yes      |
+| 40  | `@playform/hook-dsh-workspace-journal`     | per-batch pre-images, revert, crash recovery              | yes      |
+| 41  | `@playform/hook-dsh-workspace-audit`       | the accountability records                                | yes      |
+| 42  | `@playform/plugin-dsh-workspace-context`   | the orientation packet                                    | yes      |
+| 43  | `@playform/hook-dsh-workspace-monitor`     | watch/sweep check sets                                    | yes      |
+| 44  | `@playform/plugin-dsh-workspace-evidence`  | the four truth kinds + invalidation                       | yes      |
+| 45  | `@playform/plugin-dsh-workspace-graph`     | the file/symbol/block index + query                       | yes      |
+| 46  | `@playform/plugin-dsh-workspace-reflect`   | one-call rename/connect/replace                           | yes      |
+| 47  | `@playform/lib-dsh-workspace-live`         | the shared client library (no plugin)                     | yes      |
+| 48  | `@playform/client-dsh-panel-family`        | the panel contract + the family tab                       | no       |
+| 49  | `@playform/client-dsh-panel-family-host`   | the panel host half: the tail/stats endpoints             | no       |
+| 50  | `@playform/client-dsh-workspace-live`      | the workspace live tab                                    | yes      |
+| 51  | `@playform/hook-dsh-search-suggester`      | companion searches from post-execute signals              | yes      |
+| 52  | `@playform/hook-dsh-edit-suggester`        | convention companions after an edit                       | yes      |
+| 53  | `@playform/hook-dsh-doc-suggester`         | doc-graph companions after a read/edit                    | yes      |
+| 54  | `@playform/hook-dsh-convention-suggester`  | naming/layout/ledger conventions                          | yes      |
+| 55  | `@playform/hook-dsh-graph-suggester`       | graph-neighborhood companions                             | yes      |
+| 56  | `@playform/hook-dsh-replay-suggester`      | replays from the recalled history record                  | yes      |
+| 57  | `@playform/hook-dsh-test-suggester`        | test suites/coverage companions                           | yes      |
+| 58  | `@playform/plugin-dsh-batch-edit`          | the batch edit engine (files as processes, one commit)    | yes      |
+| 59  | `@playform/plugin-dsh-batchstate`          | the live batch state board                                | yes      |
+| 60  | `@playform/plugin-dsh-gitguard`            | classify and deny dangerous git commands                  | yes      |
+| 61  | `@playform/plugin-dsh-route`               | resolve/correct the subagent model routes                 | yes      |
+| 62  | `@playform/plugin-dsh-queue`               | the subagent queue: seat/release, capacity, dispatch      | yes      |
+| 63  | `@playform/plugin-dsh-feedback`            | the honest feedback: intake/classify/summary              | yes      |
+| 64  | `@playform/plugin-dsh-pass-on`             | prepare/resolve proposals for the batch flow              | no       |
+| 65  | `@playform/plugin-dsh-ingester`            | validate/apply the approved proposals                     | no       |
+| 66  | `@playform/plugin-dsh-pattern`             | match/record/decay the learned patterns                   | no       |
+| 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | no       |
+
+**EffectTS twins for the delivery (30):** `@playform/ets-*` counterparts of the 30 packages above
+marked "yes", under `EffectTS/packages/`.
 
 Absolute-link rule for any repo target in docs/prompts/skills:
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
@@ -238,7 +296,9 @@ keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` s
   queue capped 256). Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
   storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral
-  contract on top of the strings. 1314 Classic / 1324 EffectTS assertions are the release contract.
+  contract on top of the strings. 359 smoke suites / 5,337 checks across both trees are the release
+  contract (the original 14 mechanics suites: 1314 Classic / 1324 EffectTS; the rest is the
+  2026-10-22 delivery's suites).
 
 ## 5. The wiring (the four steps)
 

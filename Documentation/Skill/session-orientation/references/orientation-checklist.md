@@ -42,14 +42,14 @@ Before launching a subagent:
 
 ## D. Failure modes this checklist prevents
 
-| Failure                        | What it looks like                                    |
-| ------------------------------ | ----------------------------------------------------- |
-| Acting before orientation      | Edits in the wrong tree; a law violated in step one   |
-| Trusting prose counts          | Repeating 733/746 or 25 packages after the tree moved |
-| Reading plans as shipped truth | Documenting a planned plugin as if it exists          |
-| Wrong git surface              | Root `git status` missing `Site/` changes             |
-| Delegation without the laws    | A child edits through the terminal, or commits        |
-| Stale model route              | A delegation without the explicit triple              |
+| Failure                        | What it looks like                                                  |
+| ------------------------------ | ------------------------------------------------------------------- |
+| Acting before orientation      | Edits in the wrong tree; a law violated in step one                 |
+| Trusting prose counts          | Repeating 733/746, 1314/1324, or "15 packages" after the tree moved |
+| Reading plans as shipped truth | Documenting a planned plugin as if it exists                        |
+| Wrong git surface              | Root `git status` missing `Site/` changes                           |
+| Delegation without the laws    | A child edits through the terminal, or commits                      |
+| Stale model route              | A delegation without the explicit triple                            |
 
 ## E. The six answers
 
@@ -61,5 +61,9 @@ You are oriented when you can state, without opening another file:
 4. The three models and the main agent's model.
 5. The file-write law and the git law, in one sentence each.
 6. The active plans.
+
+The expected package answer as of 2026-10-22: 51 Classic + 46 EffectTS packages, all 0.1.0,
+unpublished; the verify command is `ls Classic/packages EffectTS/packages`. The expected smoke
+answer: 359 suites / 5,337 checks via `node Maintain/Run-Smokes.mjs`.
 
 If any answer is a guess, return to the step that owns it.

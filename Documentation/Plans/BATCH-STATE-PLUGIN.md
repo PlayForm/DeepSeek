@@ -3,16 +3,20 @@ title: The Batch-State Plugin - the cooperative context plan
 category: Plans
 kind: queued-plan
 date: 2026-10-08
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/BATCH-STATE-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
     - name: the batch-state plugin (the compiled context)
-      state: open
-      evidence: this document only - spec, no package
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-batchstate under Classic/packages/ (with its ets-plugin-dsh-batchstate twin);
+          the PoC-vs-plan grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the dynamic block concept (Context = Compile(State))
-      state: open
-      evidence: the spec's final refinement
+      state: implemented (PoC)
+      evidence:
+          the compiled-context board in plugin-dsh-batchstate; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the interim equivalent (the live-containers dynamic context)
       state: implemented
       evidence: hook-dsh-live-containers - the wave-2 dynamic-context carrier

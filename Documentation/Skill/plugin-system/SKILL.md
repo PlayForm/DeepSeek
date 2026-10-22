@@ -33,21 +33,30 @@ The family is one contract expressed twice: plain TypeScript in `Classic/` and E
 
 Two release groups, one contract:
 
-| Group    | Names                                                                                    | Runtime                          |
-| -------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`                                   | Plain TypeScript                 |
-| EffectTS | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers |
+| Group    | Names                                                                                             | Runtime                          |
+| -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- |
+| Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript                 |
+| EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
+
+51 Classic packages, 46 EffectTS packages — the original 14 plugins (plus `lib-dsh-core`) plus the
+36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration set,
+the client family) and 30 ETS twins. All at 0.1.0, all UNPUBLISHED. The full roster:
+`Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 The package roles:
 
-| Role              | Packages                                               |
-| ----------------- | ------------------------------------------------------ |
-| Service           | `plugin-dsh-factory` (19 methods, `ctx.pluginFactory`) |
-| Machinery library | `lib-dsh-core` (not a plugin)                          |
-| Governance trio   | `package-governor`, `package-pinner`, `cargo-governor` |
-| Normalize family  | six stream flavors + `plugin-dsh-normalize-file`       |
-| Guardians         | `ccr`, `tool-coach`                                    |
-| Live blocks       | `live-containers` (ships disabled)                     |
+| Role              | Packages                                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------------------------- |
+| Service           | `plugin-dsh-factory` (19 methods, `ctx.pluginFactory`)                                               |
+| Machinery library | `lib-dsh-core` (not a plugin)                                                                        |
+| Governance trio   | `package-governor`, `package-pinner`, `cargo-governor`                                               |
+| Normalize family  | six stream flavors + `plugin-dsh-normalize-file`                                                     |
+| Guardians         | `ccr`, `tool-coach`                                                                                  |
+| Live blocks       | `live-containers` (ships disabled)                                                                   |
+| Workspace         | the 15 workspace-family packages + `lib-dsh-workspace-live`                                          |
+| Suggesters        | the seven `*-suggester` hooks                                                                        |
+| Orchestration     | batch-edit, batchstate, gitguard, route, queue, feedback, pass-on, ingester, pattern, batch-decision |
+| Client            | `client-dsh-panel-family`, `client-dsh-panel-family-host`, `client-dsh-workspace-live`               |
 
 Verify the inventory:
 

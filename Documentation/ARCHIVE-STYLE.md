@@ -107,7 +107,8 @@ is a nested mapping (the YAML object-in-list style of the user's example):
 ## 4. The status vocabulary (fixed, seven values)
 
 - **implemented** - the functionality exists in code and is verified by its arbiter (the smokes, the
-  build, the live battery).
+  build, the live battery). Use `implemented (PoC)` when a PoC covers the functionality but the full
+  plan has open gaps (the grades in Documentation/Reports/POC-GAP-ANALYSIS.md) - never "complete".
 - **resolved** - the problem or decision was settled.
 - **in-progress** - started but NOT landed its final verification.
 - **open** - described or decided but NOTHING exists yet.

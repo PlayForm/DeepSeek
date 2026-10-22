@@ -3,19 +3,25 @@ title: The Subagent-Queue Plugin - the task-queue specification
 category: Plans
 kind: queued-plan
 date: 2026-10-09
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
     - name: the subagent-queue plugin (the task queue)
-      state: open
-      evidence: this document only - spec, no package
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-queue under Classic/packages/ (with its ets-plugin-dsh-queue twin); the
+          PoC-vs-plan grades in Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the capacity model (10 held / 2 children)
-      state: open
-      evidence: the spec's model; the runtime's own limits still apply
+      state: implemented (PoC)
+      evidence:
+          the queue's capacity model in plugin-dsh-queue; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the pool and reservation surface (the probe)
-      state: open
-      evidence: the probe's findings recorded in the spec
+      state: implemented (PoC)
+      evidence:
+          the seat/release and dispatch in plugin-dsh-queue; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
 # SUBAGENT-QUEUE PLUGIN - the task-queue specification (dedicated 2026-10-09)

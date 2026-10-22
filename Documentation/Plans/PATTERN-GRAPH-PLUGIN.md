@@ -3,7 +3,7 @@ title: The Pattern Graph - the general suggestion model and its plugin family
 category: Plans
 kind: queued-plan
 date: 2026-10-21
-status: planned
+status: implemented (PoC)
 registry: Documentation/Plans/PATTERN-GRAPH-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
@@ -11,14 +11,20 @@ statuses:
       state: resolved
       evidence: this document - the patternize-able definition and the behavior graph
     - name: the behavior graph model (the five node kinds and the algebra)
-      state: open
-      evidence: section 2; the model is proposed, not implemented
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-pattern under Classic/packages/; the PoC-vs-plan grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the plural family (the core service and the domain plugins)
-      state: open
-      evidence: section 4; the packages are planned, none exists
+      state: implemented (PoC)
+      evidence:
+          plugin-dsh-pattern + the seven suggester hooks under Classic/packages/; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the learner (the session replay to the pattern registry)
-      state: open
-      evidence: section 3; the sessions are the corpus
+      state: implemented (PoC)
+      evidence:
+          the record/decay path in plugin-dsh-pattern; the grades in
+          Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the measurement (the search reduction and the acceptance)
       state: open
       evidence: section 7

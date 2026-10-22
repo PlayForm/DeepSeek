@@ -4,19 +4,21 @@
 >
 > Tame the model's output and govern the project's files.
 >
-> Thirty-one TypeScript packages - the factory, the core, the governance trio, the seven-member
-> normalize family, the two guardians and the live block - in two implementations
+> Ninety-seven TypeScript packages - 51 Classic and 46 EffectTS - the original 14 plugins (the
+> factory, the core, the governance trio, the seven-member normalize family, the two guardians and
+> the live block) plus the 36 plugins of the 2026-10-22 delivery (the workspace family, the
+> suggesters, the orchestration set, the client panels) and their ETS twins, in two implementations
 > ([the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic),
 > [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one
-> ledger-string contract, 1314 + 1324 smoke assertions.
+> ledger-string contract, 359 smoke suites / 5,337 checks.
 >
 > _One monorepo._
 >
 > _Every ledger byte-checked._
 
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](CHANGELOG.md)
-[![smokes](https://img.shields.io/static/v1?label=smokes&message=classic%201314%20%2F%20effect-ts%201324&color=blue)](Classic/smokes/README.md)
-[![packages](https://img.shields.io/static/v1?label=packages&message=31&color=white)](Classic/packages/)
+[![smokes](https://img.shields.io/static/v1?label=smokes&message=359%20suites%20%2F%205%2C337%20checks&color=blue)](Classic/smokes/README.md)
+[![packages](https://img.shields.io/static/v1?label=packages&message=51%20%2B%2046&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
 ---
@@ -33,9 +35,9 @@ binary.
 
 ```sh
 pnpm install --ignore-scripts
-pnpm run build:classic   # the fifteen Classic bundles, one workspace pass
-pnpm run build:effect-ts # the fifteen EffectTS bundles
-pnpm run test            # all 207 smoke folders - the arbiter
+pnpm run build:classic   # the 51 Classic packages, one workspace pass
+pnpm run build:effect-ts # the 46 EffectTS packages
+pnpm run test            # all 359 smoke folders - the arbiter
 ```
 
 Per bundle the build is the same three steps (`Source/` -> `Target/` via ESBuild + `tsc` +
@@ -48,8 +50,8 @@ pnpm run prepublishOnly
 ```
 
 The base library and the factory first (`lib-dsh-core`,
-[plugin-dsh-factory][ours-plugin-dsh-factory]), then the thirteen consumers; the consumers import
-their siblings through directory links under their own `node_modules/`.
+[plugin-dsh-factory][ours-plugin-dsh-factory]), then the consumers; the consumers import their
+siblings through directory links under their own `node_modules/`.
 
 ### Into a DeepSeek Harness profile
 
@@ -214,18 +216,22 @@ Three seams, three behaviors, one service underneath:
 
 ## Architecture
 
-### The three implementations
+### The two trees
 
-One contract, three trees - the ledger strings are byte-identical across all of them:
+One contract, two trees - the ledger strings are byte-identical across both:
 
 | Tree        | What it is                                                                                                                               |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 1314 smoke assertions.            |
-| `EffectTS/` | The Effect v4 port - the same fifteen contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 1324 assertions. |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 51 packages; 184 smoke suites.    |
+| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 46 packages; 175 suites. |
 
-### The fifteen packages
+Every package carries an `ets-*` twin unless the manifest declares none (the two client panels and
+four orchestration candidates have no twin - 30 twins for the 36 new packages).
 
-Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
+### The original 14 plugins (plus the core library)
+
+The original 14 plugins (plus `lib-dsh-core`) - every name reads as an @-sentence:
+`<kind> @ <platform> @ <role> @ <domain>`.
 
 - **[plugin-dsh-factory][ours-plugin-dsh-factory]** (Plugin @ DSH @ Factory) - the family's first
   service: loading it registers one class plugin (`static inject = ["fs"]`) that exposes
@@ -297,15 +303,44 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
   whose labeled stanzas are recomputed at request time; it ships disabled and enables only by an
   explicit activate.
 
+### The 36 packages of the 2026-10-22 delivery
+
+The one-line roster lives in
+[Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md](Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md); the
+per-plugin live test plans in [Documentation/Testing/](Documentation/Testing/README.md). In brief:
+
+- **The workspace family (15 + the library)** - `plugin-dsh-workspace` (the operational view and the
+  map/find/expand/context tools), `hook-dsh-workspace-observe` (the version stamps),
+  `plugin-dsh-workspace-semantics` (symbol resolution and rename planning),
+  `hook-dsh-workspace-operate` (typed proposals), `hook-dsh-workspace-govern` (the means-check
+  gates), `plugin-dsh-workspace-authority` (capability/lease/residency),
+  `hook-dsh-workspace-approve` (the approval binder), `hook-dsh-workspace-merge` (the atomic batch
+  merge), `hook-dsh-workspace-journal` (pre-images, revert, crash recovery),
+  `hook-dsh-workspace-audit` (the accountability records), `plugin-dsh-workspace-context` (the
+  orientation packet), `hook-dsh-workspace-monitor` (check-set watchers),
+  `plugin-dsh-workspace-evidence` (the truth records), `plugin-dsh-workspace-graph` (the
+  file/symbol/block index), `plugin-dsh-workspace-reflect` (one-call reflective ops), plus
+  `lib-dsh-workspace-live` (the shared client library).
+- **The client family (3)** - `client-dsh-panel-family`, `client-dsh-panel-family-host`,
+  `client-dsh-workspace-live`.
+- **The suggesters (7)** - `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`.
+- **The orchestration set (10)** - `plugin-dsh-batch-edit` (the batch edit engine),
+  `plugin-dsh-batchstate` (the live board), `plugin-dsh-gitguard`, `plugin-dsh-route`,
+  `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
+  `plugin-dsh-pattern`, and `hook-dsh-batch-decision`.
+
+30 of the 36 have ETS twins (all but the two client panels and `plugin-dsh-pass-on`,
+`plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision`).
+
 ### The layout
 
 ```text
-    Classic/         the plain-TypeScript release: 15 packages + 15 smokes
-    EffectTS/        the Effect v4 port: the same 15 packages + 15 smokes
-    Site/            the static site: 24 pages (the plugins, the flavors, the setup, the case study)
+    Classic/         the plain-TypeScript release: 51 packages + smokes
+    EffectTS/        the Effect v4 port: 46 packages + smokes
+    Site/            the static site (its own repository)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes
-    Documentation/   the framework, the guides, the skills, the handoff
-    Maintain/        the formatting entry point
+    Documentation/   the framework, the guides, the skills, the plans, the reports, the test plans
+    Maintain/        the formatting entry point and the aggregate runner
 ```
 
 ### The ledger-string contract
@@ -313,8 +348,7 @@ Every name reads as an @-sentence: `<kind> @ <platform> @ <role> @ <domain>`.
 Every activation line, refusal line, chain-pass line and journal record is asserted byte-identically
 by the smokes.
 
-The strings are the contract: they must not change, and they are the same strings in all three
-implementations.
+The strings are the contract: they must not change, and they are the same strings in both trees.
 
 One ledger per plugin, `~/.dsh/<identity>.log`; the smokes load the real built `Target/Library.js`
 of each bundle and assert the full behavioral contract on top of the strings - the loader contract,
@@ -322,26 +356,20 @@ the identity assertions, the effect wiring.
 
 ### The smokes (the arbiter)
 
-One suite per bundle per tree, run with `node <name>-smoke.mjs` from `Classic/smokes/` and
-`EffectTS/smokes/`:
+One suite per test folder per tree, run with the aggregate `node Maintain/Run-Smokes.mjs` (which
+also guards each folder's printed PASS count against its folder README - the vacuously-green guard):
 
-| Suite          | Classic | EffectTS |
-| -------------- | ------: | -------: |
-| core           |      14 |       17 |
-| factory        |      34 |       41 |
-| governor       |      78 |       81 |
-| pinner         |      32 |       32 |
-| cargo          |      62 |       62 |
-| normalize-dash |     132 |      132 |
-| quotes         |      62 |       62 |
-| ellipsis       |      62 |       62 |
-| spaces         |      62 |       62 |
-| invisible      |      62 |       62 |
-| fullwidth      |      62 |       62 |
-| normalize-file |      71 |       71 |
-| **Total**      | **733** |  **746** |
+| Measure                   | Value                                                                            |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| Test folders (Classic)    | 184                                                                              |
+| Test folders (EffectTS)   | 175                                                                              |
+| Total suites              | **359**                                                                          |
+| Total checks (both trees) | **5,337**                                                                        |
+| The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run-Wiring.mjs` under `DSH_TEST_SCRATCH` |
 
-The EffectTS suites add coverage (core +3, factory +7, governor +3) on the same behavioral contract.
+The per-suite before/after totals live in the totals ledger of
+`Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`; the original 14 mechanics suites total
+1314 Classic / 1324 EffectTS checks, the rest is the 2026-10-22 delivery's suites.
 
 The counts are the release contract: they must not change.
 
@@ -440,9 +468,9 @@ The command writes one ledger line per action:
 
 The suites are the speed and coverage story:
 
-- **733 Classic / 746 EffectTS assertions, all green.** The whole Classic battery runs in ~3 s, the
-  EffectTS battery in ~7 s (Node startup dominates); the heaviest single suite (cargo, 62 checks
-  including the real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
+- **184 Classic / 175 EffectTS suites, 5,337 checks, all green.** The aggregate runner is
+  `node Maintain/Run-Smokes.mjs`; the heaviest single original suite (cargo, 62 checks including the
+  real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
 - **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript;
   EffectTS adds the single `effect` 4.0.2 dependency.
 - **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins,
@@ -456,15 +484,15 @@ The smokes are the arbiter after every change: they must stay green at the same 
 
 The workflow, root-first - every step is a root `package.json` script:
 
-| Script                                       | What it does                                                                                            |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install |
-| `pnpm run build:classic` / `build:effect-ts` | the twelve bundles of one tree, one workspace pass (`prepublishOnly` per bundle)                        |
-| `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                  |
-| `pnpm test`                                  | all 24 smokes (12 Classic + 12 EffectTS) - the behavioral arbiter, exit non-zero on any failure         |
-| `pnpm site`                                  | the static site build (`Site/` - 21 pages)                                                              |
-| `pnpm lychee`                                | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                           |
-| `pnpm format` / `format:check`               | `Maintain/Format.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)          |
+| Script                                       | What it does                                                                                              |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install   |
+| `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                               |
+| `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                    |
+| `pnpm test`                                  | all 359 smoke suites via `Maintain/Run-Smokes.mjs` - the behavioral arbiter, exit non-zero on any failure |
+| `pnpm site`                                  | the static site build (`Site/`)                                                                           |
+| `pnpm lychee`                                | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                             |
+| `pnpm format` / `format:check`               | `Maintain/Format.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)            |
 
 The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings
 stay byte-identical at the same counts; the byte-scan stays clean (no NUL bytes in the tracked
@@ -474,7 +502,7 @@ The hazards, documented:
 
 - ~~The duplicate-name relink.~~ Resolved by the namespace split (SPLICE-ETS.md): the two trees now
   carry unique names (`@playform/dsh-*` vs `@playform/ets-*`), so no install can re-relink a
-  consumer's `@playform/*` links to the other tree. Re-run the 24 smokes after every install anyway.
+  consumer's `@playform/*` links to the other tree. Re-run the smokes after every install anyway.
 - **The verifyCommand trap.** An update-policy `verifyCommand` fails on a vendored-fork workspace
   (no registry to install from) - the ledger records it, the expected outcome.
 - **The smoke/live fidelity gap.** The smokes prove the mechanics; the live battery proves the
@@ -543,12 +571,12 @@ and the governance on top.
 
 ## Contributing
 
-| Want to...            | Start here                                                                      |
-| --------------------- | ------------------------------------------------------------------------------- |
-| Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`       |
-| Add a flavor          | `lib-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle           |
-| Change behavior       | the smokes first - the counts (733/746) and the ledger strings are the contract |
-| Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`        |
+| Want to...            | Start here                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`                         |
+| Add a flavor          | `lib-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle                             |
+| Change behavior       | the smokes first - the counts (359 suites / 5,337 checks) and the ledger strings are the contract |
+| Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`                          |
 
 The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings
 stay byte-identical; the tree is committed by the maintainer, never by tooling.

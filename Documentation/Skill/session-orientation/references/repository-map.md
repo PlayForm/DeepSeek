@@ -7,8 +7,8 @@ are wrong-tree mistakes.
 
 | Path             | Role                                                                   | Git                |
 | ---------------- | ---------------------------------------------------------------------- | ------------------ |
-| `Classic/`       | The plain-TypeScript release: 15 packages, each with its own `Target/` | Root repo          |
-| `EffectTS/`      | The Effect-TS release: 15 packages plus `ets-base-dsh`                 | Root repo          |
+| `Classic/`       | The plain-TypeScript release: 51 packages, each with its own `Target/` | Root repo          |
+| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`)              | Root repo          |
 | `Site/`          | The Astro static site, built into `Site/Target/`                       | Its own repository |
 | `Test/`          | Fixture archives, governance batteries, probes                         | Root repo          |
 | `Documentation/` | Framework, guides, plans, skills, reports, research, archive           | Root repo          |
@@ -21,13 +21,15 @@ are wrong-tree mistakes.
 
 ## The two release groups
 
-| Group    | Names                                                                                    | Runtime                          |
-| -------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@playform/hook-dsh-*`, `@playform/plugin-dsh-factory`                                   | Plain TypeScript, no framework   |
-| EffectTS | `@playform/ets-hook-dsh-*`, `@playform/ets-plugin-dsh-factory`, `@playform/ets-base-dsh` | Effect 4.0.5 services and layers |
+| Group    | Names                                                                                             | Runtime                          |
+| -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- |
+| Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript, no framework   |
+| EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
 
-All packages sit at `0.1.0`. Never mix the groups in one dependency graph: the EffectTS `Update`
-returns Effect envelopes, not the Classic dispatch envelope.
+All packages sit at `0.1.0` (unpublished). The original 14 plugins were joined on 2026-10-22 by 36
+new Classic packages (the workspace family, the suggesters, the orchestration set, the client
+family) and 30 of their ETS twins. Never mix the groups in one dependency graph: the EffectTS
+`Update` returns Effect envelopes, not the Classic dispatch envelope.
 
 Verify the inventory:
 
@@ -54,6 +56,9 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
   `hook-dsh-tool-coach` (behavioral coaching through the tool surface).
 - **`hook-dsh-live-containers`** - live system-prompt blocks recomputed per request. It ships
   disabled by default.
+- **The 2026-10-22 delivery** - the workspace family (15 packages + `lib-dsh-workspace-live`), the
+  seven suggester hooks, the orchestration set (10 packages), and the three `client-dsh-*` panels.
+  Full roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 ## The event surfaces
 

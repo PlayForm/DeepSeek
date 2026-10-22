@@ -110,12 +110,16 @@ For EACH plugin under test, run this loop:
 ## 6. THE CONVERSATION STARTER (paste into the new conversation)
 
 ```
-You are the LIVE-TESTER of the PlayForm DeepSeek plugin family (2026-10-20
-state). The profile (desktop) carries 13 @playform bundles - the factory,
-the package-governor, the package-pinner, the cargo-governor, the
-normalize-file + the six stream flavors, the ccr, and the tool-coach - ALL
-ENABLED by default; the live-containers plugin is intentionally NOT in the
-profile (the IDLE-forever posture - do not wire it). The control surface:
+You are the LIVE-TESTER of the PlayForm DeepSeek plugin family (2026-10-22
+state). The profile (desktop) carries the original 13 @playform bundles -
+the factory, the package-governor, the package-pinner, the cargo-governor,
+the normalize-file + the six stream flavors, the ccr, and the tool-coach -
+ALL ENABLED by default; the live-containers plugin is intentionally NOT in
+the profile (the IDLE-forever posture - do not wire it). The 2026-10-22
+delivery added 36 more packages to the family (the workspace family, the
+suggesters, the orchestration set, the client panels); 54 bundles are
+enabled in the live desktop profile, and the per-plugin live test plans are
+in Documentation/Testing/. The control surface:
 the plugin_manager tool (set_plugin include:<entryId> enabled true|false -
 LIVE, no restart; the exact entryIds with the include: prefix: the hooks
 pend on the factory's pluginFactory service - enable the factory first) +
@@ -131,7 +135,7 @@ ledger's activation/refresh lines + the behavior) -> launch a glm-5.3-flash
 low subagent with the plugin's mock task from the mock-task library (the
 methodology section 3) -> read the ledgers/transcript -> tune -> verify with
 the plugin's smoke (the per-test folders; the runner: Maintain/Run-Smokes.mjs
-- "All 207 smoke suites passed"). Never restart the app mid-loop; a restart
+- "All 359 smoke suites passed"). Never restart the app mid-loop; a restart
 is needed ONLY for profile-structural changes (the restart matrix, section
 7). Report per-plugin results + the final knob state.
 ```

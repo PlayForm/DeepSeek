@@ -1,29 +1,31 @@
 ---
-title: The Planned Plugin Suite - the ETS twins brief (the 29 EffectTS mirrors)
+title: The Planned Plugin Suite - the ETS twins brief (the 29 EffectTS mirrors, delivered as 30)
 category: Plans
 kind: living-plan
 date: 2026-10-22
-status: planned
+status: complete
 registry: Documentation/Plans/ETS-TWINS-BRIEF.md
 index: Documentation/INDEX.md
 statuses:
 	- name: the ETS twin set (29 packages)
-		state: planned
-		evidence: this document section 2
+		state: implemented
+		evidence: the 29 twins exist under EffectTS/packages/; the delivery added one more
+		  (ets-client-dsh-workspace-live) for 30 new twins total
 	- name: the mirror pass (the generator + the per-package diff)
-		state: planned
-		evidence: this document section 3
+		state: implemented
+		evidence: Maintain/generate-ets-planned.mjs; the 30 twins built and diff-verified
 	- name: the twin verification (build + parity smokes)
-		state: planned
-		evidence: this document section 6
+		state: implemented
+		evidence: 97/97 builds green; the aggregate 359 suites / 5,337 checks green
 ---
 
 # THE PLANNED PLUGIN SUITE - THE ETS TWINS BRIEF
 
 > The end-phase companion to Documentation/Plans/POC-BRIEF.md. The Classic PoC set lands first; the
-> 29 EffectTS twins follow. The family contract: Documentation/Skill/plugin-system/SKILL.md (the ETS
-> variant and the byte-identical ledger law). The POC brief still governs the mode (source first,
-> verification after).
+> EffectTS twins follow. The brief scoped 29 mirrors; the delivery produced 30 new twins
+> (ets-client-dsh-workspace-live joined the set), for 46 EffectTS packages total. The family
+> contract: Documentation/Skill/plugin-system/SKILL.md (the ETS variant and the byte-identical
+> ledger law). The POC brief still governs the mode (source first, verification after).
 
 ## 1. The verified shape of a twin
 

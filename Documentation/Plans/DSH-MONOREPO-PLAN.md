@@ -7,15 +7,18 @@ status: active
 registry: Documentation/Plans/DSH-MONOREPO-PLAN.md
 index: Documentation/INDEX.md
 statuses:
-    - name: the monorepo layout (Boilerplate/Classic/EffectTS/Site/Test/Documentation/Maintain)
+    - name: the monorepo layout (Classic/EffectTS/Site/Test/Documentation/Maintain)
       state: implemented
-      evidence: the directories exist; 31 published packages
+      evidence: the directories exist; 51 + 46 packages at 0.1.0, all unpublished
     - name: the Classic release (the anonymized packages)
       state: implemented
-      evidence: Classic/packages - 15 packages at 0.1.0
+      evidence:
+          Classic/packages - 51 packages at 0.1.0 (14 original plugins + the core library + the 36
+          packages of the 2026-10-22 delivery)
     - name: the EffectTS release (the ets-* split)
       state: implemented
-      evidence: EffectTS/packages - 16 packages including ets-base-dsh
+      evidence:
+          EffectTS/packages - 46 packages including ets-base-dsh (30 new twins in the delivery)
     - name: the Site (the static showcase)
       state: implemented
       evidence: 24 pages, build green

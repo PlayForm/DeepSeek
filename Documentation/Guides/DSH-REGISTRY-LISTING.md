@@ -45,12 +45,18 @@ statuses:
   to `pnpm add @playform/lib-dsh-core`. `Site/Source/pages/plugins.astro` carries ONE install row
   per package. The listing below repeats that form BYTE-EXACT.
 
-## 2. THE ROSTER - the OPERATING NAMES (the two groups + the base)
+## 2. THE ROSTER - the OPERATING NAMES (the original groups + the base)
 
 The splice has executed (SPLICE-ETS section 8 S2/S4): the trees carry UNIQUE names. The Classic tree
-carries the plain `@playform/dsh-*` names. The EffectTS tree carries the `@playform/ets-hook-dsh-*`
-/ `@playform/ets-plugin-dsh-factory` names plus the base `@playform/ets-base-dsh` (verified in the
-manifests). The registry listing uses exactly these.
+carries the plain `@playform/{lib,hook,plugin}-dsh-*` names. The EffectTS tree carries the
+`@playform/ets-*` names plus the base `@playform/ets-base-dsh` (verified in the manifests). The
+registry listing uses exactly these.
+
+**This roster covers the ORIGINAL 31 packages.** The 2026-10-22 delivery adds 36 Classic packages
+and 30 EffectTS twins (the workspace family, the suggesters, the orchestration set, the client
+family) - the full inventory and one-line roles: Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md.
+Every new package follows the same install form (`pnpm add @playform/<pkg>`) and the same bootstrap
+tier (2-planned / 3-candidates).
 
 **The classical group (15, `Classic/packages/*`):**
 
@@ -105,8 +111,9 @@ contract:
   NO version suffix in the display form.
 - The package tokens must match the manifest `name` byte-for-byte. A renamed package (the splice)
   rewrites the command AND the listing row in the same change set.
-- The smoke suite reference strings and the ledger totals (1314 Classic / 1324 EffectTS) are
-  untouched by ANY listing edit. The suites are the arbiter (SPLICE-ETS section 6.1, section 10).
+- The smoke suite reference strings and the ledger totals (359 suites / 5,337 checks across both
+  trees) are untouched by ANY listing edit. The suites are the arbiter (SPLICE-ETS section 6.1,
+  section 10).
 - `Site/Target/**` is build output. The site's install rows are edited in `Site/Source/**` ONLY,
   NEVER hand-edited in Target.
 
@@ -116,8 +123,8 @@ contract:
    the registry.
 2. `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four foundations -> L2 the
    twenty-six consumers (SPLICE-ETS section 5.1).
-3. Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 1314 + 1324, zero
-   failures (SPLICE-ETS section 6.3).
+3. Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 97/97 packages, 359
+   suites / 5,337 checks, zero failures.
 4. The site's `Install:` rows + the `/setup/` flow copy already match the `pnpm add` form - verified
    byte-exact against this roster at publish time.
 
