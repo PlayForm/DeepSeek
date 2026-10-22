@@ -1,0 +1,33 @@
+# Bundle patch for @playform/plugin-dsh-batch-edit.
+# The batch edit tool turns files into PROCESSES held in state: one tool
+# (batch_edit) opens a machine, inserts files into it, and runs the
+# transition table (replace / insert-after / insert-before / remove-line /
+# append / prepend) across every held file in one go. Every write goes
+# through Factory.Write and nothing else; the governed basenames run the
+# factory's direct path exactly once per write (the govern actor marker,
+# Gate.ts route 2 - re-route, never bypass). The atomic gate is
+# all-or-nothing. Plan: Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md +
+# Documentation/Plans/Batch-Edit-Tool/*.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the apply logs `disabled (enabled=false)` and every listener
+# no-ops to a passthrough (each checks State.On first). The schema defaults
+# are the truth; the full default surface (machinesPerAgent 2, opsPerCommit
+# 64, deadlineMs 120000, strictMode false, interceptBash false,
+# monitorChecksets [], logFile ~/.dsh/batch-edit.log) lives in
+# Variable/Config.ts. EVERY knob is volatile (hot-editable without
+# remounting).
+- insert:
+      - id: plugin-dsh-batch-edit
+        name: "@playform/plugin-dsh-batch-edit"
+        config:
+            enabled: false
