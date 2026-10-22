@@ -1,0 +1,23 @@
+import type Factory from "@playform/plugin-dsh-factory";
+declare module "@deepseek-ai/cordis" {
+    interface Context {
+        /** The plugin-factory service (@playform/plugin-dsh-factory). */
+        pluginFactory: Factory;
+    }
+}
+export default interface FactoryHandle {
+    /** The State builder: cell unwrap + shared fields + module extras. */
+    State(Context: unknown, Config: unknown, Setup: unknown): unknown;
+    /** The ledger: logger first, then the durable file; never throws. */
+    Append(State: unknown, Message: string): void;
+    /** The exclusion match (the factory's segment match). */
+    Match(Path: string, List: string[] | null | undefined): boolean;
+    /** The fs/observed registration on the ROOT context. */
+    Wire(Context: unknown, State: unknown, Observe: unknown): void;
+    /** The ONE shared write executor (intent/policy/observe/stash/transform). */
+    Write(State: unknown, Target: unknown, Content: string, Over?: Record<string, unknown>): Promise<{
+        operation: "create" | "update";
+        version: unknown;
+        before: string | null;
+    }>;
+}

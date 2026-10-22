@@ -1,0 +1,1 @@
+var o=async t=>{const r=[];for(const e of t.Batches.values())e.state==="applying"&&(e.state="recovery-required",e.reason=`applying at boot with ${e.progress}/${e.files.length} writes observed`,t.Factory.Append(t,`recovery-required ${e.batchId} (${e.reason})`),r.push(e.batchId));return{batchIds:r}};export{o as default};

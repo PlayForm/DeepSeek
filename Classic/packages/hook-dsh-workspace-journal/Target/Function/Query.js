@@ -1,0 +1,1 @@
+const n=(t,e)=>t.Batches.get(e),s=t=>t.Ring.map(e=>t.Batches.get(e)).filter(e=>e!==void 0),c=(t,e)=>t.Batches.get(e)?.files.map(r=>t.Entries.get(`${e}:${r}`)).filter(r=>r!==void 0)??[],a=t=>({batches:t.Batches.size,entries:t.Entries.size,applying:[...t.Batches.values()].filter(e=>e.state==="applying").length});export{n as Batch,s as Batches,c as Entries,a as Statistics};
