@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";var l=e.object({enabled:e.boolean().default(!0),logFile:e.string().default("~/.dsh/feedback/feedback.log"),maxBlockBytes:e.number().default(4096),maxChain:e.number().default(8),maxSessions:e.number().default(128),summaryTerms:e.number().default(10)});export{l as default};

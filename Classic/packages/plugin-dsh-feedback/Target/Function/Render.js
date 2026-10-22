@@ -1,0 +1,2 @@
+const r=(e,t)=>e.length<=t?e:`${e.slice(0,t)}...`;var s=(e,t)=>{const n=Math.max(64,Math.floor(t/4));return[`[HONEST FEEDBACK - ${e.agentId} - ${e.task} - ${e.session}]`,`LIKED: ${r(e.liked,n)}`,`DISLIKED: ${r(e.disliked,n)}`,`DELTAS: ${e.deltas.length===0?"-":e.deltas.join(" | ")}`,`TRANSFERRED: ${e.transferred.length===0?"-":e.transferred.join(" -> ")}`,`READ-STATUS: ${e.readStatus}`].join(`
+`)};export{s as default};

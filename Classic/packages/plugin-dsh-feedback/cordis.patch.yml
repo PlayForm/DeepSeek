@@ -1,0 +1,19 @@
+# Bundle patch for @playform/plugin-dsh-feedback.
+# The FEEDBACK member (ctx.feedback) is a SERVICE-PROVIDER bundle: loading it
+# makes the feedback service available on the context - the honest-signal
+# collector, the transfer hop, the optional read and the council summary.
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# The class plugin (`export default class Feedback extends Service`)
+# declares a static Config (validated before construction) and registers
+# itself as `feedback` via `super(ctx, "feedback")`.
+- insert:
+      - id: plugin-dsh-feedback
+        name: "@playform/plugin-dsh-feedback"
+        config:
+            enabled: true
