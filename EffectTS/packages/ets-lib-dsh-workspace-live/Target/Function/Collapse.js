@@ -1,0 +1,1 @@
+import c from"./Render.js";var a=(l,s)=>{const t=[];let n=0;for(const e of l){const o=c(e);if(n+o.length<=s){n+=o.length,t.push({text:o,collapsed:!1});continue}const i=e.version===void 0?"":` @ ${e.version}`,r=`${e.id} (${e.kind}) collapsed: ${e.title}${i}`;n+=r.length,t.push({text:r,collapsed:!0})}return t};export{a as default};

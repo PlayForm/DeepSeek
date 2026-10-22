@@ -1,0 +1,39 @@
+{
+	"name": "@playform/ets-lib-dsh-workspace-live",
+	"version": "0.1.0",
+	"description": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section framer, the budget collapse, the orientation-packet renderer in the WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE line format). NO Config, NO apply - the library is not a plugin bundle: no loader contract, no cordis patch, publishable on its own. The consumers (the workspace agent's operational view, the client-dsh-* panels) keep their own ledger strings, tools and configs; the library owns only the pure, harness-free section mechanics. Plan: Documentation/Plans/Workspace-Family/SHARED-LIBRARY.md + LIVE.md; the packet format is WORKSPACE-FAMILY-V4-1.md section 3.5.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"README.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}
