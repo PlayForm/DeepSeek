@@ -1,0 +1,1 @@
+import{Release as d}from"./Capacity.js";var o=(t,a,s,r,i)=>{const e=t.Tasks.get(a);if(e===void 0||e.state!=="dispatched"&&e.state!=="running")return;const n=e.assignedAgent??"main";return e.state=s,s==="completed"&&(e.resultHash=r),d(t,n),t.Factory?.Journal(t,`task ${s}`,a,n),i?.(`${s} ${a} (${n})`),e};export{o as default};

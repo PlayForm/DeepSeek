@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-queue",e=t,n=["pluginFactory","tools"],r=o;var l={name:p,apply:r,Config:e,inject:n};export{e as Config,r as apply,l as default,n as inject,p as name};

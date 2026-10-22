@@ -1,0 +1,1 @@
+const i=n=>{throw new Error(`plugin-dsh-queue: ${n}`)},t=n=>typeof n?.get=="function"?n.get():n;var u=n=>{const e=t(n)??{};Number(e.main)>=1||i("capacity.main must be >= 1"),Number(e.child)>=1||i("capacity.child must be >= 1")};export{u as default};

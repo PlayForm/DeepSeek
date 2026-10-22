@@ -1,0 +1,31 @@
+# Bundle patch for @playform/plugin-dsh-queue.
+# The SUBAGENT QUEUE turns subagent work into a queue (the tasks as data, not
+# the agents as contexts): the main conversation holds up to 10 reserved
+# slots, every spawned agent's own child fan-out is capped at 2 (the
+# two-active regime), the dispatcher assigns the queued tasks in a
+# deterministic order (dependencies, then priority, then FIFO) when a slot
+# frees, and each dispatch carries its route resolved through the routing
+# enforcer when that plugin is present (Documentation/Plans/
+# SUBAGENT-QUEUE-PLUGIN.md sections 1-2).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and the tools
+# and the service no-op. The schema defaults are the truth: the user's
+# capacity model (main 10, child 2), auto-dispatch on a freed slot, routed
+# dispatch when the routing enforcer is present. EVERY knob is volatile
+# (hot-editable without remounting): enabled, log/logFile, the capacity
+# object, autoDispatch and routedDispatch.
+- insert:
+      - id: plugin-dsh-queue
+        name: "@playform/plugin-dsh-queue"
+        config:
+            enabled: false
