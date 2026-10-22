@@ -1,0 +1,1 @@
+var r=t=>{let i=0,s=0,n;for(const e of t.Tasks.values())e.state==="queued"?(i+=1,(n===void 0||e.priority>(t.Tasks.get(n)?.priority??0))&&(n=e.id)):(e.state==="dispatched"||e.state==="running")&&(s+=1);const a=t.Seats.get("main")??0;return`QUEUE: ${i} pending - next: ${n??"none"} - running: ${s}/${t.Capacity.main} (main seats ${a})`};export{r as default};

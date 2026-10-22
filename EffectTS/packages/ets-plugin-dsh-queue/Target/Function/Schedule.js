@@ -1,0 +1,1 @@
+import a from"./Capacity.js";var f=(n,i)=>{if(a(n,i)<=0)return;const s=new Set;for(const e of n.Tasks.values())e.state==="completed"&&s.add(e.id);let t;for(const e of n.Tasks.values())e.state==="queued"&&e.dependsOn.every(r=>s.has(r))&&(t===void 0||e.priority>t.priority)&&(t=e);return t};export{f as default};

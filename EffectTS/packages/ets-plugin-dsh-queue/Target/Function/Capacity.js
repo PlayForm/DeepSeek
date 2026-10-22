@@ -1,0 +1,1 @@
+const s="main";var o=(t,e)=>{const a=t.Seats.get(e)??0;return(e===s?t.Capacity.main:t.Capacity.child)-a};const r=(t,e)=>{t.Seats.set(e,(t.Seats.get(e)??0)+1)},c=(t,e)=>{const a=t.Seats.get(e)??0;t.Seats.set(e,Math.max(0,a-1))};export{s as MAIN,c as Release,r as Seat,o as default};
