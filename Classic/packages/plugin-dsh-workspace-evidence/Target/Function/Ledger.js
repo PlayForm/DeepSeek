@@ -1,0 +1,1 @@
+const r=(e,t)=>e.Store.get(t)?.status,o=(e,t)=>{const s=[...e.Store.values()].sort((n,a)=>n.sequence-a.sequence);return t===void 0?s:s.filter(n=>n.status===t)},i=e=>{const t={fresh:0,stale:0,superseded:0};for(const s of e.Store.values())t[s.status]+=1;return{validations:e.Store.size,...t,sequence:e.Sequence}};var u={Check:r,List:o,Statistics:i};export{u as default};

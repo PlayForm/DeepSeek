@@ -1,0 +1,29 @@
+# Bundle patch for @playform/plugin-dsh-workspace-evidence.
+# The evidence service owns the validation objects + the evidence deps + the
+# four kinds of truth + the stale-validation invalidation, and answers
+# through the workspaceEvidence service (the family map's EVIDENCE role,
+# phase 4 of the invisible flow, with semantics + approve). The invalidation
+# is the Acar seam: a dependency change marks the dependent validations
+# stale - never guessed back to fresh (Documentation/Plans/Workspace-Family/
+# EVIDENCE.md).
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with
+# 'entry "..." not found'. Activated when the profile's package.json lists
+# the package in dsh.profile.bundles AND the app is restarted.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the service never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE. On a cold mount the State build logs
+# `disabled (enabled=false)` and the service answers honestly from an empty
+# store (validate still records once enabled). The schema defaults are the
+# truth; the full default surface (domain workspace_evidence,
+# maxValidations 512, the glob triple exclude, and the logFile default)
+# lives in the Variable/Config.ts schema. EVERY knob is volatile
+# (hot-editable without remounting): enabled, log/logFile, domain,
+# maxValidations and exclude.
+- insert:
+      - id: plugin-dsh-workspace-evidence
+        name: "@playform/plugin-dsh-workspace-evidence"
+        config:
+            enabled: false
