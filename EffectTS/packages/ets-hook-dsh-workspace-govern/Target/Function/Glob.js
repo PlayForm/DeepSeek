@@ -1,0 +1,1 @@
+var n=(s,t)=>{let e="";for(let r=0;r<t.length;r+=1){const l=t[r]??"";l==="*"?t[r+1]==="*"?(e+=".*",r+=1):e+="[^/]*":l==="?"?e+="[^/]":e+=l.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}try{return new RegExp(`^${e}$`).test(s)}catch{return!1}};export{n as default};

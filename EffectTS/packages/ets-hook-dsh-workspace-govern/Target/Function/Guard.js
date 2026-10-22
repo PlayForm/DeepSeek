@@ -1,0 +1,1 @@
+const r=256;var c=(e,t,o)=>{const n=(e.Recent.get(t)??0)+1;for(e.Recent.set(t,n);e.Recent.size>256;){const s=e.Recent.keys().next().value;if(s===void 0)break;e.Recent.delete(s)}return!0===n>e.LoopBound?(o(`loop ${t} (recursion guard)`),!0):!1};export{c as default};
