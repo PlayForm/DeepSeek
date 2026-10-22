@@ -1,0 +1,34 @@
+# Bundle patch for @playform/hook-dsh-workspace-monitor.
+# The workspace-monitor hook plays the workspace family's watch/sweep role:
+# the wave-3 machinery with NO REAL TIMERS. The watch form records one entry
+# per fs/observed event (heard on the ROOT context, the factory's Wire
+# registration) with a debounce deadline from the module's Clock; the sweep
+# form is a CLOCK-BASED SCHEDULE - a deadline scan that runs inside the
+# event-driven checkpoints and re-arms each entry from the Clock (never a
+# setTimeout or setInterval). The shipped check-set catalog (tsc, format,
+# cargo, governance) classifies watched paths and is recorded for the
+# accountability trail; the monitor never executes a command
+# (Documentation/Plans/Workspace-Family/MONITOR.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and no listener
+# is wired. The schema defaults are the truth; the full default surface
+# (domain workspace_monitor, debounceMs 250, sweepIntervalMs 60000,
+# maxWatch 500, include empty, the glob exclude triple, and the four-entry
+# check-set catalog) lives in the Variable/Config.ts schema. EVERY knob is
+# volatile (hot-editable without remounting): enabled, log/logFile, domain,
+# debounceMs, sweepIntervalMs, maxWatch, include, exclude and checksets.
+- insert:
+      - id: hook-dsh-workspace-monitor
+        name: "@playform/ets-hook-dsh-workspace-monitor"
+        config:
+            enabled: false
