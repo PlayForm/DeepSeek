@@ -1,0 +1,56 @@
+{
+	"name": "@playform/hook-dsh-replay-suggester",
+	"version": "0.1.0",
+	"description": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has pursued before, the hook recalls the matching record from its history store (~/.dsh/replay-suggester/history.json, the seed of the search-suggester's journal per SEARCH-SUGGESTER-PLUGIN.md section 9.3) and prepends ONE labeled additionalContexts notice: the files touched last time and the command that verified. The history store is loaded once at apply (a JSON read on the boot path, not the hot path); a missing or corrupt store degrades to silence, never to a guess. Deterministic classifier, no LLM in the hot path; repo-relative paths only, local only. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 8, 9.3, 5).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-llm": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
