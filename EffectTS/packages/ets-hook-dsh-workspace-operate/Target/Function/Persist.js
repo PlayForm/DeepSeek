@@ -1,0 +1,1 @@
+var n=(e,t)=>{const a=e.Handle;a!==void 0&&(async()=>{try{t!==void 0&&await a.table("proposals").put(t.id,t),await a.table("meta").put("__meta",{sequence:e.Sequence,refused:e.Refused})}catch{}})()};export{n as default};

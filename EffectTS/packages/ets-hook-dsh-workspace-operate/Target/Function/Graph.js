@@ -1,0 +1,1 @@
+const t=e=>{const n=e;return n!==null&&typeof n=="object"&&typeof n.find=="function"&&typeof n.expand=="function"&&typeof n.snapshot=="function"};var a=e=>{if(!0===(e.Graph!==void 0))return e.Graph;try{const n=e.Context.get?.("workspaceGraph");return t(n)?(e.Graph=n,n):void 0}catch{return}};export{a as default};

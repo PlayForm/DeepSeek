@@ -1,0 +1,1 @@
+var i=(e,t,n,s)=>{try{switch(!0){case s===e.Self:return;case typeof t?.displayPath!="string":return;default:}const a=t.displayPath,r=n?.kind==="present"?String(n.version):"absent";e.Observed.set(a,r)}catch{}};export{i as default};

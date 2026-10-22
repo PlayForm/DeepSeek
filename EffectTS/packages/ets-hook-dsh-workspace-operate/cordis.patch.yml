@@ -1,0 +1,31 @@
+# Bundle patch for @playform/hook-dsh-workspace-operate.
+# The workspace-operate hook is the operation engine, the third step of the
+# invisible flow ("the operate proposes"): the typed proposals -
+# rename/connect/replace - with the resolution rules that decide what CAN
+# be proposed and the first-class REFUSAL-TO-GUESS that declares what
+# CANNOT (Documentation/Plans/Workspace-Family/OPERATE.md). The tools live
+# inside their owning hook (workspace_propose + workspace_proposals,
+# registered from apply). The hook never writes a file: it records
+# proposals in its own KV domain named workspace_operate.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and nothing is
+# wired. The schema defaults are the truth; the full default surface (domain
+# workspace_operate, maxProposals 500, limitDefault 50, limitMaximum 500)
+# lives in the Variable/Config.ts schema. EVERY knob is volatile
+# (hot-editable without remounting): enabled, log/logFile, domain,
+# maxProposals, limitDefault and limitMaximum.
+- insert:
+      - id: hook-dsh-workspace-operate
+        name: "@playform/ets-hook-dsh-workspace-operate"
+        config:
+            enabled: false

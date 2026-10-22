@@ -1,0 +1,1 @@
+import o from"./Persist.js";var a=(t,e)=>{const r=t.Proposals.get(e);return r===void 0||r.status!=="proposed"?!1:(r.status="withdrawn",o(t,r),t.Factory.Append(t,`withdrawn ${e}`),!0)};export{a as default};
