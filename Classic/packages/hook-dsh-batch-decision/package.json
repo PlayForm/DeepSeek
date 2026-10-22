@@ -1,0 +1,56 @@
+{
+	"name": "@playform/hook-dsh-batch-decision",
+	"version": "0.1.0",
+	"description": "The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester and the live view (Documentation/Plans/PASS-ON-AND-INGESTER.md section 5). It listens for batch/proposed events carrying a BatchProposal, runs the decision gate (expiry, the conservative auto-approve policy: the first batch of an intent class always requires the user; an allowlisted, bounded, confident, already-seen intent may auto-approve by policy), records the BatchDecision, emits batch/decision for the ingester and the live view, and exposes the one entry point the user interacts with - the batch_decision tool (list pending proposals, approve/deny by id, with the ingester handoff attempted through the service seam when present). It does NOT implement the pass-on or the ingester; the sibling service shapes are declared structurally in Source/Interface/Siblings.ts and resolved via Context.get at use time (the tool-jobs precedent) - never injected. The workflow ledger is the module's own log file. Ships DISABLED - the idle-forever posture.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"esbuild": "0.28.2",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

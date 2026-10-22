@@ -1,0 +1,1 @@
+import{SEAM_KEYS as n}from"../Interface/Siblings.js";const r=(e,t)=>{try{return e.get?.(t)}catch{return}},c=e=>r(e,n.passOn),o=e=>r(e,n.ingester),a=e=>r(e,n.approval),p=async(e,t)=>{const s=o(e);if(s===void 0)return null;try{return await s.apply(t)}catch{return null}};export{a as Approval,o as Ingester,c as PassOn,r as Resolve,p as ToIngester};

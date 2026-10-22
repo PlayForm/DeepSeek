@@ -1,0 +1,1 @@
+var t=(e,r)=>{switch(!0){case e.AutoApprove!=="on":return"require-user";case!e.Allowlist.includes(r.intent):return"require-user";case r.targets.length>e.MaxAutoTargets:return"require-user";case(r.confidence??0)<e.MinConfidence:return"require-user";case(e.SeenIntents.get(r.intent)??0)<1:return"require-user";default:return"auto-approve"}};export{t as default};

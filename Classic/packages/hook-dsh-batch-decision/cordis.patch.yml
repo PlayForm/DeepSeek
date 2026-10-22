@@ -1,0 +1,28 @@
+# Bundle patch for @playform/hook-dsh-batch-decision.
+# The batch-decision hook: the thin workflow owner between the suggester,
+# the pass-on, the ingester and the live view (Documentation/Plans/
+# PASS-ON-AND-INGESTER.md section 5). It listens for batch/proposed, runs
+# the decision gate (expiry first, then the conservative auto-approve
+# policy: the first batch of an intent class always requires the user),
+# records the BatchDecision, emits batch/decision, and exposes the
+# batch_decision tool as the user's one entry point. It never writes files:
+# the ingester stays the only writer.
+#
+# New entries are declared with `insert:` (a bare `id:` row PATCHES an
+# existing entry). Activated when the profile's package.json lists the
+# package in dsh.profile.bundles AND the app is restarted; a file:
+# dependency alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE. On a cold mount the State build logs
+# `disabled (enabled=false)` and every listener no-ops to a passthrough.
+# The SECOND explicit flip is autoApprove: "off" by default - the write
+# path is never auto-approved by default (the conservative policy). Every
+# knob is volatile (hot-editable without remounting): enabled, log/logFile,
+# autoApprove, allowlist, maxAutoTargets, minConfidence, pendingTtlMs.
+- insert:
+      - id: hook-dsh-batch-decision
+        name: "@playform/hook-dsh-batch-decision"
+        config:
+            enabled: false
