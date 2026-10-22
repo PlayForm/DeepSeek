@@ -1,0 +1,40 @@
+# Bundle patch for @playform/hook-dsh-test-suggester.
+# The test-suggester hook answers the TEST task intent with a target set:
+# when the model searches for proof (a grep for PASS/FAIL/error TS, a read
+# of a Test.ts, a bash error sweep), the hook classifies the call
+# deterministically and prepends ONE labeled additionalContexts notice
+# naming the likely targets - the suite's Test.ts, the suite README (the
+# expected count), the aggregate runner, the README badge. Deterministic
+# classifier, no LLM in the hot path (Documentation/Plans/
+# SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8; the family's second-consumer
+# shape: this hook carries its own embedded pack, no shared service).
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with 'entry "..." not
+# found'. Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted. A file: dependency alone is
+# NOT activation.
+#
+# SHIPS DISABLED (enabled: false): a suggester's acceptance rate must be
+# measured before it is trusted (the plan's kill criterion, section 10.3);
+# the Lead enables it explicitly in the wiring pass. Every knob is volatile
+# (hot-editable without remounting): enabled, log/logFile, threshold,
+# maxCandidates, maxNoteChars, cooldownCalls, maxNotesPerTurn, intents,
+# emitOn, exclude.
+- insert:
+      - id: test-suggester
+        name: "@playform/hook-dsh-test-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/test-suggester.log
+            threshold: 0.75
+            maxCandidates: 7
+            maxNoteChars: 1200
+            cooldownCalls: 6
+            maxNotesPerTurn: 3
+            emitOn:
+                - bash
+                - glob
+                - grep
+                - read

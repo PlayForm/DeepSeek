@@ -1,0 +1,56 @@
+{
+	"name": "@playform/hook-dsh-test-suggester",
+	"version": "0.1.0",
+	"description": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the call deterministically and names the likely targets BEFORE the model finishes searching: the suite's Test.ts assertion body, the suite README carrying the expected count, the aggregate runner (Maintain/Run-Smokes.mjs), and the README badge that must agree with the count. Deterministic classifier, no LLM in the hot path; high threshold, at most maxCandidates candidates, a stated reason per candidate, a cooldown, and an abstention path - a wrong target set costs more than a missing one. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 3, 4, 8).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-llm": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
