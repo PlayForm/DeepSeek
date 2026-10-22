@@ -1,0 +1,20 @@
+# Bundle patch for @playform/plugin-dsh-ingester.
+# The INGESTER (ctx.ingester) is a SERVICE-PROVIDER bundle: loading it makes
+# the ingester service available on the context - the apply direction of the
+# batch flow (approved proposal -> file operations, version-fenced). THE
+# ONLY WRITER: the pass-on and the decision never write. New entries are
+# declared with `insert:` (docs/user/develop/basic/publish.md) - a bare
+# `id:` row PATCHES an existing entry and the loader rejects unknown ids
+# with 'entry "..." not found'. Activated when the profile's package.json
+# lists the package in dsh.profile.bundles AND the app is restarted (bundle
+# layers compose at host boot). A file: dependency alone is NOT activation.
+#
+# The class plugin (`export default class Ingester extends Service`)
+# declares `static inject = ["fs"]` (the governed write path) and a static
+# Config (validated before construction), and registers itself as `ingester`
+# via `super(ctx, "ingester")`.
+- insert:
+      - id: plugin-dsh-ingester
+        name: "@playform/plugin-dsh-ingester"
+        config:
+            enabled: true

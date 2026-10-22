@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";var l=e.object({enabled:e.boolean().default(!0),logFile:e.string().default("~/.dsh/ingester/ingester.log"),maxTargets:e.number().default(20),stopOnConflict:e.boolean().default(!0)});export{l as default};
