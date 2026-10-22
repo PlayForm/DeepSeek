@@ -1,0 +1,33 @@
+# Bundle patch for @playform/plugin-dsh-route.
+# The ROUTING ENFORCER silently enforces the user's model-routing policy on
+# every subagent launch: an omitted provider/model/reasoningEffort is
+# resolved per the policy (the task-routing skill's task-type rules) and
+# INJECTED into the launch; an explicit-but-wrong route is silently CORRECTED
+# and logged to the plugin's own ledger. The orchestrator is never bothered -
+# no warning, no error, no reminder (Documentation/Plans/
+# ROUTING-ENFORCER-PLUGIN.md sections 1-3).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and the
+# launch-path listener no-ops to a passthrough (it checks State.On first).
+# The schema defaults are the truth: the shipped policy is the task-routing
+# skill's routing table (explorer GLM low, coder GLM high, planner
+# deepseek-v4.1-flash-1017 max, the three-model allowed set, escalation at
+# most once), overridable through every volatile knob - enabled, log/logFile,
+# defaultRole, the whole policy object and the keyword table. EVERY knob is
+# volatile (hot-editable without remounting): a policy edit lands on the
+# next launch.
+- insert:
+      - id: plugin-dsh-route
+        name: "@playform/plugin-dsh-route"
+        config:
+            enabled: false

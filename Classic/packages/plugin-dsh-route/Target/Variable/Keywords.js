@@ -1,0 +1,1 @@
+const e={explorer:["read-only","survey","research","explore","investigate","audit","document","locate"],coder:["fix","implement","restructure","refactor","build","migrate","patch"],planner:["design","plan","architecture","strategy","roadmap","specify"]};export{e as DEFAULT_KEYWORDS};
