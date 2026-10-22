@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-normalize-invisible
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-normalize-invisible&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-invisible)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-invisible)
@@ -11,58 +11,53 @@
 > [!NOTE]
 >
 > The **invisible-character normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> [LlmRuntime][dsh-llm]) and normalizes the zero-width/invisible character family in model output, live in the
-> transcript - by REMOVING it: zero-width spaces, joiners, bidi controls and the BOM character
-> simply vanish (the default replacement is the empty string).
+> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call,
+> bound to the [LlmRuntime][dsh-llm]) and normalizes the zero-width/invisible character family in
+> model output, live in the transcript - by REMOVING it: zero-width spaces, joiners, bidi controls
+> and the BOM character simply vanish (the default replacement is the empty string).
 >
-> *A CLASS flavor of the normalize family: the core's `Invisible` class plus a configurable
-> `replacement` string (default `""` - removal).*
+> _A CLASS flavor of the normalize family: the core's `Invisible` class plus a configurable
+> `replacement` string (default `""` - removal)._
 >
-> *The @-sentence identity: **Hook @ DSH @ Normalize @
-> Invisible**.*
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ Invisible**._
 >
-> *The family's `raw-write` tool (registered by
-> [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
-> the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
-> call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies.*
+> _The family's `raw-write` tool (registered by
+> [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms
+> too - the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every
+> `raw-write` call through by identity, so the tool's explicit `normalize` parameter (default false
+> = verbatim) is the only normalization it applies._
 
 ---
 
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Invisible**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
-machinery; the fifth of the six stream normalizer siblings.
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the
+[`ets-lib-dsh-core`](../ets-lib-dsh-core) machinery; the fifth of the six stream normalizer
+siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`ets-lib-dsh-core`](../ets-lib-dsh-core) for the `Invisible` class and
-the generic `Replace`/`Chunk`/`Block` dispatch:
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema`
+helper, `shared: false`, for the config), [`ets-lib-dsh-core`](../ets-lib-dsh-core) for the
+`Invisible` class and the generic `Replace`/`Chunk`/`Block` dispatch:
 
-| flavor                                                            | table                  | substitution                  |
-| ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
-| [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)           | core `Dashes` class    | `→ replacement` (default `-`) |
-| [`ets-hook-dsh-normalize-quotes`](../ets-hook-dsh-normalize-quotes)       | core `Quotes` MAP      | curly → straight              |
-| [`ets-hook-dsh-normalize-ellipsis`](../ets-hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
-| [`ets-hook-dsh-normalize-spaces`](../ets-hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
-| [ets-hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-invisible/Source) (this bundle)                      | core `Invisible` class | removed (default `""`)        |
-| [`ets-hook-dsh-normalize-fullwidth`](../ets-hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
+| flavor                                                                                                                                                        | table                  | substitution                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------- |
+| [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)                                                                                               | core `Dashes` class    | `→ replacement` (default `-`) |
+| [`ets-hook-dsh-normalize-quotes`](../ets-hook-dsh-normalize-quotes)                                                                                           | core `Quotes` MAP      | curly → straight              |
+| [`ets-hook-dsh-normalize-ellipsis`](../ets-hook-dsh-normalize-ellipsis)                                                                                       | core `Ellipsis` class  | U+2026 → `...`                |
+| [`ets-hook-dsh-normalize-spaces`](../ets-hook-dsh-normalize-spaces)                                                                                           | core `Spaces` class    | unicode spaces → `" "`        |
+| [ets-hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-invisible/Source) (this bundle) | core `Invisible` class | removed (default `""`)        |
+| [`ets-hook-dsh-normalize-fullwidth`](../ets-hook-dsh-normalize-fullwidth)                                                                                     | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
-`Journal` (the shared P5 record on every N > 0 pass); the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
-[fs/observed][dsh-fs]
-dead fields.
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell unwrap +
+shared `Ledger`/`Enabled` mappings + its own fields), `Append` and `Journal` (the shared P5 record
+on every N > 0 pass); the config is composed by the factory's standalone `Schema` helper with
+`shared: false` - the minimal block, no [fs/observed][dsh-fs] dead fields.
 
-It touches no files, so
-[fs/write-intent][dsh-fs] and
-[fs/observed][dsh-fs] never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other
-[`llm/stream`][dsh-llm] listeners
-regardless of registration order.
+It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps
+the downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm]
+listeners regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -91,8 +86,10 @@ ledger and the runtime's inspect providers are the activation assessors).
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-invisible/cordis.patch.yml) row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-invisible/cordis.patch.yml)
+row (or the profile's `dsh.bundle` manifest) - the full config table is in
+[The Config](#the-config):
 
 ```yaml
 - insert:
@@ -104,8 +101,8 @@ manifest) - the full config table is in [The Config](#the-config):
             replacement: ""
 ```
 
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
+types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 
@@ -113,13 +110,11 @@ The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the
 
 Zero-width and format characters carry no visible width - which makes them the perfect smugglers.
 
-A
-zero-width joiner inside a file path, a right-to-left mark inside a command, the U+202E
+A zero-width joiner inside a file path, a right-to-left mark inside a command, the U+202E
 visual-spoofing override in what looks like plain text: none of them show up in the transcript, all
 of them change what a parser, shell or diff sees.
 
-This flavor deletes the whole family before it
-reaches the transcript.
+This flavor deletes the whole family before it reaches the transcript.
 
 ---
 
@@ -176,8 +171,8 @@ reaches the transcript.
 
 ### The transform
 
-The core's `Invisible` class (see [`ets-lib-dsh-core`](../ets-lib-dsh-core)), applied per text segment
-through the core's generic class-to-string `Replace`:
+The core's `Invisible` class (see [`ets-lib-dsh-core`](../ets-lib-dsh-core)), applied per text
+segment through the core's generic class-to-string `Replace`:
 
 ```text
 [\u00AD\u200B\u200C\u200D\u200E\u200F\u202A-\u202E\u2060\uFEFF]  →  replacement
@@ -219,35 +214,35 @@ All are removed (default `replacement: ""` - REMOVAL) per text segment:
 
 ## The Config
 
-| Field                    | Type    | Default                                   | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------------------ | ------- | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `log`                    | boolean | `true`                                    | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `logFile`                | string  | `~/.dsh/ets-hook-dsh-normalize-invisible.log` | yes      | the invisible ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `replacement`            | string  | `""`                                      | yes      | the transform's only knob - default REMOVAL; hot-editable                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `normalizeReasoning`     | boolean | `true`                                    | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                                   | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| Field                    | Type    | Default                                       | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------ | ------- | --------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `log`                    | boolean | `true`                                        | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `logFile`                | string  | `~/.dsh/ets-hook-dsh-normalize-invisible.log` | yes      | the invisible ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `replacement`            | string  | `""`                                          | yes      | the transform's only knob - default REMOVAL; hot-editable                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `normalizeReasoning`     | boolean | `true`                                        | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `normalizeToolArguments` | boolean | `false`                                       | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
 
 ## The Granular Scopes (all volatile)
 
-The `scopes` object gates every arm of the ets-hook-dsh-normalize-invisible hook independently — the defaults are exactly the
-pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
-override in the profile patch turns the whole family off in one edit (see the patch fragment at the
-end of this section). The whole object carries the volatile marker (its leaves stay plain —
-schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
-`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
-silent, no remount, no new activation line.
+The `scopes` object gates every arm of the ets-hook-dsh-normalize-invisible hook independently — the
+defaults are exactly the pre-scopes behavior, and because the schema shape is identical in every
+family hook, one grouped override in the profile patch turns the whole family off in one edit (see
+the patch fragment at the end of this section). The whole object carries the volatile marker (its
+leaves stay plain — schemastery rejects volatile leaves under an enclosing volatile field): one leaf
+change commits one `loader/volatile-update` dispatch whose whole object the State's refresh listener
+re-reads — live, silent, no remount, no new activation line.
 
-| Scope        | Default | Gates                                                                 |
-| ------------ | ------- | --------------------------------------------------------------------- |
-| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
-| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
-| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
-| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
-| files        | on      | inert in a stream flavor (present so one patch override drives the whole family)                                                            |
-| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+| Scope        | Default | Gates                                                                            |
+| ------------ | ------- | -------------------------------------------------------------------------------- |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                            |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)                   |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)                |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)                      |
+| files        | on      | inert in a stream flavor (present so one patch override drives the whole family) |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                                 |
 
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
@@ -256,8 +251,7 @@ The per-call `{"__normalize":false` first-key marker is the tool-args arm's esca
 "leave that search alone" control: a deliberate search for an irregular character (an em dash, a
 curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
 normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
-delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
-normally.
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes normally.
 
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
@@ -294,41 +288,40 @@ ets-hook-dsh-normalize-invisible: overpass: swept K file(s), normalized M char(s
 Registered through the `commands` service when it is present (probe-once — a missing service simply
 skips the registration). Grammar:
 
-| Input              | Effect                                                                            |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `files <path…>`    | declined — the sweep is owned by the normalize-file hook                                                                       |
-| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
+| Input             | Effect                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `files <path…>`   | declined — the sweep is owned by the normalize-file hook                                                                                         |
+| `batch`           | arm the one-shot step-batch overpass (consumed by the next incoming batch)                                                                       |
 | `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
-| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+| `scopes`          | read-only report of the current effective values (the activation line never changes)                                                             |
 
 ## The Patch-Level Global Off
 
 ```yaml
 - id: ets-hook-dsh-normalize-invisible
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```
 
 ---
-
 
 ## In Action
 
 One stream, one deletion.
 
-The model emits text carrying invisible smugglers; the live UI and the
-transcript receive clean text - and the two lines below look identical in print, because the removed
-characters are invisible.
+The model emits text carrying invisible smugglers; the live UI and the transcript receive clean
+text - and the two lines below look identical in print, because the removed characters are
+invisible.
 
-The incoming line carries, in order: a soft hyphen (U+00AD), a zero-width
-space (U+200B), a zero-width joiner (U+200D), a left-to-right mark (U+200E), a right-to-left mark
-(U+200F), a word joiner (U+2060) and a BOM character (U+FEFF):
+The incoming line carries, in order: a soft hyphen (U+00AD), a zero-width space (U+200B), a
+zero-width joiner (U+200D), a left-to-right mark (U+200E), a right-to-left mark (U+200F), a word
+joiner (U+2060) and a BOM character (U+FEFF):
 
 ```text
 text-delta in (what the model wrote):
@@ -344,11 +337,9 @@ In the incoming line the smugglers sit inside the word `password` and around the
 see a `password` that does not match the author's text, a parser would tokenize differently, a shell
 could splice a command.
 
-After the pass all of them are simply gone - the output line is what the
-reader should see.
+After the pass all of them are simply gone - the output line is what the reader should see.
 
-When a stream finishes normally with replacements made, the ledger gets the count
-line:
+When a stream finishes normally with replacements made, the ledger gets the count line:
 
 ```text
 ets-hook-dsh-normalize-invisible: normalized 7 invisible char(s) in one stream
@@ -357,8 +348,8 @@ ets-hook-dsh-normalize-invisible: normalized 7 invisible char(s) in one stream
 The `replacement` is hot-editable (the default `""` removes; a non-empty value such as `"?"` would
 mark each smuggler's position for debugging), and the same pass runs over reasoning deltas when
 `normalizeReasoning` is on and over tool-call arguments when the example patch enables
-`normalizeToolArguments` - with the `edit`, `raw-write` and `normalize-file` names exempt and raw-marker calls passing through
-unnormalized.
+`normalizeToolArguments` - with the `edit`, `raw-write` and `normalize-file` names exempt and
+raw-marker calls passing through unnormalized.
 
 ---
 
@@ -374,14 +365,13 @@ ets-hook-dsh-normalize-invisible: normalized N invisible char(s) in one stream
 
 The empty default replacement renders as the empty `replacement=`.
 
-The activation line is written by
-`apply()`; the count line only follows a normal stream completion and only when N > 0 (a thrown-away
-stream writes no ledger line).
+The activation line is written by `apply()`; the count line only follows a normal stream completion
+and only when N > 0 (a thrown-away stream writes no ledger line).
 
 Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
-domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
-count line - best-effort: with no storage facility the record buffers or drops, and the human
-ledger stays the complete record.
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the count
+line - best-effort: with no storage facility the record buffers or drops, and the human ledger stays
+the complete record.
 
 ---
 

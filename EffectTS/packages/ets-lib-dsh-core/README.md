@@ -1,6 +1,6 @@
 # @playform/ets-lib-dsh-core
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-lib-dsh-core&color=blue)](https://www.npmjs.com/package/@playform/ets-lib-dsh-core)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-lib-dsh-core)
@@ -16,12 +16,12 @@
 > composer) and the stream-normalization family's tables and dispatch (six Normalize tables +
 > Replace/ReplaceMap + Stream/Chunk/Block).
 >
-> *One runtime dependency: effect v4.0.2.*
+> _One runtime dependency: effect v4.0.2._
 >
-> *Not a plugin - the muscle under the plugins.*
+> _Not a plugin - the muscle under the plugins._
 >
-> *The
-> @-sentence identity: **Lib @ DSH @ Core** - the machinery every other family package stands on.*
+> _The @-sentence identity: **Lib @ DSH @ Core** - the machinery every other family package stands
+> on._
 
 ---
 
@@ -34,14 +34,16 @@ packages.
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
   update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults). The
-  [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) re-exports NOTHING from the core (its 19-method
-  service surface stays stable).
+  [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) re-exports NOTHING from the core (its
+  19-method service surface stays stable).
 - **Consumed by the six stream normalizers** -
-  [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash) and the five `ets-hook-dsh-normalize-*`
-  flavors are each a table plus a closure over `Replace`/`ReplaceMap`, dispatched through
-  `Chunk`/`Block`.
-- The core is **not a plugin bundle**: no [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/cordis.patch.yml), no loader contract, publishable on its
-  own - consumers link it as a plain library dependency, not as a bundle row.
+  [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash) and the five
+  `ets-hook-dsh-normalize-*` flavors are each a table plus a closure over `Replace`/`ReplaceMap`,
+  dispatched through `Chunk`/`Block`.
+- The core is **not a plugin bundle**: no
+  [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/cordis.patch.yml),
+  no loader contract, publishable on its own - consumers link it as a plain library dependency, not
+  as a bundle row.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -59,35 +61,45 @@ Not a bundle, so no `dsh plugin add` row: add the package as a plain dependency 
 it (the command above, or the profile's `link:` dependency for the dev loop) and build it with the
 same `prepublishOnly` sequence as the family bundles.
 
-Consumers link it as a library dependency; the
-bundles carry their own `node_modules` (`pnpm install --ignore-workspace` inside each - pnpm does
-not install a linked package's dependencies).
+Consumers link it as a library dependency; the bundles carry their own `node_modules`
+(`pnpm install --ignore-workspace` inside each - pnpm does not install a linked package's
+dependencies).
 
 ### Usage
 
 Named exports only - no plugin, no loader contract:
 
 ```js
-import { Suppress, Refusal, Section, Default, Policy } from "@playform/ets-lib-dsh-core";
-import { Replace, ReplaceMap, Dashes, Chunk } from "@playform/ets-lib-dsh-core";
+import {
+	Chunk,
+	Dashes,
+	Default,
+	Policy,
+	Refusal,
+	Replace,
+	ReplaceMap,
+	Section,
+	Suppress,
+} from "@playform/ets-lib-dsh-core";
 ```
 
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
+types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 
 ## The Problem
 
 The family's hooks kept re-implementing the same pure functions: the NPM section list, the exclusion
-segments, the suppression-line composer, the policy loader, [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source/Function/Refusal.ts) - and, for the
-normalize flavors, the same per-chunk dispatch, block-end normalizer and character tables,
-copy-pasted per flavor.
+segments, the suppression-line composer, the policy loader,
+[the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source/Function/Refusal.ts) -
+and, for the normalize flavors, the same per-chunk dispatch, block-end normalizer and character
+tables, copy-pasted per flavor.
 
 Every fix had to be applied N times.
 
-The core makes each of them exist
-**once**, importable by any consumer - inside the DeepSeek Harness or entirely outside it.
+The core makes each of them exist **once**, importable by any consumer - inside the DeepSeek Harness
+or entirely outside it.
 
 ---
 
@@ -152,7 +164,13 @@ The core makes each of them exist
                            passthrough by identity)
 ```
 
-The tool-argument control in one formula: effective tool-input normalization = `normalizeToolArguments || scopes.toolInput` - the granular scopes (conversation/reasoning/toolInput/toolResults/files/batch, plus the `toolResultsExempt` list) are ALL volatile live toggles delivered by the `loader/volatile-update` dispatch (no remount), and the tool-args arm is the only execution-critical one - the per-call `{"__normalize":false` first-key marker its escape hatch (first key only; a pathologically tiny first delta shorter than the marker is invisible to the startsWith probe and the call normalizes normally).
+The tool-argument control in one formula: effective tool-input normalization =
+`normalizeToolArguments || scopes.toolInput` - the granular scopes
+(conversation/reasoning/toolInput/toolResults/files/batch, plus the `toolResultsExempt` list) are
+ALL volatile live toggles delivered by the `loader/volatile-update` dispatch (no remount), and the
+tool-args arm is the only execution-critical one - the per-call `{"__normalize":false` first-key
+marker its escape hatch (first key only; a pathologically tiny first delta shorter than the marker
+is invisible to the startsWith probe and the call normalizes normally).
 
 The dispatch owns the **structure** (which fields of which chunk types); the flavor owns the
 **substitution** - a new normalization flavor is a table plus a closure, not a fork of the dispatch:
@@ -228,9 +246,8 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
 The core registers no Config and needs none - it is not a plugin: no loader contract, no context, no
 Schemastery schema, nothing to validate at load.
 
-Every knob it exposes is a function parameter
-(`Policy`'s `defaults`, `Replace`'s replacement, `Chunk`'s injected transform), decided by the
-consuming module's own config.
+Every knob it exposes is a function parameter (`Policy`'s `defaults`, `Replace`'s replacement,
+`Chunk`'s injected transform), decided by the consuming module's own config.
 
 ---
 
@@ -241,7 +258,7 @@ condensed):
 
 ```js
 // Source/Function/Observe.ts of a governance hook (condensed):
-import { Suppress, Refusal, Section, Default } from "@playform/ets-lib-dsh-core";
+import { Default, Refusal, Section, Suppress } from "@playform/ets-lib-dsh-core";
 
 try {
 	// ... the pass ...
@@ -273,8 +290,8 @@ ReplaceMap("he said ‘hello’ — loudly", Quotes);
 `count === 0` means "unchanged": the caller keeps the original string by identity instead of
 allocating a copy.
 
-The policy loader, in its `Quiet` form, reads the same `update-policy.json` the
-update engine will honor and returns the built-in defaults - with the diagnostics, or without them.
+The policy loader, in its `Quiet` form, reads the same `update-policy.json` the update engine will
+honor and returns the built-in defaults - with the diagnostics, or without them.
 
 ---
 
@@ -282,38 +299,33 @@ update engine will honor and returns the built-in defaults - with the diagnostic
 
 The core owns no ledger strings and writes nothing - no plugin, no logger, no ledger file.
 
-The
-module ledger strings stay MODULE-side: the core supplies the mechanics (the `Suppress` composer,
-the `Policy` diagnostics, the `Refusal` line, the `Activate` template), and every consumer logs them
-through its own `Append` (the factory's ledger service).
+The module ledger strings stay MODULE-side: the core supplies the mechanics (the `Suppress`
+composer, the `Policy` diagnostics, the `Refusal` line, the `Activate` template), and every consumer
+logs them through its own `Append` (the factory's ledger service).
 
-Nothing in the core ever composes a
-`<Module>:` prefix or an activation proof's field list - the `activated (...)` template is the
-mechanics only; the fields are the module's.
+Nothing in the core ever composes a `<Module>:` prefix or an activation proof's field list - the
+`activated (...)` template is the mechanics only; the fields are the module's.
 
 ---
 
 ## The Test tree
 
-The package's unit tests live in `Source/Test/` - one folder per test, each holding
-one singular TypeScript test file (`Test.ts`) and a `README.md` describing the intent,
-the scenario tree, the fixtures, the expected ledger strings and the expected PASS count.
-The eight shared folders are byte-twins of the Classic tree's folders (generated from
-them under the tree-identity substitutions only); `Chunk` and `Block` are served by the
-shared `@playform/ets-base-dsh` base, exactly as the source suite imports them, and
-there are no ETS-only folders: the stream gate and the Update envelope live in the
-base (`Source/Stream/Gate.ts`, `Source/Function/Update.ts`), so the additive R1
-coverage re-homed from `EffectTS/smokes/core-smoke.mjs` has no package-local folder.
-The shared harness (`Source/Test/Harness.ts`)
-owns the Check counter and the tmpdir fixture. The tests compile to `Target/Test/` in a
-separate ESBuild step (`Configuration/Test-ESBuild.ts`) that runs SECOND in
-`prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively). Each test
-runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
-(`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its
-README). Neither tree is ever published: `.npmignore` excludes `Source/Test/` and
-`Target/Test/`, and the package `files` field negates `Target/Test`. The smoke suite
-`EffectTS/smokes/core-smoke.mjs` stays in place as the migration fallback until a later
-lane retires it.
+The package's unit tests live in `Source/Test/` - one folder per test, each holding one singular
+TypeScript test file (`Test.ts`) and a `README.md` describing the intent, the scenario tree, the
+fixtures, the expected ledger strings and the expected PASS count. The eight shared folders are
+byte-twins of the Classic tree's folders (generated from them under the tree-identity substitutions
+only); `Chunk` and `Block` are served by the shared `@playform/ets-base-dsh` base, exactly as the
+source suite imports them, and there are no ETS-only folders: the stream gate and the Update
+envelope live in the base (`Source/Stream/Gate.ts`, `Source/Function/Update.ts`), so the additive R1
+coverage re-homed from `EffectTS/smokes/core-smoke.mjs` has no package-local folder. The shared
+harness (`Source/Test/Harness.ts`) owns the Check counter and the tmpdir fixture. The tests compile
+to `Target/Test/` in a separate ESBuild step (`Configuration/Test-ESBuild.ts`) that runs SECOND in
+`prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively). Each test runs
+standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
+(`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its README).
+Neither tree is ever published: `.npmignore` excludes `Source/Test/` and `Target/Test/`, and the
+package `files` field negates `Target/Test`. The smoke suite `EffectTS/smokes/core-smoke.mjs` stays
+in place as the migration fallback until a later lane retires it.
 
 ## License 📜
 

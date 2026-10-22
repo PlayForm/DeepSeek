@@ -7,114 +7,155 @@ status: planned
 registry: Documentation/Plans/APHRODITE-RUST-DYLIB-INTEGRATION.md
 index: Documentation/INDEX.md
 statuses:
-  - name: the dylib integration plan (Aphrodite to DeepSeek)
-    state: open
-    evidence: this document only - no integration work started
-  - name: the command verification (all commands run live)
-    state: resolved
-    evidence: the plan's stated basis
-  - name: the open questions (sections 4-5, the signed-build test)
-    state: open
-    evidence: listed in the body, unresolved
+    - name: the dylib integration plan (Aphrodite to DeepSeek)
+      state: open
+      evidence: this document only - no integration work started
+    - name: the command verification (all commands run live)
+      state: resolved
+      evidence: the plan's stated basis
+    - name: the open questions (sections 4-5, the signed-build test)
+      state: open
+      evidence: listed in the body, unresolved
 ---
 
 # Aphrodite <-> DeepSeek Harness: Rust Dylib Integration Plan
 
-**Date:** 2026-10-19
-**Scope:** How a DSH plugin-family bundle integrates with Aphrodite.
-**Scope:** How the Rust binary ships (dylib vs alternatives) so the main DeepSeek Harness can use it.
-**Foundation:** `docs/research/2026-10-19-hermes-aphrodite-research.md` (parent-verified).
-ALL commands below were actually run against the LIVE machine.
+**Date:** 2026-10-19 **Scope:** How a DSH plugin-family bundle integrates with Aphrodite. **Scope:**
+How the Rust binary ships (dylib vs alternatives) so the main DeepSeek Harness can use it.
+**Foundation:** `docs/research/2026-10-19-hermes-aphrodite-research.md` (parent-verified). ALL
+commands below were actually run against the LIVE machine.
 
 ---
 
 ## Executive summary
 
-- The LIVE artifact is `~/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` (4.9 MB, arm64) exporting **34 global C symbols**: 10 `aphrodite_hermes_*` bridge entrypoints (`dispatch_tool`, `call_hook`, `get_schemas`, `get_schema`, `list_tools`, `get_hooks`, `proxy_health`, `materialize_directives`, `version`, `free_string`) plus 22 core `aphrodite_*` symbols (`init`, `compress`, `retrieve`, `search`, `transform`, ...) and ONE stray `blake3_compress_in_place_portable`.
-  Verified with `nm -gU`.
-- `otool -L` shows it depends ONLY on system frameworks (CoreFoundation, CoreServices, Security, libc++, libiconv, libSystem) - **zero third-party dylib deps**, so it is trivially shippable.
-  Its install name points at a CI path (`/Users/runner/work/...`), meaning it must be loaded by absolute path, NOT by install name - which the plugin can control anyway.
-- The Hermes-side contract is a simple JSON-string C ABI: EVERY function takes `char*` UTF-8 JSON (or none) and returns a heap `*mut c_char` JSON string freed via `aphrodite_hermes_free_string` (`crates/aphrodite-hermes/src/lib.rs:603-651`).
-  The Python loader proves it: `plugins/aphrodite/_bindings.py` binds `argtypes=[c_char_p, c_char_p]`, `restype=c_void_p` for EACH.
-- **Recommendation: load the same dylib from Node via `koffi`** - `koffi@3.1.1` is already bundled inside the shipping app at `app.asar.unpacked/dsh/node_modules/koffi` (verified), so a family bundle can call the FFI surface with **zero new native dependencies**.
-  HTTP-proxy mode and sidecar spawn are evaluated as fallbacks.
-- **Shipping: prebuilt per-platform dylib inside the bundle's `Target/` output** (the family `files` field already includes `Target` - verified in the LIVE profile bundle `dsh-plugin-factory/package.json`), mirroring Aphrodite's own `download.sh` + SHA-256 pattern.
-  NO Rust toolchain on user machines.
+- The LIVE artifact is `~/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` (4.9 MB, arm64)
+  exporting **34 global C symbols**: 10 `aphrodite_hermes_*` bridge entrypoints (`dispatch_tool`,
+  `call_hook`, `get_schemas`, `get_schema`, `list_tools`, `get_hooks`, `proxy_health`,
+  `materialize_directives`, `version`, `free_string`) plus 22 core `aphrodite_*` symbols (`init`,
+  `compress`, `retrieve`, `search`, `transform`, ...) and ONE stray
+  `blake3_compress_in_place_portable`. Verified with `nm -gU`.
+- `otool -L` shows it depends ONLY on system frameworks (CoreFoundation, CoreServices, Security,
+  libc++, libiconv, libSystem) - **zero third-party dylib deps**, so it is trivially shippable. Its
+  install name points at a CI path (`/Users/runner/work/...`), meaning it must be loaded by absolute
+  path, NOT by install name - which the plugin can control anyway.
+- The Hermes-side contract is a simple JSON-string C ABI: EVERY function takes `char*` UTF-8 JSON
+  (or none) and returns a heap `*mut c_char` JSON string freed via `aphrodite_hermes_free_string`
+  (`crates/aphrodite-hermes/src/lib.rs:603-651`). The Python loader proves it:
+  `plugins/aphrodite/_bindings.py` binds `argtypes=[c_char_p, c_char_p]`, `restype=c_void_p` for
+  EACH.
+- **Recommendation: load the same dylib from Node via `koffi`** - `koffi@3.1.1` is already bundled
+  inside the shipping app at `app.asar.unpacked/dsh/node_modules/koffi` (verified), so a family
+  bundle can call the FFI surface with **zero new native dependencies**. HTTP-proxy mode and sidecar
+  spawn are evaluated as fallbacks.
+- **Shipping: prebuilt per-platform dylib inside the bundle's `Target/` output** (the family `files`
+  field already includes `Target` - verified in the LIVE profile bundle
+  `dsh-plugin-factory/package.json`), mirroring Aphrodite's own `download.sh` + SHA-256 pattern. NO
+  Rust toolchain on user machines.
 
 ---
 
 ## 1. The dylib's exported C ABI (verified)
 
-Command: `nm -gU /Users/nikola/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` - 34 `T` symbols (macOS prefix `_` stripped below):
+Command: `nm -gU /Users/nikola/.hermes/aphrodite/binaries/libaphrodite_hermes.dylib` - 34 `T`
+symbols (macOS prefix `_` stripped below):
 
 **Bridge surface - `aphrodite_hermes_*` (10):**
 
-| Symbol | Args (from _bindings.py / lib.rs) | Returns |
-| --- | --- | --- |
-| `dispatch_tool` | `(char* tool_name, char* args_json)` (lib.rs:603) | `*mut c_char` JSON |
-| `call_hook` | `(char* hook_name, char* args_json)` (lib.rs:683) | `*mut c_char` JSON |
-| `list_tools` | `()` | JSON string |
-| `get_schema` | `(char* tool_name)` | JSON string |
-| `get_schemas` | `()` | JSON string |
-| `get_hooks` | `()` | JSON string |
-| `proxy_health` | `()` (lib.rs:1010) | JSON string |
-| `materialize_directives` | `(char* home_dir)` (lib.rs:1032) | JSON string |
-| `version` | `()` | string |
-| `free_string` | `(void* s)` (lib.rs:639) | void |
+| Symbol                   | Args (from _bindings.py / lib.rs)                 | Returns            |
+| ------------------------ | ------------------------------------------------- | ------------------ |
+| `dispatch_tool`          | `(char* tool_name, char* args_json)` (lib.rs:603) | `*mut c_char` JSON |
+| `call_hook`              | `(char* hook_name, char* args_json)` (lib.rs:683) | `*mut c_char` JSON |
+| `list_tools`             | `()`                                              | JSON string        |
+| `get_schema`             | `(char* tool_name)`                               | JSON string        |
+| `get_schemas`            | `()`                                              | JSON string        |
+| `get_hooks`              | `()`                                              | JSON string        |
+| `proxy_health`           | `()` (lib.rs:1010)                                | JSON string        |
+| `materialize_directives` | `(char* home_dir)` (lib.rs:1032)                  | JSON string        |
+| `version`                | `()`                                              | string             |
+| `free_string`            | `(void* s)` (lib.rs:639)                          | void               |
 
-**Core surface - `aphrodite_*` (22):** `init`, `destroy`, `reload`, `version`, `compress`, `retrieve`, `search`, `transform`, `classify`, `preview`, `stage2`, `terminal`, `hooks`, `call_hook`, `dispatch`, `filter_lines`, `directive`, `session_start`, `stats`, `struct_extract`, `resolve`, `config_get`, `config_set`, `catalog`, `free_string` (core crate's own handle-based `aphrodite_*` ABI, `crates/aphrodite/src/lib.rs:1-8`).
+**Core surface - `aphrodite_*` (22):** `init`, `destroy`, `reload`, `version`, `compress`,
+`retrieve`, `search`, `transform`, `classify`, `preview`, `stage2`, `terminal`, `hooks`,
+`call_hook`, `dispatch`, `filter_lines`, `directive`, `session_start`, `stats`, `struct_extract`,
+`resolve`, `config_get`, `config_set`, `catalog`, `free_string` (core crate's own handle-based
+`aphrodite_*` ABI, `crates/aphrodite/src/lib.rs:1-8`).
 
-**Stray export:** `blake3_compress_in_place_portable` (leaked from the vendored blake3 crate; harmless).
+**Stray export:** `blake3_compress_in_place_portable` (leaked from the vendored blake3 crate;
+harmless).
 
-**Link deps** (`otool -L`): CoreFoundation, CoreServices, Security, `/usr/lib/libc++.1.dylib`, `/usr/lib/libiconv.2.dylib`, `/usr/lib/libSystem.B.dylib`. No `@rpath` third-party dylibs. Compatibility/current version 0.0.0.
+**Link deps** (`otool -L`): CoreFoundation, CoreServices, Security, `/usr/lib/libc++.1.dylib`,
+`/usr/lib/libiconv.2.dylib`, `/usr/lib/libSystem.B.dylib`. No `@rpath` third-party dylibs.
+Compatibility/current version 0.0.0.
 
 ## 2. The ctypes binding model (the template for Node)
 
-`plugins/aphrodite/_bindings.py` (read in full; generated by `cbindgen -> aphrodite_hermes.h -> ctypesgen`, with build.rs falling back to the committed copy when codegen tools are absent - `crates/aphrodite-hermes/Cargo.toml` build-dependencies comment):
+`plugins/aphrodite/_bindings.py` (read in full; generated by
+`cbindgen -> aphrodite_hermes.h -> ctypesgen`, with build.rs falling back to the committed copy when
+codegen tools are absent - `crates/aphrodite-hermes/Cargo.toml` build-dependencies comment):
 
-- **Loading is decoupled from binding**: importing NEVER loads a library.
-  The host owns the CDLL handle and calls `bind_to(dylib)` - "the library path is deliberately never baked in" (path resolution: env override -> canonical home -> legacy copies -> fresh unique-path copy per generation).
-- **Signature pattern**: string-returning functions are bound with `restype = c_void_p` (full-width pointer read, NEVER `c_char_p` restype) and `argtypes = [c_char_p, c_char_p]`; `free_string` is `argtypes=[c_void_p], restype=None`.
-  `errcheck` is stripped - the host reads raw pointers and frees them through the **same handle** that produced them.
+- **Loading is decoupled from binding**: importing NEVER loads a library. The host owns the CDLL
+  handle and calls `bind_to(dylib)` - "the library path is deliberately never baked in" (path
+  resolution: env override -> canonical home -> legacy copies -> fresh unique-path copy per
+  generation).
+- **Signature pattern**: string-returning functions are bound with `restype = c_void_p` (full-width
+  pointer read, NEVER `c_char_p` restype) and `argtypes = [c_char_p, c_char_p]`; `free_string` is
+  `argtypes=[c_void_p], restype=None`. `errcheck` is stripped - the host reads raw pointers and
+  frees them through the **same handle** that produced them.
 - **Contract**: call -> get pointer int -> read bytes as UTF-8 JSON -> call `free_string(ptr)`.
-  EVERY FFI error path in Rust returns an error *JSON* rather than unwinding (`lib.rs:1525`, panic-guard across `extern "C"` at :565-588).
+  EVERY FFI error path in Rust returns an error _JSON_ rather than unwinding (`lib.rs:1525`,
+  panic-guard across `extern "C"` at :565-588).
 
-A Node/koffi port is line-for-line: `koffi.load(absPath)`, `func('dispatch_tool', 'void *', ['string','string'])`, read returned pointer, `free_string`.
-Two koffi details to honor: (a) strings must be passed as UTF-8 buffers (`char *` = NUL-terminated bytes - same as c_char_p); (b) free via the same library handle, exactly as `_bindings.py` mandates.
+A Node/koffi port is line-for-line: `koffi.load(absPath)`,
+`func('dispatch_tool', 'void *', ['string','string'])`, read returned pointer, `free_string`. Two
+koffi details to honor: (a) strings must be passed as UTF-8 buffers (`char *` = NUL-terminated
+bytes - same as c_char_p); (b) free via the same library handle, exactly as `_bindings.py` mandates.
 
 ## 3. Node binding options evaluated
 
-The DSH host is Electron/Node v26.
-Checked `app.asar.unpacked/dsh/node_modules/`: top-level packages include **`koffi` (3.1.1, main `./index.cjs` - verified)**, `node-pty`, `@koromix`, `sherpa-onnx-darwin-arm64`, `node-addon-require-builtin-darwin-arm64`.
-So a koffi-based binding adds NO new native dependency to the app.
+The DSH host is Electron/Node v26. Checked `app.asar.unpacked/dsh/node_modules/`: top-level packages
+include **`koffi` (3.1.1, main `./index.cjs` - verified)**, `node-pty`, `@koromix`,
+`sherpa-onnx-darwin-arm64`, `node-addon-require-builtin-darwin-arm64`. So a koffi-based binding adds
+NO new native dependency to the app.
 
-| Mechanism | Effort | Risk | Maintenance | Security | Verdict |
-| --- | --- | --- | --- | --- | --- |
-| **(A) koffi + dylib (in-process FFI)** | Low: ~150 lines binding module mirroring `_bindings.py` | GC-of-returned-pointer bug (double-free/UAF), crash takes down DSH host | Follow upstream ABI; version-pin the dylib | Loads a native binary from disk - must come from a trusted source with SHA-256 check (Aphrodite's own `download.sh` pattern) | **Recommended** |
-| **(B) HTTP proxy mode** (`POST /retrieve`, `/ccr/create`, `/tool/relay` on 127.0.0.1:9797/:9798; route table verified in `docs/proxy/architecture.md:73-90`) | Low: pure fetch | Requires a LIVE proxy process; `APHRODITE_MGMT_TOKEN` bearer for mgmt routes (architecture.md:95-105); loopback-only | HTTP API is documented and stable | Best - no native code loaded | **Fallback / proxy-mode support** |
-| **(C) Spawn `aphrodite` binary as sidecar** (main.rs is HTTP-proxy-only - no stdio/JSON-RPC mode found in `crates/aphrodite/src/main.rs` CLI handling) | Medium | Port conflicts ("failed to bind 127.0.0.1:9797" seen LIVE in `proxy-stderr.log`) | Process lifecycle management | Fine | ONLY if proxy mode wanted; no stdio mode exists |
-| **(D) Pure-TypeScript reimplementation** | High: re-implement classifier, BLAAKE3 hashing via `hash-wasm`, preview, ccr.db store | Semantic drift vs Rust (hashes must match exactly to be mutually retrievable) | Two implementations to keep in sync | Best | Rejected as primary; viable read-only viewer |
+| Mechanism                                                                                                                                                    | Effort                                                                                | Risk                                                                                                                 | Maintenance                                | Security                                                                                                                     | Verdict                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **(A) koffi + dylib (in-process FFI)**                                                                                                                       | Low: ~150 lines binding module mirroring `_bindings.py`                               | GC-of-returned-pointer bug (double-free/UAF), crash takes down DSH host                                              | Follow upstream ABI; version-pin the dylib | Loads a native binary from disk - must come from a trusted source with SHA-256 check (Aphrodite's own `download.sh` pattern) | **Recommended**                                 |
+| **(B) HTTP proxy mode** (`POST /retrieve`, `/ccr/create`, `/tool/relay` on 127.0.0.1:9797/:9798; route table verified in `docs/proxy/architecture.md:73-90`) | Low: pure fetch                                                                       | Requires a LIVE proxy process; `APHRODITE_MGMT_TOKEN` bearer for mgmt routes (architecture.md:95-105); loopback-only | HTTP API is documented and stable          | Best - no native code loaded                                                                                                 | **Fallback / proxy-mode support**               |
+| **(C) Spawn `aphrodite` binary as sidecar** (main.rs is HTTP-proxy-only - no stdio/JSON-RPC mode found in `crates/aphrodite/src/main.rs` CLI handling)       | Medium                                                                                | Port conflicts ("failed to bind 127.0.0.1:9797" seen LIVE in `proxy-stderr.log`)                                     | Process lifecycle management               | Fine                                                                                                                         | ONLY if proxy mode wanted; no stdio mode exists |
+| **(D) Pure-TypeScript reimplementation**                                                                                                                     | High: re-implement classifier, BLAAKE3 hashing via `hash-wasm`, preview, ccr.db store | Semantic drift vs Rust (hashes must match exactly to be mutually retrievable)                                        | Two implementations to keep in sync        | Best                                                                                                                         | Rejected as primary; viable read-only viewer    |
 
-**Recommendation: A primary (koffi), B as a configured alternative** - BOTH share the same 10-symbol/JSON contract, so the plugin's service layer can sit behind ONE interface with a `mode: "dylib" | "http"` config switch.
-C adds nothing B doesn't already give (the binary only *is* the proxy).
+**Recommendation: A primary (koffi), B as a configured alternative** - BOTH share the same
+10-symbol/JSON contract, so the plugin's service layer can sit behind ONE interface with a
+`mode: "dylib" | "http"` config switch. C adds nothing B doesn't already give (the binary only _is_
+the proxy).
 
 ## 4. Shipping plan
 
-**Artifact:** `libaphrodite_hermes.dylib` (per-platform: `.dylib` darwin-arm64/darwin-x64, `.so` linux-x64/arm64, `.dll` win-x64).
-Core crate is `crate-type = ["cdylib", "rlib"]` and bridge crate likewise (`crates/*/Cargo.toml` `[lib] crate-type`), so `cargo build -p aphrodite-hermes --release` emits the dylib per target.
+**Artifact:** `libaphrodite_hermes.dylib` (per-platform: `.dylib` darwin-arm64/darwin-x64, `.so`
+linux-x64/arm64, `.dll` win-x64). Core crate is `crate-type = ["cdylib", "rlib"]` and bridge crate
+likewise (`crates/*/Cargo.toml` `[lib] crate-type`), so `cargo build -p aphrodite-hermes --release`
+emits the dylib per target.
 
-**Build matrix / toolchain:** workspace `rust-toolchain.toml` pins `channel = "nightly"`; local rustc 1.101.0-nightly (2026-10-17).
-Builds happen **ONLY in CI** (the LIVE dylib's install name shows a `aarch64-apple-darwin/release` CI path - `/Users/runner/work/...`), NEVER on user machines.
+**Build matrix / toolchain:** workspace `rust-toolchain.toml` pins `channel = "nightly"`; local
+rustc 1.101.0-nightly (2026-10-17). Builds happen **ONLY in CI** (the LIVE dylib's install name
+shows a `aarch64-apple-darwin/release` CI path - `/Users/runner/work/...`), NEVER on user machines.
 Note `#[unsafe(no_mangle)]` and edition 2024+ require a recent nightly; pin the toolchain in CI.
 
-**Where it lives:** inside the bundle package.
-LIVE profile bundles at `~/.dsh/profiles/desktop/bundles/<name>/` are npm packages.
-`dsh-plugin-factory/package.json` declares `"files": ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` - so a new `Target/Binaries/darwin-arm64/libaphrodite_hermes.dylib` rides the same path as the compiled `Target/Library.js`.
-Shipping a binary inside the npm tarball is exactly what Aphrodite itself avoids (it uses `download.sh` + SHA-256 into `~/.hermes/aphrodite/binaries/`); for the DSH family, two viable variants:
+**Where it lives:** inside the bundle package. LIVE profile bundles at
+`~/.dsh/profiles/desktop/bundles/<name>/` are npm packages. `dsh-plugin-factory/package.json`
+declares `"files": ["Target", "cordis.patch.yml", "README.md", "SCHEME.md"]` - so a new
+`Target/Binaries/darwin-arm64/libaphrodite_hermes.dylib` rides the same path as the compiled
+`Target/Library.js`. Shipping a binary inside the npm tarball is exactly what Aphrodite itself
+avoids (it uses `download.sh` + SHA-256 into `~/.hermes/aphrodite/binaries/`); for the DSH family,
+two viable variants:
 
-1. **Vendor in package (recommended, simplest):** dylib committed/built into the bundle's `Target/Binaries/<triple>/`, verified at load time with SHA-256 (hard-coded digest per version) before `koffi.load`.
-2. **Aphrodite-style download-on-first-activate:** bundle ships a small downloader that fetches from the Aphrodite release feed into the bundle directory with digest verification.
-   It avoids multi-MB npm tarballs but adds network dependency. Prefer (1) unless package size becomes a problem.
+1. **Vendor in package (recommended, simplest):** dylib committed/built into the bundle's
+   `Target/Binaries/<triple>/`, verified at load time with SHA-256 (hard-coded digest per version)
+   before `koffi.load`.
+2. **Aphrodite-style download-on-first-activate:** bundle ships a small downloader that fetches from
+   the Aphrodite release feed into the bundle directory with digest verification. It avoids multi-MB
+   npm tarballs but adds network dependency. Prefer (1) unless package size becomes a problem.
 
 **Runtime loading flow (plugin):**
 
@@ -128,28 +169,43 @@ Config { mode, dylib_path?, proxy_url?, mgmt_token? }
 ```
 
 **Versioning:** dylib version 1.7.0 matches crate version (`crates/aphrodite-hermes/Cargo.toml`).
-Bundle package version carries `+aphrodite.1.7.0` metadata or a `dependencies`-style pin field; the loader's `version()` call asserts ABI compatibility (fail-soft if mismatched).
-The C ABI is small and stable (JSON strings + ONE free), so ABI drift risk is low.
+Bundle package version carries `+aphrodite.1.7.0` metadata or a `dependencies`-style pin field; the
+loader's `version()` call asserts ABI compatibility (fail-soft if mismatched). The C ABI is small
+and stable (JSON strings + ONE free), so ABI drift risk is low.
 
-**Fallback behavior if missing/damaged:** service degrades to (a) HTTP mode if a proxy answers `/health` on the configured ports, (b) pass-through (tools disabled with an explanatory Config error).
-NEVER crash the host: ALL FFI calls wrapped so an exception in `dispatch_tool` -> return error JSON to the tool layer.
+**Fallback behavior if missing/damaged:** service degrades to (a) HTTP mode if a proxy answers
+`/health` on the configured ports, (b) pass-through (tools disabled with an explanatory Config
+error). NEVER crash the host: ALL FFI calls wrapped so an exception in `dispatch_tool` -> return
+error JSON to the tool layer.
 
 ## 5. Integration points with the DSH plugin family
 
-- **Bundle:** new family plugin `@playform/dsh-hook-aphrodite` (or `dsh-plugin-aphrodite`) with the standard anatomy: `Source/` module leaves, deterministic `Target/` build, `cordis.patch.yml` registering via `dsh-plugin-factory` (same shape as the LIVE profile bundles verified at `~/.dsh/profiles/desktop/bundles/`).
-- **Config schema** (from the mechanism above): `mode` (`dylib`/`http`), `dylib_path`, `proxy_cache_url` (default `http://127.0.0.1:9797`), `proxy_token_url` (`:9798`), `mgmt_token`, `sha256` (per-platform map), `tool_thresholds` passthrough.
-- **DSH wiring:** tools = the 13 relay tools (`aphrodite_compress`, `aphrodite_retrieve`, `aphrodite_search`, `aphrodite_catalog`, ... - `dispatch_tool` maps 1:1, and `list_tools`/`get_schemas` give the DSH tool definitions dynamically).
-  Hooks = `call_hook("transform_tool_result" | "transform_terminal_output" | "pre_llm_call" | "post_llm_call", args_json)` from `get_hooks()`.
-- **Safety note:** the Rust side already skips its own tools to avoid an infinite preview loop (`hooks.rs:356-361`).
-  The DSH plugin must likewise exclude `aphrodite_*` tools from compression.
+- **Bundle:** new family plugin `@playform/dsh-hook-aphrodite` (or `dsh-plugin-aphrodite`) with the
+  standard anatomy: `Source/` module leaves, deterministic `Target/` build, `cordis.patch.yml`
+  registering via `dsh-plugin-factory` (same shape as the LIVE profile bundles verified at
+  `~/.dsh/profiles/desktop/bundles/`).
+- **Config schema** (from the mechanism above): `mode` (`dylib`/`http`), `dylib_path`,
+  `proxy_cache_url` (default `http://127.0.0.1:9797`), `proxy_token_url` (`:9798`), `mgmt_token`,
+  `sha256` (per-platform map), `tool_thresholds` passthrough.
+- **DSH wiring:** tools = the 13 relay tools (`aphrodite_compress`, `aphrodite_retrieve`,
+  `aphrodite_search`, `aphrodite_catalog`, ... - `dispatch_tool` maps 1:1, and
+  `list_tools`/`get_schemas` give the DSH tool definitions dynamically). Hooks =
+  `call_hook("transform_tool_result" | "transform_terminal_output" | "pre_llm_call" | "post_llm_call", args_json)`
+  from `get_hooks()`.
+- **Safety note:** the Rust side already skips its own tools to avoid an infinite preview loop
+  (`hooks.rs:356-361`). The DSH plugin must likewise exclude `aphrodite_*` tools from compression.
 
 ## 6. Open questions
 
-1. Does koffi's bundled build inside the app remain reachable from a family bundle's plugin code at runtime (asar-unpacked path resolution), or do family bundles need their own dependency?
-   Verified presence, NOT reachability from plugin code.
-2. Whether the release CI publishes the `.so`/`.dll` variants for other triples (ONLY darwin-arm64 was verifiable on this machine).
-3. `catalog_mode` / `classifier_poll` are parsed-but-unwired upstream (`aphrodite.toml.example:102-103`) - skip in Config or accept-and-warn?
-4. Should the family reuse the user's existing `~/.hermes/aphrodite/` install (shared ccr.db and session) or isolate its own runtime home?
-   Shared gives cross-session cache; isolated avoids coupling to Hermes.
-5. Can Electron's hardened runtime / code-signing reject `koffi.load` of a non-embedded dylib on macOS (Gatekeeper quarantine)?
-   Needs a signed-build test.
+1. Does koffi's bundled build inside the app remain reachable from a family bundle's plugin code at
+   runtime (asar-unpacked path resolution), or do family bundles need their own dependency? Verified
+   presence, NOT reachability from plugin code.
+2. Whether the release CI publishes the `.so`/`.dll` variants for other triples (ONLY darwin-arm64
+   was verifiable on this machine).
+3. `catalog_mode` / `classifier_poll` are parsed-but-unwired upstream
+   (`aphrodite.toml.example:102-103`) - skip in Config or accept-and-warn?
+4. Should the family reuse the user's existing `~/.hermes/aphrodite/` install (shared ccr.db and
+   session) or isolate its own runtime home? Shared gives cross-session cache; isolated avoids
+   coupling to Hermes.
+5. Can Electron's hardened runtime / code-signing reject `koffi.load` of a non-embedded dylib on
+   macOS (Gatekeeper quarantine)? Needs a signed-build test.

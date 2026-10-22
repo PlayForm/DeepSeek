@@ -1,11 +1,10 @@
 # @playform/plugin-dsh-batch-edit
 
 The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
-plugin family (the Classic release). One tool - `batch_edit` - that turns
-files into **processes held in state**: you open a machine, insert files into
-it, and the files process like a state machine in one go. Each file on the
-system is a process the harness holds (`Process<File>`), not inert bytes - the
-reversed view of the default UNIX file.
+plugin family (the Classic release). One tool - `batch_edit` - that turns files into **processes
+held in state**: you open a machine, insert files into it, and the files process like a state
+machine in one go. Each file on the system is a process the harness holds (`Process<File>`), not
+inert bytes - the reversed view of the default UNIX file.
 
 The philosophy and the research live in
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
@@ -13,14 +12,14 @@ and its granular subdocuments under `Documentation/Plans/Batch-Edit-Tool/`.
 
 ## The machine (one tool, six actions)
 
-| Action | Effect |
-|---|---|
-| `open` | Declare the scope, insert files (paths or globs) as `observed` processes with their held version; the prepared schema (searches + ops) is validated fail-loud; misses are listed, never guessed |
-| `insert` | Add files to an open machine mid-life (the lease stays) |
-| `remove` | Drop files from an open machine |
-| `commit` | Run the transition table in one go, through the factory's write executor |
-| `state` | Re-present the current state of every held file |
-| `close` | Close the machine (in-flight processes settle first - nothing silently dropped) |
+| Action   | Effect                                                                                                                                                                                          |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `open`   | Declare the scope, insert files (paths or globs) as `observed` processes with their held version; the prepared schema (searches + ops) is validated fail-loud; misses are listed, never guessed |
+| `insert` | Add files to an open machine mid-life (the lease stays)                                                                                                                                         |
+| `remove` | Drop files from an open machine                                                                                                                                                                 |
+| `commit` | Run the transition table in one go, through the factory's write executor                                                                                                                        |
+| `state`  | Re-present the current state of every held file                                                                                                                                                 |
+| `close`  | Close the machine (in-flight processes settle first - nothing silently dropped)                                                                                                                 |
 
 ## The Process\<File\> states
 
@@ -35,8 +34,8 @@ errored   -> observed  (agent corrects the op)
 any       -> halted    (machine close with in-flight work: settle-first)
 ```
 
-A held file touched externally between insert and commit **halts** with the
-`stale` reason; the machine stays open; you resume it explicitly.
+A held file touched externally between insert and commit **halts** with the `stale` reason; the
+machine stays open; you resume it explicitly.
 
 ## The transition table (one line per op)
 
@@ -44,26 +43,23 @@ A held file touched externally between insert and commit **halts** with the
 file=<selector> search=<name> op=<MODE> [with=<TEXT>] [mode=first|all|<count>]
 ```
 
-`MODE` is one of `replace`, `insert-after`, `insert-before`, `remove-line`,
-`append`, `prepend`. Searches are named at open: `name=pattern` (literal) or
-`name=re:/pattern/flags` (simple regex, the v1 scope). Larger batches use the
-`opfile` escape hatch (a prepared file path, ingested line by line - no
-schema limit).
+`MODE` is one of `replace`, `insert-after`, `insert-before`, `remove-line`, `append`, `prepend`.
+Searches are named at open: `name=pattern` (literal) or `name=re:/pattern/flags` (simple regex, the
+v1 scope). Larger batches use the `opfile` escape hatch (a prepared file path, ingested line by
+line - no schema limit).
 
 ## The write path and the atomic gate
 
-Every write goes through **Factory.Write and nothing else**: explicit
-`replaceIfVersion` intent (the fresh-stat version guard), the `govern` actor
-marker so the event path skips the marked events, and the governed basenames
-(`package.json`, `Cargo.toml`) re-run through the factory's **direct** path
-exactly once per write. The gate is all-or-nothing on the apply loop: a
-planning failure halts or errors that file alone; a write failure stops the
-loop and returns the unwritten remainder to observed.
+Every write goes through **Factory.Write and nothing else**: explicit `replaceIfVersion` intent (the
+fresh-stat version guard), the `govern` actor marker so the event path skips the marked events, and
+the governed basenames (`package.json`, `Cargo.toml`) re-run through the factory's **direct** path
+exactly once per write. The gate is all-or-nothing on the apply loop: a planning failure halts or
+errors that file alone; a write failure stops the loop and returns the unwritten remainder to
+observed.
 
-A commit exceeding the in-line deadline (capped at 120000, the composition
-contract) continues as one background job and returns the typed `jobId`; the
-settle truth arrives through the jobs subscription and the next `state`
-presentation. No plugin-owned timers anywhere.
+A commit exceeding the in-line deadline (capped at 120000, the composition contract) continues as
+one background job and returns the typed `jobId`; the settle truth arrives through the jobs
+subscription and the next `state` presentation. No plugin-owned timers anywhere.
 
 ## The ledger lines (the contract, byte-stable)
 
@@ -78,28 +74,26 @@ machine committed <id> (<applied> applied, <failed> failed, <halted> halted)
 machine closed <id>
 ```
 
-Plus the module-owned `removed <file>` line for the `remove` action. The
-ledger file defaults to `~/.dsh/batch-edit.log` (one log per module).
+Plus the module-owned `removed <file>` line for the `remove` action. The ledger file defaults to
+`~/.dsh/batch-edit.log` (one log per module).
 
 ## Configuration
 
-Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables
-only by an explicit ACTIVATE in the profile). Every knob is volatile
-(hot-editable without remounting):
+Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
+ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
 
-| Field | Default | Meaning |
-|---|---|---|
-| `enabled` | `false` | The master switch |
-| `logFile` | `~/.dsh/batch-edit.log` | The module ledger |
-| `machinesPerAgent` | `2` | Open machines per agent |
-| `opsPerCommit` | `64` | Op lines per commit (overflow goes to `opfile`) |
-| `deadlineMs` | `120000` | In-line commit deadline (1000..120000) |
-| `strictMode` | `false` | Search-not-found errors vs skips |
-| `interceptBash` | `false` | The advisory bash intercept (v1: tags and records, never denies) |
-| `monitorChecksets` | `[]` | Per-file check-set names (the live containers' vocabulary, labels in v1) |
+| Field              | Default                 | Meaning                                                                  |
+| ------------------ | ----------------------- | ------------------------------------------------------------------------ |
+| `enabled`          | `false`                 | The master switch                                                        |
+| `logFile`          | `~/.dsh/batch-edit.log` | The module ledger                                                        |
+| `machinesPerAgent` | `2`                     | Open machines per agent                                                  |
+| `opsPerCommit`     | `64`                    | Op lines per commit (overflow goes to `opfile`)                          |
+| `deadlineMs`       | `120000`                | In-line commit deadline (1000..120000)                                   |
+| `strictMode`       | `false`                 | Search-not-found errors vs skips                                         |
+| `interceptBash`    | `false`                 | The advisory bash intercept (v1: tags and records, never denies)         |
+| `monitorChecksets` | `[]`                    | Per-file check-set names (the live containers' vocabulary, labels in v1) |
 
 ## Status
 
-Classic PoC (source complete; the smoke suite, the build pass and the
-EffectTS twin are end-phase work - see
-[Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
+Classic PoC (source complete; the smoke suite, the build pass and the EffectTS twin are end-phase
+work - see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).

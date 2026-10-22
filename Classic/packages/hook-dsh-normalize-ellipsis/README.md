@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-ellipsis
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-ellipsis&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-ellipsis)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-ellipsis)
@@ -11,21 +11,21 @@
 > [!NOTE]
 >
 > The **ellipsis normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> [LlmRuntime][dsh-llm]) and normalizes the horizontal ellipsis in model output, live in the transcript: every
-> typographic three-dot ellipsis code point becomes the ASCII three-dot sequence - U+2026 to `...`.
+> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call,
+> bound to the [LlmRuntime][dsh-llm]) and normalizes the horizontal ellipsis in model output, live
+> in the transcript: every typographic three-dot ellipsis code point becomes the ASCII three-dot
+> sequence - U+2026 to `...`.
 >
-> *A CLASS flavor of the normalize family: the core's `Ellipsis` class plus a configurable
-> `replacement` string (default `...`).*
+> _A CLASS flavor of the normalize family: the core's `Ellipsis` class plus a configurable
+> `replacement` string (default `...`)._
 >
-> *The @-sentence identity: **Hook @ DSH @ Normalize @
-> Ellipsis**.*
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ Ellipsis**._
 >
-> *The family's `raw-write` tool (registered by
+> _The family's `raw-write` tool (registered by
 > [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
 > the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
 > call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies.*
+> is the only normalization it applies._
 
 ---
 
@@ -37,27 +37,26 @@ machinery; the second of the six stream normalizer siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
 [`plugin-dsh-factory`](../plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the `Ellipsis` class and
-the generic `Replace`/`Chunk`/`Block` dispatch:
+`shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the `Ellipsis` class and the
+generic `Replace`/`Chunk`/`Block` dispatch:
 
-| flavor                                                            | table                  | substitution                  |
-| ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
-| [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)           | core `Dashes` class    | `→ replacement` (default `-`) |
-| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)       | core `Quotes` MAP      | curly → straight              |
-| [hook-dsh-normalize-ellipsis](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-ellipsis/Source) (this bundle)                       | core `Ellipsis` class  | U+2026 → `...`                |
-| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
-| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
-| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
+| flavor                                                                                                                                             | table                  | substitution                  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------- |
+| [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)                                                                                            | core `Dashes` class    | `→ replacement` (default `-`) |
+| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)                                                                                        | core `Quotes` MAP      | curly → straight              |
+| [hook-dsh-normalize-ellipsis](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-ellipsis/Source) (this bundle) | core `Ellipsis` class  | U+2026 → `...`                |
+| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)                                                                                        | core `Spaces` class    | unicode spaces → `" "`        |
+| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible)                                                                                  | core `Invisible` class | removed (default `""`)        |
+| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth)                                                                                  | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
-`Journal` (the shared P5 record on every N > 0 pass); the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no [fs/observed][dsh-fs]
-dead fields.
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell unwrap +
+shared `Ledger`/`Enabled` mappings + its own fields), `Append` and `Journal` (the shared P5 record
+on every N > 0 pass); the config is composed by the factory's standalone `Schema` helper with
+`shared: false` - the minimal block, no [fs/observed][dsh-fs] dead fields.
 
-It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm] listeners
-regardless of registration order.
+It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps
+the downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm]
+listeners regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -85,8 +84,10 @@ Verify with the `hook-dsh-normalize-ellipsis: activated (...)` ledger line.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-ellipsis/cordis.patch.yml) row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-ellipsis/cordis.patch.yml)
+row (or the profile's `dsh.bundle` manifest) - the full config table is in
+[The Config](#the-config):
 
 ```yaml
 - insert:
@@ -105,11 +106,10 @@ manifest) - the full config table is in [The Config](#the-config):
 Text processors collapse the typographic three-dot run into a single code point - U+2026, the
 horizontal ellipsis.
 
-In code blocks, commands and diffs the collapsed form is simply wrong: three
-literal dots are what every parser, shell and search expects.
+In code blocks, commands and diffs the collapsed form is simply wrong: three literal dots are what
+every parser, shell and search expects.
 
-This flavor makes the ASCII spelling
-the one that reaches the transcript.
+This flavor makes the ASCII spelling the one that reaches the transcript.
 
 ---
 
@@ -166,8 +166,10 @@ the one that reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Ellipsis` class ([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s `Normalize/Ellipsis`), applied per
-text segment through the core's generic class-to-string `Replace`:
+Exactly the core's `Ellipsis` class
+([@playform/lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source)'s
+`Normalize/Ellipsis`), applied per text segment through the core's generic class-to-string
+`Replace`:
 
 ```text
 [\u2026]  →  replacement
@@ -198,12 +200,12 @@ ellipsis's own ASCII spelling).
 
 ## The Config
 
-| Field                    | Type    | Default                                  | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------------------ | ------- | ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `log`                    | boolean | `true`                                   | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `logFile`                | string  | `~/.dsh/hook-dsh-normalize-ellipsis.log` | yes      | the ellipsis ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `replacement`            | string  | `...`                                    | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                               |
-| `normalizeReasoning`     | boolean | `true`                                   | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Field                    | Type    | Default                                  | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------ | ------- | ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `log`                    | boolean | `true`                                   | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `logFile`                | string  | `~/.dsh/hook-dsh-normalize-ellipsis.log` | yes      | the ellipsis ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `replacement`            | string  | `...`                                    | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `normalizeReasoning`     | boolean | `true`                                   | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `normalizeToolArguments` | boolean | `false`                                  | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
@@ -211,22 +213,22 @@ defensively.
 
 ## The Granular Scopes (all volatile)
 
-The `scopes` object gates every arm of the hook-dsh-normalize-ellipsis hook independently — the defaults are exactly the
-pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
-override in the profile patch turns the whole family off in one edit (see the patch fragment at the
-end of this section). The whole object carries the volatile marker (its leaves stay plain —
-schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
-`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
-silent, no remount, no new activation line.
+The `scopes` object gates every arm of the hook-dsh-normalize-ellipsis hook independently — the
+defaults are exactly the pre-scopes behavior, and because the schema shape is identical in every
+family hook, one grouped override in the profile patch turns the whole family off in one edit (see
+the patch fragment at the end of this section). The whole object carries the volatile marker (its
+leaves stay plain — schemastery rejects volatile leaves under an enclosing volatile field): one leaf
+change commits one `loader/volatile-update` dispatch whose whole object the State's refresh listener
+re-reads — live, silent, no remount, no new activation line.
 
-| Scope        | Default | Gates                                                                 |
-| ------------ | ------- | --------------------------------------------------------------------- |
-| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
-| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
-| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
-| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
-| files        | on      | inert in a stream flavor (present so one patch override drives the whole family)                                                            |
-| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+| Scope        | Default | Gates                                                                            |
+| ------------ | ------- | -------------------------------------------------------------------------------- |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                            |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)                   |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)                |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)                      |
+| files        | on      | inert in a stream flavor (present so one patch override drives the whole family) |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                                 |
 
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
@@ -235,8 +237,7 @@ The per-call `{"__normalize":false` first-key marker is the tool-args arm's esca
 "leave that search alone" control: a deliberate search for an irregular character (an em dash, a
 curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
 normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
-delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
-normally.
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes normally.
 
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
@@ -273,36 +274,35 @@ hook-dsh-normalize-ellipsis: overpass: swept K file(s), normalized M char(s)
 Registered through the `commands` service when it is present (probe-once — a missing service simply
 skips the registration). Grammar:
 
-| Input              | Effect                                                                            |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `files <path…>`    | declined — the sweep is owned by the normalize-file hook                                                                       |
-| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
+| Input             | Effect                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `files <path…>`   | declined — the sweep is owned by the normalize-file hook                                                                                         |
+| `batch`           | arm the one-shot step-batch overpass (consumed by the next incoming batch)                                                                       |
 | `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
-| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+| `scopes`          | read-only report of the current effective values (the activation line never changes)                                                             |
 
 ## The Patch-Level Global Off
 
 ```yaml
 - id: hook-dsh-normalize-ellipsis
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```
 
 ---
-
 
 ## In Action
 
 One stream, one transformation.
 
-The model emits the collapsed typographic ellipsis; the live UI and
-the transcript receive three ASCII dots:
+The model emits the collapsed typographic ellipsis; the live UI and the transcript receive three
+ASCII dots:
 
 ```text
 text-delta in (what the model wrote):
@@ -314,12 +314,12 @@ text-delta out (what reaches the transcript):
   "loading the modules, one by one ... then the whole set ... and then ..."
 ```
 
-Each U+2026 code point becomes the three-dot ASCII sequence `...`; dots that were already
-ASCII are untouched.
+Each U+2026 code point becomes the three-dot ASCII sequence `...`; dots that were already ASCII are
+untouched.
 
-Each replaced code point counts once in the ledger even though it expands to
-three characters - which is why the sample's three U+2026 code points show up as `normalized 3
-ellipsis char(s)`, not nine output characters:
+Each replaced code point counts once in the ledger even though it expands to three characters -
+which is why the sample's three U+2026 code points show up as `normalized 3 ellipsis char(s)`, not
+nine output characters:
 
 ```text
 hook-dsh-normalize-ellipsis: normalized 3 ellipsis char(s) in one stream
@@ -328,10 +328,9 @@ hook-dsh-normalize-ellipsis: normalized 3 ellipsis char(s) in one stream
 The `replacement` is hot-editable: change it in the config (say to `. . .`) and the very next stream
 picks it up with no remount.
 
-The same pass runs over reasoning deltas when `normalizeReasoning` is
-on, and over tool-call arguments when the example patch enables `normalizeToolArguments` - with the
-`edit`, `raw-write` and `normalize-file` names exempt and the raw-marker calls passing through
-unnormalized.
+The same pass runs over reasoning deltas when `normalizeReasoning` is on, and over tool-call
+arguments when the example patch enables `normalizeToolArguments` - with the `edit`, `raw-write` and
+`normalize-file` names exempt and the raw-marker calls passing through unnormalized.
 
 ---
 
@@ -349,20 +348,21 @@ The activation line is written by `apply()`; the count line only follows a norma
 and only when N > 0 (a thrown-away stream writes no ledger line).
 
 Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
-domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
-count line - best-effort: with no storage facility the record buffers or drops, and the human
-ledger stays the complete record.
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the count
+line - best-effort: with no storage facility the record buffers or drops, and the human ledger stays
+the complete record.
 
 ---
 
 ## The two release groups (CLASSIC vs EFFECT-TS)
 
-Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
-zero framework dependencies: `import ... from "@playform/hook-dsh-normalize-ellipsis"` resolves to `Target/`.
-The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-hook-dsh-normalize-ellipsis` -
-effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as
-its runtime dependency. Install the group you run and never mix the groups in one graph
-(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript, zero
+framework dependencies: `import ... from "@playform/hook-dsh-normalize-ellipsis"` resolves to
+`Target/`. The EFFECT-TS implementation of the same contract is the separate package
+`@playform/ets-hook-dsh-normalize-ellipsis` - effect-backed, built on the shared
+`@playform/ets-base-dsh` base with `effect` v4.0.2 as its runtime dependency. Install the group you
+run and never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the
+classic dispatch envelope).
 
 ## License 📜
 

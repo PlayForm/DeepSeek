@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-factory
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fplugin-dsh-factory&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-factory)
@@ -10,22 +10,22 @@
 
 > [!NOTE]
 >
-> The **furnace of the DSH governance family** - the first *service-provider* bundle in the DeepSeek
+> The **furnace of the DSH governance family** - the first _service-provider_ bundle in the DeepSeek
 > Harness plugin family.
 >
-> Loading it registers one class plugin
-> (`export default class PluginFactory extends Service`, `super(ctx, "pluginFactory")`,
-> `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every
-> piece of common machinery the family's hooks used to duplicate.
+> Loading it registers one class plugin (`export default class PluginFactory extends Service`,
+> `super(ctx, "pluginFactory")`, `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a
+> single service holding every piece of common machinery the family's hooks used to duplicate.
 >
-> *One service.*
+> _One service._
 >
-> *Nineteen methods ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts) `RegisterGovern` + `Govern` and the
-> `GovernSteps` registry among them).*
+> _Nineteen methods
+> ([the direct-govern pair](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts)
+> `RegisterGovern` + `Govern` and the `GovernSteps` registry among them)._
 >
-> *The hooks bring their own metal; the factory pours the mold.*
+> _The hooks bring their own metal; the factory pours the mold._
 >
-> *The @-sentence identity: **Plugin @ DSH @ Factory**.*
+> _The @-sentence identity: **Plugin @ DSH @ Factory**._
 
 ---
 
@@ -38,9 +38,9 @@ consume `State`/`Append` and the `Schema` helper); its own parent is the filesys
 
 The factory is the **hub** of the eleven-package DSH family:
 
-| Consumer                                                            | injects                   | uses                                                                                                   |
-| ------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)                                         | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
+| Consumer                                                                                                                                                               | injects                   | uses                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source)                                       | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue, GuardedWrite, Refresh, State, Wire, Attach, Journal, Append, UpdateKey |
 | [hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover, Continue (pin pass), State, Wire, Attach, Journal, Append                              |
 | [hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)                                           | `["fs", "pluginFactory"]` | Gate, Discover/Parse, Continue (TOML surgery), State, Wire, Attach, Journal, Append, UpdateKey, Seam   |
 | [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) + the five `hook-dsh-normalize-*` flavors | `["pluginFactory"]`       | State, Append - plus the named `Schema` export (`shared: false`) for their config                      |
@@ -96,19 +96,18 @@ export async function apply(ctx) {
 
 ## The Problem
 
-Three independent consumers of the *same* machinery already existed.
+Three independent consumers of the _same_ machinery already existed.
 
-The governor, the pinner and
-the cargo governor each maintained their own copy of: the ledger (`Append`), the exclusion match
-(`Match`), the registry / policy walk-up discovery (`Discover`/`Parse`), the union keep-list
-resolution with the P3 chain-keys interlock, the g1 gate set, the version-guarded write with the P4
-sandbox fence, the P3/U2 observation-policy refresh, the detached contained continuation
-scaffolding, the `State` construction with defensive cell unwrap, the `ctx.on` wiring, the P1/P2/P5
-lifecycle effects, the Schemastery schema shape, and the probe-once optional-service accessor.
+The governor, the pinner and the cargo governor each maintained their own copy of: the ledger
+(`Append`), the exclusion match (`Match`), the registry / policy walk-up discovery
+(`Discover`/`Parse`), the union keep-list resolution with the P3 chain-keys interlock, the g1 gate
+set, the version-guarded write with the P4 sandbox fence, the P3/U2 observation-policy refresh, the
+detached contained continuation scaffolding, the `State` construction with defensive cell unwrap,
+the `ctx.on` wiring, the P1/P2/P5 lifecycle effects, the Schemastery schema shape, and the
+probe-once optional-service accessor.
 
-Every
-bug fix or hardening pass - the sandbox fence, the stale-version leak, the in-flight disposal - had
-to be applied three times.
+Every bug fix or hardening pass - the sandbox fence, the stale-version leak, the in-flight
+disposal - had to be applied three times.
 
 The factory makes it apply **once**.
 
@@ -171,27 +170,27 @@ loader holds it PENDING until the factory exists) and supplies only its own thre
    `GuardedWrite`/`Refresh`/`Seam`/`Journal`/`UpdateKey`.
 
 **The shared write executor (`Write`)** - the one write path in the family. Every governed or
-tool-driven write goes through it (GuardedWrite is the guarded alias): the `Over` bundle carries
-the intent (an explicit `replaceIfVersion` skips the [fs/write-intent][dsh-fs] waterfall - the
-default `{ waterfall: true }` runs it), the sandbox posture (`"standing"` = the built-in's
-no-escalation replica, `"p4"` = the per-call fence, or an explicit policy object), the
-root-context fs/observed emit (default true), the Stash pre-registration and the caller's content
-transform. It logs nothing - the caller composes its own ledger line from the outcome.
+tool-driven write goes through it (GuardedWrite is the guarded alias): the `Over` bundle carries the
+intent (an explicit `replaceIfVersion` skips the [fs/write-intent][dsh-fs] waterfall - the default
+`{ waterfall: true }` runs it), the sandbox posture (`"standing"` = the built-in's no-escalation
+replica, `"p4"` = the per-call fence, or an explicit policy object), the root-context fs/observed
+emit (default true), the Stash pre-registration and the caller's content transform. It logs
+nothing - the caller composes its own ledger line from the outcome.
 
 **The direct-govern entry (`Govern`)** - the raw-write tool's post-write call: resolves the
 registered steps for the target's basename, filters them by the selection (`true`/`"all"` = every
 registered step; an array or a single name = the named steps; unknown names ignored; `false`/absent
 = none), and runs each contained - one try/catch per step, never throws. The SEQUENTIAL FOLD
-(v0.2.1): the steps are awaited one at a time, so each step's chain (its guarded write + its
-ledger line) completes before the next step reads the file. An empty registry (no module
-registered for the basename) is a contained no-op.
+(v0.2.1): the steps are awaited one at a time, so each step's chain (its guarded write + its ledger
+line) completes before the next step reads the file. An empty registry (no module registered for the
+basename) is a contained no-op.
 
 ### What the factory deliberately does NOT own
 
 - **The consumer ledger strings.** Every message a hook logs (`skipped (excluded) ...`,
   `observed non-JSON package.json ... - skipped`, `REFUSED rewrite ...`, `pinned ...`,
   `governed ... → ...`, the `activated (...)` proof) is composed and logged by the hook - through
-  the factory's `Append`. The factory's own composed strings are *parameterized machinery* (the
+  the factory's `Append`. The factory's own composed strings are _parameterized machinery_ (the
   unreadable-policy line takes the policy file name; the suppressed-error lines take `state.Module`
   as the prefix) and stay byte-identical when a consumer keeps its historical name.
 - **The transforms.** The consumer supplies the pure function; the factory only drives it inside
@@ -206,8 +205,7 @@ Only the entry carries named exports: the six **type re-exports** (`State`, `Opt
 and the standalone **`Schema`** function (factory v0.1.1) - the module-load use of the instance
 method, because the loader needs `Config` before any context exists.
 
-Full contract:
-[SCHEME.md](./SCHEME.md).
+Full contract: [SCHEME.md](./SCHEME.md).
 
 ### Verification
 
@@ -251,8 +249,7 @@ Full contract:
 
 The factory registers no Config schema of its own - it **is** the config machinery.
 
-Its
-`Schema(shared?, m)` instance method is the Schemastery schema factory every consumer builds its
+Its `Schema(shared?, m)` instance method is the Schemastery schema factory every consumer builds its
 schema with, and the standalone named **`Schema`** export (factory v0.1.1) makes the same factory
 usable at module-evaluation time, before any service instance exists (the loader needs `Config` at
 load).
@@ -261,12 +258,11 @@ load).
 `logFile`/`updateCooldownMs`/`mutationTools`/`policyFile`/`exclude`) for non-manifest modules like
 the normalize flavors; the shared defaults carry the family's block.
 
-Volatile cells (`log`,
-`logFile` and any consumer's own hot fields) commit without remounting the plugin; the factory's
-`State` builder unwraps them defensively. The volatile-refresh path: every volatile edit commits
-one `loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads -
-live, silent, no remount (the granular scopes of the normalize hooks ride the same path, and the
-scopes are all volatile live toggles).
+Volatile cells (`log`, `logFile` and any consumer's own hot fields) commit without remounting the
+plugin; the factory's `State` builder unwraps them defensively. The volatile-refresh path: every
+volatile edit commits one `loader/volatile-update` dispatch whose whole object the State's refresh
+listener re-reads - live, silent, no remount (the granular scopes of the normalize hooks ride the
+same path, and the scopes are all volatile live toggles).
 
 ---
 
@@ -274,8 +270,8 @@ scopes are all volatile live toggles).
 
 A governed write, end to end.
 
-The consumer supplies the transform; the factory drives the rest (the
-excerpt is the pinner's pin pass, condensed to its shape):
+The consumer supplies the transform; the factory drives the rest (the excerpt is the pinner's pin
+pass, condensed to its shape):
 
 ```js
 // Source/Function/Transform.ts of a consumer (condensed to its shape):
@@ -308,8 +304,7 @@ registry.json, Continue ran the transform detached and contained, GuardedWrite c
 `replaceIfVersion` past the P4 sandbox fence, Refresh re-emitted the fresh version with the same
 actor, and Append composed the loggers line from the module's message.
 
-The consumer composed the
-only string in the chain.
+The consumer composed the only string in the chain.
 
 ---
 
@@ -329,9 +324,9 @@ Every string a hook logs - `skipped (excluded) ...`, `governed <path> → <versi
 `pinned <path> (N versions)`, the `activated (...)` proof - is composed and logged by the hook,
 through the factory's `Append`.
 
-The factory's own composed strings are parameterized machinery (the
-unreadable-policy line takes the policy file name; the suppressed-error lines take `state.Module` as
-the prefix) and stay byte-identical when a consumer keeps its historical name.
+The factory's own composed strings are parameterized machinery (the unreadable-policy line takes the
+policy file name; the suppressed-error lines take `state.Module` as the prefix) and stay
+byte-identical when a consumer keeps its historical name.
 
 The P5 records (the consumers' `Journal` calls) route to ONE shared sink: the harness's
 storageDomain allows one open per domain name, so the first module whose open succeeds binds the
@@ -339,17 +334,17 @@ shared `package_governance` table and every module's records land there. Records
 any open succeeds buffer in the factory's pre-bind queue (capped at 256, drained by the first
 successful open) - the boot-window race is closed by construction.
 
-
 ---
 
 ## The two release groups (CLASSIC vs EFFECT-TS)
 
-Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
-zero framework dependencies: `import ... from "@playform/plugin-dsh-factory"` resolves to `Target/`.
-The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-plugin-dsh-factory` -
-effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as
-its runtime dependency. Install the group you run and never mix the groups in one graph
-(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript, zero
+framework dependencies: `import ... from "@playform/plugin-dsh-factory"` resolves to `Target/`. The
+EFFECT-TS implementation of the same contract is the separate package
+`@playform/ets-plugin-dsh-factory` - effect-backed, built on the shared `@playform/ets-base-dsh`
+base with `effect` v4.0.2 as its runtime dependency. Install the group you run and never mix the
+groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic dispatch
+envelope).
 
 ## License 📜
 

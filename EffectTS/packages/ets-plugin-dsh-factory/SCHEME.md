@@ -3,8 +3,8 @@
 Status: **IMPLEMENTED and VERIFIED** (`tsc --noEmit` zero errors; minified build; 41-check smoke
 with a fake ctx + a REAL instance — ALL PASS).
 
-This document ships inside the bundle as `SCHEME.md`
-(alongside the usage README) and IS the contract the trio refactor consumes.
+This document ships inside the bundle as `SCHEME.md` (alongside the usage README) and IS the
+contract the trio refactor consumes.
 
 ## 0. The loader contract — the first class/service plugin in the family
 
@@ -24,12 +24,11 @@ Per docs/user/develop/framework/service.md: the constructor registers the servic
 `static inject = ["fs"]` because the primitives call `ctx.fs` (the governed-file read and the
 version-guarded write).
 
-The default object contract does not apply here — the class form is the
-Constructor plugin form; there is no `Config` schema and no config row beyond `config: {}` in the
-patch.
+The default object contract does not apply here — the class form is the Constructor plugin form;
+there is no `Config` schema and no config row beyond `config: {}` in the patch.
 
-Consumption: `inject: ["pluginFactory"]` (required service) or `ctx.get("pluginFactory")`
-(optional probe).
+Consumption: `inject: ["pluginFactory"]` (required service) or `ctx.get("pluginFactory")` (optional
+probe).
 
 ## 1. The shared state (Interface/State)
 
@@ -39,19 +38,19 @@ assignable to the factory's shape).
 
 Fields:
 
-| Field                          | Meaning                                                                                                                                                                                          |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Context`                      | the loading context (fs, logger, emit, get, effect, on)                                                                                                                                          |
+| Field                          | Meaning                                                                                                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Context`                      | the loading context (fs, logger, emit, get, effect, on)                                                                                                                                                      |
 | `Module`                       | the model identity — **doubles as the logger/ledger prefix** ("ets-hook-dsh-package-governor", "ets-hook-dsh-package-pinner", "ets-hook-dsh-cargo-governor" keep every factory-composed line byte-identical) |
-| `Tool`                         | mutation-tool names (fixed mapping ← `mutationTools`)                                                                                                                                            |
-| `Policy`                       | config `policyFile` (fixed mapping; "" = discovery)                                                                                                                                              |
-| `PolicyName`                   | the policy sidecar filename for union discovery ("pin-policy.json" / "update-policy.json"; "" disables sidecar lookup)                                                                           |
-| `Ledger` / `Enabled` / `List`  | fixed mappings ← `logFile` / `log` / `exclude`                                                                                                                                                   |
-| `Stash`                        | `Map<FsTargetKey, FsVersion>` — the idempotence gate                                                                                                                                             |
-| `Inflight`                     | `Map<string, { controller: AbortController }>` — P2 disposal                                                                                                                                     |
-| `Seams`                        | probe-once cache (Function/Seam)                                                                                                                                                                 |
-| `Subprocess`                   | P9: probed ONCE at build via the "subprocess" seam                                                                                                                                               |
-| `Queue` / `Journal` / `Domain` | the P5 storage sink, pre-open queue (capped 256), open handle                                                                                                                                    |
+| `Tool`                         | mutation-tool names (fixed mapping ← `mutationTools`)                                                                                                                                                        |
+| `Policy`                       | config `policyFile` (fixed mapping; "" = discovery)                                                                                                                                                          |
+| `PolicyName`                   | the policy sidecar filename for union discovery ("pin-policy.json" / "update-policy.json"; "" disables sidecar lookup)                                                                                       |
+| `Ledger` / `Enabled` / `List`  | fixed mappings ← `logFile` / `log` / `exclude`                                                                                                                                                               |
+| `Stash`                        | `Map<FsTargetKey, FsVersion>` — the idempotence gate                                                                                                                                                         |
+| `Inflight`                     | `Map<string, { controller: AbortController }>` — P2 disposal                                                                                                                                                 |
+| `Seams`                        | probe-once cache (Function/Seam)                                                                                                                                                                             |
+| `Subprocess`                   | P9: probed ONCE at build via the "subprocess" seam                                                                                                                                                           |
+| `Queue` / `Journal` / `Domain` | the P5 storage sink, pre-open queue (capped 256), open handle                                                                                                                                                |
 
 Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, never parsed or computed
 (subsystems/filesystem.md).
@@ -61,11 +60,10 @@ Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, neve
 > Added in v0.2: the **direct-govern registry and entry** — `RegisterGovern` and `Govern`
 > (§2.17–§2.18), the raw-write tool's per-call `govern` path.
 >
-> The callable count is now 19 (Write +
-> GuardedWrite share §2.7; the GovernSteps registry instance field is state, not a method).
+> The callable count is now 19 (Write + GuardedWrite share §2.7; the GovernSteps registry instance
+> field is state, not a method).
 >
-> §2.16's
-> `UpdateKey` is the v0.1.1 P2 helper, factory-side since the cargo collision.
+> §2.16's `UpdateKey` is the v0.1.1 P2 helper, factory-side since the cargo collision.
 
 ### 2.1 `Append(state, message): void`
 
@@ -74,8 +72,7 @@ The ledger.
 `logger.info("<Module>: <message>")` (best-effort), then
 `appendFileSync(state.Ledger, "[<ISO>] <message>\n")` when `state.Enabled` (best-effort).
 
-**Never
-throws.**
+**Never throws.**
 
 The message strings are the MODEL'S.
 
@@ -126,8 +123,8 @@ basename → exclusion-first.
 
 **Reads the Stash, never writes it; logs nothing.**
 
-The caller composes
-its own lines (at least the `excluded` one) and seeds the Stash after g2, before detaching.
+The caller composes its own lines (at least the `excluded` one) and seeds the Stash after g2, before
+detaching.
 
 ### 2.7 `Write(state, target, content, over?): Promise<FsWriteOutcome>` — the shared executor / `GuardedWrite(state, target, content, version, signal?)` — the guarded alias
 
@@ -176,11 +173,10 @@ over?: {
 — `ctx.fs.writeText` with the version-guarded intent and the P4 fence; on success, pre-registers the
 outcome's fresh version in `state.Stash` (before any re-emit).
 
-Logs nothing — the caller composes
-its own ledger line from the outcome.
+Logs nothing — the caller composes its own ledger line from the outcome.
 
-The built-in `write` tool stays OUT of scope (harness-owned
-dsh-tool-fs); this executor mirrors its mechanics.
+The built-in `write` tool stays OUT of scope (harness-owned dsh-tool-fs); this executor mirrors its
+mechanics.
 
 ### 2.8 `Refresh(state, target, actor, version): void`
 
@@ -190,8 +186,7 @@ bucket.
 
 Best-effort (swallows everything).
 
-For the stat-based variant (update engines), stat first
-and pass the stat's version.
+For the stat-based variant (update engines), stat first and pass the stat's version.
 
 ### 2.9 `Continue(state, target, actor, dir, found, version, transform): Promise<void>`
 
@@ -236,8 +231,8 @@ the P9 subprocess probe (through Seam).
 
 Generic: `Extra` names the model's field type.
 
-Never
-returned from `apply` (loader treats return values specially) — expose via a context attachment.
+Never returned from `apply` (loader treats return values specially) — expose via a context
+attachment.
 
 ### 2.11 `Wire(ctx, state, observe): void`
 
@@ -246,11 +241,9 @@ fiber-owned, removed on unload.
 
 `state` accepted for signature stability.
 
-The model's `observe` runs
-Gate, its lines, g2 discovery, the Stash seed, and the Continue handoff.
+The model's `observe` runs Gate, its lines, g2 discovery, the Stash seed, and the Continue handoff.
 
-The hook is fs/observed
-ONLY.
+The hook is fs/observed ONLY.
 
 The activation proof is the model's own `Append` + `Journal` call.
 
@@ -279,8 +272,8 @@ Three `ctx.effect` registrations, labels `<name>-jobs`, `<name>-inflight`, `<nam
 The P5 writer: calls `state.Journal(...)` inside a try/catch — a storage failure can never reach any
 caller path.
 
-Consumers: the manifest modules' lifecycle events and the non-manifest stream family's
-count records (event `normalized`, empty `path`, detail identical to the ledger count line).
+Consumers: the manifest modules' lifecycle events and the non-manifest stream family's count records
+(event `normalized`, empty `path`, detail identical to the ledger count line).
 
 ### 2.14 `Schema(shared?, model?): Schema`
 
@@ -307,12 +300,11 @@ NEVER the direct accessor (`ctx.<name>` throws on service accessors without inje
 `update:${String(target.targetKey)}` — the P2 UPDATE-STAGE controller key (v0.1.1, factory-side
 since the cargo collision).
 
-The chain pass (§2.9) registers its own controller under the PLAIN
-`String(targetKey)`; the two passes share the one `Inflight` map (Attach's disposal aborts every
-entry on unload), so a collision would let the chain pass's settlement silently drop the running
-update's controller while its engine is still in flight — the cargo collision lesson (the cargo
-fixed it flavor-side with `update:` before the factory existed; now the helper is factory-side and
-both governors adopt it).
+The chain pass (§2.9) registers its own controller under the PLAIN `String(targetKey)`; the two
+passes share the one `Inflight` map (Attach's disposal aborts every entry on unload), so a collision
+would let the chain pass's settlement silently drop the running update's controller while its engine
+is still in flight — the cargo collision lesson (the cargo fixed it flavor-side with `update:`
+before the factory existed; now the helper is factory-side and both governors adopt it).
 
 ### 2.17 `RegisterGovern(basename, name, run): void` — the direct-govern registry
 
@@ -329,15 +321,13 @@ The governance modules register their steps at apply time —
 State (built in that module's apply), so the chain pass, the update stage and every ledger string
 stay the MODULE'S own, byte-identical (the factory never owns ledger strings).
 
-One basename maps to
-one ordered list; re-registering the same name replaces the step in place (registered position
-preserved — an HMR reload rebinds the closure without duplicating it), a new name appends.
+One basename maps to one ordered list; re-registering the same name replaces the step in place
+(registered position preserved — an HMR reload rebinds the closure without duplicating it), a new
+name appends.
 
-Empty
-until the first module registers: with no registrations a `govern` call is a contained no-op.
+Empty until the first module registers: with no registrations a `govern` call is a contained no-op.
 
-Since
-the sequential fold (v0.2.1) a run MAY return a promise — §2.18 awaits it, so the step's chain
+Since the sequential fold (v0.2.1) a run MAY return a promise — §2.18 awaits it, so the step's chain
 completes before the next step starts.
 
 ### 2.18 `Govern(target, selection, actor, version): Promise<void>` — the SEQUENTIAL FOLD
@@ -361,41 +351,37 @@ Selection semantics:
 Contained: one try/catch per step — never throws, never affects the caller (the family's silence
 invariant; a step's own async continuations are contained by the step).
 
-The fold's `await` is what
-makes a multi-step selection DETERMINISTIC.
+The fold's `await` is what makes a multi-step selection DETERMINISTIC.
 
-The pre-fold version fired each step's chain detached
-and concurrently, the chains raced on the version-guarded `replaceIfVersion` write (the first write
-won, later ones failed `FS_STALE_VERSION`), and the file's final state plus the ledger lines were
-nondeterministic.
+The pre-fold version fired each step's chain detached and concurrently, the chains raced on the
+version-guarded `replaceIfVersion` write (the first write won, later ones failed
+`FS_STALE_VERSION`), and the file's final state plus the ledger lines were nondeterministic.
 
-Awaiting each chain eliminates the WRITE-WRITE races by construction — and §2.9's
-fresh-stat write basis eliminates the version-guard abort the awaiting alone could not.
+Awaiting each chain eliminates the WRITE-WRITE races by construction — and §2.9's fresh-stat write
+basis eliminates the version-guard abort the awaiting alone could not.
 
-The fold
-hands every step the SAME observed version, so even a perfectly serialized fold lost every step
-after the first (their chain writes guarded against a version the first step's write had already
-superseded — verified live: a `govern: true` run over canonicalize + pin produced only the pinner's
-line, the canonicalize's write lost the version race).
+The fold hands every step the SAME observed version, so even a perfectly serialized fold lost every
+step after the first (their chain writes guarded against a version the first step's write had
+already superseded — verified live: a `govern: true` run over canonicalize + pin produced only the
+pinner's line, the canonicalize's write lost the version race).
 
-With each step's chain writing against a
-fresh stat of the file as the previous step left it, any step order converges to the same final
-state.
+With each step's chain writing against a fresh stat of the file as the previous step left it, any
+step order converges to the same final state.
 
 The update step's awaited promise is fast.
 
-Its `Follow`/`Dispatch` handoff resolves when the
-STAGE IS DISPATCHED — the background job keeps running — so the tool's result returns after the
-fold, not after an ncu/cargo run, and the ledger still shows the job's progress as before.
+Its `Follow`/`Dispatch` handoff resolves when the STAGE IS DISPATCHED — the background job keeps
+running — so the tool's result returns after the fold, not after an ncu/cargo run, and the ledger
+still shows the job's progress as before.
 
 Best-effort by design: the handlers mirror the Observe path (g2 discovery, the Stash seed BEFORE
 their writes, the awaited `Continue`/`Follow`/`Dispatch` handoffs) but no outcome ever flows back
 into the write that triggered them.
 
-The raw-write tool passes its exec WRAPPED as
-`{ ...exec, govern: <selection> }` (the marker) — every handler receives the same actor with
-`name`/`agent` intact, and the marker keeps the write's own `fs/observed` emit from re-entering the
-event-path governance (this direct path is the raw-write's ONLY governance channel).
+The raw-write tool passes its exec WRAPPED as `{ ...exec, govern: <selection> }` (the marker) —
+every handler receives the same actor with `name`/`agent` intact, and the marker keeps the write's
+own `fs/observed` emit from re-entering the event-path governance (this direct path is the
+raw-write's ONLY governance channel).
 
 ## 3. The model contract (what a refactor consumes)
 

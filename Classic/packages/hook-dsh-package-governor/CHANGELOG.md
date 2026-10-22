@@ -6,5 +6,6 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/hook-dsh-package-governor: the silent package.json governor: hooking fs/observed, rewriting the chain-governed pins to the effective registry's resolved ranges and running the update stage
-  (the Classic release of the DeepSeek Harness Plugin Family).
+- The initial release of @playform/hook-dsh-package-governor: the silent package.json governor:
+  hooking fs/observed, rewriting the chain-governed pins to the effective registry's resolved ranges
+  and running the update stage (the Classic release of the DeepSeek Harness Plugin Family).

@@ -9,8 +9,8 @@ A fiber owns the registrations a plugin creates. Its lifecycle:
 - async disposers run concurrently;
 - a disposed fiber's registrations stop receiving events.
 
-Wrap raw resources (timers, subprocesses, watchers) in `ctx.effect` so
-disposal is owned by the fiber:
+Wrap raw resources (timers, subprocesses, watchers) in `ctx.effect` so disposal is owned by the
+fiber:
 
 ```typescript
 ctx.effect(() => {
@@ -21,12 +21,9 @@ ctx.effect(() => {
 
 ## HMR
 
-- Give every registration a stable row id so the HMR diff can match the
-  old row to the new one.
-- HMR idempotence: reloading a plugin must not duplicate its listeners,
-  timers, or jobs.
-- A reload that leaves a stale registration is a leak the next disposal
-  will not find.
+- Give every registration a stable row id so the HMR diff can match the old row to the new one.
+- HMR idempotence: reloading a plugin must not duplicate its listeners, timers, or jobs.
+- A reload that leaves a stale registration is a leak the next disposal will not find.
 
 ## Tools
 
@@ -71,5 +68,4 @@ pre-execute -> guard -> execute -> projectContent -> post-execute
 - **Unstable row ids**: the HMR diff cannot match; listeners duplicate.
 - **Impure render**: the presenter does work the result did not ask for.
 - **Ignored signal**: a cancelled tool keeps running.
-- **Throw after mutation**: the tool reports an error for a change that
-  succeeded.
+- **Throw after mutation**: the tool reports an error for a change that succeeded.

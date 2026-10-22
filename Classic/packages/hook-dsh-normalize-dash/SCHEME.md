@@ -7,16 +7,15 @@ with a fake ctx + the REAL factory — ALL PASS).
 
 The dash normalizer for **model output**.
 
-The file-hook precedent rewrites the unicode dash family to ASCII hyphen-minus
-**in files after the fact**.
+The file-hook precedent rewrites the unicode dash family to ASCII hyphen-minus **in files after the
+fact**.
 
-A DSH plugin can go where a file hook cannot: the **`llm/stream` waterfall**
-— the interceptable wrapper around every streaming model call (retry, replay, routing), bound to the
-LlmRuntime (`docs/subsystems/llm-streaming.md:1108-1125`).
+A DSH plugin can go where a file hook cannot: the **`llm/stream` waterfall** — the interceptable
+wrapper around every streaming model call (retry, replay, routing), bound to the LlmRuntime
+(`docs/subsystems/llm-streaming.md:1108-1125`).
 
-The rewrite flows into both the live UI
-and the durable transcript — **the normalization is deliberately VISIBLE** (it IS the feature), the
-opposite of the governance family's silence.
+The rewrite flows into both the live UI and the durable transcript — **the normalization is
+deliberately VISIBLE** (it IS the feature), the opposite of the governance family's silence.
 
 ## 1. The transform (exact fidelity)
 
@@ -49,18 +48,15 @@ Per text segment, verbatim from the core's Dashes class:
 
 All → the config `replacement` (default `-`, ASCII hyphen-minus U+002D).
 
-No context rules —
-none.
+No context rules — none.
 
-Whole-chunk single-character replacement is **chunk-boundary-safe**: no
-lookahead/lookbehind, no multi-character sequences, so per-chunk application can never disagree with
-whole-text application.
+Whole-chunk single-character replacement is **chunk-boundary-safe**: no lookahead/lookbehind, no
+multi-character sequences, so per-chunk application can never disagree with whole-text application.
 
-The replacement uses a **function replacer**, so a custom `replacement`
-containing `$` patterns is inserted literally.
+The replacement uses a **function replacer**, so a custom `replacement` containing `$` patterns is
+inserted literally.
 
-The replaced characters are counted per stream for
-the ledger line.
+The replaced characters are counted per stream for the ledger line.
 
 ## 2. The injection point — the llm/stream waterfall
 
@@ -122,12 +118,11 @@ own `ctx.on("llm/stream", …)` plain registration), `Attach` (§2.12 — no job
 `Journal` (§2.13 — consumed: the P5 `normalized` record on every N > 0 pass), `Gate`/
 `GuardedWrite`/`Refresh`/`Continue` (§2.6-2.9 — no fs/observed path).
 
-This is the factory's **first
-NON-MANIFEST module** and its **second consumer**.
+This is the factory's **first NON-MANIFEST module** and its **second consumer**.
 
-The chunk vocabulary (`StreamChunk`,
-`ContentBlock`, `GenerateOptions`) comes from `@deepseek-ai/dsh-llm` (host-pinned devDep, type-only
-imports — erased at build, so the Target has no runtime import of it).
+The chunk vocabulary (`StreamChunk`, `ContentBlock`, `GenerateOptions`) comes from
+`@deepseek-ai/dsh-llm` (host-pinned devDep, type-only imports — erased at build, so the Target has
+no runtime import of it).
 
 ## 4. The Config (the minimal shared block)
 
@@ -136,22 +131,21 @@ The schema is COMPOSED by the factory's STANDALONE helper (factory v0.1.1, P1 �
 passes `shared: false` — the MINIMAL shared block, ONLY the two universal volatile cells (`log`,
 `logFile`).
 
-The pre-v0.1.1 deviation (hand-defining the schema here, because the factory's Schema
-always emitted the family's shared block — `updateCooldownMs`, `mutationTools`, `policyFile`,
-`exclude` — fs/observed machinery the normalize-dash has none of) is gone: `shared: false` emits
-nothing the module does not use.
+The pre-v0.1.1 deviation (hand-defining the schema here, because the factory's Schema always emitted
+the family's shared block — `updateCooldownMs`, `mutationTools`, `policyFile`, `exclude` —
+fs/observed machinery the normalize-dash has none of) is gone: `shared: false` emits nothing the
+module does not use.
 
-The normalize-dash's own `logFile` default (its SEPARATE ledger) is
-supplied through its own fields, which override the minimal block's.
+The normalize-dash's own `logFile` default (its SEPARATE ledger) is supplied through its own fields,
+which override the minimal block's.
 
-The shape: `log` (bool, true,
-volatile), `logFile` (`~/.dsh/hook-dsh-normalize-dash.log`, volatile), `replacement` (`-`, volatile
-— the transform's only knob), `normalizeReasoning` (bool, true), `normalizeToolArguments` (bool,
-false), `scopes` (object, volatile — the granular scope gates of §7), `toolResultsExempt` (string
-array, volatile — the tool-results exemption list of §7). The `scopes` object itself carries the
-volatile marker (its leaves stay plain — schemastery rejects volatile leaves under an enclosing
-volatile field), so one leaf change commits one update whose whole object the State's refresh
-listener re-reads.
+The shape: `log` (bool, true, volatile), `logFile` (`~/.dsh/hook-dsh-normalize-dash.log`, volatile),
+`replacement` (`-`, volatile — the transform's only knob), `normalizeReasoning` (bool, true),
+`normalizeToolArguments` (bool, false), `scopes` (object, volatile — the granular scope gates of
+§7), `toolResultsExempt` (string array, volatile — the tool-results exemption list of §7). The
+`scopes` object itself carries the volatile marker (its leaves stay plain — schemastery rejects
+volatile leaves under an enclosing volatile field), so one leaf change commits one update whose
+whole object the State's refresh listener re-reads.
 
 ## 5. Ledger lines (stable, asserted by the smoke)
 
@@ -197,8 +191,8 @@ re-registration):
 - `tools/post-execute`, `{ prepend: true }` — OUTERMOST vs the ccr hook's own prepended gate (the
   family's bundle order places ccr before the normalize hooks, so the arm that prepends later
   compresses AFTER normalization; the `<<<CCR:` marker guard makes ANY load order safe). Accepted,
-  non-value-carrying decisions only; the content basis is `decision.content ?? result.content`;
-  TEXT blocks only (never tool-call/argument blocks); N = 0 is a true no-op; fail-open.
+  non-value-carrying decisions only; the content basis is `decision.content ?? result.content`; TEXT
+  blocks only (never tool-call/argument blocks); N = 0 is a true no-op; fail-open.
 - `agent/pre-step`, default order — while `scopes.batch` is on every incoming batch is normalized;
   the command's one-shot arm (`State.Overpass`) fires once regardless of the scope value and is
   cleared after one use. Only an `enter` decision can be replaced; text blocks only; never the
@@ -218,17 +212,17 @@ hook-dsh-normalize-dash: overpass: normalized N char(s) in tool result <toolName
 hook-dsh-normalize-dash: overpass: normalized N char(s) in step batch (turn T step S)
 ```
 
-**The patch-level global off.** The `scopes` shape is identical in every family hook, so one
-grouped override in `cordis.patch.yml` turns the whole family off in one edit — live and silent:
+**The patch-level global off.** The `scopes` shape is identical in every family hook, so one grouped
+override in `cordis.patch.yml` turns the whole family off in one edit — live and silent:
 
 ```yaml
 - id: hook-dsh-normalize-dash
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```

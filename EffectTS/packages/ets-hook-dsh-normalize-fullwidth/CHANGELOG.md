@@ -6,5 +6,5 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/ets-hook-dsh-normalize-fullwidth: the stream hook normalizing the full-width family in model output
-  (the Effect-TS release of the DeepSeek Harness Plugin Family).
+- The initial release of @playform/ets-hook-dsh-normalize-fullwidth: the stream hook normalizing the
+  full-width family in model output (the Effect-TS release of the DeepSeek Harness Plugin Family).

@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-normalize-file
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fplugin-dsh-normalize-file&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-normalize-file)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/plugin-dsh-normalize-file)
@@ -14,28 +14,25 @@
 > `normalize-file` TOOL: the read → count → write pipeline over files ALREADY on disk, beyond the
 > tool layer.
 >
-> One agent-chosen file per call: the target's content is read, the family's SIX
-> transforms are applied with a per-character count, and only when N > 0 is the rewritten content
-> written back through the factory's ONE shared write executor.
+> One agent-chosen file per call: the target's content is read, the family's SIX transforms are
+> applied with a per-character count, and only when N > 0 is the rewritten content written back
+> through the factory's ONE shared write executor.
 >
-> N = 0 writes NOTHING - the no-op
-> no-write rule.
+> N = 0 writes NOTHING - the no-op no-write rule.
 >
-> *The family's first LISTENER-LESS flavor: no
+> _The family's first LISTENER-LESS flavor: no
 > [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts),
-> no
-> [`fs/observed`][dsh-fs] -
-> nothing runs without an explicit agent action.*
+> no [`fs/observed`][dsh-fs] - nothing runs without an explicit agent action._
 >
-> *The background-rewrite posture is deliberately NOT
-> shipped (it would break the edit tool's `old_string` contract); the design report ships the tool
-> arm only.*
+> _The background-rewrite posture is deliberately NOT shipped (it would break the edit tool's
+> `old_string` contract); the design report ships the tool arm only._
 >
-> *The @-sentence identity: **Plugin @ DSH @ Normalize @ File**.*
+> _The @-sentence identity: **Plugin @ DSH @ Normalize @ File**._
 >
-> *This bundle's own tool calls are name-exempt in [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Stream) beside `edit` and `raw-write` -
-> its arguments carry a FILE PATH, and a normalized dash inside a filename would corrupt the
-> target.*
+> _This bundle's own tool calls are name-exempt in
+> [the stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Stream)
+> beside `edit` and `raw-write` - its arguments carry a FILE PATH, and a normalized dash inside a
+> filename would corrupt the target._
 
 ---
 
@@ -51,39 +48,37 @@ One of **seven siblings** in the normalize family, all built on the shared machi
 `Schema` helper, `shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the six
 transform tables and the generic `Replace`/`ReplaceMap` replacers:
 
-| flavor                                                            | layer                            | mechanism                                          |
-| ----------------------------------------------------------------- | -------------------------------- | -------------------------------------------------- |
-| [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)           | model output (stream)            | core `Dashes` class -> `replacement` (default `-`) |
-| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)       | model output (stream)            | core `Quotes` MAP -> curly -> straight             |
-| [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | model output (stream)            | core `Ellipsis` class -> `...`                     |
-| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | model output (stream)            | core `Spaces` class -> `" "`                       |
-| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | model output (stream)            | core `Invisible` class -> removed                  |
-| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | model output (stream)            | core `Fullwidth` MAP -> full-width -> half-width   |
-| [plugin-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/Source) (this bundle)                           | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write][ours-write]    |
+| flavor                                                                                                                                         | layer                            | mechanism                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------- |
+| [`hook-dsh-normalize-dash`](../hook-dsh-normalize-dash)                                                                                        | model output (stream)            | core `Dashes` class -> `replacement` (default `-`)          |
+| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)                                                                                    | model output (stream)            | core `Quotes` MAP -> curly -> straight                      |
+| [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)                                                                                | model output (stream)            | core `Ellipsis` class -> `...`                              |
+| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)                                                                                    | model output (stream)            | core `Spaces` class -> `" "`                                |
+| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible)                                                                              | model output (stream)            | core `Invisible` class -> removed                           |
+| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth)                                                                              | model output (stream)            | core `Fullwidth` MAP -> full-width -> half-width            |
+| [plugin-dsh-normalize-file](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/Source) (this bundle) | **files already on disk (tool)** | all SIX, at write time, through [Factory.Write][ours-write] |
 
 The six stream flavors cover only what the model is emitting right now; the raw-write tool's
 `normalize: true` covers only content being written.
 
-This flavor covers the gap in between:
-pre-existing files, git-cloned material, script-created files - anything already on disk that the
-agent did not just write.
+This flavor covers the gap in between: pre-existing files, git-cloned material, script-created
+files - anything already on disk that the agent did not just write.
 
-The file-hook precedent is direct: the `normalize-dashes-for-execute-code.sh`
-hook swept script-created files after the fact; DSH makes the same rewrite an explicit, visible,
-opt-in TOOL call instead of a background hook (and `normalize-tabs.sh` - the repair hook for a
-repair hook - is the cautionary tale that keeps it that way).
+The file-hook precedent is direct: the `normalize-dashes-for-execute-code.sh` hook swept
+script-created files after the fact; DSH makes the same rewrite an explicit, visible, opt-in TOOL
+call instead of a background hook (and `normalize-tabs.sh` - the repair hook for a repair hook - is
+the cautionary tale that keeps it that way).
 
 A **non-manifest factory consumer**: it injects `["pluginFactory", "fs", "tools"]` and uses `State`
 (cell unwrap + shared `Ledger`/`Enabled` mappings + its own field), `Append` (the ledger), `Journal`
 (the P5 storage record) and - uniquely in the family - `Write`, the ONE shared write executor.
 
-The
-config is composed by the factory's standalone `Schema` helper with `shared: false` - the minimal
-block plus the two knobs.
+The config is composed by the factory's standalone `Schema` helper with `shared: false` - the
+minimal block plus the two knobs.
 
-The tool's writes carry the call's exec as the actor, so the governance
-trio's Gate (which pins `mutationTools` to `write`/`edit`/`str_replace_editor`) never treats them as
-a trigger - the same protection raw-write already has.
+The tool's writes carry the call's exec as the actor, so the governance trio's Gate (which pins
+`mutationTools` to `write`/`edit`/`str_replace_editor`) never treats them as a trigger - the same
+protection raw-write already has.
 
 ## Install
 
@@ -107,7 +102,8 @@ Verify with the `plugin-dsh-normalize-file: activated (...)` ledger line.
 ### Usage
 
 The tool is called by the agent like any built-in tool - the bundle is configured through its
-[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/cordis.patch.yml) row (or the profile's `dsh.bundle` manifest), and the full config table is in
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-normalize-file/cordis.patch.yml)
+row (or the profile's `dsh.bundle` manifest), and the full config table is in
 [The Config](#the-config):
 
 ```
@@ -125,19 +121,18 @@ Files that never passed through a write tool are invisible to every normalizatio
 `raw-write`'s `normalize: true` is an explicit per-call opt-in for NEW writes, and the six stream
 flavors only rewrite model output - they never touch disk.
 
-Left unnormalized, a pre-existing file
-keeps every typographic dash, curly quote, ellipsis, unicode space, zero-width character and
-full-width character it was born with - exactly the characters that break parsers, shells, diffs and
-byte-exact edit matches downstream.
+Left unnormalized, a pre-existing file keeps every typographic dash, curly quote, ellipsis, unicode
+space, zero-width character and full-width character it was born with - exactly the characters that
+break parsers, shells, diffs and byte-exact edit matches downstream.
 
 But the fix cannot be another silent rewriter.
 
-Files are rewritten behind the agent only at the
-price of the edit tool's `old_string` contract: the agent read bytes X, a background rewriter
-silently changed them to X', and the next edit fails or half-matches.
+Files are rewritten behind the agent only at the price of the edit tool's `old_string` contract: the
+agent read bytes X, a background rewriter silently changed them to X', and the next edit fails or
+half-matches.
 
-The lesson is real: `normalize-tabs.sh`, a repair hook for a
-repair hook, exists to repair the damage after-the-fact rewriting caused.
+The lesson is real: `normalize-tabs.sh`, a repair hook for a repair hook, exists to repair the
+damage after-the-fact rewriting caused.
 
 The tool is the answer: explicit, visible, discoverable, zero background activity.
 
@@ -195,28 +190,28 @@ The tool is the answer: explicit, visible, discoverable, zero background activit
 The transformation is exactly the raw-write `normalize: true` chain - the core's tables and
 replacers, applied whole at write time.
 
-There is no stream dispatch to gate: the tool registers NO
-event listener, so the six transforms are applied to the entire file content in one pass, and the
-count is the ledger's N and the no-op condition in one.
+There is no stream dispatch to gate: the tool registers NO event listener, so the six transforms are
+applied to the entire file content in one pass, and the count is the ledger's N and the no-op
+condition in one.
 
 **The conflict map, honored by construction**
 
 - Governance bounded passes: the write goes through [Factory.Write][ours-write] and emits
-  [`fs/observed`][dsh-fs],
-  but the governors' Gate requires the actor tool name in their `mutationTools` pin -
-  `normalize-file` is never added to any such list, so these writes never trigger a chain pass.
+  [`fs/observed`][dsh-fs], but the governors' Gate requires the actor tool name in their
+  `mutationTools` pin - `normalize-file` is never added to any such list, so these writes never
+  trigger a chain pass.
 - Edit `old_string` contract: safe because visible - the diff card shows the before/after in the
   same turn, and the tool description says to re-read before editing (the same obligation as after
   any `normalize: true` write).
-- raw-write read-before-write: tool calls are serialized and [Factory.Write][ours-write]'s `before` is read at
-  write time, so a prior normalize-file in the same turn is already reflected. No race.
+- raw-write read-before-write: tool calls are serialized and [Factory.Write][ours-write]'s `before`
+  is read at write time, so a prior normalize-file in the same turn is already reflected. No race.
 
 ---
 
 ## The Pitfalls
 
-- **The file's bytes change under you** - re-read before editing: the edit tool's `old_string`
-  must match the NEW content; the diff card shows the before/after in the same turn.
+- **The file's bytes change under you** - re-read before editing: the edit tool's `old_string` must
+  match the NEW content; the diff card shows the before/after in the same turn.
 - **A no-op is a no-write** - N = 0 leaves the file byte-identical: no write, no ledger line, no
   journal record; a missing, binary or undecodable target errors out the same way.
 - **No governor triggers** - the write emits fs/observed with the call's exec as the actor, but
@@ -226,39 +221,38 @@ count is the ledger's N and the no-op condition in one.
 
 ## The Config
 
-| Field         | Type    | Default                              | Volatile | Meaning                                                     |
-| ------------- | ------- | ------------------------------------ | -------- | ----------------------------------------------------------- |
-| `log`         | boolean | `true`                               | yes      | write the durable ledger file                               |
+| Field         | Type    | Default                                | Volatile | Meaning                                                     |
+| ------------- | ------- | -------------------------------------- | -------- | ----------------------------------------------------------- |
+| `log`         | boolean | `true`                                 | yes      | write the durable ledger file                               |
 | `logFile`     | string  | `~/.dsh/plugin-dsh-normalize-file.log` | yes      | the normalize-file ledger (separate from the family's logs) |
-| `replacement` | string  | `"-"`                                | yes      | the dash step's replacement (the transform's only knob)     |
+| `replacement` | string  | `"-"`                                  | yes      | the dash step's replacement (the transform's only knob)     |
 
 There are no stream flags (`normalizeReasoning`, `normalizeToolArguments`) and no
-[fs/observed][dsh-fs]
-fields (`updateCooldownMs`, `mutationTools`, `policyFile`, `exclude`): the minimal `shared: false`
-block plus the two knobs is the whole config surface, because the tool registers no listener of any
-kind.
+[fs/observed][dsh-fs] fields (`updateCooldownMs`, `mutationTools`, `policyFile`, `exclude`): the
+minimal `shared: false` block plus the two knobs is the whole config surface, because the tool
+registers no listener of any kind.
 
 Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
 defensively.
 
 ## The Granular Scopes (all volatile)
 
-The `scopes` object gates every arm of the plugin-dsh-normalize-file hook independently — the defaults are exactly the
-pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
-override in the profile patch turns the whole family off in one edit (see the patch fragment at the
-end of this section). The whole object carries the volatile marker (its leaves stay plain —
-schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
-`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
-silent, no remount, no new activation line.
+The `scopes` object gates every arm of the plugin-dsh-normalize-file hook independently — the
+defaults are exactly the pre-scopes behavior, and because the schema shape is identical in every
+family hook, one grouped override in the profile patch turns the whole family off in one edit (see
+the patch fragment at the end of this section). The whole object carries the volatile marker (its
+leaves stay plain — schemastery rejects volatile leaves under an enclosing volatile field): one leaf
+change commits one `loader/volatile-update` dispatch whose whole object the State's refresh listener
+re-reads — live, silent, no remount, no new activation line.
 
-| Scope        | Default | Gates                                                                 |
-| ------------ | ------- | --------------------------------------------------------------------- |
-| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
-| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
-| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
-| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
-| files        | on      | the normalize-file tool — off = the tool returns the unchanged `changed:false` result, no read, no write, no ledger line                                                            |
-| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+| Scope        | Default | Gates                                                                                                                    |
+| ------------ | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                                                                    |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)                                                           |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)                                                        |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)                                                              |
+| files        | on      | the normalize-file tool — off = the tool returns the unchanged `changed:false` result, no read, no write, no ledger line |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                                                                         |
 
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
@@ -267,8 +261,7 @@ The per-call `{"__normalize":false` first-key marker is the tool-args arm's esca
 "leave that search alone" control: a deliberate search for an irregular character (an em dash, a
 curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
 normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
-delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
-normally.
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes normally.
 
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
@@ -305,36 +298,35 @@ plugin-dsh-normalize-file: overpass: swept K file(s), normalized M char(s)
 Registered through the `commands` service when it is present (probe-once — a missing service simply
 skips the registration). Grammar:
 
-| Input              | Effect                                                                            |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `files <path…>`    | run the file sweep — the normalize-file pipeline per path, each changed file written through the shared executor with its own count line, then the summary                                                                       |
-| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
-| `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
-| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+| Input             | Effect                                                                                                                                                     |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `files <path…>`   | run the file sweep — the normalize-file pipeline per path, each changed file written through the shared executor with its own count line, then the summary |
+| `batch`           | arm the one-shot step-batch overpass (consumed by the next incoming batch)                                                                                 |
+| `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path           |
+| `scopes`          | read-only report of the current effective values (the activation line never changes)                                                                       |
 
 ## The Patch-Level Global Off
 
 ```yaml
 - id: plugin-dsh-normalize-file
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```
 
 ---
-
 
 ## In Action
 
 One call, one file, one count.
 
-The file already on disk carries the family's characters; the tool
-rewrites what changed and reports it:
+The file already on disk carries the family's characters; the tool rewrites what changed and reports
+it:
 
 ```text
 before (what is on disk):
@@ -349,9 +341,8 @@ after (what the tool writes back):
 Every em dash (U+2014) becomes the ASCII hyphen-minus, the curly quotes become straight ones, the
 ellipsis becomes three periods; five characters replaced, so N = 5 and the write happens.
 
-The result
-carries the outcome and the diff card shows the before/after in the same turn; the ledger gets the
-count line:
+The result carries the outcome and the diff card shows the before/after in the same turn; the ledger
+gets the count line:
 
 ```text
 plugin-dsh-normalize-file: normalized 5 char(s) in ~/Projects/notes/report.md
@@ -360,11 +351,10 @@ plugin-dsh-normalize-file: normalized 5 char(s) in ~/Projects/notes/report.md
 A file with nothing to replace is a no-op: `changed: false`, the file stays byte-identical, no
 write, no count line, no journal record.
 
-A missing, binary or undecodable target is an error result
-with no write.
+A missing, binary or undecodable target is an error result with no write.
 
-Because the file's bytes change under you, re-read before editing - the edit tool's
-`old_string` must match the new content.
+Because the file's bytes change under you, re-read before editing - the edit tool's `old_string`
+must match the new content.
 
 ---
 
@@ -381,9 +371,9 @@ plugin-dsh-normalize-file: normalized N char(s) in <path>
 The activation line is written by `apply()`; the count line follows only a successful N > 0 write -
 a no-op writes no line, and a failed read or an aborted call writes none either.
 
-Each N > 0 write
-also journals one `normalized` record into the shared `package_governance` [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts) (event
-`normalized`, path = the target's display path, detail byte-identical to the count line),
+Each N > 0 write also journals one `normalized` record into the shared `package_governance`
+[v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)
+(event `normalized`, path = the target's display path, detail byte-identical to the count line),
 best-effort: with no storage facility the record buffers or drops and the human ledger stays the
 complete record.
 
@@ -391,16 +381,18 @@ complete record.
 
 ## The two release groups (CLASSIC vs EFFECT-TS)
 
-Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
-zero framework dependencies: `import ... from "@playform/plugin-dsh-normalize-file"` resolves to `Target/`.
-The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-plugin-dsh-normalize-file` -
-effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as
-its runtime dependency. Install the group you run and never mix the groups in one graph
-(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript, zero
+framework dependencies: `import ... from "@playform/plugin-dsh-normalize-file"` resolves to
+`Target/`. The EFFECT-TS implementation of the same contract is the separate package
+`@playform/ets-plugin-dsh-normalize-file` - effect-backed, built on the shared
+`@playform/ets-base-dsh` base with `effect` v4.0.2 as its runtime dependency. Install the group you
+run and never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the
+classic dispatch envelope).
 
 ## License 📜
 
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-write]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts
+[ours-write]:
+	https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts

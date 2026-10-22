@@ -8,34 +8,31 @@ The activation message carries:
 - the current-state block (the tree state, the other lanes, the counts);
 - any amendment that landed since the spec was retained.
 
-The current-state block is part of the spec. Read it before touching the
-tree.
+The current-state block is part of the spec. Read it before touching the tree.
 
 ## The pre-work check
 
 ```sh
 git status --short
 git log --oneline -5
-git -C Site status --short   # when the site is in scope
+git -C Site status --short # when the site is in scope
 ```
 
-The tree may carry the user's mid-session commits or another lane's
-edits. Do not clean up what you did not create; read before edit.
+The tree may carry the user's mid-session commits or another lane's edits. Do not clean up what you
+did not create; read before edit.
 
 ## Execute exactly
 
-The spec's scope, exclusions, sequence, and report format are constraints,
-not suggestions. When the spec says "if X exists, verify and adjust",
-verify first and adjust minimally. When the spec is silent on a detail,
-choose the reading that preserves the spec's intent and state the
-assumption in the report.
+The spec's scope, exclusions, sequence, and report format are constraints, not suggestions. When the
+spec says "if X exists, verify and adjust", verify first and adjust minimally. When the spec is
+silent on a detail, choose the reading that preserves the spec's intent and state the assumption in
+the report.
 
 ## Flag, do not silently fix
 
 Raise these to the parent instead of resolving them alone:
 
-- a contradiction with the shared facts (a count, a version, a ledger
-  string);
+- a contradiction with the shared facts (a count, a version, a ledger string);
 - a stale claim in a document you were asked to trust;
 - a file that another lane owns or has already modified;
 - a spec item that cannot be satisfied as written.
@@ -74,8 +71,7 @@ Suggested message:
   <message>
 ```
 
-The report is the lane's whole output. The parent relays it; the user
-decides.
+The report is the lane's whole output. The parent relays it; the user decides.
 
 ## Failure modes
 

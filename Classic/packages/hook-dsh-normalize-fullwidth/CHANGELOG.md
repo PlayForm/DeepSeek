@@ -6,5 +6,5 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/hook-dsh-normalize-fullwidth: the stream hook normalizing the full-width family in model output
-  (the Classic release of the DeepSeek Harness Plugin Family).
+- The initial release of @playform/hook-dsh-normalize-fullwidth: the stream hook normalizing the
+  full-width family in model output (the Classic release of the DeepSeek Harness Plugin Family).

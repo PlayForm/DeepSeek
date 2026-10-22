@@ -20,16 +20,16 @@ statuses:
 
 # THE BATCH EDIT TOOL - THE SCHEMA DESIGN (THE FIRST CUT)
 
-> Granular section of the Batch Edit Tool feature research (R-BET-1).
-> The parent hub: Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md.
-> This document carries section 2 of the research, byte-preserved.
+> Granular section of the Batch Edit Tool feature research (R-BET-1). The parent hub:
+> Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md. This document carries section 2 of the research,
+> byte-preserved.
 
 ---
 
 ## 2.1 The tool input schema (flat, defineTool-compatible)
 
-One tool: `batch_edit` (name TBD by the user; alternatives: `file_machine`,
-`process_files`). Flat parameters, grouped by prefix:
+One tool: `batch_edit` (name TBD by the user; alternatives: `file_machine`, `process_files`). Flat
+parameters, grouped by prefix:
 
 ```
 action        string, required   one of:
@@ -69,17 +69,16 @@ deadlineMs    number             the commit's in-line deadline, capped at
 								 120000 (the composition contract)
 ```
 
-The canonical output value (one JSON object): `{ machine, state: [{ file,
-status, version, diff?, error? }], applied, failed, jobId? }` - a jobId when
-the commit exceeds the deadline and continues as a background job (the
-harness's own background branch). `output.render` turns it into the
-model-facing prose; `presentationMeta` carries the diffs for the UI's diff
-card (the cookbook's diff-card precedent).
+The canonical output value (one JSON object):
+`{ machine, state: [{ file, status, version, diff?, error? }], applied, failed, jobId? }` - a jobId
+when the commit exceeds the deadline and continues as a background job (the harness's own background
+branch). `output.render` turns it into the model-facing prose; `presentationMeta` carries the diffs
+for the UI's diff card (the cookbook's diff-card precedent).
 
 ## 2.2 The per-file state - Process<File> (the Process<Halted> philosophy)
 
-The typing: each inserted file IS a process the agent harness holds. The
-states (the live containers' BoardMember/MonitorEntry states re-typed):
+The typing: each inserted file IS a process the agent harness holds. The states (the live
+containers' BoardMember/MonitorEntry states re-typed):
 
 ```
 Process<File> ::= observed | running | halted | done | errored
@@ -111,24 +110,21 @@ errored   -> observed    (agent corrects the op)
 any       -> halted      (machine 'close' with in-flight work: settle-first)
 ```
 
-Halted processes are FIRST-CLASS: the state presentation lists them with
-their halt reason; the parent/agent resumes them explicitly; nothing is
-silently dropped (the live containers' "rendered once then withdrawn"
-discipline, generalized). Each process cell carries its LICENSE (the
-license flow in the vision-and-representation document): the
-version stamp is the license's content, the
-reconciliation stamps are the renewals, and an eviction (the eviction
-document) settles the cell into the ledger before release.
+Halted processes are FIRST-CLASS: the state presentation lists them with their halt reason; the
+parent/agent resumes them explicitly; nothing is silently dropped (the live containers' "rendered
+once then withdrawn" discipline, generalized). Each process cell carries its LICENSE (the license
+flow in the vision-and-representation document): the version stamp is the license's content, the
+reconciliation stamps are the renewals, and an eviction (the eviction document) settles the cell
+into the ledger before release.
 
 ## 2.3 The dynamic insertion
 
 The agent PREPARES ITSELF A SCHEMA, then inserts files into it:
 
-1. `action=open` with `files` (paths or globs): the machine resolves each
-   target through the fs read path (which emits fs/observed - freshness for
-   free), records every hit as `observed` with its held version, and
-   returns the state presentation. Misses are listed, never guessed.
+1. `action=open` with `files` (paths or globs): the machine resolves each target through the fs read
+   path (which emits fs/observed - freshness for free), records every hit as `observed` with its
+   held version, and returns the state presentation. Misses are listed, never guessed.
 2. `action=insert` adds to the open machine mid-life (the lease stays).
-3. The machine's shape (which searches exist, which ops are legal) is the
-   agent's prepared schema, validated at `open` exactly like the live
-   containers' Apply.ts Validate (fail-loud, every knob checked).
+3. The machine's shape (which searches exist, which ops are legal) is the agent's prepared schema,
+   validated at `open` exactly like the live containers' Apply.ts Validate (fail-loud, every knob
+   checked).

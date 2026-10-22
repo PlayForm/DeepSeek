@@ -14,24 +14,22 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE PLACES TO RESEARCH (ALWAYS REFER THE SUBSEQUENT AGENTS)
 
-> Granular document of the Workspace Plugin Family Decomposition.
-> The parent hub: Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md.
-> THE FRAMING (binding): the workspace family is the DEEPSEEK HARNESS'S OWN
-> REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by the @playform
-> plugin family - never a single plugin.
+> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
+> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
+> the @playform plugin family - never a single plugin.
 
 ---
 
 - **THE PRIMARY SOURCE**: `~/Developer/Documentation/Module/deepseek-harness`
-  - the subsequent agents ALWAYS read it: to NEVER discard any single
-  functionality + to search for more integration ways + to totally modify
-  the harness per the new nomenclature.
+    - the subsequent agents ALWAYS read it: to NEVER discard any single functionality + to search
+      for more integration ways + to totally modify the harness per the new nomenclature.
 - **THE FAMILY'S OWN DOCS**: the Archive + the Skills' references.
 - **THE SEAMS** (each maps to one workspace member):
-  - **The LSP** - the language adapters' seam (the WorkspaceEdit) - the
-    typed proposals' vocabulary.
-  - **The OOXML spec** - the docx adapter.
-  - **The object capabilities** - the authority model.
-  - **The bidirectional transformations (Pierce/Foster)** - the lenses.
-  - **The incremental computation (Acar)** - the evidence dependencies.
-  - **The optimistic concurrency control** - the read/write sets.
+    - **The LSP** - the language adapters' seam (the WorkspaceEdit) - the typed proposals'
+      vocabulary.
+    - **The OOXML spec** - the docx adapter.
+    - **The object capabilities** - the authority model.
+    - **The bidirectional transformations (Pierce/Foster)** - the lenses.
+    - **The incremental computation (Acar)** - the evidence dependencies.
+    - **The optimistic concurrency control** - the read/write sets.

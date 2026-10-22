@@ -1,6 +1,6 @@
 # @playform/hook-dsh-normalize-dash
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fhook-dsh-normalize-dash&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-dash)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/hook-dsh-normalize-dash)
@@ -10,21 +10,21 @@
 
 > [!NOTE]
 >
-> The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks the [`llm/stream`][dsh-llm]
-> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the [LlmRuntime][dsh-llm])
-> and normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes,
-> en dashes and seventeen exotic relatives → `-`.
+> The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks the
+> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call,
+> bound to the [LlmRuntime][dsh-llm]) and normalizes the unicode dash family to ASCII hyphen-minus,
+> live in the transcript: em dashes, en dashes and seventeen exotic relatives → `-`.
 >
-> *The normalize-dashes hook, at the injection point the harness itself does not have.*
+> _The normalize-dashes hook, at the injection point the harness itself does not have._
 >
-> *A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
-> `replacement` (default `-`).*
+> _A CLASS flavor of the normalize family: the core's `Dashes` table plus a configurable
+> `replacement` (default `-`)._
 >
-> *It also registers the family's **`raw-write` tool** - a write wrapper
-> with an explicit `normalize` parameter (default **false = verbatim**), exempt from the stream
-> normalization by name like `edit`.*
+> _It also registers the family's **`raw-write` tool** - a write wrapper with an explicit
+> `normalize` parameter (default **false = verbatim**), exempt from the stream normalization by name
+> like `edit`._
 >
-> *The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**.*
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**._
 
 ---
 
@@ -39,27 +39,26 @@ One of **six siblings** in the stream-normalization family, all built on the sha
 `shared: false`, for the config), [`lib-dsh-core`](../lib-dsh-core) for the `Dashes` table and the
 generic `Chunk`/`Block` dispatch.
 
-The normalize-dash is the family's **CLASS flavor with a
-`replacement` knob** - the core's `Dashes` class applied verbatim; the
-siblings share the same whole-chunk replacement approach:
+The normalize-dash is the family's **CLASS flavor with a `replacement` knob** - the core's `Dashes`
+class applied verbatim; the siblings share the same whole-chunk replacement approach:
 
-| flavor                                                            | table                  | substitution                  |
-| ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
-| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) (this bundle)                           | core `Dashes` class    | `→ replacement` (default `-`) |
-| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)       | core `Quotes` MAP      | curly → straight              |
-| [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
-| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
-| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
-| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
+| flavor                                                                                                                                     | table                  | substitution                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- | ----------------------------- |
+| [hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source) (this bundle) | core `Dashes` class    | `→ replacement` (default `-`) |
+| [`hook-dsh-normalize-quotes`](../hook-dsh-normalize-quotes)                                                                                | core `Quotes` MAP      | curly → straight              |
+| [`hook-dsh-normalize-ellipsis`](../hook-dsh-normalize-ellipsis)                                                                            | core `Ellipsis` class  | U+2026 → `...`                |
+| [`hook-dsh-normalize-spaces`](../hook-dsh-normalize-spaces)                                                                                | core `Spaces` class    | unicode spaces → `" "`        |
+| [`hook-dsh-normalize-invisible`](../hook-dsh-normalize-invisible)                                                                          | core `Invisible` class | removed (default `""`)        |
+| [`hook-dsh-normalize-fullwidth`](../hook-dsh-normalize-fullwidth)                                                                          | core `Fullwidth` MAP   | full-width → half-width       |
 
 It is also the factory's **first NON-MANIFEST module** and its **second consumer**: it injects
 `["pluginFactory"]` and uses only `State` (cell unwrap + shared `Ledger`/`Enabled` mappings + its
 own fields) and `Append`.
 
-NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's
-silence; the normalize-dash implements its own [`llm/stream`][dsh-llm] registration), `Attach` (no jobs /
-inflight / storage), `Journal` (the shared P5 record on every N > 0 pass), and
-the gate/write/refresh/continue machinery (no [fs/observed][dsh-fs] path).
+NOT consumed, deliberately: `Wire` (fs/observed-hardwired - the family's silence; the normalize-dash
+implements its own [`llm/stream`][dsh-llm] registration), `Attach` (no jobs / inflight / storage),
+`Journal` (the shared P5 record on every N > 0 pass), and the gate/write/refresh/continue machinery
+(no [fs/observed][dsh-fs] path).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -68,13 +67,13 @@ the same conventions as every other @playform package.
 ### The Interplay
 
 - **The governance trio and the factory**: pure additive - no shared event, no shared state. The
-  STREAM listener touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; the `raw-write`
-  TOOL does write files, and does so through the built-in write's exact fs path - resolve →
-  [fs/write-intent][dsh-fs] → writeText → [fs/observed][dsh-fs] - so the governance hooks treat its writes exactly like
-  built-in write calls.
-- **Other [llm/stream][dsh-llm] listeners**: the normalize-dash wraps the downstream result and always calls
-  `next()`, so it composes regardless of registration order; it neither short-circuits nor yields
-  its own chunks.
+  STREAM listener touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see
+  it; the `raw-write` TOOL does write files, and does so through the built-in write's exact fs
+  path - resolve → [fs/write-intent][dsh-fs] → writeText → [fs/observed][dsh-fs] - so the governance
+  hooks treat its writes exactly like built-in write calls.
+- **Other [llm/stream][dsh-llm] listeners**: the normalize-dash wraps the downstream result and
+  always calls `next()`, so it composes regardless of registration order; it neither short-circuits
+  nor yields its own chunks.
 - **Chunk identity**: untouched chunks pass through by object identity; a rewritten delta/block is a
   shallow copy with only the text field replaced (the one exception: the raw-marker strip rewrites
   the arguments text while the count stays 0 - marker removal is not normalization)
@@ -108,8 +107,10 @@ A file: dependency alone is NOT activation.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/cordis.patch.yml) row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/cordis.patch.yml)
+row (or the profile's `dsh.bundle` manifest) - the full config table is in
+[The Config](#the-config):
 
 ```yaml
 - insert:
@@ -129,9 +130,8 @@ manifest) - the full config table is in [The Config](#the-config):
 The established file-hook approach rewrites the unicode dash family to ASCII hyphen-minus **in files
 after the fact** - `perl -CSD -pe` over whatever was already written.
 
-Model output, however, is born in the
-stream: the live UI and the durable transcript see the em dashes first, no matter what a file hook
-does later.
+Model output, however, is born in the stream: the live UI and the durable transcript see the em
+dashes first, no matter what a file hook does later.
 
 A DSH plugin can go where a file hook cannot: the [`llm/stream`][dsh-llm] waterfall, where every
 streaming model call passes through.
@@ -202,8 +202,8 @@ Waterfall discipline:
 - **`options` is NEVER touched**: a LOOP-built request arrives **deep-frozen** (mutation throws) and
   its content is a pure function of the session log - listeners read it, never rewrite it.
 - **Order preserved, no buffering**: one chunk in, one chunk out; upstream throws propagate (the
-  [LlmRuntime][dsh-llm] normalizes adapter failures to a terminal error/aborted finish - a thrown-away stream
-  writes no ledger line).
+  [LlmRuntime][dsh-llm] normalizes adapter failures to a terminal error/aborted finish - a
+  thrown-away stream writes no ledger line).
 
 ### The transform
 
@@ -238,40 +238,39 @@ normalization by name** (the core's `Stream/Chunk` + `Stream/Block` pass every `
 through by identity, exactly like `edit`), so the content is what the model sent, and the
 normalization decision happens at execution time:
 
-| `normalize`                     | what the exec writes                                                                                                                                                                                                                                              |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| absent or `false` (**default**) | the content **VERBATIM**, byte-for-byte                                                                                                                                                                                                                           |
-| `true` or `"all"`               | the family's **SIX transforms** applied in order, daisy-chaining the text: Dashes (→ the module's `replacement`), Quotes (curly → straight), Ellipsis (U+2026 → `...`), Spaces (unicode spaces → `" "`), Invisible (removed), Fullwidth (full-width → half-width) |
+| `normalize`                     | what the exec writes                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| absent or `false` (**default**) | the content **VERBATIM**, byte-for-byte                                                                                                                                                                                                                                                                                                              |
+| `true` or `"all"`               | the family's **SIX transforms** applied in order, daisy-chaining the text: Dashes (→ the module's `replacement`), Quotes (curly → straight), Ellipsis (U+2026 → `...`), Spaces (unicode spaces → `" "`), Invisible (removed), Fullwidth (full-width → half-width)                                                                                    |
 | `["dash", ...]`                 | **ONLY the selected flavors**, applied in the family's fixed order (dashes → quotes → ellipsis → spaces → invisible → fullwidth); the parameter's schema declares the union (`boolean                                                                             \| "all" \| the flavor-name array`), because the harness tools reject unknown keys |
 
 The tool also takes a **`govern` parameter** - the per-call governance selection over the factory's
 direct-govern registry (factory SCHEME.md §2.16–§2.17), applied after a successful write:
 
-| `govern`                        | what the exec runs                                                                                                                                                                              |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `govern`                        | what the exec runs                                                                                                                                                                                        |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | absent or `false` (**default**) | **NO governance chain** — the current posture, the "skip everything" escape hatch (the write still emits [`fs/observed`][dsh-fs] exactly like a built-in write, so the event-path hooks behave as always) |
-| `true` or `"all"`               | **ALL registered governance steps** for the target's basename (`package.json`: canonicalize + update; `Cargo.toml`: cargo + update)                                                             |
-| `["canonicalize", ...]`         | **ONLY the named steps** (`canonicalize`, `pin`, `cargo`, `update`); unknown names are rejected by the schema and ignored by the registry                                                       |
+| `true` or `"all"`               | **ALL registered governance steps** for the target's basename (`package.json`: canonicalize + update; `Cargo.toml`: cargo + update)                                                                       |
+| `["canonicalize", ...]`         | **ONLY the named steps** (`canonicalize`, `pin`, `cargo`, `update`); unknown names are rejected by the schema and ignored by the registry                                                                 |
 
 Governance is **best-effort and contained**: the steps run through the factory's
 `Govern(target, selection, actor, version)` with the written outcome's fresh version — a failing
 step never affects the write's outcome, and an empty registry makes the call a contained no-op.
 
-The exec mirrors the **built-in write's fs path exactly** - `ctx.fs.resolve` → the [`fs/write-intent`][dsh-fs]
-waterfall (the observation policy's single-slot guarded-write decision) → the standing sandbox
-policy (resolved like the built-in's no-escalation path; `raw-write` advertises no escalation of its
-own) → `ctx.fs.writeText(target, content, intent, exec.signal, policy)` → the [`fs/observed`][dsh-fs] emit
-with the written version - so the governance family's [fs/observed][dsh-fs] chain fires for these writes the
-same way it fires for built-in writes.
+The exec mirrors the **built-in write's fs path exactly** - `ctx.fs.resolve` → the
+[`fs/write-intent`][dsh-fs] waterfall (the observation policy's single-slot guarded-write decision)
+→ the standing sandbox policy (resolved like the built-in's no-escalation path; `raw-write`
+advertises no escalation of its own) →
+`ctx.fs.writeText(target, content, intent, exec.signal, policy)` → the [`fs/observed`][dsh-fs] emit
+with the written version - so the governance family's [fs/observed][dsh-fs] chain fires for these
+writes the same way it fires for built-in writes.
 
-`exec.signal` is honored end to end (a pre-aborted call never
-writes).
+`exec.signal` is honored end to end (a pre-aborted call never writes).
 
-The registration is readonly after registration; the presenters are pure and recompute the
-same selection-aware chain, so the diff card always matches the file.
+The registration is readonly after registration; the presenters are pure and recompute the same
+selection-aware chain, so the diff card always matches the file.
 
-Inject:
-`["pluginFactory", "fs", "tools"]`.
+Inject: `["pluginFactory", "fs", "tools"]`.
 
 ### The Source Layout
 
@@ -304,40 +303,41 @@ Source/Interface/*.ts        - Config/State shapes, the factory service view (ch
 - **One class, one table** - the em/en dash family is this flavor's class; the quotes map never
   touches a dash (and this table never touches a quote) - run the flavors the session's characters
   call for.
-- **The replacement is a literal string** - a `$` pattern in `replacement` is never interpreted
-  (the function replacer inserts it verbatim).
+- **The replacement is a literal string** - a `$` pattern in `replacement` is never interpreted (the
+  function replacer inserts it verbatim).
 
 ## The Config
 
-| Field                    | Type    | Default                              | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------------------ | ------- | ------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `log`                    | boolean | `true`                               | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `logFile`                | string  | `~/.dsh/hook-dsh-normalize-dash.log` | yes      | the normalize-dash ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `replacement`            | string  | `-`                                  | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                               |
-| `normalizeReasoning`     | boolean | `true`                               | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Field                    | Type    | Default                              | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------ | ------- | ------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `log`                    | boolean | `true`                               | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `logFile`                | string  | `~/.dsh/hook-dsh-normalize-dash.log` | yes      | the normalize-dash ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `replacement`            | string  | `-`                                  | yes      | the transform's only knob - hot-editable, the next stream picks it up with no remount                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `normalizeReasoning`     | boolean | `true`                               | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `normalizeToolArguments` | boolean | `false`                              | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
-Volatile cells commit without remounting the plugin (the fiber - and with it the [llm/stream][dsh-llm]
-registration - stays alive); the factory's State builder unwraps them defensively.
+Volatile cells commit without remounting the plugin (the fiber - and with it the
+[llm/stream][dsh-llm] registration - stays alive); the factory's State builder unwraps them
+defensively.
 
 ## The Granular Scopes (all volatile)
 
-The `scopes` object gates every arm of the hook-dsh-normalize-dash hook independently — the defaults are exactly the
-pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
-override in the profile patch turns the whole family off in one edit (see the patch fragment at the
-end of this section). The whole object carries the volatile marker (its leaves stay plain —
-schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
-`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
-silent, no remount, no new activation line.
+The `scopes` object gates every arm of the hook-dsh-normalize-dash hook independently — the defaults
+are exactly the pre-scopes behavior, and because the schema shape is identical in every family hook,
+one grouped override in the profile patch turns the whole family off in one edit (see the patch
+fragment at the end of this section). The whole object carries the volatile marker (its leaves stay
+plain — schemastery rejects volatile leaves under an enclosing volatile field): one leaf change
+commits one `loader/volatile-update` dispatch whose whole object the State's refresh listener
+re-reads — live, silent, no remount, no new activation line.
 
-| Scope        | Default | Gates                                                                 |
-| ------------ | ------- | --------------------------------------------------------------------- |
-| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
-| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
-| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
-| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
-| files        | on      | inert in a stream flavor (present so one patch override drives the whole family)                                                            |
-| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+| Scope        | Default | Gates                                                                            |
+| ------------ | ------- | -------------------------------------------------------------------------------- |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                            |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)                   |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)                |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)                      |
+| files        | on      | inert in a stream flavor (present so one patch override drives the whole family) |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                                 |
 
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
@@ -346,8 +346,7 @@ The per-call `{"__normalize":false` first-key marker is the tool-args arm's esca
 "leave that search alone" control: a deliberate search for an irregular character (an em dash, a
 curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
 normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
-delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
-normally.
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes normally.
 
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
@@ -384,36 +383,35 @@ hook-dsh-normalize-dash: overpass: swept K file(s), normalized M char(s)
 Registered through the `commands` service when it is present (probe-once — a missing service simply
 skips the registration). Grammar:
 
-| Input              | Effect                                                                            |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `files <path…>`    | declined — the sweep is owned by the normalize-file hook                                                                       |
-| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
+| Input             | Effect                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `files <path…>`   | declined — the sweep is owned by the normalize-file hook                                                                                         |
+| `batch`           | arm the one-shot step-batch overpass (consumed by the next incoming batch)                                                                       |
 | `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
-| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+| `scopes`          | read-only report of the current effective values (the activation line never changes)                                                             |
 
 ## The Patch-Level Global Off
 
 ```yaml
 - id: hook-dsh-normalize-dash
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```
 
 ---
-
 
 ## In Action
 
 One stream, one transformation.
 
-The model emits prose with typographic dashes; the live UI and the
-transcript receive the ASCII forms:
+The model emits prose with typographic dashes; the live UI and the transcript receive the ASCII
+forms:
 
 ```text
 text-delta in (what the model wrote):
@@ -430,10 +428,9 @@ text-delta out (what reaches the transcript):
 The em dash (U+2014), the en dash (U+2013) and the horizontal bar (U+2015) each become `-`; the
 ASCII hyphens that were already there are untouched (count only counts replacements).
 
-The same pass
-runs over reasoning deltas (`normalizeReasoning`, default on) and - with the example patch enabling
-`normalizeToolArguments` - over tool-call arguments, where the three-way gate keeps the sensitive
-calls intact:
+The same pass runs over reasoning deltas (`normalizeReasoning`, default on) and - with the example
+patch enabling `normalizeToolArguments` - over tool-call arguments, where the three-way gate keeps
+the sensitive calls intact:
 
 ```text
 tool-call-delta, name "edit"        → passes through BY IDENTITY
@@ -451,8 +448,7 @@ And the `raw-write` tool in the file-writing direction: its content lands verbat
 runs the family's six-fold chain when called with `normalize: true` - the em dash above would
 survive the default call and become a hyphen under `normalize: true`.
 
-When a stream finishes
-normally with replacements made, the ledger gets the count line:
+When a stream finishes normally with replacements made, the ledger gets the count line:
 
 ```text
 hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
@@ -461,8 +457,8 @@ hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
 The selection can also be FINE-GRAINED - the same call that wrote the prose above, done with the
 raw-write tool per call.
 
-The literal characters in these examples are written with the RAW-WRITE
-tool itself (this is exactly the stream-exempt path the tool exists for):
+The literal characters in these examples are written with the RAW-WRITE tool itself (this is exactly
+the stream-exempt path the tool exists for):
 
 raw-write, content
 `"The refactor is complete — every call site updated, ranges 10–15 covered, and the odd U+2015 bar ― swept too."`,
@@ -496,8 +492,8 @@ registered chain pass (canonicalize) and the update stage through the factory's 
 registry after the write lands; `govern: ["pin"]` runs only the pinner's chain pass;
 `govern: ["update"]` runs only the update stage.
 
-The default — `govern` absent — writes the file and
-lets the [fs/observed][dsh-fs] event path govern it exactly as before:
+The default — `govern` absent — writes the file and lets the [fs/observed][dsh-fs] event path govern
+it exactly as before:
 
 ```text
 raw-write  package.json, govern: ["canonicalize"]
@@ -527,20 +523,21 @@ The activation line is written by `apply()`; the count line only follows a norma
 and only when N > 0 (a thrown-away stream writes no ledger line).
 
 Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
-domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
-count line - best-effort: with no storage facility the record buffers or drops, and the human
-ledger stays the complete record.
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the count
+line - best-effort: with no storage facility the record buffers or drops, and the human ledger stays
+the complete record.
 
 ---
 
 ## The two release groups (CLASSIC vs EFFECT-TS)
 
-Two published groups, one contract: this package is the CLASSIC build - plain TypeScript,
-zero framework dependencies: `import ... from "@playform/hook-dsh-normalize-dash"` resolves to `Target/`.
-The EFFECT-TS implementation of the same contract is the separate package `@playform/ets-hook-dsh-normalize-dash` -
-effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as
-its runtime dependency. Install the group you run and never mix the groups in one graph
-(the effect-ts `Update` returns Effect envelopes, not the classic dispatch envelope).
+Two published groups, one contract: this package is the CLASSIC build - plain TypeScript, zero
+framework dependencies: `import ... from "@playform/hook-dsh-normalize-dash"` resolves to `Target/`.
+The EFFECT-TS implementation of the same contract is the separate package
+`@playform/ets-hook-dsh-normalize-dash` - effect-backed, built on the shared
+`@playform/ets-base-dsh` base with `effect` v4.0.2 as its runtime dependency. Install the group you
+run and never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the
+classic dispatch envelope).
 
 ## License 📜
 

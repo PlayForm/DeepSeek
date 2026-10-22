@@ -2,18 +2,17 @@
 
 ## Identity
 
-| Place | Value |
-| --- | --- |
-| Package name | `@playform/plugin-dsh-pattern` |
-| Service name | `pattern` (`super(Context, "pattern")`) |
-| Patch entry id | `plugin-dsh-pattern` |
-| Ledger logFile default | `~/.dsh/pattern.log` |
+| Place                  | Value                                   |
+| ---------------------- | --------------------------------------- |
+| Package name           | `@playform/plugin-dsh-pattern`          |
+| Service name           | `pattern` (`super(Context, "pattern")`) |
+| Patch entry id         | `plugin-dsh-pattern`                    |
+| Ledger logFile default | `~/.dsh/pattern.log`                    |
 
-The loader contract is the class form (the factory precedent): the default
-export is `class PatternService extends Service`, `static inject = []`
-(no service dependencies), and the named `Config` schema export (also
-attached as `static Config`). The service is registered at construction and
-removed with its owning fiber.
+The loader contract is the class form (the factory precedent): the default export is
+`class PatternService extends Service`, `static inject = []` (no service dependencies), and the
+named `Config` schema export (also attached as `static Config`). The service is registered at
+construction and removed with its owning fiber.
 
 ## The pattern shape (`Source/Interface/Pattern.ts`)
 
@@ -33,9 +32,9 @@ Pattern = {
 
 ## The scoring weights (`Source/Function/Matcher.ts`)
 
-`score = 0.6 * keywordOverlap + 0.2 * toolMatch + 0.2 * confidence`,
-thresholded at `matchThreshold`; the ambiguity rule empties the result when
-the top two scores sit within `ambiguityEpsilon`.
+`score = 0.6 * keywordOverlap + 0.2 * toolMatch + 0.2 * confidence`, thresholded at
+`matchThreshold`; the ambiguity rule empties the result when the top two scores sit within
+`ambiguityEpsilon`.
 
 ## Ledger strings (module-owned, byte-stable)
 
@@ -47,6 +46,5 @@ the top two scores sit within `ambiguityEpsilon`.
 
 ## Storage
 
-Local JSON under `~/.dsh` (version field `1`; a stale or unreadable file is
-a silent miss and keeps the cold-start catalog). Memory is local, never the
-repo; no network.
+Local JSON under `~/.dsh` (version field `1`; a stale or unreadable file is a silent miss and keeps
+the cold-start catalog). Memory is local, never the repo; no network.

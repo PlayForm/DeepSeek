@@ -1,23 +1,21 @@
 # SCHEME - @playform/hook-dsh-workspace-journal
 
-The formal scheme of the workspace-journal hook: the domain schema, the
-record shapes, the lifecycle, and the ledger lines.
+The formal scheme of the workspace-journal hook: the domain schema, the record shapes, the
+lifecycle, and the ledger lines.
 
 ## 1. The storage domain
 
-One KV domain, named config `domain` (default `workspace_journal`),
-version 1, layout `per-record`, `invalidRecords: backup-and-skip`, three
-tables:
+One KV domain, named config `domain` (default `workspace_journal`), version 1, layout `per-record`,
+`invalidRecords: backup-and-skip`, three tables:
 
-| Table | Key | Record |
-| --- | --- | --- |
-| `batches` | `batchId` | BatchRecord |
-| `entries` | `` `${batchId}:${path}` `` | EntryRecord (the revert data) |
-| `ring` | `__ring` | `string[]` - the bounded ring of batchIds |
+| Table     | Key                        | Record                                    |
+| --------- | -------------------------- | ----------------------------------------- |
+| `batches` | `batchId`                  | BatchRecord                               |
+| `entries` | `` `${batchId}:${path}` `` | EntryRecord (the revert data)             |
+| `ring`    | `__ring`                   | `string[]` - the bounded ring of batchIds |
 
-An absent `storageDomain` facility is a silent skip: the records live in
-memory only. A failed open is loud: one `storage open failed: <reason>`
-ledger line, never rethrown.
+An absent `storageDomain` facility is a silent skip: the records live in memory only. A failed open
+is loud: one `storage open failed: <reason>` ledger line, never rethrown.
 
 ## 2. BatchRecord
 
@@ -38,13 +36,13 @@ ledger line, never rethrown.
 
 ```ts
 {
-  batchId: string;
-  path: string;
-  state: "present" | "absent";  // absent ⇒ revert removes the file
-  version: string;              // the version token observed before the write
-  content: string;              // the pre-image ("" when truncated)
-  truncated: boolean;           // pre-image over maxEntryBytes
-  at: number;
+	batchId: string;
+	path: string;
+	state: "present" | "absent"; // absent ⇒ revert removes the file
+	version: string; // the version token observed before the write
+	content: string; // the pre-image ("" when truncated)
+	truncated: boolean; // pre-image over maxEntryBytes
+	at: number;
 }
 ```
 
@@ -93,6 +91,5 @@ failed <path> (<reason>)
 storage open failed: <reason>
 ```
 
-Every line is prefixed by the factory's Append with the module identity
-(`journal: `). The strings live in the modules (the factory never owns
-them) and are renamed mechanically, never edited ad hoc.
+Every line is prefixed by the factory's Append with the module identity (`journal: `). The strings
+live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.

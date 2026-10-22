@@ -6,5 +6,6 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/hook-dsh-normalize-invisible: the stream hook normalizing the zero-width and invisible character family in model output
-  (the Classic release of the DeepSeek Harness Plugin Family).
+- The initial release of @playform/hook-dsh-normalize-invisible: the stream hook normalizing the
+  zero-width and invisible character family in model output (the Classic release of the DeepSeek
+  Harness Plugin Family).

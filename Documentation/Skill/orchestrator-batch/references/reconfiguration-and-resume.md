@@ -6,26 +6,22 @@ The parent may:
 
 1. **Amend an idle lane's spec.** Send the amendment; the lane answers
    `"<NAME> SPEC AMENDED - IDLE"` and retains the new spec.
-2. **Amend a working lane mid-flight** only when the change is compatible
-   with the work already done. The message is a checkpoint: state what
-   changed and what must be re-verified.
+2. **Amend a working lane mid-flight** only when the change is compatible with the work already
+   done. The message is a checkpoint: state what changed and what must be re-verified.
 3. **Re-apply changed requirements** to lanes that have not started.
-4. **Re-dispatch a failed lane** with the corrected spec and the failure
-   summary.
+4. **Re-dispatch a failed lane** with the corrected spec and the failure summary.
 
-An amendment overrides the base spec where the two conflict. The lane
-keeps the rest.
+An amendment overrides the base spec where the two conflict. The lane keeps the rest.
 
 ## The idle-amendment law
 
-A new idea, suggestion, or improvement never amends a working lane
-mid-flight. It becomes a new idle lane. The working lane finishes against
-the spec it started with, and the improvement folds into a later dispatch.
+A new idea, suggestion, or improvement never amends a working lane mid-flight. It becomes a new idle
+lane. The working lane finishes against the spec it started with, and the improvement folds into a
+later dispatch.
 
-The reason is the spec boundary: a lane working against spec A, amended to
-spec B mid-flight, has to re-verify work it already did and may be unable
-to tell which parts of the tree belong to which spec. The new-lane rule
-keeps every report attributable.
+The reason is the spec boundary: a lane working against spec A, amended to spec B mid-flight, has to
+re-verify work it already did and may be unable to tell which parts of the tree belong to which
+spec. The new-lane rule keeps every report attributable.
 
 ## Resume
 
@@ -35,29 +31,23 @@ The durable record is `Documentation/Plans/`:
 - the process record;
 - the queue state.
 
-Handoff documents are temporary. They may be erased at the session's
-close; anything that must survive goes in the plan or the report.
+Handoff documents are temporary. They may be erased at the session's close; anything that must
+survive goes in the plan or the report.
 
 On resume:
 
 1. Read the active plan and the queue record.
-2. Check the tree state in the root and in `Site/`:
-   `git status --short`, `git log --oneline -5`.
+2. Check the tree state in the root and in `Site/`: `git status --short`, `git log --oneline -5`.
 3. Re-verify every count before repeating it; the tree may have moved.
-4. Re-read the owner skill for any law that changed since the last
-   session.
-5. Restore the queue: active, paused, queued. Do not re-run finished
-   lanes.
+4. Re-read the owner skill for any law that changed since the last session.
+5. Restore the queue: active, paused, queued. Do not re-run finished lanes.
 
 ## The resume failure modes
 
 - **Handoff as the only record**: the resume has nothing to read.
-- **Stale counts**: the new session repeats numbers the tree no longer
-  supports.
-- **Re-running finished work**: the parent did not check the persisted
-  artifacts.
-- **Losing the queue**: lanes are re-dispatched in a different order and
-  collide.
+- **Stale counts**: the new session repeats numbers the tree no longer supports.
+- **Re-running finished work**: the parent did not check the persisted artifacts.
+- **Losing the queue**: lanes are re-dispatched in a different order and collide.
 
 ## The report after resume
 

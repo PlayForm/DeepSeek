@@ -7,25 +7,23 @@ status: active
 registry: Documentation/Brand/BRANDING.md
 index: Documentation/INDEX.md
 statuses:
-  - name: the brand brief (the colors, the type, the voice)
-    state: implemented
-    evidence: the Site follows it; blue and white, Inter and IBM Plex Mono
-  - name: the remote-agent generation briefs
-    state: implemented
-    evidence: the self-contained brief in this file
+    - name: the brand brief (the colors, the type, the voice)
+      state: implemented
+      evidence: the Site follows it; blue and white, Inter and IBM Plex Mono
+    - name: the remote-agent generation briefs
+      state: implemented
+      evidence: the self-contained brief in this file
 ---
 
 # BRANDING.md - The DeepSeek Harness Plugin Family for PlayForm
 
-> The brand brief migrated to `Documentation/Brand/` - referenced by
-> `../Plans/DSH-MONOREPO-PLAN.md` (the Site design) and `../Handoff/Register.md` (item #12 - the
-> Handoff tree was erased on 2026-10-09; the reference stays as the historical record).
+> The brand brief migrated to `Documentation/Brand/` - referenced by `../Plans/DSH-MONOREPO-PLAN.md`
+> (the Site design) and `../Handoff/Register.md` (item #12 - the Handoff tree was erased on
+> 2026-10-09; the reference stays as the historical record).
 
-A self-contained brief.
-Give this file to a REMOTE agent to generate: **(A) a complete branding
+A self-contained brief. Give this file to a REMOTE agent to generate: **(A) a complete branding
 manual** for the family (plugins + versions + models + flavors), and **(B) a simple sample webpage
-design instruction set** (with a static blue/white mockup).
-EVERY fact needed is in this file - do
+design instruction set** (with a static blue/white mockup). EVERY fact needed is in this file - do
 NOT require the agent to know the codebase.
 
 ---
@@ -33,20 +31,16 @@ NOT require the agent to know the codebase.
 ## 1. THE FAMILY (what we are)
 
 The **DeepSeek Harness Plugin Family for PlayForm** - "the family" - is a set of plugins for the
-DeepSeek Harness (DSH) desktop agent platform, published under the @playform ecosystem.
-The family
+DeepSeek Harness (DSH) desktop agent platform, published under the @playform ecosystem. The family
 has ONE mission:
 
-> **Tame the model's output and govern the project's files.**
-> EVERY model's output is normalized to
+> **Tame the model's output and govern the project's files.** EVERY model's output is normalized to
 > clean, consistent characters (dashes, quotes, ellipsis, spaces, invisible characters, full-width
-> forms).
-> EVERY project manifest is governed (canonicalized, pinned, updated) - automatically,
+> forms). EVERY project manifest is governed (canonicalized, pinned, updated) - automatically,
 > visibly, and under the author's control.
 
 The family is **model-agnostic**: it normalizes the output of ANY LLM (reference models the harness
-runs: DeepSeek V4 Flash, GLM 5.3 Flash).
-The family is **flavor-based**: ONE small transform per
+runs: DeepSeek V4 Flash, GLM 5.3 Flash). The family is **flavor-based**: ONE small transform per
 character family, sharing ONE pure core.
 
 ## 2. THE PRODUCT INVENTORY (twelve packages)
@@ -69,10 +63,8 @@ The family is organized hierarchically - read EVERY name as a sentence of segmen
 | `hook-dsh-normalize-fullwidth` | Hook @ DSH @ Normalize @ Fullwidth | Full-width -> half-width                                                                            |
 | `plugin-dsh-normalize-file`    | Plugin @ DSH @ Normalize @ File    | Normalize files already on disk (the explicit tool)                                                 |
 
-The alphabetical order groups the family naturally: the kind first (hook/plugin/lib).
-Then the roles
-(core, governor-cargo, governor-package, normalize-*, pinner-package, plugin-factory).
-Then the
+The alphabetical order groups the family naturally: the kind first (hook/plugin/lib). Then the roles
+(core, governor-cargo, governor-package, normalize-*, pinner-package, plugin-factory). Then the
 domains.
 
 ## 3. THE VERSIONS (three)
@@ -85,26 +77,20 @@ domains.
    trace-ability (tracing spans over the chains), ecosystem interaction (Effect's
    transformers/processors), the same behavior, the same ledger strings.
 
-Both official releases ship side by side.
-The family is versioned with a dual badge (CLASSIC /
+Both official releases ship side by side. The family is versioned with a dual badge (CLASSIC /
 EFFECT-TS).
 
 ## 4. THE MODELS
 
-The family serves AI models, NOT the reverse.
-The normalize family rewrites what a model emits - so
+The family serves AI models, NOT the reverse. The normalize family rewrites what a model emits - so
 the branding speaks of "model output", "streams", "transcripts" - clean, consistent characters in
-everything the model writes.
-The governance family acts on the files the author (human or model)
-touches.
-The voice: "the model's output, governed and clean".
+everything the model writes. The governance family acts on the files the author (human or model)
+touches. The voice: "the model's output, governed and clean".
 
 ## 5. THE FLAVORS
 
 A **flavor** is ONE member of the normalize family (dash, quotes, ellipsis, spaces, invisible,
-fullwidth, file).
-A **role** is ONE member of the governance family (governor, pinner).
-The branding
+fullwidth, file). A **role** is ONE member of the governance family (governor, pinner). The branding
 must give EACH flavor/role a distinct visual treatment (a badge) while keeping ONE family look.
 
 ## 6. THE DESIGN CONSTRAINTS (NON-NEGOTIABLE)
@@ -141,8 +127,7 @@ A complete identity system, ONE document, covering:
 
 ## 8. THE SAMPLE WEBPAGE - WHAT TO PRODUCE (deliverable B)
 
-A simple single-page design for the family website, blue/white, clean headers.
-Produce BOTH:
+A simple single-page design for the family website, blue/white, clean headers. Produce BOTH:
 
 1. **The instruction set** (a written design spec): the page sections in order, the layout grid, the
    spacing scale, the blue/white usage per section, the clean-header treatment for EACH heading

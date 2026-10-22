@@ -6,9 +6,8 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The initial release of @playform/lib-dsh-core: the pure, dependency-free,
-  harness-free commonalities of the families: the governance mechanics (the
-  dependency-section list, the exclusion-segment list, the suppression-line
-  composer, the update-policy loader, the refusal guard and the update engine)
-  and the stream-normalization machinery (the Classic release of the DeepSeek
+- The initial release of @playform/lib-dsh-core: the pure, dependency-free, harness-free
+  commonalities of the families: the governance mechanics (the dependency-section list, the
+  exclusion-segment list, the suppression-line composer, the update-policy loader, the refusal guard
+  and the update engine) and the stream-normalization machinery (the Classic release of the DeepSeek
   Harness Plugin Family).

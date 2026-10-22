@@ -17,14 +17,12 @@ The intent waterfall carries only a version guard (`{kind:"createIfAbsent"}` |
 
 The write content travels only in the tool's own arguments → `ctx.fs.writeText`.
 
-The only hook that
-runs _after_ content is on disk is the synchronous broadcast `fs/observed`.
+The only hook that runs _after_ content is on disk is the synchronous broadcast `fs/observed`.
 
-Hence the post-hoc
-rewrite design.
+Hence the post-hoc rewrite design.
 
-(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was
-the fatal bug of the governor's first attempt.)
+(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was the fatal bug of
+the governor's first attempt.)
 
 ## 1. The domain — every harness write path
 
@@ -32,8 +30,7 @@ the fatal bug of the governor's first attempt.)
 `dsh-tool-str-replace-editor`), for **every** write/edit/read issued through the harness fs tools,
 by **any** thread: main agent, subagent, workflow child.
 
-The fs _service_ and every other writer
-(bash, git, pnpm, plain `node:fs`) dispatch **nothing**.
+The fs _service_ and every other writer (bash, git, pnpm, plain `node:fs`) dispatch **nothing**.
 
 Write paths `𝒲 = { write tool, edit tool, str-replace-editor, any tool issuing ctx.fs.writeText }`.
 
@@ -80,8 +77,7 @@ Idempotence: an already-static version has no leading prefix, so rule 2 passes i
 strips the notation (the prefix) and leaves the content untouched; the static-version rule targets
 the common caret/tilde/exact case, and the pinner never invents content.
 
-Protect wildcards with the
-keep-list (`pin-policy.json`) if a deployment needs them preserved.
+Protect wildcards with the keep-list (`pin-policy.json`) if a deployment needs them preserved.
 
 **Protocol safety**: none of `workspace:*`, `file:`, `link:`, `git+…`, `npm:` begins with
 `^`/`~`/`=`, so rule 2 leaves them untouched by construction — there is no separate protocol test to
@@ -139,9 +135,8 @@ A post-emit rewrite is invisible to the envelope.
 **Required hygiene (the leak vector)**: the observation-policy (active via `dsh-base` patch) records
 `{kind:"present", version}` per `owner = actor.agent.session`.
 
-If P mutates the file without
-refreshing the record, the author's next guarded write/edit fails **FS_STALE_VERSION** — an error
-the model _sees_ → notification leak.
+If P mutates the file without refreshing the record, the author's next guarded write/edit fails
+**FS_STALE_VERSION** — an error the model _sees_ → notification leak.
 
 Therefore P, after every mutation, re-emits
 `ctx.emit("fs/observed", target, {kind:"present", version: v'}, <same actor>)` with `v'` taken from
@@ -150,8 +145,7 @@ never computed or parsed locally).
 
 Same actor ⇒ same owner bucket ⇒ record refreshed.
 
-The version is
-pre-registered in the Stash before the re-emit so the re-entrant pass is a no-op.
+The version is pre-registered in the Stash before the re-emit so the re-entrant pass is a no-op.
 
 P never: participates in `fs/write-intent`/`fs/edit-intent` waterfalls, touches `tools/*` waterfalls
 (`tools/post-execute` is the only sanctioned result amendment — it is _louder_, so forbidden),
@@ -238,8 +232,8 @@ Non-edges (proven absent, marked ∄):
 The exported `Config` schema validates and fills every default at load (invalid configuration fails
 loudly).
 
-New entries are declared with `insert:` — a bare `id:` row patches an existing entry and
-the loader rejects unknown ids with `entry "…" not found`.
+New entries are declared with `insert:` — a bare `id:` row patches an existing entry and the loader
+rejects unknown ids with `entry "…" not found`.
 
 ```yaml
 - insert:
@@ -281,12 +275,12 @@ The three plugins coexist on `fs/observed`, each gating on its own basename (`pa
 `hook-dsh-package-governor.log` / `hook-dsh-cargo-governor.log`); the fs/observed trigger law and
 the exclusion-first rule are shared.
 
-Composition semantics: **pin → bump-exact** (the pinner pins
-`^0.3.4` → `0.3.4`; a fully pinned manifest leaves the npm governor's update stage nothing to do —
-ncu's no-op case is an exact pin — while its chain pass may still re-canonicalize chain pins to
-`^resolved`); **chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the
-pinner's `pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same
-sidecar — wins over normalization, never over the chain).
+Composition semantics: **pin → bump-exact** (the pinner pins `^0.3.4` → `0.3.4`; a fully pinned
+manifest leaves the npm governor's update stage nothing to do — ncu's no-op case is an exact pin —
+while its chain pass may still re-canonicalize chain pins to `^resolved`); **chain > strip >
+normalize** (the cargo module's precedence); **keep-list wins** (the pinner's `pin-policy.json`
+protects ranges as authored; the cargo module's keep-list — the same sidecar — wins over
+normalization, never over the chain).
 
-Activation of one never implies another;
-order between two npm listeners is defined only by registration.
+Activation of one never implies another; order between two npm listeners is defined only by
+registration.

@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-cargo-governor
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-cargo-governor&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
@@ -16,11 +16,10 @@
 > into the TypeScript ecosystem, so there is no npm-library equivalent - the update stage operates
 > at the exclusionary level through the cargo CLI.
 >
-> *A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
-> `cargo upgrade --exclude` - comments survive.*
+> _A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
+> `cargo upgrade --exclude` - comments survive._
 >
-> *The @-sentence identity: **Hook @ DSH @ Governor @
-> Cargo**.*
+> _The @-sentence identity: **Hook @ DSH @ Governor @ Cargo**._
 >
 > Every claim below is live-verified (2026-10-03, live).
 
@@ -29,42 +28,40 @@
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Cargo**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
-helpers; the Rust-sided sibling of the two npm governance hooks on the same
-[`fs/observed`][dsh-fs] seam.
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the
+[`ets-lib-dsh-core`](../ets-lib-dsh-core) helpers; the Rust-sided sibling of the two npm governance
+hooks on the same [`fs/observed`][dsh-fs] seam.
 
-One of three governance hooks sharing the
-[`fs/observed`][dsh-fs] seam, each gating on its own basename and
-writing its own ledger:
+One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own
+basename and writing its own ledger:
 
-| plugin                                                      | basename gate  | ledger                          | pass                                                 |
-| ----------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor) | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner)     | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] (this bundle)                     | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| plugin                                                                        | basename gate  | ledger                              | pass                                                 |
+| ----------------------------------------------------------------------------- | -------------- | ----------------------------------- | ---------------------------------------------------- |
+| [`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor)           | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner)               | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] (this bundle) | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
 never see a `Cargo.toml` event.
 
-Composition semantics: **chain > strip > normalize** (this module's
-precedence), **keep-list wins** over normalization - never over the chain.
+Composition semantics: **chain > strip > normalize** (this module's precedence), **keep-list wins**
+over normalization - never over the chain.
 
-The ledgers are separate;
-activating one never implies another.
+The ledgers are separate; activating one never implies another.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - gates, discovery, the guarded write, the refresh, the continuation, the effects, the schema and
-  the namespaced `UpdateKey` come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the policy
-  loader and the suppression composer come from [`ets-lib-dsh-core`](../ets-lib-dsh-core). This bundle
-  keeps the Cargo-specific residue: the TOML identification, the surgical pin, the full-version
-  directive, and the `cargo upgrade` bridge. Besides the
-[`fs/observed`][dsh-fs] event path, its two steps are
-  registered with the factory's direct-govern registry at apply
+  the namespaced `UpdateKey` come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the
+  policy loader and the suppression composer come from [`ets-lib-dsh-core`](../ets-lib-dsh-core).
+  This bundle keeps the Cargo-specific residue: the TOML identification, the surgical pin, the
+  full-version directive, and the `cargo upgrade` bridge. Besides the [`fs/observed`][dsh-fs] event
+  path, its two steps are registered with the factory's direct-govern registry at apply
   (`Factory.RegisterGovern("Cargo.toml", "cargo" | "update", …)` — factory SCHEME.md §2.16), so the
   `raw-write` tool's per-call `govern` selection can drive the same chain + normalization pass and
-  update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts) (Function/Direct — same machinery, same ledger
-  strings).
+  update stage directly through
+  [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts)
+  (Function/Direct — same machinery, same ledger strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -72,22 +69,24 @@ the same conventions as every other @playform package.
 
 ### Install
 
-1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-cargo-governor`
-   in the profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`).
+1. **Remote / dependency install (auto-activation):**
+   `pnpm add @playform/ets-hook-dsh-cargo-governor` in the profile dir (+ the package name in
+   `dsh.profile.bundles`, or `dsh plugin add`).
 2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
    node_modules - smol-toml) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
    `dsh plugin --profile <name> add <this directory>`.
 3. **Native dsh install:**
    `dsh plugin --profile <name> add ./local-ets-hook-dsh-cargo-governor-<v>.tgz`.
 
-All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
-inserts the [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] row, and the ledger logs `activated (cargo flavor, ...)` at
-the next host start.
+All three end the same way: the loader activates the entry from `Target/`,
+[cordis.patch.yml][ours-cordis-patch] inserts the
+[ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] row, and the ledger logs
+`activated (cargo flavor, ...)` at the next host start.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's
+`dsh.bundle` manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
 - insert:
@@ -99,8 +98,8 @@ manifest) - the full config table is in [The Config](#the-config):
             updateMode: cargo
 ```
 
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
+types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 
@@ -110,9 +109,8 @@ Rust manifests drift the same way npm manifests do - but `Cargo.toml` is a TOML 
 decorate with comments, and there is no in-process library path: the only update tool is the cargo
 CLI.
 
-A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and
-delegate its update stage across the Rust/TS boundary - while still hooking the same
-[`fs/observed`][dsh-fs]
+A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and delegate
+its update stage across the Rust/TS boundary - while still hooking the same [`fs/observed`][dsh-fs]
 event the npm hooks use, so one trigger law covers the whole machine.
 
 ---
@@ -168,7 +166,8 @@ event the npm hooks use, so one trigger law covers the whole machine.
 ```
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
+envelope, the breaker update, the U2 refresh) - lives in the core
+([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
 `Function/Update`); this module is a thin delegate that injects its own collections, the cargo child
 runner and its ledger strings, so the flow is not forked per governance module.
 
@@ -191,35 +190,34 @@ dependency version is expanded to its MOST SPECIFIC form:
 Precedence, in order: **(1) chain** - a dep in `registry.effectiveLatest` is canonicalized to the
 FULL resolved form (even a shorthand registry entry yields a full output); **(2) strip** -
 strict-mode unknown deps; **(3) normalize** - every other simple version, UNLESS the name is in the
-**keep-list** ([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts) via `keepFile` - the same sidecar the pinner uses; discovery:
-global `keepFile` → the file's own directory → registry-adjacent, the union).
+**keep-list**
+([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts)
+via `keepFile` - the same sidecar the pinner uses; discovery: global `keepFile` → the file's own
+directory → registry-adjacent, the union).
 
-**The keep-list wins
-over normalization; the chain is never suppressed.**
+**The keep-list wins over normalization; the chain is never suppressed.**
 
-Cargo semantics are unchanged: a bare full
-version is still Cargo's implicit caret.
+Cargo semantics are unchanged: a bare full version is still Cargo's implicit caret.
 
 ### The TOML rewrite (why comments survive)
 
-`smol-toml` (the one non-@playform tool dependency, carried by the bundle's own `node_modules`) is used for
-**PARSING ONLY** - identification of the dep entries in `[dependencies]`, `[dev-dependencies]`,
-`[build-dependencies]`, `[target.'cfg(...)'.dependencies]` (and its dev/build variants), and
-**`[workspace.dependencies]`** (the shared dep table - handled natively).
+`smol-toml` (the one non-@playform tool dependency, carried by the bundle's own `node_modules`) is
+used for **PARSING ONLY** - identification of the dep entries in `[dependencies]`,
+`[dev-dependencies]`, `[build-dependencies]`, `[target.'cfg(...)'.dependencies]` (and its dev/build
+variants), and **`[workspace.dependencies]`** (the shared dep table - handled natively).
 
-The rewrite itself
-(Function/Pin) is **surgical line-level string manipulation on the raw text** - so comments, inline
-comments, blank lines, and spacing survive byte-for-byte.
+The rewrite itself (Function/Pin) is **surgical line-level string manipulation on the raw text** -
+so comments, inline comments, blank lines, and spacing survive byte-for-byte.
 
-Handled entry shapes: `name = "0.3.4"`,
-`name = { version = "0.3.4", ... }` (single line or pretty-printed), `[dependencies.name]` table
-style.
+Handled entry shapes: `name = "0.3.4"`, `name = { version = "0.3.4", ... }` (single line or
+pretty-printed), `[dependencies.name]` table style.
 
-Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspace = true` -
-the version lives in the workspace table, walked separately).
+Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspace = true` - the
+version lives in the workspace table, walked separately).
 
-Non-dependency sections are NEVER
-touched: [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source/Function/Refusal.ts) refuses any plan entry outside an identified dependency table
+Non-dependency sections are NEVER touched:
+[the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source/Function/Refusal.ts)
+refuses any plan entry outside an identified dependency table
 (`REFUSED rewrite of ...: non-dependency section "..." would change`), and `Pin` aborts (never a
 partial rewrite) if a planned entry cannot be located in the text.
 
@@ -227,8 +225,8 @@ partial rewrite) if a planned entry cannot be located in the text.
 
 - `cargo` 1.100.0-nightly + cargo-edit 0.13.13, resolved through `cargoBin` (the schema default is
   the bare `cargo`, found via
-  [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess)'s `resolveExecutable`; set an absolute path when
-  the host PATH is not the shell PATH).
+  [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess)'s
+  `resolveExecutable`; set an absolute path when the host PATH is not the shell PATH).
 - **`--exclude` is ONE flag per crate** - the comma form is silently IGNORED (`--exclude a,b`
   excludes nothing), the exact inverse of ncu's one-comma-argument reject list, which is why this
   module cannot reuse the parent's argv builder.
@@ -337,13 +335,12 @@ declared with `insert:`.
 
 One governed write.
 
-The author saves a `Cargo.toml` with comments, a shorthand version, and a
-chain-governed dep:
+The author saves a `Cargo.toml` with comments, a shorthand version, and a chain-governed dep:
 
 ```toml
 [dependencies]
 # the engine — keep the comment alive
-serde = "1.0"              # shorthand: must become 1.0.0
+serde = "1.0"  # shorthand: must become 1.0.0
 tokio = { version = "0.4.1", features = ["full"] }  # chain-governed
 ```
 
@@ -353,7 +350,7 @@ same comments, same inline spacing):
 ```toml
 [dependencies]
 # the engine — keep the comment alive
-serde = "1.0.0"            # shorthand: must become 1.0.0
+serde = "1.0.0"  # shorthand: must become 1.0.0
 tokio = { version = "0.4.5", features = ["full"] }  # chain-governed
 ```
 
@@ -371,15 +368,14 @@ The transcript shows only what the author wrote; the ledger shows the pass:
 `tokio` are protected from the CLI bump - tokio by the chain, serde by the normalization pass
 already writing its full form.)
 
-Read the file back to see the governed state; write it again
-immediately and nothing complains - no `FS_STALE_VERSION`.
+Read the file back to see the governed state; write it again immediately and nothing complains - no
+`FS_STALE_VERSION`.
 
-Write inside `node_modules`/`.git`/`.dsh`
-and the ledger gains `skipped (excluded) ...` while the file stays untouched.
+Write inside `node_modules`/`.git`/`.dsh` and the ledger gains `skipped (excluded) ...` while the
+file stays untouched.
 
-Remove cargo-edit and
-the pass fails gracefully: `update: cargo-edit unavailable: ...`, the manifest untouched, the
-breaker counting the failure.
+Remove cargo-edit and the pass fails gracefully: `update: cargo-edit unavailable: ...`, the manifest
+untouched, the breaker counting the failure.
 
 ---
 
@@ -389,8 +385,8 @@ One global log (`logFile`, default `~/.dsh/ets-hook-dsh-cargo-governor.log` - SE
 ledgers) records activation, exclusions, chain-pass results, refusals, and every update-stage
 dispatch.
 
-The strings this module composes (the ets-hook-dsh-cargo-governor: logger prefix is the
-factory's `Append`; each line is `[<ISO>] <message>` in the file):
+The strings this module composes (the ets-hook-dsh-cargo-governor: logger prefix is the factory's
+`Append`; each line is `[<ISO>] <message>` in the file):
 
 ```text
 activated (cargo flavor, logFile=..., updateMode=cargo, cargoBin=..., exclude=[...], policyFile=(discovery), keepFile=(discovery))
@@ -421,8 +417,7 @@ unreadable pin-policy.json at <keepFile> — using built-in default
 unreadable-policy line end with em dashes; the DONE line is `update: DONE` + em dash + reason -
 byte-exact forms are in the In Action excerpt above.
 
-Those em
-dashes are part of the literal ledger strings, so they live only in the example block.)
+Those em dashes are part of the literal ledger strings, so they live only in the example block.)
 
 The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
 alone.
@@ -434,5 +429,7 @@ alone.
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-ets-hook-dsh-cargo-governor]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source
-[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/cordis.patch.yml
+[ours-ets-hook-dsh-cargo-governor]:
+	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source
+[ours-cordis-patch]:
+	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/cordis.patch.yml

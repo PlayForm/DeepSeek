@@ -2,11 +2,11 @@
 
 The design document of the **CARGO.TOML MODULE** of the silent package.json governor.
 
-The module
-delineation is the point: identical architecture and API-awareness discipline, but the update stage
-is **Rust-side only** — `cargo upgrade` (cargo-edit) driven through `ctx.subprocess` — because Rust
-does not co-opt into the TypeScript ecosystem: there is no npm-library equivalent for cargo manifest
-updates, so the update stage operates at the **exclusionary level** through the cargo CLI.
+The module delineation is the point: identical architecture and API-awareness discipline, but the
+update stage is **Rust-side only** — `cargo upgrade` (cargo-edit) driven through `ctx.subprocess` —
+because Rust does not co-opt into the TypeScript ecosystem: there is no npm-library equivalent for
+cargo manifest updates, so the update stage operates at the **exclusionary level** through the cargo
+CLI.
 
 ```
         tool-layer write/edit (write | edit | str_replace_editor)
@@ -226,15 +226,13 @@ update stage FAILED (N) for …; consecutive=N
 The three plugins coexist on `fs/observed`: the package.json governor, the package.json pinner, and
 this Cargo.toml module.
 
-Each gates on its own basename (`package.json` / `package.json` /
-`Cargo.toml`), so the cargo module never processes an npm event and vice versa; each writes its own
-ledger.
+Each gates on its own basename (`package.json` / `package.json` / `Cargo.toml`), so the cargo module
+never processes an npm event and vice versa; each writes its own ledger.
 
 The user decides which to activate — activation of one never implies another.
 
-Composition
-semantics when several are activated: **pin → bump-exact** (a fully pinned manifest leaves the npm
-governor's update stage nothing to do — ncu's no-op case is an exact pin); **chain > strip >
-normalize** (this module's precedence, §3); **keep-list wins** (the pinner's `pin-policy.json` keeps
-ranges as authored; this module's keep-list — the same sidecar — wins over normalization, never over
-the chain).
+Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
+leaves the npm governor's update stage nothing to do — ncu's no-op case is an exact pin); **chain >
+strip > normalize** (this module's precedence, §3); **keep-list wins** (the pinner's
+`pin-policy.json` keeps ranges as authored; this module's keep-list — the same sidecar — wins over
+normalization, never over the chain).

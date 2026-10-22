@@ -1,32 +1,54 @@
 # SCHEME.md - @playform/hook-dsh-workspace-approve (v0.1.0, TypeScript, function plugin)
 
-Status: **PoC** (the Classic tree, package + Source only; the smoke suite, the
-build verification and the ETS twin are the end-phase per the PoC brief).
+Status: **PoC** (the Classic tree, package + Source only; the smoke suite, the build verification
+and the ETS twin are the end-phase per the PoC brief).
 
 ## 0. What this plugin is
 
-The approval binder: the EXACT human approval - the candidate-bound approval +
-the constraints. It is the approve step of the workspace family's invisible
-flow (`... -> the authority licenses -> the approve binds -> the merge commits
--> ...`). Source of truth: `Documentation/Plans/Workspace-Family/APPROVE.md`,
-typed by `Documentation/Plans/Workspace-Family/INVERSE-REPRESENTATION.md`
-(the Commitment, the AuthorizationDecision, the intent model).
+The approval binder: the EXACT human approval - the candidate-bound approval + the constraints. It
+is the approve step of the workspace family's invisible flow
+(`... -> the authority licenses -> the approve binds -> the merge commits -> ...`). Source of truth:
+`Documentation/Plans/Workspace-Family/APPROVE.md`, typed by
+`Documentation/Plans/Workspace-Family/INVERSE-REPRESENTATION.md` (the Commitment, the
+AuthorizationDecision, the intent model).
 
 ## 1. The data model
 
 ```ts
-interface Candidate { path; fingerprint; version; constraints; summary }
-interface Binding   { id; path; fingerprint; version; constraints; summary;
-                      decision: "pending" | "approved" | "denied" |
-                                "rejected" | "revoked" | "invalidated";
-                      committedBy; sequence }
-interface CheckRequest  { path; fingerprint; version }
-interface CheckResult   { bound; decision; id; reason }
+interface Candidate {
+	path;
+	fingerprint;
+	version;
+	constraints;
+	summary;
+}
+interface Binding {
+	id;
+	path;
+	fingerprint;
+	version;
+	constraints;
+	summary;
+	decision: "pending" | "approved" | "denied" | "rejected" | "revoked" | "invalidated";
+	committedBy;
+	sequence;
+}
+interface CheckRequest {
+	path;
+	fingerprint;
+	version;
+}
+interface CheckResult {
+	bound;
+	decision;
+	id;
+	reason;
+}
 ```
 
-An approval binds the EXACT candidate: path + content fingerprint + the file
-version observed at the approval. The constraints travel with the approval. The
-decision is the Commitment; the check derives the AuthorizationDecision.
+An approval binds the EXACT candidate: path + content fingerprint + the file version observed at the
+approval. The constraints travel with the approval. The decision is the Commitment; the check
+derives the AuthorizationDecision.
 
 ## 2. The state machine
 
@@ -41,19 +63,17 @@ pending/approved -> invalidated (the file's observed version moved)
 
 1. no binding for path + fingerprint -> `unbound`;
 2. a binding that is not approved -> its own decision;
-3. an approved binding with a different version -> `stale`
-   (the candidate changed after the approval; the intent must not authorize
-   its own means);
+3. an approved binding with a different version -> `stale` (the candidate changed after the
+   approval; the intent must not authorize its own means);
 4. otherwise -> `approved`.
 
 ## 4. The listeners and effects
 
-- `fs/observed` on the ROOT context (the factory's Wire): invalidates bindings
-  whose file moved under the approval; synchronous recorder; own-actor ignored.
-- The P5-style storage effect: opens the `workspace_approve` domain (tables
-  `bindings` per id + `ring` meta `__ring`), recovers the by-id map, the ring
-  and the monotonic sequence (max loaded), closes on dispose; absent facility
-  = silent skip, failed open = one loud ledger line.
+- `fs/observed` on the ROOT context (the factory's Wire): invalidates bindings whose file moved
+  under the approval; synchronous recorder; own-actor ignored.
+- The P5-style storage effect: opens the `workspace_approve` domain (tables `bindings` per id +
+  `ring` meta `__ring`), recovers the by-id map, the ring and the monotonic sequence (max loaded),
+  closes on dispose; absent facility = silent skip, failed open = one loud ledger line.
 
 ## 5. The identity (four agreeing places)
 
@@ -84,19 +104,19 @@ approve: storage open failed: <reason>
 
 ## 7. The Config (all volatile)
 
-| Field | Type | Default |
-| --- | --- | --- |
-| logFile | string | `~/.dsh/approve.log` |
-| log | boolean | true (the factory's shared block) |
-| enabled | boolean | false |
-| domain | string | `workspace_approve` |
-| maxBindings | number | 1000 |
-| requireConstraints | boolean | true |
+| Field              | Type    | Default                           |
+| ------------------ | ------- | --------------------------------- |
+| logFile            | string  | `~/.dsh/approve.log`              |
+| log                | boolean | true (the factory's shared block) |
+| enabled            | boolean | false                             |
+| domain             | string  | `workspace_approve`               |
+| maxBindings        | number  | 1000                              |
+| requireConstraints | boolean | true                              |
 
 ## 8. What this PoC does NOT do (honest)
 
 - No smoke suite (the end-phase adds it per the PoC brief).
-- No UI surface: the human decision arrives through the service methods; the
-  wiring of a decision surface is a later slice.
-- The candidate fingerprint is computed by the caller; the approve hook binds
-  and checks, it never hashes content.
+- No UI surface: the human decision arrives through the service methods; the wiring of a decision
+  surface is a later slice.
+- The candidate fingerprint is computed by the caller; the approve hook binds and checks, it never
+  hashes content.

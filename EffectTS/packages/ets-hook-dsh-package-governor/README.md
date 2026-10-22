@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-package-governor
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-package-governor&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-package-governor)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-package-governor)
@@ -11,40 +11,37 @@
 > [!NOTE]
 >
 > The **silent package.json governor** of the DeepSeek Harness - a plugin on the
-> [`fs/observed`][dsh-fs] event
-> (the cordis event **every harness file write dispatches**; the tool layer is the only dispatcher)
-> that governs every `package.json` written by any agent, anywhere.
+> [`fs/observed`][dsh-fs] event (the cordis event **every harness file write dispatches**; the tool
+> layer is the only dispatcher) that governs every `package.json` written by any agent, anywhere.
 >
-> A pure chain pass canonicalizes
-> chain-governed dependency pins, then an update stage lets npm-check-updates bump the public ones -
-> and the author never learns.
+> A pure chain pass canonicalizes chain-governed dependency pins, then an update stage lets
+> npm-check-updates bump the public ones - and the author never learns.
 >
-> *A factory flavor: the family's furnace does the plumbing; this package is the model logic.*
+> _A factory flavor: the family's furnace does the plumbing; this package is the model logic._
 >
-> *The
-> @-sentence identity: **Hook @ DSH @ Governor @ Package**.*
+> _The @-sentence identity: **Hook @ DSH @ Governor @ Package**._
 
 ---
 
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Governor @ Package**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
-helpers; it has no hook children of its own.
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the
+[`ets-lib-dsh-core`](../ets-lib-dsh-core) helpers; it has no hook children of its own.
 
-One of three governance hooks sharing the
-[`fs/observed`][dsh-fs] seam, each gating on its own basename and
-writing its own ledger:
+One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own
+basename and writing its own ledger:
 
-| plugin                                                  | basename gate  | ledger                          | pass                                                 |
-| ------------------------------------------------------- | -------------- | ------------------------------- | ---------------------------------------------------- |
-| [ets-hook-dsh-package-governor][ours-ets-hook-dsh-package-governor] (this bundle)               | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner) | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [`ets-hook-dsh-cargo-governor`](../ets-hook-dsh-cargo-governor) | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
+| plugin                                                                            | basename gate  | ledger                              | pass                                                 |
+| --------------------------------------------------------------------------------- | -------------- | ----------------------------------- | ---------------------------------------------------- |
+| [ets-hook-dsh-package-governor][ours-ets-hook-dsh-package-governor] (this bundle) | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
+| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner)                   | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
+| [`ets-hook-dsh-cargo-governor`](../ets-hook-dsh-cargo-governor)                   | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
 
 Composition semantics when several are activated: **pin → bump-exact** (a fully pinned manifest
 leaves ncu nothing to do; the chain pass may still re-canonicalize chain pins), **chain > strip >
-normalize** (the cargo module's precedence), **keep-list wins** (the pinner's [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts)
+normalize** (the cargo module's precedence), **keep-list wins** (the pinner's
+[pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts)
 keeps ranges as authored).
 
 The ledgers are separate; activating one never implies another.
@@ -52,15 +49,17 @@ The ledgers are separate; activating one never implies another.
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
-  schema come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the pure helpers (`Suppress`, the
-  policy loader) come from [`ets-lib-dsh-core`](../ets-lib-dsh-core). This bundle keeps only its own
-  vocabulary: the Config extension, the chain pass (Function/Transform), the update engine
-  (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string. Besides the
-  [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's direct-govern registry
-  at apply (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory
-  SCHEME.md §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain
-  pass and update stage directly through [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts) (Function/Direct — same machinery, same
-  ledger strings).
+  schema come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the pure helpers
+  (`Suppress`, the policy loader) come from [`ets-lib-dsh-core`](../ets-lib-dsh-core). This bundle
+  keeps only its own vocabulary: the Config extension, the chain pass (Function/Transform), the
+  update engine (Function/Follow → Dispatch → Execute → Update/* → Settle) and every ledger string.
+  Besides the [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's
+  direct-govern registry at apply
+  (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory SCHEME.md
+  §2.16), so the `raw-write` tool's per-call `govern` selection can drive the same chain pass and
+  update stage directly through
+  [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts)
+  (Function/Direct — same machinery, same ledger strings).
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -70,22 +69,23 @@ the same conventions as every other @playform package.
 
 1. **Remote / dependency install (auto-activation):** add the package as a plain dependency of a
    profile - the `dsh.bundle` manifest makes it a harness bundle, installed automatically and
-   activated at the next host start: `pnpm add @playform/ets-hook-dsh-package-governor` in the profile
-   dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`).
+   activated at the next host start: `pnpm add @playform/ets-hook-dsh-package-governor` in the
+   profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`).
 2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
    node_modules) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
    `dsh plugin --profile <name> add <this directory>`.
 3. **Native dsh install:**
    `dsh plugin --profile <name> add ./local-ets-hook-dsh-package-governor-<v>.tgz`.
 
-All three end the same way: the loader activates the entry from `Target/`, [cordis.patch.yml][ours-cordis-patch]
-inserts the [ets-hook-dsh-package-governor][ours-ets-hook-dsh-package-governor] row, and the ledger logs `activated (anywhere mode, ...)` at
-the next host start.
+All three end the same way: the loader activates the entry from `Target/`,
+[cordis.patch.yml][ours-cordis-patch] inserts the
+[ets-hook-dsh-package-governor][ours-ets-hook-dsh-package-governor] row, and the ledger logs
+`activated (anywhere mode, ...)` at the next host start.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's
+`dsh.bundle` manifest) - the full config table is in [The Config](#the-config):
 
 ```yaml
 - insert:
@@ -97,8 +97,8 @@ manifest) - the full config table is in [The Config](#the-config):
             updateMode: programmatic
 ```
 
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
+types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 
@@ -107,12 +107,10 @@ The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the
 Agents edit `package.json` files constantly - and every edit can leave stale pins, stray version
 ranges, or deps that should track a governed registry.
 
-The fix must happen where the write happens,
-on every write path (full writes, single-line edits, `str_replace_editor` patches alike), without
-the author's tool result changing by a single byte.
+The fix must happen where the write happens, on every write path (full writes, single-line edits,
+`str_replace_editor` patches alike), without the author's tool result changing by a single byte.
 
-[`fs/observed`][dsh-fs] is the only hook that runs *after*
-content is on disk - the
+[`fs/observed`][dsh-fs] is the only hook that runs _after_ content is on disk - the
 [`fs/write-intent`][dsh-fs] waterfall carries a version guard but never the content.
 
 ---
@@ -180,7 +178,8 @@ Key properties, all enforced by construction:
   contained logger-only (the core's `Suppress` composer); the ledger is best-effort.
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core ([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
+envelope, the breaker update, the U2 refresh) - lives in the core
+([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
 `Function/Update`); this module is a thin delegate that injects its own collections, child stage and
 ledger strings, so the flow is not forked per governance module.
 
@@ -214,10 +213,11 @@ ets-hook-dsh-package-governor/
 The published artifact contains **only the built output** - `files` whitelists `Target/`,
 [cordis.patch.yml][ours-cordis-patch], and the docs; `Source/` never ships.
 
-There are no `build`/`watch` npm scripts:
-the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`); invoke it ad hoc with
-`npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json` (or `--Watch` for the dev loop).
+There are no `build`/`watch` npm scripts: the only npm script is `prepublishOnly`
+(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`);
+invoke it ad hoc with
+`npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`
+(or `--Watch` for the dev loop).
 
 ### The Hard Lessons
 
@@ -242,9 +242,8 @@ the only npm script is `prepublishOnly`
 The exported `Config` schema (the factory's `Schema` helper extended with the module's own fields)
 validates and fills every default at load - invalid configuration fails loudly.
 
-New patch entries
-are declared with `insert:` (a bare `id:` row patches an existing entry; the loader rejects unknown
-ids with `entry "..." not found`).
+New patch entries are declared with `insert:` (a bare `id:` row patches an existing entry; the
+loader rejects unknown ids with `entry "..." not found`).
 
 ```yaml
 - insert:
@@ -270,8 +269,8 @@ ids with `entry "..." not found`).
 
 One governed write.
 
-The author writes a `package.json` anywhere with the `write` tool - one dep that
-should track the governed registry, one public dep left on a range:
+The author writes a `package.json` anywhere with the `write` tool - one dep that should track the
+governed registry, one public dep left on a range:
 
 ```json
 {
@@ -301,8 +300,8 @@ Read the file back and `@acme/chain-core` is `^0.4.5` (or already bumped by ncu 
 allowed it); write it again immediately and nothing complains - no `FS_STALE_VERSION`, the re-emit
 made the second pass a no-op.
 
-Write inside `node_modules`/`.git`/`.dsh` and the ledger gains one
-line, `skipped (excluded) ...`, while the file stays untouched.
+Write inside `node_modules`/`.git`/`.dsh` and the ledger gains one line, `skipped (excluded) ...`,
+while the file stays untouched.
 
 ---
 
@@ -311,9 +310,8 @@ line, `skipped (excluded) ...`, while the file stays untouched.
 One global log (`logFile`, default `~/.dsh/ets-hook-dsh-package-governor.log`) records activation,
 exclusions, chain-pass results, and every update-stage dispatch.
 
-The strings this module composes
-(the ets-hook-dsh-package-governor: logger prefix is the factory's `Append`; each line is
-`[<ISO>] <message>` in the file):
+The strings this module composes (the ets-hook-dsh-package-governor: logger prefix is the factory's
+`Append`; each line is `[<ISO>] <message>` in the file):
 
 ```text
 activated (anywhere mode, logFile=..., updateMode=..., ncuBin=..., exclude=[...], policyFile=(discovery))
@@ -341,15 +339,14 @@ update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
 update: DONE / update: FAILED
 ```
 
-(The registry-miss line, the runner-unavailable line and the DONE/FAILED lines end with em
-dashes (`update: DONE` + em dash + reason, `update: FAILED` + em dash + reason) - byte-exact
-forms are in the In Action excerpt above.
+(The registry-miss line, the runner-unavailable line and the DONE/FAILED lines end with em dashes
+(`update: DONE` + em dash + reason, `update: FAILED` + em dash + reason) - byte-exact forms are in
+the In Action excerpt above.
 
-Those em dashes are part of the literal ledger strings, so they live
-only in the example block.)
+Those em dashes are part of the literal ledger strings, so they live only in the example block.)
 
-The REFUSED line comes from the core's `Refusal` guard: a difference outside the declared
-dependency sections is never written - the byte-identical line, then no rewrite.
+The REFUSED line comes from the core's `Refusal` guard: a difference outside the declared dependency
+sections is never written - the byte-identical line, then no rewrite.
 
 The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
 alone.
@@ -361,5 +358,7 @@ alone.
 CC0-1.0.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-ets-hook-dsh-package-governor]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/Source
-[ours-cordis-patch]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/cordis.patch.yml
+[ours-ets-hook-dsh-package-governor]:
+	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/Source
+[ours-cordis-patch]:
+	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-governor/cordis.patch.yml

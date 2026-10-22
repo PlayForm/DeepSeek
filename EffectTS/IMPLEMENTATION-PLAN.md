@@ -1,18 +1,19 @@
 # DSH Family - Effect-TS v4 Re-Implementation Plan (register #13)
 
-Status: **RESEARCH COMPLETE, PLAN (read-only at the time; nothing edited, nothing committed) — IMPLEMENTED SINCE: all twelve packages now live in `EffectTS/packages/` with 746 checks green (the per-suite counts in §2 are the real ones).** Scope: the
-twelve Classic packages (`Classic/packages/`, behavior contract), the local Effect-TS v4.0.1
-checkout, the DSH seam docs
-(the deepseek-harness docs checkout), the family docs
-(`DeepSeek/Documentation/Handoff/Register.md` #13/#14, `Documentation/Guides/Governor-SCHEME.md`,
-`Documentation/Reports/Commonalization-AUDIT.md`). Deliverable
-dir: `DeepSeek/EffectTS/` (already in the root `pnpm-workspace.yaml` as `EffectTS/packages/*`).
+Status: **RESEARCH COMPLETE, PLAN (read-only at the time; nothing edited, nothing committed) —
+IMPLEMENTED SINCE: all twelve packages now live in `EffectTS/packages/` with 746 checks green (the
+per-suite counts in §2 are the real ones).** Scope: the twelve Classic packages
+(`Classic/packages/`, behavior contract), the local Effect-TS v4.0.1 checkout, the DSH seam docs
+(the deepseek-harness docs checkout), the family docs (`DeepSeek/Documentation/Handoff/Register.md`
+#13/#14, `Documentation/Guides/Governor-SCHEME.md`,
+`Documentation/Reports/Commonalization-AUDIT.md`). Deliverable dir: `DeepSeek/EffectTS/` (already in
+the root `pnpm-workspace.yaml` as `EffectTS/packages/*`).
 
 Goal restated: re-implement all twelve packages on **Effect-TS 4.0.2** so the family gains (a)
 composition with other Effect transformers, (b) external trace-ability via Effect spans, (c)
-ecosystem interop - while the **ledger strings stay byte-identical** (Classic
-smokes are the arbiter; the EffectTS smokes add coverage - 746 checks vs Classic's 733) and
-**#14 (the parallel-govern toggle)** is designed in.
+ecosystem interop - while the **ledger strings stay byte-identical** (Classic smokes are the
+arbiter; the EffectTS smokes add coverage - 746 checks vs Classic's 733) and **#14 (the
+parallel-govern toggle)** is designed in.
 
 ---
 
@@ -65,7 +66,7 @@ shell delegates into the runtime:
 | `State` (the per-module state builder)                                                                                       | `Layer.effect` producing the module's state; mutable maps stay plain `Map`/`Set` (single-fiber ownership; `Ref` only where concurrent access is designed)                                                                                                                                                                                                                                                                         |
 | `Append` (the ledger file)                                                                                                   | `LedgerService.append(msg): Effect<void>` - logger first (`${module}: ${msg}`), then `[ISO-8601 timestamp] msg` appended via plain `node:fs` (the documented exemption - `ctx.fs` has no append); `Effect.withSpan("dsh.ledger.append")` + `Effect.timed`; never fails the caller (`Effect.ignore` wrapping)                                                                                                                      |
 | `Journal` (the P5 storage domain)                                                                                            | `JournalService.record(event, path, detail)` - wraps the plain `ctx.storageDomain` domain handle (see 1.4); the routing (SharedJournal → PendingJournal buffer cap 256 → per-State queue) stays in the shell; domain `package_governance` v2, `layout: "per-record"`, `compatibleVersions: [1]`, `invalidRecords: "backup-and-skip"`, `events` table (the enum `activated/governed/dispatched/update-failed/excluded/normalized`) |
-| `Write`/`GuardedWrite` (the shared write executor per `Documentation/Reports/Commonalization-AUDIT.md` §3)                                         | `WriteService.write(target, content, Over): Effect<FsWriteOutcome>` - the audit's option bundle (`intent/signal/policy/actor/observe/stash/transform`) becomes the record's argument shape                                                                                                                                                                                                                                        |
+| `Write`/`GuardedWrite` (the shared write executor per `Documentation/Reports/Commonalization-AUDIT.md` §3)                   | `WriteService.write(target, content, Over): Effect<FsWriteOutcome>` - the audit's option bundle (`intent/signal/policy/actor/observe/stash/transform`) becomes the record's argument shape                                                                                                                                                                                                                                        |
 | `Govern` (the direct fold)                                                                                                   | `govern(target, selection): Effect<void>` - see 1.3                                                                                                                                                                                                                                                                                                                                                                               |
 | `Continue`/`Refresh`/`Attach`/`Wire`/`Seam`/`Schema`/`Gate`/`Match`/`Discover`/`Parse`/`Unwrap`/`UpdateKey`/`Resolve`/`Open` | Each a service method on the same `FactoryService` interface; `Gate`/`Match` stay pure inside                                                                                                                                                                                                                                                                                                                                     |
 
@@ -124,10 +125,10 @@ The harness seams are plain async (verified in `docs/subsystems/filesystem.md:18
    around `open(spec)`/`close()`).
 4. **Plugin lifecycle** - the loader contract is unchanged (default-export object with
    `name/apply/Config/inject`; `apply` returns nothing - Governor-SCHEME.md §7 (now
-   `Documentation/Guides/Governor-SCHEME.md`), HANDOFF fixes 1-2).
-   `apply` starts the runtime (layers + fibers); the plugin's dispose effect (registered via the
-   harness's effect-disposal seam) closes the scope, interrupting all forked fibers
-   (`Fiber.interruptAll` semantics via the Scope).
+   `Documentation/Guides/Governor-SCHEME.md`), HANDOFF fixes 1-2). `apply` starts the runtime
+   (layers + fibers); the plugin's dispose effect (registered via the harness's effect-disposal
+   seam) closes the scope, interrupting all forked fibers (`Fiber.interruptAll` semantics via the
+   Scope).
 
 ### 1.5 The module leaves (what the factory never absorbs - unchanged in kind)
 
@@ -228,11 +229,11 @@ What gets traced (span names, per 1.3) and how it leaves the process:
 7. Ordering/timing: the single-consumer-fiber FIFO (1.3) preserves the sequential-fold and
    idempotence semantics; the parallel toggle is opt-in only.
 8. The cordis patch config replaces wholesale (FSOBSERVED-DELIVERY.md, now
-   `Documentation/Reports/FSOBSERVED-DELIVERY.md`) - the EffectTS
-   `cordis.patch.yml` files must repeat the full config object, including `raw-write` in
-   `mutationTools`.
+   `Documentation/Reports/FSOBSERVED-DELIVERY.md`) - the EffectTS `cordis.patch.yml` files must
+   repeat the full config object, including `raw-write` in `mutationTools`.
 
-**Rollout (per `Documentation/Handoff/Register.md` #13: research first, then a coder package per bundle)**
+**Rollout (per `Documentation/Handoff/Register.md` #13: research first, then a coder package per
+bundle)**
 
 - R1: core (stream gate + tables + Update envelope in Effect) → smoke 17/17.
 - R2: factory (services, layers, runtime, govern toggle) → smoke 41/41.

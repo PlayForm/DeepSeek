@@ -20,48 +20,44 @@ statuses:
 
 # THE BATCH EDIT TOOL - THE PACKAGE FORM AND THE GOVERNANCE RISKS
 
-> Granular section of the Batch Edit Tool feature research (R-BET-1).
-> The parent hub: Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md.
-> This document carries section 6 of the research, byte-preserved.
+> Granular section of the Batch Edit Tool feature research (R-BET-1). The parent hub:
+> Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md. This document carries section 6 of the research,
+> byte-preserved.
 
 ---
 
 ## 6.1 The anatomy
 
-`@playform/plugin-dsh-batch-edit` (a tool-primary plugin; the `plugin-`
-prefix since a tool is the primary surface, like plugin-dsh-factory):
+`@playform/plugin-dsh-batch-edit` (a tool-primary plugin; the `plugin-` prefix since a tool is the
+primary surface, like plugin-dsh-factory):
 
 - **Source/Library.ts** - the loader contract: `name`, `apply`, `Config`,
-  `inject = ['pluginFactory', 'tools', 'fs', 'jobs', 'systemPrompt',
-  'shell', 'shellEnv', 'workingDirectory']` on the default object (the
-  default-object-shadows pitfall).
-- **Source/Function/** - Apply.ts (registration only), Machine.ts (the state
-  machine + the process cells), Ops.ts (the transition-table executor),
-  Tools.ts (the `batch_edit` defineTool), Present.ts (the state
-  presentation), Ledger.ts (the strings).
+  `inject = ['pluginFactory', 'tools', 'fs', 'jobs', 'systemPrompt', 'shell', 'shellEnv', 'workingDirectory']`
+  on the default object (the default-object-shadows pitfall).
+- **Source/Function/** - Apply.ts (registration only), Machine.ts (the state machine + the process
+  cells), Ops.ts (the transition-table executor), Tools.ts (the `batch_edit` defineTool), Present.ts
+  (the state presentation), Ledger.ts (the strings).
 - **Source/Variable/** - Config.ts (all volatile), DefaultCheckSets.ts reuse.
 - **Source/Interface/** - State.ts, Process.ts (Process<File>), Events.ts.
-- Config (all volatile, hot-editable, P10 refresh): enabled (default
-  false - the IDLE-forever posture, like the live containers),
-  machinesPerAgent, opsPerCommit, deadlineMs (<= 120000), strictMode
-  (search-not-found errors vs skips), interceptBash (off by default in v1),
+- Config (all volatile, hot-editable, P10 refresh): enabled (default false - the IDLE-forever
+  posture, like the live containers), machinesPerAgent, opsPerCommit, deadlineMs (<= 120000),
+  strictMode (search-not-found errors vs skips), interceptBash (off by default in v1),
   monitorChecksets.
-- **No client half in v1** - the Web UI gets the diff card through
-  `presentationMeta` alone (the cookbook path); a client plugin is later
-  work, not a dependency.
-- The smokes: the fake-ctx + real-factory harness pattern (smoke-writing);
-  every timing transition driven by the fake clock; the vacuously-green trap
-  guarded; the Classic/EffectTS parity per the family discipline.
+- **No client half in v1** - the Web UI gets the diff card through `presentationMeta` alone (the
+  cookbook path); a client plugin is later work, not a dependency.
+- The smokes: the fake-ctx + real-factory harness pattern (smoke-writing); every timing transition
+  driven by the fake clock; the vacuously-green trap guarded; the Classic/EffectTS parity per the
+  family discipline.
 
 ## 6.2 The risks and the mitigations
 
-| Risk | Reality | Mitigation |
-|---|---|---|
+| Risk                                                                         | Reality                                                                                                               | Mitigation                                                                                                                                                                                                                                                                                                                                                               |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Recursive governance: the batch's writes fire fs/observed INTO the governors | REAL if the writes run the plain waterfall path - the governors would try to govern package.json/Cargo.toml mid-batch | Use the **`govern` actor marker** (Gate.ts route 2): the batch tool wraps its actor with the `govern` field, runs the selected steps ITSELF through the factory's direct path (Govern + RegisterGovern), and the event path skips the marked events silently. The Stash idempotence gate (route 5) catches re-emits. Never bypass governance - RE-ROUTE it deliberately. |
-| Tool-schema limits | defineTool is flat-typed; no nested objects | The flat field set (the schema document) + the `opfile` ingest escape hatch (the report grammar, no schema limit) |
-| Event-loop hazards | fs/observed listeners MUST be synchronous, side-effect-only; the emit is unguarded (filesystem.md:185) | The machine's fs/observed listener only flips cells and enqueues; ALL async work (reads, previews, writes) runs at checkpoints or through ctx.jobs - the no-timers discipline verbatim |
-| Waterfall hazards | A throwing listener breaks the tool pipeline; missing next() swallows downstream behavior | next() FIRST everywhere; fail-open try/catch with a logger.warn; never deny in v1 (advisory intercept only) |
-| Deadline vs the inline cap | The model's call has its own deadline | deadlineMs capped at 120000; overflow continues as a background job with the typed jobId handle (the cookbook's background branch) |
-| Stale-version races | A held file changes between insert and commit | The held version is checked at commit time; a mismatch HALTS the file (not the machine) and re-presents state - the halted process, protected and resumable |
-| The scope-of-ambition risk | "Eliminate bash entirely" cannot be enforced by this plugin alone | v1 is OPT-IN (enabled=false default), advisory interception, the layered-government roadmap: one control layer per plugin, fs/write-intent slot ownership being the future enforcement plugin's job |
-| KV-cache cost | A chattering state section fragments the prompt cache | The silence invariant (the state-machine document) as a HARD contract with smoke assertions |
+| Tool-schema limits                                                           | defineTool is flat-typed; no nested objects                                                                           | The flat field set (the schema document) + the `opfile` ingest escape hatch (the report grammar, no schema limit)                                                                                                                                                                                                                                                        |
+| Event-loop hazards                                                           | fs/observed listeners MUST be synchronous, side-effect-only; the emit is unguarded (filesystem.md:185)                | The machine's fs/observed listener only flips cells and enqueues; ALL async work (reads, previews, writes) runs at checkpoints or through ctx.jobs - the no-timers discipline verbatim                                                                                                                                                                                   |
+| Waterfall hazards                                                            | A throwing listener breaks the tool pipeline; missing next() swallows downstream behavior                             | next() FIRST everywhere; fail-open try/catch with a logger.warn; never deny in v1 (advisory intercept only)                                                                                                                                                                                                                                                              |
+| Deadline vs the inline cap                                                   | The model's call has its own deadline                                                                                 | deadlineMs capped at 120000; overflow continues as a background job with the typed jobId handle (the cookbook's background branch)                                                                                                                                                                                                                                       |
+| Stale-version races                                                          | A held file changes between insert and commit                                                                         | The held version is checked at commit time; a mismatch HALTS the file (not the machine) and re-presents state - the halted process, protected and resumable                                                                                                                                                                                                              |
+| The scope-of-ambition risk                                                   | "Eliminate bash entirely" cannot be enforced by this plugin alone                                                     | v1 is OPT-IN (enabled=false default), advisory interception, the layered-government roadmap: one control layer per plugin, fs/write-intent slot ownership being the future enforcement plugin's job                                                                                                                                                                      |
+| KV-cache cost                                                                | A chattering state section fragments the prompt cache                                                                 | The silence invariant (the state-machine document) as a HARD contract with smoke assertions                                                                                                                                                                                                                                                                              |

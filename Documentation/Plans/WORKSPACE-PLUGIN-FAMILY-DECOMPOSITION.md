@@ -26,61 +26,49 @@ statuses:
 
 # Workspace Plugin Family Decomposition - The Hub
 
-> THE FRAMING (the user's reframing, 2026-10-20 - binding): this is NOT
-> one single plugin - it is a TOTALLY NEW REFACTOR + REFRAMING OF THE
-> DEEPSEEK HARNESS ITSELF, through a workspace family of plugins POWERED
-> BY the DeepSeek Harness plugin family for PlayForm. The harness's
-> evolution: from the tool-dispatch shell (the commands that escape) to
-> the WORKSPACE-CENTRIC RUNTIME - where the workspace family (the 16+
-> packages) becomes the harness's new operating surface, built on the
-> existing @playform family (the factory's shared machinery, the
-> governors' silence, the ccr's compression, the coach's teaching, the
-> live-containers' assembly): the files live as processes in state, the
-> representations are managed, the edits never escape, the graph-like
-> view corrects itself like a living system - all through the agent's
-> actions.
+> THE FRAMING (the user's reframing, 2026-10-20 - binding): this is NOT one single plugin - it is a
+> TOTALLY NEW REFACTOR + REFRAMING OF THE DEEPSEEK HARNESS ITSELF, through a workspace family of
+> plugins POWERED BY the DeepSeek Harness plugin family for PlayForm. The harness's evolution: from
+> the tool-dispatch shell (the commands that escape) to the WORKSPACE-CENTRIC RUNTIME - where the
+> workspace family (the 16+ packages) becomes the harness's new operating surface, built on the
+> existing @playform family (the factory's shared machinery, the governors' silence, the ccr's
+> compression, the coach's teaching, the live-containers' assembly): the files live as processes in
+> state, the representations are managed, the edits never escape, the graph-like view corrects
+> itself like a living system - all through the agent's actions.
 >
-> The user's directives (2026-10-20, binding): everything distributed
-> across MANY PLUGINS - each commonality broken down, each separate
-> package named, very specific functionality, all orchestrating in the
-> WORKSPACE AGENT plugin. The OPERATIONAL VIEW (what the conversation
-> sees) is the workspace plugin's surface; the rest is INVISIBLE -
-> entirely handled by the core/plugin flow, itself governed by the
-> plugin harness (~/Developer/Documentation/Module/deepseek-harness).
+> The user's directives (2026-10-20, binding): everything distributed across MANY PLUGINS - each
+> commonality broken down, each separate package named, very specific functionality, all
+> orchestrating in the WORKSPACE AGENT plugin. The OPERATIONAL VIEW (what the conversation sees) is
+> the workspace plugin's surface; the rest is INVISIBLE - entirely handled by the core/plugin flow,
+> itself governed by the plugin harness (~/Developer/Documentation/Module/deepseek-harness).
 >
-> The granular per-package documents live in
-> Documentation/Plans/Workspace-Family/ (NAMING-BY-ROLE, WORKSPACE-AGENT,
-> OBSERVE, SEMANTICS, OPERATE, GOVERN, AUTHORITY, JOURNAL, LIVE, MERGE,
-> MONITOR, CONTEXT, APPROVE, AUDIT, EVIDENCE, GRAPH, REFLECT,
-> SHARED-LIBRARY, PHASED-DELIVERY, INVERSE-REPRESENTATION,
-> ANY-FILE-ADAPTERS, DATABASES-AND-CLOUD, PITFALLS-LOG, RFC-QUEUE,
-> RESEARCH-PLACES) - every map node preserved verbatim
-> there; this hub keeps the family map as the one-glance picture.
+> The granular per-package documents live in Documentation/Plans/Workspace-Family/ (NAMING-BY-ROLE,
+> WORKSPACE-AGENT, OBSERVE, SEMANTICS, OPERATE, GOVERN, AUTHORITY, JOURNAL, LIVE, MERGE, MONITOR,
+> CONTEXT, APPROVE, AUDIT, EVIDENCE, GRAPH, REFLECT, SHARED-LIBRARY, PHASED-DELIVERY,
+> INVERSE-REPRESENTATION, ANY-FILE-ADAPTERS, DATABASES-AND-CLOUD, PITFALLS-LOG, RFC-QUEUE,
+> RESEARCH-PLACES) - every map node preserved verbatim there; this hub keeps the family map as the
+> one-glance picture.
 
 ## The naming by role (refined 2026-10-20 - they are NOT all hooks)
 
-The family's existing conventions distinguish the package roles; the
-blanket `hook-` prefix was wrong for the service + library + client
-members:
+The family's existing conventions distinguish the package roles; the blanket `hook-` prefix was
+wrong for the service + library + client members:
 
-- `plugin-dsh-*` = the SERVICE PROVIDERS + the agent (the factory
-  precedent - the shared services the others consume).
+- `plugin-dsh-*` = the SERVICE PROVIDERS + the agent (the factory precedent - the shared services
+  the others consume).
 - `hook-dsh-*` = the EVENT HOOKS (the listeners the events fire).
 - `client-dsh-*` = the UI/CLIENT halves (the browser half).
-- `lib-dsh-*` = the LIBRARIES (no Config/apply; the consumers keep their
-  own ledger strings, tools, configs; the module leaves never absorbed).
-- The TOOLS live inside their owning hooks (per the family's pattern:
-  the ccr registers ccr_retrieve) - the operate/merge register the
-  workspace tools.
+- `lib-dsh-*` = the LIBRARIES (no Config/apply; the consumers keep their own ledger strings, tools,
+  configs; the module leaves never absorbed).
+- The TOOLS live inside their owning hooks (per the family's pattern: the ccr registers
+  ccr_retrieve) - the operate/merge register the workspace tools.
 - The twins (Classic + ETS) per the family contract.
 
-**Applied 2026-10-21** (the existing family, the workspace family's
-precedent): the core took the `lib-` prefix (`lib-dsh-core`, the library
-role), the file normalizer took the `plugin-` prefix
-(`plugin-dsh-normalize-file`, the tool plugin role), and the planned
-panel packages took the `client-` prefix (`client-dsh-panel-family` +
-`client-dsh-panel-family-host`). The four role prefixes are the whole
-contract - plugin, hook, client, lib. The original names remain in git
+**Applied 2026-10-21** (the existing family, the workspace family's precedent): the core took the
+`lib-` prefix (`lib-dsh-core`, the library role), the file normalizer took the `plugin-` prefix
+(`plugin-dsh-normalize-file`, the tool plugin role), and the planned panel packages took the
+`client-` prefix (`client-dsh-panel-family` + `client-dsh-panel-family-host`). The four role
+prefixes are the whole contract - plugin, hook, client, lib. The original names remain in git
 history.
 
 ## The family map
@@ -154,151 +142,125 @@ history.
 
 ## The orchestration contract
 
-- THE WORKSPACE AGENT is the ONLY conversational surface: the agent
-  addresses the workspace (open/insert/commit/pause/resume/close/state +
-  the graph-like projection). Every hook answers through it.
-- THE INVISIBLE FLOW: the observe stamps -> the semantics resolve -> the
-  operate proposes -> the govern gates -> the authority licenses -> the
-  approve binds -> the merge commits (through Factory.Write) -> the
-  journal records -> the audit lines -> the live view presents - all
-  evented by the plugin system (fs/observed, the tools' waterfalls, the
-  lifecycle), all governed by the plugin harness.
-- The distribution law: each commonality a separate package (never one
-  batch-edit monolith); each package's Config + ledger strings + tools
-  its own; the recursion prevention: every event carries the operation
-  identifier, the parent identifier, the event category.
+- THE WORKSPACE AGENT is the ONLY conversational surface: the agent addresses the workspace
+  (open/insert/commit/pause/resume/close/state + the graph-like projection). Every hook answers
+  through it.
+- THE INVISIBLE FLOW: the observe stamps -> the semantics resolve -> the operate proposes -> the
+  govern gates -> the authority licenses -> the approve binds -> the merge commits (through
+  Factory.Write) -> the journal records -> the audit lines -> the live view presents - all evented
+  by the plugin system (fs/observed, the tools' waterfalls, the lifecycle), all governed by the
+  plugin harness.
+- The distribution law: each commonality a separate package (never one batch-edit monolith); each
+  package's Config + ledger strings + tools its own; the recursion prevention: every event carries
+  the operation identifier, the parent identifier, the event category.
 
 ## The phased delivery (the ablation-aligned order)
 
-1. lib-dsh-workspace-live + the observe + the operate + the merge (the
-   v1 engine: the schema, the state machine, the per-file commits, the
-   smokes with the fake clocks).
-2. The govern + the authority + the journal (the safety: the
-   authorization, the leases/evictions, the recovery).
-3. The workspace agent's operational view (the graph-like projection +
-   the attention projection via the context).
-4. The semantics + the evidence + the approve (the reflective rename/
-   connect/replace + the validation objects + the exact approvals).
-5. The monitor + the live + the audit (the watch/sweep + the live view +
-   the accountability).
-6. The graph + the reflect (the later stages: the weighted-graph carry +
-   the code-block reflective API - the State:State -> State:Operational
-   reference case).
+1. lib-dsh-workspace-live + the observe + the operate + the merge (the v1 engine: the schema, the
+   state machine, the per-file commits, the smokes with the fake clocks).
+2. The govern + the authority + the journal (the safety: the authorization, the leases/evictions,
+   the recovery).
+3. The workspace agent's operational view (the graph-like projection + the attention projection via
+   the context).
+4. The semantics + the evidence + the approve (the reflective rename/ connect/replace + the
+   validation objects + the exact approvals).
+5. The monitor + the live + the audit (the watch/sweep + the live view + the accountability).
+6. The graph + the reflect (the later stages: the weighted-graph carry + the code-block reflective
+   API - the State:State -> State:Operational reference case).
 
 ## The visibility rule
 
-What the conversation sees = the workspace's operational view (the graph-
-like, systematically self-correcting). Everything else (the stamps, the
-indexes, the validations, the licenses, the journals, the gates) is the
-invisible plugin flow - the harness-governed machinery - until an event
-surfaces it. THE LIVING SYSTEM: the graph interacts with itself through
-the agent's actions - the corrections propagate, the dependencies
-invalidate, the evictions settle - all evented, all governed.
+What the conversation sees = the workspace's operational view (the graph- like, systematically
+self-correcting). Everything else (the stamps, the indexes, the validations, the licenses, the
+journals, the gates) is the invisible plugin flow - the harness-governed machinery - until an event
+surfaces it. THE LIVING SYSTEM: the graph interacts with itself through the agent's actions - the
+corrections propagate, the dependencies invalidate, the evictions settle - all evented, all
+governed.
+
 ## The inverse representation (the user's paradigm, 2026-10-20 - binding)
 
-THE CORE IDEA: the workspace is an INVERSE REPRESENTATION of the standard
-UNIX filesystem. THE STANDARD: the files are the passive bytes; the tools
-are the active operators. THE INVERSE: the files are the ACTIVE PROCESSES
-(the knowledge graphs, the halted processes), and the harness's managed
-state is the substrate - the representation INVERTS the roles: the file
-holds the process, the state holds the file.
+THE CORE IDEA: the workspace is an INVERSE REPRESENTATION of the standard UNIX filesystem. THE
+STANDARD: the files are the passive bytes; the tools are the active operators. THE INVERSE: the
+files are the ACTIVE PROCESSES (the knowledge graphs, the halted processes), and the harness's
+managed state is the substrate - the representation INVERTS the roles: the file holds the process,
+the state holds the file.
 
 ### The three regimes (the user's delineation, 2026-10-20 - binding)
 
-- THE PHYSICAL REGIME (the OS): a file on any UNIX system IS a halted
-  process - the dormant default - already true everywhere (the
-  file-as-halted-process is NOT our invention).
-- THE EXECUTION REGIME (the language runtimes): the same file becomes a
-  RUNNING process when a runtime executes it - the OS's own process
-  notion - the EXECUTION axis.
-- THE WORKSPACE REGIME (our plugin family - NEW): enabling the plugin
-  makes the file an OPERABLE process - the managed representation (the
-  Process<File> cells: observed/running/halted/done/errored + the
-  workspace verbs + the governance + the knowledge graph). What we build
-  = the workspace regime - THE THIRD AXIS.
-- THE CONTRADICTIONS RESOLVED: the plugin creates the OPERABILITY, not
-  the process-ness. The two "running" senses are DIFFERENT AXES (the OS
-  execution vs the workspace cell - orthogonal, never exclusive): a .rs
-  file can be halted on disk + running under rustc + operable in the
-  workspace SIMULTANEOUSLY. The operational mode determines the regime;
-  what exists today = the physical + execution regimes; what we build =
-  the workspace regime.
+- THE PHYSICAL REGIME (the OS): a file on any UNIX system IS a halted process - the dormant
+  default - already true everywhere (the file-as-halted-process is NOT our invention).
+- THE EXECUTION REGIME (the language runtimes): the same file becomes a RUNNING process when a
+  runtime executes it - the OS's own process notion - the EXECUTION axis.
+- THE WORKSPACE REGIME (our plugin family - NEW): enabling the plugin makes the file an OPERABLE
+  process - the managed representation (the Process<File> cells:
+  observed/running/halted/done/errored + the workspace verbs + the governance + the knowledge
+  graph). What we build = the workspace regime - THE THIRD AXIS.
+- THE CONTRADICTIONS RESOLVED: the plugin creates the OPERABILITY, not the process-ness. The two
+  "running" senses are DIFFERENT AXES (the OS execution vs the workspace cell - orthogonal, never
+  exclusive): a .rs file can be halted on disk + running under rustc + operable in the workspace
+  SIMULTANEOUSLY. The operational mode determines the regime; what exists today = the physical +
+  execution regimes; what we build = the workspace regime.
 
 ### The any-file adapters (NOT just .ts)
 
-The system applies to ANY TYPE of halted process: the .ts files (the
-TypeScript language service), the .rs files (the rust-analyzer), the
-.docx files (the OOXML/word processing), the images, the binaries, the
-data files - THINK ADAPTERS, THINK GRAPHS, THINK METHODOLOGY: each file
-type gets its adapter that produces the file's KNOWLEDGE GRAPH (the
-blocks + the references + the semantics + the dependencies). THE MAIN
-EVIDENCE = THE CODE BLOCK (the universal atom - start small with the
-code blocks + expand from there). Each file = a knowledge graph, managed
-by code fully (powered by the DeepSeek Harness). The adapter's contract:
-observe (the file's representation), propose (the operations the type
-supports - rename/connect/replace/transform per the type's semantics),
-reconcile (the applied results).
+The system applies to ANY TYPE of halted process: the .ts files (the TypeScript language service),
+the .rs files (the rust-analyzer), the .docx files (the OOXML/word processing), the images, the
+binaries, the data files - THINK ADAPTERS, THINK GRAPHS, THINK METHODOLOGY: each file type gets its
+adapter that produces the file's KNOWLEDGE GRAPH (the blocks + the references + the semantics + the
+dependencies). THE MAIN EVIDENCE = THE CODE BLOCK (the universal atom - start small with the code
+blocks + expand from there). Each file = a knowledge graph, managed by code fully (powered by the
+DeepSeek Harness). The adapter's contract: observe (the file's representation), propose (the
+operations the type supports - rename/connect/replace/transform per the type's semantics), reconcile
+(the applied results).
 
 ### The databases + the cloud (the harness lifted)
 
-DIFFERENT DATABASES can power and connect the representation - the
-inverse representation is storage-agnostic: the local fs/observed events
-OR the remote block-based feeds - the harness can be LIFTED ONTO THE
-CLOUD and fed data other than the normal files - the "artifact-like",
-block-based, powered by the cloud or a remote system. The representation
-store, the semantic index, the evidence objects, the journals all have
-their storage adapters (the SQLite, the Postgres, the object stores, the
-remote block stores) - the events' sponsorship extends to the remote
-sources (the remote blocks emit their events through the same event
-system).
+DIFFERENT DATABASES can power and connect the representation - the inverse representation is
+storage-agnostic: the local fs/observed events OR the remote block-based feeds - the harness can be
+LIFTED ONTO THE CLOUD and fed data other than the normal files - the "artifact-like", block-based,
+powered by the cloud or a remote system. The representation store, the semantic index, the evidence
+objects, the journals all have their storage adapters (the SQLite, the Postgres, the object stores,
+the remote block stores) - the events' sponsorship extends to the remote sources (the remote blocks
+emit their events through the same event system).
 
 ### The pitfalls to log (from the day's work + the design's hazards)
 
-- The fs/observed chain is filesystem-centric: the remote blocks' events
-  need the event sponsorship's extension - the local-only assumptions in
-  the governors' write-path + the ledger strings.
-- The adapter coverage gaps: the binary files, the compound documents
-  (the docx's OOXML - the zip-based XML trees!), the large files - the
-  knowledge-graph extraction's cost + the freshness.
-- The semantic uncertainty per type: the rename means different things
-  per format (the .ts symbol vs the .docx displayed text vs the .rs
-  item) - the refusal-to-guess rule applies per adapter.
-- The representation's staleness: the external edits without the events
-  (the editors, the git operations, the remote syncs) - the qualified
-  freshness + the digest-based reconciliation.
-- The cloud/remote latency + the authentication + the version
-  compatibility - the authenticated fallback rule.
-- The inverse representation's own failure modes: the graph cycles, the
-  dangling references, the evicted states mid-edit, the crash between
-  the commit and the journal.
-- The license/weight conflation: the priority, the retention, the
-  permission never interchangeable.
+- The fs/observed chain is filesystem-centric: the remote blocks' events need the event
+  sponsorship's extension - the local-only assumptions in the governors' write-path + the ledger
+  strings.
+- The adapter coverage gaps: the binary files, the compound documents (the docx's OOXML - the
+  zip-based XML trees!), the large files - the knowledge-graph extraction's cost + the freshness.
+- The semantic uncertainty per type: the rename means different things per format (the .ts symbol vs
+  the .docx displayed text vs the .rs item) - the refusal-to-guess rule applies per adapter.
+- The representation's staleness: the external edits without the events (the editors, the git
+  operations, the remote syncs) - the qualified freshness + the digest-based reconciliation.
+- The cloud/remote latency + the authentication + the version compatibility - the authenticated
+  fallback rule.
+- The inverse representation's own failure modes: the graph cycles, the dangling references, the
+  evicted states mid-edit, the crash between the commit and the journal.
+- The license/weight conflation: the priority, the retention, the permission never interchangeable.
 
 ### The future RFC queue
 
-- THE ADAPTER INTERFACE RFC: the any-file adapter's contract (observe/
-  propose/reconcile + the per-type operation vocabulary + the uncertainty
-  declaration).
-- THE KNOWLEDGE-GRAPH SCHEMA RFC: the block-based graph's canonical
-  schema (the blocks, the references, the semantics, the evidence).
-- THE INVERSE-REPRESENTATION NOMENCLATURE RFC: the new vocabulary (the
-  halted process, the representation, the license, the eviction, the
-  block, the knowledge graph) - the "standard for working inside a
-  workspace for files".
-- THE REMOTE-BLOCK PROTOCOL RFC: the cloud/remote block-based data feeds'
-  protocol (the events, the blocks, the authentication, the fallback).
-- THE STORAGE-ADAPTER RFC: the different databases powering the
-  representation (the local/remote, the SQLite/Postgres/object stores).
-- THE HARNESS-INTEGRATION RFCs: the total modification of the harness
-  according to the new nomenclature - each discovered integration seam
-  (from the harness's docs) becomes an RFC.
+- THE ADAPTER INTERFACE RFC: the any-file adapter's contract (observe/ propose/reconcile + the
+  per-type operation vocabulary + the uncertainty declaration).
+- THE KNOWLEDGE-GRAPH SCHEMA RFC: the block-based graph's canonical schema (the blocks, the
+  references, the semantics, the evidence).
+- THE INVERSE-REPRESENTATION NOMENCLATURE RFC: the new vocabulary (the halted process, the
+  representation, the license, the eviction, the block, the knowledge graph) - the "standard for
+  working inside a workspace for files".
+- THE REMOTE-BLOCK PROTOCOL RFC: the cloud/remote block-based data feeds' protocol (the events, the
+  blocks, the authentication, the fallback).
+- THE STORAGE-ADAPTER RFC: the different databases powering the representation (the local/remote,
+  the SQLite/Postgres/object stores).
+- THE HARNESS-INTEGRATION RFCs: the total modification of the harness according to the new
+  nomenclature - each discovered integration seam (from the harness's docs) becomes an RFC.
 
 ### The places to research (ALWAYS refer the subsequent agents)
 
-- ~/Developer/Documentation/Module/deepseek-harness (the PRIMARY source -
-  the subsequent agents read it to never discard any single functionality
-  + to search for more integration ways + to totally modify the harness
-  per the new nomenclature).
+- ~/Developer/Documentation/Module/deepseek-harness (the PRIMARY source - the subsequent agents read
+  it to never discard any single functionality
+    - to search for more integration ways + to totally modify the harness per the new nomenclature).
 - The family's own docs (the Archive + the Skills' references).
 - The LSP (the language adapters' seam - the WorkspaceEdit).
 - The OOXML spec (the docx adapter).
@@ -309,36 +271,27 @@ system).
 
 ## The alternative framings (the naming candidates - the user's exploration, 2026-10-20)
 
-The reframed harness's identity can be expressed in many ways - each
-candidate emphasizes a different facet of the inverse representation:
+The reframed harness's identity can be expressed in many ways - each candidate emphasizes a
+different facet of the inverse representation:
 
-- THE DATA-CENTRIC EDITOR (the user's example): the files as DATA held
-  in state - the editor operates on the data, not the disk.
-- THE WORKSPACE-CENTRIC RUNTIME: the workspace as the primary unit of
-  interaction (the earlier framing).
-- THE REPRESENTATION-FIRST WORKSPACE: the managed representations over
-  the raw disk (the research's framing).
-- THE LIVING FILESYSTEM: the files as the active processes - the
-  reversed UNIX view.
-- THE PROCESS-CENTRIC HARNESS: the halted processes as the first-class
-  citizens (Process<Halted>).
-- THE INVERSE FILESYSTEM: the roles inverted - the files act, the state
-  holds.
-- THE KNOWLEDGE-GRAPH WORKSPACE: each file = a knowledge graph, managed
-  by code.
-- THE BLOCK-BASED EDITOR: the code blocks as the universal atom + the
-  evidence.
-- THE STATE-FIRST EDITOR: the state machine as the sole filesystem
-  surface - the edits never escape.
-- THE GOVERNED WORKSPACE: the harness as the enforcement boundary - the
-  proposals become the effects only through the gates.
-- THE SEMANTIC WORKSPACE: the symbols + the references + the semantics
-  over the text.
-- THE HARNESS EDITOR: the harness's powers as the DSL the agent
-  operates.
-- THE EVENTED EDITOR: the state machine sponsored/tracked/evented by
-  the event system.
+- THE DATA-CENTRIC EDITOR (the user's example): the files as DATA held in state - the editor
+  operates on the data, not the disk.
+- THE WORKSPACE-CENTRIC RUNTIME: the workspace as the primary unit of interaction (the earlier
+  framing).
+- THE REPRESENTATION-FIRST WORKSPACE: the managed representations over the raw disk (the research's
+  framing).
+- THE LIVING FILESYSTEM: the files as the active processes - the reversed UNIX view.
+- THE PROCESS-CENTRIC HARNESS: the halted processes as the first-class citizens (Process<Halted>).
+- THE INVERSE FILESYSTEM: the roles inverted - the files act, the state holds.
+- THE KNOWLEDGE-GRAPH WORKSPACE: each file = a knowledge graph, managed by code.
+- THE BLOCK-BASED EDITOR: the code blocks as the universal atom + the evidence.
+- THE STATE-FIRST EDITOR: the state machine as the sole filesystem surface - the edits never escape.
+- THE GOVERNED WORKSPACE: the harness as the enforcement boundary - the proposals become the effects
+  only through the gates.
+- THE SEMANTIC WORKSPACE: the symbols + the references + the semantics over the text.
+- THE HARNESS EDITOR: the harness's powers as the DSL the agent operates.
+- THE EVENTED EDITOR: the state machine sponsored/tracked/evented by the event system.
 
-THE RATIFICATION: the final name is the user's choice (like the package
-namings) - the candidates above are the exploration's output; the chosen
-name becomes the reframed harness's identity in all the docs.
+THE RATIFICATION: the final name is the user's choice (like the package namings) - the candidates
+above are the exploration's output; the chosen name becomes the reframed harness's identity in all
+the docs.

@@ -2,8 +2,7 @@
 
 Status: **IMPLEMENTED and LIVE-VERIFIED.**
 
-This document ships inside the bundle as `SCHEME.md`
-(alongside the usage README).
+This document ships inside the bundle as `SCHEME.md` (alongside the usage README).
 
 **v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR — the family's shared
 machinery is consumed from the injected `@playform/plugin-dsh-factory` service (v0.1.0),
@@ -23,13 +22,13 @@ from the published seam packages at the HOST's exact versions —
 types package — its vocabulary lives in the seam packages; installing the CLI as a devDependency
 would drag the whole app into the bundle).
 
-These types now cover the event payloads
-(`FsTarget`/`FsObservation` with the `fs/observed` `Context`/`Events` augmentation), the Config
-schema, and the service calls (`ctx.fs.readText/writeText/stat` signatures including the sandbox
-policy arg, the probed `ctx.subprocess` spawn seam).
+These types now cover the event payloads (`FsTarget`/`FsObservation` with the `fs/observed`
+`Context`/`Events` augmentation), the Config schema, and the service calls
+(`ctx.fs.readText/writeText/stat` signatures including the sandbox policy arg, the probed
+`ctx.subprocess` spawn seam).
 
-The runtime behavior, the ledger strings, and
-the silence invariant are byte-identical to the verified v0.4.x line.
+The runtime behavior, the ledger strings, and the silence invariant are byte-identical to the
+verified v0.4.x line.
 
 **Verified corrections folded in (2026-10-03, each cost live debugging time):**
 
@@ -58,14 +57,12 @@ The intent waterfall carries only a version guard (`{kind:"createIfAbsent"}` |
 
 The write content travels only in the tool's own arguments → `ctx.fs.writeText`.
 
-The only hook that
-runs _after_ content is on disk is the synchronous broadcast `fs/observed`.
+The only hook that runs _after_ content is on disk is the synchronous broadcast `fs/observed`.
 
-Hence the post-hoc
-rewrite design.
+Hence the post-hoc rewrite design.
 
-(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was
-the fatal bug of the previous attempt.)
+(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was the fatal bug of
+the previous attempt.)
 
 ## 1. The domain — every harness write path
 
@@ -73,8 +70,7 @@ the fatal bug of the previous attempt.)
 `dsh-tool-str-replace-editor`), for **every** write/edit/read issued through the harness fs tools,
 by **any** thread: main agent, subagent, workflow child.
 
-The fs _service_ and every other writer
-(bash, git, ncu, plain `node:fs`) dispatch **nothing**.
+The fs _service_ and every other writer (bash, git, ncu, plain `node:fs`) dispatch **nothing**.
 
 Write paths `𝒲 = { write tool, edit tool, str-replace-editor, any tool issuing ctx.fs.writeText }`.
 
@@ -88,22 +84,21 @@ This module is a FACTORY MODULE (the family's shared machinery lives in the inje
 `@playform/plugin-dsh-factory` service — its SCHEME.md is the machinery contract; this section is
 the MODULE contract).
 
-`inject: ["fs", "pluginFactory"]`; the built Target never imports the factory
-— the service resolves from the profile through the injector, and the module's compilation declares
-the contract structurally (Source/Interface/Factory.ts).
+`inject: ["fs", "pluginFactory"]`; the built Target never imports the factory — the service resolves
+from the profile through the injector, and the module's compilation declares the contract
+structurally (Source/Interface/Factory.ts).
 
-What the factory absorbed from v0.4 of this
-bundle: the ledger (Append), the P5 journal, the exclusion match, the registry walk-up + sidecar
-parse, the union keep-list (ResolvePolicy), the g1 gate set, the guarded write (GuardedWrite — the
-P4 fence + Stash pre-registration), the P₃/U₂ refresh, the detached contained continuation
-scaffolding (Continue: Inflight, readText, ResolvePolicy, write, message, refresh), the State
-builder, the wiring and the lifecycle effects (P1/P2/P5).
+What the factory absorbed from v0.4 of this bundle: the ledger (Append), the P5 journal, the
+exclusion match, the registry walk-up + sidecar parse, the union keep-list (ResolvePolicy), the g1
+gate set, the guarded write (GuardedWrite — the P4 fence + Stash pre-registration), the P₃/U₂
+refresh, the detached contained continuation scaffolding (Continue: Inflight, readText,
+ResolvePolicy, write, message, refresh), the State builder, the wiring and the lifecycle effects
+(P1/P2/P5).
 
-What stayed module-owned: the transform
-(the chain pass: decode → Satisfy → the refusal guard, Function/Transform), the update engine
-(Function/Follow → Dispatch → Execute → Update/* → Settle), the FIRST-WINS update-policy path pick
-(Function/Resolve — engine input, NOT the factory's union keep-list discovery), and every ledger
-string.
+What stayed module-owned: the transform (the chain pass: decode → Satisfy → the refusal guard,
+Function/Transform), the update engine (Function/Follow → Dispatch → Execute → Update/* → Settle),
+the FIRST-WINS update-policy path pick (Function/Resolve — engine input, NOT the factory's union
+keep-list discovery), and every ledger string.
 
 - **Context discovery (no roots)** — `Factory.Discover`/`Factory.Parse`: the nearest `registry.json`
   is found by walking UP from the written file's directory (stopping at `node_modules` boundaries
@@ -195,15 +190,13 @@ Proof from the write tool (`dsh-tool-fs/lib/index.js:583-597`): the result
 
 No checksum.
 
-A post-emit rewrite is invisible to the
-envelope.
+A post-emit rewrite is invisible to the envelope.
 
 **Required hygiene (the leak vector)**: the observation-policy (active via `dsh-base` patch) records
 `{kind:"present", version}` per `owner = actor.agent.session`.
 
-If G mutates the file without
-refreshing the record, the author's next guarded write/edit fails **FS_STALE_VERSION** — an error
-the model _sees_ → notification leak.
+If G mutates the file without refreshing the record, the author's next guarded write/edit fails
+**FS_STALE_VERSION** — an error the model _sees_ → notification leak.
 
 Therefore G must, after every mutation:
 
@@ -307,8 +300,8 @@ Non-edges (proven absent, marked ∄):
 The exported `Config` schema validates and fills every default at load (invalid configuration fails
 loudly).
 
-New entries are declared with `insert:` — a bare `id:` row patches an existing entry and
-the loader rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
+New entries are declared with `insert:` — a bare `id:` row patches an existing entry and the loader
+rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
 
 ```yaml
 - insert:
@@ -349,10 +342,10 @@ The three plugins coexist on `fs/observed`, each gating on its own basename (`pa
 `hook-dsh-package-pinner.log` / `hook-dsh-cargo-governor.log`); the fs/observed trigger law and the
 exclusion-first rule are shared.
 
-Composition semantics: **pin → bump-exact** (a fully pinned
-manifest leaves the npm governor's update stage nothing to do; its chain pass may still
-re-canonicalize chain pins to `^resolved`); **chain > strip > normalize** (the cargo module's
-precedence); **keep-list wins** (the pinner's `pin-policy.json` protects ranges as authored; the
-cargo module's keep-list — the same sidecar — wins over normalization, never over the chain).
+Composition semantics: **pin → bump-exact** (a fully pinned manifest leaves the npm governor's
+update stage nothing to do; its chain pass may still re-canonicalize chain pins to `^resolved`);
+**chain > strip > normalize** (the cargo module's precedence); **keep-list wins** (the pinner's
+`pin-policy.json` protects ranges as authored; the cargo module's keep-list — the same sidecar —
+wins over normalization, never over the chain).
 
 Activation of one never implies another; the user decides.

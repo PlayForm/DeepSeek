@@ -1,31 +1,28 @@
 # The Current State
 
-The repository states its own condition in five places. Read them in this
-order, and read only what the task needs.
+The repository states its own condition in five places. Read them in this order, and read only what
+the task needs.
 
 ## 1. `README.md` - the family's public state
 
-What it holds: the mission, the install routes, the two release groups, the
-package descriptions, the tools, the configuration surface, the smoke
-table, the development scripts, the troubleshooting notes.
+What it holds: the mission, the install routes, the two release groups, the package descriptions,
+the tools, the configuration surface, the smoke table, the development scripts, the troubleshooting
+notes.
 
-Known drift: the header still says twelve packages and 733/746 assertions,
-and the layout section still says 12 packages and 21 site pages. The tree
-has 15 Classic packages, 15 EffectTS packages plus the base, and 25 site
-pages. Treat the counts as stale until verified against the directories.
+Known drift: the header still says twelve packages and 733/746 assertions, and the layout section
+still says 12 packages and 21 site pages. The tree has 15 Classic packages, 15 EffectTS packages
+plus the base, and 25 site pages. Treat the counts as stale until verified against the directories.
 
 ## 2. `Documentation/INDEX.md` - the documentation map
 
-What it holds: the tree, the registry of every document by section, the
-granular-split history, and the untouched trees.
+What it holds: the tree, the registry of every document by section, the granular-split history, and
+the untouched trees.
 
-Use it to find a document without listing the tree. Do not read it end to
-end.
+Use it to find a document without listing the tree. Do not read it end to end.
 
 ## 3. `Documentation/Plans/` - the state of the work
 
-Every plan carries YAML frontmatter with `status`. The statuses are the
-routing signal:
+Every plan carries YAML frontmatter with `status`. The statuses are the routing signal:
 
 | Status       | Meaning                                              |
 | ------------ | ---------------------------------------------------- |
@@ -36,39 +33,37 @@ routing signal:
 | `open`       | A question, not a commitment                         |
 
 Active at the last check: `DSH-MONOREPO-PLAN.md`, `TOMORROW-REVIEW.md`,
-`BATCH-EDIT-TOOL-FEATURE.md`, `BATCH-EDIT-TOOL-SUGGESTIONS.md`, and the
-active Batch-Edit-Tool topics. Verify:
+`BATCH-EDIT-TOOL-FEATURE.md`, `BATCH-EDIT-TOOL-SUGGESTIONS.md`, and the active Batch-Edit-Tool
+topics. Verify:
 
 ```sh
 grep -H '^status: active' Documentation/Plans/*.md
 ```
 
-The UI-Family, Workspace-Family, and orchestration plugin sets are
-`planned`. They are designs, not code. Do not put them on the site or in a
-skill as if they ship.
+The UI-Family, Workspace-Family, and orchestration plugin sets are `planned`. They are designs, not
+code. Do not put them on the site or in a skill as if they ship.
 
 ## 4. `Documentation/Guides/` - the deep manuals
 
-| Guide                          | Read when                                      |
-| ------------------------------ | ---------------------------------------------- |
-| `Governor-SCHEME.md`           | The governor's design and the method ledger    |
-| `Governor-CASCADES.md`         | The cascade rules and the escalation paths     |
-| `Governor-TRIO-GRAPH.md`       | How the three governance packages interact     |
-| `Governor-README.md`           | The operator's view of the trio                |
-| `DOGFOOD-TESTING.md`           | Running the family against itself              |
-| `LIVE-TESTING-METHODOLOGY.md`  | The live battery and its fixtures              |
-| `DSH-REGISTRY-LISTING.md`      | The npm roster and the publish gates           |
+| Guide                         | Read when                                   |
+| ----------------------------- | ------------------------------------------- |
+| `Governor-SCHEME.md`          | The governor's design and the method ledger |
+| `Governor-CASCADES.md`        | The cascade rules and the escalation paths  |
+| `Governor-TRIO-GRAPH.md`      | How the three governance packages interact  |
+| `Governor-README.md`          | The operator's view of the trio             |
+| `DOGFOOD-TESTING.md`          | Running the family against itself           |
+| `LIVE-TESTING-METHODOLOGY.md` | The live battery and its fixtures           |
+| `DSH-REGISTRY-LISTING.md`     | The npm roster and the publish gates        |
 
-The registry listing guide is dated 2026-10-10 and still says "never
-published". Verify the publish state before repeating any claim about npm.
+The registry listing guide is dated 2026-10-10 and still says "never published". Verify the publish
+state before repeating any claim about npm.
 
 ## 5. `Documentation/Reports/` and `Documentation/Researches/`
 
-Reports are audits and diagnoses (case review, commonalization audit,
-file-content flavor design, fs/observed delivery, P5 v2 diagnosis).
-Researches are the research outputs behind the plans (family interactions,
-harness UI, normalize overpass, tool coach). Read them when a plan's
-rationale is not enough.
+Reports are audits and diagnoses (case review, commonalization audit, file-content flavor design,
+fs/observed delivery, P5 v2 diagnosis). Researches are the research outputs behind the plans (family
+interactions, harness UI, normalize overpass, tool coach). Read them when a plan's rationale is not
+enough.
 
 ## The source of truth, in order
 
@@ -84,7 +79,6 @@ Documents lag; the tree does not. A count in prose is a claim, not a fact.
 
 ## The reading timebox
 
-For a fresh session: README (first 100 lines and the smoke table), INDEX
-(section headings), the active plans named by the task, and one guide.
-That is orientation. Everything else is task-specific and waits until the
-task names it.
+For a fresh session: README (first 100 lines and the smoke table), INDEX (section headings), the
+active plans named by the task, and one guide. That is orientation. Everything else is task-specific
+and waits until the task names it.

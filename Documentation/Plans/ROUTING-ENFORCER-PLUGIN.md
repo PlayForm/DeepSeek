@@ -7,51 +7,44 @@ status: planned
 registry: Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md
 index: Documentation/INDEX.md
 statuses:
-  - name: the routing-enforcer plugin (the silent auto-routing)
-    state: open
-    evidence: this document only - spec, no package
-  - name: the policy reader and keyword table
-    state: open
-    evidence: the spec's mechanism
-  - name: the manual routing discipline (the interim)
-    state: implemented
-    evidence: the task-routing skill - enforced by convention
+    - name: the routing-enforcer plugin (the silent auto-routing)
+      state: open
+      evidence: this document only - spec, no package
+    - name: the policy reader and keyword table
+      state: open
+      evidence: the spec's mechanism
+    - name: the manual routing discipline (the interim)
+      state: implemented
+      evidence: the task-routing skill - enforced by convention
 ---
 
 # ROUTING-ENFORCER PLUGIN - the silent auto-routing plan (dedicated 2026-10-09)
 
 > The user's mandate: prevent the orchestrator from slipping out of the model-routing discipline.
-> The choice happens SILENTLY.
-> The plugin automatically chooses the behavior.
-> The orchestrator is not even bothered and does not have to know about the model configuration.
-> The model configuration is the USER's responsibility.
-> He configures it in ~/.dsh.
-> The plugin enforces his configuration, model-independently.
-> It sits NEXT TO the BATCH-STATE plugin (Documentation/Plans/BATCH-STATE-PLUGIN.md).
-> BOTH contribute to the orchestration layer.
+> The choice happens SILENTLY. The plugin automatically chooses the behavior. The orchestrator is
+> not even bothered and does not have to know about the model configuration. The model configuration
+> is the USER's responsibility. He configures it in ~/.dsh. The plugin enforces his configuration,
+> model-independently. It sits NEXT TO the BATCH-STATE plugin
+> (Documentation/Plans/BATCH-STATE-PLUGIN.md). BOTH contribute to the orchestration layer.
 
 ## 0. The problem (the incident)
 
-The task-routing skill mandates: ALWAYS pass `provider`/`model`/`reasoning_effort` explicitly.
-NEVER rely on the child defaults.
-The harness's omission behavior inherits the PARENT route (the DeepSeek V4 Flash - the expensive lane).
-The orchestrator applied the explicit routing to ONE wave of launches.
-It then SLIPPED back to the omission on the next wave.
-The recent idle lanes ran on the DeepSeek route (the sunk cost).
-The behavioral discipline (the skills, the prompts) CAN slip.
-The prevention must be SYSTEMIC + SILENT.
+The task-routing skill mandates: ALWAYS pass `provider`/`model`/`reasoning_effort` explicitly. NEVER
+rely on the child defaults. The harness's omission behavior inherits the PARENT route (the DeepSeek
+V4 Flash - the expensive lane). The orchestrator applied the explicit routing to ONE wave of
+launches. It then SLIPPED back to the omission on the next wave. The recent idle lanes ran on the
+DeepSeek route (the sunk cost). The behavioral discipline (the skills, the prompts) CAN slip. The
+prevention must be SYSTEMIC + SILENT.
 
 ## 1. The design principle (the user's words)
 
-- The plugin CHOOSES THE BEHAVIOR AUTOMATICALLY.
-  NO prompting, NO reminder, NO orchestrator awareness.
-  The launch's omission is NOT an error to surface.
-  It is the DEFAULT the plugin resolves.
-- The user OWNS the configuration (the ~/.dsh task-routing policy - the roles, the models, the efforts, the allowed set).
-  The plugin reads HIS config + enforces it.
-- The orchestrator is NOT bothered.
-  The launch works the same.
-  The plugin silently routes it per the user's policy.
+- The plugin CHOOSES THE BEHAVIOR AUTOMATICALLY. NO prompting, NO reminder, NO orchestrator
+  awareness. The launch's omission is NOT an error to surface. It is the DEFAULT the plugin
+  resolves.
+- The user OWNS the configuration (the ~/.dsh task-routing policy - the roles, the models, the
+  efforts, the allowed set). The plugin reads HIS config + enforces it.
+- The orchestrator is NOT bothered. The launch works the same. The plugin silently routes it per the
+  user's policy.
 
 ## 2. The architecture: `@playform/plugin-dsh-route` (a new family plugin)
 
@@ -61,74 +54,77 @@ The prevention must be SYSTEMIC + SILENT.
 Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 ```
 
-- The input: the launch request (the task type - or the omission), the USER POLICY.
-  The USER POLICY covers the agent-loop config: coder = GLM-5.3-Flash high, explorer = GLM-5.3-Flash low, planner = DeepSeek V4 Flash max; the allowed set; the task-type rules from the task-routing skill.
-  The task-type rules: exploration ALWAYS GLM low; coding GLM high; planning/advanced DeepSeek max.
-- The resolution is DETERMINISTIC + pure.
-  The same request + the same policy = the same route.
-  NO LLM involvement, NO ambiguity.
-- The task-type inference applies when the orchestrator does NOT declare it.
-  The plugin derives the role from the task's shape (the spec's keywords: "read-only", "survey", "research" -> explorer; "fix", "implement", "restructure" -> coder; "design", "plan", "architecture" -> planner - a documented keyword table, the user's policy the final authority).
+- The input: the launch request (the task type - or the omission), the USER POLICY. The USER POLICY
+  covers the agent-loop config: coder = GLM-5.3-Flash high, explorer = GLM-5.3-Flash low, planner =
+  DeepSeek V4 Flash max; the allowed set; the task-type rules from the task-routing skill. The
+  task-type rules: exploration ALWAYS GLM low; coding GLM high; planning/advanced DeepSeek max.
+- The resolution is DETERMINISTIC + pure. The same request + the same policy = the same route. NO
+  LLM involvement, NO ambiguity.
+- The task-type inference applies when the orchestrator does NOT declare it. The plugin derives the
+  role from the task's shape (the spec's keywords: "read-only", "survey", "research" -> explorer;
+  "fix", "implement", "restructure" -> coder; "design", "plan", "architecture" -> planner - a
+  documented keyword table, the user's policy the final authority).
 
 ### 2.2 The silent injection (the "not even bothered" part)
 
-- The plugin sits on the LAUNCH path (the agent-loop's territory - the dsh-agent-loop already routes the roles - the plugin EXTENDS it or rides it).
-  When a launch omits the provider/model/effort, the plugin RESOLVES the route per the user's policy + INJECTS it into the launch.
-  The orchestrator's call succeeds exactly as if it had passed the right values.
-  NO warning, NO error, NO reminder.
-  The orchestrator NEVER sees the model configuration.
-- The explicit launches (the orchestrator passes the values): the plugin VALIDATES them against the user's policy (the allowed set + the task-type rules).
-  A violation is NOT surfaced to the orchestrator either.
-  The plugin CORRECTS it silently per the policy (the user's configuration is the law - the orchestrator's explicit-but-wrong values are overridden by the policy, logged to the plugin's own ledger, never bothering anyone).
-- The ESCALATION path (the task-routing skill's attempts ladder): the plugin knows the policy's escalation rules (GLM attempts -> DeepSeek max with the artifacts, at most once).
-  The escalation is ALSO automatic + silent.
+- The plugin sits on the LAUNCH path (the agent-loop's territory - the dsh-agent-loop already routes
+  the roles - the plugin EXTENDS it or rides it). When a launch omits the provider/model/effort, the
+  plugin RESOLVES the route per the user's policy + INJECTS it into the launch. The orchestrator's
+  call succeeds exactly as if it had passed the right values. NO warning, NO error, NO reminder. The
+  orchestrator NEVER sees the model configuration.
+- The explicit launches (the orchestrator passes the values): the plugin VALIDATES them against the
+  user's policy (the allowed set + the task-type rules). A violation is NOT surfaced to the
+  orchestrator either. The plugin CORRECTS it silently per the policy (the user's configuration is
+  the law - the orchestrator's explicit-but-wrong values are overridden by the policy, logged to the
+  plugin's own ledger, never bothering anyone).
+- The ESCALATION path (the task-routing skill's attempts ladder): the plugin knows the policy's
+  escalation rules (GLM attempts -> DeepSeek max with the artifacts, at most once). The escalation
+  is ALSO automatic + silent.
 
 ### 2.3 The state + the ledger
 
-- EVERY resolved route is recorded in the plugin's ledger (the launch, the task type, the resolved provider/model/effort, the explicit-or-resolved flag, the corrected-or-kept flag).
-  The record serves the user's audit (he owns the configuration - he can review the ledger + adjust the policy).
-- The ledger rides the family's conventions (the journal domain, the byte-integrity,
-  the tabs).
+- EVERY resolved route is recorded in the plugin's ledger (the launch, the task type, the resolved
+  provider/model/effort, the explicit-or-resolved flag, the corrected-or-kept flag). The record
+  serves the user's audit (he owns the configuration - he can review the ledger + adjust the
+  policy).
+- The ledger rides the family's conventions (the journal domain, the byte-integrity, the tabs).
 
 ### 2.4 The integration with the BATCH-STATE plugin
 
-- The routing ledger feeds the BATCH-STATE compiler's Gates.
-  The pre-baked context block's Gates section carries the routing truth (the resolved routes per lane).
-  The orchestration layer's context is the complete picture: the state + the gates + the routing - ALL compiled, ALL pre-baked, ALL silent.
-- The batch-state plugin's queue + pair orchestration consumes the resolved routes
-  (the queue's next pairs already routed per the policy).
+- The routing ledger feeds the BATCH-STATE compiler's Gates. The pre-baked context block's Gates
+  section carries the routing truth (the resolved routes per lane). The orchestration layer's
+  context is the complete picture: the state + the gates + the routing - ALL compiled, ALL
+  pre-baked, ALL silent.
+- The batch-state plugin's queue + pair orchestration consumes the resolved routes (the queue's next
+  pairs already routed per the policy).
 
 ## 3. The user's configuration surface (his responsibility)
 
-- The policy lives in ~/.dsh (the agent-loop config's roles + the task-routing skill's rules + the allowed-models set).
-  The user edits HIS files.
-  The plugin reads them (the config hot-reload or the restart).
-- The plugin NEVER writes the policy.
-  It ONLY enforces it.
-  The user's override ALWAYS wins (his explicit configuration is the plugin's law).
+- The policy lives in ~/.dsh (the agent-loop config's roles + the task-routing skill's rules + the
+  allowed-models set). The user edits HIS files. The plugin reads them (the config hot-reload or the
+  restart).
+- The plugin NEVER writes the policy. It ONLY enforces it. The user's override ALWAYS wins (his
+  explicit configuration is the plugin's law).
 
 ## 4. The exploration items
 
-1. The launch-path interception: where exactly the harness decides the route for a
-   subagent launch.
-   The open question: the agent-loop's role mapping vs the parent-inheritance.
-   The probe: the same probe as the batch-state plan's inbox mechanics.
-   The TWO plugins share the investigation.
-2. The task-type inference's accuracy: the keyword table's precision.
-   The false positives are the risk - a "fix the docs" task is coding, NOT exploration.
-   The table + the user's policy override.
-3. The explicit-launch correction: the silent override vs the user's "his
-   responsibility".
-   If the orchestrator explicitly passes a WRONG route, the plugin corrects it (the policy is the law).
-   The ledger notes it.
-4. The escalation automation: the attempts ladder's automatic triggering.
-   It covers the ESCALATION: marker detection in the agent reports + the automatic DeepSeek re-dispatch with the artifacts.
-5. The user's review surface: the ledger's format (the audit log the user reads when he reviews his configuration).
+1. The launch-path interception: where exactly the harness decides the route for a subagent launch.
+   The open question: the agent-loop's role mapping vs the parent-inheritance. The probe: the same
+   probe as the batch-state plan's inbox mechanics. The TWO plugins share the investigation.
+2. The task-type inference's accuracy: the keyword table's precision. The false positives are the
+   risk - a "fix the docs" task is coding, NOT exploration. The table + the user's policy override.
+3. The explicit-launch correction: the silent override vs the user's "his responsibility". If the
+   orchestrator explicitly passes a WRONG route, the plugin corrects it (the policy is the law). The
+   ledger notes it.
+4. The escalation automation: the attempts ladder's automatic triggering. It covers the ESCALATION:
+   marker detection in the agent reports + the automatic DeepSeek re-dispatch with the artifacts.
+5. The user's review surface: the ledger's format (the audit log the user reads when he reviews his
+   configuration).
 
 ## 5. The implementation phases
 
-1. The probe (shared with the batch-state plugin): the launch-path interception
-   point + the route-resolution hook.
+1. The probe (shared with the batch-state plugin): the launch-path interception point + the
+   route-resolution hook.
 2. The resolver (the pure function + the keyword table + the policy reader).
 3. The silent injection (the launch path + the explicit-launch validation/correction).
 4. The ledger (the family conventions).
@@ -137,16 +133,13 @@ Routing(launchRequest, UserPolicy) -> { provider, model, reasoningEffort }
 
 ## 6. The safety + the compatibility
 
-- The user's configuration is the law.
-  The plugin enforces it.
-  It NEVER decides the policy itself.
-- The silent-by-design: the orchestrator's workflow unchanged (the launches succeed the same).
-  The corrections are logged, NEVER surfaced.
+- The user's configuration is the law. The plugin enforces it. It NEVER decides the policy itself.
+- The silent-by-design: the orchestrator's workflow unchanged (the launches succeed the same). The
+  corrections are logged, NEVER surfaced.
 - The family's plugin discipline (the smokes, the loader contract, the no-commit).
-- The fallbacks: if the launch-path hook is NOT exposed, the plugin sits as a
-  pre-launch validation service the orchestrator's tooling consults.
-  It covers the subagent-model-selection-settings the profile patch already defines.
-  The plugin ensures the catalog + the policy agree.
+- The fallbacks: if the launch-path hook is NOT exposed, the plugin sits as a pre-launch validation
+  service the orchestrator's tooling consults. It covers the subagent-model-selection-settings the
+  profile patch already defines. The plugin ensures the catalog + the policy agree.
 
 ## 7. The deliverables
 

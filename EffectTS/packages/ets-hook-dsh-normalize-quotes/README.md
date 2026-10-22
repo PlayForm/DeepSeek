@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-normalize-quotes
 
-*The DeepSeek Harness Plugin Family for PlayForm.*
+_The DeepSeek Harness Plugin Family for PlayForm._
 
 [![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-normalize-quotes&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-quotes)
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-normalize-quotes)
@@ -11,61 +11,54 @@
 > [!NOTE]
 >
 > The **quote normalizer for model output** - a DeepSeek Harness plugin that hooks the
-> [`llm/stream`][dsh-llm]
-> waterfall (the interceptable wrapper around EVERY streaming model call, bound to the
-> [LlmRuntime][dsh-llm])
-> and normalizes the curly quote family in model output, live in the transcript: the eight
-> typographic quote code points each map to their ASCII straight counterpart -
-> U+2018/U+2019/U+201A/U+201B to the ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F to the ASCII
-> double quote.
+> [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around EVERY streaming model call,
+> bound to the [LlmRuntime][dsh-llm]) and normalizes the curly quote family in model output, live in
+> the transcript: the eight typographic quote code points each map to their ASCII straight
+> counterpart - U+2018/U+2019/U+201A/U+201B to the ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F
+> to the ASCII double quote.
 >
-> *A MAP flavor of the normalize family: the core's `Quotes` char-to-char table owns the
-> substitution - no `replacement` config knob.*
+> _A MAP flavor of the normalize family: the core's `Quotes` char-to-char table owns the
+> substitution - no `replacement` config knob._
 >
-> *The @-sentence identity: **Hook @ DSH @ Normalize @
-> Quotes**.*
+> _The @-sentence identity: **Hook @ DSH @ Normalize @ Quotes**._
 >
-> *The family's `raw-write` tool (registered by
-> [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms too -
-> the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every `raw-write`
-> call through by identity, so the tool's explicit `normalize` parameter (default false = verbatim)
-> is the only normalization it applies.*
+> _The family's `raw-write` tool (registered by
+> [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms
+> too - the exemption is family-wide: the core's `Stream/Chunk` + `Stream/Block` pass every
+> `raw-write` call through by identity, so the tool's explicit `normalize` parameter (default false
+> = verbatim) is the only normalization it applies._
 
 ---
 
 ## Where It Fits
 
 **Family position** (the @-sentence **Hook @ DSH @ Normalize @ Quotes**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the [`ets-lib-dsh-core`](../ets-lib-dsh-core)
-machinery; the second of the six stream normalizer siblings.
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the
+[`ets-lib-dsh-core`](../ets-lib-dsh-core) machinery; the second of the six stream normalizer
+siblings.
 
 One of **six siblings** in the stream-normalization family, all built on the shared machinery -
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema` helper,
-`shared: false`, for the config), [`ets-lib-dsh-core`](../ets-lib-dsh-core) for the `Quotes` table and the
-generic `ReplaceMap`/`Chunk`/`Block` dispatch:
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) for `State`/`Append` (and the named `Schema`
+helper, `shared: false`, for the config), [`ets-lib-dsh-core`](../ets-lib-dsh-core) for the `Quotes`
+table and the generic `ReplaceMap`/`Chunk`/`Block` dispatch:
 
-| flavor                                                            | table                  | substitution                  |
-| ----------------------------------------------------------------- | ---------------------- | ----------------------------- |
-| [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)           | core `Dashes` class    | `→ replacement` (default `-`) |
-| [ets-hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-quotes/Source) (this bundle)                         | core `Quotes` MAP      | curly → straight              |
-| [`ets-hook-dsh-normalize-ellipsis`](../ets-hook-dsh-normalize-ellipsis)   | core `Ellipsis` class  | U+2026 → `...`                |
-| [`ets-hook-dsh-normalize-spaces`](../ets-hook-dsh-normalize-spaces)       | core `Spaces` class    | unicode spaces → `" "`        |
-| [`ets-hook-dsh-normalize-invisible`](../ets-hook-dsh-normalize-invisible) | core `Invisible` class | removed (default `""`)        |
-| [`ets-hook-dsh-normalize-fullwidth`](../ets-hook-dsh-normalize-fullwidth) | core `Fullwidth` MAP   | full-width → half-width       |
+| flavor                                                                                                                                                  | table                  | substitution                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----------------------------- |
+| [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash)                                                                                         | core `Dashes` class    | `→ replacement` (default `-`) |
+| [ets-hook-dsh-normalize-quotes](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-quotes/Source) (this bundle) | core `Quotes` MAP      | curly → straight              |
+| [`ets-hook-dsh-normalize-ellipsis`](../ets-hook-dsh-normalize-ellipsis)                                                                                 | core `Ellipsis` class  | U+2026 → `...`                |
+| [`ets-hook-dsh-normalize-spaces`](../ets-hook-dsh-normalize-spaces)                                                                                     | core `Spaces` class    | unicode spaces → `" "`        |
+| [`ets-hook-dsh-normalize-invisible`](../ets-hook-dsh-normalize-invisible)                                                                               | core `Invisible` class | removed (default `""`)        |
+| [`ets-hook-dsh-normalize-fullwidth`](../ets-hook-dsh-normalize-fullwidth)                                                                               | core `Fullwidth` MAP   | full-width → half-width       |
 
-A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell
-unwrap + shared `Ledger`/`Enabled` mappings + its own fields), `Append` and
-`Journal` (the shared P5 record on every N > 0 pass); the config is composed
-by the factory's standalone `Schema` helper with `shared: false` - the minimal block, no
-[fs/observed][dsh-fs]
-dead fields.
+A **non-manifest factory consumer**: it injects `["pluginFactory"]` and uses `State` (cell unwrap +
+shared `Ledger`/`Enabled` mappings + its own fields), `Append` and `Journal` (the shared P5 record
+on every N > 0 pass); the config is composed by the factory's standalone `Schema` helper with
+`shared: false` - the minimal block, no [fs/observed][dsh-fs] dead fields.
 
-It touches no files, so
-[fs/write-intent][dsh-fs] and
-[fs/observed][dsh-fs] never see it; it wraps the
-downstream result and always calls `next()`, so it composes with other
-[`llm/stream`][dsh-llm] listeners
-regardless of registration order.
+It touches no files, so [fs/write-intent][dsh-fs] and [fs/observed][dsh-fs] never see it; it wraps
+the downstream result and always calls `next()`, so it composes with other [`llm/stream`][dsh-llm]
+listeners regardless of registration order.
 
 The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
 TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
@@ -79,9 +72,10 @@ the same conventions as every other @playform package.
 pnpm add @playform/ets-hook-dsh-normalize-quotes
 ```
 
-1. **Remote / dependency install (auto-activation):** `pnpm add @playform/ets-hook-dsh-normalize-quotes`
-   in a profile dir (+ the package name in `dsh.profile.bundles`, or `dsh plugin add`) - installed
-   automatically and activated at the next host start.
+1. **Remote / dependency install (auto-activation):**
+   `pnpm add @playform/ets-hook-dsh-normalize-quotes` in a profile dir (+ the package name in
+   `dsh.profile.bundles`, or `dsh plugin add`) - installed automatically and activated at the next
+   host start.
 2. **Local git clone:** clone → `pnpm install` inside the bundle (its `pnpm-workspace.yaml` pins
    `packages: [.]` so the install lands in the bundle, not the workspace root) → build →
    `dsh plugin --profile <name> add <this directory>`.
@@ -92,8 +86,10 @@ Verify with the `ets-hook-dsh-normalize-quotes: activated (...)` ledger line.
 
 ### Usage
 
-The bundle is configured through its [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-quotes/cordis.patch.yml) row (or the profile's `dsh.bundle`
-manifest) - the full config table is in [The Config](#the-config):
+The bundle is configured through its
+[cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-quotes/cordis.patch.yml)
+row (or the profile's `dsh.bundle` manifest) - the full config table is in
+[The Config](#the-config):
 
 ```yaml
 - insert:
@@ -105,8 +101,8 @@ manifest) - the full config table is in [The Config](#the-config):
             normalizeReasoning: true
 ```
 
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
+types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
 
 ---
 
@@ -115,11 +111,10 @@ The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the
 Smart-quote processors and code editors emit typographic quotes; every parser, shell and diff
 understands the straight ASCII ones.
 
-Left in model output, a curly quote is a silent correctness
-hazard - in code blocks, commands and file paths it is simply the wrong character.
+Left in model output, a curly quote is a silent correctness hazard - in code blocks, commands and
+file paths it is simply the wrong character.
 
-This flavor makes
-the straight form the one that reaches the transcript.
+This flavor makes the straight form the one that reaches the transcript.
 
 ---
 
@@ -176,9 +171,10 @@ the straight form the one that reaches the transcript.
 
 ### The transform
 
-Exactly the core's `Quotes` map ([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s `Normalize/Quotes`), applied per text
-segment through the core's `ReplaceMap` - eight entries, each typographic quote code point to its
-ASCII straight counterpart:
+Exactly the core's `Quotes` map
+([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
+`Normalize/Quotes`), applied per text segment through the core's `ReplaceMap` - eight entries, each
+typographic quote code point to its ASCII straight counterpart:
 
 | Code point | Character (by name)                   | ASCII        |
 | ---------- | ------------------------------------- | ------------ |
@@ -214,36 +210,36 @@ ASCII straight counterpart:
 
 ## The Config
 
-| Field                    | Type    | Default                                | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------------------ | ------- | -------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `log`                    | boolean | `true`                                 | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `logFile`                | string  | `~/.dsh/ets-hook-dsh-normalize-quotes.log` | yes      | the quotes ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `normalizeReasoning`     | boolean | `true`                                 | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `normalizeToolArguments` | boolean | `false`                                | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
+| Field                    | Type    | Default                                    | Volatile | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------ | ------- | ------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `log`                    | boolean | `true`                                     | yes      | write the durable ledger file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `logFile`                | string  | `~/.dsh/ets-hook-dsh-normalize-quotes.log` | yes      | the quotes ledger (separate from the family's logs)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `normalizeReasoning`     | boolean | `true`                                     | no       | normalize reasoning deltas and the assembled reasoning block too                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `normalizeToolArguments` | boolean | `false`                                    | no       | IMPLEMENTED (default OFF): rewrite the tool-call argumentsDelta and the assembled ToolCallBlock.arguments when on (with three exemptions: `edit`, `raw-write` and `normalize-file` calls pass through by identity (the edit tool's `old_string` must match the real file bytes; the raw-write tool owns its content normalization through its explicit `normalize` parameter; the normalize-file tool's arguments carry a file path - a normalized dash inside a filename would corrupt the target); and a call whose arguments open with the `{"__normalize":false` first-key marker passes through unnormalized, the marker entry stripped) - execution-critical raw JSON, the user's accepted risk; the example patch turns it on |
 
 There is **no `replacement` field** (MAP flavor).
 
-Volatile cells commit without remounting the
-plugin; the factory's State builder unwraps them defensively.
+Volatile cells commit without remounting the plugin; the factory's State builder unwraps them
+defensively.
 
 ## The Granular Scopes (all volatile)
 
-The `scopes` object gates every arm of the ets-hook-dsh-normalize-quotes hook independently — the defaults are exactly the
-pre-scopes behavior, and because the schema shape is identical in every family hook, one grouped
-override in the profile patch turns the whole family off in one edit (see the patch fragment at the
-end of this section). The whole object carries the volatile marker (its leaves stay plain —
-schemastery rejects volatile leaves under an enclosing volatile field): one leaf change commits one
-`loader/volatile-update` dispatch whose whole object the State's refresh listener re-reads — live,
-silent, no remount, no new activation line.
+The `scopes` object gates every arm of the ets-hook-dsh-normalize-quotes hook independently — the
+defaults are exactly the pre-scopes behavior, and because the schema shape is identical in every
+family hook, one grouped override in the profile patch turns the whole family off in one edit (see
+the patch fragment at the end of this section). The whole object carries the volatile marker (its
+leaves stay plain — schemastery rejects volatile leaves under an enclosing volatile field): one leaf
+change commits one `loader/volatile-update` dispatch whose whole object the State's refresh listener
+re-reads — live, silent, no remount, no new activation line.
 
-| Scope        | Default | Gates                                                                 |
-| ------------ | ------- | --------------------------------------------------------------------- |
-| conversation | on      | text-delta text + the assembled text/reasoning blocks                 |
-| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)         |
-| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)     |
-| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)           |
-| files        | on      | inert in a stream flavor (present so one patch override drives the whole family)                                                            |
-| batch        | off     | the agent/pre-step arm (the incoming step batch)                      |
+| Scope        | Default | Gates                                                                            |
+| ------------ | ------- | -------------------------------------------------------------------------------- |
+| conversation | on      | text-delta text + the assembled text/reasoning blocks                            |
+| reasoning    | on      | the reasoning-delta sub-gate (ANDed with `normalizeReasoning`)                   |
+| toolInput    | off     | the tool-call arguments arm (OR-ed with `normalizeToolArguments`)                |
+| toolResults  | off     | the tools/post-execute arm (tool results in the transcript)                      |
+| files        | on      | inert in a stream flavor (present so one patch override drives the whole family) |
+| batch        | off     | the agent/pre-step arm (the incoming step batch)                                 |
 
 `normalizeToolArguments` is kept and OR-ed in (effective toolInput = the field ||
 `scopes.toolInput`), so every existing profile keeps working.
@@ -252,8 +248,7 @@ The per-call `{"__normalize":false` first-key marker is the tool-args arm's esca
 "leave that search alone" control: a deliberate search for an irregular character (an em dash, a
 curly quote, a full-width form as a PATTERN) survives byte-exact while the rest of the call stream
 normalizes. Documented edges: the marker must be the FIRST key, and a pathologically tiny first
-delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes
-normally.
+delta (shorter than the marker) is invisible to the startsWith probe — the call normalizes normally.
 
 `toolResultsExempt` (volatile): a tool result whose exec name is listed passes the tool-results arm
 by identity — `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`,
@@ -290,36 +285,34 @@ ets-hook-dsh-normalize-quotes: overpass: swept K file(s), normalized M char(s)
 Registered through the `commands` service when it is present (probe-once — a missing service simply
 skips the registration). Grammar:
 
-| Input              | Effect                                                                            |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `files <path…>`    | declined — the sweep is owned by the normalize-file hook                                                                       |
-| `batch`            | arm the one-shot step-batch overpass (consumed by the next incoming batch)        |
+| Input             | Effect                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `files <path…>`   | declined — the sweep is owned by the normalize-file hook                                                                                         |
+| `batch`           | arm the one-shot step-batch overpass (consumed by the next incoming batch)                                                                       |
 | `results on\|off` | flip `scopes.toolResults` via the settings service / config editor — never direct State mutation; absent services → reports the settings-UI path |
-| `scopes`           | read-only report of the current effective values (the activation line never changes) |
+| `scopes`          | read-only report of the current effective values (the activation line never changes)                                                             |
 
 ## The Patch-Level Global Off
 
 ```yaml
 - id: ets-hook-dsh-normalize-quotes
   config:
-    scopes:
-      conversation: false
-      reasoning: false
-      toolInput: false
-      toolResults: false
-      files: false
-      batch: false
+      scopes:
+          conversation: false
+          reasoning: false
+          toolInput: false
+          toolResults: false
+          files: false
+          batch: false
 ```
 
 ---
-
 
 ## In Action
 
 One stream, one transformation.
 
-The model emits smart-quoted prose; the live UI and the transcript
-receive the straight ASCII forms:
+The model emits smart-quoted prose; the live UI and the transcript receive the straight ASCII forms:
 
 ```text
 text-delta in (what the model wrote):
@@ -336,19 +329,18 @@ becomes its ASCII counterpart; straight quotes that were already there are untou
 counts replacements). The sample carries six of the eight forms; the em dash U+2014 is the dashes
 flavor's character, not the quotes map's - with only the quotes flavor it passes through untouched.
 
-In code blocks, commands and file paths this is the difference between a
-command that runs and one that fails for no visible reason.
+In code blocks, commands and file paths this is the difference between a command that runs and one
+that fails for no visible reason.
 
-When a stream finishes normally with
-replacements made, the ledger gets the count line:
+When a stream finishes normally with replacements made, the ledger gets the count line:
 
 ```text
 ets-hook-dsh-normalize-quotes: normalized 6 quote char(s) in one stream
 ```
 
 (The same pass runs over reasoning deltas when `normalizeReasoning` is on, and over tool-call
-arguments when the example patch enables `normalizeToolArguments` - with the `edit`, `raw-write` and `normalize-file` names exempt and
-the raw-marker calls passing through unnormalized.)
+arguments when the example patch enables `normalizeToolArguments` - with the `edit`, `raw-write` and
+`normalize-file` names exempt and the raw-marker calls passing through unnormalized.)
 
 ---
 
@@ -366,9 +358,9 @@ The activation line is written by `apply()`; the count line only follows a norma
 and only when N > 0 (a thrown-away stream writes no ledger line).
 
 Every N > 0 pass also journals one `normalized` record into the shared `package_governance` v2
-domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the
-count line - best-effort: with no storage facility the record buffers or drops, and the human
-ledger stays the complete record.
+domain - event `normalized`, path = the empty stream-level path, detail byte-identical to the count
+line - best-effort: with no storage facility the record buffers or drops, and the human ledger stays
+the complete record.
 
 ---
 
