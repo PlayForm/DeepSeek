@@ -1,0 +1,1 @@
+const n=(e,t)=>e.Latest.get(t),r=(e,t)=>{const s=[...e.Ring].reverse();return!0===(typeof t=="number"&&Number.isFinite(t)&&t>=0)?s.slice(0,t):s},a=e=>({paths:e.Latest.size,stamps:e.Ring.length,sequence:e.Sequence});export{n as Latest,r as Ring,a as Statistics};
