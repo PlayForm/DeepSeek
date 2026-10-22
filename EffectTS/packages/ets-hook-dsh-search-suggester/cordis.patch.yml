@@ -1,0 +1,38 @@
+# Bundle patch for @playform/hook-dsh-search-suggester.
+# The search-intent TARGET SUGGESTER: it hooks the tools/post-execute
+# waterfall (plain registration - AFTER the ccr's {prepend:true} listener and
+# the normalize family) and, when a search-class call matches one of the ten
+# intent kinds, prepends ONE labeled additionalContexts note naming the
+# likely target set - the standard locations where that intent lives in this
+# repo - BEFORE the model burns the searches. Deterministic: no LLM in the
+# hot path; the note never replaces content, so a ccr-compressed result is
+# unaffected (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE SILENCE-FIRST POSTURE: this entry ships with enabled: false and
+# NOTHING else - the plugin enables only by an explicit ACTIVATE (the user
+# edits the profile and restarts). The plan (section 13, open decision 7)
+# recommends enabled-by-default for the A/B in P3, but the PoC ships
+# disabled until that measurement exists: a wrong target set costs more than
+# a missing one. On a cold mount the State build logs
+# `search-suggester: disabled (enabled=false)` and every listener no-ops to
+# a passthrough (each checks State.On first). The schema defaults are the
+# truth; the full default surface (threshold 0.75, maxCandidates 7,
+# maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the ten intent
+# kinds, the four judged tools, sectionMode off) lives in
+# Variable/Config.ts. EVERY tuning knob is volatile (hot-editable without
+# remounting); the structural knobs (persistPath, indexPath, refreshOnBoot)
+# remount on edit.
+- insert:
+      - id: hook-dsh-search-suggester
+        name: "@playform/ets-hook-dsh-search-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/search-suggester.log
