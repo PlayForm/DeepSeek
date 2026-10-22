@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-workspace-semantics",n=t,e=["pluginFactory","fs"],r=o;var c={name:p,apply:r,Config:n,inject:e};export{n as Config,r as apply,c as default,e as inject,p as name};
