@@ -1,0 +1,1 @@
+const r=(e,n)=>e.ById.get(n),i=(e,n)=>{const t=[...e.Ring].reverse();return!0===(typeof n=="number"&&Number.isFinite(n)&&n>=0)?t.slice(0,n):t},s=e=>({bindings:e.Ring.length,byId:e.ById.size,sequence:e.Sequence});export{r as ById,i as Ring,s as Statistics};
