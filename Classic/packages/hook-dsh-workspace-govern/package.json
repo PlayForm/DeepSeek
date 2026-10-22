@@ -1,0 +1,55 @@
+{
+	"name": "@playform/hook-dsh-workspace-govern",
+	"version": "0.1.0",
+	"description": "The workspace-govern hook: a DeepSeek plugin that IS the governance gate of the workspace family's invisible flow - the step where the operate family's proposals become effects ONLY through the gate. On every tools/pre-execute call (and for every proposal handed to its workspaceGovern service) it runs the INDEPENDENT MEANS-CHECKS on the ProposedChange - contributes, authorized scope, policy, preconditions - before any AuthorizationDecision downstream; AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS (the intent is never the permission, the gate is never the intent). The means-checks are pure functions of the proposal: the gate carries no intent of its own and reads no authority record (the licensing is the authority family's step, after this one). The FAIL-OPEN RECOVERY TABLE maps each obligation to its failure behavior - contributes and preconditions and the policy table read fail OPEN (an unevaluable check never blocks the workspace, it ledgered `recovery <obligation> (fail-open)`), the authorized-scope check fails CLOSED (an unevaluable scope check denies), the ledger is best-effort - so a broken check degrades honestly, per obligation, never silently. Recursion prevention: every proposal carries the operation identifier, the parent identifier and the event category, and the gate drops an operation identifier it has already gated beyond the loop bound. The plugin ships DISABLED - the idle-forever posture: it never appears in the profile's bundles and enables only by an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)`. Plan: Documentation/Plans/Workspace-Family/GOVERN.md + Documentation/Plans/WORKSPACE-FAMILY-V4.1.md section 3.9.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.1.0",
+		"@playform/plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

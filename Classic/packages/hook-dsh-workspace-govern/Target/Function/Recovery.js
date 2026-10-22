@@ -1,0 +1,1 @@
+const i={contributes:"fail-open",scope:"fail-closed",policy:"fail-open",preconditions:"fail-open"};var r=a=>{const o={...i};for(const e of a)e&&e.obligation in i&&(e.behavior==="fail-open"||e.behavior==="fail-closed")&&(o[e.obligation]=e.behavior);return o};export{r as default};

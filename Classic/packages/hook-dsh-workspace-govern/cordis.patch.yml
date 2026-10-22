@@ -1,0 +1,37 @@
+# Bundle patch for @playform/hook-dsh-workspace-govern.
+# The workspace-govern hook IS the governance gate of the workspace family's
+# invisible flow: operate proposes -> the GOVERN GATES -> the authority
+# licenses -> approve binds. On every tools/pre-execute call, and for every
+# proposal handed to its workspaceGovern service, the hook runs the four
+# INDEPENDENT MEANS-CHECKS on the ProposedChange (contributes, authorized
+# scope, policy, preconditions) before any AuthorizationDecision downstream -
+# an intent must not authorize its own means (Documentation/Plans/
+# Workspace-Family/GOVERN.md, the intent-model semantics binding). The
+# fail-open recovery table maps each obligation to its failure behavior
+# (Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.9: the honest
+# recovery). Recursion prevention: every proposal carries the operation
+# identifier, the parent identifier and the event category, and an operation
+# identifier already gated beyond the loop bound is dropped with a ledger
+# line.
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with 'entry "..." not
+# found'. Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted (bundle layers compose at host
+# boot). A file: dependency alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only by
+# an explicit ACTIVATE. On a cold mount the State build logs `disabled
+# (enabled=false)` and the gate is a pass-through: every listener returns the
+# downstream decision unchanged. The schema defaults are the truth; the full
+# default surface (the gated tool list, the authorized-scope allowlist, the
+# policy table, the recovery-table overrides, the exclusion globs, the loop
+# bound and the decision ring) lives in the Variable/Config.ts schema. Every
+# knob is a volatile cell (hot-editable without remounting); a policy or
+# recovery edit lands on the next gated call.
+- insert:
+      - id: hook-dsh-workspace-govern
+        name: "@playform/hook-dsh-workspace-govern"
+        config:
+            enabled: false
