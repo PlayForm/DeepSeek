@@ -1,0 +1,1 @@
+const i=256;var n=(e,t,u,c)=>{if(!0!==(t.length===0)){for(e.Focus.delete(t);e.Focus.size>=256;){const s=e.Focus.keys().next().value;!0===(s===void 0)||e.Focus.delete(s)}e.Focus.set(t,{id:u,version:c})}};export{n as default};

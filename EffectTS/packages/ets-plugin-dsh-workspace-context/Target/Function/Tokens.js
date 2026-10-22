@@ -1,0 +1,1 @@
+var a=(r,t)=>{const e=r.Meter?.estimate;switch(!0){case typeof e=="function":try{return Math.max(0,Math.ceil(Number(e(t))||0))}catch{}break;default:}return Math.ceil(t.length/4)};export{a as default};
