@@ -1,6 +1,6 @@
 import type { FsTarget, FsWriteIntent, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import type { SandboxExecutionPolicy } from "@deepseek-ai/dsh-sandbox";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import { Effect } from "effect";
 /** The option bundle: what the caller adds on top of the shared pipeline. */
 export interface Over {
@@ -29,5 +29,5 @@ export interface Over {
     /** The caller's content step, applied before the write. */
     transform?: (content: string) => string;
 }
-declare const _default: (State: State, Target: FsTarget, Content: string, Over?: Over) => Effect.Effect<FsWriteOutcome, unknown>;
 export default _default;
+declare function _default(State: State, Target: FsTarget, Content: string, Over?: Over): Effect.Effect<FsWriteOutcome, unknown>;

@@ -24,11 +24,11 @@ type ChunkShape = {
 } | {
     type: string;
 };
-declare const _default: <T extends ChunkShape>(Input: T, Replace: (Text: string) => {
+export default _default;
+declare function _default<T extends ChunkShape>(Input: T, Replace: (Text: string) => {
     text: string;
     count: number;
-}, Reasoning: boolean, ToolArgs?: boolean, Raw?: boolean, Conversation?: boolean) => {
+}, Reasoning: boolean, ToolArgs?: boolean, Raw?: boolean, Conversation?: boolean): {
     chunk: T;
     count: number;
 };
-export default _default;

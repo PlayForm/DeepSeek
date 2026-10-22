@@ -68,7 +68,4 @@ const Output = [
 
 FS.mkdirSync(Path.join(Root, "Target"), { recursive: true });
 FS.writeFileSync(Path.join(Root, "Target/Client.bundle.js"), Output);
-console.log(
-	"client bundle written:",
-	Path.join(Root, "Target/Client.bundle.js"),
-);
+console.log("client bundle written:", Path.join(Root, "Target/Client.bundle.js"));

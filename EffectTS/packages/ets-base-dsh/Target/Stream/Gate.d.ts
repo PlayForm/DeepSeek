@@ -25,8 +25,8 @@ type ChunkShape = {
 } | {
     type: string;
 };
-declare const _default: <T extends ChunkShape, E, R>(Upstream: Stream.Stream<T, E, R>, Replace: (Text: string) => {
+export default _default;
+declare function _default<T extends ChunkShape, E, R>(Upstream: Stream.Stream<T, E, R>, Replace: (Text: string) => {
     text: string;
     count: number;
-}, Reasoning: boolean, ToolArgs?: boolean, OnCount?: (Count: number) => void, Conversation?: boolean) => Stream.Stream<T, E, R>;
-export default _default;
+}, Reasoning: boolean, ToolArgs?: boolean, OnCount?: (Count: number) => void, Conversation?: boolean): Stream.Stream<T, E, R>;

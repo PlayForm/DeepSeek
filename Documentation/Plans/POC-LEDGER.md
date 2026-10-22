@@ -589,5 +589,21 @@ fully reverted.
   dump exit 0 with 96 @playform refs and only the pre-existing
   `entry "ccr" not found` stderr line.
 - THE REVIEW PASS (separate read-only lanes): the client-bundle reviewer
-  5/5 PASS, zero defects; two more reviewers in flight (the assembled
-  profile; the config-surface changes).
+  5/5 PASS, zero defects; the config-surface reviewer 4 PASS + 1 non-issue
+  (the "ETS twin of pattern" does not exist - pattern/batch-decision are
+  Classic-only candidates; the batch-edit fragment's enabled:true is the
+  intended activation); the assembled-profile reviewer 6/6 checks with the
+  KEY FINDING that the 14 EXISTING family rows are still partial (13 missing
+  `enabled: true`, pinner missing `updateCooldownMs`, the 7 normalize rows
+  missing `scopes` + `toolResultsExempt`, tool-coach missing ~20 fields,
+  live-containers missing its ~70-field schema).
+- THE ORIGINAL-ROW PASS: two config-surface lanes are extending the
+  full-default treatment to the 14 existing family rows, preserving the
+  user's custom values (normalizeToolArguments, ncuBin, ccr multipliers,
+  tool-coach notes.persistent, the logFile paths) and writing fragments to
+  `/tmp/profile-defaults-original/`; the Lead then assembles them into the
+  patch (block-surgery preserving the column-0 comments).
+- THE logFile `~` REWRITES: the 11 `/Users/nikola/.dsh/*` -> `~/.dsh/*`
+  changes in the patch were made by the APP's config editor at 14:17 (the
+  file mtime + the user's own font-size 12 edit in the same save), not by
+  the assembly (which preserves the prefix byte-for-byte).
