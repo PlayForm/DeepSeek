@@ -1,0 +1,1 @@
+var e=(p,t)=>{for(p.Latest.set(t.path,t),p.Ring.push(t);p.Ring.length>p.MaxStamps;){const n=p.Ring.shift();n!==void 0&&p.Factory.Append(p,`capped ${n.path} (maxStamps ${p.MaxStamps})`)}try{const n=p.Handle;n!==void 0&&(n.table("stamps").put(t.path,t).catch(()=>{}),n.table("ring").put("__ring",[...p.Ring]).catch(()=>{}))}catch{}};export{e as default};

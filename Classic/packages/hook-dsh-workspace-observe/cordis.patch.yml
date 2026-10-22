@@ -1,0 +1,32 @@
+# Bundle patch for @playform/hook-dsh-workspace-observe.
+# The workspace-observe hook records the workspace's first step of the
+# invisible flow: on every fs/observed event (heard on the ROOT context, the
+# factory's Wire registration) it writes one observation stamp (the path, the
+# observed version, the origin, the plugin's own monotonic sequence) into its
+# own KV storage domain named workspace_observe. The conversation never sees
+# the stamps; a later wave's events surface them. The listener is a
+# synchronous recorder: no awaits, no throws, no I/O, no file content ever
+# read, no wall clock (Documentation/Plans/Workspace-Family/
+# WAVE-1-BRIEF.md section 5).
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
+# else - the plugin never appears in the profile's bundles and enables only
+# by an explicit ACTIVATE (the user edits the profile and restarts). On a
+# cold mount the State build logs `disabled (enabled=false)` and no listener
+# is wired. The schema defaults are the truth; the full default surface
+# (domain workspace_observe, maxStamps 1000, include empty, and the glob
+# exclude triple) lives in the Variable/Config.ts schema. EVERY knob is
+# volatile (hot-editable without remounting): enabled, log/logFile, domain,
+# maxStamps, include and exclude.
+- insert:
+      - id: hook-dsh-workspace-observe
+        name: "@playform/hook-dsh-workspace-observe"
+        config:
+            enabled: false

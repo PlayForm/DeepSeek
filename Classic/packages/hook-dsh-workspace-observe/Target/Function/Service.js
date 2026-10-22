@@ -1,0 +1,1 @@
+import{Service as s}from"@deepseek-ai/cordis";import a from"./Manual.js";import*as e from"./Query.js";class m extends s{State;constructor(t,r){super(t,"workspaceObserve"),this.State=r}stamp(t){return e.Latest(this.State,t)}stamps(t){return e.Ring(this.State,t)}manual(t){return a(this.State,t)}statistics(){return e.Statistics(this.State)}}export{m as default};

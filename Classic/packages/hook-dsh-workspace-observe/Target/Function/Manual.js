@@ -1,0 +1,1 @@
+import i from"./Record.js";var a=async(e,n)=>{const s=await e.Context.fs.resolve(n),o=await e.Context.fs.stat(s),r=o!==void 0?String(o.version):"absent";return e.Sequence+=1,e.Factory.Append(e,`manual ${n} version ${r}`),i(e,{path:n,version:r,origin:"manual",sequence:e.Sequence}),{path:n,version:r,origin:"manual",sequence:e.Sequence}};export{a as default};

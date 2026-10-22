@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-workspace-observe",e=t,r=["pluginFactory","fs"],n=o;var c={name:p,apply:n,Config:e,inject:r};export{e as Config,n as apply,c as default,r as inject,p as name};
