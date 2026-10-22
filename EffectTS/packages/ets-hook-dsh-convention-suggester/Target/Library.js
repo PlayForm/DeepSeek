@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const n="convention-suggester",e=t,p=["pluginFactory"],r=o;var s={name:n,apply:r,Config:e,inject:p};export{e as Config,r as apply,s as default,p as inject,n as name};

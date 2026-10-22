@@ -1,0 +1,37 @@
+# Bundle patch for @playform/hook-dsh-convention-suggester.
+# The convention-suggester hook carries the repo's conventions as a pattern
+# pack and names them BEFORE the model violates them: on every write/edit
+# call it classifies the target path deterministically (the layout family,
+# the naming family, the docs family, the ledger-string family) and prepends
+# ONE labeled additionalContexts notice naming the companion targets the
+# convention requires. The arbiter is the smoke suite that asserts the
+# convention (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md sections 3.4,
+# 4, 8, 9.4). READ-ONLY by design: the hook never edits, never rewrites
+# arguments, and never denies.
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with 'entry "..." not
+# found'. Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted. A file: dependency alone is
+# NOT activation.
+#
+# SHIPS DISABLED (enabled: false): a suggester's acceptance rate must be
+# measured before it is trusted (the plan's kill criterion, section 10.3);
+# the Lead enables it explicitly in the wiring pass. Every knob is volatile
+# (hot-editable without remounting).
+- insert:
+      - id: convention-suggester
+        name: "@playform/ets-hook-dsh-convention-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/convention-suggester.log
+            threshold: 0.75
+            maxCandidates: 7
+            maxNoteChars: 1200
+            cooldownCalls: 6
+            maxNotesPerTurn: 3
+            emitOn:
+                - edit
+                - raw-write
+                - write
