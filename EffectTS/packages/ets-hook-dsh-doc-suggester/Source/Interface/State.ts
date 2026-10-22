@@ -1,0 +1,59 @@
+// State - the per-apply plugin state: the FACTORY's shared shape (built by
+// `Factory.State(ctx, config, { ... })` - factory SCHEME.md section 2.10)
+// extended with the doc suggester's own fields.
+//
+// The shared half comes from the factory's NAMED type export (`State`): the
+// built Target/Library.d.ts ships RELATIVE specifiers, so a consumer's
+// tsconfig paths never hijack the declaration imports. The shared machinery
+// that stays inert here: Tool/Policy/PolicyName/List (no fs/observed
+// machinery - the suggester is a NON-MANIFEST module), Stash/Inflight/
+// Subprocess/Seams/Queue/Journal (no governance traffic; the only
+// journal-domain line is the activation record, best-effort).
+//
+// The doc suggester's own fields:
+//
+//   On             - the master switch (config `enabled`, volatile);
+//   Threshold      - the default confidence gate (config `threshold`, volatile);
+//   Tools          - the judged doc-task tools (config `tools`, volatile);
+//   MaxCompanions / MaxNoteChars / CooldownCalls / MaxNotesPerTurn -
+//                    the note's shape and the noise control (volatile);
+//   Exclude        - the excluded directories (config `exclude`, volatile);
+//   Pack           - the embedded convention pack (Function/Pack) - the
+//                    families and their companion sets, never mutated;
+//   Rings          - the per-agent ring tracker (Function/Ring);
+//   Factory        - the injected factory service itself (the ledger via
+//                    Factory.Append) - assigned once in Function/Apply.
+//
+// Test probes (the end-phase) read the state through the
+// `ctx.__hookDshDocSuggesterState` attachment (never a return value from
+// `apply` - the loader treats apply returns specially).
+import type Factory from "@playform/ets-plugin-dsh-factory";
+import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+
+import type Ring from "../Function/Ring.js";
+import type { Family } from "./Execution.js";
+
+export default interface State extends Shared {
+	/** The master switch (config `enabled`, volatile). */
+	On: boolean;
+	/** The default confidence gate (config `threshold`, volatile). */
+	Threshold: number;
+	/** The judged doc-task tools (config `tools`, volatile). */
+	Tools: string[];
+	/** The companion cap (config `maxCompanions`, volatile). */
+	MaxCompanions: number;
+	/** The note character cap (config `maxNoteChars`, volatile). */
+	MaxNoteChars: number;
+	/** The cooldown window in judged calls (config `cooldownCalls`, volatile). */
+	CooldownCalls: number;
+	/** The per-turn note cap (config `maxNotesPerTurn`, volatile). */
+	MaxNotesPerTurn: number;
+	/** The excluded directories (config `exclude`, volatile). */
+	Exclude: string[];
+	/** The embedded convention pack (Function/Pack). */
+	Pack: Family[];
+	/** The per-agent ring tracker (Function/Ring). */
+	Rings: ReturnType<typeof Ring>;
+	/** The injected @playform/ets-plugin-dsh-factory service. */
+	Factory: Factory;
+}

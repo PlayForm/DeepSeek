@@ -1,0 +1,56 @@
+{
+	"name": "@playform/ets-hook-dsh-doc-suggester",
+	"version": "0.1.0",
+	"description": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE labeled additionalContexts note naming the doc graph companions the task conventionally requires: the INDEX row, the frontmatter statuses/registry/index block, the archive style, the cross-references, the site mirror. The third consumer of the search-suggester's pattern algebra (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md section 8): deterministic path rules over the documentation tree, a hard gate, a cooldown, a dedupe, a per-turn cap, and an abstention line for every silence.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.1.0",
+		"@playform/ets-plugin-dsh-factory": "0.1.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-llm": "0.2.0-rc.2",
+		"@deepseek-ai/dsh-tools": "0.2.0-rc.2",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.8",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
