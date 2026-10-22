@@ -1,0 +1,21 @@
+# Bundle patch for @playform/plugin-dsh-pattern.
+# The pattern-graph service plugin: it owns the pattern registry, the
+# matcher, the confidence store and the learner behind the suggester family
+# (Documentation/Plans/PATTERN-GRAPH-PLUGIN.md section 4). Consumers
+# (hook-dsh-*-suggester) resolve ctx.pattern; the decision hook reads the
+# pattern's `allowlist` property as its auto-approve eligibility hint.
+#
+# New entries are declared with `insert:` (a bare `id:` row PATCHES an
+# existing entry). Activated when the profile's package.json lists the
+# package in dsh.profile.bundles AND the app is restarted; a file:
+# dependency alone is NOT activation.
+#
+# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
+# default and the patch row; a cold mount logs `disabled (enabled=false)`
+# and Match returns the empty result (the abstention) - the service stays
+# resolvable so consumers never hard-fail.
+- insert:
+      - id: plugin-dsh-pattern
+        name: "@playform/plugin-dsh-pattern"
+        config:
+            enabled: false
