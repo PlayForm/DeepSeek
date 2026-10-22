@@ -1,0 +1,43 @@
+# Bundle patch for @playform/hook-dsh-replay-suggester.
+# The replay-suggester hook answers "the last time this was done, the model
+# touched these N files and verified with this command" (Documentation/
+# Plans/SEARCH-SUGGESTER-PLUGIN.md §9.3): when the model searches with an
+# intent it has pursued before, the hook recalls the matching record from
+# its history store (~/.dsh/replay-suggester/history.json, the seed of the
+# search-suggester's journal) and prepends ONE labeled additionalContexts
+# notice. READ-ONLY by design: the hook never edits, never rewrites
+# arguments, and never denies; it consumes the history store and never
+# writes one in v1 (the store is seeded by the offline learner /
+# search-suggester journal - the end-phase wiring).
+#
+# New entries are declared with `insert:` - a bare `id:` row PATCHES an
+# existing entry and the loader rejects unknown ids with 'entry "..." not
+# found'. Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted. A file: dependency alone is
+# NOT activation.
+#
+# SHIPS DISABLED (enabled: false): a suggester's acceptance rate must be
+# measured before it is trusted (the plan's kill criterion, section 10.3);
+# the Lead enables it explicitly in the wiring pass. Every knob is volatile
+# (hot-editable without remounting), except historyPath (structural: the
+# store is loaded once at apply, so changing it remounts).
+- insert:
+      - id: replay-suggester
+        name: "@playform/ets-hook-dsh-replay-suggester"
+        config:
+            enabled: false
+            log: true
+            logFile: ~/.dsh/replay-suggester.log
+            threshold: 0.75
+            maxCandidates: 7
+            maxNoteChars: 1200
+            cooldownCalls: 6
+            maxNotesPerTurn: 3
+            historyPath: ~/.dsh/replay-suggester/history.json
+            emitOn:
+                - bash
+                - edit
+                - glob
+                - grep
+                - read
+                - write
