@@ -1167,3 +1167,22 @@ family, (5) ETS parity, (6) verification + records.
   a write exactly as specified; the machine was closed and the docs corrected through the harness's
   direct writer instead. The remaining work is the restart (the final 15 + the fixed tools) and the
   final live sweep.
+- 2026-10-24: THE ROUTING AUDIT AND THE SKILL v2.1.0 (the user's request). The session's delegations
+  were audited: 11 lanes on the GLM `low` (the sweeps, the enables, the docs) - correct, all
+  first-attempt successes; 24 lanes on the DeepSeek `high` - 16 of them semantic coding that
+  belonged on the GLM `high`, 4 mechanical that belonged on the GLM `low`, and 1 red-tree diagnosis
+  that justified the DeepSeek lane at `max`; 4 durable teammates on the `spawn_teammate` default
+  (the tool has no route field). THE ROOT CAUSE: a ROW INVENTION - the global skill copy's "cheap
+  route not permitted -> DeepSeek at the same effort" fallback clause was read as a license while
+  the cheap route WAS permitted, and the semantic judgment tier was then mapped to the DeepSeek
+  model. THE FIX: `task-routing` v2.1.0 in BOTH copies (the repo's
+  `Documentation/Skill/task-routing/` and the global `~/.dsh/skills/task-routing/`, synced
+  identical): the CLOSED table (no DeepSeek `high` row), the design/coding boundary (the design is
+  the parent's; the implementation of a specified design is the GLM `high`), the cost evidence (2x
+  input / 2.4x output per over-routed lane), the 2026-10-24 calibration, the Agent Teams caveat
+  (`spawn_teammate` carries no route; a room is the expensive lane by default - route the coding
+  lanes via `subagent` with the explicit triple), and the route audit in the adjudication. The
+  routing-table reference was merged (the thirty-shape catalog + the closed table + the
+  calibration). The site room's four teammates ran on the default and that is recorded; the
+  remaining site work is the detail-pages lane, the content lane's CM closes, and the final
+  verification.

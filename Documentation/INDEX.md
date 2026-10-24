@@ -47,7 +47,7 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
-      Plans/                       the living + queued plans (29) + 5 granular families (80)
+      Plans/                       the living + queued plans (30) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
@@ -79,7 +79,7 @@ statuses:
 | -------------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (29)
+### Plans - the living + queued hubs (30)
 
 | Document (Documentation/Plans/)                                                                | Status            | Kind                                                   |
 | ---------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------ |
@@ -112,6 +112,7 @@ statuses:
 | [COMPLETION-SPEC](Plans/Completion-Spec/00-OVERVIEW.md)                                        | active            | living-plan (the completion program's hub)             |
 | [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md)                                                 | complete          | living-plan (the 29-30 ETS twins' mirror brief)        |
 | [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete          | living-plan (the smoke pass brief)                     |
+| [SITE-UPDATE-SPEC.md](Plans/SITE-UPDATE-SPEC.md)                                               | active            | living-plan (the site's per-file content delta)        |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 

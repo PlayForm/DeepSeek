@@ -1,8 +1,8 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type { KeywordTable, PolicyShape, Role } from "../Interface/Policy.js";
-import type Request from "../Interface/Request.js";
-import type Route from "../Interface/Route.js";
-import type State from "../Interface/State.js";
+import type { KeywordTable, PolicyShape, Role } from "@Interface/Policy.js";
+import type Request from "@Interface/Request.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
 export default class Enforcer extends Service {
     private State;
     constructor(Context_: Context, State_: State);

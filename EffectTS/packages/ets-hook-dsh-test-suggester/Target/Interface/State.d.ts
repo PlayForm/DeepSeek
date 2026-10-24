@@ -1,5 +1,5 @@
-import type Config from "./Config.js";
-import type { CompiledIntent } from "./Pack.js";
+import type Config from "@Interface/Config.js";
+import type { CompiledIntent } from "@Interface/Pack.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {

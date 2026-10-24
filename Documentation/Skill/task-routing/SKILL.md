@@ -2,14 +2,14 @@
 name: task-routing
 description:
     "The model-routing policy for every delegation: the three-model catalog, the difficulty-first
-    classification, the routing table, the attempts ladder, the spec requirements, and the
+    classification, the closed routing table, the attempts ladder, the spec requirements, and the
     adjudication protocol that makes cheap exploration safe."
 whenToUse:
     Before every subagent call, workflow agent() call, or any decision about which model and
     reasoning effort to use. Also load it when a delegation fails and you must decide whether to
     retry or escalate.
-version: 2.0.0
-updated: 2026-10-20
+version: 2.1.0
+updated: 2026-10-24
 ---
 
 # Task Routing
@@ -24,7 +24,7 @@ model.
 - Before any `subagent`, `subagent_fork`, or workflow `agent()` call.
 - When choosing the model for a task you will do yourself (the main agent's lane is part of the
   table).
-- When a delegated attempt fails and the next step is a retry, an escalation, or a stop.
+- When a delegation fails and the next step is a retry, an escalation, or a stop.
 - Do not use for: strain definitions and delegation methodology (`worker-strains`), or batch queue
   mechanics (`orchestrator-batch`).
 
@@ -40,6 +40,9 @@ model.
 4. **Recover, do not re-run.** After a crash or a dead agent, read the persisted sessions and
    artifacts and resume the unfinished work. Never edit the agent-loop config while subagents run; a
    live re-apply can destroy inbox projections and crash the host.
+5. **The table is closed.** A delegation that fits no row is classified by the tie-breaker, never by
+   a new row. Inventing a row ("sensitive exploration", "DeepSeek high") is a policy change and a
+   cost incident, not a judgment call.
 
 ## The catalog
 
@@ -59,28 +62,66 @@ removals (`deepseek-v4-pro-0813`, `kimi-k2.6`, `kimi-k2.7-code`, `glm-5.2`, `glm
 
 ## Difficulty first
 
-Classify by what the operation demands, not by the task's label or file count:
+Classify by what the operation demands, not by the task's label, its file count, or its stakes:
 
 - **Mechanical**: a complete spec, no ambiguity, lookup-and-replace, renames, conversions, a guarded
   exceptions list. File count does not raise the tier.
-- **Semantic**: naming judgment, authored prose, design decisions, ambiguous refactors, integration.
+- **Semantic**: naming judgment, authored prose, ambiguous refactors, integration, or the
+  implementation of a design the parent has ALREADY specified.
+- **Constitutive**: the design itself, the architecture, the plan, the adjudication. That is the
+  parent's own lane, never a delegated one.
 
-A multi-file mechanical sweep is still mechanical. A one-line naming judgment is still semantic.
+The critical distinction: **the design belongs to the parent; the implementation of a specified
+design is coding, not design.** A lane handed a detailed spec (the interfaces, the file layout, the
+contracts) is doing semantic coding, not architecture, even when the change is large or novel.
 
-## The routing table
+## The routing table (closed)
 
-| Task                                                | Model                      | Effort |
-| --------------------------------------------------- | -------------------------- | ------ |
-| Exploration, any, always                            | `glm-5.3-flash`            | `low`  |
-| Coding, trivial or mechanical (complete spec)       | `glm-5.3-flash`            | `low`  |
-| Coding, routine or semantic                         | `glm-5.3-flash`            | `high` |
-| Coding, exhaustive verification (user request only) | `glm-5.3-flash`            | `max`  |
-| Planning, architecture, design, advanced debugging  | `deepseek-v4.1-flash-1017` | `max`  |
-| The deepest reasoning (the ceiling)                 | `deepseek-v4.1-flash-1017` | `max`  |
+| Task class                                                 | Model                      | Effort          |
+| ---------------------------------------------------------- | -------------------------- | --------------- |
+| Exploration, any, always                                   | `glm-5.3-flash`            | `low`           |
+| Coding, mechanical (a complete spec)                       | `glm-5.3-flash`            | `low`           |
+| Coding, semantic (the design is given by the parent)       | `glm-5.3-flash`            | `high`          |
+| Coding, exhaustive verification (an explicit user request) | `glm-5.3-flash`            | `max`           |
+| The parent's planning, architecture, design, adjudication  | `deepseek-v4.1-flash-1017` | `max`           |
+| The delegated red-tree diagnosis or advanced debugging     | `deepseek-v4.1-flash-1017` | `max`           |
+| The fallback, only when the cheap route is NOT permitted   | `deepseek-v4.1-flash-1017` | the SAME effort |
 
-The DeepSeek rows accept either DeepSeek id at `max`; 1017 is primary and 0731 is the fallback. The
-main agent runs the DeepSeek lane at `max`; its current default is `deepseek-v4.1-flash-1017`.
+**There is no DeepSeek `high` row.** The semantic coding lane runs on the GLM at `high`; the
+DeepSeek lane appears at `max` (the planning, the design, the advanced debugging) and as the
+same-effort fallback when the cheap route is unavailable. A DeepSeek `high` delegation is a row
+invention: it pays 2x the input and 2.4x the output for a correctness gain the table does not
+predict.
+
+The main agent runs the DeepSeek lane at `max`; its current default is `deepseek-v4.1-flash-1017`.
 Planning is never delegated to the GLM tier.
+
+## The calibration (2026-10-24)
+
+The first full program run under this policy was audited and over-routed:
+
+- 11 lanes on GLM `low` (the sweeps, the enables, the docs) - correct, every one succeeded on the
+  first attempt.
+- 24 lanes on DeepSeek `high` - per this table, 16 of them were semantic coding (the suggesters, the
+  graph, the batch chain, the trace bus, the pack layer, the storage migration, the learner, the
+  client family, the policy blocks, ...) and 4 were mechanical (the type mirror, the integration
+  fixes, the profile surface, the final green verification). All were over-routed by one tier or one
+  model; the red-tree diagnosis alone justified the DeepSeek lane (at `max`, not `high`).
+- 4 durable teammates ran on the `spawn_teammate` default (the DeepSeek lane) because the tool has
+  no route field.
+
+The root cause: the fallback clause ("if the cheap route is not permitted, use DeepSeek at the same
+effort") was read as a license while the cheap route WAS permitted, and the semantic judgment tier
+was then mapped to the DeepSeek model. The fix, now binding: the cheap route is permitted unless the
+profile forbids it, and the semantic judgment tier is the GLM at `high`.
+
+## The Agent Teams caveat
+
+`spawn_teammate` carries no `provider`/`model`/`reasoning_effort` fields: a durable teammate runs on
+the profile's subagent default, which is the expensive lane. When the work is a routed lane
+(mechanical or semantic coding, exploration), use `subagent`/`subagent_fork` with the explicit
+triple. When the work needs the durable, messageable room, spawn the teammate and record that it
+runs on the default; do not describe it as a cheap lane.
 
 ## The ladder
 
@@ -103,6 +144,8 @@ Every coding prompt carries:
 2. The verbatim instruction: "If you cannot complete this task, do not silently give up. End your
    report with a section starting exactly with `ESCALATION: <concrete reason>`."
 3. For a replication benchmark, a no-reference-implementations clause.
+4. The route the lane is running on (the model and the effort), stated in the prompt, so the lane's
+   report can echo it.
 
 ## The adjudication
 
@@ -116,6 +159,9 @@ The parent verifies before accepting:
    session log when reporting.
 5. **Never spend LLM tokens on verification.** Shell checks are free and deterministic; that is why
    `low` is safe.
+6. **The route audit:** every accepted lane's report states the route it ran on; a lane whose route
+   does not match its class is an over-routing incident, recorded and corrected on the next
+   dispatch - never silently absorbed.
 
 ## Verification
 
@@ -123,23 +169,27 @@ The parent verifies before accepting:
 - The model ids match the catalog exactly, including suffixes.
 - A failed task shows at most three attempts.
 - Each accepted result has a logged parent verification.
+- No delegation uses a row the table does not contain.
 
 ## Anti-patterns
 
-| Mistake                              | Cost                                     | Do instead                    |
-| ------------------------------------ | ---------------------------------------- | ----------------------------- |
-| Omitting the route                   | Inherits the expensive lane; unauditable | Pass provider, model, effort  |
-| Sending exploration to DeepSeek      | 5.8x cost for identical correctness      | GLM at `low`                  |
-| Calling a mechanical sweep "routine" | Pays `high` for no gain                  | Difficulty first              |
-| Self-authorizing coding `max`        | 6.4x cost for identical correctness      | Only on explicit user request |
-| Escalating without artifacts         | Reproduces the failure                   | Pass the failure state        |
-| LLM re-review of a report            | Destroys the economics                   | Shell checks only             |
+| Mistake                                                 | Cost                                      | Do instead                                                  |
+| ------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------- |
+| Omitting the route                                      | Inherits the expensive lane; unauditable  | Pass provider, model, effort                                |
+| Sending exploration to DeepSeek                         | 5.8x cost for identical correctness       | GLM at `low`                                                |
+| Calling a mechanical sweep "routine"                    | Pays `high` for no gain                   | Difficulty first                                            |
+| The DeepSeek `high` for semantic coding (row invention) | 2x input, 2.4x output, no gain            | GLM at `high`                                               |
+| Treating a specified implementation as "design"         | Sends the coding to the DeepSeek lane     | The design is the parent's; the coding is the GLM           |
+| Self-authorizing coding `max`                           | 6.4x cost for identical correctness       | Only on explicit user request                               |
+| Escalating without artifacts                            | Reproduces the failure                    | Pass the failure state                                      |
+| A teammate room as the default route                    | The room silently runs the expensive lane | Route the lanes via `subagent`; record the teammate default |
+| LLM re-review of a report                               | Destroys the economics                    | Shell checks only                                           |
 
 ## References
 
-| File                             | Covers                                             | Read when                    |
-| -------------------------------- | -------------------------------------------------- | ---------------------------- |
-| `references/catalog.md`          | The models, prices, removed list, and verification | Choosing or auditing a model |
-| `references/routing-table.md`    | Difficulty classification and the full table       | Classifying a task           |
-| `references/ladder-and-specs.md` | Attempts, failure signals, and the spec template   | A delegation failed          |
-| `references/adjudication.md`     | Verification, spot checks, and cost extraction     | Accepting a delegated result |
+| File                             | Covers                                                       | Read when                    |
+| -------------------------------- | ------------------------------------------------------------ | ---------------------------- |
+| `references/catalog.md`          | The models, prices, removed list, and verification           | Choosing or auditing a model |
+| `references/routing-table.md`    | Difficulty classification, the closed table, the calibration | Classifying a task           |
+| `references/ladder-and-specs.md` | Attempts, failure signals, and the spec template             | A delegation failed          |
+| `references/adjudication.md`     | Verification, spot checks, and cost extraction               | Accepting a delegated result |
