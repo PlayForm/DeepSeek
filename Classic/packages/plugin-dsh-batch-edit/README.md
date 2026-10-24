@@ -17,7 +17,7 @@ and its granular subdocuments under `Documentation/Plans/Batch-Edit-Tool/`.
 | `open`   | Declare the scope, insert files (paths or globs) as `observed` processes with their held version; the prepared schema (searches + ops) is validated fail-loud; misses are listed, never guessed |
 | `insert` | Add files to an open machine mid-life (the lease stays)                                                                                                                                         |
 | `remove` | Drop files from an open machine                                                                                                                                                                 |
-| `commit` | Run the transition table in one go, through the factory's write executor                                                                                                                        |
+| `commit` | Run the transition table in one go, through the factory's write executor - behind the D6 policy gate (see below)                                                                                |
 | `state`  | Re-present the current state of every held file                                                                                                                                                 |
 | `close`  | Close the machine (in-flight processes settle first - nothing silently dropped)                                                                                                                 |
 
@@ -61,6 +61,27 @@ A commit exceeding the in-line deadline (capped at 120000, the composition contr
 one background job and returns the typed `jobId`; the settle truth arrives through the jobs
 subscription and the next `state` presentation. No plugin-owned timers anywhere.
 
+## The policy block (D6) - the apply gate
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The `commit` action consults `Decide(State.Allow, "write")` **before any plan or write**. The
+shipped default is `write: approve`, so an apply is **refused** with the byte-exact
+`apply refused <id> (policy write=approve)` line (in the ledger and as the thrown error): nothing is
+read or written, the machine stays open with its cells `observed`, and the batch waits for the
+user's approval - the existing approve binding (flip `policy.write` to `auto`, or approve the batch
+through the batch-decision hook). With `write: auto` the commit proceeds exactly as described above.
+The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement).
+
 ## The ledger lines (the contract, byte-stable)
 
 ```
@@ -72,27 +93,29 @@ transition errored <file> <reason>
 transition halted <file> <reason>
 machine committed <id> (<applied> applied, <failed> failed, <halted> halted)
 machine closed <id>
+apply refused <id> (policy write=approve)
 ```
 
 Plus the module-owned `removed <file>` line for the `remove` action. The ledger file defaults to
-`~/.dsh/batch-edit.log` (one log per module).
+`~/.dsh/playform/plugin-dsh-batch-edit.log` (one log per module).
 
 ## Configuration
 
 Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
 ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
 
-| Field              | Default                 | Meaning                                                                  |
-| ------------------ | ----------------------- | ------------------------------------------------------------------------ |
-| `enabled`          | `false`                 | The master switch                                                        |
-| `log`              | `true`                  | The ledger switch (the factory's shared volatile cell)                   |
-| `logFile`          | `~/.dsh/batch-edit.log` | The module ledger                                                        |
-| `machinesPerAgent` | `2`                     | Open machines per agent                                                  |
-| `opsPerCommit`     | `64`                    | Op lines per commit (overflow goes to `opfile`)                          |
-| `deadlineMs`       | `120000`                | In-line commit deadline (1000..120000)                                   |
-| `strictMode`       | `false`                 | Search-not-found errors vs skips                                         |
-| `interceptBash`    | `false`                 | The advisory bash intercept (v1: tags and records, never denies)         |
-| `monitorChecksets` | `[]`                    | Per-file check-set names (the live containers' vocabulary, labels in v1) |
+| Field              | Default                                     | Meaning                                                                  |
+| ------------------ | ------------------------------------------- | ------------------------------------------------------------------------ |
+| `enabled`          | `false`                                     | The master switch                                                        |
+| `log`              | `true`                                      | The ledger switch (the factory's shared volatile cell)                   |
+| `logFile`          | `~/.dsh/playform/plugin-dsh-batch-edit.log` | The module ledger                                                        |
+| `machinesPerAgent` | `2`                                         | Open machines per agent                                                  |
+| `opsPerCommit`     | `64`                                        | Op lines per commit (overflow goes to `opfile`)                          |
+| `deadlineMs`       | `120000`                                    | In-line commit deadline (1000..120000)                                   |
+| `strictMode`       | `false`                                     | Search-not-found errors vs skips                                         |
+| `interceptBash`    | `false`                                     | The advisory bash intercept (v1: tags and records, never denies)         |
+| `monitorChecksets` | `[]`                                        | Per-file check-set names (the live containers' vocabulary, labels in v1) |
+| `policy.*`         | D6 defaults                                 | The per-action allowlist (the apply gate; see above)                     |
 
 ## Status
 

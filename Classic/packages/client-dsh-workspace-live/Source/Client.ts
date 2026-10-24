@@ -3,8 +3,8 @@
 // factory). The named `inject` (required client services: the slots registry
 // and the locale service) and the named `apply(ctx)`; the body lives in
 // Function/Client.ts - this entry is wiring only.
-import type { Context } from "@deepseek-ai/cordis";
 import ClientApply from "@Function/Client.js";
+import type { ClientContext } from "@Interface/Client.js";
 
 /** Required client services: the slot registry and the locale service. */
 export const inject = ["slots", "locale"];
@@ -15,7 +15,7 @@ export const inject = ["slots", "locale"];
  * removes everything without residue.
  * @param ctx - client root context.
  */
-export function apply(ctx: Context): void {
+export function apply(ctx: ClientContext): void {
 	// The knobs mount with their schema defaults; the end-phase wires the
 	// shared config channel (the PoC report DECISIONS).
 	ClientApply(ctx, { tabOrder: 25, maxEvents: 50, maxRepresentations: 100 });

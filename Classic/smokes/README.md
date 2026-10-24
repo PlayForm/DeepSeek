@@ -1,6 +1,6 @@
 # The family smokes (the arbiter)
 
-The fourteen mechanics suites — **core 14 / factory 35 / governor 79 / pinner 32 / cargo 62 /
+The fourteen mechanics suites — **core 15 / factory 53 / governor 79 / pinner 32 / cargo 62 /
 normalize-dash 184 / quotes 104 / ellipsis 104 / spaces 104 / invisible 104 / fullwidth 104 /
 normalize-file 112 / ccr 147 / tool-coach 129** — live as per-test folders under their packages
 (`Classic/packages/<bundle>/Source/Test/`, compiled into `Target/Test/`); the seven wiring suites'
@@ -8,7 +8,7 @@ folders live in this directory (see below). The `.mjs` fallback files are RETIRE
 I8): the folders are the arbiter now, and the per-suite before/after totals live in the totals
 ledger of `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`.
 
-The aggregate (2026-10-22 state): **184 Classic test folders, and 359 suites / 5,337 checks across
+The aggregate (2026-10-23 state): **269 Classic test folders, and 444 suites / 6,053 checks across
 both trees with EffectTS's 175** - the original 14 mechanics suites plus every package's own suites,
 all green via `node Maintain/Run-Smokes.mjs`.
 

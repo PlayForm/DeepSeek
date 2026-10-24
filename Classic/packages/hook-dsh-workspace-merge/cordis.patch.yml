@@ -26,8 +26,26 @@
 # lives in the Variable/Config.ts schema. EVERY knob is volatile
 # (hot-editable without remounting): enabled, log/logFile, domain, mode,
 # maxFiles and maxTotalBytes.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# merge's ONE gated action is the commit - `commit: approve` holds the whole
+# batch before the gates and before any write (the documented
+# `merge held <n> files (policy commit=approve)` line, every operation
+# replied `rejected`, nothing persisted). read/index/record/suggest and
+# message are automatic; write/commit/spawn wait for approval. A resolved
+# pack's `policy` section overrides these defaults per action (the wiring is
+# the next refinement).
 - insert:
       - id: hook-dsh-workspace-merge
         name: "@playform/hook-dsh-workspace-merge"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

@@ -2,6 +2,8 @@
 // validates and defaults it. Every field is a volatile cell (the values may
 // arrive as `{ get }` references; the factory's State builder unwraps and
 // hot-refreshes them in place).
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 export default interface Config {
 	/** The durable ledger file (one log per module). */
 	logFile: string;
@@ -19,4 +21,9 @@ export default interface Config {
 	strict: boolean;
 	/** The paths the guard ignores (the factory's segment match). */
 	exclude: string[];
+	/** The per-action allowlist (D6): the shared factory block. The guard is
+	 *  read-only, so its own classes are `read`/`record` (automatic); the
+	 *  write/commit/spawn verdicts stay the shipped `approve`. A resolved
+	 *  pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

@@ -40,10 +40,12 @@ const Settle = async () => {
   }
   await new Promise((Resolve) => setTimeout(Resolve, 20));
 };
-const Make = (Knobs = {}) => {
+const Make = (Knobs = {}, Attach) => {
   const Lines = [];
   const Warns = [];
   const Provided = {};
+  const Effects = [];
+  const Disposers = [];
   const Context = {
     logger: {
       info: (M) => {
@@ -53,6 +55,15 @@ const Make = (Knobs = {}) => {
         Warns.push(M);
       }
     },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup();
+      if (typeof Disposer === "function") {
+        Disposers.push(Disposer);
+      }
+      return () => true;
+    },
     reflect: {
       provide: (Name, Value) => {
         Provided[Name] = Value ?? true;
@@ -61,11 +72,66 @@ const Make = (Knobs = {}) => {
       }
     }
   };
-  const Service = new PatternService(Context);
-  if (Object.keys(Knobs).length > 0) {
-    Service.Configure(Knobs);
-  }
-  return { Context, Service, Lines, Warns, Provided };
+  const Run = { Context, Lines, Warns, Provided, Effects, Disposers };
+  Attach?.(Context, Run);
+  Run.Service = new PatternService(Context, Knobs);
+  return Run;
+};
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    version: Options.version ?? 1,
+    tables: /* @__PURE__ */ new Map(),
+    writes: [],
+    failOpen: Options.failOpen === true,
+    closed: false
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      switch (true) {
+        case Store.failOpen:
+          throw new Error("storage unavailable");
+        case Specification.version !== Store.version:
+          throw new Error(
+            `version-mismatch: stored ${Store.version}, declared ${Specification.version}`
+          );
+        default:
+      }
+      Store.spec = Specification;
+      return {
+        name: Specification.name,
+        close: async () => {
+          Store.closed = true;
+        },
+        table: (Name) => {
+          if (!Store.tables.has(Name)) {
+            Store.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Store.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+              Store.writes.push([Name, Key]);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Store.seed = (Name, Key, Value) => {
+    if (!Store.tables.has(Name)) {
+      Store.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Store.tables.get(Name).set(Key, Value);
+  };
+  return Store;
 };
 const Messages = (Run) => Run.Lines.map((Line) => Line.replace(/ \(logFile .*\)$/, ""));
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
@@ -82,7 +148,7 @@ if (InvokedDirectly) {
     assert.equal(Run.Provided["pattern"], Run.Service);
     assert.equal(Run.Service.name, "pattern");
     assert.equal(Run.Service.List().length, 4);
-    assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/pattern.log)"]);
+    assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)"]);
   });
   if (Count.N === 3 && Count.F === 1) {
     console.log("Harness selfcheck OK");
@@ -94,6 +160,7 @@ if (InvokedDirectly) {
 export {
   Check,
   CheckAsync,
+  FakeStorage,
   Finish,
   Home,
   Make,

@@ -1,0 +1,1 @@
+var r=e=>{if(e===null||typeof e!="object")return!1;const t=e;switch(!0){case(typeof t.path!="string"||t.path.length===0):return!1;case typeof t.version!="string":return!1;case typeof t.origin!="string":return!1;default:return!0}};export{r as default};

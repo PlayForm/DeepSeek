@@ -20,8 +20,9 @@
 # `edit-suggester: disabled (enabled=false)` and every listener no-ops to a
 # passthrough (each checks State.On first). The schema defaults are the
 # truth; the full default surface (threshold 0.75, tools write/edit/raw-write,
-# maxCompanions 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3)
-# lives in Variable/Config.ts. EVERY knob is volatile (hot-editable without
+# maxCompanions 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, and
+# the learning layer's learn/learnWindow/heuristics/weights/storeLimit) lives
+# in Variable/Config.ts. EVERY knob is volatile (hot-editable without
 # remounting).
 - insert:
       - id: hook-dsh-edit-suggester
@@ -29,4 +30,4 @@
         config:
             enabled: false
             log: true
-            logFile: ~/.dsh/edit-suggester.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-edit-suggester.log

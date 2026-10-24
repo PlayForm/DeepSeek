@@ -22,8 +22,26 @@
 # lives in the Variable/Config.ts schema. EVERY knob is volatile
 # (hot-editable without remounting): enabled, log/logFile, domain,
 # maxValidations and exclude.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block, mapped to State.Allow. This package's actions are
+# read-only and record, all automatic - it has NO gated action (it never
+# writes a file, commits a batch or spawns an agent), so the block documents
+# the posture and refuses nothing. read/index/record/suggest/message are
+# automatic; write/commit/spawn stay the shipped `approve` for the family's
+# write paths. A resolved pack's `policy` section overrides these defaults
+# per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-workspace-evidence
         name: "@playform/ets-plugin-dsh-workspace-evidence"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

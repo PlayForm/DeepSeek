@@ -1,9 +1,11 @@
 // Apply - the plugin entry function: fail-loud validation, the State build
 // (the factory's cell unwrap + the P10 volatile refresh), the service
 // registration (Function/Service - `workspaceContext`, constructed here so
-// `ctx.workspaceContext` resolves), the tool registration, the activation
-// proof, and the optional token-meter probe (V4-1 section 4: the orientation
-// budget uses ctx.tokenMeter where available).
+// `ctx.workspaceContext` resolves), the activation proof, the trace adapter
+// (consume `graph/invalidated` to invalidate the packet memo - wired only
+// after the enabled gate), the tool registration, and the optional token-meter
+// probe (V4-1 section 4: the orientation budget uses ctx.tokenMeter where
+// available).
 //
 // THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
 // and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
@@ -20,6 +22,8 @@ import type Config from "@Interface/Config.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
+
+import Adapter from "../Trace/Adapter.js";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
 const Cell = (Value: unknown): unknown =>
@@ -78,10 +82,12 @@ export default (Context: Context, Options: Config): void => {
 			EvidenceLimit: "evidenceLimit",
 			MapLimit: "mapLimit",
 			WorkspaceName: "workspaceName",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;
 	State.Focus = new Map();
+	State.Cache = new Map();
 	State.Packets = 0;
 	State.Clamped = 0;
 	State.Stale = 0;
@@ -109,6 +115,11 @@ export default (Context: Context, Options: Config): void => {
 			["lenses", String(State.Lenses.length)],
 		]),
 	);
+	// The trace adapter (D5): consume `graph/invalidated` to invalidate the
+	// packet memo. Wired only after the enabled gate; the bus is optional (an
+	// absent service subscribes to nothing) and the subscription is disposed
+	// with the fiber.
+	Adapter(State);
 	// The tool registration (the live-containers posture: the context's
 	// `tools` facility, probed defensively).
 	const Tools = (Context as unknown as { tools?: { register?: (definition: unknown) => void } })

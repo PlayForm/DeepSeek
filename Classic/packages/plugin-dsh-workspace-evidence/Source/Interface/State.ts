@@ -9,14 +9,21 @@
 import type DomainHandle from "@Interface/Domain.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Validation from "@Interface/Validation.js";
-import type { State as Base } from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 
 interface Extra {
+	/** Master switch (config `enabled`, volatile) - false = full no-op. */
+	On: boolean;
 	/** Config `domain` - the KV domain NAME (volatile). Named DomainName to
 	 *  stay clear of the factory's shared `Domain` handle field. */
 	DomainName: string;
 	/** Config `maxValidations` - the store bound (volatile). */
 	MaxValidations: number;
+	/** The per-action allowlist (config `policy`, volatile) - the D6 block.
+	 *  Named `Allow` because the factory's shared State already owns `Policy`
+	 *  (the configured global policy file path). This package's actions are
+	 *  automatic; it has NO gated action. */
+	Allow: Allowlist;
 	/** The injected factory instance (the State builder, the ledger, the
 	 *  match, the Wire). */
 	Factory: FactoryHandle;

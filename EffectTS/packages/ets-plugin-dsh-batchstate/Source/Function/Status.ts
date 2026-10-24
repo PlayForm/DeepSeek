@@ -8,6 +8,7 @@
 // is ledgered and emitted AFTER the state is updated.
 import Emit from "@Function/Emit.js";
 import Ensure from "@Function/Ensure.js";
+import Persist from "@Function/Persist.js";
 import type Shape from "@Interface/Member.js";
 import type State from "@Interface/State.js";
 
@@ -41,5 +42,6 @@ export default (State: State, Agent: string, Status: string): void => {
 			}
 	}
 	State.Factory.Append(State, `status ${Agent}: ${Status}`);
+	Persist(State);
 	Emit(State, { batch: State.Batch, id: Agent, kind: "status" });
 };

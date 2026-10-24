@@ -27,13 +27,50 @@ the edited path with weights) and its standard companion set - each companion a 
 prior and **one reason phrase** ("the Config section", "the byte-exact assertion", "the long tail").
 A companion without a reason is not emitted.
 
+The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `edit/` domain. A
+repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `edit/` families; a repository without a pack
+stays silent.
+
 ## The gate
 
 The same algebra as the search consumer: `k = sigmoid(sum(weights) - 0.6)`, the candidate scoring
-with a neutral history (this PoC carries no learned layer), and the noise control - a cooldown, a
-dedupe, a per-turn cap, and the already-touched filter (companions the model edited earlier this
-turn are dropped; when nothing remains, the verdict is an `already-touched` abstention). Every
-abstention and suppression is a ledger line.
+over the **pickable heuristics** (see below), and the noise control - a cooldown, a dedupe, a
+per-turn cap, and the already-touched filter (companions the model edited earlier this turn are
+dropped; when nothing remains, the verdict is an `already-touched` abstention). Every abstention and
+suppression is a ledger line.
+
+## The learning layer (D8)
+
+Every emitted note - and every gated silence worth learning from (`low-confidence`,
+`already-touched`) - records a **decision**: the family, the companion rows with their six pickable
+heuristic values (`scope`, `graph`, `prior`, `literal`, `history`, `accept`), the effective weight
+table, the enabled list, and a `pending` outcome placeholder. The record is logged (`decided ...`)
+and stored through the optional **pattern service** (`ctx.get("pattern")`, probed per use, never an
+inject); without one it lives in a bounded in-memory fallback (`storeLimit`, default 512), which is
+per instance and documented as such.
+
+The note opens a **follow-through window** counted in judged calls (never a timer): a later call
+that names one of the note's companions is an **accept** for that companion and its family
+(`accepted <Family> <path>`); a window that reaches `learnWindow` judged calls untouched closes as a
+**soft reject** (`rejected <Family> <n> companions`). Both fill the decision record's outcome and
+move the learned accept rates.
+
+The score is `sum over the enabled heuristics of weight * value`:
+
+| Heuristic | Value                                                   | Default weight |
+| --------- | ------------------------------------------------------- | -------------- |
+| `scope`   | 1.00 - the call matched the family's path rules         | 0.35           |
+| `graph`   | 0.50 - the neutral graph-distance placeholder           | 0.00           |
+| `prior`   | the pack's prior for the companion                      | 0.25           |
+| `literal` | 0.50 - the neutral literal (no generated index)         | 0.25           |
+| `history` | the **learned per-companion accept rate** (neutral 1/3) | 0.15           |
+| `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
+
+The default row is exactly the PoC formula, and a missing store answers the neutral 1/3, so the
+default behaviour is unchanged byte-for-byte. A user can disable any heuristic (`heuristics`) or
+re-weight any of them (`weights`), and the decision record plus the `decided` line show the choice.
 
 ## The delivery
 
@@ -52,7 +89,8 @@ never fails a tool call).
 ## Config
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
-Ships **disabled** - enable by explicit ACTIVATE in the profile.
+The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
+**disabled** - enable by explicit ACTIVATE in the profile.
 
 ## License
 

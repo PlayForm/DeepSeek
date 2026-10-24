@@ -26,8 +26,25 @@
 # lensDefault code, neighborLimit 20, evidenceLimit 12, mapLimit 12,
 # workspaceName workspace) lives in the Variable/Config.ts schema. EVERY
 # knob is volatile (hot-editable without remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist ships
+# with its defaults - read/index/record/suggest and message are automatic,
+# write/commit/spawn wait for approval. The context service's actions are
+# READ-ONLY (automatic), so this package has NO gated action: it never writes a
+# file, commits a batch or spawns an agent, and no verdict can refuse it. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: plugin-dsh-workspace-context
         name: "@playform/plugin-dsh-workspace-context"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

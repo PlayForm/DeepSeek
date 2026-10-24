@@ -282,6 +282,91 @@ export const LinesWith = (Run: any, Needle: string): string[] =>
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((L: string) => L.includes(Needle));
 
+/**
+ * The fake HARNESS subagent service (`ctx.subagents`): records every
+ * `startActivation` spec verbatim, hands back a CONTROLLABLE result, and
+ * exposes each activation's abort signal. A scenario settles a child by
+ * resolving its result explicitly - no sleeps, no timers, no wall clock.
+ */
+export const FakeSubagents = (): any => {
+	const Calls: any[] = [];
+	const Results: Array<{ resolve: (Value: unknown) => void; reject: (Error: unknown) => void }> = [];
+	const Disposed: string[] = [];
+	return {
+		calls: Calls,
+		results: Results,
+		disposed: Disposed,
+		startActivation: async (Spec: any) => {
+			Calls.push(Spec);
+			let Settle: any = {};
+			const Result = new Promise((Resolve, Reject) => {
+				Settle = { resolve: Resolve, reject: Reject };
+			});
+			Results.push(Settle);
+			const Child = `child-${Calls.length}`;
+			return {
+				childId: Child,
+				messageId: `message-${Calls.length}`,
+				result: Result,
+				dispose: async () => {
+					Disposed.push(Child);
+				},
+			};
+		},
+	};
+};
+
+/**
+ * The fake HARNESS agent registry (`ctx.agents`): `currentInitiator` returns
+ * the seeded parent (the exact object the spawn must hand the service), and
+ * `get` answers from a MUTABLE live set - a scenario removes a child to model
+ * the restart's dead agent.
+ */
+export const FakeAgents = (Parent: any = { id: "parent" }): any => {
+	const Live = new Set<string>();
+	return {
+		live: Live,
+		parent: Parent,
+		currentInitiator: () => Parent,
+		get: (Id: string) => (Live.has(Id) ? { id: Id } : undefined),
+	};
+};
+
+/**
+ * The automation mount: the enabled plugin plus the fake subagent service and
+ * the fake agent registry, both attached BEFORE apply (the probes read the
+ * context at dispatch time).
+ *
+ * THE POLICY FIXTURE (D6): the mount opts the outer policy gate OPEN
+ * (`policy.spawn: "auto"`) so the spawn scenarios keep exercising the launch
+ * itself; the gate's approve posture and its precedence over `autoSpawn` are
+ * the Policy-Defaults folder's scenarios. A caller passes its own `policy`
+ * to model a closed gate.
+ */
+export const Automation = (
+	Config: Record<string, unknown> = {},
+	Agents: any = FakeAgents(),
+	Subagents: any = FakeSubagents(),
+): { Run: any; Service: any; Subagents: any; Agents: any } => {
+	rm();
+	const Run = Make(
+		Validate({
+			logFile: Ledger,
+			enabled: true,
+			autoSpawn: true,
+			policy: { spawn: "auto" },
+			...Config,
+		}),
+		(Context: any) => {
+			Context.subagents = Subagents;
+			if (Agents !== undefined) {
+				Context.agents = Agents;
+			}
+		},
+	);
+	return { Run, Service: Run.Context.dshQueue, Subagents, Agents };
+};
+
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&

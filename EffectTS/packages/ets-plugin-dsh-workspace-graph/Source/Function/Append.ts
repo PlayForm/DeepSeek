@@ -8,8 +8,10 @@
 // `appendFileSync` is the documented exemption (identical to the factory's).
 // Both best-effort, never rethrow.
 import * as FileSystem from "node:fs";
+import { dirname as Parent } from "node:path";
 
 import type State from "@Interface/State.js";
+import { Expand } from "@playform/ets-base-dsh";
 
 export default (StateRef: State, Message: string): void => {
 	try {
@@ -19,8 +21,10 @@ export default (StateRef: State, Message: string): void => {
 	}
 	if (StateRef.Ledger !== "") {
 		try {
+			const Ledger = Expand(StateRef.Ledger);
+			FileSystem.mkdirSync(Parent(Ledger), { recursive: true });
 			FileSystem.appendFileSync(
-				StateRef.Ledger,
+				Ledger,
 				`[${new Date().toISOString()}] graph: ${Message}\n`,
 			);
 		} catch {

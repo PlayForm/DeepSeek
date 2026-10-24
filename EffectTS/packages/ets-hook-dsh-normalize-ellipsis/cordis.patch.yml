@@ -35,7 +35,7 @@
         name: "@playform/ets-hook-dsh-normalize-ellipsis"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-normalize-ellipsis.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-normalize-ellipsis.log
             replacement: "..."
             normalizeReasoning: true
             normalizeToolArguments: true

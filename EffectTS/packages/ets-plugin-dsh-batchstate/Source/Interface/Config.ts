@@ -2,6 +2,8 @@
 // validates and defaults it. Every field is a volatile cell (the values may
 // arrive as `{ get }` references; the factory's State builder unwraps and
 // hot-refreshes them in place).
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 export default interface Config {
 	/** The durable ledger file (one log per module). */
 	logFile: string;
@@ -11,8 +13,18 @@ export default interface Config {
 	enabled: boolean;
 	/** The batch key (multi-batch isolation). */
 	batch: string;
-	/** The well-known JSON state file (the plan's file-based fallback). */
+	/** The KV domain name - the PRIMARY store. */
+	domain: string;
+	/** The well-known JSON state file - the FALLBACK store, engaged only when
+	 *  the storage facility is absent (or its open fails). */
 	stateFile: string;
 	/** The completions ring bound. */
 	maxRecent: number;
+	/** The spliced-proposal ring bound (the board's inbox memory). */
+	maxProposals: number;
+	/** The per-action allowlist (D6): the shared factory block. The board
+	 *  records and projects - `read`/`record`/`suggest` are automatic; the
+	 *  write/commit/spawn verdicts stay the shipped `approve`. A resolved
+	 *  pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

@@ -1,6 +1,6 @@
 // Library - the entry module of the INGESTER (@playform/plugin-dsh-ingester,
 // ctx.ingester), the apply direction of the batch flow
-// (Documentation/Plans/PASS-ON-AND-INGER.md section 4). Class form (the
+// (Documentation/Plans/PASS-ON-AND-INGESTER.md section 4). Class form (the
 // factory's precedent): `export default class Ingester extends Service` with
 // `super(Context, "ingester")`, registered immediately on construction and
 // removed with its owning fiber.
@@ -10,6 +10,17 @@
 //   Apply(proposal, decision) - the version-fenced apply: per target, in
 //                               the proposal's order, through the governed
 //                               filesystem. Returns the honest BatchResult.
+//                               One apply per proposal (the claim in
+//                               Function/Claim).
+//   WhenIdle()                - await every in-flight apply (the flush seam
+//                               the smokes use instead of sleeping).
+//
+// THE EVENT PATH (the plan's deferred trace adapter, now wired): the
+// constructor registers two bus listeners (Function/Listen) - `batch/proposed`
+// records the proposal, `batch/decision` consumes the decision and applies it
+// through the same content fence. An approved batch therefore applies with
+// no caller wiring at all, and the tool handoff path (the decision hook's
+// `Apply`) shares the same one-apply claim.
 //
 // THE ONLY-WRITER LAW: the ingester is the batch's write path - the pass-on
 // and the decision must never write. Writes go through ctx.fs (the governed
@@ -23,8 +34,10 @@ import { homedir as Home } from "node:os";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type FileSystem from "@deepseek-ai/dsh-fs";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 
-import ApplyFn from "./Function/Apply.js";
+import ClaimFn from "./Function/Claim.js";
+import ListenFn from "./Function/Listen.js";
 import type Config from "./Interface/Config.js";
 import type Decision from "./Interface/Decision.js";
 import type Proposal from "./Interface/Proposal.js";
@@ -44,19 +57,41 @@ export default class Ingester extends Service {
 		const Ledger = Config.logFile.startsWith("~")
 			? `${Home()}${Config.logFile.slice(1)}`
 			: Config.logFile;
+		// THE POLICY BLOCK (D6) is a VOLATILE cell in the schema (the factory's
+		// shared block); the class form has no factory State builder to unwrap
+		// it, so the block is normalized ONCE here - a config edit reloads the
+		// plugin anyway (the class form's documented posture).
+		const Allow: Allowlist =
+			(Config.policy as unknown as { get?: () => Allowlist }).get?.() ?? Config.policy;
 		this.State = {
-			Config,
+			Config: { ...Config, policy: Allow },
 			Context,
 			Module: "plugin-dsh-ingester",
 			Ledger,
 			Enabled: Config.enabled,
 			Fs: (Context as { fs?: FileSystem }).fs,
+			Proposals: new Map(),
+			Pending: new Map(),
 		};
+		// The trace adapter: the decision event is the apply trigger.
+		ListenFn(this.State);
 	}
 
 	/** Apply an approved proposal, per target, in order, version-fenced
-	 *  (the honest BatchResult; a conflict never silently overwrites). */
-	Apply(Proposal: Proposal, Decision: Decision): Promise<Result> {
-		return ApplyFn(this.State, Proposal, Decision);
+	 *  (the honest BatchResult; a conflict never silently overwrites; one
+	 *  apply per proposal however many callers ask). */
+	Apply(Proposal: Proposal, Decision: Decision): Promise<Result | null> {
+		return ClaimFn(this.State, Proposal, Decision);
+	}
+
+	/** Await every in-flight apply (the flush seam: no sleeps in the smokes,
+	 *  no timers in the hot path). */
+	async WhenIdle(): Promise<void> {
+		await Promise.allSettled([...this.State.Pending.values()]);
+	}
+
+	/** The recorded proposals (the decision consumer's read). */
+	Proposals(): Proposal[] {
+		return [...this.State.Proposals.values()];
 	}
 }

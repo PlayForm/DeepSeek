@@ -1,0 +1,1 @@
+import{Names as r}from"@playform/ets-lib-dsh-trace";import n from"./Invalidate.js";var i=e=>{try{const t=e.Factory.Seam(e,r.service);if(!0===(t===void 0))return;const a=t.on(r.invalidated,o=>n(e,o));e.Context.effect?.(()=>()=>a(),"context-trace")}catch{}};export{i as default};

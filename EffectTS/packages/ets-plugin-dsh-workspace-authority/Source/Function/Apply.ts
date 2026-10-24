@@ -83,6 +83,7 @@ export default (Context: Context, Options: Config): void => {
 			MaxCapabilities: "maxCapabilitiesPerHolder",
 			RevocationGraceMs: "revocationGraceMs",
 			PolicyRules: "policy",
+			Allow: "automation",
 		},
 	}) as State;
 	State.Factory = Factory;

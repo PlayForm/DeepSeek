@@ -91,21 +91,27 @@ import {
 	type Transform,
 	type Over as WriteOver,
 } from "@playform/ets-base-dsh";
+import { Names } from "@playform/ets-lib-dsh-trace";
 import { Effect } from "effect";
 
 import AttachEffects from "./Function/Attach.js";
 import Continue from "./Function/Continue.js";
+import DecideFn from "./Function/Decide.js";
 import Discover from "./Function/Discover.js";
 import Gate from "./Function/Gate.js";
 import Match from "./Function/Match.js";
 import Parse from "./Function/Parse.js";
+import PolicyFn from "./Function/Policy.js";
 import RefreshFn from "./Function/Refresh.js";
 import Resolve from "./Function/Resolve.js";
 import SchemaFn from "./Function/Schema.js";
 import SeamFn from "./Function/Seam.js";
 import Build from "./Function/State.js";
+import CreateTrace from "./Function/Trace.js";
 import UpdateKey from "./Function/UpdateKey.js";
 import Wire from "./Function/Wire.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Trace from "./Interface/Trace.js";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,
@@ -120,6 +126,14 @@ export type { Gate } from "@playform/ets-base-dsh";
 export type { Transform } from "@playform/ets-base-dsh";
 export type { Output } from "@playform/ets-base-dsh";
 export type { Journal } from "@playform/ets-base-dsh";
+// The policy block's shape (D6): the eight action classes and their verdict
+// union. The builder is the `Policy` named export below, the lookup is
+// `Decide` - the type cannot share the builder's name (TS2323), so the shape
+// ships as `Allowlist`.
+export type { default as Allowlist } from "./Interface/Allowlist.js";
+// The `ctx.trace` service view (D5): the emit/on Adapter plus the factory's
+// flush/ring/dispose seams.
+export type { default as Trace } from "./Interface/Trace.js";
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields - `Schema(shared?, module?)`,
@@ -145,6 +159,25 @@ export function Schema(
 	return SchemaFn(Shared, Module);
 }
 
+// The POLICY-BLOCK builder (D6): the module-level composition of the shared
+// per-action allowlist - `policy: Policy()` inside a consumer's own schema.
+// Exactly the module-load use `Schema` has (the loader needs the composed
+// `Config` at module-evaluation time), and exactly as `this`-free: Function/
+// Policy never reads a service. The block is volatile as one object; the D6
+// defaults are read/index/record/suggest/message = "auto", write/commit/spawn
+// = "approve".
+export function Policy(): ReturnType<typeof PolicyFn> {
+	return PolicyFn();
+}
+
+// The POLICY VERDICT lookup (D6): the action names are the block's keys, so
+// `Decide(policy, "spawn")` answers "auto" | "approve". A missing key falls
+// back to that action's D6 default (never a blanket "auto"), and a malformed
+// value is treated as missing - the helper never throws.
+export function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve" {
+	return DecideFn(Policy, Action);
+}
+
 // The service: class form, injected on fs, registered as `pluginFactory`.
 // Behind the shell, the constructor materializes the Effect runtime (the
 // four-service Layer graph); every machinery method delegates into it at a
@@ -163,6 +196,24 @@ export default class PluginFactory extends Service {
 		// steps at apply (RegisterGovern). Per factory instance - each test
 		// context gets a fresh factory, so the smokes stay per-scenario.
 		this.GovernSteps = {};
+		// THE TRACE BUS (D5): the family's ONE bus, provided here because the
+		// factory is the shared-machinery owner (the vocabulary and the
+		// detached loop live in @playform/ets-lib-dsh-trace; the service lives
+		// in the family's existing service plugin - no new package, no separate
+		// process). Both registrations are contained: a bare fixture context
+		// may not implement provide/effect, and a second factory instance may
+		// find the name already provided - neither may break the factory.
+		this.Trace = CreateTrace();
+		try {
+			Context.provide?.(Names.service, this.Trace);
+		} catch {
+			/* contained: the name may already be provided in this scope */
+		}
+		try {
+			Context.effect?.(() => () => this.Trace.dispose(), "trace");
+		} catch {
+			/* contained: a bare fixture context has no fiber effects */
+		}
 		// The Effect runtime: the four-service Layer graph materialized ONCE per
 		// instance (Source/Service/Runtime.ts). The layers are plain succeed
 		// closures - the services read this instance's fields (SharedJournal/
@@ -173,6 +224,12 @@ export default class PluginFactory extends Service {
 
 	/** The materialized Effect runtime (see the constructor). */
 	private readonly Runtime: FactoryRuntime;
+
+	/** THE TRACE BUS (D5): the family's ONE bus, provided as `ctx.trace` in the
+	 *  constructor. The vocabulary and the detached loop live in
+	 *  @playform/ets-lib-dsh-trace; this instance is the service body
+	 *  (Function/Trace) and the smoke surface (`ring`/`flush`). */
+	Trace!: Trace;
 
 	/** The ledger: logger + appendFileSync, never throws. The
 	 *  LedgerService wraps the byte-identical machinery in the

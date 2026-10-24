@@ -22,10 +22,10 @@
 // disabled, never appears in the profile's bundles, and enables only by an
 // explicit ACTIVATE.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/workspace.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-workspace.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The workspace_map knobs (V4-1 §3.4: the top-level modules, depth).
 	mapDepth: Schema.number().default(2).volatile(),
@@ -48,4 +48,13 @@ export default Compose(false, {
 	kinds: Schema.array(Schema.union(["File", "Symbol", "Block", "Test", "DocSection"]))
 		.default([])
 		.volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The workspace agent's
+	// actions are READ-ONLY (automatic), so this package has NO gated action:
+	// it never writes a file, commits a batch or spawns an agent, and no
+	// verdict can refuse it. read/index/record/suggest/message are automatic;
+	// write/commit/spawn wait for approval for the family's write paths.
+	// Volatile as one object; a resolved pack's `policy` section overrides the
+	// defaults per action (the wiring is the next refinement; the type already
+	// exists).
+	policy: Policy(),
 });

@@ -73,6 +73,7 @@ export default (Context: Context, Options: Config): void => {
 			Propagate: "propagate",
 			MaxFileBytes: "maxFileBytes",
 			MaxBlockLines: "maxBlockLines",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

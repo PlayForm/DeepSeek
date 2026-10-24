@@ -20,14 +20,14 @@ const CONTENT = [
 const Setup = (Config = {}, Files = {}) => {
   rm();
   return Make(
-    Validate({ logFile: Ledger, enabled: true, ...Config }),
+    Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" }, ...Config }),
     Seed({ "/repo/a.ts": CONTENT, ...Files })
   );
 };
 const SetupFailing = (FailMessage) => {
   rm();
   return Make(
-    Validate({ logFile: Ledger, enabled: true }),
+    Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" } }),
     (_Context, Run) => {
       Run.Fs.files = { "/repo/a.ts": CONTENT };
       Run.Fs.FailWrites = FailMessage;

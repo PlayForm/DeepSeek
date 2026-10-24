@@ -1,2 +1,2 @@
-import*as r from"node:fs";var o=(t,e)=>{try{t.Context.logger.info(`${t.Module}: ${e}`)}catch{}switch(!0){case t.Enabled:try{r.appendFileSync(t.Ledger,`[${new Date().toISOString()}] ${e}
-`)}catch{}}};export{o as default};
+import*as o from"node:fs";import{dirname as n}from"node:path";import{Expand as i}from"@playform/lib-dsh-core";var m=(e,r)=>{try{e.Context.logger.info(`${e.Module}: ${r}`)}catch{}switch(!0){case e.Enabled:try{const t=i(e.Ledger);o.mkdirSync(n(t),{recursive:!0}),o.appendFileSync(t,`[${new Date().toISOString()}] ${r}
+`)}catch{}}};export{m as default};

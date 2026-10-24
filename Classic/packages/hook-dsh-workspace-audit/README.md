@@ -43,10 +43,28 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | ---------- | --------------------------------------------------- | ---------------------------------------- |
 | `enabled`  | `false`                                             | Master switch (the IDLE-forever posture) |
 | `log`      | `true`                                              | Ledger enabled                           |
-| `logFile`  | `~/.dsh/workspace-audit.log`                        | The plugin's own ledger                  |
+| `logFile`  | `~/.dsh/playform/hook-dsh-workspace-audit.log`      | The plugin's own ledger                  |
 | `domain`   | `workspace_audit`                                   | The KV domain name                       |
 | `maxLines` | `2000`                                              | The line ring bound                      |
 | `exclude`  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |
+| `policy.*` | see below                                           | The D6 per-action allowlist              |
 
 The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
 explicit ACTIVATE.
+
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
+commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
+object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
+overrides the defaults per action (the wiring is the next refinement).

@@ -23,6 +23,10 @@ export default interface Config {
     exclude: string[];
     /** The history store path (structural: loaded once at apply; changing it remounts). */
     historyPath: string;
-    /** How many calls after a note the follow/ignore observation window spans (volatile; parsed only in the PoC - the online write path is the end-phase). */
+    /** How many calls after a note the follow/ignore observation window spans (volatile; also the recall's episode radius). */
     learnWindow: number;
+    /** The producer's JSON fallback store path (structural: read once at apply; changing it remounts). */
+    recordPath: string;
+    /** The recall history's bound (volatile; the ring, the mirror and the KV table). */
+    historyDepth: number;
 }

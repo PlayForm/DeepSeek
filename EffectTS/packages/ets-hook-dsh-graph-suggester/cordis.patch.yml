@@ -27,7 +27,7 @@
         config:
             enabled: false
             log: true
-            logFile: ~/.dsh/graph-suggester.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-graph-suggester.log
             threshold: 0.75
             maxCandidates: 7
             maxNoteChars: 1200

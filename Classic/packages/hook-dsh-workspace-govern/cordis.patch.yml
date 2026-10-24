@@ -30,8 +30,27 @@
 # bound and the decision ring) lives in the Variable/Config.ts schema. Every
 # knob is a volatile cell (hot-editable without remounting); a policy or
 # recovery edit lands on the next gated call.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the shared per-action allowlist.
+# The key is `automation` because this hook's `policy` is the decision rule
+# table - the plugin-dsh-route precedent. This hook's action class is RECORD
+# (it records a gate decision) and that class is AUTOMATIC, so the package has
+# NO gated action - it never writes a file, commits a batch or spawns an
+# agent, and no verdict can refuse it. read/index/record/suggest/message are
+# automatic; write/commit/spawn wait for approval for the family's write
+# paths. A resolved pack's `policy` section overrides these defaults per
+# action (the wiring is the next refinement).
 - insert:
       - id: hook-dsh-workspace-govern
         name: "@playform/hook-dsh-workspace-govern"
         config:
             enabled: false
+            automation:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

@@ -22,10 +22,12 @@
 // disabled, never appears in the profile's bundles, and enables only by an
 // explicit ACTIVATE.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/evidence.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-plugin-dsh-workspace-evidence.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the service's own domain, not a shared one).
 	domain: Schema.string().default("workspace_evidence").volatile(),
@@ -37,4 +39,15 @@ export default Compose(false, {
 	// the shared built-in list the observe hook ships (SEGMENT names, not
 	// globs - the factory's Function/Match is a segment matcher).
 	exclude: Schema.array(Schema.string()).default(["node_modules", "Target", ".git"]).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. This package's action
+	// classes are read-only and record - the validation objects, the stale
+	// invalidation and the read surface are AUTOMATIC, so this package has NO
+	// gated action: it never writes a file, commits a batch or spawns an
+	// agent, and no verdict can refuse it. read/index/record/suggest/message
+	// are automatic; write/commit/spawn wait for approval for the family's
+	// write paths (declared here for uniformity - this package never takes
+	// them). Volatile as one object; a resolved pack's `policy` section
+	// overrides the defaults per action (the wiring is the next refinement;
+	// the type already exists).
+	policy: Policy(),
 });

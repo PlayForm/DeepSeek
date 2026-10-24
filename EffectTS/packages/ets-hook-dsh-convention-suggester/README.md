@@ -16,8 +16,47 @@ notice naming the companion targets the convention requires:
 
 The arbiter is the smoke suite that asserts the convention
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.4). The hook
-is READ-ONLY by design: it never edits, never rewrites arguments, never denies - its only surface is
-the notice.
+is READ-ONLY by design except the opt-in learner: it never edits, never rewrites arguments, never
+denies - its surfaces are the notice and, only when learning is on, one PROPOSAL file (never the
+live pack).
+
+The conventions are **pack-driven**: the built-in pack (this monorepo's default) lives in
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `convention/` domain. A
+repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents; a repository without a
+pack stays silent.
+
+## The pack learner (D4)
+
+The hook is also the family's PACK LEARNER: an **opt-in bootstrap** that derives a repo's pack from
+the repo itself and writes it as a **proposal**, never as a live pack.
+
+- **Off by default.** Flip the config's `learning` to `true` for every workspace, or let a repo opt
+  itself in with a minimal `.dsh/pack.yml`:
+
+    ```yaml
+    learning:
+        propose: true
+    ```
+
+    The config wins when true; a false config (the default) leaves the decision to the pack.
+
+- **When.** The first judged call in a packless workspace per process (the built-in pack, or a pack
+  layer with no families). An installed pack is never proposed over.
+- **What.** The doc graph (`Documentation/INDEX.md`, `ARCHIVE-STYLE.md`, `Plans`, `Guides`, `Skill`,
+  `Handoff`), the package layout (`package.json`, `README.md`, `SCHEME.md`, `cordis.patch.yml`,
+  `Source/{Library.ts,Function,Variable,Interface,Test}`) and the site
+  (`Site/Source/{Content,pages,Component,Library}`) become the families whose companions actually
+  exist; the signature is `ARCHIVE-STYLE.md`, else `INDEX.md`, else `package.json`; the slug is the
+  repo's basename, lowercased.
+- **Where.** `<home>/.dsh/playform/proposals/<slug>.yml` - a full pack object that parses back
+  through `@playform/ets-lib-dsh-pack`. **Install it** by copying the file to
+  `~/.dsh/playform/workspaces/<slug>.yml` and restarting (the library resolves packs at boot).
+- **The note.** One `additionalContexts` notice naming the proposal path, the family count and the
+  install step, with the ledger line `learned proposal <slug> <n> families <path>`.
+
+The refine-from-edits layer (an accepted suggestion moving a companion's weight) is the later D8
+lane.
 
 ## How it works
 

@@ -39,7 +39,7 @@ export default Compose(false, {
 	// Ledger file - the CCR hook's ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/ccr.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-ccr.log").volatile(),
 	// The target allow-list: tools whose oversized results are compressed (the
 	// terminal/search/fetch family). Structural: remounts on edit.
 	targets: Schema.array(String).default([

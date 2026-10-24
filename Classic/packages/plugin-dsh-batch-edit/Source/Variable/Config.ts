@@ -26,10 +26,10 @@
 // schemastery instance - the loader consumes it through the Standard Schema
 // `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/batch-edit.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-batch-edit.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The per-agent machine capacity (the planted-board lease semantics).
 	machinesPerAgent: Schema.number().default(2).volatile(),
@@ -47,4 +47,13 @@ export default Compose(false, {
 	// Per-file check-set names (the live containers' monitor vocabulary,
 	// reused as labels in v1).
 	monitorChecksets: Schema.array(Schema.string()).default([]).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist, the OUTER gate in front
+	// of an apply - `write` defaults to `approve`, so a commit refuses before
+	// planning or writing (the documented `apply refused` line) until the user
+	// opens the gate or approves the batch through the existing approve
+	// binding. Composed from the factory's shared block:
+	// read/index/record/suggest/message = auto, write/commit/spawn = approve.
+	// Volatile as one object; a resolved pack's `policy` section overrides the
+	// defaults per action (the wiring is the next refinement).
+	policy: Policy(),
 });

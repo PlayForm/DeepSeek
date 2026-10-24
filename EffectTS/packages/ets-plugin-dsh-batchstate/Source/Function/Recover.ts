@@ -1,58 +1,38 @@
-// Recover - the state-file recovery (Function/Recover): read the well-known
-// JSON state file ONCE on mount and repopulate the members and the queue.
-// The file is the plugin's OWN store (the plan's file-based fallback, the
-// sanctioned channel when the inbox splice is not exposed) - it is read and
-// written with a plain fs read/write because the state file is NOT a
-// governed file (the same documented exemption the ledger carries: ctx.fs
-// has no append, and re-reading + rewriting the plugin's own snapshot
-// through a governed write would be both racy and wrong).
+// Recover - the JSON FALLBACK recovery (Function/Recover): read the
+// well-known JSON state file ONCE on mount and repopulate the members, the
+// queue, the spliced proposals and the arbiter gates (Function/Restore).
 //
-// The recovered members KEEP their statuses, timestamps and scopes; a
-// member that recovered as active is HONESTLY downgraded to interrupted
-// (the process it ran in is gone after a restart - the live truth cannot
-// be claimed). The queue keeps only ids that still have a member record.
-import * as FileSystem from "node:fs";
+// THE SPLIT (the completion spec's wave 3 storage migration): the PRIMARY
+// store is the storage-domain KV domain (Function/Storage); this file is the
+// DEGRADED FALLBACK, engaged ONLY when the harness provides no storage
+// facility (Function/Apply's probe) or when the domain's open fails. The file
+// is the plugin's OWN store (the plan's file-based fallback) - it is read and
+// written with a plain fs read/write because the state file is NOT a governed
+// file (the same documented exemption the ledger carries: ctx.fs has no
+// append, and re-reading + rewriting the plugin's own snapshot through a
+// governed write would be both racy and wrong). The tilde is expanded once at
+// the read site (the config default is `~/.dsh/batch-state.json`).
+//
+// A missing or corrupt file starts the batch EMPTY - never guessed.
+import { readFileSync as Read } from "node:fs";
 
-import type Member from "@Interface/Member.js";
+import type File from "@Interface/File.js";
 import type State from "@Interface/State.js";
+import { Expand } from "@playform/ets-base-dsh";
 
-/** The persisted state file's record shape. */
-interface File {
-	members: Member[];
-	queue: string[];
-}
+import Restore from "./Restore.js";
 
 export default (State: State): void => {
 	try {
-		const Raw = FileSystem.readFileSync(State.StateFile, "utf8");
-		const Parsed = JSON.parse(Raw) as Partial<File>;
-		State.Members.clear();
-		for (const Row of Parsed.members ?? []) {
-			switch (true) {
-				case typeof Row?.id !== "string":
-					continue; // malformed row - skipped, never guessed
-				case Row.status === "active":
-					// The owning process is gone after a restart: the member is
-					// honestly downgraded to interrupted.
-					Row.status = "interrupted";
-					Row.finishedAt = Row.finishedAt || Date.now();
-					break;
-				default:
-			}
-			State.Members.set(Row.id, Row);
-		}
-		State.IdleQueue.length = 0;
-		for (const Id of Parsed.queue ?? []) {
-			if (typeof Id === "string" && State.Members.has(Id)) {
-				State.IdleQueue.push(Id);
-			}
-		}
-		State.Factory.Append(
-			State,
-			`recovered (${State.Members.size} members, queue ${State.IdleQueue.length})`,
-		);
+		const Parsed = JSON.parse(Read(Expand(State.StateFile), "utf8")) as Partial<File>;
+		Restore(State, {
+			members: Parsed.members ?? [],
+			queue: Parsed.queue ?? [],
+			proposals: Parsed.proposals ?? [],
+			gates: Parsed.gates ?? [],
+		});
 	} catch {
 		// Missing or corrupt: start empty (never guessed).
-		State.Factory.Append(State, "recovered (0 members, queue 0)");
+		Restore(State, { members: [], queue: [], proposals: [], gates: [] });
 	}
 };

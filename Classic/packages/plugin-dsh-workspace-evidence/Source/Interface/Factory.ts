@@ -5,6 +5,19 @@
 // never throws), the exclusion match, and the Wire registration (the exact
 // `Context.root.on("fs/observed", ...)` posture). Structural, so any future
 // refactor keeps the consumer honest.
+//
+// The augmentation below publishes the `pluginFactory` Context property, so
+// `ctx.pluginFactory` is typed at every consumption site (the typed view
+// arrives TYPE-ONLY from the factory package - erased at build).
+import type Factory from "@playform/plugin-dsh-factory";
+
+declare module "@deepseek-ai/cordis" {
+	interface Context {
+		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		pluginFactory: Factory;
+	}
+}
+
 export default interface FactoryHandle {
 	/** The State builder: cell unwrap + shared fields + module extras. */
 	State(Context: unknown, Config: unknown, Setup: unknown): unknown;

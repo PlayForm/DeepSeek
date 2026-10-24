@@ -4,6 +4,7 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../ets-plugin-dsh-workspace-graph/Target/Library.js";
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
   Count.N++;
@@ -82,6 +83,15 @@ const FakeGraph = (Nodes = [], Edges = [], Revision = "rev-1") => {
   const Outgoing = (Id) => Edges.filter((Edge_) => Edge_.from === Id);
   const Self = {
     indexFile: (_Path) => Promise.resolve({ path: String(_Path), status: "indexed", nodes: 0, edges: 0 }),
+    // The fake graph does not walk a filesystem: the five-tool folder over a
+    // REAL populated graph (Real-Graph-And-Tools) covers the indexing
+    // trigger; here the summary is the fixed fixture's file count.
+    indexWorkspace: (_Root, _Options) => Promise.resolve({
+      indexed: 0,
+      skipped: 0,
+      failed: 0,
+      files: Nodes.filter((Node_) => Node_.kind === "File").length
+    }),
     removeFile: (_Path) => Promise.resolve(true),
     getNode: (Id) => Nodes.find((Node_) => Node_.id === Id),
     find: Find,
@@ -147,6 +157,61 @@ const StandardGraph = () => {
       { kind: "imports", from: "File:src/a.ts", to: "File:src/b.ts" }
     ]
   );
+};
+const RealGraph = (Files, Options = {}) => {
+  const Names = Object.keys(Files);
+  const Info = (Display) => {
+    const Text = Files[Display];
+    if (Text !== void 0) {
+      return { version: "v1", type: "file", size: Text.length };
+    }
+    return Names.some((Key) => Key.startsWith(`${Display}/`)) ? { version: "v1", type: "directory", size: 0 } : void 0;
+  };
+  const Fs = {
+    resolve: async (Path_) => ({ targetKey: Path_, displayPath: Path_ }),
+    stat: async (Target) => Info(String(Target.displayPath)),
+    readText: async (Target) => {
+      const Text = Files[String(Target.displayPath)];
+      if (Text === void 0) {
+        throw new Error("vanished");
+      }
+      return Text;
+    },
+    listDir: async (Target) => {
+      const Directory = String(Target.displayPath).replace(/\/$/, "");
+      const Found = /* @__PURE__ */ new Set();
+      for (const Key of Names) {
+        if (!Key.startsWith(`${Directory}/`)) {
+          continue;
+        }
+        Found.add(Key.slice(Directory.length + 1).split("/")[0]);
+      }
+      return [...Found].sort((Left, Right) => Left.localeCompare(Right)).map((Name) => {
+        const Display = `${Directory}/${Name}`;
+        const Meta = Info(Display);
+        return {
+          name: Name,
+          type: Meta?.type ?? "other",
+          target: { targetKey: Display, displayPath: Display }
+        };
+      });
+    },
+    contains: (Parent, Child) => {
+      const Left = String(Parent.displayPath);
+      const Right = String(Child.displayPath);
+      return Right === Left || Right.startsWith(`${Left}/`);
+    },
+    writeText: async () => {
+      throw new Error("writeText must never be called");
+    }
+  };
+  const GraphContext = {
+    fs: Fs,
+    logger: { info: () => void 0, warn: () => void 0, error: () => void 0 },
+    reflect: { provide: () => void 0 }
+  };
+  GraphContext.root = GraphContext;
+  return new GraphClass(GraphContext, GraphClass.Config({ enabled: true, ...Options }));
 };
 const Make = (Raw, Graph) => {
   const Registered = [];
@@ -261,13 +326,19 @@ if (InvokedDirectly) {
   });
   rm();
   const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
-  Check(Count, "selfcheck: the fake ctx registers the four navigation tools", () => {
+  Check(Count, "selfcheck: the fake ctx registers the five tools", () => {
     assert.deepEqual(
       Run.Registered.map((Definition) => Definition.name),
-      ["workspace_map", "workspace_find", "workspace_expand", "workspace_context"]
+      [
+        "workspace_map",
+        "workspace_find",
+        "workspace_expand",
+        "workspace_context",
+        "workspace_index"
+      ]
     );
     assert.ok(Run.State !== void 0);
-    assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=4)"]);
+    assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=5)"]);
   });
   if (Count.N === 3 && Count.F === 1) {
     console.log("Harness selfcheck OK");
@@ -288,6 +359,7 @@ export {
   Make,
   MakeCounter,
   Plugin,
+  RealGraph,
   Root,
   StandardGraph,
   Tool,

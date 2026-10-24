@@ -68,7 +68,25 @@ export const runTest = (): number => {
 			}
 		});
 		Check(Count, "C6: the effect labels are byte-exact and in order", () => {
-			assert.deepEqual(Run.Effects, ["panel: dictionaries", "panel: family tab", "panel: overlay mount"]);
+			assert.deepEqual(Run.Effects, [
+				"panel: dictionaries",
+				"panel: trace source",
+				"panel: family tab",
+				"panel: overlay mount",
+				"panel: adapter adapter-hook-dsh-normalize-dash",
+				"panel: adapter adapter-hook-dsh-tool-coach",
+				"panel: adapter adapter-hook-dsh-convention-suggester",
+				"panel: adapter adapter-hook-dsh-normalize-quotes",
+				"panel: adapter adapter-hook-dsh-normalize-ellipsis",
+				"panel: adapter adapter-hook-dsh-normalize-spaces",
+				"panel: adapter adapter-hook-dsh-normalize-invisible",
+				"panel: adapter adapter-hook-dsh-normalize-fullwidth",
+				"panel: adapter adapter-plugin-dsh-normalize-file",
+				"panel: adapter adapter-hook-dsh-package-governor",
+				"panel: adapter adapter-hook-dsh-package-pinner",
+				"panel: adapter adapter-hook-dsh-cargo-governor",
+				"panel: adapter adapter-hook-dsh-ccr",
+			]);
 		});
 		Check(Count, "C7: the locale registration is captured once, byte-exact", () => {
 			assert.deepEqual(Run.Locale, [
@@ -80,19 +98,81 @@ export const runTest = (): number => {
 							empty: "No family sections are registered yet.",
 							overlay: "Family panel",
 							close: "Close",
+							normalize: "Normalize family",
+							"tool-coach": "Tool coach",
+							suggester: "Convention suggester",
+							"normalize-quotes": "Normalize quotes",
+							"normalize-ellipsis": "Normalize ellipsis",
+							"normalize-spaces": "Normalize spaces",
+							"normalize-invisible": "Normalize invisible characters",
+							"normalize-fullwidth": "Normalize fullwidth characters",
+							"normalize-file": "Normalize file contents",
+							"package-governor": "Package governor",
+							"package-pinner": "Package pinner",
+							"cargo-governor": "Cargo governor",
+							ccr: "Tool output compression",
+							"status.enabled": "Enabled",
+							"status.disabled": "Disabled",
+							"status.unknown": "Unknown",
+							"status.live": "Live trace",
+							"status.static": "Static status",
+							"status.tail": "Recent events",
+							"form.options": "Options",
+							"form.volatile": "applies live",
+							"form.plain": "applies on remount",
+							"form.bridge-missing": "plain-field bridge unavailable",
+							"form.secret": "configured (secret)",
+							"form.secret-namespace": "read-only (the namespace has secrets)",
+							"form.loading": "Loading the configuration...",
+							"form.unavailable": "Configuration forms are not composed.",
+							"form.empty": "This plugin exposes no configurable fields.",
+							"form.overridden": "user override",
 						},
 						zh: {
 							tab: "家族",
 							empty: "尚未注册任何家族板块。",
 							overlay: "家族面板",
 							close: "关闭",
+							normalize: "规范化家族",
+							"tool-coach": "工具教练",
+							suggester: "约定建议器",
+							"normalize-quotes": "规范引号",
+							"normalize-ellipsis": "规范省略号",
+							"normalize-spaces": "规范空格",
+							"normalize-invisible": "规范不可见字符",
+							"normalize-fullwidth": "规范全角字符",
+							"normalize-file": "规范文件内容",
+							"package-governor": "软件包治理器",
+							"package-pinner": "依赖版本固定器",
+							"cargo-governor": "Cargo 治理器",
+							ccr: "工具输出压缩",
+							"status.enabled": "已启用",
+							"status.disabled": "已停用",
+							"status.unknown": "未知",
+							"status.live": "实时跟踪",
+							"status.static": "静态状态",
+							"status.tail": "最近事件",
+							"form.options": "选项",
+							"form.volatile": "实时生效",
+							"form.plain": "重新加载后生效",
+							"form.bridge-missing": "明文字段桥不可用",
+							"form.secret": "已配置(机密)",
+							"form.secret-namespace": "只读(命名空间含机密)",
+							"form.loading": "正在加载配置...",
+							"form.unavailable": "未组合配置表单。",
+							"form.empty": "该插件没有可配置字段。",
+							"form.overridden": "用户覆盖",
 						},
 					},
 				},
 			]);
 		});
-		Check(Count, "C8: the two slot points are injected on their exact slots", () => {
-			assert.deepEqual(Object.keys(Run.Injects), ["conversation.view", "shell.overlay"]);
+		Check(Count, "C8: the two mounts and the child slot are injected on their exact slots", () => {
+			assert.deepEqual(Object.keys(Run.Injects), [
+				"conversation.view",
+				"shell.overlay",
+				"playform.panel.section",
+			]);
 		});
 	}
 
@@ -100,7 +180,7 @@ export const runTest = (): number => {
 	{
 		const Run = Make();
 		const [TabRecord] = Run.OpenSlot("conversation.view");
-		Check(Count, "C9: the family tab registers with the exact options", () => {
+		Check(Count, "C9: the family tab registers with the exact options and child slot", () => {
 			assert.deepEqual(
 				{ ...TabRecord.options, label: undefined },
 				{
@@ -109,6 +189,9 @@ export const runTest = (): number => {
 					order: 20,
 					locale: "client-dsh-panel-family",
 					label: undefined,
+					children: {
+						"playform.panel.section": { kind: "list", scope: "session" },
+					},
 				},
 			);
 			assert.equal(TabRecord.options.label(), "Family");
@@ -119,7 +202,7 @@ export const runTest = (): number => {
 			assert.equal(Element.props.registry, Run.Provided["playformFamilyPanel"]);
 		});
 		const [OverlayRecord] = Run.OpenSlot("shell.overlay");
-		Check(Count, "C11: the overlay mount registers with the exact options", () => {
+		Check(Count, "C11: the overlay mount registers with the exact options and child slot", () => {
 			assert.deepEqual(
 				{ ...OverlayRecord.options, label: undefined },
 				{
@@ -127,6 +210,9 @@ export const runTest = (): number => {
 					id: "playform-family-overlay",
 					locale: "client-dsh-panel-family",
 					label: undefined,
+					children: {
+						"playform.panel.overlay": { kind: "list", scope: "root" },
+					},
 				},
 			);
 			assert.equal(OverlayRecord.options.label(), "Family panel");

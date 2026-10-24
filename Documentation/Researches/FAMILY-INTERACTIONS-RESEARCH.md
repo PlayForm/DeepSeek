@@ -89,10 +89,10 @@ type-aware preview + marker. Originals retrievable via its ONE registered tool, 
 ctx.on("tools/post-execute", ..., {prepend:true}) - awaits next() first, replaces ONLY an accept
 decision without a "value", content basis Decision.content ?? Result.content, fail-open. Optional
 contextEngine (default OFF): ctx.on("agent/pre-step") pure observer. Registers ccr_retrieve via
-Context.tools.register. Ledger: ~/.dsh/ccr.log (schema default is a hard-coded /Users/nikola/...
-absolute path). Store: in-memory LRU Map + TTL; OPTIONAL JSONL journal (journalPath, default "").
-NOT in the package_governance domain (blob sizes would corrupt its contract). Config: targets
-[bash,glob,grep,read,web_fetch,web_search,list,search]; exempt
+Context.tools.register. Ledger: ~/.dsh/playform/hook-dsh-ccr.log (schema default is a hard-coded
+/Users/nikola/... absolute path). Store: in-memory LRU Map + TTL; OPTIONAL JSONL journal
+(journalPath, default ""). NOT in the package_governance domain (blob sizes would corrupt its
+contract). Config: targets [bash,glob,grep,read,web_fetch,web_search,list,search]; exempt
 [write,edit,raw-write,subagent,ask_user_question,ccr_retrieve]; thresholdBytes 2048;
 inlineThresholdBytes 1024; autoExpand true @ 102400; compressFailures false; multipliers {terminal
 1, error 8, grep 2, paths 2, file 1, json 1, web 2, default 1}; previewMaxChars 240; ttlSeconds
@@ -105,23 +105,23 @@ system-prompt/assemble (append-only section); tools/pre-execute (detach decision
 (carrier, fabricated "[live] running" result); tools/post-execute (counter observer); agent/pre-step
 (counters); tools/change (cache clear); jobs events + session/event (completion pickup); fs/observed
 via factory Wire (wave-3, watchlist-gated). Tools: live_container_set, live_plant, live_monitor,
-live_monitor_check. Ledger: ~/.dsh/live-containers.log; OWN storage domain live_containers_monitors
-v1 (deliberately NOT the shared package_governance domain - would force a v3 bump). Config: enabled
-false (idle-forever; activates only on explicit ACTIVATE); monitors off; failsafes off; suggester
-off (route cloudflare-workers-ai @cf/zai-org/glm-5.3-flash low); detach mode off; 14-entry
-DefaultBlocks (todo-list, agent-progress-board, task-failsafe- guard, command-runner,
-countdown-expiry, session-stats, diff-summary, constraint-reminder, scoreboard, live-manifest,
-memory-block, validator, environment-drift, delegation-inbox).
+live_monitor_check. Ledger: ~/.dsh/playform/hook-dsh-live-containers.log; OWN storage domain
+live_containers_monitors v1 (deliberately NOT the shared package_governance domain - would force a
+v3 bump). Config: enabled false (idle-forever; activates only on explicit ACTIVATE); monitors off;
+failsafes off; suggester off (route cloudflare-workers-ai @cf/zai-org/glm-5.3-flash low); detach
+mode off; 14-entry DefaultBlocks (todo-list, agent-progress-board, task-failsafe- guard,
+command-runner, countdown-expiry, session-stats, diff-summary, constraint-reminder, scoreboard,
+live-manifest, memory-block, validator, environment-drift, delegation-inbox).
 
 1.5 plugin-dsh-normalize-file Job: The normalize-file TOOL: explicit opt-in normalization of a file
 ALREADY on disk (six transforms). The family's only listener-less flavor at the tool layer. Hooks:
 Registers the normalize-file tool; optional tools/post-execute arm {prepend:true} + agent/pre-step
 arm, both gated on volatile scopes; registers shared normalize-overpass command. Writes via
-Factory.Write (governed path, fs/observed emit). Ledger: ~/.dsh/plugin-dsh-normalize-file.log;
-package_governance domain (normalized records). No-op rule: 0 transformed chars -> NO write, NO
-ledger line. Config: replacement "-"; scopes {conversation true, reasoning true, toolInput false,
-toolResults false, files true, batch false}; toolResultsExempt
-[read,edit,raw-write,normalize-file,ccr_retrieve,subagent,ask_user_question].
+Factory.Write (governed path, fs/observed emit). Ledger:
+~/.dsh/playform/plugin-dsh-normalize-file.log; package_governance domain (normalized records). No-op
+rule: 0 transformed chars -> NO write, NO ledger line. Config: replacement "-"; scopes {conversation
+true, reasoning true, toolInput false, toolResults false, files true, batch false};
+toolResultsExempt [read,edit,raw-write,normalize-file,ccr_retrieve,subagent,ask_user_question].
 
 1.6-1.11 The six stream flavors (hook-dsh-normalize-dash/-ellipsis/-fullwidth/-invisible/
 -quotes/-spaces) Job: Each rewrites ONE unicode character family in MODEL OUTPUT on llm/stream (dash
@@ -172,15 +172,15 @@ additionalContexts notice; (2) tools/pre-execute: tier-3 opt-in deny (enforce, d
 agent/pre-step: per-agent counter reset on new user message (WeakMap); (4) system-prompt/assemble:
 tier-2 persistent "Tool discipline" section while strikes last (on at escalateThreshold, off after
 cleanWindow clean calls, TTL rebuild); (5) tools/change: section cache invalidation. Registers NO
-tools, NO fs/observed. Ledger: ~/.dsh/hook-dsh-tool-coach.log; ten byte-exact strings; per-agent
-state WeakMap only. Config: enabled true; judgeTools [bash,pwsh]; threshold 3; window 8; cooldown
-10; escalateThreshold 6; cleanWindow 12; enforce off (off|write|all); enforceThreshold 4; fetchLive
-true; maxSectionTools 8; sectionTtl 20. All volatile. Detection: split on ; && || & outside quotes
--> per-pipeline normalization (heredoc bodies stripped, $(...)/backticks -> <<sub>>, $VAR ->
-<<var>>) -> pattern rows first, then an adversarial craft/catch-all (any redirect to a real path,
---in-place, pipe to shell -> write) -> per-pipeline exemption override (an exempt head dominates its
-pipe). Taxonomy (class -> tool): write [sed -i, perl -pi, awk >, echo/printf >, tee, heredoc-to-
-file, python -c writes, truncate/dd of=] -> edit/write; read [python -c reads, cat/less/
+tools, NO fs/observed. Ledger: ~/.dsh/playform/hook-dsh-tool-coach.log; ten byte-exact strings;
+per-agent state WeakMap only. Config: enabled true; judgeTools [bash,pwsh]; threshold 3; window 8;
+cooldown 10; escalateThreshold 6; cleanWindow 12; enforce off (off|write|all); enforceThreshold 4;
+fetchLive true; maxSectionTools 8; sectionTtl 20. All volatile. Detection: split on ; && || &
+outside quotes -> per-pipeline normalization (heredoc bodies stripped, $(...)/backticks -> <<sub>>,
+$VAR -> <<var>>) -> pattern rows first, then an adversarial craft/catch-all (any redirect to a real
+path, --in-place, pipe to shell -> write) -> per-pipeline exemption override (an exempt head
+dominates its pipe). Taxonomy (class -> tool): write [sed -i, perl -pi, awk >, echo/printf >, tee,
+heredoc-to- file, python -c writes, truncate/dd of=] -> edit/write; read [python -c reads, cat/less/
 more/nl/od/xxd, head/tail, sed -n, base64 file] -> read (the read-class); search [grep ccr.db |
 sqlite3 ccr|ledger -> ccr_retrieve; grep/rg/ack/ag/sift -> grep; find -name/-path/-newer/-size ->
 glob]; discovery + control are note-only, never denied [ls -R/tree/find -type f -> glob; pwd/cd ->
@@ -305,8 +305,8 @@ THE CCR-RETRIEVAL ANALYSIS (the truth about the store/journal/"db")
   payload(base64 of the content's JSON)}; appended on EVERY Put (including auto-expand stores and
   engine archives, NOT on evict); loaded + COMPACTED (expired records dropped) on boot. ALL fs
   best-effort: a journal failure degrades to memory-only, NEVER breaks dispatch.
-- LIVE PROFILE STATE (verified on disk): only ~/.dsh/ccr.log exists (the ledger); no JSONL journal
-  file, no sqlite file anywhere under ~/.dsh. The live deployment runs memory-only.
+- LIVE PROFILE STATE (verified on disk): only ~/.dsh/playform/hook-dsh-ccr.log exists (the ledger);
+  no JSONL journal file, no sqlite file anywhere under ~/.dsh. The live deployment runs memory-only.
 - The ccr does NOT use the factory's package_governance storage domain - deliberately (blob sizes
   would corrupt the governance record contract). Its factory Journal usage is limited to the single
   lifecycle line "activated (bundle 0.1.0, targets 8, budget 268435456)".
@@ -434,7 +434,8 @@ RECOMMENDATIONS
 
 - R9. Land the #14 parallel-govern marker (design exists: "sequential by default; parallel only on
   proven disjointness") or delete the promise from the skill docs.
-- R10. Replace the ccr's hard-coded /Users/... logFile schema default with "~/.dsh/ccr.log".
+- R10. Replace the ccr's hard-coded /Users/... logFile schema default with
+  "~/.dsh/playform/hook-dsh-ccr.log".
 
 ================================================================================================ 6.
 ACCEPTANCE CRITERIA

@@ -16,8 +16,11 @@
 //     and the audit trail keeps what was passed.
 //   - The escalation flag overrides everything: the escalation rung is the
 //     planner lane (DeepSeek max) per the attempts ladder, when the policy
-//     enables escalation.
+//     enables escalation. The rung's model is verified against the LIVE
+//     catalog when the caller read one (Function/Ladder), so a model that
+//     left the catalog can never be routed to.
 import Classify from "@Function/Classify.js";
+import Ladder from "@Function/Ladder.js";
 import type { Role, RoleSpec } from "@Interface/Policy.js";
 import type Request from "@Interface/Request.js";
 import type Route from "@Interface/Route.js";
@@ -34,11 +37,12 @@ export default (
 	},
 	DefaultRole: Role,
 	Keywords = DEFAULT_KEYWORDS,
+	Advertised?: readonly string[],
 ): Route => {
 	// The escalation rung: the planner lane at max, when the policy allows it
 	// (the attempts ladder's automatic DeepSeek re-dispatch with artifacts).
 	if (Request_.escalate === true && Policy.escalation.enabled) {
-		return { ...Policy.planner, taskType: "planner", source: "escalated" };
+		return { ...Ladder(Policy, Advertised), taskType: "planner", source: "escalated" };
 	}
 	// The task type: the declared one, else the keyword inference, else the
 	// policy's default role (the omission's cheap lane).

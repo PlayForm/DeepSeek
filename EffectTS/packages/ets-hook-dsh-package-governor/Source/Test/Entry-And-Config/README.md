@@ -32,7 +32,7 @@ sections 1-2 (the source suite stays in place during the migration).
         - strict=false, maxUpdateFailures=3, updateMode="programmatic",
           ncuBin="ncu", policyFile="", exclude = the six built-in segments
     - Sub: "Config: the default logFile is the documented ledger path"
-        - logFile defaults to ~/.dsh/ets-hook-dsh-package-governor.log (must
+        - logFile defaults to ~/.dsh/playform/ets-hook-dsh-package-governor.log (must
           equal the cordis.patch.yml row and the README)
 
 ## Fixtures

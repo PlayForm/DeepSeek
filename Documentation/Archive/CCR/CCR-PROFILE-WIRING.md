@@ -117,7 +117,7 @@ indent under `insert:`, list items at 12-16 columns matching the shipped file):
         name: "@playform/dsh-hook-ccr"
         config:
             log: true
-            logFile: ~/.dsh/ccr.log
+            logFile: ~/.dsh/playform/hook-dsh-ccr.log
             targets:
                 - bash
                 - glob
@@ -183,7 +183,7 @@ edit AFTER activation. Verify activation with §4 step 1 before ANY further test
 
 ## 4. The verification checklist (after the restart)
 
-1. **The activation ledger line** - `~/.dsh/ccr.log` contains:
+1. **The activation ledger line** - `~/.dsh/playform/hook-dsh-ccr.log` contains:
 
     ```
     ccr: activated (bundle 0.1.0, targets 8, budget 268435456)
@@ -233,6 +233,6 @@ node Boilerplate/packages/dsh-hook-ccr/live-verify.mjs
 ## 5. Rollback
 
 Remove `"@playform/dsh-hook-ccr"` from `dsh.profile.bundles` and from `dependencies`, delete
-`~/.dsh/profiles/desktop/bundles/dsh-hook-ccr`, restart. The ledger (`~/.dsh/ccr.log`) is a plain
-diagnostic file - safe to keep or delete. NO governed state exists outside it and the (optional)
-JSONL journal.
+`~/.dsh/profiles/desktop/bundles/dsh-hook-ccr`, restart. The ledger
+(`~/.dsh/playform/hook-dsh-ccr.log`) is a plain diagnostic file - safe to keep or delete. NO
+governed state exists outside it and the (optional) JSONL journal.

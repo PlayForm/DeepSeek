@@ -1,0 +1,1 @@
+import o from"../Trace.js";var a={id:"adapter-hook-dsh-tool-coach",bundle:"@playform/hook-dsh-tool-coach",namespace:"hook-dsh-tool-coach",title:"tool-coach",order:30,slot:"playform.panel.section",activation:"enabled",traceKinds:o.kinds};export{a as default};

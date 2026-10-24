@@ -158,6 +158,61 @@ const Flip = (CellValue, New) => {
 };
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const FakeSubagents = () => {
+  const Calls = [];
+  const Results = [];
+  const Disposed = [];
+  return {
+    calls: Calls,
+    results: Results,
+    disposed: Disposed,
+    startActivation: async (Spec) => {
+      Calls.push(Spec);
+      let Settle = {};
+      const Result = new Promise((Resolve, Reject) => {
+        Settle = { resolve: Resolve, reject: Reject };
+      });
+      Results.push(Settle);
+      const Child = `child-${Calls.length}`;
+      return {
+        childId: Child,
+        messageId: `message-${Calls.length}`,
+        result: Result,
+        dispose: async () => {
+          Disposed.push(Child);
+        }
+      };
+    }
+  };
+};
+const FakeAgents = (Parent = { id: "parent" }) => {
+  const Live = /* @__PURE__ */ new Set();
+  return {
+    live: Live,
+    parent: Parent,
+    currentInitiator: () => Parent,
+    get: (Id) => Live.has(Id) ? { id: Id } : void 0
+  };
+};
+const Automation = (Config = {}, Agents = FakeAgents(), Subagents = FakeSubagents()) => {
+  rm();
+  const Run = Make(
+    Validate({
+      logFile: Ledger,
+      enabled: true,
+      autoSpawn: true,
+      policy: { spawn: "auto" },
+      ...Config
+    }),
+    (Context) => {
+      Context.subagents = Subagents;
+      if (Agents !== void 0) {
+        Context.agents = Agents;
+      }
+    }
+  );
+  return { Run, Service: Run.Context.dshQueue, Subagents, Agents };
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -187,8 +242,11 @@ if (InvokedDirectly) {
   }
 }
 export {
+  Automation,
   Check,
+  FakeAgents,
   FakeFs,
+  FakeSubagents,
   Finish,
   Flip,
   Furnace,

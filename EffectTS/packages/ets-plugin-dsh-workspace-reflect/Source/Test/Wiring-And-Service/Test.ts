@@ -16,10 +16,12 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount. */
+/** A standard enabled mount. The D6 policy gate is OPENED here (`write: auto`)
+ *  because this folder exercises the operations; the shipped `write: approve`
+ *  is arbitrated by `Source/Test/Policy-Defaults`. */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
-	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+	return Make(Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" }, ...Config }));
 };
 
 export const runTest = async (): Promise<number> => {

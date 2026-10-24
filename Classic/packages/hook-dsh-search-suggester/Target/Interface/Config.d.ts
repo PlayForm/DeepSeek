@@ -29,10 +29,14 @@ export default interface Config {
     learnWindow: number;
     /** The learned knowledge file (structural; remounts on edit). */
     persistPath: string;
-    /** The static index file (structural; remounts on edit). */
+    /** RETIRED by the P2 re-spec (the graph projection supersedes the generated index); never read (structural). */
     indexPath: string;
-    /** Rebuild the index on boot when the fingerprint differs (structural). */
+    /** The projection refresh switch: true rebuilds it on tools/change (structural). */
     refreshOnBoot: boolean;
+    /** The dismissal TTL in seconds - `until = now + dismissTtl` (volatile). */
+    dismissTtl: number;
+    /** The offline seed switch - seed the knowledge at load (volatile). */
+    seed: boolean;
     /** The second surface: "off" (the default) or "sticky" (volatile). */
     sectionMode: string;
     /** The sticky section's TTL in judged calls (volatile). */

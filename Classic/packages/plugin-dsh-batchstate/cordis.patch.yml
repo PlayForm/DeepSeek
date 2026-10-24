@@ -26,8 +26,24 @@
 # the truth; the full default surface (batch default, stateFile
 # ~/.dsh/batch-state.json, maxRecent 8) lives in the Variable/Config.ts
 # schema. EVERY knob is volatile (hot-editable without remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The board is a RECORDER/projection - read/record/
+# suggest are automatic; the write/commit/spawn verdicts are declared for
+# family uniformity and stay the shipped approve (the board never writes
+# files, commits or spawns). A resolved pack's `policy` section overrides
+# these defaults per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-batchstate
         name: "@playform/plugin-dsh-batchstate"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

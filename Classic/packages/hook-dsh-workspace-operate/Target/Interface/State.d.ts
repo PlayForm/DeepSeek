@@ -2,7 +2,7 @@ import type DomainHandle from "@Interface/Domain.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type { GraphHandle } from "@Interface/Graph.js";
 import type Proposal from "@Interface/Proposal.js";
-import type { State as Base } from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's
      *  mapped `On` field). */
@@ -38,6 +38,11 @@ interface Extra {
     /** The hook's OWN actor marker object (the identity check for the
      *  hook's own fs/observed emissions, if any). */
     Self: object;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 block.
+     *  Named `Allow` because the factory's shared State already owns `Policy`
+     *  (the configured global policy file path). This package's action class
+     *  is SUGGEST (automatic); it has NO gated action. */
+    Allow: Allowlist;
 }
 export default interface State extends Base, Extra {
 }

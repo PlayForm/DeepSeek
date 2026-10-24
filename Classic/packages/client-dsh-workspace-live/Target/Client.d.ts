@@ -1,4 +1,4 @@
-import type { Context } from "@deepseek-ai/cordis";
+import type { ClientContext } from "@Interface/Client.js";
 /** Required client services: the slot registry and the locale service. */
 export declare const inject: string[];
 /**
@@ -7,7 +7,7 @@ export declare const inject: string[];
  * removes everything without residue.
  * @param ctx - client root context.
  */
-export declare function apply(ctx: Context): void;
+export declare function apply(ctx: ClientContext): void;
 declare const _default: {
     inject: string[];
     apply: typeof apply;

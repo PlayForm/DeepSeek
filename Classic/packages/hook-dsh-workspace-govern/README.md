@@ -37,17 +37,38 @@ line.
 
 ## Config (all volatile)
 
-| Field             | Default                                     | Meaning                                                 |
-| ----------------- | ------------------------------------------- | ------------------------------------------------------- |
-| `enabled`         | `false`                                     | the master switch                                       |
-| `log` / `logFile` | `true` / `~/.dsh/govern.log`                | the durable ledger (one log per module)                 |
-| `tools`           | `write, edit, bash, applyPatch`             | the gated tool names                                    |
-| `scope`           | `[]` (unrestricted)                         | the authorized-scope allowlist (globs)                  |
-| `exclude`         | `node_modules/**, **/Target/**, **/.git/**` | never gated, in silence                                 |
-| `policy`          | `[]`                                        | the policy table (`{kind, decision, operation?}`)       |
-| `recovery`        | `[]`                                        | the recovery-table overrides (`{obligation, behavior}`) |
-| `loopBound`       | `4`                                         | the recursion-prevention loop bound                     |
-| `maxDecisions`    | `500`                                       | the decision ring bound                                 |
+| Field             | Default                                                  | Meaning                                                                                                       |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `enabled`         | `false`                                                  | the master switch                                                                                             |
+| `log` / `logFile` | `true` / `~/.dsh/playform/hook-dsh-workspace-govern.log` | the durable ledger (one log per module)                                                                       |
+| `tools`           | `write, edit, bash, applyPatch`                          | the gated tool names                                                                                          |
+| `scope`           | `[]` (unrestricted)                                      | the authorized-scope allowlist (globs)                                                                        |
+| `exclude`         | `node_modules/**, **/Target/**, **/.git/**`              | never gated, in silence                                                                                       |
+| `policy`          | `[]`                                                     | the policy table (`{kind, decision, operation?}`)                                                             |
+| `recovery`        | `[]`                                                     | the recovery-table overrides (`{obligation, behavior}`)                                                       |
+| `loopBound`       | `4`                                                      | the recursion-prevention loop bound                                                                           |
+| `maxDecisions`    | `500`                                                    | the decision ring bound                                                                                       |
+| `automation`      | D6 defaults                                              | the per-action allowlist (the shared factory block; keyed `automation` - `policy` is the decision rule table) |
+
+### The policy block (D6) - the `automation` key
+
+The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
+factory's block), mapped to `State.Allow`. The key is `automation`, **not** `policy`, because
+`policy` is already this hook's decision rule table (a different contract; the `plugin-dsh-route`
+precedent):
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This hook's action class is RECORD (it records a gate decision), and that class is **automatic**.
+The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
+the block documents the posture and refuses nothing. The block is one volatile object, so a policy
+flip is hot-editable without a remount; a resolved pack's `policy` section overrides the defaults
+per action (the wiring is the next refinement).
 
 ## Service
 

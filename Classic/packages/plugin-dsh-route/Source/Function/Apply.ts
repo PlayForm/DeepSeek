@@ -1,17 +1,21 @@
 // Apply - the plugin entry function: fail-loud validation, the State build
 // (the factory's cell unwrap + the P10 volatile refresh), the durable
 // activation proof, the `dshRoute` service instantiation, and the launch-path
-// listener registration. The function returns NOTHING (the loader treats
-// apply returns specially - a returned value silently kills event delivery).
+// listeners. The function returns NOTHING (the loader treats apply returns
+// specially - a returned value silently kills event delivery).
 //
-// The listener set is exactly one: Function/Inject on tools/pre-execute
-// (the launch path, the `subagent` tool). Everything else - the resolution,
-// the classification, the escalation - is the `dshRoute` service surface
-// consumed by the sibling orchestration plugins (the queue's routed dispatch)
-// and by the user's audit.
+// The listener set is exactly two, the two halves of one seam: Function/Inject
+// on tools/pre-execute (the `subagent` tool's launch - the silent route
+// injection plus the prompt hint), and Function/Launch on agent/pre-step (the
+// child's first step - the hint for a child started straight through
+// `ctx.subagents.startActivation`, which never passes through a tool).
+// Everything else - the resolution, the classification, the escalation - is
+// the `dshRoute` service surface consumed by the sibling orchestration
+// plugins (the queue's routed dispatch) and by the user's audit.
 import type { Context } from "@deepseek-ai/cordis";
 import Enforcer from "@Function/Enforcer.js";
 import Inject from "@Function/Inject.js";
+import Launch from "@Function/Launch.js";
 import Validate from "@Function/Validate.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
@@ -53,9 +57,12 @@ export default (Context: Context, Options: Config): void => {
 			RoutePolicy: "policy",
 			Keywords: "keywords",
 			DefaultRole: "defaultRole",
+			Allow: "automation",
 		},
 	});
 	State.Factory = Factory;
+	State.Seq = 0;
+	State.Hinted = new WeakSet();
 
 	// The ledger sink (Factory.Append with the State bound).
 	const Append = (Message: string): void => {
@@ -81,6 +88,16 @@ export default (Context: Context, Options: Config): void => {
 	// owning fiber (the plugin's own).
 	new Enforcer(Context, State);
 
-	// The launch-path listener: the silent injection on the `subagent` tool.
+	// The launch-path listeners, both halves of the seam: the silent injection
+	// on the `subagent` TOOL (the model-facing launch), and the routing hint
+	// on the child's first `agent/pre-step` (the SERVICE launch - the queue's
+	// spawn never passes through a tool, so only the pre-step seam reaches it).
 	Context.on("tools/pre-execute", (Exec, Next) => Inject(State, Exec, Next, Append));
+	// The pre-step decision carries the harness's branded message identity,
+	// which a structural shape cannot mint, so the listener crosses the
+	// event's exact declaration through this one documented cast (the
+	// Function/Launch smoke asserts the delivered decision's shape byte for
+	// byte, including the message id).
+	Context.on("agent/pre-step", ((Payload: never, Next: never) =>
+		Launch(State, Payload, Next, Append)) as never);
 };

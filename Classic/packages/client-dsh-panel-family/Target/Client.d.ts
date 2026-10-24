@@ -1,13 +1,14 @@
-import type { Context } from "@deepseek-ai/cordis";
+import type { ClientContext } from "./Interface/Client.js";
 /** Required client services: the slot registry and the locale service. */
 export declare const inject: string[];
 /**
- * Client plugin body: provide the playformFamilyPanel registry and mount
- * the two slot points. All registrations ride ctx.effect, so plugin unload
- * removes everything without residue.
+ * Client plugin body: provide the playformFamilyPanel registry, mount the two
+ * panels with their declared child slots, and register the three reference
+ * adapters. All registrations ride ctx.effect, so plugin unload removes
+ * everything without residue.
  * @param ctx - client root context.
  */
-export declare function apply(ctx: Context): void;
+export declare function apply(ctx: ClientContext): void;
 declare const _default: {
     inject: string[];
     apply: typeof apply;

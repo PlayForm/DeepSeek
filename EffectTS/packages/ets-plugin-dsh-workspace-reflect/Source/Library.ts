@@ -26,6 +26,14 @@
 // reflective carry) - the sibling shape is SELF-DECLARED in Interface/Graph
 // (the PoC is self-contained; the end-phase wires the real import).
 //
+// THE TWO SIBLING SEAMS (both PROBED through ctx.get at use time, never
+// injected): `workspaceGraph` is the AST source - a Replace may target a
+// Symbol/Block node by id and verify its content-derived fingerprint before
+// rewriting the span (Interface/Node, Function/Locate, Function/Fingerprint);
+// `workspaceSemantics` is the rename's scope-resolved plan source
+// (Interface/Semantics, Function/Deepened) - an absent service leaves the
+// textual whole-word engine (Function/Textual) in charge.
+//
 // The plugin is the OBJECT form (name/apply/Config/inject); the
 // `workspaceReflect` service is a Service subclass in its own module
 // (Function/Service) and is registered from apply. The plugin is a

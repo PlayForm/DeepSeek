@@ -21,8 +21,26 @@
 # path is never auto-approved by default (the conservative policy). Every
 # knob is volatile (hot-editable without remounting): enabled, log/logFile,
 # autoApprove, allowlist, maxAutoTargets, minConfidence, pendingTtlMs.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist is the
+# OUTER gate in front of autoApprove - `commit: approve` holds the policy
+# auto-approval even with the knob on (the documented
+# `decision held <id> (policy commit=approve)` line: the proposal stays
+# pending for the user's batch_decision approval). read/index/record/suggest
+# and message are automatic; write/commit/spawn wait for approval. A resolved
+# pack's `policy` section overrides these defaults per action (the wiring is
+# the next refinement).
 - insert:
       - id: hook-dsh-batch-decision
         name: "@playform/hook-dsh-batch-decision"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

@@ -58,6 +58,7 @@ export default (Context: Context, Options: Config): void => {
 			Deny: "denyPatterns",
 			Allow: "allowPatterns",
 			Strict: "strict",
+			Verdicts: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

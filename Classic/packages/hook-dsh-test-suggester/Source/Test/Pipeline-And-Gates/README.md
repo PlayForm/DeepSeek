@@ -32,7 +32,10 @@ purity.
 ## Fixtures
 
 The shared Harness (fake ctx, real factory, real built Target). No fake
-clock: the plugin has no clock dependency.
+clock: the plugin has no clock dependency. The judged relative paths resolve
+against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the harness's
+`workingDirectory` service), so the pack's package-relative targets exist;
+the `<Suite>` placeholders are illustrative and are never existence-checked.
 
 ## Expected ledger strings (byte-exact, `test-suggester: ` prefix)
 

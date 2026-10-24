@@ -25,12 +25,15 @@
         config:
             enabled: false
             log: true
-            logFile: ~/.dsh/convention-suggester.log
+            logFile: ~/.dsh/playform/hook-dsh-convention-suggester.log
             threshold: 0.75
             maxCandidates: 7
             maxNoteChars: 1200
             cooldownCalls: 6
             maxNotesPerTurn: 3
+            # The D4 pack learner is OFF: the bootstrap is opt-in (the config
+            # wins when true; a false config defers to a pack's learning.propose).
+            learning: false
             emitOn:
                 - edit
                 - raw-write

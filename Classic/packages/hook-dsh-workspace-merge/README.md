@@ -9,6 +9,8 @@ factory's Write executor**, and the **commit reply union**. Plan:
 
 - Registers the `workspaceMerge` service (`preview`, `commit`, `batch`, `batches`, `statistics`).
 - Registers one tool from apply (`workspace_merge`) - the tool lives inside its owning hook.
+- Consults the D6 policy block before a commit: an `approve` verdict for `commit` (the shipped
+  default) holds the whole batch with the documented line and writes nothing.
 - Runs the atomic gates before any write: empty batch, maxFiles, maxTotalBytes, duplicate paths,
   missing version fences, unresolved paths, stale fences.
 - Commits file by file through `pluginFactory.Write` with the explicit `replaceIfVersion` intent,
@@ -34,11 +36,33 @@ factory's Write executor**, and the **commit reply union**. Plan:
 - No unconditional write: every operation needs a version fence.
 - No wall clocks: ids and sequences are the hook's own monotonic counter.
 
+## The policy block (D6) - the outer gate
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The commit is the hook's ONE gated action, and the policy is the **outer** gate: it runs before the
+atomic gates and before any write. An `approve` verdict for `commit` refuses the whole batch - the
+ledger records the byte-exact `merge held (<n> files) (policy commit=approve)` line, every operation
+is replied `rejected` with the policy reason, nothing is persisted, and **zero writes** reach the
+filesystem. Flip `policy.commit` to `auto` (or let a resolved pack override it) to let the next
+batch reach the gates. The block is one volatile object, so a policy flip is hot-editable without a
+remount; a resolved pack's `policy` section overrides the defaults per action (the wiring is the
+next refinement).
+
 ## Ledger lines (byte-stable, module-owned)
 
 ```text
 merge: activated (domain=<domain>, mode=<mode>)
 merge: disabled (enabled=false)
+merge: merge held (<n> files) (policy commit=approve)
 merge: batch <id> started (<n> files, <bytes> bytes)
 merge: batch <id> rejected (<reason>)
 merge: applied <path> version <version> (batch <id>)
@@ -53,4 +77,7 @@ merge: storage open failed: <reason>
 ## Status
 
 The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an
-explicit ACTIVATE. This is the PoC build: the smoke suite and the ETS twin land at the end phase.
+explicit ACTIVATE. The policy block and the commit hold are arbitrated by
+`Source/Test/Policy-Defaults`; the gates and the reply union by `Source/Test/Wiring-And-Gates` and
+`Source/Test/Commit-And-Replies`. This is the PoC build: the smoke suite and the ETS twin land at
+the end phase.

@@ -7,7 +7,7 @@ What this test verifies.
 The cargo governor's loader contract and config schema: the four named
 exports with `inject = ["fs", "pluginFactory"]`; the default object carrying
 all four keys (the accessor shadow pitfall); `apply` returning nothing; every
-config default (the SEPARATE `~/.dsh/hook-dsh-cargo-governor.log` ledger,
+config default (the SEPARATE `~/.dsh/playform/hook-dsh-cargo-governor.log` ledger,
 `updateCooldownMs = 3000`, the four mutation tools, `policyFile = ""`,
 `strict = false`, `maxUpdateFailures = 3`, `cargoBin = "cargo"`,
 `keepFile = ""`, `updateMode = "cargo"`, the six-entry exclude list); the
@@ -38,7 +38,7 @@ override object.
 
 ## Expected ledger strings (byte-identical)
 
-None asserted. (The logFile default `~/.dsh/hook-dsh-cargo-governor.log` is
+None asserted. (The logFile default `~/.dsh/playform/hook-dsh-cargo-governor.log` is
 asserted as the schema's separate-ledger default.)
 
 ## Edge cases

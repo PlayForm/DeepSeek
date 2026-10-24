@@ -154,11 +154,49 @@ export const Launch = (
 	Args: Record<string, unknown> = { description: "fix the bug" },
 ): any => ({ name: "subagent", args: JSON.parse(JSON.stringify(Args)) });
 
+/**
+ * Fire one `agent/pre-step` through the ctx listener: the waterfall runs
+ * next() (returning an `enter` decision carrying the offered messages) and the
+ * listener's returned decision is captured. `Payload` is the harness's own
+ * shape: `{ agent, messages, turn, step, signal }`.
+ */
+export const FireStep = async (Run: any, Payload: any, Messages: any[] = []): Promise<any> => {
+	const Decision = { kind: "enter", messages: Messages };
+	const Out = await Run.CtxListeners["agent/pre-step"](Payload, async () => Decision);
+	return { Out, Decision };
+};
+
+/**
+ * A live-agent fixture for the pre-step seam: the harness's delegation-depth
+ * accounting reads `agent.options.subagentDepth` and
+ * `session.header.delegationDepth`, so the fixture sets both to the same
+ * value. Depth 0 is the main conversation; depth >= 1 is a delegated child.
+ */
+export const Child = (Options: Record<string, unknown> = {}, Depth = 1): any => ({
+	options: { ...Options, subagentDepth: Depth },
+	session: { header: { delegationDepth: Depth } },
+});
+
+/** One offered step message (the harness's UserMessage, read structurally). */
+export const Prompt = (Text: string): any => ({
+	id: `message-${Text.length}`,
+	role: "user",
+	content: [{ type: "text", text: Text }],
+	source: { kind: "user" },
+});
+
 /** The route triples of the shipped default policy. */
 export const Coder = {
 	provider: "cloudflare-workers-ai",
 	model: "@cf/zai-org/glm-5.3-flash",
 	reasoningEffort: "high",
+};
+
+/** The planner triple (the escalation rung's shipped route). */
+export const Planner = {
+	provider: "cloudflare-workers-ai",
+	model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+	reasoningEffort: "max",
 };
 
 /** A captured info line that carries the needle. */

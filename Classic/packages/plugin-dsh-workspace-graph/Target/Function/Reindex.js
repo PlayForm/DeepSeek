@@ -1,0 +1,1 @@
+import a from"./Append.js";import o from"./Index.js";var n=async(e,r)=>{try{const t=await o(e,r);a(e,`reindexed ${t.path} (${t.status})`)}catch(t){try{a(e,`failed ${r} (${t instanceof Error?t.message:String(t)})`)}catch{}}};export{n as default};

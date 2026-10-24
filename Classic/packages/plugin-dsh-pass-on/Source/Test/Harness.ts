@@ -122,14 +122,16 @@ export const Validate = (Raw: Record<string, unknown> = {}): any =>
 	});
 
 /**
- * The fake ctx: the only seams the class plugin touches are the Service
- * base's registration (ctx.reflect.provide) and nothing else - the plugin
- * never logs, never reads the context beyond the constructor. The context is
- * still the object the service stores, so the tests read it back.
+ * The fake ctx: the Service base's registration (ctx.reflect.provide), the
+ * bus emission capture (`batch/proposed`), the optional-service probe
+ * (`get` - the harness agent registry, the inbox delivery's target) and the
+ * logger capture. The plugin never reads anything else off the context.
  */
 export const Make = (Raw: Record<string, unknown> = {}): any => {
 	const Provided: any = {};
 	const Lines: string[] = [];
+	const Emits: any[][] = [];
+	const Services: Record<string, unknown> = {};
 	let Context: any;
 	Context = {
 		logger: {
@@ -140,6 +142,10 @@ export const Make = (Raw: Record<string, unknown> = {}): any => {
 				Lines.push(Message);
 			},
 		},
+		emit: (Name: string, ...Args: unknown[]) => {
+			Emits.push([Name, ...Args]);
+		},
+		get: (Name: string) => Services[Name],
 		reflect: {
 			provide: (Name: string, Value?: unknown) => {
 				Provided[Name] = Value ?? true;
@@ -153,7 +159,7 @@ export const Make = (Raw: Record<string, unknown> = {}): any => {
 		Context: unknown,
 		Config: unknown,
 	) => any)(Context, Config);
-	return { Context, Provided, Lines, Config, Instance, State: Instance.State };
+	return { Context, Provided, Lines, Emits, Services, Config, Instance, State: Instance.State };
 };
 
 /**

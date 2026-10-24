@@ -25,10 +25,10 @@
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/workspace-journal.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-journal.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the hook's own domain - the rollback layer's
 	// per-batch records and revert data; a NEW domain, never an extension
@@ -44,4 +44,14 @@ export default Compose(false, {
 	exclude: Schema.array(Schema.string())
 		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
 		.volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The journal's ONE
+	// gated action is the revert - it writes the pre-images back, so `write`
+	// defaults to `approve` and a revert waits for the user (the documented
+	// `revert held (<n> files) (policy write=approve)` line, zero writes).
+	// Recording (open/seal/recover) is `record` = automatic.
+	// read/index/record/suggest/message are automatic; write/commit/spawn
+	// wait for approval. Volatile as one object; a resolved pack's `policy`
+	// section overrides the defaults per action (the wiring is the next
+	// refinement; the type already exists).
+	policy: Policy(),
 });

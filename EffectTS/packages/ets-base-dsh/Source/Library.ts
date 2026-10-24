@@ -35,6 +35,7 @@ export type { default as Jobs } from "./Interface/Jobs.js";
 export { default as Update } from "./Function/Update.js";
 export { default as Append } from "./Function/Append.js";
 export { default as Activate } from "./Function/Activate.js";
+export { default as Expand } from "./Function/Expand.js";
 export { default as Block } from "./Stream/Block.js";
 export { default as Chunk } from "./Stream/Chunk.js";
 export { default as StreamGate } from "./Stream/Gate.js";

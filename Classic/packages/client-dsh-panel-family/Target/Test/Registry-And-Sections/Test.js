@@ -3,6 +3,7 @@ import { Check, Finish, MakeCounter, Make } from "../Harness.js";
 const Section = (Id, Order, Mount = "family-tab") => ({
   id: Id,
   bundle: `bundle-${Id}`,
+  namespace: Id,
   title: `Section ${Id}`,
   order: Order,
   mount: Mount,
@@ -15,7 +16,7 @@ const runTest = () => {
   Check(Count, "R1: register adds a section and entries snapshots it", () => {
     Registry.register(Section("a", 10));
     assert.deepEqual(
-      Registry.entries().map((S) => S.id),
+      Registry.entries().map((S) => S.id).filter((Id) => !Id.startsWith("adapter-")),
       ["a"]
     );
   });
@@ -29,7 +30,7 @@ const runTest = () => {
     Registry.register(Section("z", 10));
     Registry.register(Section("b", 20));
     assert.deepEqual(
-      Registry.entries().map((S) => S.id),
+      Registry.entries().map((S) => S.id).filter((Id) => !Id.startsWith("adapter-")),
       ["a", "z", "b"]
     );
   });

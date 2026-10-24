@@ -29,10 +29,14 @@ export default interface State extends Shared {
     LearnWindow: number;
     /** The knowledge file path (config `persistPath`, structural). */
     PersistPath: string;
-    /** The index file path (config `indexPath`, structural). */
+    /** RETIRED: the generated index path (config `indexPath`, structural; never read). */
     IndexPath: string;
-    /** The boot index refresh switch (config `refreshOnBoot`, structural). */
+    /** The projection refresh switch (config `refreshOnBoot`, structural). */
     RefreshOnBoot: boolean;
+    /** The dismissal TTL in seconds (config `dismissTtl`, volatile). */
+    DismissTtl: number;
+    /** The offline seed switch (config `seed`, volatile). */
+    Seed: boolean;
     /** The second surface mode (config `sectionMode`, volatile). */
     SectionMode: string;
     /** The sticky section TTL (config `sectionTtl`, volatile). */

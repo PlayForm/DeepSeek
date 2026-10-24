@@ -54,6 +54,30 @@ grace (`revocationGraceMs`).
 judgments stay separate). It reads the capability records only: revocation denies immediately,
 expiry denies, an unlisted operation denies; the weights and the residency are never consulted.
 
+## The policy block (D6)
+
+The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
+factory's block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The key is `automation`, NOT `policy`: the config's `policy` is the residency RULE TABLE
+(`{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}`, the disposition pass above), a
+different contract - the `plugin-dsh-route` precedent, which keyed its D6 block `automation` for the
+same reason.
+
+This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
+is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement).
+
+No new ledger line: the package has no gated action.
+
 ## Records
 
 `Source/Interface/{Capability,Lease,Residency,Policy}.ts` declare the shapes;

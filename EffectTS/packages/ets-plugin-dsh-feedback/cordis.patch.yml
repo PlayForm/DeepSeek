@@ -12,8 +12,24 @@
 # The class plugin (`export default class Feedback extends Service`)
 # declares a static Config (validated before construction) and registers
 # itself as `feedback` via `super(ctx, "feedback")`.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The member is a PASSIVE collector - `record` and
+# `suggest` are automatic; the write/commit/spawn verdicts are declared for
+# family uniformity and stay the shipped approve (the member never writes,
+# commits or spawns). A resolved pack's `policy` section overrides these
+# defaults per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-feedback
         name: "@playform/ets-plugin-dsh-feedback"
         config:
             enabled: true
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

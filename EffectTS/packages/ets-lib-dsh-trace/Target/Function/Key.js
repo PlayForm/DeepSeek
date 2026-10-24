@@ -1,0 +1,1 @@
+var a=n=>{const t=n.payload??{};switch(!0){case(typeof t.path=="string"&&t.path.length>0):return t.path;case(typeof n.kind=="string"&&n.kind.length>0):return n.kind;default:return"unknown"}};export{a as default};

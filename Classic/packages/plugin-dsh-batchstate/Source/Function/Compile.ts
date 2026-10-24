@@ -8,7 +8,11 @@
 //   State(State)    -> the full snapshot (getState);
 //   Context(State, agent) -> the dynamic table-of-contents block (getContext);
 //   Scope(State, agent)   -> the compiled scope view (getScope);
-//   Else(State, agent)    -> the "you are never alone" block (whoElse).
+//   Else(State, agent)    -> the "you are never alone" block (whoElse);
+//   Gates(State)          -> the arbiter truth (the Gates block);
+//   Schedule(State)       -> the queue projection (the queue's own line).
+import Projection from "@Function/Projection.js";
+import type Gate from "@Interface/Gate.js";
 import type Member from "@Interface/Member.js";
 import type Scope from "@Interface/Scope.js";
 import type Snapshot from "@Interface/Snapshot.js";
@@ -61,7 +65,32 @@ export const Snapshot = (State: State): Snapshot => ({
 	running: Running(State),
 	idle: Idle(State),
 	recent: [...State.Recent],
+	proposals: [...State.Proposals.values()],
+	gates: [...State.Gates.values()],
 });
+
+/** The compiled arbiter truth (the Gates block, plan section 7.1 item 2):
+ *  the gates sorted by name, each `<name> <state>` plus the owning lane when
+ *  one was reported - `GATES: none` when the board holds no gate. */
+export const Gates = (State: State): string => {
+	const Rows: Gate[] = [...State.Gates.values()].sort((Left, Right) =>
+		Left.name.localeCompare(Right.name),
+	);
+	switch (true) {
+		case Rows.length === 0:
+			return "GATES: none";
+		default:
+			return `GATES: ${Rows.map((One) =>
+				One.owner.length > 0
+					? `${One.name} ${One.state} (owner ${One.owner})`
+					: `${One.name} ${One.state}`,
+			).join(", ")}`;
+	}
+};
+
+/** The queue projection (the queue service's own compiled line, read
+ *  read-only) - `QUEUE: none` when no queue service is mounted. */
+export const Schedule = (State: State): string => Projection(State.Context) ?? "QUEUE: none";
 
 /** The compiled scope view for one agent (getScope): the file-ownership
  *  matrix derived at call time - pre-baked conflict avoidance, never
@@ -106,6 +135,24 @@ export const Context = (State: State, Agent: string): string => {
 			Idle0.length > 0 ? ` (${Idle0.map((One) => One.id).join(", ")})` : ""
 		}`,
 	);
+	// The Gates block and the queue projection render only when the board
+	// holds a truth to render: no gate reported / no queue service mounted
+	// means the block does not speak (silence is the honest default).
+	switch (true) {
+		case State.Gates.size > 0:
+			Lines.push(Gates(State));
+			break;
+		default:
+			break;
+	}
+	const Queue = Projection(State.Context);
+	switch (true) {
+		case Queue !== null:
+			Lines.push(Queue);
+			break;
+		default:
+			break;
+	}
 	const Mine = State.Members.get(Agent);
 	switch (true) {
 		case Mine !== undefined:

@@ -117,6 +117,7 @@ export default (Context: Context, Options: Config): void => {
 			RecoveryRules: "recovery",
 			LoopBound: "loopBound",
 			MaxDecisions: "maxDecisions",
+			Allow: "automation",
 		},
 	}) as State;
 	State.Factory = Factory;

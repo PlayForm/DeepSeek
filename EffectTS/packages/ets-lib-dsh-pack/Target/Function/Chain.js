@@ -1,0 +1,1 @@
+import a from"./Extends.js";import o from"./Pick.js";import f from"./Read.js";import d from"./User.js";const c=(r,n)=>{const t=o(d(r,n));return t===void 0?void 0:f(t)},s=(r,n,t)=>{if(t.has(r))return[];t.add(r);const i=c(r,n);return i===void 0?[]:[...a(i).flatMap(e=>s(e,n,t)),i]};var m=(r,n,t)=>r.flatMap(i=>s(i,n,t));export{m as default};

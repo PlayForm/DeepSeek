@@ -15,6 +15,9 @@
 //   Delta(session, agentId, text) - the parent's append (never an edit)
 //   Read(session, agentId, reader)- the recipient's OPTIONAL read (never forced)
 //   Summary(session)              - the council view: the aggregate signals
+//   Outcome(session, agentId, proposal, outcome, detail)
+//                                 - the batch outcome's journal + summary record
+//                                   (the caller-side orchestration integration)
 //
 // THE HONESTY POLICY (plan section 6): the honest content is NEVER sanitized
 // or filtered - the parents append deltas, NEVER rewrite the agents'
@@ -30,8 +33,10 @@
 import { homedir as Home } from "node:os";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 
 import Delta from "./Function/Delta.js";
+import OutcomeFn from "./Function/Outcome.js";
 import Parse from "./Function/Parse.js";
 import PushFn from "./Function/Push.js";
 import ReadFn from "./Function/Read.js";
@@ -40,6 +45,7 @@ import Render from "./Function/Render.js";
 import SummaryFn from "./Function/Summary.js";
 import type FeedbackBlock from "./Interface/Block.js";
 import type Config from "./Interface/Config.js";
+import type Outcome from "./Interface/Outcome.js";
 import type State from "./Interface/State.js";
 import type Summary from "./Interface/Summary.js";
 import Definition from "./Variable/Config.js";
@@ -58,14 +64,21 @@ export default class Feedback extends Service {
 		const Ledger = Config.logFile.startsWith("~")
 			? `${Home()}${Config.logFile.slice(1)}`
 			: Config.logFile;
+		// THE POLICY BLOCK (D6) is a VOLATILE cell in the schema (the factory's
+		// shared block); the class form has no factory State builder to unwrap
+		// it, so the block is normalized ONCE here - a config edit reloads the
+		// plugin anyway (the class form's documented posture).
+		const Allow: Allowlist =
+			(Config.policy as unknown as { get?: () => Allowlist }).get?.() ?? Config.policy;
 		this.State = {
-			Config,
+			Config: { ...Config, policy: Allow },
 			Context,
 			Module: "plugin-dsh-feedback",
 			Ledger,
 			Enabled: Config.enabled,
 			Sessions: new Map(),
 			Order: [],
+			Outcomes: new Map(),
 		};
 		// The passive pickup: a block that arrives as an inbox splice (the
 		// child -> parent transfer) is recorded into the receiving session's
@@ -130,6 +143,19 @@ export default class Feedback extends Service {
 	/** The council view: the session's aggregate signals. */
 	Summary(Session: string): Summary {
 		return SummaryFn(this.State, Session);
+	}
+
+	/** Record one batch outcome (applied / rejected / denied / expired) into
+	 *  the session's journal and summary - the caller-side orchestration
+	 *  integration the plan defers (the ingester is the outcome's owner). */
+	Outcome(
+		Session: string,
+		AgentId: string,
+		Proposal: string,
+		Outcome_: string,
+		Detail: string,
+	): Outcome | null {
+		return OutcomeFn(this.State, Session, AgentId, Proposal, Outcome_, Detail);
 	}
 
 	/** Render one block in the transfer format (the queue integration's

@@ -4,6 +4,8 @@
 // ride the factory's loader/volatile-update listener and are refreshed IN
 // PLACE, so a flip (enabled, deadlineMs, strictMode, ...) lands on the next
 // tool call without a remount.
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 import type FactoryService from "./Factory.js";
 import type { FactoryState } from "./Factory.js";
 import type { MachineRecord } from "./Process.js";
@@ -23,6 +25,12 @@ export default interface State extends FactoryState {
 	Intercept: boolean;
 	/** The per-file check-set names (config `monitorChecksets`). */
 	Checksets: string[];
+	/** The per-action allowlist (config `policy`, volatile) - the D6 OUTER
+	 *  gate in front of an apply. Named `Allow` because the factory's shared
+	 *  State already owns `Policy` (the configured global policy file path);
+	 *  `write` defaults to `approve`, so a commit refuses until the user
+	 *  approves. */
+	Allow: Allowlist;
 	/** The machine registry, keyed on the agent id (the planted-board lease
 	 *  semantics: machines are per-agent; machinesPerAgent caps each map). */
 	Machines: Map<string, Map<string, MachineRecord>>;

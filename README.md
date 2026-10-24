@@ -104,7 +104,7 @@ exists.
             name: "@playform/hook-dsh-package-governor"
             config:
                 log: true
-                logFile: ~/.dsh/hook-dsh-package-governor.log
+                logFile: ~/.dsh/playform/hook-dsh-package-governor.log
                 updateCooldownMs: 3000
                 strict: false
                 mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -118,7 +118,7 @@ exists.
             name: "@playform/hook-dsh-normalize-dash"
             config:
                 log: true
-                logFile: ~/.dsh/hook-dsh-normalize-dash.log
+                logFile: ~/.dsh/playform/hook-dsh-normalize-dash.log
                 replacement: "-"
                 normalizeReasoning: true
                 normalizeToolArguments: true
@@ -132,9 +132,9 @@ exists.
    ledger alone:
 
     ```text
-    hook-dsh-package-governor: activated (anywhere mode, logFile=~/.dsh/hook-dsh-package-governor.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
-    hook-dsh-package-pinner: activated (pinner, logFile=~/.dsh/hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
-    hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/hook-dsh-normalize-dash.log)
+    hook-dsh-package-governor: activated (anywhere mode, logFile=~/.dsh/playform/hook-dsh-package-governor.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
+    hook-dsh-package-pinner: activated (pinner, logFile=~/.dsh/playform/hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
+    hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-dash.log)
     ```
 
 ---

@@ -1,8 +1,12 @@
-// Snapshot - the best-effort JSON persistence (Function/Snapshot). The
-// local store under ~/.dsh (PATTERN-GRAPH-PLUGIN.md open decision 2): the
-// memory is local, never the repo; the schema is versioned; a stale or
-// unreadable file is a silent miss (the registry keeps the cold-start
-// catalog) - persistence failure must never reach any caller path.
+// Snapshot - the best-effort JSON persistence (Function/Snapshot), the
+// DEGRADED FALLBACK store. The PRIMARY store is the storage-domain KV domain
+// (Function/Open, the config `domain`); this file is written and read ONLY
+// when the harness provides no storage facility (or its open fails) - the
+// documented fallback, never the primary. The local store under ~/.dsh
+// (PATTERN-GRAPH-PLUGIN.md open decision 2): the memory is local, never the
+// repo; the schema is versioned; a stale or unreadable file is a silent miss
+// (the registry keeps the cold-start catalog) - persistence failure must
+// never reach any caller path.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import { dirname, join, resolve } from "node:path";

@@ -11,6 +11,12 @@
 //               names and the evidence weight each match contributes;
 //   targets   - the companion set: a path or glob, a prior, and the one
 //               reason phrase the model reads.
+//
+// The scored companion (Candidate) is the decision model's row: the score
+// plus the six pickable heuristic values (Interface/Decision), so the note,
+// the decision record and the ledger line all read ONE computation.
+import type { CompanionDecision } from "./Decision.js";
+
 export interface Signal {
 	/** The rule id this row implements. */
 	rule: string;
@@ -60,16 +66,12 @@ export interface Detection {
 	evidence: number;
 }
 
-/** One scored companion. */
-export interface Candidate {
-	/** The companion path or glob. */
-	path: string;
+/** One scored companion (the decision model's row plus the note's fields). */
+export interface Candidate extends CompanionDecision {
 	/** The companion kind. */
 	kind: string;
 	/** The one reason phrase. */
 	reason: string;
-	/** The companion score. */
-	score: number;
 }
 
 /** The gate's verdict. */

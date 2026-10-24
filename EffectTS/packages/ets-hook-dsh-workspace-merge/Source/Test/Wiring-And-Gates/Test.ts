@@ -20,10 +20,13 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides. */
+/** A standard enabled mount with overrides. The D6 policy gate is OPENED
+ *  here (`commit: auto`) because this folder exercises the gates and the
+ *  commit; the shipped `commit: approve` is arbitrated by
+ *  `Source/Test/Policy-Defaults`. */
 const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
-	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+	return Make(Validate({ logFile: Ledger, enabled: true, policy: { commit: "auto" }, ...Config }));
 };
 
 /** Drive one folder's checks. */
@@ -126,7 +129,14 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Reply.reason, "duplicate path /repo/src/a.ts");
 		});
 		await CheckAsync(Count, "G5: the size gate and the byte gate reject with their reasons", async () => {
-			const Small = await Make(Validate({ logFile: Ledger, enabled: true, maxFiles: 1 }));
+			const Small = await Make(
+				Validate({
+					logFile: Ledger,
+					enabled: true,
+					maxFiles: 1,
+					policy: { commit: "auto" },
+				}),
+			);
 			const ReplySmall = await Small.Context.workspaceMerge.commit({
 				operations: [
 					{ path: "/repo/src/a.ts", content: "x", version: "v1" },
@@ -135,7 +145,12 @@ export const runTest = async (): Promise<number> => {
 			});
 			assert.equal(ReplySmall.reason, "too many files (2 > 1)");
 			const Byte = await Make(
-				Validate({ logFile: Ledger, enabled: true, maxTotalBytes: 10 }),
+				Validate({
+					logFile: Ledger,
+					enabled: true,
+					maxTotalBytes: 10,
+					policy: { commit: "auto" },
+				}),
 			);
 			const ReplyByte = await Byte.Context.workspaceMerge.commit({
 				operations: [{ path: "/repo/src/a.ts", content: "0123456789012345", version: "v1" }],

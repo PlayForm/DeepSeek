@@ -27,7 +27,9 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/convention-suggester.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/hook-dsh-convention-suggester.log")
+		.volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
 	enabled: Schema.boolean().default(true).volatile(),
 	// The default confidence gate (volatile). The pack's per-intent thresholds
@@ -48,4 +50,11 @@ export default Compose(false, {
 	emitOn: Schema.array(String).default(["edit", "raw-write", "write"]).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	// The learning bootstrap switch (D4, volatile): OFF by default - the
+	// user's "learning is optional". When true, the first judged call in a
+	// packless workspace writes ONE proposal under
+	// `<home>/.dsh/playform/proposals/` and notes it; the config wins over the
+	// resolved pack's `learning.propose` when true, and a false config defers
+	// to that section (a repo may opt itself in with a minimal `.dsh/pack.yml`).
+	learning: Schema.boolean().default(false).volatile(),
 });

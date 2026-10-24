@@ -4,6 +4,8 @@
 // silently (nothing to remove, nothing to ledger).
 import type State from "@Interface/State.js";
 
+import Emit from "../Trace/Emit.js";
+import Invalidated from "../Trace/Invalidated.js";
 import Append from "./Append.js";
 import Store from "./Store.js";
 
@@ -21,6 +23,9 @@ export default async (StateRef: State, Path: string): Promise<boolean> => {
 		StateRef.Revision += 1;
 		await Store.putMeta(StateRef, StateRef.Revision);
 		Append(StateRef, `removed ${Key}`);
+		// The trace (D5): the record is gone - the consumers drop what they
+		// cached for the path. No ledger line is added.
+		Emit(StateRef, Invalidated(Key, "removed"));
 		return true;
 	} catch {
 		return false;

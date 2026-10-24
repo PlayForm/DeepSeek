@@ -2,7 +2,8 @@
 // client-half smokes: the alias hooks load the REAL built Target (the
 // ./client export and the loader row), and the fake CLIENT ctx captures
 // exactly the seams the client body uses - locale.register, slots.inject,
-// slots.register, effect, reflect.provide. This is the
+// slots.register, effect, reflect.provide, ctx.get (the optional trace /
+// settings / bridge services), and the logger. This is the
 // hook-dsh-workspace-observe harness pattern adapted to the client SDK:
 // there is no root listener, no fs capture and no waterfall here - the
 // client half is a pure browser module that touches no filesystem and has
@@ -61,19 +62,49 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 
 // -- the fake client context --
 
+/** The optional services one run may expose on ctx.get. */
+export type MakeOptions = {
+	trace?: unknown;
+	configForms?: unknown;
+	bridge?: unknown;
+	remote?: unknown;
+};
+
 /**
  * One run: the fake ctx's captures, plus the ones the tests drive. Every
  * seam records and returns a disposer, exactly as the real client services
- * do; effect runs its setup immediately and keeps the recorded label.
+ * do; effect runs its setup immediately and keeps the recorded label. A slot
+ * keeps EVERY injected factory (the real slot service runs one callback per
+ * declaration lifetime), and OpenSlot runs them all.
  */
-export const Make = (): any => {
+export const Make = (Options: MakeOptions = {}): any => {
 	const Locale: { namespace: string; dictionaries: Record<string, unknown> }[] = [];
-	const Injects: Record<string, () => unknown> = {};
-	const Registered: { options: any; component: () => unknown }[] = [];
+	const Injects: Record<string, Array<() => unknown>> = {};
+	const Registered: { options: any; component: (props?: any) => unknown }[] = [];
 	const Provided: Record<string, unknown> = {};
 	const Effects: string[] = [];
 	const Disposers: Array<() => unknown> = [];
+	const Services: Record<string, unknown> = {};
+	const Info: string[] = [];
+	const Warn: string[] = [];
+	if (Options.trace !== undefined) Services["trace"] = Options.trace;
+	if (Options.configForms !== undefined) Services["configForms"] = Options.configForms;
+	if (Options.bridge !== undefined) Services["panelFamilyBridge"] = Options.bridge;
+	if (Options.remote !== undefined) Services["remote"] = Options.remote;
 	const Ctx: any = {
+		get: (Name: string) => Services[Name],
+		logger: {
+			info: (Message: string) => {
+				Info.push(Message);
+			},
+			warn: (Message: string) => {
+				Warn.push(Message);
+			},
+			error: (Message: string) => {
+				Warn.push(Message);
+			},
+			debug: () => undefined,
+		},
 		locale: {
 			register: (Namespace: string, Dictionaries: Record<string, unknown>) => {
 				Locale.push({ namespace: Namespace, dictionaries: Dictionaries });
@@ -82,11 +113,11 @@ export const Make = (): any => {
 		},
 		slots: {
 			inject: (Slot: string, Factory: () => unknown) => {
-				Injects[Slot] = Factory;
+				Injects[Slot] = [...(Injects[Slot] ?? []), Factory];
 				return () => true;
 			},
-			register: (Options: any, Component: () => unknown) => {
-				Registered.push({ options: Options, component: Component });
+			register: (Registration: any, Component: (props?: any) => unknown) => {
+				Registered.push({ options: Registration, component: Component });
 				return () => true;
 			},
 		},
@@ -113,16 +144,143 @@ export const Make = (): any => {
 		Provided,
 		Effects,
 		Disposers,
+		Services,
+		Info,
+		Warn,
 	};
 	(ClientPlugin.apply as any)(Ctx);
-	/** Open one slot point: run the injected factory, return the last
-	 *  slots.register record it produced (the tab/overlay registration). */
+	/** Open one slot point: run every injected factory, return the
+	 *  slots.register records they produced (the tab/overlay/section
+	 *  registrations). */
 	Run.OpenSlot = (Slot: string): any => {
 		const Before = Registered.length;
-		(Injects[Slot] as () => unknown)();
+		for (const Factory of Injects[Slot] ?? []) {
+			Factory();
+		}
 		return Registered.slice(Before);
 	};
 	return Run;
+};
+
+/** A fake D5 trace port: `on` + `ring`, plus an `emit` the tests drive. */
+export const MakeTrace = (): any => {
+	const Listeners = new Map<string, Set<(Envelope: any) => void>>();
+	const Ring: any[] = [];
+	let Sequence = 0;
+	return {
+		on: (Kind: string, Listener: (Envelope: any) => void) => {
+			let Subscribers = Listeners.get(Kind);
+			if (Subscribers === undefined) {
+				Subscribers = new Set();
+				Listeners.set(Kind, Subscribers);
+			}
+			Subscribers.add(Listener);
+			return () => {
+				Subscribers?.delete(Listener);
+			};
+		},
+		ring: (Limit?: number) => [...Ring].reverse().slice(0, Limit ?? 256),
+		emit: (Kind: string, Payload: Record<string, unknown>) => {
+			Sequence += 1;
+			const Envelope = {
+				trace: `trace-${Sequence}`,
+				kind: Kind,
+				at: Sequence,
+				payload: Payload,
+			};
+			Ring.push(Envelope);
+			for (const Listener of Listeners.get(Kind) ?? []) Listener(Envelope);
+			return Envelope;
+		},
+	};
+};
+
+/** A fake settings client (`ctx.configForms`): the describe mirror plus the
+ *  namespace forms, with every mutate captured for the write assertions. */
+export const MakeForms = (Namespaces: any[], Writable = true): any => {
+	const Listeners = new Set<() => void>();
+	const Snapshot = {
+		status: "ready",
+		view: { namespaces: Namespaces, writable: Writable },
+		error: null,
+	};
+	const Mutations: any[] = [];
+	const Forms = {
+		describe: () => ({
+			getSnapshot: () => Snapshot,
+			subscribe: (Listener: () => void) => {
+				Listeners.add(Listener);
+				return () => {
+					Listeners.delete(Listener);
+				};
+			},
+			ensure: async () => {},
+		}),
+		get: (Namespace: string) => {
+			const View = Namespaces.find((Entry) => Entry.ns === Namespace);
+			return {
+				getSnapshot: () => ({
+					status: View === undefined ? "unavailable" : "ready",
+					value: View?.value,
+					base: View?.base,
+					user: View?.user,
+					revision: View?.revision,
+					writable: Writable,
+				}),
+				subscribe: (Listener: () => void) => {
+					Listeners.add(Listener);
+					return () => {
+						Listeners.delete(Listener);
+					};
+				},
+				set: async (Field: string, Value: unknown) => {
+					Mutations.push({
+						namespace: Namespace,
+						ops: [{ op: "set", path: [Field], value: Value }],
+						revision: undefined,
+					});
+					return true;
+				},
+				unset: async (Field: string) => {
+					Mutations.push({
+						namespace: Namespace,
+						ops: [{ op: "unset", path: [Field] }],
+						revision: undefined,
+					});
+					return true;
+				},
+				mutate: async (Operations: any[], Revision?: number) => {
+					Mutations.push({
+						namespace: Namespace,
+						ops: Operations,
+						revision: Revision,
+					});
+					return true;
+				},
+			};
+		},
+	};
+	return {
+		Forms,
+		Mutations,
+		Notify: () => {
+			for (const Listener of Listeners) Listener();
+		},
+	};
+};
+
+/** A fake plain-field bridge: every editFull write captured. */
+export const MakeBridge = (): any => {
+	const Writes: any[] = [];
+	return {
+		Writes,
+		Bridge: {
+			editFull: async (Namespace: string, Patch: Record<string, unknown>) => {
+				Writes.push({ namespace: Namespace, patch: Patch });
+				return true;
+			},
+		},
+	};
 };
 
 /**
@@ -132,6 +290,14 @@ export const Make = (): any => {
  */
 export const BuiltClientSource = (): string =>
 	FileSystem.readFileSync(new URL("../Client.js", import.meta.url), "utf8");
+
+/**
+ * The real built closure-factory bundle (`Target/Client.bundle.js`), for the
+ * fake `window.__ModuleLoader__` execution check (the
+ * client-dsh-panel-family-host precedent).
+ */
+export const BundleSource = (): string =>
+	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =
@@ -150,9 +316,31 @@ if (InvokedDirectly) {
 	const Run = Make();
 	Check(Count, "selfcheck: the fake ctx registers the client apply wiring", () => {
 		assert.equal(Run.Provided["playformFamilyPanel"] !== undefined, true);
-		assert.deepEqual(Run.Effects, ["panel: dictionaries", "panel: family tab", "panel: overlay mount"]);
+		assert.deepEqual(Run.Effects, [
+			"panel: dictionaries",
+			"panel: trace source",
+			"panel: family tab",
+			"panel: overlay mount",
+			"panel: adapter adapter-hook-dsh-normalize-dash",
+			"panel: adapter adapter-hook-dsh-tool-coach",
+			"panel: adapter adapter-hook-dsh-convention-suggester",
+			"panel: adapter adapter-hook-dsh-normalize-quotes",
+			"panel: adapter adapter-hook-dsh-normalize-ellipsis",
+			"panel: adapter adapter-hook-dsh-normalize-spaces",
+			"panel: adapter adapter-hook-dsh-normalize-invisible",
+			"panel: adapter adapter-hook-dsh-normalize-fullwidth",
+			"panel: adapter adapter-plugin-dsh-normalize-file",
+			"panel: adapter adapter-hook-dsh-package-governor",
+			"panel: adapter adapter-hook-dsh-package-pinner",
+			"panel: adapter adapter-hook-dsh-cargo-governor",
+			"panel: adapter adapter-hook-dsh-ccr",
+		]);
 		assert.equal(Run.Locale.length, 1);
-		assert.deepEqual(Object.keys(Run.Injects), ["conversation.view", "shell.overlay"]);
+		assert.deepEqual(Object.keys(Run.Injects), [
+			"conversation.view",
+			"shell.overlay",
+			"playform.panel.section",
+		]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

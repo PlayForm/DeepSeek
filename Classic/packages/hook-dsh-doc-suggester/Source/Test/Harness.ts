@@ -8,6 +8,18 @@
 // fresh set, so every folder is standalone-green and the aggregate replays
 // the same seams per folder.
 //
+// THE LEARNING SEAMS (the D8 layer): `Home` is a fresh OS temp directory
+// assigned to $HOME BEFORE any construction, so the optional pattern
+// service's JSON fallback path (`~/.dsh/pattern/registry.json`) can never
+// read or write the user's real home; `Pattern` builds the REAL
+// PatternService from its built Target over a fake storage facility
+// (`FakeStorage`, the authority/evidence fake-storage pattern: the open
+// capture, the map-backed tables, the version fence), so the learning smokes
+// exercise the service's real Record/Get/Put/Save semantics over a real KV
+// domain, and a "reopen" is a second service over the same tables. A folder
+// that never attaches a service gets the plugin's in-memory fallback - the
+// neutral path every pre-learning folder runs on.
+//
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
 // fake ctx actually wires the plugin (the vacuously-green backback for every
 // folder's fixture) and exits nonzero when it does not.
@@ -22,8 +34,16 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import PatternService from "../../../plugin-dsh-pattern/Target/Library.js";
 
-export { Plugin, Exports };
+export { Plugin, Exports, PatternService };
+
+/**
+ * A FRESH TEMP HOME, assigned before any construction: the pattern service's
+ * JSON fallback and any `~` expansion stay inside it, never the real home.
+ */
+export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "doc-suggester-home-"));
+process.env["HOME"] = Home;
 
 /** The per-folder counter: N passing checks, F failing checks. */
 export type Counter = { N: number; F: number };
@@ -226,6 +246,78 @@ export const AgentOf = (Id: string): any => {
 		Agents.set(Id, { agent: { id: Id } });
 	}
 	return Agents.get(Id);
+};
+
+// -- the learning seams (the D8 layer) --
+
+/**
+ * The fake storage facility (the authority/evidence fake-storage pattern):
+ * the open capture, the map-backed tables, the version fence. The REAL
+ * PatternService opens a domain through it, so the learning smokes exercise
+ * the service's own Record/Put/Save and the real KV round-trip; a "reopen" is
+ * a second service over the SAME tables.
+ */
+export const FakeStorage = (Options: { version?: number } = {}): any => {
+	const Store: any = {
+		spec: undefined as any,
+		version: Options.version ?? 1,
+		tables: new Map<string, Map<string, unknown>>(),
+		writes: [] as [string, string][],
+		closed: false,
+	};
+	Store.facility = {
+		open: async (Specification: any) => {
+			if (Specification.version !== Store.version) {
+				throw new Error(
+					`version-mismatch: stored ${Store.version}, declared ${Specification.version}`,
+				);
+			}
+			Store.spec = Specification;
+			return {
+				name: Specification.name,
+				close: async () => {
+					Store.closed = true;
+				},
+				table: (Name: string) => {
+					if (!Store.tables.has(Name)) {
+						Store.tables.set(Name, new Map());
+					}
+					const Rows = Store.tables.get(Name) as Map<string, unknown>;
+					return {
+						put: async (Key: string, Value: unknown) => {
+							Rows.set(Key, Value);
+							Store.writes.push([Name, Key]);
+						},
+						entries: () => Rows.entries(),
+						keys: () => Rows.keys(),
+						get: (Key: string) => Rows.get(Key),
+						delete: async (Key: string) => Rows.delete(Key),
+						get size() {
+							return Rows.size;
+						},
+					};
+				},
+			};
+		},
+	};
+	return Store;
+};
+
+/**
+ * The REAL pattern service over a fake storage facility - the optional
+ * service the plugin probes with `ctx.get("pattern")`. Its own ledger is
+ * discarded (the learning assertions read Get/List, never the service's
+ * lines). Attach it to a Run with `Run.Context.pattern = Pattern(Store)`.
+ */
+export const Pattern = (Store: any): any => {
+	const Context: any = {
+		logger: { info: () => undefined, warn: () => undefined },
+		get: (Name: string) => Context[Name],
+		effect: () => () => true,
+		reflect: { provide: () => () => true },
+	};
+	Context.storageDomain = Store.facility;
+	return new PatternService(Context, {});
 };
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.

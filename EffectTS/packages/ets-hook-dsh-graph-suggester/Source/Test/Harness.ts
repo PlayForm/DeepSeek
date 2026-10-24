@@ -20,6 +20,7 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../ets-plugin-dsh-workspace-graph/Target/Library.js";
 
 export { Plugin };
 
@@ -165,6 +166,74 @@ export const FakeGraph = (Entries: { path: string; role: string; reason: string 
 FakeGraph.Calls = [] as { path: string; limit: number | undefined }[];
 export const ResetGraphCalls = (): void => {
 	FakeGraph.Calls = [];
+};
+
+/**
+ * The REAL workspace graph service (from its built Target) over a
+ * deterministic in-memory file map: resolve/stat/readText/listDir/contains
+ * drive the real walk and parser, and `neighborhood(path, limit)` answers from
+ * the real `contains`/`imports` edges. The graph gets its OWN ctx (its fs must
+ * work); the hook's ctx fs stays the zero-operation purity capture.
+ */
+export const RealGraph = (
+	Files: Record<string, string>,
+	Options: Record<string, unknown> = {},
+): any => {
+	const Names = Object.keys(Files);
+	const Info = (Display: string): { version: string; type: string; size: number } | undefined => {
+		const Text = Files[Display];
+		if (Text !== undefined) {
+			return { version: "v1", type: "file", size: Text.length };
+		}
+		return Names.some((Key) => Key.startsWith(`${Display}/`))
+			? { version: "v1", type: "directory", size: 0 }
+			: undefined;
+	};
+	const Fs: any = {
+		resolve: async (Path_: string) => ({ targetKey: Path_, displayPath: Path_ }),
+		stat: async (Target: any) => Info(String(Target.displayPath)),
+		readText: async (Target: any) => {
+			const Text = Files[String(Target.displayPath)];
+			if (Text === undefined) {
+				throw new Error("vanished");
+			}
+			return Text;
+		},
+		listDir: async (Target: any) => {
+			const Directory = String(Target.displayPath).replace(/\/$/, "");
+			const Found = new Set<string>();
+			for (const Key of Names) {
+				if (!Key.startsWith(`${Directory}/`)) {
+					continue;
+				}
+				Found.add(Key.slice(Directory.length + 1).split("/")[0] as string);
+			}
+			return [...Found].sort((Left, Right) => Left.localeCompare(Right)).map((Name) => {
+				const Display = `${Directory}/${Name}`;
+				const Meta = Info(Display);
+				return {
+					name: Name,
+					type: Meta?.type ?? "other",
+					target: { targetKey: Display, displayPath: Display },
+				};
+			});
+		},
+		contains: (Parent: any, Child: any) => {
+			const Left = String(Parent.displayPath);
+			const Right = String(Child.displayPath);
+			return Right === Left || Right.startsWith(`${Left}/`);
+		},
+		writeText: async () => {
+			throw new Error("writeText must never be called");
+		},
+	};
+	const GraphContext: any = {
+		fs: Fs,
+		logger: { info: () => undefined, warn: () => undefined, error: () => undefined },
+		reflect: { provide: () => undefined },
+	};
+	GraphContext.root = GraphContext;
+	return new GraphClass(GraphContext, GraphClass.Config({ enabled: true, ...Options }));
 };
 
 /**

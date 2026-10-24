@@ -1,0 +1,1 @@
+import u from"./Apply.js";import i from"./Journal.js";import s from"./Outcome.js";const p=r=>`${r.proposal}:${r.outcome}:${r.at}`;var l=(r,n,e)=>{const o=r.Pending.get(p(e));if(!0===(o!==void 0))return o;const m=u(r,n,e).then(t=>(s(r,n,e,t),t)).catch(t=>(i(r,"recovery-required",n.id,"",String(t)),null));return r.Pending.set(p(e),m),m};export{p as Key,l as default};

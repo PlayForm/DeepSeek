@@ -10,6 +10,15 @@
 //       batch/decision (the ingester and the live view listen for it), and
 //       logged. No awaits, no I/O, no throws - a listener failure logs and
 //       no-ops.
+//
+//       THE POLICY GATE (D6): the policy block's `commit` verdict is the
+//       OUTER gate in front of `autoApprove` (the INNER one). An `approve`
+//       verdict - the shipped default - refuses the policy auto-approval and
+//       records the byte-exact `decision held <id> (policy commit=approve)`
+//       line: the proposal stays pending and waits for the user's
+//       batch_decision approval. The precedence is policy approve > knob: the
+//       knob can never widen an approve verdict, while a knob that is off
+//       still requires the user and writes no held line.
 //   T1  batch_decision tool: the user's approve/deny/list entry point
 //       (Function/Tool).
 //
@@ -24,6 +33,7 @@
 // touched by this hook.
 import type { Context } from "@deepseek-ai/cordis";
 import Gate from "@Function/Gate.js";
+import Inbox from "@Function/Inbox.js";
 import Policy from "@Function/Policy.js";
 import { Now, Record, Sweep } from "@Function/Proposals.js";
 import Tool from "@Function/Tool.js";
@@ -31,6 +41,7 @@ import type { BatchProposal } from "@Interface/Batch.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
+import { Decide } from "@playform/plugin-dsh-factory";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
@@ -88,6 +99,7 @@ export default (Context: Context, Options: Config): void => {
 			MaxAutoTargets: "maxAutoTargets",
 			MinConfidence: "minConfidence",
 			PendingTtlMs: "pendingTtlMs",
+			Allow: "policy",
 		},
 	});
 	State_.Factory = Factory;
@@ -135,12 +147,27 @@ export default (Context: Context, Options: Config): void => {
 			Append(
 				`proposal ${Proposal.id} recorded (intent ${Proposal.intent}, targets ${Proposal.targets.length}, rev ${Proposal.revision})`,
 			);
-			// The auto-approve policy: pure arithmetic on the recorded state.
-			if (Policy(State_, Proposal) === "auto-approve") {
-				const Decision = Gate(State_, Proposal, "approved", "policy");
-				if (Decision !== undefined) {
-					Append(`decision ${Decision.outcome} ${Proposal.id} (by policy)`);
-					Context.emit?.("batch/decision", Decision);
+			// The auto-approve policy: pure arithmetic on the recorded state,
+			// behind the D6 policy block's OUTER `commit` gate.
+			switch (true) {
+				case Policy(State_, Proposal) !== "auto-approve":
+					break;
+				case Decide(State_.Allow, "commit") !== "auto":
+					// The policy gate is CLOSED (the shipped default): the
+					// proposal waits for the user's batch_decision approval.
+					Append(`decision held ${Proposal.id} (policy commit=approve)`);
+					break;
+				default: {
+					const Decision = Gate(State_, Proposal, "approved", "policy");
+					if (Decision !== undefined) {
+						Append(`decision ${Decision.outcome} ${Proposal.id} (by policy)`);
+						Context.emit?.("batch/decision", Decision);
+						// THE HANDOFF: the decision also goes into the inbox the
+						// board consumes (the same channel the proposal came
+						// through) - the bus emit is for the ingester and the live
+						// view, the inbox write is for the board.
+						Inbox(Context, Decision, Proposal.origin, Append);
+					}
 				}
 			}
 		} catch (Error) {

@@ -23,7 +23,10 @@ import {
 const Gate: (State: any, Proposal: any, Outcome: "approved" | "denied", By: "user" | "policy") => any =
 	GateModule as never;
 
-/** A standard enabled mount with the policy knobs on. */
+/** A standard enabled mount with the policy knobs on. The D6 outer gate is
+ *  opened explicitly (`policy.commit: "auto"`) so the auto-approval scenarios
+ *  exercise the policy itself; the gate's closed posture is the
+ *  Policy-Defaults folder's scenario. */
 const Setup = (): any => {
 	rm();
 	return Make(
@@ -35,6 +38,7 @@ const Setup = (): any => {
 			maxAutoTargets: 5,
 			minConfidence: 0.8,
 			pendingTtlMs: 3_600_000,
+			policy: { commit: "auto" },
 		}),
 	);
 };

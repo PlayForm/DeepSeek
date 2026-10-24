@@ -20,12 +20,16 @@
 //   EmitOn      - the judged tools (volatile);
 //   ScopeRoots / Exclude - the scope and the exclusions (volatile);
 //   Learn / LearnWindow - the learner's switch and window (volatile);
-//   PersistPath / IndexPath / RefreshOnBoot - the memory paths (structural);
+//   PersistPath / IndexPath / RefreshOnBoot - the memory paths (structural;
+//                 IndexPath is retired by the P2 re-spec);
+//   DismissTtl / Seed - the dismissal TTL and the offline seed switch
+//                 (volatile);
 //   SectionMode / SectionTtl - the second surface (volatile);
 //   Pack        - the embedded intent pack (Function/Pack), filtered to the
 //                 enabled kinds at read time - never mutated;
-//   Knowledge   - the learned knowledge (Function/Persist), loaded once at
-//                 apply and saved after each emit/follow (best-effort);
+//   Knowledge   - the learned knowledge (Function/Persist), loaded and seeded
+//                 once at apply and saved after each emit/follow/dismiss
+//                 (best-effort);
 //   Rings       - the per-agent ring tracker (Function/Ring);
 //   Factory     - the injected factory service itself (the ledger via
 //                 Factory.Append) - assigned once in Function/Apply.
@@ -67,10 +71,14 @@ export default interface State extends Shared {
 	LearnWindow: number;
 	/** The knowledge file path (config `persistPath`, structural). */
 	PersistPath: string;
-	/** The index file path (config `indexPath`, structural). */
+	/** RETIRED: the generated index path (config `indexPath`, structural; never read). */
 	IndexPath: string;
-	/** The boot index refresh switch (config `refreshOnBoot`, structural). */
+	/** The projection refresh switch (config `refreshOnBoot`, structural). */
 	RefreshOnBoot: boolean;
+	/** The dismissal TTL in seconds (config `dismissTtl`, volatile). */
+	DismissTtl: number;
+	/** The offline seed switch (config `seed`, volatile). */
+	Seed: boolean;
 	/** The second surface mode (config `sectionMode`, volatile). */
 	SectionMode: string;
 	/** The sticky section TTL (config `sectionTtl`, volatile). */

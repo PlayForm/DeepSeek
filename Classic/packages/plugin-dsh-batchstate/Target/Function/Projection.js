@@ -1,0 +1,1 @@
+var u=t=>{const e=t?.get?.("dshQueue");switch(!0){case typeof e?.Board!="function":return null;default:try{const n=e.Board();return!0===(typeof n!="string"||n.length===0)?null:n}catch{return null}}};export{u as default};

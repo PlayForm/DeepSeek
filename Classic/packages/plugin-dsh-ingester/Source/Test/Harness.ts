@@ -172,20 +172,25 @@ export const FakeFs = (Files: Record<string, string> = {}, FailEdit = false): an
 
 /**
  * The fake ctx for a class-form plugin: the capturing fs, the logger
- * capture, the reflect.provide capture, and the root seam (the fake ctx is
- * its own root). `FsUndefined` omits the fs entirely (the absent-service
- * scenario).
+ * capture, the reflect.provide capture, the bus listener capture (the
+ * `batch/proposed` and `batch/decision` registrations), and the root seam
+ * (the fake ctx is its own root). `FsUndefined` omits the fs entirely (the
+ * absent-service scenario).
  */
 export const MakeCtx = (Fs?: any): any => {
 	const Lines: string[] = [];
 	const Provided: any = {};
+	const Listeners: any = {};
 	const Context: any = {
 		logger: {
 			info: (M: string) => Lines.push(M),
 			warn: (M: string) => Lines.push(M),
 			error: (M: string) => Lines.push(M),
 		},
-		on: () => () => true,
+		on: (Name: string, Listener: unknown) => {
+			Listeners[Name] = Listener;
+			return () => true;
+		},
 		reflect: {
 			provide: (Name: string, Value: unknown) => {
 				Provided[Name] = Value;
@@ -199,7 +204,7 @@ export const MakeCtx = (Fs?: any): any => {
 	if (Fs !== undefined) {
 		Context.fs = Fs;
 	}
-	return { Context, Lines, Provided };
+	return { Context, Lines, Provided, Listeners };
 };
 
 /**

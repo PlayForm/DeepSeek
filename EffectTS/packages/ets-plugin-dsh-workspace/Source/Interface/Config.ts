@@ -11,6 +11,7 @@
 // Config, WAVE-1-BRIEF.md section 4.5 - the distribution law: each
 // package's Config its own).
 import type { NodeKind } from "@Interface/Graph.js";
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 
 /** The agent's config (the family's surface knobs, all volatile). */
 export default interface Config {
@@ -41,4 +42,9 @@ export default interface Config {
 	tokenCharsPerToken: number;
 	/** The node kinds the find/map answers include by default (empty = all). */
 	kinds: NodeKind[];
+	/** The per-action allowlist (D6) - the shared factory block. This
+	 * package's actions are read-only (automatic); it has NO gated action, so
+	 * the block documents the posture without refusing anything. A resolved
+	 * pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

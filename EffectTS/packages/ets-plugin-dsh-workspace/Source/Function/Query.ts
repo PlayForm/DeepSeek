@@ -7,6 +7,7 @@
 // between pages). No full file bodies: only ids, paths, spans, kinds.
 import Packet, { Row } from "@Function/Packet.js";
 import RenderPacket from "@Function/Render.js";
+import Role from "@Function/Role.js";
 import type { Node, WorkspaceGraph } from "@Interface/Graph.js";
 import type {
 	ContextResult,
@@ -45,9 +46,7 @@ export const Map = (
 	const Modules = InRoot.slice(0, State_.MapMaxModules).map((File_) => ({
 		id: File_.id,
 		path: File_.path,
-		role:
-			Graph_.find({ kind: "DocSection", pattern: `${File_.path}*`, limit: 1 })[0]?.name ??
-			"module",
+		role: Role(Graph_, File_.path),
 	}));
 	const Imported = new Set<string>();
 	for (const Edge_ of Snapshot.edges) {

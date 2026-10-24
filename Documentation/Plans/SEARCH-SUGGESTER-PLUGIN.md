@@ -683,7 +683,7 @@ ccr and cannot be mistaken for file content.
 
 ```ts
 Compose(false, {
-	logFile: Schema.string().default("~/.dsh/search-suggester.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-search-suggester.log").volatile(),
 	enabled: Schema.boolean().default(true).volatile(),
 	threshold: Schema.number().default(0.75).volatile(),
 	maxCandidates: Schema.number().default(7).volatile(),
@@ -724,7 +724,7 @@ structural knobs (`persistPath`, `indexPath`) remount on edit.
 
 ### 4.9 The ledger
 
-One ledger per module, `~/.dsh/search-suggester.log`, byte-exact strings:
+One ledger per module, `~/.dsh/playform/hook-dsh-search-suggester.log`, byte-exact strings:
 
 ```
 search-suggester: activated (bundle 0.1.0, intents 10, threshold 0.75)

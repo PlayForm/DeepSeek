@@ -22,8 +22,15 @@
 //     reminder.
 //   - An explicit-but-wrong route is silently CORRECTED per the policy and
 //     logged to the plugin's own ledger - never surfaced to the orchestrator.
+//   - The routing hint (`[route: <taskType> <provider> <model> <effort>]`)
+//     rides into the child's prompt through BOTH halves of the launch seam:
+//     the `subagent` tool's tools/pre-execute waterfall (the launch prompt)
+//     and the child's agent/pre-step waterfall (a child started straight
+//     through `ctx.subagents.startActivation` never passes through a tool).
 //   - The escalation path (the attempts ladder: one DeepSeek max re-dispatch
-//     with the artifacts) is automatic and silent.
+//     with the artifacts) is automatic and silent: an `ESCALATION:` marker in
+//     the launch spec selects the rung, whose model is verified against the
+//     LIVE catalog (`ctx.llm.listModels` - the `list_subagent_models` source).
 //   - Every resolved route is recorded in the plugin's ledger (the audit
 //     format the user reads when he reviews his configuration).
 //
@@ -33,8 +40,8 @@
 //
 // The plugin ships DISABLED - the IDLE-forever posture: it never appears in
 // the profile's bundles and enables only by an explicit ACTIVATE; a cold
-// mount logs `disabled (enabled=false)` and the launch-path listener no-ops
-// to a passthrough (it checks State.On first).
+// mount logs `disabled (enabled=false)` and both launch-path listeners no-op
+// to a passthrough (they check State.On first).
 //
 // Sits NEXT TO the BATCH-STATE plugin in the orchestration layer
 // (Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md section 0); the

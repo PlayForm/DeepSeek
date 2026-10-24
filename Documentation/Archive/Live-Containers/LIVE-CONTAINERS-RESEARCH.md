@@ -144,7 +144,7 @@ OUT of scope for v1. NO plugin seam exists for it. It is the harness-side follow
 **v1 config surface (all volatile cells, hot-editable, no remount):**
 
     enabled: boolean (default false - the IDLE-forever posture)
-    logFile: string (default ~/.dsh/live-containers.log)
+    logFile: string (default ~/.dsh/playform/hook-dsh-live-containers.log)
     sectionName: string (default "live-containers")
     refresh: "request" | "ttl" (default "request")
     ttlCalls: number (default 1; when refresh = "ttl", the section cache is
@@ -324,7 +324,7 @@ DELIVERABLES:
 4. Source/Function/Counters.ts - the per-agent state (WeakMap on the Agent object, the tool-coach
    pattern) and the gauge formulas.
 5. The block-kind table with the ledger strings of research section 3, byte-exact,
-   `live-containers: ` prefix, one log per module (~/.dsh/live-containers.log).
+   `live-containers: ` prefix, one log per module (~/.dsh/playform/hook-dsh-live-containers.log).
 6. package.json + cordis.patch.yml mirroring the tool-coach's (enabled by config only). The profile
    wiring is NOT part of this spec. The plugin must ship DISABLED, the IDLE-forever posture.
 

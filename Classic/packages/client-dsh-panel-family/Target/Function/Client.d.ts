@@ -1,2 +1,2 @@
-import type { Context } from "@deepseek-ai/cordis";
-export default function Client(ctx: Context): void;
+import type { ClientContext } from "../Interface/Client.js";
+export default function Client(ctx: ClientContext): void;

@@ -33,6 +33,8 @@ export interface RingState {
 	userText: string;
 	/** The open note awaiting its learning verdict (plan 6.2). */
 	pending?: { intent: string; since: number } | undefined;
+	/** The open note's emitted candidate paths (the follow signal reads exactly these, never the seeded rows). */
+	emitted: string[];
 	/** The sticky section's cached text and build call (the second surface). */
 	sectionText?: string | undefined;
 	sectionBuilt?: number | undefined;
@@ -50,6 +52,7 @@ export const Fresh = (): RingState => ({
 	notes: 0,
 	calls: 0,
 	userText: "",
+	emitted: [],
 });
 
 /**
@@ -107,6 +110,7 @@ export default () => {
 			}
 			State.cooledNoted.add(Key);
 			State.notes += 1;
+			State.emitted = [...Paths];
 			State.pending = { intent: Intent, since: 0 };
 		},
 		/** The per-turn reset (plan 4.2): ring, cooldowns, dedupe, counters, caches. */
@@ -119,6 +123,7 @@ export default () => {
 			State.calls = 0;
 			State.userText = "";
 			State.pending = undefined;
+			State.emitted = [];
 			State.sectionText = undefined;
 			State.sectionBuilt = undefined;
 		},

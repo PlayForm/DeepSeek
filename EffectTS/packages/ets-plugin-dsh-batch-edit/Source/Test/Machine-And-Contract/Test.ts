@@ -43,8 +43,9 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "M1: the identity is the package name and the inject list is the four services", () => {
 			assert.equal(name, "plugin-dsh-batch-edit");
 			// `fs` joined the list after the 2026-10-22 live dogfood caught
-			// `cannot get property "fs" without inject` (the parity sync with
-			// the Classic twin).
+			// `cannot get property "fs" without inject`: the machine reads
+			// State.Context.fs (Machine/Ops/Tools), and the fake-ctx smoke
+			// provided get("fs"), masking the missing declaration.
 			assert.deepEqual(inject, ["fs", "pluginFactory", "tools", "jobs"]);
 		});
 		Check(Count, "M1: apply returns NOTHING (a returned value kills event delivery)", () => {

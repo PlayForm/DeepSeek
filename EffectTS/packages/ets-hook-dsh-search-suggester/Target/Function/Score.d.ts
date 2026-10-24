@@ -1,4 +1,5 @@
 import type { Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
 /** The gate input, built by Apply from the per-agent state and the config. */
 export interface Gate {
     /** The intent ids that emitted within the cooldown window. */
@@ -19,6 +20,10 @@ export interface Gate {
     Exclude: string[];
     /** The history lookup (the knowledge's Laplace inputs). */
     History: (Intent: string, Path: string) => KnowledgeRow | undefined;
+    /** The dismissal lookup (the knowledge's durable dismissals; Path undefined = the family). */
+    Dismissed: (Intent: string, Path: string | undefined) => boolean;
+    /** The graph projection, when one is available (Function/Projection). */
+    Projection: Projection | undefined;
 }
 /** The candidate-set dedupe key: the intent plus its sorted paths. */
 declare const Key: (Intent: string, Paths: string[]) => string;

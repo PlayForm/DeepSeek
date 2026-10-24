@@ -27,7 +27,7 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/replay-suggester.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-replay-suggester.log").volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
 	enabled: Schema.boolean().default(true).volatile(),
 	// The default confidence gate (volatile). The pack's per-intent thresholds
@@ -55,7 +55,16 @@ export default Compose(false, {
 	// (the plan §5 privacy posture).
 	historyPath: Schema.string().default("~/.dsh/replay-suggester/history.json"),
 	// How many calls after a note the follow/ignore observation window spans
-	// (volatile; parsed only in the PoC - the online write path is the
-	// end-phase wiring of the search-suggester journal seed).
+	// (volatile; also the recall's episode radius - the paths recorded within
+	// this many calls of the matched one are the recalled companions).
 	learnWindow: Schema.number().default(2).volatile(),
+	// The PRODUCER's JSON fallback store (structural: read once at apply). It
+	// lives beside the seeded history store under ~/.dsh; the storage domain
+	// `replay_history` is the primary tier and this file is only written when
+	// the harness provides no storage facility (the pattern/batchstate
+	// precedent).
+	recordPath: Schema.string().default("~/.dsh/replay-suggester/replay_history.json"),
+	// The recall history's bound (volatile): the per-agent ring, the durable
+	// mirror and the KV table all keep at most this many entries.
+	historyDepth: Schema.number().default(32).volatile(),
 });

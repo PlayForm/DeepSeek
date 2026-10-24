@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /** The durable ledger file (one log per module). */
     logFile: string;
@@ -20,4 +21,11 @@ export default interface Config {
     loopBound: number;
     /** The decision ring bound. */
     maxDecisions: number;
+    /** The per-action allowlist (D6) - the shared factory block. Keyed
+     *  `automation`, not `policy`, because this hook's `policy` is already the
+     *  decision rule table (the plugin-dsh-route precedent). This package's
+     *  action class is RECORD (automatic); it has NO gated action, so the
+     *  block documents the posture without refusing anything. A resolved
+     *  pack's `policy` section overrides it per action. */
+    automation: Allowlist;
 }

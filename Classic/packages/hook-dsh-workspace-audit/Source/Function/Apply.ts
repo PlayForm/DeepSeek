@@ -65,6 +65,7 @@ export default (Context: Context, Options: Config): void => {
 			On: "enabled",
 			DomainName: "domain",
 			MaxLines: "maxLines",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

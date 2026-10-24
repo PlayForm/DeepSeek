@@ -41,7 +41,8 @@
 // else is injected: the ledger append is the factory's own plain-fs
 // exemption, and the chunk vocabulary arrives through the waterfall, not
 // through an import.
-import type { Context } from "@deepseek-ai/cordis";
+import type { Context, Events } from "@deepseek-ai/cordis";
+import type { GenerateOptions, StreamChunk } from "@deepseek-ai/dsh-llm";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
@@ -113,7 +114,20 @@ export default (Context: Context, Options: Config): void => {
 	//   * the returned wrapped iterable is what every downstream consumer
 	//     (live UI and durable transcript) sees — the normalization is
 	//     VISIBLE by construction.
-	Context.on("llm/stream", (_Request, Next) => Normalize(Next(), State));
+	// The registration is typed against the harness's own listener contract
+	// (`Events["llm/stream"]`, declared by @deepseek-ai/dsh-llm's Events
+	// augmentation). The program carries TWO @deepseek-ai/dsh-llm copies
+	// (the root 0.2.0-rc.2 and dsh-sandbox's nested 0.2.1-rc.2) with TWO
+	// @deepseek-ai/dsh-brand copies; each declares its own `unique symbol`
+	// BRAND, so the branded ids (and therefore the chunk types) are
+	// nominally distinct and no single listener signature is structurally
+	// assignable to both merged event declarations - hence the `unknown`
+	// bridge, which TypeScript requires for an assertion between
+	// non-comparable types. The parameters are the harness's own types, the
+	// assertion is type-only, and the listener body (next() always called
+	// first, the wrapper returned) is unchanged.
+	Context.on("llm/stream", ((_Request: GenerateOptions, Next: () => AsyncIterable<StreamChunk>) =>
+		Normalize(Next(), State)) as unknown as Events["llm/stream"]);
 
 	// THE OVERPASS ARMS (the plan's §4, both opt-in by default): the
 	// tools/post-execute arm (Function/Overpass — the tool-results scope,

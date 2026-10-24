@@ -1,17 +1,22 @@
 // Apply - the plugin entry function: fail-loud validation, the State build
 // (the factory's cell unwrap + the P10 volatile refresh), the durable
-// activation proof, the `dshQueue` service instantiation, and the tool
-// registrations. The function returns NOTHING (the loader treats apply
-// returns specially - a returned value silently kills event delivery).
+// activation proof, the `dshQueue` service instantiation, the tool
+// registrations, and the unload effect that cancels in-flight spawned
+// children. The function returns NOTHING (the loader treats apply returns
+// specially - a returned value silently kills event delivery).
 //
-// The queue is SERVICE-DRIVEN by design: the dispatcher's deterministic
-// order and the seat/release bookkeeping are consumed by the orchestrator's
-// tooling (the `queue_enqueue` / `queue_status` tools and the `dshQueue`
-// service) rather than hooked to inferred lifecycle events - the exact pool
-// semantics of the shared probe are an open item (SUBAGENT-QUEUE-PLUGIN.md
-// section 3), and a wrong lifecycle hook would silently drop tasks. When the
-// probe lands in the end-phase, the auto-dispatch trigger (a settle event
-// calling Dispatch) rides the same service surface.
+// THE SPAWN (the completion wave): the dispatcher assigns a seat and, when
+// `autoSpawn` is on, starts the child through the harness's own subagent
+// service (`ctx.subagents.startActivation`) - never a private spawn, never a
+// shell. `autoSpawn` ships FALSE (the D6 approval posture: a spawn is a
+// privileged action), so the default mount assigns and ledgers only. The
+// idle-slot automation (a released seat pulls the next queued task) and the
+// restart reconcile (`Reconcile`) live on the same service surface; both are
+// gated so the manual posture's ledger stays byte-identical.
+//
+// The activation line is UNCHANGED (the byte-exact contract): the spawn
+// posture is visible on the per-task lines (`spawned` / `spawn skipped` /
+// `spawn failed`), not on the activation proof.
 import type { Context } from "@deepseek-ai/cordis";
 import Dispatcher from "@Function/Dispatcher.js";
 import ToolEnqueue from "@Function/ToolEnqueue.js";
@@ -46,12 +51,17 @@ export default (Context: Context, Options: Config): void => {
 			Capacity: "capacity",
 			AutoDispatch: "autoDispatch",
 			RoutedDispatch: "routedDispatch",
+			AutoSpawn: "autoSpawn",
+			SpawnProvider: "spawnProvider",
+			Allow: "policy",
 		},
 	});
 	State.Factory = Factory;
 	State.Tasks = new Map();
 	State.Seq = 0;
 	State.Seats = new Map();
+	State.Spawns = new Set();
+	State.Controllers = new Map();
 
 	// Durable activation proof - "did it activate" must be answerable from
 	// the ledger alone (the master switch and the capacity model on the line).
@@ -81,6 +91,20 @@ export default (Context: Context, Options: Config): void => {
 		Tools.register(ToolEnqueue(State));
 		Tools.register(ToolStatus(State));
 	}
+
+	// The unload effect: a spawned child is cancelled with the plugin's own
+	// fiber (the activation's abort signal is the harness's cancellation
+	// channel), so a disabled or reloaded plugin never leaves an orphan
+	// running behind a dead queue.
+	Context.effect(
+		() => () => {
+			for (const Controller of State.Controllers.values()) {
+				Controller.abort();
+			}
+			State.Controllers.clear();
+		},
+		"plugin-dsh-queue.spawnControllers()",
+	);
 
 	// The loader ignores any return value; the smoke harness (end-phase)
 	// probes the built State through this debug attachment instead.

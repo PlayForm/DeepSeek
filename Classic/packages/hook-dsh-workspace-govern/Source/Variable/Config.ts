@@ -20,10 +20,10 @@
 // disabled, never appears in the profile's bundles, and enables only by an
 // explicit ACTIVATE.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/govern.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-govern.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The gated tools: the tool names whose calls carry the gate (the
 	// mutating surface of the workspace family's operate step).
@@ -64,4 +64,16 @@ export default Compose(false, {
 	loopBound: Schema.number().default(4).volatile(),
 	// The decision ring bound: the last maxDecisions decisions survive.
 	maxDecisions: Schema.number().default(500).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The key is
+	// `automation`, NOT `policy` - this hook's `policy` is already the
+	// DECISION RULE TABLE (rules per proposal kind, mapped to
+	// State.PolicyRules), a different contract; the plugin-dsh-route
+	// precedent. The hook's action class is RECORD - it records a gate
+	// decision and never writes, commits or spawns - and that class is
+	// AUTOMATIC, so this package has NO gated action: no verdict can refuse
+	// it. read/index/record/suggest/message are automatic; write/commit/spawn
+	// wait for approval for the family's write paths. Volatile as one object;
+	// a resolved pack's `policy` section overrides the defaults per action
+	// (the wiring is the next refinement; the type already exists).
+	automation: Policy(),
 });

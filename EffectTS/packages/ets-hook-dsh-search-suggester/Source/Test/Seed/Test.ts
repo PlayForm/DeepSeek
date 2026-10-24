@@ -1,0 +1,167 @@
+// Source/Test/Seed/Test.ts - the P3 OFFLINE SEED: the deterministic warm
+// start at load. The canonical pack rows are seeded (count/followed/seed
+// marker), the fallback tiers are not, the graph projection doubles a proven
+// row, the seed never overwrites an existing row, it does not save (the
+// cold-start file stays absent), the next real save persists it, and the
+// `learn`/`seed` switches turn it off.
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+	AgentOf,
+	CheckAsync,
+	FakeGraph,
+	Finish,
+	Knowledge,
+	Ledger,
+	Make,
+	MakeCounter,
+	Post,
+	rm,
+	Setup,
+	Validate,
+} from "../Harness.js";
+
+/** The strong Version emit call: a grep whose pattern and path both match. */
+const StrongVersion = (Id: string): any => ({
+	name: "grep",
+	arguments: { pattern: "1.2.3 version", path: "package.json" },
+	agent: AgentOf(Id),
+});
+
+export const runTest = async (): Promise<number> => {
+	const Count = MakeCounter();
+
+	// Group S1: the seeded rows and their shape.
+	{
+		const Run = Setup();
+		await CheckAsync(Count, "S1: the canonical rows are seeded at load", async () => {
+			const Row = Run.State.Knowledge.intents.Version["package.json"];
+			assert.equal(Row.count, 1);
+			assert.equal(Row.followed, 1);
+			assert.equal(Row.seed, true);
+			assert.equal(typeof Row.lastSeen, "number");
+			assert.equal(Run.State.Knowledge.seed, true);
+			assert.equal(typeof Run.State.Knowledge.seededAt, "number");
+		});
+		await CheckAsync(Count, "S1: the seed moves no stat and writes no file", async () => {
+			assert.deepEqual(Run.State.Knowledge.stats, {
+				emitted: 0,
+				followed: 0,
+				ignored: 0,
+				dismissed: 0,
+			});
+			assert.equal(FileSystem.existsSync(Knowledge), false);
+		});
+		await CheckAsync(Count, "S1: exactly the canonical tiers are seeded", async () => {
+			const Sizes = Object.fromEntries(
+				Object.entries(Run.State.Knowledge.intents).map(([Intent, Bucket]) => [
+					Intent,
+					Object.keys(Bucket ?? {}).length,
+				]),
+			);
+			assert.deepEqual(Sizes, {
+				Version: 10,
+				Path: 2,
+				Ledger: 3,
+				Config: 3,
+				Dependency: 3,
+				Test: 3,
+				Symbol: 3,
+				Doc: 2,
+				Usage: 2,
+				Owner: 3,
+			});
+			// The fallback tiers and the family globs are not rows.
+			assert.equal(Run.State.Knowledge.intents.Version["**/README.md"], undefined);
+			assert.equal(Run.State.Knowledge.intents.Path["README.md"], undefined);
+			assert.equal(Run.State.Knowledge.intents.Symbol["Target"], undefined);
+		});
+	}
+
+	// Group S2: the graph proof doubles a seeded row.
+	{
+		rm();
+		const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context: any) => {
+			Context.workspaceGraph = FakeGraph([{ path: "package.json", kind: "File", version: "1" }]);
+		});
+		await CheckAsync(Count, "S2: a graph-proven row is seeded twice", async () => {
+			const Row = Run.State.Knowledge.intents.Version["package.json"];
+			assert.equal(Row?.count, 2);
+			assert.equal(Row?.followed, 2);
+			assert.equal(Row?.seed, true);
+			assert.equal(Run.State.Knowledge.intents.Version["CHANGELOG.md"]?.count, 1);
+		});
+	}
+
+	// Group S3: the seed never overwrites an existing row.
+	{
+		rm();
+		FileSystem.writeFileSync(
+			Knowledge,
+			JSON.stringify({
+				schema: 1,
+				intents: { Version: { "package.json": { count: 9, followed: 9, lastSeen: 5 } } },
+				journal: [],
+				dismissals: [],
+				stats: { emitted: 0, followed: 0, ignored: 0, dismissed: 0 },
+			}),
+			"utf8",
+		);
+		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+		await CheckAsync(Count, "S3: an existing row wins over the seed", async () => {
+			assert.deepEqual(Run.State.Knowledge.intents.Version["package.json"], {
+				count: 9,
+				followed: 9,
+				lastSeen: 5,
+			});
+			assert.equal(Run.State.Knowledge.intents.Version["CHANGELOG.md"].seed, true);
+		});
+	}
+
+	// Group S4: the next save persists the seed.
+	{
+		rm();
+		const Run = Setup();
+		await CheckAsync(Count, "S4: the first real save persists the seeded knowledge", async () => {
+			await Post(Run, StrongVersion("a"));
+			const Stored = JSON.parse(FileSystem.readFileSync(Knowledge, "utf8"));
+			assert.equal(Stored.seed, true);
+			assert.equal(Stored.intents.Version["package.json"].seed, true);
+			assert.equal(Stored.intents.Version["package.json"].count, 1);
+			assert.equal(Stored.stats.emitted, 1);
+		});
+	}
+
+	// Group S5: the switches.
+	{
+		rm();
+		const NoLearn = Make(Validate({ logFile: Ledger, enabled: true, learn: false }));
+		await CheckAsync(Count, "S5: learn=false keeps the deterministic cold start", async () => {
+			assert.deepEqual(NoLearn.State.Knowledge.intents, {});
+			assert.equal(NoLearn.State.Knowledge.seed, false);
+		});
+		rm();
+		const NoSeed = Make(Validate({ logFile: Ledger, enabled: true, seed: false }));
+		await CheckAsync(Count, "S5: seed=false keeps the deterministic cold start", async () => {
+			assert.deepEqual(NoSeed.State.Knowledge.intents, {});
+			assert.equal(NoSeed.State.Knowledge.seed, false);
+		});
+		rm();
+		const Off = Make(Validate({ logFile: Ledger, enabled: false }));
+		await CheckAsync(Count, "S5: a disabled mount does not seed", async () => {
+			assert.deepEqual(Off.State.Knowledge.intents, {});
+			assert.equal(Off.State.Knowledge.seed, false);
+		});
+	}
+
+	return Finish(Count, "Seed");
+};
+
+// Standalone entry: `node Target/Test/Seed/Test.js`.
+const InvokedDirectly =
+	process.argv[1] !== undefined &&
+	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+	const Pass = await runTest();
+	console.log(`${Pass} PASS - Seed`);
+}

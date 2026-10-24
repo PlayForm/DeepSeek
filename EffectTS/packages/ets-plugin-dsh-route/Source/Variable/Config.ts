@@ -28,7 +28,7 @@
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 import { DEFAULT_KEYWORDS } from "@Variable/Keywords.js";
 import { DEFAULT_POLICY } from "@Variable/Policy.js";
 
@@ -41,7 +41,7 @@ const Role = () =>
 	});
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/route.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-route.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The omission's default role: the CHEAP lane is the safe default - the
 	// plan's incident is the expensive parent route being inherited silently.
@@ -71,4 +71,14 @@ export default Compose(false, {
 	// patternTable precedent). A user dict MERGES over DEFAULT_KEYWORDS at
 	// use time (Function/Classify), so user keywords add triggers.
 	keywords: Schema.dict(Schema.array(Schema.string())).default(DEFAULT_KEYWORDS).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
+	// block. The key is `automation`, NOT `policy` - this plugin's `policy`
+	// is already the user's ROUTING policy (the role table, the allowed
+	// models, the escalation ladder), and the two are different contracts.
+	// The router reads and suggests (`read`/`suggest`, both automatic) and
+	// never writes, commits or spawns - those verdicts are declared for family
+	// uniformity and stay the shipped `approve`. A resolved pack's `policy`
+	// section overrides the defaults per action (the wiring is the next
+	// refinement).
+	automation: Policy(),
 });

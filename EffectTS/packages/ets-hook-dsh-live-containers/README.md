@@ -189,9 +189,9 @@ restart). A cold mount logs `disabled (enabled=false)` and every listener no-ops
 
 ## The ledger
 
-One log per module: `~/.dsh/live-containers.log` (config `logFile`). The strings are the contract
-(byte-exact, `live-containers: ` prefix; the durable file lines are the `[ISO] message` forms).
-Phase 1 ships nine; wave 2 adds the live-feature lines:
+One log per module: `~/.dsh/playform/hook-dsh-live-containers.log` (config `logFile`). The strings
+are the contract (byte-exact, `live-containers: ` prefix; the durable file lines are the
+`[ISO] message` forms). Phase 1 ships nine; wave 2 adds the live-feature lines:
 
 ```
 live-containers: disabled (enabled=false)

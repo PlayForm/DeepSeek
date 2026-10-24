@@ -25,8 +25,26 @@
 # exclude triple) lives in the Variable/Config.ts schema. EVERY knob is
 # volatile (hot-editable without remounting): enabled, log/logFile, domain,
 # maxStamps, include and exclude.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the shared per-action allowlist.
+# This hook's action class is RECORD (it records one observation stamp per
+# fs/observed event) and that class is AUTOMATIC, so the package has NO gated
+# action - it never writes a file, commits a batch or spawns an agent, and no
+# verdict can refuse it. read/index/record/suggest/message are automatic;
+# write/commit/spawn wait for approval for the family's write paths. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: hook-dsh-workspace-observe
         name: "@playform/ets-hook-dsh-workspace-observe"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

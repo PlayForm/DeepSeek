@@ -25,9 +25,16 @@ export type Operation = {
     kind: "replace";
     /** The file holding the block. */
     path: string;
-    /** The block span to replace (1-based, inclusive). */
-    startLine: number;
-    endLine: number;
+    /** The block span to replace (1-based, inclusive). Optional for a
+     *  node target (the graph resolves it); required otherwise. */
+    startLine?: number;
+    endLine?: number;
     /** The replacement text (replaces the span's lines exactly). */
     text: string;
+    /** The graph node id the span is resolved from (the AST source).
+     *  Requires `fingerprint`. */
+    node?: string;
+    /** The expected content fingerprint of the targeted span - verified
+     *  before the write; a mismatch refuses. */
+    fingerprint?: string;
 };

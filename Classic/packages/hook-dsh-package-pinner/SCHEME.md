@@ -241,7 +241,7 @@ rejects unknown ids with `entry "…" not found`.
         name: "@playform/hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
+            logFile: ~/.dsh/playform/hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
             policyFile: "" # optional global pin-policy.json; else discovery; else built-in default
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]

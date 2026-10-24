@@ -11,8 +11,24 @@
 # The class plugin (`export default class PassOn extends Service`) declares a
 # static Config (validated before construction) and registers itself as
 # `passOn` via `super(ctx, "passOn")`.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The pass-on is READ-ONLY - read/suggest are automatic;
+# the write/commit/spawn verdicts are declared for family uniformity and stay
+# the shipped approve (the pass-on never writes, commits or spawns). A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: plugin-dsh-pass-on
         name: "@playform/plugin-dsh-pass-on"
         config:
             enabled: true
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

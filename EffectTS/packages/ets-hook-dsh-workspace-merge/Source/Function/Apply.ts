@@ -34,6 +34,7 @@ export default (Context: Context, Options: Config): void => {
 			Mode: "mode",
 			MaxFiles: "maxFiles",
 			MaxTotalBytes: "maxTotalBytes",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

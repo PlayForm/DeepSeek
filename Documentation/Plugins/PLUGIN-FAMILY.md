@@ -1,5 +1,5 @@
 ---
-title: The authoritative registry of the 97 packages (51 Classic + 46 EffectTS)
+title: The authoritative registry of the 99 packages (53 Classic + 46 EffectTS)
 category: Plugins
 kind: living-record
 date: 2026-10-22
@@ -7,9 +7,12 @@ status: active
 registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
-    - name: the 97 packages at 0.1.0 (1 base + 51 Classic + 46 EffectTS, all UNPUBLISHED)
+    - name:
+          the 99 packages (1 base + 53 Classic + 46 EffectTS; client-dsh-panel-family at 0.2.0, the
+          other 98 at 0.1.0, all UNPUBLISHED)
       state: implemented
-      evidence: the packages exist and are built from source; 97/97 builds green
+      evidence:
+          the packages exist and are built from source; the package directories under both trees
     - name: the registry document content (the names, the links, the rules)
       state: implemented
       evidence: this document; byte-accurate names
@@ -27,12 +30,13 @@ statuses:
           Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 97 packages
+# PLUGIN-FAMILY - the authoritative registry of the 99 packages
 
-> This document is the "plugins saved as documents" registry. The registry covers the full family at
-> version **0.1.0** - all packages are built from source and UNPUBLISHED (the npm bootstrap tiers:
-> 2-planned or 3-candidates). EVERY name is byte-accurate and EVERY repo link is absolute. It is a
-> DOCUMENT, NOT an implementation. The one-line suite summary lives in
+> This document is the "plugins saved as documents" registry. The registry covers the full family -
+> all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-planned or
+> 3-candidates). Every package is version **0.1.0** except `client-dsh-panel-family` at **0.2.0**.
+> EVERY name is byte-accurate and EVERY repo link is absolute. It is a DOCUMENT, NOT an
+> implementation. The one-line suite summary lives in
 > [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md); the per-plugin live test plans in
 > [../Testing/](../Testing/README.md); the PoC-vs-plan grades in
 > [../Reports/POC-GAP-ANALYSIS.md](../Reports/POC-GAP-ANALYSIS.md). Source of truth: the packages'
@@ -41,18 +45,20 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.1.0 for ALL 97 packages, all UNPUBLISHED.** Names are byte-accurate as below. The
-  legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
-- **Two trees, 51 + 46 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
+- **Version: 0.1.0 for ALL 99 packages except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED.**
+  Names are byte-accurate as below. The legacy `ets-dsh-hook-*` naming is gone (the namespace split,
+  SPLICE-ETS.md).
+- **Two trees, 53 + 46 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
   `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript, zero
   runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on
   Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing base). NEVER mix
   the two splits in ONE dependency graph. The EffectTS `Update` returns Effect envelopes, NOT the
   classic dispatch envelope. 30 of the 36 packages added 2026-10-22 have ETS twins (all but the two
   client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`,
-  `hook-dsh-batch-decision`).
-- **Verification: 97/97 package builds green; the aggregate `node Maintain/Run-Smokes.mjs` = 359
-  smoke suites / 5,337 checks, all green; the live desktop profile has 54 bundles enabled.**
+  `hook-dsh-batch-decision`). The two libraries of the completion program - `lib-dsh-trace` and
+  `lib-dsh-pack` - are Classic-only (no ETS twin yet; the ETS parity wave is pending).
+- **Verification: the aggregate `node Maintain/Run-Smokes.mjs` = 444 smoke suites / 6,053 checks
+  across both trees, all green; the live desktop profile has 54 bundles enabled.**
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal
   record is asserted byte-identically by the smokes, in ALL implementations. ONE ledger per plugin:
   `~/.dsh/<identity>.log`.
@@ -157,6 +163,13 @@ statuses:
 **EffectTS twins for the delivery (30):** `@playform/ets-*` counterparts of the 30 packages above
 marked "yes", under `EffectTS/packages/`.
 
+**The completion program's libraries — Classic (2), no ETS twin yet:**
+
+| #   | Package                   | Archetype | Event surface                                                                                        |
+| --- | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) |
+| 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          |
+
 Absolute-link rule for any repo target in docs/prompts/skills:
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
 `https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/<pkg>`.
@@ -253,6 +266,22 @@ register tools: `raw-write` (per-call `normalize` selection, default false = ver
   `live-containers` section whose labeled stanzas are recomputed at request time; it ships DISABLED
   and enables only by an explicit activate.
 
+### The completion program's libraries
+
+- **`@playform/lib-dsh-trace`** (the trace bus's library half) - the pure, harness-free half of the
+  D5 trace bus: the event envelope (`trace`/`kind`/`at`/`actor`/`payload`), the event names
+  (`observe/stamp`, `graph/indexed`, `graph/invalidated`), the type guards, the coalescing key and
+  the detached microtask loop (`Loop` - one in-flight task per key, coalesced schedules dropped, no
+  timers, fail-open). NOT a plugin: no patch, no loader contract. The `ctx.trace` service itself is
+  provided by the factory; the 256-entry ring is the service's fixed bound, not a config knob.
+- **`@playform/lib-dsh-pack`** (the pack layer's library) - the workspace-pack library of the
+  suggester family: the pack schema (the `families` keyed `<domain>/<id>`, plus the optional
+  `indexer`/`policy`/`learning` sections), the strict YAML-subset parser, the layered resolution
+  (repo layer `.dsh/pack.yml` → user layer → the built-in pack for this monorepo, with `extends`
+  chains and merge rules), the workspace gate (`Locate` - the signature check behind the suggesters'
+  `abstained foreign-workspace` silence). NOT a plugin: no config schema, no ledger strings - the
+  consumers own their lines.
+
 ## 3. The config keys (from the packages' SCHEMs/READMEs)
 
 EVERY plugin's config schema is built through the factory's `Schema` factory. The schema is ONE
@@ -296,8 +325,8 @@ keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` s
   queue capped 256). Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
   storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral
-  contract on top of the strings. 359 smoke suites / 5,337 checks across both trees are the release
-  contract (the original 14 mechanics suites: 1314 Classic / 1324 EffectTS; the rest is the
+  contract on top of the strings. 443 smoke suites / 6,044 checks across both trees are the release
+  contract (the original 14 mechanics suites: 1333 Classic / 1324 EffectTS; the rest is the
   2026-10-22 delivery's suites).
 
 ## 5. The wiring (the four steps)

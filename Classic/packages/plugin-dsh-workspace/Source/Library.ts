@@ -12,12 +12,13 @@
 // conversational surface (the CONTROLLER the conversation addresses,
 // WORKSPACE-AGENT.md section 4). The operational view is what the
 // conversation sees; the four navigation tools (workspace_map, workspace_find,
-// workspace_expand, workspace_context) are its query surface (V4-1 §3.4),
+// workspace_expand, workspace_context) are its query surface (V4-1 §3.4), the
+// FIFTH tool (workspace_index) is the indexing trigger that fills the graph,
 // and the orientation packet is the orient step of the orient -> drill ->
 // act loop (§3.5). Everything else is the INVISIBLE plugin flow until an
 // event surfaces it (the visibility rule). The plugin is a pure CONSUMER:
 // it injects the Wave-1 graph service, the factory and the tools surface,
-// registers the four tools, and owns no event listeners in v0 - the
+// registers the five tools, and owns no event listeners in v0 - the
 // invisible flow belongs to the sibling hooks (the distribution law).
 import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
@@ -29,9 +30,9 @@ export const name = "plugin-dsh-workspace";
 export const Config = Definition;
 
 // Required services (skill: declare, never rely on load order). The graph
-// (@playform/plugin-dsh-workspace-graph) provides the data; the factory
-// provides the State builder + the ledger; tools serves the four
-// registrations.
+// (@playform/plugin-dsh-workspace-graph) provides the data and the indexing
+// trigger; the factory provides the State builder + the ledger; tools serves
+// the five registrations.
 export const inject = ["workspaceGraph", "pluginFactory", "tools"];
 
 export const apply = Apply;

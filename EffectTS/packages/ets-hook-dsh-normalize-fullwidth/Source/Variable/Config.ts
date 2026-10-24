@@ -40,7 +40,7 @@ export default Compose(false, {
 	// Ledger file — the fullwidth ledger, SEPARATE from the family's logs
 	// (one log per module) — volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-fullwidth.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-fullwidth.log").volatile(),
 	// Normalize reasoning deltas and the assembled ReasoningBlock too (the
 	// map applies to whatever the model wrote; the deltas AND the block must
 	// agree, or consumers see inconsistencies).

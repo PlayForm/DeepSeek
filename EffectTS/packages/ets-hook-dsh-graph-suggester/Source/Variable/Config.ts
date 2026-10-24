@@ -27,7 +27,7 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/graph-suggester.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-graph-suggester.log").volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
 	enabled: Schema.boolean().default(true).volatile(),
 	// The default confidence gate (volatile). The pack's per-intent thresholds

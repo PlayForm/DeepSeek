@@ -33,7 +33,7 @@ import { NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/hook-dsh-tool-coach.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-tool-coach.log").volatile(),
 	enabled: Schema.boolean().default(true).volatile(),
 	judgeTools: Schema.array(Schema.string()).default(["bash", "pwsh"]).volatile(),
 	threshold: Schema.number().default(3).volatile(),

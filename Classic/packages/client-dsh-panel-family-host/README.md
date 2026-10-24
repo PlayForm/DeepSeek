@@ -1,12 +1,20 @@
 # @playform/client-dsh-panel-family-host
 
-The **host half** of the UI family's panel: the small companion package that gives the central panel
-live data (Documentation/Plans/UI-Family/ PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md).
+The **host half** of the UI family's panel: the companion package that gives the central panel live
+data and its ONE trusted write surface (Documentation/Plans/UI-Family/
+PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md).
 
-## The endpoint
+## The services
 
-Two methods, least privilege, **read-only** - the endpoint reads `~/.dsh` family logs only and has
-no write surface (A5.3):
+Three services, provided with `ctx.provide` (removed with the plugin):
+
+| Service             | Methods                             | Posture                                                   |
+| ------------------- | ----------------------------------- | --------------------------------------------------------- |
+| `panelFamilyHost`   | `tail(namespace, lines)`, `stats()` | read-only (`~/.dsh` family logs and the ccr log)          |
+| `panelFamilyBridge` | `editFull(namespace, patch)`        | the plain-field bridge: the ONE full-config write surface |
+| `panelFamilyTrace`  | `on(kind, listener)`, `ring(limit)` | read-only forwarding of the D5 bus                        |
+
+### `panelFamilyHost` (read-only)
 
 - **`tail(namespace, lines)`** - the last N lines of the owning module's `~/.dsh/<namespace>.log`.
   The namespace must be a family module name (`[a-z0-9-]+`); anything else is _rejected_, not
@@ -14,28 +22,101 @@ no write surface (A5.3):
   `{ ok: false, code: "rejected" | "not-found", message }`.
 - **`stats()`** - the ccr store summary (log path, byte size, line count). The ccr LRU internals are
   not exposed by any existing remote; the Typert spike (end-phase) decides whether they ever are.
-- **`fiberPhases` are NOT here** - they come from the already-remote `remote.pluginManager`
-  (PHASE-5: prefer the existing remote).
+- **`fiberPhases` are NOT here** - they come from the already-remote `remote.pluginManager`.
 
-## Typert status
+### `panelFamilyBridge` (the write surface)
 
-The Typert generation pipeline (`TypertRemoteService` + `@Remote` + generated descriptors) is
-documented as not reproducible from an external package. This PoC ships the endpoint as a plain host
-service under **`panelFamilyHost`** with the exact method surface; the end-phase either reproduces
-the pipeline or keeps the v1 shortcut (the pre-decided fallback in PHASE-5 step 1).
+`editFull(namespace, patch)` applies the namespace's **whole resolved config** through
+`ctx.configEditor.edit()` - the same validate/persist/reconcile path a hand edit takes, so a plain
+(non-volatile) field applies on remount. The patch is never merged or reshaped here; the editor
+validates it, and **the audit line comes from the editor** (this package logs no success line).
+
+The host refuses, in order (each line byte-exact, see "Ledger lines"):
+
+1. a namespace that is not a non-empty string;
+2. a patch that is not a plain object;
+3. a composition without `ctx.configEditor`;
+4. a namespace that names no profile entry;
+5. a namespace declaring a `role("secret")` field at ANY depth - the patch would restate a redacted
+   value over the stored secret (the client refuses the same write independently; the host never
+   trusts the client's refusal);
+6. an editor rejection (never thrown into the panel).
+
+The `enabled` gate covers the bridge too: a disabled package refuses every method, so it never
+writes while idle.
+
+### `panelFamilyTrace` (the D5 forwarding face)
+
+The host process's D5 bus is `ctx.trace` (provided by `@playform/plugin-dsh-factory`); the host
+context already owns that name, so this package exposes its forwarder as **`panelFamilyTrace`** with
+the panel's `on(kind, listener)` / `ring(limit)` face. It reads the bus structurally (only `on` is
+required; `ring` is used when the bus has one) and provides nothing when the bus is absent - the
+panel's documented static fallback.
+
+## The forwarding path (the browser)
+
+The panel runs in the browser; the two host faces reach it through the harness's generated Remote
+namespace `playformFamilyPanel`:
+
+```text
+host: panelFamilyBridge.editFull   --(generated Remote: playformFamilyPanel/editFull)-->  browser
+host: panelFamilyTrace.on/ring     --(generated Remote: playformFamilyPanel/trace)------->  browser
+browser ./client half: re-publishes them as panelFamilyBridge and trace
+panel: ctx.get("panelFamilyBridge") / ctx.get("trace")
+```
+
+The browser half (`Source/Client.ts`) waits for the `remote.playformFamilyPanel` namespace service
+(`ctx.inject`), re-publishes `editFull` under `panelFamilyBridge` (normalizing the gateway's
+`{ ok }` envelope to the panel's boolean contract) and the trace face under `trace`, and provides
+nothing when the namespace is absent.
+
+**The residual**: the generated Remote contribution (the Typert codegen artifacts plus the
+`@deepseek-ai/dsh-api-remotes` assembly mount) is not reproducible from a Classic package - the
+harness's Client Remote refuses SRC descriptors and its registration values come from the generated
+`lib/typert.remote-client.*` artifacts. Until that contribution lands, the browser half is inert and
+the panel keeps its documented fallbacks (plain fields read-only, static status). The host services
+themselves are complete and smoke-covered.
 
 ## Config
 
-| Field      | Type    | Default          | Meaning                             |
-| ---------- | ------- | ---------------- | ----------------------------------- |
-| `enabled`  | boolean | `false`          | a disabled endpoint refuses to read |
-| `logRoot`  | string  | `~/.dsh`         | family ledger root                  |
-| `maxLines` | number  | `200` (1..2000)  | the cap on any `tail()`             |
-| `ccrLog`   | string  | `~/.dsh/ccr.log` | the ccr log for `stats()`           |
+| Field      | Type    | Default                            | Meaning                                 |
+| ---------- | ------- | ---------------------------------- | --------------------------------------- |
+| `enabled`  | boolean | `false`                            | a disabled package refuses every method |
+| `logRoot`  | string  | `~/.dsh`                           | family ledger root                      |
+| `maxLines` | number  | `200` (1..2000)                    | the cap on any `tail()`                 |
+| `ccrLog`   | string  | `~/.dsh/playform/hook-dsh-ccr.log` | the ccr log for `stats()`               |
 
 All knobs are volatile.
 
-## Ledger
+## Ledger lines (byte-exact)
 
-`host: activated (enabled=<enabled>)` - the only line this package writes (via the logger, not a
-ledger file: the package writes nothing to disk).
+The activation line and the bridge refusals go through the logger (the package writes nothing to
+disk):
+
+```text
+host: activated (enabled=<enabled>)
+bridge: secret namespace refused for <namespace>
+bridge: invalid namespace <namespace>
+bridge: invalid patch for <namespace>
+bridge: unknown namespace <namespace>
+bridge: config editor unavailable
+bridge: disabled (enabled=false)
+bridge: write failed for <namespace>
+```
+
+The accepted bridge write's audit line is the config editor's own.
+
+## Build
+
+`pnpm prepublishOnly` runs the plugin build (ESM `Target/`), then `Maintain/Build-Client-Bundle.mjs`
+(the harness closure factory `window.__ModuleLoader__.load({ id, factory(require) })` written to
+`Target/Client.bundle.js`), then the Test build and the harness selfcheck. `exports["./client"]`
+points the module system at the bundle; the ESM `Target/Client.js` stays the dev/test surface.
+
+## Smokes
+
+| Folder                 | Count   | Covers                                                                                                                                                        |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Tail-And-Stats`       | 10 PASS | the tail slicing/validation/cap and the ccr stats summary                                                                                                     |
+| `Wiring-And-Endpoints` | 8 PASS  | the loader row, the activation lines, the disabled gate, the schema                                                                                           |
+| `Bridge-And-Trace`     | 19 PASS | the bridge write + every refusal (incl. nested secrets), the trace forwarding, the browser half's forwarding, the built bundle executed through a fake loader |

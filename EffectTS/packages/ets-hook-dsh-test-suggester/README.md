@@ -31,6 +31,26 @@ returned unchanged. A note never fails a tool call.
 Confidence is `sigmoid(Σ weights − 0.6)` (the plan §3.5). Every candidate carries a one-phrase
 reason; a candidate without a reason is never emitted.
 
+The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `test/` domain. A
+repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `test/` intents; a repository without a pack
+stays silent.
+
+## The reconciliation
+
+On a judged call in a package, the package's **smoke claims** are reconciled with the tree it
+actually has (the completion spec's wave 2c re-spec,
+[03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): each
+`Source/Test/<Folder>/README.md`'s `## Expected count`, the folders that exist, each folder's
+`Test.ts`, the aggregate runner's roster (`Target/Test/<Folder>/Test.js`), and - when the workspace
+graph service is present - its `Test` nodes for the package. A drift (a folder without a README
+count, a README count whose `Test.ts` is gone, a suite the runner never runs, a graph node whose
+file is gone) emits ONE note naming the drifted files and the expected/actual counts. It is
+**read-only**: `node:fs` reads, never a write. A consistent tree logs one clear line per package
+root and stays silent; the note is gated exactly like the intent notes (workspace pack, `enabled`,
+cooldown, dedupe, per-turn cap).
+
 ## The noise controls
 
 - Confidence gate: `k ≥ max(threshold, intent threshold)` (default 0.75).
@@ -40,6 +60,10 @@ reason; a candidate without a reason is never emitted.
   build mirror is generated, never edited).
 - Fail-open and abstention: an empty surviving candidate set logs
   `<name>: abstained ambiguous <Intent> <k>` and emits nothing.
+- Workspace gate: a call that belongs to another workspace (no pack whose signature matches; the
+  built-in default is `Documentation/ARCHIVE-STYLE.md`) logs `abstained foreign-workspace` and emits
+  nothing; a target absent from the workspace is dropped before the gate (`abstained no-companions`
+  when the intent's whole target set is gone).
 
 Every activation, refusal, and suggestion is a ledger line in the hook's own ledger (one log per
 module), asserted byte-exactly by the end-phase smokes.
@@ -51,8 +75,15 @@ test-suggester: activated (bundle 0.1.0, intents 2, threshold 0.75)
 test-suggester: disabled (enabled=false)
 test-suggester: suggest Suite 0.84 4 candidates call grep
 test-suggester: abstained ambiguous Suite 0.62
+test-suggester: abstained no-companions Suite 0.62
+test-suggester: abstained foreign-workspace Suite 0.62
 test-suggester: suppressed cooldown Suite
 test-suggester: suppressed cap Suite
+test-suggester: reconciliation clear <package> (<e> expected, <a> actual)
+test-suggester: reconciliation drift <n> drifts <package> (<e> expected, <a> actual) call <tool>
+test-suggester: reconciliation skipped deduped <package>
+test-suggester: reconciliation skipped cooldown <package>
+test-suggester: reconciliation skipped cap <package>
 ```
 
 ## Configuration
@@ -63,5 +94,7 @@ rate must be measured (the plan §10.3 kill criterion) before it is trusted.
 
 ## Status
 
-PoC (the package + the Source). The smoke suites, the build pass, the ETS twin and the wiring are
-the end-phase (Documentation/Plans/POC-BRIEF.md section 8).
+The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
+reconciliation landed (the completion spec's wave 2c re-spec); the ETS twin and the live activation
+(the profile row flip and the restart) are the remaining end-phase steps
+(Documentation/Plans/POC-BRIEF.md section 8).

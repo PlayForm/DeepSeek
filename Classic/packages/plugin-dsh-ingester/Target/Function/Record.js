@@ -1,0 +1,1 @@
+const a=r=>{const o=r;return o!==null&&typeof o=="object"&&typeof o.id=="string"&&o.id.length>0&&Array.isArray(o.targets)&&Array.isArray(o.operations)};var t=(r,o)=>{const s=o;if(!0!==!a(s))for(r.Proposals.set(s.id,s);r.Proposals.size>r.Config.maxProposals;){const e=r.Proposals.keys().next().value;e!==void 0&&r.Proposals.delete(e)}};export{t as default};

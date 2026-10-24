@@ -4,6 +4,8 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "doc-suggester-home-"));
+process.env["HOME"] = Home;
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
   Count.N++;
@@ -141,6 +143,51 @@ const AgentOf = (Id) => {
   }
   return Agents.get(Id);
 };
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    version: Options.version ?? 1,
+    tables: /* @__PURE__ */ new Map(),
+    writes: [],
+    closed: false
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      if (Specification.version !== Store.version) {
+        throw new Error(
+          `version-mismatch: stored ${Store.version}, declared ${Specification.version}`
+        );
+      }
+      Store.spec = Specification;
+      return {
+        name: Specification.name,
+        close: async () => {
+          Store.closed = true;
+        },
+        table: (Name) => {
+          if (!Store.tables.has(Name)) {
+            Store.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Store.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+              Store.writes.push([Name, Key]);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  return Store;
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -173,9 +220,11 @@ export {
   Durable,
   DurableLine,
   Exports,
+  FakeStorage,
   Finish,
   FirstLine,
   Furnace,
+  Home,
   Ledger,
   LedgerLines,
   LedgerWith,

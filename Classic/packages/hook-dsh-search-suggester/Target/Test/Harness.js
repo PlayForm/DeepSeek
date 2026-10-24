@@ -74,12 +74,13 @@ const FirstLine = () => {
 const Furnace = new FactoryClass({
   reflect: { provide: () => void 0 }
 });
-const Make = (Raw) => {
+const Make = (Raw, Prepare) => {
   const CtxListeners = {};
   const Lines = [];
   const Warns = [];
   const Effects = [];
   const RootNames = [];
+  const Tools = [];
   const Root2 = {
     on: (Name, _Listener) => {
       RootNames.push(Name);
@@ -112,6 +113,12 @@ const Make = (Raw) => {
       return () => true;
     },
     get: (Name) => Context[Name],
+    tools: {
+      register: (Definition) => {
+        Tools.push(Definition);
+        return () => true;
+      }
+    },
     effect: (Setup2, Label) => {
       Effects.push(Label ?? "unnamed");
       const Disposer = Setup2();
@@ -127,10 +134,31 @@ const Make = (Raw) => {
       }
     }
   };
-  const Run = { Context, Root: Root2, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw };
+  Prepare?.(Context);
+  const Run = { Context, Root: Root2, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw, Tools };
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__hookDshSearchSuggesterState;
   return Run;
+};
+const FakeGraph = (Nodes, Revision = "r1") => {
+  const Calls = { snapshots: 0 };
+  return {
+    Calls,
+    snapshot: () => {
+      Calls.snapshots += 1;
+      return {
+        indexRevision: Revision,
+        nodes: Nodes.map((Node) => ({
+          id: `${Node.kind}:${Node.path}`,
+          kind: Node.kind,
+          path: Node.path,
+          version: Node.version ?? "1",
+          fingerprint: "f"
+        })),
+        edges: []
+      };
+    }
+  };
 };
 const Validate = (Raw) => Plugin.Config({
   persistPath: Knowledge,
@@ -193,6 +221,7 @@ export {
   Durable,
   DurableLine,
   Exports,
+  FakeGraph,
   Finish,
   FirstLine,
   Furnace,

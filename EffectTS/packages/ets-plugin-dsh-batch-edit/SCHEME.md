@@ -37,7 +37,7 @@ Configuration/          the build configs (ESBuild.ts/.js, Test-ESBuild.ts/.js,
 load, fail-loud in Function/Apply's `Validate`), `inject = ["pluginFactory", "tools", "jobs"]`. The
 default object carries all four (the default-object-shadows pitfall). The identity agrees in the
 four places: package name, `name` export, the State build's `module:` option, and the logFile
-default (`~/.dsh/batch-edit.log`).
+default (`~/.dsh/playform/ets-plugin-dsh-batch-edit.log`).
 
 ## 3. The machine
 
@@ -72,6 +72,15 @@ path ingests prepared op lines from a file (`#` comments and blank lines skipped
 
 ## 5. The commit (Ops.Commit)
 
+0. **The policy gate (D6)**: the tool's `commit` action consults `Decide(State.Allow, "write")`
+   BEFORE any plan or write. The shipped default is `write: approve`, so the apply is refused with
+   the byte-exact `apply refused <id> (policy write=approve)` line (the ledger line AND the thrown
+   error), nothing is read or written, and the machine stays open with its cells `observed` - the
+   batch waits for the user's approval (the existing approve binding: flip `policy.write` to `auto`,
+   or approve the batch through the batch-decision hook). `auto` proceeds to step 1. The block is
+   the shared factory policy (`policy: Policy()` composed into the schema, mapped to `State.Allow`);
+   a resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+   refinement).
 1. **Plan** every selected cell (`observed`, `halted`, `errored` - the resume paths): stat (the
    fresh-version guard - a mismatch halts the file with `stale`, the machine stays open), read,
    apply the ops, diff. Errors mark the file `errored`; neither aborts the batch. Zero-changed files
@@ -104,6 +113,7 @@ transition halted <file> <reason>
 machine committed <id> (<applied> applied, <failed> failed, <halted> halted)
 machine closed <id>
 removed <file>
+apply refused <id> (policy write=approve)
 ```
 
 Plus the activation proofs: `disabled (enabled=false)` and `activated bundle <version> (...)`, and

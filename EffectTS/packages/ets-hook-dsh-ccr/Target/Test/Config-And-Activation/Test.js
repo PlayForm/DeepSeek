@@ -103,11 +103,11 @@ const runTest = async () => {
     });
   }
   {
-    const Sub = "config default logFile: ~/.dsh/ccr.log (the documented default)";
+    const Sub = "config default logFile: ~/.dsh/playform/hook-dsh-ccr.log (the documented default)";
     Check(Count, Sub, () => {
       assert.equal(
         Validate({}).logFile.get(),
-        "~/.dsh/ccr.log",
+        "~/.dsh/playform/hook-dsh-ccr.log",
         "logFile default (volatile cell) - the value the patch row and the site document"
       );
     });

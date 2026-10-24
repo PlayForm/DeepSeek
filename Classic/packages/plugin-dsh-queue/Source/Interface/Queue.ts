@@ -2,7 +2,9 @@
 // cordis Context (plugin-development skill, item 12). The service registers
 // as `dshQueue` (Function/Dispatcher), so the orchestration layer (the
 // batch-state compiler's queue view, the honest-feedback journal) can
-// consume the queue through `ctx.dshQueue`.
+// consume the queue through `ctx.dshQueue` - including the completion wave's
+// `Reconcile(persisted?)` (the restart reconcile) and `Flush()` (the spawn
+// join point).
 //
 // The shape here is the structural contract; the implementation lives in
 // Function/Dispatcher.ts.

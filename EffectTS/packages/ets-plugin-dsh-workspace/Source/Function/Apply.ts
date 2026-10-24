@@ -1,10 +1,11 @@
 // Apply - the plugin entry function: fail-loud validation, the State build
 // (the factory's cell unwrap + the P10 volatile refresh), the durable
-// activation proof, and the FOUR navigation tools (the only conversational
-// surface - WORKSPACE-AGENT.md section 2). There are NO event listeners in
-// v0: the agent is a consumer of the graph service and the surface for the
-// conversation - the invisible flow (the stamps, the indexes, the gates)
-// belongs to the sibling hooks, not to the agent.
+// activation proof, and the FIVE tools (the only conversational surface -
+// WORKSPACE-AGENT.md section 2): the four navigation tools plus the
+// `workspace_index` indexing trigger that fills the graph. There are NO
+// event listeners in v0: the agent is a consumer of the graph service and the
+// surface for the conversation - the invisible flow (the stamps, the
+// indexes, the gates) belongs to the sibling hooks, not to the agent.
 //
 // THE DISABLED POSTURE: enabled=false ships default - the State build logs
 // `disabled (enabled=false)` and every tool no-ops to a clear refusal
@@ -17,6 +18,7 @@ import type { Context } from "@deepseek-ai/cordis";
 import ToolContext from "@Function/ToolContext.js";
 import ToolExpand from "@Function/ToolExpand.js";
 import ToolFind from "@Function/ToolFind.js";
+import ToolIndex from "@Function/ToolIndex.js";
 import ToolMap from "@Function/ToolMap.js";
 import type Config from "@Interface/Config.js";
 import type { NodeKind } from "@Interface/Graph.js";
@@ -93,6 +95,7 @@ export default (Context: Context, Options: Config): void => {
 			PacketTokenMax: "packetTokenMax",
 			TokenCharsPerToken: "tokenCharsPerToken",
 			Kinds: "kinds",
+			Allow: "policy",
 		},
 	});
 	State_.Factory = Factory;
@@ -113,14 +116,15 @@ export default (Context: Context, Options: Config): void => {
 			State_,
 			Activate([
 				["", `bundle ${Version}`],
-				["tools", "4"],
+				["tools", "5"],
 			]),
 		);
 	}
 
-	// The four navigation tools (V4-1 §3.4) - the ONLY conversational surface.
-	// The registration is readonly after registration; the definitions are
-	// built once here.
+	// The five tools - the ONLY conversational surface: the four navigation
+	// tools (V4-1 §3.4) plus the indexing trigger (workspace_index). The
+	// registration is readonly after registration; the definitions are built
+	// once here.
 	const Tools = (
 		Context as unknown as { tools?: { register?: (definition: unknown) => () => void } }
 	).tools;
@@ -129,6 +133,7 @@ export default (Context: Context, Options: Config): void => {
 		Tools.register(ToolFind(State_, Append));
 		Tools.register(ToolExpand(State_, Append));
 		Tools.register(ToolContext(State_, Append));
+		Tools.register(ToolIndex(State_, Append));
 	}
 
 	// The loader ignores any return value; the end-phase smokes probe the

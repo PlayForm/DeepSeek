@@ -45,18 +45,43 @@ Batch lifecycle: `applying → verified | recovery-required | reverted`.
 
 Every knob is a volatile cell (hot edits commit without remounting):
 
-| Field           | Default                                             | Description                              |
-| --------------- | --------------------------------------------------- | ---------------------------------------- |
-| `enabled`       | `false`                                             | Master switch (the IDLE-forever posture) |
-| `log`           | `true`                                              | Ledger enabled                           |
-| `logFile`       | `~/.dsh/workspace-journal.log`                      | The plugin's own ledger                  |
-| `domain`        | `workspace_journal`                                 | The KV domain name                       |
-| `maxBatches`    | `200`                                               | The batch ring bound                     |
-| `maxEntryBytes` | `65536`                                             | The pre-image size cap                   |
-| `exclude`       | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |
+| Field           | Default                                             | Description                                   |
+| --------------- | --------------------------------------------------- | --------------------------------------------- |
+| `enabled`       | `false`                                             | Master switch (the IDLE-forever posture)      |
+| `log`           | `true`                                              | Ledger enabled                                |
+| `logFile`       | `~/.dsh/playform/hook-dsh-workspace-journal.log`    | The plugin's own ledger                       |
+| `domain`        | `workspace_journal`                                 | The KV domain name                            |
+| `maxBatches`    | `200`                                               | The batch ring bound                          |
+| `maxEntryBytes` | `65536`                                             | The pre-image size cap                        |
+| `exclude`       | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                                |
+| `policy.*`      | see below                                           | The D6 per-action allowlist (the revert gate) |
 
 The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
 explicit ACTIVATE.
+
+### The policy block (D6) - the revert gate
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The revert is the hook's ONE gated action because it **writes** the pre-images back; recording
+(open/seal/recover) is `record` and stays automatic. An `approve` verdict for `write` refuses the
+whole pass before any file is touched: the ledger records the byte-exact
+`revert held (<n> files) (policy write=approve)` line, **zero writes** reach the filesystem, the
+batch keeps its `applying`/`verified` state and no record is persisted - the revert waits for the
+user. Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next revert
+replay. The block is one volatile object, so a policy flip is hot-editable without a remount; a
+resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement).
+
+The documented refusal line: `journal: revert held (<n> files) (policy write=approve)`.
 
 ## Exemptions (documented)
 

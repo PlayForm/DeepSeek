@@ -18,10 +18,19 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import { fileURLToPath } from "node:url";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
 export { Plugin };
+
+/**
+ * The REAL package cwd the judged relative paths resolve against: the pack
+ * mixes package-relative targets (`README.md`, `SCHEME.md`), so the fixture
+ * cwd is a package that actually carries them (hook-dsh-ccr) instead of the
+ * repo root.
+ */
+const Package = fileURLToPath(new URL("../../../hook-dsh-ccr/", import.meta.url));
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
@@ -84,6 +93,15 @@ export const Finish = (Count: Counter, Name: string): number => {
 };
 
 // -- the suite-level fixtures (fresh per folder process) --
+
+/**
+ * The fresh temp home: every `~`-prefixed path (the pack user layer, the
+ * ledger defaults) resolves inside it, so no folder ever reads or writes the
+ * real ~/.dsh. The reconciliation itself writes nothing at all - it reads the
+ * package tree with node:fs only.
+ */
+export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-home-"));
+process.env["HOME"] = Home;
 
 export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-smoke-"));
 export const Ledger = Path.join(Root, "test-suggester.log");
@@ -167,6 +185,7 @@ export const Make = (Raw: any): any => {
 	let Context: any;
 	Context = {
 		pluginFactory: Furnace,
+		workingDirectory: { get: () => Package },
 		fs: Fs,
 		logger: {
 			info: (M: string) => {

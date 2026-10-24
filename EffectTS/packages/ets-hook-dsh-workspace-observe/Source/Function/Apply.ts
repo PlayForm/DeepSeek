@@ -64,6 +64,7 @@ export default (Context: Context, Options: Config): void => {
 			DomainName: "domain",
 			MaxStamps: "maxStamps",
 			Include: "include",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

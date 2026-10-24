@@ -59,7 +59,13 @@ const runTest = async () => {
     Check(Count, "W2: a disabled mount still serves the tools (the refusal lives in execute) and logs the byte-exact disabled line", () => {
       assert.deepEqual(
         Run.Registered.map((Definition) => Definition.name),
-        ["workspace_map", "workspace_find", "workspace_expand", "workspace_context"]
+        [
+          "workspace_map",
+          "workspace_find",
+          "workspace_expand",
+          "workspace_context",
+          "workspace_index"
+        ]
       );
       assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: disabled (enabled=false)"]);
     });
@@ -77,18 +83,24 @@ const runTest = async () => {
   {
     const Run = Setup();
     Check(Count, "W3: the activation line is byte-exact", () => {
-      assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=4)"]);
+      assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=5)"]);
     });
     Check(Count, "W3: the durable activation line carries the same message after the ISO stamp", () => {
       assert.equal(
-        LedgerLines().filter((Line) => Line.endsWith("activated (bundle 0.1.0, tools=4)")).length,
+        LedgerLines().filter((Line) => Line.endsWith("activated (bundle 0.1.0, tools=5)")).length,
         1
       );
     });
-    Check(Count, "W3: the four navigation tools are registered in contract order", () => {
+    Check(Count, "W3: the five tools are registered in contract order", () => {
       assert.deepEqual(
         Run.Registered.map((Definition) => Definition.name),
-        ["workspace_map", "workspace_find", "workspace_expand", "workspace_context"]
+        [
+          "workspace_map",
+          "workspace_find",
+          "workspace_expand",
+          "workspace_context",
+          "workspace_index"
+        ]
       );
     });
     Check(Count, "W3: a consumer registers NO root listeners and NO services", () => {

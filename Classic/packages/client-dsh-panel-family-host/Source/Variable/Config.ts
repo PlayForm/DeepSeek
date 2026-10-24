@@ -8,5 +8,5 @@ export default Schema.object({
 	enabled: Schema.boolean().default(false).volatile(),
 	logRoot: Schema.string().default("~/.dsh").volatile(),
 	maxLines: Schema.number().default(200).min(1).max(2000).volatile(),
-	ccrLog: Schema.string().default("~/.dsh/ccr.log").volatile(),
+	ccrLog: Schema.string().default("~/.dsh/playform/hook-dsh-ccr.log").volatile(),
 });

@@ -53,6 +53,15 @@ export interface IndexOutcome {
 	reason?: string;
 }
 
+/** The counts one workspace index call returns (the graph service's own
+ * summary shape, WAVE-1-BRIEF.md section 4.3 plus the indexing trigger). */
+export interface IndexSummary {
+	indexed: number;
+	skipped: number;
+	failed: number;
+	files: number;
+}
+
 /** The find query (name, pattern, kind, limit). */
 export interface FindQuery {
 	name?: string | undefined;
@@ -85,6 +94,9 @@ export interface GraphStatistics {
 /** The workspaceGraph service surface (WAVE-1-BRIEF.md section 4.3). */
 export interface WorkspaceGraph {
 	indexFile(path: string): Promise<IndexOutcome>;
+	/** The INDEXING TRIGGER: walk the root (default = the session cwd) and
+	 * index every candidate file; the counts are the graph service's. */
+	indexWorkspace(root?: string, options?: { maxFiles?: number }): Promise<IndexSummary>;
 	removeFile(path: string): Promise<boolean>;
 	getNode(id: string): Node | undefined;
 	find(query: FindQuery): Node[];

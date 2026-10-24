@@ -17,8 +17,16 @@
 # THE IDLE-FOREVER POSTURE: this entry ships with enabled: false and NOTHING
 # else - the plugin never appears in the profile's bundles and enables only
 # by an explicit ACTIVATE (the user edits the profile and restarts). On a
-# cold mount the State build logs `disabled (enabled=false)` and the
-# launch-path listener no-ops to a passthrough (it checks State.On first).
+# cold mount the State build logs `disabled (enabled=false)` and both
+# launch-path listeners no-op to a passthrough (they check State.On first).
+# The launch seam is TWO halves of one hint: `tools/pre-execute` injects the
+# route into the `subagent` tool's launch and appends the byte-stable
+# `[route: <taskType> <provider> <model> <effort>]` hint to its prompt, while
+# `agent/pre-step` delivers the same hint to a delegated child's first step -
+# the only seam that reaches a child started straight through
+# `ctx.subagents.startActivation` (the queue's spawn). An `ESCALATION:` marker
+# in the launch spec selects the planner rung, whose model is verified against
+# the live catalog (`ctx.llm.listModels`, the `list_subagent_models` source).
 # The schema defaults are the truth: the shipped policy is the task-routing
 # skill's routing table (explorer GLM low, coder GLM high, planner
 # deepseek-v4.1-flash-1017 max, the three-model allowed set, escalation at
@@ -26,8 +34,25 @@
 # defaultRole, the whole policy object and the keyword table. EVERY knob is
 # volatile (hot-editable without remounting): a policy edit lands on the
 # next launch.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The key is `automation`, NOT `policy` - this plugin's
+# `policy` is already the user's ROUTING policy (roles, allowed models,
+# escalation), a different contract. read/index/record/suggest and message
+# are automatic; write/commit/spawn wait for approval (the router never takes
+# them - declared for family uniformity). A resolved pack's `policy` section
+# overrides these defaults per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-route
         name: "@playform/plugin-dsh-route"
         config:
             enabled: false
+            automation:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

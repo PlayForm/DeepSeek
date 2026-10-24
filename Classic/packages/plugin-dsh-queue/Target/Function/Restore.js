@@ -1,0 +1,1 @@
+import{MAIN as r,Seat as n}from"./Capacity.js";var c=(e,t)=>{e.Tasks.clear(),e.Seats.clear(),e.Seq=0;for(const a of t){const s={...a,dependsOn:[...a.dependsOn],attempts:a.attempts??0};switch(e.Tasks.set(s.id,s),!0===s.seq>e.Seq&&(e.Seq=s.seq),s.state){case"dispatched":case"running":n(e,s.assignedAgent??r);break;default:break}}};export{c as default};

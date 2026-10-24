@@ -186,6 +186,16 @@ export const Make = (Factory: any, Raw: any = {}): any => {
 				}),
 		},
 		reflect: { provide: (Name: string, Value: unknown) => (provided[Name] = Value) },
+		// The public provide seam (the factory's trace registration): the real
+		// Service base uses reflect.provide; `ctx.provide` is the mixed-in
+		// public form the constructor calls for `ctx.trace`. The fake sets the
+		// context property so a consumer probe resolves, and records it in the
+		// same `provided` capture.
+		provide: (Name: string, Value?: unknown) => {
+			provided[Name] = Value;
+			Context[Name] = Value;
+			return () => true;
+		},
 		// cordis plugin contexts inherit `root` (the shared event bus scope); the
 		// fake ctx is its own root.
 		get root() {

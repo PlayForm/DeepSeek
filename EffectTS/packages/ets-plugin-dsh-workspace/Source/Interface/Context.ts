@@ -7,7 +7,7 @@
 //     sibling's frozen contract - the end-phase aligns the import).
 //
 // The `workspaceAgent` accessor is NOT declared here: the agent is the
-// four tools plus the query layer - the operational view IS the surface,
+// five tools plus the query layer - the operational view IS the surface,
 // and the family's distribution law keeps the consumers decoupled through
 // the tools and the events, not through a second service handle.
 import type { WorkspaceGraph } from "@Interface/Graph.js";

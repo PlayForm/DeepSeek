@@ -85,9 +85,33 @@ export const Finish = (Count: Counter, Name: string): number => {
 
 // -- the suite-level fixtures (fresh per folder process) --
 
+/**
+ * The fresh temp home: every `~`-prefixed path (the seeded store's default,
+ * the producer's fallback store, the pack user layer) resolves inside it, so
+ * no folder ever reads or writes the real ~/.dsh. Set BEFORE the plugin
+ * loads: the resolvers read HOME lazily but the store paths are expanded on
+ * the first call, and the fixture must be in place by then.
+ */
+export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-home-"));
+process.env["HOME"] = Home;
+
 export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-smoke-"));
 export const Ledger = Path.join(Root, "replay-suggester.log");
 export const Store = Path.join(Root, "history.json");
+
+/** The producer's fallback-store counter: one fresh file per mount. */
+let RecordCounter = 0;
+
+/**
+ * A fresh JSON fallback store path for one mount. Every `Validate` call
+ * defaults to a NEW path, so a mount never inherits the entries another
+ * scenario's mount wrote - the reopen scenarios pass an explicit
+ * `recordPath` instead.
+ */
+export const FreshRecord = (): string => {
+	RecordCounter += 1;
+	return Path.join(Root, `replay-history-${RecordCounter}.json`);
+};
 
 /**
  * Remove the durable ledger file: every scenario starts from an empty ledger.
@@ -180,7 +204,7 @@ export const FakeFs = (): any => {
  * and records disposers, get() resolves through the context properties, and
  * the root is a DISTINCT object.
  */
-export const Make = (Raw: any): any => {
+export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any => {
 	const CtxListeners: any = {};
 	const Lines: string[] = [];
 	const Warns: string[] = [];
@@ -235,6 +259,9 @@ export const Make = (Raw: any): any => {
 		Raw,
 		Fs,
 	};
+	// The optional pre-apply attachment: the storage facility must be in place
+	// BEFORE apply, because the store probe runs there.
+	Attach?.(Context, Run);
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__replaySuggesterState;
 	return Run;
@@ -242,10 +269,15 @@ export const Make = (Raw: any): any => {
 
 /**
  * The raw-config shape the loader hands to apply: volatile fields arrive as
- * `{ get }` cells. Build one via the plugin's schema.
+ * `{ get }` cells. Build one via the plugin's schema. The producer's fallback
+ * store defaults to a FRESH temp path per mount (a caller that needs the same
+ * store across mounts - the reopen scenarios - passes `recordPath` itself).
  */
 export const Validate = (Raw: Record<string, unknown>): any =>
-	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
+	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({
+		recordPath: FreshRecord(),
+		...Raw,
+	});
 
 /**
  * The standard enabled mount with an absolute history store path.
@@ -319,6 +351,83 @@ export const LinesWith = (Run: any, Needle: string): string[] =>
  */
 export const LedgerWith = (Needle: string): string[] =>
 	LedgerLines().filter((L: string) => L.includes(Needle));
+
+/**
+ * The fake storage facility (the pattern/batchstate fake-storage pattern): the
+ * open capture (the spec the hook declared), the map-backed tables, a seed
+ * hook for the restart scenarios, and the VERSION FENCE - the real library
+ * enforces exact version equality per record, so the fake refuses an open
+ * whose declared version differs from the stored one. `facility` is attached
+ * to the fake ctx BEFORE apply (the probe runs during apply).
+ */
+export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = {}): any => {
+	const Facility: any = {
+		spec: undefined as any,
+		version: Options.version ?? 1,
+		tables: new Map<string, Map<string, unknown>>(),
+		writes: [] as [string, string][],
+		failOpen: Options.failOpen === true,
+		closed: false,
+	};
+	Facility.facility = {
+		open: async (Specification: any) => {
+			switch (true) {
+				case Facility.failOpen:
+					throw new Error("storage unavailable");
+				case Specification.version !== Facility.version:
+					throw new Error(
+						`version-mismatch: stored ${Facility.version}, declared ${Specification.version}`,
+					);
+				default:
+			}
+			Facility.spec = Specification;
+			return {
+				name: Specification.name,
+				close: async () => {
+					Facility.closed = true;
+				},
+				table: (Name: string) => {
+					if (!Facility.tables.has(Name)) {
+						Facility.tables.set(Name, new Map());
+					}
+					const Rows = Facility.tables.get(Name) as Map<string, unknown>;
+					return {
+						put: async (Key: string, Value: unknown) => {
+							Rows.set(Key, Value);
+							Facility.writes.push([Name, Key]);
+						},
+						entries: () => Rows.entries(),
+						keys: () => Rows.keys(),
+						get: (Key: string) => Rows.get(Key),
+						delete: async (Key: string) => Rows.delete(Key),
+						get size() {
+							return Rows.size;
+						},
+					};
+				},
+			};
+		},
+	};
+	/** Seed one record (the restart scenario: the store outlives the process). */
+	Facility.seed = (Name: string, Key: string, Value: unknown): void => {
+		if (!Facility.tables.has(Name)) {
+			Facility.tables.set(Name, new Map());
+		}
+		(Facility.tables.get(Name) as Map<string, unknown>).set(Key, Value);
+	};
+	return Facility;
+};
+
+/**
+ * A mount with the storage facility attached BEFORE apply (the probe runs in
+ * apply, so the fake must already sit on the context).
+ */
+export const Mount = (Config: Record<string, unknown>, Facility: any): any => {
+	rm();
+	return Make(Validate({ logFile: Ledger, historyPath: Store, ...Config }), (Context: any) => {
+		Context.storageDomain = Facility.facility;
+	});
+};
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =

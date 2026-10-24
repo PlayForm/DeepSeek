@@ -5,14 +5,19 @@
 // the ONLY named exports in the tree; every other module is a nameless
 // default export composed Rust-style.
 //
-// The endpoint: tail(namespace, lines) for the family log tails + stats()
-// for the ccr store summary (Documentation/Plans/UI-Family/
-// PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md). READ-ONLY: the endpoint reads
-// ~/.dsh family logs ONLY and has no write surface (A5.3). The Typert
-// generation pipeline is documented as not reproducible from an external
-// package, so the PoC ships the endpoint as a plain service under
-// panelFamilyHost; the end-phase decides Typert vs the v1 shortcut.
-// fiberPhases come from the existing remote.pluginManager - no new endpoint.
+// The services (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-
+// TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md):
+//   * panelFamilyHost - tail(namespace, lines) + stats(), READ-ONLY;
+//   * panelFamilyBridge - editFull(namespace, patch) over
+//     ctx.configEditor.edit(), the ONE trusted full-config write surface
+//     (secret namespaces refused);
+//   * panelFamilyTrace - the D5 bus forwarder (on/ring), provided when
+//     ctx.trace exists.
+// The Typert generation pipeline is documented as not reproducible from an
+// external package, so the services ship as plain cordis services; the
+// browser half (Source/Client.ts) forwards them through the generated
+// playformFamilyPanel Remote namespace (the documented residual). fiberPhases
+// come from the existing remote.pluginManager - no new endpoint.
 import Apply from "@Function/Apply.js";
 import Definition from "@Variable/Config.js";
 
@@ -20,12 +25,13 @@ export const name = "client-dsh-panel-family-host";
 
 export const Config = Definition;
 
-// No host services are required: the endpoint reads the filesystem directly
-// (read-only), so nothing is injected.
+// No host services are required: the host reads the filesystem directly
+// (read-only) and resolves the config editor and the trace bus structurally
+// through ctx.get, so nothing is injected.
 export const inject: string[] = [];
 
 /**
- * Apply: provide the panelFamilyHost service and log the activation.
+ * Apply: provide the three services and log the activation.
  * Returns nothing (the loader contract).
  */
 export function apply(

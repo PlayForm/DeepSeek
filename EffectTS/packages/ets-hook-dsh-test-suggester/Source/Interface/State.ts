@@ -23,6 +23,9 @@
 //   Rules          - the compiled pack, built ONCE at apply (hot path: no regex compilation);
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
+//   Cleared        - the package roots whose reconciliation already logged its
+//                    consistent-tree line (once per root per apply - the clear
+//                    line is a state change, not a per-call heartbeat);
 //   Factory        - the injected factory service itself, consumed for the
 //                    ledger (Factory.Append) - assigned once in Function/Apply.
 import type Config from "@Interface/Config.js";
@@ -53,6 +56,8 @@ export default interface State extends Shared {
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
 	Agents: WeakMap<object, AgentMemory>;
+	/** The package roots whose reconciliation logged its consistent-tree line. */
+	Cleared: Set<string>;
 	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append) is consumed through it; assigned once in Function/Apply. */
 	Factory: Factory;
@@ -60,8 +65,8 @@ export default interface State extends Shared {
 
 // The per-agent memory: the call counter (the cooldown's clock), the last
 // note call per intent (the cooldown), the notes emitted this turn (the
-// per-turn cap), and the last probes (the ring; kept for parity with the
-// plan's ring buffer).
+// per-turn cap), the last probes (the ring; kept for parity with the plan's
+// ring buffer), and the reconciliation's dedupe signatures.
 export interface AgentMemory {
 	/** Judged calls seen since the agent's memory was created. */
 	Calls: number;
@@ -71,6 +76,8 @@ export interface AgentMemory {
 	TurnNotes: number;
 	/** The last probes (most recent first, capped at 8). */
 	Ring: string[];
+	/** Package root -> the drift signature of the last reconciliation note. */
+	Reconciled: Map<string, string>;
 }
 
 // The config type the schema produces (re-exported for the listener's casts).

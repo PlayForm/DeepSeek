@@ -1,7 +1,7 @@
 import type DomainHandle from "@Interface/Domain.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Record from "@Interface/Record.js";
-import type { State as Base } from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's
      *  mapped `On` field). */
@@ -14,6 +14,11 @@ interface Extra {
     MaxFiles: number;
     /** Config `maxTotalBytes` - the batch byte gate (volatile). */
     MaxTotalBytes: number;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 gate on
+     *  the commit. Named `Allow` because the factory's shared State already
+     *  owns `Policy` (the configured global policy file path); `commit`
+     *  defaults to `approve`, so a batch is held and writes nothing. */
+    Allow: Allowlist;
     /** The injected factory instance (the State builder, the ledger, the
      *  Write executor). */
     Factory: FactoryHandle;

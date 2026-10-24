@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import {
   Check,
@@ -117,6 +118,42 @@ const runTest = async () => {
         const stBare = factory.State(ctx, {}, { module: "f" });
         assert.equal(stBare.Ledger, void 0);
         assert.doesNotThrow(() => factory.Append(stBare, "bare"));
+      });
+    }
+  }
+  {
+    const Sub = "Append: the tilde ledger path expands against $HOME and creates its missing parent (~/.dsh/playform)";
+    {
+      Check(Count, Sub, () => {
+        const Original = process.env["HOME"];
+        const Home = TempRoot("factory-smoke-home-");
+        try {
+          process.env["HOME"] = Home;
+          const stDir = factory.State(
+            ctx,
+            { log: true, logFile: "~/.dsh/playform/probe.log" },
+            { module: "smoke-flavor" }
+          );
+          assert.equal(stDir.Ledger, "~/.dsh/playform/probe.log", "State keeps the raw config path");
+          assert.equal(
+            FileSystem.existsSync(Path.join(Home, ".dsh")),
+            false,
+            "the fixture pre-state: no .dsh directory"
+          );
+          factory.Append(stDir, "probe dir");
+          const Probe = Path.join(Home, ".dsh", "playform", "probe.log");
+          const Written = FileSystem.readFileSync(Probe, "utf8");
+          assert.ok(
+            /^\[\d{4}-\d{2}-\d{2}T.*\] probe dir\n$/.test(Written),
+            "the append created the directory and landed in the expanded home path"
+          );
+        } finally {
+          if (Original === void 0) {
+            delete process.env["HOME"];
+          } else {
+            process.env["HOME"] = Original;
+          }
+        }
       });
     }
   }

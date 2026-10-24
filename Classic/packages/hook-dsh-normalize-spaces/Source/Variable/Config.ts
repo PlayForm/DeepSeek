@@ -37,7 +37,7 @@ export default Compose(false, {
 	// Ledger file — the spaces ledger, SEPARATE from the family's logs (one
 	// log per module) — volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-spaces.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-spaces.log").volatile(),
 	// The space replacement — the transform's ONLY knob. The plain ASCII
 	// space (U+0020) by default. Volatile: hot-editable; the next stream
 	// picks it up with no remount.

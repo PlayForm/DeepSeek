@@ -95,13 +95,17 @@ const FakeFs = (Files = {}, FailEdit = false) => {
 const MakeCtx = (Fs) => {
   const Lines = [];
   const Provided = {};
+  const Listeners = {};
   const Context = {
     logger: {
       info: (M) => Lines.push(M),
       warn: (M) => Lines.push(M),
       error: (M) => Lines.push(M)
     },
-    on: () => () => true,
+    on: (Name, Listener) => {
+      Listeners[Name] = Listener;
+      return () => true;
+    },
     reflect: {
       provide: (Name, Value) => {
         Provided[Name] = Value;
@@ -115,7 +119,7 @@ const MakeCtx = (Fs) => {
   if (Fs !== void 0) {
     Context.fs = Fs;
   }
-  return { Context, Lines, Provided };
+  return { Context, Lines, Provided, Listeners };
 };
 const Build = (Raw = {}, Files = {}, FailEdit = false) => {
   rm();

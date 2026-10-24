@@ -32,6 +32,7 @@ export default (State: State, Input_: Input, Append: (Message: string) => void):
 		state: "queued",
 		seq: State.Seq,
 		queuedAt: Date.now(),
+		attempts: 0,
 	};
 	State.Tasks.set(Task_.id, Task_);
 	// The journal record (best-effort, the factory's P5 writer) + the ledger

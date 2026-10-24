@@ -23,8 +23,24 @@
 # truth: the full default deny list (the 23 mutation subcommands), the
 # allow list (the read-only checks + fetch), strict false (deny-list mode),
 # exclude empty. EVERY knob is volatile (hot-editable without remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# guard is READ-ONLY (it classifies and ledgers, never writes, commits or
+# spawns), so its own action classes are read/record (automatic); the
+# write/commit/spawn verdicts are declared for family uniformity and stay the
+# shipped approve. A resolved pack's `policy` section overrides these defaults
+# per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-gitguard
         name: "@playform/ets-plugin-dsh-gitguard"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

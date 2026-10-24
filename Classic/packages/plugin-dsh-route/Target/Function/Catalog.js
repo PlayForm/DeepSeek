@@ -1,0 +1,1 @@
+var d=async(t,i)=>{const e=t?.get?.("llm");if(!(e===void 0||typeof e.listModels!="function"))try{return(await e.listModels(i)).map(n=>n?.id).filter(n=>typeof n=="string")}catch{return}};export{d as default};

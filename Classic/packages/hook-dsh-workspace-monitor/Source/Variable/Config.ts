@@ -26,11 +26,11 @@
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 import DefaultCheckSets from "@Variable/DefaultCheckSets.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/monitor.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-monitor.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name reserved for the hook (its own domain name, no
 	// collision, the hook owns its record schema).
@@ -58,4 +58,14 @@ export default Compose(false, {
 	// the whole table (the dict is a volatile cell - the table is the
 	// refresh unit).
 	checksets: Schema.dict(Schema.any()).default(DefaultCheckSets).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. This hook's action
+	// class is RECORD - every watch entry and every sweep decision is
+	// recorded - and it is AUTOMATIC, so this package has NO gated action: it
+	// never writes a file, commits a batch or spawns an agent, and no verdict
+	// can refuse it. read/index/record/suggest/message are automatic;
+	// write/commit/spawn wait for approval for the family's write paths.
+	// Volatile as one object; a resolved pack's `policy` section overrides
+	// the defaults per action (the wiring is the next refinement; the type
+	// already exists).
+	policy: Policy(),
 });

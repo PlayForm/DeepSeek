@@ -55,7 +55,7 @@ const EntryConfig = (Dump: string, Id: string): string | null => {
 	// Leaf 2: the bundle layer's logFile default is the un-expanded ~/.dsh
 	// form (the silent-catch ledger gap).
 	Check(
-		GovernorDefault.includes("logFile: ~/.dsh/ets-hook-dsh-package-governor.log"),
+		GovernorDefault.includes("logFile: ~/.dsh/playform/ets-hook-dsh-package-governor.log"),
 		"the bundle layer's logFile default is the un-expanded ~/.dsh form (the silent-catch ledger gap)",
 	);
 

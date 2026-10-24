@@ -26,10 +26,10 @@
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/reflect.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-workspace-reflect.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The default rename scope: "block" renames inside the operation's span
 	// only; "file" renames whole-word across the whole file (the one-call
@@ -43,4 +43,14 @@ export default Compose(false, {
 	// (`rejected <path> (span too large)`) - the span guard against a
 	// whole-file replacement smuggled in as a "block" operation.
 	maxBlockLines: Schema.number().default(5000).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The reflect's gated
+	// actions are the WRITES - a replace or a rename - so `write` defaults to
+	// `approve` and the operation waits for the user (the documented
+	// `replace held <path> (policy write=approve)` /
+	// `rename held <path> (policy write=approve)` lines, zero writes).
+	// read/index/record/suggest/message are automatic; write/commit/spawn
+	// wait for approval. Volatile as one object; a resolved pack's `policy`
+	// section overrides the defaults per action (the wiring is the next
+	// refinement; the type already exists).
+	policy: Policy(),
 });

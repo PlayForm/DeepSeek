@@ -15,12 +15,25 @@
 // maxSessions. The bundle patch still ships `enabled: true` explicit so the
 // activation is visible in the patch.
 import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/plugin-dsh-factory";
 
 export default Schema.object({
 	enabled: Schema.boolean().default(true),
-	logFile: Schema.string().default("~/.dsh/feedback/feedback.log"),
+	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-feedback.log"),
 	maxBlockBytes: Schema.number().default(4096),
 	maxChain: Schema.number().default(8),
 	maxSessions: Schema.number().default(128),
 	summaryTerms: Schema.number().default(10),
+	// The per-session batch-outcome ring bound: the orchestration layer's
+	// apply outcomes (applied / rejected / denied / expired) are appended to
+	// the session's summary and bounded here.
+	maxOutcomes: Schema.number().default(16),
+	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
+	// block composed into this schema. The feedback member is a PASSIVE
+	// collector: it records outcomes and suggests summaries (`record` and
+	// `suggest`, both automatic) and never writes, commits or spawns - the
+	// write/commit/spawn verdicts are declared for family uniformity and stay
+	// the shipped `approve`. A resolved pack's `policy` section overrides the
+	// defaults per action (the wiring is the next refinement).
+	policy: Policy(),
 });

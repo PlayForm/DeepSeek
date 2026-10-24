@@ -49,9 +49,27 @@ plugin's own monotonic counter - never a wall clock. Ledger lines (module-owned,
 
 ## Configuration
 
-Every knob is volatile (hot-editable without remounting): `logFile` (`~/.dsh/approve.log`), `log`,
-`enabled` (false - the IDLE-forever posture), `domain` (`workspace_approve`), `maxBindings` (1000),
-`requireConstraints` (true). The plugin ships disabled and enables only by an explicit ACTIVATE.
+Every knob is volatile (hot-editable without remounting): `logFile`
+(`~/.dsh/playform/hook-dsh-workspace-approve.log`), `log`, `enabled` (false - the IDLE-forever
+posture), `domain` (`workspace_approve`), `maxBindings` (1000), `requireConstraints` (true). The
+plugin ships disabled and enables only by an explicit ACTIVATE.
+
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
+commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
+object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
+overrides the defaults per action (the wiring is the next refinement).
 
 Plan:
 [Documentation/Plans/Workspace-Family/APPROVE.md](../../../Documentation/Plans/Workspace-Family/APPROVE.md).

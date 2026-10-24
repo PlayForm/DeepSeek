@@ -32,4 +32,12 @@ export default interface Config {
 	emitOn: string[];
 	/** Path prefixes a candidate is never drawn from (volatile). */
 	exclude: string[];
+	/**
+	 * The learning bootstrap switch (volatile, default false): when true, the
+	 * first judged call in a packless workspace proposes a pack under
+	 * `<home>/.dsh/playform/proposals/` and notes it once per process. The
+	 * config wins when true; false defers to the resolved pack's
+	 * `learning.propose`.
+	 */
+	learning: boolean;
 }

@@ -19,10 +19,10 @@
 // This is one of the modules in the tree with a runtime import of
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/operate.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-workspace-operate.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - the hook owns its record schema).
@@ -32,4 +32,13 @@ export default Compose(false, {
 	// The list limits (the graph's rule: default, capped at maximum).
 	limitDefault: Schema.number().default(50).volatile(),
 	limitMaximum: Schema.number().default(500).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The hook's action class
+	// is SUGGEST - it records a typed proposal and never applies it - and that
+	// class is AUTOMATIC, so this package has NO gated action: it never writes
+	// a file, commits a batch or spawns an agent, and no verdict can refuse
+	// it. read/index/record/suggest/message are automatic; write/commit/spawn
+	// wait for approval for the family's write paths. Volatile as one object;
+	// a resolved pack's `policy` section overrides the defaults per action
+	// (the wiring is the next refinement; the type already exists).
+	policy: Policy(),
 });

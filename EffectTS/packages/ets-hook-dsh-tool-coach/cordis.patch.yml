@@ -33,7 +33,7 @@
         name: "@playform/ets-hook-dsh-tool-coach"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-tool-coach.log
+            logFile: ~/.dsh/playform/hook-dsh-tool-coach.log
             enabled: true
             judgeTools:
                 - bash

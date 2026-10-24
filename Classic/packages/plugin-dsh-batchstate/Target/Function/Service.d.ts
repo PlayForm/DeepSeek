@@ -1,7 +1,9 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Scope from "../Interface/Scope.js";
-import type Snapshot from "../Interface/Snapshot.js";
-import type State from "../Interface/State.js";
+import type Entry from "@Interface/Entry.js";
+import type GateShape from "@Interface/Gate.js";
+import type Scope from "@Interface/Scope.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
 export default class BatchState extends Service {
     /** The apply-built state the methods read and write. */
     State: State;
@@ -17,6 +19,17 @@ export default class BatchState extends Service {
     /** The concurrent lanes' CURRENT activities (the "you are never alone"
      *  block), excluding the caller. */
     whoElse(Agent: string): string;
+    /** The spliced batch proposals, in splice order (the inbox splice's
+     *  result - the board's live proposal memory). */
+    getProposals(): Entry[];
+    /** The arbiter gates, by name (the Gates block's truth). */
+    getGates(): GateShape[];
+    /** The queue projection: the queue service's own compiled line, read
+     *  read-only (`QUEUE: none` when no queue service is mounted). */
+    getQueue(): string;
+    /** The arbiter truth update (the build/smokes state the Gates block
+     *  renders for every lane). */
+    setGate(Name: string, State_: string, Owner?: string): void;
     /** The CURRENT ACTIVITY update (the LIVE task - the agents report their
      *  phase changes; the parent sets the task at the activation). */
     setTask(Agent: string, Task_: string): void;
@@ -39,10 +52,6 @@ declare module "@deepseek-ai/cordis" {
     interface Events {
         /** One batch state transition (the plan's broadcast; the consumers:
          *  the splice trigger and any agent listening). */
-        "batch/state-change"(Change: {
-            batch: string;
-            id: string;
-            kind: "task" | "status" | "scope" | "queue" | "clear";
-        }): void;
+        "batch/state-change"(Change: import("@Interface/Change.js").default): void;
     }
 }

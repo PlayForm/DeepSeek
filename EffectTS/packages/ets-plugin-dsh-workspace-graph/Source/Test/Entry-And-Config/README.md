@@ -27,11 +27,12 @@ declaration merging compiles) and the fail-loud config rule.
       declaration merge; the noemit pass gates the build on it).
 - Group: the config defaults and the volatile cells.
     - Check: "config: the schema defaults flow into the plain State config" -
-      the State's Config equals the brief's frozen defaults (enabled false,
-      domain workspace_graph, the three languages, empty include, the three
-      default excludes, 1000000 / 5000 / 50 / 500).
+      the State's Config equals the frozen defaults (enabled false, domain
+      workspace_graph, the three languages, empty include, the three default
+      excludes, 1000000 / 5000 / 2000 / 50 / 500) - including `maxFiles`, the
+      one field the indexing trigger added.
     - Check: "config: every volatile field arrives as a cell and unwraps" -
-      all nine fields arrive as `{ get }` cells from the schema and the State
+      all ten fields arrive as `{ get }` cells from the schema and the State
       carries the unwrapped plain values.
 - Group: fail-loud validation (each refusal on the exact message).
     - Check: "config: a wrong-typed field fails loud at the schema
@@ -47,6 +48,8 @@ declaration merging compiles) and the fail-loud config rule.
       "javascript" | "markdown"`.
     - Check: "fail-loud: limitDefault above limitMaximum is rejected" - exact
       message `invalid config: limitDefault must not exceed limitMaximum`.
+    - Check: "fail-loud: a non-positive maxFiles is rejected (the walk bound)" -
+      exact message `invalid config: maxFiles must be a positive integer`.
 
 ## Fixtures
 
@@ -67,4 +70,4 @@ declaration merging compiles) and the fail-loud config rule.
 
 ## Expected count
 
-11 PASS.
+12 PASS.

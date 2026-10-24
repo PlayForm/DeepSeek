@@ -1,0 +1,1 @@
+import{existsSync as e}from"node:fs";import{join as t}from"node:path";import f from"../Variable/Signature.js";import o from"./Pick.js";import n from"./Repository.js";import p from"./Slug.js";import s from"./User.js";var y=(r,i)=>o(n(r))!==void 0||o(s(p(r),i))!==void 0||f.some(m=>e(t(r,m)));export{y as default};

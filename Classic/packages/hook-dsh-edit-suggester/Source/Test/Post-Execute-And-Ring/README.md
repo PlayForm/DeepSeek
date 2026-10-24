@@ -35,7 +35,9 @@ reset.
 
 The shared Harness (fake ctx with a DISTINCT root object, the real factory,
 the real built Target). No fake clock: every timing assertion is on the
-ring's counters and the cooldown window.
+ring's counters and the cooldown window. The judged relative paths resolve
+against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the harness's
+`workingDirectory` service), so the pack's package-relative companions exist.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-edit-suggester: ` prefix)
 

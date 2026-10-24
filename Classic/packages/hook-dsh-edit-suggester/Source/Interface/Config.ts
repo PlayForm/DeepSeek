@@ -6,8 +6,9 @@
 //
 // VOLATILE CELLS: `log`, `logFile`, plus every tuning knob of the hot-editable
 // posture (`enabled`, `threshold`, `tools`, `maxCompanions`, `maxNoteChars`,
-// `cooldownCalls`, `maxNotesPerTurn`, `exclude`) are `.volatile()` in the
-// schema - hot edits commit WITHOUT remounting the plugin.
+// `cooldownCalls`, `maxNotesPerTurn`, `exclude`, `learn`, `learnWindow`,
+// `heuristics`, `weights`, `storeLimit`) are `.volatile()` in the schema - hot
+// edits commit WITHOUT remounting the plugin.
 export default interface Config {
 	/** Ledger enabled - write the durable log file (volatile). */
 	log: boolean;
@@ -29,4 +30,14 @@ export default interface Config {
 	maxNotesPerTurn: number;
 	/** The excluded directories - an edit inside them never notes (volatile). */
 	exclude: string[];
+	/** The learning layer's master switch (volatile): false is the pure PoC posture. */
+	learn: boolean;
+	/** The follow-through window in judged calls (volatile; no timers). */
+	learnWindow: number;
+	/** The enabled pickable heuristics (volatile); a name left out is dropped from the score. */
+	heuristics: string[];
+	/** The pickable weight table (volatile); a missing name falls back to the default. */
+	weights: Record<string, number>;
+	/** The in-memory fallback's bound (volatile). */
+	storeLimit: number;
 }

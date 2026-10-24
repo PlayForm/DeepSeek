@@ -1,3 +1,4 @@
+import type Node from "./Node.js";
 export default interface GraphHandle {
     /** The frozen contract's method: re-index one file after a
      *  transformation, so the graph's representation stays current. */
@@ -10,6 +11,7 @@ export default interface GraphHandle {
         kind?: string;
         limit?: number;
     }): unknown[];
-    /** The frozen contract's method: one node by id. */
-    getNode(id: string): unknown;
+    /** The frozen contract's method: one node by id - the AST source a
+     *  fingerprint-targeted Replace resolves its span from. */
+    getNode(id: string): Node | undefined;
 }

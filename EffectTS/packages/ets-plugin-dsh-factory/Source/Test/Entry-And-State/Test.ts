@@ -10,6 +10,7 @@
 // Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
 // class, from the Harness.
 import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
 import * as Path from "node:path";
 import {
 	Check,
@@ -140,6 +141,48 @@ export const runTest = async (): Promise<number> => {
 				const stBare: any = factory.State(ctx, {}, { module: "f" });
 				assert.equal(stBare.Ledger, undefined);
 				assert.doesNotThrow(() => factory.Append(stBare, "bare"));
+			});
+		}
+	}
+	// Group: the live ledger path - the tilde expansion and the missing
+	// parent directory. The log-path standardization moves every ledger to
+	// ~/.dsh/playform/<file>.log and a clean profile does not have that
+	// directory: the append expands the config path against $HOME and creates
+	// the parent directory (best-effort) before the appendFileSync, or the
+	// line is lost to a swallowed ENOENT.
+	{
+		const Sub = "Append: the tilde ledger path expands against $HOME and creates its missing parent (~/.dsh/playform)";
+		{
+			Check(Count, Sub, () => {
+				const Original = process.env["HOME"];
+				const Home = TempRoot("factory-smoke-home-");
+				try {
+					process.env["HOME"] = Home;
+					const stDir: any = factory.State(
+						ctx,
+						{ log: true, logFile: "~/.dsh/playform/probe.log" },
+						{ module: "smoke-flavor" },
+					);
+					assert.equal(stDir.Ledger, "~/.dsh/playform/probe.log", "State keeps the raw config path");
+					assert.equal(
+						FileSystem.existsSync(Path.join(Home, ".dsh")),
+						false,
+						"the fixture pre-state: no .dsh directory",
+					);
+					factory.Append(stDir, "probe dir");
+					const Probe = Path.join(Home, ".dsh", "playform", "probe.log");
+					const Written = FileSystem.readFileSync(Probe, "utf8");
+					assert.ok(
+						/^\[\d{4}-\d{2}-\d{2}T.*\] probe dir\n$/.test(Written),
+						"the append created the directory and landed in the expanded home path",
+					);
+				} finally {
+					if (Original === undefined) {
+						delete process.env["HOME"];
+					} else {
+						process.env["HOME"] = Original;
+					}
+				}
 			});
 		}
 	}

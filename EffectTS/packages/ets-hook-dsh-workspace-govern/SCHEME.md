@@ -30,6 +30,26 @@ the next step (`plugin-dsh-workspace-authority`), not this one.
 
 Configurable per row via the `recovery` config field.
 
+## The policy block (D6) - the `automation` key
+
+The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
+factory's block), mapped to `State.Allow`. The key is `automation`, **not** `policy`, because
+`policy` is already this hook's decision rule table (a different contract; the `plugin-dsh-route`
+precedent):
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The hook's action class is RECORD, which is **automatic**: it records a gate decision and nothing
+else. The package has **NO gated action** (no file write, no batch commit, no spawn), so the block
+documents the posture and refuses nothing. The block is one volatile object, so a policy flip is
+hot-editable without a remount; a resolved pack's `policy` section overrides the defaults per action
+(the wiring is the next refinement). No new ledger line: the package has no gated action.
+
 ## Records
 
 - **Proposal** (`Source/Interface/Proposal.ts`): the operate family's ProposedChange,

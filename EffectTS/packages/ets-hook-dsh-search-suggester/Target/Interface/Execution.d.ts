@@ -90,6 +90,12 @@ export interface Knowledge {
     intents: Record<string, Record<string, KnowledgeRow>>;
     /** The journal (the last 2000 entries, a ring). */
     journal: KnowledgeEntry[];
+    /** The durable dismissals (the `suggestion_dismiss` tool's record, pruned on read). */
+    dismissals: Dismissal[];
+    /** True once the offline seed ran (Function/Seed); the rows keep their own marker. */
+    seed?: boolean;
+    /** The epoch-seconds timestamp of the last seed run. */
+    seededAt?: number;
     /** The stats counters. */
     stats: {
         emitted: number;
@@ -97,6 +103,15 @@ export interface Knowledge {
         ignored: number;
         dismissed: number;
     };
+}
+/** One recorded dismissal (the plan's section 5.2 dismissals row). */
+export interface Dismissal {
+    /** The dismissed suggestion family (the intent id). */
+    intent: string;
+    /** The dismissed candidate path; absent means the whole family. */
+    path?: string;
+    /** The epoch-seconds expiry: at or after it the dismissal is forgotten. */
+    until: number;
 }
 /** One learned candidate row. */
 export interface KnowledgeRow {
@@ -106,6 +121,8 @@ export interface KnowledgeRow {
     followed: number;
     /** The last seen timestamp (epoch seconds). */
     lastSeen: number;
+    /** True when the row came from the offline seed (the online counts move on top). */
+    seed?: boolean;
 }
 /** One journal entry. */
 export interface KnowledgeEntry {

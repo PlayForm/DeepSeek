@@ -29,7 +29,7 @@ export default Compose(
 	{
 		// Ledger file — the CARGO MODULE's OWN ledger (separate from
 		// the package governor's).
-		logFile: "~/.dsh/ets-hook-dsh-cargo-governor.log",
+		logFile: "~/.dsh/playform/ets-hook-dsh-cargo-governor.log",
 	},
 	{
 		// Strict chain pass: strip unknown deps (the whole `name = "…"` entry) in

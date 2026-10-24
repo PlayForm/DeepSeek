@@ -137,14 +137,18 @@ export const Furnace: any = new FactoryClass({
  * The fake ctx: the ROOT object is DISTINCT from the ctx; ctx.on() captures
  * into CtxListeners; effect runs its setup immediately; fs records every
  * access and must stay untouched (the suggester writes its knowledge through
- * its own node:fs channel, never through ctx.fs).
+ * its own node:fs channel, never through ctx.fs). `tools.register` captures
+ * the registered tool definitions (the `suggestion_dismiss` tool) into
+ * `Run.Tools`; `Prepare` runs BEFORE apply, so a test can mount the optional
+ * `workspaceGraph` seam the projection probes.
  */
-export const Make = (Raw: any): any => {
+export const Make = (Raw: any, Prepare?: (Context: any) => void): any => {
 	const CtxListeners: any = {};
 	const Lines: string[] = [];
 	const Warns: string[] = [];
 	const Effects: string[] = [];
 	const RootNames: string[] = [];
+	const Tools: any[] = [];
 	const Root: any = {
 		on: (Name: string, _Listener: unknown) => {
 			RootNames.push(Name);
@@ -177,6 +181,12 @@ export const Make = (Raw: any): any => {
 			return () => true;
 		},
 		get: (Name: string) => Context[Name],
+		tools: {
+			register: (Definition: unknown) => {
+				Tools.push(Definition);
+				return () => true;
+			},
+		},
 		effect: (Setup: () => unknown, Label?: string) => {
 			Effects.push(Label ?? "unnamed");
 			const Disposer = Setup();
@@ -193,10 +203,40 @@ export const Make = (Raw: any): any => {
 			},
 		},
 	};
-	const Run: any = { Context, Root, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw };
+	Prepare?.(Context);
+	const Run: any = { Context, Root, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw, Tools };
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__hookDshSearchSuggesterState;
 	return Run;
+};
+
+/**
+ * The fake workspaceGraph seam the projection probes: a snapshot over the
+ * given nodes plus a counter of snapshot reads (the refresh test reads it).
+ * A node is `{ path, kind, version? }`; the id and fingerprint are derived.
+ */
+export const FakeGraph = (
+	Nodes: { path: string; kind: string; version?: string }[],
+	Revision = "r1",
+): any => {
+	const Calls = { snapshots: 0 };
+	return {
+		Calls,
+		snapshot: () => {
+			Calls.snapshots += 1;
+			return {
+				indexRevision: Revision,
+				nodes: Nodes.map((Node) => ({
+					id: `${Node.kind}:${Node.path}`,
+					kind: Node.kind,
+					path: Node.path,
+					version: Node.version ?? "1",
+					fingerprint: "f",
+				})),
+				edges: [],
+			};
+		},
+	};
 };
 
 /**

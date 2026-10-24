@@ -98,7 +98,7 @@ The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (
         name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-package-pinner.log
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]
 ```
 
@@ -233,7 +233,7 @@ New patch entries are declared with `insert:`.
         name: "@playform/ets-hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
+            logFile: ~/.dsh/playform/ets-hook-dsh-package-pinner.log # SEPARATE ledger (own plugin)
             mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: "" # optional global pin-policy.json (else discovery, else built-in)
             updateCooldownMs: 3000 # carried by the shared block, never read (no update stage)
@@ -267,7 +267,7 @@ tailwindcss keeps its range; the other two dependencies are pinned.
 The transcript shows only what the author wrote; the ledger shows the pin:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (pinner, logFile=~/.dsh/ets-hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
+[2026-10-03T09:15:22.411Z] activated (pinner, logFile=~/.dsh/playform/ets-hook-dsh-package-pinner.log, sections=[dependencies, devDependencies, peerDependencies, optionalDependencies], exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app])
 [2026-10-03T09:16:01.880Z] pinned ~/Projects/acme/tool/package.json (2 versions)
 ```
 
@@ -286,8 +286,9 @@ line, e.g. `observed non-JSON package.json ... - skipped`, before the silence.)
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/ets-hook-dsh-package-pinner.log` - SEPARATE from the
-governor's ledger) records activation, exclusions, non-JSON skips, refusals, and every pin result.
+One global log (`logFile`, default `~/.dsh/playform/ets-hook-dsh-package-pinner.log` - SEPARATE from
+the governor's ledger) records activation, exclusions, non-JSON skips, refusals, and every pin
+result.
 
 The strings this module composes (the ets-hook-dsh-package-pinner: logger prefix is the factory's
 `Append`; each line is `[<ISO>] <message>` in the file):

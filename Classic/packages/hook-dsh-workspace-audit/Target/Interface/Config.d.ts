@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /** Ledger enabled - write the durable log file (the shared `log` cell). */
     log: boolean;
@@ -11,4 +12,9 @@ export default interface Config {
     maxLines: number;
     /** The excluded path patterns (the factory's segment match). */
     exclude: string[];
+    /** The per-action allowlist (D6) - the shared factory block. This
+     *  package's actions are record (automatic); it has NO gated action, so
+     *  the block documents the posture without refusing anything. A resolved
+     *  pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

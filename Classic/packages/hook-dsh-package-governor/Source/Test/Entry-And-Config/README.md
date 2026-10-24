@@ -32,7 +32,7 @@ sections 1-2 (the source suite stays in place during the migration).
         - strict=false, maxUpdateFailures=3, updateMode="programmatic",
           ncuBin="ncu", policyFile="", exclude = the six built-in segments
     - Sub: "Config: the default logFile is the documented ledger path"
-        - Governor.Config({}).logFile.get() === "~/.dsh/hook-dsh-package-governor.log"
+        - Governor.Config({}).logFile.get() === "~/.dsh/playform/hook-dsh-package-governor.log"
 
 ## Fixtures
 

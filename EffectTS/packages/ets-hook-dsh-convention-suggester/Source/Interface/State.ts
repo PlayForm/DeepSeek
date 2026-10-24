@@ -20,6 +20,7 @@
 //   Intents        - the enabled intent ids (config `intents`, volatile);
 //   EmitOn         - the judged tool names (config `emitOn`, volatile);
 //   Exclude        - candidate path prefixes never suggested (config `exclude`, volatile);
+//   Learning       - the learning bootstrap switch (config `learning`, volatile, default false);
 //   Rules          - the compiled pack, built ONCE at apply (hot path: no regex compilation);
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
@@ -49,6 +50,8 @@ export default interface State extends Shared {
 	EmitOn: string[];
 	/** The candidate path prefixes never suggested (config `exclude`, volatile). */
 	Exclude: string[];
+	/** The learning bootstrap switch (config `learning`, volatile; default false). */
+	Learning: boolean;
 	/** The compiled pack, built once at apply. */
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */

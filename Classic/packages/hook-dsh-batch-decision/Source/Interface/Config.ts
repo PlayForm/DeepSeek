@@ -2,6 +2,8 @@
 // The schema that produces it lives in Variable/Config.ts. Every cell is
 // volatile; the factory's State builder unwraps them and refreshes them in
 // place on loader/volatile.
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 export default interface Config {
 	/** Master switch - the idle-forever posture: false is the default. */
 	enabled: boolean;
@@ -18,4 +20,9 @@ export default interface Config {
 	minConfidence: number;
 	/** How long a decided/expired proposal stays in the pending map. */
 	pendingTtlMs: number;
+	/** The per-action allowlist (D6): the OUTER gate in front of
+	 * `autoApprove`. The shared factory block - `commit` defaults to
+	 * `approve`, so a policy auto-approval waits for the user until it is
+	 * opened. A resolved pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

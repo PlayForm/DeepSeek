@@ -19,4 +19,14 @@ export default interface Config {
     maxNotesPerTurn: number;
     /** The excluded directories - an edit inside them never notes (volatile). */
     exclude: string[];
+    /** The learning layer's master switch (volatile): false is the pure PoC posture. */
+    learn: boolean;
+    /** The follow-through window in judged calls (volatile; no timers). */
+    learnWindow: number;
+    /** The enabled pickable heuristics (volatile); a name left out is dropped from the score. */
+    heuristics: string[];
+    /** The pickable weight table (volatile); a missing name falls back to the default. */
+    weights: Record<string, number>;
+    /** The in-memory fallback's bound (volatile). */
+    storeLimit: number;
 }

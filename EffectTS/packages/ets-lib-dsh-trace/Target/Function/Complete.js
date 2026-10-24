@@ -1,0 +1,1 @@
+var o=(e,t)=>({trace:typeof e.trace=="string"&&e.trace.length>0?e.trace:`trace-${t}`,kind:e.kind,at:typeof e.at=="number"?e.at:Date.now(),...e.actor===void 0?{}:{actor:e.actor},payload:e.payload});export{o as default};

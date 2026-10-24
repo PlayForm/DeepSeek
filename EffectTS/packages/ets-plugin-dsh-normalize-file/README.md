@@ -226,11 +226,11 @@ condition in one.
 
 ## The Config
 
-| Field         | Type    | Default                                    | Volatile | Meaning                                                     |
-| ------------- | ------- | ------------------------------------------ | -------- | ----------------------------------------------------------- |
-| `log`         | boolean | `true`                                     | yes      | write the durable ledger file                               |
-| `logFile`     | string  | `~/.dsh/ets-plugin-dsh-normalize-file.log` | yes      | the normalize-file ledger (separate from the family's logs) |
-| `replacement` | string  | `"-"`                                      | yes      | the dash step's replacement (the transform's only knob)     |
+| Field         | Type    | Default                                             | Volatile | Meaning                                                     |
+| ------------- | ------- | --------------------------------------------------- | -------- | ----------------------------------------------------------- |
+| `log`         | boolean | `true`                                              | yes      | write the durable ledger file                               |
+| `logFile`     | string  | `~/.dsh/playform/ets-plugin-dsh-normalize-file.log` | yes      | the normalize-file ledger (separate from the family's logs) |
+| `replacement` | string  | `"-"`                                               | yes      | the dash step's replacement (the transform's only knob)     |
 
 There are no stream flags (`normalizeReasoning`, `normalizeToolArguments`) and no fs/observed fields
 (`updateCooldownMs`, `mutationTools`, `policyFile`, `exclude`): the minimal `shared: false` block
@@ -368,7 +368,7 @@ Two lines, both written through the factory's `Append` (the ets-plugin-dsh-norma
 the logger's `<State.Module>:`; the durable file line is `[<ISO>] <message>`):
 
 ```text
-ets-plugin-dsh-normalize-file: activated (replacement=-, logFile=~/.dsh/ets-plugin-dsh-normalize-file.log)
+ets-plugin-dsh-normalize-file: activated (replacement=-, logFile=~/.dsh/playform/ets-plugin-dsh-normalize-file.log)
 ets-plugin-dsh-normalize-file: normalized N char(s) in <path>
 ```
 

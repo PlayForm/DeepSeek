@@ -42,12 +42,18 @@ export const MonorepoRoot = () =>
 /** The Classic release tree - the packing source per the plan (§2.2). */
 export const PackagesDir = () => Path.join(MonorepoRoot(), "Classic", "packages");
 
-// The twelve release packages: the bundle-list name and the candidate source
-// directory names (the tree's package directories were renamed hook-dsh-* →
-// hook-dsh-* mid-batch; both spellings are accepted).
+// The release packages: the original twelve plus the two new workspace
+// libraries, with the candidate source directory names (the tree's package
+// directories were renamed hook-dsh-* → hook-dsh-* mid-batch; both spellings
+// are accepted).
 const Bundles = [
 	["@playform/plugin-dsh-factory", ["plugin-dsh-factory", "plugin-dsh-factory"]],
 	["@playform/lib-dsh-core", ["lib-dsh-core", "lib-dsh-core"]],
+	// The two new libraries: not bundles (no dsh.bundle), but dependencies of
+	// the factory (trace) and the six suggesters (pack) - packed and
+	// overridden so the scratch install never reaches the registry.
+	["@playform/lib-dsh-trace", ["lib-dsh-trace", "lib-dsh-trace"]],
+	["@playform/lib-dsh-pack", ["lib-dsh-pack", "lib-dsh-pack"]],
 	[
 		"@playform/hook-dsh-package-governor",
 		["hook-dsh-package-governor", "hook-dsh-package-governor"],
@@ -291,15 +297,19 @@ const ProfileManifest = (Deps) =>
 			private: true,
 			dsh: {
 				profile: {
-					// The bundle list mirrors the live desktop profile: the core
-					// package is a dependency only - it declares no dsh.bundle,
-					// so listing it as a bundle makes the loader fail loud.
+					// The bundle list mirrors the live desktop profile: the
+					// libraries (core, trace, pack) are dependencies only - they
+					// declare no dsh.bundle, so listing one as a bundle makes the
+					// loader fail loud.
 					bundles: [
 						"@deepseek-ai/dsh-base",
 						"@deepseek-ai/dsh-web-app",
-						...Bundles.filter(([Name]) => Name !== "@playform/lib-dsh-core").map(
-							([Name]) => Name,
-						),
+						...Bundles.filter(
+							([Name]) =>
+								Name !== "@playform/lib-dsh-core" &&
+								Name !== "@playform/lib-dsh-trace" &&
+								Name !== "@playform/lib-dsh-pack",
+						).map(([Name]) => Name),
 					],
 				},
 			},
@@ -484,6 +494,10 @@ const CreateScratch = (Home) => {
 			"@playform/plugin-dsh-factory":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/plugin-dsh-factory"]),
+			"@playform/lib-dsh-trace":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/lib-dsh-trace"]),
+			"@playform/lib-dsh-pack":
+				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/lib-dsh-pack"]),
 		}),
 	);
 

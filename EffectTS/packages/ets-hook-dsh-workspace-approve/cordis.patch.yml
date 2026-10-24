@@ -21,8 +21,26 @@
 # (domain workspace_approve, maxBindings 1000, requireConstraints true)
 # lives in the Variable/Config.ts schema. Every knob is volatile
 # (hot-editable without remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# approve hook's actions are RECORD (it binds a candidate and decides on a
+# binding) - all AUTOMATIC - so the package has NO gated action: it never
+# writes a file, commits a batch or spawns an agent, and no verdict can
+# refuse it. read/index/record/suggest and message are automatic;
+# write/commit/spawn wait for approval for the family's write paths. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: hook-dsh-workspace-approve
         name: "@playform/ets-hook-dsh-workspace-approve"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

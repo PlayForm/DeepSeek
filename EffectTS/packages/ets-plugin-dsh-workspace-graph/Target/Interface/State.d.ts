@@ -1,6 +1,8 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type Configuration from "@Interface/Config.js";
 import type Record from "@Interface/Record.js";
+import type { Queue } from "@playform/ets-lib-dsh-trace";
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /** The minimal structural view of an open storage-domain table (Store). */
 export interface Table {
     get(key: string): unknown;
@@ -19,6 +21,11 @@ export interface Domain {
 export default interface State {
     Context: Context;
     Config: Configuration;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 block.
+     *  Named `Allow` because the factory's shared State already owns `Policy`
+     *  (the configured global policy file path). This package's actions are
+     *  automatic; it has NO gated action. */
+    Allow: Allowlist;
     Records: Map<string, Record>;
     Revision: number;
     Domain?: Domain | undefined;
@@ -26,4 +33,9 @@ export default interface State {
     Ledger: string;
     Invalid: number;
     SkippedImports: number;
+    /** The detached loop the trace adapter builds (undefined when no bus was
+     *  present at construction - the graph then hears no observation trace). */
+    Loop?: Queue | undefined;
+    /** The latest detached re-index; the smoke awaits it (no sleep, no timer). */
+    Flush: Promise<void>;
 }

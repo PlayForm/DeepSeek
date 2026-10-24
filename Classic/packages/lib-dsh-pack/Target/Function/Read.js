@@ -1,0 +1,1 @@
+import{readFileSync as t}from"node:fs";import{extname as a}from"node:path";import n from"./Parse.js";var s=e=>{const o=t(e,"utf8"),r=a(e)===".json"?JSON.parse(o):n(o);if(r===null||typeof r!="object"||Array.isArray(r))throw new Error(`pack ${e}: the root must be a mapping`);return r};export{s as default};

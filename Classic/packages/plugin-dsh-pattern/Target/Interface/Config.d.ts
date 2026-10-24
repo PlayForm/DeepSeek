@@ -1,9 +1,13 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /** Master switch (default true - a registry is inert without callers). */
     enabled: boolean;
     /** The service's own ledger file, one log per module. */
     logFile: string;
-    /** The JSON snapshot path (the local store under ~/.dsh). */
+    /** The storage-domain name - the PRIMARY store (the KV domain). */
+    domain: string;
+    /** The JSON snapshot path - the FALLBACK store, engaged only when the
+     *  harness provides no storage facility (or its open fails). */
     storagePath: string;
     /** Matches below this abstain (the empty result, never a guess). */
     matchThreshold: number;
@@ -18,4 +22,9 @@ export default interface Config {
     rejectPenalty: number;
     appliedBonus: number;
     failedPenalty: number;
+    /** The per-action allowlist (D6): the shared factory block. The service
+     *  matches, records and decays - `read`/`record`/`suggest` are automatic;
+     *  the write/commit/spawn verdicts stay the shipped `approve`. A resolved
+     *  pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

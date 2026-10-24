@@ -20,8 +20,27 @@
 # surface (propagate block, maxFileBytes 1000000, maxBlockLines 5000) lives
 # in the Variable/Config.ts schema. Every knob is volatile (hot-editable
 # without remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# reflect's gated actions are the WRITES - a replace and a rename - so
+# `write: approve` refuses the operation before the file is read or written,
+# with the documented `replace held <path> (policy write=approve)` /
+# `rename held <path> (policy write=approve)` lines and zero writes (the
+# fingerprint targeting is unchanged). read/index/record/suggest and message
+# are automatic; write/commit/spawn wait for approval. A resolved pack's
+# `policy` section overrides these defaults per action (the wiring is the
+# next refinement).
 - insert:
       - id: plugin-dsh-workspace-reflect
         name: "@playform/ets-plugin-dsh-workspace-reflect"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

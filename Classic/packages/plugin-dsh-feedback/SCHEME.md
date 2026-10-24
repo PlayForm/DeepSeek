@@ -28,18 +28,47 @@ council summary. Service `feedback` on the context.
 - `Delta(session, agentId, text)` - the parent's append.
 - `Read(session, agentId, reader)` - the recipient's optional read.
 - `Summary(session)` - the council view.
+- `Outcome(session, agentId, proposal, outcome, detail)` - the batch outcome's record (the
+  caller-side orchestration integration the plan defers; the ingester is the caller that owns the
+  apply's result). Appended to the session's outcome ring (bounded by `maxOutcomes`) and journaled;
+  the summary carries it beside the blocks. A disabled service or an empty proposal id records
+  nothing.
 
 ## 3. The journal
 
-`logFile` - one JSON line per event: `{ at, event, session, agentId, block }`. Append-only,
-best-effort (a ledger failure never breaks the service). The journal is the plugin's own diagnostic
-log, appended with a plain `appendFileSync` (the factory's documented exemption - the governed-write
-path does not apply to a plugin's own log).
+`logFile` - one JSON line per event, in two shapes:
+
+- the block events: `{ at, event, session, agentId, block }`;
+- the batch outcome: `{ at, event: "batch", session, agentId, proposal, outcome, detail }`.
+
+Append-only, best-effort (a ledger failure never breaks the service). The journal is the plugin's
+own diagnostic log, appended with a plain `appendFileSync` (the factory's documented exemption - the
+governed-write path does not apply to a plugin's own log).
 
 ## 4. Config
 
 See README.md's table. All knobs are read at construction (the class form has no factory State to
 hot-refresh); a config edit reloads the plugin.
+
+### 4.1 The policy block (D6)
+
+The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
+`Schema.object` call; the validated shape is `State.Config.policy` (the class form has no factory
+State mapping):
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The feedback member is a PASSIVE collector: it records outcomes and suggests summaries (`record` and
+`suggest`, both automatic) and never writes, commits or spawns - those verdicts are declared for
+uniformity with the family's block and stay the shipped `approve`. A resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement; the type already
+exists in `@playform/lib-dsh-pack`). The defaults are smoke-arbitrated in
+`Source/Test/Policy-Defaults`.
 
 ## 5. The transfer semantics
 

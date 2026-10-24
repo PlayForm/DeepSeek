@@ -15,6 +15,12 @@
 // `merge: batch <id> started ...` and `merge: batch <id> complete ...`.
 // The record is persisted after the batch (the journal the recovery
 // domain reads later).
+//
+// THE POLICY GATE (D6): the commit is the hook's gated action. An `approve`
+// verdict for `commit` (the shipped default) holds the WHOLE batch before
+// the gates and before any write, with the documented
+// `merge held (<n> files) (policy commit=approve)` line; the reply is the
+// `rejected` commit shape and nothing is persisted. `auto` proceeds.
 import CommitOne from "@Function/CommitOne.js";
 import Gate from "@Function/Gate.js";
 import Persist from "@Function/Persist.js";
@@ -23,6 +29,7 @@ import type Commit from "@Interface/Commit.js";
 import type Operation from "@Interface/Operation.js";
 import type Reply from "@Interface/Reply.js";
 import type State from "@Interface/State.js";
+import { Decide } from "@playform/ets-plugin-dsh-factory";
 
 export default async (State: State, Request: Batch): Promise<Commit> => {
 	State.Sequence += 1;
@@ -32,6 +39,28 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 			: `batch-${State.Sequence}`;
 	const Operations = Array.isArray(Request.operations) ? Request.operations : [];
 	const TotalBytes = Operations.reduce((Sum, Op) => Sum + (Op?.content?.length ?? 0), 0);
+	// THE POLICY GATE (D6): the OUTER gate, in front of the atomic gates and
+	// every write. An `approve` verdict refuses the whole merge with the
+	// documented line and ZERO writes - the batch never starts, nothing is
+	// persisted, and every operation is replied `rejected` with the reason.
+	// `auto` (or a pack override to `auto`) proceeds to the gates.
+	switch (Decide(State.Allow, "commit")) {
+		case "auto":
+			break;
+		default: {
+			const Reason = "the policy holds the commit (commit=approve)";
+			State.Factory.Append(
+				State,
+				`merge held (${Operations.length} files) (policy commit=approve)`,
+			);
+			const Replies: Reply[] = Operations.map((Op) => ({
+				path: Op.path,
+				status: "rejected",
+				reason: Reason,
+			}));
+			return { id: Id, status: "rejected", replies: Replies, reason: Reason };
+		}
+	}
 	State.Factory.Append(
 		State,
 		`batch ${Id} started (${Operations.length} files, ${TotalBytes} bytes)`,

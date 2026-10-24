@@ -1,6 +1,9 @@
 import type FactoryHandle from "./Factory.js";
-import type { State as Base } from "@playform/ets-plugin-dsh-factory";
+import type Packet from "./Packet.js";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
+    /** Master switch (config `enabled`, volatile) - false = full no-op. */
+    On: boolean;
     /** Config `budgetTokens` - the budget target (volatile). */
     BudgetTokens: number;
     /** Config `budgetMaximum` - the budget hard cap (volatile). */
@@ -20,6 +23,11 @@ interface Extra {
     /** Config `workspaceName` - the packet header's workspace name
      *  (volatile). */
     WorkspaceName: string;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 block.
+     *  Named `Allow` because the factory's shared State already owns `Policy`
+     *  (the configured global policy file path). This package's actions are
+     *  automatic; it has NO gated action. */
+    Allow: Allowlist;
     /** The injected factory instance (the State builder, the ledger, the
      *  match). */
     Factory: FactoryHandle;
@@ -30,6 +38,9 @@ interface Extra {
         id: string;
         version: string;
     }>;
+    /** The packet memo (Function/Cached), keyed by Function/CacheKey; cleared
+     *  by the trace's `graph/invalidated` consumer (Trace/Invalidate). */
+    Cache: Map<string, Packet>;
     /** Performance counters: packets built. */
     Packets: number;
     /** Performance counters: packets that hit the budget clamp. */

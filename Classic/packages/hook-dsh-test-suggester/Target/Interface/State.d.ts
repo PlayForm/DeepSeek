@@ -25,6 +25,8 @@ export default interface State extends Shared {
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */
     Agents: WeakMap<object, AgentMemory>;
+    /** The package roots whose reconciliation logged its consistent-tree line. */
+    Cleared: Set<string>;
     /** The injected @playform/plugin-dsh-factory service - the ledger
      *  (Factory.Append) is consumed through it; assigned once in Function/Apply. */
     Factory: Factory;
@@ -38,5 +40,7 @@ export interface AgentMemory {
     TurnNotes: number;
     /** The last probes (most recent first, capped at 8). */
     Ring: string[];
+    /** Package root -> the drift signature of the last reconciliation note. */
+    Reconciled: Map<string, string>;
 }
 export type { Config };

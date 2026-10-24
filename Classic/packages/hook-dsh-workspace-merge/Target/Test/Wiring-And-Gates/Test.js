@@ -15,7 +15,7 @@ import {
 } from "../Harness.js";
 const Setup = (Config = {}) => {
   rm();
-  return Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+  return Make(Validate({ logFile: Ledger, enabled: true, policy: { commit: "auto" }, ...Config }));
 };
 const runTest = async () => {
   const Count = MakeCounter();
@@ -106,7 +106,14 @@ const runTest = async () => {
       assert.equal(Reply.reason, "duplicate path /repo/src/a.ts");
     });
     await CheckAsync(Count, "G5: the size gate and the byte gate reject with their reasons", async () => {
-      const Small = await Make(Validate({ logFile: Ledger, enabled: true, maxFiles: 1 }));
+      const Small = await Make(
+        Validate({
+          logFile: Ledger,
+          enabled: true,
+          maxFiles: 1,
+          policy: { commit: "auto" }
+        })
+      );
       const ReplySmall = await Small.Context.workspaceMerge.commit({
         operations: [
           { path: "/repo/src/a.ts", content: "x", version: "v1" },
@@ -115,7 +122,12 @@ const runTest = async () => {
       });
       assert.equal(ReplySmall.reason, "too many files (2 > 1)");
       const Byte = await Make(
-        Validate({ logFile: Ledger, enabled: true, maxTotalBytes: 10 })
+        Validate({
+          logFile: Ledger,
+          enabled: true,
+          maxTotalBytes: 10,
+          policy: { commit: "auto" }
+        })
       );
       const ReplyByte = await Byte.Context.workspaceMerge.commit({
         operations: [{ path: "/repo/src/a.ts", content: "0123456789012345", version: "v1" }]

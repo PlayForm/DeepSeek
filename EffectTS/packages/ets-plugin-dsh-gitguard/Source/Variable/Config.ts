@@ -26,7 +26,7 @@
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 // The default DENY-LIST (the plan's list, section 3): every git mutation
 // pattern. The MUTATIONS ONLY - the read-only checks are never listed.
@@ -63,7 +63,7 @@ const DEFAULT_DENY = [
 const DEFAULT_ALLOW = ["status", "log", "diff", "show", "rev-parse", "ls-files", "fetch"];
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/plugin-dsh-gitguard.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-gitguard.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The deny-list: the git subcommands that are always refused. Setting
 	// the field REPLACES the default list (not merge).
@@ -76,4 +76,12 @@ export default Compose(false, {
 	// The paths the guard ignores (the factory's segment match): a dispatch
 	// whose working directory matches skips the guard entirely.
 	exclude: Schema.array(Schema.string()).default([]).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The guard itself is a
+	// READ-ONLY gate (it never writes, commits or spawns), so its own action
+	// classes are `read` (the classification) and `record` (the denial
+	// ledger) - both automatic; the write/commit/spawn verdicts are declared
+	// for uniformity with the family's block and stay the shipped `approve`.
+	// Volatile as one object; a resolved pack's `policy` section overrides the
+	// defaults per action (the wiring is the next refinement).
+	policy: Policy(),
 });

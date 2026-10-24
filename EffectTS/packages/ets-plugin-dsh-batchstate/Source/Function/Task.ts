@@ -8,6 +8,7 @@
 // active, finishedAt cleared - the redo case).
 import Emit from "@Function/Emit.js";
 import Ensure from "@Function/Ensure.js";
+import Persist from "@Function/Persist.js";
 import type State from "@Interface/State.js";
 
 export default (State: State, Agent: string, Task: string): void => {
@@ -27,5 +28,6 @@ export default (State: State, Agent: string, Task: string): void => {
 		default:
 	}
 	State.Factory.Append(State, `task ${Agent}: ${Task}`);
+	Persist(State);
 	Emit(State, { batch: State.Batch, id: Agent, kind: "task" });
 };

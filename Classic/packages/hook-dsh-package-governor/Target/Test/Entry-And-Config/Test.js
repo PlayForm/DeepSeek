@@ -68,7 +68,7 @@ const runTest = async () => {
       Check(Count, Sub, () => {
         assert.equal(
           Governor.Config({}).logFile.get(),
-          "~/.dsh/hook-dsh-package-governor.log",
+          "~/.dsh/playform/hook-dsh-package-governor.log",
           "logFile default (volatile cell) - must equal the cordis.patch.yml row and the README"
         );
       });

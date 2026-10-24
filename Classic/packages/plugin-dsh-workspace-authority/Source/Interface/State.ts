@@ -12,9 +12,11 @@ import type FactoryHandle from "@Interface/Factory.js";
 import type Lease from "@Interface/Lease.js";
 import type PolicyRule from "@Interface/Policy.js";
 import type Residency from "@Interface/Residency.js";
-import type { State as Base } from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 
 interface Extra {
+	/** Master switch (config `enabled`, volatile) - false = full no-op. */
+	On: boolean;
 	/** Config `defaultTtlMs` - the default lease TTL (volatile). */
 	DefaultTtlMs: number;
 	/** Config `maxLeasesPerHolder` - the lease ceiling (volatile). */
@@ -25,6 +27,12 @@ interface Extra {
 	RevocationGraceMs: number;
 	/** Config `policy` - the policy table (volatile). */
 	PolicyRules: PolicyRule[];
+	/** The per-action allowlist (config `automation`, volatile) - the D6
+	 *  block. Keyed `automation` in the config because `policy` is the
+	 *  residency rule table; named `Allow` here because the factory's shared
+	 *  State already owns `Policy` (the configured global policy file path).
+	 *  This package's actions are automatic; it has NO gated action. */
+	Allow: Allowlist;
 	/** The injected factory instance (the State builder, the ledger). */
 	Factory: FactoryHandle;
 	/** The capability records, keyed by id. */

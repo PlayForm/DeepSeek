@@ -14,8 +14,24 @@
 # default and the patch row; a cold mount logs `disabled (enabled=false)`
 # and Match returns the empty result (the abstention) - the service stays
 # resolvable so consumers never hard-fail.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The service matches, records and decays (read/record/
+# suggest automatic) and never writes files, commits or spawns - the
+# write/commit/spawn verdicts are declared for family uniformity and stay the
+# shipped approve. A resolved pack's `policy` section overrides these defaults
+# per action (the wiring is the next refinement).
 - insert:
       - id: plugin-dsh-pattern
         name: "@playform/plugin-dsh-pattern"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

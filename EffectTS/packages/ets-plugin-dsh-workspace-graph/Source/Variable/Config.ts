@@ -17,6 +17,7 @@
 // The schema is a real @deepseek-ai/schemastery instance - the loader
 // consumes it through the Standard Schema `~standard` interface.
 import Schema from "@deepseek-ai/schemastery";
+import { Policy } from "@playform/ets-plugin-dsh-factory";
 import DEFAULT_EXCLUDE from "@Variable/Default.js";
 
 export default Schema.object({
@@ -29,6 +30,19 @@ export default Schema.object({
 	exclude: Schema.array(Schema.string()).default(DEFAULT_EXCLUDE).volatile(),
 	maxFileBytes: Schema.number().default(1000000).volatile(),
 	maxNodesPerFile: Schema.number().default(5000).volatile(),
+	// The `indexWorkspace` walk bound (the one field the indexing trigger
+	// added to the brief's table): the walk stops after this many candidate
+	// files, so a call on a large tree is bounded work. A caller's explicit
+	// `maxFiles` option overrides it for that call.
+	maxFiles: Schema.number().default(2000).volatile(),
 	limitDefault: Schema.number().default(50).volatile(),
 	limitMaximum: Schema.number().default(500).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The graph's actions are
+	// INDEX (automatic), so this package has NO gated action: it never writes a
+	// file, commits a batch or spawns an agent, and no verdict can refuse it.
+	// read/index/record/suggest/message are automatic; write/commit/spawn wait
+	// for approval for the family's write paths. Volatile as one object; a
+	// resolved pack's `policy` section overrides the defaults per action (the
+	// wiring is the next refinement; the type already exists).
+	policy: Policy(),
 });

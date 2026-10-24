@@ -32,6 +32,7 @@
 	},
 	"dependencies": {
 		"@playform/ets-base-dsh": "0.1.0",
+		"@playform/ets-lib-dsh-pack": "0.1.0",
 		"@playform/ets-plugin-dsh-factory": "0.1.0"
 	},
 	"devDependencies": {
@@ -42,7 +43,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

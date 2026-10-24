@@ -1,7 +1,7 @@
 # Plugin-Factory — Service Scheme (v0.1.0, TypeScript, class/service plugin)
 
-Status: **IMPLEMENTED and VERIFIED** (`tsc --noEmit` zero errors; minified build; 34-check smoke
-with a fake ctx + a REAL instance — ALL PASS).
+Status: **IMPLEMENTED and VERIFIED** (`tsc --noEmit` zero errors; minified build; the per-test
+folder suite - 45 checks across 7 folders, a fake ctx + a REAL instance - ALL PASS).
 
 This document ships inside the bundle as `SCHEME.md` (alongside the usage README) and IS the
 contract the trio refactor consumes.
@@ -29,6 +29,43 @@ there is no `Config` schema and no config row beyond `config: {}` in the patch.
 
 Consumption: `inject: ["pluginFactory"]` (required service) or `ctx.get("pluginFactory")` (optional
 probe).
+
+## 0.1 The trace bus (`ctx.trace`) — the second provided service
+
+The constructor also builds ONE trace bus and provides it as `ctx.trace` (the completion spec's D5:
+the indexer is inferred from the event bus; no separate process, no separate indexer plugin). The
+vocabulary (the envelope, the event names, the coalescing key, the guards, the detached loop) lives
+in `@playform/lib-dsh-trace`; the SERVICE lives here because the factory is the family's shared-
+machinery owner.
+
+```ts
+export default class PluginFactory extends Service {
+	static inject = ["fs"];
+	constructor(Context: Context) {
+		super(Context, "pluginFactory");
+		this.Trace = CreateTrace(); // Function/Trace
+		Context.provide?.("trace", this.Trace);
+		Context.effect?.(() => () => this.Trace.dispose(), "trace");
+	}
+	Trace: Trace; // Interface/Trace
+}
+```
+
+Both registrations are contained (a bare fixture context may not implement provide/effect; a second
+factory instance may find the name already provided) - neither may break the factory.
+
+| Member         | Contract                                                                                                                                                                                                                                                                                                         |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `emit(draft)`  | complete the envelope (`Complete`: `trace-<n>` and `at` when the emitter supplied none), push it into the ring, dispatch it to the listeners of its kind. Every listener is contained; the whole emit is contained: it NEVER throws into a caller. A malformed draft (no kind, a non-object payload) is ignored. |
+| `on(name, fn)` | subscribe; the returned disposer is idempotent. After `dispose`, a subscription returns a no-op disposer.                                                                                                                                                                                                        |
+| `flush()`      | the deterministic settle seam: the bus dispatches synchronously, so it resolves at once (no timer, no queue - the coalescing belongs to the adapters' loops).                                                                                                                                                    |
+| `ring(limit?)` | the bounded recent envelopes, NEWEST first; the bound is the library's fixed `Bound` = 256 (no config knob).                                                                                                                                                                                                     |
+| `dispose()`    | the unload path: drop every listener, stop dispatch; a late emit/subscription is a contained no-op.                                                                                                                                                                                                              |
+
+The service adds NO method to the 19-method `pluginFactory` surface and NO config field. The typed
+accessor is declaration-merged on the cordis Context (`ctx.trace`), and the entry re-exports the
+`Trace` type. The factory's smoke folder `Trace-Service` (9 checks) pins the registration, the
+round-trip, the ring, the disposer, the fail-open containment and the unload path.
 
 ## 1. The shared state (Interface/State)
 
@@ -64,6 +101,10 @@ Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, neve
 > field is state, not a method).
 >
 > §2.16's `UpdateKey` is the v0.1.1 P2 helper, factory-side since the cargo collision.
+>
+> §2.19 documents the two **module-level** helpers that sit BESIDE the surface — `Policy()` (the
+> shared policy-block builder, D6) and `Decide(policy, action)` (the verdict lookup). They are named
+> exports of the entry, not service methods, so the callable count above stays 19.
 
 ### 2.1 `Append(state, message): void`
 
@@ -383,11 +424,73 @@ every handler receives the same actor with `name`/`agent` intact, and the marker
 own `fs/observed` emit from re-entering the event-path governance (this direct path is the
 raw-write's ONLY governance channel).
 
+### 2.19 `Policy()` and `Decide(policy, action)` — the policy block (D6), MODULE-LEVEL exports
+
+Neither is a service method: the class surface stays at the documented nineteen. Both are named
+exports of the entry, for the same reason the standalone `Schema` export exists — the loader needs
+the composed `Config` at MODULE-EVALUATION time, before any context (and therefore any service
+instance) exists.
+
+```ts
+Policy(): Schema.object({ read, index, record, suggest, write, commit, spawn, message })
+Decide(policy: Allowlist, action: keyof Allowlist): "auto" | "approve"
+```
+
+The block carries ONE key per action class, each `Schema.union(["auto", "approve"])` with the D6
+default; the whole block is `.volatile()` (one hot-editable object — a flip re-reads wholesale into
+the consumer's mapped State field):
+
+| action    | default   | meaning                                                 |
+| --------- | --------- | ------------------------------------------------------- |
+| `read`    | `auto`    | read-only inspection of the workspace                   |
+| `index`   | `auto`    | building or refreshing the index                        |
+| `record`  | `auto`    | recording a decision, an outcome or a journal entry     |
+| `suggest` | `auto`    | emitting a suggestion or a note                         |
+| `write`   | `approve` | writing a file                                          |
+| `commit`  | `approve` | committing a batch of writes                            |
+| `spawn`   | `approve` | spawning an agent or starting a job                     |
+| `message` | `auto`    | sending a message to another agent (inside the session) |
+
+A consumer composes the block into its own schema and maps it to its own State field:
+
+```ts
+// Variable/Config.ts
+export default Compose(false, { ..., policy: Policy() });
+
+// Function/Apply.ts
+const State = Factory.State<State>(Context, Options, {
+  module: "…",
+  fields: { Allow: "policy", /* … */ },
+});
+```
+
+The shared State's `Policy` field stays the configured global policy FILE (Interface/State); the
+block's verdicts live on the consumer's own mapped field — the family convention is `Allow`.
+
+`Decide` answers the verdict for one action; the action names ARE the block's keys. A missing key (a
+partial or hand-built block) falls back to that action's D6 default from `Variable/Policy`, and a
+malformed value is treated as missing — a bad config can only be MORE conservative for
+write/commit/spawn and can never silently widen an automatic action. The helper never throws.
+
+THE PACK SECTION (D2/D3/D6): a pack's `policy` section — `@playform/lib-dsh-pack`'s `Policy` type,
+the same action → verdict mapping — OVERRIDES these defaults per action when a pack is resolved. The
+pack → policy defaulting wiring is the next refinement; the type and the section already exist, so a
+resolved pack's block is a straight overlay on `Variable/Policy`'s table (per action, the pack's
+value wins; an absent action keeps the D6 default).
+
+Consumers (the orchestration family): every package composes the block, maps it to `State.Allow`,
+and consults `Decide` before its gated action — `plugin-dsh-queue` before a spawn,
+`hook-dsh-batch-decision` before an auto-approval, `plugin-dsh-batch-edit` before an apply. The
+existing module knobs (`autoSpawn`, `autoApprove`) stay the INNER gate: the policy is the OUTER one,
+so `approve` beats an enabled knob, while a disabled knob still refuses on its own.
+
 ## 3. The model contract (what a refactor consumes)
 
 A model supplies:
 
-1. **Config** — `Factory.Schema({ logFile: … }, { …modelFields })`.
+1. **Config** — `Factory.Schema({ logFile: … }, { …modelFields })`. A module that can take a gated
+   action (a write, a batch commit, a spawn, a message) also composes the shared policy block:
+   `Factory.Schema({ … }, { …, policy: Policy() })` — see §2.19.
 2. **State** — `Factory.State(ctx, config, { model, fields, policyFileName })`; model fields via
    `fields` (e.g. `{ Section: "sections" }` or the governor's
    `{ Strict: "strict", Wait: "updateCooldownMs", Limit: "maxUpdateFailures", Binary: "ncuBin", Mode: "updateMode" }`).
@@ -428,4 +531,7 @@ update-policy path pick — it is engine input, not keep-list discovery), the le
   unreadable → null; throw containment; P3 chain-key protection), Wire, Attach (P1/P2/P5 incl.
   stub-domain open/drain/close and the absent silent-skip; the P5 spec contract — per-record layout,
   compatibleVersions [1], backup-and-skip — and the loud failed-open ledger line), Schema (volatile
-  cells, defaults, model slots, real validation through the schemastery instance).
+  cells, defaults, model slots, real validation through the schemastery instance), and the policy
+  block (Policy-And-Decide: the eight action classes in the D6 order and with the D6 defaults, the
+  partial override, the fail-loud unknown verdict, the composed volatile cell, and `Decide`'s
+  key-is-the-action contract plus its D6 fallback for a missing or malformed key).

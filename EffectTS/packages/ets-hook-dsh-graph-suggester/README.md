@@ -17,8 +17,11 @@ Two intents in the embedded pack (`Source/Variable/Defaults.ts`):
   sibling README).
 
 The graph service shape is declared in this package's own `Source/Interface/Graph.ts` (the
-self-contained PoC rule): no import from sibling workspace packages; the end-phase wires the real
-import.
+self-contained PoC rule): no import from sibling workspace packages. The real service
+(`@playform/plugin-dsh-workspace-graph`) now exposes the same `neighborhood(path, limit)` query -
+served from its W1 `contains`/`imports` edges, so W1 gives importers and tests rather than callers -
+and the `Real-Graph-Neighborhood` smoke folder proves this hook against the real populated graph
+(the real graph's own `indexWorkspace` fills it).
 
 ## How it works
 
@@ -29,5 +32,6 @@ import.
 
 ## Status
 
-PoC phase: the package and Source are complete; the smoke suites, the build pass, and the wiring are
-the end-phase (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+Built and smoked (the suite is the arbiter): `Loader-And-Activation`, `Pipeline-And-Graph` (the
+FakeGraph contract) and `Real-Graph-Neighborhood` (the real service). Ships `enabled: false` in the
+bundle patch.

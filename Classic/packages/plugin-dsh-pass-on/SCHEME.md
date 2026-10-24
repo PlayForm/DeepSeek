@@ -28,10 +28,33 @@ configured kind table; the params carry the kind's arguments.
 `Proposal` (Interface/Proposal.ts) stored in the state map and returned. `null` when the proposal
 would be empty or ambiguous - the abstention rule.
 
+## 3a. The publication (the real batch-contract wiring)
+
+A prepared proposal is CONVERTED to the canonical batch contract (Function/Batch -
+Interface/Batch.ts) and published two ways:
+
+1. `batch/proposed` on the bus (structural emit - the decision hook records it and the ingester
+   holds it);
+2. the harness agent-team inbox: `agent.inject(message)` on the origin agent
+   (`packages/core/agent/src/runtime-types.ts:241` - the read-only pre-step context splice that
+   commits the durable `agent/inbox/spliced` event), carrying
+
+    ```
+    [BATCH PROPOSAL - <id>]
+    <the canonical proposal JSON>
+    ```
+
+The origin is the caller's explicit argument, else the harness initiator
+(`packages/core/agent/src/index.ts:297`), else `""` (no return address). The conversion maps the
+intent OBJECT to the intent LABEL, adds `kind` to the operations beside the literal find/replace,
+and turns the preview array into `{ entries, changes, skipped }`.
+
 ## 4. The service surface
 
-- `Prepare(intent)` - the pipeline above + a journal line
-  (`{ at, event: "prepared", proposal, digest, targets, note }`).
+- `Prepare(intent, origin?)` - the pipeline above + the `prepared` journal line
+  (`{ at, event: "prepared", proposal, digest, targets, note }`), then the publication + the
+  `delivered` journal line
+  (`{ at, event: "delivered", proposal, digest, targets, note: "inbox <agent|none>" }`).
 - `Get(id)` - the stored proposal, or `null` when unknown/expired.
 
 ## 5. The write-trust boundary
@@ -39,8 +62,29 @@ would be empty or ambiguous - the abstention rule.
 The pass-on performs zero writes to target files. The only disk writes are its own ledger lines. The
 ingester is the batch's only writer (plan section 9, risk 2).
 
+## 5a. The policy block (D6)
+
+The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
+`Schema.object` call; the validated shape is `State.Config.policy` (the class form has no factory
+State mapping):
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The pass-on is READ-ONLY: it reads and proposes (`read`/`suggest`, both automatic) and never writes,
+commits or spawns - those verdicts are declared for uniformity with the family's block and stay the
+shipped `approve`. A resolved pack's `policy` section overrides the defaults per action (the wiring
+is the next refinement; the type already exists in `@playform/lib-dsh-pack`). The defaults are
+smoke-arbitrated in `Source/Test/Policy-Defaults`.
+
 ## 6. The relation to the other members
 
 - The search suggester supplies the intent (end-phase wiring).
-- The decision (hook-dsh-batch-decision) consumes the proposal and emits the BatchDecision.
+- The decision (hook-dsh-batch-decision) consumes the proposal on the bus and emits the
+  BatchDecision.
+- The board (plugin-dsh-batchstate) splices the proposal from the inbox.
 - The ingester consumes the proposal + decision and applies per target.

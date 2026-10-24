@@ -18,12 +18,35 @@
 # `disabled (enabled=false)` and the service answers honestly from an empty
 # index (resolve still builds through the adapter once enabled). The schema
 # defaults are the truth; the full default surface (domain
-# workspace_semantics, maxEntries 256, the glob triple exclude, and the
-# logFile default) lives in the Variable/Config.ts schema. EVERY knob is
-# volatile (hot-editable without remounting): enabled, log/logFile, domain,
-# maxEntries and exclude.
+# workspace_semantics, maxEntries 256, the glob triple exclude, root "",
+# lsp true, adapters [], and the logFile default) lives in the
+# Variable/Config.ts schema. EVERY knob is volatile (hot-editable without
+# remounting): enabled, log/logFile, domain, maxEntries, exclude, root, lsp
+# and adapters. `adapters` is the opt-in any-file catalog (json, yaml,
+# markdown, package) - empty by default, so the registration stays the seven
+# TypeScript/JavaScript extensions; `lsp` gates the harness LSP deepener
+# (probed at use time, never injected).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block, mapped to State.Allow. This package's actions are
+# read-only, all automatic - it has NO gated action (it never writes a file,
+# commits a batch or spawns an agent; the rename plan goes to the operate
+# proposals), so the block documents the posture and refuses nothing.
+# read/index/record/suggest/message are automatic; write/commit/spawn stay the
+# shipped `approve` for the family's write paths. A resolved pack's `policy`
+# section overrides these defaults per action (the wiring is the next
+# refinement).
 - insert:
       - id: plugin-dsh-workspace-semantics
         name: "@playform/ets-plugin-dsh-workspace-semantics"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

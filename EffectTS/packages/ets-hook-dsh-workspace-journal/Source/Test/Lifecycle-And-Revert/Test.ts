@@ -23,14 +23,17 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount; optional fs seeds and config overrides. */
+/** A standard enabled mount; optional fs seeds and config overrides. The D6
+ *  policy gate is OPENED here (`write: auto`) because this folder exercises
+ *  the revert; the shipped `write: approve` is arbitrated by
+ *  `Source/Test/Policy-Defaults`. */
 const Setup = async (
 	Config: Record<string, unknown> = {},
 	Files: Record<string, string> = {},
 	Stale: string[] = [],
 ): Promise<any> => {
 	rm();
-	const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+	const Run = Make(Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" }, ...Config }));
 	Run.Fs.files = Files;
 	for (const Path of Stale) {
 		Run.Fs.staleOn.add(Path);

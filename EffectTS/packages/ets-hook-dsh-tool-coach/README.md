@@ -129,8 +129,8 @@ a flip lands on the next judged call.
 
 ## The ledger
 
-One log per module: `~/.dsh/hook-dsh-tool-coach.log` (config `logFile`). The ten strings are the
-contract (byte-exact, `hook-dsh-tool-coach: ` prefix): `offense`, `strike … -> note`,
+One log per module: `~/.dsh/playform/hook-dsh-tool-coach.log` (config `logFile`). The ten strings
+are the contract (byte-exact, `hook-dsh-tool-coach: ` prefix): `offense`, `strike … -> note`,
 `cooldown suppressed`, `escalated persistent section`, `persistent section cleared`,
 `section rebuilt`, `denied … -> use`, `exempt`, `schema fetch failed -> static fallback`,
 `disabled (enabled=false)`.

@@ -88,7 +88,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "C6: the tilde default expands to the home directory", () => {
 			assert.equal(
 				Run.State.Ledger,
-				`${OS.homedir()}/.dsh/pass-on/pass-on.log`,
+				`${OS.homedir()}/.dsh/playform/plugin-dsh-pass-on.log`,
 			);
 		});
 	}

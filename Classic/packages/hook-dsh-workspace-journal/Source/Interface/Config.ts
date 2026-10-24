@@ -6,6 +6,8 @@
 // EVERY field is volatile (hot-editable without remounting): the loader hands
 // them to apply as stable `{ get }` references and the factory's State
 // builder unwraps them and refreshes them in place on loader/volatile.
+import type { Allowlist } from "@playform/plugin-dsh-factory";
+
 export default interface Config {
 	/** Ledger enabled - write the durable log file (the shared `log` cell). */
 	log: boolean;
@@ -22,4 +24,9 @@ export default interface Config {
 	maxEntryBytes: number;
 	/** The excluded path patterns (the factory's segment match). */
 	exclude: string[];
+	/** The per-action allowlist (D6) - the shared factory block. The revert is
+	 *  the hook's gated action: `write` defaults to `approve`, so a revert is
+	 *  held before any file is touched. A resolved pack's `policy` section
+	 *  overrides it per action. */
+	policy: Allowlist;
 }

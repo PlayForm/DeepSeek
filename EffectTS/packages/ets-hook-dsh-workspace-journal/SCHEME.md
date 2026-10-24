@@ -62,7 +62,27 @@ revert(id)             → replay backward (reverse file order):
                          terminal state "reverted"
 ```
 
-## 5. The ledger lines (module-owned, byte-stable)
+## 5. The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The revert is the hook's ONE gated action (it writes the pre-images back); the recording surface
+(open/seal/recover) is `record` = automatic. The gate is evaluated after the batch's existence and
+state checks and before any file is touched: an `approve` verdict for `write` logs the byte-exact
+`revert held (<n> files) (policy write=approve)` line, refuses the pass with
+`batch <id> is held by the policy (write=approve)`, performs zero writes, keeps the batch's state
+and persists no record - the batch stays reversible and waits for the user. `auto` proceeds. The
+block is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement).
+
+## 6. The ledger lines (module-owned, byte-stable)
 
 ```
 disabled (enabled=false)
@@ -83,6 +103,7 @@ reverted <batchId> <path> (skipped: pre-image over maxEntryBytes)
 reverted <batchId> <path> (skipped: <reason>)
 revert failed <batchId> (unknown batch)
 revert failed <batchId> (state <state>, not reversible)
+revert held (<n> files) (policy write=approve)
 recovery-required <batchId> (<reason>)
 capped <batchId> (maxBatches <n>)
 ignored <path> (own actor)

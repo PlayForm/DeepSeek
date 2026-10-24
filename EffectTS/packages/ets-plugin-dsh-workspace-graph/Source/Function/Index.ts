@@ -1,6 +1,8 @@
 // Index - the indexFile body: resolve through ctx.fs.resolve (the backend's
 // own cwd, the session working directory), stat, gate (enabled, exclude,
-// include, file type, language, size), read, parse, cap the node count,
+// include, file type, language, size), read, parse, ASK THE SEMANTICS SERVICE
+// for the file's references (Function/References - the `references` edge's
+// consumer wiring; no service means no references edges), cap the node count,
 // store the record (mirror + KV, awaiting the pending open first), bump the
 // indexRevision, persist the meta record, and ledger the byte-exact
 // `indexed <path> version <version> (<nodes> nodes, <edges> edges)` line.
@@ -9,10 +11,14 @@
 import type Outcome from "@Interface/Outcome.js";
 import type State from "@Interface/State.js";
 
+import Emit from "../Trace/Emit.js";
+import Indexed from "../Trace/Indexed.js";
+import Invalidated from "../Trace/Invalidated.js";
 import Append from "./Append.js";
 import Glob from "./Glob.js";
 import Language from "./Language.js";
 import ParseFile from "./ParseFile.js";
+import ReferenceEdges from "./References.js";
 import Store from "./Store.js";
 
 export default async (StateRef: State, Path: string): Promise<Outcome> => {
@@ -64,12 +70,17 @@ export default async (StateRef: State, Path: string): Promise<Outcome> => {
 				`too many nodes (${Parsed.nodes.length} > ${StateRef.Config.maxNodesPerFile})`,
 			);
 		}
+		const Edges = [
+			...Parsed.edges,
+			...(await ReferenceEdges(StateRef, Key, Text, Parsed.nodes)),
+		];
 		const Record = {
 			version: String(Info.version),
 			fingerprint: Parsed.fileFingerprint,
 			nodes: Parsed.nodes,
-			edges: Parsed.edges,
+			edges: Edges,
 		};
+		const Previous = StateRef.Records.get(Key);
 		StateRef.Records.set(Key, Record);
 		await Store.put(StateRef, Key, Record);
 		StateRef.Revision += 1;
@@ -77,13 +88,21 @@ export default async (StateRef: State, Path: string): Promise<Outcome> => {
 		StateRef.SkippedImports += Parsed.skipped.length;
 		Append(
 			StateRef,
-			`indexed ${Key} version ${String(Info.version)} (${Parsed.nodes.length} nodes, ${Parsed.edges.length} edges)`,
+			`indexed ${Key} version ${String(Info.version)} (${Parsed.nodes.length} nodes, ${Edges.length} edges)`,
 		);
+		// The trace (D5): a replaced record invalidates the previous one first
+		// (the consumers cached the old version), then the new record is
+		// announced. A first index emits only `graph/indexed`. No ledger line
+		// is added - the module's strings stay byte-exact.
+		if (Previous !== undefined) {
+			Emit(StateRef, Invalidated(Key, "replaced", Previous.version));
+		}
+		Emit(StateRef, Indexed(Key, Record.version, StateRef.Revision));
 		return {
 			path: Key,
 			status: "indexed",
 			nodes: Parsed.nodes.length,
-			edges: Parsed.edges.length,
+			edges: Edges.length,
 			version: String(Info.version),
 		};
 	} catch (Cause) {

@@ -25,14 +25,16 @@
 # a passthrough (each checks State.On first). The schema defaults are the
 # truth; the full default surface (threshold 0.75, maxCandidates 7,
 # maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the ten intent
-# kinds, the four judged tools, sectionMode off) lives in
-# Variable/Config.ts. EVERY tuning knob is volatile (hot-editable without
-# remounting); the structural knobs (persistPath, indexPath, refreshOnBoot)
-# remount on edit.
+# kinds, the four judged tools, sectionMode off, dismissTtl 86400, seed on)
+# lives in Variable/Config.ts. EVERY tuning knob is volatile (hot-editable
+# without remounting); the structural knobs (persistPath, refreshOnBoot)
+# remount on edit, and indexPath is retired by the P2 re-spec (the graph
+# projection supersedes the generated index; the field is kept so an
+# existing profile loads unchanged).
 - insert:
       - id: hook-dsh-search-suggester
         name: "@playform/hook-dsh-search-suggester"
         config:
             enabled: false
             log: true
-            logFile: ~/.dsh/search-suggester.log
+            logFile: ~/.dsh/playform/hook-dsh-search-suggester.log

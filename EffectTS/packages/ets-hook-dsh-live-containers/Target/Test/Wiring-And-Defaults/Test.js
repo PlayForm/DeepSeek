@@ -45,8 +45,8 @@ const runTest = async () => {
     Check(Count, "config default enabled=false (the IDLE-forever posture)", () => {
       assert.equal(Raw1.enabled.get(), false);
     });
-    Check(Count, "config default logFile=~/.dsh/live-containers.log", () => {
-      assert.equal(Raw1.logFile.get(), "~/.dsh/live-containers.log");
+    Check(Count, "config default logFile=~/.dsh/playform/hook-dsh-live-containers.log", () => {
+      assert.equal(Raw1.logFile.get(), "~/.dsh/playform/hook-dsh-live-containers.log");
     });
     Check(Count, "config default sectionName=live-containers", () => {
       assert.equal(Raw1.sectionName.get(), "live-containers");

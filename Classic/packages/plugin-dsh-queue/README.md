@@ -31,10 +31,20 @@ The user's capacity model is the law:
 - **Dispatch** (`dshQueue.Dispatch`): the deterministic order - dependencies satisfied first, then
   priority descending, then FIFO by enqueue sequence; a seat is taken from the agent's pool, the
   state flips to `dispatched`.
+- **Spawn** (`autoSpawn`, off by default): an assignment actually **starts a subagent through the
+  harness's own subagent service** (`ctx.subagents.startActivation`) - never a private spawn, never
+  a shell. The spec goes to the child verbatim, the resolved route goes as its `agentOptions`, the
+  parent is the exact live Agent from `ctx.agents.currentInitiator()`, and the child's own result
+  settles the task (`completed`, or `failed` for any other stop reason).
+- **Idle-slot automation:** with `autoDispatch` and `autoSpawn` both on, an enqueue or a released
+  seat pulls the next queued task into the free slot - the queue runs itself.
 - **Routed dispatch:** when the routing enforcer (`dshRoute`) is present, the route is resolved per
   the user's policy, silently; absent, the dispatch proceeds unrouted (a contained skip).
 - **Settle** (`Complete` / `Fail` / `Interrupt`): the seat is released, the journal records the
-  flip; the auto-dispatch regime fills the freed slot on the next `Dispatch` call.
+  flip; `Interrupt` also fires the spawn's own abort signal, cancelling the child.
+- **Restart reconcile** (`dshQueue.Reconcile(persisted?)`): the caller hands back the previous
+  process's `Snapshot().tasks`; every active task whose agent is not live is **requeued** once
+  (`attempts` 0 -> 1) and **failed honestly** on the second detection - never silently dropped.
 - **The board:** the queue's state compiles into the batch-state context block as one TOC line:
   `QUEUE: <n> pending - next: <id|none> - running: <m>/<limit>`.
 - **The journal:** every state flip writes a best-effort P5 journal record plus one byte-stable
@@ -44,27 +54,69 @@ The user's capacity model is the law:
 
 The plugin registers the `dshQueue` service:
 
-| Method                                                             | Meaning                                                   |
-| ------------------------------------------------------------------ | --------------------------------------------------------- |
-| `Enqueue(input)`                                                   | Queue a task (spec verbatim).                             |
-| `Dispatch(agent?)`                                                 | The deterministic next assignment (main pool by default). |
-| `Capacity(agent?)`                                                 | The free slots for the main pool or an agent.             |
-| `Start(id)` / `Complete(id, hash?)` / `Fail(id)` / `Interrupt(id)` | The state machine (settle releases the seat).             |
-| `Board()` / `Snapshot()`                                           | The compiled line / the full queue record.                |
+| Method                                                             | Meaning                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `Enqueue(input)`                                                   | Queue a task (spec verbatim).                                       |
+| `Dispatch(agent?)`                                                 | The deterministic next assignment (main pool by default).           |
+| `Capacity(agent?)`                                                 | The free slots for the main pool or an agent.                       |
+| `Start(id)` / `Complete(id, hash?)` / `Fail(id)` / `Interrupt(id)` | The state machine (settle releases the seat).                       |
+| `Reconcile(persisted?)`                                            | The restart reconcile; the report of requeued/failed ids.           |
+| `Flush()`                                                          | Join the in-flight spawns (tests/reconcile; never a hot-path wait). |
+| `Board()` / `Snapshot()`                                           | The compiled line / the full queue record.                          |
 
 ## Configuration (all volatile)
 
-| Field                              | Default                     | Meaning                                      |
-| ---------------------------------- | --------------------------- | -------------------------------------------- |
-| `enabled`                          | `false`                     | Master switch (ships disabled).              |
-| `log` / `logFile`                  | `true` / `~/.dsh/queue.log` | The plugin's own ledger.                     |
-| `capacity.main` / `capacity.child` | 10 / 2                      | The user's capacity model.                   |
-| `autoDispatch`                     | `true`                      | Freed slots trigger the next assignment.     |
-| `routedDispatch`                   | `true`                      | Consult `dshRoute` at dispatch when present. |
+| Field                              | Default                                         | Meaning                                                            |
+| ---------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------ |
+| `enabled`                          | `false`                                         | Master switch (ships disabled).                                    |
+| `log` / `logFile`                  | `true` / `~/.dsh/playform/plugin-dsh-queue.log` | The plugin's own ledger.                                           |
+| `capacity.main` / `capacity.child` | 10 / 2                                          | The user's capacity model.                                         |
+| `autoDispatch`                     | `true`                                          | Freed slots trigger the next assignment.                           |
+| `routedDispatch`                   | `true`                                          | Consult `dshRoute` at dispatch when present.                       |
+| `autoSpawn`                        | `false`                                         | **Actually start the subagent** (the approval posture; see below). |
+| `spawnProvider`                    | `spawn`                                         | The harness subagent backend name selected at spawn.               |
+| `policy.*`                         | see below                                       | The D6 per-action allowlist (the OUTER gate).                      |
+
+### `autoSpawn` (the approval posture)
+
+`autoSpawn` is the switch between **assigning** and **launching**. It ships `false` on purpose: a
+spawn is a privileged action (D6 of the completion spec), so the queue assigns seats and ledgers
+until the user turns the launch on. With `autoSpawn: false` there is no `ctx.subagents` call and no
+spawn ledger line; the idle-slot automation is off too (an automatic assignment the plugin cannot
+launch would strand the task with a held seat). With `autoSpawn: true` the dispatcher launches, the
+child's result settles the task, and a released seat pulls the next queued task.
+
+### The policy block (D6) - the outer gate
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The policy is the **outer** gate, `autoSpawn` the **inner** one. An `approve` verdict for `spawn`
+refuses the launch even with the knob on: the task stays `dispatched` with its seat held, and the
+ledger records the byte-exact `spawn held <id> (policy spawn=approve)` line - the task **waits** for
+the user (flip `policy.spawn` to `auto` to let the next assignment launch, or settle it explicitly
+with `Complete`/`Fail`/`Interrupt`). The precedence is **policy approve > knob**: the knob can never
+widen an approve verdict, while a knob that is off still refuses on its own and writes no line at
+all. The block is one volatile object, so a policy flip is hot-editable without a remount; a
+resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement).
+
+The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <id> -> <child>`,
+`spawn held <id> (policy spawn=approve)`, `spawn skipped <id> (<reason>)`,
+`spawn failed <id> (<error>)`, `requeued <id> (<agent> gone)`.
 
 ## Status
 
-PoC: the source is complete; the build, the smoke suite and the live wiring are the end-phase
-(`Documentation/Plans/POC-BRIEF.md` section 8). The reservation API's exact surface against the
-harness's per-root-lineage pool is the shared probe's open item; the dispatcher is service-driven
-until it lands.
+The spawn, the idle-slot automation and the restart reconcile are implemented and smoke-arbitrated
+(`Source/Test/Spawn-And-Reconcile`); the policy gate and its precedence are arbitrated by
+`Source/Test/Policy-Defaults`. The durable queue store is the remaining piece: the reconcile takes
+the caller's persisted record because the family has no storage domain yet (the wave-3 storage
+migration is its home). A `spawn skipped` task keeps its seat until the orchestrator settles it - an
+honest gap, never a silent drop.

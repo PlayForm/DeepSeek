@@ -50,13 +50,14 @@ export const runTest = async (): Promise<number> => {
 				exclude: ["node_modules/**", "**/Target/**", "**/.git/**"],
 				maxFileBytes: 1000000,
 				maxNodesPerFile: 5000,
+				maxFiles: 2000,
 				limitDefault: 50,
 				limitMaximum: 500,
 			});
 		});
 		Check(Count, "config: every volatile field arrives as a cell and unwraps", () => {
 			const Cells = (Defaults.Graph.constructor as any).Config({});
-			for (const Key of ["enabled", "domain", "languages", "include", "exclude", "maxFileBytes", "maxNodesPerFile", "limitDefault", "limitMaximum"]) {
+			for (const Key of ["enabled", "domain", "languages", "include", "exclude", "maxFileBytes", "maxNodesPerFile", "maxFiles", "limitDefault", "limitMaximum"]) {
 				assert.equal(typeof Cells[Key]?.get, "function", `cell for ${Key}`);
 			}
 			assert.equal(Defaults.State.Config.domain, "workspace_graph");
@@ -95,6 +96,9 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "fail-loud: limitDefault above limitMaximum is rejected", () => {
 			assert.equal(Fails({ limitDefault: 10, limitMaximum: 5 }), "invalid config: limitDefault must not exceed limitMaximum");
+		});
+		Check(Count, "fail-loud: a non-positive maxFiles is rejected (the walk bound)", () => {
+			assert.equal(Fails({ maxFiles: 0 }), "invalid config: maxFiles must be a positive integer");
 		});
 	}
 

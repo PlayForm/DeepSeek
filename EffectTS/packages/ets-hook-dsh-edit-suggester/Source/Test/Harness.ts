@@ -8,6 +8,17 @@
 // fresh set, so every folder is standalone-green and the aggregate replays
 // the same seams per folder.
 //
+// THE LEARNING SEAMS (the D8 layer): `Home` is a fresh OS temp directory
+// assigned to $HOME BEFORE any construction, so the optional pattern
+// service's JSON fallback path (`~/.dsh/pattern/registry.json`) can never
+// read or write the user's real home. THE SERVICE ITSELF IS CLASSIC-ONLY:
+// `plugin-dsh-pattern` is a Classic candidate with no ETS twin, so the ETS
+// tree cannot mix that graph and NO ETS folder attaches it - every folder
+// runs the plugin's in-memory fallback, the neutral path. `FakeStorage`
+// stays as the shared fake-storage fixture (the Classic service-present
+// folder uses it); the Learning-Loop folder is not generated (see the
+// exclusion list), so the ETS harness is the mirror minus one import.
+//
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
 // fake ctx actually wires the plugin (the vacuously-green backstop for every
 // folder's fixture) and exits nonzero when it does not.
@@ -20,10 +31,26 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import { fileURLToPath } from "node:url";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
 export { Plugin, Exports };
+
+/**
+ * A FRESH TEMP HOME, assigned before any construction: the pattern service's
+ * JSON fallback and any `~` expansion stay inside it, never the real home.
+ */
+export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "edit-suggester-home-"));
+process.env["HOME"] = Home;
+
+/**
+ * The REAL package cwd the judged relative paths resolve against: the pack
+ * mixes package-relative companions (`SCHEME.md`, `cordis.patch.yml`,
+ * `Source/Test/Config-And-Activation/Test.ts`), so the fixture cwd is a
+ * package that actually carries them (hook-dsh-ccr) instead of the repo root.
+ */
+const Package = fileURLToPath(new URL("../../../ets-hook-dsh-ccr/", import.meta.url));
 
 /** The per-folder counter: N passing checks, F failing checks. */
 export type Counter = { N: number; F: number };
@@ -158,6 +185,7 @@ export const Make = (Raw: any): any => {
 	let Context: any;
 	Context = {
 		pluginFactory: Furnace,
+		workingDirectory: { get: () => Package },
 		fs: Fs,
 		logger: {
 			info: (M: string) => {
@@ -224,6 +252,61 @@ export const AgentOf = (Id: string): any => {
 		Agents.set(Id, { agent: { id: Id } });
 	}
 	return Agents.get(Id);
+};
+
+// -- the learning seams (the D8 layer) --
+
+/**
+ * The fake storage facility (the authority/evidence fake-storage pattern):
+ * the open capture, the map-backed tables, the version fence. The Classic
+ * PatternService opens a domain through it; the ETS twin keeps the fixture
+ * (the harness stays a mirror) but has no service to attach, so no ETS
+ * folder uses it.
+ */
+export const FakeStorage = (Options: { version?: number } = {}): any => {
+	const Store: any = {
+		spec: undefined as any,
+		version: Options.version ?? 1,
+		tables: new Map<string, Map<string, unknown>>(),
+		writes: [] as [string, string][],
+		closed: false,
+	};
+	Store.facility = {
+		open: async (Specification: any) => {
+			if (Specification.version !== Store.version) {
+				throw new Error(
+					`version-mismatch: stored ${Store.version}, declared ${Specification.version}`,
+				);
+			}
+			Store.spec = Specification;
+			return {
+				name: Specification.name,
+				close: async () => {
+					Store.closed = true;
+				},
+				table: (Name: string) => {
+					if (!Store.tables.has(Name)) {
+						Store.tables.set(Name, new Map());
+					}
+					const Rows = Store.tables.get(Name) as Map<string, unknown>;
+					return {
+						put: async (Key: string, Value: unknown) => {
+							Rows.set(Key, Value);
+							Store.writes.push([Name, Key]);
+						},
+						entries: () => Rows.entries(),
+						keys: () => Rows.keys(),
+						get: (Key: string) => Rows.get(Key),
+						delete: async (Key: string) => Rows.delete(Key),
+						get size() {
+							return Rows.size;
+						},
+					};
+				},
+			};
+		},
+	};
+	return Store;
 };
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.

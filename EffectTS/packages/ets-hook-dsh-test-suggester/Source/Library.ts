@@ -22,6 +22,15 @@
 // target set costs more than a missing one (SEARCH-SUGGESTER-PLUGIN.md
 // sections 3, 4, 8 - the test consumer of the suggester family).
 //
+// THE RECONCILIATION (the completion spec's wave 2c re-spec) rides the same
+// listener: on a judged call in a package, the package's smoke claims (the
+// folder READMEs' `## Expected count`) are compared with the tree (the
+// folders, the suite files, the aggregate runner's roster) and, when the
+// workspace graph is present, its `Test` nodes. A drift emits ONE note naming
+// the drifted files and the expected/actual counts; the consistent tree logs
+// one clear line and stays silent. It is READ-ONLY (`node:fs` reads, never
+// `ctx.fs`) and gated by the same enabled/cooldown/dedupe/cap knobs.
+//
 // READ-ONLY by design: the hook never edits, never rewrites arguments, and
 // never denies - its only surface is the additionalContexts notice, so a
 // ccr-compressed result is unaffected.

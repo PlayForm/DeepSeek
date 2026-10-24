@@ -13,8 +13,9 @@ index: Documentation/INDEX.md
 > Every plugin of the @playform DSH family: one line each, the NEW ones marked, the release state,
 > and the plan/role each relates to in parentheses. The live matrix with the evidence:
 > Documentation/Plans/POC-LEDGER.md. The per-plugin live test plans: Documentation/Testing/. Release
-> state: every package is version 0.1.0 and UNPUBLISHED (the npm bootstrap tiers: 2-planned or
-> 3-candidates); the 15 pre-existing packages were never published either.
+> state: every package is version 0.1.0 except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED
+> (the npm bootstrap tiers: 2-planned or 3-candidates); the 15 pre-existing packages were never
+> published either.
 
 ## 1. The 36 NEW plugins (built 2026-10-22)
 
@@ -98,16 +99,24 @@ index: Documentation/INDEX.md
 | hook-dsh-tool-coach          | The tool-coach: the discipline notes on tool results                         | yes      | (the guardians; TOOL-COACH)                     |
 | hook-dsh-live-containers     | The live blocks: the dynamic system-prompt stanzas + the live tool transform | yes      | (the live blocks; LIVE-CONTAINERS)              |
 
-## 3. The counts
+## 3. The completion program's libraries (2)
+
+| Package       | What it is                                                                                                                | ETS twin | Context                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------ |
+| lib-dsh-trace | The trace bus's library half: the envelope, the event names, the guards, the detached loop (no plugin)                    | no       | (the trace bus; Completion-Spec 01)              |
+| lib-dsh-pack  | The pack layer's library: the pack schema, the YAML-subset parser, the layered resolution, the workspace gate (no plugin) | no       | (the pack-driven suggesters; Completion-Spec 03) |
+
+## 4. The counts
 
 | Measure                        | Value                                                                                                                                    |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | NEW plugins (built 2026-10-22) | 36 Classic + 30 ETS twins                                                                                                                |
 | Pre-existing plugins           | 14 Classic + 14 ETS twins                                                                                                                |
-| Total Classic packages         | 51 (incl. the factory)                                                                                                                   |
+| Completion program libraries   | 2 Classic (lib-dsh-trace, lib-dsh-pack) - no ETS twin yet                                                                                |
+| Total Classic packages         | 53 (incl. the factory and the two libraries)                                                                                             |
 | Total EffectTS packages        | 46                                                                                                                                       |
-| Release state                  | ALL 0.1.0, UNPUBLISHED (npm bootstrap: 2-planned / 3-candidates)                                                                         |
-| Verified                       | 97/97 builds; 359 smoke suites / 5,337 checks; the aggregate green                                                                       |
+| Release state                  | ALL 0.1.0 except `client-dsh-panel-family` (0.2.0), UNPUBLISHED (npm bootstrap: 2-planned / 3-candidates)                                |
+| Verified                       | 99 packages; 444 smoke suites / 6,053 checks; the aggregate green                                                                        |
 | Live                           | enabled in the desktop profile (54 bundles); the first dogfood found the batch-edit inject defect (fixed) and the empty-graph gap (open) |
 
 The 6 new packages WITHOUT an ETS twin: the two client panels (client-dsh-panel-family,

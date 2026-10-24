@@ -117,7 +117,7 @@ export const runTest = async (): Promise<number> => {
 		const Run = Setup();
 		await CheckAsync(Count, "E3: a non-doc path abstains no-signal with the empty-family line", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, { name: "read", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") }, Decision);
+			const Out = await Post(Run, { name: "read", arguments: { file_path: "Classic/packages/hook-dsh-doc-suggester/Source/Library.ts" }, agent: AgentOf("a") }, Decision);
 			assert.equal(Out, Decision);
 			assert.ok(Run.Lines.includes("hook-dsh-doc-suggester: abstained no-signal  0.00"));
 			assert.match(DurableLine("abstained no-signal"), Durable("abstained no-signal  0.00"));

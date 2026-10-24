@@ -9,7 +9,7 @@
 // live-containers precedent): when set, every time read goes through it.
 import type { BatchDecision, BatchProposal } from "@Interface/Batch.js";
 import type Factory from "@playform/plugin-dsh-factory";
-import type { State as Shared } from "@playform/plugin-dsh-factory";
+import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
 
 /** One proposal pending a decision, plus its recorded decision when made. */
 export interface PendingProposal {
@@ -31,6 +31,12 @@ export default interface State extends Shared {
 	MinConfidence: number;
 	/** How long a pending proposal is kept before it drops from the map. */
 	PendingTtlMs: number;
+	/** The per-action allowlist (config `policy`, volatile) - the D6 OUTER
+	 *  gate in front of `AutoApprove`. Named `Allow` because the factory's
+	 *  shared State already owns `Policy` (the configured global policy file
+	 *  path); `commit` defaults to `approve`, so an auto-approval waits for
+	 *  the user. */
+	Allow: Allowlist;
 	/** The injected factory service itself (the ledger) - set once in Apply. */
 	Factory: Factory;
 	/** The pending proposals by id (bounded by PendingTtlMs). */

@@ -224,7 +224,7 @@ unwraps `{ get }` cells and the P10 loader/volatile-update listener refreshes th
 
     enabled: boolean, default false            (the IDLE-forever posture)
     log: boolean, default true
-    logFile: string, default ~/.dsh/live-containers.log
+    logFile: string, default ~/.dsh/playform/hook-dsh-live-containers.log
     sectionName: string, default "live-containers"
     refresh: "request" | "ttl", default "request"
     ttlCalls: number, default 8

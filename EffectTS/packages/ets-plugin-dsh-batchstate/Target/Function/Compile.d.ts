@@ -1,7 +1,7 @@
-import type Member from "../Interface/Member.js";
-import type Scope from "../Interface/Scope.js";
-import type Snapshot from "../Interface/Snapshot.js";
-import type State from "../Interface/State.js";
+import type Member from "@Interface/Member.js";
+import type Scope from "@Interface/Scope.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
 /** The surfaces another lane owns exclusively - the OFF-LIMITS list for one
  *  agent. A surface the agent shares with the owner is NOT off-limits (it
  *  is a shared overlap, reported by Scope). */
@@ -13,6 +13,13 @@ export declare const Running: (State: State) => Member[];
 export declare const Idle: (State: State) => Member[];
 /** The full snapshot (getState). */
 export declare const Snapshot: (State: State) => Snapshot;
+/** The compiled arbiter truth (the Gates block, plan section 7.1 item 2):
+ *  the gates sorted by name, each `<name> <state>` plus the owning lane when
+ *  one was reported - `GATES: none` when the board holds no gate. */
+export declare const Gates: (State: State) => string;
+/** The queue projection (the queue service's own compiled line, read
+ *  read-only) - `QUEUE: none` when no queue service is mounted. */
+export declare const Schedule: (State: State) => string;
 /** The compiled scope view for one agent (getScope): the file-ownership
  *  matrix derived at call time - pre-baked conflict avoidance, never
  *  negotiated (plan section 7.2 item 1). */

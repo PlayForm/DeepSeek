@@ -21,11 +21,32 @@
 # cold mount the State build logs `disabled (enabled=false)` and the tools
 # and the service no-op. The schema defaults are the truth: the user's
 # capacity model (main 10, child 2), auto-dispatch on a freed slot, routed
-# dispatch when the routing enforcer is present. EVERY knob is volatile
-# (hot-editable without remounting): enabled, log/logFile, the capacity
-# object, autoDispatch and routedDispatch.
+# dispatch when the routing enforcer is present, and the SPAWN OFF
+# (`autoSpawn: false` - the approval posture: a spawn is a privileged action,
+# so the queue assigns seats and ledgers until the user turns the launch on;
+# the backend it would select is `spawnProvider: "spawn"`, the harness's
+# in-process subagent backend). EVERY knob is volatile (hot-editable without
+# remounting): enabled, log/logFile, the capacity object, autoDispatch,
+# routedDispatch, autoSpawn and spawnProvider.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist is the
+# OUTER gate in front of autoSpawn - `spawn: approve` holds the launch even
+# with the knob on (the documented `spawn held <id> (policy spawn=approve)`
+# line, the task waiting with its seat held). read/index/record/suggest and
+# message are automatic; write/commit/spawn wait for approval. A resolved
+# pack's `policy` section overrides these defaults per action (the wiring is
+# the next refinement).
 - insert:
       - id: plugin-dsh-queue
         name: "@playform/plugin-dsh-queue"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

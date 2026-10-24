@@ -5,6 +5,9 @@ import type SymbolNode from "@Interface/SymbolNode.js";
 export default interface Adapter {
     /** The file extensions (with dot, lowercase) the adapter owns. */
     extensions: string[];
+    /** The exact basenames the adapter owns (checked before the extension).
+     *  Absent or empty for the extension adapters. */
+    files?: string[];
     /** Build the model from the file's text. */
     scan(text: string, path: string): {
         symbols: SymbolNode[];

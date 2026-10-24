@@ -1,0 +1,1 @@
+import s from"./CacheKey.js";import u from"./Packet.js";const n=256;var d=(e,t)=>{const r=s(e,t),c=e.Cache.get(r);if(!0===(c!==void 0))return c;const a=u(e,t);for(e.Cache.set(r,a);e.Cache.size>n;){const o=e.Cache.keys().next().value;!0===(o===void 0)||e.Cache.delete(o)}return a};export{d as default};

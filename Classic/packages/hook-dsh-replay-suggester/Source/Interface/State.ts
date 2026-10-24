@@ -20,14 +20,24 @@
 //   Intents        - the enabled intent ids (config `intents`, volatile);
 //   EmitOn         - the judged tool names (config `emitOn`, volatile);
 //   Exclude        - candidate path prefixes never suggested (config `exclude`, volatile);
-//   HistoryPath    - the history store path (config `historyPath`, structural);
-//   LearnWindow    - the follow/ignore observation window (config `learnWindow`, volatile);
-//   Records        - the loaded history store (Function/History), read once at apply;
+//   HistoryPath    - the seeded history store path (config `historyPath`, structural);
+//   LearnWindow    - the follow/ignore observation window (config `learnWindow`, volatile;
+//                    also the recall's episode radius);
+//   RecordPath     - the JSON fallback store path (config `recordPath`, structural);
+//   Depth          - the history ring's bound (config `historyDepth`, volatile);
+//   Records        - the loaded seeded history store (Function/History), read once at apply;
+//   History        - the durable tier's in-memory mirror, newest first (Function/Restore);
+//   Seq            - the next entry sequence (the store's monotonic order);
+//   Handle         - the open storage domain (undefined in the JSON fallback);
+//   Pending        - the store chain (the open/recovery and every write, in order);
+//   Flush          - await the store chain (the smoke seam: no sleep needed);
 //   Rules          - the compiled pack, built ONCE at apply (hot path: no regex compilation);
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
 //   Factory        - the injected factory service itself, consumed for the
 //                    ledger (Factory.Append) - assigned once in Function/Apply.
+import type Entry from "@Interface/Entry.js";
+import type Handle from "@Interface/Handle.js";
 import type { ReplayRecord } from "@Interface/History.js";
 import type { CompiledIntent } from "@Interface/Pack.js";
 import type Factory from "@playform/plugin-dsh-factory";
@@ -56,8 +66,22 @@ export default interface State extends Shared {
 	HistoryPath: string;
 	/** The follow/ignore observation window (config `learnWindow`, volatile). */
 	LearnWindow: number;
-	/** The loaded history store (Function/History), read once at apply. */
+	/** The JSON fallback store path (config `recordPath`, structural). */
+	RecordPath: string;
+	/** The history ring's bound (config `historyDepth`, volatile). */
+	Depth: number;
+	/** The loaded seeded history store (Function/History), read once at apply. */
 	Records: ReplayRecord[];
+	/** The durable tier's in-memory mirror, newest first (Function/Restore). */
+	History: Entry[];
+	/** The next entry sequence (the store's monotonic order). */
+	Seq: number;
+	/** The open storage domain (undefined in the JSON fallback). */
+	Handle: Handle | undefined;
+	/** The store chain: the open/recovery and every write, in order. */
+	Pending: Promise<void>;
+	/** Await the store chain (the smoke seam: every write is deterministic). */
+	Flush: () => Promise<void>;
 	/** The compiled pack, built once at apply. */
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
@@ -69,8 +93,8 @@ export default interface State extends Shared {
 
 // The per-agent memory: the call counter (the cooldown's clock), the last
 // note call per intent (the cooldown), the notes emitted this turn (the
-// per-turn cap), and the last probes (the ring; kept for parity with the
-// plan's ring buffer).
+// per-turn cap), the last probes (the ring; kept for parity with the plan's
+// ring buffer), and the agent's own recall history ring.
 export interface AgentMemory {
 	/** Judged calls seen since the agent's memory was created. */
 	Calls: number;
@@ -80,4 +104,6 @@ export interface AgentMemory {
 	TurnNotes: number;
 	/** The last probes (most recent first, capped at 8). */
 	Ring: string[];
+	/** The agent's own recorded calls, newest first, bounded by `historyDepth`. */
+	History: Entry[];
 }

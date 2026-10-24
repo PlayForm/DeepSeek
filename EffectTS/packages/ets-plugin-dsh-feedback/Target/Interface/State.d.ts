@@ -1,6 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type FeedbackBlock from "./Block.js";
 import type Config from "./Config.js";
+import type Outcome from "./Outcome.js";
 /** The per-session council slice: the blocks by agent id, in record order. */
 export interface SessionRecord {
     blocks: Map<string, FeedbackBlock>;
@@ -21,4 +22,7 @@ export default interface State {
     Sessions: Map<string, SessionRecord>;
     /** Insertion order of sessions, for the maxSessions eviction. */
     Order: string[];
+    /** session id → the session's batch outcomes, oldest first, bounded by
+     *  `maxOutcomes` (the caller-side orchestration integration). */
+    Outcomes: Map<string, Outcome[]>;
 }

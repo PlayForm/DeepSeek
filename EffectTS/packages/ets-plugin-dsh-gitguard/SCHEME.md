@@ -5,12 +5,12 @@ The git guard: the tools/pre-execute DENY-LIST on the terminal/exec tool surface
 
 ## 1. The identity (four agreeing places)
 
-| Place                             | Value                            |
-| --------------------------------- | -------------------------------- |
-| Package name                      | `@playform/plugin-dsh-gitguard`  |
-| The `name` export                 | `plugin-dsh-gitguard`            |
-| The State build's `module` option | `gitguard`                       |
-| The ledger logFile default        | `~/.dsh/plugin-dsh-gitguard.log` |
+| Place                             | Value                                     |
+| --------------------------------- | ----------------------------------------- |
+| Package name                      | `@playform/plugin-dsh-gitguard`           |
+| The `name` export                 | `plugin-dsh-gitguard`                     |
+| The State build's `module` option | `gitguard`                                |
+| The ledger logFile default        | `~/.dsh/playform/ets-plugin-dsh-gitguard.log` |
 
 ## 2. The loader contract
 
@@ -27,15 +27,34 @@ The git guard: the tools/pre-execute DENY-LIST on the terminal/exec tool surface
 | Field           | Type     | Default                                             | Meaning                                                               |
 | --------------- | -------- | --------------------------------------------------- | --------------------------------------------------------------------- |
 | `enabled`       | boolean  | `false`                                             | The master switch (the IDLE-forever posture).                         |
-| `log`           | boolean  | `false`                                             | Ledger enabled - write the durable log file.                          |
-| `logFile`       | string   | `~/.dsh/plugin-dsh-gitguard.log`                    | The ledger file (one log per module).                                 |
+| `log`           | boolean  | `true`                                              | Ledger enabled - write the durable log file.                          |
+| `logFile`       | string   | `~/.dsh/playform/ets-plugin-dsh-gitguard.log`           | The ledger file (one log per module).                                 |
 | `denyPatterns`  | string[] | the 23 mutation subcommands                         | The refused git subcommands (REPLACES the default list, not merge).   |
 | `allowPatterns` | string[] | status, log, diff, show, rev-parse, ls-files, fetch | The allowed git subcommands (the allow-list wins over the deny-list). |
 | `strict`        | boolean  | `false`                                             | Deny EVERY git command (not just the deny-list).                      |
 | `exclude`       | string[] | `[]`                                                | The paths the guard ignores (the factory's segment match).            |
+| `policy`        | object   | the D6 block (see §3.1)                             | The per-action allowlist (the shared factory block).                  |
 
 Fail-loud validation runs BEFORE the State build: the three lists must be arrays of strings - an
 invalid config throws at load, never silently defaults.
+
+### 3.1 The policy block (D6)
+
+The config composes the factory's shared block (`policy: Policy()`, volatile as one object) and maps
+it to `State.Verdicts` (the name `Allow` is already this guard's git allow-list):
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The guard is READ-ONLY: it classifies and ledgers, never writes, commits or spawns, so its own
+action classes are `read` and `record` (both automatic); the write/commit/spawn verdicts are
+declared for uniformity with the family's block and stay the shipped `approve`. A resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement; the type
+already exists in `@playform/ets-lib-dsh-pack`).
 
 ## 4. The classification (Function/Decide)
 

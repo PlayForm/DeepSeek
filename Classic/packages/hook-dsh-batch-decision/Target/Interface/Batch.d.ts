@@ -7,11 +7,16 @@ export interface BatchTarget {
     /** Why this target is in the batch. */
     why: string;
 }
-/** One declarative operation per target - described, never executed here. */
+/** One declarative operation per target - described, never executed here.
+ *  The literal `find`/`replace` pair is what the apply path (the ingester)
+ *  executes; `kind`/`value` are the contract's declarative vocabulary. */
 export interface BatchOperation {
     kind: string;
     path: string;
     value?: string | undefined;
+    find?: string | undefined;
+    replace?: string | undefined;
+    why?: string | undefined;
 }
 /** The bounded before/after preview (the diff, not the full files). */
 export interface BatchPreview {
@@ -43,6 +48,9 @@ export interface BatchProposal {
     expiresAt: number;
     /** The intent's confidence, when the suggester supplied it. */
     confidence?: number | undefined;
+    /** The agent whose inbox carried the proposal - the decision's return
+     *  address (Function/Inbox delivers there first). */
+    origin?: string | undefined;
 }
 /** The decision the gate produces. */
 export interface BatchDecision {

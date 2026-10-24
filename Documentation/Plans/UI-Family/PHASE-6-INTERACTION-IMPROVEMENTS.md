@@ -49,8 +49,8 @@ statuses:
   by auditing the registered steps for disjointness; if unclear, delete the promise (the cheaper
   correct move).
 - **R10**: Classic/packages/hook-dsh-ccr/Source/Variable/Config.ts - replace the hard-coded
-  /Users/nikola/... logFile schema default with "~/.dsh/ccr.log" (or the platform-correct
-  equivalent).
+  /Users/nikola/... logFile schema default with "~/.dsh/playform/hook-dsh-ccr.log" (or the
+  platform-correct equivalent).
 
 ## 2. Exact steps
 

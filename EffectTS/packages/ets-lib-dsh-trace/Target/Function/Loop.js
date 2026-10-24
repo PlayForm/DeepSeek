@@ -1,0 +1,1 @@
+var l=i=>{const e=new Map;let t=!1;const o=async()=>{for(;e.size>0;)await Promise.all([...e.values()])};return{Schedule:s=>{switch(!0){case t:case e.has(s):return;default:}const r=(async()=>{try{await i(s)}catch{}finally{e.delete(s)}})();e.set(s,r)},get Flush(){return o()},Dispose:()=>{t=!0,e.clear()}}};export{l as default};

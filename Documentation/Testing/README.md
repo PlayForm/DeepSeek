@@ -20,7 +20,7 @@ Before any behavior test, prove the plugin activated:
    `listConfigs`, input `{"name": "@playform/<pkg>"}` → exactly one entry whose status is `"schema"`
    (the Schemastery schema was validated at load and every default was filled).
 2. **Tools** - for tool plugins, the Tool inspect provider lists the tool under the provider's tool
-   surface (`cordos_inspect_list` first, then the tool provider's list method). A missing tool means
+   surface (`cordis_inspect_list` first, then the tool provider's list method). A missing tool means
    the tool registration did not run or the plugin is disabled.
 3. **The ledger line** - the package's `activated (...)` string (quoted byte-exact in each
    per-plugin file) in its logFile (the `logFile` Config default, usually `~/.dsh/<name>.log`) or in
@@ -50,7 +50,9 @@ Before any behavior test, prove the plugin activated:
    `pnpm --config.verify-deps-before-run=false --dir Classic/packages/<pkg> run prepublishOnly`
 5. Smokes stay green: for each test folder,
    `node Classic/packages/<pkg>/Target/Test/<Folder>/Test.js` must print its README's exact
-   `N PASS - <Name>` count.
+   `N PASS - <Name>` count. 5b. Types stay green: `pnpm test:types` (the honest repo-level type
+   gate) must report `PASS` for the package; see
+   `Documentation/Plans/Completion-Spec/06-VERIFICATION.md` check 3b.
 6. The app **RESTART** - a code fix does not hot-reload; re-run the live test.
 
 ## The report format (per plugin)
@@ -70,13 +72,12 @@ Before any behavior test, prove the plugin activated:
   queries.
 - A plugin that crashes the boot is disabled by the Lead, not the tester.
 
-## The known live gaps (2026-10-22 dogfood)
+## The known live gaps (2026-10-23 status)
 
-- **`plugin-dsh-batch-edit`** fails every call with `cannot get property "fs" without inject`. Its
-  inject list is `["pluginFactory", "tools", "jobs"]` but `Machine.ts:223`, `Ops.ts:235` and
-  `Tools.ts:283` read `State.Context.fs` - the fix is adding `"fs"` to the inject array plus a
-  rebuild.
-- **The workspace graph is EMPTY**: `workspace_map` → `map @ 0: 0 files`, `workspace_find` →
-  `0 nodes`. v0 has no indexing trigger (no `workspace_index` tool, no fs/observed wiring). Fix
-  direction: add an index trigger.
+- **`plugin-dsh-batch-edit` inject defect - FIXED**: the first dogfood failed every call with
+  `cannot get property "fs" without inject`; `"fs"` is now in the inject list and the batch engine
+  runs.
+- **The workspace graph indexing - FIXED**: the graph no longer relies on a missing trigger;
+  `plugin-dsh-workspace` exposes the `workspace_index` tool (path?, maxFiles?) that drives the graph
+  service's `indexWorkspace`, so `workspace_map`/`workspace_find` return real data after an index.
 - **`batch_decision` works** - the empty pending list is the correct answer.

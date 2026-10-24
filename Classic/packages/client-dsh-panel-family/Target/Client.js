@@ -1,1 +1,1 @@
-import o from"./Function/Client.js";const e=["slots","locale"];function p(t){o(t)}var r={inject:e,apply:p};export{p as apply,r as default,e as inject};
+import e from"./Function/Client.js";const o=["slots","locale"];function n(t){e(t)}var p={inject:o,apply:n};export{n as apply,p as default,o as inject};

@@ -36,7 +36,7 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
     - Check: "config default ttlSeconds=3600".
     - Check: "config default storeBudgetBytes=268435456".
     - Check: "config default journalPath='' (memory-only)".
-    - Check: "config default logFile: ~/.dsh/ccr.log (the documented default)".
+    - Check: "config default logFile: ~/.dsh/playform/hook-dsh-ccr.log (the documented default)".
     - Check: "config default contextEngine=false (phase 4, inert)".
     - Check: "config default contextEngineThresholdPct=30".
     - Check: "config default protectFirstTurns=2".

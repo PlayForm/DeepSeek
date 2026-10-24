@@ -1,1 +1,1 @@
-import r from"./Emit.js";var d=e=>{e.Members.clear(),e.IdleQueue.length=0,e.Recent.length=0,e.Factory.Append(e,"cleared"),r(e,{batch:e.Batch,id:"",kind:"clear"})};export{d as default};
+import r from"./Emit.js";import l from"./Persist.js";var i=e=>{e.Members.clear(),e.IdleQueue.length=0,e.Recent.length=0,e.Proposals.clear(),e.Gates.clear(),e.Seen.length=0,e.Factory.Append(e,"cleared"),l(e),r(e,{batch:e.Batch,id:"",kind:"clear"})};export{i as default};

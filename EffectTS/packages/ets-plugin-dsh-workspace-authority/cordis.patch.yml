@@ -27,8 +27,29 @@
 # policy table) lives in the Variable/Config.ts schema. Every knob is a
 # volatile cell (hot-editable without remounting); a policy edit lands on the
 # next eviction pass.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block, mapped to State.Allow. The key is `automation`, NOT
+# `policy` - this package's `policy` is already the RESIDENCY RULE TABLE
+# (kind -> disposition), a different contract (the plugin-dsh-route
+# precedent). This package's actions are read-only and record, all automatic
+# - it has NO gated action (it never writes a file, commits a batch or spawns
+# an agent), so the block documents the posture and refuses nothing.
+# read/index/record/suggest/message are automatic; write/commit/spawn stay the
+# shipped `approve` for the family's write paths. A resolved pack's `policy`
+# section overrides these defaults per action (the wiring is the next
+# refinement).
 - insert:
       - id: plugin-dsh-workspace-authority
         name: "@playform/ets-plugin-dsh-workspace-authority"
         config:
             enabled: false
+            automation:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

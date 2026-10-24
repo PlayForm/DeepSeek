@@ -1,0 +1,328 @@
+// Sequence - the fixed replay corpus of the P4 BENCHMARK (the plan's
+// section 10.5): fifty search-class calls, five lanes of ten, each lane one
+// intent and one agent (the per-agent ring keeps the lanes independent
+// without a user message). The calls are the plan's release / test / doc /
+// config / symbol lanes reduced to their literals: the first call of a lane
+// carries the strong signal, the rest repeat the same intent through the
+// variants the evidence recorded (the loop the suggester exists to cut).
+//
+// The `expected` block is the HAND-LABELLED eventual target set per lane -
+// the plan's section 3.6 canonical sets plus the long-tail files the lane
+// really touched and the pack does NOT name (setup.astro, FRAMEWORK.md,
+// EffectTS/smokes/README.md, Source/Test/Config-And-Activation, Target) -
+// so the recall is honest and a rule change that loses a target shows up as
+// a recall drop (the regression gate).
+//
+// Deterministic data: no timestamps, no absolute paths, no session ids.
+export interface Call {
+	/** The lane's agent id (one ring per lane). */
+	agent: string;
+	/** The tool name. */
+	name: string;
+	/** The tool arguments (the classifier reads pattern / file_path / command). */
+	arguments: Record<string, unknown>;
+	/** The lane's user message (the R12 context word), driven before the call. */
+	context?: string;
+}
+
+export default {
+	calls: [
+		// The Version lane: the semver literal, the manifest shape, the
+		// version word, the glob - one emit, then the same set repeats.
+		{
+			agent: "version",
+			name: "grep",
+			arguments: { pattern: "1.2.3 version", path: "package.json" },
+		},
+		{ agent: "version", name: "grep", arguments: { pattern: "0.1.0", path: "package.json" } },
+		{ agent: "version", name: "read", arguments: { file_path: "package.json" } },
+		{ agent: "version", name: "glob", arguments: { pattern: "**/package.json" } },
+		{
+			agent: "version",
+			name: "grep",
+			arguments: { pattern: "version|release", path: "README.md" },
+		},
+		{ agent: "version", name: "read", arguments: { file_path: "CHANGELOG.md" } },
+		{ agent: "version", name: "bash", arguments: { command: "grep -rn 0.1.0 package.json" } },
+		{ agent: "version", name: "grep", arguments: { pattern: "semver", path: "package.json" } },
+		{ agent: "version", name: "read", arguments: { file_path: "Site/package.json" } },
+		{ agent: "version", name: "glob", arguments: { pattern: "**/CHANGELOG.md" } },
+		// The Test lane: the pass/fail/build literals and the aggregate. The
+		// user message carries the R12 context word; the third same-intent
+		// call adds the R13 loop credit, which is what lifts the lane over
+		// the pack's 0.75 gate (the plan's section 3.9 arithmetic).
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "PASS", path: "Classic/smokes/README.md" },
+			context: "run the failing test suite",
+		},
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "FAIL", path: "Classic/smokes/README.md" },
+		},
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "error TS", path: "Classic/smokes/README.md" },
+		},
+		{ agent: "test", name: "read", arguments: { file_path: "Maintain/Run-Smokes.mjs" } },
+		{ agent: "test", name: "glob", arguments: { pattern: "**/Test.ts" } },
+		{
+			agent: "test",
+			name: "bash",
+			arguments: { command: "grep -rn 'checks run' Classic/smokes" },
+		},
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "assert suite", path: "Classic/smokes/README.md" },
+		},
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "suite", path: "Classic/smokes/README.md" },
+		},
+		{ agent: "test", name: "read", arguments: { file_path: "Classic/smokes/README.md" } },
+		{
+			agent: "test",
+			name: "grep",
+			arguments: { pattern: "checks run", path: "Classic/smokes/README.md" },
+		},
+		// The Doc lane: the heading, the frontmatter, the README word.
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "^# title", path: "Documentation/INDEX.md" },
+			context: "the documentation readme",
+		},
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "title:", path: "Documentation/INDEX.md" },
+		},
+		{ agent: "doc", name: "read", arguments: { file_path: "Documentation/INDEX.md" } },
+		{ agent: "doc", name: "glob", arguments: { pattern: "Documentation/**/*.md" } },
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "status: active", path: "Documentation/INDEX.md" },
+		},
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "README", path: "Documentation/INDEX.md" },
+		},
+		{ agent: "doc", name: "read", arguments: { file_path: "Documentation/ARCHIVE-STYLE.md" } },
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "kind: living-plan", path: "Documentation/INDEX.md" },
+		},
+		{
+			agent: "doc",
+			name: "bash",
+			arguments: { command: "grep -n Documentation Documentation/INDEX.md" },
+		},
+		{
+			agent: "doc",
+			name: "grep",
+			arguments: { pattern: "^## ", path: "Documentation/INDEX.md" },
+		},
+		// The Config lane: the knob names and the patch row.
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "threshold",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
+			},
+			context: "the config setting",
+		},
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "enabled|volatile",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
+			},
+		},
+		{
+			agent: "config",
+			name: "read",
+			arguments: { file_path: "Classic/packages/hook-dsh-search-suggester/cordis.patch.yml" },
+		},
+		{ agent: "config", name: "glob", arguments: { pattern: "**/cordis.patch.yml" } },
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "Schema.",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
+			},
+		},
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "volatile",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
+			},
+		},
+		{
+			agent: "config",
+			name: "read",
+			arguments: {
+				file_path: "Classic/packages/hook-dsh-search-suggester/Source/Interface/Config.ts",
+			},
+		},
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "cordis",
+				path: "Classic/packages/hook-dsh-search-suggester/SCHEME.md",
+			},
+		},
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "threshold",
+				path: "Classic/packages/hook-dsh-search-suggester/README.md",
+			},
+		},
+		{
+			agent: "config",
+			name: "grep",
+			arguments: {
+				pattern: "enabled",
+				path: "Classic/packages/hook-dsh-search-suggester/cordis.patch.yml",
+			},
+		},
+		// The Symbol lane: the declaration shapes.
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "const Version",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
+			},
+			context: "define the symbol",
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "export default",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "function ",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "interface ",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Interface/State.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "class ",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "read",
+			arguments: {
+				file_path: "Classic/packages/hook-dsh-search-suggester/Source/Library.ts",
+			},
+		},
+		{ agent: "symbol", name: "glob", arguments: { pattern: "**/Function/*.ts" } },
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "const ",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Score.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "export ",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Persist.ts",
+			},
+		},
+		{
+			agent: "symbol",
+			name: "grep",
+			arguments: {
+				pattern: "const Version",
+				path: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
+			},
+		},
+	] as Call[],
+	expected: {
+		Version: [
+			"package.json",
+			"Site/package.json",
+			"Classic/packages/*/package.json",
+			"EffectTS/packages/*/package.json",
+			"*/Source/Function/Apply.ts",
+			"Site/Source/Library/Content.ts",
+			"CHANGELOG.md",
+			"Documentation/Plugins/PLUGIN-FAMILY.md",
+			"Site/Source/pages/versions.astro",
+			".github/workflows/NPM.yml",
+			"**/README.md",
+			"Site/Source/pages/setup.astro",
+			"Documentation/FRAMEWORK.md",
+		],
+		Test: [
+			"Source/Test",
+			"Classic/smokes/Test",
+			"Maintain/Run-Smokes.mjs",
+			"Classic/smokes/README.md",
+			"**/Test.ts",
+			"EffectTS/smokes/README.md",
+		],
+		Doc: [
+			"Documentation/INDEX.md",
+			"Documentation",
+			"Documentation/ARCHIVE-STYLE.md",
+			"Site/Source/Content",
+			"README.md",
+			"Documentation/FRAMEWORK.md",
+		],
+		Config: [
+			"Source/Variable/Config.ts",
+			"Source/Interface/Config.ts",
+			"cordis.patch.yml",
+			"README.md",
+			"SCHEME.md",
+			"Site/Source/Component/Configurator.astro",
+			"Source/Test/Config-And-Activation",
+		],
+		Symbol: [
+			"Source/Library.ts",
+			"Source/Function",
+			"Source/Interface",
+			"Documentation/Skill",
+			"Target",
+		],
+	} as Record<string, string[]>,
+};

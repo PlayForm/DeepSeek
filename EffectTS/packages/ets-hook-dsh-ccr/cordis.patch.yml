@@ -40,7 +40,7 @@
         name: "@playform/ets-hook-dsh-ccr"
         config:
             log: true
-            logFile: ~/.dsh/ccr.log
+            logFile: ~/.dsh/playform/hook-dsh-ccr.log
             targets:
                 - bash
                 - glob

@@ -24,6 +24,7 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../plugin-dsh-workspace-graph/Target/Library.js";
 import type {
 	Edge,
 	Expansion,
@@ -71,7 +72,7 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 };
 
 /**
- * The async variant of Check, for folders whose assertions await (the four
+ * The async variant of Check, for folders whose assertions await (the five
  * tools' execute is async). Same counting and printing; the caller must
  * await it so checks stay sequential and Finish sees the final counts.
  */
@@ -198,6 +199,19 @@ export const FakeGraph = (
 	const Self: WorkspaceGraph = {
 		indexFile: (_Path: string): Promise<IndexOutcome> =>
 			Promise.resolve({ path: String(_Path), status: "indexed", nodes: 0, edges: 0 }),
+		// The fake graph does not walk a filesystem: the five-tool folder over a
+		// REAL populated graph (Real-Graph-And-Tools) covers the indexing
+		// trigger; here the summary is the fixed fixture's file count.
+		indexWorkspace: (
+			_Root?: string,
+			_Options?: { maxFiles?: number },
+		): Promise<{ indexed: number; skipped: number; failed: number; files: number }> =>
+			Promise.resolve({
+				indexed: 0,
+				skipped: 0,
+				failed: 0,
+				files: Nodes.filter((Node_) => Node_.kind === "File").length,
+			}),
 		removeFile: (_Path: string): Promise<boolean> => Promise.resolve(true),
 		getNode: (Id: string): Node | undefined => Nodes.find((Node_) => Node_.id === Id),
 		find: Find,
@@ -269,6 +283,75 @@ export const StandardGraph = (): WorkspaceGraph & { graph: { nodes: Node[]; edge
 			{ kind: "imports", from: "File:src/a.ts", to: "File:src/b.ts" },
 		],
 	);
+};
+
+/**
+ * The REAL workspace graph service (from its built Target) over a
+ * deterministic in-memory file map: resolve/stat/readText/listDir/contains
+ * drive the real walk and the real parser, so the tools in the
+ * Real-Graph-And-Tools folder answer from a genuinely populated graph
+ * instead of FakeGraph. The graph gets its OWN ctx (its fs must work); the
+ * workspace plugin's ctx fs stays the throwing purity guard.
+ */
+export const RealGraph = (
+	Files: Record<string, string>,
+	Options: Record<string, unknown> = {},
+): any => {
+	const Names = Object.keys(Files);
+	const Info = (Display: string): { version: string; type: string; size: number } | undefined => {
+		const Text = Files[Display];
+		if (Text !== undefined) {
+			return { version: "v1", type: "file", size: Text.length };
+		}
+		return Names.some((Key) => Key.startsWith(`${Display}/`))
+			? { version: "v1", type: "directory", size: 0 }
+			: undefined;
+	};
+	const Fs: any = {
+		resolve: async (Path_: string) => ({ targetKey: Path_, displayPath: Path_ }),
+		stat: async (Target: any) => Info(String(Target.displayPath)),
+		readText: async (Target: any) => {
+			const Text = Files[String(Target.displayPath)];
+			if (Text === undefined) {
+				throw new Error("vanished");
+			}
+			return Text;
+		},
+		listDir: async (Target: any) => {
+			const Directory = String(Target.displayPath).replace(/\/$/, "");
+			const Found = new Set<string>();
+			for (const Key of Names) {
+				if (!Key.startsWith(`${Directory}/`)) {
+					continue;
+				}
+				Found.add(Key.slice(Directory.length + 1).split("/")[0] as string);
+			}
+			return [...Found].sort((Left, Right) => Left.localeCompare(Right)).map((Name) => {
+				const Display = `${Directory}/${Name}`;
+				const Meta = Info(Display);
+				return {
+					name: Name,
+					type: Meta?.type ?? "other",
+					target: { targetKey: Display, displayPath: Display },
+				};
+			});
+		},
+		contains: (Parent: any, Child: any) => {
+			const Left = String(Parent.displayPath);
+			const Right = String(Child.displayPath);
+			return Right === Left || Right.startsWith(`${Left}/`);
+		},
+		writeText: async () => {
+			throw new Error("writeText must never be called");
+		},
+	};
+	const GraphContext: any = {
+		fs: Fs,
+		logger: { info: () => undefined, warn: () => undefined, error: () => undefined },
+		reflect: { provide: () => undefined },
+	};
+	GraphContext.root = GraphContext;
+	return new GraphClass(GraphContext, GraphClass.Config({ enabled: true, ...Options }));
 };
 
 /**
@@ -414,13 +497,19 @@ if (InvokedDirectly) {
 	// time).
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
-	Check(Count, "selfcheck: the fake ctx registers the four navigation tools", () => {
+	Check(Count, "selfcheck: the fake ctx registers the five tools", () => {
 		assert.deepEqual(
 			Run.Registered.map((Definition: any) => Definition.name),
-			["workspace_map", "workspace_find", "workspace_expand", "workspace_context"],
+			[
+				"workspace_map",
+				"workspace_find",
+				"workspace_expand",
+				"workspace_context",
+				"workspace_index",
+			],
 		);
 		assert.ok(Run.State !== undefined);
-		assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=4)"]);
+		assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.1.0, tools=5)"]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

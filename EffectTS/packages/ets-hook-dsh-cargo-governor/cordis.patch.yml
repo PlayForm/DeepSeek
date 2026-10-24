@@ -22,7 +22,7 @@
         name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-cargo-governor.log
             updateCooldownMs: 3000
             strict: false
             mutationTools: [write, edit, str_replace_editor, raw-write]

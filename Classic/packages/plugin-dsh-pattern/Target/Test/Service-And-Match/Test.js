@@ -40,7 +40,7 @@ const runTest = async () => {
       );
     });
     Check(Count, "S1: the activation line is byte-exact", () => {
-      assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/pattern.log)"]);
+      assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)"]);
     });
   }
   {

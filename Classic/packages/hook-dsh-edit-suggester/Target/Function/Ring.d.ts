@@ -1,3 +1,12 @@
+/** One open note awaiting its follow-through verdict. */
+export interface Pending {
+    /** The family that emitted. */
+    family: string;
+    /** The companion paths the note named. */
+    companions: string[];
+    /** Judged calls since the emit (the window's position). */
+    since: number;
+}
 export interface RingState {
     /** The paths touched since the last user message (already-touched companions are dropped from later notes). */
     touched: Set<string>;
@@ -9,6 +18,8 @@ export interface RingState {
     notes: number;
     /** Judged calls since the last user message (the turn counter). */
     calls: number;
+    /** The open note the follow-through watches (undefined when none). */
+    pending?: Pending | undefined;
 }
 /** Create a fresh per-agent state. */
 export declare const Fresh: () => RingState;
@@ -27,6 +38,19 @@ declare function _default(): {
     Tick: (State: RingState, Window: number) => void;
     /** Mark an emit: the family cools, the dedupe key is kept, the counter moves. */
     Mark: (State: RingState, Family: string, Key: string) => void;
-    /** The per-turn reset: touched paths, cooldowns, dedupe, counters. */
+    /** Open the follow-through window for the note just emitted. */
+    Open: (State: RingState, Family: string, Companions: string[]) => void;
+    /** The follow signal: the call names a companion of the open note. */
+    Follow: (State: RingState, Path: string) => {
+        family: string;
+        companions: string[];
+        companion: string;
+    } | undefined;
+    /** Age the open note by one judged call; the closed note is returned. */
+    Age: (State: RingState, Window: number) => {
+        family: string;
+        companions: string[];
+    } | undefined;
+    /** The per-turn reset: touched paths, cooldowns, dedupe, counters, the open note. */
     Reset: (State: RingState) => void;
 };

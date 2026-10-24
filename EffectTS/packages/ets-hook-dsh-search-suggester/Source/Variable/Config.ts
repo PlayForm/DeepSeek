@@ -28,7 +28,7 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 export default Compose(false, {
 	// Ledger file - the search suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/search-suggester.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-search-suggester.log").volatile(),
 	// The master switch (volatile): false mutes every listener to a passthrough.
 	enabled: Schema.boolean().default(true).volatile(),
 	// The confidence gate (volatile). The destructive intents (Version, Path,
@@ -74,11 +74,22 @@ export default Compose(false, {
 	learnWindow: Schema.number().default(2).volatile(),
 	// The learned knowledge file (structural; remounts on edit).
 	persistPath: Schema.string().default("~/.dsh/search-suggester/knowledge.json"),
-	// The static index file (structural; remounts on edit).
+	// RETIRED by the P2 re-spec: the generated repo index is superseded by the
+	// graph projection (Function/Projection reads ctx.workspaceGraph). The
+	// field stays so an existing profile loads unchanged; it is never read.
 	indexPath: Schema.string().default("~/.dsh/search-suggester/index.json"),
-	// Rebuild the index on boot when the fingerprint differs (structural; the
-	// generation itself is the Maintain/Index-Search-Targets.mjs end-phase).
+	// The projection refresh switch (structural): true rebuilds the graph
+	// projection on every tools/change (the graph may have re-indexed); false
+	// builds it once per apply. The lazy first read is always attempted.
 	refreshOnBoot: Schema.boolean().default(true),
+	// The dismissal TTL in seconds (volatile): the `suggestion_dismiss` tool
+	// records `until = now + dismissTtl`; at or after it the dismissal is
+	// forgotten and the suggestion may return.
+	dismissTtl: Schema.number().default(86400).volatile(),
+	// The offline seed switch (volatile): at load the knowledge is seeded from
+	// the built-in pack's canonical candidates plus the graph projection
+	// (Function/Seed); false keeps the deterministic cold start.
+	seed: Schema.boolean().default(true).volatile(),
 	// The second surface (volatile): "off" (the default) or "sticky".
 	sectionMode: Schema.string().default("off").volatile(),
 	// The sticky section's TTL in judged calls (volatile).

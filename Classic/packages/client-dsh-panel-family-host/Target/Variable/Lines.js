@@ -1,0 +1,1 @@
+var e={secret:i=>`bridge: secret namespace refused for ${i}`,invalidNamespace:i=>`bridge: invalid namespace ${i}`,unknown:i=>`bridge: unknown namespace ${i}`,unavailable:()=>"bridge: config editor unavailable",disabled:()=>"bridge: disabled (enabled=false)",invalid:i=>`bridge: invalid patch for ${i}`,failed:i=>`bridge: write failed for ${i}`};export{e as default};

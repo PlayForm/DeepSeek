@@ -1,8 +1,10 @@
 # Registry-And-Sections - the playformFamilyPanel registry body
 
-The registry service, exercised through the instance the real built client
-apply actually provided: the section bookkeeping, the deterministic render
-order, the subscription discipline, and the open/launch wiring.
+The slot-aware registry service, exercised through the instance the real built
+client apply actually provided: the section bookkeeping, the deterministic
+render order, the subscription discipline, and the open/launch wiring. The
+slot-ownership rules (one adapter per bundle per slot) and the slot filter are
+covered by the Child-Slot-Model folder.
 
 ## Scenarios
 
@@ -24,7 +26,9 @@ order, the subscription discipline, and the open/launch wiring.
 The shared Harness (real built Target, fake client ctx). The registry used
 is the instance `ctx.reflect.provide("playformFamilyPanel", ...)` captured
 at apply time - not a freshly constructed one - so the suite proves the
-wired service, not the fixture.
+wired service, not the fixture. Each fixture section carries its `namespace`
+(the settings namespace the form reads) and a legacy `mount` (the slot is
+derived from it).
 
 ## Known blind spot
 

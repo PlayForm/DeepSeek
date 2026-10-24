@@ -7,9 +7,11 @@
 //
 //   1. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
 //      {prepend:true} listener and normalize's post-execute): next() first,
-//      detect, gate, and prepend ONE additionalContexts notice to the
-//      downstream decision. It never replaces content, only adds contexts,
-//      so a ccr-compressed result is unaffected.
+//      the RECONCILIATION (the package's smoke claims against the tree, the
+//      wave 2c re-spec), then detect, gate, and prepend ONE
+//      additionalContexts notice to the downstream decision. It never
+//      replaces content, only adds contexts, so a ccr-compressed result is
+//      unaffected.
 //   2. agent/pre-step (waterfall, plain): the per-turn reset - the
 //      per-turn note counter when a user message enters (the tool-coach
 //      precedent).
@@ -21,6 +23,18 @@
 //     logger.warn records it and the downstream decision is returned
 //     UNCHANGED. A note never fails a tool call.
 //
+// THE WORKSPACE GATE + THE EXISTENCE FILTER: the pack is the repo's own
+// convention graph (the built-in pack when the repo has no pack file), so the
+// listener resolves the workspace root first (the nearest ancestor whose
+// pack signature matches; the built-in default is
+// Documentation/ARCHIVE-STYLE.md, from the call path plus the session cwd).
+// A foreign workspace has no pack and abstains (`abstained foreign-workspace`);
+// a target absent from all three bases is dropped BEFORE the gate
+// (`abstained no-companions` when the intent's whole target set is gone).
+// The intents come from the RESOLVED pack per call (Families(pack, "test")),
+// compiled once per root, so a repo pack overrides the built-in intents
+// without a restart.
+//
 // NOT factory machinery, deliberately: no fs/observed Wire, no Attach, no
 // factory Schema - the hook owns its schema (Variable/Config.ts) and its
 // strings. The function returns NOTHING (a returned value silently kills
@@ -29,6 +43,8 @@
 // `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
 // service (the State builder + the ledger); the loader's PENDING state
 // handles the ordering, so bundle-layer order never matters.
+import { isAbsolute, resolve } from "node:path";
+
 import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import type Config from "@Interface/Config.js";
@@ -36,10 +52,16 @@ import type { Candidate } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
+import { Families, Locate } from "@playform/ets-lib-dsh-pack";
 import Defaults from "@Variable/Defaults.js";
 
 import Detect, { Compile } from "./Detect.js";
-import BuildNote, { Prepend } from "./Note.js";
+import Exists from "./Exists.js";
+import Nodes from "./Nodes.js";
+import BuildNote, { BoundSummary, Prepend } from "./Note.js";
+import Package from "./Package.js";
+import Reconcile from "./Reconcile.js";
+import Reconciled from "./Reconciled.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
@@ -51,7 +73,38 @@ const FreshMemory = (): AgentMemory => ({
 	Noted: new Map(),
 	TurnNotes: 0,
 	Ring: [],
+	Reconciled: new Map(),
 });
+
+/** The path the call names (the file_path argument, then path, then ""). */
+const Path = (Exec: ToolExecution): string => {
+	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
+	switch (true) {
+		case typeof Args["file_path"] === "string":
+			return String(Args["file_path"]);
+		case typeof Args["path"] === "string":
+			return String(Args["path"]);
+		default:
+			return "";
+	}
+};
+
+/**
+ * The session cwd, probed from the OPTIONAL harness service - never a hard
+ * inject, never an unguarded accessor: the service may be absent (a bare
+ * mount) and its getter may throw. The probe must never throw; a missing cwd
+ * simply falls back to process.cwd() inside the resolver.
+ */
+const Session = (Context: Context, Exec: ToolExecution): string | undefined => {
+	try {
+		const Service = Context.get?.("workingDirectory") as
+			{ get?: (Session: unknown) => unknown } | undefined;
+		const Cwd = Service && Exec.agent ? Service.get?.(Exec.agent.session) : undefined;
+		return typeof Cwd === "string" && Cwd.length > 0 ? Cwd : undefined;
+	} catch {
+		return undefined;
+	}
+};
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
@@ -75,20 +128,38 @@ export default (Context: Context, Options: Config): void => {
 	});
 	State.Factory = Factory;
 	State.Agents = new WeakMap();
+	// The reconciliation's per-root clear memo (one clear line per root).
+	State.Cleared = new Set();
 
-	// The compiled pack, built ONCE at apply (boot path, not hot path) from
-	// the module's own embedded pack. The configured intent list filters the
-	// pack: an empty list enables all pack intents; a listed intent not in
-	// the pack is ignored.
-	const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
-	State.Rules = Compile(
-		Defaults.intents
-			.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id))
-			.map((Intent) => ({
-				...Intent,
-				threshold: Math.max(Intent.threshold, State.Threshold),
-			})),
-	);
+	// The compile rule, shared by the built-in boot compile and the per-root
+	// workspace compile: the configured intent list filters the pack (empty =
+	// all), and the config threshold is a FLOOR (the pack may raise it).
+	const Build = (Rows: typeof Defaults) => {
+		const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
+		return Compile(
+			Rows.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id)).map(
+				(Intent) => ({
+					...Intent,
+					threshold: Math.max(Intent.threshold, State.Threshold),
+				}),
+			),
+		);
+	};
+	// The built-in compile: the activation proof's count and the no-pack path.
+	State.Rules = Build(Defaults);
+	// The per-root compile memo: a resolved workspace pack's intents are
+	// compiled once per (root, threshold, intents) tuple, never on every call.
+	const Compiled = new Map<string, typeof State.Rules>();
+	const Rules = (Root: string, Rows: typeof Defaults): typeof State.Rules => {
+		const Key = `${Root}\u0000${State.Threshold}\u0000${State.Intents.join(",")}`;
+		const Hit = Compiled.get(Key);
+		if (Hit !== undefined) {
+			return Hit;
+		}
+		const Built = Build(Rows);
+		Compiled.set(Key, Built);
+		return Built;
+	};
 
 	// The per-agent state (WeakMap keyed on the Agent object, the tool-coach
 	// precedent). A call without an agent shares the module's default key.
@@ -159,6 +230,71 @@ export default (Context: Context, Options: Config): void => {
 		return "emit";
 	};
 
+	// THE RECONCILIATION (the completion spec's wave 2c re-spec): on a judged
+	// call in a package, the package's smoke claims are compared with the tree
+	// it actually has - the README counts, the folders, the aggregate
+	// runner's roster, and (when the workspace graph is present) its `Test`
+	// nodes. Read-only: node:fs reads, never ctx.fs, and the only surface is
+	// the note. The gate is the intents' gate (cooldown + per-turn cap) plus
+	// the dedupe on the drift signature; the consistent tree logs its clear
+	// line ONCE per root and stays silent (the documented abstention).
+	const ReconcileCall = (
+		Memory: AgentMemory,
+		Root: string,
+		PackageRoot: string | undefined,
+		Tool: string,
+	): ReturnType<typeof BuildNote> | undefined => {
+		switch (true) {
+			case PackageRoot === undefined:
+				return undefined;
+			default:
+		}
+		const Result = Reconcile(PackageRoot, Root, Nodes(Context, PackageRoot, Root));
+		if (Result === undefined) {
+			// No Source/Test tree: the package has no smoke claims to reconcile.
+			return undefined;
+		}
+		switch (true) {
+			case Result.drifts.length === 0:
+				switch (true) {
+					case State.Cleared.has(PackageRoot):
+						return undefined;
+					default:
+						State.Cleared.add(PackageRoot);
+						Factory.Append(
+							State,
+							`reconciliation clear ${Result.package} (${Result.expected} expected, ${Result.actual} actual)`,
+						);
+						return undefined;
+				}
+			default:
+		}
+		const Signature = Result.drifts
+			.map((Drift) => `${Drift.file}|${Drift.reason}|${Drift.expected}|${Drift.actual}`)
+			.join("\n");
+		const Verdict = Gate(Memory, "Reconciliation");
+		switch (true) {
+			case Memory.Reconciled.get(PackageRoot) === Signature:
+				Factory.Append(State, `reconciliation skipped deduped ${Result.package}`);
+				return undefined;
+			case Verdict !== "emit":
+				Factory.Append(State, `reconciliation skipped ${Verdict} ${Result.package}`);
+				return undefined;
+			default:
+		}
+		Memory.Reconciled.set(PackageRoot, Signature);
+		Memory.Noted.set("Reconciliation", Memory.Calls);
+		Memory.TurnNotes += 1;
+		Factory.Append(
+			State,
+			`reconciliation drift ${Result.drifts.length} drifts ${Result.package} (${Result.expected} expected, ${Result.actual} actual) call ${Tool}`,
+		);
+		return BuildNote(
+			Reconciled(Result, State.MaxNoteChars),
+			BoundSummary(`Reconciliation ${Result.drifts.length} drifts`),
+		);
+	};
+
 	// Listener 1: tools/post-execute - the note. Plain registration: runs
 	// AFTER the ccr's {prepend:true} listener and normalize's post-execute,
 	// and never replaces content (only additionalContexts).
@@ -171,6 +307,21 @@ export default (Context: Context, Options: Config): void => {
 				if (!State.On || !Judged(Exec.name)) {
 					return Decision;
 				}
+				// The workspace gate, BEFORE detect/score: the pack is the
+				// repo's convention graph (the built-in pack when the repo has
+				// no pack file), so a call that belongs to another workspace
+				// has nothing to name here. The signature comes from the pack
+				// (default: Documentation/ARCHIVE-STYLE.md).
+				const CallPath = Path(Exec);
+				const Cwd = Session(Context, Exec);
+				const Located = Locate(CallPath, Cwd);
+				if (Located === undefined) {
+					Factory.Append(State, "abstained foreign-workspace  0.00");
+					return Decision;
+				}
+				// The resolved pack's intents, compiled once per root (the
+				// built-in compile covers the no-pack path).
+				const Intents = Rules(Located.root, Families(Located.pack, "test"));
 				const Memory = Agent(Exec.agent);
 				Memory.Calls += 1;
 				// The probe: the tool name plus the arguments JSON - the
@@ -178,8 +329,55 @@ export default (Context: Context, Options: Config): void => {
 				const Probe = `${Exec.name} ${JSON.stringify(Exec.arguments ?? {})}`;
 				Memory.Ring.unshift(Probe);
 				Memory.Ring.length = Math.min(Memory.Ring.length, 8);
-				const Match = Detect(State.Rules, Exec.name, Probe);
+				// THE RECONCILIATION, before the intents: a drift is a fact
+				// about the tree, the pack targets are a suggestion - when the
+				// claims have drifted the note takes the call (one note per
+				// family, D9) and the intent note yields to the next call.
+				const ReconciledNote = ReconcileCall(
+					Memory,
+					Located.root,
+					Package(
+						isAbsolute(CallPath) ? CallPath : resolve(Cwd ?? process.cwd(), CallPath),
+						Located.root,
+					),
+					Exec.name,
+				);
+				switch (true) {
+					case ReconciledNote === undefined:
+						break;
+					case Decision.kind === "block":
+						return {
+							kind: "block",
+							feedback: Decision.feedback,
+							additionalContexts: Prepend(
+								ReconciledNote,
+								Decision.additionalContexts,
+							),
+						};
+					default:
+						return {
+							...Decision,
+							additionalContexts: Prepend(
+								ReconciledNote,
+								Decision.additionalContexts,
+							),
+						};
+				}
+				const Match = Detect(Intents, Exec.name, Probe);
 				if (Match === null) {
+					return Decision;
+				}
+				// The base-aware existence filter, BEFORE the gate: a target
+				// absent from all three bases is dropped; an intent with none
+				// left abstains.
+				const Existing = Match.intent.targets.filter((Target) =>
+					Exists(Target.path, CallPath, Located.root, Cwd),
+				);
+				if (Existing.length === 0) {
+					Factory.Append(
+						State,
+						`abstained no-companions ${Match.intent.id} ${Match.k.toFixed(2)}`,
+					);
 					return Decision;
 				}
 				const Verdict = Gate(Memory, Match.intent.id);
@@ -189,9 +387,10 @@ export default (Context: Context, Options: Config): void => {
 				}
 				// The candidate set: capped at maxCandidates, exclude-filtered,
 				// in pack order. An empty surviving set abstains.
-				const Targets = Match.intent.targets
-					.filter((Target) => !Excluded(Target.path))
-					.slice(0, State.MaxCandidates);
+				const Targets = Existing.filter((Target) => !Excluded(Target.path)).slice(
+					0,
+					State.MaxCandidates,
+				);
 				if (Targets.length === 0) {
 					Factory.Append(
 						State,

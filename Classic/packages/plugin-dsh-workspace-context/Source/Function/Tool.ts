@@ -53,11 +53,15 @@ export default (Agent: State) =>
 				const Value = (args as Record<string, unknown> | null)?.[Key];
 				return typeof Value === "string" && Value.length > 0 ? Value : undefined;
 			};
+			const Id = Read("id");
+			const Query = Read("query");
+			const Lens = Read("lens");
+			const CallerVersion = Read("callerVersion");
 			const Item = PacketBuild(Agent, {
-				id: Read("id"),
-				query: Read("query"),
-				lens: Read("lens"),
-				callerVersion: Read("callerVersion"),
+				...(Id !== undefined ? { id: Id } : {}),
+				...(Query !== undefined ? { query: Query } : {}),
+				...(Lens !== undefined ? { lens: Lens } : {}),
+				...(CallerVersion !== undefined ? { callerVersion: CallerVersion } : {}),
 			});
 			return {
 				text: Render(Item),

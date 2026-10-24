@@ -2,44 +2,71 @@
 
 ## Identity
 
-- Package: `@playform/client-dsh-panel-family` (Classic/packages/client-dsh-panel-family).
-- Profile row id: `client-dsh-panel-family` (bundled in the desktop profile; the patch row's PoC
-  `enabled: false` was flipped by the wiring pass).
-- Exposes: the `playformFamilyPanel` registry service (register / entries / subscribe / getVersion /
-  unregister), the `conversation.view` family tab (`playform-family`, order 20, session scope) and
-  the `shell.overlay` mount point. Zero adapter logic: the 13 per-bundle adapters register their own
-  sections.
-- Ledger: none of its own - the host half is an empty `apply()`; activation proof is the Config
-  schema plus the tab in the UI. The client half is a pure browser module (installing it needs no
-  host restart, R-UI-1).
+- Package: `@playform/client-dsh-panel-family` (Classic/packages/client-dsh-panel-family), version
+  0.2.0 (package.json; the only family package above 0.1.0). The package tree currently carries
+  uncommitted changes - this plan describes the on-disk contract (SCHEME.md v4.1, README.md) without
+  asserting build/verification status.
+- Profile row id: `client-dsh-panel-family` (bundled in the desktop profile).
+- Exposes: the slot-aware registry service `playformFamilyPanel` with the methods
+  `register(section)`, `unregister(id)`, `entries(slot?)`, `subscribe(listener)`, `getVersion()`
+  (bumps on every accepted mutation) and `open(target)` (launches an overlay view, wired by the
+  shell's overlay host). Two mounts, each declaring its child slot: the `conversation.view` tab
+  `playform-family` (order 20) declaring `playform.panel.section` (list, session) and the
+  `shell.overlay` panel `playform-family-overlay` declaring `playform.panel.overlay` (list, root).
+  Components render their slot through the `renderSlot` prop.
+- Adapters: no longer zero adapter logic. The package ships three reference adapters
+  (`Source/Variable/Reference/`) - normalize (`@playform/hook-dsh-normalize-dash`, namespace
+  `hook-dsh-normalize-dash`, order 10), tool-coach (`@playform/hook-dsh-tool-coach`, order 30),
+  suggester (`@playform/hook-dsh-convention-suggester`, order 40) - each wired via
+  `Source/Function/Adapter.ts`. The ten residual adapters (the remaining normalize flavors,
+  `plugin-dsh-normalize-file`, the three governors, `hook-dsh-ccr`) are documented but not shipped
+  here.
+- Ledger: no ledger file (pure browser module; the host half of the Loader entry is an empty
+  `apply()`). Its lines go through the client logger (`Source/Variable/Lines.ts`), byte-exact:
+
+```text
+client-dsh-panel-family: duplicate adapter refused for <bundle> in <slot>
+client-dsh-panel-family: plain-field write <namespace> <path>
+client-dsh-panel-family: plain-field bridge unavailable for <namespace>
+client-dsh-panel-family: plain-field secret refused for <namespace>
+```
 
 ## Activation checks
 
 1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/client-dsh-panel-family"}` → one entry, status schema (defaults: tabOrder
-   20, overlayMaxWidth 720, locale "en").
-2. Service check: the `playformFamilyPanel` registry service resolves and `getVersion()` returns the
-   package version.
-3. Ledger line: none - verify activation through checks 1-2 and the T5 tab.
+   `{"name": "@playform/client-dsh-panel-family"}` → one entry, status schema (defaults: enabled
+   true, tabOrder 20, overlayMaxWidth 720, locale "en"; all knobs volatile).
+2. Service check: the `playformFamilyPanel` registry service resolves; `getVersion()` bumps on every
+   accepted mutation.
+3. Ledger line: none from activation itself - verify activation through checks 1-2, the T5 tab and,
+   once an adapter duplicate is forced, the refusal line above.
 
 ## Test cases
 
-| # | Trigger | Expected | Pass criteria | | T1 | listConfigs query above | one entry,
-`status: "schema"` | defaults present | | T1 | `playformPanel.entries()` after boot | the registered
-adapter sections | entries list non-empty once adapters register | | T2 | `register(...)` a test
-section, then `entries()` | the section appears ordered by (order, id) | order/id sort holds;
-`unregister` removes it | | T5 | The user opens the conversation view | the `playform-family` tab
-renders at order 20 | tab visible; a `shell.overlay` panel opens within overlayMaxWidth |
+| #   | Trigger                                                                  | Expected                                                                                   | Pass criteria                                                                                                   |
+| --- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| T1  | listConfigs query above                                                  | one entry, `status: "schema"`                                                              | the four defaults present                                                                                       |
+| T1  | `entries()` after boot                                                   | the three reference adapter sections                                                       | entries ordered by (order, id); `entries("playform.panel.section")` filters to one slot                         |
+| T2  | `register(...)` a second adapter id on an occupied `(slot, bundle)` pair | refused                                                                                    | the duplicate-refusal line, nothing changes, a no-op disposer returns                                           |
+| T2  | `register(...)` the same id again, then `unregister(id)`                 | replace in place, then release                                                             | re-registration replaces; unregister removes it and releases the (slot, bundle) ownership                       |
+| T5  | The user opens the conversation view                                     | the `playform-family` tab renders at order 20 with its `playform.panel.section` child slot | tab visible; adapter sections render through `renderSlot`; a `shell.overlay` panel opens within overlayMaxWidth |
+| T5  | A section's status without a trace bus                                   | static fallback                                                                            | `live: false`, empty tail; with a trace, the tail is newest-first, ≤ 8 lines, formatted `<kind> <path>`         |
 
 ## Known live gaps
 
-- Not dogfooded yet: the adapters' own registration behavior is out of scope here (each adapter is
-  tested in its owning package).
+- The package tree has uncommitted changes; the documented smokes (`Contract-And-Wiring` 13,
+  `Registry-And-Sections` 7, `Child-Slot-Model` 10, `Reference-Adapter` 14 per SCHEME §10) are the
+  on-disk documentation, not a fresh verification claim from this plan.
+- The plain-field bridge resolves, in order, the `panelFamilyHost` package's `panelFamilyBridge`
+  client service then `remote.playformFamilyPanel.editFull`; per that package's docs the browser
+  half is inert until the generated Remote contribution lands, so in a live run plain fields may
+  stay read-only with the bridge-unavailable refusal line.
 
 ## Fix loop
 
-- Fix files: `Source/Library.ts` (host half, the registry service), `Source/Client.ts`,
-  `Source/Function/`, `Source/Variable/Locale-*.json`.
+- Fix files: `Source/Library.ts` (host half, the empty `apply()`), `Source/Client.ts`,
+  `Source/Function/` (Adapter, Apply, Bridge, Form, Registry, Status), `Source/Variable/Slots.ts`,
+  `Source/Variable/Lines.ts`, `Source/Variable/Locale-*.json`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/client-dsh-panel-family run prepublishOnly`
 - Smokes: `node Classic/packages/client-dsh-panel-family/Target/Test/<Folder>/Test.js` for each
@@ -48,8 +75,9 @@ renders at order 20 | tab visible; a `shell.overlay` panel opens within overlayM
 
 ## Report stub
 
-- Plugin: `@playform/client-dsh-panel-family`
-- Tests run: T1 config - / T1 entries - / T2 register - / T5 tab -
+- Plugin: `@playform/client-dsh-panel-family` (v0.2.0)
+- Tests run: T1 config - / T1 entries - / T2 duplicate - / T2 replace+unregister - / T5 tab - / T5
+  status -
 - Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

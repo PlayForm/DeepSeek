@@ -5,6 +5,7 @@
 // Documentation/Plans/Workspace-Family/MONITOR.md (the distribution law:
 // the hook's own Config) and the live-containers monitor precedent.
 import type CheckSet from "@Interface/CheckSet.js";
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 
 export default interface Config {
 	/** The hook's own ledger file (one log per module). */
@@ -31,4 +32,9 @@ export default interface Config {
 	/** The check-set table (name -> spec) used to classify watched paths.
 	 *  The shipped catalog is Variable/DefaultCheckSets.ts. */
 	checksets: Record<string, CheckSet>;
+	/** The per-action allowlist (D6) - the shared factory block. This
+	 *  package's actions are record (automatic); it has NO gated action, so
+	 *  the block documents the posture without refusing anything. A resolved
+	 *  pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

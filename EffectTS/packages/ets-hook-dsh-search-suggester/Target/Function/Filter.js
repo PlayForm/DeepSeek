@@ -1,0 +1,1 @@
+import d from"./Exists.js";const s=(n,e,i,r)=>({...n,targets:n.targets.filter(t=>d(t.path,e,i,r))});var g=(n,e,i,r)=>n.map(t=>({...t,intent:s(t.intent,e,i,r),...t.second===void 0?{}:{second:s(t.second,e,i,r)}}));export{g as default};

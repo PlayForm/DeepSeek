@@ -30,7 +30,7 @@ bundles, Classic + EffectTS twins.
 ## 1. Bundle identity
 
 - Classic: `Classic/packages/hook-dsh-tool-coach/` — plugin `name`: `"tool-coach"`. Ledger default
-  `~/.dsh/hook-dsh-tool-coach.log`.
+  `~/.dsh/playform/hook-dsh-tool-coach.log`.
 - EffectTS: `EffectTS/packages/ets-hook-dsh-tool-coach/` — same contract behind Effect v4. Ledger
   strings byte-identical (plugin-system skill §3.5).
 - New module leaf: the coach owns its strings, config extensions, and behavior — nothing is absorbed
@@ -86,7 +86,7 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/hook-dsh-tool-coach.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-tool-coach.log").volatile(),
 	enabled: Schema.boolean().default(true).volatile(),
 	judgeTools: Schema.array(Schema.string()).default(["bash", "pwsh"]).volatile(),
 	threshold: Schema.number().default(3).volatile(),
@@ -224,9 +224,9 @@ tool-coach: disabled (enabled=false)
 
 1. Both bundles build clean serialized; all smokes pass with zero changes to existing suites.
 2. Live: profile bundle list gains the coach; a session that issues `sed -i` receives the tier-1
-   note after `threshold` offenses; ledger at `~/.dsh/hook-dsh-tool-coach.log` fills with the §4
-   strings; volatile toggles flip enforce/tier2 without remount (after the granular volatile fix
-   lands).
+   note after `threshold` offenses; ledger at `~/.dsh/playform/hook-dsh-tool-coach.log` fills with
+   the §4 strings; volatile toggles flip enforce/tier2 without remount (after the granular volatile
+   fix lands).
 3. The dedicated tools are never judged; legitimate bash never counted (smokes R1/R6).
 4. No listener ever throws into a waterfall (fail-open verified by a smoke that injects a malformed
    command payload).

@@ -30,7 +30,10 @@ intent fires ONLY through the recalled record, the gate, and the purity.
 ## Fixtures
 
 The shared Harness plus `WriteStore` (the history JSON writer). No fake
-clock: the plugin has no clock dependency.
+clock: the plugin has no clock dependency. The recalled files are HISTORY
+RECORDS, not workspace paths: they are exempt from the existence filter, so
+the seeded records keep their original `src/...` shapes. The workspace gate
+still runs on the call path.
 
 ## Expected ledger strings (byte-exact, `replay-suggester: ` prefix)
 

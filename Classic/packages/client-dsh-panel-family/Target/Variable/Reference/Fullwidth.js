@@ -1,0 +1,1 @@
+import e from"../Trace.js";var o={id:"adapter-hook-dsh-normalize-fullwidth",bundle:"@playform/hook-dsh-normalize-fullwidth",namespace:"hook-dsh-normalize-fullwidth",title:"normalize-fullwidth",order:15,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{o as default};

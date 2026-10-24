@@ -41,15 +41,38 @@ one shields only within the revocation grace). `evict` keeps the record in the g
 
 ## Config (all volatile)
 
-| Field                      | Default                         | Meaning                                                            |
-| -------------------------- | ------------------------------- | ------------------------------------------------------------------ |
-| `enabled`                  | `false`                         | the master switch                                                  |
-| `log` / `logFile`          | `true` / `~/.dsh/authority.log` | the durable ledger                                                 |
-| `defaultTtlMs`             | `300000`                        | the default lease TTL                                              |
-| `maxLeasesPerHolder`       | `8`                             | the lease ceiling                                                  |
-| `maxCapabilitiesPerHolder` | `16`                            | the capability ceiling                                             |
-| `revocationGraceMs`        | `0`                             | the revoked capability's shield time                               |
-| `policy`                   | `[]`                            | `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}` |
+| Field                      | Default                                                       | Meaning                                                            |
+| -------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `enabled`                  | `false`                                                       | the master switch                                                  |
+| `log` / `logFile`          | `true` / `~/.dsh/playform/plugin-dsh-workspace-authority.log` | the durable ledger                                                 |
+| `defaultTtlMs`             | `300000`                                                      | the default lease TTL                                              |
+| `maxLeasesPerHolder`       | `8`                                                           | the lease ceiling                                                  |
+| `maxCapabilitiesPerHolder` | `16`                                                          | the capability ceiling                                             |
+| `revocationGraceMs`        | `0`                                                           | the revoked capability's shield time                               |
+| `policy`                   | `[]`                                                          | `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}` |
+| `automation.*`             | the D6 block (see below)                                      | the per-action allowlist (the shared factory block)                |
+
+### The policy block (D6) - the `automation` key
+
+The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
+factory's block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The key is `automation`, NOT `policy`: this package's `policy` is already the residency RULE TABLE
+above (`kind` -> `disposition`), a different contract - the `plugin-dsh-route` precedent, which
+keyed its D6 block `automation` for the same reason.
+
+This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
+is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
+are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## Ledger lines (module-owned, byte-stable)
 

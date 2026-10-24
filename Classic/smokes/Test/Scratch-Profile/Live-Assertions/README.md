@@ -7,7 +7,7 @@ The scratch profile's skeleton validity, asserted against the live harness.
 The freshly created scratch profile must be a valid Section 2.3 skeleton of
 the plan: the bundle list mirrors the live desktop profile, the root is the
 empty entry list, the user patch layer is minimal and free of personal or
-family config, the install settings match the live profile's, the 12 release
+family config, the install settings match the live profile's, the 14 release
 tarballs are packed publish-identically, the post-install tree has no
 symlinks outside pnpm's own layout, every `@playform` entry is a real copied
 directory, the installed build bytes match the packed tarball, and the
@@ -32,7 +32,8 @@ other wiring suite builds on.
   - Leaf 9: the install is hoisted like the live desktop profile.
   - Leaf 10: the profile has a produced lockfile.
 - Group: the tarballs (Method 1 - publish-identical)
-  - Leaf 11: the 12 release tarballs were packed.
+  - Leaf 11: the 14 release tarballs were packed (the twelve bundles + the
+    two new libraries: trace, pack).
   - Leaf 12: every tarball is a `@playform` pack artifact.
 - Group: the no-symlink invariant (Section 2.2)
   - Leaf 13: `find $SCRATCH -type l` is empty outside pnpm's own layout.
@@ -51,7 +52,7 @@ other wiring suite builds on.
 ## Fixtures
 
 - `$DSH_TEST_SCRATCH`: the scratch home (created by `EnsureScratch` on first
-  use: 12 `pnpm pack` tarballs from the Classic packages, the profile
+  use: 14 `pnpm pack` tarballs from the Classic packages, the profile
   skeleton, `file:` tarball deps, the wiring overlay, the scratch-only
   exercise driver, a fake cargo shim).
 - No tree Target is imported; the harness drives the `dsh` CLI and the

@@ -37,7 +37,7 @@ export default Compose(false, {
 	// Ledger file — the invisible ledger, SEPARATE from the family's logs
 	// (one log per module) — volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-invisible.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-invisible.log").volatile(),
 	// The replacement — the transform's ONLY knob. The EMPTY string by
 	// default: REMOVAL — the invisible characters are deleted, not rewritten
 	// to a visible glyph. Volatile: hot-editable; the next stream picks it

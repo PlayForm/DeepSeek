@@ -112,10 +112,11 @@ const PlayformDir = path.join(Profile, "node_modules", "@playform");
 
 // Group: the tarballs (Method 1 - publish-identical).
 {
-	// Leaf 11: the 12 release tarballs were packed. Leaf 12: every tarball
-	// is a @playform pack artifact.
+	// Leaf 11: the 14 release tarballs were packed (the twelve bundles + the
+	// two new libraries: trace, pack). Leaf 12: every tarball is a @playform
+	// pack artifact.
 	const Tarballs = readdirSync(Scratch.Tarballs).filter((Entry) => Entry.endsWith(".tgz"));
-	Check(Tarballs.length === 12, `the 12 release tarballs were packed (${Tarballs.length})`);
+	Check(Tarballs.length === 14, `the 14 release tarballs were packed (${Tarballs.length})`);
 	Check(
 		Tarballs.every((Entry) => Entry.startsWith("playform-")),
 		"every tarball is a @playform pack artifact",
@@ -141,6 +142,8 @@ const PlayformDir = path.join(Profile, "node_modules", "@playform");
 	const Expected = [
 		"hook-dsh-cargo-governor",
 		"lib-dsh-core",
+		"lib-dsh-pack",
+		"lib-dsh-trace",
 		"hook-dsh-normalize-dash",
 		"hook-dsh-normalize-ellipsis",
 		"plugin-dsh-normalize-file",
@@ -157,7 +160,7 @@ const PlayformDir = path.join(Profile, "node_modules", "@playform");
 		return existsSync(Entry) && statSync(Entry).isDirectory();
 	});
 	Check(
-		RealDirs.length === 12,
+		RealDirs.length === 14,
 		"every @playform entry is a real directory (copied, never linked)",
 	);
 }

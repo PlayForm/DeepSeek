@@ -20,6 +20,19 @@
 // is one try/catch - on any error a logger.warn records it and the
 // downstream decision is returned UNCHANGED. A note never fails a waterfall.
 //
+// THE WORKSPACE GATE + THE EXISTENCE FILTER: the pack is the repo's own
+// convention graph (the built-in pack when the repo has no pack file), so the
+// post-execute listener resolves the workspace root first (the nearest
+// ancestor whose pack signature matches; the built-in default is
+// Documentation/ARCHIVE-STYLE.md, from the call path plus the session cwd).
+// A foreign workspace has no pack and abstains (`abstained foreign-workspace`);
+// a candidate absent from all three bases is dropped BEFORE the score
+// (`abstained no-companions` when the winning intent's whole candidate set is
+// gone). The intents come from the RESOLVED pack per call
+// (Families(pack, "search")), so a repo pack overrides the built-in intents
+// without a restart; the sticky section resolves the same way from the
+// process's workspace.
+//
 // THE NOTE NEVER TOUCHES CONTENT: it is a separate message, so it survives
 // the ccr and cannot be mistaken for file content (plan section 4.6). The
 // learning signals (write/edit/raw-write) are observed for the follow/ignore
@@ -30,21 +43,46 @@
 // factory Schema - the suggester owns its schema (Variable/Config) and its
 // strings. The function returns NOTHING; test probes (the end-phase) read
 // the state through the `ctx.__hookDshSearchSuggesterState` attachment.
+//
+// THE P2 GRAPH PROJECTION (the re-spec): the candidate scoring reads the
+// optional `ctx.workspaceGraph` through a lazily built projection
+// (Function/Projection) - a present graph proves the candidate (node exists,
+// kind expected, depth, recency), an absent or empty graph falls back to the
+// documented neutral literal 0.5. The projection is cached and rebuilt on
+// `tools/change` while `refreshOnBoot` holds; the sticky section renders the
+// projected index (Function/Projected) instead of the static pack list when
+// the graph proves any candidate. No ledger string is added by the
+// projection: the note and the section are the evidence.
+//
+// THE P3 OFFLINE SEED and THE P4 DISMISS TOOL: at load the knowledge is
+// seeded from the built-in pack's canonical candidates plus the projection
+// (Function/Seed; no LLM, no session history) unless `learn`/`seed` are off;
+// the `suggestion_dismiss` tool (Function/Dismiss) is registered through the
+// loader's tool API when the host exposes `ctx.tools` - the batch-decision
+// precedent, a guarded registration so a bare mount still applies.
 import type { Context } from "@deepseek-ai/cordis";
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
 import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
 import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
 import { Activate } from "@playform/lib-dsh-core";
+import { Families, Locate } from "@playform/lib-dsh-pack";
 
 import type Config from "../Interface/Config.js";
-import type { CallView, Verdict } from "../Interface/Execution.js";
+import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
 import type State from "../Interface/State.js";
 import Detect from "./Detect.js";
+import DismissTool from "./Dismiss.js";
+import Filter from "./Filter.js";
+import { Match } from "./Measure.js";
 import BuildNote, { Prepend, Text } from "./Note.js";
 import Pack from "./Pack.js";
-import Load, { Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
+import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
+import Projected from "./Projected.js";
+import BuildProjection from "./Projection.js";
 import Ring, { type RingState } from "./Ring.js";
 import Score, { NoteKey } from "./Score.js";
+import Seed from "./Seed.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
@@ -76,6 +114,23 @@ const View = (Exec: ToolExecution): CallView => {
 	}
 };
 
+/**
+ * The session cwd, probed from the OPTIONAL harness service - never a hard
+ * inject, never an unguarded accessor: the service may be absent (a bare
+ * mount) and its getter may throw. The probe must never throw; a missing cwd
+ * simply falls back to process.cwd() inside the resolver.
+ */
+const Session = (Context: Context, Exec: ToolExecution): string | undefined => {
+	try {
+		const Service = Context.get?.("workingDirectory") as
+			{ get?: (Session: unknown) => unknown } | undefined;
+		const Cwd = Service && Exec.agent ? Service.get?.(Exec.agent.session) : undefined;
+		return typeof Cwd === "string" && Cwd.length > 0 ? Cwd : undefined;
+	} catch {
+		return undefined;
+	}
+};
+
 /** The user text of the step: the last user message's text content, lowercased. */
 const UserText = (Payload: unknown): string => {
 	const Step = Payload as { messages?: { role?: string; content?: unknown }[] } | undefined;
@@ -99,7 +154,8 @@ const UserText = (Payload: unknown): string => {
 };
 
 /** The enabled pack, filtered to the config's intent kinds (order kept). */
-const Enabled = (State: State) => State.Pack.filter((Intent) => State.Intents.includes(Intent.id));
+const Enabled = (State: State, List: Intent[]) =>
+	List.filter((Intent) => State.Intents.includes(Intent.id));
 
 /** The learning verdict for an open note whose window has closed untouched (plan 6.2). */
 const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
@@ -111,6 +167,7 @@ const LearnTail = (Context: Context, State: State, Rings: RingState): void => {
 		FactoryAppend(Context, State, `ignored ${Rings.pending.intent}`);
 		Save(State.Knowledge, State.PersistPath);
 		Rings.pending = undefined;
+		Rings.emitted = [];
 	}
 };
 
@@ -169,6 +226,8 @@ export default (Context: Context, Options: Config): void => {
 			PersistPath: "persistPath",
 			IndexPath: "indexPath",
 			RefreshOnBoot: "refreshOnBoot",
+			DismissTtl: "dismissTtl",
+			Seed: "seed",
 			SectionMode: "sectionMode",
 			SectionTtl: "sectionTtl",
 		},
@@ -177,6 +236,33 @@ export default (Context: Context, Options: Config): void => {
 	State.Pack = Pack;
 	State.Knowledge = Load(State.PersistPath);
 	State.Rings = Ring();
+
+	// ------------------------------------------------------------------
+	// The graph projection cache (the P2 re-spec). The graph service is
+	// probed lazily on the first read; a present graph is cached until
+	// tools/change (refreshOnBoot), a missing/empty graph is re-probed on the
+	// next read (cheap - the expensive snapshot only runs when the service
+	// answers with nodes).
+	// ------------------------------------------------------------------
+	let Cached: Projection | undefined;
+	let Built = false;
+	const Project = (): Projection | undefined => {
+		if (!Built) {
+			Cached = BuildProjection(Context);
+			Built = Cached !== undefined;
+		}
+		return Cached;
+	};
+
+	// ------------------------------------------------------------------
+	// The P3 offline seed: the built-in pack's canonical candidates, proven
+	// twice when the graph already sees them. It mutates the in-memory
+	// knowledge only; the next real save (an emit, a follow, a dismissal)
+	// persists it, so a cold start leaves no file behind.
+	// ------------------------------------------------------------------
+	if (State.On && State.Learn && State.Seed) {
+		Seed(State.Knowledge, Enabled(State, State.Pack), Project(), Math.floor(Date.now() / 1000));
+	}
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (plan section 4.9):
@@ -188,7 +274,7 @@ export default (Context: Context, Options: Config): void => {
 			State,
 			Activate([
 				["", `bundle ${Version}`],
-				["", `intents ${Enabled(State).length}`],
+				["", `intents ${Enabled(State, State.Pack).length}`],
 				["", `threshold ${State.Threshold}`],
 			]),
 		);
@@ -218,19 +304,16 @@ export default (Context: Context, Options: Config): void => {
 					const EditPath = View(Exec).path;
 					if (State.Learn && Rings.pending !== undefined) {
 						const Intent = Rings.pending.intent;
-						const Hit = Object.keys(State.Knowledge.intents[Intent] ?? {}).find(
-							(Path) =>
-								EditPath === Path ||
-								EditPath.endsWith(Path.replace(/\*$/, "")) ||
-								(Path.includes("*") &&
-									EditPath.match(new RegExp(Path.replace(/\*/g, "[^/]+"))) !==
-										null),
-						);
+						// The follow signal reads the note's OWN candidate set
+						// (never the seeded knowledge rows): a candidate the
+						// model touched within the window is a follow.
+						const Hit = Rings.emitted.find((Path) => Match(Path, EditPath));
 						if (Hit !== undefined) {
 							Followed(State.Knowledge, Intent, Hit, Math.floor(Date.now() / 1000));
 							FactoryAppend(Context, State, `followed ${Intent} ${Hit}`);
 							Save(State.Knowledge, State.PersistPath);
 							Rings.pending = undefined;
+							Rings.emitted = [];
 						}
 					}
 					State.Rings.Push(
@@ -244,18 +327,36 @@ export default (Context: Context, Options: Config): void => {
 				if (!State.EmitOn.includes(Exec.name)) {
 					return Downstream;
 				}
+				const Call = View(Exec);
+				// The workspace gate, BEFORE detect/score: the pack is the
+				// repo's convention graph (the built-in pack when the repo has
+				// no pack file), so a call that belongs to another workspace
+				// has nothing to name here. The signature comes from the pack
+				// (default: Documentation/ARCHIVE-STYLE.md).
+				const Cwd = Session(Context, Exec);
+				const Located = Locate(Call.path, Cwd);
+				if (Located === undefined) {
+					FactoryAppend(Context, State, "abstained foreign-workspace  0.00");
+					return Downstream;
+				}
 				// The open note's learning tail, then the cooldown aging.
 				LearnTail(Context, State, Rings);
 				State.Rings.Tick(Rings, State.CooldownCalls);
 				if (Rings.pending !== undefined) {
 					Rings.pending.since += 1;
 				}
-				const Call = View(Exec);
-				const Detections = Detect(
-					Enabled(State),
-					Call,
-					State.Rings.Intents(Rings),
-					Rings.userText,
+				// The base-aware existence filter: a candidate absent from all
+				// three bases is dropped before the score/gate step.
+				const Detections = Filter(
+					Detect(
+						Enabled(State, Families(Located.pack, "search")),
+						Call,
+						State.Rings.Intents(Rings),
+						Rings.userText,
+					),
+					Call.path,
+					Located.root,
+					Cwd,
 				);
 				const Verdict: Verdict =
 					Detections.length === 0
@@ -270,6 +371,14 @@ export default (Context: Context, Options: Config): void => {
 								MaxCandidates: State.MaxCandidates,
 								Exclude: State.Exclude,
 								History: (Intent, Path) => Row(State.Knowledge, Intent, Path),
+								Dismissed: (Intent, Path) =>
+									Dismissed(
+										State.Knowledge,
+										Intent,
+										Path,
+										Math.floor(Date.now() / 1000),
+									),
+								Projection: Project(),
 							});
 				const IntentId = Detections[0]?.intent.id ?? "";
 				switch (Verdict.action) {
@@ -381,10 +490,16 @@ export default (Context: Context, Options: Config): void => {
 				}
 				const Rings = State.Rings.State(AssembleContext?.agent);
 				const Recent = [...Rings.cooled.keys()];
+				// The sticky section is pack-driven too: resolve the pack of
+				// the process's workspace (the harness runs in it) and read
+				// the intent from THAT pack. No workspace -> no section.
+				const Located = Locate(".", undefined);
 				const Intent =
-					Recent.length === 0
+					Recent.length === 0 || Located === undefined
 						? undefined
-						: State.Pack.find((Row2) => Row2.id === Recent[Recent.length - 1]);
+						: Families(Located.pack, "search").find(
+								(Row2) => Row2.id === Recent[Recent.length - 1],
+							);
 				if (Intent === undefined) {
 					return Downstream;
 				}
@@ -392,13 +507,23 @@ export default (Context: Context, Options: Config): void => {
 					Rings.sectionBuilt === undefined ||
 					Rings.calls - Rings.sectionBuilt >= State.SectionTtl;
 				if (Stale) {
+					// The P2 re-spec: the section renders the PROJECTED INDEX
+					// (the top graph paths for the intent) when the graph
+					// proves a candidate, and the static pack list otherwise
+					// (the neutral fallback, byte-identical to the PoC).
+					const Graph = Project();
+					const ProjectedRows =
+						Graph === undefined
+							? undefined
+							: Projected(Graph, Intent, State.MaxCandidates);
 					Rings.sectionText = Text(
 						Intent.id,
 						1,
-						Intent.targets.map((Target) => ({
-							path: Target.path,
-							reason: Target.reason,
-						})),
+						ProjectedRows ??
+							Intent.targets.map((Target) => ({
+								path: Target.path,
+								reason: Target.reason,
+							})),
 						State.MaxNoteChars,
 					);
 					Rings.sectionBuilt = Rings.calls;
@@ -425,14 +550,21 @@ export default (Context: Context, Options: Config): void => {
 	);
 
 	// ------------------------------------------------------------------
-	// Listener 4: tools/change - the sticky section-cache invalidation only
-	// (the section cache lives on the per-agent rings; the default ring's
-	// cache is cleared here, every other ring expires through the TTL).
+	// Listener 4: tools/change - the projection refresh (refreshOnBoot) and
+	// the sticky section-cache invalidation (the section cache lives on the
+	// per-agent rings; the default ring's cache is cleared here, every other
+	// ring expires through the TTL).
 	// ------------------------------------------------------------------
 	Context.on("tools/change", (): void => {
 		try {
 			if (!State.On) {
 				return;
+			}
+			// The projection refresh: the graph may have re-indexed with the
+			// tool registry change (refreshOnBoot); the next read rebuilds it.
+			if (State.RefreshOnBoot) {
+				Cached = undefined;
+				Built = false;
 			}
 			const Rings = State.Rings.State(undefined);
 			if (Rings.sectionText !== undefined) {
@@ -450,6 +582,19 @@ export default (Context: Context, Options: Config): void => {
 			}
 		}
 	});
+
+	// ------------------------------------------------------------------
+	// Tool T1: suggestion_dismiss (the P4 dismissal path). Registration is
+	// readonly after registration; the definition is built once here, and the
+	// guarded access keeps a bare mount (no ctx.tools) applying cleanly (the
+	// batch-decision precedent).
+	// ------------------------------------------------------------------
+	const Tools = (
+		Context as unknown as { tools?: { register?: (definition: unknown) => () => void } }
+	).tools;
+	if (typeof Tools?.register === "function") {
+		Tools.register(DismissTool(State, (Message) => FactoryAppend(Context, State, Message)));
+	}
 
 	// The loader ignores any return value; the end-phase smoke probes the
 	// built State through this debug attachment instead.

@@ -11,10 +11,15 @@ export default (State: State, Id: string): boolean => {
 		case Record === undefined:
 			State.Factory.Append(State, `revoke failed ${Id} (unknown capability)`);
 			return false;
+		default:
+			break;
+	}
+	switch (true) {
 		case Record.revoked:
 			State.Factory.Append(State, `revoke ignored ${Id} (already revoked)`);
 			return false;
 		default:
+			break;
 	}
 	Record.revoked = true;
 	Record.revokedAt = Date.now();

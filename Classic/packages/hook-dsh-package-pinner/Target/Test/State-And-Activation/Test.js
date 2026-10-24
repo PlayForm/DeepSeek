@@ -92,11 +92,12 @@ const runTest = async () => {
         assert.deepEqual(
           ctx.effects.map((e) => e[0]),
           [
+            "trace",
             "hook-dsh-pinner-package-jobs",
             "hook-dsh-pinner-package-inflight",
             "hook-dsh-pinner-package-storage"
           ],
-          "Attach: the three lifecycle effects"
+          "Attach: the trace effect + the three lifecycle effects"
         );
         const flight = new AbortController();
         st.Inflight.set("probe", { controller: flight });

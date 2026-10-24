@@ -187,8 +187,8 @@ Rewrite:
 
 - Files: `setup.astro:747-777`, `Configurator.astro:511-522`.
 - The table lists patch-name ledgers that differ from the schema defaults; `setup.astro:772` points
-  at `~/.dsh/ccr.log`, which the hardcoded path never creates off-nikola; the Configurator labels
-  logger-form strings as "the activation ledger lines", while the file form is
+  at `~/.dsh/playform/hook-dsh-ccr.log`, which the hardcoded path never creates off-nikola; the
+  Configurator labels logger-form strings as "the activation ledger lines", while the file form is
   `[ISO] activated (...)` with no plugin prefix.
 - Fix: one canonical ledger path and one canonical line shape in the table, the Configurator, and
   the verify instructions; add a default-path assertion to the smoke.

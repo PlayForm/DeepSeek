@@ -48,6 +48,8 @@ const Validate = (Raw = {}) => Plugin.Config({
 const Make = (Raw = {}) => {
   const Provided = {};
   const Lines = [];
+  const Emits = [];
+  const Services = {};
   let Context;
   Context = {
     logger: {
@@ -58,6 +60,10 @@ const Make = (Raw = {}) => {
         Lines.push(Message);
       }
     },
+    emit: (Name, ...Args) => {
+      Emits.push([Name, ...Args]);
+    },
+    get: (Name) => Services[Name],
     reflect: {
       provide: (Name, Value) => {
         Provided[Name] = Value ?? true;
@@ -68,7 +74,7 @@ const Make = (Raw = {}) => {
   };
   const Config = Validate({ logFile: Ledger, root: Root, ...Raw });
   const Instance = new Plugin(Context, Config);
-  return { Context, Provided, Lines, Config, Instance, State: Instance.State };
+  return { Context, Provided, Lines, Emits, Services, Config, Instance, State: Instance.State };
 };
 const LinesWith = (Run, Needle) => Run.Lines.filter((Line) => Line.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((Line) => Line.includes(Needle));

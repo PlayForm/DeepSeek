@@ -1,3 +1,4 @@
+import type { CompanionDecision } from "./Decision.js";
 export interface Signal {
     /** The rule id this row implements. */
     rule: string;
@@ -42,16 +43,12 @@ export interface Detection {
     /** The sum of matched signal weights. */
     evidence: number;
 }
-/** One scored companion. */
-export interface Candidate {
-    /** The companion path or glob. */
-    path: string;
+/** One scored companion (the decision model's row plus the note's fields). */
+export interface Candidate extends CompanionDecision {
     /** The companion kind. */
     kind: string;
     /** The one reason phrase. */
     reason: string;
-    /** The companion score. */
-    score: number;
 }
 /** The gate's verdict. */
 export interface Verdict {

@@ -12,7 +12,10 @@ import {
 } from "../Harness.js";
 const Setup = (Config = {}, Faults = {}) => {
   rm();
-  return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Faults);
+  return Make(
+    Validate({ logFile: Ledger, enabled: true, policy: { commit: "auto" }, ...Config }),
+    Faults
+  );
 };
 const runTest = async () => {
   const Count = MakeCounter();

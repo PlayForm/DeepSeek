@@ -23,11 +23,30 @@
 # no-ops to a passthrough (each checks State.On first). The schema defaults
 # are the truth; the full default surface (machinesPerAgent 2, opsPerCommit
 # 64, deadlineMs 120000, strictMode false, interceptBash false,
-# monitorChecksets [], logFile ~/.dsh/batch-edit.log) lives in
+# monitorChecksets [], logFile ~/.dsh/playform/ets-plugin-dsh-batch-edit.log) lives in
 # Variable/Config.ts. EVERY knob is volatile (hot-editable without
 # remounting).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist is the
+# OUTER gate in front of an apply - `write: approve` (the default) refuses the
+# commit before any plan or write with the documented
+# `apply refused <id> (policy write=approve)` line, the machine staying open
+# with its cells observed; the user's approval is the existing approve binding
+# (flip `policy.write` to auto). read/index/record/suggest and message are
+# automatic; write/commit/spawn wait for approval. A resolved pack's `policy`
+# section overrides these defaults per action (the wiring is the next
+# refinement).
 - insert:
       - id: plugin-dsh-batch-edit
         name: "@playform/ets-plugin-dsh-batch-edit"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

@@ -17,13 +17,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount over the given file fixture. */
+/** A standard enabled mount over the given file fixture. The D6 policy gate
+ *  is opened explicitly (`policy.write: "auto"`): these scenarios exercise
+ *  the commit itself, while the gate's shipped `approve` refusal is the
+ *  Policy-Defaults folder's scenario. */
 const Setup = (
 	Files: Record<string, string>,
 	Raw: Record<string, unknown> = {},
 ): any => {
 	rm();
-	return Make(Validate({ ...Raw, enabled: true, logFile: Ledger }), Files);
+	return Make(
+		Validate({ ...Raw, enabled: true, logFile: Ledger, policy: { write: "auto" } }),
+		Files,
+	);
 };
 
 /** Open a machine with one literal search and one replace op, return the run. */

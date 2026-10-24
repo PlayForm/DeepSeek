@@ -22,4 +22,21 @@ timers**.
 The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's bundles
 and enables only by an explicit ACTIVATE.
 
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
+commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
+object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
+overrides the defaults per action (the wiring is the next refinement).
+
 Plan: Documentation/Plans/Workspace-Family/MONITOR.md.

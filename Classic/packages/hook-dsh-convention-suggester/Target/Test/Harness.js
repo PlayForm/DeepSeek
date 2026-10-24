@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import { fileURLToPath } from "node:url";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const Package = fileURLToPath(new URL("../../../hook-dsh-ccr/", import.meta.url));
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
   Count.N++;
@@ -93,6 +95,7 @@ const Make = (Raw) => {
   let Context;
   Context = {
     pluginFactory: Furnace,
+    workingDirectory: { get: () => Package },
     fs: Fs,
     logger: {
       info: (M) => {

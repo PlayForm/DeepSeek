@@ -5,9 +5,30 @@ WRITER of the batch (the pass-on and the decision never write).
 
 ## 1. The inputs
 
-- `Proposal` (Interface/Proposal.ts) - the pass-on's batch contract.
+- `Proposal` (Interface/Proposal.ts) - the batch contract the apply READS: the id, the targets (the
+  version fence), the operations (the literal find/replace), the expiry and the origin (the
+  outcome's session).
 - `Decision` (Interface/Decision.ts) - `{ proposal, outcome, by, at }`; the gate's approval.
-  Produced by the decision workflow (hook-dsh-batch-decision, end-phase).
+  Produced by the decision workflow (hook-dsh-batch-decision).
+
+## 1a. The decision consumer (the trace adapter)
+
+The constructor registers two bus listeners (Function/Listen):
+
+| Event            | Effect                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `batch/proposed` | the proposal is recorded (Function/Record, bounded by `maxProposals`)                                             |
+| `batch/decision` | the decision is consumed (Function/Consume): the recorded proposal is resolved and applied through the same fence |
+
+A decision for a proposal the ingester never heard is refused with its own journal line (`unknown` /
+`no proposal recorded for the decision`) - never applied against a guessed proposal.
+
+**One apply per decision**: the claim (Function/Claim) is taken synchronously, keyed by
+`proposal:outcome:at`, so the same decision delivered twice (the tool's direct handoff and the
+event, or two channels) applies exactly once and every caller receives the same result. A genuinely
+new decision on the same proposal still runs.
+
+`WhenIdle()` awaits every in-flight apply - the flush seam the smokes use instead of sleeping.
 
 ## 2. The validation (Function/Validate, before any write)
 
@@ -40,6 +61,14 @@ continues and each remaining target gets its own honest outcome.
 `Result` (Interface/Result.ts): `{ proposal, perTarget[], applied, conflicts, recovery }` - the
 plan's BatchResult.
 
+## 4a. The feedback outcome (Function/Outcome)
+
+A batch outcome feeds the honest-feedback journal and summary (the plan's caller-side integration,
+deferred there and owned here - the ingester alone knows whether the write path applied). The
+feedback service (`ctx.feedback`, plugin-dsh-feedback) is probed at use time; absent is a silent
+skip. The outcome vocabulary is `applied` (no conflicts, no recovery) or `rejected`; the detail is
+`applied <n>, conflicts <n>, recovery <n>`; the session and the agent are the proposal's `origin`.
+
 ## 5. The write-trust boundary
 
 - Writes only through `ctx.fs` (the governed write path with the version guard); never `node:fs`,
@@ -47,6 +76,25 @@ plan's BatchResult.
 - The journal (`logFile`) is the plugin's own diagnostic log, appended with a plain `appendFileSync`
   (the factory's documented exemption).
 - No fs/observed listener, no policy file, no waterfall involvement.
+
+### 5a. The policy block (D6)
+
+The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
+`Schema.object` call; the validated shape is `State.Config.policy`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The ingester is the batch flow's WRITER, so `write` is its own action class - and it stays the
+shipped `approve`: the decision's approval (the gate in §2) IS the gate, and the block records that
+posture; the other verdicts are declared for uniformity with the family's block. A resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement; the type
+already exists in `@playform/lib-dsh-pack`). The defaults are smoke-arbitrated in
+`Source/Test/Policy-Defaults`.
 
 ## 6. The relation to the other members
 

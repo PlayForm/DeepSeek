@@ -12,8 +12,10 @@
 // through `ctx.fs.writeText` would be both racy and wrong. Every write of a
 // GOVERNED file goes through `ctx.fs` (Function/Write).
 import * as FileSystem from "node:fs";
+import { dirname as Parent } from "node:path";
 
 import type State from "@Interface/State.js";
+import { Expand } from "@playform/lib-dsh-core";
 
 export default (State: State, Message: string): void => {
 	try {
@@ -24,10 +26,9 @@ export default (State: State, Message: string): void => {
 	switch (true) {
 		case State.Enabled:
 			try {
-				FileSystem.appendFileSync(
-					State.Ledger,
-					`[${new Date().toISOString()}] ${Message}\n`,
-				);
+				const Ledger = Expand(State.Ledger);
+				FileSystem.mkdirSync(Parent(Ledger), { recursive: true });
+				FileSystem.appendFileSync(Ledger, `[${new Date().toISOString()}] ${Message}\n`);
 			} catch {
 				/* ledger best-effort */
 			}

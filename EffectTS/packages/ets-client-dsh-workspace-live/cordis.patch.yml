@@ -2,10 +2,16 @@
 #
 # The workspace family's live client: the client half of the workspace live
 # view (Documentation/Plans/Workspace-Family/LIVE.md). The presentation is
-# stable-until-event: it renders only when a workspace event surfaces a
-# change, never on a timer; it presents the workspace's representations of
-# the Entity/Presentation/Interaction model and never conflates a running OS
-# process with a managed entity.
+# stable-until-event: it renders only when a workspace event or a D5 trace
+# envelope surfaces a change, never on a timer; it presents the workspace's
+# representations of the Entity/Presentation/Interaction model and never
+# conflates a running OS process with a managed entity. The D5 trace
+# (ctx.trace: observe/stamp, graph/indexed, graph/invalidated, the batch
+# transitions when present) is the live source; the recent envelopes render
+# newest first, bounded by maxEvents, and a missing trace is the documented
+# static state. With the panel family composed, the tab declares the
+# workspace.live.section child slot and the live section registers into it
+# through its inject face.
 #
 # New entries are declared with `insert:`; activated when the profile's
 # package.json lists the package in dsh.profile.bundles AND the app restarts.

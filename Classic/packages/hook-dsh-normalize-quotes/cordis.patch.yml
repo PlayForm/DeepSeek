@@ -38,6 +38,6 @@
         name: "@playform/hook-dsh-normalize-quotes"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-normalize-quotes.log
+            logFile: ~/.dsh/playform/hook-dsh-normalize-quotes.log
             normalizeReasoning: true
             normalizeToolArguments: true

@@ -19,10 +19,19 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+import { fileURLToPath } from "node:url";
 import Plugin, * as Exports from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
 
 export { Plugin, Exports };
+
+/**
+ * The REAL package cwd the judged relative paths resolve against: the pack
+ * mixes package-relative targets (`Source/Function/*.ts`, `SCHEME.md`,
+ * `cordis.patch.yml`), so the fixture cwd is a package that actually carries
+ * them (hook-dsh-ccr) instead of the repo root.
+ */
+const Package = fileURLToPath(new URL("../../../ets-hook-dsh-ccr/", import.meta.url));
 
 /** The per-folder counter: N passing checks, F failing checks. */
 export type Counter = { N: number; F: number };
@@ -157,6 +166,7 @@ export const Make = (Raw: any): any => {
 	let Context: any;
 	Context = {
 		pluginFactory: Furnace,
+		workingDirectory: { get: () => Package },
 		fs: Fs,
 		logger: {
 			info: (M: string) => {

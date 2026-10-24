@@ -35,6 +35,83 @@ __export(Client_exports, {
 });
 module.exports = __toCommonJS(Client_exports);
 
+// Source/Variable/Locale-en.json
+var Locale_en_default = {
+  tab: "Workspace",
+  empty: "No workspace representations are presented yet."
+};
+
+// Source/Function/View.ts
+var import_react = require("react");
+var Key = (Envelope) => {
+  const Path = Envelope.payload["path"];
+  switch (true) {
+    case (typeof Path === "string" && Path.length > 0):
+      return Path;
+    default:
+      return Envelope.trace;
+  }
+};
+function View(props) {
+  return (0, import_react.createElement)(
+    "div",
+    {
+      className: "playform-workspace-live",
+      "data-live": props.live ? "true" : "false"
+    },
+    (0, import_react.createElement)(
+      "ul",
+      { className: "playform-workspace-representations" },
+      props.view.representations.map(
+        (Representation) => (0, import_react.createElement)(
+          "li",
+          { key: Representation.id },
+          `${Representation.label} (${Representation.kind}, v${Representation.version}, seq ${Representation.lastSequence})`
+        )
+      )
+    ),
+    props.view.representations.length === 0 ? (0, import_react.createElement)("p", {}, Locale_en_default.empty) : void 0,
+    (0, import_react.createElement)(
+      "ul",
+      { className: "playform-workspace-trace" },
+      props.tail.map(
+        (Envelope, Index) => (0, import_react.createElement)(
+          "li",
+          { key: `${Envelope.trace}-${String(Index)}` },
+          `${Envelope.kind} ${Key(Envelope)}`
+        )
+      )
+    ),
+    props.slot
+  );
+}
+
+// Source/Function/Section.ts
+var import_react2 = require("react");
+function Section(props) {
+  const [Current, SetCurrent] = (0, import_react2.useState)(
+    () => props.ports.store.getSnapshot()
+  );
+  const [Tail, SetTail] = (0, import_react2.useState)(() => props.ports.trace.tail());
+  (0, import_react2.useEffect)(() => {
+    const OffStore = props.ports.store.subscribe(
+      () => SetCurrent(props.ports.store.getSnapshot())
+    );
+    const OffTrace = props.ports.trace.subscribe(
+      () => SetTail(props.ports.trace.tail())
+    );
+    return () => {
+      OffStore();
+      OffTrace();
+    };
+  }, []);
+  return (0, import_react2.createElement)(View, {
+    view: Current,
+    tail: Tail,
+    live: props.ports.trace.live
+  });
+}
+
 // Source/Function/Store.ts
 function Store(config) {
   let Snapshot = { sequence: 0, representations: [], events: [] };
@@ -85,11 +162,63 @@ function Store(config) {
   };
 }
 
-// Source/Variable/Locale-en.json
-var Locale_en_default = {
-  tab: "Workspace",
-  empty: "No workspace representations are presented yet."
+// Source/Variable/Trace.ts
+var Observe = "observe/stamp";
+var Indexed = "graph/indexed";
+var Invalidated = "graph/invalidated";
+var Proposed = "batch/proposed";
+var Decision = "batch/decision";
+var StateChange = "batch/state-change";
+var Trace_default = {
+  /** The service name the factory provides on the host (`ctx.trace`). */
+  service: "trace",
+  /** The observe hook's recorded stamp (the indexer's first source). */
+  observe: Observe,
+  /** The graph stored (or replaced) a file record. */
+  indexed: Indexed,
+  /** The graph's record for a path is no longer valid. */
+  invalidated: Invalidated,
+  /** The batch gate heard a proposal (the decision hook's event). */
+  proposed: Proposed,
+  /** The batch gate decided a proposal (the decision hook's event). */
+  decision: Decision,
+  /** The batch state machine moved (the batchstate plugin's event). */
+  stateChange: StateChange,
+  /** Every name the live view follows. */
+  kinds: [Observe, Indexed, Invalidated, Proposed, Decision, StateChange]
 };
+
+// Source/Function/Trace.ts
+var IsBus = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.on === "function";
+function Trace(ctx, Bound) {
+  const Candidate = ctx.get(Trace_default.service);
+  const Bus = IsBus(Candidate) ? Candidate : void 0;
+  const Tail = [];
+  const Listeners = /* @__PURE__ */ new Set();
+  const Seed = Bus !== void 0 && typeof Bus.ring === "function" ? Bus.ring(Bound).filter(
+    (Envelope) => Trace_default.kinds.includes(Envelope.kind)
+  ) : [];
+  Tail.push(...Seed.slice(0, Bound));
+  const Publish = (Envelope) => {
+    Tail.unshift(Envelope);
+    while (Tail.length > Bound) Tail.pop();
+    for (const Listener of Listeners) Listener();
+  };
+  const Unsubscribes = Bus === void 0 ? [] : Trace_default.kinds.map((Kind) => Bus.on(Kind, Publish));
+  return {
+    live: Bus !== void 0,
+    tail: () => [...Tail],
+    subscribe(Listener) {
+      Listeners.add(Listener);
+      return () => Listeners.delete(Listener);
+    },
+    dispose() {
+      for (const Unsubscribe of Unsubscribes) Unsubscribe();
+      Unsubscribes.length = 0;
+      Listeners.clear();
+    }
+  };
+}
 
 // Source/Variable/Locale-zh.json
 var Locale_zh_default = {
@@ -97,36 +226,62 @@ var Locale_zh_default = {
   empty: "\u5C1A\u65E0\u5DE5\u4F5C\u533A\u8868\u73B0\u3002"
 };
 
+// Source/Variable/Section.ts
+var Section_default = {
+  id: "workspace-live-section",
+  bundle: "@playform/client-dsh-workspace-live",
+  namespace: "client-dsh-workspace-live",
+  title: "tab"
+};
+
+// Source/Variable/Slots.ts
+var Slots_default = {
+  /** The host slot the workspace tab mounts into. */
+  tab: "conversation.view",
+  /** The child slot the workspace tab declares and renders. */
+  section: "workspace.live.section"
+};
+
 // Source/Function/Client.ts
-var import_react = require("react");
+var import_react3 = require("react");
 var NAMESPACE = "client-dsh-workspace-live";
+var IsRegistry = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.register === "function" && typeof Candidate.getVersion === "function";
+var RegistryOf = (ctx) => {
+  const Candidate = ctx.get("playformFamilyPanel");
+  switch (true) {
+    case IsRegistry(Candidate):
+      return Candidate;
+    default:
+      return void 0;
+  }
+};
 function LiveTab(props) {
-  const [view, setView] = (0, import_react.useState)(props.store.getSnapshot());
-  (0, import_react.useEffect)(
-    () => props.store.subscribe(() => {
-      setView(props.store.getSnapshot());
-    }),
-    []
+  const [Current, SetCurrent] = (0, import_react3.useState)(
+    () => props.store.getSnapshot()
   );
-  return (0, import_react.createElement)(
-    "div",
-    { className: "playform-workspace-live" },
-    (0, import_react.createElement)(
-      "ul",
-      { className: "playform-workspace-representations" },
-      view.representations.map(
-        (representation) => (0, import_react.createElement)(
-          "li",
-          { key: representation.id },
-          `${representation.label} (${representation.kind}, v${representation.version}, seq ${representation.lastSequence})`
-        )
-      )
-    ),
-    view.representations.length === 0 ? (0, import_react.createElement)("p", {}, Locale_en_default.empty) : void 0
-  );
+  const [Tail, SetTail] = (0, import_react3.useState)(() => props.trace.tail());
+  (0, import_react3.useEffect)(() => {
+    const OffStore = props.store.subscribe(
+      () => SetCurrent(props.store.getSnapshot())
+    );
+    const OffTrace = props.trace.subscribe(() => SetTail(props.trace.tail()));
+    return () => {
+      OffStore();
+      OffTrace();
+    };
+  }, []);
+  return (0, import_react3.createElement)(View, {
+    view: Current,
+    tail: Tail,
+    live: props.trace.live,
+    ...props.slot === void 0 ? {} : { slot: props.slot }
+  });
 }
 function Client(ctx, config) {
   const store = Store(config);
+  const trace = Trace(ctx, config.maxEvents);
+  const registry = RegistryOf(ctx);
+  const manifest = { ...Section_default, order: config.tabOrder };
   ctx.provide("workspaceLive", {
     getSnapshot: () => store.getSnapshot(),
     subscribe: (listener) => store.subscribe(listener),
@@ -138,21 +293,67 @@ function Client(ctx, config) {
     "live: dictionaries"
   );
   ctx.effect(
-    () => ctx.slots.inject(
-      "conversation.view",
-      () => ctx.slots.register(
-        {
-          name: "conversation.view",
-          id: "workspace-live",
-          order: config.tabOrder,
-          locale: NAMESPACE,
-          label: () => Locale_en_default.tab
-        },
-        () => (0, import_react.createElement)(LiveTab, { store })
-      )
-    ),
+    () => {
+      const Off = ctx.slots.inject(
+        Slots_default.tab,
+        () => ctx.slots.register(
+          {
+            name: Slots_default.tab,
+            id: "workspace-live",
+            order: config.tabOrder,
+            locale: NAMESPACE,
+            label: () => Locale_en_default.tab,
+            // The child-slot model: the tab declares the slot it renders.
+            ...registry === void 0 ? {} : {
+              children: {
+                [Slots_default.section]: { kind: "list", scope: "session" }
+              }
+            }
+          },
+          (props = {}) => (0, import_react3.createElement)(LiveTab, {
+            store,
+            trace,
+            ...typeof props["renderSlot"] === "function" ? {
+              slot: props["renderSlot"](
+                Slots_default.section,
+                {}
+              )
+            } : {}
+          })
+        )
+      );
+      return () => {
+        Off?.();
+        trace.dispose();
+      };
+    },
     "live: workspace tab"
   );
+  switch (true) {
+    case registry !== void 0:
+      ctx.effect(
+        () => ctx.slots.inject(
+          Slots_default.section,
+          () => ctx.slots.register(
+            {
+              name: Slots_default.section,
+              id: Section_default.id,
+              order: config.tabOrder,
+              locale: NAMESPACE,
+              inject: () => ({ section: manifest, ports: { store, trace } })
+            },
+            (props = {}) => (0, import_react3.createElement)(
+              Section,
+              props
+            )
+          )
+        ),
+        "live: panel section"
+      );
+      break;
+    default:
+      break;
+  }
 }
 
 // Source/Client.ts

@@ -1,0 +1,1 @@
+import{homedir as t}from"node:os";import{join as e}from"node:path";var o=r=>{switch(!0){case r==="~":return t();case r.startsWith("~/"):return e(t(),r.slice(2));default:return r}};export{o as default};

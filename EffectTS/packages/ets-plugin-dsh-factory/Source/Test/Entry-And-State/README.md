@@ -43,6 +43,17 @@ volatile-refresh section, moved verbatim.
 - Group: State tolerates a config missing optional shared fields.
     - Check: "State: missing config fields tolerated (schema guarantees them
       in production)" - Ledger is undefined and Append never throws.
+- Group: the live ledger path (additive): the tilde expansion and the missing
+    parent directory.
+    - Check: "Append: the tilde ledger path expands against $HOME and creates
+      its missing parent (~/.dsh/playform)" - with `$HOME` redirected to a
+      fresh temp directory that has NO `.dsh` directory and `logFile:
+      "~/.dsh/playform/probe.log"`, `State` keeps the raw config path
+      (`Ledger` is the unexpanded string), `factory.Append(stDir, "probe
+      dir")` expands the path against the home, creates the parent directory,
+      and lands the line in `<tempHome>/.dsh/playform/probe.log` matching the
+      `[ISO] probe dir` format; the original `$HOME` is restored in a
+      `finally`.
 - Group: UpdateKey - the namespaced Inflight key for update-stage controllers.
     - Check: "UpdateKey: the namespaced Inflight key (update:<targetKey>)" -
       plain and already-namespaced target keys both map through the
@@ -81,6 +92,9 @@ volatile-refresh section, moved verbatim.
   folder).
 - The `bare` append line goes only to the disabled-ledger path (never to a
   file).
+- `[ISO] probe dir` (the directory-creation group: the single line written to
+  `<tempHome>/.dsh/playform/probe.log`, format-checked as
+  `^\[ISO\] probe dir\n$`).
 
 ## Edge cases
 
@@ -94,4 +108,4 @@ volatile-refresh section, moved verbatim.
 
 ## Expected count
 
-8 PASS.
+9 PASS.

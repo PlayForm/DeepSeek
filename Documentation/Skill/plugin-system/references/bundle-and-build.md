@@ -59,7 +59,7 @@ The patch file (`cordis.patch.yml`) declares or patches entries:
         name: "@playform/hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-governor.log
+            logFile: ~/.dsh/playform/hook-dsh-package-governor.log
 - id: hook-dsh-normalize-dash
   config:
       scopes:

@@ -67,6 +67,7 @@ export default (Context: Context, Options: Config): void => {
 			DomainName: "domain",
 			MaxBindings: "maxBindings",
 			RequireConstraints: "requireConstraints",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

@@ -1,0 +1,1 @@
+import s from"./Measure.js";var a=(t,d,o,r)=>{let i=0;for(const n of d){const f=t.intents[n.id]??={};for(const e of n.targets){if(e.family===!0||e.path.includes("<")||e.prior<1||f[e.path]!==void 0)continue;const u=o!==void 0&&s(o,n,e).exists;f[e.path]={count:u?2:1,followed:u?2:1,lastSeen:r,seed:!0},i+=1}}return t.seed=!0,t.seededAt=r,i};export{a as default};

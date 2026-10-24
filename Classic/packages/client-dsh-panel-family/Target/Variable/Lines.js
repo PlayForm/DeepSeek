@@ -1,0 +1,1 @@
+var n={duplicate:(i,e)=>`client-dsh-panel-family: duplicate adapter refused for ${i} in ${e}`,plainWrite:(i,e)=>`client-dsh-panel-family: plain-field write ${i} ${e}`,bridgeMissing:i=>`client-dsh-panel-family: plain-field bridge unavailable for ${i}`,plainSecret:i=>`client-dsh-panel-family: plain-field secret refused for ${i}`};export{n as default};

@@ -2,7 +2,7 @@ import type BatchRecord from "@Interface/Batch.js";
 import type DomainHandle from "@Interface/Domain.js";
 import type EntryRecord from "@Interface/Entry.js";
 import type FactoryHandle from "@Interface/Factory.js";
-import type { State as Base } from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */
     On: boolean;
@@ -13,6 +13,11 @@ interface Extra {
     MaxBatches: number;
     /** Config `maxEntryBytes` - the pre-image size cap (volatile). */
     MaxEntryBytes: number;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 gate on
+     *  the revert. Named `Allow` because the factory's shared State already
+     *  owns `Policy` (the configured global policy file path); `write`
+     *  defaults to `approve`, so a revert is held and writes nothing. */
+    Allow: Allowlist;
     /** The injected factory instance (State, Append, Match, Wire, Write). */
     Factory: FactoryHandle;
     /** The open batch records, keyed by batchId. */

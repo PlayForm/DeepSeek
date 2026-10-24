@@ -1,15 +1,19 @@
 // Source/Test/Harness.ts - the shared test harness for the PATTERN service
 // tests: the fake ctx (reflect.provide capture for the Service base, the
-// logger capture) + the REAL PatternService class from its built Target -
-// the family fake-ctx + real-built-library harness pattern, written ONCE
-// per package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green.
+// logger capture, the effect runner, the probe-once `get`) + the REAL
+// PatternService class from its built Target - the family fake-ctx +
+// real-built-library harness pattern, written ONCE per package and imported
+// by every test folder. Each folder process gets a fresh set, so every folder
+// is standalone-green.
 //
-// The service's Snapshot persistence uses the REAL node fs/promises against
-// `~/.dsh/pattern/registry.json` - the harness redirects $HOME to a fresh
-// OS temp directory BEFORE any construction, so the service never reads or
+// THE STORE SEAMS: the JSON fallback uses the REAL node fs/promises against
+// `~/.dsh/pattern/registry.json` - the harness redirects $HOME to a fresh OS
+// temp directory BEFORE any construction, so the service never reads or
 // writes the user's real home directory, and every scenario starts from an
-// empty (or explicitly seeded) store.
+// empty (or explicitly seeded) store. The storage-domain PRIMARY is exercised
+// with FakeStorage (the authority/evidence fake-storage pattern: the open
+// capture, the map-backed tables, the seed hook and the version fence) - the
+// facility is attached to the fake ctx BEFORE construction.
 //
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
 // counter through one deliberate pass + one deliberate failure and exits 0
@@ -57,7 +61,7 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 
 /**
  * The async variant of Check, for folders whose assertions await (the
- * snapshot Save/Load paths). Same counting and printing.
+ * snapshot Save/Load paths, the storage domain).
  */
 export const CheckAsync = async (
 	Count: Counter,
@@ -87,8 +91,9 @@ export const Finish = (Count: Counter, Name: string): number => {
 };
 
 /**
- * Flush the detached constructor promise queue (the snapshot Load runs
- * detached, so the restore line lands on a later microtask/macrotask).
+ * Flush the detached constructor promise queue (the JSON fallback's Load runs
+ * detached, so the restore line lands on a later microtask/macrotask). The
+ * storage domain's chain is awaited through the service's own Flush instead.
  */
 export const Settle = async (): Promise<void> => {
 	for (let Index = 0; Index < 4; Index++) {
@@ -101,12 +106,19 @@ export const Settle = async (): Promise<void> => {
 
 /**
  * The fake ctx: the Service base constructor registers through
- * ctx.reflect.provide; the logger captures the service's ledger lines.
+ * ctx.reflect.provide; the logger captures the service's ledger lines; the
+ * effect runner executes its setup immediately and records the disposer; get
+ * resolves through the context properties (the storage facility probe).
  */
-export const Make = (Knobs: Record<string, unknown> = {}): any => {
+export const Make = (
+	Knobs: Record<string, unknown> = {},
+	Attach?: (Context: any, Run: any) => void,
+): any => {
 	const Lines: string[] = [];
 	const Warns: string[] = [];
 	const Provided: any = {};
+	const Effects: string[] = [];
+	const Disposers: Array<() => void> = [];
 	const Context: any = {
 		logger: {
 			info: (M: string) => {
@@ -116,6 +128,15 @@ export const Make = (Knobs: Record<string, unknown> = {}): any => {
 				Warns.push(M);
 			},
 		},
+		get: (Name: string) => Context[Name],
+		effect: (Setup: () => unknown, Label?: string) => {
+			Effects.push(Label ?? "unnamed");
+			const Disposer = Setup();
+			if (typeof Disposer === "function") {
+				Disposers.push(Disposer as () => void);
+			}
+			return () => true;
+		},
 		reflect: {
 			provide: (Name: string, Value?: unknown) => {
 				Provided[Name] = Value ?? true;
@@ -124,11 +145,78 @@ export const Make = (Knobs: Record<string, unknown> = {}): any => {
 			},
 		},
 	};
-	const Service: any = new PatternService(Context);
-	if (Object.keys(Knobs).length > 0) {
-		Service.Configure(Knobs);
-	}
-	return { Context, Service, Lines, Warns, Provided };
+	const Run: any = { Context, Lines, Warns, Provided, Effects, Disposers };
+	// The optional pre-construction attachment: the storage facility must be
+	// in place BEFORE the constructor probes it.
+	Attach?.(Context, Run);
+	Run.Service = new PatternService(Context, Knobs);
+	return Run;
+};
+
+/**
+ * The fake storage facility (the authority/evidence fake-storage pattern):
+ * the open capture (the spec the service declared), the map-backed tables,
+ * a seed hook for the restart scenarios, and the VERSION FENCE - the real
+ * library enforces exact version equality per record (single layout) and a
+ * mismatched stamp is the `version-mismatch` failure, so the fake refuses an
+ * open whose declared version differs from the stored one.
+ */
+export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = {}): any => {
+	const Store: any = {
+		spec: undefined as any,
+		version: Options.version ?? 1,
+		tables: new Map<string, Map<string, unknown>>(),
+		writes: [] as [string, string][],
+		failOpen: Options.failOpen === true,
+		closed: false,
+	};
+	Store.facility = {
+		open: async (Specification: any) => {
+			switch (true) {
+				case Store.failOpen:
+					throw new Error("storage unavailable");
+				case Specification.version !== Store.version:
+					throw new Error(
+						`version-mismatch: stored ${Store.version}, declared ${Specification.version}`,
+					);
+				default:
+			}
+			Store.spec = Specification;
+			return {
+				name: Specification.name,
+				close: async () => {
+					Store.closed = true;
+				},
+				table: (Name: string) => {
+					if (!Store.tables.has(Name)) {
+						Store.tables.set(Name, new Map());
+					}
+					const Rows = Store.tables.get(Name) as Map<string, unknown>;
+					return {
+						put: async (Key: string, Value: unknown) => {
+							Rows.set(Key, Value);
+							Store.writes.push([Name, Key]);
+						},
+						entries: () => Rows.entries(),
+						keys: () => Rows.keys(),
+						get: (Key: string) => Rows.get(Key),
+						delete: async (Key: string) => Rows.delete(Key),
+						get size() {
+							return Rows.size;
+						},
+					};
+				},
+			};
+		},
+	};
+	/** Seed one record (the restart scenario: the store outlives the process). */
+	Store.seed = (Name: string, Key: string, Value: unknown): void => {
+		if (!Store.tables.has(Name)) {
+			Store.tables.set(Name, new Map());
+		}
+		(Store.tables.get(Name) as Map<string, unknown>).set(Key, Value);
+	};
+	return Store;
 };
 
 /**
@@ -157,7 +245,7 @@ if (InvokedDirectly) {
 		assert.equal(Run.Provided["pattern"], Run.Service);
 		assert.equal(Run.Service.name, "pattern");
 		assert.equal(Run.Service.List().length, 4);
-		assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/pattern.log)"]);
+		assert.deepEqual(Run.Lines, ["pattern: activated (seeded 4 patterns) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)"]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

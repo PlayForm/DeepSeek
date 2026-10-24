@@ -103,10 +103,30 @@ const Fire = async (Run, Exec) => {
   return { Out, Decision, Called };
 };
 const Launch = (Args = { description: "fix the bug" }) => ({ name: "subagent", args: JSON.parse(JSON.stringify(Args)) });
+const FireStep = async (Run, Payload, Messages = []) => {
+  const Decision = { kind: "enter", messages: Messages };
+  const Out = await Run.CtxListeners["agent/pre-step"](Payload, async () => Decision);
+  return { Out, Decision };
+};
+const Child = (Options = {}, Depth = 1) => ({
+  options: { ...Options, subagentDepth: Depth },
+  session: { header: { delegationDepth: Depth } }
+});
+const Prompt = (Text) => ({
+  id: `message-${Text.length}`,
+  role: "user",
+  content: [{ type: "text", text: Text }],
+  source: { kind: "user" }
+});
 const Coder = {
   provider: "cloudflare-workers-ai",
   model: "@cf/zai-org/glm-5.3-flash",
   reasoningEffort: "high"
+};
+const Planner = {
+  provider: "cloudflare-workers-ai",
+  model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+  reasoningEffort: "max"
 };
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
@@ -136,15 +156,19 @@ if (InvokedDirectly) {
 export {
   Check,
   CheckAsync,
+  Child,
   Coder,
   Finish,
   Fire,
+  FireStep,
   Furnace,
   Launch,
   LinesWith,
   Make,
   MakeCounter,
+  Planner,
   Plugin,
+  Prompt,
   Validate
 };
 //# sourceMappingURL=Harness.js.map

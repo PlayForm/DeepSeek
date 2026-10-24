@@ -32,5 +32,5 @@
         name: "@playform/ets-plugin-dsh-normalize-file"
         config:
             log: true
-            logFile: ~/.dsh/ets-plugin-dsh-normalize-file.log
+            logFile: ~/.dsh/playform/ets-plugin-dsh-normalize-file.log
             replacement: "-"

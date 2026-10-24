@@ -1,6 +1,8 @@
 // Config - the shape Variable/Config.ts's Schemastery schema produces; every
 // field is a volatile cell (hot-editable without remounting, the factory's
 // P10 refresh re-reads the mapped State fields in place).
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 export default interface Config {
 	/** The IDLE-forever posture: the plugin ships disabled and enables only
 	 *  by an explicit ACTIVATE. */
@@ -23,4 +25,9 @@ export default interface Config {
 	/** Per-file check-set names (the live containers' monitor vocabulary,
 	 *  reused; v1 records the names on the machine, the runner is later). */
 	monitorChecksets: string[];
+	/** The per-action allowlist (D6): the OUTER gate in front of an apply.
+	 *  The shared factory block - `write` defaults to `approve`, so a commit
+	 *  refuses until the user opens the gate. A resolved pack's `policy`
+	 *  section overrides it per action. */
+	policy: Allowlist;
 }

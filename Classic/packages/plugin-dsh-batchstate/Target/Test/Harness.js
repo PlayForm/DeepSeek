@@ -16,6 +16,17 @@ const Check = (Count, Label, Assertions) => {
     console.log(_Error instanceof Error ? _Error.message : String(_Error));
   }
 };
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
 const Finish = (Count, Name) => {
   if (Count.F !== 0) {
     throw new Error(`${Name}: ${Count.F} failed check(s)`);
@@ -139,6 +150,67 @@ const Make = (Raw, Attach) => {
   Run.State = Context.__pluginDshBatchstateState;
   return Run;
 };
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    version: Options.version ?? 1,
+    tables: /* @__PURE__ */ new Map(),
+    writes: [],
+    deletes: [],
+    failOpen: Options.failOpen === true,
+    closed: false
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      switch (true) {
+        case Store.failOpen:
+          throw new Error("storage unavailable");
+        case Specification.version !== Store.version:
+          throw new Error(
+            `version-mismatch: stored ${Store.version}, declared ${Specification.version}`
+          );
+        default:
+      }
+      Store.spec = Specification;
+      return {
+        name: Specification.name,
+        close: async () => {
+          Store.closed = true;
+        },
+        table: (Name) => {
+          if (!Store.tables.has(Name)) {
+            Store.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Store.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+              Store.writes.push([Name, Key]);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => {
+              const Existed = Rows.delete(Key);
+              Store.deletes.push([Name, Key]);
+              return Existed;
+            },
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Store.seed = (Name, Key, Value) => {
+    if (!Store.tables.has(Name)) {
+      Store.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Store.tables.get(Name).set(Key, Value);
+  };
+  return Store;
+};
 const Validate = (Raw) => Plugin.Config({ ...Raw });
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
@@ -172,7 +244,9 @@ if (InvokedDirectly) {
 }
 export {
   Check,
+  CheckAsync,
   FakeFs,
+  FakeStorage,
   Finish,
   Furnace,
   Ledger,

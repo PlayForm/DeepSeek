@@ -47,7 +47,7 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
-      Plans/                       the living + queued plans (28) + 4 granular families (73)
+      Plans/                       the living + queued plans (29) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
@@ -79,7 +79,7 @@ statuses:
 | -------------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (28)
+### Plans - the living + queued hubs (29)
 
 | Document (Documentation/Plans/)                                                                | Status            | Kind                                                   |
 | ---------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------ |
@@ -109,6 +109,7 @@ statuses:
 | [WORKSPACE-FAMILY-V4-1.md](Plans/WORKSPACE-FAMILY-V4-1.md)                                     | active            | living-plan (the dynamic workspace distilled)          |
 | [POC-BRIEF.md](Plans/POC-BRIEF.md)                                                             | complete          | living-plan (the PoC-first delivery brief)             |
 | [POC-LEDGER.md](Plans/POC-LEDGER.md)                                                           | active            | living-record (the live matrix of the planned suite)   |
+| [COMPLETION-SPEC](Plans/Completion-Spec/00-OVERVIEW.md)                                        | active            | living-plan (the completion program's hub)             |
 | [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md)                                                 | complete          | living-plan (the 29-30 ETS twins' mirror brief)        |
 | [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete          | living-plan (the smoke pass brief)                     |
 
@@ -191,6 +192,19 @@ Frame: [NAMING-BY-ROLE](Plans/Workspace-Family/NAMING-BY-ROLE.md) ·
 stage) · [REFLECT](Plans/Workspace-Family/REFLECT.md) (later stage) ·
 [SHARED-LIBRARY](Plans/Workspace-Family/SHARED-LIBRARY.md) (lib-dsh-workspace-live).
 
+### Plans/Completion-Spec - the completion program's topics (7)
+
+[00-OVERVIEW](Plans/Completion-Spec/00-OVERVIEW.md) (the interview decisions, the architecture, the
+waves, the re-spec candidates) ·
+[01-WORKSPACE-AND-INDEXER](Plans/Completion-Spec/01-WORKSPACE-AND-INDEXER.md) (the 16 workspace
+packages + the trace bus + the packs) ·
+[02-ORCHESTRATION](Plans/Completion-Spec/02-ORCHESTRATION.md) (the 10 orchestration packages + the
+policy block) · [03-SUGGESTERS](Plans/Completion-Spec/03-SUGGESTERS.md) (the 7 suggesters + the
+decision layer) · [04-CLIENT](Plans/Completion-Spec/04-CLIENT.md) (the 3 client packages) ·
+[05-CORE-EXISTING-ETS](Plans/Completion-Spec/05-CORE-EXISTING-ETS.md) (the core, the factory, the 14
+existing plugins, the twins) · [06-VERIFICATION](Plans/Completion-Spec/06-VERIFICATION.md) (the
+acceptance bar, the activation loop, the dogfood scenarios).
+
 ### Researches - the research outputs (8)
 
 | Document (Documentation/Researches/)                                                      | Status   | Kind            |
@@ -229,11 +243,11 @@ stage) · [REFLECT](Plans/Workspace-Family/REFLECT.md) (later stage) ·
 
 ### Plugins - the registry documents (3)
 
-| Document (Documentation/Plugins/)                            | Status | Kind                                  |
-| ------------------------------------------------------------ | ------ | ------------------------------------- |
-| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record                         |
-| [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | active | living-record (built as PoCs)         |
-| [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active | standard (the one-file suite summary) |
+| Document (Documentation/Plugins/)                            | Status | Kind                                                                      |
+| ------------------------------------------------------------ | ------ | ------------------------------------------------------------------------- |
+| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record (the 99-package registry)                                   |
+| [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | active | living-record (built as PoCs)                                             |
+| [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active | standard (the one-file suite summary, incl. the trace and pack libraries) |
 
 ### Testing - the per-plugin live test plans (36)
 

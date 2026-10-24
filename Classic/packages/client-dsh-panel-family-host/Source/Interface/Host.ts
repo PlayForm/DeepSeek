@@ -1,7 +1,9 @@
-// Host - the service contract of the panel-family host
+// Host - the READ-ONLY service contract of the panel-family host
 // (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md).
-// Two methods, least privilege, READ-ONLY (A5.3): the endpoint reads ~/.dsh
-// family logs only and has no write surface.
+// Two methods, least privilege: the endpoint reads ~/.dsh family logs only
+// and has no write surface. The package's ONE write surface is the separate
+// plain-field bridge contract (Interface/Bridge.ts); the D5 forwarding face
+// is Interface/Trace.ts.
 //
 // The Typert generation pipeline (TypertRemoteService + @Remote + generated
 // descriptors) is documented as not reproducible from an external package

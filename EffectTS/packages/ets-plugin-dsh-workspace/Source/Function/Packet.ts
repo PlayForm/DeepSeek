@@ -13,6 +13,7 @@
 // - The token estimate is characters / tokenCharsPerToken - no token counter
 //   is injected in v0; the budget enforcement is honest about being an
 //   estimate.
+import Role from "@Function/Role.js";
 import type { Edge, Node, WorkspaceGraph } from "@Interface/Graph.js";
 import type { PacketView } from "@Interface/Packet.js";
 import type { NodeRow } from "@Interface/Query.js";
@@ -33,13 +34,6 @@ export const Row = (Node_: Node): NodeRow => ({
 	fingerprint: Node_.fingerprint,
 	version: Node_.version,
 });
-
-/** The one-line role of a module: its first DocSection title, else "module". */
-const Role = (Graph_: WorkspaceGraph, Path: string): string => {
-	const Sections = Graph_.find({ kind: "DocSection", pattern: `${Path}*`, limit: 1 });
-	const First = Sections[0];
-	return First?.name ?? "module";
-};
 
 /** Resolve the focus node: an exact id first, else the first find hit. */
 const Focus = (Graph_: WorkspaceGraph, IdOrQuery: string): Node | undefined => {

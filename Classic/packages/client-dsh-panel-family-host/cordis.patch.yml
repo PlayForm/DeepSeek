@@ -1,11 +1,16 @@
 # Bundle patch for @playform/client-dsh-panel-family-host.
 #
-# The host half of the UI family's panel: the family-host endpoint giving the
-# central panel LIVE data - tail(namespace, lines) for the family ledger
-# tails and stats() for the ccr store summary (Documentation/Plans/UI-Family/
-# PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md). READ-ONLY: the endpoint reads
-# ~/.dsh family logs ONLY, no write surface (A5.3). fiberPhases come from the
-# existing remote.pluginManager - no new endpoint for them.
+# The host half of the UI family's panel: three services (Documentation/Plans/
+# UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md).
+# READ-ONLY: panelFamilyHost.tail(namespace, lines) for the family ledger tails
+# and panelFamilyHost.stats() for the ccr store summary; panelFamilyTrace
+# forwards the D5 bus (ctx.trace) as on/ring. WRITE, least privilege: the
+# plain-field bridge panelFamilyBridge.editFull(namespace, patch) applies a
+# namespace's whole resolved config through ctx.configEditor.edit() and refuses
+# a namespace declaring role("secret"); the editor owns the audit line. The
+# ./client half re-publishes the bridge and the trace under the panel's names
+# through the harness's generated playformFamilyPanel Remote namespace.
+# fiberPhases come from the existing remote.pluginManager - no new endpoint.
 #
 # New entries are declared with `insert:`; activated when the profile's
 # package.json lists the package in dsh.profile.bundles AND the app restarts.
@@ -18,4 +23,4 @@
             enabled: false
             logRoot: ~/.dsh
             maxLines: 200
-            ccrLog: ~/.dsh/ccr.log
+            ccrLog: ~/.dsh/playform/hook-dsh-ccr.log

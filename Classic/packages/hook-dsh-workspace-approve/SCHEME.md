@@ -80,7 +80,7 @@ pending/approved -> invalidated (the file's observed version moved)
 - package name: `@playform/hook-dsh-workspace-approve`;
 - `name` export: `hook-dsh-workspace-approve`;
 - the State build's `module:` option: `approve` (the ledger prefix);
-- the ledger logFile default: `~/.dsh/approve.log`.
+- the ledger logFile default: `~/.dsh/playform/hook-dsh-workspace-approve.log`.
 
 ## 6. The ledger strings (module-owned, byte-stable)
 
@@ -104,14 +104,15 @@ approve: storage open failed: <reason>
 
 ## 7. The Config (all volatile)
 
-| Field              | Type    | Default                           |
-| ------------------ | ------- | --------------------------------- |
-| logFile            | string  | `~/.dsh/approve.log`              |
-| log                | boolean | true (the factory's shared block) |
-| enabled            | boolean | false                             |
-| domain             | string  | `workspace_approve`               |
-| maxBindings        | number  | 1000                              |
-| requireConstraints | boolean | true                              |
+| Field              | Type        | Default                                          |
+| ------------------ | ----------- | ------------------------------------------------ |
+| logFile            | string      | `~/.dsh/playform/hook-dsh-workspace-approve.log` |
+| log                | boolean     | true (the factory's shared block)                |
+| enabled            | boolean     | false                                            |
+| domain             | string      | `workspace_approve`                              |
+| maxBindings        | number      | 1000                                             |
+| requireConstraints | boolean     | true                                             |
+| policy             | `Allowlist` | the D6 defaults (see below)                      |
 
 ## 8. What this PoC does NOT do (honest)
 
@@ -120,3 +121,21 @@ approve: storage open failed: <reason>
   surface is a later slice.
 - The candidate fingerprint is computed by the caller; the approve hook binds and checks, it never
   hashes content.
+
+## The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
+commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
+object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
+overrides the defaults per action (the wiring is the next refinement).
+
+No new ledger line: the package has no gated action.

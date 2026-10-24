@@ -26,6 +26,12 @@ with weights), its per-intent threshold (`0.85` for the destructive `Version`/`P
 **one reason phrase** ("the monorepo manifest", "the const Version", "the build mirror - never
 edit"). A candidate without a reason is not emitted.
 
+The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
+[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `search/` domain. A
+repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `search/` intents; a repository without a pack
+stays silent.
+
 ## The gate
 
 `k = sigmoid(sum(weights) + b)`, `b = -0.6`, so a single weak signal never crosses the default
@@ -44,14 +50,50 @@ user prompt in derived history. The optional second surface (`sectionMode: "stic
 default) is one `system-prompt/assemble` section carrying the current intent's target list, rebuilt
 on a TTL and invalidated on `tools/change`.
 
+## The graph projection (P2)
+
+The plan's generated repo index is superseded by a projection of the workspace graph (the approved
+re-spec, Completion-Spec/03-SUGGESTERS.md section 3): the optional `ctx.workspaceGraph` is probed
+through `ctx.get` (no inject - a repo without the graph still emits) and one `snapshot()` read
+becomes the projection. A candidate's literal score is the graph's proof - the node exists, its kind
+matches the intent's expected kinds, its recency is the node's version-token rank - and its scope is
+the path's depth tier (the plan's 1.0 / 0.7 tiers). When the graph is absent or empty, the candidate
+scores the documented **neutral** literal `0.5` and scope `1.0` (the PoC values, byte-identical).
+The projection is cached and rebuilt on `tools/change` while `refreshOnBoot` holds. The sticky
+section renders the projected index - the top graph paths per intent - instead of the static pack
+list whenever the graph proves a candidate. The projection adds **no** ledger string: the note and
+the section are the evidence.
+
 ## The learning
 
-Online only, in this PoC: after a note, a candidate the model actually touches within the window is
-a `followed` (counts move, the journal closes); an untouched window closes as `ignored`. The
-knowledge file (`persistPath`, `~/.dsh/search-suggester/knowledge.json`) is written atomically
-(temp + rename, mode 0600) and bounded; a corrupt file degrades to the cold start - the static pack
-alone is enough to emit. The offline seed and the generated repo index
-(`Maintain/Index-Search-Targets.mjs`, `indexPath`) are the end-phase.
+Two layers, both deterministic and LLM-free:
+
+- the **offline seed** (`Function/Seed`) runs at load and warms the knowledge from the built-in
+  pack's canonical candidates (prior 1.0) plus the graph projection (a proven candidate is seeded
+  twice). It never overwrites an existing row, does not save (the next real write persists it), and
+  is switched off by `learn: false` or `seed: false`;
+- the **online learning**: after a note, a candidate the model actually touches within the window is
+  a `followed` (counts move, the journal closes); an untouched window closes as `ignored`. The
+  knowledge file (`persistPath`, `~/.dsh/search-suggester/knowledge.json`) is written atomically
+  (temp + rename, mode 0600) and bounded; a corrupt file degrades to the cold start - the static
+  pack alone is enough to emit.
+
+## The dismissal
+
+The `suggestion_dismiss` tool (registered through the loader's tool API when the host exposes
+`ctx.tools`) records a durable dismissal: pass the suggestion family (the intent id a note named)
+and optionally one candidate path. A family dismissal suppresses the note
+(`suppressed dismissed <Intent>`); a path dismissal drops that candidate. The record line is
+`dismissed <Intent> <path|*>`. The dismissal lives in the knowledge file and expires after
+`dismissTtl` seconds (default 86400) - no timer, the read prunes it.
+
+## The benchmark
+
+The fixed fifty-call replay (`Variable/Sequence`) runs through the real built listener and is scored
+by `Function/Benchmark`: the recorded baseline is
+`calls=50 notes=5 precision=1.00 recall=0.70 first-note=1`. The `Source/Test/Benchmark` folder
+asserts the numbers and their determinism; a rule change that loses a target shows up as a recall
+drop.
 
 ## The waterfall discipline
 
@@ -63,8 +105,19 @@ never fails a tool call); plain registration, after the ccr and the normalize fa
 ## Config
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every tuning knob is volatile (hot-editable, no
-remount); the structural knobs (`persistPath`, `indexPath`, `refreshOnBoot`) remount on edit. Ships
-**disabled** - enable by explicit ACTIVATE in the profile.
+remount); the structural knobs (`persistPath`, `refreshOnBoot`) remount on edit, and `indexPath` is
+retired by the P2 re-spec (kept so an existing profile loads unchanged). Ships **disabled** - enable
+by explicit ACTIVATE in the profile.
+
+## The smokes
+
+Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
+its own `## Expected count`: the five original folders (Pack-Driven, Post-Execute-And-Learning,
+Sticky-Section-And-Ring, Wiring-And-Ledger, Workspace-Gate), the four capability folders of this
+wave (Projection, Dismiss, Seed, Benchmark), and the plan's nine suites - three covered by the
+original folders (Delivery-And-Label and Learning-Update by Post-Execute-And-Learning, Ledger by
+Wiring-And-Ledger) and six added here (Classification, Threshold-And-Cooldown, Abstention,
+Persistence, Index-Refresh, Noise). The aggregate prints 126 PASS.
 
 ## License
 

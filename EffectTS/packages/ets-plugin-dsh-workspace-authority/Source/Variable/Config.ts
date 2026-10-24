@@ -18,10 +18,12 @@
 // `enabled` defaults to FALSE - the IDLE-forever posture: the service
 // registers and reads honestly, but grants and leases nothing until enabled.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/authority.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-plugin-dsh-workspace-authority.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The default lease TTL (ms).
 	defaultTtlMs: Schema.number().default(300_000).volatile(),
@@ -44,4 +46,18 @@ export default Compose(false, {
 	)
 		.default([])
 		.volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
+	// block. The key is `automation`, NOT `policy` - this package's `policy`
+	// is already the RESIDENCY RULE TABLE above (kind -> disposition), a
+	// different contract (the plugin-dsh-route precedent). This package's
+	// action classes are read-only and record - the capability/lease/
+	// residency records, the eviction dispositions and the read surface are
+	// AUTOMATIC, so it has NO gated action: it never writes a file, commits a
+	// batch or spawns an agent, and no verdict can refuse it.
+	// read/index/record/suggest/message are automatic; write/commit/spawn
+	// wait for approval for the family's write paths (declared here for
+	// uniformity - this package never takes them). Volatile as one object; a
+	// resolved pack's `policy` section overrides the defaults per action (the
+	// wiring is the next refinement; the type already exists).
+	automation: Policy(),
 });

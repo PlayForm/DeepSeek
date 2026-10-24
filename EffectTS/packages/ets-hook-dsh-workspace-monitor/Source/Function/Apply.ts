@@ -67,6 +67,7 @@ export default (Context: Context, Options: Config): void => {
 			MaxWatch: "maxWatch",
 			Include: "include",
 			CheckSets: "checksets",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

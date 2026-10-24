@@ -41,7 +41,7 @@ import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
 import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/live-containers.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-live-containers.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	sectionName: Schema.string().default("live-containers").volatile(),
 	refresh: Schema.union(["request", "ttl"]).default("request").volatile(),

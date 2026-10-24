@@ -1,0 +1,1 @@
+const e="observe/stamp",t="graph/indexed",s="graph/invalidated",a="batch/proposed",n="batch/decision",d="batch/state-change";var o={service:"trace",observe:e,indexed:t,invalidated:s,proposed:a,decision:n,stateChange:d,kinds:[e,t,s,a,n,d]};export{o as default};

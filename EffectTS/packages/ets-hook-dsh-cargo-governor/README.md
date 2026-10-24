@@ -94,7 +94,7 @@ The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (
         name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-cargo-governor.log
             updateMode: cargo
 ```
 
@@ -316,7 +316,7 @@ declared with `insert:`.
         name: "@playform/ets-hook-dsh-cargo-governor"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-cargo-governor.log # SEPARATE ledger - never the npm ledgers
+            logFile: ~/.dsh/playform/ets-hook-dsh-cargo-governor.log # SEPARATE ledger - never the npm ledgers
             updateCooldownMs: 3000
             strict: false # strip unknown deps - explicit only, never a default
             mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -357,7 +357,7 @@ tokio = { version = "0.4.5", features = ["full"] }  # chain-governed
 The transcript shows only what the author wrote; the ledger shows the pass:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (cargo flavor, logFile=~/.dsh/ets-hook-dsh-cargo-governor.log, updateMode=cargo, cargoBin=/usr/local/bin/cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))
+[2026-10-03T09:15:22.411Z] activated (cargo flavor, logFile=~/.dsh/playform/ets-hook-dsh-cargo-governor.log, updateMode=cargo, cargoBin=/usr/local/bin/cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))
 [2026-10-03T09:16:01.880Z] governed ~/Projects/acme/engine/Cargo.toml → 42
 [2026-10-03T09:16:34.120Z] update stage dispatched for ~/Projects/acme/engine (cargo via /usr/local/bin/cargo, built-in default policy)
 [2026-10-03T09:16:41.502Z] update: cargo upgrade --manifest-path ~/Projects/acme/engine/Cargo.toml --exclude serde tokio → {"exitCode":0}
@@ -381,9 +381,9 @@ untouched, the breaker counting the failure.
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/ets-hook-dsh-cargo-governor.log` - SEPARATE from the npm
-ledgers) records activation, exclusions, chain-pass results, refusals, and every update-stage
-dispatch.
+One global log (`logFile`, default `~/.dsh/playform/ets-hook-dsh-cargo-governor.log` - SEPARATE from
+the npm ledgers) records activation, exclusions, chain-pass results, refusals, and every
+update-stage dispatch.
 
 The strings this module composes (the ets-hook-dsh-cargo-governor: logger prefix is the factory's
 `Append`; each line is `[<ISO>] <message>` in the file):

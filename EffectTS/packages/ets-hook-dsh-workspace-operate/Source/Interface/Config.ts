@@ -2,6 +2,8 @@
 // produces for the operate hook: every field is volatile (the factory's
 // State builder refreshes these in place on a hot edit). The contract is
 // Documentation/Plans/Workspace-Family/OPERATE.md.
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
+
 export default interface Config {
 	/** The IDLE-forever switch: false means disabled, wired to nothing. */
 	enabled: boolean;
@@ -16,4 +18,9 @@ export default interface Config {
 	limitMaximum: number;
 	/** The hook's own ledger file (one log per module). */
 	logFile: string;
+	/** The per-action allowlist (D6) - the shared factory block. This
+	 *  package's action class is SUGGEST (automatic); it has NO gated action,
+	 *  so the block documents the posture without refusing anything. A
+	 *  resolved pack's `policy` section overrides it per action. */
+	policy: Allowlist;
 }

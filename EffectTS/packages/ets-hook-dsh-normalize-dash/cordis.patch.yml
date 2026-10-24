@@ -34,7 +34,7 @@
         name: "@playform/ets-hook-dsh-normalize-dash"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-normalize-dash.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-normalize-dash.log
             replacement: "-"
             normalizeReasoning: true
             normalizeToolArguments: true

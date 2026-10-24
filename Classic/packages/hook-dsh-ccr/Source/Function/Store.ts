@@ -27,6 +27,7 @@
 import * as FileSystem from "node:fs";
 
 import type Entry from "@Interface/Entry.js";
+import { Expand } from "@playform/lib-dsh-core";
 
 // One eviction reported to the caller (the reason tags the ledger line).
 export type Eviction = { hash: string; reason: "ttl" | "budget" };
@@ -43,7 +44,10 @@ export default class Store {
 	Path: string;
 
 	constructor(JournalPath: string) {
-		this.Path = JournalPath ?? "";
+		// The config-supplied path expands once here (a leading "~" -> the
+		// user's home), so every later use - the load, the compaction rewrite
+		// and the append - sees the resolved path.
+		this.Path = Expand(JournalPath ?? "");
 		switch (true) {
 			case this.Path !== "":
 				this.Load();

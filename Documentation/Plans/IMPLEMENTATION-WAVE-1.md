@@ -59,10 +59,10 @@ decisions are owned by high-effort agents; the mechanical edits go to low-effort
 3. **EffectTS**: keep the fork for now. Remove the four unused direct `effect` dependencies (ccr,
    tool-coach, live-containers, core), correct the false `Stream/Gate` claim in `ets-lib-dsh-core`,
    and defer the generate/adapt/delete choice to a release decision.
-4. **Behavioral fixes**: the ccr default path becomes `~/.dsh/ccr.log`; the ledger defaults align to
-   the patch/README names (`hook-dsh-package-governor.log`, `hook-dsh-package-pinner.log`,
-   `hook-dsh-cargo-governor.log`); a default-path assertion lands in the relevant smoke. These are
-   behavioral and versioned.
+4. **Behavioral fixes**: the ccr default path becomes `~/.dsh/playform/hook-dsh-ccr.log`; the ledger
+   defaults align to the patch/README names (`hook-dsh-package-governor.log`,
+   `hook-dsh-package-pinner.log`, `hook-dsh-cargo-governor.log`); a default-path assertion lands in
+   the relevant smoke. These are behavioral and versioned.
 5. **Overpass**: land the hash drift-guard first (zero behavior change), then the versioned move
    with the dash canary per the architecture plan.
 6. **Renames**: only safe content terms. Package names, exported `name` values, ledger strings, and

@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 import type KindSpec from "./KindSpec.js";
 export default interface Config {
     enabled: boolean;
@@ -13,4 +14,9 @@ export default interface Config {
     expiresSeconds: number;
     /** The kind table: kind name -> spec. */
     kinds: Record<string, KindSpec>;
+    /** The per-action allowlist (D6): the shared factory block. The pass-on is
+     *  read-only - `read`/`suggest` are automatic; the write/commit/spawn
+     *  verdicts stay the shipped `approve`. A resolved pack's `policy` section
+     *  overrides it per action. */
+    policy: Allowlist;
 }

@@ -132,6 +132,7 @@ export default (Context: Context, Options: Config): void => {
 			Strict: "strictMode",
 			Intercept: "interceptBash",
 			Checksets: "monitorChecksets",
+			Allow: "policy",
 		},
 	});
 	State.Factory = Factory;

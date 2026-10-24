@@ -60,6 +60,26 @@ export const Check = (Count: Counter, Label: string, Assertions: () => void): vo
 };
 
 /**
+ * The async variant of Check, for folders whose assertions await (the storage
+ * domain's persistence chain). Same counting and printing.
+ */
+export const CheckAsync = async (
+	Count: Counter,
+	Label: string,
+	Assertions: () => Promise<void>,
+): Promise<void> => {
+	Count.N++;
+	try {
+		await Assertions();
+		console.log(`PASS - ${Label}`);
+	} catch (_Error) {
+		Count.F++;
+		console.log(`FAIL - ${Label}`);
+		console.log(_Error instanceof Error ? _Error.message : String(_Error));
+	}
+};
+
+/**
  * End-of-folder guard: any failed assertion is a folder failure. Returns the
  * PASS count for the runner's `N PASS - <Name>` line (the vacuously-green
  * backstop: the runner compares it against the folder README's expected
@@ -228,6 +248,78 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__pluginDshBatchstateState;
 	return Run;
+};
+
+/**
+ * The fake storage facility (the authority/evidence fake-storage pattern):
+ * the open capture (the spec the plugin declared), the map-backed tables, a
+ * seed hook for the restart scenarios, a write log (the persistence proof)
+ * and the VERSION FENCE - the real library enforces exact version equality
+ * per record (single layout) and a mismatched stamp is the
+ * `version-mismatch` failure, so the fake refuses an open whose declared
+ * version differs from the stored one.
+ */
+export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = {}): any => {
+	const Store: any = {
+		spec: undefined as any,
+		version: Options.version ?? 1,
+		tables: new Map<string, Map<string, unknown>>(),
+		writes: [] as [string, string][],
+		deletes: [] as [string, string][],
+		failOpen: Options.failOpen === true,
+		closed: false,
+	};
+	Store.facility = {
+		open: async (Specification: any) => {
+			switch (true) {
+				case Store.failOpen:
+					throw new Error("storage unavailable");
+				case Specification.version !== Store.version:
+					throw new Error(
+						`version-mismatch: stored ${Store.version}, declared ${Specification.version}`,
+					);
+				default:
+			}
+			Store.spec = Specification;
+			return {
+				name: Specification.name,
+				close: async () => {
+					Store.closed = true;
+				},
+				table: (Name: string) => {
+					if (!Store.tables.has(Name)) {
+						Store.tables.set(Name, new Map());
+					}
+					const Rows = Store.tables.get(Name) as Map<string, unknown>;
+					return {
+						put: async (Key: string, Value: unknown) => {
+							Rows.set(Key, Value);
+							Store.writes.push([Name, Key]);
+						},
+						entries: () => Rows.entries(),
+						keys: () => Rows.keys(),
+						get: (Key: string) => Rows.get(Key),
+						delete: async (Key: string) => {
+							const Existed = Rows.delete(Key);
+							Store.deletes.push([Name, Key]);
+							return Existed;
+						},
+						get size() {
+							return Rows.size;
+						},
+					};
+				},
+			};
+		},
+	};
+	/** Seed one record (the restart scenario: the store outlives the process). */
+	Store.seed = (Name: string, Key: string, Value: unknown): void => {
+		if (!Store.tables.has(Name)) {
+			Store.tables.set(Name, new Map());
+		}
+		(Store.tables.get(Name) as Map<string, unknown>).set(Key, Value);
+	};
+	return Store;
 };
 
 /**

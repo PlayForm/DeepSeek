@@ -1,1 +1,1 @@
-var o=(e,t)=>{for(const r of t.extensions)e.Adapters.set(r.toLowerCase(),t);e.Factory.Append(e,`adapters registered (${e.Adapters.size} extensions)`)};export{o as default};
+var o=(e,t)=>{for(const s of t.extensions)e.Adapters.set(s.toLowerCase(),t);for(const s of t.files??[])e.Adapters.set(s,t);e.Factory.Append(e,`adapters registered (${e.Adapters.size} extensions)`)};export{o as default};

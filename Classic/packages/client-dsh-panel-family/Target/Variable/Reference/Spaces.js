@@ -1,0 +1,1 @@
+import e from"../Trace.js";var o={id:"adapter-hook-dsh-normalize-spaces",bundle:"@playform/hook-dsh-normalize-spaces",namespace:"hook-dsh-normalize-spaces",title:"normalize-spaces",order:13,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{o as default};

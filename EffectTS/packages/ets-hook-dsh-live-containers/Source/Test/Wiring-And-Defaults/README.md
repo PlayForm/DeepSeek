@@ -24,7 +24,7 @@ every later folder, so it is its own folder.
           sectionBudgetBytes and blocks are `{ get }` callable cells
     - Sub: "config defaults: the shipped posture"
         - enabled=false (the IDLE-forever posture), logFile=
-          ~/.dsh/live-containers.log, sectionName=live-containers,
+          ~/.dsh/playform/hook-dsh-live-containers.log, sectionName=live-containers,
           refresh="request", ttlCalls=8, separator="---",
           sectionBudgetBytes=4096
         - blocks = the 14-entry catalog in shipped order; exactly

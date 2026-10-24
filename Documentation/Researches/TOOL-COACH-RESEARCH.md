@@ -246,7 +246,7 @@ lines.
 
 ```
 enabled        boolean  default true   volatile
-logFile        string   default '~/.dsh/hook-dsh-tool-coach.log'  volatile
+logFile        string   default '~/.dsh/playform/hook-dsh-tool-coach.log'  volatile
 judgeTools     string[] default ['bash','pwsh']  volatile
 threshold      number   default 3      volatile   (strikes within window -> note)
 window         number   default 8      volatile   (sliding window of judged calls)
@@ -284,7 +284,7 @@ references after it lands (factory State builder unwraps defensively,
   pattern). exec is identical for ALL listeners, so detection is order-independent.
 - Counters: in-memory per-agent `WeakMap` (RTR precedent; resumed sessions start fresh - accepted,
   documented). The PERSISTENT record is the ledger file (one log per module:
-  `~/.dsh/hook-dsh-tool-coach.log`).
+  `~/.dsh/playform/hook-dsh-tool-coach.log`).
 - Smokes: fake ctx + real built Target; byte-identical ledger strings; cases in PLAN section 5.
 - EffectTS parity: same contract behind Effect v4, ledger strings byte-identical (plugin-system
   skill section 3.5).

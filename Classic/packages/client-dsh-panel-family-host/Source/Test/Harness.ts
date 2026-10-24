@@ -20,8 +20,12 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
+import ClientPluginModule from "../../Target/Client.js";
 
 export { Plugin };
+
+/** The browser half (`./client`: { inject, apply, default }). */
+export const ClientPlugin = ClientPluginModule;
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.
@@ -103,11 +107,12 @@ export const MakeRoot = (): string => FileSystem.mkdtempSync(Path.join(OS.tmpdir
  * real cordis registration is `ctx.provide`, removed with the owning fiber),
  * the logger records the activation line.
  */
-export const Make = (Raw: any): any => {
+export const Make = (Raw: any, Services: Record<string, unknown> = {}): any => {
 	const Lines: string[] = [];
 	const Warns: string[] = [];
 	const Provided: any = {};
 	const Context: any = {
+		get: (Name: string) => Services[Name],
 		logger: {
 			info: (M: string) => {
 				Lines.push(M);
@@ -127,6 +132,7 @@ export const Make = (Raw: any): any => {
 		Warns,
 		Provided,
 		Raw,
+		Services,
 	};
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.Service = Provided["panelFamilyHost"];
@@ -165,6 +171,111 @@ export const Names = (Dir: string): string[] => FileSystem.readdirSync(Dir).sort
  */
 export const LinesWith = (Run: any, Needle: string): string[] =>
 	Run.Lines.filter((L: string) => L.includes(Needle));
+
+// -- the plain-field bridge's config-editor seam --
+
+/**
+ * A fake `ctx.configEditor`: `entries()` answers the declared rows and
+ * `edit(entry, change)` records the config the change callback derived. The
+ * real editor validates, persists, and audits the write; the fake captures
+ * exactly the two facts the bridge is responsible for (which entry, which
+ * patch), so the assertions stay on the bridge's contract.
+ */
+export const MakeEditor = (Entries: any[]): any => {
+	const Writes: any[] = [];
+	const Editor = {
+		entries: () => Entries,
+		edit: async (Entry: any, Change: (current: any, inherited: any) => any) => {
+			Writes.push({ id: Entry?.options?.id, patch: Change({}, {}) });
+		},
+	};
+	return { Editor, Writes };
+};
+
+/** One fake profile entry carrying a serialized Schemastery schema. */
+export const MakeEntry = (Id: string, Schema: any): any => ({
+	options: { id: Id, name: `@playform/${Id}` },
+	fiber: { runtime: { Config: Schema } },
+});
+
+/** A serialized-schema stand-in: the `{ toJSON }` shape the editor carries. */
+export const MakeSchema = (Serialized: unknown): any => ({
+	toJSON: () => Serialized,
+});
+
+// -- the D5 bus seam --
+
+/**
+ * A fake D5 bus (`ctx.trace`): `on` records listeners per kind, `emit`
+ * completes an envelope and dispatches it, and `ring` answers newest first -
+ * the factory's contract, without importing it.
+ */
+export const MakeBus = (): any => {
+	const Listeners = new Map<string, Set<(Envelope: any) => void>>();
+	const Ring: any[] = [];
+	let Sequence = 0;
+	return {
+		on: (Kind: string, Listener: (Envelope: any) => void) => {
+			let Subscribers = Listeners.get(Kind);
+			if (Subscribers === undefined) {
+				Subscribers = new Set();
+				Listeners.set(Kind, Subscribers);
+			}
+			Subscribers.add(Listener);
+			return () => {
+				Subscribers?.delete(Listener);
+			};
+		},
+		ring: (Limit?: number) => [...Ring].reverse().slice(0, Limit ?? 256),
+		emit: (Kind: string, Payload: Record<string, unknown>) => {
+			Sequence += 1;
+			const Envelope = {
+				trace: `trace-${Sequence}`,
+				kind: Kind,
+				at: Sequence,
+				payload: Payload,
+			};
+			Ring.push(Envelope);
+			for (const Listener of Listeners.get(Kind) ?? []) Listener(Envelope);
+			return Envelope;
+		},
+	};
+};
+
+// -- the browser client half's context seam --
+
+/**
+ * A fake client ctx for the `./client` half: `get` answers the optional
+ * Remote gateway face, `provide` captures the services the half publishes,
+ * and `inject` records the service-ready callbacks (the test opens the
+ * namespace by running them, the way the real seam fires).
+ */
+export const MakeClient = (Options: { remote?: unknown } = {}): any => {
+	const Services: Record<string, unknown> = {};
+	if (Options.remote !== undefined) Services["remote"] = Options.remote;
+	const Provided: Record<string, unknown> = {};
+	const Injects: { deps: string[]; callback: (ctx: any) => void }[] = [];
+	const Context: any = {
+		get: (Name: string) => Services[Name],
+		provide: (Name: string, Value: unknown) => {
+			Provided[Name] = Value;
+			return () => true;
+		},
+		inject: (Deps: string[], Callback: (ctx: any) => void) => {
+			Injects.push({ deps: Deps, callback: Callback });
+			return () => true;
+		},
+	};
+	const Run: any = { Context, Provided, Injects, Services };
+	Run.Open = () => {
+		for (const Entry of Injects) Entry.callback(Context);
+	};
+	return Run;
+};
+
+/** The built client bundle's source (the closure-factory envelope). */
+export const BundleSource = (): string =>
+	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =

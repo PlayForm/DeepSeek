@@ -1,9 +1,11 @@
 # Bundle patch for @playform/plugin-dsh-workspace.
 # The workspace agent is the workspace regime's conversational surface
 # (WORKSPACE-AGENT.md): the operational view the conversation addresses,
-# through the FOUR navigation tools (workspace_map, workspace_find,
-# workspace_expand, workspace_context) over the Wave-1 graph service
+# through the FIVE tools (workspace_map, workspace_find, workspace_expand,
+# workspace_context, workspace_index) over the Wave-1 graph service
 # (Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.4-3.5).
+# workspace_index is the indexing trigger: it delegates to the graph's
+# indexWorkspace, so the graph is populated from the conversation.
 #
 # New entries are declared with `insert:` - a bare `id:` row PATCHES an
 # existing entry and the loader rejects unknown ids. Activated when the
@@ -19,8 +21,25 @@
 # remounting): enabled, log/logFile, mapDepth, mapMaxModules, findLimit,
 # findLimitMax, expandDepth, expandMaxNeighbors, packetTokenBudget,
 # packetTokenMax, tokenCharsPerToken and the kinds filter.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist ships
+# with its defaults - read/index/record/suggest and message are automatic,
+# write/commit/spawn wait for approval. The workspace agent's actions are
+# READ-ONLY (automatic), so this package has NO gated action: it never writes a
+# file, commits a batch or spawns an agent, and no verdict can refuse it. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: plugin-dsh-workspace
         name: "@playform/plugin-dsh-workspace"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

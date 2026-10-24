@@ -7,12 +7,14 @@
 //
 // The methods are thin delegates (one Function module each):
 //
-//   packet(query)     - the orientation packet (Function/Packet);
+//   packet(query)     - the orientation packet, served through the bounded
+//                       memo (Function/Cached; the trace's graph/invalidated
+//                       clears it) and built by Function/Packet on a miss;
 //   lenses()          - the available lens names;
 //   focusOf(caller)   - the caller's tracked focus, or undefined;
 //   statistics()      - { packets, clamped, stale, budget }.
 import { Service, type Context } from "@deepseek-ai/cordis";
-import PacketBuild from "@Function/Packet.js";
+import Cached from "@Function/Cached.js";
 import type Packet from "@Interface/Packet.js";
 import type Query from "@Interface/Query.js";
 import type State from "@Interface/State.js";
@@ -26,9 +28,9 @@ export default class WorkspaceContext extends Service {
 		this.State = State;
 	}
 
-	/** The orientation packet for one query. */
+	/** The orientation packet for one query (memoized; invalidated by the trace). */
 	packet(Query_: Query): Packet {
-		return PacketBuild(this.State, Query_);
+		return Cached(this.State, Query_);
 	}
 
 	/** The available lens names (config `lenses`). */

@@ -17,12 +17,30 @@
 # cold mount the State build logs `disabled (enabled=false)` and every
 # listener no-ops to a passthrough (it checks State.On first). The schema
 # defaults are the truth; the full default surface (logFile
-# ~/.dsh/workspace-audit.log, domain workspace_audit, maxLines 2000, the
+# ~/.dsh/playform/hook-dsh-workspace-audit.log, domain workspace_audit, maxLines 2000, the
 # default exclusion triple) lives in Variable/Config.ts. EVERY knob is
 # volatile (hot-editable without remounting): enabled, log/logFile, domain,
 # maxLines and the exclusion list.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# audit hook's actions are RECORD (every traceability line and every
+# assessment is recorded) - all AUTOMATIC - so the package has NO gated
+# action: it never writes a file, commits a batch or spawns an agent, and no
+# verdict can refuse it. read/index/record/suggest and message are automatic;
+# write/commit/spawn wait for approval for the family's write paths. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: hook-dsh-workspace-audit
         name: "@playform/hook-dsh-workspace-audit"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

@@ -14,6 +14,7 @@
 		"lychee": "bash Maintain/Lychee.sh",
 		"site": "pnpm --dir Site run Run",
 		"test": "node Maintain/Run-Smokes.mjs",
+		"test:types": "node Maintain/Run-Types.mjs",
 		"test:wiring": "node Maintain/Run-Wiring.mjs"
 	},
 	"devDependencies": {
@@ -25,7 +26,7 @@
 		"@trivago/prettier-plugin-sort-imports": "6.0.2",
 		"@vue/compiler-sfc": "3.5.44",
 		"prettier": "3.9.10",
-		"prettier-plugin-astro": "1.1.1",
+		"prettier-plugin-astro": "1.1.2",
 		"prettier-plugin-autocorrect": "0.4.3",
 		"prettier-plugin-ember-template-tag": "2.1.8",
 		"prettier-plugin-java": "2.11.0",

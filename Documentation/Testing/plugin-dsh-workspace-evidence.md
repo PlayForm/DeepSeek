@@ -5,34 +5,56 @@
 - Package: `@playform/plugin-dsh-workspace-evidence`
   (Classic/packages/plugin-dsh-workspace-evidence).
 - Profile row id: `plugin-dsh-workspace-evidence` (bundled in the desktop profile).
-- Exposes: the `workspaceEvidence` service (`export default class WorkspaceEvidence extends Service`
-  with `super(Context, "workspaceEvidence")`). The evidence store of the traceability graph: the
-  OutcomeEvidence records the audit/journal steps attach to.
-- Ledger lines: `` `evidence: disabled (enabled=false)` `` (cold mount) and
-  `` `evidence: activated (domain=workspace_evidence)` ``; logFile `~/.dsh/evidence.log`; KV domain
-  `workspace_evidence`.
+- Exposes: the `workspaceEvidence` service (`ctx.workspaceEvidence`) - the validation objects, the
+  evidence dependencies, the four kinds of truth, and the stale-validation invalidation (the Acar
+  seam). Service surface: `validate(id, kind, subject, dependencies, verdict?)` records one
+  validation object (throws on an invalid kind/id/subject, fail loud; a revalidation supersedes),
+  `check(id)` returns `"fresh" | "stale" | "superseded" | undefined`, `invalidate(key)` returns the
+  number of objects gone stale, `list(status?)` returns the objects oldest sequence first,
+  `statistics()` returns `{ validations, fresh, stale, superseded, sequence }`.
+- The four truth kinds (`TruthKind`): `reality`, `observation`, `representation`, `intent`.
+- Config (all volatile): `log` true, `logFile` `~/.dsh/playform/plugin-dsh-workspace-evidence.log`,
+  `enabled` false, `domain` `workspace_evidence`, `maxValidations` 512 (superseded evict first, then
+  oldest), `exclude` `["node_modules/**", "**/Target/**", "**/.git/**"]`, `policy` (the D6 allowlist
+  defaults).
+- Ledger lines (module-owned, byte-stable, prefixed `evidence: `; from the package README):
+  `` `evidence: disabled (enabled=false)` ``,
+  `` `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` ``,
+  `` `evidence: superseded <id> (sequence N)` ``, `` `evidence: stale <id> (dependency <key>)` ``,
+  `` `evidence: no stale (dependency <key>)` ``, `` `evidence: ignored <path> (own actor)` ``,
+  `` `evidence: ignored <path> (excluded)` ``,
+  `` `evidence: ignored <path> (absent observation)` ``, `` `evidence: failed <path> (<reason>)` ``,
+  `` `evidence: storage open failed: <reason>` ``.
 
 ## Activation checks
 
 1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-evidence"}` → one entry, status schema (defaults per
-   Variable/Config.ts: the domain and the ring bounds).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceEvidence` → resolves.
-3. Ledger line: `evidence: activated (domain=workspace_evidence)` in `~/.dsh/evidence.log`.
+   `{"name": "@playform/plugin-dsh-workspace-evidence"}` → one entry, status schema (defaults:
+   domain `workspace_evidence`, maxValidations 512, the exclude globs, the D6 policy block).
+2. Service check: `cordis_inspect_query` host/Service/listService `workspaceEvidence` → resolves
+   with `validate` / `check` / `invalidate` / `list` / `statistics`.
+3. Ledger line: `evidence: disabled (enabled=false)` on a cold mount and
+   `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` on the
+   first record, in `~/.dsh/playform/plugin-dsh-workspace-evidence.log`.
 
 ## Test cases
 
-| # | Trigger | Expected | Pass criteria | | T1 | listConfigs query above | one entry,
-`status: "schema"` | the defaults match | | T2 | Record one piece of OutcomeEvidence for a /tmp
-operation | the record stored in the domain | operation id, outcome, timestamp present | | T2 |
-Attach the same evidence to a traceability query | the evidence is retrievable by operation id | no
-duplicate records | | T1 | Query evidence on a fresh state | the honest empty answer | no fabricated
-records |
+| #   | Trigger                                         | Expected                        | Pass criteria                                                                                                                                |
+| --- | ----------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | listConfigs query above                         | one entry, `status: "schema"`   | the defaults match (domain, maxValidations 512, exclude)                                                                                     |
+| T2  | `validate(id, kind, subject, deps, "verified")` | the validation stored           | `evidence: validated <id> (<kind>, <subject>, N dependencies, verified, sequence N)`; an invalid kind/id/subject throws                      |
+| T2  | Re-validate the same id                         | the old object superseded       | `evidence: superseded <id> (sequence N)`; `check(id)` reads `fresh`                                                                          |
+| T2  | `invalidate(key)` for a declared dependency     | dependents go stale in one pass | `evidence: stale <id> (dependency <key>)`; the count returned matches; a key with no dependents logs `evidence: no stale (dependency <key>)` |
+| T2  | `list()` and `statistics()`                     | the store counters              | `{ validations, fresh, stale, superseded, sequence }`; sequence is the service's own monotonic counter, never a wall clock                   |
+| T2  | Exceed maxValidations                           | eviction                        | superseded evicted first, then oldest; the eviction is visible in `statistics()`                                                             |
+| T1  | `check` on a fresh state                        | `undefined`                     | no fabricated records; the service records the caller's verdict, never invents one                                                           |
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: evidence records not linked to the audit records (broken
-  operation-id join) and ring eviction dropping evidence silently.
+- Not dogfooded yet. Watch for: invalidations not reaching the dependents through the factory's Wire
+  (a broken dependency join) and eviction dropping objects without the statistics reflecting it. The
+  resolved pack's `policy` override is the next refinement (the block documents the posture; there
+  is no gated action).
 
 ## Fix loop
 
@@ -46,7 +68,8 @@ records |
 ## Report stub
 
 - Plugin: `@playform/plugin-dsh-workspace-evidence`
-- Tests run: T1 config - / T2 record - / T2 retrieval - / T1 empty -
+- Tests run: T1 config - / T2 validate - / T2 supersede - / T2 invalidate - / T2 stats - / T2
+  eviction - / T1 empty -
 - Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

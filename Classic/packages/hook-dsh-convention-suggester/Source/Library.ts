@@ -24,8 +24,10 @@
 // abstention path (SEARCH-SUGGESTER-PLUGIN.md sections 3.4, 4, 8, 9.4 - the
 // convention consumer of the suggester family).
 //
-// READ-ONLY by design: the hook never edits, never rewrites arguments, and
-// never denies - its only surface is the additionalContexts notice.
+// READ-ONLY by design EXCEPT the opt-in learner (D4): the hook never edits,
+// never rewrites arguments, and never denies - its surfaces are the
+// additionalContexts notice and, only when `learning` is on, ONE proposal
+// file under `<home>/.dsh/playform/proposals/` (never the live pack).
 //
 // FULLY CONTRACT-AWARE: every listener awaits next() FIRST and is fail-open
 // (never throws into a waterfall). The hook is a NON-MANIFEST module (no

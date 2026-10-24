@@ -151,8 +151,8 @@ injection the family's raw-write uses):
 
 ## 7. The ledger strings (the contract)
 
-One log per module - `logFile` (default `~/.dsh/ccr.log`), volatile. The strings are the module's
-OWN (the factory never owns them) and asserted byte-identical by the smoke:
+One log per module - `logFile` (default `~/.dsh/playform/hook-dsh-ccr.log`), volatile. The strings
+are the module's OWN (the factory never owns them) and asserted byte-identical by the smoke:
 
 ```
 ccr: activated (bundle 0.1.0, targets 8, budget 268435456)

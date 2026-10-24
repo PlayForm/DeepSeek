@@ -19,13 +19,32 @@
 # cold mount the State build logs `disabled (enabled=false)` and every
 # listener no-ops to a passthrough (it checks State.On first). The schema
 # defaults are the truth; the full default surface (logFile
-# ~/.dsh/workspace-journal.log, domain workspace_journal, maxBatches 200,
+# ~/.dsh/playform/ets-hook-dsh-workspace-journal.log, domain workspace_journal, maxBatches 200,
 # maxEntryBytes 65536, the default exclusion triple) lives in
 # Variable/Config.ts. EVERY knob is volatile (hot-editable without
 # remounting): enabled, log/logFile, domain, maxBatches, maxEntryBytes and
 # the exclusion list.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist. The
+# journal's ONE gated action is the revert - it writes the pre-images back,
+# so `write: approve` refuses the pass with the documented
+# `revert held <n> files (policy write=approve)` line, zero writes, no state
+# change and no record (the batch stays reversible and waits for the user).
+# Recording (open/seal/recover) is `record` = automatic; read/index/record/
+# suggest and message are automatic; write/commit/spawn wait for approval. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: hook-dsh-workspace-journal
         name: "@playform/ets-hook-dsh-workspace-journal"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

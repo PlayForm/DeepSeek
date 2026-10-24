@@ -24,6 +24,7 @@
 
 ## The gates (in evaluation order)
 
+0. the D6 policy gate (`commit` = `approve` holds the whole batch, zero writes)
 1. empty batch
 2. `maxFiles`
 3. `maxTotalBytes`
@@ -34,16 +35,36 @@
 In all-or-nothing mode any gate failure or conflict rejects the whole batch; in survivors mode
 conflicts and per-file failures are replies.
 
+## The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The commit is the hook's ONE gated action. The policy is the OUTER gate, evaluated before the atomic
+gates and before any write: an `approve` verdict logs the byte-exact
+`merge held (<n> files) (policy commit=approve)` line, replies every operation `rejected` with
+`the policy holds the commit (commit=approve)`, persists nothing, and performs zero writes. `auto`
+proceeds to the gates. The block is one volatile object, so a policy flip is hot-editable without a
+remount; a resolved pack's `policy` section overrides the defaults per action (the wiring is the
+next refinement).
+
 ## Config
 
-| Field           | Type                              | Default            |
-| --------------- | --------------------------------- | ------------------ |
-| `enabled`       | boolean                           | `false`            |
-| `domain`        | string                            | `workspace_merge`  |
-| `mode`          | `"all-or-nothing" \| "survivors"` | `all-or-nothing`   |
-| `maxFiles`      | number                            | `50`               |
-| `maxTotalBytes` | number                            | `1000000`          |
-| `logFile`       | string                            | `~/.dsh/merge.log` |
+| Field           | Type                              | Default                                        |
+| --------------- | --------------------------------- | ---------------------------------------------- |
+| `enabled`       | boolean                           | `false`                                        |
+| `domain`        | string                            | `workspace_merge`                              |
+| `mode`          | `"all-or-nothing" \| "survivors"` | `all-or-nothing`                               |
+| `maxFiles`      | number                            | `50`                                           |
+| `maxTotalBytes` | number                            | `1000000`                                      |
+| `policy`        | `Allowlist`                       | the D6 defaults (see above)                    |
+| `logFile`       | string                            | `~/.dsh/playform/hook-dsh-workspace-merge.log` |
 
 All volatile. Invalid config fails loud at load.
 

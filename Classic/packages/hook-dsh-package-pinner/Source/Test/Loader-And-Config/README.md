@@ -31,7 +31,7 @@ factory, no apply, no I/O.
 
 ## Expected ledger strings (byte-identical)
 
-None asserted. (The logFile default `~/.dsh/hook-dsh-package-pinner.log` is
+None asserted. (The logFile default `~/.dsh/playform/hook-dsh-package-pinner.log` is
 asserted as a config VALUE - it is the module's identity string and may only
 change with the module's identity.)
 

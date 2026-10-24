@@ -185,6 +185,29 @@ registered step; an array or a single name = the named steps; unknown names igno
 line) completes before the next step reads the file. An empty registry (no module registered for the
 basename) is a contained no-op.
 
+### The trace bus (`ctx.trace`)
+
+The factory is also the home of the workspace family's **trace bus** (the completion spec's D5: the
+indexer is INFERRED from the event bus - no separate process, no separate indexer plugin). The
+constructor builds one bus and provides it as `ctx.trace`; the vocabulary and the detached loop live
+in [`@playform/lib-dsh-trace`](../lib-dsh-trace), and every adapting plugin carries its own
+`Source/Trace/` adapter - no plugin imports another.
+
+```ts
+ctx.trace.emit({ kind: "observe/stamp", payload: { path, version, origin } }); // complete + dispatch
+const Dispose = ctx.trace.on("graph/invalidated", (Envelope) => { ... });       // the disposer
+await ctx.trace.flush();                                                        // deterministic
+ctx.trace.ring(10);                                                             // newest first, bounded 256
+```
+
+The bus completes the envelope (`{ trace, kind, at, actor, payload }` - the bus assigns `trace-<n>`
+and `at` when the emitter supplied none), pushes it into a bounded ring (the fixed `Bound` = 256, no
+config knob), and dispatches it to the listeners of its kind. Every listener runs inside its own
+try/catch and the whole emit is contained: the bus NEVER throws into a caller (the callers are
+synchronous fs/observed listeners). The constructor's unload effect disposes the bus - a late emit
+and a late subscription are contained no-ops. The service adds NO method to the 19-method
+`pluginFactory` surface and NO config field.
+
 ### What the factory deliberately does NOT own
 
 - **The consumer ledger strings.** Every message a hook logs (`skipped (excluded) ...`,
@@ -201,9 +224,12 @@ basename) is a contained no-op.
 ### The named exports
 
 Only the entry carries named exports: the six **type re-exports** (`State`, `Options`, `Gate`,
-`Transform`, `Output`, `Journal` - the consumer contract, shipped as relative `.d.ts` specifiers)
-and the standalone **`Schema`** function (factory v0.1.1) - the module-load use of the instance
-method, because the loader needs `Config` before any context exists.
+`Transform`, `Output`, `Journal` - the consumer contract, shipped as relative `.d.ts` specifiers),
+the trace service's **type re-export** (`Trace`), the **`Allowlist`** type re-export (the policy
+block's shape, D6), the standalone **`Schema`** function (factory v0.1.1) - the module-load use of
+the instance method, because the loader needs `Config` before any context exists - and the two
+policy helpers, **`Policy()`** (the shared schema-block builder) and **`Decide(policy, action)`**
+(the `"auto" | "approve"` verdict lookup).
 
 Full contract: [SCHEME.md](./SCHEME.md).
 
@@ -211,12 +237,15 @@ Full contract: [SCHEME.md](./SCHEME.md).
 
 - `tsc --noEmit` - zero errors (TypeScript 7, `@playform/build/tsconfig`).
 - `pnpm run prepublishOnly` - minified `Target/` (+ `.d.ts` twins).
-- `node factory-smoke.mjs` (in the family's `smokes/` directory) - 34 checks, ALL PASS: a fake ctx +
-  a REAL instance (the class/service registered as `ctx.pluginFactory`), covering every primitive,
-  the Gate matrix, both GuardedWrite postures, the full Continue lifecycle (Inflight
+- `node Target/Test/<Folder>/Test.js` (one folder per suite) - 53 checks across 8 folders, ALL PASS:
+  a fake ctx + a REAL instance (the class/service registered as `ctx.pluginFactory`), covering every
+  primitive, the Gate matrix, both GuardedWrite postures, the full Continue lifecycle (Inflight
   registration/removal, no-op paths, throw containment, message forms, the P3 union), State
   defaults + cell unwrap, Attach's three effects, Journal's queue/drain/silent-skip, Schema's
-  volatile cells and Seam's probe-once caching.
+  volatile cells, Seam's probe-once caching, the trace service (`Trace-Service`: registration,
+  emit/on, the ring, the disposer, fail-open, the unload path), and the policy block
+  (`Policy-And-Decide`: the D6 defaults, the override, the fail-loud verdict, the composed cell and
+  `Decide`'s fallback).
 
 ### The Exemptions (inherited, documented)
 
@@ -263,6 +292,51 @@ plugin; the factory's `State` builder unwraps them defensively. The volatile-ref
 volatile edit commits one `loader/volatile-update` dispatch whose whole object the State's refresh
 listener re-reads - live, silent, no remount (the granular scopes of the normalize hooks ride the
 same path, and the scopes are all volatile live toggles).
+
+### The policy block (D6)
+
+The shared per-plugin allowlist: `Policy()` builds the Schemastery block a consumer spreads into its
+own schema, one key per action class, each `"auto"` (the plugin acts on its own) or `"approve"` (the
+action waits for the user's approval).
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+```ts
+// Variable/Config.ts - composed at module-evaluation time, like Schema.
+// the gated action - the policy is the OUTER gate.
+import { Schema as Compose, Decide, Policy } from "@playform/plugin-dsh-factory";
+
+export default Compose(false, { logFile: "…", enabled: false, policy: Policy() });
+
+// Function/Apply.ts - the block lands on the consumer's own State field.
+fields: {
+	Allow: "policy";
+}
+
+switch (Decide(State.Allow, "spawn")) {
+	case "auto":
+		/* act */ break; /* approve: wait */
+}
+```
+
+`Decide(policy, action)` answers the verdict; the action names ARE the keys. A missing key (a
+partial block) falls back to that action's D6 default and a malformed value is treated as missing,
+so a bad config can only be MORE conservative for write/commit/spawn. The block is one volatile
+object: a policy flip is hot-editable without a remount.
+
+The existing module knobs (`autoSpawn`, `autoApprove`, `enabled`) stay the INNER gate - the policy
+is the OUTER one, so an `approve` verdict beats an enabled knob, while a disabled knob still refuses
+on its own.
+
+**The pack section.** A pack's `policy` section (`@playform/lib-dsh-pack`'s `Policy` type - the same
+action -> verdict mapping) overrides these defaults per action when a pack is resolved, so one file
+describes one repo. The pack -> policy defaulting wiring is the next refinement; the type and the
+section already exist, and a resolved pack's block is a straight overlay on the table above.
 
 ---
 

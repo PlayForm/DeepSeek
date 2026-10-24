@@ -1,11 +1,14 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import { type Registry as GovernRegistry, type Selection as GovernSelection } from "./Function/Govern.js";
+import PolicyFn from "./Function/Policy.js";
 import SchemaFn from "./Function/Schema.js";
 import { type Over as WriteOver } from "./Function/Write.js";
+import type Allowlist from "./Interface/Allowlist.js";
 import type Decision from "./Interface/Gate.js";
 import type Setup from "./Interface/Options.js";
 import type Shape from "./Interface/State.js";
+import type Trace from "./Interface/Trace.js";
 import type Transform from "./Interface/Transform.js";
 export type { default as State } from "./Interface/State.js";
 export type { default as Options } from "./Interface/Options.js";
@@ -13,6 +16,8 @@ export type { default as Gate } from "./Interface/Gate.js";
 export type { default as Transform } from "./Interface/Transform.js";
 export type { default as Output } from "./Interface/Output.js";
 export type { default as Journal } from "./Interface/Journal.js";
+export type { default as Trace } from "./Interface/Trace.js";
+export type { default as Allowlist } from "./Interface/Allowlist.js";
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;
@@ -21,6 +26,8 @@ export declare function Schema(Shared?: {
     exclude?: string[];
     policyFile?: string;
 } | false, Module?: Record<string, unknown>): ReturnType<typeof SchemaFn>;
+export declare function Policy(): ReturnType<typeof PolicyFn>;
+export declare function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve";
 export default class PluginFactory extends Service {
     static inject: string[];
     constructor(Context: Context);
@@ -99,6 +106,15 @@ export default class PluginFactory extends Service {
         detail: string;
         at: number;
     }[] | undefined;
+    /** THE TRACE BUS (D5): the family's one bus, built in the constructor and
+     *  provided as `ctx.trace` (the vocabulary and the detached loop live in
+     *  @playform/lib-dsh-trace; the service lives here, the family's shared
+     *  machinery owner). Every adapting plugin carries its own Source/Trace/
+     *  adapter and consumes this bus - no plugin imports another, and the
+     *  indexer is inferred from the events rather than being a separate
+     *  process or a separate plugin. The unload effect disposes it (drop the
+     *  listeners, stop dispatch), so a late emit is a contained no-op. */
+    Trace: Trace;
     /** The Schemastery schema factory (shared volatile fields + module fields). */
     Schema(Shared?: {
         log?: boolean;
@@ -165,4 +181,10 @@ export default class PluginFactory extends Service {
      *  awaits this call: the tool's result returns after the fold completes.
      *  Best-effort by design; see Function/Govern. */
     Govern(Target: FsTarget, Selection: GovernSelection, Actor: object | undefined, Version: FsVersion): Promise<void>;
+}
+declare module "@deepseek-ai/cordis" {
+    interface Context {
+        /** The trace bus service (provided by the factory as `trace`). */
+        trace: Trace;
+    }
 }

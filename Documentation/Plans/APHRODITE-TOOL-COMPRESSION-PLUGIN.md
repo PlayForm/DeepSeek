@@ -354,8 +354,8 @@ later item per the SPLICE-ETS pattern (Documentation/Archive/Split/SPLICE-ETS.md
 - Smokes: `node Classic/smokes/ccr-smoke.mjs` green with byte-identical ledger assertions; the
   twelve existing suites unchanged and green; `pnpm run test --workspace-concurrency=1` green
   overall.
-- LIVE: activation line in `~/.dsh/ccr.log`; a >2048-byte bash result renders as preview + marker in
-  the transcript; retrieval restores the bytes; exempt tools untouched.
+- LIVE: activation line in `~/.dsh/playform/hook-dsh-ccr.log`; a >2048-byte bash result renders as
+  preview + marker in the transcript; retrieval restores the bytes; exempt tools untouched.
 - Git: read-only checks ONLY - the deliverable is reported READY-TO-COMMIT (routing law,
   `session-orientation` section 3).
 

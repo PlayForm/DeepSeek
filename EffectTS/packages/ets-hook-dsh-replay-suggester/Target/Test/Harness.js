@@ -33,9 +33,16 @@ const Finish = (Count, Name) => {
   }
   return Count.N;
 };
+const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-home-"));
+process.env["HOME"] = Home;
 const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-smoke-"));
 const Ledger = Path.join(Root, "replay-suggester.log");
 const Store = Path.join(Root, "history.json");
+let RecordCounter = 0;
+const FreshRecord = () => {
+  RecordCounter += 1;
+  return Path.join(Root, `replay-history-${RecordCounter}.json`);
+};
 const rm = () => {
   try {
     FileSystem.rmSync(Ledger);
@@ -87,7 +94,7 @@ const FakeFs = () => {
   };
   return Fs;
 };
-const Make = (Raw) => {
+const Make = (Raw, Attach) => {
   const CtxListeners = {};
   const Lines = [];
   const Warns = [];
@@ -142,11 +149,15 @@ const Make = (Raw) => {
     Raw,
     Fs
   };
+  Attach?.(Context, Run);
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__replaySuggesterState;
   return Run;
 };
-const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Validate = (Raw) => Plugin.Config({
+  recordPath: FreshRecord(),
+  ...Raw
+});
 const Setup = (Config = {}) => {
   rm();
   return Make(Validate({ logFile: Ledger, historyPath: Store, ...Config }));
@@ -170,6 +181,68 @@ const Flip = (CellValue, New) => {
 const Volatile = (Run, Key) => Run.Raw[Key];
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const FakeStorage = (Options = {}) => {
+  const Facility = {
+    spec: void 0,
+    version: Options.version ?? 1,
+    tables: /* @__PURE__ */ new Map(),
+    writes: [],
+    failOpen: Options.failOpen === true,
+    closed: false
+  };
+  Facility.facility = {
+    open: async (Specification) => {
+      switch (true) {
+        case Facility.failOpen:
+          throw new Error("storage unavailable");
+        case Specification.version !== Facility.version:
+          throw new Error(
+            `version-mismatch: stored ${Facility.version}, declared ${Specification.version}`
+          );
+        default:
+      }
+      Facility.spec = Specification;
+      return {
+        name: Specification.name,
+        close: async () => {
+          Facility.closed = true;
+        },
+        table: (Name) => {
+          if (!Facility.tables.has(Name)) {
+            Facility.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Facility.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+              Facility.writes.push([Name, Key]);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Facility.seed = (Name, Key, Value) => {
+    if (!Facility.tables.has(Name)) {
+      Facility.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Facility.tables.get(Name).set(Key, Value);
+  };
+  return Facility;
+};
+const Mount = (Config, Facility) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, historyPath: Store, ...Config }), (Context) => {
+    Context.storageDomain = Facility.facility;
+  });
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -206,15 +279,19 @@ export {
   Check,
   CheckAsync,
   FakeFs,
+  FakeStorage,
   Finish,
   Flip,
+  FreshRecord,
   Furnace,
+  Home,
   Ledger,
   LedgerLines,
   LedgerWith,
   LinesWith,
   Make,
   MakeCounter,
+  Mount,
   Plugin,
   PreStep,
   Root,

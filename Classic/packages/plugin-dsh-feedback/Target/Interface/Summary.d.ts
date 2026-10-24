@@ -1,4 +1,5 @@
 import type FeedbackBlock from "./Block.js";
+import type Outcome from "./Outcome.js";
 export default interface Summary {
     session: string;
     /** Number of blocks recorded for the session. */
@@ -9,7 +10,8 @@ export default interface Summary {
     liked: string[];
     /** The most frequent terms in the DISLIKED texts. */
     disliked: string[];
-    /** The most recent deltas, newest first (the LIFO-ish lineage chain). */
     /** The blocks themselves, for the deliberate review. */
     entries: FeedbackBlock[];
+    /** The batch outcomes recorded for the session, oldest first. */
+    outcomes: Outcome[];
 }

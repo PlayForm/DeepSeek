@@ -25,20 +25,24 @@ const CONTENT = [
 	"export const gamma = alphaBeta();",
 ].join("\n");
 
-/** An enabled mount with the standard file seeded at version 1. */
+/** An enabled mount with the standard file seeded at version 1. The D6 policy
+ *  gate is OPENED here (`write: auto`) because this folder exercises the
+ *  rename and the replace; the shipped `write: approve` is arbitrated by
+ *  `Source/Test/Policy-Defaults`. */
 const Setup = (Config: Record<string, unknown> = {}, Files: Record<string, string> = {}): any => {
 	rm();
 	return Make(
-		Validate({ logFile: Ledger, enabled: true, ...Config }),
+		Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" }, ...Config }),
 		Seed({ "/repo/a.ts": CONTENT, ...Files }),
 	);
 };
 
-/** A mount whose fake fs fails every write with the given message. */
+/** A mount whose fake fs fails every write with the given message (the gate
+ *  is open - this fixture exercises the write failure, not the policy). */
 const SetupFailing = (FailMessage: string): any => {
 	rm();
 	return Make(
-		Validate({ logFile: Ledger, enabled: true }),
+		Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" } }),
 		(_Context: any, Run: any) => {
 			Run.Fs.files = { "/repo/a.ts": CONTENT };
 			Run.Fs.FailWrites = FailMessage;

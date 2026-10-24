@@ -1,4 +1,4 @@
-import Apply from "./Function/Apply.js";
+import Apply from "@Function/Apply.js";
 export declare const name = "client-dsh-panel-family-host";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
@@ -13,7 +13,7 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
 }>>, "plain">;
 export declare const inject: string[];
 /**
- * Apply: provide the panelFamilyHost service and log the activation.
+ * Apply: provide the three services and log the activation.
  * Returns nothing (the loader contract).
  */
 export declare function apply(context: Parameters<typeof Apply>[0], config: Parameters<typeof Apply>[1]): void;

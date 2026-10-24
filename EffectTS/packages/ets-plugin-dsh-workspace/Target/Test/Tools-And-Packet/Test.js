@@ -25,10 +25,11 @@ const runTest = async () => {
         /^Error: workspace_map: the workspace plugin is disabled \(enabled=false\)$/
       );
     });
-    CheckAsync(Count, "T1: the other three tools refuse identically", async () => {
+    CheckAsync(Count, "T1: the other four tools refuse identically", async () => {
       await assert.rejects(() => Tool(Run, "workspace_find").execute({}, {}), /workspace_find: the workspace plugin is disabled/);
       await assert.rejects(() => Tool(Run, "workspace_expand").execute({ id: "File:src/a.ts" }, {}), /workspace_expand: the workspace plugin is disabled/);
       await assert.rejects(() => Tool(Run, "workspace_context").execute({}, {}), /workspace_context: the workspace plugin is disabled/);
+      await assert.rejects(() => Tool(Run, "workspace_index").execute({}, {}), /workspace_index: the workspace plugin is disabled/);
     });
   }
   {
@@ -193,11 +194,12 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    CheckAsync(Count, "T6: executing all four tools never touches the fs seam", async () => {
+    CheckAsync(Count, "T6: executing all five tools never touches the fs seam", async () => {
       await Tool(Run, "workspace_map").execute({}, {});
       await Tool(Run, "workspace_find").execute({ pattern: "src/*.ts" }, {});
       await Tool(Run, "workspace_expand").execute({ id: "File:src/a.ts" }, {});
       await Tool(Run, "workspace_context").execute({ id: "File:src/b.ts" }, {});
+      await Tool(Run, "workspace_index").execute({}, {});
       assert.deepEqual(Run.Fs.resolves, []);
       assert.deepEqual(Run.Fs.stats, []);
       assert.deepEqual(Run.Fs.reads, []);

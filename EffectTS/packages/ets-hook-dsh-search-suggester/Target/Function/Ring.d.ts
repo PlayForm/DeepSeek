@@ -29,6 +29,8 @@ export interface RingState {
         intent: string;
         since: number;
     } | undefined;
+    /** The open note's emitted candidate paths (the follow signal reads exactly these, never the seeded rows). */
+    emitted: string[];
     /** The sticky section's cached text and build call (the second surface). */
     sectionText?: string | undefined;
     sectionBuilt?: number | undefined;

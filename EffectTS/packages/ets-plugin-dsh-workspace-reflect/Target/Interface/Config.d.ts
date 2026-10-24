@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /** The durable ledger file (one log per module). */
     logFile: string;
@@ -11,4 +12,9 @@ export default interface Config {
     maxFileBytes: number;
     /** The refusal bound on the span width. */
     maxBlockLines: number;
+    /** The per-action allowlist (D6) - the shared factory block. A replace
+     *  and a rename WRITE the file, so `write` defaults to `approve` and the
+     *  operation is held before the file is read or written. A resolved
+     *  pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

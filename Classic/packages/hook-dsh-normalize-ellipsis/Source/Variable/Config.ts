@@ -37,7 +37,7 @@ export default Compose(false, {
 	// Ledger file — the ellipsis ledger, SEPARATE from the family's logs
 	// (one log per module) — volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-ellipsis.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-ellipsis.log").volatile(),
 	// The ellipsis replacement — the transform's ONLY knob. The ASCII
 	// "..." three-dot sequence by default (the typographic ellipsis's own
 	// ASCII spelling). Volatile: hot-editable; the next stream picks it up

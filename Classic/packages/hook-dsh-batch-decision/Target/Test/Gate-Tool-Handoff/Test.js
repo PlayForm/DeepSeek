@@ -23,7 +23,8 @@ const Setup = () => {
       allowlist: ["version-bump"],
       maxAutoTargets: 5,
       minConfidence: 0.8,
-      pendingTtlMs: 36e5
+      pendingTtlMs: 36e5,
+      policy: { commit: "auto" }
     })
   );
 };

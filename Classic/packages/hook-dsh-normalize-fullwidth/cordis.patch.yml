@@ -37,6 +37,6 @@
         name: "@playform/hook-dsh-normalize-fullwidth"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-normalize-fullwidth.log
+            logFile: ~/.dsh/playform/hook-dsh-normalize-fullwidth.log
             normalizeReasoning: true
             normalizeToolArguments: true

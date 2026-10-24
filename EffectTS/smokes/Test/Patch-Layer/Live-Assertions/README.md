@@ -47,7 +47,7 @@ own layer - leaving no residue afterwards.
 ## Expected ledger strings (byte-exact)
 
 This folder asserts composed-config text, not ledger lines. The asserted
-strings include `logFile: ~/.dsh/ets-hook-dsh-package-governor.log` (the
+strings include `logFile: ~/.dsh/playform/ets-hook-dsh-package-governor.log` (the
 un-expanded bundle-layer default) and `logFile: <scratch>/ledgers/governor.log`
 (the overlay's replacement).
 

@@ -1,0 +1,1 @@
+import e from"../Trace.js";var t={id:"adapter-hook-dsh-convention-suggester",bundle:"@playform/hook-dsh-convention-suggester",namespace:"hook-dsh-convention-suggester",title:"suggester",order:40,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{t as default};

@@ -71,3 +71,21 @@ storage open failed: <reason>
 
 Every line is prefixed by the factory's Append with the module identity (`audit: `). The strings
 live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.
+
+## The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
+commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
+object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
+overrides the defaults per action (the wiring is the next refinement).
+
+No new ledger line: the package has no gated action.

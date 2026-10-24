@@ -1,7 +1,7 @@
 import type DomainHandle from "@Interface/Domain.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Line from "@Interface/Line.js";
-import type { State as Base } from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */
     On: boolean;
@@ -10,6 +10,11 @@ interface Extra {
     DomainName: string;
     /** Config `maxLines` - the ring bound (volatile). */
     MaxLines: number;
+    /** The per-action allowlist (config `policy`, volatile) - the D6 block.
+     *  Named `Allow` because the factory's shared State already owns `Policy`
+     *  (the configured global policy file path). This package's actions are
+     *  automatic; it has NO gated action. */
+    Allow: Allowlist;
     /** The injected factory instance (the State builder, the ledger, the
      *  match, the Wire). */
     Factory: FactoryHandle;

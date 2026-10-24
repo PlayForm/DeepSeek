@@ -1,4 +1,5 @@
 import type CheckSet from "./CheckSet.js";
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /** The hook's own ledger file (one log per module). */
     logFile: string;
@@ -24,4 +25,9 @@ export default interface Config {
     /** The check-set table (name -> spec) used to classify watched paths.
      *  The shipped catalog is Variable/DefaultCheckSets.ts. */
     checksets: Record<string, CheckSet>;
+    /** The per-action allowlist (D6) - the shared factory block. This
+     *  package's actions are record (automatic); it has NO gated action, so
+     *  the block documents the posture without refusing anything. A resolved
+     *  pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

@@ -36,16 +36,36 @@
 
 ## Config
 
-| Field          | Type    | Default              |
-| -------------- | ------- | -------------------- |
-| `enabled`      | boolean | `false`              |
-| `domain`       | string  | `workspace_operate`  |
-| `maxProposals` | number  | `500`                |
-| `limitDefault` | number  | `50`                 |
-| `limitMaximum` | number  | `500`                |
-| `logFile`      | string  | `~/.dsh/operate.log` |
+| Field          | Type      | Default                                          |
+| -------------- | --------- | ------------------------------------------------ |
+| `enabled`      | boolean   | `false`                                          |
+| `log`          | boolean   | `true`                                           |
+| `domain`       | string    | `workspace_operate`                              |
+| `maxProposals` | number    | `500`                                            |
+| `limitDefault` | number    | `50`                                             |
+| `limitMaximum` | number    | `500`                                            |
+| `logFile`      | string    | `~/.dsh/playform/ets-hook-dsh-workspace-operate.log` |
+| `policy`       | Allowlist | the D6 defaults (see below)                      |
 
 All volatile. Invalid config fails loud at load.
+
+## The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+The hook's action class is SUGGEST, which is **automatic**: it records a typed proposal and never
+applies it. The package has **NO gated action** (no file write, no batch commit, no spawn), so the
+block documents the posture and refuses nothing. The block is one volatile object, so a policy flip
+is hot-editable without a remount; a resolved pack's `policy` section overrides the defaults per
+action (the wiring is the next refinement). No new ledger line: the package has no gated action.
 
 ## Storage layout (domain `workspace_operate`, version 1, per-record)
 

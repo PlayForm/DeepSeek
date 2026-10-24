@@ -27,10 +27,21 @@
 //     satisfied first, then priority descending, then FIFO by enqueue
 //     sequence) when a slot frees; the settled IDLE children release their
 //     active slots and the dispatcher fills them automatically.
+//   - An assignment LAUNCHES through the harness's own subagent service
+//     (`ctx.subagents.startActivation`) when `autoSpawn` is on - never a
+//     private spawn, never a shell. The spec goes to the child verbatim, the
+//     resolved route goes as its `agentOptions`, the parent is the exact live
+//     Agent from `ctx.agents.currentInitiator()`, and the child's own result
+//     settles the task. `autoSpawn` ships FALSE (the D6 approval posture: a
+//     spawn is a privileged action), so the default mount assigns and ledgers
+//     only; the idle-slot pull is gated on the same switch.
 //   - The dispatched tasks carry their routes: the dispatcher consults the
 //     routing enforcer's `dshRoute` service when it is present (probed at
 //     dispatch time, never an injection dependency) and skips routing when
 //     it is absent - the routed dispatch, silently per the user's policy.
+//   - A restart reconciles: `Reconcile(persisted?)` compares the restored
+//     queue record with the live agents and requeues an orphan once, then
+//     fails it honestly - a task is never silently dropped.
 //   - The queue's state compiles into the batch-state context block as one
 //     TOC line (Function/Board).
 //

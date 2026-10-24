@@ -1,13 +1,18 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import { type Gate as Decision, type Registry as GovernRegistry, type Selection as GovernSelection, type Options as Setup, type State as Shape, type Transform, type Over as WriteOver } from "@playform/ets-base-dsh";
+import PolicyFn from "./Function/Policy.js";
 import SchemaFn from "./Function/Schema.js";
+import type Allowlist from "./Interface/Allowlist.js";
+import type Trace from "./Interface/Trace.js";
 export type { State } from "@playform/ets-base-dsh";
 export type { Options } from "@playform/ets-base-dsh";
 export type { Gate } from "@playform/ets-base-dsh";
 export type { Transform } from "@playform/ets-base-dsh";
 export type { Output } from "@playform/ets-base-dsh";
 export type { Journal } from "@playform/ets-base-dsh";
+export type { default as Allowlist } from "./Interface/Allowlist.js";
+export type { default as Trace } from "./Interface/Trace.js";
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;
@@ -16,11 +21,18 @@ export declare function Schema(Shared?: {
     exclude?: string[];
     policyFile?: string;
 } | false, Module?: Record<string, unknown>): ReturnType<typeof SchemaFn>;
+export declare function Policy(): ReturnType<typeof PolicyFn>;
+export declare function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve";
 export default class PluginFactory extends Service {
     static inject: string[];
     constructor(Context: Context);
     /** The materialized Effect runtime (see the constructor). */
     private readonly Runtime;
+    /** THE TRACE BUS (D5): the family's ONE bus, provided as `ctx.trace` in the
+     *  constructor. The vocabulary and the detached loop live in
+     *  @playform/ets-lib-dsh-trace; this instance is the service body
+     *  (Function/Trace) and the smoke surface (`ring`/`flush`). */
+    Trace: Trace;
     /** The ledger: logger + appendFileSync, never throws. The
      *  LedgerService wraps the byte-identical machinery in the
      *  `dsh.ledger.append` span; the sync boundary is `Effect.runSync`. */

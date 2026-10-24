@@ -69,16 +69,16 @@ via the loader's `loader/volatile-update` event). The block TABLE is the volatil
 stay plain (schemastery rejects volatile leaves under an enclosing volatile field - the tool-coach's
 patternTable precedent).
 
-| Field                | Type                 | Default                      | Meaning                                                                                         |
-| -------------------- | -------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------- |
-| `logFile`            | string               | `~/.dsh/live-containers.log` | the module's OWN ledger, one log per module                                                     |
-| `enabled`            | boolean              | `false`                      | the MASTER switch - the IDLE-forever posture; the bundle entry ships `enabled: false` only      |
-| `sectionName`        | string               | `live-containers`            | the appended section's name (non-empty, fail-loud)                                              |
-| `refresh`            | `'request' \| 'ttl'` | `request`                    | the section's recompute policy; `ttl` caches the whole body                                     |
-| `ttlCalls`           | number               | `8`                          | assemblies between section rebuilds when `refresh: 'ttl'` (>= 1; the KV-cache-friendly cadence) |
-| `separator`          | string               | `---`                        | the frame dashes (`--- LIVE CONTAINER <id> ...` with the default)                               |
-| `sectionBudgetBytes` | number               | `4096`                       | when the rendered body exceeds this, the OLDEST frames collapse to one-line summaries (>= 1)    |
-| `blocks`             | block spec[]         | DEFAULT_BLOCKS (14 entries)  | the block table; the ARRAY is the volatile cell                                                 |
+| Field                | Type                 | Default                                        | Meaning                                                                                         |
+| -------------------- | -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `logFile`            | string               | `~/.dsh/playform/hook-dsh-live-containers.log` | the module's OWN ledger, one log per module                                                     |
+| `enabled`            | boolean              | `false`                                        | the MASTER switch - the IDLE-forever posture; the bundle entry ships `enabled: false` only      |
+| `sectionName`        | string               | `live-containers`                              | the appended section's name (non-empty, fail-loud)                                              |
+| `refresh`            | `'request' \| 'ttl'` | `request`                                      | the section's recompute policy; `ttl` caches the whole body                                     |
+| `ttlCalls`           | number               | `8`                                            | assemblies between section rebuilds when `refresh: 'ttl'` (>= 1; the KV-cache-friendly cadence) |
+| `separator`          | string               | `---`                                          | the frame dashes (`--- LIVE CONTAINER <id> ...` with the default)                               |
+| `sectionBudgetBytes` | number               | `4096`                                         | when the rendered body exceeds this, the OLDEST frames collapse to one-line summaries (>= 1)    |
+| `blocks`             | block spec[]         | DEFAULT_BLOCKS (14 entries)                    | the block table; the ARRAY is the volatile cell                                                 |
 
 WAVE-2 KNOBS (appended; every cell volatile like the phase-1 knobs):
 
@@ -184,11 +184,11 @@ Clock module (the fake-clock seam; production falls back to `Date.now()`).
 
 ## 7. The ledger strings (the contract)
 
-One log per module - `logFile` (default `~/.dsh/live-containers.log`), one of the two universal
-volatile cells plus the plugin's own default. The strings are the module's OWN (the factory never
-owns them) and asserted byte-exact by the test suite; the durable file lines are the `[ISO] message`
-forms with the `live-containers: ` logger prefix (the factory's Append layer adds the prefix and the
-timestamp - never the module):
+One log per module - `logFile` (default `~/.dsh/playform/hook-dsh-live-containers.log`), one of the
+two universal volatile cells plus the plugin's own default. The strings are the module's OWN (the
+factory never owns them) and asserted byte-exact by the test suite; the durable file lines are the
+`[ISO] message` forms with the `live-containers: ` logger prefix (the factory's Append layer adds
+the prefix and the timestamp - never the module):
 
 ```
 live-containers: disabled (enabled=false)

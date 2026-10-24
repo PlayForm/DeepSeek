@@ -18,7 +18,7 @@ import {
 } from "../Harness.js";
 const Setup = async (Config = {}, Files = {}, Stale = []) => {
   rm();
-  const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+  const Run = Make(Validate({ logFile: Ledger, enabled: true, policy: { write: "auto" }, ...Config }));
   Run.Fs.files = Files;
   for (const Path of Stale) {
     Run.Fs.staleOn.add(Path);

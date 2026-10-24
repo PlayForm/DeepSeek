@@ -9,6 +9,13 @@
 # SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8; the family's second-consumer
 # shape: this hook carries its own embedded pack, no shared service).
 #
+# THE RECONCILIATION (the completion spec's wave 2c re-spec) rides the same
+# listener: on a judged call in a package it compares the package's smoke
+# claims (the folder READMEs' `## Expected count`) with the tree (the
+# folders, the suite files, the aggregate runner's roster) and, when the
+# workspace graph is present, its Test nodes - READ-ONLY, one note, gated by
+# the same enabled/cooldown/dedupe/cap knobs. It adds no config field.
+#
 # New entries are declared with `insert:` - a bare `id:` row PATCHES an
 # existing entry and the loader rejects unknown ids with 'entry "..." not
 # found'. Activated when the profile's package.json lists the package in
@@ -27,7 +34,7 @@
         config:
             enabled: false
             log: true
-            logFile: ~/.dsh/test-suggester.log
+            logFile: ~/.dsh/playform/hook-dsh-test-suggester.log
             threshold: 0.75
             maxCandidates: 7
             maxNoteChars: 1200

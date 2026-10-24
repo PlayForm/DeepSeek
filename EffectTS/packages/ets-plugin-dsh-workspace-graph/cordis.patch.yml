@@ -19,14 +19,38 @@
 # Config defaults as the row - the plugin never appears in the profile's
 # bundles and enables only by an explicit ACTIVATE (the user edits the
 # profile and restarts). With config enabled=false the mutating operations
-# (indexFile) skip with the byte-exact `graph: skipped <path> (disabled)`
-# ledger line while the service itself still registers. Every knob is
-# volatile; the schema defaults are the truth (Variable/Config.ts).
+# (indexFile, indexWorkspace) skip with the byte-exact
+# `graph: skipped <path> (disabled)` ledger line while the service itself
+# still registers, and NO trace adapter is wired (the graph subscribes to
+# observe/stamp on the family's bus - ctx.trace, provided by the factory - and
+# emits graph/indexed / graph/invalidated; see SCHEME.md section 6.1). Every
+# knob is volatile; the schema defaults are the truth (Variable/Config.ts).
+#
+# maxFiles is the INDEXING TRIGGER's walk bound (indexWorkspace stops after
+# this many candidate files; a caller's explicit maxFiles option overrides it
+# for that call).
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist ships
+# with its defaults - read/index/record/suggest and message are automatic,
+# write/commit/spawn wait for approval. The graph's actions are INDEX
+# (automatic), so this package has NO gated action: it never writes a file,
+# commits a batch or spawns an agent, and no verdict can refuse it. A resolved
+# pack's `policy` section overrides these defaults per action (the wiring is
+# the next refinement).
 - insert:
       - id: plugin-dsh-workspace-graph
         name: "@playform/ets-plugin-dsh-workspace-graph"
         config:
             enabled: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto
             domain: workspace_graph
             languages:
                 - typescript
@@ -39,5 +63,6 @@
                 - "**/.git/**"
             maxFileBytes: 1000000
             maxNodesPerFile: 5000
+            maxFiles: 2000
             limitDefault: 50
             limitMaximum: 500

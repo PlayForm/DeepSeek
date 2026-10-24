@@ -9,7 +9,12 @@
 //   open    - declare the scope, insert files, return the state presentation
 //   insert  - add files to an open machine (the dynamic insertion)
 //   remove  - drop files from an open machine
-//   commit  - run the transition table in one go (Ops.Commit)
+//   commit  - run the transition table in one go (Ops.Commit) - behind the
+//             D6 policy gate: `write: approve` (the shipped default) refuses
+//             the apply BEFORE any plan or write with the byte-exact
+//             `apply refused <id> (policy write=approve)` line, and the
+//             machine stays open with its cells observed (the approval path
+//             is the existing approve binding)
 //   state   - re-present the current state of every held file
 //   close   - close the machine (halted processes settle to done-able; the
 //             settle-first rule runs in Machine.Close)
@@ -18,7 +23,9 @@ import type { JobsHub } from "@Interface/Events.js";
 import type Output from "@Interface/Output.js";
 import type { MachineRecord } from "@Interface/Process.js";
 import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
 
+import * as Ledger from "./Ledger.js";
 import * as Machine from "./Machine.js";
 import * as Ops from "./Ops.js";
 import { Cells, Prose } from "./Present.js";
@@ -245,6 +252,16 @@ export default (State: State, Append: (Message: string) => void) =>
 				}
 				case "commit": {
 					const Found = Require(State, args.machine);
+					// THE POLICY GATE (D6): `write: approve` (the shipped
+					// default) refuses the apply before any plan or write - the
+					// documented line, the machine still open, nothing half-
+					// committed. The user's approval is the existing approve
+					// binding (flip `policy.write` to auto).
+					if (Decide(State.Allow, "write") !== "auto") {
+						const Refusal = Ledger.Refused(Found.id);
+						Append(Refusal);
+						throw new Error(`plugin-dsh-batch-edit: ${Refusal}`);
+					}
 					return Ops.Commit(
 						State,
 						Found,

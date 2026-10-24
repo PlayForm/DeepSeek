@@ -20,10 +20,17 @@
 // Individual file failures do not abort the pass: the report lists every
 // file's outcome and the batch ends in the `reverted` state (the honest
 // per-file report, the recovery table's per-obligation behavior).
+//
+// THE POLICY GATE (D6): the revert is the journal's gated action because it
+// writes the pre-images back. An `approve` verdict for `write` (the shipped
+// default) refuses the pass with the documented
+// `revert held (<n> files) (policy write=approve)` line, ZERO writes, no
+// state change and no record; `auto` proceeds.
 import Record from "@Function/Record.js";
 import RevertFile from "@Function/RevertFile.js";
 import type Result from "@Interface/Result.js";
 import type State from "@Interface/State.js";
+import { Decide } from "@playform/plugin-dsh-factory";
 
 export default async (State: State, BatchId: string): Promise<Result> => {
 	const Batch = State.Batches.get(BatchId);
@@ -41,6 +48,21 @@ export default async (State: State, BatchId: string): Promise<Result> => {
 				`revert failed ${BatchId} (state ${Batch.state}, not reversible)`,
 			);
 			throw new Error(`batch ${BatchId} is ${Batch.state}, not reversible`);
+	}
+	// THE POLICY GATE (D6): a revert WRITES the pre-images back, so it is the
+	// journal's gated action. An `approve` verdict refuses the whole pass
+	// before any file is touched - the documented line, ZERO writes, no
+	// state change and no record: the batch stays reversible and waits for
+	// the user (flip `policy.write` to `auto`, or let a pack override it).
+	switch (Decide(State.Allow, "write")) {
+		case "auto":
+			break;
+		default:
+			State.Factory.Append(
+				State,
+				`revert held (${Batch.files.length} files) (policy write=approve)`,
+			);
+			throw new Error(`batch ${BatchId} is held by the policy (write=approve)`);
 	}
 	const Files: Result["files"] = [];
 	// Reverse order: last written, first restored.

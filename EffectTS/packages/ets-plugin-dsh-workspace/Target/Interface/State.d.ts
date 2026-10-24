@@ -1,6 +1,6 @@
 import type { NodeKind, WorkspaceGraph } from "./Graph.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
-import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {
     /** Master switch (config `enabled`, volatile) - false = full no-op. */
     On: boolean;
@@ -24,6 +24,11 @@ export default interface State extends Shared {
     TokenCharsPerToken: number;
     /** The node kinds filter (config `kinds`, volatile; empty = all). */
     Kinds: NodeKind[];
+    /** The per-action allowlist (config `policy`, volatile) - the D6 block.
+     * Named `Allow` because the factory's shared State already owns `Policy`
+     * (the configured global policy file path). This package's actions are
+     * automatic; it has NO gated action. */
+    Allow: Allowlist;
     /** The injected factory service itself (the ledger) - set once in Apply. */
     Factory: Factory;
     /** The injected graph service (the query layer's data source) - set once in Apply. */

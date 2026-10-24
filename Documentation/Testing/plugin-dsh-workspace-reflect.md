@@ -4,36 +4,72 @@
 
 - Package: `@playform/plugin-dsh-workspace-reflect` (Classic/packages/plugin-dsh-workspace-reflect).
 - Profile row id: `plugin-dsh-workspace-reflect` (bundled in the desktop profile).
-- Exposes: the `workspaceReflect` service (`export default class WorkspaceReflect extends Service`
-  with `super(Context, "workspaceReflect")`). The reflection step: the workspace looking back at its
-  own decisions (duplicates are answered as a `rejected` reply, "already ...").
-- Ledger: logFile `~/.dsh/reflect.log`; a cold mount logs `disabled (enabled=false)`.
+- Exposes: the `workspaceReflect` service (`ctx.workspaceReflect`) - the AST-aware reflective
+  operations, one call each: `rename(op)`, `connect(op)`, `replace(op)`, `act(op)` (the dispatch by
+  kind); all async, all returning the reply union
+  `{ status: "applied" | "conflict" | "denied" | "rejected" | "recovery-required" | "outcome-unknown", detail, version }`.
+- The semantics: the `rename` asks `ctx.workspaceSemantics` (probed through `ctx.get`, never
+  injected) for the per-adapter plan and applies its edits inside the line scope; the textual
+  fallback runs whole-word matches only (zero occurrences is rejected). The `replace` may target a
+  graph node (`node` + `fingerprint`, the graph's formula
+  `sha256(normalized text + "\n" + kind + "\n" + name)` verified against the current span before any
+  write); with the graph absent the caller's explicit span is the fallback. The `connect` inserts an
+  import (with `symbol`) or a reference comment; already-connected is rejected.
+- Config (all volatile): `logFile` `~/.dsh/playform/plugin-dsh-workspace-reflect.log`, `log` true,
+  `enabled` false, `propagate` `"block" | "file"` (default `block`), `maxFileBytes` 1000000,
+  `maxBlockLines` 5000, `policy` (the D6 defaults - the write gate).
+- Ledger lines (module-owned, byte-stable, prefixed `reflect: `):
+  `` `reflect: activated (propagate=<propagate>)` ``, `` `reflect: disabled (enabled=false)` ``,
+  `` `reflect: denied (enabled=false)` ``, `` `reflect: rename <path> <old> -> <new> (<status>)` ``,
+  `` `reflect: connect <from> -> <to> (<status>)` ``,
+  `` `reflect: replace <path> lines <a>-<b> (<status>)` ``,
+  `` `reflect: deepened <path> (<n> edits via semantics)` ``,
+  `` `reflect: rejected <path> (<reason>)` ``,
+  `` `reflect: conflict <path> (expected <version>)` ``,
+  `` `reflect: carried <path> (graph reindexed)` ``, `` `reflect: failed <path> (<reason>)` ``,
+  `` `reflect: replace held <path> (policy write=approve)` ``,
+  `` `reflect: rename held <path> (policy write=approve)` ``.
+- The rejected reasons (same line form): fingerprint required for a node target / fingerprint
+  without a node target / fingerprint mismatch / node path mismatch / node not targetable / node not
+  found / graph absent.
 
 ## Activation checks
 
 1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-reflect"}` → one entry, status schema (defaults per
-   Variable/Config.ts).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceReflect` → resolves.
-3. Ledger line: the activated line in `~/.dsh/reflect.log`; a cold mount logs
-   `disabled (enabled=false)`.
+   `{"name": "@playform/plugin-dsh-workspace-reflect"}` → one entry, status schema (defaults:
+   `enabled` false, `propagate` block, `maxFileBytes` 1000000, `maxBlockLines` 5000, the D6 policy
+   block with `write: approve`).
+2. Service check: `cordis_inspect_query` host/Service/listService `workspaceReflect` → resolves with
+   `rename` / `connect` / `replace` / `act`.
+3. Ledger line: `reflect: disabled (enabled=false)` on a cold mount (a disabled plugin answers
+   `denied (enabled=false)`); after activation `reflect: activated (propagate=block)` in
+   `~/.dsh/playform/plugin-dsh-workspace-reflect.log`.
 
 ## Test cases
 
-| # | Trigger | Expected | Pass criteria | | T1 | listConfigs query above | one entry,
-`status: "schema"` | the defaults match | | T2 | Reflect on a completed /tmp batch | the reflection
-record | what was done and how it was verified | | T2 | Reflect twice on the same batch | the second
-is a `rejected` reply ("already ...") | the duplicate is answered, not re-processed | | T1 | Reflect
-with nothing to reflect on | the honest empty answer | no fabricated reflection |
+| #   | Trigger                                                | Expected                          | Pass criteria                                                                                                                                                                                       |
+| --- | ------------------------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | listConfigs query above                                | one entry, `status: "schema"`     | the defaults match                                                                                                                                                                                  |
+| T2  | `replace` on a graph node with the correct fingerprint | `applied`                         | only the resolved span rewritten; `reflect: replace <path> lines <a>-<b> (applied)`; the optional carry probes `workspaceGraph.indexFile` → `reflect: carried <path> (graph reindexed)`             |
+| T2  | `replace` with a stale fingerprint                     | rejected, nothing written         | `reflect: rejected <path> (fingerprint mismatch)`                                                                                                                                                   |
+| T2  | `rename` with `workspaceSemantics` present             | the plan's edits applied in scope | `reflect: deepened <path> (<n> edits via semantics)` and `reflect: rename <path> <old> -> <new> (applied)`                                                                                          |
+| T2  | `rename` with zero occurrences                         | rejected                          | no applied write of an unchanged file; whole-word matching only                                                                                                                                     |
+| T2  | `connect` on an already-connected file                 | rejected                          | `reflect: rejected <path> (already connected)`; no duplicate import                                                                                                                                 |
+| T2  | A version conflict on write                            | `conflict` reply                  | `reflect: conflict <path> (expected <version>)`; nothing overwritten                                                                                                                                |
+| T2  | The shipped policy (write=approve)                     | the write held                    | `reflect: replace held <path> (policy write=approve)`, reply `{ status: "rejected", detail: "the policy holds the replace (write=approve)" }`; zero writes (no resolve, no stat, no read, no write) |
+| T1  | Any operation while disabled                           | `denied` reply                    | `reflect: denied (enabled=false)`                                                                                                                                                                   |
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: the `rejected` reply text drifting from its stable format, and
-  reflections recorded before the operation actually completed.
+- Not dogfooded yet. Watch for: the policy-flip hot edit (the block is one volatile object), the
+  carry probing the absent graph (an honest skip, never an error), and the semantics service's plan
+  having no edit inside the scope (the textual fallback must run, not fail). The "AST" is the
+  graph's v0 line/regex node model - the targeting is exact, the parse behind the spans is not a
+  compiler AST.
 
 ## Fix loop
 
-- Fix files: `Source/Function/Service.ts`, `Source/Function/` (the reflection engine),
+- Fix files: `Source/Function/Service.ts`, `Source/Function/` (the transformation engine),
   `Source/Library.ts`, `Source/Variable/Config.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-workspace-reflect run prepublishOnly`
@@ -43,7 +79,8 @@ with nothing to reflect on | the honest empty answer | no fabricated reflection 
 ## Report stub
 
 - Plugin: `@playform/plugin-dsh-workspace-reflect`
-- Tests run: T1 config - / T2 reflect - / T2 duplicate - / T1 empty -
+- Tests run: T1 config - / T2 replace - / T2 fingerprint - / T2 rename - / T2 connect - / T2
+  conflict - / T2 policy hold - / T1 denied -
 - Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

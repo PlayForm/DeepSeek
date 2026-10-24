@@ -20,6 +20,8 @@ export default interface State extends Shared {
     EmitOn: string[];
     /** The candidate path prefixes never suggested (config `exclude`, volatile). */
     Exclude: string[];
+    /** The learning bootstrap switch (config `learning`, volatile; default false). */
+    Learning: boolean;
     /** The compiled pack, built once at apply. */
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */

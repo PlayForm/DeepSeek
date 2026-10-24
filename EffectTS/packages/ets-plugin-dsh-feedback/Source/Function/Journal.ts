@@ -5,15 +5,18 @@
 import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
 import { dirname as Parent } from "node:path";
 
+import { Expand } from "@playform/ets-base-dsh";
+
 import type FeedbackBlock from "../Interface/Block.js";
 import type { Event } from "../Interface/Event.js";
 import type State from "../Interface/State.js";
 
 export default (State: State, Event: Event, Block: FeedbackBlock): void => {
 	try {
-		Make(Parent(State.Ledger), { recursive: true });
+		const Ledger = Expand(State.Ledger);
+		Make(Parent(Ledger), { recursive: true });
 		Append(
-			State.Ledger,
+			Ledger,
 			`${JSON.stringify({
 				at: Date.now(),
 				event: Event,

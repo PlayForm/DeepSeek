@@ -4,20 +4,20 @@ The complete scheme: every config field, every surface, every ledger string.
 
 ## Config (Schemastery, validated at load)
 
-| Field             | Type     | Default                                   | Volatile | Notes                                                                                                   |
-| ----------------- | -------- | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `log`             | boolean  | `true`                                    | yes      | The shared universal cell (the factory's minimal block).                                                |
-| `logFile`         | string   | `~/.dsh/graph-suggester.log`              | yes      | The hook's OWN ledger, one log per module.                                                              |
-| `enabled`         | boolean  | `true`                                    | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`. |
-| `threshold`       | number   | `0.75`                                    | yes      | The default confidence gate; per-intent thresholds may raise it, never lower it.                        |
-| `maxCandidates`   | number   | `7`                                       | yes      | The note's candidate cap (the plan §3.7).                                                               |
-| `maxNoteChars`    | number   | `1200`                                    | yes      | Hard character cap on the note text.                                                                    |
-| `cooldownCalls`   | number   | `6`                                       | yes      | No second note for the same intent within this many judged calls, per agent.                            |
-| `maxNotesPerTurn` | number   | `3`                                       | yes      | Reset per user turn (`agent/pre-step`).                                                                 |
-| `intents`         | string[] | `[]` (all pack intents enabled)           | yes      | The enabled intent ids; unknown ids are ignored.                                                        |
-| `emitOn`          | string[] | `["glob","grep","read"]`                  | yes      | The judged tool names (the discovery family).                                                           |
-| `exclude`         | string[] | `["node_modules","Target",".git","dist"]` | yes      | Substrings; a candidate whose path matches one is never suggested.                                      |
-| `graph`           | boolean  | `true`                                    | yes      | Whether the graph-based Neighborhood intent may fire; false = static intents only.                      |
+| Field             | Type     | Default                                        | Volatile | Notes                                                                                                   |
+| ----------------- | -------- | ---------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `log`             | boolean  | `true`                                         | yes      | The shared universal cell (the factory's minimal block).                                                |
+| `logFile`         | string   | `~/.dsh/playform/hook-dsh-graph-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                              |
+| `enabled`         | boolean  | `true`                                         | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`. |
+| `threshold`       | number   | `0.75`                                         | yes      | The default confidence gate; per-intent thresholds may raise it, never lower it.                        |
+| `maxCandidates`   | number   | `7`                                            | yes      | The note's candidate cap (the plan §3.7).                                                               |
+| `maxNoteChars`    | number   | `1200`                                         | yes      | Hard character cap on the note text.                                                                    |
+| `cooldownCalls`   | number   | `6`                                            | yes      | No second note for the same intent within this many judged calls, per agent.                            |
+| `maxNotesPerTurn` | number   | `3`                                            | yes      | Reset per user turn (`agent/pre-step`).                                                                 |
+| `intents`         | string[] | `[]` (all pack intents enabled)                | yes      | The enabled intent ids; unknown ids are ignored.                                                        |
+| `emitOn`          | string[] | `["glob","grep","read"]`                       | yes      | The judged tool names (the discovery family).                                                           |
+| `exclude`         | string[] | `["node_modules","Target",".git","dist"]`      | yes      | Substrings; a candidate whose path matches one is never suggested.                                      |
+| `graph`           | boolean  | `true`                                         | yes      | Whether the graph-based Neighborhood intent may fire; false = static intents only.                      |
 
 ## Services
 
@@ -25,6 +25,19 @@ The complete scheme: every config field, every surface, every ledger string.
 | ---------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `pluginFactory`  | `Interface/Factory.ts` | The State builder (cell unwrap + volatile refresh) and the ledger.                                                                |
 | `workspaceGraph` | `Interface/Graph.ts`   | `neighborhood(path, limit)` - the connected component for the Neighborhood intent. Declared in this package (self-contained PoC). |
+
+## The real graph (the consumer chain, verified 2026-10-23)
+
+`@playform/plugin-dsh-workspace-graph` now SERVES the declared query: `ctx.workspaceGraph` exposes
+`neighborhood(path, limit)` (and `indexWorkspace` to populate the graph in the first place), derived
+from the W1 `contains`/`imports` edges. The `Real-Graph-Neighborhood` folder proves the chain
+against the real service - the note lists the anchor (definition), the importing test file (tests)
+and the other importer, and an anchor the graph does not know honestly falls back to the static set.
+The anchor is the first quoted `.ts` path in the tool's arguments; the graph matches it by exact
+display path, else by path suffix (a repo-relative anchor works).
+
+W1 still has no `calls`/`references` edges, so the component carries importers rather than callers:
+the pack's note text still says "callers", and the graph's own SCHEME documents the deferral.
 
 ## Surfaces
 
@@ -65,4 +78,4 @@ graph-suggester: suppressed cap <Intent>
 1. Package name: `@playform/hook-dsh-graph-suggester`.
 2. The `name` export: `graph-suggester`.
 3. The State build's `module:` option: `graph-suggester`.
-4. The ledger `logFile` default: `~/.dsh/graph-suggester.log`.
+4. The ledger `logFile` default: `~/.dsh/playform/hook-dsh-graph-suggester.log`.

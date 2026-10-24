@@ -1,6 +1,8 @@
 // Summary - the council view of one session (plan section 2.2,
 // `feedback/summary`): the aggregate signals for the recipient's deliberate
-// review. Pure read: no block is force-read, no status is touched.
+// review. Pure read: no block is force-read, no status is touched. The batch
+// outcomes the orchestration layer reported ride along (the apply truth is
+// part of the council's knowledge).
 import type State from "../Interface/State.js";
 import type Summary from "../Interface/Summary.js";
 
@@ -30,5 +32,6 @@ export default (State: State, Session: string): Summary => {
 		liked: Terms(Blocks.map((Block) => Block.liked).join(" "), State.Config.summaryTerms),
 		disliked: Terms(Blocks.map((Block) => Block.disliked).join(" "), State.Config.summaryTerms),
 		entries: Blocks,
+		outcomes: [...(State.Outcomes.get(Session) ?? [])],
 	};
 };

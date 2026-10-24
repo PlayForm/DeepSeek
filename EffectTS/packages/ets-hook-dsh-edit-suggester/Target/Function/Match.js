@@ -1,0 +1,1 @@
+const r=t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),c=t=>{const e=t.split("**/").map(s=>s.split("*").map(r).join("[^/]*")).join("(?:.*/)?");return new RegExp(`(^|/)${e}$`)};var i=(t,e)=>{switch(!0){case!t.includes("*"):return e===t||e.endsWith(`/${t}`);case t.startsWith("*/"):return e.endsWith(`/${t.slice(2)}`);default:return c(t).test(e)}};export{i as default};

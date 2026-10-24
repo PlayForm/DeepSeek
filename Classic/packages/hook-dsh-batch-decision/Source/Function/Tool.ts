@@ -11,6 +11,7 @@ import type { Context } from "@deepseek-ai/cordis";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import Gate from "@Function/Gate.js";
 import { ToIngester } from "@Function/Handoff.js";
+import Inbox from "@Function/Inbox.js";
 import Policy, { type PolicyOutcome } from "@Function/Policy.js";
 import { Decide, ExpiredDecision, Pending } from "@Function/Proposals.js";
 import type { BatchDecision } from "@Interface/Batch.js";
@@ -104,8 +105,15 @@ export default (Context_: Context, State_: State, Append: (Message: string) => v
 				return { decided: false, kind: "unknown", detail: `no proposal ${Id}` };
 			}
 			Append(`decision ${Decision.outcome} ${Id} (by user)`);
+			// THE HANDOFF: every recorded decision goes into the inbox the
+			// board consumes (approved, denied and expired alike) - the board
+			// must stop showing a decided batch as pending.
+			Inbox(Context_, Decision, Entry.proposal.origin, Append);
+			// ... and on the bus, where the ingester's decision consumer and
+			// the live view listen (the policy path already emits).
+			Context_.emit?.("batch/decision", Decision);
 			if (Decision.outcome === "approved") {
-				const Result = await ToIngester(Context_, Decision);
+				const Result = await ToIngester(Context_, Decision, Entry.proposal);
 				Append(
 					Result === null
 						? `handoff ${Id}: no ingester service present (the batch stays approved)`

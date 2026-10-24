@@ -21,9 +21,10 @@
 // dynamic table-of-contents block, recompiled on every state change -
 // Context = Compile(State)), and the ledger (one global log per module).
 // Every state change emits the batch/state-change event and persists the
-// snapshot into the well-known JSON state file (the plan's file-based
-// fallback). The presentation is READ-ONLY for the agents - it never
-// modifies their own content.
+// full state into its store: the PRIMARY is the storage-domain KV domain
+// (config `domain`), the FALLBACK the well-known JSON state file (config
+// `stateFile`) - see SCHEME section 6. The presentation is READ-ONLY for the
+// agents - it never modifies their own content.
 //
 // The plugin is the OBJECT form (name/apply/Config/inject); the
 // `batchstate` service is a Service subclass in its own module
@@ -39,8 +40,10 @@ export const Config = Definition;
 
 // Required services. `pluginFactory` provides the State builder (cell
 // unwrap + shared fields + the P10 volatile refresh) and the ledger. The
-// state file is the plugin's own store - plain fs, not a governed file
-// (the documented exemption). No other service is consumed.
+// store is OPTIONAL: the storage facility is probed once at apply (never an
+// inject - an absent storage must degrade to the JSON fallback, not fail the
+// load), and the JSON state file is the plugin's own plain-fs store (the
+// documented exemption). No other service is consumed.
 export const inject = ["pluginFactory"];
 
 export const apply = Apply;

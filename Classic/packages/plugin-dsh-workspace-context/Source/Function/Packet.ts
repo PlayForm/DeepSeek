@@ -15,7 +15,7 @@ import Budget from "@Function/Budget.js";
 import Focus from "@Function/Focus.js";
 import LensFn from "@Function/LensFn.js";
 import Rank from "@Function/Rank.js";
-import type { GraphNode } from "@Interface/Graph.js";
+import type { GraphEdge, GraphNode } from "@Interface/Graph.js";
 import type Packet from "@Interface/Packet.js";
 import type Query from "@Interface/Query.js";
 import type State from "@Interface/State.js";
@@ -31,13 +31,13 @@ export default (State: State, Options: Query): Packet => {
 				snapshot(): {
 					indexRevision: string;
 					nodes: GraphNode[];
-					edges: { kind: string; from: string; to: string }[];
+					edges: GraphEdge[];
 				};
 				getNode(id: string): GraphNode | undefined;
 				find(query: { name?: string; limit?: number }): GraphNode[];
 				expand(id: string): {
 					nodes: GraphNode[];
-					edges: { kind: string; from: string; to: string }[];
+					edges: GraphEdge[];
 				};
 		  }
 		| undefined;
@@ -67,7 +67,13 @@ export default (State: State, Options: Query): Packet => {
 			: undefined);
 	const FocusId = Focus2?.id ?? Options.id ?? Options.query ?? "";
 	const Scope = Options.query ?? Options.id ?? "(no scope given)";
-	// The MAP: the top-level directories of the eligible files, biggest first.
+	// The MAP: the directories of the eligible files, biggest first. The band
+	// groups by the file's PARENT directory (not by its first segment): the
+	// real graph stores resolved absolute paths, whose first segment is empty
+	// ("/ws/src/core.ts".split("/")[0] === ""), so the first-segment form
+	// collapsed every real workspace into one nameless band. The parent form
+	// is identical for the relative fixture paths and meaningful for absolute
+	// ones.
 	const Dirs = new Map<string, number>();
 	for (const Node of Nodes) {
 		switch (true) {
@@ -75,7 +81,9 @@ export default (State: State, Options: Query): Packet => {
 				continue;
 			default:
 		}
-		const Dir = Node.path.includes("/") ? Node.path.split("/")[0] : ".";
+		const Dir = Node.path.includes("/")
+			? Node.path.slice(0, Node.path.lastIndexOf("/")) || "."
+			: ".";
 		Dirs.set(Dir, (Dirs.get(Dir) ?? 0) + 1);
 	}
 	const MapLines = [...Dirs.entries()]
@@ -93,11 +101,7 @@ export default (State: State, Options: Query): Packet => {
 			? (Graph?.expand(Focus2.id).edges ?? [])
 			: [];
 	const Ranked = Rank(
-		Raw.filter((Edge) => Lens.edges.size === 0 || Lens.edges.has(Edge.kind)) as {
-			kind: string;
-			from: string;
-			to: string;
-		}[],
+		Raw.filter((Edge) => Lens.edges.size === 0 || Lens.edges.has(Edge.kind)),
 		EdgeWeight,
 	).slice(0, State.NeighborLimit);
 	switch (true) {

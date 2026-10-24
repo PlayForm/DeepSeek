@@ -42,6 +42,7 @@ export default (Raw: Record<string, unknown>): Configuration => {
 	}
 	const MaxFileBytes = Integer(Raw["maxFileBytes"], "maxFileBytes");
 	const MaxNodesPerFile = Integer(Raw["maxNodesPerFile"], "maxNodesPerFile");
+	const MaxFiles = Integer(Raw["maxFiles"], "maxFiles");
 	const LimitDefault = Integer(Raw["limitDefault"], "limitDefault");
 	const LimitMaximum = Integer(Raw["limitMaximum"], "limitMaximum");
 	if (LimitDefault > LimitMaximum) {
@@ -55,6 +56,7 @@ export default (Raw: Record<string, unknown>): Configuration => {
 		exclude: StringList(Raw["exclude"], "exclude"),
 		maxFileBytes: MaxFileBytes,
 		maxNodesPerFile: MaxNodesPerFile,
+		maxFiles: MaxFiles,
 		limitDefault: LimitDefault,
 		limitMaximum: LimitMaximum,
 	};

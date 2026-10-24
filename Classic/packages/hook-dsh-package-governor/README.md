@@ -92,7 +92,7 @@ The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (
         name: "@playform/hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-governor.log
+            logFile: ~/.dsh/playform/hook-dsh-package-governor.log
             updateMode: programmatic
 ```
 
@@ -247,7 +247,7 @@ loader rejects unknown ids with `entry "..." not found`).
         name: "@playform/hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-governor.log # global ledger
+            logFile: ~/.dsh/playform/hook-dsh-package-governor.log # global ledger
             updateCooldownMs: 3000
             strict: false # explicit only; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor, raw-write]
@@ -286,7 +286,7 @@ it.
 The transcript shows only what the author wrote; the ledger shows what actually happened:
 
 ```text
-[2026-10-03T09:15:22.411Z] activated (anywhere mode, logFile=~/.dsh/hook-dsh-package-governor.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
+[2026-10-03T09:15:22.411Z] activated (anywhere mode, logFile=~/.dsh/playform/hook-dsh-package-governor.log, updateMode=programmatic, ncuBin=/usr/local/bin/ncu, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery))
 [2026-10-03T09:16:01.880Z] governed ~/Projects/acme/tool/package.json → 42
 [2026-10-03T09:16:34.120Z] update stage dispatched for ~/Projects/acme/tool (mode=programmatic, ncu via /usr/local/bin/ncu, built-in default policy)
 [2026-10-03T09:16:41.502Z] update: DONE — pins bumped per policy
@@ -303,8 +303,8 @@ while the file stays untouched.
 
 ## The Ledger
 
-One global log (`logFile`, default `~/.dsh/hook-dsh-package-governor.log`) records activation,
-exclusions, chain-pass results, and every update-stage dispatch.
+One global log (`logFile`, default `~/.dsh/playform/hook-dsh-package-governor.log`) records
+activation, exclusions, chain-pass results, and every update-stage dispatch.
 
 The strings this module composes (the hook-dsh-package-governor: logger prefix is the factory's
 `Append`; each line is `[<ISO>] <message>` in the file):

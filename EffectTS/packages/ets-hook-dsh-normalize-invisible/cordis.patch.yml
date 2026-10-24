@@ -37,7 +37,7 @@
         name: "@playform/ets-hook-dsh-normalize-invisible"
         config:
             log: true
-            logFile: ~/.dsh/ets-hook-dsh-normalize-invisible.log
+            logFile: ~/.dsh/playform/ets-hook-dsh-normalize-invisible.log
             replacement: ""
             normalizeReasoning: true
             normalizeToolArguments: true

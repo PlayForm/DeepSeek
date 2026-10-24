@@ -23,10 +23,28 @@ workspace's claims - the qualified freshness, the OutcomeEvidence, the justified
 - **The idle-forever posture**: ships disabled (`enabled: false`), never appears in the profile's
   bundles, enables only by an explicit ACTIVATE.
 - **The ledger**: its own strings, prefix `evidence:` (module-owned, byte-stable), one log per
-  module (default `~/.dsh/evidence.log`).
+  module (default `~/.dsh/playform/plugin-dsh-workspace-evidence.log`).
 
 Ledger lines (byte-stable): `disabled (enabled=false)`,
 `validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)`,
 `superseded <id> (sequence N)`, `stale <id> (dependency <key>)`, `no stale (dependency <key>)`,
 `ignored <path> (own actor)`, `ignored <path> (excluded)`, `ignored <path> (absent observation)`,
 `failed <path> (<reason>)`, `storage open failed: <reason>`.
+
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
+is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
+`policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
+are smoke-arbitrated in `Source/Test/Policy-Defaults`.

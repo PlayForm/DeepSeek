@@ -1,0 +1,1 @@
+import o from"./Persist.js";var y=(t,n,e)=>{const r={seq:t.Seq,...e};t.Seq+=1,n.History.unshift(r),n.History.length=Math.min(n.History.length,t.Depth),t.History.unshift(r),t.History.length=Math.min(t.History.length,t.Depth);const i=t.History.length;return t.Pending=t.Pending.then(()=>o(t,r,i)),r};export{y as default};

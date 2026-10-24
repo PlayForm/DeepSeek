@@ -1,0 +1,1 @@
+import o from"../Variable/Heuristics.js";import c from"../Variable/Weights.js";var l=(t,i)=>{const r=e=>{const s=i?.[e]??c[e]??0;return t.includes(e)?s:0};return{enabled:o.filter(e=>t.includes(e)),weights:{scope:r("scope"),graph:r("graph"),prior:r("prior"),literal:r("literal"),history:r("history"),accept:r("accept")}}};export{l as default};

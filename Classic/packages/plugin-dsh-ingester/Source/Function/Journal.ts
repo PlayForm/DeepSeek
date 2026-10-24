@@ -6,6 +6,8 @@
 import { appendFileSync as Append, mkdirSync as Make } from "node:fs";
 import { dirname as Parent } from "node:path";
 
+import { Expand } from "@playform/lib-dsh-core";
+
 import type State from "../Interface/State.js";
 
 export default (
@@ -16,9 +18,10 @@ export default (
 	Detail: string,
 ): void => {
 	try {
-		Make(Parent(State.Ledger), { recursive: true });
+		const Ledger = Expand(State.Ledger);
+		Make(Parent(Ledger), { recursive: true });
 		Append(
-			State.Ledger,
+			Ledger,
 			`${JSON.stringify({
 				at: Date.now(),
 				event: Event,

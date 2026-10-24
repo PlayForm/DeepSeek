@@ -39,6 +39,7 @@ export default (Context: Context, Options: Config): void => {
 			MaxProposals: "maxProposals",
 			LimitDefault: "limitDefault",
 			LimitMaximum: "limitMaximum",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

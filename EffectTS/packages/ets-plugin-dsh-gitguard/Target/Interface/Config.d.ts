@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /** The durable ledger file (one log per module). */
     logFile: string;
@@ -15,4 +16,9 @@ export default interface Config {
     strict: boolean;
     /** The paths the guard ignores (the factory's segment match). */
     exclude: string[];
+    /** The per-action allowlist (D6): the shared factory block. The guard is
+     *  read-only, so its own classes are `read`/`record` (automatic); the
+     *  write/commit/spawn verdicts stay the shipped `approve`. A resolved
+     *  pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

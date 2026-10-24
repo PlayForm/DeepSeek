@@ -10,7 +10,7 @@
 import type CheckSet from "@Interface/CheckSet.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type WatchEntry from "@Interface/WatchEntry.js";
-import type { State as Base } from "@playform/ets-plugin-dsh-factory";
+import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 
 interface Extra {
 	/** Config `enabled` - the master switch (volatile; the State builder's
@@ -28,6 +28,11 @@ interface Extra {
 	Include: string[];
 	/** Config `checksets` - the classification table (volatile). */
 	CheckSets: Record<string, CheckSet>;
+	/** The per-action allowlist (config `policy`, volatile) - the D6 block.
+	 *  Named `Allow` because the factory's shared State already owns `Policy`
+	 *  (the configured global policy file path). This package's actions are
+	 *  automatic; it has NO gated action. */
+	Allow: Allowlist;
 	/** The injected factory instance (the State builder, the ledger, the
 	 *  match, the Wire). */
 	Factory: FactoryHandle;

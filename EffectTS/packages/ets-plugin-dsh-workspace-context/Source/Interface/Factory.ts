@@ -3,6 +3,19 @@
 // The service holds the injected `pluginFactory` instance and uses: the
 // State builder, the ledger, and the exclusion match (unused by the packet
 // but part of the shared shape).
+//
+// The augmentation below publishes the `pluginFactory` Context property, so
+// `ctx.pluginFactory` is typed at every consumption site (the typed view
+// arrives TYPE-ONLY from the factory package - erased at build).
+import type Factory from "@playform/ets-plugin-dsh-factory";
+
+declare module "@deepseek-ai/cordis" {
+	interface Context {
+		/** The plugin-factory service (@playform/ets-plugin-dsh-factory). */
+		pluginFactory: Factory;
+	}
+}
+
 export default interface FactoryHandle {
 	/** The State builder: cell unwrap + shared fields + module extras. */
 	State(Context: unknown, Config: unknown, Setup: unknown): unknown;
@@ -13,4 +26,6 @@ export default interface FactoryHandle {
 	/** The fs/observed registration on the ROOT context (unused by the
 	 *  service role; part of the shared handle shape). */
 	Wire(Context: unknown, State: unknown, Observe: unknown): void;
+	/** The probe-once optional-service accessor (the trace bus seam). */
+	Seam(State: unknown, Name: string): unknown;
 }

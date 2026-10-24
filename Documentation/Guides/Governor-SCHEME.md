@@ -346,7 +346,7 @@ rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
         name: "@playform/hook-dsh-package-governor"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-governor.log # global ledger (default: ~/.dsh/hook-dsh-package-governor.log)
+            logFile: ~/.dsh/playform/hook-dsh-package-governor.log # global ledger (default: ~/.dsh/playform/hook-dsh-package-governor.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
             mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required

@@ -14,10 +14,10 @@
 //
 // `enabled` defaults to FALSE - the IDLE-forever posture.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/merge.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-merge.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - the hook owns its record schema).
@@ -27,4 +27,12 @@ export default Compose(false, {
 	// The batch gates.
 	maxFiles: Schema.number().default(50).volatile(),
 	maxTotalBytes: Schema.number().default(1000000).volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The merge's ONE gated
+	// action is the commit - `commit` defaults to `approve`, so a batch waits
+	// for the user and writes nothing (the documented `merge held (<n> files)
+	// (policy commit=approve)` line). Read/index/record/suggest/message are
+	// automatic; write/commit/spawn wait for approval. Volatile as one
+	// object; a resolved pack's `policy` section overrides the defaults per
+	// action (the wiring is the next refinement; the type already exists).
+	policy: Policy(),
 });

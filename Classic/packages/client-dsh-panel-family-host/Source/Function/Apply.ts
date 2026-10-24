@@ -1,13 +1,26 @@
-// Apply - the host package's apply body: provide the panelFamilyHost
-// service (Interface/Host.ts) and log the activation. The service is
-// provided with ctx.provide so it is removed with the plugin. When the
-// Config enabled is false the service still registers but every method
-// returns a `rejected` failure (the idle posture never silently passes:
-// a disabled endpoint answers, it just refuses to read).
+// Apply - the host package's apply body: provide the three services and log
+// the activation. Every service is provided with ctx.provide, so it is
+// removed with the plugin. When the Config enabled is false the READ endpoints
+// still register but every method returns a `rejected` failure, and the
+// plain-field bridge refuses too (the idle posture never silently passes: a
+// disabled package answers, it just refuses to read and to write).
+//
+//   * `panelFamilyHost` - tail(namespace, lines) / stats() (Interface/Host.ts);
+//   * `panelFamilyBridge` - editFull(namespace, patch) over
+//     ctx.configEditor.edit() (Interface/Bridge.ts, Function/Bridge.ts);
+//   * `panelFamilyTrace` - the D5 bus forwarder (Interface/Trace.ts,
+//     Function/Trace.ts), provided only when `ctx.trace` exists.
+//
+// The host context already owns the `trace` service name (the factory's D5
+// bus), so the forwarder is named `panelFamilyTrace` here; the browser half
+// re-publishes it as `trace` (Source/Function/Client.ts).
 import type { Context } from "@deepseek-ai/cordis";
+import BridgeFn from "@Function/Bridge.js";
 import StatsFn from "@Function/Stats.js";
 import TailFn from "@Function/Tail.js";
+import TraceFn from "@Function/Trace.js";
 import type Config from "@Interface/Config.js";
+import Lines from "@Variable/Lines.js";
 
 export default function Apply(ctx: Context, config: Config): void {
 	// Unwrap one possibly-volatile config cell (`{ get }` reference or value):
@@ -41,6 +54,28 @@ export default function Apply(ctx: Context, config: Config): void {
 						message: "the panel-family host is disabled (enabled=false)",
 					},
 	});
+	// The plain-field bridge: the ONE trusted full-config write surface. The
+	// disabled gate refuses before the editor is ever resolved.
+	ctx.provide("panelFamilyBridge", {
+		editFull: async (namespace: string, patch: Record<string, unknown>) => {
+			switch (true) {
+				case !enabled:
+					ctx.logger.warn(Lines.disabled());
+					return false;
+				default:
+					return BridgeFn(ctx, namespace, patch);
+			}
+		},
+	});
+	// The D5 forwarder: only when the host process carries the bus.
+	const HostTrace = TraceFn(ctx);
+	switch (true) {
+		case HostTrace !== undefined:
+			ctx.provide("panelFamilyTrace", HostTrace);
+			break;
+		default:
+			break;
+	}
 	// The activation line (ledger string, byte-stable):
 	// `host: activated (enabled=<enabled>)`.
 	ctx.logger.info(`host: activated (enabled=${String(enabled)})`);

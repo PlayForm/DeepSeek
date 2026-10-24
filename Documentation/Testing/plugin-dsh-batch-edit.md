@@ -9,39 +9,57 @@
   file in one go. Every write goes through Factory.Write; governed basenames run the factory's
   direct path exactly once per write (the govern actor marker, Gate.ts route 2). The atomic gate is
   all-or-nothing.
-- Ledger line:
-  `` `activated bundle ${Version} (machinesPerAgent ${State.MachinesPerAgent}, opsPerCommit ${State.OpsPerCommit}, deadlineMs ${State.Deadline}, strictMode ${State.Strict}, interceptBash ${State.Intercept})` ``
-  (Apply.ts:154); logFile `~/.dsh/batch-edit.log`.
+- Ledger lines (SCHEME §6, byte-stable): the activation proof
+  `` `activated bundle <version> (...)` `` (with the config summary), the machine/transition
+  contract lines (`machine opened <id> (<n> files, scope=<glob>)`,
+  `transition applied <file> version <old> -> <new>`, `machine committed <id> (...)`,
+  `machine closed <id>`), and the policy refusal `` `apply refused <id> (policy write=approve)` ``;
+  logFile `~/.dsh/playform/plugin-dsh-batch-edit.log`.
+- The policy block (D6, SCHEME §5 step 0 / README "The policy block"): the config carries the shared
+  per-action allowlist (`policy: Policy()`, mapped to `State.Allow`; write/commit/spawn = `approve`,
+  read/index/record/suggest/message = `auto`). The `commit` action consults
+  `Decide(State.Allow, "write")` BEFORE any plan or write; the shipped default refuses the apply
+  until the user approves (flip `policy.write` to `auto`, or approve the batch through the
+  batch-decision hook). One volatile object - hot-editable; a resolved pack's `policy` section
+  overrides per action.
 
 ## Activation checks
 
 1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
    `{"name": "@playform/plugin-dsh-batch-edit"}` → one entry, status schema (defaults:
    machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false,
-   monitorChecksets []).
+   monitorChecksets [], policy.* D6 defaults). Ships disabled (`enabled: false`; enables only by an
+   explicit ACTIVATE in the profile).
 2. Tool check: the Tool provider lists `batch_edit`.
-3. Ledger line: the `activated bundle ...` line in `~/.dsh/batch-edit.log`.
+3. Ledger line: the `activated bundle ...` line in `~/.dsh/playform/plugin-dsh-batch-edit.log`.
 
 ## Test cases
 
 | # | Trigger | Expected | Pass criteria | | T1 | listConfigs query above | one entry,
 `status: "schema"` | the defaults match | | T2 | `batch_edit` open on a /tmp scratch file | the
 machine opens, the file is held | the file appears as a PROCESS | | T2 | Commit a replace op on the
-/tmp file | the atomic commit applies | the diff is exact; all-or-nothing | | T1 | Any batch_edit
-call | **KNOWN FAILURE**: `cannot get property "fs" without inject` | currently every call fails -
-see the gap |
+/tmp file with `policy.write` = `approve` (the shipped default) | the apply is refused, nothing is
+read or written, the machine stays open with its cells `observed` | the byte-exact
+`apply refused <id> (policy write=approve)` line is in the ledger AND the thrown error | | T2 | Flip
+`policy.write` to `auto` (hot edit, no remount), then commit the same op | the atomic commit applies
+| the diff is exact; all-or-nothing | | T2 | A commit exceeding deadlineMs 120000 | one
+`batch-edit-continue` job via the jobs hub | `jobId` in the output; no plugin-owned timers | | T2 |
+A held file touched externally before commit | the cell flips to `halted("stale")`, machine stays
+open | resume with `action=commit` on the same machine |
 
 ## Known live gaps
 
-- **Fails every call** with `cannot get property "fs" without inject`. The inject list is
-  `["pluginFactory", "tools", "jobs"]` but `Machine.ts:223`, `Ops.ts:235` and `Tools.ts:283` read
-  `State.Context.fs`. The fix: add `"fs"` to the inject array + rebuild (`Source/Library.ts`), then
-  restart the app and re-run T2.
+- None known: the former `cannot get property "fs" without inject` defect is FIXED (the inject list
+  is `["pluginFactory", "tools", "jobs"]` and the tool runs). The current operational posture to
+  test: with the shipped `write: approve` policy a commit is refused (the apply gate, by design)
+  until the user approves - not a defect. Still open per SCHEME §9 (FUTURE): the bash-intercept
+  enforcement layer (v1 `interceptBash` is advisory only), the undo journal, the interactive
+  confirmation checkpoints.
 
 ## Fix loop
 
-- Fix files: `Source/Library.ts` (the inject list), `Source/Function/Machine.ts`,
-  `Source/Function/Ops.ts`, `Source/Function/Tools.ts`.
+- Fix files: `Source/Library.ts` (the loader contract, inject `["pluginFactory", "tools", "jobs"]`),
+  `Source/Function/Machine.ts`, `Source/Function/Ops.ts`, `Source/Function/Tools.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-batch-edit run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-batch-edit/Target/Test/<Folder>/Test.js`
@@ -51,7 +69,8 @@ see the gap |
 ## Report stub
 
 - Plugin: `@playform/plugin-dsh-batch-edit`
-- Tests run: T1 config - / T2 open - / T2 commit - (blocked by the fs gap)
-- Defects: Source/Library.ts - inject list lacks "fs" - add "fs" and rebuild
+- Tests run: T1 config - / T2 open - / T2 policy refusal - / T2 commit after approve - / T2 deadline
+  job - / T2 stale halt -
+- Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

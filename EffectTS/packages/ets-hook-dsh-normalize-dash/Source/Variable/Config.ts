@@ -39,7 +39,7 @@ export default Compose(false, {
 	// Ledger file — the hook-dsh-normalize-dash ledger, SEPARATE from the family's logs (one
 	// log per module) — volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/hook-dsh-normalize-dash.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-dash.log").volatile(),
 	// The dash replacement — the transform's ONLY knob. ASCII hyphen-minus by
 	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next stream picks it up with no remount.

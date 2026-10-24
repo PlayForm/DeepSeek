@@ -41,6 +41,24 @@ operate: withdrawn <id>
 operate: storage open failed: <reason>
 ```
 
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This hook's action class is SUGGEST (it records a typed proposal and never applies it), and that
+class is **automatic**. The hook has **NO gated action** - it never writes a file, commits a batch
+or spawns an agent - so the block documents the posture and refuses nothing. The block is one
+volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement).
+
 ## Status
 
 The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an

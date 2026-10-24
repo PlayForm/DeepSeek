@@ -82,16 +82,22 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 /**
  * One run: the fake ctx's captures. Every seam records and returns a
  * disposer, exactly as the real client services do; effect runs its setup
- * immediately and keeps the recorded label.
+ * immediately and keeps the recorded label. The optional `registry` /
+ * `trace` services are exposed through `ctx.get` so the child-slot and trace
+ * scenarios can compose them without changing the standalone run.
  */
-export const Make = (): any => {
+export const Make = (Options: { registry?: unknown; trace?: unknown } = {}): any => {
 	const Locale: { namespace: string; dictionaries: Record<string, unknown> }[] = [];
 	const Injects: Record<string, () => unknown> = {};
 	const Registered: { options: any; component: () => unknown }[] = [];
 	const Provided: Record<string, unknown> = {};
 	const Effects: string[] = [];
 	const Disposers: Array<() => unknown> = [];
+	const Services: Record<string, unknown> = {};
+	if (Options.registry !== undefined) Services["playformFamilyPanel"] = Options.registry;
+	if (Options.trace !== undefined) Services["trace"] = Options.trace;
 	const Ctx: any = {
+		get: (Name: string) => Services[Name],
 		locale: {
 			register: (Namespace: string, Dictionaries: Record<string, unknown>) => {
 				Locale.push({ namespace: Namespace, dictionaries: Dictionaries });
@@ -129,6 +135,7 @@ export const Make = (): any => {
 		Provided,
 		Effects,
 		Disposers,
+		Services,
 	};
 	ClientPlugin.apply(Ctx);
 	/** Open the workspace-live slot point: run the injected factory and
@@ -141,11 +148,65 @@ export const Make = (): any => {
 	return Run;
 };
 
+/** A fake D5 trace port: `on` + `ring`, plus an `emit` the tests drive. */
+export const MakeTrace = (): any => {
+	const Listeners = new Map<string, Set<(Envelope: any) => void>>();
+	const Ring: any[] = [];
+	let Sequence = 0;
+	return {
+		on: (Kind: string, Listener: (Envelope: any) => void) => {
+			let Subscribers = Listeners.get(Kind);
+			if (Subscribers === undefined) {
+				Subscribers = new Set();
+				Listeners.set(Kind, Subscribers);
+			}
+			Subscribers.add(Listener);
+			return () => {
+				Subscribers?.delete(Listener);
+			};
+		},
+		ring: (Limit?: number) => [...Ring].reverse().slice(0, Limit ?? 256),
+		emit: (Kind: string, Payload: Record<string, unknown>) => {
+			Sequence += 1;
+			const Envelope = {
+				trace: `trace-${Sequence}`,
+				kind: Kind,
+				at: Sequence,
+				payload: Payload,
+			};
+			Ring.push(Envelope);
+			for (const Listener of Listeners.get(Kind) ?? []) Listener(Envelope);
+			return Envelope;
+		},
+	};
+};
+
+/** A fake panel-family registry: presence is the composition signal. */
+export const MakeRegistry = (): any => {
+	const Registered: any[] = [];
+	return {
+		Registered,
+		register: (Section: any) => {
+			Registered.push(Section);
+			return () => undefined;
+		},
+		unregister: () => undefined,
+		entries: () => Registered.slice(),
+		subscribe: () => () => undefined,
+		getVersion: () => Registered.length,
+		open: () => undefined,
+	};
+};
+
 /**
  * The purity probe on the REAL built code: read a built file's source.
  */
 export const BuiltSource = (Relative: string): string =>
 	FileSystem.readFileSync(new URL(Relative, import.meta.url), "utf8");
+
+/** The built client bundle's source (the closure-factory envelope). */
+export const BundleSource = (): string =>
+	FileSystem.readFileSync(new URL("../Client.bundle.js", import.meta.url), "utf8");
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =

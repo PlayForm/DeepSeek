@@ -11,4 +11,4 @@ declare function _default(Request_: Request, Policy: {
         enabled: boolean;
         max: number;
     };
-}, DefaultRole: Role, Keywords?: import("../Interface/Policy.js").KeywordTable): Route;
+}, DefaultRole: Role, Keywords?: import("../Interface/Policy.js").KeywordTable, Advertised?: readonly string[]): Route;

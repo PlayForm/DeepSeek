@@ -16,13 +16,19 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** A standard enabled mount with overrides and optional fs faults. */
+/** A standard enabled mount with overrides and optional fs faults. The D6
+ *  policy gate is OPENED here (`commit: auto`) because this folder exercises
+ *  the commit itself; the shipped `commit: approve` is arbitrated by
+ *  `Source/Test/Policy-Defaults`. */
 const Setup = (
 	Config: Record<string, unknown> = {},
 	Faults: { write?: string; read?: string; tamper?: string } = {},
 ): any => {
 	rm();
-	return Make(Validate({ logFile: Ledger, enabled: true, ...Config }), Faults);
+	return Make(
+		Validate({ logFile: Ledger, enabled: true, policy: { commit: "auto" }, ...Config }),
+		Faults,
+	);
 };
 
 /** Drive one folder's checks. */

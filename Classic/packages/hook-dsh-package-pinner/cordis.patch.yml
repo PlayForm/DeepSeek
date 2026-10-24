@@ -16,7 +16,7 @@
         name: "@playform/hook-dsh-package-pinner"
         config:
             log: true
-            logFile: ~/.dsh/hook-dsh-package-pinner.log
+            logFile: ~/.dsh/playform/hook-dsh-package-pinner.log
             mutationTools: [write, edit, str_replace_editor, raw-write]
             policyFile: ""
             sections: [dependencies, devDependencies, peerDependencies, optionalDependencies]

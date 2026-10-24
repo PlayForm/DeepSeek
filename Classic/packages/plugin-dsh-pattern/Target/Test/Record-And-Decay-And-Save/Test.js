@@ -33,8 +33,8 @@ const runTest = async () => {
       assert.deepEqual(
         Run.Lines,
         [
-          "pattern: activated (seeded 4 patterns) (logFile ~/.dsh/pattern.log)",
-          "pattern: recorded accepted on version-bump (confidence 0.60) (logFile ~/.dsh/pattern.log)"
+          "pattern: activated (seeded 4 patterns) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)",
+          "pattern: recorded accepted on version-bump (confidence 0.60) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)"
         ]
       );
     });
@@ -47,7 +47,7 @@ const runTest = async () => {
       Run.Service.Record("low", "failed", 1e3);
       assert.equal(Run.Service.Get("low").confidence, 0);
       assert.ok(
-        Run.Lines.includes("pattern: recorded failed on low (confidence 0.00) (logFile ~/.dsh/pattern.log)")
+        Run.Lines.includes("pattern: recorded failed on low (confidence 0.00) (logFile ~/.dsh/playform/plugin-dsh-pattern.log)")
       );
     });
     Check(Count, "R1: an unknown id is silent - no line, no throw", () => {
@@ -99,7 +99,7 @@ const runTest = async () => {
         )
       );
       assert.ok(
-        Run.Lines.includes(`pattern: saved 5 patterns to ${SnapshotPath()} (logFile ~/.dsh/pattern.log)`)
+        Run.Lines.includes(`pattern: saved 5 patterns to ${SnapshotPath()} (logFile ~/.dsh/playform/plugin-dsh-pattern.log)`)
       );
     });
     await CheckAsync(Count, "R3: a seeded snapshot replaces the cold-start catalog on construction", async () => {

@@ -1,0 +1,1 @@
+const n=new WeakMap;var p=(i,r)=>{let t=n.get(i);t===void 0&&(t=new Map,n.set(i,t));const s=t.get(r);if(s!==void 0)return s;const f=`${r}/`,a=Object.entries(i.families??{}).filter(([e])=>e.startsWith(f)).map(([,e])=>e).sort((e,o)=>e.priority-o.priority);return t.set(r,a),a};export{p as default};

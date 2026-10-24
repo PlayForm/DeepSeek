@@ -72,11 +72,12 @@ const FakeFs = (Files = {}, Options = {}) => {
     return Content === void 0 ? void 0 : { version: Fs.versions[Target.displayPath] ?? "1", type: "file", size: Content.length };
   };
   Fs.readText = async (Target) => {
-    const Content = Fs.files[Target.displayPath];
+    const Key = typeof Target === "string" ? Target : Target.displayPath;
+    const Content = Fs.files[Key];
     if (Content === void 0) {
-      throw new Error(`readText: no such file ${Target.displayPath}`);
+      throw new Error(`readText: no such file ${Key}`);
     }
-    Fs.reads.push(Target.displayPath);
+    Fs.reads.push(Key);
     return Content;
   };
   Fs.writeText = async (Target, Content, Intent) => {
@@ -173,7 +174,7 @@ const Seed = (Files, Versions = {}) => (_Context, Run) => {
   Run.Fs.files = { ...Files };
   Run.Fs.versions = { ...Versions };
 };
-const Graph = (Calls = [], Throw) => ({
+const Graph = (Calls = [], Throw, Nodes = {}) => ({
   indexFile: async (P) => {
     Calls.push(P);
     if (Throw !== void 0) {
@@ -182,7 +183,7 @@ const Graph = (Calls = [], Throw) => ({
     return { ok: true };
   },
   find: () => [],
-  getNode: () => void 0
+  getNode: (Id) => Nodes[Id]
 });
 const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
 const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));

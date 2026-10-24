@@ -1,4 +1,5 @@
 import type { Detection, Verdict } from "../Interface/Execution.js";
+import { type MeasureInput } from "./Measure.js";
 /** The gate input, built by Apply from the per-agent state and the config. */
 export interface Gate {
     /** The family ids that emitted within the cooldown window. */
@@ -15,8 +16,8 @@ export interface Gate {
     Threshold: number;
     /** The companion cap. */
     MaxCompanions: number;
-    /** The excluded directories. */
-    Exclude: string[];
+    /** The measure input: the effective weights and the learned-rate lookups. */
+    Measure: MeasureInput;
 }
 /** The companion-set dedupe key: the family plus its sorted paths. */
 declare const Key: (Family: string, Paths: string[]) => string;
@@ -24,8 +25,6 @@ export default _default;
 declare function _default(
 /** The ranked detections (Detect's output). */
 Detections: Detection[], 
-/** The doc path the call names (dropped from the companion list). */
-CallPath: string, 
 /** The gate input. */
 Input: Gate): Verdict;
 /** The dedupe key for an emitted note (Apply records it for the next call). */

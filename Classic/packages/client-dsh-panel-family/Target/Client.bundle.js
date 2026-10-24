@@ -35,6 +35,824 @@ __export(Client_exports, {
 });
 module.exports = __toCommonJS(Client_exports);
 
+// Source/Function/Bridge.ts
+var IsBridge = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.editFull === "function";
+function Bridge(ctx) {
+  const Direct = ctx.get("panelFamilyBridge");
+  switch (true) {
+    case IsBridge(Direct):
+      return Direct;
+    default: {
+      const Remote = ctx.get("remote");
+      const Candidate = Remote?.playformFamilyPanel;
+      switch (true) {
+        case IsBridge(Candidate):
+          return Candidate;
+        default:
+          return void 0;
+      }
+    }
+  }
+}
+
+// Source/Function/Forms.ts
+var IsConfigForms = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.get === "function" && typeof Candidate.describe === "function";
+function Forms(ctx) {
+  const Candidate = ctx.get("configForms");
+  switch (true) {
+    case IsConfigForms(Candidate):
+      return Candidate;
+    default:
+      return void 0;
+  }
+}
+
+// Source/Function/Live.ts
+var Bound = 8;
+function Live(Trace2, Kinds) {
+  const Tail = [];
+  const Seed = Trace2?.ring === void 0 ? [] : Trace2.ring(Bound).filter((Envelope) => Kinds.includes(Envelope.kind));
+  Tail.push(...Seed.slice(0, Bound));
+  const Listeners = /* @__PURE__ */ new Set();
+  const Publish = (Envelope) => {
+    Tail.unshift(Envelope);
+    while (Tail.length > Bound) Tail.pop();
+    for (const Listener of Listeners) Listener();
+  };
+  const Unsubscribes = Trace2 === void 0 ? [] : Kinds.map((Kind) => Trace2.on(Kind, Publish));
+  return {
+    tail() {
+      return [...Tail];
+    },
+    subscribe(Listener) {
+      Listeners.add(Listener);
+      return () => Listeners.delete(Listener);
+    },
+    dispose() {
+      for (const Unsubscribe of Unsubscribes) Unsubscribe();
+      Unsubscribes.length = 0;
+      Listeners.clear();
+    }
+  };
+}
+
+// Source/Variable/Lines.ts
+var Lines_default = {
+  /** The slot-aware registry's refusal line. */
+  duplicate: (bundle, slot) => `client-dsh-panel-family: duplicate adapter refused for ${bundle} in ${slot}`,
+  /** The audit line for one accepted plain-field bridge write. */
+  plainWrite: (namespace, path) => `client-dsh-panel-family: plain-field write ${namespace} ${path}`,
+  /** The note for a plain-field edit with no bridge exposed. */
+  bridgeMissing: (namespace) => `client-dsh-panel-family: plain-field bridge unavailable for ${namespace}`,
+  /** The refusal for a plain-field write into a namespace with secrets. */
+  plainSecret: (namespace) => `client-dsh-panel-family: plain-field secret refused for ${namespace}`
+};
+
+// Source/Function/Apply.ts
+var IsRecord = (Value) => typeof Value === "object" && Value !== null && !Array.isArray(Value);
+var SetPath = (Root, Path, Value) => {
+  const Head = Path[0];
+  switch (true) {
+    case Head === void 0:
+      return Root;
+    case Path.length === 1:
+      return { ...Root, [Head]: Value };
+    default: {
+      const Child = Root[Head];
+      const Container = IsRecord(Child) ? { ...Child } : {};
+      return { ...Root, [Head]: SetPath(Container, Path.slice(1), Value) };
+    }
+  }
+};
+async function Apply(Ports, Section2, View, Field2, Value) {
+  switch (true) {
+    case Field2.secret:
+      return false;
+    case Field2.volatile: {
+      const Form2 = Ports.configForms?.get(Section2.namespace);
+      switch (true) {
+        case Form2 === void 0:
+          return false;
+        default: {
+          const Snapshot = Form2.getSnapshot();
+          return await Form2.mutate(
+            [{ op: "set", path: Field2.path, value: Value }],
+            Snapshot.revision
+          );
+        }
+      }
+    }
+    case Ports.bridge !== void 0: {
+      switch (true) {
+        case View.secret:
+          Ports.log.warn(Lines_default.plainSecret(Section2.namespace));
+          return false;
+        default:
+      }
+      const Namespace = Ports.configForms?.describe().getSnapshot().view?.namespaces.find((Entry) => Entry.ns === Section2.namespace);
+      switch (true) {
+        case Namespace === void 0:
+          return false;
+        default: {
+          const Patch = SetPath(
+            IsRecord(Namespace.value) ? Namespace.value : {},
+            Field2.path,
+            Value
+          );
+          const Accepted = await Ports.bridge.editFull(Section2.namespace, Patch);
+          switch (true) {
+            case Accepted:
+              Ports.log.info(
+                Lines_default.plainWrite(Section2.namespace, Field2.path.join("."))
+              );
+              return true;
+            default:
+              return false;
+          }
+        }
+      }
+    }
+    default:
+      Ports.log.warn(Lines_default.bridgeMissing(Section2.namespace));
+      return false;
+  }
+}
+
+// Source/Variable/Locale-en.json
+var Locale_en_default = {
+  tab: "Family",
+  empty: "No family sections are registered yet.",
+  overlay: "Family panel",
+  close: "Close",
+  normalize: "Normalize family",
+  "tool-coach": "Tool coach",
+  suggester: "Convention suggester",
+  "normalize-quotes": "Normalize quotes",
+  "normalize-ellipsis": "Normalize ellipsis",
+  "normalize-spaces": "Normalize spaces",
+  "normalize-invisible": "Normalize invisible characters",
+  "normalize-fullwidth": "Normalize fullwidth characters",
+  "normalize-file": "Normalize file contents",
+  "package-governor": "Package governor",
+  "package-pinner": "Package pinner",
+  "cargo-governor": "Cargo governor",
+  ccr: "Tool output compression",
+  "status.enabled": "Enabled",
+  "status.disabled": "Disabled",
+  "status.unknown": "Unknown",
+  "status.live": "Live trace",
+  "status.static": "Static status",
+  "status.tail": "Recent events",
+  "form.options": "Options",
+  "form.volatile": "applies live",
+  "form.plain": "applies on remount",
+  "form.bridge-missing": "plain-field bridge unavailable",
+  "form.secret": "configured (secret)",
+  "form.secret-namespace": "read-only (the namespace has secrets)",
+  "form.loading": "Loading the configuration...",
+  "form.unavailable": "Configuration forms are not composed.",
+  "form.empty": "This plugin exposes no configurable fields.",
+  "form.overridden": "user override"
+};
+
+// Source/Function/Field.ts
+var import_react = require("react");
+var Translate = (T, Key3) => {
+  switch (true) {
+    case T !== void 0:
+      return T(Key3);
+    default: {
+      const Value = Locale_en_default[Key3];
+      return Value === void 0 ? Key3 : Value;
+    }
+  }
+};
+var Parse = (Text) => {
+  try {
+    return JSON.parse(Text);
+  } catch {
+    return Text;
+  }
+};
+var Marker = (Field2, View) => {
+  switch (true) {
+    case Field2.secret:
+      return "form.secret";
+    case Field2.volatile:
+      return "form.volatile";
+    case View.secret:
+      return "form.secret-namespace";
+    case View.bridge:
+      return "form.plain";
+    default:
+      return "form.bridge-missing";
+  }
+};
+var Control = (props) => {
+  const Field2 = props.field;
+  const Commit = (Value) => {
+    void Apply(props.ports, props.section, props.view, Field2, Value);
+  };
+  switch (true) {
+    case Field2.secret:
+      return (0, import_react.createElement)(
+        "span",
+        { className: "playform-family-field-secret" },
+        Translate(props.t, "form.secret")
+      );
+    case Field2.type === "boolean":
+      return (0, import_react.createElement)("input", {
+        type: "checkbox",
+        checked: Field2.value === true,
+        onChange: (Event) => Commit(Event.target.checked)
+      });
+    case Field2.options !== void 0:
+      return (0, import_react.createElement)(
+        "select",
+        {
+          value: String(Field2.value ?? ""),
+          onChange: (Event) => Commit(Event.target.value)
+        },
+        Field2.options.map(
+          (Option) => (0, import_react.createElement)("option", { key: Option, value: Option }, Option)
+        )
+      );
+    case Field2.type === "number":
+      return (0, import_react.createElement)("input", {
+        type: "number",
+        defaultValue: String(Field2.value ?? ""),
+        onChange: (Event) => Commit(Number(Event.target.value))
+      });
+    default:
+      return (0, import_react.createElement)("input", {
+        type: "text",
+        defaultValue: typeof Field2.value === "string" ? Field2.value : JSON.stringify(Field2.value ?? null),
+        onChange: (Event) => Commit(Parse(Event.target.value))
+      });
+  }
+};
+function Field(props) {
+  const Field2 = props.field;
+  return (0, import_react.createElement)(
+    "label",
+    { className: "playform-family-field", "data-path": Field2.label },
+    (0, import_react.createElement)(
+      "span",
+      { className: "playform-family-field-label" },
+      `${Field2.label} (${Translate(props.t, Marker(Field2, props.view))})`
+    ),
+    Control({
+      field: Field2,
+      view: props.view,
+      section: props.section,
+      ports: props.ports,
+      ...props.t === void 0 ? {} : { t: props.t }
+    }),
+    Field2.overridden ? (0, import_react.createElement)(
+      "span",
+      { className: "playform-family-field-override" },
+      Translate(props.t, "form.overridden")
+    ) : void 0
+  );
+}
+
+// Source/Function/Form.ts
+var IsRecord2 = (Value) => typeof Value === "object" && Value !== null && !Array.isArray(Value);
+var RefsOf = (Schema) => {
+  switch (true) {
+    case (IsRecord2(Schema) && IsRecord2(Schema["refs"])):
+      return Schema["refs"];
+    default:
+      return {};
+  }
+};
+var Resolve = (Value, Refs, Depth = 0) => {
+  switch (true) {
+    case Depth > 8:
+      return void 0;
+    case typeof Value === "number":
+      return Resolve(Refs[String(Value)], Refs, Depth + 1);
+    case !IsRecord2(Value):
+      return void 0;
+    default: {
+      const Candidate = Value;
+      switch (true) {
+        case typeof Candidate["type"] === "string":
+          return Value;
+        case (IsRecord2(Candidate["refs"]) && typeof Candidate["uid"] === "number"):
+          return Resolve(
+            Candidate["refs"][String(Candidate["uid"])],
+            Refs,
+            Depth + 1
+          );
+        default:
+          return void 0;
+      }
+    }
+  }
+};
+var GetPath = (Value, Path) => {
+  let Current = Value;
+  for (const Key3 of Path) {
+    switch (true) {
+      case Array.isArray(Current):
+        Current = Current[Number(Key3)];
+        break;
+      case IsRecord2(Current):
+        Current = Current[Key3];
+        break;
+      default:
+        return void 0;
+    }
+  }
+  return Current;
+};
+var HasPath = (Value, Path) => {
+  switch (true) {
+    case Path.length === 0:
+      return Value !== void 0;
+    default: {
+      const Parent = GetPath(Value, Path.slice(0, -1));
+      const Key3 = Path[Path.length - 1];
+      switch (true) {
+        case Array.isArray(Parent):
+          return Number(Key3) < Parent.length;
+        case IsRecord2(Parent):
+          return Key3 in Parent;
+        default:
+          return false;
+      }
+    }
+  }
+};
+var Options = (Node, Refs) => {
+  switch (true) {
+    case (Node.type !== "union" || !Array.isArray(Node.list)):
+      return void 0;
+    default: {
+      const Values = Node.list.map((Member) => Resolve(Member, Refs)).filter((Member) => Member !== void 0 && Member.type === "const").map((Member) => String(Member.value));
+      return Values.length === 0 ? void 0 : Values;
+    }
+  }
+};
+var Fields = (Root, Refs, View, Path, Inherited, Depth) => {
+  switch (true) {
+    case (Depth > 6 || Root.type !== "object" || !IsRecord2(Root.dict)):
+      return [];
+    default: {
+      const Result = [];
+      for (const [Name, Child] of Object.entries(Root.dict)) {
+        const Resolved = Resolve(Child, Refs);
+        switch (true) {
+          case Resolved === void 0:
+            break;
+          default: {
+            const Meta = IsRecord2(Resolved.meta) ? Resolved.meta : {};
+            switch (true) {
+              case Meta["hidden"] === true:
+                break;
+              default: {
+                const ChildPath = [...Path, Name];
+                const Volatile = Inherited || Meta["volatile"] === true;
+                switch (true) {
+                  case (Resolved.type === "object" && IsRecord2(Resolved.dict)):
+                    Result.push(
+                      ...Fields(Resolved, Refs, View, ChildPath, Volatile, Depth + 1)
+                    );
+                    break;
+                  default: {
+                    const Values = Options(Resolved, Refs);
+                    Result.push({
+                      path: ChildPath,
+                      label: ChildPath.join("."),
+                      type: typeof Resolved.type === "string" ? Resolved.type : "unknown",
+                      volatile: Volatile,
+                      secret: Meta["role"] === "secret",
+                      overridden: HasPath(View.user, ChildPath),
+                      value: GetPath(View.value, ChildPath),
+                      base: GetPath(View.base, ChildPath),
+                      ...Values === void 0 ? {} : { options: Values }
+                    });
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return Result;
+    }
+  }
+};
+function Form(Section2, Input) {
+  const Base = {
+    namespace: Section2.namespace,
+    writable: Input.writable,
+    bridge: Input.bridge
+  };
+  switch (true) {
+    case !Input.available:
+      return { ...Base, status: "unavailable", secret: false, fields: [] };
+    case Input.view === void 0:
+      return { ...Base, status: "loading", secret: false, fields: [] };
+    default: {
+      const View = Input.view;
+      const Refs = RefsOf(View.schema);
+      const Root = Resolve(View.schema, Refs);
+      const Inherited = Root !== void 0 && IsRecord2(Root.meta) && Root.meta["volatile"] === true;
+      const Derived = Root === void 0 ? [] : Fields(Root, Refs, View, [], Inherited, 0);
+      return {
+        ...Base,
+        status: "ready",
+        secret: Derived.some((Field2) => Field2.secret),
+        revision: View.revision,
+        fields: Derived
+      };
+    }
+  }
+}
+
+// Source/Function/Status.ts
+var Key = (Envelope) => {
+  const Path = Envelope.payload["path"];
+  switch (true) {
+    case (typeof Path === "string" && Path.length > 0):
+      return Path;
+    default:
+      return Envelope.trace;
+  }
+};
+var Line = (Envelope) => `${Envelope.kind} ${Key(Envelope)}`;
+var Activation = (Envelope) => {
+  const Value = Envelope.payload["activation"];
+  switch (true) {
+    case Value === "enabled":
+      return "enabled";
+    case Value === "disabled":
+      return "disabled";
+    default:
+      return void 0;
+  }
+};
+function Status(Section2, Live2) {
+  const Envelopes = Live2 === void 0 ? [] : Live2.tail();
+  const Matched = Section2.match === void 0 ? Envelopes : Envelopes.filter((Envelope) => Section2.match?.(Envelope) === true);
+  const Override = Matched.find((Envelope) => Activation(Envelope) !== void 0);
+  const Declared = Section2.activation ?? "unknown";
+  const ActivationState = Override === void 0 ? Declared : Activation(Override);
+  return {
+    bundle: Section2.bundle,
+    activation: ActivationState,
+    live: Live2 !== void 0,
+    tail: Matched.map(Line)
+  };
+}
+
+// Source/Function/Section.ts
+var import_react2 = require("react");
+var Translate2 = (T, Key3) => {
+  switch (true) {
+    case T !== void 0:
+      return T(Key3);
+    default: {
+      const Value = Locale_en_default[Key3];
+      return Value === void 0 ? Key3 : Value;
+    }
+  }
+};
+var Read = (Section2, Ports) => {
+  const Describe = Ports.configForms?.describe().getSnapshot();
+  const View = Describe?.view?.namespaces.find((Entry) => Entry.ns === Section2.namespace);
+  return Form(Section2, {
+    ...View === void 0 ? {} : { view: View },
+    writable: Describe?.view?.writable ?? false,
+    available: Ports.configForms !== void 0,
+    bridge: Ports.bridge !== void 0
+  });
+};
+function FormBody(props) {
+  switch (true) {
+    case props.view.status === "unavailable":
+      return (0, import_react2.createElement)(
+        "p",
+        { className: "playform-family-form-note" },
+        Translate2(props.t, "form.unavailable")
+      );
+    case props.view.status === "loading":
+      return (0, import_react2.createElement)(
+        "p",
+        { className: "playform-family-form-note" },
+        Translate2(props.t, "form.loading")
+      );
+    case props.view.fields.length === 0:
+      return (0, import_react2.createElement)(
+        "p",
+        { className: "playform-family-form-note" },
+        Translate2(props.t, "form.empty")
+      );
+    default:
+      return (0, import_react2.createElement)(
+        "div",
+        { className: "playform-family-form" },
+        props.view.fields.map(
+          (FieldView) => (0, import_react2.createElement)(Field, {
+            key: FieldView.label,
+            field: FieldView,
+            view: props.view,
+            section: props.section,
+            ports: props.ports,
+            ...props.t === void 0 ? {} : { t: props.t }
+          })
+        )
+      );
+  }
+}
+function Section(props) {
+  const [FormView, SetFormView] = (0, import_react2.useState)(
+    () => Read(props.section, props.ports)
+  );
+  const [StatusView, SetStatusView] = (0, import_react2.useState)(
+    () => Status(props.section, props.ports.live)
+  );
+  (0, import_react2.useEffect)(() => {
+    const Disposers = [
+      props.ports.configForms?.describe().subscribe(() => SetFormView(Read(props.section, props.ports))),
+      props.ports.configForms?.get(props.section.namespace).subscribe(() => SetFormView(Read(props.section, props.ports))),
+      props.ports.live.subscribe(
+        () => SetStatusView(Status(props.section, props.ports.live))
+      )
+    ];
+    return () => {
+      for (const Dispose of Disposers) Dispose?.();
+    };
+  }, []);
+  return (0, import_react2.createElement)(
+    "section",
+    { className: "playform-family-section", "data-bundle": props.section.bundle },
+    (0, import_react2.createElement)("h3", {}, Translate2(props.t, props.section.title)),
+    (0, import_react2.createElement)(
+      "p",
+      { className: "playform-family-status" },
+      `${Translate2(props.t, `status.${StatusView.activation}`)} - ${Translate2(
+        props.t,
+        StatusView.live ? "status.live" : "status.static"
+      )}`
+    ),
+    (0, import_react2.createElement)(
+      "ul",
+      { className: "playform-family-tail" },
+      StatusView.tail.map((Line2) => (0, import_react2.createElement)("li", { key: Line2 }, Line2))
+    ),
+    (0, import_react2.createElement)(FormBody, {
+      view: FormView,
+      section: props.section,
+      ports: props.ports,
+      ...props.t === void 0 ? {} : { t: props.t }
+    })
+  );
+}
+
+// Source/Variable/Slots.ts
+var Slots_default = {
+  /** The family tab's section list (conversation.view > playform-family). */
+  section: "playform.panel.section",
+  /** The overlay panel's section list (shell.overlay > playform-family-overlay). */
+  overlay: "playform.panel.overlay",
+  /** The host slot the family tab mounts into. */
+  tab: "conversation.view",
+  /** The host slot the overlay panel mounts into. */
+  shell: "shell.overlay"
+};
+
+// Source/Function/Adapter.ts
+var import_react3 = require("react");
+var NAMESPACE = "client-dsh-panel-family";
+var Component = (props = {}) => (0, import_react3.createElement)(Section, props);
+function Adapter(ctx, Ports, SectionDefinition) {
+  const Slot = SectionDefinition.slot ?? Slots_default.section;
+  ctx.effect(() => {
+    const OffRegistry = Ports.registry.register(SectionDefinition);
+    const OffSlot = ctx.slots.inject(
+      Slot,
+      () => ctx.slots.register(
+        {
+          name: Slot,
+          id: SectionDefinition.id,
+          order: SectionDefinition.order,
+          locale: NAMESPACE,
+          inject: () => ({ section: SectionDefinition, ports: Ports })
+        },
+        Component
+      )
+    );
+    return () => {
+      OffSlot();
+      OffRegistry();
+    };
+  }, `panel: adapter ${SectionDefinition.id}`);
+}
+
+// Source/Variable/Trace.ts
+var Observe = "observe/stamp";
+var Indexed = "graph/indexed";
+var Invalidated = "graph/invalidated";
+var Trace_default = {
+  /** The service name the factory provides on the host (`ctx.trace`). */
+  service: "trace",
+  /** The observe hook's recorded stamp (the indexer's first source). */
+  observe: Observe,
+  /** The graph stored (or replaced) a file record. */
+  indexed: Indexed,
+  /** The graph's record for a path is no longer valid. */
+  invalidated: Invalidated,
+  /** The three names an adapter follows when its manifest declares none. */
+  kinds: [Observe, Indexed, Invalidated]
+};
+
+// Source/Variable/Reference/CargoGovernor.ts
+var CargoGovernor_default = {
+  id: "adapter-hook-dsh-cargo-governor",
+  bundle: "@playform/hook-dsh-cargo-governor",
+  namespace: "hook-dsh-cargo-governor",
+  title: "cargo-governor",
+  order: 60,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Ccr.ts
+var Ccr_default = {
+  id: "adapter-hook-dsh-ccr",
+  bundle: "@playform/hook-dsh-ccr",
+  namespace: "hook-dsh-ccr",
+  title: "ccr",
+  order: 70,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Ellipsis.ts
+var Ellipsis_default = {
+  id: "adapter-hook-dsh-normalize-ellipsis",
+  bundle: "@playform/hook-dsh-normalize-ellipsis",
+  namespace: "hook-dsh-normalize-ellipsis",
+  title: "normalize-ellipsis",
+  order: 12,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Fullwidth.ts
+var Fullwidth_default = {
+  id: "adapter-hook-dsh-normalize-fullwidth",
+  bundle: "@playform/hook-dsh-normalize-fullwidth",
+  namespace: "hook-dsh-normalize-fullwidth",
+  title: "normalize-fullwidth",
+  order: 15,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Invisible.ts
+var Invisible_default = {
+  id: "adapter-hook-dsh-normalize-invisible",
+  bundle: "@playform/hook-dsh-normalize-invisible",
+  namespace: "hook-dsh-normalize-invisible",
+  title: "normalize-invisible",
+  order: 14,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Normalize.ts
+var Normalize_default = {
+  id: "adapter-hook-dsh-normalize-dash",
+  bundle: "@playform/hook-dsh-normalize-dash",
+  namespace: "hook-dsh-normalize-dash",
+  title: "normalize",
+  order: 10,
+  slot: "playform.panel.section",
+  // The schema has no master switch: the bundle row decides, so the static
+  // posture is "enabled" until a trace envelope reports otherwise.
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/NormalizeFile.ts
+var NormalizeFile_default = {
+  id: "adapter-plugin-dsh-normalize-file",
+  bundle: "@playform/plugin-dsh-normalize-file",
+  namespace: "plugin-dsh-normalize-file",
+  title: "normalize-file",
+  order: 20,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/PackageGovernor.ts
+var PackageGovernor_default = {
+  id: "adapter-hook-dsh-package-governor",
+  bundle: "@playform/hook-dsh-package-governor",
+  namespace: "hook-dsh-package-governor",
+  title: "package-governor",
+  order: 50,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/PackagePinner.ts
+var PackagePinner_default = {
+  id: "adapter-hook-dsh-package-pinner",
+  bundle: "@playform/hook-dsh-package-pinner",
+  namespace: "hook-dsh-package-pinner",
+  title: "package-pinner",
+  order: 55,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Quotes.ts
+var Quotes_default = {
+  id: "adapter-hook-dsh-normalize-quotes",
+  bundle: "@playform/hook-dsh-normalize-quotes",
+  namespace: "hook-dsh-normalize-quotes",
+  title: "normalize-quotes",
+  order: 11,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Spaces.ts
+var Spaces_default = {
+  id: "adapter-hook-dsh-normalize-spaces",
+  bundle: "@playform/hook-dsh-normalize-spaces",
+  namespace: "hook-dsh-normalize-spaces",
+  title: "normalize-spaces",
+  order: 13,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/Suggester.ts
+var Suggester_default = {
+  id: "adapter-hook-dsh-convention-suggester",
+  bundle: "@playform/hook-dsh-convention-suggester",
+  namespace: "hook-dsh-convention-suggester",
+  title: "suggester",
+  order: 40,
+  slot: "playform.panel.section",
+  // Config.enabled defaults to true (Variable/Config.ts): the static posture
+  // is the schema default, not a live read.
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/ToolCoach.ts
+var ToolCoach_default = {
+  id: "adapter-hook-dsh-tool-coach",
+  bundle: "@playform/hook-dsh-tool-coach",
+  namespace: "hook-dsh-tool-coach",
+  title: "tool-coach",
+  order: 30,
+  slot: "playform.panel.section",
+  // Config.enabled defaults to true (Variable/Config.ts): the static posture
+  // is the schema default, not a live read.
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Function/Reference.ts
+function Reference(ctx, Ports) {
+  for (const Section2 of [
+    Normalize_default,
+    ToolCoach_default,
+    Suggester_default,
+    Quotes_default,
+    Ellipsis_default,
+    Spaces_default,
+    Invisible_default,
+    Fullwidth_default,
+    NormalizeFile_default,
+    PackageGovernor_default,
+    PackagePinner_default,
+    CargoGovernor_default,
+    Ccr_default
+  ]) {
+    Adapter(ctx, Ports, Section2);
+  }
+}
+
 // Source/Function/Registry.ts
 var Ordering = (Left, Right) => {
   switch (true) {
@@ -44,8 +862,11 @@ var Ordering = (Left, Right) => {
       return Left.id < Right.id ? -1 : 1;
   }
 };
-function Registry() {
+var SlotOf = (Section2) => Section2.slot ?? (Section2.mount === "overlay" ? Slots_default.overlay : Slots_default.section);
+var Key2 = (Slot, Bundle) => `${Slot}::${Bundle}`;
+function Registry(Log) {
   const Sections = /* @__PURE__ */ new Map();
+  const Owners = /* @__PURE__ */ new Map();
   const Listeners = /* @__PURE__ */ new Set();
   const Opened = /* @__PURE__ */ new Set();
   let Version = 0;
@@ -55,28 +876,70 @@ function Registry() {
     for (const Listener of Listeners) Listener();
   };
   const Self = {
-    register(Section) {
-      Sections.set(Section.id, Section);
-      Notify();
-      return () => Self.unregister(Section.id);
+    register(Section2) {
+      const Slot = SlotOf(Section2);
+      const Ownership = Key2(Slot, Section2.bundle);
+      const Owner = Owners.get(Ownership);
+      switch (true) {
+        case (Owner !== void 0 && Owner !== Section2.id):
+          Log?.(Lines_default.duplicate(Section2.bundle, Slot));
+          return () => void 0;
+        default: {
+          const Previous = Sections.get(Section2.id);
+          switch (true) {
+            case Previous !== void 0: {
+              const PreviousOwnership = Key2(SlotOf(Previous), Previous.bundle);
+              switch (true) {
+                case Owners.get(PreviousOwnership) === Section2.id:
+                  Owners.delete(PreviousOwnership);
+                  break;
+                default:
+                  break;
+              }
+              break;
+            }
+            default:
+              break;
+          }
+          Sections.set(Section2.id, Section2);
+          Owners.set(Ownership, Section2.id);
+          Notify();
+          return () => Self.unregister(Section2.id);
+        }
+      }
     },
     unregister(Id) {
+      const Section2 = Sections.get(Id);
       switch (true) {
-        case !Sections.has(Id):
+        case Section2 === void 0:
           return;
-        default:
+        default: {
           Sections.delete(Id);
+          const Ownership = Key2(SlotOf(Section2), Section2.bundle);
+          switch (true) {
+            case Owners.get(Ownership) === Id:
+              Owners.delete(Ownership);
+              break;
+            default:
+              break;
+          }
           for (const View of Opened) {
             switch (true) {
               case View.startsWith(`${Id}:`):
                 Opened.delete(View);
+                break;
+              default:
+                break;
             }
           }
           Notify();
+        }
       }
     },
-    entries() {
-      return [...Sections.values()].sort(Ordering);
+    entries(Slot) {
+      const All = [...Sections.values()];
+      const Selected = Slot === void 0 ? All : All.filter((Section2) => SlotOf(Section2) === Slot);
+      return Selected.sort(Ordering);
     },
     subscribe(Listener) {
       Listeners.add(Listener);
@@ -90,6 +953,9 @@ function Registry() {
       switch (true) {
         case Open !== void 0:
           Open(Target);
+          break;
+        default:
+          break;
       }
     },
     // The wiring point: the shell overlay mount supplies the real open
@@ -105,97 +971,139 @@ function Registry() {
   return Self;
 }
 
-// Source/Variable/Locale-en.json
-var Locale_en_default = {
-  tab: "Family",
-  empty: "No family sections are registered yet.",
-  overlay: "Family panel",
-  close: "Close"
-};
+// Source/Function/Trace.ts
+var IsTrace = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.on === "function";
+function Trace(ctx) {
+  const Candidate = ctx.get(Trace_default.service);
+  switch (true) {
+    case IsTrace(Candidate):
+      return Candidate;
+    default:
+      return void 0;
+  }
+}
 
 // Source/Variable/Locale-zh.json
 var Locale_zh_default = {
   tab: "\u5BB6\u65CF",
   empty: "\u5C1A\u672A\u6CE8\u518C\u4EFB\u4F55\u5BB6\u65CF\u677F\u5757\u3002",
   overlay: "\u5BB6\u65CF\u9762\u677F",
-  close: "\u5173\u95ED"
+  close: "\u5173\u95ED",
+  normalize: "\u89C4\u8303\u5316\u5BB6\u65CF",
+  "tool-coach": "\u5DE5\u5177\u6559\u7EC3",
+  suggester: "\u7EA6\u5B9A\u5EFA\u8BAE\u5668",
+  "normalize-quotes": "\u89C4\u8303\u5F15\u53F7",
+  "normalize-ellipsis": "\u89C4\u8303\u7701\u7565\u53F7",
+  "normalize-spaces": "\u89C4\u8303\u7A7A\u683C",
+  "normalize-invisible": "\u89C4\u8303\u4E0D\u53EF\u89C1\u5B57\u7B26",
+  "normalize-fullwidth": "\u89C4\u8303\u5168\u89D2\u5B57\u7B26",
+  "normalize-file": "\u89C4\u8303\u6587\u4EF6\u5185\u5BB9",
+  "package-governor": "\u8F6F\u4EF6\u5305\u6CBB\u7406\u5668",
+  "package-pinner": "\u4F9D\u8D56\u7248\u672C\u56FA\u5B9A\u5668",
+  "cargo-governor": "Cargo \u6CBB\u7406\u5668",
+  ccr: "\u5DE5\u5177\u8F93\u51FA\u538B\u7F29",
+  "status.enabled": "\u5DF2\u542F\u7528",
+  "status.disabled": "\u5DF2\u505C\u7528",
+  "status.unknown": "\u672A\u77E5",
+  "status.live": "\u5B9E\u65F6\u8DDF\u8E2A",
+  "status.static": "\u9759\u6001\u72B6\u6001",
+  "status.tail": "\u6700\u8FD1\u4E8B\u4EF6",
+  "form.options": "\u9009\u9879",
+  "form.volatile": "\u5B9E\u65F6\u751F\u6548",
+  "form.plain": "\u91CD\u65B0\u52A0\u8F7D\u540E\u751F\u6548",
+  "form.bridge-missing": "\u660E\u6587\u5B57\u6BB5\u6865\u4E0D\u53EF\u7528",
+  "form.secret": "\u5DF2\u914D\u7F6E(\u673A\u5BC6)",
+  "form.secret-namespace": "\u53EA\u8BFB(\u547D\u540D\u7A7A\u95F4\u542B\u673A\u5BC6)",
+  "form.loading": "\u6B63\u5728\u52A0\u8F7D\u914D\u7F6E...",
+  "form.unavailable": "\u672A\u7EC4\u5408\u914D\u7F6E\u8868\u5355\u3002",
+  "form.empty": "\u8BE5\u63D2\u4EF6\u6CA1\u6709\u53EF\u914D\u7F6E\u5B57\u6BB5\u3002",
+  "form.overridden": "\u7528\u6237\u8986\u76D6"
 };
 
 // Source/Function/Client.ts
-var import_react = require("react");
-var NAMESPACE = "client-dsh-panel-family";
+var import_react4 = require("react");
+var NAMESPACE2 = "client-dsh-panel-family";
 function FamilyTab(props) {
-  const [, setVersion] = (0, import_react.useState)(props.registry.getVersion());
-  (0, import_react.useEffect)(() => props.registry.subscribe(() => setVersion(props.registry.getVersion())), []);
-  const sections = props.registry.entries().filter((section) => section.mount === "family-tab");
-  return (0, import_react.createElement)(
+  const [, SetVersion] = (0, import_react4.useState)(props.registry.getVersion());
+  (0, import_react4.useEffect)(
+    () => props.registry.subscribe(() => SetVersion(props.registry.getVersion())),
+    []
+  );
+  const Sections = props.registry.entries(Slots_default.section);
+  return (0, import_react4.createElement)(
     "div",
     { className: "playform-family-tab" },
-    sections.map(
-      (section) => (0, import_react.createElement)(
-        "section",
-        { key: section.id, className: "playform-family-section" },
-        (0, import_react.createElement)("h3", {}, section.title),
-        section.render({ open: props.registry.open })
-      )
-    ),
-    sections.length === 0 ? (0, import_react.createElement)("p", {}, Locale_en_default.empty) : void 0
+    Sections.length === 0 ? (0, import_react4.createElement)("p", {}, Locale_en_default.empty) : void 0,
+    props.renderSlot === void 0 ? void 0 : props.renderSlot(Slots_default.section, {})
   );
 }
 function Client(ctx) {
-  const registry = Registry();
   const config = { tabOrder: 20, overlayMaxWidth: 720 };
+  const registry = Registry((line) => ctx.logger.warn(line));
+  const live = Live(Trace(ctx), Trace_default.kinds);
+  const configForms = Forms(ctx);
+  const bridge = Bridge(ctx);
+  const ports = {
+    registry,
+    live,
+    open: (target) => registry.open(target),
+    log: {
+      info: (message) => ctx.logger.info(message),
+      warn: (message) => ctx.logger.warn(message)
+    },
+    ...configForms === void 0 ? {} : { configForms },
+    ...bridge === void 0 ? {} : { bridge }
+  };
   ctx.reflect.provide("playformFamilyPanel", registry);
   ctx.effect(
-    () => ctx.locale.register(NAMESPACE, { en: Locale_en_default, zh: Locale_zh_default }),
+    () => ctx.locale.register(NAMESPACE2, { en: Locale_en_default, zh: Locale_zh_default }),
     "panel: dictionaries"
   );
+  ctx.effect(() => () => live.dispose(), "panel: trace source");
   ctx.effect(
     () => ctx.slots.inject(
-      "conversation.view",
+      Slots_default.tab,
       () => ctx.slots.register(
         {
-          name: "conversation.view",
+          name: Slots_default.tab,
           id: "playform-family",
           order: config.tabOrder,
-          locale: NAMESPACE,
-          label: () => Locale_en_default.tab
+          locale: NAMESPACE2,
+          label: () => Locale_en_default.tab,
+          children: { [Slots_default.section]: { kind: "list", scope: "session" } }
         },
-        // eslint-disable-next-line react/display-name
-        () => (0, import_react.createElement)(FamilyTab, { registry })
+        (props = {}) => (0, import_react4.createElement)(FamilyTab, {
+          registry,
+          ...typeof props["renderSlot"] === "function" ? { renderSlot: props["renderSlot"] } : {}
+        })
       )
     ),
     "panel: family tab"
   );
   ctx.effect(
     () => ctx.slots.inject(
-      "shell.overlay",
+      Slots_default.shell,
       () => ctx.slots.register(
         {
-          name: "shell.overlay",
+          name: Slots_default.shell,
           id: "playform-family-overlay",
-          locale: NAMESPACE,
-          label: () => Locale_en_default.overlay
+          locale: NAMESPACE2,
+          label: () => Locale_en_default.overlay,
+          children: { [Slots_default.overlay]: { kind: "list", scope: "root" } }
         },
-        () => (0, import_react.createElement)(
+        (props = {}) => (0, import_react4.createElement)(
           "div",
           {
             className: "playform-family-overlay",
             style: { maxWidth: config.overlayMaxWidth }
           },
-          registry.entries().filter((section) => section.mount === "overlay").map(
-            (section) => (0, import_react.createElement)(
-              "section",
-              { key: section.id },
-              (0, import_react.createElement)("h3", {}, section.title),
-              section.render({ open: registry.open })
-            )
-          )
+          typeof props["renderSlot"] === "function" ? props["renderSlot"](Slots_default.overlay, {}) : void 0
         )
       )
     ),
     "panel: overlay mount"
   );
+  Reference(ctx, ports);
 }
 
 // Source/Client.ts

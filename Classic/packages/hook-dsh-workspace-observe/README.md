@@ -26,6 +26,10 @@ One stamp per event (and per manual call):
 
 - The listener registers on the **ROOT context** (the factory's `Wire` - the exact
   `ctx.root.on("fs/observed", ...)` registration), so it hears every `fs/observed` emission.
+- Each recorded stamp is emitted on the family's **trace bus** as `observe/stamp` (the indexer's
+  first source, D5): the payload is `{ path, version, origin }`. The bus (`ctx.trace`, provided by
+  `@playform/plugin-dsh-factory`) is optional - a context without it records stamps exactly as
+  before and emits nothing.
 - The listener is a **synchronous recorder**: no awaits, no throws, no I/O. It reads the event
   only - it **never reads file content** and **never writes a file**.
 - Guard chain, in order: an event whose actor is the hook's **own actor object** is ignored
@@ -46,6 +50,24 @@ One stamp per event (and per manual call):
 See [SCHEME.md](SCHEME.md). Every knob is a volatile cell (hot edits commit without remounting):
 `enabled`, `domain`, `maxStamps`, `include`, `exclude` (plus the universal `log`/`logFile`).
 
+### The policy block (D6)
+
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
+
+| action    | default | action    | default   |
+| --------- | ------- | --------- | --------- |
+| `read`    | `auto`  | `write`   | `approve` |
+| `index`   | `auto`  | `commit`  | `approve` |
+| `record`  | `auto`  | `spawn`   | `approve` |
+| `suggest` | `auto`  | `message` | `auto`    |
+
+This hook's action class is RECORD (it records one observation stamp per `fs/observed` event), and
+that class is **automatic**. The hook has **NO gated action** - it never writes a file, commits a
+batch or spawns an agent - so the block documents the posture and refuses nothing. The block is one
+volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement).
+
 ## The IDLE-forever posture
 
 The plugin ships DISABLED: the bundle entry declares `enabled: false` only, the plugin never appears
@@ -54,8 +76,9 @@ restart). A cold mount logs `disabled (enabled=false)` and wires nothing.
 
 ## The ledger
 
-One log per module: `~/.dsh/observe.log` (config `logFile`). The strings are the contract
-(byte-exact, `observe: ` prefix; the durable file lines are the `[ISO] message` forms):
+One log per module: `~/.dsh/playform/hook-dsh-workspace-observe.log` (config `logFile`). The strings
+are the contract (byte-exact, `observe: ` prefix; the durable file lines are the `[ISO] message`
+forms):
 
 ```
 observe: disabled (enabled=false)

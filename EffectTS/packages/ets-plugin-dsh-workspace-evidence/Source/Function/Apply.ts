@@ -16,6 +16,7 @@
 // silently kills event delivery). The test probe is the
 // `ctx.__pluginDshWorkspaceEvidenceState` attachment.
 import type { Context } from "@deepseek-ai/cordis";
+import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
 import ServiceClass from "@Function/Service.js";
 import Storage from "@Function/Storage.js";
 import Watch from "@Function/Watch.js";
@@ -64,6 +65,7 @@ export default (Context: Context, Options: Config): void => {
 			On: "enabled",
 			DomainName: "domain",
 			MaxValidations: "maxValidations",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;
@@ -88,8 +90,14 @@ export default (Context: Context, Options: Config): void => {
 	Factory.Append(State, Activate([["domain", State.DomainName]]));
 	// The fs/observed listener, on the ROOT context (the factory's Wire) -
 	// the invalidation seam: a changed path is an invalidation key.
-	Factory.Wire(Context, State, (Target, Observation, Actor) =>
-		Watch(State, Target, Observation, Actor),
+	Factory.Wire(
+		Context,
+		State,
+		(
+			Target: FsTarget | undefined,
+			Observation: FsObservation | undefined,
+			Actor: object | undefined,
+		) => Watch(State, Target, Observation, Actor),
 	);
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// service's domain (never awaited - best-effort inside), close on dispose.

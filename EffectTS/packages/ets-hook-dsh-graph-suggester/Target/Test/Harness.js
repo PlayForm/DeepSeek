@@ -4,6 +4,7 @@ import * as OS from "node:os";
 import * as Path from "node:path";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../ets-plugin-dsh-workspace-graph/Target/Library.js";
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
   Count.N++;
@@ -88,6 +89,61 @@ const FakeGraph = (Entries, Boom) => ({
 FakeGraph.Calls = [];
 const ResetGraphCalls = () => {
   FakeGraph.Calls = [];
+};
+const RealGraph = (Files, Options = {}) => {
+  const Names = Object.keys(Files);
+  const Info = (Display) => {
+    const Text = Files[Display];
+    if (Text !== void 0) {
+      return { version: "v1", type: "file", size: Text.length };
+    }
+    return Names.some((Key) => Key.startsWith(`${Display}/`)) ? { version: "v1", type: "directory", size: 0 } : void 0;
+  };
+  const Fs = {
+    resolve: async (Path_) => ({ targetKey: Path_, displayPath: Path_ }),
+    stat: async (Target) => Info(String(Target.displayPath)),
+    readText: async (Target) => {
+      const Text = Files[String(Target.displayPath)];
+      if (Text === void 0) {
+        throw new Error("vanished");
+      }
+      return Text;
+    },
+    listDir: async (Target) => {
+      const Directory = String(Target.displayPath).replace(/\/$/, "");
+      const Found = /* @__PURE__ */ new Set();
+      for (const Key of Names) {
+        if (!Key.startsWith(`${Directory}/`)) {
+          continue;
+        }
+        Found.add(Key.slice(Directory.length + 1).split("/")[0]);
+      }
+      return [...Found].sort((Left, Right) => Left.localeCompare(Right)).map((Name) => {
+        const Display = `${Directory}/${Name}`;
+        const Meta = Info(Display);
+        return {
+          name: Name,
+          type: Meta?.type ?? "other",
+          target: { targetKey: Display, displayPath: Display }
+        };
+      });
+    },
+    contains: (Parent, Child) => {
+      const Left = String(Parent.displayPath);
+      const Right = String(Child.displayPath);
+      return Right === Left || Right.startsWith(`${Left}/`);
+    },
+    writeText: async () => {
+      throw new Error("writeText must never be called");
+    }
+  };
+  const GraphContext = {
+    fs: Fs,
+    logger: { info: () => void 0, warn: () => void 0, error: () => void 0 },
+    reflect: { provide: () => void 0 }
+  };
+  GraphContext.root = GraphContext;
+  return new GraphClass(GraphContext, GraphClass.Config({ enabled: true, ...Options }));
 };
 const Make = (Raw, Attach) => {
   const CtxListeners = {};
@@ -218,6 +274,7 @@ export {
   MakeCounter,
   Plugin,
   PreStep,
+  RealGraph,
   ResetGraphCalls,
   Root,
   Setup,

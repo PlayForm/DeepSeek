@@ -74,6 +74,7 @@ export default (Context: Context, Options: Config): void => {
 			DomainName: "domain",
 			MaxBatches: "maxBatches",
 			MaxEntryBytes: "maxEntryBytes",
+			Allow: "policy",
 		},
 	}) as State;
 	State.Factory = Factory;

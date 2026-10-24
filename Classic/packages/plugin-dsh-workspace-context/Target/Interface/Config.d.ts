@@ -1,3 +1,4 @@
+import type { Allowlist } from "@playform/plugin-dsh-factory";
 export default interface Config {
     /** The service's own ledger file (one log per module). */
     logFile: string;
@@ -19,4 +20,9 @@ export default interface Config {
     mapLimit: number;
     /** The workspace name the packet header carries. */
     workspaceName: string;
+    /** The per-action allowlist (D6) - the shared factory block. This
+     * package's actions are read-only (automatic); it has NO gated action, so
+     * the block documents the posture without refusing anything. A resolved
+     * pack's `policy` section overrides it per action. */
+    policy: Allowlist;
 }

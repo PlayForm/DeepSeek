@@ -1,2 +1,2 @@
-import{appendFileSync as n,mkdirSync as p}from"node:fs";import{dirname as o}from"node:path";var m=(t,e,r,a,i)=>{try{p(o(t.Ledger),{recursive:!0}),n(t.Ledger,`${JSON.stringify({at:Date.now(),event:e,proposal:r,path:a,detail:i})}
-`)}catch{}};export{m as default};
+import{appendFileSync as o,mkdirSync as p}from"node:fs";import{dirname as s}from"node:path";import{Expand as d}from"@playform/lib-dsh-core";var g=(e,r,a,n,i)=>{try{const t=d(e.Ledger);p(s(t),{recursive:!0}),o(t,`${JSON.stringify({at:Date.now(),event:r,proposal:a,path:n,detail:i})}
+`)}catch{}};export{g as default};

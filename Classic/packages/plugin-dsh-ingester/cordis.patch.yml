@@ -13,8 +13,25 @@
 # declares `static inject = ["fs"]` (the governed write path) and a static
 # Config (validated before construction), and registers itself as `ingester`
 # via `super(ctx, "ingester")`.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The ingester is the batch flow's WRITER, so `write` is
+# its own action class - and it stays the shipped `approve`: the decision's
+# approval IS the gate, and the block records that posture. read/index/record/
+# suggest and message are automatic; commit/spawn wait for approval too. A
+# resolved pack's `policy` section overrides these defaults per action (the
+# wiring is the next refinement).
 - insert:
       - id: plugin-dsh-ingester
         name: "@playform/plugin-dsh-ingester"
         config:
             enabled: true
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

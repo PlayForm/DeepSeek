@@ -24,11 +24,14 @@
 // in the hot path), high threshold, a cooldown, a per-turn cap, and an
 // abstention path.
 //
-// READ-ONLY by design: the hook never edits, never rewrites arguments,
-// never denies, and never writes the history store in v1 (the store is
-// seeded by the offline learner / the search-suggester journal - the
-// end-phase wiring). Privacy posture (plan §5.4): repo-relative paths only,
-// local only.
+// READ-ONLY by design for the WORKSPACE: the hook never edits, never rewrites
+// arguments, and never denies. It does own a local memory - the recall
+// store's PRODUCER (the completion spec's wave 2c re-spec): every judged call
+// is appended to the call history (the per-agent ring plus the durable tier -
+// the `replay_history` storage domain, or the JSON fallback at `recordPath`)
+// and a later call recalls the paths that accompanied a similar prior call.
+// The SEEDED store (`historyPath`) stays read-only and keeps precedence.
+// Privacy posture (plan §5.4): repo-relative paths only, local only.
 //
 // FULLY CONTRACT-AWARE: every listener awaits next() FIRST and is fail-open
 // (never throws into a waterfall). The hook is a NON-MANIFEST module (no

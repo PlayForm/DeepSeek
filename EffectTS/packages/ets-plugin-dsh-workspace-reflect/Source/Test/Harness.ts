@@ -170,11 +170,14 @@ export const FakeFs = (
 			: { version: Fs.versions[Target.displayPath] ?? "1", type: "file", size: Content.length };
 	};
 	Fs.readText = async (Target: any) => {
-		const Content = Fs.files[Target.displayPath];
+		// A bare path is accepted too: a sibling service mounted on this fake
+		// ctx (the semantics service) reads by path.
+		const Key = typeof Target === "string" ? Target : Target.displayPath;
+		const Content = Fs.files[Key];
 		if (Content === undefined) {
-			throw new Error(`readText: no such file ${Target.displayPath}`);
+			throw new Error(`readText: no such file ${Key}`);
 		}
-		Fs.reads.push(Target.displayPath);
+		Fs.reads.push(Key);
 		return Content;
 	};
 	Fs.writeText = async (Target: any, Content: string, Intent: any) => {
@@ -307,9 +310,15 @@ export const Seed = (Files: Record<string, string>, Versions: Record<string, str
 
 /**
  * Attach a fake workspaceGraph handle (the Carry probe reads it through
- * ctx.get at use time, never through inject).
+ * ctx.get at use time, never through inject). `Nodes` is the getNode map the
+ * fingerprint-targeted Replace resolves a span from; the default handle knows
+ * no node (the pre-targeting posture).
  */
-export const Graph = (Calls: string[] = [], Throw?: string) => ({
+export const Graph = (
+	Calls: string[] = [],
+	Throw?: string,
+	Nodes: Record<string, unknown> = {},
+) => ({
 	indexFile: async (P: string) => {
 		Calls.push(P);
 		if (Throw !== undefined) {
@@ -318,7 +327,7 @@ export const Graph = (Calls: string[] = [], Throw?: string) => ({
 		return { ok: true };
 	},
 	find: () => [],
-	getNode: () => undefined,
+	getNode: (Id: string) => Nodes[Id],
 });
 
 /**

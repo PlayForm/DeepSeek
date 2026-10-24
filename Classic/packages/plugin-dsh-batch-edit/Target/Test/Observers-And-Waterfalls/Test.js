@@ -13,7 +13,11 @@ import {
 } from "../Harness.js";
 const Setup = (Files, Raw = {}, Attach) => {
   rm();
-  return Make(Validate({ ...Raw, enabled: true, logFile: Ledger }), Files, Attach);
+  return Make(
+    Validate({ ...Raw, enabled: true, logFile: Ledger, policy: { write: "auto" } }),
+    Files,
+    Attach
+  );
 };
 const Open = async (Run, With, Search = "one") => Run.Tool.execute(
   {

@@ -4,6 +4,7 @@ export { default as Suppress } from "./Function/Suppress.js";
 export { default as Policy } from "./Function/Policy.js";
 export { default as Refusal } from "./Function/Refusal.js";
 export { default as Activate } from "./Function/Activate.js";
+export { default as Expand } from "./Function/Expand.js";
 export { default as Update } from "./Function/Update.js";
 export { default as Replace } from "./Normalize/Replace.js";
 export { default as ReplaceMap } from "./Normalize/ReplaceMap.js";

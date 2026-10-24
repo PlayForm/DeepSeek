@@ -4,6 +4,13 @@
 // role/task type for the routing, the priority and the dependencies, the
 // state, the assigned-agent id and the result hash. The state vocabulary is
 // queued -> dispatched -> running -> completed/failed/interrupted.
+//
+// THE SPAWN FIELDS (the completion wave): `childId` is the harness child the
+// spawn actually started (the restart reconcile's live-agent check) and
+// `attempts` counts the reconciles that already requeued the task (one
+// requeue, then an honest failure). `agentOptions` is the resolved route the
+// spawn hands the child - the ledger's `route <p> <m> <e>` string stays the
+// audit form, this is the launch form.
 
 /** The three routing roles of the task-routing skill (the queue's own copy
  * of the vocabulary; the routing enforcer declares the same three). */
@@ -12,6 +19,14 @@ export type Role = "explorer" | "coder" | "planner";
 /** The task-state vocabulary. */
 export type TaskState =
 	"queued" | "dispatched" | "running" | "completed" | "failed" | "interrupted";
+
+/** The child route the spawn passes as `agentOptions` (the harness's
+ * AgentOptions vocabulary: provider / model / reasoningEffort). */
+export interface AgentRoute {
+	provider: string;
+	model: string;
+	reasoningEffort: string;
+}
 
 export default interface Task {
 	/** The queue id, assigned at enqueue time (`queue-<n>`, monotonic). */
@@ -40,4 +55,14 @@ export default interface Task {
 	/** The route the dispatch resolved for this task, when the routing
 	 * enforcer was present at dispatch time (the routed dispatch). */
 	route?: string | undefined;
+	/** The resolved route in the harness's launch form (the spawn's
+	 * `agentOptions`); absent when the dispatch was unrouted. */
+	agentOptions?: AgentRoute | undefined;
+	/** The harness child the spawn started (`startActivation`'s childId);
+	 * absent until a spawn succeeded. The restart reconcile checks exactly
+	 * this id against the live agent registry. */
+	childId?: string | undefined;
+	/** How many reconciles already requeued this task (one requeue, then an
+	 * honest failure - the task's work is not retried forever). */
+	attempts: number;
 }

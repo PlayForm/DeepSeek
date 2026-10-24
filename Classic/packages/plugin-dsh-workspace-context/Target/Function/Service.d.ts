@@ -6,7 +6,7 @@ export default class WorkspaceContext extends Service {
     /** The apply-built state the methods read and write. */
     State: State;
     constructor(Context: Context, State: State);
-    /** The orientation packet for one query. */
+    /** The orientation packet for one query (memoized; invalidated by the trace). */
     packet(Query_: Query): Packet;
     /** The available lens names (config `lenses`). */
     lenses(): string[];

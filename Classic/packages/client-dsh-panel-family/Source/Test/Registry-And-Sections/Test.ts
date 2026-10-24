@@ -8,11 +8,12 @@
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make } from "../Harness.js";
 
-/** A minimal section (the adapters' contribution: id, bundle, title,
- *  order, mount, render). */
+/** A minimal section (the adapters' contribution: id, bundle, namespace,
+ *  title, order, mount, render). */
 const Section = (Id: string, Order: number, Mount: any = "family-tab"): any => ({
 	id: Id,
 	bundle: `bundle-${Id}`,
+	namespace: Id,
 	title: `Section ${Id}`,
 	order: Order,
 	mount: Mount,
@@ -26,8 +27,13 @@ export const runTest = (): number => {
 
 	Check(Count, "R1: register adds a section and entries snapshots it", () => {
 		Registry.register(Section("a", 10));
+		// The registry is the live service the client apply provided, so the
+		// three reference adapters are already registered; the fixture's own
+		// section is what this suite tracks.
 		assert.deepEqual(
-			Registry.entries().map((S: any) => S.id),
+			Registry.entries()
+				.map((S: any) => S.id)
+				.filter((Id: string) => !Id.startsWith("adapter-")),
 			["a"],
 		);
 	});
@@ -41,7 +47,9 @@ export const runTest = (): number => {
 		Registry.register(Section("z", 10));
 		Registry.register(Section("b", 20));
 		assert.deepEqual(
-			Registry.entries().map((S: any) => S.id),
+			Registry.entries()
+				.map((S: any) => S.id)
+				.filter((Id: string) => !Id.startsWith("adapter-")),
 			["a", "z", "b"],
 		);
 	});

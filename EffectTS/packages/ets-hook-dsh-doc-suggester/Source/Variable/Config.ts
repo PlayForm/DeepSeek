@@ -17,10 +17,13 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 
+import Names from "./Heuristics.js";
+import Defaults from "./Weights.js";
+
 export default Compose(false, {
 	// Ledger file - the doc suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/doc-suggester.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-doc-suggester.log").volatile(),
 	// The master switch (volatile): false mutes every listener to a passthrough.
 	enabled: Schema.boolean().default(true).volatile(),
 	// The confidence gate (volatile); the pack's per-family thresholds override.
@@ -40,4 +43,27 @@ export default Compose(false, {
 	maxNotesPerTurn: Schema.number().default(3).volatile(),
 	// The excluded directories - a doc task inside them never notes (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	// The learning layer's master switch (volatile): false keeps the pure PoC
+	// posture - no decision records, no outcome records, the neutral history.
+	learn: Schema.boolean().default(true).volatile(),
+	// The follow-through window, in JUDGED CALLS (volatile; no timers): an
+	// emitted note's companions must be touched within this many judged calls,
+	// or the note closes as a soft reject on the call that reaches the window.
+	learnWindow: Schema.number().default(3).volatile(),
+	// The ENABLED pickable heuristics (volatile): a name left out of this list
+	// is dropped from the score (its effective weight becomes 0) and the
+	// decision record's `enabled` list. The canonical six live in
+	// Variable/Heuristics; an unknown name is ignored by Function/Weights.
+	heuristics: Schema.array(String)
+		.default([...Names])
+		.volatile(),
+	// The pickable weight table (volatile): a name the table carries overrides
+	// Variable/Weights; a missing name falls back to that default, so a partial
+	// table is a partial override.
+	weights: Schema.dict(Schema.number())
+		.default({ ...Defaults })
+		.volatile(),
+	// The in-memory fallback's bound (volatile): the learned-rate rows and the
+	// decision ring evict the oldest entry past this count.
+	storeLimit: Schema.number().default(512).volatile(),
 });

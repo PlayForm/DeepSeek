@@ -13,7 +13,10 @@ import {
 } from "../Harness.js";
 const Setup = (Files, Raw = {}) => {
   rm();
-  return Make(Validate({ ...Raw, enabled: true, logFile: Ledger }), Files);
+  return Make(
+    Validate({ ...Raw, enabled: true, logFile: Ledger, policy: { write: "auto" } }),
+    Files
+  );
 };
 const OpenReplace = async (Run, Search, With, Files) => Run.Tool.execute(
   {

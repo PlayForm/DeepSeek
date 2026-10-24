@@ -139,10 +139,10 @@ module does not use.
 The normalize-dash's own `logFile` default (its SEPARATE ledger) is supplied through its own fields,
 which override the minimal block's.
 
-The shape: `log` (bool, true, volatile), `logFile` (`~/.dsh/hook-dsh-normalize-dash.log`, volatile),
-`replacement` (`-`, volatile — the transform's only knob), `normalizeReasoning` (bool, true),
-`normalizeToolArguments` (bool, false), `scopes` (object, volatile — the granular scope gates of
-§7), `toolResultsExempt` (string array, volatile — the tool-results exemption list of §7). The
+The shape: `log` (bool, true, volatile), `logFile` (`~/.dsh/playform/hook-dsh-normalize-dash.log`,
+volatile), `replacement` (`-`, volatile — the transform's only knob), `normalizeReasoning` (bool,
+true), `normalizeToolArguments` (bool, false), `scopes` (object, volatile — the granular scope gates
+of §7), `toolResultsExempt` (string array, volatile — the tool-results exemption list of §7). The
 `scopes` object itself carries the volatile marker (its leaves stay plain — schemastery rejects
 volatile leaves under an enclosing volatile field), so one leaf change commits one update whose
 whole object the State's refresh listener re-reads.
@@ -150,7 +150,7 @@ whole object the State's refresh listener re-reads.
 ## 5. Ledger lines (stable, asserted by the smoke)
 
 ```
-hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/hook-dsh-normalize-dash.log)
+hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-dash.log)
 hook-dsh-normalize-dash: normalized 4 dash char(s) in one stream
 ```
 

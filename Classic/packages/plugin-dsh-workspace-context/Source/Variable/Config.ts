@@ -18,11 +18,11 @@
 //
 // `enabled` defaults to FALSE - the IDLE-forever posture.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 import DefaultLens from "@Variable/DefaultLens.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/context.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-workspace-context.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.
 	budgetTokens: Schema.number().default(2000).volatile(),
@@ -40,4 +40,13 @@ export default Compose(false, {
 	mapLimit: Schema.number().default(12).volatile(),
 	// The workspace header name.
 	workspaceName: Schema.string().default("workspace").volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist. The context service's
+	// actions are READ-ONLY (automatic), so this package has NO gated action:
+	// it never writes a file, commits a batch or spawns an agent, and no
+	// verdict can refuse it. read/index/record/suggest/message are automatic;
+	// write/commit/spawn wait for approval for the family's write paths.
+	// Volatile as one object; a resolved pack's `policy` section overrides the
+	// defaults per action (the wiring is the next refinement; the type already
+	// exists).
+	policy: Policy(),
 });

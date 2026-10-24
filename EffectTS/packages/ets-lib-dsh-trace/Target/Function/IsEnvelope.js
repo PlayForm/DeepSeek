@@ -1,0 +1,1 @@
+var n=t=>{if(t===null||typeof t!="object")return!1;const e=t;switch(!0){case(typeof e.trace!="string"||e.trace.length===0):return!1;case(typeof e.kind!="string"||e.kind.length===0):return!1;case typeof e.at!="number":return!1;case(typeof e.payload!="object"||e.payload===null):return!1;default:return!0}};export{n as default};

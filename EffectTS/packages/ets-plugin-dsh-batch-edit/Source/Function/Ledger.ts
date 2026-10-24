@@ -38,5 +38,11 @@ export const Committed = (Id: string, Applied: number, Failed: number, Halted: n
 /** `machine closed <id>` */
 export const Closed = (Id: string): string => `machine closed ${Id}`;
 
+/** `apply refused <id> (policy write=approve)` - the D6 policy gate's refusal
+ *  (the shipped `write: approve` default): the commit never plans or writes,
+ *  the machine stays open with its cells observed, and the user's approval is
+ *  the existing approve binding (flip `policy.write` to auto). */
+export const Refused = (Id: string): string => `apply refused ${Id} (policy write=approve)`;
+
 /** The removed-files line (the `remove` action; same grammar family). */
 export const Removed = (File: string): string => `removed ${File}`;

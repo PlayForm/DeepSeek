@@ -32,6 +32,18 @@
 //   RegisterGovern(basename, name, run)    — the direct-govern step registration (the modules call it at apply)
 //   Govern(target, selection, actor, version): Promise<void> — the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1)
 //
+// THE POLICY BLOCK (D6) - the two MODULE-LEVEL named helpers (not service
+// methods, so the class surface stays at the documented nineteen):
+//
+//   Policy()                               — the shared policy-block builder (one key per action class)
+//   Decide(policy, action)                 — the verdict lookup: "auto" | "approve"
+//
+// The `Allowlist` type re-export names the block's shape. Every orchestration
+// package composes `policy: Policy()` into its own schema, maps the block to
+// `State.Allow`, and consults `Decide(...)` before its gated action; the
+// pack's `policy` section overrides the defaults when a pack is resolved (the
+// wiring is the next refinement; the type already exists in lib-dsh-pack).
+//
 // THE DIRECT-GOVERN REGISTRY (`GovernSteps`, the SharedJournal pattern at the
 // instance level): basename → the ordered steps `{ name, run }` the modules
 // registered at apply (Function/Govern). The run closures capture their own
@@ -51,10 +63,12 @@
 // name.
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
+import { Names } from "@playform/lib-dsh-trace";
 
 import Append from "./Function/Append.js";
 import AttachEffects from "./Function/Attach.js";
 import Continue from "./Function/Continue.js";
+import DecideFn from "./Function/Decide.js";
 import Discover from "./Function/Discover.js";
 import Gate from "./Function/Gate.js";
 import GovernFn, {
@@ -64,17 +78,21 @@ import GovernFn, {
 import Journal from "./Function/Journal.js";
 import Match from "./Function/Match.js";
 import Parse from "./Function/Parse.js";
+import PolicyFn from "./Function/Policy.js";
 import RefreshFn from "./Function/Refresh.js";
 import Resolve from "./Function/Resolve.js";
 import SchemaFn from "./Function/Schema.js";
 import SeamFn from "./Function/Seam.js";
 import Build from "./Function/State.js";
+import CreateTrace from "./Function/Trace.js";
 import UpdateKey from "./Function/UpdateKey.js";
 import Wire from "./Function/Wire.js";
 import WriteFn, { type Over as WriteOver } from "./Function/Write.js";
+import type Allowlist from "./Interface/Allowlist.js";
 import type Decision from "./Interface/Gate.js";
 import type Setup from "./Interface/Options.js";
 import type Shape from "./Interface/State.js";
+import type Trace from "./Interface/Trace.js";
 import type Transform from "./Interface/Transform.js";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
@@ -90,6 +108,12 @@ export type { default as Gate } from "./Interface/Gate.js";
 export type { default as Transform } from "./Interface/Transform.js";
 export type { default as Output } from "./Interface/Output.js";
 export type { default as Journal } from "./Interface/Journal.js";
+export type { default as Trace } from "./Interface/Trace.js";
+// The policy block's shape (D6): the eight action classes and their verdict
+// union. The builder is the `Policy` named export below, the lookup is
+// `Decide` - the type cannot share the builder's name (TS2323), so the shape
+// ships as `Allowlist`.
+export type { default as Allowlist } from "./Interface/Allowlist.js";
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields — `Schema(shared?, module?)`,
@@ -115,6 +139,25 @@ export function Schema(
 	return SchemaFn(Shared, Module);
 }
 
+// The POLICY-BLOCK builder (D6): the module-level composition of the shared
+// per-action allowlist - `policy: Policy()` inside a consumer's own schema.
+// Exactly the module-load use `Schema` has (the loader needs the composed
+// `Config` at module-evaluation time), and exactly as `this`-free: Function/
+// Policy never reads a service. The block is volatile as one object; the D6
+// defaults are read/index/record/suggest/message = "auto", write/commit/spawn
+// = "approve".
+export function Policy(): ReturnType<typeof PolicyFn> {
+	return PolicyFn();
+}
+
+// The POLICY VERDICT lookup (D6): the action names are the block's keys, so
+// `Decide(policy, "spawn")` answers "auto" | "approve". A missing key falls
+// back to that action's D6 default (never a blanket "auto"), and a malformed
+// value is treated as missing - the helper never throws.
+export function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve" {
+	return DecideFn(Policy, Action);
+}
+
 // The service: class form, injected on fs, registered as `pluginFactory`.
 export default class PluginFactory extends Service {
 	static inject = ["fs"];
@@ -130,6 +173,24 @@ export default class PluginFactory extends Service {
 		// steps at apply (RegisterGovern). Per factory instance — each test
 		// context gets a fresh factory, so the smokes stay per-scenario.
 		this.GovernSteps = {};
+		// THE TRACE BUS (D5): the family's ONE bus, provided here because the
+		// factory is the shared-machinery owner (the vocabulary and the
+		// detached loop live in @playform/lib-dsh-trace; the service lives in
+		// the family's existing service plugin - no new package, no separate
+		// process). Both registrations are contained: a bare fixture context
+		// may not implement provide/effect, and a second factory instance may
+		// find the name already provided - neither may break the factory.
+		this.Trace = CreateTrace();
+		try {
+			Context.provide?.(Names.service, this.Trace);
+		} catch {
+			/* contained: the name may already be provided in this scope */
+		}
+		try {
+			Context.effect?.(() => () => this.Trace.dispose(), "trace");
+		} catch {
+			/* contained: a bare fixture context has no fiber effects */
+		}
 	}
 
 	/** The ledger: logger + appendFileSync, never throws. */
@@ -281,6 +342,16 @@ export default class PluginFactory extends Service {
 	 *  drained it and bound `SharedJournal` (the pre-bind stage is over). */
 	PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 
+	/** THE TRACE BUS (D5): the family's one bus, built in the constructor and
+	 *  provided as `ctx.trace` (the vocabulary and the detached loop live in
+	 *  @playform/lib-dsh-trace; the service lives here, the family's shared
+	 *  machinery owner). Every adapting plugin carries its own Source/Trace/
+	 *  adapter and consumes this bus - no plugin imports another, and the
+	 *  indexer is inferred from the events rather than being a separate
+	 *  process or a separate plugin. The unload effect disposes it (drop the
+	 *  listeners, stop dispatch), so a late emit is a contained no-op. */
+	Trace: Trace;
+
 	/** The Schemastery schema factory (shared volatile fields + module fields). */
 	Schema(
 		Shared?: {
@@ -366,5 +437,17 @@ export default class PluginFactory extends Service {
 		Version: FsVersion,
 	): Promise<void> {
 		await GovernFn(this.GovernSteps, Target, Selection, Actor, Version);
+	}
+}
+
+// Declaration merging: the typed accessor on the cordis Context. The trace
+// service is provided by the factory's constructor (ctx.provide("trace")), so
+// `ctx.trace` is typed everywhere the factory package is imported; a consumer
+// that cannot require the factory probes it with `ctx.get("trace")` (the
+// family's optional-service posture).
+declare module "@deepseek-ai/cordis" {
+	interface Context {
+		/** The trace bus service (provided by the factory as `trace`). */
+		trace: Trace;
 	}
 }

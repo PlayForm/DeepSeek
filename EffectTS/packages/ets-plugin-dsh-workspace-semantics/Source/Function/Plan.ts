@@ -6,19 +6,23 @@
 // refusal-to-guess rule (PITFALLS-LOG: the semantic uncertainty per type).
 // This service never writes a file: the plan goes to the operate proposals.
 //
+// THE DEEPENING COMES FIRST: when a deepener is registered for the extension
+// (Function/Deepen - the harness LSP seam, Function/Lsp) its scope-resolved
+// plan is used when it answers; `undefined` (the seam is absent, has no
+// provider, failed, or found no same-file use site) falls through to the
+// adapter's lexical plan. The ledger line is the same for both - the plan's
+// reach and certainty are the adapter's declared contract.
+//
 // The model is built on demand: an unresolved path resolves first (the plan
 // needs the text and the references).
 import Build from "@Function/Build.js";
+import Select from "@Function/Select.js";
 import type RenamePlan from "@Interface/RenamePlan.js";
 import type Span from "@Interface/Span.js";
 import type State from "@Interface/State.js";
 
-/** The extension of a path (with dot, lowercase), or "" for none. */
-const Extension = (Path: string): string => {
-	const Dot = Path.lastIndexOf(".");
-	const Slash = Math.max(Path.lastIndexOf("/"), Path.lastIndexOf("\\"));
-	return Dot > Slash ? Path.slice(Dot).toLowerCase() : "";
-};
+/** The workspace root the deepener's queries resolve against. */
+const Root = (State: State): string => (State.Root.length > 0 ? State.Root : process.cwd());
 
 export default async (
 	State: State,
@@ -37,12 +41,12 @@ export default async (
 	// The adapter is checked BEFORE the model is built: Build already emits
 	// its own refusal line for an unadapted extension, and checking after it
 	// would log the same refusal twice.
-	const Adapter = State.Adapters.get(Extension(Path));
+	const Selected = Select(State, Path);
 	switch (true) {
-		case !Adapter:
+		case Selected.Adapter === undefined:
 			State.Factory.Append(
 				State,
-				`refused ${Path} (no adapter for ${Extension(Path) || "no extension"})`,
+				`refused ${Path} (no adapter for ${Selected.Suffix || "no extension"})`,
 			);
 			return undefined;
 		default:
@@ -64,9 +68,33 @@ export default async (
 			State.Factory.Append(State, `failed ${Path} (no fs text reader)`);
 			return undefined;
 		}
-		const Plan = Adapter.rename(Text, Path, Range, To);
+		let Plan: RenamePlan | undefined;
+		const Deepening = State.Deepenings.get(Selected.Suffix);
 		switch (true) {
-			case !Plan:
+			case Deepening === undefined:
+				break;
+			default:
+				try {
+					Plan = await Deepening.rename(
+						State.Context,
+						Root(State),
+						Path,
+						Text,
+						Range,
+						To,
+					);
+				} catch {
+					Plan = undefined;
+				}
+		}
+		switch (true) {
+			case Plan === undefined:
+				Plan = Selected.Adapter.rename(Text, Path, Range, To);
+				break;
+			default:
+		}
+		switch (true) {
+			case Plan === undefined:
 				// The adapter's refusal: never guess on its behalf.
 				State.Factory.Append(State, `refused ${Path} (rename: adapter not certain)`);
 				return undefined;

@@ -16,10 +16,10 @@
 // disabled, never appears in the profile's bundles, and enables only by an
 // explicit ACTIVATE.
 import Schema from "@deepseek-ai/schemastery";
-import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
+import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/queue.log").volatile(),
+	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-queue.log").volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The user's capacity model is the law (SUBAGENT-QUEUE-PLUGIN.md section
 	// 2.2): the MAIN conversation holds up to 10 subagents (the pool's
@@ -40,4 +40,26 @@ export default Compose(false, {
 	// present, each dispatch resolves the route per the user's policy
 	// (silently); absent, the dispatch proceeds unrouted (the contained skip).
 	routedDispatch: Schema.boolean().default(true).volatile(),
+	// THE SPAWN (the completion spec's D6 approval posture): when true, an
+	// assignment actually STARTS a subagent through the harness's own
+	// `ctx.subagents` service (never a private spawn, never a shell), with
+	// the resolved route as the child's agentOptions. Shipped FALSE: a spawn
+	// is a privileged action, so the plugin assigns seats only until the user
+	// turns it on. False = the manual posture - the dispatch still assigns
+	// and still ledgers, it just never launches.
+	autoSpawn: Schema.boolean().default(false).volatile(),
+	// The harness subagent provider the spawn selects by name
+	// (`ctx.subagents.startActivation({ provider })`). The in-process spawn
+	// backend registers as "spawn" (subagent-spawn-in-process's
+	// `providerName` default); another backend (fork/acp/dsh-sdk) is selected
+	// by naming it here.
+	spawnProvider: Schema.string().default("spawn").volatile(),
+	// THE POLICY BLOCK (D6): the per-action allowlist, the OUTER gate in front
+	// of `autoSpawn` - `spawn` defaults to `approve`, so even with the knob on
+	// an assignment waits for the user (the `spawn held` line). Composed from
+	// the factory's shared block: read/index/record/suggest/message = auto,
+	// write/commit/spawn = approve. Volatile as one object (a policy flip is
+	// hot-editable); a resolved pack's `policy` section overrides the defaults
+	// per action (the wiring is the next refinement; the type already exists).
+	policy: Policy(),
 });

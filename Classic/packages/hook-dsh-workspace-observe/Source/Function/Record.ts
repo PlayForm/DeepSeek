@@ -17,6 +17,8 @@
 import type Stamp from "@Interface/Stamp.js";
 import type State from "@Interface/State.js";
 
+import Adapter from "../Trace/Adapter.js";
+
 export default (State: State, Stamp: Stamp): void => {
 	State.Latest.set(Stamp.path, Stamp);
 	State.Ring.push(Stamp);
@@ -43,4 +45,10 @@ export default (State: State, Stamp: Stamp): void => {
 	} catch {
 		/* storage optional - never on the listener's path */
 	}
+	// The trace emission (D5: the observe hook is the indexer's first source):
+	// one `observe/stamp` per recorded stamp, after the ledger line and the KV
+	// write are final. The adapter is contained and the bus is optional (an
+	// absent service emits nothing), so the synchronous recorder's discipline
+	// is unchanged.
+	Adapter(State, Stamp);
 };

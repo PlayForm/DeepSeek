@@ -1,5 +1,7 @@
-import type { ReplayRecord } from "./History.js";
-import type { CompiledIntent } from "./Pack.js";
+import type Entry from "@Interface/Entry.js";
+import type Handle from "@Interface/Handle.js";
+import type { ReplayRecord } from "@Interface/History.js";
+import type { CompiledIntent } from "@Interface/Pack.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
@@ -25,8 +27,22 @@ export default interface State extends Shared {
     HistoryPath: string;
     /** The follow/ignore observation window (config `learnWindow`, volatile). */
     LearnWindow: number;
-    /** The loaded history store (Function/History), read once at apply. */
+    /** The JSON fallback store path (config `recordPath`, structural). */
+    RecordPath: string;
+    /** The history ring's bound (config `historyDepth`, volatile). */
+    Depth: number;
+    /** The loaded seeded history store (Function/History), read once at apply. */
     Records: ReplayRecord[];
+    /** The durable tier's in-memory mirror, newest first (Function/Restore). */
+    History: Entry[];
+    /** The next entry sequence (the store's monotonic order). */
+    Seq: number;
+    /** The open storage domain (undefined in the JSON fallback). */
+    Handle: Handle | undefined;
+    /** The store chain: the open/recovery and every write, in order. */
+    Pending: Promise<void>;
+    /** Await the store chain (the smoke seam: every write is deterministic). */
+    Flush: () => Promise<void>;
     /** The compiled pack, built once at apply. */
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */
@@ -44,4 +60,6 @@ export interface AgentMemory {
     TurnNotes: number;
     /** The last probes (most recent first, capped at 8). */
     Ring: string[];
+    /** The agent's own recorded calls, newest first, bounded by `historyDepth`. */
+    History: Entry[];
 }
