@@ -53,14 +53,14 @@ The subagent-queue plugin's dispatcher consumes `dshRoute` for the routed dispat
 
 ## Configuration (all volatile)
 
-| Field             | Default                                    | Meaning                                                                                                               |
-| ----------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `enabled`         | `false`                                    | Master switch (ships disabled; the IDLE-forever posture).                                                             |
+| Field             | Default                                        | Meaning                                                                                                               |
+| ----------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `enabled`         | `false`                                        | Master switch (ships disabled; the IDLE-forever posture).                                                             |
 | `log` / `logFile` | - / `~/.dsh/playform/ets-plugin-dsh-route.log` | The plugin's own ledger.                                                                                              |
-| `defaultRole`     | `explorer`                                 | The role used when neither a declared type nor a keyword match exists (the cheap lane is the safe default).           |
-| `policy`          | the task-routing table                     | `coder`/`explorer`/`planner` route triples, `allowedModels` (the three-model catalog), `escalation { enabled, max }`. |
-| `keywords`        | the shipped table                          | The inference table; merged over the shipped defaults (user keywords add triggers).                                   |
-| `automation`      | D6 defaults                                | The per-action allowlist (the shared factory block; keyed `automation` - `policy` is the routing policy).             |
+| `defaultRole`     | `explorer`                                     | The role used when neither a declared type nor a keyword match exists (the cheap lane is the safe default).           |
+| `policy`          | the task-routing table                         | `coder`/`explorer`/`planner` route triples, `allowedModels` (the three-model catalog), `escalation { enabled, max }`. |
+| `keywords`        | the shipped table                              | The inference table; merged over the shipped defaults (user keywords add triggers).                                   |
+| `automation`      | D6 defaults                                    | The per-action allowlist (the shared factory block; keyed `automation` - `policy` is the routing policy).             |
 
 ### The policy block (D6)
 

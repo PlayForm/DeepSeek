@@ -22,7 +22,9 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 import DefaultLens from "@Variable/DefaultLens.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-workspace-context.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-plugin-dsh-workspace-context.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.
 	budgetTokens: Schema.number().default(2000).volatile(),

@@ -89,17 +89,13 @@ function View(props) {
 // Source/Function/Section.ts
 var import_react2 = require("react");
 function Section(props) {
-  const [Current, SetCurrent] = (0, import_react2.useState)(
-    () => props.ports.store.getSnapshot()
-  );
+  const [Current, SetCurrent] = (0, import_react2.useState)(() => props.ports.store.getSnapshot());
   const [Tail, SetTail] = (0, import_react2.useState)(() => props.ports.trace.tail());
   (0, import_react2.useEffect)(() => {
     const OffStore = props.ports.store.subscribe(
       () => SetCurrent(props.ports.store.getSnapshot())
     );
-    const OffTrace = props.ports.trace.subscribe(
-      () => SetTail(props.ports.trace.tail())
-    );
+    const OffTrace = props.ports.trace.subscribe(() => SetTail(props.ports.trace.tail()));
     return () => {
       OffStore();
       OffTrace();
@@ -256,14 +252,10 @@ var RegistryOf = (ctx) => {
   }
 };
 function LiveTab(props) {
-  const [Current, SetCurrent] = (0, import_react3.useState)(
-    () => props.store.getSnapshot()
-  );
+  const [Current, SetCurrent] = (0, import_react3.useState)(() => props.store.getSnapshot());
   const [Tail, SetTail] = (0, import_react3.useState)(() => props.trace.tail());
   (0, import_react3.useEffect)(() => {
-    const OffStore = props.store.subscribe(
-      () => SetCurrent(props.store.getSnapshot())
-    );
+    const OffStore = props.store.subscribe(() => SetCurrent(props.store.getSnapshot()));
     const OffTrace = props.trace.subscribe(() => SetTail(props.trace.tail()));
     return () => {
       OffStore();
@@ -292,43 +284,37 @@ function Client(ctx, config) {
     () => ctx.locale.register(NAMESPACE, { en: Locale_en_default, zh: Locale_zh_default }),
     "live: dictionaries"
   );
-  ctx.effect(
-    () => {
-      const Off = ctx.slots.inject(
-        Slots_default.tab,
-        () => ctx.slots.register(
-          {
-            name: Slots_default.tab,
-            id: "workspace-live",
-            order: config.tabOrder,
-            locale: NAMESPACE,
-            label: () => Locale_en_default.tab,
-            // The child-slot model: the tab declares the slot it renders.
-            ...registry === void 0 ? {} : {
-              children: {
-                [Slots_default.section]: { kind: "list", scope: "session" }
-              }
+  ctx.effect(() => {
+    const Off = ctx.slots.inject(
+      Slots_default.tab,
+      () => ctx.slots.register(
+        {
+          name: Slots_default.tab,
+          id: "workspace-live",
+          order: config.tabOrder,
+          locale: NAMESPACE,
+          label: () => Locale_en_default.tab,
+          // The child-slot model: the tab declares the slot it renders.
+          ...registry === void 0 ? {} : {
+            children: {
+              [Slots_default.section]: { kind: "list", scope: "session" }
             }
-          },
-          (props = {}) => (0, import_react3.createElement)(LiveTab, {
-            store,
-            trace,
-            ...typeof props["renderSlot"] === "function" ? {
-              slot: props["renderSlot"](
-                Slots_default.section,
-                {}
-              )
-            } : {}
-          })
-        )
-      );
-      return () => {
-        Off?.();
-        trace.dispose();
-      };
-    },
-    "live: workspace tab"
-  );
+          }
+        },
+        (props = {}) => (0, import_react3.createElement)(LiveTab, {
+          store,
+          trace,
+          ...typeof props["renderSlot"] === "function" ? {
+            slot: props["renderSlot"](Slots_default.section, {})
+          } : {}
+        })
+      )
+    );
+    return () => {
+      Off?.();
+      trace.dispose();
+    };
+  }, "live: workspace tab");
   switch (true) {
     case registry !== void 0:
       ctx.effect(

@@ -41,16 +41,16 @@ session and the agent are the proposal's `origin`.
 
 ## Config
 
-| Field           | Default                                   | Meaning                                                         |
-| --------------- | ----------------------------------------- | --------------------------------------------------------------- |
-| `enabled`       | `true`                                    | Master switch (the patch entry ships `enabled: true`).          |
+| Field           | Default                                       | Meaning                                                         |
+| --------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| `enabled`       | `true`                                        | Master switch (the patch entry ships `enabled: true`).          |
 | `logFile`       | `~/.dsh/playform/ets-plugin-dsh-feedback.log` | The durable journal (one log per module).                       |
-| `maxBlockBytes` | `4096`                                    | Cap per block's text fields (the marker records a cap).         |
-| `maxChain`      | `8`                                       | Maximum TRANSFERRED hops before a block is dropped (journaled). |
-| `maxSessions`   | `128`                                     | Sessions kept in the in-memory record.                          |
-| `summaryTerms`  | `10`                                      | Terms in one summary's liked/disliked clusters.                 |
-| `maxOutcomes`   | `16`                                      | The per-session batch-outcome ring bound.                       |
-| `policy.*`      | D6 defaults                               | The per-action allowlist (the shared factory block).            |
+| `maxBlockBytes` | `4096`                                        | Cap per block's text fields (the marker records a cap).         |
+| `maxChain`      | `8`                                           | Maximum TRANSFERRED hops before a block is dropped (journaled). |
+| `maxSessions`   | `128`                                         | Sessions kept in the in-memory record.                          |
+| `summaryTerms`  | `10`                                          | Terms in one summary's liked/disliked clusters.                 |
+| `maxOutcomes`   | `16`                                          | The per-session batch-outcome ring bound.                       |
+| `policy.*`      | D6 defaults                                   | The per-action allowlist (the shared factory block).            |
 
 ### The policy block (D6)
 

@@ -8,8 +8,8 @@ source plugin --adapter--> trace bus --adapter--> consumer plugin
 ```
 
 - **The bus is a service, not a process.** `ctx.trace` is provided once by
-  [`@playform/ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) (the family's shared-machinery owner).
-  There is no separate indexer process and no separate indexer plugin.
+  [`@playform/ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) (the family's shared-machinery
+  owner). There is no separate indexer process and no separate indexer plugin.
 - **This library holds the vocabulary and the loop.** Every adapting plugin carries its own
   `Source/Trace/` adapter and imports these names and types - no plugin imports another plugin.
 - **The detached loop** is the "daemon trace": a coalescing queue keyed by path, ONE in-flight task

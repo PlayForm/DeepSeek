@@ -104,15 +104,15 @@ approve: storage open failed: <reason>
 
 ## 7. The Config (all volatile)
 
-| Field              | Type        | Default                                          |
-| ------------------ | ----------- | ------------------------------------------------ |
+| Field              | Type        | Default                                              |
+| ------------------ | ----------- | ---------------------------------------------------- |
 | logFile            | string      | `~/.dsh/playform/ets-hook-dsh-workspace-approve.log` |
-| log                | boolean     | true (the factory's shared block)                |
-| enabled            | boolean     | false                                            |
-| domain             | string      | `workspace_approve`                              |
-| maxBindings        | number      | 1000                                             |
-| requireConstraints | boolean     | true                                             |
-| policy             | `Allowlist` | the D6 defaults (see below)                      |
+| log                | boolean     | true (the factory's shared block)                    |
+| enabled            | boolean     | false                                                |
+| domain             | string      | `workspace_approve`                                  |
+| maxBindings        | number      | 1000                                                 |
+| requireConstraints | boolean     | true                                                 |
+| policy             | `Allowlist` | the D6 defaults (see below)                          |
 
 ## 8. What this PoC does NOT do (honest)
 

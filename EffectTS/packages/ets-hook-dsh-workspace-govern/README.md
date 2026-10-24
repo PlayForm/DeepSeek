@@ -37,18 +37,18 @@ line.
 
 ## Config (all volatile)
 
-| Field             | Default                                                  | Meaning                                                                                                       |
-| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `enabled`         | `false`                                                  | the master switch                                                                                             |
+| Field             | Default                                                      | Meaning                                                                                                       |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `enabled`         | `false`                                                      | the master switch                                                                                             |
 | `log` / `logFile` | `true` / `~/.dsh/playform/ets-hook-dsh-workspace-govern.log` | the durable ledger (one log per module)                                                                       |
-| `tools`           | `write, edit, bash, applyPatch`                          | the gated tool names                                                                                          |
-| `scope`           | `[]` (unrestricted)                                      | the authorized-scope allowlist (globs)                                                                        |
-| `exclude`         | `node_modules/**, **/Target/**, **/.git/**`              | never gated, in silence                                                                                       |
-| `policy`          | `[]`                                                     | the policy table (`{kind, decision, operation?}`)                                                             |
-| `recovery`        | `[]`                                                     | the recovery-table overrides (`{obligation, behavior}`)                                                       |
-| `loopBound`       | `4`                                                      | the recursion-prevention loop bound                                                                           |
-| `maxDecisions`    | `500`                                                    | the decision ring bound                                                                                       |
-| `automation`      | D6 defaults                                              | the per-action allowlist (the shared factory block; keyed `automation` - `policy` is the decision rule table) |
+| `tools`           | `write, edit, bash, applyPatch`                              | the gated tool names                                                                                          |
+| `scope`           | `[]` (unrestricted)                                          | the authorized-scope allowlist (globs)                                                                        |
+| `exclude`         | `node_modules/**, **/Target/**, **/.git/**`                  | never gated, in silence                                                                                       |
+| `policy`          | `[]`                                                         | the policy table (`{kind, decision, operation?}`)                                                             |
+| `recovery`        | `[]`                                                         | the recovery-table overrides (`{obligation, behavior}`)                                                       |
+| `loopBound`       | `4`                                                          | the recursion-prevention loop bound                                                                           |
+| `maxDecisions`    | `500`                                                        | the decision ring bound                                                                                       |
+| `automation`      | D6 defaults                                                  | the per-action allowlist (the shared factory block; keyed `automation` - `policy` is the decision rule table) |
 
 ### The policy block (D6) - the `automation` key
 

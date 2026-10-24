@@ -6,30 +6,30 @@ The workspace agent: the operational view, the five tools, the query surface. Lo
 
 ## Identity (four agreeing places)
 
-| Place                  | Value                                      |
-| ---------------------- | ------------------------------------------ |
-| package name           | `@playform/plugin-dsh-workspace`           |
-| `name` export          | `plugin-dsh-workspace`                     |
-| State build `module:`  | `plugin-dsh-workspace`                     |
+| Place                  | Value                                          |
+| ---------------------- | ---------------------------------------------- |
+| package name           | `@playform/plugin-dsh-workspace`               |
+| `name` export          | `plugin-dsh-workspace`                         |
+| State build `module:`  | `plugin-dsh-workspace`                         |
 | ledger logFile default | `~/.dsh/playform/ets-plugin-dsh-workspace.log` |
 
 ## Config (every knob volatile)
 
-| Field              | Type       | Default                                    |
-| ------------------ | ---------- | ------------------------------------------ |
-| enabled            | boolean    | `false`                                    |
+| Field              | Type       | Default                                        |
+| ------------------ | ---------- | ---------------------------------------------- |
+| enabled            | boolean    | `false`                                        |
 | logFile            | string     | `~/.dsh/playform/ets-plugin-dsh-workspace.log` |
-| mapDepth           | number     | `2`                                        |
-| mapMaxModules      | number     | `20`                                       |
-| findLimit          | number     | `50`                                       |
-| findLimitMax       | number     | `500`                                      |
-| expandDepth        | number     | `1` (cap 3, the graph contract)            |
-| expandMaxNeighbors | number     | `50`                                       |
-| packetTokenBudget  | number     | `2000`                                     |
-| packetTokenMax     | number     | `4000`                                     |
-| tokenCharsPerToken | number     | `4`                                        |
-| kinds              | NodeKind[] | `[]` (all)                                 |
-| policy             | Allowlist  | the D6 defaults                            |
+| mapDepth           | number     | `2`                                            |
+| mapMaxModules      | number     | `20`                                           |
+| findLimit          | number     | `50`                                           |
+| findLimitMax       | number     | `500`                                          |
+| expandDepth        | number     | `1` (cap 3, the graph contract)                |
+| expandMaxNeighbors | number     | `50`                                           |
+| packetTokenBudget  | number     | `2000`                                         |
+| packetTokenMax     | number     | `4000`                                         |
+| tokenCharsPerToken | number     | `4`                                            |
+| kinds              | NodeKind[] | `[]` (all)                                     |
+| policy             | Allowlist  | the D6 defaults                                |
 
 Validation is fail-loud at load: `findLimitMax >= findLimit`, `packetTokenMax >= packetTokenBudget`,
 `expandDepth in 1..3`, kinds checked against the graph's node kinds.

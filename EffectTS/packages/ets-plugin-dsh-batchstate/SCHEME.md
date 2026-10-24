@@ -5,11 +5,11 @@ The batch-state plugin: the cooperative batch's live state board
 
 ## 1. The identity (four agreeing places)
 
-| Place                             | Value                                       |
-| --------------------------------- | ------------------------------------------- |
-| Package name                      | `@playform/plugin-dsh-batchstate`           |
-| The `name` export                 | `plugin-dsh-batchstate`                     |
-| The State build's `module` option | `batchstate`                                |
+| Place                             | Value                                           |
+| --------------------------------- | ----------------------------------------------- |
+| Package name                      | `@playform/plugin-dsh-batchstate`               |
+| The `name` export                 | `plugin-dsh-batchstate`                         |
+| The State build's `module` option | `batchstate`                                    |
 | The ledger logFile default        | `~/.dsh/playform/ets-plugin-dsh-batchstate.log` |
 
 ## 2. The loader contract
@@ -25,17 +25,17 @@ The batch-state plugin: the cooperative batch's live state board
 
 ## 3. The config schema (every knob volatile)
 
-| Field          | Type    | Default                                     | Meaning                                              |
-| -------------- | ------- | ------------------------------------------- | ---------------------------------------------------- |
-| `enabled`      | boolean | `false`                                     | The master switch (the IDLE-forever posture).        |
-| `log`          | boolean | `true`                                      | Ledger enabled - write the durable log file.         |
+| Field          | Type    | Default                                         | Meaning                                              |
+| -------------- | ------- | ----------------------------------------------- | ---------------------------------------------------- |
+| `enabled`      | boolean | `false`                                         | The master switch (the IDLE-forever posture).        |
+| `log`          | boolean | `true`                                          | Ledger enabled - write the durable log file.         |
 | `logFile`      | string  | `~/.dsh/playform/ets-plugin-dsh-batchstate.log` | The ledger file (one log per module).                |
-| `batch`        | string  | `default`                                   | The batch key (multi-batch isolation).               |
-| `domain`       | string  | `batch_state`                               | The KV domain name (the PRIMARY store).              |
-| `stateFile`    | string  | `~/.dsh/batch-state.json`                   | The well-known JSON state file (the FALLBACK store). |
-| `maxRecent`    | integer | `8`                                         | The completions ring bound.                          |
-| `maxProposals` | integer | `16`                                        | The spliced-proposal ring bound (the inbox memory).  |
-| `policy`       | object  | the D6 block (see §3.1)                     | The per-action allowlist (the shared factory block). |
+| `batch`        | string  | `default`                                       | The batch key (multi-batch isolation).               |
+| `domain`       | string  | `batch_state`                                   | The KV domain name (the PRIMARY store).              |
+| `stateFile`    | string  | `~/.dsh/batch-state.json`                       | The well-known JSON state file (the FALLBACK store). |
+| `maxRecent`    | integer | `8`                                             | The completions ring bound.                          |
+| `maxProposals` | integer | `16`                                            | The spliced-proposal ring bound (the inbox memory).  |
+| `policy`       | object  | the D6 block (see §3.1)                         | The per-action allowlist (the shared factory block). |
 
 Fail-loud validation runs BEFORE the State build: `stateFile` non-empty, `domain` a lowercase unit
 name matching `/^[a-z][a-z0-9_]*$/`, `maxRecent` an integer >= 1, `maxProposals` an integer >= 1,

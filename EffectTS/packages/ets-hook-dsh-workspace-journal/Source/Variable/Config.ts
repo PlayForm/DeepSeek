@@ -28,7 +28,9 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-workspace-journal.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-hook-dsh-workspace-journal.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the hook's own domain - the rollback layer's
 	// per-batch records and revert data; a NEW domain, never an extension

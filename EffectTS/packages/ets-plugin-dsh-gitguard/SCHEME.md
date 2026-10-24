@@ -5,11 +5,11 @@ The git guard: the tools/pre-execute DENY-LIST on the terminal/exec tool surface
 
 ## 1. The identity (four agreeing places)
 
-| Place                             | Value                                     |
-| --------------------------------- | ----------------------------------------- |
-| Package name                      | `@playform/plugin-dsh-gitguard`           |
-| The `name` export                 | `plugin-dsh-gitguard`                     |
-| The State build's `module` option | `gitguard`                                |
+| Place                             | Value                                         |
+| --------------------------------- | --------------------------------------------- |
+| Package name                      | `@playform/plugin-dsh-gitguard`               |
+| The `name` export                 | `plugin-dsh-gitguard`                         |
+| The State build's `module` option | `gitguard`                                    |
 | The ledger logFile default        | `~/.dsh/playform/ets-plugin-dsh-gitguard.log` |
 
 ## 2. The loader contract
@@ -28,7 +28,7 @@ The git guard: the tools/pre-execute DENY-LIST on the terminal/exec tool surface
 | --------------- | -------- | --------------------------------------------------- | --------------------------------------------------------------------- |
 | `enabled`       | boolean  | `false`                                             | The master switch (the IDLE-forever posture).                         |
 | `log`           | boolean  | `true`                                              | Ledger enabled - write the durable log file.                          |
-| `logFile`       | string   | `~/.dsh/playform/ets-plugin-dsh-gitguard.log`           | The ledger file (one log per module).                                 |
+| `logFile`       | string   | `~/.dsh/playform/ets-plugin-dsh-gitguard.log`       | The ledger file (one log per module).                                 |
 | `denyPatterns`  | string[] | the 23 mutation subcommands                         | The refused git subcommands (REPLACES the default list, not merge).   |
 | `allowPatterns` | string[] | status, log, diff, show, rev-parse, ls-files, fetch | The allowed git subcommands (the allow-list wins over the deny-list). |
 | `strict`        | boolean  | `false`                                             | Deny EVERY git command (not just the deny-list).                      |

@@ -15,6 +15,7 @@ import * as FileSystem from "node:fs";
 import { dirname as Parent } from "node:path";
 
 import type State from "@Interface/State.js";
+
 import Expand from "./Expand.js";
 
 export default (State: State, Message: string): void => {
@@ -28,10 +29,7 @@ export default (State: State, Message: string): void => {
 			try {
 				const Ledger = Expand(State.Ledger);
 				FileSystem.mkdirSync(Parent(Ledger), { recursive: true });
-				FileSystem.appendFileSync(
-					Ledger,
-					`[${new Date().toISOString()}] ${Message}\n`,
-				);
+				FileSystem.appendFileSync(Ledger, `[${new Date().toISOString()}] ${Message}\n`);
 			} catch {
 				/* ledger best-effort */
 			}

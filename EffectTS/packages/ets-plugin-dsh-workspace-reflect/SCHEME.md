@@ -124,15 +124,15 @@ reflect: rejected <path> (graph absent)
 
 ## 6. The Config (all volatile)
 
-| Field         | Type                | Default                                            |
-| ------------- | ------------------- | -------------------------------------------------- |
+| Field         | Type                | Default                                                |
+| ------------- | ------------------- | ------------------------------------------------------ |
 | logFile       | string              | `~/.dsh/playform/ets-plugin-dsh-workspace-reflect.log` |
-| log           | boolean             | true (the factory's shared block)                  |
-| enabled       | boolean             | false                                              |
-| propagate     | `"block" \| "file"` | block                                              |
-| maxFileBytes  | number              | 1000000                                            |
-| maxBlockLines | number              | 5000                                               |
-| policy        | `Allowlist`         | the D6 defaults (below)                            |
+| log           | boolean             | true (the factory's shared block)                      |
+| enabled       | boolean             | false                                                  |
+| propagate     | `"block" \| "file"` | block                                                  |
+| maxFileBytes  | number              | 1000000                                                |
+| maxBlockLines | number              | 5000                                                   |
+| policy        | `Allowlist`         | the D6 defaults (below)                                |
 
 ### The policy block (D6)
 

@@ -42,15 +42,21 @@ export const MonorepoRoot = () =>
 /** The EffectTS release tree - the packing source for the ets group. */
 export const PackagesDir = () => Path.join(MonorepoRoot(), "EffectTS", "packages");
 
-// The twelve release packages: the bundle-list name and the candidate source
-// directory names (the tree's package directories were renamed hook-dsh-* →
-// hook-dsh-* mid-batch; both spellings are accepted).
+// The release packages: the original twelve plus the two new workspace
+// libraries, with the candidate source directory names (the tree's package
+// directories were renamed hook-dsh-* → hook-dsh-* mid-batch; both spellings
+// are accepted).
 const Bundles = [
 	["@playform/ets-plugin-dsh-factory", ["ets-plugin-dsh-factory", "ets-plugin-dsh-factory"]],
 	["@playform/ets-lib-dsh-core", ["ets-lib-dsh-core", "ets-lib-dsh-core"]],
 	// The ets base: not a bundle (no dsh.bundle), but a dependency of every
 	// ets package - packed and overridden so the install never leaves home.
 	["@playform/ets-base-dsh", ["ets-base-dsh", "ets-base-dsh"]],
+	// The two new libraries: not bundles (no dsh.bundle), but dependencies of
+	// the factory (trace) and the six suggesters (pack) - packed and
+	// overridden so the scratch install never reaches the registry.
+	["@playform/ets-lib-dsh-trace", ["ets-lib-dsh-trace", "ets-lib-dsh-trace"]],
+	["@playform/ets-lib-dsh-pack", ["ets-lib-dsh-pack", "ets-lib-dsh-pack"]],
 	[
 		"@playform/ets-hook-dsh-package-governor",
 		["ets-hook-dsh-package-governor", "ets-hook-dsh-package-governor"],
@@ -303,15 +309,18 @@ const ProfileManifest = (Deps) =>
 			private: true,
 			dsh: {
 				profile: {
-					// The bundle list mirrors the live desktop profile: the core
-					// package is a dependency only - it declares no dsh.bundle,
-					// so listing it as a bundle makes the loader fail loud.
+					// The bundle list mirrors the live desktop profile: the
+					// libraries (core, trace, pack) and the ets base are
+					// dependencies only - they declare no dsh.bundle, so
+					// listing one as a bundle makes the loader fail loud.
 					bundles: [
 						"@deepseek-ai/dsh-base",
 						"@deepseek-ai/dsh-web-app",
 						...Bundles.filter(
 							([Name]) =>
 								Name !== "@playform/ets-lib-dsh-core" &&
+								Name !== "@playform/ets-lib-dsh-trace" &&
+								Name !== "@playform/ets-lib-dsh-pack" &&
 								Name !== "@playform/ets-base-dsh",
 						).map(([Name]) => Name),
 					],
@@ -498,6 +507,12 @@ const CreateScratch = (Home) => {
 				Path.basename(TarballByPackage["@playform/ets-lib-dsh-core"]),
 			"@playform/ets-base-dsh":
 				"file:../../tarballs/" + Path.basename(TarballByPackage["@playform/ets-base-dsh"]),
+			"@playform/ets-lib-dsh-trace":
+				"file:../../tarballs/" +
+				Path.basename(TarballByPackage["@playform/ets-lib-dsh-trace"]),
+			"@playform/ets-lib-dsh-pack":
+				"file:../../tarballs/" +
+				Path.basename(TarballByPackage["@playform/ets-lib-dsh-pack"]),
 			"@playform/ets-plugin-dsh-factory":
 				"file:../../tarballs/" +
 				Path.basename(TarballByPackage["@playform/ets-plugin-dsh-factory"]),

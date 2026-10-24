@@ -101,25 +101,27 @@ index: Documentation/INDEX.md
 
 ## 3. The completion program's libraries (2)
 
-| Package       | What it is                                                                                                                | ETS twin | Context                                          |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------ |
-| lib-dsh-trace | The trace bus's library half: the envelope, the event names, the guards, the detached loop (no plugin)                    | no       | (the trace bus; Completion-Spec 01)              |
-| lib-dsh-pack  | The pack layer's library: the pack schema, the YAML-subset parser, the layered resolution, the workspace gate (no plugin) | no       | (the pack-driven suggesters; Completion-Spec 03) |
+| Package       | What it is                                                                                                                | ETS twin                | Context                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------ |
+| lib-dsh-trace | The trace bus's library half: the envelope, the event names, the guards, the detached loop (no plugin)                    | yes (ets-lib-dsh-trace) | (the trace bus; Completion-Spec 01)              |
+| lib-dsh-pack  | The pack layer's library: the pack schema, the YAML-subset parser, the layered resolution, the workspace gate (no plugin) | yes (ets-lib-dsh-pack)  | (the pack-driven suggesters; Completion-Spec 03) |
 
 ## 4. The counts
 
-| Measure                        | Value                                                                                                                                    |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| NEW plugins (built 2026-10-22) | 36 Classic + 30 ETS twins                                                                                                                |
-| Pre-existing plugins           | 14 Classic + 14 ETS twins                                                                                                                |
-| Completion program libraries   | 2 Classic (lib-dsh-trace, lib-dsh-pack) - no ETS twin yet                                                                                |
-| Total Classic packages         | 53 (incl. the factory and the two libraries)                                                                                             |
-| Total EffectTS packages        | 46                                                                                                                                       |
-| Release state                  | ALL 0.1.0 except `client-dsh-panel-family` (0.2.0), UNPUBLISHED (npm bootstrap: 2-planned / 3-candidates)                                |
-| Verified                       | 99 packages; 444 smoke suites / 6,053 checks; the aggregate green                                                                        |
-| Live                           | enabled in the desktop profile (54 bundles); the first dogfood found the batch-edit inject defect (fixed) and the empty-graph gap (open) |
+| Measure                        | Value                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NEW plugins (built 2026-10-22) | 36 Classic + 30 ETS twins                                                                                                                                                                                                                                                                                                                                                             |
+| Pre-existing plugins           | 14 Classic + 14 ETS twins                                                                                                                                                                                                                                                                                                                                                             |
+| Completion program libraries   | 2 Classic (lib-dsh-trace, lib-dsh-pack) + their 2 ETS twins (ets-lib-dsh-trace, ets-lib-dsh-pack)                                                                                                                                                                                                                                                                                     |
+| Total Classic packages         | 53 (incl. the factory and the two libraries)                                                                                                                                                                                                                                                                                                                                          |
+| Total EffectTS packages        | 48 (incl. the two library twins)                                                                                                                                                                                                                                                                                                                                                      |
+| Release state                  | ALL 0.1.0 except `client-dsh-panel-family` (0.2.0), UNPUBLISHED (npm bootstrap: 2-planned / 3-candidates)                                                                                                                                                                                                                                                                             |
+| Verified                       | 101 packages; 511 smoke suites / 6,612 checks; the aggregate green                                                                                                                                                                                                                                                                                                                    |
+| Live                           | fully activated in the desktop profile (49 @playform rows: 48 enabled + the factory); the batch-edit inject defect is fixed and the empty-graph gap is CLOSED (the graph trigger + the live index: `map @ 220: 220 files, 20 modules`); the activation sweep verified the suggesters, the foundation and the orchestration live, with the final group's live test pending the restart |
 
-The 6 new packages WITHOUT an ETS twin: the two client panels (client-dsh-panel-family,
+The new packages WITHOUT an ETS twin: the two client panels (client-dsh-panel-family,
 client-dsh-panel-family-host) and four orchestration candidates (plugin-dsh-pass-on,
 plugin-dsh-ingester, plugin-dsh-pattern, hook-dsh-batch-decision) - the MANIFEST declares no `ets-*`
-entries for them.
+entries for them. The two completion program's libraries now HAVE ETS twins (ets-lib-dsh-trace,
+ets-lib-dsh-pack), so they are no longer in that set. The option-B Learning-Loop exclusion remains
+the only Classic-only test surface, plus the pattern/batch-decision Classic-only candidates.

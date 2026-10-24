@@ -45,16 +45,16 @@ Batch lifecycle: `applying → verified | recovery-required | reverted`.
 
 Every knob is a volatile cell (hot edits commit without remounting):
 
-| Field           | Default                                             | Description                                   |
-| --------------- | --------------------------------------------------- | --------------------------------------------- |
-| `enabled`       | `false`                                             | Master switch (the IDLE-forever posture)      |
-| `log`           | `true`                                              | Ledger enabled                                |
-| `logFile`       | `~/.dsh/playform/ets-hook-dsh-workspace-journal.log`    | The plugin's own ledger                       |
-| `domain`        | `workspace_journal`                                 | The KV domain name                            |
-| `maxBatches`    | `200`                                               | The batch ring bound                          |
-| `maxEntryBytes` | `65536`                                             | The pre-image size cap                        |
-| `exclude`       | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                                |
-| `policy.*`      | see below                                           | The D6 per-action allowlist (the revert gate) |
+| Field           | Default                                              | Description                                   |
+| --------------- | ---------------------------------------------------- | --------------------------------------------- |
+| `enabled`       | `false`                                              | Master switch (the IDLE-forever posture)      |
+| `log`           | `true`                                               | Ledger enabled                                |
+| `logFile`       | `~/.dsh/playform/ets-hook-dsh-workspace-journal.log` | The plugin's own ledger                       |
+| `domain`        | `workspace_journal`                                  | The KV domain name                            |
+| `maxBatches`    | `200`                                                | The batch ring bound                          |
+| `maxEntryBytes` | `65536`                                              | The pre-image size cap                        |
+| `exclude`       | `["node_modules/**", "**/Target/**", "**/.git/**"]`  | Excluded paths                                |
+| `policy.*`      | see below                                            | The D6 per-action allowlist (the revert gate) |
 
 The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
 explicit ACTIVATE.

@@ -2,19 +2,19 @@
 
 The configuration schema (all knobs volatile; hot edits commit without remounting):
 
-| Field           | Type      | Default                                            |
-| --------------- | --------- | -------------------------------------------------- |
+| Field           | Type      | Default                                                |
+| --------------- | --------- | ------------------------------------------------------ |
 | `logFile`       | string    | `~/.dsh/playform/ets-plugin-dsh-workspace-context.log` |
-| `enabled`       | boolean   | `false`                                            |
-| `budgetTokens`  | number    | `2000` (the target)                                |
-| `budgetMaximum` | number    | `4000` (the hard cap, >= target)                   |
-| `lenses`        | string[]  | `["code", "docs", "tests"]`                        |
-| `lensDefault`   | string    | `code`                                             |
-| `neighborLimit` | number    | `20`                                               |
-| `evidenceLimit` | number    | `12`                                               |
-| `mapLimit`      | number    | `12`                                               |
-| `workspaceName` | string    | `workspace`                                        |
-| `policy`        | Allowlist | the D6 defaults                                    |
+| `enabled`       | boolean   | `false`                                                |
+| `budgetTokens`  | number    | `2000` (the target)                                    |
+| `budgetMaximum` | number    | `4000` (the hard cap, >= target)                       |
+| `lenses`        | string[]  | `["code", "docs", "tests"]`                            |
+| `lensDefault`   | string    | `code`                                                 |
+| `neighborLimit` | number    | `20`                                                   |
+| `evidenceLimit` | number    | `12`                                                   |
+| `mapLimit`      | number    | `12`                                                   |
+| `workspaceName` | string    | `workspace`                                            |
+| `policy`        | Allowlist | the D6 defaults                                        |
 
 Ledger lines (module-owned, byte-stable, prefixed `context: `):
 
@@ -45,8 +45,8 @@ clears the memo wholesale (a packet may cite any path in FOCUS/NEIGHBORS/EVIDENC
 tracker (`State.Focus`) is NOT touched: the STALE contract is about the version the caller held,
 which an invalidation does not change. The invalidation is silent - no new ledger line (the module's
 strings stay byte-exact); the trace ring is the evidence. The bus (`ctx.trace`, provided by
-`@playform/ets-plugin-dsh-factory`, which the service already injects) is optional: without it the memo
-simply lives until the process ends.
+`@playform/ets-plugin-dsh-factory`, which the service already injects) is optional: without it the
+memo simply lives until the process ends.
 
 ## Packet bands
 

@@ -10,6 +10,13 @@ index: Documentation/INDEX.md
 
 # THE POC GAP ANALYSIS - HOW BAREBONES IS EACH PLUGIN AGAINST ITS ORIGINAL IDEA
 
+> SUPERSEDED AS THE LIVE STATE (2026-10-24): the completion program closed the graded gaps - the
+> workspace-scoped suggesters, the working ledgers, the graph indexing trigger, the
+> batch/queue/route wiring, the trace bus, the pack layer + learner, the storage migration, the
+> D4-D8 layers, the client adapters, and the ETS twin parity (0 stale). The current state, the
+> evidence and the documented residuals are in `Documentation/Plans/POC-LEDGER.md` (sections 7+) and
+> `Documentation/Plans/Completion-Spec/`; the grades below remain the 2026-10-22 baseline.
+
 > Three read-only lanes compared every plugin's plan document against its Source (not the README
 > claims): the workspace family (16), the orchestration/batch set (10), the suggesters + client
 > family (10). The evidence blocks: `/tmp/gap-analysis/<package>.md`. The live matrix:

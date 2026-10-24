@@ -36,16 +36,16 @@
 
 ## Config
 
-| Field          | Type      | Default                                          |
-| -------------- | --------- | ------------------------------------------------ |
-| `enabled`      | boolean   | `false`                                          |
-| `log`          | boolean   | `true`                                           |
-| `domain`       | string    | `workspace_operate`                              |
-| `maxProposals` | number    | `500`                                            |
-| `limitDefault` | number    | `50`                                             |
-| `limitMaximum` | number    | `500`                                            |
+| Field          | Type      | Default                                              |
+| -------------- | --------- | ---------------------------------------------------- |
+| `enabled`      | boolean   | `false`                                              |
+| `log`          | boolean   | `true`                                               |
+| `domain`       | string    | `workspace_operate`                                  |
+| `maxProposals` | number    | `500`                                                |
+| `limitDefault` | number    | `50`                                                 |
+| `limitMaximum` | number    | `500`                                                |
 | `logFile`      | string    | `~/.dsh/playform/ets-hook-dsh-workspace-operate.log` |
-| `policy`       | Allowlist | the D6 defaults (see below)                      |
+| `policy`       | Allowlist | the D6 defaults (see below)                          |
 
 All volatile. Invalid config fails loud at load.
 

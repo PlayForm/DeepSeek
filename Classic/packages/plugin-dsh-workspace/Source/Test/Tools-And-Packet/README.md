@@ -24,9 +24,14 @@ the token truncation, the stale marker, and the fs purity on the tool path.
   byte-exact packet line, stamps LastPacketTokens, and truncates honestly
   under a small budget.
 - T6: executing all five tools never touches the fs seam.
+- T7: workspace_index with an ABSENT path resolves the session's working
+  directory through the harness's optional `workingDirectory` service (the
+  fake ctx carries it; the graph receives `/session/root` and the ledger line
+  names it), and a missing service falls back to the graph's own `.`
+  resolution - the byte-exact `workspace: index (cwd)` line.
 
 The REAL populated graph (not FakeGraph) is covered by Real-Graph-And-Tools.
 
 ## Expected count
 
-19 PASS.
+20 PASS.

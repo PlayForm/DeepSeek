@@ -28,7 +28,9 @@ import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 export default Compose(false, {
 	// Ledger file - the search suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-search-suggester.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-hook-dsh-search-suggester.log")
+		.volatile(),
 	// The master switch (volatile): false mutes every listener to a passthrough.
 	enabled: Schema.boolean().default(true).volatile(),
 	// The confidence gate (volatile). The destructive intents (Version, Path,

@@ -2,18 +2,18 @@
 
 The config surface (all volatile; the schema defaults are the truth).
 
-| Field        | Type      | Default                                              | Meaning                                                                                                                              |
-| ------------ | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `log`        | boolean   | `true`                                               | Ledger enabled - write the durable log file.                                                                                         |
+| Field        | Type      | Default                                                  | Meaning                                                                                                                              |
+| ------------ | --------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `log`        | boolean   | `true`                                                   | Ledger enabled - write the durable log file.                                                                                         |
 | `logFile`    | string    | `~/.dsh/playform/ets-plugin-dsh-workspace-semantics.log` | The module's own ledger.                                                                                                             |
-| `enabled`    | boolean   | `false`                                              | The master switch - the IDLE-forever posture.                                                                                        |
-| `domain`     | string    | `workspace_semantics`                                | The KV domain name.                                                                                                                  |
-| `maxEntries` | number    | `256`                                                | The index bound (the oldest models drop first).                                                                                      |
-| `exclude`    | string[]  | `["node_modules/**", "**/Target/**", "**/.git/**"]`  | Paths no model is built for.                                                                                                         |
-| `root`       | string    | `""`                                                 | The workspace root the LSP queries resolve against; `""` = the process working directory.                                            |
-| `lsp`        | boolean   | `true`                                               | Register the harness LSP deepener (the primary TypeScript reference answer); `false` keeps the model purely lexical.                 |
-| `adapters`   | string[]  | `[]`                                                 | The opt-in any-file adapters by catalog name: `json`, `yaml`, `markdown`, `package`. Empty = the TypeScript/JavaScript adapter only. |
-| `policy`     | Allowlist | the D6 block (see below)                             | The per-action allowlist (the shared factory block).                                                                                 |
+| `enabled`    | boolean   | `false`                                                  | The master switch - the IDLE-forever posture.                                                                                        |
+| `domain`     | string    | `workspace_semantics`                                    | The KV domain name.                                                                                                                  |
+| `maxEntries` | number    | `256`                                                    | The index bound (the oldest models drop first).                                                                                      |
+| `exclude`    | string[]  | `["node_modules/**", "**/Target/**", "**/.git/**"]`      | Paths no model is built for.                                                                                                         |
+| `root`       | string    | `""`                                                     | The workspace root the LSP queries resolve against; `""` = the process working directory.                                            |
+| `lsp`        | boolean   | `true`                                                   | Register the harness LSP deepener (the primary TypeScript reference answer); `false` keeps the model purely lexical.                 |
+| `adapters`   | string[]  | `[]`                                                     | The opt-in any-file adapters by catalog name: `json`, `yaml`, `markdown`, `package`. Empty = the TypeScript/JavaScript adapter only. |
+| `policy`     | Allowlist | the D6 block (see below)                                 | The per-action allowlist (the shared factory block).                                                                                 |
 
 An unknown `adapters` name fails loud at load:
 `semantics: adapters must name known adapters (json, yaml, markdown, package)`.

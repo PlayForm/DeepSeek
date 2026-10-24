@@ -44,9 +44,9 @@ file content read.
 Each RECORDED stamp is then emitted on the family's trace bus as `observe/stamp` (the indexer's
 first source, D5) through `Source/Trace/Adapter.ts`: the payload is `{ path, version, origin }` (the
 hook's own sequence stays private). The bus (`ctx.trace`) is provided by
-`@playform/ets-plugin-dsh-factory`, which the hook already injects; the adapter resolves it through the
-factory's probe-once `Seam` accessor, so a context without the bus records stamps exactly as before
-and emits nothing. The emission never throws into the recorder.
+`@playform/ets-plugin-dsh-factory`, which the hook already injects; the adapter resolves it through
+the factory's probe-once `Seam` accessor, so a context without the bus records stamps exactly as
+before and emits nothing. The emission never throws into the recorder.
 
 The `FsObservation` version field is verified from the installed `@deepseek-ai/dsh-fs` types
 (`lib/types/types.d.ts`): a present observation carries `readonly version: FsVersion`; an absent one
@@ -60,16 +60,16 @@ import of `@deepseek-ai/dsh-fs`.
 Composed via the factory's standalone `Schema(false, {...})` helper - the NON-MANIFEST posture.
 Every knob is `.volatile()`.
 
-| Field       | Type      | Default                                          | Meaning                                      |
-| ----------- | --------- | ------------------------------------------------ | -------------------------------------------- |
+| Field       | Type      | Default                                              | Meaning                                      |
+| ----------- | --------- | ---------------------------------------------------- | -------------------------------------------- |
 | `logFile`   | string    | `~/.dsh/playform/ets-hook-dsh-workspace-observe.log` | the module's OWN ledger, one log per module  |
-| `log`       | boolean   | `true`                                           | the durable ledger file enabled              |
-| `enabled`   | boolean   | `false`                                          | the MASTER switch - the IDLE-forever posture |
-| `domain`    | string    | `workspace_observe`                              | the KV domain NAME (non-empty, fail-loud)    |
-| `maxStamps` | number    | `1000`                                           | the ring bound (integer ≥ 1, fail-loud)      |
-| `include`   | string[]  | `[]`                                             | the optional allowlist; empty = every path   |
-| `exclude`   | string[]  | `node_modules/**, **/Target/**, **/.git/**`      | the excluded path patterns                   |
-| `policy`    | Allowlist | the D6 defaults (see below)                      | the per-action allowlist (D6)                |
+| `log`       | boolean   | `true`                                               | the durable ledger file enabled              |
+| `enabled`   | boolean   | `false`                                              | the MASTER switch - the IDLE-forever posture |
+| `domain`    | string    | `workspace_observe`                                  | the KV domain NAME (non-empty, fail-loud)    |
+| `maxStamps` | number    | `1000`                                               | the ring bound (integer ≥ 1, fail-loud)      |
+| `include`   | string[]  | `[]`                                                 | the optional allowlist; empty = every path   |
+| `exclude`   | string[]  | `node_modules/**, **/Target/**, **/.git/**`          | the excluded path patterns                   |
+| `policy`    | Allowlist | the D6 defaults (see below)                          | the per-action allowlist (D6)                |
 
 Fail-loud validation runs BEFORE the State build: an empty `domain`, a non-integer or sub-1
 `maxStamps`, or a non-array `include`/`exclude` throws at load with the `observe: ` message prefix.

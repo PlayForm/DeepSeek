@@ -1,5 +1,5 @@
 ---
-title: The authoritative registry of the 99 packages (53 Classic + 46 EffectTS)
+title: The authoritative registry of the 101 packages (53 Classic + 48 EffectTS)
 category: Plugins
 kind: living-record
 date: 2026-10-22
@@ -8,8 +8,8 @@ registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
     - name:
-          the 99 packages (1 base + 53 Classic + 46 EffectTS; client-dsh-panel-family at 0.2.0, the
-          other 98 at 0.1.0, all UNPUBLISHED)
+          the 101 packages (53 Classic + 48 EffectTS, one of them the ets-base-dsh plumbing base;
+          client-dsh-panel-family at 0.2.0, the other 100 at 0.1.0, all UNPUBLISHED)
       state: implemented
       evidence:
           the packages exist and are built from source; the package directories under both trees
@@ -21,8 +21,8 @@ statuses:
           orchestration set, the client panels)
       state: implemented (PoC)
       evidence:
-          the packages under Classic/packages/ with their 30 ets-* twins;
-          Documentation/Reports/POC-GAP-ANALYSIS.md
+          the packages under Classic/packages/; the family now has 47 ets-* twins (the 48 EffectTS
+          packages minus the ets-base-dsh base); Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the former "planned orchestration plugins"
       state: implemented (PoC)
       evidence:
@@ -30,7 +30,7 @@ statuses:
           Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 99 packages
+# PLUGIN-FAMILY - the authoritative registry of the 101 packages
 
 > This document is the "plugins saved as documents" registry. The registry covers the full family -
 > all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-planned or
@@ -45,10 +45,10 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.1.0 for ALL 99 packages except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED.**
+- **Version: 0.1.0 for ALL 101 packages except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED.**
   Names are byte-accurate as below. The legacy `ets-dsh-hook-*` naming is gone (the namespace split,
   SPLICE-ETS.md).
-- **Two trees, 53 + 46 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
+- **Two trees, 53 + 48 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
   `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript, zero
   runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on
   Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing base). NEVER mix
@@ -56,8 +56,10 @@ statuses:
   classic dispatch envelope. 30 of the 36 packages added 2026-10-22 have ETS twins (all but the two
   client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`,
   `hook-dsh-batch-decision`). The two libraries of the completion program - `lib-dsh-trace` and
-  `lib-dsh-pack` - are Classic-only (no ETS twin yet; the ETS parity wave is pending).
-- **Verification: the aggregate `node Maintain/Run-Smokes.mjs` = 444 smoke suites / 6,053 checks
+  `lib-dsh-pack` - now have ETS twins too (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`, added with the
+  ETS parity wave). Across the whole family the count is **47 ETS twins**: the EffectTS tree holds
+  48 packages and one of them is the `ets-base-dsh` plumbing base, not a twin.
+- **Verification: the aggregate `node Maintain/Run-Smokes.mjs` = 511 smoke suites / 6,612 checks
   across both trees, all green; the live desktop profile has 54 bundles enabled.**
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal
   record is asserted byte-identically by the smokes, in ALL implementations. ONE ledger per plugin:
@@ -161,14 +163,18 @@ statuses:
 | 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | no       |
 
 **EffectTS twins for the delivery (30):** `@playform/ets-*` counterparts of the 30 packages above
-marked "yes", under `EffectTS/packages/`.
+marked "yes", under `EffectTS/packages/`. The current full count of ETS twins is **47** (the 48
+EffectTS packages minus the `ets-base-dsh` base), including the two libraries' twins
+(`ets-lib-dsh-trace`, `ets-lib-dsh-pack`) listed below and the 15 pre-existing packages' twins
+listed above.
 
-**The completion program's libraries — Classic (2), no ETS twin yet:**
+**The completion program's libraries — Classic (2) + their ETS twins (2, `ets-lib-dsh-trace` /
+`ets-lib-dsh-pack`):**
 
-| #   | Package                   | Archetype | Event surface                                                                                        |
-| --- | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------- |
-| 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) |
-| 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          |
+| #   | Package                   | Archetype | Event surface                                                                                        | ETS twin            |
+| --- | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
+| 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) | `ets-lib-dsh-trace` |
+| 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          | `ets-lib-dsh-pack`  |
 
 Absolute-link rule for any repo target in docs/prompts/skills:
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
@@ -325,7 +331,7 @@ keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` s
   queue capped 256). Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
   storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral
-  contract on top of the strings. 443 smoke suites / 6,044 checks across both trees are the release
+  contract on top of the strings. 511 smoke suites / 6,612 checks across both trees are the release
   contract (the original 14 mechanics suites: 1333 Classic / 1324 EffectTS; the rest is the
   2026-10-22 delivery's suites).
 

@@ -62,8 +62,8 @@ statuses:
 - The **Classic release** (the anonymized normal implementation).
 - The **Effect-TS release** (Effect v4.0.5 - the tracing, the ecosystem interaction, the
   parallel-govern toggle designed in).
-- All release packages at **0.1.0**, all UNPUBLISHED. The family is now 97 packages: 51 Classic and
-  46 EffectTS - the original 14 plugins plus the 36 packages of the 2026-10-22 PoC delivery and
+- All release packages at **0.1.0**, all UNPUBLISHED. The family is now 101 packages: 53 Classic and
+  48 EffectTS - the original 14 plugins plus the 36 packages of the 2026-10-22 PoC delivery and
   their 30 ETS twins. The parity: the ledger strings are the byte-identical smoke contract across
   both trees.
 - The future structure: EACH release package its own repository, added as **submodules** to the
@@ -98,7 +98,7 @@ statuses:
   (the internals before + after). The truthful injection points (where the family enters the
   DeepSeek internals). The integration with the other dsh packages.
 - **The UI adapted to the functionality**: the real benchmarks (the integration surface, the smoke
-  coverage - 359 suites / 5,337 checks across both trees, the exposed failure cases + the
+  coverage - 511 suites / 6,610 checks across both trees, the exposed failure cases + the
   solutions). The configure-ability + the optionality (the multi-step ~/.dsh profile setup, the
   knobs, the defaults-off posture, the escape hatches).
 - **The case study emphasizes the WHY** (the structural rationale - why the architecture is shaped

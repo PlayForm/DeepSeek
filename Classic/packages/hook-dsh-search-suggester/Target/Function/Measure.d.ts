@@ -1,6 +1,6 @@
+import type { Intent, Target } from "../Interface/Execution.js";
 import type Measurement from "../Interface/Measurement.js";
 import type Projection from "../Interface/Projection.js";
-import type { Intent, Target } from "../Interface/Execution.js";
 /** Whether a node path satisfies a candidate path or glob. */
 export declare const Match: (Candidate: string, NodePath: string) => boolean;
 export default _default;

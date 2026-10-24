@@ -149,11 +149,12 @@ jsx/mjs/cjs variants) or a `Test.ts` segment.
 
 Registered ONCE from the constructor through `Trace/Adapter.ts` and ONLY when the graph is enabled
 at construction - a disabled graph wires nothing. The graph consumes `observe/stamp` from the
-family's trace bus (`ctx.trace`, provided by `@playform/ets-plugin-dsh-factory`) instead of registering
-`ctx.root.on("fs/observed")` directly (D5: the indexer is inferred from the bus - no separate
-process, no separate indexer plugin). The bus is PROBED (`ctx.get("trace")`), never injected: the
-loader contract's `inject` stays `["fs", "storage"]`, so direct construction and standalone use are
-unchanged; the factory's bundle must load first (the family's dependency-order rule).
+family's trace bus (`ctx.trace`, provided by `@playform/ets-plugin-dsh-factory`) instead of
+registering `ctx.root.on("fs/observed")` directly (D5: the indexer is inferred from the bus - no
+separate process, no separate indexer plugin). The bus is PROBED (`ctx.get("trace")`), never
+injected: the loader contract's `inject` stays `["fs", "storage"]`, so direct construction and
+standalone use are unchanged; the factory's bundle must load first (the family's dependency-order
+rule).
 
 The consumer (`Trace/Consume.ts`) is synchronous, reads no file, never throws into the bus, and
 applies this filter chain:

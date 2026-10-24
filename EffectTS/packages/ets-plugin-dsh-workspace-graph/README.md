@@ -43,8 +43,8 @@ not faked.
 
 The INCREMENTAL wiring (the trace adapter, D5): with the graph enabled, the constructor subscribes
 to `observe/stamp` on the family's trace bus (`ctx.trace`, provided by
-`@playform/ets-plugin-dsh-factory`) through `Source/Trace/Adapter.ts` - the graph no longer registers
-`ctx.root.on("fs/observed")` directly. The bus is probed, not injected (`inject` stays
+`@playform/ets-plugin-dsh-factory`) through `Source/Trace/Adapter.ts` - the graph no longer
+registers `ctx.root.on("fs/observed")` directly. The bus is probed, not injected (`inject` stays
 `["fs", "storage"]`), so direct construction and standalone use are unchanged; the factory's bundle
 must load first. An accepted stamp is coalesced through the trace library's detached loop (a queue
 keyed by path, one in-flight re-index per path, no timer) and re-indexed through `indexFile`; a

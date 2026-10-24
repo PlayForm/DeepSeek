@@ -76,9 +76,9 @@ restart). A cold mount logs `disabled (enabled=false)` and wires nothing.
 
 ## The ledger
 
-One log per module: `~/.dsh/playform/ets-hook-dsh-workspace-observe.log` (config `logFile`). The strings
-are the contract (byte-exact, `observe: ` prefix; the durable file lines are the `[ISO] message`
-forms):
+One log per module: `~/.dsh/playform/ets-hook-dsh-workspace-observe.log` (config `logFile`). The
+strings are the contract (byte-exact, `observe: ` prefix; the durable file lines are the
+`[ISO] message` forms):
 
 ```
 observe: disabled (enabled=false)

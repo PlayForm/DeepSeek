@@ -29,7 +29,9 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/ets-plugin-dsh-workspace-reflect.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-plugin-dsh-workspace-reflect.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The default rename scope: "block" renames inside the operation's span
 	// only; "file" renames whole-word across the whole file (the one-call

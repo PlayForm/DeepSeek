@@ -39,7 +39,8 @@ Source/
 
 - **Loader contract:** `name` = `plugin-dsh-route` (the four agreeing places: the package name, the
   `name` export, the State build's `module:` option, the `logFile` default
-  `~/.dsh/playform/ets-plugin-dsh-route.log`); `apply` returns nothing; `inject = ["pluginFactory"]`.
+  `~/.dsh/playform/ets-plugin-dsh-route.log`); `apply` returns nothing;
+  `inject = ["pluginFactory"]`.
 - **The determinism contract:** `Resolve` is pure - the same request and the same policy always
   produce the same route. No LLM involvement, no ambiguity, no clock reads.
 - **The silence contract:** the orchestrator is never bothered. Corrections and resolutions are

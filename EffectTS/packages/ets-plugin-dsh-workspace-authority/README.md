@@ -41,16 +41,16 @@ one shields only within the revocation grace). `evict` keeps the record in the g
 
 ## Config (all volatile)
 
-| Field                      | Default                                                       | Meaning                                                            |
-| -------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `enabled`                  | `false`                                                       | the master switch                                                  |
+| Field                      | Default                                                           | Meaning                                                            |
+| -------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `enabled`                  | `false`                                                           | the master switch                                                  |
 | `log` / `logFile`          | `true` / `~/.dsh/playform/ets-plugin-dsh-workspace-authority.log` | the durable ledger                                                 |
-| `defaultTtlMs`             | `300000`                                                      | the default lease TTL                                              |
-| `maxLeasesPerHolder`       | `8`                                                           | the lease ceiling                                                  |
-| `maxCapabilitiesPerHolder` | `16`                                                          | the capability ceiling                                             |
-| `revocationGraceMs`        | `0`                                                           | the revoked capability's shield time                               |
-| `policy`                   | `[]`                                                          | `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}` |
-| `automation.*`             | the D6 block (see below)                                      | the per-action allowlist (the shared factory block)                |
+| `defaultTtlMs`             | `300000`                                                          | the default lease TTL                                              |
+| `maxLeasesPerHolder`       | `8`                                                               | the lease ceiling                                                  |
+| `maxCapabilitiesPerHolder` | `16`                                                              | the capability ceiling                                             |
+| `revocationGraceMs`        | `0`                                                               | the revoked capability's shield time                               |
+| `policy`                   | `[]`                                                              | `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}` |
+| `automation.*`             | the D6 block (see below)                                          | the per-action allowlist (the shared factory block)                |
 
 ### The policy block (D6) - the `automation` key
 

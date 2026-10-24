@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  Check,
   CheckAsync,
   Finish,
   Ledger,
@@ -204,6 +205,59 @@ const runTest = async () => {
       assert.deepEqual(Run.Fs.stats, []);
       assert.deepEqual(Run.Fs.reads, []);
       assert.deepEqual(Run.Fs.writes, []);
+    });
+  }
+  {
+    const Graph = StandardGraph();
+    const Roots = [];
+    const Index = Graph.indexWorkspace;
+    Graph.indexWorkspace = (Root, Options) => {
+      Roots.push(Root);
+      return Index(Root, Options);
+    };
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), Graph);
+    const AgentSession = { id: "session-1" };
+    const Probed = [];
+    Run.Context.workingDirectory = {
+      get: (Session_) => {
+        Probed.push(Session_);
+        return "/session/root";
+      }
+    };
+    const Result = await Tool(Run, "workspace_index").execute(
+      {},
+      { agent: { session: AgentSession } }
+    );
+    const Bare = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+    const BareRoots = [];
+    const BareIndex = Bare.Graph.indexWorkspace;
+    Bare.Graph.indexWorkspace = (Root, Options) => {
+      BareRoots.push(Root);
+      return BareIndex(Root, Options);
+    };
+    await Tool(Bare, "workspace_index").execute({}, { agent: { session: AgentSession } });
+    Check(Count, "T7: an absent path defaults to the session working directory", () => {
+      assert.equal(Roots[0], "/session/root", "the graph receives the session cwd");
+      assert.equal(Probed[0], AgentSession, "the service is asked for THIS session");
+      assert.equal(Result.files, 2);
+      assert.ok(
+        Run.Lines.includes(
+          "plugin-dsh-workspace: workspace: index /session/root (0 indexed, 0 skipped, 0 failed, 2 files)"
+        ),
+        JSON.stringify(Run.Lines)
+      );
+      assert.equal(
+        BareRoots[0],
+        void 0,
+        "a missing service falls back to the absent root"
+      );
+      assert.ok(
+        Bare.Lines.includes(
+          "plugin-dsh-workspace: workspace: index (cwd) (0 indexed, 0 skipped, 0 failed, 2 files)"
+        ),
+        JSON.stringify(Bare.Lines)
+      );
     });
   }
   return Finish(Count, "Tools-And-Packet");

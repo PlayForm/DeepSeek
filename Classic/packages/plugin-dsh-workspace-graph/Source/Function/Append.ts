@@ -23,10 +23,7 @@ export default (StateRef: State, Message: string): void => {
 		try {
 			const Ledger = Expand(StateRef.Ledger);
 			FileSystem.mkdirSync(Parent(Ledger), { recursive: true });
-			FileSystem.appendFileSync(
-				Ledger,
-				`[${new Date().toISOString()}] graph: ${Message}\n`,
-			);
+			FileSystem.appendFileSync(Ledger, `[${new Date().toISOString()}] graph: ${Message}\n`);
 		} catch {
 			/* ledger best-effort */
 		}

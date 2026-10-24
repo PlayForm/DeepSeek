@@ -1,5 +1,5 @@
-import type Projection from "../Interface/Projection.js";
 import type { Intent, Knowledge } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
 export default _default;
 declare function _default(
 /** The loaded (or cold) knowledge, mutated in place. */

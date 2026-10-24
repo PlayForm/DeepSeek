@@ -21,8 +21,8 @@ denies - its surfaces are the notice and, only when learning is on, one PROPOSAL
 live pack).
 
 The conventions are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `convention/` domain. A
-repository that ships `.dsh/pack.yml` (or a user-layer pack at
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `convention/`
+domain. A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents; a repository without a
 pack stays silent.
 

@@ -29,7 +29,7 @@ Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md`.
 | Field             | Type     | Default                                                 | Volatile | Meaning                                                                                     |
 | ----------------- | -------- | ------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------- |
 | `log`             | boolean  | `true`                                                  | yes      | Ledger enabled                                                                              |
-| `logFile`         | string   | `~/.dsh/playform/ets-hook-dsh-search-suggester.log`         | yes      | The suggester's own ledger (one log per module)                                             |
+| `logFile`         | string   | `~/.dsh/playform/ets-hook-dsh-search-suggester.log`     | yes      | The suggester's own ledger (one log per module)                                             |
 | `enabled`         | boolean  | `true` (patch ships `false`)                            | yes      | The master switch                                                                           |
 | `threshold`       | number   | `0.75`                                                  | yes      | The default confidence gate (destructive intents: 0.85 in the pack)                         |
 | `maxCandidates`   | number   | `7`                                                     | yes      | Maximum candidates in one note                                                              |

@@ -28,7 +28,7 @@ shared algebra of section 3).
 | Field             | Type     | Default                                                                   | Volatile | Meaning                                                              |
 | ----------------- | -------- | ------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------- |
 | `log`             | boolean  | `true`                                                                    | yes      | Ledger enabled                                                       |
-| `logFile`         | string   | `~/.dsh/playform/ets-hook-dsh-doc-suggester.log`                              | yes      | The suggester's own ledger (one log per module)                      |
+| `logFile`         | string   | `~/.dsh/playform/ets-hook-dsh-doc-suggester.log`                          | yes      | The suggester's own ledger (one log per module)                      |
 | `enabled`         | boolean  | `true` (patch ships `false`)                                              | yes      | The master switch                                                    |
 | `threshold`       | number   | `0.75`                                                                    | yes      | The default confidence gate (the pack rows override per family)      |
 | `tools`           | string[] | `["read","grep","glob","write","edit","raw-write"]`                       | yes      | The judged doc-task tools                                            |

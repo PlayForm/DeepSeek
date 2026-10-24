@@ -4,7 +4,7 @@ The configuration schema (all knobs volatile; hot edits commit without remountin
 
 | Field             | Type              | Default                                              |
 | ----------------- | ----------------- | ---------------------------------------------------- |
-| `logFile`         | string            | `~/.dsh/playform/ets-hook-dsh-workspace-monitor.log`     |
+| `logFile`         | string            | `~/.dsh/playform/ets-hook-dsh-workspace-monitor.log` |
 | `enabled`         | boolean           | `false`                                              |
 | `domain`          | string            | `workspace_monitor`                                  |
 | `debounceMs`      | number            | `250`                                                |

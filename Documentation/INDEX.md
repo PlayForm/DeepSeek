@@ -56,7 +56,7 @@ statuses:
       Guides/                      the operating manuals (7)
       Reports/                     the audits and diagnoses (6)
       Plugins/                     the registry documents (3)
-      Testing/                     the per-plugin live test plans (36)
+      Testing/                     the per-plugin live test plans (35)
       Archive/                     the one-shot records (45, in 8 topics)
         Smoke-Restructure/  Site/  Live-Containers/  Tool-Coach/
         Split/  CCR/  Normalize/  Tomorrow-Review/
@@ -245,11 +245,11 @@ acceptance bar, the activation loop, the dogfood scenarios).
 
 | Document (Documentation/Plugins/)                            | Status | Kind                                                                      |
 | ------------------------------------------------------------ | ------ | ------------------------------------------------------------------------- |
-| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record (the 99-package registry)                                   |
+| [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record (the 101-package registry)                                  |
 | [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | active | living-record (built as PoCs)                                             |
 | [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active | standard (the one-file suite summary, incl. the trace and pack libraries) |
 
-### Testing - the per-plugin live test plans (36)
+### Testing - the per-plugin live test plans (35)
 
 The shared methodology + one plan per plugin: [README.md](Testing/README.md) (the activation check,
 the T1-T5 tiers, the fix loop, the safety rules) and 35 per-plugin files

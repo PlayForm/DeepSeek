@@ -43,7 +43,7 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | ---------- | --------------------------------------------------- | ---------------------------------------- |
 | `enabled`  | `false`                                             | Master switch (the IDLE-forever posture) |
 | `log`      | `true`                                              | Ledger enabled                           |
-| `logFile`  | `~/.dsh/playform/ets-hook-dsh-workspace-audit.log`      | The plugin's own ledger                  |
+| `logFile`  | `~/.dsh/playform/ets-hook-dsh-workspace-audit.log`  | The plugin's own ledger                  |
 | `domain`   | `workspace_audit`                                   | The KV domain name                       |
 | `maxLines` | `2000`                                              | The line ring bound                      |
 | `exclude`  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |

@@ -103,14 +103,17 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "Attach: P1/P2/P5 labels + the in-flight disposal effect";
 		{
 			Check(Count, Sub, () => {
+				// The D5 trace bus: the factory's constructor registers the
+				// `trace` fiber effect (its disposer) before the flavor's three.
 				assert.deepEqual(
 					ctx.effects.map((e: any) => e[0]),
 					[
+						"trace",
 						"hook-dsh-pinner-package-jobs",
 						"hook-dsh-pinner-package-inflight",
 						"hook-dsh-pinner-package-storage",
 					],
-					"Attach: the three lifecycle effects",
+					"Attach: the trace effect + the three lifecycle effects",
 				);
 				const flight = new AbortController();
 				st.Inflight.set("probe", { controller: flight });

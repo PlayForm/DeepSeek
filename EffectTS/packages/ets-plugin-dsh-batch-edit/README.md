@@ -104,18 +104,18 @@ Plus the module-owned `removed <file>` line for the `remove` action. The ledger 
 Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
 ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
 
-| Field              | Default                                     | Meaning                                                                  |
-| ------------------ | ------------------------------------------- | ------------------------------------------------------------------------ |
-| `enabled`          | `false`                                     | The master switch                                                        |
-| `log`              | `true`                                      | The ledger switch (the factory's shared volatile cell)                   |
+| Field              | Default                                         | Meaning                                                                  |
+| ------------------ | ----------------------------------------------- | ------------------------------------------------------------------------ |
+| `enabled`          | `false`                                         | The master switch                                                        |
+| `log`              | `true`                                          | The ledger switch (the factory's shared volatile cell)                   |
 | `logFile`          | `~/.dsh/playform/ets-plugin-dsh-batch-edit.log` | The module ledger                                                        |
-| `machinesPerAgent` | `2`                                         | Open machines per agent                                                  |
-| `opsPerCommit`     | `64`                                        | Op lines per commit (overflow goes to `opfile`)                          |
-| `deadlineMs`       | `120000`                                    | In-line commit deadline (1000..120000)                                   |
-| `strictMode`       | `false`                                     | Search-not-found errors vs skips                                         |
-| `interceptBash`    | `false`                                     | The advisory bash intercept (v1: tags and records, never denies)         |
-| `monitorChecksets` | `[]`                                        | Per-file check-set names (the live containers' vocabulary, labels in v1) |
-| `policy.*`         | D6 defaults                                 | The per-action allowlist (the apply gate; see above)                     |
+| `machinesPerAgent` | `2`                                             | Open machines per agent                                                  |
+| `opsPerCommit`     | `64`                                            | Op lines per commit (overflow goes to `opfile`)                          |
+| `deadlineMs`       | `120000`                                        | In-line commit deadline (1000..120000)                                   |
+| `strictMode`       | `false`                                         | Search-not-found errors vs skips                                         |
+| `interceptBash`    | `false`                                         | The advisory bash intercept (v1: tags and records, never denies)         |
+| `monitorChecksets` | `[]`                                            | Per-file check-set names (the live containers' vocabulary, labels in v1) |
+| `policy.*`         | D6 defaults                                     | The per-action allowlist (the apply gate; see above)                     |
 
 ## Status
 

@@ -56,14 +56,14 @@ next refinement).
 
 ## Config
 
-| Field           | Type                              | Default                                        |
-| --------------- | --------------------------------- | ---------------------------------------------- |
-| `enabled`       | boolean                           | `false`                                        |
-| `domain`        | string                            | `workspace_merge`                              |
-| `mode`          | `"all-or-nothing" \| "survivors"` | `all-or-nothing`                               |
-| `maxFiles`      | number                            | `50`                                           |
-| `maxTotalBytes` | number                            | `1000000`                                      |
-| `policy`        | `Allowlist`                       | the D6 defaults (see above)                    |
+| Field           | Type                              | Default                                            |
+| --------------- | --------------------------------- | -------------------------------------------------- |
+| `enabled`       | boolean                           | `false`                                            |
+| `domain`        | string                            | `workspace_merge`                                  |
+| `mode`          | `"all-or-nothing" \| "survivors"` | `all-or-nothing`                                   |
+| `maxFiles`      | number                            | `50`                                               |
+| `maxTotalBytes` | number                            | `1000000`                                          |
+| `policy`        | `Allowlist`                       | the D6 defaults (see above)                        |
 | `logFile`       | string                            | `~/.dsh/playform/ets-hook-dsh-workspace-merge.log` |
 
 All volatile. Invalid config fails loud at load.

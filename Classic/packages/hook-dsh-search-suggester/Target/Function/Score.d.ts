@@ -1,5 +1,5 @@
-import type Projection from "../Interface/Projection.js";
 import type { Detection, KnowledgeRow, Verdict } from "../Interface/Execution.js";
+import type Projection from "../Interface/Projection.js";
 /** The gate input, built by Apply from the per-agent state and the config. */
 export interface Gate {
     /** The intent ids that emitted within the cooldown window. */

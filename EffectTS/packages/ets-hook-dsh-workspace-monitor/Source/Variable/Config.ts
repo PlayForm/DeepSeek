@@ -30,7 +30,9 @@ import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 import DefaultCheckSets from "@Variable/DefaultCheckSets.js";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-workspace-monitor.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-hook-dsh-workspace-monitor.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name reserved for the hook (its own domain name, no
 	// collision, the hook owns its record schema).

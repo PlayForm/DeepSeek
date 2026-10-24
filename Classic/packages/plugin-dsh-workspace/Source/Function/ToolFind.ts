@@ -1,8 +1,10 @@
-// ToolFind - the `workspace_find` tool (V4-1 §3.4): a name or pattern, a
-// kind and a limit in, the matching nodes with id, path, span, kind out -
-// a compact table plus the ids. Pagination is by CURSOR (the id of the last
-// node of the previous page), never by offset. The disabled plugin no-ops
-// to a clear refusal (the IDLE-forever posture).
+// ToolFind - the `workspace_find` tool (V4-1 §3.4): a name (EXACT) or a
+// pattern (a case-insensitive SUBSTRING over the node id and the node name -
+// the graph's frozen contract, Function/Find.ts; never a glob), a kind and a
+// limit in, the matching nodes with id, path, span, kind out - a compact
+// table plus the ids. Pagination is by CURSOR (the id of the last node of the
+// previous page), never by offset. The disabled plugin no-ops to a clear
+// refusal (the IDLE-forever posture).
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { Find } from "@Function/Query.js";
 import type { NodeKind } from "@Interface/Graph.js";
@@ -13,10 +15,14 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_find",
 		description:
-			"Find nodes in the workspace graph: by exact name or by glob pattern, optionally filtered by kind (File, Symbol, Block, Test, DocSection) and limited. Returns id, path, span, kind, fingerprint, version - no file bodies. Pagination is by cursor, not offset.",
+			"Find nodes in the workspace graph: `name` matches the node name exactly; `pattern` is a case-insensitive SUBSTRING matched against the node id and the node name (not a glob), optionally filtered by kind (File, Symbol, Block, Test, DocSection) and limited. Returns id, path, span, kind, fingerprint, version - no file bodies. Pagination is by cursor, not offset.",
 		parameters: {
 			name: { type: "string", description: "Exact node name to find." },
-			pattern: { type: "string", description: "Glob pattern on the node id or path." },
+			pattern: {
+				type: "string",
+				description:
+					"Case-insensitive substring matched against the node id and the node name (not a glob).",
+			},
 			kind: {
 				type: "string",
 				description: "Optional kind filter: File | Symbol | Block | Test | DocSection.",

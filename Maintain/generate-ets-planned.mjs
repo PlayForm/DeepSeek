@@ -261,8 +261,7 @@ const Patches = [
 	{
 		Twin: "ets-client-dsh-workspace-live",
 		File: "Source/prepublishOnly.sh",
-		Reason:
-			"the client bundle's loader id (the unquoted Build-Client-Bundle argument the quoted package rules cannot see)",
+		Reason: "the client bundle's loader id (the unquoted Build-Client-Bundle argument the quoted package rules cannot see)",
 		Find: "node ../../../Maintain/Build-Client-Bundle.mjs . Source/Client.ts @playform/client-dsh-workspace-live",
 		Replace:
 			"node ../../../Maintain/Build-Client-Bundle.mjs . Source/Client.ts @playform/ets-client-dsh-workspace-live",
@@ -285,7 +284,7 @@ const LearningSeams =
 	"// (`FakeStorage`, the authority/evidence fake-storage pattern: the open\n" +
 	"// capture, the map-backed tables, the version fence), so the learning smokes\n" +
 	"// exercise the service's real Record/Get/Put/Save semantics over a real KV\n" +
-	"// domain, and a \"reopen\" is a second service over the same tables. A folder\n" +
+	'// domain, and a "reopen" is a second service over the same tables. A folder\n' +
 	"// that never attaches a service gets the plugin's in-memory fallback - the\n" +
 	"// neutral path every pre-learning folder runs on.";
 
@@ -304,7 +303,7 @@ const LearningSeamsEts =
 const PatternHelper =
 	"/**\n" +
 	" * The REAL pattern service over a fake storage facility - the optional\n" +
-	" * service the plugin probes with `ctx.get(\"pattern\")`. Its own ledger is\n" +
+	' * service the plugin probes with `ctx.get("pattern")`. Its own ledger is\n' +
 	" * discarded (the learning assertions read Get/List, never the service's\n" +
 	" * lines). Attach it to a Run with `Run.Context.pattern = Pattern(Store)`.\n" +
 	" */\n" +
@@ -357,7 +356,7 @@ const HarnessPatches = SuggesterTwins.flatMap((Twin) => [
 		Find:
 			" * the open capture, the map-backed tables, the version fence. The REAL\n" +
 			" * PatternService opens a domain through it, so the learning smokes exercise\n" +
-			" * the service's own Record/Put/Save and the real KV round-trip; a \"reopen\" is\n" +
+			' * the service\'s own Record/Put/Save and the real KV round-trip; a "reopen" is\n' +
 			" * a second service over the SAME tables.",
 		Replace:
 			" * the open capture, the map-backed tables, the version fence. The Classic\n" +
@@ -444,7 +443,9 @@ for (const Twin of Twins) {
 	for (const File of Exclusion) {
 		if (File.endsWith("/")) {
 			if (FS.existsSync(Path.join(To, File))) {
-				throw new Error(`EXCLUDED FOLDER PRESENT: ${TwinName}/${File} - remove the stale copy.`);
+				throw new Error(
+					`EXCLUDED FOLDER PRESENT: ${TwinName}/${File} - remove the stale copy.`,
+				);
 			}
 			continue;
 		}

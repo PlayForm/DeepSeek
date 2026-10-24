@@ -417,7 +417,14 @@ var Fields = (Root, Refs, View, Path, Inherited, Depth) => {
                 switch (true) {
                   case (Resolved.type === "object" && IsRecord2(Resolved.dict)):
                     Result.push(
-                      ...Fields(Resolved, Refs, View, ChildPath, Volatile, Depth + 1)
+                      ...Fields(
+                        Resolved,
+                        Refs,
+                        View,
+                        ChildPath,
+                        Volatile,
+                        Depth + 1
+                      )
                     );
                     break;
                   default: {
@@ -569,9 +576,7 @@ function FormBody(props) {
   }
 }
 function Section(props) {
-  const [FormView, SetFormView] = (0, import_react2.useState)(
-    () => Read(props.section, props.ports)
-  );
+  const [FormView, SetFormView] = (0, import_react2.useState)(() => Read(props.section, props.ports));
   const [StatusView, SetStatusView] = (0, import_react2.useState)(
     () => Status(props.section, props.ports.live)
   );
@@ -1025,10 +1030,7 @@ var import_react4 = require("react");
 var NAMESPACE2 = "client-dsh-panel-family";
 function FamilyTab(props) {
   const [, SetVersion] = (0, import_react4.useState)(props.registry.getVersion());
-  (0, import_react4.useEffect)(
-    () => props.registry.subscribe(() => SetVersion(props.registry.getVersion())),
-    []
-  );
+  (0, import_react4.useEffect)(() => props.registry.subscribe(() => SetVersion(props.registry.getVersion())), []);
   const Sections = props.registry.entries(Slots_default.section);
   return (0, import_react4.createElement)(
     "div",

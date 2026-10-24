@@ -29,7 +29,9 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/ets-plugin-dsh-factory";
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-workspace-approve.log").volatile(),
+	logFile: Schema.string()
+		.default("~/.dsh/playform/ets-hook-dsh-workspace-approve.log")
+		.volatile(),
 	enabled: Schema.boolean().default(false).volatile(),
 	// The KV domain name (the hook's OWN domain - a new domain name has no
 	// collision and the hook owns its record schema).

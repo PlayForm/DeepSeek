@@ -8,9 +8,9 @@ folders live in this directory (see below). The `.mjs` fallback files are RETIRE
 I8): the folders are the arbiter now, and the per-suite before/after totals live in the totals
 ledger of `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`.
 
-The aggregate (2026-10-23 state): **269 Classic test folders, and 444 suites / 6,053 checks across
-both trees with EffectTS's 175** - the original 14 mechanics suites plus every package's own suites,
-all green via `node Maintain/Run-Smokes.mjs`.
+The aggregate (2026-10-24 state): **269 Classic test folders + 242 EffectTS test folders, and 511
+suites / 6,612 checks across both trees** - the original 14 mechanics suites plus every package's
+own suites, all green via `node Maintain/Run-Smokes.mjs`.
 
 - Each test loads the REAL built `Target/Library.js` of its bundle (the factory's own tests + the
   consumers' tests instantiate the REAL factory against a fake ctx).

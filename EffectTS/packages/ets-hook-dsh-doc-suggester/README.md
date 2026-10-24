@@ -27,9 +27,10 @@ row", "the frontmatter and style rules", "the site mirror"). A companion without
 emitted.
 
 The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `doc/` domain. A repository
-that ships `.dsh/pack.yml` (or a user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`) gets
-its OWN `doc/` families; a repository without a pack stays silent.
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `doc/` domain. A
+repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `doc/` families; a repository without a pack
+stays silent.
 
 ## The gate
 
@@ -71,11 +72,12 @@ default behaviour is unchanged byte-for-byte. A user can disable any heuristic (
 re-weight any of them (`weights`), and the decision record plus the `decided` line show the choice.
 
 Before the score, two workspace guards run: the workspace locator
-([`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack)'s `Locate`, whose signature comes from the resolved
-pack; the built-in default is `Documentation/ARCHIVE-STYLE.md`) abstains `foreign-workspace` when
-the call belongs to another repository, and the existence filter drops every companion that does not
-exist under that root (abstaining `no-companions` when the winning family has none left). A note
-therefore never names a path from this repository's graph in a workspace that does not carry it.
+([`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack)'s `Locate`, whose signature comes from the
+resolved pack; the built-in default is `Documentation/ARCHIVE-STYLE.md`) abstains
+`foreign-workspace` when the call belongs to another repository, and the existence filter drops
+every companion that does not exist under that root (abstaining `no-companions` when the winning
+family has none left). A note therefore never names a path from this repository's graph in a
+workspace that does not carry it.
 
 ## The delivery
 

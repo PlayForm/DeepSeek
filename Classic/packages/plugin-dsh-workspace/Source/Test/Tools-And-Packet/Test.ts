@@ -6,6 +6,7 @@
 // the tool output.render contract.
 import assert from "node:assert/strict";
 import {
+	Check,
 	CheckAsync,
 	Finish,
 	Ledger,
@@ -225,6 +226,67 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Run.Fs.stats, []);
 			assert.deepEqual(Run.Fs.reads, []);
 			assert.deepEqual(Run.Fs.writes, []);
+		});
+	}
+
+	// Group T7: the index default path (the live sweep's defect, 2026-10-24):
+	// an absent `path` must resolve the SESSION's working directory through the
+	// harness's optional `workingDirectory` service - never the graph's own
+	// `.` (the PROCESS cwd) - and a missing service must fall back to it. The
+	// awaits sit in the group body so the SYNC check runs before Finish counts
+	// the folder (a check left unawaited could fail after the count printed).
+	{
+		const Graph = StandardGraph();
+		const Roots: (string | undefined)[] = [];
+		const Index = Graph.indexWorkspace;
+		Graph.indexWorkspace = (Root?: string, Options?: { maxFiles?: number }) => {
+			Roots.push(Root);
+			return Index(Root, Options);
+		};
+		rm();
+		const Run = Make(Validate({ logFile: Ledger, enabled: true }), Graph);
+		const AgentSession = { id: "session-1" };
+		const Probed: unknown[] = [];
+		Run.Context.workingDirectory = {
+			get: (Session_: unknown) => {
+				Probed.push(Session_);
+				return "/session/root";
+			},
+		};
+		const Result = await Tool(Run, "workspace_index").execute(
+			{},
+			{ agent: { session: AgentSession } },
+		);
+		// The guarded fallback: no service -> the graph's own `.` resolution.
+		const Bare = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+		const BareRoots: (string | undefined)[] = [];
+		const BareIndex = Bare.Graph.indexWorkspace;
+		Bare.Graph.indexWorkspace = (Root?: string, Options?: { maxFiles?: number }) => {
+			BareRoots.push(Root);
+			return BareIndex(Root, Options);
+		};
+		await Tool(Bare, "workspace_index").execute({}, { agent: { session: AgentSession } });
+		Check(Count, "T7: an absent path defaults to the session working directory", () => {
+			assert.equal(Roots[0], "/session/root", "the graph receives the session cwd");
+			assert.equal(Probed[0], AgentSession, "the service is asked for THIS session");
+			assert.equal(Result.files, 2);
+			assert.ok(
+				Run.Lines.includes(
+					"plugin-dsh-workspace: workspace: index /session/root (0 indexed, 0 skipped, 0 failed, 2 files)",
+				),
+				JSON.stringify(Run.Lines),
+			);
+			assert.equal(
+				BareRoots[0],
+				undefined,
+				"a missing service falls back to the absent root",
+			);
+			assert.ok(
+				Bare.Lines.includes(
+					"plugin-dsh-workspace: workspace: index (cwd) (0 indexed, 0 skipped, 0 failed, 2 files)",
+				),
+				JSON.stringify(Bare.Lines),
+			);
 		});
 	}
 	return Finish(Count, "Tools-And-Packet");

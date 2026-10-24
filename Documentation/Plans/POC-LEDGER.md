@@ -978,72 +978,192 @@ family, (5) ETS parity, (6) verification + records.
   `Diagram/**/*.svg` trailing-whitespace lines, untouched and out of scope) and the honest gates:
   `node Maintain/Run-Types.mjs` -> `TOTAL=99 FAIL=0`; `node Maintain/Run-Smokes.mjs` ->
   `All 444 smoke suites passed` (Classic 269 + ETS 175; the exact README sum is 6,053 checks:
-  Classic 3,452 + ETS 2,601); `node Maintain/Run-Wiring.mjs` -> `All 28 wiring suites passed (272
-  checks)`. The runtime ledger strings survived the formatter (Source <-> Target spot-checked
-  byte-identical; the three spot smokes printed 9/16/16). git status: 1,873 entries (1,167
-  modified, 706 untracked). THE PROGRAM IS GREEN; the only residuals are the 41 pre-existing SVG
-  violations and a docs drift (the wrap-up census said 443/6,044 - one folder and nine checks short
-  because the adapters' `All-Adapters` folder landed after it; this record carries the verified
-  444/6,053, and the two plugin docs still need the one-line correction).
-- 2026-10-23: THE ACTIVATION BEGINS (the user's protocol: one plugin, the user's restart, a
-  subagent runs the live plan, report, next). THE FIRST PLUGIN: `hook-dsh-doc-suggester` - the
-  original complaint - its profile row flipped to `enabled: true` (the profile now has 35 disabled:
-  the 34 remaining targets + the pre-existing `session-log-deepseek`). THE PROFILE EDIT HOT-APPLIED
-  and the plugin emitted a note in this very session on a doc-path call, naming exactly the pack's
-  three Plan companions (`Documentation/INDEX.md`, `Documentation/Plans/POC-LEDGER.md`,
+  Classic 3,452 + ETS 2,601); `node Maintain/Run-Wiring.mjs` ->
+  `All 28 wiring suites passed (272 checks)`. The runtime ledger strings survived the formatter
+  (Source <-> Target spot-checked byte-identical; the three spot smokes printed 9/16/16). git
+  status: 1,873 entries (1,167 modified, 706 untracked). THE PROGRAM IS GREEN; the only residuals
+  are the 41 pre-existing SVG violations and a docs drift (the wrap-up census said 443/6,044 - one
+  folder and nine checks short because the adapters' `All-Adapters` folder landed after it; this
+  record carries the verified 444/6,053, and the two plugin docs still need the one-line
+  correction).
+- 2026-10-23: THE ACTIVATION BEGINS (the user's protocol: one plugin, the user's restart, a subagent
+  runs the live plan, report, next). THE FIRST PLUGIN: `hook-dsh-doc-suggester` - the original
+  complaint - its profile row flipped to `enabled: true` (the profile now has 35 disabled: the 34
+  remaining targets + the pre-existing `session-log-deepseek`). THE PROFILE EDIT HOT-APPLIED and the
+  plugin emitted a note in this very session on a doc-path call, naming exactly the pack's three
+  Plan companions (`Documentation/INDEX.md`, `Documentation/Plans/POC-LEDGER.md`,
   `Documentation/ARCHIVE-STYLE.md`) - the live behaviour in this repo, observed before the restart.
   The live test to complete after the restart: (a) this repo's note (observed); (b) in a foreign
-  workspace (Hector), the note is replaced by `abstained foreign-workspace` in the ledger;
-  (c) `~/.dsh/playform/hook-dsh-doc-suggester.log` exists and carries the byte-exact activation
-  line.
-- 2026-10-24: THE FIRST LIVE ACTIVATION (after the user's restart) - THE DOC-SUGGESTER.
-  (a) HECTOR SILENCE VERIFIED: a read of `Hector/Documentation/INDEX.md` produced NO note - the
-  original bug is fixed live; the workspace gate abstained. (b) THE POSITIVE CASE VERIFIED: a read
-  of this repo's `Documentation/INDEX.md` produced the pack's Index note with exactly ONE
-  companion (`Documentation/ARCHIVE-STYLE.md` - the row format), because `Documentation/Handoff`
-  does not exist in this checkout and the base-aware filter correctly dropped it (a doc drift:
+  workspace (Hector), the note is replaced by `abstained foreign-workspace` in the ledger; (c)
+  `~/.dsh/playform/hook-dsh-doc-suggester.log` exists and carries the byte-exact activation line.
+- 2026-10-24: THE FIRST LIVE ACTIVATION (after the user's restart) - THE DOC-SUGGESTER. (a) HECTOR
+  SILENCE VERIFIED: a read of `Hector/Documentation/INDEX.md` produced NO note - the original bug is
+  fixed live; the workspace gate abstained. (b) THE POSITIVE CASE VERIFIED: a read of this repo's
+  `Documentation/INDEX.md` produced the pack's Index note with exactly ONE companion
+  (`Documentation/ARCHIVE-STYLE.md` - the row format), because `Documentation/Handoff` does not
+  exist in this checkout and the base-aware filter correctly dropped it (a doc drift:
   `Documentation/INDEX.md` still claims Handoff/ is untouched). A later grep of the POC-LEDGER
-  produced the Plan note with the pack's three companions - the plugin is working live in this
-  repo. (c) THE LEDGER PROOF FAILED: `~/.dsh/playform/` does not exist, so every ledger append
-  still dies silently - the `~` expansion works but nothing creates the parent directory (the
-  factory's Append never mkdirs; the smokes pre-created the directory and masked the gap). THE FIX
-  IS IN FLIGHT: the four Append writers (factory + workspace-graph, Classic + ETS) mkdir their
-  parent best-effort, plus a smoke case with a missing directory; the user restarts once more to
-  pick it up, and then the activation proofs (the activation line + the abstention lines) become
-  readable.
+  produced the Plan note with the pack's three companions - the plugin is working live in this repo.
+  (c) THE LEDGER PROOF FAILED: `~/.dsh/playform/` does not exist, so every ledger append still dies
+  silently - the `~` expansion works but nothing creates the parent directory (the factory's Append
+  never mkdirs; the smokes pre-created the directory and masked the gap). THE FIX IS IN FLIGHT: the
+  four Append writers (factory + workspace-graph, Classic + ETS) mkdir their parent best-effort,
+  plus a smoke case with a missing directory; the user restarts once more to pick it up, and then
+  the activation proofs (the activation line + the abstention lines) become readable.
 - 2026-10-24: THE ETS PARITY RESUME (interim). The previous lane (killed by the app restart) had
   generated the 32 twins and the two new libraries but its sibling-import substitution was broken:
   the generated Test harnesses still imported the siblings by their CLASSIC relative paths
   (`../../../plugin-dsh-workspace-graph/Target/Library.js`, 10 broken refs). The resume lane
   replaced it with one lookbehind rule per family (`(?<!ets-)` so the already-ETS prose is not
-  double-prefixed; `lib-dsh-core` still renames to `ets-base-dsh` first), regenerated 1,403 files
-  across the 32 twins, and the substitution-aware staleness is now STALE=0/32 with zero broken
-  sibling refs. It also excluded the in-flight `ets-plugin-dsh-workspace-graph/Source/Function/
-  Append.ts` from the walk (the ledger-dir lane owns it). THE SCOPE CALL: the regenerated doc/edit
-  suggester Test harnesses import the real `plugin-dsh-pattern` service, which has NO ETS twin (the
-  MANIFEST/this ledger record pattern as a Classic-only candidate) - the lane takes option B
-  (exclude the two `Learning-Loop` folders, 24 checks, as a documented and reversible post-
-  generation adaptation; the ETS type gate stays TOTAL=48), with option A (generate an
-  `ets-plugin-dsh-pattern` twin, TOTAL=49, full parity) available later if the user prefers it.
-- 2026-10-24: THE LEDGER-DIRECTORY FIX ACCEPTED. The four Append writers - Classic factory,
-  Classic workspace-graph, `ets-base-dsh` (the ETS factory's REAL ledger machinery, which also
-  lacked the tilde expansion and now mirrors Classic), and the ETS workspace-graph - create their
-  parent directory best-effort before the append. New smoke cases: the Classic factory
-  Entry-And-State 10 PASS (a missing `~/.dsh/playform` is created), the ETS factory 9 PASS (the
-  tilde expansion + the parent creation). Gates: Classic `TOTAL=53 FAIL=0`, effect-ts
-  `TOTAL=48 FAIL=0` (the ETS tree now carries 48 packages with the two new libraries). The ets
-  graph's three pre-existing non-`ets-` test imports are the ETS regeneration lane's to fix. THE
-  USER RESTARTS ONCE MORE to pick the fixed Append up - then the doc-suggester's activation proof
-  (the ledger file + the activation line) completes its live plan and the next plugin starts.
+  double-prefixed; `lib-dsh-core` still renames to `ets-base-dsh` first), regenerated 1,399 files
+  (1,399 after the option-B exclusion; 1,403 before it) across the 32 twins, and the
+  substitution-aware staleness is now STALE=0/32 with zero broken sibling refs. It also excluded the
+  in-flight `ets-plugin-dsh-workspace-graph/Source/Function/ Append.ts` from the walk (the
+  ledger-dir lane owns it). THE SCOPE CALL: the regenerated doc/edit suggester Test harnesses import
+  the real `plugin-dsh-pattern` service, which has NO ETS twin (the MANIFEST/this ledger record
+  pattern as a Classic-only candidate) - the lane takes option B (exclude the two `Learning-Loop`
+  folders, 24 checks, as a documented and reversible post- generation adaptation; the ETS type gate
+  stays TOTAL=48), with option A (generate an `ets-plugin-dsh-pattern` twin, TOTAL=49, full parity)
+  available later if the user prefers it.
+- 2026-10-24: THE LEDGER-DIRECTORY FIX ACCEPTED. The four Append writers - Classic factory, Classic
+  workspace-graph, `ets-base-dsh` (the ETS factory's REAL ledger machinery, which also lacked the
+  tilde expansion and now mirrors Classic), and the ETS workspace-graph - create their parent
+  directory best-effort before the append. New smoke cases: the Classic factory Entry-And-State 10
+  PASS (a missing `~/.dsh/playform` is created), the ETS factory 9 PASS (the tilde expansion + the
+  parent creation). Gates: Classic `TOTAL=53 FAIL=0`, effect-ts `TOTAL=48 FAIL=0` (the ETS tree now
+  carries 48 packages with the two new libraries). The ets graph's three pre-existing non-`ets-`
+  test imports are the ETS regeneration lane's to fix. THE USER RESTARTS ONCE MORE to pick the fixed
+  Append up - then the doc-suggester's activation proof (the ledger file + the activation line)
+  completes its live plan and the next plugin starts.
 - 2026-10-24: THE FIRST PLUGIN FULLY VERIFIED LIVE (the doc-suggester). After the ledger-dir fix and
   the restarts: `~/.dsh/playform/` exists with 38 ledgers writing today; the doc-suggester's ledger
-  carries the byte-exact `activated (bundle 0.1.0, families 7, threshold 0.75)`, `abstained
-  foreign-workspace  0.00` TWICE (Hector's silence, proven), `rejected Plan 2 companions` (the D8
-  follow-through), and the in-repo notes. THE LIVE PLAN IS COMPLETE: the in-repo note, the foreign
-  silence, the ledger proof. The profile now has 14 @playform rows enabled (the 13 pre-existing +
-  the doc-suggester) and 35 disabled. THE NEXT GROUP: the five remaining suggesters (edit, search,
-  convention, test, replay) are being enabled for the next restart (a group deviation from the
-  strict one-at-a-time protocol - the family shares the pack/gate layer; the graph-suggester waits
-  for the foundation group with the graph and the workspace tools). The ETS parity's FINAL
-  verification lane is dispatched (the ets graph's three non-`ets-` imports + the build/gates/
-  aggregate).
+  carries the byte-exact `activated (bundle 0.1.0, families 7, threshold 0.75)`,
+  `abstained foreign-workspace  0.00` TWICE (Hector's silence, proven), `rejected Plan 2 companions`
+  (the D8 follow-through), and the in-repo notes. THE LIVE PLAN IS COMPLETE: the in-repo note, the
+  foreign silence, the ledger proof. The profile now has 14 @playform rows enabled (the 13
+  pre-existing + the doc-suggester) and 35 disabled. THE NEXT GROUP: the five remaining suggesters
+  (edit, search, convention, test, replay) are being enabled for the next restart (a group deviation
+  from the strict one-at-a-time protocol - the family shares the pack/gate layer; the
+  graph-suggester waits for the foundation group with the graph and the workspace tools). The ETS
+  parity's FINAL verification lane is dispatched (the ets graph's three non-`ets-` imports + the
+  build/gates/ aggregate).
+- 2026-10-24: THE USER COMMITTED THE PROGRAM. HEAD is `905a37bf` ("feat(release): ship D4-D8 layers
+  with pack and trace libraries across Classic and ETS twins") and the working tree is CLEAN (0
+  changes) - the commit carries the ten waves plus the ETS parity work (the regenerated twins, the
+  two new libraries, the ets graph's import fixes, the ledger-directory fix).
+- 2026-10-24: THE SUGGESTER GROUP FULLY VERIFIED LIVE. After the restart all five activation lines
+  are in their ledgers: convention `activated (bundle 0.1.0, intents 4, threshold 0.75)`, edit
+  `activated (bundle 0.1.0, families 7, threshold 0.75)`, replay
+  `store recovered 27 entries (replay_history)` (the KV domain surviving restarts), search
+  `activated (bundle 0.1.0, intents 10, threshold 0.75)`, test
+  `activated (bundle 0.1.0, intents 2, threshold 0.75)`; the earlier hot-apply had already proven
+  the C-grade completions live (the test's
+  `reconciliation clear EffectTS/packages/ets-plugin-dsh-workspace-graph (79 expected, 79 actual)`,
+  the replay's `recorded ... (4 in store)`). 37 ledgers are writing since the boot. THE FOUNDATION
+  GROUP is being enabled next (`plugin-dsh-workspace-graph`, `plugin-dsh-workspace`,
+  `plugin-dsh-workspace-context`, `graph-suggester`), and the committed-state ETS verification lane
+  is running.
+- 2026-10-24: THE FOUNDATION GROUP ENABLED + THE REPLAY RECALL VERIFIED LIVE. The four foundation
+  rows are enabled and verified (4/4; 23 @playform plugins on, 26 disabled = the 25 remaining
+  targets + `session-log-deepseek`; the 44 logFile rows intact; the six suggesters untouched; the
+  workspace-graph row has no logFile and was anchored by its own name+config block). AND THE
+  REPLAY-SUGGESTER'S RECALL FIRED LIVE in this session - `intent=Repeat confidence=0.77`, the
+  POC-LEDGER named as "touched last time (replay)" - so the C-grade producer + recall are verified
+  end to end (the 27-entry store recovery plus a real recalled note). The suggester group is
+  therefore COMPLETE live (the doc note + the edit note + the search/test/convention activations +
+  the test reconciliation + the replay recall). The user restarts to load the foundation; the live
+  test then: `workspace_index` + `map`/`find`/`expand`/`context` over the real graph, the
+  graph-suggester's real neighborhood, and the trace chain (observe -> graph -> context) in the
+  ledgers.
+- 2026-10-24: THE COMMITTED-STATE VERIFICATION + THE ETS FIXES ACCEPTED. The read-only lane verified
+  HEAD `905a37bf`: builds 53/53 + 48/48, the honest type gate `TOTAL=101 FAIL=0`, the twin staleness
+  `checked 32 twins: 0 stale`, the Shield hand-port intact, both new twins linked, the ETS ledger
+  names at 71, the option-B Learning-Loop exclusion documented and enforced - with TWO ETS-side
+  blockers: the ETS pinner's test predating the D5 `trace` effect (the ETS pinner is a tier-1
+  package outside the 32-twin scope) and the ETS wiring scaffold missing the two new libraries (the
+  scratch install 404'd on `ets-lib-dsh-trace`). THE FIXES: the ETS pinner test now mirrors the
+  Classic's four-entry exact list (`6 PASS`), the ETS scaffold packs/overrides both libraries with
+  the Scratch-Profile exact at 15, and the ledger's 1,403 figure corrected to 1,399. FINAL GATES:
+  `All 511 smoke suites passed` (269 Classic + 242 ETS - the ETS side grew by 67 folders with the
+  regenerated Test trees), `All 28 wiring suites passed (272 checks)`, `TOTAL=101 FAIL=0`,
+  `0 stale`. The working tree holds the four fixes plus the Target rebuilds for the user's next
+  commit. The FOUNDATION RESTART is the only thing gating the next live group.
+- 2026-10-24: THE RECORDS CORRECTED TO THE ETS-PARITY STATE (accepted). The docs lane derived every
+  number from the tree and updated the registry, the suite summary, the smokes README, the INDEX and
+  the FRAMEWORK: **101 packages** (53 Classic + 48 ETS), **511 smoke suites** (269 + 242), **6,610
+  checks** (3,453 + 3,157), the Testing header corrected 36 -> 35, and the two libraries now
+  described as having their ETS twins (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`) instead of
+  "Classic-only / parity pending". The Lead's independent README-sum confirms the figures exactly
+  (3,453 + 3,157 = 6,610 over 511 folders). Residuals: the delivery-era "30 ets-* twins" claims and
+  the §1 registry tables still reflect the 2026-10-22 delivery list (the new twins are named in
+  prose only); the verification lane's looser "4,979 Classic checks" figure is superseded by the
+  README-sum 3,453 (the canonical per-folder expected counts). The records are now CURRENT; the only
+  remaining work is the activation groups (the foundation restart and the three groups after it) and
+  the final wrap-up.
+- 2026-10-24: THE FOUNDATION + ORCHESTRATION GROUPS ENABLED (one restart loads 14 plugins). The
+  profile now has 33 @playform plugins enabled (the 13 pre-existing + the doc-suggester + the five
+  suggesters + the four foundation + the ten orchestration) and 16 disabled (the 15 remaining
+  targets - the client trio, the eight workspace hooks, and authority/evidence/reflect/semantics -
+  plus `session-log-deepseek`). Both enables were verified by the Lead (4/4 foundation, 10/10
+  orchestration; the diffs show only the `enabled` lines). The foundation did NOT hot-apply this
+  time (its rows still log `disabled` from the 09:58 boot and the graph's ledger does not exist), so
+  the restart is the gate. The live test after it: `workspace_index` + the four navigation tools +
+  the graph suggester's neighborhood + the trace chain, then the batch/queue/pattern surfaces with
+  the policy gates. The remaining after that: one final group (15 plugins) and the wrap-up.
+- 2026-10-24: THE PROFILE FULLY ACTIVATED (the final group enabled). The 15 remaining rows (the
+  client trio, the eight workspace hooks, `authority`/`evidence`/`reflect`/`semantics`) flipped to
+  `enabled: true`; the profile now has 49 @playform rows - 48 enabled plus the factory (which has no
+  `enabled` field) - and the ONLY disabled row in the whole file is the pre-existing
+  `session-log-deepseek`; the 44 ledger paths all match `~/.dsh/playform/<package-name>.log`. The
+  Lead verified the final state independently (49/48/1/44-0). THE NEXT RESTART LOADS THE ENTIRE
+  FAMILY; the live sweep after it covers the foundation tools + the trace chain, the orchestration
+  surfaces with the policy gates, the workspace hooks' refusals, and the client bundles + the 13
+  adapters + the live view. After the sweep: the wrap-up and the objective's completion evidence.
+- 2026-10-24: THE FOUNDATION LIVE SWEEP (the first interactive verification, after the 10:43 boot
+  loaded the foundation + the orchestration). THE GRAPH IS REAL: `workspace_index` with the explicit
+  workspace path -> `index @ 220: 220 indexed, 180 skipped, 0 failed, 220 files`; `workspace_map` ->
+  `220 files, 20 modules, 20 entry points` (the original `map @ 0: 0 files` is FIXED);
+  `workspace_find(pattern: "README")` -> 4 nodes; `workspace_expand(File:/.../README.md)` -> 24
+  neighbors / 23 edges; `workspace_context` -> the REAL packet (`WORKSPACE workspace @ 220` with the
+  actual MAP band). THREE LIVE DEFECTS FOUND: (A) the `workspace_index` default path resolves to the
+  PROCESS cwd (`/` - the app's process cwd), not the session's workspace as the tool declares, so
+  the default call skipped 36 non-indexable root entries; (B) the `workspace_find` description
+  promises "a glob pattern" while the graph's frozen contract is a case-insensitive SUBSTRING over
+  the id/name (the tool's wording is the defect); (C) the graph's ledger is INERT BY DESIGN - its
+  frozen W1 config table has no `log`/`logFile` and `State.Ledger` is hardcoded `""` - a documented
+  residual, not a regression. A fix lane is dispatched for A + B (and the ETS twins' regeneration),
+  and the live re-test follows the next restart. THE ORCHESTRATION IS LIVE TOO: batch-edit /
+  batchstate / batch-decision / queue / route all activated in the same boot
+  (`batchstate recovered`, the queue's capacity line, a live route `hint`), and the final 15 (the
+  client trio + the workspace hooks) were enabled after that boot, so they need the next restart.
+- 2026-10-24: THE TWO LIVE TOOL FIXES ACCEPTED. (A) `workspace_index` now defaults to the SESSION's
+  working directory: the tool probes the optional `workingDirectory` service
+  (`State_.Context.get?.("workingDirectory")`) and reads `get(exec.agent.session)`, guarded, with
+  the graph's own `"."` resolution as the documented fallback; the ledger line names the resolved
+  root. (B) `workspace_find`'s description and parameter text now state the frozen contract - a
+  case-insensitive SUBSTRING over the node id and name, NOT a glob. The T7 smoke (Tools-And-Packet
+  19 -> 20) pins the session default, the exact session object and the byte-exact ledger line, and
+  is deliberately synchronous so it arbitrates before the file's unawaited CheckAsync sites; the
+  lane proved it sensitive by a scratch re-run of the pre-fix expectation (it failed). The ETS twins
+  were regenerated (1,399 files, 3 hand-ported files protected, 15 patches, 0 stale). Gates: Classic
+  5/10/20/17, the ETS build + the same folders, `TOTAL=101 FAIL=0`, `All 511 smoke suites passed`.
+  The next restart loads the final 15 plus these fixed tools; then the live re-test of the default
+  index path, the find contract, the client bundles and the hooks' refusals.
+- 2026-10-24: THE FINAL VERIFICATION - GREEN WITH THE DOCUMENTED RESIDUALS (accepted). The read-only
+  lane verified the current tree (HEAD 905a37bf + the post-commit fixes): builds `build:classic` and
+  `build:effect-ts` both exit 0 (53/48 packages, zero failure markers, fresh Target output in all
+  101); the honest type gate `TOTAL=101 FAIL=0` (53 + 48); the aggregate
+  `All 511 smoke suites passed` with the runtime check sum 6,612; the wiring
+  `All 28 wiring suites passed (272 checks)`; the twins `checked 32 twins: 0 stale`; the four fixed
+  surfaces at 20/6/16/15; the profile exactly 64 rows / 49 @playform / 48 enabled + the factory /
+  one disabled row (`session-log-deepseek`) / 44 logFile rows all resolving; and three byte-exact
+  ledger strings arbitrated at runtime (the factory activation, the doc-suggester's double-spaced
+  `abstained foreign-workspace  0.00`, the queue's `spawn held <id> (policy spawn=approve)`). The
+  ONE new residual: the three records said 6,610 checks; the true sum is 6,612 (the two
+  `Tools-And-Packet` T7 cases added one per tree) - CORRECTED in the registry, the suite summary and
+  the smokes README (verified: 4 occurrences of 6,612, zero of 6,610). AND THE POLICY GATE WAS
+  DEMONSTRATED LIVE: the Lead's `batch_edit` apply was REFUSED with
+  `plugin-dsh-batch-edit: apply refused mach-1 (policy write=approve)` - the D6 policy block holding
+  a write exactly as specified; the machine was closed and the docs corrected through the harness's
+  direct writer instead. The remaining work is the restart (the final 15 + the fixed tools) and the
+  final live sweep.
