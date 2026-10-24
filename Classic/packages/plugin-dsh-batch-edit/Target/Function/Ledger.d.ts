@@ -1,4 +1,4 @@
-import type { MachineRecord } from "@Interface/Process.js";
+import type { MachineRecord } from "../Interface/Process.js";
 /** `machine opened <id> (<n> files, scope=<glob>)` */
 export declare const Opened: (Id: string, Machine: MachineRecord) => string;
 /** `inserted <file> at version <version>` */

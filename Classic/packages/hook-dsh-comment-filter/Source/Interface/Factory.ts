@@ -1,0 +1,30 @@
+// Factory - the STRUCTURAL VIEW of the injected @playform/plugin-dsh-factory
+// service (the family's class/service plugin, factory SCHEME.md sections 0-2).
+// The comment filter is a NON-MANIFEST module: it consumes the State builder
+// (cell unwrap + shared fields, section 2.10) and the ledger (Append +
+// Journal, section 2.1) - but NOT the fs/observed Wire (section 2.11,
+// fs/observed-hardwired to this family's silence): the comment filter has no
+// fs machinery at all. Its two registrations are the plain fiber-owned
+// `ctx.on(...)` pattern.
+//
+// The type arrives TYPE-ONLY from the factory package (erased at build - the
+// built Target has NO runtime import of the factory: at runtime the service
+// resolves from the profile through the injector, never through a module
+// import). The augmentation below publishes the typed vocabulary on the
+// cordis Context (plugin-development skill, item 12), so `ctx.pluginFactory`
+// is fully typed at every consumption site.
+//
+// The two EVENT declarations are NOT re-declared here: @deepseek-ai/dsh-tools
+// already augments `Events` with `tools/post-execute` (exec, result, next)
+// => Promise<PostToolDecision> and @deepseek-ai/dsh-agent (reached through
+// the dsh-tools type graph) augments it with `agent/pre-step` (payload, next)
+// => Promise<PreStepDecision> - re-declaring either would be a conflicting
+// duplicate.
+import type Factory from "@playform/plugin-dsh-factory";
+
+declare module "@deepseek-ai/cordis" {
+	interface Context {
+		/** The plugin-factory service (@playform/plugin-dsh-factory). */
+		pluginFactory: Factory;
+	}
+}

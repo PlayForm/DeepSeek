@@ -1,0 +1,12 @@
+*.log
+*.md-f
+*.sh
+.github/
+Configuration/
+Source/
+Source/Test/
+Target/Test/
+node_modules/
+pnpm-lock.yaml
+pnpm-workspace.yaml
+tsconfig.json

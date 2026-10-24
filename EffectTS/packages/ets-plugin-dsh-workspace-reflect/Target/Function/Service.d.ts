@@ -1,7 +1,7 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type { Operation } from "@Interface/Operation.js";
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
+import type { Operation } from "../Interface/Operation.js";
+import type Reply from "../Interface/Reply.js";
+import type State from "../Interface/State.js";
 export default class WorkspaceReflect extends Service {
     /** The apply-built state the methods read and write. */
     State: State;

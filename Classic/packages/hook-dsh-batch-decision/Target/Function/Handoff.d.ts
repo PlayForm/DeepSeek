@@ -1,6 +1,6 @@
 import type { Context } from "@deepseek-ai/cordis";
-import type { BatchDecision, BatchProposal, BatchResult } from "@Interface/Batch.js";
-import { type ApprovalService, type IngesterService, type PassOnService } from "@Interface/Siblings.js";
+import type { BatchDecision, BatchProposal, BatchResult } from "../Interface/Batch.js";
+import { type ApprovalService, type IngesterService, type PassOnService } from "../Interface/Siblings.js";
 export declare const Resolve: (Context_: Context, Key: string) => unknown;
 export declare const PassOn: (Context_: Context) => PassOnService | undefined;
 export declare const Ingester: (Context_: Context) => IngesterService | undefined;

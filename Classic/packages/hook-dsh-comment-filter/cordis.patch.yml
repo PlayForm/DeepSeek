@@ -1,0 +1,43 @@
+# Bundle patch for @playform/hook-dsh-comment-filter.
+# The comment filter is a NEW OVERPASS FLAVOR: it registers one
+# tools/post-execute waterfall listener (prepended, like the family's other
+# overpass arms) that strips code comments from `read` and `ccr_retrieve`
+# tool results before they re-enter the model, and one agent/pre-step
+# waterfall listener that stashes the last user message (lowercased) as the
+# per-task intent that gates the strip. The intent gate is the point: a task
+# whose last user message is ABOUT comments (docstring, jsdoc, license,
+# annotation, inline comment, ...) leaves the read result untouched; any other
+# task strips. It is the deliberate opposite of the normalize flavors on one
+# point: `read` is NOT exempt here (they exempt it as byte-contracted).
+#
+# The transform understands the read tool's model-facing envelope - the
+# <path>/<type>file</type>/<content> wrapper whose body is `{n}: {line}`
+# lines plus a `(...)` footer - preserves every line-number prefix and every
+# line byte-for-byte (a full-line comment becomes an empty line, a trailing
+# comment is removed from its start), and is string-aware per language, so it
+# never strips what only looks like a comment (a `//` inside a string, a
+# Python docstring, a JS template literal). An unknown extension passes
+# through untouched: never strip what cannot be parsed. Under-stripping is
+# acceptable; corrupting code is not.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the app
+# is restarted (bundle layers compose at host boot). A file: dependency alone
+# is NOT activation.
+#
+# The config below repeats the schema defaults for the two volatile switches
+# a profile is most likely to tune: `enabled` (the whole filter - it maps onto
+# `State.Active`, not the ledger gate; see Variable/Config.ts) and `intent`
+# (the per-task gate). `targets` and `exempt` are structural: editing them
+# remounts the plugin, which is the honest posture for the filter's decision
+# surface.
+- insert:
+      - id: hook-dsh-comment-filter
+        name: "@playform/hook-dsh-comment-filter"
+        config:
+            logFile: ~/.dsh/playform/hook-dsh-comment-filter.log
+            enabled: true
+            intent: true
+            notice: true
