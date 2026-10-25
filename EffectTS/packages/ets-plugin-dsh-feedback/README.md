@@ -22,8 +22,9 @@ READ-STATUS: unread / read-at <session>
 
 The block is transferred through the parentage MECHANICALLY - the block flows up the tree as text
 (the inbox splice machinery), one hop per session boundary, and it is ALWAYS modified in the parent
-sessions: the parents APPEND their deltas, they never edit or sanitize the honest content. The
-reading is the recipient's CHOICE - the transfer never forces the reading.
+sessions: the parents APPEND their deltas, they never edit or sanitize the honest content.
+
+The reading is the recipient's CHOICE - the transfer never forces the reading.
 
 ## The service surface (`ctx.feedback`)
 
@@ -71,8 +72,10 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 
 The member is a passive collector - `record` and `suggest` are automatic; the write/commit/spawn
 verdicts are declared for uniformity and stay the shipped `approve` (the member never writes,
-commits or spawns). A resolved pack's `policy` section overrides the defaults per action (the wiring
-is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+commits or spawns).
+
+A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The smokes
 

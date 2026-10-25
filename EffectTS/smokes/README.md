@@ -4,9 +4,11 @@ The fourteen mechanics suites - **core 14 / factory 42 / governor 82 / pinner 32
 normalize-dash 184 / quotes 104 / ellipsis 104 / spaces 104 / invisible 104 / fullwidth 104 /
 normalize-file 112 / ccr 147 / tool-coach 129** - live as per-test folders under their packages
 (`EffectTS/packages/<bundle>/Source/Test/`, compiled into `Target/Test/`); the seven wiring suites'
-folders live in this directory (see below). The `.mjs` fallback files are RETIRED (the wrap-up lane,
-I8): the folders are the arbiter now, and the per-suite before/after totals live in the totals
-ledger of `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`.
+folders live in this directory (see below).
+
+The `.mjs` fallback files are RETIRED (the wrap-up lane, I8): the folders are the arbiter now, and
+the per-suite before/after totals live in the totals ledger of
+`Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`.
 
 The aggregate (2026-10-22 state): **175 EffectTS test folders, and 359 suites / 5,337 checks across
 both trees with Classic's 184** - the original 14 mechanics suites plus every package's own suites,
@@ -44,8 +46,9 @@ folders under the tree-identity substitutions; its two former ETS-only folders (
 (`EffectTS/packages/ets-base-dsh/Source/Test/`). The folders run standalone
 (`node EffectTS/packages/<bundle>/Target/Test/<Name>/Test.js`) and under the aggregate
 (`node Maintain/Run-Smokes.mjs`, which compares each folder's printed PASS count against its
-README's expected count — the vacuously-green guard). The former `.mjs` suite files are removed; the
-folder README sums equal the recorded baselines.
+README's expected count — the vacuously-green guard).
+
+The former `.mjs` suite files are removed; the folder README sums equal the recorded baselines.
 
 ## The wiring suites (the live battery)
 
@@ -54,10 +57,14 @@ The seven wiring suites (`scratch-profile`, `profile-assembly`, `patch-layer`, `
 `~/.dsh` harness against the real built targets - so their converted folders live in this smokes
 tree: `Test/<Suite>/{Gate-And-Harness,Live-Assertions}/`. Each folder holds one `Test.ts` + one
 `README.md`; `sh Build-Tests.sh` (in this directory) compiles them in place to `Test.mjs` (build
-output, git-ignored) and type-checks the tree. The `Gate-And-Harness` folder carries the suite's
-skip guard and shared harness contract; the `Live-Assertions` folder carries the suite's live
-checks. The folders import the real `wiring-live.mjs` (no copy) and keep the same `DSH_TEST_SCRATCH`
-gate - unset means `SKIPPED (no scratch home)` with exit 0. Their former `.mjs` originals are
-retired like the mechanics suites'; the folders are the arbiter. They run under
-`node Maintain/Run-Wiring.mjs` (which sets the gate and guards each folder's printed count against
-its README) and are never forced green in the aggregate.
+output, git-ignored) and type-checks the tree.
+
+The `Gate-And-Harness` folder carries the suite's skip guard and shared harness contract; the
+`Live-Assertions` folder carries the suite's live checks.
+
+The folders import the real `wiring-live.mjs` (no copy) and keep the same `DSH_TEST_SCRATCH` gate -
+unset means `SKIPPED (no scratch home)` with exit 0.
+
+Their former `.mjs` originals are retired like the mechanics suites'; the folders are the arbiter.
+They run under `node Maintain/Run-Wiring.mjs` (which sets the gate and guards each folder's printed
+count against its README) and are never forced green in the aggregate.

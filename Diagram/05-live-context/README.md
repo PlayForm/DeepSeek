@@ -87,8 +87,11 @@ log only when the reason changes, so the ledger stays quiet on steady state.
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-live-containers`, built on
 `@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core` and the `@playform/ets-plugin-dsh-factory`
-service. It has no Effect-native stage of its own: the section assembly, the block table and the
-token engine are the Classic pipeline, consuming the Effect-backed factory for state and the ledger.
+service.
+
+It has no Effect-native stage of its own: the section assembly, the block table and the token engine
+are the Classic pipeline, consuming the Effect-backed factory for state and the ledger.
+
 The behavior contract is byte-identical, and the ledger path is the same file as the Classic twin,
 `~/.dsh/live-containers.log`, which is safe only because the two trees are never active in one
 graph. The diagram is [live-containers.mmd](EffectTS/live-containers.mmd) and
@@ -99,10 +102,13 @@ graph. The diagram is [live-containers.mmd](EffectTS/live-containers.mmd) and
 There is one member per tree and no sibling to compose with. The composition rule that matters is
 the activation rule: the package's own patch row is `enabled: false` and nothing else, so a cold
 mount is a no-op and the only way in is an explicit activate - edit the profile, set
-`enabled: true`, restart. The desktop profile does exactly that: it lists the bundle in
-`dsh.profile.bundles` and its own patch sets `enabled: true`, so in _this_ profile the plugin is
-activated rather than cold. At authoring time no `~/.dsh/live-containers.log` exists, so the ledger
-carries no activation proof yet; the activation line is the place to look after the next restart.
+`enabled: true`, restart.
+
+The desktop profile does exactly that: it lists the bundle in `dsh.profile.bundles` and its own
+patch sets `enabled: true`, so in _this_ profile the plugin is activated rather than cold.
+
+At authoring time no `~/.dsh/live-containers.log` exists, so the ledger carries no activation proof
+yet; the activation line is the place to look after the next restart.
 
 The refresh policy is the second composition rule. `refresh: "request"` is cache-hostile for an
 always-differing block: the provider's prefix reuse is invalidated from the first changed token, and
@@ -119,13 +125,16 @@ summarized.
 The bundle is one `insert:` row. The package's own row is `enabled: false`; a profile that wants the
 plugin writes `enabled: true` in its own patch. The plugin registers its `system-prompt/assemble`
 listener, its `agent/pre-step` and `tools/post-execute` observers, and - in the wave-2 half - the
-detach arms and the two tools. Its counters are its own observations: exact token counts are not
-available to plugins, so the gauge variables are honest approximations.
+detach arms and the two tools.
+
+Its counters are its own observations: exact token counts are not available to plugins, so the gauge
+variables are honest approximations.
 
 Boot order is: profile bundles → the plugin mounts → a cold mount logs `disabled (enabled=false)`,
-an activated mount logs the activation line and renders on the first assembly. The model observes
-the framed section; the user observes a clock and counters that are correct at ask-time, and a
-prompt whose static part is unchanged.
+an activated mount logs the activation line and renders on the first assembly.
+
+The model observes the framed section; the user observes a clock and counters that are correct at
+ask-time, and a prompt whose static part is unchanged.
 
 A `file:` dependency alone is not activation. The package must be listed in `dsh.profile.bundles`,
 its row must say `enabled: true`, and the host must be restarted.

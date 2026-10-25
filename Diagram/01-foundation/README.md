@@ -41,13 +41,16 @@ status: active
 
 **Classic.** What it does. The core is the family's pure machinery layer: zero runtime dependencies,
 no loader contract, no Config, no ledger. It exists because the governance hooks and the six stream
-flavors kept re-implementing the same lists, guards, tables and dispatch. The governance half
-exports `Section` (the four NPM dependency sections), `Default` (the six exclusion segments),
-`Suppress` (the contained-throw composer), `Policy` (the update-policy loader), `Refusal` (the
-refusal guard), `Activate` (the `activated (...)` string mechanics) and `Update` (the shared
-`Dispatch`/`Settle` envelope). The normalize half exports the six character tables, `Replace` /
-`ReplaceMap`, and `Chunk` / `Block`; the `Overpass` arms (`RewriteBlocks`, `StepBatch`,
-`ToolResults`, `Command`) are exported too.
+flavors kept re-implementing the same lists, guards, tables and dispatch.
+
+The governance half exports `Section` (the four NPM dependency sections), `Default` (the six
+exclusion segments), `Suppress` (the contained-throw composer), `Policy` (the update-policy loader),
+`Refusal` (the refusal guard), `Activate` (the `activated (...)` string mechanics) and `Update` (the
+shared `Dispatch`/`Settle` envelope).
+
+The normalize half exports the six character tables, `Replace` / `ReplaceMap`, and `Chunk` /
+`Block`; the `Overpass` arms (`RewriteBlocks`, `StepBatch`, `ToolResults`, `Command`) are exported
+too.
 
 **The chain.**
 
@@ -156,10 +159,13 @@ the factory's `Append`; the base supplies only the mechanism.
 `Section`, `Default`, `Suppress`, `Policy`, `Refusal`, the six tables, `Replace` and `ReplaceMap` -
 and it deliberately does **not** carry `Chunk`, `Block`, `Update` or `Activate`: in the ETS tree
 those live in the base (`Source/Stream`, `Source/Function/Update.ts`), so the package imports
-nothing from `effect` and re-exports neither. The Effect delta is therefore an inversion of the
-Classic layout: the pure tables and guards stay here, the dispatch and envelope move one package
-down. The ledger strings are byte-identical to the Classic core's (the core writes none; the
-`Suppress`, `Policy` and `Refusal` strings are the same bytes). The diagram is
+nothing from `effect` and re-exports neither.
+
+The Effect delta is therefore an inversion of the Classic layout: the pure tables and guards stay
+here, the dispatch and envelope move one package down.
+
+The ledger strings are byte-identical to the Classic core's (the core writes none; the `Suppress`,
+`Policy` and `Refusal` strings are the same bytes). The diagram is
 [lib-core.mmd](EffectTS/lib-core.mmd) and ([SVG](EffectTS/lib-core.svg)).
 
 ### @playform/ets-plugin-dsh-factory
@@ -170,9 +176,11 @@ stays a `Service` class because the loader contract is not an Effect concept; be
 machinery becomes `Context.Service`s provided by `Layer`s composed into one runtime, with sync
 methods running through `Effect.runSync` and promise seams through `Effect.runPromise` - no
 `RunOptions` are passed, so the caller's abort signal rides the write seam rather than interrupting
-a fiber. The ledger identity is the point: every consumer string is byte-identical to the Classic
-tree, and the factory still owns none of them. The diagram is [factory.mmd](EffectTS/factory.mmd)
-and ([SVG](EffectTS/factory.svg)).
+a fiber.
+
+The ledger identity is the point: every consumer string is byte-identical to the Classic tree, and
+the factory still owns none of them. The diagram is [factory.mmd](EffectTS/factory.mmd) and
+([SVG](EffectTS/factory.svg)).
 
 ## How the group composes
 
@@ -185,7 +193,9 @@ factory still works.
 The library is not a bundle. `@playform/lib-dsh-core` has no `cordis.patch.yml`, no `apply` and no
 Config: it is a plain `link:` dependency that the hooks and flavors import. Adding it to
 `dsh.profile.bundles` would do nothing, and adding it to `dependencies` alone does not activate
-anything. The dependency shape is flat: the Classic factory declares no runtime dependency at all,
+anything.
+
+The dependency shape is flat: the Classic factory declares no runtime dependency at all,
 `lib-dsh-core` declares none, and every Classic hook declares both. In the ETS tree the base
 declares only `effect` (plus two harness peer dependencies), `ets-lib-dsh-core` declares the base,
 `ets-plugin-dsh-factory` declares the base, and every hook declares all three.
@@ -217,9 +227,11 @@ libraries are imported directly, with no service lookup.
 
 Boot order is: profile bundles -> loader applies the factory -> `pluginFactory` is provided -> the
 loader resolves the PENDING consumers -> each consumer's `apply` registers its listeners and logs
-its activation line. The model observes nothing from this group directly; the user observes that the
-other groups work, that governed writes do not fight the author's next edit, and that each plugin's
-ledger answers for its own activation.
+its activation line.
+
+The model observes nothing from this group directly; the user observes that the other groups work,
+that governed writes do not fight the author's next edit, and that each plugin's ledger answers for
+its own activation.
 
 A `file:` dependency alone is not activation. The package must be listed in the profile's
 `dsh.profile.bundles` and the host restarted; the bundle layers compose at boot, and the factory's

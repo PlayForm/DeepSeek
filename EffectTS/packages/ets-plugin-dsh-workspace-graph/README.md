@@ -20,10 +20,11 @@ After the parse, `indexFile` asks the workspace-semantics service
 (`@playform/plugin-dsh-workspace-semantics`, probed through `ctx.get` - the graph's `inject` stays
 `["fs", "storage"]`) for the file's reference list and emits one `references` edge per resolved
 reference: from the node that USES the symbol (the enclosing `Symbol` node, else the `File`) to the
-used `Symbol` node, carrying the use site's line span. The honesty rules: no service (or a service
-that answers `undefined`) means NO references edges; a target that names no `Symbol` node of the
-same file is dropped rather than turned into a dangling edge; the `graph: indexed ...` edge count
-includes the new edges and no new ledger line is added.
+used `Symbol` node, carrying the use site's line span.
+
+The honesty rules: no service (or a service that answers `undefined`) means NO references edges; a
+target that names no `Symbol` node of the same file is dropped rather than turned into a dangling
+edge; the `graph: indexed ...` edge count includes the new edges and no new ledger line is added.
 
 The class-form loader contract: `export default class WorkspaceGraph extends Service` registered
 under the exact name `workspaceGraph`, `static inject = ["fs", "storage"]`, and `static Config` (the
@@ -38,8 +39,9 @@ row and the schema default): the service registers, and `indexFile` skips with t
 listings, breadth-first), never follows an entry whose canonical identity is outside the root (a
 symlink out of the root is rejected before any read), does not descend an excluded directory, stops
 after `maxFiles` candidates (`Config.maxFiles`, default 2000), and indexes every candidate through
-the existing `indexFile` - the per-file gates are reused, never duplicated. It returns
-`{ indexed, skipped, failed, files }` and ledgers a summary line.
+the existing `indexFile` - the per-file gates are reused, never duplicated.
+
+It returns `{ indexed, skipped, failed, files }` and ledgers a summary line.
 
 `neighborhood(path, limit?)` serves the connected component the graph-suggester's declared contract
 consumes (the definition, the importers/tests, the dependencies, the doc block) - derived from the
@@ -49,14 +51,19 @@ not faked.
 The INCREMENTAL wiring (the trace adapter, D5): with the graph enabled, the constructor subscribes
 to `observe/stamp` on the family's trace bus (`ctx.trace`, provided by
 `@playform/ets-plugin-dsh-factory`) through `Source/Trace/Adapter.ts` - the graph no longer
-registers `ctx.root.on("fs/observed")` directly. The bus is probed, not injected (`inject` stays
-`["fs", "storage"]`), so direct construction and standalone use are unchanged; the factory's bundle
-must load first. An accepted stamp is coalesced through the trace library's detached loop (a queue
-keyed by path, one in-flight re-index per path, no timer) and re-indexed through `indexFile`; a
-coalesced pair produces ONE byte-exact `graph: reindexed <path> (<status>)` line. An absent stamp, a
-removed record and a replaced record emit `graph/invalidated`; a stored record emits
-`graph/indexed` - the consumers (the context packet memo) use them. A disabled graph wires nothing;
-an excluded path is ignored silently.
+registers `ctx.root.on("fs/observed")` directly.
+
+The bus is probed, not injected (`inject` stays `["fs", "storage"]`), so direct construction and
+standalone use are unchanged; the factory's bundle must load first.
+
+An accepted stamp is coalesced through the trace library's detached loop (a queue keyed by path, one
+in-flight re-index per path, no timer) and re-indexed through `indexFile`; a coalesced pair produces
+ONE byte-exact `graph: reindexed <path> (<status>)` line.
+
+An absent stamp, a removed record and a replaced record emit `graph/invalidated`; a stored record
+emits `graph/indexed` - the consumers (the context packet memo) use them.
+
+A disabled graph wires nothing; an excluded path is ignored silently.
 
 The three NEW ledger lines the indexing trigger adds (the rest of the W1 list is unchanged,
 SCHEME.md section 8):
@@ -95,9 +102,10 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The graph's actions are index, all **AUTOMATIC**; it has **no gated action** (no file write, no
-batch commit, no spawn), so the block documents the posture and refuses nothing. The block is one
-volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+batch commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The plan
 

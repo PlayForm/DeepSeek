@@ -23,25 +23,32 @@ inside a fixed frame so the model cannot mistake it for harness state:
 
 The substitution engine is token replace ONLY - no eval, no expressions. An unknown token renders
 LITERALLY and logs `render unknown <id> <token>` - never a failure. Per-block `vars` override the
-built-ins. The wave-2 catalog kinds (the default block table ships 14 entries) are ACCEPTED in
-config from day one and render as skipped blocks - reason `unknown kind` - until the wave-2 render
-engine lands. Counters (messages, turns, since last tool) come from the plugin's own
-`agent/pre-step` and `tools/post-execute` observers - exact token counts are NOT available to
-plugins, so the gauge variables are honest approximations.
+built-ins.
 
-The wave-2 half extends the same plugin with the live tool-call transform (CAN-1: with `detach.mode`
-set, a command-runner call detaches into a `ctx.jobs` background job and the model immediately
-receives a SUCCESSFUL tool result
-`[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.`, the completion report
-arriving as a `live-containers-completion` dynamic-context user-role snapshot batched per turn),
-planted boards (CAN-2: `live_plant` + `[live-report]` pickup + the parent-turn lease with the
-`[stale]` self-declaration), the CAN-4 failsafe engine (silent, ledger-first, the per-turn
-meta-budget), and the CAN-5 suggester (a detached one-shot subagent suggests a CONFIGURED block,
-accepted/dismissed with one-word `live_container_set` verbs; privacy `redact` by default -
-`suggesterPrivacy: "verbatim"` forwards the user's request text and the config flag IS the consent
-surface). The wave-3 monitors put files (halted processes) into operational mode: for `watchlist`
-matches the plugin runs the file's check set between turns and renders one band per file in the live
-section - honest to the byte, additive information, never a gate.
+The wave-2 catalog kinds (the default block table ships 14 entries) are ACCEPTED in config from day
+one and render as skipped blocks - reason `unknown kind` - until the wave-2 render engine lands.
+
+Counters (messages, turns, since last tool) come from the plugin's own `agent/pre-step` and
+`tools/post-execute` observers - exact token counts are NOT available to plugins, so the gauge
+variables are honest approximations.
+
+The wave-2 half extends the same plugin with:
+
+- the live tool-call transform (CAN-1: with `detach.mode` set, a command-runner call detaches into a
+  `ctx.jobs` background job and the model immediately receives a SUCCESSFUL tool result
+  `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.`, the completion report
+  arriving as a `live-containers-completion` dynamic-context user-role snapshot batched per turn)
+- planted boards (CAN-2: `live_plant` + `[live-report]` pickup + the parent-turn lease with the
+  `[stale]` self-declaration)
+- the CAN-4 failsafe engine (silent, ledger-first, the per-turn meta-budget)
+- the CAN-5 suggester (a detached one-shot subagent suggests a CONFIGURED block, accepted/dismissed
+  with one-word `live_container_set` verbs; privacy `redact` by default -
+  `suggesterPrivacy: "verbatim"` forwards the user's request text and the config flag IS the consent
+  surface)
+
+The wave-3 monitors put files (halted processes) into operational mode: for `watchlist` matches the
+plugin runs the file's check set between turns and renders one band per file in the live section -
+honest to the byte, additive information, never a gate.
 
 The plugin ships DISABLED - the IDLE-forever posture: the bundle entry declares `enabled: false`
 only, it never appears in the profile's bundles, and it enables only by an explicit ACTIVATE (you

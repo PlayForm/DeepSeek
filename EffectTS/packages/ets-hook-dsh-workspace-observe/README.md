@@ -68,10 +68,13 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 This hook's action class is RECORD (it records one observation stamp per `fs/observed` event), and
-that class is **automatic**. The hook has **NO gated action** - it never writes a file, commits a
-batch or spawns an agent - so the block documents the posture and refuses nothing. The block is one
-volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+that class is **automatic**.
+
+The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
+the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The IDLE-forever posture
 

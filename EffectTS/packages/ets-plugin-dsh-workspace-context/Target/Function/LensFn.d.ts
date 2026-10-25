@@ -1,4 +1,4 @@
-import type Lens from "../Interface/Lens.js";
+import type Lens from "@Interface/Lens.js";
 interface Resolved {
     name: string;
     nodes: Set<string>;

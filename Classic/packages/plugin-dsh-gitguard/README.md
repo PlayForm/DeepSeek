@@ -55,9 +55,11 @@ block), mapped to `State.Verdicts` (`Allow` is already the git allow-list):
 
 The guard is read-only - it classifies and ledgers, never writes, commits or spawns - so its own
 action classes are `read` and `record` (automatic); the write/commit/spawn verdicts are declared for
-uniformity and stay the shipped `approve`. The block is one volatile object (a policy flip is
-hot-editable), and a resolved pack's `policy` section overrides the defaults per action (the wiring
-is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+uniformity and stay the shipped `approve`.
+
+The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement). The defaults are
+smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The configuration
 

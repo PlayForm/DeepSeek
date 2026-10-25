@@ -74,10 +74,11 @@ above (`kind` -> `disposition`), a different contract - the `plugin-dsh-route` p
 keyed its D6 block `automation` for the same reason.
 
 This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
-is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
-are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement). The
+defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The ledger (module-owned, byte-stable)
 

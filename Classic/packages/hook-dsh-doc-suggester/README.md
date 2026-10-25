@@ -7,12 +7,15 @@
 
 The doc-task **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
-call touches a documentation task - a plan, guide, skill, plugin-doc, index, site, or package-prose
-path in `read`, `grep`, `glob`, or an edit - prepends ONE labeled `additionalContexts` note naming
-the doc-graph companions the task conventionally requires: the INDEX row, the frontmatter
-statuses/registry/ index block, the archive style, the cross-references, the site mirror. The third
-consumer of the search-suggester's pattern algebra
+release).
+
+A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a call touches
+a documentation task - a plan, guide, skill, plugin-doc, index, site, or package-prose path in
+`read`, `grep`, `glob`, or an edit - prepends ONE labeled `additionalContexts` note naming the
+doc-graph companions the task conventionally requires: the INDEX row, the frontmatter
+statuses/registry/ index block, the archive style, the cross-references, the site mirror.
+
+The third consumer of the search-suggester's pattern algebra
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) section 8).
 
 ## The surfaces
@@ -27,45 +30,53 @@ consumer of the search-suggester's pattern algebra
 The documentation tree has a graph the model must keep coherent but usually discovers late: a plan
 edit must keep the INDEX row and the frontmatter statuses/registry/index block; a skill must keep
 its references and the session-orientation routing table; a content change must keep the site
-mirror. Like the edit suggester, this consumer owns the NOTIFY side of the pattern: it names the
-companions, never the change.
+mirror.
+
+Like the edit suggester, this consumer owns the NOTIFY side of the pattern: it names the companions,
+never the change.
 
 ## The families
 
-Seven, priority order: `Plan`, `Guide`, `Skill`, `PluginDoc`, `Index`, `Site`, `PackageProse`. Each
-family is a pack row: its path rules (regexes on the doc path the call names, with weights) and its
-companion set - each companion a path or glob with a prior and **one reason phrase** ("the index
+Seven, priority order: `Plan`, `Guide`, `Skill`, `PluginDoc`, `Index`, `Site`, `PackageProse`.
+
+Each family is a pack row: its path rules (regexes on the doc path the call names, with weights) and
+its companion set - each companion a path or glob with a prior and **one reason phrase** ("the index
 row", "the frontmatter and style rules", "the site mirror"). A companion without a reason is not
 emitted.
 
 The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `doc/` domain. A repository
-that ships `.dsh/pack.yml` (or a user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`) gets
-its OWN `doc/` families; a repository without a pack stays silent.
+[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `doc/` domain.
+
+A repository that ships `.dsh/pack.yml` (or a user-layer pack at
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `doc/` families; a repository without a pack
+stays silent.
 
 ## The gate
 
 The same algebra as the search and edit consumers: `k = sigmoid(sum(weights) - 0.6)`, the candidate
 scoring over the **pickable heuristics** (see below), and the noise control - a cooldown, a dedupe,
 a per-turn cap, and the already-touched filter (doc paths touched earlier this turn are dropped;
-when nothing remains, the verdict is an `already-touched` abstention). Every abstention and
-suppression is a ledger line.
+when nothing remains, the verdict is an `already-touched` abstention).
+
+Every abstention and suppression is a ledger line.
 
 ## The learning layer (D8)
 
 Every emitted note - and every gated silence worth learning from (`low-confidence`,
 `already-touched`) - records a **decision**: the family, the companion rows with their six pickable
 heuristic values (`scope`, `graph`, `prior`, `literal`, `history`, `accept`), the effective weight
-table, the enabled list, and a `pending` outcome placeholder. The record is logged (`decided ...`)
-and stored through the optional **pattern service** (`ctx.get("pattern")`, probed per use, never an
-inject); without one it lives in a bounded in-memory fallback (`storeLimit`, default 512), which is
-per instance and documented as such.
+table, the enabled list, and a `pending` outcome placeholder.
+
+The record is logged (`decided ...`) and stored through the optional **pattern service**
+(`ctx.get("pattern")`, probed per use, never an inject); without one it lives in a bounded in-memory
+fallback (`storeLimit`, default 512), which is per instance and documented as such.
 
 The note opens a **follow-through window** counted in judged calls (never a timer): a later call
 that names one of the note's companions is an **accept** for that companion and its family
 (`accepted <Family> <path>`); a window that reaches `learnWindow` judged calls untouched closes as a
-**soft reject** (`rejected <Family> <n> companions`). Both fill the decision record's outcome and
-move the learned accept rates.
+**soft reject** (`rejected <Family> <n> companions`).
+
+Both fill the decision record's outcome and move the learned accept rates.
 
 The score is `sum over the enabled heuristics of weight * value`:
 
@@ -86,8 +97,10 @@ Before the score, two workspace guards run: the workspace locator
 ([`@playform/lib-dsh-pack`](../lib-dsh-pack)'s `Locate`, whose signature comes from the resolved
 pack; the built-in default is `Documentation/ARCHIVE-STYLE.md`) abstains `foreign-workspace` when
 the call belongs to another repository, and the existence filter drops every companion that does not
-exist under that root (abstaining `no-companions` when the winning family has none left). A note
-therefore never names a path from this repository's graph in a workspace that does not carry it.
+exist under that root (abstaining `no-companions` when the winning family has none left).
+
+A note therefore never names a path from this repository's graph in a workspace that does not carry
+it.
 
 ## The delivery
 

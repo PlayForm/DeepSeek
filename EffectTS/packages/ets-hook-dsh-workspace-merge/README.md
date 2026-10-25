@@ -54,13 +54,17 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The commit is the hook's ONE gated action, and the policy is the **outer** gate: it runs before the
-atomic gates and before any write. An `approve` verdict for `commit` refuses the whole batch - the
-ledger records the byte-exact `merge held (<n> files) (policy commit=approve)` line, every operation
-is replied `rejected` with the policy reason, nothing is persisted, and **zero writes** reach the
-filesystem. Flip `policy.commit` to `auto` (or let a resolved pack override it) to let the next
-batch reach the gates. The block is one volatile object, so a policy flip is hot-editable without a
-remount; a resolved pack's `policy` section overrides the defaults per action (the wiring is the
-next refinement).
+atomic gates and before any write.
+
+An `approve` verdict for `commit` refuses the whole batch - the ledger records the byte-exact
+`merge held (<n> files) (policy commit=approve)` line, every operation is replied `rejected` with
+the policy reason, nothing is persisted, and **zero writes** reach the filesystem.
+
+Flip `policy.commit` to `auto` (or let a resolved pack override it) to let the next batch reach the
+gates.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger (byte-stable, module-owned)
 
@@ -82,10 +86,12 @@ merge: storage open failed: <reason>
 ## The plan
 
 The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an
-explicit ACTIVATE. The policy block and the commit hold are arbitrated by
-`Source/Test/Policy-Defaults`; the gates and the reply union by `Source/Test/Wiring-And-Gates` and
-`Source/Test/Commit-And-Replies`. This is the PoC build: the smoke suite and the ETS twin land at
-the end phase.
+explicit ACTIVATE.
+
+The policy block and the commit hold are arbitrated by `Source/Test/Policy-Defaults`; the gates and
+the reply union by `Source/Test/Wiring-And-Gates` and `Source/Test/Commit-And-Replies`.
+
+This is the PoC build: the smoke suite and the ETS twin land at the end phase.
 
 - [Workspace-Family/MERGE](../../../Documentation/Plans/Workspace-Family/MERGE.md) - the merge step.
 

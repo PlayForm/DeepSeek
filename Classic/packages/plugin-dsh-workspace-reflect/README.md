@@ -88,12 +88,16 @@ The reflective WRITES are the gated actions: `replace` and `rename` consult the 
 before the file is read or written. An `approve` verdict (the shipped default) refuses the operation
 with the byte-exact `replace held <path> (policy write=approve)` or
 `rename held <path> (policy write=approve)` line, the reply is `rejected` with
-`the policy holds the replace|rename (write=approve)`, and **zero writes** reach the filesystem. The
-fingerprint targeting is unchanged: the policy is the OUTER check, the fingerprint verification the
-inner one. Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next
-operation reach the write path. The block is one volatile object, so a policy flip is hot-editable
-without a remount; a resolved pack's `policy` section overrides the defaults per action (the wiring
-is the next refinement).
+`the policy holds the replace|rename (write=approve)`, and **zero writes** reach the filesystem.
+
+The fingerprint targeting is unchanged: the policy is the OUTER check, the fingerprint verification
+the inner one.
+
+Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next operation reach
+the write path.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger
 

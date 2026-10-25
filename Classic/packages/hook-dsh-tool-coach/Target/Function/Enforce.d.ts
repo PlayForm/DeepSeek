@@ -1,4 +1,4 @@
-import type { AgentState, Match } from "../Interface/Execution.js";
+import type { AgentState, Match } from "@Interface/Execution.js";
 /** The knobs Enforce reads (the live State values, already unwrapped). */
 export interface EnforceConfig {
     enforce: "off" | "write" | "all";

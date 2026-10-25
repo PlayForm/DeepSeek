@@ -58,10 +58,12 @@ actually has (the completion spec's wave 2c re-spec,
 `Test.ts`, the aggregate runner's roster (`Target/Test/<Folder>/Test.js`), and - when the workspace
 graph service is present - its `Test` nodes for the package. A drift (a folder without a README
 count, a README count whose `Test.ts` is gone, a suite the runner never runs, a graph node whose
-file is gone) emits ONE note naming the drifted files and the expected/actual counts. It is
-**read-only**: `node:fs` reads, never a write. A consistent tree logs one clear line per package
-root and stays silent; the note is gated exactly like the intent notes (workspace pack, `enabled`,
-cooldown, dedupe, per-turn cap).
+file is gone) emits ONE note naming the drifted files and the expected/actual counts.
+
+It is **read-only**: `node:fs` reads, never a write.
+
+A consistent tree logs one clear line per package root and stays silent; the note is gated exactly
+like the intent notes (workspace pack, `enabled`, cooldown, dedupe, per-turn cap).
 
 ## The noise controls
 
@@ -107,8 +109,10 @@ rate must be measured (the plan §10.3 kill criterion) before it is trusted.
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`Loader-And-Activation`, `Pack-Driven`, `Pipeline-And-Gates`, `Reconciliation`, `Workspace-Gate`.
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `Loader-And-Activation`, `Pack-Driven`, `Pipeline-And-Gates`, `Reconciliation`,
+`Workspace-Gate`.
 
 ## The plan
 

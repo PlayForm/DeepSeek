@@ -19,8 +19,10 @@ approval + the constraints - the approve step of the workspace family's invisibl
 An approval binds to the **exact candidate** - the concrete change set, identified by its path, its
 content fingerprint, and the file version observed at the approval - never a fuzzy intent. The
 constraints **travel with the approval**: a changed constraint set at approval time is a rejection,
-not an amendment. The decision records the **Commitment** (who accepted responsibility). The
-merge/execute side derives its **AuthorizationDecision** from the service's check.
+not an amendment.
+
+The decision records the **Commitment** (who accepted responsibility). The merge/execute side
+derives its **AuthorizationDecision** from the service's check.
 
 **An intent must not authorize its own means**: the approval of an intention never authorizes the
 implementation the agent later produces. The check only validates the implementation against the
@@ -48,9 +50,11 @@ synchronous recorder: no awaits, no throws, no I/O; own-actor events are ignored
 
 State lives in the hook's own KV domain named `workspace_approve` (config `domain`): one record per
 binding plus a bounded ring snapshot (the last `maxBindings`, default 1000). The sequence is the
-plugin's own monotonic counter - never a wall clock. Ledger lines (module-owned, prefixed
-`approve:`): `activated`, `disabled`, `bound`, `decided`, `rejected`, `revoked`, `refused`,
-`unknown`, `invalidated`, `checked`, `capped`, `failed`, `storage open failed`.
+plugin's own monotonic counter - never a wall clock.
+
+Ledger lines (module-owned, prefixed `approve:`): `activated`, `disabled`, `bound`, `decided`,
+`rejected`, `revoked`, `refused`, `unknown`, `invalidated`, `checked`, `capped`, `failed`,
+`storage open failed`.
 
 ## The configuration
 

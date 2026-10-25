@@ -93,10 +93,14 @@ The plugin registers the `dshQueue` service:
 
 `autoSpawn` is the switch between **assigning** and **launching**. It ships `false` on purpose: a
 spawn is a privileged action (D6 of the completion spec), so the queue assigns seats and ledgers
-until the user turns the launch on. With `autoSpawn: false` there is no `ctx.subagents` call and no
-spawn ledger line; the idle-slot automation is off too (an automatic assignment the plugin cannot
-launch would strand the task with a held seat). With `autoSpawn: true` the dispatcher launches, the
-child's result settles the task, and a released seat pulls the next queued task.
+until the user turns the launch on.
+
+With `autoSpawn: false` there is no `ctx.subagents` call and no spawn ledger line; the idle-slot
+automation is off too (an automatic assignment the plugin cannot launch would strand the task with a
+held seat).
+
+With `autoSpawn: true` the dispatcher launches, the child's result settles the task, and a released
+seat pulls the next queued task.
 
 ### The policy block (D6) - the outer gate
 
@@ -114,11 +118,13 @@ The policy is the **outer** gate, `autoSpawn` the **inner** one. An `approve` ve
 refuses the launch even with the knob on: the task stays `dispatched` with its seat held, and the
 ledger records the byte-exact `spawn held <id> (policy spawn=approve)` line - the task **waits** for
 the user (flip `policy.spawn` to `auto` to let the next assignment launch, or settle it explicitly
-with `Complete`/`Fail`/`Interrupt`). The precedence is **policy approve > knob**: the knob can never
-widen an approve verdict, while a knob that is off still refuses on its own and writes no line at
-all. The block is one volatile object, so a policy flip is hot-editable without a remount; a
-resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement).
+with `Complete`/`Fail`/`Interrupt`).
+
+The precedence is **policy approve > knob**: the knob can never widen an approve verdict, while a
+knob that is off still refuses on its own and writes no line at all.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <id> -> <child>`,
 `spawn held <id> (policy spawn=approve)`, `spawn skipped <id> (<reason>)`,
@@ -149,10 +155,13 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check. 
 
 The spawn, the idle-slot automation and the restart reconcile are implemented and smoke-arbitrated
 (`Source/Test/Spawn-And-Reconcile`); the policy gate and its precedence are arbitrated by
-`Source/Test/Policy-Defaults`. The durable queue store is the remaining piece: the reconcile takes
-the caller's persisted record because the family has no storage domain yet (the wave-3 storage
-migration is its home). A `spawn skipped` task keeps its seat until the orchestrator settles it - an
-honest gap, never a silent drop.
+`Source/Test/Policy-Defaults`.
+
+The durable queue store is the remaining piece: the reconcile takes the caller's persisted record
+because the family has no storage domain yet (the wave-3 storage migration is its home).
+
+A `spawn skipped` task keeps its seat until the orchestrator settles it - an honest gap, never a
+silent drop.
 
 - [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md) - the queue model.
 

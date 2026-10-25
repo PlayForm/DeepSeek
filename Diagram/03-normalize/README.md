@@ -51,7 +51,9 @@ status: active
 **Classic.** What it does. The dash flavor maps the unicode dash family to ASCII hyphen-minus: the
 em dash, the en dash, the U+2010-U+2015 family and seventeen exotic relatives (Armenian hyphen,
 Hebrew maqaf, Mongolian soft hyphen, double oblique hyphen, two- and three-em dash, wave dash, the
-vertical presentation dashes, fullwidth hyphen-minus). It also registers `raw-write`.
+vertical presentation dashes, fullwidth hyphen-minus).
+
+It also registers `raw-write`.
 
 **The chain.**
 
@@ -237,63 +239,83 @@ runs.
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-dash`, built on
 `@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core` and the `@playform/ets-plugin-dsh-factory`
-service. The Effect delta is the stream pipeline: the Classic async-generator wrapper becomes the
-base's real `Stream/Gate` transformer, adapted with `Stream.fromAsyncIterable(Next(), onError)` and
-an identity `onError`, and the module keeps only the `OnCount` callback, run as the final
-non-emitting section. Per-stream state lives in the Gate's `Stream.suspend` closure; the line is
-byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-dash.log`. The diagram is
-[dash.mmd](EffectTS/dash.mmd) and ([SVG](EffectTS/dash.svg)).
+service.
+
+The Effect delta is the stream pipeline: the Classic async-generator wrapper becomes the base's real
+`Stream/Gate` transformer, adapted with `Stream.fromAsyncIterable(Next(), onError)` and an identity
+`onError`, and the module keeps only the `OnCount` callback, run as the final non-emitting section.
+
+Per-stream state lives in the Gate's `Stream.suspend` closure; the line is byte-identical and the
+ledger is `~/.dsh/ets-hook-dsh-normalize-dash.log`. The diagram is [dash.mmd](EffectTS/dash.mmd) and
+([SVG](EffectTS/dash.svg)).
 
 ### @playform/ets-hook-dsh-normalize-quotes
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-quotes`, built on the same
-three ETS packages. The delta is the same shape: `Stream.fromAsyncIterable` into the base's
-`Stream/Gate`, the `Quotes` map as the flavor, and the `OnCount` callback as the final non-emitting
-section, so an abandoned stream writes no line. The strings are byte-identical and the ledger is
-`~/.dsh/ets-hook-dsh-normalize-quotes.log`. The diagram is [quotes.mmd](EffectTS/quotes.mmd) and
-([SVG](EffectTS/quotes.svg)).
+three ETS packages.
+
+The delta is the same shape: `Stream.fromAsyncIterable` into the base's `Stream/Gate`, the `Quotes`
+map as the flavor, and the `OnCount` callback as the final non-emitting section, so an abandoned
+stream writes no line.
+
+The strings are byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-quotes.log`. The
+diagram is [quotes.mmd](EffectTS/quotes.mmd) and ([SVG](EffectTS/quotes.svg)).
 
 ### @playform/ets-hook-dsh-normalize-ellipsis
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-ellipsis`, built on the
-same three ETS packages. The Gate transformer owns the per-chunk dispatch and the three-way
-tool-args gate; the module supplies the `Ellipsis` transform and the count callback. The line is
-byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-ellipsis.log`. The diagram is
-[ellipsis.mmd](EffectTS/ellipsis.mmd) and ([SVG](EffectTS/ellipsis.svg)).
+same three ETS packages.
+
+The Gate transformer owns the per-chunk dispatch and the three-way tool-args gate; the module
+supplies the `Ellipsis` transform and the count callback.
+
+The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-ellipsis.log`. The
+diagram is [ellipsis.mmd](EffectTS/ellipsis.mmd) and ([SVG](EffectTS/ellipsis.svg)).
 
 ### @playform/ets-hook-dsh-normalize-spaces
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-spaces`, built on the same
-three ETS packages. The pipeline is the shared `Stream/Gate`; the flavor supplies the `Spaces` table
-and the count callback, and the accumulator lives in the Gate's `Stream.suspend` closure so
-concurrent streams never share it. The line is byte-identical and the ledger is
-`~/.dsh/ets-hook-dsh-normalize-spaces.log`. The diagram is [spaces.mmd](EffectTS/spaces.mmd) and
-([SVG](EffectTS/spaces.svg)).
+three ETS packages.
+
+The pipeline is the shared `Stream/Gate`; the flavor supplies the `Spaces` table and the count
+callback, and the accumulator lives in the Gate's `Stream.suspend` closure so concurrent streams
+never share it.
+
+The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-spaces.log`. The diagram
+is [spaces.mmd](EffectTS/spaces.mmd) and ([SVG](EffectTS/spaces.svg)).
 
 ### @playform/ets-hook-dsh-normalize-invisible
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-invisible`, built on the
-same three ETS packages. The Gate transformer and the `Invisible` table do the work; the module
-keeps the count callback. The line is byte-identical and the ledger is
-`~/.dsh/ets-hook-dsh-normalize-invisible.log`. The diagram is
-[invisible.mmd](EffectTS/invisible.mmd) and ([SVG](EffectTS/invisible.svg)).
+same three ETS packages.
+
+The Gate transformer and the `Invisible` table do the work; the module keeps the count callback.
+
+The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-invisible.log`. The
+diagram is [invisible.mmd](EffectTS/invisible.mmd) and ([SVG](EffectTS/invisible.svg)).
 
 ### @playform/ets-hook-dsh-normalize-fullwidth
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-fullwidth`, built on the
-same three ETS packages. The pipeline is the base's `Stream/Gate`, the flavor is the `Fullwidth`
-map, and the module's only residue is the count callback and its strings. The line is byte-identical
-and the ledger is `~/.dsh/ets-hook-dsh-normalize-fullwidth.log`. The diagram is
-[fullwidth.mmd](EffectTS/fullwidth.mmd) and ([SVG](EffectTS/fullwidth.svg)).
+same three ETS packages.
+
+The pipeline is the base's `Stream/Gate`, the flavor is the `Fullwidth` map, and the module's only
+residue is the count callback and its strings.
+
+The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-fullwidth.log`. The
+diagram is [fullwidth.mmd](EffectTS/fullwidth.mmd) and ([SVG](EffectTS/fullwidth.svg)).
 
 ### @playform/ets-plugin-dsh-normalize-file
 
 **EffectTS twin.** The exact package is `@playform/ets-plugin-dsh-normalize-file`, built on the same
-three ETS packages. It has no Effect-native stage of its own: the tool reads through `ctx.fs`,
-applies the same six transforms in the same order, and writes through the factory's shared executor,
-which in the ETS tree is the Effect-backed `WriteService`. The line is byte-identical and the ledger
-is `~/.dsh/ets-plugin-dsh-normalize-file.log`. The diagram is
-[normalize-file.mmd](EffectTS/normalize-file.mmd) and ([SVG](EffectTS/normalize-file.svg)).
+three ETS packages.
+
+It has no Effect-native stage of its own: the tool reads through `ctx.fs`, applies the same six
+transforms in the same order, and writes through the factory's shared executor, which in the ETS
+tree is the Effect-backed `WriteService`.
+
+The line is byte-identical and the ledger is `~/.dsh/ets-plugin-dsh-normalize-file.log`. The diagram
+is [normalize-file.mmd](EffectTS/normalize-file.mmd) and ([SVG](EffectTS/normalize-file.svg)).
 
 ## How the group composes
 
@@ -324,10 +346,11 @@ Each stream bundle is one `insert:` row with `log: true`, its `logFile`, its `re
 has one, and `normalizeReasoning: true`. The flavors inject `["pluginFactory"]`; the dash flavor
 adds `fs` and `tools` for `raw-write`, and normalize-file adds all three. The listener is a plain
 `ctx.on("llm/stream", ...)`, fiber-owned and removed on unload; the factory's `Wire` is not used
-because it is `fs/observed`-hardwired and this rewrite must be visible. Boot order is: profile
-bundles → factory service → each flavor registers and writes its activation line. A `file:`
-dependency alone is not activation: the package must be in `dsh.profile.bundles` and the host
-restarted.
+because it is `fs/observed`-hardwired and this rewrite must be visible.
+
+Boot order is: profile bundles → factory service → each flavor registers and writes its activation
+line. A `file:` dependency alone is not activation: the package must be in `dsh.profile.bundles` and
+the host restarted.
 
 ## What the user experiences
 

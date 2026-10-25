@@ -9,8 +9,10 @@ The workspace-govern hook: the governance gate of the workspace family's invisib
 proposes → **the govern gates** → the authority licenses → the approve binds. On every gated
 `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern` service, the hook
 runs the four **independent means-checks** on the ProposedChange before any AuthorizationDecision
-downstream. An intent must not authorize its own means: the gate checks the means; the intent is
-never the permission.
+downstream.
+
+An intent must not authorize its own means: the gate checks the means; the intent is never the
+permission.
 
 The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
 
@@ -71,9 +73,10 @@ precedent):
 
 This hook's action class is RECORD (it records a gate decision), and that class is **automatic**.
 The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
-the block documents the posture and refuses nothing. The block is one volatile object, so a policy
-flip is hot-editable without a remount; a resolved pack's `policy` section overrides the defaults
-per action (the wiring is the next refinement).
+the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## Service
 

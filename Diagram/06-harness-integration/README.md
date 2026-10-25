@@ -24,9 +24,10 @@ calls its `apply` with the context.
 
 The **plugin contract** is four fields on the default export: `name` (the identity, agreeing with
 the package name), `apply` (returns nothing - a returned value silently kills event delivery),
-`Config` (validated at load, failing loud), and `inject` (the services the plugin needs). `inject`
-is also the ordering mechanism: the loader holds a consumer PENDING until its services exist, so the
-bundle-list order never decides whether a listener registers.
+`Config` (validated at load, failing loud), and `inject` (the services the plugin needs).
+
+`inject` is also the ordering mechanism: the loader holds a consumer PENDING until its services
+exist, so the bundle-list order never decides whether a listener registers.
 
 The **services** the family uses are `fs` (read, resolve, write, the observation policy), `tools`
 (register a tool, read the live registry), `jobs` (the controller behind an unowned background job),
@@ -38,8 +39,9 @@ The **event bus** is Cordis's waterfall and event dispatch. The family attaches 
 `llm/stream` (the interceptable wrapper around every streaming model call), `fs/observed` (the event
 every tool-layer write dispatches after content is on disk), `tools/pre-execute` and
 `tools/post-execute` (the tool pipeline's two waterfalls), and `system-prompt/assemble` with
-`agent/pre-step` (the prompt and step surfaces). The fifth surface is the loader/service surface,
-where activation happens.
+`agent/pre-step` (the prompt and step surfaces).
+
+The fifth surface is the loader/service surface, where activation happens.
 
 The **tool pipeline** runs a call through `tools/pre-execute` (a waterfall that may deny), then the
 tool's execute, then `tools/post-execute` (a waterfall that may replace the model-visible result),
@@ -60,29 +62,33 @@ The **ledger** is the family's own durable record: one file per plugin, `~/.dsh/
 **boot-and-wiring** ([.mmd](boot-and-wiring.mmd), [SVG](boot-and-wiring.svg)) is the top-down
 hierarchy: profile `package.json` and `cordis.patch.yml` feed the loader, the loader calls `apply`,
 the services resolve, the factory builds the state and wiring, the plugin registers its listeners
-and tools, and the activation line lands in its ledger. Look for the two failure notes: a returned
-value from `apply` kills event delivery, and a `file:` dependency without a bundle-list entry never
-reaches `apply` at all.
+and tools, and the activation line lands in its ledger.
+
+Look for the two failure notes: a returned value from `apply` kills event delivery, and a `file:`
+dependency without a bundle-list entry never reaches `apply` at all.
 
 **event-surfaces** ([.mmd](event-surfaces.mmd), [SVG](event-surfaces.svg)) is the map of the four
 event seams and which groups attach. `llm/stream` carries the six normalize flavors; `fs/observed`
 carries the governance trio and the factory's `Wire`/`Write`; `tools/pre-execute` and
 `tools/post-execute` carry the guardians (and the normalize tool-results arm);
-`system-prompt/assemble` and `agent/pre-step` carry the guardians and live-containers. Look for what
-is _not_ there: the foundation attaches no listener of its own.
+`system-prompt/assemble` and `agent/pre-step` carry the guardians and live-containers.
+
+Look for what is _not_ there: the foundation attaches no listener of its own.
 
 **write-path** ([.mmd](write-path.mmd), [SVG](write-path.svg)) follows one mutation tool:
 `tools/pre-execute`, then `fs/write-intent` (the version guard), then the write executor, then
 `ctx.fs.writeText`, then `fs/observed` with the fresh version and the same actor, then the
-governance gate, the contained continuation, the guarded write and the P3 re-emit. Look for the two
-silences: the tool result is built from the author's own content, and a listener throw becomes a
-suppressed line rather than a failed write.
+governance gate, the contained continuation, the guarded write and the P3 re-emit.
+
+Look for the two silences: the tool result is built from the author's own content, and a listener
+throw becomes a suppressed line rather than a failed write.
 
 **stream-path** ([.mmd](stream-path.mmd), [SVG](stream-path.svg)) follows one model delta:
 `llm/stream`, the six flavors (each wrapping the next, order-independent), the tool-arguments gate
 with its `edit` / `raw-write` / `normalize-file` exemptions, and the yield to the live UI and the
-durable transcript. Look for the two defaults: `normalizeReasoning` on, `normalizeToolArguments`
-off.
+durable transcript.
+
+Look for the two defaults: `normalizeReasoning` on, `normalizeToolArguments` off.
 
 ## Activation vs dependency
 
@@ -92,12 +98,13 @@ restart: the bundle layers compose at host boot, so a running host does not pick
 until it is restarted.
 
 A **`cordis.patch.yml` `insert:` row** adds an entry to the composed configuration. The family's
-rows are one insert per bundle, with the module's own config keys. A bare `id:` row does something
-different: it **patches an existing entry**, and the loader rejects an unknown id with
-`entry "…" not found`. That is why every family bundle ships `- insert:` and why a profile that
-wants to override a shipped cell writes a bare `id:` row against the entry the bundle already
-inserted - the tool-coach `notes.persistent` override and the live-containers `enabled: true`
-override are exactly that.
+rows are one insert per bundle, with the module's own config keys.
+
+A bare `id:` row does something different: it **patches an existing entry**, and the loader rejects
+an unknown id with `entry "…" not found`. That is why every family bundle ships `- insert:` and why
+a profile that wants to override a shipped cell writes a bare `id:` row against the entry the bundle
+already inserted - the tool-coach `notes.persistent` override and the live-containers
+`enabled: true` override are exactly that.
 
 The identity lives in four agreeing places: the package name, the `name` export, the State build's
 `module:` option, and the ledger `logFile` default. A rename that misses one of them produces a
@@ -120,7 +127,9 @@ alone:
 **The strings are byte-identical.** Every activation line, refusal line, chain-pass line and journal
 record is asserted byte-identically by the smoke suites, in both trees. The one exception is an
 identity change by design - a package rename changes that module's own strings and is recorded as a
-rename. The ETS tree keeps the Classic strings, which is why `ets-hook-dsh-tool-coach` writes
+rename.
+
+The ETS tree keeps the Classic strings, which is why `ets-hook-dsh-tool-coach` writes
 `hook-dsh-tool-coach.log` with no `ets-` prefix, and why `ets-hook-dsh-ccr` writes the same
 `~/.dsh/ccr.log` path as the Classic CCR.
 
@@ -159,9 +168,10 @@ machinery becomes `Context.Service`s provided by `Layer`s composed into one runt
 **Never mix the two trees in one dependency graph.** The difference that forces this is the `Update`
 envelope: the Classic `Update` (in `lib-dsh-core`) returns the classic `Dispatch`/`Settle` pair,
 while the ETS `Update` (in `ets-base-dsh`) returns Effect envelopes. A graph that pulls one hook
-from each tree type-checks against neither contract. The two trees also share some ledger paths
-(`ccr.log`, `live-containers.log`, `hook-dsh-tool-coach.log`), which is safe only because they are
-never active together.
+from each tree type-checks against neither contract.
+
+The two trees also share some ledger paths (`ccr.log`, `live-containers.log`,
+`hook-dsh-tool-coach.log`), which is safe only because they are never active together.
 
 **The Effect envelope difference** is visible at the edges: ETS `Dispatch` is
 `Effect<void, never, Scope.Scope>` and forks the detached continuation into the caller's scope, so

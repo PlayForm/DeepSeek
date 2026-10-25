@@ -183,33 +183,43 @@ pass (`skipped (excluded) <path>`, `governed <path> → <version>`), refusal (th
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-package-governor`, built on
 `@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core` and the `@playform/ets-plugin-dsh-factory`
-service. The Effect delta is in the update stage: `Dispatch` is `Effect<void, never, Scope.Scope>`
-and forks the detached continuation into the caller's scope with `Effect.forkIn`, so plugin disposal
+service.
+
+The Effect delta is in the update stage: `Dispatch` is `Effect<void, never, Scope.Scope>` and forks
+the detached continuation into the caller's scope with `Effect.forkIn`, so plugin disposal
 interrupts the fiber and aborts its child; `Settle` is `Effect<number>`; the promise seam runs
-`Effect.runPromise` with the state's long-lived scope provided and a `dsh.update.dispatch` span. The
-ledger strings are byte-identical to the Classic module's, written to
+`Effect.runPromise` with the state's long-lived scope provided and a `dsh.update.dispatch` span.
+
+The ledger strings are byte-identical to the Classic module's, written to
 `~/.dsh/ets-hook-dsh-package-governor.log`. The diagram is
 [package-governor.mmd](EffectTS/package-governor.mmd) and ([SVG](EffectTS/package-governor.svg)).
 
 ### @playform/ets-hook-dsh-package-pinner
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-package-pinner`, built on the same
-three ETS packages. The pin pass itself is the Classic shape: the factory's `WriteService` performs
-the guarded write and the `Effect.ensuring` finalizer owns the P2 cleanup, and - unlike the
-governor - the module adds no span and no `Scope.provide` call site, so the scope created in `apply`
-(`Effect.runSync(Scope.make())`) is unused at runtime. The ledger strings are byte-identical,
-written to `~/.dsh/ets-hook-dsh-package-pinner.log`. The diagram is
-[package-pinner.mmd](EffectTS/package-pinner.mmd) and ([SVG](EffectTS/package-pinner.svg)).
+three ETS packages.
+
+The pin pass itself is the Classic shape: the factory's `WriteService` performs the guarded write
+and the `Effect.ensuring` finalizer owns the P2 cleanup, and - unlike the governor - the module adds
+no span and no `Scope.provide` call site, so the scope created in `apply`
+(`Effect.runSync(Scope.make())`) is unused at runtime.
+
+The ledger strings are byte-identical, written to `~/.dsh/ets-hook-dsh-package-pinner.log`. The
+diagram is [package-pinner.mmd](EffectTS/package-pinner.mmd) and
+([SVG](EffectTS/package-pinner.svg)).
 
 ### @playform/ets-hook-dsh-cargo-governor
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-cargo-governor`, built on the same
-three ETS packages. The plan and the surgical TOML rewrite are unchanged; the delta is the update
-stage, which uses the same `Effect<void, never, Scope.Scope>` dispatch and `Scope.provide` seam as
-the ETS npm governor, so the `cargo upgrade` subprocess stage is forked into the plugin scope and
-interrupted on disposal. The ledger strings are byte-identical, written to
-`~/.dsh/ets-hook-dsh-cargo-governor.log`. The diagram is
-[cargo-governor.mmd](EffectTS/cargo-governor.mmd) and ([SVG](EffectTS/cargo-governor.svg)).
+three ETS packages.
+
+The plan and the surgical TOML rewrite are unchanged; the delta is the update stage, which uses the
+same `Effect<void, never, Scope.Scope>` dispatch and `Scope.provide` seam as the ETS npm governor,
+so the `cargo upgrade` subprocess stage is forked into the plugin scope and interrupted on disposal.
+
+The ledger strings are byte-identical, written to `~/.dsh/ets-hook-dsh-cargo-governor.log`. The
+diagram is [cargo-governor.mmd](EffectTS/cargo-governor.mmd) and
+([SVG](EffectTS/cargo-governor.svg)).
 
 ## How the group composes
 
@@ -220,9 +230,11 @@ Cargo module never sees an npm manifest.
 
 The npm pair composes as **pin → bump-exact**. The pinner rewrites `^0.3.4` to `0.3.4`; a fully
 pinned manifest leaves the governor's update stage nothing to do, while the governor's chain pass
-may still re-canonicalize a chain pin to `^<resolved>`. Order between the two listeners is defined
-only by registration, so neither module relies on the other having run first: each is idempotent on
-its own output, and the version guard plus re-emit makes a second pass a no-op.
+may still re-canonicalize a chain pin to `^<resolved>`.
+
+Order between the two listeners is defined only by registration, so neither module relies on the
+other having run first: each is idempotent on its own output, and the version guard plus re-emit
+makes a second pass a no-op.
 
 The Cargo precedence is **chain > strip > normalize**, with the keep-list winning over normalization
 and never over the chain. That ordering is visible in the diagram as three labelled stages between
@@ -240,16 +252,19 @@ implies another, and the Cargo module's log is never the npm ledgers' log.
 
 Each bundle is one `insert:` row in the profile's `cordis.patch.yml`, with the module's own config
 keys. The service injection is `inject: ["fs", "pluginFactory"]`; the loader holds each hook PENDING
-until both services exist, so the bundle-list order never decides whether a listener registers. At
-apply the module builds its state through `Factory.State`, attaches the jobs/inflight/storage
+until both services exist, so the bundle-list order never decides whether a listener registers.
+
+At apply the module builds its state through `Factory.State`, attaches the jobs/inflight/storage
 effects through `Factory.Attach`, writes its activation line through `Factory.Append`, registers its
 direct-govern steps with `Factory.RegisterGovern`, and wires the one `fs/observed` listener through
 `Factory.Wire`.
 
 Boot order is: profile bundles → factory service → the three hooks resolve → each writes its
-activation line and registers its steps. The model observes nothing: the write tool's result is
-built from the author's own content, never from a disk re-read. The user observes the governed state
-only when they read the file back, and observes the history in the six ledgers.
+activation line and registers its steps.
+
+The model observes nothing: the write tool's result is built from the author's own content, never
+from a disk re-read. The user observes the governed state only when they read the file back, and
+observes the history in the six ledgers.
 
 A `file:` dependency alone is not activation. The package must be listed in `dsh.profile.bundles`
 and the host restarted; the bundle layers compose at boot.

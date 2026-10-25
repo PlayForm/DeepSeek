@@ -77,14 +77,17 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The revert is the hook's ONE gated action because it **writes** the pre-images back; recording
-(open/seal/recover) is `record` and stays automatic. An `approve` verdict for `write` refuses the
-whole pass before any file is touched: the ledger records the byte-exact
-`revert held (<n> files) (policy write=approve)` line, **zero writes** reach the filesystem, the
-batch keeps its `applying`/`verified` state and no record is persisted - the revert waits for the
-user. Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next revert
-replay. The block is one volatile object, so a policy flip is hot-editable without a remount; a
-resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement).
+(open/seal/recover) is `record` and stays automatic.
+
+An `approve` verdict for `write` refuses the whole pass before any file is touched: the ledger
+records the byte-exact `revert held (<n> files) (policy write=approve)` line, **zero writes** reach
+the filesystem, the batch keeps its `applying`/`verified` state and no record is persisted - the
+revert waits for the user.
+
+Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next revert replay.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 The documented refusal line: `journal: revert held (<n> files) (policy write=approve)`.
 

@@ -97,9 +97,11 @@ block), mapped to `State.Allow`:
 
 The board records and projects - `read`, `record` and `suggest` are automatic; the write/commit/
 spawn verdicts are declared for uniformity and stay the shipped `approve` (the board never writes
-files, commits or spawns). The block is one volatile object (a policy flip is hot-editable), and a
-resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+files, commits or spawns).
+
+The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement). The defaults are
+smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The build and the tests
 

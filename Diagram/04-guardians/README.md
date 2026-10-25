@@ -42,8 +42,10 @@ status: active
 **Classic.** What it does. CCR is compress-cache-retrieve for tool output. It hooks the
 `tools/post-execute` waterfall - the interceptable wrapper around every normalized dispatch result,
 before it becomes model content - and replaces an oversized result with a one-line type-aware
-preview plus a `<<<CCR:<24hex>|<type>|<size>>>` marker. The original stays in an in-memory LRU keyed
-by a sha256-24 hash of the full serialized content, and `ccr_retrieve` restores it byte-exactly.
+preview plus a `<<<CCR:<24hex>|<type>|<size>>>` marker.
+
+The original stays in an in-memory LRU keyed by a sha256-24 hash of the full serialized content, and
+`ccr_retrieve` restores it byte-exactly.
 
 **The chain.**
 
@@ -87,8 +89,9 @@ compressed into another retrieval.
 **Classic.** What it does. Tool-coach teaches the model to stop using the terminal for file content.
 It judges terminal calls (`bash`, `pwsh`), detects content reads and content mutations after
 normalizing away heredocs, substitutions, variables and quote layers, classifies each pipeline into
-one of five classes, and escalates through four independent channels. The rule it enforces: the
-terminal runs commands; the tools handle content.
+one of five classes, and escalates through four independent channels.
+
+The rule it enforces: the terminal runs commands; the tools handle content.
 
 **The chain.**
 
@@ -138,20 +141,27 @@ Validation is fail-loud at apply: `threshold ≥ 1`, `window ≥ threshold`, `co
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-ccr`, built on
 `@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core` and the `@playform/ets-plugin-dsh-factory`
-service. It has no Effect-native stage of its own: the listener, the gate, the classifier and the
-LRU are the Classic pipeline, consuming the Effect-backed factory for state and the ledger. The
-ledger strings are byte-identical, and the ledger path is the same file as the Classic CCR -
-`~/.dsh/ccr.log` - which is safe only because the two trees are never active in one graph. The
-diagram is [ccr.mmd](EffectTS/ccr.mmd) and ([SVG](EffectTS/ccr.svg)).
+service.
+
+It has no Effect-native stage of its own: the listener, the gate, the classifier and the LRU are the
+Classic pipeline, consuming the Effect-backed factory for state and the ledger.
+
+The ledger strings are byte-identical, and the ledger path is the same file as the Classic CCR -
+`~/.dsh/ccr.log` - which is safe only because the two trees are never active in one graph.
+
+The diagram is [ccr.mmd](EffectTS/ccr.mmd) and ([SVG](EffectTS/ccr.svg)).
 
 ### @playform/ets-hook-dsh-tool-coach
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-tool-coach`, built on the same three
-ETS packages. The five listeners and the four channels are the Classic shape; the Effect delta is
-only the factory service behind `State` and `Append`. The ten ledger strings are byte-identical, and
-the ledger path is `~/.dsh/hook-dsh-tool-coach.log` - the Classic path, with no `ets-` prefix, in
-both the patch row and `Source/Variable/Config.ts`. The diagram is
-[tool-coach.mmd](EffectTS/tool-coach.mmd) and ([SVG](EffectTS/tool-coach.svg)).
+ETS packages.
+
+The five listeners and the four channels are the Classic shape; the Effect delta is only the factory
+service behind `State` and `Append`.
+
+The ten ledger strings are byte-identical, and the ledger path is `~/.dsh/hook-dsh-tool-coach.log` -
+the Classic path, with no `ets-` prefix, in both the patch row and `Source/Variable/Config.ts`. The
+diagram is [tool-coach.mmd](EffectTS/tool-coach.mmd) and ([SVG](EffectTS/tool-coach.svg)).
 
 ## How the group composes
 
@@ -170,9 +180,10 @@ bytes, and a result that already carries a `<<<CCR:` marker is recognized rather
 
 Tool-coach's four channels are independent, not a ladder an offense must climb. One offense can
 write a tier-0 line, fire a tier-1 notice and trip a tier-2 section in the same turn, because each
-channel has its own counter and its own condition. The tiers are ordered only in intrusiveness:
-ledger, notice, persistent section, deny. Tier 3 is opt-in through `enforce`, and even at `all` it
-never denies discovery or control calls.
+channel has its own counter and its own condition.
+
+The tiers are ordered only in intrusiveness: ledger, notice, persistent section, deny. Tier 3 is
+opt-in through `enforce`, and even at `all` it never denies discovery or control calls.
 
 Both guardians can be active together: CCR defends the size of a tool result, tool-coach defends the
 choice of tool. Neither depends on the other's state, and each writes its own ledger.
@@ -180,15 +191,19 @@ choice of tool. Neither depends on the other's state, and each writes its own le
 ## How it plugs into the harness
 
 CCR is one `insert:` row with its targets, thresholds, store and engine flags; tool-coach is one row
-with its ladder knobs and note templates. Neither injects a filesystem or a factory service for a
-write path: CCR injects the tool service for `ccr_retrieve`, tool-coach injects
-`["pluginFactory", "tools"]` and owns its own schema. The listeners are plain `ctx.on`
-registrations, fiber-owned and removed on unload; CCR's is `{ prepend: true }`.
+with its ladder knobs and note templates.
+
+Neither injects a filesystem or a factory service for a write path: CCR injects the tool service for
+`ccr_retrieve`, tool-coach injects `["pluginFactory", "tools"]` and owns its own schema. The
+listeners are plain `ctx.on` registrations, fiber-owned and removed on unload; CCR's is
+`{ prepend: true }`.
 
 Boot order is: profile bundles → the services the bundle injects → each guardian registers its
-listeners and tools → each writes its activation line. The model observes CCR as the preview plus
-the marker and tool-coach as a notice, a section or a deny reason; the user observes shorter
-transcripts and, when the coach is right, fewer terminal file reads.
+listeners and tools → each writes its activation line.
+
+The model observes CCR as the preview plus the marker and tool-coach as a notice, a section or a
+deny reason; the user observes shorter transcripts and, when the coach is right, fewer terminal file
+reads.
 
 A `file:` dependency alone is not activation. The package must be listed in `dsh.profile.bundles`
 and the host restarted.

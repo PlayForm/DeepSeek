@@ -58,9 +58,10 @@ line - no schema limit).
 Every write goes through **Factory.Write and nothing else**: explicit `replaceIfVersion` intent (the
 fresh-stat version guard), the `govern` actor marker so the event path skips the marked events, and
 the governed basenames (`package.json`, `Cargo.toml`) re-run through the factory's **direct** path
-exactly once per write. The gate is all-or-nothing on the apply loop: a planning failure halts or
-errors that file alone; a write failure stops the loop and returns the unwritten remainder to
-observed.
+exactly once per write.
+
+The gate is all-or-nothing on the apply loop: a planning failure halts or errors that file alone; a
+write failure stops the loop and returns the unwritten remainder to observed.
 
 A commit exceeding the in-line deadline (capped at 120000, the composition contract) continues as
 one background job and returns the typed `jobId`; the settle truth arrives through the jobs
@@ -78,14 +79,17 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The `commit` action consults `Decide(State.Allow, "write")` **before any plan or write**. The
-shipped default is `write: approve`, so an apply is **refused** with the byte-exact
+The `commit` action consults `Decide(State.Allow, "write")` **before any plan or write**.
+
+The shipped default is `write: approve`, so an apply is **refused** with the byte-exact
 `apply refused <id> (policy write=approve)` line (in the ledger and as the thrown error): nothing is
 read or written, the machine stays open with its cells `observed`, and the batch waits for the
 user's approval - the existing approve binding (flip `policy.write` to `auto`, or approve the batch
-through the batch-decision hook). With `write: auto` the commit proceeds exactly as described above.
-The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+through the batch-decision hook).
+
+With `write: auto` the commit proceeds exactly as described above. The block is one volatile object
+(a policy flip is hot-editable), and a resolved pack's `policy` section overrides the defaults per
+action (the wiring is the next refinement).
 
 ## The ledger lines (the contract, byte-stable)
 

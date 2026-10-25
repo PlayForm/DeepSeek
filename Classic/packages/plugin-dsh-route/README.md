@@ -89,9 +89,10 @@ factory's block), mapped to `State.Allow`. The key is `automation`, **not** `pol
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The router reads and suggests - `read` and `suggest` are automatic; the write/commit/spawn verdicts
-are declared for uniformity and stay the shipped `approve` (the router never takes them). The block
-is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement). The defaults are
+are declared for uniformity and stay the shipped `approve` (the router never takes them).
+
+The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement). The defaults are
 smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The ledger
