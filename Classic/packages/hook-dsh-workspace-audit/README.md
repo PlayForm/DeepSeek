@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-audit
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/AUDIT](../../../Documentation/Plans/Workspace-Family/AUDIT.md)
+
+## The role
+
 The **workspace-audit hook**: a DeepSeek Harness plugin that is the workspace's **accountability** -
 the event records and the ledger lines. It is the AUDIT role of the workspace family's invisible
 flow:
@@ -23,7 +28,7 @@ flow:
 - **The fs/observed listener** (ROOT context): every observed write becomes an OutcomeEvidence line
   (`success` on presence, `failure` on absence).
 
-## Service
+## The surfaces
 
 `ctx.workspaceAudit` (registered from apply):
 
@@ -35,7 +40,7 @@ flow:
 | `lines(limit?)`                             | The ring, newest first                       |
 | `statistics()`                              | `{ operations, lines, sequence }`            |
 
-## Config
+## The configuration
 
 Every knob is a volatile cell (hot edits commit without remounting):
 
@@ -68,3 +73,32 @@ This package's actions are record, all AUTOMATIC; it has NO gated action (no fil
 commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
 object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
 overrides the defaults per action (the wiring is the next refinement).
+
+## The ledger
+
+One line per event, prefixed `audit: ` (byte-exact; see also the smoke folders' expected-string
+sections):
+
+```text
+activated (domain=workspace_audit, maxLines=2000)
+disabled (enabled=false)
+audit outcome-evidence <path> (success) <path>
+audit outcome-evidence <path> (failure) <path>
+ignored <path> (excluded)
+ignored <path> (own actor)
+failed unknown (malformed event: displayPath is not a string)
+```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/AUDIT](../../../Documentation/Plans/Workspace-Family/AUDIT.md) - the audit role.
+- [WORKSPACE-FAMILY-V4-1](../../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - section 2 item 6.
+
+## License
+
+CC0-1.0.

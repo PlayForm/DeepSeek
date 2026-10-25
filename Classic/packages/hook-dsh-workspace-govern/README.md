@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-govern
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/GOVERN](../../../Documentation/Plans/Workspace-Family/GOVERN.md)
+
+## The role
+
 The workspace-govern hook: the governance gate of the workspace family's invisible flow - operate
 proposes → **the govern gates** → the authority licenses → the approve binds. On every gated
 `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern` service, the hook
@@ -8,6 +13,15 @@ downstream. An intent must not authorize its own means: the gate checks the mean
 never the permission.
 
 The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
+
+## The surfaces
+
+- The `tools/pre-execute` waterfall listener: every gated tool call runs the four checks.
+- The service `ctx.workspaceGovern` (registered from apply):
+
+- `gate(proposal)` - run the four checks on one proposal record, get the gate decision.
+- `decisions(limit?)` - the decision ring, newest first.
+- `statistics()` - `{ decisions, sequence }`.
 
 ## The four independent checks
 
@@ -35,7 +49,7 @@ Recursion prevention: every proposal carries the operation identifier, the paren
 event category; an operation identifier gated more than `loopBound` times is dropped with a ledger
 line.
 
-## Config (all volatile)
+## The configuration (all volatile)
 
 | Field             | Default                                                  | Meaning                                                                                                       |
 | ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -70,15 +84,7 @@ the block documents the posture and refuses nothing. The block is one volatile o
 flip is hot-editable without a remount; a resolved pack's `policy` section overrides the defaults
 per action (the wiring is the next refinement).
 
-## Service
-
-`ctx.workspaceGovern` (registered from apply):
-
-- `gate(proposal)` - run the four checks on one proposal record, get the gate decision.
-- `decisions(limit?)` - the decision ring, newest first.
-- `statistics()` - `{ decisions, sequence }`.
-
-## Ledger lines (module-owned, byte-stable)
+## The ledger (module-owned, byte-stable)
 
 ```text
 govern: activated (tools=<n>, policy=<n>)
@@ -90,3 +96,19 @@ govern: recovery <obligation> (fail-open)
 govern: loop <operation> (recursion guard)
 govern: observed <operation> (accepted | errored)
 ```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/GOVERN](../../../Documentation/Plans/Workspace-Family/GOVERN.md) - the govern
+  gate.
+- [WORKSPACE-FAMILY-V4-1](../../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - section 3.9, the
+  honest-recovery contract.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-approve
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/APPROVE](../../../Documentation/Plans/Workspace-Family/APPROVE.md)
+
+## The role
+
 The workspace-approve hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that binds the **exact human approval** - the candidate-bound
@@ -8,6 +13,14 @@ approval + the constraints - the approve step of the workspace family's invisibl
 ```
 ... -> the authority licenses -> the approve binds -> the merge commits -> ...
 ```
+
+## The surfaces
+
+- The service `ctx.workspaceApprove` (the table below) - the only programmatic surface.
+- The `fs/observed` invalidation listener (heard on the ROOT context through the factory's Wire) - a
+  synchronous recorder.
+- The KV storage domain `workspace_approve` (config `domain`).
+- No tool, no provided service beyond `ctx.workspaceApprove`.
 
 ## The exact-approval semantics
 
@@ -47,7 +60,7 @@ plugin's own monotonic counter - never a wall clock. Ledger lines (module-owned,
 `approve:`): `activated`, `disabled`, `bound`, `decided`, `rejected`, `revoked`, `refused`,
 `unknown`, `invalidated`, `checked`, `capped`, `failed`, `storage open failed`.
 
-## Configuration
+## The configuration
 
 Every knob is volatile (hot-editable without remounting): `logFile`
 (`~/.dsh/playform/hook-dsh-workspace-approve.log`), `log`, `enabled` (false - the IDLE-forever
@@ -71,5 +84,16 @@ commit, no spawn), so the block documents the posture and refuses nothing. The b
 object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
 overrides the defaults per action (the wiring is the next refinement).
 
-Plan:
-[Documentation/Plans/Workspace-Family/APPROVE.md](../../../Documentation/Plans/Workspace-Family/APPROVE.md).
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/APPROVE](../../../Documentation/Plans/Workspace-Family/APPROVE.md) - the approve
+  step of the invisible flow.
+
+## License
+
+CC0-1.0.

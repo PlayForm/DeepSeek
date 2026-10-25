@@ -55,7 +55,7 @@ statuses:
       Researches/                  the research outputs (8)
       Guides/                      the operating manuals (7)
       Reports/                     the audits and diagnoses (6)
-      Plugins/                     the registry documents (3)
+      Plugins/                     the registry documents (4)
       Testing/                     the per-plugin live test plans (35)
       Archive/                     the one-shot records (45, in 8 topics)
         Smoke-Restructure/  Site/  Live-Containers/  Tool-Coach/
@@ -242,13 +242,14 @@ acceptance bar, the activation loop, the dogfood scenarios).
 | [P5-V2-DIAGNOSIS.md](Reports/P5-V2-DIAGNOSIS.md)                     | complete | report                          |
 | [POC-GAP-ANALYSIS.md](Reports/POC-GAP-ANALYSIS.md)                   | complete | report (the PoC-vs-plan grades) |
 
-### Plugins - the registry documents (3)
+### Plugins - the registry documents (4)
 
 | Document (Documentation/Plugins/)                            | Status | Kind                                                                      |
 | ------------------------------------------------------------ | ------ | ------------------------------------------------------------------------- |
 | [PLUGIN-FAMILY.md](Plugins/PLUGIN-FAMILY.md)                 | active | living-record (the 101-package registry)                                  |
 | [ORCHESTRATION-PLUGINS.md](Plugins/ORCHESTRATION-PLUGINS.md) | active | living-record (built as PoCs)                                             |
 | [PLUGIN-SUITE-SUMMARY.md](Plugins/PLUGIN-SUITE-SUMMARY.md)   | active | standard (the one-file suite summary, incl. the trace and pack libraries) |
+| [MARKETPLACE.md](Plugins/MARKETPLACE.md)                     | active | standard (the static market index, its URL and the release step)          |
 
 ### Testing - the per-plugin live test plans (35)
 

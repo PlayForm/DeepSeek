@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-batch-edit
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [BATCH-EDIT-TOOL-FEATURE](../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
+
+## The role
+
 The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 plugin family (the Classic release). One tool - `batch_edit` - that turns files into **processes
 held in state**: you open a machine, insert files into it, and the files process like a state
@@ -9,6 +14,12 @@ inert bytes - the reversed view of the default UNIX file.
 The philosophy and the research live in
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
 and its granular subdocuments under `Documentation/Plans/Batch-Edit-Tool/`.
+
+## The surfaces
+
+One tool: `batch_edit` (six actions: `open`, `insert`, `remove`, `commit`, `state`, `close`). No
+service, no event listener - the writes go through the factory's write executor, and the bash
+observer is the advisory `interceptBash` tag.
 
 ## The machine (one tool, six actions)
 
@@ -82,7 +93,7 @@ through the batch-decision hook). With `write: auto` the commit proceeds exactly
 The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
 section overrides the defaults per action (the wiring is the next refinement).
 
-## The ledger lines (the contract, byte-stable)
+## The ledger (the contract, byte-stable)
 
 ```
 machine opened <id> (<n> files, scope=<glob>)
@@ -99,7 +110,7 @@ apply refused <id> (policy write=approve)
 Plus the module-owned `removed <file>` line for the `remove` action. The ledger file defaults to
 `~/.dsh/playform/plugin-dsh-batch-edit.log` (one log per module).
 
-## Configuration
+## The configuration
 
 Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
 ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
@@ -117,7 +128,17 @@ ACTIVATE in the profile). Every knob is volatile (hot-editable without remountin
 | `monitorChecksets` | `[]`                                        | Per-file check-set names (the live containers' vocabulary, labels in v1) |
 | `policy.*`         | D6 defaults                                 | The per-action allowlist (the apply gate; see above)                     |
 
-## Status
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Commit-And-Ops`, `Machine-And-Contract`, `Observers-And-Waterfalls`, `Policy-Defaults`.
+
+## The plan
 
 Classic PoC (source complete; the smoke suite, the build pass and the EffectTS twin are end-phase
 work - see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
+
+## License
+
+CC0-1.0.

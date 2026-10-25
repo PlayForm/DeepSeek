@@ -84,6 +84,11 @@ function FormBody(props: {
 	}
 }
 
+const Kind = (Line: string): string => {
+	const Index = Line.indexOf(" ");
+	return Index === -1 ? Line : Line.slice(0, Index);
+};
+
 export default function Section(props: {
 	section: PanelSection;
 	ports: PanelPorts;
@@ -111,7 +116,11 @@ export default function Section(props: {
 	}, []);
 	return createElement(
 		"section",
-		{ className: "playform-family-section", "data-bundle": props.section.bundle },
+		{
+			className: "playform-family-section",
+			"data-bundle": props.section.bundle,
+			"data-activation": StatusView.activation,
+		},
 		createElement("h3", {}, Translate(props.t, props.section.title)),
 		createElement(
 			"p",
@@ -124,7 +133,9 @@ export default function Section(props: {
 		createElement(
 			"ul",
 			{ className: "playform-family-tail" },
-			StatusView.tail.map((Line) => createElement("li", { key: Line }, Line)),
+			StatusView.tail.map((Line) =>
+				createElement("li", { key: Line, "data-kind": Kind(Line) }, Line),
+			),
 		),
 		createElement(FormBody, {
 			view: FormView,

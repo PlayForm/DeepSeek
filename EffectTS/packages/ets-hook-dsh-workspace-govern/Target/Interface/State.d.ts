@@ -1,7 +1,7 @@
-import type Decision from "@Interface/Decision.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type PolicyRule from "@Interface/Policy.js";
-import type RecoveryRule from "@Interface/Recovery.js";
+import type Decision from "./Decision.js";
+import type FactoryHandle from "./Factory.js";
+import type PolicyRule from "./Policy.js";
+import type RecoveryRule from "./Recovery.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's

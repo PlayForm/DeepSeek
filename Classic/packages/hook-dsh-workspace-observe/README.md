@@ -1,10 +1,22 @@
 # @playform/hook-dsh-workspace-observe
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/OBSERVE](../../../Documentation/Plans/Workspace-Family/OBSERVE.md)
+
+## The role
+
 The workspace-observe hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release, Wave 1). The first step of the invisible flow: on every `fs/observed` event the hook
 records one **observation stamp** in its own KV storage domain - and the conversation never sees the
 stamps. A later wave's events surface them.
+
+## The surfaces
+
+- The `fs/observed` listener on the ROOT context (the factory's `Wire`) - the only registration.
+- The family's trace bus emission `observe/stamp` (when `ctx.trace` exists).
+- The own KV storage domain `workspace_observe` (tables `stamps` + `ring`).
+- No tool, no provided service, no file read, no file write.
 
 ## What it records
 
@@ -45,7 +57,7 @@ One stamp per event (and per manual call):
   domain. An absent storage facility is a silent skip (the stamps live in memory only); a present
   facility whose open fails is loud (one ledger line, never rethrown).
 
-## Config
+## The configuration
 
 See [SCHEME.md](SCHEME.md). Every knob is a volatile cell (hot edits commit without remounting):
 `enabled`, `domain`, `maxStamps`, `include`, `exclude` (plus the universal `log`/`logFile`).
@@ -92,6 +104,17 @@ observe: failed <path> (<reason>)
 observe: manual <path> version <version>
 observe: storage open failed: <reason>
 ```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Guards-And-Ring`, `Policy-Defaults`, `Storage-And-Service`, `Wiring-And-Stamps`.
+
+## The plan
+
+- [Workspace-Family/OBSERVE](../../../Documentation/Plans/Workspace-Family/OBSERVE.md) - the observe
+  step (Wave 1).
 
 ## License
 

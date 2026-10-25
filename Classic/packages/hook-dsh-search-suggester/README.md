@@ -15,12 +15,12 @@ locations where that intent lives in this repo - **before** the model burns the 
 
 ## The surfaces
 
-- The `tools/post-execute` waterfall listener (plain registration, after the ccr's
-  `{prepend: true}` listener): one `additionalContexts` note, never a content replacement.
+- The `tools/post-execute` waterfall listener (plain registration, after the ccr's `{prepend: true}`
+  listener): one `additionalContexts` note, never a content replacement.
 - The `suggestion_dismiss` tool (registered through the loader's tool API when the host exposes
   `ctx.tools`): the durable dismissal record.
-- The optional second surface (`sectionMode: "sticky"`, off by default): one `system-prompt/assemble`
-  section, rebuilt on a TTL and invalidated on `tools/change`.
+- The optional second surface (`sectionMode: "sticky"`, off by default): one
+  `system-prompt/assemble` section, rebuilt on a TTL and invalidated on `tools/change`.
 - The knowledge file (`persistPath`, `~/.dsh/search-suggester/knowledge.json`), written atomically.
 - No provided service; the optional `ctx.workspaceGraph` is probed through `ctx.get` (no inject).
 
@@ -143,8 +143,8 @@ by explicit ACTIVATE in the profile.
 
 ## The build and the tests
 
-The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`,
-Test tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
 its own `## Expected count`: the five original folders (Pack-Driven, Post-Execute-And-Learning,

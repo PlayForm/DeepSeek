@@ -1,5 +1,7 @@
 # @playform/plugin-dsh-batchstate
 
+> v0.1.0 - UNPUBLISHED - plan: [BATCH-STATE-PLUGIN](../../Documentation/Plans/BATCH-STATE-PLUGIN.md)
+
 The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board
 (Documentation/Plans/BATCH-STATE-PLUGIN.md).
 
@@ -36,6 +38,13 @@ The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch'
   `~/.dsh/batch-state.json`), written and read only when no storage facility is provided (or the
   domain's open fails). Both feed the same recovery, so the board survives a restart on either
   store.
+
+## The surfaces
+
+- The `batchstate` service (the read API listed above) - the only programmatic surface.
+- The agent-team inbox registration (`agent/inbox/spliced` / `agent/inbox/inserted`) - the splice.
+- The `batch/state-change` event emission on every state change.
+- No tool, no file writes beyond the JSON fallback state file and the ledger.
 
 ## The anatomy
 
@@ -92,14 +101,12 @@ files, commits or spawns). The block is one volatile object (a policy flip is ho
 resolved pack's `policy` section overrides the defaults per action (the wiring is the next
 refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## The build
+## The build and the tests
 
 ```
 sh Source/prepublishOnly.sh   # the full chain (Build + tsc + tsc-alias)
 sh Source/Run.sh              # the dev twin (Build only)
 ```
-
-## The smokes
 
 | Folder                | What it proves                                                                                           | Count |
 | --------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
@@ -108,3 +115,32 @@ sh Source/Run.sh              # the dev twin (Build only)
 | `Inbox-Splice`        | the inbox splice, the Gates block, the queue projection, the restart                                     | 22    |
 | `Storage-Domain`      | the KV domain (primary), the per-mutation round-trip, the reopen, the JSON fallback, the version failure | 15    |
 | `Policy-Defaults`     | the D6 block's defaults and the recorder posture                                                         | 4     |
+
+## The configuration
+
+| Field          | Default                                     | Meaning                                  |
+| -------------- | ------------------------------------------- | ---------------------------------------- |
+| `enabled`      | `false`                                     | the master switch (IDLE-forever posture) |
+| `log`          | `true`                                      | the ledger switch (shared cell)          |
+| `logFile`      | `~/.dsh/playform/plugin-dsh-batchstate.log` | the ledger                               |
+| `batch`        | `default`                                   | the active batch id                      |
+| `domain`       | `batch_state`                               | the primary KV domain                    |
+| `stateFile`    | `~/.dsh/batch-state.json`                   | the JSON fallback state file             |
+| `maxRecent`    | `8`                                         | the recent-activity ring bound           |
+| `maxProposals` | `16`                                        | the proposal list bound                  |
+| `policy.*`     | D6 defaults                                 | the per-action allowlist (see above)     |
+
+Every field is a volatile cell.
+
+## The ledger
+
+The module-owned, byte-stable lines are listed in [SCHEME.md](./SCHEME.md) section 7; the lines go
+to `logFile` with the module prefix. One global log per module.
+
+## The plan
+
+- [BATCH-STATE-PLUGIN](../../Documentation/Plans/BATCH-STATE-PLUGIN.md) - the live state board.
+
+## License
+
+CC0-1.0.

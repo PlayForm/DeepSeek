@@ -1,4 +1,4 @@
-import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
+import type { NodeKind, WorkspaceGraph } from "./Graph.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { Allowlist, State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {

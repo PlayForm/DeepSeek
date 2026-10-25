@@ -1,435 +1,106 @@
-# @playform/ets-hook-dsh-cargo-governor
-
-_The DeepSeek Harness Plugin Family for PlayForm._
-
-[![npm](https://img.shields.io/static/v1?label=npm&message=%40playform%2Fets-hook-dsh-cargo-governor&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
-[![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](https://www.npmjs.com/package/@playform/ets-hook-dsh-cargo-governor)
-[![variant](https://img.shields.io/static/v1?label=variant&message=EFFECT-TS&color=blue)](../../README.md)
-[![sibling](https://img.shields.io/static/v1?label=sibling&message=CLASSIC&color=white)](../../README.md)
-[![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](https://creativecommons.org/publicdomain/zero/1.0/)
-
-> [!NOTE]
->
-> The **Cargo.toml flavor of the silent package.json governor** - the same architecture, the same
-> API-awareness discipline, the same silence toward the author, but for RUST manifests, with the
-> update stage driven by the RUST-SIDE CLI (`cargo upgrade`, from cargo-edit): Rust does not co-opt
-> into the TypeScript ecosystem, so there is no npm-library equivalent - the update stage operates
-> at the exclusionary level through the cargo CLI.
->
-> _A factory flavor: chain canonicalization + full-version normalization + surgical TOML rewriting +
-> `cargo upgrade --exclude` - comments survive._
->
-> _The @-sentence identity: **Hook @ DSH @ Governor @ Cargo**._
->
-> Every claim below is live-verified (2026-10-03, live).
-
----
-
-## Where It Fits
-
-**Family position** (the @-sentence **Hook @ DSH @ Governor @ Cargo**): a hook child of the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) service and the
-[`ets-lib-dsh-core`](../ets-lib-dsh-core) helpers; the Rust-sided sibling of the two npm governance
-hooks on the same [`fs/observed`][dsh-fs] seam.
-
-One of three governance hooks sharing the [`fs/observed`][dsh-fs] seam, each gating on its own
-basename and writing its own ledger:
-
-| plugin                                                                        | basename gate  | ledger                              | pass                                                 |
-| ----------------------------------------------------------------------------- | -------------- | ----------------------------------- | ---------------------------------------------------- |
-| [`ets-hook-dsh-package-governor`](../ets-hook-dsh-package-governor)           | `package.json` | `ets-hook-dsh-package-governor.log` | chain pass (→ `^resolved`) + update stage (ncu)      |
-| [`ets-hook-dsh-package-pinner`](../ets-hook-dsh-package-pinner)               | `package.json` | `ets-hook-dsh-package-pinner.log`   | pin pass (`^0.3.4` → `0.3.4`; keep-list wins)        |
-| [ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] (this bundle) | `Cargo.toml`   | `ets-hook-dsh-cargo-governor.log`   | chain pass (bare caret / `=exact`) + `cargo upgrade` |
-
-The basenames are disjoint: the cargo module never sees a `package.json` event and the npm plugins
-never see a `Cargo.toml` event.
-
-Composition semantics: **chain > strip > normalize** (this module's precedence), **keep-list wins**
-over normalization - never over the chain.
-
-The ledgers are separate; activating one never implies another.
-
-Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
-
-- gates, discovery, the guarded write, the refresh, the continuation, the effects, the schema and
-  the namespaced `UpdateKey` come from [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory); the
-  policy loader and the suppression composer come from [`ets-lib-dsh-core`](../ets-lib-dsh-core).
-  This bundle keeps the Cargo-specific residue: the TOML identification, the surgical pin, the
-  full-version directive, and the `cargo upgrade` bridge. Besides the [`fs/observed`][dsh-fs] event
-  path, its two steps are registered with the factory's direct-govern registry at apply
-  (`Factory.RegisterGovern("Cargo.toml", "cargo" | "update", …)` — factory SCHEME.md §2.16), so the
-  `raw-write` tool's per-call `govern` selection can drive the same chain + normalization pass and
-  update stage directly through
-  [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-base-dsh/Source/Function/Govern.ts)
-  (Function/Direct — same machinery, same ledger strings).
-
-The DSH plugin family is the DeepSeek Harness plugin layer of the PlayForm ecosystem:
-TypeScript-first `Source/` → `Target/`, the deterministic `@playform` build, `prepublishOnly`-only -
-the same conventions as every other @playform package.
-
-### Install
-
-1. **Remote / dependency install (auto-activation):**
-   `pnpm add @playform/ets-hook-dsh-cargo-governor` in the profile dir (+ the package name in
-   `dsh.profile.bundles`, or `dsh plugin add`).
-2. **Local git clone:** clone → `pnpm install --ignore-workspace` (the bundle carries its own
-   node_modules - smol-toml) → `npx Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts` →
-   `dsh plugin --profile <name> add <this directory>`.
-3. **Native dsh install:**
-   `dsh plugin --profile <name> add ./local-ets-hook-dsh-cargo-governor-<v>.tgz`.
-
-All three end the same way: the loader activates the entry from `Target/`,
-[cordis.patch.yml][ours-cordis-patch] inserts the
-[ets-hook-dsh-cargo-governor][ours-ets-hook-dsh-cargo-governor] row, and the ledger logs
-`activated (cargo flavor, ...)` at the next host start.
-
-### Usage
-
-The bundle is configured through its [cordis.patch.yml][ours-cordis-patch] row (or the profile's
-`dsh.bundle` manifest) - the full config table is in [The Config](#the-config):
-
-```yaml
-- insert:
-      - id: ets-hook-dsh-cargo-governor
-        name: "@playform/ets-hook-dsh-cargo-governor"
-        config:
-            log: true
-            logFile: ~/.dsh/playform/ets-hook-dsh-cargo-governor.log
-            updateMode: cargo
-```
-
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery and the hook contract
-types - comes from the base [`ets-base-dsh`](../ets-base-dsh) package.
-
----
-
-## The Problem
-
-Rust manifests drift the same way npm manifests do - but `Cargo.toml` is a TOML document people
-decorate with comments, and there is no in-process library path: the only update tool is the cargo
-CLI.
-
-A governor for `Cargo.toml` must therefore rewrite surgically (never a TOML stringify) and delegate
-its update stage across the Rust/TS boundary - while still hooking the same [`fs/observed`][dsh-fs]
-event the npm hooks use, so one trigger law covers the whole machine.
-
----
-
-## How It Works
-
-**`The pipeline G = U ∘ P`**
-
-```text
-  fs/observed (target, {kind:"present", version}, actor)
-  ── fired by the TOOL LAYER ONLY, for every harness write/edit, any thread ──►
-       │
-       ▼
-  G1  Factory.Gate ── displayPath → actor ∈ mutationTools → kind "present" →
-  │                    Stash idempotence → basename "Cargo.toml" → excluded?
-  │     excluded ──► ledger `skipped (excluded) <path>`   (every other gate
-  ▼                  outcome is silent)                      outcome proceeds)
-  G2  Factory.Discover + Factory.Parse ── nearest registry.json walk-up
-  │     (THE USER'S OWN registry - the same discovery as the npm governor;
-  │      none / unreadable ──► ledger line, chain canonicalization skipped)
-  ▼
-  Stash seed (targetKey, version) ── our own re-emits re-enter as no-ops
-       │
-       ▼  detached, contained  (Factory.Continue - the listener never awaits)
-  G3  CHAIN PASS (the pure transform) ── ParseToml (smol-toml, IDENTIFICATION
-  │     ONLY) → Satisfy (the plan): 1. CHAIN - dep ∈ registry.effectiveLatest
-  │     → the bare resolved version (Cargo's implicit caret) or `=resolved`
-  │     with pinStyle "exact", always the FULL form (shorthand padded);
-  │     2. STRIP - strict-mode unknown deps (whole `name = "..."` entry gone,
-  │     only with a registry); 3. NORMALIZE - every other simple version
-  │     (full-version directive below; the keep-list wins → byte-identical)
-  │     → Pin (SURGICAL LINE REWRITE on the raw text - comments, inline
-  │     comments, blank lines and spacing survive byte-for-byte) →
-  │     GuardedWrite (replaceIfVersion + the P4 fence) → ledger
-  │     `governed <path> → <version>` → Refresh (P3 re-emit, same actor)
-  ▼  chained off the settled continuation (Function/Follow)
-  G4  UPDATE STAGE (the Rust/TS boundary) ── breaker → in-flight → cooldown →
-  │     the jobs envelope (kind "governor-update", unowned) or the detached
-  │     fallback → Policy loader → Upgrade via ctx.subprocess (fully-specified
-  │     argv, collect-mode output piped to the job ring + the ledger):
-  │          cargo upgrade --manifest-path <Cargo.toml>
-  │                    --exclude <crate> ...   (ONE flag per crate - the comma
-  │                                          form is silently IGNORED)
-  │                    [-p <crate> ...] [--compatible/--incompatible/--pinned ...]
-  │          exclude = policy.reject ∪ chain deps (the cordis-trap guard:
-  │          cargo upgrade must never bump a chain-governed pin)
-  │     → Verify (verifyCommand via /bin/sh -c, exit 127 non-fatal) →
-  │       Settle → Refresh (U2: re-stat + re-emit the fresh version)
-  ▼
-  SILENCE: the tool result shows exactly what the author wrote.
-  The governed state is discoverable only by a subsequent read - or in
-  the ledger.
-```
-
-The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
-envelope, the breaker update, the U2 refresh) - lives in the core
-([@playform/ets-lib-dsh-core](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source)'s
-`Function/Update`); this module is a thin delegate that injects its own collections, the cargo child
-runner and its ledger strings, so the flow is not forked per governance module.
-
-### The full-version normalization directive
-
-The user prefers full versions - no shorthand like "1.0" may remain in a governed Cargo.toml; every
-dependency version is expanded to its MOST SPECIFIC form:
-
-| Written                             | Governed                                       |
-| ----------------------------------- | ---------------------------------------------- |
-| `1.0`                               | `1.0.0`                                        |
-| `1`                                 | `1.0.0`                                        |
-| `0.1`                               | `0.1.0`                                        |
-| `=1.0`                              | `=1.0.0` (the exact form keeps its `=` prefix) |
-| `1.2-rc.1`                          | `1.2.0-rc.1` (padded BEFORE the prerelease)    |
-| `1.2.3-rc.1`                        | unchanged (prerelease preserved as authored)   |
-| `1.2.3+build`                       | unchanged (build metadata preserved)           |
-| `>=1.2`, `~0.3`, `>1.0`, `1.0, 2.0` | unchanged (complex ranges left as-is)          |
-
-Precedence, in order: **(1) chain** - a dep in `registry.effectiveLatest` is canonicalized to the
-FULL resolved form (even a shorthand registry entry yields a full output); **(2) strip** -
-strict-mode unknown deps; **(3) normalize** - every other simple version, UNLESS the name is in the
-**keep-list**
-([pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-package-pinner/Source/Function/Transform.ts)
-via `keepFile` - the same sidecar the pinner uses; discovery: global `keepFile` → the file's own
-directory → registry-adjacent, the union).
-
-**The keep-list wins over normalization; the chain is never suppressed.**
-
-Cargo semantics are unchanged: a bare full version is still Cargo's implicit caret.
-
-### The TOML rewrite (why comments survive)
-
-`smol-toml` (the one non-@playform tool dependency, carried by the bundle's own `node_modules`) is
-used for **PARSING ONLY** - identification of the dep entries in `[dependencies]`,
-`[dev-dependencies]`, `[build-dependencies]`, `[target.'cfg(...)'.dependencies]` (and its dev/build
-variants), and **`[workspace.dependencies]`** (the shared dep table - handled natively).
-
-The rewrite itself (Function/Pin) is **surgical line-level string manipulation on the raw text** -
-so comments, inline comments, blank lines, and spacing survive byte-for-byte.
-
-Handled entry shapes: `name = "0.3.4"`, `name = { version = "0.3.4", ... }` (single line or
-pretty-printed), `[dependencies.name]` table style.
-
-Never rewritten: `path = "..."`, `git = "..."`, and inherited entries (`workspace = true` - the
-version lives in the workspace table, walked separately).
-
-Non-dependency sections are NEVER touched:
-[the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-lib-dsh-core/Source/Function/Refusal.ts)
-refuses any plan entry outside an identified dependency table
-(`REFUSED rewrite of ...: non-dependency section "..." would change`), and `Pin` aborts (never a
-partial rewrite) if a planned entry cannot be located in the text.
-
-### The Rust side (live-verified)
-
-- `cargo` 1.100.0-nightly + cargo-edit 0.13.13, resolved through `cargoBin` (the schema default is
-  the bare `cargo`, found via
-  [the subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess)'s
-  `resolveExecutable`; set an absolute path when the host PATH is not the shell PATH).
-- **`--exclude` is ONE flag per crate** - the comma form is silently IGNORED (`--exclude a,b`
-  excludes nothing), the exact inverse of ncu's one-comma-argument reject list, which is why this
-  module cannot reuse the parent's argv builder.
-- **There is NO `--exact` flag** in cargo-edit 0.13.13 - exact pins are enforced at the manifest
-  level by the chain pass (`pinStyle: "exact"` → `=resolved`).
-- `cargo upgrade` preserves comments and formatting (it edits via `toml_edit`), rewrites every
-  dependency table, and exits 0 on success / 1 on errors.
-- If cargo-edit is NOT installed, `cargo upgrade` exits 101 with `no such command: upgrade` - the
-  module logs `update: cargo-edit unavailable: ...` and fails gracefully (the breaker counts it; the
-  manifest is untouched).
-
-### Update-stage policy mapping
-
-`update-policy.json` (same discovery as the npm governor: global `policyFile` → the file's own
-directory → registry-adjacent → built-in default):
-
-| Policy field                             | cargo-edit mapping (0.13.13)                                                      |
-| ---------------------------------------- | --------------------------------------------------------------------------------- |
-| `reject`                                 | `--exclude <crate>` - ONE flag per crate (comma form ignored)                     |
-| `allow`                                  | `-p <crate>` - repeatable                                                         |
-| `incompatible` / `pinned` / `compatible` | `--incompatible` / `--pinned` / `--compatible <allow\|ignore>`                    |
-| `pinStyle`                               | NO CLI equivalent (no `--exact` exists) - manifest-level via the chain pass       |
-| `depGroups` / `targets` / `concurrency`  | NO equivalent                                                                     |
-| `verifyCommand`                          | run after the upgrade via `ctx.subprocess` (`/bin/sh -c ...`), exit 127 non-fatal |
-
-The built-in default mirrors `cargo upgrade`'s own semantics: no rejects, `incompatible: "ignore"`,
-`pinned: "ignore"`, `pinStyle: "caret"`, no verifyCommand (never install implicitly).
-
-### The Source Layout
-
-TypeScript-first, built with `@playform/build` (ESBuild + tsc type-check):
-
-```text
-ets-hook-dsh-cargo-governor/
-├── Source/                  ← TypeScript (NOT shipped)
-│   ├── Library.ts           ← entry: name / apply / Config / inject
-│   │                          + default { name, apply, Config, inject }
-│   ├── Function/            ← Apply.ts (thin wire-up), Observe.ts,
-│   │   │                      Transform.ts (the TOML pipeline leaf),
-│   │   │                      Direct.ts (the direct-govern driver), Transform/Guard.ts,
-│   │   │                      Transform/Keep.ts, ParseToml.ts, Pin.ts (+ Pin/KeyOf, Name,
-│   │   │                      SpliceVersion, SplitPath), Normalize.ts,
-│   │   │                      Satisfy.ts, Filter.ts, Resolve.ts, Run.ts,
-│   │   │                      Dispatch.ts, Verify.ts, Settle.ts, Decode.ts
-│   │   └── Update/          ← Policy.ts, Upgrade.ts (the Rust/TS bridge,
-│   │                           + Upgrade/Child, Collect, Seam, Unavailable)
-│   ├── Interface/           ← typed contracts (State, Factory, Plan, ...)
-│   └── Variable/            ← constants, defaults, the Config schema
-├── Configuration/
-│   └── ESBuild.ts           ← the @playform/build custom config (+ .js twin)
-├── Target/                  ← built output (SHIPPED: .js + .d.ts)
-├── cordis.patch.yml         ← the loader row (id: ets-hook-dsh-cargo-governor)
-├── package.json             ← main → Target/Library.js
-└── README.md / SCHEME.md    ← usage + the design document
-```
-
-The published artifact contains **only the built output**; the only npm script is `prepublishOnly`
-(`Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts --TypeScript Configuration/TypeScript.noemit.json && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json`).
-
-### The Hard Lessons
-
-1. **`inject` and `Config` must sit on the DEFAULT export object** - named- only exports are
-   shadowed and service accessors throw.
-2. **`apply` must return nothing** - a returned value silently kills event delivery. Test probes use
-   `Context.__cargoGovernorState`.
-3. **The update stage runs in the jobs envelope when a controller serves the context, with the
-   detached contained continuation as the probed fallback** - the earlier "ctx.jobs is agent-scoped"
-   premise was refuted live: a root plugin's controller (attached by the factory's `Attach`) serves
-   every owner.
-4. **`ctx.fs.writeText` from a root plugin needs an explicit sandbox policy**
-    - this module passes `{ mode: "danger-full-access" }` because its own exclude list IS its fence.
-5. **cargo-edit's `--exclude` is one flag per crate** - the comma form is silently ignored (the
-   inverse of ncu's one-comma argument).
-6. **cargo-edit has no `--exact`** - exact pins are a manifest-level concern (the chain pass's
-   `pinStyle: "exact"`).
-
----
-
-## The Config
-
-The exported `Config` schema validates and fills every default at load; new patch entries are
-declared with `insert:`.
-
-```yaml
-- insert:
-      - id: ets-hook-dsh-cargo-governor
-        name: "@playform/ets-hook-dsh-cargo-governor"
-        config:
-            log: true
-            logFile: ~/.dsh/playform/ets-hook-dsh-cargo-governor.log # SEPARATE ledger - never the npm ledgers
-            updateCooldownMs: 3000
-            strict: false # strip unknown deps - explicit only, never a default
-            mutationTools: [write, edit, str_replace_editor, raw-write]
-            maxUpdateFailures: 3 # circuit breaker: pause a dir's update stage
-            cargoBin: /usr/local/bin/cargo # the update-stage binary; the schema default is the bare
-            # "cargo" (resolveExecutable) - an absolute path when the host PATH lacks it
-            updateMode: cargo # the ONLY mode (the Rust-side CLI)
-            policyFile: "" # optional global update-policy.json
-            keepFile: "" # optional global pin-policy.json (the keep-list)
-            exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
-```
-
----
-
-## In Action
-
-One governed write.
-
-The author saves a `Cargo.toml` with comments, a shorthand version, and a chain-governed dep:
-
-```toml
-[dependencies]
-# the engine — keep the comment alive
-serde = "1.0"  # shorthand: must become 1.0.0
-tokio = { version = "0.4.1", features = ["full"] }  # chain-governed
-```
-
-With the nearest `registry.json` resolving tokio to 0.4.5, the surgical rewrite produces (same text,
-same comments, same inline spacing):
-
-```toml
-[dependencies]
-# the engine — keep the comment alive
-serde = "1.0.0"  # shorthand: must become 1.0.0
-tokio = { version = "0.4.5", features = ["full"] }  # chain-governed
-```
-
-The transcript shows only what the author wrote; the ledger shows the pass:
-
-```text
-[2026-10-03T09:15:22.411Z] activated (cargo flavor, logFile=~/.dsh/playform/ets-hook-dsh-cargo-governor.log, updateMode=cargo, cargoBin=/usr/local/bin/cargo, exclude=[node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app], policyFile=(discovery), keepFile=(discovery))
-[2026-10-03T09:16:01.880Z] governed ~/Projects/acme/engine/Cargo.toml → 42
-[2026-10-03T09:16:34.120Z] update stage dispatched for ~/Projects/acme/engine (cargo via /usr/local/bin/cargo, built-in default policy)
-[2026-10-03T09:16:41.502Z] update: cargo upgrade --manifest-path ~/Projects/acme/engine/Cargo.toml --exclude serde tokio → {"exitCode":0}
-[2026-10-03T09:16:41.503Z] update: DONE — pins bumped per policy
-```
-
-(Here the policy's chain deps plus rejects became one `--exclude` flag per crate; `serde` and
-`tokio` are protected from the CLI bump - tokio by the chain, serde by the normalization pass
-already writing its full form.)
-
-Read the file back to see the governed state; write it again immediately and nothing complains - no
-`FS_STALE_VERSION`.
-
-Write inside `node_modules`/`.git`/`.dsh` and the ledger gains `skipped (excluded) ...` while the
-file stays untouched.
-
-Remove cargo-edit and the pass fails gracefully: `update: cargo-edit unavailable: ...`, the manifest
-untouched, the breaker counting the failure.
-
----
-
-## The Ledger
-
-One global log (`logFile`, default `~/.dsh/playform/ets-hook-dsh-cargo-governor.log` - SEPARATE from
-the npm ledgers) records activation, exclusions, chain-pass results, refusals, and every
-update-stage dispatch.
-
-The strings this module composes (the ets-hook-dsh-cargo-governor: logger prefix is the factory's
-`Append`; each line is `[<ISO>] <message>` in the file):
+# @playform/ets-hook-dsh-cargo-governor - The silent Cargo.toml governor
+
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
+> [SCHEME.md](./SCHEME.md).
+
+## The role
+
+The **Cargo.toml flavor of the silent package.json governor** - the same architecture, the same
+API-awareness discipline, the same silence toward the author, but for RUST manifests. Hooks
+`fs/observed` - the cordis event every tool-layer file write dispatches - for basename `Cargo.toml`,
+parses with smol-toml ONLY to identify dependency entries (`[dependencies]`, `[dev-dependencies]`,
+`[build-dependencies]`, `[target.'cfg(...)'.dependencies]`, `[workspace.dependencies]`) and rewrites
+chain-governed pins SURGICALLY on the raw text lines (comments and formatting survive; an internal
+calculation, not a TOML stringify), then runs the update stage as a detached, contained continuation
+that drives the RUST-SIDE CLI - `cargo upgrade` (cargo-edit) - through the `ctx.subprocess` seam
+with the exclusion list enforced AT THE CLI LEVEL (`--exclude`, one flag per crate; chain deps
+merged in so `cargo upgrade` can never bump a chain-governed pin). The Rust/TS boundary is
+exclusionary: Rust does not co-opt into the TypeScript ecosystem, and there is no npm-library
+equivalent for cargo manifest updates - the cargo CLI is the only update path. Fully API-aware: the
+governed manifest is read/rewritten through `ctx.fs` with a version-guarded `replaceIfVersion`
+write, configuration is a validated Schemastery Config schema with defaults, and the authoring agent
+is never notified (the observation-policy's version record is refreshed by re-emitting `fs/observed`
+with the service-issued fresh version). A factory flavor: the family's furnace does the plumbing;
+this package is the model logic. The lowest plumbing layer - the ledger `Append`, the shared journal
+and the activation-line composer - lives in the family's base package `ets-base-dsh`, reached
+through the factory.
+
+## The surfaces
+
+| Kind     | Name                                     | What                                                                         |
+| -------- | ---------------------------------------- | ---------------------------------------------------------------------------- |
+| listener | `fs/observed`                            | The `Wire`-registered observation listener; basename gate `Cargo.toml`.      |
+| listener | `fs/observed` (refresh)                  | The observation-policy refresh re-emits the service-issued fresh version.    |
+| service  | `RegisterGovern("Cargo.toml", "cargo")`  | The direct-govern chain-pass entry.                                          |
+| service  | `RegisterGovern("Cargo.toml", "update")` | The direct-govern update-stage entry.                                        |
+| service  | update stage (Dispatch/Run)              | The detached, contained continuation (`cargo upgrade` via `ctx.subprocess`). |
+| config   | `pin-policy.json`                        | The keep-list sidecar (`policyFileName`, shared discovery via the factory).  |
+| config   | Schemastery Config schema                | The exported `Config` (shared block + the module's own fields).              |
+| tool     | ledger `ets-hook-dsh-cargo-governor.log` | The module's own log file - separate from the npm ledgers.                   |
+
+## The configuration
+
+| Field               | Type     | Default                                                                       | Meaning                                                                                                                        |
+| ------------------- | -------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `log`               | boolean  | `true`                                                                        | Ledger enabled - write the durable log file (volatile).                                                                        |
+| `logFile`           | string   | `~/.dsh/playform/ets-hook-dsh-cargo-governor.log`                             | The CARGO MODULE's OWN ledger - separate from the package governor's (volatile).                                               |
+| `updateCooldownMs`  | number   | `3000`                                                                        | Cooldown between update-stage dispatches, per directory (volatile).                                                            |
+| `mutationTools`     | string[] | `["write", "edit", "str_replace_editor", "raw-write"]`                        | Actor tool names whose `fs/observed` events trigger the module (volatile).                                                     |
+| `policyFile`        | string   | `""`                                                                          | Global policy file; empty means discovery (`Function/Resolve`).                                                                |
+| `exclude`           | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]` | Excluded path segments (anywhere mode, exclusion-first).                                                                       |
+| `strict`            | boolean  | `false`                                                                       | Strict chain pass: strip unknown deps (the whole `name = "..."` entry) in a governed workspace.                                |
+| `maxUpdateFailures` | number   | `3`                                                                           | Circuit breaker: consecutive update-stage failures per directory before pause.                                                 |
+| `cargoBin`          | string   | `"cargo"`                                                                     | Cargo binary for the update stage (bare name resolved through the subprocess seam's `resolveExecutable`, or an absolute path). |
+| `keepFile`          | string   | `""`                                                                          | Global `pin-policy.json` (the keep-list of the full-version normalization directive); empty means discovery.                   |
+| `updateMode`        | string   | `"cargo"`                                                                     | Update stage mode: `"cargo"` (the Rust-side CLI through `ctx.subprocess`) is the only implemented mode.                        |
+
+## The ledger
 
 ```text
 activated (cargo flavor, logFile=..., updateMode=cargo, cargoBin=..., exclude=[...], policyFile=(discovery), keepFile=(discovery))
 skipped (excluded) <path>
-no registry.json found for <path>
+no registry.json found for <path> - chain pass skipped
+unreadable registry.json at <found> - chain pass skipped for <path>
+observed non-JSON/TOML Cargo.toml <path> - skipped
 governed <path> → <version>
-update stage dispatched for <dir> (cargo via ..., policy ...)
-update: cargo upgrade <argv> → {"exitCode":0}
-update: DONE / update: FAILED
-unreadable registry.json at <found> — chain pass skipped for <path>
-observed non-JSON/TOML Cargo.toml <path> — skipped
 REFUSED rewrite of <path>: non-dependency section "<name>" would change
-REFUSED rewrite of <path>: dependency "<key>" in section "<section>" has an unsupported value shape — rewrite aborted
-REFUSED rewrite of <path>: dependency "<name>" in section "<section>" not found in text — rewrite aborted
+REFUSED rewrite of <path>: dependency "<key>" in section "<section>" has an unsupported value shape - rewrite aborted
+REFUSED rewrite of <path>: dependency "<name>" in section "<section>" not found in text - rewrite aborted
+unreadable pin-policy.json at <keepFile> - using built-in default
+update stage dispatched for <dir> (cargo via ..., policy ...)
 update stage paused for <dir> (N consecutive failures ≥ limit)
 update stage skipped for <dir> (in-flight)
 update stage skipped for <dir> (cooldown)
 update stage FAILED (<code>) for <dir>; consecutive=N
+update: cargo upgrade <argv> → {"exitCode":0}
 update: cargo upgrade failed (<label>) status N
+update: cargo-edit unavailable: <cause>
 update: running verifyCommand: <command>
 update: verifyCommand ok
 update: verifyCommand failed (status N)
-update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
-unreadable pin-policy.json at <keepFile> — using built-in default
+update: verifyCommand runner unavailable (exit 127) - skipped, non-fatal
+update: DONE - pins bumped per policy
+update: FAILED - see lines above
 ```
 
-(The registry-miss line, the three REFUSED forms, the runner-unavailable line and the
-unreadable-policy line end with em dashes; the DONE line is `update: DONE` + em dash + reason -
-byte-exact forms are in the In Action excerpt above.
+Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
+module identity is `hook-dsh-governor-cargo`). The activation line is written by `apply()` - "did it
+activate" must be answerable from the ledger alone.
 
-Those em dashes are part of the literal ledger strings, so they live only in the example block.)
+## The build and the tests
 
-The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
-alone.
+- Build:
+  `pnpm --config.verify-deps-before-run=false --dir EffectTS/packages/ets-hook-dsh-cargo-governor run prepublishOnly`
+- Smokes: `node EffectTS/packages/ets-hook-dsh-cargo-governor/Target/Test/<Folder>/Test.js`
+    - Chain-And-Rewrite - 13 checks
+    - Direct-Govern - 4 checks
+    - Factory-Wiring - 8 checks
+    - Gates-And-Registry-Discovery - 6 checks
+    - Keep-Refusal-And-Guarded-Write - 8 checks
+    - Loader-And-Config - 6 checks
+    - State-And-Activation - 4 checks
+    - Update-Stage - 13 checks
 
----
+## The plan
 
-## License 📜
-
-CC0-1.0.
-
-[dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts
-[ours-ets-hook-dsh-cargo-governor]:
-	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/Source
-[ours-cordis-patch]:
-	https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-cargo-governor/cordis.patch.yml
+[SCHEME.md](./SCHEME.md).

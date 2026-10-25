@@ -1,16 +1,17 @@
 # DeepSeek Harness Plugin Family for PlayForm
 
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](CHANGELOG.md)
-[![smokes](https://img.shields.io/static/v1?label=smokes&message=359%20suites%20%2F%205%2C337%20checks&color=blue)](Classic/smokes/README.md)
-[![packages](https://img.shields.io/static/v1?label=packages&message=51%20%2B%2046&color=white)](Classic/packages/)
+[![smokes](https://img.shields.io/static/v1?label=smokes&message=511%20suites%20%2F%206%2C612%20checks&color=blue)](Classic/smokes/README.md)
+[![packages](https://img.shields.io/static/v1?label=packages&message=54%20%2B%2048&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
-Tame the model's output and govern the project's files: ninety-seven TypeScript packages - 51
-Classic and 46 EffectTS - the original 14 plugins (the factory, the core, the governance trio, the
+Tame the model's output and govern the project's files: one hundred and two TypeScript packages - 54
+Classic and 48 EffectTS - the original 14 plugins (the factory, the core, the governance trio, the
 seven-member normalize family, the two guardians and the live block) plus the 36 plugins of the
 2026-10-22 delivery (the workspace family, the suggesters, the orchestration set, the client panels)
-and their ETS twins, in two implementations ([the Classic release][classic], [the Effect-TS
-release][ets]), one ledger-string contract, 359 smoke suites / 5,337 checks.
+and their ETS twins, plus the completion-program libraries (lib-dsh-trace, lib-dsh-pack) and the
+comment filter, in two implementations ([the Classic release][classic], [the Effect-TS
+release][ets]), one ledger-string contract, 511 smoke suites / 6,612 checks.
 
 > [!NOTE]
 >
@@ -42,9 +43,9 @@ binary.
 
 ```sh
 pnpm install --ignore-scripts
-pnpm run build:classic   # the 51 Classic packages, one workspace pass
-pnpm run build:effect-ts # the 46 EffectTS packages
-pnpm run test            # all 359 smoke folders - the arbiter
+pnpm run build:classic   # the 54 Classic packages, one workspace pass
+pnpm run build:effect-ts # the 48 EffectTS packages
+pnpm run test            # all 511 smoke folders - the arbiter
 ```
 
 Per bundle the build is the same three steps (`Source/` -> `Target/` via ESBuild + `tsc` +
@@ -330,15 +331,15 @@ The original 14 plugins (plus `lib-dsh-core`) - every name reads as an @-sentenc
 
 | Tree        | What it is                                                                                                                               |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 51 packages; 184 smoke suites.    |
-| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 46 packages; 175 suites. |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 54 packages; 269 smoke suites.    |
+| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 48 packages; 242 suites. |
 
 Every package carries an `ets-*` twin unless the manifest declares none (the two client panels and
 four orchestration candidates have no twin - 30 twins for the 36 new packages).
 
 ```text
-    Classic/         the plain-TypeScript release: 51 packages + smokes
-    EffectTS/        the Effect v4 port: 46 packages + smokes
+    Classic/         the plain-TypeScript release: 54 packages + smokes
+    EffectTS/        the Effect v4 port: 48 packages + smokes
     Site/            the static site (its own repository)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes
     Documentation/   the framework, the guides, the skills, the plans, the reports, the test plans
@@ -447,7 +448,7 @@ The command writes one ledger line per action:
 
 The suites are the speed and coverage story:
 
-- **184 Classic / 175 EffectTS suites, 5,337 checks, all green.** The aggregate runner is
+- **269 Classic / 242 EffectTS suites, 6,612 checks, all green.** The aggregate runner is
   `node Maintain/Run-Smokes.mjs`; the heaviest single original suite (cargo, 62 checks including the
   real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
 - **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript;
@@ -460,10 +461,10 @@ also guards each folder's printed PASS count against its folder README - the vac
 
 | Measure                   | Value                                                                            |
 | ------------------------- | -------------------------------------------------------------------------------- |
-| Test folders (Classic)    | 184                                                                              |
-| Test folders (EffectTS)   | 175                                                                              |
-| Total suites              | **359**                                                                          |
-| Total checks (both trees) | **5,337**                                                                        |
+| Test folders (Classic)    | 269                                                                              |
+| Test folders (EffectTS)   | 242                                                                              |
+| Total suites              | **511**                                                                          |
+| Total checks (both trees) | **6,612**                                                                        |
 | The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run-Wiring.mjs` under `DSH_TEST_SCRATCH` |
 
 The per-suite before/after totals live in the totals ledger of
@@ -499,7 +500,7 @@ The workflow, root-first - every step is a root `package.json` script:
 | `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install   |
 | `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                               |
 | `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                    |
-| `pnpm test`                                  | all 359 smoke suites via `Maintain/Run-Smokes.mjs` - the behavioral arbiter, exit non-zero on any failure |
+| `pnpm test`                                  | all 511 smoke suites via `Maintain/Run-Smokes.mjs` - the behavioral arbiter, exit non-zero on any failure |
 | `pnpm run test:types`                        | `Maintain/Run-Types.mjs` - the type check across the trees                                                |
 | `pnpm run test:wiring`                       | `Maintain/Run-Wiring.mjs` - the live wiring battery under `DSH_TEST_SCRATCH`                              |
 | `pnpm site`                                  | the static site build (`Site/`)                                                                           |
@@ -581,7 +582,7 @@ and the governance on top.
 | --------------------- | ------------------------------------------------------------------------------------------------- |
 | Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`                         |
 | Add a flavor          | `lib-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle                             |
-| Change behavior       | the smokes first - the counts (359 suites / 5,337 checks) and the ledger strings are the contract |
+| Change behavior       | the smokes first - the counts (511 suites / 6,612 checks) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`                          |
 
 The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings

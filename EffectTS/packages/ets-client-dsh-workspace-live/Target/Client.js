@@ -1,1 +1,1 @@
-import e from"./Function/Client.js";const o=["slots","locale"];function n(t){e(t,{tabOrder:25,maxEvents:50,maxRepresentations:100})}var r={inject:o,apply:n};export{n as apply,r as default,o as inject};
+import e from"./Function/Client.js";import o from"./Function/Styles.js";o();const n=["slots","locale"];function r(t){e(t,{tabOrder:25,maxEvents:50,maxRepresentations:100})}var l={inject:n,apply:r};export{r as apply,l as default,n as inject};

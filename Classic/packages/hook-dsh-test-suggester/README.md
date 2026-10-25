@@ -1,5 +1,10 @@
 # @playform/hook-dsh-test-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The test-suggester hook: a DeepSeek Harness plugin that answers the **test task intent** with a
 target set. When the model searches for proof - a grep for `PASS`/`FAIL`/`error TS`, a read of a
 `Test.ts`, a bash error sweep - the hook classifies the call deterministically and names the likely
@@ -9,6 +14,13 @@ It is the test consumer of the suggester family
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md), sections 3, 4,
 8): a hook with no public API, an embedded pattern pack (the two-consumer extraction rule - no
 shared core service until the family proves two consumers), and one delivery surface.
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener (plain registration, after the ccr's `{prepend: true}`
+  listener): one `additionalContexts` notice, never a content replacement.
+- The `agent/pre-step` listener: the per-turn reset of the note counter.
+- No tool, no provided service; the reconciliation is read-only (`node:fs` reads, never a write).
 
 ## How it works
 
@@ -86,15 +98,24 @@ test-suggester: reconciliation skipped cooldown <package>
 test-suggester: reconciliation skipped cap <package>
 ```
 
-## Configuration
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full table. Every knob is volatile (hot-editable without
 remounting). The hook ships **disabled** (`enabled: false` in `cordis.patch.yml`): the acceptance
 rate must be measured (the plan §10.3 kill criterion) before it is trusted.
 
-## Status
+## The build and the tests
 
-The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
-reconciliation landed (the completion spec's wave 2c re-spec); the ETS twin and the live activation
-(the profile row flip and the restart) are the remaining end-phase steps
-(Documentation/Plans/POC-BRIEF.md section 8).
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Loader-And-Activation`, `Pack-Driven`, `Pipeline-And-Gates`, `Reconciliation`, `Workspace-Gate`.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - sections 3, 4,
+  8, the test consumer.
+- [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
+  wave 2c re-spec (the reconciliation).
+- The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
+  reconciliation landed; the ETS twin and the live activation (the profile row flip and the restart)
+  are the remaining end-phase steps (Documentation/Plans/POC-BRIEF.md section 8).

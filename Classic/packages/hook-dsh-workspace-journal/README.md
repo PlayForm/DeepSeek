@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-journal
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/JOURNAL](../../../Documentation/Plans/Workspace-Family/JOURNAL.md)
+
+## The role
+
 The **workspace-journal hook**: a DeepSeek Harness plugin that is the workspace's **evidence
 record** - the undo, the recovery checkpoints, and the crash recovery. It is the JOURNAL role of the
 workspace family's invisible flow:
@@ -28,7 +33,7 @@ sections 3.7-3.8.)
 
 Batch lifecycle: `applying → verified | recovery-required | reverted`.
 
-## Service
+## The surfaces
 
 `ctx.workspaceJournal` (registered from apply):
 
@@ -41,7 +46,7 @@ Batch lifecycle: `applying → verified | recovery-required | reverted`.
 | `batch(id)` / `batches()` / `entries(id)` | Reads                                                                |
 | `statistics()`                            | `{ batches, entries, applying }`                                     |
 
-## Config
+## The configuration
 
 Every knob is a volatile cell (hot edits commit without remounting):
 
@@ -83,9 +88,47 @@ refinement).
 
 The documented refusal line: `journal: revert held (<n> files) (policy write=approve)`.
 
+## The ledger
+
+One line per event, prefixed `journal: ` (byte-exact; the smoke folders' expected-string sections
+are the arbiter):
+
+```text
+journal: activated (domain=workspace_journal, maxBatches=200)
+journal: disabled (enabled=false)
+journal: opened <batch> (<n> files)
+journal: sealed <batch> (verified | recovery-required)
+journal: seal failed <batch> (reason)
+journal: reverted <batch> (<n> files)
+journal: reverted <batch> <file> (conflict | skipped: reason)
+journal: revert held (<n> files) (policy write=approve)
+journal: revert failed <batch> (reason)
+journal: capped <batch> (maxBatches <n>)
+journal: observed <file> in <batch> (progress <n>)
+journal: recovery-required <batch> (applying at boot with <n>/<m> writes observed)
+journal: ignored <path> (excluded | own actor)
+journal: storage open failed: <reason>
+journal: failed unknown (malformed event: displayPath is not a string)
+```
+
 ## Exemptions (documented)
 
 - The ledger file is appended with plain `appendFileSync` (ctx.fs has no append operation; the
   Append precedent).
 - Reverting an absent pre-image file unlinks it through `node:fs` (ctx.fs has no delete operation);
   every _write_ goes through the factory's shared version-fenced executor.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/JOURNAL](../../../Documentation/Plans/Workspace-Family/JOURNAL.md) - the journal
+  role.
+- [WORKSPACE-FAMILY-V4-1](../../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - sections 3.7-3.8.
+
+## License
+
+CC0-1.0.

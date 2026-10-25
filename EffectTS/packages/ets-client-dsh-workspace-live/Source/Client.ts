@@ -4,7 +4,10 @@
 // and the locale service) and the named `apply(ctx)`; the body lives in
 // Function/Client.ts - this entry is wiring only.
 import ClientApply from "@Function/Client.js";
+import Styles from "@Function/Styles.js";
 import type { ClientContext } from "@Interface/Client.js";
+
+Styles();
 
 /** Required client services: the slot registry and the locale service. */
 export const inject = ["slots", "locale"];

@@ -35,13 +35,37 @@ export default function View(props: {
 			"data-live": props.live ? "true" : "false",
 		},
 		createElement(
+			"header",
+			{ className: "playform-workspace-header" },
+			createElement("span", {
+				className: "playform-workspace-dot",
+				"data-live": props.live ? "true" : "false",
+				"aria-hidden": "true",
+			}),
+			createElement("span", { className: "playform-workspace-title" }, EN_DICTIONARY.tab),
+			createElement(
+				"span",
+				{ className: "playform-workspace-count" },
+				String(props.view.representations.length),
+			),
+		),
+		createElement(
 			"ul",
 			{ className: "playform-workspace-representations" },
 			props.view.representations.map((Representation) =>
 				createElement(
 					"li",
 					{ key: Representation.id },
-					`${Representation.label} (${Representation.kind}, v${Representation.version}, seq ${Representation.lastSequence})`,
+					createElement(
+						"span",
+						{ className: "playform-workspace-representation-label" },
+						Representation.label,
+					),
+					createElement(
+						"span",
+						{ className: "playform-workspace-representation-meta" },
+						`${Representation.kind} / v${String(Representation.version)} / seq ${String(Representation.lastSequence)}`,
+					),
 				),
 			),
 		),
@@ -54,7 +78,7 @@ export default function View(props: {
 			props.tail.map((Envelope, Index) =>
 				createElement(
 					"li",
-					{ key: `${Envelope.trace}-${String(Index)}` },
+					{ key: `${Envelope.trace}-${String(Index)}`, "data-kind": Envelope.kind },
 					`${Envelope.kind} ${Key(Envelope)}`,
 				),
 			),
