@@ -1,29 +1,36 @@
 # DeepSeek Harness Plugin Family for PlayForm
 
-> [!NOTE]
->
-> Tame the model's output and govern the project's files.
->
-> Ninety-seven TypeScript packages - 51 Classic and 46 EffectTS - the original 14 plugins (the
-> factory, the core, the governance trio, the seven-member normalize family, the two guardians and
-> the live block) plus the 36 plugins of the 2026-10-22 delivery (the workspace family, the
-> suggesters, the orchestration set, the client panels) and their ETS twins, in two implementations
-> ([the Classic release](https://github.com/PlayForm/DeepSeek/tree/Current/Classic),
-> [the Effect-TS release](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS)), one
-> ledger-string contract, 359 smoke suites / 5,337 checks.
->
-> _One monorepo._
->
-> _Every ledger byte-checked._
-
 [![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](CHANGELOG.md)
 [![smokes](https://img.shields.io/static/v1?label=smokes&message=359%20suites%20%2F%205%2C337%20checks&color=blue)](Classic/smokes/README.md)
 [![packages](https://img.shields.io/static/v1?label=packages&message=51%20%2B%2046&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
----
+Tame the model's output and govern the project's files: ninety-seven TypeScript packages - 51
+Classic and 46 EffectTS - the original 14 plugins (the factory, the core, the governance trio, the
+seven-member normalize family, the two guardians and the live block) plus the 36 plugins of the
+2026-10-22 delivery (the workspace family, the suggesters, the orchestration set, the client panels)
+and their ETS twins, in two implementations ([the Classic release][classic], [the Effect-TS
+release][ets]), one ledger-string contract, 359 smoke suites / 5,337 checks.
 
-## Install
+> [!NOTE]
+>
+> _One monorepo. Every ledger byte-checked._
+
+## Table of contents
+
+1. [Quick start](#quick-start)
+2. [The suite at a glance](#the-suite-at-a-glance)
+3. [Architecture](#architecture)
+4. [Tools and configuration](#tools-and-configuration)
+5. [Verification](#verification)
+6. [The docs map](#the-docs-map)
+7. [Development](#development)
+8. [Troubleshooting](#troubleshooting)
+9. [Relationship to deepseek-ai/deepseek-harness](#relationship-to-deepseek-aideepseek-harness)
+10. [Contributing](#contributing)
+11. [License](#license)
+
+## Quick start
 
 The family is published from source: each bundle is a self-contained TypeScript package built
 deterministically and wired into a DeepSeek Harness profile by hand - no registry install, no setup
@@ -121,7 +128,6 @@ exists.
                 logFile: ~/.dsh/playform/hook-dsh-normalize-dash.log
                 replacement: "-"
                 normalizeReasoning: true
-                normalizeToolArguments: true
     ```
 
 3. **Restart the host** - the loader activates the entry from `Target/Library.js` and inserts the
@@ -137,12 +143,12 @@ exists.
     hook-dsh-normalize-dash: activated (replacement=-, reasoning=on, toolArgs=off, logFile=~/.dsh/playform/hook-dsh-normalize-dash.log)
     ```
 
----
-
-## The two release groups (CLASSIC vs EFFECT-TS)
+## The suite at a glance
 
 Two published groups, one contract: the CLASSIC packages (`@playform/dsh-*` - plain TypeScript) and
-the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run:
+the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group you run and never mix
+the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic dispatch
+envelope):
 
 - **CLASSIC:**
   `pnpm add @playform/lib-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor` -
@@ -154,15 +160,25 @@ the EFFECT-TS packages (`@playform/ets-*` - effect-backed). Install the group yo
   dependency and the base `@playform/ets-base-dsh` package carrying the plumbing every ets-* package
   builds on.
 
-Never mix the groups in one graph (the effect-ts `Update` returns Effect envelopes, not the classic
-dispatch envelope). From source, each tree is its own workspace slice: the Classic tree under
-`Classic/packages/dsh-*`, the Effect-TS tree under `EffectTS/packages/ets-*` (+ the base), each
-built by its own `prepublishOnly` sequence. The npm publication is the later item; this section is
-the published-package story.
+The one-line roster lives in
+[Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md](Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md); the
+per-plugin live test plans in [Documentation/Testing/](Documentation/Testing/README.md). By area:
 
----
+| Area                     | Count          | What                                                                                                                                                                                                                                 |
+| ------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The original plugins     | 14             | the factory, the governance trio, the six stream flavors + the file normalizer, ccr, tool-coach, live-containers                                                                                                                     |
+| The workspace family     | 15 + 1 library | the ten-step invisible flow: observe → semantics → operate → govern → authority → approve → merge → journal → audit → context/monitor/evidence/graph/reflect, plus `lib-dsh-workspace-live`                                          |
+| The client family        | 3              | `client-dsh-panel-family`, `client-dsh-panel-family-host`, `client-dsh-workspace-live`                                                                                                                                               |
+| The suggesters           | 7              | `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`                                                                                                                                                                  |
+| The orchestration set    | 10             | `plugin-dsh-batch-edit`, `plugin-dsh-batchstate`, `plugin-dsh-gitguard`, `plugin-dsh-route`, `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision` |
+| The completion libraries | 2              | `lib-dsh-trace` (the trace bus's library half), `lib-dsh-pack` (the pack layer)                                                                                                                                                      |
 
-## The Problem
+30 of the 36 new packages have ETS twins (all but the two client panels and `plugin-dsh-pass-on`,
+`plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision`).
+
+## Architecture
+
+### The problem
 
 Two quiet kinds of rot in every agent session:
 
@@ -179,9 +195,7 @@ The DeepSeek Harness exposes the seams to fix both - [`fs/observed`][dsh-fs] for
 
 The family is those plugins.
 
----
-
-## How It Works
+### How it works
 
 Three seams, three behaviors, one service underneath:
 
@@ -211,22 +225,6 @@ Three seams, three behaviors, one service underneath:
   drives the same chain directly through [factory.Govern][ours-govern] ([the sequential
   fold][ours-govern]: one step's chain completes before the next step reads the file), instead of
   waiting for an event.
-
----
-
-## Architecture
-
-### The two trees
-
-One contract, two trees - the ledger strings are byte-identical across both:
-
-| Tree        | What it is                                                                                                                               |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 51 packages; 184 smoke suites.    |
-| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 46 packages; 175 suites. |
-
-Every package carries an `ets-*` twin unless the manifest declares none (the two client panels and
-four orchestration candidates have no twin - 30 twins for the 36 new packages).
 
 ### The original 14 plugins (plus the core library)
 
@@ -305,10 +303,6 @@ The original 14 plugins (plus `lib-dsh-core`) - every name reads as an @-sentenc
 
 ### The 36 packages of the 2026-10-22 delivery
 
-The one-line roster lives in
-[Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md](Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md); the
-per-plugin live test plans in [Documentation/Testing/](Documentation/Testing/README.md). In brief:
-
 - **The workspace family (15 + the library)** - `plugin-dsh-workspace` (the operational view and the
   map/find/expand/context tools), `hook-dsh-workspace-observe` (the version stamps),
   `plugin-dsh-workspace-semantics` (symbol resolution and rename planning),
@@ -332,7 +326,15 @@ per-plugin live test plans in [Documentation/Testing/](Documentation/Testing/REA
 30 of the 36 have ETS twins (all but the two client panels and `plugin-dsh-pass-on`,
 `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision`).
 
-### The layout
+### The two trees and the layout
+
+| Tree        | What it is                                                                                                                               |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 51 packages; 184 smoke suites.    |
+| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 46 packages; 175 suites. |
+
+Every package carries an `ets-*` twin unless the manifest declares none (the two client panels and
+four orchestration candidates have no twin - 30 twins for the 36 new packages).
 
 ```text
     Classic/         the plain-TypeScript release: 51 packages + smokes
@@ -343,7 +345,7 @@ per-plugin live test plans in [Documentation/Testing/](Documentation/Testing/REA
     Maintain/        the formatting entry point and the aggregate runner
 ```
 
-### The ledger-string contract
+### The factory and the ledger-string contract
 
 Every activation line, refusal line, chain-pass line and journal record is asserted byte-identically
 by the smokes.
@@ -354,28 +356,9 @@ One ledger per plugin, `~/.dsh/<identity>.log`; the smokes load the real built `
 of each bundle and assert the full behavioral contract on top of the strings - the loader contract,
 the identity assertions, the effect wiring.
 
-### The smokes (the arbiter)
+## Tools and configuration
 
-One suite per test folder per tree, run with the aggregate `node Maintain/Run-Smokes.mjs` (which
-also guards each folder's printed PASS count against its folder README - the vacuously-green guard):
-
-| Measure                   | Value                                                                            |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| Test folders (Classic)    | 184                                                                              |
-| Test folders (EffectTS)   | 175                                                                              |
-| Total suites              | **359**                                                                          |
-| Total checks (both trees) | **5,337**                                                                        |
-| The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run-Wiring.mjs` under `DSH_TEST_SCRATCH` |
-
-The per-suite before/after totals live in the totals ledger of
-`Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`; the original 14 mechanics suites total
-1314 Classic / 1324 EffectTS checks, the rest is the 2026-10-22 delivery's suites.
-
-The counts are the release contract: they must not change.
-
----
-
-## Tools
+### Tools
 
 Two tools ship with the family:
 
@@ -384,9 +367,7 @@ Two tools ship with the family:
 | `raw-write`      | The write wrapper registered by the stream flavors: an explicit `normalize` parameter (default **false = verbatim**) - absent/false writes byte-for-byte, `true` applies all six transforms, an array applies the named flavors only. Exempt from stream normalization by name, like `edit`. The per-call `govern` selection (`true`, a name array, or `false` = the escape hatch) drives [the direct-govern fold][ours-govern]. |
 | `normalize-file` | The whole-file pass: reads the file, applies the transforms (all six by default, or the flavor selection), reports the count, writes only when something changed.                                                                                                                                                                                                                                                                |
 
----
-
-## Configuration
+### Configuration
 
 Every plugin's config schema is built through the factory's `Schema` factory: one shared volatile
 block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the module's own fields.
@@ -454,7 +435,7 @@ normalize-overpass batch          # arm a one-shot step-batch overpass (one use)
 normalize-overpass results on     # flip scopes.toolResults via the settings service
 normalize-overpass results off
 normalize-overpass scopes         # read-only report of the current effective values
-normalize-overpass files <path…>  # the file sweep - implemented by the normalize-file hook only
+normalize-overpass files <path...>  # the file sweep - implemented by the normalize-file hook only
 ```
 
 The command writes one ledger line per action:
@@ -462,9 +443,7 @@ The command writes one ledger line per action:
 `overpass: normalized N char(s) in step batch (turn T step S)`,
 `overpass: swept K file(s), normalized M char(s)`.
 
----
-
-## Performance
+## Verification
 
 The suites are the speed and coverage story:
 
@@ -476,9 +455,40 @@ The suites are the speed and coverage story:
 - **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins,
   byte-identical ledger strings on every rebuild.
 
-The smokes are the arbiter after every change: they must stay green at the same counts.
+One suite per test folder per tree, run with the aggregate `node Maintain/Run-Smokes.mjs` (which
+also guards each folder's printed PASS count against its folder README - the vacuously-green guard):
 
----
+| Measure                   | Value                                                                            |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| Test folders (Classic)    | 184                                                                              |
+| Test folders (EffectTS)   | 175                                                                              |
+| Total suites              | **359**                                                                          |
+| Total checks (both trees) | **5,337**                                                                        |
+| The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run-Wiring.mjs` under `DSH_TEST_SCRATCH` |
+
+The per-suite before/after totals live in the totals ledger of
+`Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`; the original 14 mechanics suites total
+1314 Classic / 1324 EffectTS checks, the rest is the 2026-10-22 delivery's suites.
+
+The counts are the release contract: they must not change.
+
+## The docs map
+
+Everything is documented under [Documentation/](Documentation/INDEX.md) - the index lists every
+document with its status:
+
+| Section               | Contents                                                                                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Documentation/` root | [INDEX.md](Documentation/INDEX.md), [ARCHIVE-STYLE.md](Documentation/ARCHIVE-STYLE.md) (the frontmatter template), [FRAMEWORK.md](Documentation/FRAMEWORK.md) |
+| `Brand/`              | [BRANDING.md](Documentation/Brand/BRANDING.md)                                                                                                                |
+| `Plans/`              | the living + queued plans (30) and the granular families (`Batch-Edit-Tool/`, `Representation-First/`, `UI-Family/`, `Workspace-Family/`, `Completion-Spec/`) |
+| `Researches/`         | the research outputs (8)                                                                                                                                      |
+| `Guides/`             | the operating manuals (7)                                                                                                                                     |
+| `Reports/`            | the audits and diagnoses (6)                                                                                                                                  |
+| `Plugins/`            | the registry documents (3): PLUGIN-FAMILY.md, ORCHESTRATION-PLUGINS.md, PLUGIN-SUITE-SUMMARY.md                                                               |
+| `Testing/`            | the per-plugin live test plans: [README.md](Documentation/Testing/README.md) + 35 per-plugin files                                                            |
+| `Archive/`            | the one-shot records (45, in 8 topics)                                                                                                                        |
+| `Handoff/`, `Skill/`  | untouched trees (the delivery record; the loadable skills)                                                                                                    |
 
 ## Development
 
@@ -490,6 +500,8 @@ The workflow, root-first - every step is a root `package.json` script:
 | `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                               |
 | `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                    |
 | `pnpm test`                                  | all 359 smoke suites via `Maintain/Run-Smokes.mjs` - the behavioral arbiter, exit non-zero on any failure |
+| `pnpm run test:types`                        | `Maintain/Run-Types.mjs` - the type check across the trees                                                |
+| `pnpm run test:wiring`                       | `Maintain/Run-Wiring.mjs` - the live wiring battery under `DSH_TEST_SCRATCH`                              |
 | `pnpm site`                                  | the static site build (`Site/`)                                                                           |
 | `pnpm lychee`                                | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                             |
 | `pnpm format` / `format:check`               | `Maintain/Format.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)            |
@@ -508,8 +520,6 @@ The hazards, documented:
 - **The smoke/live fidelity gap.** The smokes prove the mechanics; the live battery proves the
   wiring; the ledgers answer "did it activate".
 
----
-
 ## Troubleshooting
 
 The known gaps, stated as they are - the corrected claims stay; no marketing gloss.
@@ -527,7 +537,7 @@ The known gaps, stated as they are - the corrected claims stay; no marketing glo
     ```text
     update: running verifyCommand: pnpm install
     update: verifyCommand failed (status 1)
-    update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal
+    update: verifyCommand runner unavailable (exit 127) - skipped, non-fatal
     update stage FAILED (1) for <dir>; consecutive=2
     ```
 
@@ -547,8 +557,6 @@ The known gaps, stated as they are - the corrected claims stay; no marketing glo
   (`__normalize: false`) passes a call through unnormalized. Markers are stripped before the tool
   validates - the harness tools reject unknown argument keys.
 
----
-
 ## Relationship to deepseek-ai/deepseek-harness
 
 The family extends the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) -
@@ -567,8 +575,6 @@ Everything the family builds on is the harness's own public plugin API:
 The harness ships the seams and no plugins that use them this way; the family adds the normalization
 and the governance on top.
 
----
-
 ## Contributing
 
 | Want to...            | Start here                                                                                        |
@@ -581,12 +587,12 @@ and the governance on top.
 The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings
 stay byte-identical; the tree is committed by the maintainer, never by tooling.
 
----
-
 ## License
 
 Released under [CC0-1.0](LICENSE) - public domain.
 
+[classic]: https://github.com/PlayForm/DeepSeek/tree/Current/Classic
+[ets]: https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS
 [ours-plugin-dsh-factory]:
 	https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

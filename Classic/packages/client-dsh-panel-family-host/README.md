@@ -1,10 +1,16 @@
 # @playform/client-dsh-panel-family-host
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [PHASE-5](../../Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md),
+> [PHASE-7](../../Documentation/Plans/UI-Family/PHASE-7-PLAIN-FIELD-BRIDGE.md)
+
+## The role
+
 The **host half** of the UI family's panel: the companion package that gives the central panel live
 data and its ONE trusted write surface (Documentation/Plans/UI-Family/
 PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md).
 
-## The services
+## The surfaces (the services)
 
 Three services, provided with `ctx.provide` (removed with the plugin):
 
@@ -77,7 +83,7 @@ harness's Client Remote refuses SRC descriptors and its registration values come
 the panel keeps its documented fallbacks (plain fields read-only, static status). The host services
 themselves are complete and smoke-covered.
 
-## Config
+## The configuration
 
 | Field      | Type    | Default                            | Meaning                                 |
 | ---------- | ------- | ---------------------------------- | --------------------------------------- |
@@ -88,7 +94,7 @@ themselves are complete and smoke-covered.
 
 All knobs are volatile.
 
-## Ledger lines (byte-exact)
+## The ledger (byte-exact)
 
 The activation line and the bridge refusals go through the logger (the package writes nothing to
 disk):
@@ -106,17 +112,26 @@ bridge: write failed for <namespace>
 
 The accepted bridge write's audit line is the config editor's own.
 
-## Build
+## The build and the tests
 
 `pnpm prepublishOnly` runs the plugin build (ESM `Target/`), then `Maintain/Build-Client-Bundle.mjs`
 (the harness closure factory `window.__ModuleLoader__.load({ id, factory(require) })` written to
 `Target/Client.bundle.js`), then the Test build and the harness selfcheck. `exports["./client"]`
 points the module system at the bundle; the ESM `Target/Client.js` stays the dev/test surface.
 
-## Smokes
-
 | Folder                 | Count   | Covers                                                                                                                                                        |
 | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Tail-And-Stats`       | 10 PASS | the tail slicing/validation/cap and the ccr stats summary                                                                                                     |
 | `Wiring-And-Endpoints` | 8 PASS  | the loader row, the activation lines, the disabled gate, the schema                                                                                           |
 | `Bridge-And-Trace`     | 19 PASS | the bridge write + every refusal (incl. nested secrets), the trace forwarding, the browser half's forwarding, the built bundle executed through a fake loader |
+
+## The plan
+
+- [PHASE-5-ADAPTERS-AND-LEDGER-TAILS](../../Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md) -
+  the tail/stats endpoints.
+- [PHASE-7-PLAIN-FIELD-BRIDGE](../../Documentation/Plans/UI-Family/PHASE-7-PLAIN-FIELD-BRIDGE.md) -
+  the bridge.
+
+## License
+
+CC0-1.0.

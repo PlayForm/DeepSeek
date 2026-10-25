@@ -1,5 +1,7 @@
 # @playform/hook-dsh-doc-suggester
 
+> v0.1.0 - UNPUBLISHED - plan: [SEARCH-SUGGESTER-PLUGIN](../../SEARCH-SUGGESTER-PLUGIN.md)
+
 The doc-task **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
@@ -9,6 +11,13 @@ the doc-graph companions the task conventionally requires: the INDEX row, the fr
 statuses/registry/ index block, the archive style, the cross-references, the site mirror. The third
 consumer of the search-suggester's pattern algebra
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) section 8).
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener: one labeled `additionalContexts` note, never a
+  content replacement.
+- No tool, no service: the note is the only surface; the learning layer records through the optional
+  `pattern` service (`ctx.get("pattern")`, probed per use) or a bounded in-memory fallback.
 
 ## Why
 
@@ -90,11 +99,56 @@ read and search calls that touch documentation plus the edits that land on it.
 transform is fail-open (an internal error logs a warning and the decision passes through - a note
 never fails a tool call).
 
-## Config
+## The ledger
+
+The lines are prefixed `hook-dsh-doc-suggester: ` and go to `logFile`:
+
+```text
+activated (...)
+suggest <family> <k> <n> companions <path>
+decided <family>
+accepted <family> <path>
+rejected <family> <n> companions
+suppressed <reason> <family>
+abstained <reason> <family> <k>
+abstained foreign-workspace
+hook-dsh-doc-suggester: <error>; the call passes through unnoted
+```
+
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
 The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
 **disabled** - enable by explicit ACTIVATE in the profile.
+
+| Field             | Default                                                  | Meaning                                       |
+| ----------------- | -------------------------------------------------------- | --------------------------------------------- |
+| `enabled`         | `true`                                                   | the plugin ships enabled                      |
+| `log`             | `true`                                                   | the ledger switch (the factory's shared cell) |
+| `logFile`         | `~/.dsh/playform/hook-dsh-doc-suggester.log`             | the ledger                                    |
+| `threshold`       | `0.75`                                                   | the gate threshold `k`                        |
+| `tools`           | `["read", "grep", "glob", "write", "edit", "raw-write"]` | the judged tool set                           |
+| `maxCompanions`   | `7`                                                      | the bound on named companions                 |
+| `maxNoteChars`    | `1200`                                                   | the note length bound                         |
+| `cooldownCalls`   | `6`                                                      | the cooldown between notes                    |
+| `maxNotesPerTurn` | `3`                                                      | the per-turn cap                              |
+| `exclude`         | `["node_modules", "Target", ".git", "dist"]`             | the excluded paths                            |
+| `learn`           | `true`                                                   | the decision-recording layer                  |
+| `learnWindow`     | `3`                                                      | the follow-through window (judged calls)      |
+| `heuristics`      | all six                                                  | the enabled heuristics                        |
+| `weights`         | the Defaults table above                                 | the heuristic weights                         |
+| `storeLimit`      | `512`                                                    | the in-memory fallback bound                  |
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Learning-Loop`, `Pack-Driven`, `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra (section 8, the third consumer).
 
 ## License
 

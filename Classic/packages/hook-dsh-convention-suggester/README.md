@@ -1,5 +1,10 @@
 # @playform/hook-dsh-convention-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a
 pattern pack and names them **before** the model violates them. On every `write`/`edit`/`raw-write`
 call it classifies the target path deterministically and prepends ONE labeled `additionalContexts`
@@ -25,6 +30,13 @@ The conventions are **pack-driven**: the built-in pack (this monorepo's default)
 repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents; a repository without a
 pack stays silent.
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener (plain registration, after the ccr's `{prepend: true}`
+  listener): one `additionalContexts` notice, never a content replacement.
+- The `agent/pre-step` listener: the per-turn reset of the note counter when a user message enters.
+- No tool, no service: the hook is read-only except the opt-in learner's proposal file.
 
 ## The pack learner (D4)
 
@@ -64,7 +76,55 @@ lane.
    listener): `next()` first; detect → gate → prepend ONE notice. Content is never replaced.
 2. `agent/pre-step`: the per-turn reset of the note counter when a user message enters.
 
-## Status
+## The ledger
 
-PoC phase: the package and Source are complete; the smoke suites, the build pass, and the wiring are
-the end-phase (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+The lines are prefixed `convention-suggester: ` and go to `logFile`:
+
+```text
+activated (...)
+suggest <id> <k> <n> candidates call <tool>
+suppressed <verdict> <id>
+abstained ambiguous <id> <k>
+abstained no-companions <id> <k>
+abstained foreign-workspace
+learned proposal <slug> <n> families <path>
+learned pack <n> families
+convention-suggester: <error>; the note is skipped
+```
+
+## The configuration
+
+| Field             | Default                                             | Meaning                                           |
+| ----------------- | --------------------------------------------------- | ------------------------------------------------- |
+| `enabled`         | `true`                                              | the plugin ships enabled                          |
+| `log`             | `true`                                              | the ledger switch (the factory's shared volatile) |
+| `logFile`         | `~/.dsh/playform/hook-dsh-convention-suggester.log` | the ledger                                        |
+| `threshold`       | `0.75`                                              | the gate threshold `k`                            |
+| `maxCandidates`   | `7`                                                 | the bound on named candidates                     |
+| `maxNoteChars`    | `1200`                                              | the note length bound                             |
+| `cooldownCalls`   | `6`                                                 | the cooldown between notes                        |
+| `maxNotesPerTurn` | `3`                                                 | the per-turn cap                                  |
+| `intents`         | `[]`                                                | the intent filter                                 |
+| `emitOn`          | `["edit", "raw-write", "write"]`                    | the tools that trigger the gate                   |
+| `exclude`         | `["node_modules", "Target", ".git", "dist"]`        | the excluded paths                                |
+| `learning`        | `false`                                             | the opt-in learner (D4)                           |
+
+Every field is a volatile cell.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Learn-Install`, `Learn-Note`, `Learn-Proposal`, `Pack-Driven`, `Post-Execute-And-Gate`,
+`Wiring-And-Ledger`, `Workspace-Gate`.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra and the section 9.4 convention arbiter.
+- PoC phase: the package and Source are complete; the smoke suites, the build pass, and the wiring
+  are the end-phase (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+
+## License
+
+CC0-1.0.

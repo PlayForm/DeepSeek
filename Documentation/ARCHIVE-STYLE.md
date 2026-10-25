@@ -151,6 +151,14 @@ The body keeps the original content. Where a document is written new, it follows
    grep.
 6. New documents register themselves: add the registry path to Documentation/INDEX.md when a
    document is added.
+7. The prose paragraphs: one idea per paragraph. A long paragraph (over ~400 characters, or one that
+   runs several ideas together) is split at the topic-sentence boundary - each new paragraph starts
+   with its own lead sentence (`It also registers...`, `The @-sentence identity:`) and is separated
+   from the previous one by ONE blank line. Long enumerations of methods or features become bullet
+   lists; the inline markdown (bold, links, code spans) is preserved verbatim. Prettier re-wraps each
+   paragraph at the configured printWidth. The worked example (2026-10-25): the dash-normalizer
+   README's single block becomes three paragraphs - the role, the raw-write tool, the identity and
+   the visibility - with the same words.
 
 ## 8. The conversion procedure
 

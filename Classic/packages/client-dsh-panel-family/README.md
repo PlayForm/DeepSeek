@@ -1,9 +1,20 @@
 # @playform/client-dsh-panel-family
 
+> v0.2.0 - UNPUBLISHED - plan: [UI-FAMILY-V4-1](../../Documentation/Plans/UI-FAMILY-V4-1.md)
+
+## The role
+
 The central panel package of the UI family, on the **v4.1 child-slot model**
 (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns
 the panel contract, the slot-aware registry, the adapter contract, and the thirteen per-bundle
 adapters; it renders what the adapters contribute and nothing else.
+
+## The surfaces
+
+A pure client package: no host service, no tool, no event listener - the host half of the Loader row
+is an empty `apply()`. The surfaces are the two client mounts (`family-tab` in `conversation.view`
+and `overlay` in `shell.overlay`), the client bundle (`exports["./client"]`), and the client logger
+(`Source/Variable/Lines.ts`).
 
 ## The child-slot model
 
@@ -121,7 +132,7 @@ write attempt logs the documented line.
 Without the settings client (`ctx.configForms` absent) the form shows the documented "not composed"
 state - the panel never throws over an absent service.
 
-## Config
+## The configuration
 
 | Field             | Type           | Default | Meaning                                 |
 | ----------------- | -------------- | ------- | --------------------------------------- |
@@ -132,7 +143,7 @@ state - the panel never throws over an absent service.
 
 All knobs are volatile (hot edits commit without remounting).
 
-## Ledger lines (byte-exact)
+## The ledger (byte-exact)
 
 The client half keeps no ledger file; its lines go through the client logger
 (`Source/Variable/Lines.ts`):
@@ -144,15 +155,13 @@ client-dsh-panel-family: plain-field bridge unavailable for <namespace>
 client-dsh-panel-family: plain-field secret refused for <namespace>
 ```
 
-## Build
+## The build and the tests
 
 `pnpm prepublishOnly` runs the two-step build: the plugin build (ESM `Target/`), then
 `Maintain/Build-Client-Bundle.mjs` (the harness closure factory
 `window.__ModuleLoader__.load({ id, factory(require) })` written to `Target/Client.bundle.js`), then
 the Test build and the harness selfcheck. `exports["./client"]` points the module system at
 `Target/Client.bundle.js`; the ESM `Target/Client.js` stays the dev/test surface.
-
-## Smokes
 
 | Folder                  | Count   | Covers                                                                                                                                                                                                                                                                                                       |
 | ----------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -168,3 +177,13 @@ No host service, no Typert endpoint, no file read, no config editor. The host ha
 entry is an empty `apply()` - the row exists so the client module system serves the `./client` half.
 The tail/stats endpoint and the plain-field bridge endpoint live in
 `@playform/client-dsh-panel-family-host`.
+
+## The plan
+
+- [UI-FAMILY-V4-1](../../Documentation/Plans/UI-FAMILY-V4-1.md) - the plan of record.
+- [Completion-Spec/04-CLIENT](../../Documentation/Plans/Completion-Spec/04-CLIENT.md) - the client
+  spec.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,8 @@
 # @playform/client-dsh-workspace-live
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md)
+
 The workspace family's **live client**: the client half of the workspace live view
 (Documentation/Plans/Workspace-Family/LIVE.md).
 
@@ -13,6 +16,13 @@ The presentation, **stable-until-event**:
 - It presents the workspace's REPRESENTATIONS of the Entity/Presentation/Interaction model. It never
   conflates a running OS process with a managed entity (the OS execution axis stays orthogonal).
 - The machinery behind the view stays invisible; the presentation IS the visible part.
+
+## The surfaces
+
+Pure client package: no host service, no tool, no event listener - the host half of the Loader row
+is an empty `apply()`. The surfaces are the client service `workspaceLive` (`getSnapshot`,
+`subscribe`, `ingest`, `refresh`), the `conversation.view` tab `workspace-live`, the client bundle
+(`exports["./client"]`), and the structurally-read D5 trace (`ctx.get("trace")`).
 
 ## What it does
 
@@ -44,7 +54,7 @@ locally in `Source/Interface/Siblings.ts` from the W1 frozen contract
 package exists yet; the end-phase wires the real imports and the real channels. The trace source
 needs no sibling import: the bus is read structurally from the client context.
 
-## Config
+## The configuration
 
 | Field                | Type    | Default | Meaning                                              |
 | -------------------- | ------- | ------- | ---------------------------------------------------- |
@@ -55,14 +65,26 @@ needs no sibling import: the bus is read structurally from the client context.
 
 All knobs are volatile.
 
-## Ledger
+## The ledger
 
 This package keeps no ledger file (pure client, no host writes).
 
-## Smokes
+## The build and the tests
 
 | Folder                 | Count   | Covers                                                                                                                                                         |
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Contract-And-Wiring`  | 12 PASS | the loader row, the Config schema, the client apply wiring, the locale, the tab                                                                                |
 | `Store-And-Snapshot`   | 11 PASS | the stable-until-event store, the ingest fold, the bounds, the refresh                                                                                         |
 | `Child-Slot-And-Trace` | 12 PASS | the child-slot declaration + the section inject face (panel family composed), the D5 ingest, the newest-first bounded tail, the static state, the built bundle |
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), then `Build-Client-Bundle.mjs` (`Target/Client.bundle.js`), then the Test build, the
+harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md) - the live-view plan.
+
+## License
+
+CC0-1.0.
