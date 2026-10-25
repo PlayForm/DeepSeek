@@ -8,12 +8,26 @@
 // for its ordering seams, ledger beads for its ledger lines, and wedge cutouts
 // for the paths it refuses.
 
+import { atlasOf } from "./Atlas.mjs";
 import { rotatePoints, scalePoints } from "./Envelope.mjs";
 import { angleOf } from "./Lexicon.mjs";
 import { familyOf, Ornament } from "./Motif.mjs";
 import { digest, stream } from "./Prng.mjs";
 
 const Weight = (Layer) => (Layer === "frame" || Layer === "body" ? 1.4 : 1.2);
+
+const ToneByLayer = (Layer) => {
+	switch (Layer) {
+		case "frame":
+			return "accent2";
+		case "core":
+			return "accent";
+		case "detail":
+			return "accent2";
+		default:
+			return "ink";
+	}
+};
 
 const piece = (Id, Points, Options = {}) => ({
 	id: Id,
@@ -34,7 +48,8 @@ const piece = (Id, Points, Options = {}) => ({
 		operation: Options.operation ?? "paint",
 		collisionGroup: Options.layer ?? "body",
 	},
-	material: { tone: Options.tone ?? "ink" },
+	material: { tone: Options.tone ?? ToneByLayer(Options.layer), opacity: Options.opacity ?? 1 },
+	render: Options.render ?? "ribbon",
 	...(Options.cutout === undefined ? {} : { cutout: Options.cutout }),
 	...(Options.fill === undefined ? {} : { fill: Options.fill }),
 });
@@ -214,7 +229,76 @@ export const sceneOf = (Genome, Plan) => {
 		});
 	}
 
-	const Raw = [...Motif, ...parts];
+	const Solid = Plan.solid ?? { shrink: 0.6, twist: 0, ribs: 8 };
+	const SolidDensity = Plan.density ?? 0;
+	const FlatMethods = new Set([
+		"division-seed",
+		"division-cell",
+		"lattice-spoke",
+		"trellis",
+		"isometric-edge",
+	]);
+	const ExtentOf = (Points) =>
+		Math.max(...Points.map((Point) => Math.hypot(Point.x - 50, Point.y - 50)));
+	const Largest = new Map();
+	for (const Part of Motif) {
+		if (Part.closed === false || FlatMethods.has(Part.method)) {
+			continue;
+		}
+		if (Part.layer !== "frame" && Part.layer !== "body") {
+			continue;
+		}
+		const Extent = ExtentOf(Part.points);
+		if (!Largest.has(Part.layer) || Extent > Largest.get(Part.layer).extent) {
+			Largest.set(Part.layer, { part: Part, extent: Extent });
+		}
+	}
+	const Projected = [];
+	for (const Part of Motif) {
+		const Target = Largest.get(Part.layer);
+		const Big = Target !== undefined && Target.part === Part && Target.extent > 18;
+		if (!Big) {
+			Projected.push(Part);
+			continue;
+		}
+		const Shrink = Part.layer === "frame" ? Math.min(0.92, Solid.shrink + 0.1) : Solid.shrink;
+		const Top = scalePoints(rotatePoints(Part.points, Solid.twist ?? 0), Shrink);
+		const Ribs = Math.max(6, Math.min(8, Solid.ribs ?? 8));
+		Projected.push({ ...Part, opacity: 1 });
+		for (let Index = 0; Index < Ribs; Index += 1) {
+			const At = Math.floor((Index * Part.points.length) / Ribs);
+			const From = Part.points[At];
+			const To = Top[At];
+			if (Math.hypot(From.x - To.x, From.y - To.y) < 1.5) {
+				continue;
+			}
+			Projected.push({
+				...Part,
+				key: `${Part.key}-rib-${Index}`,
+				points: [From, To],
+				closed: false,
+				width: 0.7,
+				opacity: 0.4,
+			});
+		}
+		Projected.push({ ...Part, key: `${Part.key}-top`, points: Top, opacity: 0.55 });
+		const Ages = Math.min(1, Plan.mutations?.rings ?? 0);
+		for (let Age = 1; Age <= Ages; Age += 1) {
+			Projected.push({
+				...Part,
+				key: `${Part.key}-age-${Age}`,
+				points: scalePoints(
+					rotatePoints(Part.points, Solid.twist ?? 0),
+					Math.pow(Shrink, Age + 1),
+				),
+				opacity: 0.4,
+			});
+		}
+	}
+	const Atlas = atlasOf(Genome, Plan);
+	const Under = Atlas.filter((Part) => Part.layer !== "core");
+	const Glyph = Atlas.filter((Part) => Part.layer === "core");
+	const Raw = [...Under, ...Projected, ...parts];
 	const Rings = Math.min(3, Plan.mutations?.rings ?? 0);
 	for (let Index = 0; Index < Rings; Index += 1) {
 		Raw.push({
@@ -246,8 +330,30 @@ export const sceneOf = (Genome, Plan) => {
 			tone: "accent2",
 		});
 	}
+	Raw.push(...Glyph);
+	const RibbonMethods = new Set([
+		"injection-ring",
+		"state-nest",
+		"evolution-ring",
+		"trace-echo",
+		"stream-spiral",
+		"seam-tick",
+		"transform-cusp",
+		"division-cell",
+		"lattice-spoke",
+		"trellis",
+		"isometric-edge",
+	]);
 	const Components = Raw.map((Part, Index) =>
-		piece(Part.key ?? `part-${Index}`, Part.points, Part),
+		piece(Part.key ?? `part-${Index}`, Part.points, {
+			...Part,
+			depth: Index,
+			render:
+				Part.render ??
+				(Part.closed === false || Part.layer === "frame" || RibbonMethods.has(Part.method)
+					? "ribbon"
+					: "solid"),
+		}),
 	);
 	if (Fill !== undefined) {
 		const Core = Components.find(

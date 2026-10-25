@@ -27,20 +27,20 @@ import { sceneOf } from "../../Maintain/Icon/Transliterate.mjs";
 const Root = fileURLToPath(new URL("../../", import.meta.url));
 
 const Contracts = {
-	spikeStar: { frame: null, closed: 3, total: 50 },
-	crossStar: { frame: null, closed: 6, total: 38 },
-	chevronRing: { frame: null, closed: 3, total: 32 },
-	crescentRing: { frame: null, closed: 3, total: 36 },
-	teardropOrbit: { frame: null, closed: 3, total: 36 },
-	rosette: { frame: null, closed: 3, total: 32 },
-	quatrefoil: { frame: "square-frame", closed: 4, total: 36 },
-	diamondLattice: { frame: "diamond-frame", closed: 4, total: 32 },
-	knotSquare: { frame: "square-frame", closed: 4, total: 32 },
-	trellisKnot: { frame: "square-frame", closed: 4, total: 32 },
-	scallopRing: { frame: "scallop-frame", closed: 4, total: 28 },
-	octagonStar: { frame: "octagon-frame", closed: 3, total: 32 },
-	divisionTile: { frame: "square-frame", closed: 4, total: 58 },
-	isometricTiles: { frame: "isometric-base", closed: 3, total: 32 },
+	spikeStar: { frame: null, closed: 3, total: 72 },
+	crossStar: { frame: null, closed: 6, total: 62 },
+	chevronRing: { frame: null, closed: 3, total: 54 },
+	crescentRing: { frame: null, closed: 3, total: 50 },
+	teardropOrbit: { frame: null, closed: 3, total: 58 },
+	rosette: { frame: null, closed: 3, total: 72 },
+	quatrefoil: { frame: "square-frame", closed: 4, total: 70 },
+	diamondLattice: { frame: "diamond-frame", closed: 4, total: 64 },
+	knotSquare: { frame: "square-frame", closed: 4, total: 68 },
+	trellisKnot: { frame: "square-frame", closed: 4, total: 66 },
+	scallopRing: { frame: "scallop-frame", closed: 4, total: 64 },
+	octagonStar: { frame: "octagon-frame", closed: 3, total: 64 },
+	divisionTile: { frame: "square-frame", closed: 4, total: 86 },
+	isometricTiles: { frame: "isometric-base", closed: 3, total: 64 },
 };
 
 const cross = (A, B, C) => (B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x);

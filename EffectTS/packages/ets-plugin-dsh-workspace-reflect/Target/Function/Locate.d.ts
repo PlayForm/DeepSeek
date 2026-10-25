@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /** The resolved target of a node-targeted operation. */
 export interface Located {
     ok: true;

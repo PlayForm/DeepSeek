@@ -72,6 +72,7 @@ const descriptorOf = (Genome) => {
 		phase: Genome.plan.phase ?? 0,
 		silhouette: Silhouette[Genome.plan.family] ?? "other",
 		topology: Open === 0 ? "closed" : Open === Components.length ? "open" : "mixed",
+		openShare: Math.round((Open / Components.length) * 100),
 		components: Components.length,
 		pattern: Pattern,
 		contrast: Math.round((Math.max(...Widths) / Math.min(...Widths)) * 10) / 10,
@@ -109,9 +110,15 @@ const Family = report("families", Descriptors.map((Entry) => Entry.family));
 const SilhouetteReport = report("silhouettes", Descriptors.map((Entry) => Entry.silhouette));
 const Symmetry = report("symmetry", Descriptors.map((Entry) => Entry.symmetry));
 const Topology = report("topology", Descriptors.map((Entry) => Entry.topology));
+const OpenShare = report(
+	"open share",
+	Descriptors.map((Entry) =>
+		Entry.openShare < 20 ? "low" : Entry.openShare < 50 ? "mid" : "high",
+	),
+);
 const Components = report(
 	"component buckets",
-	Descriptors.map((Entry) => Math.min(24, Math.round(Entry.components / 4) * 4)),
+	Descriptors.map((Entry) => Math.min(96, Math.round(Entry.components / 8) * 8)),
 );
 const Patterns = report("tone patterns", Descriptors.map((Entry) => Entry.pattern));
 const Contrast = report(
@@ -144,7 +151,12 @@ record("families: no family above 35%", Family.share <= 35, `${Family.share}%`);
 record("silhouettes: at least 7 used", SilhouetteReport.classes >= 7, `${SilhouetteReport.classes} classes`);
 record("silhouettes: no silhouette above 40%", SilhouetteReport.share <= 40, `${SilhouetteReport.share}%`);
 record("symmetry: at least 3 orders", Symmetry.classes >= 3, `${Symmetry.classes} classes`);
-record("topology: both open and closed present", Topology.classes >= 2, `${Topology.classes} classes`);
+record(
+	"topology: every icon has a closed face",
+	Descriptors.every((Entry) => Entry.topology !== "open"),
+	`${Topology.classes} classes`,
+);
+record("open share: at least 2 buckets", OpenShare.classes >= 2, `${OpenShare.classes} buckets`);
 record("components: at least 4 buckets", Components.classes >= 4, `${Components.classes} buckets`);
 record("tone patterns: at least 3 patterns", Patterns.classes >= 3, `${Patterns.classes} patterns`);
 record("contrast: both high and low present", Contrast.classes >= 2, `${Contrast.classes} classes`);

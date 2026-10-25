@@ -333,12 +333,43 @@ const factsOf = (Structure, Entry) => {
 };
 
 /** The functional profile of one package: its role, flow, and structural weight. */
+const Harness = [
+	["compaction", /ccr|compress|retriev|marker|spill|summar|token/i],
+	["context", /context|normalize|update|dash|message|prompt|text/i],
+	["session", /session|replay|journal|history|batchstate|restore|snapshot/i],
+	["session-query", /graph|query|search|report|trace/i],
+	["workspace", /workspace|merge|operate|file|fs/i],
+	["guard", /govern|pin|guard|convention|check|policy|rule|coach|audit/i],
+	["preset", /factory|preset|bundle|cargo|plugin|package/i],
+	["client", /panel|view|live|icon|design|style|visual|host/i],
+	["skill", /skill|doc|suggest/i],
+	["web", /web|fetch|crawl/i],
+	["tools", /tool|batch|decision|edit|apply/i],
+	["schedule", /schedule|cron|remind/i],
+	["goal", /goal|plan|todo/i],
+	["subagent", /subagent|delegate|team|worker/i],
+	["workflow", /workflow|pipeline/i],
+	["credentials", /credential|secret|auth/i],
+	["interaction", /feedback|identity|interaction|human/i],
+];
+
+const featureOf = (Domain) => {
+	for (const [Feature, Pattern] of Harness) {
+		if (Pattern.test(Domain)) {
+			return Feature;
+		}
+	}
+	return "core";
+};
+
 export const profileOf = (Structure, Entry) => {
 	const { totals, tokens } = Structure;
 	const Domain = Entry.domain;
 	const Role = roleOf(Structure, Entry, Domain);
+	const Feature = featureOf(Domain);
 	return {
 		role: Role.role,
+		feature: Feature,
 		flow: flowOf(Role.role),
 		stateful: tokens.state.length > 0 || Role.role === "store",
 		streaming: tokens.stream.length > 0 || /stream|pipe|flow/.test(Domain),
@@ -348,7 +379,7 @@ export const profileOf = (Structure, Entry) => {
 			totals.injections + (totals.services > 0 ? 1 : 0) + (Entry.bundle ? 1 : 0),
 		),
 		weight: weightOf(totals.functions),
-		evidence: unique(factsOf(Structure, Entry)).slice(0, 6),
+		evidence: unique([...factsOf(Structure, Entry), `feature ${Feature}`]).slice(0, 6),
 		confidence: Role.observed ? "observed" : "inferred",
 	};
 };

@@ -50,8 +50,11 @@ The generator now runs four stages, each with its own owner file:
    semantic token the package actually has (gate loops, tool beads, seam ticks, ledger beads,
    injection rings, medallion, stream spiral, state nest, trace echo, transform cusps, evolution
    rings).
-4. **Slab render.** `RenderScene.mjs` merges each layer into ONE path and paints the layers bottom
-   to top (frame, body, detail, core). The SVG is the top view of that stack, not a pile of strokes.
+4. **Solid render.** `RenderScene.mjs` fills every component (a closed component fills its polygon,
+   an open one its envelope) and paints the planes in depth order. There is no contour pass: the
+   drawing is carried by the planes, their tones, and their occlusion. A frame or body plane is
+   projected as a 3D solid seen from above (silhouette, ribs, top face, optional age face), and the
+   SVG is the top view of that stack.
 
 `ICON-METHODS.md` carries the family table, the matrix, the rules, and the arbiters. Sections 3-5
 and 7 below describe the retired first-generation vocabulary (the method pool and the annulus
@@ -268,21 +271,22 @@ fails until the asset is regenerated. That is the whole update loop.
 
 ## 9. The rendering contract
 
-| Render   | Path                                | Rules                                                                               |
-| -------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
-| `mono`   | `Site/Public/Icons/<dir>.svg`       | `fill="currentColor"`, contour stroke at 0.28, accent body at `fill-opacity="0.55"` |
-| `colour` | `Site/Public/Icons/Color/<dir>.svg` | ink + accent from the kind palette, contour stroke at 0.30                          |
+| Render   | Path                                | Rules                                                                      |
+| -------- | ----------------------------------- | -------------------------------------------------------------------------- |
+| `mono`   | `Site/Public/Icons/<dir>.svg`       | `fill="currentColor"`, per-layer opacity, no stroke                        |
+| `colour` | `Site/Public/Icons/Color/<dir>.svg` | per-layer palette tone (frame accent2, body ink, detail tint, core accent) |
 
 - `viewBox="0 0 100 100"`, coordinates quantized to whole units (the canvas is 100 wide, so one unit
   is 0.4 px at the 40 px site size).
-- **Envelope rendering, not double strokes.** Each part's centerline becomes its stroke envelope
-  (`Maintain/Icon/Envelope.mjs`): the envelope is drawn as a filled polygon, and the mini contour is
-  a hairline stroke ON that envelope, so the outline follows the stroke BOUNDARY. Open centerlines
-  keep their terminals - the envelope closes, the motif does not.
-- **One path, three uses.** The collage is written once into `<defs>` as `<path id="<dir>-i">` (ink)
-  and `<path id="<dir>-a">` (accent); the body fill, the contour stroke and the Effect-TS echo all
-  `<use>` the same definition. The ids carry the package directory, so several inlined icons on one
-  page never collide.
+- **Filled planes, no contour.** Every component is a filled path: a closed component fills its
+  centerline polygon, an open one fills its stroke envelope (`Maintain/Icon/Envelope.mjs`). The
+  contour stroke pass is removed - separation comes from the tones and the occlusion order.
+- **Depth order.** Each component carries a depth; the renderer sorts by depth and groups runs with
+  the same tone and opacity into one `<path>`. A frame or body plane contributes three features -
+  silhouette, ribs, top face - at different opacities, and a changelog release adds an age face.
+- **One path per run.** Each run is written once into `<defs>` as `<path id="<dir>-<n>">` and
+  painted with `<use>`; the Effect-TS echo reuses the body run. The ids carry the package directory,
+  so several inlined icons on one page never collide.
 - No `<style>`, no script, no external reference; each file is self-contained and under 16 KiB (the
   market index's inline limit is 32 KiB decoded, so there is room; the cap is the family's own).
 - `<title>` carries the package name and the grammar; `role="img"` and `aria-label` are set.

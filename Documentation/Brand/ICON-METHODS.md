@@ -91,19 +91,26 @@ not use it is marked "fixed".
 | `cellsOf`     | recursive subdivision of a rectangle (division raster)       |
 | `tick`/`loop` | the rim detail marks and the gate loops                      |
 
-## 4. The slab model
+## 4. The solid planes
 
-An icon is a stack of slabs, not a pile of strokes.
+An icon is a stack of solid planes, not a pile of strokes and not an outline drawing.
 
-1. Every component belongs to a LAYER: `frame`, `body`, `detail`, `core` (in bottom-to-top order).
-2. Every layer is merged into ONE path - one slab - with `fill-rule="evenodd"`.
-3. Slabs are painted bottom to top; an upper slab covers the lower one, and the lower slab's contour
-   disappears under it.
+1. Every component is a FILLED path: a closed component fills its polygon (a solid face), an open
+   component fills its stroke envelope (a ribbon).
+2. Each component carries a depth; the scene paints in depth order, so an icon can have as many
+   layers as it has components (20-60 in the current set).
+3. An upper plane covers the lower one. There is no contour pass: the drawing is carried by the
+   planes, their tones, and their occlusion.
 4. The SVG is the TOP VIEW of that stack.
 
-Mono uses one ink with per-layer opacity (frame 0.85, body 1.0, detail 0.45, core 0.65) so the stack
-still reads without colour. The colour render gives each layer its palette tone: frame and body ink,
-core accent, detail accent2. The `tint`/`solid` fill variant lightens or solidifies the core slab.
+A frame or body plane is projected as a 3D solid seen from above: its silhouette, the ribs from the
+silhouette to the top face, and the top face itself, at a shrinking scale and an optional twist. The
+projection parameters come from the composition (`solid: { shrink, twist, ribs }`), and a released
+changelog version adds one further nested face (the "age" face), so history deepens the solid.
+
+Tones are per layer: frame `accent2`, body `ink`, detail `tint`, core `accent`. Mono uses one ink
+with per-layer opacity (frame 0.55, body 0.85, detail 0.3, core 0.7) plus per-feature opacity for
+the top face (0.55) and ribs (0.4); overlaps darken, so the stack reads as an embossed solid.
 
 ## 5. The composition matrix
 
@@ -177,7 +184,7 @@ Six arbiters, all deterministic and dependency-free.
 | `Test/Icons/Profiles.mjs`      | every profile field, evidence, and at least two packages per role               |
 | `Test/Icons/Composition.mjs`   | the matrix, the rules, and determinism                                          |
 
-Current result: 14/14, 1/1, 17/17, 10/10, 4/4, 19/19; 102 unique icons; 14 families; 12 silhouettes.
+Current result: 14/14, 1/1, 17/17, 11/11, 4/4, 19/19; 102 unique icons; 14 families; 12 silhouettes.
 
 ## 9. What is not implemented
 

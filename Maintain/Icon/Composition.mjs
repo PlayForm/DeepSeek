@@ -48,6 +48,17 @@ const Accents = {
 	analyzer: "orbit",
 };
 
+const Solids = {
+	interceptor: { shrink: 0.3, twist: 0, ribs: 12 },
+	transformer: { shrink: 0.55, twist: 30, ribs: 10 },
+	router: { shrink: 0.7, twist: 15, ribs: 8 },
+	store: { shrink: 0.85, twist: 0, ribs: 8 },
+	renderer: { shrink: 0.45, twist: 0, ribs: 10 },
+	governor: { shrink: 0.9, twist: 0, ribs: 6 },
+	orchestrator: { shrink: 0.6, twist: 24, ribs: 12 },
+	analyzer: { shrink: 0.35, twist: 0, ribs: 10 },
+};
+
 /** The families that draw a frame of their own: a ledger bead would crowd the rim. */
 const FramedFamilies = new Set([
 	"diamondLattice",
@@ -109,11 +120,15 @@ export const compositionOf = (Profile, Seed) => {
 	const Containment = Math.max(0, Math.min(4, Number(Profile.containment) || 0));
 
 	const Random = stream(digest(`${Seed}|composition`));
-	const Family = Random.pick(Entry.families);
+	const Feature = typeof Profile.feature === "string" ? Profile.feature : "core";
+	const FeatureRandom = stream(digest(`${Seed}|${Feature}|composition`));
+	const Family = FeatureRandom.pick(Entry.families);
 	const Symmetry = symmetryOf(Branching, Flow);
 	const Phase = Streaming ? 0 : Random.pick(Phases);
 	const Density = densityOf(Weight, Role);
 	const Void = Math.min(2, voidOf(Containment) + (Stateful ? 1 : 0));
+	const Base = Solids[Role];
+	const FeatureValue = Number.parseInt(digest(Feature).slice(0, 4), 16);
 
 	const Rules = [];
 	if (Density >= 2) {
@@ -162,6 +177,12 @@ export const compositionOf = (Profile, Seed) => {
 		density: Density,
 		void: Void,
 		accent: Accents[Role],
+		solid: {
+			shrink: Math.min(0.92, Math.max(0.2, Base.shrink + ((FeatureValue % 9) - 4) / 100)),
+			twist: (Base.twist + (FeatureValue % 3) * 5) % 45,
+			ribs: Math.min(16, Base.ribs + (FeatureValue % 5)),
+		},
+		feature: Feature,
 		rules: Rules,
 		evidence: [
 			`role ${Role}`,
