@@ -73,7 +73,7 @@ live in `@playform/plugin-dsh-workspace-graph`; the agent stays a pure consumer 
 ## Module-owned ledger strings (byte-stable)
 
 ```text
-workspace: activated (bundle 0.1.0, tools=5)
+workspace: activated (bundle 0.2.0, tools=5)
 workspace: disabled (enabled=false)
 workspace: map <path> (<modules> modules, <files> files)
 workspace: find <query> (<n> nodes)

@@ -33,7 +33,7 @@ import Tools from "./Tools.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.1.0";
+const Version = "0.2.0";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

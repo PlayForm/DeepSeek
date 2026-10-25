@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-edit-suggester",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The edit-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a modification call (write, edit, raw-write) lands on a file whose family carries a STANDARD COMPANION SET (the version lives in 36 manifests, 6 Apply.ts and the CHANGELOG; a Config.ts edit must also land in the README's Config section, SCHEME.md, the cordis.patch.yml row and the byte-exact test), prepends ONE labeled additionalContexts note naming the companions the model has not touched yet - the second consumer of the search-suggester's pattern algebra, owning the modification intent the search consumer deliberately refuses (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md sections 8.4 and 1.4: the edit is where the discovery happens). Deterministic path rules, a hard gate, a cooldown, a dedupe, a per-turn cap, and an abstention line for every silence.",
 	"repository": {
 		"type": "git",
@@ -31,9 +31,9 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/lib-dsh-pack": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/lib-dsh-pack": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",

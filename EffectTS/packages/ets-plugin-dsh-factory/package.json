@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-plugin-dsh-factory",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The FACTORY: a DeepSeek Harness service (@playform/ets-plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate — the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list resolution, the g1 gate set, the version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained continuation, the State builder, the wiring helpers, the effects (jobs controller, in-flight disposal, storage domain), the Schemastery schema factory and the probe-once seam accessor. A new governance flavor reduces to a Config extension, a pure transform and an update engine; the factory owns the scaffolding and never the flavor's ledger strings.",
 	"repository": {
 		"type": "git",
@@ -31,9 +31,9 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.1.0",
-		"@playform/ets-lib-dsh-trace": "0.1.0",
-		"effect": "4.0.5"
+		"@playform/ets-base-dsh": "0.2.0",
+		"@playform/ets-lib-dsh-trace": "0.2.0",
+		"effect": "4.0.6"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -43,7 +43,7 @@
 		"@deepseek-ai/dsh-storage-domain": "0.2.0-rc.2",
 		"@deepseek-ai/dsh-subprocess": "0.2.1-rc.2",
 		"@deepseek-ai/schemastery": "3.18.5",
-		"@effect/opentelemetry": "4.0.5",
+		"@effect/opentelemetry": "4.0.6",
 		"@opentelemetry/api": "1.10.0",
 		"@opentelemetry/api-logs": "0.223.0",
 		"@opentelemetry/context-async-hooks": "3.0.0",

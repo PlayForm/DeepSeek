@@ -74,7 +74,7 @@ import Would from "./Would.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.1.0";
+const Version = "0.2.0";
 
 /** The edited call's view: the path alone (plan section 3.3). */
 const View = (Exec: ToolExecution): EditView => {
@@ -172,7 +172,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
-	//   edit-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)
+	//   edit-suggester: activated (bundle 0.2.0, families 7, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {

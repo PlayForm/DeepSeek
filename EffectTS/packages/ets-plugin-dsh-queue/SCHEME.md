@@ -89,7 +89,7 @@ Source/
 | Event      | Line                                                                                   |
 | ---------- | -------------------------------------------------------------------------------------- |
 | Cold mount | `disabled (enabled=false)`                                                             |
-| Activation | `Activate([...])` -> `bundle 0.1.0`, `capacity main=10 child=2`, `routedDispatch true` |
+| Activation | `Activate([...])` -> `bundle 0.2.0`, `capacity main=10 child=2`, `routedDispatch true` |
 | Enqueue    | `queued <id> <role\|auto> p<priority> deps<n>`                                         |
 | Dispatch   | `dispatched <id> -> <agent>[ route <provider> <model> <effort>]`                       |
 | Running    | `running <id>`                                                                         |

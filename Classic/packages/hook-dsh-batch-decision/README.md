@@ -1,6 +1,6 @@
 # @playform/hook-dsh-batch-decision
 
-> v0.1.0 - UNPUBLISHED - plan:
+> v0.2.0 - UNPUBLISHED - plan:
 > [PASS-ON-AND-INGESTER](../../Documentation/Plans/PASS-ON-AND-INGESTER.md)
 
 ## The role

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-graph-suggester",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate list from paths and globs to the CONNECTED COMPONENT around the symbol. When the model reads or greps a source file, the hook asks the workspace v4.1 graph service for the code-block neighborhood of that file (the definition, the callers, the tests, the doc block) and prepends ONE labeled additionalContexts notice naming it; a grep for a package name falls back to the static Sibling intent. The graph service shape is declared in this package's own Interface (self-contained PoC: no import from sibling workspace packages); when the service is absent or fails, the hook abstains with a `graph unavailable` ledger line - a wrong target set costs more than a missing one. Deterministic classifier, no LLM in the hot path. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 8, 9.2) + Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md (the graph contract the hook consumes).",
 	"repository": {
 		"type": "git",
@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -41,7 +41,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

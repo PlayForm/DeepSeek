@@ -47,7 +47,7 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
-      Plans/                       the living + queued plans (30) + 5 granular families (80)
+      Plans/                       the living + queued plans (31) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
@@ -79,7 +79,7 @@ statuses:
 | -------------------------------------- | ------ | ------------- |
 | [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
 
-### Plans - the living + queued hubs (30)
+### Plans - the living + queued hubs (31)
 
 | Document (Documentation/Plans/)                                                                | Status            | Kind                                                   |
 | ---------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------ |
@@ -99,6 +99,7 @@ statuses:
 | [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md)             | planned           | queued-plan                                            |
 | [TRUSTED-PUBLISHER.md](Plans/TRUSTED-PUBLISHER.md)                                             | planned           | queued-plan                                            |
 | [RELEASE-0.1.0.md](Plans/RELEASE-0.1.0.md)                                                     | active            | one-shot-record (the release runbook)                  |
+| [RELEASE-0.2.0.md](Plans/RELEASE-0.2.0.md)                                                     | active            | one-shot-record (the 0.2.0 release runbook)            |
 | [PATTERN-GRAPH-PLUGIN.md](Plans/PATTERN-GRAPH-PLUGIN.md)                                       | implemented (PoC) | queued-plan (the general suggestion model)             |
 | [SEARCH-SUGGESTER-PLUGIN.md](Plans/SEARCH-SUGGESTER-PLUGIN.md)                                 | implemented (PoC) | queued-plan (the pattern graph's first consumer)       |
 | [PASS-ON-AND-INGESTER.md](Plans/PASS-ON-AND-INGESTER.md)                                       | implemented (PoC) | queued-plan (the batch decision flow)                  |

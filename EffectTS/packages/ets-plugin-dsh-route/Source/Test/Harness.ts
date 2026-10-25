@@ -220,7 +220,7 @@ if (InvokedDirectly) {
 		assert.ok(Run.CtxListeners["tools/pre-execute"] !== undefined);
 		assert.ok(Run.Provided["dshRoute"] !== undefined);
 		assert.deepEqual(Run.Lines, [
-			"plugin-dsh-route: activated (bundle 0.1.0, defaultRole=explorer, models=3)",
+			"plugin-dsh-route: activated (bundle 0.2.0, defaultRole=explorer, models=3)",
 		]);
 	});
 	if (Count.N === 3 && Count.F === 1) {

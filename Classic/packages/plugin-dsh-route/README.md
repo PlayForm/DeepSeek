@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-route
 
-> v0.1.0 - UNPUBLISHED - plan:
+> v0.2.0 - UNPUBLISHED - plan:
 > [ROUTING-ENFORCER-PLUGIN](../../Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md)
 
 ## The role

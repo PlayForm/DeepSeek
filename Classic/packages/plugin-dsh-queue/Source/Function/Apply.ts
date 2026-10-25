@@ -28,7 +28,7 @@ import { Activate } from "@playform/lib-dsh-core";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.1.0";
+const Version = "0.2.0";
 
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at

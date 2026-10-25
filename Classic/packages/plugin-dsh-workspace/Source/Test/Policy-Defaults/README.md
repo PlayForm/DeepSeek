@@ -45,7 +45,7 @@ package has none.
 ## Expected ledger strings (byte-exact, `plugin-dsh-workspace: ` prefix)
 
 The unchanged activation line
-`activated (bundle 0.1.0, tools=5)` and the unchanged map line
+`activated (bundle 0.2.0, tools=5)` and the unchanged map line
 `workspace: map (root) (2 modules, 2 files)`.
 No policy or held line exists on this package's path.
 

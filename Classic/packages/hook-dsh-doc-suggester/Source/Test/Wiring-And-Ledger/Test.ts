@@ -61,13 +61,13 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-			assert.deepEqual(Run.Lines, ["hook-dsh-doc-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)"]);
+			assert.deepEqual(Run.Lines, ["hook-dsh-doc-suggester: activated (bundle 0.2.0, families 7, threshold 0.75)"]);
 			assert.deepEqual(Run.Effects, []);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
 			assert.equal(LedgerLines().length, 1);
-			assert.match(FirstLine(), Durable("activated (bundle 0.1.0, families 7, threshold 0.75)"));
-			assert.deepEqual(LedgerWith("activated (bundle 0.1.0, families 7, threshold 0.75)").length, 1);
+			assert.match(FirstLine(), Durable("activated (bundle 0.2.0, families 7, threshold 0.75)"));
+			assert.deepEqual(LedgerWith("activated (bundle 0.2.0, families 7, threshold 0.75)").length, 1);
 		});
 	}
 

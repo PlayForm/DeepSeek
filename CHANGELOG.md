@@ -4,8 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Known issues
+
+- The empty-graph gap: the workspace family has no indexing trigger yet, so a fresh workspace graph
+  stays empty until `workspace_index` is called (documented and open).
+
+## 0.2.0 - 2026-10-25
+
 ### Added
 
+- The 102-package family at 0.2.0: 54 Classic packages and 48 Effect-TS packages, every `@playform/`
+  sibling pin at 0.2.0, and every package carrying its own `CHANGELOG.md` with a 0.2.0 section and a
+  0.1.0 backfill.
 - The 2026-10-22 PoC delivery: 36 new Classic packages and 30 new EffectTS twins, all at 0.1.0 and
   unpublished (the npm bootstrap tiers: 2-planned / 3-candidates):
     - the workspace family (15 + the `lib-dsh-workspace-live` library): `plugin-dsh-workspace`,
@@ -27,9 +37,21 @@ All notable changes to this project will be documented in this file.
   smoke suites / 5,337 checks, all green; the live desktop profile has 54 bundles enabled.
 - The live dogfood's first catch: `plugin-dsh-batch-edit`'s inject list was missing `"fs"` (fixed);
   the empty-graph gap (no indexing trigger) is documented and open.
+- The derived publish scaffold: `Maintain/Generate-NPM-Placeholders.mjs` classifies the family names
+  into `1-missing` / `2-placeholder` / `3-published` from the registry and writes the `0.0.0`
+  empty-first-publish scaffold (the placeholder manifests, `MANIFEST.json`, the `README.md` and
+  `Publish.sh`) under `Temporary/npm-bootstrap/`.
 
 ### Changed
 
+- The registry state: the family's published release is 0.1.0 under the trusted publishers bound to
+  `PlayForm/DeepSeek`, `NPM.yml`, environment `Release`; `@playform/client-dsh-panel-family` is the
+  one name already published at 0.2.0, and every other 0.2.0 in the tree is unpublished at
+  preparation.
+- The publish route: `.github/workflows/NPM.yml` runs `node Maintain/Publish-Packages.mjs` instead
+  of a hard-coded package list, so the workflow derives the layer order from the workspace
+  dependency graph (L0 -> L1 -> L2, cycles refused) and publishes each package whose version is not
+  yet on the registry, skipping the ones that are.
 - The package renames under the role-prefix contract (2026-10-21): the core library is now
   `@playform/lib-dsh-core` (`ets-lib-dsh-core` in the Effect-TS tree), the file-content tool is now
   `@playform/plugin-dsh-normalize-file` (`ets-plugin-dsh-normalize-file`), and the planned UI

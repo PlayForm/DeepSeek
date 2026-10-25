@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-lib-dsh-trace",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The TRACE: the pure, harness-free vocabulary of the workspace family's trace bus (@playform/ets-lib-dsh-trace) - the envelope { trace, kind, at, actor, payload }, the event names (observe/stamp, graph/indexed, graph/invalidated), the coalescing key, the adapter contract (emit, on), the detached-loop helper (a coalescing queue keyed by path, one in-flight task per key, no timers in the hot path, fail-open, a Flush promise for deterministic smokes, a disposer) and the type guards. The SERVICE lives in @playform/ets-plugin-dsh-factory (ctx.trace); every adapting plugin carries its own adapter in its own Source/Trace/ folder and imports this vocabulary - no plugin imports another, and the indexer is inferred from the bus rather than being a separate process or package. Usable outside the harness entirely (the PlayForm ecosystem).",
 	"repository": {
 		"type": "git",

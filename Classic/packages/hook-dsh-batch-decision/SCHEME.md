@@ -89,7 +89,7 @@ action (the wiring is the next refinement).
 ## Ledger strings (module-owned, byte-stable)
 
 - `disabled (enabled=false)`
-- `bundle 0.1.0 autoApprove <off|on> allowlist <n>` (the Activate line)
+- `bundle 0.2.0 autoApprove <off|on> allowlist <n>` (the Activate line)
 - `proposal <id> recorded (intent <intent>, targets <n>, rev <n>)`
 - `proposal <id> ignored (revision not newer)`
 - `decision <outcome> <id> (by <user|policy>)`

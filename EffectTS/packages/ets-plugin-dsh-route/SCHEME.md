@@ -83,7 +83,7 @@ Source/
 | Event                     | Line                                                                                                            |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | Cold mount                | `disabled (enabled=false)`                                                                                      |
-| Activation                | `Activate([...])` -> `bundle 0.1.0`, `defaultRole <role>`, `models <n>`                                         |
+| Activation                | `Activate([...])` -> `bundle 0.2.0`, `defaultRole <role>`, `models <n>`                                         |
 | A routed launch           | `route <taskType> <source> <provider> <model> <effort>` (`source` in `resolved`/`kept`/`corrected`/`escalated`) |
 | The hint delivered        | `hint <taskType> <provider> <model> <effort>`                                                                   |
 | A fail-open routing error | `plugin-dsh-route: <error>; the launch passes through unrouted`                                                 |

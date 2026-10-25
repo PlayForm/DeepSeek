@@ -1,6 +1,6 @@
 # @playform/hook-dsh-edit-suggester
 
-> v0.1.0 - UNPUBLISHED - plan:
+> v0.2.0 - UNPUBLISHED - plan:
 > [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
 
 ## The role

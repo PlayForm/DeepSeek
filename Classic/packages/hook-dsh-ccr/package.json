@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-ccr",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The CCR hook (compress-cache-retrieve): a DeepSeek Harness plugin that hooks the tools/post-execute waterfall - the point where the normalized result of EVERY dispatched tool passes before it becomes model content - and replaces oversized tool output with a one-line type-aware preview plus a retrieval marker (<<<CCR:<24hex>|<type>|<size>>>), storing the original under a sha256-24 hash in an in-memory LRU with TTL and budget eviction (optional JSONL disk journal, default memory-only), while the registered ccr_retrieve tool restores the original bytes (optionally a granular line range) to the agent on demand. Ported from Aphrodite's CCR pipeline (Research: docs/research/2026-10-19-hermes-aphrodite-research.md; Plan: Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md). The gate compresses only the allow-listed targets (bash, glob, grep, read, web_fetch, web_search, list, search) whose serialized content exceeds thresholdBytes times the classified type's multiplier (errors ×8, grep/paths/web ×2, the rest ×1) and never the exempt tools (write, edit, raw-write, subagent, ask_user_question, ccr_retrieve itself); with autoExpand on (default) results at or under autoExpandLimitBytes are stored but returned FULL - no marker reaches the model while the content is cheap enough to keep inline.",
 	"repository": {
 		"type": "git",
@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -41,7 +41,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

@@ -49,11 +49,11 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
       briefs, user gates".
 - Group: Run 1 - the activation posture.
     - Check: "activation ledger line byte-exact: 'ccr: activated (bundle
-      0.1.0, targets 8, budget 268435456)'".
+      0.2.0, targets 8, budget 268435456)'".
     - Check: "the activation record journals to the shared storage domain
       with the identical detail".
 - Group: Run 8 - the durable ledger file.
-    - Check: "the durable ledger file: '[ISO] activated (bundle 0.1.0,
+    - Check: "the durable ledger file: '[ISO] activated (bundle 0.2.0,
       targets 8, budget 268435456)' (the file form has no module prefix)".
 
 ## Fixtures
@@ -67,11 +67,11 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
 
 ## Expected ledger strings (byte-exact)
 
-- `ccr: activated (bundle 0.1.0, targets 8, budget 268435456)` (the logger
+- `ccr: activated (bundle 0.2.0, targets 8, budget 268435456)` (the logger
   form).
-- `[ISO] activated (bundle 0.1.0, targets 8, budget 268435456)` in the
+- `[ISO] activated (bundle 0.2.0, targets 8, budget 268435456)` in the
   durable file (matched with the
-  `^\[[^\]]+\] activated \(bundle 0\.1\.0, targets 8, budget 268435456\)$`
+  `^\[[^\]]+\] activated \(bundle 0\.2\.0, targets 8, budget 268435456\)$`
   regex; the stamp is the one non-deterministic part).
 
 ## Edge cases

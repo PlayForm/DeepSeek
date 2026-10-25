@@ -68,7 +68,7 @@ const runTest = async () => {
     const Run = Setup();
     Check(Count, "P3: the activation line is byte-exact", () => {
       assert.deepEqual(Run.Lines, [
-        "hook-dsh-batch-decision: activated (bundle 0.1.0, autoApprove=on, allowlist=1)"
+        "hook-dsh-batch-decision: activated (bundle 0.2.0, autoApprove=on, allowlist=1)"
       ]);
     });
     Check(Count, "P3: the batch/proposed listener sits on the ctx; the hook registers no root listeners", () => {

@@ -1,0 +1,22 @@
+# Changelog
+
+All notable changes to this package will be documented in this file.
+
+## 0.2.0
+
+### Added
+
+- The pure workspace-live library: the render, collapse and packet helpers, with their tests and
+  their README.
+
+### Changed
+
+- The documentation passes: the repository-wide markdown clean-up, the README restructured onto the
+  role / surfaces / ledger template, and the static market index committed alongside.
+
+## 0.1.0
+
+### Changed
+
+- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
+  with the 2026-10-22 PoC delivery.

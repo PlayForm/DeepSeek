@@ -79,7 +79,7 @@ const runTest = async () => {
       assert.equal(Out, Decision);
       assert.equal(FileSystem.existsSync(Proposal(Repo)), false);
       assert.deepEqual(Run.Lines, [
-        "convention-suggester: activated (bundle 0.1.0, intents 4, threshold 0.75)"
+        "convention-suggester: activated (bundle 0.2.0, intents 4, threshold 0.75)"
       ]);
     });
   }

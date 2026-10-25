@@ -1,0 +1,17 @@
+# Changelog
+
+All notable changes to this package will be documented in this file.
+
+## 0.2.0
+
+### Added
+
+- The comment-filter hook: intent gating over the comment content and the overpass flavour of the
+  rewrite.
+
+## 0.1.0
+
+### Changed
+
+- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
+  with the 2026-10-22 PoC delivery.

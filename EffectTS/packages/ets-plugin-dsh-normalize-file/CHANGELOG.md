@@ -2,6 +2,24 @@
 
 All notable changes to this package will be documented in this file.
 
+## 0.2.0
+
+### Changed
+
+- The role-prefix rename: the package reads `@playform/ets-plugin-dsh-normalize-file` (the previous
+  name stays in git history), and its manifest, README and source identifiers follow.
+- The D4-D8 release pass (the pack and trace libraries ship across both trees): the tool's source,
+  its scheme and its bundle patch move with it.
+- The repository-wide markdown clean-up, the prettier reflow, and the README role / surfaces /
+  ledger pass with the static market index committed alongside.
+
+## 0.1.0
+
+### Changed
+
+- The 0.1.0 family release: the package ships at 0.1.0 with the 31-package family and every
+  `@playform/` sibling pin at 0.1.0, under the role-prefix contract.
+
 ## 0.0.1
 
 ### Added

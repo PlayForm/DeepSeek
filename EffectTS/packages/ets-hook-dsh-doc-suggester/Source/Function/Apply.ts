@@ -74,7 +74,7 @@ import Would from "./Would.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.1.0";
+const Version = "0.2.0";
 
 /** The doc-task call's view: the doc path the call names. */
 const View = (Exec: ToolExecution): DocView => {
@@ -170,7 +170,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
-	//   doc-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)
+	//   doc-suggester: activated (bundle 0.2.0, families 7, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {

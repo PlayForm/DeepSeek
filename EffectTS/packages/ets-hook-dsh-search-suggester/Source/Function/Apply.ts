@@ -86,7 +86,7 @@ import Seed from "./Seed.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.1.0";
+const Version = "0.2.0";
 
 /** The learning-only tools: observed for the follow/ignore rules, never noted. */
 const Learning = ["write", "edit", "raw-write"];
@@ -266,7 +266,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (plan section 4.9):
-	//   search-suggester: activated (bundle 0.1.0, intents 10, threshold 0.75)
+	//   search-suggester: activated (bundle 0.2.0, intents 10, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {

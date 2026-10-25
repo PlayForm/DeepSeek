@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-gitguard",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts terminal commands before execution and denies ANY git mutation pattern (git add, commit, reset, push, tag, rm, checkout, branch, merge, stash, clean, rebase, revert, ...) while allowing the read-only checks (git status, log, diff, show, rev-parse, ls-files, fetch). Denials surface ONCE as the refusal line (the tool result), never punish; every denied attempt is ledgered for the user's audit. The git checks-only law stays in the skills (the WHY); the plugin carries the CANNOT. Config: enabled, log/logFile, denyPatterns, allowPatterns, strict (deny ALL git commands vs deny-list only - default deny-list), exclude. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3.",
 	"repository": {
 		"type": "git",
@@ -30,15 +30,15 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

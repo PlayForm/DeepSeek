@@ -11,7 +11,7 @@ missing, loaded, and corrupt store outcomes, all byte-exact.
   `disabled (enabled=false)` line (logger and durable ledger), and both
   listeners still wired on the plugin ctx.
 - L3: the enabled mount with a MISSING store - the byte-exact activation
-  line `activated (bundle 0.1.0, intents 1, threshold 0.75, history 0)` and
+  line `activated (bundle 0.2.0, intents 1, threshold 0.75, history 0)` and
   the byte-exact `history missing (starting empty)` degradation; the records
   stay empty.
 - L4: the loaded store - `history loaded 2 records` byte-exact with
@@ -33,7 +33,7 @@ No fake clock: the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `replay-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.1.0, intents 1, threshold 0.75, history 0)`,
+`activated (bundle 0.2.0, intents 1, threshold 0.75, history 0)`,
 `history missing (starting empty)`,
 `history loaded 2 records`,
 `history corrupt (starting empty)` (+ the `<reason>` variant).

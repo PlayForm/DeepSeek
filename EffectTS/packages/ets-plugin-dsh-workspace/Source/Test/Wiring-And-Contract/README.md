@@ -14,7 +14,7 @@ the fs purity invariant.
   `plugin-dsh-workspace: disabled (enabled=false)` line (logger and durable
   file).
 - W3: the enabled mount's activation line is byte-exact
-  (`activated (bundle 0.1.0, tools=5)`), the five tools register in
+  (`activated (bundle 0.2.0, tools=5)`), the five tools register in
   contract order (map, find, expand, context, index), no root listeners and
   no services are registered (pure consumer), only the factory's
   loader/volatile-update sits on the ctx, and the State probe carries the

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-workspace-observe",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The workspace-observe hook: a DeepSeek Harness plugin that records the workspace's first step of the invisible flow - on every fs/observed event (heard on the ROOT context, the factory's Wire registration) it writes one observation stamp (the path, the observed version, the origin, the plugin's own monotonic sequence) into its own KV storage domain named workspace_observe. The conversation never sees the stamps; a later wave's events surface them. The listener is a SYNCHRONOUS RECORDER: no awaits, no throws, no I/O, no file content ever read, no wall clock (the sequence is the plugin's own monotonic counter persisted in the domain's meta record). An own-actor event and an excluded path are ignored with byte-exact ledger lines; a malformed event is caught and ledgered. The plugin ships DISABLED - the IDLE-forever posture: it never appears in the profile's bundles and enables only by an explicit ACTIVATE. Plan: Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md section 5.",
 	"repository": {
 		"type": "git",
@@ -31,9 +31,9 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/lib-dsh-trace": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/lib-dsh-trace": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",

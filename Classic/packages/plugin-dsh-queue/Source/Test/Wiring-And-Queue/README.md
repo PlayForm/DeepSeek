@@ -15,7 +15,7 @@ purity guarantee.
   and the service and tools still register while the tools refuse with the
   byte-exact `queue disabled (enabled=false)` payload.
 - W2: the activation wiring - the byte-exact
-  `activated (bundle 0.1.0, capacity main=10 child=2, routedDispatch true)`
+  `activated (bundle 0.2.0, capacity main=10 child=2, routedDispatch true)`
   line, the `dshQueue` service is the apply-registered instance with the
   nine-method surface, and the two tools carry the enqueue contract.
 - W3: the enqueue path - the ids and sequences are assigned (`queue-1`,
@@ -37,7 +37,7 @@ real factory instance.
 ## Expected ledger strings (byte-exact, `plugin-dsh-queue: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.1.0, capacity main=10 child=2, routedDispatch true)`,
+`activated (bundle 0.2.0, capacity main=10 child=2, routedDispatch true)`,
 `queued <id> <role|auto> p<priority> deps<n>`.
 
 ## Expected count

@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-batch-edit
 
-> v0.1.0 - UNPUBLISHED - plan:
+> v0.2.0 - UNPUBLISHED - plan:
 > [BATCH-EDIT-TOOL-FEATURE](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
 
 ## The role

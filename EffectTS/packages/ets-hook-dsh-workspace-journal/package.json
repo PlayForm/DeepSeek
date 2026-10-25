@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-hook-dsh-workspace-journal",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The workspace-journal hook: a DeepSeek Harness plugin that is the workspace's EVIDENCE record - the undo, the recovery checkpoints, and the crash recovery (the JOURNAL role of the workspace family's invisible flow: ... -> the merge commits (through Factory.Write) -> the journal records -> the audit lines -> the live view presents). The journal holds the PER-BATCH RECORDS and the REVERT DATA: a batch (the ordered set of per-file writes plus the journal, WORKSPACE-FAMILY-V4-1.md section 3.8) is journaled BEFORE its writes land - the merge calls workspaceJournal.open(batchId, operation, entries) with the per-file pre-images (content + version captured before the write), the journal stores them in its own KV storage domain named workspace_journal, and only then does the merge proceed; workspaceJournal.seal(batchId, 'verified') closes the batch. The HONEST ALL-OR-NOTHING (V4-1 section 6, check 5): a crash between the commit and the seal is never an invisible intermediate state - at the next boot the journal finds the batch still 'applying', marks it 'recovery-required' with the identity, and reports it; the recovery checkpoints (the fs/observed listener records the per-file write progress against the open batch) show how far the crash got. workspaceJournal.revert(batchId) replays the pre-images backward through the factory's version-fenced write executor (replaceIfVersion against the observed current version; a fence mismatch is a typed conflict, never a silent overwrite); an absent pre-image file is removed. The conversation never sees any of it until an event surfaces it (the visibility rule). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/JOURNAL.md + Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8 + Documentation/Plans/Batch-Edit-Tool/FORMS-AND-GOVERNANCE-LAYERS.md (the rollback layer, the batch_edit_journal domain pattern).",
 	"repository": {
 		"type": "git",
@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.1.0",
-		"@playform/ets-plugin-dsh-factory": "0.1.0"
+		"@playform/ets-base-dsh": "0.2.0",
+		"@playform/ets-plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -41,7 +41,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2",
 		"zod": "4.6.7"
 	},

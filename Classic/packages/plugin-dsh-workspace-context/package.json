@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-workspace-context",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The workspace-context service: a DeepSeek Harness plugin that plays the workspace family's attention-projection role - the required/relevant/deferred context economy. The service (registered as ctx.workspaceContext) builds the ORIENTATION PACKET from the sibling workspace-graph index: the eight fixed sections WORKSPACE (the index revision), SCOPE (the query or focus), MAP (the top modules and their one-line roles), FOCUS (the node, its span, its fingerprint, its version), NEIGHBORS (the strongest edges, ranked by edge strength - a call beats a reference, a test beats a mention), EVIDENCE (the files/spans the packet is built from), OPEN (the questions the packet cannot answer - honest gaps, never guesses), and STALE (the version the caller held, when it differs). The packet is BOUNDED: the budget targets 2000 tokens (estimated chars/4, or the harness ctx.tokenMeter when available) with a configurable hard cap; the weakest neighbors are dropped first until the packet fits, and every clamp is ledgered. The LENSES (code, docs, tests - the default catalog) select which node and edge kinds participate. The model-facing surface is the workspace_context tool (read-only, one canonical JSON value). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.5 + Documentation/Plans/Workspace-Family/CONTEXT.md.",
 	"repository": {
 		"type": "git",
@@ -31,9 +31,9 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/lib-dsh-trace": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/lib-dsh-trace": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",

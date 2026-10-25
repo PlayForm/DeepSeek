@@ -1,0 +1,30 @@
+# Changelog
+
+All notable changes to this package will be documented in this file.
+
+## 0.2.0
+
+### Added
+
+- The workspace govern plugin: the governance gate over the workspace writes, with the full source,
+  the tests, the build configurations and the bundle patch.
+
+### Changed
+
+- The D4-D8 release pass (the pack and trace libraries ship across both trees) refines the plugin's
+  source, its scheme and its bundle patch.
+- The documentation passes: the repository-wide markdown clean-up, the prettier reflow, and the
+  README restructured onto the role / surfaces / ledger template with the static market index
+  committed alongside.
+
+### Fixed
+
+- The workspace index root defaults to the session working directory, and the find contract is
+  corrected.
+
+## 0.1.0
+
+### Changed
+
+- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
+  with the 2026-10-22 PoC delivery.

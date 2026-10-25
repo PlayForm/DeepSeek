@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-plugin-dsh-batch-edit",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The batch edit tool: a DeepSeek Harness plugin that turns files into PROCESSES held in state. One tool (batch_edit) opens a machine, inserts files into it, and runs the transition table (replace / insert-after / insert-before / remove-line / append / prepend) across every held file in one go. Every write goes through Factory.Write and nothing else - the governors see the batch's writes exactly as they see any write - with the batch's actor wrapped in the govern marker so the governed basenames run the factory's direct path exactly once per write. The atomic gate is all-or-nothing: the batch completes or the batch does not exist. A held file touched externally HALTS its process (the stale halt, protected and resumable); a commit exceeding the in-line deadline continues as a background job with a typed jobId handle. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md + Documentation/Plans/Batch-Edit-Tool/* (SCHEMA, STATE-MACHINE, PACKAGE-AND-GOVERNANCE, ACCEPTANCE-CRITERIA).",
 	"repository": {
 		"type": "git",
@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.1.0",
-		"@playform/ets-plugin-dsh-factory": "0.1.0"
+		"@playform/ets-base-dsh": "0.2.0",
+		"@playform/ets-plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -41,7 +41,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-route",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The routing-enforcer plugin: a DeepHarness plugin that enforces the user's model-routing policy SILENTLY on every subagent launch. The choice happens automatically - no prompting, no reminder, no orchestrator awareness. When a launch omits provider/model/reasoningEffort the plugin resolves the route per the user's policy (the task-type rules of the task-routing skill: exploration always GLM low; coding GLM low/high; planning and advanced debugging DeepSeek max) and injects it into the launch; the orchestrator's call succeeds exactly as if it had passed the right values. An explicit-but-wrong route is CORRECTED silently per the policy (the user's configuration is the law) and the correction is logged to the plugin's own ledger, never surfaced. The task-type inference applies a documented keyword table (Variable/Keywords) when the launch does not declare a role; the user's policy overrides it. The escalation path (the attempts ladder: GLM attempts, then one DeepSeek max re-dispatch with the artifacts) is also automatic and silent. Every resolved route is recorded in the plugin's ledger (the launch, the task type, the resolved triple, the explicit-or-resolved and corrected-or-kept flags) for the user's audit. The plugin ships DISABLED - the IDLE-forever posture: it never appears in the profile's bundles and enables only by an explicit ACTIVATE. Plan: Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md.",
 	"repository": {
 		"type": "git",
@@ -30,8 +30,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.1.0",
-		"@playform/plugin-dsh-factory": "0.1.0"
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -39,7 +39,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {

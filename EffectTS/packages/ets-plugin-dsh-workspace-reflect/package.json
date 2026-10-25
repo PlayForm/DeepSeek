@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-plugin-dsh-workspace-reflect",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "The workspace-reflect service: a DeepSeek Harness plugin providing the LATER-STAGE code-block reflective API - the AST-aware rename/connect/replace bundled as ONE call each, over the managed representations (the family map's reflect role; the workspace regime's interactions over the representations, where the reply IS part of the type). Each operation takes the whole transformation in one call - rename an identifier across the affected block/file references, connect two blocks with a reference, replace a block's span with new text - reads the current representation through ctx.fs, applies the transformation to the exact span, and publishes it through the factory's guarded write (the replaceIfVersion fence: a file that moved under the operation yields a conflict, never a silent overwrite). The reply union is the situated interaction protocol's CommitReply: applied / conflict / denied / rejected / recovery-required / outcome-unknown. After an applied operation the optional workspaceGraph service is asked to re-index the file so the graph's representation stays current (the reflective carry, contained). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/REFLECT.md.",
 	"repository": {
 		"type": "git",
@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.1.0",
-		"@playform/ets-plugin-dsh-factory": "0.1.0"
+		"@playform/ets-base-dsh": "0.2.0",
+		"@playform/ets-plugin-dsh-factory": "0.2.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
@@ -40,7 +40,7 @@
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
-		"tsc-alias": "1.9.8",
+		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"publishConfig": {
