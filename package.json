@@ -18,6 +18,7 @@
 		"marketplace:check": "node Maintain/Generate-Marketplace.mjs --check",
 		"site": "pnpm --dir Site run Run",
 		"test": "node Maintain/Run-Smokes.mjs",
+		"test:icons": "node Test/Icons/Check.mjs",
 		"test:types": "node Maintain/Run-Types.mjs",
 		"test:wiring": "node Maintain/Run-Wiring.mjs"
 	},

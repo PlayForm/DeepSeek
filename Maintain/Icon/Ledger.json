@@ -1,0 +1,2362 @@
+{
+	"format": 1,
+	"counts": {
+		"packages": 102,
+		"classic": 54,
+		"effectTS": 48,
+		"hook": 56,
+		"plugin": 33,
+		"client": 4,
+		"lib": 9,
+		"mono": 102,
+		"colour": 102
+	},
+	"icons": [
+		{
+			"package": "@playform/client-dsh-panel-family",
+			"dir": "client-dsh-panel-family",
+			"kind": "client",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "d6957b30e967bd0c1ad1377714cdb8b45369ec0465013bb0cfffdc78583a1fb0",
+			"grammar": "quatrefoil",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "8dd6b7932cb7785f7a448db6c7d09a5375a87ef28a091e04e1aa70722b07dfa1",
+				"colour": "dc23e12e4bba6f03684079e6505212c6dce86f735663ec5f15b1aaf1714f5600"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/client-dsh-panel-family.svg",
+				"colour": "Site/Public/Icons/Color/client-dsh-panel-family.svg"
+			}
+		},
+		{
+			"package": "@playform/client-dsh-panel-family-host",
+			"dir": "client-dsh-panel-family-host",
+			"kind": "client",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "f16f927fb3f58cbcfc52b65263e8d2c119edabe17c656523582d42ba1969e574",
+			"grammar": "quatrefoil",
+			"order": 8,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "scallop",
+			"mode": "single",
+			"hash": {
+				"mono": "7a2846a2fee8203c0257ecd7a39b6d5730cbf0fa5ee9296e416c2cf1663d4083",
+				"colour": "99a80f03f775a87cecd2f2e120ecda5b86384e14a5b2daeea5387af462973290"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/client-dsh-panel-family-host.svg",
+				"colour": "Site/Public/Icons/Color/client-dsh-panel-family-host.svg"
+			}
+		},
+		{
+			"package": "@playform/client-dsh-workspace-live",
+			"dir": "client-dsh-workspace-live",
+			"kind": "client",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "71c0e410f217969dd3fa5bfc9701b73c653e9b6602c12e3b32ea9bcd8269d54c",
+			"grammar": "quatrefoil",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "3320823d3bb9820aa471e14a4fbc2a75de3bfcf1729dc7847b00cc8d3c8d8230",
+				"colour": "a22847a6f3d1fe9b985beba34e452042043a37c574e0b9a26fb83286e1ae9437"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/client-dsh-workspace-live.svg",
+				"colour": "Site/Public/Icons/Color/client-dsh-workspace-live.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-base-dsh",
+			"dir": "ets-base-dsh",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "d0b91ab4e145e52de383a37f612aaa2d566841199d2e20d7bce37b65eecece17",
+			"grammar": "crescent-ring",
+			"order": 12,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "4859f4126d1b0b6c7caf0fe23b39cb02cf452d6d9e90509cc5dc9078eadf5e4f",
+				"colour": "dbcea0ca043354bf6dec75e567aa5cd5af02bc49a1c083e25fcca131ec773a69"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-base-dsh.svg",
+				"colour": "Site/Public/Icons/Color/ets-base-dsh.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-client-dsh-workspace-live",
+			"dir": "ets-client-dsh-workspace-live",
+			"kind": "client",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "4c7e82dcda65b982a59fae609463ac3983324c71cc0e0044d1728f8f95f5e1b0",
+			"grammar": "quatrefoil",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "6e2b557304a3162a7f096e6df4ee5339803c5c4c62fc4530ad1c46aed233bdf5",
+				"colour": "49004b463783ba586d8d22e9496d048f2910fe833542123f4aafc751292ae01e"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-client-dsh-workspace-live.svg",
+				"colour": "Site/Public/Icons/Color/ets-client-dsh-workspace-live.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-cargo-governor",
+			"dir": "ets-hook-dsh-cargo-governor",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "8ef96e82b8ac151a755b5af8a7226fc93fc2051a5f06b775a377ad6c17de8c6c",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "fa68fb2db2d948e0ff276d986d60235d1d109a9c28139eba94b4b7a11a1dbe2d",
+				"colour": "f0bd97419ef259e65f68cf095ead6e433c212572cd75264827f6b436c052b08e"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-cargo-governor.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-cargo-governor.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-ccr",
+			"dir": "ets-hook-dsh-ccr",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "19df720cd75a98bcad4f18e796b1b95bf18069f0da5fb625983dcad9ab4e7727",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "6ff968a5143f289f65875fdb0794d5ba1e1a0d8dfe810b40966f2003b9380199",
+				"colour": "580b2c3948bbafd9e8e108f9c35dbba119adf42cfae618ccc660b212fabd5158"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-ccr.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-ccr.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-convention-suggester",
+			"dir": "ets-hook-dsh-convention-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "e3ad5965fe7df63d145937605741c480ccc3674f4ed1073d1ebd9cde9f229b53",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "6b342b523a810425b6a1a632aae669287b2795a69ed4b276a1a6e06882cef40a",
+				"colour": "e9ddca6f6f8942875ac6685ae8ccd7861000a114a987e048b24f729ff746e08c"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-convention-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-convention-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-doc-suggester",
+			"dir": "ets-hook-dsh-doc-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "72d95de4beaf9b1b7c4bf3bef9b8803b1d47b5fad944588c0cab59abfa1fafdc",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "d7a180eec20752b2d43b55b49772fd68c2ad6c0ba814960b91a641921265d719",
+				"colour": "198815207821e1c8003689b11299c875daa5e2e78f3e3149651a4bbd403c1326"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-doc-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-doc-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-edit-suggester",
+			"dir": "ets-hook-dsh-edit-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "7b8db6dad1f13a8558172251ff5790cab51c491a1e6338abb23c2457620022e3",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "b524a5cfc907c1d274a8ab490ead7aeb0decabbf9b22310ae712fa2792b01027",
+				"colour": "eaa644d366ef53963aebc0cfec08de72c99cde2e7175faee2dc5b1316b722c1f"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-edit-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-edit-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-graph-suggester",
+			"dir": "ets-hook-dsh-graph-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "ae1361b07c49cadfd4f1a2c26b2ca91838de83a72e35bc85b7ab02ea7f16fdc4",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "d04c2fbcffcfde50745c603372f41109975cd1f3408181bc31caabeb3e01b9ef",
+				"colour": "b0f1a275227afe52996b86ad22179e61b474263610f34a47a9fb93e7b5074b94"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-graph-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-graph-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-live-containers",
+			"dir": "ets-hook-dsh-live-containers",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "5c320bd469d587592ed39cff0bbc17fcf654e92a73176bf8a2059a05a4aa6af8",
+			"grammar": "spike-star",
+			"order": 6,
+			"arms": 6,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "2a34215f1a450bcd52fee12ae1c7b34979f8f4c510b153c43f1ac4eec71622cb",
+				"colour": "5da6c456168dd22c9afa8e5408ff5a4f275ff1a0bc0ce988efecec432fbfca2b"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-live-containers.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-live-containers.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-dash",
+			"dir": "ets-hook-dsh-normalize-dash",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "44a8e04ec9d8fa9bf61adf790e54d48b75bf68cd1d964de20f9f0a72288bef94",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "27b619c3f10ba93dcc812cc8256c05c38b6b134e7ba9e004823dc264979f08c0",
+				"colour": "71106884cffb029f72b7815a36db10f962e135fb948a24351a094b35af37f1e8"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-dash.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-dash.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-ellipsis",
+			"dir": "ets-hook-dsh-normalize-ellipsis",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "e3e9926ebc8cbdd81ba49e8a49275fa15a4f1f39920f254e09eb56c34d394225",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "4c7660b0cd3e2ed46184867b1695af19bca89be04a207b9987ad387877b550d2",
+				"colour": "98da10561a924b9b6267c3735145f00ba79945bba480268cc3cc93d375aa926e"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-ellipsis.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-ellipsis.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-fullwidth",
+			"dir": "ets-hook-dsh-normalize-fullwidth",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "59a76723c1a6f933ff00df682e7e858343d827de21df9412f5d280ad5209cb40",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "08989fa74bf8242ccc762504c336db09638df0dd244c12de018535a30ebe13b8",
+				"colour": "4790bd2bc30b5c242a46b4418b6e86963df54c93fcdfc750b79bf8d3ee2ed808"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-fullwidth.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-fullwidth.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-invisible",
+			"dir": "ets-hook-dsh-normalize-invisible",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "11c42c6083d9f28994d7bdbf1d5ab4cb19796fd3dfadecec7aab98dfb5c3fa31",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "74a05d33c61f835a0eb66831ea704bf27f3e315cc505b89b008e14569a34759b",
+				"colour": "d196f3cd13d6c93c745e66dbb1e5b15678bf6e8e5f19b09eb88d0df0e3bd0b9e"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-invisible.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-invisible.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-quotes",
+			"dir": "ets-hook-dsh-normalize-quotes",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "8819d624ed8cbceec69670f9437d1f1d3b9d543b1ef48aa4b5cce44b72af31d9",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "95b4dc9f8410924454e17d4a1d96be6968782afbb9d252d90087ca82c539a342",
+				"colour": "b06c5e7ac093ebf6303ce8d98d1abd13502df92f63b4888f62d26bd7b260542d"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-quotes.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-quotes.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-normalize-spaces",
+			"dir": "ets-hook-dsh-normalize-spaces",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "2e2c5540564221fcaf6aa3d146094a9a1d97ef9d96a852684a0f7249de7e343e",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "05a07a2893bfe4a73d8533c1af620896afee28a89bd2c94cec01285004c1ccc4",
+				"colour": "c631e32f46c9d12684a3abdfeca97c0d96e3042a4d37b6c30dfdfa1435a27b65"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-spaces.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-spaces.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-package-governor",
+			"dir": "ets-hook-dsh-package-governor",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "9fbc9c90768ddb8593475f04c75fa4941700b51f6772808352092930097a3d99",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "e629e0e7fa48a01e78b76b41fd064dcd9b1eda882f7bf32d49d40b06d51b5cb6",
+				"colour": "1c47526c2665813367e9b471f151ff68bc1a5e32d5976a0d8cec7fb53fd61437"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-package-governor.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-package-governor.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-package-pinner",
+			"dir": "ets-hook-dsh-package-pinner",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "4c30e277dc378f71bd70b7a6de11e33f202796ffeb22a50304856d6971677d1b",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "47750aa0c66b58b3f70bd0e069e2f6e76e029aef1c388fc753a722abba819714",
+				"colour": "6721f010764f9b231f068593b0d423745ef52c5771fda2c6176a3c1d74c3e450"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-package-pinner.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-package-pinner.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-replay-suggester",
+			"dir": "ets-hook-dsh-replay-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "9b8bf17300135bba551de297ba7d2b82e693b97eb4703da6d13cba4519cc2ad9",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "d28286dd088aad5cc525a5cb3fd6c02408a08baada00db61f610f7ffb5d9ae44",
+				"colour": "27079dd0ee67695ca5d67fe61b6c62549bdfeef8de2ba9866ec330f57c69a6d9"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-replay-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-replay-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-search-suggester",
+			"dir": "ets-hook-dsh-search-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "ba276ff15f6ebd86b409fd933b8aabc7f5012e8c286d14307df872e334462ac4",
+			"grammar": "spike-star",
+			"order": 6,
+			"arms": 6,
+			"rings": 1,
+			"orbit": 12,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "ad65824cdb09b60bd3225e37a645f0ef6ed79855ae205f968d3a662c3f966b31",
+				"colour": "40cac9872883b41b6da931af791b2286801a5d8083e56c6a46ad3bb83014890a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-search-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-search-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-test-suggester",
+			"dir": "ets-hook-dsh-test-suggester",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "0e6f87d188d8889ccf9b0704e9e16299e2ad03f1365eba105277241e9450d47c",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "89df87d96248939bacdfa9d8fa62982d274e6a9b6011194204952fa1aa677ccc",
+				"colour": "35e77353cddb639f21e641c325b38a7ea50806408798e86d15d259dec4fbd5da"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-test-suggester.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-test-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-tool-coach",
+			"dir": "ets-hook-dsh-tool-coach",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "5387ab71313a7472fb277bc8b74babb276679708c1e065a6e469a28ebed98bd0",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "fe32e994eb82affbaa99dd09e9eda22fe782d59297ed875d110f491da31683f1",
+				"colour": "50dd071f7e9fd9760678bdb91d3df0435d503562541c3c704c26bd938a8bc36f"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-tool-coach.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-tool-coach.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-approve",
+			"dir": "ets-hook-dsh-workspace-approve",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "8236acb94185a726f38ffcf5df34327e1d77d664be792995ac0b0fa66796ebf0",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "7213141c80861ebde82fc7594518ff34e5352f3737ad2200c79707adfb30ca42",
+				"colour": "71b0ad6e22773e34d1bbaa88a29a6360dddd9acbbf468d00e0603909c266b840"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-approve.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-approve.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-audit",
+			"dir": "ets-hook-dsh-workspace-audit",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "def4ed1237fd0ff5c697736159775dff0f399b260b1d640bcacad9da7c9c6317",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "e7ccd7a3a6ab83401487ddedac5773e953030d060c1eec0144d9d578f282eb38",
+				"colour": "8c79074202a4d2698d2ae39861cfea71f8bf5aaa97a681039e7029cc866a0cec"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-audit.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-audit.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-govern",
+			"dir": "ets-hook-dsh-workspace-govern",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "48ad201ec0ff54dddf30c1d193294b212ebac57ddac1180a44c34ed44924597a",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "8d96468ea02c5a8b4dc3f292e7e3e5a832eae8e5e236474dfb6d36bd58874fde",
+				"colour": "6d5370b6bc439024218bf5348d46b8a9450bfbb07fa694b61fd844f59e32df5d"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-govern.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-govern.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-journal",
+			"dir": "ets-hook-dsh-workspace-journal",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "b69cd344d5caf37e191987ade28dbc6750c317012b8a2f44ed95e736471ee2df",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "0d592b50333a66d7f8b1ef8f286f4b685fab4b32e6523d921d450932798ce8ba",
+				"colour": "358cf96ef0ae86ab2bc41e6d726a5f09f155699cc7fa27b45c3e3ebc57e014b7"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-journal.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-journal.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-merge",
+			"dir": "ets-hook-dsh-workspace-merge",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "07c9e20df9edad9d5204bad4ef69090b54241501d5aeb318593ac30b493c1fcc",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "11e2b74043ad3e8f2fa12b502a0f0b1456482a46d4a61c37ac94b3a4636e46eb",
+				"colour": "22c7cf16b649da40915a9979c0a870910989c089f41f82c9b1721cb920a79eff"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-merge.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-merge.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-monitor",
+			"dir": "ets-hook-dsh-workspace-monitor",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "2760bf326940557a559276e8cd5987ee3c494640259b30e82621e8eec23dd884",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "a473166b0dc92284c9b0b5229d7db5b83e32ee488fd0a6511c12279acd991f45",
+				"colour": "d714f9a55955fb37b4a9f6d824fc99a6f6d7e9f756833eb86578ff87fb347eb3"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-monitor.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-monitor.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-observe",
+			"dir": "ets-hook-dsh-workspace-observe",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "385e3b4b13ea269c680659185721cf42d8b28f0333a9b592d0983b9adb07ae72",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "eed4795c795c0b253285383081b5cea0644a73243ef13a94d8f381bd8bca69d9",
+				"colour": "26a4c4f79c5840711b0abd5559bae1d7778689173202cd0480051d8db15c128a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-observe.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-observe.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-hook-dsh-workspace-operate",
+			"dir": "ets-hook-dsh-workspace-operate",
+			"kind": "hook",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "e8de00fff530532a49f8c8f89c37261f6f6cf3177b4a5038902a80034314182e",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "639cafcb76110c143d330ac4e7a173a048c4982fe20d5d8e6517e4db67379754",
+				"colour": "6eb0118411167f07b3b19045e2756c699ce386f911162f64b058061dfb700d13"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-operate.svg",
+				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-operate.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-lib-dsh-core",
+			"dir": "ets-lib-dsh-core",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "45da255471f76e2f76b3d712aebecb859bf6e78b19fc2c544f532eeb32a5f893",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "4c35415cc7b386f3dd2ea8a166d0224bdc7805a50c4883543ae670b4adf1ae53",
+				"colour": "95a7b32a9b4db91bcbe327e9f1f9146ede88cea96932ee99148c96685a3f15fd"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-lib-dsh-core.svg",
+				"colour": "Site/Public/Icons/Color/ets-lib-dsh-core.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-lib-dsh-pack",
+			"dir": "ets-lib-dsh-pack",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "b05cbba98c7c1b6d531f455de4994d6018ef0e64b7fb4befd384849b804eb9a7",
+			"grammar": "crescent-ring",
+			"order": 6,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "43e46afc7fa323608488968b5ea0c8f31069052d1ae43fa22d9f2babac71778e",
+				"colour": "d42cb59d52a7adad9e984bd885cfcd193d6461c537f94a2415abb4d08c738095"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-lib-dsh-pack.svg",
+				"colour": "Site/Public/Icons/Color/ets-lib-dsh-pack.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-lib-dsh-trace",
+			"dir": "ets-lib-dsh-trace",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "68aec1a017ff57a0450c84587959a0d04e6a638223fb64d4a6f7bccf77143969",
+			"grammar": "crescent-ring",
+			"order": 6,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "traced",
+			"hash": {
+				"mono": "ec0692ca15a416e845c6fa228043c3885a0cb6ec121041e3609e37fa332dd411",
+				"colour": "24dd68f9f78e6c396875bbc68bec416ca2417de9487de2f6e98c5da6197b916f"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-lib-dsh-trace.svg",
+				"colour": "Site/Public/Icons/Color/ets-lib-dsh-trace.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-lib-dsh-workspace-live",
+			"dir": "ets-lib-dsh-workspace-live",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "f0d88c5b90404303e5c5536e6b1d1a3af565c3eb23effba9a0ed59dae72b9ee9",
+			"grammar": "crescent-ring",
+			"order": 8,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "41e38f86e8b0592be0bdf290a530bb839735e7a88424d95332996faaa21b9c02",
+				"colour": "0345838f30af78ba1c12ad1d09c9ab258b027153edb86993a685aac1df71d3f1"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-lib-dsh-workspace-live.svg",
+				"colour": "Site/Public/Icons/Color/ets-lib-dsh-workspace-live.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-batch-edit",
+			"dir": "ets-plugin-dsh-batch-edit",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "a722fc7e4b71c64503c0803dfc3f420f462c9fad9dfca374fce23bfc3f063a50",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "729979bd0f886a7d9692365616d41c76a6f37aa694225ac57a28bb68a372753e",
+				"colour": "e2273e15b89b907fc038090a1c00a796c431ed3bf65c98716083dbaa685be079"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-batch-edit.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-batch-edit.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-batchstate",
+			"dir": "ets-plugin-dsh-batchstate",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "8c28e682582e15d8574b75c019faabe000eb5c43208a1f76d2f19f53781ac566",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "9f928192abdfb390800db0ca4c186a0fa3180e7602e65589cc657197f4326c00",
+				"colour": "430ee223b9edf7b38d81a6d1caca23dbea645fb57c3bcaf16c01c6b045c39e31"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-batchstate.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-batchstate.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-factory",
+			"dir": "ets-plugin-dsh-factory",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "53bf1169a2b523a288ce0b34602bcc5cf485df9b4d4768411958a892d4c1f0a8",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "cf82d0e8ccdc5c61fd2e6a723ad4ebdb7065adc92d5029dded811bd8ea3a9514",
+				"colour": "cbc6efc335169662511275c19f0a39e5d16bd5d73fc4b26743d674fa85091488"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-factory.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-factory.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-feedback",
+			"dir": "ets-plugin-dsh-feedback",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "1a4fbdf4d871dbc87b09b0b27ab0d9d85a605af7158b9298d6bb495b9522791f",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "ecb0f5ed644cdda99cdc440745125c86a5a467dd15fef3234af0ea35b9530a8e",
+				"colour": "7b3377387c5fff634adb80b97ec7c4f1d9cf187146c3790ad29c4ea87bf5164a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-feedback.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-feedback.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-gitguard",
+			"dir": "ets-plugin-dsh-gitguard",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "bcabaf6f25e801937b03abf40d48b2150ce5d985f11a8df04918d4d62d912a9f",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 6,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "9418b61b8bc171177587022ffc0c20dd0a5d040c8b15414b7ddc08e2673b7658",
+				"colour": "6b0f5d42448dffa22201453e7beeabba111f9a38b74d061ff77bc3c8cdd50b56"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-gitguard.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-gitguard.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-normalize-file",
+			"dir": "ets-plugin-dsh-normalize-file",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "579785d31f2da393d0162bba5b835d2ebdd2fe1f1d1226e0b08de02d9963c937",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "671f1d75cdd60aef6e61533694e59daab20bb365e48c0d12e7d6f0f1dc8fe8c8",
+				"colour": "a23d8ac305f405914a6c10490582cacde6641af0f692abe9f4e85feca729fcaf"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-normalize-file.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-normalize-file.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-queue",
+			"dir": "ets-plugin-dsh-queue",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "1dadc92c32b498dfe0af0e558d1e931dbd473823af8fa57733551bbb9330eeb6",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "3d3524776bac1b4fc71034f6694ddb17554028b6812d5e1c727992601888b522",
+				"colour": "f4b5df85053f48681007bcab0bf79f583e8b1428293dbe0f230afbcf33174667"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-queue.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-queue.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-route",
+			"dir": "ets-plugin-dsh-route",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "3dfc251ccafab0472c4ec3fc717706bcc57fb9f422afe3b8298ba117fc784f06",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "21dd38517bcc7e6c6778055b0d71aa918e84f0205b6660d048da38098ae57af3",
+				"colour": "a73c8fd8afece747641178311cd6798ac7b0fa2f392a4440c9a59fc5cd92a6f9"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-route.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-route.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace",
+			"dir": "ets-plugin-dsh-workspace",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "0504f53ec704f8a8ef060ab84f421e843d09fd054d66a2fbec0004532577b9ec",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "c63051afff2f46b27a144294571260e5667c2039100675f21e16aba335b6d1b4",
+				"colour": "ba534cb4cb31d6771e372302236114bc9e9a5423926667f5e1723e51c032d6bb"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-authority",
+			"dir": "ets-plugin-dsh-workspace-authority",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "1b41914de390c207405e5ba2d172705cc9b31732080568f130f4e792d8048117",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "4eed607118b551e62b15feb53818831e77c2101575ed000beb3026122530abf1",
+				"colour": "494004c79629712d692beeb48f980b25a7e2932d4bb7346f0b75a289a57e3eac"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-authority.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-authority.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-context",
+			"dir": "ets-plugin-dsh-workspace-context",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "97a60907638d7af7909a7a6f5549715060c405c17c6e55f4949331493a00db7e",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "99ec8baff71f6b0f2ca934490cdf43d58036754edce0ff6cdfcd00bad21d5e42",
+				"colour": "8689a1c9c86da3f176eb04998b183803d99aadcf98a0bc92b8d823bdd40946a9"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-context.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-context.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-evidence",
+			"dir": "ets-plugin-dsh-workspace-evidence",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "6ac20f0c296fd2ce5a0afca334aa907da2e2909b154c920f98ac929b8399a8d8",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "fca33d2bf0a6f91cdaf8cf7456c1e81d70c6067c2ceceff2b45513612a073296",
+				"colour": "b304485c6b71eaf301e9a55e8bb86363fd601fa0d172e9619163abab250e6f6d"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-evidence.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-evidence.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-graph",
+			"dir": "ets-plugin-dsh-workspace-graph",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "647ec50aa2704fd81b306dd6abfbd2137697d1eb4a84f3a934113c8bf9148968",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "traced",
+			"hash": {
+				"mono": "098295c9b69c1c35e9cc21844c08585c2e5cf6ff1668739265408c6c7f4091af",
+				"colour": "66ae828a00f981dd9d5cb84a9322c6876d455d545af974130351d93d5961f2d9"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-graph.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-graph.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-reflect",
+			"dir": "ets-plugin-dsh-workspace-reflect",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "b5d698362074549c522c4fcb04a92b1a4ff467aa392f68794fbbc96bb6b2cffe",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "43a0a29696c52ee097f34f5ad14abd0be3ee10b17aa45d87c9dcc90fe30264bc",
+				"colour": "d40f306a850ec514eb831d74880072f5691e13c6f55c54bc78ffb915827f98cc"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-reflect.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-reflect.svg"
+			}
+		},
+		{
+			"package": "@playform/ets-plugin-dsh-workspace-semantics",
+			"dir": "ets-plugin-dsh-workspace-semantics",
+			"kind": "plugin",
+			"tree": "EffectTS",
+			"version": "0.2.0",
+			"seed": "1aa8d1c4530fc693e1f13200b385e665acc56383c30a49ca3ed74683d201ff1b",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "traced",
+			"hash": {
+				"mono": "c5d18afde32e68448adc4eeaeec2d17252dcf9d7ed8fcaf5630de9dd1f628775",
+				"colour": "a25b324251c71e949dcdf3055c818215fb5d139bb077052ccdacfa949c10e43b"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-semantics.svg",
+				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-semantics.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-batch-decision",
+			"dir": "hook-dsh-batch-decision",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "7cecc7280c8e6f80a40c8870b0ee93dfaa0a8649794bf4b3bffc6595bcaeb4c4",
+			"grammar": "spike-star",
+			"order": 6,
+			"arms": 6,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "252bf0c547274f98c94d6c116b776f62894702048bd11984a578294628ad8360",
+				"colour": "d33e05ae71dbdd006d1f41b2882868276c7f421daa284bd1987e8ef4920a7213"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-batch-decision.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-batch-decision.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-cargo-governor",
+			"dir": "hook-dsh-cargo-governor",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "736c01b859db2f55f2c2277f4f49e48cc8e0e5bd06d2f31eab1f2e1ea8626723",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "be2a86919164239fca04c99c6ea652d2021ed9c539a2feefa747b0906b2dc1cd",
+				"colour": "bf00ef9fc11f9eda9bb629c9de299e5e131c5260737e4067d70134e4e5373a84"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-cargo-governor.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-cargo-governor.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-ccr",
+			"dir": "hook-dsh-ccr",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "58808dc9a55b77e876c7192ef590cdbb9addb8c238d849d78cfe0889590a8d5f",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "85e7358c7dec43ec108f9e085f2a06a632086806efa57b228a72f6999ed1111a",
+				"colour": "7815aa9de2a88565d2b52b9fc2c343060dc44ea31267c57e9871f5e2844cc42a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-ccr.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-ccr.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-comment-filter",
+			"dir": "hook-dsh-comment-filter",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "3bc23c80f63e491657fbdf27492315b6a1db6457eeac652094e4f6b6476533b6",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "e373ba1ee7b0c78bc0ae08be23739468552799fa17aebaea4942089c0d71cc28",
+				"colour": "84b5fa25475f692d13089b05baf71e9e0ee6d05b43e80a2b8c855c0d2095ab87"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-comment-filter.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-comment-filter.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-convention-suggester",
+			"dir": "hook-dsh-convention-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "8aff62f407f1ec20131c81cbe3e561c504612bcfbdbd79b2f8e9edcc314be2c7",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "4614da4e236fe5b4ac0acaa3bbd792c15dc372f5fb141c6b2581b2a6eeab54a4",
+				"colour": "7f234f04727b2b5c4ca71637b21d387aebceba0883b6229d3a0cfbe58029fe4e"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-convention-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-convention-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-doc-suggester",
+			"dir": "hook-dsh-doc-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "bce65bc2822e2ba2e41fe4aae2a1a63793c40a7ca5d1262dc132f85ae820dcd8",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "d5755f70b4004abc967a69d68248fed274a275d2aeda7fabccf735e67f4e27d5",
+				"colour": "752ca1b0a7b8b43ad7ccbd242b091094ff5a0dda9269874cb6096b7b8f99cffa"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-doc-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-doc-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-edit-suggester",
+			"dir": "hook-dsh-edit-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "ef85298bcc10b6aff079e0b8f1695dddab181667c2c1c78649d1020a4cdf0a54",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "7471ece2af7402648dde05479646f5165428e4953cb04b3e9152db3a071883c3",
+				"colour": "c1822a9f0d09332b4ab8589ca1cc4c6666f945165d33894f830355c657d43e32"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-edit-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-edit-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-graph-suggester",
+			"dir": "hook-dsh-graph-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "82ede93f479f71dcc29c17fa6209f6a4a93914853ad34eef5af2dec66957f84d",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "78deed074434cb679302fb8d5010f8662c535e9563801b8dd614a6b7c5847ad8",
+				"colour": "8954148c5aa72c27522bcb668d53c1da2d84ffef201dd2f5c95429c72b240204"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-graph-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-graph-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-live-containers",
+			"dir": "hook-dsh-live-containers",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "5f9de2b2674ac76b8b7130e2178cbc686ba0d36678a8edd770568d90986a1cc9",
+			"grammar": "spike-star",
+			"order": 6,
+			"arms": 6,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "b6de69fa0342d27a0085b8c032405afa715e49a691f9b6d2e6f986745ce12c2b",
+				"colour": "151c155fcbfad34508ee88f71f3662532d58402f36ec8c9b9d100189cb8717c4"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-live-containers.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-live-containers.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-dash",
+			"dir": "hook-dsh-normalize-dash",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "2a15319f3743e2362cfff912809380df217968c91792e8325a3c8a4b91c9b28a",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "8ea4580dc0f7f9c1be375add4b33e02feb6e6739132ea4a27b50e61b5aa564bc",
+				"colour": "5127483e1936ef5bd9f5b328ea1eaec4037d873db467909fe9621601e22d4623"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-dash.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-dash.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-ellipsis",
+			"dir": "hook-dsh-normalize-ellipsis",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9c95d71279a2788b3632329b5f376132a0a54dbf27288181f4bf1ff247ecbbc7",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "58e7adf99908de78f5fe625a9c63d275a0dd509a6a7138da8228c7695233909c",
+				"colour": "01fa469ad768f9a71e208472e5d01b3079559214472f5a7f296f6314db4162c7"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-ellipsis.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-ellipsis.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-fullwidth",
+			"dir": "hook-dsh-normalize-fullwidth",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "deb227f722a5b359e6270e6b60347fd7820fe43a5f0515e7226cc004b1d2d4c9",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "16652596020f575ef9668483f330ec5c78cc8459803778aca7275f87a958ea57",
+				"colour": "b554d36d96dfb2df249ce3d1f4a7cc7b4901198fac6a9b5ba5d1e7c8f4b6c67b"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-fullwidth.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-fullwidth.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-invisible",
+			"dir": "hook-dsh-normalize-invisible",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "b91f446db1e1db39794eed94b452fe6e9e72930e7eba562ea3b4bfc89c8ea5f4",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "ea7037b016972802f60262dbac1d7e4308c0b4b19d382e65855281669de03f42",
+				"colour": "4062dcef28749e05411faef65056ea9fa7a8bcdd6f701f8513a43a98f8df62ad"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-invisible.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-invisible.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-quotes",
+			"dir": "hook-dsh-normalize-quotes",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "a5d979fe12cc272da5e351a17cd64838b7432231108d8e1d80d2f842635452b9",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "4748667e4c9e4d450f43e8c066d5a5feaf537bf09e56682804bb2aae02699c3d",
+				"colour": "eb7d543a932db149820ff7435866d769cfa7f7357dfc89799f4c74b53a834da7"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-quotes.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-quotes.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-normalize-spaces",
+			"dir": "hook-dsh-normalize-spaces",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "d488ba6ce7ccd6c6b7c68d03314020105a6d9b7d3ff9e9c3099f7675804aa764",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "b1cf9f0b8d88c5f04ce40f328b1f9d0dcaebea6ff535888b050c5c01aaefaf86",
+				"colour": "8c07ba98830e23c8e54b1f6f443958e48c8d5ade82b709a404e90978972be66f"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-normalize-spaces.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-spaces.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-package-governor",
+			"dir": "hook-dsh-package-governor",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "650d2a30130d04312569fd83ef381b6fc62b52641f3715de477cffc1279fb089",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "7e01986ad7dd1568915e29c0705f121d2eb78836b89b22f309ac50cd0d278908",
+				"colour": "a11f5a013967150ac330f4816a7b84febe48595aa39888834598548d5f1b531d"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-package-governor.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-package-governor.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-package-pinner",
+			"dir": "hook-dsh-package-pinner",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "153319c62efd4413de2da2ac6597e7182f0acb1d113cf72494cb2ac6b4b859d4",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "21495e801f596bef1d59c35d4ae90942dbe3adf0f38d04569cd00e7f9391b922",
+				"colour": "fed75528e104b7a4fba40c9df5f6d10e90f1814f55f6e89fb9a432579496eade"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-package-pinner.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-package-pinner.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-replay-suggester",
+			"dir": "hook-dsh-replay-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "aa522f8a6930927c44e42a332a3d1011b1b122c2157b53e396d63ddaf974d457",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "e808a9ccbfe79446cf758473443939af04af9018bb147c453b0e84176ef89df2",
+				"colour": "64293d5a755eced19a274c0a190db8e6984d32b5828c22d5a85f787c30dca758"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-replay-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-replay-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-search-suggester",
+			"dir": "hook-dsh-search-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9c9bf18ca0b6505cc7084e3e837cd4704463accd0b3620daa785dc6266fc9ede",
+			"grammar": "spike-star",
+			"order": 6,
+			"arms": 6,
+			"rings": 1,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "1f488e2783e3bfcfbec4aa17f7d720f8691e693443fc55aebf9d01654ecc038d",
+				"colour": "be239dfe68afa26f38e0114a791268342fc821a2feb9f1bebbd52c21aa5405d1"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-search-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-search-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-test-suggester",
+			"dir": "hook-dsh-test-suggester",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "c7c25ec73367539eb71fa529dbc77562c3ce226c4ddeb41cd4907fd09081aa5d",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "5a147bb5b3e61c2f5140fe8afe12e726a99e064bc0629063cc3b6d312b70c5b0",
+				"colour": "76f6fe5f2b497076a6aca2bc4ad3f7feea6fca72e84b529163d05d114cb1fc1b"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-test-suggester.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-test-suggester.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-tool-coach",
+			"dir": "hook-dsh-tool-coach",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "ff2c657992dff73e8d4576b67c26c873eb1af05c28464c9ac39d0e9463cd314a",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "59e478daf42b9adf582879bc3d19a478ea9d45eaa8a406c957e5a3bb4c3f744e",
+				"colour": "fe96a029423c7c7d110bec6bf4a9254fd5187bba6b3fca3f46c35b82b483b1bf"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-tool-coach.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-tool-coach.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-approve",
+			"dir": "hook-dsh-workspace-approve",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "3e9742dae73ecdf606b894361506ff6952dc9277d73eb8429466a3f70f475dd1",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "3c6e61b8dc3f38c99b7ab7d126dd53c6dee2e9139d561d29f2f9e52dc9d8f09b",
+				"colour": "a78c3dc80b1307ec6a16f82561ca6bf0746cf3b6abbdb62d4e0eb2d55903b388"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-approve.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-approve.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-audit",
+			"dir": "hook-dsh-workspace-audit",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "b28c4040047bd40bf01bafb006ff95231a859c48a36abb334786d8c0b9e491c0",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "a3a0efb271e126956fae4437cb85d6c5404a53da07102e3545ac2a0952b746a3",
+				"colour": "b14eca062657a2c1a5d86ee54f1c92aad30a0fdd47702c9473224f9b10cf8254"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-audit.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-audit.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-govern",
+			"dir": "hook-dsh-workspace-govern",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "10a2904a87d7fc3737f4f2d23a1e39c3351737368b799a9c07ec74d801818fe0",
+			"grammar": "spike-star",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "e7f2d458f8679457a3cbe30aa5aa1477bda927fc01078b162167c514a9e41bb2",
+				"colour": "996b02f53f84ae312ef564e613b109a480d0fdc9ec8c084b63aa585ae6e42678"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-govern.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-govern.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-journal",
+			"dir": "hook-dsh-workspace-journal",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "57f0fd74ae3725e247547020e27b951ef588c621b6ea3517361066e99d373122",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "00ac91bcfb61e29d14ab9bdc7a8ec4da77d337776bcfcac4455cc08475032482",
+				"colour": "73011b75696b911523a4b6611dc2dc0b01c10aee72fdd63b23335ac18ef719ff"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-journal.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-journal.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-merge",
+			"dir": "hook-dsh-workspace-merge",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "e1f79c37b0bf51cecd89b0d4580d7a08fa6def2368872b8fa80556664adc2faa",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "e90095e8f120c7bc782b0ec68323ef046af239a3463f728ee6f22569271fc56f",
+				"colour": "2688defbb4643d16b6868349e698092ee6ff0116c7292f5ed1b199d55965b31f"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-merge.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-merge.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-monitor",
+			"dir": "hook-dsh-workspace-monitor",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "2a29e3b605b46f5110d22e8f65061697a1c67d382073e4f9eedb97725b8a1aae",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "4ff61bb144f0aa39fb84a6ae15ee1b689ff2b3a2827b094ecf68aac04342e744",
+				"colour": "89f8a47653b17d07aae422acb4e5305856e5b45965571fc5491e5cdba9bba3c6"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-monitor.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-monitor.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-observe",
+			"dir": "hook-dsh-workspace-observe",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "fb3d7d1447e61f84f4dbbef60d6d34696d44d6975671e70b20d49f44fac64536",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "26bc32e85e9fc83835a483b5ca127c229170a73f1aaa4f42a5dcee7928724f70",
+				"colour": "57b4fa029bfa53fedccd4a5e87863411aa2bf138c9ec1565aaa61a3565fcb6de"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-observe.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-observe.svg"
+			}
+		},
+		{
+			"package": "@playform/hook-dsh-workspace-operate",
+			"dir": "hook-dsh-workspace-operate",
+			"kind": "hook",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "ec5eb3bd088e9d1f80223f8c7f757daed4c5d7592c3f5726fde38125ebd5759f",
+			"grammar": "spike-star",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 12,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "864592640b1730c67aad2a26833dc9f72176c3d9ce5ef43d8e3efc5fc3536da0",
+				"colour": "58f5d9400146500159daf0b1b613dfc64f1cb0e5d4257a0685b491e992302daa"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/hook-dsh-workspace-operate.svg",
+				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-operate.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-core",
+			"dir": "lib-dsh-core",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "3a48648f062e1b044d927c8ff5737c737c45ecf5aa87419c338afa84ed2b1818",
+			"grammar": "crescent-ring",
+			"order": 12,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "4a069b34707cc91027898ad7a649c4993321d8a3300b4c64e0484160b90b419b",
+				"colour": "c4a8e9f034c8373e300e12ad67bbd503276a713440e05cde3706401931202ed9"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/lib-dsh-core.svg",
+				"colour": "Site/Public/Icons/Color/lib-dsh-core.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-pack",
+			"dir": "lib-dsh-pack",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "59dbb442bae888ba8ee0e123f035eb14016361ba10b875a75d534a3f4e6f6f5b",
+			"grammar": "crescent-ring",
+			"order": 12,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "817843c88eacfa467ef1959fc3943feb30b8b975f1e99d9af5c487959d20fadb",
+				"colour": "34894eb6c855e0355dbffc5c55ef7c82104df64d0a811181dba614da0b82c8aa"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/lib-dsh-pack.svg",
+				"colour": "Site/Public/Icons/Color/lib-dsh-pack.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-trace",
+			"dir": "lib-dsh-trace",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "706de159e3c314dd35dd4e5fefdbd7483df0e40c3e430aae00bee2038182d0d9",
+			"grammar": "crescent-ring",
+			"order": 8,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "8f6f408a4e2e1daf66ed3f8665c302e7c2d8078840d929b544a71e2d83a94b05",
+				"colour": "fd47cc778a08f742163883ced5b216b5cdc6dac1adc1d0a958df593b2eaff687"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/lib-dsh-trace.svg",
+				"colour": "Site/Public/Icons/Color/lib-dsh-trace.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-workspace-live",
+			"dir": "lib-dsh-workspace-live",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "680ab7eab79810e62d58fe3976cd537fb6ce28d84a662be855a5d3884c727e49",
+			"grammar": "crescent-ring",
+			"order": 6,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "fa5a78dab79d924d956a395d8fdc1a09ffbe78e681e321fbacaa46bb2c38d786",
+				"colour": "a95749c73187d51c82d0d29a5490ed88f18fa8ff6af92378cf5719767746738c"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/lib-dsh-workspace-live.svg",
+				"colour": "Site/Public/Icons/Color/lib-dsh-workspace-live.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-batch-edit",
+			"dir": "plugin-dsh-batch-edit",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "8154ca273816430f73a4549fffccf853489b5adbd54045f2ddb09987d71f4582",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "49c4f1d435e93dd16b2d7180fd89fabd1f0755b7d636266e245de4b5b79a7d90",
+				"colour": "f7842f75be4dd8b13b5d8ea022e2a6e826a7d14f16b04c6436ff9d79d03ba5e2"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-batch-edit.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-batch-edit.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-batchstate",
+			"dir": "plugin-dsh-batchstate",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "09bd9ac9f7c2a7bdbe9033b73609e3a678b1898ffcb288678eac5d2ad8597fc3",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "6f257a5ccec9ab359c914d23f3e2f8d50ecc70ec38cc4222aeb6e2b606591e56",
+				"colour": "a8182b2236d4f7fe64e461fb3f72282f40ccd0ff6d31ee0b88a8dfd51f8ee2ea"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-batchstate.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-batchstate.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-factory",
+			"dir": "plugin-dsh-factory",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "6a0074a58e1c6188fcc10dbad14e002072cade4b69058bd2b3cb788101e8136e",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "6b5e435ae70bb5aa440e6468c4387c82b6398cc1165bfbd3c3bc31b751051873",
+				"colour": "d451242ca83c740dc8aab174fadb257de058685a529dcc083ce64fb2aa22671b"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-factory.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-factory.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-feedback",
+			"dir": "plugin-dsh-feedback",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "beb94780fe97b0fe68db6e69ed75e323a40f966ecf4fc8cdb09e636a9655b151",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "diamond",
+			"mode": "single",
+			"hash": {
+				"mono": "d80cb969f040df8879e2864cd1320c307981e8c402560ed833ff35a3a5a08997",
+				"colour": "23f877332ecbefbef4f494f4d906075bd9d1e9ff7c90ff01e05fe2df34bfa5db"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-feedback.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-feedback.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-gitguard",
+			"dir": "plugin-dsh-gitguard",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "1a8662c8015d44ce9fdb1e87c16bab65bf5d30f21112c8cb941e90d5fe050110",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 6,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "08d6731608b3445d259132dfda2b34a1da2fbf00243e7be16cc30bf63872fea1",
+				"colour": "40a2a04f525abcd1008b11ed077ae2675f21cd9d034aa8a3ad22a19b20c413eb"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-gitguard.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-gitguard.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-ingester",
+			"dir": "plugin-dsh-ingester",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "5b56a86f78ea551cfcd04a7d1a6b5f7c84ae0cd0e3101f60b6026edddcca8718",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "4cb266a2b69df2845913c82056aa107a8748dd2f4a6630fdafd06cb80ce01e47",
+				"colour": "f5993b0b6cd79fba26a65e09b0ad984507e88a5924d8d8beb04b1d75f17b3714"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-ingester.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-ingester.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-normalize-file",
+			"dir": "plugin-dsh-normalize-file",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "d16d6fa2be5f292def21a0d13970874cc0fbb6a1123a4df7c6b9fd0f887f842d",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 8,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "4842aa03da638b0ea9219aa89a2c180f5de8190f635b884b76919f411c5abe2a",
+				"colour": "5497edffa922b915bd45dfc300deaa21e69112f683495976e676689f9039e1a8"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-normalize-file.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-normalize-file.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-pass-on",
+			"dir": "plugin-dsh-pass-on",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9cc31649cb4470fb37f917325407f652bbcddd44a96789c506229766c17e7205",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "f2a441bcf0a0cd751f912a99dbc9867e11a1cd681b7e21eaf534c3f8521da4fe",
+				"colour": "ca06e4e14074ad7c07858f20a00a43087ad589a4235c2ab6898a5988e8d4e29a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-pass-on.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-pass-on.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-pattern",
+			"dir": "plugin-dsh-pattern",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "7d82a3058bebee5431651e9c681353ec01c88a3927ea38eae3c3fdfe4d12b4c3",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "42479df4d126d6f910cbec5bea7ad53124541234e0134c28f0a95728366f775d",
+				"colour": "db26268d27f03680c692783fefe497b75ebf7505987e7acf0e709ad25a63ab66"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-pattern.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-pattern.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-queue",
+			"dir": "plugin-dsh-queue",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "0f29c64d83320580d91689a945ea4cb455deeddd7cfa0ed0cb5b1ab1fdec902c",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "8aa6f7153ed2f79191eba58ba78f6938e595aa24d7a8101b82a6b77baf0fe993",
+				"colour": "7e2fa167d86f8bef498d20509b5374f25ff51c21ba13d6f366462e888511a8e5"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-queue.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-queue.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-route",
+			"dir": "plugin-dsh-route",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "4598c3b6ea425c6fb5ffd1a02f25f09830c8b303993f4b81e8454f65e28e9757",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 8,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "6e6d0fe7bd23e4648b3eead5ca824d9cce3e119f9b0644b6672a9cc5efe6c1ee",
+				"colour": "906d1f4797db5764cc563df80981635fd46c318e2932bb9f7b47a3ec7fc5e8f8"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-route.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-route.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace",
+			"dir": "plugin-dsh-workspace",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "e2f70b8e8a5c895cb9fc9cf81d21a9025975c5ebcfc78e62bb2972b9d8c255f1",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 3,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "fcbc41306a4fc04e768001e8eaba533fcea44d6c5830895c30ab5400789eed5d",
+				"colour": "ad4e799cfef26155569eb072b10f9d19bdb6044ccaf83745cdb3f2bc8ae3b5af"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-authority",
+			"dir": "plugin-dsh-workspace-authority",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "ce7cd13ffda53bfb2a6c83fcea8d40f66c7836e14d10018b3cce950f6e52cf22",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "a06895419fbad171389c3a40da78c49f812efab9d1e20de47caade01ff26ae44",
+				"colour": "025b418d1b33960953cf645c29e3fd0f914498cf3402fde69c9bb16bb33e6204"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-authority.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-authority.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-context",
+			"dir": "plugin-dsh-workspace-context",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "f0da92974401da55e44f51158b324febed0fa4fbbd030ee2c7c502d753cb0da9",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 12,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "5835d33d22a5ad6d48158639695da1808c97997189213c84f2b5dbda1716f3e1",
+				"colour": "d7c72314ef0cb3e85d012f807b516ce38fc6d4ac331c0286890d803adce7e5b5"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-context.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-context.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-evidence",
+			"dir": "plugin-dsh-workspace-evidence",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9477763d48d490576ccac5faef50d1cddd0ae98616d5055aa2721eb4d4d98400",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 1,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "48e7e6cbccb6d6fe3a9530867352aa39f6e383e8d76f799cdfcc0c6ae8e3b10f",
+				"colour": "1c05fff674fbd0207702c74702278263b3bc7677855449cc3fc3bacaf215d8b0"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-evidence.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-evidence.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-graph",
+			"dir": "plugin-dsh-workspace-graph",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9f27c78265ffc97770993c83440d0e59fe8c559a8f273e90e4370c770eb94940",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "711bf103e079e293390309df1a4d7470aa7b306334e4ea229e1315d5ba4cd77f",
+				"colour": "8b736b95f2f5d4caec92cb4aff10f1e6a2fa40a8140e9a0cab7745e22a60177a"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-graph.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-graph.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-reflect",
+			"dir": "plugin-dsh-workspace-reflect",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "9e12dae30f219044cfb1484051b55654f3528445bf38be786ea888c4d96a6276",
+			"grammar": "interlace-tile",
+			"order": 4,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "4824ee219f3110a663514c3ba0ccb14e90f004a7c6c0c72b6840909d192d4901",
+				"colour": "e4e6f988971a0f6a75f7a174f5f50d74598c7d30538b1c02500a5e36a27af3e7"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-reflect.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-reflect.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-workspace-semantics",
+			"dir": "plugin-dsh-workspace-semantics",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.0",
+			"seed": "71a9eb836786b36a505316863b79bd67db8ee52fcd2a6a80f52f551dd1c44dc4",
+			"grammar": "interlace-tile",
+			"order": 8,
+			"arms": 4,
+			"rings": 2,
+			"orbit": 8,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "fb505e20ecd72a50916f67f1b09949a60d22ae5a3338fc7c1a98d51ca7f4f7a0",
+				"colour": "77b02f636abcb4c3fa63fb0838cc79e1ca9c6931a991443e103c507462407531"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/plugin-dsh-workspace-semantics.svg",
+				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-semantics.svg"
+			}
+		}
+	]
+}

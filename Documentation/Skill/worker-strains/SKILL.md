@@ -59,8 +59,10 @@ to the GLM tier.
    Ambiguity resolves to the most faithful reading, stated in the spec.
 3. **Pick the strain**, then the route per `task-routing`.
 4. **Delegate**: an active lane, or an idle lane holding a retained spec (`idle-agent-protocol`).
-5. **Monitor**: the queue, the surface conflicts, stalls (nudge with the last verified checkpoint),
-   and failures (verify the tree for partial edits before re-dispatching).
+5. **Continue your own work**: the lane is NOT monitored. Its report arrives as a message; a stall
+   is handled when a report says so or when the user asks, never by waiting or by inspecting the
+   lane's output. Failures are verified from the tree ONCE, before a re-dispatch. The full law is
+   `orchestrator-batch` (no-blocking-wait).
 6. **Verify**: the lane's printed arbiter results, plus your own read-only spot checks.
 7. **Report**: results, residuals, decisions for the user, and the READY-TO-COMMIT list.
 

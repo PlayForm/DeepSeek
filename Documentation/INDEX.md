@@ -48,6 +48,7 @@ statuses:
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
       Brand/ICON-GRAMMAR.md        the generated icon language (sheet -> genome -> SVG)
+      Brand/ICON-REFERENCE.md      the 29 reference motifs, cut out and read one by one
       Plans/                       the living + queued plans (31) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
@@ -74,12 +75,13 @@ statuses:
 | [FRAMEWORK.md](FRAMEWORK.md)         | active | living-record |
 | [INDEX.md](INDEX.md)                 | active | standard      |
 
-### Brand (2)
+### Brand (3)
 
-| Document                                       | Status | Kind          |
-| ---------------------------------------------- | ------ | ------------- |
-| [Brand/BRANDING.md](Brand/BRANDING.md)         | active | living-record |
-| [Brand/ICON-GRAMMAR.md](Brand/ICON-GRAMMAR.md) | active | living-record |
+| Document                                           | Status | Kind          |
+| -------------------------------------------------- | ------ | ------------- |
+| [Brand/BRANDING.md](Brand/BRANDING.md)             | active | living-record |
+| [Brand/ICON-GRAMMAR.md](Brand/ICON-GRAMMAR.md)     | active | living-record |
+| [Brand/ICON-REFERENCE.md](Brand/ICON-REFERENCE.md) | active | living-record |
 
 ### Plans - the living + queued hubs (31)
 

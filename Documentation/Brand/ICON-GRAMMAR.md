@@ -16,6 +16,12 @@ statuses:
     - name: the generator contract (feature -> gate -> geometry -> seed)
       state: implemented
       evidence: Maintain/Icon/ + Maintain/Generate-Icons.mjs
+    - name: the 102 generated icons (mono + colour) and the ledger
+      state: implemented
+      evidence: Site/Public/Icons/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (14 checks)
+    - name: the marketplace icon field and the site rendering
+      state: implemented
+      evidence: marketplace.json (102 icons), PluginIcon.astro, the built site (104 pages)
 ---
 
 # ICON-GRAMMAR.md - the family's generated icon language
@@ -34,6 +40,10 @@ always regenerates the same bytes.
 The sheet is a 6 x 5 lattice of 29 motifs on cream paper (the last row carries four). Measurements
 come from `Temporary/Icon-Reference/Analyze.py`, which writes `Analysis.json` and the labelled
 `Contact-Sheet.png`.
+
+All 29 motifs are cut out at 4x (`Temporary/Icon-Reference/Motifs/<id>.png`, with six row sheets in
+`Rows/`) and read one by one in `ICON-REFERENCE.md` - the per-motif companion to this file: the
+class, the order, the body, the core, the rim, the orbit, the accent and the stroke of every motif.
 
 | Fact                 | Measured value                                                  |
 | -------------------- | --------------------------------------------------------------- |
@@ -225,23 +235,34 @@ fails until the asset is regenerated. That is the whole update loop.
 
 ```text
 Maintain/Icon/
-  Prng.mjs      seedOf(identity) -> hex, stream(seed) -> { next, jitter, pick }
-  Palette.mjs   paletteOf(kind, tree) -> { ink, accent, tint }
+  Prng.mjs      digest(), seedOf(parts), stream(seed) -> { next, float, range, jitter, pick }
+  Palette.mjs   palettesOf(kind) -> { ink, accent, tint }
   Geometry.mjs  polar(), spike(), petal(), teardrop(), scroll(), band(),
-                interlace(), quadrant(), web(), ring(), orbit(), core()
-  Grammar.mjs   planOf(genome) -> { grammar, order, arms, rings, orbit, rim,
-                core, detail, mode, mutations }
-  Feature.mjs   featuresOf(dir) -> the section 6 fields
-  Mutation.mjs  mutationsOf(changelogText) -> [{ version, entries }]
+                interlace(), quadrant(), web(), ring(), orbit(), core(),
+                squareFrame(), diamondFrame(), scallopFrame(), wovenFrame()
+  Grammar.mjs   planOf(genome) -> { grammar, variant, order, arms, rings, orbit,
+                orbitGlyph, rim, rimGap, rimNotch, core, detail, mode, mutations, jitter }
+  Feature.mjs   featuresOf(root, dir) -> the section 6 fields
+  Mutation.mjs  mutationsOf(changelogText), evolutionOf(mutations)
   Render.mjs    renderMono(genome, plan), renderColour(genome, plan)
-  Index.mjs     packages(), genomeOf(dir), build(), write(), check()
-Maintain/Generate-Icons.mjs   the CLI: no flag writes, --check verifies,
-                              --report prints the table
+  Index.mjs     packages(root), genomeOf(root, entry), build(root), write(root), check(root)
+Maintain/Generate-Icons.mjs   the CLI: no flag writes, --check verifies, --report prints the table
 Maintain/Icon/Ledger.json     the generated genome ledger (committed)
+Test/Icons/Check.mjs          the arbiter: 14 deterministic checks
 ```
 
+The ledger records, per package: package, dir, kind, tree, version, seed, grammar, order, arms,
+`rings` (the section 7 inner rings, `min(3, injections)`), orbit, rim, mode, `evolution` (the
+section 8 `{ rings, ticks }`), the two hashes, and the two paths. The evolution rings are the
+changelog's; the `rings` field is the injection gate's. Both are recorded because they answer
+different questions.
+
+Every grammar also carries a seeded `variant` (0, 1 or 2, picked from the PRNG): the body, the rim
+choice and the order draw from it, so two packages of one kind differ in their composition and not
+only in their jitter.
+
 Acceptance: `node Maintain/Generate-Icons.mjs --check` exits 0 on a clean tree; two consecutive
-writes are byte-identical; all 102 icons are distinct;
+writes are byte-identical; all 102 icons are distinct; `node Test/Icons/Check.mjs` reports 14 of 14;
 `node Maintain/Generate-Marketplace.mjs --check` passes with the icons wired; the site builds.
 
 ## 11. Palette (kind x tree)

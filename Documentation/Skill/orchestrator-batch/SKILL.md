@@ -9,7 +9,7 @@ whenToUse:
     When running a multi-agent batch in this repository, when deciding the order or concurrency of
     lanes, when the user gives feedback that amends a lane's spec, when a lane needs recorded
     history from earlier sessions, or when resuming a batch in a new session.
-version: 2.3.0
+version: 2.4.0
 updated: 2026-10-25
 ---
 
@@ -34,7 +34,9 @@ spot-checks read-only.
    facts.
 3. **Pick the strain and the route** (`worker-strains`, `task-routing`).
 4. **Delegate**: an active lane, or an idle lane with a retained spec.
-5. **Monitor** the queue, the surface conflicts, stalls, and failures.
+5. **Continue** the parent's own next unit of work. The lanes are NOT monitored: each report arrives
+   as a message, and the queue is read only when the parent has a reason to act (the
+   no-blocking-wait law).
 6. **Verify** the lanes' printed arbiter results, grep the artifact for every remediation the report
    claims, and run only read-only spot checks yourself.
 7. **Report** results, residuals, decisions, and READY-TO-COMMIT.
@@ -59,7 +61,17 @@ message. The parent does not call `wait_agent`, sleep, or poll the task board.
 - The parent's next action after a dispatch is its own next unit of work. If none is left, it
   reports progress to the user and ends its turn.
 - The board is read when the parent has a reason to act, never on a timer.
-- The incident that made this a law is recorded in `references/queue.md`.
+- **No progress inspection.** The parent does not `ls`, `git status`, `find`, or read a lane's
+  output path to learn whether the lane started. That is the same wait in a different coat: it costs
+  a turn, returns no result, and reads as stress. The report is the only progress signal.
+- **The user's stop ends the batch.** When the user says stop waiting and execute, the batch is
+  over: `interrupt_agent` every running lane, message each one "STAND DOWN - do not write", check
+  the tree ONCE at the takeover, and then do the work. Never monitor a handover.
+- The incident that made this a law is recorded in `references/queue.md`. The second incident, on 25
+  October 2026, is recorded here: the Lead dispatched three lanes, then called `wait_agent` twice
+  and inspected the lanes' output paths between waits while its own code work sat undone; the user
+  stopped it with "STOP WAITING FOR AGENTS". Stage 5 ("Monitor") licensed that shape; it is now
+  "Continue".
 
 ## The information broker
 
@@ -155,24 +167,29 @@ file. Handoff documents are temporary and may be erased at the session's close. 
 - No build, edit, or measurement run appears under the parent's name.
 - No blocking wait, sleep, or polling loop appears after a dispatch; the parent's turn ends with its
   own work or a progress report.
+- No progress inspection of a lane's output appears after a dispatch: no `ls`, `git status`, `find`,
+  or read of the lane's target path until its report arrives (or the user's stop triggers the
+  one-time takeover check).
 - Every NEED report is answered with a shaped slice that keeps its coordinates, or is recorded as
   unresolved.
 - The resume starts from the durable plan, not from a deleted handoff.
 
 ## Anti-patterns
 
-| Mistake                                 | Cost                                               | Do instead                                   |
-| --------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
-| Activating a third lane "because small" | API-limit errors multiply; the batch slows         | Hold the two-active cap                      |
-| Releasing the next pair early           | Overlapping surfaces and interleaved reports       | Wait for both reports                        |
-| Feedback without the pause              | The lane builds on a spec about to change          | Pause, amend, execute at ACTIVATE            |
-| Amending a working lane with a new idea | Rework and a lost spec boundary                    | New idle lane                                |
-| Paraphrasing feedback                   | The lane fixes something the user did not say      | Relay verbatim                               |
-| Accepting prose "all pass"              | A broken tree reported as done                     | Read the printed totals                      |
-| Accepting a claimed remediation         | A phantom fix enters the record                    | Grep the artifact for it                     |
-| Reporting coverage as a boolean         | A partial record reads as complete                 | Print `covered N of M`                       |
-| Messaging a subagent mid-run            | The harness has no mailbox; the call fails         | Pre-supply in the brief, or re-dispatch      |
-| `wait_agent` after a dispatch           | Costs a turn, adds no information, reads as stress | Do the parent's own work; the report arrives |
+| Mistake                                  | Cost                                               | Do instead                                   |
+| ---------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| Activating a third lane "because small"  | API-limit errors multiply; the batch slows         | Hold the two-active cap                      |
+| Releasing the next pair early            | Overlapping surfaces and interleaved reports       | Wait for both reports                        |
+| Feedback without the pause               | The lane builds on a spec about to change          | Pause, amend, execute at ACTIVATE            |
+| Amending a working lane with a new idea  | Rework and a lost spec boundary                    | New idle lane                                |
+| Paraphrasing feedback                    | The lane fixes something the user did not say      | Relay verbatim                               |
+| Accepting prose "all pass"               | A broken tree reported as done                     | Read the printed totals                      |
+| Accepting a claimed remediation          | A phantom fix enters the record                    | Grep the artifact for it                     |
+| Reporting coverage as a boolean          | A partial record reads as complete                 | Print `covered N of M`                       |
+| Messaging a subagent mid-run             | The harness has no mailbox; the call fails         | Pre-supply in the brief, or re-dispatch      |
+| `wait_agent` after a dispatch            | Costs a turn, adds no information, reads as stress | Do the parent's own work; the report arrives |
+| `ls`/`git status` on a lane's output     | The same wait in a different coat; no result       | Continue your own work; the report arrives   |
+| Monitoring a handover after a stand-down | The takeover is one check, not a watch             | Interrupt, stand down, check once, execute   |
 
 ## References
 

@@ -62,6 +62,7 @@
 			"description": {
 				"en": "The central panel package of the UI family, on the v4.1 CHILD-SLOT model (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns the PANEL CONTRACT - the two child slots (playform.panel.section on..."
 			},
+			"icon": "Icons/Color/client-dsh-panel-family.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -99,6 +100,7 @@
 			"description": {
 				"en": "The host half of the UI family's panel: the companion package that gives the central panel LIVE data and its ONE trusted write surface (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md)...."
 			},
+			"icon": "Icons/Color/client-dsh-panel-family-host.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -145,6 +147,7 @@
 			"description": {
 				"en": "The workspace family's live client: the client half of the workspace live view (Documentation/Plans/Workspace-Family/LIVE.md). The role: the presentation, stable-until-event - the live view does NOT re-render continuously; it stays stable..."
 			},
+			"icon": "Icons/Color/client-dsh-workspace-live.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -190,6 +193,7 @@
 			"description": {
 				"en": "The BASE of the ets-* group (@playform/ets-base-dsh): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell),..."
 			},
+			"icon": "Icons/Color/ets-base-dsh.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -241,6 +245,7 @@
 			"description": {
 				"en": "The workspace family's live client: the client half of the workspace live view (Documentation/Plans/Workspace-Family/LIVE.md). The role: the presentation, stable-until-event - the live view does NOT re-render continuously; it stays stable..."
 			},
+			"icon": "Icons/Color/ets-client-dsh-workspace-live.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -286,6 +291,7 @@
 			"description": {
 				"en": "Silent Cargo.toml governor — the RUST-SIDED FLAVOR of the package.json governor (@playform/hook-dsh-package-governor): same architecture, same API-awareness discipline, same PlayForm TypeScript layout — but for Rust manifests. Hooks..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-cargo-governor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -339,6 +345,7 @@
 			"description": {
 				"en": "The CCR hook (compress-cache-retrieve): a DeepSeek Harness plugin that hooks the tools/post-execute waterfall - the point where the normalized result of EVERY dispatched tool passes before it becomes model content - and replaces oversized..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-ccr.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -383,6 +390,7 @@
 			"description": {
 				"en": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-convention-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -428,6 +436,7 @@
 			"description": {
 				"en": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-doc-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -473,6 +482,7 @@
 			"description": {
 				"en": "The edit-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a modification call (write, edit, raw-write) lands on a file whose family carries a STANDARD COMPANION SET (the version lives in 36..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-edit-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -518,6 +528,7 @@
 			"description": {
 				"en": "The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate list from paths and globs to the CONNECTED COMPONENT around the symbol. When the model reads or greps a source file, the hook asks the..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-graph-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -563,6 +574,7 @@
 			"description": {
 				"en": "The live-containers hook: an EffectTS DeepSeek Harness plugin (the Classic twin behind Effect v4) that keeps dynamic, modifiable conversation blocks in the system prompt. Each enabled block is a labeled stanza recomputed at every request -..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-live-containers.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -608,6 +620,7 @@
 			"description": {
 				"en": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015,..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-dash.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -661,6 +674,7 @@
 			"description": {
 				"en": "The ellipsis hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the horizontal ellipsis (U+2026 — the typographic three-dot run collapsed into..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-ellipsis.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -714,6 +728,7 @@
 			"description": {
 				"en": "The fullwidth hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the full-width family (the entire FULLWIDTH FORMS range U+FF01–U+FF5E) in..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-fullwidth.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -767,6 +782,7 @@
 			"description": {
 				"en": "The invisible hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the zero-width/invisible character family (U+00AD soft hyphen, U+200B–U+200F..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-invisible.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -820,6 +836,7 @@
 			"description": {
 				"en": "The quotes hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the curly quote family (U+2018 left single quotation mark, U+2019 right single..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-quotes.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -873,6 +890,7 @@
 			"description": {
 				"en": "The spaces hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode space family (U+00A0 no-break space, U+1680 ogham space mark,..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-normalize-spaces.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -926,6 +944,7 @@
 			"description": {
 				"en": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-package-governor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -979,6 +998,7 @@
 			"description": {
 				"en": "Silent package.json VERSION PINNER: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites every ranged dependency version to its STATIC version (\"^0.3.4\" → \"0.3.4\": one leading ^, ~,..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-package-pinner.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1032,6 +1052,7 @@
 			"description": {
 				"en": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-replay-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1077,6 +1098,7 @@
 			"description": {
 				"en": "The search-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a search-class call (grep, glob, read, or a search-shaped bash) matches one of the ten intent kinds (Version, Path, Ledger, Config,..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-search-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1122,6 +1144,7 @@
 			"description": {
 				"en": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-test-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1167,6 +1190,7 @@
 			"description": {
 				"en": "The tool-coach hook: an EffectTS DeepSeek Harness plugin (the Classic twin behind Effect v4) that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-tool-coach.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1212,6 +1236,7 @@
 			"description": {
 				"en": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-approve.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1257,6 +1282,7 @@
 			"description": {
 				"en": "The workspace-audit hook: a DeepSeek Harness plugin that is the workspace's ACCOUNTABILITY - the event records and the ledger lines (the AUDIT role of the workspace family's invisible flow: ... -> the merge commits -> the journal records..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-audit.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1302,6 +1328,7 @@
 			"description": {
 				"en": "The workspace-govern hook: a DeepSeek plugin that IS the governance gate of the workspace family's invisible flow - the step where the operate family's proposals become effects ONLY through the gate. On every tools/pre-execute call (and..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-govern.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1347,6 +1374,7 @@
 			"description": {
 				"en": "The workspace-journal hook: a DeepSeek Harness plugin that is the workspace's EVIDENCE record - the undo, the recovery checkpoints, and the crash recovery (the JOURNAL role of the workspace family's invisible flow: ... -> the merge commits..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-journal.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1392,6 +1420,7 @@
 			"description": {
 				"en": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-merge.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1437,6 +1466,7 @@
 			"description": {
 				"en": "The workspace-monitor hook: a DeepSeek Harness plugin that plays the workspace family's watch/sweep role - the wave-3 machinery with NO REAL TIMERS. The watch form: on every fs/observed event (heard on the ROOT context, the factory's Wire..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-monitor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1482,6 +1512,7 @@
 			"description": {
 				"en": "The workspace-observe hook: a DeepSeek Harness plugin that records the workspace's first step of the invisible flow - on every fs/observed event (heard on the ROOT context, the factory's Wire registration) it writes one observation stamp..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-observe.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1527,6 +1558,7 @@
 			"description": {
 				"en": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A..."
 			},
+			"icon": "Icons/Color/ets-hook-dsh-workspace-operate.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1572,6 +1604,7 @@
 			"description": {
 				"en": "The CORE: the pure, harness-free commonalities of the governance family (@playform/ets-lib-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard —..."
 			},
+			"icon": "Icons/Color/ets-lib-dsh-core.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1616,6 +1649,7 @@
 			"description": {
 				"en": "The PACKS: the pure, dependency-light, harness-free workspace-pack library of the suggester family (@playform/ets-lib-dsh-pack) - the pack schema, the layered resolution (the user layer, the repo layer, the cycle-guarded extends chain),..."
 			},
+			"icon": "Icons/Color/ets-lib-dsh-pack.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1660,6 +1694,7 @@
 			"description": {
 				"en": "The TRACE: the pure, harness-free vocabulary of the workspace family's trace bus (@playform/ets-lib-dsh-trace) - the envelope { trace, kind, at, actor, payload }, the event names (observe/stamp, graph/indexed, graph/invalidated), the..."
 			},
+			"icon": "Icons/Color/ets-lib-dsh-trace.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1704,6 +1739,7 @@
 			"description": {
 				"en": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section..."
 			},
+			"icon": "Icons/Color/ets-lib-dsh-workspace-live.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1749,6 +1785,7 @@
 			"description": {
 				"en": "The batch edit tool: a DeepSeek Harness plugin that turns files into PROCESSES held in state. One tool (batch_edit) opens a machine, inserts files into it, and runs the transition table (replace / insert-after / insert-before / remove-line..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-batch-edit.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1794,6 +1831,7 @@
 			"description": {
 				"en": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-batchstate.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1838,6 +1876,7 @@
 			"description": {
 				"en": "The FACTORY: a DeepSeek Harness service (@playform/ets-plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-factory.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1890,6 +1929,7 @@
 			"description": {
 				"en": "The FEEDBACK member (ctx.feedback): a DeepSeek Harness service that collects the honest signals. Every agent's completion carries an HONEST feedback block (LIKED / DISLIKED / DELTAS / TRANSFERRED / READ-STATUS); the block is transferred..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-feedback.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1934,6 +1974,7 @@
 			"description": {
 				"en": "The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts terminal commands before execution and denies ANY git mutation pattern (git add, commit, reset, push, tag,..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-gitguard.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -1978,6 +2019,7 @@
 			"description": {
 				"en": "The file-content normalizer flavor: a DeepSeek Harness plugin that registers the normalize family's `normalize-file` tool - the read → count → write pipeline over files ALREADY on disk, beyond the tool layer. One agent-chosen file per..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-normalize-file.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2023,6 +2065,7 @@
 			"description": {
 				"en": "The subagent-queue plugin: a DeepSeek Harness plugin that turns subagent work into a QUEUE (the tasks as data, not the agents as contexts). The user's capacity model is the law: the MAIN conversation holds up to 10 subagents (the pool's..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-queue.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2067,6 +2110,7 @@
 			"description": {
 				"en": "The routing-enforcer plugin: a DeepHarness plugin that enforces the user's model-routing policy SILENTLY on every subagent launch. The choice happens automatically - no prompting, no reminder, no orchestrator awareness. When a launch omits..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-route.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2111,6 +2155,7 @@
 			"description": {
 				"en": "The workspace agent: a DeepSeek Harness plugin that IS the workspace regime's conversational surface - the OPERATIONAL VIEW the conversation addresses. It consumes the Wave-1 graph service (ctx.workspaceGraph) and presents the graph-like,..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2155,6 +2200,7 @@
 			"description": {
 				"en": "The workspace-authority service: a DeepSeek plugin that IS the authority step of the workspace family's invisible flow - the licenses. The service keeps the THREE SEPARATE AUTHORITY RECORDS (v4.1 section 3.9, correcting the corpus's own..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-authority.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2200,6 +2246,7 @@
 			"description": {
 				"en": "The workspace-context service: a DeepSeek Harness plugin that plays the workspace family's attention-projection role - the required/relevant/deferred context economy. The service (registered as ctx.workspaceContext) builds the ORIENTATION..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-context.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2245,6 +2292,7 @@
 			"description": {
 				"en": "The workspace-evidence service: a DeepSeek Harness plugin that owns the validation objects + the evidence dependencies + the four kinds of truth + the stale-validation invalidation (the family map's EVIDENCE role). It registers the..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-evidence.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2290,6 +2338,7 @@
 			"description": {
 				"en": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections,..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-graph.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2335,6 +2384,7 @@
 			"description": {
 				"en": "The workspace-reflect service: a DeepSeek Harness plugin providing the LATER-STAGE code-block reflective API - the AST-aware rename/connect/replace bundled as ONE call each, over the managed representations (the family map's reflect role;..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-reflect.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2380,6 +2430,7 @@
 			"description": {
 				"en": "The workspace-semantics service: a DeepSeek Harness plugin that owns the semantic model - the symbols + the references + the dependencies + the index (the family map's SEMANTICS role). It registers the workspaceSemantics service..."
 			},
+			"icon": "Icons/Color/ets-plugin-dsh-workspace-semantics.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2425,6 +2476,7 @@
 			"description": {
 				"en": "The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester and the live view (Documentation/Plans/PASS-ON-AND-INGESTER.md section 5). It listens for batch/proposed events carrying a BatchProposal,..."
 			},
+			"icon": "Icons/Color/hook-dsh-batch-decision.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2470,6 +2522,7 @@
 			"description": {
 				"en": "Silent Cargo.toml governor — the RUST-SIDED FLAVOR of the package.json governor (@playform/hook-dsh-package-governor): same architecture, same API-awareness discipline, same PlayForm TypeScript layout — but for Rust manifests. Hooks..."
 			},
+			"icon": "Icons/Color/hook-dsh-cargo-governor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2523,6 +2576,7 @@
 			"description": {
 				"en": "The CCR hook (compress-cache-retrieve): a DeepSeek Harness plugin that hooks the tools/post-execute waterfall - the point where the normalized result of EVERY dispatched tool passes before it becomes model content - and replaces oversized..."
 			},
+			"icon": "Icons/Color/hook-dsh-ccr.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2567,6 +2621,7 @@
 			"description": {
 				"en": "The comment-filter hook: a DeepSeek Harness plugin and a NEW overpass flavor that strips code comments from `read` and `ccr_retrieve` tool results at tools/post-execute, gated per task intent stashed at agent/pre-step. The transform..."
 			},
+			"icon": "Icons/Color/hook-dsh-comment-filter.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2612,6 +2667,7 @@
 			"description": {
 				"en": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path..."
 			},
+			"icon": "Icons/Color/hook-dsh-convention-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2657,6 +2713,7 @@
 			"description": {
 				"en": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE..."
 			},
+			"icon": "Icons/Color/hook-dsh-doc-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2702,6 +2759,7 @@
 			"description": {
 				"en": "The edit-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a modification call (write, edit, raw-write) lands on a file whose family carries a STANDARD COMPANION SET (the version lives in 36..."
 			},
+			"icon": "Icons/Color/hook-dsh-edit-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2747,6 +2805,7 @@
 			"description": {
 				"en": "The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate list from paths and globs to the CONNECTED COMPONENT around the symbol. When the model reads or greps a source file, the hook asks the..."
 			},
+			"icon": "Icons/Color/hook-dsh-graph-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2792,6 +2851,7 @@
 			"description": {
 				"en": "The live-containers hook: a DeepSeek Harness plugin that keeps dynamic, modifiable conversation blocks in the system prompt. Each enabled block is a labeled stanza recomputed at every request - the canonical example is a time block that..."
 			},
+			"icon": "Icons/Color/hook-dsh-live-containers.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2837,6 +2897,7 @@
 			"description": {
 				"en": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015,..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-dash.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2890,6 +2951,7 @@
 			"description": {
 				"en": "The ellipsis hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the horizontal ellipsis (U+2026 — the typographic three-dot run collapsed into..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-ellipsis.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2943,6 +3005,7 @@
 			"description": {
 				"en": "The fullwidth hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the full-width family (the entire FULLWIDTH FORMS range U+FF01–U+FF5E) in..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-fullwidth.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -2996,6 +3059,7 @@
 			"description": {
 				"en": "The invisible hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the zero-width/invisible character family (U+00AD soft hyphen, U+200B–U+200F..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-invisible.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3049,6 +3113,7 @@
 			"description": {
 				"en": "The quotes hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the curly quote family (U+2018 left single quotation mark, U+2019 right single..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-quotes.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3102,6 +3167,7 @@
 			"description": {
 				"en": "The spaces hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode space family (U+00A0 no-break space, U+1680 ogham space mark,..."
 			},
+			"icon": "Icons/Color/hook-dsh-normalize-spaces.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3155,6 +3221,7 @@
 			"description": {
 				"en": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage..."
 			},
+			"icon": "Icons/Color/hook-dsh-package-governor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3208,6 +3275,7 @@
 			"description": {
 				"en": "Silent package.json VERSION PINNER: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites every ranged dependency version to its STATIC version (\"^0.3.4\" → \"0.3.4\": one leading ^, ~,..."
 			},
+			"icon": "Icons/Color/hook-dsh-package-pinner.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3261,6 +3329,7 @@
 			"description": {
 				"en": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has..."
 			},
+			"icon": "Icons/Color/hook-dsh-replay-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3306,6 +3375,7 @@
 			"description": {
 				"en": "The search-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a search-class call (grep, glob, read, or a search-shaped bash) matches one of the ten intent kinds (Version, Path, Ledger, Config,..."
 			},
+			"icon": "Icons/Color/hook-dsh-search-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3351,6 +3421,7 @@
 			"description": {
 				"en": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the..."
 			},
+			"icon": "Icons/Color/hook-dsh-test-suggester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3396,6 +3467,7 @@
 			"description": {
 				"en": "The tool-coach hook: a DeepSeek Harness plugin that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step boundary, the system-prompt/assemble waterfall..."
 			},
+			"icon": "Icons/Color/hook-dsh-tool-coach.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3441,6 +3513,7 @@
 			"description": {
 				"en": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-approve.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3486,6 +3559,7 @@
 			"description": {
 				"en": "The workspace-audit hook: a DeepSeek Harness plugin that is the workspace's ACCOUNTABILITY - the event records and the ledger lines (the AUDIT role of the workspace family's invisible flow: ... -> the merge commits -> the journal records..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-audit.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3531,6 +3605,7 @@
 			"description": {
 				"en": "The workspace-govern hook: a DeepSeek plugin that IS the governance gate of the workspace family's invisible flow - the step where the operate family's proposals become effects ONLY through the gate. On every tools/pre-execute call (and..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-govern.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3576,6 +3651,7 @@
 			"description": {
 				"en": "The workspace-journal hook: a DeepSeek Harness plugin that is the workspace's EVIDENCE record - the undo, the recovery checkpoints, and the crash recovery (the JOURNAL role of the workspace family's invisible flow: ... -> the merge commits..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-journal.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3621,6 +3697,7 @@
 			"description": {
 				"en": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-merge.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3666,6 +3743,7 @@
 			"description": {
 				"en": "The workspace-monitor hook: a DeepSeek Harness plugin that plays the workspace family's watch/sweep role - the wave-3 machinery with NO REAL TIMERS. The watch form: on every fs/observed event (heard on the ROOT context, the factory's Wire..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-monitor.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3711,6 +3789,7 @@
 			"description": {
 				"en": "The workspace-observe hook: a DeepSeek Harness plugin that records the workspace's first step of the invisible flow - on every fs/observed event (heard on the ROOT context, the factory's Wire registration) it writes one observation stamp..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-observe.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3756,6 +3835,7 @@
 			"description": {
 				"en": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A..."
 			},
+			"icon": "Icons/Color/hook-dsh-workspace-operate.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3801,6 +3881,7 @@
 			"description": {
 				"en": "The CORE: the pure, harness-free commonalities of the governance family (@playform/lib-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard — the..."
 			},
+			"icon": "Icons/Color/lib-dsh-core.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3845,6 +3926,7 @@
 			"description": {
 				"en": "The PACKS: the pure, dependency-light, harness-free workspace-pack library of the suggester family (@playform/lib-dsh-pack) - the pack schema, the layered resolution (the user layer, the repo layer, the cycle-guarded extends chain), the..."
 			},
+			"icon": "Icons/Color/lib-dsh-pack.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3889,6 +3971,7 @@
 			"description": {
 				"en": "The TRACE: the pure, harness-free vocabulary of the workspace family's trace bus (@playform/lib-dsh-trace) - the envelope { trace, kind, at, actor, payload }, the event names (observe/stamp, graph/indexed, graph/invalidated), the..."
 			},
+			"icon": "Icons/Color/lib-dsh-trace.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3933,6 +4016,7 @@
 			"description": {
 				"en": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section..."
 			},
+			"icon": "Icons/Color/lib-dsh-workspace-live.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -3978,6 +4062,7 @@
 			"description": {
 				"en": "The batch edit tool: a DeepSeek Harness plugin that turns files into PROCESSES held in state. One tool (batch_edit) opens a machine, inserts files into it, and runs the transition table (replace / insert-after / insert-before / remove-line..."
 			},
+			"icon": "Icons/Color/plugin-dsh-batch-edit.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4023,6 +4108,7 @@
 			"description": {
 				"en": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the..."
 			},
+			"icon": "Icons/Color/plugin-dsh-batchstate.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4067,6 +4153,7 @@
 			"description": {
 				"en": "The FACTORY: a DeepSeek Harness service (@playform/plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate —..."
 			},
+			"icon": "Icons/Color/plugin-dsh-factory.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4119,6 +4206,7 @@
 			"description": {
 				"en": "The FEEDBACK member (ctx.feedback): a DeepSeek Harness service that collects the honest signals. Every agent's completion carries an HONEST feedback block (LIKED / DISLIKED / DELTAS / TRANSFERRED / READ-STATUS); the block is transferred..."
 			},
+			"icon": "Icons/Color/plugin-dsh-feedback.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4163,6 +4251,7 @@
 			"description": {
 				"en": "The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts terminal commands before execution and denies ANY git mutation pattern (git add, commit, reset, push, tag,..."
 			},
+			"icon": "Icons/Color/plugin-dsh-gitguard.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4207,6 +4296,7 @@
 			"description": {
 				"en": "The INGESTER (ctx.ingester): the apply direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 4). A DeepSeek Harness service that turns an approved batch proposal into file operations: per target, in the proposal's..."
 			},
+			"icon": "Icons/Color/plugin-dsh-ingester.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4251,6 +4341,7 @@
 			"description": {
 				"en": "The file-content normalizer flavor: a DeepSeek Harness plugin that registers the normalize family's `normalize-file` tool - the read → count → write pipeline over files ALREADY on disk, beyond the tool layer. One agent-chosen file per..."
 			},
+			"icon": "Icons/Color/plugin-dsh-normalize-file.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4296,6 +4387,7 @@
 			"description": {
 				"en": "The PASS-ON (ctx.passOn): the prepare direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 3). A DeepSeek Harness service that turns an intent - a suggestion from the search suggester, a user/agent intent, or a..."
 			},
+			"icon": "Icons/Color/plugin-dsh-pass-on.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4341,6 +4433,7 @@
 			"description": {
 				"en": "The pattern-graph service plugin: a DeepSeek Harness plugin that owns the pattern registry, the matcher, the confidence store and the learner behind the suggester family. A pattern is a parameterized behavior graph (PATTERN-GRAPH-PLUGIN.md..."
 			},
+			"icon": "Icons/Color/plugin-dsh-pattern.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4385,6 +4478,7 @@
 			"description": {
 				"en": "The subagent-queue plugin: a DeepSeek Harness plugin that turns subagent work into a QUEUE (the tasks as data, not the agents as contexts). The user's capacity model is the law: the MAIN conversation holds up to 10 subagents (the pool's..."
 			},
+			"icon": "Icons/Color/plugin-dsh-queue.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4429,6 +4523,7 @@
 			"description": {
 				"en": "The routing-enforcer plugin: a DeepHarness plugin that enforces the user's model-routing policy SILENTLY on every subagent launch. The choice happens automatically - no prompting, no reminder, no orchestrator awareness. When a launch omits..."
 			},
+			"icon": "Icons/Color/plugin-dsh-route.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4473,6 +4568,7 @@
 			"description": {
 				"en": "The workspace agent: a DeepSeek Harness plugin that IS the workspace regime's conversational surface - the OPERATIONAL VIEW the conversation addresses. It consumes the Wave-1 graph service (ctx.workspaceGraph) and presents the graph-like,..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4517,6 +4613,7 @@
 			"description": {
 				"en": "The workspace-authority service: a DeepSeek plugin that IS the authority step of the workspace family's invisible flow - the licenses. The service keeps the THREE SEPARATE AUTHORITY RECORDS (v4.1 section 3.9, correcting the corpus's own..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-authority.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4562,6 +4659,7 @@
 			"description": {
 				"en": "The workspace-context service: a DeepSeek Harness plugin that plays the workspace family's attention-projection role - the required/relevant/deferred context economy. The service (registered as ctx.workspaceContext) builds the ORIENTATION..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-context.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4607,6 +4705,7 @@
 			"description": {
 				"en": "The workspace-evidence service: a DeepSeek Harness plugin that owns the validation objects + the evidence dependencies + the four kinds of truth + the stale-validation invalidation (the family map's EVIDENCE role). It registers the..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-evidence.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4652,6 +4751,7 @@
 			"description": {
 				"en": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections,..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-graph.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4697,6 +4797,7 @@
 			"description": {
 				"en": "The workspace-reflect service: a DeepSeek Harness plugin providing the LATER-STAGE code-block reflective API - the AST-aware rename/connect/replace bundled as ONE call each, over the managed representations (the family map's reflect role;..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-reflect.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -4742,6 +4843,7 @@
 			"description": {
 				"en": "The workspace-semantics service: a DeepSeek Harness plugin that owns the semantic model - the symbols + the references + the dependencies + the index (the family map's SEMANTICS role). It registers the workspaceSemantics service..."
 			},
+			"icon": "Icons/Color/plugin-dsh-workspace-semantics.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",

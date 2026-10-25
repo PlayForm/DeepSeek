@@ -364,7 +364,7 @@ export default class PluginFactory extends Service {
 	State<Extra extends object = Record<string, unknown>>(
 		Context: Context,
 		Config: unknown,
-		Setup: Setup,
+		Setup: Setup & { journalDomain?: string | undefined },
 	): Shape & Extra {
 		return Build<Extra>(Context, Config, Setup);
 	}
