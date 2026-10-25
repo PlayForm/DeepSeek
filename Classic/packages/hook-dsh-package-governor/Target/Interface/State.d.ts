@@ -1,4 +1,4 @@
-import type Factory from "@Interface/Factory.js";
+import type Factory from "./Factory.js";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
     /** Strict chain pass: strip unknown deps in a governed workspace. */

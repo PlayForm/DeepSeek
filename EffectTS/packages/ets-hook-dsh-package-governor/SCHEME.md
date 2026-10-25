@@ -115,8 +115,8 @@ keep-list discovery), and every ledger string.
   (Function/Follow) — skipped on refusal, decode failure or a failed guarded write (the message
   callback runs only post-write). When a registry exists but the chain pass changed nothing (every
   computed pin equals its current pin), the passage stays closed: the update stage is not dispatched
-  for it and nothing is written (the no-flap rule, added against the identical-update flap).
-  Without a registry the passage still opens (the pre-refactor semantics; public manifests remain
+  for it and nothing is written (the no-flap rule, added against the identical-update flap). Without
+  a registry the passage still opens (the pre-refactor semantics; public manifests remain
   update-stage-eligible).
 - **U — update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a harness JOB when the P1
   controller (attached by `Factory.Attach` from the root context) serves this composition —
