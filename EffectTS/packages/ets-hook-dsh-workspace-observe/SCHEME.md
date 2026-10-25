@@ -41,6 +41,13 @@ Registered on the ROOT context through the factory's `Wire`
 `fs/observed` emissions. The listener is a synchronous recorder: no awaits, no throws, no I/O, no
 file content read.
 
+The repeat-event guard (`Function/Duplicate`): a repeat event for the same path carrying the same
+version within a short coalescing window (2 s on the module's clock; the `State.Now` test seam
+overrides it, no real timer anywhere) is dropped silently - that file state is already recorded (the
+version token identifies the state), so no sequence, no stamp, no storage put, no trace emission, no
+line. A different version, or the same version after the window, is stamped normally: the last
+distinct version always wins. The manual path is never guarded.
+
 Each RECORDED stamp is then emitted on the family's trace bus as `observe/stamp` (the indexer's
 first source, D5) through `Source/Trace/Adapter.ts`: the payload is `{ path, version, origin }` (the
 hook's own sequence stays private). The bus (`ctx.trace`) is provided by
@@ -124,11 +131,11 @@ incident posture's `storage open failed: <reason>` (loud open failure, documente
 
 ## 7. The test battery (the package-internal per-test folders)
 
-| Folder                | PASS | Covers                                                                                                                                                                                                                                      |
-| --------------------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Wiring-And-Stamps`   | 16   | the cold mount, the root registration with the distinct root identity, the apply-registered service, the activation proof, the stamp mechanics (monotonic sequence, event version, origin), the fail-loud validation, the statistics triple |
-| `Guards-And-Ring`     | 15   | the excluded path, the own-actor identity check, the include allowlist, the latest overwrite, the ring cap with the byte-exact capped line, the malformed-event containment, the volatile flip of the ring bound                            |
-| `Storage-And-Service` | 14   | the domain spec, the record persistence, the restart recovery with the continued sequence, the persisted cap, the manual path, the ZERO writeText/readText guarantee, the absent facility, the loud open failure                            |
+| Folder                | PASS | Covers                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Wiring-And-Stamps`   | 16   | the cold mount, the root registration with the distinct root identity, the apply-registered service, the activation proof, the stamp mechanics (monotonic sequence, event version, origin), the fail-loud validation, the statistics triple                                                                                                                                            |
+| `Guards-And-Ring`     | 19   | the excluded path, the own-actor identity check, the include allowlist, the latest overwrite, the ring cap with the byte-exact capped line, the malformed-event containment, the volatile flip of the ring bound, the repeat-event guard (Function/Duplicate: the same path and version inside the window is dropped silently; a different version or a post-window repeat is stamped) |
+| `Storage-And-Service` | 14   | the domain spec, the record persistence, the restart recovery with the continued sequence, the persisted cap, the manual path, the ZERO writeText/readText guarantee, the absent facility, the loud open failure                                                                                                                                                                       |
 
 Every folder runs standalone (`node Target/Test/<Name>/Test.js`) and its `README.md` declares the
 expected count under `## Expected count`.

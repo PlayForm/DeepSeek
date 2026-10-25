@@ -1,7 +1,7 @@
 ---
 name: idle-agent-protocol
-description: "The contract for an agent launched IDLE: retain the spec verbatim, do no work until activated, confirm with the exact line, then execute the spec and report against its arbiter."
-whenToUse: Whenever you are launched with a paused-status instruction and a spec to retain, and whenever the parent amends or activates an idle lane. Also when a batch stalls because a lane acknowledged an amendment but did not execute.
+description: "Contract for an agent launched IDLE: retain the spec verbatim, do no work until activated, confirm with the exact line, execute the spec, and report against its arbiter."
+whenToUse: Whenever launched with a paused-status instruction and a spec to retain, and whenever the parent amends or activates an idle lane; also when a batch stalls because a lane acknowledged an amendment but did not execute.
 version: 2.0.0
 updated: 2026-10-20
 ---

@@ -1,6 +1,238 @@
-import t from"node:assert/strict";import*as y from"node:fs";import*as R from"node:os";import*as m from"node:path";import{Call as d,Check as c,CheckAsync as h,FakeStorage as S,Finish as F,FreshRecord as k,LinesWith as i,MakeCounter as H,Mount as w,Setup as l,WriteStore as b,rmStore as f}from"../Harness.js";const u=r=>({file_path:r,pattern:"export function"}),o={cooldownCalls:0,maxNotesPerTurn:5},g=async(r,a)=>{for(const e of["src/A.ts","src/B.ts","src/C.ts","src/D.ts"])await d(r,"read",u(e),a)},v=r=>({get:()=>r}),C=async()=>{const r=H();{const a={agent:{id:"produce-a"}},e=l(o);await e.State.Flush(),await g(e,a),await h(r,"H1: the judged calls fill the durable mirror, newest first",async()=>{await e.State.Flush(),t.deepEqual(e.State.History.map(s=>`${s.seq} ${s.path} ${s.intent}`),["3 src/D.ts Repeat","2 src/C.ts Repeat","1 src/B.ts Repeat","0 src/A.ts replay"])}),await h(r,"H1: the agent's own ring carries the same calls",async()=>{const s=e.State.Agents.get(a);t.deepEqual(s.History.map(n=>n.path),["src/D.ts","src/C.ts","src/B.ts","src/A.ts"])}),await h(r,"H1: every recorded call logs the byte-exact line",async()=>{await e.State.Flush(),t.deepEqual(i(e,"recorded "),["replay-suggester: recorded replay src/A.ts (1 in store)","replay-suggester: recorded Repeat src/B.ts (2 in store)","replay-suggester: recorded Repeat src/C.ts (3 in store)","replay-suggester: recorded Repeat src/D.ts (4 in store)"])})}{const a={agent:{id:"recall-a"}},e=l(o);await e.State.Flush(),await g(e,a);const s=await d(e,"read",u("src/E.ts"),a);c(r,"H2: the note names the companions of the similar call",()=>{t.equal(s.additionalContexts.length,1),t.deepEqual(s.additionalContexts[0].source,{kind:"replay-suggester",form:"notice",summary:"Repeat 0.77"}),t.equal(s.additionalContexts[0].content[0].text,`[replay-suggester] intent=Repeat confidence=0.77
-targets (3):
-- src/D.ts - touched last time (Repeat)
-- src/C.ts - touched last time (Repeat)
-- src/B.ts - touched last time (Repeat)
-note: the recall is the answer; without a record the hook abstains.`)}),c(r,"H2: the suggest line counts the recalled companions",()=>{t.deepEqual(i(e,"candidates call").slice(-1),["replay-suggester: suggest Repeat 0.77 3 candidates call read"])})}{const a={agent:{id:"empty-a"}},e=l(o);await e.State.Flush();const s={kind:"allow"},n=await d(e,"read",u("src/A.ts"),a,s);c(r,"H3: an empty store emits NO note and makes NO claim",()=>{t.equal(n,s),t.equal(i(e,"candidates call").length,0),t.equal(i(e,"abstained").length,0),t.equal(i(e,"store empty (starting fresh)").length,1)})}{const a=S(),e={agent:{id:"kv-a"}},s=w(o,a);await s.State.Flush(),await g(s,e),await s.State.Flush(),c(r,"H4: the domain spec is replay_history v1 per-record with NO compatibleVersions",()=>{t.equal(a.spec.name,"replay_history"),t.equal(a.spec.version,1),t.equal(a.spec.layout,"per-record"),t.equal(a.spec.invalidRecords,"backup-and-skip"),t.ok(a.spec.tables.history!==void 0),t.ok(a.spec.tables.meta!==void 0),t.equal(a.spec.compatibleVersions,void 0)});const n=w(o,a);await n.State.Flush(),c(r,"H4: the reopen restores the entries with the byte-exact line",()=>{t.deepEqual(i(n,"store recovered"),["replay-suggester: store recovered 4 entries (replay_history)"]),t.equal(n.State.History.length,4),t.equal(n.State.Seq,4)}),await h(r,"H4: a call after the reopen recalls the restored companions",async()=>{const p=await d(n,"read",u("src/E.ts"),{agent:{id:"kv-b"}});t.equal(p.additionalContexts[0].content[0].text.includes("- src/D.ts - touched last time (Repeat)"),!0)})}{const a=k(),e={agent:{id:"file-a"}},s=l({...o,recordPath:a});await s.State.Flush(),await g(s,e),await s.State.Flush(),c(r,"H5: without storage the JSON fallback is the store",()=>{const p=JSON.parse(y.readFileSync(a,"utf8"));t.equal(p.version,1),t.equal(typeof p.savedAt,"number"),t.deepEqual(p.entries.map(q=>q.path),["src/D.ts","src/C.ts","src/B.ts","src/A.ts"])});const n=l({...o,recordPath:a});await n.State.Flush(),c(r,"H5: the fallback reopen restores the entries with the byte-exact line",()=>{t.deepEqual(i(n,"store recovered"),["replay-suggester: store recovered 4 entries (file)"])}),await h(r,"H5: a call after the fallback reopen recalls the restored companions",async()=>{const p=await d(n,"read",u("src/E.ts"),{agent:{id:"file-b"}});t.equal(p.additionalContexts[0].content[0].text.includes("- src/D.ts - touched last time (Repeat)"),!0)})}{const a={agent:{id:"bound-a"}},e=l({...o,historyDepth:2});await e.State.Flush(),await g(e,a),await e.State.Flush(),c(r,"H6: historyDepth bounds the mirror and the agent ring",()=>{t.deepEqual(e.State.History.map(s=>s.path),["src/D.ts","src/C.ts"]),t.deepEqual(e.State.Agents.get(a).History.map(s=>s.path),["src/D.ts","src/C.ts"])})}{const a={agent:{id:"skip-a"}},e=l(o);await e.State.Flush(),await d(e,"fetch",u("src/A.ts"),a),await h(r,"H7: a non-judged tool is never recorded",async()=>{await e.State.Flush(),t.equal(e.State.History.length,0),t.equal(i(e,"recorded ").length,0)});const s=y.mkdtempSync(m.join(R.tmpdir(),"replay-suggester-foreign-"));y.writeFileSync(m.join(s,"src.ts"),"x","utf8");const n=l(o);n.Context.workingDirectory=v(s),await d(n,"read",u(m.join(s,"src.ts")),a),await h(r,"H7: a foreign-workspace call is never recorded",async()=>{await n.State.Flush(),t.equal(n.State.History.length,0),t.equal(i(n,"recorded ").length,0),t.ok(n.Lines.includes("replay-suggester: abstained foreign-workspace  0.00"))})}{f(),b([{intent:"Repeat",probe:"src",files:["src/Seed.ts"],verify:"",at:1}]);const a={agent:{id:"seed-a"}},e=l(o);await e.State.Flush(),await g(e,a);const s=await d(e,"read",u("src/E.ts"),a);c(r,"H8: the seeded record takes precedence over the live history",()=>{const n=s.additionalContexts[0].content[0].text;t.equal(n.includes("- src/Seed.ts - touched last time (Repeat)"),!0),t.equal(n.includes("- src/D.ts"),!1)}),f()}{const a=S({failOpen:!0}),e=w(o,a);await e.State.Flush(),c(r,"H9: a failed open is loud and the JSON fallback takes over",()=>{t.deepEqual(i(e,"store open failed"),["replay-suggester: store open failed: storage unavailable"]),t.equal(e.State.Handle,void 0),t.equal(i(e,"store empty (starting fresh)").length,1)})}return F(r,"History-Producer")},A=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(A){const r=await C();console.log(`${r} PASS - History-Producer`)}export{C as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+  Call,
+  Check,
+  CheckAsync,
+  FakeStorage,
+  Finish,
+  FreshRecord,
+  LinesWith,
+  MakeCounter,
+  Mount,
+  Setup,
+  WriteStore,
+  rmStore
+} from "../Harness.js";
+const Probe = (Path_) => ({
+  file_path: Path_,
+  pattern: "export function"
+});
+const Knobs = { cooldownCalls: 0, maxNotesPerTurn: 5 };
+const Episode = async (Run, Agent) => {
+  for (const Name of ["src/A.ts", "src/B.ts", "src/C.ts", "src/D.ts"]) {
+    await Call(Run, "read", Probe(Name), Agent);
+  }
+};
+const Service = (Cwd) => ({ get: () => Cwd });
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Agent = { agent: { id: "produce-a" } };
+    const Run = Setup(Knobs);
+    await Run.State.Flush();
+    await Episode(Run, Agent);
+    await CheckAsync(Count, "H1: the judged calls fill the durable mirror, newest first", async () => {
+      await Run.State.Flush();
+      assert.deepEqual(
+        Run.State.History.map((Entry) => `${Entry.seq} ${Entry.path} ${Entry.intent}`),
+        ["3 src/D.ts Repeat", "2 src/C.ts Repeat", "1 src/B.ts Repeat", "0 src/A.ts replay"]
+      );
+    });
+    await CheckAsync(Count, "H1: the agent's own ring carries the same calls", async () => {
+      const Memory = Run.State.Agents.get(Agent);
+      assert.deepEqual(
+        Memory.History.map((Entry) => Entry.path),
+        ["src/D.ts", "src/C.ts", "src/B.ts", "src/A.ts"]
+      );
+    });
+    await CheckAsync(Count, "H1: every recorded call logs the byte-exact line", async () => {
+      await Run.State.Flush();
+      assert.deepEqual(LinesWith(Run, "recorded "), [
+        "replay-suggester: recorded replay src/A.ts (1 in store)",
+        "replay-suggester: recorded Repeat src/B.ts (2 in store)",
+        "replay-suggester: recorded Repeat src/C.ts (3 in store)",
+        "replay-suggester: recorded Repeat src/D.ts (4 in store)"
+      ]);
+    });
+  }
+  {
+    const Agent = { agent: { id: "recall-a" } };
+    const Run = Setup(Knobs);
+    await Run.State.Flush();
+    await Episode(Run, Agent);
+    const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);
+    Check(Count, "H2: the note names the companions of the similar call", () => {
+      assert.equal(Result.additionalContexts.length, 1);
+      assert.deepEqual(Result.additionalContexts[0].source, {
+        kind: "replay-suggester",
+        form: "notice",
+        summary: "Repeat 0.77"
+      });
+      assert.equal(
+        Result.additionalContexts[0].content[0].text,
+        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (3):\n- src/D.ts - touched last time (Repeat)\n- src/C.ts - touched last time (Repeat)\n- src/B.ts - touched last time (Repeat)\nnote: the recall is the answer; without a record the hook abstains."
+      );
+    });
+    Check(Count, "H2: the suggest line counts the recalled companions", () => {
+      assert.deepEqual(LinesWith(Run, "candidates call").slice(-1), [
+        "replay-suggester: suggest Repeat 0.77 3 candidates call read"
+      ]);
+    });
+  }
+  {
+    const Agent = { agent: { id: "empty-a" } };
+    const Run = Setup(Knobs);
+    await Run.State.Flush();
+    const Decision = { kind: "allow" };
+    const Result = await Call(Run, "read", Probe("src/A.ts"), Agent, Decision);
+    Check(Count, "H3: an empty store emits NO note and makes NO claim", () => {
+      assert.equal(Result, Decision);
+      assert.equal(LinesWith(Run, "candidates call").length, 0);
+      assert.equal(LinesWith(Run, "abstained").length, 0);
+      assert.equal(LinesWith(Run, "store empty (starting fresh)").length, 1);
+    });
+  }
+  {
+    const Facility = FakeStorage();
+    const Agent = { agent: { id: "kv-a" } };
+    const First = Mount(Knobs, Facility);
+    await First.State.Flush();
+    await Episode(First, Agent);
+    await First.State.Flush();
+    Check(Count, "H4: the domain spec is replay_history v1 per-record with NO compatibleVersions", () => {
+      assert.equal(Facility.spec.name, "replay_history");
+      assert.equal(Facility.spec.version, 1);
+      assert.equal(Facility.spec.layout, "per-record");
+      assert.equal(Facility.spec.invalidRecords, "backup-and-skip");
+      assert.ok(Facility.spec.tables.history !== void 0);
+      assert.ok(Facility.spec.tables.meta !== void 0);
+      assert.equal(Facility.spec.compatibleVersions, void 0);
+    });
+    const Second = Mount(Knobs, Facility);
+    await Second.State.Flush();
+    Check(Count, "H4: the reopen restores the entries with the byte-exact line", () => {
+      assert.deepEqual(LinesWith(Second, "store recovered"), [
+        "replay-suggester: store recovered 4 entries (replay_history)"
+      ]);
+      assert.equal(Second.State.History.length, 4);
+      assert.equal(Second.State.Seq, 4);
+    });
+    await CheckAsync(Count, "H4: a call after the reopen recalls the restored companions", async () => {
+      const Result = await Call(Second, "read", Probe("src/E.ts"), { agent: { id: "kv-b" } });
+      assert.equal(
+        Result.additionalContexts[0].content[0].text.includes("- src/D.ts - touched last time (Repeat)"),
+        true
+      );
+    });
+  }
+  {
+    const Shared = FreshRecord();
+    const Agent = { agent: { id: "file-a" } };
+    const First = Setup({ ...Knobs, recordPath: Shared });
+    await First.State.Flush();
+    await Episode(First, Agent);
+    await First.State.Flush();
+    Check(Count, "H5: without storage the JSON fallback is the store", () => {
+      const Raw = JSON.parse(FileSystem.readFileSync(Shared, "utf8"));
+      assert.equal(Raw.version, 1);
+      assert.equal(typeof Raw.savedAt, "number");
+      assert.deepEqual(
+        Raw.entries.map((Entry) => Entry.path),
+        ["src/D.ts", "src/C.ts", "src/B.ts", "src/A.ts"]
+      );
+    });
+    const Second = Setup({ ...Knobs, recordPath: Shared });
+    await Second.State.Flush();
+    Check(Count, "H5: the fallback reopen restores the entries with the byte-exact line", () => {
+      assert.deepEqual(LinesWith(Second, "store recovered"), [
+        "replay-suggester: store recovered 4 entries (file)"
+      ]);
+    });
+    await CheckAsync(Count, "H5: a call after the fallback reopen recalls the restored companions", async () => {
+      const Result = await Call(Second, "read", Probe("src/E.ts"), { agent: { id: "file-b" } });
+      assert.equal(
+        Result.additionalContexts[0].content[0].text.includes("- src/D.ts - touched last time (Repeat)"),
+        true
+      );
+    });
+  }
+  {
+    const Agent = { agent: { id: "bound-a" } };
+    const Run = Setup({ ...Knobs, historyDepth: 2 });
+    await Run.State.Flush();
+    await Episode(Run, Agent);
+    await Run.State.Flush();
+    Check(Count, "H6: historyDepth bounds the mirror and the agent ring", () => {
+      assert.deepEqual(
+        Run.State.History.map((Entry) => Entry.path),
+        ["src/D.ts", "src/C.ts"]
+      );
+      assert.deepEqual(
+        Run.State.Agents.get(Agent).History.map((Entry) => Entry.path),
+        ["src/D.ts", "src/C.ts"]
+      );
+    });
+  }
+  {
+    const Agent = { agent: { id: "skip-a" } };
+    const Run = Setup(Knobs);
+    await Run.State.Flush();
+    await Call(Run, "fetch", Probe("src/A.ts"), Agent);
+    await CheckAsync(Count, "H7: a non-judged tool is never recorded", async () => {
+      await Run.State.Flush();
+      assert.equal(Run.State.History.length, 0);
+      assert.equal(LinesWith(Run, "recorded ").length, 0);
+    });
+    const Foreign = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-foreign-"));
+    FileSystem.writeFileSync(Path.join(Foreign, "src.ts"), "x", "utf8");
+    const Gated = Setup(Knobs);
+    Gated.Context.workingDirectory = Service(Foreign);
+    await Call(Gated, "read", Probe(Path.join(Foreign, "src.ts")), Agent);
+    await CheckAsync(Count, "H7: a foreign-workspace call is never recorded", async () => {
+      await Gated.State.Flush();
+      assert.equal(Gated.State.History.length, 0);
+      assert.equal(LinesWith(Gated, "recorded ").length, 0);
+      assert.ok(Gated.Lines.includes("replay-suggester: abstained foreign-workspace  0.00"));
+    });
+  }
+  {
+    rmStore();
+    WriteStore([{ intent: "Repeat", probe: "src", files: ["src/Seed.ts"], verify: "", at: 1 }]);
+    const Agent = { agent: { id: "seed-a" } };
+    const Run = Setup(Knobs);
+    await Run.State.Flush();
+    await Episode(Run, Agent);
+    const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);
+    Check(Count, "H8: the seeded record takes precedence over the live history", () => {
+      const Text = Result.additionalContexts[0].content[0].text;
+      assert.equal(Text.includes("- src/Seed.ts - touched last time (Repeat)"), true);
+      assert.equal(Text.includes("- src/D.ts"), false);
+    });
+    rmStore();
+  }
+  {
+    const Facility = FakeStorage({ failOpen: true });
+    const Run = Mount(Knobs, Facility);
+    await Run.State.Flush();
+    Check(Count, "H9: a failed open is loud and the JSON fallback takes over", () => {
+      assert.deepEqual(LinesWith(Run, "store open failed"), [
+        "replay-suggester: store open failed: storage unavailable"
+      ]);
+      assert.equal(Run.State.Handle, void 0);
+      assert.equal(LinesWith(Run, "store empty (starting fresh)").length, 1);
+    });
+  }
+  return Finish(Count, "History-Producer");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - History-Producer`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

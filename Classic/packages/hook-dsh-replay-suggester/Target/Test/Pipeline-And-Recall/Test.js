@@ -1,5 +1,186 @@
-import t from"node:assert/strict";import{Call as r,Check as o,CheckAsync as w,Finish as C,LedgerWith as f,LinesWith as d,MakeCounter as m,PreStep as k,Flip as q,Setup as c,Volatile as x,WriteStore as u,rmStore as p}from"../Harness.js";const i=(s,e,n="pnpm test")=>({intent:"Repeat",probe:s,files:e,verify:n,at:17e8}),l={file_path:"src/Core.ts",pattern:"export function",glob:"**/*.ts"},g="src/Core.ts",b=async()=>{const s=m();{p(),u([i(g,["src/Core.ts","src/Use.ts"],"pnpm test")]);const e=c(),n=await r(e,"read",l);o(s,"R1: the suggest line is byte-exact (logger and durable ledger)",()=>{t.deepEqual(d(e,"candidates call"),["replay-suggester: suggest Repeat 0.77 2 candidates call read"]),t.equal(f("suggest Repeat 0.77 2 candidates call read").length,1)}),await w(s,"R1: the note carries the recalled files and the verification",async()=>{const a=n.additionalContexts[0];t.deepEqual(a.source,{kind:"replay-suggester",form:"notice",summary:"Repeat 0.77"}),t.equal(a.content[0].text,`[replay-suggester] intent=Repeat confidence=0.77
-targets (2):
-- src/Core.ts - touched last time (Repeat)
-- src/Use.ts - touched last time (Repeat)
-note: last time verified with pnpm test`)})}{p(),u([i(g,["src/Short.ts"]),i('"file_path":"src/Core.ts","pattern"',["src/Deep1.ts","src/Deep2.ts"])]);const e=c(),n=await r(e,"read",{...l,flag:!0});o(s,"R2: the longest matching probe supplies the candidates",()=>{t.deepEqual(d(e,"candidates call"),["replay-suggester: suggest Repeat 0.77 2 candidates call read"]),t.ok(n.additionalContexts[0].content[0].text.includes("- src/Deep1.ts"))}),p(),u([i(g,["src/A.ts","src/B.ts","src/C.ts"])]);const a=c({maxCandidates:1}),R=await r(a,"read",l);o(s,"R2: the recalled files are capped at maxCandidates",()=>{t.deepEqual(d(a,"candidates call"),["replay-suggester: suggest Repeat 0.77 1 candidates call read"]),t.ok(R.additionalContexts[0].content[0].text.includes("- src/A.ts"))}),p(),u([i(g,["node_modules/pkg.ts"])]);const h=c();await r(h,"read",l),o(s,"R2: a fully excluded recall abstains as ambiguous",()=>{t.deepEqual(d(h,"abstained"),["replay-suggester: abstained ambiguous Repeat 0.77"])})}{const e={agent:{id:"agent-a"}};p(),u([i(g,["src/Core.ts"])]);const n=c();await r(n,"read",l,e),await r(n,"read",l,e),o(s,"R3: a repeat within the cooldown is suppressed with the byte-exact line",()=>{t.deepEqual(d(n,"suppressed"),["replay-suggester: suppressed cooldown Repeat"]),t.equal(d(n,"candidates call").length,1)}),p(),u([i(g,["src/Core.ts"])]);const a=c({cooldownCalls:0,maxNotesPerTurn:1});await r(a,"read",l,e),await r(a,"read",l,e),o(s,"R3: a note beyond the per-turn cap is suppressed",()=>{t.deepEqual(d(a,"suppressed"),["replay-suggester: suppressed cap Repeat"])}),await k(a,e),await r(a,"read",l,e),o(s,"R3: a user turn resets the per-turn counter and the note emits again",()=>{t.equal(d(a,"candidates call").length,2)})}{p(),u([i("src/Unrelated.ts",["src/Unrelated.ts"])]);const e=c(),n={kind:"allow"},a=await r(e,"read",l,void 0,n);o(s,"R4: without a recalled record the hook stays silent",()=>{t.equal(a,n),t.equal(d(e,"candidates call").length,0),t.equal(d(e,"abstained").length,0),t.equal(d(e,"suppressed").length,0)})}{p(),u([i(g,["src/Core.ts"],"")]);const e=c(),n={kind:"block",feedback:"no",additionalContexts:[{marker:"x"}]},a=await r(e,"read",l,void 0,n);o(s,"R5: a block decision keeps its feedback and prepends the note",()=>{t.equal(a.kind,"block"),t.equal(a.feedback,"no"),t.equal(a.additionalContexts.length,2),t.equal(a.additionalContexts[0].source.kind,"replay-suggester"),t.equal(a.additionalContexts[1],n.additionalContexts[0])}),o(s,"R5: an empty verification falls back to the pack caveat",()=>{t.ok(a.additionalContexts[0].content[0].text.endsWith("note: the recall is the answer; without a record the hook abstains."))})}{p(),u([i(g,["src/Core.ts"])]);const e=c();q(x(e,"enabled"),!1),e.CtxListeners["loader/volatile-update"]([["enabled"]]);const n=await r(e,"read",l);o(s,"R6: after the flip every call passes through unchanged",()=>{t.equal(e.State.On,!1),t.equal(d(e,"candidates call").length,0),t.equal(n.kind,"allow")})}{p(),u([i(g,["src/Core.ts"])]);const e=c();await r(e,"read",l),o(s,"R7: the history store is read with node:fs, NEVER through ctx.fs",()=>{t.equal(e.Fs.reads.length,0),t.equal(e.Fs.writes.length,0),t.equal(e.Fs.resolved.length,0),t.equal(e.Fs.stats.length,0)})}return C(s,"Pipeline-And-Recall")},y=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(y){const s=await b();console.log(`${s} PASS - Pipeline-And-Recall`)}export{b as runTest};
+import assert from "node:assert/strict";
+import {
+  Call,
+  Check,
+  CheckAsync,
+  Finish,
+  LedgerWith,
+  LinesWith,
+  MakeCounter,
+  PreStep,
+  Flip,
+  Setup,
+  Volatile,
+  WriteStore,
+  rmStore
+} from "../Harness.js";
+const Rec = (Probe, Files, Verify = "pnpm test") => ({
+  intent: "Repeat",
+  probe: Probe,
+  files: Files,
+  verify: Verify,
+  at: 17e8
+});
+const REPEAT_ARGS = { file_path: "src/Core.ts", pattern: "export function", glob: "**/*.ts" };
+const REPEAT_PROBE_SUB = "src/Core.ts";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts", "src/Use.ts"], "pnpm test")]);
+    const Run = Setup();
+    const Result = await Call(Run, "read", REPEAT_ARGS);
+    Check(Count, "R1: the suggest line is byte-exact (logger and durable ledger)", () => {
+      assert.deepEqual(LinesWith(Run, "candidates call"), [
+        "replay-suggester: suggest Repeat 0.77 2 candidates call read"
+      ]);
+      assert.equal(LedgerWith("suggest Repeat 0.77 2 candidates call read").length, 1);
+    });
+    await CheckAsync(Count, "R1: the note carries the recalled files and the verification", async () => {
+      const Note = Result.additionalContexts[0];
+      assert.deepEqual(Note.source, {
+        kind: "replay-suggester",
+        form: "notice",
+        summary: "Repeat 0.77"
+      });
+      assert.equal(
+        Note.content[0].text,
+        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (2):\n- src/Core.ts - touched last time (Repeat)\n- src/Use.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
+      );
+    });
+  }
+  {
+    rmStore();
+    WriteStore([
+      Rec(REPEAT_PROBE_SUB, ["src/Short.ts"]),
+      Rec('"file_path":"src/Core.ts","pattern"', ["src/Deep1.ts", "src/Deep2.ts"])
+    ]);
+    const Run = Setup();
+    const Result = await Call(Run, "read", { ...REPEAT_ARGS, flag: true });
+    Check(Count, "R2: the longest matching probe supplies the candidates", () => {
+      assert.deepEqual(LinesWith(Run, "candidates call"), [
+        "replay-suggester: suggest Repeat 0.77 2 candidates call read"
+      ]);
+      assert.ok(Result.additionalContexts[0].content[0].text.includes("- src/Deep1.ts"));
+    });
+    rmStore();
+    WriteStore([
+      Rec(REPEAT_PROBE_SUB, ["src/A.ts", "src/B.ts", "src/C.ts"])
+    ]);
+    const Capped = Setup({ maxCandidates: 1 });
+    const CappedResult = await Call(Capped, "read", REPEAT_ARGS);
+    Check(Count, "R2: the recalled files are capped at maxCandidates", () => {
+      assert.deepEqual(LinesWith(Capped, "candidates call"), [
+        "replay-suggester: suggest Repeat 0.77 1 candidates call read"
+      ]);
+      assert.ok(CappedResult.additionalContexts[0].content[0].text.includes("- src/A.ts"));
+    });
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["node_modules/pkg.ts"])]);
+    const Excluded = Setup();
+    await Call(Excluded, "read", REPEAT_ARGS);
+    Check(Count, "R2: a fully excluded recall abstains as ambiguous", () => {
+      assert.deepEqual(LinesWith(Excluded, "abstained"), [
+        "replay-suggester: abstained ambiguous Repeat 0.77"
+      ]);
+    });
+  }
+  {
+    const Agent = { agent: { id: "agent-a" } };
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts"])]);
+    const Run = Setup();
+    await Call(Run, "read", REPEAT_ARGS, Agent);
+    await Call(Run, "read", REPEAT_ARGS, Agent);
+    Check(Count, "R3: a repeat within the cooldown is suppressed with the byte-exact line", () => {
+      assert.deepEqual(LinesWith(Run, "suppressed"), [
+        "replay-suggester: suppressed cooldown Repeat"
+      ]);
+      assert.equal(LinesWith(Run, "candidates call").length, 1);
+    });
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts"])]);
+    const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 });
+    await Call(Capped, "read", REPEAT_ARGS, Agent);
+    await Call(Capped, "read", REPEAT_ARGS, Agent);
+    Check(Count, "R3: a note beyond the per-turn cap is suppressed", () => {
+      assert.deepEqual(LinesWith(Capped, "suppressed"), [
+        "replay-suggester: suppressed cap Repeat"
+      ]);
+    });
+    await PreStep(Capped, Agent);
+    await Call(Capped, "read", REPEAT_ARGS, Agent);
+    Check(Count, "R3: a user turn resets the per-turn counter and the note emits again", () => {
+      assert.equal(LinesWith(Capped, "candidates call").length, 2);
+    });
+  }
+  {
+    rmStore();
+    WriteStore([Rec("src/Unrelated.ts", ["src/Unrelated.ts"])]);
+    const Run = Setup();
+    const Decision = { kind: "allow" };
+    const Result = await Call(Run, "read", REPEAT_ARGS, void 0, Decision);
+    Check(Count, "R4: without a recalled record the hook stays silent", () => {
+      assert.equal(Result, Decision);
+      assert.equal(LinesWith(Run, "candidates call").length, 0);
+      assert.equal(LinesWith(Run, "abstained").length, 0);
+      assert.equal(LinesWith(Run, "suppressed").length, 0);
+    });
+  }
+  {
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts"], "")]);
+    const Run = Setup();
+    const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "x" }] };
+    const Result = await Call(Run, "read", REPEAT_ARGS, void 0, Downstream);
+    Check(Count, "R5: a block decision keeps its feedback and prepends the note", () => {
+      assert.equal(Result.kind, "block");
+      assert.equal(Result.feedback, "no");
+      assert.equal(Result.additionalContexts.length, 2);
+      assert.equal(Result.additionalContexts[0].source.kind, "replay-suggester");
+      assert.equal(Result.additionalContexts[1], Downstream.additionalContexts[0]);
+    });
+    Check(Count, "R5: an empty verification falls back to the pack caveat", () => {
+      assert.ok(
+        Result.additionalContexts[0].content[0].text.endsWith(
+          "note: the recall is the answer; without a record the hook abstains."
+        )
+      );
+    });
+  }
+  {
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts"])]);
+    const Run = Setup();
+    Flip(Volatile(Run, "enabled"), false);
+    Run.CtxListeners["loader/volatile-update"]([["enabled"]]);
+    const Result = await Call(Run, "read", REPEAT_ARGS);
+    Check(Count, "R6: after the flip every call passes through unchanged", () => {
+      assert.equal(Run.State.On, false);
+      assert.equal(LinesWith(Run, "candidates call").length, 0);
+      assert.equal(Result.kind, "allow");
+    });
+  }
+  {
+    rmStore();
+    WriteStore([Rec(REPEAT_PROBE_SUB, ["src/Core.ts"])]);
+    const Run = Setup();
+    await Call(Run, "read", REPEAT_ARGS);
+    Check(Count, "R7: the history store is read with node:fs, NEVER through ctx.fs", () => {
+      assert.equal(Run.Fs.reads.length, 0);
+      assert.equal(Run.Fs.writes.length, 0);
+      assert.equal(Run.Fs.resolved.length, 0);
+      assert.equal(Run.Fs.stats.length, 0);
+    });
+  }
+  return Finish(Count, "Pipeline-And-Recall");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Pipeline-And-Recall`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

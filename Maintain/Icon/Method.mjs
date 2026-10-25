@@ -51,23 +51,23 @@ export const closedRing = ({
 	tone = "ink",
 }) =>
 	Inner === undefined
-		? part(superellipse({ Radius, Power, Samples: 128, Phase }), tone)
-		: part(lobedRing({ Lobes, Inner, Amplitude, Power, Samples: 168, Phase }), tone);
+		? part(superellipse({ Radius, Power, Samples: 64, Phase }), tone)
+		: part(lobedRing({ Lobes, Inner, Amplitude, Power, Samples: 48, Phase }), tone);
 
 /** Two concentric closed lines: the double-outline method. */
 export const doubleRing = ({ Radius, Inset = 3.5, Power = 3, Phase = 0, tone = "ink" }) => [
-	part(superellipse({ Radius, Power, Samples: 128, Phase }), tone),
-	part(superellipse({ Radius: Radius - Inset, Power, Samples: 112, Phase }), "accent"),
+	part(superellipse({ Radius, Power, Samples: 64, Phase }), tone),
+	part(superellipse({ Radius: Radius - Inset, Power, Samples: 56, Phase }), "accent"),
 ];
 
 /** A closed square or diamond frame: the tile method. */
 export const squareFrame = ({ Half = 44, Power = 5, Phase = 45, tone = "accent" }) =>
-	part(superellipse({ Radius: Half, Power, Samples: 128, Phase }), tone);
+	part(superellipse({ Radius: Half, Power, Samples: 64, Phase }), tone);
 
 /** A thick closed diamond with an inner void: the void method. */
 export const voidDiamond = ({ Half = 40, Thickness = 8, tone = "ink" }) => [
-	part(superellipse({ Radius: Half, Power: 1, Samples: 128, Phase: 45 }), tone),
-	part(superellipse({ Radius: Half - Thickness, Power: 1, Samples: 112, Phase: 45 }), "accent"),
+	part(superellipse({ Radius: Half, Power: 1, Samples: 64, Phase: 45 }), tone),
+	part(superellipse({ Radius: Half - Thickness, Power: 1, Samples: 56, Phase: 45 }), "accent"),
 ];
 
 /** A filled quadrant wedge: the block method. */
@@ -109,7 +109,7 @@ export const interlaceBand = ({
 	Phase = 0,
 	tone = "accent",
 }) => {
-	const Parts = [part(circle({ Radius: Radius - Width, Samples: 96 }), "ink")];
+	const Parts = [part(circle({ Radius: Radius - Width, Samples: 48 }), "ink")];
 	for (let Index = 0; Index < Count; Index += 1) {
 		const Angle = Phase + (Index * 360) / Count;
 		Parts.push(
@@ -134,7 +134,7 @@ export const webLattice = ({ Spokes = 8, Inner = 12, Outer = 30, Radii = [], ton
 		Parts.push(part(needle({ Angle, Inner, Outer }), tone, { open: true, close: false }));
 	}
 	for (const Radius of Radii) {
-		Parts.push(part(circle({ Radius, Samples: 96 }), "accent"));
+		Parts.push(part(circle({ Radius, Samples: 48 }), "accent"));
 	}
 	return Parts;
 };
@@ -181,7 +181,7 @@ export const dotOrbit = ({ Radius = 42, Count = 8, Dot = 1.3, Phase = 0, tone = 
 
 /** A scalloped rim: the scallop method. */
 export const scallopEdge = ({ Radius = 45, Lobes = 8, tone = "accent" }) => [
-	part(waveRing({ Radius, Amplitude: 1.4, Lobes, Samples: 168 }), tone),
+	part(waveRing({ Radius, Amplitude: 1.4, Lobes, Samples: 48 }), tone),
 ];
 
 /** An open zigzag rim: the chevron method. */

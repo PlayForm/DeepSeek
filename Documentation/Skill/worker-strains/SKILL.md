@@ -1,7 +1,12 @@
 ---
 name: worker-strains
-description: "The delegation methodology: the four worker strains (explorer, coder, planner, minuteman), the strain-first selection rule, the producer-never-records pairing, the formalized delegation loop, and the environment and scope discipline every delegated lane follows."
-whenToUse: Before any subagent delegation, workflow launch, or decision about who should do a task. Load it with task-routing, which decides the model and effort.
+description:
+    "The delegation methodology: the four worker strains (explorer, coder, planner, minuteman), the
+    strain-first selection rule, the producer-never-records pairing, the formalized delegation loop,
+    and the environment and scope discipline every delegated lane follows."
+whenToUse:
+    Before any subagent delegation, workflow launch, or decision about who should do a task. Load it
+    with task-routing, which decides the model and effort.
 version: 2.0.0
 updated: 2026-10-20
 ---

@@ -1,2 +1,306 @@
-import a from"node:assert/strict";import*as u from"node:fs";import*as b from"node:os";import*as g from"node:path";import f from"../../Target/Library.js";import P from"../../../plugin-dsh-factory/Target/Library.js";const $=()=>({N:0,F:0}),h=(e,n,t)=>{e.N++;try{t(),console.log(`PASS - ${n}`)}catch(r){e.F++,console.log(`FAIL - ${n}`),console.log(r instanceof Error?r.message:String(r))}},q=async(e,n,t)=>{e.N++;try{await t(),console.log(`PASS - ${n}`)}catch(r){e.F++,console.log(`FAIL - ${n}`),console.log(r instanceof Error?r.message:String(r))}},B=(e,n)=>{if(e.F!==0)throw new Error(`${n}: ${e.F} failed check(s)`);return e.N},A=u.mkdtempSync(g.join(b.tmpdir(),"replay-suggester-home-"));process.env.HOME=A;const k=u.mkdtempSync(g.join(b.tmpdir(),"replay-suggester-smoke-")),d=g.join(k,"replay-suggester.log"),w=g.join(k,"history.json");let R=0;const M=()=>(R+=1,g.join(k,`replay-history-${R}.json`)),m=()=>{try{u.rmSync(d)}catch{}},O=()=>(()=>{try{return u.readFileSync(d,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),z=e=>{const n=typeof e=="string"?e:Array.isArray(e)?JSON.stringify({schema:1,records:e}):JSON.stringify(e);u.writeFileSync(w,n,"utf8")},j=()=>{try{u.rmSync(w)}catch{}},W=new P({reflect:{provide:()=>{}}}),N=()=>{const e={writes:[],reads:[],resolved:[],stats:[]};return e.resolve=async n=>{throw e.resolved.push(n),new Error("resolve must never be called")},e.stat=async(...n)=>{throw e.stats.push(n),new Error("stat must never be called")},e.writeText=async(...n)=>{throw e.writes.push(n),new Error("writeText must never be called")},e.readText=async(...n)=>{throw e.reads.push(n),new Error("readText must never be called")},e},L=(e,n)=>{const t={},r=[],s=[],i={},p=[],x=[],v=N(),F={on:()=>()=>!0};let c;c={pluginFactory:W,fs:v,logger:{info:o=>{r.push(o)},warn:o=>{s.push(o)}},on:(o,l)=>(t[o]=l,()=>!0),get:o=>c[o],effect:(o,l)=>{p.push(l??"unnamed");const S=o();return typeof S=="function"&&x.push(S),()=>!0},root:F,reflect:{provide:(o,l)=>(i[o]=l??!0,c[o]=l,()=>!0)}};const y={Context:c,Root:F,CtxListeners:t,Lines:r,Warns:s,Provided:i,Effects:p,Disposers:x,Raw:e,Fs:v};return n?.(c,y),y.Returned=f.apply(c,e),y.State=c.__replaySuggesterState,y},E=e=>f.Config({recordPath:M(),...e}),T=(e={})=>(m(),L(E({logFile:d,historyPath:w,...e}))),J=async(e,n,t,r={agent:{id:"agent-a"}},s={kind:"allow"})=>e.CtxListeners["tools/post-execute"]({name:n,arguments:t,agent:r},void 0,async()=>s),V=async(e,n={agent:{id:"agent-a"}},t=[{role:"user"}])=>e.CtxListeners["agent/pre-step"]({agent:n,messages:t},async()=>({kind:"allow"})),C=Symbol.for("cosmokit.volatile.write"),K=(e,n)=>{const t=e;if(typeof t?.[C]!="function")throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");t[C](n)},U=(e,n)=>e.Raw[n],G=(e,n)=>e.Lines.filter(t=>t.includes(n)),Q=e=>O().filter(n=>n.includes(e)),X=(e={})=>{const n={spec:void 0,version:e.version??1,tables:new Map,writes:[],failOpen:e.failOpen===!0,closed:!1};return n.facility={open:async t=>{switch(!0){case n.failOpen:throw new Error("storage unavailable");case t.version!==n.version:throw new Error(`version-mismatch: stored ${n.version}, declared ${t.version}`);default:}return n.spec=t,{name:t.name,close:async()=>{n.closed=!0},table:r=>{n.tables.has(r)||n.tables.set(r,new Map);const s=n.tables.get(r);return{put:async(i,p)=>{s.set(i,p),n.writes.push([r,i])},entries:()=>s.entries(),keys:()=>s.keys(),get:i=>s.get(i),delete:async i=>s.delete(i),get size(){return s.size}}}}}},n.seed=(t,r,s)=>{n.tables.has(t)||n.tables.set(t,new Map),n.tables.get(t).set(r,s)},n},Y=(e,n)=>(m(),L(E({logFile:d,historyPath:w,...e}),t=>{t.storageDomain=n.facility})),D=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(D){const e=$();h(e,"selfcheck: a passing assertion counts as PASS",()=>{a.equal(1,1)}),h(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{a.equal(1,2)}),m(),j();const n=T({enabled:!0});h(e,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{a.equal(n.Returned,void 0),a.ok(n.CtxListeners["tools/post-execute"]instanceof Function),a.ok(n.CtxListeners["agent/pre-step"]instanceof Function),a.ok(n.State!==void 0),a.ok(n.Lines.includes("replay-suggester: activated (bundle 0.2.0, intents 1, threshold 0.75, history 0)")),a.ok(n.Lines.includes("replay-suggester: history missing (starting empty)"))}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{J as Call,h as Check,q as CheckAsync,N as FakeFs,X as FakeStorage,B as Finish,K as Flip,M as FreshRecord,W as Furnace,A as Home,d as Ledger,O as LedgerLines,Q as LedgerWith,G as LinesWith,L as Make,$ as MakeCounter,Y as Mount,f as Plugin,V as PreStep,k as Root,T as Setup,w as Store,E as Validate,U as Volatile,z as WriteStore,m as rm,j as rmStore};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-home-"));
+process.env["HOME"] = Home;
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-smoke-"));
+const Ledger = Path.join(Root, "replay-suggester.log");
+const Store = Path.join(Root, "history.json");
+let RecordCounter = 0;
+const FreshRecord = () => {
+  RecordCounter += 1;
+  return Path.join(Root, `replay-history-${RecordCounter}.json`);
+};
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const WriteStore = (Content) => {
+  const Body = typeof Content === "string" ? Content : Array.isArray(Content) ? JSON.stringify({ schema: 1, records: Content }) : JSON.stringify(Content);
+  FileSystem.writeFileSync(Store, Body, "utf8");
+};
+const rmStore = () => {
+  try {
+    FileSystem.rmSync(Store);
+  } catch {
+  }
+};
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const FakeFs = () => {
+  const Fs = {
+    writes: [],
+    reads: [],
+    resolved: [],
+    stats: []
+  };
+  Fs.resolve = async (P) => {
+    Fs.resolved.push(P);
+    throw new Error("resolve must never be called");
+  };
+  Fs.stat = async (...Parts) => {
+    Fs.stats.push(Parts);
+    throw new Error("stat must never be called");
+  };
+  Fs.writeText = async (...Parts) => {
+    Fs.writes.push(Parts);
+    throw new Error("writeText must never be called");
+  };
+  Fs.readText = async (...Parts) => {
+    Fs.reads.push(Parts);
+    throw new Error("readText must never be called");
+  };
+  return Fs;
+};
+const Make = (Raw, Attach) => {
+  const CtxListeners = {};
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Effects = [];
+  const Disposers = [];
+  const Fs = FakeFs();
+  const RootObj = { on: () => () => true };
+  let Context;
+  Context = {
+    pluginFactory: Furnace,
+    fs: Fs,
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup2, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup2();
+      if (typeof Disposer === "function") {
+        Disposers.push(Disposer);
+      }
+      return () => true;
+    },
+    root: RootObj,
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Run = {
+    Context,
+    Root: RootObj,
+    CtxListeners,
+    Lines,
+    Warns,
+    Provided,
+    Effects,
+    Disposers,
+    Raw,
+    Fs
+  };
+  Attach?.(Context, Run);
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.State = Context.__replaySuggesterState;
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({
+  recordPath: FreshRecord(),
+  ...Raw
+});
+const Setup = (Config = {}) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, historyPath: Store, ...Config }));
+};
+const Call = async (Run, Name, Arguments, Agent = { agent: { id: "agent-a" } }, Decision = { kind: "allow" }) => Run.CtxListeners["tools/post-execute"](
+  { name: Name, arguments: Arguments, agent: Agent },
+  void 0,
+  async () => Decision
+);
+const PreStep = async (Run, Agent = { agent: { id: "agent-a" } }, Messages = [{ role: "user" }]) => Run.CtxListeners["agent/pre-step"]({ agent: Agent, messages: Messages }, async () => ({
+  kind: "allow"
+}));
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
+};
+const Volatile = (Run, Key) => Run.Raw[Key];
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const FakeStorage = (Options = {}) => {
+  const Facility = {
+    spec: void 0,
+    version: Options.version ?? 1,
+    tables: /* @__PURE__ */ new Map(),
+    writes: [],
+    failOpen: Options.failOpen === true,
+    closed: false
+  };
+  Facility.facility = {
+    open: async (Specification) => {
+      switch (true) {
+        case Facility.failOpen:
+          throw new Error("storage unavailable");
+        case Specification.version !== Facility.version:
+          throw new Error(
+            `version-mismatch: stored ${Facility.version}, declared ${Specification.version}`
+          );
+        default:
+      }
+      Facility.spec = Specification;
+      return {
+        name: Specification.name,
+        close: async () => {
+          Facility.closed = true;
+        },
+        table: (Name) => {
+          if (!Facility.tables.has(Name)) {
+            Facility.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Facility.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+              Facility.writes.push([Name, Key]);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Facility.seed = (Name, Key, Value) => {
+    if (!Facility.tables.has(Name)) {
+      Facility.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Facility.tables.get(Name).set(Key, Value);
+  };
+  return Facility;
+};
+const Mount = (Config, Facility) => {
+  rm();
+  return Make(Validate({ logFile: Ledger, historyPath: Store, ...Config }), (Context) => {
+    Context.storageDomain = Facility.facility;
+  });
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  rmStore();
+  const Run = Setup({ enabled: true });
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Run.Returned, void 0);
+    assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
+    assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
+    assert.ok(Run.State !== void 0);
+    assert.ok(
+      Run.Lines.includes(
+        "replay-suggester: activated (bundle 0.2.0, intents 1, threshold 0.75, history 0)"
+      )
+    );
+    assert.ok(Run.Lines.includes("replay-suggester: history missing (starting empty)"));
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Call,
+  Check,
+  CheckAsync,
+  FakeFs,
+  FakeStorage,
+  Finish,
+  Flip,
+  FreshRecord,
+  Furnace,
+  Home,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  LinesWith,
+  Make,
+  MakeCounter,
+  Mount,
+  Plugin,
+  PreStep,
+  Root,
+  Setup,
+  Store,
+  Validate,
+  Volatile,
+  WriteStore,
+  rm,
+  rmStore
+};
+//# sourceMappingURL=Harness.js.map

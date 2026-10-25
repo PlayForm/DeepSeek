@@ -1,7 +1,12 @@
 ---
 name: session-orientation
-description: The first-load protocol for this repository. Loads the repo's own skills, the current state, and the laws before any action, and gives the repository map, skill routing table, and orientation checklist.
-whenToUse: At the start of every fresh session in this repository, and after any resume, fork, or long gap; before the first read that informs work, and before any write, build, or delegation.
+description:
+    The first-load protocol for this repository. Loads the repo's own skills, the current state, and
+    the laws before any action, and gives the repository map, skill routing table, and orientation
+    checklist.
+whenToUse:
+    At the start of every fresh session in this repository, and after any resume, fork, or long gap;
+    before the first read that informs work, and before any write, build, or delegation.
 version: 2.0.0
 updated: 2026-10-20
 ---

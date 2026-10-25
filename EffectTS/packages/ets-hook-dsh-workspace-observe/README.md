@@ -13,7 +13,7 @@ stamps. A later wave's events surface them.
 
 ## What it records
 
-One stamp per event (and per manual call):
+One stamp per distinct version (and per manual call; the repeat guard below coalesces the rest):
 
 ```
 { path, version, origin: "fs/observed" | "manual", sequence }
@@ -40,7 +40,13 @@ One stamp per event (and per manual call):
 - Guard chain, in order: an event whose actor is the hook's **own actor object** is ignored
   (`ignored <path> (own actor)`); a path matching `exclude` is ignored
   (`ignored <path> (excluded)`); a non-matching path under a non-empty `include` is ignored
-  (`ignored <path> (not included)`).
+  (`ignored <path> (not included)`); a **repeat event** - the same path carrying the same version
+  within the coalescing window - is dropped silently (no line, no stamp).
+- The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer): a repeat
+  event for the same path within a short window (2 s on the module's clock, overridable in tests via
+  the `State.Now` seam) announces a file state that is already recorded, because the version token
+  identifies the state; a different version, or the same version after the window, is stamped
+  normally - the last distinct version always wins. The manual path is never guarded.
 - A malformed event is caught and ledgered (`failed <path> (<reason>)`) - the listener never throws.
 - The latest stamp per path is the record (keyed by the path); a bounded ring of the last
   `maxStamps` stamps lives under the meta record `__ring` - the oldest drop is ledgered

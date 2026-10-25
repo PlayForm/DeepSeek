@@ -17,7 +17,10 @@ flow:
 ## What it does
 
 - **Accountability records**: one line per event, stored in the plugin's own KV storage domain
-  `workspace_audit` and in the plugin's ledger.
+  `workspace_audit` and in the plugin's ledger. A **repeat event** - the same path carrying the same
+  version within the coalescing window - records no line: that observed write was already recorded,
+  and the last distinct version always wins (the guard is on the fs/observed listener only; the
+  service's manual lines are never coalesced).
 - **The traceability graph**: the audit lines are the OutcomeEvidence on the intent model's graph -
   Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange →
   AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment.
@@ -26,7 +29,11 @@ flow:
 - **The recursion-prevention law**: every line carries the operation identifier, the parent
   identifier, and the event category - chains compose without recursion.
 - **The fs/observed listener** (ROOT context): every observed write becomes an OutcomeEvidence line
-  (`success` on presence, `failure` on absence).
+  (`success` on presence, `failure` on absence). The repeat-event guard (`Function/Duplicate`, the
+  monitor's clock pattern - no timer) drops a repeat event for the same path carrying the same
+  version within the coalescing window (2 s, the `State.Now` test seam overrides it in tests): the
+  version token identifies the file state, so the line for it is already recorded; a different
+  version, or the same version after the window, is recorded normally.
 
 ## The surfaces
 
@@ -76,8 +83,8 @@ overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger
 
-One line per event, prefixed `audit: ` (byte-exact; see also the smoke folders' expected-string
-sections):
+One line per distinct version within the coalescing window (the repeat-event guard coalesces the
+rest), prefixed `audit: ` (byte-exact; see also the smoke folders' expected-string sections):
 
 ```text
 activated (domain=workspace_audit, maxLines=2000)

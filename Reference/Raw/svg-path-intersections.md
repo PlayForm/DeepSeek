@@ -1,55 +1,59 @@
 [**1** Branch](https://github.com/herrstrietzel/svg-path-intersections/branches)[](https://github.com/herrstrietzel/svg-path-intersections/tags)
-Go to file
-Open more actions menu
-success
-Sep 20, 2025
-[f8bbd7b](https://github.com/herrstrietzel/svg-path-intersections/commit/f8bbd7bd85f2126fd8d31cd65c603332c6b8b3a4) · Sep 20, 2025
-[19 Commits](https://github.com/herrstrietzel/svg-path-intersections/commits/main/)
-Open commit details
-19 Commits  
-| Name  | Name  | Last commit message  | Last commit date  |  
-| --- | --- | --- | --- |  
-|   | Sep 20, 2025  |  
-|   | May 6, 2024  |  
-| [new shape methods, congruence checks](https://github.com/herrstrietzel/svg-path-intersections/commit/a5f384ceff49ba3dc569764ca56b5cb3fa236963 "new shape methods, congruence checks")  | May 6, 2024  |  
-|   |   |   | Sep 20, 2025  |  
-|   |   |   | Sep 20, 2025  |  
-|   |   |   | Aug 21, 2025  |  
-|   |   |   | May 6, 2024  |  
-|   |   |   | Sep 20, 2025  |  
-|   |   |   | Sep 20, 2025  |  
-| View all files |  
+Go to file Open more actions menu success Sep 20, 2025
+[f8bbd7b](https://github.com/herrstrietzel/svg-path-intersections/commit/f8bbd7bd85f2126fd8d31cd65c603332c6b8b3a4)
+· Sep 20, 2025 [19 Commits](https://github.com/herrstrietzel/svg-path-intersections/commits/main/)
+Open commit details 19 Commits
+
+| Name                                                                                                                                                                                   | Name         | Last commit message | Last commit date |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------- | ---------------- |
+|                                                                                                                                                                                        | Sep 20, 2025 |
+|                                                                                                                                                                                        | May 6, 2024  |
+| [new shape methods, congruence checks](https://github.com/herrstrietzel/svg-path-intersections/commit/a5f384ceff49ba3dc569764ca56b5cb3fa236963 "new shape methods, congruence checks") | May 6, 2024  |
+|                                                                                                                                                                                        |              |                     | Sep 20, 2025     |
+|                                                                                                                                                                                        |              |                     | Sep 20, 2025     |
+|                                                                                                                                                                                        |              |                     | Aug 21, 2025     |
+|                                                                                                                                                                                        |              |                     | May 6, 2024      |
+|                                                                                                                                                                                        |              |                     | Sep 20, 2025     |
+|                                                                                                                                                                                        |              |                     | Sep 20, 2025     |
+| View all files                                                                                                                                                                         |
+
 # svg-path-intersections
+
 A standalone library to get intersections between two SVG paths. ~ 16KB minified/ 7KB gzipped.
-  * **versatile:** support for paths, shapes (circles, rectangles, polygons etc.)
-  * **performant:** optimized by conditional calculation methods for different element types
-  * runs in **browser **and headless environments like **node**
 
+- **versatile:** support for paths, shapes (circles, rectangles, polygons etc.)
+- **performant:** optimized by conditional calculation methods for different element types
+- runs in **browser **and headless environments like **node**
 
-It includes a path data parser compliant with the [W3C SVGPathData interface draft](https://svgwg.org/specs/paths/#InterfaceSVGPathData) and can handle all minified stringified path data inputs (especially `A` commands with concatenated largeArc, sweep and final on-path parameters "bomb" quite a few other libraries).
-  * [Usage](https://github.com/herrstrietzel/svg-path-intersections#usage)
-  * [Parameters/Options](https://github.com/herrstrietzel/svg-path-intersections#parameters-options)
-  * [Methods](https://github.com/herrstrietzel/svg-path-intersections#methods)
-    * [Intersections between shapes via svgEl() helper method](https://github.com/herrstrietzel/svg-path-intersections#intersections-between-shapes-via-svgel-helper-method)
-    * [Adjacent "touching" paths](https://github.com/herrstrietzel/svg-path-intersections#adjacent-touching-paths)
-  * [Related repositories](https://github.com/herrstrietzel/svg-path-intersections#related-repositories)
-  * [Similar libraries](https://github.com/herrstrietzel/svg-path-intersections#similar-libraries)
+It includes a path data parser compliant with the
+[W3C SVGPathData interface draft](https://svgwg.org/specs/paths/#InterfaceSVGPathData) and can
+handle all minified stringified path data inputs (especially `A` commands with concatenated
+largeArc, sweep and final on-path parameters "bomb" quite a few other libraries).
 
+- [Usage](https://github.com/herrstrietzel/svg-path-intersections#usage)
+- [Parameters/Options](https://github.com/herrstrietzel/svg-path-intersections#parameters-options)
+- [Methods](https://github.com/herrstrietzel/svg-path-intersections#methods)
+    - [Intersections between shapes via svgEl() helper method](https://github.com/herrstrietzel/svg-path-intersections#intersections-between-shapes-via-svgel-helper-method)
+    - [Adjacent "touching" paths](https://github.com/herrstrietzel/svg-path-intersections#adjacent-touching-paths)
+- [Related repositories](https://github.com/herrstrietzel/svg-path-intersections#related-repositories)
+- [Similar libraries](https://github.com/herrstrietzel/svg-path-intersections#similar-libraries)
 
 ## Usage
+
 You can either pass
-  * stringified path data
-  * a path data array
-  * a custom shape object using the `svgEl()` helper
 
-
+- stringified path data
+- a path data array
+- a custom shape object using the `svgEl()` helper
 
 ```
 let intersections = findPathIntersections(d1, d2)
 
 ```
 
-or use it alongside with other path data parsers like [Jarek Foksa's pathdata-polyfill](https://github.com/jarek-foksa/path-data-polyfill) and pass already parsed path data arrays to the `findPathDataIntersections()` method.
+or use it alongside with other path data parsers like
+[Jarek Foksa's pathdata-polyfill](https://github.com/jarek-foksa/path-data-polyfill) and pass
+already parsed path data arrays to the `findPathDataIntersections()` method.
 
 ```
 let checkCollision = checkCollision(pathData1, pathData2) // returns true or false
@@ -70,7 +74,6 @@ or
 
 ```
 
-
 ```
 let d1 = 'M 75 0 a 1 1 45 010 100 1 1 45 010 -100'
 let d2 = 'M 50 0 a 1 1 45 010 100 1 1 45 010 -100'
@@ -79,7 +82,6 @@ let intersections= findPathIntersections(d1, d2);
 console.log(JSON.stringify(intersections, null, ' '));
 
 ```
-
 
 ```
 const pathIntersections = require('svg-path-intersections');
@@ -95,27 +97,36 @@ console.log(JSON.stringify(intersections, null, ' '));
 
 ```
 
-## Parameters/Options  
-| Option  | values/default  | Effect  |  
-| --- | --- | --- |  
-| pathData1, pathData2  | path data input  | accepts stringified pathdata or parsed arrays  |  
-| stopAtFirst  | false  | stop search after first occurrence: helps to speed up processing e.g. for collision checks  |  
-| quality  | low, medium, high  | default: "medium"; higher quality results in more accurate coordinates and `t` values at the cost of longer processing times  |  
-## Methods
-  * `findPathIntersections(pathData1, pathData2, stopAtFirst, quality)` : finds all intersections
-  * `checkCollision(d1, d2)`: stops at first intersection – faster than finding all occurences
-  * `pointAtT(points, t)`: calculates point at `t` value for lines, quadratic or cubic béziers: 
-    * **cubic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)` (1. previous end point, 2. first control point, 3. second control point, 4. final on-path point)
-    * **quadratic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0} ],  0.5)` (1. previous end point, 2. first control point, 3. final on-path point)
-    * **lineto** `pointAtT([{x:0, y:0}, {x:0, y:0}], 0.5)` (1. previous end point, 2. final on-path point)
-  * `parsePathDataNormalized(d, options)` Parse stringified pathdata to array with normalization options. See [complete version with all options](https://github.com/herrstrietzel/svg-parse-path-normalized) **Default options:** toAbsolute, toLonghands, arcToCubics
+## Parameters/Options
 
+| Option               | values/default    | Effect                                                                                                                       |
+| -------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| pathData1, pathData2 | path data input   | accepts stringified pathdata or parsed arrays                                                                                |
+| stopAtFirst          | false             | stop search after first occurrence: helps to speed up processing e.g. for collision checks                                   |
+| quality              | low, medium, high | default: "medium"; higher quality results in more accurate coordinates and `t` values at the cost of longer processing times |
+
+## Methods
+
+- `findPathIntersections(pathData1, pathData2, stopAtFirst, quality)` : finds all intersections
+- `checkCollision(d1, d2)`: stops at first intersection – faster than finding all occurences
+- `pointAtT(points, t)`: calculates point at `t` value for lines, quadratic or cubic béziers:
+    - **cubic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)` (1.
+      previous end point, 2. first control point, 3. second control point, 4. final on-path point)
+    - **quadratic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0} ],  0.5)` (1. previous end
+      point, 2. first control point, 3. final on-path point)
+    - **lineto** `pointAtT([{x:0, y:0}, {x:0, y:0}], 0.5)` (1. previous end point, 2. final on-path
+      point)
+- `parsePathDataNormalized(d, options)` Parse stringified pathdata to array with normalization
+  options. See
+  [complete version with all options](https://github.com/herrstrietzel/svg-parse-path-normalized)
+  **Default options:** toAbsolute, toLonghands, arcToCubics
 
 ### Intersections between shapes via `svgEl()` helper method
+
 You can use this helper to add all svg geometry elements like so
 
 ```
-let circle = svgEl(cx:10, cy:10, r: 10);  
+let circle = svgEl(cx:10, cy:10, r: 10);
 
 let ellipse = svgEl(cx:10, cy:10, rx: 10, ry:20 );
 
@@ -142,21 +153,22 @@ let intersections = findPathIntersections(circle, path)
 ```
 let circle = document.querySelector('circle')
 let path = document.querySelector('path')
-let intersectionsDOM = getElementIntersections(circle, path)   
+let intersectionsDOM = getElementIntersections(circle, path)
 
 ```
 
 ### Demos
-  * [Codepen: multiple path examples and speed test](https://codepen.io/herrstrietzel/pen/bGJyOXB)
 
+- [Codepen: multiple path examples and speed test](https://codepen.io/herrstrietzel/pen/bGJyOXB)
 
 ### Output
-The returned intersection array contains:
-  * x/y coordinates for each intersection
-  * `t1` and `t2` values for 1. and 2. path segments
-  * segment indices (at which intersection occurred)
-  * segment command points (`cpts1` and `cpts2`)
 
+The returned intersection array contains:
+
+- x/y coordinates for each intersection
+- `t1` and `t2` values for 1. and 2. path segments
+- segment indices (at which intersection occurred)
+- segment command points (`cpts1` and `cpts2`)
 
 This way, you can calculate coordinates for both paths or split each path at `t` values.
 
@@ -255,40 +267,51 @@ This way, you can calculate coordinates for both paths or split each path at `t`
 ```
 
 ### Adjacent "touching" paths
-Unlike other libraries path-intersections will also detect touching paths.
-## Related repositories
-  * [svg-parse-path-normalized](https://github.com/herrstrietzel/svg-parse-path-normalized) – Parse path data from string including fine-grained normalizing options
-  * [svg-getpointatlength](https://github.com/herrstrietzel/svg-getpointatlength) – calculate path length and point at paths on raw path data
 
+Unlike other libraries path-intersections will also detect touching paths.
+
+## Related repositories
+
+- [svg-parse-path-normalized](https://github.com/herrstrietzel/svg-parse-path-normalized) – Parse
+  path data from string including fine-grained normalizing options
+- [svg-getpointatlength](https://github.com/herrstrietzel/svg-getpointatlength) – calculate path
+  length and point at paths on raw path data
 
 ## Similar libraries
-  * [thelonious's "kld-intersections"](https://github.com/thelonious/kld-intersections)
-  * [Pomax's "bezierjs"](https://github.com/Pomax/bezierjs)
-  * [bpmn-io's "path-intersection"](https://github.com/bpmn-io/path-intersection)
 
+- [thelonious's "kld-intersections"](https://github.com/thelonious/kld-intersections)
+- [Pomax's "bezierjs"](https://github.com/Pomax/bezierjs)
+- [bpmn-io's "path-intersection"](https://github.com/bpmn-io/path-intersection)
 
 ## Credits
-  * Jarek Foksa for his [great polyfill](https://github.com/jarek-foksa/path-data-polyfill) heavily inspring to adopt the new pathData interface methodology and for contributing to the specification
-  * Dmitry Baranovskiy for (raphael.j/snap.svg) [pathToAbsolute/Relative functions](https://github.com/DmitryBaranovskiy/raphael/blob/master/raphael.js#L1848)
-  * Vitaly Puzrin (fontello) for the arc to cubic conversion method [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js) and [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
-  * Mike "POMAX" Kammermans for his great [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
 
+- Jarek Foksa for his [great polyfill](https://github.com/jarek-foksa/path-data-polyfill) heavily
+  inspring to adopt the new pathData interface methodology and for contributing to the specification
+- Dmitry Baranovskiy for (raphael.j/snap.svg)
+  [pathToAbsolute/Relative functions](https://github.com/DmitryBaranovskiy/raphael/blob/master/raphael.js#L1848)
+- Vitaly Puzrin (fontello) for the arc to cubic conversion method
+  [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js) and
+  [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
+- Mike "POMAX" Kammermans for his great
+  [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
 
 ## About
+
 Get all intersections from arbitrary path data
 [herrstrietzel.github.io/svg-path-intersections/](https://herrstrietzel.github.io/svg-path-intersections/)
-**6** stars
-**1** watching
-[ fork](https://github.com/herrstrietzel/svg-path-intersections/forks)
-## 
-No releases published
-## 
-  * [**herrstrietzel** herrstrietzel](https://github.com/herrstrietzel)
+**6** stars **1** watching [ fork](https://github.com/herrstrietzel/svg-path-intersections/forks)
 
+##
+
+No releases published
+
+##
+
+- [**herrstrietzel** herrstrietzel](https://github.com/herrstrietzel)
 
 ## Languages
-  * [JavaScript95.4%](https://github.com/herrstrietzel/svg-path-intersections/search?l=javascript)
-  * [HTML4.6%](https://github.com/herrstrietzel/svg-path-intersections/search?l=html)
 
+- [JavaScript95.4%](https://github.com/herrstrietzel/svg-path-intersections/search?l=javascript)
+- [HTML4.6%](https://github.com/herrstrietzel/svg-path-intersections/search?l=html)
 
-You can’t perform that action at this time. 
+You can’t perform that action at this time.

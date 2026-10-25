@@ -245,18 +245,22 @@ fails until the asset is regenerated. That is the whole update loop.
 
 ## 9. The rendering contract
 
-| Render   | Path                                | Rules                                                                                 |
-| -------- | ----------------------------------- | ------------------------------------------------------------------------------------- |
-| `mono`   | `Site/Public/Icons/<dir>.svg`       | `stroke="currentColor"`, outline pass at 0.25, accent body at `stroke-opacity="0.45"` |
-| `colour` | `Site/Public/Icons/Color/<dir>.svg` | ink + accent from the kind palette, outline pass at 0.30                              |
+| Render   | Path                                | Rules                                                                               |
+| -------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| `mono`   | `Site/Public/Icons/<dir>.svg`       | `fill="currentColor"`, contour stroke at 0.28, accent body at `fill-opacity="0.55"` |
+| `colour` | `Site/Public/Icons/Color/<dir>.svg` | ink + accent from the kind palette, contour stroke at 0.30                          |
 
 - `viewBox="0 0 100 100"`, coordinates quantized to whole units (the canvas is 100 wide, so one unit
   is 0.4 px at the 40 px site size).
-- **One path, two passes.** The collage is written once into `<defs>` as `<path id="<dir>-i">` and
-  `<path id="<dir>-a">`, then drawn by four `<use>` elements: the two outline passes (wider, faint)
-  and the two body passes. The ids carry the package directory, so several inlined icons on one page
-  never collide.
-- No `<style>`, no script, no external reference; each file is self-contained and under 12 KiB (the
+- **Envelope rendering, not double strokes.** Each part's centerline becomes its stroke envelope
+  (`Maintain/Icon/Envelope.mjs`): the envelope is drawn as a filled polygon, and the mini contour is
+  a hairline stroke ON that envelope, so the outline follows the stroke BOUNDARY. Open centerlines
+  keep their terminals - the envelope closes, the motif does not.
+- **One path, three uses.** The collage is written once into `<defs>` as `<path id="<dir>-i">` (ink)
+  and `<path id="<dir>-a">` (accent); the body fill, the contour stroke and the Effect-TS echo all
+  `<use>` the same definition. The ids carry the package directory, so several inlined icons on one
+  page never collide.
+- No `<style>`, no script, no external reference; each file is self-contained and under 16 KiB (the
   market index's inline limit is 32 KiB decoded, so there is room; the cap is the family's own).
 - `<title>` carries the package name and the grammar; `role="img"` and `aria-label` are set.
 - The marketplace index carries the colour render as a relative reference, `Icons/Color/<dir>.svg`,

@@ -1,7 +1,7 @@
 ---
 name: code-authoring
-description: "The authoring discipline for every file operation and code write in this repository: the write/raw-write/edit tool API, byte integrity, git checks-only, and the atomized style (one definition per file, nameless default exports, full-word PascalCase names, inlined single-use bindings, switch (true) guards)."
-whenToUse: Before every file modification and code-writing task, including docs, scripts, and manifests; also when a write might contain a deliberate unicode glyph, a bulk transformation is proposed, or a commit is requested.
+description: "Authoring discipline for every file operation and code write in this repository: the write/raw-write/edit tool API, byte integrity, git checks-only, and the atomized style (one definition per file, nameless default exports, full-word PascalCase names, inlined single-use bindings, switch (true) guards)."
+whenToUse: Before every file modification and code-writing task, including docs, scripts, and manifests; also when a write may hold a deliberate unicode glyph, a bulk transformation is proposed, or a commit is requested.
 version: 2.0.0
 updated: 2026-10-20
 ---

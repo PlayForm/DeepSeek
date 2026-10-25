@@ -28,7 +28,11 @@ workspace's claims - the qualified freshness, the OutcomeEvidence, the justified
   dependency changes (an fs/observed event through the factory's Wire, or an explicit
   `invalidate(key)`), every dependent object goes stale in one pass (the incremental-computation
   principle - the Acar seam). A stale object is never guessed back to fresh: a revalidation is a new
-  validation object, superseding the old.
+  validation object, superseding the old. A **repeat event** - the same path carrying the same
+  version within the coalescing window - runs no pass and records no line: that file state's
+  invalidation already ran (the version token identifies the state). The guard (`Function/Duplicate`,
+  the monitor's clock pattern - no timer, 2 s, the `State.Now` test seam overrides it) is on the
+  listener only; the explicit `invalidate(key)` calls are never coalesced.
 - **The honesty rule**: the service records the caller's verdict; it never invents one. The sequence
   is the service's own monotonic counter - never a wall clock.
 - **The idle-forever posture**: ships disabled (`enabled: false`), never appears in the profile's
@@ -44,7 +48,8 @@ Its own strings, prefix `evidence:` (module-owned, byte-stable), one log per mod
 `validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)`,
 `superseded <id> (sequence N)`, `stale <id> (dependency <key>)`, `no stale (dependency <key>)`,
 `ignored <path> (own actor)`, `ignored <path> (excluded)`, `ignored <path> (absent observation)`,
-`failed <path> (<reason>)`, `storage open failed: <reason>`.
+`failed <path> (<reason>)`, `storage open failed: <reason>`. A coalesced repeat event (the
+repeat-event guard) records nothing and adds no line.
 
 ## The configuration
 

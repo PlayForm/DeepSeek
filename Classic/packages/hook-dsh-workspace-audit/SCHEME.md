@@ -54,6 +54,12 @@ The fs/observed listener records the OutcomeEvidence nodes; the service's `line`
 the other services feed them; `assessment` closes the loop against the IntentSpecification's
 satisfaction contract.
 
+The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer): a repeat
+event for the same path carrying the same version within the coalescing window (2 s; the `State.Now`
+test seam overrides it) records no line - the version token identifies the file state, so the line
+for it is already recorded; a different version, or the same version after the window, is recorded
+normally. The guard lives on the listener only: the service's manual lines are never coalesced.
+
 ## 4. The ledger lines (module-owned, byte-stable)
 
 ```
@@ -71,6 +77,7 @@ storage open failed: <reason>
 
 Every line is prefixed by the factory's Append with the module identity (`audit: `). The strings
 live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.
+The repeat-event guard adds no line: a coalesced repeat event records nothing.
 
 ## The policy block (D6)
 

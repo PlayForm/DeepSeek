@@ -1,7 +1,10 @@
-SVG comes with the **getTotalLength()** and **getPointAtLength()** methods, which are useful for animations or adding markers at the paths.
-Calculating these values using Node or the Canvas element can be quite complicated. This library allows doing this and more things.
-View on [Github](https://github.com/rveciana/svg-path-properties)
+SVG comes with the **getTotalLength()** and **getPointAtLength()** methods, which are useful for
+animations or adding markers at the paths. Calculating these values using Node or the Canvas element
+can be quite complicated. This library allows doing this and more things. View on
+[Github](https://github.com/rveciana/svg-path-properties)
+
 ## Usage
+
 The usage is very simple, just pass the path into the class and call the needed methods:
 
 ```
@@ -14,13 +17,16 @@ The usage is very simple, just pass the path into the class and call the needed 
   var allProperties = properties.getPropertiesAtLength(200);
 ```
 
-  * **getTotalLength()** gives the length of the path in pixels, as in the SVG function
-  * **getPointAtLength(pixels)** gives the position of the path at the _pixels_ distance, as in the SVG function
-  * **getTangentAtLength(pixels)** gives the normalized tangent of the path at the _pixels_ distance. SVG hasn't got this function
-  * **getPropertiesAtLength(pixels)** gives the position of the path and the normalized at the _pixels_ distance, so the function has to be calculated once for performance reasons
-
+- **getTotalLength()** gives the length of the path in pixels, as in the SVG function
+- **getPointAtLength(pixels)** gives the position of the path at the _pixels_ distance, as in the
+  SVG function
+- **getTangentAtLength(pixels)** gives the normalized tangent of the path at the _pixels_ distance.
+  SVG hasn't got this function
+- **getPropertiesAtLength(pixels)** gives the position of the path and the normalized at the
+  _pixels_ distance, so the function has to be calculated once for performance reasons
 
 ## Install
+
 To use it with npm, just type:
 
 ```
@@ -34,17 +40,18 @@ To it in the browser, add:
 ```
 
 ## Tests and examples
-  * [Visual tests for all path types](https://geoexamples.com/svg-path-properties/tests.html)
-  * [Canvas + getTotalLength() application: Animated path on a map](tests.htmlhttp://bl.ocks.org/rveciana/209fa7efeb01f05fa4a544a76ac8ed91)
-  * [Point-along-a-path example made with Canvas instead of SVG](http://bl.ocks.org/rveciana/77655c3c0e3073c19da34af6dc84c4b9)
 
+- [Visual tests for all path types](https://geoexamples.com/svg-path-properties/tests.html)
+- [Canvas + getTotalLength() application: Animated path on a map](tests.htmlhttp://bl.ocks.org/rveciana/209fa7efeb01f05fa4a544a76ac8ed91)
+- [Point-along-a-path example made with Canvas instead of SVG](http://bl.ocks.org/rveciana/77655c3c0e3073c19da34af6dc84c4b9)
 
 ## Credits
-To calculate the functions and parsing the paths, I've taken information and code from several places. They are basically these
-  * <http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5>
-  * <https://gist.github.com/tunght13488/6744e77c242cc7a94859>
-  * <http://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier>
-  * <http://pomax.github.io/bezierinfo>
-  * <https://github.com/jkroso/parse-svg-path>
 
+To calculate the functions and parsing the paths, I've taken information and code from several
+places. They are basically these
 
+- <http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5>
+- <https://gist.github.com/tunght13488/6744e77c242cc7a94859>
+- <http://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier>
+- <http://pomax.github.io/bezierinfo>
+- <https://github.com/jkroso/parse-svg-path>

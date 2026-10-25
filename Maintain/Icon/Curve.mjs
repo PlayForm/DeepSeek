@@ -77,11 +77,11 @@ export const waveRing = ({ Radius, Amplitude = 1.5, Lobes = 8, Samples = 288, Ph
 };
 
 /** A circle sampled from the same angle convention (so the outline pass is uniform). */
-export const circle = ({ Radius, Samples = 64, Phase = 0 }) =>
+export const circle = ({ Radius, Samples = 48, Phase = 0 }) =>
 	superellipse({ Radius, Power: 2, Samples, Phase });
 
 /** A partial arc, as an open polyline. */
-export const arc = ({ Radius, From, To, Samples = 48 }) => {
+export const arc = ({ Radius, From, To, Samples = 24 }) => {
 	const Points = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {
 		const Angle = From + ((To - From) * Index) / Samples;
@@ -98,7 +98,7 @@ export const dotRing = ({ Radius, Count, Dot = 1.4, OffsetAngle = 0 }) => {
 		const Centre = at(Angle, Radius);
 		const Radians = (Angle * Math.PI) / 180;
 		const Ring = [];
-		for (let Step = 0; Step < 8; Step += 1) {
+		for (let Step = 0; Step < 6; Step += 1) {
 			const Turn = (Step * 2 * Math.PI) / 16;
 			Ring.push({ x: Centre.x + Dot * Math.cos(Turn), y: Centre.y + Dot * Math.sin(Turn) });
 		}
@@ -128,7 +128,7 @@ export const phyllotaxis = ({ Count, Inner, Outer, Dot = 1.2 }) => {
 		const Centre = at(Angle, Radius);
 		const Ring = [];
 		for (let Step = 0; Step < 8; Step += 1) {
-			const Turn = (Step * 2 * Math.PI) / 12;
+			const Turn = (Step * 2 * Math.PI) / 6;
 			Ring.push({ x: Centre.x + Dot * Math.cos(Turn), y: Centre.y + Dot * Math.sin(Turn) });
 		}
 		Points.push(Ring);
@@ -144,7 +144,7 @@ export const phyllotaxis = ({ Count, Inner, Outer, Dot = 1.2 }) => {
 // ---------------------------------------------------------------------------
 
 /** A ray: an open spike from the inner radius to a sharp tip, optionally bent. */
-export const ray = ({ Angle, Inner, Outer, Bend = 0, Samples = 12 }) => {
+export const ray = ({ Angle, Inner, Outer, Bend = 0, Samples = 8 }) => {
 	const Points = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {
 		const Ratio = Index / Samples;
@@ -159,7 +159,7 @@ export const ray = ({ Angle, Inner, Outer, Bend = 0, Samples = 12 }) => {
 export const needle = ({ Angle, Inner, Outer }) => [at(Angle, Inner), at(Angle, Outer)];
 
 /** A hook: an open S that curls into the centre and stops. */
-export const hook = ({ Angle, Radius, Curl = 0.55, Direction = 1, Spread = 72, Samples = 18 }) => {
+export const hook = ({ Angle, Radius, Curl = 0.55, Direction = 1, Spread = 72, Samples = 12 }) => {
 	const Points = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {
 		const Ratio = Index / Samples;
@@ -171,7 +171,7 @@ export const hook = ({ Angle, Radius, Curl = 0.55, Direction = 1, Spread = 72, S
 };
 
 /** A spiral: an open stroke that winds inward and stops at the centre. */
-export const spiral = ({ Angle, Radius, Turns = 1.4, Samples = 40, Direction = 1 }) => {
+export const spiral = ({ Angle, Radius, Turns = 1.4, Samples = 20, Direction = 1 }) => {
 	const Points = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {
 		const Ratio = Index / Samples;
@@ -181,7 +181,7 @@ export const spiral = ({ Angle, Radius, Turns = 1.4, Samples = 40, Direction = 1
 };
 
 /** A cusp: two arcs meeting at a sharp point, open at the base. */
-export const cusp = ({ Angle, Radius, Spread = 26, Rise = 4, Samples = 10 }) => {
+export const cusp = ({ Angle, Radius, Spread = 26, Rise = 4, Samples = 8 }) => {
 	const Left = [];
 	const Right = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {

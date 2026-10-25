@@ -21,6 +21,11 @@ malformed-event containment, and the fail-loud validation.
 - W4: an excluded segment, the own actor, and a malformed event - each with
   its byte-exact line; the listener path touches zero file content.
 - W5: maxEntries, domain, and exclude fail loud at load.
+- W6: the repeat-event guard (Function/Duplicate) - a repeat event for the
+  same path carrying the same version within the coalescing window is
+  dropped silently (one revision advance, one `indexed` line); a different
+  version is processed normally; the same version after the window (via the
+  `State.Now` clock seam) is processed again.
 
 ## Expected ledger strings (byte-exact, `semantics: ` prefix)
 
@@ -34,4 +39,4 @@ malformed-event containment, and the fail-loud validation.
 
 ## Expected count
 
-17 PASS.
+20 PASS.

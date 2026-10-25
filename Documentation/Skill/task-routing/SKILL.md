@@ -1,7 +1,13 @@
 ---
 name: task-routing
-description: "The model-routing policy for every delegation: the three-model catalog, difficulty-first classification, closed routing table, attempts ladder, spec requirements, and the adjudication protocol that makes cheap exploration safe."
-whenToUse: Before every subagent call, workflow agent() call, or any decision about which model and reasoning effort to use; also when a delegation fails and you must decide whether to retry or escalate.
+description:
+    "The model-routing policy for every delegation: the three-model catalog, difficulty-first
+    classification, closed routing table, attempts ladder, spec requirements, and the adjudication
+    protocol that makes cheap exploration safe."
+whenToUse:
+    Before every subagent call, workflow agent() call, or any decision about which model and
+    reasoning effort to use; also when a delegation fails and you must decide whether to retry or
+    escalate.
 version: 2.2.0
 updated: 2026-10-25
 ---
