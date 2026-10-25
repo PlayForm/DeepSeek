@@ -271,6 +271,7 @@ export const runTest = async (): Promise<number> => {
 				factory.SharedJournal = undefined;
 				factory.SharedJournals = undefined;
 				factory.PendingJournal = [];
+				services["pluginFactory"] = factory;
 				const stOpt: any = factory.State(
 					ctx,
 					{ logFile: Ledger },

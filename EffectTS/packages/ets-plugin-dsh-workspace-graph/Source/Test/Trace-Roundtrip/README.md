@@ -21,9 +21,10 @@ one plugin reaches another plugin's adapter without either importing the other.
   first index invalidates nothing.
 - T3: the packet carries the real revision (`@ 4`); a repeated identical query
   is served from the memo (same object, no second ledger line).
-- T4: a COALESCED PAIR of observations (one file written once, two stamps)
-  produces exactly ONE re-index through the loop; the observe stamp line is
-  byte-exact and its envelope is on the bus; the graph emits
+- T4: a COALESCED PAIR of observations (one file written once; the observe hook
+  coalesces the repeat event, so ONE stamp line) produces exactly ONE re-index
+  through the loop; the observe stamp line is byte-exact and its envelope is on
+  the bus; the graph emits
   `graph/invalidated` (reason `replaced`, the previous version) and
   `graph/indexed` (the new revision).
 - T5: the context's `graph/invalidated` consumer cleared the memo - the next
@@ -61,8 +62,8 @@ are unchanged.
 
 ## Edge cases
 
-- A coalesced pair: two stamps, one re-index (the loop drops the in-flight
-  duplicate).
+- A coalesced pair: one stamp (the observe hook drops the repeat event with the
+  same version inside the coalescing window), one re-index.
 - An absent observation: invalidated, never re-indexed.
 - The disposer: the graph stops hearing the bus; the source keeps recording.
 - The memo is cleared wholesale on any invalidation (a packet may cite any

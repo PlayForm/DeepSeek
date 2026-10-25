@@ -1,4 +1,5 @@
-import { stream } from "./Prng.mjs";
+import { familyFor } from "./Motif.mjs";
+import { digest, stream } from "./Prng.mjs";
 
 const Grammars = {
 	hook: "spike-star",
@@ -47,14 +48,9 @@ export const planOf = (Genome) => {
 	const Evolution = Genome.mutations ?? { rings: 0, ticks: 0 };
 	const Arms = armsOf(Features);
 
-	const Order =
-		Grammar === "spike-star"
-			? Arms
-			: Grammar === "crescent-ring"
-				? Random.pick([4, 6, 8, 12])
-				: Grammar === "interlace-tile"
-					? Random.pick([4, 4, 8])
-					: Random.pick([4, 4, 4, 8]);
+	const Motif = stream(digest(`${String(Genome.dir ?? "").replace(/^ets-/, "")}motif`));
+	const Family = familyFor(Genome.kind, Motif);
+	const Order = Motif.pick([4, 6, 6, 8, 8, 8, 12]);
 
 	const Variant = Random.pick([0, 1, 2]);
 	const Rim =
@@ -106,6 +102,7 @@ export const planOf = (Genome) => {
 
 	return {
 		grammar: Grammar,
+		family: Family,
 		variant: Variant,
 		order: Order,
 		arms: Arms,

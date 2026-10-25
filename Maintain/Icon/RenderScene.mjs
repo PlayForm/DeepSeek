@@ -14,7 +14,7 @@ import { sceneOf } from "./Transliterate.mjs";
 const TONES = ["ink", "accent", "accent2"];
 
 const sceneFor = (Genome, Plan) => {
-	const Scene = sceneOf(Genome, Plan, Genome.manifest ?? { tokens: {} });
+	const Scene = sceneOf(Genome, Plan);
 	return Scene.components.map((Component) => ({
 		...buildComponent(Component),
 		fill: Component.fill,

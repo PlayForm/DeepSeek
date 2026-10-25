@@ -213,7 +213,6 @@ const runTest = async () => {
     });
     Check(Count, "T4: the observe stamp is recorded byte-exactly and carried on the bus", () => {
       assert.deepEqual(LinesWith(Run, `observe: stamped ${CorePath}`), [
-        `observe: stamped ${CorePath} version v2 (fs/observed)`,
         `observe: stamped ${CorePath} version v2 (fs/observed)`
       ]);
       const Stamp = Run.Trace.ring().find((Envelope) => Envelope.kind === Names.observe);

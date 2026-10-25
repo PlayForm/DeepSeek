@@ -156,6 +156,50 @@ const spiralAt = (X, Y, Radius, Turns, Samples = 14) => {
 	return Points;
 };
 
+const hexagon = (Radius, Phase = 0) => polygon(6, Radius, Phase);
+
+const diamondAt = (Angle, Radius, Size, Phase = 0) => {
+	const Centre = at(Angle, Radius);
+	const Points = [];
+	for (let Index = 0; Index < 4; Index += 1) {
+		Points.push(around(Centre.x, Centre.y, Size, Phase + Index * 90));
+	}
+	return Points;
+};
+
+const cellAt = (Centre, Size, Corners = 8, Phase = 0) => {
+	const Points = [];
+	for (let Index = 0; Index < Corners; Index += 1) {
+		Points.push(around(Centre.x, Centre.y, Size, Phase + (Index * 360) / Corners));
+	}
+	return Points;
+};
+
+const cellsOf = (Box, Depth, Random, Out = []) => {
+	if (Depth <= 0 || Math.min(Box.w, Box.h) < 9) {
+		Out.push(Box);
+		return Out;
+	}
+	const Ratio = 0.38 + (Random.next() % 25) / 100;
+	if (Box.w >= Box.h) {
+		const Left = Box.w * Ratio;
+		cellsOf({ x: Box.x, y: Box.y, w: Left, h: Box.h }, Depth - 1, Random, Out);
+		cellsOf({ x: Box.x + Left, y: Box.y, w: Box.w - Left, h: Box.h }, Depth - 1, Random, Out);
+	} else {
+		const Top = Box.h * Ratio;
+		cellsOf({ x: Box.x, y: Box.y, w: Box.w, h: Top }, Depth - 1, Random, Out);
+		cellsOf({ x: Box.x, y: Box.y + Top, w: Box.w, h: Box.h - Top }, Depth - 1, Random, Out);
+	}
+	return Out;
+};
+
+const rectOf = (Box) => [
+	{ x: Box.x, y: Box.y },
+	{ x: Box.x + Box.w, y: Box.y },
+	{ x: Box.x + Box.w, y: Box.y + Box.h },
+	{ x: Box.x, y: Box.y + Box.h },
+];
+
 export const Ornament = {
 	at,
 	around,
@@ -173,6 +217,11 @@ export const Ornament = {
 	tick,
 	wedge,
 	spiralAt,
+	hexagon,
+	diamondAt,
+	cellAt,
+	cellsOf,
+	rectOf,
 };
 
 const spikeStar = ({ Order }) => {
@@ -203,6 +252,17 @@ const spikeStar = ({ Order }) => {
 			closed: true,
 			width: 0.7,
 			method: "bead",
+			layer: "detail",
+			tone: "accent2",
+		});
+	}
+	for (let Index = 0; Index < 4; Index += 1) {
+		Parts.push({
+			key: `mid-${Index}`,
+			points: diamondAt(45 + Index * 90, 26, 2.8),
+			closed: true,
+			width: 0.9,
+			method: "mid-diamond",
 			layer: "detail",
 			tone: "accent2",
 		});
@@ -240,6 +300,17 @@ const quatrefoil = () => {
 		layer: "core",
 		tone: "accent",
 	});
+	for (let Index = 0; Index < 4; Index += 1) {
+		Parts.push({
+			key: `mid-${Index}`,
+			points: circleAt(Index * 90, 33, 1.7, 8),
+			closed: true,
+			width: 0.9,
+			method: "mid-bead",
+			layer: "detail",
+			tone: "accent2",
+		});
+	}
 	return Parts;
 };
 
@@ -369,7 +440,7 @@ const crossStar = () => {
 			key: `arm-${Index}`,
 			points: spike({ Angle: Index * 90, Inner: 7, Outer: 45, HalfWidth: 5 }),
 			closed: true,
-			width: 1.1,
+			width: 1.5,
 			join: "miter",
 			method: "spike-arm",
 			layer: "body",
@@ -426,6 +497,15 @@ const scallopRing = ({ Order }) => {
 			method: "square-core",
 			layer: "core",
 			tone: "accent",
+		},
+		{
+			key: "mid",
+			points: ring(31, 32),
+			closed: true,
+			width: 0.8,
+			method: "mid-ring",
+			layer: "detail",
+			tone: "accent2",
 		},
 	];
 };
@@ -612,6 +692,107 @@ const trellisKnot = () => {
 	];
 };
 
+const divisionTile = ({ Order, Random }) => {
+	const Depth = Order >= 12 ? 4 : Order >= 6 ? 3 : 2;
+	const Cells = cellsOf({ x: 20, y: 20, w: 60, h: 60 }, Depth, Random);
+	const Parts = [
+		{
+			key: "frame",
+			points: polygon(4, 44, 45),
+			closed: true,
+			width: 1.6,
+			join: "miter",
+			method: "square-frame",
+			layer: "frame",
+		},
+	];
+	Cells.forEach((Box, Index) => {
+		Parts.push({
+			key: `cell-${Index}`,
+			points: rectOf(Box),
+			closed: true,
+			width: 0.8,
+			method: "division-cell",
+			layer: "detail",
+			tone: "accent2",
+		});
+		const Centre = { x: Box.x + Box.w / 2, y: Box.y + Box.h / 2 };
+		const Size = Math.min(Box.w, Box.h) * 0.26;
+		if (Size > 1.4) {
+			Parts.push({
+				key: `seed-${Index}`,
+				points: cellAt(Centre, Size, Index % 2 === 0 ? 8 : 4, Index % 2 === 0 ? 0 : 45),
+				closed: true,
+				width: 1.0,
+				method: "division-seed",
+				layer: "body",
+			});
+		}
+	});
+	Parts.push({
+		key: "core",
+		points: polygon(4, 6, 45),
+		closed: true,
+		width: 1.1,
+		method: "square-core",
+		layer: "core",
+		tone: "accent",
+	});
+	return Parts;
+};
+
+const isometricTiles = () => {
+	const Centre = { x: 50, y: 52 };
+	const Radius = 34;
+	const Vertices = Array.from({ length: 6 }, (_, Index) =>
+		around(Centre.x, Centre.y, Radius, 30 + Index * 60),
+	);
+	const Inner = Array.from({ length: 6 }, (_, Index) =>
+		around(Centre.x, Centre.y, 13, 30 + Index * 60),
+	);
+	const Parts = [
+		{
+			key: "base",
+			points: Vertices,
+			closed: true,
+			width: 1.6,
+			join: "miter",
+			method: "isometric-base",
+			layer: "frame",
+		},
+	];
+	for (let Index = 0; Index < 3; Index += 1) {
+		Parts.push({
+			key: `face-${Index}`,
+			points: [Vertices[Index * 2], Vertices[Index * 2 + 1], Vertices[(Index * 2 + 2) % 6], Centre],
+			closed: true,
+			width: 1.1,
+			method: "isometric-face",
+			layer: "body",
+			tone: Index === 0 ? "accent" : Index === 1 ? "accent2" : "ink",
+		});
+	}
+	Parts.push({
+		key: "inner",
+		points: Inner,
+		closed: true,
+		width: 1.2,
+		join: "miter",
+		method: "isometric-inner",
+		layer: "body",
+	});
+	Parts.push({
+		key: "core",
+		points: polygon(6, 5, 30),
+		closed: true,
+		width: 1.0,
+		method: "isometric-core",
+		layer: "core",
+		tone: "accent",
+	});
+	return Parts;
+};
+
 const Families = {
 	spikeStar,
 	quatrefoil,
@@ -625,13 +806,50 @@ const Families = {
 	teardropOrbit,
 	chevronRing,
 	trellisKnot,
+	divisionTile,
+	isometricTiles,
 };
 
 const ByKind = {
-	hook: ["spikeStar", "chevronRing", "crossStar", "crescentRing", "teardropOrbit", "octagonStar"],
-	plugin: ["diamondLattice", "knotSquare", "trellisKnot", "scallopRing", "quatrefoil", "octagonStar"],
-	client: ["quatrefoil", "rosette", "scallopRing", "diamondLattice", "trellisKnot"],
-	lib: ["crescentRing", "rosette", "octagonStar", "knotSquare", "spikeStar", "teardropOrbit"],
+	hook: [
+		"spikeStar",
+		"chevronRing",
+		"crossStar",
+		"crescentRing",
+		"teardropOrbit",
+		"octagonStar",
+		"divisionTile",
+		"isometricTiles",
+	],
+	plugin: [
+		"diamondLattice",
+		"knotSquare",
+		"trellisKnot",
+		"scallopRing",
+		"quatrefoil",
+		"octagonStar",
+		"divisionTile",
+		"isometricTiles",
+	],
+	client: [
+		"quatrefoil",
+		"rosette",
+		"scallopRing",
+		"diamondLattice",
+		"trellisKnot",
+		"divisionTile",
+		"isometricTiles",
+	],
+	lib: [
+		"crescentRing",
+		"rosette",
+		"octagonStar",
+		"knotSquare",
+		"spikeStar",
+		"teardropOrbit",
+		"isometricTiles",
+		"divisionTile",
+	],
 };
 
 export const familyFor = (Kind, Random) => {

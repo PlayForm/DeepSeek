@@ -1,323 +1,234 @@
-// Transliterate.mjs - the code-to-visual translation: semantic tokens in, a
-// layered scene of components out (and, through Lexicon.readLayer, back).
+// Transliterate.mjs - the code-to-visual translation.
 //
-// Each lexicon entry owns a layer and a glyph. A token's NAME decides its angle
-// (angleOf), so the same gate lands in the same place on every build; the token
-// count decides how many glyphs; the zone decides the radius band. The body
-// always carries the grammar's anchor ring, so the icon still reads as its kind.
+// Takes one package's plan (motif family, symmetry, style) and its inferred
+// semantic tokens, and emits the component scene. The motif supplies the
+// construction; every semantic fact the package actually has attaches one
+// further layer: a medallion for the service it provides, halo rings for the
+// services it injects, gate loops for the events it subscribes to, seam ticks
+// for its ordering seams, ledger beads for its ledger lines, and wedge cutouts
+// for the paths it refuses.
 
-import { arc, circle, cusp, hook, lobedRing, spiral, superellipse } from "./Curve.mjs";
-import { angleOf, Lexicon } from "./Lexicon.mjs";
-import { stream } from "./Prng.mjs";
+import { rotatePoints, scalePoints } from "./Envelope.mjs";
+import { angleOf } from "./Lexicon.mjs";
+import { familyOf, Ornament } from "./Motif.mjs";
+import { digest, stream } from "./Prng.mjs";
 
-const at = (Angle, Radius) => ({
-	x: 50 + Radius * Math.cos((Angle * Math.PI) / 180),
-	y: 50 + Radius * Math.sin((Angle * Math.PI) / 180),
-});
+const Weight = (Layer) => (Layer === "frame" || Layer === "body" ? 1.4 : 1.2);
 
-const dot = (X, Y, Radius = 1.2) => {
-	const Points = [];
-	for (let Step = 0; Step < 6; Step += 1) {
-		const Angle = (Step * 2 * Math.PI) / 6;
-		Points.push({ x: X + Radius * Math.cos(Angle), y: Y + Radius * Math.sin(Angle) });
-	}
-	return Points;
-};
-
-const part = (id, centerline, options = {}) => ({
-	id,
-	centerline,
-	geometry: { method: options.method ?? "token", topology: options.topology ?? "open" },
+const piece = (Id, Points, Options = {}) => ({
+	id: Id,
+	centerline: Points,
+	geometry: {
+		method: Options.method ?? "motif",
+		topology: Options.closed === false ? "open" : "closed",
+	},
 	stroke: {
-		width: options.width ?? 1.6,
-		join: options.join ?? "round",
-		start: options.start ?? "butt",
-		end: options.end ?? "butt",
-		outlineWidth: 0.7,
-		widthProfile: options.widthProfile ?? "constant",
+		width: Math.round((Options.width ?? 1.4) * Weight(Options.layer) * 10) / 10,
+		join: Options.join ?? "round",
+		start: Options.start ?? "butt",
+		end: Options.end ?? "butt",
+		outlineWidth: Options.outline ?? 0.7,
+		widthProfile: Options.profile ?? "constant",
 	},
 	composition: {
-		operation: options.operation ?? "paint",
-		collisionGroup: options.group ?? "body",
+		operation: Options.operation ?? "paint",
+		collisionGroup: Options.layer ?? "body",
 	},
-	material: { tone: options.tone ?? "ink" },
-	...(options.cutout === undefined ? {} : { cutout: options.cutout }),
-	...(options.decorate === undefined ? {} : { decorate: options.decorate }),
+	material: { tone: Options.tone ?? "ink" },
+	...(Options.cutout === undefined ? {} : { cutout: Options.cutout }),
+	...(Options.fill === undefined ? {} : { fill: Options.fill }),
 });
 
-/** The grammar's anchor ring, always present: the icon still reads as its kind. */
-const anchorOf = (Plan) => {
-	if (Plan.grammar === "interlace-tile") {
-		return part(
-			"anchor",
-			superellipse({ Radius: 28, Power: Plan.variant === 1 ? 3 : 4, Samples: 64, Phase: 45 }),
-			{
-				method: "closed-ring",
-				topology: "closed",
-				width: 1.8,
-				join: "miter",
-			},
-		);
+const motifOf = (Plan, Seed) => {
+	const Random = stream(digest(`${Seed}motif`));
+	const Parts = familyOf(Plan.family, { Order: Plan.order, Seed, Random });
+	const Phase =
+		Plan.family === "divisionTile" || Plan.family === "isometricTiles"
+			? 0
+			: Random.pick([0, 15, 30, 45, 60, 90]);
+	const Scale = 0.92 + (Random.next() % 9) / 100;
+	return Parts.map((Part) => ({
+		...Part,
+		points: scalePoints(rotatePoints(Part.points, Phase), Scale),
+	}));
+};
+
+const semanticsOf = (Tokens, Plan, Seed) => {
+	const Parts = [];
+	const Gates = Tokens.gate ?? [];
+	const Seams = Tokens.seam ?? [];
+	const Ledger = Tokens.ledger ?? [];
+	const Services = Tokens.service ?? [];
+	const Injections = Tokens.injection ?? [];
+	const Tools = Tokens.tool ?? [];
+	const Streams = Tokens.stream ?? [];
+	const States = Tokens.state ?? [];
+	const Transforms = Tokens.transform ?? [];
+
+	for (let Index = 0; Index < Math.min(2, Injections.length); Index += 1) {
+		Parts.push({
+			key: `inject-${Index}`,
+			points: Ornament.ring(15 + Index * 3, 36),
+			closed: true,
+			width: 0.7,
+			method: "injection-ring",
+			layer: "core",
+			tone: "accent2",
+		});
 	}
-	if (Plan.grammar === "quatrefoil") {
-		return part(
-			"anchor",
-			lobedRing({
-				Lobes: Plan.order === 8 ? 8 : 4,
-				Inner: 10,
-				Amplitude: 20,
-				Power: 2,
-				Samples: 96,
-			}),
-			{
-				method: "closed-ring",
-				topology: "closed",
-				width: 1.8,
-				join: "round",
-			},
-		);
+	Gates.slice(0, 6).forEach((Name, Index) => {
+		Parts.push({
+			key: `gate-${Index}`,
+			points: Ornament.loop(angleOf(Name, Seed), 30, 2.4),
+			closed: true,
+			width: 0.9,
+			method: "gate-loop",
+			layer: "detail",
+			tone: "accent",
+		});
+	});
+	const SeamCount = Math.min(8, Seams.length);
+	for (let Index = 0; Index < SeamCount; Index += 1) {
+		Parts.push({
+			key: `seam-${Index}`,
+			points: Ornament.tick((Index * 360) / SeamCount + 11, 31, 2.5),
+			closed: false,
+			width: 1.0,
+			method: "seam-tick",
+			layer: "detail",
+			tone: "accent2",
+		});
 	}
-	if (Plan.grammar === "crescent-ring") {
-		return part(
-			"anchor",
-			lobedRing({ Lobes: Plan.order, Inner: 16, Amplitude: 11, Power: 2, Samples: 96 }),
-			{
-				method: "closed-ring",
-				topology: "closed",
-				width: 1.8,
-				join: "round",
-			},
-		);
+	const LedgerCount = Math.min(10, Ledger.length);
+	for (let Index = 0; Index < LedgerCount; Index += 1) {
+		Parts.push({
+			key: `ledger-${Index}`,
+			points: Ornament.circleAt((Index * 360) / LedgerCount + 7, 29, 0.9, 6),
+			closed: true,
+			width: 0.6,
+			method: "ledger-bead",
+			layer: "detail",
+			tone: "accent2",
+		});
 	}
-	return part(
-		"anchor",
-		lobedRing({ Lobes: Plan.order, Inner: 10, Amplitude: 20, Power: 4, Samples: 96 }),
-		{
-			method: "closed-ring",
-			topology: "closed",
-			width: 1.8,
-			join: "miter",
-		},
+	Tools.slice(0, 6).forEach((Name, Index) => {
+		Parts.push({
+			key: `tool-${Index}`,
+			points: Ornament.circleAt(angleOf(Name, Seed + 3), 26, 1.4, 6),
+			closed: true,
+			width: 0.7,
+			method: "tool-bead",
+			layer: "detail",
+			tone: "accent",
+		});
+	});
+	if (Streams.length > 0) {
+		Parts.push({
+			key: "stream",
+			points: Ornament.spiralAt(50, 50, 13, 0.9, 12),
+			closed: false,
+			width: 1.0,
+			method: "stream-spiral",
+			layer: "body",
+			tone: "accent2",
+		});
+	}
+	if (States.length > 0) {
+		Parts.push({
+			key: "state-1",
+			points: Ornament.ring(5, 16),
+			closed: true,
+			width: 1.0,
+			method: "state-nest",
+			layer: "core",
+			tone: "accent2",
+		});
+		Parts.push({
+			key: "state-2",
+			points: Ornament.ring(7.5, 20),
+			closed: true,
+			width: 0.8,
+			method: "state-nest",
+			layer: "core",
+			tone: "accent2",
+		});
+	}
+	if (Transforms.length > 0) {
+		Parts.push({
+			key: "transform-a",
+			points: Ornament.spike({ Angle: 0, Inner: 36, Outer: 46, HalfWidth: 2 }),
+			closed: true,
+			width: 0.9,
+			method: "transform-cusp",
+			layer: "detail",
+			tone: "accent",
+		});
+		Parts.push({
+			key: "transform-b",
+			points: Ornament.spike({ Angle: 180, Inner: 36, Outer: 46, HalfWidth: 2 }),
+			closed: true,
+			width: 0.9,
+			method: "transform-cusp",
+			layer: "detail",
+			tone: "accent",
+		});
+	}
+	return { parts: Parts, services: Services.length };
+};
+
+export const sceneOf = (Genome, Plan) => {
+	const Manifest = Genome.manifest ?? { tokens: {} };
+	const Tokens = Manifest.tokens ?? {};
+	const Seed = Number.parseInt(String(Genome.seed).slice(0, 6), 16) || 1;
+	const Motif = motifOf(Plan, Seed);
+	const { parts, services } = semanticsOf(Tokens, Plan, Seed);
+	const Traces = Tokens.trace ?? [];
+	const Fill = Plan.fill === "none" ? undefined : Plan.fill;
+
+	if (Traces.length > 0) {
+		const Body = Motif.find((Part) => Part.layer === "body");
+		if (Body !== undefined) {
+			parts.push({
+				key: "trace",
+				points: scalePoints(Body.points, 1.06),
+				closed: Body.closed,
+				width: 0.6,
+				method: "trace-echo",
+				layer: "frame",
+				tone: "accent2",
+			});
+		}
+	}
+	if (services > 0 && !Motif.some((Part) => Part.layer === "core")) {
+		parts.push({
+			key: "medallion",
+			points: Ornament.ring(10 + Math.min(2, services), 28),
+			closed: true,
+			width: 1.4,
+			method: "medallion",
+			layer: "core",
+			fill: Fill,
+		});
+	}
+
+	const Raw = [...Motif, ...parts];
+	const Components = Raw.map((Part, Index) =>
+		piece(Part.key ?? `part-${Index}`, Part.points, Part),
 	);
-};
-
-/** One lexicon entry's glyphs, placed by the tokens' own names. */
-const glyphsOf = (Entry, Values, Plan, Seed, Random) => {
-	const Count = Entry.count(Values);
-	const Components = [];
-	switch (Entry.glyph) {
-		case "hook":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = angleOf(Values[Index], Seed);
-				Components.push(
-					part(`gate-${Index}`, hook({ Angle, Radius: 27, Spread: 58, Samples: 12 }), {
-						method: "hook",
-						width: 1.8,
-						tone: Index % 2 === 0 ? "ink" : "accent",
-						group: "gate",
-					}),
-				);
-			}
-			break;
-		case "bead":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = angleOf(Values[Index], Seed);
-				const Position = at(Angle, 42);
-				Components.push(
-					part(`tool-${Index}`, dot(Position.x, Position.y, 1.2), {
-						method: "bead",
-						topology: "closed",
-						width: 0.6,
-						tone: "accent",
-						group: "tool",
-					}),
-				);
-			}
-			break;
-		case "beads":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = (Index * 360) / Count + 15;
-				const Position = at(Angle, 32);
-				Components.push(
-					part(`ledger-${Index}`, dot(Position.x, Position.y, 0.7), {
-						method: "bead",
-						topology: "closed",
-						width: 0.5,
-						tone: "accent2",
-						group: "ledger",
-					}),
-				);
-			}
-			break;
-		case "void":
-			Components.push(
-				part("service", superellipse({ Radius: 6, Power: 1, Samples: 32, Phase: 45 }), {
-					method: "void",
-					topology: "closed",
-					width: 1.4,
-					join: "miter",
-					tone: "accent",
-					group: "core",
-				}),
-			);
-			break;
-		case "ring":
-			for (let Index = 0; Index < Count; Index += 1) {
-				Components.push(
-					part(`inject-${Index}`, circle({ Radius: 32.5 + Index * 1.5, Samples: 48 }), {
-						method: "ring",
-						topology: "closed",
-						width: 1.1,
-						tone: "accent",
-						group: "evolution",
-					}),
-				);
-			}
-			break;
-		case "tick":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = (Index * 360) / Count;
-				Components.push(
-					part(`seam-${Index}`, [at(Angle, 44), at(Angle, 46.5)], {
-						method: "tick",
-						width: 1.6,
-						join: "miter",
-						tone: "accent",
-						group: "seam",
-					}),
-				);
-			}
-			break;
-		case "wedgeCut": {
-			const Cutouts = [];
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = (Index * 360) / Count;
-				const Wedge = [];
-				for (let Step = 0; Step <= 4; Step += 1) {
-					const A = Angle - 4 + (Step * 8) / 4;
-					Wedge.push(at(A, 47));
-				}
-				for (let Step = 4; Step >= 0; Step -= 1) {
-					const A = Angle - 4 + (Step * 8) / 4;
-					Wedge.push(at(A, 40));
-				}
-				Cutouts.push(Wedge);
-			}
-			Components.push(
-				part("rim", superellipse({ Radius: 45, Power: 4, Samples: 64, Phase: 45 }), {
-					method: "rim",
-					topology: "closed",
-					width: 1.8,
-					join: "miter",
-					tone: "accent",
-					group: "rim",
-					cutout: Cutouts,
-				}),
-			);
-			break;
-		}
-		case "cusp":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = angleOf(Values[Index], Seed);
-				Components.push(
-					part(`transform-${Index}`, cusp({ Angle, Radius: 22, Spread: 20, Rise: 5 }), {
-						method: "cusp",
-						width: 1.6,
-						join: "miter",
-						tone: "accent",
-						group: "transform",
-					}),
-				);
-			}
-			break;
-		case "spiral":
-			for (let Index = 0; Index < Count; Index += 1) {
-				const Angle = angleOf(Values[Index], Seed);
-				Components.push(
-					part(
-						`stream-${Index}`,
-						spiral({ Angle, Radius: 27, Turns: 0.8, Samples: 18 }),
-						{ method: "spiral", width: 1.5, tone: "accent", group: "stream" },
-					),
-				);
-			}
-			break;
-		case "nest":
-			Components.push(
-				part("state-1", circle({ Radius: 5.5, Samples: 32 }), {
-					method: "nest",
-					topology: "closed",
-					width: 1.2,
-					tone: "accent",
-					group: "core",
-				}),
-			);
-			Components.push(
-				part("state-2", circle({ Radius: 3, Samples: 24 }), {
-					method: "nest",
-					topology: "closed",
-					width: 1,
-					tone: "accent2",
-					group: "core",
-				}),
-			);
-			break;
-		case "parallel": {
-			const Ring = circle({ Radius: 24, Samples: 48 });
-			Components.push(
-				part("trace-1", Ring, {
-					method: "parallel",
-					topology: "closed",
-					width: 1.1,
-					tone: "accent",
-					group: "trace",
-				}),
-			);
-			Components.push(
-				part("trace-2", circle({ Radius: 26.4, Samples: 48 }), {
-					method: "parallel",
-					topology: "closed",
-					width: 1.1,
-					tone: "accent2",
-					group: "trace",
-				}),
-			);
-			break;
-		}
-		default:
-			break;
-	}
-	return Components;
-};
-
-/** The transliteration of one package: its tokens become a layered scene. */
-export const sceneOf = (Genome, Plan, Manifest) => {
-	const Seed = Number.parseInt(Genome.seed.slice(0, 6), 16) || 1;
-	const Random = stream(`${Genome.seed}transliterate`);
-	const Components = [anchorOf(Plan)];
-	for (const Entry of Lexicon) {
-		const Values = Manifest.tokens[Entry.token] ?? [];
-		if (Values.length === 0) {
-			continue;
-		}
-		Components.push(...glyphsOf(Entry, Values, Plan, Seed, Random));
-	}
-	// the fill treatment is a per-package material, applied to the anchor
-	if (Plan.fill === "tint") {
-		Components[0].fill = "tint";
-	}
-	if (Plan.fill === "solid") {
+	if (Fill !== undefined) {
 		const Core = Components.find(
 			(Component) => Component.composition.collisionGroup === "core",
 		);
 		if (Core !== undefined) {
-			Core.fill = "solid";
+			Core.fill = Fill;
 		}
 	}
-	return { components: Components, closure: Manifest.tokens.gate.length > 0 ? "open" : "closed" };
+	return {
+		components: Components,
+		closure: (Tokens.gate ?? []).length > 0 ? "open" : "closed",
+	};
 };
 
-/** The reverse reading: the scene's layers back into semantics. */
 export const readingOf = (Scene) => {
 	const Groups = new Map();
 	for (const Component of Scene.components) {

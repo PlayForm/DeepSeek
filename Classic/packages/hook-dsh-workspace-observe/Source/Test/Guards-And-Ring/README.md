@@ -47,4 +47,4 @@ event: displayPath is not a string)`.
 
 ## Expected count
 
-19 PASS.
+18 PASS.

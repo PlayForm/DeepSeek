@@ -231,6 +231,7 @@ const runTest = async () => {
         factory.SharedJournal = void 0;
         factory.SharedJournals = void 0;
         factory.PendingJournal = [];
+        services["pluginFactory"] = factory;
         const stOpt = factory.State(
           ctx,
           { logFile: Ledger },

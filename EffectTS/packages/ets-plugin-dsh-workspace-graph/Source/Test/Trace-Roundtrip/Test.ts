@@ -252,7 +252,6 @@ export const runTest = async (): Promise<number> => {
 			// the COALESCING is the graph's loop, proven by the one re-index.
 			assert.deepEqual(LinesWith(Run, `observe: stamped ${CorePath}`), [
 				`observe: stamped ${CorePath} version v2 (fs/observed)`,
-				`observe: stamped ${CorePath} version v2 (fs/observed)`,
 			]);
 			const Stamp = Run.Trace
 				.ring()

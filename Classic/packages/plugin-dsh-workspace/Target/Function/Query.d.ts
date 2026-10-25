@@ -1,6 +1,6 @@
-import type { Node, WorkspaceGraph } from "../Interface/Graph.js";
-import type { ContextResult, ExpandResult, FindResult, MapResult } from "../Interface/Query.js";
-import type State from "../Interface/State.js";
+import type { Node, WorkspaceGraph } from "@Interface/Graph.js";
+import type { ContextResult, ExpandResult, FindResult, MapResult } from "@Interface/Query.js";
+import type State from "@Interface/State.js";
 /** The workspace_map operation (V4-1 §3.4): the top-level modules, the file
  * count, the entry points, the hot symbols. HOTNESS (the honest W1 proxy):
  * the graph has no reference counts (W2+), so a symbol is "hot" when its
