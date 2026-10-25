@@ -93,7 +93,7 @@ lands on the next judged call.
 | `patternTable`      | array   | `DEFAULT_PATTERNS`                          | volatile - `{ pattern, class, tool, note? }` rows           |
 | `notes`             | object  | `first` / `persistent` / `denied` templates | volatile - the three model-facing note texts                |
 | `fetchLive`         | boolean | `true`                                      | volatile - fetch tool data from the live registry           |
-| `maxSectionTools`   | number  | `8`                                         | volatile - the tier-2 tool-table row cap                    |
+| `maxSectionTools`   | number  | `5`                                         | volatile - the tier-2 tool-table row cap                    |
 | `sectionTtl`        | number  | `20`                                        | volatile - judged calls between tier-2 section rebuilds     |
 
 ## The ledger

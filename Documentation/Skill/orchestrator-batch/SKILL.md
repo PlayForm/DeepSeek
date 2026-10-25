@@ -2,14 +2,15 @@
 name: orchestrator-batch
 description:
     "The parent's batch orchestration: the incremental delegation loop, the two-active queue regime,
-    the spec-reconfiguration authority, the idle-amendment law, verification by the lanes' own
-    arbiters, and the resume protocol."
+    the no-blocking-wait law, the information-broker protocol, the spec-reconfiguration authority,
+    the idle-amendment law, verification by the lanes' own arbiters, the report-as-claim rule, and
+    the resume protocol."
 whenToUse:
     When running a multi-agent batch in this repository, when deciding the order or concurrency of
-    lanes, when the user gives feedback that amends a lane's spec, or when resuming a batch in a new
-    session.
-version: 2.0.0
-updated: 2026-10-20
+    lanes, when the user gives feedback that amends a lane's spec, when a lane needs recorded
+    history from earlier sessions, or when resuming a batch in a new session.
+version: 2.3.0
+updated: 2026-10-25
 ---
 
 # Orchestrator Batch
@@ -34,8 +35,10 @@ spot-checks read-only.
 3. **Pick the strain and the route** (`worker-strains`, `task-routing`).
 4. **Delegate**: an active lane, or an idle lane with a retained spec.
 5. **Monitor** the queue, the surface conflicts, stalls, and failures.
-6. **Verify** the lanes' printed arbiter results; run only read-only spot checks yourself.
+6. **Verify** the lanes' printed arbiter results, grep the artifact for every remediation the report
+   claims, and run only read-only spot checks yourself.
 7. **Report** results, residuals, decisions, and READY-TO-COMMIT.
+8. **Pair the record** (`worker-strains`, rule 8) in the slot the lane vacated.
 
 ## The two-active regime
 
@@ -47,6 +50,37 @@ spot-checks read-only.
   nudge.
 - "RE-PAUSE" stops all work now; partial state persists for the resume.
 
+## The no-blocking-wait law
+
+A delegated lane is never waited on. It runs, finishes, and reports; the report arrives as a
+message. The parent does not call `wait_agent`, sleep, or poll the task board.
+
+- Inactivity is not a result: it says nothing about success, failure, or progress.
+- The parent's next action after a dispatch is its own next unit of work. If none is left, it
+  reports progress to the user and ends its turn.
+- The board is read when the parent has a reason to act, never on a timer.
+- The incident that made this a law is recorded in `references/queue.md`.
+
+## The information broker
+
+A lane cannot ask the parent a question mid-flight: a subagent has no addressable mailbox in this
+harness (`send_message` rejects it), and it does not wait. Recorded history reaches a lane only
+through the parent, in two forms:
+
+- **Pre-supply** in the brief: the facts the lane will need from prior sessions, the ledgers, or
+  earlier agent attempts, with their coordinates.
+- **On a reported NEED**: pull the exact slice from the session corpus with the session tools
+  (`session_search`, `session_event_search`, `session_trace`, `session_event_read`) - never a whole
+  corpus read, never a guess.
+
+Shape the slice with a reformatter lane when the requester needs a specific form (a table, a
+timeline, a diff of what changed), verify the shaped output against the slice, then re-dispatch the
+requester with the shaped data as a continuation lane. A NEED report is not a failure and not a
+stall: it is a request the parent answers with a new dispatch.
+
+The broker never edits the requester's files and never paraphrases a record: the shaped data keeps
+its coordinates.
+
 ## Spec reconfiguration
 
 The parent may amend an idle lane's spec ("SPEC AMENDED - IDLE"), amend a working lane mid-flight
@@ -57,6 +91,11 @@ and re-dispatch a failed lane. Amendments override the base spec where they conf
 mid-flight. It becomes a new idle lane, and the improvement folds into a later dispatch. Working
 lanes finish against the spec they started with.
 
+**The moving-law case:** when the parent edits a law file that a working lane is reading, the lane
+must re-read it and may align its own output. On 21 October 2026 a lane detected that the standard
+changed under it, did not claim the parent's edit as its own, re-read the law, and aligned two of
+its files. That is correct behaviour, not drift.
+
 ## Verification and the non-execution law
 
 - Each lane runs its own arbiter and reports the printed numbers. The counts live in
@@ -66,6 +105,13 @@ lanes finish against the spec they started with.
 - The parent's hands-on work is limited to relaying feedback verbatim, keeping the records, and
   read-only spot checks over committed or built output.
 - Printed totals beat prose. A claim that contradicts the printed result is wrong.
+- **A report is a claim, not evidence.** Before accepting, grep the artifact for every remediation
+  the report claims. On 21 October 2026 a lane reported that its workflow used a command that
+  appeared nowhere in the tree; the sentence read as "already handled" and was false twice over.
+- **Coverage is a fraction, never a boolean.** A reviewer prints `covered N of M` and prints partial
+  as partial. A reviewer that can only report "done" will report done.
+- **A report without a state transition is an unfinished task.** If a lane reports and its task is
+  still open, close it as Lead when the owner is inactive, then dispatch its record lane.
 
 ## Resume
 
@@ -79,34 +125,49 @@ file. Handoff documents are temporary and may be erased at the session's close. 
 
 ## Decision table
 
-| Situation                   | Action                                         |
-| --------------------------- | ---------------------------------------------- |
-| More than two lanes ready   | Seat the rest idle; release as a pair          |
-| Feedback for a working lane | Pause first, then attach the amendment         |
-| A new idea mid-batch        | New idle lane, not a mid-flight amendment      |
-| A lane stalls               | Nudge with its last verified checkpoint        |
-| A lane fails                | Verify the tree, then re-dispatch with the fix |
-| The pair finishes           | Release the next pair only after both reports  |
-| A resumed session           | Read the plan and the queue, re-verify counts  |
+| Situation                                  | Action                                               |
+| ------------------------------------------ | ---------------------------------------------------- |
+| More than two lanes ready                  | Seat the rest idle; release as a pair                |
+| Feedback for a working lane                | Pause first, then attach the amendment               |
+| A new idea mid-batch                       | New idle lane, not a mid-flight amendment            |
+| A report claims a fix                      | Grep the artifact before accepting it                |
+| A lane reports with its task still open    | Close it as Lead if the owner is inactive            |
+| The parent edits a law mid-batch           | Expect working lanes to re-read and align            |
+| A lane reports a NEED for recorded history | Pull the exact slice, shape it, re-dispatch the lane |
+| A subagent must be steered mid-run         | It cannot be; amend the spec and re-dispatch         |
+| A lane stalls                              | Nudge with its last verified checkpoint              |
+| A lane is running and no own work is left  | Report progress and stop; never wait or poll         |
+| A lane fails                               | Verify the tree, then re-dispatch with the fix       |
+| The pair finishes                          | Release the next pair only after both reports        |
+| A resumed session                          | Read the plan and the queue, re-verify counts        |
 
 ## Verification
 
 - The queue record shows at most two active lanes at every point.
 - Every feedback delivery shows the pause before the amendment.
 - Every relayed report cites printed totals.
+- Every accepted report has at least one claimed remediation grepped against the artifact.
 - No build, edit, or measurement run appears under the parent's name.
+- No blocking wait, sleep, or polling loop appears after a dispatch; the parent's turn ends with its
+  own work or a progress report.
+- Every NEED report is answered with a shaped slice that keeps its coordinates, or is recorded as
+  unresolved.
 - The resume starts from the durable plan, not from a deleted handoff.
 
 ## Anti-patterns
 
-| Mistake                                 | Cost                                          | Do instead                        |
-| --------------------------------------- | --------------------------------------------- | --------------------------------- |
-| Activating a third lane "because small" | API-limit errors multiply; the batch slows    | Hold the two-active cap           |
-| Releasing the next pair early           | Overlapping surfaces and interleaved reports  | Wait for both reports             |
-| Feedback without the pause              | The lane builds on a spec about to change     | Pause, amend, execute at ACTIVATE |
-| Amending a working lane with a new idea | Rework and a lost spec boundary               | New idle lane                     |
-| Paraphrasing feedback                   | The lane fixes something the user did not say | Relay verbatim                    |
-| Accepting prose "all pass"              | A broken tree reported as done                | Read the printed totals           |
+| Mistake                                 | Cost                                               | Do instead                                   |
+| --------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| Activating a third lane "because small" | API-limit errors multiply; the batch slows         | Hold the two-active cap                      |
+| Releasing the next pair early           | Overlapping surfaces and interleaved reports       | Wait for both reports                        |
+| Feedback without the pause              | The lane builds on a spec about to change          | Pause, amend, execute at ACTIVATE            |
+| Amending a working lane with a new idea | Rework and a lost spec boundary                    | New idle lane                                |
+| Paraphrasing feedback                   | The lane fixes something the user did not say      | Relay verbatim                               |
+| Accepting prose "all pass"              | A broken tree reported as done                     | Read the printed totals                      |
+| Accepting a claimed remediation         | A phantom fix enters the record                    | Grep the artifact for it                     |
+| Reporting coverage as a boolean         | A partial record reads as complete                 | Print `covered N of M`                       |
+| Messaging a subagent mid-run            | The harness has no mailbox; the call fails         | Pre-supply in the brief, or re-dispatch      |
+| `wait_agent` after a dispatch           | Costs a turn, adds no information, reads as stress | Do the parent's own work; the report arrives |
 
 ## References
 

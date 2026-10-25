@@ -71,8 +71,8 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "config default enforceThreshold=4", () => {
 			assert.equal(Raw1.enforceThreshold.get(), 4);
 		});
-		Check(Count, "config default maxSectionTools=8", () => {
-			assert.equal(Raw1.maxSectionTools.get(), 8);
+		Check(Count, "config default maxSectionTools=5", () => {
+			assert.equal(Raw1.maxSectionTools.get(), 5);
 		});
 		Check(Count, "config default sectionTtl=20", () => {
 			assert.equal(Raw1.sectionTtl.get(), 20);

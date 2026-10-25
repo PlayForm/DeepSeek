@@ -50,7 +50,7 @@ last sweep stamp) live on the probed state.
 | `logFile`         | `~/.dsh/playform/hook-dsh-workspace-monitor.log` | the ledger                           |
 | `domain`          | `workspace_monitor`                              | the KV domain name                   |
 | `debounceMs`      | `250`                                            | the watch debounce deadline          |
-| `sweepIntervalMs` | `60000`                                          | the sweep schedule interval          |
+| `sweepIntervalMs` | `600000`                                         | the sweep schedule interval          |
 | `maxWatch`        | `500`                                            | the watch entry cap                  |
 | `policy.*`        | D6 defaults                                      | the per-action allowlist (see below) |
 

@@ -42,7 +42,7 @@ export default Compose(false, {
 	debounceMs: Schema.number().default(250).volatile(),
 	// The sweep cadence: how long an entry waits after a sweep before it
 	// becomes sweepable again. 0 sweeps at every checkpoint.
-	sweepIntervalMs: Schema.number().default(60000).volatile(),
+	sweepIntervalMs: Schema.number().default(600000).volatile(),
 	// The watch bound: the newest maxWatch entries survive (the oldest is
 	// dropped and the drop ledgered).
 	maxWatch: Schema.number().default(500).volatile(),

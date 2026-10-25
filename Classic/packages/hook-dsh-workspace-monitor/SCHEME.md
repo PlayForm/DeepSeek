@@ -8,7 +8,7 @@ The configuration schema (all knobs volatile; hot edits commit without remountin
 | `enabled`         | boolean           | `false`                                              |
 | `domain`          | string            | `workspace_monitor`                                  |
 | `debounceMs`      | number            | `250`                                                |
-| `sweepIntervalMs` | number            | `60000` (0 = sweep at every checkpoint)              |
+| `sweepIntervalMs` | number            | `600000` (0 = sweep at every checkpoint)             |
 | `maxWatch`        | number            | `500` (the oldest entry is dropped, ledgered)        |
 | `include`         | string[] (globs)  | `[]` (empty = every path watches)                    |
 | `exclude`         | string[] (globs)  | `node_modules/**`, `**/Target/**`, `**/.git/**`      |

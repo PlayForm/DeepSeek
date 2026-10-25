@@ -1,4 +1,4 @@
-import type RecoveryRule from "@Interface/Recovery.js";
+import type RecoveryRule from "../Interface/Recovery.js";
 /** The per-obligation failure behavior. */
 export type Behavior = "fail-open" | "fail-closed";
 /** The resolved table, one named row per obligation. */

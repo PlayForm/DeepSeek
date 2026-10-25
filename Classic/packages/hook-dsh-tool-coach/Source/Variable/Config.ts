@@ -66,6 +66,6 @@ export default Compose(false, {
 	}).volatile(),
 	// The dynamic-instruction knobs (plan Part 3 §3.4):
 	fetchLive: Schema.boolean().default(true).volatile(),
-	maxSectionTools: Schema.number().default(8).volatile(),
+	maxSectionTools: Schema.number().default(5).volatile(),
 	sectionTtl: Schema.number().default(20).volatile(), // judged calls between tier-2 rebuilds
 });

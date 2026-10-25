@@ -46,5 +46,5 @@
             enforce: off
             enforceThreshold: 4
             fetchLive: true
-            maxSectionTools: 8
+            maxSectionTools: 5
             sectionTtl: 20

@@ -25,10 +25,10 @@ The terminal runs COMMANDS (builds, tests, git, package managers); the tools han
 
 /** The tier-2 persistent section template (NOTE_PERSISTENT), verbatim. */
 export const NOTE_PERSISTENT = `Tool discipline (persistent, from tool-coach):
-- NEVER read file content through the terminal: "\${command}-style" commands (cat/head/tail/sed -n/grep <file>) are forbidden — use the read and grep/glob tools.
-- NEVER mutate file content through the terminal: \${command}-style commands (sed -i/awk/echo >/tee/heredoc >) are forbidden — use the write and edit tools. \${traceability}.
-- The terminal is for COMMANDS (builds, tests, git, package managers, process/service control).
-Mapped tools (live from the harness registry):
+- NEVER read file content through the terminal: "\${command}-style" commands — use the read and grep/glob tools.
+- NEVER mutate file content through the terminal: \${command}-style commands — use the write and edit tools.
+- The terminal is for COMMANDS (builds, tests, git, package managers).
+Mapped tools:
 | tool | purpose |
 | --- | --- |
 \${table}`;

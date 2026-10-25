@@ -68,12 +68,12 @@ export const runTest = async (): Promise<number> => {
 	await CheckAsync(Count, "R4/D1: no literal ${ placeholder remains in the composed section", async () => {
 		assert.ok(!Before.sections[1].text.includes("${"));
 	});
-	await CheckAsync(Count, "R4: the tool table has exactly maxSectionTools (8) rows", async () => {
+	await CheckAsync(Count, "R4: the tool table has exactly maxSectionTools (5) rows", async () => {
 		const Table = Before.sections[1].text.split("| tool | purpose |")[1] ?? "";
 		const Rows = Table.split("\n").filter(
 			(Row: string) => Row.startsWith("| ") && !Row.startsWith("| ---"),
 		);
-		assert.equal(Rows.length, 8);
+		assert.equal(Rows.length, 5);
 	});
 	await CheckAsync(Count, "R4: the first row is the write-class mapped tool (edit), live description", async () => {
 		const Table = Before.sections[1].text.split("| tool | purpose |")[1] ?? "";
@@ -98,7 +98,7 @@ export const runTest = async (): Promise<number> => {
 	);
 	await CheckAsync(
 		Count,
-		"R4: the cap holds - with 11 mapped tools the 8 rows are all mapped (the top-up appears in D3b)",
+		"R4: the cap holds - with 11 mapped tools the 5 rows are all mapped (the top-up appears in D3b)",
 		async () => {
 			const Table = Before.sections[1].text.split("| tool | purpose |")[1] ?? "";
 			const Rows = Table.split("\n").filter(

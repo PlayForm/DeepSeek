@@ -22,7 +22,7 @@
 # by an explicit ACTIVATE (the user edits the profile and restarts). On a
 # cold mount the State build logs `disabled (enabled=false)` and no listener
 # is wired. The schema defaults are the truth; the full default surface
-# (domain workspace_monitor, debounceMs 250, sweepIntervalMs 60000,
+# (domain workspace_monitor, debounceMs 250, sweepIntervalMs 600000,
 # maxWatch 500, include empty, the glob exclude triple, and the four-entry
 # check-set catalog) lives in the Variable/Config.ts schema. EVERY knob is
 # volatile (hot-editable without remounting): enabled, log/logFile, domain,
