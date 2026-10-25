@@ -69,6 +69,7 @@ const descriptorOf = (Genome) => {
 	return {
 		family: Genome.plan.family,
 		symmetry: Genome.plan.order,
+		phase: Genome.plan.phase ?? 0,
 		silhouette: Silhouette[Genome.plan.family] ?? "other",
 		topology: Open === 0 ? "closed" : Open === Components.length ? "open" : "mixed",
 		components: Components.length,
@@ -115,12 +116,14 @@ const Components = report(
 const Patterns = report("tone patterns", Descriptors.map((Entry) => Entry.pattern));
 const Contrast = report(
 	"stroke contrast",
-	Descriptors.map((Entry) => (Entry.contrast >= 2 ? "high" : "low")),
+	Descriptors.map((Entry) =>
+		Entry.contrast >= 2.5 ? "high" : Entry.contrast >= 1.8 ? "medium" : "low",
+	),
 );
 
 const Tuples = Descriptors.map(
 	(Entry) =>
-		`${Entry.family}|${Entry.symmetry}|${Entry.silhouette}|${Entry.topology}|${Math.round(Entry.components / 4)}|${Entry.pattern}|${Math.round(Entry.ink / 200)}`,
+		`${Entry.family}|${Entry.symmetry}|${Entry.phase}|${Entry.silhouette}|${Entry.topology}|${Math.round(Entry.components / 4)}|${Entry.pattern}|${Math.round(Entry.ink / 200)}`,
 );
 const Scenes = new Map();
 for (const [Index, Entry] of Descriptors.entries()) {

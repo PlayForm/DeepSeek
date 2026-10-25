@@ -1,3 +1,4 @@
+import { compositionOf } from "./Composition.mjs";
 import { familyFor } from "./Motif.mjs";
 import { digest, stream } from "./Prng.mjs";
 
@@ -49,8 +50,12 @@ export const planOf = (Genome) => {
 	const Arms = armsOf(Features);
 
 	const Motif = stream(digest(`${String(Genome.dir ?? "").replace(/^ets-/, "")}motif`));
-	const Family = familyFor(Genome.kind, Motif);
-	const Order = Motif.pick([4, 6, 6, 8, 8, 8, 12]);
+	const Design =
+		Genome.profile === undefined
+			? null
+			: compositionOf(Genome.profile, String(Genome.seed ?? ""));
+	const Family = Design?.family ?? familyFor(Genome.kind, Motif);
+	const Order = Design?.symmetry ?? Motif.pick([4, 6, 6, 8, 8, 8, 12]);
 
 	const Variant = Random.pick([0, 1, 2]);
 	const Rim =
@@ -103,6 +108,13 @@ export const planOf = (Genome) => {
 	return {
 		grammar: Grammar,
 		family: Family,
+		form: Design?.form,
+		role: Design?.role,
+		phase: Design?.phase,
+		density: Design?.density,
+		void: Design?.void,
+		accent: Design?.accent,
+		rules: Design?.rules ?? [],
 		variant: Variant,
 		order: Order,
 		arms: Arms,

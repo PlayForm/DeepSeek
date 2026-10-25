@@ -7,11 +7,11 @@ could not be fetched are marked [unverified].
 
 ## 1. Three systems, kept separate
 
-| System             | Job                                                  | Where it lives here                     |
-| ------------------ | ---------------------------------------------------- | --------------------------------------- |
-| Reference analysis | propose constructions from the reference raster      | pending (this note)                     |
-| Grammar            | assemble a meaningful design from the manifest       | `Maintain/Icon/Motif.mjs`, `Transliterate.mjs` |
-| Geometry backend   | realise the design as an SVG                         | `Maintain/Icon/Envelope.mjs`, `Component.mjs` |
+| System             | Job                                             | Where it lives here                            |
+| ------------------ | ----------------------------------------------- | ---------------------------------------------- |
+| Reference analysis | propose constructions from the reference raster | pending (this note)                            |
+| Grammar            | assemble a meaningful design from the manifest  | `Maintain/Icon/Motif.mjs`, `Transliterate.mjs` |
+| Geometry backend   | realise the design as an SVG                    | `Maintain/Icon/Envelope.mjs`, `Component.mjs`  |
 
 Keeping them separate is what makes a disappointing icon diagnosable: a bad interpretation, a weak
 composition rule, or a rendering defect are three different failures.
@@ -20,16 +20,16 @@ composition rule, or a rendering defect are three different failures.
 
 For each reference cutout (`Temporary/Icon-Reference/Motifs/<id>.png`):
 
-| View                        | Reveals                                                     |
-| --------------------------- | ----------------------------------------------------------- |
-| Original crop               | the visual evidence                                         |
-| Foreground mask             | occupied regions without paper texture                      |
-| Colour-separated masks      | which strokes and fills share one colour                    |
-| Boundary contours           | outer edges, holes, slots, cutouts                          |
-| Skeleton + width map        | likely stroke paths and local thickness                     |
-| Endpoint/junction annotation| open terminals, branching, possible crossings               |
-| Layer decomposition         | one or more explanations of how the icon could be assembled |
-| Reconstructed render        | whether the explanation reproduces the important features   |
+| View                         | Reveals                                                     |
+| ---------------------------- | ----------------------------------------------------------- |
+| Original crop                | the visual evidence                                         |
+| Foreground mask              | occupied regions without paper texture                      |
+| Colour-separated masks       | which strokes and fills share one colour                    |
+| Boundary contours            | outer edges, holes, slots, cutouts                          |
+| Skeleton + width map         | likely stroke paths and local thickness                     |
+| Endpoint/junction annotation | open terminals, branching, possible crossings               |
+| Layer decomposition          | one or more explanations of how the icon could be assembled |
+| Reconstructed render         | whether the explanation reproduces the important features   |
 
 Skeletonisation and the medial axis return a skeleton plus a distance transform; the transform gives
 a local foreground width estimate. That is evidence about the raster, not proof of the artist's
@@ -77,10 +77,10 @@ svgpathtools provides curvature, intersections, arc length, and inverse arc leng
 
 Two construction classes, because not every stroke is a centerline plus width:
 
-| Class               | Representation                                        | Examples                                  |
-| ------------------- | ----------------------------------------------------- | ----------------------------------------- |
-| Centerline-driven   | centerline + width profile + joins + terminals        | uniform arcs, needles, ribbons, short marks |
-| Boundary-driven     | left boundary + right boundary + terminal connections | chiselled wedges, asymmetric hooks, carved notches |
+| Class             | Representation                                        | Examples                                           |
+| ----------------- | ----------------------------------------------------- | -------------------------------------------------- |
+| Centerline-driven | centerline + width profile + joins + terminals        | uniform arcs, needles, ribbons, short marks        |
+| Boundary-driven   | left boundary + right boundary + terminal connections | chiselled wedges, asymmetric hooks, carved notches |
 
 An inner boundary with a sharp notch is awkward as a symmetric offset of one centerline. SVG paths
 mix line, quadratic, cubic, and arc segments, so the two boundaries need not share a primitive type
@@ -93,10 +93,10 @@ values:
 
 ```js
 const rules = [
-  { when: { bodyWeight: "heavy" }, prefer: { centralVoid: "large" } },
-  { when: { bodyDetail: "dense" }, prefer: { rimDetail: "sparse" } },
-  { when: { terminalFamily: "pointed" }, avoid: { microDecoration: "round-beads-everywhere" } },
-  { when: { accentRole: "interruption" }, require: { accentPlacement: "at-breaks" } },
+	{ when: { bodyWeight: "heavy" }, prefer: { centralVoid: "large" } },
+	{ when: { bodyDetail: "dense" }, prefer: { rimDetail: "sparse" } },
+	{ when: { terminalFamily: "pointed" }, avoid: { microDecoration: "round-beads-everywhere" } },
+	{ when: { accentRole: "interruption" }, require: { accentPlacement: "at-breaks" } },
 ];
 ```
 
@@ -133,10 +133,10 @@ maximum total component counts per family.
 ## 8. Ablation sheets
 
 For a candidate icon render: full, without core, without body, without edge details, without accent,
-without mini-outline, without revision marks, without variant decoration. Then ask: does removing the
-body destroy identity; is the core meaningful or a hole-filler; does colour communicate grouping;
-does the mini-outline help separation; does the Effect decoration keep the silhouette; are history
-marks subordinate.
+without mini-outline, without revision marks, without variant decoration. Then ask: does removing
+the body destroy identity; is the core meaningful or a hole-filler; does colour communicate
+grouping; does the mini-outline help separation; does the Effect decoration keep the silhouette; are
+history marks subordinate.
 
 If an icon only works with every layer present, its hierarchy is weak. If removing a layer changes
 nothing useful, the layer is unnecessary.
@@ -144,8 +144,8 @@ nothing useful, the layer is unnecessary.
 ## 9. Controlled interventions
 
 Change exactly one functional feature, keep identity fixed: streaming off/on, validation off/on, one
-tool/four tools, two transforms/three, Classic/Effect, revision zero/one. Declare allowed changes and
-protected properties:
+tool/four tools, two transforms/three, Classic/Effect, revision zero/one. Declare allowed changes
+and protected properties:
 
 ```js
 {
@@ -175,9 +175,8 @@ sweeps, topology and clearance checks, one-feature-at-a-time comparisons, small-
 list of unresolved ambiguities.
 
 Analysis tooling that would support it: scikit-image skeletonisation and medial axis
-[`Raw/skimage-skeletonize.md`], OpenCV distance transform
-[`Raw/opencv-distance-transform.md`], svgpathtools [`Raw/svgpathtools.md`], and the SVG path
-grammar [`Raw/svg2-paths.md`].
+[`Raw/skimage-skeletonize.md`], OpenCV distance transform [`Raw/opencv-distance-transform.md`],
+svgpathtools [`Raw/svgpathtools.md`], and the SVG path grammar [`Raw/svg2-paths.md`].
 
 ## 12. State in this repository
 

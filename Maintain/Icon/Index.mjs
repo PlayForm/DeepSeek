@@ -8,7 +8,7 @@ import { dirname, join } from "node:path";
 
 import { featuresOf } from "./Feature.mjs";
 import * as Grammar from "./Grammar.mjs";
-import { inferTokens, tokenCounts } from "./Infer.mjs";
+import { profileOf, structureOf } from "./Infer.mjs";
 import { evolutionOf, mutationsOf } from "./Mutation.mjs";
 import * as Palette from "./Palette.mjs";
 import * as Prng from "./Prng.mjs";
@@ -50,7 +50,12 @@ export const genomeOf = (root, entry) => {
 	]);
 	const palette = Palette.palettesOf({ kind: features.kind, seed: seed });
 	const mutations = evolutionOf(mutationsOf(changelogOf(root, entry)));
-	const manifest = inferTokens(root, entry.dir);
+	const structure = structureOf(root, entry.dir);
+	const profile = profileOf(structure, {
+		kind: features.kind,
+		domain: features.domain,
+		bundle: features.bundle,
+	});
 	const genome = {
 		package: features.package,
 		dir: features.dir,
@@ -65,8 +70,12 @@ export const genomeOf = (root, entry) => {
 		mutations,
 		seed,
 		palette,
-		manifest,
-		tokens: tokenCounts(manifest),
+		structure,
+		profile,
+		manifest: { tokens: structure.tokens },
+		tokens: Object.fromEntries(
+			Object.entries(structure.tokens).map(([Key, Values]) => [Key, Values.length]),
+		),
 	};
 
 	// The plan streams from the seed, so it is computed on the genome without

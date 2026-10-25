@@ -16,7 +16,7 @@ export default interface Config {
      *  shields its resource's promote protection. */
     revocationGraceMs: number;
     /** The policy table (rules per resource kind). */
-    policy: import("./Policy.js").default[];
+    policy: import("@Interface/Policy.js").default[];
     /** The per-action allowlist (D6) - the shared factory block. Keyed
      *  `automation` because `policy` is already the residency RULE TABLE
      *  above. This package's actions are read-only and record (automatic); it

@@ -42,10 +42,8 @@ const piece = (Id, Points, Options = {}) => ({
 const motifOf = (Plan, Seed) => {
 	const Random = stream(digest(`${Seed}motif`));
 	const Parts = familyOf(Plan.family, { Order: Plan.order, Seed, Random });
-	const Phase =
-		Plan.family === "divisionTile" || Plan.family === "isometricTiles"
-			? 0
-			: Random.pick([0, 15, 30, 45, 60, 90]);
+	const Fixed = Plan.family === "divisionTile" || Plan.family === "isometricTiles";
+	const Phase = Fixed ? 0 : (Plan.phase ?? Random.pick([0, 15, 30, 45, 60, 90]));
 	const Scale = 0.92 + (Random.next() % 9) / 100;
 	return Parts.map((Part) => ({
 		...Part,
@@ -64,6 +62,7 @@ const semanticsOf = (Tokens, Plan, Seed) => {
 	const Streams = Tokens.stream ?? [];
 	const States = Tokens.state ?? [];
 	const Transforms = Tokens.transform ?? [];
+	const Rules = new Set((Plan.rules ?? []).map((Rule) => Rule.rule));
 
 	for (let Index = 0; Index < Math.min(2, Injections.length); Index += 1) {
 		Parts.push({
@@ -87,7 +86,7 @@ const semanticsOf = (Tokens, Plan, Seed) => {
 			tone: "accent",
 		});
 	});
-	const SeamCount = Math.min(8, Seams.length);
+	const SeamCount = Rules.has("dense-body-sparse-rim") ? 0 : Math.min(8, Seams.length);
 	for (let Index = 0; Index < SeamCount; Index += 1) {
 		Parts.push({
 			key: `seam-${Index}`,
@@ -99,7 +98,10 @@ const semanticsOf = (Tokens, Plan, Seed) => {
 			tone: "accent2",
 		});
 	}
-	const LedgerCount = Math.min(10, Ledger.length);
+	const LedgerCount =
+		Rules.has("large-void-restrained-detail") || Rules.has("framed-rim-restrained")
+			? 0
+			: Math.min(10, Ledger.length);
 	for (let Index = 0; Index < LedgerCount; Index += 1) {
 		Parts.push({
 			key: `ledger-${Index}`,
@@ -202,11 +204,12 @@ export const sceneOf = (Genome, Plan) => {
 	if (services > 0 && !Motif.some((Part) => Part.layer === "core")) {
 		parts.push({
 			key: "medallion",
-			points: Ornament.ring(10 + Math.min(2, services), 28),
+			points: Ornament.ring(10 + Math.min(2, services) + (Plan.void ?? 0) * 2, 28),
 			closed: true,
 			width: 1.4,
 			method: "medallion",
 			layer: "core",
+			tone: Plan.accent === "core" ? "accent" : "ink",
 			fill: Fill,
 		});
 	}
@@ -220,6 +223,25 @@ export const sceneOf = (Genome, Plan) => {
 			closed: true,
 			width: 0.6,
 			method: "evolution-ring",
+			layer: "detail",
+			tone: "accent2",
+		});
+	}
+	const Density = Plan.density;
+	const Detail =
+		Density === undefined
+			? Math.min(6, Plan.detail ?? 0)
+			: [0, 3, 5, 6][Math.min(3, Math.max(0, Density))];
+	const Capped = (Plan.rules ?? []).some((Rule) => Rule.rule === "high-symmetry-restraint")
+		? Math.min(3, Detail)
+		: Detail;
+	for (let Index = 0; Index < Capped; Index += 1) {
+		Raw.push({
+			key: `detail-${Index}`,
+			points: Ornament.circleAt((Index * 360) / Capped + 17, 24, 0.8, 6),
+			closed: true,
+			width: 0.6,
+			method: "detail-bead",
 			layer: "detail",
 			tone: "accent2",
 		});

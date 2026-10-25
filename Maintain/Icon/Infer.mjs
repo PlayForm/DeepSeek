@@ -21,7 +21,7 @@
 // reading auditable.
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 
 const read = (Path) => {
 	try {
@@ -72,11 +72,15 @@ const ledgerOf = (Text) =>
 		(Value) => !Value.startsWith("node:") && !Value.includes("@playform/") && Value.length > 5,
 	);
 
+/** The package directory in whichever tree owns it. */
+const packagePathOf = (Root, Directory) => {
+	const Classic = join(Root, "Classic", "packages", Directory);
+	return existsSync(Classic) ? Classic : join(Root, "EffectTS", "packages", Directory);
+};
+
 /** The semantic manifest of one package. */
 export const inferTokens = (Root, Directory) => {
-	const Base = join(Root, "Classic", "packages", Directory);
-	const BaseETS = join(Root, "EffectTS", "packages", Directory);
-	const Path = existsSync(Base) ? Base : BaseETS;
+	const Path = packagePathOf(Root, Directory);
 	const Files = walk(join(Path, "Source"));
 	const Source = Files.map((File) => read(File)).join("\n");
 	const Library = read(join(Path, "Source", "Library.ts"));
@@ -148,3 +152,207 @@ export const tokenCounts = (Manifest) =>
 	Object.fromEntries(
 		Object.entries(Manifest.tokens).map(([Key, Values]) => [Key, Values.length]),
 	);
+
+const countFact = (Count, Singular, Plural) => `${Count} ${Count === 1 ? Singular : Plural}`;
+
+const functionsOf = (Sources) =>
+	Sources.filter((Source) => /^Source\/Function\/[^/]+\.ts$/.test(Source)).length;
+
+/** File-to-file import edges inside one package. */
+const edgesOf = (Path, Files) => {
+	const Present = new Set(Files);
+	const Edges = new Set();
+	for (const File of Files) {
+		for (const Match of read(File).matchAll(/from\s+["'](\.\.?\/[^"']+)["']/g)) {
+			const Target = join(dirname(File), Match[1]).replace(/\.js$/, ".ts");
+			if (Present.has(Target)) {
+				Edges.add(`${File.slice(Path.length + 1)} -> ${Target.slice(Path.length + 1)}`);
+			}
+		}
+	}
+	return [...Edges].sort();
+};
+
+/** The structural reading of one package: files, edges, totals, and named tokens. */
+export const structureOf = (Root, Directory) => {
+	const Path = packagePathOf(Root, Directory);
+	const Manifest = inferTokens(Root, Directory);
+	const Tokens = Manifest.tokens;
+	const Sources = Manifest.provenance.sources;
+	return {
+		directory: Directory,
+		files: Sources,
+		edges: edgesOf(Path, walk(join(Path, "Source"))),
+		totals: {
+			events: Tokens.gate.length,
+			services: Tokens.service.length,
+			injections: Tokens.injection.length,
+			refusals: Tokens.refusal.length,
+			tools: Tokens.tool.length,
+			functions: functionsOf(Sources),
+		},
+		tokens: Tokens,
+	};
+};
+
+const roleOf = (Structure, Entry, Domain) => {
+	const { totals, tokens } = Structure;
+	const Storeish =
+		/store|pack|ccr|cache|journal|ledger|replay|history|persist|state/.test(Domain) ||
+		(tokens.state.length > 0 && totals.services >= 1);
+	const Routerish =
+		/route|workspace|merge|split|fanout|schedule|batch|dispatch/.test(Domain) ||
+		totals.injections >= 3;
+	const Transformerish =
+		/normalize|transform|update|edit|format|compress|convert|encode|rewrite|suggest|doc/.test(
+			Domain,
+		) || tokens.transform.length > 0;
+	const Governorish =
+		/govern|audit|pin|convention|check|guard|policy|factory|rule/.test(Domain) ||
+		totals.refusals >= 2;
+	const Analyzerish = /trace|analys|analyze|diagnos|inspect|report|graph/.test(Domain);
+	const Rendererish = /panel|view|render|icon|design|style|visual/.test(Domain);
+	const Orchestratorish = Entry.bundle === true || totals.tools > 0 || totals.services >= 2;
+
+	switch (Entry.kind) {
+		case "client":
+			return { role: "renderer", observed: Rendererish };
+		case "hook":
+			switch (true) {
+				case Storeish:
+					return { role: "store", observed: true };
+				case Routerish:
+					return { role: "router", observed: true };
+				case Transformerish:
+					return { role: "transformer", observed: tokens.transform.length > 0 };
+				case Governorish:
+					return { role: "governor", observed: totals.refusals >= 2 };
+				case Analyzerish:
+					return { role: "analyzer", observed: false };
+				default:
+					return { role: "interceptor", observed: totals.events > 0 };
+			}
+		case "plugin":
+			switch (true) {
+				case Governorish:
+					return { role: "governor", observed: totals.refusals >= 2 };
+				case Routerish:
+					return { role: "router", observed: true };
+				case Storeish:
+					return { role: "store", observed: true };
+				case Rendererish:
+					return { role: "renderer", observed: true };
+				case Transformerish:
+					return { role: "transformer", observed: tokens.transform.length > 0 };
+				case Orchestratorish:
+					return { role: "orchestrator", observed: true };
+				default:
+					return { role: "orchestrator", observed: false };
+			}
+		case "lib":
+			switch (true) {
+				case Analyzerish:
+					return { role: "analyzer", observed: false };
+				case Storeish:
+					return { role: "store", observed: true };
+				case Transformerish:
+					return { role: "transformer", observed: tokens.transform.length > 0 };
+				default:
+					return { role: "analyzer", observed: false };
+			}
+		default:
+			return { role: "analyzer", observed: false };
+	}
+};
+
+const flowOf = (Role) => {
+	switch (Role) {
+		case "interceptor":
+		case "governor":
+			return "inbound";
+		case "transformer":
+		case "renderer":
+			return "outbound";
+		case "router":
+		case "orchestrator":
+			return "bidirectional";
+		default:
+			return "internal";
+	}
+};
+
+const weightOf = (Functions) => {
+	switch (true) {
+		case Functions <= 2:
+			return 0;
+		case Functions <= 5:
+			return 1;
+		case Functions <= 10:
+			return 2;
+		case Functions <= 20:
+			return 3;
+		default:
+			return 4;
+	}
+};
+
+const factsOf = (Structure, Entry) => {
+	const { totals, tokens } = Structure;
+	const Facts = [];
+	if (totals.events > 0) {
+		Facts.push(countFact(totals.events, "event gate", "event gates"));
+	}
+	if (totals.services > 0) {
+		Facts.push(countFact(totals.services, "provided service", "provided services"));
+	}
+	if (totals.injections > 0) {
+		Facts.push(countFact(totals.injections, "injected service", "injected services"));
+	}
+	if (totals.refusals > 0) {
+		Facts.push(countFact(totals.refusals, "refusal string", "refusal strings"));
+	}
+	if (totals.tools > 0) {
+		Facts.push(countFact(totals.tools, "tool", "tools"));
+	}
+	if (tokens.state.length > 0) {
+		Facts.push("state tokens");
+	}
+	if (tokens.transform.length > 0) {
+		Facts.push("transform tokens");
+	}
+	if (tokens.stream.length > 0) {
+		Facts.push("stream tokens");
+	}
+	if (Entry.kind !== undefined) {
+		Facts.push(`kind ${Entry.kind}`);
+	}
+	if (Entry.domain !== undefined) {
+		Facts.push(`domain ${Entry.domain}`);
+	}
+	if (Entry.bundle === true) {
+		Facts.push("bundle");
+	}
+	Facts.push(countFact(totals.functions, "function", "functions"));
+	return Facts;
+};
+
+/** The functional profile of one package: its role, flow, and structural weight. */
+export const profileOf = (Structure, Entry) => {
+	const { totals, tokens } = Structure;
+	const Domain = Entry.domain;
+	const Role = roleOf(Structure, Entry, Domain);
+	return {
+		role: Role.role,
+		flow: flowOf(Role.role),
+		stateful: tokens.state.length > 0 || Role.role === "store",
+		streaming: tokens.stream.length > 0 || /stream|pipe|flow/.test(Domain),
+		branching: Math.min(4, totals.events + totals.services),
+		containment: Math.min(
+			4,
+			totals.injections + (totals.services > 0 ? 1 : 0) + (Entry.bundle ? 1 : 0),
+		),
+		weight: weightOf(totals.functions),
+		evidence: unique(factsOf(Structure, Entry)).slice(0, 6),
+		confidence: Role.observed ? "observed" : "inferred",
+	};
+};

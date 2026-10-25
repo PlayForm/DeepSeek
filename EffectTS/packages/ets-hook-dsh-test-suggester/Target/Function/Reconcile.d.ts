@@ -1,4 +1,4 @@
-import type { Reconciliation } from "../Interface/Drift.js";
+import type { Reconciliation } from "@Interface/Drift.js";
 export default _default;
 declare function _default(
 /** The package root (already resolved by Function/Package). */

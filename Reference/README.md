@@ -80,6 +80,24 @@ Four are bot-walled or timed out; their claims are recorded as unverified in tha
 | Paper.js path creation (DeepWiki) | https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation               | `Raw/paperjs-deepwiki-path-creation.md`  | API map                                  | fetched |
 | Paper.js path system (DeepWiki)   | https://deepwiki.com/paperjs/paper.js/3-path-system                                    | `Raw/paperjs-deepwiki-path-system.md`    | internal path model                      | fetched |
 
+## The analysis sources
+
+The tooling behind the reverse-engineering note (`Curated/REVERSE-ENGINEERING.md`): raster evidence,
+stroke measurement, and geometry diagnostics.
+
+| Source                     | Link                                                                              | Raw file                            | Role                                   | Status                  |
+| -------------------------- | --------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------- | ----------------------- |
+| scikit-image skeletonize   | https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html       | `Raw/skimage-skeletonize.md`        | skeleton + medial axis, width estimate | fetched                 |
+| OpenCV distance transform  | https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html            | `Raw/opencv-distance-transform.md`  | distance-to-background                 | fetched                 |
+| svgpathtools               | https://pypi.org/project/svgpathtools/ (repo: mathandy/svgpathtools)              | `Raw/svgpathtools.md`               | curvature, arc length, intersections   | fetched from the repo   |
+| SVG2 paths (W3C)           | https://www.w3.org/TR/SVG2/paths.html                                             | `Raw/svg2-paths.md`                 | path grammar                           | blocked; MDN equivalent |
+| MDN SVG paths              | https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths | `Raw/mdn-svg-paths.md`              | path grammar                           | fetched                 |
+| Josh Comeau path guide     | https://www.joshwcomeau.com/svg/interactive-guide-to-paths/                       | `Raw/joshwcomeau-svg-paths.md`      | path intuition                         | fetched                 |
+| libigl signed distance     | https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h          | `Raw/libigl-signed-distance.md`     | signed distance                        | fetched                 |
+| libigl tutorial            | https://libigl.github.io/tutorial/                                                | `Raw/libigl-tutorial.md`            | geometry processing                    | fetched                 |
+| PyMesh geometry processing | https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html              | `Raw/pymesh-geometry-processing.md` | mesh operations                        | fetched                 |
+| svgpathsio                 | https://github.com/vistuleB/svgpathsio                                            | `Raw/svgpathsio.md`                 | path manipulation tools                | fetched                 |
+
 ## Licensing
 
 Paper.js, paperjs-offset and perfect-freehand document MIT; Clipper2 uses the Boost Software
@@ -88,14 +106,15 @@ third-party ports and wrappers.
 
 ## Fetch status (2026-10-25)
 
-38 files for 39 URLs, all fetched through Crawl4AI v0.9.5 with a 40000-character cap. Notes:
+48 files for 49 URLs, all fetched through Crawl4AI v0.9.5 with a 40000-character cap. Notes:
 
 - The two paperjs.org example pages are bot-walled; the page source is fetched from the repository
   instead (`Raw/paperjs-*-source.md`) and the algorithm is distilled in
   `Curated/GENERATIVE-EXAMPLES.md`.
-- Four composition-model sources are blocked or timed out (two w3.org pages and dl.acm.org behind a
-  Cloudflare challenge, mgv.sggw.pl timing out). They are recorded in `fetch-errors.log`, and their
-  claims are marked unverified in `Curated/COMPOSITION-MODEL.md`.
+- Five sources are blocked or timed out (w3.org SVG2 painting and paths, w3.org SVG1 painting,
+  dl.acm.org, mgv.sggw.pl). They are recorded in `fetch-errors.log`; the SVG2 paths page is replaced
+  by the MDN equivalent (`Raw/svg2-paths.md`), and the blocked claims are marked unverified in
+  `Curated/COMPOSITION-MODEL.md`.
 - `clipper2-wasm` publishes no npm README (the package page says so). The jsDelivr package page is
   fetched instead: `Raw/clipper2-wasm-jsdelivr.md`; the npm stub stays as `Raw/clipper2-wasm.md`.
 - `svg-path-outline-demo` is a canvas demo: its text is three labels, so the file is a stub by
