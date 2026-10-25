@@ -15,7 +15,7 @@ statuses:
       evidence: sections 3 and 4 of this file
     - name: the generator contract (feature -> gate -> geometry -> seed)
       state: implemented
-      evidence: Maintain/Icon/ + Maintain/Generate-Icons.mjs
+      evidence: Maintain/Icon/ + Maintain/Generate/Icons/Index.mjs
     - name: the 102 generated icons (mono + colour) and the ledger
       state: implemented
       evidence: Site/Public/Icons/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (14 checks)
@@ -266,8 +266,8 @@ The icon is append-only in history and live in behaviour:
   body without erasing the rings.
 
 Because the seed includes the changelog digest, the icon is reconstructed from the seed alone:
-`node Maintain/Generate-Icons.mjs` after a changelog edit produces the next icon, and `--check`
-fails until the asset is regenerated. That is the whole update loop.
+`node Maintain/Generate/Icons/Index.mjs` after a changelog edit produces the next icon, and
+`--check` fails until the asset is regenerated. That is the whole update loop.
 
 ## 9. The rendering contract
 
@@ -313,7 +313,7 @@ Maintain/Icon/
   Feature.mjs       featuresOf(root, dir) -> the package facts
   Mutation.mjs      mutationsOf(changelogText), evolutionOf(mutations)
   Index.mjs         packages(root), genomeOf(root, entry), build(root), write(root), check(root)
-Maintain/Generate-Icons.mjs   the CLI: no flag writes, --check verifies, --report prints the table
+Maintain/Generate/Icons/Index.mjs   the CLI: no flag writes, --check verifies, --report prints the table
 Maintain/Icon/Ledger.json     the generated genome ledger (committed)
 Test/Icons/Check.mjs          determinism, coverage, size, uniqueness, twins, ledger, tree
 Test/Icons/Topology.mjs       per-family topology contracts
@@ -326,11 +326,11 @@ Test/Icons/Composition.mjs    the composition matrix and its rules
 The ledger records, per package: package, dir, kind, tree, version, seed, grammar, family, order,
 arms, `rings`, orbit, rim, mode, the two hashes, and the two paths.
 
-Acceptance: `node Maintain/Generate-Icons.mjs --check` exits 0 on a clean tree; two consecutive
-writes are byte-identical; all 102 icons are distinct; `node Test/Icons/Check.mjs` reports 14 of 14;
-`node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`, `Profiles.mjs` and
-`Composition.mjs` all pass; `node Maintain/Generate-Marketplace.mjs --check` passes with the icons
-wired; the site builds.
+Acceptance: `node Maintain/Generate/Icons/Index.mjs --check` exits 0 on a clean tree; two
+consecutive writes are byte-identical; all 102 icons are distinct; `node Test/Icons/Check.mjs`
+reports 14 of 14; `node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`,
+`Profiles.mjs` and `Composition.mjs` all pass;
+`node Maintain/Generate/Marketplace/Index.mjs --check` passes with the icons wired; the site builds.
 
 ## 11. Palette (per package, from the dusk banner)
 

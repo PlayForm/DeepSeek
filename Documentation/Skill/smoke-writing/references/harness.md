@@ -54,7 +54,7 @@ node Classic/packages/ < bundle > /Target/Test/ < Name > /Test.js
 The aggregate:
 
 ```sh
-node Maintain/Run-Smokes.mjs
+node Maintain/Run/Smokes/Index.mjs
 ```
 
 The aggregate enumerates every `Target/Test/` folder in both trees, spawns each test, and fails when

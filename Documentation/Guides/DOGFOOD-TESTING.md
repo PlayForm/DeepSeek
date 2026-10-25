@@ -10,7 +10,7 @@ statuses:
     - name: the scratch-profile live battery (no symlinks)
       state: implemented
       evidence: accepted in A2's activation; the DSH_TEST_SCRATCH-style battery
-    - name: the wiring suites (Run-Wiring, 28 suites / 272 checks)
+    - name: the wiring suites (Run/Wiring/Index.mjs, 28 suites / 272 checks)
       state: implemented
       evidence: all 28 wiring suites passed, after the I9 fix
     - name: the dogfood subhome freshness
@@ -33,8 +33,9 @@ statuses:
 
 The original 12 mechanics suites per tree (the table below) have been restructured into per-test
 folders, and the 2026-10-22 delivery added suites for every new package. The current totals: **359
-smoke suites / 5,337 checks across both trees** via the aggregate `node Maintain/Run-Smokes.mjs`
-(`pnpm test`). The original per-suite checks (pre-restructure) were:
+smoke suites / 5,337 checks across both trees** via the aggregate
+`node Maintain/Run/Smokes/Index.mjs` (`pnpm test`). The original per-suite checks (pre-restructure)
+were:
 
 | Suite (both trees)                                          | Classic | EffectTS | Proves                                             |
 | ----------------------------------------------------------- | ------- | -------- | -------------------------------------------------- |
@@ -240,10 +241,10 @@ created ONCE and left in place:
   exercise driver inside the booted profile, which is how the wiring suites exercise them today. A
   credentialed headless task is the variant that triggers the same flows through an agent's tool
   calls and asserts the ledgers afterwards.
-- **Battery integration:** `Maintain/Run-Wiring.mjs` honours `DSH_WIRING_HOME=<base home>` - the
-  fast path. On the fast path, EACH tree reuses its configured subhome: no repack/reinstall, nothing
-  destroyed. WITHOUT it, the temp scratch lifecycle (create -> ... -> destroy) runs as before: ONE
-  throwaway home per tree. BOTH paths run the same 7 suites x 2 trees.
+- **Battery integration:** `Maintain/Run/Wiring/Index.mjs` honours `DSH_WIRING_HOME=<base home>` -
+  the fast path. On the fast path, EACH tree reuses its configured subhome: no repack/reinstall,
+  nothing destroyed. WITHOUT it, the temp scratch lifecycle (create -> ... -> destroy) runs as
+  before: ONE throwaway home per tree. BOTH paths run the same 7 suites x 2 trees.
 
 ```bash
 # the fast path (the configured profile):

@@ -30,7 +30,7 @@ Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 # `window.__ModuleLoader__.load({ id, factory })` expects - the ESM build
 # above is NOT servable by the client module system). Runs after the plugin
 # build because that build wipes Target/.
-node ../../../Maintain/Build-Client-Bundle.mjs . Source/Client.ts @playform/client-dsh-panel-family-host
+node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/client-dsh-panel-family-host
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts

@@ -2,7 +2,7 @@
 # NPM - the publish workflow. Every package in the two release
 # trees publishes from THIS monorepo, in the order of the packages'
 # own dependency graph. The order is DERIVED at run time by
-# Maintain/Publish-Packages.mjs - never hand-listed - so a package
+# Maintain/Publish/Packages/Index.mjs - never hand-listed - so a package
 # added to Classic/packages or EffectTS/packages publishes with no
 # workflow edit.
 # The npm publish itself remains the USER'S call (their token):
@@ -98,6 +98,6 @@ jobs:
 
             # The publish: one derived pass over every workspace package.
             # The order is the packages' own dependency graph, computed by
-            # Maintain/Publish-Packages.mjs; a version already on the registry
+            # Maintain/Publish/Packages/Index.mjs; a version already on the registry
             # is skipped, so a re-run is safe.
-            - run: node Maintain/Publish-Packages.mjs
+            - run: node Maintain/Publish/Packages/Index.mjs

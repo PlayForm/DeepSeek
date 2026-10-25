@@ -5,15 +5,15 @@ are wrong-tree mistakes.
 
 ## The trees
 
-| Path             | Role                                                                   | Git                |
-| ---------------- | ---------------------------------------------------------------------- | ------------------ |
-| `Classic/`       | The plain-TypeScript release: 51 packages, each with its own `Target/` | Root repo          |
-| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`)              | Root repo          |
-| `Site/`          | The Astro static site, built into `Site/Target/`                       | Its own repository |
-| `Test/`          | Fixture archives, governance batteries, probes                         | Root repo          |
-| `Documentation/` | Framework, guides, plans, skills, reports, research, archive           | Root repo          |
-| `Maintain/`      | `Run-Smokes.mjs`, `Run-Wiring.mjs`, `Format.sh`, `Lychee.sh`           | Root repo          |
-| `diagrams/`      | Source diagrams                                                        | Root repo          |
+| Path             | Role                                                                                       | Git                |
+| ---------------- | ------------------------------------------------------------------------------------------ | ------------------ |
+| `Classic/`       | The plain-TypeScript release: 51 packages, each with its own `Target/`                     | Root repo          |
+| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`)                                  | Root repo          |
+| `Site/`          | The Astro static site, built into `Site/Target/`                                           | Its own repository |
+| `Test/`          | Fixture archives, governance batteries, probes                                             | Root repo          |
+| `Documentation/` | Framework, guides, plans, skills, reports, research, archive                               | Root repo          |
+| `Maintain/`      | `Run/Smokes/Index.mjs`, `Run/Wiring/Index.mjs`, `Format/Index.sh`, `Check/Lychee/Index.sh` | Root repo          |
+| `diagrams/`      | Source diagrams                                                                            | Root repo          |
 
 `Site/` is listed in the root `.gitignore`. Commit site work in `Site/`, never from the root.
 

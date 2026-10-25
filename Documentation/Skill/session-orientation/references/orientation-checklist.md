@@ -64,6 +64,6 @@ You are oriented when you can state, without opening another file:
 
 The expected package answer as of 2026-10-22: 51 Classic + 46 EffectTS packages, all 0.1.0,
 unpublished; the verify command is `ls Classic/packages EffectTS/packages`. The expected smoke
-answer: 359 suites / 5,337 checks via `node Maintain/Run-Smokes.mjs`.
+answer: 359 suites / 5,337 checks via `node Maintain/Run/Smokes/Index.mjs`.
 
 If any answer is a guess, return to the step that owns it.

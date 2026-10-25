@@ -2,7 +2,7 @@
 # Pass 1 of 2 (the repo sources): the READMEs, the Documentation, the package
 # sources, and the Site sources (the markdown, the TS/JS sources, the JSON
 # manifests). Pass 2 (the built Site) lives in Site/lychee.toml.
-# Run: pnpm lychee (Maintain/Lychee.sh) - the script composes lychee-report.md.
+# Run: pnpm lychee (Maintain/Check/Lychee/Index.sh) - the script composes lychee-report.md.
 
 # The file types to scan for links
 extensions = [
@@ -74,7 +74,7 @@ accept = [200, 204, 301, 302, 307, 308, 429]
 # keeps non-fragment URLs out of the fragment pass)
 include_fragments = "anchor-only"
 
-# Report format (the output path is set per pass by Maintain/Lychee.sh)
+# Report format (the output path is set per pass by Maintain/Check/Lychee/Index.sh)
 format = "markdown"
 
 # Headers (must be last - TOML table)

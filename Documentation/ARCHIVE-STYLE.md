@@ -89,7 +89,7 @@ is a nested mapping (the YAML object-in-list style of the user's example):
     statuses:
       - name: smoke-suite restructure
         state: implemented
-        evidence: 207 suites - node Maintain/Run-Smokes.mjs last line
+        evidence: 207 suites - node Maintain/Run/Smokes/Index.mjs last line
       - name: ccr_search
         state: open
         evidence: R1 - retrieval-only today, no search/list API
@@ -121,7 +121,7 @@ is a nested mapping (the YAML object-in-list style of the user's example):
 - EVERY status entry cites something checkable - or honestly says "this document only".
 - Statuses come from the actual state, NEVER from the document's own optimism. The authoritative
   sources are: the document itself, Documentation/Plans/TOMORROW-REVIEW.md (the full record), the
-  git log, the runner (node Maintain/Run-Smokes.mjs - its last line), and the built site.
+  git log, the runner (node Maintain/Run/Smokes/Index.mjs - its last line), and the built site.
 - An entry may be open even in a document whose document-level status is complete. The statuses list
   records per-functionality truth. The document-level status records the document's lifecycle.
 

@@ -38,7 +38,7 @@ statuses:
 > status. The template (the single style) is Documentation/ARCHIVE-STYLE.md - the YAML frontmatter
 > schema EVERY document carries. Statuses are derived from the ACTUAL state:
 > Documentation/Plans/TOMORROW-REVIEW.md (the full record), the git log, the runner
-> (`node Maintain/Run-Smokes.mjs`), and the built site.
+> (`node Maintain/Run/Smokes/Index.mjs`), and the built site.
 
 ## 1. The tree
 

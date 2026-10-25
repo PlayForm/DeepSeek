@@ -450,23 +450,24 @@ The command writes one ledger line per action:
 The suites are the speed and coverage story:
 
 - **269 Classic / 242 EffectTS suites, 6,612 checks, all green.** The aggregate runner is
-  `node Maintain/Run-Smokes.mjs`; the heaviest single original suite (cargo, 62 checks including the
-  real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
+  `node Maintain/Run/Smokes/Index.mjs`; the heaviest single original suite (cargo, 62 checks
+  including the real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
 - **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript;
   EffectTS adds the single `effect` 4.0.2 dependency.
 - **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins,
   byte-identical ledger strings on every rebuild.
 
-One suite per test folder per tree, run with the aggregate `node Maintain/Run-Smokes.mjs` (which
-also guards each folder's printed PASS count against its folder README - the vacuously-green guard):
+One suite per test folder per tree, run with the aggregate `node Maintain/Run/Smokes/Index.mjs`
+(which also guards each folder's printed PASS count against its folder README - the vacuously-green
+guard):
 
-| Measure                   | Value                                                                            |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| Test folders (Classic)    | 269                                                                              |
-| Test folders (EffectTS)   | 242                                                                              |
-| Total suites              | **511**                                                                          |
-| Total checks (both trees) | **6,612**                                                                        |
-| The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run-Wiring.mjs` under `DSH_TEST_SCRATCH` |
+| Measure                   | Value                                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------- |
+| Test folders (Classic)    | 269                                                                                    |
+| Test folders (EffectTS)   | 242                                                                                    |
+| Total suites              | **511**                                                                                |
+| Total checks (both trees) | **6,612**                                                                              |
+| The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run/Wiring/Index.mjs` under `DSH_TEST_SCRATCH` |
 
 The per-suite before/after totals live in the totals ledger of
 `Documentation/Plans/SMOKE-SUITE-RESTRUCTURE-BLUEPRINT.md`; the original 14 mechanics suites total
@@ -496,17 +497,17 @@ document with its status:
 
 The workflow, root-first - every step is a root `package.json` script:
 
-| Script                                       | What it does                                                                                              |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install   |
-| `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                               |
-| `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                    |
-| `pnpm test`                                  | all 511 smoke suites via `Maintain/Run-Smokes.mjs` - the behavioral arbiter, exit non-zero on any failure |
-| `pnpm run test:types`                        | `Maintain/Run-Types.mjs` - the type check across the trees                                                |
-| `pnpm run test:wiring`                       | `Maintain/Run-Wiring.mjs` - the live wiring battery under `DSH_TEST_SCRATCH`                              |
-| `pnpm site`                                  | the static site build (`Site/`)                                                                           |
-| `pnpm lychee`                                | `Maintain/Lychee.sh` - the three-pass link check composing `lychee-report.md`                             |
-| `pnpm format` / `format:check`               | `Maintain/Format.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)            |
+| Script                                       | What it does                                                                                                    |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install         |
+| `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                                     |
+| `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                          |
+| `pnpm test`                                  | all 511 smoke suites via `Maintain/Run/Smokes/Index.mjs` - the behavioral arbiter, exit non-zero on any failure |
+| `pnpm run test:types`                        | `Maintain/Run/Types/Index.mjs` - the type check across the trees                                                |
+| `pnpm run test:wiring`                       | `Maintain/Run/Wiring/Index.mjs` - the live wiring battery under `DSH_TEST_SCRATCH`                              |
+| `pnpm site`                                  | the static site build (`Site/`)                                                                                 |
+| `pnpm lychee`                                | `Maintain/Check/Lychee/Index.sh` - the three-pass link check composing `lychee-report.md`                       |
+| `pnpm format` / `format:check`               | `Maintain/Format/Index.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)            |
 
 The regime: the smokes (and the site build) are the arbiter after every change; the ledger strings
 stay byte-identical at the same counts; the byte-scan stays clean (no NUL bytes in the tracked

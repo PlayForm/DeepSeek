@@ -44,7 +44,7 @@ Site
 Site/**
 
 # The generated static market index - written byte-for-byte by
-# Maintain/Generate-Marketplace.mjs; prettier would break its --check.
+# Maintain/Generate/Marketplace/Index.mjs; prettier would break its --check.
 marketplace.json
 
 # Test fixtures - frozen by design, never reformat

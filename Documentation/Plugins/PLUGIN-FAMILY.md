@@ -59,8 +59,8 @@ statuses:
   `lib-dsh-pack` - now have ETS twins too (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`, added with the
   ETS parity wave). Across the whole family the count is **47 ETS twins**: the EffectTS tree holds
   48 packages and one of them is the `ets-base-dsh` plumbing base, not a twin.
-- **Verification: the aggregate `node Maintain/Run-Smokes.mjs` = 511 smoke suites / 6,612 checks
-  across both trees, all green; the live desktop profile has 54 bundles enabled.**
+- **Verification: the aggregate `node Maintain/Run/Smokes/Index.mjs` = 511 smoke suites / 6,612
+  checks across both trees, all green; the live desktop profile has 54 bundles enabled.**
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal
   record is asserted byte-identically by the smokes, in ALL implementations. ONE ledger per plugin:
   `~/.dsh/<identity>.log`.

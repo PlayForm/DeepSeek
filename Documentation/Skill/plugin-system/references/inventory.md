@@ -56,15 +56,15 @@ The full one-line roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 ## The counts
 
-The aggregate runner is `node Maintain/Run-Smokes.mjs` (`pnpm test`): **359 smoke suites / 5,337
-checks across both trees** (184 Classic + 175 EffectTS test folders), all green at the 2026-10-22
-delivery. The per-folder READMEs are the arbiter; the manifest must be regenerated or derived, never
-quoted as-is.
+The aggregate runner is `node Maintain/Run/Smokes/Index.mjs` (`pnpm test`): **359 smoke suites /
+5,337 checks across both trees** (184 Classic + 175 EffectTS test folders), all green at the
+2026-10-22 delivery. The per-folder READMEs are the arbiter; the manifest must be regenerated or
+derived, never quoted as-is.
 
 Verify:
 
 ```sh
-node Maintain/Run-Smokes.mjs
+node Maintain/Run/Smokes/Index.mjs
 find Classic/packages/*/Target/Test EffectTS/packages/*/Target/Test -mindepth 1 -maxdepth 1 -type d | wc -l
 ```
 

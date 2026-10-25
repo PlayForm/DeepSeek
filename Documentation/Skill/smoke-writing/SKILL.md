@@ -24,7 +24,7 @@ them and how to read a failure without weakening the contract.
 - A suite fails after a change.
 - A live finding must become a regression test.
 - Do not use for: the build and ledger ownership (`plugin-system`) or the decision to run the
-  aggregate (`Maintain/Run-Smokes.mjs`).
+  aggregate (`Maintain/Run/Smokes/Index.mjs`).
 
 ## The harness pattern
 
@@ -62,8 +62,8 @@ The fake context provides the seams the plugin uses:
 ## The count guard
 
 Each test folder's `README.md` declares its expected count under `## Expected count` as `<N> PASS.`
-The aggregate (`Maintain/Run-Smokes.mjs`) compares the printed `N PASS - <Name>` line with that
-number. A folder without a parseable count fails.
+The aggregate (`Maintain/Run/Smokes/Index.mjs`) compares the printed `N PASS - <Name>` line with
+that number. A folder without a parseable count fails.
 
 The per-folder READMEs are the arbiter; the aggregate compares each printed count with them. The
 manifest line in `<tree>/smokes/README.md` is a summary, not the truth: it can lag the folders.

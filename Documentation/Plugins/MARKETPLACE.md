@@ -61,7 +61,7 @@ pnpm marketplace       # write both files
 pnpm marketplace:check # exit 1 when either file is stale; run it on release
 ```
 
-`Maintain/Generate-Marketplace.mjs` reads:
+`Maintain/Generate/Marketplace/Index.mjs` reads:
 
 - both trees' `Classic/packages/*/package.json` and `EffectTS/packages/*/package.json`: name,
   version, description, `dsh.bundle`, `engines.dsh`;

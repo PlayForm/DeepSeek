@@ -134,7 +134,7 @@ ledger -> toggle the knobs (ON/OFF, before and after a turn - watch the
 ledger's activation/refresh lines + the behavior) -> launch a glm-5.3-flash
 low subagent with the plugin's mock task from the mock-task library (the
 methodology section 3) -> read the ledgers/transcript -> tune -> verify with
-the plugin's smoke (the per-test folders; the runner: Maintain/Run-Smokes.mjs
+the plugin's smoke (the per-test folders; the runner: Maintain/Run/Smokes/Index.mjs
 - "All 359 smoke suites passed"). Never restart the app mid-loop; a restart
 is needed ONLY for profile-structural changes (the restart matrix, section
 7). Report per-plugin results + the final knob state.
