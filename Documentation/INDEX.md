@@ -47,6 +47,7 @@ statuses:
       ARCHIVE-STYLE.md             the single template (the frontmatter schema)
       FRAMEWORK.md                 the distilled requirements + the skill framework
       Brand/BRANDING.md            the brand brief
+      Brand/ICON-GRAMMAR.md        the generated icon language (sheet -> genome -> SVG)
       Plans/                       the living + queued plans (31) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
@@ -73,11 +74,12 @@ statuses:
 | [FRAMEWORK.md](FRAMEWORK.md)         | active | living-record |
 | [INDEX.md](INDEX.md)                 | active | standard      |
 
-### Brand (1)
+### Brand (2)
 
-| Document                               | Status | Kind          |
-| -------------------------------------- | ------ | ------------- |
-| [Brand/BRANDING.md](Brand/BRANDING.md) | active | living-record |
+| Document                                       | Status | Kind          |
+| ---------------------------------------------- | ------ | ------------- |
+| [Brand/BRANDING.md](Brand/BRANDING.md)         | active | living-record |
+| [Brand/ICON-GRAMMAR.md](Brand/ICON-GRAMMAR.md) | active | living-record |
 
 ### Plans - the living + queued hubs (31)
 

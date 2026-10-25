@@ -11,6 +11,8 @@
 		"format:check": "prettier --check --ignore-path .prettierignore . && node Maintain/Check-Newlines.mjs",
 		"format:newlines": "bash Maintain/Format.sh newlines",
 		"format:prettier": "bash Maintain/Format.sh prettier",
+		"icons": "node Maintain/Generate-Icons.mjs",
+		"icons:check": "node Maintain/Generate-Icons.mjs --check",
 		"lychee": "bash Maintain/Lychee.sh",
 		"marketplace": "node Maintain/Generate-Marketplace.mjs",
 		"marketplace:check": "node Maintain/Generate-Marketplace.mjs --check",

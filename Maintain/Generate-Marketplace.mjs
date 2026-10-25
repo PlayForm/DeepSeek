@@ -53,6 +53,15 @@ const pinOf = (Path) => {
 	return { Commit, Time: Number.parseInt(Time, 10) };
 };
 
+// The icon field carries the colour render as a relative reference (the format-1
+// validator resolves it against the index URL to the same origin). It is added
+// ONLY when the asset exists, so a tree without generated icons keeps the
+// committed index byte-identical and `--check` stays green.
+const iconOf = (Dir) =>
+	existsSync(join(Root, "Site", "Public", "Icons", "Color", `${Dir}.svg`))
+		? `Icons/Color/${Dir}.svg`
+		: null;
+
 const readPackages = (Tree) => {
 	const Base = join(Root, Tree, "packages");
 	return readdirSync(Base)
@@ -168,6 +177,7 @@ let GitVersions = 0;
 
 const Plugins = Packages.map((Package) => {
 	const Document = registry.get(Package.Name);
+	const Icon = iconOf(Package.Dir);
 	const Engines = Package.Engines === undefined ? {} : { dsh: Package.Engines };
 	const Versions = [];
 
@@ -217,6 +227,7 @@ const Plugins = Packages.map((Package) => {
 		...(Package.Description.trim() === ""
 			? {}
 			: { description: { en: describe(Package.Description) } }),
+		...(Icon === null ? {} : { icon: Icon }),
 		author: "PlayForm",
 		repository: {
 			url: RepositoryUrl,
