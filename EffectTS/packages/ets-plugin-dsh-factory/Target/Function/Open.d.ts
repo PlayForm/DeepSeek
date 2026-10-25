@@ -1,5 +1,6 @@
 import { type State } from "@playform/ets-base-dsh";
-declare const _default: (State: State & {
+export default _default;
+declare function _default(State: State & {
     JournalDomain?: string | undefined;
 }, Facility: {
     open(spec: object): Promise<{
@@ -17,5 +18,4 @@ declare const _default: (State: State & {
         detail: string;
         at: number;
     }[] | undefined;
-}) => Promise<void>;
-export default _default;
+}): Promise<void>;

@@ -1,6 +1,6 @@
-import type { OutputCell } from "@Interface/Output.js";
-import type Output from "@Interface/Output.js";
-import type { MachineRecord } from "@Interface/Process.js";
+import type { OutputCell } from "../Interface/Output.js";
+import type Output from "../Interface/Output.js";
+import type { MachineRecord } from "../Interface/Process.js";
 /** The per-file cells in the canonical value: one entry per held process,
  *  in the stable path-sorted order, each carrying its status, its held
  *  version, and whatever the last transition left (diff / error / halt

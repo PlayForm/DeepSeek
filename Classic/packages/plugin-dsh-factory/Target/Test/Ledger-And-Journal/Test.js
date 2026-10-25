@@ -249,6 +249,20 @@ const runTest = async () => {
           "hook_dsh_package_pinner",
           "P5 spec: the module's own distinct domain name (unit-name rule: lowercase/digits/underscores)"
         );
+        assert.ok(
+          factory.SharedJournals?.get("hook_dsh_package_pinner"),
+          "the custom-domain open registers its sink in SharedJournals under its own domain key"
+        );
+        assert.equal(
+          factory.SharedJournals?.get("package_governance"),
+          void 0,
+          "the custom-domain open does not register under the default domain key"
+        );
+        assert.equal(
+          factory.SharedJournal,
+          void 0,
+          "a custom-domain open leaves the legacy SharedJournal slot unbound"
+        );
         effects.find((e) => e[0] === "smoke-flavor-storage")[1]();
         await new Promise((r) => setImmediate(r));
       });

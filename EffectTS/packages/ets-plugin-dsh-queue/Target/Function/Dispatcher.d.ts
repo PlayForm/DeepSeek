@@ -1,8 +1,8 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import { type Input } from "@Function/Enqueue.js";
-import { type Report } from "@Function/Reconcile.js";
-import type State from "@Interface/State.js";
-import type Task from "@Interface/Task.js";
+import { type Input } from "./Enqueue.js";
+import { type Report } from "./Reconcile.js";
+import type State from "../Interface/State.js";
+import type Task from "../Interface/Task.js";
 export default class Dispatcher extends Service {
     private Context;
     private State;

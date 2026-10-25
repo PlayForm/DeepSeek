@@ -25,4 +25,6 @@
 // standalone, so no runPromise boundary is added here.
 import { Envelope } from "./Dispatch.js";
 
-export default Envelope.Settle;
+const Settle: typeof Envelope.Settle = Envelope.Settle;
+
+export default Settle;

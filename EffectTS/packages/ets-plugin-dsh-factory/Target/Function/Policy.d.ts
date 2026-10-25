@@ -1,21 +1,21 @@
 import Schema from "@deepseek-ai/schemastery";
-declare const _default: () => Schema<NoInfer<Schemastery.ObjectS<NoInfer<{
-    read: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    index: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    record: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    suggest: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    write: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    commit: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    spawn: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    message: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-}>>>, NoInfer<Schemastery.ObjectT<NoInfer<{
-    read: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    index: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    record: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    suggest: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    write: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    commit: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    spawn: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-    message: Schema<"auto" | "approve", "auto" | "approve", "defined">;
-}>>>, "volatile">;
 export default _default;
+declare function _default(): Schema<NoInfer<Schemastery.ObjectS<NoInfer<{
+    read: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    index: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    record: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    suggest: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    write: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    commit: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    spawn: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    message: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+}>>>, NoInfer<Schemastery.ObjectT<NoInfer<{
+    read: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    index: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    record: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    suggest: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    write: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    commit: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    spawn: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+    message: Schema<"approve" | "auto", "approve" | "auto", "defined">;
+}>>>, "volatile">;

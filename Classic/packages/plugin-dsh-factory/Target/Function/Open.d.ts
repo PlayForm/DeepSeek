@@ -1,5 +1,6 @@
 import type State from "@Interface/State.js";
-declare const _default: (State: State, Facility: {
+export default _default;
+declare function _default(State: State, Facility: {
     open(spec: object): Promise<{
         close(): Promise<void>;
         table(name: string): {
@@ -15,5 +16,4 @@ declare const _default: (State: State, Facility: {
         detail: string;
         at: number;
     }[] | undefined;
-}) => Promise<void>;
-export default _default;
+}): Promise<void>;

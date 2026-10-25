@@ -84,4 +84,4 @@ the source suite's sections 8, 9 and 14, moved verbatim.
 
 ## Expected count
 
-5 PASS.
+8 PASS.

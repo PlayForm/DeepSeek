@@ -63,6 +63,10 @@ export default interface State {
 	 *  `storageDomain` opens, then becomes the real typed-record put; retired
 	 *  to a no-op when the domain is absent (the Attach storage effect). */
 	Journal: (Event: string, Path: string, Detail: string, At?: number) => void;
+	/** The module's own storage-journal domain name (the factory's
+	 *  `journalDomain` setup option); absent means the shared
+	 *  "package_governance" domain - Function/Journal. */
+	JournalDomain?: string | undefined;
 	/** Pre-open journal queue (capped at 256), drained by Function/Open. */
 	Queue: Record[];
 	/** The open storage domain handle (P5) — closed by the Attach effect's

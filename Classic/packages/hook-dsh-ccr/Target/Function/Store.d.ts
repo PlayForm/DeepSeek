@@ -1,4 +1,4 @@
-import type Entry from "@Interface/Entry.js";
+import type Entry from "../Interface/Entry.js";
 export type Eviction = {
     hash: string;
     reason: "ttl" | "budget";

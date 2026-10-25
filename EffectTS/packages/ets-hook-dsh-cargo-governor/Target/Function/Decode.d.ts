@@ -1,3 +1,3 @@
 import type Manifest from "@Interface/Manifest.js";
-declare const _default: (Text: unknown) => Manifest | null;
 export default _default;
+declare function _default(Text: unknown): Manifest | null;

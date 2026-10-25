@@ -1,2 +1,3 @@
-declare const _default: (State: import("../Interface/State.js").default, Dir: string, Target: import("@deepseek-ai/dsh-fs").FsTarget, Actor: object | undefined, Code: number) => import("effect/Effect").Effect<number>;
-export default _default;
+import { Envelope } from "./Dispatch.js";
+declare const Settle: typeof Envelope.Settle;
+export default Settle;

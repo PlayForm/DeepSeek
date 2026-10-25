@@ -16,5 +16,5 @@ export type Registry = {
 /** The selection: `true`/`"all"` = every registered step; an array (or a
  *  single name) = only the named steps; `false`/`null`/absent = none. */
 export type Selection = boolean | string | string[] | null | undefined;
-declare const _default: (Steps: Registry, Target: FsTarget, Select: Selection, Actor: object | undefined, Version: FsVersion) => Promise<void>;
 export default _default;
+declare function _default(Steps: Registry, Target: FsTarget, Select: Selection, Actor: object | undefined, Version: FsVersion): Promise<void>;
