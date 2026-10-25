@@ -1,6 +1,6 @@
-import type CheckSet from "@Interface/CheckSet.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type WatchEntry from "@Interface/WatchEntry.js";
+import type CheckSet from "./CheckSet.js";
+import type FactoryHandle from "./Factory.js";
+import type WatchEntry from "./WatchEntry.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's

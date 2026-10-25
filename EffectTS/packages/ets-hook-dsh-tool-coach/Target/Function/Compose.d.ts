@@ -1,4 +1,4 @@
-import type { AgentState, Decision, ToolCatalog } from "@Interface/Execution.js";
+import type { AgentState, Decision, ToolCatalog } from "../Interface/Execution.js";
 /** The knob values the composers read (the live State values). */
 export interface ComposeConfig {
     maxSectionTools: number;

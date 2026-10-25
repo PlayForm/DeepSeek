@@ -286,12 +286,16 @@ function LiveTab(props) {
       OffTrace();
     };
   }, []);
-  return (0, import_react3.createElement)(View, {
-    view: Current,
-    tail: Tail,
-    live: props.trace.live,
-    ...props.slot === void 0 ? {} : { slot: props.slot }
-  });
+  switch (true) {
+    case props.slot !== void 0:
+      return props.slot;
+    default:
+      return (0, import_react3.createElement)(View, {
+        view: Current,
+        tail: Tail,
+        live: props.trace.live
+      });
+  }
 }
 function Client(ctx, config) {
   const store = Store(config);

@@ -70,7 +70,7 @@ function LiveTab(props: {
 	store: ReturnType<typeof StoreFn>;
 	trace: LiveTrace;
 	slot?: ReactNode;
-}): ReturnType<typeof createElement> {
+}): ReactNode {
 	const [Current, SetCurrent] = useState<LiveView>(() => props.store.getSnapshot());
 	const [Tail, SetTail] = useState(() => props.trace.tail());
 	useEffect(() => {
@@ -84,12 +84,16 @@ function LiveTab(props: {
 			OffTrace();
 		};
 	}, []);
-	return createElement(View, {
-		view: Current,
-		tail: Tail,
-		live: props.trace.live,
-		...(props.slot === undefined ? {} : { slot: props.slot }),
-	});
+	switch (true) {
+		case props.slot !== undefined:
+			return props.slot;
+		default:
+			return createElement(View, {
+				view: Current,
+				tail: Tail,
+				live: props.trace.live,
+			});
+	}
 }
 
 export default function Client(

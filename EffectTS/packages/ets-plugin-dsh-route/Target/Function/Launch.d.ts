@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /** One model-facing content block (the fields the hint reads). */
 interface Block {
     type?: string | undefined;
