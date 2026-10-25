@@ -1,20 +1,13 @@
-// Transliterate.mjs - the code-to-visual translation.
+// Transliterate.mjs - the degenerative scene.
 //
-// Takes one package's plan (motif family, symmetry, style) and its inferred
-// semantic tokens, and emits the component scene. The motif supplies the
-// construction; every semantic fact the package actually has attaches one
-// further layer: a medallion for the service it provides, halo rings for the
-// services it injects, gate loops for the events it subscribes to, seam ticks
-// for its ordering seams, ledger beads for its ledger lines, and wedge cutouts
-// for the paths it refuses.
+// The scene is the residue returned by Decay.mjs plus the semantic accents the
+// package's own tokens demand. There is no motif library here: the icon is a
+// decayed seed, and the tokens add the marks that name the package's facts.
+// Every component is a solid path with a palette tone.
 
-import { atlasOf } from "./Atlas.mjs";
-import { rotatePoints, scalePoints } from "./Envelope.mjs";
+import { decayOf } from "./Decay.mjs";
 import { angleOf } from "./Lexicon.mjs";
-import { familyOf, Ornament } from "./Motif.mjs";
-import { digest, stream } from "./Prng.mjs";
-
-const Weight = (Layer) => (Layer === "frame" || Layer === "body" ? 1.4 : 1.2);
+import { Ornament } from "./Motif.mjs";
 
 const ToneByLayer = (Layer) => {
 	switch (Layer) {
@@ -33,340 +26,163 @@ const piece = (Id, Points, Options = {}) => ({
 	id: Id,
 	centerline: Points,
 	geometry: {
-		method: Options.method ?? "motif",
+		method: Options.method ?? "decay",
 		topology: Options.closed === false ? "open" : "closed",
 	},
 	stroke: {
-		width: Math.round((Options.width ?? 1.4) * Weight(Options.layer) * 10) / 10,
+		width: Options.width ?? 1.1,
 		join: Options.join ?? "round",
 		start: Options.start ?? "butt",
 		end: Options.end ?? "butt",
-		outlineWidth: Options.outline ?? 0.7,
-		widthProfile: Options.profile ?? "constant",
+		outlineWidth: 0.7,
+		widthProfile: "constant",
 	},
 	composition: {
-		operation: Options.operation ?? "paint",
+		operation: "paint",
 		collisionGroup: Options.layer ?? "body",
+		depth: Options.depth ?? 0,
 	},
-	material: { tone: Options.tone ?? ToneByLayer(Options.layer), opacity: Options.opacity ?? 1 },
-	render: Options.render ?? "ribbon",
+	material: { tone: Options.tone ?? ToneByLayer(Options.layer), opacity: 1 },
+	render: Options.render ?? "solid",
 	...(Options.cutout === undefined ? {} : { cutout: Options.cutout }),
-	...(Options.fill === undefined ? {} : { fill: Options.fill }),
 });
 
-const motifOf = (Plan, Seed) => {
-	const Random = stream(digest(`${Seed}motif`));
-	const Parts = familyOf(Plan.family, { Order: Plan.order, Seed, Random });
-	const Fixed = Plan.family === "divisionTile" || Plan.family === "isometricTiles";
-	const Phase = Fixed ? 0 : (Plan.phase ?? Random.pick([0, 15, 30, 45, 60, 90]));
-	const Scale = 0.92 + (Random.next() % 9) / 100;
-	return Parts.map((Part) => ({
-		...Part,
-		points: scalePoints(rotatePoints(Part.points, Phase), Scale),
-	}));
-};
+const annulus = (Radius, Width, Samples = 28) => ({
+	points: Ornament.ring(Radius, Samples),
+	cutout: [Ornament.ring(Radius - Width, Samples)],
+});
 
-const semanticsOf = (Tokens, Plan, Seed) => {
-	const Parts = [];
+export const sceneOf = (Genome, Plan) => {
+	const Residue = decayOf(Genome.profile ?? {}, Genome.seed);
+	const Tokens = (Genome.manifest ?? { tokens: {} }).tokens ?? {};
+	const Seed = Number.parseInt(String(Genome.seed).slice(0, 6), 16) || 1;
+	const Parts = [Residue.plate, ...Residue.fragments, Residue.shape];
+
 	const Gates = Tokens.gate ?? [];
+	const Tools = Tokens.tool ?? [];
+	const Injections = Tokens.injection ?? [];
+	const Services = Tokens.service ?? [];
+	const States = Tokens.state ?? [];
 	const Seams = Tokens.seam ?? [];
 	const Ledger = Tokens.ledger ?? [];
-	const Services = Tokens.service ?? [];
-	const Injections = Tokens.injection ?? [];
-	const Tools = Tokens.tool ?? [];
-	const Streams = Tokens.stream ?? [];
-	const States = Tokens.state ?? [];
 	const Transforms = Tokens.transform ?? [];
-	const Rules = new Set((Plan.rules ?? []).map((Rule) => Rule.rule));
+	const Rings = Math.min(3, Plan.mutations?.rings ?? 0);
+	const Detail =
+		Plan.density === undefined
+			? Math.min(6, Plan.detail ?? 0)
+			: [0, 3, 5, 6][Math.min(3, Math.max(0, Plan.density))];
 
-	for (let Index = 0; Index < Math.min(2, Injections.length); Index += 1) {
-		Parts.push({
-			key: `inject-${Index}`,
-			points: Ornament.ring(15 + Index * 3, 36),
-			closed: true,
-			width: 0.7,
-			method: "injection-ring",
-			layer: "core",
-			tone: "accent2",
-		});
-	}
 	Gates.slice(0, 6).forEach((Name, Index) => {
 		Parts.push({
 			key: `gate-${Index}`,
-			points: Ornament.loop(angleOf(Name, Seed), 30, 2.4),
-			closed: true,
-			width: 0.9,
+			points: Ornament.circleAt(angleOf(Name, Seed), 34, 2.4, 8),
 			method: "gate-loop",
 			layer: "detail",
-			tone: "accent",
+			tone: "accent2",
 		});
 	});
-	const SeamCount = Rules.has("dense-body-sparse-rim") ? 0 : Math.min(8, Seams.length);
-	for (let Index = 0; Index < SeamCount; Index += 1) {
-		Parts.push({
-			key: `seam-${Index}`,
-			points: Ornament.tick((Index * 360) / SeamCount + 11, 31, 2.5),
-			closed: false,
-			width: 1.0,
-			method: "seam-tick",
-			layer: "detail",
-			tone: "accent2",
-		});
-	}
-	const LedgerCount =
-		Rules.has("large-void-restrained-detail") || Rules.has("framed-rim-restrained")
-			? 0
-			: Math.min(10, Ledger.length);
-	for (let Index = 0; Index < LedgerCount; Index += 1) {
-		Parts.push({
-			key: `ledger-${Index}`,
-			points: Ornament.circleAt((Index * 360) / LedgerCount + 7, 29, 0.9, 6),
-			closed: true,
-			width: 0.6,
-			method: "ledger-bead",
-			layer: "detail",
-			tone: "accent2",
-		});
-	}
-	Tools.slice(0, 6).forEach((Name, Index) => {
+	Tools.slice(0, 4).forEach((Name, Index) => {
 		Parts.push({
 			key: `tool-${Index}`,
-			points: Ornament.circleAt(angleOf(Name, Seed + 3), 26, 1.4, 6),
-			closed: true,
-			width: 0.7,
+			points: Ornament.circleAt(angleOf(Name, Seed + 3), 28, 1.6, 6),
 			method: "tool-bead",
 			layer: "detail",
 			tone: "accent",
 		});
 	});
-	if (Streams.length > 0) {
+	Injections.slice(0, 2).forEach((_, Index) => {
 		Parts.push({
-			key: "stream",
-			points: Ornament.spiralAt(50, 50, 13, 0.9, 12),
-			closed: false,
-			width: 1.0,
-			method: "stream-spiral",
-			layer: "body",
+			key: `inject-${Index}`,
+			...annulus(14 + Index * 3, 2.4, 24),
+			method: "injection-ring",
+			layer: "core",
 			tone: "accent2",
+		});
+	});
+	if (Services.length > 0) {
+		Parts.push({
+			key: "medallion",
+			points: Ornament.ring(9, 24),
+			method: "medallion",
+			layer: "core",
+			tone: "accent",
 		});
 	}
 	if (States.length > 0) {
 		Parts.push({
-			key: "state-1",
-			points: Ornament.ring(5, 16),
-			closed: true,
-			width: 1.0,
-			method: "state-nest",
-			layer: "core",
-			tone: "accent2",
-		});
-		Parts.push({
-			key: "state-2",
-			points: Ornament.ring(7.5, 20),
-			closed: true,
-			width: 0.8,
+			key: "state",
+			...annulus(5, 1.6, 16),
 			method: "state-nest",
 			layer: "core",
 			tone: "accent2",
 		});
 	}
-	if (Transforms.length > 0) {
+	const SeamCount = Math.min(6, Seams.length);
+	for (let Index = 0; Index < SeamCount; Index += 1) {
+		const Angle = (Index * 360) / SeamCount + 11;
+		const Inner = Ornament.at(Angle, 38);
+		const Outer = Ornament.at(Angle, 41.5);
 		Parts.push({
-			key: "transform-a",
-			points: Ornament.spike({ Angle: 0, Inner: 36, Outer: 46, HalfWidth: 2 }),
-			closed: true,
-			width: 0.9,
+			key: `seam-${Index}`,
+			points: [
+				Inner,
+				Outer,
+				{ x: Outer.x + 0.9, y: Outer.y },
+				{ x: Inner.x + 0.9, y: Inner.y },
+			],
+			method: "seam-tick",
+			layer: "detail",
+			tone: "accent",
+		});
+	}
+	const LedgerCount = Math.min(8, Ledger.length);
+	for (let Index = 0; Index < LedgerCount; Index += 1) {
+		Parts.push({
+			key: `ledger-${Index}`,
+			points: Ornament.circleAt((Index * 360) / LedgerCount + 7, 24, 0.9, 6),
+			method: "ledger-bead",
+			layer: "detail",
+			tone: "accent2",
+		});
+	}
+	Transforms.slice(0, 2).forEach((_, Index) => {
+		const Angle = Index * 180;
+		Parts.push({
+			key: `transform-${Index}`,
+			points: [
+				Ornament.at(Angle - 3, 42),
+				Ornament.at(Angle, 36),
+				Ornament.at(Angle + 3, 42),
+			],
 			method: "transform-cusp",
 			layer: "detail",
 			tone: "accent",
 		});
-		Parts.push({
-			key: "transform-b",
-			points: Ornament.spike({ Angle: 180, Inner: 36, Outer: 46, HalfWidth: 2 }),
-			closed: true,
-			width: 0.9,
-			method: "transform-cusp",
-			layer: "detail",
-			tone: "accent",
-		});
-	}
-	return { parts: Parts, services: Services.length };
-};
-
-export const sceneOf = (Genome, Plan) => {
-	const Manifest = Genome.manifest ?? { tokens: {} };
-	const Tokens = Manifest.tokens ?? {};
-	const Seed = Number.parseInt(String(Genome.seed).slice(0, 6), 16) || 1;
-	const Motif = motifOf(Plan, Seed);
-	const { parts, services } = semanticsOf(Tokens, Plan, Seed);
-	const Traces = Tokens.trace ?? [];
-	const Fill = Plan.fill === "none" ? undefined : Plan.fill;
-
-	if (Traces.length > 0) {
-		const Body = Motif.find((Part) => Part.layer === "body");
-		if (Body !== undefined) {
-			parts.push({
-				key: "trace",
-				points: scalePoints(Body.points, 1.06),
-				closed: Body.closed,
-				width: 0.6,
-				method: "trace-echo",
-				layer: "frame",
-				tone: "accent2",
-			});
-		}
-	}
-	if (services > 0 && !Motif.some((Part) => Part.layer === "core")) {
-		parts.push({
-			key: "medallion",
-			points: Ornament.ring(10 + Math.min(2, services) + (Plan.void ?? 0) * 2, 28),
-			closed: true,
-			width: 1.4,
-			method: "medallion",
-			layer: "core",
-			tone: Plan.accent === "core" ? "accent" : "ink",
-			fill: Fill,
-		});
-	}
-
-	const Solid = Plan.solid ?? { shrink: 0.6, twist: 0, ribs: 8 };
-	const SolidDensity = Plan.density ?? 0;
-	const FlatMethods = new Set([
-		"division-seed",
-		"division-cell",
-		"lattice-spoke",
-		"trellis",
-		"isometric-edge",
-	]);
-	const ExtentOf = (Points) =>
-		Math.max(...Points.map((Point) => Math.hypot(Point.x - 50, Point.y - 50)));
-	const Largest = new Map();
-	for (const Part of Motif) {
-		if (Part.closed === false || FlatMethods.has(Part.method)) {
-			continue;
-		}
-		if (Part.layer !== "frame" && Part.layer !== "body") {
-			continue;
-		}
-		const Extent = ExtentOf(Part.points);
-		if (!Largest.has(Part.layer) || Extent > Largest.get(Part.layer).extent) {
-			Largest.set(Part.layer, { part: Part, extent: Extent });
-		}
-	}
-	const Projected = [];
-	for (const Part of Motif) {
-		const Target = Largest.get(Part.layer);
-		const Big = Target !== undefined && Target.part === Part && Target.extent > 18;
-		if (!Big) {
-			Projected.push(Part);
-			continue;
-		}
-		const Shrink = Part.layer === "frame" ? Math.min(0.92, Solid.shrink + 0.1) : Solid.shrink;
-		const Top = scalePoints(rotatePoints(Part.points, Solid.twist ?? 0), Shrink);
-		const Ribs = Math.max(6, Math.min(8, Solid.ribs ?? 8));
-		Projected.push({ ...Part, opacity: 1 });
-		for (let Index = 0; Index < Ribs; Index += 1) {
-			const At = Math.floor((Index * Part.points.length) / Ribs);
-			const From = Part.points[At];
-			const To = Top[At];
-			if (Math.hypot(From.x - To.x, From.y - To.y) < 1.5) {
-				continue;
-			}
-			Projected.push({
-				...Part,
-				key: `${Part.key}-rib-${Index}`,
-				points: [From, To],
-				closed: false,
-				width: 0.7,
-				opacity: 0.4,
-			});
-		}
-		Projected.push({ ...Part, key: `${Part.key}-top`, points: Top, opacity: 0.55 });
-		const Ages = Math.min(1, Plan.mutations?.rings ?? 0);
-		for (let Age = 1; Age <= Ages; Age += 1) {
-			Projected.push({
-				...Part,
-				key: `${Part.key}-age-${Age}`,
-				points: scalePoints(
-					rotatePoints(Part.points, Solid.twist ?? 0),
-					Math.pow(Shrink, Age + 1),
-				),
-				opacity: 0.4,
-			});
-		}
-	}
-	const Atlas = atlasOf(Genome, Plan);
-	const Under = Atlas.filter((Part) => Part.layer !== "core");
-	const Glyph = Atlas.filter((Part) => Part.layer === "core");
-	const Raw = [...Under, ...Projected, ...parts];
-	const Rings = Math.min(3, Plan.mutations?.rings ?? 0);
+	});
 	for (let Index = 0; Index < Rings; Index += 1) {
-		Raw.push({
+		Parts.push({
 			key: `evolution-${Index}`,
-			points: Ornament.ring(20 + Index * 3, 32),
-			closed: true,
-			width: 0.6,
+			...annulus(20 + Index * 3, 1.4, 28),
 			method: "evolution-ring",
 			layer: "detail",
 			tone: "accent2",
 		});
 	}
-	const Density = Plan.density;
-	const Detail =
-		Density === undefined
-			? Math.min(6, Plan.detail ?? 0)
-			: [0, 3, 5, 6][Math.min(3, Math.max(0, Density))];
-	const Capped = (Plan.rules ?? []).some((Rule) => Rule.rule === "high-symmetry-restraint")
-		? Math.min(3, Detail)
-		: Detail;
-	for (let Index = 0; Index < Capped; Index += 1) {
-		Raw.push({
+	for (let Index = 0; Index < Detail; Index += 1) {
+		Parts.push({
 			key: `detail-${Index}`,
-			points: Ornament.circleAt((Index * 360) / Capped + 17, 24, 0.8, 6),
-			closed: true,
-			width: 0.6,
+			points: Ornament.circleAt((Index * 360) / Detail + 17, 24, 0.8, 6),
 			method: "detail-bead",
 			layer: "detail",
 			tone: "accent2",
 		});
 	}
-	Raw.push(...Glyph);
-	const RibbonMethods = new Set([
-		"injection-ring",
-		"state-nest",
-		"evolution-ring",
-		"trace-echo",
-		"stream-spiral",
-		"seam-tick",
-		"transform-cusp",
-		"division-cell",
-		"lattice-spoke",
-		"trellis",
-		"isometric-edge",
-	]);
-	const Components = Raw.map((Part, Index) =>
-		piece(Part.key ?? `part-${Index}`, Part.points, {
-			...Part,
-			depth: Index,
-			render:
-				Part.render ??
-				(Part.closed === false || Part.layer === "frame" || RibbonMethods.has(Part.method)
-					? "ribbon"
-					: "solid"),
-		}),
+	Parts.push(Residue.core);
+
+	const Components = Parts.map((Part, Index) =>
+		piece(Part.key ?? `part-${Index}`, Part.points, { ...Part, depth: Part.depth ?? Index }),
 	);
-	if (Fill !== undefined) {
-		const Core = Components.find(
-			(Component) => Component.composition.collisionGroup === "core",
-		);
-		if (Core !== undefined) {
-			Core.fill = Fill;
-		}
-	}
-	return {
-		components: Components,
-		closure: (Tokens.gate ?? []).length > 0 ? "open" : "closed",
-	};
+	return { components: Components, closure: Gates.length > 0 ? "open" : "closed" };
 };
 
 export const readingOf = (Scene) => {

@@ -5,14 +5,14 @@ colour). This note records the palette logic the icon set should borrow.
 
 ## What the image does
 
-| Trait | In the image | In the icon palette |
-| --- | --- | --- |
-| Warm light | yellow, amber, orange on the lit surfaces | the accent tone carries the warm end |
-| Cool shadow | violet, indigo, slate blue in the recesses | the ink tone carries the cool end |
-| Green life | small saturated green plants | a rare third accent, used sparingly |
-| Dark ground | near-black rock behind the light | the mono render stays on the page ground |
-| Saturated, low-value shifts | every hue is pushed, values step in bands | flat bands, no gradients |
-| Complementary contrast | warm light against cool shadow | each icon pairs a warm and a cool plane |
+| Trait                       | In the image                               | In the icon palette                      |
+| --------------------------- | ------------------------------------------ | ---------------------------------------- |
+| Warm light                  | yellow, amber, orange on the lit surfaces  | the accent tone carries the warm end     |
+| Cool shadow                 | violet, indigo, slate blue in the recesses | the ink tone carries the cool end        |
+| Green life                  | small saturated green plants               | a rare third accent, used sparingly      |
+| Dark ground                 | near-black rock behind the light           | the mono render stays on the page ground |
+| Saturated, low-value shifts | every hue is pushed, values step in bands  | flat bands, no gradients                 |
+| Complementary contrast      | warm light against cool shadow             | each icon pairs a warm and a cool plane  |
 
 ## What to add
 

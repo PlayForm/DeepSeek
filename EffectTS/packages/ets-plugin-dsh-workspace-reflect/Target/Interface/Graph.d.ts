@@ -1,4 +1,4 @@
-import type Node from "./Node.js";
+import type Node from "@Interface/Node.js";
 export default interface GraphHandle {
     /** The frozen contract's method: re-index one file after a
      *  transformation, so the graph's representation stays current. */
