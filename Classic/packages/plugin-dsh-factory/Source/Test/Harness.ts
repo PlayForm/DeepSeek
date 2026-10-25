@@ -113,6 +113,7 @@ export const Make = (Factory: any, Raw: any = {}): any => {
 	if (Factory) {
 		Factory.PendingJournal = [];
 		Factory.SharedJournal = undefined;
+		Factory.SharedJournals = undefined;
 	}
 	const Over = Raw.files ? Raw : { ...Raw, files: {} };
 	const provided: Record<string, unknown> = {};

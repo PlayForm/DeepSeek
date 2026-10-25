@@ -42,3 +42,13 @@ The service surface (`ctx.workspaceEvidence`):
 | `statistics` | `() => { validations, fresh, stale, superseded, sequence }`                                                                  | The store counters.                                                                                         |
 
 The four truth kinds (`TruthKind`): `reality`, `observation`, `representation`, `intent`.
+
+## The repeat-event guard (Function/Duplicate)
+
+The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
+version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it;
+no real timer anywhere) runs no invalidation pass and records nothing - the version token
+identifies the file state, so that state's invalidation already ran, and any validation created
+since is fresh against the same state. A different version, or the same version after the window,
+runs the pass normally. The service's explicit `invalidate(key)` calls are never coalesced. No new
+ledger line: a coalesced repeat records nothing.

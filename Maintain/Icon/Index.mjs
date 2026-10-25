@@ -7,11 +7,12 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { dirname, join } from "node:path";
 
 import { featuresOf } from "./Feature.mjs";
+import { inferTokens, tokenCounts } from "./Infer.mjs";
 import * as Grammar from "./Grammar.mjs";
 import { evolutionOf, mutationsOf } from "./Mutation.mjs";
 import * as Palette from "./Palette.mjs";
 import * as Prng from "./Prng.mjs";
-import * as Render from "./Render.mjs";
+import * as Render from "./RenderScene.mjs";
 
 const sha256Of = (Text) => createHash("sha256").update(Text, "utf8").digest("hex");
 
@@ -49,6 +50,7 @@ export const genomeOf = (root, entry) => {
 	]);
 	const palette = Palette.palettesOf({ kind: features.kind, seed: seed });
 	const mutations = evolutionOf(mutationsOf(changelogOf(root, entry)));
+	const manifest = inferTokens(root, entry.dir);
 	const genome = {
 		package: features.package,
 		dir: features.dir,
@@ -63,6 +65,8 @@ export const genomeOf = (root, entry) => {
 		mutations,
 		seed,
 		palette,
+		manifest,
+		tokens: tokenCounts(manifest),
 	};
 
 	// The plan streams from the seed, so it is computed on the genome without

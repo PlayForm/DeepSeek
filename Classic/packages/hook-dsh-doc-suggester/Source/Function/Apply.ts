@@ -263,6 +263,10 @@ export default (Context: Context, Options: Config): void => {
 				);
 				const Winner = Detections[0];
 				const FamilyId = Winner?.family.id ?? "";
+				if (Winner === undefined) {
+					FactoryAppend(Context, State, "abstained no-signal  0.00");
+					return Downstream;
+				}
 				// The pickable decision model, resolved per call (the config cells
 				// are volatile) plus the learned rates the score reads.
 				const Table = Weights(State.Heuristics, State.Weights);

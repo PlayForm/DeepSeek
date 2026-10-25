@@ -137,6 +137,40 @@ const runTest = async () => {
       assert.equal(Run.Fs.reads.length, 0);
     });
   }
+  {
+    const Run = Setup();
+    const Service = Run.Context.workspaceEvidence;
+    Service.validate("a", "reality", "s", ["/p/x.ts"]);
+    Fire(Run, "/p/x.ts");
+    Fire(Run, "/p/x.ts");
+    Check(Count, "W8: a repeat event with the same version is dropped silently", () => {
+      assert.equal(Service.check("a"), "stale");
+      assert.deepEqual(LinesWith(Run, "stale a"), [
+        "evidence: stale a (dependency /p/x.ts)"
+      ]);
+      assert.deepEqual(LinesWith(Run, "no stale (dependency /p/x.ts)"), []);
+    });
+    Check(Count, "W8: a different version is processed normally", () => {
+      Run.Listeners["fs/observed"](
+        { displayPath: "/p/x.ts", targetKey: "/p/x.ts" },
+        { kind: "present", version: "2" },
+        { agent: { id: "agent-a" } }
+      );
+      assert.deepEqual(LinesWith(Run, "no stale (dependency /p/x.ts)"), [
+        "evidence: no stale (dependency /p/x.ts)"
+      ]);
+    });
+    Check(Count, "W8: the same version outside the window is processed again", () => {
+      const Base = Date.now();
+      Run.State.Now = () => Base + 5e3;
+      Run.Listeners["fs/observed"](
+        { displayPath: "/p/x.ts", targetKey: "/p/x.ts" },
+        { kind: "present", version: "2" },
+        { agent: { id: "agent-a" } }
+      );
+      assert.equal(LinesWith(Run, "no stale (dependency /p/x.ts)").length, 2);
+    });
+  }
   return Finish(Count, "Watch-And-Storage");
 };
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

@@ -31,7 +31,12 @@ observe -> semantics -> operate -> govern -> authority -> approve -> merge
   a failed query) falls back to the lexical reference list. The seam is probed, never injected.
 - **The index**: on every fs/observed event heard on the ROOT context (the factory's Wire
   registration) the stale model for the path is dropped and the monotonic index revision advances.
-  The conversation never sees the index until an event surfaces it (the visibility rule).
+  A **repeat event** - the same path carrying the same version within the coalescing window - is
+  dropped silently (the guard `Function/Duplicate`, the monitor's clock pattern - no timer, 2 s,
+  the `State.Now` test seam overrides it): the model for that file state is already dropped, and a
+  model rebuilt since was built from the same version, so it stays fresh - the last distinct
+  version always wins. The conversation never sees the index until an event surfaces it (the
+  visibility rule).
 - **The rename semantics**: per-adapter. The rename means different things per format (the .ts
   symbol vs the .md link target vs the .json key); an extension with no adapter, or an adapter that
   cannot be certain, gets the refusal-to-guess answer - `undefined` plus one ledger line, never a
@@ -48,7 +53,8 @@ Ledger lines (byte-stable): `disabled (enabled=false)`, `adapters registered (N 
 `refused <path> (no adapter for <ext>)`, `refused <path> (rename: ...)`,
 `planned rename <from> -> <to> in <path> (N edits, <certainty>)`,
 `indexed <path> version <v> (revision <r>)`, `ignored <path> (own actor)`,
-`ignored <path> (excluded)`, `failed <path> (<reason>)`, `storage open failed: <reason>`.
+`ignored <path> (excluded)`, `failed <path> (<reason>)`, `storage open failed: <reason>`. A
+coalesced repeat event (the repeat-event guard) records nothing and adds no line.
 
 ### The policy block (D6)
 

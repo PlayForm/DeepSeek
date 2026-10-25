@@ -89,6 +89,7 @@ export default async (
 	// successful one, and has its pre-bind buffer drained and retired here.
 	Factory?: {
 		SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
+		SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
 		PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 	},
 ): Promise<void> => {
@@ -150,7 +151,18 @@ export default async (
 		// factory instance — every module's records route through it (the
 		// domain is single-open; later modules' own opens fail `already-open`).
 		switch (true) {
-			case !!Factory && !Factory.SharedJournal:
+			case !!Factory:
+				(Factory.SharedJournals =
+					Factory.SharedJournals ?? new Map()).set(
+					State.JournalDomain ?? "package_governance",
+					Sink,
+				);
+				break;
+		}
+		switch (true) {
+			case !!Factory &&
+				!Factory.SharedJournal &&
+				(State.JournalDomain ?? "package_governance") === "package_governance":
 				Factory.SharedJournal = Sink;
 				break;
 		}

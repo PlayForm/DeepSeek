@@ -9,6 +9,7 @@ declare function _default(State: State, Facility: {
     }>;
 }, Factory?: {
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
+    SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
     PendingJournal?: {
         event: string;
         path: string;

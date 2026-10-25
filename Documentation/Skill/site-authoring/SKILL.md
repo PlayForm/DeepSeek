@@ -1,13 +1,7 @@
 ---
 name: site-authoring
-description:
-    "The Site/ lane: the Astro source map, the design system, page anatomy, live content model,
-    Mermaid diagram pipeline, build-as-verification rule, accuracy rules for registry and model
-    claims, and the Cloudflare Pages deployment."
-whenToUse:
-    Before editing any file under Site/ (pages, components, layout, library, styles, public assets,
-    diagrams), when adding a page or nav entry, when changing the 404 or deploy config, or when a
-    site claim about the family must be verified.
+description: "The Site/ lane: Astro source map, design system, page anatomy, live content model, Mermaid diagram pipeline, build-as-verification rule, accuracy rules for registry and model claims, Cloudflare Pages deployment."
+whenToUse: Before editing any file under Site/ (pages, components, layout, library, styles, public assets, diagrams), adding a page or nav entry, changing the 404 or deploy config, or verifying a site claim about the family.
 version: 2.0.0
 updated: 2026-10-20
 ---

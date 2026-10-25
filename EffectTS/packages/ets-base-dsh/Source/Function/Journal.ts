@@ -41,6 +41,7 @@ import { Effect } from "effect";
 export default (
 	Factory: {
 		SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
+		SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
 		PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 	},
 	State: State,
@@ -51,7 +52,9 @@ export default (
 ): Effect.Effect<void, unknown> =>
 	Effect.suspend(() => {
 		try {
-			const Shared = Factory.SharedJournal;
+			const Domain = State.JournalDomain ?? "package_governance";
+			const Shared =
+				Factory.SharedJournals?.get(Domain) ?? Factory.SharedJournal;
 			switch (true) {
 				case !!Shared:
 					Shared?.(Event, Path, Detail, At);
@@ -59,7 +62,7 @@ export default (
 			}
 			const Pending = Factory.PendingJournal;
 			switch (true) {
-				case Array.isArray(Pending):
+				case Array.isArray(Pending) && Domain === "package_governance":
 					switch (Pending.length < 256) {
 						case true:
 							Pending.push({

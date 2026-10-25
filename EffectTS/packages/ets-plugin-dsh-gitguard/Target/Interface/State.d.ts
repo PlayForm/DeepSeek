@@ -1,4 +1,4 @@
-import type FactoryHandle from "@Interface/Factory.js";
+import type FactoryHandle from "./Factory.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Master switch (config `enabled`, volatile) - false = full passthrough. */

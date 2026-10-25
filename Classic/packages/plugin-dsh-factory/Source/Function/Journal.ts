@@ -29,6 +29,7 @@ import type State from "@Interface/State.js";
 export default (
 	Factory: {
 		SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
+		SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
 		PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 	},
 	State: State,
@@ -38,11 +39,15 @@ export default (
 	At?: number,
 ): void => {
 	try {
+		const Domain = State.JournalDomain ?? "package_governance";
+		const Shared =
+			Factory.SharedJournals?.get(Domain) ?? Factory.SharedJournal;
 		switch (true) {
-			case !!Factory.SharedJournal:
-				Factory.SharedJournal(Event, Path, Detail, At);
+			case !!Shared:
+				Shared(Event, Path, Detail, At);
 				break;
-			case Array.isArray(Factory.PendingJournal):
+			case Array.isArray(Factory.PendingJournal) &&
+				Domain === "package_governance":
 				switch (Factory.PendingJournal.length < 256) {
 					case true:
 						Factory.PendingJournal.push({

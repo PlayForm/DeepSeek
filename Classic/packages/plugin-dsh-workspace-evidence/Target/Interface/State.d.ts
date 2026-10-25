@@ -25,6 +25,15 @@ interface Extra {
     /** The open storage domain handle; `undefined` while pending, after a
      *  silent skip (absent facility), or after the effect's disposer. */
     Handle: DomainHandle | undefined;
+    /** The repeat-event guard's map (Function/Duplicate): one entry per path
+     *  holding the last processed version plus the clock stamp. */
+    Seen: Map<string, {
+        version: string;
+        at: number;
+    }>;
+    /** The clock override (the smoke's fake clock; production leaves it
+     *  undefined and the guard falls back to the wall clock). */
+    Now?: () => number;
     /** The service's OWN actor marker object: an event carrying exactly this
      *  actor is the service's own and is ignored (the identity check). */
     Self: object;

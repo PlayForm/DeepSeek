@@ -88,6 +88,16 @@ Every "cannot answer" path - the seam absent, no provider for the extension, a f
 non-`locations` result, an empty symbol list - is `undefined`: the lexical answer stands and no line
 is added.
 
+## The repeat-event guard (Function/Duplicate)
+
+The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
+version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it;
+no real timer anywhere) runs no invalidation and records nothing - the version token identifies the
+file state, so the model for that state is already dropped, and a model rebuilt since was built
+from the same version and stays fresh. A different version, or the same version after the window,
+invalidates normally: the last distinct version always wins. No new ledger line: a coalesced
+repeat records nothing.
+
 ## The ledger strings (module-owned, byte-stable)
 
 ```text

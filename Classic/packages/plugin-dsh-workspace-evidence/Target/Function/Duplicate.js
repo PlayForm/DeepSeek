@@ -1,0 +1,1 @@
+const u=2e3,a=2048;var c=(t,n,s)=>{const i=typeof t.Now=="function"?Number(t.Now()):Date.now(),e=t.Seen,o=e.get(n);if(!0===(o!==void 0&&o.version===s&&i-o.at<2e3))return!0;for(;e.size>=2048;){const r=e.keys().next().value;!0===(r===void 0)||e.delete(r)}return e.delete(n),e.set(n,{version:s,at:i}),!1};export{c as default};

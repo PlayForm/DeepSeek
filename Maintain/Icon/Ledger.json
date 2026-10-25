@@ -27,8 +27,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "2abb52c20b65413728b40dd158b560e7f9e349b1d9d5d2b8b9fd96ed9c7072ac",
-				"colour": "4ecc43f81df5dfa8fb6481ca8a208bb22b097348e859441959255542f0b51cf7"
+				"mono": "4c3f7432f53262cbca56b97fbc2d499fc60bc2e2a7d8e93521b5f5fbcb47de09",
+				"colour": "47ccbd5d4c148a3e08143019adfb4ff7a695de9bb1d6682d37c3fbde813591eb"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/client-dsh-panel-family.svg",
@@ -50,8 +50,8 @@
 			"rim": "scallop",
 			"mode": "single",
 			"hash": {
-				"mono": "a4025c51ff2f6a1b5b798e5e9437d924e47c9a07c08790bc6d3844df521281c4",
-				"colour": "3cf464453cef88f6210d772fe6cdb9909efc24df23f33d4f0c53e1e56188ed59"
+				"mono": "d9ef12f377d845a9e2afb2272b8ee635289e92cbd1c8278ce3f51970e981c41e",
+				"colour": "3d210ee25fdf5d9472d3c1f28cf6f400ae699c1d001b330c93255d27910651cb"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/client-dsh-panel-family-host.svg",
@@ -73,8 +73,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "48d2860c4904399cf35f355e8499afb422c454959f0327d21463864d6b3bdf98",
-				"colour": "df5a1528a1b9c0ab485bd027a72524870d5c44c65250562913f7e90d35446267"
+				"mono": "59e233907273069e1678247404a7a300f43766cc1936f63fa02991f6fbba950f",
+				"colour": "e687e3cfd748ab1d7c3e4959ea97122e0737a4326a3ce45d70495d54e84ad445"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/client-dsh-workspace-live.svg",
@@ -96,8 +96,8 @@
 			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "4f1c485de4f36e9d381981268c192a862a6afa777073be9816e0f30afa2d14f5",
-				"colour": "cf5ccde77cd02c75c8c3e533ce6b175514443585c0c0353ac330c131a487c431"
+				"mono": "d0feb8ba13f2ff18f1306863c87514542e6a37104de5cf0da4467e715bc2993a",
+				"colour": "13d64219604bda88dcf484b0aa763519103c0cb60f5cc0792a1b822bcdcc11d7"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-base-dsh.svg",
@@ -119,8 +119,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "29738fb6bc2394a199501749cf8e755f81e971d00d48b030002a5b131a577b96",
-				"colour": "5da9a598493613843e83aa965edeeaf52a38ee9e6da1a22c8f702a9b2205709a"
+				"mono": "8556ad3a377cc0cc447582b2c580b973e3f2f441fbd02bdb170af3b2509e5b29",
+				"colour": "665d1db84f40284579afa5d48b3b4f58d92dc8a50b953f80c10cc213e993c304"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-client-dsh-workspace-live.svg",
@@ -142,8 +142,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "85641fe28fb4da5bbd58bcaef58c3028dc0b845c34e5546d03f67fe534c7aba2",
-				"colour": "24a80c93171f73496d2bc22905088f7f594e5cb3045ed51544559be979074a10"
+				"mono": "8f95008fd90508bc014b1527f20a9cf753a07671d1515feb6976e1a5e09556ed",
+				"colour": "b4c9dc8a10024ac9bc82aa41f5da17cd72251592842a13ee123a7bae6c4be2ee"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-cargo-governor.svg",
@@ -165,8 +165,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "f28cb264b68b1551963adbadc7dbef814339de61977d024e7d8451f1b9cf07cb",
-				"colour": "75f64818bed5eb49adcb73f8a7d18ced5bd924446c03950d58757dc0c486cbf4"
+				"mono": "4a60010f3f91a926e8da5c09b2af7139954f0750377611354066c6660825fc61",
+				"colour": "aecdde3ecdd1f2afe9c7307d16ab6855dd5d0faa6c2cc51ef0189f765b7920c4"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-ccr.svg",
@@ -188,8 +188,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "90fd688065148e1214a68a205ec3d491f6f0a14ca701c90c5bec55c1c7e8dff6",
-				"colour": "65f9f0ce4cd9a56e23093c59b62733bc35b6b8ebf8ae892b55a2fa2021ea72b3"
+				"mono": "3d52dde747872e97d5cec11d0f76b5196c9820d55c0da92bedebc2f2c98757d7",
+				"colour": "6e4d5fec6351b1f2246aedc8e33baaacbfe5d94e0facbda9733aaf1cbb65cc1c"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-convention-suggester.svg",
@@ -211,8 +211,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "ea464e4d647056fec737ec06240ed8c77b322a8fc6f5cf6ceb96d7a8fb902886",
-				"colour": "341b7ac0ed68b9ee8d2a453e478810dd6168047f9f68f282b6db659441cc1bda"
+				"mono": "ee40890d3c6846afd4176a87b05c77cfef8a004db41bc2c86c3e75f7c48fa6f4",
+				"colour": "83998342020cde9d01c9b73dd8947a926a93b0111b1fab7ebff5f88bef11d836"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-doc-suggester.svg",
@@ -234,8 +234,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "f94abacc117c4c5f1aeba08a841d2adc7840357d4ff2008dd73ae951d7cb864e",
-				"colour": "9da320a98c80f0f067e682facd9bc9e6eac5ece51f0e77821a90389c5dd7cbf2"
+				"mono": "f34bbf4e80a41238d231e561663d8a3d10fab0553f953b611883d4b68c76480a",
+				"colour": "e9cddebe316d76eb073e82cf6941fc551ec1a367049806679ffc4d524319b7a7"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-edit-suggester.svg",
@@ -257,8 +257,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "b5f105f8394c0be56ec8eb05a0db1c1c158cbaed3b659dac477bcb3fce1925d8",
-				"colour": "f7f585db8b77cb979082abfb92fe23814ef3f3660d69fecac0e37e3e85f0eeaa"
+				"mono": "2ced6795a346c530dee2181fd33994c984fb2c498b5fcd570f7e73aee4fa0b63",
+				"colour": "9f59c098f091f4aa0a31641717b8a51cb2b47d03bc9e624f76f5f6c3f6629897"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-graph-suggester.svg",
@@ -280,8 +280,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e8e1f43de92f2432f29bd93681c2aef332dab0fcadcf5615321a6a7cfaab266d",
-				"colour": "542c97c534d94a53d3ea50b06a35c6484b9432ecdf2a07cb59655d99f516a022"
+				"mono": "902487a19959a41f2f7cf1fcddbeef8b2225e8658072b5e423fd5550fe6e4513",
+				"colour": "c78d0f9832baad56d01eb76b7df06f9852fc9561ecc12c32b49187b5dda7f9fe"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-live-containers.svg",
@@ -303,8 +303,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "c3c7acd5bcb967df6369b1e576d06eb3a531cfb7f35ab07376b6bb6dc46cab80",
-				"colour": "3ab580b31db6a3f2ed0cacf92d501b6f384a6ba055cd248b4ae4119be41ff320"
+				"mono": "90e966edfce386b18b1cca912a13216ea021bb7ac12bceea202defbfe3b7ccc8",
+				"colour": "cce9c2d93e94c001a6270997b833145382a7c1447cfdc67bf35c8127e6d3f86f"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-dash.svg",
@@ -326,8 +326,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e5628ee961bdb6f4d8d98953e43afe61e1cbb372d84b3ce823421d55196e4871",
-				"colour": "b08927972b1fd6a92762c9707add29a6013fc622412fb657f5538ed92c99450b"
+				"mono": "6dee91c15458acd2096d49e67c4ea67327b7faed11d5cf8c634e60eb35be8768",
+				"colour": "90649e1ed45eb3a1b871dba80a47257c1b412cfa2789def2f007416f42a4e31e"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-ellipsis.svg",
@@ -349,8 +349,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "f78e12725df36b3903784f88b0b418935416c99c5ce8da3f2db3ea7fb37159b0",
-				"colour": "fd1c74bc6b3274f6680f8d0e132ac59f616a451f77582a6b7b39a5f8c47f4d7a"
+				"mono": "dd4314fd9b2f91c56bc030e4b4d48fbf67ba4c6f24a6a8586292634825069bf8",
+				"colour": "5899b3864c79534c8085fbe92c995c6b427f4debf553554371dafdf980b19ef4"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-fullwidth.svg",
@@ -372,8 +372,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "800b6123dde5c85309e1c606e0c2898412009b335fdc0d5b3624d831dcf04042",
-				"colour": "1789663e49be6ebb6ba28040637a36ed4b45345c5f152d46918ec0e03253fe15"
+				"mono": "e0793dfbe70cff0d5374e9a258afa26902b9f7e7c2d1c993ffd703193dbe00d6",
+				"colour": "793c438b06263d5e114c924d4ae7cfaade8f0573d796c4dfbfd9f3e53940a460"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-invisible.svg",
@@ -395,8 +395,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "a031fa2722815782eb46d570982a254081243ac532c9fbe78112ba71687124e8",
-				"colour": "ecfc2334b9cab53aa3086fcbe6a98ae6bda8782caaa1351dd6ca979a99b6b356"
+				"mono": "af9203a251ea491b9bf8b7cea88a5bcfef1bf6bc57e2fdfe62faa7c3ae5d6960",
+				"colour": "f9be0a2c5a328cb1f38e06c7d02b3e6807b42cd17a29c2d250488d4fb7c78dd8"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-quotes.svg",
@@ -418,8 +418,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "759e66a124a4e4703bbb6ed0acb92ee0422444f3b9762e5c9fde91b0b5fdab9f",
-				"colour": "1687690b2eb794a98b95e0c5e15178ab567c079b7c522654c5ac5d727fb97f97"
+				"mono": "42e41c953acbf88e6c961b67a532500669f304a4e6986347d0fb8bb91fda7dd4",
+				"colour": "3af54419768ac633a44088e90fd06038f527416eb7e4a53fe957e139aa60adba"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-spaces.svg",
@@ -441,8 +441,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "284fcea358ce558e8a697499768be02fbc36879d499ac3607af9ce99fcfeb70f",
-				"colour": "6d47ebcc6bd22a5e62e4035007be22dfa6c311b4098ff54d24d11993b0cd0c9f"
+				"mono": "58d0fb481a0c8681626a950779ee1bd99ca939ea66f6dd9ed5d3d3611f356dc6",
+				"colour": "918fea1717d6854af7f4c56c85896aa3049e69c9fbf0489988ec92a7cd57a5f2"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-package-governor.svg",
@@ -464,8 +464,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "bc7867cf3a9d9ed227377458d6c89cb7c786709ebe864651b760f98262bfe5f2",
-				"colour": "9e928f64cef6c9b5d098679630f59001bee904a009dfe7e25ebeb69dbbb0a4d0"
+				"mono": "8fd3c97dd8ad400b4e70b11a2f933831358915a823b776a3833de7f06bb3ff7c",
+				"colour": "5e8b198ff1ec393fc309a05b10002c28d7b1cbe8d8516008c224f730585502f9"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-package-pinner.svg",
@@ -487,8 +487,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "d308764f235709593ed78c11b5292c7dbc35c169b5aa0588c7a37c19fb3ae433",
-				"colour": "bd07814ec4b99d3bd3386455e51a1a9c26b8257bf70cccfd49f3a9de23faa674"
+				"mono": "138fb28d8ef8be30d435f4e59864811809b8c82b360477a8e42cece8770c6a23",
+				"colour": "744ec5b059d2ba64350d5e647ef8f07375d904609971824fbf7e6bc3bfd1ba7f"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-replay-suggester.svg",
@@ -510,8 +510,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "c1e0e2d8d5fd048be7b33bdfa5be137e93cd67ee5c20793c2c854a1559fbda6f",
-				"colour": "97724447facee3a0a75ac0552e19d7b3cefa55f53040655acf2944153513545b"
+				"mono": "d12f41bb09c96b876d7a3d4ac90c7edc5903f62210f7c26b573bc5f3a589664b",
+				"colour": "b30fdd24e04951010f1b260a755e55e6aaf5bd4eaec3e92b537e1bfc020fb50d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-search-suggester.svg",
@@ -533,8 +533,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "52ed8595b73167b62c3b084401e322885a39a8545eaee09890badd9e7714d70a",
-				"colour": "9ce52a1304b21675ae89c3838eb709a1cc2702fe964b74321cb0f637bec2dca3"
+				"mono": "ec63b6113c420e8b61cdf44f0b88ab9020beac21d496cbf0cb6caae5b8aa5274",
+				"colour": "831aa0a76c2814cb74ff9ded5780670b5188cd675d1a85e4f604553dc0096040"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-test-suggester.svg",
@@ -556,8 +556,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "b85935c80bb233d48b6843e908c351419bd90f944d2beb3ab33f15d7eddab1a0",
-				"colour": "937ac2249802623a0373e4a2e66daf642f03f658e0d159bf78010780bccfcc7c"
+				"mono": "f647221b509c9c9cae3c6da0937698a68f71f5a9860d4f18aaa6053c59521acd",
+				"colour": "11c7daeb464820173f64e119212dec2d0a2079b9b64a92a0b4e2f28fba4455cd"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-tool-coach.svg",
@@ -579,8 +579,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "0799406df7c3f92e8f8caf5d90dc9479590c0f6f8410e97a152dbe3d4307b677",
-				"colour": "efb2602b93a83c276e2c5ba2833007c1a981e4ff57dbf1b985438d009a3924bf"
+				"mono": "9d4b7a1d39dddd60a1bcec13318daa6b33aea1e15fb5cdf5ee5f67d2ea7afac5",
+				"colour": "57c2877b182e9b33338fa28c3dcd868671ae6f9edf04905da871b6d80e651942"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-approve.svg",
@@ -602,8 +602,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "d6ed23ed33d6d4ad63d6d88bc677aa4ef8e53c5cc18738a978a9c42a8996209b",
-				"colour": "393449cb3440166b1da4738211ab9c79c23ad97c893161862ec79eaeb337b4ea"
+				"mono": "3e616f32f7644cbe6c58d096425f8d20eb5109a5eaa022cabfefcdc13809f3d6",
+				"colour": "1bffd9e977c3f3c3c4b31a7df21d0d518aed70aab560c7fe567b71c247acd115"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-audit.svg",
@@ -625,8 +625,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "142aed61575739ba98ffff8c476ba68e1deaf36db769c63efc7a8a2875392d70",
-				"colour": "f89b9bb9b52af141a461b3a392a7d8e0cabf750c49c91c6c838cc91aabbde8b4"
+				"mono": "ece1b256bca2fa2205a6168ad59fb04e780f05429c03d540a6c540d35c144623",
+				"colour": "3299d978339a2723496395f946216da2b57397c0e5f5794417b4cbee157c8c8d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-govern.svg",
@@ -648,8 +648,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "fb09f602abd740b3354dbeed99483a5120c4d240b84ce9ea8866592b9d638505",
-				"colour": "889fb2904b1426f0d0d1fcbd0532e84585314f842f5fa5ceef58718ef65e2e21"
+				"mono": "dd46f409f1c6772cac12ac988fd1b29513e9e5c17136e5aaabef8895c03ea163",
+				"colour": "5c7bb3b25480c546ac4977b44e9f6c5ad16634b473a8b939e59ce16678dc7a7d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-journal.svg",
@@ -671,8 +671,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e3cba206e7ac5625c1811080bb4a2d9f3a38c5ae8e93d23d2971b0bde86e12d3",
-				"colour": "3299c654bce8cc5c1823d89d521c3df92ea0e6d795a4fc07c586aad9fb5d4c74"
+				"mono": "58333e47931f22c525bbb73702e62b7e465df70d0fe88736611280bf4af79d46",
+				"colour": "11c8d6d86661d46e6e320dd7884843e064669b52c927bc28bc3128f354c04127"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-merge.svg",
@@ -694,8 +694,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "cd8bee89ef76cbfed61d16ecd0ed0e8efae8bfe7d08bce0044d347004b3f9cba",
-				"colour": "cd935c6f0cbbd94ebfe08d47934952d123b65111f62b3bc18170157bc21279dc"
+				"mono": "cdfe50d5c18e04b2a510eaedc68e0b219f64bb2de0d85a8aabb7c40d8c0782e0",
+				"colour": "404e4f23ef181dfe8555215feea9ea5ce15f47a88e1256397e71f23e27bc3f2c"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-monitor.svg",
@@ -717,8 +717,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "11c7a3455971e7ed01c9532cafdbf48b9855bb567f889af7455109e72e3bc80c",
-				"colour": "9d980f4bdc85baff9a431174bfd108ebcf31e2c25866b3be6c0ac5e8780c37bd"
+				"mono": "c4bdfadb72316866e6db87d7a01325e2896dbfe8730df2273eedcc5320b83cd0",
+				"colour": "c9471a76df3019563f7959dd49ba416552b154269cda34c5d7665d45a288e5e6"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-observe.svg",
@@ -740,8 +740,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "9d30bc956a6228f5aa4b422b376b1349d5fce69227e4ece587b8d6ad27c4041f",
-				"colour": "00e5b004690512d864da939f0852a227a7e144ce67fadcf76f6c8e85e0961623"
+				"mono": "553b90f8ecfa1954b40c0dc0f44c4ed70b94b6b876d548082935882f60e78cee",
+				"colour": "eeecd78aafc638de7ac22378f1e47ae1a50300ed0b1737d46a5bfde0079c69a0"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-operate.svg",
@@ -763,8 +763,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "0cbf4a69cf286dbf2f799aba88c5bb051410cb3061f25ac36dba5eba69122558",
-				"colour": "8b093f9cb221a1e353637cba4129284df0611e26dd10e3a3367fc064f7c26dce"
+				"mono": "0b70de993bfc7347dd5e86fb0e4abe06ae5ec140a35b12cdedbd1b5cb3c0371c",
+				"colour": "b701a22d12ba29f29ad83f41df7f0fe8637e49d11f9931973119ad514b5bf56b"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-lib-dsh-core.svg",
@@ -786,8 +786,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "a93ae1d96e88b53b016c2bd057c290552a49f4c9d0adbe622955434cf29781d2",
-				"colour": "001813997236964406787b77411830158ee88d1d5a222caca7991bff2d83b3c6"
+				"mono": "cb57ba4189be00ade8b2cd04bceaea3fc577f369122a376d38be3364fda026e1",
+				"colour": "0df75dc8abbd73e6d15bcbba9ebe3b1ca902f7e969a031dec5f8c12c3a698dfe"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-lib-dsh-pack.svg",
@@ -809,8 +809,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "a9273e4549223346c0a197fc112331a1fce482912ac79cb8f3e535e2eb89158b",
-				"colour": "face0fa8428d6aa2f2cf0bf227dae0fa5fea3cb10d7fd93e11fc3d9f00b89eb4"
+				"mono": "d2a5c375ccd7d2eac835333a0ae6e5bfcd98bc384bc3696cec8465465bad9ed9",
+				"colour": "67d1daf9b66d73493fd7af78b89e5e23f155a1de4045559b82ef9558f7e9a30c"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-lib-dsh-trace.svg",
@@ -832,8 +832,8 @@
 			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "a6a799b97ba1c3e142677e99951e9879f657b290ed414476a53891ab8c11941c",
-				"colour": "fb5108bcc265e0d2cd4db78c7efe9cabf6d00dcee53ef8bb2a31861e275f44f8"
+				"mono": "0df21ca3d61b3babedcccf7072df8d97362536af8e6d01467135901f5d0e6e3a",
+				"colour": "84327d7b8df15b48ad7300a5e4afeb2919632bae2f4186b500615f076c4bc010"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-lib-dsh-workspace-live.svg",
@@ -855,8 +855,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "3afd863ed7fdec71a4ef65f65d7e414c64742f61ee109dbc498ea09cf5901d41",
-				"colour": "40f48f71e5c76b43e60a28c7ded792d7a09d065d9de72f1cef5557fea3b4b43f"
+				"mono": "cac69f1ef930eb40b9bd5d85ef644bc541834379cd0c318d3fc0ccf8b8e91e18",
+				"colour": "ca5cbb0f61cf3cb4fbe3144957523c37dda1c51207a8c1f9e67233f95a16678f"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-batch-edit.svg",
@@ -878,8 +878,8 @@
 			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "2872722c17beff6fa993d7c4bb03c9e37f3302f37080f89e7fe996349d9759e1",
-				"colour": "43695bc636606339f7e2ab359e5c1d518f7df451aaaa580d35ba03f6ffcd495d"
+				"mono": "e8245ab7125773c99afed6aa7fc53cb61721dcde4f5d989ff33d2a66ee784666",
+				"colour": "535325d201f001cd51e79929d4b1126ec0cb358dc0596b53a349f40c5b50ecd9"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-batchstate.svg",
@@ -901,8 +901,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "3988d334443e56e21d819265f567aaec4174c1b531fdc1c02aa5c7044fdedd96",
-				"colour": "7cd98bb627ec706be6feda82927f97e4145224ca299ebb8c5ef09def82e55dcd"
+				"mono": "65ba0045e2a28953198152e33d0694d6c8f2dc547d0c7b378c5d671131b90029",
+				"colour": "e25248b5ae151cd38496624849f538617ecd95476720c7509d7a6e4fd3e4e9e0"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-factory.svg",
@@ -924,8 +924,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "a7b465d808a27da7483be310c58b1b8e837e23543301df39013b12ace995751c",
-				"colour": "9a5e2a8eaffeb092a986baf6f697086ab5d290207800825bcf71e6dc57578897"
+				"mono": "4f1c13eb30bf4d5e150c7ab87dc0666f2df677060f9fc570ce506736483d9268",
+				"colour": "60f989cf75c83aa5b276a7c79c8a1e225a47ad535cf1e1c3daefb7c4437633a3"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-feedback.svg",
@@ -947,8 +947,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "de0a8af6bb3ad40d22b0e53401e1f091f1bde0e1aaf1dbe4fdc4520d47d844f0",
-				"colour": "23183f4ca0e7842e25b2b95818f2937381f6beba48badc06120293174500d568"
+				"mono": "653069e3ca0d244b0b25564e18ffe12ac25c98a3f333a4782cc07482c43e2ebe",
+				"colour": "f2986f278da57e249347978f4656fb46e254e60ce43cee2b7c873413bd1fad10"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-gitguard.svg",
@@ -970,8 +970,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "6996a47d4f7b569bf439a3e3fb651606e96c64d3c04bbd0894deec2ab274a8be",
-				"colour": "29c38ec426e289a77ced5859ee8aa064e463eb43d8889d4e8c1cd6a5ff42475e"
+				"mono": "ea8ff0ba42337002ae2e17c3ac9290ca61e48101274c075053ccd20de261dab7",
+				"colour": "09d1c6ecff1b59f333ca8e6405871d2c9daaae9070847e0ecaa8dab037659552"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-normalize-file.svg",
@@ -993,8 +993,8 @@
 			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "8b70720c7a53fa2c3ef3e6e84e3c8a15bfbdf774ffa464f92ad7f0bfef0fa850",
-				"colour": "1dc5d2fd3414affb7f805b67536a6a9ee3156a1265e9cf658f21626793a7b009"
+				"mono": "59bd0430b2a2b7ade5cc2eed46ad4e413e04fcdca9248e854c1be7df63111ca6",
+				"colour": "7cce052a2fbcf8e37d496ab2a0207caa12d57a89b3890e94fc068e5ed0c62a3d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-queue.svg",
@@ -1016,8 +1016,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "3874730d79d432785597789ac7ba15d7733f76a3f4939f54f8015328315ab44e",
-				"colour": "64dbaa138891ff64dd9df0b21e24cc165741a62a327558a4347eecf6ddb3c52d"
+				"mono": "f48e9cde15b4ab9e3e9bde9fce3ba0f4f46909d4f94d1eff8a15de1691792182",
+				"colour": "fc9a7a562f461363d230ce02257e4241d6b7a2fad1a52a17006ef66fefc3e58b"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-route.svg",
@@ -1039,8 +1039,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "25976ba82a76a1526b7867d8eafab974a33a047e0e608b4ef57c0350c525a3d1",
-				"colour": "ff22826959c6f35f092fb6ab970439047ae1bc9f41d7ddbed1a90c76199f3c95"
+				"mono": "fbac246d00dc49c79373457608016afbe41a4fc82fdd402c6b7ffb10aafcae13",
+				"colour": "99d05d29b673e854c9a21d3d3ade7a1aed3422001832a8ae83a506cf674336c9"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace.svg",
@@ -1062,8 +1062,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "4f5b0bfb85e7fcbfce86587561cf73228da95edaa4c29f140ed6bf48d8fb3dfe",
-				"colour": "6e4c33645393fe7ed07b18e374ed135a0a5157f069b482d4606d7a6457fb6229"
+				"mono": "a5f724ecd0ede96bbe6dee7ec0b218e90b66da0a7606a8f3d706e08ec3ce5d2a",
+				"colour": "c5fb7c1813e7c26da83afa1df4df461e4ac5749863502698c9c635369e643edd"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-authority.svg",
@@ -1085,8 +1085,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "cf554b20107cdafaedefc1a2a066b06d07c901af14711433b84d4f986cbf1f74",
-				"colour": "ea99951d4a2edd363ad11977bf7ad632358dcafa1310ca50a2c6bcc4d6617a1d"
+				"mono": "61f6690b2a5c9838fddb7b007af616dbfd631ef7e917fae726adadea5395105c",
+				"colour": "4f12060f66b9475f06f5cd1f55ab200e5c418a238313cc745bdda0168a28d1c3"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-context.svg",
@@ -1108,8 +1108,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "9403cdb26f6b84330c770600b6ef1b183c0c7ec61912b2ae8fc9b897d54d5732",
-				"colour": "e297f898565c0c7c9bcf45e0bbf6f84e80d1cc42aa68d33cd8e17bad81f61d31"
+				"mono": "9f130548acbfb3628a367a2c297626ac4f1f83901df5c216747d26a6747cc189",
+				"colour": "0b7b9b73a673cfcd7358f040647ae890ff5c4bb51f084c86dbfd6b189ba865b8"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-evidence.svg",
@@ -1131,8 +1131,8 @@
 			"rim": "square",
 			"mode": "traced",
 			"hash": {
-				"mono": "89d6d3270acea2b0073ee017bca9d53ad393430d0548e62bdb6efdf4c264bdc9",
-				"colour": "0ef102ffc035adec5b262b4c376ef1989ee8512d2083befeed6d12850efca2a2"
+				"mono": "189193b4812af02114c8e6060e9c6b8f3d0e31cb69385e313330c2773039f173",
+				"colour": "f2cbbebbeef0c44fbac6bbf3c587876a1e090950fa57d59cba419cf4d14e9f8f"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-graph.svg",
@@ -1154,8 +1154,8 @@
 			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "023f0b61c673def428c9004a6a570adeee802a0cb318049b103cac04852a2776",
-				"colour": "a26e8981e95ab0b10b3dfaa0922f9c58275dd60c92480fa9be8472b5f7d88907"
+				"mono": "1c1284f88a8f528d0bcdd3932b0e232af059888d2365be1c0b0d5f1671224d3b",
+				"colour": "856b5c39888ddd462f25bb375501fdf50099c2b5a3a634ea1e961d7d1542293d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-reflect.svg",
@@ -1177,8 +1177,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "b0c2b62243816ff3fb34b4f14d42c81e2b5ec5ffb5f6bcd826cb5bc1f1b7702e",
-				"colour": "3f69d245e915e27abcf6529bed30bb88b78f7397b933a79031b99f3e7c2f4257"
+				"mono": "82a906b431d5dda70ab45cbde091ccae7710acb252c34419792e5b8585f5bce1",
+				"colour": "9947200347f2ee7490f484270b7067346e363d85727b7ebc05e0bff3872dfe99"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-semantics.svg",
@@ -1200,8 +1200,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "f7a9d49ac6bdb388b3f6f0feb2393f1dd8f6f48690aa347d1151d6ece6b4c12b",
-				"colour": "2d5413ec64a3be3aad50d482e1909d213e93100f320456b1ba0b895bdc17210d"
+				"mono": "3bc67783a5e97cabb3b3abe5ac9bf03d1993d8f458031241d8c63d99d852c236",
+				"colour": "45d5bea7697af9a2b6670ea60070d1db23b2924089995a4ead559a4b2892b7f4"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-batch-decision.svg",
@@ -1223,8 +1223,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "237bf425ed6c6ff2e7f52eedd43b27b81a5b72328d0a3b366c6c2f7b31d4f3d1",
-				"colour": "d9bc71d65d1eb988c93b4b2045911999eb9f9ca835667ae9714862b5dd74ee2b"
+				"mono": "f8f353bd7693daffaaaf7c31243c254a0033f1743b889c43984644bbb5e522dc",
+				"colour": "eb82807883ea7e8e4de6e5c0b50226500866d1e487df8cc8dd6ccb0fb471edc4"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-cargo-governor.svg",
@@ -1246,8 +1246,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "38581c7e3643c0f443d1271506b2dc04a0bedd42d05e794b3f27875046486ece",
-				"colour": "78253364802b90c71c10d794e6fad4fa3cac078d9e4a837e0a96e31638035495"
+				"mono": "07af97244614c3926577d6c8e830b95cdb3dbd18bf48de903502050d986ff4a9",
+				"colour": "357c580d5e0a6bf1597cc52fd945030c356d89b1dd4c54111c19d83e665f1d30"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-ccr.svg",
@@ -1269,8 +1269,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "65b278bb7ba2fbb397bb04d41cf65d27b5fc05a14db4982f85120c9379fa3f69",
-				"colour": "8262bbeb1e6668cf39311a89e8a39ff83826380dea8ec9eacb06b85fa95514ca"
+				"mono": "71eb94a849665c672a0eaccc52c3adcb43491e53563075e8383d6c8004c24e61",
+				"colour": "ce39267b9650aca71bd7a8cd7eba51e8f076a29939b77fe82af452f8e86f5d64"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-comment-filter.svg",
@@ -1292,8 +1292,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "efabd29fcb7d8132ee73a84f5bc749cf17ef43bbc57a2ec0f603e2ba9c753cec",
-				"colour": "f01e25c9739d6069f7177546c341893f08c2e7857446edf118bb365357059add"
+				"mono": "71f95456e733ff4ab6ab4e9cc734eebef1dc7e4545e188f2460c6770e2647491",
+				"colour": "6acf895f75aa13383a310b0b673fedc99949418abb7b061ddb7583e20230d51d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-convention-suggester.svg",
@@ -1315,8 +1315,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "4a545439ee5d58d33febe1cece7b7caf8dfed379203cee5211d1fad369d2be36",
-				"colour": "d1ae9c83655549f2b3a420cadff957eaab2f7e274ce33b749b46f894a1d11d75"
+				"mono": "226396823613569acd311b394e96ec3d394ed2b645ca4de6922d9c198ee26cf9",
+				"colour": "4d75d66156f6b0c7d5ba05c0bf322a835116fb63c0c952c2169aa95faaebde07"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-doc-suggester.svg",
@@ -1338,8 +1338,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "5be31c570641fb229949bf31f1a52637d77faab819025cc2a56e858c2d35d76e",
-				"colour": "f3a3918291ec53599766fa6fc60e521c91d7b08bd3c7f3cea9bdd63f16718603"
+				"mono": "6b63b42e74ae2b0587a9e3b842c32c821091ca54fb9cc9a8dc033f37beac7ec8",
+				"colour": "a595b16213c834b73be13c8278b41067a48844e6b4d99a83d5f1dba365fe587c"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-edit-suggester.svg",
@@ -1361,8 +1361,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "2347f445c8ab17a25c7836b3294275d8b814c884bbfcfe6e1839f485eaedf8dd",
-				"colour": "3ff19710ab8157c082114bf872166ba83acb385aa96fbb2d2345ed6e7207aaa1"
+				"mono": "6bf692c163095c9d1d03c05623e13420752b0a8ab86297adc3eab99c65489a13",
+				"colour": "fd0f912799fff61e667a9e5ba025570d05e25da06ce76c17516efabb2a3d5add"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-graph-suggester.svg",
@@ -1384,8 +1384,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "01da1d174d6277dfe4971608e2c845766535d49e6840c67e0159ba1e5f047d6e",
-				"colour": "20d54cd6187a3039db0d17748869b3c5c3c90e28b3f4f2006cabe9cee55f292f"
+				"mono": "6631d9ba56bb0ae336b49f38ea3a090d6fed932c80f975493fbf3ba5d796a41a",
+				"colour": "a43e3fb6b45ccf2b0717d398dd8fc3c802c7ab42cca238656975670ba2bd2dbf"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-live-containers.svg",
@@ -1407,8 +1407,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "0a00397ab5bf760736e98f992c5db22ec22ad625ae23986e6f4991f5e33d5514",
-				"colour": "3266bfbf31c1d913c2058121b8d2d39991fd829098bc0b5c62aab7d5b7edb57c"
+				"mono": "8481ccb76d623ba4c9f7e940ce39c996ad24f554dc08f99b67109db6663f8ef3",
+				"colour": "b3608b82faf5418f3f71365049af4024c18a68c943e8f0ca3198d7e96f91b23d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-dash.svg",
@@ -1430,8 +1430,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "7033fbbb3b17f6fb9dc422dc77cc13021fb0c961ed4d24af037ee16151e58d3d",
-				"colour": "3d7b5d2dd8e147c8af8b4b8b9ec3f0788b8b05d806a5be318ebd86ee3bf545fb"
+				"mono": "2a45185f82c63fd8b9242ecc872315f0db953378fa4948c01f88fea34ee791ec",
+				"colour": "dc8364d27a265bda93519b8c0a0fffd48b4bb501163ec2959e2951d579620129"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-ellipsis.svg",
@@ -1453,8 +1453,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "68e39ba6f5dc00475f949f3e55489031fcd0df8b0cccf571f7c76b9743290e73",
-				"colour": "c5e266db6b2f0c0c8575deb03ed0d921b9efaee63fb4e5bc94d97b14876ce18c"
+				"mono": "b4297acae94cc715364c82e416216c7cc7acc8fcfc620c1ebbe45998e04cc4c4",
+				"colour": "a5503138c952c59a2137832bfda1fe32a07e954d6b9d9adfb7efd0471c979f47"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-fullwidth.svg",
@@ -1476,8 +1476,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "dff087a73376ddacc3c1e20c2f8aeaab6835fcf4a79ef727fb809ea85c96cfde",
-				"colour": "151e202645d7ec60f921e6aa4109233f0892e73f14017f0ebbf6206ec6deb9d4"
+				"mono": "887f49b8c1a2b9133af44b5f30f6a5ab665309389f9a311ffb42085d906b99e7",
+				"colour": "d834b437f441a30d2d4b345ca86a9c1c1fe7802c311796c49545bee28465a687"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-invisible.svg",
@@ -1499,8 +1499,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "82eb713db7d4e355a614b5abb9c75ad1c7500f505f045be7b375f51b04801ee9",
-				"colour": "a35cd94da00d47cbb87f6ae8cb282648a9e36cbdaf9616eba4f5672433284b38"
+				"mono": "3d4f4a4faab6b6e937e09afa8b9462082fe4df7dbb5e79f2fa7b44f13e27bbae",
+				"colour": "3dfbd7ccc4747f22a32db1ddfe43f7dadb0f1175860de7284e002422a22da798"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-quotes.svg",
@@ -1522,8 +1522,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "44fd40c8614bb02dbfce83fea49810c9f504a5abe9f9bafa57b94a62d2b19837",
-				"colour": "f733943226adfafa00338f4904012ef2d63d34cc6526e7680d3e879838c59228"
+				"mono": "db5db5a13df6ef951cd920b4ea20ecc3a83ab81c671a3b263046f5ba044c4d2f",
+				"colour": "efe23a9c1aa02592b6da83cda83b9084c57d10c17bad203949d3b2e1496a2fbe"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-normalize-spaces.svg",
@@ -1545,8 +1545,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "7346257f058c09c2c2adc45b70fe35e9392a36a39d5badd89ae9e345b2d97bf5",
-				"colour": "29152fa31036a418eea67adc63c9f1c5e63231e14464e0c6074ecf3c42d914e6"
+				"mono": "b26e6869263b448f552e83540389856a2a5a1daa7375e32f9c5c9ab5336586a4",
+				"colour": "82be85ef84a7344e9e87021eac3f215ec8df63280903307dacbc87c566c02a26"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-package-governor.svg",
@@ -1568,8 +1568,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "cd346e2e483e7be601f2ca40e847da07a2d60af3ee0788b48358f780bcae8308",
-				"colour": "40f6bf6e07c17d924f04e1ba72913402c9e53db807e3109721131a9c1d47ced3"
+				"mono": "d8da37df998811cfabf296f71a1dc7c703bd3d38db4a61c9675801b2bbf008de",
+				"colour": "75fb17f39af950336e6f9cc67e04f3722eaa4ba1a4acdaa1fe9f56b38880c410"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-package-pinner.svg",
@@ -1591,8 +1591,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "a582d265421f4fd35d8be8f42c7a8fb1562ca1cc60c4c809104b4ea22ccc72d7",
-				"colour": "35160b279404d5c29da8fcdf34bad33db23686cb31a66292111aad3a2878b335"
+				"mono": "cd66d7c72172f22f158db0e67a16a53e64465864f1b21b511b06778aad1ec21c",
+				"colour": "8133daca6f8d3d33f71334a331b21d9cc8c80aa1626bf1ce842b7841b67d0450"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-replay-suggester.svg",
@@ -1614,8 +1614,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "a7ec69ade5af49384b84917067cfb9c508ab4723882ff5f074b0a1cfc85f9e04",
-				"colour": "2d6e73810e7b386eda4c4b2016e390e89b87c0743f611ba47a1495626302ef62"
+				"mono": "733e8ecd0d81a5676b308a3eb08c4306790c1c327929fe800a292d6ebe341e16",
+				"colour": "40f0f03f000c37eae7716726488c544d5e08a05d40fb024464f4b43dfbe1b218"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-search-suggester.svg",
@@ -1637,8 +1637,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "794c9c1a9e96ceb637854dc52f765578692aaca8aa77aa76816b408ece83998e",
-				"colour": "e01f650072f501f2869e8cb62147a4df99c42f9a74274529e569adf344e078b5"
+				"mono": "ee8e49db1198ad987ffbbb0884b49b56dce73fa35f2aa799383c31393d2aa4cf",
+				"colour": "641943b7400832208883507454953e159214c11b95e89f540f9862870b79c479"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-test-suggester.svg",
@@ -1660,8 +1660,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "b3446a09c78fa5f4d5f6dbc5e1134d5bb3f383781b75893bb8938ae877b5edac",
-				"colour": "ade0a8a318af688669ea2b6e22d6de85301542b621287843c28f4be1e5986165"
+				"mono": "e67a178c56b6cd0d3a7757d32c4d023c31de81982caa41f57cb8ede6f7e0c090",
+				"colour": "98cef172df858584ff1908b96517f52fb956da66bd6d9dbf94249b4882a78482"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-tool-coach.svg",
@@ -1683,8 +1683,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "3e2caddf2c7d3414fbfb5d992b8e4964cf8ad4db4d2609ea6743affed90bd2ed",
-				"colour": "6666496dcf5fb75b8cf4a90f8ceed2edbedd1d575608e1734ce2d21e691bcb10"
+				"mono": "a09eacf7a16f4fc69bac1f3c2bcc1883a132f3f556b045b81739133187ec8fda",
+				"colour": "d65fc33e24e6b8b6f0433a91e4568caa5c0249abce17db3b7e779e1e12ff1b79"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-approve.svg",
@@ -1706,8 +1706,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "289834feee610d0d7543b1a1908d19d2a895c5ad03257c3710d4b4794a9131f6",
-				"colour": "4f329b807a5a649346edd30fd980d5811faec780c538cb40213ba6272a1da8fb"
+				"mono": "675954160cd686b60430b8db82d7fed56badc904a369c5cc9039e45f99aa79e4",
+				"colour": "840c8811dcadf6cd1bb5f4b0507e45722306d39b4cbf5564db672806423cfb62"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-audit.svg",
@@ -1729,8 +1729,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "a01df6685ad2f567a00b27d76f42d314ae6ec265aea2ec20a72068a604cdb351",
-				"colour": "340791c4991e20487615f467c683007aad637914985fecdb0fa369a55833df7c"
+				"mono": "9ee248fcd15096c26b257e0e711ad15a745a989332141d141d06240ba600c1da",
+				"colour": "68a8e0f153fb005e9a9b406cd2d05ba178a3c87abbaffa607aa1af1f55b436a2"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-govern.svg",
@@ -1752,8 +1752,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "bec65abcd4f25034b1ea0f3293073e20bee2ffdcb75aac8d62cdee30f58bed0f",
-				"colour": "65789e12b0e80bd7b8f51118da8893faa13a8d820301a965404939ede62cf3f8"
+				"mono": "f3e9e1866d17e1d535398bb90c7e8a11ef99264ed86760fd73b93176c119c76d",
+				"colour": "e117b4dcce71e93b11aff1e9a22727a93ab6a1d306bbae26e94772d9ce869c62"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-journal.svg",
@@ -1775,8 +1775,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "c5c2aff169eabfbdc89f0bae081f1d965009a538dd18af87307ecd99facee951",
-				"colour": "b5bfe532172e5016f931d2b54ed543c78790e54ef329dfb7990c1482e3fad684"
+				"mono": "ad41cfa2fa596655176c1ff95202cccc8510878c2b4655af52c227e312da89bc",
+				"colour": "534eada09d830f32bafdbeefabea9f15bb39e61b7e1326510e867eb23722543d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-merge.svg",
@@ -1798,8 +1798,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "a645107323b41c24854b1b34c11b21ea1c3f6ec493a21159f22b10cd4e9ef9d2",
-				"colour": "6a2a7f8ab3a1462fe53fbef2fc06f596561bb1bb9c2931666375d745ad89c6df"
+				"mono": "31ac45bf4315aae646938ab4014904f23fb0c21d0e68989f732c943e4edfbd45",
+				"colour": "4cc5465e487d903b1130ee93cf6c6180f78ed04733abd7edb2a7961c278e1c8d"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-monitor.svg",
@@ -1821,8 +1821,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "df35b2fabd474e3360eb3c757591c1dcd07b8c47cd0fee28ff7e86c1240917fb",
-				"colour": "7f910d792d6264073402237b1e41ee7aa96ce15c8e707047aac2b56418315187"
+				"mono": "b13b46da4f248cf90c5530d3a6eed905871ef9d43cb4fe90fdeb40f32829b798",
+				"colour": "b30b442e2eb9388a835400a1938ea6bd6f15947641b9b282a15f130fe5b4afa3"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-observe.svg",
@@ -1844,8 +1844,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "04316ee63d3c54cb0038a8a0f2ae68ee5331224bb0c7aee7dbfdf78b20da3b84",
-				"colour": "dbf4bdd1809b31df35718a26f604c9310f879bb687558895f2ac7994e91a04bf"
+				"mono": "093fd12d84eea69eded14ac7b01c49bcbd233d1d1631d139836a566dbc7fdf50",
+				"colour": "7568cd96dbd60cb4281c49f1fb989655eab774a2ffff550c30090f4a55b006f3"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-operate.svg",
@@ -1867,8 +1867,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "5437b7ee4940ea735387b2efcde89cdecd0085af2f4da91fea57cb3ff0aab16f",
-				"colour": "75a2a6b400133b539bc5280330f42e2ddbe388ece90105eeb51c9b48401e40db"
+				"mono": "c1c1c12961452825cc78d737bac91d7cea4d4514f4471d8136fc7b1cfbf41179",
+				"colour": "ad9f72266fb3822ef92769bbc7bfbc87d3a6e7efbe56add176592b2906925581"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/lib-dsh-core.svg",
@@ -1890,8 +1890,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "bcda945244fd9119f88d58d6f588aa2eb3d47e1b161edd29305c08e6fa76cf56",
-				"colour": "3614293ef0e5b45cde349533d71fe89ed2e84a81e622235b16c983272f1f47a5"
+				"mono": "c7ee5513432346ebf08741cf949dbaec244c4ea1eed5e7f7ee7c34dd392bb56a",
+				"colour": "460b55d4db28e42c9f8090b93067f7c336732bb82856db5cf185031dbb5ff668"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/lib-dsh-pack.svg",
@@ -1913,8 +1913,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "789ba6bddb42e8ce4ee48295fb63fce8eab540f772ac24d97955f291522ff248",
-				"colour": "c457ffd4ced8d3276fb050483e068087d7edeec5f17cb491dc5097b2b693314f"
+				"mono": "431d5169b387c4c6492ec46971e1487f269af8c65f3a4d982c253bcb184dc245",
+				"colour": "af2c8ca2dd590925e8fb86316a30bf343308360cd6b1b70b92bf9a1bacbb06cb"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/lib-dsh-trace.svg",
@@ -1936,8 +1936,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "f1980b2e62c3e7f01fd111d405e78278f11eb93b6d8e359344e6df53799478ee",
-				"colour": "4f2b5848039d983ee1398d6a093da82ef7f820731a49787f5fd8ff308a3bab23"
+				"mono": "d3f10e1d092567470c0111d79b8fcc5ee94a1012a8e5ddfa79f4cb0211ca7534",
+				"colour": "20cae0a1360db3361fe746f42fd7b802ce6f575ab3b4d6a0b80a0c7dd9d84048"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/lib-dsh-workspace-live.svg",
@@ -1959,8 +1959,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "5870bf754ac1169b8088b423ba3edd415a2863f8fafac4028d38c394f04589cd",
-				"colour": "7a15dd8e2fc5a3c149f8605816cadd315e2b94352513b672efaec8300a90b27f"
+				"mono": "85665a39f526b5c5659840207954061015d60df58f839f20bde7e9ae510a541e",
+				"colour": "65ef66f5aa68f97532c56a463f0e28b9d8e825c502bc0c4bee28b10a4ed40f41"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-batch-edit.svg",
@@ -1982,8 +1982,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "f6e85247277b10c4ca1deb0001ad869ba195e904343bd27db0d00b1744fbf0b1",
-				"colour": "2a9b785cbf23faa69c2163925812dcdffb3d74c124f8c9377527442251a5cee5"
+				"mono": "b2f4dd7fec4bf0c126148c99448274475125494fcb81778d4edc17a1967d7477",
+				"colour": "0c7ede063fa251bc82fcd88532e73f8b3105e48787f783c6e8e91f032edbc284"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-batchstate.svg",
@@ -2005,8 +2005,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "5ee778df5878dd4671324ed300d8750e30f0eee6922ae13d4ba8b379fb216e4c",
-				"colour": "95c1f2ec300cc54a494bc3584a60d830770b30e5b1a317327193904fdc3bf2b8"
+				"mono": "0971888da209adbc721ec204630eb227ca8ea9cead9a4172cdc8f5b9c2cc7b2d",
+				"colour": "d6e3db464c0596f98e1f46ae2e8402c6287a71e9e96311e97c539412855c9549"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-factory.svg",
@@ -2028,8 +2028,8 @@
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "315b8a490da824d98639cc14e22ea0923c98c52997a36ecf93620bdf0568c65f",
-				"colour": "7aeb56acfa44609715d050c10d1fbfee367e198a87407d7409e40379163609ad"
+				"mono": "8b997901bb0ee75efcda68e6e664565a15930ca723b938a3f02b2bf80eb2267e",
+				"colour": "f0f8a2ecf980692fa2a83bbfab20bfa2bacec90815053085814a77a144b184cb"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-feedback.svg",
@@ -2051,8 +2051,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "ba7220a85be2fd1168b56e2781366db393cedbf11c21fafa53d109f0080c3254",
-				"colour": "5877bdff9b91385a201352f00903fd22697a2f9b80620ecd323b25533844125e"
+				"mono": "0e0a44e3a75fde496e15577621f35ca5a741c188492d8fc12374c942bfd72f03",
+				"colour": "1a1a159bbb9089c525af4cfceddc97f702513658df3380aea21ac67554b63d52"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-gitguard.svg",
@@ -2074,8 +2074,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "1b5bd0ebf4ce30c0eede09f79f05c38dd2afa4399e782468f0d6c75e0c7d6683",
-				"colour": "78b4daae40257c2fa81e66981ddd4cecaa3324780986ed890ad28627093b5c12"
+				"mono": "ea5f3889e8757a29260b064a2d435cb27e1f943775bc304640713a2b2047de9f",
+				"colour": "29fd77ad7c7245ba080cb0c82c25ae6510f4088388cfeae2903eb3fceec5ac7f"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-ingester.svg",
@@ -2097,8 +2097,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "44b4155a482c87aa1f348ef7675ca6c85a281fd1df03e3c251f2462f3062d85e",
-				"colour": "08ba3baeccfd6d6c3713a4472028cf9b9fceb7f54ee30565a68d2bdea2f7f487"
+				"mono": "1fe0839528f3262064ed393032f7793076e7221d78d2cf741f0f832245035103",
+				"colour": "90760c28d322c83003f34ad8210845460daa479c708c4f18bc9be73c3a3fb627"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-normalize-file.svg",
@@ -2120,8 +2120,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "71b00aa99595c8df23258447874bc13da33a8ea934f348e948f297709ed57e27",
-				"colour": "dd7ad84c68e5140ee67d3ffdc56a809fd8440cf58ee1779c7816afc4bf4097f7"
+				"mono": "7e7d8571c8719bba5b80e95259866bd99b055e79275937a6be61ae7bbf5008d6",
+				"colour": "e5cc34396addf65669873aa534b2bbf52208df82c54400362480ce32d6f89892"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-pass-on.svg",
@@ -2143,8 +2143,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "d02cb374ab38e8c4d8e86bb08324bd3146a357c0056321a584b8779ab0cd44a2",
-				"colour": "0a34a5e5576d36db7caaf77a602006ff946524457869e18f4b1d47f0a8ba44a3"
+				"mono": "d45b816371450c4dfa352f6096038520fd539960c281ad87aaf0dd13b4b6b47f",
+				"colour": "035551e3de60796c98ad28c8686b801811b19d9f455e1e533163bceee0b5487a"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-pattern.svg",
@@ -2166,8 +2166,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "56eefef9e27eaa530cf7697d1971cc0643cd60467300b574b7d302e211086662",
-				"colour": "f47a5ea0f653cf6f5ff8816317bc997236a60653f5aa4bb0e26541c8cbfa140e"
+				"mono": "663d489700f503402d5428b86bd0fe12fc7a18d4c738961f8893ed064e5a73f1",
+				"colour": "43a44ee81a7b6773f1c71577112b1df5ed0b50af5d39071c5abf099fb42bccdc"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-queue.svg",
@@ -2189,8 +2189,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "9f5bee7109a2a27cbb5e288e796fccc23a8bc92673b90a17bee0209d56c0d256",
-				"colour": "1a56d32da19594412d61bcd1f74490942af95c1bdd74e4cdfb23942b977257bf"
+				"mono": "332d0c89612c30f34636a07a9093ccdeeba460bd4cbf2d2efd52bd9114a32788",
+				"colour": "f8eaf4598a7cdf56f0ee00564855d31d9524ec07bbee8c770f6000b6ceea5076"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-route.svg",
@@ -2212,8 +2212,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "1540d266033d176f7bc163677f8a0b23c8ad0aea47795f3f7bee35cdd1bd3d00",
-				"colour": "fdea81a2b260a05af900fd35cb2883f84953dfdb6b89a5975e375149d32e8eb8"
+				"mono": "b9577a62a2b42a39d8cb3d295637bb91a7fdd7dce378d6104234d69bcbcc6474",
+				"colour": "ea2f66a29f0f842150878228e1bb3b4433cea8a79527c41c8c0ac9447c757538"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace.svg",
@@ -2235,8 +2235,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "90b58021fdcd69c69e507c207209ef25b0251e524e885eab824de1c1805f7903",
-				"colour": "73cf82bd14b3977c2ca7355a20929cb5e085bb93640b72aee84bc27a49f8dc15"
+				"mono": "f9260bc74d9a84a0fd884bd6786ea840d3f2dc20d7b227284854298861390d87",
+				"colour": "214fee0d124314a1780432d9c997407cc03cce376ba09c0df2dcf118340374c1"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-authority.svg",
@@ -2258,8 +2258,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "74e5f21641de019984cdc6d9aae7608509868e63c83a8b9cc1cde24315a35aea",
-				"colour": "97426e96da163e35de046a69f2501daed83965d828259479f593ff7047a0130e"
+				"mono": "396064d0676d63057ca95f03231a129ec32cbd68967e395c61c85372ae2e865d",
+				"colour": "769863d1c4ca981c8893262463444144ddffa46029dcdf93929e61f8ceb286a1"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-context.svg",
@@ -2281,8 +2281,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "5e10141f1cb149d6c15b0ea260cab2524382709982860a86b1b691ee35ed852c",
-				"colour": "be0fac8b5a64c2c7938c84338ca48c0518148f60c45b76d0f2394f4c726b256a"
+				"mono": "d7d865d43bf2c85a608a44f89028dd4c7119363d6127db8cb9c4511fc59d4d44",
+				"colour": "aa189da8fa61f1f5cde9e4a6a2c9b820734759aaa85a9da5bf6eecd86e0a02af"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-evidence.svg",
@@ -2304,8 +2304,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "913e061bfdd58b864effb60eb410b31483fcff183cb393bc8a370a52d7eacd17",
-				"colour": "5459612cd81d5fb30ec3058a605057e745f721a3b872049f44da0d7ab7cfdec9"
+				"mono": "77ba68df88a07ca51ed6d500bd5ba1ee64d775faa2db38607e4e9e3a24647d6c",
+				"colour": "e6fb13194cf0faee097a80ee27480d617e90011fa658e4055e0805fd621c1997"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-graph.svg",
@@ -2327,8 +2327,8 @@
 			"rim": "woven",
 			"mode": "single",
 			"hash": {
-				"mono": "0dbe61971a38356429f3ac94b22bc11c8c3037cef3fc659346433bff1f4de797",
-				"colour": "9703b739a0f2959f850b8a229ae70f5cdf8210d18d7e09b6feb2684b09267faa"
+				"mono": "6c83ae5b0dc2c63831a677950161d587484ca81fb66080f751fee17eb6574c42",
+				"colour": "d5fe2d02a6c35869646f613d3399053369db561937eb45b5bd6c5d75ea5cf96c"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-reflect.svg",
@@ -2350,8 +2350,8 @@
 			"rim": "square",
 			"mode": "single",
 			"hash": {
-				"mono": "23cd11b66b1bf46fc3dff2400fb1adc88659e2179ba43fd92d305ba7a5947a2a",
-				"colour": "deaad24bc65b5a3440e0de2ddce9bd3f0788a2e978e22043c78bdc1e8f4e2c3a"
+				"mono": "979c1978f7c05b0d64f8fe0d5e43fcb5e2ddfb0b19f32805a379d34f29dfd2eb",
+				"colour": "c257bd6390d3db81e3cd53cba2a64414667790126955877e3747ccea5057ef80"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/plugin-dsh-workspace-semantics.svg",
