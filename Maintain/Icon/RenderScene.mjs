@@ -15,8 +15,20 @@ import { sceneOf } from "./Transliterate.mjs";
 
 const sceneFor = (Genome, Plan) => {
 	const Scene = sceneOf(Genome, Plan);
+	const Angle = Number(Plan.view ?? 0);
+	const Radians = (Angle * Math.PI) / 180;
+	const Shift = (Component) => {
+		if (Angle === 0) {
+			return Component.centerline;
+		}
+		const Depth = Number(Component.composition.depth ?? 0) - 8;
+		return Component.centerline.map((Point) => ({
+			x: Point.x + Math.cos(Radians) * Depth * 0.8,
+			y: Point.y + Math.sin(Radians) * Depth * 0.8,
+		}));
+	};
 	return Scene.components.map((Component) => ({
-		...buildComponent(Component),
+		...buildComponent({ ...Component, centerline: Shift(Component) }),
 		fill: Component.fill,
 	}));
 };
@@ -82,10 +94,12 @@ const documentOf = ({ Genome, Plan, Palette, Mono }) => {
 	const Defs = Runs.map(
 		(Run, Index) => `\t\t<path id="${Prefix}-${Index}" d="${Run.paths.join(" ")}"/>`,
 	).join("\n");
-	const Pass = Runs.map(
-		(Run, Index) =>
-			`\t<g fill="${PaintOf(Run.tone, Palette, Mono)}" fill-opacity="${AlphaOf(Run.tone, Mono)}" fill-rule="evenodd" stroke="none">\n\t\t<use href="#${Prefix}-${Index}"/>\n\t</g>`,
-	).join("\n");
+	const Pass = Runs.map((Run, Index) => {
+		const Gap = Mono
+			? ""
+			: ' stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill"';
+		return `\t<g fill="${PaintOf(Run.tone, Palette, Mono)}" fill-opacity="${AlphaOf(Run.tone, Mono)}" fill-rule="evenodd"${Gap}>\n\t\t<use href="#${Prefix}-${Index}"/>\n\t</g>`;
+	}).join("\n");
 	const BodyIndex = Runs.findIndex((Run) => Run.tone === "ink");
 	const Trace =
 		Plan.mode === "traced" && BodyIndex >= 0

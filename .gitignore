@@ -34,4 +34,4 @@ dist/
 /Site/
 
 /Temporary/
-Reference/Assets/medical-pictograms.webp
+Reference/Assets/*.webp
