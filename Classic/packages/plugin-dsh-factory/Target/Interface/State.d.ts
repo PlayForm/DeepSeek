@@ -47,4 +47,10 @@ export default interface State {
     Domain?: {
         close(): Promise<void>;
     } | undefined;
+    /** The storage journal domain name (P5): Function/Open declares and opens
+     *  this domain. Transferred from the `journalDomain` setup option by the
+     *  State builder; when unset, Function/Open falls back to the shared
+     *  "package_governance" (a module that does not opt out keeps its
+     *  behavior). */
+    JournalDomain?: string | undefined;
 }

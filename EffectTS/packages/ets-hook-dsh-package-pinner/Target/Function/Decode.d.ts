@@ -1,2 +1,2 @@
-declare const _default: (Text: unknown) => Record<string, unknown> | null;
 export default _default;
+declare function _default(Text: unknown): Record<string, unknown> | null;

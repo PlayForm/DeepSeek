@@ -451,9 +451,18 @@ const runTest = async () => {
   {
     const projB = Path.join(Root, "proj-b");
     FileSystem.mkdirSync(projB);
-    Files[Path.join(projB, "package.json")] = JSON.stringify({ dependencies: { chalk: "^5.0.0" } });
+    FileSystem.writeFileSync(
+      Path.join(projB, "registry.json"),
+      JSON.stringify({ effectiveLatest: { leftpad: "1.0.0" } })
+    );
+    const pathB = Path.join(projB, "package.json");
+    const manifestB = JSON.stringify({
+      dependencies: { leftpad: "^2.0.0", chalk: "^5.0.0" }
+    });
+    Files[pathB] = manifestB;
     Listener(mkTarget(projB, "k-b"), { kind: "present", version: "v1" }, actor);
     await settle();
+    Files[pathB] = manifestB;
     Listener(mkTarget(projB, "k-b2"), { kind: "present", version: "v9" }, actor);
     await settle();
     const Sub = "idempotence: a second author write re-governs silently and never double-updates";

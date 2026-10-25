@@ -114,8 +114,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -130,12 +129,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947345,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/client-dsh-panel-family-host"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -163,8 +159,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -179,12 +174,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947350,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "Classic/packages/client-dsh-workspace-live"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -210,8 +202,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -234,12 +225,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792830205,
+					"publishTimestamp": 1792947452,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
-						"path": "EffectTS/packages/ets-base-dsh"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -267,8 +255,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -283,12 +270,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947366,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-client-dsh-workspace-live"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -316,8 +300,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -340,12 +323,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947482,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-cargo-governor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -372,8 +352,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -388,12 +367,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947467,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-ccr"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -421,8 +397,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -437,12 +412,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947546,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-convention-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -470,8 +442,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -486,12 +457,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947478,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-doc-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -519,8 +487,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -535,12 +502,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792923841,
+					"publishTimestamp": 1792947503,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "db144265d1ee187254f58c5d257e4de8027ea927",
-						"path": "EffectTS/packages/ets-hook-dsh-edit-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -568,8 +532,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -584,12 +547,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947508,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-graph-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -617,8 +577,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -633,12 +592,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792919018,
+					"publishTimestamp": 1792947493,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
-						"path": "EffectTS/packages/ets-hook-dsh-live-containers"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -666,8 +622,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -690,12 +645,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947497,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-dash"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -723,8 +675,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -747,12 +698,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947502,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-ellipsis"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -780,8 +728,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -804,12 +751,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792919018,
+					"publishTimestamp": 1792947580,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-fullwidth"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -837,8 +781,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -861,12 +804,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792919018,
+					"publishTimestamp": 1792947512,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-invisible"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -894,8 +834,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -918,12 +857,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792918155,
+					"publishTimestamp": 1792947591,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-quotes"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -951,8 +887,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -975,12 +910,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947523,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-normalize-spaces"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1008,8 +940,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1032,12 +963,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947532,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-package-governor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1065,8 +993,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1089,12 +1016,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947536,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-package-pinner"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1122,8 +1046,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1138,12 +1061,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792923841,
+					"publishTimestamp": 1792947544,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "db144265d1ee187254f58c5d257e4de8027ea927",
-						"path": "EffectTS/packages/ets-hook-dsh-replay-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1171,8 +1091,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1187,12 +1106,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947651,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-search-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1220,8 +1136,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1236,12 +1151,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792923841,
+					"publishTimestamp": 1792947554,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "db144265d1ee187254f58c5d257e4de8027ea927",
-						"path": "EffectTS/packages/ets-hook-dsh-test-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1269,8 +1181,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1285,12 +1196,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947660,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-tool-coach"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1318,8 +1226,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1334,12 +1241,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947695,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-approve"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1367,8 +1271,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1383,12 +1286,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947566,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-audit"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1416,8 +1316,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1432,12 +1331,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947590,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-govern"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1465,8 +1361,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1481,12 +1376,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947574,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-journal"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1514,8 +1406,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1530,12 +1421,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947579,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-merge"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1563,8 +1451,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1579,12 +1466,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947582,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-monitor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1612,8 +1496,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1628,12 +1511,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947588,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-observe"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1661,8 +1541,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1677,12 +1556,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792923841,
+					"publishTimestamp": 1792947592,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "db144265d1ee187254f58c5d257e4de8027ea927",
-						"path": "EffectTS/packages/ets-hook-dsh-workspace-operate"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1709,8 +1585,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1725,12 +1600,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947694,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "EffectTS/packages/ets-lib-dsh-core"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1757,8 +1629,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1773,12 +1644,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947393,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "EffectTS/packages/ets-lib-dsh-pack"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1805,8 +1673,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1821,12 +1688,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792830205,
+					"publishTimestamp": 1792947426,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
-						"path": "EffectTS/packages/ets-lib-dsh-trace"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1854,8 +1718,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1870,12 +1733,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947432,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "EffectTS/packages/ets-lib-dsh-workspace-live"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1903,8 +1763,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1919,12 +1778,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947616,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-batch-edit"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1951,8 +1807,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -1967,12 +1822,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947601,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-batchstate"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -1999,8 +1851,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2023,12 +1874,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792919018,
+					"publishTimestamp": 1792947446,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
-						"path": "EffectTS/packages/ets-plugin-dsh-factory"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2055,8 +1903,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2071,12 +1918,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947797,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-feedback"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2103,8 +1947,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2119,12 +1962,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947608,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-gitguard"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2152,8 +1992,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2168,12 +2007,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947592,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-normalize-file"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2200,8 +2036,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2216,12 +2051,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947617,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-queue"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2248,8 +2080,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2264,12 +2095,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947601,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-route"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2296,8 +2124,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2312,12 +2139,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947759,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2345,8 +2169,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2361,12 +2184,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947632,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-authority"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2394,8 +2214,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2410,12 +2229,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947636,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-context"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2443,8 +2259,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2459,12 +2274,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947661,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-evidence"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2492,8 +2304,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2508,12 +2319,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947778,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-graph"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2541,8 +2349,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2557,12 +2364,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947650,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-reflect"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2590,8 +2394,7 @@
 				],
 				"labels": [
 					"effectts",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2606,12 +2409,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947654,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "EffectTS/packages/ets-plugin-dsh-workspace-semantics"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2639,8 +2439,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2655,12 +2454,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947639,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-batch-decision"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2688,8 +2484,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2712,12 +2507,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947736,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-cargo-governor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2744,8 +2536,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2760,12 +2551,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947770,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-ccr"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2793,8 +2581,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2809,12 +2596,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792856182,
+					"publishTimestamp": 1792947673,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "c80dc783cf095bb628b711aa0b2c6d24cbc5ebe3",
-						"path": "Classic/packages/hook-dsh-comment-filter"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2842,8 +2626,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2858,12 +2641,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947699,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-convention-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2891,8 +2671,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2907,12 +2686,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947685,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-doc-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2940,8 +2716,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -2956,12 +2731,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947691,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-edit-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -2989,8 +2761,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3005,12 +2776,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947696,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-graph-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3038,8 +2806,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3054,12 +2821,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947702,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-live-containers"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3087,8 +2851,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3111,12 +2874,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947707,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "Classic/packages/hook-dsh-normalize-dash"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3144,8 +2904,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3168,12 +2927,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947711,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-normalize-ellipsis"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3201,8 +2957,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3225,12 +2980,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947716,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-normalize-fullwidth"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3258,8 +3010,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3282,12 +3033,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947720,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-normalize-invisible"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3315,8 +3063,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3339,12 +3086,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947726,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-normalize-quotes"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3372,8 +3116,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3396,12 +3139,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947733,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-normalize-spaces"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3429,8 +3169,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3453,12 +3192,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947742,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-package-governor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3486,8 +3222,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3510,12 +3245,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947744,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-package-pinner"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3543,8 +3275,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3559,12 +3290,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947791,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-replay-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3592,8 +3320,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3608,12 +3335,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947756,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/hook-dsh-search-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3641,8 +3365,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3657,12 +3380,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792923841,
+					"publishTimestamp": 1792947761,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "db144265d1ee187254f58c5d257e4de8027ea927",
-						"path": "Classic/packages/hook-dsh-test-suggester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3690,8 +3410,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3706,12 +3425,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947766,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "Classic/packages/hook-dsh-tool-coach"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3739,8 +3455,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3755,12 +3470,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947751,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-approve"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3788,8 +3500,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3804,12 +3515,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792919018,
+					"publishTimestamp": 1792947775,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
-						"path": "Classic/packages/hook-dsh-workspace-audit"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3837,8 +3545,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3853,12 +3560,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947801,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-govern"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3886,8 +3590,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3902,12 +3605,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947784,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-journal"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3935,8 +3635,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -3951,12 +3650,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947770,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-merge"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -3984,8 +3680,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4000,12 +3695,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947794,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-monitor"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4033,8 +3725,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4049,12 +3740,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947778,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-observe"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4082,8 +3770,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4098,12 +3785,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947843,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/hook-dsh-workspace-operate"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4130,8 +3814,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4146,12 +3829,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947419,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/lib-dsh-core"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4178,8 +3858,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4194,12 +3873,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947448,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/lib-dsh-pack"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4226,8 +3902,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4242,12 +3917,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792824530,
+					"publishTimestamp": 1792947452,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
-						"path": "Classic/packages/lib-dsh-trace"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4275,8 +3947,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4291,12 +3962,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947508,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/lib-dsh-workspace-live"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4324,8 +3992,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4340,12 +4007,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947807,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-batch-edit"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4372,8 +4036,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4388,12 +4051,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947811,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-batchstate"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4420,8 +4080,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4444,12 +4103,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947454,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-factory"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4476,8 +4132,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4492,12 +4147,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947887,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-feedback"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4524,8 +4176,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4540,12 +4191,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947922,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "Classic/packages/plugin-dsh-gitguard"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4572,8 +4220,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4588,12 +4235,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947824,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-ingester"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4621,8 +4265,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4637,12 +4280,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947868,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-normalize-file"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4670,8 +4310,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4686,12 +4325,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947812,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-pass-on"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4718,8 +4354,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4734,12 +4369,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947816,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-pattern"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4766,8 +4398,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4782,12 +4413,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947881,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-queue"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4814,8 +4442,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4830,12 +4457,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947846,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-route"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4862,8 +4486,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4878,12 +4501,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792926123,
+					"publishTimestamp": 1792947981,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "cd86fe9b962a084bc698d3b9bfb4af29cb8f9b33",
-						"path": "Classic/packages/plugin-dsh-workspace"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4911,8 +4531,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4927,12 +4546,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947873,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-workspace-authority"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -4960,8 +4576,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -4976,12 +4591,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947931,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-workspace-context"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -5009,8 +4621,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -5025,12 +4636,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947842,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-workspace-evidence"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -5058,8 +4666,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -5074,12 +4681,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792921928,
+					"publishTimestamp": 1792947866,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b8ae446ac76ac007f26520bbd5f5293ac1c4e9c8",
-						"path": "Classic/packages/plugin-dsh-workspace-graph"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -5107,8 +4711,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -5123,12 +4726,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947871,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-workspace-reflect"
+						"type": "npm"
 					},
 					"engines": {}
 				}
@@ -5156,8 +4756,7 @@
 				],
 				"labels": [
 					"classic",
-					"npm",
-					"source"
+					"npm"
 				],
 				"sortKeys": {}
 			},
@@ -5172,12 +4771,9 @@
 				},
 				{
 					"version": "0.2.0",
-					"publishTimestamp": 1792922702,
+					"publishTimestamp": 1792947855,
 					"source": {
-						"type": "git",
-						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "731e252c99cd0d5c329dff0d20dcc94f87b70fcf",
-						"path": "Classic/packages/plugin-dsh-workspace-semantics"
+						"type": "npm"
 					},
 					"engines": {}
 				}

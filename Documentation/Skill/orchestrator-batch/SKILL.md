@@ -81,6 +81,11 @@ stall: it is a request the parent answers with a new dispatch.
 The broker never edits the requester's files and never paraphrases a record: the shaped data keeps
 its coordinates.
 
+When a lane is expected to need mid-flight steering or a decision, spawn it as a durable teammate
+(`spawn_teammate`), which has an addressable mailbox; reserve `subagent` lanes for work that cannot
+be interrupted. A subagent lane that asks a question has already lost: it waits for an answer that
+cannot arrive, and the parent must re-dispatch a continuation that redoes part of its work.
+
 ## Spec reconfiguration
 
 The parent may amend an idle lane's spec ("SPEC AMENDED - IDLE"), amend a working lane mid-flight

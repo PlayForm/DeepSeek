@@ -51,6 +51,7 @@ Fields:
 | `Seams`                        | probe-once cache (Function/Seam)                                                                                                                                                                             |
 | `Subprocess`                   | P9: probed ONCE at build via the "subprocess" seam                                                                                                                                                           |
 | `Queue` / `Journal` / `Domain` | the P5 storage sink, pre-open queue (capped 256), open handle                                                                                                                                                |
+| `JournalDomain`                | the P5 domain name (the `journalDomain` setup option; the `package_governance` default lives in Function/Open)                                                                                               |
 
 Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, never parsed or computed
 (subsystems/filesystem.md).
@@ -221,7 +222,7 @@ Lifecycle:
 
 ```ts
 setup: { model: string; fields?: Record<string, string>;
-         policyFileName?: string }
+         policyFileName?: string; journalDomain?: string }
 ```
 
 Defensive cell unwrap (volatile Schemastery cells `{ get }`) → fixed shared mappings
@@ -254,8 +255,11 @@ Three `ctx.effect` registrations, labels `<name>-jobs`, `<name>-inflight`, `<nam
 - **P1**: probe `ctx.get("jobs")` → `attachController(name)` (root-context registrations serve every
   owner); disposer detaches.
 - **P2**: disposer aborts every `state.Inflight` controller and clears the map.
-- **P5**: probe `ctx.get("storageDomain")`; present → `void Open(...)` (the `package_governance` v2
-  `events` domain: zod enum
+- **P5**: probe `ctx.get("storageDomain")`; present → `void Open(...)` (the State's `journalDomain`
+  option's v2 `events` domain — the `package_governance` default, so a module that does not set the
+  option keeps its behavior; a module may pass its own distinct name, lowercase
+  letters/digits/underscores per the storage unit-name rule, to keep its open out of the shared
+  domain's single-open contention: zod enum
   `[activated, governed, dispatched, update-failed, excluded, normalized]`, string path/detail,
   number at; `layout: "per-record"` + `compatibleVersions: [1]` — the single-layout unit parser
   enforces exact version equality, so the per-record backend's legacy bootstrap migrates the

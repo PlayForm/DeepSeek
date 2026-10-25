@@ -5,4 +5,5 @@ export default interface Options {
     fields?: Record<string, string> | undefined;
     /** The policy sidecar file name for union discovery (State.PolicyName). */
     policyFileName?: string | undefined;
+    journalDomain?: string | undefined;
 }

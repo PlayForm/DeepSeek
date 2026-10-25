@@ -8,6 +8,11 @@
 // Queue + Journal (the P5 pre-open sink) — plus the P9 probe-once
 // "subprocess" seam through Function/Seam.
 //
+// The optional `journalDomain` setup option transfers to State.JournalDomain
+// (Function/Open's P5 domain name); the shared "package_governance" fallback
+// lives in Function/Open, so a module that does not set the option keeps its
+// behavior.
+//
 // Returns the SHARED shape intersected with the module's extra fields
 // (`State & Extra`) — the caller names its own extras type. Never returned
 // from `apply` itself: the loader treats apply return values specially, and
@@ -64,6 +69,7 @@ export default <Extra extends object = Record<string, unknown>>(
 		Subprocess: undefined,
 		Seams: new Map(), // probe-once cache (Function/Seam)
 		Queue,
+		JournalDomain: Setup.journalDomain,
 		Journal: (Event, Path, Detail, At) => {
 			switch (Queue.length < 256) {
 				case true:

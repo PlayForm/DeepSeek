@@ -63,10 +63,19 @@
 // compatibleVersions/invalidRecords) live on the JournalService — the
 // storage journal's shape belongs to the storage service, the open
 // mechanics stay here.
+//
+// The DOMAIN NAME (the journalDomain option): the State's JournalDomain
+// (the `journalDomain` setup option) names the domain, overriding the
+// JournalService's shared `DOMAIN` name; the fallback for a module that does
+// not set the option is the shared "package_governance", so every other
+// consumer keeps its behavior. A distinct name (lowercase letters, digits and
+// underscores - the storage unit-name rule) keeps a module's open out of the
+// shared domain's single-open contention. The Journal routing is unchanged:
+// post-open records still flow through the first bound shared sink.
 import { Append, DOMAIN, EVENTS, type State } from "@playform/ets-base-dsh";
 
 export default async (
-	State: State,
+	State: State & { JournalDomain?: string | undefined },
 	// The probed DomainFacility, structurally — only `open` is consumed; the
 	// handle's `close` is kept on State for the Attach effect's disposer.
 	Facility: {
@@ -99,6 +108,11 @@ export default async (
 				// `version-mismatch` — and the corrupt-record policy so a single bad
 				// record can never brick the open again.
 				...DOMAIN,
+				// The domain name comes from the State's journalDomain setup option,
+				// falling back to the shared default so a module that does not set
+				// the option keeps its behavior (a distinct name keeps a module's
+				// open out of the shared domain's single-open contention).
+				name: State.JournalDomain ?? "package_governance",
 				tables: {
 					events: Domain.domainTable(
 						Zod.object({

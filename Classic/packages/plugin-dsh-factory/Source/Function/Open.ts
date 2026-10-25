@@ -11,6 +11,13 @@
 // already share, plus `normalized` — the non-manifest stream family's count
 // records; a NEW event name requires a new domain version, hence v2).
 //
+// The DOMAIN NAME (the journalDomain option): the State's JournalDomain
+// (the `journalDomain` setup option) names the domain; the fallback for a
+// module that does not set the option is the shared "package_governance",
+// so every other consumer keeps its behavior. A distinct name (lowercase
+// letters, digits and underscores - the storage unit-name rule) keeps a
+// module's open out of the shared domain's single-open contention.
+//
 // Best-effort and detached: this whole setup is awaited by nobody — the
 // Attach effect kicks it off with `void`, every failure is contained here.
 // An ABSENT facility is a SILENT SKIP at the Attach probe (no log line, no
@@ -46,7 +53,10 @@
 // table put on the factory instance (`SharedJournal`, probed by
 // Function/Attach and passed in); every module's records then route through
 // it (Function/Journal), so a later module's `already-open` failure never
-// loses its records.
+// loses its records. The routing is unchanged by the journalDomain option:
+// a module opening its own distinct domain still routes post-open records
+// through the first bound shared sink (Function/Journal stage 1); the option
+// removes the `already-open` contention, it does not rewire the routing.
 //
 // THE BOOT-WINDOW RACE (the pre-bind buffer): each module's apply journals
 // its `activated` record BEFORE its own Attach's Open completes, so records
@@ -89,7 +99,11 @@ export default async (
 		]);
 		const Handle = await Facility.open(
 			Domain.defineDomain({
-				name: "package_governance",
+				// The domain name comes from the State's journalDomain setup option,
+				// falling back to the shared default so a module that does not set
+				// the option keeps its behavior (a distinct name keeps a module's
+				// open out of the shared domain's single-open contention).
+				name: State.JournalDomain ?? "package_governance",
 				version: 2,
 				// THE V2 OPEN CONTRACT (see header): per-record layout + the
 				// compatible v1 stamp — the legacy v1 file self-migrates on the

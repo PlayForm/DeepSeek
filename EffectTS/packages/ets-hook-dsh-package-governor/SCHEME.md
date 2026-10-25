@@ -116,8 +116,10 @@ keep-list discovery), and every ledger string.
   callback runs only post-write). When a registry exists but the chain pass changed nothing (every
   computed pin equals its current pin), the passage stays closed: the update stage is not dispatched
   for it and nothing is written (the no-flap rule, added against the identical-update flap). Without
-  a registry the passage still opens (the pre-refactor semantics; public manifests remain
-  update-stage-eligible).
+  a registry the passage stays closed too - the same no-flap rule covers both sub-cases, so a
+  package.json write whose chain pass changed nothing never re-triggers a full update run; the
+  update stage runs only off a successful governed write (the public deps left for ncu, the Filter
+  gate's job) or the explicit direct-govern `update` entry.
 - **U — update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a harness JOB when the P1
   controller (attached by `Factory.Attach` from the root context) serves this composition —
   `ctx.jobs.start({kind: "governor-update", owner: undefined, run})` — with the historical

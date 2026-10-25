@@ -10,9 +10,11 @@
 //
 // The SILENT REPLAY (the L2 precedent): the idempotence check asserts the
 // cooldown gate for proj-b, which the source suite had already stamped by the
-// no-registry dispatch of section 6. This folder replays that generating
-// fixture (one proj-b dispatch) silently before the idempotence check, so the
-// cooldown gate is armed exactly as in the source flow.
+// no-registry dispatch of section 6. Since the no-flap rule the chain pass no
+// longer dispatches on the no-registry path, so the fixture arms the cooldown
+// itself: proj-b carries a registry and a stale chain pin, so the first author
+// write governed-writes and dispatches (arming the cooldown) and the second
+// author write - the stale pin re-introduced - is the cooldown-gated one.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
@@ -730,13 +732,25 @@ export const runTest = async (): Promise<number> => {
 	}
 	{
 		// the author's second write: no double update, no stale-version.
-		// The silent replay first: the source suite had already stamped proj-b's
-		// cooldown via the section-6 no-registry dispatch; replay it unasserted.
+		// The cooldown is armed by the fixture itself (the no-flap rule removed
+		// the no-registry dispatch that previously stamped proj-b): proj-b
+		// carries a registry and a stale chain pin, so the first author write
+		// governed-writes and dispatches; the second write re-introduces the
+		// stale pin and its dispatch attempt is the cooldown-gated one.
 		const projB = Path.join(Root, "proj-b");
 		FileSystem.mkdirSync(projB);
-		Files[Path.join(projB, "package.json")] = JSON.stringify({ dependencies: { chalk: "^5.0.0" } });
+		FileSystem.writeFileSync(
+			Path.join(projB, "registry.json"),
+			JSON.stringify({ effectiveLatest: { leftpad: "1.0.0" } }),
+		);
+		const pathB = Path.join(projB, "package.json");
+		const manifestB = JSON.stringify({
+			dependencies: { leftpad: "^2.0.0", chalk: "^5.0.0" },
+		});
+		Files[pathB] = manifestB;
 		Listener(mkTarget(projB, "k-b"), { kind: "present", version: "v1" }, actor);
 		await settle();
+		Files[pathB] = manifestB;
 		Listener(mkTarget(projB, "k-b2"), { kind: "present", version: "v9" }, actor);
 		await settle();
 		const Sub = "idempotence: a second author write re-governs silently and never double-updates";

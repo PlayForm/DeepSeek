@@ -4,7 +4,8 @@
 // module owns only its identity, its ledger strings and its observe/transform:
 //
 //   1. State — Furnace.State(ctx, config, { module: "hook-dsh-pinner-package", fields:
-//      { Section: "sections" }, policyFileName: "pin-policy.json" }): the
+//      { Section: "sections" }, policyFileName: "pin-policy.json", journalDomain:
+//      "hook_dsh_package_pinner" }): the
 //      shared shape (defensive cell unwrap of the factory's volatile shared
 //      fields, Tool/Policy/Ledger/Enabled/List mappings, Stash/Inflight/
 //      Seams/Queue/Journal, the P9 subprocess probe) + the pinner's Section.
@@ -41,6 +42,7 @@ export default (Context: Context, Options: Config): void => {
 		module: "hook-dsh-pinner-package", // doubles as the factory-composed line prefix
 		fields: { Section: "sections" }, // the pinner's own field (config key)
 		policyFileName: "pin-policy.json", // the union-discovery sidecar name
+		journalDomain: "hook_dsh_package_pinner", // the pinner's own journal domain (unit-name rule: lowercase/digits/underscores)
 	});
 
 	// The context attachment for test probes (never a return value).

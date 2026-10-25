@@ -316,10 +316,15 @@ export default class PluginFactory extends Service {
 	 *  through the SHARED journal sink when one is bound (Function/Open —
 	 *  the live single-open-domain finding: the harness's storageDomain
 	 *  enforces ONE open per domain name, so the first module whose Open
-	 *  succeeds binds the shared package_governance put here, and every
+	 *  succeeds binds the first Open's put here (the journalDomain option
+	 *  names each module's domain; the shared default is package_governance),
+	 *  and every
 	 *  module's records — all consumers hold this same service instance —
 	 *  land in the one shared table; without it, the later modules' Opens
-	 *  fail `already-open` and their records silently never land). */
+	 *  fail `already-open` and their records silently never land. A module
+	 *  may pass its own `journalDomain` (the Function/State setup option) so
+	 *  its Open opens its own domain instead of contending for the shared
+	 *  one. */
 	Journal(State: Shape, Event: string, Path: string, Detail: string, At?: number): void {
 		Journal(this, State, Event, Path, Detail, At);
 	}

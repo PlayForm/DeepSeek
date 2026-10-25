@@ -78,7 +78,7 @@ const runTest = async () => {
     });
     Listener(mkTarget(projB, "k-b"), { kind: "present", version: "v1" }, actor);
     await settle();
-    const Sub = "chain semantics: no registry.json \u2192 pass skipped, everything public, update still gated";
+    const Sub = "chain semantics: no registry.json \u2192 pass skipped, everything public, no update stage";
     {
       Check(Count, Sub, () => {
         assert.equal(
@@ -91,8 +91,8 @@ const runTest = async () => {
           find(
             `update stage dispatched for ${projB} (mode=bin, ncu via ncu, built-in default policy)`
           ).length,
-          1,
-          "no registry \u2192 straight to the update stage (the chain pass wrote nothing)"
+          0,
+          "no registry \u2192 the passage stays closed, no update stage (the no-flap rule)"
         );
         assert.equal(
           Writes.filter((w) => w.path === Path.join(projB, "package.json")).length,
@@ -124,13 +124,13 @@ const runTest = async () => {
           find(
             `update stage dispatched for ${projD} (mode=bin, ncu via ncu, built-in default policy)`
           ).length,
-          1,
-          "unreadable registry \u2192 chain pass skipped but the update stage still runs (pre-refactor semantics)"
+          0,
+          "unreadable registry \u2192 the passage stays closed, no update stage (the no-flap rule)"
         );
         assert.equal(
           Probe.Stash.get("k-d"),
-          "stat-v9",
-          "Stash seeded, then advanced by the update stage's U\u2082"
+          "v1",
+          "Stash seeded at the observed version (no update stage runs, so no U\u2082 advance)"
         );
       });
     }
@@ -262,14 +262,14 @@ const runTest = async () => {
     []
   );
   {
-    const Sub = "transform: no registry \u2192 the no-change path still opens the passage (pre-refactor semantics)";
+    const Sub = "transform: no registry \u2192 the no-change path keeps the passage closed (the no-flap rule)";
     {
       Check(Count, Sub, () => {
         assert.equal(publicOut, null, "nothing to govern \u2192 null");
         assert.equal(
           publicPassage.Proceed,
-          true,
-          "no registry \u2192 the update stage path stays open"
+          false,
+          "no registry \u2192 the update stage path stays closed (no dispatch)"
         );
       });
     }

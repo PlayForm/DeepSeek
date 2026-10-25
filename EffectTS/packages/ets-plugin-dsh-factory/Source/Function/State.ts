@@ -8,6 +8,12 @@
 // Queue + Journal (the P5 pre-open sink) — plus the P9 probe-once
 // "subprocess" seam through Function/Seam.
 //
+// The optional `journalDomain` setup option (intersected onto the JournalService's
+// Options type here, since the base Options type is shared) transfers to
+// State.JournalDomain (Function/Open's P5 domain name); the shared
+// "package_governance" fallback lives in Function/Open, so a module that does
+// not set the option keeps its behavior.
+//
 // Returns the SHARED shape intersected with the module's extra fields
 // (`State & Extra`) — the caller names its own extras type. Never returned
 // from `apply` itself: the loader treats apply return values specially, and
@@ -38,7 +44,7 @@ import Unwrap from "./Unwrap.js";
 export default <Extra extends object = Record<string, unknown>>(
 	Context: Context,
 	Config: unknown,
-	Setup: Options,
+	Setup: Options & { journalDomain?: string | undefined },
 ): State & Extra => {
 	// Defensive cell unwrap (see header). Plain-object copy; cells unwrapped
 	// best-effort, a failed unwrap keeps the raw value (the schema default).
@@ -48,7 +54,7 @@ export default <Extra extends object = Record<string, unknown>>(
 	// storage cannot grow it unboundedly; Function/Open drains it on success
 	// and the Attach effect's disposer drops it.
 	const Queue: Entry[] = [];
-	const Shared: State = {
+	const Shared: State & { JournalDomain?: string | undefined } = {
 		Context,
 		Module: Setup.module,
 		Tool: Plain["mutationTools"] as string[],
@@ -62,6 +68,7 @@ export default <Extra extends object = Record<string, unknown>>(
 		Subprocess: undefined,
 		Seams: new Map(), // probe-once cache (Function/Seam)
 		Queue,
+		JournalDomain: Setup.journalDomain,
 		Journal: (Event, Path, Detail, At) => {
 			switch (Queue.length < 256) {
 				case true:

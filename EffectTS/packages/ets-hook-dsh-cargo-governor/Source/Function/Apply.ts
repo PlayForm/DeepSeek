@@ -17,8 +17,9 @@
 //   4. Attach — the factory's lifecycle effects: P1 (the root jobs
 //      controller, probed via ctx.get), P2 (the in-flight disposal — every
 //      detached continuation's abort controller is aborted and cleared on
-//      unload) and P5 (the optional storageDomain — the package_governance
-//      journal; absent → silent skip, the sink retired).
+//      unload) and P5 (the optional storageDomain — the State's journalDomain
+//      option's domain, "hook_dsh_cargo_governor" here; absent → silent skip,
+//      the sink retired).
 //
 // The function returns NOTHING — never a value: the loader treats apply
 // return values specially, and a returned State object silently killed event
@@ -58,6 +59,7 @@ export default (Context: Context, Options: Config): void => {
 			Mode: "updateMode",
 		},
 		policyFileName: "pin-policy.json",
+		journalDomain: "hook_dsh_cargo_governor", // the cargo module's own journal domain (unit-name rule: lowercase/digits/underscores)
 	});
 	// The update stage's per-directory collections (cooldown, in-flight set,
 	// circuit breaker) — module-owned loop control on top of the shared shape.

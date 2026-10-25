@@ -23,20 +23,20 @@ the factory re-exposes as part of the one service.
 
 ## The surfaces
 
-| Kind    | Name                                        | What                                                                             |
-| ------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
-| service | `ctx.pluginFactory`                         | The one service (`class PluginFactory extends Service`, `inject = ["fs"]`).      |
-| service | `State`                                     | The State builder (`State(ctx, config, {module, fields, policyFileName?})`).     |
-| service | `Append`                                    | The family's one ledger mechanism (`Append(state, message)`).                    |
-| service | `Match` / `Discover` / `Parse`              | The exclusion match, the registry/policy discovery and the JSON parse.           |
-| service | `ResolvePolicy`                             | The union keep-list discovery (P3 chain-keys included).                          |
-| service | `Gate` / `Write` / `GuardedWrite`           | The gate set, the sandbox-fenced write and the version-guarded write.            |
-| service | `Refresh` / `Continue`                      | The observation-policy refresh and the detached contained continuation.          |
-| service | `Wire` / `Attach` / `Journal`               | The wiring helper, the effects attach and the shared P5 record sink.             |
-| service | `Trace` / `Seam` / `UpdateKey`              | The trace bus, the probe-once seam accessor and the update key.                  |
-| service | `Schema`                                    | The Schemastery schema factory (`Schema(shared?, module?)`).                     |
-| service | `RegisterGovern` / `Govern` / `GovernSteps` | The direct-govern pair and the step registry.                                    |
-| config  | named exports `Policy` / `Decide`           | The shared policy-block builder and the verdict lookup (`"auto"` / `"approve"`). |
+| Kind    | Name                                        | What                                                                                         |
+| ------- | ------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| service | `ctx.pluginFactory`                         | The one service (`class PluginFactory extends Service`, `inject = ["fs"]`).                  |
+| service | `State`                                     | The State builder (`State(ctx, config, {module, fields, policyFileName?, journalDomain?})`). |
+| service | `Append`                                    | The family's one ledger mechanism (`Append(state, message)`).                                |
+| service | `Match` / `Discover` / `Parse`              | The exclusion match, the registry/policy discovery and the JSON parse.                       |
+| service | `ResolvePolicy`                             | The union keep-list discovery (P3 chain-keys included).                                      |
+| service | `Gate` / `Write` / `GuardedWrite`           | The gate set, the sandbox-fenced write and the version-guarded write.                        |
+| service | `Refresh` / `Continue`                      | The observation-policy refresh and the detached contained continuation.                      |
+| service | `Wire` / `Attach` / `Journal`               | The wiring helper, the effects attach and the shared P5 record sink.                         |
+| service | `Trace` / `Seam` / `UpdateKey`              | The trace bus, the probe-once seam accessor and the update key.                              |
+| service | `Schema`                                    | The Schemastery schema factory (`Schema(shared?, module?)`).                                 |
+| service | `RegisterGovern` / `Govern` / `GovernSteps` | The direct-govern pair and the step registry.                                                |
+| config  | named exports `Policy` / `Decide`           | The shared policy-block builder and the verdict lookup (`"auto"` / `"approve"`).             |
 
 ## The configuration
 
@@ -56,6 +56,13 @@ helper composes, in helper order:
 
 With `shared: false` the block is only `log` and `logFile` (the two universal volatile cells); a
 module supplies its own `logFile` default through its own fields.
+
+The State builder also accepts the optional `journalDomain` - Function/Open's P5 storage-domain
+name. It defaults to the shared `package_governance` inside Function/Open, so a consumer that does
+not set it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits
+and underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
+single-open contention. The Journal routing is unchanged: post-open records still flow through the
+first bound shared sink when one is bound.
 
 ## The ledger
 
@@ -79,7 +86,7 @@ parameterized lines).
     - Continue - 7 checks
     - Entry-And-State - 9 checks
     - Gate-Write-Refresh - 5 checks
-    - Ledger-And-Journal - 4 checks
+    - Ledger-And-Journal - 5 checks
     - Match-Discover-Policy - 7 checks
     - Parallel-Marker - 7 checks
     - Schema-Wire-Govern - 4 checks

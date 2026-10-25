@@ -85,28 +85,26 @@ writes.
 - When a version is published, the npm entry is the only entry for that version: the registry is
   immutable, and the market cannot express two different contents under one version.
 
-## 6. The install truth (2026-10-25)
+## 6. The install truth (2026-10-25, after the 0.2.0 release)
 
-- 102 packages in the tree: 21 have a real 0.1.0 on npm, 70 have only a `0.0.0` placeholder, and 11
-  are not on npm at all.
-- An npm entry installs only where the whole dependency closure is published. The Classic 0.1.0 set
-  (the factory, the six normalize hooks, the package governor, the package pinner, the cargo
-  governor) resolves against `@playform/hook-dsh-core@0.1.0` and
-  `@playform/plugin-dsh-factory@0.1.0`, both published.
-- The Effect-TS 0.1.0 set does not resolve yet: its consumers depend on
-  `@playform/ets-lib-dsh-core@0.1.0`, which has only a placeholder.
-- A `git` entry installs the repository at that commit, but pnpm still resolves the package's
-  `dependencies` from the registry. The current tree depends on `@playform/lib-dsh-core@0.1.0`,
-  `@playform/lib-dsh-trace@0.1.0` and others that are not published, so a git install of most
-  current packages fails until a release publishes the closure.
-- The release step that closes the gap: bump the versions, publish in dependency order, then run
-  `pnpm marketplace`. The market widens on the next generate; no entry is hand-written.
+- 102 packages in the tree, all published at 0.2.0 on npm. Before that release 21 had a real 0.1.0,
+  70 had only a `0.0.0` placeholder and 11 were absent; the release closed that gap.
+- The index carries 224 npm versions across the 102 packages (0.0.1, 0.1.0 and 0.2.0 where each
+  exists) and no `git` pins, because the rule adds a pin only when a tree version is unpublished.
+- An npm entry installs only where the whole dependency closure is published. The 0.2.0 release
+  published the closure in dependency order (`lib-dsh-core@0.2.0`, `lib-dsh-trace@0.2.0`,
+  `plugin-dsh-factory@0.2.0`, ...), so a Discover install of any 0.2.0 entry resolves.
+- A future unpublished tree version gets the `git` pin again: a `git` entry installs the repository
+  at that commit, and pnpm still resolves its `dependencies` from the registry, so the pin works
+  only for a published closure.
+- The release step: bump, publish in dependency order, then `pnpm marketplace`. The market follows
+  the registry; no entry is hand-written.
 
 ## 7. The site page
 
 `https://deepseek.playform.cloud/marketplace/` renders the same JSON. The page reads
-`Site/Public/marketplace.json` at build time and prints the URL, the profile snippet, the counts and
-one card per entry with its versions and install commands.
+`Site/Public/marketplace.json` at build time and prints the URL, the profile snippet, the counts,
+one card per entry with its recommended version and labels, and the install channels.
 
 ## 8. Verification
 

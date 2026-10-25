@@ -7,15 +7,18 @@ What this test verifies.
 The chain pass's refusal and no-op surface, plus the module transform contract
 and the P4 fence: an undecodable manifest produces exactly the g2 line plus the
 `observed non-JSON ... - skipped` line (no write, no update stage); a missing
-registry skips the pass but still gates the update stage; an unreadable
+registry skips the pass and keeps the passage closed (no update stage, the
+no-flap rule); an unreadable
 registry produces the byte-identical `unreadable registry.json ... skipped for
-<path>` line; strict mode strips unknown deps while canonicalizing the chain
+<path>` line and closes the passage the same way; strict mode strips unknown
+deps while canonicalizing the chain
 pin; the transform probed directly decodes inside and ignores the keep-list;
 its post-write message composes the version-bearing line, marks the passage and
 journals the governed record; an idempotent manifest maps to null and keeps the
 passage closed when a registry exists (every computed pin equals its current
-pin, so the update stage is not dispatched and nothing is written) while the
-no-registry no-change path still opens the passage; and a sandbox-mode-configured
+pin, so the update stage is not dispatched and nothing is written) and the
+no-registry no-change path keeps the passage closed too; and a
+sandbox-mode-configured
 backend receives a workspace-write fence rooted at the governed manifest's own
 directory. The assertions are moved verbatim from
 `Classic/smokes/governor-smoke.mjs` sections 6-6b (the transform contract and
@@ -27,7 +30,7 @@ the P4 posture included).
     - Sub: "transform: undecodable manifest -> `observed non-JSON ... -
       skipped`, no write, no update"
     - Sub: "chain semantics: no registry.json -> pass skipped, everything
-      public, update still gated"
+      public, no update stage"
     - Sub: "chain semantics: unreadable registry -> `unreadable registry.json
       ... skipped for <path>`"
     - Sub: "chain semantics: strict strip of unknown deps (never a default) +
@@ -41,8 +44,8 @@ the P4 posture included).
       governed record"
     - Sub: "transform: idempotent manifest -> null; the no-change path keeps
       the passage closed"
-    - Sub: "transform: no registry -> the no-change path still opens the
-      passage (pre-refactor semantics)"
+    - Sub: "transform: no registry -> the no-change path keeps the passage
+      closed (the no-flap rule)"
 - Group: the P4 confined fence posture.
     - Sub: "P4: confined backend -> workspace-write fence rooted at the
       manifest's own directory"
@@ -85,8 +88,9 @@ the shared `passage` object), the no-change probe (`k-t-noop` with its own
   its own sections).
 - A registry-present no-change manifest keeps the passage closed: no update
   stage dispatch and no write (the no-flap rule).
-- The unreadable registry still lets the update stage run (pre-refactor
-  semantics) and seeds the Stash (later advanced by U-sub-2).
+- The unreadable registry keeps the passage closed like the missing registry
+  (the no-flap rule) and seeds the Stash at the observed version (no U-sub-2
+  advance - no update stage runs).
 - The confined fence is rooted at the manifest's directory, not the workspace.
 
 ## Expected count

@@ -210,6 +210,47 @@ const runTest = async () => {
       });
     }
   }
+  {
+    const Sub = "Attach: P5 journalDomain option \u2192 the State's own domain name";
+    {
+      await CheckAsync(Count, Sub, async () => {
+        let optSpec = null;
+        services["storageDomain"] = {
+          open: async (spec) => {
+            optSpec = spec;
+            return {
+              close: async () => {
+              },
+              table: () => ({ put: async () => {
+              } })
+            };
+          }
+        };
+        factory.SharedJournal = void 0;
+        factory.PendingJournal = [];
+        const stOpt = factory.State(
+          ctx,
+          { logFile: Ledger },
+          { module: "smoke-flavor", journalDomain: "hook_dsh_package_pinner" }
+        );
+        assert.equal(
+          stOpt.JournalDomain,
+          "hook_dsh_package_pinner",
+          "the journalDomain option transfers to State.JournalDomain"
+        );
+        effects.length = 0;
+        factory.Attach(ctx, { state: stOpt, name: "smoke-flavor" });
+        await new Promise((r) => setImmediate(() => setImmediate(r)));
+        assert.equal(
+          optSpec && optSpec.name,
+          "hook_dsh_package_pinner",
+          "P5 spec: the module's own distinct domain name (unit-name rule: lowercase/digits/underscores)"
+        );
+        effects.find((e) => e[0] === "smoke-flavor-storage")[1]();
+        await new Promise((r) => setImmediate(r));
+      });
+    }
+  }
   return Finish(Count, "Ledger-And-Journal");
 };
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

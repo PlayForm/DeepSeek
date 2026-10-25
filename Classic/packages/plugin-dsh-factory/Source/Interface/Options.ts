@@ -21,6 +21,13 @@
 //            policy machinery) — stored as State.PolicyName. When falsy,
 //            ResolvePolicy only consults the configured global policy file
 //            and the chain keys.
+//   journalDomain - OPTIONAL. The storage journal domain name Function/Open
+//            declares and opens (P5). Defaults to the shared
+//            "package_governance" so every consumer that does not set it keeps
+//            its behavior; a module passes its own distinct name to keep its
+//            journal open out of the shared domain's single-open contention.
+//            The name must satisfy the storage domain's unit-name rule
+//            (lowercase letters, digits and underscores).
 export default interface Options {
 	/** The module identity — doubles as the logger/ledger prefix. */
 	module: string;
@@ -28,4 +35,6 @@ export default interface Options {
 	fields?: Record<string, string> | undefined;
 	/** The policy sidecar file name for union discovery (State.PolicyName). */
 	policyFileName?: string | undefined;
+
+	journalDomain?: string | undefined;
 }

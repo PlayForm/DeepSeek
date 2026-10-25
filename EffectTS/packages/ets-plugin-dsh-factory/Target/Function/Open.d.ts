@@ -1,6 +1,8 @@
 import { type State } from "@playform/ets-base-dsh";
 export default _default;
-declare function _default(State: State, Facility: {
+declare function _default(State: State & {
+    JournalDomain?: string | undefined;
+}, Facility: {
     open(spec: object): Promise<{
         close(): Promise<void>;
         table(name: string): {

@@ -97,14 +97,14 @@ export default (
 			}
 		}
 
-		// No registry (none found, or an unparsable one): straight to the update
-		// stage, exactly as the pre-refactor Function/Continue did after a null
-		// Satisfy. With a registry but NO chain change (every computed pin equals
-		// its current pin) the passage stays closed: no dispatch, no write.
-		switch (true) {
-			case !Registry:
-				Passage.Proceed = true;
-				break;
-		}
+		// The no-change fall-through, both sub-cases: no registry (none found, or
+		// an unparsable one) and a registry whose every computed pin already
+		// equals its current pin (Satisfy returned null). Both keep the passage
+		// closed: the chain pass never dispatches the update stage (the no-flap
+		// rule - a package.json write must not re-trigger a full update run when
+		// the chain pass changed nothing). The update stage still runs off a
+		// successful governed write (the message callback above leaves the
+		// public deps to the Filter gate) or the explicit direct-govern "update"
+		// entry (Function/Direct.Update), which opens its own passage.
 		return null;
 	};

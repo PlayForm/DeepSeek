@@ -46,6 +46,11 @@ the source suite's sections 8, 9 and 14, moved verbatim.
     - Check: "Attach: P5 failed open -> loud ledger line, no throw, no sink
       bound" - a rejecting open leaves no domain handle and no shared sink and
       writes exactly the best-effort ledger line.
+- Group: the `journalDomain` option (P5, the DECISION B addition).
+    - Check: "Attach: P5 journalDomain option -> the State's own domain name"
+      - the option transfers to `State.JournalDomain` and the Open declares
+      the module's own distinct domain name (the `package_governance` default
+      stays the fallback for a module that does not set the option).
 
 ## Fixtures
 
@@ -54,7 +59,8 @@ the source suite's sections 8, 9 and 14, moved verbatim.
   `fail-ledger.log`.
 - `services["jobs"]` (the P1 stub), `services["storageDomain"]` (first the
   recording stub whose `open` captures the domain spec and returns a
-  put-recording table + close, then the rejecting stub), the AbortController
+  put-recording table + close, then the rejecting stub, then the option stub
+  for the `journalDomain` check), the AbortController
   in the Inflight map, and the `effects` capture.
 - The P5 journal stages (`factory.PendingJournal`/`factory.SharedJournal`)
   are reset at the Attach group's start exactly the way the source suite
@@ -78,4 +84,4 @@ the source suite's sections 8, 9 and 14, moved verbatim.
 
 ## Expected count
 
-4 PASS.
+5 PASS.

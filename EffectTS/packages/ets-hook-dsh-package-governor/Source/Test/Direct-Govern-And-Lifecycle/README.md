@@ -59,9 +59,11 @@ registration order; the sim steps (`fold-pin`, `fold-pin-r`, `fold-can-r`)
 registered through `factory.RegisterGovern` with chain-writing transforms
 (`foldPinT`/`foldCanT`); the `UngovernedEmit` helper that blanks the listener
 capture around each fold run (the sim states are not the live listener's
-state). The idempotence check replays the section-6 proj-b no-registry
-dispatch silently first (the SILENT REPLAY), so the cooldown gate is armed
-exactly as in the source flow.
+state). The idempotence fixture arms the cooldown itself (the no-flap rule
+removed the no-registry dispatch that previously stamped proj-b): proj-b
+carries a registry and a stale chain pin, so the first author write
+governed-writes and dispatches, and the second author write - the stale pin
+re-introduced - is the cooldown-gated one.
 
 ## Expected ledger strings (byte-identical)
 

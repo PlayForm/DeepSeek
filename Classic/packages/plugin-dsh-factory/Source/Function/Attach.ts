@@ -13,7 +13,8 @@
 //        still in flight and clear the map (defensive-patterns quiescence).
 //   P5 — the optional storage seam: the facility is probed via
 //        ctx.get("storageDomain"); when present Function/Open declares and
-//        opens the package_governance domain (never awaited — best-effort
+//        opens the State's journalDomain (the setup option, default
+//        package_governance; never awaited — best-effort
 //        inside) and the disposer closes it; absent or unusable is a silent
 //        skip — the journal sink is retired to a no-op so the queue cannot
 //        grow. The service instance is probed too (ctx.get
