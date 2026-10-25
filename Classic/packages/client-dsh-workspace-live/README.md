@@ -33,15 +33,21 @@ is an empty `apply()`. The surfaces are the client service `workspaceLive` (`get
   (`on`/`ring`), seeds the tail from the bus's recent ring, follows `observe/stamp`,
   `graph/indexed`, `graph/invalidated`, and the batch transitions `batch/proposed`,
   `batch/decision`, `batch/state-change` (when a batch plugin mirrors them onto the bus), and keeps
-  the recent envelopes NEWEST FIRST, bounded by `maxEvents`. A new envelope notifies the view; a
-  missing trace is the documented STATIC state (`live: false`, empty tail) - never an error.
+  the recent envelopes NEWEST FIRST, bounded by `maxEvents`.
+
+    A new envelope notifies the view; a missing trace is the documented STATIC state (`live: false`,
+    empty tail) - never an error.
+
 - **The tab**: `conversation.view` entry `workspace-live` (default order 25) rendering the
   representations, the empty note, and the stored trace tail.
 - **The child-slot model** (when the panel family is composed, i.e. `playformFamilyPanel` is
   present): the tab registration declares `workspace.live.section` in its `children` table and
   renders it through the renderer's `renderSlot` prop; the live section registers into that declared
-  child slot, and its registration's `inject` face (`{ section, ports }`) is the data path. The
-  standalone composition (no panel family) keeps the legacy tab shape - the compatibility rule.
+  child slot, and its registration's `inject` face (`{ section, ports }`) is the data path.
+
+    The standalone composition (no panel family) keeps the legacy tab shape - the compatibility
+    rule.
+
 - **The event contract** (`Source/Interface/Siblings.ts`): every workspace event carries the
   operation identifier, the parent identifier, and the event category (the distribution law's
   recursion prevention).
@@ -50,9 +56,11 @@ is an empty `apply()`. The surfaces are the client service `workspaceLive` (`get
 
 The sibling services (`workspaceGraph`, `workspaceObserve`, the workspace event stream) are declared
 locally in `Source/Interface/Siblings.ts` from the W1 frozen contract
-(Documentation/Plans/Workspace-Family/ WAVE-1-BRIEF.md sections 4-5). No runtime import of a sibling
-package exists yet; the end-phase wires the real imports and the real channels. The trace source
-needs no sibling import: the bus is read structurally from the client context.
+(Documentation/Plans/Workspace-Family/ WAVE-1-BRIEF.md sections 4-5).
+
+No runtime import of a sibling package exists yet; the end-phase wires the real imports and the real
+channels. The trace source needs no sibling import: the bus is read structurally from the client
+context.
 
 ## The configuration
 

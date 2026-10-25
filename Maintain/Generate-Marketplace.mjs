@@ -13,8 +13,9 @@
 //   node Maintain/Generate-Marketplace.mjs --check   # verify both files; never writes
 //===============================================================================
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+
 import { parseMarketIndex } from "@deepseek-ai/dsh-plugin-market-index";
 
 const IndexUrl = "https://deepseek.playform.cloud/marketplace.json";
@@ -27,7 +28,11 @@ const Root = execFileSync("git", ["rev-parse", "--show-toplevel"], {
 	encoding: "utf8",
 }).trim();
 
-const Head = execFileSync("git", ["rev-parse", "HEAD"], {
+// The pin is the last commit that touched the package's directory, not HEAD:
+// a commit that only touches the market index, the docs or the site leaves
+// every pin valid, so `--check` stays meaningful between releases. A package
+// with no history yet (added but not committed) falls back to HEAD.
+const HeadCommit = execFileSync("git", ["rev-parse", "HEAD"], {
 	encoding: "utf8",
 	cwd: Root,
 }).trim();
@@ -39,23 +44,21 @@ const HeadTime = Number.parseInt(
 	10,
 );
 
+const pinOf = (Path) => {
+	const Line = execFileSync("git", ["log", "-1", "--format=%H %ct", "--", Path], {
+		encoding: "utf8",
+		cwd: Root,
+	}).trim();
+	const [Commit, Time] = Line === "" ? [HeadCommit, String(HeadTime)] : Line.split(" ");
+	return { Commit, Time: Number.parseInt(Time, 10) };
+};
+
 const readPackages = (Tree) => {
 	const Base = join(Root, Tree, "packages");
-	return execFileSync("ls", ["-1", Base], { encoding: "utf8" })
-		.trim()
-		.split("\n")
-		.filter((Dir) => {
-			try {
-				readFileSync(join(Base, Dir, "package.json"));
-				return true;
-			} catch {
-				return false;
-			}
-		})
+	return readdirSync(Base)
+		.filter((Dir) => existsSync(join(Base, Dir, "package.json")))
 		.map((Dir) => {
-			const Manifest = JSON.parse(
-				readFileSync(join(Base, Dir, "package.json"), "utf8"),
-			);
+			const Manifest = JSON.parse(readFileSync(join(Base, Dir, "package.json"), "utf8"));
 			return {
 				Tree,
 				Dir,
@@ -128,6 +131,7 @@ const titleOf = (Tree, Dir) => {
 	let Title = stripPrefix(Dir, ["ets"]);
 	Title = stripPrefix(Title, KindPrefixes);
 	Title = Title.split("-")
+		.filter((Word) => Word !== "dsh")
 		.map((Word) => Word.charAt(0).toUpperCase() + Word.slice(1).toLowerCase())
 		.join(" ");
 	if (Tree === "EffectTS") {
@@ -155,9 +159,7 @@ const kindOf = (Dir) => {
 const keywordsOf = (Tree, Dir) => {
 	const Words = stripPrefix(Dir, ["ets"]).split("-");
 	const Kind = Words[0];
-	const Keywords = Words.filter(
-		(Word) => Word !== Kind && Word !== "ets" && Word !== "dsh",
-	);
+	const Keywords = Words.filter((Word) => Word !== Kind && Word !== "ets" && Word !== "dsh");
 	return [...Keywords, Tree.toLowerCase()];
 };
 
@@ -186,13 +188,14 @@ const Plugins = Packages.map((Package) => {
 
 	const Published = new Set(Versions.map((Entry) => Entry.version));
 	if (!Published.has(Package.Version)) {
+		const Pin = pinOf(`${Package.Tree}/packages/${Package.Dir}`);
 		Versions.push({
 			version: Package.Version,
-			publishTimestamp: HeadTime,
+			publishTimestamp: Pin.Time,
 			source: {
 				type: "git",
 				url: RepositoryUrl,
-				commit: Head,
+				commit: Pin.Commit,
 				path: `${Package.Tree}/packages/${Package.Dir}`,
 			},
 			engines: Engines,
@@ -211,7 +214,9 @@ const Plugins = Packages.map((Package) => {
 	return {
 		name: Package.Name,
 		title: { en: titleOf(Package.Tree, Package.Dir) },
-		description: { en: describe(Package.Description) },
+		...(Package.Description.trim() === ""
+			? {}
+			: { description: { en: describe(Package.Description) } }),
 		author: "PlayForm",
 		repository: {
 			url: RepositoryUrl,
@@ -248,16 +253,10 @@ const Index = {
 	},
 	metadata: {
 		categories: Object.fromEntries(
-			Object.entries(Titles).map(([Id, Title]) => [
-				Id,
-				{ title: { en: Title } },
-			]),
+			Object.entries(Titles).map(([Id, Title]) => [Id, { title: { en: Title } }]),
 		),
 		labels: Object.fromEntries(
-			Object.entries(LabelTitles).map(([Id, Title]) => [
-				Id,
-				{ title: { en: Title } },
-			]),
+			Object.entries(LabelTitles).map(([Id, Title]) => [Id, { title: { en: Title } }]),
 		),
 		sortKeys: {},
 	},
@@ -267,10 +266,14 @@ const Index = {
 parseMarketIndex(Index, IndexUrl);
 
 const Bytes = `${JSON.stringify(Index, null, "\t")}\n`;
-const Outputs = [
-	join(Root, "marketplace.json"),
-	join(Root, "Site", "Public", "marketplace.json"),
-];
+const Outputs = [join(Root, "marketplace.json")];
+if (existsSync(join(Root, "Site", "Public"))) {
+	Outputs.push(join(Root, "Site", "Public", "marketplace.json"));
+} else {
+	console.log(
+		"Site/Public is absent - writing the root index only (the site tree is a separate repository).",
+	);
+}
 
 if (process.argv.includes("--check")) {
 	let Stale = false;

@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-govern
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/GOVERN](../../../Documentation/Plans/Workspace-Family/GOVERN.md)
+
+## The role
+
 The workspace-govern hook: the governance gate of the workspace family's invisible flow - operate
 proposes → **the govern gates** → the authority licenses → the approve binds. On every gated
 `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern` service, the hook
@@ -35,7 +40,7 @@ Recursion prevention: every proposal carries the operation identifier, the paren
 event category; an operation identifier gated more than `loopBound` times is dropped with a ledger
 line.
 
-## Config (all volatile)
+## The configuration (all volatile)
 
 | Field             | Default                                                      | Meaning                                                                                                       |
 | ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
@@ -78,7 +83,7 @@ per action (the wiring is the next refinement).
 - `decisions(limit?)` - the decision ring, newest first.
 - `statistics()` - `{ decisions, sequence }`.
 
-## Ledger lines (module-owned, byte-stable)
+## The ledger (module-owned, byte-stable)
 
 ```text
 govern: activated (tools=<n>, policy=<n>)
@@ -90,3 +95,13 @@ govern: recovery <obligation> (fail-open)
 govern: loop <operation> (recursion guard)
 govern: observed <operation> (accepted | errored)
 ```
+
+## The plan
+
+- [Workspace-Family/GOVERN](../../../Documentation/Plans/Workspace-Family/GOVERN.md) - the govern
+  gate.
+- The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
+
+## License
+
+CC0-1.0.

@@ -1,4 +1,4 @@
-import type CheckSet from "@Interface/CheckSet.js";
+import type CheckSet from "./CheckSet.js";
 import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 export default interface Config {
     /** The hook's own ledger file (one log per module). */

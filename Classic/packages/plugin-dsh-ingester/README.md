@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-ingester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [PASS-ON-AND-INGESTER](../../Documentation/Plans/PASS-ON-AND-INGESTER.md)
+
+## The role
+
 The INGESTER (ctx.ingester) - the apply direction of the batch flow
 (Documentation/Plans/PASS-ON-AND-INGESTER.md section 4). A DeepSeek Harness service that turns an
 approved batch proposal into file operations.
@@ -10,6 +15,13 @@ the batch's write path, through the governed filesystem (`ctx.fs`).
 ```
 pass-on (prepare) -> decision -> INGESTER (apply, version-fenced) -> result
 ```
+
+## The surfaces
+
+- The service `ctx.ingester` (`Apply`, `WhenIdle`, `Proposals` - the table below).
+- The bus registrations: `batch/proposed` (records), `batch/decision` (resolves and applies).
+- The governed filesystem (`ctx.fs`) writes - the batch flow's ONLY writer.
+- No tool.
 
 ## The service surface (`ctx.ingester`)
 
@@ -55,7 +67,15 @@ A conflict or a write failure stops at that target (when `stopOnConflict`, defau
 `conflict` / `recovery-required`; the applied targets are reported honestly - no invisible
 intermediate state.
 
-## Config
+## The ledger
+
+One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-ingester.log`): each line is
+
+```text
+{"at":<epoch ms>,"event":<event>,"proposal":<id>,"path":<path>,"detail":<detail>}
+```
+
+## The configuration
 
 | Field            | Default                                   | Meaning                                                            |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------------------ |
@@ -80,11 +100,15 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 
 The ingester is the batch flow's writer, so `write` is its own action class - and it stays the
 shipped `approve`: the decision's approval (the validation above) IS the gate, and the block records
-that posture; the other verdicts are declared for uniformity. A resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement). The defaults are
-smoke-arbitrated in `Source/Test/Policy-Defaults`.
+that posture; the other verdicts are declared for uniformity.
 
-## The smokes
+A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 | Folder               | What it proves                                                    | Count |
 | -------------------- | ----------------------------------------------------------------- | ----- |
@@ -92,3 +116,12 @@ smoke-arbitrated in `Source/Test/Policy-Defaults`.
 | `Apply-And-Fences`   | the version fence, the honest failure modes, the journal          | 11    |
 | `Decision-Consumer`  | the bus consumer, the one-apply claim, the feedback outcome       | 8     |
 | `Policy-Defaults`    | the D6 block's defaults and the writer's `approve` posture        | 4     |
+
+## The plan
+
+- [PASS-ON-AND-INGESTER](../../Documentation/Plans/PASS-ON-AND-INGESTER.md) - section 4, the apply
+  direction.
+
+## License
+
+CC0-1.0.

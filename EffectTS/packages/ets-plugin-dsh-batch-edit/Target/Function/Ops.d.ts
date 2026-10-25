@@ -1,9 +1,9 @@
 import type { ToolRunContext } from "@deepseek-ai/dsh-tools";
-import type { JobsHub } from "@Interface/Events.js";
-import type { FsTarget } from "@Interface/Fs.js";
-import type Output from "@Interface/Output.js";
-import type { MachineRecord, OpLine, ProcessCell } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
+import type { JobsHub } from "../Interface/Events.js";
+import type { FsTarget } from "../Interface/Fs.js";
+import type Output from "../Interface/Output.js";
+import type { MachineRecord, OpLine, ProcessCell } from "../Interface/Process.js";
+import type State from "../Interface/State.js";
 /** One planned file transition: everything decided before any write. */
 interface Plan {
     cell: ProcessCell;

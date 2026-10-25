@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-context
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/CONTEXT](../../../Documentation/Plans/Workspace-Family/CONTEXT.md)
+
+## The role
+
 The workspace family's **context service**: the attention projection - the
 required/relevant/deferred - the context economy.
 
@@ -25,6 +30,18 @@ and enables only by an explicit ACTIVATE.
 
 Plan: Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.5 +
 Documentation/Plans/Workspace-Family/CONTEXT.md.
+
+## The plan
+
+- Documentation/Plans/WORKSPACE-FAMILY-V4-1.md section 3.5 - the orientation packet.
+- [Workspace-Family/CONTEXT](../../../Documentation/Plans/Workspace-Family/CONTEXT.md) - the context
+  service.
+- The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's
+  bundles and enables only by an explicit ACTIVATE.
+
+## License
+
+CC0-1.0.
 
 ### The policy block (D6)
 

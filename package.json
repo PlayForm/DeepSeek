@@ -12,12 +12,15 @@
 		"format:newlines": "bash Maintain/Format.sh newlines",
 		"format:prettier": "bash Maintain/Format.sh prettier",
 		"lychee": "bash Maintain/Lychee.sh",
+		"marketplace": "node Maintain/Generate-Marketplace.mjs",
+		"marketplace:check": "node Maintain/Generate-Marketplace.mjs --check",
 		"site": "pnpm --dir Site run Run",
 		"test": "node Maintain/Run-Smokes.mjs",
 		"test:types": "node Maintain/Run-Types.mjs",
 		"test:wiring": "node Maintain/Run-Wiring.mjs"
 	},
 	"devDependencies": {
+		"@deepseek-ai/dsh-plugin-market-index": "0.2.1-rc.3",
 		"@ianvs/prettier-plugin-sort-imports": "4.7.1",
 		"@prettier/plugin-lua": "0.0.3",
 		"@prettier/plugin-oxc": "0.2.3",

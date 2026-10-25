@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-approve
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/APPROVE](../../../Documentation/Plans/Workspace-Family/APPROVE.md)
+
+## The role
+
 The workspace-approve hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that binds the **exact human approval** - the candidate-bound
@@ -47,7 +52,7 @@ plugin's own monotonic counter - never a wall clock. Ledger lines (module-owned,
 `approve:`): `activated`, `disabled`, `bound`, `decided`, `rejected`, `revoked`, `refused`,
 `unknown`, `invalidated`, `checked`, `capped`, `failed`, `storage open failed`.
 
-## Configuration
+## The configuration
 
 Every knob is volatile (hot-editable without remounting): `logFile`
 (`~/.dsh/playform/ets-hook-dsh-workspace-approve.log`), `log`, `enabled` (false - the IDLE-forever
@@ -71,5 +76,11 @@ commit, no spawn), so the block documents the posture and refuses nothing. The b
 object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
 overrides the defaults per action (the wiring is the next refinement).
 
-Plan:
-[Documentation/Plans/Workspace-Family/APPROVE.md](../../../Documentation/Plans/Workspace-Family/APPROVE.md).
+## The plan
+
+- [Workspace-Family/APPROVE](../../../Documentation/Plans/Workspace-Family/APPROVE.md) - the approve
+  step of the invisible flow.
+
+## License
+
+CC0-1.0.

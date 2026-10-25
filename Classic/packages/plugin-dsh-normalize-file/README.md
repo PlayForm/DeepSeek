@@ -7,16 +7,20 @@
 
 The **file-content normalizer** - a DeepSeek Harness plugin that registers the normalize family's
 `normalize-file` TOOL: the read → count → write pipeline over files ALREADY on disk, beyond the tool
-layer. One agent-chosen file per call: the target's content is read, the family's SIX transforms
-(the core's Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth tables through the shared
+layer.
+
+One agent-chosen file per call: the target's content is read, the family's SIX transforms (the
+core's Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth tables through the shared
 Replace/ReplaceMap replacers, the same chain the raw-write `normalize: true` applies) are applied
 with a per-character count, and only when N > 0 is the rewritten content written back through the
 factory's ONE shared write executor (resolve-side read, `fs/write-intent` waterfall, standing
 sandbox policy, `writeText`, the root-context `fs/observed` present emit). N = 0 writes NOTHING -
-the no-op no-write rule. The rewrite is explicit, visible (a diff card showing the before/after) and
-opt-in by construction: the family's first LISTENER-LESS flavor (no `llm/stream`, no `fs/observed` -
-the background-rewrite posture of the design report is deliberately deferred, because it would break
-the edit tool's `old_string` contract).
+the no-op no-write rule.
+
+The rewrite is explicit, visible (a diff card showing the before/after) and opt-in by construction:
+the family's first LISTENER-LESS flavor (no `llm/stream`, no `fs/observed` - the background-rewrite
+posture of the design report is deliberately deferred, because it would break the edit tool's
+`old_string` contract).
 
 ## The surfaces
 

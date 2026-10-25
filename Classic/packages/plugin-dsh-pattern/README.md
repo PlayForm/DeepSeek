@@ -1,7 +1,17 @@
 # @playform/plugin-dsh-pattern
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [PATTERN-GRAPH-PLUGIN](../../Documentation/Plans/PATTERN-GRAPH-PLUGIN.md)
+
+## The role
+
 The pattern-graph service plugin: the registry, the matcher, the confidence store and the learner
 behind the suggester family. Plan: `Documentation/Plans/PATTERN-GRAPH-PLUGIN.md`.
+
+## The surfaces
+
+One service: `pattern` (class form, `ctx.pattern` - the method table below). No tool, no event
+listener.
 
 ## What it provides
 
@@ -45,7 +55,19 @@ Match returns `[]` when the top score is below `matchThreshold` or when the top 
 within `ambiguityEpsilon` (two patterns matching equally is not a decision). The ledger records
 every Record call so precision can be measured, not assumed.
 
-## Configuration
+## The ledger
+
+The lines are prefixed `pattern: ` and go to `logFile` (byte-stable):
+
+```text
+pattern: activated (seeded N patterns) (logFile ...)
+pattern: recorded <accepted|rejected|applied|failed> on <id> (confidence X.XX)
+pattern: saved N patterns to <store> (logFile ...)
+pattern: restored N patterns from snapshot (logFile ...)
+pattern: storage open failed: <reason> (logFile ...)
+```
+
+## The configuration
 
 | Field                                                              | Default                                  | Notes                                                  |
 | ------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------ |
@@ -79,11 +101,15 @@ the service reads it as `Knobs.policy` (a bare construction falls back to the sa
 
 The service matches, records and decays - `read`, `record` and `suggest` are automatic; the
 write/commit/spawn verdicts are declared for uniformity and stay the shipped `approve` (the service
-never writes files, commits or spawns). A resolved pack's `policy` section overrides the defaults
-per action (the wiring is the next refinement). The defaults are smoke-arbitrated in
-`Source/Test/Policy-Defaults`.
+never writes files, commits or spawns).
 
-## The smokes
+A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 | Folder                      | What it proves                                                                         | Count |
 | --------------------------- | -------------------------------------------------------------------------------------- | ----- |
@@ -91,3 +117,12 @@ per action (the wiring is the next refinement). The defaults are smoke-arbitrate
 | `Record-And-Decay-And-Save` | the learner, the decay, the JSON fallback's save and restore                           | 10    |
 | `Storage-Domain`            | the KV domain (primary), the round-trip, the reopen, the fallback, the version failure | 14    |
 | `Policy-Defaults`           | the D6 block's defaults and the registry's read/record posture                         | 4     |
+
+## The plan
+
+- [PATTERN-GRAPH-PLUGIN](../../Documentation/Plans/PATTERN-GRAPH-PLUGIN.md) - the pattern-graph
+  service.
+
+## License
+
+CC0-1.0.

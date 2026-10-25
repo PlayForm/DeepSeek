@@ -1,0 +1,4218 @@
+{
+	"format": 1,
+	"title": {
+		"en": "DSH Family @ PlayForm"
+	},
+	"description": {
+		"en": "The PlayForm DeepSeek Harness plugin family: 102 packages across the Classic TypeScript and Effect-TS trees."
+	},
+	"metadata": {
+		"categories": {
+			"plugin": {
+				"title": {
+					"en": "Plugin"
+				}
+			},
+			"hook": {
+				"title": {
+					"en": "Hook"
+				}
+			},
+			"client": {
+				"title": {
+					"en": "Client"
+				}
+			},
+			"library": {
+				"title": {
+					"en": "Library"
+				}
+			}
+		},
+		"labels": {
+			"classic": {
+				"title": {
+					"en": "Classic"
+				}
+			},
+			"effectts": {
+				"title": {
+					"en": "Effect-TS"
+				}
+			},
+			"npm": {
+				"title": {
+					"en": "npm"
+				}
+			},
+			"source": {
+				"title": {
+					"en": "Source"
+				}
+			}
+		},
+		"sortKeys": {}
+	},
+	"plugins": [
+		{
+			"name": "@playform/client-dsh-panel-family",
+			"title": {
+				"en": "Panel Family"
+			},
+			"description": {
+				"en": "The central panel package of the UI family, on the v4.1 CHILD-SLOT model (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns the PANEL CONTRACT - the two child slots (playform.panel.section on..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/client-dsh-panel-family"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"panel",
+					"family",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/client-dsh-panel-family"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/client-dsh-panel-family-host",
+			"title": {
+				"en": "Panel Family Host"
+			},
+			"description": {
+				"en": "The host half of the UI family's panel: the companion package that gives the central panel LIVE data and its ONE trusted write surface (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md)...."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/client-dsh-panel-family-host"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"panel",
+					"family",
+					"host",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/client-dsh-panel-family-host"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/client-dsh-workspace-live",
+			"title": {
+				"en": "Workspace Live"
+			},
+			"description": {
+				"en": "The workspace family's live client: the client half of the workspace live view (Documentation/Plans/Workspace-Family/LIVE.md). The role: the presentation, stable-until-event - the live view does NOT re-render continuously; it stays stable..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/client-dsh-workspace-live"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"workspace",
+					"live",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/client-dsh-workspace-live"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-base-dsh",
+			"title": {
+				"en": "Base (Effect-TS)"
+			},
+			"description": {
+				"en": "The BASE of the ets-* group (@playform/ets-base-dsh): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell),..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-base-dsh"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791545926,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535949,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-client-dsh-workspace-live",
+			"title": {
+				"en": "Workspace Live (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace family's live client: the client half of the workspace live view (Documentation/Plans/Workspace-Family/LIVE.md). The role: the presentation, stable-until-event - the live view does NOT re-render continuously; it stays stable..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-client-dsh-workspace-live"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"workspace",
+					"live",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-client-dsh-workspace-live"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-cargo-governor",
+			"title": {
+				"en": "Cargo Governor (Effect-TS)"
+			},
+			"description": {
+				"en": "Silent Cargo.toml governor — the RUST-SIDED FLAVOR of the package.json governor (@playform/hook-dsh-package-governor): same architecture, same API-awareness discipline, same PlayForm TypeScript layout — but for Rust manifests. Hooks..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-cargo-governor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"cargo",
+					"governor",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791548319,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535657,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-ccr",
+			"title": {
+				"en": "Ccr (Effect-TS)"
+			},
+			"description": {
+				"en": "The CCR hook (compress-cache-retrieve): a DeepSeek Harness plugin that hooks the tools/post-execute waterfall - the point where the normalized result of EVERY dispatched tool passes before it becomes model content - and replaces oversized..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-ccr"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"ccr",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918155,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
+						"path": "EffectTS/packages/ets-hook-dsh-ccr"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-convention-suggester",
+			"title": {
+				"en": "Convention Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-convention-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"convention",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-convention-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-doc-suggester",
+			"title": {
+				"en": "Doc Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-doc-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"doc",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-doc-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-edit-suggester",
+			"title": {
+				"en": "Edit Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The edit-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a modification call (write, edit, raw-write) lands on a file whose family carries a STANDARD COMPANION SET (the version lives in 36..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-edit-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"edit",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-edit-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-graph-suggester",
+			"title": {
+				"en": "Graph Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate list from paths and globs to the CONNECTED COMPONENT around the symbol. When the model reads or greps a source file, the hook asks the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-graph-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"graph",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-hook-dsh-graph-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-live-containers",
+			"title": {
+				"en": "Live Containers (Effect-TS)"
+			},
+			"description": {
+				"en": "The live-containers hook: an EffectTS DeepSeek Harness plugin (the Classic twin behind Effect v4) that keeps dynamic, modifiable conversation blocks in the system prompt. Each enabled block is a labeled stanza recomputed at every request -..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-live-containers"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"live",
+					"containers",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-hook-dsh-live-containers"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-dash",
+			"title": {
+				"en": "Normalize Dash (Effect-TS)"
+			},
+			"description": {
+				"en": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-dash"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"dash",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547596,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535734,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-ellipsis",
+			"title": {
+				"en": "Normalize Ellipsis (Effect-TS)"
+			},
+			"description": {
+				"en": "The ellipsis hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the horizontal ellipsis (U+2026 — the typographic three-dot run collapsed into..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-ellipsis"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"ellipsis",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547608,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535708,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-fullwidth",
+			"title": {
+				"en": "Normalize Fullwidth (Effect-TS)"
+			},
+			"description": {
+				"en": "The fullwidth hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the full-width family (the entire FULLWIDTH FORMS range U+FF01–U+FF5E) in..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-fullwidth"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"fullwidth",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547631,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535697,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-invisible",
+			"title": {
+				"en": "Normalize Invisible (Effect-TS)"
+			},
+			"description": {
+				"en": "The invisible hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the zero-width/invisible character family (U+00AD soft hyphen, U+200B–U+200F..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-invisible"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"invisible",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547615,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535813,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-quotes",
+			"title": {
+				"en": "Normalize Quotes (Effect-TS)"
+			},
+			"description": {
+				"en": "The quotes hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the curly quote family (U+2018 left single quotation mark, U+2019 right single..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-quotes"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"quotes",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547696,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535665,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-normalize-spaces",
+			"title": {
+				"en": "Normalize Spaces (Effect-TS)"
+			},
+			"description": {
+				"en": "The spaces hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode space family (U+00A0 no-break space, U+1680 ogham space mark,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-normalize-spaces"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"spaces",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547627,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535792,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-package-governor",
+			"title": {
+				"en": "Package Governor (Effect-TS)"
+			},
+			"description": {
+				"en": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-package-governor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"package",
+					"governor",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547598,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535889,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-package-pinner",
+			"title": {
+				"en": "Package Pinner (Effect-TS)"
+			},
+			"description": {
+				"en": "Silent package.json VERSION PINNER: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites every ranged dependency version to its STATIC version (\"^0.3.4\" → \"0.3.4\": one leading ^, ~,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-package-pinner"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"package",
+					"pinner",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791547763,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535720,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-replay-suggester",
+			"title": {
+				"en": "Replay Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-replay-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"replay",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-replay-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-search-suggester",
+			"title": {
+				"en": "Search Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The search-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a search-class call (grep, glob, read, or a search-shaped bash) matches one of the ten intent kinds (Version, Path, Ledger, Config,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-search-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"search",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-search-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-test-suggester",
+			"title": {
+				"en": "Test Suggester (Effect-TS)"
+			},
+			"description": {
+				"en": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-test-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"test",
+					"suggester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792856182,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "c80dc783cf095bb628b711aa0b2c6d24cbc5ebe3",
+						"path": "EffectTS/packages/ets-hook-dsh-test-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-tool-coach",
+			"title": {
+				"en": "Tool Coach (Effect-TS)"
+			},
+			"description": {
+				"en": "The tool-coach hook: an EffectTS DeepSeek Harness plugin (the Classic twin behind Effect v4) that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-tool-coach"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"tool",
+					"coach",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-hook-dsh-tool-coach"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-approve",
+			"title": {
+				"en": "Workspace Approve (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-approve"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"approve",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-approve"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-audit",
+			"title": {
+				"en": "Workspace Audit (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-audit hook: a DeepSeek Harness plugin that is the workspace's ACCOUNTABILITY - the event records and the ledger lines (the AUDIT role of the workspace family's invisible flow: ... -> the merge commits -> the journal records..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-audit"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"audit",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-audit"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-govern",
+			"title": {
+				"en": "Workspace Govern (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-govern hook: a DeepSeek plugin that IS the governance gate of the workspace family's invisible flow - the step where the operate family's proposals become effects ONLY through the gate. On every tools/pre-execute call (and..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-govern"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"govern",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-govern"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-journal",
+			"title": {
+				"en": "Workspace Journal (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-journal hook: a DeepSeek Harness plugin that is the workspace's EVIDENCE record - the undo, the recovery checkpoints, and the crash recovery (the JOURNAL role of the workspace family's invisible flow: ... -> the merge commits..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-journal"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"journal",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-journal"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-merge",
+			"title": {
+				"en": "Workspace Merge (Effect-TS)"
+			},
+			"description": {
+				"en": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-merge"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"merge",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-merge"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-monitor",
+			"title": {
+				"en": "Workspace Monitor (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-monitor hook: a DeepSeek Harness plugin that plays the workspace family's watch/sweep role - the wave-3 machinery with NO REAL TIMERS. The watch form: on every fs/observed event (heard on the ROOT context, the factory's Wire..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-monitor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"monitor",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-monitor"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-observe",
+			"title": {
+				"en": "Workspace Observe (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-observe hook: a DeepSeek Harness plugin that records the workspace's first step of the invisible flow - on every fs/observed event (heard on the ROOT context, the factory's Wire registration) it writes one observation stamp..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-observe"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"observe",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-observe"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-workspace-operate",
+			"title": {
+				"en": "Workspace Operate (Effect-TS)"
+			},
+			"description": {
+				"en": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-workspace-operate"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"operate",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-hook-dsh-workspace-operate"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-core",
+			"title": {
+				"en": "Core (Effect-TS)"
+			},
+			"description": {
+				"en": "The CORE: the pure, harness-free commonalities of the governance family (@playform/ets-lib-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard —..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-core"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"core",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792672862,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "376c184ad54c08ffe0d5e5982e924e298e77583a",
+						"path": "EffectTS/packages/ets-lib-dsh-core"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-pack",
+			"title": {
+				"en": "Pack (Effect-TS)"
+			},
+			"description": {
+				"en": "The PACKS: the pure, dependency-light, harness-free workspace-pack library of the suggester family (@playform/ets-lib-dsh-pack) - the pack schema, the layered resolution (the user layer, the repo layer, the cycle-guarded extends chain),..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-pack"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"pack",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "EffectTS/packages/ets-lib-dsh-pack"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-trace",
+			"title": {
+				"en": "Trace (Effect-TS)"
+			},
+			"description": {
+				"en": "The TRACE: the pure, harness-free vocabulary of the workspace family's trace bus (@playform/ets-lib-dsh-trace) - the envelope { trace, kind, at, actor, payload }, the event names (observe/stamp, graph/indexed, graph/invalidated), the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-trace"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"trace",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-lib-dsh-trace"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-workspace-live",
+			"title": {
+				"en": "Workspace Live (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-workspace-live"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"workspace",
+					"live",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792672862,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "376c184ad54c08ffe0d5e5982e924e298e77583a",
+						"path": "EffectTS/packages/ets-lib-dsh-workspace-live"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-batch-edit",
+			"title": {
+				"en": "Batch Edit (Effect-TS)"
+			},
+			"description": {
+				"en": "The batch edit tool: a DeepSeek Harness plugin that turns files into PROCESSES held in state. One tool (batch_edit) opens a machine, inserts files into it, and runs the transition table (replace / insert-after / insert-before / remove-line..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-batch-edit"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"batch",
+					"edit",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-batch-edit"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-batchstate",
+			"title": {
+				"en": "Batchstate (Effect-TS)"
+			},
+			"description": {
+				"en": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-batchstate"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"batchstate",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-plugin-dsh-batchstate"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-factory",
+			"title": {
+				"en": "Factory (Effect-TS)"
+			},
+			"description": {
+				"en": "The FACTORY: a DeepSeek Harness service (@playform/ets-plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-factory"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"factory",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546075,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535731,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-feedback",
+			"title": {
+				"en": "Feedback (Effect-TS)"
+			},
+			"description": {
+				"en": "The FEEDBACK member (ctx.feedback): a DeepSeek Harness service that collects the honest signals. Every agent's completion carries an HONEST feedback block (LIKED / DISLIKED / DELTAS / TRANSFERRED / READ-STATUS); the block is transferred..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-feedback"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"feedback",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-plugin-dsh-feedback"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-gitguard",
+			"title": {
+				"en": "Gitguard (Effect-TS)"
+			},
+			"description": {
+				"en": "The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts terminal commands before execution and denies ANY git mutation pattern (git add, commit, reset, push, tag,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-gitguard"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"gitguard",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-gitguard"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-normalize-file",
+			"title": {
+				"en": "Normalize File (Effect-TS)"
+			},
+			"description": {
+				"en": "The file-content normalizer flavor: a DeepSeek Harness plugin that registers the normalize family's `normalize-file` tool - the read → count → write pipeline over files ALREADY on disk, beyond the tool layer. One agent-chosen file per..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-normalize-file"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"normalize",
+					"file",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-normalize-file"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-queue",
+			"title": {
+				"en": "Queue (Effect-TS)"
+			},
+			"description": {
+				"en": "The subagent-queue plugin: a DeepSeek Harness plugin that turns subagent work into a QUEUE (the tasks as data, not the agents as contexts). The user's capacity model is the law: the MAIN conversation holds up to 10 subagents (the pool's..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-queue"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"queue",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-queue"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-route",
+			"title": {
+				"en": "Route (Effect-TS)"
+			},
+			"description": {
+				"en": "The routing-enforcer plugin: a DeepHarness plugin that enforces the user's model-routing policy SILENTLY on every subagent launch. The choice happens automatically - no prompting, no reminder, no orchestrator awareness. When a launch omits..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-route"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"route",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-route"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace",
+			"title": {
+				"en": "Workspace (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace agent: a DeepSeek Harness plugin that IS the workspace regime's conversational surface - the OPERATIONAL VIEW the conversation addresses. It consumes the Wave-1 graph service (ctx.workspaceGraph) and presents the graph-like,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-authority",
+			"title": {
+				"en": "Workspace Authority (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-authority service: a DeepSeek plugin that IS the authority step of the workspace family's invisible flow - the licenses. The service keeps the THREE SEPARATE AUTHORITY RECORDS (v4.1 section 3.9, correcting the corpus's own..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-authority"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"authority",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-authority"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-context",
+			"title": {
+				"en": "Workspace Context (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-context service: a DeepSeek Harness plugin that plays the workspace family's attention-projection role - the required/relevant/deferred context economy. The service (registered as ctx.workspaceContext) builds the ORIENTATION..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-context"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"context",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-context"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-evidence",
+			"title": {
+				"en": "Workspace Evidence (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-evidence service: a DeepSeek Harness plugin that owns the validation objects + the evidence dependencies + the four kinds of truth + the stale-validation invalidation (the family map's EVIDENCE role). It registers the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-evidence"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"evidence",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-evidence"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-graph",
+			"title": {
+				"en": "Workspace Graph (Effect-TS)"
+			},
+			"description": {
+				"en": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-graph"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"graph",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-graph"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-reflect",
+			"title": {
+				"en": "Workspace Reflect (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-reflect service: a DeepSeek Harness plugin providing the LATER-STAGE code-block reflective API - the AST-aware rename/connect/replace bundled as ONE call each, over the managed representations (the family map's reflect role;..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-reflect"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"reflect",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-reflect"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-workspace-semantics",
+			"title": {
+				"en": "Workspace Semantics (Effect-TS)"
+			},
+			"description": {
+				"en": "The workspace-semantics service: a DeepSeek Harness plugin that owns the semantic model - the symbols + the references + the dependencies + the index (the family map's SEMANTICS role). It registers the workspaceSemantics service..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-workspace-semantics"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"semantics",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "EffectTS/packages/ets-plugin-dsh-workspace-semantics"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-batch-decision",
+			"title": {
+				"en": "Batch Decision"
+			},
+			"description": {
+				"en": "The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester and the live view (Documentation/Plans/PASS-ON-AND-INGESTER.md section 5). It listens for batch/proposed events carrying a BatchProposal,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-batch-decision"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"batch",
+					"decision",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-batch-decision"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-cargo-governor",
+			"title": {
+				"en": "Cargo Governor"
+			},
+			"description": {
+				"en": "Silent Cargo.toml governor — the RUST-SIDED FLAVOR of the package.json governor (@playform/hook-dsh-package-governor): same architecture, same API-awareness discipline, same PlayForm TypeScript layout — but for Rust manifests. Hooks..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-cargo-governor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"cargo",
+					"governor",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546094,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535606,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-ccr",
+			"title": {
+				"en": "Ccr"
+			},
+			"description": {
+				"en": "The CCR hook (compress-cache-retrieve): a DeepSeek Harness plugin that hooks the tools/post-execute waterfall - the point where the normalized result of EVERY dispatched tool passes before it becomes model content - and replaces oversized..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-ccr"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"ccr",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/hook-dsh-ccr"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-comment-filter",
+			"title": {
+				"en": "Comment Filter"
+			},
+			"description": {
+				"en": "The comment-filter hook: a DeepSeek Harness plugin and a NEW overpass flavor that strips code comments from `read` and `ccr_retrieve` tool results at tools/post-execute, gated per task intent stashed at agent/pre-step. The transform..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-comment-filter"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"comment",
+					"filter",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792856182,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "c80dc783cf095bb628b711aa0b2c6d24cbc5ebe3",
+						"path": "Classic/packages/hook-dsh-comment-filter"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-convention-suggester",
+			"title": {
+				"en": "Convention Suggester"
+			},
+			"description": {
+				"en": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-convention-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"convention",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/hook-dsh-convention-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-doc-suggester",
+			"title": {
+				"en": "Doc Suggester"
+			},
+			"description": {
+				"en": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-doc-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"doc",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/hook-dsh-doc-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-edit-suggester",
+			"title": {
+				"en": "Edit Suggester"
+			},
+			"description": {
+				"en": "The edit-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a modification call (write, edit, raw-write) lands on a file whose family carries a STANDARD COMPANION SET (the version lives in 36..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-edit-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"edit",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918155,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
+						"path": "Classic/packages/hook-dsh-edit-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-graph-suggester",
+			"title": {
+				"en": "Graph Suggester"
+			},
+			"description": {
+				"en": "The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate list from paths and globs to the CONNECTED COMPONENT around the symbol. When the model reads or greps a source file, the hook asks the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-graph-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"graph",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918155,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
+						"path": "Classic/packages/hook-dsh-graph-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-live-containers",
+			"title": {
+				"en": "Live Containers"
+			},
+			"description": {
+				"en": "The live-containers hook: a DeepSeek Harness plugin that keeps dynamic, modifiable conversation blocks in the system prompt. Each enabled block is a labeled stanza recomputed at every request - the canonical example is a time block that..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-live-containers"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"live",
+					"containers",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/hook-dsh-live-containers"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-dash",
+			"title": {
+				"en": "Normalize Dash"
+			},
+			"description": {
+				"en": "The normalize-dash hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode dash family (U+058A, U+05BE, U+1400, U+1806, U+2010–U+2015,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-dash"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"dash",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791545982,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535617,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-ellipsis",
+			"title": {
+				"en": "Normalize Ellipsis"
+			},
+			"description": {
+				"en": "The ellipsis hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the horizontal ellipsis (U+2026 — the typographic three-dot run collapsed into..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-ellipsis"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"ellipsis",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791545996,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535812,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-fullwidth",
+			"title": {
+				"en": "Normalize Fullwidth"
+			},
+			"description": {
+				"en": "The fullwidth hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the full-width family (the entire FULLWIDTH FORMS range U+FF01–U+FF5E) in..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-fullwidth"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"fullwidth",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546091,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535729,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-invisible",
+			"title": {
+				"en": "Normalize Invisible"
+			},
+			"description": {
+				"en": "The invisible hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the zero-width/invisible character family (U+00AD soft hyphen, U+200B–U+200F..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-invisible"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"invisible",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546036,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535765,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-quotes",
+			"title": {
+				"en": "Normalize Quotes"
+			},
+			"description": {
+				"en": "The quotes hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the curly quote family (U+2018 left single quotation mark, U+2019 right single..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-quotes"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"quotes",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546160,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535637,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-normalize-spaces",
+			"title": {
+				"en": "Normalize Spaces"
+			},
+			"description": {
+				"en": "The spaces hook: a DeepSeek Harness plugin that hooks the llm/stream waterfall — the interceptable wrapper around EVERY streaming model call — and normalizes the unicode space family (U+00A0 no-break space, U+1680 ogham space mark,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-normalize-spaces"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"normalize",
+					"spaces",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546206,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535896,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-package-governor",
+			"title": {
+				"en": "Package Governor"
+			},
+			"description": {
+				"en": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-package-governor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"package",
+					"governor",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791546092,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535646,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-package-pinner",
+			"title": {
+				"en": "Package Pinner"
+			},
+			"description": {
+				"en": "Silent package.json VERSION PINNER: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites every ranged dependency version to its STATIC version (\"^0.3.4\" → \"0.3.4\": one leading ^, ~,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-package-pinner"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"package",
+					"pinner",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791548275,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535650,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-replay-suggester",
+			"title": {
+				"en": "Replay Suggester"
+			},
+			"description": {
+				"en": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-replay-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"replay",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918155,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
+						"path": "Classic/packages/hook-dsh-replay-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-search-suggester",
+			"title": {
+				"en": "Search Suggester"
+			},
+			"description": {
+				"en": "The search-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a search-class call (grep, glob, read, or a search-shaped bash) matches one of the ten intent kinds (Version, Path, Ledger, Config,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-search-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"search",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-search-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-test-suggester",
+			"title": {
+				"en": "Test Suggester"
+			},
+			"description": {
+				"en": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-test-suggester"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"test",
+					"suggester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-test-suggester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-tool-coach",
+			"title": {
+				"en": "Tool Coach"
+			},
+			"description": {
+				"en": "The tool-coach hook: a DeepSeek Harness plugin that teaches the model to stop using the terminal for file content. It hooks the tools/post- and tools/pre-execute waterfalls, the agent/pre-step boundary, the system-prompt/assemble waterfall..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-tool-coach"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"tool",
+					"coach",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/hook-dsh-tool-coach"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-approve",
+			"title": {
+				"en": "Workspace Approve"
+			},
+			"description": {
+				"en": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-approve"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"approve",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-approve"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-audit",
+			"title": {
+				"en": "Workspace Audit"
+			},
+			"description": {
+				"en": "The workspace-audit hook: a DeepSeek Harness plugin that is the workspace's ACCOUNTABILITY - the event records and the ledger lines (the AUDIT role of the workspace family's invisible flow: ... -> the merge commits -> the journal records..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-audit"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"audit",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-audit"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-govern",
+			"title": {
+				"en": "Workspace Govern"
+			},
+			"description": {
+				"en": "The workspace-govern hook: a DeepSeek plugin that IS the governance gate of the workspace family's invisible flow - the step where the operate family's proposals become effects ONLY through the gate. On every tools/pre-execute call (and..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-govern"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"govern",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-govern"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-journal",
+			"title": {
+				"en": "Workspace Journal"
+			},
+			"description": {
+				"en": "The workspace-journal hook: a DeepSeek Harness plugin that is the workspace's EVIDENCE record - the undo, the recovery checkpoints, and the crash recovery (the JOURNAL role of the workspace family's invisible flow: ... -> the merge commits..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-journal"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"journal",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-journal"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-merge",
+			"title": {
+				"en": "Workspace Merge"
+			},
+			"description": {
+				"en": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-merge"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"merge",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-merge"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-monitor",
+			"title": {
+				"en": "Workspace Monitor"
+			},
+			"description": {
+				"en": "The workspace-monitor hook: a DeepSeek Harness plugin that plays the workspace family's watch/sweep role - the wave-3 machinery with NO REAL TIMERS. The watch form: on every fs/observed event (heard on the ROOT context, the factory's Wire..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-monitor"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"monitor",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/hook-dsh-workspace-monitor"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-observe",
+			"title": {
+				"en": "Workspace Observe"
+			},
+			"description": {
+				"en": "The workspace-observe hook: a DeepSeek Harness plugin that records the workspace's first step of the invisible flow - on every fs/observed event (heard on the ROOT context, the factory's Wire registration) it writes one observation stamp..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-observe"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"observe",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-observe"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-workspace-operate",
+			"title": {
+				"en": "Workspace Operate"
+			},
+			"description": {
+				"en": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-workspace-operate"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"workspace",
+					"operate",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/hook-dsh-workspace-operate"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/lib-dsh-core",
+			"title": {
+				"en": "Core"
+			},
+			"description": {
+				"en": "The CORE: the pure, harness-free commonalities of the governance family (@playform/lib-dsh-core) — the dependency-section list, the exclusion-segment list, the suppression-line composer, the update-policy loader and the refusal guard — the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-core"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"core",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/lib-dsh-core"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/lib-dsh-pack",
+			"title": {
+				"en": "Pack"
+			},
+			"description": {
+				"en": "The PACKS: the pure, dependency-light, harness-free workspace-pack library of the suggester family (@playform/lib-dsh-pack) - the pack schema, the layered resolution (the user layer, the repo layer, the cycle-guarded extends chain), the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-pack"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"pack",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/lib-dsh-pack"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/lib-dsh-trace",
+			"title": {
+				"en": "Trace"
+			},
+			"description": {
+				"en": "The TRACE: the pure, harness-free vocabulary of the workspace family's trace bus (@playform/lib-dsh-trace) - the envelope { trace, kind, at, actor, payload }, the event names (observe/stamp, graph/indexed, graph/invalidated), the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-trace"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"trace",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/lib-dsh-trace"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/lib-dsh-workspace-live",
+			"title": {
+				"en": "Workspace Live"
+			},
+			"description": {
+				"en": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-workspace-live"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"workspace",
+					"live",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/lib-dsh-workspace-live"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-batch-edit",
+			"title": {
+				"en": "Batch Edit"
+			},
+			"description": {
+				"en": "The batch edit tool: a DeepSeek Harness plugin that turns files into PROCESSES held in state. One tool (batch_edit) opens a machine, inserts files into it, and runs the transition table (replace / insert-after / insert-before / remove-line..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-batch-edit"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"batch",
+					"edit",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/plugin-dsh-batch-edit"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-batchstate",
+			"title": {
+				"en": "Batchstate"
+			},
+			"description": {
+				"en": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-batchstate"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"batchstate",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/plugin-dsh-batchstate"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-factory",
+			"title": {
+				"en": "Factory"
+			},
+			"description": {
+				"en": "The FACTORY: a DeepSeek Harness service (@playform/plugin-dsh-factory, ctx.pluginFactory) that centralizes every piece of common machinery the package.json governor, the package.json pinner and the Cargo.toml governor currently duplicate —..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-factory"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"factory",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.0.1",
+					"publishTimestamp": 1791545918,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792535606,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-feedback",
+			"title": {
+				"en": "Feedback"
+			},
+			"description": {
+				"en": "The FEEDBACK member (ctx.feedback): a DeepSeek Harness service that collects the honest signals. Every agent's completion carries an HONEST feedback block (LIKED / DISLIKED / DELTAS / TRANSFERRED / READ-STATUS); the block is transferred..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-feedback"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"feedback",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/plugin-dsh-feedback"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-gitguard",
+			"title": {
+				"en": "Gitguard"
+			},
+			"description": {
+				"en": "The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the terminal/exec tool surface. It intercepts terminal commands before execution and denies ANY git mutation pattern (git add, commit, reset, push, tag,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-gitguard"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"gitguard",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-gitguard"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-ingester",
+			"title": {
+				"en": "Ingester"
+			},
+			"description": {
+				"en": "The INGESTER (ctx.ingester): the apply direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 4). A DeepSeek Harness service that turns an approved batch proposal into file operations: per target, in the proposal's..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-ingester"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"ingester",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/plugin-dsh-ingester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-normalize-file",
+			"title": {
+				"en": "Normalize File"
+			},
+			"description": {
+				"en": "The file-content normalizer flavor: a DeepSeek Harness plugin that registers the normalize family's `normalize-file` tool - the read → count → write pipeline over files ALREADY on disk, beyond the tool layer. One agent-chosen file per..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-normalize-file"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"normalize",
+					"file",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918132,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "eae7ee4b8ccad5a71fe77034a583dc0a87160d08",
+						"path": "Classic/packages/plugin-dsh-normalize-file"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-pass-on",
+			"title": {
+				"en": "Pass On"
+			},
+			"description": {
+				"en": "The PASS-ON (ctx.passOn): the prepare direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 3). A DeepSeek Harness service that turns an intent - a suggestion from the search suggester, a user/agent intent, or a..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-pass-on"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"pass",
+					"on",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792824530,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "905a37bf51887da92de954bfd33037bfed82f60e",
+						"path": "Classic/packages/plugin-dsh-pass-on"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-pattern",
+			"title": {
+				"en": "Pattern"
+			},
+			"description": {
+				"en": "The pattern-graph service plugin: a DeepSeek Harness plugin that owns the pattern registry, the matcher, the confidence store and the learner behind the suggester family. A pattern is a parameterized behavior graph (PATTERN-GRAPH-PLUGIN.md..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-pattern"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"pattern",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-pattern"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-queue",
+			"title": {
+				"en": "Queue"
+			},
+			"description": {
+				"en": "The subagent-queue plugin: a DeepSeek Harness plugin that turns subagent work into a QUEUE (the tasks as data, not the agents as contexts). The user's capacity model is the law: the MAIN conversation holds up to 10 subagents (the pool's..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-queue"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"queue",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-queue"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-route",
+			"title": {
+				"en": "Route"
+			},
+			"description": {
+				"en": "The routing-enforcer plugin: a DeepHarness plugin that enforces the user's model-routing policy SILENTLY on every subagent launch. The choice happens automatically - no prompting, no reminder, no orchestrator awareness. When a launch omits..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-route"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"route",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-route"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace",
+			"title": {
+				"en": "Workspace"
+			},
+			"description": {
+				"en": "The workspace agent: a DeepSeek Harness plugin that IS the workspace regime's conversational surface - the OPERATIONAL VIEW the conversation addresses. It consumes the Wave-1 graph service (ctx.workspaceGraph) and presents the graph-like,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792918155,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "e9282eb946411bd97839a0b904399dcff0c34d5b",
+						"path": "Classic/packages/plugin-dsh-workspace"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-authority",
+			"title": {
+				"en": "Workspace Authority"
+			},
+			"description": {
+				"en": "The workspace-authority service: a DeepSeek plugin that IS the authority step of the workspace family's invisible flow - the licenses. The service keeps the THREE SEPARATE AUTHORITY RECORDS (v4.1 section 3.9, correcting the corpus's own..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-authority"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"authority",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-workspace-authority"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-context",
+			"title": {
+				"en": "Workspace Context"
+			},
+			"description": {
+				"en": "The workspace-context service: a DeepSeek Harness plugin that plays the workspace family's attention-projection role - the required/relevant/deferred context economy. The service (registered as ctx.workspaceContext) builds the ORIENTATION..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-context"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"context",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792919018,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "bc0a02a0defe392119b98e78724ae1f931d95348",
+						"path": "Classic/packages/plugin-dsh-workspace-context"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-evidence",
+			"title": {
+				"en": "Workspace Evidence"
+			},
+			"description": {
+				"en": "The workspace-evidence service: a DeepSeek Harness plugin that owns the validation objects + the evidence dependencies + the four kinds of truth + the stale-validation invalidation (the family map's EVIDENCE role). It registers the..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-evidence"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"evidence",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-workspace-evidence"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-graph",
+			"title": {
+				"en": "Workspace Graph"
+			},
+			"description": {
+				"en": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-graph"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"graph",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-workspace-graph"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-reflect",
+			"title": {
+				"en": "Workspace Reflect"
+			},
+			"description": {
+				"en": "The workspace-reflect service: a DeepSeek Harness plugin providing the LATER-STAGE code-block reflective API - the AST-aware rename/connect/replace bundled as ONE call each, over the managed representations (the family map's reflect role;..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-reflect"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"reflect",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-workspace-reflect"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-workspace-semantics",
+			"title": {
+				"en": "Workspace Semantics"
+			},
+			"description": {
+				"en": "The workspace-semantics service: a DeepSeek Harness plugin that owns the semantic model - the symbols + the references + the dependencies + the index (the family map's SEMANTICS role). It registers the workspaceSemantics service..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-workspace-semantics"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"workspace",
+					"semantics",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.1.0",
+					"publishTimestamp": 1792830205,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "ff75fceafebdb296fd866d6a9d0274e3a4a48b62",
+						"path": "Classic/packages/plugin-dsh-workspace-semantics"
+					},
+					"engines": {}
+				}
+			]
+		}
+	]
+}

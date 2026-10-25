@@ -15,12 +15,15 @@ normalizes the curly quote family in model output, live in the transcript: the e
 quote code points each map to their ASCII straight counterpart - U+2018/U+2019/U+201A/U+201B to the
 ASCII apostrophe, and U+201C/U+201D/U+201E/U+201F to the ASCII double quote. A **MAP flavor** of the
 normalize family: the core's `Quotes` char-to-char table owns the substitution - no `replacement`
-config knob. The @-sentence identity: **Hook @ DSH @ Normalize @ Quotes**. The family's `raw-write`
-tool (registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
+config knob.
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Quotes**. The family's `raw-write` tool
+(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
 transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
-false = verbatim) is the only normalization it applies. Unlike the governance family, the rewrite
-flows into both the live UI and the durable transcript - the normalization is deliberately
-**VISIBLE; it IS the feature**.
+false = verbatim) is the only normalization it applies.
+
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+the normalization is deliberately **VISIBLE; it IS the feature**.
 
 ## The surfaces
 

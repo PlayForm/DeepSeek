@@ -1,8 +1,8 @@
-import type Capability from "@Interface/Capability.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Lease from "@Interface/Lease.js";
-import type PolicyRule from "@Interface/Policy.js";
-import type Residency from "@Interface/Residency.js";
+import type Capability from "./Capability.js";
+import type FactoryHandle from "./Factory.js";
+import type Lease from "./Lease.js";
+import type PolicyRule from "./Policy.js";
+import type Residency from "./Residency.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Master switch (config `enabled`, volatile) - false = full no-op. */

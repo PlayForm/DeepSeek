@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-semantics
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/SEMANTICS](../../../Documentation/Plans/Workspace-Family/SEMANTICS.md)
+
+## The role
+
 The workspace-semantics service: the DeepSeek Harness's semantic model - the symbols + the
 references + the dependencies + the index (the family map's SEMANTICS role,
 `Documentation/Plans/Workspace-Family/SEMANTICS.md`).
@@ -36,6 +41,8 @@ observe -> semantics -> operate -> govern -> authority -> approve -> merge
 - **The ledger**: its own strings, prefix `semantics:` (module-owned, byte-stable), one log per
   module (default `~/.dsh/playform/ets-plugin-dsh-workspace-semantics.log`).
 
+## The ledger
+
 Ledger lines (byte-stable): `disabled (enabled=false)`, `adapters registered (N extensions)`,
 `resolved <path> (N symbols, M references)`, `deepened <path> (N references via <name>)`,
 `refused <path> (no adapter for <ext>)`, `refused <path> (rename: ...)`,
@@ -62,3 +69,14 @@ without a remount; a resolved pack's `policy` section overrides the defaults per
 is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 Schema: see SCHEME.md.
+
+## The plan
+
+- [Workspace-Family/SEMANTICS](../../../Documentation/Plans/Workspace-Family/SEMANTICS.md) - the
+  semantics role.
+- The idle-forever posture: ships disabled (`enabled: false`), never appears in the profile's
+  bundles, enables only by an explicit ACTIVATE.
+
+## License
+
+CC0-1.0.

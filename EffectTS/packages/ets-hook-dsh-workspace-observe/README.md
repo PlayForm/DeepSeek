@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-observe
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/OBSERVE](../../../Documentation/Plans/Workspace-Family/OBSERVE.md)
+
+## The role
+
 The workspace-observe hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release, Wave 1). The first step of the invisible flow: on every `fs/observed` event the hook
@@ -45,7 +50,7 @@ One stamp per event (and per manual call):
   domain. An absent storage facility is a silent skip (the stamps live in memory only); a present
   facility whose open fails is loud (one ledger line, never rethrown).
 
-## Config
+## The configuration
 
 See [SCHEME.md](SCHEME.md). Every knob is a volatile cell (hot edits commit without remounting):
 `enabled`, `domain`, `maxStamps`, `include`, `exclude` (plus the universal `log`/`logFile`).
@@ -92,6 +97,11 @@ observe: failed <path> (<reason>)
 observe: manual <path> version <version>
 observe: storage open failed: <reason>
 ```
+
+## The plan
+
+- [Workspace-Family/OBSERVE](../../../Documentation/Plans/Workspace-Family/OBSERVE.md) - the observe
+  step (Wave 1).
 
 ## License
 

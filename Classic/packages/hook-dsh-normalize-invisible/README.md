@@ -14,13 +14,15 @@ waterfall (the interceptable wrapper around EVERY streaming model call, bound to
 normalizes the zero-width/invisible character family in model output, live in the transcript - by
 REMOVING it: zero-width spaces, joiners, bidi controls and the BOM character simply vanish. A
 **CLASS flavor** of the normalize family: the core's `Invisible` class plus a configurable
-`replacement` string (default `""` - removal). The @-sentence identity: **Hook @ DSH @ Normalize @
-Invisible**. The family's `raw-write` tool (registered by
-[hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too - the
-exemption is family-wide, so the tool's explicit `normalize` parameter (default false = verbatim) is
-the only normalization it applies. Unlike the governance family, the rewrite flows into both the
-live UI and the durable transcript - the normalization is deliberately **VISIBLE; it IS the
-feature**.
+`replacement` string (default `""` - removal).
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Invisible**. The family's `raw-write` tool
+(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
+transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
+false = verbatim) is the only normalization it applies.
+
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+the normalization is deliberately **VISIBLE; it IS the feature**.
 
 ## The surfaces
 

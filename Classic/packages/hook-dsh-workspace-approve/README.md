@@ -52,7 +52,7 @@ observed at a different version than the one bound in the approval is invalidate
 (`decision: "invalidated"`, ledger `invalidated <id> (version changed)`). The listener is a
 synchronous recorder: no awaits, no throws, no I/O; own-actor events are ignored.
 
-## Storage and ledger
+## The ledger (storage and lines)
 
 State lives in the hook's own KV domain named `workspace_approve` (config `domain`): one record per
 binding plus a bounded ring snapshot (the last `maxBindings`, default 1000). The sequence is the

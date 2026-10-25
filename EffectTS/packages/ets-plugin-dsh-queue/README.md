@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-queue
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md)
+
+## The role
+
 The subagent-queue plugin: subagent work becomes a **queue** - the tasks as data, not the agents as
 contexts. The third orchestration-layer plugin, next to the batch-state and routing-enforcer
 plugins.
@@ -64,7 +69,7 @@ The plugin registers the `dshQueue` service:
 | `Flush()`                                                          | Join the in-flight spawns (tests/reconcile; never a hot-path wait). |
 | `Board()` / `Snapshot()`                                           | The compiled line / the full queue record.                          |
 
-## Configuration (all volatile)
+## The configuration (all volatile)
 
 | Field                              | Default                                             | Meaning                                                            |
 | ---------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------ |
@@ -112,7 +117,7 @@ The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <i
 `spawn held <id> (policy spawn=approve)`, `spawn skipped <id> (<reason>)`,
 `spawn failed <id> (<error>)`, `requeued <id> (<agent> gone)`.
 
-## Status
+## The plan
 
 The spawn, the idle-slot automation and the restart reconcile are implemented and smoke-arbitrated
 (`Source/Test/Spawn-And-Reconcile`); the policy gate and its precedence are arbitrated by
@@ -120,3 +125,9 @@ The spawn, the idle-slot automation and the restart reconcile are implemented an
 the caller's persisted record because the family has no storage domain yet (the wave-3 storage
 migration is its home). A `spawn skipped` task keeps its seat until the orchestrator settles it - an
 honest gap, never a silent drop.
+
+- [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md) - the queue model.
+
+## License
+
+CC0-1.0.

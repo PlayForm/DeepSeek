@@ -1,10 +1,23 @@
 # @playform/plugin-dsh-route
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [ROUTING-ENFORCER-PLUGIN](../../Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md)
+
+## The role
+
 The routing-enforcer plugin: the **silent model-route policy enforcement** for the DeepSeek Harness.
 The user owns the model configuration (his policy files); the plugin enforces it on every subagent
 launch, model-independently - and the orchestrator is **not even bothered**.
 
 Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
+
+## The surfaces
+
+- The `subagent` tool's `tools/pre-execute` waterfall: the silent resolution, the correction, and
+  the route hint appended to the launch prompt.
+- The `agent/pre-step` seam: the hint as one user message at a delegated child's first step.
+- The `dshRoute` service (the method table below).
+- No file write.
 
 ## What it does
 
@@ -51,7 +64,7 @@ The plugin registers the `dshRoute` service (the factory's class/service pattern
 The subagent-queue plugin's dispatcher consumes `dshRoute` for the routed dispatch
 (`SUBAGENT-QUEUE-PLUGIN.md` section 2.4).
 
-## Configuration (all volatile)
+## The configuration (all volatile)
 
 | Field             | Default                                    | Meaning                                                                                                               |
 | ----------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
@@ -81,10 +94,30 @@ is one volatile object (a policy flip is hot-editable), and a resolved pack's `p
 overrides the defaults per action (the wiring is the next refinement). The defaults are
 smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## Status
+## The ledger
 
-The two halves of the launch seam are implemented and smoke-arbitrated
-(`Source/Test/Launch-And-Hint`), together with the `ESCALATION:` marker and the catalog-verified
-ladder. The plugin ships disabled. The remaining option (not this wave) is enforcing the route at
-`agent/request` so a raw service spawn is CORRECTED, not only hinted - the queue already resolves
-`dshRoute` before its spawn, so the routed dispatch is corrected at the source.
+The lines go to `logFile` (byte-stable):
+
+```text
+route <taskType> <resolved|kept|corrected|escalated> <provider> <model> <effort>
+hint <taskType> <provider> <model> <effort>
+```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [ROUTING-ENFORCER-PLUGIN](../../Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md) - the routing
+  policy.
+- The two halves of the launch seam are implemented and smoke-arbitrated
+  (`Source/Test/Launch-And-Hint`), together with the `ESCALATION:` marker and the catalog-verified
+  ladder. The plugin ships disabled. The remaining option (not this wave) is enforcing the route at
+  `agent/request` so a raw service spawn is CORRECTED, not only hinted - the queue already resolves
+  `dshRoute` before its spawn, so the routed dispatch is corrected at the source.
+
+## License
+
+CC0-1.0.

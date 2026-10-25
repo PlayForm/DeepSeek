@@ -1,5 +1,10 @@
 # @playform/lib-dsh-workspace-live
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md)
+
+## The role
+
 The workspace-live **LIBRARY** (the `lib-dsh-*` role): the shared client machinery of the Workspace
 Plugin Family's live view - the operational-view **section types** and the **render helpers**. No
 Config, no apply: the library is not a plugin bundle (no loader contract, no cordis patch); it is
@@ -24,7 +29,11 @@ and EffectTS twins follow the family contract.
 - `@playform/client-dsh-workspace-live` and the `client-dsh-*` panel family - the client half (the
   end-phase wires the real imports).
 
-## Status
+## The plan
 
 Planned PoC (`tier: 2-planned` in `Temporary/npm-bootstrap/MANIFEST.json`); the smoke suite is the
 end-phase deliverable.
+
+## License
+
+CC0-1.0.

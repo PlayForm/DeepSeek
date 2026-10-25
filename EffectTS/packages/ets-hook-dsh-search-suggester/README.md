@@ -1,11 +1,18 @@
 # @playform/hook-dsh-search-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The search-intent **target suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
-search-class call (`grep`, `glob`, `read`, or a search-shaped `bash`) matches one of the ten intent
-kinds, prepends ONE labeled `additionalContexts` note naming the likely target set - the standard
-locations where that intent lives in this repo - **before** the model burns the searches. Plan:
+release).
+
+A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a search-class
+call (`grep`, `glob`, `read`, or a search-shaped `bash`) matches one of the ten intent kinds,
+prepends ONE labeled `additionalContexts` note naming the likely target set - the standard locations
+where that intent lives in this repo - **before** the model burns the searches. Plan:
 [SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
 
 ## Why
@@ -13,18 +20,21 @@ locations where that intent lives in this repo - **before** the model burns the 
 In the measured sessions, 46% of every tool call is a search-class call, and the discovery is late:
 in the release lane only 6% of the files the model eventually edited had been read before its first
 edit. The repetition is not mostly literal - it is semantic: the same intent reached through a dozen
-different literals and a hundred different paths. The deliverable is not a better search; it is a
-**target set**: a compact, ordered, intent-keyed list of the standard locations, delivered at the
-first call of an intent.
+different literals and a hundred different paths.
+
+The deliverable is not a better search; it is a **target set**: a compact, ordered, intent-keyed
+list of the standard locations, delivered at the first call of an intent.
 
 ## The intents
 
 Ten kinds, priority order (destructive first): `Version`, `Path`, `Ledger`, `Config`, `Dependency`,
-`Test`, `Symbol`, `Doc`, `Usage`, `Owner`. Each kind is a pack row: its signal table (regex rules
-with weights), its per-intent threshold (`0.85` for the destructive `Version`/`Path`/`Ledger`,
-`0.75` for the rest), and its ordered candidate set - each candidate a path or glob with a prior and
-**one reason phrase** ("the monorepo manifest", "the const Version", "the build mirror - never
-edit"). A candidate without a reason is not emitted.
+`Test`, `Symbol`, `Doc`, `Usage`, `Owner`.
+
+Each kind is a pack row: its signal table (regex rules with weights), its per-intent threshold
+(`0.85` for the destructive `Version`/`Path`/`Ledger`, `0.75` for the rest), and its ordered
+candidate set - each candidate a path or glob with a prior and **one reason phrase** ("the monorepo
+manifest", "the const Version", "the build mirror - never edit"). A candidate without a reason is
+not emitted.
 
 The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
 [`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `search/` domain. A
@@ -35,16 +45,22 @@ stays silent.
 ## The gate
 
 `k = sigmoid(sum(weights) + b)`, `b = -0.6`, so a single weak signal never crosses the default
-threshold. The noise control: a cooldown (no second note for the same intent within
-`cooldownCalls`), a dedupe (the same intent + candidate set is one note), a per-turn cap
-(`maxNotesPerTurn`), and the already-recent filter. Every abstention and suppression is a ledger
-line, so the precision is measured, not assumed. The algebra's identity element is silence.
+threshold.
+
+The noise control: a cooldown (no second note for the same intent within `cooldownCalls`), a dedupe
+(the same intent + candidate set is one note), a per-turn cap (`maxNotesPerTurn`), and the
+already-recent filter. Every abstention and suppression is a ledger line, so the precision is
+measured, not assumed.
+
+The algebra's identity element is silence.
 
 ## The delivery
 
 One note, never a content replacement: the post-execute listener runs AFTER the ccr's
 `{prepend: true}` listener and only adds `additionalContexts`, so a ccr-compressed result is
-unaffected. The note carries the plugin's own source label
+unaffected.
+
+The note carries the plugin's own source label
 (`{kind: "search-suggester", form: "notice", summary}`) - an unlabeled context would render as a
 user prompt in derived history. The optional second surface (`sectionMode: "sticky"`, off by
 default) is one `system-prompt/assemble` section carrying the current intent's target list, rebuilt
@@ -102,14 +118,14 @@ transform is fail-open (an internal error logs a warning and the decision passes
 never fails a tool call); plain registration, after the ccr and the normalize family. The
 `write`/`edit`/`raw-write` calls are learning signals only - a note after the edit is too late.
 
-## Config
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every tuning knob is volatile (hot-editable, no
 remount); the structural knobs (`persistPath`, `refreshOnBoot`) remount on edit, and `indexPath` is
 retired by the P2 re-spec (kept so an existing profile loads unchanged). Ships **disabled** - enable
 by explicit ACTIVATE in the profile.
 
-## The smokes
+## The build and the tests
 
 Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
 its own `## Expected count`: the five original folders (Pack-Driven, Post-Execute-And-Learning,
@@ -118,6 +134,13 @@ wave (Projection, Dismiss, Seed, Benchmark), and the plan's nine suites - three 
 original folders (Delivery-And-Label and Learning-Update by Post-Execute-And-Learning, Ledger by
 Wiring-And-Ledger) and six added here (Classification, Threshold-And-Cooldown, Abstention,
 Persistence, Index-Refresh, Noise). The aggregate prints 126 PASS.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra.
+- [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
+  approved re-spec (section 3, the graph projection).
 
 ## License
 

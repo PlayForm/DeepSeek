@@ -25,6 +25,21 @@ The packet format is `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` section 3.5 
 the orient → drill → act loop). The library is extracted per the SHARED-LIBRARY.md rule; the Classic
 and EffectTS twins follow the family contract.
 
+## The configuration
+
+No Config: the library is not a plugin bundle (no loader contract, no cordis patch); the consumers
+keep their own configs.
+
+## The ledger
+
+No ledger: the consumers keep their own ledger strings.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the library build (ESM `Target/`,
+Test tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke suite
+is the end-phase deliverable (see The plan).
+
 ## Consumers
 
 - `@playform/plugin-dsh-workspace` - the workspace agent's operational view.

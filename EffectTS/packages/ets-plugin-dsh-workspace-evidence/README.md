@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-evidence
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/EVIDENCE](../../../Documentation/Plans/Workspace-Family/EVIDENCE.md)
+
+## The role
+
 The workspace-evidence service: the DeepSeek Harness's validation objects + the evidence
 dependencies + the four kinds of truth + the stale-validation invalidation (the family map's
 EVIDENCE role, `Documentation/Plans/Workspace-Family/EVIDENCE.md`).
@@ -25,6 +30,8 @@ workspace's claims - the qualified freshness, the OutcomeEvidence, the justified
 - **The ledger**: its own strings, prefix `evidence:` (module-owned, byte-stable), one log per
   module (default `~/.dsh/playform/ets-plugin-dsh-workspace-evidence.log`).
 
+## The ledger
+
 Ledger lines (byte-stable): `disabled (enabled=false)`,
 `validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)`,
 `superseded <id> (sequence N)`, `stale <id> (dependency <key>)`, `no stale (dependency <key>)`,
@@ -48,3 +55,14 @@ write, no batch commit, no spawn), so the block documents the posture and refuse
 is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
 `policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
 are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+
+## The plan
+
+- [Workspace-Family/EVIDENCE](../../../Documentation/Plans/Workspace-Family/EVIDENCE.md) - the
+  evidence role.
+- The idle-forever posture: ships disabled (`enabled: false`), never appears in the profile's
+  bundles, enables only by an explicit ACTIVATE.
+
+## License
+
+CC0-1.0.

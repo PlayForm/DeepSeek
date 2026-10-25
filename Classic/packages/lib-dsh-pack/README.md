@@ -86,17 +86,22 @@ pack.extends: <name>                                the base, merged underneath
 The repo slug is the repo root's basename, lowercased, unless the pack declares `slug`. The repo
 layer is read first to discover that slug, then the user layer, then the `extends:` chain (a named
 base is looked up in the user layer; a missing name is skipped; a cycle is guarded and each pack is
-merged once). The merge: families by id, targets by path, scalars replace, arrays replace - the
-merged result is normalized once, so an absent field never overwrites the base. See
-[SCHEME.md](./SCHEME.md) for the exact rules and the parser's documented subset.
+merged once).
+
+The merge: families by id, targets by path, scalars replace, arrays replace - the merged result is
+normalized once, so an absent field never overwrites the base.
+
+See [SCHEME.md](./SCHEME.md) for the exact rules and the parser's documented subset.
 
 ## The parser decision
 
 The workspace does not carry the `yaml` package in its own dependency graph (the symbol only
 resolves through the enclosing machine's pnpm store, which a checkout elsewhere would not have), so
 the library stays dependency-light and parses the documented YAML subset itself
-(`Source/Function/Parse.ts`). A `.json` pack is accepted too (`JSON.parse`). The subset and its
-refusals are listed in [SCHEME.md](./SCHEME.md#the-parser-subset).
+(`Source/Function/Parse.ts`).
+
+A `.json` pack is accepted too (`JSON.parse`). The subset and its refusals are listed in
+[SCHEME.md](./SCHEME.md#the-parser-subset).
 
 ## The smokes
 

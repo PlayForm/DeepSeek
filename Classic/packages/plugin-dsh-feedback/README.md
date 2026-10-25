@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-feedback
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md)
+
+## The role
+
 The FEEDBACK member (ctx.feedback) - the fourth orchestration member
 (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md). A DeepSeek Harness service that collects the honest
 signals.
@@ -20,6 +25,11 @@ The block is transferred through the parentage MECHANICALLY - the block flows up
 sessions: the parents APPEND their deltas, they never edit or sanitize the honest content. The
 reading is the recipient's CHOICE - the transfer never forces the reading.
 
+## The surfaces
+
+One service: `ctx.feedback` (the table below). No tool, no event listener; the journal is the
+in-memory record plus the JSONL ledger.
+
 ## The service surface (`ctx.feedback`)
 
 | Method    | Signature                                                                   | Meaning                                                                                                                                              |
@@ -39,7 +49,7 @@ calls `Outcome` after every apply, so a batch's `applied` / `rejected` result la
 journal (`event: "batch"`) and in the session's summary (`outcomes`), beside the honest blocks. The
 session and the agent are the proposal's `origin`.
 
-## Config
+## The configuration
 
 | Field           | Default                                   | Meaning                                                         |
 | --------------- | ----------------------------------------- | --------------------------------------------------------------- |
@@ -69,7 +79,18 @@ verdicts are declared for uniformity and stay the shipped `approve` (the member 
 commits or spawns). A resolved pack's `policy` section overrides the defaults per action (the wiring
 is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## The smokes
+## The ledger
+
+One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-feedback.log`): each line is
+
+```text
+{"at":<epoch ms>,"event":<event>,"session":<id>,"agentId":<id>,"block":<the stored block>}
+```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 | Folder                  | What it proves                                                        | Count |
 | ----------------------- | --------------------------------------------------------------------- | ----- |
@@ -82,3 +103,12 @@ is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Polic
 
 The honest content is NEVER sanitized or filtered. The parents append deltas, NEVER rewrite the
 agents' signals. The read is ALWAYS the recipient's choice. The user's override wins.
+
+## The plan
+
+- [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md) - the honest
+  feedback member.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/hook-dsh-doc-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The doc-task **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
@@ -92,11 +97,16 @@ read and search calls that touch documentation plus the edits that land on it.
 transform is fail-open (an internal error logs a warning and the decision passes through - a note
 never fails a tool call).
 
-## Config
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
 The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
 **disabled** - enable by explicit ACTIVATE in the profile.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra (section 8, the third consumer).
 
 ## License
 

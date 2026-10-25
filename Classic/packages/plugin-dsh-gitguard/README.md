@@ -3,6 +3,12 @@
 The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the
 terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3).
 
+## The surfaces
+
+- The `tools/pre-execute` DENY-LIST intercept on the terminal/exec tool surface - the only
+  registration; a denial is the pre-execute refusal, never a punish.
+- No tool of its own, no service.
+
 ## The role
 
 - **The dirty-tree discipline, enforced**: the git checks-only law lives in the skills (the WHY) -
@@ -53,12 +59,45 @@ uniformity and stay the shipped `approve`. The block is one volatile object (a p
 hot-editable), and a resolved pack's `policy` section overrides the defaults per action (the wiring
 is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## The build
+## The configuration
+
+| Field      | Default                                   | Meaning                                      |
+| ---------- | ----------------------------------------- | -------------------------------------------- |
+| `enabled`  | `false`                                   | the master switch (the IDLE-forever posture) |
+| `log`      | `true`                                    | the ledger switch (shared cell)              |
+| `logFile`  | `~/.dsh/playform/plugin-dsh-gitguard.log` | the ledger                                   |
+| `strict`   | `false`                                   | the strict classification mode               |
+| `policy.*` | D6 defaults                               | the per-action allowlist (see below)         |
+
+Every field is a volatile cell.
+
+## The build and the tests
 
 ```
 sh Source/prepublishOnly.sh   # the full chain (Build + tsc + tsc-alias)
 sh Source/Run.sh              # the dev twin (Build only)
 ```
 
-The smoke suites are the end-phase (the PoC mode): the fake-context harness and the byte-identical
-ledger assertions land with the aggregate runner.
+The smoke folders: `Guard-And-Ledger`, `Policy-Defaults`, `Wiring-And-Classification`.
+
+## The ledger
+
+The lines are prefixed `gitguard: ` (byte-exact, see also the smoke folders' expected-string
+sections):
+
+```text
+gitguard: activated (...)
+gitguard: disabled (enabled=false)
+gitguard: denied <subcommand|bare> (<reason>)
+```
+
+## The plan
+
+- [ORCHESTRATION-PLUGINS](../../Documentation/Plugins/ORCHESTRATION-PLUGINS.md) - section 3, the
+  deny-list member.
+- The PoC mode: the fake-context harness and the byte-identical ledger assertions land with the
+  aggregate runner (the end phase).
+
+## License
+
+CC0-1.0.

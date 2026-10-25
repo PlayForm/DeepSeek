@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-monitor
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/MONITOR](../../../Documentation/Plans/Workspace-Family/MONITOR.md)
+
+## The role
+
 The workspace family's **monitor hook**: the watch/sweep forms - the wave-3 machinery with **no real
 timers**.
 
@@ -22,6 +27,35 @@ timers**.
 The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's bundles
 and enables only by an explicit ACTIVATE.
 
+## The surfaces
+
+- The `fs/observed` listener on the ROOT context (the factory's Wire registration) - the watch
+  recorder (synchronous: no awaits, no subprocess work, no file content ever read).
+- The clock-based deadline sweep inside the event-driven checkpoints.
+- The state probed as `ctx.__hookDshWorkspaceMonitorState`.
+- No tool, no provided service; the monitor never executes a command.
+
+## The ledger
+
+Every decision carries a byte-stable module-owned line (prefix `monitor:`):
+`watch/ignored/capped/sweep/failed/disabled`; the health and performance counters (events, sweeps,
+last sweep stamp) live on the probed state.
+
+## The configuration
+
+| Field             | Default                                          | Meaning                              |
+| ----------------- | ------------------------------------------------ | ------------------------------------ |
+| `enabled`         | `false`                                          | the master switch (IDLE-forever)     |
+| `log`             | `true`                                           | the ledger switch (shared cell)      |
+| `logFile`         | `~/.dsh/playform/hook-dsh-workspace-monitor.log` | the ledger                           |
+| `domain`          | `workspace_monitor`                              | the KV domain name                   |
+| `debounceMs`      | `250`                                            | the watch debounce deadline          |
+| `sweepIntervalMs` | `60000`                                          | the sweep schedule interval          |
+| `maxWatch`        | `500`                                            | the watch entry cap                  |
+| `policy.*`        | D6 defaults                                      | the per-action allowlist (see below) |
+
+Every field is a volatile cell.
+
 ### The policy block (D6)
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
@@ -39,4 +73,18 @@ commit, no spawn), so the block documents the posture and refuses nothing. The b
 object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
 overrides the defaults per action (the wiring is the next refinement).
 
-Plan: Documentation/Plans/Workspace-Family/MONITOR.md.
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/MONITOR](../../../Documentation/Plans/Workspace-Family/MONITOR.md) - the
+  watch/sweep machinery.
+- The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's
+  bundles and enables only by an explicit ACTIVATE.
+
+## License
+
+CC0-1.0.

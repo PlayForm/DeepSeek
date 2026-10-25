@@ -1,5 +1,10 @@
 # @playform/hook-dsh-convention-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a
 pattern pack and names them **before** the model violates them. On every `write`/`edit`/`raw-write`
 call it classifies the target path deterministically and prepends ONE labeled `additionalContexts`
@@ -64,7 +69,14 @@ lane.
    listener): `next()` first; detect → gate → prepend ONE notice. Content is never replaced.
 2. `agent/pre-step`: the per-turn reset of the note counter when a user message enters.
 
-## Status
+## The plan
 
 PoC phase: the package and Source are complete; the smoke suites, the build pass, and the wiring are
 the end-phase (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - §9.4, the
+  convention arbiter.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-semantics
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/SEMANTICS](../../../Documentation/Plans/Workspace-Family/SEMANTICS.md)
+
+## The role
+
 The workspace-semantics service: the DeepSeek Harness's semantic model - the symbols + the
 references + the dependencies + the index (the family map's SEMANTICS role,
 `Documentation/Plans/Workspace-Family/SEMANTICS.md`).
@@ -9,6 +14,26 @@ The second step of the invisible flow, right after the observe stamps:
 ```text
 observe -> semantics -> operate -> govern -> authority -> approve -> merge
 ```
+
+## The surfaces
+
+- The service `ctx.workspaceSemantics` (`resolve`, `symbol`, `references`, `rename`, `adapt`,
+  `statistics`).
+- The fs/observed listener on the ROOT context (the factory's Wire registration) - the index
+  trigger.
+- The optional `ctx.lsp` seam (probed, never injected) - the primary TypeScript reference answer.
+- No tool, no file write.
+
+## The ledger
+
+Its own strings, prefix `semantics:` (module-owned, byte-stable), one log per module (default
+`~/.dsh/playform/plugin-dsh-workspace-semantics.log`). The lines (byte-stable):
+`disabled (enabled=false)`, `adapters registered (N extensions)`,
+`resolved <path> (N symbols, M references)`, `deepened <path> (N references via <name>)`,
+`refused <path> (no adapter for <ext>)`, `refused <path> (rename: ...)`,
+`planned rename <from> -> <to> in <path> (N edits, <certainty>)`,
+`indexed <path> version <v> (revision <r>)`, `ignored <path> (own actor)`,
+`ignored <path> (excluded)`, `failed <path> (<reason>)`, `storage open failed: <reason>`.
 
 - **The service**: `ctx.workspaceSemantics` - `resolve(path)` builds the file's knowledge graph
   lazily through the file type's adapter, `symbol`, `references`, `rename(path, span, to)` produces
@@ -36,12 +61,21 @@ observe -> semantics -> operate -> govern -> authority -> approve -> merge
 - **The ledger**: its own strings, prefix `semantics:` (module-owned, byte-stable), one log per
   module (default `~/.dsh/playform/plugin-dsh-workspace-semantics.log`).
 
-Ledger lines (byte-stable): `disabled (enabled=false)`, `adapters registered (N extensions)`,
-`resolved <path> (N symbols, M references)`, `deepened <path> (N references via <name>)`,
-`refused <path> (no adapter for <ext>)`, `refused <path> (rename: ...)`,
-`planned rename <from> -> <to> in <path> (N edits, <certainty>)`,
-`indexed <path> version <v> (revision <r>)`, `ignored <path> (own actor)`,
-`ignored <path> (excluded)`, `failed <path> (<reason>)`, `storage open failed: <reason>`.
+## The configuration
+
+| Field        | Default                                                         | Meaning                                      |
+| ------------ | --------------------------------------------------------------- | -------------------------------------------- |
+| `enabled`    | `false`                                                         | the master switch (the idle-forever posture) |
+| `log`        | `true`                                                          | the ledger switch (shared cell)              |
+| `logFile`    | `~/.dsh/playform/plugin-dsh-workspace-semantics.log`            | the ledger                                   |
+| `domain`     | `workspace_semantics`                                           | the KV domain name                           |
+| `maxEntries` | `256`                                                           | the index entry bound                        |
+| `root`       | `""` (the session cwd)                                          | the workspace root                           |
+| `lsp`        | `true`                                                          | the LSP deepener switch                      |
+| `adapters`   | `[]` (the seven TS/JS extensions stay the default registration) | the opt-in any-file adapters, by name        |
+| `policy.*`   | D6 defaults                                                     | the per-action allowlist (see below)         |
+
+Every field is a volatile cell.
 
 ### The policy block (D6)
 
@@ -61,4 +95,17 @@ posture and refuses nothing. The block is one volatile object, so a policy flip 
 without a remount; a resolved pack's `policy` section overrides the defaults per action (the wiring
 is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-Schema: see SCHEME.md.
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/SEMANTICS](../../../Documentation/Plans/Workspace-Family/SEMANTICS.md) - the
+  semantics role.
+- Schema: see SCHEME.md.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-pass-on
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [PASS-ON-AND-INGESTER](../../Documentation/Plans/PASS-ON-AND-INGESTER.md)
+
+## The role
+
 The PASS-ON (ctx.passOn) - the prepare direction of the batch flow
 (Documentation/Plans/PASS-ON-AND-INGESTER.md section 3). A DeepSeek Harness service that turns an
 intent into a batch proposal.
@@ -11,6 +16,13 @@ renders the bounded preview, and computes the digest; the decision decides; the 
 ```
 Suggester / user intent -> PASS-ON (prepare) -> decision -> INGESTER (apply)
 ```
+
+## The surfaces
+
+- The service `ctx.passOn` (`Prepare`, `Get` - the table below).
+- The publication channels: the `batch/proposed` bus emission and the harness agent-team inbox
+  (`agent.inject`).
+- READ-ONLY: no file write, no tool.
 
 ## The service surface (`ctx.passOn`)
 
@@ -46,7 +58,7 @@ the canonical wire `Batch` (Interface/Batch.ts):
 The digest is the fence: sha256 over the targets (path + version) and the operations (find +
 replace); the ingester applies only the proposal whose digest and versions still match.
 
-## Config
+## The configuration
 
 | Field             | Default                                  | Meaning                                                 |
 | ----------------- | ---------------------------------------- | ------------------------------------------------------- |
@@ -73,15 +85,28 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 
 The pass-on is read-only - `read` and `suggest` are automatic; the write/commit/spawn verdicts are
 declared for uniformity and stay the shipped `approve` (the pass-on never writes, commits or
-spawns). A resolved pack's `policy` section overrides the defaults per action (the wiring is the
-next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+spawns).
+
+A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The abstention rule
 
 If the proposal is empty or ambiguous - an unknown kind, no resolved targets, no effective
 operations - the pass-on returns no batch, not an empty one.
 
-## The smokes
+## The ledger
+
+One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-pass-on.log`): each line is
+
+```text
+{"at":<epoch ms>,"event":"prepared","proposal":<id|null>,"digest":<digest|null>,"targets":<n>,"note":<note>}
+```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 | Folder                 | What it proves                                                       | Count |
 | ---------------------- | -------------------------------------------------------------------- | ----- |
@@ -89,3 +114,12 @@ operations - the pass-on returns no batch, not an empty one.
 | `Prepare-And-Ledger`   | the prepare paths, the digest, the preview, the read-only law        | 17    |
 | `Batch-Proposal`       | the canonical conversion, the bus emission, the inbox delivery       | 9     |
 | `Policy-Defaults`      | the D6 block's defaults and the read-only posture                    | 4     |
+
+## The plan
+
+- [PASS-ON-AND-INGESTER](../../Documentation/Plans/PASS-ON-AND-INGESTER.md) - section 3, the prepare
+  direction (section 2, the batch contract).
+
+## License
+
+CC0-1.0.

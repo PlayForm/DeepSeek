@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-batch-edit
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [BATCH-EDIT-TOOL-FEATURE](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
+
+## The role
+
 The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 plugin family (the Classic release). One tool - `batch_edit` - that turns files into **processes
 held in state**: you open a machine, insert files into it, and the files process like a state
@@ -99,7 +104,7 @@ apply refused <id> (policy write=approve)
 Plus the module-owned `removed <file>` line for the `remove` action. The ledger file defaults to
 `~/.dsh/playform/ets-plugin-dsh-batch-edit.log` (one log per module).
 
-## Configuration
+## The configuration
 
 Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
 ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
@@ -117,7 +122,11 @@ ACTIVATE in the profile). Every knob is volatile (hot-editable without remountin
 | `monitorChecksets` | `[]`                                            | Per-file check-set names (the live containers' vocabulary, labels in v1) |
 | `policy.*`         | D6 defaults                                     | The per-action allowlist (the apply gate; see above)                     |
 
-## Status
+## The plan
 
 Classic PoC (source complete; the smoke suite, the build pass and the EffectTS twin are end-phase
 work - see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
+
+## License
+
+CC0-1.0.

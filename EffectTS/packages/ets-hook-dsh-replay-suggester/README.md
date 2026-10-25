@@ -1,5 +1,10 @@
 # @playform/hook-dsh-replay-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The replay-suggester hook: a DeepSeek Harness plugin that answers the question **"the last time this
 was done, what did the model actually touch and how did it verify?"**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.3). When the
@@ -51,9 +56,16 @@ repository that ships `.dsh/pack.yml` (or a user-layer pack at
 without a pack stays silent. The recalled companion still comes from the history store - the pack
 supplies the gate and the caveat, never the companion.
 
-## Status
+## The plan
 
 The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
 recall store's producer landed (the completion spec's wave 2c re-spec); the live activation (the
 profile row flip and the restart) is the remaining end-phase step (POC-BRIEF.md §8). Ships
 `enabled: false` in the bundle patch.
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - §9.3, the recall
+  answer.
+
+## License
+
+CC0-1.0.

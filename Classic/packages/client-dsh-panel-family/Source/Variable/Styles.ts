@@ -191,4 +191,8 @@ export default `
 	border-radius: var(--dsw-radius-panel);
 	box-shadow: var(--dsw-elevation-panel);
 }
+
+.playform-family-overlay:not(:has(.playform-family-section)) {
+	display: none;
+}
 `;

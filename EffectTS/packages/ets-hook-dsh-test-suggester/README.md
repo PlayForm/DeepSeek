@@ -1,5 +1,10 @@
 # @playform/hook-dsh-test-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The test-suggester hook: a DeepSeek Harness plugin that answers the **test task intent** with a
 target set. When the model searches for proof - a grep for `PASS`/`FAIL`/`error TS`, a read of a
 `Test.ts`, a bash error sweep - the hook classifies the call deterministically and names the likely
@@ -86,15 +91,22 @@ test-suggester: reconciliation skipped cooldown <package>
 test-suggester: reconciliation skipped cap <package>
 ```
 
-## Configuration
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full table. Every knob is volatile (hot-editable without
 remounting). The hook ships **disabled** (`enabled: false` in `cordis.patch.yml`): the acceptance
 rate must be measured (the plan §10.3 kill criterion) before it is trusted.
 
-## Status
+## The plan
 
 The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
 reconciliation landed (the completion spec's wave 2c re-spec); the ETS twin and the live activation
 (the profile row flip and the restart) are the remaining end-phase steps
 (Documentation/Plans/POC-BRIEF.md section 8).
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - sections 3, 4,
+  8, the test consumer.
+
+## License
+
+CC0-1.0.

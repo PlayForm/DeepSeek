@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-graph
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/WAVE-1-BRIEF](../../../Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md)
+
+## The role
+
 The WORKSPACE GRAPH: a DeepSeek Harness service (`ctx.workspaceGraph`) that builds the W1 graph
 schema v0 over the workspace files - four node kinds (`File`, `Symbol`, `Block`, `Test`) plus
 Markdown `DocSection`s and three edge kinds (`contains`, `imports`, `references`), with stable ids,
@@ -93,3 +98,12 @@ The graph's actions are index, all **AUTOMATIC**; it has **no gated action** (no
 batch commit, no spawn), so the block documents the posture and refuses nothing. The block is one
 volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
 section overrides the defaults per action (the wiring is the next refinement).
+
+## The plan
+
+- [Workspace-Family/WAVE-1-BRIEF](../../../Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md)
+  section 4 - the frozen contract. Schema: see SCHEME.md.
+
+## License
+
+CC0-1.0.

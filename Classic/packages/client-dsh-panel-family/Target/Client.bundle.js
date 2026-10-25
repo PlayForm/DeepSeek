@@ -598,7 +598,11 @@ function Section(props) {
   }, []);
   return (0, import_react2.createElement)(
     "section",
-    { className: "playform-family-section", "data-bundle": props.section.bundle, "data-activation": StatusView.activation },
+    {
+      className: "playform-family-section",
+      "data-bundle": props.section.bundle,
+      "data-activation": StatusView.activation
+    },
     (0, import_react2.createElement)("h3", {}, Translate2(props.t, props.section.title)),
     (0, import_react2.createElement)(
       "p",
@@ -1307,6 +1311,10 @@ var Styles_default = `
 	border: 0;
 	border-radius: var(--dsw-radius-panel);
 	box-shadow: var(--dsw-elevation-panel);
+}
+
+.playform-family-overlay:not(:has(.playform-family-section)) {
+	display: none;
 }
 `;
 

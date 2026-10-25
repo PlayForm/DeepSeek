@@ -7,10 +7,12 @@
 
 The search-intent **target suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
-search-class call (`grep`, `glob`, `read`, or a search-shaped `bash`) matches one of the ten intent
-kinds, prepends ONE labeled `additionalContexts` note naming the likely target set - the standard
-locations where that intent lives in this repo - **before** the model burns the searches. Plan:
+release).
+
+A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a search-class
+call (`grep`, `glob`, `read`, or a search-shaped `bash`) matches one of the ten intent kinds,
+prepends ONE labeled `additionalContexts` note naming the likely target set - the standard locations
+where that intent lives in this repo - **before** the model burns the searches. Plan:
 [SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
 
 ## The surfaces
@@ -29,18 +31,21 @@ locations where that intent lives in this repo - **before** the model burns the 
 In the measured sessions, 46% of every tool call is a search-class call, and the discovery is late:
 in the release lane only 6% of the files the model eventually edited had been read before its first
 edit. The repetition is not mostly literal - it is semantic: the same intent reached through a dozen
-different literals and a hundred different paths. The deliverable is not a better search; it is a
-**target set**: a compact, ordered, intent-keyed list of the standard locations, delivered at the
-first call of an intent.
+different literals and a hundred different paths.
+
+The deliverable is not a better search; it is a **target set**: a compact, ordered, intent-keyed
+list of the standard locations, delivered at the first call of an intent.
 
 ## The intents
 
 Ten kinds, priority order (destructive first): `Version`, `Path`, `Ledger`, `Config`, `Dependency`,
-`Test`, `Symbol`, `Doc`, `Usage`, `Owner`. Each kind is a pack row: its signal table (regex rules
-with weights), its per-intent threshold (`0.85` for the destructive `Version`/`Path`/`Ledger`,
-`0.75` for the rest), and its ordered candidate set - each candidate a path or glob with a prior and
-**one reason phrase** ("the monorepo manifest", "the const Version", "the build mirror - never
-edit"). A candidate without a reason is not emitted.
+`Test`, `Symbol`, `Doc`, `Usage`, `Owner`.
+
+Each kind is a pack row: its signal table (regex rules with weights), its per-intent threshold
+(`0.85` for the destructive `Version`/`Path`/`Ledger`, `0.75` for the rest), and its ordered
+candidate set - each candidate a path or glob with a prior and **one reason phrase** ("the monorepo
+manifest", "the const Version", "the build mirror - never edit"). A candidate without a reason is
+not emitted.
 
 The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
 [`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `search/` domain. A
@@ -51,30 +56,41 @@ stays silent.
 ## The gate
 
 `k = sigmoid(sum(weights) + b)`, `b = -0.6`, so a single weak signal never crosses the default
-threshold. The noise control: a cooldown (no second note for the same intent within
-`cooldownCalls`), a dedupe (the same intent + candidate set is one note), a per-turn cap
-(`maxNotesPerTurn`), and the already-recent filter. Every abstention and suppression is a ledger
-line, so the precision is measured, not assumed. The algebra's identity element is silence.
+threshold.
+
+The noise control: a cooldown (no second note for the same intent within `cooldownCalls`), a dedupe
+(the same intent + candidate set is one note), a per-turn cap (`maxNotesPerTurn`), and the
+already-recent filter. Every abstention and suppression is a ledger line, so the precision is
+measured, not assumed.
+
+The algebra's identity element is silence.
 
 ## The delivery
 
 One note, never a content replacement: the post-execute listener runs AFTER the ccr's
 `{prepend: true}` listener and only adds `additionalContexts`, so a ccr-compressed result is
-unaffected. The note carries the plugin's own source label
+unaffected.
+
+The note carries the plugin's own source label
 (`{kind: "search-suggester", form: "notice", summary}`) - an unlabeled context would render as a
-user prompt in derived history. The optional second surface (`sectionMode: "sticky"`, off by
-default) is one `system-prompt/assemble` section carrying the current intent's target list, rebuilt
-on a TTL and invalidated on `tools/change`.
+user prompt in derived history.
+
+The optional second surface (`sectionMode: "sticky"`, off by default) is one
+`system-prompt/assemble` section carrying the current intent's target list, rebuilt on a TTL and
+invalidated on `tools/change`.
 
 ## The graph projection (P2)
 
 The plan's generated repo index is superseded by a projection of the workspace graph (the approved
 re-spec, Completion-Spec/03-SUGGESTERS.md section 3): the optional `ctx.workspaceGraph` is probed
 through `ctx.get` (no inject - a repo without the graph still emits) and one `snapshot()` read
-becomes the projection. A candidate's literal score is the graph's proof - the node exists, its kind
-matches the intent's expected kinds, its recency is the node's version-token rank - and its scope is
-the path's depth tier (the plan's 1.0 / 0.7 tiers). When the graph is absent or empty, the candidate
-scores the documented **neutral** literal `0.5` and scope `1.0` (the PoC values, byte-identical).
+becomes the projection.
+
+A candidate's literal score is the graph's proof - the node exists, its kind matches the intent's
+expected kinds, its recency is the node's version-token rank - and its scope is the path's depth
+tier (the plan's 1.0 / 0.7 tiers). When the graph is absent or empty, the candidate scores the
+documented **neutral** literal `0.5` and scope `1.0` (the PoC values, byte-identical).
+
 The projection is cached and rebuilt on `tools/change` while `refreshOnBoot` holds. The sticky
 section renders the projected index - the top graph paths per intent - instead of the static pack
 list whenever the graph proves a candidate. The projection adds **no** ledger string: the note and
@@ -98,25 +114,30 @@ Two layers, both deterministic and LLM-free:
 
 The `suggestion_dismiss` tool (registered through the loader's tool API when the host exposes
 `ctx.tools`) records a durable dismissal: pass the suggestion family (the intent id a note named)
-and optionally one candidate path. A family dismissal suppresses the note
-(`suppressed dismissed <Intent>`); a path dismissal drops that candidate. The record line is
-`dismissed <Intent> <path|*>`. The dismissal lives in the knowledge file and expires after
-`dismissTtl` seconds (default 86400) - no timer, the read prunes it.
+and optionally one candidate path.
+
+A family dismissal suppresses the note (`suppressed dismissed <Intent>`); a path dismissal drops
+that candidate. The record line is `dismissed <Intent> <path|*>`.
+
+The dismissal lives in the knowledge file and expires after `dismissTtl` seconds (default 86400) -
+no timer, the read prunes it.
 
 ## The benchmark
 
 The fixed fifty-call replay (`Variable/Sequence`) runs through the real built listener and is scored
 by `Function/Benchmark`: the recorded baseline is
-`calls=50 notes=5 precision=1.00 recall=0.70 first-note=1`. The `Source/Test/Benchmark` folder
-asserts the numbers and their determinism; a rule change that loses a target shows up as a recall
-drop.
+`calls=50 notes=5 precision=1.00 recall=0.70 first-note=1`.
+
+The `Source/Test/Benchmark` folder asserts the numbers and their determinism; a rule change that
+loses a target shows up as a recall drop.
 
 ## The waterfall discipline
 
 `next()` is always awaited first; pass-through returns the downstream decision unchanged; the whole
 transform is fail-open (an internal error logs a warning and the decision passes through - a note
-never fails a tool call); plain registration, after the ccr and the normalize family. The
-`write`/`edit`/`raw-write` calls are learning signals only - a note after the edit is too late.
+never fails a tool call); plain registration, after the ccr and the normalize family.
+
+The `write`/`edit`/`raw-write` calls are learning signals only - a note after the edit is too late.
 
 ## The ledger
 
@@ -138,8 +159,9 @@ section rebuilt (ttl <n>)
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every tuning knob is volatile (hot-editable, no
 remount); the structural knobs (`persistPath`, `refreshOnBoot`) remount on edit, and `indexPath` is
-retired by the P2 re-spec (kept so an existing profile loads unchanged). Ships **disabled** - enable
-by explicit ACTIVATE in the profile.
+retired by the P2 re-spec (kept so an existing profile loads unchanged).
+
+Ships **disabled** - enable by explicit ACTIVATE in the profile.
 
 ## The build and the tests
 
@@ -147,12 +169,16 @@ The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build 
 tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
-its own `## Expected count`: the five original folders (Pack-Driven, Post-Execute-And-Learning,
-Sticky-Section-And-Ring, Wiring-And-Ledger, Workspace-Gate), the four capability folders of this
-wave (Projection, Dismiss, Seed, Benchmark), and the plan's nine suites - three covered by the
-original folders (Delivery-And-Label and Learning-Update by Post-Execute-And-Learning, Ledger by
-Wiring-And-Ledger) and six added here (Classification, Threshold-And-Cooldown, Abstention,
-Persistence, Index-Refresh, Noise). The aggregate prints 126 PASS.
+its own `## Expected count`:
+
+- the five original folders (Pack-Driven, Post-Execute-And-Learning, Sticky-Section-And-Ring,
+  Wiring-And-Ledger, Workspace-Gate),
+- the four capability folders of this wave (Projection, Dismiss, Seed, Benchmark),
+- the plan's nine suites - three covered by the original folders (Delivery-And-Label and
+  Learning-Update by Post-Execute-And-Learning, Ledger by Wiring-And-Ledger) and six added here
+  (Classification, Threshold-And-Cooldown, Abstention, Persistence, Index-Refresh, Noise).
+
+The aggregate prints 126 PASS.
 
 ## The plan
 

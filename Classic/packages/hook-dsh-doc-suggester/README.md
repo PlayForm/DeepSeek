@@ -1,6 +1,9 @@
 # @playform/hook-dsh-doc-suggester
 
-> v0.1.0 - UNPUBLISHED - plan: [SEARCH-SUGGESTER-PLUGIN](../../SEARCH-SUGGESTER-PLUGIN.md)
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
 
 The doc-task **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic

@@ -3,6 +3,8 @@
 > v0.1.0 - UNPUBLISHED - plan:
 > [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
 
+## The role
+
 The modification-intent **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** for the

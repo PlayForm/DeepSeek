@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-gitguard
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [ORCHESTRATION-PLUGINS](../../Documentation/Plugins/ORCHESTRATION-PLUGINS.md)
+
+## The role
+
 The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the
 terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3).
 
@@ -53,7 +58,7 @@ uniformity and stay the shipped `approve`. The block is one volatile object (a p
 hot-editable), and a resolved pack's `policy` section overrides the defaults per action (the wiring
 is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## The build
+## The build and the tests
 
 ```
 sh Source/prepublishOnly.sh   # the full chain (Build + tsc + tsc-alias)
@@ -62,3 +67,12 @@ sh Source/Run.sh              # the dev twin (Build only)
 
 The smoke suites are the end-phase (the PoC mode): the fake-context harness and the byte-identical
 ledger assertions land with the aggregate runner.
+
+## The plan
+
+- [ORCHESTRATION-PLUGINS](../../Documentation/Plugins/ORCHESTRATION-PLUGINS.md) - section 3, the
+  deny-list member.
+
+## License
+
+CC0-1.0.

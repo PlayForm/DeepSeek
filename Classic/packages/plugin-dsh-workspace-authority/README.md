@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-authority
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md)
+
+## The role
+
 The workspace-authority service: the authority step of the workspace family's invisible flow -
 operate proposes → the govern gates → **the authority licenses** → the approve binds. The service
 keeps the **three separate authority records** (v4.1 section 3.9, correcting the corpus's own
@@ -28,6 +33,11 @@ ranks**. Two shields force `keep`: an open non-expired lease, and an active capa
 one shields only within the revocation grace). `evict` keeps the record in the graveyard
 (recoverable); `discard` removes it permanently.
 
+## The surfaces
+
+- The service `ctx.workspaceAuthority` (the method list below).
+- No tool, no event listener; the store is the service's own records.
+
 ## Service
 
 `ctx.workspaceAuthority` (registered from apply):
@@ -39,7 +49,7 @@ one shields only within the revocation grace). `evict` keeps the record in the g
 - `evict(resources?)` → `{resource, disposition}[]`
 - `statistics()` → counts
 
-## Config (all volatile)
+## The configuration (all volatile)
 
 | Field                      | Default                                                       | Meaning                                                            |
 | -------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
@@ -69,12 +79,13 @@ above (`kind` -> `disposition`), a different contract - the `plugin-dsh-route` p
 keyed its D6 block `automation` for the same reason.
 
 This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
-is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
-are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-## Ledger lines (module-owned, byte-stable)
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement). The
+defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+
+## The ledger (module-owned, byte-stable)
 
 ```text
 authority: activated (ttl=<ms>, policy=<n>)
@@ -90,3 +101,20 @@ authority: released <id>
 authority: residency <resource> (weight <w>)
 authority: evicted <resource> (<disposition>)
 ```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md) - the
+  authority step.
+- The plugin ships **disabled** (the idle-forever posture): the service registers and reads
+  honestly, but grants, leases and evictions are refused with a byte-stable ledger line until
+  enabled.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-merge
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/MERGE](../../../Documentation/Plans/Workspace-Family/MERGE.md)
+
+## The role
+
 The batch merge of the workspace family: the **atomic gates**, the per-file commits **through the
 factory's Write executor**, and the **commit reply union**. Plan:
 `Documentation/Plans/Workspace-Family/MERGE.md` + `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md`
@@ -57,7 +62,7 @@ batch reach the gates. The block is one volatile object, so a policy flip is hot
 remount; a resolved pack's `policy` section overrides the defaults per action (the wiring is the
 next refinement).
 
-## Ledger lines (byte-stable, module-owned)
+## The ledger (byte-stable, module-owned)
 
 ```text
 merge: activated (domain=<domain>, mode=<mode>)
@@ -74,10 +79,16 @@ merge: batch <id> complete (applied <a>, conflict <c>, denied <d>, recovery <r>,
 merge: storage open failed: <reason>
 ```
 
-## Status
+## The plan
 
 The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an
 explicit ACTIVATE. The policy block and the commit hold are arbitrated by
 `Source/Test/Policy-Defaults`; the gates and the reply union by `Source/Test/Wiring-And-Gates` and
 `Source/Test/Commit-And-Replies`. This is the PoC build: the smoke suite and the ETS twin land at
 the end phase.
+
+- [Workspace-Family/MERGE](../../../Documentation/Plans/Workspace-Family/MERGE.md) - the merge step.
+
+## License
+
+CC0-1.0.

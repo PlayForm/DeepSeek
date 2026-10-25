@@ -1,4 +1,7 @@
-# @playform/client-dsh-workspace-live
+# @playform/ets-client-dsh-workspace-live
+
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md)
 
 The workspace family's **live client**: the client half of the workspace live view
 (Documentation/Plans/Workspace-Family/LIVE.md).
@@ -44,7 +47,7 @@ locally in `Source/Interface/Siblings.ts` from the W1 frozen contract
 package exists yet; the end-phase wires the real imports and the real channels. The trace source
 needs no sibling import: the bus is read structurally from the client context.
 
-## Config
+## The configuration
 
 | Field                | Type    | Default | Meaning                                              |
 | -------------------- | ------- | ------- | ---------------------------------------------------- |
@@ -55,14 +58,22 @@ needs no sibling import: the bus is read structurally from the client context.
 
 All knobs are volatile.
 
-## Ledger
+## The ledger
 
 This package keeps no ledger file (pure client, no host writes).
 
-## Smokes
+## The build and the tests
 
 | Folder                 | Count   | Covers                                                                                                                                                         |
 | ---------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Contract-And-Wiring`  | 12 PASS | the loader row, the Config schema, the client apply wiring, the locale, the tab                                                                                |
 | `Store-And-Snapshot`   | 11 PASS | the stable-until-event store, the ingest fold, the bounds, the refresh                                                                                         |
 | `Child-Slot-And-Trace` | 12 PASS | the child-slot declaration + the section inject face (panel family composed), the D5 ingest, the newest-first bounded tail, the static state, the built bundle |
+
+## The plan
+
+- [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md) - the live-view plan.
+
+## License
+
+CC0-1.0.

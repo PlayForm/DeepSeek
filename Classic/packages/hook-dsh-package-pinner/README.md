@@ -9,18 +9,22 @@ The **silent version pinner** of the DeepSeek Harness - a plugin on the `fs/obse
 pins every dependency version in a written `package.json` to its STATIC version
 (`"@playform/build": "^0.3.4"` becomes `"0.3.4"`). One leading range prefix (`^`, `~`, or `=`) is
 stripped, in every dependency section the config declares (dependencies, devDependencies,
-peerDependencies, optionalDependencies). Already-static versions, compound/space ranges, wildcards
-without a prefix, and protocol dependencies (`workspace:*`, `file:`, `link:`, `git+`, `npm:`
-aliases) are left as-is; a `pin-policy.json` keep-list protects packages whose ranges must stay as
-authored (discovery: global `policyFile` -> the file's own directory -> co-located with the nearest
-`registry.json` -> built-in empty default; the effective keep-list is the union). Fully API-aware:
-the manifest is read/rewritten through `ctx.fs` with a version-guarded `replaceIfVersion` write (the
-service owns version tokens) and an explicit sandbox policy, the authoring agent is never notified
-(the tool result is built from the author's own content and the observation-policy's version record
-is refreshed by re-emitting `fs/observed` with the service-issued fresh version), and there is NO
-update stage - no ncu, no jobs, no subprocess: a pure deterministic P-only rewrite running as a
-detached contained continuation. A factory flavor; a sibling of the package governor on the same
-`fs/observed` seam.
+peerDependencies, optionalDependencies).
+
+Already-static versions, compound/space ranges, wildcards without a prefix, and protocol
+dependencies (`workspace:*`, `file:`, `link:`, `git+`, `npm:` aliases) are left as-is; a
+`pin-policy.json` keep-list protects packages whose ranges must stay as authored (discovery: global
+`policyFile` -> the file's own directory -> co-located with the nearest `registry.json` -> built-in
+empty default; the effective keep-list is the union).
+
+Fully API-aware: the manifest is read/rewritten through `ctx.fs` with a version-guarded
+`replaceIfVersion` write (the service owns version tokens) and an explicit sandbox policy, the
+authoring agent is never notified (the tool result is built from the author's own content and the
+observation-policy's version record is refreshed by re-emitting `fs/observed` with the
+service-issued fresh version), and there is NO update stage - no ncu, no jobs, no subprocess: a pure
+deterministic P-only rewrite running as a detached contained continuation.
+
+A factory flavor; a sibling of the package governor on the same `fs/observed` seam.
 
 ## The surfaces
 

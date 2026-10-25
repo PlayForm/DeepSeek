@@ -34,8 +34,10 @@ shell.overlay
 
 React travels through the slots (so a section inherits the locale `t`, the session scope, the
 priority, and `Slots.listSubTree` visibility); the data travels through the registration's `inject`
-face (`{ section, ports }`) and the slot-aware registry. The two panels prove the model twice: the
-family tab and the overlay each declare and render their own child slot.
+face (`{ section, ports }`) and the slot-aware registry.
+
+The two panels prove the model twice: the family tab and the overlay each declare and render their
+own child slot.
 
 ### The slot-aware registry (`playformFamilyPanel`)
 
@@ -86,24 +88,34 @@ function is the template every per-bundle adapter copies into its own client hal
 
 The ten remaining per-bundle adapters ship beside the three references, each following the same
 pattern (`Source/Variable/Reference/`, wired through `Function/Reference.ts`):
-`hook-dsh-normalize-quotes` (11), `hook-dsh-normalize-ellipsis` (12), `hook-dsh-normalize-spaces`
-(13), `hook-dsh-normalize-invisible` (14), `hook-dsh-normalize-fullwidth` (15),
-`plugin-dsh-normalize-file` (20), `hook-dsh-package-governor` (50), `hook-dsh-package-pinner` (55),
-`hook-dsh-cargo-governor` (60), and `hook-dsh-ccr` (70). All of them declare the
-`playform.panel.section` slot, the static `enabled` posture (none of the ten schemas has a master
-switch; the bundle row decides), and the three D5 trace names. The workspace/batch/live surfaces are
-NOT adapters of this package: the workspace-live package owns its own tab, and the host lane owns
-the rest.
+
+- `hook-dsh-normalize-quotes` (11)
+- `hook-dsh-normalize-ellipsis` (12)
+- `hook-dsh-normalize-spaces` (13)
+- `hook-dsh-normalize-invisible` (14)
+- `hook-dsh-normalize-fullwidth` (15)
+- `plugin-dsh-normalize-file` (20)
+- `hook-dsh-package-governor` (50)
+- `hook-dsh-package-pinner` (55)
+- `hook-dsh-cargo-governor` (60)
+- `hook-dsh-ccr` (70)
+
+All of them declare the `playform.panel.section` slot, the static `enabled` posture (none of the ten
+schemas has a master switch; the bundle row decides), and the three D5 trace names.
+
+The workspace/batch/live surfaces are NOT adapters of this package: the workspace-live package owns
+its own tab, and the host lane owns the rest.
 
 ## Status and the trace live source
 
 Each section renders its plugin's status: the activation state and the live tail. The panel consumes
 the **D5 trace bus** as its live source when the host exposes it in the browser (`ctx.trace`, or any
-client service under the `trace` name answering `on(kind, listener)`). It seeds the tail from the
-bus's recent ring (when exposed) and subscribes to the names each adapter declares (`observe/stamp`,
-`graph/indexed`, `graph/invalidated` by default), keeping the recent envelopes NEWEST FIRST, bounded
-to eight lines, formatted byte-exactly as `<kind> <path>` (the payload's path, else the envelope's
-trace id).
+client service under the `trace` name answering `on(kind, listener)`).
+
+It seeds the tail from the bus's recent ring (when exposed) and subscribes to the names each adapter
+declares (`observe/stamp`, `graph/indexed`, `graph/invalidated` by default), keeping the recent
+envelopes NEWEST FIRST, bounded to eight lines, formatted byte-exactly as `<kind> <path>` (the
+payload's path, else the envelope's trace id).
 
 - A missing trace is NOT an error: the status is the adapter's static activation with an empty tail
   and `live: false` (the documented fallback).
@@ -115,7 +127,9 @@ trace id).
 Each section renders its plugin's options from its serialized Schemastery schema
 (`ctx.configForms.describe()`), flattened to dotted field paths with the values, the composition
 base, the provenance (`overridden` is a user-layer key presence, never a value comparison), the enum
-options, and the nested volatile objects. Writes take one of two routes:
+options, and the nested volatile objects.
+
+Writes take one of two routes:
 
 | Field                      | Route                                                             | Effect                                                                                                                 |
 | -------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -126,8 +140,9 @@ options, and the nested volatile objects. Writes take one of two routes:
 The bridge resolves, in order: a client service named `panelFamilyBridge`, then
 `remote.playformFamilyPanel.editFull`. The HOST endpoint that calls `ctx.configEditor.edit()`
 belongs to the companion package `@playform/client-dsh-panel-family-host` (the next lane); this
-package only resolves the client-side face. With no bridge, plain fields render read-only and a
-write attempt logs the documented line.
+package only resolves the client-side face.
+
+With no bridge, plain fields render read-only and a write attempt logs the documented line.
 
 Without the settings client (`ctx.configForms` absent) the form shows the documented "not composed"
 state - the panel never throws over an absent service.
@@ -175,6 +190,7 @@ the Test build and the harness selfcheck. `exports["./client"]` points the modul
 
 No host service, no Typert endpoint, no file read, no config editor. The host half of the Loader
 entry is an empty `apply()` - the row exists so the client module system serves the `./client` half.
+
 The tail/stats endpoint and the plain-field bridge endpoint live in
 `@playform/client-dsh-panel-family-host`.
 

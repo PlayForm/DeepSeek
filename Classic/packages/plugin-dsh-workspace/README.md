@@ -1,12 +1,17 @@
 # @playform/plugin-dsh-workspace
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace/WORKSPACE-AGENT](../../Documentation/Plans/Workspace/WORKSPACE-AGENT.md)
+
+## The role
+
 The **workspace agent**: the workspace regime's conversational surface (the operational view,
 `Documentation/Plans/Workspace/WORKSPACE-AGENT.md`). The conversation addresses the workspace
 through this plugin; everything else in the family - the stamps, the indexes, the validations, the
 licenses, the journals, the gates - stays the invisible plugin flow until an event surfaces it (the
 visibility rule).
 
-## The surface
+## The surfaces
 
 Five tools over the Wave-1 graph service (`ctx.workspaceGraph`): the four navigation tools plus the
 indexing trigger that fills the graph.
@@ -35,7 +40,7 @@ workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, 
 
 The activation line moved with the fifth tool: `workspace: activated (bundle 0.1.0, tools=5)`.
 
-## Configuration
+## The configuration
 
 Ships **disabled** (`enabled: false`); every knob is volatile:
 
@@ -70,7 +75,26 @@ surface knobs. It is a pure consumer in v0: `inject: ["workspaceGraph", "pluginF
 no event listeners. Plan: `Documentation/Plans/Workspace-Family/WORKSPACE-AGENT.md`;
 `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` sections 3.4-3.5.
 
-## Status
+## The ledger
 
-Planned PoC (`tier: 2-planned` in `Temporary/npm-bootstrap/MANIFEST.json`); the smoke suite is the
-end-phase deliverable.
+```text
+workspace: activated (bundle 0.1.0, tools=5)
+workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
+```
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+## The plan
+
+- Planned PoC (`tier: 2-planned` in `Temporary/npm-bootstrap/MANIFEST.json`); the smoke suite is the
+  end-phase deliverable.
+- [Workspace/WORKSPACE-AGENT](../../Documentation/Plans/Workspace/WORKSPACE-AGENT.md) - the
+  conversational surface.
+- [WORKSPACE-FAMILY-V4-1](../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - sections 3.4-3.5.
+
+## License
+
+CC0-1.0.

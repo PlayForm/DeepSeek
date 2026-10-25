@@ -13,12 +13,14 @@ The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks 
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes, en
 dashes and seventeen exotic relatives → `-`. A **CLASS flavor** of the normalize family: the core's
-`Dashes` class plus a configurable `replacement` (default `-`). It also registers the family's
-**`raw-write` tool** - a write wrapper with an explicit `normalize` parameter (default **false =
-verbatim**), exempt from the stream normalization by name like `edit`. The @-sentence identity:
-**Hook @ DSH @ Normalize @ Dash**. Unlike the governance family, the rewrite flows into both the
-live UI and the durable transcript - the normalization is deliberately **VISIBLE; it IS the
-feature**, which is why the injection point was chosen.
+`Dashes` class plus a configurable `replacement` (default `-`).
+
+It also registers the family's **`raw-write` tool** - a write wrapper with an explicit `normalize`
+parameter (default **false = verbatim**), exempt from the stream normalization by name like `edit`.
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**. Unlike the governance family, the
+rewrite flows into both the live UI and the durable transcript - the normalization is deliberately
+**VISIBLE; it IS the feature**, which is why the injection point was chosen.
 
 ## The surfaces
 

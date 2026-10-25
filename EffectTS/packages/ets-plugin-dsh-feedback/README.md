@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-feedback
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md)
+
+## The role
+
 The FEEDBACK member (ctx.feedback) - the fourth orchestration member
 (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md). A DeepSeek Harness service that collects the honest
 signals.
@@ -39,7 +44,7 @@ calls `Outcome` after every apply, so a batch's `applied` / `rejected` result la
 journal (`event: "batch"`) and in the session's summary (`outcomes`), beside the honest blocks. The
 session and the agent are the proposal's `origin`.
 
-## Config
+## The configuration
 
 | Field           | Default                                       | Meaning                                                         |
 | --------------- | --------------------------------------------- | --------------------------------------------------------------- |
@@ -82,3 +87,12 @@ is the next refinement). The defaults are smoke-arbitrated in `Source/Test/Polic
 
 The honest content is NEVER sanitized or filtered. The parents append deltas, NEVER rewrite the
 agents' signals. The read is ALWAYS the recipient's choice. The user's override wins.
+
+## The plan
+
+- [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md) - the honest
+  feedback member.
+
+## License
+
+CC0-1.0.

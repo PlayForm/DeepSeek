@@ -1,10 +1,22 @@
 # @playform/plugin-dsh-queue
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md)
+
+## The role
+
 The subagent-queue plugin: subagent work becomes a **queue** - the tasks as data, not the agents as
 contexts. The third orchestration-layer plugin, next to the batch-state and routing-enforcer
 plugins.
 
 Plan: `Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md`.
+
+## The surfaces
+
+- The `queue_enqueue` tool and the `dshQueue` service (the method table below).
+- The subagent launch through the harness's own subagent service (`ctx.subagents.startActivation`)
+  when `autoSpawn` is on.
+- The batch-state context block projection (the TOC line).
 
 ## The model
 
@@ -64,7 +76,7 @@ The plugin registers the `dshQueue` service:
 | `Flush()`                                                          | Join the in-flight spawns (tests/reconcile; never a hot-path wait). |
 | `Board()` / `Snapshot()`                                           | The compiled line / the full queue record.                          |
 
-## Configuration (all volatile)
+## The configuration (all volatile)
 
 | Field                              | Default                                         | Meaning                                                            |
 | ---------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------ |
@@ -112,7 +124,28 @@ The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <i
 `spawn held <id> (policy spawn=approve)`, `spawn skipped <id> (<reason>)`,
 `spawn failed <id> (<error>)`, `requeued <id> (<agent> gone)`.
 
-## Status
+## The ledger
+
+The journal lines (documented in `SCHEME.md` section 3, byte-stable):
+
+```text
+spawned <id> -> <child>
+spawn held <id> (policy spawn=approve)
+spawn skipped <id> (<reason>)
+spawn failed <id> (<error>)
+requeued <id> (<agent> gone)
+```
+
+Every state flip also writes a best-effort P5 journal record - the restart reconciliation's raw
+data.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Dispatch-And-Board`, `Policy-Defaults`, `Spawn-And-Reconcile`, `Wiring-And-Queue`.
+
+## The plan
 
 The spawn, the idle-slot automation and the restart reconcile are implemented and smoke-arbitrated
 (`Source/Test/Spawn-And-Reconcile`); the policy gate and its precedence are arbitrated by
@@ -120,3 +153,9 @@ The spawn, the idle-slot automation and the restart reconcile are implemented an
 the caller's persisted record because the family has no storage domain yet (the wave-3 storage
 migration is its home). A `spawn skipped` task keeps its seat until the orchestrator settles it - an
 honest gap, never a silent drop.
+
+- [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md) - the queue model.
+
+## License
+
+CC0-1.0.

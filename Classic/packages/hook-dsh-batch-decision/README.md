@@ -37,8 +37,11 @@ workflow).
 
 A policy auto-approval requires ALL of: `autoApprove: "on"`, the intent in the allowlist, targets
 within `maxAutoTargets`, confidence at or above `minConfidence`, and at least one previous USER
-approval of the same intent class. The first batch of any intent class always requires the user. The
-policy never approves an expired proposal - expiry produces the `expired` decision by `policy` on
+approval of the same intent class.
+
+The first batch of any intent class always requires the user.
+
+The policy never approves an expired proposal - expiry produces the `expired` decision by `policy` on
 first touch (lazy; no timers).
 
 ### The policy block (D6) - the outer gate
@@ -57,9 +60,13 @@ The policy is the **outer** gate, `autoApprove` the **inner** one. An `approve` 
 
 - the shipped default - refuses the policy auto-approval even with the knob on, and the ledger
   records the byte-exact `decision held <id> (policy commit=approve)` line: the proposal stays
-  **pending** and waits for the user's `batch_decision` approval. The precedence is **policy
+  **pending** and waits for the user's `batch_decision` approval.
+
+The precedence is **policy
   approve > knob**: the knob can never widen an approve verdict, while a knob that is off still
-  requires the user and writes no held line. The block is one volatile object, so a policy flip is
+  requires the user and writes no held line.
+
+The block is one volatile object, so a policy flip is
   hot-editable without a remount; a resolved pack's `policy` section overrides the defaults per
   action (the wiring is the next refinement).
 

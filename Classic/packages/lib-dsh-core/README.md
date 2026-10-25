@@ -164,12 +164,15 @@ or entirely outside it.
 ```
 
 The tool-argument control in one formula: effective tool-input normalization =
-`normalizeToolArguments || scopes.toolInput`. The granular scopes
-(conversation/reasoning/toolInput/toolResults/files/batch, plus the `toolResultsExempt` list) are
-ALL volatile live toggles delivered by the `loader/volatile-update` dispatch (no remount). The
-tool-args arm is the only execution-critical one. The per-call `{"__normalize":false` first-key
-marker is its escape hatch (first key only; a pathologically tiny first delta shorter than the
-marker is invisible to the startsWith probe and the call normalizes normally).
+`normalizeToolArguments || scopes.toolInput`.
+
+The granular scopes (conversation/reasoning/toolInput/toolResults/files/batch, plus the
+`toolResultsExempt` list) are ALL volatile live toggles delivered by the `loader/volatile-update`
+dispatch (no remount). The tool-args arm is the only execution-critical one.
+
+The per-call `{"__normalize":false` first-key marker is its escape hatch (first key only; a
+pathologically tiny first delta shorter than the marker is invisible to the startsWith probe and the
+call normalizes normally).
 
 The dispatch owns the **structure** (which fields of which chunk types); the flavor owns the
 **substitution** - a new normalization flavor is a table plus a closure, not a fork of the dispatch:
@@ -311,11 +314,14 @@ Nothing in the core ever composes a `<Module>:` prefix or an activation proof's 
 ## The two release groups (CLASSIC vs EFFECT-TS)
 
 Two published groups, one contract: this package is the CLASSIC build - plain TypeScript, zero
-framework dependencies: `import ... from "@playform/lib-dsh-core"` resolves to `Target/`. The
-EFFECT-TS implementation of the same contract is the separate package `@playform/ets-lib-dsh-core` -
-effect-backed, built on the shared `@playform/ets-base-dsh` base with `effect` v4.0.2 as its runtime
-dependency. Install the group you run and never mix the groups in one graph (the effect-ts `Update`
-returns Effect envelopes, not the classic dispatch envelope).
+framework dependencies: `import ... from "@playform/lib-dsh-core"` resolves to `Target/`.
+
+The EFFECT-TS implementation of the same contract is the separate package
+`@playform/ets-lib-dsh-core` - effect-backed, built on the shared `@playform/ets-base-dsh` base with
+`effect` v4.0.2 as its runtime dependency.
+
+Install the group you run and never mix the groups in one graph (the effect-ts `Update` returns
+Effect envelopes, not the classic dispatch envelope).
 
 ## The Test tree
 
@@ -323,14 +329,16 @@ The package's unit tests live in `Source/Test/` - one folder per test, each hold
 TypeScript test file (`Test.ts`, the assertions moved verbatim from `Classic/smokes/core-smoke.mjs`)
 and a `README.md` describing the intent, the scenario tree, the fixtures, the expected ledger
 strings and the expected PASS count. The shared harness (`Source/Test/Harness.ts`) owns the Check
-counter and the tmpdir fixture. The tests compile to `Target/Test/` in a separate ESBuild step
-(`Configuration/Test-ESBuild.ts`) that runs SECOND in `prepublishOnly.sh`, after the plugin build
-(which wipes `Target/` recursively). Each test runs standalone (`node Target/Test/<Name>/Test.js`)
-and under the aggregate (`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS
-count against its README). Neither tree is ever published: `.npmignore` excludes `Source/Test/` and
-`Target/Test/`, and the package `files` field negates `Target/Test`. The smoke suite
-`Classic/smokes/core-smoke.mjs` stays in place as the migration fallback until a later lane retires
-it.
+counter and the tmpdir fixture.
+
+The tests compile to `Target/Test/` in a separate ESBuild step (`Configuration/Test-ESBuild.ts`)
+that runs SECOND in `prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively).
+Each test runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
+(`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its README).
+
+Neither tree is ever published: `.npmignore` excludes `Source/Test/` and `Target/Test/`, and the
+package `files` field negates `Target/Test`. The smoke suite `Classic/smokes/core-smoke.mjs` stays
+in place as the migration fallback until a later lane retires it.
 
 ## License 📜
 

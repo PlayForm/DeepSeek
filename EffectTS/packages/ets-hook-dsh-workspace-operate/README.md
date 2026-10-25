@@ -1,5 +1,10 @@
 # @playform/hook-dsh-workspace-operate
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/OPERATE](../../../Documentation/Plans/Workspace-Family/OPERATE.md)
+
+## The role
+
 The operation engine of the workspace family: the typed proposals - **rename**, **connect**,
 **replace** - with the resolution rules that decide what CAN be proposed and the first-class
 **refusal-to-guess** that declares what CANNOT. Plan:
@@ -29,7 +34,7 @@ The operation engine of the workspace family: the typed proposals - **rename**, 
   refuse with `graph-unavailable`.
 - No wall clocks: ids and sequences are the hook's own monotonic counter.
 
-## Ledger lines (byte-stable, module-owned)
+## The ledger (byte-stable, module-owned)
 
 ```text
 operate: activated (domain=<domain>)
@@ -59,7 +64,14 @@ or spawns an agent - so the block documents the posture and refuses nothing. The
 volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
 section overrides the defaults per action (the wiring is the next refinement).
 
-## Status
+## The plan
 
 The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an
 explicit ACTIVATE. This is the PoC build: the smoke suite and the ETS twin land at the end phase.
+
+- [Workspace-Family/OPERATE](../../../Documentation/Plans/Workspace-Family/OPERATE.md) - the operate
+  step.
+
+## License
+
+CC0-1.0.

@@ -1,5 +1,10 @@
 # @playform/hook-dsh-graph-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate
 list from paths and globs to the **connected component around the symbol**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.2). When the
@@ -30,8 +35,13 @@ and the `Real-Graph-Neighborhood` smoke folder proves this hook against the real
    notice. Content is never replaced.
 2. `agent/pre-step`: the per-turn reset of the note counter when a user message enters.
 
-## Status
+## The plan
 
 Built and smoked (the suite is the arbiter): `Loader-And-Activation`, `Pipeline-And-Graph` (the
 FakeGraph contract) and `Real-Graph-Neighborhood` (the real service). Ships `enabled: false` in the
-bundle patch.
+bundle patch. Plan: [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+§9.2.
+
+## License
+
+CC0-1.0.

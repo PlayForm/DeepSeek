@@ -14,13 +14,15 @@ waterfall (the interceptable wrapper around EVERY streaming model call, bound to
 normalizes the full-width family in model output, live in the transcript: the entire FULLWIDTH FORMS
 range U+FF01-U+FF5E maps to its ASCII half-width counterpart U+0021-U+007E - the whole story,
 letters, punctuation and digits included. A **MAP flavor** of the normalize family: the core's
-`Fullwidth` char-to-char table owns the substitution - no `replacement` config knob. The @-sentence
-identity: **Hook @ DSH @ Normalize @ Fullwidth**. The family's `raw-write` tool (registered by
-[hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's transforms too - the
-exemption is family-wide, so the tool's explicit `normalize` parameter (default false = verbatim) is
-the only normalization it applies. Unlike the governance family, the rewrite flows into both the
-live UI and the durable transcript - the normalization is deliberately **VISIBLE; it IS the
-feature**.
+`Fullwidth` char-to-char table owns the substitution - no `replacement` config knob.
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Fullwidth**. The family's `raw-write` tool
+(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
+transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
+false = verbatim) is the only normalization it applies.
+
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+the normalization is deliberately **VISIBLE; it IS the feature**.
 
 ## The surfaces
 

@@ -93,10 +93,11 @@ exists.
 
     The linked checkout carries its own `node_modules` and its own `pnpm-workspace.yaml`
     (`packages: [.]`) - an install inside a bundle under the profile's workspace acts on the
-    workspace root and does nothing to the bundle. Remote routes into the same list:
-    `dsh plugin --profile <name> add <tarball>` for a built bundle today, or
-    `pnpm add @playform/<pkg>` in the profile directory once the family publishes to npm (the
-    publishing is a later item).
+    workspace root and does nothing to the bundle.
+
+    Remote routes into the same list: `dsh plugin --profile <name> add <tarball>` for a built bundle
+    today, or `pnpm add @playform/<pkg>` in the profile directory once the family publishes to npm
+    (the publishing is a later item).
 
 2. **Add the patch entries** (the profile's
    [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) -

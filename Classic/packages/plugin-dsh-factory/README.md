@@ -6,18 +6,21 @@
 ## The role
 
 The **furnace of the DSH governance family** - the first _service-provider_ bundle in the DeepSeek
-Harness plugin family. Loading it registers one class plugin
-(`export default class PluginFactory extends Service`, `super(ctx, "pluginFactory")`,
-`static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every piece
-of common machinery the family's hooks used to duplicate (the ledger, the exclusion match, the
-auxiliary registry/policy discovery, the union keep-list resolution, the gate set, the
-version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained
-continuation, the State builder, the wiring helpers, the effects, the Schemastery schema factory and
-the probe-once seam accessor). One service, nineteen methods (the direct-govern pair
-`RegisterGovern` + `Govern` and the `GovernSteps` registry among them) - the hooks bring their own
-metal; the factory pours the mold. The factory is the hub of the eleven-package DSH family: the
-three governance hooks inject the service, and the six normalize flavors consume `State`/`Append`
-and the `Schema` helper.
+Harness plugin family.
+
+Loading it registers one class plugin (`export default class PluginFactory extends Service`,
+`super(ctx, "pluginFactory")`, `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a
+single service holding every piece of common machinery the family's hooks used to duplicate (the
+ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list
+resolution, the gate set, the version-guarded sandbox-fenced write, the observation-policy refresh,
+the detached contained continuation, the State builder, the wiring helpers, the effects, the
+Schemastery schema factory and the probe-once seam accessor).
+
+One service, nineteen methods (the direct-govern pair `RegisterGovern` + `Govern` and the
+`GovernSteps` registry among them) - the hooks bring their own metal; the factory pours the mold.
+
+The factory is the hub of the eleven-package DSH family: the three governance hooks inject the
+service, and the six normalize flavors consume `State`/`Append` and the `Schema` helper.
 
 ## The surfaces
 

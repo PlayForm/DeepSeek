@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-route
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [ROUTING-ENFORCER-PLUGIN](../../Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md)
+
+## The role
+
 The routing-enforcer plugin: the **silent model-route policy enforcement** for the DeepSeek Harness.
 The user owns the model configuration (his policy files); the plugin enforces it on every subagent
 launch, model-independently - and the orchestrator is **not even bothered**.
@@ -51,7 +56,7 @@ The plugin registers the `dshRoute` service (the factory's class/service pattern
 The subagent-queue plugin's dispatcher consumes `dshRoute` for the routed dispatch
 (`SUBAGENT-QUEUE-PLUGIN.md` section 2.4).
 
-## Configuration (all volatile)
+## The configuration (all volatile)
 
 | Field             | Default                                        | Meaning                                                                                                               |
 | ----------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -81,10 +86,17 @@ is one volatile object (a policy flip is hot-editable), and a resolved pack's `p
 overrides the defaults per action (the wiring is the next refinement). The defaults are
 smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## Status
+## The plan
 
 The two halves of the launch seam are implemented and smoke-arbitrated
 (`Source/Test/Launch-And-Hint`), together with the `ESCALATION:` marker and the catalog-verified
 ladder. The plugin ships disabled. The remaining option (not this wave) is enforcing the route at
 `agent/request` so a raw service spawn is CORRECTED, not only hinted - the queue already resolves
 `dshRoute` before its spawn, so the routed dispatch is corrected at the source.
+
+- [ROUTING-ENFORCER-PLUGIN](../../Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md) - the routing
+  policy.
+
+## License
+
+CC0-1.0.

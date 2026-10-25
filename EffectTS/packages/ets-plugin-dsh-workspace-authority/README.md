@@ -1,5 +1,10 @@
 # @playform/plugin-dsh-workspace-authority
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md)
+
+## The role
+
 The workspace-authority service: the authority step of the workspace family's invisible flow -
 operate proposes → the govern gates → **the authority licenses** → the approve binds. The service
 keeps the **three separate authority records** (v4.1 section 3.9, correcting the corpus's own
@@ -39,7 +44,7 @@ one shields only within the revocation grace). `evict` keeps the record in the g
 - `evict(resources?)` → `{resource, disposition}[]`
 - `statistics()` → counts
 
-## Config (all volatile)
+## The configuration (all volatile)
 
 | Field                      | Default                                                           | Meaning                                                            |
 | -------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------ |
@@ -74,7 +79,7 @@ is one volatile object, so a policy flip is hot-editable without a remount; a re
 `policy` section overrides the defaults per action (the wiring is the next refinement). The defaults
 are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## Ledger lines (module-owned, byte-stable)
+## The ledger (module-owned, byte-stable)
 
 ```text
 authority: activated (ttl=<ms>, policy=<n>)
@@ -90,3 +95,15 @@ authority: released <id>
 authority: residency <resource> (weight <w>)
 authority: evicted <resource> (<disposition>)
 ```
+
+## The plan
+
+- [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md) - the
+  authority step.
+- The plugin ships **disabled** (the idle-forever posture): the service registers and reads
+  honestly, but grants, leases and evictions are refused with a byte-stable ledger line until
+  enabled.
+
+## License
+
+CC0-1.0.

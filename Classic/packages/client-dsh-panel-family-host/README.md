@@ -34,8 +34,10 @@ Three services, provided with `ctx.provide` (removed with the plugin):
 
 `editFull(namespace, patch)` applies the namespace's **whole resolved config** through
 `ctx.configEditor.edit()` - the same validate/persist/reconcile path a hand edit takes, so a plain
-(non-volatile) field applies on remount. The patch is never merged or reshaped here; the editor
-validates it, and **the audit line comes from the editor** (this package logs no success line).
+(non-volatile) field applies on remount.
+
+The patch is never merged or reshaped here; the editor validates it, and **the audit line comes from
+the editor** (this package logs no success line).
 
 The host refuses, in order (each line byte-exact, see "Ledger lines"):
 
@@ -55,9 +57,10 @@ writes while idle.
 
 The host process's D5 bus is `ctx.trace` (provided by `@playform/plugin-dsh-factory`); the host
 context already owns that name, so this package exposes its forwarder as **`panelFamilyTrace`** with
-the panel's `on(kind, listener)` / `ring(limit)` face. It reads the bus structurally (only `on` is
-required; `ring` is used when the bus has one) and provides nothing when the bus is absent - the
-panel's documented static fallback.
+the panel's `on(kind, listener)` / `ring(limit)` face.
+
+It reads the bus structurally (only `on` is required; `ring` is used when the bus has one) and
+provides nothing when the bus is absent - the panel's documented static fallback.
 
 ## The forwarding path (the browser)
 
@@ -79,9 +82,11 @@ nothing when the namespace is absent.
 **The residual**: the generated Remote contribution (the Typert codegen artifacts plus the
 `@deepseek-ai/dsh-api-remotes` assembly mount) is not reproducible from a Classic package - the
 harness's Client Remote refuses SRC descriptors and its registration values come from the generated
-`lib/typert.remote-client.*` artifacts. Until that contribution lands, the browser half is inert and
-the panel keeps its documented fallbacks (plain fields read-only, static status). The host services
-themselves are complete and smoke-covered.
+`lib/typert.remote-client.*` artifacts.
+
+Until that contribution lands, the browser half is inert and the panel keeps its documented
+fallbacks (plain fields read-only, static status). The host services themselves are complete and
+smoke-covered.
 
 ## The configuration
 

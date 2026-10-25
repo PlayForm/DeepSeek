@@ -1,5 +1,7 @@
 # @playform/plugin-dsh-batchstate
 
+> v0.1.0 - UNPUBLISHED - plan: [BATCH-STATE-PLUGIN](../../Documentation/Plans/BATCH-STATE-PLUGIN.md)
+
 The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board
 (Documentation/Plans/BATCH-STATE-PLUGIN.md).
 
@@ -92,14 +94,12 @@ files, commits or spawns). The block is one volatile object (a policy flip is ho
 resolved pack's `policy` section overrides the defaults per action (the wiring is the next
 refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
-## The build
+## The build and the tests
 
 ```
 sh Source/prepublishOnly.sh   # the full chain (Build + tsc + tsc-alias)
 sh Source/Run.sh              # the dev twin (Build only)
 ```
-
-## The smokes
 
 | Folder                | What it proves                                                                                           | Count |
 | --------------------- | -------------------------------------------------------------------------------------------------------- | ----- |
@@ -108,3 +108,11 @@ sh Source/Run.sh              # the dev twin (Build only)
 | `Inbox-Splice`        | the inbox splice, the Gates block, the queue projection, the restart                                     | 22    |
 | `Storage-Domain`      | the KV domain (primary), the per-mutation round-trip, the reopen, the JSON fallback, the version failure | 15    |
 | `Policy-Defaults`     | the D6 block's defaults and the recorder posture                                                         | 4     |
+
+## The plan
+
+- [BATCH-STATE-PLUGIN](../../Documentation/Plans/BATCH-STATE-PLUGIN.md) - the live state board.
+
+## License
+
+CC0-1.0.

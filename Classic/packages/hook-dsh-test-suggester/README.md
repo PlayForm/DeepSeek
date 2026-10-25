@@ -119,3 +119,7 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check. 
 - The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
   reconciliation landed; the ETS twin and the live activation (the profile row flip and the restart)
   are the remaining end-phase steps (Documentation/Plans/POC-BRIEF.md section 8).
+
+## License
+
+CC0-1.0.

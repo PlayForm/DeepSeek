@@ -7,16 +7,20 @@
 
 The **silent package.json governor** of the DeepSeek Harness - a plugin on the `fs/observed` event
 (the cordis event every harness file write dispatches; the tool layer is the only dispatcher) that
-governs every `package.json` written by any agent, anywhere. A pure chain pass canonicalizes
-chain-governed dependency pins to the effective registry's `^resolved`, then an update stage lets
-npm-check-updates bump the public ones (programmatic by default or the ncu bin in bin mode,
-policy-driven, chain deps rejected) as a detached, contained continuation - and the author never
-learns. Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a
-version-guarded `replaceIfVersion` write (the service owns version tokens), configuration is a
-validated Schemastery Config schema with defaults, and the authoring agent is never notified: the
-tool result is built from the author's own content, and the observation-policy's version record is
-refreshed by re-emitting `fs/observed` with the service-issued fresh version. A factory flavor: the
-family's furnace does the plumbing; this package is the model logic.
+governs every `package.json` written by any agent, anywhere.
+
+A pure chain pass canonicalizes chain-governed dependency pins to the effective registry's
+`^resolved`, then an update stage lets npm-check-updates bump the public ones (programmatic by
+default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained
+continuation - and the author never learns.
+
+Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a version-guarded
+`replaceIfVersion` write (the service owns version tokens), configuration is a validated Schemastery
+Config schema with defaults, and the authoring agent is never notified: the tool result is built
+from the author's own content, and the observation-policy's version record is refreshed by
+re-emitting `fs/observed` with the service-issued fresh version.
+
+A factory flavor: the family's furnace does the plumbing; this package is the model logic.
 
 ## The surfaces
 
