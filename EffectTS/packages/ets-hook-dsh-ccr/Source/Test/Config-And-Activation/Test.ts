@@ -61,9 +61,9 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 	{
-		const Sub = "config default thresholdBytes=2048";
+		const Sub = "config default thresholdBytes=1024";
 		Check(Count, Sub, () => {
-			assert.ok(Raw1.thresholdBytes.get() === 2048);
+			assert.ok(Raw1.thresholdBytes.get() === 1024);
 		});
 	}
 	{

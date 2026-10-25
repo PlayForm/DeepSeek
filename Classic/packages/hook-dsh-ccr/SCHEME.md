@@ -173,7 +173,7 @@ the timestamp - never the module).
 `protectLastTurns` (phase 4: the context engine, implemented and OFF by default - see §9; enabling
 it is config-only). Composed via the factory's `Schema(false, {...})` - the NON-MANIFEST posture (no
 fs/observed machinery advertised). `inlineThresholdBytes` is parsed but inert under the default
-thresholds (1024 < 2048: anything at or below it never reaches the gate) - it maps Aphrodite's
+thresholds (1024 = 1024: anything at or below it never reaches the gate) - it maps Aphrodite's
 `inline_threshold` and stays in the schema for the store-shape parity.
 
 ## 9. The context engine (phase 4, feature-flagged OFF by default)

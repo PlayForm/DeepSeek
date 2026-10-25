@@ -85,9 +85,9 @@ verbatim.
 - The Harness fake ctx + the REAL factory + the REAL ccr apply; Run 12's
   config is `Validate({ contextEngine: true, logFile: Ledger,
   storeBudgetBytes: 10000 })`.
-- The engine script: pre-step 1, a ~1825-byte pass-through, pre-step 3, a
-  ~3534-byte auto-expanded store and a ~1725-byte pass-through, pre-step 8
-  (the archive), a ~1675-byte tail pass-through, pre-step 9 (the no-op), and
+- The engine script: pre-step 1, a ~925-byte pass-through, pre-step 3, a
+  ~3534-byte auto-expanded store and a ~925-byte pass-through, pre-step 8
+  (the archive), a ~2425-byte tail store, pre-step 9 (the no-op), and
   pre-step 14 (the second archive), then pre-step 15.
 - The Engine functions are imported from the REAL built Target
   (`Target/Function/Engine.js`).

@@ -75,9 +75,9 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 	{
-		const Sub = "volatile unwrap: thresholdBytes cell \u2192 State.Threshold=2048";
+		const Sub = "volatile unwrap: thresholdBytes cell \u2192 State.Threshold=1024";
 		Check(Count, Sub, () => {
-			assert.ok(Run1.State.Threshold === 2048);
+			assert.ok(Run1.State.Threshold === 1024);
 		});
 	}
 	{

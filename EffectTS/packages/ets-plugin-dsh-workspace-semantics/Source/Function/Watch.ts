@@ -14,6 +14,10 @@
 //          ignored - ledger `ignored <path> (own actor)`;
 //       2. a path matching config `exclude` is ignored - ledger
 //          `ignored <path> (excluded)`;
+//       3. a REPEAT event - the same path carrying the same version within
+//          the coalescing window (Function/Duplicate) - is dropped silently:
+//          the model for that file state is already dropped, and a model
+//          rebuilt since was built from the same version, so it stays fresh;
 //   * a path with a built model gets the model dropped (the next resolve
 //     rebuilds from the new version) and the index revision advances -
 //     ledger `indexed <path> version <v> (revision <r>)`;
@@ -22,6 +26,7 @@
 //   * the listener NEVER THROWS: the whole body is one try/catch - a
 //     malformed event is caught and ledgered as `failed <path> (<reason>)`.
 import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
 import type State from "@Interface/State.js";
 
 export default (
@@ -52,6 +57,11 @@ export default (
 				return;
 			case State.Factory.Match(Path, State.List):
 				State.Factory.Append(State, `ignored ${Path} (excluded)`);
+				return;
+			default:
+		}
+		switch (true) {
+			case Duplicate(State, Path, Version):
 				return;
 			default:
 		}

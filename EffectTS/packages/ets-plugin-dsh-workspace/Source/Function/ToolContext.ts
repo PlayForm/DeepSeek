@@ -13,11 +13,11 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_context",
 		description:
-			"Build the orientation packet for a node or query: WORKSPACE, SCOPE, MAP, FOCUS, NEIGHBORS (ranked by edge strength), EVIDENCE, OPEN (what the packet cannot answer) and STALE (when the caller's version differs). Bounded by a token budget - the target is 2k tokens; an overrun marks truncated instead of silently exceeding.",
+			"Build the orientation packet for a node or query: WORKSPACE, SCOPE, MAP, FOCUS, NEIGHBORS (ranked by edge strength), EVIDENCE, OPEN (what the packet cannot answer) and STALE (when the caller's version differs). Bounded by a token budget (target 2k tokens); an overrun marks truncated instead of silently exceeding.",
 		parameters: {
 			id: {
 				type: "string",
-				description: "The focus node id (from workspace_map/workspace_find).",
+				description: "Focus node id (from workspace_map/workspace_find).",
 			},
 			query: { type: "string", description: "A query string when no focus node is known." },
 			budget: {
@@ -27,8 +27,7 @@ export default (State_: State, Append: Log) =>
 			},
 			version: {
 				type: "string",
-				description:
-					"The index revision the caller holds - a mismatch sets the STALE line.",
+				description: "Index revision the caller holds - a mismatch sets the STALE line.",
 			},
 		},
 		output: {

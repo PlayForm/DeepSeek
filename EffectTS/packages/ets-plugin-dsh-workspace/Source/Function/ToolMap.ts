@@ -12,20 +12,19 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_map",
 		description:
-			"Map the workspace: given an optional path or module prefix, return the top-level modules with one-line roles, the file count, the entry-point files (nothing imports them) and the hot symbols (symbols in imported files). No file bodies - ids, paths, spans, kinds only.",
+			"Map the workspace: for an optional path or module prefix, return the top-level modules with one-line roles, the file count, the entry points (nothing imports them) and the hot symbols (in imported files). No file bodies - ids, paths, spans, kinds only.",
 		parameters: {
 			path: {
 				type: "string",
-				description: "Optional path or module prefix to scope the map to.",
+				description: "Optional path or module prefix to scope to.",
 			},
 			depth: {
 				type: "number",
-				description: "Optional traversal depth (default from config mapDepth).",
+				description: "Traversal depth (default: config mapDepth).",
 			},
 			cursor: {
 				type: "string",
-				description:
-					"Pagination cursor: the id of the last hot symbol of the previous page.",
+				description: "Cursor: the id of the last hot symbol of the previous page.",
 			},
 		},
 		output: {

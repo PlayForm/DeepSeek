@@ -28,7 +28,7 @@ listener, tool and state parts) plus Run 1a, moved verbatim.
     - Check: "state carries the REAL factory instance".
     - Check: "volatile unwrap: logFile cell unwrapped to State.Ledger".
     - Check: "volatile unwrap: log cell unwrapped to State.Enabled=true".
-    - Check: "volatile unwrap: thresholdBytes cell -> State.Threshold=2048"
+    - Check: "volatile unwrap: thresholdBytes cell -> State.Threshold=1024"
       (the runtime label uses U+2192).
     - Check: "volatile unwrap: previewMaxChars cell -> State.PreviewMax=240"
       (U+2192).
@@ -47,7 +47,7 @@ listener, tool and state parts) plus Run 1a, moved verbatim.
 
 - The Harness fake ctx + the REAL factory (`Furnace`) + the REAL ccr apply;
   `Raw1 = Validate({ logFile: Ledger })`, `Run1 = Make(Raw1)`.
-- Run 1a's fixture: `TextBlock("short bash output")` (well under the 2048
+- Run 1a's fixture: `TextBlock("short bash output")` (well under the 1024
   threshold) through `Run1.Listeners["tools/post-execute"]` with an accept
   decision as the downstream.
 

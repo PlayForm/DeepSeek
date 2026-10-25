@@ -101,35 +101,41 @@ the frame, "orbit" the satellites.
 
 ## 3. The component vocabulary
 
-Ten components. Each is a pure geometry function in `Maintain/Icon/Geometry.mjs` and takes only
-numbers, so a genome can drive it.
+The vocabulary is FUNCTIONAL: every stroke is sampled from a parametric curve in
+`Maintain/Icon/Curve.mjs`, never assembled from fixed primitives. A sampler returns a quantized
+point list, and every closed sampler is star-shaped about the centre, so a single curve can never
+self-intersect.
 
-| Component   | Geometry                                                                 |
-| ----------- | ------------------------------------------------------------------------ |
-| `core`      | centre glyph at r < 8: dot, ring, cross, diamond, square, star, pinwheel |
-| `spike`     | a point with concave sides: outer r, waist ratio, tip half-width         |
-| `petal`     | a pointed leaf: two arcs meeting at the tip, base on the inner ring      |
-| `teardrop`  | a circle tangent to a point: bulb radius, neck length                    |
-| `scroll`    | an S or C hook: two arcs of opposite curvature, open at the tail         |
-| `band`      | a straight run between two angles with an over/under break               |
-| `interlace` | two bands crossing: the under-band is broken, the over-band is whole     |
-| `quadrant`  | a square quarter with one inset corner and one inset scroll              |
-| `web`       | radial spokes plus concentric arcs between them                          |
-| `orbit`     | satellites on a circle: dot, teardrop, crescent, tick, spark             |
+| Sampler        | Function                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `superellipse` | x = r sign(cos t) abs(cos t)^(2/p), y = r sign(sin t) abs(sin t)^(2/p): p=2 circle, p=4 squircle, p=1 diamond |
+| `lobedRing`    | r = inner + amplitude abs(cos(lobes t / 2))^power: the body, star-shaped, never reaching the centre           |
+| `waveRing`     | r = radius + amplitude cos(lobes t): the rim and the woven frame                                              |
+| `circle`       | the same angle convention as every other sampler, so the outline pass is uniform                              |
+| `arc`          | an open partial ring, as a polyline                                                                           |
+| `dotRing`      | n small closed circles on one radius: the orbit                                                               |
+| `tickRing`     | n two-point strokes on one radius: the seam ticks                                                             |
+| `phyllotaxis`  | the golden-angle spiral of dots, confined to an annulus: the detail zone                                      |
 
-Every component is stroke-first. A fill is allowed only as a tint of the accent (opacity <= 0.18)
-and never on the core.
+The old assembled primitives (spike, petal, teardrop, scroll, band, interlace, quadrant, web, orbit,
+core, the frames) are retired: they placed shapes that crossed each other, which the collage rule
+now forbids.
 
 ## 4. Composition rules
 
 1. One motif, centred, in a 100 x 100 box with a 46-unit outer radius.
 2. n-fold rotation with n in {2, 4, 6, 8, 12}, plus at least one mirror axis.
-3. Concentric zones: core (r < 8), body (8 < r < 30), rim (30 < r < 40, optional), orbit (r ~ 42). A
-   zone may be empty; the order of zones never changes.
+3. **The collage rule.** The icon is packed from DISJOINT annuli and never interlaced: core (r <=
+   7), body (9-31), evolution (33-38), orbit (40-44), rim (45-47). No element may cross another
+   element's band, so no stroke of one piece overlaps a stroke of another; overlap inside one
+   sampled curve is impossible by construction. The composer (`Maintain/Icon/Compose.mjs`) enforces
+   the bands.
 4. The rim band stays mostly empty: the silhouette breathes at the edge.
-5. Ink is a line: stroke only, tint fill at most; no gradient, shadow, or texture.
-6. One accent hue, carried either by the whole ink or by alternating arms.
-7. Detail at two scales: the silhouette plus a fine inner repeat.
+5. **The outline rule.** Every stroke is drawn twice from ONE path definition: a wider faint outline
+   pass (the mini stroke outline) and the body pass, shared through `<defs>`/`<use>`. The outline is
+   what gives the line its drawn edge; no second element is used to create contrast.
+6. Ink is a line: stroke only; no gradient, shadow, or texture.
+7. One accent hue, carried by the evolution rings, the orbit and the rim.
 8. Negative space is part of the motif; the paper colour is never painted over.
 
 ## 5. The mapping to the family
@@ -190,18 +196,38 @@ scroll phase), quantized to 0.25 units so bytes stay stable.
 A component exists only when its feature does. This is the rule that makes each icon specific to the
 package's harness behaviour rather than decorative.
 
-| Gate                    | Effect on the plan                              |
-| ----------------------- | ----------------------------------------------- |
-| `events > 0`            | arms = 4 + 2 * (events mod 3)                   |
-| `events == 0`           | arms = 4 (the closed body)                      |
-| `tools > 0`             | orbit gains 4 dots at the diagonals             |
-| `injections > 0`        | inner ring count = min(3, injections)           |
-| `seams > 0`             | the rim carries a gap at the seam angle         |
-| `services > 0`          | the core becomes a hexagon                      |
-| `bundle`                | the rim carries a patch notch                   |
-| `functions > 3`         | inner detail strokes = functions                |
-| `changelogVersions > 1` | evolution rings = versions - 1                  |
-| `changelogEntries > 0`  | evolution ticks on the outermost ring = entries |
+| Gate                    | Effect on the plan                             |
+| ----------------------- | ---------------------------------------------- |
+| `events > 0`            | arms = 4 + 2 * (events mod 3)                  |
+| `events == 0`           | arms = 4 (the closed body)                     |
+| `tools > 0`             | orbit level 3 (12 satellites)                  |
+| `injections > 1`        | orbit level 2 (8 satellites)                   |
+| `seams > 0`             | rim level 2 (the double wave)                  |
+| `bundle`                | rim level 3 (the woven pair plus ticks)        |
+| `functions > 3`         | body level 2; `functions > 8` body level 3     |
+| `functions > 2`         | detail level 1; `functions > 5` detail level 2 |
+| `changelogVersions > 1` | evolution level = versions - 1 (max 3)         |
+| `changelogEntries > 0`  | evolution ticks on the outermost ring          |
+
+### 7.1 The per-zone complexity vector (the sheet's "levels of separation")
+
+The reference sheet does not vary complexity per motif; it varies it PER LEVEL - one icon has a rich
+core over a plain body, another a plain core inside a dense rim. The generator encodes that as a
+`levels` vector, one 0-3 score per zone:
+
+| Zone        | Gate (base)                                     | Rendered at 0 / 1 / 2 / 3                         |
+| ----------- | ----------------------------------------------- | ------------------------------------------------- |
+| `core`      | role richness (grid/hexagon roles score higher) | - / one medallion / two nested / three nested     |
+| `body`      | `functions`                                     | - / one curve / two concentric / three concentric |
+| `detail`    | `functions`                                     | none / 6 dots / 10 dots / 14 dots                 |
+| `evolution` | `changelogVersions - 1`                         | 0 / 1 / 2 / 3 rings                               |
+| `orbit`     | `tools`, `injections`                           | - / 4 / 8 / 12 satellites                         |
+| `rim`       | `bundle`, `seams`                               | none / single / double / woven + ticks            |
+
+Each base is nudged by the seed (`-1, 0, 0, 0, +1`), so two packages with identical features still
+differ in WHICH level is rich. The stroke weight (`functions`, `bundle`, `tools` -> 1.3-2.0) and the
+fill treatment (`variant`: tint body, solid core, or none) are per-package too, like the sheet's
+bold and filled motifs.
 
 ## 8. Evolution (the changelog reconstructs the icon)
 
@@ -219,13 +245,19 @@ fails until the asset is regenerated. That is the whole update loop.
 
 ## 9. The rendering contract
 
-| Render   | Path                                | Rules                                                                                     |
-| -------- | ----------------------------------- | ----------------------------------------------------------------------------------------- |
-| `mono`   | `Site/Public/Icons/<dir>.svg`       | `stroke="currentColor"`, accent at `stroke-opacity="0.45"`, tint at `fill-opacity="0.08"` |
-| `colour` | `Site/Public/Icons/Color/<dir>.svg` | ink + accent + tint from the kind palette                                                 |
+| Render   | Path                                | Rules                                                                                 |
+| -------- | ----------------------------------- | ------------------------------------------------------------------------------------- |
+| `mono`   | `Site/Public/Icons/<dir>.svg`       | `stroke="currentColor"`, outline pass at 0.25, accent body at `stroke-opacity="0.45"` |
+| `colour` | `Site/Public/Icons/Color/<dir>.svg` | ink + accent from the kind palette, outline pass at 0.30                              |
 
-- `viewBox="0 0 100 100"`, coordinates quantized to 0.01.
-- No `<style>`, no script, no external reference; each file is self-contained and under 8 KiB.
+- `viewBox="0 0 100 100"`, coordinates quantized to whole units (the canvas is 100 wide, so one unit
+  is 0.4 px at the 40 px site size).
+- **One path, two passes.** The collage is written once into `<defs>` as `<path id="<dir>-i">` and
+  `<path id="<dir>-a">`, then drawn by four `<use>` elements: the two outline passes (wider, faint)
+  and the two body passes. The ids carry the package directory, so several inlined icons on one page
+  never collide.
+- No `<style>`, no script, no external reference; each file is self-contained and under 12 KiB (the
+  market index's inline limit is 32 KiB decoded, so there is room; the cap is the family's own).
 - `<title>` carries the package name and the grammar; `role="img"` and `aria-label` are set.
 - The marketplace index carries the colour render as a relative reference, `Icons/Color/<dir>.svg`,
   which resolves against the index URL to the same origin the site serves.
@@ -237,9 +269,9 @@ fails until the asset is regenerated. That is the whole update loop.
 Maintain/Icon/
   Prng.mjs      digest(), seedOf(parts), stream(seed) -> { next, float, range, jitter, pick }
   Palette.mjs   palettesOf(kind) -> { ink, accent, tint }
-  Geometry.mjs  polar(), spike(), petal(), teardrop(), scroll(), band(),
-                interlace(), quadrant(), web(), ring(), orbit(), core(),
-                squareFrame(), diamondFrame(), scallopFrame(), wovenFrame()
+  Curve.mjs     the FUNCTION layer: superellipse(), lobedRing(), waveRing(), circle(),
+                arc(), dotRing(), tickRing(), phyllotaxis(), pathOf()
+  Compose.mjs   collageOf(genome, plan) -> the disjoint-zone collage (section 4.3)
   Grammar.mjs   planOf(genome) -> { grammar, variant, order, arms, rings, orbit,
                 orbitGlyph, rim, rimGap, rimNotch, core, detail, mode, mutations, jitter }
   Feature.mjs   featuresOf(root, dir) -> the section 6 fields
@@ -250,6 +282,9 @@ Maintain/Generate-Icons.mjs   the CLI: no flag writes, --check verifies, --repor
 Maintain/Icon/Ledger.json     the generated genome ledger (committed)
 Test/Icons/Check.mjs          the arbiter: 14 deterministic checks
 ```
+
+`Geometry.mjs` is retired: its assembled primitives were the source of the interlacing the collage
+rule forbids. The file may still exist on disk while the tree settles; nothing imports it.
 
 The ledger records, per package: package, dir, kind, tree, version, seed, grammar, order, arms,
 `rings` (the section 7 inner rings, `min(3, injections)`), orbit, rim, mode, `evolution` (the
@@ -265,14 +300,33 @@ Acceptance: `node Maintain/Generate-Icons.mjs --check` exits 0 on a clean tree; 
 writes are byte-identical; all 102 icons are distinct; `node Test/Icons/Check.mjs` reports 14 of 14;
 `node Maintain/Generate-Marketplace.mjs --check` passes with the icons wired; the site builds.
 
-## 11. Palette (kind x tree)
+## 11. Palette (per package, from the dusk banner)
 
-| Kind     | Ink       | Accent    | Tint      |
-| -------- | --------- | --------- | --------- |
-| `hook`   | `#0B1B3A` | `#3D6BFF` | `#DCE6FF` |
-| `plugin` | `#101010` | `#C67424` | `#F9DCAE` |
-| `client` | `#2F0E24` | `#B5179E` | `#F2D7EA` |
-| `lib`    | `#0C2F0A` | `#2F9E44` | `#D8EEDB` |
+SOURCE: `Temporary/Icon-Reference/Banner.png` (the "Beautiful Rust" pixel-art banner the user
+supplied). Its k-means extraction supplies the family's whole vocabulary:
+
+| Name       | Hex       | Name  | Hex       |
+| ---------- | --------- | ----- | --------- |
+| indigo     | `#364085` | coral | `#F67D55` |
+| navy       | `#183566` | amber | `#FBBA5B` |
+| periwinkle | `#9499CB` | rust  | `#B04523` |
+| plum       | `#261223` | rose  | `#CF637E` |
+| dark plum  | `#4D2D42` | mauve | `#97568B` |
+| cream      | `#F8E3B7` | rock  | `#2A1823` |
+
+The four kinds are mapped onto the banner's hue zones, and the SEED picks the exact ink, accent and
+second accent inside the zone:
+
+| Kind     | Zone        | Ink choices                             | Accent choices                          |
+| -------- | ----------- | --------------------------------------- | --------------------------------------- |
+| `hook`   | indigo      | `#1E3768` `#183566` `#26305E` `#223A6E` | `#40548D` `#6F7FC0` `#9499CB` `#5B6BC0` |
+| `plugin` | coral/amber | `#4D2D42` `#3A2018` `#2A1823` `#46281F` | `#F67D55` `#E97E3B` `#FBBA5B` `#B04523` |
+| `client` | rose        | `#261223` `#341630` `#3D1B33` `#2E1229` | `#CF637E` `#C86BA8` `#9E5970` `#D76A9A` |
+| `lib`    | violet      | `#2A1B3D` `#33204A` `#2B1D4A` `#35233F` | `#97568B` `#B07CC6` `#A66BB8` `#8A5A9E` |
+
+Tints mix the accent toward the banner cream (`#F8E3B7`), not toward white, so a filled icon sits on
+the same paper as the reference sheet. The result is 16 distinct inks, 19 accents and 28 fills
+across the 102 packages - the reference sheet's 29/29 spread, reached from one source palette.
 
 The mono render carries no hue at all; the colour render is the marketplace asset. The site stays
 blue and white: it inlines the mono file, whose `currentColor` is the page ink.

@@ -1,14 +1,7 @@
 ---
 name: plugin-system
-description:
-    "The DeepSeek Harness Plugin Family contract: the package inventory and roles, the loader
-    contract and identity, the bundle anatomy and deterministic build, the factory-versus-module
-    ownership split, the governance steps and the direct-govern channel, the EffectTS variant, and
-    the ledger-string law."
-whenToUse:
-    Before writing, extending, or debugging any family bundle; when adding a package, a config
-    field, a governance step, or a ledger string; when wiring bundles into a profile; when a build,
-    an activation, or a ledger line behaves unexpectedly.
+description: "The DeepSeek Harness Plugin Family contract: the package inventory and roles, loader contract and identity, bundle anatomy and deterministic build, factory-versus-module ownership split, governance steps and the direct-govern channel, the EffectTS variant, and the ledger-string law."
+whenToUse: Before writing, extending, or debugging any family bundle; when adding a package, config field, governance step, or ledger string; when wiring bundles into a profile; when a build, activation, or ledger line misbehaves.
 version: 2.0.0
 updated: 2026-10-20
 ---

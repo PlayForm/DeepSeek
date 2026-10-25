@@ -75,7 +75,7 @@ check, moved verbatim.
     - Check (x6): "'<Name>' -> type '<Type>' marker (x2 gate: 5000 bytes
       compresses)" for grep/grep, glob/paths, web_fetch/web, web_search/web,
       list/paths, search/grep.
-    - Check (x3): "'<Name>' at 3000 bytes stays UNDER its x2 gate (4096) -
+    - Check (x3): "'<Name>' at 1500 bytes stays UNDER its x2 gate (2048) -
       multiplier respected" for grep, glob, web_fetch.
     - Check: "a non-table target with JSON content classifies as 'json'
       (shape fallback) and compresses at x1".
@@ -119,7 +119,7 @@ check, moved verbatim.
   self-describing error.
 - The auto-expand preview is hard-cut at exactly 240 chars (19-char prefix +
   221 fill).
-- The x2 boundary: 3000 bytes passes through for grep/glob/web_fetch.
+- The x2 boundary: 1500 bytes passes through for grep/glob/web_fetch.
 - The x8 error gate: 5000 bytes does not compress failures; 17000 does.
 
 ## Expected count

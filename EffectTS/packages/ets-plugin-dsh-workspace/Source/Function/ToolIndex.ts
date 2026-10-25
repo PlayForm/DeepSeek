@@ -46,16 +46,15 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_index",
 		description:
-			"Index the workspace into the graph: walk a root (default = the session working directory), index every supported file through the graph service's per-file gates, and return the counts (indexed, skipped, failed, files). Bounded by maxFiles. Run it before workspace_map/workspace_find/workspace_expand/workspace_context when the graph is empty.",
+			"Index the workspace into the graph: walk a root, index every supported file through the per-file gates, and return the counts (indexed, skipped, failed, files). Bounded by maxFiles. Run it before workspace_map/find/expand/context when the graph is empty.",
 		parameters: {
 			path: {
 				type: "string",
-				description: "The root to index (default = the session working directory).",
+				description: "Root to index (default: the session working directory).",
 			},
 			maxFiles: {
 				type: "number",
-				description:
-					"The walk bound: at most this many candidate files (default from the graph config, maxFiles).",
+				description: "Walk bound: max candidate files (default from the graph config).",
 			},
 		},
 		output: {

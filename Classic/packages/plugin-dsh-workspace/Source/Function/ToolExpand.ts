@@ -12,14 +12,13 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_expand",
 		description:
-			"Expand a node: given a node id (as returned by workspace_map or workspace_find), return the connected nodes and edges. Edge kinds: contains, imports (references, calls and tests are deferred to the graph's W2+ and return empty honestly). Depth is capped at 3 by the graph contract.",
+			"Expand a node: for a node id (from workspace_map or workspace_find), return the connected nodes and edges. Edge kinds: contains, imports (references, calls and tests are deferred to W2+ and return empty honestly). Depth is capped at 3 by the graph contract.",
 		parameters: {
-			id: { type: "string", description: "The node id to expand (required)." },
+			id: { type: "string", description: "Node id to expand (required)." },
 			kinds: { type: "array", description: 'Optional edge-kind filter, e.g. ["imports"].' },
 			depth: {
 				type: "number",
-				description:
-					"Optional traversal depth (default from config expandDepth, capped at 3).",
+				description: "Traversal depth (default: config expandDepth, capped at 3).",
 			},
 		},
 		output: {

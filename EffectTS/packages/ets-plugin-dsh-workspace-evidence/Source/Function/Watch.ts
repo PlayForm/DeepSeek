@@ -17,11 +17,16 @@
 //       3. an absent observation does not invalidate (a missing file is
 //          not a dependency change) - ledger
 //          `ignored <path> (absent observation)`;
+//       4. a REPEAT event - the same path carrying the same version within
+//          the coalescing window (Function/Duplicate) - is dropped silently:
+//          the invalidation for that file state already ran, and any
+//          validation created since is fresh against the same state;
 //   * a present observation invalidates with the path as the key - the
 //     Function/Invalidate pass marks every dependent validation stale;
 //   * the listener NEVER THROWS: the whole body is one try/catch - a
 //     malformed event is caught and ledgered as `failed <path> (<reason>)`.
 import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
 import Invalidate from "@Function/Invalidate.js";
 import type State from "@Interface/State.js";
 
@@ -53,6 +58,13 @@ export default (
 				return;
 			case !Present:
 				State.Factory.Append(State, `ignored ${Path} (absent observation)`);
+				return;
+			default:
+		}
+		const Version =
+			Present === true ? String((Observation as { version: unknown }).version) : "absent";
+		switch (true) {
+			case Duplicate(State, Path, Version):
 				return;
 			default:
 		}

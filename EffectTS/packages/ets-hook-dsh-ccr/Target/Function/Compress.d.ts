@@ -17,5 +17,5 @@ export type Verdict = {
     preview: string;
     evicted: Eviction[];
 };
+declare const _default: (State: State, Name: string, IsError: boolean, Content: ContentBlock[]) => Verdict;
 export default _default;
-declare function _default(State: State, Name: string, IsError: boolean, Content: ContentBlock[]): Verdict;

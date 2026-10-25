@@ -6,7 +6,7 @@ What this test verifies.
 
 The ccr config surface and the activation posture. Every volatile field
 arrives as a `{ get }` cell (log, logFile, thresholdBytes, previewMaxChars,
-multipliers), every config default is pinned (thresholdBytes 2048,
+multipliers), every config default is pinned (thresholdBytes 1024,
 inlineThresholdBytes 1024, autoExpand true, autoExpandLimitBytes 102400,
 compressFailures false, previewMaxChars 240, ttlSeconds 3600,
 storeBudgetBytes 268435456, journalPath empty, contextEngine false,
@@ -27,7 +27,7 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
     - Check: "volatile cell: thresholdBytes arrives as { get }".
     - Check: "volatile cell: previewMaxChars arrives as { get }".
     - Check: "volatile cell: multipliers arrives as { get }".
-    - Check: "config default thresholdBytes=2048".
+    - Check: "config default thresholdBytes=1024".
     - Check: "config default inlineThresholdBytes=1024".
     - Check: "config default autoExpand=true".
     - Check: "config default autoExpandLimitBytes=102400".

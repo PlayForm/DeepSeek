@@ -64,7 +64,7 @@ export default Compose(false, {
 		"ccr_retrieve",
 	]),
 	// The one byte gate for all tools (volatile: hot-editable).
-	thresholdBytes: Schema.number().default(2048).volatile(),
+	thresholdBytes: Schema.number().default(1024).volatile(),
 	// Results at or below this size are inlined in the store and previewed
 	// fully (Aphrodite's inline_threshold). Structural: remounts on edit.
 	inlineThresholdBytes: Schema.number().default(1024),

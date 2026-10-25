@@ -1,14 +1,7 @@
 ---
 name: instructional-writing
-description:
-    "Writing files whose value is the literal presence of typographic characters the normalize hooks
-    would rewrite: fixtures, demo before/after pairs, and instructional prose. Raw-write is the only
-    writer, the characters are never replaced with ASCII stand-ins, and the notes about them stay
-    truthful."
-whenToUse:
-    Writing or editing a fixture, a byte-faithful copy, a demo pair that must show a curly quote or
-    an em dash, or any file whose point is the exact glyph. Also load it when a written glyph
-    arrives as ASCII and you need to know why.
+description: "Writing files whose value is the literal presence of typographic characters the normalize hooks would rewrite: fixtures, demo before/after pairs, instructional prose. Raw-write is the only writer, the glyphs are never replaced with ASCII stand-ins, and the notes about them stay truthful."
+whenToUse: Writing or editing a fixture, a byte-faithful copy, a demo pair that must show a curly quote or an em dash, or any file whose point is the exact glyph; also when a written glyph arrives as ASCII and you need to know why.
 version: 2.0.0
 updated: 2026-10-20
 ---

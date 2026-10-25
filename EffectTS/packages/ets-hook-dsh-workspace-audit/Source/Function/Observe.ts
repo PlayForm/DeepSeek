@@ -13,7 +13,13 @@
 //
 // Guard chain: own actor → excluded → non-empty include. A malformed
 // event is caught and ledgered "failed <path> (<reason>)".
+//
+// Repeat events (Function/Duplicate): the same path carrying the same
+// version within the coalescing window is dropped before any line - that
+// observed write was already recorded, and the last distinct version always
+// wins. The service's manual lines are never guarded.
 import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
 import Write from "@Function/Write.js";
 import type State from "@Interface/State.js";
 
@@ -40,6 +46,13 @@ export default (
 			default:
 		}
 		const Present = (Observation as { kind?: unknown } | null)?.kind === "present";
+		const Version =
+			Present === true ? String((Observation as { version: unknown }).version) : "absent";
+		switch (true) {
+			case Duplicate(State, Path, Version):
+				return;
+			default:
+		}
 		// NOTE: no sequence increment here - Write (Function/Write) is the
 		// ONE path every line takes and the only owner of the monotonic
 		// counter; a second increment here skipped every other sequence

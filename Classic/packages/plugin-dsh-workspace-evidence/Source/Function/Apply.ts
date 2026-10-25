@@ -72,6 +72,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Store = new Map();
 	State.Sequence = 0;
 	State.Handle = undefined;
+	State.Seen = new Map();
 	// The service's OWN actor marker: an fs/observed event carrying exactly
 	// this object as its actor is the service's own (the identity check in
 	// the listener) and is ignored.

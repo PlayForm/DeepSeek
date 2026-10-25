@@ -193,7 +193,7 @@ export const runTest = async (): Promise<number> => {
 			const Sub =
 				"engine flag ON: post-execute behavior unchanged - the small result still passes through";
 			await (async () => {
-				const Small = TextBlock(PlainText(1800)); // ~1825 serialized bytes: under the 2048 gate
+				const Small = TextBlock(PlainText(900)); // ~925 serialized bytes: under the 1024 gate
 				const OutSmall = await Run12.Listeners["tools/post-execute"](
 					ExecBash,
 					{ isError: false, value: {}, content: Small },
@@ -222,7 +222,7 @@ export const runTest = async (): Promise<number> => {
 				{ isError: false, value: {}, content: Big },
 				NextAccept,
 			);
-			const Mid = TextBlock(PlainText(1700)); // ~1725 serialized bytes: pass-through
+			const Mid = TextBlock(PlainText(900)); // ~925 serialized bytes: pass-through
 			await Run12.Listeners["tools/post-execute"](
 				ExecBash,
 				{ isError: false, value: {}, content: Mid },
@@ -310,7 +310,7 @@ export const runTest = async (): Promise<number> => {
 				await (async () => {
 					const BackMid = await Retrieve12.execute({ hash: HashOf(Mid) }, Exec("ccr_retrieve"));
 					Check(Count, Sub, () => {
-						assert.ok(BackMid.text === PlainText(1700));
+						assert.ok(BackMid.text === PlainText(900));
 					});
 				})();
 			}
@@ -324,7 +324,7 @@ export const runTest = async (): Promise<number> => {
 				})();
 			}
 			// post-execute at turn 8: a tail-window pass-through (content record).
-			const Tail = TextBlock(PlainText(1650)); // ~1675 serialized bytes: pass-through
+			const Tail = TextBlock(PlainText(2400)); // ~2425 serialized bytes: pushes the accumulator over the engine threshold
 			await Run12.Listeners["tools/post-execute"](
 				ExecBash,
 				{ isError: false, value: {}, content: Tail },
@@ -371,7 +371,7 @@ export const runTest = async (): Promise<number> => {
 				await (async () => {
 					const BackTail = await Retrieve12.execute({ hash: HashOf(Tail) }, Exec("ccr_retrieve"));
 					Check(Count, Sub, () => {
-						assert.ok(BackTail.text === PlainText(1650));
+						assert.ok(BackTail.text === PlainText(2400));
 					});
 				})();
 			}

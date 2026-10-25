@@ -139,6 +139,29 @@ const runTest = async () => {
       );
     });
   }
+  {
+    const Run = Setup();
+    Fire(Run, "/repo/src/g.ts", "1");
+    Fire(Run, "/repo/src/g.ts", "1");
+    Check(Count, "G8: a repeat event with the same version is dropped silently", () => {
+      assert.deepEqual(LinesWith(Run, "stamped /repo/src/g.ts"), [
+        "observe: stamped /repo/src/g.ts version 1 (fs/observed)"
+      ]);
+      assert.equal(Run.State.Sequence, 1);
+      assert.equal(Run.State.Latest.get("/repo/src/g.ts").sequence, 1);
+    });
+    Check(Count, "G8: a different version is processed normally", () => {
+      Fire(Run, "/repo/src/g.ts", "2");
+      assert.equal(Run.State.Sequence, 2);
+      assert.ok(Run.Lines.includes("observe: stamped /repo/src/g.ts version 2 (fs/observed)"));
+    });
+    Check(Count, "G8: the same version outside the window is processed again", () => {
+      const Base = Date.now();
+      Run.State.Now = () => Base + 5e3;
+      Fire(Run, "/repo/src/g.ts", "2");
+      assert.equal(Run.State.Sequence, 3);
+    });
+  }
   return Finish(Count, "Guards-And-Ring");
 };
 const runVolatile = (Run, Key) => Run.Raw[Key];

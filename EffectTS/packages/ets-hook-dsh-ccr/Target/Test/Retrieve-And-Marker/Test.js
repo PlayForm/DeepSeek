@@ -593,10 +593,10 @@ ${PlainText(300)}`;
     });
   }
   {
-    const Sub = "'grep' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    const Sub = "'grep' at 1500 bytes stays UNDER its \xD72 gate (2048) - multiplier respected";
     await CheckAsync(Count, Sub, async () => {
-      const Text3000 = PlainText(3e3);
-      const Content = TextBlock(Text3000);
+      const Text1500 = PlainText(1500);
+      const Content = TextBlock(Text1500);
       const Decision = { kind: "accept" };
       const Out = await Run7.Listeners["tools/post-execute"](
         Exec("grep"),
@@ -607,10 +607,10 @@ ${PlainText(300)}`;
     });
   }
   {
-    const Sub = "'glob' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    const Sub = "'glob' at 1500 bytes stays UNDER its \xD72 gate (2048) - multiplier respected";
     await CheckAsync(Count, Sub, async () => {
-      const Text3000 = PlainText(3e3);
-      const Content = TextBlock(Text3000);
+      const Text1500 = PlainText(1500);
+      const Content = TextBlock(Text1500);
       const Decision = { kind: "accept" };
       const Out = await Run7.Listeners["tools/post-execute"](
         Exec("glob"),
@@ -621,10 +621,10 @@ ${PlainText(300)}`;
     });
   }
   {
-    const Sub = "'web_fetch' at 3000 bytes stays UNDER its \xD72 gate (4096) - multiplier respected";
+    const Sub = "'web_fetch' at 1500 bytes stays UNDER its \xD72 gate (2048) - multiplier respected";
     await CheckAsync(Count, Sub, async () => {
-      const Text3000 = PlainText(3e3);
-      const Content = TextBlock(Text3000);
+      const Text1500 = PlainText(1500);
+      const Content = TextBlock(Text1500);
       const Decision = { kind: "accept" };
       const Out = await Run7.Listeners["tools/post-execute"](
         Exec("web_fetch"),

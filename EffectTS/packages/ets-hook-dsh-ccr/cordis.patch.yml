@@ -57,7 +57,7 @@
                 - subagent
                 - ask_user_question
                 - ccr_retrieve
-            thresholdBytes: 2048
+            thresholdBytes: 1024
             inlineThresholdBytes: 1024
             autoExpand: true
             autoExpandLimitBytes: 102400

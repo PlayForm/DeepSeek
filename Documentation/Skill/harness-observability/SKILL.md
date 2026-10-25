@@ -1,13 +1,7 @@
 ---
 name: harness-observability
-description:
-    "What this agent can observe in the running harness: the Inspect providers, the agent-control
-    surface, the background jobs and goals, the ~/.dsh state (sessions with token usage, skills,
-    profiles, governance ledgers), the filesystem and web access, and the honest limits."
-whenToUse:
-    When the user asks what you can see or do, when you need runtime facts (services, events,
-    configs, tools, slots, themes), when inspecting ~/.dsh state, or before building tooling on the
-    observable surface.
+description: "What this agent can observe in the running harness: Inspect providers, the agent-control surface, background jobs and goals, ~/.dsh state (sessions with token usage, skills, profiles, governance ledgers), filesystem and web access, and the honest limits."
+whenToUse: When the user asks what you can see or do, when you need runtime facts (services, events, configs, tools, slots, themes), when inspecting ~/.dsh state, or before building tooling on the observable surface.
 version: 2.0.0
 updated: 2026-10-20
 ---

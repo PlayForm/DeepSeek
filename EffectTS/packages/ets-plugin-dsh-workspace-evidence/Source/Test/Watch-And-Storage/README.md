@@ -27,12 +27,18 @@ the loud open failure, the absent facility, and the purity.
   <path>)`), and a malformed event never throws
   (`failed unknown (malformed event: displayPath is not a string)`).
 - W7: purity - the fake fs records ZERO writeText and readText calls.
+- W8: the repeat-event guard (Function/Duplicate) - a repeat event for the
+  same path carrying the same version within the coalescing window is
+  dropped silently (one invalidation, no repeated `stale` or `no stale`
+  line); a different version runs the pass normally; the same version after
+  the window (via the `State.Now` clock seam) is processed again. The
+  service's explicit `invalidate` calls are never guarded.
 
 ## Fixtures
 
 The shared Harness (fake storage facility with seeded records for the
 restart; the real built Target including the Storage module driven
-directly, the Monitors-Persist precedent).
+directly, the Monitors-Persist precedent) and the `State.Now` clock seam.
 
 ## Expected ledger strings (byte-exact, `evidence: ` prefix)
 
@@ -42,4 +48,4 @@ directly, the Monitors-Persist precedent).
 
 ## Expected count
 
-14 PASS.
+17 PASS.

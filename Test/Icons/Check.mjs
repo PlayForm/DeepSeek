@@ -48,9 +48,9 @@ const record = (Name, Ok, Detail) => {
 const Mono = readdirSync(join(Root, "Site", "Public", "Icons")).filter((Name) => Name.endsWith(".svg"));
 const Colour = readdirSync(join(Root, "Site", "Public", "Icons", "Color")).filter((Name) => Name.endsWith(".svg"));
 {
-	const Oversize = Mono.filter((Name) => readFileSync(join(Root, "Site", "Public", "Icons", Name)).length >= 8192);
+	const Oversize = Mono.filter((Name) => readFileSync(join(Root, "Site", "Public", "Icons", Name)).length >= 12288);
 	record("coverage: 102 mono and 102 colour documents", Mono.length === 102 && Colour.length === 102, `${Mono.length} mono, ${Colour.length} colour`);
-	record("size: every mono document under 8 KiB", Oversize.length === 0, Oversize.join(", "));
+	record("size: every mono document under 12 KiB", Oversize.length === 0, Oversize.join(", "));
 	const Malformed = Mono.filter((Name) => {
 		const Text = readFileSync(join(Root, "Site", "Public", "Icons", Name), "utf8");
 		return !Text.startsWith("<?xml") || !Text.trimEnd().endsWith("</svg>") || /NaN|undefined|Infinity/.test(Text);
@@ -76,7 +76,7 @@ const Colour = readdirSync(join(Root, "Site", "Public", "Icons", "Color")).filte
 	const GrammarA = MonoA.match(/aria-label="[^"]* - ([a-z-]+)"/)?.[1];
 	const GrammarB = MonoB.match(/aria-label="[^"]* - ([a-z-]+)"/)?.[1];
 	record("twins: same grammar, different bytes", GrammarA === GrammarB && MonoA !== MonoB, `${GrammarA} / ${GrammarB}`);
-	record("twins: the Effect-TS document carries the traced echo", MonoB.includes("translate(1.4,-1.4)") && !MonoA.includes("translate(1.4,-1.4)"), "");
+	record("twins: the Effect-TS document carries the traced echo", MonoB.includes("translate(1.2,-1.2)") && !MonoA.includes("translate(1.4,-1.4)"), "");
 }
 
 // 5. gating

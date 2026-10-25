@@ -1,13 +1,7 @@
 ---
 name: plugin-development
-description:
-    "The DeepSeek Harness (Cordis) plugin API: the five dispatch modes, plugin anatomy, Config
-    schemas, services, fibers and effects, tools and the execution pipeline, the performance rules
-    for event listeners, packaging, the review checklist, and the verified pitfalls catalog."
-whenToUse:
-    Before creating a DSH plugin or hooking a Cordis event, exporting a Config schema, providing or
-    consuming a service, registering a tool, packing a bundle, or diagnosing why a plugin did not
-    activate. For this repository's family contract, load plugin-system as well.
+description: "The DeepSeek Harness (Cordis) plugin API: the five dispatch modes, plugin anatomy, Config schemas, services, fibers and effects, tools and the execution pipeline, event-listener performance rules, packaging, the review checklist, and the pitfalls catalog."
+whenToUse: Before creating a DSH plugin, hooking a Cordis event, exporting a Config schema, providing or consuming a service, registering a tool, packing a bundle, or diagnosing why a plugin did not activate. For the family contract, load plugin-system too.
 version: 2.0.0
 updated: 2026-10-20
 ---

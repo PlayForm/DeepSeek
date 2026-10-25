@@ -1,2 +1,225 @@
-import t from"node:assert/strict";import{Advance as R,Assemble as i,Block as a,Check as s,ClockBox as v,ExpectedDate as w,ExpectedTime as x,Finish as $,Frame as h,LinesWith as c,MakeClocked as d,MakeCounter as C,Validate as u,Ledger as k,rm as p,Zone as y,LiveSection as m,PreStep as O,Post as T}from"../Harness.js";const q=v.Now,l=(e,r)=>h("---",e,r),F={t:l("t",`${x(q)} | ${w(q)} | ${y()}`),c:l("c","m=0 t=0 s=none"),man:l("man",`cwd=${process.cwd()} session=scope-1`),g:l("g","m=0 s=none"),n:l("n","hello"),tpl:l("tpl","tpl sees 0")},L=Object.values(F).join(`
-`),A=async()=>{const e=C();p();const r=d(u({logFile:k,enabled:!0,blocks:[a("t","time","{{time}} | {{date}} | {{tz}}"),a("c","counter","m={{messageCount}} t={{turnCount}} s={{sinceLastTool}}"),a("man","manifest","cwd={{cwd}} session={{sessionId}}"),a("g","gauge","m={{messageCount}} s={{sinceLastTool}}"),a("n","note","hello"),a("tpl","template","tpl sees {{messageCount}}"),a("wave2","session-stats","messages={{messageCount}}")]})),f=await i(r);{const n=m(f);s(e,"exactly ONE section appended per assembly",()=>{t.equal(f.sections.length,2),t.equal(n!==void 0,!0),t.equal(f.sections.filter(o=>o.name==="live-containers").length,1)}),s(e,'the section name is "live-containers"',()=>{t.equal(n.name,"live-containers")}),s(e,"the section carries interpolate: false",()=>{t.equal(n.interpolate,!1)}),s(e,"the base section is untouched",()=>{t.deepEqual(f.sections[0],{name:"base",text:"BASE"})}),s(e,"the section body is the byte-exact kind-frame table",()=>{t.equal(n.text,L)}),s(e,"the wave-2 kind is skipped, not rendered",()=>{t.equal(n.text.includes("wave2"),!1)}),s(e,"ledger: one block rendered line per rendered block (byte-exact)",()=>{for(const[o,g]of Object.entries(F)){const b=c(r,`block rendered ${o} (`);t.equal(b.length,1),t.equal(b[0],`hook-dsh-live-containers: block rendered ${o} (${Buffer.byteLength(g,"utf8")} bytes)`)}}),s(e,"ledger: the wave-2 kind skips with (unknown kind)",()=>{t.deepEqual(c(r,"block skipped wave2"),["hook-dsh-live-containers: block skipped wave2 (unknown kind)"])})}{await O(r,2),await T(r,"bash"),R(7e3);const n=await i(r),o=m(n);s(e,"counter block recomputed from the pre-step/post-execute observers",()=>{t.ok(o.text.includes(l("c","m=2 t=1 s=7s")))}),s(e,"gauge block recomputed (sinceLastTool after clock advance)",()=>{t.ok(o.text.includes(l("g","m=2 s=7s")))}),s(e,"template kind sees the whole variable table",()=>{t.ok(o.text.includes(l("tpl","tpl sees 2")))}),s(e,"time block recomputed under the advanced fake clock",()=>{t.ok(o.text.includes(l("t",`${x(v.Now)} | ${w(v.Now)} | ${y()}`))),t.equal(o.text===L,!1)}),s(e,"ledger: request-trigger blocks re-rendered (second pass)",()=>{t.ok(c(r,"block rendered c (").length>=2)})}p();{const n=d(u({logFile:k,enabled:!0,blocks:[a("u","note","{{provider}} and {{mystery}}")]})),o=await i(n);s(e,"unknown tokens render LITERALLY (the harness variable never resolves)",()=>{t.ok(m(o).text.includes("{{provider}} and {{mystery}}"))}),s(e,"ledger: render unknown lines (byte-exact, once per token)",()=>{t.deepEqual(c(n,"render unknown u "),["hook-dsh-live-containers: render unknown u provider","hook-dsh-live-containers: render unknown u mystery"])})}p();{const n=d(u({logFile:k,enabled:!0,blocks:[a("f","time","{{time}}",{vars:{time:"frozen"}})]})),o=await i(n);s(e,"per-block vars override the built-in token",()=>{t.ok(m(o).text.includes(h("---","f","frozen")))}),s(e,"vars override leaves no unknown-token ledger line",()=>{t.equal(c(n,"render unknown f").length,0)})}p();{const n=d(u({logFile:k,enabled:!0,separator:"===",blocks:[a("s","note","hi")]})),o=await i(n);s(e,"custom separator byte-exact in the frame",()=>{t.equal(m(o).text,h("===","s","hi"))})}p();{const n="x".repeat(200),o=d(u({logFile:k,enabled:!0,sectionBudgetBytes:100,blocks:[a("fat1","note",n),a("fat2","note",n)]})),g=await i(o),b=m(g).text,E=h("---","fat1",n);s(e,"the budget collapse leaves a one-line summary for the oldest frame",()=>{t.ok(b.includes(`--- LIVE CONTAINER fat1 (collapsed, ${Buffer.byteLength(E,"utf8")} bytes; not harness state) ---`))}),s(e,"the last frame is never collapsed",()=>{t.ok(b.includes(h("---","fat2",n)))}),s(e,"ledger: failsafe section-collapse 1 (byte-exact)",()=>{t.deepEqual(c(o,"failsafe section-collapse"),["hook-dsh-live-containers: failsafe section-collapse 1"])})}p();{const n=d(u({logFile:k,enabled:!0,blocks:[a("off","note","hi",{enabled:!1})]})),o=await i(n);s(e,"an all-disabled table appends no section",()=>{t.equal(o.sections.length,1),t.equal(o.sections[0].name,"base")}),s(e,"ledger: the disabled block skip line (byte-exact, once)",()=>{t.deepEqual(c(n,"block skipped off"),["hook-dsh-live-containers: block skipped off (disabled)"])})}return $(e,"Render-And-Frames")},B=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(B){const e=await A();console.log(`${e} PASS - Render-And-Frames`)}export{A as runTest};
+import assert from "node:assert/strict";
+import {
+  Advance,
+  Assemble,
+  Block,
+  Check,
+  ClockBox,
+  ExpectedDate,
+  ExpectedTime,
+  Finish,
+  Frame,
+  LinesWith,
+  MakeClocked,
+  MakeCounter,
+  Validate,
+  Ledger,
+  rm,
+  Zone,
+  LiveSection,
+  PreStep,
+  Post
+} from "../Harness.js";
+const Now0 = ClockBox.Now;
+const Frame1 = (ID, Body) => Frame("---", ID, Body);
+const ExpectedFrames = {
+  t: Frame1("t", `${ExpectedTime(Now0)} | ${ExpectedDate(Now0)} | ${Zone()}`),
+  c: Frame1("c", "m=0 t=0 s=none"),
+  man: Frame1("man", `cwd=${process.cwd()} session=scope-1`),
+  g: Frame1("g", "m=0 s=none"),
+  n: Frame1("n", "hello"),
+  tpl: Frame1("tpl", "tpl sees 0")
+};
+const Expected1 = Object.values(ExpectedFrames).join("\n");
+const runTest = async () => {
+  const Count = MakeCounter();
+  rm();
+  const Run1 = MakeClocked(
+    Validate({
+      logFile: Ledger,
+      enabled: true,
+      blocks: [
+        Block("t", "time", "{{time}} | {{date}} | {{tz}}"),
+        Block("c", "counter", "m={{messageCount}} t={{turnCount}} s={{sinceLastTool}}"),
+        Block("man", "manifest", "cwd={{cwd}} session={{sessionId}}"),
+        Block("g", "gauge", "m={{messageCount}} s={{sinceLastTool}}"),
+        Block("n", "note", "hello"),
+        Block("tpl", "template", "tpl sees {{messageCount}}"),
+        Block("wave2", "session-stats", "messages={{messageCount}}")
+      ]
+    })
+  );
+  const Out1 = await Assemble(Run1);
+  {
+    const Live = LiveSection(Out1);
+    Check(Count, "exactly ONE section appended per assembly", () => {
+      assert.equal(Out1.sections.length, 2);
+      assert.equal(Live !== void 0, true);
+      assert.equal(Out1.sections.filter((S) => S.name === "live-containers").length, 1);
+    });
+    Check(Count, 'the section name is "live-containers"', () => {
+      assert.equal(Live.name, "live-containers");
+    });
+    Check(Count, "the section carries interpolate: false", () => {
+      assert.equal(Live.interpolate, false);
+    });
+    Check(Count, "the base section is untouched", () => {
+      assert.deepEqual(Out1.sections[0], { name: "base", text: "BASE" });
+    });
+    Check(Count, "the section body is the byte-exact kind-frame table", () => {
+      assert.equal(Live.text, Expected1);
+    });
+    Check(Count, "the wave-2 kind is skipped, not rendered", () => {
+      assert.equal(Live.text.includes("wave2"), false);
+    });
+    Check(Count, "ledger: one block rendered line per rendered block (byte-exact)", () => {
+      for (const [ID, FrameText] of Object.entries(ExpectedFrames)) {
+        const Lines = LinesWith(Run1, `block rendered ${ID} (`);
+        assert.equal(Lines.length, 1);
+        assert.equal(
+          Lines[0],
+          `hook-dsh-live-containers: block rendered ${ID} (${Buffer.byteLength(
+            FrameText,
+            "utf8"
+          )} bytes)`
+        );
+      }
+    });
+    Check(Count, "ledger: the wave-2 kind skips with (unknown kind)", () => {
+      assert.deepEqual(LinesWith(Run1, "block skipped wave2"), [
+        "hook-dsh-live-containers: block skipped wave2 (unknown kind)"
+      ]);
+    });
+  }
+  {
+    await PreStep(Run1, 2);
+    await Post(Run1, "bash");
+    Advance(7e3);
+    const Out2 = await Assemble(Run1);
+    const Live2 = LiveSection(Out2);
+    Check(Count, "counter block recomputed from the pre-step/post-execute observers", () => {
+      assert.ok(Live2.text.includes(Frame1("c", "m=2 t=1 s=7s")));
+    });
+    Check(Count, "gauge block recomputed (sinceLastTool after clock advance)", () => {
+      assert.ok(Live2.text.includes(Frame1("g", "m=2 s=7s")));
+    });
+    Check(Count, "template kind sees the whole variable table", () => {
+      assert.ok(Live2.text.includes(Frame1("tpl", "tpl sees 2")));
+    });
+    Check(Count, "time block recomputed under the advanced fake clock", () => {
+      assert.ok(Live2.text.includes(Frame1("t", `${ExpectedTime(ClockBox.Now)} | ${ExpectedDate(ClockBox.Now)} | ${Zone()}`)));
+      assert.equal(Live2.text === Expected1, false);
+    });
+    Check(Count, "ledger: request-trigger blocks re-rendered (second pass)", () => {
+      assert.ok(LinesWith(Run1, "block rendered c (").length >= 2);
+    });
+  }
+  rm();
+  {
+    const Run2 = MakeClocked(
+      Validate({
+        logFile: Ledger,
+        enabled: true,
+        blocks: [Block("u", "note", "{{provider}} and {{mystery}}")]
+      })
+    );
+    const Out = await Assemble(Run2);
+    Check(Count, "unknown tokens render LITERALLY (the harness variable never resolves)", () => {
+      assert.ok(LiveSection(Out).text.includes("{{provider}} and {{mystery}}"));
+    });
+    Check(Count, "ledger: render unknown lines (byte-exact, once per token)", () => {
+      assert.deepEqual(LinesWith(Run2, "render unknown u "), [
+        "hook-dsh-live-containers: render unknown u provider",
+        "hook-dsh-live-containers: render unknown u mystery"
+      ]);
+    });
+  }
+  rm();
+  {
+    const Run3 = MakeClocked(
+      Validate({
+        logFile: Ledger,
+        enabled: true,
+        blocks: [Block("f", "time", "{{time}}", { vars: { time: "frozen" } })]
+      })
+    );
+    const Out3 = await Assemble(Run3);
+    Check(Count, "per-block vars override the built-in token", () => {
+      assert.ok(LiveSection(Out3).text.includes(Frame("---", "f", "frozen")));
+    });
+    Check(Count, "vars override leaves no unknown-token ledger line", () => {
+      assert.equal(LinesWith(Run3, "render unknown f").length, 0);
+    });
+  }
+  rm();
+  {
+    const Run4 = MakeClocked(
+      Validate({ logFile: Ledger, enabled: true, separator: "===", blocks: [Block("s", "note", "hi")] })
+    );
+    const Out4 = await Assemble(Run4);
+    Check(Count, "custom separator byte-exact in the frame", () => {
+      assert.equal(
+        LiveSection(Out4).text,
+        Frame("===", "s", "hi")
+      );
+    });
+  }
+  rm();
+  {
+    const Fat = "x".repeat(200);
+    const Run5 = MakeClocked(
+      Validate({
+        logFile: Ledger,
+        enabled: true,
+        sectionBudgetBytes: 100,
+        blocks: [Block("fat1", "note", Fat), Block("fat2", "note", Fat)]
+      })
+    );
+    const Out5 = await Assemble(Run5);
+    const Text = LiveSection(Out5).text;
+    const FatFrame1 = Frame("---", "fat1", Fat);
+    Check(Count, "the budget collapse leaves a one-line summary for the oldest frame", () => {
+      assert.ok(
+        Text.includes(`--- LIVE CONTAINER fat1 (collapsed, ${Buffer.byteLength(FatFrame1, "utf8")} bytes; not harness state) ---`)
+      );
+    });
+    Check(Count, "the last frame is never collapsed", () => {
+      assert.ok(Text.includes(Frame("---", "fat2", Fat)));
+    });
+    Check(Count, "ledger: failsafe section-collapse 1 (byte-exact)", () => {
+      assert.deepEqual(LinesWith(Run5, "failsafe section-collapse"), [
+        "hook-dsh-live-containers: failsafe section-collapse 1"
+      ]);
+    });
+  }
+  rm();
+  {
+    const Run6 = MakeClocked(
+      Validate({
+        logFile: Ledger,
+        enabled: true,
+        blocks: [Block("off", "note", "hi", { enabled: false })]
+      })
+    );
+    const Out6 = await Assemble(Run6);
+    Check(Count, "an all-disabled table appends no section", () => {
+      assert.equal(Out6.sections.length, 1);
+      assert.equal(Out6.sections[0].name, "base");
+    });
+    Check(Count, "ledger: the disabled block skip line (byte-exact, once)", () => {
+      assert.deepEqual(LinesWith(Run6, "block skipped off"), [
+        "hook-dsh-live-containers: block skipped off (disabled)"
+      ]);
+    });
+  }
+  return Finish(Count, "Render-And-Frames");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Render-And-Frames`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

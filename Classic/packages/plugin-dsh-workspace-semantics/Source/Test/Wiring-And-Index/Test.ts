@@ -156,6 +156,30 @@ export const runTest = async (): Promise<number> => {
 			);
 		});
 	}
+
+	
+	{
+		const Run = await Setup();
+		Fire(Run, "/repo/src/g.ts", "1");
+		Fire(Run, "/repo/src/g.ts", "1");
+		Check(Count, "W6: a repeat event with the same version is dropped silently", () => {
+			assert.equal(Run.State.Revision, 1);
+			assert.deepEqual(LinesWith(Run, "indexed /repo/src/g.ts"), [
+				"semantics: indexed /repo/src/g.ts version 1 (revision 1)",
+			]);
+		});
+		Check(Count, "W6: a different version is processed normally", () => {
+			Fire(Run, "/repo/src/g.ts", "2");
+			assert.equal(Run.State.Revision, 2);
+			assert.ok(Run.Lines.includes("semantics: indexed /repo/src/g.ts version 2 (revision 2)"));
+		});
+		Check(Count, "W6: the same version outside the window is processed again", () => {
+			const Base = Date.now();
+			Run.State.Now = () => Base + 5000;
+			Fire(Run, "/repo/src/g.ts", "2");
+			assert.equal(Run.State.Revision, 3);
+		});
+	}
 	return Finish(Count, "Wiring-And-Index");
 };
 

@@ -1,15 +1,9 @@
 ---
 name: task-routing
-description:
-    "The model-routing policy for every delegation: the three-model catalog, the difficulty-first
-    classification, the closed routing table, the attempts ladder, the spec requirements, and the
-    adjudication protocol that makes cheap exploration safe."
-whenToUse:
-    Before every subagent call, workflow agent() call, or any decision about which model and
-    reasoning effort to use. Also load it when a delegation fails and you must decide whether to
-    retry or escalate.
-version: 2.1.0
-updated: 2026-10-24
+description: "The model-routing policy for every delegation: the three-model catalog, difficulty-first classification, closed routing table, attempts ladder, spec requirements, and the adjudication protocol that makes cheap exploration safe."
+whenToUse: Before every subagent call, workflow agent() call, or any decision about which model and reasoning effort to use; also when a delegation fails and you must decide whether to retry or escalate.
+version: 2.2.0
+updated: 2026-10-25
 ---
 
 # Task Routing
@@ -43,6 +37,14 @@ model.
 5. **The table is closed.** A delegation that fits no row is classified by the tie-breaker, never by
    a new row. Inventing a row ("sensitive exploration", "DeepSeek high") is a policy change and a
    cost incident, not a judgment call.
+
+## The user's override (2026-10-25)
+
+The user rejected high-effort editing lanes: they did small edits at `high` and the effort was
+wasted. For this profile, break every piece of work into small, mechanical, self-contained specs and
+run EVERY editing lane at GLM `low`. The parent does the splitting - exact files, exact edits, exact
+expected values - so the cheap lane executes rather than judges. Many small lanes is the default;
+one large high lane is not. `high` and `max` are used only when the user asks for them by name.
 
 ## The catalog
 

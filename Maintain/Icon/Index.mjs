@@ -47,7 +47,7 @@ export const genomeOf = (root, entry) => {
 		featureDigest,
 		features.changelogDigest,
 	]);
-	const palette = Palette.palettesOf(features.kind, features.tree);
+	const palette = Palette.palettesOf({ kind: features.kind, seed: seed });
 	const mutations = evolutionOf(mutationsOf(changelogOf(root, entry)));
 	const genome = {
 		package: features.package,

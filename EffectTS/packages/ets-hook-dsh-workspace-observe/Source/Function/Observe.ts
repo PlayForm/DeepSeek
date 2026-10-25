@@ -15,6 +15,10 @@
 //          `ignored <path> (excluded)`;
 //       3. a non-empty config `include` that the path does not match is
 //          ignored - ledger `ignored <path> (not included)`;
+//       4. a REPEAT event - the same path carrying the same version within
+//          the coalescing window (Function/Duplicate) - is dropped silently:
+//          that file state was already recorded, and the last distinct
+//          version always wins;
 //   * a present observation records the event's version verbatim; an absent
 //     observation records version "absent" (honest, never a fabricated
 //     version);
@@ -22,6 +26,7 @@
 //     malformed event is caught and ledgered as `failed <path> (<reason>)`
 //     (the logger line rides the same Append).
 import type { FsObservation, FsTarget } from "@deepseek-ai/dsh-fs";
+import Duplicate from "@Function/Duplicate.js";
 import Match from "@Function/Match.js";
 import Record from "@Function/Record.js";
 import type State from "@Interface/State.js";
@@ -59,6 +64,11 @@ export default (
 				return;
 			case State.Include.length > 0 && !Match(Path, State.Include):
 				State.Factory.Append(State, `ignored ${Path} (not included)`);
+				return;
+			default:
+		}
+		switch (true) {
+			case Duplicate(State, Path, Version):
 				return;
 			default:
 		}

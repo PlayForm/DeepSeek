@@ -27,11 +27,17 @@ flip of the ring bound.
 - G7: the volatile flip - committing a new `maxStamps` into the config cell
   and dispatching `loader/volatile-update` refreshes `State.MaxStamps` in
   place (no remount) and the new bound applies on the next events.
+- G8: the repeat-event guard (Function/Duplicate) - a repeat event for the
+  same path carrying the same version within the coalescing window is
+  dropped silently (one stamp, the sequence does not move, the latest stamp
+  is untouched); a different version is processed normally; the same version
+  after the window (via the `State.Now` clock seam) is processed again.
 
 ## Fixtures
 
 The shared Harness plus `Flip` (the cosmokit volatile-cell write symbol, the
-same mechanism the live loader uses).
+same mechanism the live loader uses) and the `State.Now` clock seam (the
+monitor's pattern; no real timer anywhere).
 
 ## Expected ledger strings (byte-exact, `observe: ` prefix)
 
@@ -41,4 +47,4 @@ event: displayPath is not a string)`.
 
 ## Expected count
 
-15 PASS.
+19 PASS.

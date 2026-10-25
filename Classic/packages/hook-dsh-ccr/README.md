@@ -24,7 +24,7 @@ agent, and is the only point that can legally replace model-visible output for a
 
 The gate compresses only results of tools in `targets` (default: `bash`, `glob`, `grep`, `read`,
 `web_fetch`, `web_search`, `list`, `search`) whose serialized content exceeds `thresholdBytes`
-(2048) × the classified type's multiplier - errors ×8 (high-signal, compress late), `grep`/`paths`/
+(1024) × the classified type's multiplier - errors ×8 (high-signal, compress late), `grep`/`paths`/
 `web` ×2, the rest ×1.
 
 Never compress the `exempt` tools: `write`, `edit`, `raw-write`, `subagent`, `ask_user_question`,
@@ -70,7 +70,7 @@ guard makes any load order safe.
 | `logFile`                   | string  | `~/.dsh/playform/hook-dsh-ccr.log`                                            | volatile - the ledger file                              |
 | `targets`                   | array   | `bash`, `glob`, `grep`, `read`, `web_fetch`, `web_search`, `list`, `search`   | the tools whose results the gate compresses             |
 | `exempt`                    | array   | `write`, `edit`, `raw-write`, `subagent`, `ask_user_question`, `ccr_retrieve` | never compressed                                        |
-| `thresholdBytes`            | number  | `2048`                                                                        | volatile - the base size threshold                      |
+| `thresholdBytes`            | number  | `1024`                                                                        | volatile - the base size threshold                      |
 | `inlineThresholdBytes`      | number  | `1024`                                                                        | results under this stay inline untouched                |
 | `autoExpand`                | boolean | `true`                                                                        | store but return FULL while the content is cheap enough |
 | `autoExpandLimitBytes`      | number  | `102400`                                                                      | the auto-expand ceiling                                 |

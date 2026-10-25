@@ -15,13 +15,13 @@ export default (State_: State, Append: Log) =>
 	defineTool({
 		name: "workspace_find",
 		description:
-			"Find nodes in the workspace graph: `name` matches the node name exactly; `pattern` is a case-insensitive SUBSTRING matched against the node id and the node name (not a glob), optionally filtered by kind (File, Symbol, Block, Test, DocSection) and limited. Returns id, path, span, kind, fingerprint, version - no file bodies. Pagination is by cursor, not offset.",
+			"Find nodes in the graph: `name` matches the node name exactly; `pattern` is a case-insensitive substring against the node id and name (not a glob), optionally filtered by kind (File, Symbol, Block, Test, DocSection) and limited. Returns id, path, span, kind, fingerprint, version - no file bodies. Pagination is by cursor, not offset.",
 		parameters: {
 			name: { type: "string", description: "Exact node name to find." },
 			pattern: {
 				type: "string",
 				description:
-					"Case-insensitive substring matched against the node id and the node name (not a glob).",
+					"Case-insensitive substring against the node id and name (not a glob).",
 			},
 			kind: {
 				type: "string",
@@ -33,7 +33,7 @@ export default (State_: State, Append: Log) =>
 			},
 			cursor: {
 				type: "string",
-				description: "Pagination cursor: the id of the last node of the previous page.",
+				description: "Cursor: the id of the last node of the previous page.",
 			},
 		},
 		output: {
