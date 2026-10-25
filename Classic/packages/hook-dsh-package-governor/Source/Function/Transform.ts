@@ -97,8 +97,14 @@ export default (
 			}
 		}
 
-		// No chain change (or no registry): straight to the update stage, exactly
-		// as the pre-refactor Function/Continue did after a null Satisfy.
-		Passage.Proceed = true;
+		// No registry (none found, or an unparsable one): straight to the update
+		// stage, exactly as the pre-refactor Function/Continue did after a null
+		// Satisfy. With a registry but NO chain change (every computed pin equals
+		// its current pin) the passage stays closed: no dispatch, no write.
+		switch (true) {
+			case !Registry:
+				Passage.Proceed = true;
+				break;
+		}
 		return null;
 	};

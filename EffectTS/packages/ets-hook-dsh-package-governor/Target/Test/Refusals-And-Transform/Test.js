@@ -224,13 +224,53 @@ const runTest = async () => {
       });
     }
   }
-  const noopOut = transform(JSON.stringify({ dependencies: { leftpad: "^1.0.0" } }), void 0, []);
+  const noopPassage = { Current: null, Proceed: false };
+  const noopTransform = BuildTransform(
+    Probe,
+    { targetKey: "k-t-noop", displayPath: pathA },
+    { effectiveLatest: { leftpad: "1.0.0" } },
+    noopPassage
+  );
+  const noopOut = noopTransform(
+    JSON.stringify({ dependencies: { leftpad: "^1.0.0" } }),
+    void 0,
+    []
+  );
   {
-    const Sub = "transform: idempotent manifest \u2192 null; the no-change path opens the passage";
+    const Sub = "transform: idempotent manifest \u2192 null; the no-change path keeps the passage closed";
     {
       Check(Count, Sub, () => {
         assert.equal(noopOut, null, "idempotent manifest \u2192 null (the factory's designed no-op)");
-        assert.equal(passage.Proceed, true, "no-change path opens the passage synchronously");
+        assert.equal(
+          noopPassage.Proceed,
+          false,
+          "every computed pin equals its current pin \u2192 the passage stays closed (no dispatch, no write)"
+        );
+      });
+    }
+  }
+  const publicPassage = { Current: null, Proceed: false };
+  const publicTransform = BuildTransform(
+    Probe,
+    { targetKey: "k-t-public", displayPath: pathA },
+    null,
+    publicPassage
+  );
+  const publicOut = publicTransform(
+    JSON.stringify({ dependencies: { chalk: "^5.0.0" } }),
+    void 0,
+    []
+  );
+  {
+    const Sub = "transform: no registry \u2192 the no-change path still opens the passage (pre-refactor semantics)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(publicOut, null, "nothing to govern \u2192 null");
+        assert.equal(
+          publicPassage.Proceed,
+          true,
+          "no registry \u2192 the update stage path stays open"
+        );
       });
     }
   }

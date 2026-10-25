@@ -12,11 +12,14 @@ registry produces the byte-identical `unreadable registry.json ... skipped for
 <path>` line; strict mode strips unknown deps while canonicalizing the chain
 pin; the transform probed directly decodes inside and ignores the keep-list;
 its post-write message composes the version-bearing line, marks the passage and
-journals the governed record; an idempotent manifest maps to null and opens the
-passage synchronously; and a sandbox-mode-configured backend receives a
-workspace-write fence rooted at the governed manifest's own directory. The
-assertions are moved verbatim from `Classic/smokes/governor-smoke.mjs`
-sections 6-6b (the transform contract and the P4 posture included).
+journals the governed record; an idempotent manifest maps to null and keeps the
+passage closed when a registry exists (every computed pin equals its current
+pin, so the update stage is not dispatched and nothing is written) while the
+no-registry no-change path still opens the passage; and a sandbox-mode-configured
+backend receives a workspace-write fence rooted at the governed manifest's own
+directory. The assertions are moved verbatim from
+`Classic/smokes/governor-smoke.mjs` sections 6-6b (the transform contract and
+the P4 posture included).
 
 ## Scenario
 
@@ -36,8 +39,10 @@ sections 6-6b (the transform contract and the P4 posture included).
       from the outcome"
     - Sub: "transform: the post-write message marks the passage + journals the
       governed record"
-    - Sub: "transform: idempotent manifest -> null; the no-change path opens
-      the passage"
+    - Sub: "transform: idempotent manifest -> null; the no-change path keeps
+      the passage closed"
+    - Sub: "transform: no registry -> the no-change path still opens the
+      passage (pre-refactor semantics)"
 - Group: the P4 confined fence posture.
     - Sub: "P4: confined backend -> workspace-write fence rooted at the
       manifest's own directory"
@@ -56,7 +61,9 @@ that count assertion itself.
 Per-check fixtures: proj-h (non-JSON manifest), proj-b (no registry), proj-d
 (unreadable registry.json), proj-e (strict strip, Probe.Strict toggled), the
 direct transform probe (`BuildTransform(Probe, { targetKey: "k-t", ... })` with
-the shared `passage` object), and proj-fence with
+the shared `passage` object), the no-change probe (`k-t-noop` with its own
+`noopPassage` object), the no-registry probe (`k-t-public` with its own
+`publicPassage` object), and proj-fence with
 `Context.fs.sandboxMode = "workspace-write"` toggled around the fire.
 
 ## Expected ledger strings (byte-identical)
@@ -76,10 +83,12 @@ the shared `passage` object), and proj-fence with
   stage - the passage-closed negative control.
 - The keep-list passed to the transform does NOT pin (the governor closes over
   its own sections).
+- A registry-present no-change manifest keeps the passage closed: no update
+  stage dispatch and no write (the no-flap rule).
 - The unreadable registry still lets the update stage run (pre-refactor
   semantics) and seeds the Stash (later advanced by U-sub-2).
 - The confined fence is rooted at the manifest's directory, not the workspace.
 
 ## Expected count
 
-9 PASS.
+10 PASS.

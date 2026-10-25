@@ -93,7 +93,7 @@ it activate" must be answerable from the ledger alone.
     - Direct-Govern-And-Lifecycle - 12 checks
     - Entry-And-Config - 4 checks
     - Gate-Matrix - 9 checks
-    - Refusals-And-Transform - 9 checks
+    - Refusals-And-Transform - 10 checks
     - State-And-Activation - 10 checks
     - Update-Stage - 21 checks
 
