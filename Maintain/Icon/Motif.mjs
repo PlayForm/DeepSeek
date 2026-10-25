@@ -421,10 +421,11 @@ const crescentRing = ({ Order }) => {
 			tone: "accent",
 		},
 	];
-	for (let Index = 0; Index < Order; Index += 1) {
+	const Moons = Math.max(Order, 6);
+	for (let Index = 0; Index < Moons; Index += 1) {
 		Parts.push({
 			key: `moon-${Index}`,
-			points: crescent({ Angle: (Index * 360) / Order, Radius: 35, Size: 5.5 }),
+			points: crescent({ Angle: (Index * 360) / Moons, Radius: 35, Size: 5.5 }),
 			closed: true,
 			width: 0.9,
 			method: "crescent",
@@ -514,11 +515,12 @@ const scallopRing = ({ Order }) => {
 
 const rosette = ({ Order }) => {
 	const Parts = [];
-	for (let Index = 0; Index < Order; Index += 1) {
+	const Petals = Math.max(Order, 6);
+	for (let Index = 0; Index < Petals; Index += 1) {
 		Parts.push({
 			key: `petal-${Index}`,
 			points: petal({
-				Angle: (Index * 360) / Order,
+				Angle: (Index * 360) / Petals,
 				Radius: 13,
 				Length: 19,
 				Width: 11,
@@ -602,10 +604,11 @@ const teardropOrbit = ({ Order }) => {
 			layer: "core",
 		},
 	];
-	for (let Index = 0; Index < Order; Index += 1) {
+	const Drops = Math.max(Order, 6);
+	for (let Index = 0; Index < Drops; Index += 1) {
 		Parts.push({
 			key: `drop-${Index}`,
-			points: teardrop({ Angle: (Index * 360) / Order, Radius: 31, Length: 12, Width: 7 }),
+			points: teardrop({ Angle: (Index * 360) / Drops, Radius: 31, Length: 12, Width: 7 }),
 			closed: true,
 			width: 1.0,
 			method: "teardrop",

@@ -691,34 +691,26 @@ markers_8u)
 
 - Finally, we can apply the watershed algorithm, and visualize the result:
 
-C++ // Perform the watershed algorithm
-[watershed](https://docs.opencv.org/4.13.0/d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1)(imgResult,
-markers); [Mat](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html) mark;
-markers.[convertTo](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b)(mark,
+C++ // Perform the watershed algorithm [watershed](https://docs.opencv.org/4.13.0/d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1)(imgResult,
+markers); [Mat](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html) mark; markers.[convertTo](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b)(mark,
 [CV_8U](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06));
 [bitwise_not](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga0002cf8b418479f4cb49a75442baee2f)(mark,
 mark); // imshow("Markers_v2", mark); // uncomment this if you want to see how the mark // image
 looks like at that point // Generate random colors vector<Vec3b> colors; for (size_t i = 0; i <
-contours.size(); i++) int b =
-[theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
-256); int g =
-[theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
-256); int r =
-[theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
-256);
-colors.push_back([Vec3b](https://docs.opencv.org/4.13.0/d6/dcf/classcv_1_1Vec.html)(([uchar](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc))b,
+contours.size(); i++) int b = [theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
+256); int g = [theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
+256); int r = [theRNG](https://docs.opencv.org/4.13.0/d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3)().[uniform](https://docs.opencv.org/4.13.0/d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae)(0,
+256); colors.push_back([Vec3b](https://docs.opencv.org/4.13.0/d6/dcf/classcv_1_1Vec.html)(([uchar](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc))b,
 ([uchar](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc))g,
 ([uchar](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc))r));
 // Create the result image [Mat](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html) dst =
 Mat::zeros(markers.[size](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1)(),
 [CV_8UC3](https://docs.opencv.org/4.13.0/d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047));
-// Fill labeled objects with random colors for (int i = 0; i <
-markers.[rows](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#abed816466c45234254d25bc59c31245e);
-i++) for (int j = 0; j <
-markers.[cols](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#aa3e5a47585c9ef6a0842556739155e3e);
-j++) int
-[index](https://docs.opencv.org/4.13.0/d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c)
+// Fill labeled objects with random colors for (int i = 0; i < markers.[rows](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#abed816466c45234254d25bc59c31245e);
+i++) for (int j = 0; j < markers.[cols](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#aa3e5a47585c9ef6a0842556739155e3e);
+j++) int [index](https://docs.opencv.org/4.13.0/d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c)
 =
+
 markers.[at](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df)<int>(i,j);
 if (index > 0 && index <= static_cast<int(contours.size()))
 dst.[at](https://docs.opencv.org/4.13.0/d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df)<[Vec3b](https://docs.opencv.org/4.13.0/d6/dcf/classcv_1_1Vec.html)>(i,j)

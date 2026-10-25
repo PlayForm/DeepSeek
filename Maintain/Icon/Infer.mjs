@@ -197,22 +197,17 @@ export const structureOf = (Root, Directory) => {
 
 const roleOf = (Structure, Entry, Domain) => {
 	const { totals, tokens } = Structure;
-	const Storeish =
-		/store|pack|ccr|cache|journal|ledger|replay|history|persist|state/.test(Domain) ||
-		(tokens.state.length > 0 && totals.services >= 1);
-	const Routerish =
-		/route|workspace|merge|split|fanout|schedule|batch|dispatch/.test(Domain) ||
-		totals.injections >= 3;
+	const Storeish = /store|pack|ccr|cache|journal|ledger|replay|history|persist|state/.test(
+		Domain,
+	);
+	const Routerish = /route|workspace|merge|split|fanout|schedule|batch|dispatch/.test(Domain);
 	const Transformerish =
 		/normalize|transform|update|edit|format|compress|convert|encode|rewrite|suggest|doc/.test(
 			Domain,
-		) || tokens.transform.length > 0;
-	const Governorish =
-		/govern|audit|pin|convention|check|guard|policy|factory|rule/.test(Domain) ||
-		totals.refusals >= 2;
+		);
+	const Governorish = /govern|audit|pin|convention|check|guard|policy|factory|rule/.test(Domain);
 	const Analyzerish = /trace|analys|analyze|diagnos|inspect|report|graph/.test(Domain);
 	const Rendererish = /panel|view|render|icon|design|style|visual/.test(Domain);
-	const Orchestratorish = Entry.bundle === true || totals.tools > 0 || totals.services >= 2;
 
 	switch (Entry.kind) {
 		case "client":
@@ -220,9 +215,9 @@ const roleOf = (Structure, Entry, Domain) => {
 		case "hook":
 			switch (true) {
 				case Storeish:
-					return { role: "store", observed: true };
+					return { role: "store", observed: tokens.state.length > 0 };
 				case Routerish:
-					return { role: "router", observed: true };
+					return { role: "router", observed: totals.injections >= 3 };
 				case Transformerish:
 					return { role: "transformer", observed: tokens.transform.length > 0 };
 				case Governorish:
@@ -237,24 +232,25 @@ const roleOf = (Structure, Entry, Domain) => {
 				case Governorish:
 					return { role: "governor", observed: totals.refusals >= 2 };
 				case Routerish:
-					return { role: "router", observed: true };
+					return { role: "router", observed: totals.injections >= 3 };
 				case Storeish:
-					return { role: "store", observed: true };
+					return { role: "store", observed: tokens.state.length > 0 };
 				case Rendererish:
 					return { role: "renderer", observed: true };
 				case Transformerish:
 					return { role: "transformer", observed: tokens.transform.length > 0 };
-				case Orchestratorish:
-					return { role: "orchestrator", observed: true };
 				default:
-					return { role: "orchestrator", observed: false };
+					return {
+						role: "orchestrator",
+						observed: Entry.bundle === true || totals.tools > 0 || totals.services >= 2,
+					};
 			}
 		case "lib":
 			switch (true) {
 				case Analyzerish:
 					return { role: "analyzer", observed: false };
 				case Storeish:
-					return { role: "store", observed: true };
+					return { role: "store", observed: tokens.state.length > 0 };
 				case Transformerish:
 					return { role: "transformer", observed: tokens.transform.length > 0 };
 				default:

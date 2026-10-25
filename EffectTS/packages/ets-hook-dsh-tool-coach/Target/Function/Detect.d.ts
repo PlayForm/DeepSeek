@@ -1,4 +1,4 @@
-import type { CoachRow, Detection } from "../Interface/Execution.js";
+import type { CoachRow, Detection } from "@Interface/Execution.js";
 export default _default;
 /**
  * Detect one judged terminal call. `Command` is the raw command string; `Rows`

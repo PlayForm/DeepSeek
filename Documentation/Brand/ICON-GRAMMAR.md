@@ -35,6 +35,29 @@ Nothing here is drawn by hand. Every icon is a pure function of a genome (the pa
 features + changelog digest), so a package change regenerates its icon and the same package content
 always regenerates the same bytes.
 
+## 0. Current pipeline (2026-10-25) - supersedes sections 3, 4, 5.1, 7 and 9
+
+The generator now runs four stages, each with its own owner file:
+
+1. **Profile.** `Infer.mjs` reads the package source into a structure (modules, import graph,
+   semantic tokens) and a functional profile: role (interceptor, transformer, router, store,
+   renderer, governor, orchestrator, analyzer), flow, stateful, streaming, branching, containment,
+   weight, evidence, confidence.
+2. **Composition.** `Composition.mjs` maps the profile to a design: form and motif family, symmetry
+   (4/6/8/12 from branching), phase (0 when streaming), density (weight), void (containment), accent
+   placement, and the applied compatibility rules.
+3. **Transliteration.** `Transliterate.mjs` draws the chosen family and attaches one layer per
+   semantic token the package actually has (gate loops, tool beads, seam ticks, ledger beads,
+   injection rings, medallion, stream spiral, state nest, trace echo, transform cusps, evolution
+   rings).
+4. **Slab render.** `RenderScene.mjs` merges each layer into ONE path and paints the layers bottom
+   to top (frame, body, detail, core). The SVG is the top view of that stack, not a pile of strokes.
+
+`ICON-METHODS.md` carries the family table, the matrix, the rules, and the arbiters. Sections 3-5
+and 7 below describe the retired first-generation vocabulary (the method pool and the annulus
+collage); they are kept because their measurements of the reference sheet still hold, not because
+the generator uses them.
+
 ## 1. The sheet, measured
 
 The sheet is a 6 x 5 lattice of 29 motifs on cream paper (the last row carries four). Measurements
@@ -271,38 +294,39 @@ fails until the asset is regenerated. That is the whole update loop.
 
 ```text
 Maintain/Icon/
-  Prng.mjs      digest(), seedOf(parts), stream(seed) -> { next, float, range, jitter, pick }
-  Palette.mjs   palettesOf(kind) -> { ink, accent, tint }
-  Curve.mjs     the FUNCTION layer: superellipse(), lobedRing(), waveRing(), circle(),
-                arc(), dotRing(), tickRing(), phyllotaxis(), pathOf()
-  Compose.mjs   collageOf(genome, plan) -> the disjoint-zone collage (section 4.3)
-  Grammar.mjs   planOf(genome) -> { grammar, variant, order, arms, rings, orbit,
-                orbitGlyph, rim, rimGap, rimNotch, core, detail, mode, mutations, jitter }
-  Feature.mjs   featuresOf(root, dir) -> the section 6 fields
-  Mutation.mjs  mutationsOf(changelogText), evolutionOf(mutations)
-  Render.mjs    renderMono(genome, plan), renderColour(genome, plan)
-  Index.mjs     packages(root), genomeOf(root, entry), build(root), write(root), check(root)
+  Prng.mjs          digest(), seedOf(parts), stream(seed)
+  Palette.mjs       palettesOf(kind) -> { ink, accent, accent2, tint }
+  Curve.mjs         pathOf() and the legacy samplers
+  Motif.mjs         the 14 families + the primitives + Ornament
+  Infer.mjs         structureOf(root, dir), profileOf(structure, entry)
+  Composition.mjs   compositionOf(profile, seed) -> the design decision
+  Transliterate.mjs sceneOf(genome, plan) -> the layered scene
+  Component.mjs     buildComponent(), clearanceReport()
+  Envelope.mjs      envelopeOf(), offsetPolyline(), clearanceOf()
+  RenderScene.mjs   renderMono(), renderColour() - the slab stack
+  Grammar.mjs       planOf(genome) -> { family, form, role, phase, density, void,
+                    accent, rules, order, fill, mode, mutations, ... }
+  Feature.mjs       featuresOf(root, dir) -> the package facts
+  Mutation.mjs      mutationsOf(changelogText), evolutionOf(mutations)
+  Index.mjs         packages(root), genomeOf(root, entry), build(root), write(root), check(root)
 Maintain/Generate-Icons.mjs   the CLI: no flag writes, --check verifies, --report prints the table
 Maintain/Icon/Ledger.json     the generated genome ledger (committed)
-Test/Icons/Check.mjs          the arbiter: 14 deterministic checks
+Test/Icons/Check.mjs          determinism, coverage, size, uniqueness, twins, ledger, tree
+Test/Icons/Topology.mjs       per-family topology contracts
+Test/Icons/Interventions.mjs  one-feature-at-a-time scene changes
+Test/Icons/Diversity.mjs      collection-level descriptor distribution
+Test/Icons/Profiles.mjs       the functional profile pass
+Test/Icons/Composition.mjs    the composition matrix and its rules
 ```
 
-`Geometry.mjs` is retired: its assembled primitives were the source of the interlacing the collage
-rule forbids. The file may still exist on disk while the tree settles; nothing imports it.
-
-The ledger records, per package: package, dir, kind, tree, version, seed, grammar, order, arms,
-`rings` (the section 7 inner rings, `min(3, injections)`), orbit, rim, mode, `evolution` (the
-section 8 `{ rings, ticks }`), the two hashes, and the two paths. The evolution rings are the
-changelog's; the `rings` field is the injection gate's. Both are recorded because they answer
-different questions.
-
-Every grammar also carries a seeded `variant` (0, 1 or 2, picked from the PRNG): the body, the rim
-choice and the order draw from it, so two packages of one kind differ in their composition and not
-only in their jitter.
+The ledger records, per package: package, dir, kind, tree, version, seed, grammar, family, order,
+arms, `rings`, orbit, rim, mode, the two hashes, and the two paths.
 
 Acceptance: `node Maintain/Generate-Icons.mjs --check` exits 0 on a clean tree; two consecutive
 writes are byte-identical; all 102 icons are distinct; `node Test/Icons/Check.mjs` reports 14 of 14;
-`node Maintain/Generate-Marketplace.mjs --check` passes with the icons wired; the site builds.
+`node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`, `Profiles.mjs` and
+`Composition.mjs` all pass; `node Maintain/Generate-Marketplace.mjs --check` passes with the icons
+wired; the site builds.
 
 ## 11. Palette (per package, from the dusk banner)
 
