@@ -1,4 +1,4 @@
-import type { ClientContext } from "@Interface/Client.js";
+import type { ClientContext } from "./Interface/Client.js";
 /** Required client services: the slot registry and the locale service. */
 export declare const inject: string[];
 /**

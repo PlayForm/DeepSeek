@@ -1,4 +1,4 @@
-import type Span from "@Interface/Span.js";
+import type Span from "./Span.js";
 export default interface Plan {
     /** The identifier the plan renames. */
     from: string;

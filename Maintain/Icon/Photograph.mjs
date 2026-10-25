@@ -12,7 +12,11 @@ import { digest, stream } from "./Prng.mjs";
 
 const inside = (Point, Polygon) => {
 	let Hit = false;
-	for (let Index = 0, Other = Polygon.length - 1; Index < Polygon.length; Other = Index, Index += 1) {
+	for (
+		let Index = 0, Other = Polygon.length - 1;
+		Index < Polygon.length;
+		Other = Index, Index += 1
+	) {
 		const Left = Polygon[Index];
 		const Right = Polygon[Other];
 		if (

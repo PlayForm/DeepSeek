@@ -1,3 +1,8 @@
+// The shared contact sheet of the degenerative generators.
+//
+// Genesis and Photographs differ only in what they draw; the 96 px tile, the
+// 17-column grid and the sharp composite are identical, so both call this one
+// leaf after their own Write step produced the per-icon PNGs.
 import { join } from "node:path";
 
 import sharp from "sharp";

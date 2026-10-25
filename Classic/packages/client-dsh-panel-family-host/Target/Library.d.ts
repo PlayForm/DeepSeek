@@ -1,4 +1,4 @@
-import Apply from "@Function/Apply.js";
+import Apply from "./Function/Apply.js";
 export declare const name = "client-dsh-panel-family-host";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
