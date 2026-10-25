@@ -56,9 +56,11 @@ actually has (the completion spec's wave 2c re-spec,
 [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): each
 `Source/Test/<Folder>/README.md`'s `## Expected count`, the folders that exist, each folder's
 `Test.ts`, the aggregate runner's roster (`Target/Test/<Folder>/Test.js`), and - when the workspace
-graph service is present - its `Test` nodes for the package. A drift (a folder without a README
-count, a README count whose `Test.ts` is gone, a suite the runner never runs, a graph node whose
-file is gone) emits ONE note naming the drifted files and the expected/actual counts.
+graph service is present - its `Test` nodes for the package.
+
+A drift (a folder without a README count, a README count whose `Test.ts` is gone, a suite the runner
+never runs, a graph node whose file is gone) emits ONE note naming the drifted files and the
+expected/actual counts.
 
 It is **read-only**: `node:fs` reads, never a write.
 

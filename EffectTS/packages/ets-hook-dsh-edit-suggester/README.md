@@ -23,27 +23,26 @@ trigger ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER
 The search-suggester's evidence shows the edit is where the discovery happens: the model edited its
 way to the target sets it never thought to open.
 
-The repo's convention is that a file rarely stands
-alone - the version lives in 36 manifests, 6 `Apply.ts` files, the CHANGELOG and the prose; a
-`Config.ts` edit must also land in the README's Config section, SCHEME.md, the `cordis.patch.yml`
-row, and the byte-exact test.
+The repo's convention is that a file rarely stands alone - the version lives in 36 manifests, 6
+`Apply.ts` files, the CHANGELOG and the prose; a `Config.ts` edit must also land in the README's
+Config section, SCHEME.md, the `cordis.patch.yml` row, and the byte-exact test.
 
-The search consumer deliberately refuses to own the edit transform;
-this consumer owns the NOTIFY side of it: it names the companions, never the change.
+The search consumer deliberately refuses to own the edit transform; this consumer owns the NOTIFY
+side of it: it names the companions, never the change.
 
 ## The families
 
 Seven, priority order: `Version` (0.85 - a wrong version companion set is costly), `Config`,
 `Symbol`, `Test`, `Doc`, `Prose`, `Workflow`.
 
-Each family is a pack row: its path rules (regexes on
-the edited path with weights) and its standard companion set - each companion a path or glob with a
-prior and **one reason phrase** ("the Config section", "the byte-exact assertion", "the long tail").
-A companion without a reason is not emitted.
+Each family is a pack row: its path rules (regexes on the edited path with weights) and its standard
+companion set - each companion a path or glob with a prior and **one reason phrase** ("the Config
+section", "the byte-exact assertion", "the long tail"). A companion without a reason is not emitted.
 
 The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `edit/` domain. A
-repository that ships `.dsh/pack.yml` (or a user-layer pack at
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `edit/` domain.
+
+A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `edit/` families; a repository without a pack
 stays silent.
 
@@ -52,24 +51,27 @@ stays silent.
 The same algebra as the search consumer: `k = sigmoid(sum(weights) - 0.6)`, the candidate scoring
 over the **pickable heuristics** (see below), and the noise control - a cooldown, a dedupe, a
 per-turn cap, and the already-touched filter (companions the model edited earlier this turn are
-dropped; when nothing remains, the verdict is an `already-touched` abstention). Every abstention and
-suppression is a ledger line.
+dropped; when nothing remains, the verdict is an `already-touched` abstention).
+
+Every abstention and suppression is a ledger line.
 
 ## The learning layer (D8)
 
 Every emitted note - and every gated silence worth learning from (`low-confidence`,
 `already-touched`) - records a **decision**: the family, the companion rows with their six pickable
 heuristic values (`scope`, `graph`, `prior`, `literal`, `history`, `accept`), the effective weight
-table, the enabled list, and a `pending` outcome placeholder. The record is logged (`decided ...`)
-and stored through the optional **pattern service** (`ctx.get("pattern")`, probed per use, never an
-inject); without one it lives in a bounded in-memory fallback (`storeLimit`, default 512), which is
-per instance and documented as such.
+table, the enabled list, and a `pending` outcome placeholder.
+
+The record is logged (`decided ...`) and stored through the optional **pattern service**
+(`ctx.get("pattern")`, probed per use, never an inject); without one it lives in a bounded in-memory
+fallback (`storeLimit`, default 512), which is per instance and documented as such.
 
 The note opens a **follow-through window** counted in judged calls (never a timer): a later call
 that names one of the note's companions is an **accept** for that companion and its family
 (`accepted <Family> <path>`); a window that reaches `learnWindow` judged calls untouched closes as a
-**soft reject** (`rejected <Family> <n> companions`). Both fill the decision record's outcome and
-move the learned accept rates.
+**soft reject** (`rejected <Family> <n> companions`).
+
+Both fill the decision record's outcome and move the learned accept rates.
 
 The score is `sum over the enabled heuristics of weight * value`:
 
@@ -90,9 +92,10 @@ re-weight any of them (`weights`), and the decision record plus the `decided` li
 
 One note, never a content replacement, never a claim of the Transform: the post-execute listener
 runs after the ccr and the normalize family and only adds `additionalContexts`. The note carries the
-plugin's own source label (`{kind: "edit-suggester", form: "notice", summary}`). The
-`grep`/`read`/`bash` calls are not judged - this is the edit side of the family, disjoint from the
-search suggester's trigger set.
+plugin's own source label (`{kind: "edit-suggester", form: "notice", summary}`).
+
+The `grep`/`read`/`bash` calls are not judged - this is the edit side of the family, disjoint from
+the search suggester's trigger set.
 
 ## The waterfall discipline
 
