@@ -1,5 +1,10 @@
 # @playform/hook-dsh-search-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The search-intent **target suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** and, when a
@@ -7,6 +12,17 @@ search-class call (`grep`, `glob`, `read`, or a search-shaped `bash`) matches on
 kinds, prepends ONE labeled `additionalContexts` note naming the likely target set - the standard
 locations where that intent lives in this repo - **before** the model burns the searches. Plan:
 [SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener (plain registration, after the ccr's
+  `{prepend: true}` listener): one `additionalContexts` note, never a content replacement.
+- The `suggestion_dismiss` tool (registered through the loader's tool API when the host exposes
+  `ctx.tools`): the durable dismissal record.
+- The optional second surface (`sectionMode: "sticky"`, off by default): one `system-prompt/assemble`
+  section, rebuilt on a TTL and invalidated on `tools/change`.
+- The knowledge file (`persistPath`, `~/.dsh/search-suggester/knowledge.json`), written atomically.
+- No provided service; the optional `ctx.workspaceGraph` is probed through `ctx.get` (no inject).
 
 ## Why
 
@@ -102,14 +118,33 @@ transform is fail-open (an internal error logs a warning and the decision passes
 never fails a tool call); plain registration, after the ccr and the normalize family. The
 `write`/`edit`/`raw-write` calls are learning signals only - a note after the edit is too late.
 
-## Config
+## The ledger
+
+The lines go to `logFile` (the factory's `Append`; each line is `[<ISO>] <message>`):
+
+```text
+activated (... intents <n> ... threshold <k>)
+suggest <intent> <k> <n> targets <path>
+suppressed <reason> <intent>
+abstained foreign-workspace
+abstained no-companions <intent> <k>
+followed <intent> <path>
+ignored <intent>
+dismissed <intent> <path|*>
+section rebuilt (ttl <n>)
+```
+
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every tuning knob is volatile (hot-editable, no
 remount); the structural knobs (`persistPath`, `refreshOnBoot`) remount on edit, and `indexPath` is
 retired by the P2 re-spec (kept so an existing profile loads unchanged). Ships **disabled** - enable
 by explicit ACTIVATE in the profile.
 
-## The smokes
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`,
+Test tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
 its own `## Expected count`: the five original folders (Pack-Driven, Post-Execute-And-Learning,
@@ -118,6 +153,13 @@ wave (Projection, Dismiss, Seed, Benchmark), and the plan's nine suites - three 
 original folders (Delivery-And-Label and Learning-Update by Post-Execute-And-Learning, Ledger by
 Wiring-And-Ledger) and six added here (Classification, Threshold-And-Cooldown, Abstention,
 Persistence, Index-Refresh, Noise). The aggregate prints 126 PASS.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra.
+- [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
+  approved re-spec (section 3, the graph projection).
 
 ## License
 

@@ -155,8 +155,8 @@ The body keeps the original content. Where a document is written new, it follows
    runs several ideas together) is split at the topic-sentence boundary - each new paragraph starts
    with its own lead sentence (`It also registers...`, `The @-sentence identity:`) and is separated
    from the previous one by ONE blank line. Long enumerations of methods or features become bullet
-   lists; the inline markdown (bold, links, code spans) is preserved verbatim. Prettier re-wraps each
-   paragraph at the configured printWidth. The worked example (2026-10-25): the dash-normalizer
+   lists; the inline markdown (bold, links, code spans) is preserved verbatim. Prettier re-wraps
+   each paragraph at the configured printWidth. The worked example (2026-10-25): the dash-normalizer
    README's single block becomes three paragraphs - the role, the raw-write tool, the identity and
    the visibility - with the same words.
 

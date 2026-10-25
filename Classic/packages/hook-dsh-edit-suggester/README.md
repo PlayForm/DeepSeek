@@ -1,5 +1,8 @@
 # @playform/hook-dsh-edit-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
 The modification-intent **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release). A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** for the
@@ -9,6 +12,13 @@ the model has not touched yet - **"this file rarely stands alone."** The second 
 search-suggester's pattern algebra and its two-consumer extraction trigger
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) sections 1.4 and
 8).
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener for the modification tools: one labeled
+  `additionalContexts` note, never a content replacement.
+- No tool, no service: the note is the only surface; the learning layer records through the optional
+  `pattern` service (`ctx.get("pattern")`, probed per use) or a bounded in-memory fallback.
 
 ## Why
 
@@ -86,11 +96,38 @@ search suggester's trigger set.
 transform is fail-open (an internal error logs a warning and the decision passes through - a note
 never fails a tool call).
 
-## Config
+## The ledger
+
+The lines are prefixed `hook-dsh-edit-suggester: ` and go to `logFile`, mirroring the doc suggester:
+
+```text
+activated (...)
+suggest <family> <k> <n> companions <path>
+decided <family>
+accepted <family> <path>
+rejected <family> <n> companions
+suppressed <reason> <family>
+abstained <reason> <family> <k>
+abstained foreign-workspace
+hook-dsh-edit-suggester: <error>
+```
+
+## The configuration
 
 See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
 The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
 **disabled** - enable by explicit ACTIVATE in the profile.
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`Learning-Loop`, `Pack-Driven`, `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
+  algebra (sections 1.4 and 8, the second consumer).
 
 ## License
 

@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /** The agent key for the main conversation's pool. */
 export declare const MAIN = "main";
 export default _default;

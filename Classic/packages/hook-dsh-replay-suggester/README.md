@@ -1,5 +1,10 @@
 # @playform/hook-dsh-replay-suggester
 
+> v0.1.0 - UNPUBLISHED - plan:
+> [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
+
+## The role
+
 The replay-suggester hook: a DeepSeek Harness plugin that answers the question **"the last time this
 was done, what did the model actually touch and how did it verify?"**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.3). When the
@@ -19,6 +24,15 @@ the verification command.
 - Without a recalled record the hook **abstains** (`replay no-memory`): a replay answer without a
   record is a guess, and the plan forbids the guess (§2.4).
 - Privacy posture (plan §5.4): repo-relative paths only, no file contents, no user text, local only.
+
+## The surfaces
+
+- The `tools/post-execute` waterfall listener (after the ccr's `{prepend: true}` listener): one
+  `additionalContexts` notice, never a content replacement.
+- The `agent/pre-step` listener: the per-turn reset of the note counter.
+- The recall store: the `replay_history` storage-domain KV domain, or the JSON fallback beside the
+  seeded store (`~/.dsh/replay-suggester/`).
+- Injected services: `pluginFactory`. No tool, no provided service.
 
 ## How it works
 
@@ -51,9 +65,67 @@ repository that ships `.dsh/pack.yml` (or a user-layer pack at
 without a pack stays silent. The recalled companion still comes from the history store - the pack
 supplies the gate and the caveat, never the companion.
 
-## Status
+## The ledger
 
-The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
-recall store's producer landed (the completion spec's wave 2c re-spec); the live activation (the
-profile row flip and the restart) is the remaining end-phase step (POC-BRIEF.md §8). Ships
-`enabled: false` in the bundle patch.
+The lines are prefixed `replay-suggester: ` and go to `logFile`:
+
+```text
+activated (...)
+suggest <id> <k> <n> candidates call <tool>
+suppressed <verdict> <id>
+abstained ambiguous <id> <k>
+abstained no-companions <id> <k>
+abstained no-memory <id> <k>
+abstained foreign-workspace
+recorded <intent> <path> (<n> in store)
+history loaded <n> records
+history missing (starting empty)
+history corrupt (starting empty) <error>
+store recovered <n> entries (<source>)
+store empty (starting fresh)
+store open failed: <reason>
+store write failed: <reason>
+replay-suggester: <error>; the note is skipped
+```
+
+## The configuration
+
+See [SCHEME.md](./SCHEME.md) for the full schema. Every field is a volatile cell:
+
+| Field             | Default                                             | Meaning                         |
+| ----------------- | --------------------------------------------------- | ------------------------------- |
+| `enabled`         | `true`                                              | the plugin ships enabled        |
+| `log`             | `true`                                              | the ledger switch (shared cell) |
+| `logFile`         | `~/.dsh/playform/hook-dsh-replay-suggester.log`     | the ledger                      |
+| `threshold`       | `0.75`                                              | the gate threshold `k`          |
+| `maxCandidates`   | `7`                                                 | the bound on named candidates   |
+| `maxNoteChars`    | `1200`                                              | the note length bound           |
+| `cooldownCalls`   | `6`                                                 | the cooldown between notes      |
+| `maxNotesPerTurn` | `3`                                                 | the per-turn cap                |
+| `intents`         | `[]`                                                | the intent filter               |
+| judged tools      | `["bash", "edit", "glob", "grep", "read", "write"]` | the judged calls                |
+| `exclude`         | `["node_modules", "Target", ".git", "dist"]`        | the excluded paths              |
+| `historyPath`     | `~/.dsh/replay-suggester/history.json`              | the seeded store                |
+| `learnWindow`     | `2`                                                 | the episode width in calls      |
+| `recordPath`      | `~/.dsh/replay-suggester/replay_history.json`       | the producer's JSON fallback    |
+| `historyDepth`    | `32`                                                | the entry bound                 |
+
+## The build and the tests
+
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
+`History-Producer`, `Loader-And-History`, `Pack-Driven`, `Pipeline-And-Recall`, `Workspace-Gate`.
+
+## The plan
+
+- [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - section 9.3, the
+  recall answer.
+- [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
+  wave 2c re-spec (the producer).
+- The package, the Source, the smoke suites and the build pass are complete, and the recall store's
+  producer landed; the live activation (the profile row flip and the restart) is the remaining
+  end-phase step (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+
+## License
+
+CC0-1.0.
