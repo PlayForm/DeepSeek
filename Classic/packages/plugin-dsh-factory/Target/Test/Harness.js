@@ -37,6 +37,7 @@ const Make = (Factory, Raw = {}) => {
   if (Factory) {
     Factory.PendingJournal = [];
     Factory.SharedJournal = void 0;
+    Factory.SharedJournals = void 0;
   }
   const Over = Raw.files ? Raw : { ...Raw, files: {} };
   const provided = {};

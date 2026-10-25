@@ -15,7 +15,6 @@
 //
 // Usage: node Maintain/Generate-Specimens.mjs
 //===============================================================================
-
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -36,7 +35,10 @@ const Table = (Rows, Key) =>
 	[
 		`| ${Key} | a | b | actual | required | margin | verdict |`,
 		"| --- | --- | --- | ---: | ---: | ---: | --- |",
-		...Rows.map((Row) => `| ${Row[Key]} | ${Row.a} | ${Row.b} | ${Row.actual} | ${Row.required} | ${Row.margin} | ${Row.ok ? "clear" : "OVERLAP"} |`),
+		...Rows.map(
+			(Row) =>
+				`| ${Row[Key]} | ${Row.a} | ${Row.b} | ${Row.actual} | ${Row.required} | ${Row.margin} | ${Row.ok ? "clear" : "OVERLAP"} |`,
+		),
 	].join("\n");
 
 const Index = `# Specimens - the construction proof sheet
@@ -87,6 +89,10 @@ ${Views.failed.length === 0 && Compositions.failed.length === 0 ? "All specimens
 writeFileSync(join(Out, "index.md"), Index);
 
 console.log(`specimens: ${Views.report.length} clearance rows, ${Views.failed.length} overlaps`);
-console.log(`compositions: ${Compositions.report.length} clearance rows, ${Compositions.failed.length} overlaps`);
-console.log(`written: ${join(Out, "Views.svg")}, ${join(Out, "Compositions.svg")}, ${join(Out, "index.md")}`);
+console.log(
+	`compositions: ${Compositions.report.length} clearance rows, ${Compositions.failed.length} overlaps`,
+);
+console.log(
+	`written: ${join(Out, "Views.svg")}, ${join(Out, "Compositions.svg")}, ${join(Out, "index.md")}`,
+);
 process.exit(Views.failed.length + Compositions.failed.length === 0 ? 0 : 1);

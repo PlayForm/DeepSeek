@@ -1,13 +1,12 @@
 import Schema from "@deepseek-ai/schemastery";
-export default _default;
-declare function _default(Shared?: {
+declare const _default: (Shared?: {
     log?: boolean;
     logFile?: string;
     updateCooldownMs?: number;
     mutationTools?: string[];
     exclude?: string[];
     policyFile?: string;
-} | false, Module?: Record<string, unknown>): Schema<Schemastery.ObjectS<NoInfer<{
+} | false, Module?: Record<string, unknown>) => Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
@@ -28,3 +27,4 @@ declare function _default(Shared?: {
     policyFile: Schema<string, string, "defined">;
     exclude: Schema<string[], string[], "defined">;
 }>>, "plain">;
+export default _default;

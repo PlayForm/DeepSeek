@@ -9,14 +9,28 @@
 // Components stay separate through validation and composition; merging paths is
 // an export optimisation that happens last, if at all.
 
-import { clearanceOf, envelopeOf, footprintOf, rotatePoints, scalePoints, translatePoints } from "./Envelope.mjs";
+import {
+	clearanceOf,
+	envelopeOf,
+	footprintOf,
+	rotatePoints,
+	scalePoints,
+	translatePoints,
+} from "./Envelope.mjs";
 
 const defaults = {
 	layer: "body",
 	semantic: { feature: "unknown", role: "support" },
 	geometry: { method: "open-stroke", topology: "open", parameters: {} },
 	transform: { x: 0, y: 0, rotation: 0, scaleX: 1, scaleY: 1 },
-	stroke: { width: 1.5, widthProfile: "constant", start: "butt", end: "butt", join: "miter", outlineWidth: 0.7 },
+	stroke: {
+		width: 1.5,
+		widthProfile: "constant",
+		start: "butt",
+		end: "butt",
+		join: "miter",
+		outlineWidth: 0.7,
+	},
 	composition: { operation: "paint", collisionGroup: "body", minimumClearance: 1.5 },
 	material: { tone: "ink" },
 };
@@ -76,14 +90,23 @@ export const buildComponent = (Spec) => {
 	const Envelope = envelopeOf(Points, Widths, Closed, Options);
 	const Footprint = footprintOf(Points, Widths, Closed, Options);
 	const FootprintPoints = FootprintPointsOf(Points, Widths, Closed, Options);
-	return { ...Component, centerline: Points, widths: Widths, envelope: Envelope, footprint: Footprint, footprintPoints: FootprintPoints };
+	return {
+		...Component,
+		centerline: Points,
+		widths: Widths,
+		envelope: Envelope,
+		footprint: Footprint,
+		footprintPoints: FootprintPoints,
+	};
 };
 
 /** The footprint polygons (outer, and inner for closed) used by clearance. */
 export const FootprintPointsOf = (Points, Widths, Closed, Options = {}) => {
 	const Contour = Options.contour ?? 0.7;
 	const Grown = (Array.isArray(Widths) ? Widths : [Widths]).map((Value) => Value + Contour * 2);
-	const Halves = (Array.isArray(Grown) ? Grown : Points.map(() => Grown)).map((Value) => Value / 2);
+	const Halves = (Array.isArray(Grown) ? Grown : Points.map(() => Grown)).map(
+		(Value) => Value / 2,
+	);
 	const Outer = Points.map((Entry, Index) => {
 		const Previous = Points[(Index - 1 + Points.length) % Points.length];
 		const Next = Points[(Index + 1) % Points.length];
@@ -111,7 +134,8 @@ export const clearanceReport = (Components, Gap = 1.5) => {
 				{ points: B.centerline, width: WidthB, contour: B.stroke.outlineWidth },
 				Gap,
 			);
-			const Decoration = A.composition.operation === "decorate" || B.composition.operation === "decorate";
+			const Decoration =
+				A.composition.operation === "decorate" || B.composition.operation === "decorate";
 			Rows.push({
 				a: A.id,
 				b: B.id,

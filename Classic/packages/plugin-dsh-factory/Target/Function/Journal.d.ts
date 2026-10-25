@@ -1,6 +1,5 @@
 import type State from "@Interface/State.js";
-export default _default;
-declare function _default(Factory: {
+declare const _default: (Factory: {
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
     SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
     PendingJournal?: {
@@ -9,4 +8,5 @@ declare function _default(Factory: {
         detail: string;
         at: number;
     }[] | undefined;
-}, State: State, Event: string, Path: string, Detail: string, At?: number): void;
+}, State: State, Event: string, Path: string, Detail: string, At?: number) => void;
+export default _default;

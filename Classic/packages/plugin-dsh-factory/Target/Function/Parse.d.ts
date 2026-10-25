@@ -1,2 +1,2 @@
+declare const _default: (Path: string) => unknown;
 export default _default;
-declare function _default(Path: string): unknown;

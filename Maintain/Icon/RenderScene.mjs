@@ -15,17 +15,25 @@ const TONES = ["ink", "accent", "accent2"];
 
 const sceneFor = (Genome, Plan) => {
 	const Scene = sceneOf(Genome, Plan, Genome.manifest ?? { tokens: {} });
-	return Scene.components.map((Component) => ({ ...buildComponent(Component), fill: Component.fill }));
+	return Scene.components.map((Component) => ({
+		...buildComponent(Component),
+		fill: Component.fill,
+	}));
 };
 
 const label = (Genome, Plan) => `${Genome.package} - ${Plan.grammar}`;
 
-const escape = (Text) => Text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const escape = (Text) =>
+	Text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 const documentOf = ({ Genome, Plan, Palette, Mono }) => {
 	const Built = sceneFor(Genome, Plan);
 	const Prefix = String(Genome.dir).replace(/[^a-z0-9-]/gi, "-");
-	const Paints = [Mono ? "currentColor" : Palette.ink, Mono ? "currentColor" : Palette.accent, Mono ? "currentColor" : Palette.accent2];
+	const Paints = [
+		Mono ? "currentColor" : Palette.ink,
+		Mono ? "currentColor" : Palette.accent,
+		Mono ? "currentColor" : Palette.accent2,
+	];
 	const Paths = [[], [], []];
 	const Fills = [];
 	for (const Component of Built) {
@@ -37,16 +45,25 @@ const documentOf = ({ Genome, Plan, Palette, Mono }) => {
 			Fills.push({ path: Path, fill: Component.fill });
 		}
 	}
-	const Defs = Paths.map((Group, Index) => (Group.length === 0 ? "" : `\t\t<path id="${Prefix}-${TONES[Index]}" d="${Group.join(" ")}"/>`)).join("\n");
+	const Defs = Paths.map((Group, Index) =>
+		Group.length === 0
+			? ""
+			: `\t\t<path id="${Prefix}-${TONES[Index]}" d="${Group.join(" ")}"/>`,
+	).join("\n");
 	const FillPass = Fills.map((Fill) => {
-		const Paint = Fill.fill === "tint" ? (Palette?.tint ?? "currentColor") : Mono ? "currentColor" : Palette.accent;
+		const Paint =
+			Fill.fill === "tint"
+				? (Palette?.tint ?? "currentColor")
+				: Mono
+					? "currentColor"
+					: Palette.accent;
 		const Opacity = Fill.fill === "tint" ? (Mono ? "0.10" : "0.85") : Mono ? "0.18" : "0.95";
 		return `\t<path d="${Fill.path}" fill="${Paint}" fill-opacity="${Opacity}" fill-rule="evenodd" stroke="none"/>`;
 	}).join("\n");
 	const ContourPass = Paths.map((Group, Index) =>
 		Group.length === 0
 			? ""
-			: `\t<g fill="none" stroke="${Paints[Index]}" stroke-width="1.4" stroke-opacity="${Mono ? 0.25 : 0.30}" stroke-linejoin="round">\n\t\t<use href="#${Prefix}-${TONES[Index]}"/>\n\t</g>`,
+			: `\t<g fill="none" stroke="${Paints[Index]}" stroke-width="1.4" stroke-opacity="${Mono ? 0.25 : 0.3}" stroke-linejoin="round">\n\t\t<use href="#${Prefix}-${TONES[Index]}"/>\n\t</g>`,
 	).join("\n");
 	const BodyPass = Paths.map((Group, Index) =>
 		Group.length === 0
@@ -74,7 +91,8 @@ ${BodyPass}${Trace}
 export const renderMono = (Genome, Plan) => documentOf({ Genome, Plan, Palette: null, Mono: true });
 
 /** The colour document: the per-package palette, the marketplace asset. */
-export const renderColour = (Genome, Plan) => documentOf({ Genome, Plan, Palette: palettesOf(Genome), Mono: false });
+export const renderColour = (Genome, Plan) =>
+	documentOf({ Genome, Plan, Palette: palettesOf(Genome), Mono: false });
 
 /** The scene of one package, for the ledger and the checks. */
 export const sceneOfPackage = (Genome, Plan) => sceneFor(Genome, Plan);

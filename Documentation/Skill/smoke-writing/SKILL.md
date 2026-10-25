@@ -1,7 +1,13 @@
 ---
 name: smoke-writing
-description: "The family's smoke-suite discipline: fake-context plus real-built-library harness, byte-identical ledger assertions, additive coverage, vacuously-green and swapped-assert traps, smoke-versus-live fidelity gap, Classic/EffectTS parity rule."
-whenToUse: Before creating, modifying, or debugging any smoke suite or per-test folder in either tree, when a suite fails and adjusting an assertion tempts you, or when a live bug must become a regression test.
+description:
+    "The family's smoke-suite discipline: fake-context plus real-built-library harness,
+    byte-identical ledger assertions, additive coverage, vacuously-green and swapped-assert traps,
+    smoke-versus-live fidelity gap, Classic/EffectTS parity rule."
+whenToUse:
+    Before creating, modifying, or debugging any smoke suite or per-test folder in either tree, when
+    a suite fails and adjusting an assertion tempts you, or when a live bug must become a regression
+    test.
 version: 2.0.0
 updated: 2026-10-20
 ---

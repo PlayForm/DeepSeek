@@ -30,13 +30,13 @@ observe -> semantics -> operate -> govern -> authority -> approve -> merge
   no rename), so the symbols stay lexical and every "cannot answer" path (absent seam, no provider,
   a failed query) falls back to the lexical reference list. The seam is probed, never injected.
 - **The index**: on every fs/observed event heard on the ROOT context (the factory's Wire
-  registration) the stale model for the path is dropped and the monotonic index revision advances.
-  A **repeat event** - the same path carrying the same version within the coalescing window - is
-  dropped silently (the guard `Function/Duplicate`, the monitor's clock pattern - no timer, 2 s,
-  the `State.Now` test seam overrides it): the model for that file state is already dropped, and a
-  model rebuilt since was built from the same version, so it stays fresh - the last distinct
-  version always wins. The conversation never sees the index until an event surfaces it (the
-  visibility rule).
+  registration) the stale model for the path is dropped and the monotonic index revision advances. A
+  **repeat event** - the same path carrying the same version within the coalescing window - is
+  dropped silently (the guard `Function/Duplicate`, the monitor's clock pattern - no timer, 2 s, the
+  `State.Now` test seam overrides it): the model for that file state is already dropped, and a model
+  rebuilt since was built from the same version, so it stays fresh - the last distinct version
+  always wins. The conversation never sees the index until an event surfaces it (the visibility
+  rule).
 - **The rename semantics**: per-adapter. The rename means different things per format (the .ts
   symbol vs the .md link target vs the .json key); an extension with no adapter, or an adapter that
   cannot be certain, gets the refusal-to-guess answer - `undefined` plus one ledger line, never a

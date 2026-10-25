@@ -30,9 +30,9 @@ workspace's claims - the qualified freshness, the OutcomeEvidence, the justified
   principle - the Acar seam). A stale object is never guessed back to fresh: a revalidation is a new
   validation object, superseding the old. A **repeat event** - the same path carrying the same
   version within the coalescing window - runs no pass and records no line: that file state's
-  invalidation already ran (the version token identifies the state). The guard (`Function/Duplicate`,
-  the monitor's clock pattern - no timer, 2 s, the `State.Now` test seam overrides it) is on the
-  listener only; the explicit `invalidate(key)` calls are never coalesced.
+  invalidation already ran (the version token identifies the state). The guard
+  (`Function/Duplicate`, the monitor's clock pattern - no timer, 2 s, the `State.Now` test seam
+  overrides it) is on the listener only; the explicit `invalidate(key)` calls are never coalesced.
 - **The honesty rule**: the service records the caller's verdict; it never invents one. The sequence
   is the service's own monotonic counter - never a wall clock.
 - **The idle-forever posture**: ships disabled (`enabled: false`), never appears in the profile's

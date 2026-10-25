@@ -116,7 +116,8 @@ export const Lexicon = [
 export const entryOf = (Token) => Lexicon.find((Entry) => Entry.token === Token);
 
 /** The semantic reading of one visual layer (the reverse direction). */
-export const readLayer = (Layer) => Lexicon.filter((Entry) => Entry.layer === Layer).map((Entry) => Entry.reverse);
+export const readLayer = (Layer) =>
+	Lexicon.filter((Entry) => Entry.layer === Layer).map((Entry) => Entry.reverse);
 
 /** A stable angle for a named token, so the same gate always lands in the same place. */
 export const angleOf = (Name, Seed = 0) => {

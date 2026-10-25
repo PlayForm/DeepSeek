@@ -7,8 +7,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { dirname, join } from "node:path";
 
 import { featuresOf } from "./Feature.mjs";
-import { inferTokens, tokenCounts } from "./Infer.mjs";
 import * as Grammar from "./Grammar.mjs";
+import { inferTokens, tokenCounts } from "./Infer.mjs";
 import { evolutionOf, mutationsOf } from "./Mutation.mjs";
 import * as Palette from "./Palette.mjs";
 import * as Prng from "./Prng.mjs";

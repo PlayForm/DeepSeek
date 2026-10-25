@@ -1,6 +1,5 @@
 import { type State } from "@playform/ets-base-dsh";
-export default _default;
-declare function _default(State: State & {
+declare const _default: (State: State & {
     JournalDomain?: string | undefined;
 }, Facility: {
     open(spec: object): Promise<{
@@ -11,10 +10,12 @@ declare function _default(State: State & {
     }>;
 }, Factory?: {
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
+    SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
     PendingJournal?: {
         event: string;
         path: string;
         detail: string;
         at: number;
     }[] | undefined;
-}): Promise<void>;
+}) => Promise<void>;
+export default _default;

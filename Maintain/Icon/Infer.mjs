@@ -59,9 +59,12 @@ const walk = (Directory, Limit = 300) => {
 	return Files;
 };
 
-const unique = (Values) => [...new Set(Values.filter((Value) => typeof Value === "string" && Value.trim() !== ""))];
+const unique = (Values) => [
+	...new Set(Values.filter((Value) => typeof Value === "string" && Value.trim() !== "")),
+];
 
-const matches = (Text, Pattern, Group = 1) => unique([...Text.matchAll(Pattern)].map((Match) => Match[Group]));
+const matches = (Text, Pattern, Group = 1) =>
+	unique([...Text.matchAll(Pattern)].map((Match) => Match[Group]));
 
 /** A module-owned ledger string: lower-case words joined by a colon, no import. */
 const ledgerOf = (Text) =>
@@ -82,24 +85,46 @@ export const inferTokens = (Root, Directory) => {
 	const Domain = Directory.replace(/^ets-/, "").replace(/^(hook|plugin|client|lib)-dsh-/, "");
 
 	const Inject = Library.match(/inject\s*=\s*\[([\s\S]*?)\]/)?.[1] ?? "";
-	const Injections = unique([...Inject.matchAll(/["'`]([^"'`]+)["'`]/g)].map((Match) => Match[1]));
+	const Injections = unique(
+		[...Inject.matchAll(/["'`]([^"'`]+)["'`]/g)].map((Match) => Match[1]),
+	);
 	const Gates = matches(Source, /\.on\(\s*["'`]([^"'`]+)["'`]/g);
 	const Tools = matches(Source, /(?:registerTool|defineTool)\(\s*["'`]([^"'`]+)["'`]/g);
 	const Services = matches(Source, /ctx\.provide\(\s*["'`]([^"'`]+)["'`]/g);
 	const Seams = matches(Source, /(?:prepend|append)\s*:\s*true/g);
 	const Ledger = ledgerOf(Source);
-	const Refusals = unique([...Source.matchAll(/["'`]([^"'`\n]{0,80}(?:refus|skip|blocked|denied|escape|waive)[^"'`\n]{0,80})["'`]/gi)].map((Match) => Match[1]));
-	const Streams = /stream/i.test(Source) || /stream/i.test(Scheme) ? unique([...Source.matchAll(/["'`]([a-z-]*stream[a-z-]*)["'`]/gi)].map((Match) => Match[1])) : [];
+	const Refusals = unique(
+		[
+			...Source.matchAll(
+				/["'`]([^"'`\n]{0,80}(?:refus|skip|blocked|denied|escape|waive)[^"'`\n]{0,80})["'`]/gi,
+			),
+		].map((Match) => Match[1]),
+	);
+	const Streams =
+		/stream/i.test(Source) || /stream/i.test(Scheme)
+			? unique(
+					[...Source.matchAll(/["'`]([a-z-]*stream[a-z-]*)["'`]/gi)].map(
+						(Match) => Match[1],
+					),
+				)
+			: [];
 	const States = /storage|persist|state/i.test(Source) ? [Domain] : [];
 	const Traces = /trace|span/i.test(Source) ? [Domain] : [];
-	const Transforms = /normalize/.test(Domain) ? [Domain.replace(/^normalize-/, "")] : /update/.test(Source) ? [Domain] : [];
+	const Transforms = /normalize/.test(Domain)
+		? [Domain.replace(/^normalize-/, "")]
+		: /update/.test(Source)
+			? [Domain]
+			: [];
 
 	const Tokens = {
 		gate: Gates,
 		tool: Tools,
 		service: Services,
 		injection: Injections,
-		seam: Seams.length > 0 ? Array.from({ length: Seams.length }, (_, Index) => `seam-${Index + 1}`) : [],
+		seam:
+			Seams.length > 0
+				? Array.from({ length: Seams.length }, (_, Index) => `seam-${Index + 1}`)
+				: [],
 		ledger: Ledger,
 		refusal: Refusals,
 		transform: Transforms,
@@ -120,4 +145,6 @@ export const inferTokens = (Root, Directory) => {
 
 /** The token counts, for the ledger and the icon's density. */
 export const tokenCounts = (Manifest) =>
-	Object.fromEntries(Object.entries(Manifest.tokens).map(([Key, Values]) => [Key, Values.length]));
+	Object.fromEntries(
+		Object.entries(Manifest.tokens).map(([Key, Values]) => [Key, Values.length]),
+	);

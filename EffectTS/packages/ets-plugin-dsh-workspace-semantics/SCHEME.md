@@ -91,12 +91,12 @@ is added.
 ## The repeat-event guard (Function/Duplicate)
 
 The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
-version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it;
-no real timer anywhere) runs no invalidation and records nothing - the version token identifies the
-file state, so the model for that state is already dropped, and a model rebuilt since was built
-from the same version and stays fresh. A different version, or the same version after the window,
-invalidates normally: the last distinct version always wins. No new ledger line: a coalesced
-repeat records nothing.
+version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it; no
+real timer anywhere) runs no invalidation and records nothing - the version token identifies the
+file state, so the model for that state is already dropped, and a model rebuilt since was built from
+the same version and stays fresh. A different version, or the same version after the window,
+invalidates normally: the last distinct version always wins. No new ledger line: a coalesced repeat
+records nothing.
 
 ## The ledger strings (module-owned, byte-stable)
 

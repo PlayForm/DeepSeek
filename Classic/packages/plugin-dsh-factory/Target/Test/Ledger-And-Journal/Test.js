@@ -82,6 +82,7 @@ const runTest = async () => {
       await CheckAsync(Count, Sub, async () => {
         factory.PendingJournal = [];
         factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
         const controllers = [];
         const detached = [];
         services["jobs"] = {
@@ -191,6 +192,7 @@ const runTest = async () => {
           }
         };
         factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
         factory.PendingJournal = [];
         const failLedger = Path.join(Root, "fail-ledger.log");
         const stFail = factory.State(
@@ -227,6 +229,7 @@ const runTest = async () => {
           }
         };
         factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
         factory.PendingJournal = [];
         const stOpt = factory.State(
           ctx,

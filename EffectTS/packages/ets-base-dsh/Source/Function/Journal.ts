@@ -41,7 +41,10 @@ import { Effect } from "effect";
 export default (
 	Factory: {
 		SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
-		SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
+		SharedJournals?: Map<
+			string,
+			(Event: string, Path: string, Detail: string, At?: number) => void
+		>;
 		PendingJournal?: { event: string; path: string; detail: string; at: number }[] | undefined;
 	},
 	State: State,
@@ -53,8 +56,7 @@ export default (
 	Effect.suspend(() => {
 		try {
 			const Domain = State.JournalDomain ?? "package_governance";
-			const Shared =
-				Factory.SharedJournals?.get(Domain) ?? Factory.SharedJournal;
+			const Shared = Factory.SharedJournals?.get(Domain) ?? Factory.SharedJournal;
 			switch (true) {
 				case !!Shared:
 					Shared?.(Event, Path, Detail, At);

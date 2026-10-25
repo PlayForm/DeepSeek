@@ -342,7 +342,10 @@ export default class PluginFactory extends Service {
 	 *  JournalDomain (the default is package_governance), so a record routed
 	 *  with a custom JournalDomain lands in its own module's domain instead
 	 *  of contending for the legacy shared slot. */
-	SharedJournals?: Map<string, (Event: string, Path: string, Detail: string, At?: number) => void>;
+	SharedJournals?: Map<
+		string,
+		(Event: string, Path: string, Detail: string, At?: number) => void
+	>;
 
 	/** The PRE-BIND journal buffer (P5, the boot-window race): the factory-
 	 *  level queue holding records journaled before ANY open has succeeded

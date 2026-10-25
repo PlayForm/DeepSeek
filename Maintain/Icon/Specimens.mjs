@@ -10,8 +10,8 @@
 // The clearance rows are real numbers from Component.clearanceReport; a negative
 // margin is a visible overlap.
 
-import { arc, circle, hook, needle, ray, zigzag } from "./Curve.mjs";
 import { buildComponent, clearanceReport, componentOf } from "./Component.mjs";
+import { arc, circle, hook, needle, ray, zigzag } from "./Curve.mjs";
 import { translatePoints } from "./Envelope.mjs";
 
 const at = (Angle, Radius) => ({
@@ -27,28 +27,55 @@ const SPECIMENS = [
 	{
 		id: "S1 miter corner",
 		note: "open angular stroke, miter join, butt ends",
-		spec: { centerline: polyline([[200, 30], [270, 12], [340, 30]]), geometry: { method: "open-angular", topology: "open" }, stroke: { width: 3, join: "miter", start: "butt", end: "butt" } },
+		spec: {
+			centerline: polyline([
+				[200, 30],
+				[270, 12],
+				[340, 30],
+			]),
+			geometry: { method: "open-angular", topology: "open" },
+			stroke: { width: 3, join: "miter", start: "butt", end: "butt" },
+		},
 	},
 	{
 		id: "S2 bevel corner",
 		note: "same stroke, bevel join",
-		spec: { centerline: polyline([[200, 30], [270, 12], [340, 30]]), geometry: { method: "open-angular", topology: "open" }, stroke: { width: 3, join: "bevel", start: "butt", end: "butt" } },
+		spec: {
+			centerline: polyline([
+				[200, 30],
+				[270, 12],
+				[340, 30],
+			]),
+			geometry: { method: "open-angular", topology: "open" },
+			stroke: { width: 3, join: "bevel", start: "butt", end: "butt" },
+		},
 	},
 	{
 		id: "S3 butt curve",
 		note: "open arc, butt terminals",
-		spec: { centerline: arc({ Radius: 26, From: 200, To: 340, Samples: 16 }), geometry: { method: "open-curve", topology: "open" }, stroke: { width: 2.6, join: "round", start: "butt", end: "butt" } },
+		spec: {
+			centerline: arc({ Radius: 26, From: 200, To: 340, Samples: 16 }),
+			geometry: { method: "open-curve", topology: "open" },
+			stroke: { width: 2.6, join: "round", start: "butt", end: "butt" },
+		},
 	},
 	{
 		id: "S4 round curve",
 		note: "same arc, round terminals",
-		spec: { centerline: arc({ Radius: 26, From: 200, To: 340, Samples: 16 }), geometry: { method: "open-curve", topology: "open" }, stroke: { width: 2.6, join: "round", start: "round", end: "round" } },
+		spec: {
+			centerline: arc({ Radius: 26, From: 200, To: 340, Samples: 16 }),
+			geometry: { method: "open-curve", topology: "open" },
+			stroke: { width: 2.6, join: "round", start: "round", end: "round" },
+		},
 	},
 	{
 		id: "S5 tapered needle",
 		note: "variable-width stroke (width profile), pointed both ends",
 		spec: {
-			centerline: polyline([[150, 12], [30, 34]]),
+			centerline: polyline([
+				[150, 12],
+				[30, 34],
+			]),
 			geometry: { method: "needle", topology: "open" },
 			stroke: { width: 5, widthProfile: "tapered", start: "butt", end: "butt" },
 		},
@@ -56,7 +83,11 @@ const SPECIMENS = [
 	{
 		id: "S6 tight hook",
 		note: "hooked stroke with a tight inner curve",
-		spec: { centerline: hook({ Angle: 0, Radius: 26, Spread: 150, Samples: 18 }), geometry: { method: "hook", topology: "open" }, stroke: { width: 2.6, join: "round", start: "round", end: "round" } },
+		spec: {
+			centerline: hook({ Angle: 0, Radius: 26, Spread: 150, Samples: 18 }),
+			geometry: { method: "hook", topology: "open" },
+			stroke: { width: 2.6, join: "round", start: "round", end: "round" },
+		},
 	},
 	{
 		id: "S7 cutout ring",
@@ -72,16 +103,54 @@ const SPECIMENS = [
 		id: "S8 adjacent clearance",
 		note: "two outlined strokes at the minimum clearance (footprint test)",
 		spec: [
-			{ centerline: translatePoints(arc({ Radius: 24, From: 200, To: 340, Samples: 14 }), 0, -5), geometry: { method: "open-curve", topology: "open" }, stroke: { width: 2.4 }, composition: { collisionGroup: "pair" } },
-			{ centerline: translatePoints(arc({ Radius: 24, From: 200, To: 340, Samples: 14 }), 0, 5), geometry: { method: "open-curve", topology: "open" }, stroke: { width: 2.4 }, composition: { collisionGroup: "pair" } },
+			{
+				centerline: translatePoints(
+					arc({ Radius: 24, From: 200, To: 340, Samples: 14 }),
+					0,
+					-5,
+				),
+				geometry: { method: "open-curve", topology: "open" },
+				stroke: { width: 2.4 },
+				composition: { collisionGroup: "pair" },
+			},
+			{
+				centerline: translatePoints(
+					arc({ Radius: 24, From: 200, To: 340, Samples: 14 }),
+					0,
+					5,
+				),
+				geometry: { method: "open-curve", topology: "open" },
+				stroke: { width: 2.4 },
+				composition: { collisionGroup: "pair" },
+			},
 		],
 	},
 	{
 		id: "S9 echo footprint",
 		note: "Effect variant: the echo is part of the footprint",
 		spec: [
-			{ centerline: polyline([[150, 12], [30, 34]]), geometry: { method: "needle", topology: "open" }, stroke: { width: 2.4 }, composition: { collisionGroup: "echo" } },
-			{ centerline: translatePoints(polyline([[150, 12], [30, 34]]), 1.2, -1.2), geometry: { method: "echo", topology: "open" }, stroke: { width: 2.4 }, composition: { collisionGroup: "echo", operation: "decorate" } },
+			{
+				centerline: polyline([
+					[150, 12],
+					[30, 34],
+				]),
+				geometry: { method: "needle", topology: "open" },
+				stroke: { width: 2.4 },
+				composition: { collisionGroup: "echo" },
+			},
+			{
+				centerline: translatePoints(
+					polyline([
+						[150, 12],
+						[30, 34],
+					]),
+					1.2,
+					-1.2,
+				),
+				geometry: { method: "echo", topology: "open" },
+				stroke: { width: 2.4 },
+				composition: { collisionGroup: "echo", operation: "decorate" },
+			},
 		],
 	},
 ];
@@ -91,29 +160,91 @@ const COMPOSITIONS = [
 		id: "C1 sparse angular",
 		note: "three open angular strokes, four dots, large negative space",
 		components: [
-			{ centerline: polyline([[210, 30], [270, 14], [330, 30]]), stroke: { width: 2.2, join: "miter" } },
-			{ centerline: translatePoints(polyline([[210, 30], [270, 14], [330, 30]]), 0, 26), stroke: { width: 1.6, join: "miter" } },
-			{ centerline: translatePoints(polyline([[210, 30], [270, 14], [330, 30]]), 0, -26), stroke: { width: 1.6, join: "miter" } },
-			{ centerline: circle({ Radius: 1.4, Samples: 10 }), transform: { x: -22, y: 0 }, stroke: { width: 1.2 } },
-			{ centerline: circle({ Radius: 1.4, Samples: 10 }), transform: { x: 22, y: 0 }, stroke: { width: 1.2 } },
+			{
+				centerline: polyline([
+					[210, 30],
+					[270, 14],
+					[330, 30],
+				]),
+				stroke: { width: 2.2, join: "miter" },
+			},
+			{
+				centerline: translatePoints(
+					polyline([
+						[210, 30],
+						[270, 14],
+						[330, 30],
+					]),
+					0,
+					26,
+				),
+				stroke: { width: 1.6, join: "miter" },
+			},
+			{
+				centerline: translatePoints(
+					polyline([
+						[210, 30],
+						[270, 14],
+						[330, 30],
+					]),
+					0,
+					-26,
+				),
+				stroke: { width: 1.6, join: "miter" },
+			},
+			{
+				centerline: circle({ Radius: 1.4, Samples: 10 }),
+				transform: { x: -22, y: 0 },
+				stroke: { width: 1.2 },
+			},
+			{
+				centerline: circle({ Radius: 1.4, Samples: 10 }),
+				transform: { x: 22, y: 0 },
+				stroke: { width: 1.2 },
+			},
 		],
 	},
 	{
 		id: "C2 dense curved",
 		note: "four concentric arcs plus a bead ring",
 		components: [
-			{ centerline: circle({ Radius: 30, Samples: 40 }), geometry: { topology: "closed" }, stroke: { width: 1.4 } },
-			{ centerline: circle({ Radius: 22, Samples: 36 }), geometry: { topology: "closed" }, stroke: { width: 1.4 } },
-			{ centerline: circle({ Radius: 14, Samples: 32 }), geometry: { topology: "closed" }, stroke: { width: 1.4 } },
-			{ centerline: circle({ Radius: 7, Samples: 24 }), geometry: { topology: "closed" }, stroke: { width: 1.4 } },
+			{
+				centerline: circle({ Radius: 30, Samples: 40 }),
+				geometry: { topology: "closed" },
+				stroke: { width: 1.4 },
+			},
+			{
+				centerline: circle({ Radius: 22, Samples: 36 }),
+				geometry: { topology: "closed" },
+				stroke: { width: 1.4 },
+			},
+			{
+				centerline: circle({ Radius: 14, Samples: 32 }),
+				geometry: { topology: "closed" },
+				stroke: { width: 1.4 },
+			},
+			{
+				centerline: circle({ Radius: 7, Samples: 24 }),
+				geometry: { topology: "closed" },
+				stroke: { width: 1.4 },
+			},
 		],
 	},
 	{
 		id: "C3 asymmetric collage",
 		note: "one large off-centre hook, a void diamond, small ticks",
 		components: [
-			{ centerline: hook({ Angle: 0, Radius: 26, Spread: 150, Samples: 18 }), transform: { x: -16, y: -10, rotation: 12 }, stroke: { width: 3, start: "round", end: "round" } },
-			{ centerline: circle({ Radius: 11, Samples: 28 }), transform: { x: 20, y: 18 }, geometry: { topology: "closed" }, stroke: { width: 1.6 } },
+			{
+				centerline: hook({ Angle: 0, Radius: 26, Spread: 150, Samples: 18 }),
+				transform: { x: -16, y: -10, rotation: 12 },
+				stroke: { width: 3, start: "round", end: "round" },
+			},
+			{
+				centerline: circle({ Radius: 11, Samples: 28 }),
+				transform: { x: 20, y: 18 },
+				geometry: { topology: "closed" },
+				stroke: { width: 1.6 },
+			},
 			{ centerline: ray({ Angle: 300, Inner: 26, Outer: 38 }), stroke: { width: 1.4 } },
 			{ centerline: ray({ Angle: 330, Inner: 26, Outer: 38 }), stroke: { width: 1.4 } },
 		],
@@ -126,7 +257,11 @@ const COMPOSITIONS = [
 				centerline: ray({ Angle: Index * 45, Inner: 12, Outer: 30 }),
 				stroke: { width: Index % 2 === 0 ? 2.4 : 1.2, start: "butt", end: "butt" },
 			})),
-			{ centerline: circle({ Radius: 6, Samples: 24 }), geometry: { topology: "closed" }, stroke: { width: 1.4 } },
+			{
+				centerline: circle({ Radius: 6, Samples: 24 }),
+				geometry: { topology: "closed" },
+				stroke: { width: 1.4 },
+			},
 		],
 	},
 ];
@@ -166,7 +301,9 @@ export const viewsSheet = () => {
 					? `<path d="${Built[1].footprint}" fill="${COLORS.accent2}" fill-opacity="0.18" fill-rule="evenodd" stroke="${COLORS.accent2}" stroke-width="0.5" stroke-dasharray="2 1.5"/>`
 					: "";
 		if (Specs.length > 1) {
-			Report.push(...clearanceReport(Built, 1.5).map((Row) => ({ specimen: Specimen.id, ...Row })));
+			Report.push(
+				...clearanceReport(Built, 1.5).map((Row) => ({ specimen: Specimen.id, ...Row })),
+			);
 		}
 		Rows.push({ id: Specimen.id, note: Specimen.note, views: Views, extra: Extra });
 	}
@@ -178,10 +315,17 @@ export const compositionsSheet = () => {
 	const Rows = [];
 	const Report = [];
 	for (const Composition of COMPOSITIONS) {
-		const Built = Composition.components.map((Spec, Index) => buildComponent({ ...Spec, id: `${Composition.id}-${Index + 1}` }));
+		const Built = Composition.components.map((Spec, Index) =>
+			buildComponent({ ...Spec, id: `${Composition.id}-${Index + 1}` }),
+		);
 		const ReportRows = clearanceReport(Built, 1.5);
 		Report.push(...ReportRows.map((Row) => ({ composition: Composition.id, ...Row })));
-		Rows.push({ id: Composition.id, note: Composition.note, built: Built, ok: ReportRows.every((Row) => Row.ok) });
+		Rows.push({
+			id: Composition.id,
+			note: Composition.note,
+			built: Built,
+			ok: ReportRows.every((Row) => Row.ok),
+		});
 	}
 	return { rows: Rows, report: Report };
 };

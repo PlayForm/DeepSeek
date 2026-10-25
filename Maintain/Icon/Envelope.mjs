@@ -30,7 +30,11 @@ const tangentsOf = (Points, Closed) =>
 		const Previous = Points[(Index - 1 + Points.length) % Points.length];
 		const Forward = { x: Next.x - Entry.x, y: Next.y - Entry.y };
 		const Backward = { x: Entry.x - Previous.x, y: Entry.y - Previous.y };
-		const Use = Closed ? { x: Forward.x + Backward.x, y: Forward.y + Backward.y } : length(Forward) === 0 ? Backward : Forward;
+		const Use = Closed
+			? { x: Forward.x + Backward.x, y: Forward.y + Backward.y }
+			: length(Forward) === 0
+				? Backward
+				: Forward;
 		const Scale = length(Use);
 		return { x: Use.x / Scale, y: Use.y / Scale };
 	});
@@ -55,11 +59,17 @@ export const offsetPolyline = (Points, Distance, Closed = false, Join = "miter")
 			return { x: Entry.x + Normal.x * D, y: Entry.y + Normal.y * D };
 		}
 		if (Join === "round") {
-			const Average = { x: (Normal.x + Previous.x + Next.x) / 3, y: (Normal.y + Previous.y + Next.y) / 3 };
+			const Average = {
+				x: (Normal.x + Previous.x + Next.x) / 3,
+				y: (Normal.y + Previous.y + Next.y) / 3,
+			};
 			const Scale = length(Average);
 			return { x: Entry.x + (Average.x / Scale) * D, y: Entry.y + (Average.y / Scale) * D };
 		}
-		const Average = { x: Normal.x + (Previous.x + Next.x) / 2, y: Normal.y + (Previous.y + Next.y) / 2 };
+		const Average = {
+			x: Normal.x + (Previous.x + Next.x) / 2,
+			y: Normal.y + (Previous.y + Next.y) / 2,
+		};
 		const Scale = length(Average);
 		return { x: Entry.x + (Average.x / Scale) * D, y: Entry.y + (Average.y / Scale) * D };
 	});
@@ -77,8 +87,12 @@ const capPoints = (End, Tangent, HalfWidth, Direction) => {
 	for (let Step = 1; Step < 6; Step += 1) {
 		const Angle = (Math.PI * Step) / 6;
 		Points.push({
-			x: End.x + (Tangent.x * Math.cos(Angle) + Normal.x * Math.sin(Angle)) * HalfWidth * Direction,
-			y: End.y + (Tangent.y * Math.cos(Angle) + Normal.y * Math.sin(Angle)) * HalfWidth * Direction,
+			x:
+				End.x +
+				(Tangent.x * Math.cos(Angle) + Normal.x * Math.sin(Angle)) * HalfWidth * Direction,
+			y:
+				End.y +
+				(Tangent.y * Math.cos(Angle) + Normal.y * Math.sin(Angle)) * HalfWidth * Direction,
 		});
 	}
 	return Points;
@@ -99,14 +113,33 @@ export const envelopeOf = (Points, Width, Closed = false, Options = {}) => {
 	const Halves = Widths.map((Value) => Value / 2);
 	if (Closed) {
 		return `${ringPath(offsetPolyline(Points, Halves, true, Join))} ${ringPath(
-			offsetPolyline(Points, Halves.map((Value) => -Value), true, Join),
+			offsetPolyline(
+				Points,
+				Halves.map((Value) => -Value),
+				true,
+				Join,
+			),
 		)}`;
 	}
 	const Left = offsetPolyline(Points, Halves, false, Join);
-	const Right = offsetPolyline(Points, Halves.map((Value) => -Value), false, Join);
+	const Right = offsetPolyline(
+		Points,
+		Halves.map((Value) => -Value),
+		false,
+		Join,
+	);
 	const Tangents = tangentsOf(Points, false);
-	const EndCap = Options.endCap === "round" ? capPoints(Points[Points.length - 1], Tangents[Tangents.length - 1], Halves[Halves.length - 1], 1) : [];
-	const StartCap = Options.startCap === "round" ? capPoints(Points[0], Tangents[0], Halves[0], -1) : [];
+	const EndCap =
+		Options.endCap === "round"
+			? capPoints(
+					Points[Points.length - 1],
+					Tangents[Tangents.length - 1],
+					Halves[Halves.length - 1],
+					1,
+				)
+			: [];
+	const StartCap =
+		Options.startCap === "round" ? capPoints(Points[0], Tangents[0], Halves[0], -1) : [];
 	return ringPath([...Left, ...EndCap, ...Right.reverse(), ...StartCap]);
 };
 
@@ -118,7 +151,8 @@ export const footprintOf = (Points, Width, Closed = false, Options = {}) => {
 };
 
 /** Translate points (used for the Effect-TS echo footprint). */
-export const translatePoints = (Points, DX, DY) => Points.map((Entry) => ({ x: Entry.x + DX, y: Entry.y + DY }));
+export const translatePoints = (Points, DX, DY) =>
+	Points.map((Entry) => ({ x: Entry.x + DX, y: Entry.y + DY }));
 
 /** Rotate points about the canvas centre. */
 export const rotatePoints = (Points, Degrees) => {
@@ -141,7 +175,10 @@ export const polygonDistance = (A, B) => {
 		const DX = End.x - Start.x;
 		const DY = End.y - Start.y;
 		const Denom = DX * DX + DY * DY;
-		const T = Denom === 0 ? 0 : Math.max(0, Math.min(1, ((P.x - Start.x) * DX + (P.y - Start.y) * DY) / Denom));
+		const T =
+			Denom === 0
+				? 0
+				: Math.max(0, Math.min(1, ((P.x - Start.x) * DX + (P.y - Start.y) * DY) / Denom));
 		return Math.hypot(P.x - (Start.x + T * DX), P.y - (Start.y + T * DY));
 	};
 	let Minimum = Number.POSITIVE_INFINITY;
@@ -160,7 +197,10 @@ export const polylineDistance = (A, B) => {
 		const DX = End.x - Start.x;
 		const DY = End.y - Start.y;
 		const Denom = DX * DX + DY * DY;
-		const T = Denom === 0 ? 0 : Math.max(0, Math.min(1, ((P.x - Start.x) * DX + (P.y - Start.y) * DY) / Denom));
+		const T =
+			Denom === 0
+				? 0
+				: Math.max(0, Math.min(1, ((P.x - Start.x) * DX + (P.y - Start.y) * DY) / Denom));
 		return Math.hypot(P.x - (Start.x + T * DX), P.y - (Start.y + T * DY));
 	};
 	let Minimum = Number.POSITIVE_INFINITY;
@@ -180,7 +220,14 @@ export const polylineDistance = (A, B) => {
  */
 export const clearanceOf = (A, B, Gap = 1.5) => {
 	const Required =
-		Gap + ((A.width ?? 1.5) / 2 + (A.contour ?? 0.7) / 2) + ((B.width ?? 1.5) / 2 + (B.contour ?? 0.7) / 2);
+		Gap +
+		((A.width ?? 1.5) / 2 + (A.contour ?? 0.7) / 2) +
+		((B.width ?? 1.5) / 2 + (B.contour ?? 0.7) / 2);
 	const Actual = polylineDistance(A.points, B.points);
-	return { required: Required, actual: Actual, margin: Actual - Required, ok: Actual >= Required };
+	return {
+		required: Required,
+		actual: Actual,
+		margin: Actual - Required,
+		ok: Actual >= Required,
+	};
 };

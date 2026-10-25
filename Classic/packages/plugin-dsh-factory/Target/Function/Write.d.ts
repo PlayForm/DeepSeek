@@ -24,5 +24,5 @@ export interface Over {
     /** The caller's content step, applied before the write. */
     transform?: (content: string) => string;
 }
+declare const _default: (State: State, Target: FsTarget, Content: string, Over?: Over) => Promise<FsWriteOutcome>;
 export default _default;
-declare function _default(State: State, Target: FsTarget, Content: string, Over?: Over): Promise<FsWriteOutcome>;

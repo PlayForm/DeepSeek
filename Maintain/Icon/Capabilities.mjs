@@ -29,7 +29,13 @@ const number = (Value) => Math.round(Value * 10) / 10;
 const lengthsOf = (Points) => {
 	const Lengths = [0];
 	for (let Index = 1; Index < Points.length; Index += 1) {
-		Lengths.push(Lengths[Index - 1] + Math.hypot(Points[Index].x - Points[Index - 1].x, Points[Index].y - Points[Index - 1].y));
+		Lengths.push(
+			Lengths[Index - 1] +
+				Math.hypot(
+					Points[Index].x - Points[Index - 1].x,
+					Points[Index].y - Points[Index - 1].y,
+				),
+		);
 	}
 	return Lengths;
 };
@@ -93,7 +99,10 @@ export const parallelContours = (Points, Width, Distance = 1.2) => {
 			const Mixed = { x: Forward.x + Backward.x, y: Forward.y + Backward.y };
 			const Scale = Math.hypot(Mixed.x, Mixed.y) || 1;
 			const Normal = { x: -Mixed.y / Scale, y: Mixed.x / Scale };
-			return { x: Entry.x + Normal.x * (Width / 2 + Distance) * Side, y: Entry.y + Normal.y * (Width / 2 + Distance) * Side };
+			return {
+				x: Entry.x + Normal.x * (Width / 2 + Distance) * Side,
+				y: Entry.y + Normal.y * (Width / 2 + Distance) * Side,
+			};
 		});
 		Contours.push(Offset);
 	}
@@ -146,7 +155,9 @@ export const cutoutPathOf = (Envelope, Cutouts) =>
 
 /** Export helper: a bead ring as its own path. */
 export const beadPathOf = (Radius, Count, Dot = 0.8, Phase = 0) =>
-	dotRing({ Radius, Count, Dot, OffsetAngle: Phase }).map((Ring) => pathOf(Ring, true)).join(" ");
+	dotRing({ Radius, Count, Dot, OffsetAngle: Phase })
+		.map((Ring) => pathOf(Ring, true))
+		.join(" ");
 
 /** The number formatting the capabilities share. */
 export const round = number;

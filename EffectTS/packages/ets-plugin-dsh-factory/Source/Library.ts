@@ -411,6 +411,16 @@ export default class PluginFactory extends Service {
 	 *  through the sink it just bound - closing the boot-window race. */
 	SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
 
+	/** The SHARED P5 journal sinks, keyed by domain (see Journal): every
+	 *  successful Function/Open registers its Sink under the State's
+	 *  JournalDomain (the default is package_governance), so a record routed
+	 *  with a custom JournalDomain lands in its own module's domain instead
+	 *  of contending for the legacy shared slot. */
+	SharedJournals?: Map<
+		string,
+		(Event: string, Path: string, Detail: string, At?: number) => void
+	>;
+
 	/** The PRE-BIND journal buffer (P5, the boot-window race): the factory-
 	 *  level queue holding records journaled before ANY open has succeeded
 	 *  (each module's apply journals its `activated` record before its own

@@ -1,7 +1,13 @@
 ---
 name: orchestrator-batch
-description: "The parent's batch orchestration: incremental delegation loop, two-active queue regime, no-blocking-wait law, information-broker protocol, spec-reconfiguration authority, idle-amendment law, verification by the lanes' arbiters, report-as-claim rule, resume protocol."
-whenToUse: When running a multi-agent batch here, deciding lane order or concurrency, when user feedback amends a lane's spec, when a lane needs history from earlier sessions, or when resuming a batch in a new session.
+description:
+    "The parent's batch orchestration: incremental delegation loop, two-active queue regime,
+    no-blocking-wait law, information-broker protocol, spec-reconfiguration authority,
+    idle-amendment law, verification by the lanes' arbiters, report-as-claim rule, resume protocol."
+whenToUse:
+    When running a multi-agent batch here, deciding lane order or concurrency, when user feedback
+    amends a lane's spec, when a lane needs history from earlier sessions, or when resuming a batch
+    in a new session.
 version: 2.4.0
 updated: 2026-10-25
 ---
