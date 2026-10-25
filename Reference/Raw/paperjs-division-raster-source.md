@@ -1,4 +1,3 @@
-
 ```
 <!DOCTYPE html>
 <html>
@@ -74,4 +73,3 @@ function onResize(event) {
 </html>
 
 ```
-

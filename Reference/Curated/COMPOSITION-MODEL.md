@@ -12,16 +12,16 @@ it must survive a change of colour, stroke width, or rendering backend.
 
 The relation vocabulary the brief proposes:
 
-| Kind             | Meaning                                                        |
-| ---------------- | -------------------------------------------------------------- |
-| `faces`          | two components point at each other                             |
-| `aligned-gap`    | a set of components shares one gap and one axis                |
-| `frames`         | an outer set encloses an inner one                             |
-| `continues`      | two strokes read as one interrupted stroke, with a gap width   |
-| `balances`       | two groups carry equal visual mass                             |
-| `repeats`        | a rhythm: a component set with a spacing pattern               |
-| `subtracts`      | a cutter removes material from a target                        |
-| `shares-feature` | components belong to one idea despite different layers         |
+| Kind             | Meaning                                                      |
+| ---------------- | ------------------------------------------------------------ |
+| `faces`          | two components point at each other                           |
+| `aligned-gap`    | a set of components shares one gap and one axis              |
+| `frames`         | an outer set encloses an inner one                           |
+| `continues`      | two strokes read as one interrupted stroke, with a gap width |
+| `balances`       | two groups carry equal visual mass                           |
+| `repeats`        | a rhythm: a component set with a spacing pattern             |
+| `subtracts`      | a cutter removes material from a target                      |
+| `shares-feature` | components belong to one idea despite different layers       |
 
 This is consistent with graph-grammar work that separates a pattern's node-edge structure from its
 geometric layout [unverified: mgv.sggw.pl timed out].
@@ -51,15 +51,15 @@ componentCount, turnsPerComponent, curvatureChanges, internalCuts,
 terminalDiversity, repetitionRegularity, colorGroups
 ```
 
-| Dimension        | Simple                    | Complex                         |
-| ---------------- | ------------------------- | ------------------------------- |
-| Component count  | two large pieces          | many small pieces               |
-| Direction change | straight or one bend      | multiple bends                  |
-| Curvature        | one smooth arc            | alternating curvature           |
-| Interior         | solid stroke              | slots, holes, nested contours   |
-| Rhythm           | uniform repetition        | alternating lengths/spacing     |
-| Terminals        | one ending throughout     | selected contrasting endings    |
-| Colour grouping  | one ink                   | several purposeful groups       |
+| Dimension        | Simple                | Complex                       |
+| ---------------- | --------------------- | ----------------------------- |
+| Component count  | two large pieces      | many small pieces             |
+| Direction change | straight or one bend  | multiple bends                |
+| Curvature        | one smooth arc        | alternating curvature         |
+| Interior         | solid stroke          | slots, holes, nested contours |
+| Rhythm           | uniform repetition    | alternating lengths/spacing   |
+| Terminals        | one ending throughout | selected contrasting endings  |
+| Colour grouping  | one ink               | several purposeful groups     |
 
 A layer may be geometrically simple and compositionally rich, or the reverse. "More functionality"
 must not always mean "more tiny marks".
@@ -69,13 +69,13 @@ must not always mean "more tiny marks".
 The vector scene stays authoritative. Other views are derived from it and must not become separate
 implementations:
 
-| View                  | Purpose                              |
-| --------------------- | ------------------------------------ |
-| Vector scene          | editing and final rendering          |
-| Relationship graph    | composition rules                    |
-| Spatial occupancy grid| fast approximate placement checks    |
-| Layer-isolation render| debugging                            |
-| Semantic map          | which feature generated what         |
+| View                   | Purpose                           |
+| ---------------------- | --------------------------------- |
+| Vector scene           | editing and final rendering       |
+| Relationship graph     | composition rules                 |
+| Spatial occupancy grid | fast approximate placement checks |
+| Layer-isolation render | debugging                         |
+| Semantic map           | which feature generated what      |
 
 A coarse occupancy grid rejects bad placements quickly; the final decision still uses the visible
 geometry.
@@ -141,11 +141,11 @@ Paper.js `flatten(flatness)` subdivides to a maximum geometric error [fetched:
 
 ## 8. Three channels: function, identity, history
 
-| Channel  | Influence                                                          |
-| -------- | ------------------------------------------------------------------ |
-| Function | branching, direction, repeated groups, relationship structure      |
-| Identity | palette, preferred terminal family, asymmetry bias                 |
-| History  | reserved revision marks or one localized secondary detail          |
+| Channel  | Influence                                                     |
+| -------- | ------------------------------------------------------------- |
+| Function | branching, direction, repeated groups, relationship structure |
+| Identity | palette, preferred terminal family, asymmetry bias            |
+| History  | reserved revision marks or one localized secondary detail     |
 
 Do not hash the entire manifest into one seed: adding one capability must not change every colour,
 position, and method at once. Record provenance next to each decision:
@@ -178,10 +178,10 @@ one central opening, and a repeated outer ring, the generator is narrow no matte
 its source lists.
 
 `Test/Icons/Diversity.mjs` implements the measurement for this repository: 14 motif families, 12
-silhouette classes, 4 symmetry orders, component buckets, tone patterns, stroke contrast, ink length,
-and descriptor-tuple uniqueness over package scenes (twins collapse on purpose). It fails when one
-family or silhouette dominates, when a descriptor dimension collapses, or when fewer than 90% of
-package scenes are unique.
+silhouette classes, 4 symmetry orders, component buckets, tone patterns, stroke contrast, ink
+length, and descriptor-tuple uniqueness over package scenes (twins collapse on purpose). It fails
+when one family or silhouette dominates, when a descriptor dimension collapses, or when fewer than
+90% of package scenes are unique.
 
 ## 11. What is implemented today, and what is not
 
@@ -189,9 +189,9 @@ Implemented:
 
 - The 14-family motif library (`Maintain/Icon/Motif.mjs`): twelve ornamental constructions plus the
   two generative ones borrowed from Division Raster and Q*bertify.
-- The transliteration (`Maintain/Icon/Transliterate.mjs`): semantic tokens attach layers (halo rings,
-  gate loops, seam ticks, ledger beads, medallion, trace echo) to the motif, and the plan chooses the
-  family, symmetry, rotation, and fill.
+- The transliteration (`Maintain/Icon/Transliterate.mjs`): semantic tokens attach layers (halo
+  rings, gate loops, seam ticks, ledger beads, medallion, trace echo) to the motif, and the plan
+  chooses the family, symmetry, rotation, and fill.
 - The component model (`Maintain/Icon/Component.mjs`): per-component method, topology, stroke
   (width, profile, terminals, join, contour), composition (operation, collision group, minimum
   clearance), and material. Components stay separate until the renderer groups them per tone.

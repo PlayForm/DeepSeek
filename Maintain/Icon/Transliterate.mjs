@@ -212,6 +212,18 @@ export const sceneOf = (Genome, Plan) => {
 	}
 
 	const Raw = [...Motif, ...parts];
+	const Rings = Math.min(3, Plan.mutations?.rings ?? 0);
+	for (let Index = 0; Index < Rings; Index += 1) {
+		Raw.push({
+			key: `evolution-${Index}`,
+			points: Ornament.ring(20 + Index * 3, 32),
+			closed: true,
+			width: 0.6,
+			method: "evolution-ring",
+			layer: "detail",
+			tone: "accent2",
+		});
+	}
 	const Components = Raw.map((Part, Index) =>
 		piece(Part.key ?? `part-${Index}`, Part.points, Part),
 	);

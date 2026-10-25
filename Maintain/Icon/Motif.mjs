@@ -107,7 +107,9 @@ const crescent = ({ Angle, Radius, Size, Spread = 150, Samples = 10 }) => {
 	const Inner = at(Angle, Radius - Size * 0.4);
 	const Points = [];
 	for (let Index = 0; Index <= Samples; Index += 1) {
-		Points.push(around(Outer.x, Outer.y, Size, Angle - Spread / 2 + (Spread * Index) / Samples));
+		Points.push(
+			around(Outer.x, Outer.y, Size, Angle - Spread / 2 + (Spread * Index) / Samples),
+		);
 	}
 	for (let Index = Samples; Index >= 0; Index -= 1) {
 		Points.push(
@@ -764,7 +766,12 @@ const isometricTiles = () => {
 	for (let Index = 0; Index < 3; Index += 1) {
 		Parts.push({
 			key: `face-${Index}`,
-			points: [Vertices[Index * 2], Vertices[Index * 2 + 1], Vertices[(Index * 2 + 2) % 6], Centre],
+			points: [
+				Vertices[Index * 2],
+				Vertices[Index * 2 + 1],
+				Vertices[(Index * 2 + 2) % 6],
+				Centre,
+			],
 			closed: true,
 			width: 1.1,
 			method: "isometric-face",

@@ -53,33 +53,32 @@ The two Paper.js constructions the motif library borrows its composition from. B
 pages are bot-walled (recorded in `fetch-errors.log`), so the page source is fetched from the
 repository instead; the algorithm is distilled in `Curated/GENERATIVE-EXAMPLES.md`.
 
-| Example                  | Link                                          | Raw file                              | Role                                              | Now                                             |
-| ------------------------ | --------------------------------------------- | ------------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| Paper.js Division Raster | https://paperjs.org/examples/division-raster/ | `Raw/paperjs-division-raster-source.md` | recursive subdivision of a raster into cells      | `divisionTile` motif family                     |
-| Paper.js Q*bertify       | https://paperjs.org/examples/q-bertify/       | `Raw/paperjs-qbertify-source.md`       | isometric cube tiling with three-shade faces      | `isometricTiles` motif family                   |
+| Example                  | Link                                          | Raw file                                | Role                                         | Now                           |
+| ------------------------ | --------------------------------------------- | --------------------------------------- | -------------------------------------------- | ----------------------------- |
+| Paper.js Division Raster | https://paperjs.org/examples/division-raster/ | `Raw/paperjs-division-raster-source.md` | recursive subdivision of a raster into cells | `divisionTile` motif family   |
+| Paper.js Q*bertify       | https://paperjs.org/examples/q-bertify/       | `Raw/paperjs-qbertify-source.md`        | isometric cube tiling with three-shade faces | `isometricTiles` motif family |
 
 ## The composition model
 
-The sources behind the relationship/void/detail-profile model in
-`Curated/COMPOSITION-MODEL.md`. Four are bot-walled or timed out; their claims are recorded as
-unverified in that note.
+The sources behind the relationship/void/detail-profile model in `Curated/COMPOSITION-MODEL.md`.
+Four are bot-walled or timed out; their claims are recorded as unverified in that note.
 
-| Source                             | Link                                                                    | Raw file                                | Role                                     | Status     |
-| ---------------------------------- | ----------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------- | ---------- |
-| Graph grammar (MGV)                | https://mgv.sggw.pl/article/view/9131                                   | -                                       | node-edge structure separate from layout | blocked    |
-| Shape grammar framework (PDF)      | https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf | `Raw/shape-grammar-generative-design.md` | constrained rule application             | fetched    |
-| Shape grammar optimization (ACM)   | https://dl.acm.org/doi/full/10.1145/3757377.3764004                     | -                                       | constraining rules for predictability    | blocked    |
-| SVG2 painting                      | https://www.w3.org/TR/SVG2/painting.html                                | -                                       | fill/stroke semantics                    | blocked    |
-| MDN fill-rule                      | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule | `Raw/svg-fill-rule.md`                  | evenodd vs nonzero                       | fetched    |
-| MDN stroke-miterlimit              | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit | `Raw/svg-stroke-miterlimit.md`          | miter projection bound                   | fetched    |
-| SVG strokes spec                   | https://svgwg.org/specs/strokes/                                        | `Raw/svg-strokes-spec.md`               | stroke geometry, joins, caps             | fetched    |
-| SVG1 painting (W3C)                | https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html                | -                                       | historical fill/stroke rules             | blocked    |
-| Aspose fills and strokes           | https://docs.aspose.com/svg/tutorial/fills-and-strokes/                 | `Raw/aspose-svg-fills-strokes.md`       | practical attribute guide                | fetched    |
-| W3Schools SVG stroking             | https://www.w3schools.com/graphics/svg_stroking.asp                      | `Raw/w3schools-svg-stroking.md`         | attribute reference                      | fetched    |
-| Paper.js paths tutorial            | https://paperjs.org/tutorials/paths/                                    | `Raw/paperjs-paths-tutorial.md`         | path API                                 | fetched    |
-| Paper.js PathItem                  | https://paperjs.typogram.co/paths/pathitem                              | `Raw/paperjs-pathitem.md`               | split, join, flatten                     | fetched    |
-| Paper.js path creation (DeepWiki)  | https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation | `Raw/paperjs-deepwiki-path-creation.md` | API map                                  | fetched    |
-| Paper.js path system (DeepWiki)    | https://deepwiki.com/paperjs/paper.js/3-path-system                      | `Raw/paperjs-deepwiki-path-system.md`   | internal path model                      | fetched    |
+| Source                            | Link                                                                                   | Raw file                                 | Role                                     | Status  |
+| --------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------- | ------- |
+| Graph grammar (MGV)               | https://mgv.sggw.pl/article/view/9131                                                  | -                                        | node-edge structure separate from layout | blocked |
+| Shape grammar framework (PDF)     | https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf           | `Raw/shape-grammar-generative-design.md` | constrained rule application             | fetched |
+| Shape grammar optimization (ACM)  | https://dl.acm.org/doi/full/10.1145/3757377.3764004                                    | -                                        | constraining rules for predictability    | blocked |
+| SVG2 painting                     | https://www.w3.org/TR/SVG2/painting.html                                               | -                                        | fill/stroke semantics                    | blocked |
+| MDN fill-rule                     | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule         | `Raw/svg-fill-rule.md`                   | evenodd vs nonzero                       | fetched |
+| MDN stroke-miterlimit             | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit | `Raw/svg-stroke-miterlimit.md`           | miter projection bound                   | fetched |
+| SVG strokes spec                  | https://svgwg.org/specs/strokes/                                                       | `Raw/svg-strokes-spec.md`                | stroke geometry, joins, caps             | fetched |
+| SVG1 painting (W3C)               | https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html                               | -                                        | historical fill/stroke rules             | blocked |
+| Aspose fills and strokes          | https://docs.aspose.com/svg/tutorial/fills-and-strokes/                                | `Raw/aspose-svg-fills-strokes.md`        | practical attribute guide                | fetched |
+| W3Schools SVG stroking            | https://www.w3schools.com/graphics/svg_stroking.asp                                    | `Raw/w3schools-svg-stroking.md`          | attribute reference                      | fetched |
+| Paper.js paths tutorial           | https://paperjs.org/tutorials/paths/                                                   | `Raw/paperjs-paths-tutorial.md`          | path API                                 | fetched |
+| Paper.js PathItem                 | https://paperjs.typogram.co/paths/pathitem                                             | `Raw/paperjs-pathitem.md`                | split, join, flatten                     | fetched |
+| Paper.js path creation (DeepWiki) | https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation               | `Raw/paperjs-deepwiki-path-creation.md`  | API map                                  | fetched |
+| Paper.js path system (DeepWiki)   | https://deepwiki.com/paperjs/paper.js/3-path-system                                    | `Raw/paperjs-deepwiki-path-system.md`    | internal path model                      | fetched |
 
 ## Licensing
 
