@@ -1,130 +1,105 @@
 # Reference - the procedural-rendering toolchain
 
-The external sources behind the icon generator's rendering pipeline: the libraries that implement
-stroke geometry, offsetting, boolean operations, clearance, colour and export. Fetched from the
-links in the procedural-rendering brief (`~/Downloads/dddddd.md`) on 2026-10-25 with the local
-Crawl4AI server (v0.9.5, `read_url.py`, 40000-character cap), one Markdown file per URL.
+The external sources behind the icon generator's rendering pipeline: the libraries that
+implement stroke geometry, offsetting, boolean operations, clearance, colour and export.
 
-Structure, matching the `Client/Hector/Reference` convention:
+Rebuilt on 2026-10-26 through the `source-pipeline` skill: every page is archived as a
+rendered DOM under `Archive/HTML/` and converted with pandoc from the full DOM, so the
+Markdown keeps its headings, tables and code fences. The index below is generated from the
+run's own slug plan and status table.
 
 ```text
 Reference/
-  README.md          this index: library -> link -> local file -> role
-  Raw/               the fetched pages, one .md per URL, unedited
-  Curated/           our distilled decisions (TOOLCHAIN.md)
-  fetch-errors.log   any URL that failed to fetch, with the crawler's message
+  README.md          this index: source -> link -> local file -> status
+  Archive/HTML/      the rendered DOM of every fetched page (the source of record)
+  Raw/               the converted Markdown, one .md per fetched URL
+  Curated/           our distilled decisions
+  Specimens/         rendered specimen sheets
+  Assets/            source imagery
+  fetch-errors.log   every URL that failed, with its exit code and message
 ```
 
-## The libraries
+## Libraries
 
-"Role" is where the library would sit in our pipeline; "Now" says what the generator does today.
+| Source | Link | Raw file | Status |
+| --- | --- | --- | --- |
+| Paper.js - The Swiss Army Knife of Vector Graphics Scripting [![CI](ht | https://github.com/paperjs/paper.js | `Raw/paperjs-paper-js.md` | fetched |
+| Path | https://paperjs.org/reference/path/ | `Raw/reference-path.md` | fetched |
+| Smoothing, Simplifying & Flattening | https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/ | `Raw/paths-smoothing-simplifying-flattening.md` | fetched |
+| paperjs-offset | https://github.com/glenzli/paperjs-offset | `Raw/glenzli-paperjs-offset.md` | fetched |
+| Clipper2 | https://github.com/AngusJohnson/Clipper2 | `Raw/angusjohnson-clipper2.md` | fetched |
+| Clipper2 - Polygon Clipping Offsetting & Triangulating | https://www.angusj.com/clipper2/Docs/Overview.htm | `Raw/docs-overview.md` | fetched |
+| clipper2-wasm![TypeScript icon, indicating that this package has built | https://www.npmjs.com/package/clipper2-wasm | `Raw/package-clipper2-wasm.md` | fetched |
+| clipper2-ts | https://github.com/countertype/clipper2-ts | `Raw/countertype-clipper2-ts.md` | fetched |
+| [!Screenshot](/steveruizok/perfect-freehand/blob/main/assets/perfect-f | https://github.com/steveruizok/perfect-freehand | `Raw/steveruizok-perfect-freehand.md` | fetched |
+| polygon-clipping | https://github.com/mfogel/polygon-clipping | `Raw/mfogel-polygon-clipping.md` | fetched |
+| svg-path-outline | https://github.com/danmarshall/svg-path-outline | `Raw/danmarshall-svg-path-outline.md` | fetched |
+| svg-path-outline | https://danmarshall.github.io/svg-path-outline/browser/ | `Raw/svg-path-outline-browser.md` | fetched |
+| Javascript library for 2d geometry | https://github.com/alexbol99/flatten-js | `Raw/alexbol99-flatten-js.md` | fetched |
+| svg-path-properties | https://github.com/rveciana/svg-path-properties | `Raw/rveciana-svg-path-properties.md` | fetched |
+| svg-path-properties | https://geoexamples.com/svg-path-properties/ | `Raw/svg-path-properties.md` | fetched |
+| svg-path-intersections | https://github.com/herrstrietzel/svg-path-intersections | `Raw/herrstrietzel-svg-path-intersections.md` | fetched |
+| seedrandom.js | https://github.com/davidbau/seedrandom | `Raw/davidbau-seedrandom.md` | fetched |
+| jwagner-simplex-noise-js | https://github.com/jwagner/simplex-noise.js | `Raw/jwagner-simplex-noise-js.md` | fetched |
+| Color functions for JavaScript | https://culorijs.org/ | `Raw/culorijs-org.md` | fetched |
+| Color.js [v0.7.1](https://github.com/LeaVerou/color.js/releases/) | https://colorjs.io/ | `Raw/colorjs-io.md` | fetched |
+| SVG.js | https://svgjs.dev/ | `Raw/svgjs-dev.md` | fetched |
+| SVG.js | https://github.com/svgdotjs/svg.js | `Raw/svgdotjs-svg-js.md` | fetched |
+| Rough.js | https://roughjs.com/ | `Raw/roughjs-com.md` | fetched |
+| SVGO [![npm](https://camo.githubusercontent.com/eb8988f721887a88d75c97 | https://github.com/svg/svgo | `Raw/svg-svgo.md` | fetched |
+| resvg-js | https://github.com/thx/resvg-js | `Raw/thx-resvg-js.md` | fetched |
 
-| Library                  | Link                                                                  | Raw file                          | Role                                                            | Now                                                                    |
-| ------------------------ | --------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Paper.js                 | https://github.com/paperjs/paper.js                                   | `Raw/paperjs.md`                  | precision Bezier geometry: split, boolean, trim, preserve cusps | not adopted (dependency-free envelope in `Maintain/Icon/Envelope.mjs`) |
-| Paper.js path API        | https://paperjs.org/reference/path/                                   | `Raw/paperjs-path.md`             | the path API used for the precision backend                     | reference only                                                         |
-| Paper.js flattening      | https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/ | `Raw/paperjs-flatten.md`          | curve-to-polyline tolerance control                             | reference only                                                         |
-| paperjs-offset           | https://github.com/glenzli/paperjs-offset                             | `Raw/paperjs-offset.md`           | open/closed path offset, join/cap, stroke envelopes             | candidate for exact envelopes                                          |
-| Clipper2                 | https://github.com/AngusJohnson/Clipper2                              | `Raw/clipper2.md`                 | polygon boolean + offset with joins/ends                        | candidate for cutouts and clearance polygons                           |
-| Clipper2 docs            | https://www.angusj.com/clipper2/Docs/Overview.htm                     | `Raw/clipper2-docs.md`            | the offset and boolean semantics                                | reference only                                                         |
-| clipper2-wasm            | https://www.npmjs.com/package/clipper2-wasm                           | `Raw/clipper2-wasm.md`            | Clipper2 in the browser/node via WASM                           | candidate                                                              |
-| clipper2-ts              | https://github.com/countertype/clipper2-ts                            | `Raw/clipper2-ts.md`              | Clipper2 as TypeScript                                          | alternative to the WASM wrapper                                        |
-| perfect-freehand         | https://github.com/steveruizok/perfect-freehand                       | `Raw/perfect-freehand.md`         | pressure/taper stroke envelopes from sampled points             | candidate for tapered ribbons                                          |
-| polygon-clipping         | https://github.com/mfogel/polygon-clipping                            | `Raw/polygon-clipping.md`         | polygon union/difference; cleaning self-crossing envelopes      | candidate                                                              |
-| svg-path-outline         | https://github.com/danmarshall/svg-path-outline                       | `Raw/svg-path-outline.md`         | centerline to outline path                                      | candidate                                                              |
-| svg-path-outline demo    | https://danmarshall.github.io/svg-path-outline/browser/               | `Raw/svg-path-outline-demo.md`    | the behaviour, visually                                         | reference only                                                         |
-| flatten-js               | https://github.com/alexbol99/flatten-js                               | `Raw/flatten-js.md`               | analytic intersections, inclusion, distance                     | candidate for exact clearance                                          |
-| svg-path-properties      | https://github.com/rveciana/svg-path-properties                       | `Raw/svg-path-properties.md`      | length, point-at-length, tangent-at-length                      | candidate for beads/ticks on curves                                    |
-| svg-path-properties docs | https://geoexamples.com/svg-path-properties/                          | `Raw/svg-path-properties-docs.md` | the API in prose                                                | reference only                                                         |
-| svg-path-intersections   | https://github.com/herrstrietzel/svg-path-intersections               | `Raw/svg-path-intersections.md`   | path/shape intersections                                        | diagnostics only                                                       |
-| seedrandom               | https://github.com/davidbau/seedrandom                                | `Raw/seedrandom.md`               | seeded PRNG, independent streams                                | not adopted (own xorshift32 in `Prng.mjs`)                             |
-| simplex-noise            | https://github.com/jwagner/simplex-noise.js                           | `Raw/simplex-noise.md`            | coherent noise with a seeded RNG                                | optional modulation                                                    |
-| Culori                   | https://culorijs.org/                                                 | `Raw/culori.md`                   | colour manipulation, perceptual spaces                          | candidate for palette generation                                       |
-| Color.js                 | https://colorjs.io/                                                   | `Raw/colorjs.md`                  | OKLab/OKLCH colour                                              | alternative to Culori                                                  |
-| SVG.js                   | https://svgjs.dev/                                                    | `Raw/svgjs.md`                    | SVG manipulation/animation, editor surface                      | optional editor                                                        |
-| SVG.js repo              | https://github.com/svgdotjs/svg.js                                    | `Raw/svgjs-repo.md`               | the source                                                      | reference only                                                         |
-| Rough.js                 | https://roughjs.com/                                                  | `Raw/roughjs.md`                  | sketch-style finish                                             | optional finish, not geometry                                          |
-| SVGO                     | https://github.com/svg/svgo                                           | `Raw/svgo.md`                     | SVG optimisation after visual regression                        | optional export step                                                   |
-| resvg-js                 | https://github.com/thx/resvg-js                                       | `Raw/resvg-js.md`                 | SVG to PNG rasterisation                                        | candidate for contact sheets/fixtures                                  |
+## Generative examples (both paperjs.org pages were bot-walled; fetch the repository source instead)
 
-## The generative examples
+| Source | Link | Raw file | Status |
+| --- | --- | --- | --- |
+| examples-division-raster | https://paperjs.org/examples/division-raster/ | - | blocked |
+| examples-q-bertify | https://paperjs.org/examples/q-bertify/ | - | blocked |
 
-The two Paper.js constructions the motif library borrows its composition from. Both paperjs.org
-pages are bot-walled (recorded in `fetch-errors.log`), so the page source is fetched from the
-repository instead; the algorithm is distilled in `Curated/GENERATIVE-EXAMPLES.md`.
+## Composition model
 
-| Example                  | Link                                          | Raw file                                | Role                                         | Now                           |
-| ------------------------ | --------------------------------------------- | --------------------------------------- | -------------------------------------------- | ----------------------------- |
-| Paper.js Division Raster | https://paperjs.org/examples/division-raster/ | `Raw/paperjs-division-raster-source.md` | recursive subdivision of a raster into cells | `divisionTile` motif family   |
-| Paper.js Q*bertify       | https://paperjs.org/examples/q-bertify/       | `Raw/paperjs-qbertify-source.md`        | isometric cube tiling with three-shade faces | `isometricTiles` motif family |
+| Source | Link | Raw file | Status |
+| --- | --- | --- | --- |
+| view-9131 | https://mgv.sggw.pl/article/view/9131 | - | blocked |
+| Tdesigners and (or) automate parts of the design process. The ability | https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf | `Raw/generative-shapealgorithms-pdf.md` | fetched |
+| 10-1145-3757377-3764004 | https://dl.acm.org/doi/full/10.1145/3757377.3764004 | - | blocked |
+| svg2-painting | https://www.w3.org/TR/SVG2/painting.html | - | blocked |
+| fill-rule | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule | `Raw/attribute-fill-rule.md` | fetched |
+| stroke-miterlimit | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit | `Raw/attribute-stroke-miterlimit.md` | fetched |
+| SVG Strokes | https://svgwg.org/specs/strokes/ | `Raw/specs-strokes.md` | fetched |
+| wd-svg-20000629-painting | https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html | - | blocked |
+| Fills and Strokes in SVG – Attributes and Examples | https://docs.aspose.com/svg/tutorial/fills-and-strokes/ | `Raw/tutorial-fills-and-strokes.md` | fetched |
+| SVG Stroke Attributes | https://www.w3schools.com/graphics/svg_stroking.asp | `Raw/graphics-svg-stroking.md` | fetched |
+| Paths | https://paperjs.org/tutorials/paths/ | `Raw/tutorials-paths.md` | fetched |
+| PathItem | https://paperjs.typogram.co/paths/pathitem | `Raw/paths-pathitem.md` | fetched |
+| Path Creation and Manipulation | https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation | `Raw/paper-js-3-1-path-creation-and-manipulation.md` | fetched |
+| Path System | https://deepwiki.com/paperjs/paper.js/3-path-system | `Raw/paper-js-3-path-system.md` | fetched |
 
-## The composition model
+## Analysis sources
 
-The sources behind the relationship/void/detail-profile model in `Curated/COMPOSITION-MODEL.md`.
-Four are bot-walled or timed out; their claims are recorded as unverified in that note.
+| Source | Link | Raw file | Status |
+| --- | --- | --- | --- |
+| Skeletonize[\#](#skeletonize) | https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html | `Raw/edges-plot-skeleton.md` | fetched |
+| Goal | https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html | `Raw/dbd-tutorial-distance-transform.md` | fetched |
+| project-svgpathtools | https://pypi.org/project/svgpathtools/ | `Raw/project-svgpathtools.md` | fetched |
+| svgpathtools | https://github.com/mathandy/svgpathtools | `Raw/mathandy-svgpathtools.md` | fetched |
+| svg2-paths | https://www.w3.org/TR/SVG2/paths.html | - | blocked |
+| Paths | https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths | `Raw/svg-from-scratch-paths.md` | fetched |
+| An Interactive Guide to SVG Paths | https://www.joshwcomeau.com/svg/interactive-guide-to-paths/ | `Raw/svg-interactive-guide-to-paths.md` | fetched |
+| signed_distance.h | https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h | `Raw/igl-signed-distance-h.md` | fetched |
+| libigl tutorial | https://libigl.github.io/tutorial/ | `Raw/tutorial.md` | fetched |
+| Geometry Processing Functions[¶](#geometry-processing-functions) | https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html | `Raw/latest-api-geometry-processing.md` | fetched |
+| Python library for working with SVG paths | https://github.com/vistuleB/svgpathsio | `Raw/vistuleb-svgpathsio.md` | fetched |
 
-| Source                            | Link                                                                                   | Raw file                                 | Role                                     | Status  |
-| --------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------- | ------- |
-| Graph grammar (MGV)               | https://mgv.sggw.pl/article/view/9131                                                  | -                                        | node-edge structure separate from layout | blocked |
-| Shape grammar framework (PDF)     | https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf           | `Raw/shape-grammar-generative-design.md` | constrained rule application             | fetched |
-| Shape grammar optimization (ACM)  | https://dl.acm.org/doi/full/10.1145/3757377.3764004                                    | -                                        | constraining rules for predictability    | blocked |
-| SVG2 painting                     | https://www.w3.org/TR/SVG2/painting.html                                               | -                                        | fill/stroke semantics                    | blocked |
-| MDN fill-rule                     | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule         | `Raw/svg-fill-rule.md`                   | evenodd vs nonzero                       | fetched |
-| MDN stroke-miterlimit             | https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit | `Raw/svg-stroke-miterlimit.md`           | miter projection bound                   | fetched |
-| SVG strokes spec                  | https://svgwg.org/specs/strokes/                                                       | `Raw/svg-strokes-spec.md`                | stroke geometry, joins, caps             | fetched |
-| SVG1 painting (W3C)               | https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html                               | -                                        | historical fill/stroke rules             | blocked |
-| Aspose fills and strokes          | https://docs.aspose.com/svg/tutorial/fills-and-strokes/                                | `Raw/aspose-svg-fills-strokes.md`        | practical attribute guide                | fetched |
-| W3Schools SVG stroking            | https://www.w3schools.com/graphics/svg_stroking.asp                                    | `Raw/w3schools-svg-stroking.md`          | attribute reference                      | fetched |
-| Paper.js paths tutorial           | https://paperjs.org/tutorials/paths/                                                   | `Raw/paperjs-paths-tutorial.md`          | path API                                 | fetched |
-| Paper.js PathItem                 | https://paperjs.typogram.co/paths/pathitem                                             | `Raw/paperjs-pathitem.md`                | split, join, flatten                     | fetched |
-| Paper.js path creation (DeepWiki) | https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation               | `Raw/paperjs-deepwiki-path-creation.md`  | API map                                  | fetched |
-| Paper.js path system (DeepWiki)   | https://deepwiki.com/paperjs/paper.js/3-path-system                                    | `Raw/paperjs-deepwiki-path-system.md`    | internal path model                      | fetched |
+## Fetch status (2026-10-26)
 
-## The analysis sources
-
-The tooling behind the reverse-engineering note (`Curated/REVERSE-ENGINEERING.md`): raster evidence,
-stroke measurement, and geometry diagnostics.
-
-| Source                     | Link                                                                              | Raw file                            | Role                                   | Status                  |
-| -------------------------- | --------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------- | ----------------------- |
-| scikit-image skeletonize   | https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html       | `Raw/skimage-skeletonize.md`        | skeleton + medial axis, width estimate | fetched                 |
-| OpenCV distance transform  | https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html            | `Raw/opencv-distance-transform.md`  | distance-to-background                 | fetched                 |
-| svgpathtools               | https://pypi.org/project/svgpathtools/ (repo: mathandy/svgpathtools)              | `Raw/svgpathtools.md`               | curvature, arc length, intersections   | fetched from the repo   |
-| SVG2 paths (W3C)           | https://www.w3.org/TR/SVG2/paths.html                                             | `Raw/svg2-paths.md`                 | path grammar                           | blocked; MDN equivalent |
-| MDN SVG paths              | https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths | `Raw/mdn-svg-paths.md`              | path grammar                           | fetched                 |
-| Josh Comeau path guide     | https://www.joshwcomeau.com/svg/interactive-guide-to-paths/                       | `Raw/joshwcomeau-svg-paths.md`      | path intuition                         | fetched                 |
-| libigl signed distance     | https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h          | `Raw/libigl-signed-distance.md`     | signed distance                        | fetched                 |
-| libigl tutorial            | https://libigl.github.io/tutorial/                                                | `Raw/libigl-tutorial.md`            | geometry processing                    | fetched                 |
-| PyMesh geometry processing | https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html              | `Raw/pymesh-geometry-processing.md` | mesh operations                        | fetched                 |
-| svgpathsio                 | https://github.com/vistuleB/svgpathsio                                            | `Raw/svgpathsio.md`                 | path manipulation tools                | fetched                 |
+45 pages fetched of 52 URLs; 7 blocked, all retried once and recorded in
+`fetch-errors.log` with their exit codes: two Paper.js example pages are bot-walled,
+and five sources answer with a Cloudflare JS challenge or time out. The SVG2 paths
+page is represented by the MDN tutorial instead.
 
 ## Licensing
 
-Paper.js, paperjs-offset and perfect-freehand document MIT; Clipper2 uses the Boost Software
-License. Verify the exact package and release before adopting any of them, especially the
-third-party ports and wrappers.
-
-## Fetch status (2026-10-25)
-
-48 files for 49 URLs, all fetched through Crawl4AI v0.9.5 with a 40000-character cap. Notes:
-
-- The two paperjs.org example pages are bot-walled; the page source is fetched from the repository
-  instead (`Raw/paperjs-*-source.md`) and the algorithm is distilled in
-  `Curated/GENERATIVE-EXAMPLES.md`.
-- Five sources are blocked or timed out (w3.org SVG2 painting and paths, w3.org SVG1 painting,
-  dl.acm.org, mgv.sggw.pl). They are recorded in `fetch-errors.log`; the SVG2 paths page is replaced
-  by the MDN equivalent (`Raw/svg2-paths.md`), and the blocked claims are marked unverified in
-  `Curated/COMPOSITION-MODEL.md`.
-- `clipper2-wasm` publishes no npm README (the package page says so). The jsDelivr package page is
-  fetched instead: `Raw/clipper2-wasm-jsdelivr.md`; the npm stub stays as `Raw/clipper2-wasm.md`.
-- `svg-path-outline-demo` is a canvas demo: its text is three labels, so the file is a stub by
-  nature. `Raw/svg-path-outline-demo.md` records that; the library's own page
-  (`Raw/svg-path-outline.md`) carries the real content.
-
-## The correction this reference exists for
-
-Drawing the same centerline twice with two stroke widths is not a mini-outline: an SVG stroke is
-centred on its path. The correct pipeline is centerline -> stroke envelope (the area the stroke
-occupies) -> a fine contour around that envelope -> clearance measured on the envelopes.
-`Maintain/Icon/Envelope.mjs` implements that in-house today; `Curated/TOOLCHAIN.md` records which
-library replaces each in-house step when the dependency budget allows it.
+Paper.js, paperjs-offset and perfect-freehand document MIT; Clipper2 uses the Boost
+Software License. Verify the exact package and release before adopting any of them,
+especially the third-party ports and wrappers.

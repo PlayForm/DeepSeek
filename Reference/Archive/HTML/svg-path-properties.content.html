@@ -1,0 +1,54 @@
+<div><section class="white-section"><p>SVG comes with the <b>getTotalLength()</b> and <b>getPointAtLength()</b> methods, which are useful for animations or adding markers at the paths.</p>
+<p>Calculating these values using Node or the Canvas element can be quite complicated. This library allows doing this and more things.</p></section></div>
+<div><section class="github">
+<span>View on <a href="https://github.com/rveciana/svg-path-properties">Github</a></span>
+</section></div>
+<div><section class="light-section">
+<h2>Usage</h2>
+<p>The usage is very simple, just pass the path into the class and call the needed methods:</p>
+<pre><code>
+  var path = require("svg-path-properties");
+  var properties = path.svgPathProperties("M0,100 Q50,-50 100,100 T200,100");
+  var length = properties.getTotalLength();
+  var point = properties.getPointAtLength(200);
+  var tangent = properties.getTangentAtLength(200);
+  var allProperties = properties.getPropertiesAtLength(200);</code></pre>
+</section></div>
+<div><section class="white-section">
+<ul>
+<li>
+<b>getTotalLength()</b> gives the length of the path in pixels, as in the SVG function</li>
+<li>
+<b>getPointAtLength(pixels)</b> gives the position of the path at the <i>pixels</i> distance, as in the SVG function</li>
+<li>
+<b>getTangentAtLength(pixels)</b> gives the normalized tangent of the path at the <i>pixels</i> distance. SVG hasn't got this function</li>
+<li>
+<b>getPropertiesAtLength(pixels)</b> gives the position of the path and the normalized at the <i>pixels</i> distance, so the function has to be calculated once for performance reasons</li>
+</ul>
+</section></div>
+<div><section class="light-section">
+<h2>Install</h2>
+<p>To use it with npm, just type:</p>
+<pre><code>npm install svg-path-properties</code></pre>
+<p>To it in the browser, add:</p>
+<pre><code>&lt;script src="https://npmcdn.com/svg-path-properties/build/path-properties.js"&gt;</code></pre>
+</section></div>
+<div><section class="white-section">
+<h2>Tests and examples</h2>
+<ul>
+<li><a href="tests.html">Visual tests for all path types</a></li>
+<li><a href="tests.htmlhttp://bl.ocks.org/rveciana/209fa7efeb01f05fa4a544a76ac8ed91">Canvas + getTotalLength() application: Animated path on a map</a></li>
+<li><a href="http://bl.ocks.org/rveciana/77655c3c0e3073c19da34af6dc84c4b9">Point-along-a-path example made with Canvas instead of SVG</a></li>
+</ul>
+</section></div>
+<div><section class="light-section">
+<h2>Credits</h2>
+<p>To calculate the functions and parsing the paths, I've taken information and code from several places. They are basically these</p>
+<ul>
+<li><a href="http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5">http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5</a></li>
+<li><a href="https://gist.github.com/tunght13488/6744e77c242cc7a94859">https://gist.github.com/tunght13488/6744e77c242cc7a94859</a></li>
+<li><a href="http://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">http://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier</a></li>
+<li><a href="http://pomax.github.io/bezierinfo">http://pomax.github.io/bezierinfo</a></li>
+<li><a href="https://github.com/jkroso/parse-svg-path">https://github.com/jkroso/parse-svg-path</a></li>
+</ul>
+</section></div>

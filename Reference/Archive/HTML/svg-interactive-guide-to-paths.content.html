@@ -1,0 +1,632 @@
+<div><div class="a17ksbvo"><div class="w1jb6mm2">
+<a class="t1v2vbab" href="#jwc-skip-here">Skip to content</a><div class="h1xr5zj1">
+
+<div class="h1gqepq9"><div class="hn6iur2 watium4">
+<h1 class="w1k33q0w"><span class="tfn08jb">An Interactive Guide to SVG Paths</span></h1>
+<div class="w1cj4f62">
+<dl class="r16cvir6">
+<dt class="k1ck4psj">Filed under</dt>
+
+<dt class="l1mtlr64 k1ck4psj">on</dt>
+<dt class="slreaoj k1ck4psj">in</dt>
+<dd class="lt8ff1b v18wai4v">August 18th, 2025<span class="o1mqqjdj">.</span>
+</dd>
+<dd class="s13aepni v18wai4v">Aug 2025<span class="o1mqqjdj">.</span>
+</dd>
+</dl>
+<dl class="r16cvir6">
+<dt class="k1ck4psj">Last updated</dt>
+<dt class="l1mtlr64 k1ck4psj">on</dt>
+<dt class="slreaoj k1ck4psj">in</dt>
+<dd class="lt8ff1b v18wai4v">June 9th, 2026<span class="o1mqqjdj">.</span>
+</dd>
+<dd class="s13aepni v18wai4v">Jun 2026<span class="o1mqqjdj">.</span>
+</dd>
+</dl>
+</div>
+</div></div>
+<div class="cwckrty"><main><article class="t1e31uhj">
+<a class="wcmb8ol" id="introduction"><span class="wlgbkjj">Introduction</span></a><p class="prg881n">The SVG <code class="i165vvr1">&lt;path&gt;</code> element is notoriously tricky. When I first encountered it, I found it totally inscrutable. Its syntax isn’t <em class="w10oesj0">quite</em> as bad as Regex, but it has the same sort of <em>“what on earth?”</em> vibes.</p>
+<p class="prg881n">At the same time, <code class="i165vvr1">&lt;path&gt;</code> elements are also <em class="w10oesj0">incredibly</em> useful. They’re the only way to create curved shapes in SVG, beyond full ellipses. And once you get the hang of it, they’re actually quite a lot of fun to use!</p>
+<p class="prg881n">In this blog post, we’ll cover all of the basic commands, including the infamous arc command. I’ll help you build an intuition for how they work, and show you some cool stuff you can do with them!</p>
+
+<h2 class="hrk0sy8" id="the-basic-idea">
+<a class="aax5dne" href="#the-basic-idea-1" id="the-basic-idea-1"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>The basic idea</h2>
+<p class="prg881n">The <code class="i165vvr1">&lt;path&gt;</code> element is modeled after the “pen” tool in vector graphics software like Illustrator. It allows us to chain a bunch of separate drawing instructions together, like a real-world pen being manipulated across a piece of paper.</p>
+<p class="prg881n">Let’s look at a basic example:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r2u:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r2u:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r2u:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 12,4
+      L 4,12
+      M 6,4
+      L 12,4
+      L 12,10
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">The <code class="i165vvr1">d</code> attribute stands for “data”, and we use it to define a set of sequential drawing instructions. The “M” command moves our imaginary pen to a specific point, and the “L” command draws a straight line to a specific point.</p>
+<p class="prg881n">Here’s a visualization showing each of these steps:</p>
+<div class="wqcpdwn d16kq653">
+<div class="rt6osgt">
+<div class="cx6cf08"><pre class="whwike4"><div>
+<span class="pbazd3n c1xlvnqm">&lt;svg</span> <span class="pz58253 c1xlvnqm">viewBox=</span><span class="g1minml9 c1xlvnqm">"0 0 16 16"</span>
+</div><div>  <span class="pbazd3n c1xlvnqm">&lt;path</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">M 12,4</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">L 4,12</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">M 6,4</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">L 12,4</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">L 12,10</span>
+</div><span class="pbazd3n c1xlvnqm">&lt;/svg&gt;</span></pre></div>
+<div class="s1su48j"><div class="c1jdl7i5">(0, 0)</div></div>
+</div>
+<div class="aq3l2jl">
+<div class="w1g272cd"><div class="t1t0o8gq">
+<div class="c4af6ms">
+<div class="c1tpaa3e">
+<span class="lrfnn4z">move</span><span class="s13r7c8g">m</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">line</span><span class="s13r7c8g">l</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">move</span><span class="s13r7c8g">m</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">line</span><span class="s13r7c8g">l</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">line</span><span class="s13r7c8g">l</span>
+</div>
+</div>
+
+</div></div>
+<button class="p1mjvhpr bcww6zb w19mrn5v"><span class="c7sw782">Play</span></button>
+</div>
+</div>
+<p class="prg881n">It’s like a recipe. Each letter indicates a new step: chop the carrots, boil the broccoli. The numbers are the <em>parameters</em> for that instruction, like arguments passed to a function.</p>
+<p class="prg881n"><strong>Each instruction flows into the next.</strong> This is something that really confused me at first. I expected that a “Line” command would take <em class="w10oesj0">two</em> points, a start point and an end point. Instead, it only takes an end point; the start point is inherited from the previous command.</p>
+
+<h2 class="hrk0sy8" id="commands">
+<a class="aax5dne" href="#commands-2" id="commands-2"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Commands</h2>
+<p class="prg881n">The SVG <code class="i165vvr1">&lt;path&gt;</code> element gives us a set of commands we can use to draw all sorts of shapes. We’ve already seen a couple of them, but let’s go through them here in more detail.</p>
+<h3 class="h1uetiv1" id="move">
+<a class="aax5dne" href="#move-3" id="move-3"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Move</h3>
+<p class="prg881n">The <code class="i165vvr1">M</code> command allows us to pick up and move the metaphorical pen tip to somewhere else on the canvas.</p>
+<div class="coaxrjn c1qvfy1x ae97emi">
+<button class="wqxmqd2"><span class="i1htlkn0"><span class="i14jtb2i"><span class="haso6lc wlgbkjj">Copy to clipboard</span></span></span></button><div class="w19zxykk w1ey322x"><pre class="shiki shiki-themes josh-theme-light josh-theme-dark"><code><span class="line"><span>path</span><span> d</span><span>=</span><span>"</span><span>M 10,10</span><span>"</span><span> /&gt;</span></span></code></pre></div>
+</div>
+<p class="prg881n">This command takes two numbers: an X coordinate and a Y coordinate.</p>
+<p class="prg881n">It doesn’t draw anything on its own. You can think of it like lifting the pen up and positioning it, floating a centimeter above the page. We generally use this right before a drawing instruction, so that the thing we draw starts in the right place.</p>
+<p class="prg881n"><strong>Every path command we write <em class="w10oesj0">must</em> start with a Move command.</strong> Otherwise, the browser wouldn’t know where to start our drawing from.</p>
+
+<h3 class="h1uetiv1" id="lines">
+<a class="aax5dne" href="#lines-4" id="lines-4"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Lines</h3>
+<p class="prg881n">We can draw straight lines with the <code class="i165vvr1">L</code> command:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r3a:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r3a:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r3a:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 2,2
+      L 14,14
+      M 2,14
+      L 14,2
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">Here’s a visualization showing this sequence of commands:</p>
+<div class="wqcpdwn d16kq653">
+<div class="rt6osgt">
+<div class="cx6cf08"><pre class="whwike4"><div>
+<span class="pbazd3n c1xlvnqm">&lt;svg</span> <span class="pz58253 c1xlvnqm">viewBox=</span><span class="g1minml9 c1xlvnqm">"0 0 16 16"</span>
+</div><div>  <span class="pbazd3n c1xlvnqm">&lt;path</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">M 2,2</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">L 14,14</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">M 2,14</span>
+</div><div>      <span class="p1nnjrwi g1minml9 c1xlvnqm">L 14,2</span>
+</div><span class="pbazd3n c1xlvnqm">&lt;/svg&gt;</span></pre></div>
+<div class="s1su48j"><div class="c1jdl7i5">(0, 0)</div></div>
+</div>
+<div class="aq3l2jl">
+<div class="w1g272cd"><div class="t1t0o8gq">
+<div class="c4af6ms">
+<div class="c1tpaa3e">
+<span class="lrfnn4z">move</span><span class="s13r7c8g">m</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">line</span><span class="s13r7c8g">l</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">move</span><span class="s13r7c8g">m</span>
+</div>
+<div class="c1tpaa3e">
+<span class="lrfnn4z">line</span><span class="s13r7c8g">l</span>
+</div>
+</div>
+
+</div></div>
+<button class="p1mjvhpr bcww6zb w19mrn5v"><span class="c7sw782">Play</span></button>
+</div>
+</div>
+<h3 class="h1uetiv1" id="bzier-curves">
+<a class="aax5dne" href="#bzier-curves-5" id="bzier-curves-5"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Bézier curves</h3>
+<p class="prg881n">And here we get to the first “path-exclusive” feature!</p>
+<p class="prg881n">If you’ve been working with CSS for a while, you’ve likely used Bézier curves to control the <em>easing</em> of your <a class="a1tdgj4y s1j91s21" href="/animation/css-transitions/">CSS transitions</a>. In SVG, we can create those same swoopy curves, but they’re drawn visually rather than used mathematically.</p>
+<p class="prg881n">We have access to two flavors of Bézier curves in SVG. Let’s look at them each in turn.</p>
+<h4 class="htez0t9" id="quadratic-bzier-curves">
+<a class="aax5dne" href="#quadratic-bzier-curves-6" id="quadratic-bzier-curves-6"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Quadratic Bézier curves</h4>
+<p class="prg881n">The <code class="i165vvr1">Q</code> command lets us render “quadratic” Bézier curves. These are Bézier curves with a single control point.</p>
+<p class="prg881n"><strong><span class="c1qlv971">Drag the handles to see how this works:</span><span class="f1nwowtt">Drag the handles to see how this works:</span><span class="f1br746z">Focus one of the handles and use the arrow keys to see how this works:</span></strong></p>
+<div class="otiee4v"><div class="wp6o739 d16kq653">
+<div class="c95h0tf"><pre class="w1xc9hw2"><div>
+<span class="pe78lp5 c1mhrw2y">&lt;svg</span> <span class="phh3z8d c1mhrw2y">viewBox=</span><span class="g1apotcl c1mhrw2y">"0 0 16 16"</span>
+</div><div>  <span class="pe78lp5 c1mhrw2y">&lt;path</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">M 2,2</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">Q 2,14</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">  14,14</span>
+</div><span class="pe78lp5 c1mhrw2y">&lt;/svg&gt;</span></pre></div>
+<button class="r16bjf3u bis146 w19mrn5v"><span class="c7sw782">Reset</span></button><div class="s7rchtk">
+<button class="e1e80j3s"><div class="p9nm4xj">(2, 2)</div></button><button class="cu208i3 e1e80j3s"><div class="p9nm4xj">(2, 14)</div></button><button class="e1e80j3s"><div class="p9nm4xj">(14, 14)</div></button>
+</div>
+</div></div>
+<p class="prg881n">Quadratic Bézier curves require three points:</p>
+<ul class="uzpj0zh">
+<li class="wp18jjy"><div class="l1n7gg9f">The starting point, set by the <em class="w10oesj0">previous</em> command.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">The control point, pulling the line in its direction to create the curve.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">The end point, where the line ends.</div></li>
+</ul>
+<p class="prg881n">Like we saw with the <code class="i165vvr1">L</code> command, Bézier curves inherit their starting position from the previous command. In this case, the previous command is an <code class="i165vvr1">M</code> (Move) command to <code class="i165vvr1">1, 1</code>, but we can also chain Bézier curves after other drawing instructions.</p>
+
+<h4 class="htez0t9" id="cubic-bzier-curves">
+<a class="aax5dne" href="#cubic-bzier-curves-7" id="cubic-bzier-curves-7"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Cubic Bézier curves</h4>
+<p class="prg881n">The <code class="i165vvr1">C</code> command produces a <em class="w10oesj0">cubic</em> Bézier curve. This grants us one more control point to work with:</p>
+<div class="otiee4v"><div class="wp6o739 d16kq653">
+<div class="c95h0tf"><pre class="w1xc9hw2"><div>
+<span class="pe78lp5 c1mhrw2y">&lt;svg</span> <span class="phh3z8d c1mhrw2y">viewBox=</span><span class="g1apotcl c1mhrw2y">"0 0 16 16"</span>
+</div><div>  <span class="pe78lp5 c1mhrw2y">&lt;path</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">M 2,2</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">C 2,14</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">  14,2</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">  14,14</span>
+</div><span class="pe78lp5 c1mhrw2y">&lt;/svg&gt;</span></pre></div>
+<button class="r16bjf3u bis146 w19mrn5v"><span class="c7sw782">Reset</span></button><div class="s7rchtk">
+<button class="e1e80j3s"><div class="p9nm4xj">(2, 2)</div></button><button class="cu208i3 e1e80j3s"><div class="p9nm4xj">(2, 14)</div></button><button class="cu208i3 e1e80j3s"><div class="p9nm4xj">(14, 2)</div></button><button class="e1e80j3s"><div class="p9nm4xj">(14, 14)</div></button>
+</div>
+</div></div>
+<p class="prg881n">I remember when I was starting out with SVG, the terms “quadratic” and “cubic” were intimidating. Fortunately, the only thing these terms refer to is the number of control points. Quadratic curves have 1 point, cubic curves have 2.</p>
+<p class="prg881n">There are two reasons to use cubic Bézier curves instead of Quadratic ones:</p>
+<ol class="oc96fnv">
+<li class="wp18jjy"><div class="l1n7gg9f">Your curve has a bend in it, like an “S” shape. These shapes can’t be represented with only a single control point.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">You need more precision in how exactly your curve is represented.</div></li>
+</ol>
+<p class="prg881n">Single-point quadratic curves are great for parabola-type shapes, but we can’t really control how sharp it is. With a cubic Bézier curve, we can tighten the curve by moving the two control points close together:</p>
+<div class="otiee4v"><div class="wp6o739 d16kq653">
+<div class="c95h0tf"><pre class="w1xc9hw2"><div>
+<span class="pe78lp5 c1mhrw2y">&lt;svg</span> <span class="phh3z8d c1mhrw2y">viewBox=</span><span class="g1apotcl c1mhrw2y">"0 0 16 16"</span>
+</div><div>  <span class="pe78lp5 c1mhrw2y">&lt;path</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">M 2,2</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">C 2,15</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">  1,14</span>
+</div><div>      <span class="p1bwd6lk g1apotcl c1mhrw2y">  14,14</span>
+</div><span class="pe78lp5 c1mhrw2y">&lt;/svg&gt;</span></pre></div>
+<button class="r16bjf3u bis146 w19mrn5v"><span class="c7sw782">Reset</span></button><div class="s7rchtk">
+<button class="e1e80j3s"><div class="p9nm4xj">(2, 2)</div></button><button class="cu208i3 e1e80j3s"><div class="p9nm4xj">(2, 15)</div></button><button class="cu208i3 e1e80j3s"><div class="p9nm4xj">(1, 14)</div></button><button class="e1e80j3s"><div class="p9nm4xj">(14, 14)</div></button>
+</div>
+</div></div>
+<h3 class="h1uetiv1" id="arcs">
+<a class="aax5dne" href="#arcs-8" id="arcs-8"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Arcs</h3>
+<p class="prg881n">Last but certainly not least, we need to talk about elliptical arcs.</p>
+<p class="prg881n"><em class="w10oesj0">I’ll warn you right away:</em> arcs are confusing as heck. It took me a <em>long</em> time to really build an intuition for what each parameter does.</p>
+<p class="prg881n">Here’s what the syntax looks like:</p>
+<div class="coaxrjn c1qvfy1x ae97emi">
+<button class="wqxmqd2"><span class="i1htlkn0"><span class="i14jtb2i"><span class="haso6lc wlgbkjj">Copy to clipboard</span></span></span></button><div class="w19zxykk w1ey322x"><pre class="shiki shiki-themes josh-theme-light josh-theme-dark"><code><span class="line"><span>path</span></span>
+
+<span class="line"><span>    M [start-x],[start-y]</span></span>
+<span class="line"><span>    A [rx],[ry] [rotation] [large-arc-flag] [sweep-flag] [end-x],[end-y]</span></span>
+
+</code></pre></div>
+</div>
+<p class="prg881n">That’s <em class="w10oesj0">a lot</em> of parameters!</p>
+<p class="prg881n"><strong>For this command, I want to do something a bit different.</strong> Let’s set this syntax aside for now. We’re going to focus on the high-level ideas, to understand the surprisingly complex problems that arcs solve. That way, when we come back to the syntax, it should make way more sense.</p>
+<p class="prg881n">First, the basics: The <code class="i165vvr1">A</code> command allows us to draw an <em class="w10oesj0">elliptical</em> curve between a start point and an end point. Like all path commands, it’s designed to be composable so that we can chain it together with other drawing commands.</p>
+<p class="prg881n">Here’s a quick <code class="i165vvr1">&lt;path&gt;</code> demo that consists of a Move -&gt; Line -&gt; Arc -&gt; Line combo. <strong>Play with the handles to see how the arc behaves:</strong></p>
+<div class="w1ulamli d16kq653">
+<div class="s17l0384 s1vnopxf">
+<button class="hqoaah6"><div class="p1b1ez3m">(2, 8)</div></button><button class="hqoaah6"><div class="p1b1ez3m">(14, 8)</div></button>
+</div>
+<button class="rkvwudq bis146 w19mrn5v"><span class="c7sw782">Reset</span></button>
+</div>
+<p class="prg881n">This is a bit like the <code class="i165vvr1">&lt;ellipse&gt;</code> SVG element, but instead of drawing an entire oval/circle, we only draw the portion of the ellipse that is required to connect the start and end points.</p>
+<p class="prg881n">This is kinda weird, if we think about it. With <code class="i165vvr1">&lt;ellipse&gt;</code>, the shape is positioned based on its center point, specified with <code class="i165vvr1">cx</code> / <code class="i165vvr1">cy</code>. This feels mathematically straightforward. If you give me one of those elementary school geometry kits, I could produce a circle using this method: Stick the spike into the center coordinate and spin a full 360°.</p>
+
+<p class="prg881n"><strong>With arcs, though, things are a bit more complicated.</strong> Instead of providing a center point to trace around, we instead provide a start/end point. The browser will have to invent a <em class="w10oesj0">hypothetical</em> ellipse that contains both points somewhere on its circumference.</p>
+<p class="prg881n">This might not sound like a big difference, but it introduces several ambiguities that make things weird / interesting / hard.</p>
+<h4 class="htez0t9" id="ellipse-radius">
+<a class="aax5dne" href="#ellipse-radius-9" id="ellipse-radius-9"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Ellipse radius</h4>
+<p class="prg881n">In order to draw an elliptical arc between two points, the browser has to do <a class="a1tdgj4y s1j91s21" href="https://www.w3.org/TR/SVG11/implnote.html#ArcConversionEndpointToCenter">a bunch of <span class="p7a6phg">math<span class="wlgbkjj">(opens in new tab)</span></span></a> to calculate the <em class="w10oesj0">entire</em> ellipse, so that we can draw the small portion needed to connect the points.</p>
+<p class="prg881n">For example, suppose we had the following arc:</p>
+<p class="prg881n">In order for the browser to draw that little bridge connecting the two points, it first has to calculate a hypothetical ellipse that can work, like this one:</p>
+<p class="prg881n">In this particular case, the hypothetical ellipse is a circle with a radius of 4px in a 16×16 viewBox, but this is something that we can configure!</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6">
+<div class="d1j2qstn"><div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">Radius:</label>
+</div>
+
+</div></div>
+</div></div>
+<p class="prg881n">In fact, because this is an <em class="w10oesj0">elliptical</em> arc, we can control <code class="i165vvr1">rx</code> and <code class="i165vvr1">ry</code> independently, like we can with <code class="i165vvr1">&lt;ellipse&gt;</code>:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6">
+<svg class="s1vjjdha"><text class="b3wqxjk l1e4p20c">rx</text><text class="l1e4p20c">rx</text><text class="b3wqxjk l1e4p20c">ry</text><text class="l1e4p20c">ry</text></svg><div class="d1j2qstn">
+<div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">rx:</label>
+</div>
+
+</div>
+<div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">ry:</label>
+</div>
+
+</div>
+</div>
+</div></div>
+<p class="prg881n"><strong>Here’s the mental model I like to use for this:</strong> Imagine you have a table with a small hole in it. If you place a golf ball onto that hole, maybe 1/3rd of the ball would sink below the surface of the table.</p>
+<p class="prg881n">The arc traces along the bottom edge of that ball:</p>
+
+<p class="prg881n">If we swapped out the golf ball for one with a larger radius, like a baseball, then our arc would be shallower, since more of the ball is sitting above the hole:</p>
+
+<p class="prg881n">And if we chose an <em class="w10oesj0">enormous</em> ball like a bowling ball, the arc would practically be flat:</p>
+
+<p class="prg881n">To bring this back to SVGs: when we draw an arc, we need to specify a horizontal radius (<code class="i165vvr1">rx</code>) and a vertical radius (<code class="i165vvr1">ry</code>). These values affect the size of the hypothetical ellipse, which in turn affects how deep/shallow the arc is. The smaller the radius, the deeper the arc.</p>
+
+<h4 class="htez0t9" id="large-vs-small-arcs">
+<a class="aax5dne" href="#large-vs-small-arcs-10" id="large-vs-small-arcs-10"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Large vs small arcs</h4>
+<p class="prg881n">Let’s suppose we want to draw an arc between these points with a <code class="i165vvr1">rx</code>/<code class="i165vvr1">ry</code> of <code class="i165vvr1">5</code>:</p>
+<p class="prg881n">As we saw above, the browser creates a hypothetical ellipse with the provided radius and finds a way to bridge the gap using it, like this:</p>
+<p class="prg881n"><strong>But wait a sec:</strong> there are <em>two separate paths</em> we could follow, to get from the start point to the end point. We could take the short route going down, or the long way around, going up.</p>
+<p class="prg881n"><strong>Try toggling the “Arc size” to see what I mean:</strong></p>
+<div class="w1ulamli d16kq653">
+<div class="i1df5wci s360ott">
+<span class="l1fyq1q5">Arc size:</span><div class="w73h7tw" id="large-arc-flag"><div class="r1cct0ab">
+<button class="t6358bx"><span class="tglc2q3">Small</span></button><button class="t6358bx"><span class="tglc2q3">Large</span></button>
+</div></div>
+</div>
+<div class="s17l0384 s1vnopxf">
+<button class="hqoaah6"><div class="p1b1ez3m">(5, 5)</div></button><button class="hqoaah6"><div class="p1b1ez3m">(11, 11)</div></button>
+</div>
+<button class="rkvwudq bis146 w19mrn5v"><span class="c7sw782">Reset</span></button>
+</div>
+<p class="prg881n">You can also drag the handles around to see how this flag behaves with different gaps.</p>
+<p class="prg881n">Whenever two points are connected with a hypothetical ellipse, there are two routes we could take. We can pick which option we want with the “large arc flag” parameter. It’s a binary value: <code class="i165vvr1">0</code> selects the short path, <code class="i165vvr1">1</code> selects the longer path.</p>
+<h4 class="htez0t9" id="picking-the-right-ellipse">
+<a class="aax5dne" href="#picking-the-right-ellipse-11" id="picking-the-right-ellipse-11"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Picking the right ellipse</h4>
+<p class="prg881n">Once again, let’s start with a hypothetical scenario about a hypothetical ellipse:</p>
+<p class="prg881n">In this case, the circle’s diameter is <em class="w10oesj0">exactly</em> equal to the gap between points, and so there’s only one possible ellipse that can work in this scenario.</p>
+<p class="prg881n"><strong>But check this out:</strong> suppose we increase the radius of this ellipse so that it’s a bit bigger than the gap:</p>
+<p class="prg881n">In this case, there’s actually <em class="w10oesj0">two</em> places I can put this ellipse:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6"><div class="d1j2qstn"><div class="s360ott">
+<span class="l1fyq1q5">Direction:</span><div class="w73h7tw" id=":r4k:_direction"><div class="r1cct0ab">
+<button class="t6358bx"><span class="tglc2q3">Counter-clockwise</span></button><button class="t6358bx"><span class="tglc2q3">Clockwise</span></button>
+</div></div>
+</div></div></div></div>
+<p class="prg881n">We can select which ellipse we want to use with the “sweep flag”. Like the large arc flag we saw above, it’s a binary value: <code class="i165vvr1">0</code> selects the counter-clockwise arc, <code class="i165vvr1">1</code> selects the clockwise arc.</p>
+<p class="prg881n">You can see the resulting arc here:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6"><div class="d1j2qstn"><div class="s360ott">
+<span class="l1fyq1q5">Direction:</span><div class="w73h7tw" id=":r4m:_direction"><div class="r1cct0ab">
+<button class="t6358bx"><span class="tglc2q3">Counter-clockwise</span></button><button class="t6358bx"><span class="tglc2q3">Clockwise</span></button>
+</div></div>
+</div></div></div></div>
+<h4 class="htez0t9" id="rotation">
+<a class="aax5dne" href="#rotation-12" id="rotation-12"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Rotation</h4>
+<p class="prg881n">We’re almost done, I promise! There’s only one more parameter we need to look at.</p>
+<p class="prg881n">This final parameter, <code class="i165vvr1">rotation</code>, lets us <em class="w10oesj0">rotate</em> the arc:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6"><div class="d1j2qstn"><div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">Rotation:</label><span class="w1194iyg">0° (default)</span>
+</div>
+
+</div></div></div></div>
+<p class="prg881n">More specifically, this parameter rotates the hypothetical ellipse, and it does this <em class="w10oesj0">before</em> trying to figure out how to connect the two points using this ellipse.</p>
+<p class="prg881n">If your arc is circular (when <code class="i165vvr1">rx</code> and <code class="i165vvr1">ry</code> are set to the same value), this property has no effect. This makes sense when we imagine rotating a perfect circle: the rotation is totally invisible.</p>
+<p class="prg881n"><strong>Now, I’ll be honest with you:</strong> I don’t think I’ve ever actually used this parameter. 😅</p>
+<p class="prg881n">The main use case I see for this property is to correctly align the ellipse with the rest of the path. So, for example, if we’re drawing a cowboy hat at a 45-degree angle, we can apply the same rotation to the ellipse:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6">
+<div class="w1dno8y1"><div class="dpd3n9d"><div class="w1x6iz75"><span class="wlgbkjj">Yeehaw!</span></div></div></div>
+<div class="d1j2qstn"><div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">Rotation:</label><span class="w1194iyg">0° (default)</span>
+</div>
+
+</div></div>
+</div></div>
+<p class="prg881n">I think the reason I never find myself needing this is that I <em class="w10oesj0">wouldn’t</em> try to draw something at an angle like this. I would prefer to draw it straight-on and then rotate the entire shape using transforms. I suppose this could be useful if our path needed to draw multiple things at different angles, but at that point, I’d prefer to create it using drawing software instead of code.</p>
+<p class="prg881n">So, if your brain is feeling overloaded, feel free to not worry about “rotation”! Set this value to <code class="i165vvr1">0</code> and ride off into the sunset. 🤠</p>
+<h4 class="htez0t9" id="revisiting-the-syntax">
+<a class="aax5dne" href="#revisiting-the-syntax-13" id="revisiting-the-syntax-13"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Revisiting the syntax</h4>
+<p class="prg881n">I told you arcs were complicated!</p>
+<p class="prg881n">Here’s that syntax we started with. Hopefully, with all this new context, it makes a lot more sense:</p>
+<div class="coaxrjn c1qvfy1x ae97emi">
+<button class="wqxmqd2"><span class="i1htlkn0"><span class="i14jtb2i"><span class="haso6lc wlgbkjj">Copy to clipboard</span></span></span></button><div class="w19zxykk w1ey322x"><pre class="shiki shiki-themes josh-theme-light josh-theme-dark"><code><span class="line"><span>path</span></span>
+
+<span class="line"><span>    M [start-x],[start-y]</span></span>
+<span class="line"><span>    A [rx],[ry] [rotation] [large-arc-flag] [sweep-flag] [end-x],[end-y]</span></span>
+
+</code></pre></div>
+</div>
+<p class="prg881n">Here’s a quick cheatsheet of what each parameter does:</p>
+<ul class="uzpj0zh">
+<li class="wp18jjy"><div class="l1n7gg9f">The arc starts where the previous command left off. The arc’s start position is inherited from that previous command.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">
+<code class="i165vvr1">rx</code> and <code class="i165vvr1">ry</code> control the horizontal/vertical radius of the hypothetical ellipse.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">
+<code class="i165vvr1">rotation</code> will rotate the hypothetical ellipse. Specified in degrees. Leave as 0 for no rotation.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">
+<code class="i165vvr1">large-arc-flag</code> is a binary value that controls whether the arc takes the short path (<code class="i165vvr1">0</code>) or the long path (<code class="i165vvr1">1</code>). Has no effect if both paths are the exact same length.</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">
+<code class="i165vvr1">sweep-flag</code> is a binary value that controls which ellipse is used. From the start point, we can either go counter-clockwise (<code class="i165vvr1">0</code>) or clockwise (<code class="i165vvr1">1</code>).</div></li>
+<li class="wp18jjy"><div class="l1n7gg9f">
+<code class="i165vvr1">end-x</code> and <code class="i165vvr1">end-y</code> selects the end point for our arc.</div></li>
+</ul>
+<p class="prg881n"><strong>All of these parameters are required.</strong> Even if you don’t want to rotate your arc, for example, you still need to set rotation to "0".</p>
+<p class="prg881n">Here’s a playground for you to experiment with these concepts yourself:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r53:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r53:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r53:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 2,2
+      L 5,5
+      A 4,4 0 0 0 11,11
+      L 14,14
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<h2 class="hrk0sy8" id="animations">
+<a class="aax5dne" href="#animations-14" id="animations-14"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Animations</h2>
+<p class="prg881n">At this point, we’ve covered all of the most important fundamentals of SVG paths. I have a few more useful tidbits to share with you, but first, I want to let you know about a thing I’ve been working on. 😄</p>
+<p class="prg881n">It’s called <a class="a1tdgj4y s1j91s21" href="https://whimsy.joshwcomeau.com/">Whimsical <span class="p7a6phg">Animations<span class="wlgbkjj">(opens in new tab)</span></span></a>, and it’s a comprehensive interactive course about creating next-level animations and interactions.</p>
+
+<p class="prg881n">The course is split into four parts, covering a wide range of animation techniques. Part 2 is all about SVG animation. You’ll learn how to animate the paths we’ve been working with in this post, to create wonderful micro-interactions and big splashy effects. If you’re finding this blog post useful, you’ll get <em class="w10oesj0">so much</em> out of the course!</p>
+<p class="prg881n"><strong>Registration is now open!</strong> You can find out more here:</p>
+<ul class="uzpj0zh">
+<li class="wp18jjy"><div class="l1n7gg9f"><a class="a1tdgj4y s1j91s21" href="https://whimsy.joshwcomeau.com/">Whimsical <span class="p7a6phg">Animations<span class="wlgbkjj">(opens in new tab)</span></span></a></div></li>
+</ul>
+<p class="prg881n">If you’ve ever wondered how I made something on this blog, there’s a very good chance that we cover the underlying techniques in the course. My goal is to share all of my secrets, stuff that took me <em class="w10oesj0">years and years</em> to figure out on my own.</p>
+<h2 class="hrk0sy8" id="lil-extras">
+<a class="aax5dne" href="#lil-extras-15" id="lil-extras-15"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Lil’ extras</h2>
+<p class="prg881n">SVG paths have a few little bits of syntactic sugar, things that make it a bit easier to work with.</p>
+<h3 class="h1uetiv1" id="closing-paths">
+<a class="aax5dne" href="#closing-paths-16" id="closing-paths-16"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Closing paths</h3>
+<p class="prg881n">By default, paths are open-ended, but we can instruct our path to seal itself up using the <code class="i165vvr1">Z</code> command:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r5e:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r5e:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r5e:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 4,4
+      L 4,12
+      L 12,12
+      Z
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">The <code class="i165vvr1">Z</code> command will draw a straight line back to the first point specified by the original <code class="i165vvr1">M</code> command. It’s equivalent, in this case, to <code class="i165vvr1">L 4,4</code>.</p>
+
+<h3 class="h1uetiv1" id="relative-commands">
+<a class="aax5dne" href="#relative-commands-17" id="relative-commands-17"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Relative commands</h3>
+<p class="prg881n">In this blog post, we’ve been using uppercase commands like <code class="i165vvr1">L</code> and <code class="i165vvr1">A</code>. Each command has a <em>lowercase</em> alternative:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r5m:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r5m:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r5m:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 4,4
+      l 4,8
+      l 4,-8
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">The lowercase variants are <em>relative</em> commands. Instead of specifying coordinates based on the SVG coordinate system (with <code class="i165vvr1">(0, 0)</code> being in the top-left corner), relative commands are anchored to the previous command’s position.</p>
+<p class="prg881n">So, in the example above, we start by moving to <code class="i165vvr1">(4, 4)</code>. We then draw a relative line that adds 4px horizontally and 8px vertically. These values are added to the command’s starting position. The ending X value will be 8 (4 + 4), and the ending Y value will be 12 (4 + 8), so this command is equivalent to <code class="i165vvr1">L 8,12</code>.</p>
+<p class="prg881n">Similarly, negative values move in the opposite direction. The final command is another relative line that adds another 4px to the X coordinate (8 + 4 = 12), but <em>subtracts</em> 8 from the Y coordinate (12 - 8 = 4).</p>
+<p class="prg881n">Relative commands provide an entirely different mental model for designing paths, and it can be useful for certain kinds of illustrations. It also makes it easier to shift things along as a group:</p>
+<div class="o1m9cdug d16kq653"><div class="w1v90hn6">
+<div class="i1df5wci s360ott">
+<span class="l1fyq1q5">Command Type:</span><div class="w73h7tw" id="coordStyle"><div class="r1cct0ab">
+<button class="t6358bx"><span class="tglc2q3">Absolute</span></button><button class="t6358bx"><span class="tglc2q3">Relative</span></button>
+</div></div>
+</div>
+<div class="wafhek0">
+<div class="c6zfk8h"><div class="s1nfzlee"><button class="h1k33zt6"><div class="pao95pi">(2, 4)</div></button></div></div>
+<div class="c6zfk8h"><div class="c129dlot"><div class="c1qvfy1x ae97emi"><div class="w1ey322x"><pre class="shiki shiki-themes josh-theme-dark josh-theme-light"><code><span class="line"><span>svg</span><span> viewBox</span><span>=</span><span>"</span><span>0 0 16 16</span><span>"</span></span>
+<span class="line"><span>path</span></span>
+
+<span class="line"><span>      M 2,4</span></span>
+<span class="line"><span>      L 6,12</span></span>
+<span class="line"><span>      L 8,8</span></span>
+<span class="line"><span>      L 10,12</span></span>
+<span class="line"><span>      L 12,4</span></span>
+
+
+<span class="line"><span>&lt;/</span><span>svg</span></span></code></pre></div></div></div></div>
+</div>
+<div class="c3ct6i">
+<div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">Starting X position:</label><span class="w1194iyg">2</span>
+</div>
+
+</div>
+<div class="s4h798d">
+<div class="h1pypve8">
+<label class="lpsyt9t">Starting Y position:</label><span class="w1194iyg">4</span>
+</div>
+
+</div>
+</div>
+</div></div>
+<p class="prg881n">Relative commands will automatically adapt when their anchor point changes, so we wind up sliding the path around rather than deforming it.</p>
+<p class="prg881n">That said, I don’t <em>really</em> find myself doing this much, in practice. Instead, I typically solve this problem with a <code class="i165vvr1">transform: translate(x, y)</code>, to slide the path around wherever I want.</p>
+
+<h3 class="h1uetiv1" id="chained-curves">
+<a class="aax5dne" href="#chained-curves-18" id="chained-curves-18"><span class="aieubfy"><span class="wlgbkjj">Link to this heading</span></span></a>Chained curves</h3>
+<p class="prg881n">If you’ve ever tried to chain Bézier curves together, you’ve likely found that it’s challenging to get it to look right:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r62:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r62:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r62:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 4,4
+      Q 4,10
+        8,8
+      Q 14,0
+        12,12
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">If you look closely, there’s a visible “elbow” where the two curves connect:</p>
+
+<p class="prg881n">In order for our Bézier curves to flow well, we need to match the <em class="w10oesj0">angles</em> of subsequent curves, so that the path doesn’t veer off in a new direction. There isn’t any sort of built-in smoothing.</p>
+<p class="prg881n">Fortunately, there is a handy command that can help:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r67:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r67:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r67:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><pre class="sp-c-fWymNx sp-pre-placeholder"><span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 16 16"</span>
+  <span class="sp-syntax-definition">path</span>
+    <span class="sp-syntax-property">d</span>=<span class="sp-syntax-string">"
+      M 4,4
+      Q 4,10
+        8,8
+      T 12,12
+    "</span>
+  <span class="sp-syntax-punctuation">/&gt;</span>
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span></pre></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">The <code class="i165vvr1">T</code> command creates a Quadratic Bézier curve, like <code class="i165vvr1">Q</code>, but it doesn’t take a control point, it <em>only</em> accepts an end point. The control point is derived automatically by mirroring the angle, so that our path is smooth and kink-free.</p>
+<p class="prg881n">Similarly, the <code class="i165vvr1">S</code> command creates a <em>cubic</em> Bézier curve that omits the first control point. That point will be computed automatically to ensure a smooth curve.</p>
+<p class="prg881n">For example:</p>
+<div><div class="light sp-c-fVPbOs sp-c-fVPbOs-gMQIch-variant-light sp-wrapper"><div class="io76lfy"><div class="w5hp34c s1hfctpl d16kq653"><div class="sp-1360167065 sp-c-fVPbOs sp-c-fVPbOs-LrWkf-variant-dark sp-wrapper"><div class="ibsvt7h">
+<div class="wpmelzo"><div class="c57y05s">
+<div class="fi4glkm p1po48jq"><div class="wz6vz5e"><div class="sp-c-euXojQ sp-editor sp-stack">
+<div class="sp-c-dyHYiL sp-tabs"><div class="sp-c-gGbYbQ sp-tabs-scrollable-container">
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/index.html-:r6c:-tab" title="/index.html">index.html</button></div>
+<div class="sp-c-hluGOI sp-tab-container"><button class="sp-c-bxeRRt sp-c-pacmO sp-tab-button" id="/styles.css-:r6c:-tab" title="/styles.css">styles.css</button></div>
+</div></div>
+<div class="sp-c-gtcpyq sp-code-editor" id="/index.html-:r6c:-tab-panel"><div class="sp-pristine sp-html sp-c-jOWzsE sp-c-jkvvao sp-cm"><div class="cm-editor ͼ1 ͼ2 ͼ27"><div class="cm-scroller"><div class="cm-content cm-lineWrapping">
+<div class="cm-activeLine cm-line">
+<span class="sp-syntax-definition">svg</span> <span class="sp-syntax-property">viewBox</span>=<span class="sp-syntax-string">"0 0 24 16"</span>
+</div>
+<div class="cm-line"> <span class="sp-syntax-definition">path</span>
+</div>
+
+<div class="cm-line"><span class="sp-syntax-string">      M 0,8</span></div>
+<div class="cm-line"><span class="sp-syntax-string">      C 4,0</span></div>
+<div class="cm-line"><span class="sp-syntax-string">        8,21</span></div>
+<div class="cm-line"><span class="sp-syntax-string">        12,12</span></div>
+<div class="cm-line"><span class="sp-syntax-string">      S 16,16</span></div>
+<div class="cm-line"><span class="sp-syntax-string">        24,8</span></div>
+
+
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">svg</span>
+</div>
+</div></div></div></div></div>
+</div></div></div>
+<button class="d5w3fkw"><span class="wlgbkjj">Resize editor. Use left/right arrows.</span></button><div class="sm0fezx p1po48jq"><div class="r1w674po"><div class="w1n7upnl">
+<button class="a5rk396 tv02bcs">result</button><button class="tv02bcs">console</button><div class="a1puyu63"><abbr title="Refresh pane"><button class="whty8xo a6j6o3o"><span class="wlgbkjj">Refresh results pane</span></button></abbr></div>
+</div></div></div>
+</div></div>
+</div></div></div></div></div></div>
+<p class="prg881n">This is a useful bit of syntactic sugar because it saves us the trial and error of finding a control point that doesn’t result in an elbow. In practice, though, I generally find myself using vector graphics software if my shape includes many chained curves (like the cloud swoops at the top of this page).</p>
+<p class="prg881n">Like so many of my blog posts, this one turned out to be way longer than I originally intended, and yet it still only scratches the surface of what can be done with SVG paths. 😅</p>
+<p class="prg881n">Like I mentioned above, you can learn so much more in my brand-new course, <a class="a1tdgj4y s1j91s21" href="https://whimsy.joshwcomeau.com/">Whimsical <span class="p7a6phg">Animations<span class="wlgbkjj">(opens in new tab)</span></span></a>.</p>
+<div class="wn1j5xj">
+<div class="d66f43p">
+<h3 class="pi40lrf">Last updated on</h3>
+<p class="tgqp2fj">June 9th, 2026</p>
+</div>
+<div class="h15tjzrj"><h3 class="pi40lrf"># of hits</h3></div>
+</div></article></main></div>
+</div>
+
+</div></div></div>

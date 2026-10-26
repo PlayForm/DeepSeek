@@ -1,0 +1,1527 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=11">
+<meta name="generator" content="Doxygen 1.12.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenCV: Image Segmentation with Distance Transform and Watershed Algorithm</title>
+<link rel="icon" href="../../opencv.ico" type="image/x-icon">
+<link href="../../tabs.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<script type="text/javascript" src="../../tutorial-utils.js"></script>
+<script type="text/javascript" src="../../clipboard.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../cookie.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<script type="text/javascript">
+window.MathJax = {
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  },
+  loader: {
+    load: ['[tex]/ams']
+  },
+  tex: {
+    macros: {},
+    packages: ['base','configmacros','ams']
+  }
+};
+//<![CDATA[
+window.MathJax = {
+    loader: {load: ['[tex]/ams']},
+    tex: {
+        packages: {'[+]': ['ams']},
+        macros: {
+            matTT: [ "\\[ \\left|\\begin{array}{ccc} #1 & #2 & #3\\\\ #4 & #5 & #6\\\\ #7 & #8 & #9 \\end{array}\\right| \\]", 9],
+            fork: ["\\left\\{ \\begin{array}{l l} #1 & \\mbox{#2}\\\\ #3 & \\mbox{#4}\\\\ \\end{array} \\right.", 4],
+            forkthree: ["\\left\\{ \\begin{array}{l l} #1 & \\mbox{#2}\\\\ #3 & \\mbox{#4}\\\\ #5 & \\mbox{#6}\\\\ \\end{array} \\right.", 6],
+            forkfour: ["\\left\\{ \\begin{array}{l l} #1 & \\mbox{#2}\\\\ #3 & \\mbox{#4}\\\\ #5 & \\mbox{#6}\\\\ #7 & \\mbox{#8}\\\\ \\end{array} \\right.", 8],
+            vecthree: ["\\begin{bmatrix} #1\\\\ #2\\\\ #3 \\end{bmatrix}", 3],
+            vecthreethree: ["\\begin{bmatrix} #1 & #2 & #3\\\\ #4 & #5 & #6\\\\ #7 & #8 & #9 \\end{bmatrix}", 9],
+            cameramatrix: ["#1 = \\begin{bmatrix} f_x & 0 & c_x\\\\ 0 & f_y & c_y\\\\ 0 & 0 & 1 \\end{bmatrix}", 1],
+            distcoeffs: ["(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6 [, s_1, s_2, s_3, s_4[, \\tau_x, \\tau_y]]]]) \\text{ of 4, 5, 8, 12 or 14 elements}"],
+            distcoeffsfisheye: ["(k_1, k_2, k_3, k_4)"],
+            hdotsfor: ["\\dots", 1],
+            mathbbm: ["\\mathbb{#1}", 1],
+            bordermatrix: ["\\matrix{#1}", 1]
+        },
+        processEscapes: false
+    }
+};
+//]]>
+</script>
+<script type="text/javascript" id="MathJax-script" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-chtml.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css">
+<link href="../../stylesheet.css" rel="stylesheet" type="text/css">
+<script src="/cdn-cgi/challenge-platform/scripts/precursor/main.js"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-c::before {
+  display: inline-block;
+  width: 0;
+}
+
+.mjx-n mjx-c {
+  font-family: MJXZERO, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-i mjx-c {
+  font-family: MJXZERO, MJXTEX-I, MJXTEX-MI, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-b.mjx-i mjx-c {
+  font-family: MJXZERO, MJXTEX-BI, MJXTEX-B, MJXTEX-I, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-cal mjx-c {
+  font-family: MJXZERO, MJXTEX-C, MJXTEX-I, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-cal.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-C-B, MJXTEX-C, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ds mjx-c {
+  font-family: MJXZERO, MJXTEX-A, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1;
+}
+
+.mjx-fr mjx-c {
+  font-family: MJXZERO, MJXTEX-FR, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-fr.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-FR-B, MJXTEX-FR, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-sc mjx-c {
+  font-family: MJXZERO, MJXTEX-SC, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-sc.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-SC-B, MJXTEX-SC, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ss mjx-c {
+  font-family: MJXZERO, MJXTEX-SS, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ss.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-SS-B, MJXTEX-SS, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ss.mjx-i mjx-c {
+  font-family: MJXZERO, MJXTEX-SS-I, MJXTEX-I, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ss.mjx-b.mjx-i mjx-c {
+  font-family: MJXZERO, MJXTEX-SS-B, MJXTEX-SS-I, MJXTEX-BI, MJXTEX-B, MJXTEX-I, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-ty mjx-c {
+  font-family: MJXZERO, MJXTEX-T, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-var mjx-c {
+  font-family: MJXZERO, MJXTEX-A, MJXTEX, MJXTEX-I, MJXTEX-S1;
+}
+
+.mjx-os mjx-c {
+  font-family: MJXZERO, MJXTEX-C, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-os.mjx-b mjx-c {
+  font-family: MJXZERO, MJXTEX-C-B, MJXTEX-C, MJXTEX-B, MJXTEX-BI, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-mit mjx-c {
+  font-family: MJXZERO, MJXTEX-MI, MJXTEX-I, MJXTEX, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-lop mjx-c {
+  font-family: MJXZERO, MJXTEX-S2, MJXTEX-S1, MJXTEX, MJXTEX-I, MJXTEX-A;
+}
+
+.mjx-sop mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX, MJXTEX-I, MJXTEX-A;
+}
+
+.mjx-s3 mjx-c {
+  font-family: MJXZERO, MJXTEX-S3, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.mjx-s4 mjx-c {
+  font-family: MJXZERO, MJXTEX-S4, MJXTEX, MJXTEX-I, MJXTEX-S1, MJXTEX-A;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-C-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FR-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SS-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SS-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+</style></head>
+<body style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<!--#include virtual="/google-search.html"-->
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../opencv-logo-small.png"></td>
+  <td id="projectalign">
+   <div id="projectname">OpenCV<span id="projectnumber">&nbsp;4.13.0</span>
+   </div>
+   <div id="projectbrief">Open Source Computer Vision</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(1); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','Search',false);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){ initResizable(false); });
+/* @license-end */
+</script>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow" onmouseover="return searchBox.OnSearchSelectShow()" onmouseout="return searchBox.OnSearchSelectHide()" onkeydown="return searchBox.OnSearchSelectKey(event)" tabindex="0">
+<a class="SelectItem" onclick="searchBox.OnSelectItem(0)" href="javascript:void(0)"><span class="SelectionMark">•</span>All</a><a class="SelectItem" onclick="searchBox.OnSelectItem(1)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" onclick="searchBox.OnSelectItem(2)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" onclick="searchBox.OnSelectItem(3)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" onclick="searchBox.OnSelectItem(4)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" onclick="searchBox.OnSelectItem(5)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Variables</a><a class="SelectItem" onclick="searchBox.OnSelectItem(6)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Typedefs</a><a class="SelectItem" onclick="searchBox.OnSelectItem(7)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Enumerations</a><a class="SelectItem" onclick="searchBox.OnSelectItem(8)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Enumerator</a><a class="SelectItem" onclick="searchBox.OnSelectItem(9)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Properties</a><a class="SelectItem" onclick="searchBox.OnSelectItem(10)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Friends</a><a class="SelectItem" onclick="searchBox.OnSelectItem(11)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Macros</a><a class="SelectItem" onclick="searchBox.OnSelectItem(12)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Modules</a><a class="SelectItem" onclick="searchBox.OnSelectItem(13)" href="javascript:void(0)"><span class="SelectionMark">&nbsp;</span>Pages</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow" style="display: none;">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="../../d9/df8/tutorial_root.html">OpenCV Tutorials</a></li><li class="navelem"><a class="el" href="../../d7/da8/tutorial_table_of_content_imgproc.html">Image Processing (imgproc module)</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div id="doc-content" style="height: 511px;">
+<div><div class="header">
+  <div class="headertitle"><div class="title">Image Segmentation with Distance Transform and Watershed Algorithm</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="toc"><h3>Table of Contents</h3>
+<ul>
+  <li class="level1">
+    <a href="#autotoc_md659">Goal</a>
+  </li>
+  <li class="level1">
+    <a href="#autotoc_md660">Theory</a>
+  </li>
+  <li class="level1">
+    <a href="#autotoc_md661">Code</a>
+  </li>
+  <li class="level1">
+    <a href="#autotoc_md662">Explanation / Result</a>
+  </li>
+</ul>
+</div>
+<div class="textblock"><p><a class="anchor" id="md__2home_2ci_2opencv_2doc_2tutorials_2imgproc_2imgtrans_2distance__transformation_2distance__transform"></a></p>
+<p><b>Prev Tutorial:</b> <a class="el" href="../../dc/d48/tutorial_point_polygon_test.html">Point Polygon Test</a> <br>
+<b>Next Tutorial:</b> <a class="el" href="../../de/d3c/tutorial_out_of_focus_deblur_filter.html">Out-of-focus Deblur Filter</a> <br>
+ </p><table class="markdownTable">
+<tbody><tr class="markdownTableHead">
+<th class="markdownTableHeadRight"></th><th class="markdownTableHeadLeft"></th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">Original author   </td><td class="markdownTableBodyLeft">Theodore Tsesmelis    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">Compatibility   </td><td class="markdownTableBodyLeft">OpenCV &gt;= 3.0   </td></tr>
+</tbody></table>
+<h1><a class="anchor" id="autotoc_md659"></a>
+Goal</h1>
+<p>In this tutorial you will learn how to:</p>
+<ul>
+<li>Use the OpenCV function <a class="el" href="../../d4/d86/group__imgproc__filter.html#ga27c049795ce870216ddfb366086b5a04">cv::filter2D</a> in order to perform some laplacian filtering for image sharpening</li>
+<li>Use the OpenCV function <a class="el" href="../../d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042">cv::distanceTransform</a> in order to obtain the derived representation of a binary image, where the value of each pixel is replaced by its distance to the nearest background pixel</li>
+<li>Use the OpenCV function <a class="el" href="../../d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1">cv::watershed</a> in order to isolate objects in the image from the background</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md660"></a>
+Theory</h1>
+<h1><a class="anchor" id="autotoc_md661"></a>
+Code<br><br><button class="toggleable_button label_cpp" style="border: 2px inset; border-radius: 4px; margin: 2px;">C++</button><button class="toggleable_button label_java" style="border: 2px outset; border-radius: 4px; margin: 2px;">Java</button><button class="toggleable_button label_python" style="border: 2px outset; border-radius: 4px; margin: 2px;">Python</button></h1>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"><p> This tutorial code's is shown lines below. You can also download it from <a href="https://github.com/opencv/opencv/tree/4.x/samples/cpp/tutorial_code/ImgTrans/imageSegmentation.cpp" target="_blank">here</a>. </p><div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="../../d0/d9c/core_2include_2opencv2_2core_8hpp.html">opencv2/core.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="../../d1/d4f/imgproc_2include_2opencv2_2imgproc_8hpp.html">opencv2/imgproc.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="../../d4/dd5/highgui_8hpp.html">opencv2/highgui.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">using namespace </span><a class="code hl_namespace" href="../../d8/dcc/namespacestd.html">std</a>;</div>
+<div class="line"><span class="keyword">using namespace </span><a class="code hl_namespace" href="../../d2/d75/namespacecv.html">cv</a>;</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="../../dc/d89/highgui__qt_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// Load the image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d0/d2e/classcv_1_1CommandLineParser.html">CommandLineParser</a> parser( argc, argv, <span class="stringliteral">"{@input | cards.png | input image}"</span> );</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> src = imread( samples::findFile( parser.get&lt;<a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1f6634802eeadfd7245bc75cf3e216c2">String</a>&gt;( <span class="stringliteral">"@input"</span> ) ) );</div>
+<div class="line">    <span class="keywordflow">if</span>( src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#abbec3525a852e77998aba034813fded4">empty</a>() )</div>
+<div class="line">    {</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">"Could not open or find the image!\n"</span> &lt;&lt; endl;</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">"Usage: "</span> &lt;&lt; argv[0] &lt;&lt; <span class="stringliteral">" &lt;Input image&gt;"</span> &lt;&lt; endl;</div>
+<div class="line">        <span class="keywordflow">return</span> -1;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Show the source image</span></div>
+<div class="line">    imshow(<span class="stringliteral">"Source Image"</span>, src);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Change the background from white to black, since that will help later to extract</span></div>
+<div class="line">    <span class="comment">// better results during the use of Distance Transform</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> mask;</div>
+<div class="line">    inRange(src, <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255, 255, 255), <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255, 255, 255), mask);</div>
+<div class="line">    src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#a030678ffd9ca6e12127b3fd1337bf6e2">setTo</a>(<a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(0, 0, 0), mask);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Show output image</span></div>
+<div class="line">    imshow(<span class="stringliteral">"Black Background Image"</span>, src);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create a kernel that we will use to sharpen our image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> kernel = (<a class="code hl_class" href="../../df/dfc/classcv_1_1Mat__.html">Mat_&lt;float&gt;</a>(3,3) &lt;&lt;</div>
+<div class="line">                  1,  1, 1,</div>
+<div class="line">                  1, -8, 1,</div>
+<div class="line">                  1,  1, 1); <span class="comment">// an approximation of second derivative, a quite strong kernel</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// do the laplacian filtering as it is</span></div>
+<div class="line">    <span class="comment">// well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line">    <span class="comment">// because the kernel has some negative values,</span></div>
+<div class="line">    <span class="comment">// and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line">    <span class="comment">// BUT a 8bits unsigned int (the one we are working with) can contain values from 0 to 255</span></div>
+<div class="line">    <span class="comment">// so the possible negative number will be truncated</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> imgLaplacian;</div>
+<div class="line">    filter2D(src, imgLaplacian, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4a3def5d72b74bed31f5f8ab7676099c">CV_32F</a>, kernel);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> sharp;</div>
+<div class="line">    src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(sharp, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4a3def5d72b74bed31f5f8ab7676099c">CV_32F</a>);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> imgResult = sharp - imgLaplacian;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// convert back to 8bits gray scale</span></div>
+<div class="line">    imgResult.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(imgResult, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line">    imgLaplacian.convertTo(imgLaplacian, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// imshow( "Laplace Filtered Image", imgLaplacian );</span></div>
+<div class="line">    imshow( <span class="stringliteral">"New Sharped Image"</span>, imgResult );</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create binary image from source image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> bw;</div>
+<div class="line">    cvtColor(imgResult, bw, COLOR_BGR2GRAY);</div>
+<div class="line">    threshold(bw, bw, 40, 255, THRESH_BINARY | THRESH_OTSU);</div>
+<div class="line">    imshow(<span class="stringliteral">"Binary Image"</span>, bw);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Perform the distance transform algorithm</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dist;</div>
+<div class="line">    distanceTransform(bw, dist, DIST_L2, 3);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line">    <span class="comment">// so we can visualize and threshold it</span></div>
+<div class="line">    normalize(dist, dist, 0, 1.0, NORM_MINMAX);</div>
+<div class="line">    imshow(<span class="stringliteral">"Distance Transform Image"</span>, dist);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Threshold to obtain the peaks</span></div>
+<div class="line">    <span class="comment">// This will be the markers for the foreground objects</span></div>
+<div class="line">    threshold(dist, dist, 0.4, 1.0, THRESH_BINARY);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Dilate a bit the dist image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> kernel1 = Mat::ones(3, 3, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line">    dilate(dist, dist, kernel1);</div>
+<div class="line">    imshow(<span class="stringliteral">"Peaks"</span>, dist);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create the CV_8U version of the distance image</span></div>
+<div class="line">    <span class="comment">// It is needed for findContours()</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dist_8u;</div>
+<div class="line">    dist.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(dist_8u, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Find total markers</span></div>
+<div class="line">    vector&lt;vector&lt;Point&gt; &gt; contours;</div>
+<div class="line">    findContours(dist_8u, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create the marker image for the watershed algorithm</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> markers = Mat::zeros(dist.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1">size</a>(), <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4067910fc388075c3ea3aa14393e83b9">CV_32S</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Draw the foreground markers</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; contours.size(); i++)</div>
+<div class="line">    {</div>
+<div class="line">        drawContours(markers, contours, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i), <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i)+1), -1);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Draw the background marker</span></div>
+<div class="line">    circle(markers, <a class="code hl_class" href="../../db/d4e/classcv_1_1Point__.html">Point</a>(5,5), 3, <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255), -1);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> markers8u;</div>
+<div class="line">    markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(markers8u, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>, 10);</div>
+<div class="line">    imshow(<span class="stringliteral">"Markers"</span>, markers8u);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Perform the watershed algorithm</span></div>
+<div class="line">    watershed(imgResult, markers);</div>
+<div class="line"> </div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> mark;</div>
+<div class="line">    markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(mark, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line">    bitwise_not(mark, mark);</div>
+<div class="line">    <span class="comment">//    imshow("Markers_v2", mark); // uncomment this if you want to see how the mark</span></div>
+<div class="line">    <span class="comment">// image looks like at that point</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Generate random colors</span></div>
+<div class="line">    vector&lt;Vec3b&gt; colors;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; contours.size(); i++)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordtype">int</span> b = theRNG().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line">        <span class="keywordtype">int</span> g = theRNG().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line">        <span class="keywordtype">int</span> r = theRNG().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line"> </div>
+<div class="line">        colors.push_back(<a class="code hl_class" href="../../d6/dcf/classcv_1_1Vec.html">Vec3b</a>((<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)b, (<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)g, (<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)r));</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create the result image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dst = Mat::zeros(markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1">size</a>(), <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Fill labeled objects with random colors</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#abed816466c45234254d25bc59c31245e">rows</a>; i++)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#aa3e5a47585c9ef6a0842556739155e3e">cols</a>; j++)</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keywordtype">int</span> index = markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df">at</a>&lt;<span class="keywordtype">int</span>&gt;(i,j);</div>
+<div class="line">            <span class="keywordflow">if</span> (index &gt; 0 &amp;&amp; index &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(contours.size()))</div>
+<div class="line">            {</div>
+<div class="line">                dst.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df">at</a>&lt;<a class="code hl_class" href="../../d6/dcf/classcv_1_1Vec.html">Vec3b</a>&gt;(i,j) = colors[index-1];</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Visualize the final image</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Final Result"</span>, dst);</div>
+<div class="line"> </div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga5628525ad33f52eab17feebcfba38bd7">waitKey</a>();</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="aclasscv_1_1CommandLineParser_html"><div class="ttname"><a href="../../d0/d2e/classcv_1_1CommandLineParser.html">cv::CommandLineParser</a></div><div class="ttdoc">Designed for command line parsing.</div><div class="ttdef"><b>Definition</b> utility.hpp:890</div></div>
+<div class="ttc" id="aclasscv_1_1Mat___html"><div class="ttname"><a href="../../df/dfc/classcv_1_1Mat__.html">cv::Mat_</a></div><div class="ttdoc">Template matrix class derived from Mat.</div><div class="ttdef"><b>Definition</b> mat.hpp:2296</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html">cv::Mat</a></div><div class="ttdoc">n-dimensional dense array class</div><div class="ttdef"><b>Definition</b> mat.hpp:840</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_a030678ffd9ca6e12127b3fd1337bf6e2"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#a030678ffd9ca6e12127b3fd1337bf6e2">cv::Mat::setTo</a></div><div class="ttdeci">Mat &amp; setTo(InputArray value, InputArray mask=noArray())</div><div class="ttdoc">Sets all or some of the array elements to the specified value.</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_a146f8e8dda07d1365a575ab83d9828d1"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1">cv::Mat::size</a></div><div class="ttdeci">MatSize size</div><div class="ttdef"><b>Definition</b> mat.hpp:2226</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_aa10d804e90b51d4157b5c26e12c5d2df"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df">cv::Mat::at</a></div><div class="ttdeci">_Tp &amp; at(int i0=0)</div><div class="ttdoc">Returns a reference to the specified array element.</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_aa3e5a47585c9ef6a0842556739155e3e"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#aa3e5a47585c9ef6a0842556739155e3e">cv::Mat::cols</a></div><div class="ttdeci">int cols</div><div class="ttdef"><b>Definition</b> mat.hpp:2204</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_abbec3525a852e77998aba034813fded4"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#abbec3525a852e77998aba034813fded4">cv::Mat::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">Returns true if the array has no elements.</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_abed816466c45234254d25bc59c31245e"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#abed816466c45234254d25bc59c31245e">cv::Mat::rows</a></div><div class="ttdeci">int rows</div><div class="ttdoc">the number of rows and columns or (-1, -1) when the matrix has more than 2 dimensions</div><div class="ttdef"><b>Definition</b> mat.hpp:2204</div></div>
+<div class="ttc" id="aclasscv_1_1Mat_html_adf88c60c5b4980e05bb556080916978b"><div class="ttname"><a href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">cv::Mat::convertTo</a></div><div class="ttdeci">void convertTo(OutputArray m, int rtype, double alpha=1, double beta=0) const</div><div class="ttdoc">Converts an array to another data type with optional scaling.</div></div>
+<div class="ttc" id="aclasscv_1_1Point___html"><div class="ttname"><a href="../../db/d4e/classcv_1_1Point__.html">cv::Point_&lt; int &gt;</a></div></div>
+<div class="ttc" id="aclasscv_1_1RNG_html_acde197860cea91e5aa896be8719457ae"><div class="ttname"><a href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">cv::RNG::uniform</a></div><div class="ttdeci">int uniform(int a, int b)</div><div class="ttdoc">returns uniformly distributed integer random number from [a,b) range</div></div>
+<div class="ttc" id="aclasscv_1_1Scalar___html"><div class="ttname"><a href="../../d1/da0/classcv_1_1Scalar__.html">cv::Scalar_&lt; double &gt;</a></div></div>
+<div class="ttc" id="aclasscv_1_1Vec_html"><div class="ttname"><a href="../../d6/dcf/classcv_1_1Vec.html">cv::Vec</a></div><div class="ttdoc">Template class for short numerical vectors, a partial case of Matx.</div><div class="ttdef"><b>Definition</b> matx.hpp:369</div></div>
+<div class="ttc" id="acore_2include_2opencv2_2core_8hpp_html"><div class="ttname"><a href="../../d0/d9c/core_2include_2opencv2_2core_8hpp.html">core.hpp</a></div></div>
+<div class="ttc" id="agroup__core__basic_html_ga1f6634802eeadfd7245bc75cf3e216c2"><div class="ttname"><a href="../../dc/d84/group__core__basic.html#ga1f6634802eeadfd7245bc75cf3e216c2">cv::String</a></div><div class="ttdeci">std::string String</div><div class="ttdef"><b>Definition</b> cvstd.hpp:151</div></div>
+<div class="ttc" id="agroup__core__hal__interface_html_ga32b18d904ee2b1731a9416a8eef67d06"><div class="ttname"><a href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a></div><div class="ttdeci">#define CV_8U</div><div class="ttdef"><b>Definition</b> interface.h:73</div></div>
+<div class="ttc" id="agroup__core__hal__interface_html_ga4067910fc388075c3ea3aa14393e83b9"><div class="ttname"><a href="../../d1/d1b/group__core__hal__interface.html#ga4067910fc388075c3ea3aa14393e83b9">CV_32S</a></div><div class="ttdeci">#define CV_32S</div><div class="ttdef"><b>Definition</b> interface.h:77</div></div>
+<div class="ttc" id="agroup__core__hal__interface_html_ga4a3def5d72b74bed31f5f8ab7676099c"><div class="ttname"><a href="../../d1/d1b/group__core__hal__interface.html#ga4a3def5d72b74bed31f5f8ab7676099c">CV_32F</a></div><div class="ttdeci">#define CV_32F</div><div class="ttdef"><b>Definition</b> interface.h:78</div></div>
+<div class="ttc" id="agroup__core__hal__interface_html_ga65f85814a8290f9797005d3b28e7e5fc"><div class="ttname"><a href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></div><div class="ttdeci">unsigned char uchar</div><div class="ttdef"><b>Definition</b> interface.h:51</div></div>
+<div class="ttc" id="agroup__core__hal__interface_html_ga88c4cd9de76f678f33928ef1e3f96047"><div class="ttname"><a href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a></div><div class="ttdeci">#define CV_8UC3</div><div class="ttdef"><b>Definition</b> interface.h:90</div></div>
+<div class="ttc" id="agroup__highgui_html_ga453d42fe4cb60e5723281a89973ee563"><div class="ttname"><a href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv::imshow</a></div><div class="ttdeci">void imshow(const String &amp;winname, InputArray mat)</div><div class="ttdoc">Displays an image in the specified window.</div></div>
+<div class="ttc" id="agroup__highgui_html_ga5628525ad33f52eab17feebcfba38bd7"><div class="ttname"><a href="../../d7/dfc/group__highgui.html#ga5628525ad33f52eab17feebcfba38bd7">cv::waitKey</a></div><div class="ttdeci">int waitKey(int delay=0)</div><div class="ttdoc">Waits for a pressed key.</div></div>
+<div class="ttc" id="ahighgui_8hpp_html"><div class="ttname"><a href="../../d4/dd5/highgui_8hpp.html">highgui.hpp</a></div></div>
+<div class="ttc" id="ahighgui__qt_8cpp_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="../../dc/d89/highgui__qt_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition</b> highgui_qt.cpp:3</div></div>
+<div class="ttc" id="aimgproc_2include_2opencv2_2imgproc_8hpp_html"><div class="ttname"><a href="../../d1/d4f/imgproc_2include_2opencv2_2imgproc_8hpp.html">imgproc.hpp</a></div></div>
+<div class="ttc" id="anamespacecv_html"><div class="ttname"><a href="../../d2/d75/namespacecv.html">cv</a></div><div class="ttdef"><b>Definition</b> core.hpp:107</div></div>
+<div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="../../d8/dcc/namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"><p> This tutorial code's is shown lines below. You can also download it from <a href="https://github.com/opencv/opencv/tree/4.x/samples/java/tutorial_code/ImgTrans/distance_transformation/ImageSegmentationDemo.java" target="_blank">here</a> </p><div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div>
+<div class="line"><span class="keyword">import</span> java.util.List;</div>
+<div class="line"><span class="keyword">import</span> java.util.Random;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.Core;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.CvType;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.Mat;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.MatOfPoint;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.Point;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.core.Scalar;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.highgui.HighGui;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.imgcodecs.Imgcodecs;</div>
+<div class="line"><span class="keyword">import</span> org.opencv.imgproc.Imgproc;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">class </span>ImageSegmentation {</div>
+<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> run(String[] args) {</div>
+<div class="line">        <span class="comment">// Load the image</span></div>
+<div class="line">        String filename = args.length &gt; 0 ? args[0] : <span class="stringliteral">"../data/cards.png"</span>;</div>
+<div class="line">        Mat srcOriginal = Imgcodecs.imread(filename);</div>
+<div class="line">        <span class="keywordflow">if</span> (srcOriginal.empty()) {</div>
+<div class="line">            System.err.println(<span class="stringliteral">"Cannot read image: "</span> + filename);</div>
+<div class="line">            System.exit(0);</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Show source image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Source Image"</span>, srcOriginal);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Change the background from white to black, since that will help later to</span></div>
+<div class="line">        <span class="comment">// extract</span></div>
+<div class="line">        <span class="comment">// better results during the use of Distance Transform</span></div>
+<div class="line">        Mat src = srcOriginal.clone();</div>
+<div class="line">        <span class="keywordtype">byte</span>[] srcData = <span class="keyword">new</span> <span class="keywordtype">byte</span>[(int) (src.total() * src.channels())];</div>
+<div class="line">        src.get(0, 0, srcData);</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; src.rows(); i++) {</div>
+<div class="line">            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; src.cols(); j++) {</div>
+<div class="line">                <span class="keywordflow">if</span> (srcData[(i * src.cols() + j) * 3] == (<span class="keywordtype">byte</span>) 255 &amp;&amp; srcData[(i * src.cols() + j) * 3 + 1] == (<span class="keywordtype">byte</span>) 255</div>
+<div class="line">                        &amp;&amp; srcData[(i * src.cols() + j) * 3 + 2] == (<span class="keywordtype">byte</span>) 255) {</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3] = 0;</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3 + 1] = 0;</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3 + 2] = 0;</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">        src.put(0, 0, srcData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Show output image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Black Background Image"</span>, src);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create a kernel that we will use to sharpen our image</span></div>
+<div class="line">        Mat kernel = <span class="keyword">new</span> Mat(3, 3, CvType.CV_32F);</div>
+<div class="line">        <span class="comment">// an approximation of second derivative, a quite strong kernel</span></div>
+<div class="line">        <span class="keywordtype">float</span>[] kernelData = <span class="keyword">new</span> <span class="keywordtype">float</span>[(int) (kernel.total() * kernel.channels())];</div>
+<div class="line">        kernelData[0] = 1; kernelData[1] = 1; kernelData[2] = 1;</div>
+<div class="line">        kernelData[3] = 1; kernelData[4] = -8; kernelData[5] = 1;</div>
+<div class="line">        kernelData[6] = 1; kernelData[7] = 1; kernelData[8] = 1;</div>
+<div class="line">        kernel.put(0, 0, kernelData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// do the laplacian filtering as it is</span></div>
+<div class="line">        <span class="comment">// well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line">        <span class="comment">// because the kernel has some negative values,</span></div>
+<div class="line">        <span class="comment">// and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line">        <span class="comment">// BUT a 8bits unsigned int (the one we are working with) can contain values</span></div>
+<div class="line">        <span class="comment">// from 0 to 255</span></div>
+<div class="line">        <span class="comment">// so the possible negative number will be truncated</span></div>
+<div class="line">        Mat imgLaplacian = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.filter2D(src, imgLaplacian, CvType.CV_32F, kernel);</div>
+<div class="line">        Mat sharp = <span class="keyword">new</span> Mat();</div>
+<div class="line">        src.convertTo(sharp, CvType.CV_32F);</div>
+<div class="line">        Mat imgResult = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Core.subtract(sharp, imgLaplacian, imgResult);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// convert back to 8bits gray scale</span></div>
+<div class="line">        imgResult.convertTo(imgResult, CvType.CV_8UC3);</div>
+<div class="line">        imgLaplacian.convertTo(imgLaplacian, CvType.CV_8UC3);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// imshow( "Laplace Filtered Image", imgLaplacian );</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"New Sharped Image"</span>, imgResult);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create binary image from source image</span></div>
+<div class="line">        Mat bw = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.cvtColor(imgResult, bw, Imgproc.COLOR_BGR2GRAY);</div>
+<div class="line">        Imgproc.threshold(bw, bw, 40, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Binary Image"</span>, bw);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Perform the distance transform algorithm</span></div>
+<div class="line">        Mat dist = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.distanceTransform(bw, dist, Imgproc.DIST_L2, 3);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line">        <span class="comment">// so we can visualize and threshold it</span></div>
+<div class="line">        Core.normalize(dist, dist, 0.0, 1.0, Core.NORM_MINMAX);</div>
+<div class="line">        Mat distDisplayScaled = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Core.multiply(dist, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255), distDisplayScaled);</div>
+<div class="line">        Mat distDisplay = <span class="keyword">new</span> Mat();</div>
+<div class="line">        distDisplayScaled.convertTo(distDisplay, CvType.CV_8U);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Distance Transform Image"</span>, distDisplay);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Threshold to obtain the peaks</span></div>
+<div class="line">        <span class="comment">// This will be the markers for the foreground objects</span></div>
+<div class="line">        Imgproc.threshold(dist, dist, 0.4, 1.0, Imgproc.THRESH_BINARY);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Dilate a bit the dist image</span></div>
+<div class="line">        Mat kernel1 = Mat.ones(3, 3, CvType.CV_8U);</div>
+<div class="line">        Imgproc.dilate(dist, dist, kernel1);</div>
+<div class="line">        Mat distDisplay2 = <span class="keyword">new</span> Mat();</div>
+<div class="line">        dist.convertTo(distDisplay2, CvType.CV_8U);</div>
+<div class="line">        Core.multiply(distDisplay2, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255), distDisplay2);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Peaks"</span>, distDisplay2);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create the CV_8U version of the distance image</span></div>
+<div class="line">        <span class="comment">// It is needed for findContours()</span></div>
+<div class="line">        Mat dist_8u = <span class="keyword">new</span> Mat();</div>
+<div class="line">        dist.convertTo(dist_8u, CvType.CV_8U);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Find total markers</span></div>
+<div class="line">        List&lt;MatOfPoint&gt; contours = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+<div class="line">        Mat hierarchy = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create the marker image for the watershed algorithm</span></div>
+<div class="line">        Mat markers = Mat.zeros(dist.size(), CvType.CV_32S);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Draw the foreground markers</span></div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; contours.size(); i++) {</div>
+<div class="line">            Imgproc.drawContours(markers, contours, i, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(i + 1), -1);</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Draw the background marker</span></div>
+<div class="line">        Mat markersScaled = <span class="keyword">new</span> Mat();</div>
+<div class="line">        markers.convertTo(markersScaled, CvType.CV_32F);</div>
+<div class="line">        Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);</div>
+<div class="line">        Imgproc.circle(markersScaled, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1e83eafb2d26b3c93f09e8338bcab192">Point</a>(5, 5), 3, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255, 255, 255), -1);</div>
+<div class="line">        Mat markersDisplay = <span class="keyword">new</span> Mat();</div>
+<div class="line">        markersScaled.convertTo(markersDisplay, CvType.CV_8U);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Markers"</span>, markersDisplay);</div>
+<div class="line">        Imgproc.circle(markers, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1e83eafb2d26b3c93f09e8338bcab192">Point</a>(5, 5), 3, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255, 255, 255), -1);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Perform the watershed algorithm</span></div>
+<div class="line">        Imgproc.watershed(imgResult, markers);</div>
+<div class="line"> </div>
+<div class="line">        Mat mark = Mat.zeros(markers.size(), CvType.CV_8U);</div>
+<div class="line">        markers.convertTo(mark, CvType.CV_8UC1);</div>
+<div class="line">        Core.bitwise_not(mark, mark);</div>
+<div class="line">        <span class="comment">// imshow("Markers_v2", mark); // uncomment this if you want to see how the mark</span></div>
+<div class="line">        <span class="comment">// image looks like at that point</span></div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Generate random colors</span></div>
+<div class="line">        Random rng = <span class="keyword">new</span> Random(12345);</div>
+<div class="line">        List&lt;Scalar&gt; colors = <span class="keyword">new</span> ArrayList&lt;&gt;(contours.size());</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; contours.size(); i++) {</div>
+<div class="line">            <span class="keywordtype">int</span> b = rng.nextInt(256);</div>
+<div class="line">            <span class="keywordtype">int</span> g = rng.nextInt(256);</div>
+<div class="line">            <span class="keywordtype">int</span> r = rng.nextInt(256);</div>
+<div class="line"> </div>
+<div class="line">            colors.add(<span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(b, g, r));</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create the result image</span></div>
+<div class="line">        Mat dst = Mat.zeros(markers.size(), CvType.CV_8UC3);</div>
+<div class="line">        <span class="keywordtype">byte</span>[] dstData = <span class="keyword">new</span> <span class="keywordtype">byte</span>[(int) (dst.total() * dst.channels())];</div>
+<div class="line">        dst.get(0, 0, dstData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Fill labeled objects with random colors</span></div>
+<div class="line">        <span class="keywordtype">int</span>[] markersData = <span class="keyword">new</span> <span class="keywordtype">int</span>[(int) (markers.total() * markers.channels())];</div>
+<div class="line">        markers.get(0, 0, markersData);</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; markers.rows(); i++) {</div>
+<div class="line">            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; markers.cols(); j++) {</div>
+<div class="line">                <span class="keywordtype">int</span> <a class="code hl_enumvalue" href="../../d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c">index</a> = markersData[i * markers.cols() + j];</div>
+<div class="line">                <span class="keywordflow">if</span> (index &gt; 0 &amp;&amp; index &lt;= contours.size()) {</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 0] = (byte) colors.get(index - 1).val[0];</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 1] = (byte) colors.get(index - 1).val[1];</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 2] = (byte) colors.get(index - 1).val[2];</div>
+<div class="line">                } <span class="keywordflow">else</span> {</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 0] = 0;</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 1] = 0;</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 2] = 0;</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">        dst.put(0, 0, dstData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Visualize the final image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Final Result"</span>, dst);</div>
+<div class="line"> </div>
+<div class="line">        HighGui.waitKey();</div>
+<div class="line">        System.exit(0);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">public</span> <span class="keyword">class </span>ImageSegmentationDemo {</div>
+<div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../dc/d89/highgui__qt_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>(String[] args) {</div>
+<div class="line">        <span class="comment">// Load the native OpenCV library</span></div>
+<div class="line">        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keyword">new</span> ImageSegmentation().run(args);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="ttc" id="agroup__core__basic_html_ga1e83eafb2d26b3c93f09e8338bcab192"><div class="ttname"><a href="../../dc/d84/group__core__basic.html#ga1e83eafb2d26b3c93f09e8338bcab192">cv::Point</a></div><div class="ttdeci">Point2i Point</div><div class="ttdef"><b>Definition</b> types.hpp:209</div></div>
+<div class="ttc" id="agroup__core__basic_html_ga599fe92e910c027be274233eccad7beb"><div class="ttname"><a href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">cv::Scalar</a></div><div class="ttdeci">Scalar_&lt; double &gt; Scalar</div><div class="ttdef"><b>Definition</b> types.hpp:709</div></div>
+<div class="ttc" id="agroup__datasets__gr_html_gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c"><div class="ttname"><a href="../../d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c">cv::datasets::index</a></div><div class="ttdeci">@ index</div><div class="ttdef"><b>Definition</b> gr_skig.hpp:77</div></div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"><p> This tutorial code's is shown lines below. You can also download it from <a href="https://github.com/opencv/opencv/tree/4.x/samples/python/tutorial_code/ImgTrans/distance_transformation/imageSegmentation.py" target="_blank">here</a> </p><div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</div>
+<div class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</div>
+<div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
+<div class="line"><span class="keyword">import</span> argparse</div>
+<div class="line"><span class="keyword">import</span> random <span class="keyword">as</span> rng</div>
+<div class="line"> </div>
+<div class="line">rng.seed(12345)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">parser = argparse.ArgumentParser(description=<span class="stringliteral">'Code for Image Segmentation with Distance Transform and Watershed Algorithm.\</span></div>
+<div class="line"><span class="stringliteral">    Sample code showing how to segment overlapping objects using Laplacian filtering, \</span></div>
+<div class="line"><span class="stringliteral">    in addition to Watershed and Distance Transformation'</span>)</div>
+<div class="line">parser.add_argument(<span class="stringliteral">'--input'</span>, help=<span class="stringliteral">'Path to input image.'</span>, default=<span class="stringliteral">'cards.png'</span>)</div>
+<div class="line">args = parser.parse_args()</div>
+<div class="line"> </div>
+<div class="line">src = <a class="code hl_function" href="../../d4/da8/group__imgcodecs.html#gaffb68fce322c6e52841d7d9357b9ad2d">cv.imread</a>(<a class="code hl_function" href="../../d6/dba/group__core__utils__samples.html#ga3a33b00033b46c698ff6340d95569c13">cv.samples.findFile</a>(args.input))</div>
+<div class="line"><span class="keywordflow">if</span> src <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line">    print(<span class="stringliteral">'Could not open or find the image:'</span>, args.input)</div>
+<div class="line">    exit(0)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Show source image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Source Image'</span>, src)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">src[np.all(src == 255, axis=2)] = 0</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Show output image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Black Background Image'</span>, src)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">kernel = np.array([[1, 1, 1], [1, -8, 1], [1, 1, 1]], dtype=np.float32)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># do the laplacian filtering as it is</span></div>
+<div class="line"><span class="comment"># well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line"><span class="comment"># because the kernel has some negative values,</span></div>
+<div class="line"><span class="comment"># and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line"><span class="comment"># BUT a 8bits unsigned int (the one we are working with) can contain values from 0 to 255</span></div>
+<div class="line"><span class="comment"># so the possible negative number will be truncated</span></div>
+<div class="line">imgLaplacian = <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga27c049795ce870216ddfb366086b5a04">cv.filter2D</a>(src, cv.CV_32F, kernel)</div>
+<div class="line">sharp = np.float32(src)</div>
+<div class="line">imgResult = sharp - imgLaplacian</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># convert back to 8bits gray scale</span></div>
+<div class="line">imgResult = np.clip(imgResult, 0, 255)</div>
+<div class="line">imgResult = imgResult.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line">imgLaplacian = np.clip(imgLaplacian, 0, 255)</div>
+<div class="line">imgLaplacian = np.uint8(imgLaplacian)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">#cv.imshow('Laplace Filtered Image', imgLaplacian)</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'New Sharped Image'</span>, imgResult)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">bw = <a class="code hl_function" href="../../d8/d01/group__imgproc__color__conversions.html#gaf86c09fe702ed037c03c2bc603ceab14">cv.cvtColor</a>(imgResult, cv.COLOR_BGR2GRAY)</div>
+<div class="line">_, bw = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">cv.threshold</a>(bw, 40, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Binary Image'</span>, bw)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">dist = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042">cv.distanceTransform</a>(bw, cv.DIST_L2, 3)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line"><span class="comment"># so we can visualize and threshold it</span></div>
+<div class="line"><a class="code hl_function" href="../../d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd">cv.normalize</a>(dist, dist, 0, 1.0, cv.NORM_MINMAX)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Distance Transform Image'</span>, dist)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">_, dist = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">cv.threshold</a>(dist, 0.4, 1.0, cv.THRESH_BINARY)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Dilate a bit the dist image</span></div>
+<div class="line">kernel1 = np.ones((3,3), dtype=np.uint8)</div>
+<div class="line">dist = <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c">cv.dilate</a>(dist, kernel1)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Peaks'</span>, dist)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">dist_8u = dist.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Find total markers</span></div>
+<div class="line">contours, _ = <a class="code hl_function" href="../../d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0">cv.findContours</a>(dist_8u, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Create the marker image for the watershed algorithm</span></div>
+<div class="line">markers = np.zeros(dist.shape, dtype=np.int32)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Draw the foreground markers</span></div>
+<div class="line"><span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(len(contours)):</div>
+<div class="line">    <a class="code hl_function" href="../../d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc">cv.drawContours</a>(markers, contours, i, (i+1), -1)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Draw the background marker</span></div>
+<div class="line"><a class="code hl_function" href="../../d6/d6e/group__imgproc__draw.html#gaf10604b069374903dbd0f0488cb43670">cv.circle</a>(markers, (5,5), 3, (255,255,255), -1)</div>
+<div class="line">markers_8u = (markers * 10).astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Markers'</span>, markers_8u)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="../../d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1">cv.watershed</a>(imgResult, markers)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">#mark = np.zeros(markers.shape, dtype=np.uint8)</span></div>
+<div class="line">mark = markers.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line">mark = <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga0002cf8b418479f4cb49a75442baee2f">cv.bitwise_not</a>(mark)</div>
+<div class="line"><span class="comment"># uncomment this if you want to see how the mark</span></div>
+<div class="line"><span class="comment"># image looks like at that point</span></div>
+<div class="line"><span class="comment">#cv.imshow('Markers_v2', mark)</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Generate random colors</span></div>
+<div class="line">colors = []</div>
+<div class="line"><span class="keywordflow">for</span> contour <span class="keywordflow">in</span> contours:</div>
+<div class="line">    colors.append((rng.randint(0,256), rng.randint(0,256), rng.randint(0,256)))</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Create the result image</span></div>
+<div class="line">dst = np.zeros((markers.shape[0], markers.shape[1], 3), dtype=np.uint8)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Fill labeled objects with random colors</span></div>
+<div class="line"><span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(markers.shape[0]):</div>
+<div class="line">    <span class="keywordflow">for</span> j <span class="keywordflow">in</span> range(markers.shape[1]):</div>
+<div class="line">        index = markers[i,j]</div>
+<div class="line">        <span class="keywordflow">if</span> index &gt; 0 <span class="keywordflow">and</span> index &lt;= len(contours):</div>
+<div class="line">            dst[i,j,:] = colors[index-1]</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Visualize the final image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Final Result'</span>, dst)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga5628525ad33f52eab17feebcfba38bd7">cv.waitKey</a>()</div>
+<div class="ttc" id="agroup__core__array_html_ga0002cf8b418479f4cb49a75442baee2f"><div class="ttname"><a href="../../d2/de8/group__core__array.html#ga0002cf8b418479f4cb49a75442baee2f">cv::bitwise_not</a></div><div class="ttdeci">void bitwise_not(InputArray src, OutputArray dst, InputArray mask=noArray())</div><div class="ttdoc">Inverts every bit of an array.</div></div>
+<div class="ttc" id="agroup__core__array_html_ga87eef7ee3970f86906d69a92cbf064bd"><div class="ttname"><a href="../../d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd">cv::normalize</a></div><div class="ttdeci">void normalize(InputArray src, InputOutputArray dst, double alpha=1, double beta=0, int norm_type=NORM_L2, int dtype=-1, InputArray mask=noArray())</div><div class="ttdoc">Normalizes the norm or value range of an array.</div></div>
+<div class="ttc" id="agroup__core__utils__samples_html_ga3a33b00033b46c698ff6340d95569c13"><div class="ttname"><a href="../../d6/dba/group__core__utils__samples.html#ga3a33b00033b46c698ff6340d95569c13">cv::samples::findFile</a></div><div class="ttdeci">cv::String findFile(const cv::String &amp;relative_path, bool required=true, bool silentMode=false)</div><div class="ttdoc">Try to find requested data file.</div></div>
+<div class="ttc" id="agroup__imgcodecs_html_gaffb68fce322c6e52841d7d9357b9ad2d"><div class="ttname"><a href="../../d4/da8/group__imgcodecs.html#gaffb68fce322c6e52841d7d9357b9ad2d">cv::imread</a></div><div class="ttdeci">Mat imread(const String &amp;filename, int flags=IMREAD_COLOR_BGR)</div><div class="ttdoc">Loads an image from a file.</div></div>
+<div class="ttc" id="agroup__imgproc__color__conversions_html_gaf86c09fe702ed037c03c2bc603ceab14"><div class="ttname"><a href="../../d8/d01/group__imgproc__color__conversions.html#gaf86c09fe702ed037c03c2bc603ceab14">cv::cvtColor</a></div><div class="ttdeci">void cvtColor(InputArray src, OutputArray dst, int code, int dstCn=0, AlgorithmHint hint=cv::ALGO_HINT_DEFAULT)</div><div class="ttdoc">Converts an image from one color space to another.</div></div>
+<div class="ttc" id="agroup__imgproc__draw_html_ga746c0625f1781f1ffc9056259103edbc"><div class="ttname"><a href="../../d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc">cv::drawContours</a></div><div class="ttdeci">void drawContours(InputOutputArray image, InputArrayOfArrays contours, int contourIdx, const Scalar &amp;color, int thickness=1, int lineType=LINE_8, InputArray hierarchy=noArray(), int maxLevel=INT_MAX, Point offset=Point())</div><div class="ttdoc">Draws contours outlines or filled contours.</div></div>
+<div class="ttc" id="agroup__imgproc__draw_html_gaf10604b069374903dbd0f0488cb43670"><div class="ttname"><a href="../../d6/d6e/group__imgproc__draw.html#gaf10604b069374903dbd0f0488cb43670">cv::circle</a></div><div class="ttdeci">void circle(InputOutputArray img, Point center, int radius, const Scalar &amp;color, int thickness=1, int lineType=LINE_8, int shift=0)</div><div class="ttdoc">Draws a circle.</div></div>
+<div class="ttc" id="agroup__imgproc__filter_html_ga27c049795ce870216ddfb366086b5a04"><div class="ttname"><a href="../../d4/d86/group__imgproc__filter.html#ga27c049795ce870216ddfb366086b5a04">cv::filter2D</a></div><div class="ttdeci">void filter2D(InputArray src, OutputArray dst, int ddepth, InputArray kernel, Point anchor=Point(-1,-1), double delta=0, int borderType=BORDER_DEFAULT)</div><div class="ttdoc">Convolves an image with the kernel.</div></div>
+<div class="ttc" id="agroup__imgproc__filter_html_ga4ff0f3318642c4f469d0e11f242f3b6c"><div class="ttname"><a href="../../d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c">cv::dilate</a></div><div class="ttdeci">void dilate(InputArray src, OutputArray dst, InputArray kernel, Point anchor=Point(-1,-1), int iterations=1, int borderType=BORDER_CONSTANT, const Scalar &amp;borderValue=morphologyDefaultBorderValue())</div><div class="ttdoc">Dilates an image by using a specific structuring element.</div></div>
+<div class="ttc" id="agroup__imgproc__misc_html_ga8a0b7fdfcb7a13dde018988ba3a43042"><div class="ttname"><a href="../../d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042">cv::distanceTransform</a></div><div class="ttdeci">void distanceTransform(InputArray src, OutputArray dst, OutputArray labels, int distanceType, int maskSize, int labelType=DIST_LABEL_CCOMP)</div><div class="ttdoc">Calculates the distance to the closest zero pixel for each pixel of the source image.</div></div>
+<div class="ttc" id="agroup__imgproc__misc_html_gae8a4a146d1ca78c626a53577199e9c57"><div class="ttname"><a href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">cv::threshold</a></div><div class="ttdeci">double threshold(InputArray src, OutputArray dst, double thresh, double maxval, int type)</div><div class="ttdoc">Applies a fixed-level threshold to each array element.</div></div>
+<div class="ttc" id="agroup__imgproc__segmentation_html_ga3267243e4d3f95165d55a618c65ac6e1"><div class="ttname"><a href="../../d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1">cv::watershed</a></div><div class="ttdeci">void watershed(InputArray image, InputOutputArray markers)</div><div class="ttdoc">Performs a marker-based image segmentation using the watershed algorithm.</div></div>
+<div class="ttc" id="agroup__imgproc__shape_html_gadf1ad6a0b82947fa1fe3c3d497f260e0"><div class="ttname"><a href="../../d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0">cv::findContours</a></div><div class="ttdeci">void findContours(InputArray image, OutputArrayOfArrays contours, OutputArray hierarchy, int mode, int method, Point offset=Point())</div><div class="ttdoc">Finds contours in a binary image.</div></div>
+</div><!-- fragment -->  </div> <h1><a class="anchor" id="autotoc_md662"></a>
+Explanation / Result<br><br><button class="toggleable_button label_cpp" style="border: 2px inset; border-radius: 4px; margin: 2px;">C++</button><button class="toggleable_button label_java" style="border: 2px outset; border-radius: 4px; margin: 2px;">Java</button><button class="toggleable_button label_python" style="border: 2px outset; border-radius: 4px; margin: 2px;">Python</button></h1>
+<ul>
+<li>Load the source image and check if it is loaded without any problem, then show it:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Load the image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d0/d2e/classcv_1_1CommandLineParser.html">CommandLineParser</a> parser( argc, argv, <span class="stringliteral">"{@input | cards.png | input image}"</span> );</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> src = <a class="code hl_function" href="../../d4/da8/group__imgcodecs.html#gaffb68fce322c6e52841d7d9357b9ad2d">imread</a>( samples::findFile( parser.get&lt;<a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1f6634802eeadfd7245bc75cf3e216c2">String</a>&gt;( <span class="stringliteral">"@input"</span> ) ) );</div>
+<div class="line">    <span class="keywordflow">if</span>( src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#abbec3525a852e77998aba034813fded4">empty</a>() )</div>
+<div class="line">    {</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">"Could not open or find the image!\n"</span> &lt;&lt; endl;</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">"Usage: "</span> &lt;&lt; argv[0] &lt;&lt; <span class="stringliteral">" &lt;Input image&gt;"</span> &lt;&lt; endl;</div>
+<div class="line">        <span class="keywordflow">return</span> -1;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Show the source image</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Source Image"</span>, src);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Load the image</span></div>
+<div class="line">        <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1f6634802eeadfd7245bc75cf3e216c2">String</a> filename = args.length &gt; 0 ? args[0] : <span class="stringliteral">"../data/cards.png"</span>;</div>
+<div class="line">        Mat srcOriginal = Imgcodecs.imread(filename);</div>
+<div class="line">        <span class="keywordflow">if</span> (srcOriginal.empty()) {</div>
+<div class="line">            System.err.println(<span class="stringliteral">"Cannot read image: "</span> + filename);</div>
+<div class="line">            System.exit(0);</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Show source image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Source Image"</span>, srcOriginal);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">parser = argparse.ArgumentParser(description=<span class="stringliteral">'Code for Image Segmentation with Distance Transform and Watershed Algorithm.\</span></div>
+<div class="line"><span class="stringliteral">    Sample code showing how to segment overlapping objects using Laplacian filtering, \</span></div>
+<div class="line"><span class="stringliteral">    in addition to Watershed and Distance Transformation'</span>)</div>
+<div class="line">parser.add_argument(<span class="stringliteral">'--input'</span>, help=<span class="stringliteral">'Path to input image.'</span>, default=<span class="stringliteral">'cards.png'</span>)</div>
+<div class="line">args = parser.parse_args()</div>
+<div class="line"> </div>
+<div class="line">src = <a class="code hl_function" href="../../d4/da8/group__imgcodecs.html#gaffb68fce322c6e52841d7d9357b9ad2d">cv.imread</a>(<a class="code hl_function" href="../../d6/dba/group__core__utils__samples.html#ga3a33b00033b46c698ff6340d95569c13">cv.samples.findFile</a>(args.input))</div>
+<div class="line"><span class="keywordflow">if</span> src <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line">    print(<span class="stringliteral">'Could not open or find the image:'</span>, args.input)</div>
+<div class="line">    exit(0)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Show source image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Source Image'</span>, src)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../source.jpeg" alt="" width="300" height="243">
+</div>
+    <ul>
+<li>Then if we have an image with a white background, it is good to transform it to black. This will help us to discriminate the foreground objects easier when we will apply the Distance Transform:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Change the background from white to black, since that will help later to extract</span></div>
+<div class="line">    <span class="comment">// better results during the use of Distance Transform</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> <a class="code hl_function" href="../../da/dd3/group__gapi__math.html#gaba076d51941328cb7ca9348b7b535220">mask</a>;</div>
+<div class="line">    <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga48af0ab51e36436c5d04340e036ce981">inRange</a>(src, <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255, 255, 255), <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255, 255, 255), mask);</div>
+<div class="line">    src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#a030678ffd9ca6e12127b3fd1337bf6e2">setTo</a>(<a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(0, 0, 0), mask);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Show output image</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Black Background Image"</span>, src);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Change the background from white to black, since that will help later to</span></div>
+<div class="line">        <span class="comment">// extract</span></div>
+<div class="line">        <span class="comment">// better results during the use of Distance Transform</span></div>
+<div class="line">        Mat src = srcOriginal.clone();</div>
+<div class="line">        <span class="keywordtype">byte</span>[] srcData = <span class="keyword">new</span> <span class="keywordtype">byte</span>[(int) (src.total() * src.channels())];</div>
+<div class="line">        src.get(0, 0, srcData);</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; src.rows(); i++) {</div>
+<div class="line">            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; src.cols(); j++) {</div>
+<div class="line">                <span class="keywordflow">if</span> (srcData[(i * src.cols() + j) * 3] == (<span class="keywordtype">byte</span>) 255 &amp;&amp; srcData[(i * src.cols() + j) * 3 + 1] == (<span class="keywordtype">byte</span>) 255</div>
+<div class="line">                        &amp;&amp; srcData[(i * src.cols() + j) * 3 + 2] == (<span class="keywordtype">byte</span>) 255) {</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3] = 0;</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3 + 1] = 0;</div>
+<div class="line">                    srcData[(i * src.cols() + j) * 3 + 2] = 0;</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">        src.put(0, 0, srcData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Show output image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Black Background Image"</span>, src);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">src[np.all(src == 255, axis=2)] = 0</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Show output image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Black Background Image'</span>, src)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../black_bg.jpeg" alt="" width="300" height="243">
+</div>
+    <ul>
+<li>Afterwards we will sharpen our image in order to acute the edges of the foreground objects. We will apply a laplacian filter with a quite strong filter (an approximation of second derivative):</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Create a kernel that we will use to sharpen our image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> kernel = (<a class="code hl_class" href="../../df/dfc/classcv_1_1Mat__.html">Mat_&lt;float&gt;</a>(3,3) &lt;&lt;</div>
+<div class="line">                  1,  1, 1,</div>
+<div class="line">                  1, -8, 1,</div>
+<div class="line">                  1,  1, 1); <span class="comment">// an approximation of second derivative, a quite strong kernel</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// do the laplacian filtering as it is</span></div>
+<div class="line">    <span class="comment">// well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line">    <span class="comment">// because the kernel has some negative values,</span></div>
+<div class="line">    <span class="comment">// and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line">    <span class="comment">// BUT a 8bits unsigned int (the one we are working with) can contain values from 0 to 255</span></div>
+<div class="line">    <span class="comment">// so the possible negative number will be truncated</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> imgLaplacian;</div>
+<div class="line">    <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga27c049795ce870216ddfb366086b5a04">filter2D</a>(src, imgLaplacian, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4a3def5d72b74bed31f5f8ab7676099c">CV_32F</a>, kernel);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> sharp;</div>
+<div class="line">    src.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(sharp, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4a3def5d72b74bed31f5f8ab7676099c">CV_32F</a>);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> imgResult = sharp - imgLaplacian;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// convert back to 8bits gray scale</span></div>
+<div class="line">    imgResult.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(imgResult, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line">    imgLaplacian.convertTo(imgLaplacian, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// imshow( "Laplace Filtered Image", imgLaplacian );</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>( <span class="stringliteral">"New Sharped Image"</span>, imgResult );</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Create a kernel that we will use to sharpen our image</span></div>
+<div class="line">        Mat kernel = <span class="keyword">new</span> Mat(3, 3, CvType.CV_32F);</div>
+<div class="line">        <span class="comment">// an approximation of second derivative, a quite strong kernel</span></div>
+<div class="line">        <span class="keywordtype">float</span>[] kernelData = <span class="keyword">new</span> <span class="keywordtype">float</span>[(int) (kernel.total() * kernel.channels())];</div>
+<div class="line">        kernelData[0] = 1; kernelData[1] = 1; kernelData[2] = 1;</div>
+<div class="line">        kernelData[3] = 1; kernelData[4] = -8; kernelData[5] = 1;</div>
+<div class="line">        kernelData[6] = 1; kernelData[7] = 1; kernelData[8] = 1;</div>
+<div class="line">        kernel.put(0, 0, kernelData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// do the laplacian filtering as it is</span></div>
+<div class="line">        <span class="comment">// well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line">        <span class="comment">// because the kernel has some negative values,</span></div>
+<div class="line">        <span class="comment">// and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line">        <span class="comment">// BUT a 8bits unsigned int (the one we are working with) can contain values</span></div>
+<div class="line">        <span class="comment">// from 0 to 255</span></div>
+<div class="line">        <span class="comment">// so the possible negative number will be truncated</span></div>
+<div class="line">        Mat imgLaplacian = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.filter2D(src, imgLaplacian, CvType.CV_32F, kernel);</div>
+<div class="line">        Mat sharp = <span class="keyword">new</span> Mat();</div>
+<div class="line">        src.convertTo(sharp, CvType.CV_32F);</div>
+<div class="line">        Mat imgResult = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Core.subtract(sharp, imgLaplacian, imgResult);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// convert back to 8bits gray scale</span></div>
+<div class="line">        imgResult.convertTo(imgResult, CvType.CV_8UC3);</div>
+<div class="line">        imgLaplacian.convertTo(imgLaplacian, CvType.CV_8UC3);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// imshow( "Laplace Filtered Image", imgLaplacian );</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"New Sharped Image"</span>, imgResult);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">kernel = np.array([[1, 1, 1], [1, -8, 1], [1, 1, 1]], dtype=np.float32)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># do the laplacian filtering as it is</span></div>
+<div class="line"><span class="comment"># well, we need to convert everything in something more deeper then CV_8U</span></div>
+<div class="line"><span class="comment"># because the kernel has some negative values,</span></div>
+<div class="line"><span class="comment"># and we can expect in general to have a Laplacian image with negative values</span></div>
+<div class="line"><span class="comment"># BUT a 8bits unsigned int (the one we are working with) can contain values from 0 to 255</span></div>
+<div class="line"><span class="comment"># so the possible negative number will be truncated</span></div>
+<div class="line">imgLaplacian = <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga27c049795ce870216ddfb366086b5a04">cv.filter2D</a>(src, cv.CV_32F, kernel)</div>
+<div class="line">sharp = np.float32(src)</div>
+<div class="line">imgResult = sharp - imgLaplacian</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># convert back to 8bits gray scale</span></div>
+<div class="line">imgResult = np.clip(imgResult, 0, 255)</div>
+<div class="line">imgResult = imgResult.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line">imgLaplacian = np.clip(imgLaplacian, 0, 255)</div>
+<div class="line">imgLaplacian = np.uint8(imgLaplacian)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">#cv.imshow('Laplace Filtered Image', imgLaplacian)</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'New Sharped Image'</span>, imgResult)</div>
+</div><!-- fragment -->  </div> <p><img src="../../laplace.jpeg" alt="" class="inline" width="300" height="243">    </p>
+<p><img src="../../sharp.jpeg" alt="" class="inline" width="300" height="243">    </p>
+<ul>
+<li>Now we transform our new sharpened source image to a grayscale and a binary one, respectively:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Create binary image from source image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> bw;</div>
+<div class="line">    <a class="code hl_function" href="../../d8/d01/group__imgproc__color__conversions.html#gaf86c09fe702ed037c03c2bc603ceab14">cvtColor</a>(imgResult, bw, COLOR_BGR2GRAY);</div>
+<div class="line">    <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">threshold</a>(bw, bw, 40, 255, THRESH_BINARY | THRESH_OTSU);</div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Binary Image"</span>, bw);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Create binary image from source image</span></div>
+<div class="line">        Mat bw = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.cvtColor(imgResult, bw, Imgproc.COLOR_BGR2GRAY);</div>
+<div class="line">        Imgproc.threshold(bw, bw, 40, 255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Binary Image"</span>, bw);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">bw = <a class="code hl_function" href="../../d8/d01/group__imgproc__color__conversions.html#gaf86c09fe702ed037c03c2bc603ceab14">cv.cvtColor</a>(imgResult, cv.COLOR_BGR2GRAY)</div>
+<div class="line">_, bw = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">cv.threshold</a>(bw, 40, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Binary Image'</span>, bw)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../bin.jpeg" alt="" width="300" height="243">
+</div>
+    <ul>
+<li>We are ready now to apply the Distance Transform on the binary image. Moreover, we normalize the output image in order to be able visualize and threshold the result:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Perform the distance transform algorithm</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dist;</div>
+<div class="line">    <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042">distanceTransform</a>(bw, dist, DIST_L2, 3);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line">    <span class="comment">// so we can visualize and threshold it</span></div>
+<div class="line">    <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd">normalize</a>(dist, dist, 0, 1.0, NORM_MINMAX);</div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Distance Transform Image"</span>, dist);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Perform the distance transform algorithm</span></div>
+<div class="line">        Mat dist = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.distanceTransform(bw, dist, Imgproc.DIST_L2, 3);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line">        <span class="comment">// so we can visualize and threshold it</span></div>
+<div class="line">        Core.normalize(dist, dist, 0.0, 1.0, Core.NORM_MINMAX);</div>
+<div class="line">        Mat distDisplayScaled = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Core.multiply(dist, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255), distDisplayScaled);</div>
+<div class="line">        Mat distDisplay = <span class="keyword">new</span> Mat();</div>
+<div class="line">        distDisplayScaled.convertTo(distDisplay, CvType.CV_8U);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Distance Transform Image"</span>, distDisplay);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">dist = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#ga8a0b7fdfcb7a13dde018988ba3a43042">cv.distanceTransform</a>(bw, cv.DIST_L2, 3)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Normalize the distance image for range = {0.0, 1.0}</span></div>
+<div class="line"><span class="comment"># so we can visualize and threshold it</span></div>
+<div class="line"><a class="code hl_function" href="../../d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd">cv.normalize</a>(dist, dist, 0, 1.0, cv.NORM_MINMAX)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Distance Transform Image'</span>, dist)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../dist_transf.jpeg" alt="" width="300" height="243">
+</div>
+    <ul>
+<li>We threshold the <em>dist</em> image and then perform some morphology operation (i.e. dilation) in order to extract the peaks from the above image:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Threshold to obtain the peaks</span></div>
+<div class="line">    <span class="comment">// This will be the markers for the foreground objects</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">threshold</a>(dist, dist, 0.4, 1.0, THRESH_BINARY);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Dilate a bit the dist image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> kernel1 = Mat::ones(3, 3, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line">    <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c">dilate</a>(dist, dist, kernel1);</div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Peaks"</span>, dist);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Threshold to obtain the peaks</span></div>
+<div class="line">        <span class="comment">// This will be the markers for the foreground objects</span></div>
+<div class="line">        Imgproc.threshold(dist, dist, 0.4, 1.0, Imgproc.THRESH_BINARY);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Dilate a bit the dist image</span></div>
+<div class="line">        Mat kernel1 = Mat.ones(3, 3, CvType.CV_8U);</div>
+<div class="line">        Imgproc.dilate(dist, dist, kernel1);</div>
+<div class="line">        Mat distDisplay2 = <span class="keyword">new</span> Mat();</div>
+<div class="line">        dist.convertTo(distDisplay2, CvType.CV_8U);</div>
+<div class="line">        Core.multiply(distDisplay2, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255), distDisplay2);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Peaks"</span>, distDisplay2);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">_, dist = <a class="code hl_function" href="../../d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57">cv.threshold</a>(dist, 0.4, 1.0, cv.THRESH_BINARY)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Dilate a bit the dist image</span></div>
+<div class="line">kernel1 = np.ones((3,3), dtype=np.uint8)</div>
+<div class="line">dist = <a class="code hl_function" href="../../d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c">cv.dilate</a>(dist, kernel1)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Peaks'</span>, dist)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../peaks.jpeg" alt="">
+</div>
+    <ul>
+<li>From each blob then we create a seed/marker for the watershed algorithm with the help of the <a class="el" href="../../d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0">cv::findContours</a> function:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Create the CV_8U version of the distance image</span></div>
+<div class="line">    <span class="comment">// It is needed for findContours()</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dist_8u;</div>
+<div class="line">    dist.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(dist_8u, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Find total markers</span></div>
+<div class="line">    vector&lt;vector&lt;Point&gt; &gt; contours;</div>
+<div class="line">    <a class="code hl_function" href="../../d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0">findContours</a>(dist_8u, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create the marker image for the watershed algorithm</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> markers = Mat::zeros(dist.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1">size</a>(), <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga4067910fc388075c3ea3aa14393e83b9">CV_32S</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Draw the foreground markers</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; contours.size(); i++)</div>
+<div class="line">    {</div>
+<div class="line">        <a class="code hl_function" href="../../d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc">drawContours</a>(markers, contours, <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i), <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(i)+1), -1);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Draw the background marker</span></div>
+<div class="line">    <a class="code hl_enumvalue" href="../../d9/db7/group__datasets__gr.html#gga610754124ced68d1f05760b5948fbb76a6f0d8b2d9e3e947b2a5c1eff9e81ee95">circle</a>(markers, <a class="code hl_class" href="../../db/d4e/classcv_1_1Point__.html">Point</a>(5,5), 3, <a class="code hl_class" href="../../d1/da0/classcv_1_1Scalar__.html">Scalar</a>(255), -1);</div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> markers8u;</div>
+<div class="line">    markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(markers8u, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>, 10);</div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Markers"</span>, markers8u);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Create the CV_8U version of the distance image</span></div>
+<div class="line">        <span class="comment">// It is needed for findContours()</span></div>
+<div class="line">        Mat dist_8u = <span class="keyword">new</span> Mat();</div>
+<div class="line">        dist.convertTo(dist_8u, CvType.CV_8U);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Find total markers</span></div>
+<div class="line">        List&lt;MatOfPoint&gt; contours = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+<div class="line">        Mat hierarchy = <span class="keyword">new</span> Mat();</div>
+<div class="line">        Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create the marker image for the watershed algorithm</span></div>
+<div class="line">        Mat markers = Mat.zeros(dist.size(), CvType.CV_32S);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Draw the foreground markers</span></div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; contours.size(); i++) {</div>
+<div class="line">            Imgproc.drawContours(markers, contours, i, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(i + 1), -1);</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Draw the background marker</span></div>
+<div class="line">        Mat markersScaled = <span class="keyword">new</span> Mat();</div>
+<div class="line">        markers.convertTo(markersScaled, CvType.CV_32F);</div>
+<div class="line">        Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);</div>
+<div class="line">        Imgproc.circle(markersScaled, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1e83eafb2d26b3c93f09e8338bcab192">Point</a>(5, 5), 3, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255, 255, 255), -1);</div>
+<div class="line">        Mat markersDisplay = <span class="keyword">new</span> Mat();</div>
+<div class="line">        markersScaled.convertTo(markersDisplay, CvType.CV_8U);</div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Markers"</span>, markersDisplay);</div>
+<div class="line">        Imgproc.circle(markers, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga1e83eafb2d26b3c93f09e8338bcab192">Point</a>(5, 5), 3, <span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(255, 255, 255), -1);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">dist_8u = dist.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Find total markers</span></div>
+<div class="line">contours, _ = <a class="code hl_function" href="../../d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0">cv.findContours</a>(dist_8u, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Create the marker image for the watershed algorithm</span></div>
+<div class="line">markers = np.zeros(dist.shape, dtype=np.int32)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Draw the foreground markers</span></div>
+<div class="line"><span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(len(contours)):</div>
+<div class="line">    <a class="code hl_function" href="../../d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc">cv.drawContours</a>(markers, contours, i, (i+1), -1)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Draw the background marker</span></div>
+<div class="line"><a class="code hl_function" href="../../d6/d6e/group__imgproc__draw.html#gaf10604b069374903dbd0f0488cb43670">cv.circle</a>(markers, (5,5), 3, (255,255,255), -1)</div>
+<div class="line">markers_8u = (markers * 10).astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Markers'</span>, markers_8u)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../markers.jpeg" alt="" width="300" height="243">
+</div>
+    <ul>
+<li>Finally, we can apply the watershed algorithm, and visualize the result:</li>
+</ul>
+ <div class="newInnerHTML" title="cpp" style="display: none;">C++</div><div class="toggleable_div label_cpp" style="display: block;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">    <span class="comment">// Perform the watershed algorithm</span></div>
+<div class="line">    <a class="code hl_function" href="../../d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1">watershed</a>(imgResult, markers);</div>
+<div class="line"> </div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> mark;</div>
+<div class="line">    markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#adf88c60c5b4980e05bb556080916978b">convertTo</a>(mark, <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga32b18d904ee2b1731a9416a8eef67d06">CV_8U</a>);</div>
+<div class="line">    <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga0002cf8b418479f4cb49a75442baee2f">bitwise_not</a>(mark, mark);</div>
+<div class="line">    <span class="comment">//    imshow("Markers_v2", mark); // uncomment this if you want to see how the mark</span></div>
+<div class="line">    <span class="comment">// image looks like at that point</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Generate random colors</span></div>
+<div class="line">    vector&lt;Vec3b&gt; colors;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; contours.size(); i++)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordtype">int</span> b = <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3">theRNG</a>().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line">        <span class="keywordtype">int</span> g = <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3">theRNG</a>().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line">        <span class="keywordtype">int</span> r = <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga3161a635d36203f92adadec67b29c2a3">theRNG</a>().<a class="code hl_function" href="../../d1/dd6/classcv_1_1RNG.html#acde197860cea91e5aa896be8719457ae">uniform</a>(0, 256);</div>
+<div class="line"> </div>
+<div class="line">        colors.push_back(<a class="code hl_class" href="../../d6/dcf/classcv_1_1Vec.html">Vec3b</a>((<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)b, (<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)g, (<a class="code hl_typedef" href="../../d1/d1b/group__core__hal__interface.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a>)r));</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create the result image</span></div>
+<div class="line">    <a class="code hl_class" href="../../d3/d63/classcv_1_1Mat.html">Mat</a> dst = Mat::zeros(markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#a146f8e8dda07d1365a575ab83d9828d1">size</a>(), <a class="code hl_define" href="../../d1/d1b/group__core__hal__interface.html#ga88c4cd9de76f678f33928ef1e3f96047">CV_8UC3</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Fill labeled objects with random colors</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#abed816466c45234254d25bc59c31245e">rows</a>; i++)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; markers.<a class="code hl_variable" href="../../d3/d63/classcv_1_1Mat.html#aa3e5a47585c9ef6a0842556739155e3e">cols</a>; j++)</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keywordtype">int</span> <a class="code hl_enumvalue" href="../../d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c">index</a> = markers.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df">at</a>&lt;<span class="keywordtype">int</span>&gt;(i,j);</div>
+<div class="line">            <span class="keywordflow">if</span> (index &gt; 0 &amp;&amp; index &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(contours.size()))</div>
+<div class="line">            {</div>
+<div class="line">                dst.<a class="code hl_function" href="../../d3/d63/classcv_1_1Mat.html#aa10d804e90b51d4157b5c26e12c5d2df">at</a>&lt;<a class="code hl_class" href="../../d6/dcf/classcv_1_1Vec.html">Vec3b</a>&gt;(i,j) = colors[index-1];</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Visualize the final image</span></div>
+<div class="line">    <a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">imshow</a>(<span class="stringliteral">"Final Result"</span>, dst);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="java" style="display: none;">Java</div><div class="toggleable_div label_java" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line">        <span class="comment">// Perform the watershed algorithm</span></div>
+<div class="line">        Imgproc.watershed(imgResult, markers);</div>
+<div class="line"> </div>
+<div class="line">        Mat mark = Mat.zeros(markers.size(), CvType.CV_8U);</div>
+<div class="line">        markers.convertTo(mark, CvType.CV_8UC1);</div>
+<div class="line">        Core.bitwise_not(mark, mark);</div>
+<div class="line">        <span class="comment">// imshow("Markers_v2", mark); // uncomment this if you want to see how the mark</span></div>
+<div class="line">        <span class="comment">// image looks like at that point</span></div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Generate random colors</span></div>
+<div class="line">        Random rng = <span class="keyword">new</span> Random(12345);</div>
+<div class="line">        List&lt;Scalar&gt; colors = <span class="keyword">new</span> ArrayList&lt;&gt;(contours.size());</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; contours.size(); i++) {</div>
+<div class="line">            <span class="keywordtype">int</span> b = rng.nextInt(256);</div>
+<div class="line">            <span class="keywordtype">int</span> g = rng.nextInt(256);</div>
+<div class="line">            <span class="keywordtype">int</span> r = rng.nextInt(256);</div>
+<div class="line"> </div>
+<div class="line">            colors.add(<span class="keyword">new</span> <a class="code hl_typedef" href="../../dc/d84/group__core__basic.html#ga599fe92e910c027be274233eccad7beb">Scalar</a>(b, g, r));</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Create the result image</span></div>
+<div class="line">        Mat dst = Mat.zeros(markers.size(), CvType.CV_8UC3);</div>
+<div class="line">        <span class="keywordtype">byte</span>[] dstData = <span class="keyword">new</span> <span class="keywordtype">byte</span>[(int) (dst.total() * dst.channels())];</div>
+<div class="line">        dst.get(0, 0, dstData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Fill labeled objects with random colors</span></div>
+<div class="line">        <span class="keywordtype">int</span>[] markersData = <span class="keyword">new</span> <span class="keywordtype">int</span>[(int) (markers.total() * markers.channels())];</div>
+<div class="line">        markers.get(0, 0, markersData);</div>
+<div class="line">        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; markers.rows(); i++) {</div>
+<div class="line">            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; markers.cols(); j++) {</div>
+<div class="line">                <span class="keywordtype">int</span> <a class="code hl_enumvalue" href="../../d9/db7/group__datasets__gr.html#gga82775e152f8a74c5fe06f5a7343e0233a9dfc90ef6dc3ba62850d76cc3534572c">index</a> = markersData[i * markers.cols() + j];</div>
+<div class="line">                <span class="keywordflow">if</span> (index &gt; 0 &amp;&amp; index &lt;= contours.size()) {</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 0] = (byte) colors.get(index - 1).val[0];</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 1] = (byte) colors.get(index - 1).val[1];</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 2] = (byte) colors.get(index - 1).val[2];</div>
+<div class="line">                } <span class="keywordflow">else</span> {</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 0] = 0;</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 1] = 0;</div>
+<div class="line">                    dstData[(i * dst.cols() + j) * 3 + 2] = 0;</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">        dst.put(0, 0, dstData);</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Visualize the final image</span></div>
+<div class="line">        HighGui.imshow(<span class="stringliteral">"Final Result"</span>, dst);</div>
+</div><!-- fragment -->  </div>  <div class="newInnerHTML" title="python" style="display: none;">Python</div><div class="toggleable_div label_python" style="display: none;"> <div class="fragment"><div class="clipboard" title="Copy to clipboard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg></div><div class="line"><a class="code hl_function" href="../../d3/d47/group__imgproc__segmentation.html#ga3267243e4d3f95165d55a618c65ac6e1">cv.watershed</a>(imgResult, markers)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">#mark = np.zeros(markers.shape, dtype=np.uint8)</span></div>
+<div class="line">mark = markers.astype(<span class="stringliteral">'uint8'</span>)</div>
+<div class="line">mark = <a class="code hl_function" href="../../d2/de8/group__core__array.html#ga0002cf8b418479f4cb49a75442baee2f">cv.bitwise_not</a>(mark)</div>
+<div class="line"><span class="comment"># uncomment this if you want to see how the mark</span></div>
+<div class="line"><span class="comment"># image looks like at that point</span></div>
+<div class="line"><span class="comment">#cv.imshow('Markers_v2', mark)</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Generate random colors</span></div>
+<div class="line">colors = []</div>
+<div class="line"><span class="keywordflow">for</span> contour <span class="keywordflow">in</span> contours:</div>
+<div class="line">    colors.append((rng.randint(0,256), rng.randint(0,256), rng.randint(0,256)))</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Create the result image</span></div>
+<div class="line">dst = np.zeros((markers.shape[0], markers.shape[1], 3), dtype=np.uint8)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Fill labeled objects with random colors</span></div>
+<div class="line"><span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(markers.shape[0]):</div>
+<div class="line">    <span class="keywordflow">for</span> j <span class="keywordflow">in</span> range(markers.shape[1]):</div>
+<div class="line">        index = markers[i,j]</div>
+<div class="line">        <span class="keywordflow">if</span> index &gt; 0 <span class="keywordflow">and</span> index &lt;= len(contours):</div>
+<div class="line">            dst[i,j,:] = colors[index-1]</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Visualize the final image</span></div>
+<div class="line"><a class="code hl_function" href="../../d7/dfc/group__highgui.html#ga453d42fe4cb60e5723281a89973ee563">cv.imshow</a>(<span class="stringliteral">'Final Result'</span>, dst)</div>
+</div><!-- fragment -->  </div> <div class="image">
+<img src="../../final.jpeg" alt="">
+</div>
+     </div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- HTML footer for doxygen 1.12.0-->
+<!-- start footer part -->
+<hr class="footer"><address class="footer"><small>
+Generated on Wed Dec 31 2025 07:26:21 for OpenCV by&nbsp;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="300" height="89" alt="doxygen"></a> 1.12.0
+</small></address>
+</div><!-- doc-content -->
+<script type="text/javascript">
+//<![CDATA[
+addTutorialsButtons();
+//]]>
+</script>
+<script>window.__CF$cv$params={r:'a509d68ffdfedc1a',t:'MTc5MzAyMTY2Mg==',u:'01a1786b56ad733db57a68fc1f6a62bc',ut:'crKUXipM1VnLPmAbgSYbkndlOXmuIa8MYD7lyqVizYs-1793021662-1.2.1.1-2k5Mj.GUCf14c0cleQijDtCw1GnLInQAaKIDuSU9EjLv80oNDMkVJkMvoZlML9pKyneLqM9xaMxHqLQF4FJivt3MStGemnB0tPVuDX.HJU4',i:60};(function(){if(!document.body)return;var s=document.createElement('script');s.src='/cdn-cgi/challenge-platform/scripts/precursor/main.js';document.head.appendChild(s);})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;55698296dd8c4381b9a17117972ffe0c&quot;,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+
+</body></html>

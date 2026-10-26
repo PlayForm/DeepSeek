@@ -1,0 +1,601 @@
+<div><div class="document">
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body">
+<div class="section" id="geometry-processing-functions">
+<h1>Geometry Processing Functions<a class="headerlink" href="#geometry-processing-functions" title="Permalink to this headline">¶</a>
+</h1>
+<div class="section" id="boolean-opertions">
+<h2>Boolean opertions<a class="headerlink" href="#boolean-opertions" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.boolean">
+<code class="descclassname">pymesh.</code><code class="descname">boolean</code><span class="sig-paren">(</span><em>mesh_1</em>, <em>mesh_2</em>, <em>operation</em>, <em>engine='auto'</em>, <em>with_timing=False</em>, <em>exact_mesh_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.boolean" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Perform boolean operations on input meshes.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first last simple">
+<li>
+<strong>mesh_1</strong> () – The first input mesh, .</li>
+<li>
+<strong>mesh_2</strong> () – The second input mesh, .</li>
+<li>
+<strong>operation</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – <p>The name of the operation.  Valid choices are:</p>
+<ul>
+<li>
+<code class="docutils literal notranslate"><span class="pre">intersection</span></code>: 
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">union</span></code>: 
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">difference</span></code>: 
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">symmetric_difference</span></code>: <span class="math notranslate nohighlight"><span class="MathJax_Preview"><span class="MJXp-math" id="MJXp-Span-33"><span class="MJXp-mo" id="MJXp-Span-34">(</span><span class="MJXp-mo" id="MJXp-Span-38">∖</span><span class="MJXp-mo" id="MJXp-Span-42">)</span><span class="MJXp-mo" id="MJXp-Span-43">∪</span><span class="MJXp-mo" id="MJXp-Span-44">(</span><span class="MJXp-mo" id="MJXp-Span-48">∖</span><span class="MJXp-mo" id="MJXp-Span-52">)</span></span></span></span>
+</li>
+</ul>
+</li>
+<li>
+<strong>engine</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – <p>(optional) Boolean engine name.  Valid engines include:</p>
+<ul>
+<li>
+<code class="docutils literal notranslate"><span class="pre">auto</span></code>: Using the default boolean engine
+(<code class="docutils literal notranslate"><span class="pre">igl</span></code> for 3D and <code class="docutils literal notranslate"><span class="pre">clipper</span></code> for 2D).  This is the default.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">cork</span></code>: <a class="reference external" href="https://github.com/gilbo/cork">Cork 3D boolean libary</a>
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">cgal</span></code>: <a class="reference external" href="http://doc.cgal.org/latest/Nef_3/index.html">CGAL 3D boolean operations on Nef Polyhedra</a>
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">corefinement</span></code>: The undocumented CGAL boolean function that does
+not use Nef Polyhedra.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">igl</span></code>: <a class="reference external" href="https://github.com/libigl/libigl">libigl’s 3D boolean support</a>
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">clipper</span></code>: <a class="reference external" href="http://www.angusj.com/delphi/clipper.php">Clipper 2D boolean library</a>
+</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">carve</span></code>: <a class="reference external" href="https://code.google.com/p/carve/">Carve solid geometry library</a>
+</li>
+</ul>
+</li>
+<li>
+<strong>with_timing</strong> (<code class="docutils literal notranslate"><span class="pre">boolean</span></code>) – (optional) Whether to time the code.</li>
+<li>
+<strong>exact_mesh_file</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – (optional) Filename to store the XML
+serialized exact output.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: The output mesh.</p>
+<p>The following attributes are defined in the output mesh:</p>
+<blockquote>
+<div>
+<ul class="simple">
+<li>“source”: An array of 0s and 1s indicating which input mesh an output
+face comes from.</li>
+<li>“source_face”: An array of indices, one per output face, into the
+concatenated faces of the input meshes.</li>
+</ul>
+</div>
+</blockquote>
+</dd>
+</dl>
+<p>While all solid geometry operations can be done as a sequence of binary boolean
+operations. It is beneficial sometimes to use <a class="reference internal" href="#pymesh.CSGTree" title="pymesh.CSGTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">pymesh.CSGTree</span></code></a> for
+carrying out more complex operations.</p>
+<dl class="class">
+<dt id="pymesh.CSGTree">
+<em class="property">class </em><code class="descclassname">pymesh.</code><code class="descname">CSGTree</code><span class="sig-paren">(</span><em>tree</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.CSGTree" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Contructive Solid Geometry Tree.</p>
+<p>Perhaps the best way of describing supported operations is using context
+free grammar:</p>
+<ul>
+<li>
+<p class="first"><code class="docutils literal notranslate"><span class="pre">mesh</span></code> operation: This operation is always a leaf node of the tree.</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"mesh"</span><span class="p">:</span> <span class="n">mesh</span><span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li>
+<p class="first"><code class="docutils literal notranslate"><span class="pre">union</span></code> operation:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"union"</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="n">TREE_1</span><span class="p">,</span> <span class="n">TREE_2</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">TREE_N</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li>
+<p class="first"><code class="docutils literal notranslate"><span class="pre">intersection</span></code> operations:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"intersection"</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="n">TREE_1</span><span class="p">,</span> <span class="n">TREE_2</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">TREE_N</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li>
+<p class="first"><code class="docutils literal notranslate"><span class="pre">difference</span></code> operations:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"difference"</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="n">TREE_1</span><span class="p">,</span> <span class="n">TREE_2</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li>
+<p class="first"><code class="docutils literal notranslate"><span class="pre">symmetric_difference</span></code> operations:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"symmetric_difference"</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="n">TREE_1</span><span class="p">,</span> <span class="n">TREE_2</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">});</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Where <code class="docutils literal notranslate"><span class="pre">TREE_X</span></code> could be any of the nodes defined above.</p>
+<p>A tree can be build up incrementally:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">left_tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"mesh"</span><span class="p">:</span> <span class="n">mesh_1</span><span class="p">});</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"mesh"</span><span class="p">:</span> <span class="n">mesh_2</span><span class="p">});</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"union"</span><span class="p">:</span> <span class="p">[</span><span class="n">left_tree</span><span class="p">,</span> <span class="n">right_tree</span><span class="p">]});</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">mesh</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Or constructed from a dict:</p>
+<div class="highlight-default notranslate">
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">pymesh</span><span class="o">.</span><span class="n">CSGTree</span><span class="p">({</span><span class="s2">"union"</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="p">[{</span><span class="s2">"mesh"</span><span class="p">:</span> <span class="n">mesh_1</span><span class="p">},</span> <span class="p">{</span><span class="s2">"mesh"</span><span class="p">:</span> <span class="n">mesh_2</span><span class="p">}]</span>
+<span class="gp">... </span>    <span class="p">});</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">mesh</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="convex-hull">
+<h2>Convex hull<a class="headerlink" href="#convex-hull" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.convex_hull">
+<code class="descclassname">pymesh.</code><code class="descname">convex_hull</code><span class="sig-paren">(</span><em>mesh</em>, <em>engine='auto'</em>, <em>with_timing=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.convex_hull" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Compute the convex hull of an input mesh.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first last simple">
+<li>
+<strong>mesh</strong> () – The input mesh.</li>
+<li>
+<strong>engine</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – <p>(optional) Convex hull engine name.  Valid names are:</p>
+<ul>
+<li>
+<cite>auto</cite>: Using the default engine.</li>
+<li>
+<cite>qhull</cite>: <a class="reference external" href="http://www.qhull.org/">Qhull convext hull library</a>
+</li>
+<li>
+<dl class="first docutils">
+<dt>
+<cite>cgal</cite>: CGAL convex hull module (</dt>
+
+</dl>
+</li>
+<li>
+<cite>triangle</cite>: Triangle convex hull engine.</li>
+<li>
+<cite>tetgen</cite>: Tetgen convex hull engine.</li>
+</ul>
+</li>
+<li>
+<strong>with_timing</strong> (<code class="docutils literal notranslate"><span class="pre">boolean</span></code>) – (optional) Whether to time the code</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: The output mesh representing the convex hull.
+(and running time if <cite>with_timing</cite> is true.)</p>
+<p>The following attributes are defined in the output mesh:</p>
+<blockquote>
+<div>
+<ul class="simple">
+<li>“source_vertex”: An array of source vertex indices into the input mesh.</li>
+</ul>
+</div>
+</blockquote>
+</dd>
+</dl>
+</div>
+<div class="section" id="outer-hull">
+<h2>Outer hull<a class="headerlink" href="#outer-hull" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.compute_outer_hull">
+<code class="descclassname">pymesh.</code><code class="descname">compute_outer_hull</code><span class="sig-paren">(</span><em>mesh</em>, <em>engine='auto'</em>, <em>all_layers=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.compute_outer_hull" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Compute the outer hull of the input mesh.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first simple">
+<li>
+<strong>engine</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – <p>(optional) Outer hull engine name.  Valid engines are:</p>
+<ul>
+<li>
+<code class="docutils literal notranslate"><span class="pre">auto</span></code>: Using the default engine (<code class="docutils literal notranslate"><span class="pre">igl</span></code>).</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">igl</span></code>: <a class="reference external" href="https://github.com/libigl/libigl">libigl’s outer hull support</a>
+</li>
+</ul>
+</li>
+<li>
+<strong>all_layers</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – (optional) If true, recursively peel
+outer hull layers.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field">
+<th class="field-name">Returns:</th>
+<td class="field-body">
+<p>If <code class="docutils literal notranslate"><span class="pre">all_layers</span></code> is false, just return the outer hull mesh.</p>
+<dl class="docutils">
+<dt>If <code class="docutils literal notranslate"><span class="pre">all_layers</span></code> is ture, return a recursively peeled outer hull</dt>
+<dd>
+<p class="first last">layers, from the outer most layer to the inner most layer.</p>
+</dd>
+</dl>
+<p>The following mesh attirbutes are defined in each outer hull mesh:</p>
+<ul class="simple">
+<li>
+<code class="docutils literal notranslate"><span class="pre">flipped</span></code>: A per-face attribute that is true if a face in outer
+hull is orientated differently comparing to its corresponding face
+in the input mesh.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">face_sources</span></code>: A per-face attribute that specifies the index of the
+source face in the input mesh.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="mesh-arrangement">
+<h2>Mesh arrangement<a class="headerlink" href="#mesh-arrangement" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.partition_into_cells">
+<code class="descclassname">pymesh.</code><code class="descname">partition_into_cells</code><span class="sig-paren">(</span><em>mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.partition_into_cells" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Resolve all-intersections of the input mesh and extract cell partitions
+induced by the mesh.  A cell-partition is subset of the ambient space where
+any pair of points belonging the partition can be connected by a curve
+without ever going through any mesh faces.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<strong>mesh</strong> () – The input mesh.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: The output mesh with all intersections resolved and a list of
+meshes representing individual cells.</p>
+<p>The following attributes are defined in the output mesh:</p>
+<blockquote>
+<div>
+<ul class="simple">
+<li>
+<code class="docutils literal notranslate"><span class="pre">source_face</span></code>: the original face index.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">patches</span></code>: the scalar field marking manifold patches (A set of
+connected faces connected by manifold edges).</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">cells</span></code>: a per-face scalar field indicating the cell id on the
+positive side of each face.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">winding_number</span></code>: the scalar field indicating the piece-wise
+constant winding number of the cell on the positive side of each face.</li>
+</ul>
+</div>
+</blockquote>
+</dd>
+</dl>
+</div>
+<div class="section" id="minkowski-sum">
+<h2>Minkowski sum<a class="headerlink" href="#minkowski-sum" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.minkowski_sum">
+<code class="descclassname">pymesh.</code><code class="descname">minkowski_sum</code><span class="sig-paren">(</span><em>mesh</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.minkowski_sum" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Perform Minkowski sum of a mesh with a poly-line.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first last simple">
+<li>
+<strong>mesh</strong> () – Input mesh.</li>
+<li>
+<strong>path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – a  matrix.  Each row
+represents a node in the poly-line.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns: A mesh representing the Minkowski sum of the inputs.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="subdivision">
+<h2>Subdivision<a class="headerlink" href="#subdivision" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.subdivide">
+<code class="descclassname">pymesh.</code><code class="descname">subdivide</code><span class="sig-paren">(</span><em>mesh</em>, <em>order=1</em>, <em>method='simple'</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.subdivide" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Subdivide the input mesh.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first simple">
+<li>
+<strong>mesh</strong> – Input triangle mesh.</li>
+<li>
+<strong>order</strong> – (optional) Subdivision order.</li>
+<li>
+<strong>method</strong> – (optional) Subdivision method.  Choices are “simple” and “loop”.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field">
+<th class="field-name">Returns:</th>
+<td class="field-body">
+<p class="first last">Returns the subdivided mesh.  The per-face attribute “ori_face_index”
+tracks the original face index from the input mesh.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="winding-number-query">
+<h2>Winding number query<a class="headerlink" href="#winding-number-query" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.compute_winding_number">
+<code class="descclassname">pymesh.</code><code class="descname">compute_winding_number</code><span class="sig-paren">(</span><em>mesh</em>, <em>queries</em>, <em>engine='auto'</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.compute_winding_number" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Compute winding number with respect to <cite>mesh</cite> at <cite>queries</cite>.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first simple">
+<li>
+<strong>mesh</strong> () – The mesh for which winding number is evaluated.</li>
+<li>
+<strong>queries</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – N by 3 matrix of query points at which
+winding number is evaluated.</li>
+<li>
+<strong>engine</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – <p>(optional) Winding number computing engine name:</p>
+<ul>
+<li>
+<code class="docutils literal notranslate"><span class="pre">auto</span></code>: use default engine (which is <code class="docutils literal notranslate"><span class="pre">igl</span></code>).</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">igl</span></code>: use libigl’s <a class="reference external" href="https://libigl.github.io/tutorial/#generalized-winding-number">generalized winding number</a>.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">fast_winding_number</span></code>: use code from <a class="reference external" href="http://www.dgp.toronto.edu/projects/fast-winding-numbers/">fast winding number</a>
+paper. It is faster than <code class="docutils literal notranslate"><span class="pre">igl</span></code> but can be less accurate sometimes.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field">
+<th class="field-name">Returns:</th>
+<td class="field-body">
+<p class="first last">A list of size N, represent the winding numbers at each query points in
+order.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="slicing-mesh">
+<h2>Slicing mesh<a class="headerlink" href="#slicing-mesh" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.slice_mesh">
+<code class="descclassname">pymesh.</code><code class="descname">slice_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>direction</em>, <em>N</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.slice_mesh" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Slice a given 3D mesh N times along certain direciton.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first simple">
+<li>
+<strong>mesh</strong> () – The mesh to be sliced.</li>
+<li>
+<strong>direction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndaray</span></code>) – Direction orthogonal to the slices.</li>
+<li>
+<strong>N</strong> (<em>int</em>) – Number of slices.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field">
+<th class="field-name">Returns:</th>
+<td class="field-body">
+<p class="first last">A list of <cite>N</cite>  objects, each representing a single slice.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="distance-to-mesh-query">
+<h2>Distance to mesh query<a class="headerlink" href="#distance-to-mesh-query" title="Permalink to this headline">¶</a>
+</h2>
+<dl class="function">
+<dt id="pymesh.distance_to_mesh">
+<code class="descclassname">pymesh.</code><code class="descname">distance_to_mesh</code><span class="sig-paren">(</span><em>mesh</em>, <em>pts</em>, <em>engine='auto'</em><span class="sig-paren">)</span><a class="headerlink" href="#pymesh.distance_to_mesh" title="Permalink to this definition">¶</a>
+</dt>
+<dd>
+<p>Compute the distance from a set of points to a mesh.</p>
+<table class="docutils field-list">
+<tbody>
+<tr class="field-odd field">
+<th class="field-name">Parameters:</th>
+<td class="field-body">
+<ul class="first simple">
+<li>
+<strong>mesh</strong> () – A input mesh.</li>
+<li>
+<strong>pts</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – A  array of query
+points.</li>
+<li>
+<strong>engine</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – BVH engine name. Valid choices are “cgal”,
+“geogram”, “igl” if all dependencies are used. The default is
+“auto” where an available engine is automatically picked.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field">
+<th class="field-name">Returns:</th>
+<td class="field-body">
+<p>Three values are returned.</p>
+<blockquote>
+<div>
+<ul class="simple">
+<li>
+<code class="docutils literal notranslate"><span class="pre">squared_distances</span></code>: squared distances from each point to mesh.</li>
+<li>
+<code class="docutils literal notranslate"><span class="pre">face_indices</span></code>  : the closest face to each point.</li>
+<li>
+<dl class="first docutils">
+<dt>
+<code class="docutils literal notranslate"><span class="pre">closest_points</span></code>: the point on mesh that is closest to each</dt>
+<dd>query point.</dd>
+</dl>
+</li>
+</ul>
+</div>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sphinxsidebar">
+<div class="sphinxsidebarwrapper">
+
+<h3>Navigation</h3>
+<ul class="current">
+
+<li class="toctree-l1 current">
+<a class="reference internal" href="api.html">PyMesh API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="api_mesh.html">Mesh Data Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_meshio.html">Reading and Writing Meshes</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="api_procedural_mesh_generation.html">Procedural Mesh Generation</a></li>
+
+<li class="toctree-l2 current">
+<a class="current reference internal" href="#">Geometry Processing Functions</a><ul>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="#winding-number-query">Winding number query</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="#distance-to-mesh-query">Distance to mesh query</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_matrix_assembly.html">Finite Element Matrix Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_sparse_solver.html">Sparse Linear System Solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_misc.html">Miscellaneous functions</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+<li>
+<a href="index.html">Documentation overview</a><ul>
+<li>
+<a href="api.html">PyMesh API Reference</a><ul>
+<li>Previous: <a href="api_mesh_generation.html" title="previous chapter">Mesh Generation</a>
+</li>
+<li>Next: <a href="api_matrix_assembly.html" title="next chapter">Finite Element Matrix Assembly</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="searchbox">
+<h3>Quick search</h3>
+
+</div>
+</div>
+</div>
+</div></div>
+<div><div class="footer">
+      ©2018, Qingnan Zhou.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api_geometry_processing.rst.txt">Page source</a>
+</div></div>

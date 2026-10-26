@@ -1,0 +1,66 @@
+<div><div class="container">
+
+<div class="wrap content">
+
+<section class="main-content" id="main">
+<h1 id="svg-js">SVG.js</h1>
+<p>The lightweight library for manipulating and animating SVG.</p>
+
+
+<h2 id="why-choose-svg-js">Why choose SVG.js?</h2>
+<p>SVG.js has no dependencies and aims to be as small as possible while providing close to complete coverage of the SVG spec. If you're not convinced yet, here are a few highlights.</p>
+
+<h2 id="it-s-speedy">It's speedy.</h2>
+<p>SVG.js is fast. Obviously not as fast as vanilla js, but many times faster than the competition:</p>
+<p>Index:</p>
+<ul>
+<li>
+<code>rects</code>:    <strong><code>generate 10000 rects</code></strong>
+</li>
+<li>
+<code>fill</code>:     <strong><code>generate 10000 rects with fill color</code></strong>
+</li>
+<li>
+<code>gradient</code>: <strong><code>generate 10000 rects with gradient fill</code></strong>
+</li>
+</ul>
+<p><small><em>Less is better. Tested on an Intel Core i7-4702MQ @ 2.2GHz.</em></small></p>
+
+<h2 id="easy-readable-uncluttered-syntax">Easy readable, uncluttered syntax.</h2>
+<p>Creating and manipulating SVG using JavaScript alone is pretty verbose.  For example, just creating a simple pink square requires quite a lot of code:</p>
+<p>SVG.js provides a syntax that is concise and easy to read. Doing the same as the vanilla js example above:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-comment">// SVG.js</span>
+<span class="hljs-keyword">var</span> draw = SVG().addTo(<span class="hljs-string">'#drawing'</span>)
+  , rect = draw.rect(<span class="hljs-number">100</span>, <span class="hljs-number">100</span>).fill(<span class="hljs-string">'#f06'</span>)</code></pre>
+<p>That's just <strong>two</strong> lines of code instead of <strong>ten</strong>! And a whole lot less repetition.</p>
+
+<h2 id="go-crazy-with-animations">Go crazy with animations</h2>
+
+<h2 id="there-is-more">There is more...</h2>
+<ul>
+<li>
+<a href="/docs/3.2/animating">animations</a> on size, position, transformations, color, ...</li>
+<li>
+<a href="/docs/3.2/extending">painless extension</a> thanks to the modular structure</li>
+<li>various <a href="/docs/3.2/plugins">useful plugins</a> available</li>
+<li>unified api between shape types with <a href="/docs/3.2/manipulating/#move">move</a>, <a href="/docs/3.2/manipulating/#resizing">size</a>, <a href="/docs/3.2/manipulating/#center">center</a>, ...</li>
+<li>
+<a href="/docs/3.2/events">binding events</a> to elements</li>
+<li>full support for opacity <a href="/docs/3.2/shape-elements/#svg-mask">masks</a> and <a href="/docs/3.2/shape-elements/#svg-clippath">clipping paths</a>
+</li>
+<li>
+<a href="/docs/3.2/shape-elements/#svg-textpath">text paths</a>, even animated</li>
+<li>element <a href="/docs/3.2/container-elements/#svg-g">groups</a>
+</li>
+<li>dynamic <a href="/docs/3.2/shape-elements/#svg-gradient">gradients</a> and <a href="/docs/3.2/shape-elements/#svg-pattern">patterns</a>
+</li>
+<li>fully documented (you're looking at it :)</li>
+</ul>
+<h3 id="license">License</h3>
+<p>SVG.js is licensed under the terms of the <a href="https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt">MIT License</a>.</p>
+<h3 id="changelog">Changelog</h3>
+<p>Wondering what has changed in the latest releases? Have a look at the <a href="https://github.com/svgdotjs/svg.js/blob/master/CHANGELOG.md">change log</a>.</p> </section>
+</div>
+
+
+</div></div>

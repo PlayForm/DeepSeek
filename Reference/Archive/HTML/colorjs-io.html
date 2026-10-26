@@ -1,0 +1,406 @@
+<!DOCTYPE html><html data-route="/"><head>
+<title>Color.js: Let’s get serious about color • Color.js</title>
+<meta name="viewport" content="width=device-width">
+<link rel="shortcut icon" href="./logo.svg">
+<link rel="stylesheet" href="./assets/css/style.css">
+
+
+
+<script src="./color.js" type="module"></script>
+
+
+
+<link rel="stylesheet" href="./assets/css/home.css">
+
+<link href="https://live.prismjs.com/prism-live.css" rel="stylesheet"><style>
+			:root {
+				--gradient-steps: color(display-p3 0.82632 0.20854 0.1653),color(display-p3 0.7533 0.39145 0.08704),color(display-p3 0.66463 0.5111 0.07126),color(display-p3 0.57622 0.60018 0.1562),color(display-p3 0.49964 0.66904 0.29453),color(display-p3 0.49964 0.66904 0.29453),color(display-p3 0.2524 0.67647 0.45869),color(display-p3 0 0.65674 0.6662),color(display-p3 0 0.61185 0.82306),color(display-p3 0.29641 0.54252 0.88325),color(display-p3 0.29641 0.54252 0.88325),color(display-p3 0.54437 0.44829 0.87071),color(display-p3 0.75729 0.30459 0.71354),color(display-p3 0.86346 0.14665 0.44777),color(display-p3 0.82632 0.20854 0.1653);--color-red-light: hsl(9.8517 100% 83.839%);--color-green-light: hsl(89.814 59.046% 61.264%);--color-blue-light: hsl(214.52 100% 83.078%);--color-red-lighter: hsl(10.711 100% 97.194%);--color-green-lighter: hsl(89.508 100% 77.591%);--color-blue-lighter: hsl(215.55 100% 96.215%);--color-red-green: color(display-p3 0.66463 0.5111 0.07126);--color-green-blue: color(display-p3 0 0.65674 0.6662);--color-blue-red: color(display-p3 0.75729 0.30459 0.71354);--color-red-green-light: color(display-p3 1 0.91392 0.60511);--color-green-blue-light: color(display-p3 0.45254 1 1);--color-blue-red-light: color(display-p3 1 0.92102 1);
+			}
+		</style></head>
+<body class=" language-javascript " style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+
+<header>
+	<nav>
+		<a href="./get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="./docs/">Docs</a>
+	<ul>
+		<li><a href="/docs/the-color-object">The Color object</a></li>
+<li><a href="/docs/spaces">Supported color spaces</a></li>
+<li><a href="/docs/color-difference">Color difference</a></li>
+<li><a href="/docs/manipulation">Color manipulation</a></li>
+<li><a href="/docs/contrast">Contrast</a></li>
+<li><a href="/docs/gamut-mapping">Gamut Mapping</a></li>
+<li><a href="/docs/interpolation">Interpolation</a></li>
+<li><a href="/docs/adaptation">Chromatic Adaptation</a></li>
+<li><a href="/docs/output">Output</a></li>
+<li><a href="/docs/procedural">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="./api/">API</a>
+<a href="./notebook/">Play!</a>
+<a href="https://apps.colorjs.io/">Demos</a>
+<a href="https://elements.colorjs.io/">Elements</a>
+<a href="./test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://discord.gg/K64FJBznq4">Discord</a>
+<a href="https://opencollective.com/color">♡&nbsp;Sponsor</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+	</nav>
+
+	<hgroup class="logo">
+		<img src="logo.svg" alt="" width="615" height="600">
+		<h1>Color.js
+			<a class="version-number" href="https://github.com/LeaVerou/color.js/releases/" target="_blank" title="View changelog">v0.7.1</a>
+		</h1>
+		<h2>Let's get serious about color</h2>
+	</hgroup>
+
+	<div id="features">
+		<article>
+			<h4>Fully color space aware</h4>
+			<p>Each color belongs to a color space; operations are color space agnostic.
+				Modules for <a href="/docs/spaces">a wide variety of color spaces</a>,
+				including Lab/LCh, OKLab/OKLCh,
+				sRGB and friends (HSL/HSV/HWB), Display P3,
+				J<sub>z</sub>a<sub>z</sub>b<sub>z</sub>, REC.2100 and many <a href="/docs/spaces">more</a>.</p>
+		</article>
+		<article>
+			<h4>Doesn't gloss over color science</h4>
+			<p>Actual <a href="/docs/gamut-mapping">gamut mapping</a> instead of naïve clipping,
+				multiple <a href="/docs/color-difference">DeltaE</a> methods (76, CMC, 2000, J<sub>z</sub>),
+				multiple <a href="/docs/adaptation">chromatic adaptation</a> methods (von Kries, Bradford, CAT02, CAT16),
+				all with sensible defaults
+			</p>
+		</article>
+		<article>
+			<h4>Up to date with CSS Color 4</h4>
+			<p>Every <a href="https://drafts.csswg.org/css-color-4/">CSS Color 4</a> format &amp; color space supported for both <a href="/docs/the-color-object">input</a> and <a href="/docs/output">output</a>, whether your browser supports it or not.</p>
+		</article>
+		<article>
+			<h4>Readable, object-oriented API</h4>
+			<p>Color objects for multiple operations on the same color, and static Color.something() functions for one-off calculations</p>
+		</article>
+		<article>
+			<h4>Modular &amp; Extensible</h4>
+			<p>Use only what you need, or a bundle. Client-side or Node. Deep extensibility with <a href="api/#Hooks-hooks.js">hooks</a>. </p>
+		</article>
+		<article>
+			<h4>Fast &amp; efficient</h4>
+			<p><a href="/docs/procedural">Procedural, tree-shakeable API</a> available for performance sensitive tasks and reduced bundle size</p>
+		</article>
+	</div>
+</header>
+
+<main>
+	<header class="readme-only">
+<h1>Color.js: Let’s get serious about color</h1>
+<p><a href="https://app.netlify.com/sites/colorjs/deploys"><img src="https://api.netlify.com/api/v1/badges/a6208d72-3d48-43ab-9132-b9f31f828609/deploy-status" alt="Netlify Status"></a>
+<a href="https://npmjs.com/package/colorjs.io"><img src="https://img.shields.io/npm/dw/colorjs.io" alt="npm"></a></p>
+<p><a href="https://colorjs.io">Official website</a> • <a href="CONTRIBUTING.md">Contribution guide</a></p>
+<p>Color.js is a color conversion and modification library created by two of the editors of the CSS Color specifications: <a href="https://lea.verou.me/">Lea Verou</a> and <a href="https://svgees.us/">Chris Lilley</a>.
+They continue to work on it, but are also joined by an exceptional <a href="#maintainers">small grassroots team of co-maintainers</a>.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>Color space agnostic</strong>: Each color object is basically a list of coords and a color space reference. Operations are color space agnostic.
+Modules for <a href="https://colorjs.io/docs/spaces">a wide variety of color spaces</a>,
+including Lab/LCh, OKLab/OKLCh,
+sRGB and friends (HSL/HSV/HWB), Display P3,
+J<sub>z</sub>a<sub>z</sub>b<sub>z</sub>, REC.2100 and many <a href="https://colorjs.io/docs/spaces">more</a>.</li>
+<li><strong>Doesn't gloss over color science</strong>: Actual <a href="https://colorjs.io/docs/gamut-mapping">gamut mapping</a> instead of naïve clipping,
+multiple <a href="https://colorjs.io/docs/color-difference">DeltaE</a> methods (76, CMC, 2000, J<sub>z</sub>),
+multiple <a href="https://colorjs.io/docs/adaptation">chromatic adaptation</a> methods (von Kries, Bradford, CAT02, CAT16),
+all with sensible defaults</li>
+<li><strong>Up to date with CSS Color 4</strong>: Every <a href="https://drafts.csswg.org/css-color-4/">CSS Color 4</a> format &amp; color space supported for both <a href="https://colorjs.io/docs/the-color-object">input</a> and <a href="https://colorjs.io/docs/output">output</a>, whether your browser supports it or not.</li>
+<li><strong>Readable, object-oriented API</strong>: Color objects for multiple operations on the same color, and static <code class=" language-javascript">Color<span class="token punctuation">.</span><span class="token function">something</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code> functions for one-off calculations</li>
+<li><strong>Modular &amp; Extensible</strong>: Use only what you need, or a bundle. Client-side or Node. Deep extensibility with <a href="https://colorjs.io/api/#Hooks-hooks.js">hooks</a>.</li>
+<li><strong>Fast &amp; efficient</strong>: <a href="https://colorjs.io/docs/procedural">Procedural, tree-shakeable API</a> available for performance sensitive tasks and reduced bundle size</li>
+<li><strong>Dependency free</strong>: Not that there’s anything wrong with dependencies, but we gotta mention it!</li>
+</ul>
+</header>
+<section>
+<h2>Impact</h2>
+<ul>
+<li>Has been used to create demos for several W3C specifications</li>
+<li>Has been used by browsers to test their CSS Color 4/5 implementations</li>
+<li>Over <a href="https://limonte.dev/total-npm-downloads/?package=colorjs.io">335 million total npm downloads</a>!</li>
+<li>Used by several <a href="https://www.npmjs.com/browse/depended/colorjs.io">high impact projects</a>, including <a href="https://sass-lang.com/">Sass</a>, <a href="https://open-props.style/">Open Props</a>, <a href="https://www.deque.com/axe/">axe</a> accessibility testing engine, and <a href="https://www.oddcontrast.com/">OddContrast</a> and <a href="https://gradient.style/">CSS HD Gradients</a> color tools</li>
+<li>Parts of Color.js’s API are used as a testing ground for the design of a <a href="https://github.com/wicg/color-api">native <code class=" language-javascript">Color</code> object for the Web platform</a>.</li>
+</ul>
+</section>
+<section class="cn-ignore">
+<h2>Installation</h2>
+<p>Color.js is designed make simple things easy, and complex things possible, and that extends to installation as well.</p>
+<p>For quick experiments, you can just import Color.js directly from a CDN such as <a href="https://esm.sh">esm.sh</a> with all modules included:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">import</span> Color <span class="token keyword">from</span> <span class="token string">"https://esm.sh/colorjs.io"</span><span class="token punctuation">;</span></code></pre>
+<p>You can also install via npm if you’d prefer:</p>
+<pre class=" language-javascript"><code class=" language-javascript">npm install colorjs<span class="token punctuation">.</span>io</code></pre>
+<p>Whether you’re using NPM, the CDN, or local files, Color.js allows you to also import specific modules by directly importing from <code class=" language-javascript">src</code>:</p>
+<ul>
+<li><code class=" language-javascript">https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>colorjs<span class="token punctuation">.</span>io<span class="token operator">/</span>src<span class="token operator">/</span></code> for the CDN</li>
+<li><code class=" language-javascript">node_modules<span class="token operator">/</span>colorjs<span class="token punctuation">.</span>io<span class="token operator">/</span>src<span class="token operator">/</span></code> for NPM</li>
+</ul>
+<p>For example:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">import</span> Color <span class="token keyword">from</span> <span class="token string">"https://colorjs.io/src/color.js"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> p3 <span class="token keyword">from</span> <span class="token string">"https://colorjs.io/src/spaces/p3.js"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> rec2020 <span class="token keyword">from</span> <span class="token string">"https://colorjs.io/src/spaces/rec2020.js"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> deltaE200 <span class="token keyword">from</span> <span class="token string">"https://colorjs.io/src/deltaE/deltaE2000.js"</span><span class="token punctuation">;</span></code></pre>
+<p class="warning"> To use <code class=" language-javascript"><span class="token keyword">import</span></code> statements in a browser, your <code class=" language-javascript"><span class="token operator">&lt;</span>script<span class="token operator">&gt;</span></code> needs <code class=" language-javascript">type<span class="token operator">=</span><span class="token string">"module"</span></code></p>
+<p>Are you old school and prefer to simply have a global <code class=" language-javascript">Color</code> variable?
+We’ve got you covered!
+Just include the following script in your HTML:</p>
+<pre class=" language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://colorjs.io/dist/color.global.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code></pre>
+<p class="read-more"><a href="https://colorjs.io/get">Read more about installation</a></p>
+</section>
+<section>
+<h2>Reading colors</h2>
+<p>Any color from CSS Color Level 4 should work:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> color2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"hwb(60 30% 40% / .5)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> color3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"color(display-p3 0 1 0 / .9)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> color4 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"lch(50% 80 30)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>You can also create <code class=" language-javascript">Color</code> objects manually:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"hwb"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">60</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> color3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token punctuation">{</span>space<span class="token operator">:</span> <span class="token string">"p3"</span><span class="token punctuation">,</span> coords<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> alpha<span class="token operator">:</span> <span class="token number">.9</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p class="read-more"><a href="https://colorjs.io/docs/the-color-object">Read more about color objects</a>
+</p></section>
+<section>
+<h2>Manipulating colors</h2>
+<p>You can use properties to modify coordinates
+of any color space and convert back</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span>lch<span class="token punctuation">.</span>l <span class="token operator">=</span> <span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">// Set coord directly in any color space</span>
+color<span class="token punctuation">.</span>lch<span class="token punctuation">.</span>c <span class="token operator">*=</span> <span class="token number">1.2</span><span class="token punctuation">;</span> <span class="token comment">// saturate by increasing LCH chroma by 20%</span>
+color<span class="token punctuation">.</span>hwb<span class="token punctuation">.</span>w <span class="token operator">+=</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token comment">// any other color space also available</span></code></pre>
+<p>To modify coordinates in any color space you use <code class=" language-javascript">color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code> and <code class=" language-javascript">color<span class="token punctuation">.</span><span class="token function">setAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code>:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Multiple coordinates</span>
+color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	<span class="token string">"lch.l"</span><span class="token operator">:</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token comment">// set lightness to 80</span>
+	<span class="token string">"lch.c"</span><span class="token operator">:</span> <span class="token parameter">c</span> <span class="token operator">=&gt;</span> c <span class="token operator">*</span> <span class="token number">1.2</span> <span class="token comment">// Relative manipulation</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Set single coordinate</span>
+color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"hwb.w"</span><span class="token punctuation">,</span> <span class="token parameter">w</span> <span class="token operator">=&gt;</span> w <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Coordinates of the color's color space are available without a prefix:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"lch"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Multiple coordinates</span>
+color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	l<span class="token operator">:</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token comment">// set lightness to 80</span>
+	<span class="token function-variable function">c</span><span class="token operator">:</span> <span class="token parameter">c</span> <span class="token operator">=&gt;</span> c <span class="token operator">*</span> <span class="token number">1.2</span> <span class="token comment">// Relative manipulation</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Set single coordinate</span>
+color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"h"</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Chaining-style modifications are also supported:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"lch(50% 50 10)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color <span class="token operator">=</span> color<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	<span class="token function-variable function">h</span><span class="token operator">:</span> <span class="token parameter">h</span> <span class="token operator">=&gt;</span> h <span class="token operator">+</span> <span class="token number">180</span><span class="token punctuation">,</span>
+	c<span class="token operator">:</span> <span class="token number">60</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">lighten</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>You can also use properties:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span>lch<span class="token punctuation">.</span>l <span class="token operator">=</span> <span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">// Set coord directly in any color space</span>
+color<span class="token punctuation">.</span>lch<span class="token punctuation">.</span>c <span class="token operator">*=</span> <span class="token number">1.2</span><span class="token punctuation">;</span> <span class="token comment">// saturate by increasing LCH chroma by 20%</span>
+color<span class="token punctuation">.</span>hwb<span class="token punctuation">.</span>w <span class="token operator">+=</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token comment">// any other color space also available</span></code></pre>
+<p>Coordinates of the color's color space are available without a prefix:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"lch"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span>l <span class="token operator">=</span> <span class="token number">80</span><span class="token punctuation">;</span> <span class="token comment">// Set LCH lightness</span>
+color<span class="token punctuation">.</span>c <span class="token operator">*=</span> <span class="token number">1.2</span><span class="token punctuation">;</span> <span class="token comment">// saturate by increasing LCH chroma</span></code></pre>
+<p class="read-more"><a href="https://colorjs.io/docs/manipulation">Read more about color manipulation</a></p>
+</section>
+<section>
+<h2>Converting between color spaces &amp; stringifying</h2>
+<p>Convert to any color space:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"lch"</span><span class="token punctuation">)</span> <span class="token comment">// Convert to LCH</span></code></pre>
+<p>Output in any color space</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"slategray"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color <span class="token operator">+</span> <span class="token string">""</span><span class="token punctuation">;</span> <span class="token comment">// default stringification</span>
+color<span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"p3"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">{</span>precision<span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Clip to gamut or don't</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"p3"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"srgb"</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">""</span><span class="token punctuation">;</span> <span class="token comment">// Default toString()</span>
+color<span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token string">"srgb"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">{</span>inGamut<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p class="read-more"><a href="https://colorjs.io/docs/output">Read more about output</a></p>
+</section>
+<section>
+<h2>Interpolation</h2>
+<p>Get a function that accepts a percentage:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"p3"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> redgreen <span class="token operator">=</span> color<span class="token punctuation">.</span><span class="token function">range</span><span class="token punctuation">(</span><span class="token string">"red"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	space<span class="token operator">:</span> <span class="token string">"lch"</span><span class="token punctuation">,</span> <span class="token comment">// interpolation space</span>
+	outputSpace<span class="token operator">:</span> <span class="token string">"srgb"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">redgreen</span><span class="token punctuation">(</span><span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// midpoint</span></code></pre>
+<p>Interpolation by discrete steps:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"p3"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+color<span class="token punctuation">.</span><span class="token function">steps</span><span class="token punctuation">(</span><span class="token string">"red"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	space<span class="token operator">:</span> <span class="token string">"lch"</span><span class="token punctuation">,</span>
+	outputSpace<span class="token operator">:</span> <span class="token string">"srgb"</span><span class="token punctuation">,</span>
+	maxDeltaE<span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token comment">// max deltaE between consecutive steps</span>
+	steps<span class="token operator">:</span> <span class="token number">10</span> <span class="token comment">// min number of steps</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Shortcut for specific points in the range:</p>
+<pre class=" language-js"><code class=" language-js"><span class="token keyword">let</span> color <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Color</span><span class="token punctuation">(</span><span class="token string">"p3"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> redgreen <span class="token operator">=</span> color<span class="token punctuation">.</span><span class="token function">mix</span><span class="token punctuation">(</span><span class="token string">"red"</span><span class="token punctuation">,</span> <span class="token number">.5</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>space<span class="token operator">:</span> <span class="token string">"lch"</span><span class="token punctuation">,</span> outputSpace<span class="token operator">:</span> <span class="token string">"srgb"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> reddishGreen <span class="token operator">=</span> color<span class="token punctuation">.</span><span class="token function">mix</span><span class="token punctuation">(</span><span class="token string">"red"</span><span class="token punctuation">,</span> <span class="token number">.25</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>space<span class="token operator">:</span> <span class="token string">"lch"</span><span class="token punctuation">,</span> outputSpace<span class="token operator">:</span> <span class="token string">"srgb"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Static syntax  (every color method has a static one too):</p>
+<pre class=" language-js"><code class=" language-js">Color<span class="token punctuation">.</span><span class="token function">mix</span><span class="token punctuation">(</span><span class="token string">"color(display-p3 0 1 0)"</span><span class="token punctuation">,</span> <span class="token string">"red"</span><span class="token punctuation">,</span> <span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p class="read-more"><a href="https://colorjs.io/docs/interpolation">Read more about interpolation</a></p>
+</section>
+<section>
+<h2>Other Color.js Initiatives</h2>
+<p>These are all very experimental and not as polished as Color.js itself, but we are excited about their potential.</p>
+<h3><a href="https://elements.colorjs.io">Color Elements</a></h3>
+<p>This is a set of (currently 10) web components for building color-related apps (the first library of its kind to our knowledge).
+It includes things like color pickers, color charts, interactive color scales, and more.</p>
+<h3><a href="https://apps.colorjs.io">Color Apps</a></h3>
+<p>A set of color-related apps, such as color pickers, converters, and more.</p>
+<h3><a href="https://palettes.colorjs.io">Color Palettes</a></h3>
+<p>A research project which aims to analyze designer-created color palettes in a variety of color spaces,
+both to document patterns (e.g. what hue names are most popular?)
+and to understand what makes aesthetically pleasing color scales.</p>
+</section>
+<section id="maintainers">
+<h2>Maintainer team</h2>
+<p>Color.js is maintained by a small grassroots core team of core maintainers, with <a href="https://github.com/color-js/color.js/graphs/contributors">numerous contributions from the community</a>.
+The core team is:</p>
+<table class="links-icon-before">
+<thead>
+<tr>
+<th>Maintainer</th>
+<th>GitHub</th>
+<th>Socials</th>
+</tr></thead>
+<tbody>
+	<tr>
+		<th><a href="https://lea.verou.me/">Lea Verou</a></th>
+		<td><a href="https://github.com/LeaVerou" class="github">LeaVerou</a></td>
+		<td>
+			<a href="https://bsky.app/profile/lea.verou.me" class="bluesky">@lea.verou.me</a>
+			<a href="https://front-end.social/@leaverou" class="mastodon">@lea.verou.me</a>
+			<a href="https://x.com/LeaVerou" class="twitter">@LeaVerou</a>
+		</td>
+	</tr>
+	<tr>
+		<th><a href="https://svgees.us/">Chris Lilley</a></th>
+		<td><a href="https://github.com/svgeesus" class="github">svgeesus</a></td>
+		<td>
+			<a href="https://mastodon.scot/@svgeesus@mastodon.scot" class="mastodon">@svgeesus@mastodon.scot</a>
+			<a href="https://x.com/svgeesus" class="twitter">@svgeesus</a>
+		</td>
+	</tr>
+	<tr>
+		<th>Adam Thompson-Sharpe</th>
+		<td><a href="https://github.com/MysteryBlokHed" class="github">MysteryBlokHed</a></td>
+		<td>
+			<a href="https://x.com/MysteryBlokHed" class="twitter">@MysteryBlokHed</a>
+		</td>
+	</tr>
+	<tr>
+		<th>Lloyd Kupchanko</th>
+		<td><a href="https://github.com/lloydk" class="github">lloydk</a></td>
+		<td>
+			<a href="https://x.com/lkupchanko" class="twitter">@lkupchanko</a>
+		</td>
+	</tr>
+	<tr>
+		<th><a href="https://d12n.me/">Dmitry Sharabin</a></th>
+		<td><a href="https://github.com/dmitrysharabin" class="github">dmitrysharabin</a></td>
+		<td>
+			<a href="https://bsky.app/profile/d12n.me" class="bluesky">@d12n.me</a>
+			<a href="https://front-end.social/@dmitrysharabin@front-end.social" class="mastodon">@dmitrysharabin@front-end.social</a>
+			<a href="https://x.com/dmitrysharabin" class="twitter">@dmitrysharabin</a>
+		</td>
+	</tr>
+	<tr>
+		<th>Isaac Muse</th>
+		<td><a href="https://github.com/facelessuser" class="github">facelessuser</a></td>
+		<td></td>
+	</tr>
+	<tr>
+		<th><a href="https://jamessw.com/">James Stuckey Weber</a></th>
+		<td><a href="https://github.com/jamesnw" class="github">jamesnw</a></td>
+		<td>
+			<a href="https://bsky.app/profile/jamessw.com" class="bluesky">@jamessw.com</a>
+			<a href="https://front-end.social/@jamessw" class="mastodon">@jamessw@front-end.social</a>
+			<a href="https://x.com/jamesnw" class="twitter">@jamesnw</a>
+		</td>
+	</tr>
+	<tr>
+		<th><a href="https://www.oddbird.net">Jonny Gerig Meyer</a></th>
+		<td><a href="https://github.com/jgerigmeyer" class="github">jgerigmeyer</a></td>
+		<td>
+			<a href="https://bsky.app/profile/jgerigmeyer.bsky.social" class="bluesky">@jgerigmeyer.bsky.social</a>
+			<a href="https://front-end.social/@jgerigmeyer@front-end.social" class="mastodon">@jgerigmeyer@front-end.social</a>
+		</td>
+	</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>Sponsor</h2>
+<p>Color.js is a free and open source project, developed on a volunteer basis.
+We very recently started an <a href="https://opencollective.com/color">Open Collective</a> so you can fund Color.js's development.
+<strong>If your company depends on Color.js in any way, it is in your best interest to ensure its future is sustainable.</strong></p>
+<p>The best way to sponsor Color.js is to <a href="https://opencollective.com/color/donate">become a sponsor on Open Collective</a>:</p>
+<a href="https://opencollective.com/color/donate" target="_blank">
+<img src="https://opencollective.com/color/donate/button@2x.png?color=blue" width="596" height="96">
+</a>
+<p>Once there are enough sponsors, <strong>we plan to feature them prominently on our website and README</strong>, so if you want to be among the first ones to get your name in there, now’s the chance!</p>
+</section>
+
+</main>
+
+
+<footer>
+	Created by <a href="http://lea.verou.me">Lea Verou</a> (co-editor of CSS Color 4 and 5)
+	and <a href="https://svgees.us">Chris Lilley</a> (co-editor of CSS Color 3, 4, and 5; W3C representative to ICC).
+
+	Co-maintained by <a href="https://github.com/facelessuser">Isaac Muse</a>,
+	<a href="https://github.com/jgerigmeyer">Jonny Gerig Meyer</a>,
+	and
+	<a href="https://github.com/MysteryBlokHed">Adam Thompson-Sharpe</a>,
+	with lots of help from a <a href="https://github.com/color-js/color.js/graphs/contributors">community of contributors</a>.
+
+	<nav>
+		<a href="./get/">Get<span class="wide"> Color.js</span></a>
+<div class="menu">
+	<a href="./docs/">Docs</a>
+	<ul>
+		<li><a href="/docs/the-color-object">The Color object</a></li>
+<li><a href="/docs/spaces">Supported color spaces</a></li>
+<li><a href="/docs/color-difference">Color difference</a></li>
+<li><a href="/docs/manipulation">Color manipulation</a></li>
+<li><a href="/docs/contrast">Contrast</a></li>
+<li><a href="/docs/gamut-mapping">Gamut Mapping</a></li>
+<li><a href="/docs/interpolation">Interpolation</a></li>
+<li><a href="/docs/adaptation">Chromatic Adaptation</a></li>
+<li><a href="/docs/output">Output</a></li>
+<li><a href="/docs/procedural">Procedural, tree-shakable API</a></li>
+
+	</ul>
+</div>
+<a href="./api/">API</a>
+<a href="./notebook/">Play!</a>
+<a href="https://apps.colorjs.io/">Demos</a>
+<a href="https://elements.colorjs.io/">Elements</a>
+<a href="./test/" class="footer">Tests</a>
+<a href="https://github.com/LeaVerou/color.js">GitHub</a>
+<a href="https://discord.gg/K64FJBznq4">Discord</a>
+<a href="https://opencollective.com/color">♡&nbsp;Sponsor</a>
+<a href="https://github.com/LeaVerou/color.js/issues/new" class="footer">File bug</a>
+
+	</nav>
+</footer>
+
+<script src="./assets/js/index.js" type="module"></script>
+
+
+
+</body></html>

@@ -1,0 +1,420 @@
+{
+  "sources": [
+    {
+      "source": "https://github.com/paperjs/paper.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paperjs-paper-js.html",
+      "content": "Archive/HTML/paperjs-paper-js.content.html",
+      "converted": "Raw/paperjs-paper-js.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://paperjs.org/reference/path/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/reference-path.html",
+      "content": "Archive/HTML/reference-path.content.html",
+      "converted": "Raw/reference-path.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paths-smoothing-simplifying-flattening.html",
+      "content": "Archive/HTML/paths-smoothing-simplifying-flattening.content.html",
+      "converted": "Raw/paths-smoothing-simplifying-flattening.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/glenzli/paperjs-offset",
+      "kind": "HTML",
+      "archive": "Archive/HTML/glenzli-paperjs-offset.html",
+      "content": "Archive/HTML/glenzli-paperjs-offset.content.html",
+      "converted": "Raw/glenzli-paperjs-offset.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/AngusJohnson/Clipper2",
+      "kind": "HTML",
+      "archive": "Archive/HTML/angusjohnson-clipper2.html",
+      "content": "Archive/HTML/angusjohnson-clipper2.content.html",
+      "converted": "Raw/angusjohnson-clipper2.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://www.angusj.com/clipper2/Docs/Overview.htm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/docs-overview.html",
+      "content": "Archive/HTML/docs-overview.content.html",
+      "converted": "Raw/docs-overview.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://www.npmjs.com/package/clipper2-wasm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/package-clipper2-wasm.html",
+      "content": "Archive/HTML/package-clipper2-wasm.content.html",
+      "converted": "Raw/package-clipper2-wasm.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/countertype/clipper2-ts",
+      "kind": "HTML",
+      "archive": "Archive/HTML/countertype-clipper2-ts.html",
+      "content": "Archive/HTML/countertype-clipper2-ts.content.html",
+      "converted": "Raw/countertype-clipper2-ts.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/steveruizok/perfect-freehand",
+      "kind": "HTML",
+      "archive": "Archive/HTML/steveruizok-perfect-freehand.html",
+      "content": "Archive/HTML/steveruizok-perfect-freehand.content.html",
+      "converted": "Raw/steveruizok-perfect-freehand.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/mfogel/polygon-clipping",
+      "kind": "HTML",
+      "archive": "Archive/HTML/mfogel-polygon-clipping.html",
+      "content": "Archive/HTML/mfogel-polygon-clipping.content.html",
+      "converted": "Raw/mfogel-polygon-clipping.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/danmarshall/svg-path-outline",
+      "kind": "HTML",
+      "archive": "Archive/HTML/danmarshall-svg-path-outline.html",
+      "content": "Archive/HTML/danmarshall-svg-path-outline.content.html",
+      "converted": "Raw/danmarshall-svg-path-outline.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://danmarshall.github.io/svg-path-outline/browser/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-path-outline-browser.html",
+      "content": "Archive/HTML/svg-path-outline-browser.content.html",
+      "converted": "Raw/svg-path-outline-browser.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/alexbol99/flatten-js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/alexbol99-flatten-js.html",
+      "content": "Archive/HTML/alexbol99-flatten-js.content.html",
+      "converted": "Raw/alexbol99-flatten-js.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/rveciana/svg-path-properties",
+      "kind": "HTML",
+      "archive": "Archive/HTML/rveciana-svg-path-properties.html",
+      "content": "Archive/HTML/rveciana-svg-path-properties.content.html",
+      "converted": "Raw/rveciana-svg-path-properties.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://geoexamples.com/svg-path-properties/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-path-properties.html",
+      "content": "Archive/HTML/svg-path-properties.content.html",
+      "converted": "Raw/svg-path-properties.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/herrstrietzel/svg-path-intersections",
+      "kind": "HTML",
+      "archive": "Archive/HTML/herrstrietzel-svg-path-intersections.html",
+      "content": "Archive/HTML/herrstrietzel-svg-path-intersections.content.html",
+      "converted": "Raw/herrstrietzel-svg-path-intersections.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/davidbau/seedrandom",
+      "kind": "HTML",
+      "archive": "Archive/HTML/davidbau-seedrandom.html",
+      "content": "Archive/HTML/davidbau-seedrandom.content.html",
+      "converted": "Raw/davidbau-seedrandom.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/jwagner/simplex-noise.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/jwagner-simplex-noise-js.html",
+      "content": "Archive/HTML/jwagner-simplex-noise-js.content.html",
+      "converted": "Raw/jwagner-simplex-noise-js.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://culorijs.org/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/culorijs-org.html",
+      "content": "Archive/HTML/culorijs-org.content.html",
+      "converted": "Raw/culorijs-org.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://colorjs.io/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/colorjs-io.html",
+      "content": "Archive/HTML/colorjs-io.content.html",
+      "converted": "Raw/colorjs-io.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://svgjs.dev/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svgjs-dev.html",
+      "content": "Archive/HTML/svgjs-dev.content.html",
+      "converted": "Raw/svgjs-dev.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/svgdotjs/svg.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svgdotjs-svg-js.html",
+      "content": "Archive/HTML/svgdotjs-svg-js.content.html",
+      "converted": "Raw/svgdotjs-svg-js.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://roughjs.com/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/roughjs-com.html",
+      "content": "Archive/HTML/roughjs-com.content.html",
+      "converted": "Raw/roughjs-com.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/svg/svgo",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-svgo.html",
+      "content": "Archive/HTML/svg-svgo.content.html",
+      "converted": "Raw/svg-svgo.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/thx/resvg-js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/thx-resvg-js.html",
+      "content": "Archive/HTML/thx-resvg-js.content.html",
+      "converted": "Raw/thx-resvg-js.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf",
+      "kind": "Document",
+      "archive": "Archive/Documents/generative-shapealgorithms.pdf",
+      "content": "",
+      "converted": "Raw/generative-shapealgorithms-pdf.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule",
+      "kind": "HTML",
+      "archive": "Archive/HTML/attribute-fill-rule.html",
+      "content": "Archive/HTML/attribute-fill-rule.content.html",
+      "converted": "Raw/attribute-fill-rule.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit",
+      "kind": "HTML",
+      "archive": "Archive/HTML/attribute-stroke-miterlimit.html",
+      "content": "Archive/HTML/attribute-stroke-miterlimit.content.html",
+      "converted": "Raw/attribute-stroke-miterlimit.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://svgwg.org/specs/strokes/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/specs-strokes.html",
+      "content": "Archive/HTML/specs-strokes.content.html",
+      "converted": "Raw/specs-strokes.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://docs.aspose.com/svg/tutorial/fills-and-strokes/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorial-fills-and-strokes.html",
+      "content": "Archive/HTML/tutorial-fills-and-strokes.content.html",
+      "converted": "Raw/tutorial-fills-and-strokes.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://www.w3schools.com/graphics/svg_stroking.asp",
+      "kind": "HTML",
+      "archive": "Archive/HTML/graphics-svg-stroking.html",
+      "content": "Archive/HTML/graphics-svg-stroking.content.html",
+      "converted": "Raw/graphics-svg-stroking.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://paperjs.org/tutorials/paths/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorials-paths.html",
+      "content": "Archive/HTML/tutorials-paths.content.html",
+      "converted": "Raw/tutorials-paths.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://paperjs.typogram.co/paths/pathitem",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paths-pathitem.html",
+      "content": "Archive/HTML/paths-pathitem.content.html",
+      "converted": "Raw/paths-pathitem.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.html",
+      "content": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.content.html",
+      "converted": "Raw/paper-js-3-1-path-creation-and-manipulation.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://deepwiki.com/paperjs/paper.js/3-path-system",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paper-js-3-path-system.html",
+      "content": "Archive/HTML/paper-js-3-path-system.content.html",
+      "converted": "Raw/paper-js-3-path-system.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/edges-plot-skeleton.html",
+      "content": "Archive/HTML/edges-plot-skeleton.content.html",
+      "converted": "Raw/edges-plot-skeleton.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/dbd-tutorial-distance-transform.html",
+      "content": "Archive/HTML/dbd-tutorial-distance-transform.content.html",
+      "converted": "Raw/dbd-tutorial-distance-transform.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://pypi.org/project/svgpathtools/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/project-svgpathtools.html",
+      "content": "Archive/HTML/project-svgpathtools.content.html",
+      "converted": "Raw/project-svgpathtools.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/mathandy/svgpathtools",
+      "kind": "HTML",
+      "archive": "Archive/HTML/mathandy-svgpathtools.html",
+      "content": "Archive/HTML/mathandy-svgpathtools.content.html",
+      "converted": "Raw/mathandy-svgpathtools.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-from-scratch-paths.html",
+      "content": "Archive/HTML/svg-from-scratch-paths.content.html",
+      "converted": "Raw/svg-from-scratch-paths.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://www.joshwcomeau.com/svg/interactive-guide-to-paths/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-interactive-guide-to-paths.html",
+      "content": "Archive/HTML/svg-interactive-guide-to-paths.content.html",
+      "converted": "Raw/svg-interactive-guide-to-paths.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h",
+      "kind": "HTML",
+      "archive": "Archive/HTML/igl-signed-distance-h.html",
+      "content": "Archive/HTML/igl-signed-distance-h.content.html",
+      "converted": "Raw/igl-signed-distance-h.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://libigl.github.io/tutorial/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorial.html",
+      "content": "Archive/HTML/tutorial.content.html",
+      "converted": "Raw/tutorial.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/latest-api-geometry-processing.html",
+      "content": "Archive/HTML/latest-api-geometry-processing.content.html",
+      "converted": "Raw/latest-api-geometry-processing.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://github.com/vistuleB/svgpathsio",
+      "kind": "HTML",
+      "archive": "Archive/HTML/vistuleb-svgpathsio.html",
+      "content": "Archive/HTML/vistuleb-svgpathsio.content.html",
+      "converted": "Raw/vistuleb-svgpathsio.md",
+      "status": "converted"
+    },
+    {
+      "source": "https://paperjs.org/examples/division-raster/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://paperjs.org/examples/q-bertify/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://mgv.sggw.pl/article/view/9131",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://dl.acm.org/doi/full/10.1145/3757377.3764004",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://www.w3.org/TR/SVG2/painting.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    },
+    {
+      "source": "https://www.w3.org/TR/SVG2/paths.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "blocked"
+    }
+  ]
+}
