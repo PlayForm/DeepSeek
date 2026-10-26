@@ -33,6 +33,7 @@ export interface CoachNotes {
 	first: string;
 	persistent: string;
 	denied: string;
+	deniedTool: string;
 }
 
 /** The result of one Detect pass over a judged terminal call. */

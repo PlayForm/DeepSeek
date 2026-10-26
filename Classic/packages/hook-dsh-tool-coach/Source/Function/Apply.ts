@@ -146,7 +146,7 @@ const Validate = (Options: unknown): void => {
 	}
 	const Notes = Cell(Raw["notes"]) as Record<string, unknown> | undefined;
 	if (Notes && typeof Notes === "object") {
-		for (const Key of ["first", "persistent", "denied"]) {
+		for (const Key of ["first", "persistent", "denied", "deniedTool"]) {
 			if (typeof Notes[Key] !== "string" || (Notes[Key] as string).length === 0) {
 				Fail(`notes.${Key} must be a non-empty template string`);
 			}
@@ -185,6 +185,7 @@ export default (Context: Context, Options: Config): void => {
 		fields: {
 			On: "enabled",
 			Judge: "judgeTools",
+			Deny: "denyTools",
 			Threshold: "threshold",
 			Window: "window",
 			Cooldown: "cooldown",
@@ -401,6 +402,21 @@ export default (Context: Context, Options: Config): void => {
 			// next() FIRST: the downstream listeners settle before any decision.
 			const Downstream = await Next();
 			try {
+				if (State.On && Array.isArray(State.Deny) && State.Deny.includes(Exec.name)) {
+					const Pseudo: Decision = {
+						match: null,
+						tier: 3,
+						note: false,
+						tier2On: false,
+						tier2Off: false,
+						suppressed: false,
+						strikes: 0,
+						sinceNote: 0,
+					};
+					const Reason = Compose.Denied(Pseudo, Catalog(), State.Notes.deniedTool);
+					Factory.Append(State, `denied ${Exec.name} denyTools`);
+					return { kind: "deny", reason: Reason };
+				}
 				if (!State.On || State.Enforce === "off" || !Judged(Exec.name)) {
 					return Downstream;
 				}

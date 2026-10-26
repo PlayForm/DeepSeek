@@ -27,7 +27,7 @@ checks.
         - threshold=3, window=8, cooldown=10, escalateThreshold=6,
           cleanWindow=12, enforce="off", enforceThreshold=4,
           maxSectionTools=5, sectionTtl=20, fetchLive=true
-        - judgeTools=["bash","pwsh"], notes = the three verbatim templates,
+        - judgeTools=["bash","pwsh"], notes = the four verbatim templates,
           patternTable = DEFAULT_PATTERNS, exemptPatterns = DEFAULT_EXEMPTS
 - Group: the apply-time wiring and the activation.
     - Sub: "apply returns NOTHING (the loader contract)"

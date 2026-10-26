@@ -36,6 +36,9 @@ Mapped tools:
 /** The tier-3 deny reason (NOTE_DENIED), verbatim. */
 export const NOTE_DENIED = `Blocked by tool-coach: "\${command}" is forbidden (\${class}-class bash pattern). Use the \${tool.name} tool for this operation instead — \${tool.description} (key parameter: \${tool.param}). Then rerun only the legitimate command parts (build/test/git), if any.`;
 
+/** The deny-list reason (NOTE_DENIED_TOOL): generic and placeholder-safe - the deny list carries no match, so the template holds no placeholder the composer would leave unfilled. */
+export const NOTE_DENIED_TOOL = `Blocked by tool-coach: this tool is disabled in this profile. Use the documented alternative for that surface instead.`;
+
 /**
  * One static tool line: the fallback first-sentence description (plan Part 1
  * §1.2, from the live registry descriptions) and the tool's key parameter

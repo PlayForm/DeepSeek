@@ -6,6 +6,8 @@ export declare const NOTE_FIRST = "Tool-coach note (strike ${count}, ${class}-cl
 export declare const NOTE_PERSISTENT = "Tool discipline (persistent, from tool-coach):\n- NEVER read file content through the terminal: \"${command}-style\" commands \u2014 use the read and grep/glob tools.\n- NEVER mutate file content through the terminal: ${command}-style commands \u2014 use the write and edit tools.\n- The terminal is for COMMANDS (builds, tests, git, package managers).\nMapped tools:\n| tool | purpose |\n| --- | --- |\n${table}";
 /** The tier-3 deny reason (NOTE_DENIED), verbatim. */
 export declare const NOTE_DENIED = "Blocked by tool-coach: \"${command}\" is forbidden (${class}-class bash pattern). Use the ${tool.name} tool for this operation instead \u2014 ${tool.description} (key parameter: ${tool.param}). Then rerun only the legitimate command parts (build/test/git), if any.";
+/** The deny-list reason (NOTE_DENIED_TOOL): generic and placeholder-safe - the deny list carries no match, so the template holds no placeholder the composer would leave unfilled. */
+export declare const NOTE_DENIED_TOOL = "Blocked by tool-coach: this tool is disabled in this profile. Use the documented alternative for that surface instead.";
 /**
  * One static tool line: the fallback first-sentence description (plan Part 1
  * §1.2, from the live registry descriptions) and the tool's key parameter

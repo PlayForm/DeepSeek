@@ -5,7 +5,7 @@ export default interface Decision {
     /** The human-readable reason (the deny / escalate reason text). */
     reason: string;
     /** The per-obligation outcomes: satisfied | denied | n/a | recovery. */
-    obligations: import("@Interface/Check.js").Obligations;
+    obligations: import("./Check.js").Obligations;
     /** The proposal the decision evaluated (echoed for the ring). */
     operation: string;
 }

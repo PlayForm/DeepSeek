@@ -29,13 +29,14 @@
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
-import { NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
+import { NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 
 export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-tool-coach.log").volatile(),
 	enabled: Schema.boolean().default(true).volatile(),
 	judgeTools: Schema.array(Schema.string()).default(["bash", "pwsh"]).volatile(),
+	denyTools: Schema.array(Schema.string()).default([]).volatile(),
 	threshold: Schema.number().default(3).volatile(),
 	window: Schema.number().default(8).volatile(),
 	cooldown: Schema.number().default(10).volatile(),
@@ -63,6 +64,7 @@ export default Compose(false, {
 		first: Schema.string().default(NOTE_FIRST),
 		persistent: Schema.string().default(NOTE_PERSISTENT),
 		denied: Schema.string().default(NOTE_DENIED),
+		deniedTool: Schema.string().default(NOTE_DENIED_TOOL),
 	}).volatile(),
 	// The dynamic-instruction knobs (plan Part 3 §3.4):
 	fetchLive: Schema.boolean().default(true).volatile(),

@@ -13,9 +13,9 @@ export default interface Config {
     /** The excluded target globs - never gated. */
     exclude: string[];
     /** The policy table (rules per proposal kind). */
-    policy: import("@Interface/Policy.js").default[];
+    policy: import("./Policy.js").default[];
     /** The recovery-table overrides (per-obligation failure behavior). */
-    recovery: import("@Interface/Recovery.js").default[];
+    recovery: import("./Recovery.js").default[];
     /** The loop bound: an operation identifier gated more than this many
      *  times is dropped (recursion prevention). */
     loopBound: number;

@@ -21,6 +21,7 @@ import {
 	Make,
 	MakeCounter,
 	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
 	NOTE_FIRST,
 	NOTE_PERSISTENT,
 	Validate,
@@ -86,10 +87,15 @@ export const runTest = async (): Promise<number> => {
 				JSON.stringify(["bash", "pwsh"]),
 			);
 		});
-		Check(Count, "config default notes: the three verbatim templates", () => {
+		Check(Count, "config default notes: the four verbatim templates", () => {
 			assert.equal(
 				JSON.stringify(Raw1.notes.get()),
-				JSON.stringify({ first: NOTE_FIRST, persistent: NOTE_PERSISTENT, denied: NOTE_DENIED }),
+				JSON.stringify({
+					first: NOTE_FIRST,
+					persistent: NOTE_PERSISTENT,
+					denied: NOTE_DENIED,
+					deniedTool: NOTE_DENIED_TOOL,
+				}),
 			);
 		});
 		Check(Count, "config default patternTable = the built-in adversarial table", () => {

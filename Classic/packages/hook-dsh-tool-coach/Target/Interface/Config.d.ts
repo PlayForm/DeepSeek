@@ -8,6 +8,8 @@ export default interface Config {
     enabled: boolean;
     /** The terminal tools that are judged; dedicated tools are never judged (volatile). */
     judgeTools: string[];
+    /** The tools denied on EVERY call, before and independent of the strikes ladder (volatile). */
+    denyTools: string[];
     /** Strikes within the window that trigger a tier-1 note (volatile). */
     threshold: number;
     /** Sliding window of judged calls (volatile). */

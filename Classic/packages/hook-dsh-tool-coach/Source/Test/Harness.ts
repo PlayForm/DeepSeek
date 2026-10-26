@@ -31,13 +31,14 @@ import Detect from "../../Target/Function/Detect.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../../Target/Variable/Patterns.js";
 import {
 	NOTE_DENIED,
+	NOTE_DENIED_TOOL,
 	NOTE_FIRST,
 	NOTE_PERSISTENT,
 	STATIC_TOOL_LINES,
 } from "../../Target/Variable/Notes.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
-export { Coach, Detect, DEFAULT_EXEMPTS, DEFAULT_PATTERNS, NOTE_DENIED, NOTE_FIRST, NOTE_PERSISTENT, STATIC_TOOL_LINES };
+export { Coach, Detect, DEFAULT_EXEMPTS, DEFAULT_PATTERNS, NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT, STATIC_TOOL_LINES };
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.

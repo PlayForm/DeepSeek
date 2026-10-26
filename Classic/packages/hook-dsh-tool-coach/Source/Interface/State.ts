@@ -28,6 +28,8 @@ export default interface State extends Shared {
 	On: boolean;
 	/** The judged terminal tools (config `judgeTools`, volatile). */
 	Judge: string[];
+	/** The tools denied on every call regardless of the ladder (config `denyTools`, volatile). */
+	Deny: string[];
 	/** Strikes within the window that trigger a tier-1 note (volatile). */
 	Threshold: number;
 	/** Sliding window of judged calls (volatile). */

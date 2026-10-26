@@ -7,6 +7,7 @@ import Detect from "../../Target/Function/Detect.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "../../Target/Variable/Patterns.js";
 import {
   NOTE_DENIED,
+  NOTE_DENIED_TOOL,
   NOTE_FIRST,
   NOTE_PERSISTENT,
   STATIC_TOOL_LINES
@@ -214,6 +215,7 @@ export {
   Make,
   MakeCounter,
   NOTE_DENIED,
+  NOTE_DENIED_TOOL,
   NOTE_FIRST,
   NOTE_PERSISTENT,
   Post,
