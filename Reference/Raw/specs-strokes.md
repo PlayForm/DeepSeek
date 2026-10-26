@@ -5,22 +5,13 @@
 
 ## W3C Editor’s Draft *14 September 2025*
 
-This version:  
-<https://svgwg.org/specs/strokes/>
-
-Latest version:  
-<http://www.w3.org/TR/svg-strokes/>
-
-GitHub repository:  
-<https://github.com/w3c/svgwg/tree/main/specs/strokes>
-
-Feedback:  
-<www-svg@w3.org> with subject line “`[svg-strokes] … `*`message topic`*` …`” ([archive](https://lists.w3.org/Archives/Public/www-svg/))
-
-Editors:  
-Cameron McCormack, Mozilla Corporation \<<cam@mcc.id.au>\>
-
-Dirk Schulze, Adobe Systems \<<dschulze@adobe.com>\>
+| Term | Definition |
+|----|----|
+| This version: | <https://svgwg.org/specs/strokes/> |
+| Latest version: | <http://www.w3.org/TR/svg-strokes/> |
+| GitHub repository: | <https://github.com/w3c/svgwg/tree/main/specs/strokes> |
+| Feedback: | <www-svg@w3.org> with subject line “`[svg-strokes] … `*`message topic`*` …`” ([archive](https://lists.w3.org/Archives/Public/www-svg/)) |
+| Editors: | Cameron McCormack, Mozilla Corporation \<<cam@mcc.id.au>\> |
 
 [Copyright](http://www.w3.org/Consortium/Legal/ipr-notice#Copyright) © 2025 [<span class="abbr">W3C</span>](http://www.w3.org/)<sup>®</sup> ([<span class="abbr">MIT</span>](http://www.csail.mit.edu/), [<span class="abbr">ERCIM</span>](http://www.ercim.eu/), [Keio](http://www.keio.ac.jp/), [Beihang](http://ev.buaa.edu.cn/)). W3C [liability](http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer), [trademark](http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks) and [document use](http://www.w3.org/Consortium/Legal/copyright-documents) rules apply.
 
@@ -203,14 +194,11 @@ This property specifies the width of the stroke on the current object. A zero va
 
 [stroke-linecap](#StrokeLinecapProperty) specifies the shape to be used at the end of open subpaths when they are stroked. The possible values are:
 
-butt  
-This value indicates that the stroke for each subpath does not extend beyond its two endpoints. A zero length subpath will therefore not have any stroke.
-
-round  
-This value indicates that at each end of each subpath, the shape representing the stroke will be extended by a half circle with a radius equal to the stroke width. If a subpath has zero length, then the resulting effect is that the stroke for that subpath consists solely of a full circle centered at the subpath's point.
-
-square  
-This value indicates that at the end of each subpath, the shape representing the stroke will be extended by a rectangle with the same width as the stroke width and whose length is half of the stroke width. If a subpath has zero length, then the resulting effect is that the stroke for that subpath consists solely of a square with side length equal to the stroke width, centered at the subpath's point, and oriented such that two of its sides are parallel to the effective tangent at that subpath's point. See [‘path’ element implementation notes](https://svgwg.org/svg2-draft/paths.html#PathElementImplementationNotes) for details on how to determine the tangent at a zero-length subpath.
+| Term | Definition |
+|----|----|
+| butt | This value indicates that the stroke for each subpath does not extend beyond its two endpoints. A zero length subpath will therefore not have any stroke. |
+| round | This value indicates that at each end of each subpath, the shape representing the stroke will be extended by a half circle with a radius equal to the stroke width. If a subpath has zero length, then the resulting effect is that the stroke for that subpath consists solely of a full circle centered at the subpath's point. |
+| square | This value indicates that at the end of each subpath, the shape representing the stroke will be extended by a rectangle with the same width as the stroke width and whose length is half of the stroke width. If a subpath has zero length, then the resulting effect is that the stroke for that subpath consists solely of a square with side length equal to the stroke width, centered at the subpath's point, and oriented such that two of its sides are parallel to the effective tangent at that subpath's point. See [‘path’ element implementation notes](https://svgwg.org/svg2-draft/paths.html#PathElementImplementationNotes) for details on how to determine the tangent at a zero-length subpath. |
 
 ![Image showing three paths, each with a different line cap.](images/linecap.svg)
 
@@ -234,20 +222,13 @@ See the definition of the [cap shape](#TermCapShape) below for a more precise de
 
 [stroke-linejoin](#StrokeLinejoinProperty) specifies the shape to be used at the corners of paths or basic shapes when they are stroked. For further details see the [path implementation notes](https://svgwg.org/svg2-draft/paths.html#PathElementImplementationNotes).
 
-miter  
-This value indicates that a sharp corner is to be used to join path segments. The corner is formed by extending the outer edges of the stroke at the tangents of the path segments until they intersect. If the [stroke-miterlimit](#StrokeMiterlimitProperty) is exceeded, the line join falls back to bevel (see below).
-
-miter-clip  
-This value is the same as miter but if the [stroke-miterlimit](#StrokeMiterlimitProperty) is exceeded, the miter is clipped at a miter length equal to the [stroke-miterlimit](#StrokeMiterlimitProperty) value multiplied by the stroke width (see below).
-
-round  
-This value indicates that a round corner is to be used to join path segments. The corner is a circular sector centered on the join point.
-
-bevel  
-This value indicates that a bevelled corner is to be used to join path segments. The bevel shape is a triangle that fills the area between the two stroked segments.
-
-arcs  
-This value indicates that an arcs corner is to be used to join path segments. The arcs shape is formed by extending the outer edges of the stroke at the join point with arcs that have the same curvature as the outer edges at the join point.
+| Term | Definition |
+|----|----|
+| miter | This value indicates that a sharp corner is to be used to join path segments. The corner is formed by extending the outer edges of the stroke at the tangents of the path segments until they intersect. If the [stroke-miterlimit](#StrokeMiterlimitProperty) is exceeded, the line join falls back to bevel (see below). |
+| miter-clip | This value is the same as miter but if the [stroke-miterlimit](#StrokeMiterlimitProperty) is exceeded, the miter is clipped at a miter length equal to the [stroke-miterlimit](#StrokeMiterlimitProperty) value multiplied by the stroke width (see below). |
+| round | This value indicates that a round corner is to be used to join path segments. The corner is a circular sector centered on the join point. |
+| bevel | This value indicates that a bevelled corner is to be used to join path segments. The bevel shape is a triangle that fills the area between the two stroked segments. |
+| arcs | This value indicates that an arcs corner is to be used to join path segments. The arcs shape is formed by extending the outer edges of the stroke at the join point with arcs that have the same curvature as the outer edges at the join point. |
 
 The miter-clip and arcs values are new in SVG 2. The miter-clip value offers a more consistent presentation for a path with multiple joins as well as better behavior when a path is animated. The arcs value provides a better looking join when the path segments at the join are curved.
 
@@ -273,8 +254,9 @@ Four types of line joins.
 
 When two line segments meet at a sharp angle and a value of miter, miter-clip, or arcs has been specified for [stroke-linejoin](#StrokeLinejoinProperty), it is possible for the join to extend far beyond the thickness of the line stroking the path. The [stroke-miterlimit](#StrokeMiterlimitProperty) imposes a limit on the extent of the line join.
 
-\<number\>  
-The limit on the extent of a miter, miter-clip, or arcs line join as a multiple of the [stroke-width](#StrokeWidthProperty) value. The value of [stroke-miterlimit](#StrokeMiterlimitProperty) must be a [\<number\>](https://www.w3.org/TR/css3-values/#numbers) greater than or equal to 1. Any other value is an error (see [Error processing](https://svgwg.org/svg2-draft/implnote.html#ErrorProcessing)).
+| Term | Definition |
+|----|----|
+| \<number\> | The limit on the extent of a miter, miter-clip, or arcs line join as a multiple of the [stroke-width](#StrokeWidthProperty) value. The value of [stroke-miterlimit](#StrokeMiterlimitProperty) must be a [\<number\>](https://www.w3.org/TR/css3-values/#numbers) greater than or equal to 1. Any other value is an error (see [Error processing](https://svgwg.org/svg2-draft/implnote.html#ErrorProcessing)). |
 
 For the miter or the miter-clip values, given the angle `θ` between the segments in local coordinate system, the miter length is calculated by:
 
@@ -284,11 +266,10 @@ miter length = stroke-width / sin(theta / 2)
 
 If the miter length divided by the stroke width exceeds the [stroke-miterlimit](#StrokeMiterlimitProperty) then for the value:
 
-miter  
-the join is converted to a bevel;
-
-miter-clip  
-the miter is clipped by a line perpendicular to the line bisecting the angle between the two path segments at a distance of the value of miter length from the intersection of the two path segments.
+| Term | Definition |
+|----|----|
+| miter | the join is converted to a bevel; |
+| miter-clip | the miter is clipped by a line perpendicular to the line bisecting the angle between the two path segments at a distance of the value of miter length from the intersection of the two path segments. |
 
 ![Image showing resulting stroke when stroke miter limit is exceeded.](images/miter-limit.svg)
 
@@ -378,11 +359,10 @@ The [stroke-dashcorner](#StrokeDashcornerProperty) property controls whether a d
 
 [](#issue8)This will not help with placing a corner dash on a ‘[rect](https://svgwg.org/svg2-draft/shapes.html#RectElement)’ with rounded corners, as they will also be placed at the points between the arcs forming the rounded corners and the straight line segments.
 
-none  
-Indicates that no dashes are required to be painted at the vertices of the shape.
-
-\<length\>  
-Specifies that a dash of the given length is to be painted at each vertex of the shape. For an open shape, the first corner dash is positioned so that it begins at the start of the path, and the last corner dash so that it ends at the end of the path. The other corner dashes of an open shape, and all corner dashes of a closed shape, are positioned so that they are centered on their vertex.
+| Term | Definition |
+|----|----|
+| none | Indicates that no dashes are required to be painted at the vertices of the shape. |
+| \<length\> | Specifies that a dash of the given length is to be painted at each vertex of the shape. For an open shape, the first corner dash is positioned so that it begins at the start of the path, and the last corner dash so that it ends at the end of the path. The other corner dashes of an open shape, and all corner dashes of a closed shape, are positioned so that they are centered on their vertex. |
 
 [](#issue9)Should the corner dash at the first and last vertex of an open shape be half the length of the others? Should this be author controllable?
 
@@ -412,20 +392,13 @@ This is a new feature, added to allow for more visually pleasing stroke dash pat
 
 The [stroke-dashadjust](#StrokeDashadjustProperty) property specifies whether and how a stroke's dash pattern will be adjusted so that it is repeated a whole number of times along an element's subpaths.
 
-none  
-Indicates that no adjustment of the dash pattern takes place.
-
-stretch  
-Indicates that when the dash pattern does not fit into a subpath a whole number times, the dashes or gaps (or both) will be lengthened so that it does.
-
-compress  
-Indicates that when the dash pattern does not fit into a subpath a whole number times, the dashes or gaps (or both) will be shortened so that it does.
-
-dashes  
-Indicates that when a dash pattern is to be stretched or compressed, only the length of the dashes will be adjusted; the gaps will remain as specified.
-
-gaps  
-Indicates that when a dash pattern is to be stretched or compressed, only the length of the gaps will be adjusted; the dashes will remain as specified.
+| Term | Definition |
+|----|----|
+| none | Indicates that no adjustment of the dash pattern takes place. |
+| stretch | Indicates that when the dash pattern does not fit into a subpath a whole number times, the dashes or gaps (or both) will be lengthened so that it does. |
+| compress | Indicates that when the dash pattern does not fit into a subpath a whole number times, the dashes or gaps (or both) will be shortened so that it does. |
+| dashes | Indicates that when a dash pattern is to be stretched or compressed, only the length of the dashes will be adjusted; the gaps will remain as specified. |
+| gaps | Indicates that when a dash pattern is to be stretched or compressed, only the length of the gaps will be adjusted; the dashes will remain as specified. |
 
 [](#issue12)Do we need to be able to choose to stretch or compress?
 
@@ -610,14 +583,10 @@ Where `κ(0)` and `κ(1)` are the signed curvatures at the start and end of the 
 
 ### 4.1. Normative references[](#normrefs)
 
-**\[RFC2119\]**  
-[Key words for use in RFCs to Indicate Requirement Levels](https://tools.ietf.org/html/rfc2119), S. Bradner, March 1997.\
-Available at https://tools.ietf.org/html/rfc2119.
-
-**\[SVG2\]**  
-[Scalable Vector Graphics (SVG) 2](https://www.w3.org/TR/2015/WD-SVG2-20150409/), N. Andronikos, T. Bah, A. Bellamy-Royds, B. Birtles, C. Concolato, E. Dahlström, C. Lilley, C. McCormack, D. Schepers, D. Schulze, R. Schwerdtfeger, S. Takagi, J. Watt, eds. World Wide Web Consortium, 09 April 2015.\
-This edition of SVG 2 is https://www.w3.org/TR/2015/WD-SVG2-20150409/.\
-The [latest edition of SVG 2](https://www.w3.org/TR/SVG2/) is available at https://www.w3.org/TR/SVG2/.
+| Term | Definition |
+|----|----|
+| **\[RFC2119\]** | [Key words for use in RFCs to Indicate Requirement Levels](https://tools.ietf.org/html/rfc2119), S. Bradner, March 1997. Available at https://tools.ietf.org/html/rfc2119. |
+| **\[SVG2\]** | [Scalable Vector Graphics (SVG) 2](https://www.w3.org/TR/2015/WD-SVG2-20150409/), N. Andronikos, T. Bah, A. Bellamy-Royds, B. Birtles, C. Concolato, E. Dahlström, C. Lilley, C. McCormack, D. Schepers, D. Schulze, R. Schwerdtfeger, S. Takagi, J. Watt, eds. World Wide Web Consortium, 09 April 2015. This edition of SVG 2 is https://www.w3.org/TR/2015/WD-SVG2-20150409/. The [latest edition of SVG 2](https://www.w3.org/TR/SVG2/) is available at https://www.w3.org/TR/SVG2/. |
 
 ## 5. Changes since SVG 2[](#ChangesSinceSVG2)
 

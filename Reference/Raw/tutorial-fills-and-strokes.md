@@ -162,10 +162,10 @@
   - [Русский](https://docs.aspose.com/svg/ru/tutorial/fills-and-strokes/)
 
 
-- Home
-- Aspose.SVG
-- SVG Tutorial
-- Fills and Strokes in SVG
+- [Home](./index.md)
+- [Aspose.SVG](./svg.md)
+- [SVG Tutorial](./svg-tutorial.md)
+- [Fills and Strokes in SVG](./svg-tutorial-fills-and-strokes.md)
 
 
 - [Live Demos](https://products.aspose.app/svg/applications)
@@ -178,7 +178,10 @@ Helpful resources ▼
 - [SVG Solutions](https://products.aspose.com/svg/)
 - [API Reference](https://reference.aspose.com/svg/)
 
-[* * Download](https://releases.aspose.com/svg/) [* * Pricing](https://purchase.aspose.com/pricing/svg/family/) [* * Buy](https://purchase.aspose.com/buy/cart?ppId=99273)
+
+- [* * Download](https://releases.aspose.com/svg/)
+- [* * Pricing](https://purchase.aspose.com/pricing/svg/family/)
+- [* * Buy](https://purchase.aspose.com/buy/cart?ppId=99273)
 
 # Fills and Strokes in SVG – Attributes and Examples
 
@@ -250,14 +253,14 @@ The `fill` property defines how the interior of a shape or text is painted. It a
 | `url(#id)` | Uses a paint server (gradient or pattern) | `fill="url(#gradient1)"` |
 | `currentColor` | Uses the current text color | `fill="currentColor"` |
 
-The sample below compares a path with `fill="none"` and the same path without an explicit fill ( two-paths.svg):
+The sample below compares a path with `fill="none"` and the same path without an explicit fill ( [two-paths.svg](./svg-files-two-paths.svg.md)):
 
     1<svg height="400" width="800" xmlns="http://www.w3.org/2000/svg">
     2    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" fill="none" />
     3    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" transform="translate(0 125)" />
     4</svg>
 
-!Two SVG paths comparing fill none and default black fill
+![Two SVG paths comparing fill none and default black fill](./svg-images-drawing-two_paths.png.md)
 
 ## SVG Stroke
 
@@ -280,7 +283,7 @@ For any line, it is possible to set the shape of its ends. The `stroke-linecap` 
 | `square` | Flat edge that extends half a stroke‑width beyond the end point. |
 | `round`  | Semi‑circular end whose radius equals half the stroke‑width.     |
 
-The effect is visible when the line has a noticeable `stroke-width`. The sample below shows how `stroke-width` and `stroke-linecap` define stroke thickness and endpoint shape ( lines.svg).
+The effect is visible when the line has a noticeable `stroke-width`. The sample below shows how `stroke-width` and `stroke-linecap` define stroke thickness and endpoint shape ( [lines.svg](./svg-files-lines.svg.md)).
 
      1<svg height="200" width="800" xmlns="http://www.w3.org/2000/svg">
      2  <g stroke="grey">
@@ -302,7 +305,7 @@ The effect is visible when the line has a noticeable `stroke-width`. The sample 
 
 In the sample, the `<g>` element sets shared properties, such as `stroke` and `stroke-width`, for several child paths.
 
-!Two sets of SVG lines: with different width values and stroke-linecap properties
+![Two sets of SVG lines: with different width values and stroke-linecap properties](./svg-images-drawing-lines.png.md)
 
 In the example above, the orange guide lines show the original paths, and the grey strokes show how stroke width and line caps change the rendered result.
 
@@ -316,7 +319,7 @@ The `stroke-linejoin` property controls the shape of corners where two stroke se
 | `round` | Rounds the corner with a radius of half the stroke width. |
 | `bevel` | Cuts off the corner, creating a flat edge.                |
 
-The next sample illustrates `stroke-linejoin` values ( linejoin.svg):
+The next sample illustrates `stroke-linejoin` values ( [linejoin.svg](./svg-files-linejoin.svg.md)):
 
      1<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
      2    <g stroke-width="20" fill="none">
@@ -331,7 +334,7 @@ The next sample illustrates `stroke-linejoin` values ( linejoin.svg):
     11    </g>
     12</svg>
 
-!Three polylines with different stroke-linejoin properties
+![Three polylines with different stroke-linejoin properties](./svg-images-drawing-linejoin.png.md)
 
 The orange line shows the original polyline path, while the wider colored outline shows the rendered stroke around it.
 
@@ -347,7 +350,7 @@ All the SVG stroke properties can be applied to any line type, text and outlines
 | `stroke-dasharray`  | Defines dash and gap pattern |
 | `stroke-dashoffset` | Shifts the dash pattern      |
 
-Here is an example of using `stroke-dasharray` ( dasharray.svg):
+Here is an example of using `stroke-dasharray` ( [dasharray.svg](./svg-files-dasharray.svg.md)):
 
     1<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
     2    <line x1="20" y1="30" x2="400" y2="30" style="stroke:rgb(112, 128, 144); fill:none; stroke-width:10; stroke-dasharray:10 5;" />
@@ -357,9 +360,9 @@ Here is an example of using `stroke-dasharray` ( dasharray.svg):
 
 For the grey and orange lines, the dash pattern uses an even number of values: each pair means dash length and gap length. If the list has an odd number of values, SVG repeats the list to make an even pattern. For example, `20 10 5` becomes `20 10 5 20 10 5`, as shown by the olive line.
 
-!Three paths with different stroke-dasharray properties
+![Three paths with different stroke-dasharray properties](./svg-images-drawing-dasharray.png.md)
 
-You can experiment with `stroke-dasharray` attribute. Amazing things can be achieved with SVG strokes and simple SVG shapes ( dasharray-example.svg):
+You can experiment with `stroke-dasharray` attribute. Amazing things can be achieved with SVG strokes and simple SVG shapes ( [dasharray-example.svg](./svg-files-dasharray-example.svg.md)):
 
      1<svg height="600" width="600" xmlns="http://www.w3.org/2000/svg">
      2    <g fill="none">
@@ -372,7 +375,7 @@ You can experiment with `stroke-dasharray` attribute. Amazing things can be achi
      9    </g>
     10</svg>
 
-!Circle, rectangle, and text with different stroke-dasharray patterns
+![Circle, rectangle, and text with different stroke-dasharray patterns](./svg-images-drawing-dasharray_example.png.md)
 
 ## Additional SVG Paint Attributes
 
@@ -459,14 +462,17 @@ Yes. Gradients and patterns can be applied with `fill="url(#id)"` or `stroke="ur
 - The SVG specification section on [painting](https://www.w3.org/TR/SVG2/painting.html) defines fill, stroke, paint servers, opacity, line caps, joins, and dash properties.
 - The SVG 2 definition of [presentation attributes](https://www.w3.org/TR/2018/CR-SVG2-20181004/styling.html#TermPresentationAttribute) explains how styling properties such as `fill` and `stroke` can be written directly as SVG attributes.
 - The SVG 1.1 list of [color keywords](https://www.w3.org/TR/SVG11/types.html#ColorKeywords) is useful when you need named color values such as `red`, `orange`, or `DarkCyan` in SVG examples.
-- Use SVG Color for color formats, opacity, and transparency in SVG.
-- Open SVG Gradients to apply linear or radial gradients to fills and strokes.
-- Use SVG Shapes to see how `fill`, `stroke`, and `stroke-width` are applied to basic SVG shapes.
-- See Edit SVG File for .NET API examples that create SVG elements and set color properties programmatically.
-- See How to Change SVG Color for focused .NET examples that update SVG element colors and background color.
-- See Change SVG Colors in Python for Python via .NET examples that edit `fill`, `stroke`, inline styles, and gradient stops.
+- Use [SVG Color](./svg-tutorial-svg-color.md) for color formats, opacity, and transparency in SVG.
+- Open [SVG Gradients](./svg-tutorial-svg-gradients.md) to apply linear or radial gradients to fills and strokes.
+- Use [SVG Shapes](./svg-tutorial-svg-shapes.md) to see how `fill`, `stroke`, and `stroke-width` are applied to basic SVG shapes.
+- See [Edit SVG File](./svg-net-edit-svg-file.md) for .NET API examples that create SVG elements and set color properties programmatically.
+- See [How to Change SVG Color](./svg-net-how-to-change-svg-color.md) for focused .NET examples that update SVG element colors and background color.
+- See [Change SVG Colors in Python](./svg-python-net-change-svg-colors.md) for Python via .NET examples that edit `fill`, `stroke`, inline styles, and gradient stops.
 
- SVG Transformation Matrix SVG Color  !Close!Loading
+- [ SVG Transformation Matrix](./svg-tutorial-transformation-matrix.md)
+- [SVG Color ](./svg-tutorial-svg-color.md)
+- ![Close](./svg-icons-close.svg.md)
+- ![Loading](./svg-icons-preloader.svg.md)
 
 Analyzing your prompt, please hold on...
 
@@ -598,34 +604,34 @@ Sets consent for personalized advertising.
 - [简体中文](https://docs.aspose.com/svg/zh/tutorial/fills-and-strokes/)
 - [Deutsch](https://docs.aspose.com/svg/de/tutorial/fills-and-strokes/)
 - [Русский](https://docs.aspose.com/svg/ru/tutorial/fills-and-strokes/)
-- Home - source: `/`
-- Aspose.SVG - source: `/svg/`
-- SVG Tutorial - source: `/svg/tutorial/`
-- Fills and Strokes in SVG - source: `/svg/tutorial/fills-and-strokes/`
+- [Home](./index.md) - source: /
+- [Aspose.SVG](./svg.md) - source: /svg/
+- [SVG Tutorial](./svg-tutorial.md) - source: /svg/tutorial/
+- [Fills and Strokes in SVG](./svg-tutorial-fills-and-strokes.md) - source: /svg/tutorial/fills-and-strokes/
 - [Live Demos](https://products.aspose.app/svg/applications)
 - [API Reference](https://reference.aspose.com/svg/)
 - [Download](https://releases.aspose.com/svg/)
 - [Pricing](https://purchase.aspose.com/pricing/svg/family/)
 - [Buy](https://purchase.aspose.com/buy/cart?ppId=99273)
-- SVG Painting Model – Fill and Stroke - source: `/svg/tutorial/fills-and-strokes/#svg-painting-model--fill-and-stroke`
-- Properties vs Attributes in SVG - source: `/svg/tutorial/fills-and-strokes/#properties-vs-attributes-in-svg`
-- SVG Fill - source: `/svg/tutorial/fills-and-strokes/#svg-fill`
-- SVG Stroke - source: `/svg/tutorial/fills-and-strokes/#svg-stroke`
-- two-paths.svg - source: `/svg/files/two-paths.svg`
-- lines.svg - source: `/svg/files/lines.svg`
-- linejoin.svg - source: `/svg/files/linejoin.svg`
-- dasharray.svg - source: `/svg/files/dasharray.svg`
-- dasharray-example.svg - source: `/svg/files/dasharray-example.svg`
+- [SVG Painting Model – Fill and Stroke](./svg-tutorial-fills-and-strokes.md#svg-painting-model--fill-and-stroke) - source: /svg/tutorial/fills-and-strokes/#svg-painting-model--fill-and-stroke
+- [Properties vs Attributes in SVG](./svg-tutorial-fills-and-strokes.md#properties-vs-attributes-in-svg) - source: /svg/tutorial/fills-and-strokes/#properties-vs-attributes-in-svg
+- [SVG Fill](./svg-tutorial-fills-and-strokes.md#svg-fill) - source: /svg/tutorial/fills-and-strokes/#svg-fill
+- [SVG Stroke](./svg-tutorial-fills-and-strokes.md#svg-stroke) - source: /svg/tutorial/fills-and-strokes/#svg-stroke
+- [two-paths.svg](./svg-files-two-paths.svg.md) - source: /svg/files/two-paths.svg
+- [lines.svg](./svg-files-lines.svg.md) - source: /svg/files/lines.svg
+- [linejoin.svg](./svg-files-linejoin.svg.md) - source: /svg/files/linejoin.svg
+- [dasharray.svg](./svg-files-dasharray.svg.md) - source: /svg/files/dasharray.svg
+- [dasharray-example.svg](./svg-files-dasharray-example.svg.md) - source: /svg/files/dasharray-example.svg
 - [painting](https://www.w3.org/TR/SVG2/painting.html)
 - [presentation attributes](https://www.w3.org/TR/2018/CR-SVG2-20181004/styling.html#TermPresentationAttribute)
 - [color keywords](https://www.w3.org/TR/SVG11/types.html#ColorKeywords)
-- SVG Color - source: `/svg/tutorial/svg-color/`
-- SVG Gradients - source: `/svg/tutorial/svg-gradients/`
-- SVG Shapes - source: `/svg/tutorial/svg-shapes/`
-- Edit SVG File - source: `/svg/net/edit-svg-file/`
-- How to Change SVG Color - source: `/svg/net/how-to-change-svg-color/`
-- Change SVG Colors in Python - source: `/svg/python-net/change-svg-colors/`
-- SVG Transformation Matrix - source: `/svg/tutorial/transformation-matrix/`
+- [SVG Color](./svg-tutorial-svg-color.md) - source: /svg/tutorial/svg-color/
+- [SVG Gradients](./svg-tutorial-svg-gradients.md) - source: /svg/tutorial/svg-gradients/
+- [SVG Shapes](./svg-tutorial-svg-shapes.md) - source: /svg/tutorial/svg-shapes/
+- [Edit SVG File](./svg-net-edit-svg-file.md) - source: /svg/net/edit-svg-file/
+- [How to Change SVG Color](./svg-net-how-to-change-svg-color.md) - source: /svg/net/how-to-change-svg-color/
+- [Change SVG Colors in Python](./svg-python-net-change-svg-colors.md) - source: /svg/python-net/change-svg-colors/
+- [SVG Transformation Matrix](./svg-tutorial-transformation-matrix.md) - source: /svg/tutorial/transformation-matrix/
 - [https://www.facebook.com/AsposeApp/](https://www.facebook.com/AsposeApp/)
 - [https://twitter.com/AsposeApp/](https://twitter.com/AsposeApp/)
 - [https://www.linkedin.com/company/asposeapp/about/](https://www.linkedin.com/company/asposeapp/about/)

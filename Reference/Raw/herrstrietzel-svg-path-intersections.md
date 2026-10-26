@@ -280,8 +280,8 @@ Unlike other libraries path-intersections will also detect touching paths.
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -340,41 +340,41 @@ Unlike other libraries path-intersections will also detect touching paths.
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=herrstrietzel%2Fsvg-path-intersections`
-- herrstrietzel - source: `/herrstrietzel`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=herrstrietzel%2Fsvg-path-intersections.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=herrstrietzel%2Fsvg-path-intersections
+- [herrstrietzel](./herrstrietzel.md) - source: /herrstrietzel
 - [svg-path-intersections](./herrstrietzel-svg-path-intersections.md) - source: /herrstrietzel/svg-path-intersections
-- Issues 2 - source: `/herrstrietzel/svg-path-intersections/issues`
-- Pull requests - source: `/herrstrietzel/svg-path-intersections/pulls`
-- Actions - source: `/herrstrietzel/svg-path-intersections/actions`
-- Projects - source: `/herrstrietzel/svg-path-intersections/projects`
-- Security and quality - source: `/herrstrietzel/svg-path-intersections/security`
-- Insights - source: `/herrstrietzel/svg-path-intersections/pulse`
-- Notifications - source: `/login?return_to=%2Fherrstrietzel%2Fsvg-path-intersections`
+- [Issues 2](./herrstrietzel-svg-path-intersections-issues.md) - source: /herrstrietzel/svg-path-intersections/issues
+- [Pull requests](./herrstrietzel-svg-path-intersections-pulls.md) - source: /herrstrietzel/svg-path-intersections/pulls
+- [Actions](./herrstrietzel-svg-path-intersections-actions.md) - source: /herrstrietzel/svg-path-intersections/actions
+- [Projects](./herrstrietzel-svg-path-intersections-projects.md) - source: /herrstrietzel/svg-path-intersections/projects
+- [Security and quality](./herrstrietzel-svg-path-intersections-security.md) - source: /herrstrietzel/svg-path-intersections/security
+- [Insights](./herrstrietzel-svg-path-intersections-pulse.md) - source: /herrstrietzel/svg-path-intersections/pulse
+- [Notifications](./login?return_to=%2Fherrstrietzel%2Fsvg-path-intersections.md) - source: /login?return_to=%2Fherrstrietzel%2Fsvg-path-intersections
 - [herrstrietzel.github.io/svg-path-intersections/](https://herrstrietzel.github.io/svg-path-intersections/)
-- intersections - source: `/topics/intersections`
-- svg - source: `/topics/svg`
-- Activity - source: `/herrstrietzel/svg-path-intersections/activity`
-- 1 fork - source: `/herrstrietzel/svg-path-intersections/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections&report=herrstrietzel+%28user%29`
-- 1 Branch - source: `/herrstrietzel/svg-path-intersections/branches`
-- 0 Tags - source: `/herrstrietzel/svg-path-intersections/tags`
-- herrstrietzel - source: `/herrstrietzel/svg-path-intersections/commits?author=herrstrietzel`
-- update package - source: `/herrstrietzel/svg-path-intersections/commit/f8bbd7bd85f2126fd8d31cd65c603332c6b8b3a4`
-- 19 Commits - source: `/herrstrietzel/svg-path-intersections/commits/main/`
-- demo - source: `/herrstrietzel/svg-path-intersections/tree/main/demo`
-- update demos - source: `/herrstrietzel/svg-path-intersections/commit/9d9447c055c3a6a49a227dbca8483ddbf973ef2a`
-- img - source: `/herrstrietzel/svg-path-intersections/tree/main/img`
-- screenshots - source: `/herrstrietzel/svg-path-intersections/commit/2f7a6c9bb1266371cb0ed442475af13d3e3e525c`
-- js - source: `/herrstrietzel/svg-path-intersections/tree/main/js`
-- new shape methods, congruence checks - source: `/herrstrietzel/svg-path-intersections/commit/a5f384ceff49ba3dc569764ca56b5cb3fa236963`
-- .gitignore - source: `/herrstrietzel/svg-path-intersections/blob/main/.gitignore`
-- .npmignore - source: `/herrstrietzel/svg-path-intersections/blob/main/.npmignore`
-- LICENSE - source: `/herrstrietzel/svg-path-intersections/blob/main/LICENSE`
-- Create LICENSE - source: `/herrstrietzel/svg-path-intersections/commit/3ba8cc43fbbf2bbcf54b96da530243e6cfa9181e`
-- README.md - source: `/herrstrietzel/svg-path-intersections/blob/main/README.md`
-- update readme - source: `/herrstrietzel/svg-path-intersections/commit/53afd43fc73d28637a8108f87c2fffad6b0faae0`
-- index.html - source: `/herrstrietzel/svg-path-intersections/blob/main/index.html`
-- package.json - source: `/herrstrietzel/svg-path-intersections/blob/main/package.json`
+- [intersections](./topics-intersections.md) - source: /topics/intersections
+- [svg](./topics-svg.md) - source: /topics/svg
+- [Activity](./herrstrietzel-svg-path-intersections-activity.md) - source: /herrstrietzel/svg-path-intersections/activity
+- [1 fork](./herrstrietzel-svg-path-intersections-forks.md) - source: /herrstrietzel/svg-path-intersections/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections&report=herrstrietzel+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fherrstrietzel%2Fsvg-path-intersections&report=herrstrietzel+%28user%29
+- [1 Branch](./herrstrietzel-svg-path-intersections-branches.md) - source: /herrstrietzel/svg-path-intersections/branches
+- [0 Tags](./herrstrietzel-svg-path-intersections-tags.md) - source: /herrstrietzel/svg-path-intersections/tags
+- [herrstrietzel](./herrstrietzel-svg-path-intersections-commits?author=herrstrietzel.md) - source: /herrstrietzel/svg-path-intersections/commits?author=herrstrietzel
+- [update package](./herrstrietzel-svg-path-intersections-commit-f8bbd7bd85f2126fd8d31cd65c603332c6b8b3a4.md) - source: /herrstrietzel/svg-path-intersections/commit/f8bbd7bd85f2126fd8d31cd65c603332c6b8b3a4
+- [19 Commits](./herrstrietzel-svg-path-intersections-commits-main.md) - source: /herrstrietzel/svg-path-intersections/commits/main/
+- [demo](./herrstrietzel-svg-path-intersections-tree-main-demo.md) - source: /herrstrietzel/svg-path-intersections/tree/main/demo
+- [update demos](./herrstrietzel-svg-path-intersections-commit-9d9447c055c3a6a49a227dbca8483ddbf973ef2a.md) - source: /herrstrietzel/svg-path-intersections/commit/9d9447c055c3a6a49a227dbca8483ddbf973ef2a
+- [img](./herrstrietzel-svg-path-intersections-tree-main-img.md) - source: /herrstrietzel/svg-path-intersections/tree/main/img
+- [screenshots](./herrstrietzel-svg-path-intersections-commit-2f7a6c9bb1266371cb0ed442475af13d3e3e525c.md) - source: /herrstrietzel/svg-path-intersections/commit/2f7a6c9bb1266371cb0ed442475af13d3e3e525c
+- [js](./herrstrietzel-svg-path-intersections-tree-main-js.md) - source: /herrstrietzel/svg-path-intersections/tree/main/js
+- [new shape methods, congruence checks](./herrstrietzel-svg-path-intersections-commit-a5f384ceff49ba3dc569764ca56b5cb3fa236963.md) - source: /herrstrietzel/svg-path-intersections/commit/a5f384ceff49ba3dc569764ca56b5cb3fa236963
+- [.gitignore](./herrstrietzel-svg-path-intersections-blob-main-.gitignore.md) - source: /herrstrietzel/svg-path-intersections/blob/main/.gitignore
+- [.npmignore](./herrstrietzel-svg-path-intersections-blob-main-.npmignore.md) - source: /herrstrietzel/svg-path-intersections/blob/main/.npmignore
+- [LICENSE](./herrstrietzel-svg-path-intersections-blob-main-LICENSE.md) - source: /herrstrietzel/svg-path-intersections/blob/main/LICENSE
+- [Create LICENSE](./herrstrietzel-svg-path-intersections-commit-3ba8cc43fbbf2bbcf54b96da530243e6cfa9181e.md) - source: /herrstrietzel/svg-path-intersections/commit/3ba8cc43fbbf2bbcf54b96da530243e6cfa9181e
+- [README.md](./herrstrietzel-svg-path-intersections-blob-main-README.md.md) - source: /herrstrietzel/svg-path-intersections/blob/main/README.md
+- [update readme](./herrstrietzel-svg-path-intersections-commit-53afd43fc73d28637a8108f87c2fffad6b0faae0.md) - source: /herrstrietzel/svg-path-intersections/commit/53afd43fc73d28637a8108f87c2fffad6b0faae0
+- [index.html](./herrstrietzel-svg-path-intersections-blob-main-index.html.md) - source: /herrstrietzel/svg-path-intersections/blob/main/index.html
+- [package.json](./herrstrietzel-svg-path-intersections-blob-main-package.json.md) - source: /herrstrietzel/svg-path-intersections/blob/main/package.json
 - [W3C SVGPathData interface draft](https://svgwg.org/specs/paths/#InterfaceSVGPathData)
 - [https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/intersections.png](https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/intersections.png)
 - [Jarek Foksa's pathdata-polyfill](https://github.com/jarek-foksa/path-data-polyfill)
@@ -391,10 +391,10 @@ Unlike other libraries path-intersections will also detect touching paths.
 - [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js)
 - [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
 - [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
-- Releases - source: `/herrstrietzel/svg-path-intersections/releases`
-- Contributors - source: `/herrstrietzel/svg-path-intersections/graphs/contributors`
-- JavaScript 95.4% - source: `/herrstrietzel/svg-path-intersections/search?l=javascript`
-- HTML 4.6% - source: `/herrstrietzel/svg-path-intersections/search?l=html`
+- [Releases](./herrstrietzel-svg-path-intersections-releases.md) - source: /herrstrietzel/svg-path-intersections/releases
+- [Contributors](./herrstrietzel-svg-path-intersections-graphs-contributors.md) - source: /herrstrietzel/svg-path-intersections/graphs/contributors
+- [JavaScript 95.4%](./herrstrietzel-svg-path-intersections-search?l=javascript.md) - source: /herrstrietzel/svg-path-intersections/search?l=javascript
+- [HTML 4.6%](./herrstrietzel-svg-path-intersections-search?l=html.md) - source: /herrstrietzel/svg-path-intersections/search?l=html
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

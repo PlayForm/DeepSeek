@@ -3,7 +3,10 @@
 
 Apply boolean Polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your Polygons & MultiPolygons.
 
-[![CI](https://github.com/mfogel/polygon-clipping/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mfogel/polygon-clipping/actions) [![codecov](https://camo.githubusercontent.com/79c4edad59470eda99f870ec6d196b3ac36258fce4b2a5b7f24f283545ca0ab0/68747470733a2f2f636f6465636f762e696f2f67682f6d666f67656c2f706f6c79676f6e2d636c697070696e672f6272616e63682f6d61696e2f67726170682f62616467652e7376673f746f6b656e3d69733933696e4451694a)](https://codecov.io/gh/mfogel/polygon-clipping) [![License: MIT](https://camo.githubusercontent.com/784362b26e4b3546254f1893e778ba64616e362bd6ac791991d2c9e880a3a64e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d677265656e2e737667)](https://opensource.org/licenses/MIT) [![npm](https://camo.githubusercontent.com/a456f6e14d1f59efe9926b1542261effe914db823b8ea3e6a48a346c70034122/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f706f6c79676f6e2d636c697070696e672e737667)](https://www.npmjs.com/package/polygon-clipping)
+- [![CI](https://github.com/mfogel/polygon-clipping/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mfogel/polygon-clipping/actions)
+- [![codecov](https://camo.githubusercontent.com/79c4edad59470eda99f870ec6d196b3ac36258fce4b2a5b7f24f283545ca0ab0/68747470733a2f2f636f6465636f762e696f2f67682f6d666f67656c2f706f6c79676f6e2d636c697070696e672f6272616e63682f6d61696e2f67726170682f62616467652e7376673f746f6b656e3d69733933696e4451694a)](https://codecov.io/gh/mfogel/polygon-clipping)
+- [![License: MIT](https://camo.githubusercontent.com/784362b26e4b3546254f1893e778ba64616e362bd6ac791991d2c9e880a3a64e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d677265656e2e737667)](https://opensource.org/licenses/MIT)
+- [![npm](https://camo.githubusercontent.com/a456f6e14d1f59efe9926b1542261effe914db823b8ea3e6a48a346c70034122/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f706f6c79676f6e2d636c697070696e672e737667)](https://www.npmjs.com/package/polygon-clipping)
 
 ## Quickstart
 
@@ -64,7 +67,7 @@ In the event that the result of the operation is the empty set, output will be a
 
 Run: `npm test`
 
-The tests are broken up into unit tests and end-to-end tests. The end-to-end tests are organized as GeoJSON files, to make them easy to visualize thanks to [GitHub's helpful rendering of GeoJSON files](https://help.github.com/articles/mapping-geojson-files-on-github/). Browse those tests here.
+The tests are broken up into unit tests and end-to-end tests. The end-to-end tests are organized as GeoJSON files, to make them easy to visualize thanks to [GitHub's helpful rendering of GeoJSON files](https://help.github.com/articles/mapping-geojson-files-on-github/). Browse those tests [here](./mfogel-polygon-clipping-blob-main-test-end-to-end.md).
 
 ## Performance
 
@@ -103,13 +106,13 @@ Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is
 ## Based on
 
 
-- A new algorithm for computing Boolean operations on polygons by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
+- [A new algorithm for computing Boolean operations on polygons](./mfogel-polygon-clipping-blob-main-paper.pdf.md) by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
 
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -168,64 +171,64 @@ Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mfogel%2Fpolygon-clipping`
-- mfogel - source: `/mfogel`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mfogel%2Fpolygon-clipping.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mfogel%2Fpolygon-clipping
+- [mfogel](./mfogel.md) - source: /mfogel
 - [polygon-clipping](./mfogel-polygon-clipping.md) - source: /mfogel/polygon-clipping
-- Issues 45 - source: `/mfogel/polygon-clipping/issues`
-- Pull requests 1 - source: `/mfogel/polygon-clipping/pulls`
-- Actions - source: `/mfogel/polygon-clipping/actions`
-- Projects - source: `/mfogel/polygon-clipping/projects`
-- Wiki - source: `/mfogel/polygon-clipping/wiki`
-- Security and quality - source: `/mfogel/polygon-clipping/security`
-- Insights - source: `/mfogel/polygon-clipping/pulse`
-- Notifications - source: `/login?return_to=%2Fmfogel%2Fpolygon-clipping`
-- boolean-operations - source: `/topics/boolean-operations`
-- difference - source: `/topics/difference`
-- intersection - source: `/topics/intersection`
-- polygon - source: `/topics/polygon`
-- polygon-clipping - source: `/topics/polygon-clipping`
-- union - source: `/topics/union`
-- xor - source: `/topics/xor`
-- Activity - source: `/mfogel/polygon-clipping/activity`
-- 68 forks - source: `/mfogel/polygon-clipping/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping&report=mfogel+%28user%29`
-- 7 Branches - source: `/mfogel/polygon-clipping/branches`
-- 37 Tags - source: `/mfogel/polygon-clipping/tags`
-- artemrsx - source: `/mfogel/polygon-clipping/commits?author=artemrsx`
-- Fix for - source: `/mfogel/polygon-clipping/commit/82b0ac2c35304bfea9cac24eabcbda32a808ee55`
+- [Issues 45](./mfogel-polygon-clipping-issues.md) - source: /mfogel/polygon-clipping/issues
+- [Pull requests 1](./mfogel-polygon-clipping-pulls.md) - source: /mfogel/polygon-clipping/pulls
+- [Actions](./mfogel-polygon-clipping-actions.md) - source: /mfogel/polygon-clipping/actions
+- [Projects](./mfogel-polygon-clipping-projects.md) - source: /mfogel/polygon-clipping/projects
+- [Wiki](./mfogel-polygon-clipping-wiki.md) - source: /mfogel/polygon-clipping/wiki
+- [Security and quality](./mfogel-polygon-clipping-security.md) - source: /mfogel/polygon-clipping/security
+- [Insights](./mfogel-polygon-clipping-pulse.md) - source: /mfogel/polygon-clipping/pulse
+- [Notifications](./login?return_to=%2Fmfogel%2Fpolygon-clipping.md) - source: /login?return_to=%2Fmfogel%2Fpolygon-clipping
+- [boolean-operations](./topics-boolean-operations.md) - source: /topics/boolean-operations
+- [difference](./topics-difference.md) - source: /topics/difference
+- [intersection](./topics-intersection.md) - source: /topics/intersection
+- [polygon](./topics-polygon.md) - source: /topics/polygon
+- [polygon-clipping](./topics-polygon-clipping.md) - source: /topics/polygon-clipping
+- [union](./topics-union.md) - source: /topics/union
+- [xor](./topics-xor.md) - source: /topics/xor
+- [Activity](./mfogel-polygon-clipping-activity.md) - source: /mfogel/polygon-clipping/activity
+- [68 forks](./mfogel-polygon-clipping-forks.md) - source: /mfogel/polygon-clipping/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping&report=mfogel+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmfogel%2Fpolygon-clipping&report=mfogel+%28user%29
+- [7 Branches](./mfogel-polygon-clipping-branches.md) - source: /mfogel/polygon-clipping/branches
+- [37 Tags](./mfogel-polygon-clipping-tags.md) - source: /mfogel/polygon-clipping/tags
+- [artemrsx](./mfogel-polygon-clipping-commits?author=artemrsx.md) - source: /mfogel/polygon-clipping/commits?author=artemrsx
+- [Fix for](./mfogel-polygon-clipping-commit-82b0ac2c35304bfea9cac24eabcbda32a808ee55.md) - source: /mfogel/polygon-clipping/commit/82b0ac2c35304bfea9cac24eabcbda32a808ee55
 - [#165](https://github.com/mfogel/polygon-clipping/issues/165)
 - [#167](https://github.com/mfogel/polygon-clipping/pull/167)
-- 516 Commits - source: `/mfogel/polygon-clipping/commits/main/`
-- .github/ workflows - source: `/mfogel/polygon-clipping/tree/main/.github/workflows`
-- Use private codecov token - source: `/mfogel/polygon-clipping/commit/e2c6aed942a37c3fe5476dac1e3f1b91632e396e`
-- bench - source: `/mfogel/polygon-clipping/tree/main/bench`
-- Release v0.15.7 - source: `/mfogel/polygon-clipping/commit/25f2a460ca7bd750d958d3d83b0037a32fcf75f6`
-- dist - source: `/mfogel/polygon-clipping/tree/main/dist`
-- Fix packaging ( - source: `/mfogel/polygon-clipping/commit/ffa5bae12abd31a4c27690ee70b022e901fda2a7`
+- [516 Commits](./mfogel-polygon-clipping-commits-main.md) - source: /mfogel/polygon-clipping/commits/main/
+- [.github/ workflows](./mfogel-polygon-clipping-tree-main-.github-workflows.md) - source: /mfogel/polygon-clipping/tree/main/.github/workflows
+- [Use private codecov token](./mfogel-polygon-clipping-commit-e2c6aed942a37c3fe5476dac1e3f1b91632e396e.md) - source: /mfogel/polygon-clipping/commit/e2c6aed942a37c3fe5476dac1e3f1b91632e396e
+- [bench](./mfogel-polygon-clipping-tree-main-bench.md) - source: /mfogel/polygon-clipping/tree/main/bench
+- [Release v0.15.7](./mfogel-polygon-clipping-commit-25f2a460ca7bd750d958d3d83b0037a32fcf75f6.md) - source: /mfogel/polygon-clipping/commit/25f2a460ca7bd750d958d3d83b0037a32fcf75f6
+- [dist](./mfogel-polygon-clipping-tree-main-dist.md) - source: /mfogel/polygon-clipping/tree/main/dist
+- [Fix packaging (](./mfogel-polygon-clipping-commit-ffa5bae12abd31a4c27690ee70b022e901fda2a7.md) - source: /mfogel/polygon-clipping/commit/ffa5bae12abd31a4c27690ee70b022e901fda2a7
 - [#161](https://github.com/mfogel/polygon-clipping/pull/161)
-- docs - source: `/mfogel/polygon-clipping/tree/main/docs`
-- Tidy up robust-predicates import, and tidy vite config ( - source: `/mfogel/polygon-clipping/commit/96b7774245bfdc2594405456df543651f8130d00`
+- [docs](./mfogel-polygon-clipping-tree-main-docs.md) - source: /mfogel/polygon-clipping/tree/main/docs
+- [Tidy up robust-predicates import, and tidy vite config (](./mfogel-polygon-clipping-commit-96b7774245bfdc2594405456df543651f8130d00.md) - source: /mfogel/polygon-clipping/commit/96b7774245bfdc2594405456df543651f8130d00
 - [#147](https://github.com/mfogel/polygon-clipping/pull/147)
-- src - source: `/mfogel/polygon-clipping/tree/main/src`
-- test - source: `/mfogel/polygon-clipping/tree/main/test`
-- .eslintrc.cjs - source: `/mfogel/polygon-clipping/blob/main/.eslintrc.cjs`
-- .gitignore - source: `/mfogel/polygon-clipping/blob/main/.gitignore`
-- Set up CI: travis, coveralls - source: `/mfogel/polygon-clipping/commit/91e4dd52f98b0d2c1cdec84f7c2f784fd6253d37`
-- .prettierignore - source: `/mfogel/polygon-clipping/blob/main/.prettierignore`
-- Formating: use prettier, adjust configs - source: `/mfogel/polygon-clipping/commit/d371557fd146d0f51ec61be6071608445b163a13`
-- CHANGELOG.md - source: `/mfogel/polygon-clipping/blob/main/CHANGELOG.md`
-- LICENSE.md - source: `/mfogel/polygon-clipping/blob/main/LICENSE.md`
-- Move license, change name, add copyright - source: `/mfogel/polygon-clipping/commit/90b9bdc6155b09495bb9346a602a673a49940204`
-- README.md - source: `/mfogel/polygon-clipping/blob/main/README.md`
-- Fix typo in codecov badge url - source: `/mfogel/polygon-clipping/commit/b064f942061e9820c53a462ebcccda7407330007`
-- babel.config.cjs - source: `/mfogel/polygon-clipping/blob/main/babel.config.cjs`
-- package-lock.json - source: `/mfogel/polygon-clipping/blob/main/package-lock.json`
-- package.json - source: `/mfogel/polygon-clipping/blob/main/package.json`
-- Update package.json:respository format - source: `/mfogel/polygon-clipping/commit/289151d5cf7413d215d38cc7d42bf10ac26df586`
-- paper.pdf - source: `/mfogel/polygon-clipping/blob/main/paper.pdf`
-- Update README, add paper describing algorithm - source: `/mfogel/polygon-clipping/commit/ea2d64b301801257913b29775a3ed85183269dcd`
-- prettier.config.cjs - source: `/mfogel/polygon-clipping/blob/main/prettier.config.cjs`
-- rollup.config.js - source: `/mfogel/polygon-clipping/blob/main/rollup.config.js`
+- [src](./mfogel-polygon-clipping-tree-main-src.md) - source: /mfogel/polygon-clipping/tree/main/src
+- [test](./mfogel-polygon-clipping-tree-main-test.md) - source: /mfogel/polygon-clipping/tree/main/test
+- [.eslintrc.cjs](./mfogel-polygon-clipping-blob-main-.eslintrc.cjs.md) - source: /mfogel/polygon-clipping/blob/main/.eslintrc.cjs
+- [.gitignore](./mfogel-polygon-clipping-blob-main-.gitignore.md) - source: /mfogel/polygon-clipping/blob/main/.gitignore
+- [Set up CI: travis, coveralls](./mfogel-polygon-clipping-commit-91e4dd52f98b0d2c1cdec84f7c2f784fd6253d37.md) - source: /mfogel/polygon-clipping/commit/91e4dd52f98b0d2c1cdec84f7c2f784fd6253d37
+- [.prettierignore](./mfogel-polygon-clipping-blob-main-.prettierignore.md) - source: /mfogel/polygon-clipping/blob/main/.prettierignore
+- [Formating: use prettier, adjust configs](./mfogel-polygon-clipping-commit-d371557fd146d0f51ec61be6071608445b163a13.md) - source: /mfogel/polygon-clipping/commit/d371557fd146d0f51ec61be6071608445b163a13
+- [CHANGELOG.md](./mfogel-polygon-clipping-blob-main-CHANGELOG.md.md) - source: /mfogel/polygon-clipping/blob/main/CHANGELOG.md
+- [LICENSE.md](./mfogel-polygon-clipping-blob-main-LICENSE.md.md) - source: /mfogel/polygon-clipping/blob/main/LICENSE.md
+- [Move license, change name, add copyright](./mfogel-polygon-clipping-commit-90b9bdc6155b09495bb9346a602a673a49940204.md) - source: /mfogel/polygon-clipping/commit/90b9bdc6155b09495bb9346a602a673a49940204
+- [README.md](./mfogel-polygon-clipping-blob-main-README.md.md) - source: /mfogel/polygon-clipping/blob/main/README.md
+- [Fix typo in codecov badge url](./mfogel-polygon-clipping-commit-b064f942061e9820c53a462ebcccda7407330007.md) - source: /mfogel/polygon-clipping/commit/b064f942061e9820c53a462ebcccda7407330007
+- [babel.config.cjs](./mfogel-polygon-clipping-blob-main-babel.config.cjs.md) - source: /mfogel/polygon-clipping/blob/main/babel.config.cjs
+- [package-lock.json](./mfogel-polygon-clipping-blob-main-package-lock.json.md) - source: /mfogel/polygon-clipping/blob/main/package-lock.json
+- [package.json](./mfogel-polygon-clipping-blob-main-package.json.md) - source: /mfogel/polygon-clipping/blob/main/package.json
+- [Update package.json:respository format](./mfogel-polygon-clipping-commit-289151d5cf7413d215d38cc7d42bf10ac26df586.md) - source: /mfogel/polygon-clipping/commit/289151d5cf7413d215d38cc7d42bf10ac26df586
+- [paper.pdf](./mfogel-polygon-clipping-blob-main-paper.pdf.md) - source: /mfogel/polygon-clipping/blob/main/paper.pdf
+- [Update README, add paper describing algorithm](./mfogel-polygon-clipping-commit-ea2d64b301801257913b29775a3ed85183269dcd.md) - source: /mfogel/polygon-clipping/commit/ea2d64b301801257913b29775a3ed85183269dcd
+- [prettier.config.cjs](./mfogel-polygon-clipping-blob-main-prettier.config.cjs.md) - source: /mfogel/polygon-clipping/blob/main/prettier.config.cjs
+- [rollup.config.js](./mfogel-polygon-clipping-blob-main-rollup.config.js.md) - source: /mfogel/polygon-clipping/blob/main/rollup.config.js
 - [https://github.com/mfogel/polygon-clipping/actions](https://github.com/mfogel/polygon-clipping/actions)
 - [https://codecov.io/gh/mfogel/polygon-clipping](https://codecov.io/gh/mfogel/polygon-clipping)
 - [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
@@ -233,7 +236,7 @@ Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is
 - [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1)
 - [non-zero rule](https://en.wikipedia.org/wiki/Nonzero-rule)
 - [GitHub's helpful rendering of GeoJSON files](https://help.github.com/articles/mapping-geojson-files-on-github/)
-- here - source: `/mfogel/polygon-clipping/blob/main/test/end-to-end`
+- [here](./mfogel-polygon-clipping-blob-main-test-end-to-end.md) - source: /mfogel/polygon-clipping/blob/main/test/end-to-end
 - [Semantic Versioning](https://semver.org/)
 - [CHANGELOG.md](https://github.com/mfogel/polygon-clipping/blob/master/CHANGELOG.md)
 - [Mike Fogel](https://github.com/mfogel)
@@ -241,23 +244,23 @@ Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is
 - [Vladimir Ovsyannikov](https://github.com/sh1ng)
 - [Alantgeo](https://www.alantgeo.com.au/)
 - [EasyTerritory](https://www.easyterritory.com/)
-- Releases - source: `/mfogel/polygon-clipping/releases`
-- Used by - source: `/mfogel/polygon-clipping/network/dependents`
-- Contributors - source: `/mfogel/polygon-clipping/graphs/contributors`
-- /w8r - source: `/w8r`
-- /rowanwins - source: `/rowanwins`
-- /DenisCarriere - source: `/DenisCarriere`
-- /erf - source: `/erf`
-- /barnabas-avalara - source: `/barnabas-avalara`
-- /dependabot[bot] - source: `/dependabot[bot]`
-- /sh1ng - source: `/sh1ng`
-- /jliebrand - source: `/jliebrand`
-- /OliverColeman - source: `/OliverColeman`
-- /joelgallant - source: `/joelgallant`
-- /bgschiller - source: `/bgschiller`
-- /lyrachord - source: `/lyrachord`
-- /mfedderly - source: `/mfedderly`
-- JavaScript 100% - source: `/mfogel/polygon-clipping/search?l=javascript`
+- [Releases](./mfogel-polygon-clipping-releases.md) - source: /mfogel/polygon-clipping/releases
+- [Used by](./mfogel-polygon-clipping-network-dependents.md) - source: /mfogel/polygon-clipping/network/dependents
+- [Contributors](./mfogel-polygon-clipping-graphs-contributors.md) - source: /mfogel/polygon-clipping/graphs/contributors
+- [/w8r](./w8r.md) - source: /w8r
+- [/rowanwins](./rowanwins.md) - source: /rowanwins
+- [/DenisCarriere](./DenisCarriere.md) - source: /DenisCarriere
+- [/erf](./erf.md) - source: /erf
+- [/barnabas-avalara](./barnabas-avalara.md) - source: /barnabas-avalara
+- [/dependabot[bot]](./dependabot[bot].md) - source: /dependabot[bot]
+- [/sh1ng](./sh1ng.md) - source: /sh1ng
+- [/jliebrand](./jliebrand.md) - source: /jliebrand
+- [/OliverColeman](./OliverColeman.md) - source: /OliverColeman
+- [/joelgallant](./joelgallant.md) - source: /joelgallant
+- [/bgschiller](./bgschiller.md) - source: /bgschiller
+- [/lyrachord](./lyrachord.md) - source: /lyrachord
+- [/mfedderly](./mfedderly.md) - source: /mfedderly
+- [JavaScript 100%](./mfogel-polygon-clipping-search?l=javascript.md) - source: /mfogel/polygon-clipping/search?l=javascript
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

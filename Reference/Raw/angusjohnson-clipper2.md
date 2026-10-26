@@ -8,7 +8,11 @@
 ### A Polygon [Clipping](https://en.wikipedia.org/wiki/Clipping_(computer_graphics)), [Offsetting](https://en.wikipedia.org/wiki/Parallel_curve) library (in C++, C# & Delphi)\
 
 
-[![GitHub Actions C++ status](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml) [![C#](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml) [![License](https://camo.githubusercontent.com/2e59bcdc79f349e3405740ea3f93ffd0e794724c58737e32f9b408455a435883/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d426f6f73745f312e302d6c69676874626c75652e737667)](https://www.boost.org/LICENSE_1_0.txt) [![Nuget](https://camo.githubusercontent.com/896b01c38835b0b0bd909f058eca95e43c98161d577e3d7387d624b815bfb9cd/68747470733a2f2f696d672e736869656c64732e696f2f6e756765742f762f436c6970706572323f636f6c6f723d677265656e)](https://www.nuget.org/packages/Clipper2) [![documentation](https://user-images.githubusercontent.com/5280692/187832279-b2a43890-da80-4888-95fe-793f092be372.svg)](https://www.angusj.com/clipper2/Docs/Overview.htm)
+- [![GitHub Actions C++ status](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml)
+- [![C#](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml)
+- [![License](https://camo.githubusercontent.com/2e59bcdc79f349e3405740ea3f93ffd0e794724c58737e32f9b408455a435883/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d426f6f73745f312e302d6c69676874626c75652e737667)](https://www.boost.org/LICENSE_1_0.txt)
+- [![Nuget](https://camo.githubusercontent.com/896b01c38835b0b0bd909f058eca95e43c98161d577e3d7387d624b815bfb9cd/68747470733a2f2f696d672e736869656c64732e696f2f6e756765742f762f436c6970706572323f636f6c6f723d677265656e)](https://www.nuget.org/packages/Clipper2)
+- [![documentation](https://user-images.githubusercontent.com/5280692/187832279-b2a43890-da80-4888-95fe-793f092be372.svg)](https://www.angusj.com/clipper2/Docs/Overview.htm)
 
 The **Clipper2** library performs **intersection**, **union**, **difference** and **XOR** boolean operations on both simple and complex polygons. It also performs **polygon offsetting**. This is a major update of my original [**Clipper**](https://sourceforge.net/projects/polyclipping/) library that was written about 15 years ago. That library I'm now calling **Clipper1**, and while it still works very well, Clipper2 is just [better](https://www.angusj.com/clipper2/Docs/Changes.htm).
 
@@ -38,7 +42,7 @@ The **Clipper2** library performs **intersection**, **union**, **difference** an
 
 [Clipper2/CPP/Examples/SimpleClipping/SimpleClipping.cpp](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CPP/Examples/SimpleClipping/SimpleClipping.cpp#L29-L34)
 
-Lines 29 to 34 in fa7add7
+Lines 29 to 34 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |  |  |
 |----|----|
@@ -53,7 +57,7 @@ Lines 29 to 34 in fa7add7
 
 [Clipper2/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs#L112-L116)
 
-Lines 112 to 116 in fa7add7
+Lines 112 to 116 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |  |  |
 |----|----|
@@ -67,7 +71,7 @@ Lines 112 to 116 in fa7add7
 
 [Clipper2/Delphi/Examples/Example1/Example1.dpr](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/Delphi/Examples/Example1/Example1.dpr#L21-L26)
 
-Lines 21 to 26 in fa7add7
+Lines 21 to 26 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |     |                                                                       |
 |-----|-----------------------------------------------------------------------|
@@ -86,7 +90,7 @@ Lines 21 to 26 in fa7add7
 
 [Clipper2/CPP/Examples/Inflate/Inflate.cpp](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CPP/Examples/Inflate/Inflate.cpp#L36-L47)
 
-Lines 36 to 47 in fa7add7
+Lines 36 to 47 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |  |  |
 |----|----|
@@ -107,7 +111,7 @@ Lines 36 to 47 in fa7add7
 
 [Clipper2/CSharp/Clipper2Lib.Examples/InflateDemo/Main.cs](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CSharp/Clipper2Lib.Examples/InflateDemo/Main.cs#L89-L100)
 
-Lines 89 to 100 in fa7add7
+Lines 89 to 100 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |  |  |
 |----|----|
@@ -128,7 +132,7 @@ Lines 89 to 100 in fa7add7
 
 [Clipper2/Delphi/Examples/Example2/Example2.dpr](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/Delphi/Examples/Example2/Example2.dpr#L20-L31)
 
-Lines 20 to 31 in fa7add7
+Lines 20 to 31 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |     |                                                                     |
 |-----|---------------------------------------------------------------------|
@@ -167,8 +171,8 @@ Lines 20 to 31 in fa7add7
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -227,63 +231,63 @@ Lines 20 to 31 in fa7add7
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=AngusJohnson%2FClipper2`
-- AngusJohnson - source: `/AngusJohnson`
-- Clipper2 - source: `/AngusJohnson/Clipper2`
-- Issues 22 - source: `/AngusJohnson/Clipper2/issues`
-- Pull requests 16 - source: `/AngusJohnson/Clipper2/pulls`
-- Discussions - source: `/AngusJohnson/Clipper2/discussions`
-- Actions - source: `/AngusJohnson/Clipper2/actions`
-- Security and quality - source: `/AngusJohnson/Clipper2/security`
-- Insights - source: `/AngusJohnson/Clipper2/pulse`
-- Notifications - source: `/login?return_to=%2FAngusJohnson%2FClipper2`
-- algorithm - source: `/topics/algorithm`
-- boolean-operations - source: `/topics/boolean-operations`
-- clipping - source: `/topics/clipping`
-- clipping-algorithm - source: `/topics/clipping-algorithm`
-- cpp - source: `/topics/cpp`
-- csharp - source: `/topics/csharp`
-- delphi - source: `/topics/delphi`
-- geometry - source: `/topics/geometry`
-- inflate - source: `/topics/inflate`
-- offsetting - source: `/topics/offsetting`
-- pascal - source: `/topics/pascal`
-- polygon - source: `/topics/polygon`
-- polygon-boolean - source: `/topics/polygon-boolean`
-- polygon-clipping - source: `/topics/polygon-clipping`
-- polygon-clipping-algorithm - source: `/topics/polygon-clipping-algorithm`
-- polygon-intersection - source: `/topics/polygon-intersection`
-- polygon-union - source: `/topics/polygon-union`
-- Activity - source: `/AngusJohnson/Clipper2/activity`
-- 464 forks - source: `/AngusJohnson/Clipper2/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2&report=AngusJohnson+%28user%29`
-- 1 Branch - source: `/AngusJohnson/Clipper2/branches`
-- 25 Tags - source: `/AngusJohnson/Clipper2/tags`
-- AngusJohnson - source: `/AngusJohnson/Clipper2/commits?author=AngusJohnson`
-- Update README.md - source: `/AngusJohnson/Clipper2/commit/a6e7294703ae329576462f9471b356971f53010d`
-- 819 Commits - source: `/AngusJohnson/Clipper2/commits/main/`
-- .github/ workflows - source: `/AngusJohnson/Clipper2/tree/main/.github/workflows`
-- Updated C# CI to .NET 8.0. - source: `/AngusJohnson/Clipper2/commit/77f5f63244cf955e58f52eb34d52002968b21edf`
-- CPP - source: `/AngusJohnson/Clipper2/tree/main/CPP`
-- Fix linking to - source: `/AngusJohnson/Clipper2/commit/c324e7bdcb021ada9d74f91da034bc499de5861c`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=AngusJohnson%2FClipper2.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=AngusJohnson%2FClipper2
+- [AngusJohnson](./AngusJohnson.md) - source: /AngusJohnson
+- [Clipper2](./AngusJohnson-Clipper2.md) - source: /AngusJohnson/Clipper2
+- [Issues 22](./AngusJohnson-Clipper2-issues.md) - source: /AngusJohnson/Clipper2/issues
+- [Pull requests 16](./AngusJohnson-Clipper2-pulls.md) - source: /AngusJohnson/Clipper2/pulls
+- [Discussions](./AngusJohnson-Clipper2-discussions.md) - source: /AngusJohnson/Clipper2/discussions
+- [Actions](./AngusJohnson-Clipper2-actions.md) - source: /AngusJohnson/Clipper2/actions
+- [Security and quality](./AngusJohnson-Clipper2-security.md) - source: /AngusJohnson/Clipper2/security
+- [Insights](./AngusJohnson-Clipper2-pulse.md) - source: /AngusJohnson/Clipper2/pulse
+- [Notifications](./login?return_to=%2FAngusJohnson%2FClipper2.md) - source: /login?return_to=%2FAngusJohnson%2FClipper2
+- [algorithm](./topics-algorithm.md) - source: /topics/algorithm
+- [boolean-operations](./topics-boolean-operations.md) - source: /topics/boolean-operations
+- [clipping](./topics-clipping.md) - source: /topics/clipping
+- [clipping-algorithm](./topics-clipping-algorithm.md) - source: /topics/clipping-algorithm
+- [cpp](./topics-cpp.md) - source: /topics/cpp
+- [csharp](./topics-csharp.md) - source: /topics/csharp
+- [delphi](./topics-delphi.md) - source: /topics/delphi
+- [geometry](./topics-geometry.md) - source: /topics/geometry
+- [inflate](./topics-inflate.md) - source: /topics/inflate
+- [offsetting](./topics-offsetting.md) - source: /topics/offsetting
+- [pascal](./topics-pascal.md) - source: /topics/pascal
+- [polygon](./topics-polygon.md) - source: /topics/polygon
+- [polygon-boolean](./topics-polygon-boolean.md) - source: /topics/polygon-boolean
+- [polygon-clipping](./topics-polygon-clipping.md) - source: /topics/polygon-clipping
+- [polygon-clipping-algorithm](./topics-polygon-clipping-algorithm.md) - source: /topics/polygon-clipping-algorithm
+- [polygon-intersection](./topics-polygon-intersection.md) - source: /topics/polygon-intersection
+- [polygon-union](./topics-polygon-union.md) - source: /topics/polygon-union
+- [Activity](./AngusJohnson-Clipper2-activity.md) - source: /AngusJohnson/Clipper2/activity
+- [464 forks](./AngusJohnson-Clipper2-forks.md) - source: /AngusJohnson/Clipper2/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2&report=AngusJohnson+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2FAngusJohnson%2FClipper2&report=AngusJohnson+%28user%29
+- [1 Branch](./AngusJohnson-Clipper2-branches.md) - source: /AngusJohnson/Clipper2/branches
+- [25 Tags](./AngusJohnson-Clipper2-tags.md) - source: /AngusJohnson/Clipper2/tags
+- [AngusJohnson](./AngusJohnson-Clipper2-commits?author=AngusJohnson.md) - source: /AngusJohnson/Clipper2/commits?author=AngusJohnson
+- [Update README.md](./AngusJohnson-Clipper2-commit-a6e7294703ae329576462f9471b356971f53010d.md) - source: /AngusJohnson/Clipper2/commit/a6e7294703ae329576462f9471b356971f53010d
+- [819 Commits](./AngusJohnson-Clipper2-commits-main.md) - source: /AngusJohnson/Clipper2/commits/main/
+- [.github/ workflows](./AngusJohnson-Clipper2-tree-main-.github-workflows.md) - source: /AngusJohnson/Clipper2/tree/main/.github/workflows
+- [Updated C# CI to .NET 8.0.](./AngusJohnson-Clipper2-commit-77f5f63244cf955e58f52eb34d52002968b21edf.md) - source: /AngusJohnson/Clipper2/commit/77f5f63244cf955e58f52eb34d52002968b21edf
+- [CPP](./AngusJohnson-Clipper2-tree-main-CPP.md) - source: /AngusJohnson/Clipper2/tree/main/CPP
+- [Fix linking to](./AngusJohnson-Clipper2-commit-c324e7bdcb021ada9d74f91da034bc499de5861c.md) - source: /AngusJohnson/Clipper2/commit/c324e7bdcb021ada9d74f91da034bc499de5861c
 - [#1080](https://github.com/AngusJohnson/Clipper2/pull/1080)
-- CSharp - source: `/AngusJohnson/Clipper2/tree/main/CSharp`
-- fix project path for C# tests, add readme on tests ( - source: `/AngusJohnson/Clipper2/commit/642390d0d515cfb645d2ec4d95d218e28be645f4`
+- [CSharp](./AngusJohnson-Clipper2-tree-main-CSharp.md) - source: /AngusJohnson/Clipper2/tree/main/CSharp
+- [fix project path for C# tests, add readme on tests (](./AngusJohnson-Clipper2-commit-642390d0d515cfb645d2ec4d95d218e28be645f4.md) - source: /AngusJohnson/Clipper2/commit/642390d0d515cfb645d2ec4d95d218e28be645f4
 - [#1082](https://github.com/AngusJohnson/Clipper2/pull/1082)
-- DLL - source: `/AngusJohnson/Clipper2/tree/main/DLL`
-- clipper.export.h: added exported Triangulate functions - source: `/AngusJohnson/Clipper2/commit/21ebba05db8894f0c7217ad35ea518080f324946`
-- Delphi - source: `/AngusJohnson/Clipper2/tree/main/Delphi`
-- Fixed a bug in ClipperBase::FixSelfIntersects ( - source: `/AngusJohnson/Clipper2/commit/4da1564fb1ae69ad14b334a677c0e34a88aa8e7a`
+- [DLL](./AngusJohnson-Clipper2-tree-main-DLL.md) - source: /AngusJohnson/Clipper2/tree/main/DLL
+- [clipper.export.h: added exported Triangulate functions](./AngusJohnson-Clipper2-commit-21ebba05db8894f0c7217ad35ea518080f324946.md) - source: /AngusJohnson/Clipper2/commit/21ebba05db8894f0c7217ad35ea518080f324946
+- [Delphi](./AngusJohnson-Clipper2-tree-main-Delphi.md) - source: /AngusJohnson/Clipper2/tree/main/Delphi
+- [Fixed a bug in ClipperBase::FixSelfIntersects (](./AngusJohnson-Clipper2-commit-4da1564fb1ae69ad14b334a677c0e34a88aa8e7a.md) - source: /AngusJohnson/Clipper2/commit/4da1564fb1ae69ad14b334a677c0e34a88aa8e7a
 - [#1067](https://github.com/AngusJohnson/Clipper2/issues/1067)
-- Tests - source: `/AngusJohnson/Clipper2/tree/main/Tests`
-- Tweaks to C++CI tests - source: `/AngusJohnson/Clipper2/commit/aefa104d134eeb228f5031df70cdefb14144bf8b`
-- .gitignore - source: `/AngusJohnson/Clipper2/blob/main/.gitignore`
-- C# refactored Path64, Paths64, PathD & PathsD to derived List classes - source: `/AngusJohnson/Clipper2/commit/5f34747aca3d7a485fd436daeaac538fb7cfff12`
-- .gitmodules - source: `/AngusJohnson/Clipper2/blob/main/.gitmodules`
-- Make googletest not be a git submodule, and instead clone it separate… - source: `/AngusJohnson/Clipper2/commit/69e00c6cf9c4afa16e378c7b7aebf453c7d443ba`
-- LICENSE - source: `/AngusJohnson/Clipper2/blob/main/LICENSE`
-- Initial commit - source: `/AngusJohnson/Clipper2/commit/8ded82c20e83c5aa8f19a9e3dbfd29d6574d3d15`
-- README.md - source: `/AngusJohnson/Clipper2/blob/main/README.md`
+- [Tests](./AngusJohnson-Clipper2-tree-main-Tests.md) - source: /AngusJohnson/Clipper2/tree/main/Tests
+- [Tweaks to C++CI tests](./AngusJohnson-Clipper2-commit-aefa104d134eeb228f5031df70cdefb14144bf8b.md) - source: /AngusJohnson/Clipper2/commit/aefa104d134eeb228f5031df70cdefb14144bf8b
+- [.gitignore](./AngusJohnson-Clipper2-blob-main-.gitignore.md) - source: /AngusJohnson/Clipper2/blob/main/.gitignore
+- [C# refactored Path64, Paths64, PathD & PathsD to derived List classes](./AngusJohnson-Clipper2-commit-5f34747aca3d7a485fd436daeaac538fb7cfff12.md) - source: /AngusJohnson/Clipper2/commit/5f34747aca3d7a485fd436daeaac538fb7cfff12
+- [.gitmodules](./AngusJohnson-Clipper2-blob-main-.gitmodules.md) - source: /AngusJohnson/Clipper2/blob/main/.gitmodules
+- [Make googletest not be a git submodule, and instead clone it separate…](./AngusJohnson-Clipper2-commit-69e00c6cf9c4afa16e378c7b7aebf453c7d443ba.md) - source: /AngusJohnson/Clipper2/commit/69e00c6cf9c4afa16e378c7b7aebf453c7d443ba
+- [LICENSE](./AngusJohnson-Clipper2-blob-main-LICENSE.md) - source: /AngusJohnson/Clipper2/blob/main/LICENSE
+- [Initial commit](./AngusJohnson-Clipper2-commit-8ded82c20e83c5aa8f19a9e3dbfd29d6574d3d15.md) - source: /AngusJohnson/Clipper2/commit/8ded82c20e83c5aa8f19a9e3dbfd29d6574d3d15
+- [README.md](./AngusJohnson-Clipper2-blob-main-README.md.md) - source: /AngusJohnson/Clipper2/blob/main/README.md
 - [Why there haven’t been any updates in the last 6 months](https://github.com/AngusJohnson/Clipper2/discussions/1118)
 - [Clipping](https://en.wikipedia.org/wiki/Clipping_(computer_graphics))
 - [Offsetting](https://en.wikipedia.org/wiki/Parallel_curve)
@@ -299,7 +303,7 @@ Lines 20 to 31 in fa7add7
 - [C#:](https://github.com/AngusJohnson/Clipper2/tree/main/CSharp)
 - [Delphi:](https://github.com/AngusJohnson/Clipper2/tree/main/Delphi)
 - [Clipper2/CPP/Examples/SimpleClipping/SimpleClipping.cpp](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CPP/Examples/SimpleClipping/SimpleClipping.cpp#L29-L34)
-- fa7add7 - source: `/AngusJohnson/Clipper2/commit/fa7add77364eb3877dd1b8caf9b3cbd5486347f6`
+- [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md) - source: /AngusJohnson/Clipper2/commit/fa7add77364eb3877dd1b8caf9b3cbd5486347f6
 - [Clipper2/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs#L112-L116)
 - [Clipper2/Delphi/Examples/Example1/Example1.dpr](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/Delphi/Examples/Example1/Example1.dpr#L21-L26)
 - [https://user-images.githubusercontent.com/5280692/178123810-1719a1f5-25c3-4a9e-b419-e575ff056272.svg](https://user-images.githubusercontent.com/5280692/178123810-1719a1f5-25c3-4a9e-b419-e575ff056272.svg)
@@ -317,27 +321,27 @@ Lines 20 to 31 in fa7add7
 - [https://github.com/zyunlongz/clipper2-swift](https://github.com/zyunlongz/clipper2-swift)
 - [https://github.com/countertype/clipper2-ts](https://github.com/countertype/clipper2-ts)
 - [https://github.com/ErikSom/Clipper2-WASM/](https://github.com/ErikSom/Clipper2-WASM/)
-- Releases - source: `/AngusJohnson/Clipper2/releases`
-- Clipper2 ver. 2.0.1 Latest Dec 19, 2025 - source: `/AngusJohnson/Clipper2/releases/tag/Clipper2_2.0.1`
-- Contributors - source: `/AngusJohnson/Clipper2/graphs/contributors`
-- /reunanen - source: `/reunanen`
-- /philstopford - source: `/philstopford`
-- /damiandixon - source: `/damiandixon`
-- /SebastianDirks - source: `/SebastianDirks`
-- /sethhillbrand - source: `/sethhillbrand`
-- /sergey-239 - source: `/sergey-239`
-- /DJGosnell - source: `/DJGosnell`
-- /JingDict - source: `/JingDict`
-- /mmassing - source: `/mmassing`
-- /jfriesne - source: `/jfriesne`
-- /lederernc - source: `/lederernc`
-- /deining - source: `/deining`
-- /cwangbh - source: `/cwangbh`
-- C++ 37.1% - source: `/AngusJohnson/Clipper2/search?l=c%2B%2B`
-- Pascal 33% - source: `/AngusJohnson/Clipper2/search?l=pascal`
-- C# 28.6% - source: `/AngusJohnson/Clipper2/search?l=c%23`
-- CMake 1.2% - source: `/AngusJohnson/Clipper2/search?l=cmake`
-- C 0.1% - source: `/AngusJohnson/Clipper2/search?l=c`
+- [Releases](./AngusJohnson-Clipper2-releases.md) - source: /AngusJohnson/Clipper2/releases
+- [Clipper2 ver. 2.0.1 Latest Dec 19, 2025](./AngusJohnson-Clipper2-releases-tag-Clipper2_2.0.1.md) - source: /AngusJohnson/Clipper2/releases/tag/Clipper2_2.0.1
+- [Contributors](./AngusJohnson-Clipper2-graphs-contributors.md) - source: /AngusJohnson/Clipper2/graphs/contributors
+- [/reunanen](./reunanen.md) - source: /reunanen
+- [/philstopford](./philstopford.md) - source: /philstopford
+- [/damiandixon](./damiandixon.md) - source: /damiandixon
+- [/SebastianDirks](./SebastianDirks.md) - source: /SebastianDirks
+- [/sethhillbrand](./sethhillbrand.md) - source: /sethhillbrand
+- [/sergey-239](./sergey-239.md) - source: /sergey-239
+- [/DJGosnell](./DJGosnell.md) - source: /DJGosnell
+- [/JingDict](./JingDict.md) - source: /JingDict
+- [/mmassing](./mmassing.md) - source: /mmassing
+- [/jfriesne](./jfriesne.md) - source: /jfriesne
+- [/lederernc](./lederernc.md) - source: /lederernc
+- [/deining](./deining.md) - source: /deining
+- [/cwangbh](./cwangbh.md) - source: /cwangbh
+- [C++ 37.1%](./AngusJohnson-Clipper2-search?l=c%2B%2B.md) - source: /AngusJohnson/Clipper2/search?l=c%2B%2B
+- [Pascal 33%](./AngusJohnson-Clipper2-search?l=pascal.md) - source: /AngusJohnson/Clipper2/search?l=pascal
+- [C# 28.6%](./AngusJohnson-Clipper2-search?l=c%23.md) - source: /AngusJohnson/Clipper2/search?l=c%23
+- [CMake 1.2%](./AngusJohnson-Clipper2-search?l=cmake.md) - source: /AngusJohnson/Clipper2/search?l=cmake
+- [C 0.1%](./AngusJohnson-Clipper2-search?l=c.md) - source: /AngusJohnson/Clipper2/search?l=c
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

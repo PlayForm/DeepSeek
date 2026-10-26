@@ -3,7 +3,7 @@
 
 Create an outline surrounding an SVG path
 
-[!Image of example outlines](/danmarshall/svg-path-outline/blob/master/example.png)
+[![Image of example outlines](./danmarshall-svg-path-outline-raw-master-example.png.md)](/danmarshall/svg-path-outline/blob/master/example.png)
 
 A stroke is typically used to outline an SVG element. Use this package if you need an actual SVG path instead. When corners are outlined, you have the option of specifying the style of joint: round, square, or beveled.
 
@@ -95,8 +95,8 @@ Apache 2.0
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -155,55 +155,55 @@ Apache 2.0
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=danmarshall%2Fsvg-path-outline`
-- danmarshall - source: `/danmarshall`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=danmarshall%2Fsvg-path-outline.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=danmarshall%2Fsvg-path-outline
+- [danmarshall](./danmarshall.md) - source: /danmarshall
 - [svg-path-outline](./danmarshall-svg-path-outline.md) - source: /danmarshall/svg-path-outline
-- Issues 5 - source: `/danmarshall/svg-path-outline/issues`
-- Pull requests - source: `/danmarshall/svg-path-outline/pulls`
-- Actions - source: `/danmarshall/svg-path-outline/actions`
-- Projects - source: `/danmarshall/svg-path-outline/projects`
-- Security and quality - source: `/danmarshall/svg-path-outline/security`
-- Insights - source: `/danmarshall/svg-path-outline/pulse`
-- Notifications - source: `/login?return_to=%2Fdanmarshall%2Fsvg-path-outline`
+- [Issues 5](./danmarshall-svg-path-outline-issues.md) - source: /danmarshall/svg-path-outline/issues
+- [Pull requests](./danmarshall-svg-path-outline-pulls.md) - source: /danmarshall/svg-path-outline/pulls
+- [Actions](./danmarshall-svg-path-outline-actions.md) - source: /danmarshall/svg-path-outline/actions
+- [Projects](./danmarshall-svg-path-outline-projects.md) - source: /danmarshall/svg-path-outline/projects
+- [Security and quality](./danmarshall-svg-path-outline-security.md) - source: /danmarshall/svg-path-outline/security
+- [Insights](./danmarshall-svg-path-outline-pulse.md) - source: /danmarshall/svg-path-outline/pulse
+- [Notifications](./login?return_to=%2Fdanmarshall%2Fsvg-path-outline.md) - source: /login?return_to=%2Fdanmarshall%2Fsvg-path-outline
 - [danmarshall.github.io/svg-path-outline/browser](https://danmarshall.github.io/svg-path-outline/browser)
-- drawing - source: `/topics/drawing`
-- maker - source: `/topics/maker`
-- outline - source: `/topics/outline`
-- svg - source: `/topics/svg`
-- svg-path - source: `/topics/svg-path`
-- Activity - source: `/danmarshall/svg-path-outline/activity`
-- 8 forks - source: `/danmarshall/svg-path-outline/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline&report=danmarshall+%28user%29`
-- 1 Branch - source: `/danmarshall/svg-path-outline/branches`
-- 0 Tags - source: `/danmarshall/svg-path-outline/tags`
-- danmarshall - source: `/danmarshall/svg-path-outline/commits?author=danmarshall`
-- Merge pull request - source: `/danmarshall/svg-path-outline/commit/c067626ac34b82b98eefafb8d83071349d991b4b`
+- [drawing](./topics-drawing.md) - source: /topics/drawing
+- [maker](./topics-maker.md) - source: /topics/maker
+- [outline](./topics-outline.md) - source: /topics/outline
+- [svg](./topics-svg.md) - source: /topics/svg
+- [svg-path](./topics-svg-path.md) - source: /topics/svg-path
+- [Activity](./danmarshall-svg-path-outline-activity.md) - source: /danmarshall/svg-path-outline/activity
+- [8 forks](./danmarshall-svg-path-outline-forks.md) - source: /danmarshall/svg-path-outline/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline&report=danmarshall+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fdanmarshall%2Fsvg-path-outline&report=danmarshall+%28user%29
+- [1 Branch](./danmarshall-svg-path-outline-branches.md) - source: /danmarshall/svg-path-outline/branches
+- [0 Tags](./danmarshall-svg-path-outline-tags.md) - source: /danmarshall/svg-path-outline/tags
+- [danmarshall](./danmarshall-svg-path-outline-commits?author=danmarshall.md) - source: /danmarshall/svg-path-outline/commits?author=danmarshall
+- [Merge pull request](./danmarshall-svg-path-outline-commit-c067626ac34b82b98eefafb8d83071349d991b4b.md) - source: /danmarshall/svg-path-outline/commit/c067626ac34b82b98eefafb8d83071349d991b4b
 - [#7](https://github.com/danmarshall/svg-path-outline/pull/7)
-- 29 Commits - source: `/danmarshall/svg-path-outline/commits/master/`
-- browser - source: `/danmarshall/svg-path-outline/tree/master/browser`
-- change url to bezier.js - source: `/danmarshall/svg-path-outline/commit/1180afb7c5f5da55bfa6b85fa267497458c7b48b`
-- .gitignore - source: `/danmarshall/svg-path-outline/blob/master/.gitignore`
-- Initial commit - source: `/danmarshall/svg-path-outline/commit/bfefedd86637e5da8fa2992542a3fe5a0de79287`
-- .npmignore - source: `/danmarshall/svg-path-outline/blob/master/.npmignore`
-- ignore example.png - source: `/danmarshall/svg-path-outline/commit/bec112dafae9a68c1567c87041c715429f59299a`
-- LICENSE - source: `/danmarshall/svg-path-outline/blob/master/LICENSE`
-- README.md - source: `/danmarshall/svg-path-outline/blob/master/README.md`
-- add image - source: `/danmarshall/svg-path-outline/commit/81f2a540c7e6bc7f13066358dcb51631c7e71b70`
-- example.png - source: `/danmarshall/svg-path-outline/blob/master/example.png`
-- improved examples - source: `/danmarshall/svg-path-outline/commit/81ca6cade02514887b1e5c6265ea613434920d89`
-- index.d.ts - source: `/danmarshall/svg-path-outline/blob/master/index.d.ts`
-- working version with rainbow example - source: `/danmarshall/svg-path-outline/commit/39668bb3a36edc640ffca21337ee9b8330ff18e1`
-- index.js - source: `/danmarshall/svg-path-outline/blob/master/index.js`
-- index.ts - source: `/danmarshall/svg-path-outline/blob/master/index.ts`
-- package.json - source: `/danmarshall/svg-path-outline/blob/master/package.json`
-- bump tp fix npm - source: `/danmarshall/svg-path-outline/commit/1e29fde8fea8e559691e44e51420339864a920b7`
-- test.js - source: `/danmarshall/svg-path-outline/blob/master/test.js`
-- tsconfig.json - source: `/danmarshall/svg-path-outline/blob/master/tsconfig.json`
-- Releases - source: `/danmarshall/svg-path-outline/releases`
-- Contributors - source: `/danmarshall/svg-path-outline/graphs/contributors`
-- HTML 75.5% - source: `/danmarshall/svg-path-outline/search?l=html`
-- JavaScript 16.8% - source: `/danmarshall/svg-path-outline/search?l=javascript`
-- TypeScript 7.7% - source: `/danmarshall/svg-path-outline/search?l=typescript`
+- [29 Commits](./danmarshall-svg-path-outline-commits-master.md) - source: /danmarshall/svg-path-outline/commits/master/
+- [browser](./danmarshall-svg-path-outline-tree-master-browser.md) - source: /danmarshall/svg-path-outline/tree/master/browser
+- [change url to bezier.js](./danmarshall-svg-path-outline-commit-1180afb7c5f5da55bfa6b85fa267497458c7b48b.md) - source: /danmarshall/svg-path-outline/commit/1180afb7c5f5da55bfa6b85fa267497458c7b48b
+- [.gitignore](./danmarshall-svg-path-outline-blob-master-.gitignore.md) - source: /danmarshall/svg-path-outline/blob/master/.gitignore
+- [Initial commit](./danmarshall-svg-path-outline-commit-bfefedd86637e5da8fa2992542a3fe5a0de79287.md) - source: /danmarshall/svg-path-outline/commit/bfefedd86637e5da8fa2992542a3fe5a0de79287
+- [.npmignore](./danmarshall-svg-path-outline-blob-master-.npmignore.md) - source: /danmarshall/svg-path-outline/blob/master/.npmignore
+- [ignore example.png](./danmarshall-svg-path-outline-commit-bec112dafae9a68c1567c87041c715429f59299a.md) - source: /danmarshall/svg-path-outline/commit/bec112dafae9a68c1567c87041c715429f59299a
+- [LICENSE](./danmarshall-svg-path-outline-blob-master-LICENSE.md) - source: /danmarshall/svg-path-outline/blob/master/LICENSE
+- [README.md](./danmarshall-svg-path-outline-blob-master-README.md.md) - source: /danmarshall/svg-path-outline/blob/master/README.md
+- [add image](./danmarshall-svg-path-outline-commit-81f2a540c7e6bc7f13066358dcb51631c7e71b70.md) - source: /danmarshall/svg-path-outline/commit/81f2a540c7e6bc7f13066358dcb51631c7e71b70
+- [example.png](./danmarshall-svg-path-outline-blob-master-example.png.md) - source: /danmarshall/svg-path-outline/blob/master/example.png
+- [improved examples](./danmarshall-svg-path-outline-commit-81ca6cade02514887b1e5c6265ea613434920d89.md) - source: /danmarshall/svg-path-outline/commit/81ca6cade02514887b1e5c6265ea613434920d89
+- [index.d.ts](./danmarshall-svg-path-outline-blob-master-index.d.ts.md) - source: /danmarshall/svg-path-outline/blob/master/index.d.ts
+- [working version with rainbow example](./danmarshall-svg-path-outline-commit-39668bb3a36edc640ffca21337ee9b8330ff18e1.md) - source: /danmarshall/svg-path-outline/commit/39668bb3a36edc640ffca21337ee9b8330ff18e1
+- [index.js](./danmarshall-svg-path-outline-blob-master-index.js.md) - source: /danmarshall/svg-path-outline/blob/master/index.js
+- [index.ts](./danmarshall-svg-path-outline-blob-master-index.ts.md) - source: /danmarshall/svg-path-outline/blob/master/index.ts
+- [package.json](./danmarshall-svg-path-outline-blob-master-package.json.md) - source: /danmarshall/svg-path-outline/blob/master/package.json
+- [bump tp fix npm](./danmarshall-svg-path-outline-commit-1e29fde8fea8e559691e44e51420339864a920b7.md) - source: /danmarshall/svg-path-outline/commit/1e29fde8fea8e559691e44e51420339864a920b7
+- [test.js](./danmarshall-svg-path-outline-blob-master-test.js.md) - source: /danmarshall/svg-path-outline/blob/master/test.js
+- [tsconfig.json](./danmarshall-svg-path-outline-blob-master-tsconfig.json.md) - source: /danmarshall/svg-path-outline/blob/master/tsconfig.json
+- [Releases](./danmarshall-svg-path-outline-releases.md) - source: /danmarshall/svg-path-outline/releases
+- [Contributors](./danmarshall-svg-path-outline-graphs-contributors.md) - source: /danmarshall/svg-path-outline/graphs/contributors
+- [HTML 75.5%](./danmarshall-svg-path-outline-search?l=html.md) - source: /danmarshall/svg-path-outline/search?l=html
+- [JavaScript 16.8%](./danmarshall-svg-path-outline-search?l=javascript.md) - source: /danmarshall/svg-path-outline/search?l=javascript
+- [TypeScript 7.7%](./danmarshall-svg-path-outline-search?l=typescript.md) - source: /danmarshall/svg-path-outline/search?l=typescript
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

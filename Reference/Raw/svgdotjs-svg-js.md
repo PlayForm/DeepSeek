@@ -1,42 +1,54 @@
- ![svgdotjs](https://avatars.githubusercontent.com/u/22855482?s=60&v=4)**svg.js** Public
+[](./svgdotjs-svg.js.md) ![svgdotjs](https://avatars.githubusercontent.com/u/22855482?s=60&v=4)**[svg.js](./svgdotjs-svg.js.md)** Public
 
-- Sponsor
-- Notifications You must be signed in to change notification settings
-- Fork 1.1k
-- Star 11.8k You must be signed in to star a repository
+- [Sponsor](./sponsors-Fuzzyma.md)
+- [Notifications](./login?return_to=%2Fsvgdotjs%2Fsvg.js.md) You must be signed in to change notification settings
+- [Fork 1.1k](./login?return_to=%2Fsvgdotjs%2Fsvg.js.md)
+- [Star 11.8k](./login?return_to=%2Fsvgdotjs%2Fsvg.js.md) You must be signed in to star a repository
 
 ## About
 
 The lightweight library for manipulating and animating SVG
 
-[svgjs.dev](https://svgjs.dev) animation javascript svg svgjs [Readme](#readme-ov-file) [License](#License-1-ov-file) [Contributing](#contributing-ov-file) Activity Custom properties **11.8k** stars **263** watching **1.1k** forks Report repository**5** Branches **117** TagsOpen more actions menu[![Fuzzyma](https://avatars.githubusercontent.com/u/3540542?v=4&size=40)](/Fuzzyma)Fuzzymarelease 3.2.8 Aug 4, 2026 4b8809b · Aug 4, 2026 1,570 Commits Open commit details1,570 Commits
+[svgjs.dev](https://svgjs.dev)
+
+- [animation](./topics-animation.md)
+- [javascript](./topics-javascript.md)
+- [svg](./topics-svg.md)
+- [svgjs](./topics-svgjs.md)
+
+[Readme](#readme-ov-file) [License](#License-1-ov-file) [Contributing](#contributing-ov-file) [Activity](./svgdotjs-svg.js-activity.md) [Custom properties](./svgdotjs-svg.js-custom-properties.md) **11.8k** stars **263** watching [**1.1k** forks](./svgdotjs-svg.js-forks.md) [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js&report=svgdotjs+%28user%29.md)[**5** Branches](./svgdotjs-svg.js-branches.md) [**117** Tags](./svgdotjs-svg.js-tags.md)[](./svgdotjs-svg.js-branches.md)[](./svgdotjs-svg.js-tags.md)Open more actions menu[![Fuzzyma](https://avatars.githubusercontent.com/u/3540542?v=4&size=40)](/Fuzzyma)[Fuzzyma](./svgdotjs-svg.js-commits?author=Fuzzyma.md)[release 3.2.8](./svgdotjs-svg.js-commit-4b8809b1554c44a84f8992cdbda60480336cc040.md) Aug 4, 2026 [4b8809b](./svgdotjs-svg.js-commit-4b8809b1554c44a84f8992cdbda60480336cc040.md) · Aug 4, 2026 [1,570 Commits](./svgdotjs-svg.js-commits-master.md) Open commit details[](./svgdotjs-svg.js-commits-master.md)1,570 Commits
 
 | Name | Name | Last commit message | Last commit date |
 |----|----|----|----|
-| .config | .config | Modernize development toolchain | Jul 17, 2026 |
-| .github | .github | Fix event cleanup and Corepack setup | Jul 16, 2026 |
-| bench | bench | update dependencies | Jun 18, 2024 |
-| playgrounds | playgrounds | dependency updates, easier formatting | Jun 12, 2023 |
-| spec | spec | Simplify transform runner bookkeeping | Jul 29, 2026 |
-| src | src | Simplify transform runner bookkeeping | Jul 29, 2026 |
-| .gitignore | .gitignore | Fix published package entry points | Jul 16, 2026 |
-| .oxfmtrc.json | .oxfmtrc.json | Modernize development toolchain | Jul 17, 2026 |
-| .oxlintrc.json | .oxlintrc.json | Modernize development toolchain | Jul 17, 2026 |
-| .travis.yml | .travis.yml | Fix event cleanup and Corepack setup | Jul 16, 2026 |
-| CHANGELOG.md | CHANGELOG.md | release 3.2.8 | Aug 4, 2026 |
-| LICENSE.txt | LICENSE.txt | fix playgrounds, delete unneeded files | Dec 1, 2018 |
-| README.md | README.md | dependency updates, easier formatting | Jun 12, 2023 |
-| package.json | package.json | release 3.2.8 | Aug 4, 2026 |
-| pnpm-lock.yaml | pnpm-lock.yaml | Modernize development toolchain | Jul 17, 2026 |
-| pnpm-workspace.yaml | pnpm-workspace.yaml | Modernize development toolchain | Jul 17, 2026 |
-| svg.js.d.ts | svg.js.d.ts | Clean animation API state and declarations | Jul 29, 2026 |
-| tsconfig.json | tsconfig.json | add more events to sugar (fixes [\#1217](https://github.com/svgdotjs/svg.js/issues/1217)) | Sep 3, 2023 |
+| [.config](./svgdotjs-svg.js-tree-master-.config.md) | [.config](./svgdotjs-svg.js-tree-master-.config.md) | [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) | Jul 17, 2026 |
+| [.github](./svgdotjs-svg.js-tree-master-.github.md) | [.github](./svgdotjs-svg.js-tree-master-.github.md) | [Fix event cleanup and Corepack setup](./svgdotjs-svg.js-commit-14db829fdabcbacfcbcb6882dc7040ed8668db02.md) | Jul 16, 2026 |
+| [bench](./svgdotjs-svg.js-tree-master-bench.md) | [bench](./svgdotjs-svg.js-tree-master-bench.md) | [update dependencies](./svgdotjs-svg.js-commit-a1c23d3838f6551f01894be40c8894398467c541.md) | Jun 18, 2024 |
+| [playgrounds](./svgdotjs-svg.js-tree-master-playgrounds.md) | [playgrounds](./svgdotjs-svg.js-tree-master-playgrounds.md) | [dependency updates, easier formatting](./svgdotjs-svg.js-commit-03322672782a6318b019eff33fe44ec800d6f12c.md) | Jun 12, 2023 |
+| [spec](./svgdotjs-svg.js-tree-master-spec.md) | [spec](./svgdotjs-svg.js-tree-master-spec.md) | [Simplify transform runner bookkeeping](./svgdotjs-svg.js-commit-06f6254472609ba104b8073339708e20952b18ae.md) | Jul 29, 2026 |
+| [src](./svgdotjs-svg.js-tree-master-src.md) | [src](./svgdotjs-svg.js-tree-master-src.md) | [Simplify transform runner bookkeeping](./svgdotjs-svg.js-commit-06f6254472609ba104b8073339708e20952b18ae.md) | Jul 29, 2026 |
+| [.gitignore](./svgdotjs-svg.js-blob-master-.gitignore.md) | [.gitignore](./svgdotjs-svg.js-blob-master-.gitignore.md) | [Fix published package entry points](./svgdotjs-svg.js-commit-e2d50e83eee5662e11ad589b67c67afd7fca2dfb.md) | Jul 16, 2026 |
+| [.oxfmtrc.json](./svgdotjs-svg.js-blob-master-.oxfmtrc.json.md) | [.oxfmtrc.json](./svgdotjs-svg.js-blob-master-.oxfmtrc.json.md) | [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) | Jul 17, 2026 |
+| [.oxlintrc.json](./svgdotjs-svg.js-blob-master-.oxlintrc.json.md) | [.oxlintrc.json](./svgdotjs-svg.js-blob-master-.oxlintrc.json.md) | [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) | Jul 17, 2026 |
+| [.travis.yml](./svgdotjs-svg.js-blob-master-.travis.yml.md) | [.travis.yml](./svgdotjs-svg.js-blob-master-.travis.yml.md) | [Fix event cleanup and Corepack setup](./svgdotjs-svg.js-commit-14db829fdabcbacfcbcb6882dc7040ed8668db02.md) | Jul 16, 2026 |
+| [CHANGELOG.md](./svgdotjs-svg.js-blob-master-CHANGELOG.md.md) | [CHANGELOG.md](./svgdotjs-svg.js-blob-master-CHANGELOG.md.md) | [release 3.2.8](./svgdotjs-svg.js-commit-4b8809b1554c44a84f8992cdbda60480336cc040.md) | Aug 4, 2026 |
+| [LICENSE.txt](./svgdotjs-svg.js-blob-master-LICENSE.txt.md) | [LICENSE.txt](./svgdotjs-svg.js-blob-master-LICENSE.txt.md) | [fix playgrounds, delete unneeded files](./svgdotjs-svg.js-commit-51dafe62e02c4298859ac8f1c5945899241fac23.md) | Dec 1, 2018 |
+| [README.md](./svgdotjs-svg.js-blob-master-README.md.md) | [README.md](./svgdotjs-svg.js-blob-master-README.md.md) | [dependency updates, easier formatting](./svgdotjs-svg.js-commit-03322672782a6318b019eff33fe44ec800d6f12c.md) | Jun 12, 2023 |
+| [package.json](./svgdotjs-svg.js-blob-master-package.json.md) | [package.json](./svgdotjs-svg.js-blob-master-package.json.md) | [release 3.2.8](./svgdotjs-svg.js-commit-4b8809b1554c44a84f8992cdbda60480336cc040.md) | Aug 4, 2026 |
+| [pnpm-lock.yaml](./svgdotjs-svg.js-blob-master-pnpm-lock.yaml.md) | [pnpm-lock.yaml](./svgdotjs-svg.js-blob-master-pnpm-lock.yaml.md) | [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) | Jul 17, 2026 |
+| [pnpm-workspace.yaml](./svgdotjs-svg.js-blob-master-pnpm-workspace.yaml.md) | [pnpm-workspace.yaml](./svgdotjs-svg.js-blob-master-pnpm-workspace.yaml.md) | [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) | Jul 17, 2026 |
+| [svg.js.d.ts](./svgdotjs-svg.js-blob-master-svg.js.d.ts.md) | [svg.js.d.ts](./svgdotjs-svg.js-blob-master-svg.js.d.ts.md) | [Clean animation API state and declarations](./svgdotjs-svg.js-commit-2b7a1dc3f231f9c1fdf38e4320312241d1391c7b.md) | Jul 29, 2026 |
+| [tsconfig.json](./svgdotjs-svg.js-blob-master-tsconfig.json.md) | [tsconfig.json](./svgdotjs-svg.js-blob-master-tsconfig.json.md) | [add more events to sugar (](./svgdotjs-svg.js-commit-2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9.md)[fixes](./svgdotjs-svg.js-commit-2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9.md) [\#1217](https://github.com/svgdotjs/svg.js/issues/1217)[)](./svgdotjs-svg.js-commit-2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9.md) | Sep 3, 2023 |
 |  |  |  |  |
 
 # SVG.js
 
 
-[![Build Status](https://camo.githubusercontent.com/4f6b530dc4710b6ad118912670104b4da9bf8e65eaf04a39aea8bd00cbeb5197/68747470733a2f2f7472617669732d63692e6f72672f737667646f746a732f7376672e6a732e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/svgdotjs/svg.js) [![Coverage Status](https://camo.githubusercontent.com/791505b4389e231713bd255618d94690b0a5fa06124762a6aecb0dbe7bad18af/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f737667646f746a732f7376672e6a732f62616467652e7376673f6272616e63683d6d6173746572)](https://coveralls.io/github/svgdotjs/svg.js?branch=master) [![Cdnjs](https://camo.githubusercontent.com/a94933b2f028a4c9e66bec7803358eb5f84637cb2e85ac49001b455f70fc1396/68747470733a2f2f696d672e736869656c64732e696f2f63646e6a732f762f7376672e6a732e737667)](https://cdnjs.com/libraries/svg.js) [![jsdelivr](https://camo.githubusercontent.com/6de39104106b0842f85031b0b2d750519aa343786208f12fe5e8f7ea3c2a1bf5/68747470733a2f2f62616467656e2e6e65742f6a7364656c6976722f762f6e706d2f40737667646f746a732f7376672e6a73)](https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js) [![Join the chat at https://gitter.im/svgdotjs/svg.js](https://camo.githubusercontent.com/fc7363461d9a793908d38527614a19211f84379ef1dad7877b9a13b1aafd2237/68747470733a2f2f6261646765732e6769747465722e696d2f737667646f746a732f7376672e6a732e737667)](https://gitter.im/svgdotjs/svg.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Twitter](https://camo.githubusercontent.com/0a6505005b6146b3c95d22c0f6c5a45124be89cc578ff95b2165cec4977f47db/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f547769747465722d407376675f5f6a732d677265656e2e737667)](https://twitter.com/svg_js)
+- [![Build Status](https://camo.githubusercontent.com/4f6b530dc4710b6ad118912670104b4da9bf8e65eaf04a39aea8bd00cbeb5197/68747470733a2f2f7472617669732d63692e6f72672f737667646f746a732f7376672e6a732e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/svgdotjs/svg.js)
+- [![Coverage Status](https://camo.githubusercontent.com/791505b4389e231713bd255618d94690b0a5fa06124762a6aecb0dbe7bad18af/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f737667646f746a732f7376672e6a732f62616467652e7376673f6272616e63683d6d6173746572)](https://coveralls.io/github/svgdotjs/svg.js?branch=master)
+- [![Cdnjs](https://camo.githubusercontent.com/a94933b2f028a4c9e66bec7803358eb5f84637cb2e85ac49001b455f70fc1396/68747470733a2f2f696d672e736869656c64732e696f2f63646e6a732f762f7376672e6a732e737667)](https://cdnjs.com/libraries/svg.js)
+- [![jsdelivr](https://camo.githubusercontent.com/6de39104106b0842f85031b0b2d750519aa343786208f12fe5e8f7ea3c2a1bf5/68747470733a2f2f62616467656e2e6e65742f6a7364656c6976722f762f6e706d2f40737667646f746a732f7376672e6a73)](https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js)
+- [![Join the chat at https://gitter.im/svgdotjs/svg.js](https://camo.githubusercontent.com/fc7363461d9a793908d38527614a19211f84379ef1dad7877b9a13b1aafd2237/68747470733a2f2f6261646765732e6769747465722e696d2f737667646f746a732f7376672e6a732e737667)](https://gitter.im/svgdotjs/svg.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+- [![Twitter](https://camo.githubusercontent.com/0a6505005b6146b3c95d22c0f6c5a45124be89cc578ff95b2165cec4977f47db/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f547769747465722d407376675f5f6a732d677265656e2e737667)](https://twitter.com/svg_js)
 
 **A lightweight library for manipulating and animating SVG, without any dependencies.**
 
@@ -73,23 +85,38 @@ Check [svgjs.dev](https://svgjs.dev/docs/3.0/) to learn more.
 
 The lightweight library for manipulating and animating SVG
 
-[svgjs.dev](https://svgjs.dev) animation javascript svg svgjs [Readme](#readme-ov-file) [License](#License-1-ov-file) [Contributing](#contributing-ov-file) Activity Custom properties **11.8k** stars **263** watching **1.1k** forks Report repository
+[svgjs.dev](https://svgjs.dev)
 
-## Releases 39 (39)
+- [animation](./topics-animation.md)
+- [javascript](./topics-javascript.md)
+- [svg](./topics-svg.md)
+- [svgjs](./topics-svgjs.md)
 
-Release 3.2.6 Latest Jul 17, 2026+ 38 releases
+[Readme](#readme-ov-file) [License](#License-1-ov-file) [Contributing](#contributing-ov-file) [Activity](./svgdotjs-svg.js-activity.md) [Custom properties](./svgdotjs-svg.js-custom-properties.md) **11.8k** stars **263** watching [**1.1k** forks](./svgdotjs-svg.js-forks.md) [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js&report=svgdotjs+%28user%29.md)
+
+## [Releases](./svgdotjs-svg.js-releases.md) 39 (39)
+
+[Release 3.2.6 Latest Jul 17, 2026](./svgdotjs-svg.js-releases-tag-3.2.6.md)[+ 38 releases](./svgdotjs-svg.js-releases.md)
 
 ## Sponsor this project
 
-- [![@Fuzzyma](https://avatars.githubusercontent.com/u/3540542?s=64&v=4)](/Fuzzyma)**Fuzzyma** Ulrich-Matthias SchäferSponsor @Fuzzyma
+- [![@Fuzzyma](https://avatars.githubusercontent.com/u/3540542?s=64&v=4)](/Fuzzyma)[**Fuzzyma**](./Fuzzyma.md) Ulrich-Matthias Schäfer[](./sponsors-Fuzzyma.md)Sponsor @Fuzzyma
 
-Learn more about GitHub Sponsors
+[Learn more about GitHub Sponsors](./sponsors.md)
 
-## Used by 190K (190K)
+## [Used by](./svgdotjs-svg.js-network-dependents.md) 190K (190K)
 
-[![@jeromesigg](https://avatars.githubusercontent.com/u/23478949?s=64&v=4)![@open-source-uct](https://avatars.githubusercontent.com/u/326765316?s=64&v=4)![@ValentinML525](https://avatars.githubusercontent.com/u/216724229?s=64&v=4)![@syahrulrzk](https://avatars.githubusercontent.com/u/62525690?s=64&v=4)![@bizbaeja](https://avatars.githubusercontent.com/u/75407823?s=64&v=4)+ 192,786](/svgdotjs/svg.js/network/dependents)
+[](./svgdotjs-svg.js-network-dependents.md)
 
-## Contributors 90 (90)
+- ![@jeromesigg](https://avatars.githubusercontent.com/u/23478949?s=64&v=4)
+- ![@open-source-uct](https://avatars.githubusercontent.com/u/326765316?s=64&v=4)
+- ![@ValentinML525](https://avatars.githubusercontent.com/u/216724229?s=64&v=4)
+- ![@syahrulrzk](https://avatars.githubusercontent.com/u/62525690?s=64&v=4)
+- ![@bizbaeja](https://avatars.githubusercontent.com/u/75407823?s=64&v=4)
+
+\+ 192,786
+
+## [Contributors](./svgdotjs-svg.js-graphs-contributors.md) 90 (90)
 
 - [![@Fuzzyma](https://avatars.githubusercontent.com/u/3540542?s=64&v=4)](/Fuzzyma)
 - [![@dotnetCarpenter](https://avatars.githubusercontent.com/u/43763?s=64&v=4)](/dotnetCarpenter)
@@ -106,18 +133,18 @@ Learn more about GitHub Sponsors
 - [![@pragdave](https://avatars.githubusercontent.com/u/10648?s=64&v=4)](/pragdave)
 - [![@gormster](https://avatars.githubusercontent.com/u/152158?s=64&v=4)](/gormster)
 
-+ 76 contributors
+[+ 76 contributors](./svgdotjs-svg.js-graphs-contributors.md)
 
 ## Languages
 
-- JavaScript 98.3%
-- Other 1.7%
+- [JavaScript 98.3%](./svgdotjs-svg.js-search?l=javascript.md)
+- [Other 1.7%](./svgdotjs-svg.js-search?l=Other.md)
 
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -176,59 +203,59 @@ Learn more about GitHub Sponsors
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=svgdotjs%2Fsvg.js`
-- svgdotjs - source: `/svgdotjs`
-- svg.js - source: `/svgdotjs/svg.js`
-- Issues - source: `/svgdotjs/svg.js/issues`
-- Pull requests - source: `/svgdotjs/svg.js/pulls`
-- Actions - source: `/svgdotjs/svg.js/actions`
-- Projects - source: `/svgdotjs/svg.js/projects`
-- Security and quality - source: `/svgdotjs/svg.js/security`
-- Insights - source: `/svgdotjs/svg.js/pulse`
-- Sponsor - source: `/sponsors/Fuzzyma`
-- Notifications - source: `/login?return_to=%2Fsvgdotjs%2Fsvg.js`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=svgdotjs%2Fsvg.js.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=svgdotjs%2Fsvg.js
+- [svgdotjs](./svgdotjs.md) - source: /svgdotjs
+- [svg.js](./svgdotjs-svg.js.md) - source: /svgdotjs/svg.js
+- [Issues](./svgdotjs-svg.js-issues.md) - source: /svgdotjs/svg.js/issues
+- [Pull requests](./svgdotjs-svg.js-pulls.md) - source: /svgdotjs/svg.js/pulls
+- [Actions](./svgdotjs-svg.js-actions.md) - source: /svgdotjs/svg.js/actions
+- [Projects](./svgdotjs-svg.js-projects.md) - source: /svgdotjs/svg.js/projects
+- [Security and quality](./svgdotjs-svg.js-security.md) - source: /svgdotjs/svg.js/security
+- [Insights](./svgdotjs-svg.js-pulse.md) - source: /svgdotjs/svg.js/pulse
+- [Sponsor](./sponsors-Fuzzyma.md) - source: /sponsors/Fuzzyma
+- [Notifications](./login?return_to=%2Fsvgdotjs%2Fsvg.js.md) - source: /login?return_to=%2Fsvgdotjs%2Fsvg.js
 - [svgjs.dev](https://svgjs.dev)
-- animation - source: `/topics/animation`
-- javascript - source: `/topics/javascript`
-- svg - source: `/topics/svg`
-- svgjs - source: `/topics/svgjs`
-- Activity - source: `/svgdotjs/svg.js/activity`
-- Custom properties - source: `/svgdotjs/svg.js/custom-properties`
-- 1.1k forks - source: `/svgdotjs/svg.js/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js&report=svgdotjs+%28user%29`
-- 5 Branches - source: `/svgdotjs/svg.js/branches`
-- 117 Tags - source: `/svgdotjs/svg.js/tags`
-- /Fuzzyma - source: `/Fuzzyma`
-- Fuzzyma - source: `/svgdotjs/svg.js/commits?author=Fuzzyma`
-- release 3.2.8 - source: `/svgdotjs/svg.js/commit/4b8809b1554c44a84f8992cdbda60480336cc040`
-- 1,570 Commits - source: `/svgdotjs/svg.js/commits/master/`
-- .config - source: `/svgdotjs/svg.js/tree/master/.config`
-- Modernize development toolchain - source: `/svgdotjs/svg.js/commit/26519a5d2660faa7d0b8cf329b36c18b2e87fdd6`
-- .github - source: `/svgdotjs/svg.js/tree/master/.github`
-- Fix event cleanup and Corepack setup - source: `/svgdotjs/svg.js/commit/14db829fdabcbacfcbcb6882dc7040ed8668db02`
-- bench - source: `/svgdotjs/svg.js/tree/master/bench`
-- update dependencies - source: `/svgdotjs/svg.js/commit/a1c23d3838f6551f01894be40c8894398467c541`
-- playgrounds - source: `/svgdotjs/svg.js/tree/master/playgrounds`
-- dependency updates, easier formatting - source: `/svgdotjs/svg.js/commit/03322672782a6318b019eff33fe44ec800d6f12c`
-- spec - source: `/svgdotjs/svg.js/tree/master/spec`
-- Simplify transform runner bookkeeping - source: `/svgdotjs/svg.js/commit/06f6254472609ba104b8073339708e20952b18ae`
-- src - source: `/svgdotjs/svg.js/tree/master/src`
-- .gitignore - source: `/svgdotjs/svg.js/blob/master/.gitignore`
-- Fix published package entry points - source: `/svgdotjs/svg.js/commit/e2d50e83eee5662e11ad589b67c67afd7fca2dfb`
-- .oxfmtrc.json - source: `/svgdotjs/svg.js/blob/master/.oxfmtrc.json`
-- .oxlintrc.json - source: `/svgdotjs/svg.js/blob/master/.oxlintrc.json`
-- .travis.yml - source: `/svgdotjs/svg.js/blob/master/.travis.yml`
-- CHANGELOG.md - source: `/svgdotjs/svg.js/blob/master/CHANGELOG.md`
-- LICENSE.txt - source: `/svgdotjs/svg.js/blob/master/LICENSE.txt`
-- fix playgrounds, delete unneeded files - source: `/svgdotjs/svg.js/commit/51dafe62e02c4298859ac8f1c5945899241fac23`
-- README.md - source: `/svgdotjs/svg.js/blob/master/README.md`
-- package.json - source: `/svgdotjs/svg.js/blob/master/package.json`
-- pnpm-lock.yaml - source: `/svgdotjs/svg.js/blob/master/pnpm-lock.yaml`
-- pnpm-workspace.yaml - source: `/svgdotjs/svg.js/blob/master/pnpm-workspace.yaml`
-- svg.js.d.ts - source: `/svgdotjs/svg.js/blob/master/svg.js.d.ts`
-- Clean animation API state and declarations - source: `/svgdotjs/svg.js/commit/2b7a1dc3f231f9c1fdf38e4320312241d1391c7b`
-- tsconfig.json - source: `/svgdotjs/svg.js/blob/master/tsconfig.json`
-- add more events to sugar ( - source: `/svgdotjs/svg.js/commit/2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9`
+- [animation](./topics-animation.md) - source: /topics/animation
+- [javascript](./topics-javascript.md) - source: /topics/javascript
+- [svg](./topics-svg.md) - source: /topics/svg
+- [svgjs](./topics-svgjs.md) - source: /topics/svgjs
+- [Activity](./svgdotjs-svg.js-activity.md) - source: /svgdotjs/svg.js/activity
+- [Custom properties](./svgdotjs-svg.js-custom-properties.md) - source: /svgdotjs/svg.js/custom-properties
+- [1.1k forks](./svgdotjs-svg.js-forks.md) - source: /svgdotjs/svg.js/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js&report=svgdotjs+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fsvgdotjs%2Fsvg.js&report=svgdotjs+%28user%29
+- [5 Branches](./svgdotjs-svg.js-branches.md) - source: /svgdotjs/svg.js/branches
+- [117 Tags](./svgdotjs-svg.js-tags.md) - source: /svgdotjs/svg.js/tags
+- [/Fuzzyma](./Fuzzyma.md) - source: /Fuzzyma
+- [Fuzzyma](./svgdotjs-svg.js-commits?author=Fuzzyma.md) - source: /svgdotjs/svg.js/commits?author=Fuzzyma
+- [release 3.2.8](./svgdotjs-svg.js-commit-4b8809b1554c44a84f8992cdbda60480336cc040.md) - source: /svgdotjs/svg.js/commit/4b8809b1554c44a84f8992cdbda60480336cc040
+- [1,570 Commits](./svgdotjs-svg.js-commits-master.md) - source: /svgdotjs/svg.js/commits/master/
+- [.config](./svgdotjs-svg.js-tree-master-.config.md) - source: /svgdotjs/svg.js/tree/master/.config
+- [Modernize development toolchain](./svgdotjs-svg.js-commit-26519a5d2660faa7d0b8cf329b36c18b2e87fdd6.md) - source: /svgdotjs/svg.js/commit/26519a5d2660faa7d0b8cf329b36c18b2e87fdd6
+- [.github](./svgdotjs-svg.js-tree-master-.github.md) - source: /svgdotjs/svg.js/tree/master/.github
+- [Fix event cleanup and Corepack setup](./svgdotjs-svg.js-commit-14db829fdabcbacfcbcb6882dc7040ed8668db02.md) - source: /svgdotjs/svg.js/commit/14db829fdabcbacfcbcb6882dc7040ed8668db02
+- [bench](./svgdotjs-svg.js-tree-master-bench.md) - source: /svgdotjs/svg.js/tree/master/bench
+- [update dependencies](./svgdotjs-svg.js-commit-a1c23d3838f6551f01894be40c8894398467c541.md) - source: /svgdotjs/svg.js/commit/a1c23d3838f6551f01894be40c8894398467c541
+- [playgrounds](./svgdotjs-svg.js-tree-master-playgrounds.md) - source: /svgdotjs/svg.js/tree/master/playgrounds
+- [dependency updates, easier formatting](./svgdotjs-svg.js-commit-03322672782a6318b019eff33fe44ec800d6f12c.md) - source: /svgdotjs/svg.js/commit/03322672782a6318b019eff33fe44ec800d6f12c
+- [spec](./svgdotjs-svg.js-tree-master-spec.md) - source: /svgdotjs/svg.js/tree/master/spec
+- [Simplify transform runner bookkeeping](./svgdotjs-svg.js-commit-06f6254472609ba104b8073339708e20952b18ae.md) - source: /svgdotjs/svg.js/commit/06f6254472609ba104b8073339708e20952b18ae
+- [src](./svgdotjs-svg.js-tree-master-src.md) - source: /svgdotjs/svg.js/tree/master/src
+- [.gitignore](./svgdotjs-svg.js-blob-master-.gitignore.md) - source: /svgdotjs/svg.js/blob/master/.gitignore
+- [Fix published package entry points](./svgdotjs-svg.js-commit-e2d50e83eee5662e11ad589b67c67afd7fca2dfb.md) - source: /svgdotjs/svg.js/commit/e2d50e83eee5662e11ad589b67c67afd7fca2dfb
+- [.oxfmtrc.json](./svgdotjs-svg.js-blob-master-.oxfmtrc.json.md) - source: /svgdotjs/svg.js/blob/master/.oxfmtrc.json
+- [.oxlintrc.json](./svgdotjs-svg.js-blob-master-.oxlintrc.json.md) - source: /svgdotjs/svg.js/blob/master/.oxlintrc.json
+- [.travis.yml](./svgdotjs-svg.js-blob-master-.travis.yml.md) - source: /svgdotjs/svg.js/blob/master/.travis.yml
+- [CHANGELOG.md](./svgdotjs-svg.js-blob-master-CHANGELOG.md.md) - source: /svgdotjs/svg.js/blob/master/CHANGELOG.md
+- [LICENSE.txt](./svgdotjs-svg.js-blob-master-LICENSE.txt.md) - source: /svgdotjs/svg.js/blob/master/LICENSE.txt
+- [fix playgrounds, delete unneeded files](./svgdotjs-svg.js-commit-51dafe62e02c4298859ac8f1c5945899241fac23.md) - source: /svgdotjs/svg.js/commit/51dafe62e02c4298859ac8f1c5945899241fac23
+- [README.md](./svgdotjs-svg.js-blob-master-README.md.md) - source: /svgdotjs/svg.js/blob/master/README.md
+- [package.json](./svgdotjs-svg.js-blob-master-package.json.md) - source: /svgdotjs/svg.js/blob/master/package.json
+- [pnpm-lock.yaml](./svgdotjs-svg.js-blob-master-pnpm-lock.yaml.md) - source: /svgdotjs/svg.js/blob/master/pnpm-lock.yaml
+- [pnpm-workspace.yaml](./svgdotjs-svg.js-blob-master-pnpm-workspace.yaml.md) - source: /svgdotjs/svg.js/blob/master/pnpm-workspace.yaml
+- [svg.js.d.ts](./svgdotjs-svg.js-blob-master-svg.js.d.ts.md) - source: /svgdotjs/svg.js/blob/master/svg.js.d.ts
+- [Clean animation API state and declarations](./svgdotjs-svg.js-commit-2b7a1dc3f231f9c1fdf38e4320312241d1391c7b.md) - source: /svgdotjs/svg.js/commit/2b7a1dc3f231f9c1fdf38e4320312241d1391c7b
+- [tsconfig.json](./svgdotjs-svg.js-blob-master-tsconfig.json.md) - source: /svgdotjs/svg.js/blob/master/tsconfig.json
+- [add more events to sugar (](./svgdotjs-svg.js-commit-2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9.md) - source: /svgdotjs/svg.js/commit/2a8b5ea3fb6b3a62ed53d367b6d16d1515422ab9
 - [#1217](https://github.com/svgdotjs/svg.js/issues/1217)
 - [https://travis-ci.org/svgdotjs/svg.js](https://travis-ci.org/svgdotjs/svg.js)
 - [https://coveralls.io/github/svgdotjs/svg.js?branch=master](https://coveralls.io/github/svgdotjs/svg.js?branch=master)
@@ -240,26 +267,26 @@ Learn more about GitHub Sponsors
 - [svgjs.dev](https://svgjs.dev/docs/3.0/)
 - [https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ulima.ums%40googlemail.com&lc=US&item_name=SVG.JS&currency_code=EUR&bn=PP-DonationsBF%3Abtn_donate_74x21.png%3ANonHostedGuest](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ulima.ums%40googlemail.com&lc=US&item_name=SVG.JS&currency_code=EUR&bn=PP-DonationsBF%3Abtn_donate_74x21.png%3ANonHostedGuest)
 - [https://github.com/sponsors/Fuzzyma](https://github.com/sponsors/Fuzzyma)
-- Releases - source: `/svgdotjs/svg.js/releases`
-- Release 3.2.6 Latest Jul 17, 2026 - source: `/svgdotjs/svg.js/releases/tag/3.2.6`
-- Learn more about GitHub Sponsors - source: `/sponsors`
-- Used by - source: `/svgdotjs/svg.js/network/dependents`
-- Contributors - source: `/svgdotjs/svg.js/graphs/contributors`
-- /dotnetCarpenter - source: `/dotnetCarpenter`
-- /RmiTtro - source: `/RmiTtro`
-- /wout - source: `/wout`
-- /snowyplover - source: `/snowyplover`
-- /kabentley - source: `/kabentley`
-- /pklingem - source: `/pklingem`
-- /alexewerlof - source: `/alexewerlof`
-- /GSchutz - source: `/GSchutz`
-- /visionm45 - source: `/visionm45`
-- /nobuti - source: `/nobuti`
-- /niceilm - source: `/niceilm`
-- /pragdave - source: `/pragdave`
-- /gormster - source: `/gormster`
-- JavaScript 98.3% - source: `/svgdotjs/svg.js/search?l=javascript`
-- Other 1.7% - source: `/svgdotjs/svg.js/search?l=Other`
+- [Releases](./svgdotjs-svg.js-releases.md) - source: /svgdotjs/svg.js/releases
+- [Release 3.2.6 Latest Jul 17, 2026](./svgdotjs-svg.js-releases-tag-3.2.6.md) - source: /svgdotjs/svg.js/releases/tag/3.2.6
+- [Learn more about GitHub Sponsors](./sponsors.md) - source: /sponsors
+- [Used by](./svgdotjs-svg.js-network-dependents.md) - source: /svgdotjs/svg.js/network/dependents
+- [Contributors](./svgdotjs-svg.js-graphs-contributors.md) - source: /svgdotjs/svg.js/graphs/contributors
+- [/dotnetCarpenter](./dotnetCarpenter.md) - source: /dotnetCarpenter
+- [/RmiTtro](./RmiTtro.md) - source: /RmiTtro
+- [/wout](./wout.md) - source: /wout
+- [/snowyplover](./snowyplover.md) - source: /snowyplover
+- [/kabentley](./kabentley.md) - source: /kabentley
+- [/pklingem](./pklingem.md) - source: /pklingem
+- [/alexewerlof](./alexewerlof.md) - source: /alexewerlof
+- [/GSchutz](./GSchutz.md) - source: /GSchutz
+- [/visionm45](./visionm45.md) - source: /visionm45
+- [/nobuti](./nobuti.md) - source: /nobuti
+- [/niceilm](./niceilm.md) - source: /niceilm
+- [/pragdave](./pragdave.md) - source: /pragdave
+- [/gormster](./gormster.md) - source: /gormster
+- [JavaScript 98.3%](./svgdotjs-svg.js-search?l=javascript.md) - source: /svgdotjs/svg.js/search?l=javascript
+- [Other 1.7%](./svgdotjs-svg.js-search?l=Other.md) - source: /svgdotjs/svg.js/search?l=Other
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

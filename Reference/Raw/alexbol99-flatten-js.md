@@ -1,4 +1,6 @@
-[![npm version](https://camo.githubusercontent.com/b3900c4487ff917e793449af68175a58fde60976f1d12cea4334e9fd3bb491a4/68747470733a2f2f62616467652e667572792e696f2f6a732f253430666c617474656e2d6a73253246636f72652e737667)](https://badge.fury.io/js/%40flatten-js%2Fcore) [![Coverage Status](https://camo.githubusercontent.com/25d6b5c880e82a4e2608dba35cfc087ce0659c27dfb9583291a693a49c5701e6/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f616c6578626f6c39392f666c617474656e2d6a732f62616467652e7376673f6272616e63683d6d6173746572)](https://coveralls.io/github/alexbol99/flatten-js?branch=master) [![](https://camo.githubusercontent.com/eea6f5d63c9bafd46a1620c8b17047333e29ea5b185b997d4ca2674a441dc513/68747470733a2f2f646174612e6a7364656c6976722e636f6d2f76312f7061636b6167652f6e706d2f40666c617474656e2d6a732f636f72652f6261646765)](https://www.jsdelivr.com/package/npm/@flatten-js/core)
+- [![npm version](https://camo.githubusercontent.com/b3900c4487ff917e793449af68175a58fde60976f1d12cea4334e9fd3bb491a4/68747470733a2f2f62616467652e667572792e696f2f6a732f253430666c617474656e2d6a73253246636f72652e737667)](https://badge.fury.io/js/%40flatten-js%2Fcore)
+- [![Coverage Status](https://camo.githubusercontent.com/25d6b5c880e82a4e2608dba35cfc087ce0659c27dfb9583291a693a49c5701e6/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f616c6578626f6c39392f666c617474656e2d6a732f62616467652e7376673f6272616e63683d6d6173746572)](https://coveralls.io/github/alexbol99/flatten-js?branch=master)
+- [![](https://camo.githubusercontent.com/eea6f5d63c9bafd46a1620c8b17047333e29ea5b185b997d4ca2674a441dc513/68747470733a2f2f646174612e6a7364656c6976722e636f6d2f76312f7061636b6167652f6e706d2f40666c617474656e2d6a732f636f72652f6261646765)](https://www.jsdelivr.com/package/npm/@flatten-js/core)
 
 # Javascript library for 2d geometry
 
@@ -303,8 +305,8 @@ Other packages, published under scope **@flatten-js/**:
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -363,64 +365,64 @@ Other packages, published under scope **@flatten-js/**:
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=alexbol99%2Fflatten-js`
-- alexbol99 - source: `/alexbol99`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=alexbol99%2Fflatten-js.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=alexbol99%2Fflatten-js
+- [alexbol99](./alexbol99.md) - source: /alexbol99
 - [flatten-js](./alexbol99-flatten-js.md) - source: /alexbol99/flatten-js
-- Issues 10 - source: `/alexbol99/flatten-js/issues`
-- Pull requests 2 - source: `/alexbol99/flatten-js/pulls`
-- Discussions - source: `/alexbol99/flatten-js/discussions`
-- Actions - source: `/alexbol99/flatten-js/actions`
-- Projects - source: `/alexbol99/flatten-js/projects`
-- Security and quality - source: `/alexbol99/flatten-js/security`
-- Insights - source: `/alexbol99/flatten-js/pulse`
-- Notifications - source: `/login?return_to=%2Falexbol99%2Fflatten-js`
-- Activity - source: `/alexbol99/flatten-js/activity`
-- 64 forks - source: `/alexbol99/flatten-js/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js&report=alexbol99+%28user%29`
-- 30 Branches - source: `/alexbol99/flatten-js/branches`
-- 107 Tags - source: `/alexbol99/flatten-js/tags`
-- alexbol99 - source: `/alexbol99/flatten-js/commits?author=alexbol99`
-- chore: release 1.6.15 - source: `/alexbol99/flatten-js/commit/2264436796eab01f38f40dd54d12fdcb1c540e64`
-- 673 Commits - source: `/alexbol99/flatten-js/commits/master/`
-- .github/ workflows - source: `/alexbol99/flatten-js/tree/master/.github/workflows`
-- ci: publish releases with Node 24 and current Actions - source: `/alexbol99/flatten-js/commit/0430cacd72bb2d33159cd685552254f13bbe2de1`
-- .idea - source: `/alexbol99/flatten-js/tree/master/.idea`
-- Fix bug in box.transform() - source: `/alexbol99/flatten-js/commit/bc7af8e5e44090864b438365c79f7d4e98f020f4`
-- dist - source: `/alexbol99/flatten-js/tree/master/dist`
-- Merge pull request - source: `/alexbol99/flatten-js/commit/6e7b5600767c04ba8091cf12319a65cd204266a9`
+- [Issues 10](./alexbol99-flatten-js-issues.md) - source: /alexbol99/flatten-js/issues
+- [Pull requests 2](./alexbol99-flatten-js-pulls.md) - source: /alexbol99/flatten-js/pulls
+- [Discussions](./alexbol99-flatten-js-discussions.md) - source: /alexbol99/flatten-js/discussions
+- [Actions](./alexbol99-flatten-js-actions.md) - source: /alexbol99/flatten-js/actions
+- [Projects](./alexbol99-flatten-js-projects.md) - source: /alexbol99/flatten-js/projects
+- [Security and quality](./alexbol99-flatten-js-security.md) - source: /alexbol99/flatten-js/security
+- [Insights](./alexbol99-flatten-js-pulse.md) - source: /alexbol99/flatten-js/pulse
+- [Notifications](./login?return_to=%2Falexbol99%2Fflatten-js.md) - source: /login?return_to=%2Falexbol99%2Fflatten-js
+- [Activity](./alexbol99-flatten-js-activity.md) - source: /alexbol99/flatten-js/activity
+- [64 forks](./alexbol99-flatten-js-forks.md) - source: /alexbol99/flatten-js/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js&report=alexbol99+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Falexbol99%2Fflatten-js&report=alexbol99+%28user%29
+- [30 Branches](./alexbol99-flatten-js-branches.md) - source: /alexbol99/flatten-js/branches
+- [107 Tags](./alexbol99-flatten-js-tags.md) - source: /alexbol99/flatten-js/tags
+- [alexbol99](./alexbol99-flatten-js-commits?author=alexbol99.md) - source: /alexbol99/flatten-js/commits?author=alexbol99
+- [chore: release 1.6.15](./alexbol99-flatten-js-commit-2264436796eab01f38f40dd54d12fdcb1c540e64.md) - source: /alexbol99/flatten-js/commit/2264436796eab01f38f40dd54d12fdcb1c540e64
+- [673 Commits](./alexbol99-flatten-js-commits-master.md) - source: /alexbol99/flatten-js/commits/master/
+- [.github/ workflows](./alexbol99-flatten-js-tree-master-.github-workflows.md) - source: /alexbol99/flatten-js/tree/master/.github/workflows
+- [ci: publish releases with Node 24 and current Actions](./alexbol99-flatten-js-commit-0430cacd72bb2d33159cd685552254f13bbe2de1.md) - source: /alexbol99/flatten-js/commit/0430cacd72bb2d33159cd685552254f13bbe2de1
+- [.idea](./alexbol99-flatten-js-tree-master-.idea.md) - source: /alexbol99/flatten-js/tree/master/.idea
+- [Fix bug in box.transform()](./alexbol99-flatten-js-commit-bc7af8e5e44090864b438365c79f7d4e98f020f4.md) - source: /alexbol99/flatten-js/commit/bc7af8e5e44090864b438365c79f7d4e98f020f4
+- [dist](./alexbol99-flatten-js-tree-master-dist.md) - source: /alexbol99/flatten-js/tree/master/dist
+- [Merge pull request](./alexbol99-flatten-js-commit-6e7b5600767c04ba8091cf12319a65cd204266a9.md) - source: /alexbol99/flatten-js/commit/6e7b5600767c04ba8091cf12319a65cd204266a9
 - [#255](https://github.com/alexbol99/flatten-js/pull/255)
-- docs - source: `/alexbol99/flatten-js/tree/master/docs`
-- Add Box distance support to shape classes - source: `/alexbol99/flatten-js/commit/cbb4c19ed53c24286dc75d5ea6a155c089838f05`
-- examples - source: `/alexbol99/flatten-js/tree/master/examples`
-- Issue - source: `/alexbol99/flatten-js/commit/7323efb9c8f931885e273aacaef15bfb532828da`
+- [docs](./alexbol99-flatten-js-tree-master-docs.md) - source: /alexbol99/flatten-js/tree/master/docs
+- [Add Box distance support to shape classes](./alexbol99-flatten-js-commit-cbb4c19ed53c24286dc75d5ea6a155c089838f05.md) - source: /alexbol99/flatten-js/commit/cbb4c19ed53c24286dc75d5ea6a155c089838f05
+- [examples](./alexbol99-flatten-js-tree-master-examples.md) - source: /alexbol99/flatten-js/tree/master/examples
+- [Issue](./alexbol99-flatten-js-commit-7323efb9c8f931885e273aacaef15bfb532828da.md) - source: /alexbol99/flatten-js/commit/7323efb9c8f931885e273aacaef15bfb532828da
 - [#45](https://github.com/alexbol99/flatten-js/issues/45)
-- packages/ utils - source: `/alexbol99/flatten-js/tree/master/packages/utils`
-- - Upgrade interval tree dependency to scoped package @flatten-js/inte… - source: `/alexbol99/flatten-js/commit/938f39de91577f3b104b86e9715e241705447b16`
-- src - source: `/alexbol99/flatten-js/tree/master/src`
-- test - source: `/alexbol99/flatten-js/tree/master/test`
-- .babelrc - source: `/alexbol99/flatten-js/blob/master/.babelrc`
-- - update coverage tool istanbul to nyc - source: `/alexbol99/flatten-js/commit/8738590724405f026c213424ef16bc856ba791dd`
-- .gitignore - source: `/alexbol99/flatten-js/blob/master/.gitignore`
-- - Fix bug in method polygon.cutWithLine() - source: `/alexbol99/flatten-js/commit/b51769a18380e84cd30d28941b1e6ae2df514616`
-- .grenrc.json - source: `/alexbol99/flatten-js/blob/master/.grenrc.json`
-- - Add boolean operations test - source: `/alexbol99/flatten-js/commit/1cee39bb73ddfcfb37850cf7e7dc5bdd1236c87e`
-- .jsdoc.json - source: `/alexbol99/flatten-js/blob/master/.jsdoc.json`
-- - Improved documentation and TypeScript type definition, fixed some bugs - source: `/alexbol99/flatten-js/commit/061edf975da884e717eca8de5c7f95028880171e`
-- .npmignore - source: `/alexbol99/flatten-js/blob/master/.npmignore`
-- Reduce npm package size - source: `/alexbol99/flatten-js/commit/4903aa3c194f0f3c09e90ec6d94d88583c604282`
-- .travis.yml - source: `/alexbol99/flatten-js/blob/master/.travis.yml`
-- LICENSE - source: `/alexbol99/flatten-js/blob/master/LICENSE`
-- Initial commit - source: `/alexbol99/flatten-js/commit/7b0deaaf67b01943db56ae2ad21a47f5a1378b75`
-- README.md - source: `/alexbol99/flatten-js/blob/master/README.md`
-- Keep hole orientation semantics and document island splitting - source: `/alexbol99/flatten-js/commit/ce09bfef9f077edc8e43f3cccbbccb7f20e2c3f6`
-- index.d.ts - source: `/alexbol99/flatten-js/blob/master/index.d.ts`
-- Preserve uncontained polygon faces in islands - source: `/alexbol99/flatten-js/commit/ff78ef417f2eb6c0ff417ad3dc0346b8e1e9192d`
-- index.js - source: `/alexbol99/flatten-js/blob/master/index.js`
-- Restore export parseWkt from index.js, remove import from index.js fr… - source: `/alexbol99/flatten-js/commit/32278e3e5a77800822a96e4c623400385b317f11`
-- package-lock.json - source: `/alexbol99/flatten-js/blob/master/package-lock.json`
-- package.json - source: `/alexbol99/flatten-js/blob/master/package.json`
-- rollup.config.js - source: `/alexbol99/flatten-js/blob/master/rollup.config.js`
-- Fix export module entry point - target main.mjs instead main.esm - source: `/alexbol99/flatten-js/commit/984251ad9ed5ab8872e671eefb93f91fee24d0fd`
+- [packages/ utils](./alexbol99-flatten-js-tree-master-packages-utils.md) - source: /alexbol99/flatten-js/tree/master/packages/utils
+- [- Upgrade interval tree dependency to scoped package @flatten-js/inte…](./alexbol99-flatten-js-commit-938f39de91577f3b104b86e9715e241705447b16.md) - source: /alexbol99/flatten-js/commit/938f39de91577f3b104b86e9715e241705447b16
+- [src](./alexbol99-flatten-js-tree-master-src.md) - source: /alexbol99/flatten-js/tree/master/src
+- [test](./alexbol99-flatten-js-tree-master-test.md) - source: /alexbol99/flatten-js/tree/master/test
+- [.babelrc](./alexbol99-flatten-js-blob-master-.babelrc.md) - source: /alexbol99/flatten-js/blob/master/.babelrc
+- [- update coverage tool istanbul to nyc](./alexbol99-flatten-js-commit-8738590724405f026c213424ef16bc856ba791dd.md) - source: /alexbol99/flatten-js/commit/8738590724405f026c213424ef16bc856ba791dd
+- [.gitignore](./alexbol99-flatten-js-blob-master-.gitignore.md) - source: /alexbol99/flatten-js/blob/master/.gitignore
+- [- Fix bug in method polygon.cutWithLine()](./alexbol99-flatten-js-commit-b51769a18380e84cd30d28941b1e6ae2df514616.md) - source: /alexbol99/flatten-js/commit/b51769a18380e84cd30d28941b1e6ae2df514616
+- [.grenrc.json](./alexbol99-flatten-js-blob-master-.grenrc.json.md) - source: /alexbol99/flatten-js/blob/master/.grenrc.json
+- [- Add boolean operations test](./alexbol99-flatten-js-commit-1cee39bb73ddfcfb37850cf7e7dc5bdd1236c87e.md) - source: /alexbol99/flatten-js/commit/1cee39bb73ddfcfb37850cf7e7dc5bdd1236c87e
+- [.jsdoc.json](./alexbol99-flatten-js-blob-master-.jsdoc.json.md) - source: /alexbol99/flatten-js/blob/master/.jsdoc.json
+- [- Improved documentation and TypeScript type definition, fixed some bugs](./alexbol99-flatten-js-commit-061edf975da884e717eca8de5c7f95028880171e.md) - source: /alexbol99/flatten-js/commit/061edf975da884e717eca8de5c7f95028880171e
+- [.npmignore](./alexbol99-flatten-js-blob-master-.npmignore.md) - source: /alexbol99/flatten-js/blob/master/.npmignore
+- [Reduce npm package size](./alexbol99-flatten-js-commit-4903aa3c194f0f3c09e90ec6d94d88583c604282.md) - source: /alexbol99/flatten-js/commit/4903aa3c194f0f3c09e90ec6d94d88583c604282
+- [.travis.yml](./alexbol99-flatten-js-blob-master-.travis.yml.md) - source: /alexbol99/flatten-js/blob/master/.travis.yml
+- [LICENSE](./alexbol99-flatten-js-blob-master-LICENSE.md) - source: /alexbol99/flatten-js/blob/master/LICENSE
+- [Initial commit](./alexbol99-flatten-js-commit-7b0deaaf67b01943db56ae2ad21a47f5a1378b75.md) - source: /alexbol99/flatten-js/commit/7b0deaaf67b01943db56ae2ad21a47f5a1378b75
+- [README.md](./alexbol99-flatten-js-blob-master-README.md.md) - source: /alexbol99/flatten-js/blob/master/README.md
+- [Keep hole orientation semantics and document island splitting](./alexbol99-flatten-js-commit-ce09bfef9f077edc8e43f3cccbbccb7f20e2c3f6.md) - source: /alexbol99/flatten-js/commit/ce09bfef9f077edc8e43f3cccbbccb7f20e2c3f6
+- [index.d.ts](./alexbol99-flatten-js-blob-master-index.d.ts.md) - source: /alexbol99/flatten-js/blob/master/index.d.ts
+- [Preserve uncontained polygon faces in islands](./alexbol99-flatten-js-commit-ff78ef417f2eb6c0ff417ad3dc0346b8e1e9192d.md) - source: /alexbol99/flatten-js/commit/ff78ef417f2eb6c0ff417ad3dc0346b8e1e9192d
+- [index.js](./alexbol99-flatten-js-blob-master-index.js.md) - source: /alexbol99/flatten-js/blob/master/index.js
+- [Restore export parseWkt from index.js, remove import from index.js fr…](./alexbol99-flatten-js-commit-32278e3e5a77800822a96e4c623400385b317f11.md) - source: /alexbol99/flatten-js/commit/32278e3e5a77800822a96e4c623400385b317f11
+- [package-lock.json](./alexbol99-flatten-js-blob-master-package-lock.json.md) - source: /alexbol99/flatten-js/blob/master/package-lock.json
+- [package.json](./alexbol99-flatten-js-blob-master-package.json.md) - source: /alexbol99/flatten-js/blob/master/package.json
+- [rollup.config.js](./alexbol99-flatten-js-blob-master-rollup.config.js.md) - source: /alexbol99/flatten-js/blob/master/rollup.config.js
+- [Fix export module entry point - target main.mjs instead main.esm](./alexbol99-flatten-js-commit-984251ad9ed5ab8872e671eefb93f91fee24d0fd.md) - source: /alexbol99/flatten-js/commit/984251ad9ed5ab8872e671eefb93f91fee24d0fd
 - [https://badge.fury.io/js/%40flatten-js%2Fcore](https://badge.fury.io/js/%40flatten-js%2Fcore)
 - [https://coveralls.io/github/alexbol99/flatten-js?branch=master](https://coveralls.io/github/alexbol99/flatten-js?branch=master)
 - [https://www.jsdelivr.com/package/npm/@flatten-js/core](https://www.jsdelivr.com/package/npm/@flatten-js/core)
@@ -445,23 +447,23 @@ Other packages, published under scope **@flatten-js/**:
 - [@flatten-js/boolean-op](https://www.npmjs.com/package/@flatten-js/boolean-op)
 - [@flatten-js/polygon-offset](https://www.npmjs.com/package/@flatten-js/polygon-offset)
 - [https://www.buymeacoffee.com/alexbol99](https://www.buymeacoffee.com/alexbol99)
-- Releases - source: `/alexbol99/flatten-js/releases`
-- v1.6.15 Latest Oct 25, 2026 - source: `/alexbol99/flatten-js/releases/tag/v1.6.15`
-- Contributors - source: `/alexbol99/flatten-js/graphs/contributors`
-- /alexbol-fls - source: `/alexbol-fls`
-- /bertyhell - source: `/bertyhell`
-- /dependabot[bot] - source: `/dependabot[bot]`
-- /saraedum - source: `/saraedum`
-- /stanch - source: `/stanch`
-- /delmohf - source: `/delmohf`
-- /schelmo - source: `/schelmo`
-- /AlexQbiq - source: `/AlexQbiq`
-- /ebuswell - source: `/ebuswell`
-- /axtavt - source: `/axtavt`
-- /nsinstruments - source: `/nsinstruments`
-- /awhitty - source: `/awhitty`
-- /rtm - source: `/rtm`
-- JavaScript 100% - source: `/alexbol99/flatten-js/search?l=javascript`
+- [Releases](./alexbol99-flatten-js-releases.md) - source: /alexbol99/flatten-js/releases
+- [v1.6.15 Latest Oct 25, 2026](./alexbol99-flatten-js-releases-tag-v1.6.15.md) - source: /alexbol99/flatten-js/releases/tag/v1.6.15
+- [Contributors](./alexbol99-flatten-js-graphs-contributors.md) - source: /alexbol99/flatten-js/graphs/contributors
+- [/alexbol-fls](./alexbol-fls.md) - source: /alexbol-fls
+- [/bertyhell](./bertyhell.md) - source: /bertyhell
+- [/dependabot[bot]](./dependabot[bot].md) - source: /dependabot[bot]
+- [/saraedum](./saraedum.md) - source: /saraedum
+- [/stanch](./stanch.md) - source: /stanch
+- [/delmohf](./delmohf.md) - source: /delmohf
+- [/schelmo](./schelmo.md) - source: /schelmo
+- [/AlexQbiq](./AlexQbiq.md) - source: /AlexQbiq
+- [/ebuswell](./ebuswell.md) - source: /ebuswell
+- [/axtavt](./axtavt.md) - source: /axtavt
+- [/nsinstruments](./nsinstruments.md) - source: /nsinstruments
+- [/awhitty](./awhitty.md) - source: /awhitty
+- [/rtm](./rtm.md) - source: /rtm
+- [JavaScript 100%](./alexbol99-flatten-js-search?l=javascript.md) - source: /alexbol99/flatten-js/search?l=javascript
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

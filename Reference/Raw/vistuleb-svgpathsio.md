@@ -66,8 +66,8 @@ This module is under a MIT License.
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -126,44 +126,44 @@ This module is under a MIT License.
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=vistuleB%2Fsvgpathsio`
-- vistuleB - source: `/vistuleB`
-- svgpathsio - source: `/vistuleB/svgpathsio`
-- Pull requests - source: `/vistuleB/svgpathsio/pulls`
-- Actions - source: `/vistuleB/svgpathsio/actions`
-- Projects - source: `/vistuleB/svgpathsio/projects`
-- Wiki - source: `/vistuleB/svgpathsio/wiki`
-- Security and quality - source: `/vistuleB/svgpathsio/security`
-- Insights - source: `/vistuleB/svgpathsio/pulse`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=vistuleB%2Fsvgpathsio.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=vistuleB%2Fsvgpathsio
+- [vistuleB](./vistuleB.md) - source: /vistuleB
+- [svgpathsio](./vistuleB-svgpathsio.md) - source: /vistuleB/svgpathsio
+- [Pull requests](./vistuleB-svgpathsio-pulls.md) - source: /vistuleB/svgpathsio/pulls
+- [Actions](./vistuleB-svgpathsio-actions.md) - source: /vistuleB/svgpathsio/actions
+- [Projects](./vistuleB-svgpathsio-projects.md) - source: /vistuleB/svgpathsio/projects
+- [Wiki](./vistuleB-svgpathsio-wiki.md) - source: /vistuleB/svgpathsio/wiki
+- [Security and quality](./vistuleB-svgpathsio-security.md) - source: /vistuleB/svgpathsio/security
+- [Insights](./vistuleB-svgpathsio-pulse.md) - source: /vistuleB/svgpathsio/pulse
 - [mathandy/svgpathtools](./mathandy-svgpathtools.md) - source: /mathandy/svgpathtools
-- Notifications - source: `/login?return_to=%2FvistuleB%2Fsvgpathsio`
-- Activity - source: `/vistuleB/svgpathsio/activity`
-- 0 forks - source: `/vistuleB/svgpathsio/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio&report=vistuleB+%28user%29`
-- 5 Branches - source: `/vistuleB/svgpathsio/branches`
-- 13 Tags - source: `/vistuleB/svgpathsio/tags`
-- 88 commits ahead of - source: `/vistuleB/svgpathsio/compare/mathandy%3Asvgpathtools%3Amaster...master`
-- 252 commits behind - source: `/vistuleB/svgpathsio/compare/master...mathandy%3Asvgpathtools%3Amaster`
-- vistuleB - source: `/vistuleB/svgpathsio/commits?author=vistuleB`
-- latest - source: `/vistuleB/svgpathsio/commit/da086e3b47e4630406c9203c400b7d1c891794e3`
-- 221 Commits - source: `/vistuleB/svgpathsio/commits/master/`
-- svgpathsio - source: `/vistuleB/svgpathsio/tree/master/svgpathsio`
-- .gitignore - source: `/vistuleB/svgpathsio/blob/master/.gitignore`
-- removed build & eggs-info from git repo - source: `/vistuleB/svgpathsio/commit/2b1670460e97b896077ae2370f4a5b750d3adfc8`
-- .travis.yml - source: `/vistuleB/svgpathsio/blob/master/.travis.yml`
-- added SciPy to Travis CI environment - source: `/vistuleB/svgpathsio/commit/f77f94db5b4af0ab00f1e8f0596a00e817eff941`
-- README.rst - source: `/vistuleB/svgpathsio/blob/master/README.rst`
-- redid README - source: `/vistuleB/svgpathsio/commit/0de41c8e72bf177e374a374d96c883f3157c5130`
-- decorated_ellipse.svg - source: `/vistuleB/svgpathsio/blob/master/decorated_ellipse.svg`
-- initial commit - source: `/vistuleB/svgpathsio/commit/9b3d6fe5e3513e03235822e4bbf5352abef46dd2`
-- output1.svg - source: `/vistuleB/svgpathsio/blob/master/output1.svg`
-- add ability to preserve svg-attributes - source: `/vistuleB/svgpathsio/commit/15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68`
-- output2.svg - source: `/vistuleB/svgpathsio/blob/master/output2.svg`
-- output_intersections.svg - source: `/vistuleB/svgpathsio/blob/master/output_intersections.svg`
-- path.svg - source: `/vistuleB/svgpathsio/blob/master/path.svg`
-- test.svg - source: `/vistuleB/svgpathsio/blob/master/test.svg`
-- vectorframes.svg - source: `/vistuleB/svgpathsio/blob/master/vectorframes.svg`
-- Releases - source: `/vistuleB/svgpathsio/releases`
+- [Notifications](./login?return_to=%2FvistuleB%2Fsvgpathsio.md) - source: /login?return_to=%2FvistuleB%2Fsvgpathsio
+- [Activity](./vistuleB-svgpathsio-activity.md) - source: /vistuleB/svgpathsio/activity
+- [0 forks](./vistuleB-svgpathsio-forks.md) - source: /vistuleB/svgpathsio/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio&report=vistuleB+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2FvistuleB%2Fsvgpathsio&report=vistuleB+%28user%29
+- [5 Branches](./vistuleB-svgpathsio-branches.md) - source: /vistuleB/svgpathsio/branches
+- [13 Tags](./vistuleB-svgpathsio-tags.md) - source: /vistuleB/svgpathsio/tags
+- [88 commits ahead of](./vistuleB-svgpathsio-compare-mathandy%3Asvgpathtools%3Amaster...master.md) - source: /vistuleB/svgpathsio/compare/mathandy%3Asvgpathtools%3Amaster...master
+- [252 commits behind](./vistuleB-svgpathsio-compare-master...mathandy%3Asvgpathtools%3Amaster.md) - source: /vistuleB/svgpathsio/compare/master...mathandy%3Asvgpathtools%3Amaster
+- [vistuleB](./vistuleB-svgpathsio-commits?author=vistuleB.md) - source: /vistuleB/svgpathsio/commits?author=vistuleB
+- [latest](./vistuleB-svgpathsio-commit-da086e3b47e4630406c9203c400b7d1c891794e3.md) - source: /vistuleB/svgpathsio/commit/da086e3b47e4630406c9203c400b7d1c891794e3
+- [221 Commits](./vistuleB-svgpathsio-commits-master.md) - source: /vistuleB/svgpathsio/commits/master/
+- [svgpathsio](./vistuleB-svgpathsio-tree-master-svgpathsio.md) - source: /vistuleB/svgpathsio/tree/master/svgpathsio
+- [.gitignore](./vistuleB-svgpathsio-blob-master-.gitignore.md) - source: /vistuleB/svgpathsio/blob/master/.gitignore
+- [removed build & eggs-info from git repo](./vistuleB-svgpathsio-commit-2b1670460e97b896077ae2370f4a5b750d3adfc8.md) - source: /vistuleB/svgpathsio/commit/2b1670460e97b896077ae2370f4a5b750d3adfc8
+- [.travis.yml](./vistuleB-svgpathsio-blob-master-.travis.yml.md) - source: /vistuleB/svgpathsio/blob/master/.travis.yml
+- [added SciPy to Travis CI environment](./vistuleB-svgpathsio-commit-f77f94db5b4af0ab00f1e8f0596a00e817eff941.md) - source: /vistuleB/svgpathsio/commit/f77f94db5b4af0ab00f1e8f0596a00e817eff941
+- [README.rst](./vistuleB-svgpathsio-blob-master-README.rst.md) - source: /vistuleB/svgpathsio/blob/master/README.rst
+- [redid README](./vistuleB-svgpathsio-commit-0de41c8e72bf177e374a374d96c883f3157c5130.md) - source: /vistuleB/svgpathsio/commit/0de41c8e72bf177e374a374d96c883f3157c5130
+- [decorated_ellipse.svg](./vistuleB-svgpathsio-blob-master-decorated_ellipse.svg.md) - source: /vistuleB/svgpathsio/blob/master/decorated_ellipse.svg
+- [initial commit](./vistuleB-svgpathsio-commit-9b3d6fe5e3513e03235822e4bbf5352abef46dd2.md) - source: /vistuleB/svgpathsio/commit/9b3d6fe5e3513e03235822e4bbf5352abef46dd2
+- [output1.svg](./vistuleB-svgpathsio-blob-master-output1.svg.md) - source: /vistuleB/svgpathsio/blob/master/output1.svg
+- [add ability to preserve svg-attributes](./vistuleB-svgpathsio-commit-15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68.md) - source: /vistuleB/svgpathsio/commit/15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68
+- [output2.svg](./vistuleB-svgpathsio-blob-master-output2.svg.md) - source: /vistuleB/svgpathsio/blob/master/output2.svg
+- [output_intersections.svg](./vistuleB-svgpathsio-blob-master-output_intersections.svg.md) - source: /vistuleB/svgpathsio/blob/master/output_intersections.svg
+- [path.svg](./vistuleB-svgpathsio-blob-master-path.svg.md) - source: /vistuleB/svgpathsio/blob/master/path.svg
+- [test.svg](./vistuleB-svgpathsio-blob-master-test.svg.md) - source: /vistuleB/svgpathsio/blob/master/test.svg
+- [vectorframes.svg](./vistuleB-svgpathsio-blob-master-vectorframes.svg.md) - source: /vistuleB/svgpathsio/blob/master/vectorframes.svg
+- [Releases](./vistuleB-svgpathsio-releases.md) - source: /vistuleB/svgpathsio/releases
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

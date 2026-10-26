@@ -2,45 +2,20 @@
 
 ## Boolean opertions[¶](#boolean-opertions)
 
-`pymesh.``boolean`(*mesh_1*, *mesh_2*, *operation*, *engine='auto'*, *with_timing=False*, *exact_mesh_file=None*)[¶](#pymesh.boolean)  
+`pymesh.boolean`
+
+- *mesh_1*
+- *mesh_2*
+- *operation*
+- *engine='auto'*
+- *with_timing=False*
+- *exact_mesh_file=None*
+
 Perform boolean operations on input meshes.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh_1</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The first input mesh, M 1.</li>
-<li><strong>mesh_2</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The second input mesh, M 2.</li>
-<li><p><strong>operation</strong> (<code>string</code>) –</p>
-<p>The name of the operation. Valid choices are:</p>
-<ul>
-<li><code>intersection</code>: M 1∩M 2</li>
-<li><code>union</code>: M 1∪M 2</li>
-<li><code>difference</code>: M 1∖M 2</li>
-<li><code>symmetric_difference</code>: (M 1∖M 2)∪(M 2∖M 1)</li>
-</ul></li>
-<li><p><strong>engine</strong> (<code>string</code>) –</p>
-<p>(optional) Boolean engine name. Valid engines include:</p>
-<ul>
-<li><code>auto</code>: Using the default boolean engine (<code>igl</code> for 3D and <code>clipper</code> for 2D). This is the default.</li>
-<li><code>cork</code>: <a href="https://github.com/gilbo/cork">Cork 3D boolean libary</a></li>
-<li><code>cgal</code>: <a href="http://doc.cgal.org/latest/Nef_3/index.html">CGAL 3D boolean operations on Nef Polyhedra</a></li>
-<li><code>corefinement</code>: The undocumented CGAL boolean function that does not use Nef Polyhedra.</li>
-<li><code>igl</code>: <a href="https://github.com/libigl/libigl">libigl’s 3D boolean support</a></li>
-<li><code>clipper</code>: <a href="http://www.angusj.com/delphi/clipper.php">Clipper 2D boolean library</a></li>
-<li><code>carve</code>: <a href="https://code.google.com/p/carve/">Carve solid geometry library</a></li>
-</ul></li>
-<li><strong>with_timing</strong> (<code>boolean</code>) – (optional) Whether to time the code.</li>
-<li><strong>exact_mesh_file</strong> (<code>str</code>) – (optional) Filename to store the XML serialized exact output.</li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh_1** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The first input mesh, M 1. ; **mesh_2** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The second input mesh, M 2. ; **operation** (`string`) – The name of the operation. Valid choices are: `intersection`: M 1∩M 2 ; `union`: M 1∪M 2 ; `difference`: M 1∖M 2 ; `symmetric_difference`: (M 1∖M 2)∪(M 2∖M 1) ; **engine** (`string`) – (optional) Boolean engine name. Valid engines include: `auto`: Using the default boolean engine (`igl` for 3D and `clipper` for 2D). This is the default. ; `cork`: [Cork 3D boolean libary](https://github.com/gilbo/cork) ; `cgal`: [CGAL 3D boolean operations on Nef Polyhedra](http://doc.cgal.org/latest/Nef_3/index.html) ; `corefinement`: The undocumented CGAL boolean function that does not use Nef Polyhedra. ; `igl`: [libigl’s 3D boolean support](https://github.com/libigl/libigl) ; `clipper`: [Clipper 2D boolean library](http://www.angusj.com/delphi/clipper.php) ; `carve`: [Carve solid geometry library](https://code.google.com/p/carve/) ; **with_timing** (`boolean`) – (optional) Whether to time the code. ; **exact_mesh_file** (`str`) – (optional) Filename to store the XML serialized exact output. |
 
 Returns: The output mesh.
 
@@ -51,7 +26,10 @@ The following attributes are defined in the output mesh:
 
 While all solid geometry operations can be done as a sequence of binary boolean operations. It is beneficial sometimes to use [`pymesh.CSGTree`](#pymesh.CSGTree) for carrying out more complex operations.
 
-*class* `pymesh.``CSGTree`(*tree*)[¶](#pymesh.CSGTree)  
+class `pymesh.CSGTree`
+
+- *tree*
+
 Contructive Solid Geometry Tree.
 
 Perhaps the best way of describing supported operations is using context free grammar:
@@ -102,38 +80,17 @@ Or constructed from a dict:
 
 ## Convex hull[¶](#convex-hull)
 
-`pymesh.``convex_hull`(*mesh*, *engine='auto'*, *with_timing=False*)[¶](#pymesh.convex_hull)  
+`pymesh.convex_hull`
+
+- *mesh*
+- *engine='auto'*
+- *with_timing=False*
+
 Compute the convex hull of an input mesh.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The input mesh.</li>
-<li><p><strong>engine</strong> (<code>string</code>) –</p>
-<p>(optional) Convex hull engine name. Valid names are:</p>
-<ul>
-<li>auto: Using the default engine.</li>
-<li>qhull: <a href="http://www.qhull.org/">Qhull convext hull library</a></li>
-<li><dl>
-<dt>cgal: CGAL convex hull module (</dt>
-<dd>
-<a href="https://doc.cgal.org/latest/Convex_hull_2/index.html">2D</a>, <a href="https://doc.cgal.org/latest/Convex_hull_3/index.html">3D</a>)
-</dd>
-</dl></li>
-<li>triangle: Triangle convex hull engine.</li>
-<li>tetgen: Tetgen convex hull engine.</li>
-</ul></li>
-<li><strong>with_timing</strong> (<code>boolean</code>) – (optional) Whether to time the code</li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The input mesh. ; **engine** (`string`) – (optional) Convex hull engine name. Valid names are: auto: Using the default engine. ; qhull: [Qhull convext hull library](http://www.qhull.org/) ; cgal: CGAL convex hull module (: [2D](https://doc.cgal.org/latest/Convex_hull_2/index.html), [3D](https://doc.cgal.org/latest/Convex_hull_3/index.html)) ; triangle: Triangle convex hull engine. ; tetgen: Tetgen convex hull engine. ; **with_timing** (`boolean`) – (optional) Whether to time the code |
 
 Returns: The output mesh representing the convex hull. (and running time if with_timing is true.)
 
@@ -143,51 +100,28 @@ The following attributes are defined in the output mesh:
 
 ## Outer hull[¶](#outer-hull)
 
-`pymesh.``compute_outer_hull`(*mesh*, *engine='auto'*, *all_layers=False*)[¶](#pymesh.compute_outer_hull)  
+`pymesh.compute_outer_hull`
+
+- *mesh*
+- *engine='auto'*
+- *all_layers=False*
+
 Compute the outer hull of the input mesh.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><p><strong>engine</strong> (<code>str</code>) –</p>
-<p>(optional) Outer hull engine name. Valid engines are:</p>
-<ul>
-<li><code>auto</code>: Using the default engine (<code>igl</code>).</li>
-<li><code>igl</code>: <a href="https://github.com/libigl/libigl">libigl’s outer hull support</a></li>
-</ul></li>
-<li><strong>all_layers</strong> (<code>bool</code>) – (optional) If true, recursively peel outer hull layers.</li>
-</ul></td>
-</tr>
-<tr>
-<th>Returns:</th>
-<td><p>If <code>all_layers</code> is false, just return the outer hull mesh.</p>
-<dl>
-<dt>If <code>all_layers</code> is ture, return a recursively peeled outer hull</dt>
-<dd>
-<p>layers, from the outer most layer to the inner most layer.</p>
-</dd>
-</dl>
-<p>The following mesh attirbutes are defined in each outer hull mesh:</p>
-<ul>
-<li><code>flipped</code>: A per-face attribute that is true if a face in outer hull is orientated differently comparing to its corresponding face in the input mesh.</li>
-<li><code>face_sources</code>: A per-face attribute that specifies the index of the source face in the input mesh.</li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **engine** (`str`) – (optional) Outer hull engine name. Valid engines are: `auto`: Using the default engine (`igl`). ; `igl`: [libigl’s outer hull support](https://github.com/libigl/libigl) ; **all_layers** (`bool`) – (optional) If true, recursively peel outer hull layers. |
+| Returns: | If `all_layers` is false, just return the outer hull mesh. If `all_layers` is ture, return a recursively peeled outer hull: layers, from the outer most layer to the inner most layer. The following mesh attirbutes are defined in each outer hull mesh: `flipped`: A per-face attribute that is true if a face in outer hull is orientated differently comparing to its corresponding face in the input mesh. ; `face_sources`: A per-face attribute that specifies the index of the source face in the input mesh. |
 
 ## Mesh arrangement[¶](#mesh-arrangement)
 
-`pymesh.``partition_into_cells`(*mesh*)[¶](#pymesh.partition_into_cells)  
+`pymesh.partition_into_cells`
+
+- *mesh*
+
 Resolve all-intersections of the input mesh and extract cell partitions induced by the mesh. A cell-partition is subset of the ambient space where any pair of points belonging the partition can be connected by a curve without ever going through any mesh faces.
 
-|  |  |
+| Field | Value |
 |----|----|
 | Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The input mesh. |
 
@@ -202,148 +136,78 @@ The following attributes are defined in the output mesh:
 
 ## Minkowski sum[¶](#minkowski-sum)
 
-`pymesh.``minkowski_sum`(*mesh*, *path*)[¶](#pymesh.minkowski_sum)  
+`pymesh.minkowski_sum`
+
+- *mesh*
+- *path*
+
 Perform Minkowski sum of a mesh with a poly-line.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – Input mesh.</li>
-<li><strong>path</strong> (<code>numpy.ndarray</code>) – a n i m e s 3 matrix. Each row represents a node in the poly-line.</li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – Input mesh. ; **path** (`numpy.ndarray`) – a n i m e s 3 matrix. Each row represents a node in the poly-line. |
 
 Returns: A mesh representing the Minkowski sum of the inputs.
 
 ## Subdivision[¶](#subdivision)
 
-`pymesh.``subdivide`(*mesh*, *order=1*, *method='simple'*)[¶](#pymesh.subdivide)  
+`pymesh.subdivide`
+
+- *mesh*
+- *order=1*
+- *method='simple'*
+
 Subdivide the input mesh.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> – Input triangle mesh.</li>
-<li><strong>order</strong> – (optional) Subdivision order.</li>
-<li><strong>method</strong> – (optional) Subdivision method. Choices are “simple” and “loop”.</li>
-</ul></td>
-</tr>
-<tr>
-<th>Returns:</th>
-<td><p>Returns the subdivided mesh. The per-face attribute “ori_face_index” tracks the original face index from the input mesh.</p></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** – Input triangle mesh. ; **order** – (optional) Subdivision order. ; **method** – (optional) Subdivision method. Choices are “simple” and “loop”. |
+| Returns: | Returns the subdivided mesh. The per-face attribute “ori_face_index” tracks the original face index from the input mesh. |
 
 ## Winding number query[¶](#winding-number-query)
 
-`pymesh.``compute_winding_number`(*mesh*, *queries*, *engine='auto'*)[¶](#pymesh.compute_winding_number)  
+`pymesh.compute_winding_number`
+
+- *mesh*
+- *queries*
+- *engine='auto'*
+
 Compute winding number with respect to mesh at queries.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The mesh for which winding number is evaluated.</li>
-<li><strong>queries</strong> (<code>numpy.ndarray</code>) – N by 3 matrix of query points at which winding number is evaluated.</li>
-<li><p><strong>engine</strong> (<code>string</code>) –</p>
-<p>(optional) Winding number computing engine name:</p>
-<ul>
-<li><code>auto</code>: use default engine (which is <code>igl</code>).</li>
-<li><code>igl</code>: use libigl’s <a href="https://libigl.github.io/tutorial/#generalized-winding-number">generalized winding number</a>.</li>
-<li><code>fast_winding_number</code>: use code from <a href="http://www.dgp.toronto.edu/projects/fast-winding-numbers/">fast winding number</a> paper. It is faster than <code>igl</code> but can be less accurate sometimes.</li>
-</ul></li>
-</ul></td>
-</tr>
-<tr>
-<th>Returns:</th>
-<td><p>A list of size N, represent the winding numbers at each query points in order.</p></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The mesh for which winding number is evaluated. ; **queries** (`numpy.ndarray`) – N by 3 matrix of query points at which winding number is evaluated. ; **engine** (`string`) – (optional) Winding number computing engine name: `auto`: use default engine (which is `igl`). ; `igl`: use libigl’s [generalized winding number](https://libigl.github.io/tutorial/#generalized-winding-number). ; `fast_winding_number`: use code from [fast winding number](http://www.dgp.toronto.edu/projects/fast-winding-numbers/) paper. It is faster than `igl` but can be less accurate sometimes. |
+| Returns: | A list of size N, represent the winding numbers at each query points in order. |
 
 ## Slicing mesh[¶](#slicing-mesh)
 
-`pymesh.``slice_mesh`(*mesh*, *direction*, *N*)[¶](#pymesh.slice_mesh)  
+`pymesh.slice_mesh`
+
+- *mesh*
+- *direction*
+- *N*
+
 Slice a given 3D mesh N times along certain direciton.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The mesh to be sliced.</li>
-<li><strong>direction</strong> (<code>numpy.ndaray</code>) – Direction orthogonal to the slices.</li>
-<li><strong>N</strong> (<em>int</em>) – Number of slices.</li>
-</ul></td>
-</tr>
-<tr>
-<th>Returns:</th>
-<td><p>A list of N <a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a> objects, each representing a single slice.</p></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – The mesh to be sliced. ; **direction** (`numpy.ndaray`) – Direction orthogonal to the slices. ; **N** (*int*) – Number of slices. |
+| Returns: | A list of N [`Mesh`](api_mesh.html#pymesh.Mesh) objects, each representing a single slice. |
 
 ## Distance to mesh query[¶](#distance-to-mesh-query)
 
-`pymesh.``distance_to_mesh`(*mesh*, *pts*, *engine='auto'*)[¶](#pymesh.distance_to_mesh)  
+`pymesh.distance_to_mesh`
+
+- *mesh*
+- *pts*
+- *engine='auto'*
+
 Compute the distance from a set of points to a mesh.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr>
-<th>Parameters:</th>
-<td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – A input mesh.</li>
-<li><strong>pts</strong> (<code>numpy.ndarray</code>) – A N×d i m array of query points.</li>
-<li><strong>engine</strong> (<code>string</code>) – BVH engine name. Valid choices are “cgal”, “geogram”, “igl” if all dependencies are used. The default is “auto” where an available engine is automatically picked.</li>
-</ul></td>
-</tr>
-<tr>
-<th>Returns:</th>
-<td><p>Three values are returned.</p>
-<blockquote>
-<ul>
-<li><code>squared_distances</code>: squared distances from each point to mesh.</li>
-<li><code>face_indices</code> : the closest face to each point.</li>
-<li><dl>
-<dt><code>closest_points</code>: the point on mesh that is closest to each</dt>
-<dd>
-query point.
-</dd>
-</dl></li>
-</ul>
-</blockquote></td>
-</tr>
-</tbody>
-</table>
+| Field | Value |
+|----|----|
+| Parameters: | **mesh** ([`Mesh`](api_mesh.html#pymesh.Mesh)) – A input mesh. ; **pts** (`numpy.ndarray`) – A N×d i m array of query points. ; **engine** (`string`) – BVH engine name. Valid choices are “cgal”, “geogram”, “igl” if all dependencies are used. The default is “auto” where an available engine is automatically picked. |
+| Returns: | Three values are returned. `squared_distances`: squared distances from each point to mesh. ; `face_indices` : the closest face to each point. ; `closest_points`: the point on mesh that is closest to each: query point. |
 
 [![Logo](_static/pymesh_logo.png)](index.html)
 

@@ -1,23 +1,15 @@
-[Skip to content](#jwc-skip-here) Josh W Comeau [RSS Feed](https://www.joshwcomeau.com/rss.xml)
+[Skip to content](#jwc-skip-here) [Josh W Comeau](./index.md) [RSS Feed](https://www.joshwcomeau.com/rss.xml)
 
 # An Interactive Guide to SVG Paths
 
-Filed under  
-SVG
+| Term        | Definition         |
+|-------------|--------------------|
+| Filed under | [SVG](./svg.md)       |
+| on in       | August 18th, 2025. |
 
-on\
-in  
-August 18th, 2025.
-
-Aug 2025.
-
-
-Last updated\
-on\
-in  
-June 9th, 2026.
-
-Jun 2026.
+| Term               | Definition      |
+|--------------------|-----------------|
+| Last updated on in | June 9th, 2026. |
 
 Introduction
 
@@ -112,7 +104,7 @@ Here’s a visualization showing this sequence of commands:
 
 And here we get to the first “path-exclusive” feature!
 
-If you’ve been working with CSS for a while, you’ve likely used Bézier curves to control the *easing* of your CSS transitions. In SVG, we can create those same swoopy curves, but they’re drawn visually rather than used mathematically.
+If you’ve been working with CSS for a while, you’ve likely used Bézier curves to control the *easing* of your [CSS transitions](./animation-css-transitions.md). In SVG, we can create those same swoopy curves, but they’re drawn visually rather than used mathematically.
 
 We have access to two flavors of Bézier curves in SVG. Let’s look at them each in turn.
 
@@ -178,7 +170,7 @@ This is a bit like the `<ellipse>` SVG element, but instead of drawing an entire
 
 This is kinda weird, if we think about it. With `<ellipse>`, the shape is positioned based on its center point, specified with `cx` / `cy`. This feels mathematically straightforward. If you give me one of those elementary school geometry kits, I could produce a circle using this method: Stick the spike into the center coordinate and spin a full 360°.
 
-!A mathematical compass, a V-shaped tool with a sharp end and a pencil end. By poking the sharp end into a paper, you can use it to draw a perfect circle centered around it
+![A mathematical compass, a V-shaped tool with a sharp end and a pencil end. By poking the sharp end into a paper, you can use it to draw a perfect circle centered around it](./_next-image-?url=%2Fimages%2Finteractive-guide-to-paths%2Fcompass.jpg&w=828&q=75.md)
 
 **With arcs, though, things are a bit more complicated.** Instead of providing a center point to trace around, we instead provide a start/end point. The browser will have to invent a *hypothetical* ellipse that contains both points somewhere on its circumference.
 
@@ -204,15 +196,15 @@ rx:3.50ry:4.50
 
 The arc traces along the bottom edge of that ball:
 
-!Golf ball
+![Golf ball](./images-interactive-guide-to-paths-golf-ball.png.md)
 
 If we swapped out the golf ball for one with a larger radius, like a baseball, then our arc would be shallower, since more of the ball is sitting above the hole:
 
-!Baseball
+![Baseball](./images-interactive-guide-to-paths-baseball.png.md)
 
 And if we chose an *enormous* ball like a bowling ball, the arc would practically be flat:
 
-!bowling
+![bowling](./images-interactive-guide-to-paths-bowlingball.png.md)
 
 To bring this back to SVGs: when we draw an arc, we need to specify a horizontal radius (`rx`) and a vertical radius (`ry`). These values affect the size of the hypothetical ellipse, which in turn affects how deep/shallow the arc is. The smaller the radius, the deeper the arc.
 
@@ -323,7 +315,7 @@ At this point, we’ve covered all of the most important fundamentals of SVG pat
 
 It’s called [Whimsical Animations(opens in new tab)](https://whimsy.joshwcomeau.com/), and it’s a comprehensive interactive course about creating next-level animations and interactions.
 
-[!Whimsical Animations](https://whimsy.joshwcomeau.com/)
+[![Whimsical Animations](./_next-image-?url=%2Fimages%2Fwhimsical-animations.jpg&w=1920&q=75.md)](https://whimsy.joshwcomeau.com/)
 
 The course is split into four parts, covering a wide range of animation techniques. Part 2 is all about SVG animation. You’ll learn how to animate the paths we’ve been working with in this post, to create wonderful micro-interactions and big splashy effects. If you’re finding this blog post useful, you’ll get *so much* out of the course!
 
@@ -434,7 +426,7 @@ Code Playground
 
 If you look closely, there’s a visible “elbow” where the two curves connect:
 
-!close-up screenshot of the SVG from the playground above, showing a kink in the curve
+![close-up screenshot of the SVG from the playground above, showing a kink in the curve](./_next-image-?url=%2Fimages%2Finteractive-guide-to-paths%2Fsvg-elbow-annotated.png&w=640&q=75.md)
 
 In order for our Bézier curves to flow well, we need to match the *angles* of subsequent curves, so that the path doesn’t veer off in a new direction. There isn’t any sort of built-in smoothing.
 
@@ -482,31 +474,31 @@ June 9th, 2026
 <!--
 ## Source links
 
-- Josh W Comeau - source: `/`
-- About - source: `/about-josh/`
+- [Josh W Comeau](./index.md) - source: /
+- [About](./about-josh.md) - source: /about-josh/
 - [RSS Feed](https://www.joshwcomeau.com/rss.xml)
-- SVG - source: `/svg/`
-- A Friendly Introduction to SVG - source: `/svg/friendly-introduction-to-svg/`
+- [SVG](./svg.md) - source: /svg/
+- [A Friendly Introduction to SVG](./svg-friendly-introduction-to-svg.md) - source: /svg/friendly-introduction-to-svg/
 - [Open in CodeSandbox](https://codesandbox.io/api/v1/sandboxes/define?undefined&environment=parcel)
 - [W3C specification (opens in new tab)](https://www.w3.org/TR/SVG/paths.html#PathDataGeneralInformation)
-- CSS transitions - source: `/animation/css-transitions/`
+- [CSS transitions](./animation-css-transitions.md) - source: /animation/css-transitions/
 - [The Beauty of Bézier Curves (opens in new tab)](https://youtu.be/aVwxzDHniEw?t=115)
 - [a bunch of math (opens in new tab)](https://www.w3.org/TR/SVG11/implnote.html#ArcConversionEndpointToCenter)
 - [some more math (opens in new tab)](https://www.w3.org/TR/SVG11/implnote.html#ArcCorrectionOutOfRangeRadii)
 - [Whimsical Animations (opens in new tab)](https://whimsy.joshwcomeau.com/)
 - [stroke-miterlimit property (opens in new tab)](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit)
-- CSS - source: `/css/`
-- React - source: `/react/`
-- Animation - source: `/animation/`
-- JavaScript - source: `/javascript/`
-- Career - source: `/career/`
-- Next.js - source: `/nextjs/`
-- General - source: `/blog/`
+- [CSS](./css.md) - source: /css/
+- [React](./react.md) - source: /react/
+- [Animation](./animation.md) - source: /animation/
+- [JavaScript](./javascript.md) - source: /javascript/
+- [Career](./career.md) - source: /career/
+- [Next.js](./nextjs.md) - source: /nextjs/
+- [General](./blog.md) - source: /blog/
 - [CSS for JS Developers (opens in new tab)](https://css-for-js.dev/)
 - [The Joy of React (opens in new tab)](https://joyofreact.com)
 - [Whimsical Animations (opens in new tab)](https://whimsy.joshwcomeau.com)
-- About This Blog - source: `/blog/how-i-built-my-blog-v2/`
-- Contact - source: `/contact/`
+- [About This Blog](./blog-how-i-built-my-blog-v2.md) - source: /blog/how-i-built-my-blog-v2/
+- [Contact](./contact.md) - source: /contact/
 - [Josh's BlueSky profile](https://bsky.app/profile/joshwcomeau.com)
 - [Josh's Github profile](https://github.com/joshwcomeau/)
 - [Josh's LinkedIn profile](https://www.linkedin.com/in/joshwcomeau/)

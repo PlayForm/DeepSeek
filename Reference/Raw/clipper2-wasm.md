@@ -1,6 +1,10 @@
 # clipper2-wasm
 
-[![](https://img.jsdelivr.com/github.com/ErikSom.png) ErikSom](/?query=author%3A%20ErikSom) esm [![clipper2-wasm JS library on GitHub](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/github.svg)](https://github.com/ErikSom/Clipper2-WASM/) [![clipper2-wasm JS library on npm](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/npm.svg)](https://www.npmjs.com/package/clipper2-wasm) [![Download clipper2-wasm JS library](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/download.svg)](https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz)
+[![](https://img.jsdelivr.com/github.com/ErikSom.png) ErikSom](/?query=author%3A%20ErikSom) esm
+
+- [![clipper2-wasm JS library on GitHub](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/github.svg)](https://github.com/ErikSom/Clipper2-WASM/)
+- [![clipper2-wasm JS library on npm](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/npm.svg)](https://www.npmjs.com/package/clipper2-wasm)
+- [![Download clipper2-wasm JS library](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/download.svg)](https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz)
 
 WebAssembly port of the Clipper2 library for polygon clipping and offsetting
 
@@ -26,7 +30,12 @@ Version 0.4.0 License BSL-1.0 ![clipper2-wasm has no homepage](https://www.jsdel
 - 0.0.2
 - 0.0.1
 
-\<script src=" <https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js> "\>\</script\> Learn more [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/book.svg) Readme](/package/npm/clipper2-wasm) [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/settings.svg) Files](?tab=files) [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/statistics.svg) Statistics](?tab=stats) [Browse CDN ![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/external-link.svg)](https://cdn.jsdelivr.net/npm/clipper2-wasm/)
+\<script src=" <https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js> "\>\</script\> [Learn more](./documentation.md#id-npm)
+
+- [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/book.svg) Readme](/package/npm/clipper2-wasm)
+- [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/settings.svg) Files](?tab=files)
+- [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/statistics.svg) Statistics](?tab=stats)
+- [Browse CDN ![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/external-link.svg)](https://cdn.jsdelivr.net/npm/clipper2-wasm/)
 
 [![npm version](https://badge.fury.io/js/clipper2-wasm.svg)](https://badge.fury.io/js/clipper2-wasm)
 
@@ -207,33 +216,33 @@ Top version - 0.2.1 16 035 Full clipper2-wasm Download Stats The 24940th most po
 <!--
 ## Source links
 
-- / - source: `/`
-- About Us - source: `/about`
-- Network - source: `/network`
-- Stats - source: `/statistics`
-- Sponsors - source: `/sponsors`
-- Purge cache - source: `/tools/purge`
-- GitHub - source: `/github`
-- Google Hosted Libraries - source: `/google`
-- unpkg - source: `/unpkg`
-- Skypack - source: `/skypack`
-- esm.sh - source: `/esmsh`
-- Blog - source: `/blog/`
+- [/](./index.md) - source: /
+- [About Us](./about.md) - source: /about
+- [Network](./network.md) - source: /network
+- [Stats](./statistics.md) - source: /statistics
+- [Sponsors](./sponsors.md) - source: /sponsors
+- [Purge cache](./tools-purge.md) - source: /tools/purge
+- [GitHub](./github.md) - source: /github
+- [Google Hosted Libraries](./google.md) - source: /google
+- [unpkg](./unpkg.md) - source: /unpkg
+- [Skypack](./skypack.md) - source: /skypack
+- [esm.sh](./esmsh.md) - source: /esmsh
+- [Blog](./blog.md) - source: /blog/
 - [Newsletter](https://jsdelivr.us11.list-manage.com/subscribe?u=0c85fe2c9a60310df9a3d6751&id=283887f736)
-- esm.run - source: `/esm`
-- Open Source CDN - source: `/documentation`
-- Public API - source: `/docs/data.jsdelivr.com`
+- [esm.run](./esm.md) - source: /esm
+- [Open Source CDN](./documentation.md) - source: /documentation
+- [Public API](./docs-data.jsdelivr.com.md) - source: /docs/data.jsdelivr.com
 - [Globalping](https://globalping.io)
 - [GitHub](https://github.com/jsdelivr/jsdelivr)
 - [Twitter](https://twitter.com/jsDelivr)
-- Discord - source: `/discord`
-- ErikSom - source: `/?query=author%3A%20ErikSom`
+- [Discord](./discord.md) - source: /discord
+- [ErikSom](./?query=author%3A%20ErikSom.md) - source: /?query=author%3A%20ErikSom
 - [https://github.com/ErikSom/Clipper2-WASM/](https://github.com/ErikSom/Clipper2-WASM/)
 - [https://www.npmjs.com/package/clipper2-wasm](https://www.npmjs.com/package/clipper2-wasm)
 - [https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz](https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz)
 - [https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js](https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js)
-- Learn more - source: `/documentation#id-npm`
-- Readme - source: `/package/npm/clipper2-wasm`
+- [Learn more](./documentation.md#id-npm) - source: /documentation#id-npm
+- [Readme](./package-npm-clipper2-wasm.md) - source: /package/npm/clipper2-wasm
 - [Files](?tab=files)
 - [Statistics](?tab=stats)
 - [Browse CDN](https://cdn.jsdelivr.net/npm/clipper2-wasm/)
@@ -256,12 +265,12 @@ Top version - 0.2.1 16 035 Full clipper2-wasm Download Stats The 24940th most po
 - [@Birch-san](https://www.github.com/Birch-san)
 - [https://github.com/Birch-san/box2d-wasm/](https://github.com/Birch-san/box2d-wasm/)
 - [Share](https://twitter.com/intent/tweet?text=clipper2-wasm%20is%20the%2024940th%20most%20popular%20package%20on%20%40jsDelivr%20CDN%2C%20with%2017%20221%20hits%20in%20the%20last%20month%3A%20https%3A%2F%2Fwww.jsdelivr.com%2Fpackage%2Fnpm%2Fclipper2-wasm)
-- jsDelivr team and contributors - source: `/about#people`
+- [jsDelivr team and contributors](./about.md#people) - source: /about#people
 - [Dmitriy Akulov](https://dakulov.com/)
-- Our History - source: `/history`
-- Custom OSS CDN - source: `/oss-cdn`
+- [Our History](./history.md) - source: /history
+- [Custom OSS CDN](./oss-cdn.md) - source: /oss-cdn
 - [Status](https://status.jsdelivr.com/)
-- Terms & Policies - source: `/terms`
+- [Terms & Policies](./terms.md) - source: /terms
 - [d@jsdelivr.com](mailto:d@jsdelivr.com)
 - [Making jsDelivr’s Origin More Reliable at Scale](https://www.jsdelivr.com/blog/making-jsdelivrs-origin-more-reliable-at-scale/)
 - [Making More npm Packages Work with jsDelivr ESM mode](https://www.jsdelivr.com/blog/making-more-npm-packages-work-with-jsdelivr-esm/)

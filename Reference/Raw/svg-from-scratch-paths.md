@@ -1,15 +1,15 @@
 # Paths
 
-- Previous
-- Next
+- [Previous](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md)
+- [Next](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Fills_and_strokes.md)
 
-The `<path>` element is the most powerful element in the SVG library of basic shapes. It can be used to create lines, curves, arcs, and more.
+The [`<path>`](./en-US-docs-Web-SVG-Reference-Element-path.md) element is the most powerful element in the SVG library of [basic shapes](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md). It can be used to create lines, curves, arcs, and more.
 
-Paths create complex shapes by combining multiple straight lines or curved lines. Complex shapes composed only of straight lines can be created as `<polyline>` elements. While `<polyline>` and `<path>` elements can create similar-looking shapes, `<polyline>` elements require a lot of small straight lines to simulate curves and don't scale well to larger sizes.
+Paths create complex shapes by combining multiple straight lines or curved lines. Complex shapes composed only of straight lines can be created as [`<polyline>`](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md#polyline) elements. While `<polyline>` and `<path>` elements can create similar-looking shapes, `<polyline>` elements require a lot of small straight lines to simulate curves and don't scale well to larger sizes.
 
 A good understanding of paths is important when drawing SVGs. While creating complex paths using an XML editor or text editor is not recommended, understanding how they work will allow you to identify and repair display issues in SVGs.
 
-The shape of a `<path>` element is defined by one parameter: `d`. (See more in basic shapes.) The `d` attribute contains a series of commands and parameters used by those commands.
+The shape of a `<path>` element is defined by one parameter: [`d`](./en-US-docs-Web-SVG-Reference-Attribute-d.md). (See more in [basic shapes](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md).) The `d` attribute contains a series of commands and parameters used by those commands.
 
 Each of the commands is instantiated (for example, creating a class, naming and locating it) by a specific letter. For instance, the "Move to" command is called with the letter `M` — to move to (`10`, `10`) you would start your command with `M 10 10`. When the parser runs into this letter, it knows it first needs to move to a point (without drawing a connecting line).
 
@@ -19,7 +19,7 @@ Coordinates in the `d` parameter are **always unitless** and hence in the user c
 
 ## Line commands
 
-There are five line commands for `<path>` nodes. The first command is the "Move To" or `M`, which was described above. It takes at least two parameters, starting with an `x` and `y` coordinate to move to. If the cursor was already somewhere on the page, no line is drawn to connect the two positions. The "Move To" command appears at the beginning of paths to specify where the drawing should start. For example:
+There are five line commands for [`<path>`](./en-US-docs-Web-SVG-Reference-Element-path.md) nodes. The first command is the "Move To" or `M`, which was described above. It takes at least two parameters, starting with an `x` and `y` coordinate to move to. If the cursor was already somewhere on the page, no line is drawn to connect the two positions. The "Move To" command appears at the beginning of paths to specify where the drawing should start. For example:
 
 M x y\
 (or)\
@@ -47,7 +47,7 @@ V y\
 (or)\
 v dy\
 
-An easy place to start is by drawing a shape. We will start with a rectangle (the same type that could be more easily made with a `<rect>` element). It's composed of horizontal and vertical lines only.
+An easy place to start is by drawing a shape. We will start with a rectangle (the same type that could be more easily made with a [`<rect>`](./en-US-docs-Web-SVG-Reference-Element-rect.md) element). It's composed of horizontal and vertical lines only.
 
 We can shorten the above path declaration a little bit by using the "Close Path" command, called with `Z`. This command draws a straight line from the current position back to the first unclosed point (first point after the last `Z` command if there is one, or the first point in the path otherwise), and closes off the path with a line joint. It is often placed at the end of a path node, although not always. There is no difference between the uppercase and lowercase command.
 
@@ -61,11 +61,11 @@ The relative forms of these commands can also be used to draw the same picture. 
 
 The path will move to point (`10`, `10`) and then move horizontally 80 points to the right, then 80 points down, then 80 points to the left, and then back to the start.
 
-In these examples, it would probably be more intuitive to use the `<polygon>` or `<polyline>` elements. However, paths are used so often in drawing SVG that developers may be more comfortable using them instead. There is no real performance penalty or bonus for using one or the other.
+In these examples, it would probably be more intuitive to use the [`<polygon>`](./en-US-docs-Web-SVG-Reference-Element-polygon.md) or [`<polyline>`](./en-US-docs-Web-SVG-Reference-Element-polyline.md) elements. However, paths are used so often in drawing SVG that developers may be more comfortable using them instead. There is no real performance penalty or bonus for using one or the other.
 
 ## Curve commands
 
-There are three different commands that can be used to create smooth curves. Two of those curves are Bézier curves, and the third is an "arc" or part of a circle. You might have already gained practical experience with Bézier curves using path tools in Inkscape, Illustrator or Photoshop. There are an infinite number of Bézier curves, but only two are available in `<path>` elements: a cubic one, called with `C`, and a quadratic one, called with `Q`.
+There are three different commands that can be used to create smooth curves. Two of those curves are [Bézier curves](./en-US-docs-Glossary-Bezier_curve.md), and the third is an "arc" or part of a circle. You might have already gained practical experience with Bézier curves using path tools in Inkscape, Illustrator or Photoshop. There are an infinite number of Bézier curves, but only two are available in `<path>` elements: a cubic one, called with `C`, and a quadratic one, called with `Q`.
 
 ### Bézier Curves
 
@@ -120,7 +120,7 @@ Because of that, arcs require quite a few parameters:
 A rx ry x-axis-rotation large-arc-flag sweep-flag x y\
 a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy\
 
-At its start, the arc element takes in two parameters for the x-radius and y-radius. If needed, see `<ellipse>`s and how they behave. The final two parameters designate the x and y coordinates to end the stroke. Together, these four values define the basic structure of the arc.
+At its start, the arc element takes in two parameters for the x-radius and y-radius. If needed, see [`<ellipse>`](./en-US-docs-Web-SVG-Reference-Element-ellipse.md)s and how they behave. The final two parameters designate the x and y coordinates to end the stroke. Together, these four values define the basic structure of the arc.
 
 The third parameter describes the rotation of the arc. This is best explained with an example:
 
@@ -136,67 +136,67 @@ The four different paths mentioned above are determined by the next two paramete
 
 Arcs are an easy way to create pieces of circles or ellipses in drawings. For instance, a pie chart would require a different arc for each piece.
 
-If transitioning to SVG from `<canvas>`, arcs can be the hardest thing to learn, but are also much more powerful. Complete circles and ellipses are the only shapes that SVG arcs have trouble drawing. Because the start and end points for any path going around a circle are the same point, there are an infinite number of circles that could be chosen, and the actual path is undefined. It's possible to approximate them by making the start and end points of the path slightly askew, and then connecting them with another path segment. For example, it's possible to make a circle with an arc for each semi-circle. At that point, it's often easier to use a real `<circle>` or `<ellipse>` node instead. This interactive demo might help understand the concepts behind SVG arcs.
+If transitioning to SVG from [`<canvas>`](./en-US-docs-Web-HTML-Reference-Elements-canvas.md), arcs can be the hardest thing to learn, but are also much more powerful. Complete circles and ellipses are the only shapes that SVG arcs have trouble drawing. Because the start and end points for any path going around a circle are the same point, there are an infinite number of circles that could be chosen, and the actual path is undefined. It's possible to approximate them by making the start and end points of the path slightly askew, and then connecting them with another path segment. For example, it's possible to make a circle with an arc for each semi-circle. At that point, it's often easier to use a real [`<circle>`](./en-US-docs-Web-SVG-Reference-Element-circle.md) or [`<ellipse>`](./en-US-docs-Web-SVG-Reference-Element-ellipse.md) node instead. This interactive demo might help understand the concepts behind SVG arcs.
 
-- Previous
-- Next
+- [Previous](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md)
+- [Next](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Fills_and_strokes.md)
 
 ## Help improve MDN
 
-Learn how to contribute
+[Learn how to contribute](./en-US-docs-MDN-Community-Getting_started.md)
 
-This page was last modified on Aug 31, 2026 by MDN contributors.
+This page was last modified on Aug 31, 2026 by [MDN contributors](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Paths-contributors.txt.md).
 
 [View this page on GitHub](https://github.com/mdn/content/blob/main/files/en-us/web/svg/tutorials/svg_from_scratch/paths/index.md?plain=1) • [Report a problem with this content](https://github.com/mdn/content/issues/new?template=page-report.yml&mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FTutorials%2FSVG_from_scratch%2FPaths&metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Ftutorials%2Fsvg_from_scratch%2Fpaths%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FTutorials%2FSVG_from_scratch%2FPaths%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Ftutorials%2Fsvg_from_scratch%2Fpaths%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2Fc956b5fc0c588115bc8e5972952fff985d4bd335%0A*+Document+last+modified%3A+2026-08-31T01%3A03%3A55.000Z%0A%0A%3C%2Fdetails%3E)
 
 <!--
 ## Source links
 
-- Previous - source: `/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Basic_shapes`
-- Next - source: `/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Fills_and_strokes`
-- <path> - source: `/en-US/docs/Web/SVG/Reference/Element/path`
-- <polyline> - source: `/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Basic_shapes#polyline`
-- d - source: `/en-US/docs/Web/SVG/Reference/Attribute/d`
-- <rect> - source: `/en-US/docs/Web/SVG/Reference/Element/rect`
-- <polygon> - source: `/en-US/docs/Web/SVG/Reference/Element/polygon`
-- <polyline> - source: `/en-US/docs/Web/SVG/Reference/Element/polyline`
-- Bézier curves - source: `/en-US/docs/Glossary/Bezier_curve`
-- <ellipse> - source: `/en-US/docs/Web/SVG/Reference/Element/ellipse`
+- [Previous](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md) - source: /en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Basic_shapes
+- [Next](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Fills_and_strokes.md) - source: /en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Fills_and_strokes
+- [<path>](./en-US-docs-Web-SVG-Reference-Element-path.md) - source: /en-US/docs/Web/SVG/Reference/Element/path
+- [<polyline>](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Basic_shapes.md#polyline) - source: /en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Basic_shapes#polyline
+- [d](./en-US-docs-Web-SVG-Reference-Attribute-d.md) - source: /en-US/docs/Web/SVG/Reference/Attribute/d
+- [<rect>](./en-US-docs-Web-SVG-Reference-Element-rect.md) - source: /en-US/docs/Web/SVG/Reference/Element/rect
+- [<polygon>](./en-US-docs-Web-SVG-Reference-Element-polygon.md) - source: /en-US/docs/Web/SVG/Reference/Element/polygon
+- [<polyline>](./en-US-docs-Web-SVG-Reference-Element-polyline.md) - source: /en-US/docs/Web/SVG/Reference/Element/polyline
+- [Bézier curves](./en-US-docs-Glossary-Bezier_curve.md) - source: /en-US/docs/Glossary/Bezier_curve
+- [<ellipse>](./en-US-docs-Web-SVG-Reference-Element-ellipse.md) - source: /en-US/docs/Web/SVG/Reference/Element/ellipse
 - [this on wolfram alpha](https://www.wolframalpha.com/input/?i=solve+((110+-+x)%5E2%2F36%5E2)+%2B+((215+-+y)%5E2%2F60%5E2)+%3D+1,+((150.71+-+x)%5E2%2F36%5E2)+%2B+((170.29+-+y)%5E2%2F60%5E2)+%3D+1)
 - [imaginary](https://www.wolframalpha.com/input/?i=solve+((110+-+x)%5E2%2F30%5E2)+%2B+((215+-+y)%5E2%2F50%5E2)+%3D+1,+((162.55+-+x)%5E2%2F30%5E2)+%2B+((162.45+-+y)%5E2%2F50%5E2)+%3D+1)
-- <canvas> - source: `/en-US/docs/Web/HTML/Reference/Elements/canvas`
-- <circle> - source: `/en-US/docs/Web/SVG/Reference/Element/circle`
-- Learn how to contribute - source: `/en-US/docs/MDN/Community/Getting_started`
-- MDN contributors - source: `/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths/contributors.txt`
+- [<canvas>](./en-US-docs-Web-HTML-Reference-Elements-canvas.md) - source: /en-US/docs/Web/HTML/Reference/Elements/canvas
+- [<circle>](./en-US-docs-Web-SVG-Reference-Element-circle.md) - source: /en-US/docs/Web/SVG/Reference/Element/circle
+- [Learn how to contribute](./en-US-docs-MDN-Community-Getting_started.md) - source: /en-US/docs/MDN/Community/Getting_started
+- [MDN contributors](./en-US-docs-Web-SVG-Tutorials-SVG_from_scratch-Paths-contributors.txt.md) - source: /en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths/contributors.txt
 - [View this page on GitHub](https://github.com/mdn/content/blob/main/files/en-us/web/svg/tutorials/svg_from_scratch/paths/index.md?plain=1)
 - [Report a problem with this content](https://github.com/mdn/content/issues/new?template=page-report.yml&mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FTutorials%2FSVG_from_scratch%2FPaths&metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Ftutorials%2Fsvg_from_scratch%2Fpaths%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FTutorials%2FSVG_from_scratch%2FPaths%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Ftutorials%2Fsvg_from_scratch%2Fpaths%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2Fc956b5fc0c588115bc8e5972952fff985d4bd335%0A*+Document+last+modified%3A+2026-08-31T01%3A03%3A55.000Z%0A%0A%3C%2Fdetails%3E)
-- MDN - source: `/`
+- [MDN](./index.md) - source: /
 - [https://github.com/mdn/](https://github.com/mdn/)
 - [https://bsky.app/profile/developer.mozilla.org](https://bsky.app/profile/developer.mozilla.org)
 - [https://x.com/mozdevnet](https://x.com/mozdevnet)
 - [https://mastodon.social/@mdn](https://mastodon.social/@mdn)
-- /en-US/blog/rss.xml - source: `/en-US/blog/rss.xml`
-- About - source: `/en-US/about`
-- Blog - source: `/en-US/blog/`
+- [/en-US/blog/rss.xml](./en-US-blog-rss.xml.md) - source: /en-US/blog/rss.xml
+- [About](./en-US-about.md) - source: /en-US/about
+- [Blog](./en-US-blog.md) - source: /en-US/blog/
 - [Mozilla careers](https://www.mozilla.org/en-US/careers/listings/)
-- Advertise with us - source: `/en-US/advertising`
-- MDN Plus - source: `/en-US/plus`
+- [Advertise with us](./en-US-advertising.md) - source: /en-US/advertising
+- [MDN Plus](./en-US-plus.md) - source: /en-US/plus
 - [Product help](https://support.mozilla.org/products/mdn-plus)
-- MDN Community - source: `/en-US/community`
-- Community resources - source: `/en-US/docs/MDN/Community`
-- Writing guidelines - source: `/en-US/docs/MDN/Writing_guidelines`
-- MDN Discord - source: `/discord`
+- [MDN Community](./en-US-community.md) - source: /en-US/community
+- [Community resources](./en-US-docs-MDN-Community.md) - source: /en-US/docs/MDN/Community
+- [Writing guidelines](./en-US-docs-MDN-Writing_guidelines.md) - source: /en-US/docs/MDN/Writing_guidelines
+- [MDN Discord](./discord.md) - source: /discord
 - [MDN on GitHub](https://github.com/mdn)
-- Web technologies - source: `/en-US/docs/Web`
-- Learn web development - source: `/en-US/docs/Learn_web_development`
-- Guides - source: `/en-US/docs/MDN/Guides`
-- Tutorials - source: `/en-US/docs/MDN/Tutorials`
-- Glossary - source: `/en-US/docs/Glossary`
+- [Web technologies](./en-US-docs-Web.md) - source: /en-US/docs/Web
+- [Learn web development](./en-US-docs-Learn_web_development.md) - source: /en-US/docs/Learn_web_development
+- [Guides](./en-US-docs-MDN-Guides.md) - source: /en-US/docs/MDN/Guides
+- [Tutorials](./en-US-docs-MDN-Tutorials.md) - source: /en-US/docs/MDN/Tutorials
+- [Glossary](./en-US-docs-Glossary.md) - source: /en-US/docs/Glossary
 - [Hacks blog](https://hacks.mozilla.org/)
 - [Mozilla](https://www.mozilla.org/)
 - [Website Privacy Notice](https://www.mozilla.org/privacy/websites/)
 - [Telemetry Settings](https://www.mozilla.org/en-US/privacy/websites/data-preferences/)
 - [Legal](https://www.mozilla.org/about/legal/terms/mozilla)
 - [Community Participation Guidelines](https://www.mozilla.org/about/governance/policies/participation/)
-- a Creative Commons license - source: `/docs/MDN/Writing_guidelines/Attrib_copyright_license`
+- [a Creative Commons license](./docs-MDN-Writing_guidelines-Attrib_copyright_license.md) - source: /docs/MDN/Writing_guidelines/Attrib_copyright_license
 -->

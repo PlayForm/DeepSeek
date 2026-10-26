@@ -1,7 +1,7 @@
 # paperjs-offset
 
 
-[!paperjs-offset preview](/glenzli/paperjs-offset/blob/master/public/preview.jpg)
+[![paperjs-offset preview](./glenzli-paperjs-offset-raw-master-public-preview.jpg.md)](/glenzli/paperjs-offset/blob/master/public/preview.jpg)
 
 Language: [English](#english) \| [中文](#%E4%B8%AD%E6%96%87)
 
@@ -361,7 +361,7 @@ npm run release:ship
 ### 许可证
 
 
-MIT。详见 LICENSE。
+MIT。详见 [LICENSE](./glenzli-paperjs-offset-blob-master-LICENSE.md)。
 
 
 ## English
@@ -720,13 +720,13 @@ npm run release:ship
 ### License
 
 
-MIT. See LICENSE.
+MIT. See [LICENSE](./glenzli-paperjs-offset-blob-master-LICENSE.md).
 
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -785,71 +785,71 @@ MIT. See LICENSE.
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=glenzli%2Fpaperjs-offset`
-- glenzli - source: `/glenzli`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=glenzli%2Fpaperjs-offset.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=glenzli%2Fpaperjs-offset
+- [glenzli](./glenzli.md) - source: /glenzli
 - [paperjs-offset](./glenzli-paperjs-offset.md) - source: /glenzli/paperjs-offset
-- Issues - source: `/glenzli/paperjs-offset/issues`
-- Pull requests - source: `/glenzli/paperjs-offset/pulls`
-- Actions - source: `/glenzli/paperjs-offset/actions`
-- Projects - source: `/glenzli/paperjs-offset/projects`
-- Security and quality - source: `/glenzli/paperjs-offset/security`
-- Insights - source: `/glenzli/paperjs-offset/pulse`
-- Notifications - source: `/login?return_to=%2Fglenzli%2Fpaperjs-offset`
+- [Issues](./glenzli-paperjs-offset-issues.md) - source: /glenzli/paperjs-offset/issues
+- [Pull requests](./glenzli-paperjs-offset-pulls.md) - source: /glenzli/paperjs-offset/pulls
+- [Actions](./glenzli-paperjs-offset-actions.md) - source: /glenzli/paperjs-offset/actions
+- [Projects](./glenzli-paperjs-offset-projects.md) - source: /glenzli/paperjs-offset/projects
+- [Security and quality](./glenzli-paperjs-offset-security.md) - source: /glenzli/paperjs-offset/security
+- [Insights](./glenzli-paperjs-offset-pulse.md) - source: /glenzli/paperjs-offset/pulse
+- [Notifications](./login?return_to=%2Fglenzli%2Fpaperjs-offset.md) - source: /login?return_to=%2Fglenzli%2Fpaperjs-offset
 - [glenzli.com/projects/paperjs-offset/](https://glenzli.com/projects/paperjs-offset/)
-- bezier - source: `/topics/bezier`
-- canvas - source: `/topics/canvas`
-- computational-geometry - source: `/topics/computational-geometry`
-- curve - source: `/topics/curve`
-- geometry - source: `/topics/geometry`
-- javascript - source: `/topics/javascript`
-- offset - source: `/topics/offset`
-- paper - source: `/topics/paper`
-- paper-js - source: `/topics/paper-js`
-- paperjs - source: `/topics/paperjs`
-- path-offset - source: `/topics/path-offset`
-- stroke - source: `/topics/stroke`
-- typescript - source: `/topics/typescript`
-- vector-graphics - source: `/topics/vector-graphics`
-- Activity - source: `/glenzli/paperjs-offset/activity`
-- 23 forks - source: `/glenzli/paperjs-offset/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset&report=glenzli+%28user%29`
-- 2 Branches - source: `/glenzli/paperjs-offset/branches`
-- 5 Tags - source: `/glenzli/paperjs-offset/tags`
-- glenzli - source: `/glenzli/paperjs-offset/commits?author=glenzli`
-- docs: recommend native Paper.js offset and outline APIs - source: `/glenzli/paperjs-offset/commit/f3ed87fc640bc101f9d9454e1748a3e3c15b335e`
-- 70 Commits - source: `/glenzli/paperjs-offset/commits/master/`
-- dev-site - source: `/glenzli/paperjs-offset/tree/master/dev-site`
-- fix: handle transformed paths, degenerate contours and runtime cleanup - source: `/glenzli/paperjs-offset/commit/eb235c9f651ea4e695fe77a1df0ba6fcb02183c3`
-- public - source: `/glenzli/paperjs-offset/tree/master/public`
-- docs: add generated project icon - source: `/glenzli/paperjs-offset/commit/e14e5283da0e29721505a694a7dd409559f829ce`
-- scripts - source: `/glenzli/paperjs-offset/tree/master/scripts`
-- src - source: `/glenzli/paperjs-offset/tree/master/src`
-- test - source: `/glenzli/paperjs-offset/tree/master/test`
-- .gitignore - source: `/glenzli/paperjs-offset/blob/master/.gitignore`
-- build: standardize package outputs and release flow - source: `/glenzli/paperjs-offset/commit/d37a1e1f6cef0d98e4e751e5f99ba7c0d04b8847`
-- .npmrc - source: `/glenzli/paperjs-offset/blob/master/.npmrc`
-- chore: clean metadata and lock dev setup - source: `/glenzli/paperjs-offset/commit/9f308156996520131daa0c49ca4e384d163ebf73`
-- LICENSE - source: `/glenzli/paperjs-offset/blob/master/LICENSE`
-- docs: add bilingual README and fix metadata - source: `/glenzli/paperjs-offset/commit/58562b3ee2ee64e80c47c4003a756dde187b0e43`
-- README.md - source: `/glenzli/paperjs-offset/blob/master/README.md`
-- banner.html - source: `/glenzli/paperjs-offset/blob/master/banner.html`
-- docs: replace banner artwork - source: `/glenzli/paperjs-offset/commit/1159f6f4b70885621f85b5919acdfcf5e76bc679`
-- build.js - source: `/glenzli/paperjs-offset/blob/master/build.js`
-- feat: add dev site export contract - source: `/glenzli/paperjs-offset/commit/81244d1624c88c5124d7d9ad4694050538100d97`
-- package-lock.json - source: `/glenzli/paperjs-offset/blob/master/package-lock.json`
-- chore: release v2.2.2 - source: `/glenzli/paperjs-offset/commit/8c0dfe3ae7bc734a603daa49119dd08b5507fd91`
-- package.json - source: `/glenzli/paperjs-offset/blob/master/package.json`
-- tsconfig.json - source: `/glenzli/paperjs-offset/blob/master/tsconfig.json`
-- /glenzli/paperjs-offset/blob/master/public/preview.jpg - source: `/glenzli/paperjs-offset/blob/master/public/preview.jpg`
+- [bezier](./topics-bezier.md) - source: /topics/bezier
+- [canvas](./topics-canvas.md) - source: /topics/canvas
+- [computational-geometry](./topics-computational-geometry.md) - source: /topics/computational-geometry
+- [curve](./topics-curve.md) - source: /topics/curve
+- [geometry](./topics-geometry.md) - source: /topics/geometry
+- [javascript](./topics-javascript.md) - source: /topics/javascript
+- [offset](./topics-offset.md) - source: /topics/offset
+- [paper](./topics-paper.md) - source: /topics/paper
+- [paper-js](./topics-paper-js.md) - source: /topics/paper-js
+- [paperjs](./topics-paperjs.md) - source: /topics/paperjs
+- [path-offset](./topics-path-offset.md) - source: /topics/path-offset
+- [stroke](./topics-stroke.md) - source: /topics/stroke
+- [typescript](./topics-typescript.md) - source: /topics/typescript
+- [vector-graphics](./topics-vector-graphics.md) - source: /topics/vector-graphics
+- [Activity](./glenzli-paperjs-offset-activity.md) - source: /glenzli/paperjs-offset/activity
+- [23 forks](./glenzli-paperjs-offset-forks.md) - source: /glenzli/paperjs-offset/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset&report=glenzli+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fglenzli%2Fpaperjs-offset&report=glenzli+%28user%29
+- [2 Branches](./glenzli-paperjs-offset-branches.md) - source: /glenzli/paperjs-offset/branches
+- [5 Tags](./glenzli-paperjs-offset-tags.md) - source: /glenzli/paperjs-offset/tags
+- [glenzli](./glenzli-paperjs-offset-commits?author=glenzli.md) - source: /glenzli/paperjs-offset/commits?author=glenzli
+- [docs: recommend native Paper.js offset and outline APIs](./glenzli-paperjs-offset-commit-f3ed87fc640bc101f9d9454e1748a3e3c15b335e.md) - source: /glenzli/paperjs-offset/commit/f3ed87fc640bc101f9d9454e1748a3e3c15b335e
+- [70 Commits](./glenzli-paperjs-offset-commits-master.md) - source: /glenzli/paperjs-offset/commits/master/
+- [dev-site](./glenzli-paperjs-offset-tree-master-dev-site.md) - source: /glenzli/paperjs-offset/tree/master/dev-site
+- [fix: handle transformed paths, degenerate contours and runtime cleanup](./glenzli-paperjs-offset-commit-eb235c9f651ea4e695fe77a1df0ba6fcb02183c3.md) - source: /glenzli/paperjs-offset/commit/eb235c9f651ea4e695fe77a1df0ba6fcb02183c3
+- [public](./glenzli-paperjs-offset-tree-master-public.md) - source: /glenzli/paperjs-offset/tree/master/public
+- [docs: add generated project icon](./glenzli-paperjs-offset-commit-e14e5283da0e29721505a694a7dd409559f829ce.md) - source: /glenzli/paperjs-offset/commit/e14e5283da0e29721505a694a7dd409559f829ce
+- [scripts](./glenzli-paperjs-offset-tree-master-scripts.md) - source: /glenzli/paperjs-offset/tree/master/scripts
+- [src](./glenzli-paperjs-offset-tree-master-src.md) - source: /glenzli/paperjs-offset/tree/master/src
+- [test](./glenzli-paperjs-offset-tree-master-test.md) - source: /glenzli/paperjs-offset/tree/master/test
+- [.gitignore](./glenzli-paperjs-offset-blob-master-.gitignore.md) - source: /glenzli/paperjs-offset/blob/master/.gitignore
+- [build: standardize package outputs and release flow](./glenzli-paperjs-offset-commit-d37a1e1f6cef0d98e4e751e5f99ba7c0d04b8847.md) - source: /glenzli/paperjs-offset/commit/d37a1e1f6cef0d98e4e751e5f99ba7c0d04b8847
+- [.npmrc](./glenzli-paperjs-offset-blob-master-.npmrc.md) - source: /glenzli/paperjs-offset/blob/master/.npmrc
+- [chore: clean metadata and lock dev setup](./glenzli-paperjs-offset-commit-9f308156996520131daa0c49ca4e384d163ebf73.md) - source: /glenzli/paperjs-offset/commit/9f308156996520131daa0c49ca4e384d163ebf73
+- [LICENSE](./glenzli-paperjs-offset-blob-master-LICENSE.md) - source: /glenzli/paperjs-offset/blob/master/LICENSE
+- [docs: add bilingual README and fix metadata](./glenzli-paperjs-offset-commit-58562b3ee2ee64e80c47c4003a756dde187b0e43.md) - source: /glenzli/paperjs-offset/commit/58562b3ee2ee64e80c47c4003a756dde187b0e43
+- [README.md](./glenzli-paperjs-offset-blob-master-README.md.md) - source: /glenzli/paperjs-offset/blob/master/README.md
+- [banner.html](./glenzli-paperjs-offset-blob-master-banner.html.md) - source: /glenzli/paperjs-offset/blob/master/banner.html
+- [docs: replace banner artwork](./glenzli-paperjs-offset-commit-1159f6f4b70885621f85b5919acdfcf5e76bc679.md) - source: /glenzli/paperjs-offset/commit/1159f6f4b70885621f85b5919acdfcf5e76bc679
+- [build.js](./glenzli-paperjs-offset-blob-master-build.js.md) - source: /glenzli/paperjs-offset/blob/master/build.js
+- [feat: add dev site export contract](./glenzli-paperjs-offset-commit-81244d1624c88c5124d7d9ad4694050538100d97.md) - source: /glenzli/paperjs-offset/commit/81244d1624c88c5124d7d9ad4694050538100d97
+- [package-lock.json](./glenzli-paperjs-offset-blob-master-package-lock.json.md) - source: /glenzli/paperjs-offset/blob/master/package-lock.json
+- [chore: release v2.2.2](./glenzli-paperjs-offset-commit-8c0dfe3ae7bc734a603daa49119dd08b5507fd91.md) - source: /glenzli/paperjs-offset/commit/8c0dfe3ae7bc734a603daa49119dd08b5507fd91
+- [package.json](./glenzli-paperjs-offset-blob-master-package.json.md) - source: /glenzli/paperjs-offset/blob/master/package.json
+- [tsconfig.json](./glenzli-paperjs-offset-blob-master-tsconfig.json.md) - source: /glenzli/paperjs-offset/blob/master/tsconfig.json
+- [/glenzli/paperjs-offset/blob/master/public/preview.jpg](./glenzli-paperjs-offset-blob-master-public-preview.jpg.md) - source: /glenzli/paperjs-offset/blob/master/public/preview.jpg
 - [PR #2422](https://github.com/paperjs/paper.js/pull/2422)
 - [Paper.js](https://paperjs.org/)
-- Releases - source: `/glenzli/paperjs-offset/releases`
-- v2.2.2 Latest Oct 16, 2026 - source: `/glenzli/paperjs-offset/releases/tag/v2.2.2`
-- Contributors - source: `/glenzli/paperjs-offset/graphs/contributors`
-- /weibinzhu - source: `/weibinzhu`
-- JavaScript 67.8% - source: `/glenzli/paperjs-offset/search?l=javascript`
-- TypeScript 25.7% - source: `/glenzli/paperjs-offset/search?l=typescript`
-- HTML 6.5% - source: `/glenzli/paperjs-offset/search?l=html`
+- [Releases](./glenzli-paperjs-offset-releases.md) - source: /glenzli/paperjs-offset/releases
+- [v2.2.2 Latest Oct 16, 2026](./glenzli-paperjs-offset-releases-tag-v2.2.2.md) - source: /glenzli/paperjs-offset/releases/tag/v2.2.2
+- [Contributors](./glenzli-paperjs-offset-graphs-contributors.md) - source: /glenzli/paperjs-offset/graphs/contributors
+- [/weibinzhu](./weibinzhu.md) - source: /weibinzhu
+- [JavaScript 67.8%](./glenzli-paperjs-offset-search?l=javascript.md) - source: /glenzli/paperjs-offset/search?l=javascript
+- [TypeScript 25.7%](./glenzli-paperjs-offset-search?l=typescript.md) - source: /glenzli/paperjs-offset/search?l=typescript
+- [HTML 6.5%](./glenzli-paperjs-offset-search?l=html.md) - source: /glenzli/paperjs-offset/search?l=html
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

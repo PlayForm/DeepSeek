@@ -1,7 +1,10 @@
 # resvg-js
 
 
-[![GitHub CI Status](https://github.com/thx/resvg-js/actions/workflows/CI.yaml/badge.svg?branch=main)](https://github.com/yisibl/resvg-js/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain) [![@resvg/resvg-js npm version](https://camo.githubusercontent.com/f002e231e9ad5411a49f54d9d140a2eb29a55e1720e03daeb0e752d1e7e34a4b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js) [![@resvg/resvg-js downloads](https://camo.githubusercontent.com/c0c233a9f6b4f4feb46372bf5e9e89c18e10ee0edfac4125a405b083eb83c55f/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://npmcharts.com/compare/@resvg/resvg-js?minimal=true) [![Rust 1.65+](https://camo.githubusercontent.com/7c811ef78a65cca3c014d36045bd07867e5cabe5155bd558db84b2c6ded1f2df/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f727573742d312e36352b2d6f72616e67652e737667)](https://www.rust-lang.org)
+- [![GitHub CI Status](https://github.com/thx/resvg-js/actions/workflows/CI.yaml/badge.svg?branch=main)](https://github.com/yisibl/resvg-js/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
+- [![@resvg/resvg-js npm version](https://camo.githubusercontent.com/f002e231e9ad5411a49f54d9d140a2eb29a55e1720e03daeb0e752d1e7e34a4b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js)
+- [![@resvg/resvg-js downloads](https://camo.githubusercontent.com/c0c233a9f6b4f4feb46372bf5e9e89c18e10ee0edfac4125a405b083eb83c55f/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://npmcharts.com/compare/@resvg/resvg-js?minimal=true)
+- [![Rust 1.65+](https://camo.githubusercontent.com/7c811ef78a65cca3c014d36045bd07867e5cabe5155bd558db84b2c6ded1f2df/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f727573742d312e36352b2d6f72616e67652e737667)](https://www.rust-lang.org)
 
 > resvg-js is a high-performance SVG renderer and toolkit, powered by Rust based [resvg](https://github.com/RazrFalcon/resvg/), with Node.js backend using [napi-rs](https://github.com/napi-rs/napi-rs), also a pure WebAssembly backend.
 
@@ -43,13 +46,13 @@ npm i @resvg/resvg-js
 ## Docs
 
 
-- Node.js see index.d.ts
-- Wasm see wasm/index.d.ts
+- Node.js see [index.d.ts](./thx-resvg-js-blob-main-index.d.ts.md)
+- Wasm see [wasm/index.d.ts](./thx-resvg-js-blob-main-wasm-index.d.ts.md)
 
 ## Example
 
 
-### Node.js Example
+### [Node.js Example](./thx-resvg-js-blob-main-example-index.js.md)
 
 
 This example will load Source Han Serif, and then render the SVG to PNG.
@@ -60,7 +63,7 @@ Loaded 1 font faces in 0ms.\
 Font './example/SourceHanSerifCN-Light-subset.ttf':0 found in 0.006ms.\
 ✨ Done in 55.65491008758545 ms
 
-### Deno Example
+### [Deno Example](./thx-resvg-js-blob-main-example-index-deno.js.md)
 
 
 deno run --unstable --allow-read --allow-write --allow-ffi example/index-deno.js\
@@ -73,7 +76,7 @@ Output PNG Size  : 1200 x 623\
 
 | SVG | PNG |
 |----|----|
-| [!](/thx/resvg-js/blob/main/example/text.svg) | [!](/thx/resvg-js/blob/main/example/text-out.png) |
+| [![](./thx-resvg-js-raw-main-example-text.svg.md)](/thx/resvg-js/blob/main/example/text.svg) | [![](./thx-resvg-js-raw-main-example-text-out.png.md)](/thx/resvg-js/blob/main/example/text-out.png) |
 
 ## Usage
 
@@ -186,7 +189,7 @@ This package also ships a pure WebAssembly artifact built with `wasm-bindgen` to
   })()\
 \</script\>
 
-See playground, it is also possible to call Wasm in Node.js, but it is slower.
+See [playground](./thx-resvg-js-blob-main-wasm-index.html.md), it is also possible to [call Wasm in Node.js](./thx-resvg-js-blob-main-example-wasm-node.js.md), but it is slower.
 
 ## Sample Benchmark
 
@@ -308,8 +311,8 @@ Copyright (c) 2021-present, yisibl(一丝)
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -368,91 +371,91 @@ Copyright (c) 2021-present, yisibl(一丝)
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=thx%2Fresvg-js`
-- thx - source: `/thx`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=thx%2Fresvg-js.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=thx%2Fresvg-js
+- [thx](./thx.md) - source: /thx
 - [resvg-js](./thx-resvg-js.md) - source: /thx/resvg-js
-- Issues 52 - source: `/thx/resvg-js/issues`
-- Pull requests 26 - source: `/thx/resvg-js/pulls`
-- Actions - source: `/thx/resvg-js/actions`
-- Projects - source: `/thx/resvg-js/projects`
-- Security and quality - source: `/thx/resvg-js/security`
-- Insights - source: `/thx/resvg-js/pulse`
-- Notifications - source: `/login?return_to=%2Fthx%2Fresvg-js`
+- [Issues 52](./thx-resvg-js-issues.md) - source: /thx/resvg-js/issues
+- [Pull requests 26](./thx-resvg-js-pulls.md) - source: /thx/resvg-js/pulls
+- [Actions](./thx-resvg-js-actions.md) - source: /thx/resvg-js/actions
+- [Projects](./thx-resvg-js-projects.md) - source: /thx/resvg-js/projects
+- [Security and quality](./thx-resvg-js-security.md) - source: /thx/resvg-js/security
+- [Insights](./thx-resvg-js-pulse.md) - source: /thx/resvg-js/pulse
+- [Notifications](./login?return_to=%2Fthx%2Fresvg-js.md) - source: /login?return_to=%2Fthx%2Fresvg-js
 - [resvg-js.vercel.app/](https://resvg-js.vercel.app/)
-- nodejs - source: `/topics/nodejs`
-- rust - source: `/topics/rust`
-- svg - source: `/topics/svg`
-- wasm - source: `/topics/wasm`
-- Activity - source: `/thx/resvg-js/activity`
-- Custom properties - source: `/thx/resvg-js/custom-properties`
-- 82 forks - source: `/thx/resvg-js/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js&report=thx+%28user%29`
-- 29 Branches - source: `/thx/resvg-js/branches`
-- 37 Tags - source: `/thx/resvg-js/tags`
-- dependabot[bot] - source: `/thx/resvg-js/commits?author=dependabot%5Bbot%5D`
-- yisibl - source: `/thx/resvg-js/commits?author=yisibl`
-- chore(deps): bump flatted from 3.2.6 to 3.4.2 - source: `/thx/resvg-js/commit/9de8ddd9dd62293006d849dd846a3b91ba992f23`
-- 409 Commits - source: `/thx/resvg-js/commits/main/`
-- .cargo - source: `/thx/resvg-js/tree/main/.cargo`
-- fix: enable static link for windows-msvc ( - source: `/thx/resvg-js/commit/83517cedc0afcdadd7a4cdb64edcd4bb0a891648`
+- [nodejs](./topics-nodejs.md) - source: /topics/nodejs
+- [rust](./topics-rust.md) - source: /topics/rust
+- [svg](./topics-svg.md) - source: /topics/svg
+- [wasm](./topics-wasm.md) - source: /topics/wasm
+- [Activity](./thx-resvg-js-activity.md) - source: /thx/resvg-js/activity
+- [Custom properties](./thx-resvg-js-custom-properties.md) - source: /thx/resvg-js/custom-properties
+- [82 forks](./thx-resvg-js-forks.md) - source: /thx/resvg-js/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js&report=thx+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fthx%2Fresvg-js&report=thx+%28user%29
+- [29 Branches](./thx-resvg-js-branches.md) - source: /thx/resvg-js/branches
+- [37 Tags](./thx-resvg-js-tags.md) - source: /thx/resvg-js/tags
+- [dependabot[bot]](./thx-resvg-js-commits?author=dependabot%5Bbot%5D.md) - source: /thx/resvg-js/commits?author=dependabot%5Bbot%5D
+- [yisibl](./thx-resvg-js-commits?author=yisibl.md) - source: /thx/resvg-js/commits?author=yisibl
+- [chore(deps): bump flatted from 3.2.6 to 3.4.2](./thx-resvg-js-commit-9de8ddd9dd62293006d849dd846a3b91ba992f23.md) - source: /thx/resvg-js/commit/9de8ddd9dd62293006d849dd846a3b91ba992f23
+- [409 Commits](./thx-resvg-js-commits-main.md) - source: /thx/resvg-js/commits/main/
+- [.cargo](./thx-resvg-js-tree-main-.cargo.md) - source: /thx/resvg-js/tree/main/.cargo
+- [fix: enable static link for windows-msvc (](./thx-resvg-js-commit-83517cedc0afcdadd7a4cdb64edcd4bb0a891648.md) - source: /thx/resvg-js/commit/83517cedc0afcdadd7a4cdb64edcd4bb0a891648
 - [#308](https://github.com/thx/resvg-js/pull/308)
-- .github/ workflows - source: `/thx/resvg-js/tree/main/.github/workflows`
-- chore(ci): add font mounting and debug commands for Linux binding tests - source: `/thx/resvg-js/commit/ca777cd1abbb5f9ec9ab9951a4bf585bf5a71251`
-- .husky - source: `/thx/resvg-js/tree/main/.husky`
-- 👻 init - source: `/thx/resvg-js/commit/ca60aaed9846365b339ffdd94014514d74651be1`
-- .yarn/ releases - source: `/thx/resvg-js/tree/main/.yarn/releases`
-- chore(ci): migrating CI to napi-rs v3 and yarn v4.12.0 - source: `/thx/resvg-js/commit/0910270c765f3b49d8f6fc56fa75a9eab2ac5376`
-- __test__ - source: `/thx/resvg-js/tree/main/__test__`
-- refactor: extract cropByBBox logic and prevent overflow panics - source: `/thx/resvg-js/commit/6d2e209d4cd0d6c91b44be81ac6b8bc5c390d825`
-- benchmark - source: `/thx/resvg-js/tree/main/benchmark`
-- chore: remove bench-related dependencies - source: `/thx/resvg-js/commit/aa93f748f2831c25b80cdb295a4bfffd5c989650`
-- example - source: `/thx/resvg-js/tree/main/example`
-- npm - source: `/thx/resvg-js/tree/main/npm`
-- 2.7.0-alpha.2 - source: `/thx/resvg-js/commit/8697a26bda4408c074e1afd264ff601e5e29b328`
-- scripts - source: `/thx/resvg-js/tree/main/scripts`
-- feat: more aggressive GC to prevent continued growth of memory usage - source: `/thx/resvg-js/commit/9ddc1e8b1cb721ac0d656a1e9502b8b9ed33e361`
-- src - source: `/thx/resvg-js/tree/main/src`
-- wasm - source: `/thx/resvg-js/tree/main/wasm`
-- .editorconfig - source: `/thx/resvg-js/blob/main/.editorconfig`
-- style: rust indent changed from 2 to 4 spaces - source: `/thx/resvg-js/commit/8288cd939123afd95015a8ab5c395096bff81cd6`
-- .eslintignore - source: `/thx/resvg-js/blob/main/.eslintignore`
-- refactor: wasm binding and test - source: `/thx/resvg-js/commit/8e925aae30c386b009da413b671f33ba36801408`
-- .eslintrc.yml - source: `/thx/resvg-js/blob/main/.eslintrc.yml`
-- chore: add deno example - source: `/thx/resvg-js/commit/530611351e4159e62caffa164bde110b8b17b6fb`
-- .gitattributes - source: `/thx/resvg-js/blob/main/.gitattributes`
-- 1.1.0 - source: `/thx/resvg-js/commit/dff92961d2dc5159481ccd21a80a28332f3a0a9d`
-- .gitignore - source: `/thx/resvg-js/blob/main/.gitignore`
-- chore: upgrade yarn from v1 to v3 - source: `/thx/resvg-js/commit/92eea4f90d032cfe2aa78a03a99d144ad37d2168`
-- .npmignore - source: `/thx/resvg-js/blob/main/.npmignore`
-- feat: upgrade to napi2 ( - source: `/thx/resvg-js/commit/a24d2586ef478697eadae5262469f8f4a69cb66d`
+- [.github/ workflows](./thx-resvg-js-tree-main-.github-workflows.md) - source: /thx/resvg-js/tree/main/.github/workflows
+- [chore(ci): add font mounting and debug commands for Linux binding tests](./thx-resvg-js-commit-ca777cd1abbb5f9ec9ab9951a4bf585bf5a71251.md) - source: /thx/resvg-js/commit/ca777cd1abbb5f9ec9ab9951a4bf585bf5a71251
+- [.husky](./thx-resvg-js-tree-main-.husky.md) - source: /thx/resvg-js/tree/main/.husky
+- [👻 init](./thx-resvg-js-commit-ca60aaed9846365b339ffdd94014514d74651be1.md) - source: /thx/resvg-js/commit/ca60aaed9846365b339ffdd94014514d74651be1
+- [.yarn/ releases](./thx-resvg-js-tree-main-.yarn-releases.md) - source: /thx/resvg-js/tree/main/.yarn/releases
+- [chore(ci): migrating CI to napi-rs v3 and yarn v4.12.0](./thx-resvg-js-commit-0910270c765f3b49d8f6fc56fa75a9eab2ac5376.md) - source: /thx/resvg-js/commit/0910270c765f3b49d8f6fc56fa75a9eab2ac5376
+- [__test__](./thx-resvg-js-tree-main-__test__.md) - source: /thx/resvg-js/tree/main/__test__
+- [refactor: extract cropByBBox logic and prevent overflow panics](./thx-resvg-js-commit-6d2e209d4cd0d6c91b44be81ac6b8bc5c390d825.md) - source: /thx/resvg-js/commit/6d2e209d4cd0d6c91b44be81ac6b8bc5c390d825
+- [benchmark](./thx-resvg-js-tree-main-benchmark.md) - source: /thx/resvg-js/tree/main/benchmark
+- [chore: remove bench-related dependencies](./thx-resvg-js-commit-aa93f748f2831c25b80cdb295a4bfffd5c989650.md) - source: /thx/resvg-js/commit/aa93f748f2831c25b80cdb295a4bfffd5c989650
+- [example](./thx-resvg-js-tree-main-example.md) - source: /thx/resvg-js/tree/main/example
+- [npm](./thx-resvg-js-tree-main-npm.md) - source: /thx/resvg-js/tree/main/npm
+- [2.7.0-alpha.2](./thx-resvg-js-commit-8697a26bda4408c074e1afd264ff601e5e29b328.md) - source: /thx/resvg-js/commit/8697a26bda4408c074e1afd264ff601e5e29b328
+- [scripts](./thx-resvg-js-tree-main-scripts.md) - source: /thx/resvg-js/tree/main/scripts
+- [feat: more aggressive GC to prevent continued growth of memory usage](./thx-resvg-js-commit-9ddc1e8b1cb721ac0d656a1e9502b8b9ed33e361.md) - source: /thx/resvg-js/commit/9ddc1e8b1cb721ac0d656a1e9502b8b9ed33e361
+- [src](./thx-resvg-js-tree-main-src.md) - source: /thx/resvg-js/tree/main/src
+- [wasm](./thx-resvg-js-tree-main-wasm.md) - source: /thx/resvg-js/tree/main/wasm
+- [.editorconfig](./thx-resvg-js-blob-main-.editorconfig.md) - source: /thx/resvg-js/blob/main/.editorconfig
+- [style: rust indent changed from 2 to 4 spaces](./thx-resvg-js-commit-8288cd939123afd95015a8ab5c395096bff81cd6.md) - source: /thx/resvg-js/commit/8288cd939123afd95015a8ab5c395096bff81cd6
+- [.eslintignore](./thx-resvg-js-blob-main-.eslintignore.md) - source: /thx/resvg-js/blob/main/.eslintignore
+- [refactor: wasm binding and test](./thx-resvg-js-commit-8e925aae30c386b009da413b671f33ba36801408.md) - source: /thx/resvg-js/commit/8e925aae30c386b009da413b671f33ba36801408
+- [.eslintrc.yml](./thx-resvg-js-blob-main-.eslintrc.yml.md) - source: /thx/resvg-js/blob/main/.eslintrc.yml
+- [chore: add deno example](./thx-resvg-js-commit-530611351e4159e62caffa164bde110b8b17b6fb.md) - source: /thx/resvg-js/commit/530611351e4159e62caffa164bde110b8b17b6fb
+- [.gitattributes](./thx-resvg-js-blob-main-.gitattributes.md) - source: /thx/resvg-js/blob/main/.gitattributes
+- [1.1.0](./thx-resvg-js-commit-dff92961d2dc5159481ccd21a80a28332f3a0a9d.md) - source: /thx/resvg-js/commit/dff92961d2dc5159481ccd21a80a28332f3a0a9d
+- [.gitignore](./thx-resvg-js-blob-main-.gitignore.md) - source: /thx/resvg-js/blob/main/.gitignore
+- [chore: upgrade yarn from v1 to v3](./thx-resvg-js-commit-92eea4f90d032cfe2aa78a03a99d144ad37d2168.md) - source: /thx/resvg-js/commit/92eea4f90d032cfe2aa78a03a99d144ad37d2168
+- [.npmignore](./thx-resvg-js-blob-main-.npmignore.md) - source: /thx/resvg-js/blob/main/.npmignore
+- [feat: upgrade to napi2 (](./thx-resvg-js-commit-a24d2586ef478697eadae5262469f8f4a69cb66d.md) - source: /thx/resvg-js/commit/a24d2586ef478697eadae5262469f8f4a69cb66d
 - [#41](https://github.com/thx/resvg-js/pull/41)
-- .prettierignore - source: `/thx/resvg-js/blob/main/.prettierignore`
-- .yarnrc.yml - source: `/thx/resvg-js/blob/main/.yarnrc.yml`
-- CHANGELOG.md - source: `/thx/resvg-js/blob/main/CHANGELOG.md`
-- Cargo.toml - source: `/thx/resvg-js/blob/main/Cargo.toml`
-- feat: add catch_unwind protection to render to prevent Node.js proces… - source: `/thx/resvg-js/commit/4b2adf32c34e1176b64cda579badac256ba6df7a`
-- LICENSE - source: `/thx/resvg-js/blob/main/LICENSE`
-- README.md - source: `/thx/resvg-js/blob/main/README.md`
-- build.rs - source: `/thx/resvg-js/blob/main/build.rs`
-- bundle.js - source: `/thx/resvg-js/blob/main/bundle.js`
-- feat: build wasm package - source: `/thx/resvg-js/commit/432427495ee652b4689f4a699a30850932511847`
-- index.d.ts - source: `/thx/resvg-js/blob/main/index.d.ts`
-- feat: add a square parameter to cropByBBox() so it always generat… - source: `/thx/resvg-js/commit/9b18c973a20ef268b93ea45ada3b203cdcfa363c`
-- index.js - source: `/thx/resvg-js/blob/main/index.js`
-- test: new class API - source: `/thx/resvg-js/commit/5a0946cfa298fddebbcb13babb3010c542739001`
-- js-binding.d.ts - source: `/thx/resvg-js/blob/main/js-binding.d.ts`
-- feat: migration napi-rs V2 to V3 - source: `/thx/resvg-js/commit/46ec7509ea1d0e35cc6946abbeec4b59ade64b61`
-- js-binding.js - source: `/thx/resvg-js/blob/main/js-binding.js`
-- package.json - source: `/thx/resvg-js/blob/main/package.json`
-- renovate.json - source: `/thx/resvg-js/blob/main/renovate.json`
-- chore: core dependencies disable automatic upgrades - source: `/thx/resvg-js/commit/58db40d638a870547d14499dedb814e9404a2303`
-- rust-toolchain.toml - source: `/thx/resvg-js/blob/main/rust-toolchain.toml`
-- chore: napi-build@2.3.1 requires rustc 1.88 - source: `/thx/resvg-js/commit/6d70155dccfa18bc46617e97fc06f0c4a8fbec8a`
-- rustfmt.toml - source: `/thx/resvg-js/blob/main/rustfmt.toml`
-- tsconfig.json - source: `/thx/resvg-js/blob/main/tsconfig.json`
-- wasm-binding.ts - source: `/thx/resvg-js/blob/main/wasm-binding.ts`
-- refactor(wasm): change the fontsBuffers option to fontBuffers - source: `/thx/resvg-js/commit/093b8393f87601acbd549654317eb63c74851c04`
-- yarn.lock - source: `/thx/resvg-js/blob/main/yarn.lock`
+- [.prettierignore](./thx-resvg-js-blob-main-.prettierignore.md) - source: /thx/resvg-js/blob/main/.prettierignore
+- [.yarnrc.yml](./thx-resvg-js-blob-main-.yarnrc.yml.md) - source: /thx/resvg-js/blob/main/.yarnrc.yml
+- [CHANGELOG.md](./thx-resvg-js-blob-main-CHANGELOG.md.md) - source: /thx/resvg-js/blob/main/CHANGELOG.md
+- [Cargo.toml](./thx-resvg-js-blob-main-Cargo.toml.md) - source: /thx/resvg-js/blob/main/Cargo.toml
+- [feat: add catch_unwind protection to render to prevent Node.js proces…](./thx-resvg-js-commit-4b2adf32c34e1176b64cda579badac256ba6df7a.md) - source: /thx/resvg-js/commit/4b2adf32c34e1176b64cda579badac256ba6df7a
+- [LICENSE](./thx-resvg-js-blob-main-LICENSE.md) - source: /thx/resvg-js/blob/main/LICENSE
+- [README.md](./thx-resvg-js-blob-main-README.md.md) - source: /thx/resvg-js/blob/main/README.md
+- [build.rs](./thx-resvg-js-blob-main-build.rs.md) - source: /thx/resvg-js/blob/main/build.rs
+- [bundle.js](./thx-resvg-js-blob-main-bundle.js.md) - source: /thx/resvg-js/blob/main/bundle.js
+- [feat: build wasm package](./thx-resvg-js-commit-432427495ee652b4689f4a699a30850932511847.md) - source: /thx/resvg-js/commit/432427495ee652b4689f4a699a30850932511847
+- [index.d.ts](./thx-resvg-js-blob-main-index.d.ts.md) - source: /thx/resvg-js/blob/main/index.d.ts
+- [feat: add a square parameter to cropByBBox() so it always generat…](./thx-resvg-js-commit-9b18c973a20ef268b93ea45ada3b203cdcfa363c.md) - source: /thx/resvg-js/commit/9b18c973a20ef268b93ea45ada3b203cdcfa363c
+- [index.js](./thx-resvg-js-blob-main-index.js.md) - source: /thx/resvg-js/blob/main/index.js
+- [test: new class API](./thx-resvg-js-commit-5a0946cfa298fddebbcb13babb3010c542739001.md) - source: /thx/resvg-js/commit/5a0946cfa298fddebbcb13babb3010c542739001
+- [js-binding.d.ts](./thx-resvg-js-blob-main-js-binding.d.ts.md) - source: /thx/resvg-js/blob/main/js-binding.d.ts
+- [feat: migration napi-rs V2 to V3](./thx-resvg-js-commit-46ec7509ea1d0e35cc6946abbeec4b59ade64b61.md) - source: /thx/resvg-js/commit/46ec7509ea1d0e35cc6946abbeec4b59ade64b61
+- [js-binding.js](./thx-resvg-js-blob-main-js-binding.js.md) - source: /thx/resvg-js/blob/main/js-binding.js
+- [package.json](./thx-resvg-js-blob-main-package.json.md) - source: /thx/resvg-js/blob/main/package.json
+- [renovate.json](./thx-resvg-js-blob-main-renovate.json.md) - source: /thx/resvg-js/blob/main/renovate.json
+- [chore: core dependencies disable automatic upgrades](./thx-resvg-js-commit-58db40d638a870547d14499dedb814e9404a2303.md) - source: /thx/resvg-js/commit/58db40d638a870547d14499dedb814e9404a2303
+- [rust-toolchain.toml](./thx-resvg-js-blob-main-rust-toolchain.toml.md) - source: /thx/resvg-js/blob/main/rust-toolchain.toml
+- [chore: napi-build@2.3.1 requires rustc 1.88](./thx-resvg-js-commit-6d70155dccfa18bc46617e97fc06f0c4a8fbec8a.md) - source: /thx/resvg-js/commit/6d70155dccfa18bc46617e97fc06f0c4a8fbec8a
+- [rustfmt.toml](./thx-resvg-js-blob-main-rustfmt.toml.md) - source: /thx/resvg-js/blob/main/rustfmt.toml
+- [tsconfig.json](./thx-resvg-js-blob-main-tsconfig.json.md) - source: /thx/resvg-js/blob/main/tsconfig.json
+- [wasm-binding.ts](./thx-resvg-js-blob-main-wasm-binding.ts.md) - source: /thx/resvg-js/blob/main/wasm-binding.ts
+- [refactor(wasm): change the fontsBuffers option to fontBuffers](./thx-resvg-js-commit-093b8393f87601acbd549654317eb63c74851c04.md) - source: /thx/resvg-js/commit/093b8393f87601acbd549654317eb63c74851c04
+- [yarn.lock](./thx-resvg-js-blob-main-yarn.lock.md) - source: /thx/resvg-js/blob/main/yarn.lock
 - [https://github.com/yisibl/resvg-js/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain](https://github.com/yisibl/resvg-js/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
 - [https://www.npmjs.com/package/@resvg/resvg-js](https://www.npmjs.com/package/@resvg/resvg-js)
 - [https://npmcharts.com/compare/@resvg/resvg-js?minimal=true](https://npmcharts.com/compare/@resvg/resvg-js?minimal=true)
@@ -461,15 +464,15 @@ Copyright (c) 2021-present, yisibl(一丝)
 - [napi-rs](https://github.com/napi-rs/napi-rs)
 - [https://resvg-js.vercel.app](https://resvg-js.vercel.app)
 - [Apple M Chips](https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/)
-- wasm/index.d.ts - source: `/thx/resvg-js/blob/main/wasm/index.d.ts`
-- Node.js Example - source: `/thx/resvg-js/blob/main/example/index.js`
-- Deno Example - source: `/thx/resvg-js/blob/main/example/index-deno.js`
-- /thx/resvg-js/blob/main/example/text.svg - source: `/thx/resvg-js/blob/main/example/text.svg`
-- /thx/resvg-js/blob/main/example/text-out.png - source: `/thx/resvg-js/blob/main/example/text-out.png`
+- [wasm/index.d.ts](./thx-resvg-js-blob-main-wasm-index.d.ts.md) - source: /thx/resvg-js/blob/main/wasm/index.d.ts
+- [Node.js Example](./thx-resvg-js-blob-main-example-index.js.md) - source: /thx/resvg-js/blob/main/example/index.js
+- [Deno Example](./thx-resvg-js-blob-main-example-index-deno.js.md) - source: /thx/resvg-js/blob/main/example/index-deno.js
+- [/thx/resvg-js/blob/main/example/text.svg](./thx-resvg-js-blob-main-example-text.svg.md) - source: /thx/resvg-js/blob/main/example/text.svg
+- [/thx/resvg-js/blob/main/example/text-out.png](./thx-resvg-js-blob-main-example-text-out.png.md) - source: /thx/resvg-js/blob/main/example/text-out.png
 - [Bun 0.8.1](https://github.com/oven-sh/bun/issues/172#issuecomment-1692930718)
 - [Deno 1.26.1](https://github.com/denoland/deno/releases/tag/v1.26.1)
-- playground - source: `/thx/resvg-js/blob/main/wasm/index.html`
-- call Wasm in Node.js - source: `/thx/resvg-js/blob/main/example/wasm-node.js`
+- [playground](./thx-resvg-js-blob-main-wasm-index.html.md) - source: /thx/resvg-js/blob/main/wasm/index.html
+- [call Wasm in Node.js](./thx-resvg-js-blob-main-example-wasm-node.js.md) - source: /thx/resvg-js/blob/main/example/wasm-node.js
 - [https://www.npmjs.com/package/@resvg/resvg-js-win32-x64-msvc](https://www.npmjs.com/package/@resvg/resvg-js-win32-x64-msvc)
 - [https://www.npmjs.com/package/@resvg/resvg-js-win32-ia32-msvc](https://www.npmjs.com/package/@resvg/resvg-js-win32-ia32-msvc)
 - [https://www.npmjs.com/package/@resvg/resvg-js-win32-arm64-msvc](https://www.npmjs.com/package/@resvg/resvg-js-win32-arm64-msvc)
@@ -485,27 +488,27 @@ Copyright (c) 2021-present, yisibl(一丝)
 - [fails due to network reasons](https://github.com/rustwasm/wasm-pack-template/issues/44#issuecomment-521657516)
 - [https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86_64-appl](https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86_64-apple-darwin.tar.gz)
 - [MPLv2.0](https://www.mozilla.org/en-US/MPL/)
-- Releases - source: `/thx/resvg-js/releases`
-- v2.6.2 Latest Mar 26, 2024 - source: `/thx/resvg-js/releases/tag/v2.6.2`
-- Contributors - source: `/thx/resvg-js/graphs/contributors`
-- /yisibl - source: `/yisibl`
-- /renovate[bot] - source: `/renovate[bot]`
-- /zimond - source: `/zimond`
-- /renovate-bot - source: `/renovate-bot`
-- /dependabot[bot] - source: `/dependabot[bot]`
-- /Brooooooklyn - source: `/Brooooooklyn`
-- /axelhzf - source: `/axelhzf`
-- /XhmikosR - source: `/XhmikosR`
-- /Nkay - source: `/Nkay`
-- /JoKalliauer - source: `/JoKalliauer`
-- /CGQAQ - source: `/CGQAQ`
-- /hadeeb - source: `/hadeeb`
-- /antmelnyk - source: `/antmelnyk`
-- /Zagrios - source: `/Zagrios`
-- TypeScript 33.1% - source: `/thx/resvg-js/search?l=typescript`
-- Rust 25.3% - source: `/thx/resvg-js/search?l=rust`
-- JavaScript 24.8% - source: `/thx/resvg-js/search?l=javascript`
-- HTML 16.8% - source: `/thx/resvg-js/search?l=html`
+- [Releases](./thx-resvg-js-releases.md) - source: /thx/resvg-js/releases
+- [v2.6.2 Latest Mar 26, 2024](./thx-resvg-js-releases-tag-v2.6.2.md) - source: /thx/resvg-js/releases/tag/v2.6.2
+- [Contributors](./thx-resvg-js-graphs-contributors.md) - source: /thx/resvg-js/graphs/contributors
+- [/yisibl](./yisibl.md) - source: /yisibl
+- [/renovate[bot]](./renovate[bot].md) - source: /renovate[bot]
+- [/zimond](./zimond.md) - source: /zimond
+- [/renovate-bot](./renovate-bot.md) - source: /renovate-bot
+- [/dependabot[bot]](./dependabot[bot].md) - source: /dependabot[bot]
+- [/Brooooooklyn](./Brooooooklyn.md) - source: /Brooooooklyn
+- [/axelhzf](./axelhzf.md) - source: /axelhzf
+- [/XhmikosR](./XhmikosR.md) - source: /XhmikosR
+- [/Nkay](./Nkay.md) - source: /Nkay
+- [/JoKalliauer](./JoKalliauer.md) - source: /JoKalliauer
+- [/CGQAQ](./CGQAQ.md) - source: /CGQAQ
+- [/hadeeb](./hadeeb.md) - source: /hadeeb
+- [/antmelnyk](./antmelnyk.md) - source: /antmelnyk
+- [/Zagrios](./Zagrios.md) - source: /Zagrios
+- [TypeScript 33.1%](./thx-resvg-js-search?l=typescript.md) - source: /thx/resvg-js/search?l=typescript
+- [Rust 25.3%](./thx-resvg-js-search?l=rust.md) - source: /thx/resvg-js/search?l=rust
+- [JavaScript 24.8%](./thx-resvg-js-search?l=javascript.md) - source: /thx/resvg-js/search?l=javascript
+- [HTML 16.8%](./thx-resvg-js-search?l=html.md) - source: /thx/resvg-js/search?l=html
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

@@ -223,9 +223,19 @@ Here is the SVG code:
   \<polygon points="55,25 10,190 110,190" fill="lime" stroke="red" stroke-width="16" stroke-linejoin="bevel" /\>\
   \<rect width="150" height="100" x="140" y="50" fill="yellow" stroke="red" stroke-width="16" stroke-linejoin="bevel" /\>\
 \</svg\> [Try it Yourself »](tryit.asp?filename=trysvg_stroke6)\
-[❮ Previous](svg_fill.asp) [Next ❯](svg_filters_intro.asp) [★ +1](https://profile.w3schools.com/log-in?redirect_url=https%3A%2F%2Fwww.w3schools.com%2Fgraphics%2Fsvg_stroking.asp) [Sign in to track progress](https://profile.w3schools.com/log-in?redirect_url=https%3A%2F%2Fpathfinder.w3schools.com&origin=https%3A%2F%2Fwww.w3schools.com%2Fgraphics%2Fsvg_stroking.asp)
+- [❮ Previous](svg_fill.asp)
+- [Next ❯](svg_filters_intro.asp)
+- [★ +1](https://profile.w3schools.com/log-in?redirect_url=https%3A%2F%2Fwww.w3schools.com%2Fgraphics%2Fsvg_stroking.asp)
+- [Sign in to track progress](https://profile.w3schools.com/log-in?redirect_url=https%3A%2F%2Fpathfinder.w3schools.com&origin=https%3A%2F%2Fwww.w3schools.com%2Fgraphics%2Fsvg_stroking.asp)
 
-!W3Schools Certificate [](https://www.youtube.com/@w3schools) [](https://www.linkedin.com/company/w3schools.com/) [](https://discord.com/invite/w3schools) [](https://www.facebook.com/w3schoolscom/) [](https://www.instagram.com/w3schools.com_official/) [](https://www.tiktok.com/@w3schools.com)
+![W3Schools Certificate](./images-img_2026_cert_300.webp.md)
+
+- [](https://www.youtube.com/@w3schools)
+- [](https://www.linkedin.com/company/w3schools.com/)
+- [](https://discord.com/invite/w3schools)
+- [](https://www.facebook.com/w3schoolscom/)
+- [](https://www.instagram.com/w3schools.com_official/)
+- [](https://www.tiktok.com/@w3schools.com)
 
 ------------------------------------------------------------------------
 
@@ -241,7 +251,11 @@ New
 
 Coding fundamentals as bite-sized lessons and challenges.
 
-[](https://apps.apple.com/us/app/w3schools/id6770531503) [](https://play.google.com/store/apps/details?id=com.w3schools.app.prod) [](https://app.w3schools.com/) [](//www.w3schools.com) [PLUS](https://order.w3schools.com/plans) SPACES [GET CERTIFIED](https://campus.w3schools.com/collections/certifications) FOR TEACHERS PRACTICE [CONTACT US](javascript:void(0);)
+- [](https://apps.apple.com/us/app/w3schools/id6770531503)
+- [](https://play.google.com/store/apps/details?id=com.w3schools.app.prod)
+- [](https://app.w3schools.com/)
+
+[](//www.w3schools.com) [PLUS](https://order.w3schools.com/plans) [SPACES](./spaces-index.php.md) [GET CERTIFIED](https://campus.w3schools.com/collections/certifications) [FOR TEACHERS](./academy-index.php.md) [PRACTICE](./practice-index.php.md) [CONTACT US](javascript:void(0);)
 
 ## Contact Sales
 
@@ -255,48 +269,48 @@ help@w3schools.com
 
 ##### Top Tutorials
 
-HTML Tutorial\
-CSS Tutorial\
-JavaScript Tutorial\
-How To Tutorial\
-SQL Tutorial\
-Python Tutorial\
-W3.CSS Tutorial\
-Bootstrap Tutorial\
-PHP Tutorial\
-Java Tutorial\
-C++ Tutorial\
-jQuery Tutorial\
+[HTML Tutorial](./html-default.asp.md)\
+[CSS Tutorial](./css-default.asp.md)\
+[JavaScript Tutorial](./js-default.asp.md)\
+[How To Tutorial](./howto-default.asp.md)\
+[SQL Tutorial](./sql-default.asp.md)\
+[Python Tutorial](./python-default.asp.md)\
+[W3.CSS Tutorial](./w3css-default.asp.md)\
+[Bootstrap Tutorial](./bootstrap-bootstrap_ver.asp.md)\
+[PHP Tutorial](./php-default.asp.md)\
+[Java Tutorial](./java-default.asp.md)\
+[C++ Tutorial](./cpp-default.asp.md)\
+[jQuery Tutorial](./jquery-default.asp.md)\
 
 ##### Top References
 
-HTML Reference\
-CSS Reference\
-JavaScript Reference\
-SQL Reference\
-Python Reference\
-W3.CSS Reference\
-Bootstrap Reference\
-PHP Reference\
-HTML Colors\
-Java Reference\
-AngularJS Reference\
-jQuery Reference\
+[HTML Reference](./tags-default.asp.md)\
+[CSS Reference](./cssref-index.php.md)\
+[JavaScript Reference](./jsref-default.asp.md)\
+[SQL Reference](./sql-sql_ref_keywords.asp.md)\
+[Python Reference](./python-python_reference.asp.md)\
+[W3.CSS Reference](./w3css-w3css_references.asp.md)\
+[Bootstrap Reference](./bootstrap-bootstrap_ref_all_classes.asp.md)\
+[PHP Reference](./php-php_ref_overview.asp.md)\
+[HTML Colors](./colors-colors_names.asp.md)\
+[Java Reference](./java-java_ref_keywords.asp.md)\
+[AngularJS Reference](./angularjs-angularjs_ref_directives.asp.md)\
+[jQuery Reference](./jquery-jquery_ref_overview.asp.md)\
 
 ##### Top Examples
 
-HTML Examples\
-CSS Examples\
-JavaScript Examples\
-How To Examples\
-SQL Examples\
-Python Examples\
-W3.CSS Examples\
-Bootstrap Examples\
-PHP Examples\
-Java Examples\
-XML Examples\
-jQuery Examples\
+[HTML Examples](./html-html_examples.asp.md)\
+[CSS Examples](./css-css_examples.asp.md)\
+[JavaScript Examples](./js-js_examples.asp.md)\
+[How To Examples](./howto-default.asp.md)\
+[SQL Examples](./sql-sql_examples.asp.md)\
+[Python Examples](./python-python_examples.asp.md)\
+[W3.CSS Examples](./w3css-w3css_examples.asp.md)\
+[Bootstrap Examples](./bootstrap-bootstrap_examples.asp.md)\
+[PHP Examples](./php-php_examples.asp.md)\
+[Java Examples](./java-java_examples.asp.md)\
+[XML Examples](./xml-xml_examples.asp.md)\
+[jQuery Examples](./jquery-jquery_examples.asp.md)\
 
 ##### [Get Certified](https://campus.w3schools.com/collections/course-catalog)
 
@@ -312,11 +326,11 @@ jQuery Examples\
 [C++ Certificate](https://campus.w3schools.com/collections/certifications/products/c-certificate)\
 [C# Certificate](https://campus.w3schools.com/collections/certifications/products/c-certificate-1)\
 [XML Certificate](https://campus.w3schools.com/collections/certifications/products/xml-certificate)\
-[](https://www.youtube.com/@w3schools) [**](https://www.linkedin.com/company/w3schools.com/) [**](https://discord.com/invite/w3schools) [**](https://www.facebook.com/w3schoolscom/) [**](https://www.instagram.com/w3schools.com_official/) FORUM ABOUT ACADEMY W3Schools is optimized for learning and training. Examples might be simplified to improve reading and learning.\
+[](https://www.youtube.com/@w3schools) [**](https://www.linkedin.com/company/w3schools.com/) [**](https://discord.com/invite/w3schools) [**](https://www.facebook.com/w3schoolscom/) [**](https://www.instagram.com/w3schools.com_official/) [FORUM](./forum-index.php.md) [ABOUT](./about-default.asp.md) [ACADEMY](./academy-index.php.md) W3Schools is optimized for learning and training. Examples might be simplified to improve reading and learning.\
 Tutorials, references, and examples are constantly reviewed to avoid errors, but we cannot warrant full correctness\
-of all content. While using W3Schools, you agree to have read and accepted our terms of use, cookies and privacy policy.\
+of all content. While using W3Schools, you agree to have read and accepted our [terms of use](./about-about_copyright.asp.md), cookies and [privacy policy](./about-about_privacy.asp.md).\
 \
-Copyright 1999-2026 by Refsnes Data. All Rights Reserved. [W3Schools is Powered by W3.CSS](//www.w3schools.com/w3css/default.asp).\
+[Copyright 1999-2026](./about-about_copyright.asp.md) by Refsnes Data. All Rights Reserved. [W3Schools is Powered by W3.CSS](//www.w3schools.com/w3css/default.asp).\
 \
 \
 \
@@ -356,46 +370,46 @@ Copyright 1999-2026 by Refsnes Data. All Rights Reserved. [W3Schools is Powered 
 - [GET IT ON Google Play](https://play.google.com/store/apps/details?id=com.w3schools.app.prod)
 - [TRY NOW IN Browser](https://app.w3schools.com/)
 - //www.w3schools.com - source: `//www.w3schools.com`
-- SPACES - source: `/spaces/index.php`
+- [SPACES](./spaces-index.php.md) - source: /spaces/index.php
 - [GET CERTIFIED](https://campus.w3schools.com/collections/certifications)
-- FOR TEACHERS - source: `/academy/index.php`
-- PRACTICE - source: `/practice/index.php`
+- [FOR TEACHERS](./academy-index.php.md) - source: /academy/index.php
+- [PRACTICE](./practice-index.php.md) - source: /practice/index.php
 - [CONTACT US](javascript:void(0);)
-- HTML Tutorial - source: `/html/default.asp`
-- CSS Tutorial - source: `/css/default.asp`
-- JavaScript Tutorial - source: `/js/default.asp`
-- How To Tutorial - source: `/howto/default.asp`
-- SQL Tutorial - source: `/sql/default.asp`
-- Python Tutorial - source: `/python/default.asp`
-- W3.CSS Tutorial - source: `/w3css/default.asp`
-- Bootstrap Tutorial - source: `/bootstrap/bootstrap_ver.asp`
-- PHP Tutorial - source: `/php/default.asp`
-- Java Tutorial - source: `/java/default.asp`
-- C++ Tutorial - source: `/cpp/default.asp`
-- jQuery Tutorial - source: `/jquery/default.asp`
-- HTML Reference - source: `/tags/default.asp`
-- CSS Reference - source: `/cssref/index.php`
-- JavaScript Reference - source: `/jsref/default.asp`
-- SQL Reference - source: `/sql/sql_ref_keywords.asp`
-- Python Reference - source: `/python/python_reference.asp`
-- W3.CSS Reference - source: `/w3css/w3css_references.asp`
-- Bootstrap Reference - source: `/bootstrap/bootstrap_ref_all_classes.asp`
-- PHP Reference - source: `/php/php_ref_overview.asp`
-- HTML Colors - source: `/colors/colors_names.asp`
-- Java Reference - source: `/java/java_ref_keywords.asp`
-- AngularJS Reference - source: `/angularjs/angularjs_ref_directives.asp`
-- jQuery Reference - source: `/jquery/jquery_ref_overview.asp`
-- HTML Examples - source: `/html/html_examples.asp`
-- CSS Examples - source: `/css/css_examples.asp`
-- JavaScript Examples - source: `/js/js_examples.asp`
-- SQL Examples - source: `/sql/sql_examples.asp`
-- Python Examples - source: `/python/python_examples.asp`
-- W3.CSS Examples - source: `/w3css/w3css_examples.asp`
-- Bootstrap Examples - source: `/bootstrap/bootstrap_examples.asp`
-- PHP Examples - source: `/php/php_examples.asp`
-- Java Examples - source: `/java/java_examples.asp`
-- XML Examples - source: `/xml/xml_examples.asp`
-- jQuery Examples - source: `/jquery/jquery_examples.asp`
+- [HTML Tutorial](./html-default.asp.md) - source: /html/default.asp
+- [CSS Tutorial](./css-default.asp.md) - source: /css/default.asp
+- [JavaScript Tutorial](./js-default.asp.md) - source: /js/default.asp
+- [How To Tutorial](./howto-default.asp.md) - source: /howto/default.asp
+- [SQL Tutorial](./sql-default.asp.md) - source: /sql/default.asp
+- [Python Tutorial](./python-default.asp.md) - source: /python/default.asp
+- [W3.CSS Tutorial](./w3css-default.asp.md) - source: /w3css/default.asp
+- [Bootstrap Tutorial](./bootstrap-bootstrap_ver.asp.md) - source: /bootstrap/bootstrap_ver.asp
+- [PHP Tutorial](./php-default.asp.md) - source: /php/default.asp
+- [Java Tutorial](./java-default.asp.md) - source: /java/default.asp
+- [C++ Tutorial](./cpp-default.asp.md) - source: /cpp/default.asp
+- [jQuery Tutorial](./jquery-default.asp.md) - source: /jquery/default.asp
+- [HTML Reference](./tags-default.asp.md) - source: /tags/default.asp
+- [CSS Reference](./cssref-index.php.md) - source: /cssref/index.php
+- [JavaScript Reference](./jsref-default.asp.md) - source: /jsref/default.asp
+- [SQL Reference](./sql-sql_ref_keywords.asp.md) - source: /sql/sql_ref_keywords.asp
+- [Python Reference](./python-python_reference.asp.md) - source: /python/python_reference.asp
+- [W3.CSS Reference](./w3css-w3css_references.asp.md) - source: /w3css/w3css_references.asp
+- [Bootstrap Reference](./bootstrap-bootstrap_ref_all_classes.asp.md) - source: /bootstrap/bootstrap_ref_all_classes.asp
+- [PHP Reference](./php-php_ref_overview.asp.md) - source: /php/php_ref_overview.asp
+- [HTML Colors](./colors-colors_names.asp.md) - source: /colors/colors_names.asp
+- [Java Reference](./java-java_ref_keywords.asp.md) - source: /java/java_ref_keywords.asp
+- [AngularJS Reference](./angularjs-angularjs_ref_directives.asp.md) - source: /angularjs/angularjs_ref_directives.asp
+- [jQuery Reference](./jquery-jquery_ref_overview.asp.md) - source: /jquery/jquery_ref_overview.asp
+- [HTML Examples](./html-html_examples.asp.md) - source: /html/html_examples.asp
+- [CSS Examples](./css-css_examples.asp.md) - source: /css/css_examples.asp
+- [JavaScript Examples](./js-js_examples.asp.md) - source: /js/js_examples.asp
+- [SQL Examples](./sql-sql_examples.asp.md) - source: /sql/sql_examples.asp
+- [Python Examples](./python-python_examples.asp.md) - source: /python/python_examples.asp
+- [W3.CSS Examples](./w3css-w3css_examples.asp.md) - source: /w3css/w3css_examples.asp
+- [Bootstrap Examples](./bootstrap-bootstrap_examples.asp.md) - source: /bootstrap/bootstrap_examples.asp
+- [PHP Examples](./php-php_examples.asp.md) - source: /php/php_examples.asp
+- [Java Examples](./java-java_examples.asp.md) - source: /java/java_examples.asp
+- [XML Examples](./xml-xml_examples.asp.md) - source: /xml/xml_examples.asp
+- [jQuery Examples](./jquery-jquery_examples.asp.md) - source: /jquery/jquery_examples.asp
 - [HTML Certificate](https://campus.w3schools.com/collections/certifications/products/html-certificate)
 - [CSS Certificate](https://campus.w3schools.com/collections/certifications/products/css-certificate)
 - [JavaScript Certificate](https://campus.w3schools.com/collections/certifications/products/javascript-certificate)
@@ -408,9 +422,9 @@ Copyright 1999-2026 by Refsnes Data. All Rights Reserved. [W3Schools is Powered 
 - [C++ Certificate](https://campus.w3schools.com/collections/certifications/products/c-certificate)
 - [C# Certificate](https://campus.w3schools.com/collections/certifications/products/c-certificate-1)
 - [XML Certificate](https://campus.w3schools.com/collections/certifications/products/xml-certificate)
-- FORUM - source: `/forum/index.php`
-- ABOUT - source: `/about/default.asp`
-- terms of use - source: `/about/about_copyright.asp`
-- privacy policy - source: `/about/about_privacy.asp`
+- [FORUM](./forum-index.php.md) - source: /forum/index.php
+- [ABOUT](./about-default.asp.md) - source: /about/default.asp
+- [terms of use](./about-about_copyright.asp.md) - source: /about/about_copyright.asp
+- [privacy policy](./about-about_privacy.asp.md) - source: /about/about_privacy.asp
 - W3Schools is Powered by W3.CSS - source: `//www.w3schools.com/w3css/default.asp`
 -->

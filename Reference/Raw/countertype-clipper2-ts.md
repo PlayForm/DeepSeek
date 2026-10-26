@@ -129,8 +129,8 @@ Benchmark polygon data from [Poly2Tri](https://github.com/jhasse/poly2tri) (BSD 
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -189,71 +189,71 @@ Benchmark polygon data from [Poly2Tri](https://github.com/jhasse/poly2tri) (BSD 
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=countertype%2Fclipper2-ts`
-- countertype - source: `/countertype`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=countertype%2Fclipper2-ts.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=countertype%2Fclipper2-ts
+- [countertype](./countertype.md) - source: /countertype
 - [clipper2-ts](./countertype-clipper2-ts.md) - source: /countertype/clipper2-ts
-- Issues 3 - source: `/countertype/clipper2-ts/issues`
-- Pull requests 2 - source: `/countertype/clipper2-ts/pulls`
-- Actions - source: `/countertype/clipper2-ts/actions`
-- Projects - source: `/countertype/clipper2-ts/projects`
-- Security and quality - source: `/countertype/clipper2-ts/security`
-- Insights - source: `/countertype/clipper2-ts/pulse`
-- Notifications - source: `/login?return_to=%2Fcountertype%2Fclipper2-ts`
+- [Issues 3](./countertype-clipper2-ts-issues.md) - source: /countertype/clipper2-ts/issues
+- [Pull requests 2](./countertype-clipper2-ts-pulls.md) - source: /countertype/clipper2-ts/pulls
+- [Actions](./countertype-clipper2-ts-actions.md) - source: /countertype/clipper2-ts/actions
+- [Projects](./countertype-clipper2-ts-projects.md) - source: /countertype/clipper2-ts/projects
+- [Security and quality](./countertype-clipper2-ts-security.md) - source: /countertype/clipper2-ts/security
+- [Insights](./countertype-clipper2-ts-pulse.md) - source: /countertype/clipper2-ts/pulse
+- [Notifications](./login?return_to=%2Fcountertype%2Fclipper2-ts.md) - source: /login?return_to=%2Fcountertype%2Fclipper2-ts
 - [countertype.github.io/clipper2-ts/](https://countertype.github.io/clipper2-ts/)
-- boolean-operations - source: `/topics/boolean-operations`
-- clipper - source: `/topics/clipper`
-- clipper2 - source: `/topics/clipper2`
-- delaunay-triangulation - source: `/topics/delaunay-triangulation`
-- minkowski - source: `/topics/minkowski`
-- offsetting - source: `/topics/offsetting`
-- polygon-clipping - source: `/topics/polygon-clipping`
-- self-intersection - source: `/topics/self-intersection`
-- triangulation - source: `/topics/triangulation`
-- vatti - source: `/topics/vatti`
-- vatti-clipping - source: `/topics/vatti-clipping`
-- Activity - source: `/countertype/clipper2-ts/activity`
-- Custom properties - source: `/countertype/clipper2-ts/custom-properties`
-- 7 forks - source: `/countertype/clipper2-ts/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts&report=countertype+%28user%29`
-- 2 Branches - source: `/countertype/clipper2-ts/branches`
-- 0 Tags - source: `/countertype/clipper2-ts/tags`
-- /jpt - source: `/jpt`
-- jpt - source: `/countertype/clipper2-ts/commits?author=jpt`
-- Merge pull request - source: `/countertype/clipper2-ts/commit/bf6e0303217bdffcbe2f03ab7f6218194df8e7e4`
+- [boolean-operations](./topics-boolean-operations.md) - source: /topics/boolean-operations
+- [clipper](./topics-clipper.md) - source: /topics/clipper
+- [clipper2](./topics-clipper2.md) - source: /topics/clipper2
+- [delaunay-triangulation](./topics-delaunay-triangulation.md) - source: /topics/delaunay-triangulation
+- [minkowski](./topics-minkowski.md) - source: /topics/minkowski
+- [offsetting](./topics-offsetting.md) - source: /topics/offsetting
+- [polygon-clipping](./topics-polygon-clipping.md) - source: /topics/polygon-clipping
+- [self-intersection](./topics-self-intersection.md) - source: /topics/self-intersection
+- [triangulation](./topics-triangulation.md) - source: /topics/triangulation
+- [vatti](./topics-vatti.md) - source: /topics/vatti
+- [vatti-clipping](./topics-vatti-clipping.md) - source: /topics/vatti-clipping
+- [Activity](./countertype-clipper2-ts-activity.md) - source: /countertype/clipper2-ts/activity
+- [Custom properties](./countertype-clipper2-ts-custom-properties.md) - source: /countertype/clipper2-ts/custom-properties
+- [7 forks](./countertype-clipper2-ts-forks.md) - source: /countertype/clipper2-ts/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts&report=countertype+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fcountertype%2Fclipper2-ts&report=countertype+%28user%29
+- [2 Branches](./countertype-clipper2-ts-branches.md) - source: /countertype/clipper2-ts/branches
+- [0 Tags](./countertype-clipper2-ts-tags.md) - source: /countertype/clipper2-ts/tags
+- [/jpt](./jpt.md) - source: /jpt
+- [jpt](./countertype-clipper2-ts-commits?author=jpt.md) - source: /countertype/clipper2-ts/commits?author=jpt
+- [Merge pull request](./countertype-clipper2-ts-commit-bf6e0303217bdffcbe2f03ab7f6218194df8e7e4.md) - source: /countertype/clipper2-ts/commit/bf6e0303217bdffcbe2f03ab7f6218194df8e7e4
 - [#34](https://github.com/countertype/clipper2-ts/pull/34)
-- 100 Commits - source: `/countertype/clipper2-ts/commits/main/`
-- bench - source: `/countertype/clipper2-ts/tree/main/bench`
-- hole-heavy testing - source: `/countertype/clipper2-ts/commit/f75f16baa045f9c5c059b9a751bd783e98b8688c`
-- src - source: `/countertype/clipper2-ts/tree/main/src`
-- scanbeam fast paths - source: `/countertype/clipper2-ts/commit/a6711505084faeacd2f9b6d91ccfda888c23a85c`
-- tests - source: `/countertype/clipper2-ts/tree/main/tests`
-- invoke zCallback in doSplitOp ( - source: `/countertype/clipper2-ts/commit/329f7b4926fc709e04bb82da59e422c72fce7d0b`
+- [100 Commits](./countertype-clipper2-ts-commits-main.md) - source: /countertype/clipper2-ts/commits/main/
+- [bench](./countertype-clipper2-ts-tree-main-bench.md) - source: /countertype/clipper2-ts/tree/main/bench
+- [hole-heavy testing](./countertype-clipper2-ts-commit-f75f16baa045f9c5c059b9a751bd783e98b8688c.md) - source: /countertype/clipper2-ts/commit/f75f16baa045f9c5c059b9a751bd783e98b8688c
+- [src](./countertype-clipper2-ts-tree-main-src.md) - source: /countertype/clipper2-ts/tree/main/src
+- [scanbeam fast paths](./countertype-clipper2-ts-commit-a6711505084faeacd2f9b6d91ccfda888c23a85c.md) - source: /countertype/clipper2-ts/commit/a6711505084faeacd2f9b6d91ccfda888c23a85c
+- [tests](./countertype-clipper2-ts-tree-main-tests.md) - source: /countertype/clipper2-ts/tree/main/tests
+- [invoke zCallback in doSplitOp (](./countertype-clipper2-ts-commit-329f7b4926fc709e04bb82da59e422c72fce7d0b.md) - source: /countertype/clipper2-ts/commit/329f7b4926fc709e04bb82da59e422c72fce7d0b
 - [#31](https://github.com/countertype/clipper2-ts/issues/31)
-- .gitignore - source: `/countertype/clipper2-ts/blob/main/.gitignore`
-- 2.0.1-1 - source: `/countertype/clipper2-ts/commit/64a0c771e3402aebbd49006770f5e203ed464c0f`
-- .npmignore - source: `/countertype/clipper2-ts/blob/main/.npmignore`
-- init - source: `/countertype/clipper2-ts/commit/f4db5b1f392aa922738757bc67fd678300856fe3`
-- CHANGELOG.md - source: `/countertype/clipper2-ts/blob/main/CHANGELOG.md`
-- bump version - source: `/countertype/clipper2-ts/commit/23462827eb2c3877a6c9b3e5c850bfd5af061ddc`
-- LICENSE - source: `/countertype/clipper2-ts/blob/main/LICENSE`
-- LICENSE_THIRD_PARTY - source: `/countertype/clipper2-ts/blob/main/LICENSE_THIRD_PARTY`
-- add benchmarks, rolldown, license 3rd party - source: `/countertype/clipper2-ts/commit/da477324b651b800ba097b570e1008c323dd5d97`
-- README.md - source: `/countertype/clipper2-ts/blob/main/README.md`
-- fix z propagation - source: `/countertype/clipper2-ts/commit/6186553591e962ba213e59fee3dd20d4ac36205e`
-- package.json - source: `/countertype/clipper2-ts/blob/main/package.json`
-- rolldown.config.ts - source: `/countertype/clipper2-ts/blob/main/rolldown.config.ts`
-- tsconfig.json - source: `/countertype/clipper2-ts/blob/main/tsconfig.json`
-- ESM - source: `/countertype/clipper2-ts/commit/42ae42b95888198b61179a0ecc0cd30648a1c841`
-- vitest.config.ts - source: `/countertype/clipper2-ts/blob/main/vitest.config.ts`
+- [.gitignore](./countertype-clipper2-ts-blob-main-.gitignore.md) - source: /countertype/clipper2-ts/blob/main/.gitignore
+- [2.0.1-1](./countertype-clipper2-ts-commit-64a0c771e3402aebbd49006770f5e203ed464c0f.md) - source: /countertype/clipper2-ts/commit/64a0c771e3402aebbd49006770f5e203ed464c0f
+- [.npmignore](./countertype-clipper2-ts-blob-main-.npmignore.md) - source: /countertype/clipper2-ts/blob/main/.npmignore
+- [init](./countertype-clipper2-ts-commit-f4db5b1f392aa922738757bc67fd678300856fe3.md) - source: /countertype/clipper2-ts/commit/f4db5b1f392aa922738757bc67fd678300856fe3
+- [CHANGELOG.md](./countertype-clipper2-ts-blob-main-CHANGELOG.md.md) - source: /countertype/clipper2-ts/blob/main/CHANGELOG.md
+- [bump version](./countertype-clipper2-ts-commit-23462827eb2c3877a6c9b3e5c850bfd5af061ddc.md) - source: /countertype/clipper2-ts/commit/23462827eb2c3877a6c9b3e5c850bfd5af061ddc
+- [LICENSE](./countertype-clipper2-ts-blob-main-LICENSE.md) - source: /countertype/clipper2-ts/blob/main/LICENSE
+- [LICENSE_THIRD_PARTY](./countertype-clipper2-ts-blob-main-LICENSE_THIRD_PARTY.md) - source: /countertype/clipper2-ts/blob/main/LICENSE_THIRD_PARTY
+- [add benchmarks, rolldown, license 3rd party](./countertype-clipper2-ts-commit-da477324b651b800ba097b570e1008c323dd5d97.md) - source: /countertype/clipper2-ts/commit/da477324b651b800ba097b570e1008c323dd5d97
+- [README.md](./countertype-clipper2-ts-blob-main-README.md.md) - source: /countertype/clipper2-ts/blob/main/README.md
+- [fix z propagation](./countertype-clipper2-ts-commit-6186553591e962ba213e59fee3dd20d4ac36205e.md) - source: /countertype/clipper2-ts/commit/6186553591e962ba213e59fee3dd20d4ac36205e
+- [package.json](./countertype-clipper2-ts-blob-main-package.json.md) - source: /countertype/clipper2-ts/blob/main/package.json
+- [rolldown.config.ts](./countertype-clipper2-ts-blob-main-rolldown.config.ts.md) - source: /countertype/clipper2-ts/blob/main/rolldown.config.ts
+- [tsconfig.json](./countertype-clipper2-ts-blob-main-tsconfig.json.md) - source: /countertype/clipper2-ts/blob/main/tsconfig.json
+- [ESM](./countertype-clipper2-ts-commit-42ae42b95888198b61179a0ecc0cd30648a1c841.md) - source: /countertype/clipper2-ts/commit/42ae42b95888198b61179a0ecc0cd30648a1c841
+- [vitest.config.ts](./countertype-clipper2-ts-blob-main-vitest.config.ts.md) - source: /countertype/clipper2-ts/blob/main/vitest.config.ts
 - [https://www.npmjs.com/package/clipper2-ts](https://www.npmjs.com/package/clipper2-ts)
 - [https://github.com/countertype/clipper2-ts/blob/main/LICENSE](https://github.com/countertype/clipper2-ts/blob/main/LICENSE)
 - [Clipper2](https://github.com/AngusJohnson/Clipper2)
 - [Clipper2 Z Docs](https://www.angusj.com/clipper2/Docs/Overview.htm)
 - [safe integer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger)
 - [Poly2Tri](https://github.com/jhasse/poly2tri)
-- Releases - source: `/countertype/clipper2-ts/releases`
-- Contributors - source: `/countertype/clipper2-ts/graphs/contributors`
-- TypeScript 100% - source: `/countertype/clipper2-ts/search?l=typescript`
+- [Releases](./countertype-clipper2-ts-releases.md) - source: /countertype/clipper2-ts/releases
+- [Contributors](./countertype-clipper2-ts-graphs-contributors.md) - source: /countertype/clipper2-ts/graphs/contributors
+- [TypeScript 100%](./countertype-clipper2-ts-search?l=typescript.md) - source: /countertype/clipper2-ts/search?l=typescript
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

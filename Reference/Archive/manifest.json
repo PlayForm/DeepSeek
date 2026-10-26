@@ -58,7 +58,7 @@
       "status": "converted",
       "title": "GitHub - AngusJohnson/Clipper2: Polygon Clipping, Offsetting & ...",
       "quality": {
-        "long-line": 2
+        "long-line": 1
       }
     },
     {
@@ -112,10 +112,7 @@
       "content": "Archive/HTML/mfogel-polygon-clipping.content.html",
       "converted": "Raw/mfogel-polygon-clipping.md",
       "status": "converted",
-      "title": "GitHub - mfogel/polygon-clipping: Apply boolean polygon clipping ...",
-      "quality": {
-        "long-line": 1
-      }
+      "title": "GitHub - mfogel/polygon-clipping: Apply boolean polygon clipping ..."
     },
     {
       "source": "https://github.com/danmarshall/svg-path-outline",
@@ -288,7 +285,10 @@
       "content": "Archive/HTML/svg-svgo.content.html",
       "converted": "Raw/svg-svgo.md",
       "status": "converted",
-      "title": "GitHub - svg/svgo: SVG Optimizer for Node.js and CLI. \u2699\ufe0f \u00b7 GitHub"
+      "title": "GitHub - svg/svgo: SVG Optimizer for Node.js and CLI. \u2699\ufe0f \u00b7 GitHub",
+      "quality": {
+        "heading-no-h1": 1
+      }
     },
     {
       "source": "https://github.com/thx/resvg-js",
@@ -299,8 +299,7 @@
       "status": "converted",
       "title": "GitHub - thx/resvg-js: A high-performance SVG renderer and toolkit, ...",
       "quality": {
-        "heading-duplicate": 1,
-        "long-line": 1
+        "heading-duplicate": 1
       }
     },
     {
@@ -479,8 +478,7 @@
       "quality": {
         "fence-no-language": 1,
         "fence-blank-padded": 1,
-        "raw-html": 4,
-        "long-line": 1
+        "raw-html": 4
       }
     },
     {
@@ -528,7 +526,8 @@
       "title": "Tutorial - libigl",
       "quality": {
         "fence-no-language": 1,
-        "raw-html": 126
+        "raw-html": 126,
+        "glued-code": 1
       }
     },
     {
@@ -540,7 +539,7 @@
       "status": "converted",
       "title": "Geometry Processing Functions \u2014 PyMesh 0.2.1 documentation",
       "quality": {
-        "raw-html": 8
+        "long-line": 1
       }
     },
     {

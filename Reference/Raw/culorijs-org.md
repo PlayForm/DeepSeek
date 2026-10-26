@@ -1,8 +1,8 @@
-[!culori](/) [v4.0.2](https://github.com/evercoder/culori/releases)
+[![culori](./img-culori.svg.md)](/) [v4.0.2](https://github.com/evercoder/culori/releases)
 
 # Color functions for JavaScript
 
-Culori is a JavaScript color library that supports the conversion and manipulation of all formats defined in the [CSS Colors Level 4](https://drafts.csswg.org/css-color/) specification, plus [additional color spaces](./color-spaces). It handles [color differences](https://en.wikipedia.org/wiki/Color_difference), interpolation, gradients, blend modes and much more.
+Culori is a JavaScript color library that supports the conversion and manipulation of all formats defined in the [CSS Colors Level 4](https://drafts.csswg.org/css-color/) specification, plus [additional color spaces](./color-spaces). It handles [color differences](https://en.wikipedia.org/wiki/Color_difference), interpolation, gradients, blend modes [and much more](./api.md).
 
 ``` bash
 npm install culori
@@ -23,12 +23,12 @@ npm install culori
 <!--
 ## Source links
 
-- / - source: `/`
+- [/](./index.md) - source: /
 - [v4.0.2](https://github.com/evercoder/culori/releases)
-- Get started - source: `/getting-started/`
-- API reference - source: `/api/`
-- Color spaces - source: `/color-spaces/`
-- Guides - source: `/guides/`
+- [Get started](./getting-started.md) - source: /getting-started/
+- [API reference](./api.md) - source: /api/
+- [Color spaces](./color-spaces.md) - source: /color-spaces/
+- [Guides](./guides.md) - source: /guides/
 - [GitHub ↗](https://github.com/Evercoder/culori)
 - [CSS Colors Level 4](https://drafts.csswg.org/css-color/)
 - [additional color spaces](./color-spaces)
@@ -37,7 +37,7 @@ npm install culori
 - [functions](./api)
 - [a tree-shakeable version of the library](./guides/tree-shaking)
 - [Moqups](https://moqups.com)
-- Colophon - source: `/colophon/`
-- Resources - source: `/resources/`
+- [Colophon](./colophon.md) - source: /colophon/
+- [Resources](./resources.md) - source: /resources/
 - [Edit it on GitHub](https://github.com/Evercoder/culori/blob/main/./docs/index.md)
 -->

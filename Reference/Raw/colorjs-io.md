@@ -6,15 +6,15 @@
 
 #### Fully color space aware
 
-Each color belongs to a color space; operations are color space agnostic. Modules for a wide variety of color spaces, including Lab/LCh, OKLab/OKLCh, sRGB and friends (HSL/HSV/HWB), Display P3, J <sub>z</sub> a <sub>z</sub> b <sub>z</sub>, REC.2100 and many more.
+Each color belongs to a color space; operations are color space agnostic. Modules for [a wide variety of color spaces](./docs-spaces.md), including Lab/LCh, OKLab/OKLCh, sRGB and friends (HSL/HSV/HWB), Display P3, J <sub>z</sub> a <sub>z</sub> b <sub>z</sub>, REC.2100 and many [more](./docs-spaces.md).
 
 #### Doesn't gloss over color science
 
-Actual gamut mapping instead of naïve clipping, multiple DeltaE methods (76, CMC, 2000, J <sub>z</sub>), multiple chromatic adaptation methods (von Kries, Bradford, CAT02, CAT16), all with sensible defaults
+Actual [gamut mapping](./docs-gamut-mapping.md) instead of naïve clipping, multiple [DeltaE](./docs-color-difference.md) methods (76, CMC, 2000, J <sub>z</sub>), multiple [chromatic adaptation](./docs-adaptation.md) methods (von Kries, Bradford, CAT02, CAT16), all with sensible defaults
 
 #### Up to date with CSS Color 4
 
-Every [CSS Color 4](https://drafts.csswg.org/css-color-4/) format & color space supported for both input and output, whether your browser supports it or not.
+Every [CSS Color 4](https://drafts.csswg.org/css-color-4/) format & color space supported for both [input](./docs-the-color-object.md) and [output](./docs-output.md), whether your browser supports it or not.
 
 #### Readable, object-oriented API
 
@@ -26,7 +26,7 @@ Use only what you need, or a bundle. Client-side or Node. Deep extensibility wit
 
 #### Fast & efficient
 
-Procedural, tree-shakeable API available for performance sensitive tasks and reduced bundle size
+[Procedural, tree-shakeable API](./docs-procedural.md) available for performance sensitive tasks and reduced bundle size
 
 # Color.js: Let’s get serious about color
 
@@ -298,16 +298,16 @@ Once there are enough sponsors, **we plan to feature them prominently on our web
 
 - [Get Color.js](./get/)
 - [Docs](./docs/)
-- The Color object - source: `/docs/the-color-object`
-- Supported color spaces - source: `/docs/spaces`
-- Color difference - source: `/docs/color-difference`
-- Color manipulation - source: `/docs/manipulation`
-- Contrast - source: `/docs/contrast`
-- Gamut Mapping - source: `/docs/gamut-mapping`
-- Interpolation - source: `/docs/interpolation`
-- Chromatic Adaptation - source: `/docs/adaptation`
-- Output - source: `/docs/output`
-- Procedural, tree-shakable API - source: `/docs/procedural`
+- [The Color object](./docs-the-color-object.md) - source: /docs/the-color-object
+- [Supported color spaces](./docs-spaces.md) - source: /docs/spaces
+- [Color difference](./docs-color-difference.md) - source: /docs/color-difference
+- [Color manipulation](./docs-manipulation.md) - source: /docs/manipulation
+- [Contrast](./docs-contrast.md) - source: /docs/contrast
+- [Gamut Mapping](./docs-gamut-mapping.md) - source: /docs/gamut-mapping
+- [Interpolation](./docs-interpolation.md) - source: /docs/interpolation
+- [Chromatic Adaptation](./docs-adaptation.md) - source: /docs/adaptation
+- [Output](./docs-output.md) - source: /docs/output
+- [Procedural, tree-shakable API](./docs-procedural.md) - source: /docs/procedural
 - [API](./api/)
 - [Play!](./notebook/)
 - [Demos](https://apps.colorjs.io/)

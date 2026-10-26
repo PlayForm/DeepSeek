@@ -1,6 +1,6 @@
 [![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://camo.githubusercontent.com/a6ed1655e865a26dfcec492b68d0fa0ed6d8b7c1aaf3b974bfbe28f2b71e6232/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2533432532462533452d547970655363726970742d2532333030373463312e737667)](http://www.typescriptlang.org/)
 
-[!simplex-noise.js header](/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png) [API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
+[![simplex-noise.js header](./jwagner-simplex-noise.js-raw-main-doc-github-header-fs8.png.md)](/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png) [API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
 
 simplex-noise.js is a simplex noise implementation in Javascript/TypeScript. It works in the browser and Node.js, using CommonJS and ES Modules. It is self-contained (dependency-free), relatively small (about 2k minified and gzipped) and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeable.
 
@@ -236,8 +236,8 @@ The initial typescript definition has been provided by [Neonit](https://github.c
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -296,73 +296,73 @@ The initial typescript definition has been provided by [Neonit](https://github.c
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=jwagner%2Fsimplex-noise.js`
-- jwagner - source: `/jwagner`
-- simplex-noise.js - source: `/jwagner/simplex-noise.js`
-- Issues 5 - source: `/jwagner/simplex-noise.js/issues`
-- Pull requests 2 - source: `/jwagner/simplex-noise.js/pulls`
-- Discussions - source: `/jwagner/simplex-noise.js/discussions`
-- Actions - source: `/jwagner/simplex-noise.js/actions`
-- Projects - source: `/jwagner/simplex-noise.js/projects`
-- Wiki - source: `/jwagner/simplex-noise.js/wiki`
-- Security and quality - source: `/jwagner/simplex-noise.js/security`
-- Insights - source: `/jwagner/simplex-noise.js/pulse`
-- Notifications - source: `/login?return_to=%2Fjwagner%2Fsimplex-noise.js`
-- demo - source: `/topics/demo`
-- gfx - source: `/topics/gfx`
-- javascript - source: `/topics/javascript`
-- nodejs - source: `/topics/nodejs`
-- noise-functions - source: `/topics/noise-functions`
-- procedural - source: `/topics/procedural`
-- procedural-art - source: `/topics/procedural-art`
-- procedural-generation - source: `/topics/procedural-generation`
-- procedural-terrain - source: `/topics/procedural-terrain`
-- procedural-textures - source: `/topics/procedural-textures`
-- simplex - source: `/topics/simplex`
-- typescript - source: `/topics/typescript`
-- Activity - source: `/jwagner/simplex-noise.js/activity`
-- 128 forks - source: `/jwagner/simplex-noise.js/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js&report=jwagner+%28user%29`
-- 5 Branches - source: `/jwagner/simplex-noise.js/branches`
-- 9 Tags - source: `/jwagner/simplex-noise.js/tags`
-- jwagner - source: `/jwagner/simplex-noise.js/commits?author=jwagner`
-- prepare 4.0.3 release - source: `/jwagner/simplex-noise.js/commit/6bfff874f5f0efed6375a9bf27fbd39b3cec6b4e`
-- 143 Commits - source: `/jwagner/simplex-noise.js/commits/main/`
-- .devcontainer - source: `/jwagner/simplex-noise.js/tree/main/.devcontainer`
-- use tsx for module-compatibility tests - source: `/jwagner/simplex-noise.js/commit/d278637cd9186ce0034e15250e9b82c65aca4f9e`
-- .github/ workflows - source: `/jwagner/simplex-noise.js/tree/main/.github/workflows`
-- remove node versions from the future - source: `/jwagner/simplex-noise.js/commit/1c4821361de7b4799e9a03d5c1d93384b0ac049e`
-- doc - source: `/jwagner/simplex-noise.js/tree/main/doc`
-- Readme improvements - source: `/jwagner/simplex-noise.js/commit/4d3af659fb20ff359ec6cd147b0206ea0d078d66`
-- examples - source: `/jwagner/simplex-noise.js/tree/main/examples`
-- Fixing plasma example - source: `/jwagner/simplex-noise.js/commit/bd64f2223801bbcffec0151671e9af7b3cea2345`
-- perf - source: `/jwagner/simplex-noise.js/tree/main/perf`
-- Performance and test improvements - source: `/jwagner/simplex-noise.js/commit/66087595756d57211d18c6f5a229bff1ebdc3178`
-- snapshots - source: `/jwagner/simplex-noise.js/tree/main/snapshots`
-- test - source: `/jwagner/simplex-noise.js/tree/main/test`
-- .editorconfig - source: `/jwagner/simplex-noise.js/blob/main/.editorconfig`
-- introduce jscs - source: `/jwagner/simplex-noise.js/commit/dbe8c4bcf7b6fce5227f72a1da05de844248f2ee`
-- .eslintrc.js - source: `/jwagner/simplex-noise.js/blob/main/.eslintrc.js`
-- Makes module/packet structure more compatible - source: `/jwagner/simplex-noise.js/commit/0d7e90df9f0e20aaa4673b9c0c818d61181ded16`
-- .gitignore - source: `/jwagner/simplex-noise.js/blob/main/.gitignore`
-- Adding a setup to investigate the JIT output - source: `/jwagner/simplex-noise.js/commit/8d3d2844337355c8ba564c3c79d17e47ffea9a1b`
-- .mocharc.json - source: `/jwagner/simplex-noise.js/blob/main/.mocharc.json`
-- Converts simplex-noise.js to typescript - source: `/jwagner/simplex-noise.js/commit/1f4a4748d00af40f1ca82d6710af45e92e038216`
-- LICENSE - source: `/jwagner/simplex-noise.js/blob/main/LICENSE`
-- Update LICENSE - source: `/jwagner/simplex-noise.js/commit/3f1ad19a5b3972c4a6add7c35a7360110d9d12ef`
-- README.md - source: `/jwagner/simplex-noise.js/blob/main/README.md`
-- build.sh - source: `/jwagner/simplex-noise.js/blob/main/build.sh`
-- package-lock.json - source: `/jwagner/simplex-noise.js/blob/main/package-lock.json`
-- package.json - source: `/jwagner/simplex-noise.js/blob/main/package.json`
-- release-docs.sh - source: `/jwagner/simplex-noise.js/blob/main/release-docs.sh`
-- Draft of a new tree shakeable API - source: `/jwagner/simplex-noise.js/commit/fe89dba7b2e5ff70ceea3d17221ae2592c5cbafd`
-- simplex-noise.ts - source: `/jwagner/simplex-noise.js/blob/main/simplex-noise.ts`
-- tsconfig-commonjs.json - source: `/jwagner/simplex-noise.js/blob/main/tsconfig-commonjs.json`
-- tsconfig-esm.json - source: `/jwagner/simplex-noise.js/blob/main/tsconfig-esm.json`
-- tsconfig.json - source: `/jwagner/simplex-noise.js/blob/main/tsconfig.json`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=jwagner%2Fsimplex-noise.js.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=jwagner%2Fsimplex-noise.js
+- [jwagner](./jwagner.md) - source: /jwagner
+- [simplex-noise.js](./jwagner-simplex-noise.js.md) - source: /jwagner/simplex-noise.js
+- [Issues 5](./jwagner-simplex-noise.js-issues.md) - source: /jwagner/simplex-noise.js/issues
+- [Pull requests 2](./jwagner-simplex-noise.js-pulls.md) - source: /jwagner/simplex-noise.js/pulls
+- [Discussions](./jwagner-simplex-noise.js-discussions.md) - source: /jwagner/simplex-noise.js/discussions
+- [Actions](./jwagner-simplex-noise.js-actions.md) - source: /jwagner/simplex-noise.js/actions
+- [Projects](./jwagner-simplex-noise.js-projects.md) - source: /jwagner/simplex-noise.js/projects
+- [Wiki](./jwagner-simplex-noise.js-wiki.md) - source: /jwagner/simplex-noise.js/wiki
+- [Security and quality](./jwagner-simplex-noise.js-security.md) - source: /jwagner/simplex-noise.js/security
+- [Insights](./jwagner-simplex-noise.js-pulse.md) - source: /jwagner/simplex-noise.js/pulse
+- [Notifications](./login?return_to=%2Fjwagner%2Fsimplex-noise.js.md) - source: /login?return_to=%2Fjwagner%2Fsimplex-noise.js
+- [demo](./topics-demo.md) - source: /topics/demo
+- [gfx](./topics-gfx.md) - source: /topics/gfx
+- [javascript](./topics-javascript.md) - source: /topics/javascript
+- [nodejs](./topics-nodejs.md) - source: /topics/nodejs
+- [noise-functions](./topics-noise-functions.md) - source: /topics/noise-functions
+- [procedural](./topics-procedural.md) - source: /topics/procedural
+- [procedural-art](./topics-procedural-art.md) - source: /topics/procedural-art
+- [procedural-generation](./topics-procedural-generation.md) - source: /topics/procedural-generation
+- [procedural-terrain](./topics-procedural-terrain.md) - source: /topics/procedural-terrain
+- [procedural-textures](./topics-procedural-textures.md) - source: /topics/procedural-textures
+- [simplex](./topics-simplex.md) - source: /topics/simplex
+- [typescript](./topics-typescript.md) - source: /topics/typescript
+- [Activity](./jwagner-simplex-noise.js-activity.md) - source: /jwagner/simplex-noise.js/activity
+- [128 forks](./jwagner-simplex-noise.js-forks.md) - source: /jwagner/simplex-noise.js/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js&report=jwagner+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fjwagner%2Fsimplex-noise.js&report=jwagner+%28user%29
+- [5 Branches](./jwagner-simplex-noise.js-branches.md) - source: /jwagner/simplex-noise.js/branches
+- [9 Tags](./jwagner-simplex-noise.js-tags.md) - source: /jwagner/simplex-noise.js/tags
+- [jwagner](./jwagner-simplex-noise.js-commits?author=jwagner.md) - source: /jwagner/simplex-noise.js/commits?author=jwagner
+- [prepare 4.0.3 release](./jwagner-simplex-noise.js-commit-6bfff874f5f0efed6375a9bf27fbd39b3cec6b4e.md) - source: /jwagner/simplex-noise.js/commit/6bfff874f5f0efed6375a9bf27fbd39b3cec6b4e
+- [143 Commits](./jwagner-simplex-noise.js-commits-main.md) - source: /jwagner/simplex-noise.js/commits/main/
+- [.devcontainer](./jwagner-simplex-noise.js-tree-main-.devcontainer.md) - source: /jwagner/simplex-noise.js/tree/main/.devcontainer
+- [use tsx for module-compatibility tests](./jwagner-simplex-noise.js-commit-d278637cd9186ce0034e15250e9b82c65aca4f9e.md) - source: /jwagner/simplex-noise.js/commit/d278637cd9186ce0034e15250e9b82c65aca4f9e
+- [.github/ workflows](./jwagner-simplex-noise.js-tree-main-.github-workflows.md) - source: /jwagner/simplex-noise.js/tree/main/.github/workflows
+- [remove node versions from the future](./jwagner-simplex-noise.js-commit-1c4821361de7b4799e9a03d5c1d93384b0ac049e.md) - source: /jwagner/simplex-noise.js/commit/1c4821361de7b4799e9a03d5c1d93384b0ac049e
+- [doc](./jwagner-simplex-noise.js-tree-main-doc.md) - source: /jwagner/simplex-noise.js/tree/main/doc
+- [Readme improvements](./jwagner-simplex-noise.js-commit-4d3af659fb20ff359ec6cd147b0206ea0d078d66.md) - source: /jwagner/simplex-noise.js/commit/4d3af659fb20ff359ec6cd147b0206ea0d078d66
+- [examples](./jwagner-simplex-noise.js-tree-main-examples.md) - source: /jwagner/simplex-noise.js/tree/main/examples
+- [Fixing plasma example](./jwagner-simplex-noise.js-commit-bd64f2223801bbcffec0151671e9af7b3cea2345.md) - source: /jwagner/simplex-noise.js/commit/bd64f2223801bbcffec0151671e9af7b3cea2345
+- [perf](./jwagner-simplex-noise.js-tree-main-perf.md) - source: /jwagner/simplex-noise.js/tree/main/perf
+- [Performance and test improvements](./jwagner-simplex-noise.js-commit-66087595756d57211d18c6f5a229bff1ebdc3178.md) - source: /jwagner/simplex-noise.js/commit/66087595756d57211d18c6f5a229bff1ebdc3178
+- [snapshots](./jwagner-simplex-noise.js-tree-main-snapshots.md) - source: /jwagner/simplex-noise.js/tree/main/snapshots
+- [test](./jwagner-simplex-noise.js-tree-main-test.md) - source: /jwagner/simplex-noise.js/tree/main/test
+- [.editorconfig](./jwagner-simplex-noise.js-blob-main-.editorconfig.md) - source: /jwagner/simplex-noise.js/blob/main/.editorconfig
+- [introduce jscs](./jwagner-simplex-noise.js-commit-dbe8c4bcf7b6fce5227f72a1da05de844248f2ee.md) - source: /jwagner/simplex-noise.js/commit/dbe8c4bcf7b6fce5227f72a1da05de844248f2ee
+- [.eslintrc.js](./jwagner-simplex-noise.js-blob-main-.eslintrc.js.md) - source: /jwagner/simplex-noise.js/blob/main/.eslintrc.js
+- [Makes module/packet structure more compatible](./jwagner-simplex-noise.js-commit-0d7e90df9f0e20aaa4673b9c0c818d61181ded16.md) - source: /jwagner/simplex-noise.js/commit/0d7e90df9f0e20aaa4673b9c0c818d61181ded16
+- [.gitignore](./jwagner-simplex-noise.js-blob-main-.gitignore.md) - source: /jwagner/simplex-noise.js/blob/main/.gitignore
+- [Adding a setup to investigate the JIT output](./jwagner-simplex-noise.js-commit-8d3d2844337355c8ba564c3c79d17e47ffea9a1b.md) - source: /jwagner/simplex-noise.js/commit/8d3d2844337355c8ba564c3c79d17e47ffea9a1b
+- [.mocharc.json](./jwagner-simplex-noise.js-blob-main-.mocharc.json.md) - source: /jwagner/simplex-noise.js/blob/main/.mocharc.json
+- [Converts simplex-noise.js to typescript](./jwagner-simplex-noise.js-commit-1f4a4748d00af40f1ca82d6710af45e92e038216.md) - source: /jwagner/simplex-noise.js/commit/1f4a4748d00af40f1ca82d6710af45e92e038216
+- [LICENSE](./jwagner-simplex-noise.js-blob-main-LICENSE.md) - source: /jwagner/simplex-noise.js/blob/main/LICENSE
+- [Update LICENSE](./jwagner-simplex-noise.js-commit-3f1ad19a5b3972c4a6add7c35a7360110d9d12ef.md) - source: /jwagner/simplex-noise.js/commit/3f1ad19a5b3972c4a6add7c35a7360110d9d12ef
+- [README.md](./jwagner-simplex-noise.js-blob-main-README.md.md) - source: /jwagner/simplex-noise.js/blob/main/README.md
+- [build.sh](./jwagner-simplex-noise.js-blob-main-build.sh.md) - source: /jwagner/simplex-noise.js/blob/main/build.sh
+- [package-lock.json](./jwagner-simplex-noise.js-blob-main-package-lock.json.md) - source: /jwagner/simplex-noise.js/blob/main/package-lock.json
+- [package.json](./jwagner-simplex-noise.js-blob-main-package.json.md) - source: /jwagner/simplex-noise.js/blob/main/package.json
+- [release-docs.sh](./jwagner-simplex-noise.js-blob-main-release-docs.sh.md) - source: /jwagner/simplex-noise.js/blob/main/release-docs.sh
+- [Draft of a new tree shakeable API](./jwagner-simplex-noise.js-commit-fe89dba7b2e5ff70ceea3d17221ae2592c5cbafd.md) - source: /jwagner/simplex-noise.js/commit/fe89dba7b2e5ff70ceea3d17221ae2592c5cbafd
+- [simplex-noise.ts](./jwagner-simplex-noise.js-blob-main-simplex-noise.ts.md) - source: /jwagner/simplex-noise.js/blob/main/simplex-noise.ts
+- [tsconfig-commonjs.json](./jwagner-simplex-noise.js-blob-main-tsconfig-commonjs.json.md) - source: /jwagner/simplex-noise.js/blob/main/tsconfig-commonjs.json
+- [tsconfig-esm.json](./jwagner-simplex-noise.js-blob-main-tsconfig-esm.json.md) - source: /jwagner/simplex-noise.js/blob/main/tsconfig-esm.json
+- [tsconfig.json](./jwagner-simplex-noise.js-blob-main-tsconfig.json.md) - source: /jwagner/simplex-noise.js/blob/main/tsconfig.json
 - [https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml)
 - [http://www.typescriptlang.org/](http://www.typescriptlang.org/)
-- /jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png - source: `/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png`
+- [/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png](./jwagner-simplex-noise.js-blob-main-doc-github-header-fs8.png.md) - source: /jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png
 - [API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
 - [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/)
 - [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001)
@@ -374,23 +374,23 @@ The initial typescript definition has been provided by [Neonit](https://github.c
 - [satelllte](https://github.com/satelllte)
 - [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
 - [Neonit](https://github.com/Neonit)
-- Releases - source: `/jwagner/simplex-noise.js/releases`
-- 4.0.3 Latest Jul 26, 2024 - source: `/jwagner/simplex-noise.js/releases/tag/4.0.3`
-- Contributors - source: `/jwagner/simplex-noise.js/graphs/contributors`
-- /satelllte - source: `/satelllte`
-- /dependabot[bot] - source: `/dependabot[bot]`
-- /espadrine - source: `/espadrine`
-- /dmnsgn - source: `/dmnsgn`
-- /viljami - source: `/viljami`
-- /tophattom - source: `/tophattom`
-- /Sietsem - source: `/Sietsem`
-- /Neonit - source: `/Neonit`
-- /deathcap - source: `/deathcap`
-- TypeScript 84.2% - source: `/jwagner/simplex-noise.js/search?l=typescript`
-- JavaScript 8.8% - source: `/jwagner/simplex-noise.js/search?l=javascript`
-- Shell 4.2% - source: `/jwagner/simplex-noise.js/search?l=shell`
-- Dockerfile 2.3% - source: `/jwagner/simplex-noise.js/search?l=dockerfile`
-- HTML 0.5% - source: `/jwagner/simplex-noise.js/search?l=html`
+- [Releases](./jwagner-simplex-noise.js-releases.md) - source: /jwagner/simplex-noise.js/releases
+- [4.0.3 Latest Jul 26, 2024](./jwagner-simplex-noise.js-releases-tag-4.0.3.md) - source: /jwagner/simplex-noise.js/releases/tag/4.0.3
+- [Contributors](./jwagner-simplex-noise.js-graphs-contributors.md) - source: /jwagner/simplex-noise.js/graphs/contributors
+- [/satelllte](./satelllte.md) - source: /satelllte
+- [/dependabot[bot]](./dependabot[bot].md) - source: /dependabot[bot]
+- [/espadrine](./espadrine.md) - source: /espadrine
+- [/dmnsgn](./dmnsgn.md) - source: /dmnsgn
+- [/viljami](./viljami.md) - source: /viljami
+- [/tophattom](./tophattom.md) - source: /tophattom
+- [/Sietsem](./Sietsem.md) - source: /Sietsem
+- [/Neonit](./Neonit.md) - source: /Neonit
+- [/deathcap](./deathcap.md) - source: /deathcap
+- [TypeScript 84.2%](./jwagner-simplex-noise.js-search?l=typescript.md) - source: /jwagner/simplex-noise.js/search?l=typescript
+- [JavaScript 8.8%](./jwagner-simplex-noise.js-search?l=javascript.md) - source: /jwagner/simplex-noise.js/search?l=javascript
+- [Shell 4.2%](./jwagner-simplex-noise.js-search?l=shell.md) - source: /jwagner/simplex-noise.js/search?l=shell
+- [Dockerfile 2.3%](./jwagner-simplex-noise.js-search?l=dockerfile.md) - source: /jwagner/simplex-noise.js/search?l=dockerfile
+- [HTML 0.5%](./jwagner-simplex-noise.js-search?l=html.md) - source: /jwagner/simplex-noise.js/search?l=html
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

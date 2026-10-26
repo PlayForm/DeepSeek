@@ -1,4 +1,4 @@
-! JavaScript is disabled in your browser.
+![](./_fs-ch-1T1wmsGaOgGaSxcX-assets-errorIcon.svg.md) JavaScript is disabled in your browser.
 
 Please enable JavaScript to proceed.
 

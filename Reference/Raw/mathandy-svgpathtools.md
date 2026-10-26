@@ -1,4 +1,7 @@
-[![Donate](https://camo.githubusercontent.com/e7d506bc437b2f1c47b5fa4605744c9353d029415e176663d692a2b34a970ea0/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f6e6174652d70617970616c2d627269676874677265656e)](https://www.paypal.com/donate?business=4SKJ27AM4EYYA&no_recurring=0&item_name=Support+the+creator+of+svgpathtools?++He%27s+a+student+and+would+appreciate+it.&currency_code=USD) [![Python](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667)](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667) [![PyPI](https://camo.githubusercontent.com/5481b6f926a839d394906ba1a6d9559e98545c20fec8a0791a78309ab39e33d7/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f73766770617468746f6f6c73)](https://pypi.org/project/svgpathtools/) [![PyPI - Downloads](https://camo.githubusercontent.com/73bf17d187877b1567f0b6c6e9a0412f1c7dc2348a8d3b002db71ff72f203fcd/68747470733a2f2f696d672e736869656c64732e696f2f707970692f646d2f73766770617468746f6f6c733f636f6c6f723d79656c6c6f77)](https://pypistats.org/packages/svgpathtools)
+- [![Donate](https://camo.githubusercontent.com/e7d506bc437b2f1c47b5fa4605744c9353d029415e176663d692a2b34a970ea0/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f6e6174652d70617970616c2d627269676874677265656e)](https://www.paypal.com/donate?business=4SKJ27AM4EYYA&no_recurring=0&item_name=Support+the+creator+of+svgpathtools?++He%27s+a+student+and+would+appreciate+it.&currency_code=USD)
+- [![Python](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667)](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667)
+- [![PyPI](https://camo.githubusercontent.com/5481b6f926a839d394906ba1a6d9559e98545c20fec8a0791a78309ab39e33d7/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f73766770617468746f6f6c73)](https://pypi.org/project/svgpathtools/)
+- [![PyPI - Downloads](https://camo.githubusercontent.com/73bf17d187877b1567f0b6c6e9a0412f1c7dc2348a8d3b002db71ff72f203fcd/68747470733a2f2f696d672e736869656c64732e696f2f707970692f646d2f73766770617468746f6f6c733f636f6c6f723d79656c6c6f77)](https://pypistats.org/packages/svgpathtools)
 
 # svgpathtools
 
@@ -201,7 +204,7 @@ The **wsvg()** function creates an SVG file from a list of path. This function c
 \# Let's make a new SVG that's identical to the first\
 wsvg(paths, attributes=attributes, svg_attributes=svg_attributes, filename='output1.svg')
 
-[!output1.svg](/mathandy/svgpathtools/blob/master/output1.svg)
+[![output1.svg](./mathandy-svgpathtools-raw-master-output1.svg.md)](/mathandy/svgpathtools/blob/master/output1.svg)
 
 There will be many more examples of writing and displaying path data below.
 
@@ -346,7 +349,7 @@ wsvg(\[b, tangent_line, normal_line, br, tangent_line_r, normal_line_r\], 
      'bgpkgp', nodes=\[b.point(t), br.point(t)\], filename='vectorframes.svg', \
      text=\["b's tangent", "br's tangent"\], text_path=\[tangent_line, tangent_line_r\])
 
-[!vectorframes.svg](/mathandy/svgpathtools/blob/master/vectorframes.svg)
+[![vectorframes.svg](./mathandy-svgpathtools-raw-master-vectorframes.svg.md)](/mathandy/svgpathtools/blob/master/vectorframes.svg)
 
 ### Rotations and Translations
 
@@ -368,7 +371,7 @@ for k in range(12):\
 decorated_ellipse = decorated_ellipse.translated(4+0j)\
 wsvg(\[top_half, midline, decorated_ellipse\], filename='decorated_ellipse.svg')
 
-[!decorated_ellipse.svg](/mathandy/svgpathtools/blob/master/decorated_ellipse.svg)
+[![decorated_ellipse.svg](./mathandy-svgpathtools-raw-master-decorated_ellipse.svg.md)](/mathandy/svgpathtools/blob/master/decorated_ellipse.svg)
 
 ### arc length and inverse arc length
 
@@ -407,7 +410,7 @@ for path in paths:\
 wsvg(paths, nodes=dots, node_colors=ncols, node_radii=nradii, \
      attributes=attributes, filename='output2.svg')
 
-[!output2.svg](/mathandy/svgpathtools/blob/master/output2.svg)
+[![output2.svg](./mathandy-svgpathtools-raw-master-output2.svg.md)](/mathandy/svgpathtools/blob/master/output2.svg)
 
 ### Intersections between Bezier curves
 
@@ -423,7 +426,7 @@ for path in paths\[1:\]:\
 disvg(paths, filename='output_intersections.svg', attributes=attributes,\
       nodes = intersections, node_radii = \[5\]\*len(intersections))
 
-[!output_intersections.svg](/mathandy/svgpathtools/blob/master/output_intersections.svg)
+[![output_intersections.svg](./mathandy-svgpathtools-raw-master-output_intersections.svg.md)](/mathandy/svgpathtools/blob/master/output_intersections.svg)
 
 ### An Advanced Application: Offsetting Paths
 
@@ -464,7 +467,7 @@ for path in paths:\
 \# Let's take a look\
 wsvg(paths + offset_paths, 'g'\*len(paths) + 'r'\*len(offset_paths), filename='offset_curves.svg')
 
-[!offset_curves.svg](/mathandy/svgpathtools/blob/master/offset_curves.svg)
+[![offset_curves.svg](./mathandy-svgpathtools-raw-master-offset_curves.svg.md)](/mathandy/svgpathtools/blob/master/offset_curves.svg)
 
 ## Compatibility Notes for users of svg.path (v2.0)
 
@@ -483,8 +486,8 @@ This module is under a MIT License.
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -543,68 +546,68 @@ This module is under a MIT License.
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mathandy%2Fsvgpathtools`
-- mathandy - source: `/mathandy`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mathandy%2Fsvgpathtools.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=mathandy%2Fsvgpathtools
+- [mathandy](./mathandy.md) - source: /mathandy
 - [svgpathtools](./mathandy-svgpathtools.md) - source: /mathandy/svgpathtools
-- Issues 62 - source: `/mathandy/svgpathtools/issues`
-- Pull requests 2 - source: `/mathandy/svgpathtools/pulls`
-- Discussions - source: `/mathandy/svgpathtools/discussions`
-- Actions - source: `/mathandy/svgpathtools/actions`
-- Projects - source: `/mathandy/svgpathtools/projects`
-- Wiki - source: `/mathandy/svgpathtools/wiki`
-- Security and quality - source: `/mathandy/svgpathtools/security`
-- Insights - source: `/mathandy/svgpathtools/pulse`
-- Notifications - source: `/login?return_to=%2Fmathandy%2Fsvgpathtools`
-- Activity - source: `/mathandy/svgpathtools/activity`
-- 162 forks - source: `/mathandy/svgpathtools/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools&report=mathandy+%28user%29`
-- 22 Branches - source: `/mathandy/svgpathtools/branches`
-- 30 Tags - source: `/mathandy/svgpathtools/tags`
-- mathandy - source: `/mathandy/svgpathtools/commits?author=mathandy`
-- Merge PR - source: `/mathandy/svgpathtools/commit/15b500ef3dc23336b114f40fb18d957483d3968f`
+- [Issues 62](./mathandy-svgpathtools-issues.md) - source: /mathandy/svgpathtools/issues
+- [Pull requests 2](./mathandy-svgpathtools-pulls.md) - source: /mathandy/svgpathtools/pulls
+- [Discussions](./mathandy-svgpathtools-discussions.md) - source: /mathandy/svgpathtools/discussions
+- [Actions](./mathandy-svgpathtools-actions.md) - source: /mathandy/svgpathtools/actions
+- [Projects](./mathandy-svgpathtools-projects.md) - source: /mathandy/svgpathtools/projects
+- [Wiki](./mathandy-svgpathtools-wiki.md) - source: /mathandy/svgpathtools/wiki
+- [Security and quality](./mathandy-svgpathtools-security.md) - source: /mathandy/svgpathtools/security
+- [Insights](./mathandy-svgpathtools-pulse.md) - source: /mathandy/svgpathtools/pulse
+- [Notifications](./login?return_to=%2Fmathandy%2Fsvgpathtools.md) - source: /login?return_to=%2Fmathandy%2Fsvgpathtools
+- [Activity](./mathandy-svgpathtools-activity.md) - source: /mathandy/svgpathtools/activity
+- [162 forks](./mathandy-svgpathtools-forks.md) - source: /mathandy/svgpathtools/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools&report=mathandy+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fmathandy%2Fsvgpathtools&report=mathandy+%28user%29
+- [22 Branches](./mathandy-svgpathtools-branches.md) - source: /mathandy/svgpathtools/branches
+- [30 Tags](./mathandy-svgpathtools-tags.md) - source: /mathandy/svgpathtools/tags
+- [mathandy](./mathandy-svgpathtools-commits?author=mathandy.md) - source: /mathandy/svgpathtools/commits?author=mathandy
+- [Merge PR](./mathandy-svgpathtools-commit-15b500ef3dc23336b114f40fb18d957483d3968f.md) - source: /mathandy/svgpathtools/commit/15b500ef3dc23336b114f40fb18d957483d3968f
 - [#253](https://github.com/mathandy/svgpathtools/pull/253)
-- 385 Commits - source: `/mathandy/svgpathtools/commits/master/`
-- .github/ workflows - source: `/mathandy/svgpathtools/tree/master/.github/workflows`
-- Apply CodeRabbit review suggestions from PR - source: `/mathandy/svgpathtools/commit/e16c603a8845542c293a2294f6b2ba5097a05c02`
+- [385 Commits](./mathandy-svgpathtools-commits-master.md) - source: /mathandy/svgpathtools/commits/master/
+- [.github/ workflows](./mathandy-svgpathtools-tree-master-.github-workflows.md) - source: /mathandy/svgpathtools/tree/master/.github/workflows
+- [Apply CodeRabbit review suggestions from PR](./mathandy-svgpathtools-commit-e16c603a8845542c293a2294f6b2ba5097a05c02.md) - source: /mathandy/svgpathtools/commit/e16c603a8845542c293a2294f6b2ba5097a05c02
 - [#249](https://github.com/mathandy/svgpathtools/pull/249)
-- examples - source: `/mathandy/svgpathtools/tree/master/examples`
-- remove all wildcard imports - source: `/mathandy/svgpathtools/commit/d9515ea39962cd044eb624fd068a82cf37d12e8c`
-- svgpathtools - source: `/mathandy/svgpathtools/tree/master/svgpathtools`
-- svg2paths: don't crash on a <path> with no d attribute - source: `/mathandy/svgpathtools/commit/d89f733f0f161ef974b1ee3b23107e4ad15d4a19`
-- test - source: `/mathandy/svgpathtools/tree/master/test`
-- Also assert the returned attributes in the no-d path test - source: `/mathandy/svgpathtools/commit/d9de536a50749601746c97a9f863362f7b93d12b`
-- .gitignore - source: `/mathandy/svgpathtools/blob/master/.gitignore`
-- do not ignore .github directory - source: `/mathandy/svgpathtools/commit/c5f49de5fe692d29e7eb94097d8f12efec719c19`
-- CONTRIBUTING.md - source: `/mathandy/svgpathtools/blob/master/CONTRIBUTING.md`
-- minor improvements - source: `/mathandy/svgpathtools/commit/d810653b63b29ff4536a8d691dc397b6ba4761e4`
-- LICENSE.txt - source: `/mathandy/svgpathtools/blob/master/LICENSE.txt`
-- initial commit - source: `/mathandy/svgpathtools/commit/9b3d6fe5e3513e03235822e4bbf5352abef46dd2`
-- LICENSE2.txt - source: `/mathandy/svgpathtools/blob/master/LICENSE2.txt`
-- MANIFEST.in - source: `/mathandy/svgpathtools/blob/master/MANIFEST.in`
-- improve distribution to PyPI - source: `/mathandy/svgpathtools/commit/08e8dc71ff37c35247e75aaba17745f98d9d266a`
-- README.ipynb - source: `/mathandy/svgpathtools/blob/master/README.ipynb`
-- remove broken build shield - source: `/mathandy/svgpathtools/commit/dc2f6e90cc771237c3645599ee20c3c397aede6c`
-- README.md - source: `/mathandy/svgpathtools/blob/master/README.md`
-- SECURITY.md - source: `/mathandy/svgpathtools/blob/master/SECURITY.md`
-- Create SECURITY.md - source: `/mathandy/svgpathtools/commit/be33f182fb831c7675b023680a64a49d5bef38a7`
-- decorated_ellipse.svg - source: `/mathandy/svgpathtools/blob/master/decorated_ellipse.svg`
-- donate-button.svg - source: `/mathandy/svgpathtools/blob/master/donate-button.svg`
-- add donate button - source: `/mathandy/svgpathtools/commit/5ea0fb226df4e3e589d38544e0c7fdc96866ab31`
-- offset_curves.svg - source: `/mathandy/svgpathtools/blob/master/offset_curves.svg`
-- improved README curve offsetting example - source: `/mathandy/svgpathtools/commit/0c682bf4d89022b937cbb0de2408ae172085e6ad`
-- output1.svg - source: `/mathandy/svgpathtools/blob/master/output1.svg`
-- add ability to preserve svg-attributes - source: `/mathandy/svgpathtools/commit/15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68`
-- output2.svg - source: `/mathandy/svgpathtools/blob/master/output2.svg`
-- output_intersections.svg - source: `/mathandy/svgpathtools/blob/master/output_intersections.svg`
-- path.svg - source: `/mathandy/svgpathtools/blob/master/path.svg`
-- requirements.txt - source: `/mathandy/svgpathtools/blob/master/requirements.txt`
-- add scipy to requirements file - source: `/mathandy/svgpathtools/commit/3a6711a5e74743cf17ecf8938374399fa01583ae`
-- setup.cfg - source: `/mathandy/svgpathtools/blob/master/setup.cfg`
-- Drop comment from pydocstyle config - source: `/mathandy/svgpathtools/commit/10c472beb5581c2350d886ecf0ec4de7758c3090`
-- setup.py - source: `/mathandy/svgpathtools/blob/master/setup.py`
-- Update version to 1.8.0 - source: `/mathandy/svgpathtools/commit/bcbbb74705c6916c5fe659b7a7ae3708390f946c`
-- test.svg - source: `/mathandy/svgpathtools/blob/master/test.svg`
-- vectorframes.svg - source: `/mathandy/svgpathtools/blob/master/vectorframes.svg`
+- [examples](./mathandy-svgpathtools-tree-master-examples.md) - source: /mathandy/svgpathtools/tree/master/examples
+- [remove all wildcard imports](./mathandy-svgpathtools-commit-d9515ea39962cd044eb624fd068a82cf37d12e8c.md) - source: /mathandy/svgpathtools/commit/d9515ea39962cd044eb624fd068a82cf37d12e8c
+- [svgpathtools](./mathandy-svgpathtools-tree-master-svgpathtools.md) - source: /mathandy/svgpathtools/tree/master/svgpathtools
+- [svg2paths: don't crash on a <path> with no d attribute](./mathandy-svgpathtools-commit-d89f733f0f161ef974b1ee3b23107e4ad15d4a19.md) - source: /mathandy/svgpathtools/commit/d89f733f0f161ef974b1ee3b23107e4ad15d4a19
+- [test](./mathandy-svgpathtools-tree-master-test.md) - source: /mathandy/svgpathtools/tree/master/test
+- [Also assert the returned attributes in the no-d path test](./mathandy-svgpathtools-commit-d9de536a50749601746c97a9f863362f7b93d12b.md) - source: /mathandy/svgpathtools/commit/d9de536a50749601746c97a9f863362f7b93d12b
+- [.gitignore](./mathandy-svgpathtools-blob-master-.gitignore.md) - source: /mathandy/svgpathtools/blob/master/.gitignore
+- [do not ignore .github directory](./mathandy-svgpathtools-commit-c5f49de5fe692d29e7eb94097d8f12efec719c19.md) - source: /mathandy/svgpathtools/commit/c5f49de5fe692d29e7eb94097d8f12efec719c19
+- [CONTRIBUTING.md](./mathandy-svgpathtools-blob-master-CONTRIBUTING.md.md) - source: /mathandy/svgpathtools/blob/master/CONTRIBUTING.md
+- [minor improvements](./mathandy-svgpathtools-commit-d810653b63b29ff4536a8d691dc397b6ba4761e4.md) - source: /mathandy/svgpathtools/commit/d810653b63b29ff4536a8d691dc397b6ba4761e4
+- [LICENSE.txt](./mathandy-svgpathtools-blob-master-LICENSE.txt.md) - source: /mathandy/svgpathtools/blob/master/LICENSE.txt
+- [initial commit](./mathandy-svgpathtools-commit-9b3d6fe5e3513e03235822e4bbf5352abef46dd2.md) - source: /mathandy/svgpathtools/commit/9b3d6fe5e3513e03235822e4bbf5352abef46dd2
+- [LICENSE2.txt](./mathandy-svgpathtools-blob-master-LICENSE2.txt.md) - source: /mathandy/svgpathtools/blob/master/LICENSE2.txt
+- [MANIFEST.in](./mathandy-svgpathtools-blob-master-MANIFEST.in.md) - source: /mathandy/svgpathtools/blob/master/MANIFEST.in
+- [improve distribution to PyPI](./mathandy-svgpathtools-commit-08e8dc71ff37c35247e75aaba17745f98d9d266a.md) - source: /mathandy/svgpathtools/commit/08e8dc71ff37c35247e75aaba17745f98d9d266a
+- [README.ipynb](./mathandy-svgpathtools-blob-master-README.ipynb.md) - source: /mathandy/svgpathtools/blob/master/README.ipynb
+- [remove broken build shield](./mathandy-svgpathtools-commit-dc2f6e90cc771237c3645599ee20c3c397aede6c.md) - source: /mathandy/svgpathtools/commit/dc2f6e90cc771237c3645599ee20c3c397aede6c
+- [README.md](./mathandy-svgpathtools-blob-master-README.md.md) - source: /mathandy/svgpathtools/blob/master/README.md
+- [SECURITY.md](./mathandy-svgpathtools-blob-master-SECURITY.md.md) - source: /mathandy/svgpathtools/blob/master/SECURITY.md
+- [Create SECURITY.md](./mathandy-svgpathtools-commit-be33f182fb831c7675b023680a64a49d5bef38a7.md) - source: /mathandy/svgpathtools/commit/be33f182fb831c7675b023680a64a49d5bef38a7
+- [decorated_ellipse.svg](./mathandy-svgpathtools-blob-master-decorated_ellipse.svg.md) - source: /mathandy/svgpathtools/blob/master/decorated_ellipse.svg
+- [donate-button.svg](./mathandy-svgpathtools-blob-master-donate-button.svg.md) - source: /mathandy/svgpathtools/blob/master/donate-button.svg
+- [add donate button](./mathandy-svgpathtools-commit-5ea0fb226df4e3e589d38544e0c7fdc96866ab31.md) - source: /mathandy/svgpathtools/commit/5ea0fb226df4e3e589d38544e0c7fdc96866ab31
+- [offset_curves.svg](./mathandy-svgpathtools-blob-master-offset_curves.svg.md) - source: /mathandy/svgpathtools/blob/master/offset_curves.svg
+- [improved README curve offsetting example](./mathandy-svgpathtools-commit-0c682bf4d89022b937cbb0de2408ae172085e6ad.md) - source: /mathandy/svgpathtools/commit/0c682bf4d89022b937cbb0de2408ae172085e6ad
+- [output1.svg](./mathandy-svgpathtools-blob-master-output1.svg.md) - source: /mathandy/svgpathtools/blob/master/output1.svg
+- [add ability to preserve svg-attributes](./mathandy-svgpathtools-commit-15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68.md) - source: /mathandy/svgpathtools/commit/15d186ff33af1f9bfbe1f2ea9e36a9d61ad3ff68
+- [output2.svg](./mathandy-svgpathtools-blob-master-output2.svg.md) - source: /mathandy/svgpathtools/blob/master/output2.svg
+- [output_intersections.svg](./mathandy-svgpathtools-blob-master-output_intersections.svg.md) - source: /mathandy/svgpathtools/blob/master/output_intersections.svg
+- [path.svg](./mathandy-svgpathtools-blob-master-path.svg.md) - source: /mathandy/svgpathtools/blob/master/path.svg
+- [requirements.txt](./mathandy-svgpathtools-blob-master-requirements.txt.md) - source: /mathandy/svgpathtools/blob/master/requirements.txt
+- [add scipy to requirements file](./mathandy-svgpathtools-commit-3a6711a5e74743cf17ecf8938374399fa01583ae.md) - source: /mathandy/svgpathtools/commit/3a6711a5e74743cf17ecf8938374399fa01583ae
+- [setup.cfg](./mathandy-svgpathtools-blob-master-setup.cfg.md) - source: /mathandy/svgpathtools/blob/master/setup.cfg
+- [Drop comment from pydocstyle config](./mathandy-svgpathtools-commit-10c472beb5581c2350d886ecf0ec4de7758c3090.md) - source: /mathandy/svgpathtools/commit/10c472beb5581c2350d886ecf0ec4de7758c3090
+- [setup.py](./mathandy-svgpathtools-blob-master-setup.py.md) - source: /mathandy/svgpathtools/blob/master/setup.py
+- [Update version to 1.8.0](./mathandy-svgpathtools-commit-bcbbb74705c6916c5fe659b7a7ae3708390f946c.md) - source: /mathandy/svgpathtools/commit/bcbbb74705c6916c5fe659b7a7ae3708390f946c
+- [test.svg](./mathandy-svgpathtools-blob-master-test.svg.md) - source: /mathandy/svgpathtools/blob/master/test.svg
+- [vectorframes.svg](./mathandy-svgpathtools-blob-master-vectorframes.svg.md) - source: /mathandy/svgpathtools/blob/master/vectorframes.svg
 - [https://www.paypal.com/donate?business=4SKJ27AM4EYYA&no_recurring=0&item_name=Support+the+creator+of+svgpathtools?++He%27s+a+student+and+would+appreciate+it.&currency_code=USD](https://www.paypal.com/donate?business=4SKJ27AM4EYYA&no_recurring=0&item_name=Support+the+creator+of+svgpathtools?++He%27s+a+student+and+would+appreciate+it.&currency_code=USD)
 - [https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667)
 - [https://pypi.org/project/svgpathtools/](https://pypi.org/project/svgpathtools/)
@@ -614,23 +617,23 @@ This module is under a MIT License.
 - [defined similarly](https://en.wikipedia.org/wiki/B%C3%A9zier_curve#General_definition)
 - [Example available here](https://github.com/mathandy/svgpathtools/blob/master/examples/compute-many-points-quickly-using-numpy-arrays.py)
 - [offset curve](https://en.wikipedia.org/wiki/Parallel_curve)
-- Releases - source: `/mathandy/svgpathtools/releases`
-- Used by - source: `/mathandy/svgpathtools/network/dependents`
-- Contributors - source: `/mathandy/svgpathtools/graphs/contributors`
-- /SebKuzminsky - source: `/SebKuzminsky`
-- /claude - source: `/claude`
-- /FlyingSamson - source: `/FlyingSamson`
-- /kennyweiss - source: `/kennyweiss`
-- /tatarize - source: `/tatarize`
-- /derVedro - source: `/derVedro`
-- /jpcofr - source: `/jpcofr`
-- /elenzil - source: `/elenzil`
-- /mxgrey - source: `/mxgrey`
-- /andersgb - source: `/andersgb`
-- /bouhek - source: `/bouhek`
-- /abey79 - source: `/abey79`
-- /Erfouni - source: `/Erfouni`
-- Python 100% - source: `/mathandy/svgpathtools/search?l=python`
+- [Releases](./mathandy-svgpathtools-releases.md) - source: /mathandy/svgpathtools/releases
+- [Used by](./mathandy-svgpathtools-network-dependents.md) - source: /mathandy/svgpathtools/network/dependents
+- [Contributors](./mathandy-svgpathtools-graphs-contributors.md) - source: /mathandy/svgpathtools/graphs/contributors
+- [/SebKuzminsky](./SebKuzminsky.md) - source: /SebKuzminsky
+- [/claude](./claude.md) - source: /claude
+- [/FlyingSamson](./FlyingSamson.md) - source: /FlyingSamson
+- [/kennyweiss](./kennyweiss.md) - source: /kennyweiss
+- [/tatarize](./tatarize.md) - source: /tatarize
+- [/derVedro](./derVedro.md) - source: /derVedro
+- [/jpcofr](./jpcofr.md) - source: /jpcofr
+- [/elenzil](./elenzil.md) - source: /elenzil
+- [/mxgrey](./mxgrey.md) - source: /mxgrey
+- [/andersgb](./andersgb.md) - source: /andersgb
+- [/bouhek](./bouhek.md) - source: /bouhek
+- [/abey79](./abey79.md) - source: /abey79
+- [/Erfouni](./Erfouni.md) - source: /Erfouni
+- [Python 100%](./mathandy-svgpathtools-search?l=python.md) - source: /mathandy/svgpathtools/search?l=python
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

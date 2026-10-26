@@ -22,11 +22,14 @@ Relevant source files
 - [test/tests/Path_Intersections.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js)
 - [test/tests/Style.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Style.js)
 
-This document explains how to create and manipulate paths in Paper.js. Paths are one of the core components of Paper.js and represent vector shapes composed of connected segments and curves. For information about boolean operations on paths (unite, intersect, subtract, etc.), see Boolean Operations. For detailed information about curves and segments, see Curves and Segments.
+This document explains how to create and manipulate paths in Paper.js. Paths are one of the core components of Paper.js and represent vector shapes composed of connected segments and curves. For information about boolean operations on paths (unite, intersect, subtract, etc.), see [Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md). For detailed information about curves and segments, see [Curves and Segments](./paperjs-paper.js-3.3-curves-and-segments.md).
 
 ## Path Structure Overview
 
-Sources: [src/path/Path.js 15-21](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L15-L21) [src/path/Path.js 22-27](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L22-L27) [src/path/Path.js 169-177](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L169-L177) [src/path/Path.js 199-207](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L199-L207)
+- [src/path/Path.js 15-21](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L15-L21)
+- [src/path/Path.js 22-27](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L22-L27)
+- [src/path/Path.js 169-177](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L169-L177)
+- [src/path/Path.js 199-207](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L199-L207)
 
 ## Creating Paths
 
@@ -76,7 +79,9 @@ Sources: [src/path/Path.js 169-216](https://github.com/paperjs/paper.js/blob/927
 // Add a segment at the end of the pathpath.add(new Point(100, 100)); // Add multiple segmentspath.add([100, 200], [200, 300]); // Add a segment with handlespath.add(new Segment(    new Point(100, 20),    new Point(-50, 0),  // handle in    new Point(50, 0)    // handle out));
 ```
 
-Sources: [src/path/Path.js 481-558](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L481-L558) [src/path/Path.js 604-611](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L604-L611) [src/path/Path.js 654-657](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L654-L657)
+- [src/path/Path.js 481-558](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L481-L558)
+- [src/path/Path.js 604-611](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L604-L611)
+- [src/path/Path.js 654-657](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L654-L657)
 
 ### Inserting Segments
 
@@ -84,7 +89,9 @@ Sources: [src/path/Path.js 481-558](https://github.com/paperjs/paper.js/blob/927
 // Insert a segment at a specific indexpath.insert(1, new Point(50, 50)); // Insert multiple segments at a specific indexpath.insert(1, [new Point(50, 50), new Point(70, 70)]);
 ```
 
-Sources: [src/path/Path.js 595-603](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L595-L603) [src/path/Path.js 609-611](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L609-L611) [src/path/Path.js 669-671](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L669-L671)
+- [src/path/Path.js 595-603](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L595-L603)
+- [src/path/Path.js 609-611](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L609-L611)
+- [src/path/Path.js 669-671](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L669-L671)
 
 ### Removing Segments
 
@@ -219,9 +226,11 @@ The Path class extends PathItem, which provides common functionality for path-ba
 
 When segments are modified, curves between segments are automatically updated. Paper.js maintains segment and curve indices, so when segments are added or removed, all affected indices are updated.
 
-Boolean operations, covered in another section Boolean Operations, allow for complex path combinations including unite, subtract, intersect, exclude, and divide.
+Boolean operations, covered in another section [Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md), allow for complex path combinations including unite, subtract, intersect, exclude, and divide.
 
-Sources: [src/path/Path.js 88-127](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L88-L127) [src/path/Path.js 139-156](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L139-L156) [src/path/PathItem.Boolean.js 29-46](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L29-L46)
+- [src/path/Path.js 88-127](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L88-L127)
+- [src/path/Path.js 139-156](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L139-L156)
+- [src/path/PathItem.Boolean.js 29-46](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L29-L46)
 
 Refresh this wiki
 
@@ -273,8 +282,8 @@ Refresh this wiki
 - [test/tests/Path_Boolean.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Boolean.js)
 - [test/tests/Path_Intersections.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js)
 - [test/tests/Style.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Style.js)
-- Boolean Operations - source: `/paperjs/paper.js/3.2-boolean-operations`
-- Curves and Segments - source: `/paperjs/paper.js/3.3-curves-and-segments`
+- [Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md) - source: /paperjs/paper.js/3.2-boolean-operations
+- [Curves and Segments](./paperjs-paper.js-3.3-curves-and-segments.md) - source: /paperjs/paper.js/3.3-curves-and-segments
 - [src/path/Path.js 15-21](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L15-L21)
 - [src/path/Path.js 22-27](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L22-L27)
 - [src/path/Path.js 169-177](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L169-L177)

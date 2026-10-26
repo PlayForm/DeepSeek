@@ -2526,7 +2526,7 @@ This tutorial was originally presented by Daniele Panozzo and Alec Jacobson at S
 
 51. Oded Stein, Eitan Grinspun, Max Wardetzky, Alec Jacobson. [Natural Boundary Conditions for Smoothing in Geometry Processing](http://www.cs.columbia.edu/cg/hessians/), 2018. [↩](#fnref:stein_2018)
 
-[C++](./tutorial.md)Python
+[C++](./tutorial.md)[Python](./python-api.md)
 
 <!--
 ## Source links
@@ -2693,5 +2693,5 @@ This tutorial was originally presented by Daniele Panozzo and Alec Jacobson at S
 - [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
 - [https://github.com/libigl](https://github.com/libigl)
 - [C++](./tutorial.md) - source: /tutorial/
-- Python - source: `/python/api/`
+- [Python](./python-api.md) - source: /python/api/
 -->

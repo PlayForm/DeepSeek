@@ -1,7 +1,9 @@
 # seedrandom.js
 
 
-[![Build Status](https://camo.githubusercontent.com/d17855eb6b91c8ec009b7242415a88f5450870a9740cf319170c0b6e7e108d78/68747470733a2f2f7472617669732d63692e6f72672f64617669646261752f7365656472616e646f6d2e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/davidbau/seedrandom) [![NPM version](https://camo.githubusercontent.com/5f104d203588b2bc089be0207171fda27951265b6de90acc07909b1e83351f12/68747470733a2f2f62616467652e667572792e696f2f6a732f7365656472616e646f6d2e737667)](http://badge.fury.io/js/seedrandom) [![Bower version](https://camo.githubusercontent.com/b037ba207ed9c9ecc9fdab2c0e57c3b7a4bfef771aeeb9f9899af03116489a73/68747470733a2f2f62616467652e667572792e696f2f626f2f7365656472616e646f6d2e737667)](http://badge.fury.io/bo/seedrandom)
+- [![Build Status](https://camo.githubusercontent.com/d17855eb6b91c8ec009b7242415a88f5450870a9740cf319170c0b6e7e108d78/68747470733a2f2f7472617669732d63692e6f72672f64617669646261752f7365656472616e646f6d2e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/davidbau/seedrandom)
+- [![NPM version](https://camo.githubusercontent.com/5f104d203588b2bc089be0207171fda27951265b6de90acc07909b1e83351f12/68747470733a2f2f62616467652e667572792e696f2f6a732f7365656472616e646f6d2e737667)](http://badge.fury.io/js/seedrandom)
+- [![Bower version](https://camo.githubusercontent.com/b037ba207ed9c9ecc9fdab2c0e57c3b7a4bfef771aeeb9f9899af03116489a73/68747470733a2f2f62616467652e667572792e696f2f626f2f7365656472616e646f6d2e737667)](http://badge.fury.io/bo/seedrandom)
 
 Seeded random number generator for JavaScript.
 
@@ -243,8 +245,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -303,74 +305,74 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=davidbau%2Fseedrandom`
-- davidbau - source: `/davidbau`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=davidbau%2Fseedrandom.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=davidbau%2Fseedrandom
+- [davidbau](./davidbau.md) - source: /davidbau
 - [seedrandom](./davidbau-seedrandom.md) - source: /davidbau/seedrandom
-- Issues 10 - source: `/davidbau/seedrandom/issues`
-- Pull requests 1 - source: `/davidbau/seedrandom/pulls`
-- Actions - source: `/davidbau/seedrandom/actions`
-- Projects - source: `/davidbau/seedrandom/projects`
-- Wiki - source: `/davidbau/seedrandom/wiki`
-- Security and quality - source: `/davidbau/seedrandom/security`
-- Insights - source: `/davidbau/seedrandom/pulse`
-- Notifications - source: `/login?return_to=%2Fdavidbau%2Fseedrandom`
-- Activity - source: `/davidbau/seedrandom/activity`
-- 168 forks - source: `/davidbau/seedrandom/forks`
-- Report repository - source: `/contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom&report=davidbau+%28user%29`
-- 2 Branches - source: `/davidbau/seedrandom/branches`
-- 25 Tags - source: `/davidbau/seedrandom/tags`
-- davidbau - source: `/davidbau/seedrandom/commits?author=davidbau`
-- release 3.0.5 - source: `/davidbau/seedrandom/commit/4460ad325a0a15273a211e509f03ae0beb99511a`
-- 161 Commits - source: `/davidbau/seedrandom/commits/released/`
-- lib - source: `/davidbau/seedrandom/tree/released/lib`
-- Update npm packages. - source: `/davidbau/seedrandom/commit/9a841c893894bf360966f5245ba8151f87a999dc`
-- test - source: `/davidbau/seedrandom/tree/released/test`
-- Prepare for 3.0.5 release. - source: `/davidbau/seedrandom/commit/45a8a57ec1fd8abbd3b0776dcd6d9a6918c9ff69`
-- .coveralls.yml - source: `/davidbau/seedrandom/blob/released/.coveralls.yml`
-- Rearrange names, add travis coveralls yml. - source: `/davidbau/seedrandom/commit/8523b852123b64985b353032a4f38e11a2104e98`
-- .gitignore - source: `/davidbau/seedrandom/blob/released/.gitignore`
-- Move from istanbul tool to nyc. - source: `/davidbau/seedrandom/commit/12cb7e99b2d46b0e81d1fe4348d2bde8625ae5ad`
-- .npmignore - source: `/davidbau/seedrandom/blob/released/.npmignore`
-- Ignore the test directory in npm pacakage (472K) - source: `/davidbau/seedrandom/commit/2d5b1f62d1c31ce7fb1350ad4a96c9205c595b54`
-- .nvmrc - source: `/davidbau/seedrandom/blob/released/.nvmrc`
-- Upgrade to qunit 2.0. - source: `/davidbau/seedrandom/commit/a1895d0d56a2a9b308b1bdc1d2e572a70288a798`
-- .travis.yml - source: `/davidbau/seedrandom/blob/released/.travis.yml`
-- Eliminate old node versions for travis. - source: `/davidbau/seedrandom/commit/4faff3bd9e8cb16e07f1944de206cf8a908ee8c9`
-- Gruntfile.js - source: `/davidbau/seedrandom/blob/released/Gruntfile.js`
-- Switch back to patched grunt-release. - source: `/davidbau/seedrandom/commit/a72457f0a9edb4446b1055cb68e42a60a79e665b`
-- README.md - source: `/davidbau/seedrandom/blob/released/README.md`
-- bower.json - source: `/davidbau/seedrandom/blob/released/bower.json`
-- Update bower.json to current conventions. - source: `/davidbau/seedrandom/commit/c6052aab2f90a8a7d4011bf352d0ade10bd746c8`
-- component.json - source: `/davidbau/seedrandom/blob/released/component.json`
-- version bump to 3.0.0. - source: `/davidbau/seedrandom/commit/872042c8f042558e59b90a416da4fb6b8fd0ea0a`
-- index.js - source: `/davidbau/seedrandom/blob/released/index.js`
-- Include the impressively fast alea algorithm. - source: `/davidbau/seedrandom/commit/55c92f55b35d65364766af94b8ffa2ad9830c4fb`
-- package-lock.json - source: `/davidbau/seedrandom/blob/released/package-lock.json`
-- package.json - source: `/davidbau/seedrandom/blob/released/package.json`
-- seedrandom.js - source: `/davidbau/seedrandom/blob/released/seedrandom.js`
-- Avoid using eval() to get global object. - source: `/davidbau/seedrandom/commit/5f2ec4218ff700fd0dba5b2d5782d0ac4ad19df5`
-- seedrandom.min.js - source: `/davidbau/seedrandom/blob/released/seedrandom.min.js`
+- [Issues 10](./davidbau-seedrandom-issues.md) - source: /davidbau/seedrandom/issues
+- [Pull requests 1](./davidbau-seedrandom-pulls.md) - source: /davidbau/seedrandom/pulls
+- [Actions](./davidbau-seedrandom-actions.md) - source: /davidbau/seedrandom/actions
+- [Projects](./davidbau-seedrandom-projects.md) - source: /davidbau/seedrandom/projects
+- [Wiki](./davidbau-seedrandom-wiki.md) - source: /davidbau/seedrandom/wiki
+- [Security and quality](./davidbau-seedrandom-security.md) - source: /davidbau/seedrandom/security
+- [Insights](./davidbau-seedrandom-pulse.md) - source: /davidbau/seedrandom/pulse
+- [Notifications](./login?return_to=%2Fdavidbau%2Fseedrandom.md) - source: /login?return_to=%2Fdavidbau%2Fseedrandom
+- [Activity](./davidbau-seedrandom-activity.md) - source: /davidbau/seedrandom/activity
+- [168 forks](./davidbau-seedrandom-forks.md) - source: /davidbau/seedrandom/forks
+- [Report repository](./contact-report-content?content_url=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom&report=davidbau+%28user%29.md) - source: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fdavidbau%2Fseedrandom&report=davidbau+%28user%29
+- [2 Branches](./davidbau-seedrandom-branches.md) - source: /davidbau/seedrandom/branches
+- [25 Tags](./davidbau-seedrandom-tags.md) - source: /davidbau/seedrandom/tags
+- [davidbau](./davidbau-seedrandom-commits?author=davidbau.md) - source: /davidbau/seedrandom/commits?author=davidbau
+- [release 3.0.5](./davidbau-seedrandom-commit-4460ad325a0a15273a211e509f03ae0beb99511a.md) - source: /davidbau/seedrandom/commit/4460ad325a0a15273a211e509f03ae0beb99511a
+- [161 Commits](./davidbau-seedrandom-commits-released.md) - source: /davidbau/seedrandom/commits/released/
+- [lib](./davidbau-seedrandom-tree-released-lib.md) - source: /davidbau/seedrandom/tree/released/lib
+- [Update npm packages.](./davidbau-seedrandom-commit-9a841c893894bf360966f5245ba8151f87a999dc.md) - source: /davidbau/seedrandom/commit/9a841c893894bf360966f5245ba8151f87a999dc
+- [test](./davidbau-seedrandom-tree-released-test.md) - source: /davidbau/seedrandom/tree/released/test
+- [Prepare for 3.0.5 release.](./davidbau-seedrandom-commit-45a8a57ec1fd8abbd3b0776dcd6d9a6918c9ff69.md) - source: /davidbau/seedrandom/commit/45a8a57ec1fd8abbd3b0776dcd6d9a6918c9ff69
+- [.coveralls.yml](./davidbau-seedrandom-blob-released-.coveralls.yml.md) - source: /davidbau/seedrandom/blob/released/.coveralls.yml
+- [Rearrange names, add travis coveralls yml.](./davidbau-seedrandom-commit-8523b852123b64985b353032a4f38e11a2104e98.md) - source: /davidbau/seedrandom/commit/8523b852123b64985b353032a4f38e11a2104e98
+- [.gitignore](./davidbau-seedrandom-blob-released-.gitignore.md) - source: /davidbau/seedrandom/blob/released/.gitignore
+- [Move from istanbul tool to nyc.](./davidbau-seedrandom-commit-12cb7e99b2d46b0e81d1fe4348d2bde8625ae5ad.md) - source: /davidbau/seedrandom/commit/12cb7e99b2d46b0e81d1fe4348d2bde8625ae5ad
+- [.npmignore](./davidbau-seedrandom-blob-released-.npmignore.md) - source: /davidbau/seedrandom/blob/released/.npmignore
+- [Ignore the test directory in npm pacakage (472K)](./davidbau-seedrandom-commit-2d5b1f62d1c31ce7fb1350ad4a96c9205c595b54.md) - source: /davidbau/seedrandom/commit/2d5b1f62d1c31ce7fb1350ad4a96c9205c595b54
+- [.nvmrc](./davidbau-seedrandom-blob-released-.nvmrc.md) - source: /davidbau/seedrandom/blob/released/.nvmrc
+- [Upgrade to qunit 2.0.](./davidbau-seedrandom-commit-a1895d0d56a2a9b308b1bdc1d2e572a70288a798.md) - source: /davidbau/seedrandom/commit/a1895d0d56a2a9b308b1bdc1d2e572a70288a798
+- [.travis.yml](./davidbau-seedrandom-blob-released-.travis.yml.md) - source: /davidbau/seedrandom/blob/released/.travis.yml
+- [Eliminate old node versions for travis.](./davidbau-seedrandom-commit-4faff3bd9e8cb16e07f1944de206cf8a908ee8c9.md) - source: /davidbau/seedrandom/commit/4faff3bd9e8cb16e07f1944de206cf8a908ee8c9
+- [Gruntfile.js](./davidbau-seedrandom-blob-released-Gruntfile.js.md) - source: /davidbau/seedrandom/blob/released/Gruntfile.js
+- [Switch back to patched grunt-release.](./davidbau-seedrandom-commit-a72457f0a9edb4446b1055cb68e42a60a79e665b.md) - source: /davidbau/seedrandom/commit/a72457f0a9edb4446b1055cb68e42a60a79e665b
+- [README.md](./davidbau-seedrandom-blob-released-README.md.md) - source: /davidbau/seedrandom/blob/released/README.md
+- [bower.json](./davidbau-seedrandom-blob-released-bower.json.md) - source: /davidbau/seedrandom/blob/released/bower.json
+- [Update bower.json to current conventions.](./davidbau-seedrandom-commit-c6052aab2f90a8a7d4011bf352d0ade10bd746c8.md) - source: /davidbau/seedrandom/commit/c6052aab2f90a8a7d4011bf352d0ade10bd746c8
+- [component.json](./davidbau-seedrandom-blob-released-component.json.md) - source: /davidbau/seedrandom/blob/released/component.json
+- [version bump to 3.0.0.](./davidbau-seedrandom-commit-872042c8f042558e59b90a416da4fb6b8fd0ea0a.md) - source: /davidbau/seedrandom/commit/872042c8f042558e59b90a416da4fb6b8fd0ea0a
+- [index.js](./davidbau-seedrandom-blob-released-index.js.md) - source: /davidbau/seedrandom/blob/released/index.js
+- [Include the impressively fast alea algorithm.](./davidbau-seedrandom-commit-55c92f55b35d65364766af94b8ffa2ad9830c4fb.md) - source: /davidbau/seedrandom/commit/55c92f55b35d65364766af94b8ffa2ad9830c4fb
+- [package-lock.json](./davidbau-seedrandom-blob-released-package-lock.json.md) - source: /davidbau/seedrandom/blob/released/package-lock.json
+- [package.json](./davidbau-seedrandom-blob-released-package.json.md) - source: /davidbau/seedrandom/blob/released/package.json
+- [seedrandom.js](./davidbau-seedrandom-blob-released-seedrandom.js.md) - source: /davidbau/seedrandom/blob/released/seedrandom.js
+- [Avoid using eval() to get global object.](./davidbau-seedrandom-commit-5f2ec4218ff700fd0dba5b2d5782d0ac4ad19df5.md) - source: /davidbau/seedrandom/commit/5f2ec4218ff700fd0dba5b2d5782d0ac4ad19df5
+- [seedrandom.min.js](./davidbau-seedrandom-blob-released-seedrandom.min.js.md) - source: /davidbau/seedrandom/blob/released/seedrandom.min.js
 - [https://travis-ci.org/davidbau/seedrandom](https://travis-ci.org/davidbau/seedrandom)
 - [http://badge.fury.io/js/seedrandom](http://badge.fury.io/js/seedrandom)
 - [http://badge.fury.io/bo/seedrandom](http://badge.fury.io/bo/seedrandom)
 - [cryptico](https://www.npmjs.com/package/cryptico)
 - [uses the wrong form](https://github.com/wwwtyro/cryptico/blob/9291ece6/api.js#L264)
-- Releases - source: `/davidbau/seedrandom/releases`
-- Used by - source: `/davidbau/seedrandom/network/dependents`
-- Contributors - source: `/davidbau/seedrandom/graphs/contributors`
-- /TimothyGu - source: `/TimothyGu`
-- /danielledeleo - source: `/danielledeleo`
-- /mreinstein - source: `/mreinstein`
-- /tmcw - source: `/tmcw`
-- /automata - source: `/automata`
-- /bluelovers - source: `/bluelovers`
-- /jared-stilwell - source: `/jared-stilwell`
-- /ZJONSSON - source: `/ZJONSSON`
-- /louh - source: `/louh`
-- /dave-5 - source: `/dave-5`
-- JavaScript 81.3% - source: `/davidbau/seedrandom/search?l=javascript`
-- HTML 18.5% - source: `/davidbau/seedrandom/search?l=html`
-- Shell 0.2% - source: `/davidbau/seedrandom/search?l=shell`
+- [Releases](./davidbau-seedrandom-releases.md) - source: /davidbau/seedrandom/releases
+- [Used by](./davidbau-seedrandom-network-dependents.md) - source: /davidbau/seedrandom/network/dependents
+- [Contributors](./davidbau-seedrandom-graphs-contributors.md) - source: /davidbau/seedrandom/graphs/contributors
+- [/TimothyGu](./TimothyGu.md) - source: /TimothyGu
+- [/danielledeleo](./danielledeleo.md) - source: /danielledeleo
+- [/mreinstein](./mreinstein.md) - source: /mreinstein
+- [/tmcw](./tmcw.md) - source: /tmcw
+- [/automata](./automata.md) - source: /automata
+- [/bluelovers](./bluelovers.md) - source: /bluelovers
+- [/jared-stilwell](./jared-stilwell.md) - source: /jared-stilwell
+- [/ZJONSSON](./ZJONSSON.md) - source: /ZJONSSON
+- [/louh](./louh.md) - source: /louh
+- [/dave-5](./dave-5.md) - source: /dave-5
+- [JavaScript 81.3%](./davidbau-seedrandom-search?l=javascript.md) - source: /davidbau/seedrandom/search?l=javascript
+- [HTML 18.5%](./davidbau-seedrandom-search?l=html.md) - source: /davidbau/seedrandom/search?l=html
+- [Shell 0.2%](./davidbau-seedrandom-search?l=shell.md) - source: /davidbau/seedrandom/search?l=shell
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

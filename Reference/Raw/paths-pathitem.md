@@ -1,8 +1,8 @@
-🧻paper.js`⌘Ctrl` `k` [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/) For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
+[🧻paper.js](./index.md)`⌘Ctrl` `k` [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/) For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
 
 # PathItem
 
-Extends **`Item`**
+Extends [**`Item`**](./project-and-items-item.md)
 
 The PathItem class is the base for any items that describe paths and offer standardised methods for drawing and path manipulation, such as `[Path](Path%20f91b7d17f1f747e1950d655ad8aaf2c5.md)` and `[CompoundPath](CompoundPath%200e46476761cb45a0ab9ed15d5e6dfffb.md)`.
 
@@ -3682,54 +3682,54 @@ The PathItem class is the base for any items that describe paths and offer stand
   path.tweenFrom({ fillColor: 'red' }, { duration: 1000 });
   ```
 
-Previous HitResult Next Path
+[Previous HitResult](./project-and-items-hitresult.md) [Next Path](./paths-path.md)
 
 Last updated 3 years ago
 
 <!--
 ## Source links
 
-- 🧻 paper.js - source: `/`
+- [🧻 paper.js](./index.md) - source: /
 - [Paper.js](http://paperjs.org/)
 - [Typogram](https://typogram.co/)
-- Global Scope - source: `/global-scope`
-- paperjs-round-corners - source: `/3rd-party-plugins/paperjs-round-corners`
-- Point - source: `/basic-types/point`
-- Size - source: `/basic-types/size`
-- Line - source: `/basic-types/line`
-- Rectangle - source: `/basic-types/rectangle`
-- Matrix - source: `/basic-types/matrix`
-- Project - source: `/project-and-items/project`
-- Item - source: `/project-and-items/item`
-- Layer - source: `/project-and-items/layer`
-- Group - source: `/project-and-items/group`
-- Shape - source: `/project-and-items/shape`
-- Raster - source: `/project-and-items/raster`
-- HitResult - source: `/project-and-items/hitresult`
+- [Global Scope](./global-scope.md) - source: /global-scope
+- [paperjs-round-corners](./3rd-party-plugins-paperjs-round-corners.md) - source: /3rd-party-plugins/paperjs-round-corners
+- [Point](./basic-types-point.md) - source: /basic-types/point
+- [Size](./basic-types-size.md) - source: /basic-types/size
+- [Line](./basic-types-line.md) - source: /basic-types/line
+- [Rectangle](./basic-types-rectangle.md) - source: /basic-types/rectangle
+- [Matrix](./basic-types-matrix.md) - source: /basic-types/matrix
+- [Project](./project-and-items-project.md) - source: /project-and-items/project
+- [Item](./project-and-items-item.md) - source: /project-and-items/item
+- [Layer](./project-and-items-layer.md) - source: /project-and-items/layer
+- [Group](./project-and-items-group.md) - source: /project-and-items/group
+- [Shape](./project-and-items-shape.md) - source: /project-and-items/shape
+- [Raster](./project-and-items-raster.md) - source: /project-and-items/raster
+- [HitResult](./project-and-items-hitresult.md) - source: /project-and-items/hitresult
 - [PathItem](./paths-pathitem.md) - source: /paths/pathitem
-- Path - source: `/paths/path`
-- CompoundPath - source: `/paths/compoundpath`
-- Segment - source: `/paths/segment`
-- Curve - source: `/paths/curve`
-- CurveLocation - source: `/paths/curvelocation`
-- SymbolDefinition - source: `/symbols/symboldefinition`
-- SymbolItem - source: `/symbols/symbolitem`
-- Style - source: `/styling/style`
-- Color - source: `/styling/color`
-- Gradient - source: `/styling/gradient`
-- GradientStop - source: `/styling/gradientstop`
-- Tween - source: `/animation/tween`
-- TextItem - source: `/typography/textitem`
-- PointText - source: `/typography/pointtext`
-- View - source: `/user-interaction-and-events/view`
-- Event - source: `/user-interaction-and-events/event`
-- MouseEvent - source: `/user-interaction-and-events/mouseevent`
-- Tool - source: `/user-interaction-and-events/tool`
-- ToolEvent - source: `/user-interaction-and-events/toolevent`
-- Key - source: `/user-interaction-and-events/key`
-- KeyEvent - source: `/user-interaction-and-events/keyevent`
-- PaperScope - source: `/javascript/paperscope`
-- PaperScript - source: `/javascript/paperscript`
+- [Path](./paths-path.md) - source: /paths/path
+- [CompoundPath](./paths-compoundpath.md) - source: /paths/compoundpath
+- [Segment](./paths-segment.md) - source: /paths/segment
+- [Curve](./paths-curve.md) - source: /paths/curve
+- [CurveLocation](./paths-curvelocation.md) - source: /paths/curvelocation
+- [SymbolDefinition](./symbols-symboldefinition.md) - source: /symbols/symboldefinition
+- [SymbolItem](./symbols-symbolitem.md) - source: /symbols/symbolitem
+- [Style](./styling-style.md) - source: /styling/style
+- [Color](./styling-color.md) - source: /styling/color
+- [Gradient](./styling-gradient.md) - source: /styling/gradient
+- [GradientStop](./styling-gradientstop.md) - source: /styling/gradientstop
+- [Tween](./animation-tween.md) - source: /animation/tween
+- [TextItem](./typography-textitem.md) - source: /typography/textitem
+- [PointText](./typography-pointtext.md) - source: /typography/pointtext
+- [View](./user-interaction-and-events-view.md) - source: /user-interaction-and-events/view
+- [Event](./user-interaction-and-events-event.md) - source: /user-interaction-and-events/event
+- [MouseEvent](./user-interaction-and-events-mouseevent.md) - source: /user-interaction-and-events/mouseevent
+- [Tool](./user-interaction-and-events-tool.md) - source: /user-interaction-and-events/tool
+- [ToolEvent](./user-interaction-and-events-toolevent.md) - source: /user-interaction-and-events/toolevent
+- [Key](./user-interaction-and-events-key.md) - source: /user-interaction-and-events/key
+- [KeyEvent](./user-interaction-and-events-keyevent.md) - source: /user-interaction-and-events/keyevent
+- [PaperScope](./javascript-paperscope.md) - source: /javascript/paperscope
+- [PaperScript](./javascript-paperscript.md) - source: /javascript/paperscript
 - [Powered by GitBook](https://www.gitbook.com/powered-by?utm_source=content&utm_medium=trademark&utm_campaign=AD21QO0wQq6LFbJSvklk&utm_content=site_Iyyaz)
 - [llms.txt](https://paperjs.typogram.co/llms.txt)
 - [Markdown](https://paperjs.typogram.co/paths/pathitem.md)

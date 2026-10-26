@@ -1,14 +1,20 @@
- /
+[](./libigl-libigl.md) /
 
 # signed_distance.h
 
-Copy path More file actions More file actions [![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)alecjacobsonLipschitz octree pruning ([\#2488](https://github.com/libigl/libigl/pull/2488)[) \skip ci\]Open commit details Jul 17, 2025 47b557d · Jul 17, 2025 History Open commit detailsHistory 319 lines (316 loc) · 11 KB1
+Copy path More file actions More file actions [![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)[alecjacobson](./libigl-libigl-commits?author=alecjacobson.md)
+
+- [Lipschitz octree pruning (](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md)
+- [\#2488](https://github.com/libigl/libigl/pull/2488)
+- [) \[skip ci\]](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md)
+
+Open commit details Jul 17, 2025 [47b557d](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md) · Jul 17, 2025 [History](./libigl-libigl-commits-main-include-igl-signed_distance.h.md) Open commit details[](./libigl-libigl-commits-main-include-igl-signed_distance.h.md)History 319 lines (316 loc) · 11 KB1
 
 <!--
 ## Source links
 
-- / - source: `/`
-- Sign in - source: `/login?return_to=https%3A%2F%2Fgithub.com%2Flibigl%2Flibigl%2Fblob%2Fmain%2Finclude%2Figl%2Fsigned_distance.h`
+- [/](./index.md) - source: /
+- [Sign in](./login?return_to=https%3A%2F%2Fgithub.com%2Flibigl%2Flibigl%2Fblob%2Fmain%2Finclude%2Figl%2Fsigned_distance.h.md) - source: /login?return_to=https%3A%2F%2Fgithub.com%2Flibigl%2Flibigl%2Fblob%2Fmain%2Finclude%2Figl%2Fsigned_distance.h
 - [GitHub Copilot Write better code with AI](https://github.com/features/copilot)
 - [GitHub Copilot app Direct agents from issue to merge](https://github.com/features/ai/github-app)
 - [MCP Registry Integrate external tools](https://github.com/mcp)
@@ -67,24 +73,24 @@ Copy path More file actions More file actions [![alecjacobson](https://avatars.g
 - [Copilot for Business Enterprise-grade AI features](https://github.com/features/copilot/copilot-business)
 - [Premium Support Enterprise-grade 24/7 support](https://github.com/enterprise/premium-support)
 - [Pricing](https://github.com/pricing)
-- Sign up - source: `/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fblob%2Fshow&source=header-repo&source_repo=libigl%2Flibigl`
-- libigl - source: `/libigl`
-- libigl - source: `/libigl/libigl`
-- Issues 144 - source: `/libigl/libigl/issues`
-- Pull requests 16 - source: `/libigl/libigl/pulls`
-- Discussions - source: `/libigl/libigl/discussions`
-- Actions - source: `/libigl/libigl/actions`
-- Projects - source: `/libigl/libigl/projects`
-- Security and quality - source: `/libigl/libigl/security`
-- Insights - source: `/libigl/libigl/pulse`
-- libigl - source: `/libigl/libigl/tree/main`
-- include - source: `/libigl/libigl/tree/main/include`
-- igl - source: `/libigl/libigl/tree/main/include/igl`
-- /alecjacobson - source: `/alecjacobson`
-- alecjacobson - source: `/libigl/libigl/commits?author=alecjacobson`
-- Lipschitz octree pruning ( - source: `/libigl/libigl/commit/47b557df58925008b37d6f66d6362e6b803ef18f`
+- [Sign up](./signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fblob%2Fshow&source=header-repo&source_repo=libigl%2Flibigl.md) - source: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E%2Fblob%2Fshow&source=header-repo&source_repo=libigl%2Flibigl
+- [libigl](./libigl.md) - source: /libigl
+- [libigl](./libigl-libigl.md) - source: /libigl/libigl
+- [Issues 144](./libigl-libigl-issues.md) - source: /libigl/libigl/issues
+- [Pull requests 16](./libigl-libigl-pulls.md) - source: /libigl/libigl/pulls
+- [Discussions](./libigl-libigl-discussions.md) - source: /libigl/libigl/discussions
+- [Actions](./libigl-libigl-actions.md) - source: /libigl/libigl/actions
+- [Projects](./libigl-libigl-projects.md) - source: /libigl/libigl/projects
+- [Security and quality](./libigl-libigl-security.md) - source: /libigl/libigl/security
+- [Insights](./libigl-libigl-pulse.md) - source: /libigl/libigl/pulse
+- [libigl](./libigl-libigl-tree-main.md) - source: /libigl/libigl/tree/main
+- [include](./libigl-libigl-tree-main-include.md) - source: /libigl/libigl/tree/main/include
+- [igl](./libigl-libigl-tree-main-include-igl.md) - source: /libigl/libigl/tree/main/include/igl
+- [/alecjacobson](./alecjacobson.md) - source: /alecjacobson
+- [alecjacobson](./libigl-libigl-commits?author=alecjacobson.md) - source: /libigl/libigl/commits?author=alecjacobson
+- [Lipschitz octree pruning (](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md) - source: /libigl/libigl/commit/47b557df58925008b37d6f66d6362e6b803ef18f
 - [#2488](https://github.com/libigl/libigl/pull/2488)
-- History - source: `/libigl/libigl/commits/main/include/igl/signed_distance.h`
+- [History](./libigl-libigl-commits-main-include-igl-signed_distance.h.md) - source: /libigl/libigl/commits/main/include/igl/signed_distance.h
 - [https://github.com](https://github.com)
 - [Terms](https://docs.github.com/site-policy/github-terms/github-terms-of-service)
 - [Privacy](https://docs.github.com/site-policy/privacy-policies/github-privacy-statement)

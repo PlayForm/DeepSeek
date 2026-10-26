@@ -23,13 +23,15 @@ Relevant source files
 
 The Path System is the core vector drawing capability in Paper.js, providing comprehensive functionality for creating, manipulating, and rendering vector paths. This system handles the representation of paths through segments and curves, supports path operations like joining and boolean operations, and offers utilities for path simplification and flattening.
 
-For information about styling paths, see Styling System. For details on how paths fit into the scene graph, see Scene Graph.
+For information about styling paths, see [Styling System](./paperjs-paper.js-4-styling-system.md). For details on how paths fit into the scene graph, see [Scene Graph](./paperjs-paper.js-2.2-scene-graph.md).
 
 ## Path Structure and Representation
 
 The Path System is built around a hierarchy of classes with `PathItem` as the base class. Paths are represented as collections of segments (points with handles), connected by curves.
 
-Sources: [src/path/Path.js 21-296](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L21-L296) [src/path/Curve.js 27-145](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L27-L145) [src/path/PathItem.js 22-34](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L22-L34)
+- [src/path/Path.js 21-296](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L21-L296)
+- [src/path/Curve.js 27-145](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L27-L145)
+- [src/path/PathItem.js 22-34](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L22-L34)
 
 ### Segments and Curves
 
@@ -141,7 +143,11 @@ Curves can be classified into different types based on their mathematical proper
 - **Loop**: Self-intersects to form a loop
 - **Arch**: A simple, non-inflected curve
 
-Sources: [src/path/Curve.js 173-175](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L173-L175) [src/path/Curve.js 431-438](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L431-L438) [src/path/Curve.js 605-629](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L605-L629) [src/path/Curve.js 795-819](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L795-L819)
+
+- [src/path/Curve.js 173-175](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L173-L175)
+- [src/path/Curve.js 431-438](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L431-L438)
+- [src/path/Curve.js 605-629](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L605-L629)
+- [src/path/Curve.js 795-819](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L795-L819)
 
 ## Intersections and Hit Testing
 
@@ -224,7 +230,9 @@ Sources: [src/path/Path.js 170-296](https://github.com/paperjs/paper.js/blob/927
 | `getIntersections(path)` | Returns all intersections between this and another path | PathItem |
 | `contains(point)` | Returns whether the point is inside the path | PathItem |
 
-Sources: [src/path/Path.js 551-603](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603) [src/path/PathItem.js 321-414](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L414) [src/path/PathItem.Boolean.js 110-216](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216)
+- [src/path/Path.js 551-603](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603)
+- [src/path/PathItem.js 321-414](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L414)
+- [src/path/PathItem.Boolean.js 110-216](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216)
 
 Refresh this wiki
 
@@ -265,8 +273,8 @@ Refresh this wiki
 - [test/tests/Path_Boolean.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Boolean.js)
 - [test/tests/Path_Intersections.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js)
 - [test/tests/Style.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Style.js)
-- Styling System - source: `/paperjs/paper.js/4-styling-system`
-- Scene Graph - source: `/paperjs/paper.js/2.2-scene-graph`
+- [Styling System](./paperjs-paper.js-4-styling-system.md) - source: /paperjs/paper.js/4-styling-system
+- [Scene Graph](./paperjs-paper.js-2.2-scene-graph.md) - source: /paperjs/paper.js/2.2-scene-graph
 - [src/path/Path.js 21-296](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L21-L296)
 - [src/path/Curve.js 27-145](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L27-L145)
 - [src/path/PathItem.js 22-34](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L22-L34)
