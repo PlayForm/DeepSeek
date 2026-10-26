@@ -39,7 +39,7 @@ Here is the SVG code:
   \<polygon points="50,10 0,190 100,190" fill="lime" stroke="red" /\>\
   \<rect width="150" height="100" x="120" y="50" fill="yellow" stroke="red" /\>\
   \<circle r="45" cx="350" cy="100" fill="pink" stroke="blue" /\>\
-  \<text x="420" y="100" fill="red" stroke="blue"\>I love SVG\!\</text\>\
+  \<text x="420" y="100" fill="red" stroke="blue"\>I love SVG!\</text\>\
 \</svg\> [Try it Yourself »](tryit.asp?filename=trysvg_stroke00)
 
 Here we use the `stroke` attribute to define the color of three lines:
@@ -74,7 +74,7 @@ Here is the SVG code:
   \<polygon points="55,10 10,190 110,190" fill="lime" stroke="red" stroke-width="4" /\>\
   \<rect width="150" height="100" x="120" y="50" fill="yellow" stroke="red" stroke-width="4" /\>\
   \<circle r="45" cx="350" cy="100" fill="pink" stroke="blue" stroke-width="4" /\>\
-  \<text x="420" y="100" fill="red" stroke="blue" stroke-width="4"\>I love SVG\!\</text\>\
+  \<text x="420" y="100" fill="red" stroke="blue" stroke-width="4"\>I love SVG!\</text\>\
 \</svg\> [Try it Yourself »](tryit.asp?filename=trysvg_stroke1)
 
 Here we use the `stroke-width` attribute to set the width of three lines:
@@ -115,7 +115,7 @@ Here is the SVG code:
   \<polygon points="55,10 10,190 110,190" fill="lime" stroke="red" stroke-width="4" stroke-opacity="0.4" /\>\
   \<rect width="150" height="100" x="120" y="50" fill="yellow" stroke="red" stroke-width="4" stroke-opacity="0.4" /\>\
   \<circle r="45" cx="350" cy="100" fill="pink" stroke="blue" stroke-width="4" stroke-opacity="0.4" /\>\
-  \<text x="420" y="100" fill="red" stroke="blue" stroke-width="4" stroke-opacity="0.4"\>I love SVG\!\</text\>\
+  \<text x="420" y="100" fill="red" stroke="blue" stroke-width="4" stroke-opacity="0.4"\>I love SVG!\</text\>\
 \</svg\> [Try it Yourself »](tryit.asp?filename=trysvg_stroke4)
 
 Here we use the `stroke-opacity` attribute to set the opacity of three lines:

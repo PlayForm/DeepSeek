@@ -4,7 +4,7 @@ skip to:[content](#main) [package search](#search) [sign in](#signin) Light mode
 
 0.4.0 • Public • Published 5 months ago
 
-- [ Readme](?activeTab=readme)
+- [Readme](?activeTab=readme)
 - [Code Beta](?activeTab=code)
 - [1 Dependency](?activeTab=dependencies)
 - [4 Dependents](?activeTab=dependents)

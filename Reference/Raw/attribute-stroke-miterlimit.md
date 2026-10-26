@@ -43,22 +43,9 @@ The value of `stroke-miterlimit` must be greater than or equal to 1.
 
 ## Specifications
 
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr>
-<th>Specification</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://w3c.github.io/svgwg/svg2-draft/painting.html#StrokeMiterlimitProperty">Scalable Vector Graphics (SVG) 2<br />
-# StrokeMiterlimitProperty</a></td>
-</tr>
-</tbody>
-</table>
+| Specification |
+|----|
+| [Scalable Vector Graphics (SVG) 2 \# StrokeMiterlimitProperty](https://w3c.github.io/svgwg/svg2-draft/painting.html#StrokeMiterlimitProperty) |
 
 ## Browser compatibility
 

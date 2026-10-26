@@ -1,33 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./danmarshall-svg-path-outline.md) ![danmarshall](https://avatars.githubusercontent.com/u/11507384?s=60&v=4)**[svg-path-outline](./danmarshall-svg-path-outline.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 8
-- Star 77 You must be signed in to star a repository
-
-## About
-
-Create an outline surrounding an SVG path
-
-[danmarshall.github.io/svg-path-outline/browser](https://danmarshall.github.io/svg-path-outline/browser) drawing maker outline svg svg-path [Readme](#readme-ov-file) [Apache-2.0 license](#Apache-2.0-1-ov-file) Activity **77** stars **4** watching **8** forks Report repository**1** Branch **0** TagsOpen more actions menu[![danmarshall](https://avatars.githubusercontent.com/u/11507384?v=4&size=40)](/danmarshall)danmarshallMerge pull request [\#7](https://github.com/danmarshall/svg-path-outline/pull/7) from danmarshall/bezierjs-url Open commit details Feb 20, 2024 c067626 · Feb 20, 2024 29 Commits Open commit details29 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| browser | browser | change url to bezier.js | Feb 20, 2024 |
-| .gitignore | .gitignore | Initial commit | Jan 15, 2017 |
-| .npmignore | .npmignore | ignore example.png | Feb 28, 2017 |
-| LICENSE | LICENSE | Initial commit | Jan 15, 2017 |
-| README.md | README.md | add image | Feb 28, 2017 |
-| example.png | example.png | improved examples | Feb 28, 2017 |
-| index.d.ts | index.d.ts | working version with rainbow example | Feb 28, 2017 |
-| index.js | index.js | working version with rainbow example | Feb 28, 2017 |
-| index.ts | index.ts | working version with rainbow example | Feb 28, 2017 |
-| package.json | package.json | bump tp fix npm | Feb 28, 2017 |
-| test.js | test.js | working version with rainbow example | Feb 28, 2017 |
-| tsconfig.json | tsconfig.json | working version with rainbow example | Feb 28, 2017 |
-|  |  |  |  |
-
 # svg-path-outline
 
 
@@ -81,59 +51,13 @@ Numeric distance to offset the outline.
 
 Object with these optional properties:
 
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th>option</th>
-<th>type</th>
-<th>default</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>joints</td>
-<td>number</td>
-<td>0</td>
-<td>0 - round joints<br />
-1 - miter<br />
-2 - bevel</td>
-</tr>
-<tr>
-<td>bezierAccuracy</td>
-<td>number</td>
-<td>0.5</td>
-<td>Distance of accuracy for Bezier curves. A lower number is more accurate but requires more computation. Using zero is not recommended as it may never finish computing. This number is relative to the unit system of your SVG; so if you are rendering pixels, then 0.5 is accurate to half a pixel.</td>
-</tr>
-<tr>
-<td>inside</td>
-<td>boolean</td>
-<td>false</td>
-<td>Add offset lines on the inside of the shape</td>
-</tr>
-<tr>
-<td>outside</td>
-<td>boolean</td>
-<td>true</td>
-<td>Add offset lines on the outside of the shape</td>
-</tr>
-<tr>
-<td>tagName</td>
-<td>string</td>
-<td>'path'</td>
-<td>SVG tag name of the type of data:<br />
-'path' - SVG path language<br />
-'polygon' - point coordinates, closed shape<br />
-'polyline' - point coordinates, open shape</td>
-</tr>
-</tbody>
-</table>
+| option | type | default | description |
+|----|----|----|----|
+| joints | number | 0 | 0 - round joints 1 - miter 2 - bevel |
+| bezierAccuracy | number | 0.5 | Distance of accuracy for Bezier curves. A lower number is more accurate but requires more computation. Using zero is not recommended as it may never finish computing. This number is relative to the unit system of your SVG; so if you are rendering pixels, then 0.5 is accurate to half a pixel. |
+| inside | boolean | false | Add offset lines on the inside of the shape |
+| outside | boolean | true | Add offset lines on the outside of the shape |
+| tagName | string | 'path' | SVG tag name of the type of data: 'path' - SVG path language 'polygon' - point coordinates, closed shape 'polyline' - point coordinates, open shape |
 
 ### return value
 
@@ -167,28 +91,6 @@ Example in HTML:
 
 
 Apache 2.0
-
-## About
-
-Create an outline surrounding an SVG path
-
-[danmarshall.github.io/svg-path-outline/browser](https://danmarshall.github.io/svg-path-outline/browser) drawing maker outline svg svg-path [Readme](#readme-ov-file) [Apache-2.0 license](#Apache-2.0-1-ov-file) Activity **77** stars **4** watching **8** forks Report repository
-
-## Releases
-
-No releases published
-
-## Contributors 1 (1)
-
-- [![@danmarshall](https://avatars.githubusercontent.com/u/11507384?s=64&v=4)](/danmarshall)**danmarshall** Dan Marshall
-
-## Languages
-
-- HTML 75.5%
-- JavaScript 16.8%
-- TypeScript 7.7%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

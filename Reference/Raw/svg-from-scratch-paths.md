@@ -1,7 +1,7 @@
 # Paths
 
--  Previous 
--  Next 
+- Previous
+- Next
 
 The `<path>` element is the most powerful element in the SVG library of basic shapes. It can be used to create lines, curves, arcs, and more.
 
@@ -138,8 +138,8 @@ Arcs are an easy way to create pieces of circles or ellipses in drawings. For in
 
 If transitioning to SVG from `<canvas>`, arcs can be the hardest thing to learn, but are also much more powerful. Complete circles and ellipses are the only shapes that SVG arcs have trouble drawing. Because the start and end points for any path going around a circle are the same point, there are an infinite number of circles that could be chosen, and the actual path is undefined. It's possible to approximate them by making the start and end points of the path slightly askew, and then connecting them with another path segment. For example, it's possible to make a circle with an arc for each semi-circle. At that point, it's often easier to use a real `<circle>` or `<ellipse>` node instead. This interactive demo might help understand the concepts behind SVG arcs.
 
--  Previous 
--  Next 
+- Previous
+- Next
 
 ## Help improve MDN
 

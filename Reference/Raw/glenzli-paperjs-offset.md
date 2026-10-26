@@ -1,33 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }} [](./glenzli-paperjs-offset.md) ![glenzli](https://avatars.githubusercontent.com/u/39257644?s=60&v=4)**[paperjs-offset](./glenzli-paperjs-offset.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 23
-- Star 122 You must be signed in to star a repository
-
-## About
-
-Path offset and stroke outline helpers for Paper.js ｜ Paper.js 路径偏移与描边轮廓工具
-
-[glenzli.com/projects/paperjs-offset/](https://glenzli.com/projects/paperjs-offset/)bezier canvas computational-geometry curve geometry javascript offset paper paper-js paperjs path-offset stroke typescript vector-graphics [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **122** stars **6** watching **23** forks Report repository **2** Branches **5** TagsOpen more actions menu[![glenzli](https://avatars.githubusercontent.com/u/39257644?v=4&size=40)](/glenzli)glenzlidocs: recommend native Paper.js offset and outline APIs Oct 23, 2026 f3ed87f · Oct 23, 2026 70 Commits Open commit details70 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| dev-site | dev-site | fix: handle transformed paths, degenerate contours and runtime cleanup | Oct 16, 2026 |
-| public | public | docs: add generated project icon | Aug 30, 2026 |
-| scripts | scripts | docs: add generated project icon | Aug 30, 2026 |
-| src | src | fix: handle transformed paths, degenerate contours and runtime cleanup | Oct 16, 2026 |
-| test | test | fix: handle transformed paths, degenerate contours and runtime cleanup | Oct 16, 2026 |
-| .gitignore | .gitignore | build: standardize package outputs and release flow | Jun 27, 2026 |
-| .npmrc | .npmrc | chore: clean metadata and lock dev setup | Jun 27, 2026 |
-| LICENSE | LICENSE | docs: add bilingual README and fix metadata | Jun 27, 2026 |
-| README.md | README.md | docs: recommend native Paper.js offset and outline APIs | Oct 23, 2026 |
-| banner.html | banner.html | docs: replace banner artwork | Jul 18, 2026 |
-| build.js | build.js | feat: add dev site export contract | Jun 29, 2026 |
-| package-lock.json | package-lock.json | chore: release v2.2.2 | Oct 16, 2026 |
-| package.json | package.json | chore: release v2.2.2 | Oct 16, 2026 |
-| tsconfig.json | tsconfig.json | build: standardize package outputs and release flow | Jun 27, 2026 |
-|  |  |  |  |
-
 # paperjs-offset
 
 
@@ -751,30 +721,6 @@ npm run release:ship
 
 
 MIT. See LICENSE.
-
-
-## About
-
-Path offset and stroke outline helpers for Paper.js ｜ Paper.js 路径偏移与描边轮廓工具
-
-[glenzli.com/projects/paperjs-offset/](https://glenzli.com/projects/paperjs-offset/)bezier canvas computational-geometry curve geometry javascript offset paper paper-js paperjs path-offset stroke typescript vector-graphics [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **122** stars **6** watching **23** forks Report repository
-
-## Releases 5
-
-v2.2.2 Latest Oct 16, 2026+ 4 releases
-
-## Contributors 2
-
-- [![@glenzli](https://avatars.githubusercontent.com/u/39257644?s=64&v=4)](/glenzli)**glenzli** Glen Li
-- [![@weibinzhu](https://avatars.githubusercontent.com/u/15839182?s=64&v=4)](/weibinzhu)**weibinzhu** weibinzhu
-
-## Languages
-
-- JavaScript 67.8%
-- TypeScript 25.7%
-- HTML 6.5%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

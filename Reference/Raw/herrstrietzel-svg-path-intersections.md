@@ -1,30 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./herrstrietzel-svg-path-intersections.md) ![herrstrietzel](https://avatars.githubusercontent.com/u/36772754?s=60&v=4)**[svg-path-intersections](./herrstrietzel-svg-path-intersections.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 1
-- Star 6 You must be signed in to star a repository
-
-## About
-
-Get all intersections from arbitrary path data
-
-[herrstrietzel.github.io/svg-path-intersections/](https://herrstrietzel.github.io/svg-path-intersections/)intersections svg [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **6** stars **1** watching **1** fork Report repository**1** Branch **0** TagsOpen more actions menu[![herrstrietzel](https://avatars.githubusercontent.com/u/36772754?v=4&size=40)](/herrstrietzel)herrstrietzelupdate package success Sep 20, 2025 f8bbd7b · Sep 20, 2025 19 Commits Open commit details19 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| demo | demo | update demos | Sep 20, 2025 |
-| img | img | screenshots | May 6, 2024 |
-| js | js | new shape methods, congruence checks | May 6, 2024 |
-| .gitignore | .gitignore | update demos | Sep 20, 2025 |
-| .npmignore | .npmignore | update demos | Sep 20, 2025 |
-| LICENSE | LICENSE | Create LICENSE | Aug 21, 2025 |
-| README.md | README.md | update readme | May 6, 2024 |
-| index.html | index.html | update demos | Sep 20, 2025 |
-| package.json | package.json | update package | Sep 20, 2025 |
-|  |  |  |  |
-
 # svg-path-intersections
 
 
@@ -303,27 +276,6 @@ Unlike other libraries path-intersections will also detect touching paths.
 - Dmitry Baranovskiy for (raphael.j/snap.svg) [pathToAbsolute/Relative functions](https://github.com/DmitryBaranovskiy/raphael/blob/master/raphael.js#L1848)
 - Vitaly Puzrin (fontello) for the arc to cubic conversion method [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js) and [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
 - Mike "POMAX" Kammermans for his great [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
-
-## About
-
-Get all intersections from arbitrary path data
-
-[herrstrietzel.github.io/svg-path-intersections/](https://herrstrietzel.github.io/svg-path-intersections/)intersections svg [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **6** stars **1** watching **1** fork Report repository
-
-## Releases
-
-No releases published
-
-## Contributors 1
-
-- [![@herrstrietzel](https://avatars.githubusercontent.com/u/36772754?s=64&v=4)](/herrstrietzel)**herrstrietzel** herrstrietzel
-
-## Languages
-
-- JavaScript 95.4%
-- HTML 4.6%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

@@ -1,40 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }} [](./alexbol99-flatten-js.md) ![alexbol99](https://avatars.githubusercontent.com/u/6965440?s=60&v=4)**[flatten-js](./alexbol99-flatten-js.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 64
-- Star 654 You must be signed in to star a repository
-
-## About
-
-Javascript library for 2d geometry
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **654** stars **6** watching **64** forks Report repository **30** Branches **107** TagsOpen more actions menu[![alexbol99](https://avatars.githubusercontent.com/u/6965440?v=4&size=40)](/alexbol99)alexbol99chore: release 1.6.15 success Oct 25, 2026 2264436 · Oct 25, 2026 673 Commits Open commit details673 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github/workflows | .github/workflows | ci: publish releases with Node 24 and current Actions | Aug 4, 2026 |
-| .idea | .idea | Fix bug in box.transform() | Jul 25, 2023 |
-| dist | dist | Merge pull request [\#255](https://github.com/alexbol99/flatten-js/pull/255) from dajiaohuang/fix/polygon-island-retention… | Oct 25, 2026 |
-| docs | docs | Add Box distance support to shape classes | Aug 18, 2026 |
-| examples | examples | Issue [\#45](https://github.com/alexbol99/flatten-js/issues/45) The Typescript definitions aren't up to date | May 23, 2020 |
-| packages/utils | packages/utils | - Upgrade interval tree dependency to scoped package @flatten-js/inte… | Feb 19, 2019 |
-| src | src | Merge pull request [\#255](https://github.com/alexbol99/flatten-js/pull/255) from dajiaohuang/fix/polygon-island-retention… | Oct 25, 2026 |
-| test | test | Merge pull request [\#255](https://github.com/alexbol99/flatten-js/pull/255) from dajiaohuang/fix/polygon-island-retention… | Oct 25, 2026 |
-| .babelrc | .babelrc | - update coverage tool istanbul to nyc | Mar 25, 2019 |
-| .gitignore | .gitignore | - Fix bug in method polygon.cutWithLine() | Dec 18, 2021 |
-| .grenrc.json | .grenrc.json | - Add boolean operations test | Apr 18, 2020 |
-| .jsdoc.json | .jsdoc.json | - Improved documentation and TypeScript type definition, fixed some bugs | Apr 11, 2020 |
-| .npmignore | .npmignore | Reduce npm package size | Dec 9, 2023 |
-| .travis.yml | .travis.yml | - update coverage tool istanbul to nyc | Mar 25, 2019 |
-| LICENSE | LICENSE | Initial commit | Feb 18, 2017 |
-| README.md | README.md | Keep hole orientation semantics and document island splitting | Oct 25, 2026 |
-| index.d.ts | index.d.ts | Preserve uncontained polygon faces in islands | Oct 23, 2026 |
-| index.js | index.js | Restore export parseWkt from index.js, remove import from index.js fr… | Aug 3, 2024 |
-| package-lock.json | package-lock.json | chore: release 1.6.15 | Oct 25, 2026 |
-| package.json | package.json | chore: release 1.6.15 | Oct 25, 2026 |
-| rollup.config.js | rollup.config.js | Fix export module entry point - target main.mjs instead main.esm | Dec 1, 2023 |
-|  |  |  |  |
-
 [![npm version](https://camo.githubusercontent.com/b3900c4487ff917e793449af68175a58fde60976f1d12cea4334e9fd3bb491a4/68747470733a2f2f62616467652e667572792e696f2f6a732f253430666c617474656e2d6a73253246636f72652e737667)](https://badge.fury.io/js/%40flatten-js%2Fcore) [![Coverage Status](https://camo.githubusercontent.com/25d6b5c880e82a4e2608dba35cfc087ce0659c27dfb9583291a693a49c5701e6/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f616c6578626f6c39392f666c617474656e2d6a732f62616467652e7376673f6272616e63683d6d6173746572)](https://coveralls.io/github/alexbol99/flatten-js?branch=master) [![](https://camo.githubusercontent.com/eea6f5d63c9bafd46a1620c8b17047333e29ea5b185b997d4ca2674a441dc513/68747470733a2f2f646174612e6a7364656c6976722e636f6d2f76312f7061636b6167652f6e706d2f40666c617474656e2d6a732f636f72652f6261646765)](https://www.jsdelivr.com/package/npm/@flatten-js/core)
 
 # Javascript library for 2d geometry
@@ -336,41 +299,6 @@ Other packages, published under scope **@flatten-js/**:
 
 
 [![Buy Me A Coffee](https://camo.githubusercontent.com/9a769e616ce78645bf51d12e4179cfbfd72fb413722b284e0be3ec3c75a86010/68747470733a2f2f63646e2e6275796d6561636f666665652e636f6d2f627574746f6e732f64656661756c742d6f72616e67652e706e67)](https://www.buymeacoffee.com/alexbol99)
-
-## About
-
-Javascript library for 2d geometry
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **654** stars **6** watching **64** forks Report repository
-
-## Releases 34
-
-v1.6.15 Latest Oct 25, 2026+ 33 releases
-
-## Contributors 32
-
-- [![@alexbol99](https://avatars.githubusercontent.com/u/6965440?s=64&v=4)](/alexbol99)
-- [![@alexbol-fls](https://avatars.githubusercontent.com/u/19872224?s=64&v=4)](/alexbol-fls)
-- [![@bertyhell](https://avatars.githubusercontent.com/u/1710840?s=64&v=4)](/bertyhell)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-- [![@saraedum](https://avatars.githubusercontent.com/u/373765?s=64&v=4)](/saraedum)
-- [![@stanch](https://avatars.githubusercontent.com/u/2670454?s=64&v=4)](/stanch)
-- [![@delmohf](https://avatars.githubusercontent.com/u/11967822?s=64&v=4)](/delmohf)
-- [![@schelmo](https://avatars.githubusercontent.com/u/47602?s=64&v=4)](/schelmo)
-- [![@AlexQbiq](https://avatars.githubusercontent.com/u/166483416?s=64&v=4)](/AlexQbiq)
-- [![@ebuswell](https://avatars.githubusercontent.com/u/335327?s=64&v=4)](/ebuswell)
-- [![@axtavt](https://avatars.githubusercontent.com/u/2076950?s=64&v=4)](/axtavt)
-- [![@nsinstruments](https://avatars.githubusercontent.com/u/104651844?s=64&v=4)](/nsinstruments)
-- [![@awhitty](https://avatars.githubusercontent.com/u/5736?s=64&v=4)](/awhitty)
-- [![@rtm](https://avatars.githubusercontent.com/u/24391?s=64&v=4)](/rtm)
-
-+ 18 contributors
-
-## Languages
-
-- JavaScript 100%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

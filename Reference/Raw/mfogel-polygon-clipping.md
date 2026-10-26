@@ -1,37 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }} [](./mfogel-polygon-clipping.md) ![mfogel](https://avatars.githubusercontent.com/u/69902?s=60&v=4)**[polygon-clipping](./mfogel-polygon-clipping.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 68
-- Star 642 You must be signed in to star a repository
-
-## About
-
-Apply boolean polygon clipping operations (union, intersection, difference, xor) to your Polygons & MultiPolygons.
-
-boolean-operations difference intersection polygon polygon-clipping union xor [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **642** stars **11** watching **68** forks Report repository **7** Branches **37** TagsOpen more actions menuartemrsx and Bochkarev ArtemFix for [\#165](https://github.com/mfogel/polygon-clipping/issues/165) ([\#167](https://github.com/mfogel/polygon-clipping/pull/167))Open commit details Apr 19, 2024 82b0ac2 · Apr 19, 2024 516 Commits Open commit details516 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github/workflows | .github/workflows | Use private codecov token | Jan 2, 2024 |
-| bench | bench | Release v0.15.7 | Dec 18, 2023 |
-| dist | dist | Fix packaging ([\#161](https://github.com/mfogel/polygon-clipping/pull/161)) | Dec 17, 2023 |
-| docs | docs | Tidy up robust-predicates import, and tidy vite config ([\#147](https://github.com/mfogel/polygon-clipping/pull/147)) | Oct 12, 2022 |
-| src | src | Fix for [\#165](https://github.com/mfogel/polygon-clipping/issues/165) ([\#167](https://github.com/mfogel/polygon-clipping/pull/167)) | Apr 19, 2024 |
-| test | test | Fix packaging ([\#161](https://github.com/mfogel/polygon-clipping/pull/161)) | Dec 17, 2023 |
-| .eslintrc.cjs | .eslintrc.cjs | Tidy up robust-predicates import, and tidy vite config ([\#147](https://github.com/mfogel/polygon-clipping/pull/147)) | Oct 12, 2022 |
-| .gitignore | .gitignore | Set up CI: travis, coveralls | Feb 3, 2018 |
-| .prettierignore | .prettierignore | Formating: use prettier, adjust configs | Feb 21, 2022 |
-| CHANGELOG.md | CHANGELOG.md | Release v0.15.7 | Dec 18, 2023 |
-| LICENSE.md | LICENSE.md | Move license, change name, add copyright | Feb 2, 2018 |
-| README.md | README.md | Fix typo in codecov badge url | Feb 21, 2022 |
-| babel.config.cjs | babel.config.cjs | Tidy up robust-predicates import, and tidy vite config ([\#147](https://github.com/mfogel/polygon-clipping/pull/147)) | Oct 12, 2022 |
-| package-lock.json | package-lock.json | Release v0.15.7 | Dec 18, 2023 |
-| package.json | package.json | Update package.json:respository format | Jan 2, 2024 |
-| paper.pdf | paper.pdf | Update README, add paper describing algorithm | Feb 2, 2018 |
-| prettier.config.cjs | prettier.config.cjs | Tidy up robust-predicates import, and tidy vite config ([\#147](https://github.com/mfogel/polygon-clipping/pull/147)) | Oct 12, 2022 |
-| rollup.config.js | rollup.config.js | Fix packaging ([\#161](https://github.com/mfogel/polygon-clipping/pull/161)) | Dec 17, 2023 |
-|  |  |  |  |
-
 # polygon-clipping
 
 
@@ -138,45 +104,6 @@ Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is
 
 
 - A new algorithm for computing Boolean operations on polygons by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
-
-## About
-
-Apply boolean polygon clipping operations (union, intersection, difference, xor) to your Polygons & MultiPolygons.
-
-boolean-operations difference intersection polygon polygon-clipping union xor [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **642** stars **11** watching **68** forks Report repository
-
-## Releases
-
-37 tags
-
-## Used by 19K
-
-[ ![@WildEyeConservation](https://avatars.githubusercontent.com/u/103252266?s=64&v=4)![@taucad](https://avatars.githubusercontent.com/u/172118270?s=64&v=4)![@khglynn](https://avatars.githubusercontent.com/u/19673024?s=64&v=4)![@antigua285](https://avatars.githubusercontent.com/u/262908565?s=64&v=4)![@chanuka789](https://avatars.githubusercontent.com/u/44484693?s=64&v=4)+ 18,852](/mfogel/polygon-clipping/network/dependents)
-
-## Contributors 16
-
-- [![@mfogel](https://avatars.githubusercontent.com/u/69902?s=64&v=4)](/mfogel)
-- [![@w8r](https://avatars.githubusercontent.com/u/26884?s=64&v=4)](/w8r)
-- [![@rowanwins](https://avatars.githubusercontent.com/u/6735870?s=64&v=4)](/rowanwins)
-- [![@DenisCarriere](https://avatars.githubusercontent.com/u/550895?s=64&v=4)](/DenisCarriere)
-- [![@erf](https://avatars.githubusercontent.com/u/1562523?s=64&v=4)](/erf)
-- [![@barnabas-avalara](https://avatars.githubusercontent.com/u/11672876?s=64&v=4)](/barnabas-avalara)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-- [![@sh1ng](https://avatars.githubusercontent.com/u/2821871?s=64&v=4)](/sh1ng)
-- [![@jliebrand](https://avatars.githubusercontent.com/u/23407884?s=64&v=4)](/jliebrand)
-- [![@OliverColeman](https://avatars.githubusercontent.com/u/758108?s=64&v=4)](/OliverColeman)
-- [![@joelgallant](https://avatars.githubusercontent.com/u/1429994?s=64&v=4)](/joelgallant)
-- [![@bgschiller](https://avatars.githubusercontent.com/u/2491257?s=64&v=4)](/bgschiller)
-- [![@lyrachord](https://avatars.githubusercontent.com/u/11712923?s=64&v=4)](/lyrachord)
-- [![@mfedderly](https://avatars.githubusercontent.com/u/24275386?s=64&v=4)](/mfedderly)
-
-+ 2 contributors
-
-## Languages
-
-- JavaScript 100%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

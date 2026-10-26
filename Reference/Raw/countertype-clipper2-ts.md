@@ -1,34 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./countertype-clipper2-ts.md) ![countertype](https://avatars.githubusercontent.com/u/88532744?s=60&v=4)**[clipper2-ts](./countertype-clipper2-ts.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 7
-- Star 42 You must be signed in to star a repository
-
-## About
-
-TypeScript port of Clipper2 polygon clipping, offsetting, and triangulation library by Angus Johnson
-
-[countertype.github.io/clipper2-ts/](https://countertype.github.io/clipper2-ts/)boolean-operations clipper clipper2 delaunay-triangulation minkowski offsetting polygon-clipping self-intersection triangulation vatti vatti-clipping [Readme](#readme-ov-file) [BSL-1.0 license](#BSL-1.0-1-ov-file) Activity Custom properties **42** stars **3** watching **7** forks Report repository**2** Branches **0** TagsOpen more actions menu[![jpt](https://avatars.githubusercontent.com/u/5319916?v=4&size=40)](/jpt)jptMerge pull request [\#34](https://github.com/countertype/clipper2-ts/pull/34) from countertype/perf-scanbeam Open commit details Jul 4, 2026 bf6e030 · Jul 4, 2026 100 Commits Open commit details100 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| bench | bench | hole-heavy testing | Mar 9, 2026 |
-| src | src | scanbeam fast paths | Jul 3, 2026 |
-| tests | tests | invoke zCallback in doSplitOp ([\#31](https://github.com/countertype/clipper2-ts/issues/31)) | May 22, 2026 |
-| .gitignore | .gitignore | 2.0.1-1 | Jan 2, 2026 |
-| .npmignore | .npmignore | init | Nov 3, 2025 |
-| CHANGELOG.md | CHANGELOG.md | bump version | Jul 3, 2026 |
-| LICENSE | LICENSE | init | Nov 3, 2025 |
-| LICENSE_THIRD_PARTY | LICENSE_THIRD_PARTY | add benchmarks, rolldown, license 3rd party | Feb 6, 2026 |
-| README.md | README.md | fix z propagation | Feb 9, 2026 |
-| package.json | package.json | bump version | Jul 3, 2026 |
-| rolldown.config.ts | rolldown.config.ts | add benchmarks, rolldown, license 3rd party | Feb 6, 2026 |
-| tsconfig.json | tsconfig.json | ESM | Nov 18, 2025 |
-| vitest.config.ts | vitest.config.ts | add benchmarks, rolldown, license 3rd party | Feb 6, 2026 |
-|  |  |  |  |
-
 # clipper2-ts
 
 
@@ -121,8 +90,8 @@ For detailed API documentation, see the [official Clipper2 docs](https://www.ang
 
 The port includes 258 tests validating against Clipper2's reference test suite:
 
-npm test              \# Run all tests\
-npm test:coverage     \# Run with coverage report
+npm test              # Run all tests\
+npm test:coverage     # Run with coverage report
 
 The test suite validates clipping, offsetting, triangulation, and Z-callbacks against Clipper2's reference implementation. Polygon test 16 (bow-tie) uses relaxed tolerances as this edge case also fails in the C# reference
 
@@ -156,26 +125,6 @@ Boost Software License 1.0 (same as Clipper2)
 Original Clipper2 library by Angus Johnson. TypeScript port maintained by Jeremy Tribby
 
 Benchmark polygon data from [Poly2Tri](https://github.com/jhasse/poly2tri) (BSD 3-clause). See `LICENSE_THIRD_PARTY` for details
-
-## About
-
-TypeScript port of Clipper2 polygon clipping, offsetting, and triangulation library by Angus Johnson
-
-[countertype.github.io/clipper2-ts/](https://countertype.github.io/clipper2-ts/)boolean-operations clipper clipper2 delaunay-triangulation minkowski offsetting polygon-clipping self-intersection triangulation vatti vatti-clipping [Readme](#readme-ov-file) [BSL-1.0 license](#BSL-1.0-1-ov-file) Activity Custom properties **42** stars **3** watching **7** forks Report repository
-
-## Releases
-
-No releases published
-
-## Contributors 1
-
-- [![@jpt](https://avatars.githubusercontent.com/u/5319916?s=64&v=4)](/jpt)**jpt** Jeremy Tribby
-
-## Languages
-
-- TypeScript 100%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

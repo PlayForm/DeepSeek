@@ -28,7 +28,7 @@ Index:
 - `fill`: **`generate 10000 rects with fill color`**
 - `gradient`: **`generate 10000 rects with gradient fill`**
 
-<span class="small">*Less is better. Tested on an Intel Core i7-4702MQ @ 2.2GHz.*</span>
+*Less is better. Tested on an Intel Core i7-4702MQ @ 2.2GHz.*
 
 \
 
@@ -38,11 +38,9 @@ Creating and manipulating SVG using JavaScript alone is pretty verbose. For exam
 
 SVG.js provides a syntax that is concise and easy to read. Doing the same as the vanilla js example above:
 
-``` javascript
-// SVG.js
-var draw = SVG().addTo('#drawing')
-  , rect = draw.rect(100, 100).fill('#f06')
-```
+    // SVG.js
+    var draw = SVG().addTo('#drawing')
+      , rect = draw.rect(100, 100).fill('#f06')
 
 That's just **two** lines of code instead of **ten**! And a whole lot less repetition.
 

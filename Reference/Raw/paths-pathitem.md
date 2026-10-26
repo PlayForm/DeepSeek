@@ -1,4 +1,4 @@
-🧻paper.js<span class="kbd">⌘Ctrl</span> <span class="kbd">k</span> [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/) For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
+🧻paper.js`⌘Ctrl` `k` [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/) For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
 
 # PathItem
 

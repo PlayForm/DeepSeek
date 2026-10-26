@@ -1,31 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
- ![AngusJohnson](https://avatars.githubusercontent.com/u/5280692?s=60&v=4)**Clipper2** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 464
-- Star 2.5k You must be signed in to star a repository
-
-## About
-
-Polygon Clipping, Offsetting & Triangulation in C++, C# and Delphi
-
-algorithm boolean-operations clipping clipping-algorithm cpp csharp delphi geometry inflate offsetting pascal polygon polygon-boolean polygon-clipping polygon-clipping-algorithm polygon-intersection polygon-union [Readme](#readme-ov-file) [BSL-1.0 license](#BSL-1.0-1-ov-file) Activity **2.5k** stars **59** watching **464** forks Report repository**1** Branch **25** TagsOpen more actions menu[![AngusJohnson](https://avatars.githubusercontent.com/u/5280692?v=4&size=40)](/AngusJohnson)AngusJohnsonUpdate README.md success Oct 17, 2026 a6e7294 · Oct 17, 2026 819 Commits Open commit details819 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github/workflows | .github/workflows | Updated C# CI to .NET 8.0. | Feb 22, 2026 |
-| CPP | CPP | Fix linking to `m.lib` on Windows ([\#1080](https://github.com/AngusJohnson/Clipper2/pull/1080)) | Mar 20, 2026 |
-| CSharp | CSharp | fix project path for C# tests, add readme on tests ([\#1082](https://github.com/AngusJohnson/Clipper2/pull/1082)) | Mar 20, 2026 |
-| DLL | DLL | clipper.export.h: added exported Triangulate functions | Dec 19, 2025 |
-| Delphi | Delphi | Fixed a bug in ClipperBase::FixSelfIntersects ([\#1067](https://github.com/AngusJohnson/Clipper2/issues/1067)) | Feb 22, 2026 |
-| Tests | Tests | Tweaks to C++CI tests | Feb 6, 2023 |
-| .gitignore | .gitignore | C# refactored Path64, Paths64, PathD & PathsD to derived List classes | Sep 16, 2022 |
-| .gitmodules | .gitmodules | Make googletest not be a git submodule, and instead clone it separate… | Dec 9, 2023 |
-| LICENSE | LICENSE | Initial commit | Feb 23, 2022 |
-| README.md | README.md | Update README.md | Oct 17, 2026 |
-|  |  |  |  |
-
 # Clipper2
 
 
@@ -139,7 +111,7 @@ Lines 89 to 100 in fa7add7
 
 |  |  |
 |----|----|
-|  | SvgReader sr = new("..\\\\..\\\\..\\\\rabbit.svg"); |
+|  | SvgReader sr = new("..\\\\..\\\\..\\\rabbit.svg"); |
 |  | PathsD pp = sr.Paths; |
 |  | PathsD solution = new (pp); |
 |  | while (pp.Count \> 0) |
@@ -150,7 +122,7 @@ Lines 89 to 100 in fa7add7
 |  | pp = Clipper.SimplifyPaths(pp, 0.25); |
 |  | solution.AddRange(pp); |
 |  | } |
-|  | DisplaySolutionAsSvg("..\\\\..\\\\..\\\\rabbit_inflate.svg", solution); |
+|  | DisplaySolutionAsSvg("..\\\\..\\\\..\\\rabbit_inflate.svg", solution); |
 
 **Delphi**
 
@@ -191,45 +163,6 @@ Lines 20 to 31 in fa7add7
 | **Swift**      | <https://github.com/zyunlongz/clipper2-swift>         |
 | **TypeScript** | <https://github.com/countertype/clipper2-ts>          |
 | **WASM**       | <https://github.com/ErikSom/Clipper2-WASM/>           |
-
-## About
-
-Polygon Clipping, Offsetting & Triangulation in C++, C# and Delphi
-
-algorithm boolean-operations clipping clipping-algorithm cpp csharp delphi geometry inflate offsetting pascal polygon polygon-boolean polygon-clipping polygon-clipping-algorithm polygon-intersection polygon-union [Readme](#readme-ov-file) [BSL-1.0 license](#BSL-1.0-1-ov-file) Activity **2.5k** stars **59** watching **464** forks Report repository
-
-## Releases 23 (23)
-
-Clipper2 ver. 2.0.1 Latest Dec 19, 2025+ 22 releases
-
-## Contributors 52 (52)
-
-- [![@AngusJohnson](https://avatars.githubusercontent.com/u/5280692?s=64&v=4)](/AngusJohnson)
-- [![@reunanen](https://avatars.githubusercontent.com/u/2297572?s=64&v=4)](/reunanen)
-- [![@philstopford](https://avatars.githubusercontent.com/u/1983851?s=64&v=4)](/philstopford)
-- [![@damiandixon](https://avatars.githubusercontent.com/u/1237723?s=64&v=4)](/damiandixon)
-- [![@SebastianDirks](https://avatars.githubusercontent.com/u/68428517?s=64&v=4)](/SebastianDirks)
-- [![@sethhillbrand](https://avatars.githubusercontent.com/u/914826?s=64&v=4)](/sethhillbrand)
-- [![@sergey-239](https://avatars.githubusercontent.com/u/99703804?s=64&v=4)](/sergey-239)
-- [![@DJGosnell](https://avatars.githubusercontent.com/u/224169?s=64&v=4)](/DJGosnell)
-- [![@JingDict](https://avatars.githubusercontent.com/u/46510529?s=64&v=4)](/JingDict)
-- [![@mmassing](https://avatars.githubusercontent.com/u/56651?s=64&v=4)](/mmassing)
-- [![@jfriesne](https://avatars.githubusercontent.com/u/1404232?s=64&v=4)](/jfriesne)
-- [![@lederernc](https://avatars.githubusercontent.com/u/4776519?s=64&v=4)](/lederernc)
-- [![@deining](https://avatars.githubusercontent.com/u/18169566?s=64&v=4)](/deining)
-- [![@cwangbh](https://avatars.githubusercontent.com/u/21260868?s=64&v=4)](/cwangbh)
-
-+ 38 contributors
-
-## Languages
-
-- C++37.1%
-- Pascal 33%
-- C#28.6%
-- CMake 1.2%
-- C 0.1%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

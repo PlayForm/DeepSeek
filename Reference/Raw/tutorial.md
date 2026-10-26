@@ -26,17 +26,17 @@ Before getting into the examples, we summarize the main design principles in lib
 
 libigl can be downloaded from our [github repository](https://github.com/libigl/libigl) or cloned with git:
 
-`git`` ``clone`` ``https://github.com/libigl/libigl.git`\
+    git clone https://github.com/libigl/libigl.git
 
 The core libigl functionality only depends on the C++ Standard Library and Eigen. *Optional dependencies* will be downloaded upon issuing `cmake`, below.
 
 To build all the examples in the tutorial (and tests), you can use the CMakeLists.txt in the root folder:
 
-`cd`` ``libigl/`\
-`mkdir`` ``build`\
-`cd`` ``build`\
-`cmake`` ``../`\
-`make`\
+    cd libigl/
+    mkdir build
+    cd build
+    cmake ../
+    make
 
 Note about CGAL
 
@@ -48,18 +48,18 @@ Note for linux users
 
 Many linux distributions do not include gcc and the basic development tools in their default installation. On Ubuntu, you need to install the following packages:
 
-`sudo`` ``apt-get`` ``install`` ``\`\
-`  ``git`` ``\`\
-`  ``build-essential`` ``\`\
-`  ``cmake`` ``\`\
-`  ``libx11-dev`` ``\`\
-`  ``mesa-common-dev`` ``libgl1-mesa-dev`` ``libglu1-mesa-dev`` ``\`\
-`  ``libxrandr-dev`` ``\`\
-`  ``libxi-dev`` ``\`\
-`  ``libxmu-dev`` ``\`\
-`  ``libblas-dev`` ``\`\
-`  ``libxinerama-dev`` ``\`\
-`  ``libxcursor-dev`\
+    sudo apt-get install \
+      git \
+      build-essential \
+      cmake \
+      libx11-dev \
+      mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev \
+      libxrandr-dev \
+      libxi-dev \
+      libxmu-dev \
+      libblas-dev \
+      libxinerama-dev \
+      libxcursor-dev
 
 Note for Windows users
 
@@ -81,8 +81,8 @@ libigl uses the [Eigen](http://eigen.tuxfamily.org/) library to encode vector an
 
 A triangular mesh is encoded as a pair of matrices:
 
-`Eigen``::``MatrixXd`` ``V``;`\
-`Eigen``::``MatrixXi`` ``F``;`\
+    Eigen::MatrixXd V;
+    Eigen::MatrixXi F;
 
 `V` is a \#N by 3 matrix which stores the coordinates of the vertices. Each row stores the coordinate of a vertex, with its x,y and z coordinates in the first, second and third column, respectively. The matrix `F` stores the triangle connectivity: each line of `F` denotes a triangle whose 3 vertices are represented as indices pointing to rows of `V`.
 
@@ -100,11 +100,11 @@ libigl provides input \[output\] functions to read \[write\] many common mesh fo
 
 Reading a mesh from a file requires a single libigl function call:
 
-`igl``::``readOFF``(``TUTORIAL_SHARED_PATH`` ``"/cube.off"``,`` ``V``,`` ``F``);`\
+    igl::readOFF(TUTORIAL_SHARED_PATH "/cube.off", V, F);
 
 The function reads the mesh cube.off and it fills the provided `V` and `F` matrices. Similarly, a mesh can be written in an OBJ file using:
 
-`igl``::``writeOBJ``(``"cube.obj"``,``V``,``F``);`\
+    igl::writeOBJ("cube.obj",V,F);
 
 [Example 101](https://github.com/libigl/libigl/tree/main/tutorial/101_FileIO/main.cpp) contains a simple mesh converter from OFF to OBJ format.
 
@@ -114,26 +114,26 @@ Libigl provides an glfw-based OpenGL 3.2 viewer to visualize surfaces, their pro
 
 The following code ([Example 102](https://github.com/libigl/libigl/tree/main/tutorial/102_DrawMesh/main.cpp)) is a basic skeleton for all the examples that will be used in the tutorial. It is a standalone application that loads a mesh and uses the viewer to render it.
 
-`#include`` ``<igl/readOFF.h>`\
-`#include`` ``<igl/opengl/glfw/Viewer.h>`\
-\
-`Eigen``::``MatrixXd`` ``V``;`\
-`Eigen``::``MatrixXi`` ``F``;`\
-\
-`int`` ``main``(``int`` ``argc``,`` ``char`` ``*``argv``[])`\
-`{`\
-`  ``// Load a mesh in OFF format`\
-`  ``igl``::``readOFF``(``TUTORIAL_SHARED_PATH`` ``"/bunny.off"``,`` ``V``,`` ``F``);`\
-\
-`  ``// Plot the mesh`\
-`  ``igl``::``opengl``::``glfw``::``Viewer`` ``viewer``;`\
-`  ``viewer``.``data``().``set_mesh``(``V``,`` ``F``);`\
-`  ``viewer``.``launch``();`\
-`}`\
+    #include <igl/readOFF.h>
+    #include <igl/opengl/glfw/Viewer.h>
+
+    Eigen::MatrixXd V;
+    Eigen::MatrixXi F;
+
+    int main(int argc, char *argv[])
+    {
+      // Load a mesh in OFF format
+      igl::readOFF(TUTORIAL_SHARED_PATH "/bunny.off", V, F);
+
+      // Plot the mesh
+      igl::opengl::glfw::Viewer viewer;
+      viewer.data().set_mesh(V, F);
+      viewer.launch();
+    }
 
 The function `set_mesh` copies the mesh into the viewer. `Viewer.launch()` creates a window, an OpenGL context and it starts the draw loop. The default camera motion mode is 2-axis (`ROTATION_TYPE_TWO_AXIS_VALUATOR_FIXED_UP`), which can be changed to 3-axis trackball style by adding this line:
 
-`  viewer.core().set_rotation_type(igl::opengl::ViewerCore::ROTATION_TYPE_TRACKBALL);`\
+      viewer.core().set_rotation_type(igl::opengl::ViewerCore::ROTATION_TYPE_TRACKBALL);
 
 Additional properties can be plotted on the mesh (as we will see later), and it is possible to extend the viewer with standard OpenGL code. Please see the documentation in [Viewer.h](https://github.com/libigl/libigl/tree/main/include/igl/opengl/glfw/Viewer.h) for more details.
 
@@ -145,37 +145,37 @@ Additional properties can be plotted on the mesh (as we will see later), and it 
 
 Keyboard and mouse events triggers callbacks that can be registered in the viewer. The viewer supports the following callbacks:
 
-`bool`` ``(``*``callback_pre_draw``)(``Viewer``&`` ``viewer``);`\
-`bool`` ``(``*``callback_post_draw``)(``Viewer``&`` ``viewer``);`\
-`bool`` ``(``*``callback_mouse_down``)(``Viewer``&`` ``viewer``,`` ``int`` ``button``,`` ``int`` ``modifier``);`\
-`bool`` ``(``*``callback_mouse_up``)(``Viewer``&`` ``viewer``,`` ``int`` ``button``,`` ``int`` ``modifier``);`\
-`bool`` ``(``*``callback_mouse_move``)(``Viewer``&`` ``viewer``,`` ``int`` ``mouse_x``,`` ``int`` ``mouse_y``);`\
-`bool`` ``(``*``callback_mouse_scroll``)(``Viewer``&`` ``viewer``,`` ``float`` ``delta_y``);`\
-`bool`` ``(``*``callback_key_down``)(``Viewer``&`` ``viewer``,`` ``unsigned`` ``char`` ``key``,`` ``int`` ``modifiers``);`\
-`bool`` ``(``*``callback_key_up``)(``Viewer``&`` ``viewer``,`` ``unsigned`` ``char`` ``key``,`` ``int`` ``modifiers``);`\
+    bool (*callback_pre_draw)(Viewer& viewer);
+    bool (*callback_post_draw)(Viewer& viewer);
+    bool (*callback_mouse_down)(Viewer& viewer, int button, int modifier);
+    bool (*callback_mouse_up)(Viewer& viewer, int button, int modifier);
+    bool (*callback_mouse_move)(Viewer& viewer, int mouse_x, int mouse_y);
+    bool (*callback_mouse_scroll)(Viewer& viewer, float delta_y);
+    bool (*callback_key_down)(Viewer& viewer, unsigned char key, int modifiers);
+    bool (*callback_key_up)(Viewer& viewer, unsigned char key, int modifiers);
 
 A keyboard callback can be used to visualize multiple meshes or different stages of an algorithm, as demonstrated in [Example 103](https://github.com/libigl/libigl/tree/main/tutorial/103_Events/main.cpp), where the keyboard callback changes the visualized mesh depending on the key pressed:
 
-`bool`` ``key_down``(``igl``::``opengl``::``glfw``::``Viewer``&`` ``viewer``,`` ``unsigned`` ``char`` ``key``,`` ``int`` ``modifier``)`\
-`{`\
-`  ``if`` ``(``key`` ``==`` ``'1'``)`\
-`  ``{`\
-`    ``viewer``.``data``().``clear``();`\
-`    ``viewer``.``data``().``set_mesh``(``V1``,`` ``F1``);`\
-`    ``viewer``.``core``.``align_camera_center``(``V1``,``F1``);`\
-`  ``}`\
-`  ``else`` ``if`` ``(``key`` ``==`` ``'2'``)`\
-`  ``{`\
-`    ``viewer``.``data``().``clear``();`\
-`    ``viewer``.``data``().``set_mesh``(``V2``,`` ``F2``);`\
-`    ``viewer``.``core``.``align_camera_center``(``V2``,``F2``);`\
-`  ``}`\
-`  ``return`` ``false``;`\
-`}`\
+    bool key_down(igl::opengl::glfw::Viewer& viewer, unsigned char key, int modifier)
+    {
+      if (key == '1')
+      {
+        viewer.data().clear();
+        viewer.data().set_mesh(V1, F1);
+        viewer.core.align_camera_center(V1,F1);
+      }
+      else if (key == '2')
+      {
+        viewer.data().clear();
+        viewer.data().set_mesh(V2, F2);
+        viewer.core.align_camera_center(V2,F2);
+      }
+      return false;
+    }
 
 The callback is registered in the viewer as follows:
 
-`viewer``.``callback_key_down`` ``=`` ``&``key_down``;`\
+    viewer.callback_key_down = &key_down;
 
 Note that the mesh is cleared before using set_mesh. This has to be called every time the number of vertices or faces of the plotted mesh changes. Every callback returns a boolean value that tells the viewer if the event has been handled by the plugin, or if the viewer should process it normally. This is useful, for example, to disable the default mouse event handling if you want to control the camera directly in your code.
 
@@ -185,7 +185,7 @@ The viewer can be extended using plugins, which are classes that implements all 
 
 Colors can be associated to faces or vertices using the `set_colors` function:
 
-`viewer``.``data``().``set_colors``(``C``);`\
+    viewer.data().set_colors(C);
 
 `C` is a \#C by 3 matrix with one RGB color per row. `C` must have as many rows as the number of faces **or** the number of vertices of the mesh. Depending on the size of `C`, the viewer applies the color to the faces or to the vertices. In Example 104, the colors of mesh vertices are set according to their Cartesian coordinates.
 
@@ -195,7 +195,7 @@ Colors can be associated to faces or vertices using the `set_colors` function:
 
 Per-Vertex scalar fields can be directly visualized using `set_data` function:
 
-`viewer``.``data``().``set_data``(``D``);`\
+    viewer.data().set_data(D);
 
 `D` is a \#V by 1 vector with one value corresponding to each vertex. `set_data` will color according to linearly interpolating the *data* within a triangle (in the [fragment shader](https://en.wikipedia.org/wiki/Shader#Types)) and use this interpolated data to look up a color in a colormap (stored as a texture). The colormap defaults to `igl::COLOR_MAP_TYPE_VIRIDIS` with 21 discrete intervals. A custom colormap may be set with `set_colormap`.
 
@@ -203,22 +203,22 @@ Per-Vertex scalar fields can be directly visualized using `set_data` function:
 
 In addition to plotting the surface, the viewer supports the visualization of points, lines and text labels: these overlays can be very helpful while developing geometric processing algorithms to plot debug information.
 
-`viewer``.``data``().``add_points``(``P``,``Eigen``::``RowVector3d``(``r``,``g``,``b``));`\
+    viewer.data().add_points(P,Eigen::RowVector3d(r,g,b));
 
 Draws a point of color r,g,b for each row of P. The point is placed at the coordinates specified in each row of P, which is a \#P by 3 matrix. Size of the points (in pixels) can be changed globally by setting `viewer.data().point_size`.
 
-`viewer``.``data``().``add_edges``(``P1``,``P2``,``Eigen``::``RowVector3d``(``r``,``g``,``b``));`\
+    viewer.data().add_edges(P1,P2,Eigen::RowVector3d(r,g,b));
 
 Draws a line of color r,g,b for each row of P1 and P2, which connects the 3D point in to the point in P2. Both P1 and P2 are of size \#P by 3.
 
-`viewer``.``data``().``add_label``(``p``,``str``);`\
+    viewer.data().add_label(p,str);
 
 Draws a label containing the string str at the position p, which is a vector of length 3.
 
 These functions are demonstrate in [Example 105](https://github.com/libigl/libigl/tree/main/tutorial/105_Overlays/main.cpp) where the bounding box of a mesh is plotted using lines and points. Using matrices to encode the mesh and its attributes allows to write short and efficient code for many operations, avoiding to write for loops. For example, the bounding box of a mesh can be found by taking the colwise maximum and minimum of `V`:
 
-`Eigen``::``Vector3d`` ``m`` ``=`` ``V``.``colwise``().``minCoeff``();`\
-`Eigen``::``Vector3d`` ``M`` ``=`` ``V``.``colwise``().``maxCoeff``();`\
+    Eigen::Vector3d m = V.colwise().minCoeff();
+    Eigen::Vector3d M = V.colwise().maxCoeff();
 
 ![](../images/105_Overlays.png)
 
@@ -228,80 +228,80 @@ These functions are demonstrate in [Example 105](https://github.com/libigl/libig
 
 As of latest version, the viewer uses a new menu and completely replaces [AntTweakBar](http://anttweakbar.sourceforge.net/doc/) and [nanogui](https://github.com/wjakob/nanogui) with [Dear ImGui](https://github.com/ocornut/imgui). To extend the default menu of the viewer and to expose more user defined variables you have to implement a custom interface, as in [Example 106](https://github.com/libigl/libigl/tree/main/tutorial/106_ViewerMenu/main.cpp):
 
-`// Add content to the default menu window`\
-`menu``.``callback_draw_viewer_menu`` ``=`` ``[``&``]()`\
-`{`\
-`  ``// Draw parent menu content`\
-`  ``menu``.``draw_viewer_menu``();`\
-\
-`  ``// Add new group`\
-`  ``if`` ``(``ImGui``::``CollapsingHeader``(``"New Group"``,`` ``ImGuiTreeNodeFlags_DefaultOpen``))`\
-`  ``{`\
-`    ``// Expose variable directly ...`\
-`    ``ImGui``::``InputFloat``(``"float"``,`` ``&``floatVariable``,`` ``0``,`` ``0``,`` ``3``);`\
-\
-`    ``// ... or using a custom callback`\
-`    ``static`` ``bool`` ``boolVariable`` ``=`` ``true``;`\
-`    ``if`` ``(``ImGui``::``Checkbox``(``"bool"``,`` ``&``boolVariable``))`\
-`    ``{`\
-`      ``// do something`\
-`      ``std``::``cout`` ``<<`` ``"boolVariable: "`` ``<<`` ``std``::``boolalpha`` ``<<`` ``boolVariable`` ``<<`` ``std``::``endl``;`\
-`    ``}`\
-\
-`    ``// Expose an enumeration type`\
-`    ``enum`` ``Orientation`` ``{`` ``Up``=``0``,`` ``Down``,`` ``Left``,`` ``Right`` ``};`\
-`    ``static`` ``Orientation`` ``dir`` ``=`` ``Up``;`\
-`    ``ImGui``::``Combo``(``"Direction"``,`` ``(``int`` ``*``)(``&``dir``),`` ``"Up``\0``Down``\0``Left``\0``Right``\0\0``"``);`\
-\
-`    ``// We can also use a std::vector<std::string> defined dynamically`\
-`    ``static`` ``int`` ``num_choices`` ``=`` ``3``;`\
-`    ``static`` ``std``::``vector``<``std``::``string``>`` ``choices``;`\
-`    ``static`` ``int`` ``idx_choice`` ``=`` ``0``;`\
-`    ``if`` ``(``ImGui``::``InputInt``(``"Num letters"``,`` ``&``num_choices``))`\
-`    ``{`\
-`      ``num_choices`` ``=`` ``std``::``max``(``1``,`` ``std``::``min``(``26``,`` ``num_choices``));`\
-`    ``}`\
-`    ``if`` ``(``num_choices`` ``!=`` ``(``int``)`` ``choices``.``size``())`\
-`    ``{`\
-`      ``choices``.``resize``(``num_choices``);`\
-`      ``for`` ``(``int`` ``i`` ``=`` ``0``;`` ``i`` ``<`` ``num_choices``;`` ``++``i``)`\
-`        ``choices``[``i``]`` ``=`` ``std``::``string``(``1``,`` ``'A'`` ``+`` ``i``);`\
-`      ``if`` ``(``idx_choice`` ``>=`` ``num_choices``)`\
-`        ``idx_choice`` ``=`` ``num_choices`` ``-`` ``1``;`\
-`    ``}`\
-`    ``ImGui``::``Combo``(``"Letter"``,`` ``&``idx_choice``,`` ``choices``);`\
-\
-`    ``// Add a button`\
-`    ``if`` ``(``ImGui``::``Button``(``"Print Hello"``,`` ``ImVec2``(``-1``,``0``)))`\
-`    ``{`\
-`      ``std``::``cout`` ``<<`` ``"Hello``\n``"``;`\
-`    ``}`\
-`  ``}`\
-`};`\
+    // Add content to the default menu window
+    menu.callback_draw_viewer_menu = [&]()
+    {
+      // Draw parent menu content
+      menu.draw_viewer_menu();
+
+      // Add new group
+      if (ImGui::CollapsingHeader("New Group", ImGuiTreeNodeFlags_DefaultOpen))
+      {
+        // Expose variable directly ...
+        ImGui::InputFloat("float", &floatVariable, 0, 0, 3);
+
+        // ... or using a custom callback
+        static bool boolVariable = true;
+        if (ImGui::Checkbox("bool", &boolVariable))
+        {
+          // do something
+          std::cout << "boolVariable: " << std::boolalpha << boolVariable << std::endl;
+        }
+
+        // Expose an enumeration type
+        enum Orientation { Up=0, Down, Left, Right };
+        static Orientation dir = Up;
+        ImGui::Combo("Direction", (int *)(&dir), "Up\0Down\0Left\0Right\0\0");
+
+        // We can also use a std::vector<std::string> defined dynamically
+        static int num_choices = 3;
+        static std::vector<std::string> choices;
+        static int idx_choice = 0;
+        if (ImGui::InputInt("Num letters", &num_choices))
+        {
+          num_choices = std::max(1, std::min(26, num_choices));
+        }
+        if (num_choices != (int) choices.size())
+        {
+          choices.resize(num_choices);
+          for (int i = 0; i < num_choices; ++i)
+            choices[i] = std::string(1, 'A' + i);
+          if (idx_choice >= num_choices)
+            idx_choice = num_choices - 1;
+        }
+        ImGui::Combo("Letter", &idx_choice, choices);
+
+        // Add a button
+        if (ImGui::Button("Print Hello", ImVec2(-1,0)))
+        {
+          std::cout << "Hello\n";
+        }
+      }
+    };
 
 If you need a separate new menu window implement:
 
-`// Draw additional windows`\
-`menu``.``callback_draw_custom_window`` ``=`` ``[``&``]()`\
-`{`\
-`  ``// Define next window position + size`\
-`  ``ImGui``::``SetNextWindowPos``(``ImVec2``(``180.f`` ``*`` ``menu``.``menu_scaling``(),`` ``10``),`` ``ImGuiSetCond_FirstUseEver``);`\
-`  ``ImGui``::``SetNextWindowSize``(``ImVec2``(``200``,`` ``160``),`` ``ImGuiSetCond_FirstUseEver``);`\
-`  ``ImGui``::``Begin``(`\
-`      ``"New Window"``,`` ``nullptr``,`\
-`      ``ImGuiWindowFlags_NoSavedSettings`\
-`  ``);`\
-\
-`  ``// Expose the same variable directly ...`\
-`  ``ImGui``::``PushItemWidth``(``-80``);`\
-`  ``ImGui``::``DragFloat``(``"float"``,`` ``&``floatVariable``,`` ``0.0``,`` ``0.0``,`` ``3.0``);`\
-`  ``ImGui``::``PopItemWidth``();`\
-\
-`  ``static`` ``std``::``string`` ``str`` ``=`` ``"bunny"``;`\
-`  ``ImGui``::``InputText``(``"Name"``,`` ``str``);`\
-\
-`  ``ImGui``::``End``();`\
-`};`\
+    // Draw additional windows
+    menu.callback_draw_custom_window = [&]()
+    {
+      // Define next window position + size
+      ImGui::SetNextWindowPos(ImVec2(180.f * menu.menu_scaling(), 10), ImGuiSetCond_FirstUseEver);
+      ImGui::SetNextWindowSize(ImVec2(200, 160), ImGuiSetCond_FirstUseEver);
+      ImGui::Begin(
+          "New Window", nullptr,
+          ImGuiWindowFlags_NoSavedSettings
+      );
+
+      // Expose the same variable directly ...
+      ImGui::PushItemWidth(-80);
+      ImGui::DragFloat("float", &floatVariable, 0.0, 0.0, 3.0);
+      ImGui::PopItemWidth();
+
+      static std::string str = "bunny";
+      ImGui::InputText("Name", str);
+
+      ImGui::End();
+    };
 
 ![](../images/106_ViewerMenu.png)
 
@@ -325,17 +325,17 @@ A new view core can be added to the viewer using the `Viewer::append_core()` met
 
 When there are more than one view core, the user is responsible for specifying each viewport’s size and position by setting their `viewport` attribute. The user must also indicates how to resize each viewport when the size of the window changes. For example:
 
-`viewer``.``callback_post_resize`` ``=`` ``[``&``](``igl``::``opengl``::``glfw``::``Viewer`` ``&``v``,`` ``int`` ``w``,`` ``int`` ``h``)`` ``{`\
-`  ``v``.``core``(`` ``left_view``).``viewport`` ``=`` ``Eigen``::``Vector4f``(``0``,`` ``0``,`` ``w`` ``/`` ``2``,`` ``h``);`\
-`  ``v``.``core``(``right_view``).``viewport`` ``=`` ``Eigen``::``Vector4f``(``w`` ``/`` ``2``,`` ``0``,`` ``w`` ``-`` ``(``w`` ``/`` ``2``),`` ``h``);`\
-`  ``return`` ``true``;`\
-`};`\
+    viewer.callback_post_resize = [&](igl::opengl::glfw::Viewer &v, int w, int h) {
+      v.core( left_view).viewport = Eigen::Vector4f(0, 0, w / 2, h);
+      v.core(right_view).viewport = Eigen::Vector4f(w / 2, 0, w - (w / 2), h);
+      return true;
+    };
 
 Note that the viewport currently hovered by the mouse can be selected using the `Viewer::selected_core_index()` method, and the selected view core can then be accessed by calling `viewer.core_list[viewer.selected_core_index]`.
 
 Finally, the visibility of a mesh on a given view core is controlled by a bitmask flag per mesh. This property can be easily controlled by calling the method
 
-`viewer``.``data``(``mesh_id``).``set_visible``(``false``,`` ``view_id``);`\
+    viewer.data(mesh_id).set_visible(false, view_id);
 
 When appending a new mesh or a new view core, an optional argument controls the visibility of the existing objects with respect to the new mesh/view. Please refer to the documentation of `Viewer::append_mesh()` and `Viewer::append_core()` for more details.
 
@@ -353,30 +353,30 @@ The viewer integrates with [ImGuizmo](https://github.com/CedricGuillemet/ImGuizm
 
 First, register the `ImGuizmoPlugin` plugin with the Viewer:
 
-`#include`` ``<igl/opengl/glfw/imgui/ImGuizmoPlugin.h>`\
-\
-`// ImGuizmoPlugin replaces the ImGuiMenu plugin entirely`\
-`igl``::``opengl``::``glfw``::``imgui``::``ImGuizmoPlugin`` ``plugin``;`\
-`vr``.``plugins``.``push_back``(``&``plugin``);`\
+    #include <igl/opengl/glfw/imgui/ImGuizmoPlugin.h>
+
+    // ImGuizmoPlugin replaces the ImGuiMenu plugin entirely
+    igl::opengl::glfw::imgui::ImGuizmoPlugin plugin;
+    vr.plugins.push_back(&plugin);
 
 On initialization, ImGuizmo must be provided with the mesh centroid, as shown in [Example 109](https://github.com/libigl/libigl/tree/main/tutorial/109_ImGuizmo/main.cpp):
 
-`// Initialize ImGuizmo at mesh centroid`\
-`plugin``.``T``.``block``(``0``,``3``,``3``,``1``)`` ``=`` `\
-`  ``0.5``*``(``V``.``colwise``().``maxCoeff``()`` ``+`` ``V``.``colwise``().``minCoeff``()).``transpose``().``cast``<``float``>``();`\
+    // Initialize ImGuizmo at mesh centroid
+    plugin.T.block(0,3,3,1) = 
+      0.5*(V.colwise().maxCoeff() + V.colwise().minCoeff()).transpose().cast<float>();
 
 To apply the mesh manipulations invoked by the guizmos, the resulting transformation matrix is computed and applied to the input geometric data explicitly through the viewer’s API:
 
-`// Update can be applied relative to this remembered initial transform`\
-`const`` ``Eigen``::``Matrix4f`` ``T0`` ``=`` ``plugin``.``T``;`\
-`// Attach callback to apply imguizmo's transform to mesh`\
-`plugin``.``callback`` ``=`` ``[``&``](``const`` ``Eigen``::``Matrix4f`` ``&`` ``T``)`\
-`{`\
-`  ``const`` ``Eigen``::``Matrix4d`` ``TT`` ``=`` ``(``T``*``T0``.``inverse``()).``cast``<``double``>``().``transpose``();`\
-`  ``vr``.``data``().``set_vertices``(`\
-`    ``(``V``.``rowwise``().``homogeneous``()``*``TT``).``rowwise``().``hnormalized``());`\
-`  ``vr``.``data``().``compute_normals``();`\
-`};`\
+    // Update can be applied relative to this remembered initial transform
+    const Eigen::Matrix4f T0 = plugin.T;
+    // Attach callback to apply imguizmo's transform to mesh
+    plugin.callback = [&](const Eigen::Matrix4f & T)
+    {
+      const Eigen::Matrix4d TT = (T*T0.inverse()).cast<double>().transpose();
+      vr.data().set_vertices(
+        (V.rowwise().homogeneous()*TT).rowwise().hnormalized());
+      vr.data().compute_normals();
+    };
 
 \![\](images/109_ImGuizmo.png)
 
@@ -386,21 +386,21 @@ To apply the mesh manipulations invoked by the guizmos, the resulting transforma
 
 Libigl can read mixed meshes stored in [Gmsh `.msh` version 2](https://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format-version-2-_0028Legacy_0029) file format. These files can contain mixture of different meshes, as well as additional scalar and vector fields defined on element level and vertex level.
 
-`Eigen``::``MatrixXd`` ``X``;`` ``// Vertex coorinates (Xx3)`\
-`Eigen``::``MatrixXi`` ``Tri``;`` ``// Triangular elements (Yx3)`\
-`Eigen``::``MatrixXi`` ``Tet``;`` ``// Tetrahedral elements (Zx4)`\
-`Eigen``::``VectorXi`` ``TriTag``;`` ``// Integer tags defining triangular submeshes`\
-`Eigen``::``VectorXi`` ``TetTag``;`` ``// Integer tags defining tetrahedral submeshes`\
-\
-`std``::``vector``<``std``::``string``>`` ``XFields``;`` ``// headers (names) of fields defined on vertex level`\
-`std``::``vector``<``std``::``string``>`` ``EFields``;`` ``// headers (names) of fields defined on element level`\
-\
-`std``::``vector``<``Eigen``::``MatrixXd``>`` ``XF``;``   ``// fields defined on vertex `\
-`std``::``vector``<``Eigen``::``MatrixXd``>`` ``TriF``;`` ``// fields defined on triangular elements`\
-`std``::``vector``<``Eigen``::``MatrixXd``>`` ``TetF``;`` ``// fields defined on tetrahedral elements`\
-\
-`// loading mixed mesh from Gmsh file`\
-`igl``::``readMSH``(``"hand.msh"``,`` ``X``,`` ``Tri``,`` ``Tet``,`` ``TriTag``,`` ``TetTag``,`` ``XFields``,`` ``XF``,`` ``EFields``,`` ``TriF``,`` ``TetF``);`\
+    Eigen::MatrixXd X; // Vertex coorinates (Xx3)
+    Eigen::MatrixXi Tri; // Triangular elements (Yx3)
+    Eigen::MatrixXi Tet; // Tetrahedral elements (Zx4)
+    Eigen::VectorXi TriTag; // Integer tags defining triangular submeshes
+    Eigen::VectorXi TetTag; // Integer tags defining tetrahedral submeshes
+
+    std::vector<std::string> XFields; // headers (names) of fields defined on vertex level
+    std::vector<std::string> EFields; // headers (names) of fields defined on element level
+
+    std::vector<Eigen::MatrixXd> XF;   // fields defined on vertex 
+    std::vector<Eigen::MatrixXd> TriF; // fields defined on triangular elements
+    std::vector<Eigen::MatrixXd> TetF; // fields defined on tetrahedral elements
+
+    // loading mixed mesh from Gmsh file
+    igl::readMSH("hand.msh", X, Tri, Tet, TriTag, TetTag, XFields, XF, EFields, TriF, TetF);
 
 The interactive viewer is unable to directly draw tetrahedra though. So for visualization purposes each tetrahedron can be converted to four triangles.
 
@@ -426,8 +426,8 @@ When rendering a non-spherical shape, in the fragment shader we compute the norm
 
 In libigl, if the rgba data for a matcap image is stored in `R`,`G`,`B`, and `A` (as output, e.g., by `igl::png::readPNG`) then this can be attached to the `igl::opengl::ViewerData` by setting it as the texture data and then turning on matcap rendering:
 
-`viewer``.``data``().``set_texture``(``R``,``G``,``B``,``A``);`\
-`viewer``.``data``().``use_matcap`` ``=`` ``true``;`\
+    viewer.data().set_texture(R,G,B,A);
+    viewer.data().use_matcap = true;
 
 ## Chapter 2: Discrete Geometric Quantities And Operators[¶](#chapter-2-discrete-geometric-quantities-and-operators)
 
@@ -447,27 +447,27 @@ Normals can be computed and stored on vertices, and interpolated in the interior
 
 The typical half-edge style computation of area-based weights has this structure:
 
-`N``.``setZero``(``V``.``rows``(),``3``);`\
-`for``(``int`` ``i`` ``:`` ``vertices``)`\
-`{`\
-`  ``for``(``face`` ``:`` ``incident_faces``(``i``))`\
-`  ``{`\
-`    ``N``.``row``(``i``)`` ``+=`` ``face``.``area`` ``*`` ``face``.``normal``;`\
-`  ``}`\
-`}`\
-`N``.``rowwise``().``normalize``();`\
+    N.setZero(V.rows(),3);
+    for(int i : vertices)
+    {
+      for(face : incident_faces(i))
+      {
+        N.row(i) += face.area * face.normal;
+      }
+    }
+    N.rowwise().normalize();
 
 At first glance, it might seem inefficient to loop over incident faces—and thus constructing the per-vertex normals— without using an half-edge data structure. However, per-vertex normals may be *throwing* each face normal to running sums on its corner vertices:
 
-`N``.``setZero``(``V``.``rows``(),``3``);`\
-`for``(``int`` ``f`` ``=`` ``0``;`` ``f`` ``<`` ``F``.``rows``();``f``++``)`\
-`{`\
-`  ``for``(``int`` ``c`` ``=`` ``0``;`` ``c`` ``<`` ``3``;``c``++``)`\
-`  ``{`\
-`    ``N``.``row``(``F``(``f``,``c``))`` ``+=`` ``area``(``f``)`` ``*`` ``face_normal``.``row``(``f``);`\
-`  ``}`\
-`}`\
-`N``.``rowwise``().``normalize``();`\
+    N.setZero(V.rows(),3);
+    for(int f = 0; f < F.rows();f++)
+    {
+      for(int c = 0; c < 3;c++)
+      {
+        N.row(F(f,c)) += area(f) * face_normal.row(f);
+      }
+    }
+    N.rowwise().normalize();
 
 #### Per-corner[¶](#per-corner)
 
@@ -513,17 +513,17 @@ One way to extract mean curvature is by examining the Laplace-Beltrami operator 
 
 It is easy to compute this on a discrete triangle mesh in libigl using the cotangent Laplace-Beltrami operator <sup>[3](#fn:meyer_2003)</sup>.
 
-`#include`` ``<igl/cotmatrix.h>`\
-`#include`` ``<igl/massmatrix.h>`\
-`#include`` ``<igl/invert_diag.h>`\
-`...`\
-`MatrixXd`` ``HN``;`\
-`SparseMatrix``<``double``>`` ``L``,``M``,``Minv``;`\
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
-`igl``::``massmatrix``(``V``,``F``,``igl``::``MASSMATRIX_TYPE_VORONOI``,``M``);`\
-`igl``::``invert_diag``(``M``,``Minv``);`\
-`HN`` ``=`` ``-``Minv``*``(``L``*``V``);`\
-`H`` ``=`` ``HN``.``rowwise``().``norm``();`` ``//up to sign`\
+    #include <igl/cotmatrix.h>
+    #include <igl/massmatrix.h>
+    #include <igl/invert_diag.h>
+    ...
+    MatrixXd HN;
+    SparseMatrix<double> L,M,Minv;
+    igl::cotmatrix(V,F,L);
+    igl::massmatrix(V,F,igl::MASSMATRIX_TYPE_VORONOI,M);
+    igl::invert_diag(M,Minv);
+    HN = -Minv*(L*V);
+    H = HN.rowwise().norm(); //up to sign
 
 Combined with the angle defect definition of discrete Gaussian curvature, one can define principal curvatures and use least squares fitting to find directions <sup>[3](#fn:meyer_2003)</sup>.
 
@@ -575,30 +575,30 @@ L i j={j∈N(i)cotα i j+cotβ i j,j∉N(i)0,i=j−∑k≠i L i k,
 
 where N(i) are the vertices adjacent to (neighboring) vertex i, and α i j,β i j are the angles opposite to edge i j. This formula leads to a typical half-edge style implementation for constructing L:
 
-`for``(``int`` ``i`` ``:`` ``vertices``)`\
-`{`\
-`  ``for``(``int`` ``j`` ``:`` ``one_ring``(``i``))`\
-`  ``{`\
-`    ``for``(``int`` ``k`` ``:`` ``triangle_on_edge``(``i``,``j``))`\
-`    ``{`\
-`      ``L``(``i``,``j``)`` ``+=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`      ``L``(``i``,``i``)`` ``-=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`    ``}`\
-`  ``}`\
-`}`\
+    for(int i : vertices)
+    {
+      for(int j : one_ring(i))
+      {
+        for(int k : triangle_on_edge(i,j))
+        {
+          L(i,j) += cot(angle(i,j,k));
+          L(i,i) -= cot(angle(i,j,k));
+        }
+      }
+    }
 
 Similarly as before, it may seem inefficient to loop over one-rings without having an half-edge data structure. However, this is not the case, since the Laplacian may be built by summing together contributions for each triangle, much in spirit with its FEM discretization of the Dirichlet energy (sum of squared gradients):
 
-`for``(``triangle`` ``t`` ``:`` ``triangles``)`\
-`{`\
-`  ``for``(``edge`` ``i``,``j`` ``:`` ``t``)`\
-`  ``{`\
-`    ``L``(``i``,``j``)`` ``+=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`    ``L``(``j``,``i``)`` ``+=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`    ``L``(``i``,``i``)`` ``-=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`    ``L``(``j``,``j``)`` ``-=`` ``cot``(``angle``(``i``,``j``,``k``));`\
-`  ``}`\
-`}`\
+    for(triangle t : triangles)
+    {
+      for(edge i,j : t)
+      {
+        L(i,j) += cot(angle(i,j,k));
+        L(j,i) += cot(angle(i,j,k));
+        L(i,i) -= cot(angle(i,j,k));
+        L(j,j) -= cot(angle(i,j,k));
+      }
+    }
 
 Libigl implements discrete “cotangent” Laplacians for triangles meshes and tetrahedral meshes, building both with fast geometric rules rather than “by the book” FEM construction which involves many (small) matrix inversions, cf. <sup>[6](#fn:sharf_2007)</sup>.
 
@@ -638,18 +638,18 @@ The discrete geodesic distance between two points is the length of the shortest 
 
 Libigl includes a wrapper for the exact geodesic algorithm <sup>[4](#fn:mitchell_1987)</sup> developed by Danil Kirsanov (<https://code.google.com/archive/p/geodesic/>), exposing it through an Eigen-based API. The function
 
-`igl``::``exact_geodesic``(``V``,``F``,``VS``,``FS``,``VT``,``FT``,``d``);`\
+    igl::exact_geodesic(V,F,VS,FS,VT,FT,d);
 
 computes the closest geodesic distances of each vertex in VT or face in FT, from the source vertices VS or faces FS of the input mesh V,F. The output is written in the vector d, which lists first the distances for the vertices in VT, and then for the faces in FT. For example, if you want to compute the distance from the vertex with id `vid`, to all vertices of F you can use:
 
-`Eigen``::``VectorXi`` ``VS``,``FS``,``VT``,``FT``;`\
-`// The selected vertex is the source`\
-`VS``.``resize``(``1``);`\
-`VS`` ``<<`` ``vid``;`\
-`// All vertices are the targets`\
-`VT``.``setLinSpaced``(``V``.``rows``(),``0``,``V``.``rows``()``-1``);`\
-`Eigen``::``VectorXd`` ``d``;`\
-`igl``::``exact_geodesic``(``V``,``F``,``VS``,``FS``,``VT``,``FT``,``d``);`\
+    Eigen::VectorXi VS,FS,VT,FT;
+    // The selected vertex is the source
+    VS.resize(1);
+    VS << vid;
+    // All vertices are the targets
+    VT.setLinSpaced(V.rows(),0,V.rows()-1);
+    Eigen::VectorXd d;
+    igl::exact_geodesic(V,F,VS,FS,VT,FT,d);
 
 ![](https://github.com/libigl/libigl/tree/main/tutorial/206_GeodesicDistance/main.cpp)
 
@@ -665,24 +665,24 @@ Libigl relies heavily on the Eigen library for dense and sparse linear algebra r
 
 A very familiar and powerful routine in Matlab is array slicing. This allows reading from or writing to a possibly non-contiguous sub-matrix. Let’s consider the Matlab code:
 
-`B`` ``=`` ``A``(``R``,``C``);`\
+    B = A(R,C);
 
 If `A` is a m×n matrix and `R` is a j-long list of row-indices (between 1 and m) and `C` is a k-long list of column-indices, then as a result `B` will be a j×k matrix drawing elements from `A` according to `R` and `C`. In libigl, the same functionality is provided by the `slice` function ([Example 301](https://github.com/libigl/libigl/tree/main/tutorial/301_Slice/main.cpp)):
 
-`VectorXi`` ``R``,``C``;`\
-`MatrixXd`` ``A``,``B``;`\
-`...`\
-`igl``::``slice``(``A``,``R``,``C``,``B``);`\
+    VectorXi R,C;
+    MatrixXd A,B;
+    ...
+    igl::slice(A,R,C,B);
 
 Note that `A` and `B` could also be sparse matrices.
 
 Similarly, consider the Matlab code:
 
-`A``(``R``,``C``)`` ``=`` ``B``;`\
+    A(R,C) = B;
 
 Now, the selection is on the left-hand side so the j×k matrix `B` is being *written into* the submatrix of `A` determined by `R` and `C`. This functionality is provided in libigl using `slice_into`:
 
-`igl``::``slice_into``(``B``,``R``,``C``,``A``);`\
+    igl::slice_into(B,R,C,A);
 
 ![](../images/decimated-knight-slice-color.png)
 
@@ -692,23 +692,23 @@ The example `Slice` shows how to use `igl::slice` to change the colors for trian
 
 Matlab and other higher-level languages make it very easy to extract indices of sorting and comparison routines. For example in Matlab, one can write:
 
-`[``Y``,``I``]`` ``=`` ``sort``(``X``,``1``,``'ascend'``);`\
+    [Y,I] = sort(X,1,'ascend');
 
 so if `X` is a m×n matrix then `Y` will also be an m×n matrix with entries sorted along dimension `1` in `'ascend'`ing order. The second output `I` is a m×n matrix of indices such that `Y(i,j) = X(I(i,j),j);`. That is, `I` reveals how `X` is sorted into `Y`.
 
 This same functionality is supported in libigl:
 
-`igl``::``sort``(``X``,``1``,``true``,``Y``,``I``);`\
+    igl::sort(X,1,true,Y,I);
 
 Similarly, sorting entire rows can be accomplished in Matlab using:
 
-`[``Y``,``I``]`` ``=`` ``sortrows``(``X``,``'ascend'``);`\
+    [Y,I] = sortrows(X,'ascend');
 
 where now `I` is a m vector of indices such that `Y = X(I,:)`.
 
 In libigl, this is supported with
 
-`igl``::``sortrows``(``X``,``true``,``Y``,``I``);`\
+    igl::sortrows(X,true,Y,I);
 
 where again `I` reveals the index of sort so that it can be reproduced with `igl::slice(X,I,1,Y)`.
 
@@ -840,12 +840,12 @@ This specification is overly general as we could write z b=z b c as rows of A e 
 
 In libigl, solving such quadratic optimization problems is split into two routines: precomputation and solve. Precomputation only depends on the quadratic coefficients, known value indices and linear constraint coefficients:
 
-`igl``::``min_quad_with_fixed_data`` ``mqwf``;`\
-`igl``::``min_quad_with_fixed_precompute``(``Q``,``b``,``Aeq``,``true``,``mqwf``);`\
+    igl::min_quad_with_fixed_data mqwf;
+    igl::min_quad_with_fixed_precompute(Q,b,Aeq,true,mqwf);
 
 The output is a struct `mqwf` which contains the system matrix factorization and is used during solving with arbitrary linear terms, known values, and constraint in the right-hand sides:
 
-`igl``::``min_quad_with_fixed_solve``(``mqwf``,``B``,``bc``,``Beq``,``Z``);`\
+    igl::min_quad_with_fixed_solve(mqwf,B,bc,Beq,Z);
 
 The output `Z` is a n×1 vector of solutions with fixed values correctly placed to match the mesh vertices `V`.
 
@@ -901,9 +901,9 @@ Currently the implementation is efficient for box constraints and sparse non-ove
 
 Unlike alternative interior-point methods, the active set method benefits from a warm-start (initial guess for the solution vector z).
 
-`igl``::``active_set_params`` ``as``;`\
-`// Z is optional initial guess and output`\
-`igl``::``active_set``(``Q``,``B``,``b``,``bc``,``Aeq``,``Beq``,``Aieq``,``Bieq``,``lx``,``ux``,``as``,``Z``);`\
+    igl::active_set_params as;
+    // Z is optional initial guess and output
+    igl::active_set(Q,B,b,bc,Aeq,Beq,Aieq,Bieq,lx,ux,as,Z);
 
 ![](../images/cheburashka-multiscale-biharmonic-kernels.jpg)
 
@@ -933,12 +933,12 @@ Often the sum above is *truncated* to the first k eigen vectors. If the low freq
 
 In [Example 306](https://github.com/libigl/libigl/tree/main/tutorial/306_EigenDecomposition/main.cpp)), the first 5 eigen vectors of the discrete Laplace-Beltrami operator are computed and displayed in pseudo-color atop the beetle. Eigen vectors are computed using `igl::eigs` (mirroring MATLAB’s `eigs`). The 5 eigen vectors are placed into the columns of `U` and the eigen values are placed into the entries of `S`:
 
-`SparseMatrix``<``double``>`` ``L``,``M``;`\
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
-`igl``::``massmatrix``(``V``,``F``,``igl``::``MASSMATRIX_TYPE_DEFAULT``,``M``);`\
-`Eigen``::``MatrixXd`` ``U``;`\
-`Eigen``::``VectorXd`` ``S``;`\
-`igl``::``eigs``(``L``,``M``,``5``,``igl``::``EIGS_TYPE_SM``,``U``,``S``);`\
+    SparseMatrix<double> L,M;
+    igl::cotmatrix(V,F,L);
+    igl::massmatrix(V,F,igl::MASSMATRIX_TYPE_DEFAULT,M);
+    Eigen::MatrixXd U;
+    Eigen::VectorXd S;
+    igl::eigs(L,M,5,igl::EIGS_TYPE_SM,U,S);
 
 ![](../images/beetle-eigen-decomposition.gif)
 
@@ -968,8 +968,8 @@ where x′ is the unknown 3D position of a point on the surface. So we are askin
 
 In libigl, one can solve a biharmonic problem with `igl::harmonic` and setting k=2 (*bi*-harmonic):
 
-`// U_bc contains deformation of boundary vertices b`\
-`igl``::``harmonic``(``V``,``F``,``b``,``U_bc``,``2``,``U``);`\
+    // U_bc contains deformation of boundary vertices b
+    igl::harmonic(V,F,b,U_bc,2,U);
 
 This produces a smooth surface that interpolates the handle constraints, but all original details on the surface will be *smoothed away*. Most obviously, if the original surface is not already biharmonic, then giving all handles the identity deformation (keeping them at their rest positions) will **not** reproduce the original surface. Rather, the result will be the biharmonic surface that does interpolate those handle positions.
 
@@ -993,10 +993,10 @@ d b=x b c−x b.
 
 Again we can use `igl::harmonic` with k=2, but this time solve for the deformation field and then recover the deformed positions:
 
-`// U_bc contains deformation of boundary vertices b`\
-`D_bc`` ``=`` ``U_bc`` ``-`` ``igl``::``slice``(``V``,``b``,``1``);`\
-`igl``::``harmonic``(``V``,``F``,``b``,``D_bc``,``2``,``D``);`\
-`U`` ``=`` ``V``+``D``;`\
+    // U_bc contains deformation of boundary vertices b
+    D_bc = U_bc - igl::slice(V,b,1);
+    igl::harmonic(V,F,b,D_bc,2,D);
+    U = V+D;
 
 ![](../images/max-biharmonic.jpg)
 
@@ -1024,8 +1024,8 @@ We can generalize biharmonic deformation by considering different powers of the 
 
 with k∈1,2,3,…. The choice of k determines the level of continuity at the handles. In particular, k=1 implies C 0 at the boundary, k=2 implies C 1, k=3 implies C 2 and in general k implies C k−1.
 
-`int`` ``k`` ``=`` ``2``;``// or 1,3,4,...`\
-`igl``::``harmonic``(``V``,``F``,``b``,``bc``,``k``,``Z``);`\
+    int k = 2;// or 1,3,4,...
+    igl::harmonic(V,F,b,bc,k,Z);
 
 ![](../images/bump-k-harmonic.jpg)
 
@@ -1085,9 +1085,9 @@ where ^q i is the dual quaternion representation of the rigid transformation of 
 
 Like linear blend skinning, dual quaternion skinning is best performed in the vertex shader. The only difference being that bone transformations are sent as dual quaternions rather than affine transformation matrices. Libigl supports CPU-side dual quaternion skinning with the `igl::dqs` function, which takes a more traditional representation of rigid transformations as input and internally converts to the dual quaternion representation before blending:
 
-`// vQ is a list of rotations as quaternions`\
-`// vT is a list of translations`\
-`igl``::``dqs``(``V``,``W``,``vQ``,``vT``,``U``);`\
+    // vQ is a list of rotations as quaternions
+    // vT is a list of translations
+    igl::dqs(V,W,vQ,vT,U);
 
 ![](../images/arm-dqs.jpg)
 
@@ -1121,15 +1121,15 @@ The different flavors of “as-rigid-as-possible” depend on the dimension and 
 
 Libigl, supports these common flavors. Selecting one is a matter of setting the energy type before the precompuation phase:
 
-`igl``::``ARAPData`` ``arap_data``;`\
-`arap_data``.``energy`` ``=`` ``igl``::``ARAP_ENERGY_TYPE_SPOKES``;`\
-`//arap_data.energy = igl::ARAP_ENERGY_TYPE_SPOKES_AND_RIMS;`\
-`//arap_data.energy = igl::ARAP_ENERGY_TYPE_ELEMENTS; //triangles or tets`\
-`igl``::``arap_precomputation``(``V``,``F``,``dim``,``b``,``arap_data``);`\
+    igl::ARAPData arap_data;
+    arap_data.energy = igl::ARAP_ENERGY_TYPE_SPOKES;
+    //arap_data.energy = igl::ARAP_ENERGY_TYPE_SPOKES_AND_RIMS;
+    //arap_data.energy = igl::ARAP_ENERGY_TYPE_ELEMENTS; //triangles or tets
+    igl::arap_precomputation(V,F,dim,b,arap_data);
 
 Just like `igl::min_quad_with_fixed_*`, this precomputation phase only depends on the mesh, fixed vertex indices `b` and the energy parameters. To solve with certain constraints on the positions of vertices in `b`, we may call:
 
-`igl``::``arap_solve``(``bc``,``arap_data``,``U``);`\
+    igl::arap_solve(bc,arap_data,U);
 
 which uses `U` as an initial guess and then computes the solution into it.
 
@@ -1219,7 +1219,7 @@ Minimizers of this “squared Laplacian” energy are in some sense *discrete bi
 
 In libigl, one can compute biharmonic coordinates given a mesh `(V,F)` and a list `S` of selected control points or control regions (which act like skinning handles):
 
-`igl``::``biharmonic_coordinates``(``V``,``F``,``S``,``W``);`\
+    igl::biharmonic_coordinates(V,F,S,W);
 
 ![](../images/octopus-biharmonic-coordinates-physics.gif)
 
@@ -1243,13 +1243,13 @@ The key insight of “Direct Delta Mush” is that this process of Laplacian smo
 
 Direct delta mush moves the smoothing step into precomputation, resulting in “vector-valued” skinning weights per-vertex per-bone, stored in a matrix Ω. In libigl, for a mesh `(V,F)` and (e.g., piecewise-constant) weights `W` this precomputation is computed using:
 
-`igl``::``direct_delta_mush_precomputation``(``V``,`` ``F``,``Wsparse``,`` ``p``,`` ``lambda``,`` ``kappa``,`` ``alpha``,`` ``Omega``);`\
+    igl::direct_delta_mush_precomputation(V, F,Wsparse, p, lambda, kappa, alpha, Omega);
 
 the parameters `p, lambda, kappa, alpha` control the smoothness and compactness of the resulting deformation. The precomputation’s output is the matrix `Omega`.
 
 At runtime, Ω is used to deform the mesh to its final locations. In libigl, this is computed using:
 
-`igl``::``direct_delta_mush``(``V``,`` ``T_list``,`` ``Omega``,`` ``U``);`\
+    igl::direct_delta_mush(V, T_list, Omega, U);
 
 where `T_list` is the input pose (affine) transformations associated with each bone and the final locations are stored in `U`.
 
@@ -1307,8 +1307,8 @@ Regularized kelvinlets can further be extended by replacing the vector-based loa
 
 In libigl, this is computed using:
 
-`igl``::``KelvinletParams``<``double``>`` ``brushParams``{``brushRadius``,`` ``scale``,`` ``brushType``};`\
-`igl``::``kelvinlets``(``V``,`` ``origin``,`` ``forceVec``,`` ``forceMatrix``,`` ``brushParams``,`` ``result``);`\
+    igl::KelvinletParams<double> brushParams{brushRadius, scale, brushType};
+    igl::kelvinlets(V, origin, forceVec, forceMatrix, brushParams, result);
 
 where `brushRadius, scale, brushType` correspond to ϵ, the falloff, and operation(grab, pinch, scale, twist).
 
@@ -1342,19 +1342,19 @@ The algorithm is divided in 3 steps:
 
 The algorithm can be coded using libigl as follows:
 
-`Eigen``::``VectorXi`` ``bnd``;`\
-`igl``::``boundary_loop``(``V``,``F``,``bnd``);`\
-\
-`Eigen``::``MatrixXd`` ``bnd_uv``;`\
-`igl``::``map_vertices_to_circle``(``V``,``bnd``,``bnd_uv``);`\
-\
-`igl``::``harmonic``(``V``,``F``,``bnd``,``bnd_uv``,``1``,``V_uv``);`\
+    Eigen::VectorXi bnd;
+    igl::boundary_loop(V,F,bnd);
+
+    Eigen::MatrixXd bnd_uv;
+    igl::map_vertices_to_circle(V,bnd,bnd_uv);
+
+    igl::harmonic(V,F,bnd,bnd_uv,1,V_uv);
 
 where `bnd` contains the indices of the boundary vertices, bnd_uv their position on the UV plane, and “1” denotes that we want to compute an harmonic function (2 will be for biharmonic, 3 for triharmonic, etc.). Note that each of the three functions is designed to be reusable in other parametrization algorithms.
 
 A UV parametrization can be visualized in the viewer with:
 
-`viewer``.``data``().``set_uv``(``V_uv``);`\
+    viewer.data().set_uv(V_uv);
 
 The UV coordinates are then used to apply a procedural checkerboard texture to the mesh ([Example 501](https://github.com/libigl/libigl/tree/main/tutorial/501_HarmonicParam/main.cpp)).
 
@@ -1378,18 +1378,18 @@ where L c is the cotangent Laplacian matrix and A is a matrix such that \[u,v\]t
 
 Using libigl, this matrix energy can be written in a few lines of code. The cotangent matrix can be computed using `igl::cotmatrix`:
 
-`SparseMatrix``<``double``>`` ``L``;`\
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
+    SparseMatrix<double> L;
+    igl::cotmatrix(V,F,L);
 
 Note that we want to apply the Laplacian matrix to the u and v coordinates at the same time, thus we need to extend it taking the left Kronecker product with a 2x2 identity matrix:
 
-`SparseMatrix``<``double``>`` ``L_flat``;`\
-`igl``::``repdiag``(``L``,``2``,``L_flat``);`\
+    SparseMatrix<double> L_flat;
+    igl::repdiag(L,2,L_flat);
 
 The area matrix is computed with `igl::vector_area_matrix`:
 
-`SparseMatrix``<``double``>`` ``A``;`\
-`igl``::``vector_area_matrix``(``F``,``A``);`\
+    SparseMatrix<double> A;
+    igl::vector_area_matrix(F,A);
 
 The final energy matrix is L f l a t−2 A. Note that in this case we do not need to fix the boundary. To remove the null space of the energy and make the minimum unique, it is sufficient to fix two arbitrary vertices to two arbitrary positions. The full source code is provided in [Example 502](https://github.com/libigl/libigl/tree/main/tutorial/502_LSCMParam/main.cpp).
 
@@ -1413,8 +1413,8 @@ The design of tangent fields is a basic tool used to design guidance fields for 
 
 In libigl, tangent unit-length vector fields are piece-wise constant on the faces of a triangle mesh, and they are described by one or more vectors per-face. The function
 
-`igl``::``nrosy``(``V``,``F``,``b``,``bc``,``b_soft``,``b_soft_weight``,``bc_soft``,``N``,``0.5``,`\
-`           ``output_field``,``output_singularities``);`\
+    igl::nrosy(V,F,b,bc,b_soft,b_soft_weight,bc_soft,N,0.5,
+               output_field,output_singularities);
 
 creates a smooth unit-length vector field (N=1) starting from a sparse set of constrained faces, whose indices are listed in b and their constrained value is specified in bc. The functions supports soft_constraints (b_soft, b_soft_weight, bc_soft), and returns the interpolated field for each face of the triangle mesh (output_field), plus the singularities of the field (output_singularities).
 
@@ -1550,92 +1550,92 @@ In libigl, serialization is much simpler, since the majority of the functions us
 
 To de-/serialize a set of variables use the following method:
 
-`#include`` ``"igl/serialize.h"`\
-\
-`bool`` ``b`` ``=`` ``true``;`\
-`unsigned`` ``int`` ``num`` ``=`` ``10``;`\
-`std``::``vector``<``float``>`` ``vec`` ``=`` ``{``0.1``,``0.002``,``5.3``};`\
-\
-`// use overwrite = true for the first serialization to create or overwrite an`\
-`// existing file`\
-`igl``::``serialize``(``b``,``"B"``,``"filename"``,``true``);`\
-`// append following serialization to existing file`\
-`igl``::``serialize``(``num``,``"Number"``,``"filename"``);`\
-`igl``::``serialize``(``vec``,``"VectorName"``,``"filename"``);`\
-\
-`// deserialize back to variables`\
-`igl``::``deserialize``(``b``,``"B"``,``"filename"``);`\
-`igl``::``deserialize``(``num``,``"Number"``,``"filename"``);`\
-`igl``::``deserialize``(``vec``,``"VectorName"``,``"filename"``);`\
+    #include "igl/serialize.h"
+
+    bool b = true;
+    unsigned int num = 10;
+    std::vector<float> vec = {0.1,0.002,5.3};
+
+    // use overwrite = true for the first serialization to create or overwrite an
+    // existing file
+    igl::serialize(b,"B","filename",true);
+    // append following serialization to existing file
+    igl::serialize(num,"Number","filename");
+    igl::serialize(vec,"VectorName","filename");
+
+    // deserialize back to variables
+    igl::deserialize(b,"B","filename");
+    igl::deserialize(num,"Number","filename");
+    igl::deserialize(vec,"VectorName","filename");
 
 Currently all fundamental data types (bool, int, float, double, …) are supported, as well as std::string, basic `STL` containers, dense and sparse Eigen matrices and nestings of those. Some limitations apply to pointers. Currently, loops or many to one type of link structures are not handled correctly. Each pointer is assumed to point to a different independent object. Uninitialized pointers must be set to `nullptr` before de-/serialization to avoid memory leaks. Cross-platform issues like little-, big-endianess is currently not supported. To make user defined types serializable, just derive from `igl::Serializable` and trivially implementing the `InitSerialization` method.
 
 Assume that the state of your application is a mesh and a set of integer ids:
 
-`#include`` ``"igl/serialize.h"`\
-\
-`struct`` ``State`` ``:`` ``public`` ``igl``::``Serializable`\
-`{`\
-`  ``Eigen``::``MatrixXd`` ``V``;`\
-`  ``Eigen``::``MatrixXi`` ``F``;`\
-`  ``std``::``vector``<``int``>`` ``ids``;`\
-\
-`  ``void`` ``InitSerialization``()`\
-`  ``{`\
-`    ``this``->``Add``(``V``  ``,`` ``"V"``);`\
-`    ``this``->``Add``(``F``  ``,`` ``"F"``);`\
-`    ``this``->``Add``(``ids``,`` ``"ids"``);`\
-`  ``}`\
-`};`\
+    #include "igl/serialize.h"
+
+    struct State : public igl::Serializable
+    {
+      Eigen::MatrixXd V;
+      Eigen::MatrixXi F;
+      std::vector<int> ids;
+
+      void InitSerialization()
+      {
+        this->Add(V  , "V");
+        this->Add(F  , "F");
+        this->Add(ids, "ids");
+      }
+    };
 
 If you need more control over the serialization of your types, you can override the following functions or directly inherit from the interface `igl::SerializableBase`.
 
-`bool`` ``Serializable::PreSerialization``()`` ``const``;`\
-`void`` ``Serializable::PostSerialization``()`` ``const``;`\
-`bool`` ``Serializable::PreDeserialization``();`\
-`void`` ``Serializable::PostDeserialization``();`\
+    bool Serializable::PreSerialization() const;
+    void Serializable::PostSerialization() const;
+    bool Serializable::PreDeserialization();
+    void Serializable::PostDeserialization();
 
 Alternatively, if you want a non-intrusive way of serializing your state you can overload the following functions:
 
-`namespace`` ``igl`\
-`{`\
-`  ``namespace`` ``serialization`\
-`  ``{`\
-`    ``template`` ``<>`` ``inline`` ``void`` ``serialize``(``const`` ``State``&`` ``obj``,``std``::``vector``<``char``>&`` ``buffer``)`\
-`    ``{`\
-`      ``::``igl``::``serialize``(``obj``.``V``,``std``::``string``(``"V"``),``buffer``);`\
-`      ``::``igl``::``serialize``(``obj``.``F``,``std``::``string``(``"F"``),``buffer``);`\
-`      ``::``igl``::``serialize``(``obj``.``ids``,``std``::``string``(``"ids"``),``buffer``);`\
-`    ``}`\
-`    ``template`` ``<>`` ``inline`` ``void`` ``deserialize``(``State``&`` ``obj``,``const`` ``std``::``vector``<``char``>&`` ``buffer``)`\
-`    ``{`\
-`      ``::``igl``::``deserialize``(``obj``.``V``,``std``::``string``(``"V"``),``buffer``);`\
-`      ``::``igl``::``deserialize``(``obj``.``F``,``std``::``string``(``"F"``),``buffer``);`\
-`      ``::``igl``::``deserialize``(``obj``.``ids``,``std``::``string``(``"ids"``),``buffer``);`\
-`    ``}`\
-`  ``}`\
-`}`\
+    namespace igl
+    {
+      namespace serialization
+      {
+        template <> inline void serialize(const State& obj,std::vector<char>& buffer)
+        {
+          ::igl::serialize(obj.V,std::string("V"),buffer);
+          ::igl::serialize(obj.F,std::string("F"),buffer);
+          ::igl::serialize(obj.ids,std::string("ids"),buffer);
+        }
+        template <> inline void deserialize(State& obj,const std::vector<char>& buffer)
+        {
+          ::igl::deserialize(obj.V,std::string("V"),buffer);
+          ::igl::deserialize(obj.F,std::string("F"),buffer);
+          ::igl::deserialize(obj.ids,std::string("ids"),buffer);
+        }
+      }
+    }
 
 Equivalently, you can use the following macros:
 
-`SERIALIZE_TYPE``(``State``,`\
-` ``SERIALIZE_MEMBER``(``V``)`\
-` ``SERIALIZE_MEMBER``(``F``)`\
-` ``SERIALIZE_MEMBER_NAME``(``ids``,``"ids"``)`\
-`)`\
+    SERIALIZE_TYPE(State,
+     SERIALIZE_MEMBER(V)
+     SERIALIZE_MEMBER(F)
+     SERIALIZE_MEMBER_NAME(ids,"ids")
+    )
 
 All the former code is for binary serialization which is especially useful if you have to handle larger data where the loading and saving times become more important. For cases where you want to read and edit the serialized data by hand we provide a serialization to XML files which is based on the library [tinyxml2](https://github.com/leethomason/tinyxml2). There you also have the option to create a partial binary serialization of your data by using the binary parameter, exposed in the function `serialize_xml()`:
 
-`#include`` ``"igl/xml/serialize_xml.h"`\
-\
-`int`` ``number``;`\
-\
-`// binary = false, overwrite = true`\
-`igl``::``serialize_xml``(``vec``,``"VectorXML"``,``xmlFile``,``false``,``true``);`\
-`// binary = true, overwrite = true`\
-`igl``::``serialize_xml``(``vec``,``"VectorBin"``,``xmlFile``,``true``,``true``);`\
-`igl``::``deserialize_xml``(``vec``,``"VectorXML"``,``xmlFile``);`\
-`igl``::``deserialize_xml``(``vec``,``"VectorBin"``,``xmlFile``);`\
+    #include "igl/xml/serialize_xml.h"
+
+    int number;
+
+    // binary = false, overwrite = true
+    igl::serialize_xml(vec,"VectorXML",xmlFile,false,true);
+    // binary = true, overwrite = true
+    igl::serialize_xml(vec,"VectorBin",xmlFile,true,true);
+    igl::deserialize_xml(vec,"VectorXML",xmlFile);
+    igl::deserialize_xml(vec,"VectorBin",xmlFile);
 
 For user defined types derive from `XMLSerializable`.
 
@@ -1649,16 +1649,16 @@ We demonstrate how to integrate Matlab in a libigl application in [Example 602](
 
 Libigl can connect to an existing instance of Matlab (or launching a new one on Linux/MacOSX) using:
 
-`igl``::``mlinit``(``&``engine``);`\
+    igl::mlinit(&engine);
 
 The cotangent Laplacian is computed using igl::cotmatrix and uploaded to the Matlab workspace:
 
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
-`igl``::``mlsetmatrix``(``&``engine``,``"L"``,``L``);`\
+    igl::cotmatrix(V,F,L);
+    igl::mlsetmatrix(&engine,"L",L);
 
 It is now possible to use any Matlab function on the data. For example, we can see the sparsity pattern of L using spy:
 
-`igl``::``mleval``(``&``engine``,``"spy(L)"``);`\
+    igl::mleval(&engine,"spy(L)");
 
 ![](../images/602_Matlab_1.png)
 
@@ -1666,8 +1666,8 @@ The Matlab spy function is called from a libigl-based application.
 
 The results of Matlab computations can be returned back to the C++ application
 
-`igl``::``mleval``(``&``engine``,``"[EV,~] = eigs(-L,10,'sm')"``);`\
-`igl``::``mlgetmatrix``(``&``engine``,``"EV"``,``EV``);`\
+    igl::mleval(&engine,"[EV,~] = eigs(-L,10,'sm')");
+    igl::mlgetmatrix(&engine,"EV",EV);
 
 and plotted using the libigl viewer.
 
@@ -1679,17 +1679,17 @@ Eigenfunctions of the Laplacian computed in Matlab, plotted in the libigl viewer
 
 To aid debugging, libigl also supplies functions to write Matlab `.mat` “Workspaces”. This C++ snippet saves a mesh and it’s sparse Laplacian matrix to a file:
 
-`igl``::``readOFF``(``TUTORIAL_SHARED_PATH`` ``"/fertility.off"``,`` ``V``,`` ``F``);`\
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
-`igl``::``MatlabWorkspace`` ``mw``;`\
-`mw``.``save``(``V``,``"V"``);`\
-`mw``.``save_index``(``F``,``"F"``);`\
-`mw``.``save``(``L``,``"L"``);`\
-`mw``.``write``(``"fertility.mat"``);`\
+    igl::readOFF(TUTORIAL_SHARED_PATH "/fertility.off", V, F);
+    igl::cotmatrix(V,F,L);
+    igl::MatlabWorkspace mw;
+    mw.save(V,"V");
+    mw.save_index(F,"F");
+    mw.save(L,"L");
+    mw.write("fertility.mat");
 
 Then this workspace can be loaded into a Matlab IDE:
 
-`load`` ``fertility``.``mat`\
+    load fertility.mat
 
 The `igl::MatlabWorkspace` depends on Matlab libraries to compile and run, but—in contrast to the engine routines above—will avoid launching a Matlab instance upon execution.
 
@@ -1697,41 +1697,41 @@ The `igl::MatlabWorkspace` depends on Matlab libraries to compile and run, but�
 
 Eigen supplies a sophisticated API for printing its matrix types to the screen. Libigl has wrapped up a particularly useful formatting which makes it simple to copy standard output from a C++ program into a Matlab IDE. The code:
 
-`igl``::``readOFF``(``TUTORIAL_SHARED_PATH`` ``"/2triangles.off"``,`` ``V``,`` ``F``);`\
-`igl``::``cotmatrix``(``V``,``F``,``L``);`\
-`std``::``cout``<<``igl``::``matlab_format``(``V``,``"V"``)``<<``std``::``endl``;`\
-`std``::``cout``<<``igl``::``matlab_format``((``F``.``array``()``+``1``).``eval``(),``"F"``)``<<``std``::``endl``;`\
-`std``::``cout``<<``igl``::``matlab_format``(``L``,``"L"``)``<<``std``::``endl``;`\
+    igl::readOFF(TUTORIAL_SHARED_PATH "/2triangles.off", V, F);
+    igl::cotmatrix(V,F,L);
+    std::cout<<igl::matlab_format(V,"V")<<std::endl;
+    std::cout<<igl::matlab_format((F.array()+1).eval(),"F")<<std::endl;
+    std::cout<<igl::matlab_format(L,"L")<<std::endl;
 
 produces the output:
 
-`V`` ``=`` ``[`\
-`  ``0`` ``0`` ``0`\
-`  ``1`` ``0`` ``0`\
-`  ``1`` ``1`` ``1`\
-`  ``2`` ``1`` ``0`\
-`];`\
-`F`` ``=`` ``[`\
-`  ``1`` ``2`` ``3`\
-`  ``2`` ``4`` ``3`\
-`];`\
-`LIJV`` ``=`` ``[`\
-`1``  ``1``    ``-``0.7071067811865476`\
-`2``  ``1``     ``0.7071067811865475`\
-`3``  ``1``  ``1.570092458683775e-16`\
-`1``  ``2``     ``0.7071067811865475`\
-`2``  ``2``     ``-``1.638010440969447`\
-`3``  ``2``     ``0.6422285251880865`\
-`4``  ``2``     ``0.2886751345948129`\
-`1``  ``3``  ``1.570092458683775e-16`\
-`2``  ``3``     ``0.6422285251880865`\
-`3``  ``3``    ``-``0.9309036597828995`\
-`4``  ``3``     ``0.2886751345948129`\
-`2``  ``4``     ``0.2886751345948129`\
-`3``  ``4``     ``0.2886751345948129`\
-`4``  ``4``    ``-``0.5773502691896258`\
-`];`\
-`L`` ``=`` ``sparse``(``LIJV``(:,``1``),``LIJV``(:,``2``),``LIJV``(:,``3``));`\
+    V = [
+      0 0 0
+      1 0 0
+      1 1 1
+      2 1 0
+    ];
+    F = [
+      1 2 3
+      2 4 3
+    ];
+    LIJV = [
+    1  1    -0.7071067811865476
+    2  1     0.7071067811865475
+    3  1  1.570092458683775e-16
+    1  2     0.7071067811865475
+    2  2     -1.638010440969447
+    3  2     0.6422285251880865
+    4  2     0.2886751345948129
+    1  3  1.570092458683775e-16
+    2  3     0.6422285251880865
+    3  3    -0.9309036597828995
+    4  3     0.2886751345948129
+    2  4     0.2886751345948129
+    3  4     0.2886751345948129
+    4  4    -0.5773502691896258
+    ];
+    L = sparse(LIJV(:,1),LIJV(:,2),LIJV(:,3));
 
 which is easily copied and pasted into Matlab for debugging, etc.
 
@@ -1747,7 +1747,7 @@ The generation of high-quality triangle and tetrahedral meshes is a very common 
 
 A triangle mesh with a given boundary can be created with:
 
-`igl``::``triangulate``(``V``,``E``,``H``,``V2``,``F2``,``"a0.005q"``);`\
+    igl::triangulate(V,E,H,V2,F2,"a0.005q");
 
 where `E` is a set of boundary edges (#E by 2), `H` is a set of 2D positions of points contained in holes of the triangulation (#H by 2) and (`V2`,`F2`) is the generated triangulation. Additional parameters can be passed to `triangle`, to control the quality: `"a0.005q"` enforces a bound on the maximal area of the triangles and a minimal angle of 20 degrees. In [Example 604](https://github.com/libigl/libigl/tree/main/tutorial/604_Triangle/main.cpp), the interior of a square (excluded a smaller square in its interior) is triangulated.
 
@@ -1759,7 +1759,7 @@ Triangulation of the interior of a polygon.
 
 Similarly, the interior of a closed manifold surface can be tetrahedralized using the function `igl::tetrahedralize` which wraps the Tetgen library ([Example 605](https://github.com/libigl/libigl/tree/main/tutorial/605_Tetgen/main.cpp)):
 
-`igl``::``tetrahedralize``(``V``,``F``,``"pq1.414"``,`` ``TV``,``TT``,``TF``);`\
+    igl::tetrahedralize(V,F,"pq1.414", TV,TT,TF);
 
 ![](../images/605_Tetgen.png)
 
@@ -1777,7 +1777,7 @@ where V p,ω is the visibility function at p, defined to be zero if p is occlude
 
 The integral is usually approximated by casting rays in random directions around each vertex. This approximation can be computed using the function:
 
-`igl``::``ambient_occlusion``(``V``,``F``,``V_samples``,``N_samples``,``500``,``AO``);`\
+    igl::ambient_occlusion(V,F,V_samples,N_samples,500,AO);
 
 that given a scene described in `V` and `F`, computes the ambient occlusion of the points in `V_samples` whose associated normals are `N_samples`. The number of casted rays can be controlled (usually at least 300-500 rays are required to get a smooth result) and the result is returned in `AO`, as a single scalar for each sample.
 
@@ -1793,17 +1793,17 @@ Libigl supports read and writing to .png files via the [stb image](http://nothin
 
 With the viewer used in this tutorial, it is possible to render the scene in a memory buffer using the function, `igl::opengl::ViewerCore::draw_buffer`:
 
-`// Allocate temporary buffers for 1280x800 image`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``R``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``G``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``B``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``A``(``1280``,``800``);`\
-\
-`// Draw the scene in the buffers`\
-`viewer``.``core``.``draw_buffer``(``viewer``.``data``(),``false``,``R``,``G``,``B``,``A``);`\
-\
-`// Save it to a PNG`\
-`igl``::``png``::``writePNG``(``R``,``G``,``B``,``A``,``"out.png"``);`\
+    // Allocate temporary buffers for 1280x800 image
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> R(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> G(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> B(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> A(1280,800);
+
+    // Draw the scene in the buffers
+    viewer.core.draw_buffer(viewer.data(),false,R,G,B,A);
+
+    // Save it to a PNG
+    igl::png::writePNG(R,G,B,A,"out.png");
 
 In [Example 607](https://github.com/libigl/libigl/tree/main/tutorial/607_ScreenCapture/main.cpp) a scene is rendered in a temporary png and used to texture a quadrilateral.
 
@@ -1811,43 +1811,43 @@ In [Example 607](https://github.com/libigl/libigl/tree/main/tutorial/607_ScreenC
 
 If libigl is compiled without OpenGL support, or when the interactive viewer is not practical, it is still possible to render view in memory using [Embree](https://www.embree.org/) library. Currently only triangular meshes are supported. The usage is very similar to the [Screen Capture](#screen-capture) tutorial.
 
-`// Create embree renderer object`\
-`igl``::``embree``::``EmbreeRenderer`` ``er``;`\
-`// Specify mesh, tell embree to optimize for static scene`\
-`er``.``set_mesh``(``V``,``F``,``true``);`\
-\
-`// Specify scalar data, use JET color map to convert to colors`\
-`er``.``set_data``(``K``,``igl``::``COLOR_MAP_TYPE_JET``);`\
-\
-`// Since the render is not interactive, need to specify scene parameters`\
-`// the default view is identical to the interactive viewer`\
-`Eigen``::``Matrix3d`` ``rot_matrix``;`\
-\
-`// Specify rotation matrix:`\
-`//     10 degrees around X axis`\
-`//      5 degrees around Y axis`\
-`//      4 degrees around Z axis`\
-`rot_matrix`` ``=``  ``Eigen``::``AngleAxisd``(`` ``10``*``igl``::``PI``/``180.0``,`` ``Eigen``::``Vector3d``::``UnitX``())`\
-`            ``*`` ``Eigen``::``AngleAxisd``(``  ``5``*``igl``::``PI``/``180.0``,`` ``Eigen``::``Vector3d``::``UnitY``())`\
-`            ``*`` ``Eigen``::``AngleAxisd``(``  ``4``*``igl``::``PI``/``180.0``,`` ``Eigen``::``Vector3d``::``UnitZ``());`\
-`er``.``set_rot``(``rot_matrix``);`\
-\
-`// Specify relative zoom factor`\
-`er``.``set_zoom``(``1.5``);`\
-`// Request orthographic projection`\
-`er``.``set_orthographic``(``false``);`\
-\
-`// Allocate temporary buffers for 1280x800 image`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``R``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``G``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``B``(``1280``,``800``);`\
-`Eigen``::``Matrix``<``unsigned`` ``char``,``Eigen``::``Dynamic``,``Eigen``::``Dynamic``>`` ``A``(``1280``,``800``);`\
-\
-`// Render view`\
-`er``.``render_buffer``(``R``,``G``,``B``,``A``);`\
-\
-`// Save it to a PNG`\
-`igl``::``png``::``writePNG``(``R``,``G``,``B``,``A``,``png_file``);`\
+    // Create embree renderer object
+    igl::embree::EmbreeRenderer er;
+    // Specify mesh, tell embree to optimize for static scene
+    er.set_mesh(V,F,true);
+
+    // Specify scalar data, use JET color map to convert to colors
+    er.set_data(K,igl::COLOR_MAP_TYPE_JET);
+
+    // Since the render is not interactive, need to specify scene parameters
+    // the default view is identical to the interactive viewer
+    Eigen::Matrix3d rot_matrix;
+
+    // Specify rotation matrix:
+    //     10 degrees around X axis
+    //      5 degrees around Y axis
+    //      4 degrees around Z axis
+    rot_matrix =  Eigen::AngleAxisd( 10*igl::PI/180.0, Eigen::Vector3d::UnitX())
+                * Eigen::AngleAxisd(  5*igl::PI/180.0, Eigen::Vector3d::UnitY())
+                * Eigen::AngleAxisd(  4*igl::PI/180.0, Eigen::Vector3d::UnitZ());
+    er.set_rot(rot_matrix);
+
+    // Specify relative zoom factor
+    er.set_zoom(1.5);
+    // Request orthographic projection
+    er.set_orthographic(false);
+
+    // Allocate temporary buffers for 1280x800 image
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> R(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> G(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> B(1280,800);
+    Eigen::Matrix<unsigned char,Eigen::Dynamic,Eigen::Dynamic> A(1280,800);
+
+    // Render view
+    er.render_buffer(R,G,B,A);
+
+    // Save it to a PNG
+    igl::png::writePNG(R,G,B,A,png_file);
 
 ![](../images/608_RayTrace.png)
 
@@ -1885,7 +1885,7 @@ Then libigl labels each “cell” bounded by surfaces of the arrangement accord
 
 Calling libigl’s boolean operations is simple. To compute the union of `(VA,FA)` and `(VB,FB)` into a new mesh `(VC,FC)`, use:
 
-`igl``::``copyleft``::``cgal``::``mesh_boolean``(``VA``,``FA``,``VB``,``FB``,``MESH_BOOLEAN_TYPE_UNION``,``VC``,``FC``);`\
+    igl::copyleft::cgal::mesh_boolean(VA,FA,VB,FB,MESH_BOOLEAN_TYPE_UNION,VC,FC);
 
 The following figure shows each boolean operation on two meshes.
 
@@ -1903,9 +1903,9 @@ The [previous section](#boolean-operations-on-meshes) discusses using `igl::copy
 
 Libigl uses exact arithmetic internally to construct the intermediary boolean results robustly. “Rounding” this result to floating point (even double precision) would cause problems if re-injected into a further boolean operation. To facilitate CSG tree operations and encourage callers *not* to call `igl::copyleft::cgal::mesh_boolean` multiple times explicitly, libigl implements a class `igl::copyleft::cgal::CSGTree`. Leaf nodes of this class are simply “solid” meshes (otherwise good input to `igl::copyleft::cgal::mesh_boolean`). Interior nodes of the tree combine two children with a boolean operation. Using the intializer list constructor it is easy to hard-code specific tree constructions. Here’s an example taking the *intersection* of a cube A and sphere B *minus* the *union* of three cylinders:
 
-`// Compute result of (A ∩ B) \ ((C ∪ D) ∪ E)`\
-`igl``::``copyleft``::``cgal``::``CSGTree``<``MatrixXi``>`` ``CSGTree`` ``=`\
-`  ``{`` ``{`` ``{``VA``,``FA``},{``VB``,``FB``},``"i"``},{`` ``{`` ``{``VC``,``FC``},{``VD``,``FD``},``"u"``},`` ``{``VE``,``FE``},``"u"``},``"m"``};`\
+    // Compute result of (A ∩ B) \ ((C ∪ D) ∪ E)
+    igl::copyleft::cgal::CSGTree<MatrixXi> CSGTree =
+      { { {VA,FA},{VB,FB},"i"},{ { {VC,FC},{VD,FD},"u"}, {VE,FE},"u"},"m"};
 
 ![](../images/cube-sphere-cylinders-csg-tree.jpg)
 
@@ -1927,12 +1927,12 @@ Libigl contains various mesh statistics, including face angles, face areas and t
 
 The example [Statistics](https://github.com/libigl/libigl/tree/main/tutorial/701_Statistics/main.cpp) computes these quantities and does a basic statistic analysis that allows to estimate the isometry and regularity of a mesh:
 
-`Irregular`` ``vertices:`\
-`136``/2400`` ``(``5``.67%``)`\
-`Areas`` ``(``Min/Max``)``/Avg_Area`` ``Sigma:`\
-`0``.01/5.33`` ``(``0``.87``)`\
-`Angles`` ``in`` ``degrees`` ``(``Min/Max``)`` ``Sigma:`\
-`17``.21/171.79`` ``(``15``.36``)`\
+    Irregular vertices:
+    136/2400 (5.67%)
+    Areas (Min/Max)/Avg_Area Sigma:
+    0.01/5.33 (0.87)
+    Angles in degrees (Min/Max) Sigma:
+    17.21/171.79 (15.36)
 
 The first row contains the number and percentage of irregular vertices, which is particularly important for quadrilateral meshes when they are used to define subdivision surfaces: every singular point will result in a point of the surface that is only C^1.
 
@@ -1984,13 +1984,13 @@ Because libigl (purposefully) does not center its implementations around a dynam
 
 The simplest is `igl::decimation`. By calling
 
-`igl``::``decimate``(``V``,``F``,``1000``,``U``,``G``);`\
+    igl::decimate(V,F,1000,U,G);
 
 the mesh `(V,F)` will be decimated to a new mesh `(U,G)` so that `G` has at most `1000` faces. This uses default (naive) criteria for determining the cost of an edge collapse and the placement of the merged vertex. Shortest edges are collapsed first, and merged vertices are placed at edge midpoints.
 
 One can also provide function handles (`c++` lambda functions are convenient here) `cost_and_placement` and `stopping_condition` for determining the cost/placement of an edge collapse and the stopping condition respectively. For example, the default version above is implemented as:
 
-`igl``::``decimate``(``V``,``F``,``shortest_edge_and_midpoint``,``max_m``,``U``,``G``);`\
+    igl::decimate(V,F,shortest_edge_and_midpoint,max_m,U,G);
 
 where `shortest_edge_and_midpoint` assign the edge’s length as cost and its midpoint as the merged vertex placement and `max_m` counts the current number of faces (valid collapses decrease count by 2) and returns `true` if the count drops below `m=1000`.
 
@@ -2002,7 +2002,7 @@ When a collapse occurs, the sizes of the `F`,`E`, etc. matrices do not change. R
 
 The following will collapse the first edge and place its merged vertex at the origin:
 
-`igl``::``collapse_edge``(``0``,``RowVector3d``(``0``,``0``,``0``),``V``,``F``,``E``,``EMAP``,``EF``,``EI``);`\
+    igl::collapse_edge(0,RowVector3d(0,0,0),V,F,E,EMAP,EF,EI);
 
 If valid, then `V`,`F`,`E`,`EF`,`EI` are adjusted accordingly.
 
@@ -2010,7 +2010,7 @@ This is powerful, but low level. To build a decimator around this you’d need t
 
 The priority queue is implemented as a (ordered) set `Q` or (cost,edge index) pairs and a list of iterators `Qit` so that `Qit[e]` reveals the iterator in `Q` corresponding to the eth edge. Placements are stored in a \#E list of positions `C`. When the following is called:
 
-`igl``::``collapse_edge``(``cost_and_placement``,``V``,``F``,``E``,``EMAP``,``EF``,``EI``,``Q``,``Qit``,``C``);`\
+    igl::collapse_edge(cost_and_placement,V,F,E,EMAP,EF,EI,Q,Qit,C);
 
 the lowest cost edge collapse according to `Q` is attempted. If valid, then `V`,`F`,etc. are adjusted accordingly and that edge is “popped” from `Q`. Using `Qit` its neighboring edges are also popped from `Q` and re-inserted after updating their costs according to `cost_and_placement`, new placements are remembered in `C`. If not valid, then the edge is “popped” from `Q` and reinserted with infinite cost.
 
@@ -2028,18 +2028,18 @@ In the [Generalized Winding Number section](#generalized-winding-number), we exa
 
 For tetrahedral meshes, this is useful for “in element” or “point location” queries: given a point q∈R 3 and a tetrahedral mesh (V,T) determine in which tetrahedron q lies. This is accomplished in libigl for a tet mesh `V,T` and a list of query points in the rows of `Q` via the `igl::in_element()`:
 
-`// Initialize AABB tree`\
-`igl``::``AABB``<``MatrixXd``,``3``>`` ``tree``;`\
-`tree``.``init``(``V``,``T``);`\
-`VectorXi`` ``I``;`\
-`igl``::``in_element``(``V``,``T``,``Q``,``tree``,``I``);`\
+    // Initialize AABB tree
+    igl::AABB<MatrixXd,3> tree;
+    tree.init(V,T);
+    VectorXi I;
+    igl::in_element(V,T,Q,tree,I);
 
 the resulting vector `I` is a list of indices into `T` revealing the *first* tetrahedron found to contain the corresponding point in `Q`.
 
 For overlapping meshes, a point q may belong to more than one tetrahedron. In those cases, one can find them all (not just the first) by using the `igl::in_element` overload with a `SparseMatrix` as the output:
 
-`SparseMatrix``<``int``>`` ``I``;`\
-`igl``::``in_element``(``V``,``T``,``Q``,``tree``,``I``);`\
+    SparseMatrix<int> I;
+    igl::in_element(V,T,Q,tree,I);
 
 now each row of `I` reveals whether each tet contains the corresponding row in `Q`: `I(q,e)!=0` means that point `q` is in element `e`.
 
@@ -2047,20 +2047,20 @@ now each row of `I` reveals whether each tet contains the corresponding row in `
 
 For Triangle meshes, we use the AABB tree to accelerate point-mesh closest point queries: given a mesh (V,F) and a query point q∈R 3 find the closest point c∈(V,F) (where c is not necessarily a vertex of (V,F)). This is accomplished for a triangle mesh `V,F` and a list of points in the rows of `P` via `igl::point_mesh_squared_distance`:
 
-`VectorXd`` ``sqrD``;`\
-`VectorXi`` ``I``;`\
-`MatrixXd`` ``C``;`\
-`igl``::``point_mesh_squared_distance``(``P``,``V``,``F``,``sqrD``,``I``,``C``);`\
+    VectorXd sqrD;
+    VectorXi I;
+    MatrixXd C;
+    igl::point_mesh_squared_distance(P,V,F,sqrD,I,C);
 
 the output `sqrD` contains the (unsigned) squared distance from each point in `P` to its closest point given in `C` which lies on the element in `F` given by `I` (e.g. from which one could recover barycentric coordinates, using `igl::barycentric_coordinates`).
 
 If the mesh `V,F` is static, but the point set `P` is changing dynamically then it’s best to reuse the AABB hierarchy that’s being built during `igl::point_mesh_squared_distance`:
 
-`igl``::``AABB`` ``tree``;`\
-`tree``.``init``(``V``,``F``);`\
-`tree``.``squared_distance``(``V``,``F``,``P``,``sqrD``,``I``,``C``);`\
-`...`` ``// P changes, but (V,F) does not`\
-`tree``.``squared_distance``(``V``,``F``,``P``,``sqrD``,``I``,``C``);`\
+    igl::AABB tree;
+    tree.init(V,F);
+    tree.squared_distance(V,F,P,sqrD,I,C);
+    ... // P changes, but (V,F) does not
+    tree.squared_distance(V,F,P,sqrD,I,C);
 
 #### Signed Distance[¶](#signed-distance)
 
@@ -2072,9 +2072,9 @@ An alternative is to use the [generalized winding number](#generalized-winding-n
 
 In either case, the interface via `igl::signed_distance` is:
 
-`// Choose type of signing to use`\
-`igl``::``SignedDistanceType`` ``type`` ``=`` ``SIGNED_DISTANCE_TYPE_PSEUDONORMAL``;`\
-`igl``::``signed_distance``(``P``,``V``,``F``,``sign_type``,``S``,``I``,``C``,``N``);`\
+    // Choose type of signing to use
+    igl::SignedDistanceType type = SIGNED_DISTANCE_TYPE_PSEUDONORMAL;
+    igl::signed_distance(P,V,F,sign_type,S,I,C,N);
 
 the outputs are as above for `igl::point_mesh_squared_distance` but now `S` contains signed (unsquared) distances and the extra output `N` (only set when `type == SIGNED_DISTANCE_TYPE_PSEUDON`) contains the normals used for signing with the pseudo-normal test.
 
@@ -2090,7 +2090,7 @@ Often 3D data is captured as scalar field defined over space f(x):R 3→R. Lurki
 
 In libigl, `igl::marching_cubes` constructs a triangle mesh `(V,F)` from an input scalar field `S` sampled at vertex locations `GV` of a `nx` by `ny` by `nz` regular grid:
 
-`igl``::``marching_cubes``(``S``,``GV``,``nx``,``ny``,``nz``,``V``,``F``);`\
+    igl::marching_cubes(S,GV,nx,ny,nz,V,F);
 
 ![](../images/armadillo-marching-cubes.jpg)
 
@@ -2102,13 +2102,13 @@ Models from the web occasionally arrive *unorientated* in the sense that the ord
 
 For (open) surfaces representing two-sided sheets, libigl provides a routine to force consistent orientations within each orientable patch (`igl::orientable_patches`) of a mesh:
 
-`igl``::``bfs_orient``(``F``,``FF``,``C``);`\
+    igl::bfs_orient(F,FF,C);
 
 This simple routine will use breadth-first search on each patch of the mesh to enforce a consistent facet orientation in the output faces `FF`.
 
 For (closed or nearly closed) surfaces representing the boundary of a solid object, libigl provides a routine to reorient faces so that the vertex ordering corresponds to a counter-clockwise ordering of the vertices with a right-hand-rule normal pointing outward. This method <sup>[45](#fn:takayama14)</sup>\[\] assumes that [most of the universe is empty](https://www.reddit.com/r/askscience/comments/32otgx/which_as_a_is_more_empty_an_atom_or_the_universe/). That is, most points in space are outside of the solid object than inside. Points are sampled over surface patches. For each sample point, rays are shot into both hemispheres to compute average of the (distance weighted) ambient occlusion on each side. A patch is oriented so that the outward side is *less occluded* (lighter, i.e., facing more void space).
 
-`igl``::``embree``::``reorient_facets_raycast``(``V``,``F``,``FF``,``I``);`\
+    igl::embree::reorient_facets_raycast(V,F,FF,I);
 
 The boolean vector `I` reveals which rows of `F` have been flipped in `FF`.
 
@@ -2138,7 +2138,7 @@ This method is similar to one described by Schroeder et al. in 1994 <sup>[44](#f
 
 In libigl, if your input solid’s surface is represented by `(V,F)` then the output surface mesh will be `(SV,SF)` after calling:
 
-`igl``::``copyleft``::``swept_volume``(``V``,``F``,``num_time_steps``,``grid_size``,``isolevel``,``SV``,``SF``);`\
+    igl::copyleft::swept_volume(V,F,num_time_steps,grid_size,isolevel,SV,SF);
 
 The `isolevel` parameter can be set to zero to approximate the exact swept volume, greater than zero to approximate a positive offset of the swept volume or less than zero to approximate a negative offset.
 
@@ -2150,15 +2150,15 @@ The `isolevel` parameter can be set to zero to approximate the exact swept volum
 
 Picking vertices and faces using the mouse is very common in geometry processing applications. While this might seem a simple operation, its implementation is not straightforward. Libigl contains a function that solves this problem using the [Embree](https://software.intel.com/en-us/articles/embree-photo-realistic-ray-tracing-kernels) raycaster. Its usage is demonstrated in [Example 708](https://github.com/libigl/libigl/tree/main/tutorial/708_Picking/main.cpp):
 
-`bool`` ``hit`` ``=`` ``igl``::``unproject_onto_mesh``(`\
-`  ``Vector2f``(``x``,``y``),`\
-`  ``F``,`\
-`  ``viewer``.``core``.``view`` ``*`` ``viewer``.``core``.``model``,`\
-`  ``viewer``.``core``.``proj``,`\
-`  ``viewer``.``core``.``viewport``,`\
-`  ``*``ei``,`\
-`  ``fid``,`\
-`  ``bc``);`\
+    bool hit = igl::unproject_onto_mesh(
+      Vector2f(x,y),
+      F,
+      viewer.core.view * viewer.core.model,
+      viewer.core.proj,
+      viewer.core.viewport,
+      *ei,
+      fid,
+      bc);
 
 This function casts a ray from the view plane in the view direction. Variables `x` and `y` are the mouse screen coordinates; `view`, `model`, `proj` are the view, model and projection matrix respectively; `viewport` is the viewport in OpenGL format; `ei` contains a [Bounding Volume Hierarchy](http://en.wikipedia.org/wiki/Bounding_volume_hierarchy) constructed by Embree, and `fid` and `bc` are the picked face and barycentric coordinate of the picked position, respectively.
 
@@ -2248,7 +2248,7 @@ Often 3D data is captured as scalar field defined over space f(x):R 3→R. Lurki
 
 In libigl, `igl::marching_tets` constructs a triangle mesh `(V,F)` approximating the iso-level set for the value `isovalue` from an input scalar field `S` sampled at the vertices of a tet mesh locations `(TV, TT)`:
 
-`igl``::``marching_tets``(``TV``,``TT``,``S``,`` ``isovalue`` ``,``V``,``F``);`\
+    igl::marching_tets(TV,TT,S, isovalue ,V,F);
 
 ### Implicit Function Meshing[¶](#implicit-function-meshing)
 
@@ -2274,10 +2274,10 @@ This method involves inverting n×n sparse matrices (a O(n 1.⋯) operation), bu
 
 In libigl, you can compute approximate geodesic distances for a mesh (`V`,`F`) from a list of source vertex indices `gamma` into a vector `D` using this method via two steps:
 
-`igl``::``HeatGeodesicsData``<``double``>`` ``data``;`\
-`igl``::``heat_geodesics_precompute``(``V``,``F``,``data``);`\
-`...`\
-`igl``::``heat_geodesics_solve``(``data``,``gamma``,``D``);`\
+    igl::HeatGeodesicsData<double> data;
+    igl::heat_geodesics_precompute(V,F,data);
+    ...
+    igl::heat_geodesics_solve(data,gamma,D);
 
 ![](https://github.com/libigl/libigl/tree/main/tutorial/716_HeatGeodesics/main.cpp))
 
@@ -2295,26 +2295,26 @@ Since the cotangent Laplacian only depends on the edge-lengths of a triangle mes
 
 You can compute the intrinsic Delaunay triangulation of mesh (`V`,`F`) in libigl using:
 
-`Eigen``::``MatrixXd`` ``l``;`\
-`igl``::``edge_lengths``(``V``,``F``,``l``);`\
-`Eigen``::``MatrixXd`` ``l_intrinsic``;`\
-`Eigen``::``MatrixXi`` ``F_intrinsic``;`\
-`igl``::``intrinsic_delaunay_triangulation``(``l``,``F``,``l_intrinsic``,``F_intrinsic``);`\
+    Eigen::MatrixXd l;
+    igl::edge_lengths(V,F,l);
+    Eigen::MatrixXd l_intrinsic;
+    Eigen::MatrixXi F_intrinsic;
+    igl::intrinsic_delaunay_triangulation(l,F,l_intrinsic,F_intrinsic);
 
 Notice that the mesh vertex positions `V` are not used, since this is a purely intrinsic operation. The method inputs and outputs edge-lengths and triangle indices.
 
 You may construct the intrinsic Delaunay cotangent Laplacian matrix directly using:
 
-`Eigen``::``SparseMatrix``<``double``>`` ``L``;`\
-`igl``::``intrinsic_delaunay_cotmatrix``(``V``,``F``,``L``);`\
+    Eigen::SparseMatrix<double> L;
+    igl::intrinsic_delaunay_cotmatrix(V,F,L);
 
 And finally you can compute heat geodesics using this matrix via:
 
-`igl``::``HeatGeodesicsData``<``double``>`` ``data``;`\
-`data``.``use_intrinsic_delaunay`` ``=`` ``true``;`\
-`igl``::``heat_geodesics_precompute``(``V``,``F``,``data``);`\
-`...`\
-`igl``::``heat_geodesics_solve``(``data``,``gamma``,``D``);`\
+    igl::HeatGeodesicsData<double> data;
+    data.use_intrinsic_delaunay = true;
+    igl::heat_geodesics_precompute(V,F,data);
+    ...
+    igl::heat_geodesics_solve(data,gamma,D);
 
 ![The \_standard\_ FEM Laplacian igl::cotmatrix results in an unstable geodesic distance approximation that is non-monotonic (left), in the presence of a poor quality and/or biased mesh (zoom-in center). Switching to the intrinsic Delaunay triangulation's cotagent Laplacian igl::intrinsic_delaunay_cotmatrix improves things and ensures monotonicity (right)](../images/heat-geodesic-peaks.png)
 
@@ -2334,37 +2334,37 @@ loads a mesh, samples 1,000,000 random queries and then discards all those *outs
 
 Computing *fast* winding numbers for soups has two steps: building the tree data structure and then evaluating at query points. In libigl, this is programmed as follows:
 
-`igl``::``FastWindingNumberBVH`` ``fwn_bvh``;`\
-`igl``::``fast_winding_number``(``V``.``cast``<``float``>``(),``F``,``2``,``fwn_bvh``);`\
-`Eigen``::``VectorXf`` ``W``;`\
-`igl``::``fast_winding_number``(``fwn_bvh``,``2``,``Q``.``cast``<``float``>``(),``W``);`\
+    igl::FastWindingNumberBVH fwn_bvh;
+    igl::fast_winding_number(V.cast<float>(),F,2,fwn_bvh);
+    Eigen::VectorXf W;
+    igl::fast_winding_number(fwn_bvh,2,Q.cast<float>(),W);
 
 #### Clouds[¶](#clouds)
 
 For point clouds, the process is similar, but more precomputation may be necessary. The winding number for point clouds is defined so long as each point comes with an outward-facing normal and an area value. Areas can be estimated by using a libigl function that computes a tangents space Voronoi diagram for each point `igl::copyleft::cgal::point_areas`. This function in turn relies on first computing k nearest neighbors `igl::knn`. And that function and the eventual winding number computation uses libigl’s `igl::octree` as a bounding volume hierarchy. To estimate areas use for a point cloud `P` with normals `N` use:
 
-`// Build octree`\
-`std``::``vector``<``std``::``vector``<``int`` ``>`` ``>`` ``O_PI``;`\
-`Eigen``::``MatrixXi`` ``O_CH``;`\
-`Eigen``::``MatrixXd`` ``O_CN``;`\
-`Eigen``::``VectorXd`` ``O_W``;`\
-`igl``::``octree``(``P``,``O_PI``,``O_CH``,``O_CN``,``O_W``);`\
-`Eigen``::``VectorXd`` ``A``;`\
-`{`\
-`  ``Eigen``::``MatrixXi`` ``I``;`\
-`  ``igl``::``knn``(``P``,``20``,``O_PI``,``O_CH``,``O_CN``,``O_W``,``I``);`\
-`  ``// CGAL is only used to help get point areas`\
-`  ``igl``::``copyleft``::``cgal``::``point_areas``(``P``,``I``,``N``,``A``);`\
-`}`\
+    // Build octree
+    std::vector<std::vector<int > > O_PI;
+    Eigen::MatrixXi O_CH;
+    Eigen::MatrixXd O_CN;
+    Eigen::VectorXd O_W;
+    igl::octree(P,O_PI,O_CH,O_CN,O_W);
+    Eigen::VectorXd A;
+    {
+      Eigen::MatrixXi I;
+      igl::knn(P,20,O_PI,O_CH,O_CN,O_W,I);
+      // CGAL is only used to help get point areas
+      igl::copyleft::cgal::point_areas(P,I,N,A);
+    }
 
 Then it is possible to compute fast winding numbers for a list of queries `Q`:
 
-`Eigen``::``MatrixXd`` ``O_CM``;`\
-`Eigen``::``VectorXd`` ``O_R``;`\
-`Eigen``::``MatrixXd`` ``O_EC``;`\
-`igl``::``fast_winding_number``(``P``,``N``,``A``,``O_PI``,``O_CH``,``2``,``O_CM``,``O_R``,``O_EC``);`\
-`Eigen``::``VectorXd`` ``W``;`\
-`igl``::``fast_winding_number``(``P``,``N``,``A``,``O_PI``,``O_CH``,``O_CM``,``O_R``,``O_EC``,``Q``,``2``,``W``);`\
+    Eigen::MatrixXd O_CM;
+    Eigen::VectorXd O_R;
+    Eigen::MatrixXd O_EC;
+    igl::fast_winding_number(P,N,A,O_PI,O_CH,2,O_CM,O_R,O_EC);
+    Eigen::VectorXd W;
+    igl::fast_winding_number(P,N,A,O_PI,O_CH,O_CM,O_R,O_EC,Q,2,W);
 
 ### Iterative Closest Point[¶](#iterative-closest-point)
 

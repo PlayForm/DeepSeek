@@ -1,30 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}  ![vistuleB](https://avatars.githubusercontent.com/u/19382247?s=60&v=4)**svgpathsio** Public forked from [mathandy/svgpathtools](./mathandy-svgpathtools.md)
-
-- Notifications You must be signed in to change notification settings
-- Fork 0
-- Star 0 You must be signed in to star a repository
-
-## About
-
-A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves.
-
-[Readme](#readme-ov-file) Activity **0** stars **1** watching **0** forks Report repository **5** Branches **13** TagsOpen more actions menu This branch is 88 commits ahead of and 252 commits behind mathandy/svgpathtools:master.[![vistuleB](https://avatars.githubusercontent.com/u/19382247?v=4&size=40)](/vistuleB)vistuleBlatest Jun 18, 2026 da086e3 · Jun 18, 2026 221 Commits Open commit details221 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| svgpathsio | svgpathsio | latest | Jun 18, 2026 |
-| .gitignore | .gitignore | removed build & eggs-info from git repo | Jul 24, 2018 |
-| .travis.yml | .travis.yml | added SciPy to Travis CI environment | Aug 23, 2018 |
-| README.rst | README.rst | redid README | Oct 10, 2023 |
-| decorated_ellipse.svg | decorated_ellipse.svg | initial commit | Jul 6, 2016 |
-| output1.svg | output1.svg | add ability to preserve svg-attributes | Jul 16, 2016 |
-| output2.svg | output2.svg | initial commit | Jul 6, 2016 |
-| output_intersections.svg | output_intersections.svg | initial commit | Jul 6, 2016 |
-| path.svg | path.svg | initial commit | Jul 6, 2016 |
-| test.svg | test.svg | initial commit | Jul 6, 2016 |
-| vectorframes.svg | vectorframes.svg | initial commit | Jul 6, 2016 |
-|  |  |  |  |
-
 # Python library for working with SVG paths
 
 
@@ -89,26 +62,6 @@ While positions on paths, subpaths and segments are specified parameterically, t
 
 
 This module is under a MIT License.
-
-## About
-
-A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves.
-
-[Readme](#readme-ov-file) Activity **0** stars **1** watching **0** forks Report repository
-
-## Releases
-
-13 tags
-
-## Contributors
-
-No contributors
-
-## Languages
-
-- Python 100%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

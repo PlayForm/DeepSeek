@@ -46,22 +46,9 @@ The value `evenodd` determines the "insideness" of a point in the shape by drawi
 
 ## Specifications
 
-<table>
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<thead>
-<tr>
-<th>Specification</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://w3c.github.io/svgwg/svg2-draft/painting.html#WindingRule">Scalable Vector Graphics (SVG) 2<br />
-# WindingRule</a></td>
-</tr>
-</tbody>
-</table>
+| Specification |
+|----|
+| [Scalable Vector Graphics (SVG) 2 \# WindingRule](https://w3c.github.io/svgwg/svg2-draft/painting.html#WindingRule) |
 
 ## Browser compatibility
 

@@ -1,45 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./mathandy-svgpathtools.md) ![mathandy](https://avatars.githubusercontent.com/u/3175485?s=60&v=4)**[svgpathtools](./mathandy-svgpathtools.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 162
-- Star 640 You must be signed in to star a repository
-
-## About
-
-A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves.
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Contributing](#contributing-ov-file) [Security policy](#security-ov-file) Activity **640** stars **14** watching **162** forks Report repository**22** Branches **30** TagsOpen more actions menu[![mathandy](https://avatars.githubusercontent.com/u/3175485?v=4&size=40)](/mathandy)mathandyMerge PR [\#253](https://github.com/mathandy/svgpathtools/pull/253): svg2paths: don't crash on a \<path\> with no d attribute Open commit details success Oct 7, 2026 15b500e · Oct 7, 2026 385 Commits Open commit details385 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github/workflows | .github/workflows | Apply CodeRabbit review suggestions from PR [\#249](https://github.com/mathandy/svgpathtools/pull/249) | Sep 5, 2026 |
-| examples | examples | remove all wildcard imports | Feb 4, 2023 |
-| svgpathtools | svgpathtools | svg2paths: don't crash on a \<path\> with no d attribute | Oct 6, 2026 |
-| test | test | Also assert the returned attributes in the no-d path test | Oct 7, 2026 |
-| .gitignore | .gitignore | do not ignore .github directory | Sep 18, 2021 |
-| CONTRIBUTING.md | CONTRIBUTING.md | minor improvements | Nov 2, 2018 |
-| LICENSE.txt | LICENSE.txt | initial commit | Jul 6, 2016 |
-| LICENSE2.txt | LICENSE2.txt | initial commit | Jul 6, 2016 |
-| MANIFEST.in | MANIFEST.in | improve distribution to PyPI | Oct 29, 2016 |
-| README.ipynb | README.ipynb | remove broken build shield | Feb 13, 2023 |
-| README.md | README.md | remove broken build shield | Feb 13, 2023 |
-| SECURITY.md | SECURITY.md | Create SECURITY.md | Sep 21, 2021 |
-| decorated_ellipse.svg | decorated_ellipse.svg | initial commit | Jul 6, 2016 |
-| donate-button.svg | donate-button.svg | add donate button | Aug 13, 2021 |
-| offset_curves.svg | offset_curves.svg | improved README curve offsetting example | Jul 11, 2016 |
-| output1.svg | output1.svg | add ability to preserve svg-attributes | Jul 16, 2016 |
-| output2.svg | output2.svg | initial commit | Jul 6, 2016 |
-| output_intersections.svg | output_intersections.svg | initial commit | Jul 6, 2016 |
-| path.svg | path.svg | initial commit | Jul 6, 2016 |
-| requirements.txt | requirements.txt | add scipy to requirements file | Nov 10, 2021 |
-| setup.cfg | setup.cfg | Drop comment from pydocstyle config | Sep 5, 2026 |
-| setup.py | setup.py | Update version to 1.8.0 | Sep 5, 2026 |
-| test.svg | test.svg | initial commit | Jul 6, 2016 |
-| vectorframes.svg | vectorframes.svg | initial commit | Jul 6, 2016 |
-|  |  |  |  |
-
 [![Donate](https://camo.githubusercontent.com/e7d506bc437b2f1c47b5fa4605744c9353d029415e176663d692a2b34a970ea0/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f6e6174652d70617970616c2d627269676874677265656e)](https://www.paypal.com/donate?business=4SKJ27AM4EYYA&no_recurring=0&item_name=Support+the+creator+of+svgpathtools?++He%27s+a+student+and+would+appreciate+it.&currency_code=USD) [![Python](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667)](https://camo.githubusercontent.com/a57377fc3c24869a7d80bc2d158eae38e42f6177e79de9a02468d7cee4307a2d/68747470733a2f2f696d672e736869656c64732e696f2f707970692f707976657273696f6e732f73766770617468746f6f6c732e737667) [![PyPI](https://camo.githubusercontent.com/5481b6f926a839d394906ba1a6d9559e98545c20fec8a0791a78309ab39e33d7/68747470733a2f2f696d672e736869656c64732e696f2f707970692f762f73766770617468746f6f6c73)](https://pypi.org/project/svgpathtools/) [![PyPI - Downloads](https://camo.githubusercontent.com/73bf17d187877b1567f0b6c6e9a0412f1c7dc2348a8d3b002db71ff72f203fcd/68747470733a2f2f696d672e736869656c64732e696f2f707970692f646d2f73766770617468746f6f6c733f636f6c6f723d79656c6c6f77)](https://pypistats.org/packages/svgpathtools)
 
 # svgpathtools
@@ -123,9 +81,9 @@ from \_\_future\_\_ import division, print_function
 
 \# Coordinates are given as points in the complex plane\
 from svgpathtools import Path, Line, QuadraticBezier, CubicBezier, Arc\
-seg1 = CubicBezier(300+100j, 100+100j, 200+200j, 200+300j)  \# A cubic beginning at (300, 100) and ending at (200, 300)\
-seg2 = Line(200+300j, 250+350j)  \# A line beginning at (200, 300) and ending at (250, 350)\
-path = Path(seg1, seg2)  \# A path traversing the cubic and then the line\
+seg1 = CubicBezier(300+100j, 100+100j, 200+200j, 200+300j)  # A cubic beginning at (300, 100) and ending at (200, 300)\
+seg2 = Line(200+300j, 250+350j)  # A line beginning at (200, 300) and ending at (250, 350)\
+path = Path(seg1, seg2)  # A path traversing the cubic and then the line\
 \
 \# We could alternatively created this Path object using a d-string\
 from svgpathtools import parse_path\
@@ -181,7 +139,7 @@ print(spath)\
 from svgpathtools import disvg\
 from time import sleep\
 disvg(path) \
-sleep(1)  \# needed when not giving the SVGs unique names (or not using timestamp)\
+sleep(1)  # needed when not giving the SVGs unique names (or not using timestamp)\
 disvg(spath)\
 print("Notice that path contains {} segments and spath contains {} segments."\
       "".format(len(path), len(spath)))
@@ -346,8 +304,8 @@ u3 = dp(t)/abs(dp(t))\
 \### Method 4: the removable-singularity-proof numpy.poly1d way  \
 \# Note: This is roughly how Method 1 works\
 from svgpathtools import real, imag, rational_limit\
-dx, dy = real(dp), imag(dp)  \# dp == dx + 1j\*dy \
-p_mag2 = dx\*\*2 + dy\*\*2  \# p_mag2(t) = \|p(t)\|\*\*2\
+dx, dy = real(dp), imag(dp)  # dp == dx + 1j\*dy \
+p_mag2 = dx\*\*2 + dy\*\*2  # p_mag2(t) = \|p(t)\|\*\*2\
 \# Note: abs(dp) isn't a polynomial, but abs(dp)\*\*2 is, and,\
 \#  the limit\_{t-\>t0}\[f(t) / abs(f(t))\] == \
 \# sqrt(limit\_{t-\>t0}\[f(t)\*\*2 / abs(f(t))\*\*2\])\
@@ -357,7 +315,7 @@ u4 = sqrt(rational_limit(dp\*\*2, p_mag2, t))\
 print("unit tangent check:", u1 == u2 == u3 == u4)\
 \
 \# Let's do a visual check\
-mag = b.length()/4  \# so it's not hard to see the tangent line\
+mag = b.length()/4  # so it's not hard to see the tangent line\
 tangent_line = Line(b.point(t), b.point(t) + mag\*u1)\
 disvg(\[b, tangent_line\], 'bg', nodes=\[b.point(t)\])
 
@@ -380,7 +338,7 @@ br = b.reversed()\
 \# Let's also shift b_r over a bit to the right so we can view it next to b\
 \# The simplest way to do this is br = br.translated(3\*mag),  but let's use \
 \# the .bpoints() instead, which returns a Bezier's control points\
-br.start, br.control1, br.control2, br.end = \[3\*mag + bpt for bpt in br.bpoints()\]  \# \
+br.start, br.control1, br.control2, br.end = \[3\*mag + bpt for bpt in br.bpoints()\]  # \
 \
 tangent_line_r = Line(br.point(t), br.point(t) + mag\*br.unit_tangent(t))\
 normal_line_r = Line(br.point(t), br.point(t) + mag\*br.normal(t))\
@@ -521,45 +479,6 @@ wsvg(paths + offset_paths, 'g'\*len(paths) + 'r'\*len(offset_paths), filen
 
 
 This module is under a MIT License.
-
-## About
-
-A collection of tools for manipulating and analyzing SVG Path objects and Bezier curves.
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Contributing](#contributing-ov-file) [Security policy](#security-ov-file) Activity **640** stars **14** watching **162** forks Report repository
-
-## Releases
-
-30 tags
-
-## Used by 1.8K (1.8K)
-
-[ ![@sacovo](https://avatars.githubusercontent.com/u/3640273?s=64&v=4)![@sethfischer](https://avatars.githubusercontent.com/u/2492233?s=64&v=4)![@maxk2222](https://avatars.githubusercontent.com/u/117130112?s=64&v=4)![@suyiiyii](https://avatars.githubusercontent.com/u/143583484?s=64&v=4)![@OpenReloading](https://avatars.githubusercontent.com/u/340181410?s=64&v=4)+ 1,768](/mathandy/svgpathtools/network/dependents)
-
-## Contributors 34 (34)
-
-- [![@mathandy](https://avatars.githubusercontent.com/u/3175485?s=64&v=4)](/mathandy)
-- [![@SebKuzminsky](https://avatars.githubusercontent.com/u/400548?s=64&v=4)](/SebKuzminsky)
-- [![@claude](https://avatars.githubusercontent.com/u/81847?s=64&v=4)](/claude)
-- [![@FlyingSamson](https://avatars.githubusercontent.com/u/59110786?s=64&v=4)](/FlyingSamson)
-- [![@kennyweiss](https://avatars.githubusercontent.com/u/5626552?s=64&v=4)](/kennyweiss)
-- [![@tatarize](https://avatars.githubusercontent.com/u/3302478?s=64&v=4)](/tatarize)
-- [![@derVedro](https://avatars.githubusercontent.com/u/4129535?s=64&v=4)](/derVedro)
-- [![@jpcofr](https://avatars.githubusercontent.com/u/2237933?s=64&v=4)](/jpcofr)
-- [![@elenzil](https://avatars.githubusercontent.com/u/4194028?s=64&v=4)](/elenzil)
-- [![@mxgrey](https://avatars.githubusercontent.com/u/1307217?s=64&v=4)](/mxgrey)
-- [![@andersgb](https://avatars.githubusercontent.com/u/1473004?s=64&v=4)](/andersgb)
-- [![@bouhek](https://avatars.githubusercontent.com/u/37497935?s=64&v=4)](/bouhek)
-- [![@abey79](https://avatars.githubusercontent.com/u/49431240?s=64&v=4)](/abey79)
-- [![@Erfouni](https://avatars.githubusercontent.com/u/232311059?s=64&v=4)](/Erfouni)
-
-+ 20 contributors
-
-## Languages
-
-- Python 100%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

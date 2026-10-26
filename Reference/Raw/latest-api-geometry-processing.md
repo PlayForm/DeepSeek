@@ -6,33 +6,37 @@
 Perform boolean operations on input meshes.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh_1</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – The first input mesh, <span><span><span><span><span>M</span> <span>1</span></span></span></span><span></span></span>.</li>
-<li><strong>mesh_2</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – The second input mesh, <span><span><span><span><span>M</span> <span>2</span></span></span></span><span></span></span>.</li>
-<li><p><strong>operation</strong> (<span><code class="docutils literal notranslate">string</code></span>) –</p>
+<li><strong>mesh_1</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The first input mesh, M 1.</li>
+<li><strong>mesh_2</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The second input mesh, M 2.</li>
+<li><p><strong>operation</strong> (<code>string</code>) –</p>
 <p>The name of the operation. Valid choices are:</p>
 <ul>
-<li><span><code class="docutils literal notranslate">intersection</code></span>: <span><span><span><span><span>M</span> <span>1</span></span><span>∩</span><span><span>M</span> <span>2</span></span></span></span><span></span></span></li>
-<li><span><code class="docutils literal notranslate">union</code></span>: <span><span><span><span><span>M</span> <span>1</span></span><span>∪</span><span><span>M</span> <span>2</span></span></span></span><span></span></span></li>
-<li><span><code class="docutils literal notranslate">difference</code></span>: <span><span><span><span><span>M</span> <span>1</span></span><span>∖</span><span><span>M</span> <span>2</span></span></span></span><span></span></span></li>
-<li><span><code class="docutils literal notranslate">symmetric_difference</code></span>: <span><span><span><span>(</span><span><span>M</span> <span>1</span></span><span>∖</span><span><span>M</span> <span>2</span></span><span>)</span><span>∪</span><span>(</span><span><span>M</span> <span>2</span></span><span>∖</span><span><span>M</span> <span>1</span></span><span>)</span></span></span><span></span></span></li>
+<li><code>intersection</code>: M 1∩M 2</li>
+<li><code>union</code>: M 1∪M 2</li>
+<li><code>difference</code>: M 1∖M 2</li>
+<li><code>symmetric_difference</code>: (M 1∖M 2)∪(M 2∖M 1)</li>
 </ul></li>
-<li><p><strong>engine</strong> (<span><code class="docutils literal notranslate">string</code></span>) –</p>
+<li><p><strong>engine</strong> (<code>string</code>) –</p>
 <p>(optional) Boolean engine name. Valid engines include:</p>
 <ul>
-<li><span><code class="docutils literal notranslate">auto</code></span>: Using the default boolean engine (<span><code class="docutils literal notranslate">igl</code></span> for 3D and <span><code class="docutils literal notranslate">clipper</code></span> for 2D). This is the default.</li>
-<li><span><code class="docutils literal notranslate">cork</code></span>: <a href="https://github.com/gilbo/cork">Cork 3D boolean libary</a></li>
-<li><span><code class="docutils literal notranslate">cgal</code></span>: <a href="http://doc.cgal.org/latest/Nef_3/index.html">CGAL 3D boolean operations on Nef Polyhedra</a></li>
-<li><span><code class="docutils literal notranslate">corefinement</code></span>: The undocumented CGAL boolean function that does not use Nef Polyhedra.</li>
-<li><span><code class="docutils literal notranslate">igl</code></span>: <a href="https://github.com/libigl/libigl">libigl’s 3D boolean support</a></li>
-<li><span><code class="docutils literal notranslate">clipper</code></span>: <a href="http://www.angusj.com/delphi/clipper.php">Clipper 2D boolean library</a></li>
-<li><span><code class="docutils literal notranslate">carve</code></span>: <a href="https://code.google.com/p/carve/">Carve solid geometry library</a></li>
+<li><code>auto</code>: Using the default boolean engine (<code>igl</code> for 3D and <code>clipper</code> for 2D). This is the default.</li>
+<li><code>cork</code>: <a href="https://github.com/gilbo/cork">Cork 3D boolean libary</a></li>
+<li><code>cgal</code>: <a href="http://doc.cgal.org/latest/Nef_3/index.html">CGAL 3D boolean operations on Nef Polyhedra</a></li>
+<li><code>corefinement</code>: The undocumented CGAL boolean function that does not use Nef Polyhedra.</li>
+<li><code>igl</code>: <a href="https://github.com/libigl/libigl">libigl’s 3D boolean support</a></li>
+<li><code>clipper</code>: <a href="http://www.angusj.com/delphi/clipper.php">Clipper 2D boolean library</a></li>
+<li><code>carve</code>: <a href="https://code.google.com/p/carve/">Carve solid geometry library</a></li>
 </ul></li>
-<li><strong>with_timing</strong> (<span><code class="docutils literal notranslate">boolean</code></span>) – (optional) Whether to time the code.</li>
-<li><strong>exact_mesh_file</strong> (<span><code class="docutils literal notranslate">str</code></span>) – (optional) Filename to store the XML serialized exact output.</li>
+<li><strong>with_timing</strong> (<code>boolean</code>) – (optional) Whether to time the code.</li>
+<li><strong>exact_mesh_file</strong> (<code>str</code>) – (optional) Filename to store the XML serialized exact output.</li>
 </ul></td>
 </tr>
 </tbody>
@@ -102,12 +106,16 @@ Or constructed from a dict:
 Compute the convex hull of an input mesh.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – The input mesh.</li>
-<li><p><strong>engine</strong> (<span><code class="docutils literal notranslate">string</code></span>) –</p>
+<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The input mesh.</li>
+<li><p><strong>engine</strong> (<code>string</code>) –</p>
 <p>(optional) Convex hull engine name. Valid names are:</p>
 <ul>
 <li>auto: Using the default engine.</li>
@@ -121,7 +129,7 @@ Compute the convex hull of an input mesh.
 <li>triangle: Triangle convex hull engine.</li>
 <li>tetgen: Tetgen convex hull engine.</li>
 </ul></li>
-<li><strong>with_timing</strong> (<span><code class="docutils literal notranslate">boolean</code></span>) – (optional) Whether to time the code</li>
+<li><strong>with_timing</strong> (<code>boolean</code>) – (optional) Whether to time the code</li>
 </ul></td>
 </tr>
 </tbody>
@@ -139,32 +147,36 @@ The following attributes are defined in the output mesh:
 Compute the outer hull of the input mesh.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><p><strong>engine</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate"><span class="bu">str</span></code></span>) –</p>
+<li><p><strong>engine</strong> (<code>str</code>) –</p>
 <p>(optional) Outer hull engine name. Valid engines are:</p>
 <ul>
-<li><span><code class="docutils literal notranslate">auto</code></span>: Using the default engine (<span><code class="docutils literal notranslate">igl</code></span>).</li>
-<li><span><code class="docutils literal notranslate">igl</code></span>: <a href="https://github.com/libigl/libigl">libigl’s outer hull support</a></li>
+<li><code>auto</code>: Using the default engine (<code>igl</code>).</li>
+<li><code>igl</code>: <a href="https://github.com/libigl/libigl">libigl’s outer hull support</a></li>
 </ul></li>
-<li><strong>all_layers</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate"><span class="bu">bool</span></code></span>) – (optional) If true, recursively peel outer hull layers.</li>
+<li><strong>all_layers</strong> (<code>bool</code>) – (optional) If true, recursively peel outer hull layers.</li>
 </ul></td>
 </tr>
 <tr>
 <th>Returns:</th>
-<td><p>If <span><code class="docutils literal notranslate">all_layers</code></span> is false, just return the outer hull mesh.</p>
+<td><p>If <code>all_layers</code> is false, just return the outer hull mesh.</p>
 <dl>
-<dt>If <span><code class="docutils literal notranslate">all_layers</code></span> is ture, return a recursively peeled outer hull</dt>
+<dt>If <code>all_layers</code> is ture, return a recursively peeled outer hull</dt>
 <dd>
 <p>layers, from the outer most layer to the inner most layer.</p>
 </dd>
 </dl>
 <p>The following mesh attirbutes are defined in each outer hull mesh:</p>
 <ul>
-<li><span><code class="docutils literal notranslate">flipped</code></span>: A per-face attribute that is true if a face in outer hull is orientated differently comparing to its corresponding face in the input mesh.</li>
-<li><span><code class="docutils literal notranslate">face_sources</code></span>: A per-face attribute that specifies the index of the source face in the input mesh.</li>
+<li><code>flipped</code>: A per-face attribute that is true if a face in outer hull is orientated differently comparing to its corresponding face in the input mesh.</li>
+<li><code>face_sources</code>: A per-face attribute that specifies the index of the source face in the input mesh.</li>
 </ul></td>
 </tr>
 </tbody>
@@ -194,12 +206,16 @@ The following attributes are defined in the output mesh:
 Perform Minkowski sum of a mesh with a poly-line.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – Input mesh.</li>
-<li><strong>path</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate">numpy.ndarray</code></span>) – a <span><span><span><span>n</span> <span>i</span> <span>m</span> <span>e</span> <span>s</span> <span>3</span></span></span><span></span></span> matrix. Each row represents a node in the poly-line.</li>
+<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – Input mesh.</li>
+<li><strong>path</strong> (<code>numpy.ndarray</code>) – a n i m e s 3 matrix. Each row represents a node in the poly-line.</li>
 </ul></td>
 </tr>
 </tbody>
@@ -213,6 +229,10 @@ Returns: A mesh representing the Minkowski sum of the inputs.
 Subdivide the input mesh.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
@@ -235,18 +255,22 @@ Subdivide the input mesh.
 Compute winding number with respect to mesh at queries.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – The mesh for which winding number is evaluated.</li>
-<li><strong>queries</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate">numpy.ndarray</code></span>) – N by 3 matrix of query points at which winding number is evaluated.</li>
-<li><p><strong>engine</strong> (<span><code class="docutils literal notranslate">string</code></span>) –</p>
+<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The mesh for which winding number is evaluated.</li>
+<li><strong>queries</strong> (<code>numpy.ndarray</code>) – N by 3 matrix of query points at which winding number is evaluated.</li>
+<li><p><strong>engine</strong> (<code>string</code>) –</p>
 <p>(optional) Winding number computing engine name:</p>
 <ul>
-<li><span><code class="docutils literal notranslate">auto</code></span>: use default engine (which is <span><code class="docutils literal notranslate">igl</code></span>).</li>
-<li><span><code class="docutils literal notranslate">igl</code></span>: use libigl’s <a href="https://libigl.github.io/tutorial/#generalized-winding-number">generalized winding number</a>.</li>
-<li><span><code class="docutils literal notranslate">fast_winding_number</code></span>: use code from <a href="http://www.dgp.toronto.edu/projects/fast-winding-numbers/">fast winding number</a> paper. It is faster than <span><code class="docutils literal notranslate">igl</code></span> but can be less accurate sometimes.</li>
+<li><code>auto</code>: use default engine (which is <code>igl</code>).</li>
+<li><code>igl</code>: use libigl’s <a href="https://libigl.github.io/tutorial/#generalized-winding-number">generalized winding number</a>.</li>
+<li><code>fast_winding_number</code>: use code from <a href="http://www.dgp.toronto.edu/projects/fast-winding-numbers/">fast winding number</a> paper. It is faster than <code>igl</code> but can be less accurate sometimes.</li>
 </ul></li>
 </ul></td>
 </tr>
@@ -263,18 +287,22 @@ Compute winding number with respect to mesh at queries.
 Slice a given 3D mesh N times along certain direciton.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – The mesh to be sliced.</li>
-<li><strong>direction</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate">numpy.ndaray</code></span>) – Direction orthogonal to the slices.</li>
+<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – The mesh to be sliced.</li>
+<li><strong>direction</strong> (<code>numpy.ndaray</code>) – Direction orthogonal to the slices.</li>
 <li><strong>N</strong> (<em>int</em>) – Number of slices.</li>
 </ul></td>
 </tr>
 <tr>
 <th>Returns:</th>
-<td><p>A list of N <a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a> objects, each representing a single slice.</p></td>
+<td><p>A list of N <a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a> objects, each representing a single slice.</p></td>
 </tr>
 </tbody>
 </table>
@@ -285,13 +313,17 @@ Slice a given 3D mesh N times along certain direciton.
 Compute the distance from a set of points to a mesh.
 
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <tbody>
 <tr>
 <th>Parameters:</th>
 <td><ul>
-<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><span><code class="sourceCode python xref py py-class docutils literal notranslate">Mesh</code></span></a>) – A input mesh.</li>
-<li><strong>pts</strong> (<span><code class="sourceCode python xref py py-class docutils literal notranslate">numpy.ndarray</code></span>) – A <span><span><span><span>N</span><span>×</span><span>d</span> <span>i</span> <span>m</span></span></span><span></span></span> array of query points.</li>
-<li><strong>engine</strong> (<span><code class="docutils literal notranslate">string</code></span>) – BVH engine name. Valid choices are “cgal”, “geogram”, “igl” if all dependencies are used. The default is “auto” where an available engine is automatically picked.</li>
+<li><strong>mesh</strong> (<a href="api_mesh.html#pymesh.Mesh"><code>Mesh</code></a>) – A input mesh.</li>
+<li><strong>pts</strong> (<code>numpy.ndarray</code>) – A N×d i m array of query points.</li>
+<li><strong>engine</strong> (<code>string</code>) – BVH engine name. Valid choices are “cgal”, “geogram”, “igl” if all dependencies are used. The default is “auto” where an available engine is automatically picked.</li>
 </ul></td>
 </tr>
 <tr>
@@ -299,10 +331,10 @@ Compute the distance from a set of points to a mesh.
 <td><p>Three values are returned.</p>
 <blockquote>
 <ul>
-<li><span><code class="docutils literal notranslate">squared_distances</code></span>: squared distances from each point to mesh.</li>
-<li><span><code class="docutils literal notranslate">face_indices</code></span> : the closest face to each point.</li>
+<li><code>squared_distances</code>: squared distances from each point to mesh.</li>
+<li><code>face_indices</code> : the closest face to each point.</li>
 <li><dl>
-<dt><span><code class="docutils literal notranslate">closest_points</code></span>: the point on mesh that is closest to each</dt>
+<dt><code>closest_points</code>: the point on mesh that is closest to each</dt>
 <dd>
 query point.
 </dd>

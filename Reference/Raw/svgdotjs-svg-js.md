@@ -1,5 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
  ![svgdotjs](https://avatars.githubusercontent.com/u/22855482?s=60&v=4)**svg.js** Public
 
 - Sponsor
@@ -89,7 +87,7 @@ Learn more about GitHub Sponsors
 
 ## Used by 190K (190K)
 
-[ ![@jeromesigg](https://avatars.githubusercontent.com/u/23478949?s=64&v=4)![@open-source-uct](https://avatars.githubusercontent.com/u/326765316?s=64&v=4)![@ValentinML525](https://avatars.githubusercontent.com/u/216724229?s=64&v=4)![@syahrulrzk](https://avatars.githubusercontent.com/u/62525690?s=64&v=4)![@bizbaeja](https://avatars.githubusercontent.com/u/75407823?s=64&v=4)+ 192,786](/svgdotjs/svg.js/network/dependents)
+[![@jeromesigg](https://avatars.githubusercontent.com/u/23478949?s=64&v=4)![@open-source-uct](https://avatars.githubusercontent.com/u/326765316?s=64&v=4)![@ValentinML525](https://avatars.githubusercontent.com/u/216724229?s=64&v=4)![@syahrulrzk](https://avatars.githubusercontent.com/u/62525690?s=64&v=4)![@bizbaeja](https://avatars.githubusercontent.com/u/75407823?s=64&v=4)+ 192,786](/svgdotjs/svg.js/network/dependents)
 
 ## Contributors 90 (90)
 
@@ -114,8 +112,6 @@ Learn more about GitHub Sponsors
 
 - JavaScript 98.3%
 - Other 1.7%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

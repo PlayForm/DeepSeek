@@ -6,7 +6,11 @@
       "archive": "Archive/HTML/paperjs-paper-js.html",
       "content": "Archive/HTML/paperjs-paper-js.content.html",
       "converted": "Raw/paperjs-paper-js.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - paperjs/paper.js: The Swiss Army Knife of Vector Graphics ...",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://paperjs.org/reference/path/",
@@ -14,7 +18,13 @@
       "archive": "Archive/HTML/reference-path.html",
       "content": "Archive/HTML/reference-path.content.html",
       "converted": "Raw/reference-path.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Paper.js \u2014 Path",
+      "quality": {
+        "heading-duplicate": 15,
+        "heading-jump": 6,
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/",
@@ -22,7 +32,8 @@
       "archive": "Archive/HTML/paths-smoothing-simplifying-flattening.html",
       "content": "Archive/HTML/paths-smoothing-simplifying-flattening.content.html",
       "converted": "Raw/paths-smoothing-simplifying-flattening.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Paper.js \u2014 Smoothing, Simplifying & Flattening"
     },
     {
       "source": "https://github.com/glenzli/paperjs-offset",
@@ -30,7 +41,13 @@
       "archive": "Archive/HTML/glenzli-paperjs-offset.html",
       "content": "Archive/HTML/glenzli-paperjs-offset.content.html",
       "converted": "Raw/glenzli-paperjs-offset.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - glenzli/paperjs-offset: Path offset and stroke outline helpers ...",
+      "quality": {
+        "heading-duplicate": 1,
+        "fence-no-language": 1,
+        "code-non-ascii": 32
+      }
     },
     {
       "source": "https://github.com/AngusJohnson/Clipper2",
@@ -38,7 +55,11 @@
       "archive": "Archive/HTML/angusjohnson-clipper2.html",
       "content": "Archive/HTML/angusjohnson-clipper2.content.html",
       "converted": "Raw/angusjohnson-clipper2.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - AngusJohnson/Clipper2: Polygon Clipping, Offsetting & ...",
+      "quality": {
+        "long-line": 2
+      }
     },
     {
       "source": "https://www.angusj.com/clipper2/Docs/Overview.htm",
@@ -46,7 +67,12 @@
       "archive": "Archive/HTML/docs-overview.html",
       "content": "Archive/HTML/docs-overview.content.html",
       "converted": "Raw/docs-overview.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Clipper2 - Polygon Clipping Offsetting & Triangulating",
+      "quality": {
+        "raw-html": 4,
+        "long-line": 1
+      }
     },
     {
       "source": "https://www.npmjs.com/package/clipper2-wasm",
@@ -54,7 +80,12 @@
       "archive": "Archive/HTML/package-clipper2-wasm.html",
       "content": "Archive/HTML/package-clipper2-wasm.content.html",
       "converted": "Raw/package-clipper2-wasm.md",
-      "status": "converted"
+      "status": "stub",
+      "title": "clipper2-wasm - npm",
+      "quality": {
+        "heading-jump": 1
+      },
+      "note": "npm page carries no README (756-byte body); the README lives on the jsDelivr mirror and was recovered as its own source (clipper2-wasm)"
     },
     {
       "source": "https://github.com/countertype/clipper2-ts",
@@ -62,7 +93,8 @@
       "archive": "Archive/HTML/countertype-clipper2-ts.html",
       "content": "Archive/HTML/countertype-clipper2-ts.content.html",
       "converted": "Raw/countertype-clipper2-ts.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - countertype/clipper2-ts: TypeScript port of Clipper2 polygon ..."
     },
     {
       "source": "https://github.com/steveruizok/perfect-freehand",
@@ -70,7 +102,8 @@
       "archive": "Archive/HTML/steveruizok-perfect-freehand.html",
       "content": "Archive/HTML/steveruizok-perfect-freehand.content.html",
       "converted": "Raw/steveruizok-perfect-freehand.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - steveruizok/perfect-freehand: Draw perfect pressure-sensitive ..."
     },
     {
       "source": "https://github.com/mfogel/polygon-clipping",
@@ -78,7 +111,11 @@
       "archive": "Archive/HTML/mfogel-polygon-clipping.html",
       "content": "Archive/HTML/mfogel-polygon-clipping.content.html",
       "converted": "Raw/mfogel-polygon-clipping.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - mfogel/polygon-clipping: Apply boolean polygon clipping ...",
+      "quality": {
+        "long-line": 1
+      }
     },
     {
       "source": "https://github.com/danmarshall/svg-path-outline",
@@ -86,7 +123,11 @@
       "archive": "Archive/HTML/danmarshall-svg-path-outline.html",
       "content": "Archive/HTML/danmarshall-svg-path-outline.content.html",
       "converted": "Raw/danmarshall-svg-path-outline.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - danmarshall/svg-path-outline: Create an outline surrounding an ...",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://danmarshall.github.io/svg-path-outline/browser/",
@@ -94,7 +135,9 @@
       "archive": "Archive/HTML/svg-path-outline-browser.html",
       "content": "Archive/HTML/svg-path-outline-browser.content.html",
       "converted": "Raw/svg-path-outline-browser.md",
-      "status": "converted"
+      "status": "stub",
+      "title": "svg-path-outline",
+      "note": "interactive canvas application; the page DOM carries almost no text (248-byte body), so there is nothing to convert"
     },
     {
       "source": "https://github.com/alexbol99/flatten-js",
@@ -102,7 +145,11 @@
       "archive": "Archive/HTML/alexbol99-flatten-js.html",
       "content": "Archive/HTML/alexbol99-flatten-js.content.html",
       "converted": "Raw/alexbol99-flatten-js.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - alexbol99/flatten-js: Javascript library for 2d geometry \u00b7 ...",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://github.com/rveciana/svg-path-properties",
@@ -110,7 +157,13 @@
       "archive": "Archive/HTML/rveciana-svg-path-properties.html",
       "content": "Archive/HTML/rveciana-svg-path-properties.content.html",
       "converted": "Raw/rveciana-svg-path-properties.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - rveciana/svg-path-properties: Pure Javascript alternative to ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 1
+      }
     },
     {
       "source": "https://geoexamples.com/svg-path-properties/",
@@ -118,7 +171,11 @@
       "archive": "Archive/HTML/svg-path-properties.html",
       "content": "Archive/HTML/svg-path-properties.content.html",
       "converted": "Raw/svg-path-properties.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "svg-path-properties",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://github.com/herrstrietzel/svg-path-intersections",
@@ -126,7 +183,12 @@
       "archive": "Archive/HTML/herrstrietzel-svg-path-intersections.html",
       "content": "Archive/HTML/herrstrietzel-svg-path-intersections.content.html",
       "converted": "Raw/herrstrietzel-svg-path-intersections.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - herrstrietzel/svg-path-intersections: Get all intersections ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
     },
     {
       "source": "https://github.com/davidbau/seedrandom",
@@ -134,7 +196,11 @@
       "archive": "Archive/HTML/davidbau-seedrandom.html",
       "content": "Archive/HTML/davidbau-seedrandom.content.html",
       "converted": "Raw/davidbau-seedrandom.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - davidbau/seedrandom: seeded random number generator for ...",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://github.com/jwagner/simplex-noise.js",
@@ -142,7 +208,13 @@
       "archive": "Archive/HTML/jwagner-simplex-noise-js.html",
       "content": "Archive/HTML/jwagner-simplex-noise-js.content.html",
       "converted": "Raw/jwagner-simplex-noise-js.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - jwagner/simplex-noise.js: A fast simplex noise implementation ...",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "code-non-ascii": 3
+      }
     },
     {
       "source": "https://culorijs.org/",
@@ -150,7 +222,8 @@
       "archive": "Archive/HTML/culorijs-org.html",
       "content": "Archive/HTML/culorijs-org.content.html",
       "converted": "Raw/culorijs-org.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Color functions for JavaScript \u00b7 culori"
     },
     {
       "source": "https://colorjs.io/",
@@ -158,7 +231,14 @@
       "archive": "Archive/HTML/colorjs-io.html",
       "content": "Archive/HTML/colorjs-io.content.html",
       "converted": "Raw/colorjs-io.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Color.js: Let\u2019s get serious about color \u2022 Color.js",
+      "quality": {
+        "heading-multi-h1": 1,
+        "heading-jump": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 16
+      }
     },
     {
       "source": "https://svgjs.dev/",
@@ -166,7 +246,13 @@
       "archive": "Archive/HTML/svgjs-dev.html",
       "content": "Archive/HTML/svgjs-dev.content.html",
       "converted": "Raw/svgjs-dev.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "SVG.js v3.2 | Home",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://github.com/svgdotjs/svg.js",
@@ -174,7 +260,13 @@
       "archive": "Archive/HTML/svgdotjs-svg-js.html",
       "content": "Archive/HTML/svgdotjs-svg-js.content.html",
       "converted": "Raw/svgdotjs-svg-js.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - svgdotjs/svg.js: The lightweight library for manipulating and ...",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 1,
+        "long-line": 1
+      }
     },
     {
       "source": "https://roughjs.com/",
@@ -182,7 +274,12 @@
       "archive": "Archive/HTML/roughjs-com.html",
       "content": "Archive/HTML/roughjs-com.content.html",
       "converted": "Raw/roughjs-com.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Rough.js",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 1
+      }
     },
     {
       "source": "https://github.com/svg/svgo",
@@ -190,7 +287,8 @@
       "archive": "Archive/HTML/svg-svgo.html",
       "content": "Archive/HTML/svg-svgo.content.html",
       "converted": "Raw/svg-svgo.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - svg/svgo: SVG Optimizer for Node.js and CLI. \u2699\ufe0f \u00b7 GitHub"
     },
     {
       "source": "https://github.com/thx/resvg-js",
@@ -198,7 +296,12 @@
       "archive": "Archive/HTML/thx-resvg-js.html",
       "content": "Archive/HTML/thx-resvg-js.content.html",
       "converted": "Raw/thx-resvg-js.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - thx/resvg-js: A high-performance SVG renderer and toolkit, ...",
+      "quality": {
+        "heading-duplicate": 1,
+        "long-line": 1
+      }
     },
     {
       "source": "https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf",
@@ -206,7 +309,14 @@
       "archive": "Archive/Documents/generative-shapealgorithms.pdf",
       "content": "",
       "converted": "Raw/generative-shapealgorithms-pdf.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Tdesigners and (or) automate parts of the design process. The ability",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 9,
+        "raw-html": 10,
+        "long-line": 16
+      }
     },
     {
       "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule",
@@ -214,7 +324,13 @@
       "archive": "Archive/HTML/attribute-fill-rule.html",
       "content": "Archive/HTML/attribute-fill-rule.content.html",
       "converted": "Raw/attribute-fill-rule.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "fill-rule - SVG | MDN",
+      "quality": {
+        "heading-duplicate": 1,
+        "table-escaped-pipe": 1,
+        "long-line": 1
+      }
     },
     {
       "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit",
@@ -222,7 +338,11 @@
       "archive": "Archive/HTML/attribute-stroke-miterlimit.html",
       "content": "Archive/HTML/attribute-stroke-miterlimit.content.html",
       "converted": "Raw/attribute-stroke-miterlimit.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "stroke-miterlimit - SVG | MDN",
+      "quality": {
+        "long-line": 1
+      }
     },
     {
       "source": "https://svgwg.org/specs/strokes/",
@@ -230,7 +350,13 @@
       "archive": "Archive/HTML/specs-strokes.html",
       "content": "Archive/HTML/specs-strokes.content.html",
       "converted": "Raw/specs-strokes.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "SVG Strokes",
+      "quality": {
+        "table-escaped-pipe": 8,
+        "raw-html": 126,
+        "long-line": 1
+      }
     },
     {
       "source": "https://docs.aspose.com/svg/tutorial/fills-and-strokes/",
@@ -238,7 +364,12 @@
       "archive": "Archive/HTML/tutorial-fills-and-strokes.html",
       "content": "Archive/HTML/tutorial-fills-and-strokes.content.html",
       "converted": "Raw/tutorial-fills-and-strokes.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "SVG Fill and Stroke \u2013 colors, width, dashes \u2013 Aspose.SVG",
+      "quality": {
+        "heading-duplicate": 1,
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://www.w3schools.com/graphics/svg_stroking.asp",
@@ -246,7 +377,12 @@
       "archive": "Archive/HTML/graphics-svg-stroking.html",
       "content": "Archive/HTML/graphics-svg-stroking.content.html",
       "converted": "Raw/graphics-svg-stroking.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "SVG Stroke Attributes",
+      "quality": {
+        "heading-duplicate": 2,
+        "heading-jump": 1
+      }
     },
     {
       "source": "https://paperjs.org/tutorials/paths/",
@@ -254,7 +390,9 @@
       "archive": "Archive/HTML/tutorials-paths.html",
       "content": "Archive/HTML/tutorials-paths.content.html",
       "converted": "Raw/tutorials-paths.md",
-      "status": "converted"
+      "status": "stub",
+      "title": "Paper.js \u2014 Paths",
+      "note": "tutorials index page; after cleaning the body is a bare link list (190 bytes)"
     },
     {
       "source": "https://paperjs.typogram.co/paths/pathitem",
@@ -262,7 +400,11 @@
       "archive": "Archive/HTML/paths-pathitem.html",
       "content": "Archive/HTML/paths-pathitem.content.html",
       "converted": "Raw/paths-pathitem.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "PathItem | paper.js",
+      "quality": {
+        "fence-blank-padded": 1
+      }
     },
     {
       "source": "https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation",
@@ -270,7 +412,12 @@
       "archive": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.html",
       "content": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.content.html",
       "converted": "Raw/paper-js-3-1-path-creation-and-manipulation.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Path Creation and Manipulation | paperjs/paper.js | DeepWiki",
+      "quality": {
+        "fence-no-language": 1,
+        "code-non-ascii": 16
+      }
     },
     {
       "source": "https://deepwiki.com/paperjs/paper.js/3-path-system",
@@ -278,7 +425,11 @@
       "archive": "Archive/HTML/paper-js-3-path-system.html",
       "content": "Archive/HTML/paper-js-3-path-system.content.html",
       "converted": "Raw/paper-js-3-path-system.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Path System | paperjs/paper.js | DeepWiki",
+      "quality": {
+        "fence-no-language": 1
+      }
     },
     {
       "source": "https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html",
@@ -286,7 +437,11 @@
       "archive": "Archive/HTML/edges-plot-skeleton.html",
       "content": "Archive/HTML/edges-plot-skeleton.content.html",
       "converted": "Raw/edges-plot-skeleton.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Skeletonize \u2014 skimage 0.26.0 documentation",
+      "quality": {
+        "heading-jump": 1
+      }
     },
     {
       "source": "https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html",
@@ -294,7 +449,12 @@
       "archive": "Archive/HTML/dbd-tutorial-distance-transform.html",
       "content": "Archive/HTML/dbd-tutorial-distance-transform.content.html",
       "converted": "Raw/dbd-tutorial-distance-transform.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "OpenCV: Image Segmentation with Distance Transform and Watershed ...",
+      "quality": {
+        "heading-multi-h1": 1,
+        "long-line": 11
+      }
     },
     {
       "source": "https://pypi.org/project/svgpathtools/",
@@ -302,7 +462,11 @@
       "archive": "Archive/HTML/project-svgpathtools.html",
       "content": "Archive/HTML/project-svgpathtools.content.html",
       "converted": "Raw/project-svgpathtools.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Client Challenge",
+      "quality": {
+        "long-line": 2
+      }
     },
     {
       "source": "https://github.com/mathandy/svgpathtools",
@@ -310,7 +474,14 @@
       "archive": "Archive/HTML/mathandy-svgpathtools.html",
       "content": "Archive/HTML/mathandy-svgpathtools.content.html",
       "converted": "Raw/mathandy-svgpathtools.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - mathandy/svgpathtools: A collection of tools for manipulating ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 4,
+        "long-line": 1
+      }
     },
     {
       "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
@@ -318,7 +489,11 @@
       "archive": "Archive/HTML/svg-from-scratch-paths.html",
       "content": "Archive/HTML/svg-from-scratch-paths.content.html",
       "converted": "Raw/svg-from-scratch-paths.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Paths - SVG | MDN",
+      "quality": {
+        "long-line": 2
+      }
     },
     {
       "source": "https://www.joshwcomeau.com/svg/interactive-guide-to-paths/",
@@ -326,7 +501,12 @@
       "archive": "Archive/HTML/svg-interactive-guide-to-paths.html",
       "content": "Archive/HTML/svg-interactive-guide-to-paths.content.html",
       "converted": "Raw/svg-interactive-guide-to-paths.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "An Interactive Guide to SVG Paths \u2022 Josh W. Comeau",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 32
+      }
     },
     {
       "source": "https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h",
@@ -334,7 +514,9 @@
       "archive": "Archive/HTML/igl-signed-distance-h.html",
       "content": "Archive/HTML/igl-signed-distance-h.content.html",
       "converted": "Raw/igl-signed-distance-h.md",
-      "status": "converted"
+      "status": "stub",
+      "title": "libigl/include/igl/signed_distance.h at main \u00b7 libigl/libigl \u00b7 GitHub",
+      "note": "GitHub blob page; the converted body is a link shell (392 bytes) because the file's content is C++ code the page loads separately"
     },
     {
       "source": "https://libigl.github.io/tutorial/",
@@ -342,7 +524,12 @@
       "archive": "Archive/HTML/tutorial.html",
       "content": "Archive/HTML/tutorial.content.html",
       "converted": "Raw/tutorial.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Tutorial - libigl",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 126
+      }
     },
     {
       "source": "https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html",
@@ -350,7 +537,11 @@
       "archive": "Archive/HTML/latest-api-geometry-processing.html",
       "content": "Archive/HTML/latest-api-geometry-processing.content.html",
       "converted": "Raw/latest-api-geometry-processing.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "Geometry Processing Functions \u2014 PyMesh 0.2.1 documentation",
+      "quality": {
+        "raw-html": 8
+      }
     },
     {
       "source": "https://github.com/vistuleB/svgpathsio",
@@ -358,7 +549,48 @@
       "archive": "Archive/HTML/vistuleb-svgpathsio.html",
       "content": "Archive/HTML/vistuleb-svgpathsio.content.html",
       "converted": "Raw/vistuleb-svgpathsio.md",
-      "status": "converted"
+      "status": "converted",
+      "title": "GitHub - vistuleB/svgpathsio: A collection of tools for manipulating ..."
+    },
+    {
+      "source": "https://www.jsdelivr.com/package/npm/clipper2-wasm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/clipper2-wasm.html",
+      "content": "Archive/HTML/clipper2-wasm.content.html",
+      "converted": "Raw/clipper2-wasm.md",
+      "status": "converted",
+      "title": "clipper2-wasm CDN by jsDelivr - A CDN for npm and GitHub",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      },
+      "note": "recovered substitution: jsDelivr mirror carries the README the npm page lacks; stands in for the package-clipper2-wasm source"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/division-raster.html",
+      "content": "Archive/HTML/division-raster.content.html",
+      "converted": "Raw/division-raster.md",
+      "status": "converted",
+      "title": "division-raster",
+      "quality": {
+        "long-line": 1
+      },
+      "note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/q-bertify.html",
+      "content": "Archive/HTML/q-bertify.content.html",
+      "converted": "Raw/q-bertify.md",
+      "status": "converted",
+      "title": "q-bertify",
+      "quality": {
+        "long-line": 1
+      },
+      "note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
     },
     {
       "source": "https://paperjs.org/examples/division-raster/",
@@ -366,7 +598,13 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
+      "note": "recovered: substitute fetched from the repository and converted as its own source (division-raster)",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://paperjs.org/examples/division-raster/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1392 bytes, 0 chars visible)"
     },
     {
       "source": "https://paperjs.org/examples/q-bertify/",
@@ -374,7 +612,13 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
+      "note": "recovered: substitute fetched from the repository and converted as its own source (q-bertify)",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://paperjs.org/examples/q-bertify/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1386 bytes, 0 chars visible)"
     },
     {
       "source": "https://mgv.sggw.pl/article/view/9131",
@@ -382,7 +626,11 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "timeout",
+      "title": "",
+      "disposition": "retryable",
+      "exit": 4,
+      "message": "read_url: probe failed for https://mgv.sggw.pl/article/view/9131: timed out"
     },
     {
       "source": "https://dl.acm.org/doi/full/10.1145/3757377.3764004",
@@ -390,7 +638,11 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://dl.acm.org/doi/full/10.1145/3757377.3764004: Blocked by anti-bot protection: Cloudflare JS challenge"
     },
     {
       "source": "https://www.w3.org/TR/SVG2/painting.html",
@@ -398,7 +650,13 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://svgwg.org/svg2-draft/painting.html",
+      "note": "substitute identified but not fetched in this run",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
     },
     {
       "source": "https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html",
@@ -406,7 +664,11 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
     },
     {
       "source": "https://www.w3.org/TR/SVG2/paths.html",
@@ -414,7 +676,13 @@
       "archive": "",
       "content": "",
       "converted": "",
-      "status": "blocked"
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
+      "note": "MDN Paths tutorial substitute already in the shelf as svg-from-scratch-paths",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/paths.html: Blocked by anti-bot protection: Cloudflare JS challenge"
     }
   ]
 }

@@ -1,57 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./thx-resvg-js.md) ![thx](https://avatars.githubusercontent.com/u/4538353?s=60&v=4)**[resvg-js](./thx-resvg-js.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 82
-- Star 2k You must be signed in to star a repository
-
-## About
-
-A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.
-
-[resvg-js.vercel.app/](https://resvg-js.vercel.app/)nodejs rust svg wasm [Readme](#readme-ov-file) [MPL-2.0 license](#MPL-2.0-1-ov-file) Activity Custom properties **2.0k** stars **12** watching **82** forks Report repository**29** Branches **37** TagsOpen more actions menu[dependabot\bot\]and yisiblchore(deps): bump flatted from 3.2.6 to 3.4.2 Open commit details failure Mar 26, 2026 9de8ddd · Mar 26, 2026 409 Commits Open commit details409 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .cargo | .cargo | fix: enable static link for windows-msvc ([\#308](https://github.com/thx/resvg-js/pull/308)) | Mar 7, 2024 |
-| .github/workflows | .github/workflows | chore(ci): add font mounting and debug commands for Linux binding tests | Jan 22, 2026 |
-| .husky | .husky | 👻 init | Oct 8, 2021 |
-| .yarn/releases | .yarn/releases | chore(ci): migrating CI to napi-rs v3 and yarn v4.12.0 | Jan 15, 2026 |
-| \_\_test\_\_ | \_\_test\_\_ | refactor: extract `cropByBBox` logic and prevent overflow panics | Jan 28, 2026 |
-| benchmark | benchmark | chore: remove bench-related dependencies | Feb 7, 2023 |
-| example | example | refactor: extract `cropByBBox` logic and prevent overflow panics | Jan 28, 2026 |
-| npm | npm | 2.7.0-alpha.2 | Jan 28, 2026 |
-| scripts | scripts | feat: more aggressive GC to prevent continued growth of memory usage | Jan 22, 2026 |
-| src | src | refactor: extract `cropByBBox` logic and prevent overflow panics | Jan 28, 2026 |
-| wasm | wasm | 2.7.0-alpha.2 | Jan 28, 2026 |
-| .editorconfig | .editorconfig | style: rust indent changed from 2 to 4 spaces | May 21, 2022 |
-| .eslintignore | .eslintignore | refactor: wasm binding and test | Feb 22, 2022 |
-| .eslintrc.yml | .eslintrc.yml | chore: add deno example | Nov 17, 2022 |
-| .gitattributes | .gitattributes | 1.1.0 | Nov 10, 2021 |
-| .gitignore | .gitignore | chore: upgrade yarn from v1 to v3 | Jul 7, 2022 |
-| .npmignore | .npmignore | feat: upgrade to napi2 ([\#41](https://github.com/thx/resvg-js/pull/41)) | Dec 24, 2021 |
-| .prettierignore | .prettierignore | chore: upgrade yarn from v1 to v3 | Jul 7, 2022 |
-| .yarnrc.yml | .yarnrc.yml | chore(ci): migrating CI to napi-rs v3 and yarn v4.12.0 | Jan 15, 2026 |
-| CHANGELOG.md | CHANGELOG.md | 2.7.0-alpha.2 | Jan 28, 2026 |
-| Cargo.toml | Cargo.toml | feat: add catch_unwind protection to render to prevent Node.js proces… | Jan 27, 2026 |
-| LICENSE | LICENSE | 👻 init | Oct 8, 2021 |
-| README.md | README.md | chore(ci): migrating CI to napi-rs v3 and yarn v4.12.0 | Jan 15, 2026 |
-| build.rs | build.rs | style: rust indent changed from 2 to 4 spaces | May 21, 2022 |
-| bundle.js | bundle.js | feat: build wasm package | Feb 15, 2022 |
-| index.d.ts | index.d.ts | feat: add a `square` parameter to `cropByBBox()` so it always generat… | Sep 24, 2025 |
-| index.js | index.js | test: new class API | Feb 22, 2022 |
-| js-binding.d.ts | js-binding.d.ts | feat: migration napi-rs V2 to V3 | Jan 15, 2026 |
-| js-binding.js | js-binding.js | 2.7.0-alpha.2 | Jan 28, 2026 |
-| package.json | package.json | 2.7.0-alpha.2 | Jan 28, 2026 |
-| renovate.json | renovate.json | chore: core dependencies disable automatic upgrades | Mar 30, 2023 |
-| rust-toolchain.toml | rust-toolchain.toml | chore: `napi-build@2.3.1` requires rustc 1.88 | Jan 9, 2026 |
-| rustfmt.toml | rustfmt.toml | style: rust indent changed from 2 to 4 spaces | May 21, 2022 |
-| tsconfig.json | tsconfig.json | 👻 init | Oct 8, 2021 |
-| wasm-binding.ts | wasm-binding.ts | refactor(wasm): change the `fontsBuffers` option to `fontBuffers` | Sep 5, 2023 |
-| yarn.lock | yarn.lock | chore(deps): bump flatted from 3.2.6 to 3.4.2 | Mar 26, 2026 |
-|  |  |  |  |
-
 # resvg-js
 
 
@@ -358,42 +304,6 @@ Please use all lowercase `resvg-js` when referencing project names.
 [MPLv2.0](https://www.mozilla.org/en-US/MPL/)
 
 Copyright (c) 2021-present, yisibl(一丝)
-
-## About
-
-A high-performance SVG renderer and toolkit, powered by Rust based resvg and napi-rs.
-
-[resvg-js.vercel.app/](https://resvg-js.vercel.app/)nodejs rust svg wasm [Readme](#readme-ov-file) [MPL-2.0 license](#MPL-2.0-1-ov-file) Activity Custom properties **2.0k** stars **12** watching **82** forks Report repository
-
-## Releases 37 (37)
-
-v2.6.2 Latest Mar 26, 2024+ 36 releases
-
-## Contributors 14 (14)
-
-- [![@yisibl](https://avatars.githubusercontent.com/u/2784308?s=64&v=4)](/yisibl)
-- [![@renovate\[bot\]](https://avatars.githubusercontent.com/in/2740?s=64&v=4)](/renovate%5Bbot%5D)
-- [![@zimond](https://avatars.githubusercontent.com/u/4921289?s=64&v=4)](/zimond)
-- [![@renovate-bot](https://avatars.githubusercontent.com/u/25180681?s=64&v=4)](/renovate-bot)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-- [![@Brooooooklyn](https://avatars.githubusercontent.com/u/3468483?s=64&v=4)](/Brooooooklyn)
-- [![@axelhzf](https://avatars.githubusercontent.com/u/175627?s=64&v=4)](/axelhzf)
-- [![@XhmikosR](https://avatars.githubusercontent.com/u/349621?s=64&v=4)](/XhmikosR)
-- [![@Nkay](https://avatars.githubusercontent.com/u/4235733?s=64&v=4)](/Nkay)
-- [![@JoKalliauer](https://avatars.githubusercontent.com/u/15687581?s=64&v=4)](/JoKalliauer)
-- [![@CGQAQ](https://avatars.githubusercontent.com/u/15936231?s=64&v=4)](/CGQAQ)
-- [![@hadeeb](https://avatars.githubusercontent.com/u/16823042?s=64&v=4)](/hadeeb)
-- [![@antmelnyk](https://avatars.githubusercontent.com/u/17108334?s=64&v=4)](/antmelnyk)
-- [![@Zagrios](https://avatars.githubusercontent.com/u/40181755?s=64&v=4)](/Zagrios)
-
-## Languages
-
-- TypeScript 33.1%
-- Rust 25.3%
-- JavaScript 24.8%
-- HTML 16.8%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

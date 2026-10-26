@@ -1,40 +1,3 @@
-
-## Navigation Menu
-
-Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./davidbau-seedrandom.md) ![davidbau](https://avatars.githubusercontent.com/u/3458792?s=60&v=4)**[seedrandom](./davidbau-seedrandom.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 168
-- Star 2.1k You must be signed in to star a repository
-
-## About
-
-seeded random number generator for Javascript
-
-[Readme](#readme-ov-file) Activity **2.1k** stars **35** watching **168** forks Report repository**2** Branches **25** TagsOpen more actions menu[![davidbau](https://avatars.githubusercontent.com/u/3458792?v=4&size=40)](/davidbau)davidbaurelease 3.0.5 Sep 17, 2019 4460ad3 · Sep 17, 2019 161 Commits Open commit details161 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| lib | lib | Update npm packages. | Aug 9, 2019 |
-| test | test | Prepare for 3.0.5 release. | Sep 17, 2019 |
-| .coveralls.yml | .coveralls.yml | Rearrange names, add travis coveralls yml. | May 2, 2015 |
-| .gitignore | .gitignore | Move from istanbul tool to nyc. | Mar 4, 2019 |
-| .npmignore | .npmignore | Ignore the test directory in npm pacakage (472K) | Jan 26, 2019 |
-| .nvmrc | .nvmrc | Upgrade to qunit 2.0. | Dec 31, 2016 |
-| .travis.yml | .travis.yml | Eliminate old node versions for travis. | Jan 26, 2019 |
-| Gruntfile.js | Gruntfile.js | Switch back to patched grunt-release. | Mar 4, 2019 |
-| README.md | README.md | Prepare for 3.0.5 release. | Sep 17, 2019 |
-| bower.json | bower.json | Update bower.json to current conventions. | Sep 6, 2014 |
-| component.json | component.json | version bump to 3.0.0. | Feb 23, 2019 |
-| index.js | index.js | Include the impressively fast alea algorithm. | Jul 4, 2015 |
-| package-lock.json | package-lock.json | Update npm packages. | Aug 9, 2019 |
-| package.json | package.json | release 3.0.5 | Sep 17, 2019 |
-| seedrandom.js | seedrandom.js | Avoid using eval() to get global object. | Sep 17, 2019 |
-| seedrandom.min.js | seedrandom.min.js | Prepare for 3.0.5 release. | Sep 17, 2019 |
-|  |  |  |  |
-
 # seedrandom.js
 
 
@@ -276,42 +239,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-## About
-
-seeded random number generator for Javascript
-
-[Readme](#readme-ov-file) Activity **2.1k** stars **35** watching **168** forks Report repository
-
-## Releases
-
-25 tags
-
-## Used by 330K (330K)
-
-[ ![@WildEyeConservation](https://avatars.githubusercontent.com/u/103252266?s=64&v=4)![@hamhoagie](https://avatars.githubusercontent.com/u/467533?s=64&v=4)![@matheus-leao](https://avatars.githubusercontent.com/u/22027614?s=64&v=4)![@Vibes-college](https://avatars.githubusercontent.com/u/68100629?s=64&v=4)![@Vibes-college](https://avatars.githubusercontent.com/u/68100629?s=64&v=4)+ 331,505](/davidbau/seedrandom/network/dependents)
-
-## Contributors 11 (11)
-
-- [![@davidbau](https://avatars.githubusercontent.com/u/3458792?s=64&v=4)](/davidbau)
-- [![@TimothyGu](https://avatars.githubusercontent.com/u/1538624?s=64&v=4)](/TimothyGu)
-- [![@danielledeleo](https://avatars.githubusercontent.com/u/667598?s=64&v=4)](/danielledeleo)
-- [![@mreinstein](https://avatars.githubusercontent.com/u/718067?s=64&v=4)](/mreinstein)
-- [![@tmcw](https://avatars.githubusercontent.com/u/32314?s=64&v=4)](/tmcw)
-- [![@automata](https://avatars.githubusercontent.com/u/49062?s=64&v=4)](/automata)
-- [![@bluelovers](https://avatars.githubusercontent.com/u/167966?s=64&v=4)](/bluelovers)
-- [![@jared-stilwell](https://avatars.githubusercontent.com/u/450603?s=64&v=4)](/jared-stilwell)
-- [![@ZJONSSON](https://avatars.githubusercontent.com/u/1082488?s=64&v=4)](/ZJONSSON)
-- [![@louh](https://avatars.githubusercontent.com/u/2553268?s=64&v=4)](/louh)
-- [![@dave-5](https://avatars.githubusercontent.com/u/5506023?s=64&v=4)](/dave-5)
-
-## Languages
-
-- JavaScript 81.3%
-- HTML 18.5%
-- Shell 0.2%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

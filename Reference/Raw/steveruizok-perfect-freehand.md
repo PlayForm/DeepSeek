@@ -1,54 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
-[](./steveruizok-perfect-freehand.md) ![steveruizok](https://avatars.githubusercontent.com/u/23072548?s=60&v=4)**[perfect-freehand](./steveruizok-perfect-freehand.md)** Public
-
-- Sponsor
-- Notifications You must be signed in to change notification settings
-- Fork 215
-- Star 5.8k You must be signed in to star a repository
-
-## About
-
-Draw perfect pressure-sensitive freehand lines.
-
-[perfectfreehand.com](https://perfectfreehand.com) drawing graphics html-canvas lines pressure stroke svg variable-width [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **5.8k** stars **19** watching **215** forks Report repository**28** Branches **25** TagsOpen more actions menusibaiper and steveruizokUpdate README to link to new Rust port ([\#95](https://github.com/steveruizok/perfect-freehand/pull/95))Open commit details failure Feb 1, 2026 176e00f · Feb 1, 2026 241 Commits Open commit details241 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github | .github | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .husky | .husky | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .vscode | .vscode | Improvement thinning ([\#33](https://github.com/steveruizok/perfect-freehand/pull/33)) | Sep 16, 2021 |
-| assets | assets | Updates README | Oct 5, 2021 |
-| packages | packages | chore: bump version to 1.2.3 | Feb 1, 2026 |
-| tutorial | tutorial | Updates readme | Oct 5, 2021 |
-| .editorconfig | .editorconfig | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .gitattributes | .gitattributes | Initial commit | Feb 16, 2021 |
-| .gitignore | .gitignore | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .npmignore | .npmignore | Moves to a monorepo with esbuild ([\#28](https://github.com/steveruizok/perfect-freehand/pull/28)) | Aug 23, 2021 |
-| .nvmrc | .nvmrc | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .prettierignore | .prettierignore | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .prettierrc | .prettierrc | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| .yarnrc.yml | .yarnrc.yml | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| CLAUDE.md | CLAUDE.md | chore: update claude.md | Feb 1, 2026 |
-| LICENSE | LICENSE | Update LICENSE | Sep 24, 2021 |
-| README.md | README.md | Update README to link to new Rust port ([\#95](https://github.com/steveruizok/perfect-freehand/pull/95)) | Feb 1, 2026 |
-| build.mjs | build.mjs | Updates comments | Oct 5, 2021 |
-| commitlint.config.js | commitlint.config.js | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| eslint.config.mjs | eslint.config.mjs | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| icons.png | icons.png | Updates readme | Oct 5, 2021 |
-| lazy.config.js | lazy.config.js | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| package.json | package.json | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| perfect-freehand-card.png | perfect-freehand-card.png | updates assets | Sep 15, 2021 |
-| perfect-freehand-logo.svg | perfect-freehand-logo.svg | Update perfect-freehand-logo.svg | Sep 15, 2021 |
-| process.gif | process.gif | Updates readme | Oct 5, 2021 |
-| setupTests.ts | setupTests.ts | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| todo.md | todo.md | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| tsconfig.base.json | tsconfig.base.json | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| tsconfig.json | tsconfig.json | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| vitest.config.ts | vitest.config.ts | Modernize build tooling and dev infrastructure for 2026 ([\#96](https://github.com/steveruizok/perfect-freehand/pull/96)) | Feb 1, 2026 |
-| yarn.lock | yarn.lock | chore: fix yarn.lock | Feb 1, 2026 |
-|  |  |  |  |
-
 # [!Screenshot](/steveruizok/perfect-freehand/blob/main/assets/perfect-freehand-logo.svg)
 
 
@@ -91,7 +40,7 @@ yarn add perfect-freehand
 
 This package exports a function named `getStroke` that will generate the points for a polygon based on an array of points.
 
-[!Screenshot](/steveruizok/perfect-freehand/blob/main/assets/process.gif) [ ![Screenshot](https://github.com/steveruizok/perfect-freehand/raw/main/assets/process.gif) ](https://github.com/steveruizok/perfect-freehand/blob/main/assets/process.gif)
+[!Screenshot](/steveruizok/perfect-freehand/blob/main/assets/process.gif) [![Screenshot](https://github.com/steveruizok/perfect-freehand/raw/main/assets/process.gif)](https://github.com/steveruizok/perfect-freehand/blob/main/assets/process.gif)
 
 [](https://github.com/steveruizok/perfect-freehand/blob/main/assets/process.gif)
 
@@ -421,46 +370,6 @@ Have an idea or casual question? Visit the [discussion page](https://github.com/
 
 
 - [@steveruizok](https://twitter.com/steveruizok)
-
-## About
-
-Draw perfect pressure-sensitive freehand lines.
-
-[perfectfreehand.com](https://perfectfreehand.com) drawing graphics html-canvas lines pressure stroke svg variable-width [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **5.8k** stars **19** watching **215** forks Report repository
-
-## Sponsor this project
-
-- [![@steveruizok](https://avatars.githubusercontent.com/u/23072548?s=64&v=4)](/steveruizok)**steveruizok** Steve RuizSponsor @steveruizok
-
-Learn more about GitHub Sponsors
-
-## Used by 30K (30K)
-
-[ ![@mediaopt](https://avatars.githubusercontent.com/u/1358471?s=64&v=4)![@CodingFeng101](https://avatars.githubusercontent.com/u/152643312?s=64&v=4)![@csound-flossmanual](https://avatars.githubusercontent.com/u/57353385?s=64&v=4)![@SchulzOli](https://avatars.githubusercontent.com/u/153920877?s=64&v=4)![@hashintel](https://avatars.githubusercontent.com/u/22116112?s=64&v=4)+ 30,041](/steveruizok/perfect-freehand/network/dependents)
-
-## Contributors 12 (12)
-
-- [![@steveruizok](https://avatars.githubusercontent.com/u/23072548?s=64&v=4)](/steveruizok)
-- [![@claude](https://avatars.githubusercontent.com/u/81847?s=64&v=4)](/claude)
-- [![@Redemption198](https://avatars.githubusercontent.com/u/25185835?s=64&v=4)](/Redemption198)
-- [![@miles-crighton](https://avatars.githubusercontent.com/u/39874506?s=64&v=4)](/miles-crighton)
-- [![@mudcube](https://avatars.githubusercontent.com/u/101564?s=64&v=4)](/mudcube)
-- [![@yaojingguo](https://avatars.githubusercontent.com/u/516386?s=64&v=4)](/yaojingguo)
-- [![@gilesvangruisen](https://avatars.githubusercontent.com/u/1256189?s=64&v=4)](/gilesvangruisen)
-- [![@calebeby](https://avatars.githubusercontent.com/u/13206945?s=64&v=4)](/calebeby)
-- [![@TodePond](https://avatars.githubusercontent.com/u/15892272?s=64&v=4)](/TodePond)
-- [![@mattclarkestudio](https://avatars.githubusercontent.com/u/29930527?s=64&v=4)](/mattclarkestudio)
-- [![@aaronsantiago](https://avatars.githubusercontent.com/u/47049060?s=64&v=4)](/aaronsantiago)
-- [![@sibaiper](https://avatars.githubusercontent.com/u/102336408?s=64&v=4)](/sibaiper)
-
-## Languages
-
-- HTML 53.1%
-- TypeScript 42.9%
-- CSS 2.2%
-- JavaScript 1.8%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

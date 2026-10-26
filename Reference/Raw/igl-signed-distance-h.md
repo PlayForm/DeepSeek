@@ -1,10 +1,8 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
  /
 
 # signed_distance.h
 
-Copy path More file actions More file actions [![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)alecjacobsonLipschitz octree pruning ([\#2488](https://github.com/libigl/libigl/pull/2488)[) \skip ci\]Open commit details Jul 17, 2025 47b557d · Jul 17, 2025 History Open commit detailsHistory 319 lines (316 loc) · 11 KB1 You can’t perform that action at this time.
+Copy path More file actions More file actions [![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)alecjacobsonLipschitz octree pruning ([\#2488](https://github.com/libigl/libigl/pull/2488)[) \skip ci\]Open commit details Jul 17, 2025 47b557d · Jul 17, 2025 History Open commit detailsHistory 319 lines (316 loc) · 11 KB1
 
 <!--
 ## Source links

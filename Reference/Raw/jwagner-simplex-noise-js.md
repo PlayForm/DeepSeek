@@ -1,42 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
- ![jwagner](https://avatars.githubusercontent.com/u/293536?s=60&v=4)**simplex-noise.js** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 128
-- Star 1.9k You must be signed in to star a repository
-
-## About
-
-A fast simplex noise implementation in Javascript / Typescript.
-
-demo gfx javascript nodejs noise-functions procedural procedural-art procedural-generation procedural-terrain procedural-textures simplex typescript [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **1.9k** stars **27** watching **128** forks Report repository**5** Branches **9** TagsOpen more actions menu[![jwagner](https://avatars.githubusercontent.com/u/293536?v=4&size=40)](/jwagner)jwagnerprepare 4.0.3 release Jul 26, 2024 6bfff87 · Jul 26, 2024 143 Commits Open commit details143 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .devcontainer | .devcontainer | use tsx for module-compatibility tests | Jul 10, 2024 |
-| .github/workflows | .github/workflows | remove node versions from the future | Jul 10, 2024 |
-| doc | doc | Readme improvements | Jul 23, 2022 |
-| examples | examples | Fixing plasma example | Jul 23, 2022 |
-| perf | perf | Performance and test improvements | Jul 23, 2022 |
-| snapshots | snapshots | Performance and test improvements | Jul 23, 2022 |
-| test | test | use tsx for module-compatibility tests | Jul 10, 2024 |
-| .editorconfig | .editorconfig | introduce jscs | Dec 30, 2016 |
-| .eslintrc.js | .eslintrc.js | Makes module/packet structure more compatible | Aug 22, 2021 |
-| .gitignore | .gitignore | Adding a setup to investigate the JIT output | Jul 23, 2022 |
-| .mocharc.json | .mocharc.json | Converts simplex-noise.js to typescript | Aug 22, 2021 |
-| LICENSE | LICENSE | Update LICENSE | Feb 10, 2018 |
-| README.md | README.md | prepare 4.0.3 release | Jul 26, 2024 |
-| build.sh | build.sh | Makes module/packet structure more compatible | Aug 22, 2021 |
-| package-lock.json | package-lock.json | use tsx for module-compatibility tests | Jul 10, 2024 |
-| package.json | package.json | prepare 4.0.3 release | Jul 26, 2024 |
-| release-docs.sh | release-docs.sh | Draft of a new tree shakeable API | Jul 23, 2022 |
-| simplex-noise.ts | simplex-noise.ts | prepare 4.0.3 release | Jul 26, 2024 |
-| tsconfig-commonjs.json | tsconfig-commonjs.json | Draft of a new tree shakeable API | Jul 23, 2022 |
-| tsconfig-esm.json | tsconfig-esm.json | Makes module/packet structure more compatible | Aug 22, 2021 |
-| tsconfig.json | tsconfig.json | Makes module/packet structure more compatible | Aug 22, 2021 |
-|  |  |  |  |
-
 [![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://camo.githubusercontent.com/a6ed1655e865a26dfcec492b68d0fa0ed6d8b7c1aaf3b974bfbe28f2b71e6232/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2533432532462533452d547970655363726970742d2532333030373463312e737667)](http://www.typescriptlang.org/)
 
 [!simplex-noise.js header](/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png) [API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
@@ -271,39 +232,6 @@ Copyright (c) 2022 Jonas Wagner, licensed under the MIT License (enclosed)
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java) by Stefan Gustavson and Peter Eastman.
 
 The initial typescript definition has been provided by [Neonit](https://github.com/Neonit).
-
-## About
-
-A fast simplex noise implementation in Javascript / Typescript.
-
-demo gfx javascript nodejs noise-functions procedural procedural-art procedural-generation procedural-terrain procedural-textures simplex typescript [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) Activity **1.9k** stars **27** watching **128** forks Report repository
-
-## Releases 8 (8)
-
-4.0.3 Latest Jul 26, 2024+ 7 releases
-
-## Contributors 10 (10)
-
-- [![@jwagner](https://avatars.githubusercontent.com/u/293536?s=64&v=4)](/jwagner)
-- [![@satelllte](https://avatars.githubusercontent.com/u/20585619?s=64&v=4)](/satelllte)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-- [![@espadrine](https://avatars.githubusercontent.com/u/100689?s=64&v=4)](/espadrine)
-- [![@dmnsgn](https://avatars.githubusercontent.com/u/1636460?s=64&v=4)](/dmnsgn)
-- [![@viljami](https://avatars.githubusercontent.com/u/2721718?s=64&v=4)](/viljami)
-- [![@tophattom](https://avatars.githubusercontent.com/u/654307?s=64&v=4)](/tophattom)
-- [![@Sietsem](https://avatars.githubusercontent.com/u/1254264?s=64&v=4)](/Sietsem)
-- [![@Neonit](https://avatars.githubusercontent.com/u/1565916?s=64&v=4)](/Neonit)
-- [![@deathcap](https://avatars.githubusercontent.com/u/5897956?s=64&v=4)](/deathcap)
-
-## Languages
-
-- TypeScript 84.2%
-- JavaScript 8.8%
-- Shell 4.2%
-- Dockerfile 2.3%
-- HTML 0.5%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

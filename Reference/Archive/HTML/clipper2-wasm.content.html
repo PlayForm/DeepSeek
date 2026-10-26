@@ -1,0 +1,236 @@
+<div><div id="page">  <div class="p-package page"><div class="c-slider">
+<div class="c-slide"><div> <div class="c-package"><div class="page-content">
+<div class="page-content_top-content-wrapper">
+<div class="main-content">
+<div class="c-package-header">
+<div class="row">
+<div class="col-sm-8">
+<div class="package-name-wrapper">
+<h1>clipper2-wasm</h1> </div> <div class="package-info">
+<a class="package-owner" href="/?query=author%3A%20ErikSom"> <span>ErikSom</span></a> 
+</div>
+</div> 
+</div> <p class="package-description">WebAssembly port of the Clipper2 library for polygon clipping and offsetting</p> <div class="package-header-bottom"> <div class="col-xs-12">
+<span title="0.4.0">Version <span>0.4.0</span></span> <span title="BSL-1.0">License <span>BSL-1.0</span></span> </div>
+</div>  <div class="package-keywords_title">Keywords</div> <div class="package-keywords_list">
+<span class="package-keywords_list_item" title="clipper">clipper</span><span class="package-keywords_list_item" title="polygon">polygon</span><span class="package-keywords_list_item" title="clipping">clipping</span><span class="package-keywords_list_item" title="offsetting">offsetting</span><span class="package-keywords_list_item" title="wasm">wasm</span><span class="package-keywords_list_item" title="webassembly">webassembly</span>
+</div>
+</div> <div class="c-package-install-block"><div class="package-install-wrapper">
+<div class="install-settings">
+<div>INSTALL</div> <div class="switch-wrapper">
+<span>Type:</span>  </div> <div class="versions-wrapper">
+<span>Version:</span> <div class="version-dropdown">
+ <div class="version-dropdown_wrapper">
+ <ul class="version-dropdown_wrapper_list">
+
+<li class="version-dropdown_wrapper_list_item"><a>Latest Patch</a></li>
+<li class="version-dropdown_wrapper_list_item"><a>Latest Minor</a></li>
+<li class="version-dropdown_wrapper_list_item"><a>Latest Major</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</div>
+</div>
+</div>  </div> <div class="install-script">
+<div class="script-wrapper-default">
+<div class="code-wrapper">
+<span class="script-tag">&lt;script src="</span> <span class="script-text"><a href="https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js">https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js</a></span> <span class="script-tag">"&gt;&lt;/script&gt;</span>
+</div> </div> </div> 
+</div></div> <div class="package-nav">
+<a class="package-nav_route package-nav_route_active" href="/package/npm/clipper2-wasm" id="tabRouteReadme"> <span>Readme</span></a> <a class="package-nav_route" href="?tab=files" id="tabRouteFiles"> <span>Files</span></a> <a class="package-nav_route" href="?tab=stats" id="tabRouteStats"> <span>Statistics</span></a> <a class="package-nav_route" href="https://cdn.jsdelivr.net/npm/clipper2-wasm/" id="tabRouteCdn"><span>Browse CDN</span> </a>
+</div> <div class="package-readme"><div class="c-html">
+
+<h1 id="id-clipper2-wasm">Clipper2 WASM</h1>
+<p>The <b>Clipper2</b> library performs <strong>intersection</strong>, <strong>union</strong>, <strong>difference</strong> and <strong>XOR</strong> boolean operations on both simple and complex polygons. It also performs polygon offsetting and constrained Delaunay triangulation.</p>
+<h2 id="id-documentation">Documentation:</h2>
+<p>For Clipper2 documentation please see the <a class="router-ignore" href="http://www.angusj.com/clipper2/Docs/Overview.htm">Extensive HTML documentation</a></p>
+<h2 id="id-live-examples">Live examples:</h2>
+<ul>
+
+
+
+
+
+
+
+</ul>
+<h2 id="id-download-lib">Download lib</h2>
+<p>ES6: <a class="router-ignore" href="https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/dist/es/">https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/dist/es/</a></p>
+<p>UMD: <a class="router-ignore" href="https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/dist/umd/">https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/dist/umd/</a></p>
+<h2 id="id-usage">Usage:</h2>
+<p>For ES6 see the examples here:
+<a class="router-ignore" href="https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/es">https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/es</a></p>
+<p>For UMD see the examples here:
+<a class="router-ignore" href="https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/umd">https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/umd</a></p>
+<h2 id="id-typescript-example">Typescript example:</h2>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Clipper2ZFactoryFunction</span>, <span class="hljs-title class_">MainModule</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">'clipper2-wasm/dist/clipper2z'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> _Clipper2ZFactory <span class="hljs-keyword">from</span> <span class="hljs-string">'clipper2-wasm/dist/umd/clipper2z'</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Clipper2ZFactory</span>: <span class="hljs-title class_">Clipper2ZFactoryFunction</span> = _Clipper2ZFactory;
+
+<span class="hljs-title class_">Clipper2ZFactory</span>({
+	<span class="hljs-attr">locateFile</span>: <span class="hljs-function">() =&gt;</span> {
+		<span class="hljs-keyword">return</span> <span class="hljs-string">'path/to/your/clipper2z.wasm'</span>
+	},
+}).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">Clipper2Z: MainModule</span>) =&gt;</span> {
+	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Clipper2Z'</span>, <span class="hljs-title class_">Clipper2Z</span>);
+})
+</code></pre>
+<h2 id="id-benchmark-vs-clipper1-wasm-apple-m2-pro">Benchmark vs Clipper1 WASM: (Apple M2 Pro)</h2>
+<p>Clipper1 WASM repository: <a class="router-ignore" href="https://github.com/xaviergonz/js-angusj-clipper">https://github.com/xaviergonz/js-angusj-clipper</a>
+</p>
+<p>See implementation: <a class="router-ignore" href="https://github.com/ErikSom/Clipper2-WASM/tree/main/clipper2-wasm/examples/benchmark">https://github.com/ErikSom/Clipper2-WASM/tree/main/clipper2-wasm/examples/benchmark</a></p>
+<p>Made possible by:
+<a class="router-ignore" href="https://github.com/AngusJohnson/Clipper2">https://github.com/AngusJohnson/Clipper2</a></p>
+<p>Huge thanks to <a class="router-ignore" href="https://www.github.com/Birch-san">@Birch-san</a> with an outstanding wasm port example:
+<a class="router-ignore" href="https://github.com/Birch-san/box2d-wasm/">https://github.com/Birch-san/box2d-wasm/</a></p>
+</div></div>
+</div> <div class="side-content"><div class="c-package-sidemenu">
+<div class="package-stats"> <div>
+<div class="sidemenu-title">
+<span>Statistics</span> <div class="c-periods-dropdown">
+<div class="dropdown_head"> 
+</div> <div class="dropdown_body">
+ <ul class="dropdown_body_list">
+
+<li class="dropdown_body_list_item"><a>quarter</a></li>
+
+<li class="dropdown_body_list_item"><a>Q3 2026</a></li>
+<li class="dropdown_body_list_item"><a>September 2026</a></li>
+<li class="dropdown_body_list_item"><a>August 2026</a></li>
+<li class="dropdown_body_list_item"><a>July 2026</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2026</a></li>
+<li class="dropdown_body_list_item"><a>June 2026</a></li>
+<li class="dropdown_body_list_item"><a>May 2026</a></li>
+<li class="dropdown_body_list_item"><a>April 2026</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2026</a></li>
+<li class="dropdown_body_list_item"><a>March 2026</a></li>
+<li class="dropdown_body_list_item"><a>February 2026</a></li>
+<li class="dropdown_body_list_item"><a>January 2026</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2025</a></li>
+<li class="dropdown_body_list_item"><a>December 2025</a></li>
+<li class="dropdown_body_list_item"><a>November 2025</a></li>
+<li class="dropdown_body_list_item"><a>October 2025</a></li>
+<li class="dropdown_body_list_item"><a>Q3 2025</a></li>
+<li class="dropdown_body_list_item"><a>September 2025</a></li>
+<li class="dropdown_body_list_item"><a>August 2025</a></li>
+<li class="dropdown_body_list_item"><a>July 2025</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2025</a></li>
+<li class="dropdown_body_list_item"><a>June 2025</a></li>
+<li class="dropdown_body_list_item"><a>May 2025</a></li>
+<li class="dropdown_body_list_item"><a>April 2025</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2025</a></li>
+<li class="dropdown_body_list_item"><a>March 2025</a></li>
+<li class="dropdown_body_list_item"><a>February 2025</a></li>
+<li class="dropdown_body_list_item"><a>January 2025</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2024</a></li>
+<li class="dropdown_body_list_item"><a>December 2024</a></li>
+<li class="dropdown_body_list_item"><a>November 2024</a></li>
+<li class="dropdown_body_list_item"><a>October 2024</a></li>
+<li class="dropdown_body_list_item"><a>Q3 2024</a></li>
+<li class="dropdown_body_list_item"><a>September 2024</a></li>
+<li class="dropdown_body_list_item"><a>August 2024</a></li>
+<li class="dropdown_body_list_item"><a>July 2024</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2024</a></li>
+<li class="dropdown_body_list_item"><a>June 2024</a></li>
+<li class="dropdown_body_list_item"><a>May 2024</a></li>
+<li class="dropdown_body_list_item"><a>April 2024</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2024</a></li>
+<li class="dropdown_body_list_item"><a>March 2024</a></li>
+<li class="dropdown_body_list_item"><a>February 2024</a></li>
+<li class="dropdown_body_list_item"><a>January 2024</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2023</a></li>
+<li class="dropdown_body_list_item"><a>December 2023</a></li>
+<li class="dropdown_body_list_item"><a>November 2023</a></li>
+<li class="dropdown_body_list_item"><a>October 2023</a></li>
+<li class="dropdown_body_list_item"><a>Q3 2023</a></li>
+<li class="dropdown_body_list_item"><a>September 2023</a></li>
+<li class="dropdown_body_list_item"><a>August 2023</a></li>
+<li class="dropdown_body_list_item"><a>July 2023</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2023</a></li>
+<li class="dropdown_body_list_item"><a>June 2023</a></li>
+<li class="dropdown_body_list_item"><a>May 2023</a></li>
+<li class="dropdown_body_list_item"><a>April 2023</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2023</a></li>
+<li class="dropdown_body_list_item"><a>March 2023</a></li>
+<li class="dropdown_body_list_item"><a>February 2023</a></li>
+<li class="dropdown_body_list_item"><a>January 2023</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2022</a></li>
+<li class="dropdown_body_list_item"><a>December 2022</a></li>
+<li class="dropdown_body_list_item"><a>November 2022</a></li>
+<li class="dropdown_body_list_item"><a>October 2022</a></li>
+<li class="dropdown_body_list_item"><a>Q3 2022</a></li>
+<li class="dropdown_body_list_item"><a>September 2022</a></li>
+<li class="dropdown_body_list_item"><a>August 2022</a></li>
+<li class="dropdown_body_list_item"><a>July 2022</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2022</a></li>
+<li class="dropdown_body_list_item"><a>June 2022</a></li>
+<li class="dropdown_body_list_item"><a>May 2022</a></li>
+<li class="dropdown_body_list_item"><a>April 2022</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2022</a></li>
+<li class="dropdown_body_list_item"><a>March 2022</a></li>
+<li class="dropdown_body_list_item"><a>February 2022</a></li>
+<li class="dropdown_body_list_item"><a>January 2022</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2021</a></li>
+<li class="dropdown_body_list_item"><a>December 2021</a></li>
+<li class="dropdown_body_list_item"><a>November 2021</a></li>
+<li class="dropdown_body_list_item"><a>October 2021</a></li>
+<li class="dropdown_body_list_item"><a>Q3 2021</a></li>
+<li class="dropdown_body_list_item"><a>September 2021</a></li>
+<li class="dropdown_body_list_item"><a>August 2021</a></li>
+<li class="dropdown_body_list_item"><a>July 2021</a></li>
+<li class="dropdown_body_list_item"><a>Q2 2021</a></li>
+<li class="dropdown_body_list_item"><a>June 2021</a></li>
+<li class="dropdown_body_list_item"><a>May 2021</a></li>
+<li class="dropdown_body_list_item"><a>April 2021</a></li>
+<li class="dropdown_body_list_item"><a>Q1 2021</a></li>
+<li class="dropdown_body_list_item"><a>March 2021</a></li>
+<li class="dropdown_body_list_item"><a>February 2021</a></li>
+<li class="dropdown_body_list_item"><a>January 2021</a></li>
+
+<li class="dropdown_body_list_item"><a>Q4 2020</a></li>
+<li class="dropdown_body_list_item"><a>December 2020</a></li>
+</ul>
+</div>
+</div>
+</div> <div class="stats-section mb-18">
+<span>Requests</span> <span>17 221</span>
+</div> <div class="stats-section mb-18">
+<span>Bandwidth</span> <span>1 012 MB</span>
+</div> </div> <div class="stats-section mb-24">
+ <span>Top version - 0.2.1</span> <span>16 035</span>
+</div> <a class="btn-secondary">Full clipper2-wasm Download Stats</a> <div class="twitter-share">
+<div>The 24940th most popular on jsDelivr</div> <a class="btn-twitter-share mt-8" href="https://twitter.com/intent/tweet?text=clipper2-wasm%20is%20the%2024940th%20most%20popular%20package%20on%20%40jsDelivr%20CDN%2C%20with%2017%20221%20hits%20in%20the%20last%20month%3A%20https%3A%2F%2Fwww.jsdelivr.com%2Fpackage%2Fnpm%2Fclipper2-wasm"> Share</a>
+</div> <div class="stats-keywords mt-32">
+<div class="stats-keywords-header">Keywords</div> <div class="stats-keywords-badges">
+<div class="keyword-badge">clipper</div>
+<div class="keyword-badge">polygon</div>
+<div class="keyword-badge">clipping</div>
+<div class="keyword-badge">offsetting</div>
+<div class="keyword-badge">wasm</div>
+<div class="keyword-badge">webassembly</div> </div>
+</div>
+</div> <div class="box-badge mt-32 mb-32">
+<div class="box-title">Get a badge for your package</div>   
+</div>
+</div></div>
+</div> </div></div>
+</div></div> </div></div> 
+</div></div>

@@ -41,7 +41,7 @@ Color.js is a color conversion and modification library created by two of the ed
 - **Color space agnostic**: Each color object is basically a list of coords and a color space reference. Operations are color space agnostic. Modules for [a wide variety of color spaces](https://colorjs.io/docs/spaces), including Lab/LCh, OKLab/OKLCh, sRGB and friends (HSL/HSV/HWB), Display P3, J <sub>z</sub> a <sub>z</sub> b <sub>z</sub>, REC.2100 and many [more](https://colorjs.io/docs/spaces).
 - **Doesn't gloss over color science**: Actual [gamut mapping](https://colorjs.io/docs/gamut-mapping) instead of naïve clipping, multiple [DeltaE](https://colorjs.io/docs/color-difference) methods (76, CMC, 2000, J <sub>z</sub>), multiple [chromatic adaptation](https://colorjs.io/docs/adaptation) methods (von Kries, Bradford, CAT02, CAT16), all with sensible defaults
 - **Up to date with CSS Color 4**: Every [CSS Color 4](https://drafts.csswg.org/css-color-4/) format & color space supported for both [input](https://colorjs.io/docs/the-color-object) and [output](https://colorjs.io/docs/output), whether your browser supports it or not.
-- **Readable, object-oriented API**: Color objects for multiple operations on the same color, and static `Color``.``something``(``)` functions for one-off calculations
+- **Readable, object-oriented API**: Color objects for multiple operations on the same color, and static `Color.something()` functions for one-off calculations
 - **Modular & Extensible**: Use only what you need, or a bundle. Client-side or Node. Deep extensibility with [hooks](https://colorjs.io/api/#Hooks-hooks.js).
 - **Fast & efficient**: [Procedural, tree-shakeable API](https://colorjs.io/docs/procedural) available for performance sensitive tasks and reduced bundle size
 - **Dependency free**: Not that there’s anything wrong with dependencies, but we gotta mention it!
@@ -72,8 +72,8 @@ npm install colorjs.io
 
 Whether you’re using NPM, the CDN, or local files, Color.js allows you to also import specific modules by directly importing from `src`:
 
-- `https``:``/``/``colorjs``.``io``/``src``/` for the CDN
-- `node_modules``/``colorjs``.``io``/``src``/` for NPM
+- `https://colorjs.io/src/` for the CDN
+- `node_modules/colorjs.io/src/` for NPM
 
 For example:
 
@@ -84,7 +84,7 @@ import rec2020 from "https://colorjs.io/src/spaces/rec2020.js";
 import deltaE200 from "https://colorjs.io/src/deltaE/deltaE2000.js";
 ```
 
-To use `import` statements in a browser, your `<``script``>` needs `type``=``"module"`
+To use `import` statements in a browser, your `<script>` needs `type="module"`
 
 Are you old school and prefer to simply have a global `Color` variable? We’ve got you covered! Just include the following script in your HTML:
 
@@ -125,7 +125,7 @@ color.lch.c *= 1.2; // saturate by increasing LCH chroma by 20%
 color.hwb.w += 10; // any other color space also available
 ```
 
-To modify coordinates in any color space you use `color``.``set``(``)` and `color``.``setAll``(``)`:
+To modify coordinates in any color space you use `color.set()` and `color.setAll()`:
 
 ``` js
 let color = new Color("slategray");

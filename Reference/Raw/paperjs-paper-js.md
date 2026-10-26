@@ -1,52 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }}
-
- ![paperjs](https://avatars.githubusercontent.com/u/846856?s=60&v=4)**paper.js** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 1.3k
-- Star 15.1k You must be signed in to star a repository
-
-## About
-
-The Swiss Army Knife of Vector Graphics Scripting – Scriptographer ported to JavaScript and the browser, using HTML5 Canvas. Created by [@lehni](https://github.com/lehni) & [@puckey](https://github.com/puckey)
-
-[paperjs.org](http://paperjs.org) [Readme](#readme-ov-file) [License](#License-1-ov-file) Activity Custom properties **15.1k** stars **373** watching **1.3k** forks Report repository**97** Branches **71** TagsOpen more actions menu[![lehni](https://avatars.githubusercontent.com/u/213275?v=4&size=40)](/lehni)lehniHosted: Mark the changes of children reordered other than by inserts success Oct 26, 2026 357f0dc · Oct 26, 2026 7,741 Commits Open commit details7,741 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github | .github | Tests: Add screenshots of text items | Oct 21, 2026 |
-| .husky | .husky | Check the branch in the pre-push hook itself | Oct 21, 2026 |
-| .vscode | .vscode | Switch from Yarn to pnpm | Oct 19, 2026 |
-| changelog/unreleased | changelog/unreleased | Run the library in strict mode | Oct 26, 2026 |
-| dist | dist | Switch back to load.js versions on develop branch. | Oct 21, 2026 |
-| examples | examples | Effect: Rename title to label | Oct 24, 2026 |
-| gulp | gulp | Add pattern colors through PatternDefinition | Oct 22, 2026 |
-| packages | packages | Release version 0.16.0 | Oct 21, 2026 |
-| projects | projects | Introduce paper-jsdom and paper-jsdom-canvas submodules. | Apr 19, 2017 |
-| src | src | Hosted: Mark the changes of children reordered other than by inserts | Oct 26, 2026 |
-| test | test | Hosted: Mark the changes of children reordered other than by inserts | Oct 26, 2026 |
-| .editorconfig | .editorconfig | Tests: Move from QUnit to Vitest, on Node and in Chromium | Oct 21, 2026 |
-| .gitignore | .gitignore | Tests: Move from QUnit to Vitest, on Node and in Chromium | Oct 21, 2026 |
-| .gitmodules | .gitmodules | Switch from submodules to workspace packages | Mar 12, 2021 |
-| .jshintrc | .jshintrc | Use `== false` instead of `=== false` for all options that default to… | Mar 22, 2017 |
-| .nvmrc | .nvmrc | Node.js: Use Node 24 in .nvmrc, as in CI | Oct 20, 2026 |
-| .prettierignore | .prettierignore | Limit ESLint and Prettier to the tests | Oct 23, 2026 |
-| .tm_properties | .tm_properties | Turn off invisible spaces in TextMate2. | Jan 3, 2015 |
-| AUTHORS.md | AUTHORS.md | Update year, author email addresses and links | May 23, 2020 |
-| CHANGELOG.md | CHANGELOG.md | Move unreleased changelog entries out of 0.16.0 | Oct 26, 2026 |
-| LICENSE.txt | LICENSE.txt | Update year, author email addresses and links | May 23, 2020 |
-| README.md | README.md | Tests: Add screenshots of text items | Oct 21, 2026 |
-| RULES.md | RULES.md | Add .github templates | Oct 4, 2017 |
-| bower.json | bower.json | CI: Replace Travis with GitHub Actions | Oct 18, 2026 |
-| eslint.config.mjs | eslint.config.mjs | Limit ESLint and Prettier to the tests | Oct 23, 2026 |
-| gulpfile.js | gulpfile.js | Update year, author email addresses and links | May 23, 2020 |
-| package.json | package.json | Node.js: Map the files to an empty file in the browser field | Oct 22, 2026 |
-| pnpm-lock.yaml | pnpm-lock.yaml | Release version 0.16.0 | Oct 21, 2026 |
-| pnpm-workspace.yaml | pnpm-workspace.yaml | Drop PhantomJS through a pnpm override | Oct 19, 2026 |
-| prettier.config.mjs | prettier.config.mjs | Tests: Move from QUnit to Vitest, on Node and in Chromium | Oct 21, 2026 |
-| vitest.config.mjs | vitest.config.mjs | Tests: Add screenshots of drawing and SVG import | Oct 21, 2026 |
-|  |  |  |  |
-
 # Paper.js - The Swiss Army Knife of Vector Graphics Scripting [![CI](https://github.com/paperjs/paper.js/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/paperjs/paper.js/actions/workflows/ci.yml) [![NPM](https://camo.githubusercontent.com/8d54c3bd0b034847afc2e9371a9ce38ae17c6b48b11f55afd00612727b3e3ff9/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f70617065722e737667)](https://www.npmjs.com/package/paper)
 
 
@@ -385,42 +336,6 @@ For a list of authors and contributors, please see [AUTHORS](https://github.com/
 
 
 Distributed under the MIT license. See [LICENSE](https://github.com/paperjs/paper.js/blob/main/LICENSE.txt) for details.
-
-## About
-
-The Swiss Army Knife of Vector Graphics Scripting – Scriptographer ported to JavaScript and the browser, using HTML5 Canvas. Created by [@lehni](https://github.com/lehni) & [@puckey](https://github.com/puckey)
-
-[paperjs.org](http://paperjs.org) [Readme](#readme-ov-file) [License](#License-1-ov-file) Activity Custom properties **15.1k** stars **373** watching **1.3k** forks Report repository
-
-## Releases 34
-
-v0.16.0 Latest Oct 21, 2026+ 33 releases
-
-## Contributors 95
-
-- [![@lehni](https://avatars.githubusercontent.com/u/213275?s=64&v=4)](/lehni)
-- [![@puckey](https://avatars.githubusercontent.com/u/271885?s=64&v=4)](/puckey)
-- [![@hkrish](https://avatars.githubusercontent.com/u/980896?s=64&v=4)](/hkrish)
-- [![@sasensi](https://avatars.githubusercontent.com/u/11247504?s=64&v=4)](/sasensi)
-- [![@sapics](https://avatars.githubusercontent.com/u/11169954?s=64&v=4)](/sapics)
-- [![@iconexperience](https://avatars.githubusercontent.com/u/2122773?s=64&v=4)](/iconexperience)
-- [![@jridgewell](https://avatars.githubusercontent.com/u/112982?s=64&v=4)](/jridgewell)
-- [![@AWagenheim](https://avatars.githubusercontent.com/u/2312667?s=64&v=4)](/AWagenheim)
-- [![@jaroles](https://avatars.githubusercontent.com/u/2312997?s=64&v=4)](/jaroles)
-- [![@rdworth](https://avatars.githubusercontent.com/u/107824?s=64&v=4)](/rdworth)
-- [![@skierons](https://avatars.githubusercontent.com/u/2313113?s=64&v=4)](/skierons)
-- [![@megawac](https://avatars.githubusercontent.com/u/3475472?s=64&v=4)](/megawac)
-- [![@adroitwhiz](https://avatars.githubusercontent.com/u/25993062?s=64&v=4)](/adroitwhiz)
-- [![@msand](https://avatars.githubusercontent.com/u/1131362?s=64&v=4)](/msand)
-
-+ 81 contributors
-
-## Languages
-
-- JavaScript 98.9%
-- Other 1.1%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

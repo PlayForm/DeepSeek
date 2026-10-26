@@ -1,41 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }} [](./rveciana-svg-path-properties.md) ![rveciana](https://avatars.githubusercontent.com/u/2832885?s=60&v=4)**[svg-path-properties](./rveciana-svg-path-properties.md)** Public
-
-- Notifications You must be signed in to change notification settings
-- Fork 22
-- Star 292 You must be signed in to star a repository
-
-## About
-
-Pure Javascript alternative to path.getPointAtLength(t) and getTotalLength() functions. Works with Canvas & Node
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Code of conduct](./rveciana-svg-path-properties.md#coc-ov-file) [Contributing](#contributing-ov-file) Activity **292** stars **6** watching **22** forks Report repository **15** Branches **46** TagsOpen more actions menu[![rveciana](https://avatars.githubusercontent.com/u/2832885?v=4&size=40)](/rveciana)rveciana2.2.0 success Oct 15, 2026 d675311 · Oct 15, 2026 240 Commits Open commit details240 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .changeset | .changeset | chore: new release | Aug 23, 2026 |
-| .github | .github | ci: upgrade npm to 11.x for Trusted Publishing support | Feb 22, 2026 |
-| .husky | .husky | Upgrade libraries | Jul 21, 2025 |
-| .opencode | .opencode | Add mcp | Aug 22, 2026 |
-| .vscode | .vscode | Prepare package for typescript | Nov 14, 2019 |
-| dist | dist | chore: reduce package size and improve code quality | Feb 15, 2026 |
-| src | src | Give a tangent where a control point sits on its anchor | Aug 27, 2026 |
-| test | test | Give a tangent where a control point sits on its anchor | Aug 27, 2026 |
-| .gitignore | .gitignore | feat: expose segment details via getDetails() and getParts().details | Aug 23, 2026 |
-| .prettierignore | .prettierignore | Upgrade libraries | Jul 21, 2025 |
-| .prettierrc.json | .prettierrc.json | Upgrade libraries | Jul 21, 2025 |
-| CHANGELOG.md | CHANGELOG.md | chore: new release | Aug 23, 2026 |
-| CODE_OF_CONDUCT.md | CODE_OF_CONDUCT.md | Create CODE_OF_CONDUCT.md | Oct 2, 2020 |
-| LICENSE | LICENSE | Initial commit | Oct 25, 2016 |
-| README.md | README.md | feat: expose segment details via getDetails() and getParts().details | Aug 23, 2026 |
-| RELEASE.md | RELEASE.md | Upgrade libraries | Jul 21, 2025 |
-| eslint.config.js | eslint.config.js | Upgrade libraries | Jul 21, 2025 |
-| opencode.json | opencode.json | Add mcp | Aug 22, 2026 |
-| package-lock.json | package-lock.json | 2.2.0 | Oct 15, 2026 |
-| package.json | package.json | 2.2.0 | Oct 15, 2026 |
-| tsconfig.json | tsconfig.json | Upgrade libraries | Jul 21, 2025 |
-| tsup.config.ts | tsup.config.ts | Upgrade libraries | Jul 21, 2025 |
-|  |  |  |  |
-
 # svg-path-properties
 
 
@@ -208,46 +170,6 @@ For Bézier curves:
 - [Arc elements calculation](https://github.com/MadLittleMods/svg-curve-lib/tree/f07d6008a673816f4cb74a3269164b430c3a95cb)
 
 - [path parsing](https://github.com/jkroso/parse-svg-path)
-
-## About
-
-Pure Javascript alternative to path.getPointAtLength(t) and getTotalLength() functions. Works with Canvas & Node
-
-[Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Code of conduct](./rveciana-svg-path-properties.md#coc-ov-file) [Contributing](#contributing-ov-file) Activity **292** stars **6** watching **22** forks Report repository
-
-## Releases 3 (3)
-
-v2.2.0 Latest Oct 16, 2026+ 2 releases
-
-## Used by 5.2K (5.2K)
-
-[ ![@wxad](https://avatars.githubusercontent.com/u/40755522?s=64&v=4)![@tonyketcham](https://avatars.githubusercontent.com/u/43280336?s=64&v=4)![@justine-george](https://avatars.githubusercontent.com/u/22838605?s=64&v=4)![@Shohibun](https://avatars.githubusercontent.com/u/71695550?s=64&v=4)![@andromanpro](https://avatars.githubusercontent.com/u/5669019?s=64&v=4)+ 5,218](/rveciana/svg-path-properties/network/dependents)
-
-## Contributors 15 (15)
-
-- [![@rveciana](https://avatars.githubusercontent.com/u/2832885?s=64&v=4)](/rveciana)
-- [![@RogerVecianaAbzu](https://avatars.githubusercontent.com/u/155717123?s=64&v=4)](/RogerVecianaAbzu)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-- [![@scien](https://avatars.githubusercontent.com/u/1251587?s=64&v=4)](/scien)
-- [![@ievgennaida](https://avatars.githubusercontent.com/u/17121033?s=64&v=4)](/ievgennaida)
-- [![@github-actions\[bot\]](https://avatars.githubusercontent.com/in/15368?s=64&v=4)](/github-actions%5Bbot%5D)
-- [![@Rheeseyb](https://avatars.githubusercontent.com/u/1044774?s=64&v=4)](/Rheeseyb)
-- [![@chrisparton1991](https://avatars.githubusercontent.com/u/13063119?s=64&v=4)](/chrisparton1991)
-- [![@wcandillon](https://avatars.githubusercontent.com/u/306134?s=64&v=4)](/wcandillon)
-- [![@punkt2](https://avatars.githubusercontent.com/u/1295471?s=64&v=4)](/punkt2)
-- [![@veltman](https://avatars.githubusercontent.com/u/2120446?s=64&v=4)](/veltman)
-- [![@dgrcode](https://avatars.githubusercontent.com/u/17493200?s=64&v=4)](/dgrcode)
-- [![@FrankSandqvist](https://avatars.githubusercontent.com/u/32358133?s=64&v=4)](/FrankSandqvist)
-- [![@zHaytam](https://avatars.githubusercontent.com/u/34218324?s=64&v=4)](/zHaytam)
-
-## Languages
-
-- TypeScript 91.6%
-- HTML 6.9%
-- JavaScript 1.2%
-- Shell 0.3%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links

@@ -73,7 +73,7 @@
   - [Acquisition](https://about.aspose.com/acquisition/)
   - [Trust](https://trust.aspose.com)
   - [Metrics](https://metrics.aspose.com)
--  English
+- English
   - [Español](https://docs.aspose.com/svg/es/tutorial/fills-and-strokes/)
   - [Français](https://docs.aspose.com/svg/fr/tutorial/fills-and-strokes/)
   - [简体中文](https://docs.aspose.com/svg/zh/tutorial/fills-and-strokes/)
@@ -167,6 +167,7 @@
 - SVG Tutorial
 - Fills and Strokes in SVG
 
+
 - [Live Demos](https://products.aspose.app/svg/applications)
 - [SVG Solutions](https://products.aspose.com/svg/)
 - [API Reference](https://reference.aspose.com/svg/)
@@ -251,12 +252,10 @@ The `fill` property defines how the interior of a shape or text is painted. It a
 
 The sample below compares a path with `fill="none"` and the same path without an explicit fill ( two-paths.svg):
 
-``` java
-1<svg height="400" width="800" xmlns="http://www.w3.org/2000/svg">
-2    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" fill="none" />
-3    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" transform="translate(0 125)" />
-4</svg>
-```
+    1<svg height="400" width="800" xmlns="http://www.w3.org/2000/svg">
+    2    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" fill="none" />
+    3    <path d="M 10 100 Q 25 10 180 100 T 250 100 T 300 100 T 390 130" stroke="red" stroke-width="3" transform="translate(0 125)" />
+    4</svg>
 
 !Two SVG paths comparing fill none and default black fill
 
@@ -283,25 +282,23 @@ For any line, it is possible to set the shape of its ends. The `stroke-linecap` 
 
 The effect is visible when the line has a noticeable `stroke-width`. The sample below shows how `stroke-width` and `stroke-linecap` define stroke thickness and endpoint shape ( lines.svg).
 
-``` java
- 1<svg height="200" width="800" xmlns="http://www.w3.org/2000/svg">
- 2  <g stroke="grey">
- 3    <path stroke-width="3" d="M 5 20 l 215 0" />
- 4    <path stroke-width="15" d="M 5 60 l 215 0" />
- 5    <path stroke-width="30" d="M 5 100 l 215 0" />
- 6  </g>
- 7 <g stroke="grey" stroke-width="30">
- 8    <path stroke-linecap="butt" d="M 300 20 l 215 0" />
- 9    <path stroke-linecap="round" d="M 300 60 l 215 0" />
-10    <path stroke-linecap="square" d="M 300 100 l 215 0" />
-11  </g>
-12  <g stroke="orange" stroke-width="2">
-13    <line x1="300" y1="20" x2="515" y2="20" />
-14    <path d="M 300 60 l 215 0" />
-15    <path d="M 300 100 l 215 0" />
-16  </g>
-17</svg>
-```
+     1<svg height="200" width="800" xmlns="http://www.w3.org/2000/svg">
+     2  <g stroke="grey">
+     3    <path stroke-width="3" d="M 5 20 l 215 0" />
+     4    <path stroke-width="15" d="M 5 60 l 215 0" />
+     5    <path stroke-width="30" d="M 5 100 l 215 0" />
+     6  </g>
+     7 <g stroke="grey" stroke-width="30">
+     8    <path stroke-linecap="butt" d="M 300 20 l 215 0" />
+     9    <path stroke-linecap="round" d="M 300 60 l 215 0" />
+    10    <path stroke-linecap="square" d="M 300 100 l 215 0" />
+    11  </g>
+    12  <g stroke="orange" stroke-width="2">
+    13    <line x1="300" y1="20" x2="515" y2="20" />
+    14    <path d="M 300 60 l 215 0" />
+    15    <path d="M 300 100 l 215 0" />
+    16  </g>
+    17</svg>
 
 In the sample, the `<g>` element sets shared properties, such as `stroke` and `stroke-width`, for several child paths.
 
@@ -321,20 +318,18 @@ The `stroke-linejoin` property controls the shape of corners where two stroke se
 
 The next sample illustrates `stroke-linejoin` values ( linejoin.svg):
 
-``` java
- 1<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
- 2    <g stroke-width="20" fill="none">
- 3        <polyline points="40 60 80 20 120 60 160 20 200 60 240 20" stroke="grey" stroke-linecap="butt"  stroke-linejoin="miter" />
- 4        <polyline points="40 140 80 100 120 140 160 100 200 140 240 100" stroke="#CD5C5C" stroke-linecap="round" stroke-linejoin="round" />
- 5        <polyline points="40 220 80 180 120 220 160 180 200 220 240 180" stroke="black"  stroke-linecap="square" stroke-linejoin="bevel" />
- 6    </g>
- 7    <g fill="none" stroke="orange" stroke-width="2">
- 8        <polyline points="40 60 80 20 120 60 160 20 200 60 240 20" />
- 9        <polyline points="40 140 80 100 120 140 160 100 200 140 240 100" />
-10        <polyline points="40 220 80 180 120 220 160 180 200 220 240 180" />
-11    </g>
-12</svg>
-```
+     1<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+     2    <g stroke-width="20" fill="none">
+     3        <polyline points="40 60 80 20 120 60 160 20 200 60 240 20" stroke="grey" stroke-linecap="butt"  stroke-linejoin="miter" />
+     4        <polyline points="40 140 80 100 120 140 160 100 200 140 240 100" stroke="#CD5C5C" stroke-linecap="round" stroke-linejoin="round" />
+     5        <polyline points="40 220 80 180 120 220 160 180 200 220 240 180" stroke="black"  stroke-linecap="square" stroke-linejoin="bevel" />
+     6    </g>
+     7    <g fill="none" stroke="orange" stroke-width="2">
+     8        <polyline points="40 60 80 20 120 60 160 20 200 60 240 20" />
+     9        <polyline points="40 140 80 100 120 140 160 100 200 140 240 100" />
+    10        <polyline points="40 220 80 180 120 220 160 180 200 220 240 180" />
+    11    </g>
+    12</svg>
 
 !Three polylines with different stroke-linejoin properties
 
@@ -344,10 +339,8 @@ The orange line shows the original polyline path, while the wider colored outlin
 
 All the SVG stroke properties can be applied to any line type, text and outlines of elements like a circle, rectangle, etc. The `stroke-dasharray` property turns a solid stroke into a patterned dash‑gap sequence. The attribute accepts a list of numbers that define alternating dash and gap lengths (in user units, typically pixels).
 
-``` java
-1stroke-dasharray="10 5"   /* dash 10, gap 5 */
-2stroke-dasharray="20 10 5"/* dash 20, gap 10, dash 5, then repeats */
-```
+    1stroke-dasharray="10 5"   /* dash 10, gap 5 */
+    2stroke-dasharray="20 10 5"/* dash 20, gap 10, dash 5, then repeats */
 
 | Property            | Description                  |
 |---------------------|------------------------------|
@@ -356,13 +349,11 @@ All the SVG stroke properties can be applied to any line type, text and outlines
 
 Here is an example of using `stroke-dasharray` ( dasharray.svg):
 
-``` java
-1<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-2    <line x1="20" y1="30" x2="400" y2="30" style="stroke:rgb(112, 128, 144); fill:none; stroke-width:10; stroke-dasharray:10 5;" />
-3    <line x1="20" y1="80" x2="400" y2="80" style="stroke:olive; fill:none; stroke-width: 20; stroke-dasharray: 20 10 5;" />
-4    <path d="M 10 200 Q 50 100 150 200 T 230 200 T 300 200 T 390 200" stroke="#FF8C00" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="15 10 2 8" />
-5</svg>
-```
+    1<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    2    <line x1="20" y1="30" x2="400" y2="30" style="stroke:rgb(112, 128, 144); fill:none; stroke-width:10; stroke-dasharray:10 5;" />
+    3    <line x1="20" y1="80" x2="400" y2="80" style="stroke:olive; fill:none; stroke-width: 20; stroke-dasharray: 20 10 5;" />
+    4    <path d="M 10 200 Q 50 100 150 200 T 230 200 T 300 200 T 390 200" stroke="#FF8C00" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="15 10 2 8" />
+    5</svg>
 
 For the grey and orange lines, the dash pattern uses an even number of values: each pair means dash length and gap length. If the list has an odd number of values, SVG repeats the list to make an even pattern. For example, `20 10 5` becomes `20 10 5 20 10 5`, as shown by the olive line.
 
@@ -370,18 +361,16 @@ For the grey and orange lines, the dash pattern uses an even number of values: e
 
 You can experiment with `stroke-dasharray` attribute. Amazing things can be achieved with SVG strokes and simple SVG shapes ( dasharray-example.svg):
 
-``` java
- 1<svg height="600" width="600" xmlns="http://www.w3.org/2000/svg">
- 2    <g fill="none">
- 3        <circle cx="100" cy="100" r="40" stroke="red" stroke-width="55" stroke-dasharray="4,2" />
- 4        <circle cx="100" cy="100" r="30" stroke="grey" stroke-width="45" stroke-dasharray="5,2" transform="translate(120,40)" />
- 5        <circle cx="100" cy="100" r="35" stroke="orange" stroke-width="45" stroke-dasharray="9,3" transform="translate(30,130)" />
- 6      <circle cx="100" cy="100" r="20" stroke="pink" stroke-linecap="round" stroke-width="20" stroke-dasharray="10,15" transform="translate(380,120)" />
- 7        <rect x="320" y="100" width="100" height="100" stroke="DarkCyan" stroke-width="55" stroke-dasharray="7 7 3 2" />
- 8        <text x="200" y="300" font-family="arial" font-size="60" stroke="#000080" stroke-width="3" stroke-dasharray="2 1">I love SVG!</text>
- 9    </g>
-10</svg>
-```
+     1<svg height="600" width="600" xmlns="http://www.w3.org/2000/svg">
+     2    <g fill="none">
+     3        <circle cx="100" cy="100" r="40" stroke="red" stroke-width="55" stroke-dasharray="4,2" />
+     4        <circle cx="100" cy="100" r="30" stroke="grey" stroke-width="45" stroke-dasharray="5,2" transform="translate(120,40)" />
+     5        <circle cx="100" cy="100" r="35" stroke="orange" stroke-width="45" stroke-dasharray="9,3" transform="translate(30,130)" />
+     6      <circle cx="100" cy="100" r="20" stroke="pink" stroke-linecap="round" stroke-width="20" stroke-dasharray="10,15" transform="translate(380,120)" />
+     7        <rect x="320" y="100" width="100" height="100" stroke="DarkCyan" stroke-width="55" stroke-dasharray="7 7 3 2" />
+     8        <text x="200" y="300" font-family="arial" font-size="60" stroke="#000080" stroke-width="3" stroke-dasharray="2 1">I love SVG!</text>
+     9    </g>
+    10</svg>
 
 !Circle, rectangle, and text with different stroke-dasharray patterns
 
@@ -447,29 +436,23 @@ Yes. Gradients and patterns can be applied with `fill="url(#id)"` or `stroke="ur
 
 **1. Simple solid fill and stroke**
 
-``` java
-1<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-2  <circle cx="60" cy="60" r="50" fill="#4CAF50" stroke="#026802" stroke-width="4"/>
-3</svg>
-```
+    1<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+    2  <circle cx="60" cy="60" r="50" fill="#4CAF50" stroke="#026802" stroke-width="4"/>
+    3</svg>
 
 **2. Dashed line with offset**
 
-``` java
-1<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">
-2  <line x1="10" y1="20" x2="190" y2="20" stroke="#ff6600" stroke-width="8" stroke-dasharray="15 5" stroke-dashoffset="7"/>
-3</svg>
-```
+    1<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">
+    2  <line x1="10" y1="20" x2="190" y2="20" stroke="#ff6600" stroke-width="8" stroke-dasharray="15 5" stroke-dashoffset="7"/>
+    3</svg>
 
 **Dashed stroke with rounded caps**
 
-``` java
-1<line x1="10" y1="40" x2="140" y2="40"
-2      stroke="black"
-3      stroke-width="4"
-4      stroke-dasharray="10 6"
-5      stroke-linecap="round" />
-```
+    1<line x1="10" y1="40" x2="140" y2="40"
+    2      stroke="black"
+    3      stroke-width="4"
+    4      stroke-dasharray="10 6"
+    5      stroke-linecap="round" />
 
 ## Specification and Related Resources
 

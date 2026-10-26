@@ -1,45 +1,3 @@
-[Skip to content](#start-of-content) Sign in Appearance settings Sign in Sign up Appearance settings {{ message }} [](./svg-svgo.md) ![svg](https://avatars.githubusercontent.com/u/2473585?s=60&v=4)**[svgo](./svg-svgo.md)** Public
-
-- 
-- Notifications You must be signed in to change notification settings
-- Fork 1.5k
-- Star 22.8k You must be signed in to star a repository
-
-## About
-
-SVG Optimizer for Node.js and CLI. ⚙️
-
-[svgo.dev/](https://svgo.dev/)cli hacktoberfest javascript minification nodejs optimization svg svgo [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Contributing](#contributing-ov-file) [Security policy](#security-ov-file) Activity Custom properties **22.8k** stars **235** watching **1.5k** forks Report repository **6** Branches **113** TagsOpen more actions menuKTibow and claudechore(regression): make screenshots deterministic and stop ignoring f…Open commit details success Oct 24, 2026 96e756b · Oct 24, 2026 1,649 Commits Open commit details1,649 Commits
-
-| Name | Name | Last commit message | Last commit date |
-|----|----|----|----|
-| .github | .github | chore: secure actions ([\#2278](https://github.com/svg/svgo/pull/2278)) | Aug 24, 2026 |
-| bin | bin | chore: convert project to us ECMAScript modules (preserving CJS compa… | Jan 3, 2024 |
-| docs | docs | fix(removeScripts): sanitize foreignObject content ([\#2264](https://github.com/svg/svgo/pull/2264)) | Aug 22, 2026 |
-| lib | lib | perf: cache parsed inline style declarations ([\#2281](https://github.com/svg/svgo/pull/2281)) | Aug 25, 2026 |
-| logo | logo | Remove the executable flag from files. ([\#1439](https://github.com/svg/svgo/pull/1439)) | Mar 20, 2021 |
-| patches | patches | feat: upgrade sax to 1.6.1 ([\#2257](https://github.com/svg/svgo/pull/2257)) | Aug 15, 2026 |
-| plugins | plugins | perf: compile removeAttrs patterns once per run ([\#2284](https://github.com/svg/svgo/pull/2284)) | Aug 25, 2026 |
-| scripts | scripts | chore: revamp how we export types ([\#2118](https://github.com/svg/svgo/pull/2118)) | May 4, 2025 |
-| test | test | chore(regression): make screenshots deterministic and stop ignoring f… | Oct 24, 2026 |
-| .gitattributes | .gitattributes | chore: migrate package management to pnpm ([\#2243](https://github.com/svg/svgo/pull/2243)) | Aug 10, 2026 |
-| .gitignore | .gitignore | chore: cache regression screenshots ([\#2267](https://github.com/svg/svgo/pull/2267)) | Aug 23, 2026 |
-| .prettierignore | .prettierignore | chore: migrate package management to pnpm ([\#2243](https://github.com/svg/svgo/pull/2243)) | Aug 10, 2026 |
-| .prettierrc | .prettierrc | chore: update prettier and eslint ([\#1885](https://github.com/svg/svgo/pull/1885)) | Dec 15, 2023 |
-| CONTRIBUTING.md | CONTRIBUTING.md | chore: cache regression screenshots ([\#2267](https://github.com/svg/svgo/pull/2267)) | Aug 23, 2026 |
-| LICENSE | LICENSE | Cleanup LICENSE ([\#1157](https://github.com/svg/svgo/pull/1157)) | Feb 13, 2021 |
-| README.md | README.md | docs: add sponsor message to readme ([\#2285](https://github.com/svg/svgo/pull/2285)) | Aug 27, 2026 |
-| cspell.jsonc | cspell.jsonc | chore(regression): make screenshots deterministic and stop ignoring f… | Oct 24, 2026 |
-| eslint.config.mjs | eslint.config.mjs | test: migrate from Jest to Vitest ([\#2252](https://github.com/svg/svgo/pull/2252)) | Aug 13, 2026 |
-| package.json | package.json | chore: prepare v4.1.0 release ([\#2275](https://github.com/svg/svgo/pull/2275)) | Aug 24, 2026 |
-| pnpm-lock.yaml | pnpm-lock.yaml | chore: optimize fixtures in a bounded worker pool ([\#2265](https://github.com/svg/svgo/pull/2265)) | Aug 22, 2026 |
-| pnpm-workspace.yaml | pnpm-workspace.yaml | feat: upgrade sax to 1.6.1 ([\#2257](https://github.com/svg/svgo/pull/2257)) | Aug 15, 2026 |
-| rollup.config.js | rollup.config.js | docs: write v2 to v3 migration guide ([\#2177](https://github.com/svg/svgo/pull/2177)) | Oct 11, 2025 |
-| tsconfig.build.json | tsconfig.build.json | chore: revamp how we export types ([\#2118](https://github.com/svg/svgo/pull/2118)) | May 4, 2025 |
-| tsconfig.json | tsconfig.json | test(typescript): drop tsd for vitest type testing API | Aug 16, 2026 |
-| vitest.config.js | vitest.config.js | test(typescript): drop tsd for vitest type testing API | Aug 16, 2026 |
-|  |  |  |  |
-
 [!](/svg/svgo/blob/main/logo/logo-web.svg)
 
 # SVGO [![npm](https://camo.githubusercontent.com/eb8988f721887a88d75c97e6530c5384171ed8cf88467601ffd9dfb5bbbc30af/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f7376676f)](https://npmjs.org/package/svgo) [![chat](https://camo.githubusercontent.com/4dd535ad4d808f2586390a041d395362a08508fc0e9e596df2854ea08a49f708/68747470733a2f2f696d672e736869656c64732e696f2f646973636f72642f383135313636373231333135383331383638)](https://discord.gg/z8jX8NYxrE) [![docs](https://camo.githubusercontent.com/760fd346fa4f8161b715a1b480d92a9c7965a5f7d00e452d20beda0a0a2e5083/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d7376676f2e6465762d626c7565)](https://svgo.dev/)
@@ -204,50 +162,6 @@ const config = await loadConfig(configFile, cwd);
 This software is released under the terms of the [MIT license](https://github.com/svg/svgo/blob/main/LICENSE).
 
 Logo by [André Castillo](https://github.com/DerianAndre).
-
-## About
-
-SVG Optimizer for Node.js and CLI. ⚙️
-
-[svgo.dev/](https://svgo.dev/)cli hacktoberfest javascript minification nodejs optimization svg svgo [Readme](#readme-ov-file) [MIT license](#MIT-1-ov-file) [Contributing](#contributing-ov-file) [Security policy](#security-ov-file) Activity Custom properties **22.8k** stars **235** watching **1.5k** forks Report repository
-
-## Releases 77
-
-v4.1.0 Latest Aug 24, 2026+ 76 releases
-
-## Sponsor this project
-
-- ![](https://github.githubassets.com/assets/open_collective-0a706523753d.svg)[opencollective.com/svgo](https://opencollective.com/svgo)
-
-## Used by 17M
-
-[ ![@BenjaminJAnderson](https://avatars.githubusercontent.com/u/45207455?s=64&v=4)![@tarekazz1](https://avatars.githubusercontent.com/u/184146862?s=64&v=4)![@BhodiSea](https://avatars.githubusercontent.com/u/216463319?s=64&v=4)![@ali-security](https://avatars.githubusercontent.com/u/121376304?s=64&v=4)![@psy-repos-javascript](https://avatars.githubusercontent.com/u/93031662?s=64&v=4)+ 17,053,331](/svg/svgo/network/dependents)
-
-## Contributors 208
-
-- [![@GreLI](https://avatars.githubusercontent.com/u/1467392?s=64&v=4)](/GreLI)
-- [![@TrySound](https://avatars.githubusercontent.com/u/5635476?s=64&v=4)](/TrySound)
-- [![@SethFalco](https://avatars.githubusercontent.com/u/22801583?s=64&v=4)](/SethFalco)
-- [![@XhmikosR](https://avatars.githubusercontent.com/u/349621?s=64&v=4)](/XhmikosR)
-- [![@strarsis](https://avatars.githubusercontent.com/u/9271436?s=64&v=4)](/strarsis)
-- [![@KTibow](https://avatars.githubusercontent.com/u/10727862?s=64&v=4)](/KTibow)
-- [![@caub](https://avatars.githubusercontent.com/u/3134574?s=64&v=4)](/caub)
-- [![@johnkenny54](https://avatars.githubusercontent.com/u/45182853?s=64&v=4)](/johnkenny54)
-- [![@silentroach](https://avatars.githubusercontent.com/u/166803?s=64&v=4)](/silentroach)
-- [![@deepsweet](https://avatars.githubusercontent.com/u/266822?s=64&v=4)](/deepsweet)
-- [![@lahmatiy](https://avatars.githubusercontent.com/u/270491?s=64&v=4)](/lahmatiy)
-- [![@davidleston](https://avatars.githubusercontent.com/u/1719826?s=64&v=4)](/davidleston)
-- [![@Yeti-or](https://avatars.githubusercontent.com/u/1813468?s=64&v=4)](/Yeti-or)
-- [![@dependabot\[bot\]](https://avatars.githubusercontent.com/in/29110?s=64&v=4)](/dependabot%5Bbot%5D)
-
-+ 194 contributors
-
-## Languages
-
-- JavaScript 97.9%
-- TypeScript 2.1%
-
-You can’t perform that action at this time.
 
 <!--
 ## Source links
