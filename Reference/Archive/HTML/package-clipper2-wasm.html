@@ -1,20 +1,1818 @@
-<!DOCTYPE html><html lang="en" data-theme-setting="light" data-color-mode="light"><head>
-    <meta charset="utf-8">
-    <script>
-      (function(){try{var d=document.documentElement,s=localStorage.getItem('npm-color-mode')||'light';d.setAttribute('data-theme-setting',s);if(s==='dark'){d.setAttribute('data-color-mode','dark')}else if(s==='system'){var q=window.matchMedia('(prefers-color-scheme: dark)');d.setAttribute('data-color-mode',q.matches?'dark':'light');q.addEventListener('change',function(e){if((localStorage.getItem('npm-color-mode')||'light')==='system'){d.setAttribute('data-color-mode',e.matches?'dark':'light')}})}else{d.setAttribute('data-color-mode','light')}}catch(e){}})();
-    </script>
-    <link rel="stylesheet" href="https://static-production.npmjs.com/styles.fa175a2429ccab07af2c.css">
-      <title>clipper2-wasm - npm</title>
-      <meta data-react-helmet="true" http-equiv="cleartype" content="on"><meta data-react-helmet="true" name="apple-mobile-web-app-capable" content="yes"><meta data-react-helmet="true" name="mobile-web-app-capable" content="yes"><meta data-react-helmet="true" name="viewport" content="width=device-width,minimum-scale=1.0,initial-scale=1,user-scalable=yes"><meta data-react-helmet="true" name="msapplication-TileColor" content="#cb3837"><meta data-react-helmet="true" name="theme-color" content="#cb3837"><meta data-react-helmet="true" name="description" content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm."><meta data-react-helmet="true" property="og:description" content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm."><meta data-react-helmet="true" property="og:title" content="clipper2-wasm"><meta data-react-helmet="true" property="og:url" content="https://www.npmjs.com/package/clipper2-wasm"><meta data-react-helmet="true" property="og:site_name" content="npm"><meta data-react-helmet="true" name="keywords" content="clipper,polygon,clipping,offsetting,wasm,webassembly"><meta data-react-helmet="true" name="twitter:card" content="summary"><meta data-react-helmet="true" name="twitter:url" content="https://www.npmjs.com/package/clipper2-wasm"><meta data-react-helmet="true" name="twitter:title" content="npm: clipper2-wasm"><meta data-react-helmet="true" name="twitter:description" content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm.">
-      <link data-react-helmet="true" href="https://static-production.npmjs.com/osd.xml" rel="search" title="npm package search" type="application/opensearchdescription+xml">
-      
-      
-    
-  <style data-styled="active" data-styled-version="5.3.11"></style><link rel="apple-touch-icon" sizes="120x120" href="https://static-production.npmjs.com/58a19602036db1daee0d7863c94673a4.png" data-react-helmet="true"><link rel="apple-touch-icon" sizes="144x144" href="https://static-production.npmjs.com/7a7ffabbd910fc60161bc04f2cee4160.png" data-react-helmet="true"><link rel="apple-touch-icon" sizes="152x152" href="https://static-production.npmjs.com/34110fd7686e2c90a487ca98e7336e99.png" data-react-helmet="true"><link rel="apple-touch-icon" sizes="180x180" href="https://static-production.npmjs.com/3dc95981de4241b35cd55fe126ab6b2c.png" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png" sizes="32x32" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/1996fcfdf7ca81ea795f67f093d7f449.png" sizes="230x230" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/f1786e9b7cba9753ca7b9c40e8b98f67.png" sizes="96x96" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/5f6e93af5bf0f5dcdd1eecdac99f51ee.png" sizes="192x192" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/c426a1116301d1fd178c51522484127a.png" sizes="228x228" data-react-helmet="true"><link rel="icon" type="image/png" href="https://static-production.npmjs.com/da3ab40fb0861d15c83854c29f5f2962.png" sizes="16x16" data-react-helmet="true"><meta property="og:image" content="https://static-production.npmjs.com/338e4905a2684ca96e08c7780fc68412.png" data-react-helmet="true"><meta name="msapplication-TileImage" content="https://static-production.npmjs.com/7a7ffabbd910fc60161bc04f2cee4160.png" data-react-helmet="true"><meta name="msapplication-config" content="https://static-production.npmjs.com/668aac888e52ae13cac9cfd71fabd31f.xml" data-react-helmet="true"></head>
-  <body style="margin-right: 0px; padding-right: 0px; overflow: auto;">
-    <div id="app"><div class="_452c3ec4 d68c66a8"><div class="cf325dbd list ma0 pa0 tr z-998"><div class="c746cc21 list ma0 pa0 tr z-999"></div></div><div class="flex flex-column vh-100"><header class="_755f5b0f bg-white z-2 bb b--black-20"><div></div><div class="e7070742 pv3-ns ph1-ns bg-white"><div id="header" class="bbefbfcc">skip to:<a aria-label="skip to content" class="d6d0dbcf" href="#main">content</a><a aria-label="skip to package search" class="d6d0dbcf" href="#search">package search</a><a aria-label="skip to sign in" class="d6d0dbcf" href="#signin">sign in</a></div><div class="ef7c6e62 center mw9 border-box ph4-ns ph3 flex items-center"><span class="_6d365d27"><button class="_3c64022e flex items-center pointer" aria-label="Light mode — click for dark" type="button"><svg aria-hidden="true" focusable="false" class="octicon octicon-moon" viewBox="0 0 16 16" width="18" height="18" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:text-bottom"><path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path></svg></button><span class="_7e374c1c" aria-hidden="true">Light mode — click for dark</span></span><nav class="_4a5f2a79 db w-100 w-auto-ns truncate" aria-label="Product Navigation"><ul id="main-menu" class="list pl0"><li class="dib"><a href="/products/pro" class="c6c55db4 no-underline f6-ns f7 fw5 dim pr2 pl2" id="nav-pro-link">Pro</a></li><li class="dib"><a href="/products/teams" class="c6c55db4 no-underline f6-ns f7 fw5 dim pr2 pl2" id="nav-teams-link">Teams</a></li><li class="dib"><a href="/products" class="c6c55db4 no-underline f6-ns f7 fw5 dim pr2 pl2" id="nav-pricing-link">Pricing</a></li><li class="dib"><a href="https://docs.npmjs.com" class="c6c55db4 no-underline f6-ns f7 fw5 dim pr2 pl2" id="nav-docs-link">Documentation</a></li></ul></nav></div></div><div class="_4ea0e50d bt b--black-10"><div class="c5b9953b center mw9 flex flex-wrap ph4-ns border-box"><div class="af43375d mt3 db mr4-ns pb3 pb0-ns flex-auto 2-ns ph3 ph0-ns"><a href="/" aria-label="Npm"><svg viewBox="0 0 780 250" aria-hidden="true"><path fill="#231F20" d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z" stroke-width="5" stroke="#f7f7f7"></path></svg></a></div><div id="search" class="_581ebd89 relative flex-auto w-100 w-50-ns pv2-ns order-1-ns order-2"><form id="search" method="GET" action="/search" class="_13c93d41 relative flex bg-transparent ph3 ph2 pv2 ph0-ns pv0-ns bt b--black-10 bn-ns"><div class="e82b10fd relative dde91b96"><div class="_2f299eeb nowrap flex"><span class="_705cdf4f db fl pl3 pr1"><svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" aria-hidden="true"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g stroke="#777777" stroke-width="1.3"><g><path d="M13.4044,7.0274 C13.4044,10.5494 10.5494,13.4044 7.0274,13.4044 C3.5054,13.4044 0.6504,10.5494 0.6504,7.0274 C0.6504,3.5054 3.5054,0.6504 7.0274,0.6504 C10.5494,0.6504 13.4044,3.5054 13.4044,7.0274 Z"></path><path d="M11.4913,11.4913 L17.8683,17.8683"></path></g></g></g></svg></span><input type="search" role="combobox" name="q" hotkeys="[object Object]" placeholder="Search packages" aria-label="Search packages" aria-controls="typeahead-list-696792" aria-expanded="false" aria-activedescendant="" inputref="[object Object]" autocomplete="off" class="_390acbc5 f5 fw3 black relative" value="" element="input"></div></div><button type="submit" class="_0da775bb bn pv2 ph4 f6 white pointer bn pv2 ph4 f6 white pointer" aria-label="Search">Search</button><input type="hidden" name="csrftoken" value="sdVLaa82VrPI3orLxeGZDRjIqS5dX1Bpn_pwhCGmsDj"></form></div><div class="_6f31c82b ml3 mt2 mt0-ns pv2-ns flex-auto tr nowrap relative pointer fw6 order-1 order-2-ns"><div class="_1066d9e7 flex items-center self-center pl3"><a href="/signup" id="signup" class="_9752c8b3 pa2 lh-copy br2 f6 no-underline fw5 black dim ph3 mr3">Sign Up</a><a href="/login" id="signin" class="_352269a0 pa1 lh-copy br2 f6 no-underline fw5 black dim">Sign In</a></div></div></div></div></header><main id="main"> <div class="_36ae70e9 flex flex-row flex-wrap pb5 ph3-l mw-100 mt4-ns mt1 center-ns mh1" id="top"><div class="w-100 ph0-l ph3 ph4-m"><h1 class="cd6ce1fd flex flex-row justify-start items-center w-100 fw6 mt3 black dib ma0 tracked-tight no-underline hover-black f3-ns" tabindex="-1"><span class="_50685029 truncate">clipper2-wasm</span><div data-nosnippet="true"><img src="https://static-production.npmjs.com/4a2a680dfcadf231172b78b1d3beb975.svg" height="20px" title="This package contains built-in TypeScript declarations" alt="TypeScript icon, indicating that this package has built-in type declarations" class="aa30d277 pl3" data-nosnippet="true"></div></h1><span class="_76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy">0.4.0<!-- -->&nbsp;•&nbsp;</span><span class="_813b53b2 _76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy">Public</span><span class="_76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy">&nbsp;•&nbsp;Published <time datetime="2026-05-18T18:10:17.494Z" title="5/18/2026, 6:10:17 PM">5 months ago</time></span></div><ul class="cfb2a888 flex flex-column flex-row-l w-100 ma0 pa0 mr2 mr0-l list" role="tablist" aria-owns="package-tab-readme package-tab-code package-tab-dependencies package-tab-dependents package-tab-versions"><li class="_8055e658 f5 fw5 tc pointer d9f99065 ac5f7ef8 f4 fw6 black-50" role="presentation"><a class="_38ce9a85 link db ph4 fw6" href="?activeTab=readme" aria-selected="true" role="tab" aria-controls="tabpanel-readme" id="package-tab-readme" tabindex="0"><span><svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="file-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M288 248v28c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-28c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm-12 72H108c-6.6 0-12 5.4-12 12v28c0 6.6 5.4 12 12 12h168c6.6 0 12-5.4 12-12v-28c0-6.6-5.4-12-12-12zm108-188.1V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V48C0 21.5 21.5 0 48 0h204.1C264.8 0 277 5.1 286 14.1L369.9 98c9 8.9 14.1 21.2 14.1 33.9zm-128-80V128h76.1L256 51.9zM336 464V176H232c-13.3 0-24-10.7-24-24V48H48v416h288z"></path></svg> Readme</span></a></li><li class="_8055e658 f5 fw5 tc pointer _7aa1ee94" role="presentation"><a class="_38ce9a85 link db ph4 fw6" href="?activeTab=code" aria-selected="false" role="tab" aria-controls="tabpanel-explore" id="package-tab-code" tabindex="-1"><span><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-archive" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zM128.4 336c-17.9 0-32.4 12.1-32.4 27 0 15 14.6 27 32.5 27s32.4-12.1 32.4-27-14.6-27-32.5-27zM224 136V0h-63.6v32h-32V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM95.9 32h32v32h-32zm32.3 384c-33.2 0-58-30.4-51.4-62.9L96.4 256v-32h32v-32h-32v-32h32v-32h-32V96h32V64h32v32h-32v32h32v32h-32v32h32v32h-32v32h22.1c5.7 0 10.7 4.1 11.8 9.7l17.3 87.7c6.4 32.4-18.4 62.6-51.4 62.6z"></path></svg>Code <span class="a17280e0"><span class="Label-sc-6dyj7v-0 dlKCNe _22665c13">Beta</span></span></span></a></li><li class="_8055e658 f5 fw5 tc pointer c1f85151" role="presentation"><a class="_38ce9a85 link db ph4 fw6" href="?activeTab=dependencies" aria-selected="false" role="tab" aria-controls="tabpanel-dependencies" id="package-tab-dependencies" tabindex="-1"><span><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cube" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"></path></svg>1 Dependency</span></a></li><li class="_8055e658 f5 fw5 tc pointer _7cec0316" role="presentation"><a class="_38ce9a85 link db ph4 fw6" href="?activeTab=dependents" aria-selected="false" role="tab" aria-controls="tabpanel-dependents" id="package-tab-dependents" tabindex="-1"><span><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cubes" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"></path></svg>4 Dependents</span></a></li><li class="_8055e658 f5 fw5 tc pointer b4fcfd19" role="presentation"><a class="_38ce9a85 link db ph4 fw6" href="?activeTab=versions" aria-selected="false" role="tab" aria-controls="tabpanel-versions" id="package-tab-versions" tabindex="-1"><span><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tags" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"></path></svg>14 Versions</span></a></li></ul><div class="_6620a4fd mw8-l mw-100 w-100 w-two-thirds-l ph3-m pt2 pl0-ns pl2"><span><section class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-readme" aria-labelledby="package-tab-readme" role="tabpanel" data-attribute=""><div class=""><article><div id="readme" class="_704c034e _6d9832ac pr4-ns pl0-ns ph1-m pr3-m pr2">This package does not have a README. <a href="https://docs.npmjs.com/about-package-readme-files">Add a README</a> to your package so that users know how to get started.</div></article></div><div class="pv4"><h3 id="user-content-keywords" class="a0dff0b1 mt2 pt2 mb3 pb3 f4 fw6 b--black-10">Keywords</h3><ul class="list pl0"><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:clipper">clipper</a></li><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:polygon">polygon</a></li><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:clipping">clipping</a></li><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:offsetting">offsetting</a></li><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:wasm">wasm</a></li><li class="dib mr2"><a class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate" href="/search?q=keywords:webassembly">webassembly</a></li></ul></div></section><section class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-explore" aria-labelledby="package-tab-explore" role="tabpanel" data-attribute="hidden"></section><section class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-admin" aria-labelledby="package-tab-admin" role="tabpanel" data-attribute="hidden"></section><section class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-dependencies" aria-labelledby="package-tab-dependencies" role="tabpanel" data-attribute="hidden"></section><section class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-dependents" aria-labelledby="package-tab-dependents" role="tabpanel" data-attribute="hidden"></section><div class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80" id="tabpanel-versions" aria-labelledby="package-tab-versions" role="tabpanel" data-attribute="hidden"></div></span><span aria-live="polite"></span></div><aside class="fdbf4038 w-third-l mt3 w-100 ph3 ph4-m pv3 pv0-l" aria-label="Package sidebar"><h3 class="c84e15be f5 mt2 pt2 mb0">Install</h3><div class="d767adf4 lh-copy truncate ph0 mb3 black-80 b5be2af6 f6 flex flex-row"><p class="flex-auto truncate db ma0"><span class="a9150b94"><code>npm i <!-- -->clipper2-wasm</code></span></p></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2 w-100"><h3 id="repository" class="c84e15be f5 mt2 pt2 mb0">Repository</h3><p class="_1a11b8cf fw6 mb3 mt2 black-80 f5"><a aria-labelledby="repository repository-link" class="b2812e30 f2874b88 fw6 mb3 mt2 truncate black-80 f4 no-underline pr1" href="https://github.com/ErikSom/Clipper2-WASM" target="_blank" rel="noopener noreferrer nofollow"><span class="_513426a8 dib v-mid"><svg width="16" height="16" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><title>Git</title><g fill="currentColor" fill-rule="nonzero"><path d="M15.6981994,7.28744895 L8.71251571,0.3018063 C8.3102891,-0.1006021 7.65784619,-0.1006021 7.25527133,0.3018063 L5.80464367,1.75263572 L7.64478689,3.59281398 C8.07243561,3.44828825 8.56276901,3.5452772 8.90352982,3.88604451 C9.24638012,4.22907547 9.34249661,4.72359725 9.19431703,5.15282127 L10.9679448,6.92630874 C11.3971607,6.77830046 11.8918472,6.8738964 12.2346975,7.21727561 C12.7135387,7.69595181 12.7135387,8.47203759 12.2346975,8.95106204 C11.755508,9.43026062 10.9796112,9.43026062 10.5002476,8.95106204 C10.140159,8.59061834 10.0510075,8.06127108 10.2336636,7.61759448 L8.57948492,5.9635584 L8.57948492,10.3160467 C8.69614805,10.3738569 8.80636859,10.4509954 8.90352982,10.5479843 C9.38237103,11.0268347 9.38237103,11.8027463 8.90352982,12.2822931 C8.42468862,12.7609693 7.64826937,12.7609693 7.16977641,12.2822931 C6.69093521,11.8027463 6.69093521,11.0268347 7.16977641,10.5479843 C7.28818078,10.4297518 7.42521643,10.3402504 7.57148065,10.2803505 L7.57148065,5.88746473 C7.42521643,5.82773904 7.28852903,5.73893407 7.16977641,5.62000506 C6.80707597,5.25747183 6.71983981,4.72499027 6.90597844,4.27957241 L5.09195384,2.465165 L0.301800552,7.25506126 C-0.100600184,7.65781791 -0.100600184,8.31027324 0.301800552,8.71268164 L7.28783254,15.6983243 C7.69005915,16.1005586 8.34232793,16.1005586 8.74507691,15.6983243 L15.6981994,8.74506934 C16.1006002,8.34266094 16.1006002,7.68968322 15.6981994,7.28744895" id="Path"></path></g></svg></span><span id="repository-link" class="bae53307">github.com/ErikSom/Clipper2-WASM</span></a></p></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2 w-100"><h3 id="homePage" class="c84e15be f5 mt2 pt2 mb0">Homepage</h3><p class="_1a11b8cf fw6 mb3 mt2 black-80 f5"><a aria-labelledby="homePage homePage-link" class="b2812e30 f2874b88 fw6 mb3 mt2 truncate black-80 f4 no-underline pr1" rel="noopener noreferrer nofollow" href="https://github.com/ErikSom/Clipper2-WASM#readme"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="link" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path></svg><span id="homePage-link" class="bae53307">github.com/ErikSom/Clipper2-WASM#readme</span></a></p></div><div><div class="_702d723c dib w-50 fl bb b--black-10 pr2 w-100" role="button" tabindex="0" aria-label="Showing weekly downloads"><h3 class="c84e15be f5 mt2 pt2 mb0 _5cfc0900"><svg viewBox="0 0 7.22 11.76" aria-hidden="true"><title>Downloads</title><g><polygon points="4.59 4.94 4.59 0 2.62 0 2.62 4.94 0 4.94 3.28 9.53 7.22 4.94 4.59 4.94" aria-label="Downloads icon"></polygon><rect x="0.11" y="10.76" width="7" height="1"></rect></g></svg>Weekly Downloads</h3><div class="_000ae427 flex flex-row-reverse items-end"><svg class="_418c4939 flex-none" width="200" height="40" stroke-width="3" stroke="#8956FF" fill="rgba(137, 86, 255, .2)" aria-hidden="true"><path class="sparkline--fill" d="M4 34.66 L 4 34.66 L 7.764705882352941 34.56 L 11.529411764705882 34.53 L 15.294117647058822 34.38 L 19.058823529411764 34.71 L 22.823529411764707 34.76 L 26.588235294117645 34.76 L 30.352941176470587 34.62 L 34.11764705882353 34.59 L 37.88235294117647 34.74 L 41.64705882352941 34.41 L 45.411764705882355 34.25 L 49.17647058823529 34.38 L 52.94117647058823 34.16 L 56.705882352941174 34.25 L 60.470588235294116 34.26 L 64.23529411764706 34.44 L 68 34.18 L 71.76470588235294 34.41 L 75.52941176470588 33.93 L 79.29411764705883 33.82 L 83.05882352941177 33.46 L 86.82352941176471 33.66 L 90.58823529411765 33.63 L 94.35294117647058 33.53 L 98.11764705882352 32.71 L 101.88235294117646 26.16 L 105.6470588235294 24.05 L 109.41176470588235 21.3 L 113.17647058823529 25.73 L 116.94117647058823 26.14 L 120.70588235294117 24.1 L 124.47058823529412 21.43 L 128.23529411764707 29.63 L 132 23.86 L 135.76470588235293 28.23 L 139.52941176470588 26.28 L 143.2941176470588 28.09 L 147.05882352941177 27.98 L 150.8235294117647 24.18 L 154.58823529411765 23.6 L 158.35294117647058 5 L 162.11764705882354 11.12 L 165.88235294117646 28.03 L 169.64705882352942 29.34 L 173.41176470588235 32.39 L 177.1764705882353 31.61 L 180.94117647058823 30.33 L 184.70588235294116 28.82 L 188.47058823529412 27.92 L 192.23529411764704 30.76 L 196 33.88 V 40 L 4 40 Z" stroke="none"></path><path class="sparkline--line" d="M4 34.66 L 4 34.66 L 7.764705882352941 34.56 L 11.529411764705882 34.53 L 15.294117647058822 34.38 L 19.058823529411764 34.71 L 22.823529411764707 34.76 L 26.588235294117645 34.76 L 30.352941176470587 34.62 L 34.11764705882353 34.59 L 37.88235294117647 34.74 L 41.64705882352941 34.41 L 45.411764705882355 34.25 L 49.17647058823529 34.38 L 52.94117647058823 34.16 L 56.705882352941174 34.25 L 60.470588235294116 34.26 L 64.23529411764706 34.44 L 68 34.18 L 71.76470588235294 34.41 L 75.52941176470588 33.93 L 79.29411764705883 33.82 L 83.05882352941177 33.46 L 86.82352941176471 33.66 L 90.58823529411765 33.63 L 94.35294117647058 33.53 L 98.11764705882352 32.71 L 101.88235294117646 26.16 L 105.6470588235294 24.05 L 109.41176470588235 21.3 L 113.17647058823529 25.73 L 116.94117647058823 26.14 L 120.70588235294117 24.1 L 124.47058823529412 21.43 L 128.23529411764707 29.63 L 132 23.86 L 135.76470588235293 28.23 L 139.52941176470588 26.28 L 143.2941176470588 28.09 L 147.05882352941177 27.98 L 150.8235294117647 24.18 L 154.58823529411765 23.6 L 158.35294117647058 5 L 162.11764705882354 11.12 L 165.88235294117646 28.03 L 169.64705882352942 29.34 L 173.41176470588235 32.39 L 177.1764705882353 31.61 L 180.94117647058823 30.33 L 184.70588235294116 28.82 L 188.47058823529412 27.92 L 192.23529411764704 30.76 L 196 33.88" fill="none"></path><line class="sparkline--cursor" x1="-1000" x2="-1000" y1="0" y2="40" stroke-width="2"></line><circle class="sparkline--spot" cx="-1000" cy="-1000" r="2"></circle><rect width="200" height="40" style="fill: transparent; stroke: transparent" class="sparkline--interaction-layer"></rect></svg><p class="_9ba9a726 f4 tl flex-auto fw6 black-80 ma0 pr2 pb1" aria-live="polite" aria-atomic="true">2,970</p></div></div></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2"><h3 class="c84e15be f5 mt2 pt2 mb0">Version</h3><div class="abe380b3 flex flex-row items-center"><p class="f2874b88 fw6 mb3 mt2 truncate black-80 f4">0.4.0</p></div></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2"><h3 class="c84e15be f5 mt2 pt2 mb0">License</h3><p class="f2874b88 fw6 mb3 mt2 truncate black-80 f4">BSL-1.0</p></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2 w-100"><h3 class="c84e15be f5 mt2 pt2 mb0">Last publish</h3><p class="f2874b88 fw6 mb3 mt2 truncate black-80 f4"><time datetime="2026-05-18T18:10:17.494Z" title="5/18/2026, 6:10:17 PM">5 months ago</time></p></div><div class="_702d723c dib w-50 fl bb b--black-10 pr2 bb-0 w-100"><h3 id="collaborators" class="c84e15be f5 mt2 pt2 mb0">Collaborators</h3><ul aria-labelledby="collaborators" class="list pl0 cf"><li class="_426b8533 fl dib mr2 mb2 a03d8d59"><div><a href="/~eriksombroek" tabindex="0"><img src="/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTEwMCZkZWZhdWx0PXJldHJvIn0.iA27VvbbcpG_YgfyemhtFsDUVcHyVETjWobo3H-94rc" style="width:42px;height:42px;min-width:42px;border-radius:4%" alt="eriksombroek" title="eriksombroek"></a></div><div class="_405dc045" role="tooltip" aria-hidden="true">eriksombroek</div></li></ul></div><div class="_33c89934 w-100"><a class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 truncate ml0 no-underline mt2 dib w-100" rel="noopener noreferrer nofollow" href="https://socket.dev/npm/package/clipper2-wasm" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="shield-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M466.5 83.7l-192-80a48.15 48.15 0 0 0-36.9 0l-192 80C27.7 91.1 16 108.6 16 128c0 198.5 114.5 335.7 221.5 380.3 11.8 4.9 25.1 4.9 36.9 0C360.1 472.6 496 349.3 496 128c0-19.4-11.7-36.9-29.5-44.3zM256.1 446.3l-.1-381 175.9 73.3c-3.3 151.4-82.1 261.1-175.8 307.7z"></path></svg><strong>Analyze security</strong> with Socket</a><a class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 truncate ml0 no-underline mt2 dib w-100" rel="noopener noreferrer nofollow" href="https://bundlephobia.com/package/clipper2-wasm" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cubes" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"></path></svg><strong>Check bundle size</strong></a><a class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 truncate ml0 no-underline mt2 dib w-100" rel="noopener noreferrer nofollow" href="https://snyk.io/advisor/npm-package/clipper2-wasm" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bug" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"></path></svg><strong>View package health</strong></a><a class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 truncate ml0 no-underline mt2 dib w-100" rel="noopener noreferrer nofollow" href="https://npmgraph.js.org/?q=clipper2-wasm" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-bar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M332.8 320h38.4c6.4 0 12.8-6.4 12.8-12.8V172.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v134.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V76.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v230.4c0 6.4 6.4 12.8 12.8 12.8zm-288 0h38.4c6.4 0 12.8-6.4 12.8-12.8v-70.4c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v70.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V108.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v198.4c0 6.4 6.4 12.8 12.8 12.8zM496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg><strong>Explore dependencies</strong></a></div><div class="_33c89934 w-100"><a class="_4a3f8f21 _24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 truncate ml0 no-underline mt2 dib w-100" href="/support?inquire=security&amp;security-inquire=malware&amp;package=clipper2-wasm&amp;version=0.4.0"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="flag" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z"></path></svg><strong>Report</strong> malware</a></div></aside></div> </main><footer class="cd2827bb bt b--black-10 mt4"><div id="footer" class="center mw9 pa3 flex flex-column flex-wrap-m flex-row-ns"><div class="flex-auto pa4-ns pa3 w-100 w-10-l"><div class="_802b5507 pt3"><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/npm" aria-label="Visit npm GitHub page"><svg viewBox="0 0 27.23 27.23" aria-hidden="true"><rect fill="#333333" width="27.23" height="27.23" rx="2"></rect><polygon fill="#fff" points="5.8 21.75 13.66 21.75 13.67 9.98 17.59 9.98 17.58 21.76 21.51 21.76 21.52 6.06 5.82 6.04 5.8 21.75"></polygon></svg></a></div><div class="_802b5507 pt3"><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com" aria-label="GitHub"><svg aria-hidden="true" focusable="false" class="octicon octicon-mark-github" viewBox="0 0 24 24" width="50" height="50" fill="currentColor" display="inline-block" overflow="visible" style="vertical-align:top"><path d="M10.303 16.652c-2.837-.344-4.835-2.385-4.835-5.028 0-1.074.387-2.235 1.031-3.008-.279-.709-.236-2.214.086-2.837.86-.107 2.02.344 2.708.967.816-.258 1.676-.386 2.728-.386 1.053 0 1.913.128 2.686.365.666-.602 1.848-1.053 2.708-.946.3.581.344 2.085.064 2.815.688.817 1.053 1.913 1.053 3.03 0 2.643-1.998 4.641-4.877 5.006.73.473 1.224 1.504 1.224 2.686v2.235c0 .644.537 1.01 1.182.752 3.889-1.483 6.94-5.372 6.94-10.185 0-6.081-4.942-11.044-11.022-11.044-6.081 0-10.98 4.963-10.98 11.044a10.84 10.84 0 0 0 7.112 10.206c.58.215 1.139-.172 1.139-.752v-1.719a2.768 2.768 0 0 1-1.032.215c-1.418 0-2.256-.773-2.857-2.213-.237-.58-.495-.924-.989-.988-.258-.022-.344-.129-.344-.258 0-.258.43-.451.86-.451.623 0 1.16.386 1.719 1.181.43.623.881.903 1.418.903.537 0 .881-.194 1.375-.688.365-.365.645-.687.903-.902Z"></path></svg></a></div></div><div class="flex-auto pa4-ns pa3 w-30-ns w-50-m"><h3 id="support" class="_1b8c0a9f">Support</h3><ul class="list pl0" aria-labelledby="support"><li class="pv1"><a class="df995acb no-underline pr1" href="https://docs.npmjs.com">Help</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="https://github.com/advisories">Advisories</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="http://status.npmjs.org/">Status</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="/support" target="_self">Contact npm</a></li></ul></div><div class="flex-auto pa4-ns pa3 w-30-ns w-50-m"><h3 id="company" class="_1b8c0a9f">Company</h3><ul class="list pl0" aria-labelledby="company"><li class="pv1"><a class="df995acb no-underline pr1" href="/about" target="_self">About</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="https://github.blog/tag/npm/">Blog</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="/press">Press</a></li></ul></div><div class="flex-auto pa4-ns pa3 w-30-ns w-50-m"><h3 id="terms" class="_1b8c0a9f">Terms &amp; Policies</h3><ul class="list pl0" aria-labelledby="terms"><li class="pv1"><a class="df995acb no-underline pr1" href="/policies/">Policies</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="/policies/terms">Terms of Use</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="/policies/conduct">Code of Conduct</a></li><li class="pv1"><a class="df995acb no-underline pr1" href="/policies/privacy">Privacy</a></li></ul></div></div></footer></div><div class="_8a62ca63 fixed top-0 left-0 z-999" style="opacity:0;transform:scaleX(1);-webkit-transform:scaleX(1);-moz-transform:scaleX(1)"></div></div></div><script integrity="sha512-8UrtZGVCxk7Nl8Q90DkWbJ94hEC9bWpPxl1nWKJlN5+EvMSCMPPbR5sF8gpUAJSGt8ryIQUjBh9HT6RoHhJzqQ==">window.__context__ = {"context":{"alertBanners":[{"id":"bypass2fa-gat-deprecation-2026","level":"warning","message":"npm tokens that bypass 2FA are being restricted — account changes (Aug 2026) and direct publishing (Jan 2027). \u003ca href=\"https://github.blog/changelog/2026-07-08-npm-install-time-security-and-gat-bypass2fa-deprecation/\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Learn how to prepare for the npm bypass 2FA token deprecation\"\u003eLearn how to prepare →\u003c/a\u003e","skipXSSEscaping":true,"duration":null,"dismissalCookie":"bypass2fa_banner_dismissed"}],"notifications":[],"csrftoken":"sdVLaa82VrPI3orLxeGZDRjIqS5dX1Bpn_pwhCGmsDj","userEmailVerified":null,"darkThemeEnabled":true,"auditLogEnabled":false,"user":null,"documentContext":{"readme.data":"readme"},"undefined":true,"readme":{"ref":"readme","data":null},"versionsDownloads":{"0.0.7":4,"0.0.3":3,"0.2.1":1575,"0.0.9":3,"0.4.0":9200,"0.0.4":4,"0.3.0":3,"0.0.6":3,"0.0.8":4,"0.1.0":249,"0.0.5":1,"0.0.1":1},"starAction":"/package/clipper2-wasm/star","provenance":{"enabled":false,"feedbackUrl":" https://github.com/npm/feedback"},"isSecurityPlaceholder":false,"private":false,"devDeps":[],"deps":["@types/emscripten"],"packument":{"description":"WebAssembly port of the Clipper2 library for polygon clipping and offsetting","homepage":"https://github.com/ErikSom/Clipper2-WASM#readme","repository":"https://github.com/ErikSom/Clipper2-WASM","distTags":{"latest":"0.4.0"},"keywords":["clipper","polygon","clipping","offsetting","wasm","webassembly"],"maintainers":[{"name":"eriksombroek","avatars":{"small":"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTUwJmRlZmF1bHQ9cmV0cm8ifQ.iWh9EWm9Bu4ExZXr2LZQDqM5wo7bybbgOdGt_SV83Sw","medium":"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTEwMCZkZWZhdWx0PXJldHJvIn0.iA27VvbbcpG_YgfyemhtFsDUVcHyVETjWobo3H-94rc","large":"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.CcUeUFIg21QwqbMLMAwymwPm7JBtvnJBdxnlIh3lZwk"}}],"name":"clipper2-wasm","license":"BSL-1.0","version":"0.4.0","versions":[{"version":"0.4.0","date":{"ts":1779127817494,"rel":"5 months ago"},"dist":{}},{"version":"0.3.0","date":{"ts":1779087908036,"rel":"5 months ago"},"dist":{}},{"version":"0.2.1","date":{"ts":1733565739452,"rel":"2 years ago"},"dist":{}},{"version":"0.2.0","date":{"ts":1733565618286,"rel":"2 years ago"},"dist":{}},{"version":"0.1.0","date":{"ts":1704790032140,"rel":"3 years ago"},"dist":{}},{"version":"0.0.9","date":{"ts":1704788451177,"rel":"3 years ago"},"dist":{}},{"version":"0.0.8","date":{"ts":1704027919732,"rel":"3 years ago"},"dist":{}},{"version":"0.0.7","date":{"ts":1703929997475,"rel":"3 years ago"},"dist":{}},{"version":"0.0.6","date":{"ts":1703711485319,"rel":"3 years ago"},"dist":{}},{"version":"0.0.5","date":{"ts":1703694036863,"rel":"3 years ago"},"dist":{}},{"version":"0.0.4","date":{"ts":1703689660360,"rel":"3 years ago"},"dist":{}},{"version":"0.0.3","date":{"ts":1703689469439,"rel":"3 years ago"},"dist":{}},{"version":"0.0.2","date":{"ts":1703688346329,"rel":"3 years ago"},"dist":{}},{"version":"0.0.1","date":{"ts":1703680621279,"rel":"3 years ago"},"dist":{}}],"deprecations":[]},"packageVersionsError":false,"packageVersionHistoryEnabled":true,"packageVersion":{"name":"clipper2-wasm","license":"BSL-1.0","version":"0.4.0","dependencies":{"@types/emscripten":"^1.39.10"},"deprecated":false,"types":"dist/es/clipper2z.d.ts"},"packageUrl":"/package/clipper2-wasm","packageLinkingCallToActionHref":null,"package":"clipper2-wasm","linkingAllowedForPackage":false,"isStarred":false,"ghapi":"https://api.github.com/repos/ErikSom/Clipper2-WASM","downloads":[{"downloads":915,"label":"2025-10-27 to 2025-11-02"},{"downloads":1172,"label":"2025-11-03 to 2025-11-09"},{"downloads":1239,"label":"2025-11-10 to 2025-11-16"},{"downloads":1637,"label":"2025-11-17 to 2025-11-23"},{"downloads":777,"label":"2025-11-24 to 2025-11-30"},{"downloads":640,"label":"2025-12-01 to 2025-12-07"},{"downloads":651,"label":"2025-12-08 to 2025-12-14"},{"downloads":1004,"label":"2025-12-15 to 2025-12-21"},{"downloads":1092,"label":"2025-12-22 to 2025-12-28"},{"downloads":684,"label":"2025-12-29 to 2026-01-04"},{"downloads":1565,"label":"2026-01-05 to 2026-01-11"},{"downloads":1984,"label":"2026-01-12 to 2026-01-18"},{"downloads":1653,"label":"2026-01-19 to 2026-01-25"},{"downloads":2242,"label":"2026-01-26 to 2026-02-01"},{"downloads":1992,"label":"2026-02-02 to 2026-02-08"},{"downloads":1979,"label":"2026-02-09 to 2026-02-15"},{"downloads":1476,"label":"2026-02-16 to 2026-02-22"},{"downloads":2170,"label":"2026-02-23 to 2026-03-01"},{"downloads":1562,"label":"2026-03-02 to 2026-03-08"},{"downloads":2851,"label":"2026-03-09 to 2026-03-15"},{"downloads":3142,"label":"2026-03-16 to 2026-03-22"},{"downloads":4090,"label":"2026-03-23 to 2026-03-29"},{"downloads":3560,"label":"2026-03-30 to 2026-04-05"},{"downloads":3633,"label":"2026-04-06 to 2026-04-12"},{"downloads":3907,"label":"2026-04-13 to 2026-04-19"},{"downloads":6089,"label":"2026-04-20 to 2026-04-26"},{"downloads":23497,"label":"2026-04-27 to 2026-05-03"},{"downloads":29110,"label":"2026-05-04 to 2026-05-10"},{"downloads":36410,"label":"2026-05-11 to 2026-05-17"},{"downloads":24632,"label":"2026-05-18 to 2026-05-24"},{"downloads":23557,"label":"2026-05-25 to 2026-05-31"},{"downloads":28970,"label":"2026-06-01 to 2026-06-07"},{"downloads":36078,"label":"2026-06-08 to 2026-06-14"},{"downloads":14267,"label":"2026-06-15 to 2026-06-21"},{"downloads":29623,"label":"2026-06-22 to 2026-06-28"},{"downloads":17988,"label":"2026-06-29 to 2026-07-05"},{"downloads":23187,"label":"2026-07-06 to 2026-07-12"},{"downloads":18374,"label":"2026-07-13 to 2026-07-19"},{"downloads":18656,"label":"2026-07-20 to 2026-07-26"},{"downloads":28750,"label":"2026-07-27 to 2026-08-02"},{"downloads":30303,"label":"2026-08-03 to 2026-08-09"},{"downloads":79746,"label":"2026-08-10 to 2026-08-16"},{"downloads":63475,"label":"2026-08-17 to 2026-08-23"},{"downloads":18520,"label":"2026-08-24 to 2026-08-30"},{"downloads":15038,"label":"2026-08-31 to 2026-09-06"},{"downloads":6951,"label":"2026-09-07 to 2026-09-13"},{"downloads":9000,"label":"2026-09-14 to 2026-09-20"},{"downloads":12418,"label":"2026-09-21 to 2026-09-27"},{"downloads":16436,"label":"2026-09-28 to 2026-10-04"},{"downloads":18823,"label":"2026-10-05 to 2026-10-11"},{"downloads":11268,"label":"2026-10-12 to 2026-10-18"},{"downloads":2970,"label":"2026-10-19 to 2026-10-25"}],"dependents":{"dependentsCount":"4","dependentsTruncated":["@taucad/viewer","ignitefuse","@ccpc/math","sketchx.js"]},"capsule":{"name":"clipper2-wasm","description":"WebAssembly port of the Clipper2 library for polygon clipping and offsetting","maintainers":["eriksombroek"],"dist-tags":{"latest":"0.4.0"},"lastPublish":{"maintainer":"eriksombroek","time":"2026-05-18T18:10:17.494Z"},"types":{"typescript":{"bundled":"dist/es/clipper2z.d.ts"}}},"canEditPackage":false},"chunks":{"commons":["commons.18f7743105d044addf35.js","commons.18f7743105d044addf35.js.map"],"styles":["styles.fa175a2429ccab07af2c.css","minicssextractbug.42ff216368a620557893.js","styles.fa175a2429ccab07af2c.css.map","minicssextractbug.42ff216368a620557893.js.map"],"acceptance/acceptance":["acceptance/acceptance.7166183654098cd57bde.js","acceptance/acceptance.7166183654098cd57bde.js.map"],"audit-logs/actions/common/auditLogContainer":["audit-logs/actions/common/auditLogContainer.b2fe9c98f3bc56268dc4.js","audit-logs/actions/common/auditLogContainer.b2fe9c98f3bc56268dc4.js.map"],"audit-logs/actions/common/dot":["audit-logs/actions/common/dot.1832f990b5c2d9d99a40.js","audit-logs/actions/common/dot.1832f990b5c2d9d99a40.js.map"],"audit-logs/actions/common/filterActions":["audit-logs/actions/common/filterActions.686f6e7343f4ea8d1168.js","audit-logs/actions/common/filterActions.686f6e7343f4ea8d1168.js.map"],"audit-logs/actions/common/spaceGap":["audit-logs/actions/common/spaceGap.85333b17db526b589bcb.js","audit-logs/actions/common/spaceGap.85333b17db526b589bcb.js.map"],"audit-logs/actions/orgAddUser":["audit-logs/actions/orgAddUser.32c68d24558c7dc402c5.js","audit-logs/actions/orgAddUser.32c68d24558c7dc402c5.js.map"],"audit-logs/actions/orgCreateTeam":["audit-logs/actions/orgCreateTeam.89f48e8a22530ba640a9.js","audit-logs/actions/orgCreateTeam.89f48e8a22530ba640a9.js.map"],"audit-logs/actions/orgDeleteTeam":["audit-logs/actions/orgDeleteTeam.3ed4bbf2e46ffaa8659e.js","audit-logs/actions/orgDeleteTeam.3ed4bbf2e46ffaa8659e.js.map"],"audit-logs/actions/orgRemoveUser":["audit-logs/actions/orgRemoveUser.b74e23d5f3f2d01716a2.js","audit-logs/actions/orgRemoveUser.b74e23d5f3f2d01716a2.js.map"],"audit-logs/actions/packageAddDistTag":["audit-logs/actions/packageAddDistTag.010f83e5fba2f4e842a4.js","audit-logs/actions/packageAddDistTag.010f83e5fba2f4e842a4.js.map"],"audit-logs/actions/packageDeprecate":["audit-logs/actions/packageDeprecate.93c7298eccfdfcad6279.js","audit-logs/actions/packageDeprecate.93c7298eccfdfcad6279.js.map"],"audit-logs/actions/packagePublish":["audit-logs/actions/packagePublish.44744913b1e2b8b73f44.js","audit-logs/actions/packagePublish.44744913b1e2b8b73f44.js.map"],"audit-logs/actions/packageRemoveDistTag":["audit-logs/actions/packageRemoveDistTag.61585f7303c7a3c7aa38.js","audit-logs/actions/packageRemoveDistTag.61585f7303c7a3c7aa38.js.map"],"audit-logs/actions/packageUnpublish":["audit-logs/actions/packageUnpublish.df7727b09dcd7b5dcd64.js","audit-logs/actions/packageUnpublish.df7727b09dcd7b5dcd64.js.map"],"audit-logs/actions/packageUpdateAccess":["audit-logs/actions/packageUpdateAccess.dd4ada8db456a7b84f23.js","audit-logs/actions/packageUpdateAccess.dd4ada8db456a7b84f23.js.map"],"audit-logs/actions/teamAddPackage":["audit-logs/actions/teamAddPackage.f8ba9e0db68d750e342e.js","audit-logs/actions/teamAddPackage.f8ba9e0db68d750e342e.js.map"],"audit-logs/actions/teamAddUser":["audit-logs/actions/teamAddUser.db8ff7426204ac5fd629.js","audit-logs/actions/teamAddUser.db8ff7426204ac5fd629.js.map"],"audit-logs/actions/teamRemovePackage":["audit-logs/actions/teamRemovePackage.265b7dd25c09a08afa7b.js","audit-logs/actions/teamRemovePackage.265b7dd25c09a08afa7b.js.map"],"audit-logs/actions/teamRemoveUser":["audit-logs/actions/teamRemoveUser.f45f102a38953a9f26d0.js","audit-logs/actions/teamRemoveUser.f45f102a38953a9f26d0.js.map"],"audit-logs/actions/teamUpdatePackageAccess":["audit-logs/actions/teamUpdatePackageAccess.8d4c3de43f73bae84168.js","audit-logs/actions/teamUpdatePackageAccess.8d4c3de43f73bae84168.js.map"],"audit-logs/audit-logs":["audit-logs/audit-logs.5f5fde9052618b539d77.js","audit-logs/audit-logs.5f5fde9052618b539d77.js.map"],"audit-logs/audit-search-input":["audit-logs/audit-search-input.7e135d56d6902d7bffa5.js","audit-logs/audit-search-input.7e135d56d6902d7bffa5.js.map"],"audit-logs/list":["audit-logs/list.c2cdb1b1393288351165.js","audit-logs/list.c2cdb1b1393288351165.js.map"],"audit-logs/no-logs":["audit-logs/no-logs.e87d4cfe127175e5eb62.js","audit-logs/no-logs.e87d4cfe127175e5eb62.js.map"],"audit-logs/no-logs-with-query":["audit-logs/no-logs-with-query.8d7e148c863aab6b25a9.js","audit-logs/no-logs-with-query.8d7e148c863aab6b25a9.js.map"],"auth/account-recovery-message":["auth/account-recovery-message.3cace09b3d107907ded2.js","auth/account-recovery-message.3cace09b3d107907ded2.js.map"],"auth/authentication-successful":["auth/authentication-successful.d984a06ad28929eb3ce7.js","auth/authentication-successful.d984a06ad28929eb3ce7.js.map"],"auth/email-otp":["auth/email-otp.a312310769055ee85c81.js","auth/email-otp.a312310769055ee85c81.js.map"],"auth/escalate":["auth/escalate.1a95fde6b83fd49893ba.js","auth/escalate.1a95fde6b83fd49893ba.js.map"],"auth/forgot":["auth/forgot.5412f197536ff486f674.js","auth/forgot.5412f197536ff486f674.js.map"],"auth/forgot-sent":["auth/forgot-sent.38b3ad81077169342cfd.js","auth/forgot-sent.38b3ad81077169342cfd.js.map"],"auth/forgot-sent-anonymized":["auth/forgot-sent-anonymized.412559c6de67af4e0327.js","auth/forgot-sent-anonymized.412559c6de67af4e0327.js.map"],"auth/invite-signup":["auth/invite-signup.ad1c5b5b7ea3e0d83ef4.js","auth/invite-signup.ad1c5b5b7ea3e0d83ef4.js.map"],"auth/liminal-login-footer":["auth/liminal-login-footer.4354dbfb541e4bea3c67.js","auth/liminal-login-footer.4354dbfb541e4bea3c67.js.map"],"auth/login":["auth/login.1c249513607f3938c626.js","auth/login.1c249513607f3938c626.js.map"],"auth/otp":["auth/otp.1ab39cc7321176e7cb63.js","auth/otp.1ab39cc7321176e7cb63.js.map"],"auth/password":["auth/password.57683578e899a0462448.js","auth/password.57683578e899a0462448.js.map"],"auth/recovery-code":["auth/recovery-code.a5f874da0f64516859c5.js","auth/recovery-code.a5f874da0f64516859c5.js.map"],"auth/recovery-email-otp":["auth/recovery-email-otp.e88303b89d1739518b58.js","auth/recovery-email-otp.e88303b89d1739518b58.js.map"],"auth/reset-password":["auth/reset-password.5ef8df264560be9842fa.js","auth/reset-password.5ef8df264560be9842fa.js.map"],"auth/signup":["auth/signup.b3485d392b5e27df5d3a.js","auth/signup.b3485d392b5e27df5d3a.js.map"],"auth/test/email-otp-test":["auth/test/email-otp-test.1ad870fcc866ea93eb62.js","auth/test/email-otp-test.1ad870fcc866ea93eb62.js.map"],"auth/test/escalate-test":["auth/test/escalate-test.b1809f807a5bbfc37648.js","auth/test/escalate-test.b1809f807a5bbfc37648.js.map"],"auth/test/otp-test":["auth/test/otp-test.7b69e750d3f907c6e40f.js","auth/test/otp-test.7b69e750d3f907c6e40f.js.map"],"auth/test/recovery-code-test":["auth/test/recovery-code-test.594b53c9aef4eb5f8138.js","auth/test/recovery-code-test.594b53c9aef4eb5f8138.js.map"],"auth/test/webauthn-login-test":["auth/test/webauthn-login-test.b0ecb540039e0e46a0b9.js","auth/test/webauthn-login-test.b0ecb540039e0e46a0b9.js.map"],"auth/webauthn-cli-login":["auth/webauthn-cli-login.d8e89560b763b99cf505.js","auth/webauthn-cli-login.d8e89560b763b99cf505.js.map"],"auth/webauthn-login":["auth/webauthn-login.b5d5a9f6ac7f10a126a7.js","auth/webauthn-login.b5d5a9f6ac7f10a126a7.js.map"],"billing/delete-org":["billing/delete-org.2e7161850a94cbf8df6e.js","billing/delete-org.2e7161850a94cbf8df6e.js.map"],"billing/detail":["billing/detail.9e66fda6eb9449971303.js","billing/detail.9e66fda6eb9449971303.js.map"],"billing/downgrade":["billing/downgrade.197f65c2aa192685e0ef.js","billing/downgrade.197f65c2aa192685e0ef.js.map"],"billing/upgrade":["billing/upgrade.25e746468c83dee4f40b.js","billing/upgrade.25e746468c83dee4f40b.js.map"],"contact/contact":["contact/contact.3f968363d361c591b673.js","contact/contact.3f968363d361c591b673.js.map"],"contact/recovery-support-v1":["contact/recovery-support-v1.c4b526bf89cf0bbfeca0.js","contact/recovery-support-v1.c4b526bf89cf0bbfeca0.js.map"],"contact/recovery-support-v2":["contact/recovery-support-v2.3fa55cc0b5f44cdb6f0d.js","contact/recovery-support-v2.3fa55cc0b5f44cdb6f0d.js.map"],"contact/sidebar":["contact/sidebar.e456a58bb6b439522265.js","contact/sidebar.e456a58bb6b439522265.js.map"],"debug/badstatus":["debug/badstatus.74119802a083828b9193.js","debug/badstatus.74119802a083828b9193.js.map"],"debug/detail":["debug/detail.1be080d53d3a92a49a44.js","debug/detail.1be080d53d3a92a49a44.js.map"],"debug/failcomponent":["debug/failcomponent.bc95ba3d8efa510e02d4.js","debug/failcomponent.bc95ba3d8efa510e02d4.js.map"],"dev/choose-template":["dev/choose-template.81449515810210641618.js","dev/choose-template.81449515810210641618.js.map"],"dsr/dsr-export":["dsr/dsr-export.e77484b8112e6c6c5add.js","dsr/dsr-export.e77484b8112e6c6c5add.js.map"],"egg/egg":["egg/egg.df15ba0b0c0cb0789f50.js","egg/egg.df15ba0b0c0cb0789f50.js.map"],"errors/bad-request":["errors/bad-request.ea29c7a648a127771649.js","errors/bad-request.ea29c7a648a127771649.js.map"],"errors/not-found":["errors/not-found.6423012faff4c0cef206.js","errors/not-found.6423012faff4c0cef206.js.map"],"errors/server":["errors/server.d298311a73273316b0e1.js","errors/server.d298311a73273316b0e1.js.map"],"errors/tea-pot":["errors/tea-pot.b754ab744b4709308b60.js","errors/tea-pot.b754ab744b4709308b60.js.map"],"errors/template":["errors/template.7fa4bfb572d537db88df.js","errors/template.7fa4bfb572d537db88df.js.map"],"flatpage/flatpage":["flatpage/flatpage.bf9c494f51566823d348.js","flatpage/flatpage.bf9c494f51566823d348.js.map"],"homepage/homepage":["homepage/homepage.b1c35d53e22034b89427.js","homepage/homepage.b1c35d53e22034b89427.js.map"],"homepage/homepage-logged-in":["homepage/homepage-logged-in.1589c76b5817d102b79e.js","homepage/homepage-logged-in.1589c76b5817d102b79e.js.map"],"orgs/create":["orgs/create.c8ec6711ec5b18d1e44e.js","orgs/create.c8ec6711ec5b18d1e44e.js.map"],"orgs/detail":["orgs/detail.e85404f3d29ea86f859d.js","orgs/detail.e85404f3d29ea86f859d.js.map"],"orgs/invite":["orgs/invite.4259cbe59f3d8441967e.js","orgs/invite.4259cbe59f3d8441967e.js.map"],"orgs/tfa-enforced":["orgs/tfa-enforced.6862bcf30e2007bf1629.js","orgs/tfa-enforced.6862bcf30e2007bf1629.js.map"],"orgs/upgrade":["orgs/upgrade.bdd7cb0dd06759f32666.js","orgs/upgrade.bdd7cb0dd06759f32666.js.map"],"package-list/package-list":["package-list/package-list.4cde72567d1a2c4cc925.js","package-list/package-list.4cde72567d1a2c4cc925.js.map"],"package/delete-package":["package/delete-package.5a7056842b3ac3c6fffc.js","package/delete-package.5a7056842b3ac3c6fffc.js.map"],"package/deprecate-package":["package/deprecate-package.358358f4528c9d29dd2a.js","package/deprecate-package.358358f4528c9d29dd2a.js.map"],"package/error-message-package":["package/error-message-package.b75619deb60a445c5a25.js","package/error-message-package.b75619deb60a445c5a25.js.map"],"package/package":["package/package.8cc4af6d0308658a6f1d.js","package/package.8cc4af6d0308658a6f1d.js.map"],"profile/profile":["profile/profile.49ecd39e14fcb7f7f955.js","profile/profile.49ecd39e14fcb7f7f955.js.map"],"recovery-codes/show":["recovery-codes/show.f71039678ae03d6a66fd.js","recovery-codes/show.f71039678ae03d6a66fd.js.map"],"search/search":["search/search.9def634ad298d0b7a86b.js","search/search.9def634ad298d0b7a86b.js.map"],"searchv2/search":["searchv2/search.e9080509b3c203a56665.js","searchv2/search.e9080509b3c203a56665.js.map"],"settings/change-password":["settings/change-password.a44d529fa595edb027c0.js","settings/change-password.a44d529fa595edb027c0.js.map"],"settings/delete-account":["settings/delete-account.6951d29faf09faff1903.js","settings/delete-account.6951d29faf09faff1903.js.map"],"settings/email":["settings/email.5a84c7f389f7659e17fc.js","settings/email.5a84c7f389f7659e17fc.js.map"],"settings/memberships":["settings/memberships.8b97a3dd256591cd5969.js","settings/memberships.8b97a3dd256591cd5969.js.map"],"settings/packages":["settings/packages.52bd866b280081f852e9.js","settings/packages.52bd866b280081f852e9.js.map"],"settings/profile":["settings/profile.6a334bb8d7cc5c164bc3.js","settings/profile.6a334bb8d7cc5c164bc3.js.map"],"staged-packages/staged-packages":["staged-packages/staged-packages.e0d8207cab912d266bfb.js","staged-packages/staged-packages.e0d8207cab912d266bfb.js.map"],"teams/create":["teams/create.898e190e759f25f7643a.js","teams/create.898e190e759f25f7643a.js.map"],"teams/detail":["teams/detail.56ecbb8fd65adb543f9c.js","teams/detail.56ecbb8fd65adb543f9c.js.map"],"teams/list":["teams/list.2649cda575da8d4f8dcf.js","teams/list.2649cda575da8d4f8dcf.js.map"],"teams/packages":["teams/packages.c654959295c24bd500f8.js","teams/packages.c654959295c24bd500f8.js.map"],"teams/users":["teams/users.05918fc8085f9c6e3624.js","teams/users.05918fc8085f9c6e3624.js.map"],"tfa/additional-options":["tfa/additional-options.2d96cf30cc5f9739015b.js","tfa/additional-options.2d96cf30cc5f9739015b.js.map"],"tfa/enable":["tfa/enable.4376fbaabb8248ed0b15.js","tfa/enable.4376fbaabb8248ed0b15.js.map"],"tfa/list":["tfa/list.9be09f983a0ea677d606.js","tfa/list.9be09f983a0ea677d606.js.map"],"tfa/recovery-codes":["tfa/recovery-codes.fc510151891060819b7b.js","tfa/recovery-codes.fc510151891060819b7b.js.map"],"tfa/security-key-list":["tfa/security-key-list.8598bc3f024f2df66f9c.js","tfa/security-key-list.8598bc3f024f2df66f9c.js.map"],"tfa/showTFAQRCode":["tfa/showTFAQRCode.a5ed08229294a1f87fe5.js","tfa/showTFAQRCode.a5ed08229294a1f87fe5.js.map"],"tfa/showTFASuccess":["tfa/showTFASuccess.ff80ecb6caccf1579ae4.js","tfa/showTFASuccess.ff80ecb6caccf1579ae4.js.map"],"tfa/tfa-disable":["tfa/tfa-disable.7577ed40f81cb58a3424.js","tfa/tfa-disable.7577ed40f81cb58a3424.js.map"],"tfa/tfa-mode-selection":["tfa/tfa-mode-selection.b36f39855d5a21646241.js","tfa/tfa-mode-selection.b36f39855d5a21646241.js.map"],"tfa/tfa-password-entry":["tfa/tfa-password-entry.2e938d426721b5dc1873.js","tfa/tfa-password-entry.2e938d426721b5dc1873.js.map"],"tfa/totp":["tfa/totp.58f877294a0d4f5e969a.js","tfa/totp.58f877294a0d4f5e969a.js.map"],"tokens/create-gat":["tokens/create-gat.bc918414f753f3ea69a9.js","tokens/create-gat.bc918414f753f3ea69a9.js.map"],"tokens/gat-details":["tokens/gat-details.b0b0bb67343240bcfca8.js","tokens/gat-details.b0b0bb67343240bcfca8.js.map"],"tokens/gat/allowed-ip-ranges-input":["tokens/gat/allowed-ip-ranges-input.7fd52f9ccec4cb1dbe54.js","tokens/gat/allowed-ip-ranges-input.7fd52f9ccec4cb1dbe54.js.map"],"tokens/gat/constants":["tokens/gat/constants.f73b7aa15b7e57b61c6a.js","tokens/gat/constants.f73b7aa15b7e57b61c6a.js.map"],"tokens/gat/divider":["tokens/gat/divider.894c0ac2e39ce4c2a612.js","tokens/gat/divider.894c0ac2e39ce4c2a612.js.map"],"tokens/gat/expiration-days-input":["tokens/gat/expiration-days-input.cba32c0071ddead7a34f.js","tokens/gat/expiration-days-input.cba32c0071ddead7a34f.js.map"],"tokens/gat/gat-expiration":["tokens/gat/gat-expiration.554385589b6d7ca4366b.js","tokens/gat/gat-expiration.554385589b6d7ca4366b.js.map"],"tokens/gat/gat-input":["tokens/gat/gat-input.4e636a1355942052f660.js","tokens/gat/gat-input.4e636a1355942052f660.js.map"],"tokens/gat/organizations-input":["tokens/gat/organizations-input.1cce3933adbd861a2844.js","tokens/gat/organizations-input.1cce3933adbd861a2844.js.map"],"tokens/gat/organizations-section":["tokens/gat/organizations-section.1c2cec2ded27fe60a9a0.js","tokens/gat/organizations-section.1c2cec2ded27fe60a9a0.js.map"],"tokens/gat/packages-and-scopes-input":["tokens/gat/packages-and-scopes-input.b9b9833811c89fccc61c.js","tokens/gat/packages-and-scopes-input.b9b9833811c89fccc61c.js.map"],"tokens/gat/packages-and-scopes-section":["tokens/gat/packages-and-scopes-section.dbeb529092395488ee5e.js","tokens/gat/packages-and-scopes-section.dbeb529092395488ee5e.js.map"],"tokens/gat/permissions-input":["tokens/gat/permissions-input.026081a5ba5f3b401023.js","tokens/gat/permissions-input.026081a5ba5f3b401023.js.map"],"tokens/gat/section":["tokens/gat/section.0b4fdcf57935ba658dc3.js","tokens/gat/section.0b4fdcf57935ba658dc3.js.map"],"tokens/gat/section-heading":["tokens/gat/section-heading.4620919655aa1b56a445.js","tokens/gat/section-heading.4620919655aa1b56a445.js.map"],"tokens/gat/selected-items":["tokens/gat/selected-items.5d1e85b89be34fe9da35.js","tokens/gat/selected-items.5d1e85b89be34fe9da35.js.map"],"tokens/gat/utils":["tokens/gat/utils.62a84287afe1ae363a5a.js","tokens/gat/utils.62a84287afe1ae363a5a.js.map"],"tokens/generate-token":["tokens/generate-token.277c44b4548d0ced415c.js","tokens/generate-token.277c44b4548d0ced415c.js.map"],"tokens/list":["tokens/list.11590cd786891c3e32c3.js","tokens/list.11590cd786891c3e32c3.js.map"],"vouchers/view":["vouchers/view.de6578759ec7068f8016.js","vouchers/view.de6578759ec7068f8016.js.map"]},"hash":"18f7743105d044addf35","name":"package/package","containerId":"app","headerName":"x-spiferack","publicPath":"https://static-production.npmjs.com/"}</script><script crossorigin="anonymous" src="https://static-production.npmjs.com/commons.18f7743105d044addf35.js"></script>
-<script crossorigin="anonymous" src="https://static-production.npmjs.com/minicssextractbug.42ff216368a620557893.js"></script>
-<script crossorigin="anonymous" src="https://static-production.npmjs.com/package/package.8cc4af6d0308658a6f1d.js"></script>
-  
+<!doctype html>
+<html lang="en" data-color-mode="light" data-theme-setting="light">
+	<head>
+		<meta charset="utf-8" />
+		<script>
+			(function () {
+				try {
+					var d = document.documentElement,
+						s = localStorage.getItem("npm-color-mode") || "light";
+					d.setAttribute("data-theme-setting", s);
+					if (s === "dark") {
+						d.setAttribute("data-color-mode", "dark");
+					} else if (s === "system") {
+						var q = window.matchMedia("(prefers-color-scheme: dark)");
+						d.setAttribute("data-color-mode", q.matches ? "dark" : "light");
+						q.addEventListener("change", function (e) {
+							if ((localStorage.getItem("npm-color-mode") || "light") === "system") {
+								d.setAttribute("data-color-mode", e.matches ? "dark" : "light");
+							}
+						});
+					} else {
+						d.setAttribute("data-color-mode", "light");
+					}
+				} catch (e) {}
+			})();
+		</script>
+		<link
+			href="https://static-production.npmjs.com/styles.fa175a2429ccab07af2c.css"
+			rel="stylesheet" />
+		<title>clipper2-wasm - npm</title>
+		<meta content="on" http-equiv="cleartype" data-react-helmet="true" />
+		<meta content="yes" name="apple-mobile-web-app-capable" data-react-helmet="true" />
+		<meta content="yes" name="mobile-web-app-capable" data-react-helmet="true" />
+		<meta
+			content="width=device-width,minimum-scale=1.0,initial-scale=1,user-scalable=yes"
+			name="viewport"
+			data-react-helmet="true" />
+		<meta content="#cb3837" name="msapplication-TileColor" data-react-helmet="true" />
+		<meta content="#cb3837" name="theme-color" data-react-helmet="true" />
+		<meta
+			content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm."
+			name="description"
+			data-react-helmet="true" />
+		<meta
+			content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm."
+			property="og:description"
+			data-react-helmet="true" />
+		<meta content="clipper2-wasm" property="og:title" data-react-helmet="true" />
+		<meta
+			content="https://www.npmjs.com/package/clipper2-wasm"
+			property="og:url"
+			data-react-helmet="true" />
+		<meta content="npm" property="og:site_name" data-react-helmet="true" />
+		<meta
+			content="clipper,polygon,clipping,offsetting,wasm,webassembly"
+			name="keywords"
+			data-react-helmet="true" />
+		<meta content="summary" name="twitter:card" data-react-helmet="true" />
+		<meta
+			content="https://www.npmjs.com/package/clipper2-wasm"
+			name="twitter:url"
+			data-react-helmet="true" />
+		<meta content="npm: clipper2-wasm" name="twitter:title" data-react-helmet="true" />
+		<meta
+			content="WebAssembly port of the Clipper2 library for polygon clipping and offsetting. Latest version: 0.4.0, last published: 5 months ago. Start using clipper2-wasm in your project by running `npm i clipper2-wasm`. There are 4 other projects in the npm registry using clipper2-wasm."
+			name="twitter:description"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/osd.xml"
+			rel="search"
+			title="npm package search"
+			type="application/opensearchdescription+xml"
+			data-react-helmet="true" />
 
-</body></html>
+		<style data-styled="active" data-styled-version="5.3.11"></style>
+		<link
+			href="https://static-production.npmjs.com/58a19602036db1daee0d7863c94673a4.png"
+			rel="apple-touch-icon"
+			sizes="120x120"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/7a7ffabbd910fc60161bc04f2cee4160.png"
+			rel="apple-touch-icon"
+			sizes="144x144"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/34110fd7686e2c90a487ca98e7336e99.png"
+			rel="apple-touch-icon"
+			sizes="152x152"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/3dc95981de4241b35cd55fe126ab6b2c.png"
+			rel="apple-touch-icon"
+			sizes="180x180"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png"
+			rel="icon"
+			sizes="32x32"
+			type="image/png"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/1996fcfdf7ca81ea795f67f093d7f449.png"
+			rel="icon"
+			sizes="230x230"
+			type="image/png"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/f1786e9b7cba9753ca7b9c40e8b98f67.png"
+			rel="icon"
+			sizes="96x96"
+			type="image/png"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/5f6e93af5bf0f5dcdd1eecdac99f51ee.png"
+			rel="icon"
+			sizes="192x192"
+			type="image/png"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/c426a1116301d1fd178c51522484127a.png"
+			rel="icon"
+			sizes="228x228"
+			type="image/png"
+			data-react-helmet="true" />
+		<link
+			href="https://static-production.npmjs.com/da3ab40fb0861d15c83854c29f5f2962.png"
+			rel="icon"
+			sizes="16x16"
+			type="image/png"
+			data-react-helmet="true" />
+		<meta
+			content="https://static-production.npmjs.com/338e4905a2684ca96e08c7780fc68412.png"
+			property="og:image"
+			data-react-helmet="true" />
+		<meta
+			content="https://static-production.npmjs.com/7a7ffabbd910fc60161bc04f2cee4160.png"
+			name="msapplication-TileImage"
+			data-react-helmet="true" />
+		<meta
+			content="https://static-production.npmjs.com/668aac888e52ae13cac9cfd71fabd31f.xml"
+			name="msapplication-config"
+			data-react-helmet="true" />
+	</head>
+	<body style="margin-right: 0px; padding-right: 0px; overflow: auto">
+		<div id="app">
+			<div class="_452c3ec4 d68c66a8">
+				<div class="cf325dbd list ma0 pa0 tr z-998">
+					<div class="c746cc21 list ma0 pa0 tr z-999"></div>
+				</div>
+				<div class="flex-column vh-100 flex">
+					<header class="_755f5b0f bb b--black-20 z-2 bg-white">
+						<div></div>
+						<div class="e7070742 pv3-ns ph1-ns bg-white">
+							<div class="bbefbfcc" id="header">
+								skip to:<a
+									aria-label="skip to content"
+									class="d6d0dbcf"
+									href="#main"
+									>content</a
+								><a
+									aria-label="skip to package search"
+									class="d6d0dbcf"
+									href="#search"
+									>package search</a
+								><a aria-label="skip to sign in" class="d6d0dbcf" href="#signin"
+									>sign in</a
+								>
+							</div>
+							<div
+								class="ef7c6e62 center mw9 border-box ph4-ns ph3 flex items-center">
+								<span class="_6d365d27"
+									><button
+										aria-label="Light mode — click for dark"
+										class="_3c64022e pointer flex items-center"
+										type="button">
+										<svg
+											aria-hidden="true"
+											class="octicon octicon-moon"
+											display="inline-block"
+											fill="currentColor"
+											focusable="false"
+											height="18"
+											overflow="visible"
+											style="vertical-align: text-bottom"
+											viewBox="0 0 16 16"
+											width="18">
+											<path
+												d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z"></path>
+										</svg></button
+									><span aria-hidden="true" class="_7e374c1c"
+										>Light mode — click for dark</span
+									></span
+								>
+								<nav
+									aria-label="Product Navigation"
+									class="_4a5f2a79 db w-auto-ns w-100 truncate">
+									<ul class="list pl0" id="main-menu">
+										<li class="dib">
+											<a
+												class="c6c55db4 f6-ns f7 fw5 dim pr2 pl2 no-underline"
+												href="/products/pro"
+												id="nav-pro-link"
+												>Pro</a
+											>
+										</li>
+										<li class="dib">
+											<a
+												class="c6c55db4 f6-ns f7 fw5 dim pr2 pl2 no-underline"
+												href="/products/teams"
+												id="nav-teams-link"
+												>Teams</a
+											>
+										</li>
+										<li class="dib">
+											<a
+												class="c6c55db4 f6-ns f7 fw5 dim pr2 pl2 no-underline"
+												href="/products"
+												id="nav-pricing-link"
+												>Pricing</a
+											>
+										</li>
+										<li class="dib">
+											<a
+												class="c6c55db4 f6-ns f7 fw5 dim pr2 pl2 no-underline"
+												href="https://docs.npmjs.com"
+												id="nav-docs-link"
+												>Documentation</a
+											>
+										</li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+						<div class="_4ea0e50d bt b--black-10">
+							<div class="c5b9953b center mw9 ph4-ns border-box flex flex-wrap">
+								<div
+									class="af43375d mt3 db mr4-ns pb3 pb0-ns 2-ns ph3 ph0-ns flex-auto">
+									<a aria-label="Npm" href="/"
+										><svg aria-hidden="true" viewBox="0 0 780 250">
+											<path
+												d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z"
+												fill="#231F20"
+												stroke="#f7f7f7"
+												stroke-width="5"></path></svg
+									></a>
+								</div>
+								<div
+									class="_581ebd89 w-50-ns pv2-ns order-1-ns relative order-2 w-100 flex-auto"
+									id="search">
+									<form
+										action="/search"
+										class="_13c93d41 ph3 ph2 pv2 ph0-ns pv0-ns bt b--black-10 bn-ns relative flex bg-transparent"
+										id="search"
+										method="GET">
+										<div class="e82b10fd dde91b96 relative">
+											<div class="_2f299eeb nowrap flex">
+												<span class="_705cdf4f db fl pl3 pr1"
+													><svg
+														aria-hidden="true"
+														height="15px"
+														viewBox="0 0 18 18"
+														width="15px"
+														xmlns="http://www.w3.org/2000/svg">
+														<g
+															fill="none"
+															fill-rule="evenodd"
+															stroke="none"
+															stroke-width="1">
+															<g stroke="#777777" stroke-width="1.3">
+																<g>
+																	<path
+																		d="M13.4044,7.0274 C13.4044,10.5494 10.5494,13.4044 7.0274,13.4044 C3.5054,13.4044 0.6504,10.5494 0.6504,7.0274 C0.6504,3.5054 3.5054,0.6504 7.0274,0.6504 C10.5494,0.6504 13.4044,3.5054 13.4044,7.0274 Z"></path>
+																	<path
+																		d="M11.4913,11.4913 L17.8683,17.8683"></path>
+																</g>
+															</g>
+														</g></svg></span
+												><input
+													aria-activedescendant=""
+													aria-controls="typeahead-list-696792"
+													aria-expanded="false"
+													aria-label="Search packages"
+													autocomplete="off"
+													class="_390acbc5 f5 fw3 black relative"
+													element="input"
+													hotkeys="[object Object]"
+													inputref="[object Object]"
+													name="q"
+													placeholder="Search packages"
+													role="combobox"
+													type="search"
+													value="" />
+											</div>
+										</div>
+										<button
+											aria-label="Search"
+											class="_0da775bb bn pv2 ph4 f6 white pointer bn pv2 ph4 f6 white pointer"
+											type="submit">
+											Search</button
+										><input
+											name="csrftoken"
+											type="hidden"
+											value="sdVLaa82VrPI3orLxeGZDRjIqS5dX1Bpn_pwhCGmsDj" />
+									</form>
+								</div>
+								<div
+									class="_6f31c82b ml3 mt2 mt0-ns pv2-ns tr nowrap pointer fw6 order-2-ns relative order-1 flex-auto">
+									<div class="_1066d9e7 pl3 flex items-center self-center">
+										<a
+											class="_9752c8b3 pa2 lh-copy br2 f6 fw5 black dim ph3 mr3 no-underline"
+											href="/signup"
+											id="signup"
+											>Sign Up</a
+										><a
+											class="_352269a0 pa1 lh-copy br2 f6 fw5 black dim no-underline"
+											href="/login"
+											id="signin"
+											>Sign In</a
+										>
+									</div>
+								</div>
+							</div>
+						</div>
+					</header>
+					<main id="main">
+						<div
+							class="_36ae70e9 pb5 ph3-l mw-100 mt4-ns mt1 center-ns mh1 flex flex-row flex-wrap"
+							id="top">
+							<div class="ph0-l ph3 ph4-m w-100">
+								<h1
+									class="cd6ce1fd fw6 mt3 black dib ma0 tracked-tight hover-black f3-ns flex w-100 flex-row items-center justify-start no-underline"
+									tabindex="-1">
+									<span class="_50685029 truncate">clipper2-wasm</span>
+									<div data-nosnippet="true">
+										<img
+											alt="TypeScript icon, indicating that this package has built-in type declarations"
+											class="aa30d277 pl3"
+											height="20px"
+											src="https://static-production.npmjs.com/4a2a680dfcadf231172b78b1d3beb975.svg"
+											title="This package contains built-in TypeScript declarations"
+											data-nosnippet="true" />
+									</div>
+								</h1>
+								<span
+									class="_76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy"
+									>0.4.0<!-- -->&nbsp;•&nbsp;</span
+								><span
+									class="_813b53b2 _76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy"
+									>Public</span
+								><span
+									class="_76473bea f6 dib ph0 pv2 mb2-ns black-80 nowrap f5 fw4 lh-copy"
+									>&nbsp;•&nbsp;Published
+									<time
+										datetime="2026-05-18T18:10:17.494Z"
+										title="5/18/2026, 6:10:17 PM"
+										>5 months ago</time
+									></span
+								>
+							</div>
+							<ul
+								aria-owns="package-tab-readme package-tab-code package-tab-dependencies package-tab-dependents package-tab-versions"
+								class="cfb2a888 flex-column flex-row-l ma0 pa0 mr2 mr0-l list flex w-100"
+								role="tablist">
+								<li
+									class="_8055e658 f5 fw5 tc pointer d9f99065 ac5f7ef8 f4 fw6 black-50"
+									role="presentation">
+									<a
+										aria-controls="tabpanel-readme"
+										aria-selected="true"
+										class="_38ce9a85 link db ph4 fw6"
+										href="?activeTab=readme"
+										id="package-tab-readme"
+										role="tab"
+										tabindex="0"
+										><span
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 384 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="file-alt"
+												data-prefix="far">
+												<path
+													d="M288 248v28c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-28c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm-12 72H108c-6.6 0-12 5.4-12 12v28c0 6.6 5.4 12 12 12h168c6.6 0 12-5.4 12-12v-28c0-6.6-5.4-12-12-12zm108-188.1V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V48C0 21.5 21.5 0 48 0h204.1C264.8 0 277 5.1 286 14.1L369.9 98c9 8.9 14.1 21.2 14.1 33.9zm-128-80V128h76.1L256 51.9zM336 464V176H232c-13.3 0-24-10.7-24-24V48H48v416h288z"
+													fill="currentColor"></path>
+											</svg>
+											Readme</span
+										></a
+									>
+								</li>
+								<li
+									class="_8055e658 f5 fw5 tc pointer _7aa1ee94"
+									role="presentation">
+									<a
+										aria-controls="tabpanel-explore"
+										aria-selected="false"
+										class="_38ce9a85 link db ph4 fw6"
+										href="?activeTab=code"
+										id="package-tab-code"
+										role="tab"
+										tabindex="-1"
+										><span
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 384 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="file-archive"
+												data-prefix="fas">
+												<path
+													d="M377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zM128.4 336c-17.9 0-32.4 12.1-32.4 27 0 15 14.6 27 32.5 27s32.4-12.1 32.4-27-14.6-27-32.5-27zM224 136V0h-63.6v32h-32V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM95.9 32h32v32h-32zm32.3 384c-33.2 0-58-30.4-51.4-62.9L96.4 256v-32h32v-32h-32v-32h32v-32h-32V96h32V64h32v32h-32v32h32v32h-32v32h32v32h-32v32h22.1c5.7 0 10.7 4.1 11.8 9.7l17.3 87.7c6.4 32.4-18.4 62.6-51.4 62.6z"
+													fill="currentColor"></path></svg
+											>Code
+											<span class="a17280e0"
+												><span class="Label-sc-6dyj7v-0 dlKCNe _22665c13"
+													>Beta</span
+												></span
+											></span
+										></a
+									>
+								</li>
+								<li
+									class="_8055e658 f5 fw5 tc pointer c1f85151"
+									role="presentation">
+									<a
+										aria-controls="tabpanel-dependencies"
+										aria-selected="false"
+										class="_38ce9a85 link db ph4 fw6"
+										href="?activeTab=dependencies"
+										id="package-tab-dependencies"
+										role="tab"
+										tabindex="-1"
+										><span
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 512 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="cube"
+												data-prefix="fas">
+												<path
+													d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"
+													fill="currentColor"></path></svg
+											>1 Dependency</span
+										></a
+									>
+								</li>
+								<li
+									class="_8055e658 f5 fw5 tc pointer _7cec0316"
+									role="presentation">
+									<a
+										aria-controls="tabpanel-dependents"
+										aria-selected="false"
+										class="_38ce9a85 link db ph4 fw6"
+										href="?activeTab=dependents"
+										id="package-tab-dependents"
+										role="tab"
+										tabindex="-1"
+										><span
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 512 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="cubes"
+												data-prefix="fas">
+												<path
+													d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"
+													fill="currentColor"></path></svg
+											>4 Dependents</span
+										></a
+									>
+								</li>
+								<li
+									class="_8055e658 f5 fw5 tc pointer b4fcfd19"
+									role="presentation">
+									<a
+										aria-controls="tabpanel-versions"
+										aria-selected="false"
+										class="_38ce9a85 link db ph4 fw6"
+										href="?activeTab=versions"
+										id="package-tab-versions"
+										role="tab"
+										tabindex="-1"
+										><span
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 640 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="tags"
+												data-prefix="fas">
+												<path
+													d="M497.941 225.941L286.059 14.059A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v204.118a48 48 0 0 0 14.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882 0l204.118-204.118c18.745-18.745 18.745-49.137 0-67.882zM112 160c-26.51 0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882 0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397 0h48.721a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882z"
+													fill="currentColor"></path></svg
+											>14 Versions</span
+										></a
+									>
+								</li>
+							</ul>
+							<div
+								class="_6620a4fd mw8-l mw-100 w-two-thirds-l ph3-m pt2 pl0-ns pl2 w-100">
+								<span
+									><section
+										aria-labelledby="package-tab-readme"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-readme"
+										role="tabpanel"
+										data-attribute="">
+										<div class="">
+											<article>
+												<div
+													class="_704c034e _6d9832ac pr4-ns pl0-ns ph1-m pr3-m pr2"
+													id="readme">
+													This package does not have a README.
+													<a
+														href="https://docs.npmjs.com/about-package-readme-files"
+														>Add a README</a
+													>
+													to your package so that users know how to get
+													started.
+												</div>
+											</article>
+										</div>
+										<div class="pv4">
+											<h3
+												class="a0dff0b1 mt2 pt2 mb3 pb3 f4 fw6 b--black-10"
+												id="user-content-keywords">
+												Keywords
+											</h3>
+											<ul class="list pl0">
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:clipper"
+														>clipper</a
+													>
+												</li>
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:polygon"
+														>polygon</a
+													>
+												</li>
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:clipping"
+														>clipping</a
+													>
+												</li>
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:offsetting"
+														>offsetting</a
+													>
+												</li>
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:wasm"
+														>wasm</a
+													>
+												</li>
+												<li class="dib mr2">
+													<a
+														class="_75a5f581 f4 fw6 fl db pv1 ma1 black-70 link hover-black animate"
+														href="/search?q=keywords:webassembly"
+														>webassembly</a
+													>
+												</li>
+											</ul>
+										</div>
+									</section>
+									<section
+										aria-labelledby="package-tab-explore"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-explore"
+										role="tabpanel"
+										data-attribute="hidden"></section>
+									<section
+										aria-labelledby="package-tab-admin"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-admin"
+										role="tabpanel"
+										data-attribute="hidden"></section>
+									<section
+										aria-labelledby="package-tab-dependencies"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-dependencies"
+										role="tabpanel"
+										data-attribute="hidden"></section>
+									<section
+										aria-labelledby="package-tab-dependents"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-dependents"
+										role="tabpanel"
+										data-attribute="hidden"></section>
+									<div
+										aria-labelledby="package-tab-versions"
+										class="e22ba268 ph2 ph0-ns ml0-ns mr3-ns black-80"
+										id="tabpanel-versions"
+										role="tabpanel"
+										data-attribute="hidden"></div></span
+								><span aria-live="polite"></span>
+							</div>
+							<aside
+								aria-label="Package sidebar"
+								class="fdbf4038 w-third-l mt3 ph3 ph4-m pv3 pv0-l w-100">
+								<h3 class="c84e15be f5 mt2 pt2 mb0">Install</h3>
+								<div
+									class="d767adf4 lh-copy ph0 mb3 black-80 b5be2af6 f6 flex flex-row truncate">
+									<p class="db ma0 flex-auto truncate">
+										<span class="a9150b94"
+											><code
+												>npm i
+												<!-- -->clipper2-wasm</code
+											></span
+										>
+									</p>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 w-50 w-100">
+									<h3 class="c84e15be f5 mt2 pt2 mb0" id="repository">
+										Repository
+									</h3>
+									<p class="_1a11b8cf fw6 mb3 mt2 black-80 f5">
+										<a
+											aria-labelledby="repository repository-link"
+											class="b2812e30 f2874b88 fw6 mb3 mt2 black-80 f4 pr1 truncate no-underline"
+											href="https://github.com/ErikSom/Clipper2-WASM"
+											rel="noopener noreferrer nofollow"
+											target="_blank"
+											><span class="_513426a8 dib v-mid"
+												><svg
+													aria-hidden="true"
+													height="16"
+													version="1.1"
+													viewBox="0 0 16 16"
+													width="16"
+													xmlns="http://www.w3.org/2000/svg">
+													<title>Git</title>
+													<g fill="currentColor" fill-rule="nonzero">
+														<path
+															d="M15.6981994,7.28744895 L8.71251571,0.3018063 C8.3102891,-0.1006021 7.65784619,-0.1006021 7.25527133,0.3018063 L5.80464367,1.75263572 L7.64478689,3.59281398 C8.07243561,3.44828825 8.56276901,3.5452772 8.90352982,3.88604451 C9.24638012,4.22907547 9.34249661,4.72359725 9.19431703,5.15282127 L10.9679448,6.92630874 C11.3971607,6.77830046 11.8918472,6.8738964 12.2346975,7.21727561 C12.7135387,7.69595181 12.7135387,8.47203759 12.2346975,8.95106204 C11.755508,9.43026062 10.9796112,9.43026062 10.5002476,8.95106204 C10.140159,8.59061834 10.0510075,8.06127108 10.2336636,7.61759448 L8.57948492,5.9635584 L8.57948492,10.3160467 C8.69614805,10.3738569 8.80636859,10.4509954 8.90352982,10.5479843 C9.38237103,11.0268347 9.38237103,11.8027463 8.90352982,12.2822931 C8.42468862,12.7609693 7.64826937,12.7609693 7.16977641,12.2822931 C6.69093521,11.8027463 6.69093521,11.0268347 7.16977641,10.5479843 C7.28818078,10.4297518 7.42521643,10.3402504 7.57148065,10.2803505 L7.57148065,5.88746473 C7.42521643,5.82773904 7.28852903,5.73893407 7.16977641,5.62000506 C6.80707597,5.25747183 6.71983981,4.72499027 6.90597844,4.27957241 L5.09195384,2.465165 L0.301800552,7.25506126 C-0.100600184,7.65781791 -0.100600184,8.31027324 0.301800552,8.71268164 L7.28783254,15.6983243 C7.69005915,16.1005586 8.34232793,16.1005586 8.74507691,15.6983243 L15.6981994,8.74506934 C16.1006002,8.34266094 16.1006002,7.68968322 15.6981994,7.28744895"
+															id="Path"></path>
+													</g></svg></span
+											><span class="bae53307" id="repository-link"
+												>github.com/ErikSom/Clipper2-WASM</span
+											></a
+										>
+									</p>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 w-50 w-100">
+									<h3 class="c84e15be f5 mt2 pt2 mb0" id="homePage">Homepage</h3>
+									<p class="_1a11b8cf fw6 mb3 mt2 black-80 f5">
+										<a
+											aria-labelledby="homePage homePage-link"
+											class="b2812e30 f2874b88 fw6 mb3 mt2 black-80 f4 pr1 truncate no-underline"
+											href="https://github.com/ErikSom/Clipper2-WASM#readme"
+											rel="noopener noreferrer nofollow"
+											><svg
+												aria-hidden="true"
+												focusable="false"
+												role="img"
+												viewBox="0 0 512 512"
+												xmlns="http://www.w3.org/2000/svg"
+												data-icon="link"
+												data-prefix="fas">
+												<path
+													d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"
+													fill="currentColor"></path></svg
+											><span class="bae53307" id="homePage-link"
+												>github.com/ErikSom/Clipper2-WASM#readme</span
+											></a
+										>
+									</p>
+								</div>
+								<div>
+									<div
+										aria-label="Showing weekly downloads"
+										class="_702d723c dib fl bb b--black-10 pr2 w-50 w-100"
+										role="button"
+										tabindex="0">
+										<h3 class="c84e15be f5 mt2 pt2 mb0 _5cfc0900">
+											<svg aria-hidden="true" viewBox="0 0 7.22 11.76">
+												<title>Downloads</title>
+												<g>
+													<polygon
+														aria-label="Downloads icon"
+														points="4.59 4.94 4.59 0 2.62 0 2.62 4.94 0 4.94 3.28 9.53 7.22 4.94 4.59 4.94"></polygon>
+													<rect
+														height="1"
+														width="7"
+														x="0.11"
+														y="10.76"></rect>
+												</g></svg
+											>Weekly Downloads
+										</h3>
+										<div class="_000ae427 flex flex-row-reverse items-end">
+											<svg
+												aria-hidden="true"
+												class="_418c4939 flex-none"
+												fill="rgba(137, 86, 255, .2)"
+												height="40"
+												stroke="#8956FF"
+												stroke-width="3"
+												width="200">
+												<path
+													class="sparkline--fill"
+													d="M4 34.66 L 4 34.66 L 7.764705882352941 34.56 L 11.529411764705882 34.53 L 15.294117647058822 34.38 L 19.058823529411764 34.71 L 22.823529411764707 34.76 L 26.588235294117645 34.76 L 30.352941176470587 34.62 L 34.11764705882353 34.59 L 37.88235294117647 34.74 L 41.64705882352941 34.41 L 45.411764705882355 34.25 L 49.17647058823529 34.38 L 52.94117647058823 34.16 L 56.705882352941174 34.25 L 60.470588235294116 34.26 L 64.23529411764706 34.44 L 68 34.18 L 71.76470588235294 34.41 L 75.52941176470588 33.93 L 79.29411764705883 33.82 L 83.05882352941177 33.46 L 86.82352941176471 33.66 L 90.58823529411765 33.63 L 94.35294117647058 33.53 L 98.11764705882352 32.71 L 101.88235294117646 26.16 L 105.6470588235294 24.05 L 109.41176470588235 21.3 L 113.17647058823529 25.73 L 116.94117647058823 26.14 L 120.70588235294117 24.1 L 124.47058823529412 21.43 L 128.23529411764707 29.63 L 132 23.86 L 135.76470588235293 28.23 L 139.52941176470588 26.28 L 143.2941176470588 28.09 L 147.05882352941177 27.98 L 150.8235294117647 24.18 L 154.58823529411765 23.6 L 158.35294117647058 5 L 162.11764705882354 11.12 L 165.88235294117646 28.03 L 169.64705882352942 29.34 L 173.41176470588235 32.39 L 177.1764705882353 31.61 L 180.94117647058823 30.33 L 184.70588235294116 28.82 L 188.47058823529412 27.92 L 192.23529411764704 30.76 L 196 33.88 V 40 L 4 40 Z"
+													stroke="none"></path>
+												<path
+													class="sparkline--line"
+													d="M4 34.66 L 4 34.66 L 7.764705882352941 34.56 L 11.529411764705882 34.53 L 15.294117647058822 34.38 L 19.058823529411764 34.71 L 22.823529411764707 34.76 L 26.588235294117645 34.76 L 30.352941176470587 34.62 L 34.11764705882353 34.59 L 37.88235294117647 34.74 L 41.64705882352941 34.41 L 45.411764705882355 34.25 L 49.17647058823529 34.38 L 52.94117647058823 34.16 L 56.705882352941174 34.25 L 60.470588235294116 34.26 L 64.23529411764706 34.44 L 68 34.18 L 71.76470588235294 34.41 L 75.52941176470588 33.93 L 79.29411764705883 33.82 L 83.05882352941177 33.46 L 86.82352941176471 33.66 L 90.58823529411765 33.63 L 94.35294117647058 33.53 L 98.11764705882352 32.71 L 101.88235294117646 26.16 L 105.6470588235294 24.05 L 109.41176470588235 21.3 L 113.17647058823529 25.73 L 116.94117647058823 26.14 L 120.70588235294117 24.1 L 124.47058823529412 21.43 L 128.23529411764707 29.63 L 132 23.86 L 135.76470588235293 28.23 L 139.52941176470588 26.28 L 143.2941176470588 28.09 L 147.05882352941177 27.98 L 150.8235294117647 24.18 L 154.58823529411765 23.6 L 158.35294117647058 5 L 162.11764705882354 11.12 L 165.88235294117646 28.03 L 169.64705882352942 29.34 L 173.41176470588235 32.39 L 177.1764705882353 31.61 L 180.94117647058823 30.33 L 184.70588235294116 28.82 L 188.47058823529412 27.92 L 192.23529411764704 30.76 L 196 33.88"
+													fill="none"></path>
+												<line
+													class="sparkline--cursor"
+													stroke-width="2"
+													x1="-1000"
+													x2="-1000"
+													y1="0"
+													y2="40"></line>
+												<circle
+													class="sparkline--spot"
+													cx="-1000"
+													cy="-1000"
+													r="2"></circle>
+												<rect
+													class="sparkline--interaction-layer"
+													height="40"
+													style="fill: transparent; stroke: transparent"
+													width="200"></rect>
+											</svg>
+											<p
+												aria-atomic="true"
+												aria-live="polite"
+												class="_9ba9a726 f4 tl fw6 black-80 ma0 pr2 pb1 flex-auto">
+												2,970
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 w-50">
+									<h3 class="c84e15be f5 mt2 pt2 mb0">Version</h3>
+									<div class="abe380b3 flex flex-row items-center">
+										<p class="f2874b88 fw6 mb3 mt2 black-80 f4 truncate">
+											0.4.0
+										</p>
+									</div>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 w-50">
+									<h3 class="c84e15be f5 mt2 pt2 mb0">License</h3>
+									<p class="f2874b88 fw6 mb3 mt2 black-80 f4 truncate">BSL-1.0</p>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 w-50 w-100">
+									<h3 class="c84e15be f5 mt2 pt2 mb0">Last publish</h3>
+									<p class="f2874b88 fw6 mb3 mt2 black-80 f4 truncate">
+										<time
+											datetime="2026-05-18T18:10:17.494Z"
+											title="5/18/2026, 6:10:17 PM"
+											>5 months ago</time
+										>
+									</p>
+								</div>
+								<div class="_702d723c dib fl bb b--black-10 pr2 bb-0 w-50 w-100">
+									<h3 class="c84e15be f5 mt2 pt2 mb0" id="collaborators">
+										Collaborators
+									</h3>
+									<ul aria-labelledby="collaborators" class="list pl0 cf">
+										<li class="_426b8533 fl dib mr2 mb2 a03d8d59">
+											<div>
+												<a href="/~eriksombroek" tabindex="0"
+													><img
+														alt="eriksombroek"
+														src="/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTEwMCZkZWZhdWx0PXJldHJvIn0.iA27VvbbcpG_YgfyemhtFsDUVcHyVETjWobo3H-94rc"
+														style="
+															width: 42px;
+															height: 42px;
+															min-width: 42px;
+															border-radius: 4%;
+														"
+														title="eriksombroek"
+												/></a>
+											</div>
+											<div
+												aria-hidden="true"
+												class="_405dc045"
+												role="tooltip">
+												eriksombroek
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="_33c89934 w-100">
+									<a
+										class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 ml0 mt2 dib w-100 truncate no-underline"
+										href="https://socket.dev/npm/package/clipper2-wasm"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg
+											aria-hidden="true"
+											focusable="false"
+											role="img"
+											viewBox="0 0 512 512"
+											xmlns="http://www.w3.org/2000/svg"
+											data-icon="shield-alt"
+											data-prefix="fas">
+											<path
+												d="M466.5 83.7l-192-80a48.15 48.15 0 0 0-36.9 0l-192 80C27.7 91.1 16 108.6 16 128c0 198.5 114.5 335.7 221.5 380.3 11.8 4.9 25.1 4.9 36.9 0C360.1 472.6 496 349.3 496 128c0-19.4-11.7-36.9-29.5-44.3zM256.1 446.3l-.1-381 175.9 73.3c-3.3 151.4-82.1 261.1-175.8 307.7z"
+												fill="currentColor"></path></svg
+										><strong>Analyze security</strong> with Socket</a
+									><a
+										class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 ml0 mt2 dib w-100 truncate no-underline"
+										href="https://bundlephobia.com/package/clipper2-wasm"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg
+											aria-hidden="true"
+											focusable="false"
+											role="img"
+											viewBox="0 0 512 512"
+											xmlns="http://www.w3.org/2000/svg"
+											data-icon="cubes"
+											data-prefix="fas">
+											<path
+												d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"
+												fill="currentColor"></path></svg
+										><strong>Check bundle size</strong></a
+									><a
+										class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 ml0 mt2 dib w-100 truncate no-underline"
+										href="https://snyk.io/advisor/npm-package/clipper2-wasm"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg
+											aria-hidden="true"
+											focusable="false"
+											role="img"
+											viewBox="0 0 512 512"
+											xmlns="http://www.w3.org/2000/svg"
+											data-icon="bug"
+											data-prefix="fas">
+											<path
+												d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z"
+												fill="currentColor"></path></svg
+										><strong>View package health</strong></a
+									><a
+										class="_24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 ml0 mt2 dib w-100 truncate no-underline"
+										href="https://npmgraph.js.org/?q=clipper2-wasm"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg
+											aria-hidden="true"
+											focusable="false"
+											role="img"
+											viewBox="0 0 512 512"
+											xmlns="http://www.w3.org/2000/svg"
+											data-icon="chart-bar"
+											data-prefix="fas">
+											<path
+												d="M332.8 320h38.4c6.4 0 12.8-6.4 12.8-12.8V172.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v134.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V76.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v230.4c0 6.4 6.4 12.8 12.8 12.8zm-288 0h38.4c6.4 0 12.8-6.4 12.8-12.8v-70.4c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v70.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V108.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v198.4c0 6.4 6.4 12.8 12.8 12.8zM496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"
+												fill="currentColor"></path></svg
+										><strong>Explore dependencies</strong></a
+									>
+								</div>
+								<div class="_33c89934 w-100">
+									<a
+										class="_4a3f8f21 _24a1e9c7 dab9924c br2 pv2 ph3 fw5 f5 tc button button-reset pointer ma2 ml0 mt2 dib w-100 truncate no-underline"
+										href="/support?inquire=security&amp;security-inquire=malware&amp;package=clipper2-wasm&amp;version=0.4.0"
+										><svg
+											aria-hidden="true"
+											focusable="false"
+											role="img"
+											viewBox="0 0 512 512"
+											xmlns="http://www.w3.org/2000/svg"
+											data-icon="flag"
+											data-prefix="fas">
+											<path
+												d="M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z"
+												fill="currentColor"></path></svg
+										><strong>Report</strong> malware</a
+									>
+								</div>
+							</aside>
+						</div>
+					</main>
+					<footer class="cd2827bb bt b--black-10 mt4">
+						<div
+							class="center mw9 pa3 flex-column flex-wrap-m flex-row-ns flex"
+							id="footer">
+							<div class="pa4-ns pa3 w-10-l w-100 flex-auto">
+								<div class="_802b5507 pt3">
+									<a
+										aria-label="Visit npm GitHub page"
+										href="https://github.com/npm"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg aria-hidden="true" viewBox="0 0 27.23 27.23">
+											<rect
+												fill="#333333"
+												height="27.23"
+												rx="2"
+												width="27.23"></rect>
+											<polygon
+												fill="#fff"
+												points="5.8 21.75 13.66 21.75 13.67 9.98 17.59 9.98 17.58 21.76 21.51 21.76 21.52 6.06 5.82 6.04 5.8 21.75"></polygon></svg
+									></a>
+								</div>
+								<div class="_802b5507 pt3">
+									<a
+										aria-label="GitHub"
+										href="https://github.com"
+										rel="noopener noreferrer nofollow"
+										target="_blank"
+										><svg
+											aria-hidden="true"
+											class="octicon octicon-mark-github"
+											display="inline-block"
+											fill="currentColor"
+											focusable="false"
+											height="50"
+											overflow="visible"
+											style="vertical-align: top"
+											viewBox="0 0 24 24"
+											width="50">
+											<path
+												d="M10.303 16.652c-2.837-.344-4.835-2.385-4.835-5.028 0-1.074.387-2.235 1.031-3.008-.279-.709-.236-2.214.086-2.837.86-.107 2.02.344 2.708.967.816-.258 1.676-.386 2.728-.386 1.053 0 1.913.128 2.686.365.666-.602 1.848-1.053 2.708-.946.3.581.344 2.085.064 2.815.688.817 1.053 1.913 1.053 3.03 0 2.643-1.998 4.641-4.877 5.006.73.473 1.224 1.504 1.224 2.686v2.235c0 .644.537 1.01 1.182.752 3.889-1.483 6.94-5.372 6.94-10.185 0-6.081-4.942-11.044-11.022-11.044-6.081 0-10.98 4.963-10.98 11.044a10.84 10.84 0 0 0 7.112 10.206c.58.215 1.139-.172 1.139-.752v-1.719a2.768 2.768 0 0 1-1.032.215c-1.418 0-2.256-.773-2.857-2.213-.237-.58-.495-.924-.989-.988-.258-.022-.344-.129-.344-.258 0-.258.43-.451.86-.451.623 0 1.16.386 1.719 1.181.43.623.881.903 1.418.903.537 0 .881-.194 1.375-.688.365-.365.645-.687.903-.902Z"></path></svg
+									></a>
+								</div>
+							</div>
+							<div class="pa4-ns pa3 w-30-ns w-50-m flex-auto">
+								<h3 class="_1b8c0a9f" id="support">Support</h3>
+								<ul aria-labelledby="support" class="list pl0">
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="https://docs.npmjs.com"
+											>Help</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="https://github.com/advisories"
+											>Advisories</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="http://status.npmjs.org/"
+											>Status</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="/support"
+											target="_self"
+											>Contact npm</a
+										>
+									</li>
+								</ul>
+							</div>
+							<div class="pa4-ns pa3 w-30-ns w-50-m flex-auto">
+								<h3 class="_1b8c0a9f" id="company">Company</h3>
+								<ul aria-labelledby="company" class="list pl0">
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="/about"
+											target="_self"
+											>About</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="https://github.blog/tag/npm/"
+											>Blog</a
+										>
+									</li>
+									<li class="pv1">
+										<a class="df995acb pr1 no-underline" href="/press">Press</a>
+									</li>
+								</ul>
+							</div>
+							<div class="pa4-ns pa3 w-30-ns w-50-m flex-auto">
+								<h3 class="_1b8c0a9f" id="terms">Terms &amp; Policies</h3>
+								<ul aria-labelledby="terms" class="list pl0">
+									<li class="pv1">
+										<a class="df995acb pr1 no-underline" href="/policies/"
+											>Policies</a
+										>
+									</li>
+									<li class="pv1">
+										<a class="df995acb pr1 no-underline" href="/policies/terms"
+											>Terms of Use</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="/policies/conduct"
+											>Code of Conduct</a
+										>
+									</li>
+									<li class="pv1">
+										<a
+											class="df995acb pr1 no-underline"
+											href="/policies/privacy"
+											>Privacy</a
+										>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</footer>
+				</div>
+				<div
+					class="_8a62ca63 fixed top-0 left-0 z-999"
+					style="
+						opacity: 0;
+						transform: scaleX(1);
+						-webkit-transform: scaleX(1);
+						-moz-transform: scaleX(1);
+					"></div>
+			</div>
+		</div>
+		<script
+			integrity="sha512-8UrtZGVCxk7Nl8Q90DkWbJ94hEC9bWpPxl1nWKJlN5+EvMSCMPPbR5sF8gpUAJSGt8ryIQUjBh9HT6RoHhJzqQ==">
+			window.__context__ = {
+				"context": {
+					"alertBanners": [
+						{
+							"id": "bypass2fa-gat-deprecation-2026",
+							"level": "warning",
+							"message":
+								'npm tokens that bypass 2FA are being restricted — account changes (Aug 2026) and direct publishing (Jan 2027). \u003ca href="https://github.blog/changelog/2026-07-08-npm-install-time-security-and-gat-bypass2fa-deprecation/" target="_blank" rel="noopener noreferrer" aria-label="Learn how to prepare for the npm bypass 2FA token deprecation"\u003eLearn how to prepare →\u003c/a\u003e',
+							"skipXSSEscaping": true,
+							"duration": null,
+							"dismissalCookie": "bypass2fa_banner_dismissed",
+						},
+					],
+					"notifications": [],
+					"csrftoken": "sdVLaa82VrPI3orLxeGZDRjIqS5dX1Bpn_pwhCGmsDj",
+					"userEmailVerified": null,
+					"darkThemeEnabled": true,
+					"auditLogEnabled": false,
+					"user": null,
+					"documentContext": { "readme.data": "readme" },
+					"undefined": true,
+					"readme": { "ref": "readme", "data": null },
+					"versionsDownloads": {
+						"0.0.7": 4,
+						"0.0.3": 3,
+						"0.2.1": 1575,
+						"0.0.9": 3,
+						"0.4.0": 9200,
+						"0.0.4": 4,
+						"0.3.0": 3,
+						"0.0.6": 3,
+						"0.0.8": 4,
+						"0.1.0": 249,
+						"0.0.5": 1,
+						"0.0.1": 1,
+					},
+					"starAction": "/package/clipper2-wasm/star",
+					"provenance": {
+						"enabled": false,
+						"feedbackUrl": " https://github.com/npm/feedback",
+					},
+					"isSecurityPlaceholder": false,
+					"private": false,
+					"devDeps": [],
+					"deps": ["@types/emscripten"],
+					"packument": {
+						"description":
+							"WebAssembly port of the Clipper2 library for polygon clipping and offsetting",
+						"homepage": "https://github.com/ErikSom/Clipper2-WASM#readme",
+						"repository": "https://github.com/ErikSom/Clipper2-WASM",
+						"distTags": { "latest": "0.4.0" },
+						"keywords": [
+							"clipper",
+							"polygon",
+							"clipping",
+							"offsetting",
+							"wasm",
+							"webassembly",
+						],
+						"maintainers": [
+							{
+								"name": "eriksombroek",
+								"avatars": {
+									"small":
+										"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTUwJmRlZmF1bHQ9cmV0cm8ifQ.iWh9EWm9Bu4ExZXr2LZQDqM5wo7bybbgOdGt_SV83Sw",
+									"medium":
+										"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTEwMCZkZWZhdWx0PXJldHJvIn0.iA27VvbbcpG_YgfyemhtFsDUVcHyVETjWobo3H-94rc",
+									"large":
+										"/npm-avatar/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdmF0YXJVUkwiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci81ODMzODZiNzg3Nzc3NjQ0ZWVlNDExOGEzMmE1OGVkZD9zaXplPTQ5NiZkZWZhdWx0PXJldHJvIn0.CcUeUFIg21QwqbMLMAwymwPm7JBtvnJBdxnlIh3lZwk",
+								},
+							},
+						],
+						"name": "clipper2-wasm",
+						"license": "BSL-1.0",
+						"version": "0.4.0",
+						"versions": [
+							{
+								"version": "0.4.0",
+								"date": { "ts": 1779127817494, "rel": "5 months ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.3.0",
+								"date": { "ts": 1779087908036, "rel": "5 months ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.2.1",
+								"date": { "ts": 1733565739452, "rel": "2 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.2.0",
+								"date": { "ts": 1733565618286, "rel": "2 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.1.0",
+								"date": { "ts": 1704790032140, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.9",
+								"date": { "ts": 1704788451177, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.8",
+								"date": { "ts": 1704027919732, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.7",
+								"date": { "ts": 1703929997475, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.6",
+								"date": { "ts": 1703711485319, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.5",
+								"date": { "ts": 1703694036863, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.4",
+								"date": { "ts": 1703689660360, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.3",
+								"date": { "ts": 1703689469439, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.2",
+								"date": { "ts": 1703688346329, "rel": "3 years ago" },
+								"dist": {},
+							},
+							{
+								"version": "0.0.1",
+								"date": { "ts": 1703680621279, "rel": "3 years ago" },
+								"dist": {},
+							},
+						],
+						"deprecations": [],
+					},
+					"packageVersionsError": false,
+					"packageVersionHistoryEnabled": true,
+					"packageVersion": {
+						"name": "clipper2-wasm",
+						"license": "BSL-1.0",
+						"version": "0.4.0",
+						"dependencies": { "@types/emscripten": "^1.39.10" },
+						"deprecated": false,
+						"types": "dist/es/clipper2z.d.ts",
+					},
+					"packageUrl": "/package/clipper2-wasm",
+					"packageLinkingCallToActionHref": null,
+					"package": "clipper2-wasm",
+					"linkingAllowedForPackage": false,
+					"isStarred": false,
+					"ghapi": "https://api.github.com/repos/ErikSom/Clipper2-WASM",
+					"downloads": [
+						{ "downloads": 915, "label": "2025-10-27 to 2025-11-02" },
+						{ "downloads": 1172, "label": "2025-11-03 to 2025-11-09" },
+						{ "downloads": 1239, "label": "2025-11-10 to 2025-11-16" },
+						{ "downloads": 1637, "label": "2025-11-17 to 2025-11-23" },
+						{ "downloads": 777, "label": "2025-11-24 to 2025-11-30" },
+						{ "downloads": 640, "label": "2025-12-01 to 2025-12-07" },
+						{ "downloads": 651, "label": "2025-12-08 to 2025-12-14" },
+						{ "downloads": 1004, "label": "2025-12-15 to 2025-12-21" },
+						{ "downloads": 1092, "label": "2025-12-22 to 2025-12-28" },
+						{ "downloads": 684, "label": "2025-12-29 to 2026-01-04" },
+						{ "downloads": 1565, "label": "2026-01-05 to 2026-01-11" },
+						{ "downloads": 1984, "label": "2026-01-12 to 2026-01-18" },
+						{ "downloads": 1653, "label": "2026-01-19 to 2026-01-25" },
+						{ "downloads": 2242, "label": "2026-01-26 to 2026-02-01" },
+						{ "downloads": 1992, "label": "2026-02-02 to 2026-02-08" },
+						{ "downloads": 1979, "label": "2026-02-09 to 2026-02-15" },
+						{ "downloads": 1476, "label": "2026-02-16 to 2026-02-22" },
+						{ "downloads": 2170, "label": "2026-02-23 to 2026-03-01" },
+						{ "downloads": 1562, "label": "2026-03-02 to 2026-03-08" },
+						{ "downloads": 2851, "label": "2026-03-09 to 2026-03-15" },
+						{ "downloads": 3142, "label": "2026-03-16 to 2026-03-22" },
+						{ "downloads": 4090, "label": "2026-03-23 to 2026-03-29" },
+						{ "downloads": 3560, "label": "2026-03-30 to 2026-04-05" },
+						{ "downloads": 3633, "label": "2026-04-06 to 2026-04-12" },
+						{ "downloads": 3907, "label": "2026-04-13 to 2026-04-19" },
+						{ "downloads": 6089, "label": "2026-04-20 to 2026-04-26" },
+						{ "downloads": 23497, "label": "2026-04-27 to 2026-05-03" },
+						{ "downloads": 29110, "label": "2026-05-04 to 2026-05-10" },
+						{ "downloads": 36410, "label": "2026-05-11 to 2026-05-17" },
+						{ "downloads": 24632, "label": "2026-05-18 to 2026-05-24" },
+						{ "downloads": 23557, "label": "2026-05-25 to 2026-05-31" },
+						{ "downloads": 28970, "label": "2026-06-01 to 2026-06-07" },
+						{ "downloads": 36078, "label": "2026-06-08 to 2026-06-14" },
+						{ "downloads": 14267, "label": "2026-06-15 to 2026-06-21" },
+						{ "downloads": 29623, "label": "2026-06-22 to 2026-06-28" },
+						{ "downloads": 17988, "label": "2026-06-29 to 2026-07-05" },
+						{ "downloads": 23187, "label": "2026-07-06 to 2026-07-12" },
+						{ "downloads": 18374, "label": "2026-07-13 to 2026-07-19" },
+						{ "downloads": 18656, "label": "2026-07-20 to 2026-07-26" },
+						{ "downloads": 28750, "label": "2026-07-27 to 2026-08-02" },
+						{ "downloads": 30303, "label": "2026-08-03 to 2026-08-09" },
+						{ "downloads": 79746, "label": "2026-08-10 to 2026-08-16" },
+						{ "downloads": 63475, "label": "2026-08-17 to 2026-08-23" },
+						{ "downloads": 18520, "label": "2026-08-24 to 2026-08-30" },
+						{ "downloads": 15038, "label": "2026-08-31 to 2026-09-06" },
+						{ "downloads": 6951, "label": "2026-09-07 to 2026-09-13" },
+						{ "downloads": 9000, "label": "2026-09-14 to 2026-09-20" },
+						{ "downloads": 12418, "label": "2026-09-21 to 2026-09-27" },
+						{ "downloads": 16436, "label": "2026-09-28 to 2026-10-04" },
+						{ "downloads": 18823, "label": "2026-10-05 to 2026-10-11" },
+						{ "downloads": 11268, "label": "2026-10-12 to 2026-10-18" },
+						{ "downloads": 2970, "label": "2026-10-19 to 2026-10-25" },
+					],
+					"dependents": {
+						"dependentsCount": "4",
+						"dependentsTruncated": [
+							"@taucad/viewer",
+							"ignitefuse",
+							"@ccpc/math",
+							"sketchx.js",
+						],
+					},
+					"capsule": {
+						"name": "clipper2-wasm",
+						"description":
+							"WebAssembly port of the Clipper2 library for polygon clipping and offsetting",
+						"maintainers": ["eriksombroek"],
+						"dist-tags": { "latest": "0.4.0" },
+						"lastPublish": {
+							"maintainer": "eriksombroek",
+							"time": "2026-05-18T18:10:17.494Z",
+						},
+						"types": { "typescript": { "bundled": "dist/es/clipper2z.d.ts" } },
+					},
+					"canEditPackage": false,
+				},
+				"chunks": {
+					"commons": [
+						"commons.18f7743105d044addf35.js",
+						"commons.18f7743105d044addf35.js.map",
+					],
+					"styles": [
+						"styles.fa175a2429ccab07af2c.css",
+						"minicssextractbug.42ff216368a620557893.js",
+						"styles.fa175a2429ccab07af2c.css.map",
+						"minicssextractbug.42ff216368a620557893.js.map",
+					],
+					"acceptance/acceptance": [
+						"acceptance/acceptance.7166183654098cd57bde.js",
+						"acceptance/acceptance.7166183654098cd57bde.js.map",
+					],
+					"audit-logs/actions/common/auditLogContainer": [
+						"audit-logs/actions/common/auditLogContainer.b2fe9c98f3bc56268dc4.js",
+						"audit-logs/actions/common/auditLogContainer.b2fe9c98f3bc56268dc4.js.map",
+					],
+					"audit-logs/actions/common/dot": [
+						"audit-logs/actions/common/dot.1832f990b5c2d9d99a40.js",
+						"audit-logs/actions/common/dot.1832f990b5c2d9d99a40.js.map",
+					],
+					"audit-logs/actions/common/filterActions": [
+						"audit-logs/actions/common/filterActions.686f6e7343f4ea8d1168.js",
+						"audit-logs/actions/common/filterActions.686f6e7343f4ea8d1168.js.map",
+					],
+					"audit-logs/actions/common/spaceGap": [
+						"audit-logs/actions/common/spaceGap.85333b17db526b589bcb.js",
+						"audit-logs/actions/common/spaceGap.85333b17db526b589bcb.js.map",
+					],
+					"audit-logs/actions/orgAddUser": [
+						"audit-logs/actions/orgAddUser.32c68d24558c7dc402c5.js",
+						"audit-logs/actions/orgAddUser.32c68d24558c7dc402c5.js.map",
+					],
+					"audit-logs/actions/orgCreateTeam": [
+						"audit-logs/actions/orgCreateTeam.89f48e8a22530ba640a9.js",
+						"audit-logs/actions/orgCreateTeam.89f48e8a22530ba640a9.js.map",
+					],
+					"audit-logs/actions/orgDeleteTeam": [
+						"audit-logs/actions/orgDeleteTeam.3ed4bbf2e46ffaa8659e.js",
+						"audit-logs/actions/orgDeleteTeam.3ed4bbf2e46ffaa8659e.js.map",
+					],
+					"audit-logs/actions/orgRemoveUser": [
+						"audit-logs/actions/orgRemoveUser.b74e23d5f3f2d01716a2.js",
+						"audit-logs/actions/orgRemoveUser.b74e23d5f3f2d01716a2.js.map",
+					],
+					"audit-logs/actions/packageAddDistTag": [
+						"audit-logs/actions/packageAddDistTag.010f83e5fba2f4e842a4.js",
+						"audit-logs/actions/packageAddDistTag.010f83e5fba2f4e842a4.js.map",
+					],
+					"audit-logs/actions/packageDeprecate": [
+						"audit-logs/actions/packageDeprecate.93c7298eccfdfcad6279.js",
+						"audit-logs/actions/packageDeprecate.93c7298eccfdfcad6279.js.map",
+					],
+					"audit-logs/actions/packagePublish": [
+						"audit-logs/actions/packagePublish.44744913b1e2b8b73f44.js",
+						"audit-logs/actions/packagePublish.44744913b1e2b8b73f44.js.map",
+					],
+					"audit-logs/actions/packageRemoveDistTag": [
+						"audit-logs/actions/packageRemoveDistTag.61585f7303c7a3c7aa38.js",
+						"audit-logs/actions/packageRemoveDistTag.61585f7303c7a3c7aa38.js.map",
+					],
+					"audit-logs/actions/packageUnpublish": [
+						"audit-logs/actions/packageUnpublish.df7727b09dcd7b5dcd64.js",
+						"audit-logs/actions/packageUnpublish.df7727b09dcd7b5dcd64.js.map",
+					],
+					"audit-logs/actions/packageUpdateAccess": [
+						"audit-logs/actions/packageUpdateAccess.dd4ada8db456a7b84f23.js",
+						"audit-logs/actions/packageUpdateAccess.dd4ada8db456a7b84f23.js.map",
+					],
+					"audit-logs/actions/teamAddPackage": [
+						"audit-logs/actions/teamAddPackage.f8ba9e0db68d750e342e.js",
+						"audit-logs/actions/teamAddPackage.f8ba9e0db68d750e342e.js.map",
+					],
+					"audit-logs/actions/teamAddUser": [
+						"audit-logs/actions/teamAddUser.db8ff7426204ac5fd629.js",
+						"audit-logs/actions/teamAddUser.db8ff7426204ac5fd629.js.map",
+					],
+					"audit-logs/actions/teamRemovePackage": [
+						"audit-logs/actions/teamRemovePackage.265b7dd25c09a08afa7b.js",
+						"audit-logs/actions/teamRemovePackage.265b7dd25c09a08afa7b.js.map",
+					],
+					"audit-logs/actions/teamRemoveUser": [
+						"audit-logs/actions/teamRemoveUser.f45f102a38953a9f26d0.js",
+						"audit-logs/actions/teamRemoveUser.f45f102a38953a9f26d0.js.map",
+					],
+					"audit-logs/actions/teamUpdatePackageAccess": [
+						"audit-logs/actions/teamUpdatePackageAccess.8d4c3de43f73bae84168.js",
+						"audit-logs/actions/teamUpdatePackageAccess.8d4c3de43f73bae84168.js.map",
+					],
+					"audit-logs/audit-logs": [
+						"audit-logs/audit-logs.5f5fde9052618b539d77.js",
+						"audit-logs/audit-logs.5f5fde9052618b539d77.js.map",
+					],
+					"audit-logs/audit-search-input": [
+						"audit-logs/audit-search-input.7e135d56d6902d7bffa5.js",
+						"audit-logs/audit-search-input.7e135d56d6902d7bffa5.js.map",
+					],
+					"audit-logs/list": [
+						"audit-logs/list.c2cdb1b1393288351165.js",
+						"audit-logs/list.c2cdb1b1393288351165.js.map",
+					],
+					"audit-logs/no-logs": [
+						"audit-logs/no-logs.e87d4cfe127175e5eb62.js",
+						"audit-logs/no-logs.e87d4cfe127175e5eb62.js.map",
+					],
+					"audit-logs/no-logs-with-query": [
+						"audit-logs/no-logs-with-query.8d7e148c863aab6b25a9.js",
+						"audit-logs/no-logs-with-query.8d7e148c863aab6b25a9.js.map",
+					],
+					"auth/account-recovery-message": [
+						"auth/account-recovery-message.3cace09b3d107907ded2.js",
+						"auth/account-recovery-message.3cace09b3d107907ded2.js.map",
+					],
+					"auth/authentication-successful": [
+						"auth/authentication-successful.d984a06ad28929eb3ce7.js",
+						"auth/authentication-successful.d984a06ad28929eb3ce7.js.map",
+					],
+					"auth/email-otp": [
+						"auth/email-otp.a312310769055ee85c81.js",
+						"auth/email-otp.a312310769055ee85c81.js.map",
+					],
+					"auth/escalate": [
+						"auth/escalate.1a95fde6b83fd49893ba.js",
+						"auth/escalate.1a95fde6b83fd49893ba.js.map",
+					],
+					"auth/forgot": [
+						"auth/forgot.5412f197536ff486f674.js",
+						"auth/forgot.5412f197536ff486f674.js.map",
+					],
+					"auth/forgot-sent": [
+						"auth/forgot-sent.38b3ad81077169342cfd.js",
+						"auth/forgot-sent.38b3ad81077169342cfd.js.map",
+					],
+					"auth/forgot-sent-anonymized": [
+						"auth/forgot-sent-anonymized.412559c6de67af4e0327.js",
+						"auth/forgot-sent-anonymized.412559c6de67af4e0327.js.map",
+					],
+					"auth/invite-signup": [
+						"auth/invite-signup.ad1c5b5b7ea3e0d83ef4.js",
+						"auth/invite-signup.ad1c5b5b7ea3e0d83ef4.js.map",
+					],
+					"auth/liminal-login-footer": [
+						"auth/liminal-login-footer.4354dbfb541e4bea3c67.js",
+						"auth/liminal-login-footer.4354dbfb541e4bea3c67.js.map",
+					],
+					"auth/login": [
+						"auth/login.1c249513607f3938c626.js",
+						"auth/login.1c249513607f3938c626.js.map",
+					],
+					"auth/otp": [
+						"auth/otp.1ab39cc7321176e7cb63.js",
+						"auth/otp.1ab39cc7321176e7cb63.js.map",
+					],
+					"auth/password": [
+						"auth/password.57683578e899a0462448.js",
+						"auth/password.57683578e899a0462448.js.map",
+					],
+					"auth/recovery-code": [
+						"auth/recovery-code.a5f874da0f64516859c5.js",
+						"auth/recovery-code.a5f874da0f64516859c5.js.map",
+					],
+					"auth/recovery-email-otp": [
+						"auth/recovery-email-otp.e88303b89d1739518b58.js",
+						"auth/recovery-email-otp.e88303b89d1739518b58.js.map",
+					],
+					"auth/reset-password": [
+						"auth/reset-password.5ef8df264560be9842fa.js",
+						"auth/reset-password.5ef8df264560be9842fa.js.map",
+					],
+					"auth/signup": [
+						"auth/signup.b3485d392b5e27df5d3a.js",
+						"auth/signup.b3485d392b5e27df5d3a.js.map",
+					],
+					"auth/test/email-otp-test": [
+						"auth/test/email-otp-test.1ad870fcc866ea93eb62.js",
+						"auth/test/email-otp-test.1ad870fcc866ea93eb62.js.map",
+					],
+					"auth/test/escalate-test": [
+						"auth/test/escalate-test.b1809f807a5bbfc37648.js",
+						"auth/test/escalate-test.b1809f807a5bbfc37648.js.map",
+					],
+					"auth/test/otp-test": [
+						"auth/test/otp-test.7b69e750d3f907c6e40f.js",
+						"auth/test/otp-test.7b69e750d3f907c6e40f.js.map",
+					],
+					"auth/test/recovery-code-test": [
+						"auth/test/recovery-code-test.594b53c9aef4eb5f8138.js",
+						"auth/test/recovery-code-test.594b53c9aef4eb5f8138.js.map",
+					],
+					"auth/test/webauthn-login-test": [
+						"auth/test/webauthn-login-test.b0ecb540039e0e46a0b9.js",
+						"auth/test/webauthn-login-test.b0ecb540039e0e46a0b9.js.map",
+					],
+					"auth/webauthn-cli-login": [
+						"auth/webauthn-cli-login.d8e89560b763b99cf505.js",
+						"auth/webauthn-cli-login.d8e89560b763b99cf505.js.map",
+					],
+					"auth/webauthn-login": [
+						"auth/webauthn-login.b5d5a9f6ac7f10a126a7.js",
+						"auth/webauthn-login.b5d5a9f6ac7f10a126a7.js.map",
+					],
+					"billing/delete-org": [
+						"billing/delete-org.2e7161850a94cbf8df6e.js",
+						"billing/delete-org.2e7161850a94cbf8df6e.js.map",
+					],
+					"billing/detail": [
+						"billing/detail.9e66fda6eb9449971303.js",
+						"billing/detail.9e66fda6eb9449971303.js.map",
+					],
+					"billing/downgrade": [
+						"billing/downgrade.197f65c2aa192685e0ef.js",
+						"billing/downgrade.197f65c2aa192685e0ef.js.map",
+					],
+					"billing/upgrade": [
+						"billing/upgrade.25e746468c83dee4f40b.js",
+						"billing/upgrade.25e746468c83dee4f40b.js.map",
+					],
+					"contact/contact": [
+						"contact/contact.3f968363d361c591b673.js",
+						"contact/contact.3f968363d361c591b673.js.map",
+					],
+					"contact/recovery-support-v1": [
+						"contact/recovery-support-v1.c4b526bf89cf0bbfeca0.js",
+						"contact/recovery-support-v1.c4b526bf89cf0bbfeca0.js.map",
+					],
+					"contact/recovery-support-v2": [
+						"contact/recovery-support-v2.3fa55cc0b5f44cdb6f0d.js",
+						"contact/recovery-support-v2.3fa55cc0b5f44cdb6f0d.js.map",
+					],
+					"contact/sidebar": [
+						"contact/sidebar.e456a58bb6b439522265.js",
+						"contact/sidebar.e456a58bb6b439522265.js.map",
+					],
+					"debug/badstatus": [
+						"debug/badstatus.74119802a083828b9193.js",
+						"debug/badstatus.74119802a083828b9193.js.map",
+					],
+					"debug/detail": [
+						"debug/detail.1be080d53d3a92a49a44.js",
+						"debug/detail.1be080d53d3a92a49a44.js.map",
+					],
+					"debug/failcomponent": [
+						"debug/failcomponent.bc95ba3d8efa510e02d4.js",
+						"debug/failcomponent.bc95ba3d8efa510e02d4.js.map",
+					],
+					"dev/choose-template": [
+						"dev/choose-template.81449515810210641618.js",
+						"dev/choose-template.81449515810210641618.js.map",
+					],
+					"dsr/dsr-export": [
+						"dsr/dsr-export.e77484b8112e6c6c5add.js",
+						"dsr/dsr-export.e77484b8112e6c6c5add.js.map",
+					],
+					"egg/egg": [
+						"egg/egg.df15ba0b0c0cb0789f50.js",
+						"egg/egg.df15ba0b0c0cb0789f50.js.map",
+					],
+					"errors/bad-request": [
+						"errors/bad-request.ea29c7a648a127771649.js",
+						"errors/bad-request.ea29c7a648a127771649.js.map",
+					],
+					"errors/not-found": [
+						"errors/not-found.6423012faff4c0cef206.js",
+						"errors/not-found.6423012faff4c0cef206.js.map",
+					],
+					"errors/server": [
+						"errors/server.d298311a73273316b0e1.js",
+						"errors/server.d298311a73273316b0e1.js.map",
+					],
+					"errors/tea-pot": [
+						"errors/tea-pot.b754ab744b4709308b60.js",
+						"errors/tea-pot.b754ab744b4709308b60.js.map",
+					],
+					"errors/template": [
+						"errors/template.7fa4bfb572d537db88df.js",
+						"errors/template.7fa4bfb572d537db88df.js.map",
+					],
+					"flatpage/flatpage": [
+						"flatpage/flatpage.bf9c494f51566823d348.js",
+						"flatpage/flatpage.bf9c494f51566823d348.js.map",
+					],
+					"homepage/homepage": [
+						"homepage/homepage.b1c35d53e22034b89427.js",
+						"homepage/homepage.b1c35d53e22034b89427.js.map",
+					],
+					"homepage/homepage-logged-in": [
+						"homepage/homepage-logged-in.1589c76b5817d102b79e.js",
+						"homepage/homepage-logged-in.1589c76b5817d102b79e.js.map",
+					],
+					"orgs/create": [
+						"orgs/create.c8ec6711ec5b18d1e44e.js",
+						"orgs/create.c8ec6711ec5b18d1e44e.js.map",
+					],
+					"orgs/detail": [
+						"orgs/detail.e85404f3d29ea86f859d.js",
+						"orgs/detail.e85404f3d29ea86f859d.js.map",
+					],
+					"orgs/invite": [
+						"orgs/invite.4259cbe59f3d8441967e.js",
+						"orgs/invite.4259cbe59f3d8441967e.js.map",
+					],
+					"orgs/tfa-enforced": [
+						"orgs/tfa-enforced.6862bcf30e2007bf1629.js",
+						"orgs/tfa-enforced.6862bcf30e2007bf1629.js.map",
+					],
+					"orgs/upgrade": [
+						"orgs/upgrade.bdd7cb0dd06759f32666.js",
+						"orgs/upgrade.bdd7cb0dd06759f32666.js.map",
+					],
+					"package-list/package-list": [
+						"package-list/package-list.4cde72567d1a2c4cc925.js",
+						"package-list/package-list.4cde72567d1a2c4cc925.js.map",
+					],
+					"package/delete-package": [
+						"package/delete-package.5a7056842b3ac3c6fffc.js",
+						"package/delete-package.5a7056842b3ac3c6fffc.js.map",
+					],
+					"package/deprecate-package": [
+						"package/deprecate-package.358358f4528c9d29dd2a.js",
+						"package/deprecate-package.358358f4528c9d29dd2a.js.map",
+					],
+					"package/error-message-package": [
+						"package/error-message-package.b75619deb60a445c5a25.js",
+						"package/error-message-package.b75619deb60a445c5a25.js.map",
+					],
+					"package/package": [
+						"package/package.8cc4af6d0308658a6f1d.js",
+						"package/package.8cc4af6d0308658a6f1d.js.map",
+					],
+					"profile/profile": [
+						"profile/profile.49ecd39e14fcb7f7f955.js",
+						"profile/profile.49ecd39e14fcb7f7f955.js.map",
+					],
+					"recovery-codes/show": [
+						"recovery-codes/show.f71039678ae03d6a66fd.js",
+						"recovery-codes/show.f71039678ae03d6a66fd.js.map",
+					],
+					"search/search": [
+						"search/search.9def634ad298d0b7a86b.js",
+						"search/search.9def634ad298d0b7a86b.js.map",
+					],
+					"searchv2/search": [
+						"searchv2/search.e9080509b3c203a56665.js",
+						"searchv2/search.e9080509b3c203a56665.js.map",
+					],
+					"settings/change-password": [
+						"settings/change-password.a44d529fa595edb027c0.js",
+						"settings/change-password.a44d529fa595edb027c0.js.map",
+					],
+					"settings/delete-account": [
+						"settings/delete-account.6951d29faf09faff1903.js",
+						"settings/delete-account.6951d29faf09faff1903.js.map",
+					],
+					"settings/email": [
+						"settings/email.5a84c7f389f7659e17fc.js",
+						"settings/email.5a84c7f389f7659e17fc.js.map",
+					],
+					"settings/memberships": [
+						"settings/memberships.8b97a3dd256591cd5969.js",
+						"settings/memberships.8b97a3dd256591cd5969.js.map",
+					],
+					"settings/packages": [
+						"settings/packages.52bd866b280081f852e9.js",
+						"settings/packages.52bd866b280081f852e9.js.map",
+					],
+					"settings/profile": [
+						"settings/profile.6a334bb8d7cc5c164bc3.js",
+						"settings/profile.6a334bb8d7cc5c164bc3.js.map",
+					],
+					"staged-packages/staged-packages": [
+						"staged-packages/staged-packages.e0d8207cab912d266bfb.js",
+						"staged-packages/staged-packages.e0d8207cab912d266bfb.js.map",
+					],
+					"teams/create": [
+						"teams/create.898e190e759f25f7643a.js",
+						"teams/create.898e190e759f25f7643a.js.map",
+					],
+					"teams/detail": [
+						"teams/detail.56ecbb8fd65adb543f9c.js",
+						"teams/detail.56ecbb8fd65adb543f9c.js.map",
+					],
+					"teams/list": [
+						"teams/list.2649cda575da8d4f8dcf.js",
+						"teams/list.2649cda575da8d4f8dcf.js.map",
+					],
+					"teams/packages": [
+						"teams/packages.c654959295c24bd500f8.js",
+						"teams/packages.c654959295c24bd500f8.js.map",
+					],
+					"teams/users": [
+						"teams/users.05918fc8085f9c6e3624.js",
+						"teams/users.05918fc8085f9c6e3624.js.map",
+					],
+					"tfa/additional-options": [
+						"tfa/additional-options.2d96cf30cc5f9739015b.js",
+						"tfa/additional-options.2d96cf30cc5f9739015b.js.map",
+					],
+					"tfa/enable": [
+						"tfa/enable.4376fbaabb8248ed0b15.js",
+						"tfa/enable.4376fbaabb8248ed0b15.js.map",
+					],
+					"tfa/list": [
+						"tfa/list.9be09f983a0ea677d606.js",
+						"tfa/list.9be09f983a0ea677d606.js.map",
+					],
+					"tfa/recovery-codes": [
+						"tfa/recovery-codes.fc510151891060819b7b.js",
+						"tfa/recovery-codes.fc510151891060819b7b.js.map",
+					],
+					"tfa/security-key-list": [
+						"tfa/security-key-list.8598bc3f024f2df66f9c.js",
+						"tfa/security-key-list.8598bc3f024f2df66f9c.js.map",
+					],
+					"tfa/showTFAQRCode": [
+						"tfa/showTFAQRCode.a5ed08229294a1f87fe5.js",
+						"tfa/showTFAQRCode.a5ed08229294a1f87fe5.js.map",
+					],
+					"tfa/showTFASuccess": [
+						"tfa/showTFASuccess.ff80ecb6caccf1579ae4.js",
+						"tfa/showTFASuccess.ff80ecb6caccf1579ae4.js.map",
+					],
+					"tfa/tfa-disable": [
+						"tfa/tfa-disable.7577ed40f81cb58a3424.js",
+						"tfa/tfa-disable.7577ed40f81cb58a3424.js.map",
+					],
+					"tfa/tfa-mode-selection": [
+						"tfa/tfa-mode-selection.b36f39855d5a21646241.js",
+						"tfa/tfa-mode-selection.b36f39855d5a21646241.js.map",
+					],
+					"tfa/tfa-password-entry": [
+						"tfa/tfa-password-entry.2e938d426721b5dc1873.js",
+						"tfa/tfa-password-entry.2e938d426721b5dc1873.js.map",
+					],
+					"tfa/totp": [
+						"tfa/totp.58f877294a0d4f5e969a.js",
+						"tfa/totp.58f877294a0d4f5e969a.js.map",
+					],
+					"tokens/create-gat": [
+						"tokens/create-gat.bc918414f753f3ea69a9.js",
+						"tokens/create-gat.bc918414f753f3ea69a9.js.map",
+					],
+					"tokens/gat-details": [
+						"tokens/gat-details.b0b0bb67343240bcfca8.js",
+						"tokens/gat-details.b0b0bb67343240bcfca8.js.map",
+					],
+					"tokens/gat/allowed-ip-ranges-input": [
+						"tokens/gat/allowed-ip-ranges-input.7fd52f9ccec4cb1dbe54.js",
+						"tokens/gat/allowed-ip-ranges-input.7fd52f9ccec4cb1dbe54.js.map",
+					],
+					"tokens/gat/constants": [
+						"tokens/gat/constants.f73b7aa15b7e57b61c6a.js",
+						"tokens/gat/constants.f73b7aa15b7e57b61c6a.js.map",
+					],
+					"tokens/gat/divider": [
+						"tokens/gat/divider.894c0ac2e39ce4c2a612.js",
+						"tokens/gat/divider.894c0ac2e39ce4c2a612.js.map",
+					],
+					"tokens/gat/expiration-days-input": [
+						"tokens/gat/expiration-days-input.cba32c0071ddead7a34f.js",
+						"tokens/gat/expiration-days-input.cba32c0071ddead7a34f.js.map",
+					],
+					"tokens/gat/gat-expiration": [
+						"tokens/gat/gat-expiration.554385589b6d7ca4366b.js",
+						"tokens/gat/gat-expiration.554385589b6d7ca4366b.js.map",
+					],
+					"tokens/gat/gat-input": [
+						"tokens/gat/gat-input.4e636a1355942052f660.js",
+						"tokens/gat/gat-input.4e636a1355942052f660.js.map",
+					],
+					"tokens/gat/organizations-input": [
+						"tokens/gat/organizations-input.1cce3933adbd861a2844.js",
+						"tokens/gat/organizations-input.1cce3933adbd861a2844.js.map",
+					],
+					"tokens/gat/organizations-section": [
+						"tokens/gat/organizations-section.1c2cec2ded27fe60a9a0.js",
+						"tokens/gat/organizations-section.1c2cec2ded27fe60a9a0.js.map",
+					],
+					"tokens/gat/packages-and-scopes-input": [
+						"tokens/gat/packages-and-scopes-input.b9b9833811c89fccc61c.js",
+						"tokens/gat/packages-and-scopes-input.b9b9833811c89fccc61c.js.map",
+					],
+					"tokens/gat/packages-and-scopes-section": [
+						"tokens/gat/packages-and-scopes-section.dbeb529092395488ee5e.js",
+						"tokens/gat/packages-and-scopes-section.dbeb529092395488ee5e.js.map",
+					],
+					"tokens/gat/permissions-input": [
+						"tokens/gat/permissions-input.026081a5ba5f3b401023.js",
+						"tokens/gat/permissions-input.026081a5ba5f3b401023.js.map",
+					],
+					"tokens/gat/section": [
+						"tokens/gat/section.0b4fdcf57935ba658dc3.js",
+						"tokens/gat/section.0b4fdcf57935ba658dc3.js.map",
+					],
+					"tokens/gat/section-heading": [
+						"tokens/gat/section-heading.4620919655aa1b56a445.js",
+						"tokens/gat/section-heading.4620919655aa1b56a445.js.map",
+					],
+					"tokens/gat/selected-items": [
+						"tokens/gat/selected-items.5d1e85b89be34fe9da35.js",
+						"tokens/gat/selected-items.5d1e85b89be34fe9da35.js.map",
+					],
+					"tokens/gat/utils": [
+						"tokens/gat/utils.62a84287afe1ae363a5a.js",
+						"tokens/gat/utils.62a84287afe1ae363a5a.js.map",
+					],
+					"tokens/generate-token": [
+						"tokens/generate-token.277c44b4548d0ced415c.js",
+						"tokens/generate-token.277c44b4548d0ced415c.js.map",
+					],
+					"tokens/list": [
+						"tokens/list.11590cd786891c3e32c3.js",
+						"tokens/list.11590cd786891c3e32c3.js.map",
+					],
+					"vouchers/view": [
+						"vouchers/view.de6578759ec7068f8016.js",
+						"vouchers/view.de6578759ec7068f8016.js.map",
+					],
+				},
+				"hash": "18f7743105d044addf35",
+				"name": "package/package",
+				"containerId": "app",
+				"headerName": "x-spiferack",
+				"publicPath": "https://static-production.npmjs.com/",
+			};
+		</script>
+		<script
+			crossorigin="anonymous"
+			src="https://static-production.npmjs.com/commons.18f7743105d044addf35.js"></script>
+		<script
+			crossorigin="anonymous"
+			src="https://static-production.npmjs.com/minicssextractbug.42ff216368a620557893.js"></script>
+		<script
+			crossorigin="anonymous"
+			src="https://static-production.npmjs.com/package/package.8cc4af6d0308658a6f1d.js"></script>
+	</body>
+</html>

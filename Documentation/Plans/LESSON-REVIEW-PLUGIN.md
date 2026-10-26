@@ -242,7 +242,7 @@ settled on.
 
 ```
 Classic/packages/plugin-dsh-lesson-review/
-  Source/Library.ts                 the service (17 methods)
+  Source/Library.ts                 the service (19 methods)
   Source/Function/{Knobs,Digest,Prompt,Parse,Judge,Apply,Curate,Usage,Report,Snapshot}.ts
   Source/Interface/{Config,Entry,Proposal,Review,Corpus}.ts
   Source/Variable/{Config,Blocks}.ts
@@ -306,18 +306,44 @@ Adding packages to this repo is a CENSUS change, not just a directory. Before me
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PLUGIN-FAMILY.md`                                  | two rows, and the counts reconciled: the tree holds **54 Classic + 48 ETS = 102** directories today while the registry says 101 (53 + 48) - the new packages make it 56 + 48 = 104, and the registry's own drift should be settled in the same pass |
 | `PLUGIN-SUITE-SUMMARY.md`                           | the one-line role per package                                                                                                                                                                                                                       |
-| `Site/Source/Library/Content.ts` + `Live.ts`        | the census figures the site renders (packages, smoke folders, checks, twins)                                                                                                                                                                        |
+| `Site/Source/Library/Content.ts` + `Live.ts`        | the census figures the site renders (packages, smoke folders, checks, twins, policy packages, storage domains, dependents)                                                                                                                          |
+| the SITE CATALOG                                    | one static page per package, the registry links to it, and the sitemap entry - the catalog is derived per package, so two packages are two pages                                                                                                    |
 | `marketplace.json` + `Site/Public/marketplace.json` | `pnpm marketplace` (the generator walks both trees)                                                                                                                                                                                                 |
 | `Documentation/INDEX.md`                            | this plan's entry                                                                                                                                                                                                                                   |
 | the ETS twins                                       | section 7, if the delivery includes them                                                                                                                                                                                                            |
 
-`node Site/Scripts/Drift-Guard.mjs` is the arbiter, and its BASELINE in this checkout is already
-red: **5 failures, all in the smoke-count figures** (`Counts.Coach` expects Classic 139 / EffectTS
-129, got 129/129; `Totals.Classic` expects 3509, got 3500; `Totals.EffectTS` expects 3172, got 3173;
-`Counts.SuitesClassic` expects 272, got 271; `Counts.Suites` expects 514, got 513). The mockup adds
-7 folders / 75 checks on top of that. The package census check itself passes today (54 + 48), which
-is why the two new packages will be the first NEW drift this tree sees - and why the figures above
-must move with them.
+`node Site/Scripts/Drift-Guard.mjs` is the arbiter. Measured in this checkout:
+
+- **baseline before the mockup: 5 failures, all in the smoke figures** - `Counts.Coach` (Classic 139
+  expected, 129 counted), `Totals.Classic` (3509/3500), `Totals.EffectTS` (3172/3173),
+  `Counts.SuitesClassic` (272/271), `Counts.Suites` (514/513). The tree was already red here.
+- **after the mockup: 20 failures** - the same 5, plus 15 that are exactly the census the two
+  packages move. The new ones, with the figures a delivery must write:
+
+| Check                               | Now (repo)   | Content library      |
+| ----------------------------------- | ------------ | -------------------- |
+| `Totals.Classic`                    | 3584 checks  | 3500                 |
+| `Counts.SuitesClassic`              | 279 folders  | 271                  |
+| `Counts.Suites`                     | 521 folders  | 513                  |
+| `Counts.PackagesClassic`            | 56 packages  | 54                   |
+| `Counts.Packages`                   | 104 packages | 102                  |
+| `Policy.Packages`                   | 26           | 25                   |
+| `Storage.Domains`                   | 15           | 14                   |
+| `Dependents.CoreClassic`            | 49           | 47                   |
+| `Dependents.Factory`                | 48           | 46                   |
+| the twin-less Classic packages      | nine         | the documented seven |
+| the catalog's fallback tuples       | 104 rows     | 102                  |
+| the catalog: a built page per entry | 2 missing    | -                    |
+| the registry: every page linked     | 2 missing    | -                    |
+| the sitemap: every page listed      | 2 missing    | -                    |
+
+Two of those are worth calling out because they are not obvious from "add a package": the new
+service declares a KV `domain` (`lesson`), which moves `Storage.Domains`; and it carries a
+`Policy-Defaults` smoke folder, which moves `Policy.Packages`. Both are derived from the packages
+themselves, which is the point of the guard.
+
+None of this is a code defect: the two packages build, typecheck and pass their own smokes. It is
+the price of a package existing in a repo whose site is a re-derivation of the tree.
 
 ## 9. Non-goals
 

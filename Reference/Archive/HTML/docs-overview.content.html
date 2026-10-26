@@ -1,84 +1,373 @@
 <div><h1>Clipper2 - Polygon Clipping Offsetting &amp; Triangulating</h1></div>
 <div><h2>Author &amp; copyright:</h2></div>
-<div><p> Angus Johnson Copyright © 2010-2025 <a href="./License.htm">License, terms and conditions</a> </p></div>
+<div>
+	<p>
+		Angus Johnson Copyright © 2010-2025
+		<a href="./License.htm">License, terms and conditions</a>
+	</p>
+</div>
 <div><h2>Summary:</h2></div>
-<div><p> <a href="./_Body.htm"><b>Clipper2</b></a> is an <b>open source freeware</b> software library (written in <b>C++</b>, <b>C#</b> and <b>Delphi Pascal</b>) that performs line and polygon <a href="./Units/Clipper/Types/ClipType.htm"><b>clipping</b></a>, <a href="./Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm"><b>offsetting</b></a> and <a href="./Units/Clipper/Functions/Triangulate.htm"><b>triangulating</b></a>. <b>Clipper2</b> is a major update of my original <a href="https://sourceforge.net/projects/polyclipping/"><b>Clipper </b></a> library which I'm now calling <b>Clipper1</b>. Clipper1 was written 15 years ago and while it still works very well, Clipper2 is just <a href="./Changes.htm">better</a>. And Clipper2 has all the features of Clipper1 (plus more) that sets Clipper apart from other polygon clipping libraries, including: 
-    </p></div>
-<div><ul>
-<li>being able to clip complex self-intersecting polygons</li>
-<li>support polygons with multiple filling rules (EvenOdd, NonZero, Positive, Negative)</li>
-<li>performing polygon offsetting and triangulating</li>
-<li>is numerically robust, and</li>
-<li>is free to use in both freeware and commercial applications</li>
-</ul></div>
+<div>
+	<p>
+		<a href="./_Body.htm"><b>Clipper2</b></a> is an <b>open source freeware</b> software library
+		(written in <b>C++</b>, <b>C#</b> and <b>Delphi Pascal</b>) that performs line and polygon
+		<a href="./Units/Clipper/Types/ClipType.htm"><b>clipping</b></a
+		>,
+		<a href="./Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm"><b>offsetting</b></a> and
+		<a href="./Units/Clipper/Functions/Triangulate.htm"><b>triangulating</b></a
+		>. <b>Clipper2</b> is a major update of my original
+		<a href="https://sourceforge.net/projects/polyclipping/"><b>Clipper </b></a> library which
+		I'm now calling <b>Clipper1</b>. Clipper1 was written 15 years ago and while it still works
+		very well, Clipper2 is just <a href="./Changes.htm">better</a>. And Clipper2 has all the
+		features of Clipper1 (plus more) that sets Clipper apart from other polygon clipping
+		libraries, including:
+	</p>
+</div>
+<div>
+	<ul>
+		<li>being able to clip complex self-intersecting polygons</li>
+		<li>support polygons with multiple filling rules (EvenOdd, NonZero, Positive, Negative)</li>
+		<li>performing polygon offsetting and triangulating</li>
+		<li>is numerically robust, and</li>
+		<li>is free to use in both freeware and commercial applications</li>
+	</ul>
+</div>
 <div><h2>Source Code and Compilers:</h2></div>
-<div><p> The <b>Clipper</b> library is maintained in three programming languages: <b>C++</b>, <b>C#</b> and <b>Delphi Pascal</b>. (While I do most of the library's development in Delphi, I've made a habit of translating it into <b>C++</b> and <b>C#</b> as a way of developing my skills in these languages too. And as a side benefit, I often find bugs while making these translations.) The C++ code also contains a <a href="https://github.com/AngusJohnson/Clipper2/blob/main/CPP/Clipper2Lib/include/clipper2/clipper.export.h"><b>header file </b></a> that exports virtually all of the library's features via simple functions. So by compiling this header into a <a href="https://github.com/AngusJohnson/Clipper2/releases/tag/Clipper2_1.0.6_DLL"><b>DLL</b></a> or shared object, the library can be accessed by almost <b>any programming language</b>. And when performance is critical, Delphi and C# users may even prefer accessing the library this way since it'll be faster than the C# or Delphi compiled code (see chart <a href="./Changes.htm">here</a>).
-</p></div>
-<div><ul>
-<li>
-<span class="Language">Delphi</span>: compiles with any version of Delphi back to <b>Delphi 7</b>.</li>
-<li>
-<span class="Language">C#</span>: core library uses <b>Standard Library 2.0</b> but the sample code uses .NET5</li>
-<li>
-<span class="Language">C++</span>: requires <b>C++17</b> but could easily be modified to C++11.</li>
-</ul></div>
+<div>
+	<p>
+		The <b>Clipper</b> library is maintained in three programming languages: <b>C++</b>,
+		<b>C#</b> and <b>Delphi Pascal</b>. (While I do most of the library's development in Delphi,
+		I've made a habit of translating it into <b>C++</b> and <b>C#</b> as a way of developing my
+		skills in these languages too. And as a side benefit, I often find bugs while making these
+		translations.) The C++ code also contains a
+		<a
+			href="https://github.com/AngusJohnson/Clipper2/blob/main/CPP/Clipper2Lib/include/clipper2/clipper.export.h"
+			><b>header file </b></a
+		>
+		that exports virtually all of the library's features via simple functions. So by compiling
+		this header into a
+		<a href="https://github.com/AngusJohnson/Clipper2/releases/tag/Clipper2_1.0.6_DLL"
+			><b>DLL</b></a
+		>
+		or shared object, the library can be accessed by almost <b>any programming language</b>. And
+		when performance is critical, Delphi and C# users may even prefer accessing the library this
+		way since it'll be faster than the C# or Delphi compiled code (see chart
+		<a href="./Changes.htm">here</a>).
+	</p>
+</div>
+<div>
+	<ul>
+		<li>
+			<span class="Language">Delphi</span>: compiles with any version of Delphi back to
+			<b>Delphi 7</b>.
+		</li>
+		<li>
+			<span class="Language">C#</span>: core library uses <b>Standard Library 2.0</b> but the
+			sample code uses .NET5
+		</li>
+		<li>
+			<span class="Language">C++</span>: requires <b>C++17</b> but could easily be modified to
+			C++11.
+		</li>
+	</ul>
+</div>
 <div><h2>Download:</h2></div>
-<div><p> Latest Version: <b>2.0.0</b> Last Update: 17 December 2025 <a href="https://github.com/AngusJohnson/Clipper2"><b>Download from GitHub</b></a> </p></div>
+<div>
+	<p>
+		Latest Version: <b>2.0.0</b> Last Update: 17 December 2025
+		<a href="https://github.com/AngusJohnson/Clipper2"><b>Download from GitHub</b></a>
+	</p>
+</div>
 <div><h2 id="terminology">Terminology:</h2></div>
-<div><p>  Originally <b>clipping</b> referred to the process of removing or "cutting away" parts of images that were outside a rectangular <i>clipping window</i>. However over time this process has been generalized to include <i>clipping</i> with non-rectangular <i>windows</i>, and to include union, difference and XOR <a href="./Units/Clipper/Types/ClipType.htm"><b>boolean operations</b></a> too. And in this library, instead of raster images being clipped, vector paths (<b>subjects</b>) are clipped with other (<b>clip</b>) vector paths that define the clipping regions. <b id="paths">Paths</b> (see <a href="https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/Path64.htm"><b>Path64</b></a> &amp; <a href="https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/PathD.htm"><b>PathD</b></a>) are simply series of straight line <b>segments</b>. These are defined by series of 2D coordinates (aka points or vertices). Paths are <b>open</b> when their ends <i>don't</i> join together. And open paths are sometimes called <b>polylines</b>. Paths are <b>closed</b> when their ends <i>do</i> join (with an implicit line segment between the first and last vertices). Only context will determine whether paths are open or closed. Closed paths are often called <b>polygons</b>, but more accurately, they are simply the <b>contours</b> that outline polygon regions (see below). In this clipping library, <i>subject</i> paths in clipping operations may be open or closed, whereas <i>clip</i> paths must be closed. <b>Simple polygons</b> are formed by single closed paths that don't self-intersect. <b id="filling">Complex polygons</b> are polygons that aren't <i>simple</i>, whether because they self-intersect or because they require more than one path to define their enclosed "filling" regions. <b>Polygon holes</b> are any regions inside polygons that aren't filled. <i>Holes</i> are defined by <b>inner</b> polygon contours that are separate from and inside <b>outer</b> polygon contours. While the filling region of a <i>simple polygon</i> is unambiguous, the filling region of a <i>complex polygon</i> is not. So complex polygons require additional information (i.e. a <a href="./Units/Clipper/Types/FillRule.htm"><b>filling rule</b></a>) to fully define which regions are filled, and which are not. In 2D graphics, there are two commonly used filling rules - <i>EvenOdd</i> and <i>NonZero</i>.  Closed path <b>segments</b> are commonly referred to as <b>edges</b>. Edges are considered <b>touching</b> when they are collinear and overlap, and polygons are <i>touching</i> when they have <i>touching</i> edges. 
-    </p></div>
-<div><div>
-<div>C++ Example:
-      </div>
-<div><div class="syntaxhighlighter cpp" id="highlighter_598122">
-
-<table><tbody><tr>
-<td class="gutter">
-<div class="line number1 index0 alt2">1</div>
-<div class="line number2 index1 alt1">2</div>
-<div class="line number3 index2 alt2">3</div>
-<div class="line number4 index3 alt1">4</div>
-<div class="line number5 index4 alt2">5</div>
-<div class="line number6 index5 alt1">6</div>
-<div class="line number7 index6 alt2">7</div>
-<div class="line number8 index7 alt1">8</div>
-</td>
-<td class="code"><div class="container">
-<div class="line number1 index0 alt2"><code class="cpp preprocessor">#include "clipper2/clipper.h"</code></div>
-<div class="line number2 index1 alt1"><code class="cpp preprocessor">#include &lt;iomanip&gt; </code></div>
-<div class="line number3 index2 alt2">
-<code class="cpp keyword bold">using</code> <code class="cpp keyword bold">namespace</code> <code class="cpp plain">Clipper2Lib;</code>
+<div>
+	<p>
+		Originally <b>clipping</b> referred to the process of removing or "cutting away" parts of
+		images that were outside a rectangular <i>clipping window</i>. However over time this
+		process has been generalized to include <i>clipping</i> with non-rectangular <i>windows</i>,
+		and to include union, difference and XOR
+		<a href="./Units/Clipper/Types/ClipType.htm"><b>boolean operations</b></a> too. And in this
+		library, instead of raster images being clipped, vector paths (<b>subjects</b>) are clipped
+		with other (<b>clip</b>) vector paths that define the clipping regions.
+		<b id="paths">Paths</b> (see
+		<a href="https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/Path64.htm"
+			><b>Path64</b></a
+		>
+		&amp;
+		<a href="https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/PathD.htm"><b>PathD</b></a
+		>) are simply series of straight line <b>segments</b>. These are defined by series of 2D
+		coordinates (aka points or vertices). Paths are <b>open</b> when their ends
+		<i>don't</i> join together. And open paths are sometimes called <b>polylines</b>. Paths are
+		<b>closed</b> when their ends <i>do</i> join (with an implicit line segment between the
+		first and last vertices). Only context will determine whether paths are open or closed.
+		Closed paths are often called <b>polygons</b>, but more accurately, they are simply the
+		<b>contours</b> that outline polygon regions (see below). In this clipping library,
+		<i>subject</i> paths in clipping operations may be open or closed, whereas <i>clip</i> paths
+		must be closed. <b>Simple polygons</b> are formed by single closed paths that don't
+		self-intersect. <b id="filling">Complex polygons</b> are polygons that aren't <i>simple</i>,
+		whether because they self-intersect or because they require more than one path to define
+		their enclosed "filling" regions. <b>Polygon holes</b> are any regions inside polygons that
+		aren't filled. <i>Holes</i> are defined by <b>inner</b> polygon contours that are separate
+		from and inside <b>outer</b> polygon contours. While the filling region of a
+		<i>simple polygon</i> is unambiguous, the filling region of a <i>complex polygon</i> is not.
+		So complex polygons require additional information (i.e. a
+		<a href="./Units/Clipper/Types/FillRule.htm"><b>filling rule</b></a
+		>) to fully define which regions are filled, and which are not. In 2D graphics, there are
+		two commonly used filling rules - <i>EvenOdd</i> and <i>NonZero</i>. Closed path
+		<b>segments</b> are commonly referred to as <b>edges</b>. Edges are considered
+		<b>touching</b> when they are collinear and overlap, and polygons are <i>touching</i> when
+		they have <i>touching</i> edges.
+	</p>
 </div>
-<div class="line number4 index3 alt1">
-<code class="cpp keyword bold">using</code> <code class="cpp keyword bold">namespace</code> <code class="cpp plain">std;  </code>
+<div>
+	<div>
+		<div>C++ Example:</div>
+		<div>
+			<div class="syntaxhighlighter cpp" id="highlighter_598122">
+				<table>
+					<tbody>
+						<tr>
+							<td class="gutter">
+								<div class="line number1 index0 alt2">1</div>
+								<div class="line number2 index1 alt1">2</div>
+								<div class="line number3 index2 alt2">3</div>
+								<div class="line number4 index3 alt1">4</div>
+								<div class="line number5 index4 alt2">5</div>
+								<div class="line number6 index5 alt1">6</div>
+								<div class="line number7 index6 alt2">7</div>
+								<div class="line number8 index7 alt1">8</div>
+							</td>
+							<td class="code">
+								<div class="container">
+									<div class="line number1 index0 alt2">
+										<code class="cpp preprocessor"
+											>#include "clipper2/clipper.h"</code
+										>
+									</div>
+									<div class="line number2 index1 alt1">
+										<code class="cpp preprocessor"
+											>#include &lt;iomanip&gt;
+										</code>
+									</div>
+									<div class="line number3 index2 alt2">
+										<code class="cpp keyword bold">using</code>
+										<code class="cpp keyword bold">namespace</code>
+										<code class="cpp plain">Clipper2Lib;</code>
+									</div>
+									<div class="line number4 index3 alt1">
+										<code class="cpp keyword bold">using</code>
+										<code class="cpp keyword bold">namespace</code>
+										<code class="cpp plain">std;  </code>
+									</div>
+									<div class="line number5 index4 alt2">
+										<code class="cpp plain"
+											>PathsD subject =
+											{{{100,50},{9.5,79.4},{65.5,2.4},{65.5,97.6},{9.5,20.7}}};</code
+										>
+									</div>
+									<div class="line number6 index5 alt1">
+										<code class="cpp plain"
+											>PathsD clip =
+											{{{20,20},{80,20},{80,80},{20,80}}};</code
+										>
+									</div>
+									<div class="line number7 index6 alt2">
+										<code class="cpp plain"
+											>PathsD solution = Intersect(subject, clip,
+											FillRule::NonZero);</code
+										>
+									</div>
+									<div class="line number8 index7 alt1">
+										<code class="cpp plain"
+											>cout &lt;&lt; setprecision(3) &lt;&lt; solution
+											&lt;&lt; endl;</code
+										>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="line number5 index4 alt2"><code class="cpp plain">PathsD subject = {{{100,50},{9.5,79.4},{65.5,2.4},{65.5,97.6},{9.5,20.7}}};</code></div>
-<div class="line number6 index5 alt1"><code class="cpp plain">PathsD clip = {{{20,20},{80,20},{80,80},{20,80}}};</code></div>
-<div class="line number7 index6 alt2"><code class="cpp plain">PathsD solution = Intersect(subject, clip, FillRule::NonZero);</code></div>
-<div class="line number8 index7 alt1"><code class="cpp plain">cout &lt;&lt; setprecision(3) &lt;&lt; solution &lt;&lt; endl;</code></div>
-</div></td>
-</tr></tbody></table>
-</div></div>
-</div></div>
-<div><div>
-<div>Console output:
-    65.5,38.8, 80,43.5, 80,56.5, 65.5,61.2, 65.5,80, 52.7,80, 44.1,68.2, 20,76, 20,65, 30.9,50, 20,35, 20,24, 44.1,31.8, 52.7,20, 65.5,20
-      </div>
-</div></div>
+<div>
+	<div>
+		<div>
+			Console output: 65.5,38.8, 80,43.5, 80,56.5, 65.5,61.2, 65.5,80, 52.7,80, 44.1,68.2,
+			20,76, 20,65, 30.9,50, 20,35, 20,24, 44.1,31.8, 52.7,20, 65.5,20
+		</div>
+	</div>
+</div>
 <div><h2 id="coord_range">Coordinate Range:</h2></div>
-<div><p> In <i>Clipper2</i> there are now two <i>Clipper</i> classes - <b>Clipper64</b> and <b>ClipperD</b> - that perform all clipping operations. While <i>Clipper64</i> accepts <span class="monobold">Path64</span> paths, and <i>ClipperD</i> accepts <span class="monobold">PathD</span> paths, both these classes still perform clipping operations using integer coordinates internally. This is to ensure <a href="https://en.wikipedia.org/wiki/Robust_geometric_computation"><b>numerical robustness</b></a>. Because of this, <i>ClipperD</i> performs <span class="monobold">double / integer</span> conversions before and after clipping (by scaling and de-scaling coordinates using the specified decimal precision). Even though <span class="monobold">Path64</span> paths <i>can</i> be assigned using all 64bits, clipping can't be performed using quite this full range. At a minimum there must be room to allow integer addition and subtraction without overflow. To accommodate this (and the sign bit too), coordinates must at the very least remain within 62bits (±4.6 × 10<sup>18
-    </sup>). However, as coordinates extend beyond ±1.0 × 10<sup>15
-    </sup>, the algorithm that determines where segments intersect slowly degrades. (There are algorithms that are <a href="https://github.com/AngusJohnson/Clipper2/blob/main/CPP/BenchMark/GetIntersectPtBenchmark.cpp"><b>more accurate</b></a> at the extremes of the coordinate range, but these algorithms are also significantly slower.) Given this flexibility in ranges, and because range checking will affect performance, all range checking is left to the discretion of the library user. </p></div>
+<div>
+	<p>
+		In <i>Clipper2</i> there are now two <i>Clipper</i> classes - <b>Clipper64</b> and
+		<b>ClipperD</b> - that perform all clipping operations. While <i>Clipper64</i> accepts
+		<span class="monobold">Path64</span> paths, and <i>ClipperD</i> accepts
+		<span class="monobold">PathD</span> paths, both these classes still perform clipping
+		operations using integer coordinates internally. This is to ensure
+		<a href="https://en.wikipedia.org/wiki/Robust_geometric_computation"
+			><b>numerical robustness</b></a
+		>. Because of this, <i>ClipperD</i> performs
+		<span class="monobold">double / integer</span> conversions before and after clipping (by
+		scaling and de-scaling coordinates using the specified decimal precision). Even though
+		<span class="monobold">Path64</span> paths <i>can</i> be assigned using all 64bits, clipping
+		can't be performed using quite this full range. At a minimum there must be room to allow
+		integer addition and subtraction without overflow. To accommodate this (and the sign bit
+		too), coordinates must at the very least remain within 62bits (±4.6 × 10<sup>18 </sup>).
+		However, as coordinates extend beyond ±1.0 × 10<sup>15 </sup>, the algorithm that determines
+		where segments intersect slowly degrades. (There are algorithms that are
+		<a
+			href="https://github.com/AngusJohnson/Clipper2/blob/main/CPP/BenchMark/GetIntersectPtBenchmark.cpp"
+			><b>more accurate</b></a
+		>
+		at the extremes of the coordinate range, but these algorithms are also significantly
+		slower.) Given this flexibility in ranges, and because range checking will affect
+		performance, all range checking is left to the discretion of the library user.
+	</p>
+</div>
 <div><h2 id="closed_paths">Clipping closed paths:</h2></div>
-<div><p> Clipping operations will always return <a href="./Units/Clipper/Functions/IsPositive.htm"><b>Positive</b></a> oriented solutions (unless the Clipper object's <a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/ReverseSolution.htm"><b>ReverseSolution</b></a> property has been enabled). This means that outer polygon contours will wind anti-clockwise (in Cartesian coordinates), and inner <i>hole</i> contours will wind clockwise. And because paths in clipping solutions never intersect, both <b>EvenOdd</b> and <b>NonZero</b> filling would correctly apply to the solution, though it's usual to apply the same <a href="./Units/Clipper/Types/FillRule.htm"><b>FillRule</b></a> that was applied to the subject and clip paths during clipping.   A lot of effort has gone into returning solutions close to their simplest forms, but there's no way to do this perfectly without significantly degrading performance. So there will, on occasions, be solutions with polygons that are <a href="#touching"><b>touching</b></a>. If this is problematic, then a follow up <b>union</b> operation will frequently bring these solutions to their simplest forms. The Clipper class's <a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/PreserveCollinear.htm"><b>PreserveCollinear</b></a> property only is only relevant when clipping <b>closed paths</b>. Paths will sometimes contain consecutive collinear segments, where the shared vertex can be removed without altering path shape. Removing these vertices simplifies path definitions and is generally (but not always) preferred in clipping solutions. Nevertheless, where consecutive collinear segments create 180 degree 'spikes', these will always be removed from closed solutions. </p></div>
+<div>
+	<p>
+		Clipping operations will always return
+		<a href="./Units/Clipper/Functions/IsPositive.htm"><b>Positive</b></a> oriented solutions
+		(unless the Clipper object's
+		<a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/ReverseSolution.htm"
+			><b>ReverseSolution</b></a
+		>
+		property has been enabled). This means that outer polygon contours will wind anti-clockwise
+		(in Cartesian coordinates), and inner <i>hole</i> contours will wind clockwise. And because
+		paths in clipping solutions never intersect, both <b>EvenOdd</b> and <b>NonZero</b> filling
+		would correctly apply to the solution, though it's usual to apply the same
+		<a href="./Units/Clipper/Types/FillRule.htm"><b>FillRule</b></a> that was applied to the
+		subject and clip paths during clipping. A lot of effort has gone into returning solutions
+		close to their simplest forms, but there's no way to do this perfectly without significantly
+		degrading performance. So there will, on occasions, be solutions with polygons that are
+		<a href="#touching"><b>touching</b></a
+		>. If this is problematic, then a follow up <b>union</b> operation will frequently bring
+		these solutions to their simplest forms. The Clipper class's
+		<a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/PreserveCollinear.htm"
+			><b>PreserveCollinear</b></a
+		>
+		property only is only relevant when clipping <b>closed paths</b>. Paths will sometimes
+		contain consecutive collinear segments, where the shared vertex can be removed without
+		altering path shape. Removing these vertices simplifies path definitions and is generally
+		(but not always) preferred in clipping solutions. Nevertheless, where consecutive collinear
+		segments create 180 degree 'spikes', these will always be removed from closed solutions.
+	</p>
+</div>
 <div><h2 id="open_paths">Clipping open paths:</h2></div>
-<div><p>  The library supports open path clipping, and this may also be performed concurrently with closed path clipping. However, only <b>subject</b> paths may be open. Except in <a href="./Units/Clipper/Types/ClipType.htm"><b>union</b></a> operations, the presence of closed subject paths will have no effect on open path solutions. In <b>union</b> operations, open paths will be clipped wherever they overlap <i>any</i> closed paths (regardless of whether they are subject or clip paths). Unlike closed path clipping, there's not always an obvious or <i>right</i> way to clip open path segments when they overlap (are collinear with) clipping boundaries. Sometimes these segments will be included in clipping solutions, and sometimes not. When the adjacent (ie preceding and succeeding) segments of an overlapping segment are both inside the clipping region, then the overlapping segment will be included. When adjacent segments are both outside, then the overlapping segments will be excluded. When one adjacent segment is inside and the other is outside, then the overlapping segment will be included when the lower-most adjacent segment in inside the clipping region. </p></div>
+<div>
+	<p>
+		The library supports open path clipping, and this may also be performed concurrently with
+		closed path clipping. However, only <b>subject</b> paths may be open. Except in
+		<a href="./Units/Clipper/Types/ClipType.htm"><b>union</b></a> operations, the presence of
+		closed subject paths will have no effect on open path solutions. In <b>union</b> operations,
+		open paths will be clipped wherever they overlap <i>any</i> closed paths (regardless of
+		whether they are subject or clip paths). Unlike closed path clipping, there's not always an
+		obvious or <i>right</i> way to clip open path segments when they overlap (are collinear
+		with) clipping boundaries. Sometimes these segments will be included in clipping solutions,
+		and sometimes not. When the adjacent (ie preceding and succeeding) segments of an
+		overlapping segment are both inside the clipping region, then the overlapping segment will
+		be included. When adjacent segments are both outside, then the overlapping segments will be
+		excluded. When one adjacent segment is inside and the other is outside, then the overlapping
+		segment will be included when the lower-most adjacent segment in inside the clipping region.
+	</p>
+</div>
 <div><h2 id="usingz">Adding user-defined data to clipping paths:</h2></div>
-<div><p> With regard to clipping solutions, occasionally users will need to assign user-defined data to vertices, including those created at path intersections. To facilitate this, the pre-processor directive <a href="./USINGZ.htm"><b>USINGZ</b></a> can be set that adds an <span class="monobold">Int64</span> <span class="monobold2">Z</span> member to vertex definitions (see <a href="./Units/Clipper/Types/Point64.htm"><b>Point64</b></a> and <a href="./Units/Clipper/Types/PointD.htm"><b>PointD</b></a>). <span class="monobold2">Z</span> values can then be assigned to vertices prior to clipping, and during clipping with newly created vertices at points of intersection (ie via a user-defined <a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/ZCallback.htm"><b>ZCallback</b></a> function). Note however, that these <span class="monobold2">Z</span> values are <b>user defined</b> values and shouldn't be confused with 3D geometries and 3D coordinates.) </p></div>
+<div>
+	<p>
+		With regard to clipping solutions, occasionally users will need to assign user-defined data
+		to vertices, including those created at path intersections. To facilitate this, the
+		pre-processor directive <a href="./USINGZ.htm"><b>USINGZ</b></a> can be set that adds an
+		<span class="monobold">Int64</span> <span class="monobold2">Z</span> member to vertex
+		definitions (see <a href="./Units/Clipper/Types/Point64.htm"><b>Point64</b></a> and
+		<a href="./Units/Clipper/Types/PointD.htm"><b>PointD</b></a
+		>). <span class="monobold2">Z</span> values can then be assigned to vertices prior to
+		clipping, and during clipping with newly created vertices at points of intersection (ie via
+		a user-defined
+		<a href="./Units/Clipper.Engine/Classes/Clipper64/Properties/ZCallback.htm"
+			><b>ZCallback</b></a
+		>
+		function). Note however, that these <span class="monobold2">Z</span> values are
+		<b>user defined</b> values and shouldn't be confused with 3D geometries and 3D coordinates.)
+	</p>
+</div>
 <div><h2>Polygon Offsetting:</h2></div>
-<div><p>  Geometric <b>offsetting</b> refers to the process of creating <a href="https://en.wikipedia.org/wiki/Parallel_curve"><b>parallel curves</b></a> that are offset a specified distance from their starting positions.  While all offsetting is performed by the <a href="./Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm"><b>ClipperOffset</b></a> class in the <a href="./Units/Clipper.Offset/_Body.htm"><b>Clipper.Offset</b></a> unit, the complexities of constructing and using this class can usually be avoided by using instead the <a href="./Units/Clipper/Functions/InflatePaths.htm"><b>InflatePaths</b></a> function in the <a href="./Units/Clipper/_Body.htm"><b>Clipper</b></a> unit. This function can both inflate and shrink polygons (using positive and negative offsets respectively). Offsetting can be performed using a number of <a href="./Units/Clipper/Types/JoinType.htm"><b>JoinTypes</b></a> and <a href="./Units/Clipper/Types/EndType.htm"><b>EndTypes</b></a>. While both open paths and closed paths can be offset, logically only closed paths can be shrunk (ie with negative offsets). Note: Offsetting shouldn't be confused with the process of polygon <a href="https://en.wikipedia.org/wiki/Translation_(geometry)"><b>translation</b></a>. </p></div>
+<div>
+	<p>
+		Geometric <b>offsetting</b> refers to the process of creating
+		<a href="https://en.wikipedia.org/wiki/Parallel_curve"><b>parallel curves</b></a> that are
+		offset a specified distance from their starting positions. While all offsetting is performed
+		by the
+		<a href="./Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm"><b>ClipperOffset</b></a>
+		class in the <a href="./Units/Clipper.Offset/_Body.htm"><b>Clipper.Offset</b></a> unit, the
+		complexities of constructing and using this class can usually be avoided by using instead
+		the <a href="./Units/Clipper/Functions/InflatePaths.htm"><b>InflatePaths</b></a> function in
+		the <a href="./Units/Clipper/_Body.htm"><b>Clipper</b></a> unit. This function can both
+		inflate and shrink polygons (using positive and negative offsets respectively). Offsetting
+		can be performed using a number of
+		<a href="./Units/Clipper/Types/JoinType.htm"><b>JoinTypes</b></a> and
+		<a href="./Units/Clipper/Types/EndType.htm"><b>EndTypes</b></a
+		>. While both open paths and closed paths can be offset, logically only closed paths can be
+		shrunk (ie with negative offsets). Note: Offsetting shouldn't be confused with the process
+		of polygon
+		<a href="https://en.wikipedia.org/wiki/Translation_(geometry)"><b>translation</b></a
+		>.
+	</p>
+</div>
 <div><h2>References:</h2></div>
-<div><p> The Library is based on but significantly extends Bala Vatti's polygon clipping algorithm as described in <a href="https://dl.acm.org/doi/pdf/10.1145/129902.129906">"A generic solution to polygon clipping"</a>, Communications of the ACM, Vol 35, Issue 7 (July 1992) pp 56-63. A section in <a href="http://books.google.com/books?q=vatti+clipping+agoston">"Computer graphics and geometric modeling: implementation and algorithms"</a> by By Max K. Agoston (Springer, 2005) discussing <em>Vatti Polygon Clipping</em> was also helpful in creating the initial Clipper implementation. The paper titled <a href="https://mcmains.me.berkeley.edu/pubs/DAC05OffsetPolygon.pdf">"Polygon Offsetting by Computing Winding Numbers"</a> by Chen &amp; McMains (Paper no. DETC2005-85513, ASME 2005. Pages 565-575) contains helpful discussion on the complexities of polygon offsetting together with some solutions. </p></div>
+<div>
+	<p>
+		The Library is based on but significantly extends Bala Vatti's polygon clipping algorithm as
+		described in
+		<a href="https://dl.acm.org/doi/pdf/10.1145/129902.129906"
+			>"A generic solution to polygon clipping"</a
+		>, Communications of the ACM, Vol 35, Issue 7 (July 1992) pp 56-63. A section in
+		<a href="http://books.google.com/books?q=vatti+clipping+agoston"
+			>"Computer graphics and geometric modeling: implementation and algorithms"</a
+		>
+		by By Max K. Agoston (Springer, 2005) discussing <em>Vatti Polygon Clipping</em> was also
+		helpful in creating the initial Clipper implementation. The paper titled
+		<a href="https://mcmains.me.berkeley.edu/pubs/DAC05OffsetPolygon.pdf"
+			>"Polygon Offsetting by Computing Winding Numbers"</a
+		>
+		by Chen &amp; McMains (Paper no. DETC2005-85513, ASME 2005. Pages 565-575) contains helpful
+		discussion on the complexities of polygon offsetting together with some solutions.
+	</p>
+</div>
 <div><h2 id="Auto-SeeAlso">See Also</h2></div>
-<div><p class="Body"><a href="_Body.htm"><b>Index</b></a>, <a href="Changes.htm">Changes</a>, <a href="License.htm">License</a>, <a href="Units/Clipper.Engine/Classes/Clipper64/_Body.htm">Clipper64</a>, <a href="Units/Clipper.Engine/Classes/Clipper64/Properties/PreserveCollinear.htm">Clipper64.PreserveCollinear</a>, <a href="Units/Clipper.Engine/Classes/Clipper64/Properties/ReverseSolution.htm">Clipper64.ReverseSolution</a>, <a href="Units/Clipper.Engine/Classes/Clipper64/Properties/ZCallback.htm">Clipper64.ZCallback</a>, <a href="Units/Clipper.Offset/_Body.htm">Clipper.Offset</a>, <a href="Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm">ClipperOffset</a>, <a href="Units/Clipper/_Body.htm">Clipper</a>, <a href="Units/Clipper/Functions/InflatePaths.htm">InflatePaths</a>, <a href="Units/Clipper/Functions/IsPositive.htm">IsPositive</a>, <a href="Units/Clipper/Functions/Triangulate.htm">Triangulate</a>, <a href="Units/Clipper/Types/ClipType.htm">ClipType</a>, <a href="Units/Clipper/Types/EndType.htm">EndType</a>, <a href="Units/Clipper/Types/FillRule.htm">FillRule</a>, <a href="Units/Clipper/Types/JoinType.htm">JoinType</a>, <a href="Units/Clipper/Types/Point64.htm">Point64</a>, <a href="Units/Clipper/Types/PointD.htm">PointD</a>, <a href="USINGZ.htm">USINGZ</a></p></div>
-<div><p class="Copyright" id="auto">  Copyright © 2010-2024 Angus Johnson   -   Clipper2 2.0.0   -   Help file built on 17 Dec 2025 </p></div>
+<div>
+	<p class="Body">
+		<a href="_Body.htm"><b>Index</b></a
+		>, <a href="Changes.htm">Changes</a>, <a href="License.htm">License</a>,
+		<a href="Units/Clipper.Engine/Classes/Clipper64/_Body.htm">Clipper64</a>,
+		<a href="Units/Clipper.Engine/Classes/Clipper64/Properties/PreserveCollinear.htm"
+			>Clipper64.PreserveCollinear</a
+		>,
+		<a href="Units/Clipper.Engine/Classes/Clipper64/Properties/ReverseSolution.htm"
+			>Clipper64.ReverseSolution</a
+		>,
+		<a href="Units/Clipper.Engine/Classes/Clipper64/Properties/ZCallback.htm"
+			>Clipper64.ZCallback</a
+		>, <a href="Units/Clipper.Offset/_Body.htm">Clipper.Offset</a>,
+		<a href="Units/Clipper.Offset/Classes/ClipperOffset/_Body.htm">ClipperOffset</a>,
+		<a href="Units/Clipper/_Body.htm">Clipper</a>,
+		<a href="Units/Clipper/Functions/InflatePaths.htm">InflatePaths</a>,
+		<a href="Units/Clipper/Functions/IsPositive.htm">IsPositive</a>,
+		<a href="Units/Clipper/Functions/Triangulate.htm">Triangulate</a>,
+		<a href="Units/Clipper/Types/ClipType.htm">ClipType</a>,
+		<a href="Units/Clipper/Types/EndType.htm">EndType</a>,
+		<a href="Units/Clipper/Types/FillRule.htm">FillRule</a>,
+		<a href="Units/Clipper/Types/JoinType.htm">JoinType</a>,
+		<a href="Units/Clipper/Types/Point64.htm">Point64</a>,
+		<a href="Units/Clipper/Types/PointD.htm">PointD</a>, <a href="USINGZ.htm">USINGZ</a>
+	</p>
+</div>
+<div>
+	<p class="Copyright" id="auto">
+		Copyright © 2010-2024 Angus Johnson   -   Clipper2 2.0.0   -   Help file built on 17 Dec
+		2025
+	</p>
+</div>

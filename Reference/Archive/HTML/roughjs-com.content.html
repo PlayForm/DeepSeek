@@ -1,105 +1,156 @@
-<div><article>
-
-<main>
-<h2>Rough.js</h2>
-<p><strong>Rough.js</strong> is a small (&lt;9kB gzipped) graphics library that lets you draw in a <em>sketchy</em>, <em>hand-drawn-like</em>, style.
-The library defines primitives to draw lines, curves, arcs, polygons, circles, and ellipses. It also supports drawing <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths">SVG paths</a>.</p>
-<p>Rough.js works with both <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">Canvas</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a>.</p>
-
-<h2>Install</h2>
-<p>Install from npm:</p>
-<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">--save</span> roughjs</code></pre>
-<p>And use it in your code:</p>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> rough <span class="token keyword">from</span> <span class="token string">'roughjs'</span><span class="token punctuation">;</span></code></pre>
-<h2>Usage</h2>
-<p>View <a href="https://github.com/rough-stuff/rough/wiki">Full Rough.js API</a> is available on Github.</p>
-
-<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> rc <span class="token operator">=</span> rough<span class="token punctuation">.</span><span class="token function">canvas</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'canvas'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x, y, width, height</span></code></pre>
-<p>or SVG</p>
-<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> rc <span class="token operator">=</span> rough<span class="token punctuation">.</span><span class="token function">svg</span><span class="token punctuation">(</span>svg<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">let</span> node <span class="token operator">=</span> rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x, y, width, height</span>svg<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2>Lines and Ellipses</h2>
-
-<pre class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// centerX, centerY, diameter</span>rc<span class="token punctuation">.</span><span class="token function">ellipse</span><span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// centerX, centerY, width, height</span>rc<span class="token punctuation">.</span><span class="token function">line</span><span class="token punctuation">(</span><span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x1, y1, x2, y2</span></code></pre>
-<h2>Filling</h2>
-
-<pre class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// fill with red hachure</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">"rgb(10,150,10)"</span><span class="token punctuation">,</span>  <span class="token literal-property property">fillWeight</span><span class="token operator">:</span> <span class="token number">3</span> <span class="token comment">// thicker lines for hachure</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span><span class="token punctuation">,</span>  <span class="token literal-property property">hachureAngle</span><span class="token operator">:</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token comment">// angle of hachure,</span>  <span class="token literal-property property">hachureGap</span><span class="token operator">:</span> <span class="token number">8</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'rgba(255,0,200,0.2)'</span><span class="token punctuation">,</span>  <span class="token literal-property property">fillStyle</span><span class="token operator">:</span> <span class="token string">'solid'</span> <span class="token comment">// solid fill</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Fill styles can be: <strong>hachure</strong>(default), <strong>solid</strong>, <strong>zigzag</strong>, <strong>cross-hatch</strong>, <strong>dots</strong>, <strong>sunburst</strong>, <strong>dashed</strong>, or <strong>zigzag-line</strong></p>
-
-<h2>Sketching style</h2>
-
-<pre class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">roughness</span><span class="token operator">:</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">roughness</span><span class="token operator">:</span> <span class="token number">2.8</span><span class="token punctuation">,</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'blue'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">bowing</span><span class="token operator">:</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token literal-property property">stroke</span><span class="token operator">:</span> <span class="token string">'green'</span><span class="token punctuation">,</span> <span class="token literal-property property">strokeWidth</span><span class="token operator">:</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2>SVG Paths</h2>
-
-<pre class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M80 80 A 45 45, 0, 0, 0, 125 125 L 125 80 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'green'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M230 80 A 45 45, 0, 1, 0, 275 125 L 275 80 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'purple'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M80 230 A 45 45, 0, 0, 1, 125 275 L 125 230 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M230 230 A 45 45, 0, 1, 1, 275 275 L 275 230 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'blue'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>SVG Path with simplification:</p>
-
-<h2>Examples</h2>
-
-<p><a href="https://github.com/rough-stuff/rough/wiki/Examples">View examples here</a></p>
-<h2>API &amp; Documentation</h2>
-<p><a href="https://github.com/rough-stuff/rough/wiki">Full Rough.js API</a></p>
-<h2>Credits</h2>
-<p>Core algorithms for drawing lines and ellipse outlines were adapted from <a href="https://www.gicentre.net/software/#/handy/">handy</a> processing lib.</p>
-<p>Algorithm to convert SVG arcs to Canvas <a href="https://www.w3.org/TR/SVG/implnote.html">described here</a> was adapted from <a href="https://hg.mozilla.org/mozilla-central/file/17156fbebbc8/content/svg/content/src/nsSVGPathDataParser.cpp#l887">Mozilla codebase</a></p>
-<h2>Support this project</h2>
-<p>Support development of this project by sponsoring on <a href="https://github.com/sponsors/pshihn">Github Sponsors</a>.
-Alternatively, you can also sponsor or <a href="https://opencollective.com/rough">Open Collective</a>.</p>
-<p>This project is supported by:</p>
-<div class="sponsorsPanel">
-<a class="sponsor-card" href="https://excalidraw.com/">
-
 <div>
-<h5>Excalidraw</h5>
-<div>A whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://cube.dev/">
+	<article>
+		<main>
+			<h2>Rough.js</h2>
+			<p>
+				<strong>Rough.js</strong> is a small (&lt;9kB gzipped) graphics library that lets
+				you draw in a <em>sketchy</em>, <em>hand-drawn-like</em>, style. The library defines
+				primitives to draw lines, curves, arcs, polygons, circles, and ellipses. It also
+				supports drawing
+				<a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths"
+					>SVG paths</a
+				>.
+			</p>
+			<p>
+				Rough.js works with both
+				<a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">Canvas</a> and
+				<a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a>.
+			</p>
 
-<div>
-<h5>Cube</h5>
-<div>Headless BI for building powerful, fast, and consistent data applications.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://www.diagrams.net/">
+			<h2>Install</h2>
+			<p>Install from npm:</p>
+			<pre
+				class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">--save</span> roughjs</code></pre>
+			<p>And use it in your code:</p>
+			<pre
+				class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> rough <span class="token keyword">from</span> <span class="token string">'roughjs'</span><span class="token punctuation">;</span></code></pre>
+			<h2>Usage</h2>
+			<p>
+				View <a href="https://github.com/rough-stuff/rough/wiki">Full Rough.js API</a> is
+				available on Github.
+			</p>
 
-<div>
-<h5>Diagrams.net</h5>
-<div>Security-first diagramming for teams.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://terrastruct.com/">
+			<pre
+				class="language-js"><code class="language-js"><span class="token keyword">const</span> rc <span class="token operator">=</span> rough<span class="token punctuation">.</span><span class="token function">canvas</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'canvas'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x, y, width, height</span></code></pre>
+			<p>or SVG</p>
+			<pre
+				class="language-js"><code class="language-js"><span class="token keyword">const</span> rc <span class="token operator">=</span> rough<span class="token punctuation">.</span><span class="token function">svg</span><span class="token punctuation">(</span>svg<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">let</span> node <span class="token operator">=</span> rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x, y, width, height</span>svg<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+			<h2>Lines and Ellipses</h2>
 
-<div>
-<h5>Terrastruct</h5>
-<div>Diagramming tool specialized for software architecture.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://sheetjs.com/">
+			<pre
+				class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// centerX, centerY, diameter</span>rc<span class="token punctuation">.</span><span class="token function">ellipse</span><span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// centerX, centerY, width, height</span>rc<span class="token punctuation">.</span><span class="token function">line</span><span class="token punctuation">(</span><span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x1, y1, x2, y2</span></code></pre>
+			<h2>Filling</h2>
 
-<div>
-<h5>SheetJS</h5>
-<div>Spreadsheets simplified.
-Read, edit, and export spreadsheets.
-Works in web browsers and servers.
-Supports every Excel file format.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://www.postermaker.com/">
+			<pre
+				class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// fill with red hachure</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">"rgb(10,150,10)"</span><span class="token punctuation">,</span>  <span class="token literal-property property">fillWeight</span><span class="token operator">:</span> <span class="token number">3</span> <span class="token comment">// thicker lines for hachure</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span><span class="token punctuation">,</span>  <span class="token literal-property property">hachureAngle</span><span class="token operator">:</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token comment">// angle of hachure,</span>  <span class="token literal-property property">hachureGap</span><span class="token operator">:</span> <span class="token number">8</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>  <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'rgba(255,0,200,0.2)'</span><span class="token punctuation">,</span>  <span class="token literal-property property">fillStyle</span><span class="token operator">:</span> <span class="token string">'solid'</span> <span class="token comment">// solid fill</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+			<p>
+				Fill styles can be: <strong>hachure</strong>(default), <strong>solid</strong>,
+				<strong>zigzag</strong>, <strong>cross-hatch</strong>, <strong>dots</strong>,
+				<strong>sunburst</strong>, <strong>dashed</strong>, or <strong>zigzag-line</strong>
+			</p>
 
-<div>
-<h5>Poster Maker</h5>
-<div>A free online poster maker. Design and create your own posters, flyers, memes and typography design.</div>
-</div>
-</a>
-<a class="sponsor-card" href="https://www.chartle.com/">
+			<h2>Sketching style</h2>
 
-<div>
-<h5>Chartle</h5>
-<div>A free online tool where you can create and make your own charts and graphs.</div>
+			<pre
+				class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">roughness</span><span class="token operator">:</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">roughness</span><span class="token operator">:</span> <span class="token number">2.8</span><span class="token punctuation">,</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'blue'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">rectangle</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">bowing</span><span class="token operator">:</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token literal-property property">stroke</span><span class="token operator">:</span> <span class="token string">'green'</span><span class="token punctuation">,</span> <span class="token literal-property property">strokeWidth</span><span class="token operator">:</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+			<h2>SVG Paths</h2>
+
+			<pre
+				class="language-js"><code class="language-js">rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M80 80 A 45 45, 0, 0, 0, 125 125 L 125 80 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'green'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M230 80 A 45 45, 0, 1, 0, 275 125 L 275 80 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'purple'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M80 230 A 45 45, 0, 0, 1, 125 275 L 125 230 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'red'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>rc<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">'M230 230 A 45 45, 0, 1, 1, 275 275 L 275 230 Z'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">fill</span><span class="token operator">:</span> <span class="token string">'blue'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+			<p>SVG Path with simplification:</p>
+
+			<h2>Examples</h2>
+
+			<p>
+				<a href="https://github.com/rough-stuff/rough/wiki/Examples">View examples here</a>
+			</p>
+			<h2>API &amp; Documentation</h2>
+			<p><a href="https://github.com/rough-stuff/rough/wiki">Full Rough.js API</a></p>
+			<h2>Credits</h2>
+			<p>
+				Core algorithms for drawing lines and ellipse outlines were adapted from
+				<a href="https://www.gicentre.net/software/#/handy/">handy</a> processing lib.
+			</p>
+			<p>
+				Algorithm to convert SVG arcs to Canvas
+				<a href="https://www.w3.org/TR/SVG/implnote.html">described here</a> was adapted
+				from
+				<a
+					href="https://hg.mozilla.org/mozilla-central/file/17156fbebbc8/content/svg/content/src/nsSVGPathDataParser.cpp#l887"
+					>Mozilla codebase</a
+				>
+			</p>
+			<h2>Support this project</h2>
+			<p>
+				Support development of this project by sponsoring on
+				<a href="https://github.com/sponsors/pshihn">Github Sponsors</a>. Alternatively, you
+				can also sponsor or <a href="https://opencollective.com/rough">Open Collective</a>.
+			</p>
+			<p>This project is supported by:</p>
+			<div class="sponsorsPanel">
+				<a class="sponsor-card" href="https://excalidraw.com/">
+					<div>
+						<h5>Excalidraw</h5>
+						<div>
+							A whiteboard tool that lets you easily sketch diagrams that have a
+							hand-drawn feel to them.
+						</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://cube.dev/">
+					<div>
+						<h5>Cube</h5>
+						<div>
+							Headless BI for building powerful, fast, and consistent data
+							applications.
+						</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://www.diagrams.net/">
+					<div>
+						<h5>Diagrams.net</h5>
+						<div>Security-first diagramming for teams.</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://terrastruct.com/">
+					<div>
+						<h5>Terrastruct</h5>
+						<div>Diagramming tool specialized for software architecture.</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://sheetjs.com/">
+					<div>
+						<h5>SheetJS</h5>
+						<div>
+							Spreadsheets simplified. Read, edit, and export spreadsheets. Works in
+							web browsers and servers. Supports every Excel file format.
+						</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://www.postermaker.com/">
+					<div>
+						<h5>Poster Maker</h5>
+						<div>
+							A free online poster maker. Design and create your own posters, flyers,
+							memes and typography design.
+						</div>
+					</div>
+				</a>
+				<a class="sponsor-card" href="https://www.chartle.com/">
+					<div>
+						<h5>Chartle</h5>
+						<div>
+							A free online tool where you can create and make your own charts and
+							graphs.
+						</div>
+					</div>
+				</a>
+			</div>
+			<h2>License</h2>
+			<p>
+				<a href="https://github.com/rough-stuff/rough/blob/master/LICENSE">MIT License</a>
+				(c) <a href="https://twitter.com/preetster">Preet Shihn</a>
+			</p>
+		</main>
+	</article>
 </div>
-</a>
-</div>
-<h2>License</h2>
-<p><a href="https://github.com/rough-stuff/rough/blob/master/LICENSE">MIT License</a> (c) <a href="https://twitter.com/preetster">Preet Shihn</a></p>
-</main>
-</article></div>

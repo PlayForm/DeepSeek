@@ -1,253 +1,615 @@
-<!DOCTYPE html><html><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-touch-fullscreen" content="yes">
-  <meta name="msapplication-tap-highlight" content="no">
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/assets/favicon.ico">
-  <script type="text/javascript" async="" src="https://ssl.google-analytics.com/ga.js"></script><script src="/assets/js/jquery.js"></script>
-  <script src="/assets/js/paper.js"></script>
-  <script src="/assets/js/codemirror.js"></script>
-  <script src="/assets/js/scripts.js"></script>
-  <script>
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-10082945-6']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-  <title>Paper.js — Smoothing, Simplifying &amp; Flattening</title>
-</head>
-  <body style="margin-right: 0px; padding-right: 0px; overflow: auto;">
-    
-<article class="tutorial">
-  <h1>Smoothing, Simplifying &amp; Flattening</h1><p>
-Paper.js offers two different ways to smooth a path.
-</p>
-<p>
-<tt><a href="/reference/path#smooth">path.smooth()</a></tt> smooths a path by changing its segment handles without adding or removing segment points.
-</p>
-<p>
-<tt><a href="/reference/path#simplify">path.simplify()</a></tt> smooths a path by analyzing its <tt><a href="/reference/path#segments">path.segments</a></tt> array and replacing it with a more optimal set of segments, reducing memory usage and speeding up drawing.
-</p>
-<section id="smoothing-paths"><a name="smoothing-paths" title="Smoothing Paths" class="anchor"><h2>Smoothing Paths</h2></a><p>
-Paper.js allows you to automatically smooth paths using the <tt><a href="/reference/path#smooth">path.smooth()</a></tt> function. This function calculates the optimal values for the handles of the path's segment points to create curves that flow smoothly through them. The segments are not moved and the current handle settings of the path's segments are ignored.
-</p><p>
-In the following example, we create a rectangle shaped path, create a copy of it and smooth the copy. As you can see, only the handle positions are changed. The segment points remain unchanged.
-</p><div class="paperscript split">
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<meta content="yes" name="apple-mobile-web-app-capable" />
+		<meta content="yes" name="apple-touch-fullscreen" />
+		<meta content="no" name="msapplication-tap-highlight" />
+		<link href="/assets/css/style.css" rel="stylesheet" />
+		<link href="/assets/favicon.ico" rel="icon" type="image/x-icon" />
+		<link href="/assets/favicon.ico" rel="shortcut icon" />
+		<script
+			async=""
+			src="https://ssl.google-analytics.com/ga.js"
+			type="text/javascript"></script>
+		<script src="/assets/js/jquery.js"></script>
+		<script src="/assets/js/paper.js"></script>
+		<script src="/assets/js/codemirror.js"></script>
+		<script src="/assets/js/scripts.js"></script>
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(["_setAccount", "UA-10082945-6"]);
+			_gaq.push(["_trackPageview"]);
+			(function () {
+				var ga = document.createElement("script");
+				ga.type = "text/javascript";
+				ga.async = true;
+				ga.src =
+					("https:" == document.location.protocol ? "https://ssl" : "http://www") +
+					".google-analytics.com/ga.js";
+				var s = document.getElementsByTagName("script")[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<title>Paper.js — Smoothing, Simplifying &amp; Flattening</title>
+	</head>
+	<body style="margin-right: 0px; padding-right: 0px; overflow: auto">
+		<article class="tutorial">
+			<h1>Smoothing, Simplifying &amp; Flattening</h1>
+			<p>Paper.js offers two different ways to smooth a path.</p>
+			<p>
+				<tt><a href="/reference/path#smooth">path.smooth()</a></tt> smooths a path by
+				changing its segment handles without adding or removing segment points.
+			</p>
+			<p>
+				<tt><a href="/reference/path#simplify">path.simplify()</a></tt> smooths a path by
+				analyzing its <tt><a href="/reference/path#segments">path.segments</a></tt> array
+				and replacing it with a more optimal set of segments, reducing memory usage and
+				speeding up drawing.
+			</p>
+			<section id="smoothing-paths">
+				<a class="anchor" name="smoothing-paths" title="Smoothing Paths"
+					><h2>Smoothing Paths</h2></a
+				>
+				<p>
+					Paper.js allows you to automatically smooth paths using the
+					<tt><a href="/reference/path#smooth">path.smooth()</a></tt> function. This
+					function calculates the optimal values for the handles of the path's segment
+					points to create curves that flow smoothly through them. The segments are not
+					moved and the current handle settings of the path's segments are ignored.
+				</p>
+				<p>
+					In the following example, we create a rectangle shaped path, create a copy of it
+					and smooth the copy. As you can see, only the handle positions are changed. The
+					segment points remain unchanged.
+				</p>
+				<div class="paperscript split">
+					<div class="source">
+						<div class="CodeMirror">
+							<div
+								style="
+									overflow: hidden;
+									position: relative;
+									width: 3px;
+									height: 0px;
+									top: 10px;
+									left: 39px;
+								">
+								<textarea
+									autocapitalize="off"
+									autocorrect="off"
+									style="
+										position: absolute;
+										padding: 0px;
+										width: 1px;
+										height: 1em;
+									"
+									wrap="off"></textarea>
+							</div>
+							<div class="CodeMirror-scrollbar" style="display: none">
+								<div class="CodeMirror-scrollbar-inner"></div>
+							</div>
+							<div class="CodeMirror-scroll cm-s-default" tabindex="-1">
+								<div style="position: relative">
+									<div style="position: relative; top: 0px">
+										<div class="CodeMirror-lines">
+											<div
+												style="
+													position: relative;
+													z-index: 0;
+													outline: none;
+													min-width: 489px;
+													margin-left: 31px;
+												">
+												<div
+													style="
+														position: absolute;
+														width: 100%;
+														height: 0px;
+														overflow: hidden;
+														visibility: hidden;
+													"></div>
+												<pre
+													class="CodeMirror-cursor"
+													style="top: 0px; left: 0px">
+&nbsp;</pre>
+												<pre
+													class="CodeMirror-cursor"
+													style="visibility: hidden; left: 480px">
+&nbsp;</pre>
+												<div
+													style="
+														position: relative;
+														z-index: -1;
+														display: none;
+													"></div>
+												<div style="">
+													<pre><span class="cm-keyword">var</span> <span class="cm-variable">path</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Path</span>({</pre>
+													<pre><span class="cm-tab">    </span><span class="cm-property">segments</span>: [[<span class="cm-number">30</span>, <span class="cm-number">75</span>], [<span class="cm-number">30</span>, <span class="cm-number">25</span>], [<span class="cm-number">80</span>, <span class="cm-number">25</span>], [<span class="cm-number">80</span>, <span class="cm-number">75</span>]],</pre>
+													<pre><span class="cm-tab">    </span><span class="cm-property">strokeColor</span>: <span class="cm-string">'black'</span>,</pre>
+													<pre><span class="cm-tab">    </span><span class="cm-property">closed</span>: <span class="cm-atom">true</span></pre>
+													<pre>});</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Select the path, so we can see its handles:</span></pre>
+													<pre><span class="cm-variable">path</span>.<span class="cm-property">fullySelected</span> = <span class="cm-atom">true</span>;</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Create a copy of the path and move it 100pt to the right:</span></pre>
+													<pre><span class="cm-keyword">var</span> <span class="cm-variable">copy</span> = <span class="cm-variable">path</span>.<span class="cm-property">clone</span>();</pre>
+													<pre><span class="cm-variable">copy</span>.<span class="cm-property">fullySelected</span> = <span class="cm-atom">true</span>;</pre>
+													<pre><span class="cm-variable">copy</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> += <span class="cm-number">100</span>;</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Smooth the segments of the copy:</span></pre>
+													<pre><span class="cm-variable">copy</span>.<span class="cm-property">smooth</span>();</pre>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script canvas="canvas-1" type="text/paperscript" data-paper-ignore="true">
+						var path = new Path({
+							segments: [[30, 75], [30, 25], [80, 25], [80, 75]],
+							strokeColor: 'black',
+							closed: true
+						});
 
-<div class="source"><div class="CodeMirror"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10px; left: 39px;"><textarea wrap="off" autocorrect="off" autocapitalize="off" style="position: absolute; padding: 0px; width: 1px; height: 1em;"></textarea></div><div class="CodeMirror-scrollbar" style="display: none;"><div class="CodeMirror-scrollbar-inner"></div></div><div class="CodeMirror-scroll cm-s-default" tabindex="-1"><div style="position: relative;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; z-index: 0; outline: none; min-width: 489px; margin-left: 31px;"><div style="position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden;"></div><pre class="CodeMirror-cursor" style="top: 0px; left: 0px;">&nbsp;</pre><pre class="CodeMirror-cursor" style="visibility: hidden; left: 480px;">&nbsp;</pre><div style="position: relative; z-index: -1; display: none;"></div><div style=""><pre><span class="cm-keyword">var</span> <span class="cm-variable">path</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Path</span>({</pre><pre><span class="cm-tab">    </span><span class="cm-property">segments</span>: [[<span class="cm-number">30</span>, <span class="cm-number">75</span>], [<span class="cm-number">30</span>, <span class="cm-number">25</span>], [<span class="cm-number">80</span>, <span class="cm-number">25</span>], [<span class="cm-number">80</span>, <span class="cm-number">75</span>]],</pre><pre><span class="cm-tab">    </span><span class="cm-property">strokeColor</span>: <span class="cm-string">'black'</span>,</pre><pre><span class="cm-tab">    </span><span class="cm-property">closed</span>: <span class="cm-atom">true</span></pre><pre>});</pre><pre> </pre><pre><span class="cm-comment">// Select the path, so we can see its handles:</span></pre><pre><span class="cm-variable">path</span>.<span class="cm-property">fullySelected</span> = <span class="cm-atom">true</span>;</pre><pre> </pre><pre><span class="cm-comment">// Create a copy of the path and move it 100pt to the right:</span></pre><pre><span class="cm-keyword">var</span> <span class="cm-variable">copy</span> = <span class="cm-variable">path</span>.<span class="cm-property">clone</span>();</pre><pre><span class="cm-variable">copy</span>.<span class="cm-property">fullySelected</span> = <span class="cm-atom">true</span>;</pre><pre><span class="cm-variable">copy</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> += <span class="cm-number">100</span>;</pre><pre> </pre><pre><span class="cm-comment">// Smooth the segments of the copy:</span></pre><pre><span class="cm-variable">copy</span>.<span class="cm-property">smooth</span>();</pre></div></div></div></div></div></div></div></div><script type="text/paperscript" canvas="canvas-1" data-paper-ignore="true">
-var path = new Path({
-	segments: [[30, 75], [30, 25], [80, 25], [80, 75]],
-	strokeColor: 'black',
-	closed: true
-});
+						// Select the path, so we can see its handles:
+						path.fullySelected = true;
 
-// Select the path, so we can see its handles:
-path.fullySelected = true;
+						// Create a copy of the path and move it 100pt to the right:
+						var copy = path.clone();
+						copy.fullySelected = true;
+						copy.position.x += 100;
 
-// Create a copy of the path and move it 100pt to the right:
-var copy = path.clone();
-copy.fullySelected = true;
-copy.position.x += 100;
+						// Smooth the segments of the copy:
+						copy.smooth();
+					</script>
+					<div class="canvas">
+						<canvas
+							height="98"
+							id="canvas-1"
+							style="
+								-webkit-user-drag: none;
+								user-select: none;
+								-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+								width: 538px;
+								height: 98px;
+							"
+							width="538"
+							data-paper-scope="1"></canvas>
+					</div>
+				</div>
+				<p>
+					Click and drag in the view below to draw a line, when you release the mouse, the
+					path is smoothed using
+					<tt><a href="/reference/path#smooth">path.smooth()</a></tt
+					>:
+				</p>
+				<div class="paperscript">
+					<div class="source hidden"></div>
+					<script canvas="canvas-2" type="text/paperscript" data-paper-ignore="true">
+						var path;
 
-// Smooth the segments of the copy:
-copy.smooth();
-</script>
-<div class="canvas">
-<canvas height="98" id="canvas-1" width="538" data-paper-scope="1" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 538px; height: 98px;"></canvas>
-</div>
-</div><p>
-Click and drag in the view below to draw a line, when you release the mouse, the path is smoothed using <tt><a href="/reference/path#smooth">path.smooth()</a></tt>:
-</p><div class="paperscript">
+						// The mouse has to drag at least 20pt
+						// before the next drag event is fired:
+						tool.minDistance = 20;
 
-<div class="source hidden"></div><script type="text/paperscript" canvas="canvas-2" data-paper-ignore="true">
-var path;
+						function onMouseDown(event) {
+							if (path) {
+								path.selected = false;
+							};
+							path = new Path();
+							path.strokeColor = 'black';
+							path.fullySelected = true;
+						}
 
-// The mouse has to drag at least 20pt
-// before the next drag event is fired:
-tool.minDistance = 20;
+						function onMouseDrag(event) {
+							path.add(event.point);
+						}
 
-function onMouseDown(event) {
-	if (path) {
-		path.selected = false;
-	};
-	path = new Path();
-	path.strokeColor = 'black';
-	path.fullySelected = true;
-}
+						function onMouseUp(event) {
+							path.selected = false;
+							path.smooth();
+						}
+					</script>
+					<div class="canvas border">
+						<canvas
+							height="318"
+							id="canvas-2"
+							style="
+								-webkit-user-drag: none;
+								user-select: none;
+								-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+								width: 538px;
+								height: 318px;
+							"
+							width="538"
+							data-paper-scope="2"></canvas>
+					</div>
+				</div>
+			</section>
 
-function onMouseDrag(event) {
-	path.add(event.point);
-}
+			<section id="simplifying-paths">
+				<a class="anchor" name="simplifying-paths" title="Simplifying Paths"
+					><h2>Simplifying Paths</h2></a
+				>
+				<p>
+					<tt><a href="/reference/path#simplify">path.simplify()</a></tt> smooths a path
+					by simplifying it. The path.segments array is analyzed and replaced by a more
+					optimal set of segments, reducing memory usage and speeding up drawing.
+				</p>
+				<div class="paperscript">
+					<div class="source hidden"></div>
+					<script canvas="canvas-3" type="text/paperscript" data-paper-ignore="true">
+						var path;
 
-function onMouseUp(event) {
-	path.selected = false;
-	path.smooth();
-}
-</script>
-<div class="canvas border">
-<canvas height="318" id="canvas-2" width="538" data-paper-scope="2" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 538px; height: 318px;"></canvas>
-</div>
-</div></section>
+						var textItem = new PointText(new Point(20, 30));
+						textItem.fillColor = 'black';
+						textItem.content = 'Click and drag to draw a line.';
 
+						function onMouseDown(event) {
+							// If we produced a path before, deselect it:
+							if (path) {
+								path.selected = false;
+							}
 
+							path = new Path();
+							path.strokeColor = 'black';
 
+							// Select the path, so we can see its segment points:
+							path.fullySelected = true;
+						}
 
+						function onMouseDrag(event) {
+							// Every drag event, add a point to the path at the current
+							// position of the mouse:
+							path.add(event.point);
 
-<section id="simplifying-paths"><a name="simplifying-paths" title="Simplifying Paths" class="anchor"><h2>Simplifying Paths</h2></a><p>
-<tt><a href="/reference/path#simplify">path.simplify()</a></tt> smooths a path by simplifying it. The path.segments array is analyzed and replaced by a more optimal set of segments, reducing memory usage and speeding up drawing.
-</p><div class="paperscript">
+							textItem.content = 'Segment count: ' + path.segments.length;
+						}
 
-<div class="source hidden"></div><script type="text/paperscript" canvas="canvas-3" data-paper-ignore="true">
-var path;
+						function onMouseUp(event) {
+							var segmentCount = path.segments.length;
 
-var textItem = new PointText(new Point(20, 30));
-textItem.fillColor = 'black';
-textItem.content = 'Click and drag to draw a line.';
+							// When the mouse is released, simplify it:
+							path.simplify();
 
-function onMouseDown(event) {
-	// If we produced a path before, deselect it:
-	if (path) {
-		path.selected = false;
-	}
+							// Select the path, so we can see its segments:
+							path.fullySelected = true;
 
-	path = new Path();
-	path.strokeColor = 'black';
-	
-	// Select the path, so we can see its segment points:
-	path.fullySelected = true;
-}
+							var newSegmentCount = path.segments.length;
+							var difference = segmentCount - newSegmentCount;
+							var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
+							textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
 
-function onMouseDrag(event) {
-	// Every drag event, add a point to the path at the current
-	// position of the mouse:
-	path.add(event.point);
-	
-	textItem.content = 'Segment count: ' + path.segments.length;
-}
+						}
+					</script>
+					<div class="canvas border">
+						<canvas
+							height="318"
+							id="canvas-3"
+							style="
+								-webkit-user-drag: none;
+								user-select: none;
+								-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+								width: 538px;
+								height: 318px;
+							"
+							width="538"
+							data-paper-scope="3"></canvas>
+					</div>
+				</div>
+				<p>
+					The <tt><a href="/reference/path#simplify">path.simplify()</a></tt> function has
+					an optional <tt>tolerance</tt> parameter, which specifies the maximum distance
+					the simplifying algorithm is allowed to deviate from the original path. This
+					value is set to <tt>2.5</tt> by default. Setting it to a lower value, produces a
+					more correct path but with more segment points. Setting it to a higher value
+					leads to a smoother curve and less segment points, but the shape of the path
+					will be more different than the original.
+				</p>
+			</section>
 
-function onMouseUp(event) {
-	var segmentCount = path.segments.length;
-	
-	// When the mouse is released, simplify it:
-	path.simplify();
-	
-	// Select the path, so we can see its segments:
-	path.fullySelected = true;
-	
-	var newSegmentCount = path.segments.length;
-	var difference = segmentCount - newSegmentCount;
-	var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
-	textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
+			<section id="flattening-paths" style="height: auto">
+				<a class="anchor" name="flattening-paths" title="Flattening Paths"
+					><h2>Flattening Paths</h2></a
+				>
+				<p>
+					<tt><a href="/reference/path#flatten-error">path.flatten(error)</a></tt>
+					converts the curves in a path to straight lines with a maximum specified error.
+					The resulting lines are guaranteed to not be further away than the amount
+					specified by the <tt>error</tt> parameter.
+				</p>
+				<p>
+					In the following example, we create a circle shaped path and straighten it using
+					<tt><a href="/reference/path#flatten-error">path.flatten(20)</a></tt
+					>:
+				</p>
+				<div class="paperscript split">
+					<div class="source">
+						<div class="CodeMirror">
+							<div
+								style="
+									overflow: hidden;
+									position: relative;
+									width: 3px;
+									height: 0px;
+									top: 10px;
+									left: 39px;
+								">
+								<textarea
+									autocapitalize="off"
+									autocorrect="off"
+									style="
+										position: absolute;
+										padding: 0px;
+										width: 1px;
+										height: 1em;
+									"
+									wrap="off"></textarea>
+							</div>
+							<div class="CodeMirror-scrollbar" style="display: none">
+								<div class="CodeMirror-scrollbar-inner"></div>
+							</div>
+							<div class="CodeMirror-scroll cm-s-default" tabindex="-1">
+								<div style="position: relative">
+									<div style="position: relative; top: 0px">
+										<div class="CodeMirror-lines">
+											<div
+												style="
+													position: relative;
+													z-index: 0;
+													outline: none;
+													min-width: 497px;
+													margin-left: 31px;
+												">
+												<div
+													style="
+														position: absolute;
+														width: 100%;
+														height: 0px;
+														overflow: hidden;
+														visibility: hidden;
+													"></div>
+												<pre
+													class="CodeMirror-cursor"
+													style="top: 0px; left: 0px">
+&nbsp;</pre>
+												<pre
+													class="CodeMirror-cursor"
+													style="visibility: hidden; left: 488px">
+&nbsp;</pre>
+												<div
+													style="
+														position: relative;
+														z-index: -1;
+														display: none;
+													"></div>
+												<div style="">
+													<pre><span class="cm-comment">// Create a circle shaped path at { x: 80, y: 50 }</span></pre>
+													<pre><span class="cm-comment">// with a radius of 35:</span></pre>
+													<pre><span class="cm-keyword">var</span> <span class="cm-variable">path</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Path</span>.<span class="cm-property">Circle</span>({</pre>
+													<pre><span class="cm-tab">    </span><span class="cm-property">center</span>: [<span class="cm-number">80</span>, <span class="cm-number">50</span>],</pre>
+													<pre><span class="cm-tab">    </span><span class="cm-property">radius</span>: <span class="cm-number">35</span></pre>
+													<pre>});</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Select the path, so we can inspect its segments:</span></pre>
+													<pre><span class="cm-variable">path</span>.<span class="cm-property">selected</span> = <span class="cm-atom">true</span>;</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Create a copy of the path and move it by 150 points:</span></pre>
+													<pre><span class="cm-keyword">var</span> <span class="cm-variable">copy</span> = <span class="cm-variable">path</span>.<span class="cm-property">clone</span>();</pre>
+													<pre><span class="cm-variable">copy</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> += <span class="cm-number">150</span>;</pre>
+													<pre></pre>
+													<pre><span class="cm-comment">// Flatten the copied path, with a maximum error of 4 points:</span></pre>
+													<pre><span class="cm-variable">copy</span>.<span class="cm-property">flatten</span>(<span class="cm-number">4</span>);</pre>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script canvas="canvas-4" type="text/paperscript" data-paper-ignore="true">
+						// Create a circle shaped path at { x: 80, y: 50 }
+						// with a radius of 35:
+						var path = new Path.Circle({
+							center: [80, 50],
+							radius: 35
+						});
 
-}
-</script>
-<div class="canvas border">
-<canvas height="318" id="canvas-3" width="538" data-paper-scope="3" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 538px; height: 318px;"></canvas>
-</div>
-</div><p>
-The <tt><a href="/reference/path#simplify">path.simplify()</a></tt> function has an optional <tt>tolerance</tt> parameter, which specifies the maximum distance the simplifying algorithm is allowed to deviate from the original path. This value is set to <tt>2.5</tt> by default. Setting it to a lower value, produces a more correct path but with more segment points. Setting it to a higher value leads to a smoother curve and less segment points, but the shape of the path will be more different than the original.
-</p></section>
+						// Select the path, so we can inspect its segments:
+						path.selected = true;
 
+						// Create a copy of the path and move it by 150 points:
+						var copy = path.clone();
+						copy.position.x += 150;
 
-
-<section id="flattening-paths" style="height: auto;"><a name="flattening-paths" title="Flattening Paths" class="anchor"><h2>Flattening Paths</h2></a><p>
-<tt><a href="/reference/path#flatten-error">path.flatten(error)</a></tt> converts the curves in a path to straight lines with a maximum specified error. The resulting lines are guaranteed to not be further away than the amount specified by the <tt>error</tt> parameter.
-</p><p>
-In the following example, we create a circle shaped path and straighten it using <tt><a href="/reference/path#flatten-error">path.flatten(20)</a></tt>:
-</p><div class="paperscript split">
-
-<div class="source"><div class="CodeMirror"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10px; left: 39px;"><textarea wrap="off" autocorrect="off" autocapitalize="off" style="position: absolute; padding: 0px; width: 1px; height: 1em;"></textarea></div><div class="CodeMirror-scrollbar" style="display: none;"><div class="CodeMirror-scrollbar-inner"></div></div><div class="CodeMirror-scroll cm-s-default" tabindex="-1"><div style="position: relative;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; z-index: 0; outline: none; min-width: 497px; margin-left: 31px;"><div style="position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden;"></div><pre class="CodeMirror-cursor" style="top: 0px; left: 0px;">&nbsp;</pre><pre class="CodeMirror-cursor" style="visibility: hidden; left: 488px;">&nbsp;</pre><div style="position: relative; z-index: -1; display: none;"></div><div style=""><pre><span class="cm-comment">// Create a circle shaped path at { x: 80, y: 50 }</span></pre><pre><span class="cm-comment">// with a radius of 35:</span></pre><pre><span class="cm-keyword">var</span> <span class="cm-variable">path</span> = <span class="cm-keyword">new</span> <span class="cm-variable">Path</span>.<span class="cm-property">Circle</span>({</pre><pre><span class="cm-tab">    </span><span class="cm-property">center</span>: [<span class="cm-number">80</span>, <span class="cm-number">50</span>],</pre><pre><span class="cm-tab">    </span><span class="cm-property">radius</span>: <span class="cm-number">35</span></pre><pre>});</pre><pre> </pre><pre><span class="cm-comment">// Select the path, so we can inspect its segments:</span></pre><pre><span class="cm-variable">path</span>.<span class="cm-property">selected</span> = <span class="cm-atom">true</span>;</pre><pre> </pre><pre><span class="cm-comment">// Create a copy of the path and move it by 150 points:</span></pre><pre><span class="cm-keyword">var</span> <span class="cm-variable">copy</span> = <span class="cm-variable">path</span>.<span class="cm-property">clone</span>();</pre><pre><span class="cm-variable">copy</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> += <span class="cm-number">150</span>;</pre><pre> </pre><pre><span class="cm-comment">// Flatten the copied path, with a maximum error of 4 points:</span></pre><pre><span class="cm-variable">copy</span>.<span class="cm-property">flatten</span>(<span class="cm-number">4</span>);</pre></div></div></div></div></div></div></div></div><script type="text/paperscript" canvas="canvas-4" data-paper-ignore="true">
-// Create a circle shaped path at { x: 80, y: 50 }
-// with a radius of 35:
-var path = new Path.Circle({
-	center: [80, 50],
-	radius: 35
-});
-
-// Select the path, so we can inspect its segments:
-path.selected = true;
-
-// Create a copy of the path and move it by 150 points:
-var copy = path.clone();
-copy.position.x += 150;
-
-// Flatten the copied path, with a maximum error of 4 points:
-copy.flatten(4);
-</script>
-<div class="canvas">
-<canvas height="98" id="canvas-4" width="538" data-paper-scope="4" style="-webkit-user-drag: none; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 538px; height: 98px;"></canvas>
-</div>
-</div></section>
-
-
-
-</article>
-<aside>
-<h1>Index</h1>
-<ul class="tutorial-index">
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/getting-started/">Getting Started</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/getting-started/working-with-paper-js/">Working with Paper.js</a></li>
-  <li><a href="/tutorials/getting-started/using-javascript-directly/">Using JavaScript Directly</a></li>
-  <li><a href="/tutorials/getting-started/paperscript-interoperability/">PaperScript Interoperability</a></li>
-</ul>
-  </li>
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/geometry/">Geometry</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/geometry/point-size-and-rectangle/">Point, Size and Rectangle</a></li>
-  <li><a href="/tutorials/geometry/object-conversion/">Object Conversion</a></li>
-  <li><a href="/tutorials/geometry/mathematical-operations/">Mathematical Operations</a></li>
-  <li><a href="/tutorials/geometry/vector-geometry/">Vector Geometry</a></li>
-</ul>
-  </li>
-  <li class="expandable-list expanded"><a href="#" class="arrow"></a><b><a href="/tutorials/paths/">Paths</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/paths/working-with-path-items/">Working with Path Items</a></li>
-  <li><a href="/tutorials/paths/creating-predefined-shapes/">Creating Predefined Shapes</a></li>
-  <li><a href="/tutorials/paths/using-color-and-style/">Using Color and Style</a></li>
-  <li class="active"><span>Smoothing, Simplifying &amp; Flattening</span></li>
-</ul>
-  </li>
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/interaction/">Interaction</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/interaction/creating-mouse-tools/">Creating Mouse Tools</a></li>
-  <li><a href="/tutorials/interaction/mouse-tool-events/">Mouse Tool Events</a></li>
-  <li><a href="/tutorials/interaction/working-with-mouse-vectors/">Working with Mouse Vectors</a></li>
-  <li><a href="/tutorials/interaction/keyboard-interaction/">Keyboard Interaction</a></li>
-</ul>
-  </li>
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/project-items/">Project &amp; Items</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/project-items/working-with-items/">Working with Items</a></li>
-  <li><a href="/tutorials/project-items/transforming-items/">Transforming Items</a></li>
-  <li><a href="/tutorials/project-items/project-hierarchy/">Project Hierarchy</a></li>
-  <li><a href="/tutorials/project-items/working-with-symbols/">Working with Symbols</a></li>
-</ul>
-  </li>
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/images/">Images</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/images/working-with-rasters/">Working with Rasters</a></li>
-  <li><a href="/tutorials/images/using-pixel-colors/">Using Pixel Colors</a></li>
-  <li><a href="/tutorials/images/color-averaging-image-areas/">Color Averaging Image Areas</a></li>
-</ul>
-  </li>
-  <li class="expandable-list"><a href="#" class="arrow"></a><b><a href="/tutorials/animation/">Animation</a></b>
-<ul class="tutorial-index">
-  <li><a href="/tutorials/animation/creating-animations/">Creating Animations</a></li>
-</ul>
-  </li>
-</ul>
-<div class="sticky"><div>
-  <h1>Content</h1>
-  <ul class="toc"><li class="entry selector active"><a href="#smoothing-paths">Smoothing Paths</a></li><li class="entry selector"><a href="#simplifying-paths">Simplifying Paths</a></li><li class="entry selector"><a href="#flattening-paths">Flattening Paths</a></li></ul>
-</div></div>
-</aside>
-  
-</body></html>
+						// Flatten the copied path, with a maximum error of 4 points:
+						copy.flatten(4);
+					</script>
+					<div class="canvas">
+						<canvas
+							height="98"
+							id="canvas-4"
+							style="
+								-webkit-user-drag: none;
+								user-select: none;
+								-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+								width: 538px;
+								height: 98px;
+							"
+							width="538"
+							data-paper-scope="4"></canvas>
+					</div>
+				</div>
+			</section>
+		</article>
+		<aside>
+			<h1>Index</h1>
+			<ul class="tutorial-index">
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a
+					><b><a href="/tutorials/getting-started/">Getting Started</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/getting-started/working-with-paper-js/"
+								>Working with Paper.js</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/getting-started/using-javascript-directly/"
+								>Using JavaScript Directly</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/getting-started/paperscript-interoperability/"
+								>PaperScript Interoperability</a
+							>
+						</li>
+					</ul>
+				</li>
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a><b><a href="/tutorials/geometry/">Geometry</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/geometry/point-size-and-rectangle/"
+								>Point, Size and Rectangle</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/geometry/object-conversion/">Object Conversion</a>
+						</li>
+						<li>
+							<a href="/tutorials/geometry/mathematical-operations/"
+								>Mathematical Operations</a
+							>
+						</li>
+						<li><a href="/tutorials/geometry/vector-geometry/">Vector Geometry</a></li>
+					</ul>
+				</li>
+				<li class="expandable-list expanded">
+					<a class="arrow" href="#"></a><b><a href="/tutorials/paths/">Paths</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/paths/working-with-path-items/"
+								>Working with Path Items</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/paths/creating-predefined-shapes/"
+								>Creating Predefined Shapes</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/paths/using-color-and-style/"
+								>Using Color and Style</a
+							>
+						</li>
+						<li class="active"><span>Smoothing, Simplifying &amp; Flattening</span></li>
+					</ul>
+				</li>
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a
+					><b><a href="/tutorials/interaction/">Interaction</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/interaction/creating-mouse-tools/"
+								>Creating Mouse Tools</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/interaction/mouse-tool-events/"
+								>Mouse Tool Events</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/interaction/working-with-mouse-vectors/"
+								>Working with Mouse Vectors</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/interaction/keyboard-interaction/"
+								>Keyboard Interaction</a
+							>
+						</li>
+					</ul>
+				</li>
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a
+					><b><a href="/tutorials/project-items/">Project &amp; Items</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/project-items/working-with-items/"
+								>Working with Items</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/project-items/transforming-items/"
+								>Transforming Items</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/project-items/project-hierarchy/"
+								>Project Hierarchy</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/project-items/working-with-symbols/"
+								>Working with Symbols</a
+							>
+						</li>
+					</ul>
+				</li>
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a><b><a href="/tutorials/images/">Images</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/images/working-with-rasters/"
+								>Working with Rasters</a
+							>
+						</li>
+						<li>
+							<a href="/tutorials/images/using-pixel-colors/">Using Pixel Colors</a>
+						</li>
+						<li>
+							<a href="/tutorials/images/color-averaging-image-areas/"
+								>Color Averaging Image Areas</a
+							>
+						</li>
+					</ul>
+				</li>
+				<li class="expandable-list">
+					<a class="arrow" href="#"></a
+					><b><a href="/tutorials/animation/">Animation</a></b>
+					<ul class="tutorial-index">
+						<li>
+							<a href="/tutorials/animation/creating-animations/"
+								>Creating Animations</a
+							>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div class="sticky">
+				<div>
+					<h1>Content</h1>
+					<ul class="toc">
+						<li class="entry selector active">
+							<a href="#smoothing-paths">Smoothing Paths</a>
+						</li>
+						<li class="entry selector">
+							<a href="#simplifying-paths">Simplifying Paths</a>
+						</li>
+						<li class="entry selector">
+							<a href="#flattening-paths">Flattening Paths</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</aside>
+	</body>
+</html>

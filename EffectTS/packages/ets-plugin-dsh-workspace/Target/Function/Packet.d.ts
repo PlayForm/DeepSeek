@@ -1,7 +1,7 @@
-import type { Node, WorkspaceGraph } from "@Interface/Graph.js";
-import type { PacketView } from "@Interface/Packet.js";
-import type { NodeRow } from "@Interface/Query.js";
-import type State from "@Interface/State.js";
+import type { Node, WorkspaceGraph } from "../Interface/Graph.js";
+import type { PacketView } from "../Interface/Packet.js";
+import type { NodeRow } from "../Interface/Query.js";
+import type State from "../Interface/State.js";
 /** Compact one node into the row shape the tools print. */
 export declare const Row: (Node_: Node) => NodeRow;
 export default _default;

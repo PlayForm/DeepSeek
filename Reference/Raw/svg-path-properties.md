@@ -4,9 +4,11 @@
 
 [](https://github.com/rveciana/svg-path-properties) ![Example](./example.svg)
 
-SVG comes with the **getTotalLength()** and **getPointAtLength()** methods, which are useful for animations or adding markers at the paths.
+SVG comes with the **getTotalLength()** and **getPointAtLength()** methods, which are useful for
+animations or adding markers at the paths.
 
-Calculating these values using Node or the Canvas element can be quite complicated. This library allows doing this and more things.
+Calculating these values using Node or the Canvas element can be quite complicated. This library
+allows doing this and more things.
 
 View on [Github](https://github.com/rveciana/svg-path-properties)
 
@@ -22,9 +24,12 @@ The usage is very simple, just pass the path into the class and call the needed 
       var allProperties = properties.getPropertiesAtLength(200);
 
 - **getTotalLength()** gives the length of the path in pixels, as in the SVG function
-- **getPointAtLength(pixels)** gives the position of the path at the *pixels* distance, as in the SVG function
-- **getTangentAtLength(pixels)** gives the normalized tangent of the path at the *pixels* distance. SVG hasn't got this function
-- **getPropertiesAtLength(pixels)** gives the position of the path and the normalized at the *pixels* distance, so the function has to be calculated once for performance reasons
+- **getPointAtLength(pixels)** gives the position of the path at the _pixels_ distance, as in the
+  SVG function
+- **getTangentAtLength(pixels)** gives the normalized tangent of the path at the _pixels_ distance.
+  SVG hasn't got this function
+- **getPropertiesAtLength(pixels)** gives the position of the path and the normalized at the
+  _pixels_ distance, so the function has to be calculated once for performance reasons
 
 ## Install
 
@@ -44,7 +49,8 @@ To it in the browser, add:
 
 ## Credits
 
-To calculate the functions and parsing the paths, I've taken information and code from several places. They are basically these
+To calculate the functions and parsing the paths, I've taken information and code from several
+places. They are basically these
 
 - <http://bl.ocks.org/hnakamur/e7efd0602bfc15f66fc5>
 - <https://gist.github.com/tunght13488/6744e77c242cc7a94859>

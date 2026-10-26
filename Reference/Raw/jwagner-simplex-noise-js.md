@@ -1,11 +1,15 @@
-[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://camo.githubusercontent.com/a6ed1655e865a26dfcec492b68d0fa0ed6d8b7c1aaf3b974bfbe28f2b71e6232/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2533432532462533452d547970655363726970742d2532333030373463312e737667)](http://www.typescriptlang.org/)
+[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml)
+[![TypeScript](https://camo.githubusercontent.com/a6ed1655e865a26dfcec492b68d0fa0ed6d8b7c1aaf3b974bfbe28f2b71e6232/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2533432532462533452d547970655363726970742d2532333030373463312e737667)](http://www.typescriptlang.org/)
 
-[![simplex-noise.js header](./jwagner-simplex-noise.js-raw-main-doc-github-header-fs8.png.md)](/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png) [API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
+[![simplex-noise.js header](./jwagner-simplex-noise.js-raw-main-doc-github-header-fs8.png.md)](/jwagner/simplex-noise.js/blob/main/doc/github-header-fs8.png)
+[API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
 
-simplex-noise.js is a simplex noise implementation in Javascript/TypeScript. It works in the browser and Node.js, using CommonJS and ES Modules. It is self-contained (dependency-free), relatively small (about 2k minified and gzipped) and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeable.
+simplex-noise.js is a simplex noise implementation in Javascript/TypeScript. It works in the browser
+and Node.js, using CommonJS and ES Modules. It is self-contained (dependency-free), relatively small
+(about 2k minified and gzipped) and fairly fast (about 20 nanoseconds for a sample of 2d noise) and
+tree shakeable.
 
 ## Demos & Real World Examples
-
 
 - [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header
 - Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001)
@@ -17,26 +21,21 @@ Created something awesome with simplex-noise? Let me know so I can add it to the
 
 ## Installation
 
-
 `npm i -S simplex-noise`
 
 ## Usage Examples
 
-
 ### ES Module Import
-
 
 // import the noise functions you need\
 import { createNoise2D } from 'simplex-noise';
 
 ### CommonJS Require
 
-
 // import the noise functions you need\
 const { createNoise2D } = require('simplex-noise');
 
 ### 2D
-
 
 // initialize the noise function\
 const noise2D = createNoise2D();\
@@ -45,20 +44,18 @@ console.log(noise2D(x, y));
 
 ### 3D
 
-
 const noise3D = createNoise3D();\
 console.log(noise3D(x, y, z));
 
 ### 4D
-
 
 const noise4D = createNoise4D();\
 console.log(noise4D(x, y, z, w));
 
 ### Using a seed value
 
-
-By default simplex-noise.js will use Math.random() to seed the noise. You can pass in a PRNG function to use your own seed value.
+By default simplex-noise.js will use Math.random() to seed the noise. You can pass in a PRNG
+function to use your own seed value.
 
 \# install the alea prng\
 npm install -S alea
@@ -70,12 +67,13 @@ const prng = alea('seed');\
 const noise2D = createNoise2D(prng);\
 console.log(noise2D(x, y));
 
-The ALEA PRNG used in the example above can be found in the [alea](https://npmjs.org/package/alea) npm package.
+The ALEA PRNG used in the example above can be found in the [alea](https://npmjs.org/package/alea)
+npm package.
 
 ## Benchmarks
 
-
-simplex-noise.js is reasonably quick. According to `perf/index.js` I can perform about 70 million `noise2D()` calls/second on a single thread on my desktop (Ryzen 5950X).
+simplex-noise.js is reasonably quick. According to `perf/index.js` I can perform about 70 million
+`noise2D()` calls/second on a single thread on my desktop (Ryzen 5950X).
 
 ```
 $ node perf/index.js
@@ -86,9 +84,7 @@ noise4D: 35,564,111 ops/sec ±0%
 
 ## Migrating from 3.x to 4.x
 
-
 ### random initialization
-
 
 // 3.x\
 import SimplexNoise from 'simplex-noise';\
@@ -101,7 +97,6 @@ const noise2D = createNoise2D();\
 const value2d = noise2D(x, y);
 
 ### Initialization with a seed
-
 
 // 3.x\
 import SimplexNoise from 'simplex-noise';\
@@ -124,7 +119,6 @@ const noise3D = createNoise3D(alea(seed));
 
 ### Emulating the 3.x and older API
 
-
 const simplex = {\
   noise2D: createNoise2D(alea(seed)),\
   noise3D: createNoise3D(alea(seed)),\
@@ -133,44 +127,45 @@ const simplex = {\
 
 ## Changelog
 
-
 ### 4.0.3
 
-
-- Additional tweaks to **PURE** annotations to avoid warnings in rollup.js. Contributed by [Damien Seguin](https://github.com/dmnsgn).
+- Additional tweaks to **PURE** annotations to avoid warnings in rollup.js. Contributed by
+  [Damien Seguin](https://github.com/dmnsgn).
 
 ### 4.0.2
 
-
-- Tweaked **PURE** annotations to avoid warnings in rollup.js. Contributed by [Damien Seguin](https://github.com/dmnsgn).
+- Tweaked **PURE** annotations to avoid warnings in rollup.js. Contributed by
+  [Damien Seguin](https://github.com/dmnsgn).
 
 ### 4.0.1
 
-
-- Explicitly defined the return type of `createNoise4D` to be `NoiseFunction4D`. Contributed by [satelllte](https://github.com/satelllte).
+- Explicitly defined the return type of `createNoise4D` to be `NoiseFunction4D`. Contributed by
+  [satelllte](https://github.com/satelllte).
 
 ### 4.0.0
 
-
 ⚠️ **This release changes the API and the output of the noise functions.** ⚠️
 
-- Reworked the API so that the noise functions can be imported individually. When combined with tree shaking this helps with build sizes.
-- Removed the built in version of the ALEA PRNG to focus the library to do only one thing. If you want to continue to use it you'll have to install and import it separately.
+- Reworked the API so that the noise functions can be imported individually. When combined with tree
+  shaking this helps with build sizes.
+- Removed the built in version of the ALEA PRNG to focus the library to do only one thing. If you
+  want to continue to use it you'll have to install and import it separately.
 - Noise functions are a bit faster (~ 20 - 30%).
 - Noise values can be different from previous versions
-- Input coordinates bigger than 2^31 may not result in a noisy output anymore. If you have a use case that is affected by this change, please file an issue.
+- Input coordinates bigger than 2^31 may not result in a noisy output anymore. If you have a use
+  case that is affected by this change, please file an issue.
 - Test coverage is now at 100%.
-- A big thank you to @mreinstein, @redblobgames and everyone else involved for their comments and PRs which motivated me to create this new version.
+- A big thank you to @mreinstein, @redblobgames and everyone else involved for their comments and
+  PRs which motivated me to create this new version.
 
 ### 3.0.1
-
 
 - Include simplex-noise.ts as source file, fixes sourcemap warnings.
 
 ### 3.0.0
 
-
-- Changed module structure. When using bundlers that import the es module even using require() the import might need to be updated.
+- Changed module structure. When using bundlers that import the es module even using require() the
+  import might need to be updated.
 - Dependency update
 - Setting sideEffects: false in package.json
 - Added snapshot tests
@@ -180,12 +175,10 @@ const simplex = {\
 
 ### 2.4.0
 
-
 - Included a PRNG based on ALEA to directly allow seeding
 - Included typescript definitions
 
 ### 2.3.0
-
 
 ⚠️ **This release changes the output of the noise functions.** ⚠️
 
@@ -197,39 +190,34 @@ In the future such changes will be released as a new major version.
 
 ### 2.2.0
 
-
 - Small performance improvement for 2D noise
 
 ### 2.1.1
-
 
 - Increased entropy by fixing a little initialization issue.
 
 ### 2.1.0
 
-
 - AMD support
 
 ### 2.0.0
-
 
 - Changed node.js api, SimplexNoise is now exported directly.
 - Added unit tests
 
 ### 1.0.0
 
-
 - Initial Release
 
 ## License
-
 
 Copyright (c) 2022 Jonas Wagner, licensed under the MIT License (enclosed)
 
 ## Credits
 
-
-This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java) by Stefan Gustavson and Peter Eastman.
+This is mostly a direct javascript port of the
+[Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java) by Stefan
+Gustavson and Peter Eastman.
 
 The initial typescript definition has been provided by [Neonit](https://github.com/Neonit).
 

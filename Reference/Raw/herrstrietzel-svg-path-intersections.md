@@ -1,29 +1,30 @@
 # svg-path-intersections
 
-
 A standalone library to get intersections between two SVG paths. ~ 16KB minified/ 7KB gzipped.
 
 - **versatile:** support for paths, shapes (circles, rectangles, polygons etc.)
 - **performant:** optimized by conditional calculation methods for different element types
 - runs in \*\*browser \*\*and headless environments like **node**
 
-It includes a path data parser compliant with the [W3C SVGPathData interface draft](https://svgwg.org/specs/paths/#InterfaceSVGPathData) and can handle all minified stringified path data inputs (especially `A` commands with concatenated largeArc, sweep and final on-path parameters "bomb" quite a few other libraries).
+It includes a path data parser compliant with the
+[W3C SVGPathData interface draft](https://svgwg.org/specs/paths/#InterfaceSVGPathData) and can
+handle all minified stringified path data inputs (especially `A` commands with concatenated
+largeArc, sweep and final on-path parameters "bomb" quite a few other libraries).
 
 [![touching points](https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/intersections.png)](https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/intersections.png)
 
 - [Usage](#usage)
-  - [Browser](#browser)
-  - [Node](#node)
+    - [Browser](#browser)
+    - [Node](#node)
 - [Parameters/Options](#parameters-options)
 - [Methods](#methods)
-  - [Intersections between shapes via svgEl() helper method](#intersections-between-shapes-via-svgel-helper-method)
-  - [Adjacent "touching" paths](#adjacent-touching-paths)
+    - [Intersections between shapes via svgEl() helper method](#intersections-between-shapes-via-svgel-helper-method)
+    - [Adjacent "touching" paths](#adjacent-touching-paths)
 - [Related repositories](#related-repositories)
 - [Similar libraries](#similar-libraries)
 - [Credits](#credits)
 
 ## Usage
-
 
 You can either pass
 
@@ -35,14 +36,15 @@ You can either pass
 let intersections = findPathIntersections(d1, d2)
 ```
 
-or use it alongside with other path data parsers like [Jarek Foksa's pathdata-polyfill](https://github.com/jarek-foksa/path-data-polyfill) and pass already parsed path data arrays to the `findPathDataIntersections()` method.
+or use it alongside with other path data parsers like
+[Jarek Foksa's pathdata-polyfill](https://github.com/jarek-foksa/path-data-polyfill) and pass
+already parsed path data arrays to the `findPathDataIntersections()` method.
 
 ```
 let checkCollision = checkCollision(pathData1, pathData2) // returns true or false
 ```
 
 ### Browser
-
 
 ```
 <script src="https://cdn.jsdelivr.net/npm/svg-path-intersections@latest/js/svg-path-intersections_standalone.min.js"></script>
@@ -64,7 +66,6 @@ console.log(JSON.stringify(intersections, null, ' '));
 
 ### Node
 
-
 ```
 const pathIntersections = require('svg-path-intersections');
 const {findPathIntersections, checkPathIntersection, findPathDataIntersections, pointAtT, parsePathDataNormalized} = pathIntersections;
@@ -79,36 +80,35 @@ console.log(JSON.stringify(intersections, null, ' '));
 
 ## Parameters/Options
 
-
-| Option | values/default | Effect |
-|----|----|----|
-| pathData1, pathData2 | path data input | accepts stringified pathdata or parsed arrays |
-| stopAtFirst | false | stop search after first occurrence: helps to speed up processing e.g. for collision checks |
-| quality | low, medium, high | default: "medium"; higher quality results in more accurate coordinates and `t` values at the cost of longer processing times |
+| Option               | values/default    | Effect                                                                                                                       |
+| -------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| pathData1, pathData2 | path data input   | accepts stringified pathdata or parsed arrays                                                                                |
+| stopAtFirst          | false             | stop search after first occurrence: helps to speed up processing e.g. for collision checks                                   |
+| quality              | low, medium, high | default: "medium"; higher quality results in more accurate coordinates and `t` values at the cost of longer processing times |
 
 ## Methods
-
 
 - `findPathIntersections(pathData1, pathData2, stopAtFirst, quality)` : finds all intersections
 - `checkCollision(d1, d2)`: stops at first intersection – faster than finding all occurences
 - `pointAtT(points, t)`: calculates point at `t` value for lines, quadratic or cubic béziers:
-  - **cubic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)`\
-    \(1\. previous end point, 2. first control point, 3. second control point, 4. final on-path point)
-  - **quadratic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)`\
-    \(1\. previous end point, 2. first control point, 3. final on-path point)
-  - **lineto** `pointAtT([{x:0, y:0}, {x:0, y:0}], 0.5)`\
-    \(1\. previous end point, 2. final on-path point)
+    - **cubic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)`\
+      \(1\. previous end point, 2. first control point, 3. second control point, 4. final on-path
+      point)
+    - **quadratic bézier:** `pointAtT([{x:0, y:0}, {x:0, y:0}, {x:0, y:0} ], 0.5)`\
+      \(1\. previous end point, 2. first control point, 3. final on-path point)
+    - **lineto** `pointAtT([{x:0, y:0}, {x:0, y:0}], 0.5)`\
+      \(1\. previous end point, 2. final on-path point)
 - `parsePathDataNormalized(d, options)`\
-  Parse stringified pathdata to array with normalization options. See [complete version with all options](https://github.com/herrstrietzel/svg-parse-path-normalized)\
+  Parse stringified pathdata to array with normalization options. See
+  [complete version with all options](https://github.com/herrstrietzel/svg-parse-path-normalized)\
   **Default options:** toAbsolute, toLonghands, arcToCubics
 
 ### Intersections between shapes via `svgEl()` helper method
 
-
 You can use this helper to add all svg geometry elements like so
 
 ```
-let circle = svgEl(cx:10, cy:10, r: 10);  
+let circle = svgEl(cx:10, cy:10, r: 10);
 
 let ellipse = svgEl(cx:10, cy:10, rx: 10, ry:20 );
 
@@ -130,22 +130,19 @@ let intersections = findPathIntersections(circle, path)
 
 ### Intersections between DOM elements
 
-
 ```
 let circle = document.querySelector('circle')
 let path = document.querySelector('path')
-let intersectionsDOM = getElementIntersections(circle, path)   
+let intersectionsDOM = getElementIntersections(circle, path)
 ```
 
 ### Demos
-
 
 - [Codepen: multiple path examples and speed test](https://codepen.io/herrstrietzel/pen/bGJyOXB)
 - [Simple demo](https://codepen.io/herrstrietzel/pen/mdgZGrz)
 - [Shapes](https://codepen.io/herrstrietzel/pen/OJGKxKp)
 
 ### Output
-
 
 The returned intersection array contains:
 
@@ -251,19 +248,18 @@ This way, you can calculate coordinates for both paths or split each path at `t`
 
 ### Adjacent "touching" paths
 
-
 Unlike other libraries path-intersections will also detect touching paths.
 
 [![touching points](https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/touching-paths.png)](https://raw.githubusercontent.com/herrstrietzel/svg-path-intersections/main/img/touching-paths.png)
 
 ## Related repositories
 
-
-- [svg-parse-path-normalized](https://github.com/herrstrietzel/svg-parse-path-normalized) – Parse path data from string including fine-grained normalizing options
-- [svg-getpointatlength](https://github.com/herrstrietzel/svg-getpointatlength) – calculate path length and point at paths on raw path data
+- [svg-parse-path-normalized](https://github.com/herrstrietzel/svg-parse-path-normalized) – Parse
+  path data from string including fine-grained normalizing options
+- [svg-getpointatlength](https://github.com/herrstrietzel/svg-getpointatlength) – calculate path
+  length and point at paths on raw path data
 
 ## Similar libraries
-
 
 - [thelonious's "kld-intersections"](https://github.com/thelonious/kld-intersections)
 - [Pomax's "bezierjs"](https://github.com/Pomax/bezierjs)
@@ -271,11 +267,15 @@ Unlike other libraries path-intersections will also detect touching paths.
 
 ## Credits
 
-
-- Jarek Foksa for his [great polyfill](https://github.com/jarek-foksa/path-data-polyfill) heavily inspring to adopt the new pathData interface methodology and for contributing to the specification
-- Dmitry Baranovskiy for (raphael.j/snap.svg) [pathToAbsolute/Relative functions](https://github.com/DmitryBaranovskiy/raphael/blob/master/raphael.js#L1848)
-- Vitaly Puzrin (fontello) for the arc to cubic conversion method [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js) and [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
-- Mike "POMAX" Kammermans for his great [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
+- Jarek Foksa for his [great polyfill](https://github.com/jarek-foksa/path-data-polyfill) heavily
+  inspring to adopt the new pathData interface methodology and for contributing to the specification
+- Dmitry Baranovskiy for (raphael.j/snap.svg)
+  [pathToAbsolute/Relative functions](https://github.com/DmitryBaranovskiy/raphael/blob/master/raphael.js#L1848)
+- Vitaly Puzrin (fontello) for the arc to cubic conversion method
+  [a2c.js](https://github.com/fontello/svgpath/blob/master/lib/a2c.js) and
+  [cubic to quadratic approximation](https://github.com/fontello/cubic2quad/blob/master/test/cubic2quad.js)
+- Mike "POMAX" Kammermans for his great
+  [A Primer on Bézier Curves](https://pomax.github.io/bezierinfo)
 
 <!--
 ## Source links

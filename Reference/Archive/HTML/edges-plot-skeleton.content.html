@@ -1,28 +1,49 @@
-<div><button class="btn rounded-pill" id="pst-back-to-top">
-Back to top</button></div>
-<div><div class="bd-container">
-<div class="bd-container__inner bd-page-width">
-<main class="bd-main" id="main-content">
-<div class="bd-content">
-<div class="bd-article-container">
-
-<article class="bd-article">
-<div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-auto-examples-edges-plot-skeleton-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code or to run this example in your browser via Binder.</p>
-</div>
-<section class="sphx-glr-example-title" id="skeletonize">
-<h1>Skeletonize<a class="headerlink" href="#skeletonize" title="Link to this heading">#</a>
-</h1>
-<p>Skeletonization reduces binary objects to 1 pixel wide representations. This
-can be useful for feature extraction, and/or representing an object’s topology.</p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> works by making successive passes of the image. On each pass,
-border pixels are identified and removed on the condition that they do not
-break the connectivity of the corresponding object.</p>
-<div class="highlight-Python notranslate">
-<div class="highlight">
-<pre id="codecell0"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a>
+<div><button class="btn rounded-pill" id="pst-back-to-top">Back to top</button></div>
+<div>
+	<div class="bd-container">
+		<div class="bd-container__inner bd-page-width">
+			<main class="bd-main" id="main-content">
+				<div class="bd-content">
+					<div class="bd-article-container">
+						<article class="bd-article">
+							<div class="sphx-glr-download-link-note admonition note">
+								<p class="admonition-title">Note</p>
+								<p>
+									<a
+										class="reference internal"
+										href="#sphx-glr-download-auto-examples-edges-plot-skeleton-py"
+										><span class="std std-ref">Go to the end</span></a
+									>
+									to download the full example code or to run this example in your
+									browser via Binder.
+								</p>
+							</div>
+							<section class="sphx-glr-example-title" id="skeletonize">
+								<h1>
+									Skeletonize<a
+										class="headerlink"
+										href="#skeletonize"
+										title="Link to this heading"
+										>#</a
+									>
+								</h1>
+								<p>
+									Skeletonization reduces binary objects to 1 pixel wide
+									representations. This can be useful for feature extraction,
+									and/or representing an object’s topology.
+								</p>
+								<p>
+									<code class="docutils literal notranslate"
+										><span class="pre">skeletonize</span></code
+									>
+									works by making successive passes of the image. On each pass,
+									border pixels are identified and removed on the condition that
+									they do not break the connectivity of the corresponding object.
+								</p>
+								<div class="highlight-Python notranslate">
+									<div class="highlight">
+										<pre
+											id="codecell0"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a>
 <span class="kn">from</span><span class="nn">skimage</span><span class="kn">import</span> <span class="n">data</span>
 <span class="kn">import</span><span class="nn">matplotlib.pyplot</span><span class="k">as</span><span class="nn">plt</span>
 <span class="kn">from</span><span class="nn">skimage.util</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-util sphx-glr-backref-type-py-function" href="../../api/skimage.util.html#skimage.util.invert" title="skimage.util.invert"><span class="n">invert</span></a>
@@ -49,50 +70,85 @@ break the connectivity of the corresponding object.</p>
 <a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre>
-<button class="copybtn o-tooltip--left">
-<svg class="icon icon-tabler icon-tabler-copy" height="44" width="44">
-<title>Copy to clipboard</title>
-</svg>
-</button>
-</div>
-</div>
-<p><strong>Zhang’s method vs Lee’s method</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> <a class="reference internal" href="#zha84" id="id1"><span>[Zha84]</span></a> works by making successive passes of
-the image, removing pixels on object borders. This continues until no
-more pixels can be removed.  The image is correlated with a
-mask that assigns each pixel a number in the range [0…255]
-corresponding to each possible pattern of its 8 neighboring
-pixels. A look up table is then used to assign the pixels a
-value of 0, 1, 2 or 3, which are selectively removed during
-the iterations.</p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize(...,</span> <span class="pre">method='lee')</span></code> <a class="reference internal" href="#lee94" id="id2"><span>[Lee94]</span></a> uses an octree data structure
-to examine a 3x3x3 neighborhood of a pixel. The algorithm proceeds by
-iteratively sweeping over the image, and removing pixels at each iteration
-until the image stops changing. Each iteration consists of two steps: first,
-a list of candidates for removal is assembled; then pixels from this list
-are rechecked sequentially, to better preserve connectivity of the image.</p>
-<p>Note that Lee’s method <a class="reference internal" href="#lee94" id="id3"><span>[Lee94]</span></a> is designed to be used on 3-D images, and
-is selected automatically for those. For illustrative purposes, we apply
-this algorithm to a 2-D image.</p>
-<div class="citation-list">
-<div class="citation" id="zha84">
+										<button class="copybtn o-tooltip--left">
+											<svg
+												class="icon icon-tabler icon-tabler-copy"
+												height="44"
+												width="44">
+												<title>Copy to clipboard</title>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<p><strong>Zhang’s method vs Lee’s method</strong></p>
+								<p>
+									<code class="docutils literal notranslate"
+										><span class="pre">skeletonize</span></code
+									>
+									<a class="reference internal" href="#zha84" id="id1"
+										><span>[Zha84]</span></a
+									>
+									works by making successive passes of the image, removing pixels
+									on object borders. This continues until no more pixels can be
+									removed. The image is correlated with a mask that assigns each
+									pixel a number in the range [0…255] corresponding to each
+									possible pattern of its 8 neighboring pixels. A look up table is
+									then used to assign the pixels a value of 0, 1, 2 or 3, which
+									are selectively removed during the iterations.
+								</p>
+								<p>
+									<code class="docutils literal notranslate"
+										><span class="pre">skeletonize(...,</span>
+										<span class="pre">method='lee')</span></code
+									>
+									<a class="reference internal" href="#lee94" id="id2"
+										><span>[Lee94]</span></a
+									>
+									uses an octree data structure to examine a 3x3x3 neighborhood of
+									a pixel. The algorithm proceeds by iteratively sweeping over the
+									image, and removing pixels at each iteration until the image
+									stops changing. Each iteration consists of two steps: first, a
+									list of candidates for removal is assembled; then pixels from
+									this list are rechecked sequentially, to better preserve
+									connectivity of the image.
+								</p>
+								<p>
+									Note that Lee’s method
+									<a class="reference internal" href="#lee94" id="id3"
+										><span>[Lee94]</span></a
+									>
+									is designed to be used on 3-D images, and is selected
+									automatically for those. For illustrative purposes, we apply
+									this algorithm to a 2-D image.
+								</p>
+								<div class="citation-list">
+									<div class="citation" id="zha84">
+										<p>
+											A fast parallel algorithm for thinning digital patterns,
+											T. Y. Zhang and C. Y. Suen, Communications of the ACM,
+											March 1984, Volume 27, Number 3.
+										</p>
+									</div>
+									<div class="citation" id="lee94">
+										<span class="label"
+											><span class="fn-bracket">[</span>Lee94<span
+												class="fn-bracket"
+												>]</span
+											></span
+										>
 
-<p>A fast parallel algorithm for thinning digital patterns,
-T. Y. Zhang and C. Y. Suen, Communications of the ACM,
-March 1984, Volume 27, Number 3.</p>
-</div>
-<div class="citation" id="lee94">
-<span class="label"><span class="fn-bracket">[</span>Lee94<span class="fn-bracket">]</span></span>
-
-<p>T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building skeleton models
-via 3-D medial surface/axis thinning algorithms.
-Computer Vision, Graphics, and Image Processing, 56(6):462-478,
-1994.</p>
-</div>
-</div>
-<div class="highlight-Python notranslate">
-<div class="highlight">
-<pre id="codecell1"><span class="kn">import</span><span class="nn">matplotlib.pyplot</span><span class="k">as</span><span class="nn">plt</span>
+										<p>
+											T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building skeleton
+											models via 3-D medial surface/axis thinning algorithms.
+											Computer Vision, Graphics, and Image Processing,
+											56(6):462-478, 1994.
+										</p>
+									</div>
+								</div>
+								<div class="highlight-Python notranslate">
+									<div class="highlight">
+										<pre
+											id="codecell1"><span class="kn">import</span><span class="nn">matplotlib.pyplot</span><span class="k">as</span><span class="nn">plt</span>
 <span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a>
 
 <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">blobs</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-skimage-data sphx-glr-backref-type-py-function" href="../../api/skimage.data.html#skimage.data.binary_blobs" title="skimage.data.binary_blobs"><span class="n">data</span><span class="o">.</span><span class="n">binary_blobs</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">blob_size_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">volume_fraction</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -118,28 +174,49 @@ Computer Vision, Graphics, and Image Processing, 56(6):462-478,
 <a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre>
-<button class="copybtn o-tooltip--left">
-<svg class="icon icon-tabler icon-tabler-copy" height="44" width="44">
-<title>Copy to clipboard</title>
-</svg>
-</button>
-</div>
-</div>
-<p><strong>Medial axis skeletonization</strong></p>
-<p>The medial axis of an object is the set of all points having more than one
-closest point on the object’s boundary. It is often called the <em>topological
-skeleton</em>, because it is a 1-pixel wide skeleton of the object, with the same
-connectivity as the original object.</p>
-<p>Here, we use the medial axis transform to compute the width of the foreground
-objects. As the function <code class="docutils literal notranslate"><span class="pre">medial_axis</span></code> returns the distance transform in
-addition to the medial axis (with the keyword argument <code class="docutils literal notranslate"><span class="pre">return_distance=True</span></code>),
-it is possible to compute the distance to the background for all points of
-the medial axis with this function. This gives an estimate of the local width
-of the objects.</p>
-<p>For a skeleton with fewer branches, <code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> should be preferred.</p>
-<div class="highlight-Python notranslate">
-<div class="highlight">
-<pre id="codecell2"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.medial_axis" title="skimage.morphology.medial_axis"><span class="n">medial_axis</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a>
+										<button class="copybtn o-tooltip--left">
+											<svg
+												class="icon icon-tabler icon-tabler-copy"
+												height="44"
+												width="44">
+												<title>Copy to clipboard</title>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<p><strong>Medial axis skeletonization</strong></p>
+								<p>
+									The medial axis of an object is the set of all points having
+									more than one closest point on the object’s boundary. It is
+									often called the <em>topological skeleton</em>, because it is a
+									1-pixel wide skeleton of the object, with the same connectivity
+									as the original object.
+								</p>
+								<p>
+									Here, we use the medial axis transform to compute the width of
+									the foreground objects. As the function
+									<code class="docutils literal notranslate"
+										><span class="pre">medial_axis</span></code
+									>
+									returns the distance transform in addition to the medial axis
+									(with the keyword argument
+									<code class="docutils literal notranslate"
+										><span class="pre">return_distance=True</span></code
+									>), it is possible to compute the distance to the background for
+									all points of the medial axis with this function. This gives an
+									estimate of the local width of the objects.
+								</p>
+								<p>
+									For a skeleton with fewer branches,
+									<code class="docutils literal notranslate"
+										><span class="pre">skeletonize</span></code
+									>
+									should be preferred.
+								</p>
+								<div class="highlight-Python notranslate">
+									<div class="highlight">
+										<pre
+											id="codecell2"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.medial_axis" title="skimage.morphology.medial_axis"><span class="n">medial_axis</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a>
 
 <span class="c1"># Generate the data</span>
 <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">blobs</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-skimage-data sphx-glr-backref-type-py-function" href="../../api/skimage.data.html#skimage.data.binary_blobs" title="skimage.data.binary_blobs"><span class="n">data</span><span class="o">.</span><span class="n">binary_blobs</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">blob_size_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">volume_fraction</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -177,25 +254,46 @@ of the objects.</p>
 <a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre>
-<button class="copybtn o-tooltip--left">
-<svg class="icon icon-tabler icon-tabler-copy" height="44" width="44">
-<title>Copy to clipboard</title>
-</svg>
-</button>
-</div>
-</div>
-<p><strong>Morphological thinning</strong></p>
-<p>Morphological thinning, implemented in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">thin</span></code> function, works on the
-same principle as <code class="xref py py-obj docutils literal notranslate"><span class="pre">skeletonize</span></code>: remove pixels from the borders at each
-iteration until none can be removed without altering the connectivity. The
-different rules of removal can speed up skeletonization and result in
-different final skeletons.</p>
-<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">thin</span></code> function also takes an optional <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_num_iter</span></code> keyword argument to
-limit the number of thinning iterations, and thus produce a relatively
-thicker skeleton.</p>
-<div class="highlight-Python notranslate">
-<div class="highlight">
-<pre id="codecell3"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin"><span class="n">thin</span></a>
+										<button class="copybtn o-tooltip--left">
+											<svg
+												class="icon icon-tabler icon-tabler-copy"
+												height="44"
+												width="44">
+												<title>Copy to clipboard</title>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<p><strong>Morphological thinning</strong></p>
+								<p>
+									Morphological thinning, implemented in the
+									<code class="xref py py-obj docutils literal notranslate"
+										><span class="pre">thin</span></code
+									>
+									function, works on the same principle as
+									<code class="xref py py-obj docutils literal notranslate"
+										><span class="pre">skeletonize</span></code
+									>: remove pixels from the borders at each iteration until none
+									can be removed without altering the connectivity. The different
+									rules of removal can speed up skeletonization and result in
+									different final skeletons.
+								</p>
+								<p>
+									The
+									<code class="xref py py-obj docutils literal notranslate"
+										><span class="pre">thin</span></code
+									>
+									function also takes an optional
+									<code class="xref py py-obj docutils literal notranslate"
+										><span class="pre">max_num_iter</span></code
+									>
+									keyword argument to limit the number of thinning iterations, and
+									thus produce a relatively thicker skeleton.
+								</p>
+								<div class="highlight-Python notranslate">
+									<div class="highlight">
+										<pre
+											id="codecell3"><span class="kn">from</span><span class="nn">skimage.morphology</span><span class="kn">import</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin"><span class="n">thin</span></a>
 
 <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">skeleton</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize"><span class="n">skeletonize</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image</span></a><span class="p">)</span>
 <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">thinned</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function" href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin"><span class="n">thin</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">image</span></a><span class="p">)</span>
@@ -223,41 +321,96 @@ thicker skeleton.</p>
 <a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre>
-<button class="copybtn o-tooltip--left">
-<svg class="icon icon-tabler icon-tabler-copy" height="44" width="44">
-<title>Copy to clipboard</title>
-</svg>
-</button>
+										<button class="copybtn o-tooltip--left">
+											<svg
+												class="icon icon-tabler icon-tabler-copy"
+												height="44"
+												width="44">
+												<title>Copy to clipboard</title>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<p class="sphx-glr-timing">
+									<strong>Total running time of the script:</strong> (0 minutes
+									1.397 seconds)
+								</p>
+								<div
+									class="sphx-glr-footer sphx-glr-footer-example docutils container"
+									id="sphx-glr-download-auto-examples-edges-plot-skeleton-py">
+									<div
+										class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+										<p>
+											<a
+												class="reference download internal"
+												href="../../_downloads/2763f34da4b712ae70cd9a352f2399ea/plot_skeleton.ipynb"
+												><code
+													class="xref download docutils literal notranslate"
+													><span class="pre">Download</span>
+													<span class="pre">Jupyter</span>
+													<span class="pre">notebook:</span>
+													<span class="pre"
+														>plot_skeleton.ipynb</span
+													></code
+												></a
+											>
+										</p>
+									</div>
+									<div
+										class="sphx-glr-download sphx-glr-download-python docutils container">
+										<p>
+											<a
+												class="reference download internal"
+												href="../../_downloads/acc64afc58dd7a1f46c04f30a38229d9/plot_skeleton.py"
+												><code
+													class="xref download docutils literal notranslate"
+													><span class="pre">Download</span>
+													<span class="pre">Python</span>
+													<span class="pre">source</span>
+													<span class="pre">code:</span>
+													<span class="pre">plot_skeleton.py</span></code
+												></a
+											>
+										</p>
+									</div>
+									<div
+										class="sphx-glr-download sphx-glr-download-zip docutils container">
+										<p>
+											<a
+												class="reference download internal"
+												href="../../_downloads/deb7b62e66096d53b9a5c78433ffae6b/plot_skeleton.zip"
+												><code
+													class="xref download docutils literal notranslate"
+													><span class="pre">Download</span>
+													<span class="pre">zipped:</span>
+													<span class="pre">plot_skeleton.zip</span></code
+												></a
+											>
+										</p>
+									</div>
+								</div>
+								<p class="sphx-glr-signature">
+									<a
+										class="reference external"
+										href="https://sphinx-gallery.github.io"
+										>Gallery generated by Sphinx-Gallery</a
+									>
+								</p>
+							</section>
+						</article>
+					</div>
+					<div class="bd-sidebar-secondary bd-toc" id="pst-secondary-sidebar">
+						<div class="sidebar-secondary-items sidebar-secondary__inner">
+							<div class="sidebar-secondary-item">
+								<div>
+									<h3>This Page</h3>
+									<ul class="this-page-menu"></ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
 </div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.397 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-edges-plot-skeleton-py">
-
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" href="../../_downloads/2763f34da4b712ae70cd9a352f2399ea/plot_skeleton.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_skeleton.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" href="../../_downloads/acc64afc58dd7a1f46c04f30a38229d9/plot_skeleton.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_skeleton.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" href="../../_downloads/deb7b62e66096d53b9a5c78433ffae6b/plot_skeleton.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_skeleton.zip</span></code></a></p>
-</div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</section>
-</article>
-</div>
-<div class="bd-sidebar-secondary bd-toc" id="pst-secondary-sidebar"><div class="sidebar-secondary-items sidebar-secondary__inner">
-<div class="sidebar-secondary-item">
-<div>
-<h3>This Page</h3>
-<ul class="this-page-menu">
-
-</ul>
-</div>
-</div>
-</div></div>
-</div>
-</main>
-</div>
-</div></div>

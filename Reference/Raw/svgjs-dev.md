@@ -14,7 +14,8 @@ The lightweight library for manipulating and animating SVG.
 
 ## Why choose SVG.js?
 
-SVG.js has no dependencies and aims to be as small as possible while providing close to complete coverage of the SVG spec. If you're not convinced yet, here are a few highlights.
+SVG.js has no dependencies and aims to be as small as possible while providing close to complete
+coverage of the SVG spec. If you're not convinced yet, here are a few highlights.
 
 \
 
@@ -28,15 +29,17 @@ Index:
 - `fill`: **`generate 10000 rects with fill color`**
 - `gradient`: **`generate 10000 rects with gradient fill`**
 
-*Less is better. Tested on an Intel Core i7-4702MQ @ 2.2GHz.*
+_Less is better. Tested on an Intel Core i7-4702MQ @ 2.2GHz._
 
 \
 
 ## Easy readable, uncluttered syntax.
 
-Creating and manipulating SVG using JavaScript alone is pretty verbose. For example, just creating a simple pink square requires quite a lot of code:
+Creating and manipulating SVG using JavaScript alone is pretty verbose. For example, just creating a
+simple pink square requires quite a lot of code:
 
-SVG.js provides a syntax that is concise and easy to read. Doing the same as the vanilla js example above:
+SVG.js provides a syntax that is concise and easy to read. Doing the same as the vanilla js example
+above:
 
     // SVG.js
     var draw = SVG().addTo('#drawing')
@@ -55,21 +58,26 @@ That's just **two** lines of code instead of **ten**! And a whole lot less repet
 - [animations](./docs-3.2-animating.md) on size, position, transformations, color, ...
 - [painless extension](./docs-3.2-extending.md) thanks to the modular structure
 - various [useful plugins](./docs-3.2-plugins.md) available
-- unified api between shape types with [move](./docs-3.2-manipulating.md#move), [size](./docs-3.2-manipulating.md#resizing), [center](./docs-3.2-manipulating.md#center), ...
+- unified api between shape types with [move](./docs-3.2-manipulating.md#move),
+  [size](./docs-3.2-manipulating.md#resizing), [center](./docs-3.2-manipulating.md#center), ...
 - [binding events](./docs-3.2-events.md) to elements
-- full support for opacity [masks](./docs-3.2-shape-elements.md#svg-mask) and [clipping paths](./docs-3.2-shape-elements.md#svg-clippath)
+- full support for opacity [masks](./docs-3.2-shape-elements.md#svg-mask) and
+  [clipping paths](./docs-3.2-shape-elements.md#svg-clippath)
 - [text paths](./docs-3.2-shape-elements.md#svg-textpath), even animated
 - element [groups](./docs-3.2-container-elements.md#svg-g)
-- dynamic [gradients](./docs-3.2-shape-elements.md#svg-gradient) and [patterns](./docs-3.2-shape-elements.md#svg-pattern)
+- dynamic [gradients](./docs-3.2-shape-elements.md#svg-gradient) and
+  [patterns](./docs-3.2-shape-elements.md#svg-pattern)
 - fully documented (you're looking at it :)
 
 ### License
 
-SVG.js is licensed under the terms of the [MIT License](https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt).
+SVG.js is licensed under the terms of the
+[MIT License](https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt).
 
 ### Changelog
 
-Wondering what has changed in the latest releases? Have a look at the [change log](https://github.com/svgdotjs/svg.js/blob/master/CHANGELOG.md).
+Wondering what has changed in the latest releases? Have a look at the
+[change log](https://github.com/svgdotjs/svg.js/blob/master/CHANGELOG.md).
 
 <!--
 ## Source links

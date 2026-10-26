@@ -1,495 +1,1246 @@
-<div><div class="contentcontainer">
-<div class="belowtopnavcontainer">
-
-<div class="w3-main ws-light-grey" id="belowtopnav">
-
-<div class="w3-row">
-
-<div class="w3-col l10 m12 w3-white" id="main">
-
-<h1 class="with-bookmark">SVG <span class="color_h1">Stroke Attributes</span>
-</h1>
-
-
-
-<div class="ws-share ws-share--float">
-<span class="ws-share-label">Share</span>
-<button class="ws-share-btn ga-featured ga-share-link" title="Copy link"><span class="ws-copied-toast">Link Copied</span></button>
-</div>
-<h2>SVG Stroke Attributes</h2>
-<p>The <code class="w3-codespan">stroke</code> attribute sets the color of the 
-line drawn around an element.</p>
-<p>Here we will look at the six <code class="w3-codespan">stroke</code> 
-attributes:</p>
-<ul>
-<li> <code class="w3-codespan">stroke</code> - sets the color of the line 
-  around an element</li>
-<li> <code class="w3-codespan">stroke-width</code> - sets the width of the 
-  line around an element</li>
-<li> <code class="w3-codespan">stroke-opacity</code> - sets the opacity of the 
-  line around an element</li>
-<li> <code class="w3-codespan">stroke-linecap</code> - sets the shape of the 
-  end-lines for a line or open path</li>
-<li> <code class="w3-codespan">stroke-dasharray</code> - sets the line 
-  to show as a dashed line</li>
-<li> <code class="w3-codespan">stroke-linejoin</code> - sets the shape of the 
-  corners where two lines meet</li>
-</ul>
-
-<h2>SVG stroke Attribute</h2>
-<p>The <code class="w3-codespan">stroke</code> attribute defines the color of 
-the outline of an element.</p>
-<p>The <code class="w3-codespan">stroke</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;circle&gt;</code>, <code class="w3-codespan">
-&lt;ellipse&gt;</code>, <code class="w3-codespan">&lt;line&gt;</code>, <code class="w3-codespan">&lt;path&gt;</code>, <code class="w3-codespan">
-&lt;polygon&gt;</code>, <code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;rect&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>The value of the <code class="w3-codespan">stroke</code> attribute can be a 
-color name, rgb value or a hex value.</p>
-<p>Here we use the <code class="w3-codespan">stroke</code> attribute to set the 
-outline color for a polygon, rectangle, circle 
-and a text:</p>
-<svg height="220" width="600">
-<text>I love SVG!</text>
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="220"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="50,10 0,190 100,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> 
-  width<span class="attributevaluecolor">="150"</span> height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="120"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> /</span></span>  
-  <span class="tagnamecolor">circle<span class="attributecolor"> r<span class="attributevaluecolor">="45"</span> cx<span class="attributevaluecolor">="350"</span> cy<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="pink"</span> stroke<span class="attributevaluecolor">="blue"</span> /</span></span>  <span class="tagnamecolor">text<span class="attributecolor"> 
-  x<span class="attributevaluecolor">="420"</span> y<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="red"</span> stroke<span class="attributevaluecolor">="blue"</span></span></span>I love SVG!<span class="tagnamecolor">/text</span><span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke00">Try it Yourself »</a>
-</div>
-<p>Here we use the <code class="w3-codespan">stroke</code> attribute to define the color of 
-three lines:</p>
-<svg height="80" width="300">
-   
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> height<span class="attributevaluecolor">="80"</span> width<span class="attributevaluecolor">="300"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>
-  <span class="tagnamecolor">g<span class="attributecolor"> fill<span class="attributevaluecolor">="none"</span></span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke<span class="attributevaluecolor">="red"</span> d<span class="attributevaluecolor">="M5 20 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke<span class="attributevaluecolor">="green"</span> d<span class="attributevaluecolor">="M5 40 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke<span class="attributevaluecolor">="blue"</span> d<span class="attributevaluecolor">="M5 60 l215 0"</span> /</span></span>
-  
-<span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke0">Try it Yourself »</a>
-</div>
-
-<h2>SVG stroke-width Attribute</h2>
-<p>The <code class="w3-codespan">stroke-width</code> attribute defines the width of the stroke.</p>
-<p>The <code class="w3-codespan">stroke-width</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;circle&gt;</code>, <code class="w3-codespan">
-&lt;ellipse&gt;</code>, <code class="w3-codespan">&lt;line&gt;</code>, <code class="w3-codespan">&lt;path&gt;</code>, <code class="w3-codespan">
-&lt;polygon&gt;</code>, <code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;rect&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>Here we use the <code class="w3-codespan">stroke-width</code> attribute to set the 
-width of the outline for a polygon, rectangle, circle and a text:</p>
-<svg height="220" width="600">
-<text>I love SVG!</text>
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="220"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,10 10,190 110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> 
-  width<span class="attributevaluecolor">="150"</span> height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="120"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> /</span></span>  
-  <span class="tagnamecolor">circle<span class="attributecolor"> r<span class="attributevaluecolor">="45"</span> cx<span class="attributevaluecolor">="350"</span> cy<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="pink"</span> stroke<span class="attributevaluecolor">="blue"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> /</span></span>  <span class="tagnamecolor">text<span class="attributecolor"> 
-  x<span class="attributevaluecolor">="420"</span> y<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="red"</span> stroke<span class="attributevaluecolor">="blue"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span></span></span>I love SVG!<span class="tagnamecolor">/text</span><span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke1">Try it Yourself »</a>
-</div>
-<p>Here we use the <code class="w3-codespan">stroke-width</code> attribute to set the width of three lines:</p>
-<svg height="80" width="300">
-   
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> height<span class="attributevaluecolor">="80"</span> width<span class="attributevaluecolor">="300"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>
-  <span class="tagnamecolor">g<span class="attributecolor"> fill<span class="attributevaluecolor">="none"</span> stroke<span class="attributevaluecolor">="red"</span></span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="2"</span> d<span class="attributevaluecolor">="M5 20 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="4"</span> d<span class="attributevaluecolor">="M5 40 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="6"</span> d<span class="attributevaluecolor">="M5 60 l215 0"</span> /</span></span>
-  
-<span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke">Try it Yourself »</a>
-</div>
-
-<div id="midcontentadcontainer">
-
-
-
-</div>
-
-<h2>SVG stroke-opacity Attribute</h2>
-<p>The <code class="w3-codespan">stroke-opacity</code> attribute defines the 
-opacity of the stroke.</p>
-<p>The <code class="w3-codespan">stroke-opacity</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;circle&gt;</code>, <code class="w3-codespan">
-&lt;ellipse&gt;</code>, <code class="w3-codespan">&lt;line&gt;</code>, <code class="w3-codespan">&lt;path&gt;</code>, <code class="w3-codespan">
-&lt;polygon&gt;</code>, <code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;rect&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>The value of the <code class="w3-codespan">stroke-opacity</code> attribute goes 
-from 0 to 1 (or 0% to 100%).</p>
-<p>Here we use the <code class="w3-codespan">stroke-opacity</code> attribute to set the 
-opacity of the outline for a polygon, rectangle, circle and a text:</p>
-<svg height="220" width="600">
-<text>I love SVG!</text>
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="220"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,10 10,190 110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> 
-  width<span class="attributevaluecolor">="150"</span> height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="120"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> /</span></span>  
-  <span class="tagnamecolor">circle<span class="attributecolor"> r<span class="attributevaluecolor">="45"</span> cx<span class="attributevaluecolor">="350"</span> cy<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="pink"</span> stroke<span class="attributevaluecolor">="blue"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> /</span></span>  <span class="tagnamecolor">text<span class="attributecolor"> 
-  x<span class="attributevaluecolor">="420"</span> y<span class="attributevaluecolor">="100"</span> fill<span class="attributevaluecolor">="red"</span> stroke<span class="attributevaluecolor">="blue"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span></span></span>I love SVG!<span class="tagnamecolor">/text</span><span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke4">Try it Yourself »</a>
-</div>
-<p>Here we use the <code class="w3-codespan">stroke-opacity</code> attribute to set the 
-opacity of three lines:</p>
-<svg height="80" width="300">
-   
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> height<span class="attributevaluecolor">="80"</span> width<span class="attributevaluecolor">="300"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>
-  <span class="tagnamecolor">g<span class="attributecolor"> fill<span class="attributevaluecolor">="none"</span> stroke<span class="attributevaluecolor">="red"</span></span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="2"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> d<span class="attributevaluecolor">="M5 20 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="4"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> d<span class="attributevaluecolor">="M5 40 l215 0"</span> /</span></span>
-    <span class="tagnamecolor">path<span class="attributecolor"> stroke-width<span class="attributevaluecolor">="6"</span> stroke-opacity<span class="attributevaluecolor">="0.4"</span> d<span class="attributevaluecolor">="M5 60 l215 0"</span> /</span></span>
-  
-<span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke5">Try it Yourself »</a>
-</div>
-
-<h2>SVG stroke-linecap Attribute</h2>
-<p>The <code class="w3-codespan">stroke-linecap</code> attribute defines different types of endings 
-for a line or an open path.</p>
-<p>The <code class="w3-codespan">stroke-linecap</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;path&gt;</code>, 
-<code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;line&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>The value of the <code class="w3-codespan">stroke-linecap</code> attribute can be 
-"butt", "round" or "square".</p>
-<p>Here we use the <code class="w3-codespan">stroke-linecap</code> attribute to set 
-different endings for three lines:</p>
-<svg height="120" width="300">
-  
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> height<span class="attributevaluecolor">="120"</span> width<span class="attributevaluecolor">="300"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  <span class="tagnamecolor">g<span class="attributecolor"> fill<span class="attributevaluecolor">="none"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="16"</span></span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-linecap<span class="attributevaluecolor">="butt"</span> d<span class="attributevaluecolor">="M10 20 
-  l215 0"</span> /</span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-linecap<span class="attributevaluecolor">="round"</span> d<span class="attributevaluecolor">="M10 50 l215 
-  0"</span> /</span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-linecap<span class="attributevaluecolor">="square"</span> d<span class="attributevaluecolor">="M10 80 l215 0"</span> /</span></span>  
-  <span class="tagnamecolor">/svg</span> </div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke2">Try it Yourself »</a>
-</div>
-
-<h2>SVG stroke-dasharray Attribute</h2>
-<p>The <code class="w3-codespan">stroke-dasharray</code> attribute is used to create dashed lines.</p>
-<p>The <code class="w3-codespan">stroke-dasharray</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;circle&gt;</code>, <code class="w3-codespan">
-&lt;ellipse&gt;</code>, <code class="w3-codespan">&lt;line&gt;</code>, <code class="w3-codespan">&lt;path&gt;</code>, <code class="w3-codespan">
-&lt;polygon&gt;</code>, <code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;rect&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>The value of the <code class="w3-codespan">stroke-dasharray</code> attribute can be 
-"none" or a comma or space separated list of lengths/percentages that 
-define the lengths of dashes and gaps.</p>
-<p>Here we use the <code class="w3-codespan">stroke-dasharray</code> attribute to 
-create different dashed lines:</p>
-<svg height="100" width="400">
-   
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> height<span class="attributevaluecolor">="100"</span> width<span class="attributevaluecolor">="400"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  <span class="tagnamecolor">g<span class="attributecolor"> 
-  fill<span class="attributevaluecolor">="none"</span> stroke<span class="attributevaluecolor">="red"</span> stroke-width<span class="attributevaluecolor">="6"</span></span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-dasharray<span class="attributevaluecolor">="5,5"</span> 
-  d<span class="attributevaluecolor">="M5 20 l215 0"</span> /</span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-dasharray<span class="attributevaluecolor">="10,10"</span> d<span class="attributevaluecolor">="M5 
-  40 l215 0"</span> /</span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-dasharray<span class="attributevaluecolor">="35,10"</span> d<span class="attributevaluecolor">="M5 60 
-  l215 0"</span> /</span></span>    <span class="tagnamecolor">path<span class="attributecolor"> stroke-dasharray<span class="attributevaluecolor">="20,10,5,5,5,10"</span> d<span class="attributevaluecolor">="M5 
-  80 l215 0"</span> /</span></span>  <span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke3">Try it Yourself »</a>
-</div>
-<p>Here we use the <code class="w3-codespan">stroke-dasharray</code> attribute to 
-create different dashed outlines for a polygon, rectangle and a circle:</p>
-<svg height="220" width="600">
-  
-  
-  
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="220"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,10 10,190 110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="4"</span> stroke-dasharray<span class="attributevaluecolor">="10,5"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> width<span class="attributevaluecolor">="150"</span> 
-  height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="120"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> stroke-width<span class="attributevaluecolor">="4"</span> 
-  stroke-dasharray<span class="attributevaluecolor">="10,5"</span> /</span></span>  <span class="tagnamecolor">circle<span class="attributecolor"> r<span class="attributevaluecolor">="45"</span> cx<span class="attributevaluecolor">="350"</span> cy<span class="attributevaluecolor">="100"</span> 
-  fill<span class="attributevaluecolor">="pink"</span> stroke<span class="attributevaluecolor">="blue"</span> stroke-width<span class="attributevaluecolor">="4"</span> stroke-dasharray<span class="attributevaluecolor">="10,5"</span> /</span></span><span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke7">Try it Yourself »</a>
-</div>
-
-<h2>SVG stroke-linejoin Attribute</h2>
-<p>The <code class="w3-codespan">stroke-linejoin</code> attribute defines the 
-shape of the corners where two lines meet.</p>
-<p>The <code class="w3-codespan">stroke-linejoin</code> attribute can be used with the 
-following SVG elements: <code class="w3-codespan">&lt;path&gt;</code>, <code class="w3-codespan">
-&lt;polygon&gt;</code>, <code class="w3-codespan">&lt;polyline&gt;</code>, <code class="w3-codespan">
-&lt;rect&gt;</code>, <code class="w3-codespan">&lt;text&gt;</code>, <code class="w3-codespan">
-&lt;textPath&gt;</code>, <code class="w3-codespan">&lt;tref&gt;</code> and <code class="w3-codespan">
-&lt;tspan&gt;</code>.</p>
-<p>The value of the <code class="w3-codespan">stroke-linejoin</code> attribute can be 
-"arcs", "bevel", "miter", miter-clip" or "round".</p>
-<p>Here we use the <code class="w3-codespan">stroke-linejoin</code> attribute to 
-create different corner shapes:</p>
-<svg height="230" width="600">
-  
-  
-  Sorry, your browser does not support inline SVG.
-</svg>
-<svg height="230" width="600">
-  
-  
-  Sorry, your browser does not support inline SVG.
-</svg>
-<svg height="230" width="600">
-  
-  
-  Sorry, your browser does not support inline SVG.
-</svg>
-<p>Here is the SVG code:</p>
-<div class="w3-example">
-<h3>Example</h3>
-<div class="w3-code notranslate htmlHigh">
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="230"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,25 10,190 110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="16"</span> stroke-linejoin<span class="attributevaluecolor">="round"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> width<span class="attributevaluecolor">="150"</span> 
-  height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="140"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> stroke-width<span class="attributevaluecolor">="16"</span> 
-  stroke-linejoin<span class="attributevaluecolor">="round"</span> /</span></span><span class="tagnamecolor">/svg</span>
-<span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="230"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  
-  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,25 10,190 110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="16"</span> stroke-linejoin<span class="attributevaluecolor">="miter"</span> /</span></span>  <span class="tagnamecolor">rect<span class="attributecolor"> width<span class="attributevaluecolor">="150"</span> 
-  height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="140"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> stroke-width<span class="attributevaluecolor">="16"</span> 
-  stroke-linejoin<span class="attributevaluecolor">="miter"</span> /</span></span><span class="tagnamecolor">/svg</span><span class="tagnamecolor">svg<span class="attributecolor"> width<span class="attributevaluecolor">="600"</span> height<span class="attributevaluecolor">="230"</span> xmlns<span class="attributevaluecolor">="http://www.w3.org/2000/svg"</span></span></span>  <span class="tagnamecolor">polygon<span class="attributecolor"> points<span class="attributevaluecolor">="55,25 10,190 
-  110,190"</span> fill<span class="attributevaluecolor">="lime"</span> stroke<span class="attributevaluecolor">="red"</span> stroke-width<span class="attributevaluecolor">="16"</span> stroke-linejoin<span class="attributevaluecolor">="bevel"</span> /</span></span>  
-  <span class="tagnamecolor">rect<span class="attributecolor"> width<span class="attributevaluecolor">="150"</span> height<span class="attributevaluecolor">="100"</span> x<span class="attributevaluecolor">="140"</span> y<span class="attributevaluecolor">="50"</span> fill<span class="attributevaluecolor">="yellow"</span> stroke<span class="attributevaluecolor">="red"</span> 
-  stroke-width<span class="attributevaluecolor">="16"</span> stroke-linejoin<span class="attributevaluecolor">="bevel"</span> /</span></span><span class="tagnamecolor">/svg</span>
-</div>
-<a class="w3-btn w3-margin-bottom" href="tryit.asp?filename=trysvg_stroke6">Try it Yourself »</a>
-</div>
-
-
-<div class="user-profile-bottom-wrapper" id="user-profile-bottom-wrapper">
-
-<div class="w3s-pathfinder -teaser user-anonymous">
-
-</div>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-</div></div>
-<div><div id="wrappercontainer">
-<div id="footerwrapper">
-
-<div class="advb">
-
-
-<div class="advb-inner">
-
-<section class="advb-left user-anonymous">
-<div class="advb-card">
-<p class="advb-kicker">Free account</p>
-<h2 class="advb-title">Track your progress</h2>
-<div class="advb-stats">
-<span class="advb-stat">XP earned <b>0</b></span>
-<span class="advb-stat">Day streak <b>0</b></span>
-<span class="advb-stat">Spaces <b>0</b></span>
-<span class="advb-stat">League <b>—</b></span>
-</div>
-
-</div>
-</section>
-
-<section class="advb-right">
-<p class="advb-kicker">New</p>
-<h2 class="advb-title">
-<span class="advb-t-wide">Learn in Adventure Mode</span>
-<span class="advb-t-narrow">W3Schools Adventure App</span>
-</h2>
-<p class="advb-text">
-        Coding fundamentals as bite-sized lessons and challenges.
-      </p>
-<div class="advb-cta">
-<div class="advb-badges">
-<a class="ga-bottom ga-appstore-signinbanner" href="https://apps.apple.com/us/app/w3schools/id6770531503" title="Get W3Schools Adventure App on App Store">
-<svg class="advb-badge">
-<text>Download on the</text>
-<text>App Store</text>
-</svg>
-</a>
-<a class="ga-bottom ga-googleplay-signinbanner" href="https://play.google.com/store/apps/details?id=com.w3schools.app.prod" title="Get W3Schools Adventure App on Google Play">
-<svg class="advb-badge">
-<text>GET IT ON</text>
-<text>Google Play</text>
-</svg>
-</a>
-<a class="ga-bottom ga-adventure-desktop" href="https://app.w3schools.com/" title="Try W3Schools Adventure Mode in your browser">
-<svg class="advb-badge advb-badge-browser">
-<text>TRY NOW IN</text>
-<text>Browser</text>
-</svg>
-</a>
-</div>
-</div>
-</section>
-</div>
-</div>
-<div id="spacemyfooter">
 <div>
+	<div class="contentcontainer">
+		<div class="belowtopnavcontainer">
+			<div class="w3-main ws-light-grey" id="belowtopnav">
+				<div class="w3-row">
+					<div class="w3-col l10 m12 w3-white" id="main">
+						<h1 class="with-bookmark">
+							SVG <span class="color_h1">Stroke Attributes</span>
+						</h1>
 
+						<div class="ws-share ws-share--float">
+							<span class="ws-share-label">Share</span>
+							<button
+								class="ws-share-btn ga-featured ga-share-link"
+								title="Copy link">
+								<span class="ws-copied-toast">Link Copied</span>
+							</button>
+						</div>
+						<h2>SVG Stroke Attributes</h2>
+						<p>
+							The <code class="w3-codespan">stroke</code> attribute sets the color of
+							the line drawn around an element.
+						</p>
+						<p>
+							Here we will look at the six
+							<code class="w3-codespan">stroke</code> attributes:
+						</p>
+						<ul>
+							<li>
+								<code class="w3-codespan">stroke</code> - sets the color of the line
+								around an element
+							</li>
+							<li>
+								<code class="w3-codespan">stroke-width</code> - sets the width of
+								the line around an element
+							</li>
+							<li>
+								<code class="w3-codespan">stroke-opacity</code> - sets the opacity
+								of the line around an element
+							</li>
+							<li>
+								<code class="w3-codespan">stroke-linecap</code> - sets the shape of
+								the end-lines for a line or open path
+							</li>
+							<li>
+								<code class="w3-codespan">stroke-dasharray</code> - sets the line to
+								show as a dashed line
+							</li>
+							<li>
+								<code class="w3-codespan">stroke-linejoin</code> - sets the shape of
+								the corners where two lines meet
+							</li>
+						</ul>
 
+						<h2>SVG stroke Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke</code> attribute defines the color
+							of the outline of an element.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke</code> attribute can be used with
+							the following SVG elements:
+							<code class="w3-codespan">&lt;circle&gt;</code>,
+							<code class="w3-codespan"> &lt;ellipse&gt;</code>,
+							<code class="w3-codespan">&lt;line&gt;</code>,
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan"> &lt;polygon&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;rect&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							The value of the <code class="w3-codespan">stroke</code> attribute can
+							be a color name, rgb value or a hex value.
+						</p>
+						<p>
+							Here we use the <code class="w3-codespan">stroke</code> attribute to set
+							the outline color for a polygon, rectangle, circle and a text:
+						</p>
+						<svg height="220" width="600">
+							<text>I love SVG!</text>
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="220"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="50,10 0,190 100,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="120"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>circle<span class="attributecolor">
+										r<span class="attributevaluecolor">="45"</span> cx<span
+											class="attributevaluecolor"
+											>="350"</span
+										>
+										cy<span class="attributevaluecolor">="100"</span> fill<span
+											class="attributevaluecolor"
+											>="pink"</span
+										>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>text<span class="attributecolor">
+										x<span class="attributevaluecolor">="420"</span> y<span
+											class="attributevaluecolor"
+											>="100"</span
+										>
+										fill<span class="attributevaluecolor">="red"</span>
+										stroke<span class="attributevaluecolor">="blue"</span></span
+									></span
+								>I love SVG!<span class="tagnamecolor">/text</span
+								><span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke00"
+								>Try it Yourself »</a
+							>
+						</div>
+						<p>
+							Here we use the <code class="w3-codespan">stroke</code> attribute to
+							define the color of three lines:
+						</p>
+						<svg height="80" width="300">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										height<span class="attributevaluecolor">="80"</span>
+										width<span class="attributevaluecolor">="300"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								>
+								 
+								<span class="tagnamecolor"
+									>g<span class="attributecolor">
+										fill<span class="attributevaluecolor">="none"</span></span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke<span class="attributevaluecolor">="red"</span> d<span
+											class="attributevaluecolor"
+											>="M5 20 l215 0"</span
+										>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke<span class="attributevaluecolor">="green"</span>
+										d<span class="attributevaluecolor">="M5 40 l215 0"</span>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke<span class="attributevaluecolor">="blue"</span>
+										d<span class="attributevaluecolor">="M5 60 l215 0"</span>
+										/</span
+									></span
+								>
+								 
+								<span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke0"
+								>Try it Yourself »</a
+							>
+						</div>
 
+						<h2>SVG stroke-width Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke-width</code> attribute defines the
+							width of the stroke.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke-width</code> attribute can be used
+							with the following SVG elements:
+							<code class="w3-codespan">&lt;circle&gt;</code>,
+							<code class="w3-codespan"> &lt;ellipse&gt;</code>,
+							<code class="w3-codespan">&lt;line&gt;</code>,
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan"> &lt;polygon&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;rect&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							Here we use the <code class="w3-codespan">stroke-width</code> attribute
+							to set the width of the outline for a polygon, rectangle, circle and a
+							text:
+						</p>
+						<svg height="220" width="600">
+							<text>I love SVG!</text>
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="220"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,10 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="120"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>circle<span class="attributecolor">
+										r<span class="attributevaluecolor">="45"</span> cx<span
+											class="attributevaluecolor"
+											>="350"</span
+										>
+										cy<span class="attributevaluecolor">="100"</span> fill<span
+											class="attributevaluecolor"
+											>="pink"</span
+										>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>text<span class="attributecolor">
+										x<span class="attributevaluecolor">="420"</span> y<span
+											class="attributevaluecolor"
+											>="100"</span
+										>
+										fill<span class="attributevaluecolor">="red"</span>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										stroke-width<span class="attributevaluecolor"
+											>="4"</span
+										></span
+									></span
+								>I love SVG!<span class="tagnamecolor">/text</span
+								><span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke1"
+								>Try it Yourself »</a
+							>
+						</div>
+						<p>
+							Here we use the <code class="w3-codespan">stroke-width</code> attribute
+							to set the width of three lines:
+						</p>
+						<svg height="80" width="300">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										height<span class="attributevaluecolor">="80"</span>
+										width<span class="attributevaluecolor">="300"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								>
+								 
+								<span class="tagnamecolor"
+									>g<span class="attributecolor">
+										fill<span class="attributevaluecolor">="none"</span>
+										stroke<span class="attributevaluecolor">="red"</span></span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="2"</span>
+										d<span class="attributevaluecolor">="M5 20 l215 0"</span>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										d<span class="attributevaluecolor">="M5 40 l215 0"</span>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="6"</span>
+										d<span class="attributevaluecolor">="M5 60 l215 0"</span>
+										/</span
+									></span
+								>
+								 
+								<span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke"
+								>Try it Yourself »</a
+							>
+						</div>
 
+						<div id="midcontentadcontainer"></div>
 
+						<h2>SVG stroke-opacity Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke-opacity</code> attribute defines
+							the opacity of the stroke.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke-opacity</code> attribute can be
+							used with the following SVG elements:
+							<code class="w3-codespan">&lt;circle&gt;</code>,
+							<code class="w3-codespan"> &lt;ellipse&gt;</code>,
+							<code class="w3-codespan">&lt;line&gt;</code>,
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan"> &lt;polygon&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;rect&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							The value of the
+							<code class="w3-codespan">stroke-opacity</code> attribute goes from 0 to
+							1 (or 0% to 100%).
+						</p>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-opacity</code> attribute to set the
+							opacity of the outline for a polygon, rectangle, circle and a text:
+						</p>
+						<svg height="220" width="600">
+							<text>I love SVG!</text>
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="220"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,10 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="120"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>circle<span class="attributecolor">
+										r<span class="attributevaluecolor">="45"</span> cx<span
+											class="attributevaluecolor"
+											>="350"</span
+										>
+										cy<span class="attributevaluecolor">="100"</span> fill<span
+											class="attributevaluecolor"
+											>="pink"</span
+										>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>text<span class="attributecolor">
+										x<span class="attributevaluecolor">="420"</span> y<span
+											class="attributevaluecolor"
+											>="100"</span
+										>
+										fill<span class="attributevaluecolor">="red"</span>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										></span
+									></span
+								>I love SVG!<span class="tagnamecolor">/text</span
+								><span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke4"
+								>Try it Yourself »</a
+							>
+						</div>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-opacity</code> attribute to set the
+							opacity of three lines:
+						</p>
+						<svg height="80" width="300">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										height<span class="attributevaluecolor">="80"</span>
+										width<span class="attributevaluecolor">="300"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								>
+								 
+								<span class="tagnamecolor"
+									>g<span class="attributecolor">
+										fill<span class="attributevaluecolor">="none"</span>
+										stroke<span class="attributevaluecolor">="red"</span></span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="2"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										d<span class="attributevaluecolor">="M5 20 l215 0"</span>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										d<span class="attributevaluecolor">="M5 40 l215 0"</span>
+										/</span
+									></span
+								>
+								   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-width<span class="attributevaluecolor">="6"</span>
+										stroke-opacity<span class="attributevaluecolor"
+											>="0.4"</span
+										>
+										d<span class="attributevaluecolor">="M5 60 l215 0"</span>
+										/</span
+									></span
+								>
+								 
+								<span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke5"
+								>Try it Yourself »</a
+							>
+						</div>
 
+						<h2>SVG stroke-linecap Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke-linecap</code> attribute defines
+							different types of endings for a line or an open path.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke-linecap</code> attribute can be
+							used with the following SVG elements:
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;line&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							The value of the
+							<code class="w3-codespan">stroke-linecap</code> attribute can be "butt",
+							"round" or "square".
+						</p>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-linecap</code> attribute to set
+							different endings for three lines:
+						</p>
+						<svg height="120" width="300">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										height<span class="attributevaluecolor">="120"</span>
+										width<span class="attributevaluecolor">="300"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>g<span class="attributecolor">
+										fill<span class="attributevaluecolor">="none"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor"
+											>="16"</span
+										></span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-linecap<span class="attributevaluecolor"
+											>="butt"</span
+										>
+										d<span class="attributevaluecolor">="M10 20 l215 0"</span>
+										/</span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-linecap<span class="attributevaluecolor"
+											>="round"</span
+										>
+										d<span class="attributevaluecolor">="M10 50 l215 0"</span>
+										/</span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-linecap<span class="attributevaluecolor"
+											>="square"</span
+										>
+										d<span class="attributevaluecolor">="M10 80 l215 0"</span>
+										/</span
+									></span
+								>  <span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke2"
+								>Try it Yourself »</a
+							>
+						</div>
 
-</div>
-<div id="err_message">
-<h2>Contact Sales</h2>
-<p>If you want to use W3Schools services as an educational institution, team or enterprise, send us an e-mail:sales@w3schools.com</p>
-<h2>Report Error</h2>
-<p>If you want to report an error, or if you want to make a suggestion, send us an e-mail:help@w3schools.com</p>
+						<h2>SVG stroke-dasharray Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke-dasharray</code> attribute is used
+							to create dashed lines.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke-dasharray</code> attribute can be
+							used with the following SVG elements:
+							<code class="w3-codespan">&lt;circle&gt;</code>,
+							<code class="w3-codespan"> &lt;ellipse&gt;</code>,
+							<code class="w3-codespan">&lt;line&gt;</code>,
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan"> &lt;polygon&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;rect&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							The value of the
+							<code class="w3-codespan">stroke-dasharray</code> attribute can be
+							"none" or a comma or space separated list of lengths/percentages that
+							define the lengths of dashes and gaps.
+						</p>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-dasharray</code> attribute to create
+							different dashed lines:
+						</p>
+						<svg height="100" width="400">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										height<span class="attributevaluecolor">="100"</span>
+										width<span class="attributevaluecolor">="400"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>g<span class="attributecolor">
+										fill<span class="attributevaluecolor">="none"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor"
+											>="6"</span
+										></span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-dasharray<span class="attributevaluecolor"
+											>="5,5"</span
+										>
+										d<span class="attributevaluecolor">="M5 20 l215 0"</span>
+										/</span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-dasharray<span class="attributevaluecolor"
+											>="10,10"</span
+										>
+										d<span class="attributevaluecolor">="M5 40 l215 0"</span>
+										/</span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-dasharray<span class="attributevaluecolor"
+											>="35,10"</span
+										>
+										d<span class="attributevaluecolor">="M5 60 l215 0"</span>
+										/</span
+									></span
+								>   
+								<span class="tagnamecolor"
+									>path<span class="attributecolor">
+										stroke-dasharray<span class="attributevaluecolor"
+											>="20,10,5,5,5,10"</span
+										>
+										d<span class="attributevaluecolor">="M5 80 l215 0"</span>
+										/</span
+									></span
+								>  <span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke3"
+								>Try it Yourself »</a
+							>
+						</div>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-dasharray</code> attribute to create
+							different dashed outlines for a polygon, rectangle and a circle:
+						</p>
+						<svg height="220" width="600">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="220"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,10 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-dasharray<span class="attributevaluecolor"
+											>="10,5"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="120"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-dasharray<span class="attributevaluecolor"
+											>="10,5"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>circle<span class="attributecolor">
+										r<span class="attributevaluecolor">="45"</span> cx<span
+											class="attributevaluecolor"
+											>="350"</span
+										>
+										cy<span class="attributevaluecolor">="100"</span> fill<span
+											class="attributevaluecolor"
+											>="pink"</span
+										>
+										stroke<span class="attributevaluecolor">="blue"</span>
+										stroke-width<span class="attributevaluecolor">="4"</span>
+										stroke-dasharray<span class="attributevaluecolor"
+											>="10,5"</span
+										>
+										/</span
+									></span
+								><span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke7"
+								>Try it Yourself »</a
+							>
+						</div>
+
+						<h2>SVG stroke-linejoin Attribute</h2>
+						<p>
+							The <code class="w3-codespan">stroke-linejoin</code> attribute defines
+							the shape of the corners where two lines meet.
+						</p>
+						<p>
+							The <code class="w3-codespan">stroke-linejoin</code> attribute can be
+							used with the following SVG elements:
+							<code class="w3-codespan">&lt;path&gt;</code>,
+							<code class="w3-codespan"> &lt;polygon&gt;</code>,
+							<code class="w3-codespan">&lt;polyline&gt;</code>,
+							<code class="w3-codespan"> &lt;rect&gt;</code>,
+							<code class="w3-codespan">&lt;text&gt;</code>,
+							<code class="w3-codespan"> &lt;textPath&gt;</code>,
+							<code class="w3-codespan">&lt;tref&gt;</code> and
+							<code class="w3-codespan"> &lt;tspan&gt;</code>.
+						</p>
+						<p>
+							The value of the
+							<code class="w3-codespan">stroke-linejoin</code> attribute can be
+							"arcs", "bevel", "miter", miter-clip" or "round".
+						</p>
+						<p>
+							Here we use the
+							<code class="w3-codespan">stroke-linejoin</code> attribute to create
+							different corner shapes:
+						</p>
+						<svg height="230" width="600">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<svg height="230" width="600">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<svg height="230" width="600">
+							Sorry, your browser does not support inline SVG.
+						</svg>
+						<p>Here is the SVG code:</p>
+						<div class="w3-example">
+							<h3>Example</h3>
+							<div class="w3-code notranslate htmlHigh">
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="230"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,25 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="round"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="140"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="round"</span
+										>
+										/</span
+									></span
+								><span class="tagnamecolor">/svg</span>
+								<span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="230"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,25 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="miter"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="140"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="miter"</span
+										>
+										/</span
+									></span
+								><span class="tagnamecolor">/svg</span
+								><span class="tagnamecolor"
+									>svg<span class="attributecolor">
+										width<span class="attributevaluecolor">="600"</span>
+										height<span class="attributevaluecolor">="230"</span>
+										xmlns<span class="attributevaluecolor"
+											>="http://www.w3.org/2000/svg"</span
+										></span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>polygon<span class="attributecolor">
+										points<span class="attributevaluecolor"
+											>="55,25 10,190 110,190"</span
+										>
+										fill<span class="attributevaluecolor">="lime"</span>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="bevel"</span
+										>
+										/</span
+									></span
+								> 
+								<span class="tagnamecolor"
+									>rect<span class="attributecolor">
+										width<span class="attributevaluecolor">="150"</span>
+										height<span class="attributevaluecolor">="100"</span> x<span
+											class="attributevaluecolor"
+											>="140"</span
+										>
+										y<span class="attributevaluecolor">="50"</span> fill<span
+											class="attributevaluecolor"
+											>="yellow"</span
+										>
+										stroke<span class="attributevaluecolor">="red"</span>
+										stroke-width<span class="attributevaluecolor">="16"</span>
+										stroke-linejoin<span class="attributevaluecolor"
+											>="bevel"</span
+										>
+										/</span
+									></span
+								><span class="tagnamecolor">/svg</span>
+							</div>
+							<a
+								class="w3-btn w3-margin-bottom"
+								href="tryit.asp?filename=trysvg_stroke6"
+								>Try it Yourself »</a
+							>
+						</div>
+
+						<div class="user-profile-bottom-wrapper" id="user-profile-bottom-wrapper">
+							<div class="w3s-pathfinder -teaser user-anonymous"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div>
-<div class="footerlinks_2">
-<h5>Top Tutorials</h5>
-<a class="ga-bottom" href="/html/default.asp">HTML Tutorial</a>
-<a class="ga-bottom" href="/css/default.asp">CSS Tutorial</a>
-<a class="ga-bottom" href="/js/default.asp">JavaScript Tutorial</a>
-<a class="ga-bottom" href="/howto/default.asp">How To Tutorial</a>
-<a class="ga-bottom" href="/sql/default.asp">SQL Tutorial</a>
-<a class="ga-bottom" href="/python/default.asp">Python Tutorial</a>
-<a class="ga-bottom" href="/w3css/default.asp">W3.CSS Tutorial</a>
-<a class="ga-bottom" href="/bootstrap/bootstrap_ver.asp">Bootstrap Tutorial</a>
-<a class="ga-bottom" href="/php/default.asp">PHP Tutorial</a>
-<a class="ga-bottom" href="/java/default.asp">Java Tutorial</a>
-<a class="ga-bottom" href="/cpp/default.asp">C++ Tutorial</a>
-<a class="ga-bottom" href="/jquery/default.asp">jQuery Tutorial</a>
-</div>
-<div class="footerlinks_2">
-<h5>Top References</h5>
-<a class="ga-bottom" href="/tags/default.asp">HTML Reference</a>
-<a class="ga-bottom" href="/cssref/index.php">CSS Reference</a>
-<a class="ga-bottom" href="/jsref/default.asp">JavaScript Reference</a>
-<a class="ga-bottom" href="/sql/sql_ref_keywords.asp">SQL Reference</a>
-<a class="ga-bottom" href="/python/python_reference.asp">Python Reference</a>
-<a class="ga-bottom" href="/w3css/w3css_references.asp">W3.CSS Reference</a>
-<a class="ga-bottom" href="/bootstrap/bootstrap_ref_all_classes.asp">Bootstrap Reference</a>
-<a class="ga-bottom" href="/php/php_ref_overview.asp">PHP Reference</a>
-<a class="ga-bottom" href="/colors/colors_names.asp">HTML Colors</a>
-<a class="ga-bottom" href="/java/java_ref_keywords.asp">Java Reference</a>
-<a class="ga-bottom" href="/angularjs/angularjs_ref_directives.asp">AngularJS Reference</a>
-<a class="ga-bottom" href="/jquery/jquery_ref_overview.asp">jQuery Reference</a>
-</div>
-<div class="footerlinks_2">
-<h5>Top Examples</h5>
-<a class="ga-bottom" href="/html/html_examples.asp">HTML Examples</a>
-<a class="ga-bottom" href="/css/css_examples.asp">CSS Examples</a>
-<a class="ga-bottom" href="/js/js_examples.asp">JavaScript Examples</a>
-<a class="ga-bottom" href="/howto/default.asp">How To Examples</a>
-<a class="ga-bottom" href="/sql/sql_examples.asp">SQL Examples</a>
-<a class="ga-bottom" href="/python/python_examples.asp">Python Examples</a>
-<a class="ga-bottom" href="/w3css/w3css_examples.asp">W3.CSS Examples</a>
-<a class="ga-bottom" href="/bootstrap/bootstrap_examples.asp">Bootstrap Examples</a>
-<a class="ga-bottom" href="/php/php_examples.asp">PHP Examples</a>
-<a class="ga-bottom" href="/java/java_examples.asp">Java Examples</a>
-<a class="ga-bottom" href="/xml/xml_examples.asp">XML Examples</a>
-<a class="ga-bottom" href="/jquery/jquery_examples.asp">jQuery Examples</a>
-</div>
-<div class="footerlinks_2">
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/course-catalog"><h5>Get Certified</h5></a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/html-certificate">HTML Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/css-certificate">CSS Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/javascript-certificate">JavaScript Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/front-end-certificate">Front End Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/sql-certificate">SQL Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/python-certificate">Python Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/php-certificate">PHP Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/jquery-certificate">jQuery Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/java-certificate">Java Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/c-certificate">C++ Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/c-certificate-1">C# Certificate</a>
-<a class="ga-bottom" href="https://campus.w3schools.com/collections/certifications/products/xml-certificate">XML Certificate</a>
-</div>
-</div>
+	<div id="wrappercontainer">
+		<div id="footerwrapper">
+			<div class="advb">
+				<div class="advb-inner">
+					<section class="advb-left user-anonymous">
+						<div class="advb-card">
+							<p class="advb-kicker">Free account</p>
+							<h2 class="advb-title">Track your progress</h2>
+							<div class="advb-stats">
+								<span class="advb-stat">XP earned <b>0</b></span>
+								<span class="advb-stat">Day streak <b>0</b></span>
+								<span class="advb-stat">Spaces <b>0</b></span>
+								<span class="advb-stat">League <b>—</b></span>
+							</div>
+						</div>
+					</section>
 
-<div class="footertext">
-W3Schools is optimized for learning and training. Examples might be simplified to improve reading and learning.
-Tutorials, references, and examples are constantly reviewed to avoid errors, but we cannot warrant full correctness
-of all content. While using W3Schools, you agree to have read and accepted our <a class="ga-bottom" href="/about/about_copyright.asp">terms of use</a>,
-<a class="ga-bottom">cookies</a> and 
-<a class="ga-bottom" href="/about/about_privacy.asp">privacy policy</a>.
-<a class="ga-bottom" href="/about/about_copyright.asp">Copyright 1999-2026</a> by Refsnes Data. All Rights Reserved.
-<a class="ga-bottom" href="//www.w3schools.com/w3css/default.asp">W3Schools is Powered by W3.CSS</a>.
+					<section class="advb-right">
+						<p class="advb-kicker">New</p>
+						<h2 class="advb-title">
+							<span class="advb-t-wide">Learn in Adventure Mode</span>
+							<span class="advb-t-narrow">W3Schools Adventure App</span>
+						</h2>
+						<p class="advb-text">
+							Coding fundamentals as bite-sized lessons and challenges.
+						</p>
+						<div class="advb-cta">
+							<div class="advb-badges">
+								<a
+									class="ga-bottom ga-appstore-signinbanner"
+									href="https://apps.apple.com/us/app/w3schools/id6770531503"
+									title="Get W3Schools Adventure App on App Store">
+									<svg class="advb-badge">
+										<text>Download on the</text>
+										<text>App Store</text>
+									</svg>
+								</a>
+								<a
+									class="ga-bottom ga-googleplay-signinbanner"
+									href="https://play.google.com/store/apps/details?id=com.w3schools.app.prod"
+									title="Get W3Schools Adventure App on Google Play">
+									<svg class="advb-badge">
+										<text>GET IT ON</text>
+										<text>Google Play</text>
+									</svg>
+								</a>
+								<a
+									class="ga-bottom ga-adventure-desktop"
+									href="https://app.w3schools.com/"
+									title="Try W3Schools Adventure Mode in your browser">
+									<svg class="advb-badge advb-badge-browser">
+										<text>TRY NOW IN</text>
+										<text>Browser</text>
+									</svg>
+								</a>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+			<div id="spacemyfooter">
+				<div></div>
+				<div id="err_message">
+					<h2>Contact Sales</h2>
+					<p>
+						If you want to use W3Schools services as an educational institution, team or
+						enterprise, send us an e-mail:sales@w3schools.com
+					</p>
+					<h2>Report Error</h2>
+					<p>
+						If you want to report an error, or if you want to make a suggestion, send us
+						an e-mail:help@w3schools.com
+					</p>
+				</div>
+				<div>
+					<div class="footerlinks_2">
+						<h5>Top Tutorials</h5>
+						<a class="ga-bottom" href="/html/default.asp">HTML Tutorial</a>
+						<a class="ga-bottom" href="/css/default.asp">CSS Tutorial</a>
+						<a class="ga-bottom" href="/js/default.asp">JavaScript Tutorial</a>
+						<a class="ga-bottom" href="/howto/default.asp">How To Tutorial</a>
+						<a class="ga-bottom" href="/sql/default.asp">SQL Tutorial</a>
+						<a class="ga-bottom" href="/python/default.asp">Python Tutorial</a>
+						<a class="ga-bottom" href="/w3css/default.asp">W3.CSS Tutorial</a>
+						<a class="ga-bottom" href="/bootstrap/bootstrap_ver.asp"
+							>Bootstrap Tutorial</a
+						>
+						<a class="ga-bottom" href="/php/default.asp">PHP Tutorial</a>
+						<a class="ga-bottom" href="/java/default.asp">Java Tutorial</a>
+						<a class="ga-bottom" href="/cpp/default.asp">C++ Tutorial</a>
+						<a class="ga-bottom" href="/jquery/default.asp">jQuery Tutorial</a>
+					</div>
+					<div class="footerlinks_2">
+						<h5>Top References</h5>
+						<a class="ga-bottom" href="/tags/default.asp">HTML Reference</a>
+						<a class="ga-bottom" href="/cssref/index.php">CSS Reference</a>
+						<a class="ga-bottom" href="/jsref/default.asp">JavaScript Reference</a>
+						<a class="ga-bottom" href="/sql/sql_ref_keywords.asp">SQL Reference</a>
+						<a class="ga-bottom" href="/python/python_reference.asp"
+							>Python Reference</a
+						>
+						<a class="ga-bottom" href="/w3css/w3css_references.asp">W3.CSS Reference</a>
+						<a class="ga-bottom" href="/bootstrap/bootstrap_ref_all_classes.asp"
+							>Bootstrap Reference</a
+						>
+						<a class="ga-bottom" href="/php/php_ref_overview.asp">PHP Reference</a>
+						<a class="ga-bottom" href="/colors/colors_names.asp">HTML Colors</a>
+						<a class="ga-bottom" href="/java/java_ref_keywords.asp">Java Reference</a>
+						<a class="ga-bottom" href="/angularjs/angularjs_ref_directives.asp"
+							>AngularJS Reference</a
+						>
+						<a class="ga-bottom" href="/jquery/jquery_ref_overview.asp"
+							>jQuery Reference</a
+						>
+					</div>
+					<div class="footerlinks_2">
+						<h5>Top Examples</h5>
+						<a class="ga-bottom" href="/html/html_examples.asp">HTML Examples</a>
+						<a class="ga-bottom" href="/css/css_examples.asp">CSS Examples</a>
+						<a class="ga-bottom" href="/js/js_examples.asp">JavaScript Examples</a>
+						<a class="ga-bottom" href="/howto/default.asp">How To Examples</a>
+						<a class="ga-bottom" href="/sql/sql_examples.asp">SQL Examples</a>
+						<a class="ga-bottom" href="/python/python_examples.asp">Python Examples</a>
+						<a class="ga-bottom" href="/w3css/w3css_examples.asp">W3.CSS Examples</a>
+						<a class="ga-bottom" href="/bootstrap/bootstrap_examples.asp"
+							>Bootstrap Examples</a
+						>
+						<a class="ga-bottom" href="/php/php_examples.asp">PHP Examples</a>
+						<a class="ga-bottom" href="/java/java_examples.asp">Java Examples</a>
+						<a class="ga-bottom" href="/xml/xml_examples.asp">XML Examples</a>
+						<a class="ga-bottom" href="/jquery/jquery_examples.asp">jQuery Examples</a>
+					</div>
+					<div class="footerlinks_2">
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/course-catalog"
+							><h5>Get Certified</h5></a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/html-certificate"
+							>HTML Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/css-certificate"
+							>CSS Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/javascript-certificate"
+							>JavaScript Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/front-end-certificate"
+							>Front End Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/sql-certificate"
+							>SQL Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/python-certificate"
+							>Python Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/php-certificate"
+							>PHP Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/jquery-certificate"
+							>jQuery Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/java-certificate"
+							>Java Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/c-certificate"
+							>C++ Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/c-certificate-1"
+							>C# Certificate</a
+						>
+						<a
+							class="ga-bottom"
+							href="https://campus.w3schools.com/collections/certifications/products/xml-certificate"
+							>XML Certificate</a
+						>
+					</div>
+				</div>
+
+				<div class="footertext">
+					W3Schools is optimized for learning and training. Examples might be simplified
+					to improve reading and learning. Tutorials, references, and examples are
+					constantly reviewed to avoid errors, but we cannot warrant full correctness of
+					all content. While using W3Schools, you agree to have read and accepted our
+					<a class="ga-bottom" href="/about/about_copyright.asp">terms of use</a>,
+					<a class="ga-bottom">cookies</a> and
+					<a class="ga-bottom" href="/about/about_privacy.asp">privacy policy</a>.
+					<a class="ga-bottom" href="/about/about_copyright.asp">Copyright 1999-2026</a>
+					by Refsnes Data. All Rights Reserved.
+					<a class="ga-bottom" href="//www.w3schools.com/w3css/default.asp"
+						>W3Schools is Powered by W3.CSS</a
+					>.
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-</div>
-</div>
-</div></div>
 <div><button id="fast-cmp-settings">Cookies</button></div>

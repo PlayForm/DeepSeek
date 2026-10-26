@@ -4,20 +4,22 @@
 - [![chat](https://camo.githubusercontent.com/4dd535ad4d808f2586390a041d395362a08508fc0e9e596df2854ea08a49f708/68747470733a2f2f696d672e736869656c64732e696f2f646973636f72642f383135313636373231333135383331383638)](https://discord.gg/z8jX8NYxrE)
 - [![docs](https://camo.githubusercontent.com/760fd346fa4f8161b715a1b480d92a9c7965a5f7d00e452d20beda0a0a2e5083/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d7376676f2e6465762d626c7565)](https://svgo.dev/)
 
+SVGO, short for SVG Optimizer, is a Node.js library and command-line application for optimizing SVG
+files.
 
-SVGO, short for SVG Optimizer, is a Node.js library and command-line application for optimizing SVG files.
-
-> 💖 [Sponsor SVGO on Open Collective](https://opencollective.com/svgo) to support continued improvements in stability and performance.
+> 💖 [Sponsor SVGO on Open Collective](https://opencollective.com/svgo) to support continued
+> improvements in stability and performance.
 
 ## Why?
 
-
-SVG files, especially those exported from vector editors, usually contain a lot of redundant information. This includes editor metadata, comments, hidden elements, default or suboptimal values, and other stuff that can be safely removed or converted without impacting rendering.
+SVG files, especially those exported from vector editors, usually contain a lot of redundant
+information. This includes editor metadata, comments, hidden elements, default or suboptimal values,
+and other stuff that can be safely removed or converted without impacting rendering.
 
 ## Installation
 
-
-You can install SVGO globally through npm, yarn, or pnpm. Alternatively, drop the global flag (`global`/`-g`) to use it in your Node.js project.
+You can install SVGO globally through npm, yarn, or pnpm. Alternatively, drop the global flag
+(`global`/`-g`) to use it in your Node.js project.
 
 \# npm\
 npm install -g svgo\
@@ -29,7 +31,6 @@ yarn global add svgo\
 pnpm add -g svgo
 
 ## Command-line usage
-
 
 Process single files:
 
@@ -45,10 +46,12 @@ svgo --help
 
 ## Configuration
 
+SVGO has a plugin architecture. You can read more about all plugins in
+[Plugins \| SVGO Documentation](https://svgo.dev/docs/plugins/), and the default plugins in
+[Preset Default \| SVGO Documentation](https://svgo.dev/docs/preset-default/).
 
-SVGO has a plugin architecture. You can read more about all plugins in [Plugins \| SVGO Documentation](https://svgo.dev/docs/plugins/), and the default plugins in [Preset Default \| SVGO Documentation](https://svgo.dev/docs/preset-default/).
-
-SVGO reads the configuration from `svgo.config.mjs` or the `--config path/to/config.mjs` command-line option. Some other parameters can be configured though command-line options too.
+SVGO reads the configuration from `svgo.config.mjs` or the `--config path/to/config.mjs`
+command-line option. Some other parameters can be configured though command-line options too.
 
 **`svgo.config.mjs`**
 
@@ -75,8 +78,8 @@ export default {\
 
 ### Default preset
 
-
-Instead of configuring SVGO from scratch, you can tweak the default preset to suit your needs by configuring or disabling the respective plugin.
+Instead of configuring SVGO from scratch, you can tweak the default preset to suit your needs by
+configuring or disabling the respective plugin.
 
 **`svgo.config.mjs`**
 
@@ -99,10 +102,10 @@ export default {\
   \],\
 };
 
-You can find a list of the default plugins in the order they run in [Preset Default \| SVGO Documentation](https://svgo.dev/docs/preset-default/#plugins-list).
+You can find a list of the default plugins in the order they run in
+[Preset Default \| SVGO Documentation](https://svgo.dev/docs/preset-default/#plugins-list).
 
 ### Custom plugins
-
 
 You can also specify custom plugins:
 
@@ -128,11 +131,9 @@ export default {\
 
 ## API usage
 
-
 SVGO provides a few low level utilities.
 
 ### optimize
-
 
 The core of SVGO is `optimize` function.
 
@@ -147,7 +148,6 @@ const optimizedSvgString = result.data;
 
 ### loadConfig
 
-
 If you write a tool on top of SVGO you may want to resolve the `svgo.config.mjs` file.
 
 import { loadConfig } from 'svgo';\
@@ -160,8 +160,8 @@ const config = await loadConfig(configFile, cwd);
 
 ## License and Copyright
 
-
-This software is released under the terms of the [MIT license](https://github.com/svg/svgo/blob/main/LICENSE).
+This software is released under the terms of the
+[MIT license](https://github.com/svg/svgo/blob/main/LICENSE).
 
 Logo by [André Castillo](https://github.com/DerianAndre).
 

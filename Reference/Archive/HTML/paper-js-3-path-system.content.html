@@ -1,47 +1,161 @@
-<div><div class="flex min-h-screen w-full flex-col text-white" id="codebase-wiki-repo-page">
-<div class="w-full flex-1"><div class="container-wrapper relative mx-auto h-full px-0"><div class="relative container mx-auto flex h-full w-full flex-col gap-0 max-md:!px-0 md:flex-row md:gap-6 lg:gap-10">
-<div class="flex h-full flex-1 flex-col overflow-hidden">
-
-<div class="relative flex-1 overflow-y-auto px-3 pt-3 md:rounded-md md:px-0 md:pt-0 [&amp;_::selection]:bg-purple-500/40"><div class="mx-auto max-w-2xl pb-30 md:pt-6 md:pb-40 lg:pt-8"><div class="prose prose-invert dark:prose-invert prose-headings:text-inherit prose-p:text-inherit max-w-none"><div><div class="prose-custom prose-custom-md prose-custom-gray !max-w-none [overflow-wrap:anywhere] text-neutral-300">
-<h1 class="group" id="path-system">Path System</h1>
-<details>
-<summary>Relevant source files</summary>
-<ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<li><a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4] rounded-r">test/tests/Path_Intersections.js</span></a></li>
-
-</ul>
-</details>
-<p>The Path System is the core vector drawing capability in Paper.js, providing comprehensive functionality for creating, manipulating, and rendering vector paths. This system handles the representation of paths through segments and curves, supports path operations like joining and boolean operations, and offers utilities for path simplification and flattening.</p>
-<p>For information about styling paths, see <a class="text-neutral-300 hover:text-neutral-200 hover:underline" href="/paperjs/paper.js/4-styling-system">Styling System</a>. For details on how paths fit into the scene graph, see <a class="text-neutral-300 hover:text-neutral-200 hover:underline" href="/paperjs/paper.js/2.2-scene-graph">Scene Graph</a>.</p>
-<h2 class="group" id="path-structure-and-representation">Path Structure and Representation</h2>
-<p>The Path System is built around a hierarchy of classes with <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">PathItem</code> as the base class. Paths are represented as collections of segments (points with handles), connected by curves.</p>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L21-L296"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">21-296</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L27-L145"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">27-145</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L22-L34"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">22-34</span></a></p>
-<h3 class="group" id="segments-and-curves">Segments and Curves</h3>
-<p>A path consists of segments connected by curves. Each segment contains a point and optional handle points (handleIn and handleOut) that control the curvature.</p>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L170-L257"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">170-257</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L63-L145"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">63-145</span></a></p>
-<p>A curve in Paper.js is a cubic Bézier curve defined by four points:</p>
-<ol>
-<li>The point of the first segment</li>
-<li>The handleOut of the first segment</li>
-<li>The handleIn of the second segment</li>
-<li>The point of the second segment</li>
-</ol>
-<p>Paths can be closed or open. When a path is closed, a curve connects the last segment back to the first segment.</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Example of a simple path with segments</span></div>
+<div>
+	<div class="flex min-h-screen w-full flex-col text-white" id="codebase-wiki-repo-page">
+		<div class="w-full flex-1">
+			<div class="container-wrapper relative mx-auto h-full px-0">
+				<div
+					class="relative container mx-auto flex h-full w-full flex-col gap-0 max-md:!px-0 md:flex-row md:gap-6 lg:gap-10">
+					<div class="flex h-full flex-1 flex-col overflow-hidden">
+						<div
+							class="[&amp;_::selection]:bg-purple-500/40 relative flex-1 overflow-y-auto px-3 pt-3 md:rounded-md md:px-0 md:pt-0">
+							<div class="mx-auto max-w-2xl pb-30 md:pt-6 md:pb-40 lg:pt-8">
+								<div
+									class="prose prose-invert dark:prose-invert prose-headings:text-inherit prose-p:text-inherit max-w-none">
+									<div>
+										<div
+											class="prose-custom prose-custom-md prose-custom-gray !max-w-none [overflow-wrap:anywhere] text-neutral-300">
+											<h1 class="group" id="path-system">Path System</h1>
+											<details>
+												<summary>Relevant source files</summary>
+												<ul>
+													<li>
+														<a
+															class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+															href="https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js"
+															><span
+																class="flex items-center rounded-l rounded-r bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+																>test/tests/Path_Intersections.js</span
+															></a
+														>
+													</li>
+												</ul>
+											</details>
+											<p>
+												The Path System is the core vector drawing
+												capability in Paper.js, providing comprehensive
+												functionality for creating, manipulating, and
+												rendering vector paths. This system handles the
+												representation of paths through segments and curves,
+												supports path operations like joining and boolean
+												operations, and offers utilities for path
+												simplification and flattening.
+											</p>
+											<p>
+												For information about styling paths, see
+												<a
+													class="text-neutral-300 hover:text-neutral-200 hover:underline"
+													href="/paperjs/paper.js/4-styling-system"
+													>Styling System</a
+												>. For details on how paths fit into the scene
+												graph, see
+												<a
+													class="text-neutral-300 hover:text-neutral-200 hover:underline"
+													href="/paperjs/paper.js/2.2-scene-graph"
+													>Scene Graph</a
+												>.
+											</p>
+											<h2
+												class="group"
+												id="path-structure-and-representation">
+												Path Structure and Representation
+											</h2>
+											<p>
+												The Path System is built around a hierarchy of
+												classes with
+												<code
+													class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+													>PathItem</code
+												>
+												as the base class. Paths are represented as
+												collections of segments (points with handles),
+												connected by curves.
+											</p>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L21-L296"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>21-296</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L27-L145"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>27-145</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L22-L34"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>22-34</span
+													></a
+												>
+											</p>
+											<h3 class="group" id="segments-and-curves">
+												Segments and Curves
+											</h3>
+											<p>
+												A path consists of segments connected by curves.
+												Each segment contains a point and optional handle
+												points (handleIn and handleOut) that control the
+												curvature.
+											</p>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L170-L257"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>170-257</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L63-L145"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>63-145</span
+													></a
+												>
+											</p>
+											<p>
+												A curve in Paper.js is a cubic Bézier curve defined
+												by four points:
+											</p>
+											<ol>
+												<li>The point of the first segment</li>
+												<li>The handleOut of the first segment</li>
+												<li>The handleIn of the second segment</li>
+												<li>The point of the second segment</li>
+											</ol>
+											<p>
+												Paths can be closed or open. When a path is closed,
+												a curve connects the last segment back to the first
+												segment.
+											</p>
+											<pre
+												class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Example of a simple path with segments</span></div>
 <div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>();</span>
 </div>
@@ -57,13 +171,45 @@
 <div class="whitespace-pre">
 <span>path.closed </span><span>=</span><span> true</span><span>// Close the path</span>
 </div></code></pre></pre>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L484-L550"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">484-550</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L276-L296"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">276-296</span></a></p>
-<h2 class="group" id="creating-and-manipulating-paths">Creating and Manipulating Paths</h2>
-<p>Paper.js provides several ways to create paths:</p>
-<ol>
-<li>
-<p><strong>Constructing paths with segments</strong>:</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L484-L550"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>484-550</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L276-L296"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>276-296</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="creating-and-manipulating-paths">
+												Creating and Manipulating Paths
+											</h2>
+											<p>Paper.js provides several ways to create paths:</p>
+											<ol>
+												<li>
+													<p>
+														<strong
+															>Constructing paths with
+															segments</strong
+														>:
+													</p>
+													<pre
+														class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>({</span>
 </div>
 <div class="whitespace-pre">
@@ -73,10 +219,13 @@
 <span>    strokeColor: </span><span>'black'</span>
 </div>
 <div class="whitespace-pre"><span>});</span></div></code></pre></pre>
-</li>
-<li>
-<p><strong>Adding segments to paths</strong>:</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+												</li>
+												<li>
+													<p>
+														<strong>Adding segments to paths</strong>:
+													</p>
+													<pre
+														class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>();</span>
 </div>
 <div class="whitespace-pre">
@@ -88,90 +237,327 @@
 <div class="whitespace-pre">
 <span>path.</span><span>add</span><span>(</span><span>new</span><span> Point</span><span>(</span><span>100</span><span>, </span><span>20</span><span>));</span>
 </div></code></pre></pre>
-</li>
-<li>
-<p><strong>Using SVG path data</strong>:</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+												</li>
+												<li>
+													<p><strong>Using SVG path data</strong>:</p>
+													<pre
+														class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>(</span><span>'M100,50c0,27.614-22.386,50-50,50S0,77.614,0,50S22.386,0,50,0S100,22.386,100,50'</span><span>);</span>
 </div></code></pre></pre>
-</li>
-<li>
-<p><strong>Using predefined shape constructors</strong>:</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+												</li>
+												<li>
+													<p>
+														<strong
+															>Using predefined shape
+															constructors</strong
+														>:
+													</p>
+													<pre
+														class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>var</span><span> circle </span><span>=</span><span> new</span><span> Path.</span><span>Circle</span><span>(</span><span>new</span><span> Point</span><span>(</span><span>100</span><span>, </span><span>100</span><span>), </span><span>50</span><span>);</span>
 </div>
 <div class="whitespace-pre">
 <span>var</span><span> rectangle </span><span>=</span><span> new</span><span> Path.</span><span>Rectangle</span><span>(</span><span>new</span><span> Point</span><span>(</span><span>20</span><span>, </span><span>20</span><span>), </span><span>new</span><span> Size</span><span>(</span><span>60</span><span>, </span><span>60</span><span>));</span>
 </div></code></pre></pre>
-</li>
-</ol>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L48-L127"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">48-127</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L482-L558"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">482-558</span></a></p>
-<h3 class="group" id="modifying-paths">Modifying Paths</h3>
-<p>Paths can be modified by manipulating their segments or applying transformation operations:</p>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">551-603</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L696-L784"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">696-784</span></a></p>
-<h2 class="group" id="boolean-operations">Boolean Operations</h2>
-<p>One of the most powerful features of the Path System is the ability to perform boolean operations on paths:</p>
-<ul>
-<li>
-<strong>Unite</strong>: Combines the area of two paths</li>
-<li>
-<strong>Intersect</strong>: Keeps only the area where both paths overlap</li>
-<li>
-<strong>Subtract</strong>: Subtracts the area of the second path from the first path</li>
-<li>
-<strong>Exclude</strong>: Keeps only the area where the paths don't overlap</li>
-</ul>
-<p>Boolean operations work by:</p>
-<ol>
-<li>Calculating the intersections between paths</li>
-<li>Splitting paths at these intersections</li>
-<li>Determining which parts to keep based on winding numbers and the operation type</li>
-<li>Creating a new path from the kept parts</li>
-</ol>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L29-L108"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.Boolean.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">29-108</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.Boolean.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">110-216</span></a></p>
-<h2 class="group" id="path-utilities">Path Utilities</h2>
-<h3 class="group" id="pathfitter">PathFitter</h3>
-<p>The <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">PathFitter</code> class is used to simplify paths by reducing the number of segments while maintaining the visual appearance as closely as possible. It uses the Ramer-Douglas-Peucker algorithm to fit cubic bezier curves to digitized points.</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Simplifying a path</span></div>
+												</li>
+											</ol>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L48-L127"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>48-127</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L482-L558"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>482-558</span
+													></a
+												>
+											</p>
+											<h3 class="group" id="modifying-paths">
+												Modifying Paths
+											</h3>
+											<p>
+												Paths can be modified by manipulating their segments
+												or applying transformation operations:
+											</p>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>551-603</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L696-L784"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>696-784</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="boolean-operations">
+												Boolean Operations
+											</h2>
+											<p>
+												One of the most powerful features of the Path System
+												is the ability to perform boolean operations on
+												paths:
+											</p>
+											<ul>
+												<li>
+													<strong>Unite</strong>: Combines the area of two
+													paths
+												</li>
+												<li>
+													<strong>Intersect</strong>: Keeps only the area
+													where both paths overlap
+												</li>
+												<li>
+													<strong>Subtract</strong>: Subtracts the area of
+													the second path from the first path
+												</li>
+												<li>
+													<strong>Exclude</strong>: Keeps only the area
+													where the paths don't overlap
+												</li>
+											</ul>
+											<p>Boolean operations work by:</p>
+											<ol>
+												<li>Calculating the intersections between paths</li>
+												<li>Splitting paths at these intersections</li>
+												<li>
+													Determining which parts to keep based on winding
+													numbers and the operation type
+												</li>
+												<li>Creating a new path from the kept parts</li>
+											</ol>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L29-L108"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.Boolean.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>29-108</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.Boolean.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>110-216</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="path-utilities">
+												Path Utilities
+											</h2>
+											<h3 class="group" id="pathfitter">PathFitter</h3>
+											<p>
+												The
+												<code
+													class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+													>PathFitter</code
+												>
+												class is used to simplify paths by reducing the
+												number of segments while maintaining the visual
+												appearance as closely as possible. It uses the
+												Ramer-Douglas-Peucker algorithm to fit cubic bezier
+												curves to digitized points.
+											</p>
+											<pre
+												class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Simplifying a path</span></div>
 <div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>(</span><span>/* ... */</span><span>);</span>
 </div>
 <div class="whitespace-pre">
 <span>path.</span><span>simplify</span><span>(</span><span>0.5</span><span>); </span><span>// Tolerance parameter</span>
 </div></code></pre></pre>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L23-L69"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathFitter.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">23-69</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L114-L217"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathFitter.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">114-217</span></a></p>
-<h3 class="group" id="pathflattener">PathFlattener</h3>
-<p>The <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">PathFlattener</code> class converts curves into sequences of straight lines by subdividing curves until they are flat enough according to a specified tolerance. This is useful for path measurement, hit testing, and other operations that are easier to perform on straight lines.</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Flattening a path</span></div>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L23-L69"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathFitter.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>23-69</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L114-L217"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathFitter.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>114-217</span
+													></a
+												>
+											</p>
+											<h3 class="group" id="pathflattener">PathFlattener</h3>
+											<p>
+												The
+												<code
+													class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+													>PathFlattener</code
+												>
+												class converts curves into sequences of straight
+												lines by subdividing curves until they are flat
+												enough according to a specified tolerance. This is
+												useful for path measurement, hit testing, and other
+												operations that are easier to perform on straight
+												lines.
+											</p>
+											<pre
+												class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre"><span>// Flattening a path</span></div>
 <div class="whitespace-pre">
 <span>var</span><span> path </span><span>=</span><span> new</span><span> Path</span><span>(</span><span>/* ... */</span><span>);</span>
 </div>
 <div class="whitespace-pre">
 <span>path.</span><span>flatten</span><span>(</span><span>0.25</span><span>); </span><span>// Flatness parameter</span>
 </div></code></pre></pre>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFlattener.js#L18-L105"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathFlattener.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">18-105</span></a></p>
-<h2 class="group" id="curve-operations-and-classifications">Curve Operations and Classifications</h2>
-<p>Curves in Paper.js can be analyzed and manipulated in various ways:</p>
-<p>Curves can be classified into different types based on their mathematical properties:</p>
-<ul>
-<li>
-<strong>Line</strong>: A straight line</li>
-<li>
-<strong>Quadratic</strong>: A quadratic bezier curve</li>
-<li>
-<strong>Serpentine</strong>: Has an S-shape with one inflection point</li>
-<li>
-<strong>Cusp</strong>: Has a sharp point with a discontinuous derivative</li>
-<li>
-<strong>Loop</strong>: Self-intersects to form a loop</li>
-<li>
-<strong>Arch</strong>: A simple, non-inflected curve</li>
-</ul>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L173-L175"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">173-175</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L431-L438"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">431-438</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L605-L629"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">605-629</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L795-L819"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Curve.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">795-819</span></a></p>
-<h2 class="group" id="intersections-and-hit-testing">Intersections and Hit Testing</h2>
-<p>The Path System provides robust methods for finding intersections between paths and testing if points are inside paths:</p>
-<h3 class="group" id="intersections">Intersections</h3>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFlattener.js#L18-L105"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathFlattener.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>18-105</span
+													></a
+												>
+											</p>
+											<h2
+												class="group"
+												id="curve-operations-and-classifications">
+												Curve Operations and Classifications
+											</h2>
+											<p>
+												Curves in Paper.js can be analyzed and manipulated
+												in various ways:
+											</p>
+											<p>
+												Curves can be classified into different types based
+												on their mathematical properties:
+											</p>
+											<ul>
+												<li><strong>Line</strong>: A straight line</li>
+												<li>
+													<strong>Quadratic</strong>: A quadratic bezier
+													curve
+												</li>
+												<li>
+													<strong>Serpentine</strong>: Has an S-shape with
+													one inflection point
+												</li>
+												<li>
+													<strong>Cusp</strong>: Has a sharp point with a
+													discontinuous derivative
+												</li>
+												<li>
+													<strong>Loop</strong>: Self-intersects to form a
+													loop
+												</li>
+												<li>
+													<strong>Arch</strong>: A simple, non-inflected
+													curve
+												</li>
+											</ul>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L173-L175"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>173-175</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L431-L438"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>431-438</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L605-L629"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>605-629</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L795-L819"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Curve.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>795-819</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="intersections-and-hit-testing">
+												Intersections and Hit Testing
+											</h2>
+											<p>
+												The Path System provides robust methods for finding
+												intersections between paths and testing if points
+												are inside paths:
+											</p>
+											<h3 class="group" id="intersections">Intersections</h3>
+											<pre
+												class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>var</span><span> intersections </span><span>=</span><span> path1.</span><span>getIntersections</span><span>(path2);</span>
 </div>
 <div class="whitespace-pre">
@@ -182,196 +568,569 @@
 </div>
 <div class="whitespace-pre"><span>    // Do something with the intersection point</span></div>
 </code></pre></pre>
-<p>Intersections are represented by <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">CurveLocation</code> objects that provide information about:</p>
-<ul>
-<li>The intersection point</li>
-<li>The curves that intersect</li>
-<li>The parameters of the intersection on each curve</li>
-<li>Whether the intersection is a crossing or a tangent point</li>
-</ul>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L339"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">321-339</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/CurveLocation.js#L29-L66"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/CurveLocation.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">29-66</span></a></p>
-<h3 class="group" id="hit-testing">Hit Testing</h3>
-<p>Hit testing determines if a point is on or inside a path:</p>
-<pre class="px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white [&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
+											<p>
+												Intersections are represented by
+												<code
+													class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+													>CurveLocation</code
+												>
+												objects that provide information about:
+											</p>
+											<ul>
+												<li>The intersection point</li>
+												<li>The curves that intersect</li>
+												<li>
+													The parameters of the intersection on each curve
+												</li>
+												<li>
+													Whether the intersection is a crossing or a
+													tangent point
+												</li>
+											</ul>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L339"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>321-339</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/CurveLocation.js#L29-L66"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/CurveLocation.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>29-66</span
+													></a
+												>
+											</p>
+											<h3 class="group" id="hit-testing">Hit Testing</h3>
+											<p>
+												Hit testing determines if a point is on or inside a
+												path:
+											</p>
+											<pre
+												class="[&amp;_code]:block [&amp;_code]:border-none [&amp;_code]:bg-transparent [&amp;_code]:p-0 px-2 py-1.5 has-[code]:rounded-md has-[code]:!bg-[#e5e5e5] has-[code]:text-stone-900 has-[div]:bg-transparent has-[div]:!p-0 dark:has-[code]:!bg-[#242424] has-[code]:dark:text-white"><pre class="not-prose m-0 w-full bg-transparent p-[6px_8px]"><code class="block"><div class="whitespace-pre">
 <span>if</span><span> (path.</span><span>contains</span><span>(point)) {</span>
 </div>
 <div class="whitespace-pre"><span>    // Point is inside the path</span></div>
 </code></pre></pre>
-<p>For complex paths, hit testing uses winding numbers to determine if a point is inside the path according to either the non-zero or even-odd fill rule.</p>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L257-L282"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">257-282</span></a></p>
-<h2 class="group" id="performance-considerations">Performance Considerations</h2>
-<p>The Path System includes several optimizations for performance:</p>
-<ol>
-<li>
-<strong>Caching</strong>: Various properties like length and area are cached and only recalculated when necessary.</li>
-<li>
-<strong>Curve subdivision</strong>: Used for efficient hit testing and intersection detection.</li>
-<li>
-<strong>Path simplification</strong>: Reduces the number of segments for better performance.</li>
-<li>
-<strong>Collision detection</strong>: Uses broad-phase algorithms to quickly filter out non-colliding paths.</li>
-</ol>
-<p>For complex paths or when working with many paths, consider:</p>
-<ul>
-<li>Using <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">simplify()</code> to reduce the number of segments</li>
-<li>Using <code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">flatten()</code> with an appropriate tolerance for operations on complex curves</li>
-<li>Using compound paths for complex shapes with holes</li>
-</ul>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L139-L156"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">139-156</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/util/CollisionDetection.js#L19-L107"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/util/CollisionDetection.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">19-107</span></a></p>
-<h2 class="group" id="table-of-path-properties">Table of Path Properties</h2>
-<table>
-<thead><tr>
-<th>Property</th>
-<th>Description</th>
-<th>Class</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">segments</code></td>
-<td>Array of segments that make up the path</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">curves</code></td>
-<td>Array of curves connecting the segments</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">closed</code></td>
-<td>Whether the path is closed</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">length</code></td>
-<td>The approximate length of the path</td>
-<td>Path</td>
-</tr>
-<tr>
+											<p>
+												For complex paths, hit testing uses winding numbers
+												to determine if a point is inside the path according
+												to either the non-zero or even-odd fill rule.
+											</p>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L257-L282"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>257-282</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="performance-considerations">
+												Performance Considerations
+											</h2>
+											<p>
+												The Path System includes several optimizations for
+												performance:
+											</p>
+											<ol>
+												<li>
+													<strong>Caching</strong>: Various properties
+													like length and area are cached and only
+													recalculated when necessary.
+												</li>
+												<li>
+													<strong>Curve subdivision</strong>: Used for
+													efficient hit testing and intersection
+													detection.
+												</li>
+												<li>
+													<strong>Path simplification</strong>: Reduces
+													the number of segments for better performance.
+												</li>
+												<li>
+													<strong>Collision detection</strong>: Uses
+													broad-phase algorithms to quickly filter out
+													non-colliding paths.
+												</li>
+											</ol>
+											<p>
+												For complex paths or when working with many paths,
+												consider:
+											</p>
+											<ul>
+												<li>
+													Using
+													<code
+														class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+														>simplify()</code
+													>
+													to reduce the number of segments
+												</li>
+												<li>
+													Using
+													<code
+														class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+														>flatten()</code
+													>
+													with an appropriate tolerance for operations on
+													complex curves
+												</li>
+												<li>
+													Using compound paths for complex shapes with
+													holes
+												</li>
+											</ul>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L139-L156"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>139-156</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/util/CollisionDetection.js#L19-L107"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/util/CollisionDetection.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>19-107</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="table-of-path-properties">
+												Table of Path Properties
+											</h2>
+											<table>
+												<thead>
+													<tr>
+														<th>Property</th>
+														<th>Description</th>
+														<th>Class</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>segments</code
+															>
+														</td>
+														<td>
+															Array of segments that make up the path
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>curves</code
+															>
+														</td>
+														<td>
+															Array of curves connecting the segments
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>closed</code
+															>
+														</td>
+														<td>Whether the path is closed</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>length</code
+															>
+														</td>
+														<td>The approximate length of the path</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>The area enclosed by the path</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>fullySelected</code
+															>
+														</td>
+														<td>
+															Whether the path and all its segments
+															are selected
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>clockwise</code
+															>
+														</td>
+														<td>
+															Whether the path is oriented clockwise
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>pathData</code
+															>
+														</td>
+														<td>
+															The path's geometry formatted as SVG
+															path data
+														</td>
+														<td>PathItem</td>
+													</tr>
+												</tbody>
+											</table>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L170-L296"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>170-296</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L817-L852"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>817-852</span
+													></a
+												>
+											</p>
+											<h2 class="group" id="table-of-path-methods">
+												Table of Path Methods
+											</h2>
+											<table>
+												<thead>
+													<tr>
+														<th>Method</th>
+														<th>Description</th>
+														<th>Class</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>add(segment)</code
+															>
+														</td>
+														<td>Adds a segment to the path</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>insert(index, segment)</code
+															>
+														</td>
+														<td>
+															Inserts a segment at the specified index
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>removeSegment(index)</code
+															>
+														</td>
+														<td>
+															Removes the segment at the specified
+															index
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>removeSegments()</code
+															>
+														</td>
+														<td>Removes all segments from the path</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>smooth()</code
+															>
+														</td>
+														<td>
+															Smooths the path by adjusting the curve
+															handles
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>simplify(tolerance)</code
+															>
+														</td>
+														<td>
+															Simplifies the path by removing
+															redundant points
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>flatten(flatness)</code
+															>
+														</td>
+														<td>
+															Converts the path to a series of
+															straight lines
+														</td>
+														<td>Path</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>unite(path)</code
+															>
+														</td>
+														<td>
+															Returns the union of this path with
+															another
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>intersect(path)</code
+															>
+														</td>
+														<td>
+															Returns the intersection of this path
+															with another
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>subtract(path)</code
+															>
+														</td>
+														<td>
+															Returns this path with the other path
+															subtracted
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>exclude(path)</code
+															>
+														</td>
+														<td>
+															Returns areas where either this or the
+															other path (but not both) are
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>getIntersections(path)</code
+															>
+														</td>
+														<td>
+															Returns all intersections between this
+															and another path
+														</td>
+														<td>PathItem</td>
+													</tr>
+													<tr>
+														<td>
+															<code
+																class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30"
+																>contains(point)</code
+															>
+														</td>
+														<td>
+															Returns whether the point is inside the
+															path
+														</td>
+														<td>PathItem</td>
+													</tr>
+												</tbody>
+											</table>
+											<p>
+												Sources:
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/Path.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>551-603</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L414"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>321-414</span
+													></a
+												>
+												<a
+													class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75"
+													href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216"
+													><span
+														class="flex items-center rounded-l bg-[#e5e5e5] px-2 py-1.5 break-all text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]"
+														>src/path/PathItem.Boolean.js</span
+													><span
+														class="flex flex-shrink-0 items-center rounded-r border-l border-[#dddddd] bg-[#d8d8d8] px-2 py-1.5 text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]"
+														>110-216</span
+													></a
+												>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div
+						class="hidden overflow-hidden transition-[border-radius] xl:sticky xl:top-20 xl:right-0 xl:block xl:h-[calc(100vh-82px)] xl:w-64 xl:flex-shrink-0 2xl:w-72">
+						<div
+							class="flex max-h-full w-full flex-shrink-0 flex-col py-6 pt-0 text-sm lg:pt-8 lg:pb-4 xl:w-64 2xl:w-72">
+							<div>
+								<div
+									class="text-text-secondary relative mx-4 my-4 rounded-md border border-neutral-200 bg-neutral-100 p-3 text-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
+									<p class="text-sm font-medium">Refresh this wiki</p>
+									<button
+										class="mt-2 flex items-center gap-1 rounded-md bg-neutral-200 px-2 py-1 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700">
+										Enter email to refresh
+									</button>
+								</div>
+							</div>
+							<h3 class="px-4 pb-5 text-lg leading-none font-medium">On this page</h3>
+							<ul class="min-h-0 flex-1 space-y-3 overflow-y-auto p-4 pt-0">
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#path-structure-and-representation"
+										>Path Structure and Representation</a
+									>
+								</li>
 
-<td>The area enclosed by the path</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">fullySelected</code></td>
-<td>Whether the path and all its segments are selected</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">clockwise</code></td>
-<td>Whether the path is oriented clockwise</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">pathData</code></td>
-<td>The path's geometry formatted as SVG path data</td>
-<td>PathItem</td>
-</tr>
-</tbody>
-</table>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L170-L296"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">170-296</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L817-L852"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">817-852</span></a></p>
-<h2 class="group" id="table-of-path-methods">Table of Path Methods</h2>
-<table>
-<thead><tr>
-<th>Method</th>
-<th>Description</th>
-<th>Class</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">add(segment)</code></td>
-<td>Adds a segment to the path</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">insert(index, segment)</code></td>
-<td>Inserts a segment at the specified index</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">removeSegment(index)</code></td>
-<td>Removes the segment at the specified index</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">removeSegments()</code></td>
-<td>Removes all segments from the path</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">smooth()</code></td>
-<td>Smooths the path by adjusting the curve handles</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">simplify(tolerance)</code></td>
-<td>Simplifies the path by removing redundant points</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">flatten(flatness)</code></td>
-<td>Converts the path to a series of straight lines</td>
-<td>Path</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">unite(path)</code></td>
-<td>Returns the union of this path with another</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">intersect(path)</code></td>
-<td>Returns the intersection of this path with another</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">subtract(path)</code></td>
-<td>Returns this path with the other path subtracted</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">exclude(path)</code></td>
-<td>Returns areas where either this or the other path (but not both) are</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">getIntersections(path)</code></td>
-<td>Returns all intersections between this and another path</td>
-<td>PathItem</td>
-</tr>
-<tr>
-<td><code class="rounded-sm bg-[#e5e5e5] px-[0.25rem] py-[0.20rem] text-xs leading-[15px] font-normal before:hidden after:hidden dark:bg-[#484848]/30">contains(point)</code></td>
-<td>Returns whether the point is inside the path</td>
-<td>PathItem</td>
-</tr>
-</tbody>
-</table>
-<p>Sources: <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L551-L603"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/Path.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">551-603</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L414"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">321-414</span></a> <a class="mr-1 mb-1 inline-flex items-stretch font-mono text-xs !no-underline transition-opacity hover:opacity-75" href="https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L110-L216"><span class="flex items-center rounded-l px-2 py-1.5 break-all bg-[#e5e5e5] text-[#333333] dark:bg-[#252525] dark:text-[#e4e4e4]">src/path/PathItem.Boolean.js</span><span class="flex flex-shrink-0 items-center rounded-r border-l px-2 py-1.5 border-[#dddddd] bg-[#d8d8d8] text-[#666666] dark:border-[#333333] dark:bg-[#2a2a2a] dark:text-[#888888]">110-216</span></a></p>
-</div></div></div></div></div>
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#creating-and-manipulating-paths"
+										>Creating and Manipulating Paths</a
+									>
+								</li>
+
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#curve-operations-and-classifications"
+										>Curve Operations and Classifications</a
+									>
+								</li>
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#intersections-and-hit-testing"
+										>Intersections and Hit Testing</a
+									>
+								</li>
+
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#performance-considerations"
+										>Performance Considerations</a
+									>
+								</li>
+								<li class="ml-3">
+									<a
+										class="hover:text-primary text-secondary pr-1 font-normal transition-all"
+										href="#table-of-path-properties"
+										>Table of Path Properties</a
+									>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="hidden overflow-hidden transition-[border-radius] xl:sticky xl:top-20 xl:right-0 xl:block xl:h-[calc(100vh-82px)] xl:w-64 xl:flex-shrink-0 2xl:w-72"><div class="flex max-h-full w-full flex-shrink-0 flex-col py-6 pt-0 text-sm lg:pt-8 lg:pb-4 xl:w-64 2xl:w-72">
-<div><div class="text-text-secondary relative mx-4 my-4 rounded-md border border-neutral-200 bg-neutral-100 p-3 text-sm dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
-<p class="text-sm font-medium">Refresh this wiki</p>
-<button class="mt-2 flex items-center gap-1 rounded-md bg-neutral-200 px-2 py-1 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700">Enter email to refresh</button>
-</div></div>
-<h3 class="px-4 pb-5 text-lg leading-none font-medium">On this page</h3>
-<ul class="min-h-0 flex-1 space-y-3 overflow-y-auto p-4 pt-0">
-
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#path-structure-and-representation">Path Structure and Representation</a></li>
-
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#creating-and-manipulating-paths">Creating and Manipulating Paths</a></li>
-
-
-
-
-
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#curve-operations-and-classifications">Curve Operations and Classifications</a></li>
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#intersections-and-hit-testing">Intersections and Hit Testing</a></li>
-
-
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#performance-considerations">Performance Considerations</a></li>
-<li class="ml-3"><a class="hover:text-primary pr-1 font-normal transition-all text-secondary" href="#table-of-path-properties">Table of Path Properties</a></li>
-
-</ul>
-</div></div>
-</div></div></div>
-
-</div></div>

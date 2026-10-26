@@ -1,59 +1,54 @@
 # resvg-js
 
-
 - [![GitHub CI Status](https://github.com/thx/resvg-js/actions/workflows/CI.yaml/badge.svg?branch=main)](https://github.com/yisibl/resvg-js/actions/workflows/CI.yaml?query=event%3Apush+branch%3Amain)
 - [![@resvg/resvg-js npm version](https://camo.githubusercontent.com/f002e231e9ad5411a49f54d9d140a2eb29a55e1720e03daeb0e752d1e7e34a4b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js)
 - [![@resvg/resvg-js downloads](https://camo.githubusercontent.com/c0c233a9f6b4f4feb46372bf5e9e89c18e10ee0edfac4125a405b083eb83c55f/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f646d2f4072657376672f72657376672d6a732e7376673f73616e6974697a653d74727565)](https://npmcharts.com/compare/@resvg/resvg-js?minimal=true)
 - [![Rust 1.65+](https://camo.githubusercontent.com/7c811ef78a65cca3c014d36045bd07867e5cabe5155bd558db84b2c6ded1f2df/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f727573742d312e36352b2d6f72616e67652e737667)](https://www.rust-lang.org)
 
-> resvg-js is a high-performance SVG renderer and toolkit, powered by Rust based [resvg](https://github.com/RazrFalcon/resvg/), with Node.js backend using [napi-rs](https://github.com/napi-rs/napi-rs), also a pure WebAssembly backend.
+> resvg-js is a high-performance SVG renderer and toolkit, powered by Rust based
+> [resvg](https://github.com/RazrFalcon/resvg/), with Node.js backend using
+> [napi-rs](https://github.com/napi-rs/napi-rs), also a pure WebAssembly backend.
 
 Please use all lowercase `resvg-js` when referencing project names.
 
 ## Playground
 
-
 <https://resvg-js.vercel.app>
 
 ## Features
-
 
 - Fast, safe and zero dependencies, with correct output.
 - Convert SVG to PNG, includes cropping, scaling and setting the background color.
 - Support system fonts and custom fonts in SVG text.
 - `v2`: Gets the width and height of the SVG and the generated PNG.
-- `v2`: Support for outputting simplified SVG strings, such as converting shapes(rect, circle, etc) to `<path>`.
+- `v2`: Support for outputting simplified SVG strings, such as converting shapes(rect, circle, etc)
+  to `<path>`.
 - `v2`: Support WebAssembly.
 - `v2`: Support to get SVG bounding box and crop according to bounding box.
 - `v2`: Support for loading images of external links in `<image>`.
 - No need for node-gyp and postinstall, the `.node` file has been compiled for you.
-- Cross-platform support, including [Apple M Chips](https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/).
+- Cross-platform support, including
+  [Apple M Chips](https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/).
 - Support for running as native addons in Deno.
 
 ## Installation
 
-
 ### Node.js
-
 
 npm i @resvg/resvg-js
 
 ### Browser(Wasm)
 
-
 \<script src="https://unpkg.com/@resvg/resvg-wasm"\>\</script\>
 
 ## Docs
-
 
 - Node.js see [index.d.ts](./thx-resvg-js-blob-main-index.d.ts.md)
 - Wasm see [wasm/index.d.ts](./thx-resvg-js-blob-main-wasm-index.d.ts.md)
 
 ## Example
 
-
 ### [Node.js Example](./thx-resvg-js-blob-main-example-index.js.md)
-
 
 This example will load Source Han Serif, and then render the SVG to PNG.
 
@@ -65,7 +60,6 @@ Font './example/SourceHanSerifCN-Light-subset.ttf':0 found in 0.006ms.\
 
 ### [Deno Example](./thx-resvg-js-blob-main-example-index-deno.js.md)
 
-
 deno run --unstable --allow-read --allow-write --allow-ffi example/index-deno.js\
 \
 \[2022-11-16T15:03:29Z DEBUG resvg_js::fonts\] Loaded 1 font faces in 0.067ms.\
@@ -74,15 +68,13 @@ Original SVG Size: 1324 x 687\
 Output PNG Size  : 1200 x 623\
 ✨ Done in 66 ms
 
-| SVG | PNG |
-|----|----|
+| SVG                                                                                          | PNG                                                                                                  |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | [![](./thx-resvg-js-raw-main-example-text.svg.md)](/thx/resvg-js/blob/main/example/text.svg) | [![](./thx-resvg-js-raw-main-example-text-out.png.md)](/thx/resvg-js/blob/main/example/text-out.png) |
 
 ## Usage
 
-
 ### Node.js
-
 
 const { promises } = require('fs')\
 const { join } = require('path')\
@@ -116,15 +108,17 @@ main()
 
 ### Bun
 
-
-Starting with [Bun 0.8.1](https://github.com/oven-sh/bun/issues/172#issuecomment-1692930718), resvg-js can be run directly in Bun without any modification to the JS files, and is fully compatible with the syntax in Node.js.
+Starting with [Bun 0.8.1](https://github.com/oven-sh/bun/issues/172#issuecomment-1692930718),
+resvg-js can be run directly in Bun without any modification to the JS files, and is fully
+compatible with the syntax in Node.js.
 
 bun example/index.js
 
 ### Deno
 
-
-Starting with [Deno 1.26.1](https://github.com/denoland/deno/releases/tag/v1.26.1), there is support for running Native Addons directly from Node.js. This allows for performance that is close to that found in Node.js.
+Starting with [Deno 1.26.1](https://github.com/denoland/deno/releases/tag/v1.26.1), there is support
+for running Native Addons directly from Node.js. This allows for performance that is close to that
+found in Node.js.
 
 deno run --unstable --allow-read --allow-write --allow-ffi example/index-deno.js
 
@@ -152,18 +146,15 @@ await Deno.writeFile(path.join(\_\_dirname, './text-out-deno.png'), pngBuffer
 
 ### WebAssembly
 
-
 This package also ships a pure WebAssembly artifact built with `wasm-bindgen` to run in browsers.
 
 #### Browser
-
 
 \<script src="https://unpkg.com/@resvg/resvg-wasm"\>\</script\>\
 \<script\>\
   ;(async function () {\
     // The Wasm must be initialized first\
-    await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))\
-\
+    await resvg.initWasm(fetch('https://unpkg.com/@resvg/resvg-wasm/index_bg.wasm'))\ \
     const font = await fetch('./fonts/Pacifico-Regular.woff2')\
     if (!font.ok) return\
 \
@@ -189,10 +180,10 @@ This package also ships a pure WebAssembly artifact built with `wasm-bindgen` to
   })()\
 \</script\>
 
-See [playground](./thx-resvg-js-blob-main-wasm-index.html.md), it is also possible to [call Wasm in Node.js](./thx-resvg-js-blob-main-example-wasm-node.js.md), but it is slower.
+See [playground](./thx-resvg-js-blob-main-wasm-index.html.md), it is also possible to
+[call Wasm in Node.js](./thx-resvg-js-blob-main-example-wasm-node.js.md), but it is slower.
 
 ## Sample Benchmark
-
 
 npm i benny@3.x sharp@0.x @types/sharp svg2img@0.x\
 npm run bench
@@ -212,24 +203,22 @@ Running "resize width" suite...\
 
 ## Support matrix
 
-
-|  | Node.js 12 | Node.js 14 | Node.js 16 | Node.js 18 | Node.js 20 | Node.js 22 | npm |
-|----|----|----|----|----|----|----|----|
-| Windows x64 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/0304b7f3255972f943c0a67b33b81d1f8ed575536445ececeeb0d972fa9a4dc6/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d7836342d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-x64-msvc) |
-| Windows x32 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/959de4946633b4a2868cf0cf5919c880a644f812703952945f4584f2bd220e5d/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d696133322d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-ia32-msvc) |
-| Windows arm64 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/3a9df42f0d1ff9f17b29019c031461f2bb57d4d800d5f3849cc2e50544d0f9f9/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d61726d36342d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-arm64-msvc) |
-| macOS x64 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/e9a9db5fa885c7ff4dc7d335fca36b16d8cd7809c60ee1ca1893dccccd90ee3a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d64617277696e2d7836342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-darwin-x64) |
-| macOS arm64(M Chips) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/49392e8d0a23289e9a05e6cec1a2a385936d91b432bb2392ce28be16205e1c1e/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d64617277696e2d61726d36342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-darwin-arm64) |
-| Linux x64 gnu | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/f8cc2e0b26163d2aaac1474d58b24efb7d592d1d310ca289eba1eea080f76e1c/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d7836342d676e752e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-x64-gnu) |
-| Linux x64 musl | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/4c64a67e1efb4723928bfcb837dea6ec255473aa227d705b173d48e8d3b8a670/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d7836342d6d75736c2e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-x64-musl) |
-| Linux arm gnu | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/233f04009e18e2a4f683ac9d44d3f6c72d802909ec2dc7e3e8a68ce7b07a7d9b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d2d676e756561626968662e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm-gnueabihf) |
-| Linux arm64 gnu | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/4f68548fe9ec3140c9427be1288932d442b2355d24a63e126077c0d438b59032/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d36342d676e752e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm64-gnu) |
-| Linux arm64 musl | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/ec069ca7b4b4306bba46831be86762370e9d98f763729862db230dd779915d9b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d36342d6d75736c2e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm64-musl) |
-| Android arm64 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/f8d31d7aa1c478e2b3785d8706ae18c8a79325735aba8907748d46bf123869aa/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d616e64726f69642d61726d36342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-android-arm64) |
-| Android armv7 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | [![npm version](https://camo.githubusercontent.com/4767a7c74130d5a3d4d6356dd6718c7fa486ea92bc56c689fdd998dfd3122f81/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d616e64726f69642d61726d2d656162692e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-android-arm-eabi) |
+|                      | Node.js 12 | Node.js 14 | Node.js 16 | Node.js 18 | Node.js 20 | Node.js 22 | npm                                                                                                                                                                                                                                                                                                                                                           |
+| -------------------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows x64          | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/0304b7f3255972f943c0a67b33b81d1f8ed575536445ececeeb0d972fa9a4dc6/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d7836342d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-x64-msvc)                |
+| Windows x32          | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/959de4946633b4a2868cf0cf5919c880a644f812703952945f4584f2bd220e5d/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d696133322d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-ia32-msvc)             |
+| Windows arm64        | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/3a9df42f0d1ff9f17b29019c031461f2bb57d4d800d5f3849cc2e50544d0f9f9/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d77696e33322d61726d36342d6d7376632e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-win32-arm64-msvc)          |
+| macOS x64            | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/e9a9db5fa885c7ff4dc7d335fca36b16d8cd7809c60ee1ca1893dccccd90ee3a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d64617277696e2d7836342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-darwin-x64)                            |
+| macOS arm64(M Chips) | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/49392e8d0a23289e9a05e6cec1a2a385936d91b432bb2392ce28be16205e1c1e/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d64617277696e2d61726d36342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-darwin-arm64)                      |
+| Linux x64 gnu        | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/f8cc2e0b26163d2aaac1474d58b24efb7d592d1d310ca289eba1eea080f76e1c/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d7836342d676e752e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-x64-gnu)                   |
+| Linux x64 musl       | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/4c64a67e1efb4723928bfcb837dea6ec255473aa227d705b173d48e8d3b8a670/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d7836342d6d75736c2e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-x64-musl)                |
+| Linux arm gnu        | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/233f04009e18e2a4f683ac9d44d3f6c72d802909ec2dc7e3e8a68ce7b07a7d9b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d2d676e756561626968662e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm-gnueabihf) |
+| Linux arm64 gnu      | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/4f68548fe9ec3140c9427be1288932d442b2355d24a63e126077c0d438b59032/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d36342d676e752e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm64-gnu)             |
+| Linux arm64 musl     | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/ec069ca7b4b4306bba46831be86762370e9d98f763729862db230dd779915d9b/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d6c696e75782d61726d36342d6d75736c2e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-linux-arm64-musl)          |
+| Android arm64        | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/f8d31d7aa1c478e2b3785d8706ae18c8a79325735aba8907748d46bf123869aa/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d616e64726f69642d61726d36342e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-android-arm64)                   |
+| Android armv7        | ✓          | ✓          | ✓          | ✓          | ✓          | ✓          | [![npm version](https://camo.githubusercontent.com/4767a7c74130d5a3d4d6356dd6718c7fa486ea92bc56c689fdd998dfd3122f81/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f4072657376672f72657376672d6a732d616e64726f69642d61726d2d656162692e7376673f73616e6974697a653d74727565)](https://www.npmjs.com/package/@resvg/resvg-js-android-arm-eabi)          |
 
 ## Test or Contributing
-
 
 - Install latest `Rust`
 
@@ -237,22 +226,24 @@ Running "resize width" suite...\
 
 - Install `wasm-pack`
 
-  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf \| sh
+    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf \| sh
 
-  Normally `wasm-pack` will install `wasm-bindgen` automatically, but if the installation [fails due to network reasons](https://github.com/rustwasm/wasm-pack-template/issues/44#issuecomment-521657516), please try to install it manually.
+    Normally `wasm-pack` will install `wasm-bindgen` automatically, but if the installation
+    [fails due to network reasons](https://github.com/rustwasm/wasm-pack-template/issues/44#issuecomment-521657516),
+    please try to install it manually.
 
-  cargo install wasm-bindgen-cli
+    cargo install wasm-bindgen-cli
 
-  On computers with Apple M chips, the following error message may appear:
+    On computers with Apple M chips, the following error message may appear:
 
-  > Error: failed to download from <https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86_64-apple-darwin.tar.gz>
+    > Error: failed to download from
+    > <https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86_64-apple-darwin.tar.gz>
 
-  Please install binaryen manually:
+    Please install binaryen manually:
 
-  brew install binaryen
+    brew install binaryen
 
 ### Build Node.js bindings
-
 
 npm i\
 npm run build\
@@ -260,26 +251,26 @@ npm test
 
 ### Build WebAssembly bindings
 
-
 npm i\
 npm run build:wasm\
 npm run test:wasm
 
 ### Upgrade Yarn
 
-
 This project uses Yarn v4. To upgrade to a newer version, run:
 
 yarn set version stable
 
-This will automatically download the latest stable Yarn from `repo.yarnpkg.com` and update the `yarnPath` in `.yarnrc.yml`.
+This will automatically download the latest stable Yarn from `repo.yarnpkg.com` and update the
+`yarnPath` in `.yarnrc.yml`.
 
-> **Note**: If the yarn executable fails to start due to a missing binary, temporarily modify `yarnPath` in `.yarnrc.yml` to your current version to bootstrap, then run the upgrade command.
+> **Note**: If the yarn executable fails to start due to a missing binary, temporarily modify
+> `yarnPath` in `.yarnrc.yml` to your current version to bootstrap, then run the upgrade command.
 
 ## Roadmap
 
-
-I will consider implementing the following features, if you happen to be interested, please feel free to discuss with me or submit a PR.
+I will consider implementing the following features, if you happen to be interested, please feel
+free to discuss with me or submit a PR.
 
 - Support async API
 - Upgrade to napi-rs v2
@@ -290,7 +281,6 @@ I will consider implementing the following features, if you happen to be interes
 
 ## Release package
 
-
 We use GitHub actions to automatically publish npm packages.
 
 \# 1.0.0 =\> 1.0.1\
@@ -300,7 +290,6 @@ npm version patch\
 npm version minor
 
 ## License
-
 
 Please use all lowercase `resvg-js` when referencing project names.
 

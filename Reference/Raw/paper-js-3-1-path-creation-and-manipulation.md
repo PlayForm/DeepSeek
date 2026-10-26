@@ -22,7 +22,11 @@ Relevant source files
 - [test/tests/Path_Intersections.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Path_Intersections.js)
 - [test/tests/Style.js](https://github.com/paperjs/paper.js/blob/92775f52/test/tests/Style.js)
 
-This document explains how to create and manipulate paths in Paper.js. Paths are one of the core components of Paper.js and represent vector shapes composed of connected segments and curves. For information about boolean operations on paths (unite, intersect, subtract, etc.), see [Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md). For detailed information about curves and segments, see [Curves and Segments](./paperjs-paper.js-3.3-curves-and-segments.md).
+This document explains how to create and manipulate paths in Paper.js. Paths are one of the core
+components of Paper.js and represent vector shapes composed of connected segments and curves. For
+information about boolean operations on paths (unite, intersect, subtract, etc.), see
+[Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md). For detailed information about
+curves and segments, see [Curves and Segments](./paperjs-paper.js-3.3-curves-and-segments.md).
 
 ## Path Structure Overview
 
@@ -43,7 +47,8 @@ You can create a new path using the `Path` constructor:
 // Create an empty pathvar path = new Path(); // Create a path with segmentsvar path = new Path([point1, point2, point3]); // Create a path with propertiesvar path = new Path({    segments: [[20, 20], [80, 80], [140, 20]],    fillColor: 'black',    closed: true}); // Create a path from SVG path datavar path = new Path('M100,50c0,27.614-22.386,50-50,50S0,77.614,0,50S22.386,0,50,0S100,22.386,100,50');
 ```
 
-Sources: [src/path/Path.js 28-127](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L28-L127)
+Sources:
+[src/path/Path.js 28-127](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L28-L127)
 
 ### Using Shape Constructors
 
@@ -59,11 +64,13 @@ You can create paths from SVG path data strings using the constructor or `setPat
 // Create a new path from SVG path datavar path = new Path('M100,100L200,100L150,200z'); // Set path data to existing pathvar path = new Path();path.setPathData('M100,100L200,100L150,200z');
 ```
 
-Sources: [src/path/PathItem.js 127-249](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L127-L249)
+Sources:
+[src/path/PathItem.js 127-249](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L127-L249)
 
 ## Working with Segments
 
-Paths in Paper.js are made up of segments. Each segment consists of a point and optional handles (handleIn and handleOut) that control the curvature around the point.
+Paths in Paper.js are made up of segments. Each segment consists of a point and optional handles
+(handleIn and handleOut) that control the curvature around the point.
 
 ### Accessing Segments
 
@@ -71,7 +78,8 @@ Paths in Paper.js are made up of segments. Each segment consists of a point and 
 // Get all segmentsvar segments = path.segments; // Get first and last segmentsvar firstSegment = path.firstSegment;var lastSegment = path.lastSegment; // Get segment at specific indexvar segment = path.segments[2];
 ```
 
-Sources: [src/path/Path.js 169-216](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L169-L216)
+Sources:
+[src/path/Path.js 169-216](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L169-L216)
 
 ### Adding Segments
 
@@ -99,13 +107,18 @@ Sources: [src/path/Path.js 169-216](https://github.com/paperjs/paper.js/blob/927
 // Remove a segmentpath.removeSegment(1); // Remove segments in a rangepath.removeSegments(1, 3); // Remove all segmentspath.removeSegments();
 ```
 
-Sources: [src/path/Path.js 696-780](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L696-L780) [src/path/Path.js 782-783](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L782-L783)
+Sources:
+[src/path/Path.js 696-780](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L696-L780)
+[src/path/Path.js 782-783](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L782-L783)
 
 ## Working with Curves
 
-Curves in Paper.js are automatically created between consecutive segments. Each curve is a cubic Bézier curve defined by four points: the two segment points and their handles.
+Curves in Paper.js are automatically created between consecutive segments. Each curve is a cubic
+Bézier curve defined by four points: the two segment points and their handles.
 
-Sources: [src/path/Curve.js 14-26](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L14-L26) [src/path/Path.js 224-257](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L224-L257)
+Sources:
+[src/path/Curve.js 14-26](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L14-L26)
+[src/path/Path.js 224-257](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L224-L257)
 
 ### Accessing Curves
 
@@ -113,7 +126,8 @@ Sources: [src/path/Curve.js 14-26](https://github.com/paperjs/paper.js/blob/9277
 // Get all curvesvar curves = path.curves; // Get first and last curvesvar firstCurve = path.firstCurve;var lastCurve = path.lastCurve;
 ```
 
-Sources: [src/path/Path.js 224-257](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L224-L257)
+Sources:
+[src/path/Path.js 224-257](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L224-L257)
 
 ### Manipulating Curves
 
@@ -123,7 +137,9 @@ Curves can be manipulated indirectly by adjusting segment handles:
 // Adjust curve shape by modifying segment handlespath.segments[1].handleIn = new Point(-20, -10);path.segments[1].handleOut = new Point(20, 10); // Clear handles to convert a curve to a straight linepath.segments[1].clearHandles(); // Clear all handlespath.clearHandles();
 ```
 
-Sources: [src/path/Path.js 792-809](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L792-L809) [src/path/Curve.js 580-583](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L580-L583)
+Sources:
+[src/path/Path.js 792-809](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L792-L809)
+[src/path/Curve.js 580-583](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L580-L583)
 
 ## Path Manipulation
 
@@ -133,7 +149,9 @@ Sources: [src/path/Path.js 792-809](https://github.com/paperjs/paper.js/blob/927
 // Get path lengthvar length = path.length; // Get path areavar area = path.area; // Check if path is closedvar isClosed = path.closed; // Close pathpath.closed = true;
 ```
 
-Sources: [src/path/Path.js 816-852](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L816-L852) [src/path/Path.js 276-296](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L276-L296)
+Sources:
+[src/path/Path.js 816-852](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L816-L852)
+[src/path/Path.js 276-296](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L276-L296)
 
 ### Dividing and Splitting Paths
 
@@ -141,7 +159,9 @@ Sources: [src/path/Path.js 816-852](https://github.com/paperjs/paper.js/blob/927
 // Divide a path at a specific locationvar newSegment = path.divideAt(location); // Split a path at a location, creating two separate pathsvar newPath = path.splitAt(location);
 ```
 
-Sources: [src/path/Path.js 968-1042](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L968-L1042) [src/path/Curve.js 454-515](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L454-L515)
+Sources:
+[src/path/Path.js 968-1042](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L968-L1042)
+[src/path/Curve.js 454-515](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Curve.js#L454-L515)
 
 ### Path Simplification
 
@@ -149,9 +169,12 @@ Sources: [src/path/Path.js 968-1042](https://github.com/paperjs/paper.js/blob/92
 // Simplify a path to reduce the number of segmentspath.simplify(); // Control the level of simplificationpath.simplify(10); // Higher value means more aggressive simplification
 ```
 
-The `simplify()` method uses the `PathFitter` class to fit a smooth curve with fewer segments to the original path, using an algorithm based on "An Algorithm for Automatically Fitting Digitized Curves" by Philip J. Schneider.
+The `simplify()` method uses the `PathFitter` class to fit a smooth curve with fewer segments to the
+original path, using an algorithm based on "An Algorithm for Automatically Fitting Digitized Curves"
+by Philip J. Schneider.
 
-Sources: [src/path/PathFitter.js 22-242](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L22-L242)
+Sources:
+[src/path/PathFitter.js 22-242](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFitter.js#L22-L242)
 
 ### Path Flattening
 
@@ -159,9 +182,12 @@ Sources: [src/path/PathFitter.js 22-242](https://github.com/paperjs/paper.js/blo
 // Flatten curves to straight line segmentspath.flatten(); // Control the flatness (maximum allowed distance between the// original curve and the flattened representation)path.flatten(0.5);
 ```
 
-The `flatten()` method uses the `PathFlattener` class to convert curves into a sequence of straight lines by recursively subdividing curves until they are within a specified tolerance of a straight line.
+The `flatten()` method uses the `PathFlattener` class to convert curves into a sequence of straight
+lines by recursively subdividing curves until they are within a specified tolerance of a straight
+line.
 
-Sources: [src/path/PathFlattener.js 18-167](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFlattener.js#L18-L167)
+Sources:
+[src/path/PathFlattener.js 18-167](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathFlattener.js#L18-L167)
 
 ### Smoothing Paths
 
@@ -176,7 +202,8 @@ Paper.js supports four different smoothing methods:
 - `'catmull-rom'`: Uses the Catmull-Rom spline algorithm
 - `'geometric'`: Uses a simple geometric method
 
-Sources: [src/path/PathItem.js 457-527](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L457-L527)
+Sources:
+[src/path/PathItem.js 457-527](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L457-L527)
 
 ## Path Selection
 
@@ -186,7 +213,8 @@ Paper.js provides visual selection of paths for editing and debugging:
 // Select a pathpath.selected = true; // Fully select a path (including all segments)path.fullySelected = true; // Select specific segmentspath.segments[1].selected = true;
 ```
 
-Sources: [src/path/Path.js 853-967](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L853-L967)
+Sources:
+[src/path/Path.js 853-967](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L853-L967)
 
 ## Path Operations with Other Paths
 
@@ -196,7 +224,8 @@ Sources: [src/path/Path.js 853-967](https://github.com/paperjs/paper.js/blob/927
 // Join two pathsvar path1 = new Path([0, 0], [50, 0]);var path2 = new Path([50, 0], [100, 50]);path1.join(path2);// Result: path1 now contains points [0, 0], [50, 0], [100, 50]// and path2 is removed
 ```
 
-Sources: [src/path/PathItem.js](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js)
+Sources:
+[src/path/PathItem.js](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js)
 
 ### Finding Intersections
 
@@ -204,9 +233,12 @@ Sources: [src/path/PathItem.js](https://github.com/paperjs/paper.js/blob/92775f5
 // Find all intersections between two pathsvar intersections = path1.getIntersections(path2); // Get intersection pointsfor (var i = 0; i < intersections.length; i++) {    var point = intersections[i].point;}
 ```
 
-Intersection detection is handled through the `CurveLocation` class, which provides methods to find and manage locations on curves.
+Intersection detection is handled through the `CurveLocation` class, which provides methods to find
+and manage locations on curves.
 
-Sources: [src/path/PathItem.js 321-339](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L339) [src/path/CurveLocation.js 29-499](https://github.com/paperjs/paper.js/blob/92775f52/src/path/CurveLocation.js#L29-L499)
+Sources:
+[src/path/PathItem.js 321-339](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.js#L321-L339)
+[src/path/CurveLocation.js 29-499](https://github.com/paperjs/paper.js/blob/92775f52/src/path/CurveLocation.js#L29-L499)
 
 ## Example: Building a Path Interactively
 
@@ -216,24 +248,30 @@ The following is an example of how to create an interactive Bézier curve editor
 // Create a new pathvar path = new Path();path.strokeColor = 'black'; // Add initial segmentspath.add(new Point(30, 75));path.add(new Point(100, 20));path.add(new Point(170, 75)); // Select the path to show handlespath.fullySelected = true; // Now you can adjust segment points and handles interactively
 ```
 
-This code creates a path with three points and shows all the control points and handles for editing. You can then manipulate the path through interactions like dragging points or handles.
+This code creates a path with three points and shows all the control points and handles for editing.
+You can then manipulate the path through interactions like dragging points or handles.
 
-Sources: [examples/Tools/BezierTool.html 8-79](https://github.com/paperjs/paper.js/blob/92775f52/examples/Tools/BezierTool.html#L8-L79)
+Sources:
+[examples/Tools/BezierTool.html 8-79](https://github.com/paperjs/paper.js/blob/92775f52/examples/Tools/BezierTool.html#L8-L79)
 
 ## Implementation Details
 
-The Path class extends PathItem, which provides common functionality for path-based items. The `Path` constructor handles various initialization scenarios, including creation from segments, points, SVG path data, or an object literal with properties.
+The Path class extends PathItem, which provides common functionality for path-based items. The
+`Path` constructor handles various initialization scenarios, including creation from segments,
+points, SVG path data, or an object literal with properties.
 
-When segments are modified, curves between segments are automatically updated. Paper.js maintains segment and curve indices, so when segments are added or removed, all affected indices are updated.
+When segments are modified, curves between segments are automatically updated. Paper.js maintains
+segment and curve indices, so when segments are added or removed, all affected indices are updated.
 
-Boolean operations, covered in another section [Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md), allow for complex path combinations including unite, subtract, intersect, exclude, and divide.
+Boolean operations, covered in another section
+[Boolean Operations](./paperjs-paper.js-3.2-boolean-operations.md), allow for complex path
+combinations including unite, subtract, intersect, exclude, and divide.
 
 - [src/path/Path.js 88-127](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L88-L127)
 - [src/path/Path.js 139-156](https://github.com/paperjs/paper.js/blob/92775f52/src/path/Path.js#L139-L156)
 - [src/path/PathItem.Boolean.js 29-46](https://github.com/paperjs/paper.js/blob/92775f52/src/path/PathItem.Boolean.js#L29-L46)
 
 Refresh this wiki
-
 
 - [Path Creation and Manipulation](#path-creation-and-manipulation)
 - [Path Structure Overview](#path-structure-overview)

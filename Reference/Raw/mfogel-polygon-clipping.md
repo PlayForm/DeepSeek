@@ -1,7 +1,7 @@
 # polygon-clipping
 
-
-Apply boolean Polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your Polygons & MultiPolygons.
+Apply boolean Polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your
+Polygons & MultiPolygons.
 
 - [![CI](https://github.com/mfogel/polygon-clipping/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mfogel/polygon-clipping/actions)
 - [![codecov](https://camo.githubusercontent.com/79c4edad59470eda99f870ec6d196b3ac36258fce4b2a5b7f24f283545ca0ab0/68747470733a2f2f636f6465636f762e696f2f67682f6d666f67656c2f706f6c79676f6e2d636c697070696e672f6272616e63682f6d61696e2f67726170682f62616467652e7376673f746f6b656e3d69733933696e4451694a)](https://codecov.io/gh/mfogel/polygon-clipping)
@@ -9,7 +9,6 @@ Apply boolean Polygon clipping operations (`intersection`, `union`, `difference`
 - [![npm](https://camo.githubusercontent.com/a456f6e14d1f59efe9926b1542261effe914db823b8ea3e6a48a346c70034122/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f706f6c79676f6e2d636c697070696e672e737667)](https://www.npmjs.com/package/polygon-clipping)
 
 ## Quickstart
-
 
 const polygonClipping = require('polygon-clipping')\
 \
@@ -23,7 +22,6 @@ polygonClipping.difference  (poly1, poly2 /\* , poly3, ... \*/)
 
 ## API
 
-
 /\* All functions take one or more \[multi\]polygon(s) as input \*/\
 \
 polygonClipping.union       (\<geom\>, ...\<geoms\>)\
@@ -35,21 +33,25 @@ polygonClipping.difference(\<subjectGeom\>, ...\<clipGeoms\>)
 
 ### Input
 
-
-Each positional argument (`<geom>`) may be either a Polygon or a MultiPolygon. The [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is followed, with the following notes/modifications:
+Each positional argument (`<geom>`) may be either a Polygon or a MultiPolygon. The
+[GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is followed, with the following
+notes/modifications:
 
 - MultiPolygons may contain touching or overlapping Polygons.
 - rings are not required to be self-closing.
 - rings may contain repeated points, which are ignored.
-- rings may be self-touching and/or self-crossing. Self-crossing rings will be interpreted using the [non-zero rule](https://en.wikipedia.org/wiki/Nonzero-rule).
+- rings may be self-touching and/or self-crossing. Self-crossing rings will be interpreted using the
+  [non-zero rule](https://en.wikipedia.org/wiki/Nonzero-rule).
 - winding order of rings does not matter.
-- inner rings may extend outside their outer ring. The portion of inner rings outside their outer ring is dropped.
+- inner rings may extend outside their outer ring. The portion of inner rings outside their outer
+  ring is dropped.
 - inner rings may touch or overlap each other.
 
 ### Output
 
-
-For non-empty results, output will always be a MultiPolygon containing one or more non-overlapping, non-edge-sharing Polygons. The [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is followed, with the following notes/modifications:
+For non-empty results, output will always be a MultiPolygon containing one or more non-overlapping,
+non-edge-sharing Polygons. The [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is
+followed, with the following notes/modifications:
 
 - outer rings will be wound counter-clockwise, and inner rings clockwise.
 - inner rings will not extend outside their outer ring.
@@ -58,38 +60,42 @@ For non-empty results, output will always be a MultiPolygon containing one or mo
 - rings will not contain repeated points.
 - rings will not contain superfluous points (intermediate points along a straight line).
 - rings will not be self-touching nor self-crossing.
-- rings *may* touch each other, but *may not* cross each other.
+- rings _may_ touch each other, but _may not_ cross each other.
 
-In the event that the result of the operation is the empty set, output will be a MultiPolygon with no Polygons: `[]`.
+In the event that the result of the operation is the empty set, output will be a MultiPolygon with
+no Polygons: `[]`.
 
 ## Correctness
 
-
 Run: `npm test`
 
-The tests are broken up into unit tests and end-to-end tests. The end-to-end tests are organized as GeoJSON files, to make them easy to visualize thanks to [GitHub's helpful rendering of GeoJSON files](https://help.github.com/articles/mapping-geojson-files-on-github/). Browse those tests [here](./mfogel-polygon-clipping-blob-main-test-end-to-end.md).
+The tests are broken up into unit tests and end-to-end tests. The end-to-end tests are organized as
+GeoJSON files, to make them easy to visualize thanks to
+[GitHub's helpful rendering of GeoJSON files](https://help.github.com/articles/mapping-geojson-files-on-github/).
+Browse those tests [here](./mfogel-polygon-clipping-blob-main-test-end-to-end.md).
 
 ## Performance
 
-
-The Martinez-Rueda-Feito polygon clipping algorithm is used to compute the result in `O((n+k)*log(n))` time, where `n` is the total number of edges in all polygons involved and `k` is the number of intersections between edges.
+The Martinez-Rueda-Feito polygon clipping algorithm is used to compute the result in
+`O((n+k)*log(n))` time, where `n` is the total number of edges in all polygons involved and `k` is
+the number of intersections between edges.
 
 ## Settings
 
-
 Global settings are set via environment variables.
 
-- **POLYGON_CLIPPING_MAX_QUEUE_SIZE** and **POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS**: Aims to prevent infinite loops - usually caused by floating-point math round-off errors. Defaults are 1,000,000.
+- **POLYGON_CLIPPING_MAX_QUEUE_SIZE** and **POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS**: Aims to
+  prevent infinite loops - usually caused by floating-point math round-off errors. Defaults are
+  1,000,000.
 
 ## Changelog
 
-
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-The full changelog is available at [CHANGELOG.md](https://github.com/mfogel/polygon-clipping/blob/master/CHANGELOG.md).
+The full changelog is available at
+[CHANGELOG.md](https://github.com/mfogel/polygon-clipping/blob/master/CHANGELOG.md).
 
 ## Authors
-
 
 - [Mike Fogel](https://github.com/mfogel)
 - [Alexander Milevski](https://github.com/w8r)
@@ -97,16 +103,16 @@ The full changelog is available at [CHANGELOG.md](https://github.com/mfogel/poly
 
 ## Sponsors
 
-
 - [Alantgeo](https://www.alantgeo.com.au/)
 - [EasyTerritory](https://www.easyterritory.com/)
 
-Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is interested in sponsoring work on specific bug fixes or feature requests.
+Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is interested in
+sponsoring work on specific bug fixes or feature requests.
 
 ## Based on
 
-
-- [A new algorithm for computing Boolean operations on polygons](./mfogel-polygon-clipping-blob-main-paper.pdf.md) by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
+- [A new algorithm for computing Boolean operations on polygons](./mfogel-polygon-clipping-blob-main-paper.pdf.md)
+  by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
 
 <!--
 ## Source links

@@ -4,35 +4,43 @@
 
 # Javascript library for 2d geometry
 
+**flatten-js** is a javascript library for manipulating abstract geometrical shapes like point,
+vector, line, ray, segment, circle, arc and polygon. Shapes may be organized into Planar Set -
+searchable container which support spatial queries.
 
-**flatten-js** is a javascript library for manipulating abstract geometrical shapes like point, vector, line, ray, segment, circle, arc and polygon. Shapes may be organized into Planar Set - searchable container which support spatial queries.
+**flatten-js** provides a lot of useful methods and algorithms like finding intersections, checking
+inclusion, calculating distance, applying affine transformations, performing boolean operations and
+more.
 
-**flatten-js** provides a lot of useful methods and algorithms like finding intersections, checking inclusion, calculating distance, applying affine transformations, performing boolean operations and more.
+Packages are distributed in 3 formats: commonjs, umd and es6 modules. Package.json file provides
+various entry points suitable for different targets.
 
-Packages are distributed in 3 formats: commonjs, umd and es6 modules. Package.json file provides various entry points suitable for different targets.
+TypeScript users may take advantage of static type checking with typescript definition file
+index.d.ts included into the package.
 
-TypeScript users may take advantage of static type checking with typescript definition file index.d.ts included into the package.
+**flatten-js** does not concern too much about visualization. Anyway, all classes implement svg()
+method, that returns a string which may be inserted into SVG container. It works pretty well
+together with [d3js](https://d3js.org/) library, but it is definitely possible to create bridges to
+other graphic libraries.
 
-**flatten-js** does not concern too much about visualization. Anyway, all classes implement svg() method, that returns a string which may be inserted into SVG container. It works pretty well together with [d3js](https://d3js.org/) library, but it is definitely possible to create bridges to other graphic libraries.
-
-The best way to start working with FlattenJS is to use awesome [Observable](https://beta.observablehq.com/) javascript interactive notebooks. Check out collection of [Tutorials](https://observablehq.com/collection/@alexbol99/flatten-js-tutorials) published in Observable Notebooks.
+The best way to start working with FlattenJS is to use awesome
+[Observable](https://beta.observablehq.com/) javascript interactive notebooks. Check out collection
+of [Tutorials](https://observablehq.com/collection/@alexbol99/flatten-js-tutorials) published in
+Observable Notebooks.
 
 Full documentation may be found here: <https://alexbol99.github.io/flatten-js/index.html>
 
 ## Contacts
 
-
 Follow me on Twitter [@alex_bol\_](https://twitter.com/alex_bol_)
 
 ## Installation
-
 
 ```
 npm install --save @flatten-js/core
 ```
 
 ## Usage
-
 
 import {Point, Vector, Circle, Line, Ray, Segment, Arc, Box, Polygon, Matrix, PlanarSet} from '@flatten-js/core';
 
@@ -41,12 +49,11 @@ It is possible to import Flatten namespace as default import, and then destruct 
 import Flatten from '@flatten-js/core'\
 const {Point, Vector, Circle, Line, Ray, Segment, Arc, Box, Polygon, Matrix, PlanarSet} = Flatten;
 
-Some classes have shortcuts to avoid annoying *new* constructor:
+Some classes have shortcuts to avoid annoying _new_ constructor:
 
 import {point, vector, circle, line, ray, segment, arc, polygon, matrix} from '@flatten-js/core';
 
 ## Example
-
 
 After module imported, it is possible to create some construction:
 
@@ -69,9 +76,7 @@ You may also check out examples section in the code which illustrate different u
 
 ## Content of the library
 
-
 ### Basic shapes
-
 
 **flatten-js** library implements following basic shapes:
 
@@ -86,10 +91,15 @@ You may also check out examples section in the code which illustrate different u
 
 ### Polygon
 
+[Polygon](https://alexbol99.github.io/flatten-js/Polygon.html) in **flatten-js** library is actually
+a multi-polygon. Polygon is a collection of faces - closed oriented chains of edges, which may be of
+type Segment or Arc. The most external face called island, a face included into it is called hole.
+Holes in turn may have inner islands, number of inclusion levels is unlimited.
 
-[Polygon](https://alexbol99.github.io/flatten-js/Polygon.html) in **flatten-js** library is actually a multi-polygon. Polygon is a collection of faces - closed oriented chains of edges, which may be of type Segment or Arc. The most external face called island, a face included into it is called hole. Holes in turn may have inner islands, number of inclusion levels is unlimited.
-
-Orientation of islands and holes is matter for calculation of relationships and boolean operations, holes should have orientation opposite to islands. It means that for proper results faces in a polygon should be **orientable**: they should not have self-intersections. Faces also should not overlap each other. Method `isValid()` checks if polygon fit these rules.
+Orientation of islands and holes is matter for calculation of relationships and boolean operations,
+holes should have orientation opposite to islands. It means that for proper results faces in a
+polygon should be **orientable**: they should not have self-intersections. Faces also should not
+overlap each other. Method `isValid()` checks if polygon fit these rules.
 
 Constructor of the polygon object accept various inputs:
 
@@ -112,20 +122,22 @@ Polygon provides various useful methods:
 - `reverse` - revert orientation of faces
 - `splitToIslands` - split to array of islands with holes
 
-`splitToIslands()` uses the largest face's orientation to identify outer faces. Opposite-oriented faces represent holes (voids), and are attached to islands that contain them. A hole moved completely outside the islands contributes no filled region and is omitted from the returned polygons; it is not reversed into a new island. The original polygon is unchanged, so the result may contain fewer faces than the input. This method does not clip partially overlapping faces; callers should supply non-overlapping faces with consistent winding.
+`splitToIslands()` uses the largest face's orientation to identify outer faces. Opposite-oriented
+faces represent holes (voids), and are attached to islands that contain them. A hole moved
+completely outside the islands contributes no filled region and is omitted from the returned
+polygons; it is not reversed into a new island. The original polygon is unchanged, so the result may
+contain fewer faces than the input. This method does not clip partially overlapping faces; callers
+should supply non-overlapping faces with consistent winding.
 
 ### Multiline
-
 
 Multiline represent an unclosed chain of edges of type Segment or Arc
 
 ### Planar Set
 
-
 Planar Set is a container of shapes that enables spatial seach by rectangular query.
 
 ### Transformations
-
 
 All the classes have methods `translate`, `rotate` and `scale` which may be chained.\
 Example:
@@ -139,15 +151,20 @@ let rotated_segment = s.rotate(angle, center)
 
 ### Intersection points
 
+All classes have method `intersect(otherShape)` that return array of intersection points, if two
+shapes intersect each other, or empty array otherwise. The is no predefined order of intersection
+points in the array.
 
-All classes have method `intersect(otherShape)` that return array of intersection points, if two shapes intersect each other, or empty array otherwise. The is no predefined order of intersection points in the array.
-
-Please don't be confused, there are another two methods `BooleanOperations.intersect()` that performs boolean intersection of polygons and logical predicate `Relations.intersect()` that check if two shapes intersected or not.
+Please don't be confused, there are another two methods `BooleanOperations.intersect()` that
+performs boolean intersection of polygons and logical predicate `Relations.intersect()` that check
+if two shapes intersected or not.
 
 ### Distance between shapes
 
-
-All basic classes and polygon have method `distanceTo(othershape)` that calculate distance to other shape. Together with the distance function returns the shortest segment between two shapes - segment between two closest point, where the first point lays on `this` shape, and the second - on the other shape, see example:
+All basic classes and polygon have method `distanceTo(othershape)` that calculate distance to other
+shape. Together with the distance function returns the shortest segment between two shapes - segment
+between two closest point, where the first point lays on `this` shape, and the second - on the other
+shape, see example:
 
 let s = segment(point(10,30), point(150, 40));\
 let c = circle(point(75,75),10);\
@@ -155,8 +172,9 @@ let \[dist,shortest_segment\] = s.distanceTo(c);
 
 ### Intersection model (DE-9IM)
 
-
-The Dimensionally Extended nine-Intersection Model ([DE-9IM](https://en.wikipedia.org/wiki/DE-9IM)) is a topological model and a standard used to describe the spatial relations of two geometries in 2-dimensional plane.
+The Dimensionally Extended nine-Intersection Model ([DE-9IM](https://en.wikipedia.org/wiki/DE-9IM))
+is a topological model and a standard used to describe the spatial relations of two geometries in
+2-dimensional plane.
 
 First, for every shape we define:
 
@@ -181,17 +199,22 @@ where `a` and `b` are two shapes (geometries),
 
 `I(), B(), E()` denotes interior, boundary and exterior operator and
 
-`^` denotes operation of intersection. Dimension of intersection result depends on the dimension of shapes, for example,
+`^` denotes operation of intersection. Dimension of intersection result depends on the dimension of
+shapes, for example,
 
-- intersection between an interior of the line and an interior of the polygon is an array of segments
-- intersection between an interior of the line and boundary polygon is an array of points (may include segments in case of touching)
+- intersection between an interior of the line and an interior of the polygon is an array of
+  segments
+- intersection between an interior of the line and boundary polygon is an array of points (may
+  include segments in case of touching)
 - intersection between interiors of two polygons (if exists) will be a polygon.
 
 DE-9IM matrix describes any possible relationships between two shapes on the plane.
 
 DE-9IM matrix is available via method `relate` under namespace `Relations`.
 
-Each element of DE-9IM matrix is an array of the objects representing corresponding intersection. Empty array represents case of no intersection. If intersection is not applicable (i.e. intersection with a boundary for a line which has no boundary), correspondent cell left undefined.
+Each element of DE-9IM matrix is an array of the objects representing corresponding intersection.
+Empty array represents case of no intersection. If intersection is not applicable (i.e. intersection
+with a boundary for a line which has no boundary), correspondent cell left undefined.
 
 Intersection between two exteriors not calculated because usually it is meaningless.
 
@@ -216,8 +239,8 @@ String may be obtained with `de9im.toString()` method.
 
 ### Relationship predicates
 
-
-The spatial relationships between two shapes exposed via namespace `Relations`. The spatial predicates return `true` if relationship match and `false` otherwise.
+The spatial relationships between two shapes exposed via namespace `Relations`. The spatial
+predicates return `true` if relationship match and `false` otherwise.
 
 let {intersect, disjoint, equal, touch, inside, contain, covered, cover} = Flatten.Relations;\
 // define shape a and shape b\
@@ -235,8 +258,9 @@ console.log(p)             // true / false
 
 ### Boolean operations
 
-
-Boolean operations on polygons available via namespace **BooleanOperations**. Polygons in boolean operation should be valid: both operands should have same meaning of face orientation, faces should not overlap each other and should not have self-intersections.
+Boolean operations on polygons available via namespace **BooleanOperations**. Polygons in boolean
+operation should be valid: both operands should have same meaning of face orientation, faces should
+not overlap each other and should not have self-intersections.
 
 User is responsible to provide valid polygons, boolean operation methods do not check validity.
 
@@ -245,15 +269,18 @@ let {unify, subtract, intersect, innerClip, outerClip} = BooleanOperation
 - `unify` - unify two polygons and return resulted polygon
 - `subtract` - subtract second polygon from the first and return resulted polygon
 - `intersect` - intersect two polygons and return resulted polygon
-- `innerClip` - intersect two polygons and return boundary of intersection as 2 arrays. The first aray contains edges of the first polygon, the second - the edges of the second
+- `innerClip` - intersect two polygons and return boundary of intersection as 2 arrays. The first
+  aray contains edges of the first polygon, the second - the edges of the second
 - `outerClip` - clip boundary of the first polygon with the interior of the second polygon
 
-Implementation based on Weiler-Atherton clipping algorithm, described in the article [Hidden Surface Removal Using Polygon Area Sorting](https://www.cs.drexel.edu/~david/Classes/CS430/HWs/p214-weiler.pdf)
+Implementation based on Weiler-Atherton clipping algorithm, described in the article
+[Hidden Surface Removal Using Polygon Area Sorting](https://www.cs.drexel.edu/~david/Classes/CS430/HWs/p214-weiler.pdf)
 
 ### Serialization
 
-
-All **flatten-js** shape objects may be serialized using `JSON.stringify()` method. `JSON.stringify` transforms object to string using `.toJSON()` formatter implemented in the class. `JSON.parse` restore object from a string, and then constructor can use this object to create Flatten object.
+All **flatten-js** shape objects may be serialized using `JSON.stringify()` method. `JSON.stringify`
+transforms object to string using `.toJSON()` formatter implemented in the class. `JSON.parse`
+restore object from a string, and then constructor can use this object to create Flatten object.
 
 let {lint, point} = Flatten;\
 let l = line(point(4, 0), point(0, 4));\
@@ -265,8 +292,8 @@ let l_parsed = line(l_json);
 
 ### Visualization
 
-
-All classes provide `svg()` method, that create svg string that may be inserted into svg container element in a very straightforward way:
+All classes provide `svg()` method, that create svg string that may be inserted into svg container
+element in a very straightforward way:
 
 \<body\>\
     \<svg id="stage" width="500" height="500"\>\</svg\>\
@@ -284,21 +311,21 @@ All classes provide `svg()` method, that create svg string that may be inserted 
 \</script\>\
 \</body\>
 
-Method `svg()` may accept as a parameter an object that enables to define several basic attributes of svg element: `stroke`, `strokeWidth`, `fill`, `fillRule`, `fillOpacity`, `id` and `className`. If attributes not provided, method `svg()` use default values.
+Method `svg()` may accept as a parameter an object that enables to define several basic attributes
+of svg element: `stroke`, `strokeWidth`, `fill`, `fillRule`, `fillOpacity`, `id` and `className`. If
+attributes not provided, method `svg()` use default values.
 
 ### Other packages
 
-
 Other packages, published under scope **@flatten-js/**:
 
-| Name | Description |
-|----|----|
-| [@flatten-js/interval-tree](https://www.npmjs.com/package/@flatten-js/interval-tree) | Interval binary search tree |
-| [@flatten-js/boolean-op](https://www.npmjs.com/package/@flatten-js/boolean-op) | Boolean operations (deprecated, use this functionality from the core package) |
-| [@flatten-js/polygon-offset](https://www.npmjs.com/package/@flatten-js/polygon-offset) | Polygon offset |
+| Name                                                                                   | Description                                                                   |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [@flatten-js/interval-tree](https://www.npmjs.com/package/@flatten-js/interval-tree)   | Interval binary search tree                                                   |
+| [@flatten-js/boolean-op](https://www.npmjs.com/package/@flatten-js/boolean-op)         | Boolean operations (deprecated, use this functionality from the core package) |
+| [@flatten-js/polygon-offset](https://www.npmjs.com/package/@flatten-js/polygon-offset) | Polygon offset                                                                |
 
 ## Support
-
 
 [![Buy Me A Coffee](https://camo.githubusercontent.com/9a769e616ce78645bf51d12e4179cfbfd72fb413722b284e0be3ec3c75a86010/68747470733a2f2f63646e2e6275796d6561636f666665652e636f6d2f627574746f6e732f64656661756c742d6f72616e67652e706e67)](https://www.buymeacoffee.com/alexbol99)
 

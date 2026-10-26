@@ -2,15 +2,22 @@
 
 Paper.js offers two different ways to smooth a path.
 
-[`path.smooth()`](./reference-path.md#smooth) smooths a path by changing its segment handles without adding or removing segment points.
+[`path.smooth()`](./reference-path.md#smooth) smooths a path by changing its segment handles without
+adding or removing segment points.
 
-[`path.simplify()`](./reference-path.md#simplify) smooths a path by analyzing its [`path.segments`](./reference-path.md#segments) array and replacing it with a more optimal set of segments, reducing memory usage and speeding up drawing.
+[`path.simplify()`](./reference-path.md#simplify) smooths a path by analyzing its
+[`path.segments`](./reference-path.md#segments) array and replacing it with a more optimal set of
+segments, reducing memory usage and speeding up drawing.
 
 ## Smoothing Paths
 
-Paper.js allows you to automatically smooth paths using the [`path.smooth()`](./reference-path.md#smooth) function. This function calculates the optimal values for the handles of the path's segment points to create curves that flow smoothly through them. The segments are not moved and the current handle settings of the path's segments are ignored.
+Paper.js allows you to automatically smooth paths using the
+[`path.smooth()`](./reference-path.md#smooth) function. This function calculates the optimal values
+for the handles of the path's segment points to create curves that flow smoothly through them. The
+segments are not moved and the current handle settings of the path's segments are ignored.
 
-In the following example, we create a rectangle shaped path, create a copy of it and smooth the copy. As you can see, only the handle positions are changed. The segment points remain unchanged.
+In the following example, we create a rectangle shaped path, create a copy of it and smooth the
+copy. As you can see, only the handle positions are changed. The segment points remain unchanged.
 
  
 
@@ -48,19 +55,29 @@ copy.position.x += 100;
 
 copy.smooth();
 
-Click and drag in the view below to draw a line, when you release the mouse, the path is smoothed using [`path.smooth()`](./reference-path.md#smooth):
+Click and drag in the view below to draw a line, when you release the mouse, the path is smoothed
+using [`path.smooth()`](./reference-path.md#smooth):
 
 ## Simplifying Paths
 
-[`path.simplify()`](./reference-path.md#simplify) smooths a path by simplifying it. The path.segments array is analyzed and replaced by a more optimal set of segments, reducing memory usage and speeding up drawing.
+[`path.simplify()`](./reference-path.md#simplify) smooths a path by simplifying it. The
+path.segments array is analyzed and replaced by a more optimal set of segments, reducing memory
+usage and speeding up drawing.
 
-The [`path.simplify()`](./reference-path.md#simplify) function has an optional `tolerance` parameter, which specifies the maximum distance the simplifying algorithm is allowed to deviate from the original path. This value is set to `2.5` by default. Setting it to a lower value, produces a more correct path but with more segment points. Setting it to a higher value leads to a smoother curve and less segment points, but the shape of the path will be more different than the original.
+The [`path.simplify()`](./reference-path.md#simplify) function has an optional `tolerance`
+parameter, which specifies the maximum distance the simplifying algorithm is allowed to deviate from
+the original path. This value is set to `2.5` by default. Setting it to a lower value, produces a
+more correct path but with more segment points. Setting it to a higher value leads to a smoother
+curve and less segment points, but the shape of the path will be more different than the original.
 
 ## Flattening Paths
 
-[`path.flatten(error)`](./reference-path.md#flatten-error) converts the curves in a path to straight lines with a maximum specified error. The resulting lines are guaranteed to not be further away than the amount specified by the `error` parameter.
+[`path.flatten(error)`](./reference-path.md#flatten-error) converts the curves in a path to straight
+lines with a maximum specified error. The resulting lines are guaranteed to not be further away than
+the amount specified by the `error` parameter.
 
-In the following example, we create a circle shaped path and straighten it using [`path.flatten(20)`](./reference-path.md#flatten-error):
+In the following example, we create a circle shaped path and straighten it using
+[`path.flatten(20)`](./reference-path.md#flatten-error):
 
  
 

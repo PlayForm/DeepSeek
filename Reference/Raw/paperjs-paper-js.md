@@ -1,7 +1,7 @@
 # Paper.js - The Swiss Army Knife of Vector Graphics Scripting [![CI](https://github.com/paperjs/paper.js/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/paperjs/paper.js/actions/workflows/ci.yml) [![NPM](https://camo.githubusercontent.com/8d54c3bd0b034847afc2e9371a9ce38ae17c6b48b11f55afd00612727b3e3ff9/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f762f70617065722e737667)](https://www.npmjs.com/package/paper)
 
-
-If you want to work with Paper.js, simply download the latest "stable" version from <http://paperjs.org/download/>
+If you want to work with Paper.js, simply download the latest "stable" version from
+<http://paperjs.org/download/>
 
 - Website: <http://paperjs.org/>
 - Questions: <https://stackoverflow.com/questions/tagged/paperjs>
@@ -9,12 +9,14 @@ If you want to work with Paper.js, simply download the latest "stable" version f
 - Mainline source code: <https://github.com/paperjs/paper.js>
 - Twitter: [@paperjs](https://twitter.com/paperjs)
 - Latest releases: <http://paperjs.org/download/>
-- Pre-built development versions: [`prebuilt/module`](https://github.com/paperjs/paper.js/tree/prebuilt/module) and [`prebuilt/dist`](https://github.com/paperjs/paper.js/tree/prebuilt/dist) branches.
+- Pre-built development versions:
+  [`prebuilt/module`](https://github.com/paperjs/paper.js/tree/prebuilt/module) and
+  [`prebuilt/dist`](https://github.com/paperjs/paper.js/tree/prebuilt/dist) branches.
 
 ## Installing Paper.js
 
-
-The recommended way to install and maintain Paper.js as a dependency in your project is through the [Node.js Package Manager (NPM)](https://www.npmjs.com/) for browsers, Node.js or Electron.
+The recommended way to install and maintain Paper.js as a dependency in your project is through the
+[Node.js Package Manager (NPM)](https://www.npmjs.com/) for browsers, Node.js or Electron.
 
 If NPM is already installed, simply type one of these commands in your project folder:
 
@@ -22,12 +24,13 @@ npm install paper
 
 Upon execution, you will find a `paper` folder inside the project's `node_modules` folder.
 
-For more information on how to install Node.js and NPM, read the chapter [Installing Node.js and NPM](#installing-nodejs-and-npm).
+For more information on how to install Node.js and NPM, read the chapter
+[Installing Node.js and NPM](#installing-nodejs-and-npm).
 
 ### Using Paper.js with a Bundler
 
-
-With a bundler such as webpack, Rollup, esbuild or Vite, import Paper.js and set it up with a canvas element:
+With a bundler such as webpack, Rollup, esbuild or Vite, import Paper.js and set it up with a canvas
+element:
 
 import paper from 'paper'\
 // Or, with CommonJS: const paper = require('paper')\
@@ -45,57 +48,74 @@ paper.view.onFrame = event =\> {\
   circle.rotate(1)\
 }
 
-The module exports the global `paper` scope as its default export, with all classes as its properties. Use `paper.view` and `paper.project` after calling `paper.setup()`, rather than importing them, as they only exist from then on. To use the core version without PaperScript, import `'paper/dist/paper-core'` instead. With TypeScript, the default import requires `esModuleInterop`.
+The module exports the global `paper` scope as its default export, with all classes as its
+properties. Use `paper.view` and `paper.project` after calling `paper.setup()`, rather than
+importing them, as they only exist from then on. To use the core version without PaperScript, import
+`'paper/dist/paper-core'` instead. With TypeScript, the default import requires `esModuleInterop`.
 
 ### Which Version to Use
 
-
-The various distributions come with two different pre-build versions of Paper.js, in minified and normal variants:
+The various distributions come with two different pre-build versions of Paper.js, in minified and
+normal variants:
 
 - `paper-full.js` – The full version for the browser, including PaperScript support and Acorn.js
-- `paper-core.js` – The core version for the browser, without PaperScript support nor Acorn.js. You can use this to shave off some bytes and compilation time when working with JavaScript directly.
+- `paper-core.js` – The core version for the browser, without PaperScript support nor Acorn.js. You
+  can use this to shave off some bytes and compilation time when working with JavaScript directly.
 
 ### Installing Node.js and NPM
 
+Node.js comes with the Node Package Manager (NPM). There are many tutorials explaining the different
+ways to install Node.js on different platforms. It is generally not recommended to install Node.js
+through OS-supplied package managers, as the its development cycles move fast and these versions are
+often out-of-date.
 
-Node.js comes with the Node Package Manager (NPM). There are many tutorials explaining the different ways to install Node.js on different platforms. It is generally not recommended to install Node.js through OS-supplied package managers, as the its development cycles move fast and these versions are often out-of-date.
-
-On macOS, [Homebrew](https://brew.sh/) is a good option if one version of Node.js that is kept up to date with `brew upgrade` is enough:\
+On macOS, [Homebrew](https://brew.sh/) is a good option if one version of Node.js that is kept up to
+date with `brew upgrade` is enough:\
 <https://treehouse.github.io/installation-guides/mac/node-mac.html>
 
-[NVM](https://github.com/creationix/nvm) can be used instead to install and maintain multiple versions of Node.js on the same platform, as often required by different projects:\
+[NVM](https://github.com/creationix/nvm) can be used instead to install and maintain multiple
+versions of Node.js on the same platform, as often required by different projects:\
 <https://nodesource.com/blog/installing-node-js-tutorial-using-nvm-on-mac-os-x-and-ubuntu/>
 
-Homebrew is recommended on macOS also if you intend to install Paper.js with rendering to the Canvas on Node.js, as described in the next paragraph.
+Homebrew is recommended on macOS also if you intend to install Paper.js with rendering to the Canvas
+on Node.js, as described in the next paragraph.
 
-For Linux, see <https://nodejs.org/download/> to locate 32-bit and 64-bit Node.js binaries as well as sources, or use NVM, as described in the paragraph above.
+For Linux, see <https://nodejs.org/download/> to locate 32-bit and 64-bit Node.js binaries as well
+as sources, or use NVM, as described in the paragraph above.
 
 ### Installing Paper.js Using NPM
 
+Paper.js comes in three different versions on NPM: `paper`, `paper-jsdom` and `paper-jsdom-canvas`.
+Depending on your use case, you need to required a different one:
 
-Paper.js comes in three different versions on NPM: `paper`, `paper-jsdom` and `paper-jsdom-canvas`. Depending on your use case, you need to required a different one:
+- `paper` is the main library, and can be used directly in a browser context, e.g. a web browser or
+  worker.
+- `paper-jsdom` is a shim module for Node.js, offering headless use with SVG importing and exporting
+  through [jsdom](https://github.com/tmpvar/jsdom).
+- `paper-jsdom-canvas` is a shim module for Node.js, offering canvas rendering through
+  [Node-Canvas](https://github.com/Automattic/node-canvas) as well as SVG importing and exporting
+  through [jsdom](https://github.com/tmpvar/jsdom).
 
-- `paper` is the main library, and can be used directly in a browser context, e.g. a web browser or worker.
-- `paper-jsdom` is a shim module for Node.js, offering headless use with SVG importing and exporting through [jsdom](https://github.com/tmpvar/jsdom).
-- `paper-jsdom-canvas` is a shim module for Node.js, offering canvas rendering through [Node-Canvas](https://github.com/Automattic/node-canvas) as well as SVG importing and exporting through [jsdom](https://github.com/tmpvar/jsdom).
-
-In order to install `paper-jsdom-canvas`, you need the [Cairo Graphics library](https://cairographics.org/) installed in your system:
+In order to install `paper-jsdom-canvas`, you need the
+[Cairo Graphics library](https://cairographics.org/) installed in your system:
 
 ### Installing Native Dependencies
 
-
-Paper.js relies on [Node-Canvas](https://github.com/Automattic/node-canvas) for rendering, which in turn relies on the native libraries [Cairo](https://cairographics.org/) and [Pango](https://www.pango.org/).
+Paper.js relies on [Node-Canvas](https://github.com/Automattic/node-canvas) for rendering, which in
+turn relies on the native libraries [Cairo](https://cairographics.org/) and
+[Pango](https://www.pango.org/).
 
 #### Installing Native Dependencies on macOS
 
-
-Paper.js relies on Node-Canvas for rendering, which in turn relies on Cairo and Pango. The easiest way to install Cairo is through [Homebrew](https://brew.sh/), by issuing the command:
+Paper.js relies on Node-Canvas for rendering, which in turn relies on Cairo and Pango. The easiest
+way to install Cairo is through [Homebrew](https://brew.sh/), by issuing the command:
 
 ```
 brew install cairo pango
 ```
 
-Note that currently there is an issue on macOS with Cairo. If the above causes errors, the following will most likely fix it:
+Note that currently there is an issue on macOS with Cairo. If the above causes errors, the following
+will most likely fix it:
 
 ```
 PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig/ npm install paper
@@ -107,7 +127,8 @@ Also, whenever you would like to update the modules, you will need to execute:
 PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig/ npm update
 ```
 
-If you keep forgetting about this requirement, or would like to be able to type simple and clean commands, add this to your `.bash_profile` file:
+If you keep forgetting about this requirement, or would like to be able to type simple and clean
+commands, add this to your `.bash_profile` file:
 
 ```
 # PKG Config for Pango / Cairo
@@ -123,12 +144,12 @@ npm update
 
 #### Installing Native Dependencies on Debian/Ubuntu Linux
 
-
 ```
 sudo apt-get install pkg-config libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev
 ```
 
-You might also need to install the build-essential package if you don't usually build from c++ sources:
+You might also need to install the build-essential package if you don't usually build from c++
+sources:
 
 ```
 sudo apt-get install build-essential
@@ -136,13 +157,13 @@ sudo apt-get install build-essential
 
 #### Installing Native Dependencies for Electron
 
-
-In order to build Node-Canvas for use of `paper-jsdom-canvas` in Electron, which is likely to use a different version of V8 than the Node binary installed in your system, you need to manually specify the location of Electron’s headers. Follow these steps to do so:
+In order to build Node-Canvas for use of `paper-jsdom-canvas` in Electron, which is likely to use a
+different version of V8 than the Node binary installed in your system, you need to manually specify
+the location of Electron’s headers. Follow these steps to do so:
 
 [Electron — Using Native Node Modules](https://electron.atom.io/docs/tutorial/using-native-node-modules/)
 
 #### After Native Dependencies have been installed
-
 
 You should now be able to install the Paper.js module with jsdom and Canvas rendering from NPM:
 
@@ -152,11 +173,11 @@ npm install paper-jsdom-canvas
 
 ## Development
 
-
-The main Paper.js source tree is hosted on [GitHub](https://github.com/paperjs/paper.js/). `git` is required to create a clone of the repository, and can be easily installed through your preferred package manager on your platform.
+The main Paper.js source tree is hosted on [GitHub](https://github.com/paperjs/paper.js/). `git` is
+required to create a clone of the repository, and can be easily installed through your preferred
+package manager on your platform.
 
 ### Get the Source
-
 
 ```
 git clone --recursive git://github.com/paperjs/paper.js.git
@@ -177,12 +198,16 @@ git submodule update  --init --recursive
 
 ### Setting Up For Building
 
+Paper.js uses [Gulp.js](https://gulpjs.com/) for building, and has a couple of dependencies as NPM
+modules. Read the chapter [Installing Node.js and NPM](#installing-nodejs-and-npm) if you still need
+to install these.
 
-Paper.js uses [Gulp.js](https://gulpjs.com/) for building, and has a couple of dependencies as NPM modules. Read the chapter [Installing Node.js and NPM](#installing-nodejs-and-npm) if you still need to install these.
+Development uses [pnpm](https://pnpm.io/), which needs to be installed too. See
+[Installing pnpm](https://pnpm.io/installation) for details.
 
-Development uses [pnpm](https://pnpm.io/), which needs to be installed too. See [Installing pnpm](https://pnpm.io/installation) for details.
-
-In order to be able to build Paper.js, after checking out the repository, paper has dependencies that need to be installed. Install them by issuing the following commands from the Paper.js directory:
+In order to be able to build Paper.js, after checking out the repository, paper has dependencies
+that need to be installed. Install them by issuing the following commands from the Paper.js
+directory:
 
 ```
 pnpm install
@@ -190,21 +215,27 @@ pnpm install
 
 ### Building the Library
 
-
-The Paper.js sources are distributed across many separate files, organised in subfolders inside the `src` folder. To compile them all into distributable files, you can run the `build` task:
+The Paper.js sources are distributed across many separate files, organised in subfolders inside the
+`src` folder. To compile them all into distributable files, you can run the `build` task:
 
 ```
 pnpm build
 ```
 
-You will then find the built library files inside the `dist` folder, named `paper-full.js` and `paper-core.js`, along with their minified versions. Read more about this in [Which Version to Use?](#which-version-to-use).
+You will then find the built library files inside the `dist` folder, named `paper-full.js` and
+`paper-core.js`, along with their minified versions. Read more about this in
+[Which Version to Use?](#which-version-to-use).
 
 ### Running Directly from Separate Source Files
 
+As a handy alternative to building the library after each change to try it out in your scripts,
+there is the `load` task, that replaces the built libraries with symbolic links to the
+`scrc/load.js` script. This script then load the library directly from all the separate source files
+in the `src` folder, through the [Prepro.js](https://github.com/lehni/prepro.js) JavaScript
+preprocessing library.
 
-As a handy alternative to building the library after each change to try it out in your scripts, there is the `load` task, that replaces the built libraries with symbolic links to the `scrc/load.js` script. This script then load the library directly from all the separate source files in the `src` folder, through the [Prepro.js](https://github.com/lehni/prepro.js) JavaScript preprocessing library.
-
-This means you can switch between loading from sources and loading a built library simply by running.
+This means you can switch between loading from sources and loading a built library simply by
+running.
 
 ```
 pnpm load
@@ -216,10 +247,11 @@ And to go back to a built library
 pnpm build
 ```
 
-Note that your PaperScripts examples do not need to change, they can keep loading `dist/paper-full.js`, which will always do the right thing. Note also that `src/load.js` handles both browsers and Node.js, as supported by Prepro.js.
+Note that your PaperScripts examples do not need to change, they can keep loading
+`dist/paper-full.js`, which will always do the right thing. Note also that `src/load.js` handles
+both browsers and Node.js, as supported by Prepro.js.
 
 ### Other Build Tasks
-
 
 Create a final zipped distribution file inside the `dist` folder:
 
@@ -229,15 +261,19 @@ pnpm dist
 
 ### Branch structure
 
+Since the release of version `0.9.22`, Paper.js has adopted aspects of the Git- Flow workflow. All
+development is taking place in the [`develop`](https://github.com/paperjs/paper.js/tree/develop)
+branch, which is only merged into [`main`](https://github.com/paperjs/paper.js/tree/main) when a new
+release occurs.
 
-Since the release of version `0.9.22`, Paper.js has adopted aspects of the Git- Flow workflow. All development is taking place in the [`develop`](https://github.com/paperjs/paper.js/tree/develop) branch, which is only merged into [`main`](https://github.com/paperjs/paper.js/tree/main) when a new release occurs.
+As of version `0.9.26`, the `dist` folder is excluded on all branches, and the building is now part
+of the `pnpm publish` process by way of the `prepublish` script.
 
-As of version `0.9.26`, the `dist` folder is excluded on all branches, and the building is now part of the `pnpm publish` process by way of the `prepublish` script.
-
-We also offer prebuilt versions of the latest state of the `develop` branch on [`prebuilt/module`](https://github.com/paperjs/paper.js/tree/prebuilt/module) and [`prebuilt/dist`](https://github.com/paperjs/paper.js/tree/prebuilt/dist).
+We also offer prebuilt versions of the latest state of the `develop` branch on
+[`prebuilt/module`](https://github.com/paperjs/paper.js/tree/prebuilt/module) and
+[`prebuilt/dist`](https://github.com/paperjs/paper.js/tree/prebuilt/dist).
 
 ### Building the Documentation
-
 
 Similarly to building the library, you can run the `docs` task to build the documentation:
 
@@ -249,8 +285,8 @@ Your docs will then be located at `dist/docs`.
 
 ### Testing
 
-
-The tests run with [Vitest](https://vitest.dev/), on Node.js and in Chromium through [Playwright](https://playwright.dev/), against the library built from the sources:
+The tests run with [Vitest](https://vitest.dev/), on Node.js and in Chromium through
+[Playwright](https://playwright.dev/), against the library built from the sources:
 
 ```
 pnpm test
@@ -269,15 +305,20 @@ The browser tests need Chromium for Playwright, which this installs once:
 pnpm exec playwright install chromium
 ```
 
-Once the library is built in `dist`, the tests run against that instead. Select another build than `paper-full.js` with `PAPER_BUILD`, e.g. `PAPER_BUILD=hosted pnpm test:node`. Vitest also runs single files, and watches for changes with `pnpm exec vitest`.
+Once the library is built in `dist`, the tests run against that instead. Select another build than
+`paper-full.js` with `PAPER_BUILD`, e.g. `PAPER_BUILD=hosted pnpm test:node`. Vitest also runs
+single files, and watches for changes with `pnpm exec vitest`.
 
-The screenshot tests in `test/screenshots` compare what the library draws with reference images. Rendering differs between systems, so they run in Playwright's Docker image, which needs [Docker](https://www.docker.com/):
+The screenshot tests in `test/screenshots` compare what the library draws with reference images.
+Rendering differs between systems, so they run in Playwright's Docker image, which needs
+[Docker](https://www.docker.com/):
 
 ```
 pnpm test:screenshots
 ```
 
-To write new reference images, after adding a test or changing what it draws, and review them in `test/screenshots/__screenshots__` before committing:
+To write new reference images, after adding a test or changing what it draws, and review them in
+`test/screenshots/__screenshots__` before committing:
 
 ```
 pnpm test:screenshots --update
@@ -285,18 +326,25 @@ pnpm test:screenshots --update
 
 ### Contributing [![Open Source Helpers](https://camo.githubusercontent.com/b3d693f8660dc383e3b21fef1f27c7ab5e544dd6c620f1c51a982afc12a040ea/68747470733a2f2f7777772e636f64657472696167652e636f6d2f70617065726a732f70617065722e6a732f6261646765732f75736572732e737667)](https://www.codetriage.com/paperjs/paper.js)
 
+The main Paper.js source tree is hosted on GitHub, thus you should create a fork of the repository
+in which you perform development. See <https://help.github.com/articles/fork-a-repo/>.
 
-The main Paper.js source tree is hosted on GitHub, thus you should create a fork of the repository in which you perform development. See <https://help.github.com/articles/fork-a-repo/>.
+We prefer that you send a
+[pull request on GitHub](https://help.github.com/articles/about-pull-requests/) which will then be
+merged into the official main line repository.
 
-We prefer that you send a [pull request on GitHub](https://help.github.com/articles/about-pull-requests/) which will then be merged into the official main line repository.
+Also, in your first contribution, add yourself to the end of `AUTHORS.md` (which of course is
+optional).
 
-Also, in your first contribution, add yourself to the end of `AUTHORS.md` (which of course is optional).
-
-In addition to contributing code you can also triage issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to paper.js on CodeTriage](https://www.codetriage.com/paperjs/paper.js).
+In addition to contributing code you can also triage issues which may include reproducing bug
+reports or asking for vital information, such as version numbers or reproduction instructions. If
+you would like to start triaging issues, one easy way to get started is to
+[subscribe to paper.js on CodeTriage](https://www.codetriage.com/paperjs/paper.js).
 
 **Get the source (for contributing):**
 
-If you want to contribute to the project you will have to [make a fork](https://help.github.com/articles/fork-a-repo/). Then do this:
+If you want to contribute to the project you will have to
+[make a fork](https://help.github.com/articles/fork-a-repo/). Then do this:
 
 ```
 git clone --recursive git@github.com:yourusername/paper.js.git
@@ -312,30 +360,46 @@ git fetch upstream
 
 #### Creating and Submitting a Patch
 
+As mentioned above, we prefer that you send a
+[pull request](https://help.github.com/articles/about-pull-requests/) on GitHub:
 
-As mentioned above, we prefer that you send a [pull request](https://help.github.com/articles/about-pull-requests/) on GitHub:
-
-1.  Create a fork of the upstream repository by visiting <https://github.com/paperjs/paper.js/fork>. If you feel insecure, here's a great guide: <https://help.github.com/articles/fork-a-repo/>
+1.  Create a fork of the upstream repository by visiting <https://github.com/paperjs/paper.js/fork>.
+    If you feel insecure, here's a great guide: <https://help.github.com/articles/fork-a-repo/>
 
 2.  Clone of your repository: `git clone https://yourusername@github.com/yourusername/paper.js.git`
 
-3.  This is important: Create a so-called *topic branch* based on the `develop` branch: `git checkout -tb name-of-my-patch develop` where `name-of-my-patch` is a short but descriptive name of the patch you're about to create. Don't worry about the perfect name though -- you can change this name at any time later on.
+3.  This is important: Create a so-called _topic branch_ based on the `develop` branch:
+    `git checkout -tb name-of-my-patch develop` where `name-of-my-patch` is a short but descriptive
+    name of the patch you're about to create. Don't worry about the perfect name though -- you can
+    change this name at any time later on.
 
-4.  Hack! Make your changes, additions, etc., and describe them for the changelog in a file of their own in `changelog/unreleased`, see its [README](./paperjs-paper.js-blob-develop-changelog-unreleased-README.md.md). Commit them then push them to your GitHub fork: `git push origin name-of-my-patch`
+4.  Hack! Make your changes, additions, etc., and describe them for the changelog in a file of their
+    own in `changelog/unreleased`, see its
+    [README](./paperjs-paper.js-blob-develop-changelog-unreleased-README.md.md). Commit them then
+    push them to your GitHub fork: `git push origin name-of-my-patch`
 
-5.  Send a pull request to the upstream repository's owner by visiting your repository's site at GitHub (i.e. <https://github.com/yourusername/paper.js>) and press the "Pull Request" button. Make sure you are creating the pull request to the `develop` branch, not the `main` branch. Here's a good guide on pull requests: <https://help.github.com/articles/about-pull-requests/>
+5.  Send a pull request to the upstream repository's owner by visiting your repository's site at
+    GitHub (i.e. <https://github.com/yourusername/paper.js>) and press the "Pull Request" button.
+    Make sure you are creating the pull request to the `develop` branch, not the `main` branch.
+    Here's a good guide on pull requests: <https://help.github.com/articles/about-pull-requests/>
 
 ##### Use one topic branch per feature:
 
+Don't mix different kinds of patches in the same branch. Instead, merge them all together into your
+`develop` branch (or develop everything in your `develop` branch and then cherry-pick-and-merge into
+the different topic branches). Git provides for an extremely flexible workflow, which in many ways
+causes more confusion than it helps you when new to collaborative software development. The guides
+provided by GitHub at <https://help.github.com/> are a really good starting point and reference. If
+you are fixing an issue, a convenient way to name the branch is to use the issue number as a prefix,
+like this: `git checkout -tb issue-937-feature-add-text-styling`.
 
-Don't mix different kinds of patches in the same branch. Instead, merge them all together into your `develop` branch (or develop everything in your `develop` branch and then cherry-pick-and-merge into the different topic branches). Git provides for an extremely flexible workflow, which in many ways causes more confusion than it helps you when new to collaborative software development. The guides provided by GitHub at <https://help.github.com/> are a really good starting point and reference. If you are fixing an issue, a convenient way to name the branch is to use the issue number as a prefix, like this: `git checkout -tb issue-937-feature-add-text-styling`.
-
-For a list of authors and contributors, please see [AUTHORS](https://github.com/paperjs/paper.js/blob/main/AUTHORS.md).
+For a list of authors and contributors, please see
+[AUTHORS](https://github.com/paperjs/paper.js/blob/main/AUTHORS.md).
 
 ## License
 
-
-Distributed under the MIT license. See [LICENSE](https://github.com/paperjs/paper.js/blob/main/LICENSE.txt) for details.
+Distributed under the MIT license. See
+[LICENSE](https://github.com/paperjs/paper.js/blob/main/LICENSE.txt) for details.
 
 <!--
 ## Source links

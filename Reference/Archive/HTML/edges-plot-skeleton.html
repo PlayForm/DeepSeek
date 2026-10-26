@@ -1,165 +1,1070 @@
-<!DOCTYPE html><html lang="en" data-content_root="../../" data-mode="auto" data-theme="light" class="fontawesome-i2svg-active fontawesome-i2svg-complete"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html
+	class="fontawesome-i2svg-active fontawesome-i2svg-complete"
+	lang="en"
+	data-content_root="../../"
+	data-mode="auto"
+	data-theme="light">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
 
-    <title>Skeletonize — skimage 0.26.0 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
-  </script>
-  <!--
+		<title>Skeletonize — skimage 0.26.0 documentation</title>
+
+		<script data-cfasync="false">
+			document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+			document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+		</script>
+		<!--
     this give us a css class that will be invisible only if js is disabled
   -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
+		<noscript>
+			<style>
+				.pst-js-only {
+					display: none !important;
+				}
+			</style>
+		</noscript>
 
-    </style>
-  </noscript>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <style type="text/css">:host,:root{--fa-font-solid:normal 900 1em/1 "Font Awesome 6 Solid";--fa-font-regular:normal 400 1em/1 "Font Awesome 6 Regular";--fa-font-light:normal 300 1em/1 "Font Awesome 6 Light";--fa-font-thin:normal 100 1em/1 "Font Awesome 6 Thin";--fa-font-duotone:normal 900 1em/1 "Font Awesome 6 Duotone";--fa-font-sharp-solid:normal 900 1em/1 "Font Awesome 6 Sharp";--fa-font-sharp-regular:normal 400 1em/1 "Font Awesome 6 Sharp";--fa-font-sharp-light:normal 300 1em/1 "Font Awesome 6 Sharp";--fa-font-sharp-thin:normal 100 1em/1 "Font Awesome 6 Sharp";--fa-font-brands:normal 400 1em/1 "Font Awesome 6 Brands"}svg:not(:host).svg-inline--fa,svg:not(:root).svg-inline--fa{overflow:visible;box-sizing:content-box}.svg-inline--fa{display:var(--fa-display,inline-block);height:1em;overflow:visible;vertical-align:-.125em}.svg-inline--fa.fa-2xs{vertical-align:.1em}.svg-inline--fa.fa-xs{vertical-align:0}.svg-inline--fa.fa-sm{vertical-align:-.0714285705em}.svg-inline--fa.fa-lg{vertical-align:-.2em}.svg-inline--fa.fa-xl{vertical-align:-.25em}.svg-inline--fa.fa-2xl{vertical-align:-.3125em}.svg-inline--fa.fa-pull-left{margin-right:var(--fa-pull-margin,.3em);width:auto}.svg-inline--fa.fa-pull-right{margin-left:var(--fa-pull-margin,.3em);width:auto}.svg-inline--fa.fa-li{width:var(--fa-li-width,2em);top:.25em}.svg-inline--fa.fa-fw{width:var(--fa-fw-width,1.25em)}.fa-layers svg.svg-inline--fa{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0}.fa-layers-counter,.fa-layers-text{display:inline-block;position:absolute;text-align:center}.fa-layers{display:inline-block;height:1em;position:relative;text-align:center;vertical-align:-.125em;width:1em}.fa-layers svg.svg-inline--fa{-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-text{left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);-webkit-transform-origin:center center;transform-origin:center center}.fa-layers-counter{background-color:var(--fa-counter-background-color,#ff253a);border-radius:var(--fa-counter-border-radius,1em);box-sizing:border-box;color:var(--fa-inverse,#fff);line-height:var(--fa-counter-line-height,1);max-width:var(--fa-counter-max-width,5em);min-width:var(--fa-counter-min-width,1.5em);overflow:hidden;padding:var(--fa-counter-padding,.25em .5em);right:var(--fa-right,0);text-overflow:ellipsis;top:var(--fa-top,0);-webkit-transform:scale(var(--fa-counter-scale,.25));transform:scale(var(--fa-counter-scale,.25));-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-bottom-right{bottom:var(--fa-bottom,0);right:var(--fa-right,0);top:auto;-webkit-transform:scale(var(--fa-layers-scale,.25));transform:scale(var(--fa-layers-scale,.25));-webkit-transform-origin:bottom right;transform-origin:bottom right}.fa-layers-bottom-left{bottom:var(--fa-bottom,0);left:var(--fa-left,0);right:auto;top:auto;-webkit-transform:scale(var(--fa-layers-scale,.25));transform:scale(var(--fa-layers-scale,.25));-webkit-transform-origin:bottom left;transform-origin:bottom left}.fa-layers-top-right{top:var(--fa-top,0);right:var(--fa-right,0);-webkit-transform:scale(var(--fa-layers-scale,.25));transform:scale(var(--fa-layers-scale,.25));-webkit-transform-origin:top right;transform-origin:top right}.fa-layers-top-left{left:var(--fa-left,0);right:auto;top:var(--fa-top,0);-webkit-transform:scale(var(--fa-layers-scale,.25));transform:scale(var(--fa-layers-scale,.25));-webkit-transform-origin:top left;transform-origin:top left}.fa-1x{font-size:1em}.fa-2x{font-size:2em}.fa-3x{font-size:3em}.fa-4x{font-size:4em}.fa-5x{font-size:5em}.fa-6x{font-size:6em}.fa-7x{font-size:7em}.fa-8x{font-size:8em}.fa-9x{font-size:9em}.fa-10x{font-size:10em}.fa-2xs{font-size:.625em;line-height:.1em;vertical-align:.225em}.fa-xs{font-size:.75em;line-height:.0833333337em;vertical-align:.125em}.fa-sm{font-size:.875em;line-height:.0714285718em;vertical-align:.0535714295em}.fa-lg{font-size:1.25em;line-height:.05em;vertical-align:-.075em}.fa-xl{font-size:1.5em;line-height:.0416666682em;vertical-align:-.125em}.fa-2xl{font-size:2em;line-height:.03125em;vertical-align:-.1875em}.fa-fw{text-align:center;width:1.25em}.fa-ul{list-style-type:none;margin-left:var(--fa-li-margin,2.5em);padding-left:0}.fa-ul>li{position:relative}.fa-li{left:calc(var(--fa-li-width,2em) * -1);position:absolute;text-align:center;width:var(--fa-li-width,2em);line-height:inherit}.fa-border{border-color:var(--fa-border-color,#eee);border-radius:var(--fa-border-radius,.1em);border-style:var(--fa-border-style,solid);border-width:var(--fa-border-width,.08em);padding:var(--fa-border-padding,.2em .25em .15em)}.fa-pull-left{float:left;margin-right:var(--fa-pull-margin,.3em)}.fa-pull-right{float:right;margin-left:var(--fa-pull-margin,.3em)}.fa-beat{-webkit-animation-name:fa-beat;animation-name:fa-beat;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,ease-in-out);animation-timing-function:var(--fa-animation-timing,ease-in-out)}.fa-bounce{-webkit-animation-name:fa-bounce;animation-name:fa-bounce;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,cubic-bezier(.28,.84,.42,1));animation-timing-function:var(--fa-animation-timing,cubic-bezier(.28,.84,.42,1))}.fa-fade{-webkit-animation-name:fa-fade;animation-name:fa-fade;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,cubic-bezier(.4,0,.6,1));animation-timing-function:var(--fa-animation-timing,cubic-bezier(.4,0,.6,1))}.fa-beat-fade{-webkit-animation-name:fa-beat-fade;animation-name:fa-beat-fade;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,cubic-bezier(.4,0,.6,1));animation-timing-function:var(--fa-animation-timing,cubic-bezier(.4,0,.6,1))}.fa-flip{-webkit-animation-name:fa-flip;animation-name:fa-flip;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,ease-in-out);animation-timing-function:var(--fa-animation-timing,ease-in-out)}.fa-shake{-webkit-animation-name:fa-shake;animation-name:fa-shake;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,linear);animation-timing-function:var(--fa-animation-timing,linear)}.fa-spin{-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-delay:var(--fa-animation-delay,0s);animation-delay:var(--fa-animation-delay,0s);-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,2s);animation-duration:var(--fa-animation-duration,2s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,linear);animation-timing-function:var(--fa-animation-timing,linear)}.fa-spin-reverse{--fa-animation-direction:reverse}.fa-pulse,.fa-spin-pulse{-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-direction:var(--fa-animation-direction,normal);animation-direction:var(--fa-animation-direction,normal);-webkit-animation-duration:var(--fa-animation-duration,1s);animation-duration:var(--fa-animation-duration,1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count,infinite);animation-iteration-count:var(--fa-animation-iteration-count,infinite);-webkit-animation-timing-function:var(--fa-animation-timing,steps(8));animation-timing-function:var(--fa-animation-timing,steps(8))}@media (prefers-reduced-motion:reduce){.fa-beat,.fa-beat-fade,.fa-bounce,.fa-fade,.fa-flip,.fa-pulse,.fa-shake,.fa-spin,.fa-spin-pulse{-webkit-animation-delay:-1ms;animation-delay:-1ms;-webkit-animation-duration:1ms;animation-duration:1ms;-webkit-animation-iteration-count:1;animation-iteration-count:1;-webkit-transition-delay:0s;transition-delay:0s;-webkit-transition-duration:0s;transition-duration:0s}}@-webkit-keyframes fa-beat{0%,90%{-webkit-transform:scale(1);transform:scale(1)}45%{-webkit-transform:scale(var(--fa-beat-scale,1.25));transform:scale(var(--fa-beat-scale,1.25))}}@keyframes fa-beat{0%,90%{-webkit-transform:scale(1);transform:scale(1)}45%{-webkit-transform:scale(var(--fa-beat-scale,1.25));transform:scale(var(--fa-beat-scale,1.25))}}@-webkit-keyframes fa-bounce{0%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}10%{-webkit-transform:scale(var(--fa-bounce-start-scale-x,1.1),var(--fa-bounce-start-scale-y,.9)) translateY(0);transform:scale(var(--fa-bounce-start-scale-x,1.1),var(--fa-bounce-start-scale-y,.9)) translateY(0)}30%{-webkit-transform:scale(var(--fa-bounce-jump-scale-x,.9),var(--fa-bounce-jump-scale-y,1.1)) translateY(var(--fa-bounce-height,-.5em));transform:scale(var(--fa-bounce-jump-scale-x,.9),var(--fa-bounce-jump-scale-y,1.1)) translateY(var(--fa-bounce-height,-.5em))}50%{-webkit-transform:scale(var(--fa-bounce-land-scale-x,1.05),var(--fa-bounce-land-scale-y,.95)) translateY(0);transform:scale(var(--fa-bounce-land-scale-x,1.05),var(--fa-bounce-land-scale-y,.95)) translateY(0)}57%{-webkit-transform:scale(1,1) translateY(var(--fa-bounce-rebound,-.125em));transform:scale(1,1) translateY(var(--fa-bounce-rebound,-.125em))}64%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}100%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}}@keyframes fa-bounce{0%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}10%{-webkit-transform:scale(var(--fa-bounce-start-scale-x,1.1),var(--fa-bounce-start-scale-y,.9)) translateY(0);transform:scale(var(--fa-bounce-start-scale-x,1.1),var(--fa-bounce-start-scale-y,.9)) translateY(0)}30%{-webkit-transform:scale(var(--fa-bounce-jump-scale-x,.9),var(--fa-bounce-jump-scale-y,1.1)) translateY(var(--fa-bounce-height,-.5em));transform:scale(var(--fa-bounce-jump-scale-x,.9),var(--fa-bounce-jump-scale-y,1.1)) translateY(var(--fa-bounce-height,-.5em))}50%{-webkit-transform:scale(var(--fa-bounce-land-scale-x,1.05),var(--fa-bounce-land-scale-y,.95)) translateY(0);transform:scale(var(--fa-bounce-land-scale-x,1.05),var(--fa-bounce-land-scale-y,.95)) translateY(0)}57%{-webkit-transform:scale(1,1) translateY(var(--fa-bounce-rebound,-.125em));transform:scale(1,1) translateY(var(--fa-bounce-rebound,-.125em))}64%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}100%{-webkit-transform:scale(1,1) translateY(0);transform:scale(1,1) translateY(0)}}@-webkit-keyframes fa-fade{50%{opacity:var(--fa-fade-opacity,.4)}}@keyframes fa-fade{50%{opacity:var(--fa-fade-opacity,.4)}}@-webkit-keyframes fa-beat-fade{0%,100%{opacity:var(--fa-beat-fade-opacity,.4);-webkit-transform:scale(1);transform:scale(1)}50%{opacity:1;-webkit-transform:scale(var(--fa-beat-fade-scale,1.125));transform:scale(var(--fa-beat-fade-scale,1.125))}}@keyframes fa-beat-fade{0%,100%{opacity:var(--fa-beat-fade-opacity,.4);-webkit-transform:scale(1);transform:scale(1)}50%{opacity:1;-webkit-transform:scale(var(--fa-beat-fade-scale,1.125));transform:scale(var(--fa-beat-fade-scale,1.125))}}@-webkit-keyframes fa-flip{50%{-webkit-transform:rotate3d(var(--fa-flip-x,0),var(--fa-flip-y,1),var(--fa-flip-z,0),var(--fa-flip-angle,-180deg));transform:rotate3d(var(--fa-flip-x,0),var(--fa-flip-y,1),var(--fa-flip-z,0),var(--fa-flip-angle,-180deg))}}@keyframes fa-flip{50%{-webkit-transform:rotate3d(var(--fa-flip-x,0),var(--fa-flip-y,1),var(--fa-flip-z,0),var(--fa-flip-angle,-180deg));transform:rotate3d(var(--fa-flip-x,0),var(--fa-flip-y,1),var(--fa-flip-z,0),var(--fa-flip-angle,-180deg))}}@-webkit-keyframes fa-shake{0%{-webkit-transform:rotate(-15deg);transform:rotate(-15deg)}4%{-webkit-transform:rotate(15deg);transform:rotate(15deg)}24%,8%{-webkit-transform:rotate(-18deg);transform:rotate(-18deg)}12%,28%{-webkit-transform:rotate(18deg);transform:rotate(18deg)}16%{-webkit-transform:rotate(-22deg);transform:rotate(-22deg)}20%{-webkit-transform:rotate(22deg);transform:rotate(22deg)}32%{-webkit-transform:rotate(-12deg);transform:rotate(-12deg)}36%{-webkit-transform:rotate(12deg);transform:rotate(12deg)}100%,40%{-webkit-transform:rotate(0);transform:rotate(0)}}@keyframes fa-shake{0%{-webkit-transform:rotate(-15deg);transform:rotate(-15deg)}4%{-webkit-transform:rotate(15deg);transform:rotate(15deg)}24%,8%{-webkit-transform:rotate(-18deg);transform:rotate(-18deg)}12%,28%{-webkit-transform:rotate(18deg);transform:rotate(18deg)}16%{-webkit-transform:rotate(-22deg);transform:rotate(-22deg)}20%{-webkit-transform:rotate(22deg);transform:rotate(22deg)}32%{-webkit-transform:rotate(-12deg);transform:rotate(-12deg)}36%{-webkit-transform:rotate(12deg);transform:rotate(12deg)}100%,40%{-webkit-transform:rotate(0);transform:rotate(0)}}@-webkit-keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes fa-spin{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.fa-rotate-90{-webkit-transform:rotate(90deg);transform:rotate(90deg)}.fa-rotate-180{-webkit-transform:rotate(180deg);transform:rotate(180deg)}.fa-rotate-270{-webkit-transform:rotate(270deg);transform:rotate(270deg)}.fa-flip-horizontal{-webkit-transform:scale(-1,1);transform:scale(-1,1)}.fa-flip-vertical{-webkit-transform:scale(1,-1);transform:scale(1,-1)}.fa-flip-both,.fa-flip-horizontal.fa-flip-vertical{-webkit-transform:scale(-1,-1);transform:scale(-1,-1)}.fa-rotate-by{-webkit-transform:rotate(var(--fa-rotate-angle,0));transform:rotate(var(--fa-rotate-angle,0))}.fa-stack{display:inline-block;vertical-align:middle;height:2em;position:relative;width:2.5em}.fa-stack-1x,.fa-stack-2x{bottom:0;left:0;margin:auto;position:absolute;right:0;top:0;z-index:var(--fa-stack-z-index,auto)}.svg-inline--fa.fa-stack-1x{height:1em;width:1.25em}.svg-inline--fa.fa-stack-2x{height:2em;width:2.5em}.fa-inverse{color:var(--fa-inverse,#fff)}.fa-sr-only,.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}.fa-sr-only-focusable:not(:focus),.sr-only-focusable:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}.svg-inline--fa .fa-primary{fill:var(--fa-primary-color,currentColor);opacity:var(--fa-primary-opacity,1)}.svg-inline--fa .fa-secondary{fill:var(--fa-secondary-color,currentColor);opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-primary{opacity:var(--fa-secondary-opacity,.4)}.svg-inline--fa.fa-swap-opacity .fa-secondary{opacity:var(--fa-primary-opacity,1)}.svg-inline--fa mask .fa-primary,.svg-inline--fa mask .fa-secondary{fill:#000}.fa-duotone.fa-inverse,.fad.fa-inverse{color:var(--fa-inverse,#fff)}</style><link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet">
+		<!-- Loaded before other Sphinx assets -->
+		<style type="text/css">
+			:host,
+			:root {
+				--fa-font-solid: normal 900 1em/1 "Font Awesome 6 Solid";
+				--fa-font-regular: normal 400 1em/1 "Font Awesome 6 Regular";
+				--fa-font-light: normal 300 1em/1 "Font Awesome 6 Light";
+				--fa-font-thin: normal 100 1em/1 "Font Awesome 6 Thin";
+				--fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+				--fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+				--fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+				--fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+				--fa-font-sharp-thin: normal 100 1em/1 "Font Awesome 6 Sharp";
+				--fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+			}
+			svg:not(:host).svg-inline--fa,
+			svg:not(:root).svg-inline--fa {
+				overflow: visible;
+				box-sizing: content-box;
+			}
+			.svg-inline--fa {
+				display: var(--fa-display, inline-block);
+				height: 1em;
+				overflow: visible;
+				vertical-align: -0.125em;
+			}
+			.svg-inline--fa.fa-2xs {
+				vertical-align: 0.1em;
+			}
+			.svg-inline--fa.fa-xs {
+				vertical-align: 0;
+			}
+			.svg-inline--fa.fa-sm {
+				vertical-align: -0.0714285705em;
+			}
+			.svg-inline--fa.fa-lg {
+				vertical-align: -0.2em;
+			}
+			.svg-inline--fa.fa-xl {
+				vertical-align: -0.25em;
+			}
+			.svg-inline--fa.fa-2xl {
+				vertical-align: -0.3125em;
+			}
+			.svg-inline--fa.fa-pull-left {
+				margin-right: var(--fa-pull-margin, 0.3em);
+				width: auto;
+			}
+			.svg-inline--fa.fa-pull-right {
+				margin-left: var(--fa-pull-margin, 0.3em);
+				width: auto;
+			}
+			.svg-inline--fa.fa-li {
+				width: var(--fa-li-width, 2em);
+				top: 0.25em;
+			}
+			.svg-inline--fa.fa-fw {
+				width: var(--fa-fw-width, 1.25em);
+			}
+			.fa-layers svg.svg-inline--fa {
+				bottom: 0;
+				left: 0;
+				margin: auto;
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+			.fa-layers-counter,
+			.fa-layers-text {
+				display: inline-block;
+				position: absolute;
+				text-align: center;
+			}
+			.fa-layers {
+				display: inline-block;
+				height: 1em;
+				position: relative;
+				text-align: center;
+				vertical-align: -0.125em;
+				width: 1em;
+			}
+			.fa-layers svg.svg-inline--fa {
+				-webkit-transform-origin: center center;
+				transform-origin: center center;
+			}
+			.fa-layers-text {
+				left: 50%;
+				top: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+				-webkit-transform-origin: center center;
+				transform-origin: center center;
+			}
+			.fa-layers-counter {
+				background-color: var(--fa-counter-background-color, #ff253a);
+				border-radius: var(--fa-counter-border-radius, 1em);
+				box-sizing: border-box;
+				color: var(--fa-inverse, #fff);
+				line-height: var(--fa-counter-line-height, 1);
+				max-width: var(--fa-counter-max-width, 5em);
+				min-width: var(--fa-counter-min-width, 1.5em);
+				overflow: hidden;
+				padding: var(--fa-counter-padding, 0.25em 0.5em);
+				right: var(--fa-right, 0);
+				text-overflow: ellipsis;
+				top: var(--fa-top, 0);
+				-webkit-transform: scale(var(--fa-counter-scale, 0.25));
+				transform: scale(var(--fa-counter-scale, 0.25));
+				-webkit-transform-origin: top right;
+				transform-origin: top right;
+			}
+			.fa-layers-bottom-right {
+				bottom: var(--fa-bottom, 0);
+				right: var(--fa-right, 0);
+				top: auto;
+				-webkit-transform: scale(var(--fa-layers-scale, 0.25));
+				transform: scale(var(--fa-layers-scale, 0.25));
+				-webkit-transform-origin: bottom right;
+				transform-origin: bottom right;
+			}
+			.fa-layers-bottom-left {
+				bottom: var(--fa-bottom, 0);
+				left: var(--fa-left, 0);
+				right: auto;
+				top: auto;
+				-webkit-transform: scale(var(--fa-layers-scale, 0.25));
+				transform: scale(var(--fa-layers-scale, 0.25));
+				-webkit-transform-origin: bottom left;
+				transform-origin: bottom left;
+			}
+			.fa-layers-top-right {
+				top: var(--fa-top, 0);
+				right: var(--fa-right, 0);
+				-webkit-transform: scale(var(--fa-layers-scale, 0.25));
+				transform: scale(var(--fa-layers-scale, 0.25));
+				-webkit-transform-origin: top right;
+				transform-origin: top right;
+			}
+			.fa-layers-top-left {
+				left: var(--fa-left, 0);
+				right: auto;
+				top: var(--fa-top, 0);
+				-webkit-transform: scale(var(--fa-layers-scale, 0.25));
+				transform: scale(var(--fa-layers-scale, 0.25));
+				-webkit-transform-origin: top left;
+				transform-origin: top left;
+			}
+			.fa-1x {
+				font-size: 1em;
+			}
+			.fa-2x {
+				font-size: 2em;
+			}
+			.fa-3x {
+				font-size: 3em;
+			}
+			.fa-4x {
+				font-size: 4em;
+			}
+			.fa-5x {
+				font-size: 5em;
+			}
+			.fa-6x {
+				font-size: 6em;
+			}
+			.fa-7x {
+				font-size: 7em;
+			}
+			.fa-8x {
+				font-size: 8em;
+			}
+			.fa-9x {
+				font-size: 9em;
+			}
+			.fa-10x {
+				font-size: 10em;
+			}
+			.fa-2xs {
+				font-size: 0.625em;
+				line-height: 0.1em;
+				vertical-align: 0.225em;
+			}
+			.fa-xs {
+				font-size: 0.75em;
+				line-height: 0.0833333337em;
+				vertical-align: 0.125em;
+			}
+			.fa-sm {
+				font-size: 0.875em;
+				line-height: 0.0714285718em;
+				vertical-align: 0.0535714295em;
+			}
+			.fa-lg {
+				font-size: 1.25em;
+				line-height: 0.05em;
+				vertical-align: -0.075em;
+			}
+			.fa-xl {
+				font-size: 1.5em;
+				line-height: 0.0416666682em;
+				vertical-align: -0.125em;
+			}
+			.fa-2xl {
+				font-size: 2em;
+				line-height: 0.03125em;
+				vertical-align: -0.1875em;
+			}
+			.fa-fw {
+				text-align: center;
+				width: 1.25em;
+			}
+			.fa-ul {
+				list-style-type: none;
+				margin-left: var(--fa-li-margin, 2.5em);
+				padding-left: 0;
+			}
+			.fa-ul > li {
+				position: relative;
+			}
+			.fa-li {
+				left: calc(var(--fa-li-width, 2em) * -1);
+				position: absolute;
+				text-align: center;
+				width: var(--fa-li-width, 2em);
+				line-height: inherit;
+			}
+			.fa-border {
+				border-color: var(--fa-border-color, #eee);
+				border-radius: var(--fa-border-radius, 0.1em);
+				border-style: var(--fa-border-style, solid);
+				border-width: var(--fa-border-width, 0.08em);
+				padding: var(--fa-border-padding, 0.2em 0.25em 0.15em);
+			}
+			.fa-pull-left {
+				float: left;
+				margin-right: var(--fa-pull-margin, 0.3em);
+			}
+			.fa-pull-right {
+				float: right;
+				margin-left: var(--fa-pull-margin, 0.3em);
+			}
+			.fa-beat {
+				-webkit-animation-name: fa-beat;
+				animation-name: fa-beat;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(--fa-animation-timing, ease-in-out);
+				animation-timing-function: var(--fa-animation-timing, ease-in-out);
+			}
+			.fa-bounce {
+				-webkit-animation-name: fa-bounce;
+				animation-name: fa-bounce;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(
+					--fa-animation-timing,
+					cubic-bezier(0.28, 0.84, 0.42, 1)
+				);
+				animation-timing-function: var(
+					--fa-animation-timing,
+					cubic-bezier(0.28, 0.84, 0.42, 1)
+				);
+			}
+			.fa-fade {
+				-webkit-animation-name: fa-fade;
+				animation-name: fa-fade;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(
+					--fa-animation-timing,
+					cubic-bezier(0.4, 0, 0.6, 1)
+				);
+				animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+			}
+			.fa-beat-fade {
+				-webkit-animation-name: fa-beat-fade;
+				animation-name: fa-beat-fade;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(
+					--fa-animation-timing,
+					cubic-bezier(0.4, 0, 0.6, 1)
+				);
+				animation-timing-function: var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));
+			}
+			.fa-flip {
+				-webkit-animation-name: fa-flip;
+				animation-name: fa-flip;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(--fa-animation-timing, ease-in-out);
+				animation-timing-function: var(--fa-animation-timing, ease-in-out);
+			}
+			.fa-shake {
+				-webkit-animation-name: fa-shake;
+				animation-name: fa-shake;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(--fa-animation-timing, linear);
+				animation-timing-function: var(--fa-animation-timing, linear);
+			}
+			.fa-spin {
+				-webkit-animation-name: fa-spin;
+				animation-name: fa-spin;
+				-webkit-animation-delay: var(--fa-animation-delay, 0s);
+				animation-delay: var(--fa-animation-delay, 0s);
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 2s);
+				animation-duration: var(--fa-animation-duration, 2s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(--fa-animation-timing, linear);
+				animation-timing-function: var(--fa-animation-timing, linear);
+			}
+			.fa-spin-reverse {
+				--fa-animation-direction: reverse;
+			}
+			.fa-pulse,
+			.fa-spin-pulse {
+				-webkit-animation-name: fa-spin;
+				animation-name: fa-spin;
+				-webkit-animation-direction: var(--fa-animation-direction, normal);
+				animation-direction: var(--fa-animation-direction, normal);
+				-webkit-animation-duration: var(--fa-animation-duration, 1s);
+				animation-duration: var(--fa-animation-duration, 1s);
+				-webkit-animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+				-webkit-animation-timing-function: var(--fa-animation-timing, steps(8));
+				animation-timing-function: var(--fa-animation-timing, steps(8));
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.fa-beat,
+				.fa-beat-fade,
+				.fa-bounce,
+				.fa-fade,
+				.fa-flip,
+				.fa-pulse,
+				.fa-shake,
+				.fa-spin,
+				.fa-spin-pulse {
+					-webkit-animation-delay: -1ms;
+					animation-delay: -1ms;
+					-webkit-animation-duration: 1ms;
+					animation-duration: 1ms;
+					-webkit-animation-iteration-count: 1;
+					animation-iteration-count: 1;
+					-webkit-transition-delay: 0s;
+					transition-delay: 0s;
+					-webkit-transition-duration: 0s;
+					transition-duration: 0s;
+				}
+			}
+			@-webkit-keyframes fa-beat {
+				0%,
+				90% {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+				}
+				45% {
+					-webkit-transform: scale(var(--fa-beat-scale, 1.25));
+					transform: scale(var(--fa-beat-scale, 1.25));
+				}
+			}
+			@keyframes fa-beat {
+				0%,
+				90% {
+					-webkit-transform: scale(1);
+					transform: scale(1);
+				}
+				45% {
+					-webkit-transform: scale(var(--fa-beat-scale, 1.25));
+					transform: scale(var(--fa-beat-scale, 1.25));
+				}
+			}
+			@-webkit-keyframes fa-bounce {
+				0% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+				10% {
+					-webkit-transform: scale(
+							var(--fa-bounce-start-scale-x, 1.1),
+							var(--fa-bounce-start-scale-y, 0.9)
+						)
+						translateY(0);
+					transform: scale(
+							var(--fa-bounce-start-scale-x, 1.1),
+							var(--fa-bounce-start-scale-y, 0.9)
+						)
+						translateY(0);
+				}
+				30% {
+					-webkit-transform: scale(
+							var(--fa-bounce-jump-scale-x, 0.9),
+							var(--fa-bounce-jump-scale-y, 1.1)
+						)
+						translateY(var(--fa-bounce-height, -0.5em));
+					transform: scale(
+							var(--fa-bounce-jump-scale-x, 0.9),
+							var(--fa-bounce-jump-scale-y, 1.1)
+						)
+						translateY(var(--fa-bounce-height, -0.5em));
+				}
+				50% {
+					-webkit-transform: scale(
+							var(--fa-bounce-land-scale-x, 1.05),
+							var(--fa-bounce-land-scale-y, 0.95)
+						)
+						translateY(0);
+					transform: scale(
+							var(--fa-bounce-land-scale-x, 1.05),
+							var(--fa-bounce-land-scale-y, 0.95)
+						)
+						translateY(0);
+				}
+				57% {
+					-webkit-transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+					transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+				}
+				64% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+				100% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+			}
+			@keyframes fa-bounce {
+				0% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+				10% {
+					-webkit-transform: scale(
+							var(--fa-bounce-start-scale-x, 1.1),
+							var(--fa-bounce-start-scale-y, 0.9)
+						)
+						translateY(0);
+					transform: scale(
+							var(--fa-bounce-start-scale-x, 1.1),
+							var(--fa-bounce-start-scale-y, 0.9)
+						)
+						translateY(0);
+				}
+				30% {
+					-webkit-transform: scale(
+							var(--fa-bounce-jump-scale-x, 0.9),
+							var(--fa-bounce-jump-scale-y, 1.1)
+						)
+						translateY(var(--fa-bounce-height, -0.5em));
+					transform: scale(
+							var(--fa-bounce-jump-scale-x, 0.9),
+							var(--fa-bounce-jump-scale-y, 1.1)
+						)
+						translateY(var(--fa-bounce-height, -0.5em));
+				}
+				50% {
+					-webkit-transform: scale(
+							var(--fa-bounce-land-scale-x, 1.05),
+							var(--fa-bounce-land-scale-y, 0.95)
+						)
+						translateY(0);
+					transform: scale(
+							var(--fa-bounce-land-scale-x, 1.05),
+							var(--fa-bounce-land-scale-y, 0.95)
+						)
+						translateY(0);
+				}
+				57% {
+					-webkit-transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+					transform: scale(1, 1) translateY(var(--fa-bounce-rebound, -0.125em));
+				}
+				64% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+				100% {
+					-webkit-transform: scale(1, 1) translateY(0);
+					transform: scale(1, 1) translateY(0);
+				}
+			}
+			@-webkit-keyframes fa-fade {
+				50% {
+					opacity: var(--fa-fade-opacity, 0.4);
+				}
+			}
+			@keyframes fa-fade {
+				50% {
+					opacity: var(--fa-fade-opacity, 0.4);
+				}
+			}
+			@-webkit-keyframes fa-beat-fade {
+				0%,
+				100% {
+					opacity: var(--fa-beat-fade-opacity, 0.4);
+					-webkit-transform: scale(1);
+					transform: scale(1);
+				}
+				50% {
+					opacity: 1;
+					-webkit-transform: scale(var(--fa-beat-fade-scale, 1.125));
+					transform: scale(var(--fa-beat-fade-scale, 1.125));
+				}
+			}
+			@keyframes fa-beat-fade {
+				0%,
+				100% {
+					opacity: var(--fa-beat-fade-opacity, 0.4);
+					-webkit-transform: scale(1);
+					transform: scale(1);
+				}
+				50% {
+					opacity: 1;
+					-webkit-transform: scale(var(--fa-beat-fade-scale, 1.125));
+					transform: scale(var(--fa-beat-fade-scale, 1.125));
+				}
+			}
+			@-webkit-keyframes fa-flip {
+				50% {
+					-webkit-transform: rotate3d(
+						var(--fa-flip-x, 0),
+						var(--fa-flip-y, 1),
+						var(--fa-flip-z, 0),
+						var(--fa-flip-angle, -180deg)
+					);
+					transform: rotate3d(
+						var(--fa-flip-x, 0),
+						var(--fa-flip-y, 1),
+						var(--fa-flip-z, 0),
+						var(--fa-flip-angle, -180deg)
+					);
+				}
+			}
+			@keyframes fa-flip {
+				50% {
+					-webkit-transform: rotate3d(
+						var(--fa-flip-x, 0),
+						var(--fa-flip-y, 1),
+						var(--fa-flip-z, 0),
+						var(--fa-flip-angle, -180deg)
+					);
+					transform: rotate3d(
+						var(--fa-flip-x, 0),
+						var(--fa-flip-y, 1),
+						var(--fa-flip-z, 0),
+						var(--fa-flip-angle, -180deg)
+					);
+				}
+			}
+			@-webkit-keyframes fa-shake {
+				0% {
+					-webkit-transform: rotate(-15deg);
+					transform: rotate(-15deg);
+				}
+				4% {
+					-webkit-transform: rotate(15deg);
+					transform: rotate(15deg);
+				}
+				24%,
+				8% {
+					-webkit-transform: rotate(-18deg);
+					transform: rotate(-18deg);
+				}
+				12%,
+				28% {
+					-webkit-transform: rotate(18deg);
+					transform: rotate(18deg);
+				}
+				16% {
+					-webkit-transform: rotate(-22deg);
+					transform: rotate(-22deg);
+				}
+				20% {
+					-webkit-transform: rotate(22deg);
+					transform: rotate(22deg);
+				}
+				32% {
+					-webkit-transform: rotate(-12deg);
+					transform: rotate(-12deg);
+				}
+				36% {
+					-webkit-transform: rotate(12deg);
+					transform: rotate(12deg);
+				}
+				100%,
+				40% {
+					-webkit-transform: rotate(0);
+					transform: rotate(0);
+				}
+			}
+			@keyframes fa-shake {
+				0% {
+					-webkit-transform: rotate(-15deg);
+					transform: rotate(-15deg);
+				}
+				4% {
+					-webkit-transform: rotate(15deg);
+					transform: rotate(15deg);
+				}
+				24%,
+				8% {
+					-webkit-transform: rotate(-18deg);
+					transform: rotate(-18deg);
+				}
+				12%,
+				28% {
+					-webkit-transform: rotate(18deg);
+					transform: rotate(18deg);
+				}
+				16% {
+					-webkit-transform: rotate(-22deg);
+					transform: rotate(-22deg);
+				}
+				20% {
+					-webkit-transform: rotate(22deg);
+					transform: rotate(22deg);
+				}
+				32% {
+					-webkit-transform: rotate(-12deg);
+					transform: rotate(-12deg);
+				}
+				36% {
+					-webkit-transform: rotate(12deg);
+					transform: rotate(12deg);
+				}
+				100%,
+				40% {
+					-webkit-transform: rotate(0);
+					transform: rotate(0);
+				}
+			}
+			@-webkit-keyframes fa-spin {
+				0% {
+					-webkit-transform: rotate(0);
+					transform: rotate(0);
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes fa-spin {
+				0% {
+					-webkit-transform: rotate(0);
+					transform: rotate(0);
+				}
+				100% {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			.fa-rotate-90 {
+				-webkit-transform: rotate(90deg);
+				transform: rotate(90deg);
+			}
+			.fa-rotate-180 {
+				-webkit-transform: rotate(180deg);
+				transform: rotate(180deg);
+			}
+			.fa-rotate-270 {
+				-webkit-transform: rotate(270deg);
+				transform: rotate(270deg);
+			}
+			.fa-flip-horizontal {
+				-webkit-transform: scale(-1, 1);
+				transform: scale(-1, 1);
+			}
+			.fa-flip-vertical {
+				-webkit-transform: scale(1, -1);
+				transform: scale(1, -1);
+			}
+			.fa-flip-both,
+			.fa-flip-horizontal.fa-flip-vertical {
+				-webkit-transform: scale(-1, -1);
+				transform: scale(-1, -1);
+			}
+			.fa-rotate-by {
+				-webkit-transform: rotate(var(--fa-rotate-angle, 0));
+				transform: rotate(var(--fa-rotate-angle, 0));
+			}
+			.fa-stack {
+				display: inline-block;
+				vertical-align: middle;
+				height: 2em;
+				position: relative;
+				width: 2.5em;
+			}
+			.fa-stack-1x,
+			.fa-stack-2x {
+				bottom: 0;
+				left: 0;
+				margin: auto;
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: var(--fa-stack-z-index, auto);
+			}
+			.svg-inline--fa.fa-stack-1x {
+				height: 1em;
+				width: 1.25em;
+			}
+			.svg-inline--fa.fa-stack-2x {
+				height: 2em;
+				width: 2.5em;
+			}
+			.fa-inverse {
+				color: var(--fa-inverse, #fff);
+			}
+			.fa-sr-only,
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border-width: 0;
+			}
+			.fa-sr-only-focusable:not(:focus),
+			.sr-only-focusable:not(:focus) {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border-width: 0;
+			}
+			.svg-inline--fa .fa-primary {
+				fill: var(--fa-primary-color, currentColor);
+				opacity: var(--fa-primary-opacity, 1);
+			}
+			.svg-inline--fa .fa-secondary {
+				fill: var(--fa-secondary-color, currentColor);
+				opacity: var(--fa-secondary-opacity, 0.4);
+			}
+			.svg-inline--fa.fa-swap-opacity .fa-primary {
+				opacity: var(--fa-secondary-opacity, 0.4);
+			}
+			.svg-inline--fa.fa-swap-opacity .fa-secondary {
+				opacity: var(--fa-primary-opacity, 1);
+			}
+			.svg-inline--fa mask .fa-primary,
+			.svg-inline--fa mask .fa-secondary {
+				fill: #000;
+			}
+			.fa-duotone.fa-inverse,
+			.fad.fa-inverse {
+				color: var(--fa-inverse, #fff);
+			}
+		</style>
+		<link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+		<link
+			href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf"
+			rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079">
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
-    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css">
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8">
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c">
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c">
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3">
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e">
-    <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=4bb1f280">
-  
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf">
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf">
+		<link href="../../_static/pygments.css?v=03e43079" rel="stylesheet" type="text/css" />
+		<link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css" />
+		<link href="../../_static/plot_directive.css" rel="stylesheet" type="text/css" />
+		<link href="../../_static/sg_gallery.css?v=d2d258e8" rel="stylesheet" type="text/css" />
+		<link
+			href="../../_static/sg_gallery-binder.css?v=f4aeca0c"
+			rel="stylesheet"
+			type="text/css" />
+		<link
+			href="../../_static/sg_gallery-dataframe.css?v=2082cf3c"
+			rel="stylesheet"
+			type="text/css" />
+		<link
+			href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3"
+			rel="stylesheet"
+			type="text/css" />
+		<link
+			href="../../_static/sphinx-design.min.css?v=95c83b7e"
+			rel="stylesheet"
+			type="text/css" />
+		<link
+			href="../../_static/theme_overrides.css?v=4bb1f280"
+			rel="stylesheet"
+			type="text/css" />
 
-    <script src="../../_static/documentation_options.js?v=4aa2dafa"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script data-domain="scikit-image.org" defer="defer" src="https://views.scientific-python.org/js/script.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/edges/plot_skeleton';</script>
-    <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
-        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://scikit-image.org/docs/dev/_static/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.26.0';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner =
-            true;
-        </script>
-    <link rel="icon" href="../../_static/favicon.ico">
-    <link rel="index" title="Index" href="../../genindex.html">
-    <link rel="search" title="Search" href="../../search.html">
-    <link rel="next" title="Edge operators" href="plot_edge_filter.html">
-    <link rel="prev" title="Circular and Elliptical Hough Transforms" href="plot_circular_elliptical_hough_transform.html">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="docsearch:language" content="en">
-  <meta name="docsearch:version" content="0.26.0">
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="" style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+		<!-- So that users can add custom icons -->
+		<script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+		<!-- Pre-loaded scripts that we'll load fully later -->
+		<link
+			as="script"
+			href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"
+			rel="preload" />
+		<link
+			as="script"
+			href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"
+			rel="preload" />
 
-  
-  
-  
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top" style="display: none;">
-    <svg class="svg-inline--fa fa-arrow-up" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-up" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg><!-- <i class="fa-solid fa-arrow-up"></i> Font Awesome fontawesome.com -->Back to top</button>
+		<script src="../../_static/documentation_options.js?v=4aa2dafa"></script>
+		<script src="../../_static/doctools.js?v=9bcbadda"></script>
+		<script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+		<script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+		<script src="../../_static/copybutton.js?v=f281be69"></script>
+		<script src="../../_static/design-tabs.js?v=f930bc37"></script>
+		<script
+			defer="defer"
+			src="https://views.scientific-python.org/js/script.js"
+			data-domain="scikit-image.org"></script>
+		<script>
+			DOCUMENTATION_OPTIONS.pagename = "auto_examples/edges/plot_skeleton";
+		</script>
+		<script>
+			DOCUMENTATION_OPTIONS.theme_version = "0.16.1";
+			DOCUMENTATION_OPTIONS.theme_switcher_json_url =
+				"https://scikit-image.org/docs/dev/_static/version_switcher.json";
+			DOCUMENTATION_OPTIONS.theme_switcher_version_match = "0.26.0";
+			DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+		</script>
+		<link href="../../_static/favicon.ico" rel="icon" />
+		<link href="../../genindex.html" rel="index" title="Index" />
+		<link href="../../search.html" rel="search" title="Search" />
+		<link href="plot_edge_filter.html" rel="next" title="Edge operators" />
+		<link
+			href="plot_circular_elliptical_hough_transform.html"
+			rel="prev"
+			title="Circular and Elliptical Hough Transforms" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<meta content="en" name="docsearch:language" />
+		<meta content="0.26.0" name="docsearch:version" />
+	</head>
 
-  
-  <dialog id="pst-search-dialog">
-    
-<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
-  <svg class="svg-inline--fa fa-magnifying-glass" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg><!-- <i class="fa-solid fa-magnifying-glass"></i> Font Awesome fontawesome.com -->
-  <input type="search" class="form-control" name="q" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+	<body
+		style="margin-right: 0px; padding-right: 0px; overflow: auto"
+		data-bs-root-margin="0px 0px -60%"
+		data-bs-spy="scroll"
+		data-bs-target=".bd-toc-nav"
+		data-default-mode=""
+		data-offset="180">
+		<div id="pst-scroll-pixel-helper"></div>
 
-  <div class="pst-async-banner-revealer" style="height: auto;">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
+		<button class="btn rounded-pill" id="pst-back-to-top" style="display: none" type="button">
+			<svg
+				aria-hidden="true"
+				class="svg-inline--fa fa-arrow-up"
+				focusable="false"
+				role="img"
+				viewBox="0 0 384 512"
+				xmlns="http://www.w3.org/2000/svg"
+				data-fa-i2svg=""
+				data-icon="arrow-up"
+				data-prefix="fas">
+				<path
+					d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+					fill="currentColor"></path></svg
+			><!-- <i class="fa-solid fa-arrow-up"></i> Font Awesome fontawesome.com -->Back to top
+		</button>
 
-  
-    
-  
+		<dialog id="pst-search-dialog">
+			<form
+				action="../../search.html"
+				class="bd-search d-flex align-items-center"
+				method="get">
+				<svg
+					aria-hidden="true"
+					class="svg-inline--fa fa-magnifying-glass"
+					focusable="false"
+					role="img"
+					viewBox="0 0 512 512"
+					xmlns="http://www.w3.org/2000/svg"
+					data-fa-i2svg=""
+					data-icon="magnifying-glass"
+					data-prefix="fas">
+					<path
+						d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+						fill="currentColor"></path></svg
+				><!-- <i class="fa-solid fa-magnifying-glass"></i> Font Awesome fontawesome.com -->
+				<input
+					aria-label="Search the docs ..."
+					autocapitalize="off"
+					autocomplete="off"
+					autocorrect="off"
+					class="form-control"
+					name="q"
+					placeholder="Search the docs ..."
+					spellcheck="false"
+					type="search" />
+				<span class="search-button__kbd-shortcut"
+					><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span
+				>
+			</form>
+		</dialog>
 
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      
-      
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      
-      
-      <main id="main-content" class="bd-main" role="main">
-        
-        
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article d-print-none">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item">
+		<div class="pst-async-banner-revealer" style="height: auto">
+			<aside
+				aria-label="Version warning"
+				class="d-none d-print-none"
+				id="bd-header-version-warning"></aside>
+		</div>
 
-<nav aria-label="Breadcrumb" class="d-print-none">
-  <ul class="bd-breadcrumbs">
-    
-    <li class="breadcrumb-item breadcrumb-home">
-      <a href="../../index.html" class="nav-link" aria-label="Home">
-        <svg class="svg-inline--fa fa-house" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="house" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg><!-- <i class="fa-solid fa-home"></i> Font Awesome fontawesome.com -->
-      </a>
-    </li>
-    
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Examples</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Edges and lines</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Skeletonize</span></li>
-  </ul>
-</nav>
-</div>
-      
-    </div>
-  
-  
-</div>
-</div>
-              
-              
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-auto-examples-edges-plot-skeleton-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code or to run this example in your browser via Binder.</p>
-</div>
-<section class="sphx-glr-example-title" id="skeletonize">
-<span id="sphx-glr-auto-examples-edges-plot-skeleton-py"></span><h1>Skeletonize<a class="headerlink" href="#skeletonize" title="Link to this heading">#</a></h1>
-<p>Skeletonization reduces binary objects to 1 pixel wide representations. This
-can be useful for feature extraction, and/or representing an object’s topology.</p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> works by making successive passes of the image. On each pass,
-border pixels are identified and removed on the condition that they do not
-break the connectivity of the corresponding object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre id="codecell0" tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a>
+		<div class="bd-container">
+			<div class="bd-container__inner bd-page-width">
+				<dialog id="pst-primary-sidebar-modal"></dialog>
+
+				<main class="bd-main" id="main-content" role="main">
+					<div class="bd-content">
+						<div class="bd-article-container">
+							<div class="bd-header-article d-print-none">
+								<div class="header-article-items header-article__inner">
+									<div class="header-article-items__start">
+										<div class="header-article-item">
+											<nav aria-label="Breadcrumb" class="d-print-none">
+												<ul class="bd-breadcrumbs">
+													<li class="breadcrumb-item breadcrumb-home">
+														<a
+															aria-label="Home"
+															class="nav-link"
+															href="../../index.html">
+															<svg
+																aria-hidden="true"
+																class="svg-inline--fa fa-house"
+																focusable="false"
+																role="img"
+																viewBox="0 0 576 512"
+																xmlns="http://www.w3.org/2000/svg"
+																data-fa-i2svg=""
+																data-icon="house"
+																data-prefix="fas">
+																<path
+																	d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"
+																	fill="currentColor"></path></svg
+															><!-- <i class="fa-solid fa-home"></i> Font Awesome fontawesome.com -->
+														</a>
+													</li>
+
+													<li class="breadcrumb-item">
+														<a class="nav-link" href="../index.html"
+															>Examples</a
+														>
+													</li>
+
+													<li class="breadcrumb-item">
+														<a class="nav-link" href="index.html"
+															>Edges and lines</a
+														>
+													</li>
+
+													<li
+														aria-current="page"
+														class="breadcrumb-item active">
+														<span class="ellipsis">Skeletonize</span>
+													</li>
+												</ul>
+											</nav>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div id="searchbox"></div>
+							<article class="bd-article">
+								<div class="sphx-glr-download-link-note admonition note">
+									<p class="admonition-title">Note</p>
+									<p>
+										<a
+											class="reference internal"
+											href="#sphx-glr-download-auto-examples-edges-plot-skeleton-py"
+											><span class="std std-ref">Go to the end</span></a
+										>
+										to download the full example code or to run this example in
+										your browser via Binder.
+									</p>
+								</div>
+								<section class="sphx-glr-example-title" id="skeletonize">
+									<span id="sphx-glr-auto-examples-edges-plot-skeleton-py"></span>
+									<h1>
+										Skeletonize<a
+											class="headerlink"
+											href="#skeletonize"
+											title="Link to this heading"
+											>#</a
+										>
+									</h1>
+									<p>
+										Skeletonization reduces binary objects to 1 pixel wide
+										representations. This can be useful for feature extraction,
+										and/or representing an object’s topology.
+									</p>
+									<p>
+										<code class="docutils literal notranslate"
+											><span class="pre">skeletonize</span></code
+										>
+										works by making successive passes of the image. On each
+										pass, border pixels are identified and removed on the
+										condition that they do not break the connectivity of the
+										corresponding object.
+									</p>
+									<div class="highlight-Python notranslate">
+										<div class="highlight">
+											<pre
+												id="codecell0"
+												tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skimage.util</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.util.html#skimage.util.invert" title="skimage.util.invert" class="sphx-glr-backref-module-skimage-util sphx-glr-backref-type-py-function"><span class="n">invert</span></a>
@@ -185,50 +1090,129 @@ break the connectivity of the corresponding object.</p>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell0">
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <title>Copy to clipboard</title>
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-  <rect x="8" y="8" width="12" height="12" rx="2"></rect>
-  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-</svg>
-    </button></div>
-</div>
-<img src="../../_images/sphx_glr_plot_skeleton_001.png" srcset="../../_images/sphx_glr_plot_skeleton_001.png" alt="original, skeleton" class="sphx-glr-single-img" width="800" height="400"><p><strong>Zhang’s method vs Lee’s method</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> <a class="reference internal" href="#zha84" id="id1"><span>[Zha84]</span></a> works by making successive passes of
-the image, removing pixels on object borders. This continues until no
-more pixels can be removed.  The image is correlated with a
-mask that assigns each pixel a number in the range [0…255]
-corresponding to each possible pattern of its 8 neighboring
-pixels. A look up table is then used to assign the pixels a
-value of 0, 1, 2 or 3, which are selectively removed during
-the iterations.</p>
-<p><code class="docutils literal notranslate"><span class="pre">skeletonize(...,</span> <span class="pre">method='lee')</span></code> <a class="reference internal" href="#lee94" id="id2"><span>[Lee94]</span></a> uses an octree data structure
-to examine a 3x3x3 neighborhood of a pixel. The algorithm proceeds by
-iteratively sweeping over the image, and removing pixels at each iteration
-until the image stops changing. Each iteration consists of two steps: first,
-a list of candidates for removal is assembled; then pixels from this list
-are rechecked sequentially, to better preserve connectivity of the image.</p>
-<p>Note that Lee’s method <a class="reference internal" href="#lee94" id="id3"><span>[Lee94]</span></a> is designed to be used on 3-D images, and
-is selected automatically for those. For illustrative purposes, we apply
-this algorithm to a 2-D image.</p>
-<div role="list" class="citation-list">
-<div class="citation" id="zha84" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Zha84</a><span class="fn-bracket">]</span></span>
-<p>A fast parallel algorithm for thinning digital patterns,
-T. Y. Zhang and C. Y. Suen, Communications of the ACM,
-March 1984, Volume 27, Number 3.</p>
-</div>
-<div class="citation" id="lee94" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>Lee94<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
-<p>T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building skeleton models
-via 3-D medial surface/axis thinning algorithms.
-Computer Vision, Graphics, and Image Processing, 56(6):462-478,
-1994.</p>
-</div>
-</div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre id="codecell1" tabindex="-1"><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre>
+											<button
+												class="copybtn o-tooltip--left"
+												data-clipboard-target="#codecell0"
+												data-tooltip="Copy">
+												<svg
+													class="icon icon-tabler icon-tabler-copy"
+													fill="none"
+													height="44"
+													stroke="#000000"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="1.5"
+													viewBox="0 0 24 24"
+													width="44"
+													xmlns="http://www.w3.org/2000/svg">
+													<title>Copy to clipboard</title>
+													<path
+														d="M0 0h24v24H0z"
+														fill="none"
+														stroke="none"></path>
+													<rect
+														height="12"
+														rx="2"
+														width="12"
+														x="8"
+														y="8"></rect>
+													<path
+														d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<img
+										alt="original, skeleton"
+										class="sphx-glr-single-img"
+										height="400"
+										src="../../_images/sphx_glr_plot_skeleton_001.png"
+										srcset="../../_images/sphx_glr_plot_skeleton_001.png"
+										width="800" />
+									<p><strong>Zhang’s method vs Lee’s method</strong></p>
+									<p>
+										<code class="docutils literal notranslate"
+											><span class="pre">skeletonize</span></code
+										>
+										<a class="reference internal" href="#zha84" id="id1"
+											><span>[Zha84]</span></a
+										>
+										works by making successive passes of the image, removing
+										pixels on object borders. This continues until no more
+										pixels can be removed. The image is correlated with a mask
+										that assigns each pixel a number in the range [0…255]
+										corresponding to each possible pattern of its 8 neighboring
+										pixels. A look up table is then used to assign the pixels a
+										value of 0, 1, 2 or 3, which are selectively removed during
+										the iterations.
+									</p>
+									<p>
+										<code class="docutils literal notranslate"
+											><span class="pre">skeletonize(...,</span>
+											<span class="pre">method='lee')</span></code
+										>
+										<a class="reference internal" href="#lee94" id="id2"
+											><span>[Lee94]</span></a
+										>
+										uses an octree data structure to examine a 3x3x3
+										neighborhood of a pixel. The algorithm proceeds by
+										iteratively sweeping over the image, and removing pixels at
+										each iteration until the image stops changing. Each
+										iteration consists of two steps: first, a list of candidates
+										for removal is assembled; then pixels from this list are
+										rechecked sequentially, to better preserve connectivity of
+										the image.
+									</p>
+									<p>
+										Note that Lee’s method
+										<a class="reference internal" href="#lee94" id="id3"
+											><span>[Lee94]</span></a
+										>
+										is designed to be used on 3-D images, and is selected
+										automatically for those. For illustrative purposes, we apply
+										this algorithm to a 2-D image.
+									</p>
+									<div class="citation-list" role="list">
+										<div class="citation" id="zha84" role="doc-biblioentry">
+											<span class="label"
+												><span class="fn-bracket">[</span
+												><a href="#id1" role="doc-backlink">Zha84</a
+												><span class="fn-bracket">]</span></span
+											>
+											<p>
+												A fast parallel algorithm for thinning digital
+												patterns, T. Y. Zhang and C. Y. Suen, Communications
+												of the ACM, March 1984, Volume 27, Number 3.
+											</p>
+										</div>
+										<div class="citation" id="lee94" role="doc-biblioentry">
+											<span class="label"
+												><span class="fn-bracket">[</span>Lee94<span
+													class="fn-bracket"
+													>]</span
+												></span
+											>
+											<span class="backrefs"
+												>(<a href="#id2" role="doc-backlink">1</a>,<a
+													href="#id3"
+													role="doc-backlink"
+													>2</a
+												>)</span
+											>
+											<p>
+												T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building
+												skeleton models via 3-D medial surface/axis thinning
+												algorithms. Computer Vision, Graphics, and Image
+												Processing, 56(6):462-478, 1994.
+											</p>
+										</div>
+									</div>
+									<div class="highlight-Python notranslate">
+										<div class="highlight">
+											<pre
+												id="codecell1"
+												tabindex="-1"><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">blobs</span></a> <span class="o">=</span> <a href="../../api/skimage.data.html#skimage.data.binary_blobs" title="skimage.data.binary_blobs" class="sphx-glr-backref-module-skimage-data sphx-glr-backref-type-py-function"><span class="n">data</span><span class="o">.</span><span class="n">binary_blobs</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">blob_size_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">volume_fraction</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -253,28 +1237,80 @@ Computer Vision, Graphics, and Image Processing, 56(6):462-478,
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell1">
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <title>Copy to clipboard</title>
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-  <rect x="8" y="8" width="12" height="12" rx="2"></rect>
-  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-</svg>
-    </button></div>
-</div>
-<img src="../../_images/sphx_glr_plot_skeleton_002.png" srcset="../../_images/sphx_glr_plot_skeleton_002.png" alt="original, skeletonize, skeletonize (Lee 94)" class="sphx-glr-single-img" width="800" height="400"><p><strong>Medial axis skeletonization</strong></p>
-<p>The medial axis of an object is the set of all points having more than one
-closest point on the object’s boundary. It is often called the <em>topological
-skeleton</em>, because it is a 1-pixel wide skeleton of the object, with the same
-connectivity as the original object.</p>
-<p>Here, we use the medial axis transform to compute the width of the foreground
-objects. As the function <code class="docutils literal notranslate"><span class="pre">medial_axis</span></code> returns the distance transform in
-addition to the medial axis (with the keyword argument <code class="docutils literal notranslate"><span class="pre">return_distance=True</span></code>),
-it is possible to compute the distance to the background for all points of
-the medial axis with this function. This gives an estimate of the local width
-of the objects.</p>
-<p>For a skeleton with fewer branches, <code class="docutils literal notranslate"><span class="pre">skeletonize</span></code> should be preferred.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre id="codecell2" tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.medial_axis" title="skimage.morphology.medial_axis" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">medial_axis</span></a><span class="p">,</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a>
+</pre>
+											<button
+												class="copybtn o-tooltip--left"
+												data-clipboard-target="#codecell1"
+												data-tooltip="Copy">
+												<svg
+													class="icon icon-tabler icon-tabler-copy"
+													fill="none"
+													height="44"
+													stroke="#000000"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="1.5"
+													viewBox="0 0 24 24"
+													width="44"
+													xmlns="http://www.w3.org/2000/svg">
+													<title>Copy to clipboard</title>
+													<path
+														d="M0 0h24v24H0z"
+														fill="none"
+														stroke="none"></path>
+													<rect
+														height="12"
+														rx="2"
+														width="12"
+														x="8"
+														y="8"></rect>
+													<path
+														d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<img
+										alt="original, skeletonize, skeletonize (Lee 94)"
+										class="sphx-glr-single-img"
+										height="400"
+										src="../../_images/sphx_glr_plot_skeleton_002.png"
+										srcset="../../_images/sphx_glr_plot_skeleton_002.png"
+										width="800" />
+									<p><strong>Medial axis skeletonization</strong></p>
+									<p>
+										The medial axis of an object is the set of all points having
+										more than one closest point on the object’s boundary. It is
+										often called the <em>topological skeleton</em>, because it
+										is a 1-pixel wide skeleton of the object, with the same
+										connectivity as the original object.
+									</p>
+									<p>
+										Here, we use the medial axis transform to compute the width
+										of the foreground objects. As the function
+										<code class="docutils literal notranslate"
+											><span class="pre">medial_axis</span></code
+										>
+										returns the distance transform in addition to the medial
+										axis (with the keyword argument
+										<code class="docutils literal notranslate"
+											><span class="pre">return_distance=True</span></code
+										>), it is possible to compute the distance to the background
+										for all points of the medial axis with this function. This
+										gives an estimate of the local width of the objects.
+									</p>
+									<p>
+										For a skeleton with fewer branches,
+										<code class="docutils literal notranslate"
+											><span class="pre">skeletonize</span></code
+										>
+										should be preferred.
+									</p>
+									<div class="highlight-Python notranslate">
+										<div class="highlight">
+											<pre
+												id="codecell2"
+												tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.medial_axis" title="skimage.morphology.medial_axis" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">medial_axis</span></a><span class="p">,</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a>
 
 <span class="c1"># Generate the data</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">blobs</span></a> <span class="o">=</span> <a href="../../api/skimage.data.html#skimage.data.binary_blobs" title="skimage.data.binary_blobs" class="sphx-glr-backref-module-skimage-data sphx-glr-backref-type-py-function"><span class="n">data</span><span class="o">.</span><span class="n">binary_blobs</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">blob_size_fraction</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">volume_fraction</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -311,25 +1347,77 @@ of the objects.</p>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <title>Copy to clipboard</title>
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-  <rect x="8" y="8" width="12" height="12" rx="2"></rect>
-  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-</svg>
-    </button></div>
-</div>
-<img src="../../_images/sphx_glr_plot_skeleton_003.png" srcset="../../_images/sphx_glr_plot_skeleton_003.png" alt="original, medial_axis, skeletonize, skeletonize (Lee 94)" class="sphx-glr-single-img" width="800" height="800"><p><strong>Morphological thinning</strong></p>
-<p>Morphological thinning, implemented in the <code class="xref py py-obj docutils literal notranslate"><span class="pre">thin</span></code> function, works on the
-same principle as <code class="xref py py-obj docutils literal notranslate"><span class="pre">skeletonize</span></code>: remove pixels from the borders at each
-iteration until none can be removed without altering the connectivity. The
-different rules of removal can speed up skeletonization and result in
-different final skeletons.</p>
-<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">thin</span></code> function also takes an optional <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_num_iter</span></code> keyword argument to
-limit the number of thinning iterations, and thus produce a relatively
-thicker skeleton.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre id="codecell3" tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a><span class="p">,</span> <a href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">thin</span></a>
+</pre>
+											<button
+												class="copybtn o-tooltip--left"
+												data-clipboard-target="#codecell2"
+												data-tooltip="Copy">
+												<svg
+													class="icon icon-tabler icon-tabler-copy"
+													fill="none"
+													height="44"
+													stroke="#000000"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="1.5"
+													viewBox="0 0 24 24"
+													width="44"
+													xmlns="http://www.w3.org/2000/svg">
+													<title>Copy to clipboard</title>
+													<path
+														d="M0 0h24v24H0z"
+														fill="none"
+														stroke="none"></path>
+													<rect
+														height="12"
+														rx="2"
+														width="12"
+														x="8"
+														y="8"></rect>
+													<path
+														d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<img
+										alt="original, medial_axis, skeletonize, skeletonize (Lee 94)"
+										class="sphx-glr-single-img"
+										height="800"
+										src="../../_images/sphx_glr_plot_skeleton_003.png"
+										srcset="../../_images/sphx_glr_plot_skeleton_003.png"
+										width="800" />
+									<p><strong>Morphological thinning</strong></p>
+									<p>
+										Morphological thinning, implemented in the
+										<code class="xref py py-obj docutils literal notranslate"
+											><span class="pre">thin</span></code
+										>
+										function, works on the same principle as
+										<code class="xref py py-obj docutils literal notranslate"
+											><span class="pre">skeletonize</span></code
+										>: remove pixels from the borders at each iteration until
+										none can be removed without altering the connectivity. The
+										different rules of removal can speed up skeletonization and
+										result in different final skeletons.
+									</p>
+									<p>
+										The
+										<code class="xref py py-obj docutils literal notranslate"
+											><span class="pre">thin</span></code
+										>
+										function also takes an optional
+										<code class="xref py py-obj docutils literal notranslate"
+											><span class="pre">max_num_iter</span></code
+										>
+										keyword argument to limit the number of thinning iterations,
+										and thus produce a relatively thicker skeleton.
+									</p>
+									<div class="highlight-Python notranslate">
+										<div class="highlight">
+											<pre
+												id="codecell3"
+												tabindex="-1"><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.morphology</span><span class="w"> </span><span class="kn">import</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a><span class="p">,</span> <a href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">thin</span></a>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">skeleton</span></a> <span class="o">=</span> <a href="../../api/skimage.morphology.html#skimage.morphology.skeletonize" title="skimage.morphology.skeletonize" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">skeletonize</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">image</span></a><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">thinned</span></a> <span class="o">=</span> <a href="../../api/skimage.morphology.html#skimage.morphology.thin" title="skimage.morphology.thin" class="sphx-glr-backref-module-skimage-morphology sphx-glr-backref-type-py-function"><span class="n">thin</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">image</span></a><span class="p">)</span>
@@ -356,112 +1444,199 @@ thicker skeleton.</p>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell3">
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <title>Copy to clipboard</title>
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-  <rect x="8" y="8" width="12" height="12" rx="2"></rect>
-  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
-</svg>
-    </button></div>
-</div>
-<img src="../../_images/sphx_glr_plot_skeleton_004.png" srcset="../../_images/sphx_glr_plot_skeleton_004.png" alt="original, skeleton, thinned, partially thinned" class="sphx-glr-single-img" width="800" height="800"><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.397 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-edges-plot-skeleton-py">
-<div class="binder-badge docutils container">
-<a class="reference external image-reference" href="https://mybinder.org/v2/gh/scikit-image/scikit-image/v0.26.0?filepath=notebooks/auto_examples/edges/plot_skeleton.ipynb"><img alt="Launch binder" src="../../_images/binder_badge_logo.svg" style="width: 150px;" width="109" height="20">
-</a>
-</div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/2763f34da4b712ae70cd9a352f2399ea/plot_skeleton.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_skeleton.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/acc64afc58dd7a1f46c04f30a38229d9/plot_skeleton.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_skeleton.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/deb7b62e66096d53b9a5c78433ffae6b/plot_skeleton.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_skeleton.zip</span></code></a></p>
-</div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</section>
+</pre>
+											<button
+												class="copybtn o-tooltip--left"
+												data-clipboard-target="#codecell3"
+												data-tooltip="Copy">
+												<svg
+													class="icon icon-tabler icon-tabler-copy"
+													fill="none"
+													height="44"
+													stroke="#000000"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													stroke-width="1.5"
+													viewBox="0 0 24 24"
+													width="44"
+													xmlns="http://www.w3.org/2000/svg">
+													<title>Copy to clipboard</title>
+													<path
+														d="M0 0h24v24H0z"
+														fill="none"
+														stroke="none"></path>
+													<rect
+														height="12"
+														rx="2"
+														width="12"
+														x="8"
+														y="8"></rect>
+													<path
+														d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<img
+										alt="original, skeleton, thinned, partially thinned"
+										class="sphx-glr-single-img"
+										height="800"
+										src="../../_images/sphx_glr_plot_skeleton_004.png"
+										srcset="../../_images/sphx_glr_plot_skeleton_004.png"
+										width="800" />
+									<p class="sphx-glr-timing">
+										<strong>Total running time of the script:</strong> (0
+										minutes 1.397 seconds)
+									</p>
+									<div
+										class="sphx-glr-footer sphx-glr-footer-example docutils container"
+										id="sphx-glr-download-auto-examples-edges-plot-skeleton-py">
+										<div class="binder-badge docutils container">
+											<a
+												class="reference external image-reference"
+												href="https://mybinder.org/v2/gh/scikit-image/scikit-image/v0.26.0?filepath=notebooks/auto_examples/edges/plot_skeleton.ipynb"
+												><img
+													alt="Launch binder"
+													height="20"
+													src="../../_images/binder_badge_logo.svg"
+													style="width: 150px"
+													width="109" />
+											</a>
+										</div>
+										<div
+											class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+											<p>
+												<a
+													class="reference download internal"
+													download=""
+													href="../../_downloads/2763f34da4b712ae70cd9a352f2399ea/plot_skeleton.ipynb"
+													><code
+														class="xref download docutils literal notranslate"
+														><span class="pre">Download</span>
+														<span class="pre">Jupyter</span>
+														<span class="pre">notebook:</span>
+														<span class="pre"
+															>plot_skeleton.ipynb</span
+														></code
+													></a
+												>
+											</p>
+										</div>
+										<div
+											class="sphx-glr-download sphx-glr-download-python docutils container">
+											<p>
+												<a
+													class="reference download internal"
+													download=""
+													href="../../_downloads/acc64afc58dd7a1f46c04f30a38229d9/plot_skeleton.py"
+													><code
+														class="xref download docutils literal notranslate"
+														><span class="pre">Download</span>
+														<span class="pre">Python</span>
+														<span class="pre">source</span>
+														<span class="pre">code:</span>
+														<span class="pre"
+															>plot_skeleton.py</span
+														></code
+													></a
+												>
+											</p>
+										</div>
+										<div
+											class="sphx-glr-download sphx-glr-download-zip docutils container">
+											<p>
+												<a
+													class="reference download internal"
+													download=""
+													href="../../_downloads/deb7b62e66096d53b9a5c78433ffae6b/plot_skeleton.zip"
+													><code
+														class="xref download docutils literal notranslate"
+														><span class="pre">Download</span>
+														<span class="pre">zipped:</span>
+														<span class="pre"
+															>plot_skeleton.zip</span
+														></code
+													></a
+												>
+											</p>
+										</div>
+									</div>
+									<p class="sphx-glr-signature">
+										<a
+											class="reference external"
+											href="https://sphinx-gallery.github.io"
+											>Gallery generated by Sphinx-Gallery</a
+										>
+									</p>
+								</section>
+							</article>
+						</div>
 
+						<dialog id="pst-secondary-sidebar-modal"></dialog>
+						<div class="bd-sidebar-secondary bd-toc" id="pst-secondary-sidebar">
+							<div class="sidebar-secondary-items sidebar-secondary__inner">
+								<div class="sidebar-secondary-item">
+									<div aria-label="source link" role="note">
+										<h3>This Page</h3>
+										<ul class="this-page-menu">
+											<li>
+												<a
+													href="../../_sources/auto_examples/edges/plot_skeleton.rst.txt"
+													rel="nofollow"
+													>Show Source</a
+												>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<footer class="bd-footer-content"></footer>
+				</main>
+			</div>
+		</div>
 
-                </article>
-              
-              
-              
-              
-              
-            </div>
-            
-            
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+		<!-- Scripts loaded after <body> so the DOM is not blocked -->
+		<script
+			defer=""
+			src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+		<script
+			defer=""
+			src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
+		<footer class="bd-footer">
+			<div class="bd-footer__inner bd-page-width">
+				<div class="footer-items__start">
+					<div class="footer-item">
+						<p class="copyright">
+							© Copyright 2013-2025, the scikit-image team.
+							<br />
+						</p>
+					</div>
+				</div>
 
-  <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/auto_examples/edges/plot_skeleton.rst.txt" rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+				<div class="footer-items__end">
+					<div class="footer-item">
+						<p class="sphinx-version">
+							Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+							<br />
+						</p>
+					</div>
 
-</div></div>
-              
-            
-          </div>
-          <footer class="bd-footer-content">
-            
-          </footer>
-        
-      </main>
-    </div>
-  </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer="" src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer="" src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
-
-  <footer class="bd-footer">
-<div class="bd-footer__inner bd-page-width">
-  
-    <div class="footer-items__start">
-      
-        <div class="footer-item">
-
-  <p class="copyright">
-    
-      © Copyright 2013-2025, the scikit-image team.
-      <br>
-    
-  </p>
-</div>
-      
-    </div>
-  
-  
-  
-    <div class="footer-items__end">
-      
-        <div class="footer-item">
-
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
-    <br>
-  </p>
-</div>
-      
-        <div class="footer-item">
-<p class="theme-version">
-  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
-</p></div>
-      
-    </div>
-  
-</div>
-
-  </footer>
-  
-</body></html>
+					<div class="footer-item">
+						<p class="theme-version">
+							<!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+							Built with the
+							<a
+								href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html"
+								>PyData Sphinx Theme</a
+							>
+							0.16.1.
+						</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

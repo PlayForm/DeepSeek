@@ -1,127 +1,215 @@
-<div><div class="page-layout__main">
-<div class="layout__2-sidebars-inline reference-layout">
-<main class="layout__content" id="content">
-<div class="layout__header reference-layout__header">
-<h1>stroke-miterlimit</h1>
-<details class="baseline-indicator high">
-<summary>
-<div class="status-title">
-          Baseline
-        </div>
-<div class="pill">Widely available</div>
-</summary>
-<div class="extra">
-<p>This feature is well established and works across many devices and browser versions. It’s been available across browsers since March 2020.</p>
-<ul>
-<li>
-<a href="#browser_compatibility">
-              See full compatibility
-            </a>
-</li>
+<div>
+	<div class="page-layout__main">
+		<div class="layout__2-sidebars-inline reference-layout">
+			<main class="layout__content" id="content">
+				<div class="layout__header reference-layout__header">
+					<h1>stroke-miterlimit</h1>
+					<details class="baseline-indicator high">
+						<summary>
+							<div class="status-title">Baseline</div>
+							<div class="pill">Widely available</div>
+						</summary>
+						<div class="extra">
+							<p>
+								This feature is well established and works across many devices and
+								browser versions. It’s been available across browsers since March
+								2020.
+							</p>
+							<ul>
+								<li>
+									<a href="#browser_compatibility"> See full compatibility </a>
+								</li>
+							</ul>
+						</div>
+					</details>
+					<section class="content-section">
+						<p>
+							The <strong><code>stroke-miterlimit</code></strong> attribute is a
+							presentation attribute defining a limit on the ratio of the miter length
+							to the
+							<a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-width"
+								><code>stroke-width</code></a
+							>
+							used to draw a miter join. When the limit is exceeded, the join is
+							converted from a miter to a bevel.
+						</p>
+						<div class="notecard note">
+							<p>
+								<strong>Note:</strong> As a presentation attribute,
+								<code>stroke-miterlimit</code> also has a CSS property counterpart:
+								<a href="/en-US/docs/Web/CSS/Reference/Properties/stroke-miterlimit"
+									><code>stroke-miterlimit</code></a
+								>. When both are specified, the CSS property takes priority.
+							</p>
+						</div>
+						<p>You can use this attribute with the following SVG elements:</p>
+						<ul></ul>
+					</section>
+				</div>
+				<div class="layout__body reference-layout__body">
+					<section class="content-section">
+						<p>
+							When two line segments meet at a sharp angle and
+							<code>miter</code> joins have been specified for
+							<a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-linejoin"
+								><code>stroke-linejoin</code></a
+							>, it is possible for the miter to extend far beyond the thickness of
+							the line stroking the path. The <code>stroke-miterlimit</code> ratio is
+							used to define when the limit is exceeded, if so the join is converted
+							from a miter to a bevel.
+						</p>
+						<p>
+							The ratio of miter length (distance between the outer tip and the inner
+							corner of the miter) to
+							<a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-width"
+								><code>stroke-width</code></a
+							>
+							is directly related to the angle (theta) between the segments in user
+							space by the formula:
+						</p>
 
-</ul>
+						<figure class="table-container">
+							<math>
+								<semantics
+									><mstyle
+										><mi>stroke-miterlimit</mi><mo>=</mo
+										><mfrac
+											><mrow><mi>miterLength</mi></mrow
+											><mrow><mi>stroke-width</mi></mrow></mfrac
+										><mo>=</mo
+										><mfrac
+											><mrow
+												><mrow
+													><mi>sin</mi
+													><mrow><mo>(</mo><mo>)</mo></mrow></mrow
+												></mrow
+											></mfrac
+										></mstyle
+									><annotation
+										>\text{stroke-miterlimit} =
+										\frac{\text{miterLength}}{\text{stroke-width}} =
+										\frac{1}{\sin\left(\frac{\theta}{2}\right)}</annotation
+									></semantics
+								>
+							</math>
+						</figure>
+
+						<p>
+							For example, a miter limit of 1.414 converts miters to bevels for theta
+							less than 90 degrees, a limit of 4.0 converts them for theta less than
+							approximately 29 degrees, and a limit of 10.0 converts them for theta
+							less than approximately 11.5 degrees.
+						</p>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="usage_context">
+							<a class="heading-anchor" href="#usage_context">Usage context</a>
+						</h2>
+
+						<figure class="table-container">
+							<table class="properties">
+								<tbody>
+									<tr>
+										<th>Value</th>
+										<td></td>
+									</tr>
+									<tr>
+										<th>Default value</th>
+										<td>4</td>
+									</tr>
+									<tr>
+										<th>Animatable</th>
+										<td>Yes</td>
+									</tr>
+								</tbody>
+							</table>
+						</figure>
+						<p>
+							The value of <code>stroke-miterlimit</code> must be greater than or
+							equal to 1.
+						</p>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="specifications">
+							<a class="heading-anchor" href="#specifications">Specifications</a>
+						</h2>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Specification</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<a
+											class="external"
+											href="https://w3c.github.io/svgwg/svg2-draft/painting.html#StrokeMiterlimitProperty"
+											>Scalable Vector Graphics (SVG) 2#
+											StrokeMiterlimitProperty</a
+										>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="browser_compatibility">
+							<a class="heading-anchor" href="#browser_compatibility"
+								>Browser compatibility</a
+							>
+						</h2>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="see_also">
+							<a class="heading-anchor" href="#see_also">See also</a>
+						</h2>
+
+						<ul>
+							<li>
+								CSS
+								<a href="/en-US/docs/Web/CSS/Reference/Properties/stroke-miterlimit"
+									><code>stroke-miterlimit</code></a
+								>
+								property
+							</li>
+						</ul>
+					</section>
+					<section class="content-section article-footer">
+						<div class="article-footer__inner">
+							<h2 id="feedback">Help improve MDN</h2>
+							<a
+								class="article-footer__contribute"
+								href="/en-US/docs/MDN/Community/Getting_started"
+								>Learn how to contribute</a
+							>
+							<p class="article-footer__last-modified">
+								This page was last modified on <time>Apr 16, 2025</time> by
+								<a
+									href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit/contributors.txt"
+									>MDN contributors</a
+								>.
+							</p>
+							<div class="article-footer__links">
+								<a
+									class="external"
+									href="https://github.com/mdn/content/blob/main/files/en-us/web/svg/reference/attribute/stroke-miterlimit/index.md?plain=1"
+									title="Folder: en-us/web/svg/reference/attribute/stroke-miterlimit (Opens in a new tab)"
+									>View this page on GitHub</a
+								>
+								•
+								<a
+									class="external"
+									href="https://github.com/mdn/content/issues/new?template=page-report.yml&amp;mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Fstroke-miterlimit&amp;metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Fstroke-miterlimit%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Fstroke-miterlimit%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Fstroke-miterlimit%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2F3c83d88f02f33f4066224e9f624a17dd2a0b0d19%0A*+Document+last+modified%3A+2025-04-16T15%3A02%3A49.000Z%0A%0A%3C%2Fdetails%3E"
+									title="This will take you to GitHub to file a new issue."
+									>Report a problem with this content</a
+								>
+							</div>
+						</div>
+					</section>
+				</div>
+			</main>
+		</div>
+	</div>
 </div>
-</details> <section class="content-section">
-<p>The <strong><code>stroke-miterlimit</code></strong> attribute is a presentation attribute defining a limit on the ratio of the miter length to the <a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-width"><code>stroke-width</code></a> used to draw a miter join. When the limit is exceeded, the join is converted from a miter to a bevel.</p>
-<div class="notecard note">
-<p><strong>Note:</strong>
-As a presentation attribute, <code>stroke-miterlimit</code> also has a CSS property counterpart: <a href="/en-US/docs/Web/CSS/Reference/Properties/stroke-miterlimit"><code>stroke-miterlimit</code></a>. When both are specified, the CSS property takes priority.</p>
-</div>
-<p>You can use this attribute with the following SVG elements:</p>
-<ul>
-
-
-
-
-
-
-
-</ul>
-</section>
-</div>
-<div class="layout__body reference-layout__body">
-<section class="content-section">
-
-
-<p>When two line segments meet at a sharp angle and <code>miter</code> joins have been specified for <a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-linejoin"><code>stroke-linejoin</code></a>, it is possible for the miter to extend far beyond the thickness of the line stroking the path. The <code>stroke-miterlimit</code> ratio is used to define when the limit is exceeded, if so the join is converted from a miter to a bevel.</p>
-<p>The ratio of miter length (distance between the outer tip and the inner corner of the miter) to <a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-width"><code>stroke-width</code></a> is directly related to the angle (theta) between the segments in user space by the formula:</p>
-
-<figure class="table-container"><math>
-<semantics><mstyle><mi>stroke-miterlimit</mi><mo>=</mo><mfrac><mrow><mi>miterLength</mi></mrow><mrow><mi>stroke-width</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mrow><mi>sin</mi><mrow><mo>(</mo><mo>)</mo></mrow></mrow></mrow></mfrac></mstyle><annotation>\text{stroke-miterlimit} = \frac{\text{miterLength}}{\text{stroke-width}} = \frac{1}{\sin\left(\frac{\theta}{2}\right)}</annotation></semantics>
-</math></figure>
-
-<p>For example, a miter limit of 1.414 converts miters to bevels for theta less than 90 degrees, a limit of 4.0 converts them for theta less than approximately 29 degrees, and a limit of 10.0 converts them for theta less than approximately 11.5 degrees.</p>
-</section><section class="content-section">
-<h2 class="heading" id="usage_context">
-<a class="heading-anchor" href="#usage_context">Usage context</a>
-</h2>
-
-<figure class="table-container"><table class="properties">
-<tbody>
-<tr>
-<th>Value</th>
-<td>
-
-</td>
-</tr>
-<tr>
-<th>Default value</th>
-<td>4</td>
-</tr>
-<tr>
-<th>Animatable</th>
-<td>Yes</td>
-</tr>
-</tbody>
-</table></figure>
-<p>The value of <code>stroke-miterlimit</code> must be greater than or equal to 1.</p>
-</section><section class="content-section">
-<h2 class="heading" id="specifications">
-<a class="heading-anchor" href="#specifications">Specifications</a>
-</h2>
-
-<table>
-<thead>
-<tr>
-<th>
-            Specification
-          </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a class="external" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#StrokeMiterlimitProperty">Scalable Vector Graphics (SVG) 2# StrokeMiterlimitProperty</a></td>
-</tr>
-</tbody>
-</table>
-</section><section class="content-section">
-<h2 class="heading" id="browser_compatibility">
-<a class="heading-anchor" href="#browser_compatibility">Browser compatibility</a>
-</h2>
-
-</section><section class="content-section">
-<h2 class="heading" id="see_also">
-<a class="heading-anchor" href="#see_also">See also</a>
-</h2>
-
-<ul>
-<li>CSS <a href="/en-US/docs/Web/CSS/Reference/Properties/stroke-miterlimit"><code>stroke-miterlimit</code></a> property</li>
-</ul>
-</section>
-<section class="content-section article-footer">
-<div class="article-footer__inner">
-
-<h2 id="feedback">
-            Help improve MDN
-          </h2>
-<a class="article-footer__contribute" href="/en-US/docs/MDN/Community/Getting_started">Learn how to contribute</a> <p class="article-footer__last-modified">
-    This page was last modified on <time>Apr 16, 2025</time> by <a href="/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit/contributors.txt">MDN contributors</a>.
-  </p> <div class="article-footer__links">
-<a class="external" href="https://github.com/mdn/content/blob/main/files/en-us/web/svg/reference/attribute/stroke-miterlimit/index.md?plain=1" title="Folder: en-us/web/svg/reference/attribute/stroke-miterlimit (Opens in a new tab)">View this page on GitHub</a> • <a class="external" href="https://github.com/mdn/content/issues/new?template=page-report.yml&amp;mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Fstroke-miterlimit&amp;metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Fstroke-miterlimit%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Fstroke-miterlimit%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Fstroke-miterlimit%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2F3c83d88f02f33f4066224e9f624a17dd2a0b0d19%0A*+Document+last+modified%3A+2025-04-16T15%3A02%3A49.000Z%0A%0A%3C%2Fdetails%3E" title="This will take you to GitHub to file a new issue.">Report a problem with this content</a>
-</div>
-</div>
-</section>
-</div>
-</main>
-</div>
-</div></div>

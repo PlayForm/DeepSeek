@@ -10,7 +10,9 @@ skip to:Light mode — click for dark[](./index.md)[Sign Up](./signup.md) [Sign 
 - [4 Dependents](?activeTab=dependents)
 - [14 Versions](?activeTab=versions)
 
-This package does not have a README. [Add a README](https://docs.npmjs.com/about-package-readme-files) to your package so that users know how to get started.
+This package does not have a README.
+[Add a README](https://docs.npmjs.com/about-package-readme-files) to your package so that users know
+how to get started.
 
 ### Keywords
 

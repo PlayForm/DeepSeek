@@ -2,13 +2,18 @@
 
 # signed_distance.h
 
-Copy path More file actions More file actions [![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)[alecjacobson](./libigl-libigl-commits?author=alecjacobson.md)
+Copy path More file actions More file actions
+[![alecjacobson](https://avatars.githubusercontent.com/u/2241689?v=4&size=40)](/alecjacobson)[alecjacobson](./libigl-libigl-commits?author=alecjacobson.md)
 
 - [Lipschitz octree pruning (](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md)
 - [\#2488](https://github.com/libigl/libigl/pull/2488)
 - [) \[skip ci\]](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md)
 
-Open commit details Jul 17, 2025 [47b557d](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md) · Jul 17, 2025 [History](./libigl-libigl-commits-main-include-igl-signed_distance.h.md) Open commit details[](./libigl-libigl-commits-main-include-igl-signed_distance.h.md)History 319 lines (316 loc) · 11 KB1
+Open commit details Jul 17, 2025
+[47b557d](./libigl-libigl-commit-47b557df58925008b37d6f66d6362e6b803ef18f.md) · Jul 17, 2025
+[History](./libigl-libigl-commits-main-include-igl-signed_distance.h.md) Open commit
+details[](./libigl-libigl-commits-main-include-igl-signed_distance.h.md)History 319 lines (316 loc)
+· 11 KB1
 
 <!--
 ## Source links

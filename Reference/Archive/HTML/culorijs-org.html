@@ -1,19 +1,28 @@
-<!DOCTYPE html><html><head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>
-			 Color functions for JavaScript · culori 
-		</title>
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width,initial-scale=1" name="viewport" />
+		<title>Color functions for JavaScript · culori</title>
 
-		<link rel="icon" type="image/png" href="/favicon.png">
-		<link rel="stylesheet" href="/css/main.css">
+		<link href="/favicon.png" rel="icon" type="image/png" />
+		<link href="/css/main.css" rel="stylesheet" />
 	</head>
-	<body style="--random-1: color(display-p3 0.06576429498193964 0.2936686005603986 0.6730076702134065); --random-2: color(display-p3 0.519131164952459 -0.026169348016102663 0.48065862838239043); margin-right: 0px; padding-right: 0px; overflow: auto;">
+	<body
+		style="
+			--random-1: color(display-p3 0.06576429498193964 0.2936686005603986 0.6730076702134065);
+			--random-2: color(
+				display-p3 0.519131164952459 -0.026169348016102663 0.48065862838239043
+			);
+			margin-right: 0px;
+			padding-right: 0px;
+			overflow: auto;
+		">
 		<header>
 			<div class="container">
 				<div class="logo">
 					<a href="/">
-						<img width="132" height="30" src="/img/culori.svg" alt="culori">
+						<img alt="culori" height="30" src="/img/culori.svg" width="132" />
 					</a>
 					<a href="https://github.com/evercoder/culori/releases">v4.0.2</a>
 				</div>
@@ -32,7 +41,9 @@
 							<a href="/guides/">Guides</a>
 						</li>
 						<li>
-							<a href="https://github.com/Evercoder/culori">GitHub <span aria-hidden="true">↗</span></a>
+							<a href="https://github.com/Evercoder/culori"
+								>GitHub <span aria-hidden="true">↗</span></a
+							>
 						</li>
 					</ul>
 				</nav>
@@ -42,53 +53,81 @@
 		<div class="container">
 			<article>
 				<h1>Color functions for JavaScript</h1>
-				<p>Culori is a JavaScript color library that supports the conversion and manipulation of all formats defined in the <a href="https://drafts.csswg.org/css-color/">CSS Colors Level 4</a> specification, plus <a href="./color-spaces">additional color spaces</a>. It handles <a href="https://en.wikipedia.org/wiki/Color_difference">color differences</a>, interpolation, gradients, blend modes <a href="/api/">and much more</a>.</p>
-<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> culori</code></pre>
-<p><a class="btn-link" href="./getting-started">Get started</a></p>
-<h2>What sets Culori apart?</h2>
-<p><strong>A function-oriented API.</strong> Colors are represented as plain JavaScript objects you pass through a series of <a href="./api">functions</a>, which makes it super easy to extend.</p>
-<p><strong>Accurate alpha.</strong> On the <code>alpha</code> channel, the library doesn't equate an <code>undefined</code> value with an opaque color, but rather with a color for which we don't care about the opacity. This gives you the opportunity to interpret <code>undefined</code> as you see fit. The hex string <kbd>#ff0000</kbd> <em>should</em> probably be rendered as fully opaque red, but for running functions on colors it's useful to discern <kbd>#ff0000</kbd> from <kbd>#ff0000ff</kbd> — the former has an implicit alpha of 1, while for the latter it's explicit.</p>
-<p><strong>Comprehensive functionality.</strong> Build advanced color tools with Culori's rich collection of color spaces and functions.</p>
-<p><strong>Tree-shakeable version available.</strong> When you're ready to optimize for bundle size, switch to <a href="./guides/tree-shaking">a tree-shakeable version of the library</a>.</p>
-
+				<p>
+					Culori is a JavaScript color library that supports the conversion and
+					manipulation of all formats defined in the
+					<a href="https://drafts.csswg.org/css-color/">CSS Colors Level 4</a>
+					specification, plus <a href="./color-spaces">additional color spaces</a>. It
+					handles
+					<a href="https://en.wikipedia.org/wiki/Color_difference">color differences</a>,
+					interpolation, gradients, blend modes <a href="/api/">and much more</a>.
+				</p>
+				<pre
+					class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> culori</code></pre>
+				<p><a class="btn-link" href="./getting-started">Get started</a></p>
+				<h2>What sets Culori apart?</h2>
+				<p>
+					<strong>A function-oriented API.</strong> Colors are represented as plain
+					JavaScript objects you pass through a series of <a href="./api">functions</a>,
+					which makes it super easy to extend.
+				</p>
+				<p>
+					<strong>Accurate alpha.</strong> On the <code>alpha</code> channel, the library
+					doesn't equate an <code>undefined</code> value with an opaque color, but rather
+					with a color for which we don't care about the opacity. This gives you the
+					opportunity to interpret <code>undefined</code> as you see fit. The hex string
+					<kbd>#ff0000</kbd> <em>should</em> probably be rendered as fully opaque red, but
+					for running functions on colors it's useful to discern <kbd>#ff0000</kbd> from
+					<kbd>#ff0000ff</kbd> — the former has an implicit alpha of 1, while for the
+					latter it's explicit.
+				</p>
+				<p>
+					<strong>Comprehensive functionality.</strong> Build advanced color tools with
+					Culori's rich collection of color spaces and functions.
+				</p>
+				<p>
+					<strong>Tree-shakeable version available.</strong> When you're ready to optimize
+					for bundle size, switch to
+					<a href="./guides/tree-shaking">a tree-shakeable version of the library</a>.
+				</p>
 			</article>
 		</div>
 		<footer>
 			<div class="container">
-
 				<p>
-					Culori is built by <a href="https://moqups.com">Moqups</a> · <a href="/colophon/">Colophon</a> · <a href="/resources/">Resources</a> 
-				</p><p>
-
-				</p><p>
+					Culori is built by <a href="https://moqups.com">Moqups</a> ·
+					<a href="/colophon/">Colophon</a> · <a href="/resources/">Resources</a>
+				</p>
+				<p></p>
+				<p>
 					Can this page be improved?
-					<a href="https://github.com/Evercoder/culori/blob/main/./docs/index.md">Edit it on GitHub</a>
+					<a href="https://github.com/Evercoder/culori/blob/main/./docs/index.md"
+						>Edit it on GitHub</a
+					>
 				</p>
 			</div>
 		</footer>
 
-
 		<script type="module">
-			import * as culori from '/culori.min.mjs';
+			import * as culori from "/culori.min.mjs";
 
 			/* Expose as global variable */
 			window.culori = culori;
 
 			const { p3, random, formatCss, formatHex } = culori;
 
-			const r = () => random('lch', { l: [30, 80], c: [60, 90] });
+			const r = () => random("lch", { l: [30, 80], c: [60, 90] });
 			let r1 = r();
 			let r2 = r();
-			if (CSS.supports('color: color(display-p3 0 0 0)')) {
+			if (CSS.supports("color: color(display-p3 0 0 0)")) {
 				r1 = formatCss(p3(r1));
 				r2 = formatCss(p3(r2));
 			} else {
 				r1 = formatHex(r1);
 				r2 = formatHex(r2);
 			}
-			document.body.style.setProperty('--random-1', r1);
-			document.body.style.setProperty('--random-2', r2);
+			document.body.style.setProperty("--random-1", r1);
+			document.body.style.setProperty("--random-2", r2);
 		</script>
-	
-
-</body></html>
+	</body>
+</html>

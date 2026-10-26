@@ -5,15 +5,16 @@
 
 # svgpathtools
 
-
-svgpathtools is a collection of tools for manipulating and analyzing SVG Path objects and Bézier curves.
+svgpathtools is a collection of tools for manipulating and analyzing SVG Path objects and Bézier
+curves.
 
 ## Features
 
+svgpathtools contains functions designed to **easily read, write and display SVG files** as well as
+_a large selection of geometrically-oriented tools_ to **transform and analyze path elements**.
 
-svgpathtools contains functions designed to **easily read, write and display SVG files** as well as *a large selection of geometrically-oriented tools* to **transform and analyze path elements**.
-
-Additionally, the submodule *bezier.py* contains tools for for working with general **nth order Bezier curves stored as n-tuples**.
+Additionally, the submodule _bezier.py_ contains tools for for working with general **nth order
+Bezier curves stored as n-tuples**.
 
 Some included tools:
 
@@ -36,39 +37,39 @@ Some included tools:
 
 ## Prerequisites
 
-
 - **numpy**
 - **svgwrite**
 - **scipy** (optional, but recommended for performance)
 
 ## Setup
 
-
 \$ pip install svgpathtools
 
 ### Alternative Setup
 
-
-You can download the source from Github and install by using the command (from inside the folder containing setup.py):
+You can download the source from Github and install by using the command (from inside the folder
+containing setup.py):
 
 \$ python setup.py install
 
 ## Credit where credit's due
 
-
-Much of the core of this module was taken from [the svg.path (v2.0) module](https://github.com/regebro/svg.path). Interested svg.path users should see the compatibility notes at bottom of this readme.
+Much of the core of this module was taken from
+[the svg.path (v2.0) module](https://github.com/regebro/svg.path). Interested svg.path users should
+see the compatibility notes at bottom of this readme.
 
 ## Basic Usage
 
-
 ### Classes
 
-
-The svgpathtools module is primarily structured around four path segment classes: `Line`, `QuadraticBezier`, `CubicBezier`, and `Arc`. There is also a fifth class, `Path`, whose objects are sequences of (connected or disconnected <sup>[1](#f1)</sup>) path segment objects.
+The svgpathtools module is primarily structured around four path segment classes: `Line`,
+`QuadraticBezier`, `CubicBezier`, and `Arc`. There is also a fifth class, `Path`, whose objects are
+sequences of (connected or disconnected <sup>[1](#f1)</sup>) path segment objects.
 
 - `Line(start, end)`
 
-- `Arc(start, radius, rotation, large_arc, sweep, end)` Note: See docstring for a detailed explanation of these parameters
+- `Arc(start, radius, rotation, large_arc, sweep, end)` Note: See docstring for a detailed
+  explanation of these parameters
 
 - `QuadraticBezier(start, control, end)`
 
@@ -76,9 +77,13 @@ The svgpathtools module is primarily structured around four path segment classes
 
 - `Path(*segments)`
 
-See the relevant docstrings in *path.py* or the [official SVG specifications](http://www.w3.org/TR/SVG/paths.html) for more information on what each parameter means.
+See the relevant docstrings in _path.py_ or the
+[official SVG specifications](http://www.w3.org/TR/SVG/paths.html) for more information on what each
+parameter means.
 
-1 Warning: Some of the functionality in this library has not been tested on discontinuous Path objects. A simple workaround is provided, however, by the `Path.continuous_subpaths()` method. [↩](#a1)
+1 Warning: Some of the functionality in this library has not been tested on discontinuous Path
+objects. A simple workaround is provided, however, by the `Path.continuous_subpaths()` method.
+[↩](#a1)
 
 from \_\_future\_\_ import division, print_function
 
@@ -111,7 +116,8 @@ M 300.0,100.0 C 100.0,100.0 200.0,200.0 200.0,300.0 L 250.0,350.0
 True
 ```
 
-The `Path` class is a mutable sequence, so it behaves much like a list. So segments can **append** ed, **insert** ed, set by index, **del** eted, **enumerate** d, **slice** d out, etc.
+The `Path` class is a mutable sequence, so it behaves much like a list. So segments can **append**
+ed, **insert** ed, set by index, **del** eted, **enumerate** d, **slice** d out, etc.
 
 \# Let's append another to the end of it\
 path.append(CubicBezier(250+350j, 275+350j, 250+225j, 200+100j))\
@@ -169,9 +175,10 @@ Notice that path contains 3 segments and spath contains 6 segments.
 
 ### Reading SVGSs
 
-
-The **svg2paths()** function converts an svgfile to a list of Path objects and a separate list of dictionaries containing the attributes of each said path.\
-Note: Line, Polyline, Polygon, and Path SVG elements can all be converted to Path objects using this function.
+The **svg2paths()** function converts an svgfile to a list of Path objects and a separate list of
+dictionaries containing the attributes of each said path.\
+Note: Line, Polyline, Polygon, and Path SVG elements can all be converted to Path objects using this
+function.
 
 \# Read SVG into a list of path objects and list of dictionaries of attributes \
 from svgpathtools import svg2paths, wsvg\
@@ -198,8 +205,10 @@ red
 
 ### Writing SVGSs (and some geometric functions and methods)
 
-
-The **wsvg()** function creates an SVG file from a list of path. This function can do many things (see docstring in *paths2svg.py* for more information) and is meant to be quick and easy to use. Note: Use the convenience function **disvg()** (or set 'openinbrowser=True') to automatically attempt to open the created svg file in your default SVG viewer.
+The **wsvg()** function creates an SVG file from a list of path. This function can do many things
+(see docstring in _paths2svg.py_ for more information) and is meant to be quick and easy to use.
+Note: Use the convenience function **disvg()** (or set 'openinbrowser=True') to automatically
+attempt to open the created svg file in your default SVG viewer.
 
 \# Let's make a new SVG that's identical to the first\
 wsvg(paths, attributes=attributes, svg_attributes=svg_attributes, filename='output1.svg')
@@ -210,11 +219,15 @@ There will be many more examples of writing and displaying path data below.
 
 ### The .point() method and transitioning between path and path segment parameterizations
 
+SVG Path elements and their segments have official parameterizations. These parameterizations can be
+accessed using the `Path.point()`, `Line.point()`, `QuadraticBezier.point()`, `CubicBezier.point()`,
+and `Arc.point()` methods. All these parameterizations are defined over the domain 0 \<= t \<= 1.
 
-SVG Path elements and their segments have official parameterizations. These parameterizations can be accessed using the `Path.point()`, `Line.point()`, `QuadraticBezier.point()`, `CubicBezier.point()`, and `Arc.point()` methods. All these parameterizations are defined over the domain 0 \<= t \<= 1.
-
-**Note:** In this document and in inline documentation and doctrings, I use a capital `T` when referring to the parameterization of a Path object and a lower case `t` when referring speaking about path segment objects (i.e. Line, QaudraticBezier, CubicBezier, and Arc objects).\
-Given a `T` value, the `Path.T2t()` method can be used to find the corresponding segment index, `k`, and segment parameter, `t`, such that `path.point(T)=path[k].point(t)`.\
+**Note:** In this document and in inline documentation and doctrings, I use a capital `T` when
+referring to the parameterization of a Path object and a lower case `t` when referring speaking
+about path segment objects (i.e. Line, QaudraticBezier, CubicBezier, and Arc objects).\
+Given a `T` value, the `Path.T2t()` method can be used to find the corresponding segment index, `k`,
+and segment parameter, `t`, such that `path.point(T)=path[k].point(t)`.\
 There is also a `Path.t2T()` method to solve the inverse problem.
 
 \# Example:\
@@ -245,13 +258,23 @@ True
 
 ### Bezier curves as NumPy polynomial objects
 
+Another great way to work with the parameterizations for `Line`, `QuadraticBezier`, and
+`CubicBezier` objects is to convert them to `numpy.poly1d` objects. This is done easily using the
+`Line.poly()`, `QuadraticBezier.poly()` and `CubicBezier.poly()` methods.\
+There's also a `polynomial2bezier()` function in the pathtools.py submodule to convert polynomials
+back to Bezier curves.
 
-Another great way to work with the parameterizations for `Line`, `QuadraticBezier`, and `CubicBezier` objects is to convert them to `numpy.poly1d` objects. This is done easily using the `Line.poly()`, `QuadraticBezier.poly()` and `CubicBezier.poly()` methods.\
-There's also a `polynomial2bezier()` function in the pathtools.py submodule to convert polynomials back to Bezier curves.
+**Note:** cubic Bezier curves are parameterized as
+$`B(t) = P_{0}(1 - t)^{3} + 3P_{1}(1 - t)^{2}t + 3P_{2}(1 - t)t^{2} + P_{3}t^{3}`$ where $`P_{0}`$,
+$`P_{1}`$, $`P_{2}`$, and $`P_{3}`$ are the control points `start`, `control1`, `control2`, and
+`end`, respectively, that svgpathtools uses to define a CubicBezier object. The `CubicBezier.poly()`
+method expands this polynomial to its standard form $`B(t) = c_{0}t^{3} + c_{1}t^{2} + c_{2}t + c3`$
+where \$\$\begin{bmatrix}c_0\c_1\c_2\c_3\end{bmatrix} = \begin{bmatrix} -1 & 3 & -3 & 1\\ 3 & -6 &
+-3 & 0\\ -3 & 3 & 0 & 0\\ 1 & 0 & 0 & 0\\ \end{bmatrix}
+\begin{bmatrix}P_0\P_1\P_2\P_3\end{bmatrix}\$\$
 
-**Note:** cubic Bezier curves are parameterized as $`B(t) = P_{0}(1 - t)^{3} + 3P_{1}(1 - t)^{2}t + 3P_{2}(1 - t)t^{2} + P_{3}t^{3}`$ where $`P_{0}`$, $`P_{1}`$, $`P_{2}`$, and $`P_{3}`$ are the control points `start`, `control1`, `control2`, and `end`, respectively, that svgpathtools uses to define a CubicBezier object. The `CubicBezier.poly()` method expands this polynomial to its standard form $`B(t) = c_{0}t^{3} + c_{1}t^{2} + c_{2}t + c3`$ where \$\$\begin{bmatrix}c_0\c_1\c_2\c_3\end{bmatrix} = \begin{bmatrix} -1 & 3 & -3 & 1\\ 3 & -6 & -3 & 0\\ -3 & 3 & 0 & 0\\ 1 & 0 & 0 & 0\\ \end{bmatrix} \begin{bmatrix}P_0\P_1\P_2\P_3\end{bmatrix}\$\$
-
-`QuadraticBezier.poly()` and `Line.poly()` are [defined similarly](https://en.wikipedia.org/wiki/B%C3%A9zier_curve#General_definition).
+`QuadraticBezier.poly()` and `Line.poly()` are
+[defined similarly](https://en.wikipedia.org/wiki/B%C3%A9zier_curve#General_definition).
 
 \# Example:\
 b = CubicBezier(300+100j, 100+100j, 200+200j, 200+300j)\
@@ -269,27 +292,28 @@ print("The CubicBezier, b.point(x) = \n\n" + \
 
 ```
 True
-The CubicBezier, b.point(x) = 
+The CubicBezier, b.point(x) =
 
 (300+100j)*(1-t)^3 + 3*(100+100j)*(1-t)^2*t + 3*(200+200j)*(1-t)*t^2 + (200+300j)*t^3
 
-can be rewritten in standard form as 
+can be rewritten in standard form as
 
                 3                2
 (-400 + -100j) t + (900 + 300j) t - 600 t + (300 + 100j)
 ```
 
-The ability to convert between Bezier objects to NumPy polynomial objects is very useful. For starters, we can take turn a list of Bézier segments into a NumPy array
+The ability to convert between Bezier objects to NumPy polynomial objects is very useful. For
+starters, we can take turn a list of Bézier segments into a NumPy array
 
 ### Numpy Array operations on Bézier path segments
 
-
 [Example available here](https://github.com/mathandy/svgpathtools/blob/master/examples/compute-many-points-quickly-using-numpy-arrays.py)
 
-To further illustrate the power of being able to convert our Bezier curve objects to numpy.poly1d objects and back, lets compute the unit tangent vector of the above CubicBezier object, b, at t=0.5 in four different ways.
+To further illustrate the power of being able to convert our Bezier curve objects to numpy.poly1d
+objects and back, lets compute the unit tangent vector of the above CubicBezier object, b, at t=0.5
+in four different ways.
 
 ### Tangent vectors (and more on NumPy polynomials)
-
 
 t = 0.5\
 \### Method 1: the easy way\
@@ -328,7 +352,6 @@ unit tangent check: True
 
 ### Translations (shifts), reversing orientation, and normal vectors
 
-
 \# Speaking of tangents, let's add a normal vector to the picture\
 n = b.normal(t)\
 normal_line = Line(b.point(t), b.point(t) + mag\*n)\
@@ -353,7 +376,6 @@ wsvg(\[b, tangent_line, normal_line, br, tangent_line_r, normal_line_r\], 
 
 ### Rotations and Translations
 
-
 \# Let's take a Line and an Arc and make some pictures\
 top_half = Arc(start=-1, radius=1+2j, rotation=0, large_arc=1, sweep=1, end=1)\
 midline = Line(-1.5, 1.5)\
@@ -375,8 +397,10 @@ wsvg(\[top_half, midline, decorated_ellipse\], filename='decorated_ellipse.sv
 
 ### arc length and inverse arc length
 
-
-Here we'll create an SVG that shows off the parametric and geometric midpoints of the paths from `test.svg`. We'll need to compute use the `Path.length()`, `Line.length()`, `QuadraticBezier.length()`, `CubicBezier.length()`, and `Arc.length()` methods, as well as the related inverse arc length methods `.ilength()` function to do this.
+Here we'll create an SVG that shows off the parametric and geometric midpoints of the paths from
+`test.svg`. We'll need to compute use the `Path.length()`, `Line.length()`,
+`QuadraticBezier.length()`, `CubicBezier.length()`, and `Arc.length()` methods, as well as the
+related inverse arc length methods `.ilength()` function to do this.
 
 \# First we'll load the path data from the file test.svg\
 paths, attributes = svg2paths('test.svg')\
@@ -414,7 +438,6 @@ wsvg(paths, nodes=dots, node_colors=ncols, node_radii=nradii, \
 
 ### Intersections between Bezier curves
 
-
 \# Let's find all intersections between redpath and the other \
 redpath = paths\[0\]\
 redpath_attribs = attributes\[0\]\
@@ -429,7 +452,6 @@ disvg(paths, filename='output_intersections.svg', attributes=attributes,\
 [![output_intersections.svg](./mathandy-svgpathtools-raw-master-output_intersections.svg.md)](/mathandy/svgpathtools/blob/master/output_intersections.svg)
 
 ### An Advanced Application: Offsetting Paths
-
 
 Here we'll find the [offset curve](https://en.wikipedia.org/wiki/Parallel_curve) for a few paths.
 
@@ -471,15 +493,15 @@ wsvg(paths + offset_paths, 'g'\*len(paths) + 'r'\*len(offset_paths), filen
 
 ## Compatibility Notes for users of svg.path (v2.0)
 
-
 - renamed Arc.arc attribute as Arc.large_arc
 
-- Path.d() : For behavior similar <sup>[2](#f2)</sup> to svg.path (v2.0), set both useSandT and use_closed_attrib to be True.
+- Path.d() : For behavior similar <sup>[2](#f2)</sup> to svg.path (v2.0), set both useSandT and
+  use_closed_attrib to be True.
 
-2 The behavior would be identical, but the string formatting used in this method has been changed to use default format (instead of the General format, {:G}), for inceased precision. [↩](#a2)
+2 The behavior would be identical, but the string formatting used in this method has been changed to
+use default format (instead of the General format, {:G}), for inceased precision. [↩](#a2)
 
 ## Licence
-
 
 This module is under a MIT License.
 

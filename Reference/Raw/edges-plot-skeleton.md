@@ -1,12 +1,16 @@
 Note
 
-[Go to the end](#sphx-glr-download-auto-examples-edges-plot-skeleton-py) to download the full example code or to run this example in your browser via Binder.
+[Go to the end](#sphx-glr-download-auto-examples-edges-plot-skeleton-py) to download the full
+example code or to run this example in your browser via Binder.
 
 # Skeletonize[\#](#skeletonize)
 
-Skeletonization reduces binary objects to 1 pixel wide representations. This can be useful for feature extraction, and/or representing an object’s topology.
+Skeletonization reduces binary objects to 1 pixel wide representations. This can be useful for
+feature extraction, and/or representing an object’s topology.
 
-`skeletonize` works by making successive passes of the image. On each pass, border pixels are identified and removed on the condition that they do not break the connectivity of the corresponding object.
+`skeletonize` works by making successive passes of the image. On each pass, border pixels are
+identified and removed on the condition that they do not break the connectivity of the corresponding
+object.
 
 from skimage.morphology import [skeletonize](../../api/skimage.morphology.html#skimage.morphology.skeletonize)\
 from skimage import data\
@@ -39,19 +43,30 @@ from skimage.util import [invert](../../api/skimage.util.html#skimage.util.in
 
 **Zhang’s method vs Lee’s method**
 
-`skeletonize` [\[Zha84\]](#zha84) works by making successive passes of the image, removing pixels on object borders. This continues until no more pixels can be removed. The image is correlated with a mask that assigns each pixel a number in the range \[0…255\] corresponding to each possible pattern of its 8 neighboring pixels. A look up table is then used to assign the pixels a value of 0, 1, 2 or 3, which are selectively removed during the iterations.
+`skeletonize` [\[Zha84\]](#zha84) works by making successive passes of the image, removing pixels on
+object borders. This continues until no more pixels can be removed. The image is correlated with a
+mask that assigns each pixel a number in the range \[0…255\] corresponding to each possible pattern
+of its 8 neighboring pixels. A look up table is then used to assign the pixels a value of 0, 1, 2 or
+3, which are selectively removed during the iterations.
 
-`skeletonize(..., method='lee')` [\[Lee94\]](#lee94) uses an octree data structure to examine a 3x3x3 neighborhood of a pixel. The algorithm proceeds by iteratively sweeping over the image, and removing pixels at each iteration until the image stops changing. Each iteration consists of two steps: first, a list of candidates for removal is assembled; then pixels from this list are rechecked sequentially, to better preserve connectivity of the image.
+`skeletonize(..., method='lee')` [\[Lee94\]](#lee94) uses an octree data structure to examine a
+3x3x3 neighborhood of a pixel. The algorithm proceeds by iteratively sweeping over the image, and
+removing pixels at each iteration until the image stops changing. Each iteration consists of two
+steps: first, a list of candidates for removal is assembled; then pixels from this list are
+rechecked sequentially, to better preserve connectivity of the image.
 
-Note that Lee’s method [\[Lee94\]](#lee94) is designed to be used on 3-D images, and is selected automatically for those. For illustrative purposes, we apply this algorithm to a 2-D image.
+Note that Lee’s method [\[Lee94\]](#lee94) is designed to be used on 3-D images, and is selected
+automatically for those. For illustrative purposes, we apply this algorithm to a 2-D image.
 
 \[[Zha84](#id1)\]
 
-A fast parallel algorithm for thinning digital patterns, T. Y. Zhang and C. Y. Suen, Communications of the ACM, March 1984, Volume 27, Number 3.
+A fast parallel algorithm for thinning digital patterns, T. Y. Zhang and C. Y. Suen, Communications
+of the ACM, March 1984, Volume 27, Number 3.
 
 \[Lee94\] ([1](#id2),[2](#id3))
 
-T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building skeleton models via 3-D medial surface/axis thinning algorithms. Computer Vision, Graphics, and Image Processing, 56(6):462-478, 1994.
+T.-C. Lee, R.L. Kashyap and C.-N. Chu, Building skeleton models via 3-D medial surface/axis thinning
+algorithms. Computer Vision, Graphics, and Image Processing, 56(6):462-478, 1994.
 
 import matplotlib.pyplot as plt\
 from skimage.morphology import [skeletonize](../../api/skimage.morphology.html#skimage.morphology.skeletonize)\
@@ -83,9 +98,15 @@ from skimage.morphology import [skeletonize](../../api/skimage.morphology.htm
 
 **Medial axis skeletonization**
 
-The medial axis of an object is the set of all points having more than one closest point on the object’s boundary. It is often called the *topological skeleton*, because it is a 1-pixel wide skeleton of the object, with the same connectivity as the original object.
+The medial axis of an object is the set of all points having more than one closest point on the
+object’s boundary. It is often called the _topological skeleton_, because it is a 1-pixel wide
+skeleton of the object, with the same connectivity as the original object.
 
-Here, we use the medial axis transform to compute the width of the foreground objects. As the function `medial_axis` returns the distance transform in addition to the medial axis (with the keyword argument `return_distance=True`), it is possible to compute the distance to the background for all points of the medial axis with this function. This gives an estimate of the local width of the objects.
+Here, we use the medial axis transform to compute the width of the foreground objects. As the
+function `medial_axis` returns the distance transform in addition to the medial axis (with the
+keyword argument `return_distance=True`), it is possible to compute the distance to the background
+for all points of the medial axis with this function. This gives an estimate of the local width of
+the objects.
 
 For a skeleton with fewer branches, `skeletonize` should be preferred.
 
@@ -131,9 +152,13 @@ from skimage.morphology import [medial_axis](../../api/skimage.morphology.htm
 
 **Morphological thinning**
 
-Morphological thinning, implemented in the `thin` function, works on the same principle as `skeletonize`: remove pixels from the borders at each iteration until none can be removed without altering the connectivity. The different rules of removal can speed up skeletonization and result in different final skeletons.
+Morphological thinning, implemented in the `thin` function, works on the same principle as
+`skeletonize`: remove pixels from the borders at each iteration until none can be removed without
+altering the connectivity. The different rules of removal can speed up skeletonization and result in
+different final skeletons.
 
-The `thin` function also takes an optional `max_num_iter` keyword argument to limit the number of thinning iterations, and thus produce a relatively thicker skeleton.
+The `thin` function also takes an optional `max_num_iter` keyword argument to limit the number of
+thinning iterations, and thus produce a relatively thicker skeleton.
 
 from skimage.morphology import [skeletonize](../../api/skimage.morphology.html#skimage.morphology.skeletonize), [thin](../../api/skimage.morphology.html#skimage.morphology.thin)\
 \

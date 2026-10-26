@@ -7,8 +7,7 @@
     \<script type="text/javascript" src="../../dist/paper-full.js"\>\</script\>\
     \<script type="text/paperscript" canvas="canvas"\>\
 // Based on 'JPEG Raster' by Jonathan Puckey:\
-// http://www.flickr.com/photos/puckey/3179779686/in/photostream/\
-\
+// http://www.flickr.com/photos/puckey/3179779686/in/photostream/\ \
 // Create a raster item using the image with id='mona'\
 var raster = new Raster('mona');\
 \

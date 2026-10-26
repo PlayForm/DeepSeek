@@ -1,44 +1,50 @@
-[🧻paper.js](./index.md)`⌘Ctrl` `k` [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/) For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
+[🧻paper.js](./index.md)`⌘Ctrl` `k` [Paper.js](http://paperjs.org/) [Typogram](https://typogram.co/)
+For the complete documentation index, see [llms.txt](https://paperjs.typogram.co/llms.txt). This
+page is also available as [Markdown](https://paperjs.typogram.co/paths/pathitem.md).
 
 # PathItem
 
 Extends [**`Item`**](./project-and-items-item.md)
 
-The PathItem class is the base for any items that describe paths and offer standardised methods for drawing and path manipulation, such as `[Path](Path%20f91b7d17f1f747e1950d655ad8aaf2c5.md)` and `[CompoundPath](CompoundPath%200e46476761cb45a0ab9ed15d5e6dfffb.md)`.
+The PathItem class is the base for any items that describe paths and offer standardised methods for
+drawing and path manipulation, such as `[Path](Path%20f91b7d17f1f747e1950d655ad8aaf2c5.md)` and
+`[CompoundPath](CompoundPath%200e46476761cb45a0ab9ed15d5e6dfffb.md)`.
 
 ## Properties[](#properties)
 
 - `interiorPoint`
 
-  Returns a point that is guaranteed to be inside the path.
+    Returns a point that is guaranteed to be inside the path.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Point`
+    - `Point`
 
 - `clockwise`
 
-  Specifies whether the path as a whole is oriented clock-wise, by looking at the path’s area. Note that self-intersecting paths and sub-paths of different orientation can result in areas that cancel each other out.
+    Specifies whether the path as a whole is oriented clock-wise, by looking at the path’s area.
+    Note that self-intersecting paths and sub-paths of different orientation can result in areas
+    that cancel each other out.
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
-  - See also:
+    - See also:
 
-  - `path.area`
+    - `path.area`
 
-  - `compoundPath.area`
+    - `compoundPath.area`
 
 - `pathData`
 
-  The path’s geometry, formatted as SVG style path data.
+    The path’s geometry, formatted as SVG style path data.
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
 ## Methods[](#methods)
 
@@ -46,3641 +52,3916 @@ The PathItem class is the base for any items that describe paths and offer stand
 
 - `unite(path[, options])`
 
-  Unites the geometry of the specified path with this path’s geometry and returns the result as a new path item.
+    Unites the geometry of the specified path with this path’s geometry and returns the result as a
+    new path item.
 
-  - Options:
+    - Options:
 
-  - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene graph, above both paths involved in the operation — default: `true`
+    - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene
+      graph, above both paths involved in the operation — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to unite with
+    - `path:` `PathItem` — the path to unite with
 
-  - `options:` `Object` — the boolean operation options — optional
+    - `options:` `Object` — the boolean operation options — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — the resulting path item
+    - `PathItem` — the resulting path item
 
 - `intersect(path[, options])`
 
-  Intersects the geometry of the specified path with this path’s geometry and returns the result as a new path item.
+    Intersects the geometry of the specified path with this path’s geometry and returns the result
+    as a new path item.
 
-  - Options:
+    - Options:
 
-  - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene graph, above both paths involved in the operation — default: `true`
+    - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene
+      graph, above both paths involved in the operation — default: `true`
 
-  - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas when determining which parts of the paths are to be kept in the result, or whether the first path is only to be split at intersections, keeping the parts of the curves that intersect with the area of the second path. — default: `true`
+    - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas
+      when determining which parts of the paths are to be kept in the result, or whether the first
+      path is only to be split at intersections, keeping the parts of the curves that intersect with
+      the area of the second path. — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to intersect with
+    - `path:` `PathItem` — the path to intersect with
 
-  - `options:` `Object` — the boolean operation options — optional
+    - `options:` `Object` — the boolean operation options — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — the resulting path item
+    - `PathItem` — the resulting path item
 
 - `subtract(path[, options])`
 
-  Subtracts the geometry of the specified path from this path’s geometry and returns the result as a new path item.
+    Subtracts the geometry of the specified path from this path’s geometry and returns the result as
+    a new path item.
 
-  - Options:
+    - Options:
 
-  - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene graph, above both paths involved in the operation — default: `true`
+    - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene
+      graph, above both paths involved in the operation — default: `true`
 
-  - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas when determining which parts of the paths are to be kept in the result, or whether the first path is only to be split at intersections, removing the parts of the curves that intersect with the area of the second path. — default: `true`
+    - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas
+      when determining which parts of the paths are to be kept in the result, or whether the first
+      path is only to be split at intersections, removing the parts of the curves that intersect
+      with the area of the second path. — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to subtract
+    - `path:` `PathItem` — the path to subtract
 
-  - `options:` `Object` — the boolean operation options — optional
+    - `options:` `Object` — the boolean operation options — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — the resulting path item
+    - `PathItem` — the resulting path item
 
 - `exclude(path[, options])`
 
-  Excludes the intersection of the geometry of the specified path with this path’s geometry and returns the result as a new path item.
+    Excludes the intersection of the geometry of the specified path with this path’s geometry and
+    returns the result as a new path item.
 
-  - Options:
+    - Options:
 
-  - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene graph, above both paths involved in the operation — default: `true`
+    - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene
+      graph, above both paths involved in the operation — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to exclude the intersection of
+    - `path:` `PathItem` — the path to exclude the intersection of
 
-  - `options:` `Object` — the boolean operation options — optional
+    - `options:` `Object` — the boolean operation options — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — the resulting path item
+    - `PathItem` — the resulting path item
 
 - `divide(path[, options])`
 
-  Splits the geometry of this path along the geometry of the specified path returns the result as a new group item. This is equivalent to calling `subtract(path)` and `intersect(path)` and putting the results into a new group.
+    Splits the geometry of this path along the geometry of the specified path returns the result as
+    a new group item. This is equivalent to calling `subtract(path)` and `intersect(path)` and
+    putting the results into a new group.
 
-  - Options:
+    - Options:
 
-  - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene graph, above both paths involved in the operation — default: `true`
+    - `options.insert: Boolean` — whether the resulting item should be inserted back into the scene
+      graph, above both paths involved in the operation — default: `true`
 
-  - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas when determining which parts of the paths are to be kept in the result, or whether the first path is only to be split at intersections. — default: `true`
+    - `options.trace: Boolean` — whether the tracing method is used, treating both paths as areas
+      when determining which parts of the paths are to be kept in the result, or whether the first
+      path is only to be split at intersections. — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to divide by
+    - `path:` `PathItem` — the path to divide by
 
-  - `options:` `Object` — the boolean operation options — optional
+    - `options:` `Object` — the boolean operation options — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — the resulting path item
+    - `PathItem` — the resulting path item
 
 - `reorient([nonZero[, clockwise]])`
 
-  Fixes the orientation of the sub-paths of a compound-path, assuming that non of its sub-paths intersect, by reorienting them so that they are of different winding direction than their containing paths, except for disjoint sub-paths, i.e. islands, which are oriented so that they have the same winding direction as the the biggest path.
+    Fixes the orientation of the sub-paths of a compound-path, assuming that non of its sub-paths
+    intersect, by reorienting them so that they are of different winding direction than their
+    containing paths, except for disjoint sub-paths, i.e. islands, which are oriented so that they
+    have the same winding direction as the the biggest path.
 
-  - Parameters:
+    - Parameters:
 
-  - `nonZero:` `Boolean` — controls if the non-zero fill-rule is to be applied, by counting the winding of each nested path and discarding sub-paths that do not contribute to the final result — optional, default: `false`
+    - `nonZero:` `Boolean` — controls if the non-zero fill-rule is to be applied, by counting the
+      winding of each nested path and discarding sub-paths that do not contribute to the final
+      result — optional, default: `false`
 
-  - `clockwise:` `Boolean` — if provided, the orientation of the root paths will be set to the orientation specified by `clockwise`, otherwise the orientation of the largest root child is used. — optional
+    - `clockwise:` `Boolean` — if provided, the orientation of the root paths will be set to the
+      orientation specified by `clockwise`, otherwise the orientation of the largest root child is
+      used. — optional
 
-  - Returns:
+    - Returns:
 
-  - `PathItem` — a reference to the item itself, reoriented
+    - `PathItem` — a reference to the item itself, reoriented
 
 ### Path Intersections and Locations[](#path-intersections-and-locations)
 
 - `getIntersections(path[, include])`
 
-  Returns all intersections between two `PathItem` items as an array of `CurveLocation` objects. `CompoundPath` items are also supported.
+    Returns all intersections between two `PathItem` items as an array of `CurveLocation` objects.
+    `CompoundPath` items are also supported.
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the other item to find the intersections with
+    - `path:` `PathItem` — the other item to find the intersections with
 
-  - `include:` `Function` — a callback function that can be used to filter out undesired locations right while they are collected. When defined, it shall return `true` to include a location, `false` otherwise. — optional
+    - `include:` `Function` — a callback function that can be used to filter out undesired locations
+      right while they are collected. When defined, it shall return `true` to include a location,
+      `false` otherwise. — optional
 
-  - Returns:
+    - Returns:
 
-  - `Array of CurveLocation` objects — the locations of all intersection between the paths
+    - `Array of CurveLocation` objects — the locations of all intersection between the paths
 
-  - See also:
+    - See also:
 
-  - `getCrossings(path)`
+    - `getCrossings(path)`
 
-  Example:Finding the intersections between two paths
+    Example:Finding the intersections between two paths
 
-  ``` py-2.5
-  var path = new Path.Rectangle(new Point(30, 25), new Size(50, 50));
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path.Rectangle(new Point(30, 25), new Size(50, 50));
+    path.strokeColor = 'black';
 
-  var secondPath = path.clone();
-  var intersectionGroup = new Group();
+    var secondPath = path.clone();
+    var intersectionGroup = new Group();
 
-  function onFrame(event) {
-      secondPath.rotate(1);
+    function onFrame(event) {
+        secondPath.rotate(1);
 
-      var intersections = path.getIntersections(secondPath);
-      intersectionGroup.removeChildren();
+        var intersections = path.getIntersections(secondPath);
+        intersectionGroup.removeChildren();
 
-      for (var i = 0; i < intersections.length; i++) {
-          var intersectionPath = new Path.Circle({
-              center: intersections[i].point,
-              radius: 4,
-              fillColor: 'red',
-              parent: intersectionGroup
-          });
-      }
-  }
-  ```
+        for (var i = 0; i < intersections.length; i++) {
+            var intersectionPath = new Path.Circle({
+                center: intersections[i].point,
+                radius: 4,
+                fillColor: 'red',
+                parent: intersectionGroup
+            });
+        }
+    }
+    ```
 
 - `getCrossings(path)`
 
-  Returns all crossings between two `PathItem` items as an array of `CurveLocation` objects. `CompoundPath` items are also supported. Crossings are intersections where the paths actually are crossing each other, as opposed to simply touching.
+    Returns all crossings between two `PathItem` items as an array of `CurveLocation` objects.
+    `CompoundPath` items are also supported. Crossings are intersections where the paths actually
+    are crossing each other, as opposed to simply touching.
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the other item to find the crossings with
+    - `path:` `PathItem` — the other item to find the crossings with
 
-  - Returns:
+    - Returns:
 
-  - `Array of CurveLocation` objects — the locations of all crossings between the paths
+    - `Array of CurveLocation` objects — the locations of all crossings between the paths
 
-  - See also:
+    - See also:
 
-  - `getIntersections(path)`
+    - `getIntersections(path)`
 
 - `getNearestLocation(point)`
 
-  Returns the nearest location on the path item to the specified point.
+    Returns the nearest location on the path item to the specified point.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point for which we search the nearest location
+    - `point:` `Point` — the point for which we search the nearest location
 
-  - Returns:
+    - Returns:
 
-  - `CurveLocation` — the location on the path that’s the closest to the specified point
+    - `CurveLocation` — the location on the path that’s the closest to the specified point
 
 - `getNearestPoint(point)`
 
-  Returns the nearest point on the path item to the specified point.
+    Returns the nearest point on the path item to the specified point.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point for which we search the nearest point
+    - `point:` `Point` — the point for which we search the nearest point
 
-  - Returns:
+    - Returns:
 
-  - `Point` — the point on the path that’s the closest to the specified point
+    - `Point` — the point on the path that’s the closest to the specified point
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var star = new Path.Star({
-      center: view.center,
-      points: 10,
-      radius1: 30,
-      radius2: 60,
-      strokeColor: 'black'
-  });
+    ```py-2.5
+    var star = new Path.Star({
+        center: view.center,
+        points: 10,
+        radius1: 30,
+        radius2: 60,
+        strokeColor: 'black'
+    });
 
-  var circle = new Path.Circle({
-      center: view.center,
-      radius: 3,
-      fillColor: 'red'
-  });
+    var circle = new Path.Circle({
+        center: view.center,
+        radius: 3,
+        fillColor: 'red'
+    });
 
-  function onMouseMove(event) {
-      // Get the nearest point from the mouse position
-      // to the star shaped path:
-      var nearestPoint = star.getNearestPoint(event.point);
+    function onMouseMove(event) {
+        // Get the nearest point from the mouse position
+        // to the star shaped path:
+        var nearestPoint = star.getNearestPoint(event.point);
 
-      // Move the red circle to the nearest point:
-      circle.position = nearestPoint;
-  }
-  ```
+        // Move the red circle to the nearest point:
+        circle.position = nearestPoint;
+    }
+    ```
 
 ### Path Manipulation[](#path-manipulation)
 
 - `reverse()`
 
-  Reverses the orientation of the path item. When called on `CompoundPath` items, each of the nested paths is reversed. On `Path` items, the sequence of `path.segments` is reversed.
+    Reverses the orientation of the path item. When called on `CompoundPath` items, each of the
+    nested paths is reversed. On `Path` items, the sequence of `path.segments` is reversed.
 
 - `flatten([flatness])`
 
-  Flattens the curves in path items to a sequence of straight lines, by subdividing them enough times until the specified maximum error is met.
+    Flattens the curves in path items to a sequence of straight lines, by subdividing them enough
+    times until the specified maximum error is met.
 
-  - Parameters:
+    - Parameters:
 
-  - `flatness:` `Number` — the maximum error between the flattened lines and the original curves — optional, default: `0.25`
+    - `flatness:` `Number` — the maximum error between the flattened lines and the original curves —
+      optional, default: `0.25`
 
-  Example:Flattening a circle shaped path:
+    Example:Flattening a circle shaped path:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 35:
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 35:
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  // Select the path, so we can inspect its segments:
-  path.selected = true;
+    // Select the path, so we can inspect its segments:
+    path.selected = true;
 
-  // Create a copy of the path and move it by 150 points:
-  var copy = path.clone();
-  copy.position.x += 150;
+    // Create a copy of the path and move it by 150 points:
+    var copy = path.clone();
+    copy.position.x += 150;
 
-  // Flatten the copied path, with a maximum error of 4 points:
-  copy.flatten(4);
-  ```
+    // Flatten the copied path, with a maximum error of 4 points:
+    copy.flatten(4);
+    ```
 
 - `smooth([options])`
 
-  Smooths the path item without changing the amount of segments in the path or moving the segments’ locations, by smoothing and adjusting the angle and length of the segments’ handles based on the position and distance of neighboring segments.
+    Smooths the path item without changing the amount of segments in the path or moving the
+    segments’ locations, by smoothing and adjusting the angle and length of the segments’ handles
+    based on the position and distance of neighboring segments.
 
-  Smoothing works both for open paths and closed paths, and can be applied to the full path, as well as a sub-range of it. If a range is defined using the `options.from` and `options.to` properties, only the curve handles inside that range are touched. If one or both limits of the range are specified in negative indices, the indices are wrapped around the end of the curve. That way, a smoothing range in a close path can even wrap around the connection between the last and the first segment.
+    Smoothing works both for open paths and closed paths, and can be applied to the full path, as
+    well as a sub-range of it. If a range is defined using the `options.from` and `options.to`
+    properties, only the curve handles inside that range are touched. If one or both limits of the
+    range are specified in negative indices, the indices are wrapped around the end of the curve.
+    That way, a smoothing range in a close path can even wrap around the connection between the last
+    and the first segment.
 
-  Four different smoothing methods are available:
+    Four different smoothing methods are available:
 
-  - `'continuous'` smooths the path item by adjusting its curve handles so that the first and second derivatives of all involved curves are continuous across their boundaries.
+    - `'continuous'` smooths the path item by adjusting its curve handles so that the first and
+      second derivatives of all involved curves are continuous across their boundaries.
 
-    This method tends to result in the smoothest results, but does not allow for further parametrization of the handles.
+        This method tends to result in the smoothest results, but does not allow for further
+        parametrization of the handles.
 
-  - `'asymmetric'` is based on the same principle as `'continuous'` but uses different factors so that the result is asymmetric. This used to the only method available until v0.10.0, and is currently still the default when no method is specified, for reasons of backward compatibility. It will eventually be removed.
+    - `'asymmetric'` is based on the same principle as `'continuous'` but uses different factors so
+      that the result is asymmetric. This used to the only method available until v0.10.0, and is
+      currently still the default when no method is specified, for reasons of backward
+      compatibility. It will eventually be removed.
 
-  - `'catmull-rom'` uses the Catmull-Rom spline to smooth the segment.
+    - `'catmull-rom'` uses the Catmull-Rom spline to smooth the segment.
 
-    The optionally passed factor controls the knot parametrization of the algorithm:
+        The optionally passed factor controls the knot parametrization of the algorithm:
 
-    - `0.0`: the standard, uniform Catmull-Rom spline
+        - `0.0`: the standard, uniform Catmull-Rom spline
 
-    - `0.5`: the centripetal Catmull-Rom spline, guaranteeing no self-intersections
+        - `0.5`: the centripetal Catmull-Rom spline, guaranteeing no self-intersections
 
-    - `1.0`: the chordal Catmull-Rom spline
+        - `1.0`: the chordal Catmull-Rom spline
 
-  - `'geometric'` use a simple heuristic and empiric geometric method to smooth the segment’s handles. The handles were weighted, meaning that big differences in distances between the segments will lead to probably undesired results.
+    - `'geometric'` use a simple heuristic and empiric geometric method to smooth the segment’s
+      handles. The handles were weighted, meaning that big differences in distances between the
+      segments will lead to probably undesired results.
 
-    The optionally passed factor defines the tension parameter (`0…1`), controlling the amount of smoothing as a factor by which to scale each handle.
+        The optionally passed factor defines the tension parameter (`0…1`), controlling the amount
+        of smoothing as a factor by which to scale each handle.
 
-  - Options:
+    - Options:
 
-  - `options.type: String` — the type of smoothing method: `‘continuous’`, `‘asymmetric’`, `‘catmull-rom’`, `‘geometric’` — default: `‘asymmetric’`
+    - `options.type: String` — the type of smoothing method: `‘continuous’`, `‘asymmetric’`,
+      `‘catmull-rom’`, `‘geometric’` — default: `‘asymmetric’`
 
-  - `options.factor: Number` — the factor parameterizing the smoothing method — default: `0.5` for `'catmull-rom'`, `0.4` for `'geometric'`
+    - `options.factor: Number` — the factor parameterizing the smoothing method — default: `0.5` for
+      `'catmull-rom'`, `0.4` for `'geometric'`
 
-  - `options.from: Number`⟋`Segment`⟋`Curve` — the segment or curve at which to start smoothing, if not the full path shall be smoothed (inclusive). This can either be a segment index, or a segment or curve object that is part of the path. If the passed number is negative, the index is wrapped around the end of the path.
+    - `options.from: Number`⟋`Segment`⟋`Curve` — the segment or curve at which to start smoothing,
+      if not the full path shall be smoothed (inclusive). This can either be a segment index, or a
+      segment or curve object that is part of the path. If the passed number is negative, the index
+      is wrapped around the end of the path.
 
-  - `options.to: Number`⟋`Segment`⟋`Curve` — the segment or curve to which the handles of the path shall be processed (inclusive). This can either be a segment index, or a segment or curve object that is part of the path. If the passed number is negative, the index is wrapped around the end of the path.
+    - `options.to: Number`⟋`Segment`⟋`Curve` — the segment or curve to which the handles of the path
+      shall be processed (inclusive). This can either be a segment index, or a segment or curve
+      object that is part of the path. If the passed number is negative, the index is wrapped around
+      the end of the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object` — the smoothing options — optional
+    - `options:` `Object` — the smoothing options — optional
 
-  - See also:
+    - See also:
 
-  - `segment.smooth([options])`
+    - `segment.smooth([options])`
 
-  Example:Smoothing a closed shape:
+    Example:Smoothing a closed shape:
 
-  ``` py-2.5
-  // Create a rectangular path with its top-left point at
-  // {x: 30, y: 25} and a size of {width: 50, height: 50}:
-  var path = new Path.Rectangle({
-      point: [30, 25],
-      size: [50, 50],
-      strokeColor: 'black',
-  });
+    ```py-2.5
+    // Create a rectangular path with its top-left point at
+    // {x: 30, y: 25} and a size of {width: 50, height: 50}:
+    var path = new Path.Rectangle({
+        point: [30, 25],
+        size: [50, 50],
+        strokeColor: 'black',
+    });
 
-  // Select the path, so we can see its handles:
-  path.fullySelected = true;
+    // Select the path, so we can see its handles:
+    path.fullySelected = true;
 
-  // Create a copy of the path and move it 100 to the right:
-  var copy = path.clone();
-  copy.position.x += 100;
+    // Create a copy of the path and move it 100 to the right:
+    var copy = path.clone();
+    copy.position.x += 100;
 
-  // Smooth the segments of the copy:
-  copy.smooth({ type: 'continuous' });
-  ```
+    // Smooth the segments of the copy:
+    copy.smooth({ type: 'continuous' });
+    ```
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path();
+    path.strokeColor = 'black';
 
-  path.add(new Point(30, 50));
+    path.add(new Point(30, 50));
 
-  var y = 5;
-  var x = 3;
+    var y = 5;
+    var x = 3;
 
-  for (var i = 0; i < 28; i++) {
-      y *= -1.1;
-      x *= 1.1;
-      path.lineBy(x, y);
-  }
+    for (var i = 0; i < 28; i++) {
+        y *= -1.1;
+        x *= 1.1;
+        path.lineBy(x, y);
+    }
 
-  // Create a copy of the path and move it 100 down:
-  var copy = path.clone();
-  copy.position.y += 120;
+    // Create a copy of the path and move it 100 down:
+    var copy = path.clone();
+    copy.position.y += 120;
 
-  // Select the path, so we can see its handles:
-  copy.fullySelected = true;
+    // Select the path, so we can see its handles:
+    copy.fullySelected = true;
 
-  // Smooth the path using centripetal Catmull-Rom splines:
-  copy.smooth({ type: 'catmull-rom', factor: 0.5 });
-  ```
+    // Smooth the path using centripetal Catmull-Rom splines:
+    copy.smooth({ type: 'catmull-rom', factor: 0.5 });
+    ```
 
-  Example:Smoothing ranges of paths, using segments, curves or indices:
+    Example:Smoothing ranges of paths, using segments, curves or indices:
 
-  ``` py-2.5
-  // Create 5 rectangles, next to each other:
-  var paths = [];
-  for (var i = 0; i < 5; i++) {
-      paths.push(new Path.Rectangle({
-          point: [30 + i * 100, 30],
-          size: [50, 50],
-          fullySelected: true
-      }));
-  }
-  // Smooth a range, using segments:
-  paths[1].smooth({
-      type: 'continuous',
-      from: paths[1].segments[0],
-      to: paths[1].segments[2]
-  });
+    ```py-2.5
+    // Create 5 rectangles, next to each other:
+    var paths = [];
+    for (var i = 0; i < 5; i++) {
+        paths.push(new Path.Rectangle({
+            point: [30 + i * 100, 30],
+            size: [50, 50],
+            fullySelected: true
+        }));
+    }
+    // Smooth a range, using segments:
+    paths[1].smooth({
+        type: 'continuous',
+        from: paths[1].segments[0],
+        to: paths[1].segments[2]
+    });
 
-  // Smooth a range, using curves:
-  paths[2].smooth({
-      type: 'continuous',
-      from: paths[2].curves[0],
-      to: paths[2].curves[1]
-  });
+    // Smooth a range, using curves:
+    paths[2].smooth({
+        type: 'continuous',
+        from: paths[2].curves[0],
+        to: paths[2].curves[1]
+    });
 
-  // Smooth a range, using indices:
-  paths[3].smooth({ type: 'continuous', from: 0, to: 2 });
+    // Smooth a range, using indices:
+    paths[3].smooth({ type: 'continuous', from: 0, to: 2 });
 
-  // Smooth a range, using negative indices:
-  paths[4].smooth({ type: 'continuous', from: -1, to: 1 });
-  ```
+    // Smooth a range, using negative indices:
+    paths[4].smooth({ type: 'continuous', from: -1, to: 1 });
+    ```
 
 - `simplify([tolerance])`
 
-  Fits a sequence of as few curves as possible through the path’s anchor points, ignoring the path items’s curve-handles, with an allowed maximum error. When called on `CompoundPath` items, each of the nested paths is simplified. On `Path` items, the `path.segments` array is processed and replaced by the resulting sequence of fitted curves.
+    Fits a sequence of as few curves as possible through the path’s anchor points, ignoring the path
+    items’s curve-handles, with an allowed maximum error. When called on `CompoundPath` items, each
+    of the nested paths is simplified. On `Path` items, the `path.segments` array is processed and
+    replaced by the resulting sequence of fitted curves.
 
-  This method can be used to process and simplify the point data received from a mouse or touch device.
+    This method can be used to process and simplify the point data received from a mouse or touch
+    device.
 
-  - Parameters:
+    - Parameters:
 
-  - `tolerance:` `Number` — the allowed maximum error when fitting the curves through the segment points — optional, default: `2.5`
+    - `tolerance:` `Number` — the allowed maximum error when fitting the curves through the segment
+      points — optional, default: `2.5`
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the method was capable of fitting curves through the path’s segment points, `false` otherwise
+    - `Boolean` — `true` if the method was capable of fitting curves through the path’s segment
+      points, `false` otherwise
 
-  Example:Click and drag below to draw to draw a line, when you release the mouse, the is made smooth using path.simplify():
+    Example:Click and drag below to draw to draw a line, when you release the mouse, the is made
+    smooth using path.simplify():
 
-  ``` py-2.5
-  var path;
-  function onMouseDown(event) {
-      // If we already made a path before, deselect it:
-      if (path) {
-          path.selected = false;
-      }
+    ```py-2.5
+    var path;
+    function onMouseDown(event) {
+        // If we already made a path before, deselect it:
+        if (path) {
+            path.selected = false;
+        }
 
-      // Create a new path and add the position of the mouse
-      // as its first segment. Select it, so we can see the
-      // segment points:
-      path = new Path({
-          segments: [event.point],
-          strokeColor: 'black',
-          selected: true
-      });
-  }
+        // Create a new path and add the position of the mouse
+        // as its first segment. Select it, so we can see the
+        // segment points:
+        path = new Path({
+            segments: [event.point],
+            strokeColor: 'black',
+            selected: true
+        });
+    }
 
-  function onMouseDrag(event) {
-      // On every drag event, add a segment to the path
-      // at the position of the mouse:
-      path.add(event.point);
-  }
+    function onMouseDrag(event) {
+        // On every drag event, add a segment to the path
+        // at the position of the mouse:
+        path.add(event.point);
+    }
 
-  function onMouseUp(event) {
-      // When the mouse is released, simplify the path:
-      path.simplify();
-      path.selected = true;
-  }
-  ```
+    function onMouseUp(event) {
+        // When the mouse is released, simplify the path:
+        path.simplify();
+        path.selected = true;
+    }
+    ```
 
 - `interpolate(from, to, factor)`
 
-  Interpolates between the two specified path items and uses the result as the geometry for this path item. The number of children and segments in the two paths involved in the operation should be the same.
+    Interpolates between the two specified path items and uses the result as the geometry for this
+    path item. The number of children and segments in the two paths involved in the operation should
+    be the same.
 
-  - Parameters:
+    - Parameters:
 
-  - `from:` `PathItem` — the path item defining the geometry when `factor` is `0`
+    - `from:` `PathItem` — the path item defining the geometry when `factor` is `0`
 
-  - `to:` `PathItem` — the path item defining the geometry when `factor` is `1`
+    - `to:` `PathItem` — the path item defining the geometry when `factor` is `1`
 
-  - `factor:` `Number` — the interpolation coefficient, typically between `0` and `1`, but extrapolation is possible too
+    - `factor:` `Number` — the interpolation coefficient, typically between `0` and `1`, but
+      extrapolation is possible too
 
 - `compare(path)`
 
-  Compares the geometry of two paths to see if they describe the same shape, detecting cases where paths start in different segments or even use different amounts of curves to describe the same shape, as long as their orientation is the same, and their segments and handles really result in the same visual appearance of curves.
+    Compares the geometry of two paths to see if they describe the same shape, detecting cases where
+    paths start in different segments or even use different amounts of curves to describe the same
+    shape, as long as their orientation is the same, and their segments and handles really result in
+    the same visual appearance of curves.
 
-  - Parameters:
+    - Parameters:
 
-  - `path:` `PathItem` — the path to compare this path’s geometry with
+    - `path:` `PathItem` — the path to compare this path’s geometry with
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if two paths describe the same shape, `false` otherwise
+    - `Boolean` — `true` if two paths describe the same shape, `false` otherwise
 
 ### Postscript Style Drawing Commands[](#postscript-style-drawing-commands)
 
 - `moveTo(point)`
 
-  On a normal empty `Path`, the point is simply added as the path’s first segment. If called on a `CompoundPath`, a new `Path` is created as a child and the point is added as its first segment.
+    On a normal empty `Path`, the point is simply added as the path’s first segment. If called on a
+    `CompoundPath`, a new `Path` is created as a child and the point is added as its first segment.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point in which to start the path
+    - `point:` `Point` — the point in which to start the path
 
 - `lineTo(point)`
 
-  Adds a straight curve to the path, from the the last segment in the path to the specified point.
+    Adds a straight curve to the path, from the the last segment in the path to the specified point.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the destination point of the newly added straight curve
+    - `point:` `Point` — the destination point of the newly added straight curve
 
 - `arcTo(through, to)`
 
-  Adds an arc from the position of the last segment in the path, passing through the specified `through` point, to the specified `to` point, by adding one or more segments to the path.
+    Adds an arc from the position of the last segment in the path, passing through the specified
+    `through` point, to the specified `to` point, by adding one or more segments to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `through:` `Point` — the point where the arc should pass through
+    - `through:` `Point` — the point where the arc should pass through
 
-  - `to:` `Point` — the point where the arc should end
+    - `to:` `Point` — the point where the arc should end
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path();
+    path.strokeColor = 'black';
 
-  var firstPoint = new Point(30, 75);
-  path.add(firstPoint);
+    var firstPoint = new Point(30, 75);
+    path.add(firstPoint);
 
-  // The point through which we will create the arc:
-  var throughPoint = new Point(40, 40);
+    // The point through which we will create the arc:
+    var throughPoint = new Point(40, 40);
 
-  // The point at which the arc will end:
-  var toPoint = new Point(130, 75);
+    // The point at which the arc will end:
+    var toPoint = new Point(130, 75);
 
-  // Draw an arc through 'throughPoint' to 'toPoint'
-  path.arcTo(throughPoint, toPoint);
+    // Draw an arc through 'throughPoint' to 'toPoint'
+    path.arcTo(throughPoint, toPoint);
 
-  // Add a red circle shaped path at the position of 'throughPoint':
-  var circle = new Path.Circle(throughPoint, 3);
-  circle.fillColor = 'red';
-  ```
+    // Add a red circle shaped path at the position of 'throughPoint':
+    var circle = new Path.Circle(throughPoint, 3);
+    circle.fillColor = 'red';
+    ```
 
-  Example:Interactive example. Click and drag in the view below:
+    Example:Interactive example. Click and drag in the view below:
 
-  ``` py-2.5
-  var myPath;
-  function onMouseDrag(event) {
-      // If we created a path before, remove it:
-      if (myPath) {
-          myPath.remove();
-      }
+    ```py-2.5
+    var myPath;
+    function onMouseDrag(event) {
+        // If we created a path before, remove it:
+        if (myPath) {
+            myPath.remove();
+        }
 
-      // Create a new path and add a segment point to it
-      // at {x: 150, y: 150):
-      myPath = new Path();
-      myPath.add(150, 150);
+        // Create a new path and add a segment point to it
+        // at {x: 150, y: 150):
+        myPath = new Path();
+        myPath.add(150, 150);
 
-      // Draw an arc through the position of the mouse to 'toPoint'
-      var toPoint = new Point(350, 150);
-      myPath.arcTo(event.point, toPoint);
+        // Draw an arc through the position of the mouse to 'toPoint'
+        var toPoint = new Point(350, 150);
+        myPath.arcTo(event.point, toPoint);
 
-      // Select the path, so we can see its segments:
-      myPath.selected = true;
-  }
+        // Select the path, so we can see its segments:
+        myPath.selected = true;
+    }
 
-  // When the mouse is released, deselect the path
-  // and fill it with black.
-  function onMouseUp(event) {
-      myPath.selected = false;
-      myPath.fillColor = 'black';
-  }
-  ```
+    // When the mouse is released, deselect the path
+    // and fill it with black.
+    function onMouseUp(event) {
+        myPath.selected = false;
+        myPath.fillColor = 'black';
+    }
+    ```
 
 - `arcTo(to[, clockwise])`
 
-  Adds an arc from the position of the last segment in the path to the specified point, by adding one or more segments to the path.
+    Adds an arc from the position of the last segment in the path to the specified point, by adding
+    one or more segments to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `to:` `Point` — the point where the arc should end
+    - `to:` `Point` — the point where the arc should end
 
-  - `clockwise:` `Boolean` — specifies whether the arc should be drawn in clockwise direction — optional, default: `true`
+    - `clockwise:` `Boolean` — specifies whether the arc should be drawn in clockwise direction —
+      optional, default: `true`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path();
+    path.strokeColor = 'black';
 
-  path.add(new Point(30, 75));
-  path.arcTo(new Point(130, 75));
+    path.add(new Point(30, 75));
+    path.arcTo(new Point(130, 75));
 
-  var path2 = new Path();
-  path2.strokeColor = 'red';
-  path2.add(new Point(180, 25));
+    var path2 = new Path();
+    path2.strokeColor = 'red';
+    path2.add(new Point(180, 25));
 
-  // To draw an arc in anticlockwise direction,
-  // we pass `false` as the second argument to arcTo:
-  path2.arcTo(new Point(280, 25), false);
-  ```
+    // To draw an arc in anticlockwise direction,
+    // we pass `false` as the second argument to arcTo:
+    path2.arcTo(new Point(280, 25), false);
+    ```
 
-  Example:Interactive example. Click and drag in the view below:
+    Example:Interactive example. Click and drag in the view below:
 
-  ``` py-2.5
-  var myPath;
+    ```py-2.5
+    var myPath;
 
-  // The mouse has to move at least 20 points before
-  // the next mouse drag event is fired:
-  tool.minDistance = 20;
+    // The mouse has to move at least 20 points before
+    // the next mouse drag event is fired:
+    tool.minDistance = 20;
 
-  // When the user clicks, create a new path and add
-  // the current mouse position to it as its first segment:
-  function onMouseDown(event) {
-      myPath = new Path();
-      myPath.strokeColor = 'black';
-      myPath.add(event.point);
-  }
+    // When the user clicks, create a new path and add
+    // the current mouse position to it as its first segment:
+    function onMouseDown(event) {
+        myPath = new Path();
+        myPath.strokeColor = 'black';
+        myPath.add(event.point);
+    }
 
-  // On each mouse drag event, draw an arc to the current
-  // position of the mouse:
-  function onMouseDrag(event) {
-      myPath.arcTo(event.point);
-  }
-  ```
+    // On each mouse drag event, draw an arc to the current
+    // position of the mouse:
+    function onMouseDrag(event) {
+        myPath.arcTo(event.point);
+    }
+    ```
 
 - `curveTo(through, to[, time])`
 
-  Adds a curve from the last segment in the path through the specified `through` point, to the specified destination point by adding one segment to the path.
+    Adds a curve from the last segment in the path through the specified `through` point, to the
+    specified destination point by adding one segment to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `through:` `Point` — the point through which the curve should pass
+    - `through:` `Point` — the point through which the curve should pass
 
-  - `to:` `Point` — the destination point of the newly added curve
+    - `to:` `Point` — the destination point of the newly added curve
 
-  - `time:` `Number` — the curve-time parameter at which the `through` point is to be located — optional, default: `0.5`
+    - `time:` `Number` — the curve-time parameter at which the `through` point is to be located —
+      optional, default: `0.5`
 
-  Example:Interactive example. Move your mouse around the view below:
+    Example:Interactive example. Move your mouse around the view below:
 
-  ``` py-2.5
-  var myPath;
-  function onMouseMove(event) {
-      // If we created a path before, remove it:
-      if (myPath) {
-          myPath.remove();
-      }
+    ```py-2.5
+    var myPath;
+    function onMouseMove(event) {
+        // If we created a path before, remove it:
+        if (myPath) {
+            myPath.remove();
+        }
 
-      // Create a new path and add a segment point to it
-      // at {x: 150, y: 150):
-      myPath = new Path();
-      myPath.add(150, 150);
+        // Create a new path and add a segment point to it
+        // at {x: 150, y: 150):
+        myPath = new Path();
+        myPath.add(150, 150);
 
-      // Draw a curve through the position of the mouse to 'toPoint'
-      var toPoint = new Point(350, 150);
-      myPath.curveTo(event.point, toPoint);
+        // Draw a curve through the position of the mouse to 'toPoint'
+        var toPoint = new Point(350, 150);
+        myPath.curveTo(event.point, toPoint);
 
-      // Select the path, so we can see its segments:
-      myPath.selected = true;
-  }
-  ```
+        // Select the path, so we can see its segments:
+        myPath.selected = true;
+    }
+    ```
 
 - `cubicCurveTo(handle1, handle2, to)`
 
-  Adds a cubic bezier curve to the path, from the last segment to the specified destination point, with the curve itself defined by two specified handles.
+    Adds a cubic bezier curve to the path, from the last segment to the specified destination point,
+    with the curve itself defined by two specified handles.
 
-  - Parameters:
+    - Parameters:
 
-  - `handle1:` `Point` — the location of the first handle of the newly added curve in absolute coordinates, out of which the relative values for `segment.handleOut` of its first segment are calculated
+    - `handle1:` `Point` — the location of the first handle of the newly added curve in absolute
+      coordinates, out of which the relative values for `segment.handleOut` of its first segment are
+      calculated
 
-  - `handle2:` `Point` — the location of the second handle of the newly added curve in absolute coordinates, out of which the relative values for `segment.handleIn` of its second segment are calculated
+    - `handle2:` `Point` — the location of the second handle of the newly added curve in absolute
+      coordinates, out of which the relative values for `segment.handleIn` of its second segment are
+      calculated
 
-  - `to:` `Point` — the destination point of the newly added curve
+    - `to:` `Point` — the destination point of the newly added curve
 
 - `quadraticCurveTo(handle, to)`
 
-  Adds a quadratic bezier curve to the path, from the last segment to the specified destination point, with the curve itself defined by the specified handle.
+    Adds a quadratic bezier curve to the path, from the last segment to the specified destination
+    point, with the curve itself defined by the specified handle.
 
-  Note that Paper.js only stores cubic curves, so the handle is actually converted.
+    Note that Paper.js only stores cubic curves, so the handle is actually converted.
 
-  - Parameters:
+    - Parameters:
 
-  - `handle:` `Point` — the location of the handle of the newly added quadratic curve in absolute coordinates, out of which the relative values for `segment.handleOut` of the resulting cubic curve’s first segment and `segment.handleIn` of its second segment are calculated
+    - `handle:` `Point` — the location of the handle of the newly added quadratic curve in absolute
+      coordinates, out of which the relative values for `segment.handleOut` of the resulting cubic
+      curve’s first segment and `segment.handleIn` of its second segment are calculated
 
-  - `to:` `Point` — the destination point of the newly added curve
+    - `to:` `Point` — the destination point of the newly added curve
 
 - `closePath()`
 
-  Closes the path. When closed, Paper.js connects the first and last segment of the path with an additional curve. The difference to setting `path.closed` to `true` is that this will also merge the first segment with the last if they lie in the same location.
+    Closes the path. When closed, Paper.js connects the first and last segment of the path with an
+    additional curve. The difference to setting `path.closed` to `true` is that this will also merge
+    the first segment with the last if they lie in the same location.
 
-  - See also:
+    - See also:
 
-  - `path.closed`
+    - `path.closed`
 
 ### Relative Drawing Commands[](#relative-drawing-commands)
 
 - `moveBy(to)`
 
-  If called on a `CompoundPath`, a new `Path` is created as a child and a point is added as its first segment relative to the position of the last segment of the current path.
+    If called on a `CompoundPath`, a new `Path` is created as a child and a point is added as its
+    first segment relative to the position of the last segment of the current path.
 
-  - Parameters:
+    - Parameters:
 
-  - `to:` `Point`
+    - `to:` `Point`
 
 - `lineBy(point)`
 
-  Adds a straight curve to the path, from the the last segment in the path to the `to` vector specified relatively to it.
+    Adds a straight curve to the path, from the the last segment in the path to the `to` vector
+    specified relatively to it.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the vector describing the destination of the newly added straight curve
+    - `point:` `Point` — the vector describing the destination of the newly added straight curve
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path();
+    path.strokeColor = 'black';
 
-  // Add a segment at {x: 50, y: 50}
-  path.add(25, 25);
+    // Add a segment at {x: 50, y: 50}
+    path.add(25, 25);
 
-  // Add a segment relative to the last segment of the path.
-  // 50 in x direction and 0 in y direction, becomes {x: 75, y: 25}
-  path.lineBy(50, 0);
+    // Add a segment relative to the last segment of the path.
+    // 50 in x direction and 0 in y direction, becomes {x: 75, y: 25}
+    path.lineBy(50, 0);
 
-  // 0 in x direction and 50 in y direction, becomes {x: 75, y: 75}
-  path.lineBy(0, 50);
-  ```
+    // 0 in x direction and 50 in y direction, becomes {x: 75, y: 75}
+    path.lineBy(0, 50);
+    ```
 
-  Example:Drawing a spiral using lineBy:
+    Example:Drawing a spiral using lineBy:
 
-  ``` py-2.5
-  var path = new Path();
-  path.strokeColor = 'black';
+    ```py-2.5
+    var path = new Path();
+    path.strokeColor = 'black';
 
-  // Add the first segment at {x: 50, y: 50}
-  path.add(view.center);
+    // Add the first segment at {x: 50, y: 50}
+    path.add(view.center);
 
-  // Loop 500 times:
-  for (var i = 0; i < 500; i++) {
-      // Create a vector with an ever increasing length
-      // and an angle in increments of 45 degrees
-      var vector = new Point({
-          angle: i * 45,
-          length: i / 2
-      });
-      // Add the vector relatively to the last segment point:
-      path.lineBy(vector);
-  }
+    // Loop 500 times:
+    for (var i = 0; i < 500; i++) {
+        // Create a vector with an ever increasing length
+        // and an angle in increments of 45 degrees
+        var vector = new Point({
+            angle: i * 45,
+            length: i / 2
+        });
+        // Add the vector relatively to the last segment point:
+        path.lineBy(vector);
+    }
 
-  // Smooth the handles of the path:
-  path.smooth();
+    // Smooth the handles of the path:
+    path.smooth();
 
-  // Uncomment the following line and click on 'run' to see
-  // the construction of the path:
-  // path.selected = true;
-  ```
+    // Uncomment the following line and click on 'run' to see
+    // the construction of the path:
+    // path.selected = true;
+    ```
 
 - `arcBy(through, to)`
 
-  Adds an arc from the position of the last segment in the path, passing through the specified `through` vector, to the specified `to` vector, all specified relatively to it by these given vectors, by adding one or more segments to the path.
+    Adds an arc from the position of the last segment in the path, passing through the specified
+    `through` vector, to the specified `to` vector, all specified relatively to it by these given
+    vectors, by adding one or more segments to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `through:` `Point` — the vector where the arc should pass through
+    - `through:` `Point` — the vector where the arc should pass through
 
-  - `to:` `Point` — the vector where the arc should end
+    - `to:` `Point` — the vector where the arc should end
 
 - `arcBy(to[, clockwise])`
 
-  Adds an arc from the position of the last segment in the path to the `to` vector specified relatively to it, by adding one or more segments to the path.
+    Adds an arc from the position of the last segment in the path to the `to` vector specified
+    relatively to it, by adding one or more segments to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `to:` `Point` — the vector where the arc should end
+    - `to:` `Point` — the vector where the arc should end
 
-  - `clockwise:` `Boolean` — specifies whether the arc should be drawn in clockwise direction — optional, default: `true`
+    - `clockwise:` `Boolean` — specifies whether the arc should be drawn in clockwise direction —
+      optional, default: `true`
 
 - `curveBy(through, to[, time])`
 
-  Adds a curve from the last segment in the path through the specified `through` vector, to the specified `to` vector, all specified relatively to it by these given vectors, by adding one segment to the path.
+    Adds a curve from the last segment in the path through the specified `through` vector, to the
+    specified `to` vector, all specified relatively to it by these given vectors, by adding one
+    segment to the path.
 
-  - Parameters:
+    - Parameters:
 
-  - `through:` `Point` — the vector through which the curve should pass
+    - `through:` `Point` — the vector through which the curve should pass
 
-  - `to:` `Point` — the destination vector of the newly added curve
+    - `to:` `Point` — the destination vector of the newly added curve
 
-  - `time:` `Number` — the curve-time parameter at which the `through` point is to be located — optional, default: `0.5`
+    - `time:` `Number` — the curve-time parameter at which the `through` point is to be located —
+      optional, default: `0.5`
 
 - `cubicCurveBy(handle1, handle2, to)`
 
-  Adds a cubic bezier curve to the path, from the last segment to the to the specified `to` vector, with the curve itself defined by two specified handles.
+    Adds a cubic bezier curve to the path, from the last segment to the to the specified `to`
+    vector, with the curve itself defined by two specified handles.
 
-  - Parameters:
+    - Parameters:
 
-  - `handle1:` `Point` — the location of the first handle of the newly added curve
+    - `handle1:` `Point` — the location of the first handle of the newly added curve
 
-  - `handle2:` `Point` — the location of the second handle of the newly added curve
+    - `handle2:` `Point` — the location of the second handle of the newly added curve
 
-  - `to:` `Point` — the destination point of the newly added curve
+    - `to:` `Point` — the destination point of the newly added curve
 
 - `quadraticCurveBy(handle, to)`
 
-  Adds a quadratic bezier curve to the path, from the last segment to the specified destination point, with the curve itself defined by the specified handle.
+    Adds a quadratic bezier curve to the path, from the last segment to the specified destination
+    point, with the curve itself defined by the specified handle.
 
-  Note that Paper.js only stores cubic curves, so the handle is actually converted.
+    Note that Paper.js only stores cubic curves, so the handle is actually converted.
 
-  - Parameters:
+    - Parameters:
 
-  - `handle:` `Point` — the handle of the newly added quadratic curve out of which the values for `segment.handleOut` of the resulting cubic curve’s first segment and `segment.handleIn` of its second segment are calculated
+    - `handle:` `Point` — the handle of the newly added quadratic curve out of which the values for
+      `segment.handleOut` of the resulting cubic curve’s first segment and `segment.handleIn` of its
+      second segment are calculated
 
-  - `to:` `Point` — the destination point of the newly added curve
+    - `to:` `Point` — the destination point of the newly added curve
 
 ## Static Methods[](#static-methods)
 
 - `PathItem.create(pathData)`
 
-  Creates a path item from the given SVG path-data, determining if the data describes a plain path or a compound-path with multiple sub-paths.
+    Creates a path item from the given SVG path-data, determining if the data describes a plain path
+    or a compound-path with multiple sub-paths.
 
-  - Parameters:
+    - Parameters:
 
-  - `pathData:` `String` — the SVG path-data to parse
+    - `pathData:` `String` — the SVG path-data to parse
 
-  - Returns:
+    - Returns:
 
-  - `Path`⟋`CompoundPath` — the newly created path item
+    - `Path`⟋`CompoundPath` — the newly created path item
 
 - `PathItem.create(segments)`
 
-  Creates a path item from the given segments array, determining if the array describes a plain path or a compound-path with multiple sub-paths.
+    Creates a path item from the given segments array, determining if the array describes a plain
+    path or a compound-path with multiple sub-paths.
 
-  - Parameters:
+    - Parameters:
 
-  - `segments:` Array of `Number[]` objects\[\] — the segments array to parse
+    - `segments:` Array of `Number[]` objects\[\] — the segments array to parse
 
-  - Returns:
+    - Returns:
 
-  - `Path`⟋`CompoundPath` — the newly created path item
+    - `Path`⟋`CompoundPath` — the newly created path item
 
 - `PathItem.create(object)`
 
-  Creates a path item from the given object, determining if the contained information describes a plain path or a compound-path with multiple sub-paths.
+    Creates a path item from the given object, determining if the contained information describes a
+    plain path or a compound-path with multiple sub-paths.
 
-  - Parameters:
+    - Parameters:
 
-  - `object:` `Object` — an object containing the properties describing the item to be created
+    - `object:` `Object` — an object containing the properties describing the item to be created
 
-  - Returns:
+    - Returns:
 
-  - `Path`⟋`CompoundPath` — the newly created path item
+    - `Path`⟋`CompoundPath` — the newly created path item
 
 ## Properties inherited from `Item`[](#properties-inherited-from-item)
 
 - `id`
 
-  The unique id of the item.
+    The unique id of the item.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 - `className`
 
-  The class name of the item as a string.
+    The class name of the item as a string.
 
-  - Values:
+    - Values:
 
-  - `'Group'`, `'Layer'`, `'Path'`, `'CompoundPath'`, `'Shape'`, `'Raster'`, `'SymbolItem'`, `'PointText'`
+    - `'Group'`, `'Layer'`, `'Path'`, `'CompoundPath'`, `'Shape'`, `'Raster'`, `'SymbolItem'`,
+      `'PointText'`
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
-  `name`
+    `name`
 
-  The name of the item. If the item has a name, it can be accessed by name through its parent’s children list.
+    The name of the item. If the item has a name, it can be accessed by name through its parent’s
+    children list.
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
-  // Set the name of the path:
-  path.name = 'example';
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
+    // Set the name of the path:
+    path.name = 'example';
 
-  // Create a group and add path to it as a child:
-  var group = new Group();
-  group.addChild(path);
+    // Create a group and add path to it as a child:
+    var group = new Group();
+    group.addChild(path);
 
-  // The path can be accessed by name:
-  group.children['example'].fillColor = 'red';
-  ```
+    // The path can be accessed by name:
+    group.children['example'].fillColor = 'red';
+    ```
 
 - `style`
 
-  The path style of the item.
+    The path style of the item.
 
-  - Type:
+    - Type:
 
-  - `Style`
+    - `Style`
 
-  Example:Applying several styles to an item in one go, by passing an object to its style property:
+    Example:Applying several styles to an item in one go, by passing an object to its style
+    property:
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 30
-  });
-  circle.style = {
-      fillColor: 'blue',
-      strokeColor: 'red',
-      strokeWidth: 5
-  };
-  ```
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 30
+    });
+    circle.style = {
+        fillColor: 'blue',
+        strokeColor: 'red',
+        strokeWidth: 5
+    };
+    ```
 
-  Example:Copying the style of another item:
+    Example:Copying the style of another item:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [50, 50],
-      radius: 30,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [50, 50],
+        radius: 30,
+        fillColor: 'red'
+    });
 
-  var path2 = new Path.Circle({
-      center: new Point(180, 50),
-      radius: 20
-  });
+    var path2 = new Path.Circle({
+        center: new Point(180, 50),
+        radius: 20
+    });
 
-  // Copy the path style of path:
-  path2.style = path.style;
-  ```
+    // Copy the path style of path:
+    path2.style = path.style;
+    ```
 
-  Example:Applying the same style object to multiple items:
+    Example:Applying the same style object to multiple items:
 
-  ``` py-2.5
-  var myStyle = {
-      fillColor: 'red',
-      strokeColor: 'blue',
-      strokeWidth: 4
-  };
+    ```py-2.5
+    var myStyle = {
+        fillColor: 'red',
+        strokeColor: 'blue',
+        strokeWidth: 4
+    };
 
-  var path = new Path.Circle({
-      center: [50, 50],
-      radius: 30
-  });
-  path.style = myStyle;
+    var path = new Path.Circle({
+        center: [50, 50],
+        radius: 30
+    });
+    path.style = myStyle;
 
-  var path2 = new Path.Circle({
-      center: new Point(150, 50),
-      radius: 20
-  });
-  path2.style = myStyle;
-  ```
+    var path2 = new Path.Circle({
+        center: new Point(150, 50),
+        radius: 20
+    });
+    path2.style = myStyle;
+    ```
 
 - `locked`
 
-  Specifies whether the item is locked. When set to `true`, item interactions with the mouse are disabled.
+    Specifies whether the item is locked. When set to `true`, item interactions with the mouse are
+    disabled.
 
-  - Default:
+    - Default:
 
-  - `false`
+    - `false`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var unlockedItem = new Path.Circle({
-      center: view.center - [35, 0],
-      radius: 30,
-      fillColor: 'springgreen',
-      onMouseDown: function() {
-          this.fillColor = Color.random();
-      }
-  });
+    ```py-2.5
+    var unlockedItem = new Path.Circle({
+        center: view.center - [35, 0],
+        radius: 30,
+        fillColor: 'springgreen',
+        onMouseDown: function() {
+            this.fillColor = Color.random();
+        }
+    });
 
-  var lockedItem = new Path.Circle({
-      center: view.center + [35, 0],
-      radius: 30,
-      fillColor: 'crimson',
-      locked: true,
-      // This event won't be triggered because the item is locked.
-      onMouseDown: function() {
-          this.fillColor = Color.random();
-      }
-  });
+    var lockedItem = new Path.Circle({
+        center: view.center + [35, 0],
+        radius: 30,
+        fillColor: 'crimson',
+        locked: true,
+        // This event won't be triggered because the item is locked.
+        onMouseDown: function() {
+            this.fillColor = Color.random();
+        }
+    });
 
-  new PointText({
-      content: 'Click on both circles to see which one is locked.',
-      point: view.center - [0, 35],
-      justification: 'center'
-  });
-  ```
+    new PointText({
+        content: 'Click on both circles to see which one is locked.',
+        point: view.center - [0, 35],
+        justification: 'center'
+    });
+    ```
 
 - `visible`
 
-  Specifies whether the item is visible. When set to `false`, the item won’t be drawn.
+    Specifies whether the item is visible. When set to `false`, the item won’t be drawn.
 
-  - Default:
+    - Default:
 
-  - `true`
+    - `true`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
-  Example:Hiding an item:
+    Example:Hiding an item:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [50, 50],
-      radius: 20,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [50, 50],
+        radius: 20,
+        fillColor: 'red'
+    });
 
-  // Hide the path:
-  path.visible = false;
-  ```
+    // Hide the path:
+    path.visible = false;
+    ```
 
 - `blendMode`
 
-  The blend mode with which the item is composited onto the canvas. Both the standard canvas compositing modes, as well as the new CSS blend modes are supported. If blend-modes cannot be rendered natively, they are emulated. Be aware that emulation can have an impact on performance.
+    The blend mode with which the item is composited onto the canvas. Both the standard canvas
+    compositing modes, as well as the new CSS blend modes are supported. If blend-modes cannot be
+    rendered natively, they are emulated. Be aware that emulation can have an impact on performance.
 
-  - Values:
+    - Values:
 
-  - `'normal'`, `'multiply'`, `'screen'`, `'overlay'`, `'soft-light'`, `'hard- light'`, `'color-dodge'`, `'color-burn'`, `'darken'`, `'lighten'`, `'difference'`, `'exclusion'`, `'hue'`, `'saturation'`, `'luminosity'`, `'color'`, `'add'`, `'subtract'`, `'average'`, `'pin-light'`, `'negation'`, `'source-over'`, `'source-in'`, `'source-out'`, `'source-atop'`, `'destination-over'`, `'destination-in'`, `'destination-out'`, `'destination-atop'`, `'lighter'`, `'darker'`, `'copy'`, `'xor'`
+    - `'normal'`, `'multiply'`, `'screen'`, `'overlay'`, `'soft-light'`, `'hard- light'`,
+      `'color-dodge'`, `'color-burn'`, `'darken'`, `'lighten'`, `'difference'`, `'exclusion'`,
+      `'hue'`, `'saturation'`, `'luminosity'`, `'color'`, `'add'`, `'subtract'`, `'average'`,
+      `'pin-light'`, `'negation'`, `'source-over'`, `'source-in'`, `'source-out'`, `'source-atop'`,
+      `'destination-over'`, `'destination-in'`, `'destination-out'`, `'destination-atop'`,
+      `'lighter'`, `'darker'`, `'copy'`, `'xor'`
 
-  - Default:
+    - Default:
 
-  - `'normal'`
+    - `'normal'`
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
-  Example:Setting an item's blend mode:
+    Example:Setting an item's blend mode:
 
-  ``` py-2.5
-  // Create a white rectangle in the background
-  // with the same dimensions as the view:
-  var background = new Path.Rectangle(view.bounds);
-  background.fillColor = 'white';
+    ```py-2.5
+    // Create a white rectangle in the background
+    // with the same dimensions as the view:
+    var background = new Path.Rectangle(view.bounds);
+    background.fillColor = 'white';
 
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35,
-      fillColor: 'red'
-  });
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35,
+        fillColor: 'red'
+    });
 
-  var circle2 = new Path.Circle({
-      center: new Point(120, 50),
-      radius: 35,
-      fillColor: 'blue'
-  });
+    var circle2 = new Path.Circle({
+        center: new Point(120, 50),
+        radius: 35,
+        fillColor: 'blue'
+    });
 
-  // Set the blend mode of circle2:
-  circle2.blendMode = 'multiply';
-  ```
+    // Set the blend mode of circle2:
+    circle2.blendMode = 'multiply';
+    ```
 
 - `opacity`
 
-  The opacity of the item as a value between `0` and `1`.
+    The opacity of the item as a value between `0` and `1`.
 
-  - Default:
+    - Default:
 
-  - `1`
+    - `1`
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
-  Example:Making an item 50% transparent:
+    Example:Making an item 50% transparent:
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35,
+        fillColor: 'red'
+    });
 
-  var circle2 = new Path.Circle({
-      center: new Point(120, 50),
-      radius: 35,
-      fillColor: 'blue',
-      strokeColor: 'green',
-      strokeWidth: 10
-  });
+    var circle2 = new Path.Circle({
+        center: new Point(120, 50),
+        radius: 35,
+        fillColor: 'blue',
+        strokeColor: 'green',
+        strokeWidth: 10
+    });
 
-  // Make circle2 50% transparent:
-  circle2.opacity = 0.5;
-  ```
+    // Make circle2 50% transparent:
+    circle2.opacity = 0.5;
+    ```
 
 - `selected`
 
-  Specifies whether the item is selected. This will also return `true` for `Group` items if they are partially selected, e.g. groups containing selected or partially selected paths.
+    Specifies whether the item is selected. This will also return `true` for `Group` items if they
+    are partially selected, e.g. groups containing selected or partially selected paths.
 
-  Paper.js draws the visual outlines of selected items on top of your project. This can be useful for debugging, as it allows you to see the construction of paths, position of path curves, individual segment points and bounding boxes of symbol and raster items.
+    Paper.js draws the visual outlines of selected items on top of your project. This can be useful
+    for debugging, as it allows you to see the construction of paths, position of path curves,
+    individual segment points and bounding boxes of symbol and raster items.
 
-  - Default:
+    - Default:
 
-  - `false`
+    - `false`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
-  - See also:
+    - See also:
 
-  - `project.selectedItems`
+    - `project.selectedItems`
 
-  - `segment.selected`
+    - `segment.selected`
 
-  - `curve.selected`
+    - `curve.selected`
 
-  - `point.selected`
+    - `point.selected`
 
-  Example:Selecting an item:
+    Example:Selecting an item:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
-  path.selected = true; // Select the path
-  ```
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
+    path.selected = true; // Select the path
+    ```
 
 - `clipMask`
 
-  Specifies whether the item defines a clip mask. This can only be set on paths and compound paths, and only if the item is already contained within a clipping group.
+    Specifies whether the item defines a clip mask. This can only be set on paths and compound
+    paths, and only if the item is already contained within a clipping group.
 
-  - Default:
+    - Default:
 
-  - `false`
+    - `false`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
 - `data`
 
-  A plain javascript object which can be used to store arbitrary data on the item.
+    A plain javascript object which can be used to store arbitrary data on the item.
 
-  - Type:
+    - Type:
 
-  - `Object`
+    - `Object`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.data.remember = 'milk';
-  ```
+    ```py-2.5
+    var path = new Path();
+    path.data.remember = 'milk';
+    ```
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.data.malcolm = new Point(20, 30);
-  console.log(path.data.malcolm.x); // 20
-  ```
+    ```py-2.5
+    var path = new Path();
+    path.data.malcolm = new Point(20, 30);
+    console.log(path.data.malcolm.x); // 20
+    ```
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
-  path.data = {
-      home: 'Omicron Theta',
-      found: 2338,
-      pets: ['Spot']
-  };
-  console.log(path.data.pets.length); // 1
-  ```
+    ```py-2.5
+    var path = new Path();
+    path.data = {
+        home: 'Omicron Theta',
+        found: 2338,
+        pets: ['Spot']
+    };
+    console.log(path.data.pets.length); // 1
+    ```
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path({
-      data: {
-          home: 'Omicron Theta',
-          found: 2338,
-          pets: ['Spot']
-      }
-  });
-  console.log(path.data.pets.length); // 1
-  ```
+    ```py-2.5
+    var path = new Path({
+        data: {
+            home: 'Omicron Theta',
+            found: 2338,
+            pets: ['Spot']
+        }
+    });
+    console.log(path.data.pets.length); // 1
+    ```
 
 ### Position and Bounding Boxes[](#position-and-bounding-boxes)
 
 - `position`
 
-  The item’s position within the parent item’s coordinate system. By default, this is the `rectangle.center` of the item’s `bounds` rectangle.
+    The item’s position within the parent item’s coordinate system. By default, this is the
+    `rectangle.center` of the item’s `bounds` rectangle.
 
-  - Type:
+    - Type:
 
-  - `Point`
+    - `Point`
 
-  Example:Changing the position of a path:
+    Example:Changing the position of a path:
 
-  ``` py-2.5
-  // Create a circle at position { x: 10, y: 10 }
-  var circle = new Path.Circle({
-      center: new Point(10, 10),
-      radius: 10,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle at position { x: 10, y: 10 }
+    var circle = new Path.Circle({
+        center: new Point(10, 10),
+        radius: 10,
+        fillColor: 'red'
+    });
 
-  // Move the circle to { x: 20, y: 20 }
-  circle.position = new Point(20, 20);
+    // Move the circle to { x: 20, y: 20 }
+    circle.position = new Point(20, 20);
 
-  // Move the circle 100 points to the right and 50 points down
-  circle.position += new Point(100, 50);
-  ```
+    // Move the circle 100 points to the right and 50 points down
+    circle.position += new Point(100, 50);
+    ```
 
-  Example:Changing the x coordinate of an item's position:
+    Example:Changing the x coordinate of an item's position:
 
-  ``` py-2.5
-  // Create a circle at position { x: 20, y: 20 }
-  var circle = new Path.Circle({
-      center: new Point(20, 20),
-      radius: 10,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle at position { x: 20, y: 20 }
+    var circle = new Path.Circle({
+        center: new Point(20, 20),
+        radius: 10,
+        fillColor: 'red'
+    });
 
-  // Move the circle 100 points to the right
-  circle.position.x += 100;
-  ```
+    // Move the circle 100 points to the right
+    circle.position.x += 100;
+    ```
 
 - `pivot`
 
-  The item’s pivot point specified in the item coordinate system, defining the point around which all transformations are hinging. This is also the reference point for `position`. By default, it is set to `null`, meaning the `rectangle.center` of the item’s `bounds` rectangle is used as pivot.
+    The item’s pivot point specified in the item coordinate system, defining the point around which
+    all transformations are hinging. This is also the reference point for `position`. By default, it
+    is set to `null`, meaning the `rectangle.center` of the item’s `bounds` rectangle is used as
+    pivot.
 
-  - Default:
+    - Default:
 
-  - `null`
+    - `null`
 
-  - Type:
+    - Type:
 
-  - `Point`
+    - `Point`
 
 - `bounds`
 
-  The bounding rectangle of the item excluding stroke width.
+    The bounding rectangle of the item excluding stroke width.
 
-  - Type:
+    - Type:
 
-  - `Rectangle`
+    - `Rectangle`
 
 - `strokeBounds`
 
-  The bounding rectangle of the item including stroke width.
+    The bounding rectangle of the item including stroke width.
 
-  - Type:
+    - Type:
 
-  - `Rectangle`
+    - `Rectangle`
 
 - `handleBounds`
 
-  The bounding rectangle of the item including handles.
+    The bounding rectangle of the item including handles.
 
-  - Type:
+    - Type:
 
-  - `Rectangle`
+    - `Rectangle`
 
 - `internalBounds`
 
-  The bounding rectangle of the item without any matrix transformations.
+    The bounding rectangle of the item without any matrix transformations.
 
-  Typical use case would be drawing a frame around the object where you want to draw something of the same size, position, rotation, and scaling, like a selection frame.
+    Typical use case would be drawing a frame around the object where you want to draw something of
+    the same size, position, rotation, and scaling, like a selection frame.
 
-  - Type:
+    - Type:
 
-  - `Rectangle`
+    - `Rectangle`
 
 - `rotation`
 
-  The current rotation angle of the item, as described by its `matrix`. Please note that this only returns meaningful values for items with `applyMatrix` set to `false`, meaning they do not directly bake transformations into their content.
+    The current rotation angle of the item, as described by its `matrix`. Please note that this only
+    returns meaningful values for items with `applyMatrix` set to `false`, meaning they do not
+    directly bake transformations into their content.
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 - `scaling`
 
-  The current scale factor of the item, as described by its `matrix`. Please note that this only returns meaningful values for items with `applyMatrix` set to `false`, meaning they do not directly bake transformations into their content.
+    The current scale factor of the item, as described by its `matrix`. Please note that this only
+    returns meaningful values for items with `applyMatrix` set to `false`, meaning they do not
+    directly bake transformations into their content.
 
-  - Type:
+    - Type:
 
-  - `Point`
+    - `Point`
 
 - `matrix`
 
-  The item’s transformation matrix, defining position and dimensions in relation to its parent item in which it is contained.
+    The item’s transformation matrix, defining position and dimensions in relation to its parent
+    item in which it is contained.
 
-  - Type:
+    - Type:
 
-  - `Matrix`
+    - `Matrix`
 
 - `globalMatrix`
 
-  The item’s global transformation matrix in relation to the global project coordinate space. Note that the view’s transformations resulting from zooming and panning are not factored in.
+    The item’s global transformation matrix in relation to the global project coordinate space. Note
+    that the view’s transformations resulting from zooming and panning are not factored in.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Matrix`
+    - `Matrix`
 
 - `viewMatrix`
 
-  The item’s global matrix in relation to the view coordinate space. This means that the view’s transformations resulting from zooming and panning are factored in.
+    The item’s global matrix in relation to the view coordinate space. This means that the view’s
+    transformations resulting from zooming and panning are factored in.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Matrix`
+    - `Matrix`
 
 - `applyMatrix`
 
-  Controls whether the transformations applied to the item (e.g. through `transform(matrix)`, `rotate(angle)`, `scale(scale)`, etc.) are stored in its `matrix` property, or whether they are directly applied to its contents or children (passed on to the segments in `Path` items, the children of `Group` items, etc.).
+    Controls whether the transformations applied to the item (e.g. through `transform(matrix)`,
+    `rotate(angle)`, `scale(scale)`, etc.) are stored in its `matrix` property, or whether they are
+    directly applied to its contents or children (passed on to the segments in `Path` items, the
+    children of `Group` items, etc.).
 
-  - Default:
+    - Default:
 
-  - `true`
+    - `true`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
 ### Project Hierarchy[](#project-hierarchy)
 
 - `project`
 
-  The project that this item belongs to.
+    The project that this item belongs to.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Project`
+    - `Project`
 
 - `view`
 
-  The view that this item belongs to.
+    The view that this item belongs to.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `View`
+    - `View`
 
 - `layer`
 
-  The layer that this item is contained within.
+    The layer that this item is contained within.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Layer`
+    - `Layer`
 
 - `parent`
 
-  The item that this item is contained within.
+    The item that this item is contained within.
 
-  - Type:
+    - Type:
 
-  - `Item`
+    - `Item`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path();
+    ```py-2.5
+    var path = new Path();
 
-  // New items are placed in the active layer:
-  console.log(path.parent == project.activeLayer); // true
+    // New items are placed in the active layer:
+    console.log(path.parent == project.activeLayer); // true
 
-  var group = new Group();
-  group.addChild(path);
+    var group = new Group();
+    group.addChild(path);
 
-  // Now the parent of the path has become the group:
-  console.log(path.parent == group); // true
-  ```
+    // Now the parent of the path has become the group:
+    console.log(path.parent == group); // true
+    ```
 
-  Example:Setting the parent of the item to another item
+    Example:Setting the parent of the item to another item
 
-  ``` py-2.5
-  var path = new Path();
+    ```py-2.5
+    var path = new Path();
 
-  // New items are placed in the active layer:
-  console.log(path.parent == project.activeLayer); // true
+    // New items are placed in the active layer:
+    console.log(path.parent == project.activeLayer); // true
 
-  var group = new Group();
-  path.parent = group;
+    var group = new Group();
+    path.parent = group;
 
-  // Now the parent of the path has become the group:
-  console.log(path.parent == group); // true
+    // Now the parent of the path has become the group:
+    console.log(path.parent == group); // true
 
-  // The path is now contained in the children list of group:
-  console.log(group.children[0] == path); // true
-  ```
+    // The path is now contained in the children list of group:
+    console.log(group.children[0] == path); // true
+    ```
 
-  Example:Setting the parent of an item in the constructor
+    Example:Setting the parent of an item in the constructor
 
-  ``` py-2.5
-  var group = new Group();
+    ```py-2.5
+    var group = new Group();
 
-  var path = new Path({
-      parent: group
-  });
+    var path = new Path({
+        parent: group
+    });
 
-  // The parent of the path is the group:
-  console.log(path.parent == group); // true
+    // The parent of the path is the group:
+    console.log(path.parent == group); // true
 
-  // The path is contained in the children list of group:
-  console.log(group.children[0] == path); // true
-  ```
+    // The path is contained in the children list of group:
+    console.log(group.children[0] == path); // true
+    ```
 
 - `children`
 
-  The children items contained within this item. Items that define a `name` can also be accessed by name.
+    The children items contained within this item. Items that define a `name` can also be accessed
+    by name.
 
-  **Please note:** The children array should not be modified directly using array functions. To remove single items from the children list, use `item.remove`(), to remove all items from the children list, use `item.removeChildren`(). To add items to the children list, use `item.addChild(item)` or `item.insertChild(index, item)`.
+    **Please note:** The children array should not be modified directly using array functions. To
+    remove single items from the children list, use `item.remove`(), to remove all items from the
+    children list, use `item.removeChildren`(). To add items to the children list, use
+    `item.addChild(item)` or `item.insertChild(index, item)`.
 
-  - Type:
+    - Type:
 
-  - Array of `Item` objects
+    - Array of `Item` objects
 
-  Example:Accessing items in the children array:
+    Example:Accessing items in the children array:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  // Create a group and move the path into it:
-  var group = new Group();
-  group.addChild(path);
+    // Create a group and move the path into it:
+    var group = new Group();
+    group.addChild(path);
 
-  // Access the path through the group's children array:
-  group.children[0].fillColor = 'red';
-  ```
+    // Access the path through the group's children array:
+    group.children[0].fillColor = 'red';
+    ```
 
-  Example:Accessing children by name:
+    Example:Accessing children by name:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
-  // Set the name of the path:
-  path.name = 'example';
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
+    // Set the name of the path:
+    path.name = 'example';
 
-  // Create a group and move the path into it:
-  var group = new Group();
-  group.addChild(path);
+    // Create a group and move the path into it:
+    var group = new Group();
+    group.addChild(path);
 
-  // The path can be accessed by name:
-  group.children['example'].fillColor = 'orange';
-  ```
+    // The path can be accessed by name:
+    group.children['example'].fillColor = 'orange';
+    ```
 
-  Example:Passing an array of items to item.children:
+    Example:Passing an array of items to item.children:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  var group = new Group();
-  group.children = [path];
+    var group = new Group();
+    group.children = [path];
 
-  // The path is the first child of the group:
-  group.firstChild.fillColor = 'green';
-  ```
+    // The path is the first child of the group:
+    group.firstChild.fillColor = 'green';
+    ```
 
 - `firstChild`
 
-  The first item contained within this item. This is a shortcut for accessing `item.children[0]`.
+    The first item contained within this item. This is a shortcut for accessing `item.children[0]`.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Item`
+    - `Item`
 
 - `lastChild`
 
-  The last item contained within this item.This is a shortcut for accessing `item.children[item.children.length - 1]`.
+    The last item contained within this item.This is a shortcut for accessing
+    `item.children[item.children.length - 1]`.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Item`
+    - `Item`
 
 - `nextSibling`
 
-  The next item on the same level as this item.
+    The next item on the same level as this item.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Item`
+    - `Item`
 
 - `previousSibling`
 
-  The previous item on the same level as this item.
+    The previous item on the same level as this item.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Item`
+    - `Item`
 
 - `index`
 
-  The index of this item within the list of its parent’s children.
+    The index of this item within the list of its parent’s children.
 
-  Read only.
+    Read only.
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 ### Stroke Style[](#stroke-style)
 
 - `strokeColor`
 
-  The color of the stroke.
+    The color of the stroke.
 
-  - Type:
+    - Type:
 
-  - `Color`⟋`null`
+    - `Color`⟋`null`
 
-  Example:Setting the stroke color of a path:
+    Example:Setting the stroke color of a path:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 35:
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 35:
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  // Set its stroke color to RGB red:
-  circle.strokeColor = new Color(1, 0, 0);
-  ```
+    // Set its stroke color to RGB red:
+    circle.strokeColor = new Color(1, 0, 0);
+    ```
 
 - `strokeWidth`
 
-  The width of the stroke.
+    The width of the stroke.
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
-  Example:Setting an item's stroke width:
+    Example:Setting an item's stroke width:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 35:
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35,
-      strokeColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 35:
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35,
+        strokeColor: 'red'
+    });
 
-  // Set its stroke width to 10:
-  circle.strokeWidth = 10;
-  ```
+    // Set its stroke width to 10:
+    circle.strokeWidth = 10;
+    ```
 
 - `strokeCap`
 
-  The shape to be used at the beginning and end of open `Path` items, when they have a stroke.
+    The shape to be used at the beginning and end of open `Path` items, when they have a stroke.
 
-  - Values:
+    - Values:
 
-  - `'round'`, `'square'`, `'butt'`
+    - `'round'`, `'square'`, `'butt'`
 
-  - Default:
+    - Default:
 
-  - `'butt'`
+    - `'butt'`
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
-  Example:A look at the different stroke caps:
+    Example:A look at the different stroke caps:
 
-  ``` py-2.5
-  var line = new Path({
-      segments: [[80, 50], [420, 50]],
-      strokeColor: 'black',
-      strokeWidth: 20,
-      selected: true
-  });
+    ```py-2.5
+    var line = new Path({
+        segments: [[80, 50], [420, 50]],
+        strokeColor: 'black',
+        strokeWidth: 20,
+        selected: true
+    });
 
-  // Set the stroke cap of the line to be round:
-  line.strokeCap = 'round';
+    // Set the stroke cap of the line to be round:
+    line.strokeCap = 'round';
 
-  // Copy the path and set its stroke cap to be square:
-  var line2 = line.clone();
-  line2.position.y += 50;
-  line2.strokeCap = 'square';
+    // Copy the path and set its stroke cap to be square:
+    var line2 = line.clone();
+    line2.position.y += 50;
+    line2.strokeCap = 'square';
 
-  // Make another copy and set its stroke cap to be butt:
-  var line2 = line.clone();
-  line2.position.y += 100;
-  line2.strokeCap = 'butt';
-  ```
+    // Make another copy and set its stroke cap to be butt:
+    var line2 = line.clone();
+    line2.position.y += 100;
+    line2.strokeCap = 'butt';
+    ```
 
 - `strokeJoin`
 
-  The shape to be used at the segments and corners of `Path` items when they have a stroke.
+    The shape to be used at the segments and corners of `Path` items when they have a stroke.
 
-  - Values:
+    - Values:
 
-  - `'miter'`, `'round'`, `'bevel'`
+    - `'miter'`, `'round'`, `'bevel'`
 
-  - Default:
+    - Default:
 
-  - `'miter'`
+    - `'miter'`
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
-  Example:A look at the different stroke joins:
+    Example:A look at the different stroke joins:
 
-  ``` py-2.5
-  var path = new Path({
-      segments: [[80, 100], [120, 40], [160, 100]],
-      strokeColor: 'black',
-      strokeWidth: 20,
-      // Select the path, in order to see where the stroke is formed:
-      selected: true
-  });
+    ```py-2.5
+    var path = new Path({
+        segments: [[80, 100], [120, 40], [160, 100]],
+        strokeColor: 'black',
+        strokeWidth: 20,
+        // Select the path, in order to see where the stroke is formed:
+        selected: true
+    });
 
-  var path2 = path.clone();
-  path2.position.x += path2.bounds.width * 1.5;
-  path2.strokeJoin = 'round';
+    var path2 = path.clone();
+    path2.position.x += path2.bounds.width * 1.5;
+    path2.strokeJoin = 'round';
 
-  var path3 = path2.clone();
-  path3.position.x += path3.bounds.width * 1.5;
-  path3.strokeJoin = 'bevel';
-  ```
+    var path3 = path2.clone();
+    path3.position.x += path3.bounds.width * 1.5;
+    path3.strokeJoin = 'bevel';
+    ```
 
 - `dashOffset`
 
-  The dash offset of the stroke.
+    The dash offset of the stroke.
 
-  - Default:
+    - Default:
 
-  - `0`
+    - `0`
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 - `strokeScaling`
 
-  Specifies whether the stroke is to be drawn taking the current affine transformation into account (the default behavior), or whether it should appear as a non-scaling stroke.
+    Specifies whether the stroke is to be drawn taking the current affine transformation into
+    account (the default behavior), or whether it should appear as a non-scaling stroke.
 
-  - Default:
+    - Default:
 
-  - `true`
+    - `true`
 
-  - Type:
+    - Type:
 
-  - `Boolean`
+    - `Boolean`
 
 - `dashArray`
 
-  Specifies an array containing the dash and gap lengths of the stroke.
+    Specifies an array containing the dash and gap lengths of the stroke.
 
-  - Default:
+    - Default:
 
-  - `[]`
+    - `[]`
 
-  - Type:
+    - Type:
 
-  - Array of `Numbers`
+    - Array of `Numbers`
 
-  Example:
+    Example:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 40,
-      strokeWidth: 2,
-      strokeColor: 'black'
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 40,
+        strokeWidth: 2,
+        strokeColor: 'black'
+    });
 
-  // Set the dashed stroke to [10pt dash, 4pt gap]:
-  path.dashArray = [10, 4];
-  ```
+    // Set the dashed stroke to [10pt dash, 4pt gap]:
+    path.dashArray = [10, 4];
+    ```
 
 - `miterLimit`
 
-  The miter limit of the stroke. When two line segments meet at a sharp angle and miter joins have been specified for `item.strokeJoin`, it is possible for the miter to extend far beyond the `item.strokeWidth` of the path. The miterLimit imposes a limit on the ratio of the miter length to the `item.strokeWidth`.
+    The miter limit of the stroke. When two line segments meet at a sharp angle and miter joins have
+    been specified for `item.strokeJoin`, it is possible for the miter to extend far beyond the
+    `item.strokeWidth` of the path. The miterLimit imposes a limit on the ratio of the miter length
+    to the `item.strokeWidth`.
 
-  - Default:
+    - Default:
 
-  - `10`
+    - `10`
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 ### Fill Style[](#fill-style)
 
 - `fillColor`
 
-  The fill color of the item.
+    The fill color of the item.
 
-  - Type:
+    - Type:
 
-  - `Color`⟋`null`
+    - `Color`⟋`null`
 
-  Example:Setting the fill color of a path to red:
+    Example:Setting the fill color of a path to red:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 35:
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 35:
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  // Set the fill color of the circle to RGB red:
-  circle.fillColor = new Color(1, 0, 0);
-  ```
+    // Set the fill color of the circle to RGB red:
+    circle.fillColor = new Color(1, 0, 0);
+    ```
 
 - `fillRule`
 
-  The fill-rule with which the shape gets filled. Please note that only modern browsers support fill-rules other than `'nonzero'`.
+    The fill-rule with which the shape gets filled. Please note that only modern browsers support
+    fill-rules other than `'nonzero'`.
 
-  - Values:
+    - Values:
 
-  - `'nonzero'`, `'evenodd'`
+    - `'nonzero'`, `'evenodd'`
 
-  - Default:
+    - Default:
 
-  - `'nonzero'`
+    - `'nonzero'`
 
-  - Type:
+    - Type:
 
-  - `String`
+    - `String`
 
 ### Shadow Style[](#shadow-style)
 
 - `shadowColor`
 
-  The shadow color.
+    The shadow color.
 
-  - Type:
+    - Type:
 
-  - `Color`⟋`null`
+    - `Color`⟋`null`
 
-  Example:Creating a circle with a black shadow:
+    Example:Creating a circle with a black shadow:
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35,
-      fillColor: 'white',
-      // Set the shadow color of the circle to RGB black:
-      shadowColor: new Color(0, 0, 0),
-      // Set the shadow blur radius to 12:
-      shadowBlur: 12,
-      // Offset the shadow by { x: 5, y: 5 }
-      shadowOffset: new Point(5, 5)
-  });
-  ```
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35,
+        fillColor: 'white',
+        // Set the shadow color of the circle to RGB black:
+        shadowColor: new Color(0, 0, 0),
+        // Set the shadow blur radius to 12:
+        shadowBlur: 12,
+        // Offset the shadow by { x: 5, y: 5 }
+        shadowOffset: new Point(5, 5)
+    });
+    ```
 
 - `shadowBlur`
 
-  The shadow’s blur radius.
+    The shadow’s blur radius.
 
-  - Default:
+    - Default:
 
-  - `0`
+    - `0`
 
-  - Type:
+    - Type:
 
-  - `Number`
+    - `Number`
 
 - `shadowOffset`
 
-  The shadow’s offset.
+    The shadow’s offset.
 
-  - Default:
+    - Default:
 
-  - `0`
+    - `0`
 
-  - Type:
+    - Type:
 
-  - `Point`
+    - `Point`
 
 ### Selection Style[](#selection-style)
 
 - `selectedColor`
 
-  The color the item is highlighted with when selected. If the item does not specify its own color, the color defined by its layer is used instead.
+    The color the item is highlighted with when selected. If the item does not specify its own
+    color, the color defined by its layer is used instead.
 
-  - Type:
+    - Type:
 
-  - `Color`⟋`null`
+    - `Color`⟋`null`
 
 ### Event Handlers[](#event-handlers)
 
 - `onFrame`
 
-  Item level handler function to be called on each frame of an animation. The function receives an event object which contains information about the frame event:
+    Item level handler function to be called on each frame of an animation. The function receives an
+    event object which contains information about the frame event:
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - Options:
+    - Options:
 
-  - `event.count: Number` — the number of times the frame event was fired
+    - `event.count: Number` — the number of times the frame event was fired
 
-  - `event.time: Number` — the total amount of time passed since the first frame event in seconds
+    - `event.time: Number` — the total amount of time passed since the first frame event in seconds
 
-  - `event.delta: Number` — the time passed in seconds since the last frame event
+    - `event.delta: Number` — the time passed in seconds since the last frame event
 
-  - See also:
+    - See also:
 
-  - `view.onFrame`
+    - `view.onFrame`
 
-  Example:Creating an animation:
+    Example:Creating an animation:
 
-  ``` py-2.5
-  // Create a rectangle shaped path with its top left point at:
-  // {x: 50, y: 25} and a size of {width: 50, height: 50}
-  var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
-  path.fillColor = 'black';
+    ```py-2.5
+    // Create a rectangle shaped path with its top left point at:
+    // {x: 50, y: 25} and a size of {width: 50, height: 50}
+    var path = new Path.Rectangle(new Point(50, 25), new Size(50, 50));
+    path.fillColor = 'black';
 
-  path.onFrame = function(event) {
-      // Every frame, rotate the path by 3 degrees:
-      this.rotate(3);
-  }
-  ```
+    path.onFrame = function(event) {
+        // Every frame, rotate the path by 3 degrees:
+        this.rotate(3);
+    }
+    ```
 
 - `onMouseDown`
 
-  The function to be called when the mouse button is pushed down on the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse button is pushed down on the item. The function
+    receives a `MouseEvent` object which contains information about the mouse event. Note that such
+    mouse events bubble up the scene graph hierarchy and will reach the view, unless they are
+    stopped with `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseDown`
+    - `view.onMouseDown`
 
-  Example:Press the mouse button down on the circle shaped path, to make it red:
+    Example:Press the mouse button down on the circle shaped path, to make it red:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse is pressed on the item,
-  // set its fill color to red:
-  path.onMouseDown = function(event) {
-      this.fillColor = 'red';
-  }
-  ```
+    // When the mouse is pressed on the item,
+    // set its fill color to red:
+    path.onMouseDown = function(event) {
+        this.fillColor = 'red';
+    }
+    ```
 
-  Example:Press the mouse on the circle shaped paths to remove them:
+    Example:Press the mouse on the circle shaped paths to remove them:
 
-  ``` py-2.5
-  // Loop 30 times:
-  for (var i = 0; i < 30; i++) {
-      // Create a circle shaped path at a random position
-      // in the view:
-      var path = new Path.Circle({
-          center: Point.random() * view.size,
-          radius: 25,
-          fillColor: 'black',
-          strokeColor: 'white'
-      });
+    ```py-2.5
+    // Loop 30 times:
+    for (var i = 0; i < 30; i++) {
+        // Create a circle shaped path at a random position
+        // in the view:
+        var path = new Path.Circle({
+            center: Point.random() * view.size,
+            radius: 25,
+            fillColor: 'black',
+            strokeColor: 'white'
+        });
 
-      // When the mouse is pressed on the item, remove it:
-      path.onMouseDown = function(event) {
-          this.remove();
-      }
-  }
-  ```
+        // When the mouse is pressed on the item, remove it:
+        path.onMouseDown = function(event) {
+            this.remove();
+        }
+    }
+    ```
 
 - `onMouseDrag`
 
-  The function to be called when the mouse position changes while the mouse is being dragged over the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse position changes while the mouse is being dragged over
+    the item. The function receives a `MouseEvent` object which contains information about the mouse
+    event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view,
+    unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseDrag`
+    - `view.onMouseDrag`
 
-  Example:Press and drag the mouse on the blue circle to move it:
+    Example:Press and drag the mouse on the blue circle to move it:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 50,
-      fillColor: 'blue'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 50,
+        fillColor: 'blue'
+    });
 
-  // Install a drag event handler that moves the path along.
-  path.onMouseDrag = function(event) {
-      path.position += event.delta;
-  }
-  ```
+    // Install a drag event handler that moves the path along.
+    path.onMouseDrag = function(event) {
+        path.position += event.delta;
+    }
+    ```
 
 - `onMouseUp`
 
-  The function to be called when the mouse button is released over the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse button is released over the item. The function receives
+    a `MouseEvent` object which contains information about the mouse event. Note that such mouse
+    events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseUp`
+    - `view.onMouseUp`
 
-  Example:Release the mouse button over the circle shaped path, to make it red:
+    Example:Release the mouse button over the circle shaped path, to make it red:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse is released over the item,
-  // set its fill color to red:
-  path.onMouseUp = function(event) {
-      this.fillColor = 'red';
-  }
-  ```
+    // When the mouse is released over the item,
+    // set its fill color to red:
+    path.onMouseUp = function(event) {
+        this.fillColor = 'red';
+    }
+    ```
 
 - `onClick`
 
-  The function to be called when the mouse clicks on the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse clicks on the item. The function receives a
+    `MouseEvent` object which contains information about the mouse event. Note that such mouse
+    events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onClick`
+    - `view.onClick`
 
-  Example:Click on the circle shaped path, to make it red:
+    Example:Click on the circle shaped path, to make it red:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse is clicked on the item,
-  // set its fill color to red:
-  path.onClick = function(event) {
-      this.fillColor = 'red';
-  }
-  ```
+    // When the mouse is clicked on the item,
+    // set its fill color to red:
+    path.onClick = function(event) {
+        this.fillColor = 'red';
+    }
+    ```
 
-  Example:Click on the circle shaped paths to remove them:
+    Example:Click on the circle shaped paths to remove them:
 
-  ``` py-2.5
-  // Loop 30 times:
-  for (var i = 0; i < 30; i++) {
-      // Create a circle shaped path at a random position
-      // in the view:
-      var path = new Path.Circle({
-          center: Point.random() * view.size,
-          radius: 25,
-          fillColor: 'black',
-          strokeColor: 'white'
-      });
+    ```py-2.5
+    // Loop 30 times:
+    for (var i = 0; i < 30; i++) {
+        // Create a circle shaped path at a random position
+        // in the view:
+        var path = new Path.Circle({
+            center: Point.random() * view.size,
+            radius: 25,
+            fillColor: 'black',
+            strokeColor: 'white'
+        });
 
-      // When the mouse clicks on the item, remove it:
-      path.onClick = function(event) {
-          this.remove();
-      }
-  }
-  ```
+        // When the mouse clicks on the item, remove it:
+        path.onClick = function(event) {
+            this.remove();
+        }
+    }
+    ```
 
 - `onDoubleClick`
 
-  The function to be called when the mouse double clicks on the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse double clicks on the item. The function receives a
+    `MouseEvent` object which contains information about the mouse event. Note that such mouse
+    events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onDoubleClick`
+    - `view.onDoubleClick`
 
-  Example:Double click on the circle shaped path, to make it red:
+    Example:Double click on the circle shaped path, to make it red:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse is double clicked on the item,
-  // set its fill color to red:
-  path.onDoubleClick = function(event) {
-      this.fillColor = 'red';
-  }
-  ```
+    // When the mouse is double clicked on the item,
+    // set its fill color to red:
+    path.onDoubleClick = function(event) {
+        this.fillColor = 'red';
+    }
+    ```
 
-  Example:Double click on the circle shaped paths to remove them:
+    Example:Double click on the circle shaped paths to remove them:
 
-  ``` py-2.5
-  // Loop 30 times:
-  for (var i = 0; i < 30; i++) {
-      // Create a circle shaped path at a random position
-      // in the view:
-      var path = new Path.Circle({
-          center: Point.random() * view.size,
-          radius: 25,
-          fillColor: 'black',
-          strokeColor: 'white'
-      });
+    ```py-2.5
+    // Loop 30 times:
+    for (var i = 0; i < 30; i++) {
+        // Create a circle shaped path at a random position
+        // in the view:
+        var path = new Path.Circle({
+            center: Point.random() * view.size,
+            radius: 25,
+            fillColor: 'black',
+            strokeColor: 'white'
+        });
 
-      // When the mouse is double clicked on the item, remove it:
-      path.onDoubleClick = function(event) {
-          this.remove();
-      }
-  }
-  ```
+        // When the mouse is double clicked on the item, remove it:
+        path.onDoubleClick = function(event) {
+            this.remove();
+        }
+    }
+    ```
 
 - `onMouseMove`
 
-  The function to be called repeatedly while the mouse moves over the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called repeatedly while the mouse moves over the item. The function receives
+    a `MouseEvent` object which contains information about the mouse event. Note that such mouse
+    events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseMove`
+    - `view.onMouseMove`
 
-  Example:Move over the circle shaped path, to change its opacity:
+    Example:Move over the circle shaped path, to change its opacity:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-      var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-      });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+        var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+        });
 
-  // When the mouse moves on top of the item, set its opacity
-  // to a random value between 0 and 1:
-  path.onMouseMove = function(event) {
-      this.opacity = Math.random();
-  }
-  ```
+    // When the mouse moves on top of the item, set its opacity
+    // to a random value between 0 and 1:
+    path.onMouseMove = function(event) {
+        this.opacity = Math.random();
+    }
+    ```
 
 - `onMouseEnter`
 
-  The function to be called when the mouse moves over the item. This function will only be called again, once the mouse moved outside of the item first. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse moves over the item. This function will only be called
+    again, once the mouse moved outside of the item first. The function receives a `MouseEvent`
+    object which contains information about the mouse event. Note that such mouse events bubble up
+    the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseEnter`
+    - `view.onMouseEnter`
 
-  Example:When you move the mouse over the item, its fill color is set to red. When you move the mouse outside again, its fill color is set back to black.
+    Example:When you move the mouse over the item, its fill color is set to red. When you move the
+    mouse outside again, its fill color is set back to black.
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse enters the item, set its fill color to red:
-  path.onMouseEnter = function(event) {
-      this.fillColor = 'red';
-  }
+    // When the mouse enters the item, set its fill color to red:
+    path.onMouseEnter = function(event) {
+        this.fillColor = 'red';
+    }
 
-  // When the mouse leaves the item, set its fill color to black:
-  path.onMouseLeave = function(event) {
-      this.fillColor = 'black';
-  }
-  ```
+    // When the mouse leaves the item, set its fill color to black:
+    path.onMouseLeave = function(event) {
+        this.fillColor = 'black';
+    }
+    ```
 
-  Example:When you click the mouse, you create new circle shaped items. When you move the mouse over the item, its fill color is set to red. When you move the mouse outside again, its fill color is set back to black.
+    Example:When you click the mouse, you create new circle shaped items. When you move the mouse
+    over the item, its fill color is set to red. When you move the mouse outside again, its fill
+    color is set back to black.
 
-  ``` py-2.5
-  function enter(event) {
-      this.fillColor = 'red';
-  }
+    ```py-2.5
+    function enter(event) {
+        this.fillColor = 'red';
+    }
 
-  function leave(event) {
-      this.fillColor = 'black';
-  }
+    function leave(event) {
+        this.fillColor = 'black';
+    }
 
-  // When the mouse is pressed:
-  function onMouseDown(event) {
-      // Create a circle shaped path at the position of the mouse:
-      var path = new Path.Circle(event.point, 25);
-      path.fillColor = 'black';
+    // When the mouse is pressed:
+    function onMouseDown(event) {
+        // Create a circle shaped path at the position of the mouse:
+        var path = new Path.Circle(event.point, 25);
+        path.fillColor = 'black';
 
-      // When the mouse enters the item, set its fill color to red:
-      path.onMouseEnter = enter;
+        // When the mouse enters the item, set its fill color to red:
+        path.onMouseEnter = enter;
 
-      // When the mouse leaves the item, set its fill color to black:
-      path.onMouseLeave = leave;
-  }
-  ```
+        // When the mouse leaves the item, set its fill color to black:
+        path.onMouseLeave = leave;
+    }
+    ```
 
 - `onMouseLeave`
 
-  The function to be called when the mouse moves out of the item. The function receives a `MouseEvent` object which contains information about the mouse event. Note that such mouse events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with `event.stopPropagation`() or by returning `false` from the handler.
+    The function to be called when the mouse moves out of the item. The function receives a
+    `MouseEvent` object which contains information about the mouse event. Note that such mouse
+    events bubble up the scene graph hierarchy and will reach the view, unless they are stopped with
+    `event.stopPropagation`() or by returning `false` from the handler.
 
-  - Type:
+    - Type:
 
-  - `Function`⟋`null`
+    - `Function`⟋`null`
 
-  - See also:
+    - See also:
 
-  - `view.onMouseLeave`
+    - `view.onMouseLeave`
 
-  Example:Move the mouse over the circle shaped path and then move it out of it again to set its fill color to red:
+    Example:Move the mouse over the circle shaped path and then move it out of it again to set its
+    fill color to red:
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse leaves the item, set its fill color to red:
-  path.onMouseLeave = function(event) {
-      this.fillColor = 'red';
-  }
-  ```
+    // When the mouse leaves the item, set its fill color to red:
+    path.onMouseLeave = function(event) {
+        this.fillColor = 'red';
+    }
+    ```
 
 ## Methods inherited from `Item`[](#methods-inherited-from-item)
 
 - `set(props)`
 
-  Sets the properties of the passed object literal on this item to the values defined in the object literal, if the item has property of the given name (or a setter defined for it).
+    Sets the properties of the passed object literal on this item to the values defined in the
+    object literal, if the item has property of the given name (or a setter defined for it).
 
-  - Parameters:
+    - Parameters:
 
-  - `props:` `Object`
+    - `props:` `Object`
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the item itself
+    - `Item` — the item itself
 
-  Example:Setting properties through an object literal
+    Example:Setting properties through an object literal
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 35
-  });
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 35
+    });
 
-  circle.set({
-      strokeColor: 'red',
-      strokeWidth: 10,
-      fillColor: 'black',
-      selected: true
-  });
-  ```
+    circle.set({
+        strokeColor: 'red',
+        strokeWidth: 10,
+        fillColor: 'black',
+        selected: true
+    });
+    ```
 
 - `clone([options])`
 
-  Clones the item within the same project and places the copy above the item.
+    Clones the item within the same project and places the copy above the item.
 
-  - Options:
+    - Options:
 
-  - `insert: undefined` — specifies whether the copy should be inserted into the scene graph. When set to `true`, it is inserted above the original — default: `true`
+    - `insert: undefined` — specifies whether the copy should be inserted into the scene graph. When
+      set to `true`, it is inserted above the original — default: `true`
 
-  - `deep: undefined` — specifies whether the item’s children should also be cloned — default: `true`
+    - `deep: undefined` — specifies whether the item’s children should also be cloned — default:
+      `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object` — optional, default: `{ insert: true, deep: true }`
+    - `options:` `Object` — optional, default: `{ insert: true, deep: true }`
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the newly cloned item
+    - `Item` — the newly cloned item
 
-  Example:Cloning items:
+    Example:Cloning items:
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [50, 50],
-      radius: 10,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [50, 50],
+        radius: 10,
+        fillColor: 'red'
+    });
 
-  // Make 20 copies of the circle:
-  for (var i = 0; i < 20; i++) {
-      var copy = circle.clone();
+    // Make 20 copies of the circle:
+    for (var i = 0; i < 20; i++) {
+        var copy = circle.clone();
 
-      // Distribute the copies horizontally, so we can see them:
-      copy.position.x += i * copy.bounds.width;
-  }
-  ```
+        // Distribute the copies horizontally, so we can see them:
+        copy.position.x += i * copy.bounds.width;
+    }
+    ```
 
 - `copyContent(source)`
 
-  Copies the content of the specified item over to this item.
+    Copies the content of the specified item over to this item.
 
-  - Parameters:
+    - Parameters:
 
-  - `source:` `Item` — the item to copy the content from
+    - `source:` `Item` — the item to copy the content from
 
 - `copyAttributes(source, excludeMatrix)`
 
-  Copies all attributes of the specified item over to this item. This includes its style, visibility, matrix, pivot, blend-mode, opacity, selection state, data, name, etc.
+    Copies all attributes of the specified item over to this item. This includes its style,
+    visibility, matrix, pivot, blend-mode, opacity, selection state, data, name, etc.
 
-  - Parameters:
+    - Parameters:
 
-  - `source:` `Item` — the item to copy the attributes from
+    - `source:` `Item` — the item to copy the attributes from
 
-  - `excludeMatrix:` `Boolean` — whether to exclude the transformation matrix when copying all attributes
+    - `excludeMatrix:` `Boolean` — whether to exclude the transformation matrix when copying all
+      attributes
 
 - `rasterize([resolution[, insert]])`
 
-  Rasterizes the item into a newly created Raster object. The item itself is not removed after rasterization.
+    Rasterizes the item into a newly created Raster object. The item itself is not removed after
+    rasterization.
 
-  - Parameters:
+    - Parameters:
 
-  - `resolution:` `Number` — the resolution of the raster in pixels per inch (DPI). If not specified, the value of `view.resolution` is used. — optional, default: `view.resolution`
+    - `resolution:` `Number` — the resolution of the raster in pixels per inch (DPI). If not
+      specified, the value of `view.resolution` is used. — optional, default: `view.resolution`
 
-  - `insert:` `Boolean` — specifies whether the raster should be inserted into the scene graph. When set to `true`, it is inserted above the original — optional, default: `true`
+    - `insert:` `Boolean` — specifies whether the raster should be inserted into the scene graph.
+      When set to `true`, it is inserted above the original — optional, default: `true`
 
-  - Returns:
+    - Returns:
 
-  - `Raster` — the newly created raster item
+    - `Raster` — the newly created raster item
 
-  Example:Rasterizing an item:
+    Example:Rasterizing an item:
 
-  ``` py-2.5
-  var circle = new Path.Circle({
-      center: [50, 50],
-      radius: 5,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var circle = new Path.Circle({
+        center: [50, 50],
+        radius: 5,
+        fillColor: 'red'
+    });
 
-  // Create a rasterized version of the path:
-  var raster = circle.rasterize();
+    // Create a rasterized version of the path:
+    var raster = circle.rasterize();
 
-  // Move it 100pt to the right:
-  raster.position.x += 100;
+    // Move it 100pt to the right:
+    raster.position.x += 100;
 
-  // Scale the path and the raster by 300%, so we can compare them:
-  circle.scale(5);
-  raster.scale(5);
-  ```
+    // Scale the path and the raster by 300%, so we can compare them:
+    circle.scale(5);
+    raster.scale(5);
+    ```
 
 ### Geometric Tests[](#geometric-tests)
 
 - `contains(point)`
 
-  Checks whether the item’s geometry contains the given point.
+    Checks whether the item’s geometry contains the given point.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point to check for
+    - `point:` `Point` — the point to check for
 
-  - Returns:
+    - Returns:
 
-  - `Boolean`
+    - `Boolean`
 
-  Example:Click within and outside the star below Create a star shaped path:
+    Example:Click within and outside the star below Create a star shaped path:
 
-  ``` py-2.5
-  var path = new Path.Star({
-      center: [50, 50],
-      points: 12,
-      radius1: 20,
-      radius2: 40,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    var path = new Path.Star({
+        center: [50, 50],
+        points: 12,
+        radius1: 20,
+        radius2: 40,
+        fillColor: 'black'
+    });
 
-  // Whenever the user presses the mouse:
-  function onMouseDown(event) {
-      // If the position of the mouse is within the path,
-      // set its fill color to red, otherwise set it to
-      // black:
-      if (path.contains(event.point)) {
-          path.fillColor = 'red';
-      } else {
-          path.fillColor = 'black';
-      }
-  }
-  ```
+    // Whenever the user presses the mouse:
+    function onMouseDown(event) {
+        // If the position of the mouse is within the path,
+        // set its fill color to red, otherwise set it to
+        // black:
+        if (path.contains(event.point)) {
+            path.fillColor = 'red';
+        } else {
+            path.fillColor = 'black';
+        }
+    }
+    ```
 
 - `isInside(rect)`
 
-  - Parameters:
+    - Parameters:
 
-  - `rect:` `Rectangle` — the rectangle to check against
+    - `rect:` `Rectangle` — the rectangle to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean`
+    - `Boolean`
 
 - `intersects(item)`
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean`
+    - `Boolean`
 
 ### Hit-testing, Fetching and Matching Items[](#hit-testing-fetching-and-matching-items)
 
 - `hitTest(point[, options])`
 
-  Performs a hit-test on the item and its children (if it is a `Group` or `Layer`) at the location of the specified point, returning the first found hit.
+    Performs a hit-test on the item and its children (if it is a `Group` or `Layer`) at the location
+    of the specified point, returning the first found hit.
 
-  The options object allows you to control the specifics of the hit- test and may contain a combination of the following values:
+    The options object allows you to control the specifics of the hit- test and may contain a
+    combination of the following values:
 
-  - Options:
+    - Options:
 
-  - `options.tolerance: Number` — the tolerance of the hit-test — default: `paperScope.settings`.hitTolerance
+    - `options.tolerance: Number` — the tolerance of the hit-test — default:
+      `paperScope.settings`.hitTolerance
 
-  - `options.class: Function` — only hit-test against a specific item class, or any of its sub-classes, by providing the constructor function against which an `instanceof` check is performed: `Group`, `Layer`, `Path`, `CompoundPath`, `Shape`, `Raster`, `SymbolItem`, `PointText`, …
+    - `options.class: Function` — only hit-test against a specific item class, or any of its
+      sub-classes, by providing the constructor function against which an `instanceof` check is
+      performed: `Group`, `Layer`, `Path`, `CompoundPath`, `Shape`, `Raster`, `SymbolItem`,
+      `PointText`, …
 
-  - `options.match: Function` — a match function to be called for each found hit result: Return `true` to return the result, `false` to keep searching
+    - `options.match: Function` — a match function to be called for each found hit result: Return
+      `true` to return the result, `false` to keep searching
 
-  - `options.fill: Boolean` — hit-test the fill of items — default: `true`
+    - `options.fill: Boolean` — hit-test the fill of items — default: `true`
 
-  - `options.stroke: Boolean` — hit-test the stroke of path items, taking into account the setting of stroke color and width — default: `true`
+    - `options.stroke: Boolean` — hit-test the stroke of path items, taking into account the setting
+      of stroke color and width — default: `true`
 
-  - `options.segments: Boolean` — hit-test for `segment.point` of `Path` items — default: `true`
+    - `options.segments: Boolean` — hit-test for `segment.point` of `Path` items — default: `true`
 
-  - `options.curves: Boolean` — hit-test the curves of path items, without taking the stroke color or width into account
+    - `options.curves: Boolean` — hit-test the curves of path items, without taking the stroke color
+      or width into account
 
-  - `options.handles: Boolean` — hit-test for the handles (`segment.handleIn` / `segment.handleOut`) of path segments.
+    - `options.handles: Boolean` — hit-test for the handles (`segment.handleIn` /
+      `segment.handleOut`) of path segments.
 
-  - `options.ends: Boolean` — only hit-test for the first or last segment points of open path items
+    - `options.ends: Boolean` — only hit-test for the first or last segment points of open path
+      items
 
-  - `options.position: Boolean` — hit-test the `item.position` of of items, which depends on the setting of `item.pivot`
+    - `options.position: Boolean` — hit-test the `item.position` of of items, which depends on the
+      setting of `item.pivot`
 
-  - `options.center: Boolean` — hit-test the `rectangle.center` of the bounding rectangle of items (`item.bounds`)
+    - `options.center: Boolean` — hit-test the `rectangle.center` of the bounding rectangle of items
+      (`item.bounds`)
 
-  - `options.bounds: Boolean` — hit-test the corners and side-centers of the bounding rectangle of items (`item.bounds`)
+    - `options.bounds: Boolean` — hit-test the corners and side-centers of the bounding rectangle of
+      items (`item.bounds`)
 
-  - `options.guides: Boolean` — hit-test items that have `Item#guide` set to `true`
+    - `options.guides: Boolean` — hit-test items that have `Item#guide` set to `true`
 
-  - `options.selected: Boolean` — only hit selected items
+    - `options.selected: Boolean` — only hit selected items
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point where the hit-test should be performed (in global coordinates system).
+    - `point:` `Point` — the point where the hit-test should be performed (in global coordinates
+      system).
 
-  - `options:` `Object` — optional, default: `{ fill: true, stroke: true, segments: true, tolerance: settings.hitTolerance }`
+    - `options:` `Object` — optional, default:
+      `{ fill: true, stroke: true, segments: true, tolerance: settings.hitTolerance }`
 
-  - Returns:
+    - Returns:
 
-  - `HitResult` — a hit result object describing what exactly was hit or `null` if nothing was hit
+    - `HitResult` — a hit result object describing what exactly was hit or `null` if nothing was hit
 
 - `hitTestAll(point[, options])`
 
-  Performs a hit-test on the item and its children (if it is a `Group` or `Layer`) at the location of the specified point, returning all found hits.
+    Performs a hit-test on the item and its children (if it is a `Group` or `Layer`) at the location
+    of the specified point, returning all found hits.
 
-  The options object allows you to control the specifics of the hit- test. See `hitTest(point[, options])` for a list of all options.
+    The options object allows you to control the specifics of the hit- test. See
+    `hitTest(point[, options])` for a list of all options.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point where the hit-test should be performed (in global coordinates system).
+    - `point:` `Point` — the point where the hit-test should be performed (in global coordinates
+      system).
 
-  - `options:` `Object` — optional, default: `{ fill: true, stroke: true, segments: true, tolerance: settings.hitTolerance }`
+    - `options:` `Object` — optional, default:
+      `{ fill: true, stroke: true, segments: true, tolerance: settings.hitTolerance }`
 
-  - Returns:
+    - Returns:
 
-  - `Array of HitResult` objects — hit result objects for all hits, describing what exactly was hit or `null` if nothing was hit
+    - `Array of HitResult` objects — hit result objects for all hits, describing what exactly was
+      hit or `null` if nothing was hit
 
-  - See also:
+    - See also:
 
-  - `hitTest(point[, options])`;
+    - `hitTest(point[, options])`;
 
 - `matches(options)`
 
-  Checks whether the item matches the criteria described by the given object, by iterating over all of its properties and matching against their values through `matches(name, compare)`.
+    Checks whether the item matches the criteria described by the given object, by iterating over
+    all of its properties and matching against their values through `matches(name, compare)`.
 
-  See `project.getItems(options)` for a selection of illustrated examples.
+    See `project.getItems(options)` for a selection of illustrated examples.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object`⟋`Function` — the criteria to match against
+    - `options:` `Object`⟋`Function` — the criteria to match against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item matches all the criteria, `false` otherwise
+    - `Boolean` — `true` if the item matches all the criteria, `false` otherwise
 
-  - See also:
+    - See also:
 
-  - `getItems(options)`
+    - `getItems(options)`
 
 - `matches(name, compare)`
 
-  Checks whether the item matches the given criteria. Extended matching is possible by providing a compare function or a regular expression. Matching points, colors only work as a comparison of the full object, not partial matching (e.g. only providing the x-coordinate to match all points with that x-value). Partial matching does work for `item.data`.
+    Checks whether the item matches the given criteria. Extended matching is possible by providing a
+    compare function or a regular expression. Matching points, colors only work as a comparison of
+    the full object, not partial matching (e.g. only providing the x-coordinate to match all points
+    with that x-value). Partial matching does work for `item.data`.
 
-  See `project.getItems(options)` for a selection of illustrated examples.
+    See `project.getItems(options)` for a selection of illustrated examples.
 
-  - Parameters:
+    - Parameters:
 
-  - `name:` `String` — the name of the state to match against
+    - `name:` `String` — the name of the state to match against
 
-  - `compare:` `Object` — the value, function or regular expression to compare against
+    - `compare:` `Object` — the value, function or regular expression to compare against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item matches the state, `false` otherwise
+    - `Boolean` — `true` if the item matches the state, `false` otherwise
 
-  - See also:
+    - See also:
 
-  - `getItems(options)`
+    - `getItems(options)`
 
 - `getItems(options)`
 
-  Fetch the descendants (children or children of children) of this item that match the properties in the specified object. Extended matching is possible by providing a compare function or regular expression. Matching points, colors only work as a comparison of the full object, not partial matching (e.g. only providing the x- coordinate to match all points with that x-value). Partial matching does work for `item.data`.
+    Fetch the descendants (children or children of children) of this item that match the properties
+    in the specified object. Extended matching is possible by providing a compare function or
+    regular expression. Matching points, colors only work as a comparison of the full object, not
+    partial matching (e.g. only providing the x- coordinate to match all points with that x-value).
+    Partial matching does work for `item.data`.
 
-  Matching items against a rectangular area is also possible, by setting either `options.inside` or `options.overlapping` to a rectangle describing the area in which the items either have to be fully or partly contained.
+    Matching items against a rectangular area is also possible, by setting either `options.inside`
+    or `options.overlapping` to a rectangle describing the area in which the items either have to be
+    fully or partly contained.
 
-  See `project.getItems(options)` for a selection of illustrated examples.
+    See `project.getItems(options)` for a selection of illustrated examples.
 
-  - Options:
+    - Options:
 
-  - `options.recursive: Boolean` — whether to loop recursively through all children, or stop at the current level — default: `true`
+    - `options.recursive: Boolean` — whether to loop recursively through all children, or stop at
+      the current level — default: `true`
 
-  - `options.match: Function` — a match function to be called for each item, allowing the definition of more flexible item checks that are not bound to properties. If no other match properties are defined, this function can also be passed instead of the `options` object
+    - `options.match: Function` — a match function to be called for each item, allowing the
+      definition of more flexible item checks that are not bound to properties. If no other match
+      properties are defined, this function can also be passed instead of the `options` object
 
-  - `options.class: Function` — the constructor function of the item type to match against
+    - `options.class: Function` — the constructor function of the item type to match against
 
-  - `options.inside: Rectangle` — the rectangle in which the items need to be fully contained
+    - `options.inside: Rectangle` — the rectangle in which the items need to be fully contained
 
-  - `options.overlapping: Rectangle` — the rectangle with which the items need to at least partly overlap
+    - `options.overlapping: Rectangle` — the rectangle with which the items need to at least partly
+      overlap
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object`⟋`Function` — the criteria to match against
+    - `options:` `Object`⟋`Function` — the criteria to match against
 
-  - Returns:
+    - Returns:
 
-  - `Array of Item` objects — the list of matching descendant items
+    - `Array of Item` objects — the list of matching descendant items
 
-  - See also:
+    - See also:
 
-  - `matches(options)`
+    - `matches(options)`
 
 - `getItem(options)`
 
-  Fetch the first descendant (child or child of child) of this item that matches the properties in the specified object. Extended matching is possible by providing a compare function or regular expression. Matching points, colors only work as a comparison of the full object, not partial matching (e.g. only providing the x- coordinate to match all points with that x-value). Partial matching does work for `item.data`. See `project.getItems(match)` for a selection of illustrated examples.
+    Fetch the first descendant (child or child of child) of this item that matches the properties in
+    the specified object. Extended matching is possible by providing a compare function or regular
+    expression. Matching points, colors only work as a comparison of the full object, not partial
+    matching (e.g. only providing the x- coordinate to match all points with that x-value). Partial
+    matching does work for `item.data`. See `project.getItems(match)` for a selection of illustrated
+    examples.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object`⟋`Function` — the criteria to match against
+    - `options:` `Object`⟋`Function` — the criteria to match against
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the first descendant item matching the given criteria
+    - `Item` — the first descendant item matching the given criteria
 
-  - See also:
+    - See also:
 
-  - `getItems(options)`
+    - `getItems(options)`
 
 ### Importing / Exporting JSON and SVG[](#importing-exporting-json-and-svg)
 
 - `exportJSON([options])`
 
-  Exports (serializes) the item with its content and child items to a JSON data string.
+    Exports (serializes) the item with its content and child items to a JSON data string.
 
-  - Options:
+    - Options:
 
-  - `options.asString: Boolean` — whether the JSON is returned as a `Object` or a `String` — default: `true`
+    - `options.asString: Boolean` — whether the JSON is returned as a `Object` or a `String` —
+      default: `true`
 
-  - `options.precision: Number` — the amount of fractional digits in numbers used in JSON data — default: `5`
+    - `options.precision: Number` — the amount of fractional digits in numbers used in JSON data —
+      default: `5`
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object` — the serialization options — optional
+    - `options:` `Object` — the serialization options — optional
 
-  - Returns:
+    - Returns:
 
-  - `String` — the exported JSON data
+    - `String` — the exported JSON data
 
 - `importJSON(json)`
 
-  Imports (deserializes) the stored JSON data into this item. If the data describes an item of the same class or a parent class of the item, the data is imported into the item itself. If not, the imported item is added to this item’s `item.children` list. Note that not all type of items can have children.
+    Imports (deserializes) the stored JSON data into this item. If the data describes an item of the
+    same class or a parent class of the item, the data is imported into the item itself. If not, the
+    imported item is added to this item’s `item.children` list. Note that not all type of items can
+    have children.
 
-  - Parameters:
+    - Parameters:
 
-  - `json:` `String` — the JSON data to import from
+    - `json:` `String` — the JSON data to import from
 
-  - Returns:
+    - Returns:
 
-  - `Item`
+    - `Item`
 
 - `exportSVG([options])`
 
 - `importSVG(svg[, options])`
 
-  Converts the provided SVG content into Paper.js items and adds them to the this item’s children list. Note that the item is not cleared first. You can call `item.removeChildren`() to do so.
+    Converts the provided SVG content into Paper.js items and adds them to the this item’s children
+    list. Note that the item is not cleared first. You can call `item.removeChildren`() to do so.
 
-  - Options:
+    - Options:
 
-  - `options.expandShapes: Boolean` — whether imported shape items should be expanded to path items — default: `false`
+    - `options.expandShapes: Boolean` — whether imported shape items should be expanded to path
+      items — default: `false`
 
-  - `options.onLoad: Function` — the callback function to call once the SVG content is loaded from the given URL receiving two arguments: the converted `item` and the original `svg` data as a string. Only required when loading from external resources.
+    - `options.onLoad: Function` — the callback function to call once the SVG content is loaded from
+      the given URL receiving two arguments: the converted `item` and the original `svg` data as a
+      string. Only required when loading from external resources.
 
-  - `options.onError: Function` — the callback function to call if an error occurs during loading. Only required when loading from external resources.
+    - `options.onError: Function` — the callback function to call if an error occurs during loading.
+      Only required when loading from external resources.
 
-  - `options.insert: Boolean` — whether the imported items should be added to the item that `importSVG()` is called on — default: `true`
+    - `options.insert: Boolean` — whether the imported items should be added to the item that
+      `importSVG()` is called on — default: `true`
 
-  - `options.applyMatrix: Boolean` — whether the imported items should have their transformation matrices applied to their contents or not — default: `paperScope.settings`.applyMatrix
+    - `options.applyMatrix: Boolean` — whether the imported items should have their transformation
+      matrices applied to their contents or not — default: `paperScope.settings`.applyMatrix
 
-  - Parameters:
+    - Parameters:
 
-  - `svg:` `SVGElement`⟋`String` — the SVG content to import, either as a SVG DOM node, a string containing SVG content, or a string describing the URL of the SVG file to fetch.
+    - `svg:` `SVGElement`⟋`String` — the SVG content to import, either as a SVG DOM node, a string
+      containing SVG content, or a string describing the URL of the SVG file to fetch.
 
-  - `options:` `Object` — the import options — optional
+    - `options:` `Object` — the import options — optional
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the newly created Paper.js item containing the converted SVG content
+    - `Item` — the newly created Paper.js item containing the converted SVG content
 
 - `importSVG(svg, onLoad)`
 
-  Imports the provided external SVG file, converts it into Paper.js items and adds them to the this item’s children list. Note that the item is not cleared first. You can call `item.removeChildren`() to do so.
+    Imports the provided external SVG file, converts it into Paper.js items and adds them to the
+    this item’s children list. Note that the item is not cleared first. You can call
+    `item.removeChildren`() to do so.
 
-  - Parameters:
+    - Parameters:
 
-  - `svg:` `SVGElement`⟋`String` — the URL of the SVG file to fetch.
+    - `svg:` `SVGElement`⟋`String` — the URL of the SVG file to fetch.
 
-  - `onLoad:` `Function` — the callback function to call once the SVG content is loaded from the given URL receiving two arguments: the converted `item` and the original `svg` data as a string. Only required when loading from external files.
+    - `onLoad:` `Function` — the callback function to call once the SVG content is loaded from the
+      given URL receiving two arguments: the converted `item` and the original `svg` data as a
+      string. Only required when loading from external files.
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the newly created Paper.js item containing the converted SVG content
+    - `Item` — the newly created Paper.js item containing the converted SVG content
 
 ### Hierarchy Operations[](#hierarchy-operations)
 
 - `addChild(item)`
 
-  Adds the specified item as a child of this item at the end of the its `children` list. You can use this function for groups, compound paths and layers.
+    Adds the specified item as a child of this item at the end of the its `children` list. You can
+    use this function for groups, compound paths and layers.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to be added as a child
+    - `item:` `Item` — the item to be added as a child
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the added item, or `null` if adding was not possible
+    - `Item` — the added item, or `null` if adding was not possible
 
 - `insertChild(index, item)`
 
-  Inserts the specified item as a child of this item at the specified index in its `children` list. You can use this function for groups, compound paths and layers.
+    Inserts the specified item as a child of this item at the specified index in its `children`
+    list. You can use this function for groups, compound paths and layers.
 
-  - Parameters:
+    - Parameters:
 
-  - `index:` `Number` — the index at which to insert the item
+    - `index:` `Number` — the index at which to insert the item
 
-  - `item:` `Item` — the item to be inserted as a child
+    - `item:` `Item` — the item to be inserted as a child
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the inserted item, or `null` if inserting was not possible
+    - `Item` — the inserted item, or `null` if inserting was not possible
 
 - `addChildren(items)`
 
-  Adds the specified items as children of this item at the end of the its children list. You can use this function for groups, compound paths and layers.
+    Adds the specified items as children of this item at the end of the its children list. You can
+    use this function for groups, compound paths and layers.
 
-  - Parameters:
+    - Parameters:
 
-  - `items:` Array of `Item` objects — the items to be added as children
+    - `items:` Array of `Item` objects — the items to be added as children
 
-  - Returns:
+    - Returns:
 
-  - `Array of Item` objects — the added items, or `null` if adding was not possible
+    - `Array of Item` objects — the added items, or `null` if adding was not possible
 
 - `insertChildren(index, items)`
 
-  Inserts the specified items as children of this item at the specified index in its `children` list. You can use this function for groups, compound paths and layers.
+    Inserts the specified items as children of this item at the specified index in its `children`
+    list. You can use this function for groups, compound paths and layers.
 
-  - Parameters:
+    - Parameters:
 
-  - `index:` `Number`
+    - `index:` `Number`
 
-  - `items:` Array of `Item` objects — the items to be appended as children
+    - `items:` Array of `Item` objects — the items to be appended as children
 
-  - Returns:
+    - Returns:
 
-  - `Array of Item` objects — the inserted items, or `null` if inserted was not possible
+    - `Array of Item` objects — the inserted items, or `null` if inserted was not possible
 
 - `insertAbove(item)`
 
-  Inserts this item above the specified item.
+    Inserts this item above the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item above which it should be inserted
+    - `item:` `Item` — the item above which it should be inserted
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the inserted item, or `null` if inserting was not possible
+    - `Item` — the inserted item, or `null` if inserting was not possible
 
 - `insertBelow(item)`
 
-  Inserts this item below the specified item.
+    Inserts this item below the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item below which it should be inserted
+    - `item:` `Item` — the item below which it should be inserted
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the inserted item, or `null` if inserting was not possible
+    - `Item` — the inserted item, or `null` if inserting was not possible
 
 - `sendToBack()`
 
-  Sends this item to the back of all other items within the same parent.
+    Sends this item to the back of all other items within the same parent.
 
 - `bringToFront()`
 
-  Brings this item to the front of all other items within the same parent.
+    Brings this item to the front of all other items within the same parent.
 
 - `addTo(owner)`
 
-  Adds it to the specified owner, which can be either a `Item` or a `Project`.
+    Adds it to the specified owner, which can be either a `Item` or a `Project`.
 
-  - Parameters:
+    - Parameters:
 
-  - `owner:` `Project`⟋`Layer`⟋`Group`⟋`CompoundPath` — the item or project to add the item to
+    - `owner:` `Project`⟋`Layer`⟋`Group`⟋`CompoundPath` — the item or project to add the item to
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the item itself, if it was successfully added
+    - `Item` — the item itself, if it was successfully added
 
 - `copyTo(owner)`
 
-  Clones the item and adds it to the specified owner, which can be either a `Item` or a `Project`.
+    Clones the item and adds it to the specified owner, which can be either a `Item` or a `Project`.
 
-  - Parameters:
+    - Parameters:
 
-  - `owner:` `Project`⟋`Layer`⟋`Group`⟋`CompoundPath` — the item or project to copy the item to
+    - `owner:` `Project`⟋`Layer`⟋`Group`⟋`CompoundPath` — the item or project to copy the item to
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the new copy of the item, if it was successfully added
+    - `Item` — the new copy of the item, if it was successfully added
 
 - `reduce(options)`
 
-  If this is a group, layer or compound-path with only one child-item, the child-item is moved outside and the parent is erased. Otherwise, the item itself is returned unmodified.
+    If this is a group, layer or compound-path with only one child-item, the child-item is moved
+    outside and the parent is erased. Otherwise, the item itself is returned unmodified.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:`
+    - `options:`
 
-  - Returns:
+    - Returns:
 
-  - `Item` — the reduced item
+    - `Item` — the reduced item
 
 - `remove()`
 
-  Removes the item and all its children from the project. The item is not destroyed and can be inserted again after removal.
+    Removes the item and all its children from the project. The item is not destroyed and can be
+    inserted again after removal.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item was removed, `false` otherwise
+    - `Boolean` — `true` if the item was removed, `false` otherwise
 
 - `replaceWith(item)`
 
-  Replaces this item with the provided new item which will takes its place in the project hierarchy instead.
+    Replaces this item with the provided new item which will takes its place in the project
+    hierarchy instead.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item that will replace this item
+    - `item:` `Item` — the item that will replace this item
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item was replaced, `false` otherwise
+    - `Boolean` — `true` if the item was replaced, `false` otherwise
 
 - `removeChildren()`
 
-  Removes all of the item’s `children` (if any).
+    Removes all of the item’s `children` (if any).
 
-  - Returns:
+    - Returns:
 
-  - `Array of Item` objects — an array containing the removed items
+    - `Array of Item` objects — an array containing the removed items
 
 - `removeChildren(start[, end])`
 
-  Removes the children from the specified `start` index to and excluding the `end` index from the parent’s `children` array.
+    Removes the children from the specified `start` index to and excluding the `end` index from the
+    parent’s `children` array.
 
-  - Parameters:
+    - Parameters:
 
-  - `start:` `Number` — the beginning index, inclusive
+    - `start:` `Number` — the beginning index, inclusive
 
-  - `end:` `Number` — the ending index, exclusive — optional, default: `children.length`
+    - `end:` `Number` — the ending index, exclusive — optional, default: `children.length`
 
-  - Returns:
+    - Returns:
 
-  - `Array of Item` objects — an array containing the removed items
+    - `Array of Item` objects — an array containing the removed items
 
 - `reverseChildren()`
 
-  Reverses the order of the item’s children
+    Reverses the order of the item’s children
 
 ### Tests[](#tests)
 
 - `isEmpty([recursively])`
 
-  Specifies whether the item has any content or not. The meaning of what content is differs from type to type. For example, a `Group` with no children, a `TextItem` with no text content and a `Path` with no segments all are considered empty.
+    Specifies whether the item has any content or not. The meaning of what content is differs from
+    type to type. For example, a `Group` with no children, a `TextItem` with no text content and a
+    `Path` with no segments all are considered empty.
 
-  - Parameters:
+    - Parameters:
 
-  - `recursively:` `Boolean` — whether an item with children should be considered empty if all its descendants are empty — optional, default: `false`
+    - `recursively:` `Boolean` — whether an item with children should be considered empty if all its
+      descendants are empty — optional, default: `false`
 
-  - Returns:
+    - Returns:
 
-  - `Boolean`
+    - `Boolean`
 
 ### Style Tests[](#style-tests)
 
 - `hasFill()`
 
-  Checks whether the item has a fill.
+    Checks whether the item has a fill.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item has a fill, `false` otherwise
+    - `Boolean` — `true` if the item has a fill, `false` otherwise
 
 - `hasStroke()`
 
-  Checks whether the item has a stroke.
+    Checks whether the item has a stroke.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item has a stroke, `false` otherwise
+    - `Boolean` — `true` if the item has a stroke, `false` otherwise
 
 - `hasShadow()`
 
-  Checks whether the item has a shadow.
+    Checks whether the item has a shadow.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item has a shadow, `false` otherwise
+    - `Boolean` — `true` if the item has a shadow, `false` otherwise
 
 ### Hierarchy Tests[](#hierarchy-tests)
 
 - `hasChildren()`
 
-  Checks if the item contains any children items.
+    Checks if the item contains any children items.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` it has one or more children, `false` otherwise
+    - `Boolean` — `true` it has one or more children, `false` otherwise
 
 - `isInserted()`
 
-  Checks whether the item and all its parents are inserted into scene graph or not.
+    Checks whether the item and all its parents are inserted into scene graph or not.
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item is inserted into the scene graph, `false` otherwise
+    - `Boolean` — `true` if the item is inserted into the scene graph, `false` otherwise
 
 - `isAbove(item)`
 
-  Checks if this item is above the specified item in the stacking order of the project.
+    Checks if this item is above the specified item in the stacking order of the project.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if it is above the specified item, `false` otherwise
+    - `Boolean` — `true` if it is above the specified item, `false` otherwise
 
 - `isBelow(item)`
 
-  Checks if the item is below the specified item in the stacking order of the project.
+    Checks if the item is below the specified item in the stacking order of the project.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if it is below the specified item, `false` otherwise
+    - `Boolean` — `true` if it is below the specified item, `false` otherwise
 
 - `isParent(item)`
 
-  Checks whether the specified item is the parent of the item.
+    Checks whether the specified item is the parent of the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if it is the parent of the item, `false` otherwise
+    - `Boolean` — `true` if it is the parent of the item, `false` otherwise
 
 - `isChild(item)`
 
-  Checks whether the specified item is a child of the item.
+    Checks whether the specified item is a child of the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` it is a child of the item, `false` otherwise
+    - `Boolean` — `true` it is a child of the item, `false` otherwise
 
 - `isDescendant(item)`
 
-  Checks if the item is contained within the specified item.
+    Checks if the item is contained within the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if it is inside the specified item, `false` otherwise
+    - `Boolean` — `true` if it is inside the specified item, `false` otherwise
 
 - `isAncestor(item)`
 
-  Checks if the item is an ancestor of the specified item.
+    Checks if the item is an ancestor of the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item is an ancestor of the specified item, `false` otherwise
+    - `Boolean` — `true` if the item is an ancestor of the specified item, `false` otherwise
 
 - `isSibling(item)`
 
-  Checks if the item is an a sibling of the specified item.
+    Checks if the item is an a sibling of the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item` — the item to check against
+    - `item:` `Item` — the item to check against
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item is aa sibling of the specified item, `false` otherwise
+    - `Boolean` — `true` if the item is aa sibling of the specified item, `false` otherwise
 
 - `isGroupedWith(item)`
 
-  Checks whether the item is grouped with the specified item.
+    Checks whether the item is grouped with the specified item.
 
-  - Parameters:
+    - Parameters:
 
-  - `item:` `Item`
+    - `item:` `Item`
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the items are grouped together, `false` otherwise
+    - `Boolean` — `true` if the items are grouped together, `false` otherwise
 
 ### Transform Functions[](#transform-functions)
 
 - `translate(delta)`
 
-  Translates (moves) the item by the given offset views.
+    Translates (moves) the item by the given offset views.
 
-  - Parameters:
+    - Parameters:
 
-  - `delta:` `Point` — the offset to translate the item by
+    - `delta:` `Point` — the offset to translate the item by
 
 - `rotate(angle[, center])`
 
-  Rotates the item by a given angle around the given center point.
+    Rotates the item by a given angle around the given center point.
 
-  Angles are oriented clockwise and measured in degrees.
+    Angles are oriented clockwise and measured in degrees.
 
-  - Parameters:
+    - Parameters:
 
-  - `angle:` `Number` — the rotation angle
+    - `angle:` `Number` — the rotation angle
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  - See also:
+    - See also:
 
-  - `matrix.rotate(angle[, center])`
+    - `matrix.rotate(angle[, center])`
 
-  Example:Rotating an item:
+    Example:Rotating an item:
 
-  ``` py-2.5
-  // Create a rectangle shaped path with its top left
-  // point at {x: 80, y: 25} and a size of {width: 50, height: 50}:
-  var path = new Path.Rectangle(new Point(80, 25), new Size(50, 50));
-  path.fillColor = 'black';
+    ```py-2.5
+    // Create a rectangle shaped path with its top left
+    // point at {x: 80, y: 25} and a size of {width: 50, height: 50}:
+    var path = new Path.Rectangle(new Point(80, 25), new Size(50, 50));
+    path.fillColor = 'black';
 
-  // Rotate the path by 30 degrees:
-  path.rotate(30);
-  ```
+    // Rotate the path by 30 degrees:
+    path.rotate(30);
+    ```
 
-  Example:Rotating an item around a specific point:
+    Example:Rotating an item around a specific point:
 
-  ``` py-2.5
-  // Create a rectangle shaped path with its top left
-  // point at {x: 175, y: 50} and a size of {width: 100, height: 100}:
-  var topLeft = new Point(175, 50);
-  var size = new Size(100, 100);
-  var path = new Path.Rectangle(topLeft, size);
-  path.fillColor = 'black';
+    ```py-2.5
+    // Create a rectangle shaped path with its top left
+    // point at {x: 175, y: 50} and a size of {width: 100, height: 100}:
+    var topLeft = new Point(175, 50);
+    var size = new Size(100, 100);
+    var path = new Path.Rectangle(topLeft, size);
+    path.fillColor = 'black';
 
-  // Draw a circle shaped path in the center of the view,
-  // to show the rotation point:
-  var circle = new Path.Circle({
-      center: view.center,
-      radius: 5,
-      fillColor: 'white'
-  });
+    // Draw a circle shaped path in the center of the view,
+    // to show the rotation point:
+    var circle = new Path.Circle({
+        center: view.center,
+        radius: 5,
+        fillColor: 'white'
+    });
 
-  // Each frame rotate the path 3 degrees around the center point
-  // of the view:
-  function onFrame(event) {
-      path.rotate(3, view.center);
-  }
-  ```
+    // Each frame rotate the path 3 degrees around the center point
+    // of the view:
+    function onFrame(event) {
+        path.rotate(3, view.center);
+    }
+    ```
 
 - `scale(scale[, center])`
 
-  Scales the item by the given value from its center point, or optionally from a supplied point.
+    Scales the item by the given value from its center point, or optionally from a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `scale:` `Number` — the scale factor
+    - `scale:` `Number` — the scale factor
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  Example:Scaling an item from its center point:
+    Example:Scaling an item from its center point:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 20:
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 20,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 20:
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 20,
+        fillColor: 'red'
+    });
 
-  // Scale the path by 150% from its center point
-  circle.scale(1.5);
-  ```
+    // Scale the path by 150% from its center point
+    circle.scale(1.5);
+    ```
 
-  Example:Scaling an item from a specific point:
+    Example:Scaling an item from a specific point:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 80, y: 50 }
-  // with a radius of 20:
-  var circle = new Path.Circle({
-      center: [80, 50],
-      radius: 20,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 80, y: 50 }
+    // with a radius of 20:
+    var circle = new Path.Circle({
+        center: [80, 50],
+        radius: 20,
+        fillColor: 'red'
+    });
 
-  // Scale the path 150% from its bottom left corner
-  circle.scale(1.5, circle.bounds.bottomLeft);
-  ```
+    // Scale the path 150% from its bottom left corner
+    circle.scale(1.5, circle.bounds.bottomLeft);
+    ```
 
 - `scale(hor, ver[, center])`
 
-  Scales the item by the given values from its center point, or optionally from a supplied point.
+    Scales the item by the given values from its center point, or optionally from a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `hor:` `Number` — the horizontal scale factor
+    - `hor:` `Number` — the horizontal scale factor
 
-  - `ver:` `Number` — the vertical scale factor
+    - `ver:` `Number` — the vertical scale factor
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  Example:Scaling an item horizontally by 300%:
+    Example:Scaling an item horizontally by 300%:
 
-  ``` py-2.5
-  // Create a circle shaped path at { x: 100, y: 50 }
-  // with a radius of 20:
-  var circle = new Path.Circle({
-      center: [100, 50],
-      radius: 20,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    // Create a circle shaped path at { x: 100, y: 50 }
+    // with a radius of 20:
+    var circle = new Path.Circle({
+        center: [100, 50],
+        radius: 20,
+        fillColor: 'red'
+    });
 
-  // Scale the path horizontally by 300%
-  circle.scale(3, 1);
-  ```
+    // Scale the path horizontally by 300%
+    circle.scale(3, 1);
+    ```
 
 - `shear(shear[, center])`
 
-  Shears the item by the given value from its center point, or optionally by a supplied point.
+    Shears the item by the given value from its center point, or optionally by a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `shear:` `Point` — the horizontal and vertical shear factors as a point
+    - `shear:` `Point` — the horizontal and vertical shear factors as a point
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  - See also:
+    - See also:
 
-  - `matrix.shear(shear[, center])`
+    - `matrix.shear(shear[, center])`
 
 - `shear(hor, ver[, center])`
 
-  Shears the item by the given values from its center point, or optionally by a supplied point.
+    Shears the item by the given values from its center point, or optionally by a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `hor:` `Number` — the horizontal shear factor
+    - `hor:` `Number` — the horizontal shear factor
 
-  - `ver:` `Number` — the vertical shear factor
+    - `ver:` `Number` — the vertical shear factor
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  - See also:
+    - See also:
 
-  - `matrix.shear(hor, ver[, center])`
+    - `matrix.shear(hor, ver[, center])`
 
 - `skew(skew[, center])`
 
-  Skews the item by the given angles from its center point, or optionally by a supplied point.
+    Skews the item by the given angles from its center point, or optionally by a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `skew:` `Point` — the horizontal and vertical skew angles in degrees
+    - `skew:` `Point` — the horizontal and vertical skew angles in degrees
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  - See also:
+    - See also:
 
-  - `matrix.shear(skew[, center])`
+    - `matrix.shear(skew[, center])`
 
 - `skew(hor, ver[, center])`
 
-  Skews the item by the given angles from its center point, or optionally by a supplied point.
+    Skews the item by the given angles from its center point, or optionally by a supplied point.
 
-  - Parameters:
+    - Parameters:
 
-  - `hor:` `Number` — the horizontal skew angle in degrees
+    - `hor:` `Number` — the horizontal skew angle in degrees
 
-  - `ver:` `Number` — the vertical sskew angle in degrees
+    - `ver:` `Number` — the vertical sskew angle in degrees
 
-  - `center:` `Point` — optional, default: `item.position`
+    - `center:` `Point` — optional, default: `item.position`
 
-  - See also:
+    - See also:
 
-  - `matrix.shear(hor, ver[, center])`
+    - `matrix.shear(hor, ver[, center])`
 
 - `transform(matrix)`
 
-  Transform the item.
+    Transform the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `matrix:` `Matrix` — the matrix by which the item shall be transformed
+    - `matrix:` `Matrix` — the matrix by which the item shall be transformed
 
 - `globalToLocal(point)`
 
-  Converts the specified point from global project coordinate space to the item’s own local coordinate space.
+    Converts the specified point from global project coordinate space to the item’s own local
+    coordinate space.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point to be transformed
+    - `point:` `Point` — the point to be transformed
 
-  - Returns:
+    - Returns:
 
-  - `Point` — the transformed point as a new instance
+    - `Point` — the transformed point as a new instance
 
 - `localToGlobal(point)`
 
-  Converts the specified point from the item’s own local coordinate space to the global project coordinate space.
+    Converts the specified point from the item’s own local coordinate space to the global project
+    coordinate space.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point to be transformed
+    - `point:` `Point` — the point to be transformed
 
-  - Returns:
+    - Returns:
 
-  - `Point` — the transformed point as a new instance
+    - `Point` — the transformed point as a new instance
 
 - `parentToLocal(point)`
 
-  Converts the specified point from the parent’s coordinate space to item’s own local coordinate space.
+    Converts the specified point from the parent’s coordinate space to item’s own local coordinate
+    space.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point to be transformed
+    - `point:` `Point` — the point to be transformed
 
-  - Returns:
+    - Returns:
 
-  - `Point` — the transformed point as a new instance
+    - `Point` — the transformed point as a new instance
 
 - `localToParent(point)`
 
-  Converts the specified point from the item’s own local coordinate space to the parent’s coordinate space.
+    Converts the specified point from the item’s own local coordinate space to the parent’s
+    coordinate space.
 
-  - Parameters:
+    - Parameters:
 
-  - `point:` `Point` — the point to be transformed
+    - `point:` `Point` — the point to be transformed
 
-  - Returns:
+    - Returns:
 
-  - `Point` — the transformed point as a new instance
+    - `Point` — the transformed point as a new instance
 
 - `fitBounds(rectangle[, fill])`
 
-  Transform the item so that its `bounds` fit within the specified rectangle, without changing its aspect ratio.
+    Transform the item so that its `bounds` fit within the specified rectangle, without changing its
+    aspect ratio.
 
-  - Parameters:
+    - Parameters:
 
-  - `rectangle:` `Rectangle`
+    - `rectangle:` `Rectangle`
 
-  - `fill:` `Boolean` — optional, default: `false`
+    - `fill:` `Boolean` — optional, default: `false`
 
-  Example:Fitting an item to the bounding rectangle of another item's bounding rectangle:
+    Example:Fitting an item to the bounding rectangle of another item's bounding rectangle:
 
-  ``` py-2.5
-  // Create a rectangle shaped path with its top left corner
-  // at {x: 80, y: 25} and a size of {width: 75, height: 50}:
-  var path = new Path.Rectangle({
-      point: [80, 25],
-      size: [75, 50],
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a rectangle shaped path with its top left corner
+    // at {x: 80, y: 25} and a size of {width: 75, height: 50}:
+    var path = new Path.Rectangle({
+        point: [80, 25],
+        size: [75, 50],
+        fillColor: 'black'
+    });
 
-  // Create a circle shaped path with its center at {x: 80, y: 50}
-  // and a radius of 30.
-  var circlePath = new Path.Circle({
-      center: [80, 50],
-      radius: 30,
-      fillColor: 'red'
-  });
+    // Create a circle shaped path with its center at {x: 80, y: 50}
+    // and a radius of 30.
+    var circlePath = new Path.Circle({
+        center: [80, 50],
+        radius: 30,
+        fillColor: 'red'
+    });
 
-  // Fit the circlePath to the bounding rectangle of
-  // the rectangular path:
-  circlePath.fitBounds(path.bounds);
-  ```
+    // Fit the circlePath to the bounding rectangle of
+    // the rectangular path:
+    circlePath.fitBounds(path.bounds);
+    ```
 
-  Example:Fitting an item to the bounding rectangle of another item's bounding rectangle with the fill parameter set to true:
+    Example:Fitting an item to the bounding rectangle of another item's bounding rectangle with the
+    fill parameter set to true:
 
-  ``` py-2.5
-  // Create a rectangle shaped path with its top left corner
-  // at {x: 80, y: 25} and a size of {width: 75, height: 50}:
-  var path = new Path.Rectangle({
-      point: [80, 25],
-      size: [75, 50],
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a rectangle shaped path with its top left corner
+    // at {x: 80, y: 25} and a size of {width: 75, height: 50}:
+    var path = new Path.Rectangle({
+        point: [80, 25],
+        size: [75, 50],
+        fillColor: 'black'
+    });
 
-  // Create a circle shaped path with its center at {x: 80, y: 50}
-  // and a radius of 30.
-  var circlePath = new Path.Circle({
-      center: [80, 50],
-      radius: 30,
-      fillColor: 'red'
-  });
+    // Create a circle shaped path with its center at {x: 80, y: 50}
+    // and a radius of 30.
+    var circlePath = new Path.Circle({
+        center: [80, 50],
+        radius: 30,
+        fillColor: 'red'
+    });
 
-  // Fit the circlePath to the bounding rectangle of
-  // the rectangular path:
-  circlePath.fitBounds(path.bounds, true);
-  ```
+    // Fit the circlePath to the bounding rectangle of
+    // the rectangular path:
+    circlePath.fitBounds(path.bounds, true);
+    ```
 
-  Example:Fitting an item to the bounding rectangle of the view
+    Example:Fitting an item to the bounding rectangle of the view
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      center: [80, 50],
-      radius: 30,
-      fillColor: 'red'
-  });
+    ```py-2.5
+    var path = new Path.Circle({
+        center: [80, 50],
+        radius: 30,
+        fillColor: 'red'
+    });
 
-  // Fit the path to the bounding rectangle of the view:
-  path.fitBounds(view.bounds);
-  ```
+    // Fit the path to the bounding rectangle of the view:
+    path.fitBounds(view.bounds);
+    ```
 
 ### Event Handling[](#event-handling)
 
 - `on(type, function)`
 
-  Attaches an event handler to the item.
+    Attaches an event handler to the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`, `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
+    - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`,
+      `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
 
-  - `function:` `Function` — the function to be called when the event occurs, receiving a `MouseEvent` or `Event` object as its sole argument
+    - `function:` `Function` — the function to be called when the event occurs, receiving a
+      `MouseEvent` or `Event` object as its sole argument
 
-  - Returns:
+    - Returns:
 
-  - `Item` — this item itself, so calls can be chained
+    - `Item` — this item itself, so calls can be chained
 
-  Example:Change the fill color of the path to red when the mouse enters its shape and back to black again, when it leaves its shape.
+    Example:Change the fill color of the path to red when the mouse enters its shape and back to
+    black again, when it leaves its shape.
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25,
-      fillColor: 'black'
-  });
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25,
+        fillColor: 'black'
+    });
 
-  // When the mouse enters the item, set its fill color to red:
-  path.on('mouseenter', function() {
-      this.fillColor = 'red';
-  });
+    // When the mouse enters the item, set its fill color to red:
+    path.on('mouseenter', function() {
+        this.fillColor = 'red';
+    });
 
-  // When the mouse leaves the item, set its fill color to black:
-  path.on('mouseleave', function() {
-      this.fillColor = 'black';
-  });
-  ```
+    // When the mouse leaves the item, set its fill color to black:
+    path.on('mouseleave', function() {
+        this.fillColor = 'black';
+    });
+    ```
 
 - `on(object)`
 
-  Attaches one or more event handlers to the item.
+    Attaches one or more event handlers to the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `object:` `Object` — an object containing one or more of the following properties: `frame`, `mousedown`, `mouseup`, `mousedrag`, `click`, `doubleclick`, `mousemove`, `mouseenter`, `mouseleave`
+    - `object:` `Object` — an object containing one or more of the following properties: `frame`,
+      `mousedown`, `mouseup`, `mousedrag`, `click`, `doubleclick`, `mousemove`, `mouseenter`,
+      `mouseleave`
 
-  - Returns:
+    - Returns:
 
-  - `Item` — this item itself, so calls can be chained
+    - `Item` — this item itself, so calls can be chained
 
-  Example:Change the fill color of the path to red when the mouse enters its shape and back to black again, when it leaves its shape.
+    Example:Change the fill color of the path to red when the mouse enters its shape and back to
+    black again, when it leaves its shape.
 
-  ``` py-2.5
-  // Create a circle shaped path at the center of the view:
-  var path = new Path.Circle({
-      center: view.center,
-      radius: 25
-  });
-  path.fillColor = 'black';
+    ```py-2.5
+    // Create a circle shaped path at the center of the view:
+    var path = new Path.Circle({
+        center: view.center,
+        radius: 25
+    });
+    path.fillColor = 'black';
 
-  // When the mouse enters the item, set its fill color to red:
-  path.on({
-      mouseenter: function(event) {
-          this.fillColor = 'red';
-      },
-      mouseleave: function(event) {
-          this.fillColor = 'black';
-      }
-  });
-  ```
+    // When the mouse enters the item, set its fill color to red:
+    path.on({
+        mouseenter: function(event) {
+            this.fillColor = 'red';
+        },
+        mouseleave: function(event) {
+            this.fillColor = 'black';
+        }
+    });
+    ```
 
-  Example:When you click the mouse, you create new circle shaped items. When you move the mouse over the item, its fill color is set to red. When you move the mouse outside again, its fill color is set black.
+    Example:When you click the mouse, you create new circle shaped items. When you move the mouse
+    over the item, its fill color is set to red. When you move the mouse outside again, its fill
+    color is set black.
 
-  ``` py-2.5
-  var pathHandlers = {
-      mouseenter: function(event) {
-          this.fillColor = 'red';
-      },
-      mouseleave: function(event) {
-          this.fillColor = 'black';
-      }
-  }
+    ```py-2.5
+    var pathHandlers = {
+        mouseenter: function(event) {
+            this.fillColor = 'red';
+        },
+        mouseleave: function(event) {
+            this.fillColor = 'black';
+        }
+    }
 
-  // When the mouse is pressed:
-  function onMouseDown(event) {
-      // Create a circle shaped path at the position of the mouse:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 25,
-          fillColor: 'black'
-      });
+    // When the mouse is pressed:
+    function onMouseDown(event) {
+        // Create a circle shaped path at the position of the mouse:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 25,
+            fillColor: 'black'
+        });
 
-      // Attach the handers inside the object literal to the path:
-      path.on(pathHandlers);
-  }
-  ```
+        // Attach the handers inside the object literal to the path:
+        path.on(pathHandlers);
+    }
+    ```
 
 - `off(type, function)`
 
-  Detach an event handler from the item.
+    Detach an event handler from the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`, `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
+    - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`,
+      `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
 
-  - `function:` `Function` — the function to be detached
+    - `function:` `Function` — the function to be detached
 
-  - Returns:
+    - Returns:
 
-  - `Item` — this item itself, so calls can be chained
+    - `Item` — this item itself, so calls can be chained
 
 - `off(object)`
 
-  Detach one or more event handlers to the item.
+    Detach one or more event handlers to the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `object:` `Object` — an object containing one or more of the following properties: `frame`, `mousedown`, `mouseup`, `mousedrag`, `click`, `doubleclick`, `mousemove`, `mouseenter`, `mouseleave`
+    - `object:` `Object` — an object containing one or more of the following properties: `frame`,
+      `mousedown`, `mouseup`, `mousedrag`, `click`, `doubleclick`, `mousemove`, `mouseenter`,
+      `mouseleave`
 
-  - Returns:
+    - Returns:
 
-  - `Item` — this item itself, so calls can be chained
+    - `Item` — this item itself, so calls can be chained
 
 - `emit(type, event)`
 
-  Emit an event on the item.
+    Emit an event on the item.
 
-  - Parameters:
+    - Parameters:
 
-  - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`, `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
+    - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`,
+      `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
 
-  - `event:` `Object` — an object literal containing properties describing the event
+    - `event:` `Object` — an object literal containing properties describing the event
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the event had listeners, `false` otherwise
+    - `Boolean` — `true` if the event had listeners, `false` otherwise
 
 - `responds(type)`
 
-  Check if the item has one or more event handlers of the specified type.
+    Check if the item has one or more event handlers of the specified type.
 
-  - Parameters:
+    - Parameters:
 
-  - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`, `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
+    - `type:` `String` — the type of event: `‘frame’`, `mousedown’`, `‘mouseup’`, `‘mousedrag’`,
+      `‘click’`, `‘doubleclick’`, `‘mousemove’`, `‘mouseenter’`, `‘mouseleave’`
 
-  - Returns:
+    - Returns:
 
-  - `Boolean` — `true` if the item has one or more event handlers of the specified type, `false` otherwise
+    - `Boolean` — `true` if the item has one or more event handlers of the specified type, `false`
+      otherwise
 
 ### Remove On Event[](#remove-on-event)
 
 - `removeOn(options)`
 
-  Removes the item when the events specified in the passed options object occur.
+    Removes the item when the events specified in the passed options object occur.
 
-  - Options:
+    - Options:
 
-  - `options.move: undefined` — {Boolean) remove the item when the next `tool.onMouseMove` event is fired.
+    - `options.move: undefined` — {Boolean) remove the item when the next `tool.onMouseMove` event
+      is fired.
 
-  - `options.drag: undefined` — {Boolena) remove the item when the next `tool.onMouseDrag` event is fired.
+    - `options.drag: undefined` — {Boolena) remove the item when the next `tool.onMouseDrag` event
+      is fired.
 
-  - `options.down: undefined` — {Boolean) remove the item when the next `tool.onMouseDown` event is fired.
+    - `options.down: undefined` — {Boolean) remove the item when the next `tool.onMouseDown` event
+      is fired.
 
-  - `options.up: undefined` — {Boolean) remove the item when the next `tool.onMouseUp` event is fired.
+    - `options.up: undefined` — {Boolean) remove the item when the next `tool.onMouseUp` event is
+      fired.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object`
+    - `options:` `Object`
 
-  Example:Click and drag below:
+    Example:Click and drag below:
 
-  ``` py-2.5
-  function onMouseDrag(event) {
-      // Create a circle shaped path at the mouse position,
-      // with a radius of 10:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 10,
-          fillColor: 'black'
-      });
+    ```py-2.5
+    function onMouseDrag(event) {
+        // Create a circle shaped path at the mouse position,
+        // with a radius of 10:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 10,
+            fillColor: 'black'
+        });
 
-      // Remove the path on the next onMouseDrag or onMouseDown event:
-      path.removeOn({
-          drag: true,
-          down: true
-      });
-  }
-  ```
+        // Remove the path on the next onMouseDrag or onMouseDown event:
+        path.removeOn({
+            drag: true,
+            down: true
+        });
+    }
+    ```
 
 - `removeOnMove()`
 
-  Removes the item when the next `tool.onMouseMove` event is fired.
+    Removes the item when the next `tool.onMouseMove` event is fired.
 
-  Example:Move your mouse below:
+    Example:Move your mouse below:
 
-  ``` py-2.5
-  function onMouseMove(event) {
-      // Create a circle shaped path at the mouse position,
-      // with a radius of 10:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 10,
-          fillColor: 'black'
-      });
+    ```py-2.5
+    function onMouseMove(event) {
+        // Create a circle shaped path at the mouse position,
+        // with a radius of 10:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 10,
+            fillColor: 'black'
+        });
 
-      // On the next move event, automatically remove the path:
-      path.removeOnMove();
-  }
-  ```
+        // On the next move event, automatically remove the path:
+        path.removeOnMove();
+    }
+    ```
 
 - `removeOnDown()`
 
-  Removes the item when the next `tool.onMouseDown` event is fired.
+    Removes the item when the next `tool.onMouseDown` event is fired.
 
-  Example:Click a few times below:
+    Example:Click a few times below:
 
-  ``` py-2.5
-  function onMouseDown(event) {
-      // Create a circle shaped path at the mouse position,
-      // with a radius of 10:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 10,
-          fillColor: 'black'
-      });
+    ```py-2.5
+    function onMouseDown(event) {
+        // Create a circle shaped path at the mouse position,
+        // with a radius of 10:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 10,
+            fillColor: 'black'
+        });
 
-      // Remove the path, next time the mouse is pressed:
-      path.removeOnDown();
-  }
-  ```
+        // Remove the path, next time the mouse is pressed:
+        path.removeOnDown();
+    }
+    ```
 
 - `removeOnDrag()`
 
-  Removes the item when the next `tool.onMouseDrag` event is fired.
+    Removes the item when the next `tool.onMouseDrag` event is fired.
 
-  Example:Click and drag below:
+    Example:Click and drag below:
 
-  ``` py-2.5
-  function onMouseDrag(event) {
-      // Create a circle shaped path at the mouse position,
-      // with a radius of 10:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 10,
-          fillColor: 'black'
-      });
+    ```py-2.5
+    function onMouseDrag(event) {
+        // Create a circle shaped path at the mouse position,
+        // with a radius of 10:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 10,
+            fillColor: 'black'
+        });
 
-      // On the next drag event, automatically remove the path:
-      path.removeOnDrag();
-  }
-  ```
+        // On the next drag event, automatically remove the path:
+        path.removeOnDrag();
+    }
+    ```
 
 - `removeOnUp()`
 
-  Removes the item when the next `tool.onMouseUp` event is fired.
+    Removes the item when the next `tool.onMouseUp` event is fired.
 
-  Example:Click a few times below:
+    Example:Click a few times below:
 
-  ``` py-2.5
-  function onMouseDown(event) {
-      // Create a circle shaped path at the mouse position,
-      // with a radius of 10:
-      var path = new Path.Circle({
-          center: event.point,
-          radius: 10,
-          fillColor: 'black'
-      });
+    ```py-2.5
+    function onMouseDown(event) {
+        // Create a circle shaped path at the mouse position,
+        // with a radius of 10:
+        var path = new Path.Circle({
+            center: event.point,
+            radius: 10,
+            fillColor: 'black'
+        });
 
-      // Remove the path, when the mouse is released:
-      path.removeOnUp();
-  }
-  ```
+        // Remove the path, when the mouse is released:
+        path.removeOnUp();
+    }
+    ```
 
 ### Tweening Functions[](#tweening-functions)
 
 - `tween(from, to, options)`
 
-  Tween item between two states.
+    Tween item between two states.
 
-  - Options:
+    - Options:
 
-  - `options.duration: Number` — the duration of the tweening
+    - `options.duration: Number` — the duration of the tweening
 
-  - `options.easing: Function`⟋`String` — an easing function or the type of the easing: `‘linear’ ‘easeInQuad’ ‘easeOutQuad’ ‘easeInOutQuad’ ‘easeInCubic’ ‘easeOutCubic’ ‘easeInOutCubic’ ‘easeInQuart’ ‘easeOutQuart’ ‘easeInOutQuart’ ‘easeInQuint’ ‘easeOutQuint’ ‘easeInOutQuint’` — default: `‘linear’`
+    - `options.easing: Function`⟋`String` — an easing function or the type of the easing:
+      `‘linear’ ‘easeInQuad’ ‘easeOutQuad’ ‘easeInOutQuad’ ‘easeInCubic’ ‘easeOutCubic’ ‘easeInOutCubic’ ‘easeInQuart’ ‘easeOutQuart’ ‘easeInOutQuart’ ‘easeInQuint’ ‘easeOutQuint’ ‘easeInOutQuint’`
+      — default: `‘linear’`
 
-  - `options.start: Boolean` — whether to start tweening automatically — default: `true`
+    - `options.start: Boolean` — whether to start tweening automatically — default: `true`
 
-  - Parameters:
+    - Parameters:
 
-  - `from:` `Object` — the state at the start of the tweening
+    - `from:` `Object` — the state at the start of the tweening
 
-  - `to:` `Object` — the state at the end of the tweening
+    - `to:` `Object` — the state at the end of the tweening
 
-  - `options:` `Object`⟋`Number` — the options or the duration
+    - `options:` `Object`⟋`Number` — the options or the duration
 
-  - Returns:
+    - Returns:
 
-  - `Tween`
+    - `Tween`
 
-  Example:Tween fillColor:
+    Example:Tween fillColor:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      radius: view.bounds.height * 0.4,
-      center: view.center
-  });
-  path.tween(
-      { fillColor: 'blue' },
-      { fillColor: 'red' },
-      3000
-  );
-  ```
+    ```py-2.5
+    var path = new Path.Circle({
+        radius: view.bounds.height * 0.4,
+        center: view.center
+    });
+    path.tween(
+        { fillColor: 'blue' },
+        { fillColor: 'red' },
+        3000
+    );
+    ```
 
-  Example:Tween rotation:
+    Example:Tween rotation:
 
-  ``` py-2.5
-  var path = new Shape.Rectangle({
-      fillColor: 'red',
-      center: [50, view.center.y],
-      size: [60, 60]
-  });
-  path.tween({
-      rotation: 180,
-      'position.x': view.bounds.width - 50,
-      'fillColor.hue': '+= 90'
-  }, {
-      easing: 'easeInOutCubic',
-      duration: 2000
-  });
-  ```
+    ```py-2.5
+    var path = new Shape.Rectangle({
+        fillColor: 'red',
+        center: [50, view.center.y],
+        size: [60, 60]
+    });
+    path.tween({
+        rotation: 180,
+        'position.x': view.bounds.width - 50,
+        'fillColor.hue': '+= 90'
+    }, {
+        easing: 'easeInOutCubic',
+        duration: 2000
+    });
+    ```
 
 - `tween(to, options)`
 
-  Tween item to a state.
+    Tween item to a state.
 
-  - Parameters:
+    - Parameters:
 
-  - `to:` `Object` — the state at the end of the tweening
+    - `to:` `Object` — the state at the end of the tweening
 
-  - `options:` `Object`⟋`Number` — the options or the duration
+    - `options:` `Object`⟋`Number` — the options or the duration
 
-  - Returns:
+    - Returns:
 
-  - `Tween`
+    - `Tween`
 
-  - See also:
+    - See also:
 
-  - `item.tween(from, to, options)`
+    - `item.tween(from, to, options)`
 
-  Example:Tween a nested property with relative values
+    Example:Tween a nested property with relative values
 
-  ``` py-2.5
-  var path = new Path.Rectangle({
-      size: [100, 100],
-      position: view.center,
-      fillColor: 'red',
-  });
+    ```py-2.5
+    var path = new Path.Rectangle({
+        size: [100, 100],
+        position: view.center,
+        fillColor: 'red',
+    });
 
-  var delta = { x: path.bounds.width / 2, y: 0 };
+    var delta = { x: path.bounds.width / 2, y: 0 };
 
-  path.tween({
-      'segments[1].point': ['+=', delta],
-      'segments[2].point.x': '-= 50'
-  }, 3000);
-  ```
+    path.tween({
+        'segments[1].point': ['+=', delta],
+        'segments[2].point.x': '-= 50'
+    }, 3000);
+    ```
 
 - `tween(options)`
 
-  Tween item.
+    Tween item.
 
-  - Parameters:
+    - Parameters:
 
-  - `options:` `Object`⟋`Number` — the options or the duration
+    - `options:` `Object`⟋`Number` — the options or the duration
 
-  - Returns:
+    - Returns:
 
-  - `Tween`
+    - `Tween`
 
-  - See also:
+    - See also:
 
-  - `item.tween(from, to, options)`
+    - `item.tween(from, to, options)`
 
-  Example:Start an empty tween and just use the update callback:
+    Example:Start an empty tween and just use the update callback:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      fillColor: 'blue',
-      radius: view.bounds.height * 0.4,
-      center: view.center,
-  });
-  var pathFrom = path.clone({ insert: false })
-  var pathTo = new Path.Rectangle({
-      position: view.center,
-      rectangle: path.bounds,
-      insert: false
-  });
-  path.tween(2000).onUpdate = function(event) {
-      path.interpolate(pathFrom, pathTo, event.factor)
-  };
-  ```
+    ```py-2.5
+    var path = new Path.Circle({
+        fillColor: 'blue',
+        radius: view.bounds.height * 0.4,
+        center: view.center,
+    });
+    var pathFrom = path.clone({ insert: false })
+    var pathTo = new Path.Rectangle({
+        position: view.center,
+        rectangle: path.bounds,
+        insert: false
+    });
+    path.tween(2000).onUpdate = function(event) {
+        path.interpolate(pathFrom, pathTo, event.factor)
+    };
+    ```
 
 - `tweenTo(to, options)`
 
-  Tween item to a state.
+    Tween item to a state.
 
-  - Parameters:
+    - Parameters:
 
-  - `to:` `Object` — the state at the end of the tweening
+    - `to:` `Object` — the state at the end of the tweening
 
-  - `options:` `Object`⟋`Number` — the options or the duration
+    - `options:` `Object`⟋`Number` — the options or the duration
 
-  - Returns:
+    - Returns:
 
-  - `Tween`
+    - `Tween`
 
-  - See also:
+    - See also:
 
-  - `item.tween(to, options)`
+    - `item.tween(to, options)`
 
 - `tweenFrom(from, options)`
 
-  Tween item from a state to its state before the tweening.
+    Tween item from a state to its state before the tweening.
 
-  - Parameters:
+    - Parameters:
 
-  - `from:` `Object` — the state at the start of the tweening
+    - `from:` `Object` — the state at the start of the tweening
 
-  - `options:` `Object`⟋`Number` — the options or the duration
+    - `options:` `Object`⟋`Number` — the options or the duration
 
-  - Returns:
+    - Returns:
 
-  - `Tween`
+    - `Tween`
 
-  - See also:
+    - See also:
 
-  - `item.tween(from, to, options)`
+    - `item.tween(from, to, options)`
 
-  Example:Tween fillColor from red to the path's initial fillColor:
+    Example:Tween fillColor from red to the path's initial fillColor:
 
-  ``` py-2.5
-  var path = new Path.Circle({
-      fillColor: 'blue',
-      radius: view.bounds.height * 0.4,
-      center: view.center
-  });
-  path.tweenFrom({ fillColor: 'red' }, { duration: 1000 });
-  ```
+    ```py-2.5
+    var path = new Path.Circle({
+        fillColor: 'blue',
+        radius: view.bounds.height * 0.4,
+        center: view.center
+    });
+    path.tweenFrom({ fillColor: 'red' }, { duration: 1000 });
+    ```
 
 [Previous HitResult](./project-and-items-hitresult.md) [Next Path](./paths-path.md)
 

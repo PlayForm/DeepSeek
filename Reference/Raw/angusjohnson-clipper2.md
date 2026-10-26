@@ -1,12 +1,10 @@
 # Clipper2
 
-
 ## [Why there haven’t been any updates in the last 6 months](https://github.com/AngusJohnson/Clipper2/discussions/1118)
 
 [](#why-there-havent-been-any-updates-in-the-last-6-months)\
 
-### A Polygon [Clipping](https://en.wikipedia.org/wiki/Clipping_(computer_graphics)), [Offsetting](https://en.wikipedia.org/wiki/Parallel_curve) library (in C++, C# & Delphi)\
-
+### A Polygon [Clipping](<https://en.wikipedia.org/wiki/Clipping_(computer_graphics)>), [Offsetting](https://en.wikipedia.org/wiki/Parallel_curve) library (in C++, C# & Delphi)\
 
 - [![GitHub Actions C++ status](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml)
 - [![C#](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml)
@@ -14,27 +12,34 @@
 - [![Nuget](https://camo.githubusercontent.com/896b01c38835b0b0bd909f058eca95e43c98161d577e3d7387d624b815bfb9cd/68747470733a2f2f696d672e736869656c64732e696f2f6e756765742f762f436c6970706572323f636f6c6f723d677265656e)](https://www.nuget.org/packages/Clipper2)
 - [![documentation](https://user-images.githubusercontent.com/5280692/187832279-b2a43890-da80-4888-95fe-793f092be372.svg)](https://www.angusj.com/clipper2/Docs/Overview.htm)
 
-The **Clipper2** library performs **intersection**, **union**, **difference** and **XOR** boolean operations on both simple and complex polygons. It also performs **polygon offsetting**. This is a major update of my original [**Clipper**](https://sourceforge.net/projects/polyclipping/) library that was written about 15 years ago. That library I'm now calling **Clipper1**, and while it still works very well, Clipper2 is just [better](https://www.angusj.com/clipper2/Docs/Changes.htm).
+The **Clipper2** library performs **intersection**, **union**, **difference** and **XOR** boolean
+operations on both simple and complex polygons. It also performs **polygon offsetting**. This is a
+major update of my original [**Clipper**](https://sourceforge.net/projects/polyclipping/) library
+that was written about 15 years ago. That library I'm now calling **Clipper1**, and while it still
+works very well, Clipper2 is just [better](https://www.angusj.com/clipper2/Docs/Changes.htm).
 
 ### Compilers
 
+**Clipper2** can be compiled using any one of three supported programming languages: C++, or C#, or
+Delphi Pascal. The library can also be accessed from other languages by dynamically linking to
+exported functions in the
+[C++ compiled Clipper2 library](https://github.com/AngusJohnson/Clipper2/tree/main/DLL). (The C++
+compiled code is [measurably](https://www.angusj.com/clipper2/Docs/Changes.htm) faster so, where
+performance is critical, even C# and Delphi developers may prefer this approach in application
+development.)
 
-**Clipper2** can be compiled using any one of three supported programming languages: C++, or C#, or Delphi Pascal. The library can also be accessed from other languages by dynamically linking to exported functions in the [C++ compiled Clipper2 library](https://github.com/AngusJohnson/Clipper2/tree/main/DLL). (The C++ compiled code is [measurably](https://www.angusj.com/clipper2/Docs/Changes.htm) faster so, where performance is critical, even C# and Delphi developers may prefer this approach in application development.)
-
-| Lang. | Requirements |
-|----|----|
-| [**C++:**](https://github.com/AngusJohnson/Clipper2/tree/main/CPP) | Requires C++17, **or** |
-| [**C#:**](https://github.com/AngusJohnson/Clipper2/tree/main/CSharp) | The library uses Standard Library 2.0 but the sample code uses .NET6, **or** |
-| [**Delphi:**](https://github.com/AngusJohnson/Clipper2/tree/main/Delphi) | Compiles with any version of Delphi from version 7 to current. |
+| Lang.                                                                    | Requirements                                                                 |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| [**C++:**](https://github.com/AngusJohnson/Clipper2/tree/main/CPP)       | Requires C++17, **or**                                                       |
+| [**C#:**](https://github.com/AngusJohnson/Clipper2/tree/main/CSharp)     | The library uses Standard Library 2.0 but the sample code uses .NET6, **or** |
+| [**Delphi:**](https://github.com/AngusJohnson/Clipper2/tree/main/Delphi) | Compiles with any version of Delphi from version 7 to current.               |
 
 ### Documentation
-
 
 [**Extensive HTML documentation**](https://www.angusj.com/clipper2/Docs/Overview.htm)\
 \
 
 ### Examples
-
 
 **Clipping**
 
@@ -42,39 +47,42 @@ The **Clipper2** library performs **intersection**, **union**, **difference** an
 
 [Clipper2/CPP/Examples/SimpleClipping/SimpleClipping.cpp](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CPP/Examples/SimpleClipping/SimpleClipping.cpp#L29-L34)
 
-Lines 29 to 34 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 29 to 34 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
-|  |  |
-|----|----|
-|  | // intersect a star and another modestly rotated star |
-|  | Paths64 subject, clip, solution; |
-|  | subject.push_back({ MakePath({200,100, 20,158, 130,4, 130,196, 20,42}) }); |
-|  | clip.push_back({ MakePath({196,126, 8,136, 154,16, 104,200, 38,24}) }); |
-|  | solution = Intersect(subject, clip, FillRule::NonZero); |
-|  | DisplayAsSvgImage("Intersect Paths", FillRule::NonZero, subject, clip, solution); |
+|     |                                                                                   |
+| --- | --------------------------------------------------------------------------------- |
+|     | // intersect a star and another modestly rotated star                             |
+|     | Paths64 subject, clip, solution;                                                  |
+|     | subject.push_back({ MakePath({200,100, 20,158, 130,4, 130,196, 20,42}) });        |
+|     | clip.push_back({ MakePath({196,126, 8,136, 154,16, 104,200, 38,24}) });           |
+|     | solution = Intersect(subject, clip, FillRule::NonZero);                           |
+|     | DisplayAsSvgImage("Intersect Paths", FillRule::NonZero, subject, clip, solution); |
 
 **C#**
 
 [Clipper2/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CSharp/Clipper2Lib.Examples/ConsoleDemo/Main.cs#L112-L116)
 
-Lines 112 to 116 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 112 to 116 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
-|  |  |
-|----|----|
-|  | const FillRule fillrule = FillRule.NonZero; |
-|  | Paths64 subject = new() { Clipper.MakePath(new int\[\] { 200, 100, 20, 158, 130, 4, 130, 196, 20, 42 }) }; |
-|  | Paths64 clip = new() { Clipper.MakePath(new int\[\] { 196, 126, 8, 136, 154, 16, 104, 200, 38, 24 }) }; |
-|  | Paths64 solution = Clipper.Intersect(subject, clip, fillrule); |
-|  | DisplayAsSvgImage("Intersect", fillrule, subject, clip, solution); |
+|     |                                                                                                            |
+| --- | ---------------------------------------------------------------------------------------------------------- |
+|     | const FillRule fillrule = FillRule.NonZero;                                                                |
+|     | Paths64 subject = new() { Clipper.MakePath(new int\[\] { 200, 100, 20, 158, 130, 4, 130, 196, 20, 42 }) }; |
+|     | Paths64 clip = new() { Clipper.MakePath(new int\[\] { 196, 126, 8, 136, 154, 16, 104, 200, 38, 24 }) };    |
+|     | Paths64 solution = Clipper.Intersect(subject, clip, fillrule);                                             |
+|     | DisplayAsSvgImage("Intersect", fillrule, subject, clip, solution);                                         |
 
 **Delphi**
 
 [Clipper2/Delphi/Examples/Example1/Example1.dpr](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/Delphi/Examples/Example1/Example1.dpr#L21-L26)
 
-Lines 21 to 26 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 21 to 26 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |     |                                                                       |
-|-----|-----------------------------------------------------------------------|
+| --- | --------------------------------------------------------------------- |
 |     | SetLength(subj, 1);                                                   |
 |     | subj\[0\] := MakePathD(\[200,100, 20,158, 130,4, 130,196, 20,42\]);   |
 |     | SetLength(clip, 1);                                                   |
@@ -90,52 +98,55 @@ Lines 21 to 26 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b
 
 [Clipper2/CPP/Examples/Inflate/Inflate.cpp](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CPP/Examples/Inflate/Inflate.cpp#L36-L47)
 
-Lines 36 to 47 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 36 to 47 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
-|  |  |
-|----|----|
-|  | SvgReader svg_reader("./rabbit.svg"); |
-|  | PathsD p = svg_reader.paths; |
-|  | PathsD solution(p); |
-|  | while (p.size()) |
-|  | { |
-|  | p = InflatePaths(p, -5, JoinType::Round, EndType::Polygon); |
-|  | // SimplifyPaths is not essential but is \*\*highly recommended\*\* |
-|  | // because it speeds up the loop by removing tiny artefacts |
-|  | p = SimplifyPaths(p, 0.25); |
-|  | copy(p.begin(), p.end(), back_inserter(solution)); |
-|  | } |
-|  | DisplayAsSvgImage("rabbit_offset", FillRule::EvenOdd, nullptr, nullptr, &solution); |
+|     |                                                                                     |
+| --- | ----------------------------------------------------------------------------------- |
+|     | SvgReader svg_reader("./rabbit.svg");                                               |
+|     | PathsD p = svg_reader.paths;                                                        |
+|     | PathsD solution(p);                                                                 |
+|     | while (p.size())                                                                    |
+|     | {                                                                                   |
+|     | p = InflatePaths(p, -5, JoinType::Round, EndType::Polygon);                         |
+|     | // SimplifyPaths is not essential but is \*\*highly recommended\*\*                 |
+|     | // because it speeds up the loop by removing tiny artefacts                         |
+|     | p = SimplifyPaths(p, 0.25);                                                         |
+|     | copy(p.begin(), p.end(), back_inserter(solution));                                  |
+|     | }                                                                                   |
+|     | DisplayAsSvgImage("rabbit_offset", FillRule::EvenOdd, nullptr, nullptr, &solution); |
 
 **C#**
 
 [Clipper2/CSharp/Clipper2Lib.Examples/InflateDemo/Main.cs](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/CSharp/Clipper2Lib.Examples/InflateDemo/Main.cs#L89-L100)
 
-Lines 89 to 100 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 89 to 100 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
-|  |  |
-|----|----|
-|  | SvgReader sr = new("..\\\\..\\\\..\\\rabbit.svg"); |
-|  | PathsD pp = sr.Paths; |
-|  | PathsD solution = new (pp); |
-|  | while (pp.Count \> 0) |
-|  | { |
-|  | pp = Clipper.InflatePaths(pp, -5, JoinType.Round, EndType.Polygon); |
-|  | // SimplifyPaths - is recommended here as it removes tiny |
-|  | // offsetting artefacts and speeds up this while loop |
-|  | pp = Clipper.SimplifyPaths(pp, 0.25); |
-|  | solution.AddRange(pp); |
-|  | } |
-|  | DisplaySolutionAsSvg("..\\\\..\\\\..\\\rabbit_inflate.svg", solution); |
+|     |                                                                        |
+| --- | ---------------------------------------------------------------------- |
+|     | SvgReader sr = new("..\\\\..\\\\..\\\rabbit.svg");                     |
+|     | PathsD pp = sr.Paths;                                                  |
+|     | PathsD solution = new (pp);                                            |
+|     | while (pp.Count \> 0)                                                  |
+|     | {                                                                      |
+|     | pp = Clipper.InflatePaths(pp, -5, JoinType.Round, EndType.Polygon);    |
+|     | // SimplifyPaths - is recommended here as it removes tiny              |
+|     | // offsetting artefacts and speeds up this while loop                  |
+|     | pp = Clipper.SimplifyPaths(pp, 0.25);                                  |
+|     | solution.AddRange(pp);                                                 |
+|     | }                                                                      |
+|     | DisplaySolutionAsSvg("..\\\\..\\\\..\\\rabbit_inflate.svg", solution); |
 
 **Delphi**
 
 [Clipper2/Delphi/Examples/Example2/Example2.dpr](https://github.com/AngusJohnson/Clipper2/blob/fa7add77364eb3877dd1b8caf9b3cbd5486347f6/Delphi/Examples/Example2/Example2.dpr#L20-L31)
 
-Lines 20 to 31 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
+Lines 20 to 31 in
+[fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b8caf9b3cbd5486347f6.md)
 
 |     |                                                                     |
-|-----|---------------------------------------------------------------------|
+| --- | ------------------------------------------------------------------- |
 |     | sol := GetPathsFromVerySimpleSVG('rabbit.svg');                     |
 |     | sol := SimplifyPaths(sol, 0.25);                                    |
 |     | p := sol;                                                           |
@@ -149,15 +160,15 @@ Lines 20 to 31 in [fa7add7](./AngusJohnson-Clipper2-commit-fa7add77364eb3877dd1b
 |     | end;                                                                |
 |     | DisplayAsSvg('DeflatedRabbit', frEvenOdd, sol, nil, sol, true);     |
 
-[![rabbit](https://private-user-images.githubusercontent.com/5280692/527284042-a0f2f43c-f0a3-45ec-887d-d9ca34256088.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNzI4NDA0Mi1hMGYyZjQzYy1mMGEzLTQ1ZWMtODg3ZC1kOWNhMzQyNTYwODguc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MGE0MmQyMTFhMDM4Y2YyMWRhNTM2ZmRlNTViY2YzMTVlOWU0OWU3N2NhZjhlYjU2ZWE2NTJhZTM1OTZkMWZiZiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.xmSYtAWi8mo_v4EpwlPilJDLIvDKyCWLyfq-hnYN0n8)](https://private-user-images.githubusercontent.com/5280692/527284042-a0f2f43c-f0a3-45ec-887d-d9ca34256088.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNzI4NDA0Mi1hMGYyZjQzYy1mMGEzLTQ1ZWMtODg3ZC1kOWNhMzQyNTYwODguc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MGE0MmQyMTFhMDM4Y2YyMWRhNTM2ZmRlNTViY2YzMTVlOWU0OWU3N2NhZjhlYjU2ZWE2NTJhZTM1OTZkMWZiZiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.xmSYtAWi8mo_v4EpwlPilJDLIvDKyCWLyfq-hnYN0n8) [![rabbit_offset](https://private-user-images.githubusercontent.com/5280692/526880086-ca05688e-293f-4596-86ab-df529694e778.SVG?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNjg4MDA4Ni1jYTA1Njg4ZS0yOTNmLTQ1OTYtODZhYi1kZjUyOTY5NGU3NzguU1ZHP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YjU5YjEzYWUwOTljY2YzNzQ2ZGUwZThkMzA0NzIxNTViNzZjZDAzYjAxYjQwMDk5Yzc1MzgxZDUxODJiZDM0YSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.blGQ9BWiybsQ0beusLjIX2VnhPwBu8ZsOOLKDIa6cD8)](https://private-user-images.githubusercontent.com/5280692/526880086-ca05688e-293f-4596-86ab-df529694e778.SVG?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNjg4MDA4Ni1jYTA1Njg4ZS0yOTNmLTQ1OTYtODZhYi1kZjUyOTY5NGU3NzguU1ZHP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YjU5YjEzYWUwOTljY2YzNzQ2ZGUwZThkMzA0NzIxNTViNzZjZDAzYjAxYjQwMDk5Yzc1MzgxZDUxODJiZDM0YSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.blGQ9BWiybsQ0beusLjIX2VnhPwBu8ZsOOLKDIa6cD8)
+[![rabbit](https://private-user-images.githubusercontent.com/5280692/527284042-a0f2f43c-f0a3-45ec-887d-d9ca34256088.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNzI4NDA0Mi1hMGYyZjQzYy1mMGEzLTQ1ZWMtODg3ZC1kOWNhMzQyNTYwODguc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MGE0MmQyMTFhMDM4Y2YyMWRhNTM2ZmRlNTViY2YzMTVlOWU0OWU3N2NhZjhlYjU2ZWE2NTJhZTM1OTZkMWZiZiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.xmSYtAWi8mo_v4EpwlPilJDLIvDKyCWLyfq-hnYN0n8)](https://private-user-images.githubusercontent.com/5280692/527284042-a0f2f43c-f0a3-45ec-887d-d9ca34256088.svg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNzI4NDA0Mi1hMGYyZjQzYy1mMGEzLTQ1ZWMtODg3ZC1kOWNhMzQyNTYwODguc3ZnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MGE0MmQyMTFhMDM4Y2YyMWRhNTM2ZmRlNTViY2YzMTVlOWU0OWU3N2NhZjhlYjU2ZWE2NTJhZTM1OTZkMWZiZiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.xmSYtAWi8mo_v4EpwlPilJDLIvDKyCWLyfq-hnYN0n8)
+[![rabbit_offset](https://private-user-images.githubusercontent.com/5280692/526880086-ca05688e-293f-4596-86ab-df529694e778.SVG?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNjg4MDA4Ni1jYTA1Njg4ZS0yOTNmLTQ1OTYtODZhYi1kZjUyOTY5NGU3NzguU1ZHP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YjU5YjEzYWUwOTljY2YzNzQ2ZGUwZThkMzA0NzIxNTViNzZjZDAzYjAxYjQwMDk5Yzc1MzgxZDUxODJiZDM0YSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.blGQ9BWiybsQ0beusLjIX2VnhPwBu8ZsOOLKDIa6cD8)](https://private-user-images.githubusercontent.com/5280692/526880086-ca05688e-293f-4596-86ab-df529694e778.SVG?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTMwMjE3OTAsIm5iZiI6MTc5MzAyMTQ5MCwicGF0aCI6Ii81MjgwNjkyLzUyNjg4MDA4Ni1jYTA1Njg4ZS0yOTNmLTQ1OTYtODZhYi1kZjUyOTY5NGU3NzguU1ZHP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MTAyNiUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjEwMjZUMTMzMTMwWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9YjU5YjEzYWUwOTljY2YzNzQ2ZGUwZThkMzA0NzIxNTViNzZjZDAzYjAxYjQwMDk5Yzc1MzgxZDUxODJiZDM0YSZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmcmVzcG9uc2UtY29udGVudC10eXBlPWltYWdlJTJGc3ZnJTJCeG1sIn0.blGQ9BWiybsQ0beusLjIX2VnhPwBu8ZsOOLKDIa6cD8)
 
-------------------------------------------------------------------------
+---
 
 ### Ports to other languages
 
-
 | lang.          | link                                                  |
-|----------------|-------------------------------------------------------|
+| -------------- | ----------------------------------------------------- |
 | **golang**     | <https://github.com/epit3d/goclipper2>                |
 | **Haxe**       | <https://github.com/jeremyfa/Clipper2/tree/main/Haxe> |
 | **Java**       | <https://github.com/micycle1/Clipper2-java/>          |

@@ -1,128 +1,179 @@
-<div><div class="page-layout__main">
-<div class="layout__2-sidebars-inline reference-layout">
-<main class="layout__content" id="content">
-<div class="layout__header reference-layout__header">
-<h1>fill-rule</h1>
-<details class="baseline-indicator high">
-<summary>
-<div class="status-title">
-          Baseline
-        </div>
-<div class="pill">Widely available</div>
-</summary>
-<div class="extra">
-<p>This feature is well established and works across many devices and browser versions. It’s been available across browsers since March 2020.</p>
-<ul>
-<li>
-<a href="#browser_compatibility">
-              See full compatibility
-            </a>
-</li>
+<div>
+	<div class="page-layout__main">
+		<div class="layout__2-sidebars-inline reference-layout">
+			<main class="layout__content" id="content">
+				<div class="layout__header reference-layout__header">
+					<h1>fill-rule</h1>
+					<details class="baseline-indicator high">
+						<summary>
+							<div class="status-title">Baseline</div>
+							<div class="pill">Widely available</div>
+						</summary>
+						<div class="extra">
+							<p>
+								This feature is well established and works across many devices and
+								browser versions. It’s been available across browsers since March
+								2020.
+							</p>
+							<ul>
+								<li>
+									<a href="#browser_compatibility"> See full compatibility </a>
+								</li>
+							</ul>
+						</div>
+					</details>
+					<section class="content-section">
+						<p>
+							The <strong><code>fill-rule</code></strong> attribute is a presentation
+							attribute defining the algorithm to use to determine the
+							<em>inside</em> part of a shape.
+						</p>
+						<div class="notecard note">
+							<p>
+								<strong>Note:</strong> As a presentation attribute,
+								<code>fill-rule</code> also has a CSS property counterpart:
+								<a href="/en-US/docs/Web/CSS/Reference/Properties/fill-rule"
+									><code>fill-rule</code></a
+								>. When both are specified, the CSS property takes priority.
+							</p>
+						</div>
+						<p>You can use this attribute with the following SVG elements:</p>
+						<ul></ul>
+					</section>
+				</div>
+				<div class="layout__body reference-layout__body">
+					<section class="content-section"></section>
+					<section class="content-section">
+						<h2 class="heading" id="usage_notes">
+							<a class="heading-anchor" href="#usage_notes">Usage notes</a>
+						</h2>
 
-</ul>
+						<figure class="table-container">
+							<table class="properties">
+								<tbody>
+									<tr>
+										<th>Value</th>
+										<td><code>nonzero</code> | <code>evenodd</code></td>
+									</tr>
+									<tr>
+										<th>Default value</th>
+										<td><code>nonzero</code></td>
+									</tr>
+									<tr>
+										<th>Animatable</th>
+										<td>discrete</td>
+									</tr>
+								</tbody>
+							</table>
+						</figure>
+						<p>
+							The <code>fill-rule</code> attribute provides two options for how the
+							inside (that is, the area to be filled) of a shape is determined:
+						</p>
+					</section>
+					<section class="content-section">
+						<p>
+							The value <code>nonzero</code> determines the "insideness" of a point in
+							the shape by drawing a ray from that point to infinity in any direction,
+							and then examining the places where a segment of the shape crosses the
+							ray. Starting with a count of zero, add one each time a path segment
+							crosses the ray from left to right and subtract one each time a path
+							segment crosses the ray from right to left. After counting the
+							crossings, if the result is zero then the point is outside the path.
+							Otherwise, it is inside.
+						</p>
+						<h4 id="example_2">Example</h4>
+					</section>
+					<section class="content-section">
+						<p>
+							The value <code>evenodd</code> determines the "insideness" of a point in
+							the shape by drawing a ray from that point to infinity in any direction
+							and counting the number of path segments from the given shape that the
+							ray crosses. If this number is odd, the point is inside; if even, the
+							point is outside.
+						</p>
+						<h4 id="example_3">Example</h4>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="specifications">
+							<a class="heading-anchor" href="#specifications">Specifications</a>
+						</h2>
+
+						<table>
+							<thead>
+								<tr>
+									<th>Specification</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<a
+											class="external"
+											href="https://w3c.github.io/svgwg/svg2-draft/painting.html#WindingRule"
+											>Scalable Vector Graphics (SVG) 2# WindingRule</a
+										>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="browser_compatibility">
+							<a class="heading-anchor" href="#browser_compatibility"
+								>Browser compatibility</a
+							>
+						</h2>
+					</section>
+					<section class="content-section">
+						<h2 class="heading" id="see_also">
+							<a class="heading-anchor" href="#see_also">See also</a>
+						</h2>
+
+						<ul>
+							<li>
+								CSS
+								<a href="/en-US/docs/Web/CSS/Reference/Properties/fill-rule"
+									><code>fill-rule</code></a
+								>
+								property
+							</li>
+						</ul>
+					</section>
+					<section class="content-section article-footer">
+						<div class="article-footer__inner">
+							<h2 id="feedback">Help improve MDN</h2>
+							<a
+								class="article-footer__contribute"
+								href="/en-US/docs/MDN/Community/Getting_started"
+								>Learn how to contribute</a
+							>
+							<p class="article-footer__last-modified">
+								This page was last modified on <time>Apr 16, 2025</time> by
+								<a
+									href="/en-US/docs/Web/SVG/Reference/Attribute/fill-rule/contributors.txt"
+									>MDN contributors</a
+								>.
+							</p>
+							<div class="article-footer__links">
+								<a
+									class="external"
+									href="https://github.com/mdn/content/blob/main/files/en-us/web/svg/reference/attribute/fill-rule/index.md?plain=1"
+									title="Folder: en-us/web/svg/reference/attribute/fill-rule (Opens in a new tab)"
+									>View this page on GitHub</a
+								>
+								•
+								<a
+									class="external"
+									href="https://github.com/mdn/content/issues/new?template=page-report.yml&amp;mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Ffill-rule&amp;metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Ffill-rule%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Ffill-rule%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Ffill-rule%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2F3c83d88f02f33f4066224e9f624a17dd2a0b0d19%0A*+Document+last+modified%3A+2025-04-16T15%3A02%3A49.000Z%0A%0A%3C%2Fdetails%3E"
+									title="This will take you to GitHub to file a new issue."
+									>Report a problem with this content</a
+								>
+							</div>
+						</div>
+					</section>
+				</div>
+			</main>
+		</div>
+	</div>
 </div>
-</details> <section class="content-section">
-<p>The <strong><code>fill-rule</code></strong> attribute is a presentation attribute defining the algorithm to use to determine the <em>inside</em> part of a shape.</p>
-<div class="notecard note">
-<p><strong>Note:</strong>
-As a presentation attribute, <code>fill-rule</code> also has a CSS property counterpart: <a href="/en-US/docs/Web/CSS/Reference/Properties/fill-rule"><code>fill-rule</code></a>. When both are specified, the CSS property takes priority.</p>
-</div>
-<p>You can use this attribute with the following SVG elements:</p>
-<ul>
-
-
-
-
-
-
-</ul>
-</section>
-</div>
-<div class="layout__body reference-layout__body">
-<section class="content-section">
-
-
-</section><section class="content-section">
-<h2 class="heading" id="usage_notes">
-<a class="heading-anchor" href="#usage_notes">Usage notes</a>
-</h2>
-
-<figure class="table-container"><table class="properties">
-<tbody>
-<tr>
-<th>Value</th>
-<td>
-<code>nonzero</code> | <code>evenodd</code>
-</td>
-</tr>
-<tr>
-<th>Default value</th>
-<td><code>nonzero</code></td>
-</tr>
-<tr>
-<th>Animatable</th>
-<td>discrete</td>
-</tr>
-</tbody>
-</table></figure>
-<p>The <code>fill-rule</code> attribute provides two options for how the inside (that is, the area to be filled) of a shape is determined:</p>
-</section><section class="content-section">
-
-
-<p>The value <code>nonzero</code> determines the "insideness" of a point in the shape by drawing a ray from that point to infinity in any direction, and then examining the places where a segment of the shape crosses the ray. Starting with a count of zero, add one each time a path segment crosses the ray from left to right and subtract one each time a path segment crosses the ray from right to left. After counting the crossings, if the result is zero then the point is outside the path. Otherwise, it is inside.</p>
-<h4 id="example_2">Example</h4>
-</section><section class="content-section">
-
-
-<p>The value <code>evenodd</code> determines the "insideness" of a point in the shape by drawing a ray from that point to infinity in any direction and counting the number of path segments from the given shape that the ray crosses. If this number is odd, the point is inside; if even, the point is outside.</p>
-<h4 id="example_3">Example</h4>
-</section><section class="content-section">
-<h2 class="heading" id="specifications">
-<a class="heading-anchor" href="#specifications">Specifications</a>
-</h2>
-
-<table>
-<thead>
-<tr>
-<th>
-            Specification
-          </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a class="external" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#WindingRule">Scalable Vector Graphics (SVG) 2# WindingRule</a></td>
-</tr>
-</tbody>
-</table>
-</section><section class="content-section">
-<h2 class="heading" id="browser_compatibility">
-<a class="heading-anchor" href="#browser_compatibility">Browser compatibility</a>
-</h2>
-
-</section><section class="content-section">
-<h2 class="heading" id="see_also">
-<a class="heading-anchor" href="#see_also">See also</a>
-</h2>
-
-<ul>
-<li>CSS <a href="/en-US/docs/Web/CSS/Reference/Properties/fill-rule"><code>fill-rule</code></a> property</li>
-</ul>
-</section>
-<section class="content-section article-footer">
-<div class="article-footer__inner">
-
-<h2 id="feedback">
-            Help improve MDN
-          </h2>
-<a class="article-footer__contribute" href="/en-US/docs/MDN/Community/Getting_started">Learn how to contribute</a> <p class="article-footer__last-modified">
-    This page was last modified on <time>Apr 16, 2025</time> by <a href="/en-US/docs/Web/SVG/Reference/Attribute/fill-rule/contributors.txt">MDN contributors</a>.
-  </p> <div class="article-footer__links">
-<a class="external" href="https://github.com/mdn/content/blob/main/files/en-us/web/svg/reference/attribute/fill-rule/index.md?plain=1" title="Folder: en-us/web/svg/reference/attribute/fill-rule (Opens in a new tab)">View this page on GitHub</a> • <a class="external" href="https://github.com/mdn/content/issues/new?template=page-report.yml&amp;mdn-url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Ffill-rule&amp;metadata=%3C%21--+Do+not+make+changes+below+this+line+--%3E%0A%3Cdetails%3E%0A%3Csummary%3EPage+report+details%3C%2Fsummary%3E%0A%0A*+Folder%3A+%60en-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Ffill-rule%60%0A*+MDN+URL%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FSVG%2FReference%2FAttribute%2Ffill-rule%0A*+GitHub+URL%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fblob%2Fmain%2Ffiles%2Fen-us%2Fweb%2Fsvg%2Freference%2Fattribute%2Ffill-rule%2Findex.md%0A*+Last+commit%3A+https%3A%2F%2Fgithub.com%2Fmdn%2Fcontent%2Fcommit%2F3c83d88f02f33f4066224e9f624a17dd2a0b0d19%0A*+Document+last+modified%3A+2025-04-16T15%3A02%3A49.000Z%0A%0A%3C%2Fdetails%3E" title="This will take you to GitHub to file a new issue.">Report a problem with this content</a>
-</div>
-</div>
-</section>
-</div>
-</main>
-</div>
-</div></div>

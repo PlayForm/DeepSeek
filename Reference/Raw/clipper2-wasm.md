@@ -8,13 +8,18 @@
 
 WebAssembly port of the Clipper2 library for polygon clipping and offsetting
 
-Version 0.4.0 License BSL-1.0 ![clipper2-wasm has no homepage](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/globe.disabled.svg) [![clipper2-wasm JS library on GitHub](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/github.svg)](https://github.com/ErikSom/Clipper2-WASM/) [![clipper2-wasm JS library on npm](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/npm.svg)](https://www.npmjs.com/package/clipper2-wasm) [![Download clipper2-wasm JS library](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/download.svg)](https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz) Keywords clipper polygon clipping offsetting wasm webassembly INSTALL Type: Version:
+Version 0.4.0 License BSL-1.0
+![clipper2-wasm has no homepage](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/globe.disabled.svg)
+[![clipper2-wasm JS library on GitHub](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/github.svg)](https://github.com/ErikSom/Clipper2-WASM/)
+[![clipper2-wasm JS library on npm](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/npm.svg)](https://www.npmjs.com/package/clipper2-wasm)
+[![Download clipper2-wasm JS library](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/download.svg)](https://registry.npmjs.org/clipper2-wasm/-/clipper2-wasm-0.4.0.tgz)
+Keywords clipper polygon clipping offsetting wasm webassembly INSTALL Type: Version:
 
 - Static
 - Latest Patch
 - Latest Minor
 - Latest Major
-- 
+-
 - 0.4.0
 - 0.3.0
 - 0.2.1
@@ -30,7 +35,8 @@ Version 0.4.0 License BSL-1.0 ![clipper2-wasm has no homepage](https://www.jsdel
 - 0.0.2
 - 0.0.1
 
-\<script src=" <https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js> "\>\</script\> [Learn more](./documentation.md#id-npm)
+\<script src=" <https://cdn.jsdelivr.net/npm/clipper2-wasm@0.4.0/dist/umd/clipper2z.min.js>
+"\>\</script\> [Learn more](./documentation.md#id-npm)
 
 - [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/book.svg) Readme](/package/npm/clipper2-wasm)
 - [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/settings.svg) Files](?tab=files)
@@ -41,11 +47,14 @@ Version 0.4.0 License BSL-1.0 ![clipper2-wasm has no homepage](https://www.jsdel
 
 # Clipper2 WASM
 
-The **Clipper2** library performs **intersection**, **union**, **difference** and **XOR** boolean operations on both simple and complex polygons. It also performs polygon offsetting and constrained Delaunay triangulation.
+The **Clipper2** library performs **intersection**, **union**, **difference** and **XOR** boolean
+operations on both simple and complex polygons. It also performs polygon offsetting and constrained
+Delaunay triangulation.
 
 ## Documentation:
 
-For Clipper2 documentation please see the [Extensive HTML documentation](http://www.angusj.com/clipper2/Docs/Overview.htm)
+For Clipper2 documentation please see the
+[Extensive HTML documentation](http://www.angusj.com/clipper2/Docs/Overview.htm)
 
 ## Live examples:
 
@@ -65,9 +74,11 @@ UMD: <https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/dist/
 
 ## Usage:
 
-For ES6 see the examples here: <https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/es>
+For ES6 see the examples here:
+<https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/es>
 
-For UMD see the examples here: <https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/umd>
+For UMD see the examples here:
+<https://github.com/ErikSom/Clipper2-WASM/tree/main/CPP/clipper2-wasm/examples/umd>
 
 ## Typescript example:
 
@@ -86,20 +97,23 @@ For UMD see the examples here: <https://github.com/ErikSom/Clipper2-WASM/tree/ma
 
 ## Benchmark vs Clipper1 WASM: (Apple M2 Pro)
 
-Clipper1 WASM repository: <https://github.com/xaviergonz/js-angusj-clipper> ![image](https://img.jsdelivr.com/github.com/user-attachments/assets/59543ebe-e501-46f6-b1cc-c2f9f32d5b18)
+Clipper1 WASM repository: <https://github.com/xaviergonz/js-angusj-clipper>
+![image](https://img.jsdelivr.com/github.com/user-attachments/assets/59543ebe-e501-46f6-b1cc-c2f9f32d5b18)
 
-See implementation: <https://github.com/ErikSom/Clipper2-WASM/tree/main/clipper2-wasm/examples/benchmark>
+See implementation:
+<https://github.com/ErikSom/Clipper2-WASM/tree/main/clipper2-wasm/examples/benchmark>
 
 Made possible by: <https://github.com/AngusJohnson/Clipper2>
 
-Huge thanks to [@Birch-san](https://www.github.com/Birch-san) with an outstanding wasm port example: <https://github.com/Birch-san/box2d-wasm/>
+Huge thanks to [@Birch-san](https://www.github.com/Birch-san) with an outstanding wasm port example:
+<https://github.com/Birch-san/box2d-wasm/>
 
 Statistics
 
 - month
 - quarter
 - year
-- 
+-
 - Q3 2026
 - September 2026
 - August 2026
@@ -112,7 +126,7 @@ Statistics
 - March 2026
 - February 2026
 - January 2026
-- 
+-
 - 2025
 - Q4 2025
 - December 2025
@@ -130,7 +144,7 @@ Statistics
 - March 2025
 - February 2025
 - January 2025
-- 
+-
 - 2024
 - Q4 2024
 - December 2024
@@ -148,7 +162,7 @@ Statistics
 - March 2024
 - February 2024
 - January 2024
-- 
+-
 - 2023
 - Q4 2023
 - December 2023
@@ -166,7 +180,7 @@ Statistics
 - March 2023
 - February 2023
 - January 2023
-- 
+-
 - 2022
 - Q4 2022
 - December 2022
@@ -184,7 +198,7 @@ Statistics
 - March 2022
 - February 2022
 - January 2022
-- 
+-
 - 2021
 - Q4 2021
 - December 2021
@@ -202,7 +216,7 @@ Statistics
 - March 2021
 - February 2021
 - January 2021
-- 
+-
 - 2020
 - Q4 2020
 - December 2020
@@ -211,7 +225,12 @@ Requests 17 221
 
 Bandwidth 1 012 MB
 
-Top version - 0.2.1 16 035 Full clipper2-wasm Download Stats The 24940th most popular on jsDelivr [![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/twitter-white.svg) Share](https://twitter.com/intent/tweet?text=clipper2-wasm%20is%20the%2024940th%20most%20popular%20package%20on%20%40jsDelivr%20CDN%2C%20with%2017%20221%20hits%20in%20the%20last%20month%3A%20https%3A%2F%2Fwww.jsdelivr.com%2Fpackage%2Fnpm%2Fclipper2-wasm) Keywords clipper polygon clipping offsetting wasm webassembly Get a badge for your package ![](https://data.jsdelivr.com/v1/package/npm/clipper2-wasm/badge) ![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/copy-btn-black.svg) ![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/alternate-btn.svg)
+Top version - 0.2.1 16 035 Full clipper2-wasm Download Stats The 24940th most popular on jsDelivr
+[![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/twitter-white.svg) Share](https://twitter.com/intent/tweet?text=clipper2-wasm%20is%20the%2024940th%20most%20popular%20package%20on%20%40jsDelivr%20CDN%2C%20with%2017%20221%20hits%20in%20the%20last%20month%3A%20https%3A%2F%2Fwww.jsdelivr.com%2Fpackage%2Fnpm%2Fclipper2-wasm)
+Keywords clipper polygon clipping offsetting wasm webassembly Get a badge for your package
+![](https://data.jsdelivr.com/v1/package/npm/clipper2-wasm/badge)
+![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/copy-btn-black.svg)
+![](https://www.jsdelivr.com/assets/e281cc058fcdd33984b08139ee2372c92ae506c7/img/icons/alternate-btn.svg)
 
 <!--
 ## Source links
