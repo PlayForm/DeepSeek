@@ -1,0 +1,55 @@
+{
+	"name": "@playform/hook-dsh-lesson-nudge",
+	"version": "0.2.0",
+	"description": "The lesson-nudge hook: a DeepSeek Harness plugin that turns the post-turn IDLE transition into a self-improvement review. It listens to `agent/status`, asks the lesson-review service whether a review is due, and runs the review inside `agent.runMaintenance` - the true idle phase, so the review never competes with the live turn for the endpoint and never enters the turn's own log. One review per interval, a hard per-session cap, and a missing service is a warn (the nudge never throws into a status emit). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/LESSON-REVIEW-PLUGIN.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.2.0",
+		"@playform/plugin-dsh-factory": "0.2.0"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.4",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

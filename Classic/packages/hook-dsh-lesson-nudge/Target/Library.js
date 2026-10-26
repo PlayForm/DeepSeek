@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const n="hook-dsh-lesson-nudge",p=t,e=["pluginFactory"],r=o;var c={name:n,apply:r,Config:p,inject:e};export{p as Config,r as apply,c as default,e as inject,n as name};

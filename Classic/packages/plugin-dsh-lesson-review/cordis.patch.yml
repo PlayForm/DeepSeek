@@ -1,0 +1,42 @@
+# Bundle patch for @playform/plugin-dsh-lesson-review.
+# The lesson-review service: it owns the usage store, the pending queue, the
+# review prompt, the judge, the guarded corpus write and the staleness/archive
+# pass behind the self-improvement loop (Documentation/Plans/
+# LESSON-REVIEW-PLUGIN.md). The trigger is the sibling
+# `@playform/hook-dsh-lesson-nudge`; consumers resolve `ctx.lesson`.
+#
+# New entries are declared with `insert:` (a bare `id:` row PATCHES an existing
+# entry). Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted; a file: dependency alone is NOT
+# activation.
+#
+# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
+# default and the patch row; a cold mount logs `disabled (enabled=false)` and the
+# service stays resolvable (Tick never comes due, Review answers `unavailable`),
+# so the nudge hook never hard-fails on a missing service.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The service READS the corpus, RECORDS usage and SUGGESTS
+# lessons (read/index/record/suggest automatic) and never commits or spawns -
+# those verdicts are declared for family uniformity and stay the shipped
+# `approve`. `write: approve` is the one that matters: an accepted operation is
+# QUEUED (`~/.dsh/lesson/pending.jsonl`) until it is accepted, so the shipped
+# posture PROPOSES and never publishes.
+- insert:
+      - id: plugin-dsh-lesson-review
+        name: "@playform/plugin-dsh-lesson-review"
+        config:
+            enabled: false
+            intervalTurns: 10
+            staleAfterDays: 14
+            archiveAfterDays: 30
+            consolidate: false
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto
