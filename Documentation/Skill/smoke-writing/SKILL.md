@@ -167,6 +167,22 @@ When a smoke "passes but the world is weird", verify the harness wiring before t
 | A folder without an expected count | The vacuously-green guard is off         | Declare the count in the README   |
 | Skipping the build before the run  | The test runs a stale Target             | `prepublishOnly` first            |
 
+## The replay gate
+
+A suite of fixtures proves the arithmetic; it does not prove the wiring. On 2026-10-27 a package
+passed fifty-six checks across twelve folders and still ranked a directory as its highest-cost file
+and reported every edit as `+0/-0`, because the fixture that fed the parser was not the shape the
+live log produced.
+
+The rule: a pipeline of four or more stages gets one replay against a real recorded input before it
+is called done. The replay is not a test in the suite; it runs the built modules against a captured
+sample, prints the totals, and is read by the parent. Its job is to find the defect the fixtures
+were written around - the argument that is a directory rather than a file, the field that is absent,
+the count that assumes a newline.
+
+The two questions the replay answers and the suite cannot: does the input the live system produces
+reach the parser unchanged, and does the output rank the things a human would rank?
+
 ## References
 
 | File                             | Covers                                                  | Read when          |

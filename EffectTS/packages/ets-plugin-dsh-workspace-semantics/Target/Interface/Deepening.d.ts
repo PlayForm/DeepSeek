@@ -1,7 +1,7 @@
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type RenamePlan from "@Interface/RenamePlan.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
+import type ReferenceNode from "./ReferenceNode.js";
+import type RenamePlan from "./RenamePlan.js";
+import type Span from "./Span.js";
+import type SymbolNode from "./SymbolNode.js";
 export default interface Deepening {
     /** The name the ledger reports (`deepened <path> ... via <name>`). */
     name: string;

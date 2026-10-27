@@ -41,20 +41,21 @@ statuses:
 
 ---
 
-1. The exact tool name and the op grammar need the user's confirmation (suggested: `batch_edit`; the
-   ops are the first cut).
-2. Regex support scope: literal + simple regex in v1; the ptc-runtime integration (the programmable
-   stage, LIVE-CONTAINERS-RESEARCH section 5) is the future host for complex transforms.
-3. The multi-agent machine sharing (a sub-agent joining the parent's batch) rides the session/event
-   fold but needs a scope-decision at implementation time.
-4. The framework extraction's package name (`lib-dsh-live-view` vs `manifest`) is tied to the user's
-   undecided naming refinements (#15).
-5. The `fs/edit-intent` slot (the edit waterfall) as the batch tool's control seam is listed but
-   unexercised - the first control-layer plugin's territory.
-6. The eviction rule's trigger values (the lease window, the LRU cap) are the first-cut defaults;
-   they need the live tuning pass the monitors got.
-7. The graph stage needs an edge-extraction source decision (the TS language service vs. the cheap
-   import-scan) before any design.
+1. The exact tool name and the op grammar need the confirmation of the user (suggested: `batch_edit`,
+   and the ops are the first cut).
+2. Regex support scope: literal and simple regex in v1, while the ptc-runtime integration (the
+   programmable stage, LIVE-CONTAINERS-RESEARCH section 5) is the future host for complex
+   transforms.
+3. The multi-agent machine sharing (a sub-agent that joins the batch of the parent) rides the
+   session/event fold but needs a scope decision at implementation time.
+4. The package name of the framework extraction (`lib-dsh-live-view` against `manifest`) is tied to
+   the undecided naming refinements of the user (#15).
+5. The `fs/edit-intent` slot (the edit waterfall) as the control seam of the batch tool is listed but
+   unexercised, which is the territory of the first control-layer plugin.
+6. The trigger values of the eviction rule (the lease window and the LRU cap) are the first-cut
+   defaults, and they need the live tuning pass that the monitors got.
+7. The graph stage needs an edge-extraction source decision (the TS language service against the
+   cheap import-scan) before any design.
 8. The three measurement questions from the trajectory evidence
    (Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 8), tracked here so the plan
    answers them before the savings are claimed as measured: a. does a batch reduce cache reads in

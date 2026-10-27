@@ -4,19 +4,22 @@
 
 ## What it measures
 
-The per-file inference cost ledger: a **telemetry-only reader** of the session log. Every model call
-is priced from the provider's own `usage`, split across the files the conversation touched, and
-stored in one SQLite ledger. It never adds a tool, a prompt section, or a model-visible message.
+The per-file inference cost ledger is a **telemetry-only reader** of the session log.
+
+Every model call is priced from the provider's own `usage`, split across the files the conversation
+touched, and stored in one SQLite ledger, and it never adds a tool, a prompt section, or a
+model-visible message.
 
 ## The two attribution halves
 
 - **Direct** (the output side): the model's decision to act, weighted by each written file's share
-  of changed bytes; equal shares when nothing was written, the unattributed bucket when nothing was
-  touched.
+  of changed bytes, with equal shares when nothing was written and the unattributed bucket when
+  nothing was touched.
 - **Amortized** (the input side): the context that made the decision possible, split per cache
-  bucket - the uncached input weighted by each file's uncached mass, the cached input by its cached
-  mass, because prompt caching is prefix-based and one blended ratio misprices a file whose tokens
-  are cached against one whose are not. A file read early carries its mass into every later step.
+  bucket (the uncached input weighted by each file's uncached mass and the cached input by its
+  cached mass), because prompt caching is prefix-based and one blended ratio misprices a file whose
+  tokens are cached against one whose are not. A file read early carries its mass into every later
+  step.
 
 ## The schema
 
@@ -30,8 +33,8 @@ stored in one SQLite ledger. It never adds a tool, a prompt section, or a model-
 | `Alias`                                               | one observed rename, so a file's cost survives its path change   |
 | `Verdict`                                             | one session's outcome for one file: changed, reverted, or read   |
 
-The views `FileCost`, `ModelCost`, `SessionCost`, `ClientCost` and `FileLifetime` pre-aggregate the
-money - the last one answers "what has this file cost across every session that ever touched it".
+The views `FileCost`, `ModelCost`, `SessionCost`, `ClientCost`, and `FileLifetime` pre-aggregate the
+money, and the last one answers "what has this file cost across every session that ever touched it".
 
 The v2 analytics columns (schema migration, additive, `PRAGMA user_version` 1 to 2):
 
@@ -66,7 +69,7 @@ The v4 edit and telemetry grain (schema migration, additive, `PRAGMA user_versio
 ## The stages
 
 `Touch.Stage` is recorded at capture time from the tool kind and the file's own prior touches in the
-session - not inferred at report time:
+session, not inferred at report time:
 
 | Stage      | Detected from                                   | What it means                       |
 | ---------- | ----------------------------------------------- | ----------------------------------- |
@@ -79,8 +82,10 @@ session - not inferred at report time:
 
 ## The commands
 
-The five human commands run through the `commands` service - none of them is a tool and none enters
-the model context. One registered command owns the grammar and the verb is its first word:
+The five human commands run through the `commands` service, none of them is a tool, and none enters
+the model context.
+
+One registered command owns the grammar and the verb is its first word:
 
 | Invocation                                  | What it does                                                                                                                                                         |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -91,11 +96,11 @@ the model context. One registered command owns the grammar and the verb is its f
 | `/cost forecast [days]`                     | the daily rate per scope and key over the last `days` (thirty by default), projected to a thirty-day period with its confidence band                                 |
 
 The assessment buckets are descriptive and always stored as rows the ledger can re-derive (`Verdict`
-per session and file, the unattributed allocation rows for overhead); the discount policies stay an
-export-time concern and are not applied to the stored truth.
+per session and file, the unattributed allocation rows for overhead), while the discount policies
+stay an export-time concern and are not applied to the stored truth.
 
-The annotation is a marker-delimited block that speaks the file's own comment language; writing it
-twice is a no-op, and a hand edit afterwards only replaces the block:
+The annotation is a marker-delimited block that speaks the file's own comment language, so writing
+it twice is a no-op and a hand edit afterwards only replaces the block:
 
 ```text
 // dsh-cost:begin
@@ -105,15 +110,15 @@ twice is a no-op, and a hand edit afterwards only replaces the block:
 // dsh-cost:end
 ```
 
-It ships off by default (`annotate.enabled: false`) - the one toggle the user asked for - and the
+It ships off by default (`annotate.enabled: false`), the one toggle the user asked for, and the
 write goes through the factory's write executor, so a file that changed under the plugin refuses the
 annotation and retries, never forces it.
 
 ## The configuration
 
-`enabled` and `log` on; the ledger at `~/.dsh/cost/ledger.db`, the log at `~/.dsh/cost/cost.log`;
-`currency` `USD`, `client` `default`; `capture` sessions and subagents on, backfill off;
-`attribution` direct `bytes` / amortized `context`; `annotate` off (marker `dsh-cost`); `export`
-`csv`; `prices` the three shipped rows per million tokens; `modifiers` the four shipped mode
-multipliers (batch 0.5, flex 0.5, priority 2.0, ultrafast 6.0, all from 2026-01-01); `priceWindows`
-empty.
+`enabled` and `log` are on; the ledger sits at `~/.dsh/cost/ledger.db` and the log at
+`~/.dsh/cost/cost.log`; `currency` is `USD` and `client` is `default`; `capture` sessions and
+subagents are on with backfill off; `attribution` uses direct `bytes` and amortized `context`;
+`annotate` is off (marker `dsh-cost`); `export` is `csv`; `prices` holds the three shipped rows per
+million tokens; `modifiers` holds the four shipped mode multipliers (batch 0.5, flex 0.5, priority
+2.0, ultrafast 6.0, all from 2026-01-01); and `priceWindows` is empty.

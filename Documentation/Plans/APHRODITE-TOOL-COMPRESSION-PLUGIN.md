@@ -20,18 +20,23 @@ statuses:
 
 # APHRODITE TOOL-COMPRESSION PLUGIN - the CCR adaptation plan (dedicated 2026-10-19)
 
-> Source of truth: `Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md` (cited below as
-> **Rsectionn**). Target: the DeepSeek Harness Plugin Family monorepo (`Documentation/FRAMEWORK.md`,
-> `Documentation/Plugins/PLUGIN-FAMILY.md`). Goal: bring Aphrodite's CCR pipeline - compress, cache,
-> retrieve - to DSH agent loops as ONE new family hook bundle, Rsection 0/section 1 (R:7-33, 37-53).
+> Source of truth: `Aphrodite/docs/research/2026-10-19-hermes-aphrodite-research.md`, cited below as
+> **Rsectionn**. Target: the DeepSeek Harness Plugin Family monorepo (`Documentation/FRAMEWORK.md`,
+> `Documentation/Plugins/PLUGIN-FAMILY.md`). Goal: bring the CCR pipeline of Aphrodite (compress,
+> cache, and retrieve) to DSH agent loops as ONE new family hook bundle, per Rsection 0 and section
+> 1 (R:7-33, 37-53).
 
 ## 0. The problem
 
 EVERY DSH agent turn floods the context with raw tool output: `bash` runs, `grep` matches, `read`
-file slices, `web_fetch` pages, `glob` paths - the same problem Aphrodite states for Hermes
-(Rsection 1, R:40-44). Aphrodite intercepts tool output before it reaches the LLM and replaces it
-with a ~15-token preview plus a retrieval marker (Rsection 0, R:9-14). We port that pipeline to the
-harness, NOT the proxy (the proxy mode is a separate verdict, section 8).
+file slices, `web_fetch` pages, and `glob` paths, which is the same problem that Aphrodite states
+for Hermes (Rsection 1, R:40-44).
+
+Aphrodite intercepts tool output before it reaches the LLM and replaces it with a ~15-token preview
+plus a retrieval marker (Rsection 0, R:9-14).
+
+We port that pipeline to the harness and NOT the proxy, because the proxy mode is a separate verdict
+in section 8.
 
 ## 1. Where interception happens in DSH (the decision)
 
@@ -54,42 +59,50 @@ The precedent for hooking family plugins into harness machinery is the `llm/stre
 listener (normalize-dash: `Boilerplate/packages/dsh-hook-normalize-dash/Source/Library.ts:44-52`,
 "CARD-BOUNDARY-SAFE ... one waterfall listener", bound to the LlmRuntime), and the retry plugin
 executes "on the agent loop's recovery extension point"
-(`~/.dsh/profiles/desktop/cordis.patch.yml:17-19`). The `agent-loop` entry
-(`cordis.patch.yml:132-147`) is where loop agents are configured, NOT where tool traffic flows. Tool
-results flow through the ToolRuntime scheduler, and its normalized result passes
+(`~/.dsh/profiles/desktop/cordis.patch.yml:17-19`).
+
+The `agent-loop` entry (`cordis.patch.yml:132-147`) is where loop agents are configured and NOT
+where tool traffic flows.
+
+Tool results flow through the ToolRuntime scheduler, and its normalized result passes
 `tools/post-execute` before it becomes model content.
 
 ### 1.2 Recommendation: host-side `tools/post-execute` waterfall (option a)
 
 **Primary mechanism: a host-side plugin that registers ONE `tools/post-execute` waterfall listener**
-and REPLACES oversized results with preview + marker content blocks (the exact analog of Aphrodite's
-`transform_tool_result`, Rsection 3, R:120-135 and `hooks.rs:317-426`). Rationale:
+and REPLACES oversized results with preview and marker content blocks (the exact analog of
+`transform_tool_result` in Aphrodite, Rsection 3, R:120-135 and `hooks.rs:317-426`).
+
+The rationale:
 
 1. It sees the normalized result of EVERY tool (bash, grep, read, glob, web_fetch, subagent) with
-   name + parsed arguments + caller agent - the full data Aphrodite's gate needs - and can legally
-   replace the content, per the event contract above. NO other point can replace model-visible
-   output for ALL tools.
-2. It matches the family's plugin anatomy: ONE waterfall listener, like normalize-dash's
-   `llm/stream` listener (SCHEME.md section 2, `dsh-hook-normalize-dash/SCHEME.md`).
-3. Option (b) - the client `tool.call.toolview` keyed slots - ONLY changes what the USER sees in the
-   GUI. It cannot shrink the model's context, so it is a complementary display nicety at most
+   name, parsed arguments, and caller agent, which is the full data that the gate of Aphrodite
+   needs, and it can legally replace the content per the event contract above. NO other point can
+   replace model-visible output for ALL tools.
+2. It matches the plugin anatomy of the family: ONE waterfall listener, like the `llm/stream`
+   listener of normalize-dash (SCHEME.md section 2, `dsh-hook-normalize-dash/SCHEME.md`).
+3. Option (b), the client `tool.call.toolview` keyed slots, ONLY changes what the USER sees in the
+   GUI. It cannot shrink the context of the model, so it is a complementary display nicety at most
    (deferred, section 8).
-4. Option (c) - wrapping the `Tool` registry (`ToolRuntime.register`) would require wrapping EVERY
-   tool definition at agent setup and re-fusing signals. `tools/execute` explicitly forbids result
-   replacement. Registry-level work is needed ONLY to REGISTER the retrieval tool, which is separate
-   (section 4.3).
+4. Option (c), wrapping the `Tool` registry (`ToolRuntime.register`), would require wrapping EVERY
+   tool definition at agent setup and re-fusing signals, and `tools/execute` explicitly forbids
+   result replacement. Registry-level work is needed ONLY to REGISTER the retrieval tool, which is
+   separate (section 4.3).
 
 ## 2. What gets compressed (the gate, mapped from Aphrodite)
 
 ### 2.1 Targets
 
-Rsection 3: bash/cargo/glob/grep/read are the big consumers. DSH equivalents, default `targets`
-allow-list: `bash`, `glob`, `grep`, `read`, `web_fetch`, `web_search`, `list`, `search` (the
-terminal/search/fetch family; the `ToolCallKind` union -
-read/edit/delete/move/search/execute/fetch/other - is the coarse fallback when a name is unknown).
-Exemptions mirror R:352-361: `write`, `edit`, `raw-write` (execution-critical; mutating tools and
-their own echo), the plugin's own retrieval tool, and `subagent`/`ask_user_question` (NEVER compress
-another agent's brief or a user gate).
+Rsection 3: bash/cargo/glob/grep/read are the big consumers.
+
+The DSH equivalents, as the default `targets` allow-list: `bash`, `glob`, `grep`, `read`,
+`web_fetch`, `web_search`, `list`, `search` (the terminal, search, and fetch family; the
+`ToolCallKind` union of read/edit/delete/move/search/execute/fetch/other is the coarse fallback when
+a name is unknown).
+
+Exemptions mirror R:352-361: `write`, `edit`, `raw-write` (execution-critical, being mutating tools
+and their own echo), the retrieval tool of the plugin itself, and `subagent`/`ask_user_question`
+(NEVER compress the brief of another agent or a user gate).
 
 ### 2.2 Threshold mapping (Rsection 3 + Rsection 6, R:293-304)
 
@@ -107,57 +120,59 @@ another agent's brief or a user gate).
 | inline LRU 256 MB (R:109-111)                            | `storeBudgetBytes: 268435456`                      | 256 MiB   |                                                                                                                   |
 
 Type tiers: a DSH classifier with a REDUCED set (NOT 30, section 8): `terminal` (bash), `grep`,
-`paths` (glob/list), `file` (read), `json`, `web`, `default` - 7 types, EACH with a one-line preview
-builder and a multiplier, seeded from Aphrodite's preview formats (Rsection 3 step 2, R:105-106;
-e.g. `[build:1E 1W 142L | ...]` becomes `[terminal:exit 0 | 142 lines | first error line]`).
+`paths` (glob/list), `file` (read), `json`, `web`, and `default`, which gives 7 types, EACH with a
+one-line preview builder and a multiplier, seeded from the preview formats of Aphrodite (Rsection 3
+step 2, R:105-106; for example `[build:1E 1W 142L | ...]` becomes
+`[terminal:exit 0 | 142 lines | first error line]`).
 
 ## 3. The compression store
 
-Aphrodite: inline LRU (<=256 MB) or SQLite `ccr.db` (hash, original BLOB, TTL, last_accessed)
-(Rsection 3, R:107-115; schema R:152-160).
+Aphrodite uses an inline LRU (<=256 MB) or the SQLite `ccr.db` (hash, original BLOB, TTL,
+last_accessed) (Rsection 3, R:107-115; schema R:152-160).
 
-Decision for DSH: **in-memory LRU keyed by hash + optional JSONL disk journal, NOT the factory's
-storage journal.**
+Decision for DSH: **an in-memory LRU keyed by hash plus an optional JSONL disk journal, and NOT the
+storage journal of the factory.**
 
-- Hash: **SHA-256 (node:crypto), truncated to 24 hex chars**. BLAKE3 needs a wasm/native dep - the
-  family is zero-framework TypeScript (README.md:140-141) and `node:crypto` is free. 24 hex (96
-  bits) is collision-safe at the LRU's practical entry counts and keeps markers short.
-- The factory's journal (`Boilerplate/packages/dsh-plugin-factory/Source/Function/Journal.ts:1-25`)
-  is a typed LIFECYCLE ledger (activated/governed/dispatched - Event, Path, Detail strings) routed
-  through a shared sink with a 256-record pre-bind buffer. It is the wrong shape for MB-size BLOBs
-  and for retrieval; reusing it would corrupt the governance domain's contract. Verdict: **keep the
-  factory journal ONLY for the plugin's lifecycle/ledger lines** (compressed-count, eviction,
-  retrieval counts - the family's "one log per module" convention, normalize-dash
-  `Variable/Config.ts:39-42`), and add a SEPARATE optional disk journal file (default off): JSONL,
-  ONE record per entry `{hash, type, size, ttlAt, payload-base64}`, appended on store, compacted on
-  boot past TTL. This is `journalPath: ""` in the Config; empty = memory-only (Aphrodite's inline
-  mode).
-- LRU: `storeBudgetBytes` cap (default 256 MiB), insert-time TTL (`ttlSeconds`), `lastAccessed`
-  refreshed on retrieval, expired entries evicted (R:167-168).
+- Hash: **SHA-256 (node:crypto), truncated to 24 hex chars**. BLAKE3 needs a wasm or native dep, and
+  the family is zero-framework TypeScript (README.md:140-141) with `node:crypto` free. 24 hex (96
+  bits) is collision-safe at the practical entry counts of the LRU and keeps markers short.
+- The factory journal (`Boilerplate/packages/dsh-plugin-factory/Source/Function/Journal.ts:1-25`) is
+  a typed LIFECYCLE ledger (activated/governed/dispatched with Event, Path, and Detail strings)
+  routed through a shared sink with a 256-record pre-bind buffer. It is the wrong shape for MB-size
+  BLOBs and for retrieval, so reusing it would corrupt the contract of the governance domain.
+  Verdict: **keep the factory journal ONLY for the lifecycle and ledger lines of the plugin**
+  (compressed-count, eviction, and retrieval counts, the "one log per module" convention of the
+  family, normalize-dash `Variable/Config.ts:39-42`), and add a SEPARATE optional disk journal file
+  that is off by default: JSONL with ONE record per entry
+  `{hash, type, size, ttlAt, payload-base64}`, appended on store and compacted on boot past the TTL.
+  This is `journalPath: ""` in the Config, and empty means memory-only (the inline mode of
+  Aphrodite).
+- LRU: a `storeBudgetBytes` cap (default 256 MiB), an insert-time TTL (`ttlSeconds`), `lastAccessed`
+  refreshed on retrieval, and expired entries evicted (R:167-168).
 
 ## 4. The preview + marker + retrieval contract
 
 ### 4.1 Marker format
 
-Aphrodite: `<<<CCR:hash|type|size>>>` (R:116-118, R:139-146). DSH:
+Aphrodite uses `<<<CCR:hash|type|size>>>` (R:116-118, R:139-146), and DSH uses:
 
 ```
 <<<CCR:<24hex>|<type>|<size>>>
 ```
 
-Kept byte-identical in shape so the research vocabulary carries over, but:
+The shape stays byte-identical so the research vocabulary carries over, but:
 
-- Pure ASCII (digits, lowercase hex, letters, pipes) - it passes through EVERY member of the
-  harness's normalize family untouched (the dash class rewrites ONLY unicode dashes to `-`; the
-  quotes/ellipsis/space classes NEVER touch ASCII pipes; `normalize-file` normalizes existing files,
-  NOT model output - `dsh-hook-normalize-dash/SCHEME.md` section 1). The model can also re-read the
-  marker from its own transcript intact.
-- The 24-hex hash is lowercase; "no prefix or fuzzy matching" carries over (R:142-146).
+- It is pure ASCII (digits, lowercase hex, letters, and pipes), so it passes through EVERY member of
+  the normalize family of the harness untouched (the dash class rewrites ONLY unicode dashes to `-`,
+  the quotes, ellipsis, and space classes NEVER touch ASCII pipes, and `normalize-file` normalizes
+  existing files and NOT model output, `dsh-hook-normalize-dash/SCHEME.md` section 1). The model can
+  also re-read the marker from its own transcript intact.
+- The 24-hex hash is lowercase, and "no prefix or fuzzy matching" carries over (R:142-146).
 
 ### 4.2 Preview + replacement result
 
 The replaced `tools/post-execute` decision returns `kind:'accept'` with content blocks shaped like
-Aphrodite's JSON payload (R:127-128):
+the JSON payload of Aphrodite (R:127-128):
 
 ```
 [type:<preview>]  (the preview line)
@@ -165,28 +180,36 @@ Aphrodite's JSON payload (R:127-128):
 ```
 
 For `value`-carrying successes the listener emits the accepted decision with replaced `content`.
-Failures (isError) pass through unless `compressFailures` (ONLY the error x8 tier benefits - default
-true for `terminal` errors, false otherwise).
+
+Failures (isError) pass through unless `compressFailures` is set, and ONLY the error x8 tier
+benefits, so the default is true for `terminal` errors and false otherwise.
 
 ### 4.3 Retrieval
 
-Aphrodite: the model calls `aphrodite_retrieve(hash)` (R:117-118, R:190-194). DSH: **the plugin
-registers ONE dynamic tool at apply time** - `ccr_retrieve(hash)` - through the `tools` service the
-family already injects (the normalize-dash uses the same injection to register its raw-write tool,
-`Source/Library.ts:62-71`; `ToolRuntime.register` accepts a `ToolDefinition` per the LIVE contract).
-ONE tool, ONE hash parameter, optional `range` (start,count lines) for granular retrieval
-(R:199-203: prefer granular, batch retrievals). Retrievals over expired/unknown hashes return a
-self-describing error telling the model the entry is gone (re-run the tool) - NO prefix matching.
+Aphrodite: the model calls `aphrodite_retrieve(hash)` (R:117-118, R:190-194).
 
-The directive doc becomes a small system-prompt section the plugin can append via the
-`system-prompt/assemble` waterfall (LIVE Event directory) - phase 4 optional item, mirroring
-Aphrodite's `ccr-handling.md` (Rsection 3, R:199-203).
+DSH: **the plugin registers ONE dynamic tool at apply time**, `ccr_retrieve(hash)`, through the
+`tools` service that the family already injects (normalize-dash uses the same injection to register
+its raw-write tool, `Source/Library.ts:62-71`, and `ToolRuntime.register` accepts a `ToolDefinition`
+per the LIVE contract).
+
+That is ONE tool, ONE hash parameter, and an optional `range` (start, count lines) for granular
+retrieval (R:199-203: prefer granular and batch retrievals).
+
+Retrievals over expired or unknown hashes return a self-describing error that tells the model the
+entry is gone (re-run the tool), with NO prefix matching.
+
+The directive doc becomes a small system-prompt section that the plugin can append through the
+`system-prompt/assemble` waterfall (LIVE Event directory), an optional phase 4 item that mirrors
+`ccr-handling.md` of Aphrodite (Rsection 3, R:199-203).
 
 ## 5. Config schema (Schemastery, family conventions)
 
-Composed with the factory's `Schema(shared?, module?)` helper with `shared: false` (ONLY
-`log`/`logFile` volatile cells) - the exact pattern of
-`dsh-hook-normalize-dash/Source/Variable/Config.ts:35-57`. All knobs:
+Composed with the `Schema(shared?, module?)` helper of the factory with `shared: false` (ONLY the
+`log`/`logFile` volatile cells), which is the exact pattern of
+`dsh-hook-normalize-dash/Source/Variable/Config.ts:35-57`.
+
+All knobs:
 
 ```ts
 Schema(false, {
@@ -235,14 +258,15 @@ Schema(false, {
 });
 ```
 
-Volatile (hot-edit, NO remount): `logFile`, `previewMaxChars`, `thresholdBytes`, `multipliers` -
-matching Aphrodite's hot-reload thresholds (R:293-296). Structural knobs (targets, store, journal)
-remount.
+Volatile (hot-edit, NO remount): `logFile`, `previewMaxChars`, `thresholdBytes`, and `multipliers`,
+which matches the hot-reload thresholds of Aphrodite (R:293-296).
+
+Structural knobs (targets, store, and journal) remount.
 
 ## 6. Bundle layout
 
-New family member (Boilerplate -> Classic/EffectTS later): **`dsh-hook-ccr`** (published
-`@playform/dsh-hook-ccr`, loader id `ccr`), mirroring `dsh-hook-normalize-dash` anatomy:
+New family member (Boilerplate, then Classic/EffectTS later): **`dsh-hook-ccr`** (published as
+`@playform/dsh-hook-ccr`, loader id `ccr`), which mirrors the anatomy of `dsh-hook-normalize-dash`:
 
 ```
 dsh-hook-ccr/
@@ -264,28 +288,29 @@ dsh-hook-ccr/
 
 `cordis.patch.yml` follows the bundle-patch pattern
 (`dsh-hook-normalize-dash/cordis.patch.yml:32-40`): `insert:` with id `ccr`, name
-`@playform/dsh-hook-ccr`, the section 5 config.
+`@playform/dsh-hook-ccr`, and the section 5 config.
 
 ### Smoke suite plan (`Classic/smokes/ccr-smoke.mjs`)
 
 The family discipline (`Classic/smokes/README.md:1-14`): the smoke loads the REAL built
-`Target/Library.js`, instantiates the REAL factory against a fake ctx, and EVERY ledger string is
-byte-identical; zero changes to the twelve existing suites - coverage is additive. The `ccr-smoke`
-must prove:
+`Target/Library.js`, instantiates the REAL factory against a fake ctx, and EVERY ledger string stays
+byte-identical, with zero changes to the twelve existing suites because coverage is additive.
+
+The `ccr-smoke` must prove:
 
 1. under-threshold results pass through byte-identical (the vacuously-green trap: assert the
    pass-through AND a compressed case, NEVER only ONE);
-2. an oversized `bash` result compresses: preview line + correct marker bytes
-    - the original retrievable via `ccr_retrieve` (round-trip);
-3. auto-expand: content under `autoExpandLimitBytes` returns FULL content, no marker;
+2. an oversized `bash` result compresses to a preview line plus the correct marker bytes, and the
+   original is retrievable through `ccr_retrieve` (round-trip);
+3. auto-expand: content under `autoExpandLimitBytes` returns FULL content and no marker;
 4. exempt tools pass through (write/edit/raw-write identity);
-5. TTL expiry evicts and retrieval reports gone; LRU eviction at budget;
-6. ledger strings byte-identical (`ccr: activated (...)`, per-compress lines);
+5. TTL expiry evicts and retrieval reports gone, and LRU eviction happens at the budget;
+6. ledger strings stay byte-identical (`ccr: activated (...)`, plus the per-compress lines);
 7. all 7 classifier types hit their multiplier gates.
 
 ## 7. Implementation phases
 
-Build command per phase (deterministic, workspace serialized; README.md:38-45):
+Build command per phase (deterministic and workspace serialized; README.md:38-45):
 
 ```
 cd <tree>/packages/dsh-hook-ccr
@@ -298,31 +323,34 @@ node ../../smokes/ccr-smoke.mjs        # from Classic/smokes/
 pnpm run test --workspace-concurrency=1   # all smokes, the arbiter
 ```
 
-1. **Skeleton + config** - bundle layout, Library.ts, Variable/Config.ts, Interface/, `apply` that
-   logs the activation ledger line; NO interception. Files: package.json, cordis.patch.yml,
-   Source/Library.ts, Variable/Config.ts, Interface/*. Arbiter: build +
-   `node Classic/smokes/ccr-smoke.mjs` (activation + schema-default assertions). Accept: build zero
-   errors, smoke green, ALL 12 existing suites untouched and green.
+1. **Skeleton + config** - the bundle layout, Library.ts, Variable/Config.ts, Interface/, and an
+   `apply` that logs the activation ledger line, with NO interception. Files: package.json,
+   cordis.patch.yml, Source/Library.ts, Variable/Config.ts, Interface/*. Arbiter: the build plus
+   `node Classic/smokes/ccr-smoke.mjs` (activation and schema-default assertions). Accept: zero
+   build errors, a green smoke, and ALL 12 existing suites untouched and green.
 2. **The gate + classifier + store** - Classify/Preview/Hash/Store/Compress, the
-   `tools/post-execute` listener registered in Apply, LRU + TTL, NO journal. Arbiter: build +
-   ccr-smoke assertions 1,2,4,5,7. Accept: oversized results compress with byte-exact markers;
-   under-threshold and exempt results byte-identical pass-through.
-3. **Retrieval tool + auto-expand** - Retrieve.ts, `ccr_retrieve` registration, auto-expand path,
-   granular `range`, ledger retrieval counts. Arbiter: build + ccr-smoke assertion 3 + round-trip.
-   Accept: model-visible marker is retrievable to the original bytes; NO marker under autoExpand
-   limit.
-4. **Disk journal + context engine (optional per config)** - JSONL journal (`journalPath`), boot
-   compaction; `agent/pre-step`-adjacent middle-turn archiving under `contextEngine`
-   (protectFirst/last per R:173-179) - feature-flagged off by default. Arbiter: build + ccr-smoke
-   journal round-trip + existing suites. Accept: journal survives a fake restart (re-instantiate
-   store from file), TTL compaction proven.
-5. **Profile wiring + LIVE verification** - add to the desktop profile's package.json bundles +
-   cordis.patch.yml, restart, verify the activation ledger line and ONE LIVE compressed bash result.
-   Accept: the ledger shows `ccr: activated (...)`; the transcript shows preview + marker for
-   a >2048 byte tool result; `ccr_retrieve` works in the LIVE loop.
+   `tools/post-execute` listener registered in Apply, and LRU + TTL with NO journal. Arbiter: the
+   build plus ccr-smoke assertions 1, 2, 4, 5, and 7. Accept: oversized results compress with
+   byte-exact markers, and under-threshold and exempt results pass through byte-identical.
+3. **Retrieval tool + auto-expand** - Retrieve.ts, the `ccr_retrieve` registration, the auto-expand
+   path, the granular `range`, and the ledger retrieval counts. Arbiter: the build plus ccr-smoke
+   assertion 3 and the round-trip. Accept: the model-visible marker retrieves the original bytes,
+   and NO marker appears under the autoExpand limit.
+4. **Disk journal + context engine (optional per config)** - the JSONL journal (`journalPath`) and
+   boot compaction, plus middle-turn archiving next to `agent/pre-step` under `contextEngine`
+   (protectFirst/last per R:173-179) behind a feature flag that is off by default. Arbiter: the
+   build plus the ccr-smoke journal round-trip and the existing suites. Accept: the journal survives
+   a fake restart (re-instantiate the store from the file) and the TTL compaction is proven.
+5. **Profile wiring + LIVE verification** - add the plugin to the package.json bundles and
+   cordis.patch.yml of the desktop profile, restart, and verify the activation ledger line and ONE
+   LIVE compressed bash result. Accept: the ledger shows `ccr: activated (...)`, the transcript
+   shows a preview plus marker for a >2048 byte tool result, and `ccr_retrieve` works in the LIVE
+   loop.
 
-Phases 1-3 are the MVP; 4-5 complete it. The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate
-later item per the SPLICE-ETS pattern (Documentation/Archive/Split/SPLICE-ETS.md).
+Phases 1-3 are the MVP, and 4-5 complete it.
+
+The EffectTS sibling (`ets-hook-dsh-ccr`) is a separate later item per the SPLICE-ETS pattern
+(Documentation/Archive/Split/SPLICE-ETS.md).
 
 ## 8. Feature scoping table (Rsection 3/section 4/section 6)
 
@@ -350,26 +378,27 @@ later item per the SPLICE-ETS pattern (Documentation/Archive/Split/SPLICE-ETS.md
 
 ## 9. Acceptance (the whole plugin)
 
-- Build: deterministic three-step build zero-error on EVERY touched tree.
-- Smokes: `node Classic/smokes/ccr-smoke.mjs` green with byte-identical ledger assertions; the
-  twelve existing suites unchanged and green; `pnpm run test --workspace-concurrency=1` green
-  overall.
-- LIVE: activation line in `~/.dsh/playform/hook-dsh-ccr.log`; a >2048-byte bash result renders as
-  preview + marker in the transcript; retrieval restores the bytes; exempt tools untouched.
-- Git: read-only checks ONLY - the deliverable is reported READY-TO-COMMIT (routing law,
+- Build: the deterministic three-step build is zero-error on EVERY touched tree.
+- Smokes: `node Classic/smokes/ccr-smoke.mjs` is green with byte-identical ledger assertions, the
+  twelve existing suites stay unchanged and green, and `pnpm run test --workspace-concurrency=1` is
+  green overall.
+- LIVE: the activation line appears in `~/.dsh/playform/hook-dsh-ccr.log`, a >2048-byte bash result
+  renders as a preview plus marker in the transcript, retrieval restores the bytes, and exempt tools
+  stay untouched.
+- Git: read-only checks ONLY, so the deliverable is reported READY-TO-COMMIT (routing law,
   `session-orientation` section 3).
 
 ## 10. Open questions
 
-1. Does `tools/post-execute` replacement update the GUI card views (`presentResult`) or ONLY
-   model-visible content? If cards show stale originals, a `tool.call.toolview` client slot (option
-   b) is the display fix.
-2. Should `read` be compressed at ALL in phase 3 when its result carries line numbers the model
-   already navigated (compressing a `read` can break a later edit's `old_string` context)? Default
-   yes (hash of full content, retrieval restores it) but the pilot should confirm NO edit-failure
-   regression.
-3. Does the JSONL journal want rotation/capping (file growth at 256 MiB budget x TTL churn), or is
-   boot-compaction enough?
-4. The `subagent` tool's result often embeds a child's full report - compress it? It is the single
-   largest consumer in orchestrator sessions; currently exempt (section 2.1), review after LIVE
-   data.
+1. Does the `tools/post-execute` replacement update the GUI card views (`presentResult`) or ONLY the
+   model-visible content? If the cards show stale originals, a `tool.call.toolview` client slot
+   (option b) is the display fix.
+2. Should `read` be compressed at ALL in phase 3 when its result carries line numbers that the model
+   already navigated, since compressing a `read` can break the `old_string` context of a later edit?
+   The default is yes (hash of the full content, and retrieval restores it), but the pilot should
+   confirm NO edit-failure regression.
+3. Does the JSONL journal want rotation or capping (file growth at a 256 MiB budget with TTL churn),
+   or is boot compaction enough?
+4. The result of the `subagent` tool often embeds the full report of a child, so should it be
+   compressed? It is the single largest consumer in orchestrator sessions, and it is currently
+   exempt (section 2.1), so review it after LIVE data.

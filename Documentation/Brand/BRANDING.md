@@ -17,13 +17,15 @@ statuses:
 
 # BRANDING.md - The DeepSeek Harness Plugin Family for PlayForm
 
-> The brand brief now lives in `Documentation/Brand/`, and two documents refer to it: `../Plans/DSH-MONOREPO-PLAN.md`
-> (the Site design) and `../Handoff/Register.md` (item #12 - the Handoff tree was erased on
-> 2026-10-09, so the reference stays as the historical record).
+> The brand brief now lives in `Documentation/Brand/`, and two documents refer to it:
+> `../Plans/DSH-MONOREPO-PLAN.md` (the Site design) and `../Handoff/Register.md` (item #12 - the
+> Handoff tree was erased on 2026-10-09, so the reference stays as the historical record).
 
 This file is a self-contained brief.
 
-Give this file to a REMOTE agent to make two deliverables: **(A) a complete branding manual** for the family (plugins, versions, models, and flavors), and **(B) a simple sample webpage design instruction set** with a static blue/white mockup.
+Give this file to a REMOTE agent to make two deliverables: **(A) a complete branding manual** for
+the family (plugins, versions, models, and flavors), and **(B) a simple sample webpage design
+instruction set** with a static blue/white mockup.
 
 EVERY fact that the agent needs is in this file, so do NOT make the agent learn the codebase.
 
@@ -31,22 +33,26 @@ EVERY fact that the agent needs is in this file, so do NOT make the agent learn 
 
 ## 1. THE FAMILY (what we are)
 
-The **DeepSeek Harness Plugin Family for PlayForm**, or "the family", is a set of plugins for the DeepSeek Harness (DSH) desktop agent platform, and it ships under the @playform ecosystem.
+The **DeepSeek Harness Plugin Family for PlayForm**, or "the family", is a set of plugins for the
+DeepSeek Harness (DSH) desktop agent platform, and it ships under the @playform ecosystem.
 
 The family has ONE mission:
 
-> **Control the output of the model and govern the files of the project.** The harness normalizes the
-> output of EVERY model to clean, consistent characters (dashes, quotes, ellipsis, spaces, invisible
-> characters, and full-width forms). The harness governs EVERY project manifest (canonicalized,
-> pinned, and updated) automatically, visibly, and under the control of the author.
+> **Control the output of the model and govern the files of the project.** The harness normalizes
+> the output of EVERY model to clean, consistent characters (dashes, quotes, ellipsis, spaces,
+> invisible characters, and full-width forms). The harness governs EVERY project manifest
+> (canonicalized, pinned, and updated) automatically, visibly, and under the control of the author.
 
-The family is **model-agnostic** because it normalizes the output of ANY LLM (the reference models that the harness runs are DeepSeek V4 Flash and GLM 5.3 Flash).
+The family is **model-agnostic** because it normalizes the output of ANY LLM (the reference models
+that the harness runs are DeepSeek V4 Flash and GLM 5.3 Flash).
 
-The family is **flavor-based** because it uses ONE small transform for each character family and shares ONE pure core.
+The family is **flavor-based** because it uses ONE small transform for each character family and
+shares ONE pure core.
 
 ## 2. THE PRODUCT INVENTORY (twelve packages)
 
-The family has a hierarchical organization, so read EVERY name as a sentence of segments: `<kind> @ <platform> @ <role> @ <domain>`.
+The family has a hierarchical organization, so read EVERY name as a sentence of segments:
+`<kind> @ <platform> @ <role> @ <domain>`.
 
 | Package                        | The @-sentence                     | Role                                                                                                |
 | ------------------------------ | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -63,9 +69,11 @@ The family has a hierarchical organization, so read EVERY name as a sentence of 
 | `hook-dsh-normalize-fullwidth` | Hook @ DSH @ Normalize @ Fullwidth | Full-width -> half-width                                                                            |
 | `plugin-dsh-normalize-file`    | Plugin @ DSH @ Normalize @ File    | Normalize files already on disk (the explicit tool)                                                 |
 
-The alphabetical order groups the family in a natural way: the kind comes first (hook, plugin, or lib).
+The alphabetical order groups the family in a natural way: the kind comes first (hook, plugin, or
+lib).
 
-Then come the roles (core, governor-cargo, governor-package, normalize-*, pinner-package, plugin-factory).
+Then come the roles (core, governor-cargo, governor-package, normalize-*, pinner-package,
+plugin-factory).
 
 Then come the domains.
 
@@ -79,11 +87,14 @@ Then come the domains.
 
 2. **The Classic Release.**
 
-    The official release that comes from the boilerplate: cleaned, de-personalized, restructured (fewer comments, improved code), with ONE repository for each package.
+    The official release that comes from the boilerplate: cleaned, de-personalized, restructured
+    (fewer comments, improved code), with ONE repository for each package.
 
 3. **The Effect-TS Release.**
 
-    The official release that is re-implemented on Effect-TS v4: external trace-ability (tracing spans over the chains), ecosystem interaction (the transformers and processors of Effect), the same behavior, and the same ledger strings.
+    The official release that is re-implemented on Effect-TS v4: external trace-ability (tracing
+    spans over the chains), ecosystem interaction (the transformers and processors of Effect), the
+    same behavior, and the same ledger strings.
 
 Both official releases ship side by side.
 
@@ -93,7 +104,8 @@ The family carries a dual badge for its version (CLASSIC / EFFECT-TS).
 
 The family serves AI models and NOT the reverse.
 
-The normalize family rewrites what a model emits, so the branding speaks of "model output", "streams", and "transcripts" with clean, consistent characters in everything that the model writes.
+The normalize family rewrites what a model emits, so the branding speaks of "model output",
+"streams", and "transcripts" with clean, consistent characters in everything that the model writes.
 
 The governance family acts on the files that the author (human or model) touches.
 
@@ -101,11 +113,13 @@ The voice is "the output of the model, governed and clean".
 
 ## 5. THE FLAVORS
 
-A **flavor** is ONE member of the normalize family (dash, quotes, ellipsis, spaces, invisible, fullwidth, or file).
+A **flavor** is ONE member of the normalize family (dash, quotes, ellipsis, spaces, invisible,
+fullwidth, or file).
 
 A **role** is ONE member of the governance family (governor or pinner).
 
-The branding must give EACH flavor and role a distinct visual treatment (a badge) while it keeps ONE family look.
+The branding must give EACH flavor and role a distinct visual treatment (a badge) while it keeps ONE
+family look.
 
 ## 6. THE DESIGN CONSTRAINTS (NON-NEGOTIABLE)
 
@@ -121,27 +135,36 @@ A complete identity system in ONE document that covers:
 
 1. **Identity.**
 
-    The treatment of the family name, a proposed tagline (ONE line with a blue/white mindset), and the mission statement from section 1.
+    The treatment of the family name, a proposed tagline (ONE line with a blue/white mindset), and
+    the mission statement from section 1.
 
 2. **Logo.**
 
-    A wordmark concept (the family name and the @-sentence hierarchy as a visual motif), a proposed abstract mark (clean, geometric, blue/white), and the usage rules (clear space, minimum sizes, and the wrong uses).
+    A wordmark concept (the family name and the @-sentence hierarchy as a visual motif), a proposed
+    abstract mark (clean, geometric, blue/white), and the usage rules (clear space, minimum sizes,
+    and the wrong uses).
 
 3. **Color.**
 
-    The exact brand blue (name, hex, and usage ratios such as 80% white and 20% blue), the blue tints, the neutral greys, and the accessibility contrast notes.
+    The exact brand blue (name, hex, and usage ratios such as 80% white and 20% blue), the blue
+    tints, the neutral greys, and the accessibility contrast notes.
 
 4. **Typography.**
 
-    A clean header typeface and a clean body typeface (propose specific families), the size scale, and the header hierarchy (H1/H2/H3 rules for "clean headers").
+    A clean header typeface and a clean body typeface (propose specific families), the size scale,
+    and the header hierarchy (H1/H2/H3 rules for "clean headers").
 
 5. **Components.**
 
-    Cards, buttons, badges (the flavor, role, and version badges - ONE for each flavor and role: dash, quotes, ellipsis, spaces, invisible, fullwidth, file, governor, and pinner; plus the version badges CLASSIC / EFFECT-TS), tables (the package inventory), code blocks, and the header/nav component.
+    Cards, buttons, badges (the flavor, role, and version badges - ONE for each flavor and role:
+    dash, quotes, ellipsis, spaces, invisible, fullwidth, file, governor, and pinner; plus the
+    version badges CLASSIC / EFFECT-TS), tables (the package inventory), code blocks, and the
+    header/nav component.
 
 6. **Voice.**
 
-    The tone (clean, technical, confident), the vocabulary (the @-sentences, "flavor", "role", and "the family"), and short do/don't examples of copy.
+    The tone (clean, technical, confident), the vocabulary (the @-sentences, "flavor", "role", and
+    "the family"), and short do/don't examples of copy.
 
 7. **Package-level branding.**
 
@@ -149,7 +172,8 @@ A complete identity system in ONE document that covers:
 
 8. **Applications.**
 
-    The README header layout, the website header, the docs, and the package badges on a registry page.
+    The README header layout, the website header, the docs, and the package badges on a registry
+    page.
 
 ## 8. THE SAMPLE WEBPAGE - WHAT TO PRODUCE (deliverable B)
 
@@ -159,7 +183,9 @@ Produce BOTH:
 
 1. **The instruction set.**
 
-    A written design spec with the page sections in order, the layout grid, the spacing scale, the blue/white usage for each section, the clean-header treatment for EACH heading level, the component usage, and the responsive notes.
+    A written design spec with the page sections in order, the layout grid, the spacing scale, the
+    blue/white usage for each section, the clean-header treatment for EACH heading level, the
+    component usage, and the responsive notes.
 
 2. **The static mockup.**
 
@@ -170,7 +196,8 @@ Produce BOTH:
     - **The hero**: ONE strong sentence (the mission), clean type, white space, and one blue accent.
     - **The products grid**: the twelve packages grouped by role (Core & Factory, Governance, and
       Normalize), with EACH card that shows its name, its @-sentence, and its badge.
-    - **The versions section**: CLASSIC compared with EFFECT-TS in two clean cards, with ONE line each.
+    - **The versions section**: CLASSIC compared with EFFECT-TS in two clean cards, with ONE line
+      each.
     - **The models section**: ONE line that states model-agnostic and names the reference models.
     - **The flavors section**: the badge row with the seven normalize flavors and the two governance
       roles.

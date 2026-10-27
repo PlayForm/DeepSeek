@@ -1,12 +1,15 @@
 # SCHEME - @playform/lib-dsh-trace
 
-This document covers the trace vocabulary and the detached loop, and everything below is what the code does today; nothing else is claimed.
+This document covers the trace vocabulary and the detached loop, and everything below is what the
+code does today; nothing else is claimed.
 
 ## 0. What this library is
 
-This is the pure, harness-free half of D5: a library, NOT a plugin bundle (no `cordis.patch.yml`, no loader contract, no `dsh.bundle` entry).
+This is the pure, harness-free half of D5: a library, NOT a plugin bundle (no `cordis.patch.yml`, no
+loader contract, no `dsh.bundle` entry).
 
-The SERVICE (`ctx.trace`) is provided by `@playform/plugin-dsh-factory`, while the event names, the envelope, the coalescing key, the adapter contract, and the loop live here.
+The SERVICE (`ctx.trace`) is provided by `@playform/plugin-dsh-factory`, while the event names, the
+envelope, the coalescing key, the adapter contract, and the loop live here.
 
 ## 1. The envelope
 
@@ -14,9 +17,11 @@ The SERVICE (`ctx.trace`) is provided by `@playform/plugin-dsh-factory`, while t
 { trace: string; kind: string; at: number; actor?: object; payload: Record<string, unknown> }
 ```
 
-- `trace` - the emission's correlation id, where `Complete` assigns `trace-<sequence>` (the bus's monotonic counter) unless the emitter supplied one.
+- `trace` - the emission's correlation id, where `Complete` assigns `trace-<sequence>` (the bus's
+  monotonic counter) unless the emitter supplied one.
 - `kind` - the event name (`Names`).
-- `at` - the emission time in epoch milliseconds, where `Complete` assigns `Date.now()` unless the emitter supplied one; no timer is created anywhere in the library.
+- `at` - the emission time in epoch milliseconds, where `Complete` assigns `Date.now()` unless the
+  emitter supplied one; no timer is created anywhere in the library.
 - `actor` - the optional emitting actor object (the same identity the `fs/observed` events carry).
 - `payload` - the event's own shape.
 
@@ -33,14 +38,17 @@ An emitter hands the bus a `Draft` (`{ kind, payload, actor?, trace?, at? }`).
 
 ## 3. The guards
 
-- `IsEnvelope(value)` - a non-empty string `trace`, a non-empty string `kind`, a number `at`, and an object `payload`.
+- `IsEnvelope(value)` - a non-empty string `trace`, a non-empty string `kind`, a number `at`, and an
+  object `payload`.
 - `IsStamp(value)` - a non-empty string `path`, a string `version`, and a string `origin`.
 
-Both are type predicates, and an adapter uses them to ignore a foreign value instead of crashing (fail-open).
+Both are type predicates, and an adapter uses them to ignore a foreign value instead of crashing
+(fail-open).
 
 ## 4. The coalescing key (`Key`)
 
-The key is the payload's `path` when it is a non-empty string, else the event name when it is a non-empty string, else `unknown`.
+The key is the payload's `path` when it is a non-empty string, else the event name when it is a
+non-empty string, else `unknown`.
 
 The loop and the graph's per-path debounce key on exactly this value.
 
@@ -59,13 +67,16 @@ The loop and the graph's per-path debounce key on exactly this value.
 
 ## 6. The ring bound (`Bound`)
 
-The ring bound is 256, the service's fixed ring size, and it is not a config knob because the trace adds no config schema anywhere.
+The ring bound is 256, the service's fixed ring size, and it is not a config knob because the trace
+adds no config schema anywhere.
 
 ## 7. Verification
 
-- `prepublishOnly` builds `Target/` and `Target/Test/`, runs the harness selfcheck (the counter's deliberate failure + the loop's coalescing proof), and type-checks the Test tree.
+- `prepublishOnly` builds `Target/` and `Target/Test/`, runs the harness selfcheck (the counter's
+  deliberate failure + the loop's coalescing proof), and type-checks the Test tree.
 - `Loop-And-Vocabulary` prints `10 PASS`.
 
 ## 8. The EffectTS twin
 
-The EffectTS twin is deferred to the ETS parity wave (wave 5 of the completion spec), and the Classic tree is the contract source for it.
+The EffectTS twin is deferred to the ETS parity wave (wave 5 of the completion spec), and the
+Classic tree is the contract source for it.

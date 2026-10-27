@@ -26,38 +26,48 @@ statuses:
 
 ---
 
-The immediate deliverable is the schema + the state machine + the license flow + the eviction rule
-(the vision-and-representation, schema, state-machine and eviction documents). The stages beyond it,
-in the user's own direction:
+The immediate deliverable is the schema, the state machine, the license flow, and the eviction rule
+(the vision-and-representation, schema, state-machine, and eviction documents).
+
+The stages beyond it, in the own direction of the user:
 
 ## 9.1 The graph stage (the license carry)
 
-Files kept as GRAPHS inside our own internal CARRY: each license carries WEIGHT, and the weights
-together are a representation of the file system - the weighted graph. The machine's flat cell map
-becomes an edge-typed graph (imports, references, ownership); the license weights are the edge costs
-(the protection strength, the reconciliation cost, the eviction priority). The eviction rule and the
-reconciliation walk the graph by weight, not by recency alone.
+The files stay as GRAPHS inside our own internal CARRY: each license carries WEIGHT, and the weights
+together are a representation of the file system, which is the weighted graph.
+
+The flat cell map of the machine becomes an edge-typed graph (imports, references, and ownership),
+and the license weights are the edge costs (the protection strength, the reconciliation cost, and
+the eviction priority).
+
+The eviction rule and the reconciliation walk the graph by weight and not by recency alone.
 
 ## 9.2 The code-block stage (the reflective surface)
 
-We are primarily dealing with CODE BLOCKS, not files. From a SINGLE CALL the agent can replace /
-rename / connect across the reflective API - the TypeScript SDK's language-service class of
-operations: renaming `const State: State = ...` to `const State: Operational = ...` propagates to
-every reference in every held file, exactly as the VSCode rename does - because the representation
-already knows the type's identity and its references. The mutations (rename, connect, move, extract,
-inline) exceed anything `write(filename, content)` offers, because the model already holds the
-code's structure.
+We deal primarily with CODE BLOCKS and not with files.
+
+From a SINGLE CALL the agent can replace, rename, and connect across the reflective API, which is
+the class of language-service operations of the TypeScript SDK: renaming `const State: State = ...`
+to `const State: Operational = ...` propagates to every reference in every held file, exactly as the
+VSCode rename does, because the representation already knows the identity of the type and its
+references.
+
+The mutations (rename, connect, move, extract, and inline) exceed anything that
+`write(filename, content)` offers, because the model already holds the structure of the code.
 
 ## 9.3 The token-waste elimination
 
-The point of the reflective surface: the model KNOWS the code block it means - presenting a
-full-file rewrite (or a bash sed) spends tokens, space, and conversational length over something the
-model already has. The code-block ops present the mutation directly (the symbol, the kind of change,
-the scope) and the machine computes the edit - the AST layer rides the same
-license/reconciliation/eviction contract; only the op vocabulary grows.
+The point of the reflective surface: the model KNOWS the code block that it means, so presenting a
+full-file rewrite (or a bash sed) spends tokens, space, and conversational length over something
+that the model already has.
 
-The measured cost puts a bound on this stage's worth
-(Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md): the dominant term is the step
-boundary, and the payload is the smaller one. The code-block stage attacks the payload, so its
-saving is real but secondary to the batch engine's boundary count - the engine first, the reflective
-surface after it.
+The code-block ops present the mutation directly (the symbol, the kind of change, and the scope) and
+the machine computes the edit, while the AST layer rides the same license/reconciliation/eviction
+contract and only the op vocabulary grows.
+
+The measured cost puts a bound on the worth of this stage
+(Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md): the dominant term is the step boundary
+and the payload is the smaller one.
+
+The code-block stage attacks the payload, so its saving is real but secondary to the boundary count
+of the batch engine, which means the engine first and the reflective surface after it.

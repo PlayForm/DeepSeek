@@ -1,6 +1,6 @@
 import type { Context } from "@deepseek-ai/cordis";
-import type Configuration from "@Interface/Config.js";
-import type Record from "@Interface/Record.js";
+import type Configuration from "./Config.js";
+import type Record from "./Record.js";
 import type { Queue } from "@playform/ets-lib-dsh-trace";
 import type { Allowlist } from "@playform/ets-plugin-dsh-factory";
 /** The minimal structural view of an open storage-domain table (Store). */

@@ -23,27 +23,28 @@ statuses:
 
 ---
 
-1. R-BET-1's BATCH-EDIT-TOOL-FEATURE.md had NOT landed at write time. The merge point: its feature
-   inventory should map onto this document's sections 2 (the forms) and 5 (the ranked set); any
-   R-BET-1 finding that contradicts a rank here wins on recency (the addendum-wins rule the family
-   uses on the design conflicts).
-2. The harness docs at ~/Developer/Documentation/Module/deepseek-harness/ were ABSENT on this host -
-   the seam verification here inherits the live-containers designs' verified anchors (the tool-coach
-   and the live-containers precedents) instead of fresh asar reads. The implementation agent must
-   re-verify the two seams it actually touches: the tools/execute arm (the D2 G1 carrier) and the
-   system-prompt/assemble waterfall (the D3 section pattern), both documented in
+1. BATCH-EDIT-TOOL-FEATURE.md of R-BET-1 had NOT landed at write time. The merge point: its feature
+   inventory should map onto sections 2 (the forms) and 5 (the ranked set) of this document, and any
+   R-BET-1 finding that contradicts a rank here wins on recency through the addendum-wins rule that
+   the family uses on design conflicts.
+2. The harness docs at ~/Developer/Documentation/Module/deepseek-harness/ were ABSENT on this host,
+   so the seam verification here inherits the verified anchors of the live-containers designs (the
+   tool-coach and the live-containers precedents) instead of fresh asar reads. The implementation
+   agent must re-verify the two seams that it actually touches: the tools/execute arm (the D2 G1
+   carrier) and the system-prompt/assemble waterfall (the D3 section pattern), both documented in
    Documentation/Archive/Live-Containers/Design/IMPLEMENTATION-DESIGN.md section 3.2 and
    FILE-MONITORS-DESIGN.md section 5.
-3. The journal's pre-image storage size: the per-file full pre-image vs the reverse-patch tradeoff
-   is UNDECIDED (the rollback improvement). Suggestion: the full pre-image for the v1 (the simpler
-   revert, the bounded ring cap like the live containers' outputLimitBytes), the reverse-patch as
-   the wave-2 compression.
+3. The pre-image storage size of the journal is UNDECIDED, which is the tradeoff between the per-file
+   full pre-image and the reverse patch (the rollback improvement). Suggestion: the full pre-image
+   for the v1 (the simpler revert and the bounded ring cap like the outputLimitBytes of the live
+   containers), and the reverse patch as the wave-2 compression.
 4. The batch lifecycle event names: NEW event names may require a new storage domain version (the
-   D3/M5 open contract). The implementation agent must decide: the batch events in the plugin's OWN
-   domain (the journal's) vs the shared governance chain. The suggestion: the batch LIFECYCLE events
-   in the plugin's own domain; the per-file merges ride the EXISTING fs/observed events unmodified.
-5. The scheduled sweep's default posture: the IDLE-forever rule (the monitors: "off" default) should
-   apply - the batch tool ships with every form opt-in, the one-shot search as the only
-   always-available form.
-6. The naming: "batch-edit" vs the user's approved names discipline (#15) - the name needs the
-   user's ratification before the packages land.
+   D3/M5 open contract). The implementation agent must decide between the batch events in the OWN
+   domain of the plugin (the journal's) and the shared governance chain. The suggestion: the batch
+   LIFECYCLE events in the own domain of the plugin, and the per-file merges riding the EXISTING
+   fs/observed events unmodified.
+5. The default posture of the scheduled sweep: the IDLE-forever rule should apply (the monitors
+   default to "off"), so the batch tool ships with every form opt-in and the one-shot search as the
+   only always-available form.
+6. The naming: "batch-edit" against the approved-names discipline of the user (#15), where the name
+   needs the ratification of the user before the packages land.

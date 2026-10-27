@@ -28,25 +28,24 @@ statuses:
 
 ## 6.1 The anatomy
 
-`@playform/plugin-dsh-batch-edit` (a tool-primary plugin; the `plugin-` prefix since a tool is the
-primary surface, like plugin-dsh-factory):
+`@playform/plugin-dsh-batch-edit` is a tool-primary plugin, and it carries the `plugin-` prefix because a tool is the primary surface, like plugin-dsh-factory:
 
 - **Source/Library.ts** - the loader contract: `name`, `apply`, `Config`,
   `inject = ['pluginFactory', 'tools', 'fs', 'jobs', 'systemPrompt', 'shell', 'shellEnv', 'workingDirectory']`
   on the default object (the default-object-shadows pitfall).
-- **Source/Function/** - Apply.ts (registration only), Machine.ts (the state machine + the process
+- **Source/Function/** - Apply.ts (registration only), Machine.ts (the state machine and the process
   cells), Ops.ts (the transition-table executor), Tools.ts (the `batch_edit` defineTool), Present.ts
-  (the state presentation), Ledger.ts (the strings).
-- **Source/Variable/** - Config.ts (all volatile), DefaultCheckSets.ts reuse.
-- **Source/Interface/** - State.ts, Process.ts (Process<File>), Events.ts.
-- Config (all volatile, hot-editable, P10 refresh): enabled (default false - the IDLE-forever
-  posture, like the live containers), machinesPerAgent, opsPerCommit, deadlineMs (<= 120000),
-  strictMode (search-not-found errors vs skips), interceptBash (off by default in v1),
-  monitorChecksets.
-- **No client half in v1** - the Web UI gets the diff card through `presentationMeta` alone (the
-  cookbook path); a client plugin is later work, not a dependency.
-- The smokes: the fake-ctx + real-factory harness pattern (smoke-writing); every timing transition
-  driven by the fake clock; the vacuously-green trap guarded; the Classic/EffectTS parity per the
+  (the state presentation), and Ledger.ts (the strings).
+- **Source/Variable/** - Config.ts (all volatile) and the DefaultCheckSets.ts reuse.
+- **Source/Interface/** - State.ts, Process.ts (Process<File>), and Events.ts.
+- Config (all volatile, hot-editable, with the P10 refresh): enabled (default false, which is the
+  IDLE-forever posture like the live containers), machinesPerAgent, opsPerCommit, deadlineMs (<=
+  120000), strictMode (search-not-found errors against skips), interceptBash (off by default in v1),
+  and monitorChecksets.
+- **No client half in v1**, because the Web UI gets the diff card through `presentationMeta` alone
+  (the cookbook path), and a client plugin is later work and not a dependency.
+- The smokes: the fake-ctx + real-factory harness pattern (smoke-writing), every timing transition
+  driven by the fake clock, the vacuously-green trap guarded, and the Classic/EffectTS parity per the
   family discipline.
 
 ## 6.2 The risks and the mitigations

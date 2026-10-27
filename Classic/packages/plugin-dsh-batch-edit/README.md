@@ -5,14 +5,14 @@
 
 ## The role
 
-The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
+The batch edit engine serves the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 plugin family (the Classic release).
 
-One tool - `batch_edit` - that turns files into **processes held in state**: you open a machine,
-insert files into it, and the files process like a state machine in one go.
+It provides one tool, `batch_edit`, that turns files into **processes held in state**: you open a
+machine, insert files into it, and the files process like a state machine in one go.
 
-Each file on the system is a process the harness holds (`Process<File>`), not inert bytes - the
-reversed view of the default UNIX file.
+Each file on the system is a process the harness holds (`Process<File>`), not inert bytes, which is
+the reversed view of the default UNIX file.
 
 The philosophy and the research live in
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
@@ -20,10 +20,11 @@ and its granular subdocuments under `Documentation/Plans/Batch-Edit-Tool/`.
 
 ## The surfaces
 
-One tool: `batch_edit` (six actions: `open`, `insert`, `remove`, `commit`, `state`, `close`).
+One tool, `batch_edit`, offers six actions: `open`, `insert`, `remove`, `commit`, `state`, and
+`close`.
 
-No service, no event listener - the writes go through the factory's write executor, and the bash
-observer is the advisory `interceptBash` tag.
+There is no service and no event listener, because the writes go through the factory's write
+executor and the bash observer is the advisory `interceptBash` tag.
 
 ## The machine (one tool, six actions)
 
@@ -49,8 +50,8 @@ errored   -> observed  (agent corrects the op)
 any       -> halted    (machine close with in-flight work: settle-first)
 ```
 
-A held file touched externally between insert and commit **halts** with the `stale` reason; the
-machine stays open; you resume it explicitly.
+A held file touched externally between insert and commit **halts** with the `stale` reason, the
+machine stays open, and you resume it explicitly.
 
 ## The transition table (one line per op)
 
@@ -58,29 +59,29 @@ machine stays open; you resume it explicitly.
 file=<selector> search=<name> op=<MODE> [with=<TEXT>] [mode=first|all|<count>]
 ```
 
-`MODE` is one of `replace`, `insert-after`, `insert-before`, `remove-line`, `append`, `prepend`.
+`MODE` is one of `replace`, `insert-after`, `insert-before`, `remove-line`, `append`, or `prepend`.
 
 Searches are named at open: `name=pattern` (literal) or `name=re:/pattern/flags` (simple regex, the
 v1 scope).
 
-Larger batches use the `opfile` escape hatch (a prepared file path, ingested line by line - no
+Larger batches use the `opfile` escape hatch (a prepared file path, ingested line by line, with no
 schema limit).
 
 ## The write path and the atomic gate
 
-Every write goes through **Factory.Write and nothing else**: explicit `replaceIfVersion` intent (the
-fresh-stat version guard), the `govern` actor marker so the event path skips the marked events, and
-the governed basenames (`package.json`, `Cargo.toml`) re-run through the factory's **direct** path
-exactly once per write.
+Every write goes through **Factory.Write and nothing else**: the explicit `replaceIfVersion` intent
+(the fresh-stat version guard), the `govern` actor marker so the event path skips the marked events,
+and the governed basenames (`package.json`, `Cargo.toml`) re-run through the factory's **direct**
+path exactly once per write.
 
-The gate is all-or-nothing on the apply loop: a planning failure halts or errors that file alone; a
-write failure stops the loop and returns the unwritten remainder to observed.
+The gate is all-or-nothing on the apply loop: a planning failure halts or errors that file alone,
+while a write failure stops the loop and returns the unwritten remainder to observed.
 
 A commit exceeding the in-line deadline (capped at 120000, the composition contract) continues as
-one background job and returns the typed `jobId`; the settle truth arrives through the jobs
+one background job and returns the typed `jobId`, and the settle truth arrives through the jobs
 subscription and the next `state` presentation.
 
-No plugin-owned timers anywhere.
+No plugin-owned timers exist anywhere.
 
 ## The policy block (D6) - the apply gate
 
@@ -99,8 +100,8 @@ The `commit` action consults `Decide(State.Allow, "write")` **before any plan or
 The shipped default is `write: approve`, so an apply is **refused** with the byte-exact
 `apply refused <id> (policy write=approve)` line (in the ledger and as the thrown error): nothing is
 read or written, the machine stays open with its cells `observed`, and the batch waits for the
-user's approval - the existing approve binding (flip `policy.write` to `auto`, or approve the batch
-through the batch-decision hook).
+user's approval through the existing approve binding (flip `policy.write` to `auto`, or approve the
+batch through the batch-decision hook).
 
 With `write: auto` the commit proceeds exactly as described above.
 
@@ -127,8 +128,8 @@ The ledger file defaults to `~/.dsh/playform/plugin-dsh-batch-edit.log` (one log
 
 ## The configuration
 
-Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
-ACTIVATE in the profile).
+The plugin ships **disabled** (`enabled: false`, the IDLE-forever posture), and it enables only by
+an explicit ACTIVATE in the profile.
 
 Every knob is volatile (hot-editable without remounting):
 
@@ -150,13 +151,13 @@ Every knob is volatile (hot-editable without remounting):
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
 tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
-The smoke folders: `Commit-And-Ops`, `Machine-And-Contract`, `Observers-And-Waterfalls`,
+The smoke folders are `Commit-And-Ops`, `Machine-And-Contract`, `Observers-And-Waterfalls`, and
 `Policy-Defaults`.
 
 ## The plan
 
-Classic PoC (source complete; the smoke suite, the build pass and the EffectTS twin are end-phase
-work - see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
+This is a Classic PoC (source complete; the smoke suite, the build pass, and the EffectTS twin are
+end-phase work, see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
 
 ## License
 

@@ -35,19 +35,20 @@ statuses:
 
 # BATCH EDIT TOOL - SUGGESTIONS + IMPROVEMENTS (R-BET-2) - THE HUB
 
-Date: 2026-10-20 Status: research agent R-BET-2 - the suggestions + improvements pass; the granular
-topic documents are the deliverables, this file is the hub Prepared by: the research agent R-BET-2
-(cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low) Routing law: every subagent = provider
-cloudflare-workers-ai / model @cf/zai-org/glm-5.3-flash / reasoningEffort low. Base:
-Documentation/Plans/TOMORROW-REVIEW.md (the live-containers v1 + wave 2 + wave 3 status; the user's
-batch-edit feature directive) + Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md +
+Date: 2026-10-20 Status: the research agent R-BET-2 and the suggestions + improvements pass; the
+granular topic documents are the deliverables, and this file is the hub Prepared by: the research
+agent R-BET-2 (cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low) Routing law: every subagent
+uses provider cloudflare-workers-ai / model @cf/zai-org/glm-5.3-flash / reasoningEffort low. Base:
+Documentation/Plans/TOMORROW-REVIEW.md (the live-containers v1 + wave 2 + wave 3 status and the
+batch-edit feature directive of the user) +
+Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md +
 Documentation/Archive/Live-Containers/Design/{IMPLEMENTATION-DESIGN,FILE-MONITORS-DESIGN,APPEND-SEAM,AWAIT-MARKER,COMPLETION-ERGONOMICS,PLANTED-LEASE,SUGGESTER-CONFIGURED}.md +
 Documentation/Plans/BATCH-STATE-PLUGIN.md. Note: the sibling research R-BET-1
-(BATCH-EDIT-TOOL-FEATURE.md) had NOT landed at write time (checked Documentation/Plans/ - absent).
-That document stands alone; the merge point with R-BET-1 is the residuals-and-merge-point document.
-Read-only discipline: the granular documents only. ASCII + tabs throughout. Thinking directive
-applied: think in paradigms; take the most reversed, counter-intuitive view - the file is not a
-byte-sequence, it is a PROCESS.
+(BATCH-EDIT-TOOL-FEATURE.md) had NOT landed at write time (checked Documentation/Plans/ and found it
+absent). That document stands alone, and the merge point with R-BET-1 is the
+residuals-and-merge-point document. Read-only discipline: the granular documents only. ASCII + tabs
+throughout. Thinking directive applied: think in paradigms and take the most reversed,
+counter-intuitive view, because the file is not a byte-sequence but a PROCESS.
 
 ---
 
@@ -64,14 +65,14 @@ byte-sequence, it is a PROCESS.
 
 ## 2. The sibling research
 
-R-BET-1 lives in the same folder as the granular set: the hub is
+R-BET-1 lives in the same folder as the granular set, and its hub is
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](BATCH-EDIT-TOOL-FEATURE.md) with its own 12 topic
-documents (the vision, the eviction, the schema, the state machine, the governance...). Read both -
-the why is shared.
+documents (the vision, the eviction, the schema, the state machine, and the governance). Read both,
+because the why is shared.
 
-The measured evidence both researches share:
+The measured evidence that both researches share is
 [Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md](Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md)
 
-- the cost of one-edit-at-a-time, the three mutation shapes and the refusal boundary. It is the
-  single owner of the figures; the rank 14 measurement (the calls replaced) is judged against it,
-  not against an assertion.
+- the cost of one-edit-at-a-time, the three mutation shapes, and the refusal boundary. It is the
+  single owner of the figures, so the rank 14 measurement (the calls replaced) is judged against it
+  and not against an assertion.

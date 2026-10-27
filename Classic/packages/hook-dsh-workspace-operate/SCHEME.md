@@ -14,9 +14,13 @@
 
 ## The types
 
-- `Outcome` - `{ status: "proposed" \| "refused", proposal?, refusal? }`; exactly one of proposal/refusal.
-- `Proposal` - `{ id: "<kind>-<seq>", kind, status: "proposed" \| "withdrawn", path, version (the fence), sequence, kind-specific fields }` (rename: `name`, `to`; connect: `from`, `target`, `edge`; replace: `span`, `content`).
-- `Refusal` - `{ kind, reason, detail }` with the frozen reason vocabulary in `Source/Interface/Refusal.ts`.
+- `Outcome` - `{ status: "proposed" \| "refused", proposal?, refusal? }`; exactly one of
+  proposal/refusal.
+- `Proposal` -
+  `{ id: "<kind>-<seq>", kind, status: "proposed" \| "withdrawn", path, version (the fence), sequence, kind-specific fields }`
+  (rename: `name`, `to`; connect: `from`, `target`, `edge`; replace: `span`, `content`).
+- `Refusal` - `{ kind, reason, detail }` with the frozen reason vocabulary in
+  `Source/Interface/Refusal.ts`.
 
 ## The resolution rules (in evaluation order)
 
@@ -30,11 +34,13 @@
 
 3. **The graph resolution.**
 
-    `unknown-symbol` / `name-collision` / `duplicate-edge` / `incompatible-edge` is the graph resolution.
+    `unknown-symbol` / `name-collision` / `duplicate-edge` / `incompatible-edge` is the graph
+    resolution.
 
 4. **The missing version.**
 
-    `missing-version` is the fence: the caller's version, else the hook's own observed version for the path; a version is never invented.
+    `missing-version` is the fence: the caller's version, else the hook's own observed version for
+    the path; a version is never invented.
 
 5. **The stale version.**
 
@@ -67,7 +73,8 @@ Invalid config fails loud at load.
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -76,11 +83,14 @@ The config carries the shared per-action allowlist (`policy: Policy()`, composed
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The hook's action class is SUGGEST, which is **automatic**: it records a typed proposal and never applies it.
+The hook's action class is SUGGEST, which is **automatic**: it records a typed proposal and never
+applies it.
 
-The package has **NO gated action** (no file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+The package has **NO gated action** (no file write, no batch commit, no spawn), so the block
+documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 No new ledger line: the package has no gated action.
 

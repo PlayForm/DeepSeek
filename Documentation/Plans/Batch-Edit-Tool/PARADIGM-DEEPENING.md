@@ -29,11 +29,13 @@ statuses:
 
 ---
 
-The default UNIX view: a file is a passive byte-sequence; the tools act ON it (stat, read, write,
-sed). The reversed view this feature adopts: every file on the system is a PROCESS in a lifecycle,
-halted by default; the developer/agent HOLDS the processes. The batch edit tool is then not a "text
-utility" - it is a PROCESS CONTROL SURFACE. This section draws out the full consequences so the
-implementation agent builds the type system first, not the string ops.
+The default UNIX view: a file is a passive byte-sequence and the tools act ON it (stat, read, write, and sed).
+
+The reversed view that this feature adopts: every file on the system is a PROCESS in a lifecycle, halted by default, and the developer or agent HOLDS the processes.
+
+The batch edit tool is then not a "text utility" but a PROCESS CONTROL SURFACE.
+
+This section draws out the full consequences, so the implementation agent builds the type system first and not the string ops.
 
 ## 1.0 THE WHY: the call-escape problem is the core motivation
 
@@ -48,10 +50,11 @@ thus ELIMINATING ENTIRELY the bash and other tools - using the agent harness's p
 - providing MANY MANY layers of control - a PLUGIN FOR EACH ONE - just like a government protects
   its people / halted processes."
 
-The core promise, drawn tight: EVERY file operation in the batch is a STATE TRANSITION the harness
-HOLDS. The edit call never escapes the environment - there is no syscall-shaped side door; the
-mutation is a transition inside a container the harness owns, presents (the live view), and controls
-(the layered governance). The consequences, ranked by how much they should shape the implementation:
+The core promise, drawn tight: EVERY file operation in the batch is a STATE TRANSITION that the harness HOLDS.
+
+The edit call never escapes the environment, because there is no syscall-shaped side door, and the mutation is a transition inside a container that the harness owns, presents (the live view), and controls (the layered governance).
+
+The consequences, ranked by how much they should shape the implementation:
 
     a. THE CALL-ESCAPE ELIMINATION is the metric. The old flow (the model
        writes sed/write calls that leave the session with only a stdout
@@ -79,7 +82,9 @@ mutation is a transition inside a container the harness owns, presents (the live
 
 ## 1.1 The Process<Halted> type system
 
-Every file the batch tool TOUCHES enters a typed lifecycle. The states:
+Every file that the batch tool TOUCHES enters a typed lifecycle.
+
+The states:
 
     Halted        the resting state; the file exists, is untouched, holds no
                   live claims. This is where sed/bash sees EVERY file.
@@ -111,7 +116,7 @@ The transitions (the state machine, typed):
     any       -> Halted           the release verb (the batch closes; the
                                   claims dissolve; the journal persists)
 
-The typed operations (the verbs the tool exposes, the reversed-UNIX set):
+The typed operations (the verbs that the tool exposes, which is the reversed-UNIX set):
 
     spawn(path)        claim a file into the batch (NOT "open")
     observe(path)      read-with-version (NOT "read": the result carries the
@@ -123,10 +128,11 @@ The typed operations (the verbs the tool exposes, the reversed-UNIX set):
                        (the commit verb - the ONLY verb that touches disk)
     release(path)      dissolve the claim (the process returns to Halted)
 
-The REVERSAL is precise: in UNIX, read/write happen immediately and the system is always mutated. In
-the process view, NOTHING touches the disk until merge. The default is halted-and-unmutated;
-mutation is the exceptional, explicit, journaled act. The bash-sed world inverts this (every byte is
-a mutation; nothing remembers).
+The REVERSAL is precise: in UNIX, read and write happen immediately and the system is always mutated.
+
+In the process view, NOTHING touches the disk until merge, so the default is halted-and-unmutated and mutation is the exceptional, explicit, and journaled act.
+
+The bash-sed world inverts this, because every byte is a mutation and nothing remembers.
 
 ## 1.2 The file as a living being: the metadata, the ownership, the process-tree
 
@@ -154,20 +160,18 @@ The process view gives each file MORE than content:
                    its indicator glyphs (! ~ x and the no-problem band) are
                    the file's vital signs, rendered in the prompt's live view
 
-The governance resonance: the family ALREADY gives files a pulse - the fs/observed chain, the
-governor, the pinner, the normalize family's version bump. The batch tool should ride that exact
-pulse: one merge = one fs/observed event burst = one governor pass over EVERY edit in the batch. The
-files were already processes in this family's event system; the batch tool just names it.
+The governance resonance: the family ALREADY gives files a pulse through the fs/observed chain, the governor, the pinner, and the version bump of the normalize family.
+
+The batch tool should ride that exact pulse, so one merge gives one fs/observed event burst and one governor pass over EVERY edit in the batch.
+
+The files were already processes in the event system of this family, and the batch tool just names it.
 
 ## 1.3 The implications for the tools: no stat/read/write
 
-The reversed-UNIX consequence for the implementation: the plugin should NOT expose a generic "file
-utility". It exposes the process-control verbs above, and the harness's existing read/write/edit
-tools remain the DEFAULT for the single-file case. The batch tool is the CONTAINER: the agent
-prepares the batch schema, inserts the files (spawn), the state machine processes them
-(match/transform/validate), and merge commits - like a code execution block where the language is
-"file operations" and the runtime is the plugin. The verb mapping discipline (per the G2/G5
-decisions in IMPLEMENTATION-DESIGN.md): the batch runs INSIDE the plugin's own tools/execute arm and
-the governed shell path only when a check needs a command; the content-mutating family
-(write/edit/raw-write/normalize-file) stays non-detachable - the batch is the policy-honoring
-caller, never the bypass.
+The reversed-UNIX consequence for the implementation: the plugin should NOT expose a generic "file utility".
+
+It exposes the process-control verbs above, and the existing read/write/edit tools of the harness remain the DEFAULT for the single-file case.
+
+The batch tool is the CONTAINER: the agent prepares the batch schema, inserts the files (spawn), the state machine processes them (match/transform/validate), and merge commits, like a code execution block where the language is "file operations" and the runtime is the plugin.
+
+The verb mapping discipline (per the G2/G5 decisions in IMPLEMENTATION-DESIGN.md): the batch runs INSIDE the own tools/execute arm of the plugin and the governed shell path only when a check needs a command, and the content-mutating family (write/edit/raw-write/normalize-file) stays non-detachable, because the batch is the policy-honoring caller and never the bypass.

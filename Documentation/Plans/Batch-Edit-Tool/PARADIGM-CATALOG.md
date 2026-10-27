@@ -20,8 +20,9 @@ statuses:
 
 ---
 
-The user's question: which paradigms are useful for managing such representations. Ranked for THIS
-design (1 = core, 2 = adopt in v1/v2, 3 = the later control layers):
+The question of the user: which paradigms are useful for managing such representations.
+
+Ranked for THIS design (1 = core, 2 = adopt in v1/v2, 3 = the later control layers):
 
 | Rank | Paradigm                                               | How it lands here                                                                                                                                                                |
 | ---- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

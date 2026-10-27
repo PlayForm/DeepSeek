@@ -135,6 +135,16 @@ conversation, and every activation is explicit.
 | Paraphrasing the spec in the report     | The parent cannot match work to spec   | Quote the spec's items |
 | Silently fixing a conflict              | The change is invisible to the parent  | Flag it in the report  |
 
+## The amendment that does nothing
+
+An amendment is a new instruction, and a reply that restates the previous report is not an execution
+of it. On 2026-10-27 a child received the compiler's errors with a request for a signature change
+and answered with the summary it had already sent; the file was untouched.
+
+A child that cannot act on an amendment says so in one line and names what blocks it. A child that
+acts reports the diff, not the summary. The parent checks the artifact either way, so the honest
+answer is also the cheap one.
+
 ## References
 
 | File                      | Covers                                             | Read when             |

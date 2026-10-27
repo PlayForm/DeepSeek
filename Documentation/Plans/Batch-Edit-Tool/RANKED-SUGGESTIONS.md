@@ -23,10 +23,9 @@ statuses:
 
 ---
 
-The ranking: (the paradigm correctness x the user's stated intent) first, the trust/rollback
-guarantees second, the ergonomics third, the deferred ambition last. The cost scale: S = the
-days-scale engine work on the existing patterns; M = a wave of its own (the new module + the storage
-domain or the section renderer + the smokes); L = the new machinery beyond the family's precedents.
+The ranking: (the paradigm correctness x the stated intent of the user) first, the trust and rollback guarantees second, the ergonomics third, and the deferred ambition last.
+
+The cost scale: S = the days-scale engine work on the existing patterns; M = a wave of its own (the new module plus the storage domain or the section renderer, plus the smokes); L = the new machinery beyond the precedents of the family.
 
     RANK  SUGGESTION                                           COST
     ----  ---------------------------------------------------  ----
@@ -93,12 +92,8 @@ domain or the section renderer + the smokes); L = the new machinery beyond the f
           not asserted - the harness-as-DSL adoption curve
           visible in the same ledger the governors hold.       S
 
-The baseline for rank 14 is the measured cost of one-edit-at-a-time in
-Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md: the per-mutation figure and the boundary
-arithmetic, not a guess. Its caveat binds the rank - no measured before/after exists until a batch
-tool actually runs, so the ledger records the calls replaced and the measurement follows the build.
+The baseline for rank 14 is the measured cost of one-edit-at-a-time in Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md, which gives the per-mutation figure and the boundary arithmetic and not a guess.
 
-The package shape suggestion: ONE plugin (hook-dsh-batch-edit + the ETS twin) following the
-hook-dsh-live-containers anatomy (the Config/Catalog/Apply/ Render split, the smokes as the arbiter,
-the ledger-string contract, the tabs discipline), NOT a bash-wrapper: the engine is in-container
-state, the shell is only the check runner's carrier.
+Its caveat binds the rank: no measured before/after exists until a batch tool actually runs, so the ledger records the calls replaced and the measurement follows the build.
+
+The package shape suggestion: ONE plugin (hook-dsh-batch-edit plus the ETS twin) that follows the anatomy of hook-dsh-live-containers (the Config/Catalog/Apply/Render split, the smokes as the arbiter, the ledger-string contract, and the tabs discipline) and NOT a bash-wrapper, because the engine is in-container state and the shell is only the carrier of the check runner.

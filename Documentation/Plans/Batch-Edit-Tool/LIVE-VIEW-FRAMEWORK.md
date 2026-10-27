@@ -20,11 +20,9 @@ statuses:
 
 ---
 
-What the live containers and the batch tool share, extracted into a separate package (the live-view
-framework style - the foundation for the layered control). In representation terms (the
-vision-and-representation document): the framework IS the substrate for MANAGING REPRESENTATIONS -
-the license flow, the reconciliation discipline, and the eviction rule are framework-level; each
-consumer plugin instantiates its own representation kind over it:
+This is what the live containers and the batch tool share, extracted into a separate package in the live-view framework style, which is the foundation for the layered control.
+
+In representation terms (the vision-and-representation document), the framework IS the substrate for MANAGING REPRESENTATIONS: the license flow, the reconciliation discipline, and the eviction rule are framework-level, and each consumer plugin instantiates its own representation kind over it.
 
 | Shared machinery                                                            | Lives in live containers today    | Framework extraction |
 | --------------------------------------------------------------------------- | --------------------------------- | -------------------- |
@@ -38,11 +36,8 @@ consumer plugin instantiates its own representation kind over it:
 | The lease (open/stale/close, rendered-once-then-withdrawn)                  | Board lease                       | `live-view/lease`    |
 | The fail-open waterfall discipline + the arming gate                        | Apply.ts patterns                 | `live-view/wiring`   |
 
-The framework is NOT a plugin - it is a LIBRARY package (`lib-dsh-live-view` per the naming
-discussion, or `@playform/lib-dsh-live-view`): no Config, no apply; the live containers and the
-batch edit tool (and every future control layer) depend on it and keep their OWN ledger strings,
-tools, and configs (the module-leaves-never-absorbed rule). The extraction order: build the batch
-tool against the live containers' patterns FIRST (no fork of shipped code), extract the framework
-SECOND once two consumers exist - the standard rule of three, adjusted to two by the family's parity
-discipline. The Classic and EffectTS variants each get the framework as a sibling package (the
-split-never-mixed rule).
+The framework is NOT a plugin but a LIBRARY package (`lib-dsh-live-view` per the naming discussion, or `@playform/lib-dsh-live-view`): it has no Config and no apply, and the live containers, the batch edit tool, and every future control layer depend on it and keep their OWN ledger strings, tools, and configs (the module-leaves-never-absorbed rule).
+
+The extraction order: build the batch tool against the patterns of the live containers FIRST (with no fork of shipped code) and extract the framework SECOND once two consumers exist, which is the standard rule of three adjusted to two by the parity discipline of the family.
+
+The Classic and EffectTS variants each get the framework as a sibling package (the split-never-mixed rule).

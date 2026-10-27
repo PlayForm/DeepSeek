@@ -235,6 +235,30 @@ On resume:
 | `ls`/`git status` on a lane's output     | The same wait in a different coat; no result       | Continue your own work; the report arrives   |
 | Monitoring a handover after a stand-down | The takeover is one check, not a watch             | Interrupt, stand down, check once, execute   |
 
+## What a report does not prove
+
+Three failures from 2026-10-27, each one a report that was accurate about intent and wrong about the
+tree.
+
+**A reply is not a diff.** A child was sent the compiler's two errors and asked for the signature
+fix. It replied with its previous summary - the same "created and changed" list - and the file on
+disk was unchanged. The parent read the reply, assumed the fix, rebuilt, and met the same two
+errors. A report that restates a previous report has done nothing; after any amendment the artifact
+is checked before the reply is believed.
+
+**The parent fixes compile-level breakage.** The non-execution law exists so the parent does not
+duplicate a lane's work, and it does not cover a two-line type mismatch discovered by the parent's
+own build. Re-dispatching a write-only lane for a signature costs a full lane cycle; the parent
+makes the fix, records it as the parent's, and re-runs the arbiter. The line is the size of the
+change, not the identity of the actor: a signature, a defaulted index access, or an off-by-one in a
+fixture is the parent's; a behavior change is the lane's.
+
+**Fan-out is not the two-active cap.** A workflow script seated three read-only lanes whose outputs
+were disjoint files, and all three finished without a throttle error. The cap governs the parent's
+messageable lanes, where the parent's own attention is the scarce resource; a script's phases are
+bounded by their file disjointness instead. The test is the same in both cases: can two lanes write
+the same file? If they can, serialize them.
+
 ## References
 
 | File                                       | Covers                                                  | Read when                          |

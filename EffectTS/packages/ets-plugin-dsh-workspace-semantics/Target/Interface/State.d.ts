@@ -1,8 +1,8 @@
-import type Adapter from "@Interface/Adapter.js";
-import type Deepening from "@Interface/Deepening.js";
-import type DomainHandle from "@Interface/Domain.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Model from "@Interface/Model.js";
+import type Adapter from "./Adapter.js";
+import type Deepening from "./Deepening.js";
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Model from "./Model.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */

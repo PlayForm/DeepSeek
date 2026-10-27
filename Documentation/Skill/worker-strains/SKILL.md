@@ -168,6 +168,21 @@ to the GLM tier.
 | Accepting "all tests pass"            | The tree may be broken                     | Read the printed totals         |
 | Executing the lane's work on feedback | Duplicates the lane; breaks the role split | Relay and verify read-only      |
 
+## The pre-supplied spec
+
+A lane that may not run commands cannot discover the compiler's strictness, so the spec supplies it.
+On 2026-10-27 two consecutive builds failed on the same class of error - an indexed access that is
+`T | undefined` under `noUncheckedIndexedAccess`, and a parameter whose type the caller did not
+match - because the spec described the behavior and left the types to the lane's imagination.
+
+The spec for a write-only lane carries, in addition to the six items: the strict flags the project
+compiles with, the exact signature of every function the lane must match, the exact strings it must
+emit, and the single arbiter command the parent will run. A lane that can run commands discovers all
+four by building; a lane that cannot must be told.
+
+The corollary is a limit on lane size: a write-only lane is worth one file that compiles, not ten
+that might. Split at the point where a build would have caught the mistake.
+
 ## References
 
 | File                            | Covers                                                   | Read when                   |

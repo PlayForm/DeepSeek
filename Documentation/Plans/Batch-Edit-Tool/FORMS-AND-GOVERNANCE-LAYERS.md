@@ -28,10 +28,13 @@ statuses:
 
 ## 1. The batch tool's nine forms
 
-The user's directive: break the tool into many different variants/forms. Each form is the SAME
-engine (the state machine + the registry + the journal) with a different lifecycle posture. The
-implementation should build the engine once and grow the forms as configurations, not as separate
-tools.
+The directive of the user: break the tool into many different variants and forms.
+
+Each form is the SAME engine (the state machine, the registry, and the journal) with a different
+lifecycle posture.
+
+The implementation should build the engine once and grow the forms as configurations and not as
+separate tools.
 
     1. THE ONE-SHOT SEARCH     spawn -> observe -> report -> release. No merge.
         The batch returns the match inventory (the per-file counts + the
@@ -72,26 +75,36 @@ tools.
         before every merge (the observe-stamp must match the merge-time
         version, else the file goes Errored with a typed conflict).
 
-The form matrix gives the implementation a growth path: forms 1, 3, 5, 6 are the v1 core (one
-engine, one tool); forms 2, 4, 9 are the wave-2 additions; forms 7, 8 reuse the live-containers
-monitor machinery verbatim (the M5 storage domain pattern: a NEW domain, never an extension record).
+The form matrix gives the implementation a growth path: forms 1, 3, 5, and 6 are the v1 core (one
+engine and one tool), forms 2, 4, and 9 are the wave-2 additions, and forms 7 and 8 reuse the
+monitor machinery of the live containers verbatim (the M5 storage domain pattern: a NEW domain and
+never an extension record).
 
 ### The demand the forms serve (and where the tool must refuse)
 
 The measured mutation runs fall into three shapes
 (Documentation/Plans/Batch-Edit-Tool/TRAJECTORY-EVIDENCE.md section 6): one edit across many files,
-many edits to one file, and one edit then verification then another edit. The first two are why
-forms 1, 2 and 5 exist. The third is the REFUSAL BOUNDARY: when the next edit depends on the
-previous result, a batch removes the feedback the agent needs. No form above may absorb that shape -
-the tool refuses the batch and leaves the agent on the single-file read/edit tools, which stay the
-fallback (the paradigm deepening document, 1.0.b). The refusal rule itself is an open question: the
-count of interleaved reads vs an explicit dependency marker (RESIDUALS.md item 8).
+many edits to one file, and one edit then verification then another edit.
+
+The first two are why forms 1, 2, and 5 exist.
+
+The third is the REFUSAL BOUNDARY: when the next edit depends on the previous result, a batch
+removes the feedback that the agent needs.
+
+No form above may absorb that shape, so the tool refuses the batch and leaves the agent on the
+single-file read/edit tools, which stay the fallback (the paradigm deepening document, 1.0.b).
+
+The refusal rule itself is an open question: the count of interleaved reads against an explicit
+dependency marker (RESIDUALS.md item 8).
 
 ## 2. THE GOVERNANCE LAYERS: the government of the halted processes
 
-The user's WHY names the end shape: MANY MANY layers of control, A PLUGIN FOR EACH ONE - "just like
-a government protects its people / halted processes." Each layer is a protection AROUND the process
-(the file), not a feature inside it. The layer set, ordered from the outermost to the innermost:
+The WHY of the user names the end shape: MANY MANY layers of control with A PLUGIN FOR EACH ONE,
+"just like a government protects its people / halted processes".
+
+Each layer is a protection AROUND the process (the file) and not a feature inside it.
+
+The layer set, ordered from the outermost to the innermost:
 
     1. THE OBSERVATION LAYER    the live view: every process's state,
        version, heartbeat and ledger are PRESENTED to the LLM without any
@@ -113,6 +126,8 @@ a government protects its people / halted processes." Each layer is a protection
        the governors hold. (The plugin layer: the fs/observed chain + the
        per-batch ledger lines.)
 
-The COMPOSITION rule: the layers are plugins (or plugin modules), not flags inside one monolith -
-each independently enabled, each fail-open on the family's pattern, each contributing its own ledger
-line. The government is the stack; the batch engine is the territory it governs.
+The COMPOSITION rule: the layers are plugins (or plugin modules) and not flags inside one monolith,
+so each one is independently enabled, each one fails open on the pattern of the family, and each one
+contributes its own ledger line.
+
+The government is the stack, and the batch engine is the territory that it governs.

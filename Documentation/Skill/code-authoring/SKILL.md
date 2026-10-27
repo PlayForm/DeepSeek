@@ -236,6 +236,21 @@ A failure is fixed before the next file, not reported as a residual.
 | Named exports spreading through the tree  | Uniformity decays; import sites multiply    | Anonymous defaults; contract only |
 | Abbreviations "just this once"            | The table becomes advisory                  | Full words, documented exceptions |
 
+## The moved tree
+
+A failed literal match is evidence about the file, not about your memory of it. On 2026-10-27 an
+edit failed with "file changed since it was read" on a document the session had written minutes
+earlier; another session had committed the tree and run a formatter over the same file, which
+rewrapped the frontmatter the edit was matching against.
+
+The procedure is the same in both cases and does not depend on knowing who moved it: re-read the
+exact span, retry the literal match, and if the span has genuinely changed, decide whether the
+change belongs to you before writing over it. Never force the match through the shell, and never
+restore the old bytes, because the other writer's change is not yours to revert.
+
+The related symptom is a `git status` that shows files you never touched. They are another session's
+work; stage only the step's files and leave the rest alone.
+
 ## References
 
 | File                                 | Covers                                                       | Read when                    |

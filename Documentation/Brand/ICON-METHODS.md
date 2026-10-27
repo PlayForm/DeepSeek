@@ -26,15 +26,16 @@ statuses:
 
 # ICON-METHODS.md - the motif library and the composition matrix
 
-`ICON-GRAMMAR.md` records what the reference motifs ARE and how the package genome is read. This
-file records HOW the generated icon is built: the motif families, the primitives, the slab model,
-and the matrix that turns a package's functional profile into design decisions.
+`ICON-GRAMMAR.md` records what the reference motifs ARE and how the reader reads the package genome.
+
+This file records HOW the build makes the generated icon: the motif families, the primitives, the
+slab model, and the matrix that turns the functional profile of a package into design decisions.
 
 The old method pool (`Method.mjs`) and the layer cube (`Matrix.mjs`, `Compose.mjs`) are retired.
 
-The generator no longer samples a method per layer; it infers a FUNCTIONAL PROFILE from the package
-source, passes the profile through a COMPOSITION MATRIX, and draws the resulting motif as a stack of
-slabs.
+The generator no longer samples a method for each layer, because it infers a FUNCTIONAL PROFILE from
+the package source, passes the profile through a COMPOSITION MATRIX, and draws the resulting motif
+as a stack of slabs.
 
 ## 1. The pipeline
 
@@ -54,7 +55,8 @@ package source
 
 A family is a construction grammar.
 
-`Order` is the symmetry the family receives; a family that does not use it is marked "fixed".
+`Order` is the symmetry that the family receives, and a family that does not use it is marked
+"fixed".
 
 | Family           | Form    | Construction                                                        | Order |
 | ---------------- | ------- | ------------------------------------------------------------------- | ----- |
@@ -75,7 +77,8 @@ A family is a construction grammar.
 
 ## 3. The primitives
 
-`Motif.mjs` builds every family from a small primitive set, all sampled as point lists.
+`Motif.mjs` builds every family from a small primitive set, and every primitive is sampled as a
+point list.
 
 | Primitive     | Shape                                                        |
 | ------------- | ------------------------------------------------------------ |
@@ -99,20 +102,20 @@ An icon is a stack of solid planes, not a pile of strokes and not an outline dra
 
 1. **The filled path.**
 
-    Every component is a FILLED path: a closed component fills its polygon (a solid face), an open
-    component fills its stroke envelope (a ribbon).
+    Every component is a FILLED path: a closed component fills its polygon (a solid face) and an
+    open component fills its stroke envelope (a ribbon).
 
 2. **The depth.**
 
-    Each component carries a depth; the scene paints in depth order, so an icon can have as many
+    Each component carries a depth, and the scene paints in depth order, so an icon can have as many
     layers as it has components (20-60 in the current set).
 
 3. **The occlusion.**
 
     An upper plane covers the lower one.
 
-    There is no contour pass: the drawing is carried by the planes, their tones, and their
-    occlusion.
+    There is no contour pass, because the planes, their tones, and their occlusion carry the
+    drawing.
 
 4. **The top view.**
 
@@ -125,15 +128,15 @@ The projection parameters come from the composition (`solid: { shrink, twist, ri
 released changelog version adds one further nested face (the "age" face), so history deepens the
 solid.
 
-Tones are per layer: frame `accent2`, body `ink`, detail `tint`, core `accent`.
+Tones are per layer: frame `accent2`, body `ink`, detail `tint`, and core `accent`.
 
 Mono uses one ink with per-layer opacity (frame 0.55, body 0.85, detail 0.3, core 0.7) plus
-per-feature opacity for the top face (0.55) and ribs (0.4); overlaps darken, so the stack reads as
-an embossed solid.
+per-feature opacity for the top face (0.55) and the ribs (0.4), and overlaps darken, so the stack
+reads as an embossed solid.
 
 ## 5. The composition matrix
 
-`Composition.mjs` maps a profile to design decisions. It is pure and deterministic.
+`Composition.mjs` maps a profile to design decisions, and it is pure and deterministic.
 
 ### 5.1 Role -> form -> candidate families
 
@@ -160,7 +163,7 @@ an embossed solid.
 
 ## 6. The compatibility rules
 
-The matrix does not randomise attributes independently; it applies rules and records them.
+The matrix does not randomise attributes independently, because it applies rules and records them.
 
 | Rule                           | Trigger                           | Effect                   |
 | ------------------------------ | --------------------------------- | ------------------------ |
@@ -173,8 +176,8 @@ The matrix does not randomise attributes independently; it applies rules and rec
 
 ## 7. The semantic layers
 
-The profile chooses the form; the package's own tokens attach the layers, so a visual feature exists
-only when the code fact does.
+The profile chooses the form, and the tokens of the package attach the layers, so a visual feature
+exists only when the code fact does.
 
 | Token       | Layer  | Drawn as                                         |
 | ----------- | ------ | ------------------------------------------------ |
@@ -192,7 +195,7 @@ only when the code fact does.
 
 ## 8. Verification
 
-Six arbiters, all deterministic and dependency-free.
+Six arbiters, and all of them are deterministic and dependency-free.
 
 | Arbiter                        | Proves                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------- |
@@ -212,9 +215,9 @@ boundary-driven stroke class, the raster analysis pipeline that proposes constru
 reference sheet, candidate generation with constraint selection, small-size render profiles, and the
 local repair loop.
 
-They are recorded in `Reference/Curated/COMPOSITION-MODEL.md` and
-`Reference/Curated/REVERSE-ENGINEERING.md`.
+`Reference/Curated/COMPOSITION-MODEL.md` and `Reference/Curated/REVERSE-ENGINEERING.md` record them.
 
 ---
 
-_The profile supplies the sentence; the matrix supplies the grammar; the slab stack is the icon._
+_The profile supplies the sentence, the matrix supplies the grammar, and the slab stack is the
+icon._

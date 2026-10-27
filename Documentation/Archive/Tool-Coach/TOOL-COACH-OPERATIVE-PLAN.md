@@ -22,13 +22,17 @@ statuses:
 
 Status: operative plan (Part 3 of the tool-coach research trio).
 
-It completes `TOOL-COACH-RESEARCH.md` + `TOOL-COACH-PLAN.md` in this directory, and it is dated 2026-10-19.
+It completes `TOOL-COACH-RESEARCH.md` + `TOOL-COACH-PLAN.md` in this directory, and it is dated
+2026-10-19.
 
-It is the coder's primary spec for (a) the granular tool ↔ shell-alternative map and (b) the dynamic-fetch instruction engine.
+It is the coder's primary spec for (a) the granular tool ↔ shell-alternative map and (b) the
+dynamic-fetch instruction engine.
 
 EVERY claim is anchored `file:line`.
 
-Harness docs live at `/Users/nikola/Developer/Documentation/Module/deepseek-harness/docs/`, where `catalog.md` = `tool-catalog.md`, `tools.md` = `subsystems/tools.md`, `pipeline.md` = `tool-execution-pipeline.md`, and `cookbook.md` = `cookbook/extension-cookbook.md`.
+Harness docs live at `/Users/nikola/Developer/Documentation/Module/deepseek-harness/docs/`, where
+`catalog.md` = `tool-catalog.md`, `tools.md` = `subsystems/tools.md`, `pipeline.md` =
+`tool-execution-pipeline.md`, and `cookbook.md` = `cookbook/extension-cookbook.md`.
 
 ---
 
@@ -38,41 +42,65 @@ Harness docs live at `/Users/nikola/Developer/Documentation/Module/deepseek-harn
 
 1. **The registration.**
 
-    A tool plugin registers a `ToolDefinition` via `ctx.tools.register()` (`tools.md:33-37`): the model-facing `ToolSchema` **plus** execution-only fields `output`, `execute`, `projectContent`, `finalizeContent`, `timeoutMs`, `isConcurrencySafe`, `presentCall`, `presentResult` (`tools.md:27-79`).
+    A tool plugin registers a `ToolDefinition` via `ctx.tools.register()` (`tools.md:33-37`): the
+    model-facing `ToolSchema` **plus** execution-only fields `output`, `execute`, `projectContent`,
+    `finalizeContent`, `timeoutMs`, `isConcurrencySafe`, `presentCall`, `presentResult`
+    (`tools.md:27-79`).
 
 2. **The projection.**
 
-    The registry projects the model-visible set with `schemas(scope?: ScopeKey): ToolSchema[]` - "Project visible definitions onto the allowlisted model-facing schema fields ... one deep-cloned schema per visible tool" (`tools.md:563-570`).
+    The registry projects the model-visible set with `schemas(scope?: ScopeKey): ToolSchema[]` -
+    "Project visible definitions onto the allowlisted model-facing schema fields ... one deep-cloned
+    schema per visible tool" (`tools.md:563-570`).
 
-    The allowlist is explicit: `output`/`execute`/`projectContent`/`finalizeContent`/`timeoutMs`/`isConcurrencySafe`/`presentCall`/`presentResult` "must never leak into a model request" (`tools.md:11`), and `schemas()` "whitelists only name/description/parameters" (`tools.md:79-84`).
+    The allowlist is explicit:
+    `output`/`execute`/`projectContent`/`finalizeContent`/`timeoutMs`/`isConcurrencySafe`/`presentCall`/`presentResult`
+    "must never leak into a model request" (`tools.md:11`), and `schemas()` "whitelists only
+    name/description/parameters" (`tools.md:79-84`).
 
 3. **The schema shape.**
 
-    `ToolSchema` is exactly three (+1) fields, live-verified via the host Service inspect provider with method `listService`, input `{"service":"tools"}`, and `referencedTypes.ToolSchema`: `{ deferLoading?: true; name: string; description: string; parameters: Record<string, unknown> }`.
+    `ToolSchema` is exactly three (+1) fields, live-verified via the host Service inspect provider
+    with method `listService`, input `{"service":"tools"}`, and `referencedTypes.ToolSchema`:
+    `{ deferLoading?: true; name: string; description: string; parameters: Record<string, unknown> }`.
 
 4. **The service access.**
 
-    Plugin code reaches the service by `ctx.get("tools")`, which is optional and requires an undefined check, or by the hard dependency `inject: ['tools']` → `ctx.tools` (live-verified, same query, `access` block).
+    Plugin code reaches the service by `ctx.get("tools")`, which is optional and requires an
+    undefined check, or by the hard dependency `inject: ['tools']` → `ctx.tools` (live-verified,
+    same query, `access` block).
 
     The coach uses `inject: ['tools']`, and §3.1 covers the fetch-failure fallback.
 
 5. **The visibility.**
 
-    Visibility is per-scope: "Scoped registrations shadow globals; one visibility resolver feeds presentation, lookup, and dispatch" (`tools.md:506-508`).
+    Visibility is per-scope: "Scoped registrations shadow globals; one visibility resolver feeds
+    presentation, lookup, and dispatch" (`tools.md:506-508`).
 
-    `restrict()` masks globals per agent scope (`tools.md:33-38`), and `tools/change` fires on any registration or restriction change, because "a global change concerns every agent's next assembly" (`tools.md:608-610`).
+    `restrict()` masks globals per agent scope (`tools.md:33-38`), and `tools/change` fires on any
+    registration or restriction change, because "a global change concerns every agent's next
+    assembly" (`tools.md:608-610`).
 
-    Consequence: the model-visible tool set is DYNAMIC per agent and over time, which is why the engine fetches live schemas instead of hardcoding a table (Part 3).
+    Consequence: the model-visible tool set is DYNAMIC per agent and over time, which is why the
+    engine fetches live schemas instead of hardcoding a table (Part 3).
 
-6. **The dispatch pipeline** (`pipeline.md:6-63`): `tool/call` event → `tools/pre-execute` waterfall (allow/deny/cancel/ask) → monotonic `ctx.tools.guard()` → `tools/execute` around-dispatch → tool body → tool-owned events (`fs/write-intent`, `fs/edit-intent`, `fs/observed`, `todo/write`) → `projectContent` → `tools/post-execute` waterfall → `finalizeContent` → `tools/result` → additionalContexts injected as user messages after the recorded results (`pipeline.md:26,60`), with denials skipping the body (`pipeline.md:15`).
+6. **The dispatch pipeline** (`pipeline.md:6-63`): `tool/call` event → `tools/pre-execute` waterfall
+   (allow/deny/cancel/ask) → monotonic `ctx.tools.guard()` → `tools/execute` around-dispatch → tool
+   body → tool-owned events (`fs/write-intent`, `fs/edit-intent`, `fs/observed`, `todo/write`) →
+   `projectContent` → `tools/post-execute` waterfall → `finalizeContent` → `tools/result` →
+   additionalContexts injected as user messages after the recorded results (`pipeline.md:26,60`),
+   with denials skipping the body (`pipeline.md:15`).
 
 7. **The PTC caveat.**
 
-    Sub-calls "omit `additionalContexts` to preserve call/result adjacency" (`pipeline.md:63`), so tier 2 is the carrier in PTC mode (RESEARCH §8.2, confirmed here).
+    Sub-calls "omit `additionalContexts` to preserve call/result adjacency" (`pipeline.md:63`), so
+    tier 2 is the carrier in PTC mode (RESEARCH §8.2, confirmed here).
 
 8. **The catalog generation.**
 
-    The tool catalog is itself generated by BOOTING each tool plugin and reading `ctx.tools.schemas()`, "because a tool schema is not statically knowable (runtime-spread enums, concatenated descriptions, config-driven names, raw-JSON-Schema MCP tools)" (`catalog.md:8`).
+    The tool catalog is itself generated by BOOTING each tool plugin and reading
+    `ctx.tools.schemas()`, "because a tool schema is not statically knowable (runtime-spread enums,
+    concatenated descriptions, config-driven names, raw-JSON-Schema MCP tools)" (`catalog.md:8`).
 
     That is the same reason the coach's notes must be fetched, not hardcoded.
 
@@ -80,31 +108,38 @@ Harness docs live at `/Users/nikola/Developer/Documentation/Module/deepseek-harn
 
 LIVE cross-check: the host `Tool.listTools` inspect query matches these descriptions verbatim.
 
-Style: imperative, capability-first, with parameters carrying one-line descriptions and enums inline.
+Style: imperative, capability-first, with parameters carrying one-line descriptions and enums
+inline.
 
-(`web_search` "Search the web for current information. Returns an optional summary answer and a list of source URLs.", `catalog.md:2800-2802`; `present`, `catalog.md:696-698`; `skill`, `catalog.md:1809-1811` - quoted in Part 2/3 where used.)
+(`web_search` "Search the web for current information. Returns an optional summary answer and a list
+of source URLs.", `catalog.md:2800-2802`; `present`, `catalog.md:696-698`; `skill`,
+`catalog.md:1809-1811` - quoted in Part 2/3 where used.)
 
 | Tool        | Catalog anchor         | Exact model-facing description (verbatim)                                                                                                                                                          |
 | ----------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `read`      | `catalog.md:1036-1038` | "Read a UTF-8 text file and return line-numbered content."                                                                                                                                         |
 | `write`     | `catalog.md:1086-1088` | "Create or fully replace a UTF-8 text file."                                                                                                                                                       |
 | `edit`      | `catalog.md:1001`      | "Edit an existing UTF-8 text file by replacing literal text." (params: "Literal text to replace." / "Literal replacement text. Use an empty string to delete the match." - `catalog.md:1008-1012`) |
-| `glob`      | `catalog.md:1118-1120` | "Find files, not directories, whose paths match a glob pattern, including hidden and ignored files. Returns up to 100 paths in modification-time order ..."                                          |
-| `grep`      | `catalog.md:1143-1145` | "Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file ..."                                                                              |
-| `bash`      | `catalog.md:652-654`   | "Execute a bash command (`bash -c`) and return its stdout/stderr. Each call runs in a fresh shell; pass `workdir` instead of using `cd` ..."                                                         |
+| `glob`      | `catalog.md:1118-1120` | "Find files, not directories, whose paths match a glob pattern, including hidden and ignored files. Returns up to 100 paths in modification-time order ..."                                        |
+| `grep`      | `catalog.md:1143-1145` | "Search file contents with a ripgrep regular expression. Returns matching lines with line numbers, grouped by file ..."                                                                            |
+| `bash`      | `catalog.md:652-654`   | "Execute a bash command (`bash -c`) and return its stdout/stderr. Each call runs in a fresh shell; pass `workdir` instead of using `cd` ..."                                                       |
 | `web_fetch` | `catalog.md:2779-2781` | "Fetch the content of a specific HTTP(S) URL and return it decoded to text."                                                                                                                       |
 
-Note: `web_fetch`/`web_search` "keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps" (`catalog.md:2824`).
+Note: `web_fetch`/`web_search` "keep provider selection behind ctx.web so model-visible schemas stay
+stable across backend swaps" (`catalog.md:2824`).
 
-Fetched descriptions are deployment-stable, which keeps cached sections honest, and `bash` documents truncation + spill behavior (`catalog.md:652-654`).
+Fetched descriptions are deployment-stable, which keeps cached sections honest, and `bash` documents
+truncation + spill behavior (`catalog.md:652-654`).
 
 Read returns line-numbered content directly, with NO spill round-trip.
 
-`job_output` (`catalog.md:2240`), `todo_write` (`catalog.md:2565`), `skill` (`catalog.md:1809-1811`), and `present` (`catalog.md:696-698`) complete the live registry set.
+`job_output` (`catalog.md:2240`), `todo_write` (`catalog.md:2565`), `skill`
+(`catalog.md:1809-1811`), and `present` (`catalog.md:696-698`) complete the live registry set.
 
 ### 1.3 Why we prevent shell content-mutation (the traceability argument)
 
-Quote, `Documentation/Skill/code-authoring/SKILL.md:39-46` (family repo, `/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/`):
+Quote, `Documentation/Skill/code-authoring/SKILL.md:39-46` (family repo,
+`/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/`):
 
 > 7. **THE MECHANISM RATIONALE (user-mandated 2026-10-03): terminal file edits are invisible to the
 >    plugin system.** The harness's `fs/observed` chain - the trigger of the governor, pinner, and
@@ -113,15 +148,22 @@ Quote, `Documentation/Skill/code-authoring/SKILL.md:39-46` (family repo, `/Volum
 >    no governance, no pinning, no ledger line. Using the write/edit tools IS the plugin usage -
 >    every agent edit becomes a real governed event.
 
-What the governance chain sees vs doesn't: the pipeline records `fs/write-intent` / `fs/edit-intent` for tool-fs mutations and `fs/observed` after successful file operations (`catalog.md:32` package row).
+What the governance chain sees vs doesn't: the pipeline records `fs/write-intent` / `fs/edit-intent`
+for tool-fs mutations and `fs/observed` after successful file operations (`catalog.md:32` package
+row).
 
-A bash `sed -i`/`python -c` write produces NONE of these events, because it executes below the tool layer (`pipeline.md:6`).
+A bash `sed -i`/`python -c` write produces NONE of these events, because it executes below the tool
+layer (`pipeline.md:6`).
 
-The mandate continues: "The discipline above must NOT depend on the model's understanding or memory of this skill. It must become MODEL-INDEPENDENT, enforced by the plugin system itself" (`code-authoring/SKILL.md:66-69`).
+The mandate continues: "The discipline above must NOT depend on the model's understanding or memory
+of this skill. It must become MODEL-INDEPENDENT, enforced by the plugin system itself"
+(`code-authoring/SKILL.md:66-69`).
 
-The coach (tier 1 notes + tier 3 deny, the guardian's Mode A, `code-authoring/SKILL.md:73-79`) is exactly that realization.
+The coach (tier 1 notes + tier 3 deny, the guardian's Mode A, `code-authoring/SKILL.md:73-79`) is
+exactly that realization.
 
-The read side matters equally: `task-routing/SKILL.md:165-170` (quoted in RESEARCH §3) forbids terminal content reads, because their output is un-line-numbered, un-spilled, and ungoverned.
+The read side matters equally: `task-routing/SKILL.md:165-170` (quoted in RESEARCH §3) forbids
+terminal content reads, because their output is un-line-numbered, un-spilled, and ungoverned.
 
 Habitual terminal reads are the FIRST step back to edits.
 
@@ -129,43 +171,54 @@ Habitual terminal reads are the FIRST step back to edits.
 
 The full harness toolset that the notes point at (live registry + `catalog.md:16-50` package map).
 
-**Content I/O** `read`, `read_image`, `write`, `edit`, `str_replace_editor` (`catalog.md:895`; absent in this deployment, another reason to fetch live).
+**Content I/O** `read`, `read_image`, `write`, `edit`, `str_replace_editor` (`catalog.md:895`;
+absent in this deployment, another reason to fetch live).
 
-**Search/discovery** `glob`, `grep` (`catalog.md:33`, packaged ripgrep via ctx.subprocess, "no host `rg` install and no shell layer").
+**Search/discovery** `glob`, `grep` (`catalog.md:33`, packaged ripgrep via ctx.subprocess, "no host
+`rg` install and no shell layer").
 
-**Terminal** `bash`, `pwsh` (`catalog.md:25,27`), `terminal_*` (opt-in, `catalog.md:34`), `working_directory`.
+**Terminal** `bash`, `pwsh` (`catalog.md:25,27`), `terminal_*` (opt-in, `catalog.md:34`),
+`working_directory`.
 
-**Background** `run_in_background` + `job_list`/`job_output`/`job_kill` (`catalog.md:43`, "the kind-agnostic background-job controller").
+**Background** `run_in_background` + `job_list`/`job_output`/`job_kill` (`catalog.md:43`, "the
+kind-agnostic background-job controller").
 
 **Web** `web_fetch`, `web_search`.
 
-**Process/coordination** `subagent`, `subagent_fork`, `send_message`, `interrupt_agent`, `list_agents`, `list_subagent_models`, `workflow`, `todo_write`, `skill`, `ask_user_question`, `exit_plan_mode`, `create_goal`/`get_goal`/`update_goal`, `schedule_*`, `present`, `plugin_manager`, `cordis_inspect_list/query`, `lsp`, `session_*` query tools, `load_workspace_dependencies`.
+**Process/coordination** `subagent`, `subagent_fork`, `send_message`, `interrupt_agent`,
+`list_agents`, `list_subagent_models`, `workflow`, `todo_write`, `skill`, `ask_user_question`,
+`exit_plan_mode`, `create_goal`/`get_goal`/`update_goal`, `schedule_*`, `present`, `plugin_manager`,
+`cordis_inspect_list/query`, `lsp`, `session_*` query tools, `load_workspace_dependencies`.
 
-This inventory is what tier 2's persistent section compresses: fetched, NOT copied into the bundle source (Part 3).
+This inventory is what tier 2's persistent section compresses: fetched, NOT copied into the bundle
+source (Part 3).
 
 ---
 
 ## PART 2 - THE GRANULAR MAP (tool ↔ shell-alternative)
 
-Boundary rule (`task-routing/SKILL.md:165-170` + `code-authoring/SKILL.md:25-32`): **The terminal runs COMMANDS; the tools handle CONTENT.**
+Boundary rule (`task-routing/SKILL.md:165-170` + `code-authoring/SKILL.md:25-32`): **The terminal
+runs COMMANDS; the tools handle CONTENT.**
 
-ANY bash segment that (a) reads file content into the conversation or (b) mutates file content on disk is a regression class match.
+ANY bash segment that (a) reads file content into the conversation or (b) mutates file content on
+disk is a regression class match.
 
 Everything else is legitimate bash and is NEVER counted.
 
-`judgeTools` limits judging to terminal tools, and dedicated tools are NEVER judged (PLAN §1, RESEARCH §4).
+`judgeTools` limits judging to terminal tools, and dedicated tools are NEVER judged (PLAN §1,
+RESEARCH §4).
 
 ### 2.1 Write class (tier 1 note + tier 3 deny when `enforce: 'write'`)
 
-| Harness tool                                                 | Shell/CLI alternatives (default regexes)                                            | Class | Note text (template ref)                                                                                        |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------- |
-| `write` / `edit`                                             | `sed -i`                                                                            | write | `${command} is forbidden for file content - use the edit tool (`sed -i` also bypasses fs/observed governance).` |
-| `write` / `edit`                                             | `perl -pi`, `perl -e.*-i\b`, `perl .*-i\b`                                          | write | same shape                                                                                                      |
+| Harness tool                                                 | Shell/CLI alternatives (default regexes)                                                | Class | Note text (template ref)                                                                                        |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------- |
+| `write` / `edit`                                             | `sed -i`                                                                                | write | `${command} is forbidden for file content - use the edit tool (`sed -i` also bypasses fs/observed governance).` |
+| `write` / `edit`                                             | `perl -pi`, `perl -e.*-i\b`, `perl .*-i\b`                                              | write | same shape                                                                                                      |
 | `write` / `edit`                                             | `awk` with `> <file>` or `awk '...{print...}' <file>`                                   | write | use edit (reconstruct via read) or write                                                                        |
 | `write` / `edit`                                             | `echo/printf ... > <file>`, `... >> <file>`, `tee [-a]` (path operand or `> file` tail) | write | use edit/write (append: read + edit)                                                                            |
-| `write` / `edit`                                             | `cat <<'?'\w*EOF'\w* >>? *<file>` heredoc-to-file                                   | write | heredoc surgery is the 2026-10-03 incident class (`code-authoring/SKILL.md:51-54`)                              |
-| `write` / `edit`                                             | `python[0-9.]* -c` with `open\([^)]*['"]w`, `['"]a\+?`, `shutil`, `Path(.*\.write_` | write | python in-place patches are the recorded live incident                                                          |
-| `write` / `edit`                                             | `truncate -s`, `dd .*of=<file>`                                                     | write | use write (full replacement)                                                                                    |
+| `write` / `edit`                                             | `cat <<'?'\w*EOF'\w* >>? *<file>` heredoc-to-file                                       | write | heredoc surgery is the 2026-10-03 incident class (`code-authoring/SKILL.md:51-54`)                              |
+| `write` / `edit`                                             | `python[0-9.]* -c` with `open\([^)]*['"]w`, `['"]a\+?`, `shutil`, `Path(.*\.write_`     | write | python in-place patches are the recorded live incident                                                          |
+| `write` / `edit`                                             | `truncate -s`, `dd .*of=<file>`                                                         | write | use write (full replacement)                                                                                    |
 | normalize-file (family hook, rides write/edit - RESEARCH §4) | `sed -i 's/x/y/g'`, `perl -pi -e 's/.../.../g'` character replacements                  | write | use edit (literal replace validates the match); normalize-file then runs on the tool-layer write                |
 
 ### 2.2 Read class
@@ -181,7 +234,7 @@ Everything else is legitimate bash and is NEVER counted.
 | Harness tool    | Shell/CLI alternatives                                                                        | Class  | Note text                                                                  |
 | --------------- | --------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------- |
 | `grep`          | `grep -rn`, `grep -n <pattern> <path>`, `egrep`, `rg`, `ack`, `ag`, `sift` on workspace paths | search | use the grep tool - grouped, capped, spill-backed (`catalog.md:1143-1145`) |
-| `grep` / `glob` | `find <dir> ( -name \| -path ) ...`                                                             | search | glob for names (`catalog.md:1118`), grep for content predicates            |
+| `grep` / `glob` | `find <dir> ( -name \| -path ) ...`                                                           | search | glob for names (`catalog.md:1118`), grep for content predicates            |
 
 ### 2.4 Discovery & control classes (strike + tier-1 note at threshold;
 
@@ -195,7 +248,7 @@ Discovery is note-only and harmless, because flagging it hard would dilute the w
 | `working_directory`                                   | `pwd`, `cd <dir>` (in a bash call)                   | discovery | the working_directory tool keeps shells/processes correct (`catalog.md:2615-2617`)              |
 | `web_fetch`                                           | `curl <url>`, `wget -qO-` **for content fetches**    | discovery | web_fetch decodes/truncates consistently                                                        |
 | `web_search`                                          | nothing clean                                        | discovery | no shell alternative exists - say so explicitly                                                 |
-| `job_*` (`catalog.md:2202-2272`)                      | `nohup ... &`, `screen`, `tmux`, `disown`              | control   | run_in_background + job_output/job_kill (`catalog.md:656-666`)                                  |
+| `job_*` (`catalog.md:2202-2272`)                      | `nohup ... &`, `screen`, `tmux`, `disown`            | control   | run_in_background + job_output/job_kill (`catalog.md:656-666`)                                  |
 | `schedule_*` (`catalog.md:1437-1598`)                 | `cron`, `at`, `launchctl`                            | control   | schedule_create supports after_seconds/at/every_seconds/daily/weekly/cron                       |
 | `plugin_manager` (`catalog.md:56-58`)                 | `npm install -g`, manual `node_modules` surgery      | control   | installs bundles with version gating + approval                                                 |
 | `ccr_retrieve` (family hook; not in every deployment) | `grep -n <hash> <ccr.db>`, `sqlite3 <ledger>`        | search    | the ccr ledger is queryable through the family tool - shell DB reads bypass the ledger contract |
@@ -203,25 +256,33 @@ Discovery is note-only and harmless, because flagging it hard would dilute the w
 
 ### 2.6 The LEGITIMATE bash classes (never flagged - `exemptPatterns` defaults)
 
-Verified against the family's own discipline (`task-routing/SKILL.md:165-170`, `code-authoring/SKILL.md:25-32`, RESEARCH §4).
+Verified against the family's own discipline (`task-routing/SKILL.md:165-170`,
+`code-authoring/SKILL.md:25-32`, RESEARCH §4).
 
-**1. Builds/tests/package managers**: `pnpm`, `npm`, `npx`, `node`, `tsc`, `esbuild`, `vite`, `pytest`, `cargo`, `make`, `ctest`, `go build/test`, `swift build`.
+**1. Builds/tests/package managers**: `pnpm`, `npm`, `npx`, `node`, `tsc`, `esbuild`, `vite`,
+`pytest`, `cargo`, `make`, `ctest`, `go build/test`, `swift build`.
 
 **2. VCS**: ANY `git <op>` (`code-authoring/SKILL.md:33`).
 
-**3. Process/network/data CLIs**: `curl` for **API calls** (vs web_fetch for content pages), `ssh`, `sqlite3` for family DBs, `docker`, `ps`, `kill`, `lsof`, `systemctl`/`launchctl`.
+**3. Process/network/data CLIs**: `curl` for **API calls** (vs web_fetch for content pages), `ssh`,
+`sqlite3` for family DBs, `docker`, `ps`, `kill`, `lsof`, `systemctl`/`launchctl`.
 
-**4. File metadata & lifecycle** (NO tool equivalent or explicitly permitted): `ls <path>` (single-level), `stat`, `du`, `df`, `rm` ("deletions via `rm` are permitted", `code-authoring/SKILL.md:32`), `mkdir`, `rmdir`, `cp`, `mv`, `chmod`, `touch`, `ln`.
+**4. File metadata & lifecycle** (NO tool equivalent or explicitly permitted): `ls <path>`
+(single-level), `stat`, `du`, `df`, `rm` ("deletions via `rm` are permitted",
+`code-authoring/SKILL.md:32`), `mkdir`, `rmdir`, `cp`, `mv`, `chmod`, `touch`, `ln`.
 
-**5. Pipes headed by an exempt command**: `pnpm build | tail -20`, `git log | grep refactor`, where the head command's class dominates.
+**5. Pipes headed by an exempt command**: `pnpm build | tail -20`, `git log | grep refactor`, where
+the head command's class dominates.
 
 ONLY a segment whose HEAD is a content-class command is judged.
 
-**Borderline cases (explicit):** `grep -rn <x> .` for repo exploration → search strike, because the grep tool is better (grouped, capped, spill-backed).
+**Borderline cases (explicit):** `grep -rn <x> .` for repo exploration → search strike, because the
+grep tool is better (grouped, capped, spill-backed).
 
 `... | grep <x>` with exempt head → exempt (rule 5).
 
-`cat package.json` → read strike, with no "quick cat" carve-out, because that carve-out IS the regression slope.
+`cat package.json` → read strike, with no "quick cat" carve-out, because that carve-out IS the
+regression slope.
 
 `cat f.json | jq` → exempt, because data transformation needs stdin; bare `ls` → exempt.
 
@@ -229,28 +290,36 @@ ONLY a segment whose HEAD is a content-class command is judged.
 
 `python script.py` → exempt; `python -c '...'` reading/writing files → the matched class.
 
-Segment-aware matching stays as in PLAN §5 Detect: split on `&&`, `||`, `;`, `|` outside quotes/heredocs, skip heredoc bodies, append patternTable rows after DEFAULT_PATTERNS, and let exemptPatterns win FIRST (fail-open, PLAN §2).
+Segment-aware matching stays as in PLAN §5 Detect: split on `&&`, `||`, `;`, `|` outside
+quotes/heredocs, skip heredoc bodies, append patternTable rows after DEFAULT_PATTERNS, and let
+exemptPatterns win FIRST (fail-open, PLAN §2).
 
 ### 2.7 ADVERSARIAL DETECTION (parent amendment - never exact-match only)
 
-LLMs get crafty and invent advanced/obfuscated forms, so detection is NORMALIZATION + INTENT MARKERS + CATCH-ALL, and the pattern table is ONE input, NOT the authority.
+LLMs get crafty and invent advanced/obfuscated forms, so detection is NORMALIZATION + INTENT
+MARKERS + CATCH-ALL, and the pattern table is ONE input, NOT the authority.
 
 **(a) Command normalization** (before any matching, `Function/Normalize.ts`).
 
-Strip quote layers (`'x'`, `"x"`, `\x`), collapse whitespace, lowercase the command word, decode `$IFS`→space, expand `$VAR`/`${VAR}` to a `«var»` marker (treated as a path if adjacent to `>`/`|`), replace `$(...)`/backtick bodies with `«sub»` (keeping the inside normalizing), and mark chain boundaries `; && || & |` plus heredoc start/end.
+Strip quote layers (`'x'`, `"x"`, `\x`), collapse whitespace, lowercase the command word, decode
+`$IFS`→space, expand `$VAR`/`${VAR}` to a `«var»` marker (treated as a path if adjacent to `>`/`|`),
+replace `$(...)`/backtick bodies with `«sub»` (keeping the inside normalizing), and mark chain
+boundaries `; && || & |` plus heredoc start/end.
 
-Chained segments are classified INDIVIDUALLY, so `cat a; sed -i ...` yields ONE read match and ONE write match.
+Chained segments are classified INDIVIDUALLY, so `cat a; sed -i ...` yields ONE read match and ONE
+write match.
 
-**(b) Intent-marker scan** (class determined by markers, NOT vocabulary, and the craft library below all resolves through this):
+**(b) Intent-marker scan** (class determined by markers, NOT vocabulary, and the craft library below
+all resolves through this):
 
 | Marker (normalized)                                                                                                                                                                      | Class                                                             |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `>` / `>>` + path token (relative, absolute, `~`, `«var»`); `-i`/`--in-place` on sed/awk/perl; `tee`, `dd of=`, `install` (authored destination); `tr`/`cut`/`sed -e`/`awk` via `>` tail | write                                                             |
-| `python[0-9.]* -c`/`-m` body with `.write(`, `.writelines(`, `exec(`, `eval(`, `Path(...write`                                                                                             | write                                                             |
-| decode-then-execute: `base64 -d \| sh`, `xxd -r \| sh`, `openssl enc -d \| bash`, `printf ... \| sh`                                                                                       | write (payload execution = unreviewed content)                    |
+| `python[0-9.]* -c`/`-m` body with `.write(`, `.writelines(`, `exec(`, `eval(`, `Path(...write`                                                                                           | write                                                             |
+| decode-then-execute: `base64 -d \| sh`, `xxd -r \| sh`, `openssl enc -d \| bash`, `printf ... \| sh`                                                                                     | write (payload execution = unreviewed content)                    |
 | heredoc `<<-?'EOF'` anywhere                                                                                                                                                             | write when redirected to a file; else body skipped (read-neutral) |
-| `xargs`, `find ... -exec ... {}`, `sh -c`, `bash -c`, `eval` wrappers                                                                                                                        | re-classify the INNER payload; a wrapper never exempts            |
-| `cat`/`head`/`tail`/`less`/`more`/`sed -n`/`nl`/`python -c ... .read(`                                                                                                                     | read                                                              |
+| `xargs`, `find ... -exec ... {}`, `sh -c`, `bash -c`, `eval` wrappers                                                                                                                    | re-classify the INNER payload; a wrapper never exempts            |
+| `cat`/`head`/`tail`/`less`/`more`/`sed -n`/`nl`/`python -c ... .read(`                                                                                                                   | read                                                              |
 | `grep`/`egrep`/`rg`/`find -name`/`ack`                                                                                                                                                   | search                                                            |
 
 **(c) Craft library** (obfuscation variant → normalized form → class):
@@ -261,10 +330,10 @@ Chained segments are classified INDIVIDUALLY, so `cat a; sed -i ...` yields ONE 
 | `perl -pi -e "s/x/y/" f`                                                  | `perl -pi -e s/x/y/ f`                      | write                                                            |
 | `echo "${TXT}" > f.md`                                                    | `echo «var» > f.md`                         | write                                                            |
 | `printf '%s\n' x                                                          | tee -a f`                                   | `printf x \| tee -a f`                                           | write |
-| `cat <<'EOF' > f` ... `EOF`                                                 | heredoc-marker, body skipped, `> f`         | write                                                            |
+| `cat <<'EOF' > f` ... `EOF`                                               | heredoc-marker, body skipped, `> f`         | write                                                            |
 | `python3 -c "open('f','w').write(x)"`                                     | `python3 -c open f w .write(`               | write                                                            |
 | `echo a2V5... \| base64 -d \| sh`                                         | `echo «sub» \| base64 -d \| sh`             | write (decode-execute)                                           |
-| `x='sed'; $x -i s/a/b/ f`                                                 | env-var indirection: `«var» -i ... f`         | write (catch-all via `-i` marker)                                |
+| `x='sed'; $x -i s/a/b/ f`                                                 | env-var indirection: `«var» -i ... f`       | write (catch-all via `-i` marker)                                |
 | `grep x f > /dev/null`                                                    | unchanged                                   | search (redirect to `/dev/null` is NOT a write)                  |
 | `cat f \| sed s/a/b/ > f`; `find . -name '*.ts' -exec sed -i s/a/b/ {} +` | unchanged / inner `sed -i`                  | write (final redirect wins; `-exec` inner payload re-classified) |
 | `ssh host 'cat f'`                                                        | remote command - EXEMPT (not local content) | exempt                                                           |
@@ -272,51 +341,73 @@ Chained segments are classified INDIVIDUALLY, so `cat a; sed -i ...` yields ONE 
 
 **(d) CATCH-ALL fallback**.
 
-ANY segment with a write-intent marker (§b row 1) targeting a non-`/dev/null` path is classified **write** EVEN IF no pattern row matches, so novel zero-day forms still land.
+ANY segment with a write-intent marker (§b row 1) targeting a non-`/dev/null` path is classified
+**write** EVEN IF no pattern row matches, so novel zero-day forms still land.
 
-The catch-all match is `{class: 'write', tool: 'edit', pattern: '<catch-all>'}` with the note "full command analysis unavailable; use the edit tool".
+The catch-all match is `{class: 'write', tool: 'edit', pattern: '<catch-all>'}` with the note "full
+command analysis unavailable; use the edit tool".
 
-Residual risk, honestly: legitimate-but-odd commands (e.g. `journalctl > log.txt`) get false positives, mitigated by `exemptPatterns` overrides, the threshold/cooldown ladder (a single odd command NEVER notes), and tier 3 deny requiring `enforce` explicitly enabled.
+Residual risk, honestly: legitimate-but-odd commands (e.g. `journalctl > log.txt`) get false
+positives, mitigated by `exemptPatterns` overrides, the threshold/cooldown ladder (a single odd
+command NEVER notes), and tier 3 deny requiring `enforce` explicitly enabled.
 
 **(e)** The §2.6 legitimate boundary is checked AFTER normalization and BEFORE the catch-all.
 
-An exempt head dominates a write tail ONLY for rule-5 pipes, and a raw write marker on a bare segment still fires (`git stash` exempt, `echo x > tracked.md` flagged).
+An exempt head dominates a write tail ONLY for rule-5 pipes, and a raw write marker on a bare
+segment still fires (`git stash` exempt, `echo x > tracked.md` flagged).
 
 ---
 
 ## PART 3 - THE DYNAMIC INSTRUCTION ENGINE (the realization core)
 
-User requirement (verbatim intent): the instruction set is "static text + dynamic tool description, e.g. the tools should actually be fetched and provided from the harnesses capabilities itself, meaning, the same way you are provided the tools, this is how we should 'fetch' and suggest them + our instruction (formatted `${command} is forbidden` etc.)".
+User requirement (verbatim intent): the instruction set is "static text + dynamic tool description,
+e.g. the tools should actually be fetched and provided from the harnesses capabilities itself,
+meaning, the same way you are provided the tools, this is how we should 'fetch' and suggest them +
+our instruction (formatted `${command} is forbidden` etc.)".
 
 ### 3.1 The fetch
 
-- **Call**: `ctx.tools.schemas()` with no scope argument (plain `ctx.on` global listeners; an omitted scope = the global view).
+- **Call**: `ctx.tools.schemas()` with no scope argument (plain `ctx.on` global listeners; an
+  omitted scope = the global view).
 
-  The signature (live-verified via host Service.listService `tools`) is `schemas(scope?: ScopeKey): ToolSchema[]` → "one deep-cloned schema per visible tool", projected onto the allowlist (`tools.md:563-570`).
+    The signature (live-verified via host Service.listService `tools`) is
+    `schemas(scope?: ScopeKey): ToolSchema[]` → "one deep-cloned schema per visible tool", projected
+    onto the allowlist (`tools.md:563-570`).
 
 - **Projection fields to embed**: exactly `name`, `description`, `parameters` (§1.1).
 
-  The coach embeds `name` + the FIRST SENTENCE of `description` (hard cap 120 chars) in notes and the tier 2 table.
+    The coach embeds `name` + the FIRST SENTENCE of `description` (hard cap 120 chars) in notes and
+    the tier 2 table.
 
-  NEVER `parameters` in the persistent section, for budget reasons.
+    NEVER `parameters` in the persistent section, for budget reasons.
 
-  Tier 1 notes name the tool and the parameter that matters (e.g. `file_path`, `old_string`/`new_string`, `pattern`), taken from `parameters.properties` keys when present.
+    Tier 1 notes name the tool and the parameter that matters (e.g. `file_path`,
+    `old_string`/`new_string`, `pattern`), taken from `parameters.properties` keys when present.
 
 - **Freshness - fetch per note** (tier 1/tier 3 compose right before returning their decision).
 
-  These fire at most once per `cooldown` (default 10) judged calls, and `schemas()` is a deep-clone projection of an in-memory registry, so the cost is trivial (`tools.md:568-570`).
+    These fire at most once per `cooldown` (default 10) judged calls, and `schemas()` is a
+    deep-clone projection of an in-memory registry, so the cost is trivial (`tools.md:568-570`).
 
-  Per-note fetching guarantees the note reflects the set visible at the offense moment, including `tools/change` swaps (`tools.md:608-610`).
+    Per-note fetching guarantees the note reflects the set visible at the offense moment, including
+    `tools/change` swaps (`tools.md:608-610`).
 
-  **Tier 2 caches**: rebuilt when `sectionTtl` (default 20 tool calls) elapsed or on `tools/change` (cache-invalidating listener), truncated to `maxSectionTools` rows, with PatternTable-mapped tools first (write, read, search, discovery, control) and then the remaining live tools by name.
+    **Tier 2 caches**: rebuilt when `sectionTtl` (default 20 tool calls) elapsed or on
+    `tools/change` (cache-invalidating listener), truncated to `maxSectionTools` rows, with
+    PatternTable-mapped tools first (write, read, search, discovery, control) and then the remaining
+    live tools by name.
 
 - **Error handling**: fetch + compose run inside the fail-open envelope (PLAN §2, ccr precedent).
 
-  If `ctx.get("tools")` is undefined, `schemas()` throws, or a mapped tool's description is missing → fall back to the static `STATIC_TOOL_LINES` table (name→one-liner constant in `Variable/Notes.ts`, derived from §1.2) and log `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
+    If `ctx.get("tools")` is undefined, `schemas()` throws, or a mapped tool's description is
+    missing → fall back to the static `STATIC_TOOL_LINES` table (name→one-liner constant in
+    `Variable/Notes.ts`, derived from §1.2) and log
+    `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
 
-  A note NEVER fails the waterfall.
+    A note NEVER fails the waterfall.
 
-- **`fetchLive` (default true)**: false → `STATIC_TOOL_LINES` unconditionally, the escape hatch for zero registry coupling.
+- **`fetchLive` (default true)**: false → `STATIC_TOOL_LINES` unconditionally, the escape hatch for
+  zero registry coupling.
 
 ### 3.2 The FOUR DELIVERY CHANNELS (parent amendment - "just inject? No.")
 
@@ -329,7 +420,10 @@ User requirement (verbatim intent): the instruction set is "static text + dynami
 
 ### 3.3 The template system (verbatim)
 
-Placeholders: `${command}` (offending command segment, first 200 chars), `${class}`, `${tool.name}`, `${tool.description}` (fetched first sentence), `${tool.param}` (primary parameter key, from fetched `parameters.properties` order), `${count}` (current strike count), and `${traceability}` (static, from `code-authoring/SKILL.md:39-46`).
+Placeholders: `${command}` (offending command segment, first 200 chars), `${class}`, `${tool.name}`,
+`${tool.description}` (fetched first sentence), `${tool.param}` (primary parameter key, from fetched
+`parameters.properties` order), `${count}` (current strike count), and `${traceability}` (static,
+from `code-authoring/SKILL.md:39-46`).
 
 `terminal edits produce no fs/observed event, so the governor/pinner/normalize plugins never see them`.
 
@@ -343,7 +437,9 @@ Tool-coach note (strike ${count}, ${class}-class bash pattern):
 The terminal runs COMMANDS (builds, tests, git, package managers); the tools handle CONTENT.
 ```
 
-**Tier 2 persistent section (system-prompt/assemble append) - verbatim; compact: heading + 3 fixed rules + a table of at most `maxSectionTools` (default 8) mapped tools with fetched one-line descriptions:**
+**Tier 2 persistent section (system-prompt/assemble append) - verbatim; compact: heading + 3 fixed
+rules + a table of at most `maxSectionTools` (default 8) mapped tools with fetched one-line
+descriptions:**
 
 ```
 Tool discipline (persistent, from tool-coach):
@@ -357,9 +453,11 @@ Mapped tools (live from the harness registry):
 ... (at most maxSectionTools rows)
 ```
 
-Formatting rule: "its returned assembly is authoritative, so listener authors own preserving active PTC mode and structured-output protocol contributions" (`cookbook.md:102`).
+Formatting rule: "its returned assembly is authoritative, so listener authors own preserving active
+PTC mode and structured-output protocol contributions" (`cookbook.md:102`).
 
-The coach appends ONE markdown section to `next()`'s result and returns it unchanged otherwise (PLAN §5).
+The coach appends ONE markdown section to `next()`'s result and returns it unchanged otherwise (PLAN
+§5).
 
 **Tier 3 deny reason (NOTE_DENIED) - verbatim:**
 
@@ -369,13 +467,15 @@ Blocked by tool-coach: "${command}" is forbidden (${class}-class bash pattern). 
 
 This is the `${command} is forbidden` phrasing the user asked for, in all three tiers.
 
-The deny reason materializes as the model-facing tool result (`tools.md:402-408`), which is self-teaching (`code-authoring/SKILL.md:73-79`).
+The deny reason materializes as the model-facing tool result (`tools.md:402-408`), which is
+self-teaching (`code-authoring/SKILL.md:73-79`).
 
 ### 3.4 Config surface (final verbatim Schemastery schema)
 
 Merges PLAN §3, with the new dynamic knobs at the end.
 
-`Compose(false, {...})` comes from `@playform/plugin-dsh-factory`, and every cell is `.volatile()` (RESEARCH §6).
+`Compose(false, {...})` comes from `@playform/plugin-dsh-factory`, and every cell is `.volatile()`
+(RESEARCH §6).
 
 ```ts
 export default Compose(false, {
@@ -412,17 +512,21 @@ export default Compose(false, {
 });
 ```
 
-Fail-loud validation (PLAN §3) plus: `maxSectionTools` 1-24, `sectionTtl ≥ 1`, and EVERY `patternTable.tool` non-empty (it need NOT exist in the live registry, because the static fallback covers unknown names).
+Fail-loud validation (PLAN §3) plus: `maxSectionTools` 1-24, `sectionTtl ≥ 1`, and EVERY
+`patternTable.tool` non-empty (it need NOT exist in the live registry, because the static fallback
+covers unknown names).
 
 ### 3.5 The data flow (function contracts; coder-implementable)
 
-1. **`Detect(exec, cfg) → Match | undefined`** - as PLAN §5 plus normalization, intent-marker scan, and catch-all (§2.7).
+1. **`Detect(exec, cfg) → Match | undefined`** - as PLAN §5 plus normalization, intent-marker scan,
+   and catch-all (§2.7).
 
     `Match` gains `command: string` (matched segment, ≤200 chars).
 
 2. **`Count(state, match, cfg) → Decision`** - as PLAN §5.
 
-    Decision is `{ tier: 0|1|2on|2off|3, match, strikes, sinceNote, clean }`, and the per-agent `WeakMap<Agent, State>` also holds `sectionCache?: { built: number; text: string }`.
+    Decision is `{ tier: 0|1|2on|2off|3, match, strikes, sinceNote, clean }`, and the per-agent
+    `WeakMap<Agent, State>` also holds `sectionCache?: { built: number; text: string }`.
 
 3. **`Fetch(cfg) → ToolCatalog`** (`Function/Fetch.ts`).
 
@@ -430,17 +534,21 @@ Fail-loud validation (PLAN §3) plus: `maxSectionTools` 1-24, `sectionTtl ≥ 1`
 
     Else `ctx.tools.schemas()` → map `name → {first sentence, paramKeys}`.
 
-    On ANY throw/undefined → static fallback + ledger `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
+    On ANY throw/undefined → static fallback + ledger
+    `hook-dsh-tool-coach: schema fetch failed -> static fallback`.
 
 4. **`Compose(decision, fetch, cfg) → string`** (`Function/Compose.ts`).
 
-    It fills the §3.3 templates, and a per-row `notes[].note` overrides the tier-1 body when its row declares one.
+    It fills the §3.3 templates, and a per-row `notes[].note` overrides the tier-1 body when its row
+    declares one.
 
-    ANY placeholder missing a fetched value degrades to the static line, and the output must never contain an unfilled `${...}` (smoke D1).
+    ANY placeholder missing a fetched value degrades to the static line, and the output must never
+    contain an unfilled `${...}` (smoke D1).
 
 5. **`Note(exec, result, next, decision)`** - PLAN §5 verbatim.
 
-    Always `await next()` first, then prepend `UserMessage` with source `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <count>'}`.
+    Always `await next()` first, then prepend `UserMessage` with source
+    `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <count>'}`.
 
 6. **`Enforce(decision) → {kind:'deny', reason} | undefined`** - PLAN §5.
 
@@ -448,7 +556,8 @@ Fail-loud validation (PLAN §3) plus: `maxSectionTools` 1-24, `sectionTtl ≥ 1`
 
 7. **`Assemble(assembly, agentState, fetch, cfg)`** (in Apply.ts).
 
-    While tier 2 is on, rebuild when `sectionCache` is stale (TTL or `tools/change`), append to `next()`'s assembly, and return; else return untouched.
+    While tier 2 is on, rebuild when `sectionCache` is stale (TTL or `tools/change`), append to
+    `next()`'s assembly, and return; else return untouched.
 
     Tier 2 OFF simply does not append, because the waterfall re-runs per request.
 
@@ -472,7 +581,8 @@ Fail-loud validation (PLAN §3) plus: `maxSectionTools` 1-24, `sectionTtl ≥ 1`
 
 All listeners are fail-open wrapped (PLAN §2).
 
-`apply` returns NOTHING (PLAN §2, ccr Apply.ts:53-55), and `inject: ['tools']` (§3.1) means no fs/observed listener and no factory Wire/Attach/Schema.
+`apply` returns NOTHING (PLAN §2, ccr Apply.ts:53-55), and `inject: ['tools']` (§3.1) means no
+fs/observed listener and no factory Wire/Attach/Schema.
 
 ### 4.2 Ledger strings (byte-exact, module prefix `hook-dsh-tool-coach: `)
 
@@ -495,13 +605,17 @@ R1-R6 run exactly as PLAN §7.
 
 NEW dynamic-fetch smokes:
 
-- **D1**: the tier-1 note contains the fetched `${tool.description}` first sentence and `${tool.param}`, and no literal `${` remains in any composed note.
+- **D1**: the tier-1 note contains the fetched `${tool.description}` first sentence and
+  `${tool.param}`, and no literal `${` remains in any composed note.
 
-- **D2**: a fake `ctx.tools.schemas()` throws → STATIC_TOOL_LINES text, the ledger carries `schema fetch failed -> static fallback`, and the waterfall continues.
+- **D2**: a fake `ctx.tools.schemas()` throws → STATIC_TOOL_LINES text, the ledger carries
+  `schema fetch failed -> static fallback`, and the waterfall continues.
 
-- **D3**: `maxSectionTools: 3` with 6 mapped tools → exactly 3 rows, in mapped-class priority order (write, read, search first).
+- **D3**: `maxSectionTools: 3` with 6 mapped tools → exactly 3 rows, in mapped-class priority order
+  (write, read, search first).
 
-- **D4**: rebuild at `sectionTtl` judged calls and on `tools/change`, with the ledger `section rebuilt` line for each path.
+- **D4**: rebuild at `sectionTtl` judged calls and on `tools/change`, with the ledger
+  `section rebuilt` line for each path.
 
 - **D5**: `fetchLive=false` → static lines only, and no fetch-failure line ever.
 
@@ -509,11 +623,14 @@ NEW dynamic-fetch smokes:
 
 1. Bundle skeleton (both trees) - arbiter: `tsc` clean.
 
-2. Patterns + Notes (including STATIC_TOOL_LINES + templates) + Config (§3.4 verbatim) - arbiter: build + schema defaults instantiate.
+2. Patterns + Notes (including STATIC_TOOL_LINES + templates) + Config (§3.4 verbatim) - arbiter:
+   build + schema defaults instantiate.
 
-3. Detect (with Normalize + adversarial scan) + Count + Fetch + Compose (pure) - arbiter: unit smokes including every §2.7 craft-library row, exemption precedence, `${`-absence, and fallback.
+3. Detect (with Normalize + adversarial scan) + Count + Fetch + Compose (pure) - arbiter: unit
+   smokes including every §2.7 craft-library row, exemption precedence, `${`-absence, and fallback.
 
-4. Apply wiring (5 listeners) + Note + Enforce + Assemble gate - arbiter: R1-R6 + D1-D5, byte-identical ledger strings.
+4. Apply wiring (5 listeners) + Note + Enforce + Assemble gate - arbiter: R1-R6 + D1-D5,
+   byte-identical ledger strings.
 
 5. EffectTS mirror - arbiter: ledger strings byte-identical.
 
@@ -523,26 +640,39 @@ NEW dynamic-fetch smokes:
 
 1. ALL PLAN §8 items hold.
 
-2. A tier-1 note in a live session names a tool with its LIVE registry description (verify against `Tool.listTools` for that tool).
+2. A tier-1 note in a live session names a tool with its LIVE registry description (verify against
+   `Tool.listTools` for that tool).
 
-3. EVERY §2.7 craft-library variant passes a unit smoke, with obfuscated forms classifying correctly including the catch-all row.
+3. EVERY §2.7 craft-library variant passes a unit smoke, with obfuscated forms classifying correctly
+   including the catch-all row.
 
-4. `fetchLive` and `maxSectionTools` volatile flips pick up on the next judged call without a remount.
+4. `fetchLive` and `maxSectionTools` volatile flips pick up on the next judged call without a
+   remount.
 
-5. The tier-2 section never exceeds `maxSectionTools` rows and NEVER alters any other assembly field (deep-equal smoke, R4).
+5. The tier-2 section never exceeds `maxSectionTools` rows and NEVER alters any other assembly field
+   (deep-equal smoke, R4).
 
 ---
 
 ## RISKS / OPEN QUESTIONS
 
-1. **Catch-all false positives** (§2.7d) on legitimate-but-odd commands, mitigated by `exemptPatterns`, the threshold/cooldown ladder (a single odd command never notes), tier 3 default-off, and `patternTable` per-deployment correction.
+1. **Catch-all false positives** (§2.7d) on legitimate-but-odd commands, mitigated by
+   `exemptPatterns`, the threshold/cooldown ladder (a single odd command never notes), tier 3
+   default-off, and `patternTable` per-deployment correction.
 
-2. **First-sentence extraction** (§3.1) with parentheticals: split on the FIRST sentence-ending punctuation not inside parentheses, cap 120 chars at a word boundary, and fall back to the static line.
+2. **First-sentence extraction** (§3.1) with parentheticals: split on the FIRST sentence-ending
+   punctuation not inside parentheses, cap 120 chars at a word boundary, and fall back to the static
+   line.
 
-3. **`schemas()` cost**: deep-clone per call, bounded by cooldown (notes) and `sectionTtl` (section), with the escape hatch `fetchLive: false`.
+3. **`schemas()` cost**: deep-clone per call, bounded by cooldown (notes) and `sectionTtl`
+   (section), with the escape hatch `fetchLive: false`.
 
-4. **PTC swallows additionalContexts** (`pipeline.md:63`): tier 2 is the carrier, unchanged from RESEARCH §8.2.
+4. **PTC swallows additionalContexts** (`pipeline.md:63`): tier 2 is the carrier, unchanged from
+   RESEARCH §8.2.
 
-5. **`${command}` containing `${`**: escape `${` → `$${` in user data before template fill, and smoke D1 asserts template placeholders only.
+5. **`${command}` containing `${`**: escape `${` → `$${` in user data before template fill, and
+   smoke D1 asserts template placeholders only.
 
-6. Open for the parent: (a) `control` as fifth class vs folding into `discovery` (the doc assumes 5 classes, control never-denied); (b) whether the tier-2 table should top up from the live registry beyond mapped tools (the doc assumes yes, alphabetical); (c) confirm `sectionTtl` default 20.
+6. Open for the parent: (a) `control` as fifth class vs folding into `discovery` (the doc assumes 5
+   classes, control never-denied); (b) whether the tier-2 table should top up from the live registry
+   beyond mapped tools (the doc assumes yes, alphabetical); (c) confirm `sectionTtl` default 20.
