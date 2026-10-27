@@ -1,8 +1,10 @@
 # SCHEME - @playform/lib-dsh-workspace-live
 
-The shared client library of the Workspace Plugin Family's live view. **No Config, no apply** - the
-`lib-dsh-*` role: not a plugin bundle, no loader contract, no cordis patch. The consumers keep their
-own ledger strings, tools and configs.
+This is the shared client library of the Workspace Plugin Family's live view.
+
+It has **no Config and no apply** because it holds the `lib-dsh-*` role: not a plugin bundle, no loader contract, and no cordis patch.
+
+The consumers keep their own ledger strings, tools, and configs.
 
 ## The exported surface
 
@@ -18,8 +20,6 @@ own ledger strings, tools and configs.
 
 ## Composition contracts
 
-- The **version stamp** is the index revision (or event sequence) the section reflects - the
-  stable-until-event rule: re-render is justified only by a version change.
-- The **token budget** is the caller's concern (it owns the counter seam); `Collapse` takes bytes
-  only.
-- Every helper is **pure and harness-free** - usable outside the harness.
+- The **version stamp** is the index revision (or event sequence) the section reflects, which follows the stable-until-event rule: re-render is justified only by a version change.
+- The **token budget** is the caller's concern (it owns the counter seam), and `Collapse` takes bytes only.
+- Every helper is **pure and harness-free**, so it is usable outside the harness.

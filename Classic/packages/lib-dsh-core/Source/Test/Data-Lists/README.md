@@ -1,18 +1,14 @@
 # Data-Lists
 
-What this test verifies.
+This test verifies the following behavior.
 
 ## Intent
 
-The two exported data lists are pure constants the whole family builds on: `Section`
-(the canonical npm dependency sections, in the order the update engine walks them)
-and `Default` (the built-in exclusion segments, "anywhere mode, exclusion-first").
-They are their own folder because they are the core's simplest contract surface -
-a reorder, a rename or an added segment in either list changes the behavior of every
-consumer (the factory's directory walk, the update engine's section scope) without
-any code path failing loudly. The assertions are moved verbatim from
-`Classic/smokes/core-smoke.mjs` section 1 (the source suite stays in place during
-the migration; this folder is the future home of the same contract).
+The two exported data lists are pure constants the whole family builds on: `Section` (the canonical npm dependency sections, in the order the update engine walks them) and `Default` (the built-in exclusion segments, "anywhere mode, exclusion-first").
+
+They are their own folder because they are the core's simplest contract surface, where a reorder, a rename, or an added segment in either list changes the behavior of every consumer (the factory's directory walk, the update engine's section scope) without any code path failing loudly.
+
+The assertions are moved verbatim from `Classic/smokes/core-smoke.mjs` section 1 (the source suite stays in place during the migration, and this folder is the future home of the same contract).
 
 ## Scenario
 
@@ -24,21 +20,24 @@ the migration; this folder is the future home of the same contract).
 
 ## Fixtures
 
-None. This is the one folder with no I/O at all: the test imports the REAL built
-`Target/Library.js` of `@playform/lib-dsh-core` and asserts two exported constants.
-No fake ctx, no factory, no temp files.
+None.
+
+This is the one folder with no I/O at all: the test imports the REAL built `Target/Library.js` of `@playform/lib-dsh-core` and asserts two exported constants.
+
+There is no fake ctx, no factory, and no temp files.
 
 ## Expected ledger strings (byte-exact)
 
-None. The core owns no ledger strings and writes nothing; this folder asserts
-data, not log lines. (The check labels printed by the harness are the source
-suite's ok labels, verbatim.)
+None.
+
+The core owns no ledger strings and writes nothing, and this folder asserts data, not log lines.
+
+(The check labels printed by the harness are the source suite's ok labels, verbatim.)
 
 ## Edge cases
 
 - The lists are compared with deepEqual (exact contents AND exact order).
-- The six exclusion segments include the ".dsh" state segment and the
-  "DeepSeek Harness.app" application segment - both must stay in the list.
+- The six exclusion segments include the ".dsh" state segment and the "DeepSeek Harness.app" application segment, and both must stay in the list.
 
 ## Expected count
 

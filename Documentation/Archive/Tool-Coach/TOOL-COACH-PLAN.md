@@ -21,20 +21,21 @@ statuses:
       evidence: the I7 teaching note in the profile
 ---
 
-# TOOL-COACH-PLAN.md — Implementation plan for the Tool-Usage Coach plugin
+# TOOL-COACH-PLAN.md - Implementation plan for the Tool-Usage Coach plugin
 
-Status: implementation plan. Companion research: `TOOL-COACH-RESEARCH.md` (same directory, every
-external claim anchored there). This plan references it as "RESEARCH §n". Target: two new family
-bundles, Classic + EffectTS twins.
+Status: implementation plan.
+
+Companion research: `TOOL-COACH-RESEARCH.md` (same directory, where every external claim is anchored), and this plan references it as "RESEARCH §n".
+
+Target: two new family bundles, Classic + EffectTS twins.
 
 ## 1. Bundle identity
 
-- Classic: `Classic/packages/hook-dsh-tool-coach/` — plugin `name`: `"tool-coach"`. Ledger default
-  `~/.dsh/playform/hook-dsh-tool-coach.log`.
-- EffectTS: `EffectTS/packages/ets-hook-dsh-tool-coach/` — same contract behind Effect v4. Ledger
-  strings byte-identical (plugin-system skill §3.5).
-- New module leaf: the coach owns its strings, config extensions, and behavior — nothing is absorbed
-  into the factory (plugin-system skill §3.2).
+- Classic: `Classic/packages/hook-dsh-tool-coach/` with plugin `name`: `"tool-coach"`, and ledger default `~/.dsh/playform/hook-dsh-tool-coach.log`.
+
+- EffectTS: `EffectTS/packages/ets-hook-dsh-tool-coach/` with the same contract behind Effect v4, and ledger strings byte-identical (plugin-system skill §3.5).
+
+- New module leaf: the coach owns its strings, config extensions, and behavior, and nothing is absorbed into the factory (plugin-system skill §3.2).
 
 ## 2. File-by-file layout (Classic; the ets twin mirrors it)
 
@@ -63,21 +64,19 @@ hook-dsh-tool-coach/
       Apply.ts                     # listener wiring + fail-open envelope
 ```
 
-`Library.ts` contract (mirrors `hook-dsh-ccr/Source/Library.ts` and the ccr Apply comments,
-`Classic/packages/hook-dsh-ccr/Source/Function/Apply.ts:41-53`):
+`Library.ts` contract, mirroring `hook-dsh-ccr/Source/Library.ts` and the ccr Apply comments (`Classic/packages/hook-dsh-ccr/Source/Function/Apply.ts:41-53`):
 
-- `inject: []`-plus-`['fs']` only if needed — the coach registers NO fs/observed listener and never
-  touches the factory executor. It is a pure hook plugin. It does NOT use factory Wire/Attach/Schema
-  (the ccr precedent, Apply.ts:41-52).
-- `apply` returns NOTHING — a returned value silently kills event delivery (live-verified pitfall,
-  ccr Apply.ts:53-55).
-- Listeners registered: `tools/post-execute` (plain `ctx.on` — runs after the ccr `{prepend:true}`
-  listener), `agent/pre-step` (user-message reset), `system-prompt/assemble` (tier 2), and
-  `tools/pre-execute` ONLY when `enforce !== 'off'`. Removed/re-added on live toggles via the
-  volatile cell read at each apply-time entry. Simplest: register unconditionally, no-op when
-  `enforce === 'off'`.
-- EVERY listener body wrapped in try/catch. On error `logger.warn` + unchanged `next()` result
-  (fail-open; ccr Apply.ts:23-26).
+- `inject: []`-plus-`['fs']` only if needed, because the coach registers NO fs/observed listener and never touches the factory executor.
+
+  It is a pure hook plugin, and it does NOT use factory Wire/Attach/Schema (the ccr precedent, Apply.ts:41-52).
+
+- `apply` returns NOTHING, because a returned value silently kills event delivery (live-verified pitfall, ccr Apply.ts:53-55).
+
+- Listeners registered: `tools/post-execute` (plain `ctx.on`, which runs after the ccr `{prepend:true}` listener), `agent/pre-step` (user-message reset), `system-prompt/assemble` (tier 2), and `tools/pre-execute` ONLY when `enforce !== 'off'`.
+
+  They are removed and re-added on live toggles via the volatile cell read at each apply-time entry, and the simplest form is to register unconditionally and no-op when `enforce === 'off'`.
+
+- EVERY listener body is wrapped in try/catch: on error `logger.warn` + unchanged `next()` result (fail-open; ccr Apply.ts:23-26).
 
 ## 3. Verbatim Config schema (Variable/Config.ts)
 
@@ -114,10 +113,9 @@ export default Compose(false, {
 });
 ```
 
-Fail-loud validation in `apply` (RTR precedent, lib__index.js:2184-2208). `threshold ≥ 1`.
-`window ≥ threshold`. `cooldown ≥ 1`. `escalateThreshold ≥ threshold`. `enforceThreshold ≥ 1`. EVERY
-`patternTable.pattern` compiles as a RegExp and its `tool` is non-empty. Duplicates of a
-DEFAULT_PATTERNS pattern are rejected with a clear error. Invalid config throws at load.
+Fail-loud validation in `apply` (RTR precedent, lib__index.js:2184-2208), with `threshold ≥ 1`, `window ≥ threshold`, `cooldown ≥ 1`, `escalateThreshold ≥ threshold`, and `enforceThreshold ≥ 1`.
+
+EVERY `patternTable.pattern` compiles as a RegExp and its `tool` is non-empty, duplicates of a DEFAULT_PATTERNS pattern are rejected with a clear error, and invalid config throws at load.
 
 ## 4. Verbatim note templates (Variable/Notes.ts) + ledger strings
 
@@ -152,81 +150,96 @@ tool-coach: disabled (enabled=false)
 
 ## 5. Function contracts
 
-- **Detect(exec, cfg) → Match | undefined** (`Function/Detect.ts`). Undefined unless
-  `judgeTools.includes(exec.name)`. Splits `exec.arguments.command` (string; fallback
-  `JSON.stringify(exec.arguments)`) into segments (split on `&&`, `||`, `;`, `|` boundaries outside
-  quotes and heredoc bodies). For each segment, first DEFAULT_PATTERNS then patternTable row whose
-  regex matches → `{class, tool, pattern}`. If a segment matches an exemptPatterns regex first →
-  `exempt` (counted nowhere, ledger `exempt` line at most once per distinct pattern-head per agent).
-  Never judges non-terminal tools.
-- **Count(state, match, cfg) → decision** (`Function/Count.ts`). Per-agent state in a
-  `WeakMap<Agent, {window: Match[], strikes, sinceNote, sinceClean, tier2}> keyed like RTR (lib__index.js:2209). Pushes the match onto the sliding window (cap `window`). `strikes`= class-weighted count in window (write =1, others =1). User-message reset via the pre-step listener (RTR lib__index.js:2261). Decision precedence. (1)`strikes >=
-  threshold && sinceNote >= cooldown`→ NOTE tier 1 (reset sinceNote). (2)`strikesSinceNote >=
-  escalateThreshold`→ tier 2 ON (idempotent while on). (3)`tier2 && sinceClean >=
-  cleanWindow`→ tier 2 OFF. (4)`enforce !== 'off' && class matches enforce && sinceNote >=
-  enforceThreshold` → deny (tier 3, resets sinceNote).
-- **Note(exec, result, next, decision)** (`Function/Note.ts`). Always
-  `const downstream = await next()` first (RTR lib__index.js:2248). When tier 1 fires, build the
-  `UserMessage` via `createUserMessage` with source
-  `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <n>'}` and PREPEND it to
-  `downstream.additionalContexts` (label is load-bearing — RESEARCH §1.1). On tier 3 deny return
-  `{kind:'accept', …downstream}` from post-execute but record the strike for the pre-execute
-  listener.
-- **Enforce(match, state) → string | undefined** (`Function/Enforce.ts`). The deny reason =
-  `notes.denied(match)`. Only fired from the pre-execute listener: `{kind:'deny', reason}`. The
-  model reads the reason directly (RESEARCH §2.3). Denied calls still flow through post-execute, so
-  counting continues (RTR README.md:83).
-- **Assemble gate** (in Apply.ts): `system-prompt/assemble` listener returns `next()`'s assembly
-  with ONE appended section (the `notes.persistent` text) while `tier2` is on for that agent, and
-  the unmodified assembly otherwise — the coach touches nothing else, preserving PTC mode and
-  structured-output contributions (RESEARCH §2.2, cookbook.md:102).
-- **N=0 / enabled=false passthrough**: `enabled=false` (or an empty effective pattern table) → every
-  listener returns `next()` untouched; smoke-asserted.
+- **Detect(exec, cfg) → Match | undefined** (`Function/Detect.ts`).
+
+  It returns undefined unless `judgeTools.includes(exec.name)`.
+
+  It splits `exec.arguments.command` (string; fallback `JSON.stringify(exec.arguments)`) into segments on `&&`, `||`, `;`, and `|` boundaries outside quotes and heredoc bodies.
+
+  For each segment it tries DEFAULT_PATTERNS first, then the patternTable row whose regex matches → `{class, tool, pattern}`.
+
+  If a segment matches an exemptPatterns regex first → `exempt`, counted nowhere, with the ledger `exempt` line at most once per distinct pattern-head per agent.
+
+  It never judges non-terminal tools.
+
+- **Count(state, match, cfg) → decision** (`Function/Count.ts`).
+
+  Per-agent state lives in a `WeakMap<Agent, {window: Match[], strikes, sinceNote, sinceClean, tier2}>` keyed like RTR (lib__index.js:2209).
+
+  It pushes the match onto the sliding window (cap `window`), where `strikes` = the class-weighted count in window (write =1, others =1).
+
+  A user-message reset comes via the pre-step listener (RTR lib__index.js:2261).
+
+  Decision precedence: (1) `strikes >= threshold && sinceNote >= cooldown` → NOTE tier 1, resetting sinceNote; (2) `strikesSinceNote >= escalateThreshold` → tier 2 ON, idempotent while on; (3) `tier2 && sinceClean >= cleanWindow` → tier 2 OFF; (4) `enforce !== 'off' && class matches enforce && sinceNote >= enforceThreshold` → deny (tier 3), resetting sinceNote.
+
+- **Note(exec, result, next, decision)** (`Function/Note.ts`).
+
+  Always `const downstream = await next()` first (RTR lib__index.js:2248).
+
+  When tier 1 fires, build the `UserMessage` via `createUserMessage` with source `{kind: 'tool-coach', form: 'notice', summary: '<tool> <class> × <n>'}` and PREPEND it to `downstream.additionalContexts`, because the label is load-bearing (RESEARCH §1.1).
+
+  On tier 3 deny, return `{kind:'accept', ...downstream}` from post-execute but record the strike for the pre-execute listener.
+
+- **Enforce(match, state) → string | undefined** (`Function/Enforce.ts`).
+
+  The deny reason = `notes.denied(match)`, fired only from the pre-execute listener as `{kind:'deny', reason}`.
+
+  The model reads the reason directly (RESEARCH §2.3), and denied calls still flow through post-execute, so counting continues (RTR README.md:83).
+
+- **Assemble gate** (in Apply.ts): the `system-prompt/assemble` listener returns `next()`'s assembly with ONE appended section (the `notes.persistent` text) while `tier2` is on for that agent, and the unmodified assembly otherwise.
+
+  The coach touches nothing else, which preserves PTC mode and structured-output contributions (RESEARCH §2.2, cookbook.md:102).
+
+- **N=0 / enabled=false passthrough**: `enabled=false` (or an empty effective pattern table) makes every listener return `next()` untouched, and a smoke asserts it.
 
 ## 6. Phases with arbiters
 
-1. **Bundle skeleton** — copy family boilerplate into both trees; Identity swaps; tsconfig paths.
-   Arbiter: `tsc -p tsconfig.json` clean in both.
-2. **Patterns + Notes + Config variables** — verbatim above. Arbiter: build + compile; schema
-   instantiates with defaults.
-3. **Detect + Count** (pure functions; no listeners yet). Arbiter: unit smokes for pattern classes,
-   exemption precedence, window/strike math.
-4. **Apply wiring + Note + Enforce + assemble gate**. Arbiter: full smoke battery (below) with ZERO
-   existing-suite assertion changes (smoke-writing skill); byte-identical ledger strings.
-5. **EffectTS mirror** — same phases 1–4 against `ets-plugin-dsh-factory`; ledger strings
-   byte-identical. Arbiter: ets bundle build + its smokes.
-6. **Serialized workspace build** — `--workspace-concurrency=1` (plugin-system skill §2.4); factory
-   rebuilt before consumers type-check against its Target.
+1. **Bundle skeleton** - copy the family boilerplate into both trees, swap the identity, set the tsconfig paths.
+
+    Arbiter: `tsc -p tsconfig.json` clean in both.
+
+2. **Patterns + Notes + Config variables** - verbatim above.
+
+    Arbiter: build + compile, and the schema instantiates with defaults.
+
+3. **Detect + Count** (pure functions; no listeners yet).
+
+    Arbiter: unit smokes for pattern classes, exemption precedence, and window/strike math.
+
+4. **Apply wiring + Note + Enforce + assemble gate**.
+
+    Arbiter: the full smoke battery (below) with ZERO existing-suite assertion changes (smoke-writing skill) and byte-identical ledger strings.
+
+5. **EffectTS mirror** - the same phases 1-4 against `ets-plugin-dsh-factory`, with byte-identical ledger strings.
+
+    Arbiter: the ets bundle build + its smokes.
+
+6. **Serialized workspace build** - `--workspace-concurrency=1` (plugin-system skill §2.4), with the factory rebuilt before consumers type-check against its Target.
 
 ## 7. Smoke plan (fake ctx + real built Target)
 
-- **R1 passthrough**: 10 legitimate calls (`git status`, `pnpm build`, `node x`) → zero strikes,
-  zero notes, zero ledger lines except none.
-- **R2 detect+strike**: bash `cat a.md` ×2, `sed -i s/x/y/ b.md` ×1 → ledger shows 3 `offense` lines
-  and 0 notes (below threshold); 4th offense (window 8) → `strike 4/3 … -> note read` line +
-  decision carries ONE additionalContexts with source `kind: 'tool-coach'`.
-- **R3 cooldown**: continuing offenses within cooldown → `cooldown suppressed` lines, no second note
-  until cooldown elapses.
-- **R4 tier 2**: strikes reach escalateThreshold → `escalated persistent section` line; fake
-  assemble → assembly contains exactly one appended section, PTC/structured-output props untouched
-  (deep-equal on all other fields); cleanWindow clean calls → `persistent section cleared`.
-- **R5 enforce**: config `enforce:'write'` → pre-execute on `sed -i` returns
-  `{kind:'deny', reason: NOTE_DENIED text}` byte-identical; read-class `cat` is NOT denied;
-  `enforce:'all'` denies `cat` too; `enforce:'off'` never denies.
-- **R6 exempt + enabled=false + N=0**: `rm`, `git commit`, empty patternTable → no counts;
-  `enabled:false` → full passthrough.
-- **Ledger**: every case asserts byte-identical ledger strings (identity-driven strings change BY
-  DESIGN only if the module name changes).
-- **Vacuously-green guard**: each smoke asserts the wiring by checking the listener actually fired
-  (a marker call on the fake ctx), per smoke-writing §3.
+- **R1 passthrough**: 10 legitimate calls (`git status`, `pnpm build`, `node x`) → zero strikes, zero notes, and no ledger lines.
+
+- **R2 detect+strike**: bash `cat a.md` ×2 and `sed -i s/x/y/ b.md` ×1 → the ledger shows 3 `offense` lines and 0 notes, because the count is below threshold; the 4th offense (window 8) → the `strike 4/3 ... -> note read` line + a decision carrying ONE additionalContexts with source `kind: 'tool-coach'`.
+
+- **R3 cooldown**: continuing offenses within cooldown → `cooldown suppressed` lines, with no second note until cooldown elapses.
+
+- **R4 tier 2**: strikes reach escalateThreshold → the `escalated persistent section` line; a fake assemble → the assembly contains exactly one appended section with the PTC/structured-output props untouched (deep-equal on all other fields); cleanWindow clean calls → `persistent section cleared`.
+
+- **R5 enforce**: config `enforce:'write'` → pre-execute on `sed -i` returns `{kind:'deny', reason: NOTE_DENIED text}` byte-identical; read-class `cat` is NOT denied; `enforce:'all'` denies `cat` too; `enforce:'off'` never denies.
+
+- **R6 exempt + enabled=false + N=0**: `rm`, `git commit`, and an empty patternTable → no counts; `enabled:false` → full passthrough.
+
+- **Ledger**: every case asserts byte-identical ledger strings, and identity-driven strings change BY DESIGN only if the module name changes.
+
+- **Vacuously-green guard**: each smoke asserts the wiring by checking that the listener actually fired (a marker call on the fake ctx), per smoke-writing §3.
 
 ## 8. Acceptance criteria
 
-1. Both bundles build clean serialized; all smokes pass with zero changes to existing suites.
-2. Live: profile bundle list gains the coach; a session that issues `sed -i` receives the tier-1
-   note after `threshold` offenses; ledger at `~/.dsh/playform/hook-dsh-tool-coach.log` fills with
-   the §4 strings; volatile toggles flip enforce/tier2 without remount (after the granular volatile
-   fix lands).
-3. The dedicated tools are never judged; legitimate bash never counted (smokes R1/R6).
-4. No listener ever throws into a waterfall (fail-open verified by a smoke that injects a malformed
-   command payload).
+1. Both bundles build clean serialized, and all smokes pass with zero changes to existing suites.
+
+2. Live: the profile bundle list gains the coach; a session that issues `sed -i` receives the tier-1 note after `threshold` offenses; the ledger at `~/.dsh/playform/hook-dsh-tool-coach.log` fills with the §4 strings; volatile toggles flip enforce/tier2 without a remount (after the granular volatile fix lands).
+
+3. The dedicated tools are never judged, and legitimate bash is never counted (smokes R1/R6).
+
+4. No listener ever throws into a waterfall, which a smoke verifies by injecting a malformed command payload (fail-open).
