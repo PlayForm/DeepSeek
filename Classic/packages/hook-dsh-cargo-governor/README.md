@@ -1,7 +1,8 @@
 # @playform/hook-dsh-cargo-governor - The silent Cargo.toml governor
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md).
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md).
 
 ## The role
 
@@ -85,8 +86,10 @@ update: FAILED — see lines above
 ```
 
 Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
-module identity is `hook-dsh-governor-cargo`). The activation line is written by `apply()` - "did it
-activate" must be answerable from the ledger alone.
+module identity is `hook-dsh-governor-cargo`).
+
+The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
+alone.
 
 ## The build and the tests
 

@@ -1,7 +1,8 @@
 # @playform/ets-hook-dsh-normalize-spaces - The spaces normalizer for model output
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan: the
-> [factory README](../ets-plugin-dsh-factory/README.md), the
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: the [factory README](../ets-plugin-dsh-factory/README.md), the
 > [core README](../ets-lib-dsh-core/README.md), and the
 > [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 > reference.
@@ -13,17 +14,24 @@ The **space normalizer for model output** - a DeepSeek Harness plugin that hooks
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the unicode space family in model output, live in the transcript: every visible
 non-terminator space that is not the ASCII space becomes the plain ASCII space - U+00A0 to `' '`,
-quads and quirks alike. A **CLASS flavor** of the normalize family: the core's `Spaces` class
-(Unicode's Zs category minus the ASCII space) plus a configurable `replacement` string (default
-`" "`, the plain ASCII space). The @-sentence identity: **Hook @ DSH @ Normalize @ Spaces**. The
-family's `raw-write` tool (registered by
+quads and quirks alike.
+
+A **CLASS flavor** of the normalize family: the core's `Spaces` class (Unicode's Zs category minus
+the ASCII space) plus a configurable `replacement` string (default `" "`, the plain ASCII space).
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Spaces**.
+
+The family's `raw-write` tool (registered by
 [ets-hook-dsh-normalize-dash](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms
 too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default false =
-verbatim) is the only normalization it applies. Unlike the governance family, the rewrite flows into
-both the live UI and the durable transcript - the normalization is deliberately **VISIBLE; it IS the
-feature**. The shared Effect-TS plumbing - the runtime wiring, the stream machinery, the
-`Activate`/`Append` ledger composer and the generic `normalize-overpass` handler - comes from the
-base [ets-base-dsh](../ets-base-dsh) package.
+verbatim) is the only normalization it applies.
+
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+the normalization is deliberately **VISIBLE; it IS the feature**.
+
+The shared Effect-TS plumbing - the runtime wiring, the stream machinery, the `Activate`/`Append`
+ledger composer and the generic `normalize-overpass` handler - comes from the base
+[ets-base-dsh](../ets-base-dsh) package.
 
 ## The surfaces
 
@@ -66,8 +74,10 @@ hook-dsh-normalize-spaces: overpass: normalized N char(s) in step batch (turn T 
 
 The activation line is written by `apply()`; the count line and the overpass lines only appear on a
 normal completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream
-writes no line). The `hook-dsh-normalize-spaces: ` prefix is the `<State.Module>:` identity the
-factory's `Append` composes - the Classic identity, kept byte-identical across the two variants.
+writes no line).
+
+The `hook-dsh-normalize-spaces: ` prefix is the `<State.Module>:` identity the factory's `Append`
+composes - the Classic identity, kept byte-identical across the two variants.
 
 ## The build and the tests
 

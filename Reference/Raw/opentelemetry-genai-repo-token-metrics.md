@@ -1,5 +1,4 @@
-
-```
+````
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Token Metrics
 --->
@@ -49,24 +48,24 @@ Embeddings operations only report the
 histogram, and total token usage can be computed from it.
 
 > [!NOTE]
-> 
+>
 > The `gen_ai.client.inference.operation.input_tokens` and
 > `gen_ai.client.inference.operation.output_tokens` histograms are
 > deliberately not broken down by modality: percentiles across modalities do
 > not add up.
-> 
+>
 > A query like this one appears valid:
-> 
+>
 > ```promql
 > histogram_quantile(0.95,
 >   sum(rate({"gen_ai.client.inference.operation.input_tokens"}[5m]))
 > )
 > ```
-> 
+>
 > However, if modality were added as a dimension, it would produce meaningless results: for
 > 100 identical operations with 300 input tokens each (100 text and 200 image),
 > it would return 200 instead of 300.
-> 
+>
 > For the full reasoning behind this design, see
 > [Token metrics design](/docs/gen-ai/non-normative/token-metrics-design.md).
 
@@ -978,5 +977,4 @@ Instrumentations SHOULD document the list of errors they report.
 [DocumentStatus]: https://opentelemetry.io/docs/specs/otel/document-status
 [ExplicitBucketBoundaries]: https://github.com/open-telemetry/opentelemetry-specification/blob/v1.55.0/specification/metrics/api.md#instrument-advisory-parameters
 
-```
-
+````

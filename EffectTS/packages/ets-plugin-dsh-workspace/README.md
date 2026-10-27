@@ -6,10 +6,11 @@
 ## The role
 
 The **workspace agent**: the workspace regime's conversational surface (the operational view,
-`Documentation/Plans/Workspace/WORKSPACE-AGENT.md`). The conversation addresses the workspace
-through this plugin; everything else in the family - the stamps, the indexes, the validations, the
-licenses, the journals, the gates - stays the invisible plugin flow until an event surfaces it (the
-visibility rule).
+`Documentation/Plans/Workspace/WORKSPACE-AGENT.md`).
+
+The conversation addresses the workspace through this plugin; everything else in the family - the
+stamps, the indexes, the validations, the licenses, the journals, the gates - stays the invisible
+plugin flow until an event surfaces it (the visibility rule).
 
 ## The surfaces
 
@@ -24,15 +25,19 @@ indexing trigger that fills the graph.
 | `workspace_context` | node id or query, budget               | the orientation packet (WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE)    |
 | `workspace_index`   | path (default = session cwd), maxFiles | the walk's counts: indexed, skipped, failed, files                                  |
 
-Compact tables plus ids; no full file bodies; pagination by cursor, never offset. The packet is
-bounded (target 2k tokens), ranked by edge strength, and always versioned so a stale view is
-detectable.
+Compact tables plus ids; no full file bodies; pagination by cursor, never offset.
+
+The packet is bounded (target 2k tokens), ranked by edge strength, and always versioned so a stale
+view is detectable.
 
 `workspace_index` is the indexing trigger: it delegates to the graph service's `indexWorkspace`, so
 the walk, the per-file gates, the `maxFiles` bound and the counts all stay in
-`@playform/plugin-dsh-workspace-graph` - the agent never touches `ctx.fs` itself. Run it first when
-the graph is empty; `workspace_map` on an unindexed workspace honestly reports zero files. Its
-byte-exact ledger line (the one NEW line this work adds; the rest are unchanged in SCHEME.md):
+`@playform/plugin-dsh-workspace-graph` - the agent never touches `ctx.fs` itself.
+
+Run it first when the graph is empty; `workspace_map` on an unindexed workspace honestly reports
+zero files.
+
+Its byte-exact ledger line (the one NEW line this work adds; the rest are unchanged in SCHEME.md):
 
 ```text
 workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
@@ -72,8 +77,12 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 ## Position in the family
 
 The agent orchestrates every hook and is the only conversational surface; its Config is the family's
-surface knobs. It is a pure consumer in v0: `inject: ["workspaceGraph", "pluginFactory", "tools"]`,
-no event listeners. Plan: `Documentation/Plans/Workspace-Family/WORKSPACE-AGENT.md`;
+surface knobs.
+
+It is a pure consumer in v0: `inject: ["workspaceGraph", "pluginFactory", "tools"]`, no event
+listeners.
+
+Plan: `Documentation/Plans/Workspace-Family/WORKSPACE-AGENT.md`;
 `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` sections 3.4-3.5.
 
 ## The plan

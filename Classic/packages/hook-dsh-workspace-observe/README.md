@@ -7,9 +7,12 @@
 
 The workspace-observe hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release, Wave 1). The first step of the invisible flow: on every `fs/observed` event the hook
-records one **observation stamp** in its own KV storage domain - and the conversation never sees the
-stamps. A later wave's events surface them.
+release, Wave 1).
+
+The first step of the invisible flow: on every `fs/observed` event the hook records one
+**observation stamp** in its own KV storage domain - and the conversation never sees the stamps.
+
+A later wave's events surface them.
 
 ## The surfaces
 
@@ -30,18 +33,23 @@ One stamp per distinct version (and per manual call; the repeat guard below coal
 - `version` - the observed version token, verbatim; `absent` for an absent observation (never a
   fabricated token).
 - `origin` - how the stamp was recorded.
+
 - `sequence` - the plugin's **own monotonic counter**, incremented once per stamp and persisted with
-  the domain (recovered on mount as the maximum loaded sequence). It is **never a wall clock** - the
-  family's no-real-timers rule.
+  the domain (recovered on mount as the maximum loaded sequence).
+
+    It is **never a wall clock** - the family's no-real-timers rule.
 
 ## The disciplines
 
 - The listener registers on the **ROOT context** (the factory's `Wire` - the exact
   `ctx.root.on("fs/observed", ...)` registration), so it hears every `fs/observed` emission.
+
 - Each recorded stamp is emitted on the family's **trace bus** as `observe/stamp` (the indexer's
-  first source, D5): the payload is `{ path, version, origin }`. The bus (`ctx.trace`, provided by
-  `@playform/plugin-dsh-factory`) is optional - a context without it records stamps exactly as
-  before and emits nothing.
+  first source, D5): the payload is `{ path, version, origin }`.
+
+    The bus (`ctx.trace`, provided by `@playform/plugin-dsh-factory`) is optional - a context
+    without it records stamps exactly as before and emits nothing.
+
 - The listener is a **synchronous recorder**: no awaits, no throws, no I/O. It reads the event
   only - it **never reads file content** and **never writes a file**.
 - Guard chain, in order: an event whose actor is the hook's **own actor object** is ignored
@@ -49,24 +57,33 @@ One stamp per distinct version (and per manual call; the repeat guard below coal
   (`ignored <path> (excluded)`); a non-matching path under a non-empty `include` is ignored
   (`ignored <path> (not included)`); a **repeat event** - the same path carrying the same version
   within the coalescing window - is dropped silently (no line, no stamp).
+
 - The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer): a repeat
   event for the same path within a short window (2 s on the module's clock, overridable in tests via
   the `State.Now` seam) announces a file state that is already recorded, because the version token
   identifies the state; a different version, or the same version after the window, is stamped
-  normally - the last distinct version always wins. The manual path is never guarded.
+  normally - the last distinct version always wins.
+
+    The manual path is never guarded.
+
 - A malformed event is caught and ledgered (`failed <path> (<reason>)`) - the listener never throws.
 - The latest stamp per path is the record (keyed by the path); a bounded ring of the last
   `maxStamps` stamps lives under the meta record `__ring` - the oldest drop is ledgered
   (`capped <path> (maxStamps <n>)`), never silently discarded.
+
 - The domain is the hook's **own** (`workspace_observe`, version 1, per-record layout,
   `backup-and-skip`, tables `stamps` + `ring`) - not extension records in the shared governance
-  domain. An absent storage facility is a silent skip (the stamps live in memory only); a present
-  facility whose open fails is loud (one ledger line, never rethrown).
+  domain.
+
+    An absent storage facility is a silent skip (the stamps live in memory only); a present facility
+    whose open fails is loud (one ledger line, never rethrown).
 
 ## The configuration
 
-See [SCHEME.md](SCHEME.md). Every knob is a volatile cell (hot edits commit without remounting):
-`enabled`, `domain`, `maxStamps`, `include`, `exclude` (plus the universal `log`/`logFile`).
+See [SCHEME.md](SCHEME.md).
+
+Every knob is a volatile cell (hot edits commit without remounting): `enabled`, `domain`,
+`maxStamps`, `include`, `exclude` (plus the universal `log`/`logFile`).
 
 ### The policy block (D6)
 
@@ -93,13 +110,16 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 The plugin ships DISABLED: the bundle entry declares `enabled: false` only, the plugin never appears
 in the profile's bundles, and it enables only by an explicit ACTIVATE (you edit the profile and
-restart). A cold mount logs `disabled (enabled=false)` and wires nothing.
+restart).
+
+A cold mount logs `disabled (enabled=false)` and wires nothing.
 
 ## The ledger
 
-One log per module: `~/.dsh/playform/hook-dsh-workspace-observe.log` (config `logFile`). The strings
-are the contract (byte-exact, `observe: ` prefix; the durable file lines are the `[ISO] message`
-forms):
+One log per module: `~/.dsh/playform/hook-dsh-workspace-observe.log` (config `logFile`).
+
+The strings are the contract (byte-exact, `observe: ` prefix; the durable file lines are the
+`[ISO] message` forms):
 
 ```
 observe: disabled (enabled=false)

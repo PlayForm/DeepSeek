@@ -1,22 +1,17 @@
-#  RFC 3339: Date and Time on the Internet: Timestamps
+# RFC 3339: Date and Time on the Internet: Timestamps
 
+- G. Klyne,
+- C. Newman
 
-  * G. Klyne, 
-  * C. Newman
+Proposed Standard
 
-
-Proposed Standard 
-  * Rate this RFC 
-  * Subscribe
-4 subscribed 
-  * Add to Set
-Added to 5 Sets
-
+- Rate this RFC
+- Subscribe 4 subscribed
+- Add to Set Added to 5 Sets
 
 **This RFC was updated, see**
-  * [RFC 9557](https://www.rfc-editor.org/info/rfc9557/). 
 
-
+- [RFC 9557](https://www.rfc-editor.org/info/rfc9557/).
 
 ```
 Network Working Group                                           G. Klyne
@@ -1076,4 +1071,3 @@ Acknowledgement
 Klyne, et. al.              Standards Track                    [Page 18]
 
 ```
-

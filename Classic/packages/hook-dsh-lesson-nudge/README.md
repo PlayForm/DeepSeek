@@ -3,17 +3,22 @@
 The post-turn nudge of the lesson-review family: it turns the `idle` edge of `agent/status` into a
 self-improvement review.
 
-**Hook @ DSH @ Nudge @ Lesson.** It owns no corpus and no prompt. It watches the agent's lifecycle,
-asks `@playform/plugin-dsh-lesson-review` whether a review is due, and runs that review from the
-true idle phase (`agent.runMaintenance`) - so the review never competes with the live turn for the
-endpoint and never enters the turn's own log.
+**Hook @ DSH @ Nudge @ Lesson.**
+
+It owns no corpus and no prompt.
+
+It watches the agent's lifecycle, asks `@playform/plugin-dsh-lesson-review` whether a review is due,
+and runs that review from the true idle phase (`agent.runMaintenance`) - so the review never
+competes with the live turn for the endpoint and never enters the turn's own log.
 
 ## Why the split
 
-The family separates a SERVICE (state, storage, writes) from a HOOK (an event surface). The review
-needs both: a corpus with a usage store and a queue, and a moment to run. Splitting them means
-either half can be replaced - a different trigger (a cron, a manual tool) can drive the same
-service, and a different review implementation can be driven by the same trigger.
+The family separates a SERVICE (state, storage, writes) from a HOOK (an event surface).
+
+The review needs both: a corpus with a usage store and a queue, and a moment to run.
+
+Splitting them means either half can be replaced - a different trigger (a cron, a manual tool) can
+drive the same service, and a different review implementation can be driven by the same trigger.
 
 ## The four gates
 
@@ -37,15 +42,17 @@ service, and a different review implementation can be driven by the same trigger
 
 ## Fail-open, always
 
-A throw inside a status emit breaks the harness's status publication. Every body is one `try/catch`;
-the maintenance task is detached from the emit so the listener returns immediately and a rejected
-review cannot become an unhandled rejection.
+A throw inside a status emit breaks the harness's status publication.
+
+Every body is one `try/catch`; the maintenance task is detached from the emit so the listener
+returns immediately and a rejected review cannot become an unhandled rejection.
 
 ## Ships disabled
 
-`enabled: false` is the schema default and the patch row - the family's idle-forever posture. A cold
-mount logs `disabled (enabled=false)` and registers the listener inert; flipping the cell lands on
-the next status transition.
+`enabled: false` is the schema default and the patch row - the family's idle-forever posture.
+
+A cold mount logs `disabled (enabled=false)` and registers the listener inert; flipping the cell
+lands on the next status transition.
 
 ## Wiring
 

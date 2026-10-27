@@ -5,22 +5,26 @@
 ## The role
 
 The central panel package of the UI family, on the **v4.1 child-slot model**
-(Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns
-the panel contract, the slot-aware registry, the adapter contract, and the thirteen per-bundle
-adapters; it renders what the adapters contribute and nothing else.
+(Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md).
+
+It owns the panel contract, the slot-aware registry, the adapter contract, and the thirteen
+per-bundle adapters; it renders what the adapters contribute and nothing else.
 
 ## The surfaces
 
 A pure client package: no host service, no tool, no event listener - the host half of the Loader row
-is an empty `apply()`. The surfaces are the two client mounts (`family-tab` in `conversation.view`
-and `overlay` in `shell.overlay`), the client bundle (`exports["./client"]`), and the client logger
+is an empty `apply()`.
+
+The surfaces are the two client mounts (`family-tab` in `conversation.view` and `overlay` in
+`shell.overlay`), the client bundle (`exports["./client"]`), and the client logger
 (`Source/Variable/Lines.ts`).
 
 ## The child-slot model
 
-The panel owns the render sites. Each mount registration DECLARES its child slot in the
-registration's `children` table; an adapter's client half injects the slot its manifest declares and
-registers one section component there.
+The panel owns the render sites.
+
+Each mount registration DECLARES its child slot in the registration's `children` table; an adapter's
+client half injects the slot its manifest declares and registers one section component there.
 
 ```text
 conversation.view
@@ -51,9 +55,10 @@ own child slot.
 | `open(target)`        | launches an overlay view (wired by the shell's overlay host)                     |
 
 A legacy registration that omits `slot` maps its `mount` onto a slot (`family-tab` ->
-`playform.panel.section`, `overlay` -> `playform.panel.overlay`). A second adapter id claiming an
-occupied `(slot, bundle)` pair is REFUSED with the documented line (see "Ledger lines");
-re-registering the same id replaces in place (the HMR rebind).
+`playform.panel.section`, `overlay` -> `playform.panel.overlay`).
+
+A second adapter id claiming an occupied `(slot, bundle)` pair is REFUSED with the documented line
+(see "Ledger lines"); re-registering the same id replaces in place (the HMR rebind).
 
 ## The adapter contract
 
@@ -73,8 +78,9 @@ An adapter is one manifest (`Source/Interface/Panel.ts`):
 | `enabled`    | optional live gate                                                  |
 
 `Source/Function/Adapter.ts` wires a manifest in both directions (the registry entry and the
-child-slot registration) inside `ctx.effect`, so plugin unload removes both with no residue. That
-function is the template every per-bundle adapter copies into its own client half.
+child-slot registration) inside `ctx.effect`, so plugin unload removes both with no residue.
+
+That function is the template every per-bundle adapter copies into its own client half.
 
 ## The three reference adapters
 
@@ -108,9 +114,10 @@ its own tab, and the host lane owns the rest.
 
 ## Status and the trace live source
 
-Each section renders its plugin's status: the activation state and the live tail. The panel consumes
-the **D5 trace bus** as its live source when the host exposes it in the browser (`ctx.trace`, or any
-client service under the `trace` name answering `on(kind, listener)`).
+Each section renders its plugin's status: the activation state and the live tail.
+
+The panel consumes the **D5 trace bus** as its live source when the host exposes it in the browser
+(`ctx.trace`, or any client service under the `trace` name answering `on(kind, listener)`).
 
 It seeds the tail from the bus's recent ring (when exposed) and subscribes to the names each adapter
 declares (`observe/stamp`, `graph/indexed`, `graph/invalidated` by default), keeping the recent
@@ -138,9 +145,11 @@ Writes take one of two routes:
 | `role("secret")`           | never written, never rendered                                     | the marker only; a namespace that declares a secret refuses the bridge write (the redacted value must not be restated) |
 
 The bridge resolves, in order: a client service named `panelFamilyBridge`, then
-`remote.playformFamilyPanel.editFull`. The HOST endpoint that calls `ctx.configEditor.edit()`
-belongs to the companion package `@playform/client-dsh-panel-family-host` (the next lane); this
-package only resolves the client-side face.
+`remote.playformFamilyPanel.editFull`.
+
+The HOST endpoint that calls `ctx.configEditor.edit()` belongs to the companion package
+`@playform/client-dsh-panel-family-host` (the next lane); this package only resolves the client-side
+face.
 
 With no bridge, plain fields render read-only and a write attempt logs the documented line.
 
@@ -175,8 +184,10 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 `pnpm prepublishOnly` runs the two-step build: the plugin build (ESM `Target/`), then
 `Maintain/Build-Client-Bundle.mjs` (the harness closure factory
 `window.__ModuleLoader__.load({ id, factory(require) })` written to `Target/Client.bundle.js`), then
-the Test build and the harness selfcheck. `exports["./client"]` points the module system at
-`Target/Client.bundle.js`; the ESM `Target/Client.js` stays the dev/test surface.
+the Test build and the harness selfcheck.
+
+`exports["./client"]` points the module system at `Target/Client.bundle.js`; the ESM
+`Target/Client.js` stays the dev/test surface.
 
 | Folder                  | Count   | Covers                                                                                                                                                                                                                                                                                                       |
 | ----------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -188,8 +199,10 @@ the Test build and the harness selfcheck. `exports["./client"]` points the modul
 
 ## What it is not
 
-No host service, no Typert endpoint, no file read, no config editor. The host half of the Loader
-entry is an empty `apply()` - the row exists so the client module system serves the `./client` half.
+No host service, no Typert endpoint, no file read, no config editor.
+
+The host half of the Loader entry is an empty `apply()` - the row exists so the client module system
+serves the `./client` half.
 
 The tail/stats endpoint and the plain-field bridge endpoint live in
 `@playform/client-dsh-panel-family-host`.

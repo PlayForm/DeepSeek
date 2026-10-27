@@ -6,11 +6,14 @@
 ## The role
 
 The INGESTER (ctx.ingester) - the apply direction of the batch flow
-(Documentation/Plans/PASS-ON-AND-INGESTER.md section 4). A DeepSeek Harness service that turns an
-approved batch proposal into file operations.
+(Documentation/Plans/PASS-ON-AND-INGESTER.md section 4).
 
-**THE ONLY WRITER.** The pass-on (plugin-dsh-pass-on) and the decision never write; the ingester is
-the batch's write path, through the governed filesystem (`ctx.fs`).
+A DeepSeek Harness service that turns an approved batch proposal into file operations.
+
+**THE ONLY WRITER.**
+
+The pass-on (plugin-dsh-pass-on) and the decision never write; the ingester is the batch's write
+path, through the governed filesystem (`ctx.fs`).
 
 ```
 pass-on (prepare) -> decision -> INGESTER (apply, version-fenced) -> result
@@ -35,8 +38,10 @@ pass-on (prepare) -> decision -> INGESTER (apply, version-fenced) -> result
 
 The constructor registers on the bus: `batch/proposed` records the proposal (bounded by
 `maxProposals`), `batch/decision` resolves it and applies it through the same content fence - so an
-approved batch applies with no caller wiring at all. A decision for an unrecorded proposal is
-refused (`unknown` / `no proposal recorded for the decision`).
+approved batch applies with no caller wiring at all.
+
+A decision for an unrecorded proposal is refused (`unknown` /
+`no proposal recorded for the decision`).
 
 **One apply per decision**: the claim is taken synchronously, keyed by `proposal:outcome:at`, so the
 same decision delivered twice (the tool's handoff and the event) applies exactly once.
@@ -50,16 +55,19 @@ After an apply, the ingester reports the outcome to `ctx.feedback` (when present
 ## The validation (before any write)
 
 The decision references this proposal; the outcome is `approved`; the proposal is not expired; the
-proposal carries operations. Anything else rejects the whole run with every target reported as
-`skipped`.
+proposal carries operations.
+
+Anything else rejects the whole run with every target reported as `skipped`.
 
 ## The version fence
 
-Each target carries the sha256 of its content at prepare time. Before applying, the current content
-is hashed and compared: a mismatch is a **conflict**, not a silent overwrite (a target edited
-between the preview and the apply). Each operation is then applied as a version-fenced literal edit
-(`ctx.fs.editText` with the version guard), so a racing write between edits fails `FS_STALE_VERSION`
-and lands as `recovery-required`.
+Each target carries the sha256 of its content at prepare time.
+
+Before applying, the current content is hashed and compared: a mismatch is a **conflict**, not a
+silent overwrite (a target edited between the preview and the apply).
+
+Each operation is then applied as a version-fenced literal edit (`ctx.fs.editText` with the version
+guard), so a racing write between edits fails `FS_STALE_VERSION` and lands as `recovery-required`.
 
 ## The failure rule
 
@@ -103,7 +111,9 @@ shipped `approve`: the decision's approval (the validation above) IS the gate, a
 that posture; the other verdicts are declared for uniformity.
 
 A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+refinement).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The build and the tests
 

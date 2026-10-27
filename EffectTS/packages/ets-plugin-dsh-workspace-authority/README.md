@@ -6,9 +6,10 @@
 ## The role
 
 The workspace-authority service: the authority step of the workspace family's invisible flow -
-operate proposes → the govern gates → **the authority licenses** → the approve binds. The service
-keeps the **three separate authority records** (v4.1 section 3.9, correcting the corpus's own
-conflation) and owns the **eviction dispositions**.
+operate proposes → the govern gates → **the authority licenses** → the approve binds.
+
+The service keeps the **three separate authority records** (v4.1 section 3.9, correcting the
+corpus's own conflation) and owns the **eviction dispositions**.
 
 The plugin ships **disabled** (the idle-forever posture): the service registers and reads honestly,
 but grants, leases and evictions are refused with a byte-stable ledger line until enabled.
@@ -29,9 +30,12 @@ order candidates.
 
 `keep` · `defer` · `evict` · `discard` · `promote` - decided by the policy table (rules per resource
 kind, with defaults, TTLs and the revocation timing); **the license decides, the weight only
-ranks**. Two shields force `keep`: an open non-expired lease, and an active capability (a revoked
-one shields only within the revocation grace). `evict` keeps the record in the graveyard
-(recoverable); `discard` removes it permanently.
+ranks**.
+
+Two shields force `keep`: an open non-expired lease, and an active capability (a revoked one shields
+only within the revocation grace).
+
+`evict` keeps the record in the graveyard (recoverable); `discard` removes it permanently.
 
 ## Service
 
@@ -77,8 +81,9 @@ This package's actions are read-only and record, all AUTOMATIC; it has NO gated 
 write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
 The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement). The
-defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The ledger (module-owned, byte-stable)
 

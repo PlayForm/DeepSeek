@@ -12,7 +12,9 @@ content-derived fingerprints, and the `indexRevision` the graph was built from.
 
 The v0 parser is a line/regex scanner (no compiler API): TypeScript and JavaScript declarations with
 brace-counted spans, relative-import edges, test-path detection, and one `DocSection` per Markdown
-heading. The remaining deferred kinds (`ConfigKey`, `calls`, `tests`) are NOT faked - W2+ work.
+heading.
+
+The remaining deferred kinds (`ConfigKey`, `calls`, `tests`) are NOT faked - W2+ work.
 
 ## The references edge (the semantics consumer wiring)
 
@@ -28,9 +30,11 @@ edge; the `graph: indexed ...` edge count includes the new edges and no new ledg
 
 The class-form loader contract: `export default class WorkspaceGraph extends Service` registered
 under the exact name `workspaceGraph`, `static inject = ["fs", "storage"]`, and `static Config` (the
-Schemastery schema, every field volatile). The plugin ships DISABLED (`enabled: false` in the patch
-row and the schema default): the service registers, and `indexFile` skips with the byte-exact
-`graph: skipped <path> (disabled)` line until an explicit ACTIVATE.
+Schemastery schema, every field volatile).
+
+The plugin ships DISABLED (`enabled: false` in the patch row and the schema default): the service
+registers, and `indexFile` skips with the byte-exact `graph: skipped <path> (disabled)` line until
+an explicit ACTIVATE.
 
 ## The indexing trigger (why the graph is no longer empty)
 
@@ -76,8 +80,9 @@ graph: reindexed <path> (<status>)
 
 Records live in the KV facet through the storage domain (one record per path plus the `__meta`
 revision record in the `records` table of the domain named `Config.domain`, default
-`workspace_graph`); absent storage falls back to the in-memory mirror. The plugin writes nothing
-outside its own domain.
+`workspace_graph`); absent storage falls back to the in-memory mirror.
+
+The plugin writes nothing outside its own domain.
 
 Build and smoke:
 
@@ -86,8 +91,9 @@ pnpm --dir Classic/packages/plugin-dsh-workspace-graph run prepublishOnly
 node Classic/packages/plugin-dsh-workspace-graph/Target/Test/ < Folder > /Test.js
 ```
 
-Plan: Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md section 4 (the frozen contract). Schema:
-see SCHEME.md.
+Plan: Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md section 4 (the frozen contract).
+
+Schema: see SCHEME.md.
 
 ### The policy block (D6)
 
@@ -110,7 +116,9 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 ## The plan
 
 - [Workspace-Family/WAVE-1-BRIEF](../../../Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md)
-  section 4 - the frozen contract. Schema: see SCHEME.md.
+  section 4 - the frozen contract.
+
+    Schema: see SCHEME.md.
 
 ## License
 

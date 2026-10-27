@@ -16,9 +16,11 @@ labeled `additionalContexts` notice naming it.
 Two intents in the embedded pack (`Source/Variable/Defaults.ts`):
 
 - **Neighborhood** - resolved through the graph service; a static fallback set is appended only when
-  the graph answers with an _empty_ component. When the service is absent or throws, the intent
-  **abstains** with a `graph unavailable` ledger line (once per apply) - the graph intent never
-  guesses.
+  the graph answers with an _empty_ component.
+
+    When the service is absent or throws, the intent **abstains** with a `graph unavailable` ledger
+    line (once per apply) - the graph intent never guesses.
+
 - **Sibling** - a package-name grep resolves statically (the family roster, the inventory, the
   sibling README).
 
@@ -49,9 +51,11 @@ hook against the real populated graph (the real graph's own `indexWorkspace` fil
 ## The plan
 
 Built and smoked (the suite is the arbiter): `Loader-And-Activation`, `Pipeline-And-Graph` (the
-FakeGraph contract) and `Real-Graph-Neighborhood` (the real service). Ships `enabled: false` in the
-bundle patch. Plan: [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
-§9.2.
+FakeGraph contract) and `Real-Graph-Neighborhood` (the real service).
+
+Ships `enabled: false` in the bundle patch.
+
+Plan: [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.2.
 
 ## License
 

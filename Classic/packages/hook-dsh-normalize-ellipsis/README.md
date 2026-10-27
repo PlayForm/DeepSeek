@@ -1,8 +1,9 @@
 # @playform/hook-dsh-normalize-ellipsis - The ellipsis normalizer for model output
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan: the
-> [factory README](../plugin-dsh-factory/README.md), the [core README](../lib-dsh-core/README.md),
-> and the
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: the [factory README](../plugin-dsh-factory/README.md), the
+> [core README](../lib-dsh-core/README.md), and the
 > [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 > reference.
 
@@ -12,14 +13,16 @@ The **ellipsis normalizer for model output** - a DeepSeek Harness plugin that ho
 [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the horizontal ellipsis in model output, live in the transcript: every typographic
-three-dot ellipsis code point becomes the ASCII three-dot sequence - U+2026 to `...`. A **CLASS
-flavor** of the normalize family: the core's `Ellipsis` class plus a configurable `replacement`
-string (default `...`).
+three-dot ellipsis code point becomes the ASCII three-dot sequence - U+2026 to `...`.
 
-The @-sentence identity: **Hook @ DSH @ Normalize @ Ellipsis**. The family's `raw-write` tool
-(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
-transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
-false = verbatim) is the only normalization it applies.
+A **CLASS flavor** of the normalize family: the core's `Ellipsis` class plus a configurable
+`replacement` string (default `...`).
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Ellipsis**.
+
+The family's `raw-write` tool (registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash))
+bypasses this flavor's transforms too - the exemption is family-wide, so the tool's explicit
+`normalize` parameter (default false = verbatim) is the only normalization it applies.
 
 Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
 the normalization is deliberately **VISIBLE; it IS the feature**.

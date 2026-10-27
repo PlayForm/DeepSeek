@@ -12,7 +12,9 @@ content-derived fingerprints, and the `indexRevision` the graph was built from.
 
 The v0 parser is a line/regex scanner (no compiler API): TypeScript and JavaScript declarations with
 brace-counted spans, relative-import edges, test-path detection, and one `DocSection` per Markdown
-heading. The remaining deferred kinds (`ConfigKey`, `calls`, `tests`) are NOT faked - W2+ work.
+heading.
+
+The remaining deferred kinds (`ConfigKey`, `calls`, `tests`) are NOT faked - W2+ work.
 
 ## The surfaces
 
@@ -35,9 +37,11 @@ edge; the `graph: indexed ...` edge count includes the new edges and no new ledg
 
 The class-form loader contract: `export default class WorkspaceGraph extends Service` registered
 under the exact name `workspaceGraph`, `static inject = ["fs", "storage"]`, and `static Config` (the
-Schemastery schema, every field volatile). The plugin ships DISABLED (`enabled: false` in the patch
-row and the schema default): the service registers, and `indexFile` skips with the byte-exact
-`graph: skipped <path> (disabled)` line until an explicit ACTIVATE.
+Schemastery schema, every field volatile).
+
+The plugin ships DISABLED (`enabled: false` in the patch row and the schema default): the service
+registers, and `indexFile` skips with the byte-exact `graph: skipped <path> (disabled)` line until
+an explicit ACTIVATE.
 
 ## The indexing trigger (why the graph is no longer empty)
 
@@ -74,8 +78,9 @@ A disabled graph wires nothing; an excluded path is ignored silently.
 
 Records live in the KV facet through the storage domain (one record per path plus the `__meta`
 revision record in the `records` table of the domain named `Config.domain`, default
-`workspace_graph`); absent storage falls back to the in-memory mirror. The plugin writes nothing
-outside its own domain.
+`workspace_graph`); absent storage falls back to the in-memory mirror.
+
+The plugin writes nothing outside its own domain.
 
 ## The ledger
 
@@ -125,14 +130,17 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The graph's actions are index, all **AUTOMATIC**; it has **no gated action** (no file write, no
-batch commit, no spawn), so the block documents the posture and refuses nothing. The block is one
-volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+batch commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The plan
 
 - [Workspace-Family/WAVE-1-BRIEF](../../../Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md)
-  section 4 - the frozen contract. Schema: see SCHEME.md.
+  section 4 - the frozen contract.
+
+    Schema: see SCHEME.md.
 
 ## License
 

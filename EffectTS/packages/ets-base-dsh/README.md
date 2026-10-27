@@ -8,8 +8,9 @@ depends on.
 - The fiber/stream machinery: the Gate transformer and the pure reducers, the Update envelope.
 - The shared contract types: the factory's `Interface/*` structural contracts.
 
-Usable outside the harness entirely (the PlayForm ecosystem). The only external dependency is
-`effect` (pinned at exactly `4.0.2`).
+Usable outside the harness entirely (the PlayForm ecosystem).
+
+The only external dependency is `effect` (pinned at exactly `4.0.2`).
 
 ```sh
 pnpm add @playform/ets-base-dsh

@@ -10,25 +10,35 @@ The workspace family's **live client**: the client half of the workspace live vi
 
 The presentation, **stable-until-event**:
 
-- The live view does NOT re-render continuously. It stays stable until a workspace event or a D5
-  trace envelope surfaces a change; it presents at the END of the invisible flow (... -> the audit
-  lines -> the live view presents).
-- It presents the workspace's REPRESENTATIONS of the Entity/Presentation/Interaction model. It never
-  conflates a running OS process with a managed entity (the OS execution axis stays orthogonal).
+- The live view does NOT re-render continuously.
+
+    It stays stable until a workspace event or a D5 trace envelope surfaces a change; it presents at
+    the END of the invisible flow (... -> the audit lines -> the live view presents).
+
+- It presents the workspace's REPRESENTATIONS of the Entity/Presentation/Interaction model.
+
+    It never conflates a running OS process with a managed entity (the OS execution axis stays
+    orthogonal).
+
 - The machinery behind the view stays invisible; the presentation IS the visible part.
 
 ## The surfaces
 
 Pure client package: no host service, no tool, no event listener - the host half of the Loader row
-is an empty `apply()`. The surfaces are the client service `workspaceLive` (`getSnapshot`,
-`subscribe`, `ingest`, `refresh`), the `conversation.view` tab `workspace-live`, the client bundle
-(`exports["./client"]`), and the structurally-read D5 trace (`ctx.get("trace")`).
+is an empty `apply()`.
+
+The surfaces are the client service `workspaceLive` (`getSnapshot`, `subscribe`, `ingest`,
+`refresh`), the `conversation.view` tab `workspace-live`, the client bundle (`exports["./client"]`),
+and the structurally-read D5 trace (`ctx.get("trace")`).
 
 ## What it does
 
 - **The workspaceLive service** (client): `getSnapshot`, `subscribe`, `ingest(event)`,
-  `refresh(graph)`. The store emits a NEW snapshot object only when an event or a graph refresh
-  arrives - no polling, no timer.
+  `refresh(graph)`.
+
+    The store emits a NEW snapshot object only when an event or a graph refresh arrives - no
+    polling, no timer.
+
 - **The D5 trace is the live source**: the client half resolves `ctx.get("trace")` structurally
   (`on`/`ring`), seeds the tail from the bus's recent ring, follows `observe/stamp`,
   `graph/indexed`, `graph/invalidated`, and the batch transitions `batch/proposed`,
@@ -59,8 +69,9 @@ locally in `Source/Interface/Siblings.ts` from the W1 frozen contract
 (Documentation/Plans/Workspace-Family/ WAVE-1-BRIEF.md sections 4-5).
 
 No runtime import of a sibling package exists yet; the end-phase wires the real imports and the real
-channels. The trace source needs no sibling import: the bus is read structurally from the client
-context.
+channels.
+
+The trace source needs no sibling import: the bus is read structurally from the client context.
 
 ## The configuration
 

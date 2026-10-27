@@ -33,9 +33,11 @@ packages.
 
 - **Consumed by the factory-era governance hooks** - the package.json governor, the pinner and the
   cargo governor import the helpers directly (`Suppress` in every listener's catch, `Policy` in the
-  update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults). The
-  [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) re-exports NOTHING from the core (its
-  19-method service surface stays stable).
+  update engines, `Refusal` in the transforms, `Section`/`Default` as the state defaults).
+
+    The [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) re-exports NOTHING from the core (its
+    19-method service surface stays stable).
+
 - **Consumed by the six stream normalizers** -
   [`ets-hook-dsh-normalize-dash`](../ets-hook-dsh-normalize-dash) and the five
   `ets-hook-dsh-normalize-*` flavors are each a table plus a closure over `Replace`/`ReplaceMap`,
@@ -202,13 +204,16 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
   `` `${module}: ${kind} error (suppressed): ${cause}` `` (kind is `"listener"` or
   `"continuation"`) - the byte-identical line every contained throw produces (logger-only, never the
   ledger).
+
 - **`Policy(append, file, defaults, quiet?)`** - the update-policy loader: read the policy file
   (plain fs, the discovery exemption) when given and readable; any failure falls back to the
   module's built-in `defaults` with the family's byte-identical diagnostic lines
   (`update: unreadable policy at ... - using built-in default`,
-  `update: no policy at ... - using built-in default`, `update: using built-in default policy`). The
-  `Quiet` form skips the diagnostics (a module reading the policy's fields to drive its chain pass
-  BEFORE the update job).
+  `update: no policy at ... - using built-in default`, `update: using built-in default policy`).
+
+    The `Quiet` form skips the diagnostics (a module reading the policy's fields to drive its chain
+    pass BEFORE the update job).
+
 - **`Refusal(append, path, sections, current, next)`** - the shared REFUSAL GUARD: only the declared
   dependency sections may differ from the author's manifest; a difference anywhere else composes the
   byte-identical refusal line
@@ -220,11 +225,15 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
   refresh flow return as a `{ Dispatch, Settle }` pair; every string, collection and child stage is
   INJECTED through the dependencies, so the module keeps its ledger vocabulary (the smokes stay the
   arbiter).
+
 - **`Activate(fields)`** - the ACTIVATION-LINE composer: the `activated (...)` proof line's shared
   string mechanics - the `activated (` prefix, the `k=v` pair join with `, `, the `)` suffix and the
   skip-absent-field rule (a pair with an `undefined` value is omitted; an empty key renders a bare
-  segment). The FIELD LIST stays module-side: each of the nine Apply sites passes its own strings,
-  byte-identical to the hand-composed line it replaced.
+  segment).
+
+    The FIELD LIST stays module-side: each of the nine Apply sites passes its own strings,
+    byte-identical to the hand-composed line it replaced.
+
 - **`Replace` / `ReplaceMap`** - the two generic replacers: a fresh per-call regex (no shared
   `lastIndex` state), a **function replacer** (a config value or table value is a literal string -
   `$` patterns are never interpreted), and the `{ text, count }` contract where `count === 0` means
@@ -323,17 +332,21 @@ tree-identity substitutions only); `Chunk` and `Block` are served by the shared
 
 There are no ETS-only folders: the stream gate and the Update envelope live in the base
 (`Source/Stream/Gate.ts`, `Source/Function/Update.ts`), so the additive R1 coverage re-homed from
-`EffectTS/smokes/core-smoke.mjs` has no package-local folder. The shared harness
-(`Source/Test/Harness.ts`) owns the Check counter and the tmpdir fixture.
+`EffectTS/smokes/core-smoke.mjs` has no package-local folder.
+
+The shared harness (`Source/Test/Harness.ts`) owns the Check counter and the tmpdir fixture.
 
 The tests compile to `Target/Test/` in a separate ESBuild step (`Configuration/Test-ESBuild.ts`)
 that runs SECOND in `prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively).
+
 Each test runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
 (`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its README).
 
 Neither tree is ever published: `.npmignore` excludes `Source/Test/` and `Target/Test/`, and the
-package `files` field negates `Target/Test`. The smoke suite `EffectTS/smokes/core-smoke.mjs` stays
-in place as the migration fallback until a later lane retires it.
+package `files` field negates `Target/Test`.
+
+The smoke suite `EffectTS/smokes/core-smoke.mjs` stays in place as the migration fallback until a
+later lane retires it.
 
 ## License 📜
 

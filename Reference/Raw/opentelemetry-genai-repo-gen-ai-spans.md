@@ -1,4 +1,3 @@
-
 ```
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Spans
@@ -923,4 +922,3 @@ TODO
 [DocumentStatus]: https://opentelemetry.io/docs/specs/otel/document-status
 
 ```
-

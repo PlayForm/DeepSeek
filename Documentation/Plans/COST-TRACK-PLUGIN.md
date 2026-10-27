@@ -53,11 +53,11 @@ commands), which is not part of the model-visible tool list.
 
 Three durable facts exist already; the plugin computes from them rather than re-deriving them.
 
-| Fact | Source | Why it is the right source |
-| --- | --- | --- |
-| Tokens per model call | `assistant/message` event's `usage: TokenUsage` | The provider's own numbers, already durable in the session log, with `turn` and `step` on the same record. |
-| Which files a step touched | `tool/call` event's `name` + `arguments` | Durable, ordered, and carries the same `turn`/`step`. |
-| What the request surface contained | surface events (`system/message`, `user/message`, `assistant/message`, `tool/result`) before the call | The context that produced the call, recoverable by replay. |
+| Fact                               | Source                                                                                                | Why it is the right source                                                                                 |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Tokens per model call              | `assistant/message` event's `usage: TokenUsage`                                                       | The provider's own numbers, already durable in the session log, with `turn` and `step` on the same record. |
+| Which files a step touched         | `tool/call` event's `name` + `arguments`                                                              | Durable, ordered, and carries the same `turn`/`step`.                                                      |
+| What the request surface contained | surface events (`system/message`, `user/message`, `assistant/message`, `tool/result`) before the call | The context that produced the call, recoverable by replay.                                                 |
 
 The listener set is exactly two, both on the session log:
 
@@ -68,10 +68,11 @@ The listener set is exactly two, both on the session log:
 A debounced timer and `session/disposed` are the two safety drains, so a session that ends without a
 flush still lands.
 
-`TokenUsage` is `{ inputTokens, outputTokens, totalTokens?, cacheReadTokens?, cacheWriteTokens?,
-reasoningTokens? }`. Live verification on 2026-10-27: `totalTokens = inputTokens + cacheReadTokens +
-outputTokens`, so `inputTokens` is the **uncached** remainder and `cacheReadTokens` is a separate,
-discounted bucket. Pricing must never treat `inputTokens` as the whole input.
+`TokenUsage` is
+`{ inputTokens, outputTokens, totalTokens?, cacheReadTokens?, cacheWriteTokens?, reasoningTokens? }`.
+Live verification on 2026-10-27: `totalTokens = inputTokens + cacheReadTokens + outputTokens`, so
+`inputTokens` is the **uncached** remainder and `cacheReadTokens` is a separate, discounted bucket.
+Pricing must never treat `inputTokens` as the whole input.
 
 The surface weights come from `tokenMeter`:
 
@@ -80,14 +81,15 @@ The surface weights come from `tokenMeter`:
 - `ctx.tokenMeter.measure(session)` prices the live surface with the provider's anchor when it
   applies. It is O(surface) and is used once per drain for the newest step only.
 
-Weights are ratios, so the estimator's absolute error cancels; the **cost** always uses the provider's
-`usage`, never the estimator.
+Weights are ratios, so the estimator's absolute error cancels; the **cost** always uses the
+provider's `usage`, never the estimator.
 
 ## 2. The attribution model
 
 Two halves, stored separately, so an export can show either and an invoice can defend both.
 
-A step `S` in session `X` has one `Call` row. Its cost is split into an input side and an output side:
+A step `S` in session `X` has one `Call` row. Its cost is split into an input side and an output
+side:
 
     inputCost(S)  = inputTokens*inputRate + cacheReadTokens*cacheReadRate
                   + cacheWriteTokens*cacheWriteRate
@@ -128,8 +130,8 @@ the honest answer to "a single line change can cost a whole conversation".
 
     sum over F of (direct(F, S) + amortized(F, S)) + unattributed(S) = costTotal(S)
 
-within a cent per call. The drain asserts this in a smoke; a violation is a bug in the allocator, not
-a rounding artifact to be waved through.
+within a cent per call. The drain asserts this in a smoke; a violation is a bug in the allocator,
+not a rounding artifact to be waved through.
 
 ### 2.4 Recalculation
 
@@ -141,9 +143,9 @@ those three tables alone, and land byte-identical totals. No session log is read
 ## 3. The ledger schema
 
 One file, `~/.dsh/cost/ledger.db`, opened with `journal_mode=WAL`, `foreign_keys=ON`,
-`synchronous=NORMAL`. Every table is `STRICT`. Money is `REAL` in one currency per row (the `Currency`
-column), with rates stored per million tokens so the arithmetic is exact in the units the providers
-publish.
+`synchronous=NORMAL`. Every table is `STRICT`. Money is `REAL` in one currency per row (the
+`Currency` column), with rates stored per million tokens so the arithmetic is exact in the units the
+providers publish.
 
 The dimensions exist so one ledger serves many projects and many clients:
 
@@ -152,9 +154,9 @@ The dimensions exist so one ledger serves many projects and many clients:
   session's `cwd` and creates it on first sight.
 - `Session` - the conversation, with `ParentSessionId` so a subagent's cost rolls into its parent.
 - `File` - the path within the project; `FileVersion` - the content hash and size at a touch.
-- `Price` - append-only and effective-dated: `(Provider, Model, EffectiveFrom)` unique, `EffectiveTo`
-  open until a later row closes it. A price row is never updated; a change inserts a new row. That is
-  what makes a historical invoice reproducible after a provider raises its rates.
+- `Price` - append-only and effective-dated: `(Provider, Model, EffectiveFrom)` unique,
+  `EffectiveTo` open until a later row closes it. A price row is never updated; a change inserts a
+  new row. That is what makes a historical invoice reproducible after a provider raises its rates.
 - `Call` - one model request, with the usage, the resolved `PriceId`, and the computed cost columns.
 - `Touch` - one file interaction from one `tool/call`.
 - `ContextMass` - the per-file token mass of one call's surface.
@@ -310,7 +312,8 @@ guarded so a runtime without it fails loud at apply with one actionable line ins
 
 No tool. Three slash commands, registered through `ctx.commands`:
 
-- `/cost report [scope] [range]` - the rollup for `file`, `project`, `client`, `model`, or `session`.
+- `/cost report [scope] [range]` - the rollup for `file`, `project`, `client`, `model`, or
+  `session`.
 - `/cost export <csv|json> [path]` - the client-facing bundle.
 - `/cost annotate [path]` - write the cost comment into the named files, or into every file the
   ledger knows for the current project when no path is given.
@@ -325,13 +328,13 @@ path, and writes the same rows. The `Cursor` table makes it resumable and idempo
 as a job (`ctx.jobs.start`), never on the boot path, and its progress is a ledger line.
 
 Open: whether a backfilled call should be priced with the price that was effective at the call's
-`time` (correct for history) or with the current price (wrong for history, right for a live invoice).
-The plan is the call's own time, with a config switch.
+`time` (correct for history) or with the current price (wrong for history, right for a live
+invoice). The plan is the call's own time, with a config switch.
 
 ## 7. Annotation
 
-The comment is a marker-delimited block, so writing it twice is a no-op and writing it after a
-hand edit replaces only the block:
+The comment is a marker-delimited block, so writing it twice is a no-op and writing it after a hand
+edit replaces only the block:
 
 ```text
 // dsh-cost:begin
@@ -359,15 +362,16 @@ for Markdown, where an end-of-file block is invisible to a reader.
   RFC 4180 quoting.
 - `json` - one bundle: `{meta, priceBook, projects, files, calls, allocations, rollups}` with
   ISO-8601 UTC timestamps (RFC 3339), so a client can re-derive every number.
-- `markdown` - a one-page invoice per client: totals, per-project, per-file top-N, and the model mix.
+- `markdown` - a one-page invoice per client: totals, per-project, per-file top-N, and the model
+  mix.
 
 Open: whether the export should carry the raw call rows (large, auditable) or only the rollups
 (small, unverifiable). Plan: both, behind a flag.
 
 ## 9. Verification
 
-The arbiter is the package's own smoke suite, run by `pnpm --filter @playform/plugin-dsh-cost run
-prepublishOnly` and the harness selfcheck.
+The arbiter is the package's own smoke suite, run by
+`pnpm --filter @playform/plugin-dsh-cost run prepublishOnly` and the harness selfcheck.
 
 The cases that must exist:
 

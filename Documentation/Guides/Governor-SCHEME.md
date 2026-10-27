@@ -294,7 +294,7 @@ best-effort).
 ```
               AUTHOR THREAD(S) - main agent, subagents, workflow children
                  │  write / edit / str_replace_editor: package.json ANYWHERE
-                 │  (excluded segments: node_modules, .git, .dsh, ...)
+                 │  (excluded segments: node_modules, .git, .dsh, …)
                  ▼
         ┌────────────────────────── HOST EVENT BUS ──────────────────────────┐
         │ ① fs/write-intent (waterfall, single-slot): version guard only -   │
@@ -386,7 +386,7 @@ Non-edges (proven absent, marked ∄):
 4. **The activation.**
 
     Verify activation via `plugin_manager` / Inspect `Config.listConfigs` + the durable
-    `activated (anywhere mode, ...)` ledger line in `apply()`.
+    `activated (anywhere mode, …)` ledger line in `apply()`.
 
     NEVER assume; the previous disable was an uncommitted staged edit, discovered ONLY by forensics.
 

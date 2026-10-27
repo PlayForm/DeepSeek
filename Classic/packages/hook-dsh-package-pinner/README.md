@@ -1,15 +1,17 @@
 # @playform/hook-dsh-package-pinner - The silent version pinner
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md).
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md).
 
 ## The role
 
 The **silent version pinner** of the DeepSeek Harness - a plugin on the `fs/observed` event that
 pins every dependency version in a written `package.json` to its STATIC version
-(`"@playform/build": "^0.3.4"` becomes `"0.3.4"`). One leading range prefix (`^`, `~`, or `=`) is
-stripped, in every dependency section the config declares (dependencies, devDependencies,
-peerDependencies, optionalDependencies).
+(`"@playform/build": "^0.3.4"` becomes `"0.3.4"`).
+
+One leading range prefix (`^`, `~`, or `=`) is stripped, in every dependency section the config
+declares (dependencies, devDependencies, peerDependencies, optionalDependencies).
 
 Already-static versions, compound/space ranges, wildcards without a prefix, and protocol
 dependencies (`workspace:*`, `file:`, `link:`, `git+`, `npm:` aliases) are left as-is; a
@@ -61,8 +63,10 @@ REFUSED rewrite of <path>: non-dependency section "<name>" would change
 ```
 
 Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
-module identity is `hook-dsh-pinner-package`). The activation line is written by `apply()` - "did it
-activate" must be answerable from the ledger alone.
+module identity is `hook-dsh-pinner-package`).
+
+The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
+alone.
 
 ## The build and the tests
 

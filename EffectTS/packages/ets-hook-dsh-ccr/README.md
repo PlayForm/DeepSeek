@@ -1,7 +1,8 @@
 # @playform/ets-hook-dsh-ccr - the compress-cache-retrieve hook for oversized tool output
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md) -
+> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md) -
 > [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](../../Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md).
 
 ## The role
@@ -15,11 +16,13 @@ oversized tool output with a one-line type-aware preview plus a retrieval marker
 <<<CCR:9d3c1f0a7b2e4d5c6a8b9c0d|terminal|5231>>>
 ```
 
-... while keeping the original retrievable through the registered **`ccr_retrieve`** tool. Ported
-from Aphrodite's CCR pipeline - compress, cache, retrieve - at the injection point a proxy cannot
-reach, the tool result itself. `tools/post-execute` sees the normalized result of EVERY tool with
-name + parsed arguments + caller agent, and is the only point that can legally replace model-visible
-output for all tools.
+... while keeping the original retrievable through the registered **`ccr_retrieve`** tool.
+
+Ported from Aphrodite's CCR pipeline - compress, cache, retrieve - at the injection point a proxy
+cannot reach, the tool result itself.
+
+`tools/post-execute` sees the normalized result of EVERY tool with name + parsed arguments + caller
+agent, and is the only point that can legally replace model-visible output for all tools.
 
 This is the Effect-TS variant: the identical ccr contract behind the
 [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) shell (Effect v4), with the ledger strings
@@ -29,29 +32,38 @@ activation line is built with) comes from the [`ets-base-dsh`](../ets-base-dsh) 
 The gate compresses only results of tools in `targets` (default: `bash`, `glob`, `grep`, `read`,
 `web_fetch`, `web_search`, `list`, `search`) whose serialized content exceeds `thresholdBytes`
 (1024) × the classified type's multiplier - errors ×8 (high-signal, compress late), `grep`/`paths`/
-`web` ×2, the rest ×1. Never compress the `exempt` tools: `write`, `edit`, `raw-write`, `subagent`,
-`ask_user_question`, and `ccr_retrieve` itself. Failures pass through unless `compressFailures` is
-on. With `autoExpand` on (the default), a result at or under `autoExpandLimitBytes` (102400) is
-stored but returned FULL - no marker reaches the model while the content is cheap enough to keep
-inline.
+`web` ×2, the rest ×1.
+
+Never compress the `exempt` tools: `write`, `edit`, `raw-write`, `subagent`, `ask_user_question`,
+and `ccr_retrieve` itself.
+
+Failures pass through unless `compressFailures` is on.
+
+With `autoExpand` on (the default), a result at or under `autoExpandLimitBytes` (102400) is stored
+but returned FULL - no marker reaches the model while the content is cheap enough to keep inline.
 
 The store is an in-memory LRU keyed by a sha256-24 hash of the full serialized content bytes
 (`node:crypto`, no native deps), with a `storeBudgetBytes` budget (default 256 MiB,
 least-recently-accessed eviction), a `ttlSeconds` TTL (default 3600), and an optional JSONL disk
 journal (`journalPath`, default `""` = memory-only): one `{hash, type, size, ttlAt, payload}` record
-per store, loaded and TTL-compacted on boot, payload base64. SQLite (Aphrodite's `ccr.db`) was
-deliberately adapted to JSONL - a native dep the family does not carry.
+per store, loaded and TTL-compacted on boot, payload base64.
+
+SQLite (Aphrodite's `ccr.db`) was deliberately adapted to JSONL - a native dep the family does not
+carry.
 
 `ccr_retrieve(hash, range?)` matches the hash exactly - no prefix or fuzzy matching.
-`range { start, count }` slices lines granularly. Unknown/expired hashes return a self-describing
-error telling the model to re-run the original tool.
+
+`range { start, count }` slices lines granularly.
+
+Unknown/expired hashes return a self-describing error telling the model to re-run the original tool.
 
 Waterfall discipline: `next()` is always awaited first; pass-through returns the downstream decision
 unchanged; only an accepted, non-value-carrying decision is replaced; the whole transform is
 fail-open (an internal error logs a warning and keeps the inline content - never throws into the
-waterfall); the listener prepends so the gate sees the pristine result. The ccr hook and the
-normalize flavors' tool-results arm share the `tools/post-execute` waterfall; the `<<<CCR:` marker
-guard makes any load order safe.
+waterfall); the listener prepends so the gate sees the pristine result.
+
+The ccr hook and the normalize flavors' tool-results arm share the `tools/post-execute` waterfall;
+the `<<<CCR:` marker guard makes any load order safe.
 
 ## The surfaces
 

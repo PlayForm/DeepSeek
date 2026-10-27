@@ -7,11 +7,18 @@ spec's D5 ("the indexer is inferred from the event bus").
 source plugin --adapter--> trace bus --adapter--> consumer plugin
 ```
 
-- **The bus is a service, not a process.** `ctx.trace` is provided once by
-  [`@playform/ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) (the family's shared-machinery
-  owner). There is no separate indexer process and no separate indexer plugin.
-- **This library holds the vocabulary and the loop.** Every adapting plugin carries its own
-  `Source/Trace/` adapter and imports these names and types - no plugin imports another plugin.
+- **The bus is a service, not a process.**
+
+    `ctx.trace` is provided once by [`@playform/ets-plugin-dsh-factory`](../ets-plugin-dsh-factory)
+    (the family's shared-machinery owner).
+
+    There is no separate indexer process and no separate indexer plugin.
+
+- **This library holds the vocabulary and the loop.**
+
+    Every adapting plugin carries its own `Source/Trace/` adapter and imports these names and
+    types - no plugin imports another plugin.
+
 - **The detached loop** is the "daemon trace": a coalescing queue keyed by path, ONE in-flight task
   per key, no timers in the hot path, fail-open, a `Flush` promise for deterministic smokes, and a
   disposer.
@@ -73,7 +80,9 @@ node Classic/packages/ets-lib-dsh-trace/Target/Test/Loop-And-Vocabulary/Test.js
 ```
 
 The test battery is one folder (`Loop-And-Vocabulary`, 10 checks) plus the harness selfcheck that
-gates the build. Contract: [SCHEME.md](./SCHEME.md).
+gates the build.
+
+Contract: [SCHEME.md](./SCHEME.md).
 
 ## License
 

@@ -37,7 +37,9 @@ Seven, priority order: `Version` (0.85 - a wrong version companion set is costly
 
 Each family is a pack row: its path rules (regexes on the edited path with weights) and its standard
 companion set - each companion a path or glob with a prior and **one reason phrase** ("the Config
-section", "the byte-exact assertion", "the long tail"). A companion without a reason is not emitted.
+section", "the byte-exact assertion", "the long tail").
+
+A companion without a reason is not emitted.
 
 The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
 [`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `edit/` domain.
@@ -85,14 +87,18 @@ The score is `sum over the enabled heuristics of weight * value`:
 | `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
 
 The default row is exactly the PoC formula, and a missing store answers the neutral 1/3, so the
-default behavior is unchanged byte-for-byte. A user can disable any heuristic (`heuristics`) or
-re-weight any of them (`weights`), and the decision record plus the `decided` line show the choice.
+default behavior is unchanged byte-for-byte.
+
+A user can disable any heuristic (`heuristics`) or re-weight any of them (`weights`), and the
+decision record plus the `decided` line show the choice.
 
 ## The delivery
 
 One note, never a content replacement, never a claim of the Transform: the post-execute listener
-runs after the ccr and the normalize family and only adds `additionalContexts`. The note carries the
-plugin's own source label (`{kind: "edit-suggester", form: "notice", summary}`).
+runs after the ccr and the normalize family and only adds `additionalContexts`.
+
+The note carries the plugin's own source label
+(`{kind: "edit-suggester", form: "notice", summary}`).
 
 The `grep`/`read`/`bash` calls are not judged - this is the edit side of the family, disjoint from
 the search suggester's trigger set.
@@ -105,9 +111,13 @@ never fails a tool call).
 
 ## The configuration
 
-See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
-The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
-**disabled** - enable by explicit ACTIVATE in the profile.
+See [SCHEME.md](./SCHEME.md) for the full schema.
+
+Every knob is volatile (hot-editable, no remount).
+
+The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`.
+
+Ships **disabled** - enable by explicit ACTIVATE in the profile.
 
 ## The plan
 

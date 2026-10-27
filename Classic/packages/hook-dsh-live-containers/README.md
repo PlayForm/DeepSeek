@@ -1,7 +1,8 @@
 # @playform/hook-dsh-live-containers - dynamic, modifiable conversation blocks, live jobs, planted boards, failsafes and the suggester
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md) -
+> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md) -
 > [LIVE-CONTAINERS-RESEARCH.md](../../Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md) -
 > [IMPLEMENTATION-DESIGN.md](../../Documentation/Plans/LiveContainers/Design/IMPLEMENTATION-DESIGN.md).
 
@@ -10,7 +11,9 @@
 A DeepSeek Harness plugin that keeps **dynamic, modifiable conversation blocks in the system
 prompt**: each enabled block is a labeled stanza recomputed at every request - the canonical example
 is a time block that always holds the current time at ask-time while the rest of the conversation
-stays static. The blocks ride the `system-prompt/assemble` waterfall as ONE appended section named
+stays static.
+
+The blocks ride the `system-prompt/assemble` waterfall as ONE appended section named
 `live-containers` (`interpolate: false`, so only the plugin's own substitution engine touches its
 `{{token}}` groups - the harness's unresolved-variable failure is never inherited), each block
 inside a fixed frame so the model cannot mistake it for harness state:
@@ -21,9 +24,11 @@ inside a fixed frame so the model cannot mistake it for harness state:
 --- END LIVE CONTAINER <id> ---
 ```
 
-The substitution engine is token replace ONLY - no eval, no expressions. An unknown token renders
-LITERALLY and logs `render unknown <id> <token>` - never a failure. Per-block `vars` override the
-built-ins.
+The substitution engine is token replace ONLY - no eval, no expressions.
+
+An unknown token renders LITERALLY and logs `render unknown <id> <token>` - never a failure.
+
+Per-block `vars` override the built-ins.
 
 The wave-2 catalog kinds (the default block table ships 14 entries) are ACCEPTED in config from day
 one and render as skipped blocks - reason `unknown kind` - until the wave-2 render engine lands.
@@ -52,8 +57,9 @@ honest to the byte, additive information, never a gate.
 
 The plugin ships DISABLED - the IDLE-forever posture: the bundle entry declares `enabled: false`
 only, it never appears in the profile's bundles, and it enables only by an explicit ACTIVATE (you
-edit the profile and restart). A cold mount logs `disabled (enabled=false)` and every listener
-no-ops to a passthrough.
+edit the profile and restart).
+
+A cold mount logs `disabled (enabled=false)` and every listener no-ops to a passthrough.
 
 ## The surfaces
 
@@ -165,8 +171,9 @@ monitor recovered <path> (<n> checks)
 ```
 
 Durable activation proof: `disabled (enabled=false)` on a cold mount, else the activated line with
-the bundle version, the block count and the refresh policy. Skip lines log only when the reason
-changes - the ledger stays quiet on steady state.
+the bundle version, the block count and the refresh policy.
+
+Skip lines log only when the reason changes - the ledger stays quiet on steady state.
 
 ## The build and the tests
 

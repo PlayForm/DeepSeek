@@ -16,9 +16,11 @@ labeled `additionalContexts` notice naming it.
 Two intents in the embedded pack (`Source/Variable/Defaults.ts`):
 
 - **Neighborhood** - resolved through the graph service; a static fallback set is appended only when
-  the graph answers with an _empty_ component. When the service is absent or throws, the intent
-  **abstains** with a `graph unavailable` ledger line (once per apply) - the graph intent never
-  guesses.
+  the graph answers with an _empty_ component.
+
+    When the service is absent or throws, the intent **abstains** with a `graph unavailable` ledger
+    line (once per apply) - the graph intent never guesses.
+
 - **Sibling** - a package-name grep resolves statically (the family roster, the inventory, the
   sibling README).
 
@@ -91,9 +93,10 @@ Every field is a volatile cell.
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`Loader-And-Activation`, `Pipeline-And-Graph` (the FakeGraph contract), `Real-Graph-Neighborhood`
-(the real service).
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `Loader-And-Activation`, `Pipeline-And-Graph` (the FakeGraph contract),
+`Real-Graph-Neighborhood` (the real service).
 
 ## The plan
 

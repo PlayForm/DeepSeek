@@ -7,13 +7,16 @@
 
 The workspace-reflect service for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release). The **later stage** service-provider role: the code-block reflective ops - the AST-aware
+release).
+
+The **later stage** service-provider role: the code-block reflective ops - the AST-aware
 rename/connect/replace from a **single call** each, over the managed representations.
 
 ## The one-call semantics
 
-Each operation bundles the whole transformation - one call instead of a tool choreography. The spans
-are 1-based and inclusive (the graph's span grammar).
+Each operation bundles the whole transformation - one call instead of a tool choreography.
+
+The spans are 1-based and inclusive (the graph's span grammar).
 
 | Op        | Request                                               | Behavior                                                                                                                                                                                                       |
 | --------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,11 +27,14 @@ are 1-based and inclusive (the graph's span grammar).
 ## The AST-aware targeting
 
 A `replace` may name the workspace graph's frozen node id (`node: "Block:<path>:<line>:body"`) and
-the node's content-derived fingerprint. The graph (`ctx.workspaceGraph`, probed never injected)
-supplies the span, the fingerprint is verified against the current text with the graph's own
-formula, and only that span is rewritten - a mismatch refuses with
-`rejected <path> (fingerprint mismatch)` and writes nothing. With the graph absent the caller's
-explicit span is the fallback and the fingerprint is still verified.
+the node's content-derived fingerprint.
+
+The graph (`ctx.workspaceGraph`, probed never injected) supplies the span, the fingerprint is
+verified against the current text with the graph's own formula, and only that span is rewritten - a
+mismatch refuses with `rejected <path> (fingerprint mismatch)` and writes nothing.
+
+With the graph absent the caller's explicit span is the fallback and the fingerprint is still
+verified.
 
 A `rename` asks the workspace-semantics service (`ctx.workspaceSemantics`, probed never injected)
 for the scope-resolved plan - the service may deepen it through the harness LSP seam - and applies
@@ -55,9 +61,10 @@ status: "applied" | "conflict" | "denied" | "rejected" | "recovery-required" | "
 ## The publish path and the carry
 
 Writes go only through the factory's guarded write (the `replaceIfVersion` fence, the P4 sandbox
-policy, the stash pre-registration) - never a raw fs write. After an applied operation the optional
-`workspaceGraph` sibling service is probed (never injected) and asked to re-index the changed file -
-the reflective carry; an absent graph is an honest skip.
+policy, the stash pre-registration) - never a raw fs write.
+
+After an applied operation the optional `workspaceGraph` sibling service is probed (never injected)
+and asked to re-index the changed file - the reflective carry; an absent graph is an honest skip.
 
 ## The surfaces
 
@@ -69,8 +76,11 @@ returning the reply union.
 Every knob is volatile (hot-editable without remounting): `logFile`
 (`~/.dsh/playform/plugin-dsh-workspace-reflect.log`), `log`, `enabled` (false - the IDLE-forever
 posture), `propagate` (`block` | `file`, default `block`), `maxFileBytes` (1000000), `maxBlockLines`
-(5000). The plugin ships disabled and enables only by an explicit ACTIVATE. No new knob: the graph
-and the semantics service are optional siblings.
+(5000).
+
+The plugin ships disabled and enables only by an explicit ACTIVATE.
+
+No new knob: the graph and the semantics service are optional siblings.
 
 ### The policy block (D6) - the write gate
 
@@ -85,10 +95,12 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The reflective WRITES are the gated actions: `replace` and `rename` consult the `write` verdict
-before the file is read or written. An `approve` verdict (the shipped default) refuses the operation
-with the byte-exact `replace held <path> (policy write=approve)` or
-`rename held <path> (policy write=approve)` line, the reply is `rejected` with
-`the policy holds the replace|rename (write=approve)`, and **zero writes** reach the filesystem.
+before the file is read or written.
+
+An `approve` verdict (the shipped default) refuses the operation with the byte-exact
+`replace held <path> (policy write=approve)` or `rename held <path> (policy write=approve)` line,
+the reply is `rejected` with `the policy holds the replace|rename (write=approve)`, and **zero
+writes** reach the filesystem.
 
 The fingerprint targeting is unchanged: the policy is the OUTER check, the fingerprint verification
 the inner one.
@@ -103,10 +115,11 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 Module-owned, prefixed `reflect:`: `activated`, `disabled`, `rename`, `connect`, `replace`,
 `deepened`, `denied`, `rejected`, `conflict`, `carried`, `failed`, and the two policy holds
-`replace held <path> (policy write=approve)` / `rename held <path> (policy write=approve)`. The new
-`rejected` reasons (`fingerprint required for a node target`, `fingerprint without a node target`,
-`fingerprint mismatch`, `node path mismatch`, `node not targetable`, `node not found`,
-`graph absent`) are documented in SCHEME.md section 5.
+`replace held <path> (policy write=approve)` / `rename held <path> (policy write=approve)`.
+
+The new `rejected` reasons (`fingerprint required for a node target`,
+`fingerprint without a node target`, `fingerprint mismatch`, `node path mismatch`,
+`node not targetable`, `node not found`, `graph absent`) are documented in SCHEME.md section 5.
 
 ## The build and the tests
 

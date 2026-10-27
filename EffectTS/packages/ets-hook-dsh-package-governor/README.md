@@ -1,24 +1,30 @@
 # @playform/ets-hook-dsh-package-governor - The silent package.json governor
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md).
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md).
 
 ## The role
 
 The **silent package.json governor** of the DeepSeek Harness - a plugin on the `fs/observed` event
 (the cordis event every harness file write dispatches; the tool layer is the only dispatcher) that
-governs every `package.json` written by any agent, anywhere. A pure chain pass canonicalizes
-chain-governed dependency pins to the effective registry's `^resolved`, then an update stage lets
-npm-check-updates bump the public ones (programmatic by default or the ncu bin in bin mode,
-policy-driven, chain deps rejected) as a detached, contained continuation - and the author never
-learns. Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a
-version-guarded `replaceIfVersion` write (the service owns version tokens), configuration is a
-validated Schemastery Config schema with defaults, and the authoring agent is never notified: the
-tool result is built from the author's own content, and the observation-policy's version record is
-refreshed by re-emitting `fs/observed` with the service-issued fresh version. A factory flavor: the
-family's furnace does the plumbing; this package is the model logic. The lowest plumbing layer - the
-ledger `Append`, the shared journal and the activation-line composer - lives in the family's base
-package `ets-base-dsh`, reached through the factory.
+governs every `package.json` written by any agent, anywhere.
+
+A pure chain pass canonicalizes chain-governed dependency pins to the effective registry's
+`^resolved`, then an update stage lets npm-check-updates bump the public ones (programmatic by
+default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained
+continuation - and the author never learns.
+
+Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a version-guarded
+`replaceIfVersion` write (the service owns version tokens), configuration is a validated Schemastery
+Config schema with defaults, and the authoring agent is never notified: the tool result is built
+from the author's own content, and the observation-policy's version record is refreshed by
+re-emitting `fs/observed` with the service-issued fresh version.
+
+A factory flavor: the family's furnace does the plumbing; this package is the model logic.
+
+The lowest plumbing layer - the ledger `Append`, the shared journal and the activation-line
+composer - lives in the family's base package `ets-base-dsh`, reached through the factory.
 
 ## The surfaces
 
@@ -79,8 +85,10 @@ update: FAILED - see lines above
 ```
 
 Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
-module identity is `hook-dsh-governor-package`). The activation line is written by `apply()` - "did
-it activate" must be answerable from the ledger alone.
+module identity is `hook-dsh-governor-package`).
+
+The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
+alone.
 
 ## The build and the tests
 

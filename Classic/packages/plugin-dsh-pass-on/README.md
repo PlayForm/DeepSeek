@@ -6,12 +6,16 @@
 ## The role
 
 The PASS-ON (ctx.passOn) - the prepare direction of the batch flow
-(Documentation/Plans/PASS-ON-AND-INGESTER.md section 3). A DeepSeek Harness service that turns an
-intent into a batch proposal.
+(Documentation/Plans/PASS-ON-AND-INGESTER.md section 3).
 
-**READ-ONLY.** The pass-on never writes a file. It resolves the targets, computes the operations,
-renders the bounded preview, and computes the digest; the decision decides; the ingester
-(plugin-dsh-ingester) applies.
+A DeepSeek Harness service that turns an intent into a batch proposal.
+
+**READ-ONLY.**
+
+The pass-on never writes a file.
+
+It resolves the targets, computes the operations, renders the bounded preview, and computes the
+digest; the decision decides; the ingester (plugin-dsh-ingester) applies.
 
 ```
 Suggester / user intent -> PASS-ON (prepare) -> decision -> INGESTER (apply)
@@ -55,6 +59,7 @@ The internal `Proposal` (Interface/Proposal.ts):
 `{ id, intent: { kind, params }, targets, operations, preview, digest, revision, expiresAt, createdAt }`;
 the canonical wire `Batch` (Interface/Batch.ts):
 `{ id, intent: <label>, targets, operations, preview: { entries, changes, skipped }, digest, revision, expiresAt, origin? }`.
+
 The digest is the fence: sha256 over the targets (path + version) and the operations (find +
 replace); the ingester applies only the proposal whose digest and versions still match.
 
@@ -88,7 +93,9 @@ declared for uniformity and stay the shipped `approve` (the pass-on never writes
 spawns).
 
 A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement). The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+refinement).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The abstention rule
 

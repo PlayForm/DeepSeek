@@ -6,8 +6,9 @@
 ## The role
 
 The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester
-and the live view. Plan: `Documentation/Plans/PASS-ON-AND-INGESTER.md` (section 5, the decision
-workflow).
+and the live view.
+
+Plan: `Documentation/Plans/PASS-ON-AND-INGESTER.md` (section 5, the decision workflow).
 
 ## The surfaces
 
@@ -24,10 +25,13 @@ workflow).
   evaluates expiry, and evaluates the auto-approve policy.
 - An auto-approval records a `BatchDecision` (`approved`, by `policy`), emits `batch/decision`, and
   logs one ledger line.
+
 - **The handoff**: every recorded decision is ALSO written into the harness agent-team inbox (the
-  same channel plugin-dsh-batchstate consumes), so the board's status follows the decision. The
-  target is the proposal's `origin`, then the harness initiator, then the first live agent; no live
-  agent is an honest ledger line.
+  same channel plugin-dsh-batchstate consumes), so the board's status follows the decision.
+
+    The target is the proposal's `origin`, then the harness initiator, then the first live agent; no
+    live agent is an honest ledger line.
+
 - The `batch_decision` tool is the one entry point the user interacts with: no args lists pending
   proposals; `id` + `approve=true|false` records the user's decision; an approved batch is handed to
   the ingester service when one is present (the declared `batchIngester` seam first, then the live
@@ -56,7 +60,9 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The policy is the **outer** gate, `autoApprove` the **inner** one. An `approve` verdict for `commit`
+The policy is the **outer** gate, `autoApprove` the **inner** one.
+
+An `approve` verdict for `commit`
 
 - the shipped default - refuses the policy auto-approval even with the knob on, and the ledger
   records the byte-exact `decision held <id> (policy commit=approve)` line: the proposal stays
@@ -70,10 +76,11 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 ## It never writes
 
-The hook does not implement the pass-on or the ingester and never writes files. Sibling service
-shapes are declared structurally (`Source/Interface/Siblings.ts`) and resolved via `Context.get` at
-use time: the declared seams `batchPassOn`, `batchIngester`, `approval`, then the live names
-`passOn`, `ingester`.
+The hook does not implement the pass-on or the ingester and never writes files.
+
+Sibling service shapes are declared structurally (`Source/Interface/Siblings.ts`) and resolved via
+`Context.get` at use time: the declared seams `batchPassOn`, `batchIngester`, `approval`, then the
+live names `passOn`, `ingester`.
 
 ## The build and the tests
 

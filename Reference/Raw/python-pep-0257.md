@@ -1,53 +1,71 @@
-Following system colour scheme Selected dark colour scheme Selected light colour scheme
-↑↓ navigate
-↵ select
-esc close
-# PEP 257 – Docstring Conventions 
+Following system colour scheme Selected dark colour scheme Selected light colour scheme ↑↓ navigate
+↵ select esc close
 
-Author: 
-    David Goodger <goodger at python.org>, Guido van Rossum <guido at python.org> 
+# PEP 257 – Docstring Conventions
 
-Discussions-To: 
+Author: David Goodger <goodger at python.org>, Guido van Rossum <guido at python.org>
 
+Discussions-To:
 
-Status: 
-    Active 
+Status: Active
 
-Type: 
-    Informational 
+Type: Informational
 
-Created: 
-    29-May-2001 
+Created: 29-May-2001
 
-Post-History: 
-    13-Jun-2001 Table of Contents
-  * [Specification](https://peps.python.org/pep-0257/#specification)
-    * [What is a Docstring?](https://peps.python.org/pep-0257/#what-is-a-docstring)
-    * [One-line Docstrings](https://peps.python.org/pep-0257/#one-line-docstrings)
-    * [Multi-line Docstrings](https://peps.python.org/pep-0257/#multi-line-docstrings)
-    * [Handling Docstring Indentation](https://peps.python.org/pep-0257/#handling-docstring-indentation)
+Post-History: 13-Jun-2001 Table of Contents
 
+- [Specification](https://peps.python.org/pep-0257/#specification)
+    - [What is a Docstring?](https://peps.python.org/pep-0257/#what-is-a-docstring)
+    - [One-line Docstrings](https://peps.python.org/pep-0257/#one-line-docstrings)
+    - [Multi-line Docstrings](https://peps.python.org/pep-0257/#multi-line-docstrings)
+    - [Handling Docstring Indentation](https://peps.python.org/pep-0257/#handling-docstring-indentation)
 
 ## [Abstract](https://peps.python.org/pep-0257/#abstract)
+
 This PEP documents the semantics and conventions associated with Python docstrings.
+
 ## [Rationale](https://peps.python.org/pep-0257/#rationale)
-The aim of this PEP is to standardize the high-level structure of docstrings: what they should contain, and how to say it (without touching on any markup syntax within docstrings). The PEP contains conventions, not laws or syntax.
-> “A universal convention supplies all of maintainability, clarity, consistency, and a foundation for good programming habits too. What it doesn’t do is insist that you follow it against your will. That’s Python!”
-> —Tim Peters on comp.lang.python, 2001-06-16
-If you violate these conventions, the worst you’ll get is some dirty looks. But some software (such as the [Docutils](https://docutils.sourceforge.io/) docstring processing system [PEP 256](https://peps.python.org/pep-0256/ "PEP 256 – Docstring Processing System Framework"), [PEP 258](https://peps.python.org/pep-0258/ "PEP 258 – Docutils Design Specification")) will be aware of the conventions, so following them will get you the best results.
+
+The aim of this PEP is to standardize the high-level structure of docstrings: what they should
+contain, and how to say it (without touching on any markup syntax within docstrings). The PEP
+contains conventions, not laws or syntax.
+
+> “A universal convention supplies all of maintainability, clarity, consistency, and a foundation
+> for good programming habits too. What it doesn’t do is insist that you follow it against your
+> will. That’s Python!” —Tim Peters on comp.lang.python, 2001-06-16 If you violate these
+> conventions, the worst you’ll get is some dirty looks. But some software (such as the
+> [Docutils](https://docutils.sourceforge.io/) docstring processing system
+> [PEP 256](https://peps.python.org/pep-0256/ "PEP 256 – Docstring Processing System Framework"),
+> [PEP 258](https://peps.python.org/pep-0258/ "PEP 258 – Docutils Design Specification")) will be
+> aware of the conventions, so following them will get you the best results.
+
 ## [Specification](https://peps.python.org/pep-0257/#specification)
+
 ### [What is a Docstring?](https://peps.python.org/pep-0257/#what-is-a-docstring)
-A docstring is a string literal that occurs as the first statement in a module, function, class, or method definition. Such a docstring becomes the `__doc__` special attribute of that object.
-All modules should normally have docstrings, and all functions and classes exported by a module should also have docstrings. Public methods (including the `__init__` constructor) should also have docstrings. A package may be documented in the module docstring of the `__init__.py` file in the package directory.
-String literals occurring elsewhere in Python code may also act as documentation. They are not recognized by the Python bytecode compiler and are not accessible as runtime object attributes (i.e. not assigned to `__doc__`), but two types of extra docstrings may be extracted by software tools:
-  1. String literals occurring immediately after a simple assignment at the top level of a module, class, or `__init__` method are called “attribute docstrings”.
-  2. String literals occurring immediately after another docstring are called “additional docstrings”.
 
+A docstring is a string literal that occurs as the first statement in a module, function, class, or
+method definition. Such a docstring becomes the `__doc__` special attribute of that object. All
+modules should normally have docstrings, and all functions and classes exported by a module should
+also have docstrings. Public methods (including the `__init__` constructor) should also have
+docstrings. A package may be documented in the module docstring of the `__init__.py` file in the
+package directory. String literals occurring elsewhere in Python code may also act as documentation.
+They are not recognized by the Python bytecode compiler and are not accessible as runtime object
+attributes (i.e. not assigned to `__doc__`), but two types of extra docstrings may be extracted by
+software tools:
 
-Please see [PEP 258](https://peps.python.org/pep-0258/ "PEP 258 – Docutils Design Specification"), “Docutils Design Specification”, for a detailed description of attribute and additional docstrings.
-For consistency, always use `"""triple double quotes"""` around docstrings. Use `r"""raw triple double quotes"""` if you use any backslashes in your docstrings.
-There are two forms of docstrings: one-liners and multi-line docstrings.
+1. String literals occurring immediately after a simple assignment at the top level of a module,
+   class, or `__init__` method are called “attribute docstrings”.
+2. String literals occurring immediately after another docstring are called “additional docstrings”.
+
+Please see [PEP 258](https://peps.python.org/pep-0258/ "PEP 258 – Docutils Design Specification"),
+“Docutils Design Specification”, for a detailed description of attribute and additional docstrings.
+For consistency, always use `"""triple double quotes"""` around docstrings. Use
+`r"""raw triple double quotes"""` if you use any backslashes in your docstrings. There are two forms
+of docstrings: one-liners and multi-line docstrings.
+
 ### [One-line Docstrings](https://peps.python.org/pep-0257/#one-line-docstrings)
+
 One-liners are for really obvious cases. They should really fit on one line. For example:
 
 ```
@@ -60,11 +78,16 @@ defkos_root():
 ```
 
 Notes:
-  * Triple quotes are used even though the string fits on one line. This makes it easy to later expand it.
-  * The closing quotes are on the same line as the opening quotes. This looks better for one-liners.
-  * There’s no blank line either before or after the docstring.
-  * The docstring is a phrase ending in a period. It prescribes the function or method’s effect as a command (“Do this”, “Return that”), not as a description; e.g. don’t write “Returns the pathname …”.
-  * The one-line docstring should NOT be a “signature” reiterating the function/method parameters (which can be obtained by introspection). Don’t do:
+
+- Triple quotes are used even though the string fits on one line. This makes it easy to later expand
+  it.
+- The closing quotes are on the same line as the opening quotes. This looks better for one-liners.
+- There’s no blank line either before or after the docstring.
+- The docstring is a phrase ending in a period. It prescribes the function or method’s effect as a
+  command (“Do this”, “Return that”), not as a description; e.g. don’t write “Returns the pathname
+  …”.
+- The one-line docstring should NOT be a “signature” reiterating the function/method parameters
+  (which can be obtained by introspection). Don’t do:
 
 ```
 deffunction(a, b):
@@ -72,7 +95,9 @@ deffunction(a, b):
 
 ```
 
-This type of docstring is only appropriate for C functions (such as built-ins), where introspection is not possible. However, the nature of the _return value_ cannot be determined by introspection, so it should be mentioned. The preferred form for such a docstring would be something like:
+This type of docstring is only appropriate for C functions (such as built-ins), where introspection
+is not possible. However, the nature of the _return value_ cannot be determined by introspection, so
+it should be mentioned. The preferred form for such a docstring would be something like:
 
 ```
 deffunction(a, b):
@@ -82,16 +107,41 @@ deffunction(a, b):
 
 (Of course “Do X” should be replaced by a useful description!)
 
-
 ### [Multi-line Docstrings](https://peps.python.org/pep-0257/#multi-line-docstrings)
-Multi-line docstrings consist of a summary line just like a one-line docstring, followed by a blank line, followed by a more elaborate description. The summary line may be used by automatic indexing tools; it is important that it fits on one line and is separated from the rest of the docstring by a blank line. The summary line may be on the same line as the opening quotes or on the next line. The entire docstring is indented the same as the quotes at its first line (see example below).
-Insert a blank line after all docstrings (one-line or multi-line) that document a class – generally speaking, the class’s methods are separated from each other by a single blank line, and the docstring needs to be offset from the first method by a blank line.
-The docstring of a script (a stand-alone program) should be usable as its “usage” message, printed when the script is invoked with incorrect or missing arguments (or perhaps with a “-h” option, for “help”). Such a docstring should document the script’s function and command line syntax, environment variables, and files. Usage messages can be fairly elaborate (several screens full) and should be sufficient for a new user to use the command properly, as well as a complete quick reference to all options and arguments for the sophisticated user.
-The docstring for a module should generally list the classes, exceptions and functions (and any other objects) that are exported by the module, with a one-line summary of each. (These summaries generally give less detail than the summary line in the object’s docstring.) The docstring for a package (i.e., the docstring of the package’s `__init__.py` module) should also list the modules and subpackages exported by the package.
-The docstring for a function or method should summarize its behavior and document its arguments, return value(s), side effects, exceptions raised, and restrictions on when it can be called (all if applicable). Optional arguments should be indicated. It should be documented whether keyword arguments are part of the interface.
-The docstring for a class should summarize its behavior and list the public methods and instance variables. If the class is intended to be subclassed, and has an additional interface for subclasses, this interface should be listed separately (in the docstring). The class constructor should be documented in the docstring for its `__init__` method. Individual methods should be documented by their own docstring.
-If a class subclasses another class and its behavior is mostly inherited from that class, its docstring should mention this and summarize the differences. Use the verb “override” to indicate that a subclass method replaces a superclass method and does not call the superclass method; use the verb “extend” to indicate that a subclass method calls the superclass method (in addition to its own behavior).
-_Do not_ use the Emacs convention of mentioning the arguments of functions or methods in upper case in running text. Python is case sensitive and the argument names can be used for keyword arguments, so the docstring should document the correct argument names. It is best to list each argument on a separate line. For example:
+
+Multi-line docstrings consist of a summary line just like a one-line docstring, followed by a blank
+line, followed by a more elaborate description. The summary line may be used by automatic indexing
+tools; it is important that it fits on one line and is separated from the rest of the docstring by a
+blank line. The summary line may be on the same line as the opening quotes or on the next line. The
+entire docstring is indented the same as the quotes at its first line (see example below). Insert a
+blank line after all docstrings (one-line or multi-line) that document a class – generally speaking,
+the class’s methods are separated from each other by a single blank line, and the docstring needs to
+be offset from the first method by a blank line. The docstring of a script (a stand-alone program)
+should be usable as its “usage” message, printed when the script is invoked with incorrect or
+missing arguments (or perhaps with a “-h” option, for “help”). Such a docstring should document the
+script’s function and command line syntax, environment variables, and files. Usage messages can be
+fairly elaborate (several screens full) and should be sufficient for a new user to use the command
+properly, as well as a complete quick reference to all options and arguments for the sophisticated
+user. The docstring for a module should generally list the classes, exceptions and functions (and
+any other objects) that are exported by the module, with a one-line summary of each. (These
+summaries generally give less detail than the summary line in the object’s docstring.) The docstring
+for a package (i.e., the docstring of the package’s `__init__.py` module) should also list the
+modules and subpackages exported by the package. The docstring for a function or method should
+summarize its behavior and document its arguments, return value(s), side effects, exceptions raised,
+and restrictions on when it can be called (all if applicable). Optional arguments should be
+indicated. It should be documented whether keyword arguments are part of the interface. The
+docstring for a class should summarize its behavior and list the public methods and instance
+variables. If the class is intended to be subclassed, and has an additional interface for
+subclasses, this interface should be listed separately (in the docstring). The class constructor
+should be documented in the docstring for its `__init__` method. Individual methods should be
+documented by their own docstring. If a class subclasses another class and its behavior is mostly
+inherited from that class, its docstring should mention this and summarize the differences. Use the
+verb “override” to indicate that a subclass method replaces a superclass method and does not call
+the superclass method; use the verb “extend” to indicate that a subclass method calls the superclass
+method (in addition to its own behavior). _Do not_ use the Emacs convention of mentioning the
+arguments of functions or methods in upper case in running text. Python is case sensitive and the
+argument names can be used for keyword arguments, so the docstring should document the correct
+argument names. It is best to list each argument on a separate line. For example:
 
 ```
 defcomplex(real=0.0, imag=0.0):
@@ -107,10 +157,17 @@ defcomplex(real=0.0, imag=0.0):
 
 ```
 
-Unless the entire docstring fits on a line, place the closing quotes on a line by themselves. This way, Emacs’ `fill-paragraph` command can be used on it.
+Unless the entire docstring fits on a line, place the closing quotes on a line by themselves. This
+way, Emacs’ `fill-paragraph` command can be used on it.
+
 ### [Handling Docstring Indentation](https://peps.python.org/pep-0257/#handling-docstring-indentation)
-Docstring processing tools will strip a uniform amount of indentation from the second and further lines of the docstring, equal to the minimum indentation of all non-blank lines after the first line. Any indentation in the first line of the docstring (i.e., up to the first newline) is insignificant and removed. Relative indentation of later lines in the docstring is retained. Blank lines should be removed from the beginning and end of the docstring.
-Since code is much more precise than words, here is an implementation of the algorithm:
+
+Docstring processing tools will strip a uniform amount of indentation from the second and further
+lines of the docstring, equal to the minimum indentation of all non-blank lines after the first
+line. Any indentation in the first line of the docstring (i.e., up to the first newline) is
+insignificant and removed. Relative indentation of later lines in the docstring is retained. Blank
+lines should be removed from the beginning and end of the docstring. Since code is much more precise
+than words, here is an implementation of the algorithm:
 
 ```
 deftrim(docstring):
@@ -140,7 +197,8 @@ deftrim(docstring):
 
 ```
 
-The docstring in this example contains two newline characters and is therefore 3 lines long. The first and last lines are blank:
+The docstring in this example contains two newline characters and is therefore 3 lines long. The
+first and last lines are blank:
 
 ```
 deffoo():
@@ -179,9 +237,15 @@ defbar():
 ```
 
 ## [Copyright](https://peps.python.org/pep-0257/#copyright)
+
 This document has been placed in the public domain.
+
 ## [Acknowledgements](https://peps.python.org/pep-0257/#acknowledgements)
-The “Specification” text comes mostly verbatim from [PEP 8](https://peps.python.org/pep-0008/ "PEP 8 – Style Guide for Python Code") by Guido van Rossum.
-This document borrows ideas from the archives of the Python [Doc-SIG](https://www.python.org/community/sigs/current/doc-sig/). Thanks to all members past and present.
-  *[Active]: Currently valid informational guidance, or an in-use process
-  *[Informational]: Non-normative PEP containing background, guidelines or other information relevant to the Python ecosystem
+
+The “Specification” text comes mostly verbatim from
+[PEP 8](https://peps.python.org/pep-0008/ "PEP 8 – Style Guide for Python Code") by Guido van
+Rossum. This document borrows ideas from the archives of the Python
+[Doc-SIG](https://www.python.org/community/sigs/current/doc-sig/). Thanks to all members past and
+present. *[Active]: Currently valid informational guidance, or an in-use process *[Informational]:
+Non-normative PEP containing background, guidelines or other information relevant to the Python
+ecosystem

@@ -1,7 +1,8 @@
 # @playform/plugin-dsh-factory - The furnace of the DSH governance family
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md).
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md).
 
 ## The role
 
@@ -43,8 +44,9 @@ service, and the six normalize flavors consume `State`/`Append` and the `Schema`
 
 The factory itself registers **no config schema and no config field** - the schema it owns is the
 helper it lends to every consumer (`Schema(shared?, module?)`, exported on the entry and as an
-instance method; `shared: false` emits only the two universal volatile cells). The shared block the
-helper composes, in helper order:
+instance method; `shared: false` emits only the two universal volatile cells).
+
+The shared block the helper composes, in helper order:
 
 | Field              | Type     | Default                                                                       | Meaning                                                                    |
 | ------------------ | -------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
@@ -59,11 +61,15 @@ With `shared: false` the block is only `log` and `logFile` (the two universal vo
 module supplies its own `logFile` default through its own fields.
 
 The State builder also accepts the optional `journalDomain` - Function/Open's P5 storage-domain
-name. It defaults to the shared `package_governance` inside Function/Open, so a consumer that does
-not set it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits
-and underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
-single-open contention. The Journal routing is unchanged: post-open records still flow through the
-first bound shared sink when one is bound.
+name.
+
+It defaults to the shared `package_governance` inside Function/Open, so a consumer that does not set
+it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits and
+underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
+single-open contention.
+
+The Journal routing is unchanged: post-open records still flow through the first bound shared sink
+when one is bound.
 
 ## The ledger
 

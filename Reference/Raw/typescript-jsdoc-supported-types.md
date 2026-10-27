@@ -1,43 +1,65 @@
 Was this page helpful?
-# JSDoc Reference
-The list below outlines which constructs are currently supported when using JSDoc annotations to provide type information in JavaScript files.
-Note:
-  * Any tags which are not explicitly listed below (such as `@async`) are not yet supported.
-  * Only documentation tags are supported in TypeScript files. The rest of the tags are only supported in JavaScript files.
 
+# JSDoc Reference
+
+The list below outlines which constructs are currently supported when using JSDoc annotations to
+provide type information in JavaScript files. Note:
+
+- Any tags which are not explicitly listed below (such as `@async`) are not yet supported.
+- Only documentation tags are supported in TypeScript files. The rest of the tags are only supported
+  in JavaScript files.
 
 ## Types
-  * [`@param`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns) (or [`@arg`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns) or [`@argument`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns))
-  * [`@returns`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns) (or [`@return`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns))
 
+- [`@param`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns)
+  (or
+  [`@arg`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns)
+  or
+  [`@argument`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns))
+- [`@returns`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns)
+  (or
+  [`@return`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns))
 
 ## Classes
-  * [Property Modifiers](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#property-modifiers) `@public`, `@private`, `@protected`, `@readonly`
-  * [`@extends`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#extends) (or [`@augments`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#extends))
-  * [`@class`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor) (or [`@constructor`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor))
 
+- [Property Modifiers](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#property-modifiers)
+  `@public`, `@private`, `@protected`, `@readonly`
+- [`@extends`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#extends) (or
+  [`@augments`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#extends))
+- [`@class`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor)
+  (or
+  [`@constructor`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor))
 
 ## Documentation
+
 Documentation tags work in both TypeScript and JavaScript.
 
-
 ## Other
-  * [Other supported patterns](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#other-supported-patterns)
-  * [Unsupported patterns](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#unsupported-patterns)
-  * [Unsupported tags](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#unsupported-tags)
 
+- [Other supported patterns](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#other-supported-patterns)
+- [Unsupported patterns](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#unsupported-patterns)
+- [Unsupported tags](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#unsupported-tags)
 
-The meaning is usually the same, or a superset, of the meaning of the tag given at [jsdoc.app](https://jsdoc.app). The code below describes the differences and gives some example usage of each tag.
-**Note:** You can use [the playground to explore JSDoc support](https://www.typescriptlang.org/play?useJavaScript=truee=4#example/jsdoc-support).
+The meaning is usually the same, or a superset, of the meaning of the tag given at
+[jsdoc.app](https://jsdoc.app). The code below describes the differences and gives some example
+usage of each tag. **Note:** You can use
+[the playground to explore JSDoc support](https://www.typescriptlang.org/play?useJavaScript=truee=4#example/jsdoc-support).
+
 ## Types
+
 ### `@type`
+
 You can reference types with the “@type” tag. The type can be:
-  1. Primitive, like `string` or `number`.
-  2. Declared in a TypeScript declaration, either global or imported.
-  3. Declared in a JSDoc [`@typedef`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#typedef-callback-and-param) tag.
 
+1. Primitive, like `string` or `number`.
+2. Declared in a TypeScript declaration, either global or imported.
+3. Declared in a JSDoc
+   [`@typedef`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#typedef-callback-and-param)
+   tag.
 
-You can use most JSDoc type syntax and any TypeScript syntax, from [the most basic like `string`](https://www.typescriptlang.org/docs/handbook/2/basic-types.html) to [the most advanced, like conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html).
+You can use most JSDoc type syntax and any TypeScript syntax, from
+[the most basic like `string`](https://www.typescriptlang.org/docs/handbook/2/basic-types.html) to
+[the most advanced, like conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html).
 
 ```
 
@@ -166,7 +188,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEBcE8AcCm4DeA7ArgWwEaIE4D
 
 ```
 
-You can also specify object literal types. For example, an object with properties ‘a’ (string) and ‘b’ (number) uses the following syntax:
+You can also specify object literal types. For example, an object with properties ‘a’ (string) and
+‘b’ (number) uses the following syntax:
 
 ```
 
@@ -186,7 +209,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEBcE8AcCm4DeLwEMBc4DO0AnA
 
 ```
 
-You can specify map-like and array-like objects using string and number index signatures, using either standard JSDoc syntax or TypeScript syntax.
+You can specify map-like and array-like objects using string and number index signatures, using
+either standard JSDoc syntax or TypeScript syntax.
 
 ```
 
@@ -225,8 +249,9 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUhBSC2BDADgWgDYEsDWBTSAe
 
 ```
 
-The preceding two types are equivalent to the TypeScript types `{ [x: string]: number }` and `{ [x: number]: any }`. The compiler understands both syntaxes.
-You can specify function types using either TypeScript or Google Closure syntax:
+The preceding two types are equivalent to the TypeScript types `{ [x: string]: number }` and
+`{ [x: number]: any }`. The compiler understands both syntaxes. You can specify function types using
+either TypeScript or Google Closure syntax:
 
 ```
 
@@ -325,7 +350,9 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXAngBwKaQN4gL6QLSQDG
 ```
 
 #### Casts
-TypeScript borrows cast syntax from Google Closure. This lets you cast types to other types by adding a `@type` tag before any parenthesized expression.
+
+TypeScript borrows cast syntax from Google Closure. This lets you cast types to other types by
+adding a `@type` tag before any parenthesized expression.
 
 ```
 
@@ -370,7 +397,9 @@ Try[](https://www.typescriptlang.org/play/#code/DYUwLgBA9gdiEF4IHoBUqIAEwE8AO8A3
 ```
 
 #### Import types
-You can import declarations from other files using import types. This syntax is TypeScript-specific and differs from the JSDoc standard:
+
+You can import declarations from other files using import types. This syntax is TypeScript-specific
+and differs from the JSDoc standard:
 
 ```
 
@@ -418,7 +447,8 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEDMEsBsFMB2BDAtvAXKALgTwA7w
 
 ```
 
-import types can be used to get the type of a value from a module if you don’t know the type, or if it has a large type that is annoying to type:
+import types can be used to get the type of a value from a module if you don’t know the type, or if
+it has a large type that is annoying to type:
 
 ```
 
@@ -443,6 +473,7 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEBcE8AcFMDOAuUA7A9gE3gKBBAG
 ```
 
 ### `@import`
+
 The `@import` tag can let us reference exports from other files.
 
 ```
@@ -482,7 +513,8 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEDMEsBsFMB2BDAtvAXKALgTwA7w
 
 ```
 
-These tags don’t actually import files at runtime, and the symbols they bring into scope can only be used within JSDoc comments for type-checking.
+These tags don’t actually import files at runtime, and the symbols they bring into scope can only be
+used within JSDoc comments for type-checking.
 
 ```
 
@@ -527,8 +559,10 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEDMEsBsFMB2BDAtvAXKAJgewOYB
 
 ```
 
-###  `@param` and `@returns`
-`@param` uses the same type syntax as `@type`, but adds a parameter name. The parameter may also be declared optional by surrounding the name with square brackets:
+### `@param` and `@returns`
+
+`@param` uses the same type syntax as `@type`, but adds a parameter name. The parameter may also be
+declared optional by surrounding the name with square brackets:
 
 ```
 
@@ -620,7 +654,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAnApgFwK7wHaQN4AV4D2A
 
 ```
 
-###  `@typedef`, `@callback`, and `@param`
+### `@typedef`, `@callback`, and `@param`
+
 You can define complex types with `@typedef`. Similar syntax works with `@param`.
 
 ```
@@ -726,7 +761,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXAngBwKYBNUDNIG8D2AR
 
 ```
 
-`@param` allows a similar syntax for one-off type specifications. Note that the nested property names must be prefixed with the name of the parameter:
+`@param` allows a similar syntax for one-off type specifications. Note that the nested property
+names must be prefixed with the name of the parameter:
 
 ```
 
@@ -843,7 +879,9 @@ js
 ```
 
 ### `@template`
-You can declare type parameters with the `@template` tag. This lets you make functions, classes, or types that are generic:
+
+You can declare type parameters with the `@template` tag. This lets you make functions, classes, or
+types that are generic:
 
 ```
 
@@ -920,7 +958,8 @@ js
 
 ```
 
-You can also specify a type constraint before the type parameter name. Only the first type parameter in a list is constrained:
+You can also specify a type constraint before the type parameter name. Only the first type parameter
+in a list is constrained:
 
 ```
 
@@ -1003,7 +1042,11 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEBcFMFsAOAbAhncBtAKgXgPYB
 ```
 
 ### `@satisfies`
-`@satisfies` provides access to the postfix [operator `satisfies`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html) in TypeScript. Satisfies is used to declare that a value implements a type but does not affect the type of the value.
+
+`@satisfies` provides access to the postfix
+[operator `satisfies`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
+in TypeScript. Satisfies is used to declare that a value implements a type but does not affect the
+type of the value.
 
 ```
 
@@ -1069,6 +1112,7 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEFMCdoe2gZwFygIwGYBsAGAUCBA
 ```
 
 ## Classes
+
 Classes can be declared as ES6 classes.
 
 ```
@@ -1185,9 +1229,15 @@ Try[](https://www.typescriptlang.org/play/#code/MYGwhgzhAEDC0G8BQ1oHoBUGWo9AAgA5
 
 ```
 
-They can also be declared as constructor functions; use [`@constructor`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor) along with [`@this`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#this) for this.
+They can also be declared as constructor functions; use
+[`@constructor`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#constructor)
+along with [`@this`](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#this)
+for this.
+
 ### Property Modifiers
-`@public`, `@private`, and `@protected` work exactly like `public`, `private`, and `protected` in TypeScript:
+
+`@public`, `@private`, and `@protected` work exactly like `public`, `private`, and `protected` in
+TypeScript:
 
 ```
 
@@ -1247,13 +1297,16 @@ Property 'identifier' is private and only accessible within class 'Car'.2341Prop
 
 ```
 
-  * `@public` is always implied and can be left off, but means that a property can be reached from anywhere.
-  * `@private` means that a property can only be used within the containing class.
-  * `@protected` means that a property can only be used within the containing class, and all derived subclasses, but not on dissimilar instances of the containing class.
-
+- `@public` is always implied and can be left off, but means that a property can be reached from
+  anywhere.
+- `@private` means that a property can only be used within the containing class.
+- `@protected` means that a property can only be used within the containing class, and all derived
+  subclasses, but not on dissimilar instances of the containing class.
 
 `@public`, `@private`, and `@protected` do not work in constructor functions.
+
 ### `@readonly`
+
 The `@readonly` modifier ensures that a property is only ever written to during initialization.
 
 ```
@@ -1314,7 +1367,9 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEFMCdoe2gZwFygEwFYAsAGAUCBA
 ```
 
 ### `@override`
-`@override` works the same way as in TypeScript; use it on methods that override a method from a base class:
+
+`@override` works the same way as in TypeScript; use it on methods that override a method from a
+base class:
 
 ```
 
@@ -1352,8 +1407,11 @@ Try[](https://www.typescriptlang.org/play/#code/KYDwDg9gTgLgBAYwDYEMDOa4GE4G8BQc
 ```
 
 Set `noImplicitOverride: true` in tsconfig to check overrides.
+
 ### `@extends`
-When JavaScript classes extend a generic base class, there is no JavaScript syntax for passing a type argument. The `@extends` tag allows this:
+
+When JavaScript classes extend a generic base class, there is no JavaScript syntax for passing a
+type argument. The `@extends` tag allows this:
 
 ```
 
@@ -1388,9 +1446,13 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXApgWwA4BsCGTIBUoyyI
 
 ```
 
-Note that `@extends` only works with classes. Currently, there is no way for a constructor function to extend a class.
+Note that `@extends` only works with classes. Currently, there is no way for a constructor function
+to extend a class.
+
 ### `@implements`
-In the same way, there is no JavaScript syntax for implementing a TypeScript interface. The `@implements` tag works just like in TypeScript:
+
+In the same way, there is no JavaScript syntax for implementing a TypeScript interface. The
+`@implements` tag works just like in TypeScript:
 
 ```
 
@@ -1423,7 +1485,9 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEEsFsAcA2BTWyB2AXAzuA3gAo
 ```
 
 ### `@constructor`
-The compiler infers constructor functions based on this-property assignments, but you can make checking stricter and suggestions better if you add a `@constructor` tag:
+
+The compiler infers constructor functions based on this-property assignments, but you can make
+checking stricter and suggestions better if you add a `@constructor` tag:
 
 ```
 
@@ -1539,11 +1603,18 @@ Value of type 'typeof C' is not callable. Did you mean to include 'new'?2348Valu
 
 ```
 
-> Note: Error messages only show up in JS codebases with [a JSConfig](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) and [`checkJs`](https://www.typescriptlang.org/tsconfig#checkJs) enabled.
-With `@constructor`, `this` is checked inside the constructor function `C`, so you will get suggestions for the `initialize` method and an error if you pass it a number. Your editor may also show warnings if you call `C` instead of constructing it.
-Unfortunately, this means that constructor functions that are also callable cannot use `@constructor`.
+> Note: Error messages only show up in JS codebases with
+> [a JSConfig](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) and
+> [`checkJs`](https://www.typescriptlang.org/tsconfig#checkJs) enabled. With `@constructor`, `this`
+> is checked inside the constructor function `C`, so you will get suggestions for the `initialize`
+> method and an error if you pass it a number. Your editor may also show warnings if you call `C`
+> instead of constructing it. Unfortunately, this means that constructor functions that are also
+> callable cannot use `@constructor`.
+
 ### `@this`
-The compiler can usually figure out the type of `this` when it has some context to work with. When it doesn’t, you can explicitly specify the type of `this` with `@this`:
+
+The compiler can usually figure out the type of `this` when it has some context to work with. When
+it doesn’t, you can explicitly specify the type of `this` with `@this`:
 
 ```
 
@@ -1579,8 +1650,13 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXAFgSwM6QN4AkAqBZAGQ
 ```
 
 ## Documentation
+
 ### `@deprecated`
-When a function, method, or property is deprecated you can let users know by marking it with a `/** @deprecated */` JSDoc comment. That information is surfaced in completion lists and as a suggestion diagnostic that editors can handle specially. In an editor like VS Code, deprecated values are typically displayed in a strike-through style ~~like this~~.
+
+When a function, method, or property is deprecated you can let users know by marking it with a
+`/** @deprecated */` JSDoc comment. That information is surfaced in completion lists and as a
+suggestion diagnostic that editors can handle specially. In an editor like VS Code, deprecated
+values are typically displayed in a strike-through style ~~like this~~.
 
 ```
 
@@ -1627,6 +1703,7 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEDsHsFECd7XgZwFDAFSYgEwKYAO
 ```
 
 ### `@see`
+
 `@see` lets you link to other names in your program:
 
 ```
@@ -1653,7 +1730,9 @@ Try[](https://www.typescriptlang.org/play/#code/C4TwDgpgBAQg9gDwDwBUB8UC8UDeVgBc
 ```
 
 Some editors will turn `Box` into a link to make it easy to jump there and back.
+
 ### `@link`
+
 `@link` is like `@see`, except that it can be used inside other tags:
 
 ```
@@ -1780,8 +1859,12 @@ Try[](https://www.typescriptlang.org/play/#code/C4TwDgpgBAChxQLxQN4CgpQHYEMC2EAX
 ```
 
 ## Other
+
 ### `@enum`
-The `@enum` tag allows you to create an object literal whose members are all of a specified type. Unlike most object literals in JavaScript, it does not allow other members. `@enum` is intended for compatibility with Google Closure’s `@enum` tag.
+
+The `@enum` tag allows you to create an object literal whose members are all of a specified type.
+Unlike most object literals in JavaScript, it does not allow other members. `@enum` is intended for
+compatibility with Google Closure’s `@enum` tag.
 
 ```
 
@@ -1823,7 +1906,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEFMDsFcC24DeDECNoCcC+4RgA
 
 ```
 
-Note that `@enum` is quite different from, and much simpler than, TypeScript’s `enum`. However, unlike TypeScript’s enums, `@enum` can have any type:
+Note that `@enum` is quite different from, and much simpler than, TypeScript’s `enum`. However,
+unlike TypeScript’s enums, `@enum` can have any type:
 
 ```
 
@@ -1866,6 +1950,7 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhAIAEFMDsFcC24DeAzesDGAXAlgPa
 ```
 
 ### `@author`
+
 You can specify the author of an item with `@author`:
 
 ```
@@ -1888,7 +1973,9 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUh1BTANgYwPYFt6QC6sgQwHd
 
 ```
 
-Remember to surround the email address with angle brackets. Otherwise, `@example` will be parsed as a new tag.
+Remember to surround the email address with angle brackets. Otherwise, `@example` will be parsed as
+a new tag.
+
 ### Other supported patterns
 
 ```
@@ -2045,6 +2132,7 @@ Try[](https://www.typescriptlang.org/play/#code/PTAEAEBcE8AcFMDOAuUAneBDAxpAUNgD
 ```
 
 ### Unsupported patterns
+
 Postfix equals on a property type in an object literal type doesn’t specify an optional property:
 
 ```
@@ -2086,7 +2174,8 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXAngBwKaQN4cgQwFyQDO
 
 ```
 
-Nullable types only have meaning if [`strictNullChecks`](https://www.typescriptlang.org/tsconfig#strictNullChecks) is on:
+Nullable types only have meaning if
+[`strictNullChecks`](https://www.typescriptlang.org/tsconfig#strictNullChecks) is on:
 
 ```
 
@@ -2173,42 +2262,47 @@ Try[](https://www.typescriptlang.org/play/#code/PQKhCgAIUgBAXAngBwKaQN4EIB2BXAWw
 
 ```
 
-Unlike JSDoc’s type system, TypeScript only allows you to mark types as containing null or not. There is no explicit non-nullability — if strictNullChecks is on, then `number` is not nullable. If it is off, then `number` is nullable.
-### Unsupported tags
-TypeScript ignores any unsupported JSDoc tags.
-The following tags have open issues to support them:
-  * `@memberof` ([issue #7237](https://github.com/Microsoft/TypeScript/issues/7237))
-  * `@yields` ([issue #23857](https://github.com/Microsoft/TypeScript/issues/23857))
-  * `@member` ([issue #56674](https://github.com/microsoft/TypeScript/issues/56674))
+Unlike JSDoc’s type system, TypeScript only allows you to mark types as containing null or not.
+There is no explicit non-nullability — if strictNullChecks is on, then `number` is not nullable. If
+it is off, then `number` is nullable.
 
+### Unsupported tags
+
+TypeScript ignores any unsupported JSDoc tags. The following tags have open issues to support them:
+
+- `@memberof` ([issue #7237](https://github.com/Microsoft/TypeScript/issues/7237))
+- `@yields` ([issue #23857](https://github.com/Microsoft/TypeScript/issues/23857))
+- `@member` ([issue #56674](https://github.com/microsoft/TypeScript/issues/56674))
 
 ### Legacy type synonyms
-A number of common types are given aliases for compatibility with old JavaScript code. Some of the aliases are the same as existing types, although most of those are rarely used. For example, `String` is treated as an alias for `string`. Even though `String` is a type in TypeScript, old JSDoc often uses it to mean `string`. Besides, in TypeScript, the capitalized versions of primitive types are wrapper types — almost always a mistake to use. So the compiler treats these types as synonyms based on usage in old JSDoc:
-  * `String -> string`
-  * `Number -> number`
-  * `Boolean -> boolean`
-  * `Void -> void`
-  * `Undefined -> undefined`
-  * `Null -> null`
-  * `function -> Function`
-  * `array -> Array<any>`
-  * `promise -> Promise<any>`
-  * `Object -> any`
-  * `object -> any`
 
+A number of common types are given aliases for compatibility with old JavaScript code. Some of the
+aliases are the same as existing types, although most of those are rarely used. For example,
+`String` is treated as an alias for `string`. Even though `String` is a type in TypeScript, old
+JSDoc often uses it to mean `string`. Besides, in TypeScript, the capitalized versions of primitive
+types are wrapper types — almost always a mistake to use. So the compiler treats these types as
+synonyms based on usage in old JSDoc:
+
+- `String -> string`
+- `Number -> number`
+- `Boolean -> boolean`
+- `Void -> void`
+- `Undefined -> undefined`
+- `Null -> null`
+- `function -> Function`
+- `array -> Array<any>`
+- `promise -> Promise<any>`
+- `Object -> any`
+- `object -> any`
 
 The last four aliases are turned off when `noImplicitAny: true`:
-  * `object` and `Object` are built-in types, although `Object` is rarely used.
-  * `array` and `promise` are not built-in, but might be declared somewhere in your program.
 
+- `object` and `Object` are built-in types, although `Object` is rarely used.
+- `array` and `promise` are not built-in, but might be declared somewhere in your program.
 
 ### [Type Checking JavaScript Files How to add type checking to JavaScript files using TypeScript ](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html)### [Creating .d.ts Files from .js files How to add d.ts generation to JavaScript projects ](https://www.typescriptlang.org/docs/handbook/declaration-files/dts-from-js.html)
-The TypeScript docs are an open source project. Help us improve these pages [by sending a Pull Request](https://github.com/microsoft/TypeScript-Website/blob/v2/packages/documentation/copy/en/javascript/JSDoc%20Reference.md) ❤
-Contributors to this page:
-OT
-NS
-RG
-N
-R
-12+
-Last updated: Oct 26, 2026This page loaded in 0.278 seconds.
+
+The TypeScript docs are an open source project. Help us improve these pages
+[by sending a Pull Request](https://github.com/microsoft/TypeScript-Website/blob/v2/packages/documentation/copy/en/javascript/JSDoc%20Reference.md)
+❤ Contributors to this page: OT NS RG N R 12+ Last updated: Oct 26, 2026This page loaded in 0.278
+seconds.

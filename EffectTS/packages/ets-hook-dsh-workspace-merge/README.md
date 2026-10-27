@@ -6,9 +6,10 @@
 ## The role
 
 The batch merge of the workspace family: the **atomic gates**, the per-file commits **through the
-factory's Write executor**, and the **commit reply union**. Plan:
-`Documentation/Plans/Workspace-Family/MERGE.md` + `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md`
-(sections 3.7-3.8).
+factory's Write executor**, and the **commit reply union**.
+
+Plan: `Documentation/Plans/Workspace-Family/MERGE.md` +
+`Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` (sections 3.7-3.8).
 
 ## What it does
 

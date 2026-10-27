@@ -1,7 +1,8 @@
 # @playform/hook-dsh-normalize-dash - The dash normalizer for model output
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md), the [factory README](../plugin-dsh-factory/README.md), the
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md), the [factory README](../plugin-dsh-factory/README.md), the
 > [core README](../lib-dsh-core/README.md), and the
 > [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 > reference.
@@ -12,15 +13,19 @@ The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks 
 [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes, en
-dashes and seventeen exotic relatives → `-`. A **CLASS flavor** of the normalize family: the core's
-`Dashes` class plus a configurable `replacement` (default `-`).
+dashes and seventeen exotic relatives → `-`.
+
+A **CLASS flavor** of the normalize family: the core's `Dashes` class plus a configurable
+`replacement` (default `-`).
 
 It also registers the family's **`raw-write` tool** - a write wrapper with an explicit `normalize`
 parameter (default **false = verbatim**), exempt from the stream normalization by name like `edit`.
 
-The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**. Unlike the governance family, the
-rewrite flows into both the live UI and the durable transcript - the normalization is deliberately
-**VISIBLE; it IS the feature**, which is why the injection point was chosen.
+The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**.
+
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+the normalization is deliberately **VISIBLE; it IS the feature**, which is why the injection point
+was chosen.
 
 ## The surfaces
 
@@ -51,11 +56,12 @@ rewrite flows into both the live UI and the durable transcript - the normalizati
 | `toolResultsExempt`      | string[] | `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question` | a tool result whose exec name is listed passes the tool-results arm by identity (volatile)                                                     |
 
 The module composes the factory helper with `shared: false`, so the shared block is only `log` and
-`logFile`; the module's own fields follow in schema order. `raw-write`'s `normalize` parameter
-(absent/false = verbatim, `true`/`"all"` = all six transforms in the family's fixed order, or an
-array of flavor names = only the selected flavors) and its `govern` parameter (absent/false = no
-governance chain, `true`/`"all"` = all registered steps for the target's basename, or named steps
-only) are per-call tool parameters, not config fields.
+`logFile`; the module's own fields follow in schema order.
+
+`raw-write`'s `normalize` parameter (absent/false = verbatim, `true`/`"all"` = all six transforms in
+the family's fixed order, or an array of flavor names = only the selected flavors) and its `govern`
+parameter (absent/false = no governance chain, `true`/`"all"` = all registered steps for the
+target's basename, or named steps only) are per-call tool parameters, not config fields.
 
 ## The ledger
 

@@ -26,46 +26,64 @@ statuses:
 
 # ICON-GRAMMAR.md - the family's generated icon language
 
-One icon per package, generated from the package's own functionality. The reference sheet
-(`Temporary/Icon-Reference/Reference.jpg`, 29 motifs) is the visual source: this file measures it,
-extracts its component vocabulary, and maps that vocabulary onto the two release trees and the four
-package kinds.
+One icon per package, generated from the package's own functionality.
 
-Nothing here is drawn by hand. Every icon is a pure function of a genome (the package's identity +
-features + changelog digest), so a package change regenerates its icon and the same package content
-always regenerates the same bytes.
+The reference sheet (`Temporary/Icon-Reference/Reference.jpg`, 29 motifs) is the visual source: this
+file measures it, extracts its component vocabulary, and maps that vocabulary onto the two release
+trees and the four package kinds.
+
+Nothing here is drawn by hand.
+
+Every icon is a pure function of a genome (the package's identity + features + changelog digest), so
+a package change regenerates its icon and the same package content always regenerates the same
+bytes.
 
 ## 0. Current pipeline (2026-10-25) - supersedes sections 3, 4, 5.1, 7 and 9
 
 The generator now runs four stages, each with its own owner file:
 
-1. **Profile.** `Infer.mjs` reads the package source into a structure (modules, import graph,
-   semantic tokens) and a functional profile: role (interceptor, transformer, router, store,
-   renderer, governor, orchestrator, analyzer), flow, stateful, streaming, branching, containment,
-   weight, evidence, confidence.
-2. **Composition.** `Composition.mjs` maps the profile to a design: form and motif family, symmetry
-   (4/6/8/12 from branching), phase (0 when streaming), density (weight), void (containment), accent
-   placement, and the applied compatibility rules.
-3. **Transliteration.** `Transliterate.mjs` draws the chosen family and attaches one layer per
-   semantic token the package actually has (gate loops, tool beads, seam ticks, ledger beads,
-   injection rings, medallion, stream spiral, state nest, trace echo, transform cusps, evolution
-   rings).
-4. **Solid render.** `RenderScene.mjs` fills every component (a closed component fills its polygon,
-   an open one its envelope) and paints the planes in depth order. There is no contour pass: the
-   drawing is carried by the planes, their tones, and their occlusion. A frame or body plane is
-   projected as a 3D solid seen from above (silhouette, ribs, top face, optional age face), and the
-   SVG is the top view of that stack.
+1. **The profile.**
 
-`ICON-METHODS.md` carries the family table, the matrix, the rules, and the arbiters. Sections 3-5
-and 7 below describe the retired first-generation vocabulary (the method pool and the annulus
-collage); they are kept because their measurements of the reference sheet still hold, not because
-the generator uses them.
+    `Infer.mjs` reads the package source into a structure (modules, import graph, semantic tokens)
+    and a functional profile: role (interceptor, transformer, router, store, renderer, governor,
+    orchestrator, analyzer), flow, stateful, streaming, branching, containment, weight, evidence,
+    confidence.
+
+2. **The composition.**
+
+    `Composition.mjs` maps the profile to a design: form and motif family, symmetry (4/6/8/12 from
+    branching), phase (0 when streaming), density (weight), void (containment), accent placement,
+    and the applied compatibility rules.
+
+3. **The transliteration.**
+
+    `Transliterate.mjs` draws the chosen family and attaches one layer per semantic token the
+    package actually has (gate loops, tool beads, seam ticks, ledger beads, injection rings,
+    medallion, stream spiral, state nest, trace echo, transform cusps, evolution rings).
+
+4. **The solid render.**
+
+    `RenderScene.mjs` fills every component (a closed component fills its polygon, an open one its
+    envelope) and paints the planes in depth order.
+
+    There is no contour pass: the drawing is carried by the planes, their tones, and their
+    occlusion.
+
+    A frame or body plane is projected as a 3D solid seen from above (silhouette, ribs, top face,
+    optional age face), and the SVG is the top view of that stack.
+
+`ICON-METHODS.md` carries the family table, the matrix, the rules, and the arbiters.
+
+Sections 3-5 and 7 below describe the retired first-generation vocabulary (the method pool and the
+annulus collage); they are kept because their measurements of the reference sheet still hold, not
+because the generator uses them.
 
 ## 1. The sheet, measured
 
-The sheet is a 6 x 5 lattice of 29 motifs on cream paper (the last row carries four). Measurements
-come from `Temporary/Icon-Reference/Analyze.py`, which writes `Analysis.json` and the labelled
-`Contact-Sheet.png`.
+The sheet is a 6 x 5 lattice of 29 motifs on cream paper (the last row carries four).
+
+Measurements come from `Temporary/Icon-Reference/Analyze.py`, which writes `Analysis.json` and the
+labeled `Contact-Sheet.png`.
 
 All 29 motifs are cut out at 4x (`Temporary/Icon-Reference/Motifs/<id>.png`, with six row sheets in
 `Rows/`) and read one by one in `ICON-REFERENCE.md` - the per-motif companion to this file: the
@@ -74,24 +92,26 @@ class, the order, the body, the core, the rim, the orbit, the accent and the str
 | Fact                 | Measured value                                                  |
 | -------------------- | --------------------------------------------------------------- |
 | Canvas               | 730 x 975 px, portrait                                          |
-| Paper                | #F8F8E8 (warm cream), visible fibre texture, no vignette        |
+| Paper                | #F8F8E8 (warm cream), visible fiber texture, no vignette        |
 | Lattice              | 5 columns x 6 rows, 137 px pitch, 29 occupied slots             |
-| Motif box            | 100-125 px (0.73-0.91 of the pitch), always centred             |
+| Motif box            | 100-125 px (0.73-0.91 of the pitch), always centered            |
 | Whitespace           | 25-40 px between boxes; no frames, captions, or rules           |
 | Stroke               | uniform 1.5-3 px at this scale; no gradient, shadow, or texture |
 | Ink share of the box | 0.07-0.41 (median 0.21): line-first, the paper shows through    |
 | Radial mass          | peaks in bands 2-3 (mid radius); the rim band is nearly empty   |
-| Ink colour           | near-black, always tinted: navy, maroon, brown, green, purple   |
+| Ink color            | near-black, always tinted: navy, maroon, brown, green, purple   |
 | Accent               | one hue per motif, as ink or as a light tint fill               |
 | Mirror axes          | present in every motif that was checked by hand                 |
 
-The radial profile matters: the motifs breathe at the edge. A generated icon that fills its outer
-band stops reading as one of these.
+The radial profile matters: the motifs breathe at the edge.
+
+A generated icon that fills its outer band stops reading as one of these.
 
 ## 2. The catalogue (29 motifs)
 
-Classes are the vocabulary of section 3. "Body" is the repeated element, "core" the centre, "rim"
-the frame, "orbit" the satellites.
+Classes are the vocabulary of section 3.
+
+"Body" is the repeated element, "core" the center, "rim" the frame, "orbit" the satellites.
 
 | Id   | Class             | Sym | Body                   | Core             | Rim             | Orbit            |
 | ---- | ----------------- | --- | ---------------------- | ---------------- | --------------- | ---------------- |
@@ -128,14 +148,15 @@ the frame, "orbit" the satellites.
 ## 3. The component vocabulary
 
 The vocabulary is FUNCTIONAL: every stroke is sampled from a parametric curve in
-`Maintain/Icon/Curve.mjs`, never assembled from fixed primitives. A sampler returns a quantized
-point list, and every closed sampler is star-shaped about the centre, so a single curve can never
-self-intersect.
+`Maintain/Icon/Curve.mjs`, never assembled from fixed primitives.
+
+A sampler returns a quantized point list, and every closed sampler is star-shaped about the center,
+so a single curve can never self-intersect.
 
 | Sampler        | Function                                                                                                      |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
 | `superellipse` | x = r sign(cos t) abs(cos t)^(2/p), y = r sign(sin t) abs(sin t)^(2/p): p=2 circle, p=4 squircle, p=1 diamond |
-| `lobedRing`    | r = inner + amplitude abs(cos(lobes t / 2))^power: the body, star-shaped, never reaching the centre           |
+| `lobedRing`    | r = inner + amplitude abs(cos(lobes t / 2))^power: the body, star-shaped, never reaching the center           |
 | `waveRing`     | r = radius + amplitude cos(lobes t): the rim and the woven frame                                              |
 | `circle`       | the same angle convention as every other sampler, so the outline pass is uniform                              |
 | `arc`          | an open partial ring, as a polyline                                                                           |
@@ -149,20 +170,46 @@ now forbids.
 
 ## 4. Composition rules
 
-1. One motif, centred, in a 100 x 100 box with a 46-unit outer radius.
-2. n-fold rotation with n in {2, 4, 6, 8, 12}, plus at least one mirror axis.
-3. **The collage rule.** The icon is packed from DISJOINT annuli and never interlaced: core (r <=
-   7), body (9-31), evolution (33-38), orbit (40-44), rim (45-47). No element may cross another
-   element's band, so no stroke of one piece overlaps a stroke of another; overlap inside one
-   sampled curve is impossible by construction. The composer (`Maintain/Icon/Compose.mjs`) enforces
-   the bands.
-4. The rim band stays mostly empty: the silhouette breathes at the edge.
-5. **The outline rule.** Every stroke is drawn twice from ONE path definition: a wider faint outline
-   pass (the mini stroke outline) and the body pass, shared through `<defs>`/`<use>`. The outline is
-   what gives the line its drawn edge; no second element is used to create contrast.
-6. Ink is a line: stroke only; no gradient, shadow, or texture.
-7. One accent hue, carried by the evolution rings, the orbit and the rim.
-8. Negative space is part of the motif; the paper colour is never painted over.
+1. **The motif.**
+
+    One motif, centered, in a 100 x 100 box with a 46-unit outer radius.
+
+2. **The symmetry.**
+
+    n-fold rotation with n in {2, 4, 6, 8, 12}, plus at least one mirror axis.
+
+3. **The collage rule.**
+
+    The icon is packed from DISJOINT annuli and never interlaced: core (r <= 7), body (9-31),
+    evolution (33-38), orbit (40-44), rim (45-47).
+
+    No element may cross another element's band, so no stroke of one piece overlaps a stroke of
+    another; overlap inside one sampled curve is impossible by construction.
+
+    The composer (`Maintain/Icon/Compose.mjs`) enforces the bands.
+
+4. **The breathing rim.**
+
+    The rim band stays mostly empty: the silhouette breathes at the edge.
+
+5. **The outline rule.**
+
+    Every stroke is drawn twice from ONE path definition: a wider faint outline pass (the mini
+    stroke outline) and the body pass, shared through `<defs>`/`<use>`.
+
+    The outline is what gives the line its drawn edge; no second element is used to create contrast.
+
+6. **The ink.**
+
+    Ink is a line: stroke only; no gradient, shadow, or texture.
+
+7. **The accent.**
+
+    One accent hue, carried by the evolution rings, the orbit and the rim.
+
+8. **The negative space.**
+
+    Negative space is part of the motif; the paper color is never painted over.
 
 ## 5. The mapping to the family
 
@@ -183,8 +230,9 @@ now forbids.
 | `EffectTS` | `traced` | a second stroke offset 1.6 units (the effect trace), hollow core ring, one trace tick at 45 degrees |
 
 The two trees share the grammar, the order, and the palette; the mode is the only difference, so a
-twin pair reads as the same design with and without tracing. The ledger strings are byte-identical
-across trees; the icons are deliberately not.
+twin pair reads as the same design with and without tracing.
+
+The ledger strings are byte-identical across trees; the icons are deliberately not.
 
 ### 5.3 Domain -> core glyph
 
@@ -213,14 +261,17 @@ else a small diamond.
 | `changelogEntries`     | bullet lines in `CHANGELOG.md`                              |
 | `changelogDigest`      | sha256 of `CHANGELOG.md`                                    |
 
-The seed is `sha256(name | tree | version | features | changelogDigest)`. The PRNG is xorshift32
-seeded from the first 8 hex digits and is used only for micro-variation (arm length, orbit radius,
-scroll phase), quantized to 0.25 units so bytes stay stable.
+The seed is `sha256(name | tree | version | features | changelogDigest)`.
+
+The PRNG is xorshift32 seeded from the first 8 hex digits and is used only for micro-variation (arm
+length, orbit radius, scroll phase), quantized to 0.25 units so bytes stay stable.
 
 ## 7. Gated design (the feature gates the geometry)
 
-A component exists only when its feature does. This is the rule that makes each icon specific to the
-package's harness behaviour rather than decorative.
+A component exists only when its feature does.
+
+This is the rule that makes each icon specific to the package's harness behavior rather than
+decorative.
 
 | Gate                    | Effect on the plan                             |
 | ----------------------- | ---------------------------------------------- |
@@ -238,8 +289,9 @@ package's harness behaviour rather than decorative.
 ### 7.1 The per-zone complexity vector (the sheet's "levels of separation")
 
 The reference sheet does not vary complexity per motif; it varies it PER LEVEL - one icon has a rich
-core over a plain body, another a plain core inside a dense rim. The generator encodes that as a
-`levels` vector, one 0-3 score per zone:
+core over a plain body, another a plain core inside a dense rim.
+
+The generator encodes that as a `levels` vector, one 0-3 score per zone:
 
 | Zone        | Gate (base)                                     | Rendered at 0 / 1 / 2 / 3                         |
 | ----------- | ----------------------------------------------- | ------------------------------------------------- |
@@ -251,13 +303,14 @@ core over a plain body, another a plain core inside a dense rim. The generator e
 | `rim`       | `bundle`, `seams`                               | none / single / double / woven + ticks            |
 
 Each base is nudged by the seed (`-1, 0, 0, 0, +1`), so two packages with identical features still
-differ in WHICH level is rich. The stroke weight (`functions`, `bundle`, `tools` -> 1.3-2.0) and the
-fill treatment (`variant`: tint body, solid core, or none) are per-package too, like the sheet's
-bold and filled motifs.
+differ in WHICH level is rich.
+
+The stroke weight (`functions`, `bundle`, `tools` -> 1.3-2.0) and the fill treatment (`variant`:
+tint body, solid core, or none) are per-package too, like the sheet's bold and filled motifs.
 
 ## 8. Evolution (the changelog reconstructs the icon)
 
-The icon is append-only in history and live in behaviour:
+The icon is append-only in history and live in behavior:
 
 - `changelogVersions - 1` concentric evolution rings, each at a fixed radius, so a new release
   visibly adds a ring.
@@ -267,7 +320,9 @@ The icon is append-only in history and live in behaviour:
 
 Because the seed includes the changelog digest, the icon is reconstructed from the seed alone:
 `node Maintain/Generate/Icons/Index.mjs` after a changelog edit produces the next icon, and
-`--check` fails until the asset is regenerated. That is the whole update loop.
+`--check` fails until the asset is regenerated.
+
+That is the whole update loop.
 
 ## 9. The rendering contract
 
@@ -335,7 +390,9 @@ reports 14 of 14; `node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversit
 ## 11. Palette (per package, from the dusk banner)
 
 SOURCE: `Temporary/Icon-Reference/Banner.png` (the "Beautiful Rust" pixel-art banner the user
-supplied). Its k-means extraction supplies the family's whole vocabulary:
+supplied).
+
+Its k-means extraction supplies the family's whole vocabulary:
 
 | Name       | Hex       | Name  | Hex       |
 | ---------- | --------- | ----- | --------- |
@@ -357,11 +414,14 @@ second accent inside the zone:
 | `lib`    | violet      | `#2A1B3D` `#33204A` `#2B1D4A` `#35233F` | `#97568B` `#B07CC6` `#A66BB8` `#8A5A9E` |
 
 Tints mix the accent toward the banner cream (`#F8E3B7`), not toward white, so a filled icon sits on
-the same paper as the reference sheet. The result is 16 distinct inks, 19 accents and 28 fills
-across the 102 packages - the reference sheet's 29/29 spread, reached from one source palette.
+the same paper as the reference sheet.
 
-The mono render carries no hue at all; the colour render is the marketplace asset. The site stays
-blue and white: it inlines the mono file, whose `currentColor` is the page ink.
+The result is 16 distinct inks, 19 accents and 28 fills across the 102 packages - the reference
+sheet's 29/29 spread, reached from one source palette.
+
+The mono render carries no hue at all; the colour render is the marketplace asset.
+
+The site stays blue and white: it inlines the mono file, whose `currentColor` is the page ink.
 
 ---
 

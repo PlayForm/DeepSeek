@@ -1,4 +1,3 @@
-
 ```
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Metrics
@@ -825,4 +824,3 @@ Datastore: A tool used by the agent to access and query structured or unstructur
 [ExplicitBucketBoundaries]: https://github.com/open-telemetry/opentelemetry-specification/blob/v1.55.0/specification/metrics/api.md#instrument-advisory-parameters
 
 ```
-

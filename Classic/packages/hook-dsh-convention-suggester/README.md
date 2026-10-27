@@ -6,9 +6,11 @@
 ## The role
 
 The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a
-pattern pack and names them **before** the model violates them. On every `write`/`edit`/`raw-write`
-call it classifies the target path deterministically and prepends ONE labeled `additionalContexts`
-notice naming the companion targets the convention requires:
+pattern pack and names them **before** the model violates them.
+
+On every `write`/`edit`/`raw-write` call it classifies the target path deterministically and
+prepends ONE labeled `additionalContexts` notice naming the companion targets the convention
+requires:
 
 - **Layout** - the entry stays wiring-only (`name`, `apply`, `Config`, `inject`); one definition per
   file, nameless default exports.
@@ -45,8 +47,10 @@ pack stays silent.
 The hook is also the family's PACK LEARNER: an **opt-in bootstrap** that derives a repo's pack from
 the repo itself and writes it as a **proposal**, never as a live pack.
 
-- **Off by default.** Flip the config's `learning` to `true` for every workspace, or let a repo opt
-  itself in with a minimal `.dsh/pack.yml`:
+- **Off by default.**
+
+    Flip the config's `learning` to `true` for every workspace, or let a repo opt itself in with a
+    minimal `.dsh/pack.yml`:
 
     ```yaml
     learning:
@@ -55,19 +59,34 @@ the repo itself and writes it as a **proposal**, never as a live pack.
 
     The config wins when true; a false config (the default) leaves the decision to the pack.
 
-- **When.** The first judged call in a packless workspace per process (the built-in pack, or a pack
-  layer with no families). An installed pack is never proposed over.
-- **What.** The doc graph (`Documentation/INDEX.md`, `ARCHIVE-STYLE.md`, `Plans`, `Guides`, `Skill`,
-  `Handoff`), the package layout (`package.json`, `README.md`, `SCHEME.md`, `cordis.patch.yml`,
-  `Source/{Library.ts,Function,Variable,Interface,Test}`) and the site
-  (`Site/Source/{Content,pages,Component,Library}`) become the families whose companions actually
-  exist; the signature is `ARCHIVE-STYLE.md`, else `INDEX.md`, else `package.json`; the slug is the
-  repo's basename, lowercased.
-- **Where.** `<home>/.dsh/playform/proposals/<slug>.yml` - a full pack object that parses back
-  through `@playform/lib-dsh-pack`. **Install it** by copying the file to
-  `~/.dsh/playform/workspaces/<slug>.yml` and restarting (the library resolves packs at boot).
-- **The note.** One `additionalContexts` notice naming the proposal path, the family count and the
-  install step, with the ledger line `learned proposal <slug> <n> families <path>`.
+- **When.**
+
+    The first judged call in a packless workspace per process (the built-in pack, or a pack layer
+    with no families).
+
+    An installed pack is never proposed over.
+
+- **What.**
+
+    The doc graph (`Documentation/INDEX.md`, `ARCHIVE-STYLE.md`, `Plans`, `Guides`, `Skill`,
+    `Handoff`), the package layout (`package.json`, `README.md`, `SCHEME.md`, `cordis.patch.yml`,
+    `Source/{Library.ts,Function,Variable,Interface,Test}`) and the site
+    (`Site/Source/{Content,pages,Component,Library}`) become the families whose companions actually
+    exist; the signature is `ARCHIVE-STYLE.md`, else `INDEX.md`, else `package.json`; the slug is
+    the repo's basename, lowercased.
+
+- **Where.**
+
+    `<home>/.dsh/playform/proposals/<slug>.yml` - a full pack object that parses back through
+    `@playform/lib-dsh-pack`.
+
+    **Install it** by copying the file to `~/.dsh/playform/workspaces/<slug>.yml` and restarting
+    (the library resolves packs at boot).
+
+- **The note.**
+
+    One `additionalContexts` notice naming the proposal path, the family count and the install step,
+    with the ledger line `learned proposal <slug> <n> families <path>`.
 
 The refine-from-edits layer (an accepted suggestion moving a companion's weight) is the later D8
 lane.
@@ -125,16 +144,20 @@ Every field is a volatile cell.
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`Learn-Install`, `Learn-Note`, `Learn-Proposal`, `Pack-Driven`, `Post-Execute-And-Gate`,
-`Wiring-And-Ledger`, `Workspace-Gate`.
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `Learn-Install`, `Learn-Note`, `Learn-Proposal`, `Pack-Driven`,
+`Post-Execute-And-Gate`, `Wiring-And-Ledger`, `Workspace-Gate`.
 
 ## The plan
 
 - [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - the pattern
   algebra and the section 9.4 convention arbiter.
+
 - PoC phase: the package and Source are complete; the smoke suites, the build pass, and the wiring
-  are the end-phase (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+  are the end-phase (POC-BRIEF.md §8).
+
+    Ships `enabled: false` in the bundle patch.
 
 ## License
 

@@ -41,8 +41,9 @@ Seven, priority order: `Plan`, `Guide`, `Skill`, `PluginDoc`, `Index`, `Site`, `
 
 Each family is a pack row: its path rules (regexes on the doc path the call names, with weights) and
 its companion set - each companion a path or glob with a prior and **one reason phrase** ("the index
-row", "the frontmatter and style rules", "the site mirror"). A companion without a reason is not
-emitted.
+row", "the frontmatter and style rules", "the site mirror").
+
+A companion without a reason is not emitted.
 
 The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
 [`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `doc/` domain.
@@ -90,8 +91,10 @@ The score is `sum over the enabled heuristics of weight * value`:
 | `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
 
 The default row is exactly the PoC formula, and a missing store answers the neutral 1/3, so the
-default behavior is unchanged byte-for-byte. A user can disable any heuristic (`heuristics`) or
-re-weight any of them (`weights`), and the decision record plus the `decided` line show the choice.
+default behavior is unchanged byte-for-byte.
+
+A user can disable any heuristic (`heuristics`) or re-weight any of them (`weights`), and the
+decision record plus the `decided` line show the choice.
 
 Before the score, two workspace guards run: the workspace locator
 ([`@playform/lib-dsh-pack`](../lib-dsh-pack)'s `Locate`, whose signature comes from the resolved
@@ -105,9 +108,12 @@ it.
 ## The delivery
 
 One note, never a content replacement: the post-execute listener runs after the ccr and the
-normalize family and only adds `additionalContexts`. The note carries the plugin's own source label
-(`{kind: "doc-suggester", form: "notice", summary}`). The judged tool set is config (`tools`): the
-read and search calls that touch documentation plus the edits that land on it.
+normalize family and only adds `additionalContexts`.
+
+The note carries the plugin's own source label (`{kind: "doc-suggester", form: "notice", summary}`).
+
+The judged tool set is config (`tools`): the read and search calls that touch documentation plus the
+edits that land on it.
 
 ## The waterfall discipline
 
@@ -133,9 +139,13 @@ hook-dsh-doc-suggester: <error>; the call passes through unnoted
 
 ## The configuration
 
-See [SCHEME.md](./SCHEME.md) for the full schema. Every knob is volatile (hot-editable, no remount).
-The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`. Ships
-**disabled** - enable by explicit ACTIVATE in the profile.
+See [SCHEME.md](./SCHEME.md) for the full schema.
+
+Every knob is volatile (hot-editable, no remount).
+
+The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `storeLimit`.
+
+Ships **disabled** - enable by explicit ACTIVATE in the profile.
 
 | Field             | Default                                                  | Meaning                                       |
 | ----------------- | -------------------------------------------------------- | --------------------------------------------- |
@@ -158,8 +168,10 @@ The learning layer adds `learn`, `learnWindow`, `heuristics`, `weights`, and `st
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`Learning-Loop`, `Pack-Driven`, `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`.
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `Learning-Loop`, `Pack-Driven`, `Post-Execute-And-Ring`, `Wiring-And-Ledger`,
+`Workspace-Gate`.
 
 ## The plan
 

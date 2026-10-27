@@ -1,529 +1,425 @@
 ### Suggested
-response_formatreasoning_effortstreamingtools
-Overview  Models  Agents  Tools  Audio & voice  Production  API reference 
-Models
-###  Get started 
 
+response_formatreasoning_effortstreamingtools Overview Models Agents Tools Audio & voice Production
+API reference Models
 
-###  Core concepts 
+### Get started
 
+### Core concepts
 
-###  SDKs and CLI 
+### SDKs and CLI
 
+### Resources
 
-###  Resources 
+### Legacy APIs
 
+- Agent Builder
+- Evals
+- Fine-tuning
+    - [ Direct preference optimization ](https://developers.openai.com/api/docs/guides/direct-preference-optimization)
+- Assistants API
 
-###  Legacy APIs 
-  * Agent Builder
-  * Evals
-  * Fine-tuning
-    * [ Direct preference optimization ](https://developers.openai.com/api/docs/guides/direct-preference-optimization)
-  * Assistants API
+### Choose a model
 
+### Text and code
 
+### Prompting
 
+### Reasoning
 
-###  Choose a model 
+### Images
 
+-     * [ Image input cost calculator ](https://developers.openai.com/api/docs/guides/image-cost-calculator)
+-
 
-###  Text and code 
+### Realtime and audio
 
+### Specialized models
 
-###  Prompting 
+### Agents API
 
+- Sessions
+- Environments and sandboxes
+- Tools and integrations
 
-###  Reasoning 
+### Agents SDK
 
+- [ Integrations and observability ](https://developers.openai.com/api/docs/guides/agents/integrations-observability)
 
-###  Images 
-  *     * [ Image input cost calculator ](https://developers.openai.com/api/docs/guides/image-cost-calculator)
-  * 
+### ChatKit
 
-###  Realtime and audio 
+### Search and retrieval
 
+### Connect tools and data
 
-###  Specialized models 
+### Build tool workflows
 
+### Computer and code
 
+-
 
+### Media
 
-###  Agents API 
-  * Sessions
-  * Environments and sandboxes
-  * Tools and integrations
+### GPT-Live
 
+### Realtime API
 
-###  Agents SDK 
-  * [ Integrations and observability ](https://developers.openai.com/api/docs/guides/agents/integrations-observability)
+### Build with voice
 
+- [ Connect voice to Decisions ](https://developers.openai.com/api/docs/guides/decisions-voice)
 
-###  ChatKit 
+### Connections
 
+### Audio processing
 
+### Go live
 
+### Performance and quality
 
-###  Search and retrieval 
+### Evaluation
 
+### Cost and throughput
 
-###  Connect tools and data 
+-
 
+### Safety and governance
 
-###  Build tool workflows 
+- Safety checks
+- [ Enforcement notifications ](https://developers.openai.com/api/docs/guides/safety-enforcement)
 
+### Infrastructure and access
 
-###  Computer and code 
-  * 
+- [ Terraform provider ](https://developers.openai.com/api/docs/guides/terraform)
+    - [ Model, tool, and data controls ](https://developers.openai.com/api/docs/guides/terraform/project-controls)
+- [ Workload identity federation ](https://developers.openai.com/api/docs/guides/workload-identity-federation)
+    - [ Oracle Cloud Infrastructure ](https://developers.openai.com/api/docs/guides/workload-identity-federation/oracle-cloud)
 
-###  Media 
+### Operations
 
-
-
-
-###  GPT-Live 
-
-
-###  Realtime API 
-
-
-###  Build with voice 
-  * [ Connect voice to Decisions ](https://developers.openai.com/api/docs/guides/decisions-voice)
-
-
-###  Connections 
-
-
-###  Audio processing 
-
-
-###  Go live 
-
-
-###  Performance and quality 
-
-
-###  Evaluation 
-
-
-###  Cost and throughput 
-  * 
-
-###  Safety and governance 
-  * Safety checks
-  * [ Enforcement notifications ](https://developers.openai.com/api/docs/guides/safety-enforcement)
-
-
-###  Infrastructure and access 
-  * [ Terraform provider ](https://developers.openai.com/api/docs/guides/terraform)
-    * [ Model, tool, and data controls ](https://developers.openai.com/api/docs/guides/terraform/project-controls)
-  * [ Workload identity federation ](https://developers.openai.com/api/docs/guides/workload-identity-federation)
-    * [ Oracle Cloud Infrastructure ](https://developers.openai.com/api/docs/guides/workload-identity-federation/oracle-cloud)
-
-
-###  Operations 
-
-
-[ Overview ](https://developers.openai.com/chatgpt) Plugins  Sign in with ChatGPT  Commerce  Ads  Workspace Agents [ ChatGPT + Codex user docs ](https://learn.chatgpt.com/docs)[ Use cases ](https://learn.chatgpt.com/use-cases)
+[ Overview ](https://developers.openai.com/chatgpt) Plugins Sign in with ChatGPT Commerce Ads
+Workspace Agents
+[ ChatGPT + Codex user docs ](https://learn.chatgpt.com/docs)[ Use cases ](https://learn.chatgpt.com/use-cases)
 Overview
 
+### Core concepts
 
-###  Core concepts 
+### Plan
 
+### Build
 
-###  Plan 
+- [ Add UI to your MCP server (optional) ](https://developers.openai.com/plugins/build/chatgpt-ui)
+- [ Add events to your MCP server (optional) ](https://developers.openai.com/plugins/build/mcp-events)
 
+### Test and publish
 
-###  Build 
-  * [ Add UI to your MCP server (optional) ](https://developers.openai.com/plugins/build/chatgpt-ui)
-  * [ Add events to your MCP server (optional) ](https://developers.openai.com/plugins/build/mcp-events)
+- [ Connect and test your plugin ](https://developers.openai.com/plugins/deploy/connect-chatgpt)
+- [ Submit desktop-only plugins ](https://developers.openai.com/plugins/deploy/desktop-only)
+- [ Submission error reference ](https://developers.openai.com/plugins/deploy/submission-errors)
 
+### Conversion specs
 
-###  Test and publish 
-  * [ Connect and test your plugin ](https://developers.openai.com/plugins/deploy/connect-chatgpt)
-  * [ Submit desktop-only plugins ](https://developers.openai.com/plugins/deploy/desktop-only)
-  * [ Submission error reference ](https://developers.openai.com/plugins/deploy/submission-errors)
+- [ Restaurant reservation spec ](https://developers.openai.com/plugins/guides/restaurant-reservation-conversion-spec)
 
+### Guides
 
-###  Conversion specs 
-  * [ Restaurant reservation spec ](https://developers.openai.com/plugins/guides/restaurant-reservation-conversion-spec)
+- [ Submit a Claude Code plugin ](https://developers.openai.com/plugins/guides/submit-claude-plugin)
 
+### Resources
 
-###  Guides 
-  * [ Submit a Claude Code plugin ](https://developers.openai.com/plugins/guides/submit-claude-plugin)
+- [ MCP server review requirements ](https://developers.openai.com/plugins/deploy/app-review)
 
+### Identity
 
-###  Resources 
-  * [ MCP server review requirements ](https://developers.openai.com/plugins/deploy/app-review)
+### ChatGPT plan usage
 
+### Guides
 
+### File Upload
 
+### API
 
-###  Identity 
+### Measurement
 
+- [ Multiple Pixels (Advanced) ](https://developers.openai.com/ads/multiple-pixels)
 
-###  ChatGPT plan usage 
+### Advertiser API
 
+- [ Hotel Feeds (limited beta) ](https://developers.openai.com/ads/hotel-feeds)
 
-###  Guides 
+### API Reference
 
+### Get started
 
-###  File Upload 
+- [ Trigger workspace agent runs ](https://developers.openai.com/workspace-agents/trigger-runs)
+- [ Authenticate with Workspace Agent access tokens ](https://developers.openai.com/workspace-agents/authentication)
 
+Overview Features Configuration Developers Security Administration Use Cases Resources Overview
 
-###  API 
+### Get started
 
+- [ Import from another agent ](https://developers.openai.com/codex/import)
 
+### Foundations
 
+### Explore
 
-###  Measurement 
-  * [ Multiple Pixels (Advanced) ](https://developers.openai.com/ads/multiple-pixels)
+### Available on
 
+### Releases
 
-###  Advertiser API 
-  * [ Hotel Feeds (limited beta) ](https://developers.openai.com/ads/hotel-feeds)
+### Workflows
 
+### Capabilities
 
-###  API Reference 
+### Sites
 
+### dots
 
-###  Get started 
-  * [ Trigger workspace agent runs ](https://developers.openai.com/workspace-agents/trigger-runs)
-  * [ Authenticate with Workspace Agent access tokens ](https://developers.openai.com/workspace-agents/authentication)
+### ChatGPT Space
 
+### Reference
 
-Overview  Features  Configuration  Developers  Security  Administration  Use Cases  Resources 
-Overview
-###  Get started 
-  * [ Import from another agent ](https://developers.openai.com/codex/import)
+### Customization
 
+### Config file
 
-###  Foundations 
+### Agent configuration
 
+### Extend ChatGPT and Codex
 
-###  Explore 
+### Linux
 
+### Windows
 
-###  Available on 
+### Development workflows
 
+### Extend and automate
 
-###  Releases 
+- [ Annotations Extensibility ](https://developers.openai.com/codex/annotations-extensibility)
 
+### Environments
 
+### Codex Cloud
 
+### Build with Codex
 
-###  Workflows 
+### Third-party integrations
 
+### Reference
 
-###  Capabilities 
+### Permissions
 
+- [ Agent approvals & security ](https://developers.openai.com/codex/agent-approvals-security)
 
-###  Sites 
+### Codex Security
 
+- Codex Security Cloud
+    - [ Improving the threat model ](https://developers.openai.com/codex/security/threat-model)
+- Codex Security plugin
+    - [ Use the Security workbench ](https://developers.openai.com/codex/security/plugin/workbench)
+    - [ Propose security hardening ](https://developers.openai.com/codex/security/plugin/security-hardening)
+    - [ Write vulnerability reports ](https://developers.openai.com/codex/security/plugin/vulnerability-reports)
+- Codex Security CLI
+    - CI/CD
 
-###  dots 
+### Cyber safety
 
+### Getting started
 
-###  ChatGPT Space 
+### Feature Configuration
 
+- [ ChatGPT in Slack and Teams ](https://developers.openai.com/codex/enterprise/chatgpt-slack-and-teams)
+- [ Local computer access for Work Cloud and dots ](https://developers.openai.com/codex/enterprise/cloud-local-access)
 
-###  Reference 
+### Identity and access
 
+- [ User lifecycle management ](https://developers.openai.com/codex/enterprise/user-lifecycle)
+- [ Roles and workspace permissions ](https://developers.openai.com/codex/enterprise/roles-and-workspace-permissions)
 
+### Deployment and configuration
 
+- [ Windows app and CLI deployment ](https://developers.openai.com/codex/enterprise/windows-deployment)
+- [ Workspace model availability ](https://developers.openai.com/codex/enterprise/workspace-model-availability)
+- [ Bedrock GovCloud configuration ](https://developers.openai.com/codex/enterprise/govcloud-configuration)
+- Connect to a gateway
+    - [ Use API/provider credentials ](https://developers.openai.com/codex/enterprise/connect-to-a-gateway)
 
-###  Customization 
+### ChatGPT EDU
 
+### ChatGPT Work
 
-###  Config file 
+### Collaboration and sharing
 
+### Plugins and connections
 
-###  Agent configuration 
+- [ Migrate custom GPTs to plugins ](https://developers.openai.com/codex/migrate-custom-gpts)
 
+### Usage and analytics
 
-###  Extend ChatGPT and Codex 
+### Security and compliance
 
+- [ Compliance API and audit events ](https://developers.openai.com/codex/enterprise/compliance-api)
 
-###  Linux 
+### Community
 
+### Blog
 
-###  Windows 
+### Community
 
+### Blog
 
+[ Showcase ](https://developers.openai.com/showcase) Blog Cookbook Learn Community Showcase
 
+### Recent
 
-###  Development workflows 
+- [ Designing failover across OpenAI model providers ](https://developers.openai.com/blog/designing-failover-across-openai-model-providers)
+- [ Maintaining software with the GPT-6 family ](https://developers.openai.com/blog/maintaining-software-with-the-gpt-6-family)
+- [ Bringing my LED display to life with GPT-Live-1 and Codex ](https://developers.openai.com/blog/bringing-my-led-display-to-life)
+- [ Rethinking skills and prompts for GPT-6 Astra ](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)
+- [ Architectural visualization with Astra ](https://developers.openai.com/blog/architectural-visualization-with-astra)
 
+### Topics
 
-###  Extend and automate 
-  * [ Annotations Extensibility ](https://developers.openai.com/codex/annotations-extensibility)
+### Topics
 
+### Contribute
 
-###  Environments 
+### Categories
 
+### Topics
 
-###  Codex Cloud 
+### Programs
 
+-
 
-###  Build with Codex 
+### Spaces
 
-
-###  Third-party integrations 
-
-
-###  Reference 
-
-
-
-
-###  Permissions 
-  * [ Agent approvals & security ](https://developers.openai.com/codex/agent-approvals-security)
-
-
-###  Codex Security 
-  * Codex Security Cloud
-    * [ Improving the threat model ](https://developers.openai.com/codex/security/threat-model)
-  * Codex Security plugin
-    * [ Use the Security workbench ](https://developers.openai.com/codex/security/plugin/workbench)
-    * [ Propose security hardening ](https://developers.openai.com/codex/security/plugin/security-hardening)
-    * [ Write vulnerability reports ](https://developers.openai.com/codex/security/plugin/vulnerability-reports)
-  * Codex Security CLI
-    * CI/CD
-
-
-###  Cyber safety 
-
-
-
-
-###  Getting started 
-
-
-###  Feature Configuration 
-  * [ ChatGPT in Slack and Teams ](https://developers.openai.com/codex/enterprise/chatgpt-slack-and-teams)
-  * [ Local computer access for Work Cloud and dots ](https://developers.openai.com/codex/enterprise/cloud-local-access)
-
-
-###  Identity and access 
-  * [ User lifecycle management ](https://developers.openai.com/codex/enterprise/user-lifecycle)
-  * [ Roles and workspace permissions ](https://developers.openai.com/codex/enterprise/roles-and-workspace-permissions)
-
-
-###  Deployment and configuration 
-  * [ Windows app and CLI deployment ](https://developers.openai.com/codex/enterprise/windows-deployment)
-  * [ Workspace model availability ](https://developers.openai.com/codex/enterprise/workspace-model-availability)
-  * [ Bedrock GovCloud configuration ](https://developers.openai.com/codex/enterprise/govcloud-configuration)
-  * Connect to a gateway
-    * [ Use API/provider credentials ](https://developers.openai.com/codex/enterprise/connect-to-a-gateway)
-
-
-###  ChatGPT EDU 
-
-
-###  ChatGPT Work 
-
-
-###  Collaboration and sharing 
-
-
-###  Plugins and connections 
-  * [ Migrate custom GPTs to plugins ](https://developers.openai.com/codex/migrate-custom-gpts)
-
-
-###  Usage and analytics 
-
-
-###  Security and compliance 
-  * [ Compliance API and audit events ](https://developers.openai.com/codex/enterprise/compliance-api)
-
-
-
-
-
-
-###  Community 
-
-
-###  Blog 
-
-
-
-
-
-
-###  Community 
-
-
-###  Blog 
-
-
-[ Showcase ](https://developers.openai.com/showcase) Blog  Cookbook  Learn  Community 
-Showcase
-
-
-###  Recent 
-  * [ Designing failover across OpenAI model providers ](https://developers.openai.com/blog/designing-failover-across-openai-model-providers)
-  * [ Maintaining software with the GPT-6 family ](https://developers.openai.com/blog/maintaining-software-with-the-gpt-6-family)
-  * [ Bringing my LED display to life with GPT-Live-1 and Codex ](https://developers.openai.com/blog/bringing-my-led-display-to-life)
-  * [ Rethinking skills and prompts for GPT-6 Astra ](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)
-  * [ Architectural visualization with Astra ](https://developers.openai.com/blog/architectural-visualization-with-astra)
-
-
-###  Topics 
-
-
-###  Topics 
-
-
-###  Contribute 
-
-
-
-
-###  Categories 
-
-
-###  Topics 
-
-
-
-
-###  Programs 
-  * 
-
-###  Spaces 
-
-
-Copy Page
-Flagship models
-Speed
-Context length
-Prices per 1M tokens.
-StandardFlex/BatchUltrafast
-Standard  
-| Prompt caching  |  
-| --- |  
-| Model  | Input  | Output  | Cached input  | 30m write  | 12h write  |  
-| gpt-6-astra  | $10.00  | $50.00  | $1.00  | $12.50  | $25.00  |  
-| gpt-6.1-sol  | $2.00  | $10.00  | $0.10  | $2.50  | $5.00  |  
-| gpt-6.1-terra  | $1.00  | $5.00  | $0.05  | $1.25  | $2.50  |  
-| gpt-6-luna  | $0.10  | $0.50  | $0.01  | $0.125  | $0.25  |  
-All models
-Batch  
-| Prompt caching  |  
-| --- |  
-| Model  | Input  | Output  | Cached input  | 30m write  | 12h write  |  
-| gpt-6-astra  | $5.00  | $25.00  | $0.50  | $6.25  | $12.50  |  
-| gpt-6.1-sol  | $1.00  | $5.00  | $0.05  | $1.25  | $2.50  |  
-| gpt-6.1-terra  | $0.50  | $2.50  | $0.025  | $0.625  | $1.25  |  
-| gpt-6-luna  | $0.05  | $0.25  | $0.005  | $0.0625  | $0.125  |  
-All models
-Fast  
-| Prompt caching  |  
-| --- |  
-| Model  | Input  | Output  | Cached input  | 30m write  | 12h write  |  
-| gpt-6-astra  | $20.00  | $100.00  | $2.00  | $25.00  | $50.00  |  
-| gpt-6.1-sol  | $4.00  | $20.00  | $0.20  | $5.00  | $10.00  |  
-| gpt-6.1-terra  | $2.00  | $10.00  | $0.10  | $2.50  | $5.00  |  
-| gpt-6-luna  | $0.20  | $1.00  | $0.02  | $0.25  | $0.50  |  
-All models
-Ultrafast  
-| Prompt caching  |  
-| --- |  
-| Model  | Input  | Output  | Cached input  | 30m write  | 12h write  |  
-| gpt-6-astra  | $60.00  | $300.00  | $6.00  | $75.00  | $150.00  |  
-| gpt-6.1-sol  | $12.00  | $60.00  | $0.60  | $15.00  | $30.00  |  
-Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026. FedRAMP endpoints are also charged a 10% uplift. Priority processing was renamed Fast mode on July 30, 2026. GPT-5.6 Sol’s promotional pricing is available at least through November 21, 2026.
-Cyber models
-Our latest Daybreak models.
-Context length
-Prices per 1M tokens.  
-| Prompt caching  |  
-| --- |  
-| Model  | Input  | Output  | Cached input  | 30m write  | 12h write  |  
-| gpt-5.6-sol  | $4.00  | $20.00  | $0.40  | $5.00  | $10.00  |  
-| gpt-5.6-cyber  | $12.50  | $75.00  | $1.25  | $15.625  | $31.25  |  
-All models
-Life sciences models
-Our latest Rosalind models.
-Prices per 1M tokens.  
-| Model  | Input  | Output  | Cached input  |  
-| --- | --- | --- | --- |  
-| gpt-rosalind-research  | $5.00  | $25.00  | $0.50  |  
-| gpt-rosalind-discovery  | $5.00  | $25.00  | $0.50  |  
-Billing for `gpt-rosalind-research` begins on October 5, 2026. Cache-write pricing does not apply to this model. Access is limited to approved internal research through the [trusted-access program](https://help.openai.com/en/articles/20001193-gpt-rosalind-for-life-sciences-research). All eligible organizations will continue to get access to the latest GPT-Rosalind models as they’re released.Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.
-Multimodal models
-[GPT-Live 1](https://developers.openai.com/api/docs/models/gpt-live-1) voice sessions are billed per second, without rounding up to a whole minute. Backend model and tool usage is charged separately.  
-| Model  | Price per minute  |  
-| --- | --- |  
-| gpt-live-1  | $0.05  |  
-Prices per 1M tokens unless noted.  
-| Model  | Modality  | Input  | Output / cost  | Cached input  |  
-| --- | --- | --- | --- | --- |  
-| gpt-realtime-2.1  | Audio  | $32.00  | $64.00  | $0.40  |  
-| Text  | $4.00  | $24.00  | $0.40  |  
-| Image  | $5.00  | -  | $0.50  |  
-| gpt-realtime-2.1-mini  | Audio  | $10.00  | $20.00  | $0.30  |  
-| Text  | $0.60  | $2.40  | $0.06  |  
-| Image  | $0.80  | -  | $0.08  |  
-All models
-Prices per 1M tokens unless noted.  
-| Model  | Use case  | Input  | Output  | Estimated cost  |  
-| --- | --- | --- | --- | --- |  
-| gpt-realtime-translate  | Live translation  | -  | -  | $0.034 / minute  |  
-| gpt-live-transcribe  | Live transcription  | -  | -  | $0.017 / minute  |  
-| gpt-realtime-whisper  | Live transcription  | -  | -  | $0.017 / minute  |  
-| gpt-transcribe  | Transcription  | -  | -  | $0.0045 / minute  |  
-| gpt-4o-transcribe  | Transcription  | $2.50  | $10.00  | $0.006 / minute  |  
-| gpt-4o-mini-transcribe  | Transcription  | $1.25  | $5.00  | $0.003 / minute  |  
-All models
-Tools  
-| Tool  | Details  | Pricing  |  
-| --- | --- | --- |  
-| Web search  | Web search (all models)  | $10.00 / 1k calls+ Search content tokens billed at model rates.  |  
-| Image Web search (all models)  | $10.00 / 1k calls+ Search content tokens billed at model rates.  |  
-| Web search preview (reasoning models, including `gpt-5`, `o-series`)  | $10.00 / 1k calls+ Search content tokens billed at model rates.  |  
-| Web search preview (non-reasoning models)  | $25.00 / 1k calls+ Search content tokens are free.  |  
-| Containers  | Hosted Shell and Code Interpreter  | 1 GB $0.03, 4 GB $0.12, 16 GB $0.48, 64 GB $1.92 per 20-minute session per container.  |  
-| File search  | Storage  | $0.10 / GB per day (1 GB free)  |  
-| Tool call  | $2.50 / 1k calls  |  
-| Agent Kit  | ChatKit file and image upload storage  | $0.10 / GB-day after 1 GB free per account per month  |  
-Tokens used for built-in tools are billed at the chosen model's per-token rates. GB refers to binary gigabytes (also known as gibibytes), where 1 GB is 2^30 bytes. Web search content tokens are tokens retrieved from the search index and fed to the model alongside your prompt to generate an answer. For `gpt-4o-mini` and `gpt-4.1-mini` with the non-preview web search tool, search content tokens are billed as a fixed block of 8,000 input tokens per call. File search tool call pricing applies to the Responses API only. Container pricing includes [Hosted Shell](https://developers.openai.com/api/docs/guides/tools-shell#hosted-shell-quickstart) and [Code Interpreter](https://developers.openai.com/api/docs/guides/tools-code-interpreter). Eligible container sessions will be billed by the minute, with a 5-minute minimum per session. Responses API, Chat Completions API, Realtime API, Batch API, and Assistants API are not priced separately. Tokens are billed at the chosen model's input and output rates.
-Specialized models
-Prices per 1M tokens.
+Copy Page Flagship models Speed Context length Prices per 1M tokens. StandardFlex/BatchUltrafast
 Standard
-Standard  
-| Category  | Model  | Input  | Output  | Cached input  |  
-| --- | --- | --- | --- | --- |  
-| ChatGPT  | chat-latest  | $5.00  | $30.00  | $0.50  |  
-| Codex  | gpt-5.3-codex  | $1.75  | $14.00  | $0.175  |  
-All models
-Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.
-Fast  
-| Category  | Model  | Input  | Output  | Cached input  |  
-| --- | --- | --- | --- | --- |  
-| Codex  | gpt-5.3-codex  | $3.50  | $28.00  | $0.35  |  
-Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.
-Finetuning
-Prices per 1M tokens.
-OpenAI is winding down the fine-tuning platform. The platform is no longer accessible to new users, but existing users of the fine-tuning platform will be able to create training jobs for the coming months.
-All fine-tuned models will remain available for inference until their base models are deprecated. The full timeline is [here](https://developers.openai.com/api/docs/deprecations#update-to-openais-self-serve-fine-tuning).
-Standard
-Standard  
-| Model  | Training  | Input  | Output  | Cached input  |  
-| --- | --- | --- | --- | --- |  
-| o4-mini-2025-04-16  | $100.00 / hour  | $4.00  | $16.00  | $1.00  |  
-| o4-mini-2025-04-16with data sharing  | $100.00 / hour  | $2.00  | $8.00  | $0.50  |  
-All models
-Batch  
-| Model  | Training  | Input  | Output  | Cached input  |  
-| --- | --- | --- | --- | --- |  
-| o4-mini-2025-04-16  | $100.00 / hour  | $2.00  | $8.00  | $0.50  |  
-| o4-mini-2025-04-16with data sharing  | $100.00 / hour  | $1.00  | $4.00  | $0.25  |  
-All models
-Tokens used for model grading in reinforcement fine-tuning are billed at that model's per-token rate. Inference discounts are available if you enable data sharing when creating the fine-tune job. [Learn more](https://help.openai.com/en/articles/10306912-sharing-feedback-evaluation-and-fine-tuning-data-and-api-inputs-and-outputs-with-openai#h_c93188c569).
-Cloud platforms
-OpenAI models on Amazon Bedrock and Microsoft Azure are billed through those services.
-  * See [Amazon Bedrock pricing](https://aws.amazon.com/bedrock/pricing/).
-  * See [Microsoft Azure pricing](https://azure.microsoft.com/en-us/pricing/details/azure-openai/).
 
+| Prompt caching                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  | 30m write        | 12h write |
+| gpt-6-astra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $10.00                                                          | $50.00                                                                                | $1.00         | $12.50           | $25.00    |
+| gpt-6.1-sol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $2.00                                                           | $10.00                                                                                | $0.10         | $2.50            | $5.00     |
+| gpt-6.1-terra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | $1.00                                                           | $5.00                                                                                 | $0.05         | $1.25            | $2.50     |
+| gpt-6-luna                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | $0.10                                                           | $0.50                                                                                 | $0.01         | $0.125           | $0.25     |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Batch                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Prompt caching                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  | 30m write        | 12h write |
+| gpt-6-astra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $5.00                                                           | $25.00                                                                                | $0.50         | $6.25            | $12.50    |
+| gpt-6.1-sol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $1.00                                                           | $5.00                                                                                 | $0.05         | $1.25            | $2.50     |
+| gpt-6.1-terra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | $0.50                                                           | $2.50                                                                                 | $0.025        | $0.625           | $1.25     |
+| gpt-6-luna                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | $0.05                                                           | $0.25                                                                                 | $0.005        | $0.0625          | $0.125    |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Fast                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Prompt caching                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  | 30m write        | 12h write |
+| gpt-6-astra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $20.00                                                          | $100.00                                                                               | $2.00         | $25.00           | $50.00    |
+| gpt-6.1-sol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $4.00                                                           | $20.00                                                                                | $0.20         | $5.00            | $10.00    |
+| gpt-6.1-terra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | $2.00                                                           | $10.00                                                                                | $0.10         | $2.50            | $5.00     |
+| gpt-6-luna                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | $0.20                                                           | $1.00                                                                                 | $0.02         | $0.25            | $0.50     |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Ultrafast                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Prompt caching                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  | 30m write        | 12h write |
+| gpt-6-astra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $60.00                                                          | $300.00                                                                               | $6.00         | $75.00           | $150.00   |
+| gpt-6.1-sol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $12.00                                                          | $60.00                                                                                | $0.60         | $15.00           | $30.00    |
+| Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026. FedRAMP endpoints are also charged a 10% uplift. Priority processing was renamed Fast mode on July 30, 2026. GPT-5.6 Sol’s promotional pricing is available at least through November 21, 2026.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Cyber models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Our latest Daybreak models.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Context length                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Prices per 1M tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Prompt caching                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  | 30m write        | 12h write |
+| gpt-5.6-sol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | $4.00                                                           | $20.00                                                                                | $0.40         | $5.00            | $10.00    |
+| gpt-5.6-cyber                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | $12.50                                                          | $75.00                                                                                | $1.25         | $15.625          | $31.25    |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Life sciences models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Our latest Rosalind models.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| Prices per 1M tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Input                                                           | Output                                                                                | Cached input  |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           |
+| gpt-rosalind-research                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | $5.00                                                           | $25.00                                                                                | $0.50         |
+| gpt-rosalind-discovery                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | $5.00                                                           | $25.00                                                                                | $0.50         |
+| Billing for `gpt-rosalind-research` begins on October 5, 2026. Cache-write pricing does not apply to this model. Access is limited to approved internal research through the [trusted-access program](https://help.openai.com/en/articles/20001193-gpt-rosalind-for-life-sciences-research). All eligible organizations will continue to get access to the latest GPT-Rosalind models as they’re released.Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.                                                                                                                                                                                                                                                                                                                                        |
+| Multimodal models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| [GPT-Live 1](https://developers.openai.com/api/docs/models/gpt-live-1) voice sessions are billed per second, without rounding up to a whole minute. Backend model and tool usage is charged separately.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Price per minute                                                |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             |
+| gpt-live-1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | $0.05                                                           |
+| Prices per 1M tokens unless noted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Modality                                                        | Input                                                                                 | Output / cost | Cached input     |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| gpt-realtime-2.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Audio                                                           | $32.00                                                                                | $64.00        | $0.40            |
+| Text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | $4.00                                                           | $24.00                                                                                | $0.40         |
+| Image                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | $5.00                                                           | -                                                                                     | $0.50         |
+| gpt-realtime-2.1-mini                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Audio                                                           | $10.00                                                                                | $20.00        | $0.30            |
+| Text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | $0.60                                                           | $2.40                                                                                 | $0.06         |
+| Image                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | $0.80                                                           | -                                                                                     | $0.08         |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Prices per 1M tokens unless noted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Use case                                                        | Input                                                                                 | Output        | Estimated cost   |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| gpt-realtime-translate                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Live translation                                                | -                                                                                     | -             | $0.034 / minute  |
+| gpt-live-transcribe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Live transcription                                              | -                                                                                     | -             | $0.017 / minute  |
+| gpt-realtime-whisper                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Live transcription                                              | -                                                                                     | -             | $0.017 / minute  |
+| gpt-transcribe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Transcription                                                   | -                                                                                     | -             | $0.0045 / minute |
+| gpt-4o-transcribe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Transcription                                                   | $2.50                                                                                 | $10.00        | $0.006 / minute  |
+| gpt-4o-mini-transcribe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Transcription                                                   | $1.25                                                                                 | $5.00         | $0.003 / minute  |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Tools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Tool                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Details                                                         | Pricing                                                                               |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   |
+| Web search                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Web search (all models)                                         | $10.00 / 1k calls+ Search content tokens billed at model rates.                       |
+| Image Web search (all models)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | $10.00 / 1k calls+ Search content tokens billed at model rates. |
+| Web search preview (reasoning models, including `gpt-5`, `o-series`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | $10.00 / 1k calls+ Search content tokens billed at model rates. |
+| Web search preview (non-reasoning models)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | $25.00 / 1k calls+ Search content tokens are free.              |
+| Containers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Hosted Shell and Code Interpreter                               | 1 GB $0.03, 4 GB $0.12, 16 GB $0.48, 64 GB $1.92 per 20-minute session per container. |
+| File search                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Storage                                                         | $0.10 / GB per day (1 GB free)                                                        |
+| Tool call                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | $2.50 / 1k calls                                                |
+| Agent Kit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | ChatKit file and image upload storage                           | $0.10 / GB-day after 1 GB free per account per month                                  |
+| Tokens used for built-in tools are billed at the chosen model's per-token rates. GB refers to binary gigabytes (also known as gibibytes), where 1 GB is 2^30 bytes. Web search content tokens are tokens retrieved from the search index and fed to the model alongside your prompt to generate an answer. For `gpt-4o-mini` and `gpt-4.1-mini` with the non-preview web search tool, search content tokens are billed as a fixed block of 8,000 input tokens per call. File search tool call pricing applies to the Responses API only. Container pricing includes [Hosted Shell](https://developers.openai.com/api/docs/guides/tools-shell#hosted-shell-quickstart) and [Code Interpreter](https://developers.openai.com/api/docs/guides/tools-code-interpreter). Eligible container sessions will be billed by the minute, with a 5-minute minimum per session. Responses API, Chat Completions API, Realtime API, Batch API, and Assistants API are not priced separately. Tokens are billed at the chosen model's input and output rates. |
+| Specialized models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Prices per 1M tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Standard                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Standard                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Category                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Model                                                           | Input                                                                                 | Output        | Cached input     |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| ChatGPT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | chat-latest                                                     | $5.00                                                                                 | $30.00        | $0.50            |
+| Codex                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | gpt-5.3-codex                                                   | $1.75                                                                                 | $14.00        | $0.175           |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Fast                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Category                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Model                                                           | Input                                                                                 | Output        | Cached input     |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| Codex                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | gpt-5.3-codex                                                   | $3.50                                                                                 | $28.00        | $0.35            |
+| Regional processing (data residency) endpoints are charged a 10% uplift for models released on or after March 5, 2026, that are eligible for data residency. See our [Your data](https://developers.openai.com/api/docs/guides/your-data) guide for supported regions and processing details.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Finetuning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Prices per 1M tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| OpenAI is winding down the fine-tuning platform. The platform is no longer accessible to new users, but existing users of the fine-tuning platform will be able to create training jobs for the coming months.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| All fine-tuned models will remain available for inference until their base models are deprecated. The full timeline is [here](https://developers.openai.com/api/docs/deprecations#update-to-openais-self-serve-fine-tuning).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Standard                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Standard                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Training                                                        | Input                                                                                 | Output        | Cached input     |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| o4-mini-2025-04-16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | $100.00 / hour                                                  | $4.00                                                                                 | $16.00        | $1.00            |
+| o4-mini-2025-04-16with data sharing                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | $100.00 / hour                                                  | $2.00                                                                                 | $8.00         | $0.50            |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Batch                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Training                                                        | Input                                                                                 | Output        | Cached input     |
+| ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ---                                                             | ---                                                                                   | ---           | ---              |
+| o4-mini-2025-04-16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | $100.00 / hour                                                  | $2.00                                                                                 | $8.00         | $0.50            |
+| o4-mini-2025-04-16with data sharing                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | $100.00 / hour                                                  | $1.00                                                                                 | $4.00         | $0.25            |
+| All models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Tokens used for model grading in reinforcement fine-tuning are billed at that model's per-token rate. Inference discounts are available if you enable data sharing when creating the fine-tune job. [Learn more](https://help.openai.com/en/articles/10306912-sharing-feedback-evaluation-and-fine-tuning-data-and-api-inputs-and-outputs-with-openai#h_c93188c569).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Cloud platforms                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| OpenAI models on Amazon Bedrock and Microsoft Azure are billed through those services.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
+- See [Amazon Bedrock pricing](https://aws.amazon.com/bedrock/pricing/).
+- See [Microsoft Azure pricing](https://azure.microsoft.com/en-us/pricing/details/azure-openai/).

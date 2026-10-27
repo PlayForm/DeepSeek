@@ -14,9 +14,11 @@ from its history store and prepends ONE labeled `additionalContexts` notice: the
 time and the verification command.
 
 - The history store: `~/.dsh/replay-suggester/history.json` (the seed of the search-suggester's
-  journal per §9.3; the offline learner and the journal adapter are the end-phase wiring). Loaded
-  once at apply; a missing or corrupt store degrades to silence with a ledger line, never to a
-  guess.
+  journal per §9.3; the offline learner and the journal adapter are the end-phase wiring).
+
+    Loaded once at apply; a missing or corrupt store degrades to silence with a ledger line, never
+    to a guess.
+
 - The recall store has a **producer** (the wave 2c re-spec,
   [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): every judged call
   is recorded, and a later call recalls the paths that accompanied a similar prior call.
@@ -65,8 +67,9 @@ The `recorded` line, the recovery lines (`store recovered <n> entries (replay_hi
 ## The pack
 
 The `Repeat` intent is **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `replay/` domain. A
-repository that ships `.dsh/pack.yml` (or a user-layer pack at
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `replay/` domain.
+
+A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` intent and caveat; a repository
 without a pack stays silent.
 
@@ -77,8 +80,9 @@ caveat, never the companion.
 
 The package, the Source, the smoke suites (five folders) and the build pass are complete, and the
 recall store's producer landed (the completion spec's wave 2c re-spec); the live activation (the
-profile row flip and the restart) is the remaining end-phase step (POC-BRIEF.md §8). Ships
-`enabled: false` in the bundle patch.
+profile row flip and the restart) is the remaining end-phase step (POC-BRIEF.md §8).
+
+Ships `enabled: false` in the bundle patch.
 
 - [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - §9.3, the recall
   answer.

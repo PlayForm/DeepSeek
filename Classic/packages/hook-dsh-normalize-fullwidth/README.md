@@ -1,8 +1,9 @@
 # @playform/hook-dsh-normalize-fullwidth - The fullwidth normalizer for model output
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan: the
-> [factory README](../plugin-dsh-factory/README.md), the [core README](../lib-dsh-core/README.md),
-> and the
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: the [factory README](../plugin-dsh-factory/README.md), the
+> [core README](../lib-dsh-core/README.md), and the
 > [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 > reference.
 
@@ -13,13 +14,16 @@ The **fullwidth normalizer for model output** - a DeepSeek Harness plugin that h
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the full-width family in model output, live in the transcript: the entire FULLWIDTH FORMS
 range U+FF01-U+FF5E maps to its ASCII half-width counterpart U+0021-U+007E - the whole story,
-letters, punctuation and digits included. A **MAP flavor** of the normalize family: the core's
-`Fullwidth` char-to-char table owns the substitution - no `replacement` config knob.
+letters, punctuation and digits included.
 
-The @-sentence identity: **Hook @ DSH @ Normalize @ Fullwidth**. The family's `raw-write` tool
-(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
-transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
-false = verbatim) is the only normalization it applies.
+A **MAP flavor** of the normalize family: the core's `Fullwidth` char-to-char table owns the
+substitution - no `replacement` config knob.
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Fullwidth**.
+
+The family's `raw-write` tool (registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash))
+bypasses this flavor's transforms too - the exemption is family-wide, so the tool's explicit
+`normalize` parameter (default false = verbatim) is the only normalization it applies.
 
 Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
 the normalization is deliberately **VISIBLE; it IS the feature**.
@@ -51,8 +55,10 @@ the normalization is deliberately **VISIBLE; it IS the feature**.
 | `toolResultsExempt`      | string[] | `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question` | a tool result whose exec name is listed passes the tool-results arm by identity (volatile)                                                     |
 
 The module composes the factory helper with `shared: false`, so the shared block is only `log` and
-`logFile`; the module's own fields follow in schema order. There is no `replacement` field: this is
-a MAP flavor - the substitution is the core's `Fullwidth` char-to-char table.
+`logFile`; the module's own fields follow in schema order.
+
+There is no `replacement` field: this is a MAP flavor - the substitution is the core's `Fullwidth`
+char-to-char table.
 
 ## The ledger
 

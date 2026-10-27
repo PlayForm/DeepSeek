@@ -1,7 +1,8 @@
 # @playform/hook-dsh-tool-coach - the four-tier ladder that teaches the model to keep file content out of the terminal
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md) -
+> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md) -
 > [TOOL-COACH-OPERATIVE-PLAN.md](../../Documentation/Plans/TOOL-COACH-OPERATIVE-PLAN.md) -
 > [TOOL-COACH-PLAN.md](../../Documentation/Plans/TOOL-COACH-PLAN.md) -
 > [TOOL-COACH-RESEARCH.md](../../Documentation/Plans/TOOL-COACH-RESEARCH.md).
@@ -37,9 +38,12 @@ across chained segments (`cat a; sed -i ...` counts once, as write).
 
 Every note names the correct tool with its LIVE registry data, fetched through
 `ctx.tools.schemas()`: the tool name, the FIRST SENTENCE of its description (≤ 120 chars), and the
-primary parameter key. Any fetch failure degrades to the static `STATIC_TOOL_LINES` table and logs
-`schema fetch failed -> static fallback` - a note never fails a waterfall. `fetchLive: false` (the
-escape hatch) uses the static table unconditionally.
+primary parameter key.
+
+Any fetch failure degrades to the static `STATIC_TOOL_LINES` table and logs
+`schema fetch failed -> static fallback` - a note never fails a waterfall.
+
+`fetchLive: false` (the escape hatch) uses the static table unconditionally.
 
 The three model-facing note texts (`notes.first` the tier-1 notice, `notes.persistent` the tier-2
 section, `notes.denied` the tier-3 deny reason) are volatile config cells: a profile patch that
@@ -68,11 +72,15 @@ the live-containers README's "Teaching the grammar (the tool-coach note)".
 The four tiers: tier 0 fires on every detected offense (ledger only, the model sees nothing); tier 1
 fires when a class reaches `threshold` (3) strikes within `window` (8) judged calls, `cooldown` (10)
 between notes; tier 2 escalates at `escalateThreshold` (6) offenses since the last note and turns
-off again after `cleanWindow` (12) clean calls; tier 3 fires at `enforceThreshold` (4) strikes. Tier
-3 is off by default (`enforce: 'off'`); `write` denies only write-class segments, `all` adds read
-and search. Discovery and control are **never denied**, even at `all` - flagging them hard would
-dilute the write/read signal. Every knob is **volatile** - hot-edited without remounting; a flip
-lands on the next judged call.
+off again after `cleanWindow` (12) clean calls; tier 3 fires at `enforceThreshold` (4) strikes.
+
+Tier 3 is off by default (`enforce: 'off'`); `write` denies only write-class segments, `all` adds
+read and search.
+
+Discovery and control are **never denied**, even at `all` - flagging them hard would dilute the
+write/read signal.
+
+Every knob is **volatile** - hot-edited without remounting; a flip lands on the next judged call.
 
 ## The configuration
 

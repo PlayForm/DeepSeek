@@ -58,7 +58,9 @@ Language table: `//` and the slash-star pair for the C family, `#` for the hash 
 
 `<!-- -->` for markup, `#` + `<# #>` for PowerShell, plus Ruby's `=begin`/`=end`.
 
-`md`, `mdx`, `json` and `txt` are deliberately absent. Unknown extensions pass by identity.
+`md`, `mdx`, `json` and `txt` are deliberately absent.
+
+Unknown extensions pass by identity.
 
 v1 blind spots: regex literals, JSX text, Rust raw strings, Lua long strings, shell `${...}`.
 

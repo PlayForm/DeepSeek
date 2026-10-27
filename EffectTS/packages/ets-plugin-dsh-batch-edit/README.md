@@ -6,10 +6,13 @@
 ## The role
 
 The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
-plugin family (the Classic release). One tool - `batch_edit` - that turns files into **processes
-held in state**: you open a machine, insert files into it, and the files process like a state
-machine in one go. Each file on the system is a process the harness holds (`Process<File>`), not
-inert bytes - the reversed view of the default UNIX file.
+plugin family (the Classic release).
+
+One tool - `batch_edit` - that turns files into **processes held in state**: you open a machine,
+insert files into it, and the files process like a state machine in one go.
+
+Each file on the system is a process the harness holds (`Process<File>`), not inert bytes - the
+reversed view of the default UNIX file.
 
 The philosophy and the research live in
 [Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md](../../../Documentation/Plans/BATCH-EDIT-TOOL-FEATURE.md)
@@ -49,9 +52,12 @@ file=<selector> search=<name> op=<MODE> [with=<TEXT>] [mode=first|all|<count>]
 ```
 
 `MODE` is one of `replace`, `insert-after`, `insert-before`, `remove-line`, `append`, `prepend`.
+
 Searches are named at open: `name=pattern` (literal) or `name=re:/pattern/flags` (simple regex, the
-v1 scope). Larger batches use the `opfile` escape hatch (a prepared file path, ingested line by
-line - no schema limit).
+v1 scope).
+
+Larger batches use the `opfile` escape hatch (a prepared file path, ingested line by line - no
+schema limit).
 
 ## The write path and the atomic gate
 
@@ -65,7 +71,9 @@ write failure stops the loop and returns the unwritten remainder to observed.
 
 A commit exceeding the in-line deadline (capped at 120000, the composition contract) continues as
 one background job and returns the typed `jobId`; the settle truth arrives through the jobs
-subscription and the next `state` presentation. No plugin-owned timers anywhere.
+subscription and the next `state` presentation.
+
+No plugin-owned timers anywhere.
 
 ## The policy block (D6) - the apply gate
 
@@ -87,9 +95,10 @@ read or written, the machine stays open with its cells `observed`, and the batch
 user's approval - the existing approve binding (flip `policy.write` to `auto`, or approve the batch
 through the batch-decision hook).
 
-With `write: auto` the commit proceeds exactly as described above. The block is one volatile object
-(a policy flip is hot-editable), and a resolved pack's `policy` section overrides the defaults per
-action (the wiring is the next refinement).
+With `write: auto` the commit proceeds exactly as described above.
+
+The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger lines (the contract, byte-stable)
 
@@ -105,13 +114,16 @@ machine closed <id>
 apply refused <id> (policy write=approve)
 ```
 
-Plus the module-owned `removed <file>` line for the `remove` action. The ledger file defaults to
-`~/.dsh/playform/ets-plugin-dsh-batch-edit.log` (one log per module).
+Plus the module-owned `removed <file>` line for the `remove` action.
+
+The ledger file defaults to `~/.dsh/playform/ets-plugin-dsh-batch-edit.log` (one log per module).
 
 ## The configuration
 
 Ships **disabled** (`enabled: false` - the IDLE-forever posture; it enables only by an explicit
-ACTIVATE in the profile). Every knob is volatile (hot-editable without remounting):
+ACTIVATE in the profile).
+
+Every knob is volatile (hot-editable without remounting):
 
 | Field              | Default                                         | Meaning                                                                  |
 | ------------------ | ----------------------------------------------- | ------------------------------------------------------------------------ |

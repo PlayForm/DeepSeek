@@ -6,8 +6,9 @@
 ## The role
 
 The **workspace-audit hook**: a DeepSeek Harness plugin that is the workspace's **accountability** -
-the event records and the ledger lines. It is the AUDIT role of the workspace family's invisible
-flow:
+the event records and the ledger lines.
+
+It is the AUDIT role of the workspace family's invisible flow:
 
 > ... → the merge commits → the journal records → **the audit lines** → the live view presents
 
@@ -17,23 +18,31 @@ flow:
 ## What it does
 
 - **Accountability records**: one line per event, stored in the plugin's own KV storage domain
-  `workspace_audit` and in the plugin's ledger. A **repeat event** - the same path carrying the same
-  version within the coalescing window - records no line: that observed write was already recorded,
-  and the last distinct version always wins (the guard is on the fs/observed listener only; the
-  service's manual lines are never coalesced).
+  `workspace_audit` and in the plugin's ledger.
+
+    A **repeat event** - the same path carrying the same version within the coalescing window -
+    records no line: that observed write was already recorded, and the last distinct version always
+    wins (the guard is on the fs/observed listener only; the service's manual lines are never
+    coalesced).
+
 - **The traceability graph**: the audit lines are the OutcomeEvidence on the intent model's graph -
   Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange →
   AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment.
-  `ctx.workspaceAudit.line` records any node; `ctx.workspaceAudit.assessment` closes the loop
-  against the IntentSpecification's satisfaction contract.
+
+    `ctx.workspaceAudit.line` records any node; `ctx.workspaceAudit.assessment` closes the loop
+    against the IntentSpecification's satisfaction contract.
+
 - **The recursion-prevention law**: every line carries the operation identifier, the parent
   identifier, and the event category - chains compose without recursion.
+
 - **The fs/observed listener** (ROOT context): every observed write becomes an OutcomeEvidence line
-  (`success` on presence, `failure` on absence). The repeat-event guard (`Function/Duplicate`, the
-  monitor's clock pattern - no timer) drops a repeat event for the same path carrying the same
-  version within the coalescing window (2 s, the `State.Now` test seam overrides it in tests): the
-  version token identifies the file state, so the line for it is already recorded; a different
-  version, or the same version after the window, is recorded normally.
+  (`success` on presence, `failure` on absence).
+
+    The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer) drops a
+    repeat event for the same path carrying the same version within the coalescing window (2 s, the
+    `State.Now` test seam overrides it in tests): the version token identifies the file state, so
+    the line for it is already recorded; a different version, or the same version after the window,
+    is recorded normally.
 
 ## The surfaces
 
@@ -77,9 +86,10 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
-object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement).
+commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger
 

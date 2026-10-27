@@ -2,10 +2,14 @@
 
 The post-turn self-improvement review, as a service.
 
-**Plugin @ DSH @ Review @ Lesson.** It owns the nudge counter, the bounded digest, the review
-prompt, the strict reply parse, the deterministic acceptance judge, the guarded corpus write, the
-usage store and the staleness/archive pass. It does not own the trigger -
-`@playform/hook-dsh-lesson-nudge` calls it from the agent's idle phase.
+**Plugin @ DSH @ Review @ Lesson.**
+
+It owns the nudge counter, the bounded digest, the review prompt, the strict reply parse, the
+deterministic acceptance judge, the guarded corpus write, the usage store and the staleness/archive
+pass.
+
+It does not own the trigger - `@playform/hook-dsh-lesson-nudge` calls it from the agent's idle
+phase.
 
 ## What it does
 
@@ -41,8 +45,9 @@ One review is one bounded round trip:
 
 ## The posture: propose, never publish
 
-The corpus is the user's working memory. A review that writes to it unasked is worse than no review,
-so:
+The corpus is the user's working memory.
+
+A review that writes to it unasked is worse than no review, so:
 
 - `policy.write` ships `approve` → accepted operations land in `~/.dsh/lesson/pending.jsonl` and
   wait for `Accept`;
@@ -59,8 +64,9 @@ archive is a rename into `.archive/` (its own undo through `Restore`).
 
 ## Ships disabled
 
-`enabled: false` is the schema default and the patch row - the family's idle-forever posture. The
-service stays resolvable while disabled, so the nudge hook never hard-fails on it.
+`enabled: false` is the schema default and the patch row - the family's idle-forever posture.
+
+The service stays resolvable while disabled, so the nudge hook never hard-fails on it.
 
 ## Wiring
 

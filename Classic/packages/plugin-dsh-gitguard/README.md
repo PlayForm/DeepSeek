@@ -12,16 +12,21 @@ terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md secti
 ## The role
 
 - **The dirty-tree discipline, enforced**: the git checks-only law lives in the skills (the WHY) -
-  but skills are behavioral and CAN slip. The plugin carries the CANNOT.
+  but skills are behavioral and CAN slip.
+
+    The plugin carries the CANNOT.
+
 - **The guarded operations**: it intercepts terminal commands before execution and denies ANY git
   mutation pattern - `git add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`,
   `merge`, `stash`, `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`, `am`, `bisect`, `gc`,
   `prune`, `worktree`, `submodule`, `notes`.
 - **The allowed operations**: the read-only checks - `git status`, `log`, `diff`, `show`,
   `rev-parse`, `ls-files`, `fetch`.
+
 - **The refusal lines**: denials surface ONCE as the pre-execute refusal (the tool result), never
-  punish - the agent's correct path is simply the only executable one. Every denied attempt is
-  ledgered for the user's audit.
+  punish - the agent's correct path is simply the only executable one.
+
+    Every denied attempt is ledgered for the user's audit.
 
 ## The anatomy
 
@@ -58,8 +63,9 @@ action classes are `read` and `record` (automatic); the write/commit/spawn verdi
 uniformity and stay the shipped `approve`.
 
 The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement). The defaults are
-smoke-arbitrated in `Source/Test/Policy-Defaults`.
+section overrides the defaults per action (the wiring is the next refinement).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The configuration
 

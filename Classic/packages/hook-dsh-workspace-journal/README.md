@@ -6,8 +6,9 @@
 ## The role
 
 The **workspace-journal hook**: a DeepSeek Harness plugin that is the workspace's **evidence
-record** - the undo, the recovery checkpoints, and the crash recovery. It is the JOURNAL role of the
-workspace family's invisible flow:
+record** - the undo, the recovery checkpoints, and the crash recovery.
+
+It is the JOURNAL role of the workspace family's invisible flow:
 
 > ... → the merge commits (through Factory.Write) → **the journal records** → the audit lines → the
 > live view presents
@@ -19,17 +20,23 @@ sections 3.7-3.8.)
 
 - **Per-batch records**: the merge journals a batch _before_ its writes land -
   `ctx.workspaceJournal.open(batch, entries)` stores the batch record (state `applying`) and the
-  per-file pre-images in the plugin's own KV storage domain `workspace_journal`. No journal, no
-  writes: "the workspace transaction is the ordered set of those writes plus the journal".
+  per-file pre-images in the plugin's own KV storage domain `workspace_journal`.
+
+    No journal, no writes: "the workspace transaction is the ordered set of those writes plus the
+    journal".
+
 - **Revert data**: the per-file pre-images (content + version captured before the write) are the
   entries; `ctx.workspaceJournal.revert(batchId)` replays them backward through the factory's
   version-fenced write executor - a fence mismatch is a reported conflict, never a silent overwrite;
   a truncated pre-image is skipped with a ledger line, never half-applied.
 - **Recovery checkpoints**: the fs/observed listener (registered on the ROOT context) counts the
   writes landing against open batches and persists the progress - how far a crash got.
+
 - **Crash recovery**: at boot, every batch still `applying` is marked `recovery-required` with its
-  identity. The honest all-or-nothing: **recoverable partial states, never an invisible intermediate
-  state**.
+  identity.
+
+    The honest all-or-nothing: **recoverable partial states, never an invisible intermediate
+    state**.
 
 Batch lifecycle: `applying → verified | recovery-required | reverted`.
 

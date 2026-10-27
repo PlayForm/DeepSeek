@@ -6,8 +6,9 @@
 ## The role
 
 The workspace-live **LIBRARY** (the `lib-dsh-*` role): the shared client machinery of the Workspace
-Plugin Family's live view - the operational-view **section types** and the **render helpers**. No
-Config, no apply: the library is not a plugin bundle (no loader contract, no cordis patch); it is
+Plugin Family's live view - the operational-view **section types** and the **render helpers**.
+
+No Config, no apply: the library is not a plugin bundle (no loader contract, no cordis patch); it is
 publishable on its own and the consumers keep their own ledger strings, tools and configs.
 
 ## The surfaces (the exports)
@@ -22,8 +23,10 @@ publishable on its own and the consumers keep their own ledger strings, tools an
 The library has no Config, no tool, no service and no ledger: it is not a plugin bundle.
 
 The packet format is `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` section 3.5 (the orient step of
-the orient → drill → act loop). The library is extracted per the SHARED-LIBRARY.md rule; the Classic
-and EffectTS twins follow the family contract.
+the orient → drill → act loop).
+
+The library is extracted per the SHARED-LIBRARY.md rule; the Classic and EffectTS twins follow the
+family contract.
 
 ## The configuration
 
@@ -37,8 +40,9 @@ No ledger: the consumers keep their own ledger strings.
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the library build (ESM `Target/`,
-Test tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke suite
-is the end-phase deliverable (see The plan).
+Test tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke suite is the end-phase deliverable (see The plan).
 
 ## Consumers
 
@@ -49,8 +53,10 @@ is the end-phase deliverable (see The plan).
 ## The plan
 
 Planned PoC (`tier: 2-planned` in `Temporary/npm-bootstrap/MANIFEST.json`); the smoke suite is the
-end-phase deliverable. The packet format is
-[WORKSPACE-FAMILY-V4-1](../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) section 3.5.
+end-phase deliverable.
+
+The packet format is [WORKSPACE-FAMILY-V4-1](../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md)
+section 3.5.
 
 ## License
 

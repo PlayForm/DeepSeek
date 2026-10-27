@@ -6,8 +6,9 @@
 ## The role
 
 The subagent-queue plugin: subagent work becomes a **queue** - the tasks as data, not the agents as
-contexts. The third orchestration-layer plugin, next to the batch-state and routing-enforcer
-plugins.
+contexts.
+
+The third orchestration-layer plugin, next to the batch-state and routing-enforcer plugins.
 
 Plan: `Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md`.
 
@@ -28,10 +29,15 @@ Plan: `Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md`.
 
 The user's capacity model is the law:
 
-- **Main pool: 10.** The main conversation holds up to 10 subagents (reserved slots, IDLE-held lanes
-  included).
-- **Child cap: 2.** Every spawned agent's own child fan-out is capped at 2 - the two-active regime;
-  the workflow fan-out flood is prevented structurally.
+- **Main pool: 10.**
+
+    The main conversation holds up to 10 subagents (reserved slots, IDLE-held lanes included).
+
+- **Child cap: 2.**
+
+    Every spawned agent's own child fan-out is capped at 2 - the two-active regime; the workflow
+    fan-out flood is prevented structurally.
+
 - The harness's own `maxActiveSubagents` knob stays the backstop; the plugin enforces its model at
   the dispatch level.
 
@@ -39,15 +45,22 @@ The user's capacity model is the law:
 
 - **Enqueue** (`queue_enqueue` tool or `dshQueue.Enqueue`): a task carries the id, the
   self-contained spec (never altered), the role for the routing, the priority, the dependencies, the
-  state and the result hash. No agent context is consumed while it waits.
+  state and the result hash.
+
+    No agent context is consumed while it waits.
+
 - **Dispatch** (`dshQueue.Dispatch`): the deterministic order - dependencies satisfied first, then
   priority descending, then FIFO by enqueue sequence; a seat is taken from the agent's pool, the
   state flips to `dispatched`.
+
 - **Spawn** (`autoSpawn`, off by default): an assignment actually **starts a subagent through the
   harness's own subagent service** (`ctx.subagents.startActivation`) - never a private spawn, never
-  a shell. The spec goes to the child verbatim, the resolved route goes as its `agentOptions`, the
-  parent is the exact live Agent from `ctx.agents.currentInitiator()`, and the child's own result
-  settles the task (`completed`, or `failed` for any other stop reason).
+  a shell.
+
+    The spec goes to the child verbatim, the resolved route goes as its `agentOptions`, the parent
+    is the exact live Agent from `ctx.agents.currentInitiator()`, and the child's own result settles
+    the task (`completed`, or `failed` for any other stop reason).
+
 - **Idle-slot automation:** with `autoDispatch` and `autoSpawn` both on, an enqueue or a released
   seat pulls the next queued task into the free slot - the queue runs itself.
 - **Routed dispatch:** when the routing enforcer (`dshRoute`) is present, the route is resolved per
@@ -91,9 +104,10 @@ The plugin registers the `dshQueue` service:
 
 ### `autoSpawn` (the approval posture)
 
-`autoSpawn` is the switch between **assigning** and **launching**. It ships `false` on purpose: a
-spawn is a privileged action (D6 of the completion spec), so the queue assigns seats and ledgers
-until the user turns the launch on.
+`autoSpawn` is the switch between **assigning** and **launching**.
+
+It ships `false` on purpose: a spawn is a privileged action (D6 of the completion spec), so the
+queue assigns seats and ledgers until the user turns the launch on.
 
 With `autoSpawn: false` there is no `ctx.subagents` call and no spawn ledger line; the idle-slot
 automation is off too (an automatic assignment the plugin cannot launch would strand the task with a
@@ -114,11 +128,13 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The policy is the **outer** gate, `autoSpawn` the **inner** one. An `approve` verdict for `spawn`
-refuses the launch even with the knob on: the task stays `dispatched` with its seat held, and the
-ledger records the byte-exact `spawn held <id> (policy spawn=approve)` line - the task **waits** for
-the user (flip `policy.spawn` to `auto` to let the next assignment launch, or settle it explicitly
-with `Complete`/`Fail`/`Interrupt`).
+The policy is the **outer** gate, `autoSpawn` the **inner** one.
+
+An `approve` verdict for `spawn` refuses the launch even with the knob on: the task stays
+`dispatched` with its seat held, and the ledger records the byte-exact
+`spawn held <id> (policy spawn=approve)` line - the task **waits** for the user (flip `policy.spawn`
+to `auto` to let the next assignment launch, or settle it explicitly with
+`Complete`/`Fail`/`Interrupt`).
 
 The precedence is **policy approve > knob**: the knob can never widen an approve verdict, while a
 knob that is off still refuses on its own and writes no line at all.
@@ -148,8 +164,10 @@ data.
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`Dispatch-And-Board`, `Policy-Defaults`, `Spawn-And-Reconcile`, `Wiring-And-Queue`.
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `Dispatch-And-Board`, `Policy-Defaults`, `Spawn-And-Reconcile`,
+`Wiring-And-Queue`.
 
 ## The plan
 

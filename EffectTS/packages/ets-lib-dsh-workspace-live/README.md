@@ -6,8 +6,9 @@
 ## The role
 
 The workspace-live **LIBRARY** (the `lib-dsh-*` role): the shared client machinery of the Workspace
-Plugin Family's live view - the operational-view **section types** and the **render helpers**. No
-Config, no apply: the library is not a plugin bundle (no loader contract, no cordis patch); it is
+Plugin Family's live view - the operational-view **section types** and the **render helpers**.
+
+No Config, no apply: the library is not a plugin bundle (no loader contract, no cordis patch); it is
 publishable on its own and the consumers keep their own ledger strings, tools and configs.
 
 ## The commonality split
@@ -20,8 +21,10 @@ publishable on its own and the consumers keep their own ledger strings, tools an
 | `Packet`   | The orientation-packet renderer: the fixed eight-line grammar (WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE). |
 
 The packet format is `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` section 3.5 (the orient step of
-the orient → drill → act loop). The library is extracted per the SHARED-LIBRARY.md rule; the Classic
-and EffectTS twins follow the family contract.
+the orient → drill → act loop).
+
+The library is extracted per the SHARED-LIBRARY.md rule; the Classic and EffectTS twins follow the
+family contract.
 
 ## Consumers
 

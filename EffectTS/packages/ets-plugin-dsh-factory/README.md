@@ -1,25 +1,31 @@
 # @playform/ets-plugin-dsh-factory - The furnace of the DSH governance family
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan:
-> [SCHEME.md](./SCHEME.md).
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: [SCHEME.md](./SCHEME.md).
 
 ## The role
 
 The **furnace of the DSH governance family** - the first _service-provider_ bundle in the DeepSeek
-Harness plugin family. Loading it registers one class plugin
-(`export default class PluginFactory extends Service`, `super(ctx, "pluginFactory")`,
-`static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a single service holding every piece
-of common machinery the family's hooks used to duplicate (the ledger, the exclusion match, the
-auxiliary registry/policy discovery, the union keep-list resolution, the gate set, the
-version-guarded sandbox-fenced write, the observation-policy refresh, the detached contained
-continuation, the State builder, the wiring helpers, the effects, the Schemastery schema factory and
-the probe-once seam accessor). One service, nineteen methods (the direct-govern pair
-`RegisterGovern` + `Govern` and the `GovernSteps` registry among them) - the hooks bring their own
-metal; the factory pours the mold. The factory is the hub of the eleven-package DSH family: the
-three governance hooks inject the service, and the six normalize flavors consume `State`/`Append`
-and the `Schema` helper. The lowest layer of that machinery - the ledger `Append`, the shared
-journal and the activation-line composer - lives in the family's base package `ets-base-dsh`, which
-the factory re-exposes as part of the one service.
+Harness plugin family.
+
+Loading it registers one class plugin (`export default class PluginFactory extends Service`,
+`super(ctx, "pluginFactory")`, `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a
+single service holding every piece of common machinery the family's hooks used to duplicate (the
+ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list
+resolution, the gate set, the version-guarded sandbox-fenced write, the observation-policy refresh,
+the detached contained continuation, the State builder, the wiring helpers, the effects, the
+Schemastery schema factory and the probe-once seam accessor).
+
+One service, nineteen methods (the direct-govern pair `RegisterGovern` + `Govern` and the
+`GovernSteps` registry among them) - the hooks bring their own metal; the factory pours the mold.
+
+The factory is the hub of the eleven-package DSH family: the three governance hooks inject the
+service, and the six normalize flavors consume `State`/`Append` and the `Schema` helper.
+
+The lowest layer of that machinery - the ledger `Append`, the shared journal and the activation-line
+composer - lives in the family's base package `ets-base-dsh`, which the factory re-exposes as part
+of the one service.
 
 ## The surfaces
 
@@ -42,8 +48,9 @@ the factory re-exposes as part of the one service.
 
 The factory itself registers **no config schema and no config field** - the schema it owns is the
 helper it lends to every consumer (`Schema(shared?, module?)`, exported on the entry and as an
-instance method; `shared: false` emits only the two universal volatile cells). The shared block the
-helper composes, in helper order:
+instance method; `shared: false` emits only the two universal volatile cells).
+
+The shared block the helper composes, in helper order:
 
 | Field              | Type     | Default                                                                       | Meaning                                                                    |
 | ------------------ | -------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
@@ -58,11 +65,15 @@ With `shared: false` the block is only `log` and `logFile` (the two universal vo
 module supplies its own `logFile` default through its own fields.
 
 The State builder also accepts the optional `journalDomain` - Function/Open's P5 storage-domain
-name. It defaults to the shared `package_governance` inside Function/Open, so a consumer that does
-not set it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits
-and underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
-single-open contention. The Journal routing is unchanged: post-open records still flow through the
-first bound shared sink when one is bound.
+name.
+
+It defaults to the shared `package_governance` inside Function/Open, so a consumer that does not set
+it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits and
+underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
+single-open contention.
+
+The Journal routing is unchanged: post-open records still flow through the first bound shared sink
+when one is bound.
 
 ## The ledger
 

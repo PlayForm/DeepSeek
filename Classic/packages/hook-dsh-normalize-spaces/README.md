@@ -1,8 +1,9 @@
 # @playform/hook-dsh-normalize-spaces - The spaces normalizer for model output
 
-> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates). Plan: the
-> [factory README](../plugin-dsh-factory/README.md), the [core README](../lib-dsh-core/README.md),
-> and the
+> Version 0.1.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+>
+> Plan: the [factory README](../plugin-dsh-factory/README.md), the
+> [core README](../lib-dsh-core/README.md), and the
 > [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 > reference.
 
@@ -13,14 +14,16 @@ The **space normalizer for model output** - a DeepSeek Harness plugin that hooks
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the unicode space family in model output, live in the transcript: every visible
 non-terminator space that is not the ASCII space becomes the plain ASCII space - U+00A0 to `' '`,
-quads and quirs alike. A **CLASS flavor** of the normalize family: the core's `Spaces` class
-(Unicode's Zs category minus the ASCII space) plus a configurable `replacement` string (default
-`" "`, the plain ASCII space).
+quads and quirs alike.
 
-The @-sentence identity: **Hook @ DSH @ Normalize @ Spaces**. The family's `raw-write` tool
-(registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses this flavor's
-transforms too - the exemption is family-wide, so the tool's explicit `normalize` parameter (default
-false = verbatim) is the only normalization it applies.
+A **CLASS flavor** of the normalize family: the core's `Spaces` class (Unicode's Zs category minus
+the ASCII space) plus a configurable `replacement` string (default `" "`, the plain ASCII space).
+
+The @-sentence identity: **Hook @ DSH @ Normalize @ Spaces**.
+
+The family's `raw-write` tool (registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash))
+bypasses this flavor's transforms too - the exemption is family-wide, so the tool's explicit
+`normalize` parameter (default false = verbatim) is the only normalization it applies.
 
 Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
 the normalization is deliberately **VISIBLE; it IS the feature**.

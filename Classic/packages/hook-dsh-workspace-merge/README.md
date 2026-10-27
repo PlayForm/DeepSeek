@@ -6,9 +6,10 @@
 ## The role
 
 The batch merge of the workspace family: the **atomic gates**, the per-file commits **through the
-factory's Write executor**, and the **commit reply union**. Plan:
-`Documentation/Plans/Workspace-Family/MERGE.md` + `Documentation/Plans/WORKSPACE-FAMILY-V4-1.md`
-(sections 3.7-3.8).
+factory's Write executor**, and the **commit reply union**.
+
+Plan: `Documentation/Plans/Workspace-Family/MERGE.md` +
+`Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` (sections 3.7-3.8).
 
 ## The surfaces
 
@@ -118,8 +119,11 @@ the reply union by `Source/Test/Wiring-And-Gates` and `Source/Test/Commit-And-Re
 - [Workspace-Family/MERGE](../../../Documentation/Plans/Workspace-Family/MERGE.md) - the merge step.
 - [WORKSPACE-FAMILY-V4-1](../../../Documentation/Plans/WORKSPACE-FAMILY-V4-1.md) - sections 3.7-3.8,
   the edit lifecycle.
+
 - The plugin ships **disabled** (`enabled: false` - the IDLE-forever posture); it enables only by an
-  explicit ACTIVATE. This is the PoC build: the smoke suite and the ETS twin land at the end phase.
+  explicit ACTIVATE.
+
+    This is the PoC build: the smoke suite and the ETS twin land at the end phase.
 
 ## License
 

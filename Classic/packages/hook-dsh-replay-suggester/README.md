@@ -14,9 +14,11 @@ from its history store and prepends ONE labeled `additionalContexts` notice: the
 time and the verification command.
 
 - The history store: `~/.dsh/replay-suggester/history.json` (the seed of the search-suggester's
-  journal per §9.3; the offline learner and the journal adapter are the end-phase wiring). Loaded
-  once at apply; a missing or corrupt store degrades to silence with a ledger line, never to a
-  guess.
+  journal per §9.3; the offline learner and the journal adapter are the end-phase wiring).
+
+    Loaded once at apply; a missing or corrupt store degrades to silence with a ledger line, never
+    to a guess.
+
 - The recall store has a **producer** (the wave 2c re-spec,
   [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): every judged call
   is recorded, and a later call recalls the paths that accompanied a similar prior call.
@@ -35,7 +37,10 @@ time and the verification command.
 - The `agent/pre-step` listener: the per-turn reset of the note counter.
 - The recall store: the `replay_history` storage-domain KV domain, or the JSON fallback beside the
   seeded store (`~/.dsh/replay-suggester/`).
-- Injected services: `pluginFactory`. No tool, no provided service.
+
+- Injected services: `pluginFactory`.
+
+    No tool, no provided service.
 
 ## How it works
 
@@ -74,8 +79,9 @@ The `recorded` line, the recovery lines (`store recovered <n> entries (replay_hi
 ## The pack
 
 The `Repeat` intent is **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `replay/` domain. A
-repository that ships `.dsh/pack.yml` (or a user-layer pack at
+[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `replay/` domain.
+
+A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` intent and caveat; a repository
 without a pack stays silent.
 
@@ -107,7 +113,9 @@ replay-suggester: <error>; the note is skipped
 
 ## The configuration
 
-See [SCHEME.md](./SCHEME.md) for the full schema. Every field is a volatile cell:
+See [SCHEME.md](./SCHEME.md) for the full schema.
+
+Every field is a volatile cell:
 
 | Field             | Default                                             | Meaning                         |
 | ----------------- | --------------------------------------------------- | ------------------------------- |
@@ -130,8 +138,10 @@ See [SCHEME.md](./SCHEME.md) for the full schema. Every field is a volatile cell
 ## The build and the tests
 
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check. The smoke folders:
-`History-Producer`, `Loader-And-History`, `Pack-Driven`, `Pipeline-And-Recall`, `Workspace-Gate`.
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+
+The smoke folders: `History-Producer`, `Loader-And-History`, `Pack-Driven`, `Pipeline-And-Recall`,
+`Workspace-Gate`.
 
 ## The plan
 
@@ -139,9 +149,12 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check. 
   recall answer.
 - [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
   wave 2c re-spec (the producer).
+
 - The package, the Source, the smoke suites and the build pass are complete, and the recall store's
   producer landed; the live activation (the profile row flip and the restart) is the remaining
-  end-phase step (POC-BRIEF.md §8). Ships `enabled: false` in the bundle patch.
+  end-phase step (POC-BRIEF.md §8).
+
+    Ships `enabled: false` in the bundle patch.
 
 ## License
 

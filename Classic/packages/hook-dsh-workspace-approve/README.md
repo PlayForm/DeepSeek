@@ -7,8 +7,10 @@
 
 The workspace-approve hook for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
-release). A DeepSeek Harness plugin that binds the **exact human approval** - the candidate-bound
-approval + the constraints - the approve step of the workspace family's invisible flow:
+release).
+
+A DeepSeek Harness plugin that binds the **exact human approval** - the candidate-bound approval +
+the constraints - the approve step of the workspace family's invisible flow:
 
 ```
 ... -> the authority licenses -> the approve binds -> the merge commits -> ...
@@ -25,16 +27,20 @@ approval + the constraints - the approve step of the workspace family's invisibl
 ## The exact-approval semantics
 
 An approval binds to the **exact candidate** - the concrete change set, identified by its path, its
-content fingerprint, and the file version observed at the approval - never a fuzzy intent. The
-constraints **travel with the approval**: a changed constraint set at approval time is a rejection,
-not an amendment.
+content fingerprint, and the file version observed at the approval - never a fuzzy intent.
 
-The decision records the **Commitment** (who accepted responsibility). The merge/execute side
-derives its **AuthorizationDecision** from the service's check.
+The constraints **travel with the approval**: a changed constraint set at approval time is a
+rejection, not an amendment.
+
+The decision records the **Commitment** (who accepted responsibility).
+
+The merge/execute side derives its **AuthorizationDecision** from the service's check.
 
 **An intent must not authorize its own means**: the approval of an intention never authorizes the
-implementation the agent later produces. The check only validates the implementation against the
-approved candidate; the independent authority licensing happened earlier in the flow.
+implementation the agent later produces.
+
+The check only validates the implementation against the approved candidate; the independent
+authority licensing happened earlier in the flow.
 
 ## The service surface (`ctx.workspaceApprove`)
 
@@ -51,14 +57,16 @@ approved candidate; the independent authority licensing happened earlier in the 
 
 On `fs/observed` (heard on the ROOT context through the factory's Wire), a binding whose file is
 observed at a different version than the one bound in the approval is invalidated
-(`decision: "invalidated"`, ledger `invalidated <id> (version changed)`). The listener is a
-synchronous recorder: no awaits, no throws, no I/O; own-actor events are ignored.
+(`decision: "invalidated"`, ledger `invalidated <id> (version changed)`).
+
+The listener is a synchronous recorder: no awaits, no throws, no I/O; own-actor events are ignored.
 
 ## The ledger (storage and lines)
 
 State lives in the hook's own KV domain named `workspace_approve` (config `domain`): one record per
-binding plus a bounded ring snapshot (the last `maxBindings`, default 1000). The sequence is the
-plugin's own monotonic counter - never a wall clock.
+binding plus a bounded ring snapshot (the last `maxBindings`, default 1000).
+
+The sequence is the plugin's own monotonic counter - never a wall clock.
 
 Ledger lines (module-owned, prefixed `approve:`): `activated`, `disabled`, `bound`, `decided`,
 `rejected`, `revoked`, `refused`, `unknown`, `invalidated`, `checked`, `capped`, `failed`,
@@ -68,8 +76,9 @@ Ledger lines (module-owned, prefixed `approve:`): `activated`, `disabled`, `boun
 
 Every knob is volatile (hot-editable without remounting): `logFile`
 (`~/.dsh/playform/hook-dsh-workspace-approve.log`), `log`, `enabled` (false - the IDLE-forever
-posture), `domain` (`workspace_approve`), `maxBindings` (1000), `requireConstraints` (true). The
-plugin ships disabled and enables only by an explicit ACTIVATE.
+posture), `domain` (`workspace_approve`), `maxBindings` (1000), `requireConstraints` (true).
+
+The plugin ships disabled and enables only by an explicit ACTIVATE.
 
 ### The policy block (D6)
 
@@ -84,9 +93,10 @@ block), mapped to `State.Allow`:
 | `suggest` | `auto`  | `message` | `auto`    |
 
 This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
-object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement).
+commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The build and the tests
 

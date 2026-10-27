@@ -13,8 +13,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > user layer, the repo layer, the cycle-guarded `extends:` chain), the strict YAML-subset parser,
 > the merge rules, the workspace locator and the built-in pack for this monorepo.
 >
-> _The CLASSIC build: zero runtime dependencies. Not a plugin - the data layer under the six
-> suggesters._
+> _The CLASSIC build: zero runtime dependencies._
+>
+> _Not a plugin - the data layer under the six suggesters._
 >
 > _The @-sentence identity: **Lib @ DSH @ Pack** - one file describes one repository._
 
@@ -23,8 +24,9 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 ## Where It Fits
 
 **Family position**: the pack library of the suggester family - parent of none, child of none: the
-CLASSIC build has zero runtime dependencies. Consumed by the six suggesters
-([`hook-dsh-doc-suggester`](../hook-dsh-doc-suggester),
+CLASSIC build has zero runtime dependencies.
+
+Consumed by the six suggesters ([`hook-dsh-doc-suggester`](../hook-dsh-doc-suggester),
 [`hook-dsh-edit-suggester`](../hook-dsh-edit-suggester),
 [`hook-dsh-search-suggester`](../hook-dsh-search-suggester),
 [`hook-dsh-convention-suggester`](../hook-dsh-convention-suggester),
@@ -34,15 +36,23 @@ CLASSIC build has zero runtime dependencies. Consumed by the six suggesters
 
 - **The built-in pack** (`Builtin`) is the union of the six suggesters' former embedded packs: 31
   families keyed by the domain-qualified id (`doc/Plan`, `edit/Version`, `search/Version`, ...), so
-  the six domains share one map without colliding on the ids they reuse. It is the default for this
-  monorepo and byte-for-byte the data the suggesters shipped before the extraction.
+  the six domains share one map without colliding on the ids they reuse.
+
+    It is the default for this monorepo and byte-for-byte the data the suggesters shipped before the
+    extraction.
+
 - **The layered resolution** (D2): the user layer `~/.dsh/playform/workspaces/<repo-slug>.yml` is
   read first, the repo layer `<repo>/.dsh/pack.yml` overrides it, and a pack may `extends:` another
-  user-layer pack (cycle-guarded). A repo without a pack resolves to the built-in pack; a workspace
-  outside its signature resolves to `undefined` - the honest silence.
+  user-layer pack (cycle-guarded).
+
+    A repo without a pack resolves to the built-in pack; a workspace outside its signature resolves
+    to `undefined` - the honest silence.
+
 - **The workspace locator** (`Locate`) is the family's gate: the first ancestor whose pack signature
-  matches. The signature is the pack's `signature` list, defaulting to
-  `Documentation/ARCHIVE-STYLE.md`.
+  matches.
+
+    The signature is the pack's `signature` list, defaulting to `Documentation/ARCHIVE-STYLE.md`.
+
 - The library is **not a plugin bundle**: no
   [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml),
   no loader contract, publishable on its own - consumers link it as a plain library dependency, not
@@ -83,10 +93,11 @@ const Pack = Resolve("/path/to/repo", { home: "/tmp/temp-home" });
 pack.extends: <name>                                the base, merged underneath
 ```
 
-The repo slug is the repo root's basename, lowercased, unless the pack declares `slug`. The repo
-layer is read first to discover that slug, then the user layer, then the `extends:` chain (a named
-base is looked up in the user layer; a missing name is skipped; a cycle is guarded and each pack is
-merged once).
+The repo slug is the repo root's basename, lowercased, unless the pack declares `slug`.
+
+The repo layer is read first to discover that slug, then the user layer, then the `extends:` chain
+(a named base is looked up in the user layer; a missing name is skipped; a cycle is guarded and each
+pack is merged once).
 
 The merge: families by id, targets by path, scalars replace, arrays replace - the merged result is
 normalized once, so an absent field never overwrites the base.
@@ -100,8 +111,9 @@ resolves through the enclosing machine's pnpm store, which a checkout elsewhere 
 the library stays dependency-light and parses the documented YAML subset itself
 (`Source/Function/Parse.ts`).
 
-A `.json` pack is accepted too (`JSON.parse`). The subset and its refusals are listed in
-[SCHEME.md](./SCHEME.md#the-parser-subset).
+A `.json` pack is accepted too (`JSON.parse`).
+
+The subset and its refusals are listed in [SCHEME.md](./SCHEME.md#the-parser-subset).
 
 ## The smokes
 

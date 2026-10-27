@@ -6,10 +6,11 @@
 ## The role
 
 The workspace-govern hook: the governance gate of the workspace family's invisible flow - operate
-proposes → **the govern gates** → the authority licenses → the approve binds. On every gated
-`tools/pre-execute` call, and for every proposal handed to the `workspaceGovern` service, the hook
-runs the four **independent means-checks** on the ProposedChange before any AuthorizationDecision
-downstream.
+proposes → **the govern gates** → the authority licenses → the approve binds.
+
+On every gated `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern`
+service, the hook runs the four **independent means-checks** on the ProposedChange before any
+AuthorizationDecision downstream.
 
 An intent must not authorize its own means: the gate checks the means; the intent is never the
 permission.
@@ -36,7 +37,9 @@ The plugin ships **disabled** (the idle-forever posture) and enables only by an 
 
 The fail-open recovery table is the honest-recovery contract
 (`Documentation/Plans/WORKSPACE-FAMILY-V4-1.md` section 3.9): per-obligation failure behavior, never
-a silent default. An override list in the config replaces rows.
+a silent default.
+
+An override list in the config replaces rows.
 
 ## The gate outcomes
 
@@ -69,9 +72,10 @@ line.
 ### The policy block (D6) - the `automation` key
 
 The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
-factory's block), mapped to `State.Allow`. The key is `automation`, **not** `policy`, because
-`policy` is already this hook's decision rule table (a different contract; the `plugin-dsh-route`
-precedent):
+factory's block), mapped to `State.Allow`.
+
+The key is `automation`, **not** `policy`, because `policy` is already this hook's decision rule
+table (a different contract; the `plugin-dsh-route` precedent):
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -81,6 +85,7 @@ precedent):
 | `suggest` | `auto`  | `message` | `auto`    |
 
 This hook's action class is RECORD (it records a gate decision), and that class is **automatic**.
+
 The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
 the block documents the posture and refuses nothing.
 

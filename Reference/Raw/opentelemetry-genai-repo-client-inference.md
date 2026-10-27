@@ -1,4 +1,3 @@
-
 ```
 <!--- Hugo front matter used to generate the website version of this page:
 linkTitle: Client Inference
@@ -1223,4 +1222,3 @@ Semantic conventions for recording exceptions on Generative AI client operations
 [ExplicitBucketBoundaries]: https://github.com/open-telemetry/opentelemetry-specification/blob/v1.55.0/specification/metrics/api.md#instrument-advisory-parameters
 
 ```
-

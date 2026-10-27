@@ -1,21 +1,18 @@
 RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) Files | RFC Editor
-#  RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) Files
 
+# RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) Files
 
-  * Y. Shafranovich
+- Y. Shafranovich
 
+Informational
 
-Informational 
-  * Rate this RFC 
-  * Subscribe
-2 subscribed 
-  * Add to Set
-
+- Rate this RFC
+- Subscribe 2 subscribed
+- Add to Set
 
 **This RFC was updated, see**
-  * [RFC 7111](https://www.rfc-editor.org/info/rfc7111/). 
 
-
+- [RFC 7111](https://www.rfc-editor.org/info/rfc7111/).
 
 ```
 Network Working Group                                    Y. Shafranovich
@@ -485,4 +482,3 @@ Acknowledgement
 Shafranovich                 Informational                      [Page 8]
 
 ```
-

@@ -23,11 +23,18 @@ Three services, provided with `ctx.provide` (removed with the plugin):
 ### `panelFamilyHost` (read-only)
 
 - **`tail(namespace, lines)`** - the last N lines of the owning module's `~/.dsh/<namespace>.log`.
-  The namespace must be a family module name (`[a-z0-9-]+`); anything else is _rejected_, not
-  sanitized (no path traversal). Returns `{ ok: true, namespace, lines }` or
-  `{ ok: false, code: "rejected" | "not-found", message }`.
-- **`stats()`** - the ccr store summary (log path, byte size, line count). The ccr LRU internals are
-  not exposed by any existing remote; the Typert spike (end-phase) decides whether they ever are.
+
+    The namespace must be a family module name (`[a-z0-9-]+`); anything else is _rejected_, not
+    sanitized (no path traversal).
+
+    Returns `{ ok: true, namespace, lines }` or
+    `{ ok: false, code: "rejected" | "not-found", message }`.
+
+- **`stats()`** - the ccr store summary (log path, byte size, line count).
+
+    The ccr LRU internals are not exposed by any existing remote; the Typert spike (end-phase)
+    decides whether they ever are.
+
 - **`fiberPhases` are NOT here** - they come from the already-remote `remote.pluginManager`.
 
 ### `panelFamilyBridge` (the write surface)
@@ -102,8 +109,9 @@ harness's Client Remote refuses SRC descriptors and its registration values come
 `lib/typert.remote-client.*` artifacts.
 
 Until that contribution lands, the browser half is inert and the panel keeps its documented
-fallbacks (plain fields read-only, static status). The host services themselves are complete and
-smoke-covered.
+fallbacks (plain fields read-only, static status).
+
+The host services themselves are complete and smoke-covered.
 
 ## The configuration
 
@@ -138,8 +146,10 @@ The accepted bridge write's audit line is the config editor's own.
 
 `pnpm prepublishOnly` runs the plugin build (ESM `Target/`), then `Maintain/Build-Client-Bundle.mjs`
 (the harness closure factory `window.__ModuleLoader__.load({ id, factory(require) })` written to
-`Target/Client.bundle.js`), then the Test build and the harness selfcheck. `exports["./client"]`
-points the module system at the bundle; the ESM `Target/Client.js` stays the dev/test surface.
+`Target/Client.bundle.js`), then the Test build and the harness selfcheck.
+
+`exports["./client"]` points the module system at the bundle; the ESM `Target/Client.js` stays the
+dev/test surface.
 
 | Folder                 | Count   | Covers                                                                                                                                                        |
 | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |

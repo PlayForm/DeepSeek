@@ -6,9 +6,11 @@
 ## The role
 
 The test-suggester hook: a DeepSeek Harness plugin that answers the **test task intent** with a
-target set. When the model searches for proof - a grep for `PASS`/`FAIL`/`error TS`, a read of a
-`Test.ts`, a bash error sweep - the hook classifies the call deterministically and names the likely
-targets **before** the model finishes searching.
+target set.
+
+When the model searches for proof - a grep for `PASS`/`FAIL`/`error TS`, a read of a `Test.ts`, a
+bash error sweep - the hook classifies the call deterministically and names the likely targets
+**before** the model finishes searching.
 
 It is the test consumer of the suggester family
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md), sections 3, 4,
@@ -39,7 +41,9 @@ shared core service until the family proves two consumers), and one delivery sur
     The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 
 Every listener is fail-open: on any error a warning is logged and the downstream decision is
-returned unchanged. A note never fails a tool call.
+returned unchanged.
+
+A note never fails a tool call.
 
 ## The pack
 
@@ -48,12 +52,14 @@ returned unchanged. A note never fails a tool call.
 | `Suite`  | 0.75      | `PASS\|FAIL\|error TS\|assert\|suite`, `Source/Test/` paths | `Source/Test/<Suite>/Test.ts`, the suite README, `Maintain/Run-Smokes.mjs`, the README badge |
 | `Counts` | 0.80      | `N PASS`, expected/PASS count, badge                        | README badge, `SCHEME.md`, the site content counts                                           |
 
-Confidence is `sigmoid(Σ weights − 0.6)` (the plan §3.5). Every candidate carries a one-phrase
-reason; a candidate without a reason is never emitted.
+Confidence is `sigmoid(Σ weights − 0.6)` (the plan §3.5).
+
+Every candidate carries a one-phrase reason; a candidate without a reason is never emitted.
 
 The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `test/` domain. A
-repository that ships `.dsh/pack.yml` (or a user-layer pack at
+[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `test/` domain.
+
+A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `test/` intents; a repository without a pack
 stays silent.
 
@@ -112,9 +118,12 @@ test-suggester: reconciliation skipped cap <package>
 
 ## The configuration
 
-See [SCHEME.md](./SCHEME.md) for the full table. Every knob is volatile (hot-editable without
-remounting). The hook ships **disabled** (`enabled: false` in `cordis.patch.yml`): the acceptance
-rate must be measured (the plan §10.3 kill criterion) before it is trusted.
+See [SCHEME.md](./SCHEME.md) for the full table.
+
+Every knob is volatile (hot-editable without remounting).
+
+The hook ships **disabled** (`enabled: false` in `cordis.patch.yml`): the acceptance rate must be
+measured (the plan §10.3 kill criterion) before it is trusted.
 
 ## The build and the tests
 

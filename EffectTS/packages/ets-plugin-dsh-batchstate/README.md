@@ -17,27 +17,41 @@ The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch'
 - **The read API** (the `batchstate` service): `getState()`, `getContext(agentId)`,
   `getScope(agentId)`, `whoElse(agentId)`, `getProposals()`, `getGates()`, `getQueue()` - both the
   service and the spliced block give the LIVE state.
+
 - **The inbox splice** (the re-spec's target, D5): the board registers on the harness agent-team
   inbox - the durable `agent/inbox/spliced` session event and the live `agent/inbox/inserted` emit -
-  and projects every batch proposal/decision that arrives through it. A proposal from the pass-on
-  reaches the board; a decision from the hook moves its status. The two channels are one delivery,
-  de-duplicated on the message id.
+  and projects every batch proposal/decision that arrives through it.
+
+    A proposal from the pass-on reaches the board; a decision from the hook moves its status.
+
+    The two channels are one delivery, de-duplicated on the message id.
+
 - **The Gates block**: the compiled arbiter truth (the build/smokes state and the lane that owns the
   failure), reported by the parent through `setGate` and rendered to every lane.
 - **The queue projection**: the queue service's own compiled line, read read-only from
   `ctx.dshQueue` - one source of truth, no drift, and the queue package is never modified.
+
 - **The presentation**: the dynamic table-of-contents block, recompiled on every state change -
-  `Context = Compile(State)`. Every block is a COMPILED OUTPUT of a deterministic compiler (pure
-  functions); the LLM's only role is to READ it. READ-ONLY for the agents - never their own content.
+  `Context = Compile(State)`.
+
+    Every block is a COMPILED OUTPUT of a deterministic compiler (pure functions); the LLM's only
+    role is to READ it.
+
+    READ-ONLY for the agents - never their own content.
+
 - **The ledger**: one global log per module (the module-owned, byte-stable lines in SCHEME.md
   section 7).
+
 - **The persistence (the store split)**: every state change emits `batch/state-change` and persists
-  the full state. The **PRIMARY** store is the harness's `ctx.storage` KV domain (config `domain`,
-  default `batch_state`, version 1, per-record: the `members`, `queue`, `proposals` and `gates`
-  tables); the **FALLBACK** is the well-known JSON state file (config `stateFile`, default
-  `~/.dsh/batch-state.json`), written and read only when no storage facility is provided (or the
-  domain's open fails). Both feed the same recovery, so the board survives a restart on either
-  store.
+  the full state.
+
+    The **PRIMARY** store is the harness's `ctx.storage` KV domain (config `domain`, default
+    `batch_state`, version 1, per-record: the `members`, `queue`, `proposals` and `gates` tables);
+    the **FALLBACK** is the well-known JSON state file (config `stateFile`, default
+    `~/.dsh/batch-state.json`), written and read only when no storage facility is provided (or the
+    domain's open fails).
+
+    Both feed the same recovery, so the board survives a restart on either store.
 
 ## The anatomy
 
@@ -68,7 +82,9 @@ The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch'
 ```
 
 The markers are a cross-package contract (each package declares its own copy - the self-contained
-rule). The board parses the FIRST block out of any inbox text; ordinary messages are silence.
+rule).
+
+The board parses the FIRST block out of any inbox text; ordinary messages are silence.
 
 ## The posture
 
@@ -93,8 +109,9 @@ spawn verdicts are declared for uniformity and stay the shipped `approve` (the b
 files, commits or spawns).
 
 The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement). The defaults are
-smoke-arbitrated in `Source/Test/Policy-Defaults`.
+section overrides the defaults per action (the wiring is the next refinement).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The build and the tests
 

@@ -26,16 +26,17 @@ const Rate = () =>
 		model: Schema.string()
 			.required()
 			.description("Model id exactly as the session log reports it."),
-		input: Schema.number()
-			.required()
-			.description("Price per million uncached input tokens."),
+		input: Schema.number().required().description("Price per million uncached input tokens."),
 		output: Schema.number().required().description("Price per million output tokens."),
-		cacheRead: Schema.number()
-			.description("Price per million cache-read tokens; absent means that bucket is unpriced."),
-		cacheWrite: Schema.number()
-			.description("Price per million cache-write tokens; absent means that bucket is unpriced."),
-		reasoning: Schema.number()
-			.description("Price per million reasoning tokens; absent means that bucket is unpriced."),
+		cacheRead: Schema.number().description(
+			"Price per million cache-read tokens; absent means that bucket is unpriced.",
+		),
+		cacheWrite: Schema.number().description(
+			"Price per million cache-write tokens; absent means that bucket is unpriced.",
+		),
+		reasoning: Schema.number().description(
+			"Price per million reasoning tokens; absent means that bucket is unpriced.",
+		),
 		effectiveFrom: Schema.string()
 			.default("2026-01-01")
 			.description("First date the row is in force; the newest row in force prices a call."),
@@ -56,13 +57,17 @@ export default Schema.object({
 		.default("default")
 		.description("Name of the paying party new projects are billed to."),
 	capture: Schema.object({
-		sessions: Schema.boolean().default(true).description("Record live sessions into the ledger."),
+		sessions: Schema.boolean()
+			.default(true)
+			.description("Record live sessions into the ledger."),
 		subagents: Schema.boolean()
 			.default(true)
 			.description("Record delegated subagent sessions and roll them into their parent."),
 		backfill: Schema.boolean()
 			.default(false)
-			.description("Replay sessions that predate the plugin into the ledger as a background job."),
+			.description(
+				"Replay sessions that predate the plugin into the ledger as a background job.",
+			),
 	}).description("What the ledger records from the session log."),
 	attribution: Schema.object({
 		direct: Schema.union(["bytes", "equal"])
@@ -79,11 +84,15 @@ export default Schema.object({
 	annotate: Schema.object({
 		enabled: Schema.boolean()
 			.default(false)
-			.description("Allow writing the accumulated cost into files as a marker-delimited comment."),
+			.description(
+				"Allow writing the accumulated cost into files as a marker-delimited comment.",
+			),
 		marker: Schema.string()
 			.default("dsh-cost")
 			.description("Marker word that delimits the cost comment block."),
-		maxLines: Schema.number().default(8).description("Maximum lines of one cost comment block."),
+		maxLines: Schema.number()
+			.default(8)
+			.description("Maximum lines of one cost comment block."),
 	}).description("The comment writer (off by default; the one toggle the user asked for)."),
 	export: Schema.object({
 		format: Schema.union(["csv", "json", "markdown"])
