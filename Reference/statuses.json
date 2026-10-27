@@ -646,5 +646,45 @@
 		"exitCode": 5,
 		"message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions.",
 		"disposition": "retryable"
+	},
+	{
+		"source": "https://designsystem.digital.gov/components/header/",
+		"slug": "designsystem-digital-gov-components-header",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://designsystem.digital.gov/components/footer/",
+		"slug": "designsystem-digital-gov-components-footer",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://designsystem.digital.gov/components/card/",
+		"slug": "designsystem-digital-gov-components-card",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://diataxis.fr/",
+		"slug": "diataxis-fr",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://carbondesignsystem.com/components/UI-shell-header/usage/",
+		"slug": "carbondesignsystem-com-components-UI-shell-header-usage",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+		"slug": "wai-aria-apg-patterns-disclosure",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "Blocked by anti-bot protection: Cloudflare JS challenge on both the default pass and the one --filter raw retry. No file written; the disclosure-pattern claims stay unverified and are cited nowhere.",
+		"disposition": "retryable"
 	}
 ]

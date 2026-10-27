@@ -9,30 +9,30 @@
 
 ## The role
 
-The **fullwidth normalizer for model output** - a DeepSeek Harness plugin that hooks the
+The **fullwidth normalizer for model output**: a DeepSeek Harness plugin that hooks the
 [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
-normalizes the full-width family in model output, live in the transcript: the entire FULLWIDTH FORMS
-range U+FF01-U+FF5E maps to its ASCII half-width counterpart U+0021-U+007E - the whole story,
-letters, punctuation and digits included.
+normalizes the full-width family in model output, live in the transcript.
 
-A **MAP flavor** of the normalize family: the core's `Fullwidth` char-to-char table owns the
-substitution - no `replacement` config knob.
+The entire FULLWIDTH FORMS range U+FF01-U+FF5E maps to its ASCII half-width counterpart
+U+0021-U+007E, which is the whole story, letters, punctuation and digits included.
+
+It is a **MAP flavor** of the normalize family: the `Fullwidth` char-to-char table of the core owns
+the substitution, so there is no `replacement` config knob.
 
 The @-sentence identity: **Hook @ DSH @ Normalize @ Fullwidth**.
 
 The family's `raw-write` tool (registered by
-[ets-hook-dsh-normalize-dash](../ets-hook-dsh-normalize-dash)) bypasses this flavor's transforms too
+[ets-hook-dsh-normalize-dash](../ets-hook-dsh-normalize-dash)) bypasses the transforms of this
+flavor too, because the exemption is family-wide, so the explicit `normalize` parameter of the tool
+(default false = verbatim) is the only normalization it applies.
 
-- the exemption is family-wide, so the tool's explicit `normalize` parameter (default false =
-  verbatim) is the only normalization it applies.
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript,
+because the normalization is deliberately **VISIBLE; it IS the feature**.
 
-    Unlike the governance family, the rewrite flows into both the live UI and the durable
-    transcript - the normalization is deliberately **VISIBLE; it IS the feature**.
-
-    The shared Effect-TS plumbing - the runtime wiring, the stream machinery, the
-    `Activate`/`Append` ledger composer and the generic `normalize-overpass` handler - comes from
-    the base [ets-base-dsh](../ets-base-dsh) package.
+The shared Effect-TS plumbing (the runtime wiring, the stream machinery, the `Activate`/`Append`
+ledger composer and the generic `normalize-overpass` handler) comes from the base
+[ets-base-dsh](../ets-base-dsh) package.
 
 ## The surfaces
 
@@ -61,10 +61,10 @@ The family's `raw-write` tool (registered by
 | `toolResultsExempt`      | string[] | `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question` | a tool result whose exec name is listed passes the tool-results arm by identity (volatile)                                                     |
 
 The module composes the factory helper with `shared: false`, so the shared block is only `log` and
-`logFile`; the module's own fields follow in schema order.
+`logFile`, and the own fields of the module follow in schema order.
 
-There is no `replacement` field: this is a MAP flavor - the substitution is the core's `Fullwidth`
-char-to-char table.
+There is no `replacement` field, because this is a MAP flavor and the substitution is the
+`Fullwidth` char-to-char table of the core.
 
 ## The ledger
 
@@ -75,12 +75,13 @@ hook-dsh-normalize-fullwidth: overpass: normalized N char(s) in tool result <too
 hook-dsh-normalize-fullwidth: overpass: normalized N char(s) in step batch (turn T step S)
 ```
 
-The activation line is written by `apply()`; the count line and the overpass lines only appear on a
-normal completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream
-writes no line).
+The activation line is written by `apply()`.
 
-The `hook-dsh-normalize-fullwidth: ` prefix is the `<State.Module>:` identity the factory's `Append`
-composes - the Classic identity, kept byte-identical across the two variants.
+The count line and the overpass lines only appear on a normal completion or an N > 0 pass, because N
+= 0 is a true no-op with no ledger line, and a thrown-away stream writes no line.
+
+The `hook-dsh-normalize-fullwidth: ` prefix is the `<State.Module>:` identity that `Append` of the
+factory composes: the Classic identity, kept byte-identical across the two variants.
 
 ## The build and the tests
 
@@ -99,6 +100,8 @@ The family position and the factory contract are documented in the
 [ets-plugin-dsh-factory](../ets-plugin-dsh-factory) and [ets-lib-dsh-core](../ets-lib-dsh-core)
 READMEs, and the hook point is the
 [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
-waterfall of the LlmRuntime; the bundle is configured through its
+waterfall of the LlmRuntime.
+
+The bundle is configured through its
 [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-hook-dsh-normalize-fullwidth/cordis.patch.yml)
 row, and the shared Effect-TS plumbing is the base [ets-base-dsh](../ets-base-dsh) package.

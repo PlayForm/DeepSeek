@@ -1,9 +1,8 @@
 # Pack-Driven
 
-The edit suggester as a PACK CONSUMER: a temporary repo's own pack overrides
-the built-in family, a workspace without a pack stays silent, the pack's
-signature gates the workspace, and the built-in pack still drives this
-monorepo.
+The edit suggester as a PACK CONSUMER: the own pack of a temporary repo overrides the built-in
+family, a workspace without a pack stays silent, the signature of the pack gates the workspace, and
+the built-in pack still drives this monorepo.
 
 ## Scenarios
 
@@ -20,9 +19,10 @@ monorepo.
 
 ## Fixtures
 
-The shared Harness (fake ctx, the real factory, the real built Target) plus
-`node:fs` temporary trees under the OS temp dir. The pack is a real
-`.dsh/pack.yml` read by the strict YAML-subset parser in
+The shared Harness (fake ctx, the real factory, the real built Target) plus `node:fs` temporary
+trees under the OS temp dir.
+
+The pack is a real `.dsh/pack.yml` read by the strict YAML-subset parser in
 `@playform/ets-lib-dsh-pack`.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-edit-suggester: ` prefix)

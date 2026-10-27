@@ -4,48 +4,47 @@
 
 - Package: `@playform/client-dsh-workspace-live` (Classic/packages/client-dsh-workspace-live).
 - Profile row id: `client-dsh-workspace-live` (bundled in the desktop profile).
-- Exposes: the `workspaceLive` service (client: `getSnapshot`, `subscribe`, `ingest(event)`,
-  `refresh(graph)`) and the `conversation.view` tab `workspace-live` (order 25). Stable-until-event
-  presentation: the store emits a new snapshot only on `ingest()` or `refresh()`; it presents the
-  workspace's representations, never a running OS process.
+- Exposes the `workspaceLive` service (client: `getSnapshot`, `subscribe`, `ingest(event)`,
+  `refresh(graph)`) and the `conversation.view` tab `workspace-live` (order 25). Presentation is
+  stable-until-event: the store emits a new snapshot only on `ingest()` or `refresh()`, and it
+  presents the workspace's representations, never a running OS process.
 - The child-slot model: when the panel family is composed (`ctx.get("playformFamilyPanel")` is a
   registry), the tab registration declares
   `children: { "workspace.live.section": { kind: "list", scope: "session" } }` and hands it to the
-  renderer through `renderSlot("workspace.live.section", {})`; the section registers into that
+  renderer through `renderSlot("workspace.live.section", {})`. The section then registers into that
   declared child slot (section id `workspace-live-section`) with the inject face
-  `{ section, ports }` - the ports carry the presentation store and the trace source, and the
+  `{ section, ports }`, where the ports carry the presentation store and the trace source and the
   section reads through the ports, never the context. Without the panel family the tab keeps its
   legacy shape (no `children`, no section registration, one slot point).
-- The D5 trace ingest (`Source/Function/Trace.ts`): resolves `ctx.get("trace")` structurally
+- The D5 trace ingest (`Source/Function/Trace.ts`) resolves `ctx.get("trace")` structurally
   (`on(kind, listener)` required, `ring(limit)` when present; no import of `@playform/lib-dsh-trace`
   or the factory). Kinds: `observe/stamp`, `graph/indexed`, `graph/invalidated`, `batch/proposed`,
   `batch/decision`, `batch/state-change` (the batch transitions surface when a batch plugin mirrors
-  them onto the bus). The tail is newest first, bounded by `maxEvents`; a tail line is
+  them onto the bus). The tail is newest first, bounded by `maxEvents`, and a tail line is
   `<kind> <path>` (the payload's `path` when a non-empty string, else the envelope's `trace` id). A
   missing trace is the static state: `live: false` (`data-live="false"`), empty tail, a no-op
-  subscribe/dispose - never an error.
-- Config (all volatile; no seed field - the SCHEME shows none): `enabled` false, `tabOrder` 25,
+  subscribe/dispose, never an error.
+- Config (all volatile; no seed field, since the SCHEME shows none): `enabled` false, `tabOrder` 25,
   `maxEvents` 50 (the event tail bound AND the trace tail bound), `maxRepresentations` 100.
-- Ledger: none of its own (pure client, no host writes); the sibling services (workspaceGraph,
+- Ledger: none of its own (pure client, no host writes), and the sibling services (workspaceGraph,
   workspaceObserve, the workspace events) are declared locally in `Source/Interface/Siblings.ts`
-  from the W1 frozen contract - no runtime import of sibling packages exists yet.
+  from the W1 frozen contract, so no runtime import of sibling packages exists yet.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/client-dsh-workspace-live"}` → one entry, status schema (defaults: tabOrder
-    25, maxEvents 50, maxRepresentations 100, enabled false).
+    Inspect Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-workspace-live"}` for one entry with status schema (defaults:
+    tabOrder 25, maxEvents 50, maxRepresentations 100, enabled false).
 
 2. **The service check.**
 
-    Service check: the `workspaceLive` service resolves with `getSnapshot`, `subscribe`, `ingest`,
-    `refresh`.
+    The `workspaceLive` service resolves with `getSnapshot`, `subscribe`, `ingest`, and `refresh`.
 
 3. **The ledger line.**
 
-    Ledger line: none - activation is proven by checks 1-2 and the T5 tab.
+    No ledger line exists, so activation is proven by checks 1-2 and the T5 tab.
 
 ## Test cases
 
@@ -62,12 +61,12 @@
 ## Known live gaps
 
 - The sibling imports are still declared locally (W1 contract), so the live view consumes the
-  declared shapes until the end-phase wiring - a mismatch between the declared and real service
-  shapes is a likely defect source.
+  declared shapes until the end-phase wiring, which makes a mismatch between the declared and real
+  service shapes a likely defect source.
 - The workspace graph is empty (see README), so event-driven representations may stay empty until an
   index trigger exists.
-- The batch transition kinds surface only when a batch plugin mirrors them onto the bus; without a
-  mirror the trace tail never shows them.
+- The batch transition kinds surface only when a batch plugin mirrors them onto the bus, so without
+  a mirror the trace tail never shows them.
 
 ## Fix loop
 
@@ -77,7 +76,7 @@
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/client-dsh-workspace-live run prepublishOnly`
 - Smokes: `node Classic/packages/client-dsh-workspace-live/Target/Test/<Folder>/Test.js` per folder
   under `Source/Test/` (the SCHEME's three folders: Contract-And-Wiring 12 PASS, Store-And-Snapshot
-  11 PASS, Child-Slot-And-Trace 12 PASS). Then the app restart.
+  11 PASS, Child-Slot-And-Trace 12 PASS), then restart the app.
 
 ## Report stub
 

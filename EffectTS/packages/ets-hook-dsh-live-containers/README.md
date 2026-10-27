@@ -9,14 +9,17 @@
 ## The role
 
 A DeepSeek Harness plugin that keeps **dynamic, modifiable conversation blocks in the system
-prompt**: each enabled block is a labeled stanza recomputed at every request - the canonical example
-is a time block that always holds the current time at ask-time while the rest of the conversation
-stays static.
+prompt**.
+
+Each enabled block is a labeled stanza recomputed at every request, and the canonical example is a
+time block that always holds the current time at ask-time while the rest of the conversation stays
+static.
 
 The blocks ride the `system-prompt/assemble` waterfall as ONE appended section named
-`live-containers` (`interpolate: false`, so only the plugin's own substitution engine touches its
-`{{token}}` groups - the harness's unresolved-variable failure is never inherited), each block
-inside a fixed frame so the model cannot mistake it for harness state:
+`live-containers` (`interpolate: false`, so only the substitution engine of the plugin touches its
+`{{token}}` groups and the harness's unresolved-variable failure is never inherited).
+
+Each block sits inside a fixed frame, so the model cannot mistake it for harness state:
 
 ```
 --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
@@ -26,43 +29,55 @@ inside a fixed frame so the model cannot mistake it for harness state:
 
 This is the Effect-TS variant: the Classic twin behind the
 [`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) shell (Effect v4), with the same blocks, knobs
-and ledger strings; the shared Effect-TS plumbing (the `Activate` composer the ledger's durable
-activation line is built with) comes from the [`ets-base-dsh`](../ets-base-dsh) package.
+and ledger strings.
+
+The shared Effect-TS plumbing (the `Activate` composer that builds the durable activation line of
+the ledger) comes from the [`ets-base-dsh`](../ets-base-dsh) package.
 
 The substitution engine is token replace ONLY - no eval, no expressions.
 
-An unknown token renders LITERALLY and logs `render unknown <id> <token>` - never a failure.
+An unknown token renders LITERALLY and logs `render unknown <id> <token>`, never a failure.
 
 Per-block `vars` override the built-ins.
 
 The wave-2 catalog kinds (the default block table ships 14 entries) are ACCEPTED in config from day
-one and render as skipped blocks - reason `unknown kind` - until the wave-2 render engine lands.
+one and render as skipped blocks, with the reason `unknown kind`, until the wave-2 render engine
+lands.
 
-Counters (messages, turns, since last tool) come from the plugin's own `agent/pre-step` and
-`tools/post-execute` observers - exact token counts are NOT available to plugins, so the gauge
-variables are honest approximations.
+Counters (messages, turns, since last tool) come from the own `agent/pre-step` and
+`tools/post-execute` observers of the plugin.
 
-The wave-2 half extends the same plugin with the live tool-call transform (CAN-1: with `detach.mode`
-set, a command-runner call detaches into a `ctx.jobs` background job and the model immediately
-receives a SUCCESSFUL tool result
-`[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.`, the completion report
-arriving as a `live-containers-completion` dynamic-context user-role snapshot batched per turn),
-planted boards (CAN-2: `live_plant` + `[live-report]` pickup + the parent-turn lease with the
-`[stale]` self-declaration), the CAN-4 failsafe engine (silent, ledger-first, the per-turn
-meta-budget), and the CAN-5 suggester (a detached one-shot subagent suggests a CONFIGURED block,
-accepted/dismissed with one-word `live_container_set` verbs; privacy `redact` by default -
-`suggesterPrivacy: "verbatim"` forwards the user's request text and the config flag IS the consent
-surface).
+Exact token counts are NOT available to plugins, so the gauge variables are honest approximations.
 
-The wave-3 monitors put files (halted processes) into operational mode: for `watchlist` matches the
-plugin runs the file's check set between turns and renders one band per file in the live section -
-honest to the byte, additive information, never a gate.
+The wave-2 half extends the same plugin with the live tool-call transform (CAN-1).
 
-The plugin ships DISABLED - the IDLE-forever posture: the bundle entry declares `enabled: false`
-only, it never appears in the profile's bundles, and it enables only by an explicit ACTIVATE (you
-edit the profile and restart).
+With `detach.mode` set, a command-runner call detaches into a `ctx.jobs` background job, and the
+model immediately receives a SUCCESSFUL tool result
+`[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.`.
 
-A cold mount logs `disabled (enabled=false)` and every listener no-ops to a passthrough.
+The completion report arrives as a `live-containers-completion` dynamic-context user-role snapshot
+batched per turn.
+
+The same half adds planted boards (CAN-2: `live_plant` + `[live-report]` pickup + the parent-turn
+lease with the `[stale]` self-declaration).
+
+It adds the CAN-4 failsafe engine (silent, ledger-first, the per-turn meta-budget) and the CAN-5
+suggester, where a detached one-shot subagent suggests a CONFIGURED block that is accepted or
+dismissed with one-word `live_container_set` verbs.
+
+Privacy is `redact` by default: `suggesterPrivacy: "verbatim"` forwards the request text of the
+user, and the config flag IS the consent surface.
+
+The wave-3 monitors put files (halted processes) into operational mode.
+
+For `watchlist` matches the plugin runs the check set of the file between turns and renders one band
+per file in the live section: honest to the byte, additive information, never a gate.
+
+The plugin ships DISABLED with the IDLE-forever posture: the bundle entry declares `enabled: false`
+only, it never appears in the bundles of the profile, and it enables only by an explicit ACTIVATE
+(you edit the profile and restart).
+
+A cold mount logs `disabled (enabled=false)`, and every listener no-ops to a passthrough.
 
 ## The surfaces
 
@@ -77,7 +92,7 @@ A cold mount logs `disabled (enabled=false)` and every listener no-ops to a pass
 | tool     | `live_monitor` / `live_monitor_check`        | enroll/inspect a monitor; on-demand check                                                                                  |
 | config   | `SCHEME.md`                                  | the full Schemastery schema (see the table below)                                                                          |
 
-Ship posture: DISABLED by default (`enabled: false`); the wave-2 knobs are volatile cells and the
+Ship posture: DISABLED by default (`enabled: false`), the wave-2 knobs are volatile cells, and the
 wave-3 SEVEREXT/COMPREHENSIVE knobs are accepted and inert.
 
 ## The configuration
@@ -115,8 +130,9 @@ wave-3 SEVEREXT/COMPREHENSIVE knobs are accepted and inert.
 
 ## The ledger
 
-One log per module: `~/.dsh/playform/hook-dsh-live-containers.log` (config `logFile`); the durable
-file lines are the `[ISO] message` forms with the `hook-dsh-live-containers: ` prefix.
+One log per module: `~/.dsh/playform/hook-dsh-live-containers.log` (config `logFile`).
+
+The durable file lines are the `[ISO] message` forms with the `hook-dsh-live-containers: ` prefix.
 
 ```text
 disabled (enabled=false)
@@ -174,7 +190,7 @@ monitor recovered <path> (<n> checks)
 Durable activation proof: `disabled (enabled=false)` on a cold mount, else the activated line with
 the bundle version, the block count and the refresh policy.
 
-Skip lines log only when the reason changes - the ledger stays quiet on steady state.
+Skip lines log only when the reason changes, so the ledger stays quiet on steady state.
 
 ## The build and the tests
 

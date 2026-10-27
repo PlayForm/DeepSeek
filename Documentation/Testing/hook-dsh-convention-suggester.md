@@ -5,20 +5,21 @@
 - Package: `@playform/hook-dsh-convention-suggester`
   (Classic/packages/hook-dsh-convention-suggester).
 - Profile row id: `convention-suggester` (bundled in the desktop profile).
-- Exposes: no tools or services - it hooks `tools/post-execute` for the modification family
-  (`emitOn`: edit, raw-write, write) and prepends ONE labeled `additionalContexts` notice naming the
-  companions the convention requires. Deterministic classifier over the pack's intents; no LLM in
-  the hot path; read-only by design (never edits, never rewrites arguments, never denies).
-- PACK-DRIVEN: the table of intents is the BUILT-IN pack's `convention/` projection
+- Exposes no tools or services: it hooks `tools/post-execute` for the modification family (`emitOn`:
+  edit, raw-write, write) and prepends ONE labeled `additionalContexts` notice naming the companions
+  that the convention requires. The classifier over the pack's intents is deterministic, no LLM sits
+  in the hot path, and the hook is read-only by design (never edits, never rewrites arguments, never
+  denies).
+- PACK-DRIVEN: the table of intents is the `convention/` projection of the BUILT-IN pack
   (`@playform/lib-dsh-pack`; `Source/Variable/Defaults.ts` selects it with
   `Families(Builtin, "convention")`): Layout, Naming, Docs (threshold 0.75) and Ledger (0.85). A
   workspace pack (`<repo>/.dsh/pack.yml` or the user layer `~/.dsh/playform/workspaces/<slug>.yml`)
-  overrides it per repo; the Apply compiles the resolved pack's intents once per workspace root, so
-  a repo pack overrides the built-in intents without a restart. The workspace root is the nearest
-  ancestor whose PACK SIGNATURE matches (defaulting to `Documentation/ARCHIVE-STYLE.md`); a foreign
-  workspace logs `convention-suggester: abstained foreign-workspace  0.00`.
-- The pack learner (D4): with learning ON the hook derives a repo's pack from the repo itself and
-  writes it as a PROPOSAL (`<home>/.dsh/playform/proposals/<slug>.yml` - never the live pack), once
+  overrides it per repo, and the Apply compiles the resolved pack's intents once per workspace root,
+  so a repo pack overrides the built-in intents without a restart. The workspace root is the nearest
+  ancestor whose PACK SIGNATURE matches (defaulting to `Documentation/ARCHIVE-STYLE.md`), and a
+  foreign workspace logs `convention-suggester: abstained foreign-workspace  0.00`.
+- The pack learner (D4): with learning ON, the hook derives a repo's pack from the repo itself and
+  writes it as a PROPOSAL (`<home>/.dsh/playform/proposals/<slug>.yml`, never the live pack), once
   per workspace per process, on the first judged call when the resolved pack has no families.
 - Ledger prefix: `convention-suggester:`; logFile
   `~/.dsh/playform/hook-dsh-convention-suggester.log`.
@@ -27,20 +28,20 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-convention-suggester"}` → one entry, status schema (defaults:
-    threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents
-    `[]` (all pack intents enabled), emitOn edit/raw-write/write, exclude
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-convention-suggester"}` for one entry with status schema
+    (defaults: threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn
+    3, intents `[]` (all pack intents enabled), emitOn edit/raw-write/write, exclude
     node_modules/Target/.git/dist, learning false).
 
 2. **The tool check.**
 
-    Tool check: none expected (no tools).
+    No tool is expected, because the hook registers none.
 
 3. **The ledger line.**
 
-    Ledger line: the `activated (...)` line in `~/.dsh/playform/hook-dsh-convention-suggester.log`
-    (module-owned, byte-stable); a cold mount logs the byte-exact
+    The `activated (...)` line appears in `~/.dsh/playform/hook-dsh-convention-suggester.log`
+    (module-owned, byte-stable), and a cold mount logs the byte-exact
     `convention-suggester: disabled (enabled=false)`.
 
 ## Test cases
@@ -57,11 +58,12 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: notes firing on excluded paths (Target, node_modules), the per-turn
-  cap (maxNotesPerTurn 3) not being enforced, and the learner running before the gate's silence (a
-  proposed workspace gets the learning note instead of the convention note on that call).
+- Not dogfooded yet, so watch for notes firing on excluded paths (Target, node_modules), the
+  per-turn cap (maxNotesPerTurn 3) not being enforced, and the learner running before the gate's
+  silence, which gives a proposed workspace the learning note instead of the convention note on that
+  call.
 - The refine-from-edits layer (an accepted suggestion moving a companion's weight) is the later D8
-  lane - not implemented.
+  lane and is not implemented.
 
 ## Fix loop
 
@@ -71,7 +73,7 @@
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-convention-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-convention-suggester/Target/Test/<Folder>/Test.js` per
   folder under `Source/Test/` (`Post-Execute-And-Gate`, `Wiring-And-Ledger`, `Workspace-Gate`,
-  `Pack-Driven`, `Learn-Note`, `Learn-Proposal`, `Learn-Install`). Then the app restart.
+  `Pack-Driven`, `Learn-Note`, `Learn-Proposal`, `Learn-Install`), then restart the app.
 
 ## Report stub
 

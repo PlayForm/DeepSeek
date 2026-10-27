@@ -4,17 +4,23 @@ What this test verifies.
 
 ## Intent
 
-The loader contract and the config schema are the two surfaces every other
-folder (and every consumer) silently depends on: the volatile fields must
-arrive as `{ get }` cells, every default must match the shipped schema, `apply`
-must return NOTHING while registering exactly the FIVE listeners (the four
-plugin listeners plus the State builder's P10 volatile refresh), the state
-probe must carry the REAL factory instance and the unwrapped cell values, the
-cold mount must log its byte-exact `disabled (enabled=false)` line and an
-activated mount its byte-exact `activated (bundle 0.3.0, blocks=<n>,
-refresh=<policy>)` line - both in-memory and durably ([ISO] prefixed in the
-file) - and the schema must fail LOUD on invalid configs. A drift here breaks
-every later folder, so it is its own folder.
+The loader contract and the config schema are the two surfaces that every other folder (and every
+consumer) silently depends on.
+
+The volatile fields must arrive as `{ get }` cells, and every default must match the shipped schema.
+
+`apply` must return NOTHING while registering exactly the FIVE listeners (the four plugin listeners
+plus the P10 volatile refresh of the State builder).
+
+The state probe must carry the REAL factory instance and the unwrapped cell values.
+
+The cold mount must log its byte-exact `disabled (enabled=false)` line, and an activated mount its
+byte-exact `activated (bundle 0.3.0, blocks=<n>, refresh=<policy>)` line, both in memory and durably
+([ISO] prefixed in the file).
+
+The schema must fail LOUD on invalid configs.
+
+A drift here breaks every later folder, so it is its own folder.
 
 ## Scenario
 
@@ -50,12 +56,14 @@ every later folder, so it is its own folder.
 
 ## Fixtures
 
-The harness world: the fake ctx (on/get/logger capture + the root seam) with
-the REAL `@playform/ets-plugin-dsh-factory` instance from its built Target, one
-`Make(Validate({ logFile: Ledger }))` against the harness tmpdir ledger. Each
-validation refusal constructs a throwaway mount through the same `Validate`
-helper (each throws before any listener registration matters). The ledger
-file lives in a fresh per-process mkdtemp directory.
+The harness world: the fake ctx (on/get/logger capture + the root seam) with the REAL
+`@playform/ets-plugin-dsh-factory` instance from its built Target, and one
+`Make(Validate({ logFile: Ledger }))` against the harness tmpdir ledger.
+
+Each validation refusal constructs a throwaway mount through the same `Validate` helper (each throws
+before any listener registration matters).
+
+The ledger file lives in a fresh per-process mkdtemp directory.
 
 ## Expected ledger strings (byte-exact)
 
@@ -69,12 +77,9 @@ file lives in a fresh per-process mkdtemp directory.
 
 ## Edge cases
 
-- The `blocks` volatile cell is an array cell (its `get` returns the whole
-  table) - the array is the refresh unit, its leaves stay plain.
-- The registration-count check is the negative control: a missing or extra
-  listener registration fails the exact-five assertion.
-- Each validation refusal is asserted on the exact error message, not merely
-  on "it threw".
+- The `blocks` volatile cell is an array cell (its `get` returns the whole table), so the array is the refresh unit and its leaves stay plain.
+- The registration-count check is the negative control: a missing or extra listener registration fails the exact-five assertion.
+- Each validation refusal is asserted on the exact error message, not merely on "it threw".
 
 ## Expected count
 

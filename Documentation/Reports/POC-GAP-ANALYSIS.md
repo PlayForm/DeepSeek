@@ -16,8 +16,8 @@ index: Documentation/INDEX.md
 > D4-D8 layers, the client adapters, and the ETS twin parity (0 stale).
 >
 > The current state, the evidence, and the documented residuals are in
-> `Documentation/Plans/POC-LEDGER.md` (sections 7+) and `Documentation/Plans/Completion-Spec/`, while
-> the grades below remain the 2026-10-22 baseline.
+> `Documentation/Plans/POC-LEDGER.md` (sections 7+) and `Documentation/Plans/Completion-Spec/`,
+> while the grades below remain the 2026-10-22 baseline.
 
 > Three read-only lanes compared the plan document of every plugin against its Source (not the
 > claims of the README): the workspace family (16), the orchestration and batch set (10), and the
@@ -107,8 +107,8 @@ index: Documentation/INDEX.md
 
 2. **The empty graph.**
 
-    The live graph is empty (`map @ 0: 0 files`), so the core orientation loop of the epic cannot run
-    until an indexing trigger exists (an index tool or the fs/observed wiring).
+    The live graph is empty (`map @ 0: 0 files`), so the core orientation loop of the epic cannot
+    run until an indexing trigger exists (an index tool or the fs/observed wiring).
 
 3. **The client family.**
 
@@ -137,7 +137,7 @@ Nothing is a stub, because 22 of 36 plugins are substantively implemented agains
 are partial, and 5 are contract-level.
 
 The real distance from the ORIGINAL idea is not inside the plugins but in the WIRING BETWEEN them,
-where the pipeline that makes the family a workspace runtime (the index, the inbox splice, the spawn,
-the adapters, and the event chain) is the next build and the single highest-leverage fix is the
-indexing trigger of the graph, because three plugins (the workspace tools, the graph suggester, and
-the live view) depend on it.
+where the pipeline that makes the family a workspace runtime (the index, the inbox splice, the
+spawn, the adapters, and the event chain) is the next build and the single highest-leverage fix is
+the indexing trigger of the graph, because three plugins (the workspace tools, the graph suggester,
+and the live view) depend on it.

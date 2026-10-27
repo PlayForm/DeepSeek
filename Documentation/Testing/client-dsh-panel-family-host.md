@@ -3,23 +3,23 @@
 ## Identity
 
 - Package: `@playform/client-dsh-panel-family-host` (Classic/packages/client-dsh-panel-family-host),
-  version 0.1.0 (package.json). The package tree currently carries uncommitted changes - this plan
-  describes the on-disk contract (SCHEME.md, README.md) without asserting build/verification status.
+  version 0.1.0 (package.json), with uncommitted changes in the tree today, so this plan describes
+  the on-disk contract (SCHEME.md, README.md) without asserting build/verification status.
 - Profile row id: `client-dsh-panel-family-host` (bundled in the desktop profile).
 - Exposes three services (provided with `ctx.provide`, removed with the plugin):
-    - `panelFamilyHost` (read-only): `tail(namespace, lines)` - the last N lines of
-      `~/.dsh/<namespace>.log`, namespace validated as `[a-z0-9-]+` and rejected (not sanitized) on
-      mismatch, lines capped at `maxLines`; returns `{ ok: true, namespace, lines }` or
-      `{ ok: false, code: "rejected" | "not-found", message }`. `stats()` - the ccr log summary (log
-      path, byte size, line count). `fiberPhases` come from the existing remote.pluginManager - no
-      new endpoint.
-    - `panelFamilyBridge`: `editFull(namespace, patch)` over
-      `ctx.configEditor.edit(entry, change)` - the ONE full-config write surface; the patch is the
-      namespace's whole resolved config, the editor's own path emits the audit line (this package
-      logs no success line), and a nested-secret namespace is refused (`Source/Function/Secret.ts`).
+    - `panelFamilyHost` (read-only): `tail(namespace, lines)` gives the last N lines of
+      `~/.dsh/<namespace>.log`, with the namespace validated as `[a-z0-9-]+` and rejected (not
+      sanitized) on mismatch, lines capped at `maxLines`, and a return of
+      `{ ok: true, namespace, lines }` or `{ ok: false, code: "rejected" | "not-found", message }`.
+      `stats()` gives the ccr log summary (log path, byte size, line count), and `fiberPhases` come
+      from the existing remote.pluginManager, so no new endpoint appears.
+    - `panelFamilyBridge`: `editFull(namespace, patch)` over `ctx.configEditor.edit(entry, change)`,
+      the ONE full-config write surface, where the patch is the namespace's whole resolved config,
+      the editor's own path emits the audit line (this package logs no success line), and a
+      nested-secret namespace is refused (`Source/Function/Secret.ts`).
     - `panelFamilyTrace`: `on(kind, listener)` and `ring(limit)` forwarding the host D5 bus
-      (`ctx.trace`) structurally; provided only when the bus exists (otherwise the panel's static
-      fallback). The browser half re-publishes it as `trace`.
+      (`ctx.trace`) structurally, provided only when the bus exists (otherwise the static fallback
+      of the panel), and the browser half re-publishes it as `trace`.
 - Ledger lines: through the logger (the package writes nothing to disk), byte-exact:
 
 ```text
@@ -37,22 +37,22 @@ bridge: write failed for <namespace>
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/client-dsh-panel-family-host"}` → one entry, status schema (defaults:
+    Inspect Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-panel-family-host"}` for one entry with status schema (defaults:
     enabled false, logRoot ~/.dsh, maxLines 200 (1..2000), ccrLog ~/.dsh/playform/hook-dsh-ccr.log;
     all knobs volatile).
 
-    Note the default is DISABLED - a disabled package refuses every method.
+    Note that the default is DISABLED, so a disabled package refuses every method.
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService → `panelFamilyHost` (`tail`,
-    `stats`), plus `panelFamilyBridge` and `panelFamilyTrace` when the bus and config editor exist.
+    Run `cordis_inspect_query` host/Service/listService for `panelFamilyHost` (`tail`, `stats`),
+    plus `panelFamilyBridge` and `panelFamilyTrace` when the bus and config editor exist.
 
 3. **The ledger line.**
 
-    Ledger line: `host: activated (enabled=<enabled>)` in the logger - with the stock config,
-    `host: activated (enabled=false)`.
+    The logger shows `host: activated (enabled=<enabled>)`, which is
+    `host: activated (enabled=false)` with the stock config.
 
 ## Test cases
 
@@ -67,11 +67,11 @@ bridge: write failed for <namespace>
 
 ## Known live gaps
 
-- Not dogfooded yet. The generated Remote contribution (Typert codegen artifacts + the
+- Not dogfooded yet: the generated Remote contribution (Typert codegen artifacts + the
   `@deepseek-ai/dsh-api-remotes` assembly mount) is not reproducible from a Classic package, so the
-  browser half waits for the generated `remote.playformFamilyPanel` namespace and is inert until it
-  lands - the panel keeps its documented fallbacks (plain fields read-only, static status). The host
-  services themselves are complete and smoke-covered per the README.
+  browser half waits for the generated `remote.playformFamilyPanel` namespace and stays inert until
+  it lands, while the panel keeps its documented fallbacks (plain fields read-only, static status).
+  The host services themselves are complete and smoke-covered per the README.
 - Method names must stay exactly `tail(namespace, lines)` and `stats()`.
 
 ## Fix loop
@@ -82,7 +82,7 @@ bridge: write failed for <namespace>
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/client-dsh-panel-family-host run prepublishOnly`
 - Smokes: `node Classic/packages/client-dsh-panel-family-host/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/`. Then the app restart.
+  folder under `Source/Test/`, then restart the app.
 
 ## Report stub
 

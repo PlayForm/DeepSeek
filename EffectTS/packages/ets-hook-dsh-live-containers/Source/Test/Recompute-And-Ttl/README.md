@@ -4,19 +4,22 @@ What this test verifies.
 
 ## Intent
 
-The recompute/changing-value and refresh-policy tests. A request-trigger
-block's rendered value CHANGES between two assemblies whose FAKE CLOCK
-advances (no sleep, no real clock dependence), the counters recompute from
-the pre-step/post-execute observers, the global refresh policy decides
-between per-request re-rendering and the TTL cache (`refresh "ttl"` with
-ttlCalls=2 renders once, reuses the cache on the second assembly, rebuilds on
-the third with the byte-exact `section rebuilt (ttl 2)` line and a CHANGED
-value; `refresh "request"` re-renders every assembly and never logs a rebuild
-line), the per-block triggers (ttl/event) drive their own staleness within
-any global policy, the per-turn counter reset runs at the pre-step boundary,
-and the tools/change notification clears the section cache with the
-byte-exact `section rebuilt (tools/change)` line without re-rendering steady
-blocks.
+The recompute/changing-value and refresh-policy tests.
+
+A request-trigger block's rendered value CHANGES between two assemblies whose FAKE CLOCK advances (no
+sleep, no real clock dependence), and the counters recompute from the pre-step/post-execute
+observers.
+
+The global refresh policy decides between per-request re-rendering and the TTL cache.
+
+`refresh "ttl"` with ttlCalls=2 renders once, reuses the cache on the second assembly, and rebuilds
+on the third with the byte-exact `section rebuilt (ttl 2)` line and a CHANGED value.
+
+`refresh "request"` re-renders every assembly and never logs a rebuild line.
+
+The per-block triggers (ttl/event) drive their own staleness within any global policy, the per-turn
+counter reset runs at the pre-step boundary, and the tools/change notification clears the section
+cache with the byte-exact `section rebuilt (tools/change)` line without re-rendering steady blocks.
 
 ## Scenario
 
@@ -48,11 +51,11 @@ blocks.
 
 ## Fixtures
 
-The harness world with the fake clock (`MakeClocked`; `ClockBox.Now` is reset
-to the same epoch at the start of every group, so the assembly indices and
-the TTL arithmetic are deterministic). The waterfall helpers fire the
-captured listeners directly: Assemble, PreStep, Post, and the tools/change
-listener.
+The harness world with the fake clock (`MakeClocked`; `ClockBox.Now` is reset to the same epoch at
+the start of every group, so the assembly indices and the TTL arithmetic are deterministic).
+
+The waterfall helpers fire the captured listeners directly: Assemble, PreStep, Post, and the
+tools/change listener.
 
 ## Expected ledger strings (byte-exact)
 
@@ -62,13 +65,9 @@ listener.
 
 ## Edge cases
 
-- The assembly count is advanced BEFORE the cache check, so both the hit and
-  the miss paths see the same count - the TTL arithmetic is asserted from
-  outside, never by reading the counter.
-- A cache hit re-renders nothing and logs nothing (steady state is quiet);
-  only the rebuild and the notification leave lines.
-- The per-block ttl/event caches are independent of the global section
-  cache: a cleared section cache reuses the steady per-block frames.
+- The assembly count is advanced BEFORE the cache check, so both the hit and the miss paths see the same count, and the TTL arithmetic is asserted from outside, never by reading the counter.
+- A cache hit re-renders nothing and logs nothing (steady state is quiet), so only the rebuild and the notification leave lines.
+- The per-block ttl/event caches are independent of the global section cache, so a cleared section cache reuses the steady per-block frames.
 
 ## Expected count
 

@@ -111,16 +111,17 @@ statuses:
 > conversation of its parent.
 >
 > The second is the subtree requirement: the root must be able to tune its direct child and the
-> subagents of that child (the grandchildren), live or settled, without knowing their ids in advance.
+> subagents of that child (the grandchildren), live or settled, without knowing their ids in
+> advance.
 >
 > The verdict, stated before the evidence:
 >
 > - **Yes for model and reasoning effort in one session.** The harness already does it without a new
 >   plugin (the `/model` command, the composer seat, and `session.selectModel`).
 > - **No for cross-agent control through the built-in selection path.** `selectModel` refuses every
->   subagent session, live or cold, because `liveAgent` applies the same ownership test as the resume
->   path, and `packages/api/session-controller/src/agent.ts:402-408` refutes the hypothesis that a
->   live child might slip through.
+>   subagent session, live or cold, because `liveAgent` applies the same ownership test as the
+>   resume path, and `packages/api/session-controller/src/agent.ts:402-408` refutes the hypothesis
+>   that a live child might slip through.
 > - **Yes for cross-agent tuning through the request waterfall.** A host plugin can hold a
 >   per-session tuning store and apply it in `agent/request` for any live agent: parent, child, or
 >   grandchild. That is the only seam that works for every direction, and the only one that does not

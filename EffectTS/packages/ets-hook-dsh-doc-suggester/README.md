@@ -74,9 +74,9 @@ per instance and documented as such.
 
 The note opens a **follow-through window** counted in judged calls (never a timer).
 
-A later call that names one of the companions of the note is an **accept** for that companion and its
-family (`accepted <Family> <path>`), and a window that reaches `learnWindow` judged calls untouched
-closes as a **soft reject** (`rejected <Family> <n> companions`).
+A later call that names one of the companions of the note is an **accept** for that companion and
+its family (`accepted <Family> <path>`), and a window that reaches `learnWindow` judged calls
+untouched closes as a **soft reject** (`rejected <Family> <n> companions`).
 
 Both fill the outcome of the decision record and move the learned accept rates.
 
@@ -111,8 +111,8 @@ carry it.
 
 ## The delivery
 
-One note, never a content replacement: the post-execute listener runs after the ccr and the normalize
-family and only adds `additionalContexts`.
+One note, never a content replacement: the post-execute listener runs after the ccr and the
+normalize family and only adds `additionalContexts`.
 
 The note carries the plugin's own source label (`{kind: "doc-suggester", form: "notice", summary}`).
 

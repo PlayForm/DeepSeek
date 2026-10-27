@@ -1,10 +1,11 @@
 # Monitors-Band - the wave-3 M-series band tests
 
-The R-series byte-identity for the monitor stanza (the design section 6
-grammar): every outcome line byte-exact, the STALE flips, the recovered
-forms, the summary arithmetic, the token budget, the KV stability and the
-fail-open renderer. The glyphs are asserted as the RENDERED characters
-(the source writes `\u2204` / `\u2205` escapes).
+The R-series byte-identity for the monitor stanza (the design section 6 grammar): every outcome line
+byte-exact, the STALE flips, the recovered forms, the summary arithmetic, the token budget, the KV
+stability and the fail-open renderer.
+
+The glyphs are asserted as the RENDERED characters, because the source writes `\u2204` / `\u2205`
+escapes.
 
 ## Scenarios
 
@@ -40,10 +41,11 @@ fail-open renderer. The glyphs are asserted as the RENDERED characters
 
 ## Fixtures
 
-The shared Harness plus the wave-3 fixtures; the results are injected
-directly into the entries (the fold is covered by the Jobs series), the
-clock advances drive the time-stale transitions, and `ExpectedTime`
-computes the deterministic HH:MM:SS bytes.
+The shared Harness plus the wave-3 fixtures.
+
+The results are injected directly into the entries (the fold is covered by the Jobs series), the
+clock advances drive the time-stale transitions, and `ExpectedTime` computes the deterministic
+HH:MM:SS bytes.
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

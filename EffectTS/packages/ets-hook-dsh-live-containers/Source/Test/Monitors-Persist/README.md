@@ -1,8 +1,7 @@
 # Monitors-Persist - the wave-3 M-series storage tests
 
-The monitor storage domain (the plugin's own P5-style open): the domain
-spec, the record shapes, the pre-bind buffer, the absent facility, the
-loud open failure and the recovery.
+The monitor storage domain (the own P5-style open of the plugin): the domain spec, the record shapes,
+the pre-bind buffer, the absent facility, the loud open failure and the recovery.
 
 ## Scenarios
 
@@ -28,9 +27,9 @@ loud open failure and the recovery.
 
 ## Fixtures
 
-The shared Harness plus `FakeStorage` (the fake facility: the captured
-spec, the record map, the read surface, the fail-open mode) and
-`OpenStorage` (the direct call of the module the Apply effect drives).
+The shared Harness plus `FakeStorage` (the fake facility: the captured spec, the record map, the
+read surface, the fail-open mode) and `OpenStorage` (the direct call of the module that the Apply
+effect drives).
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

@@ -3,26 +3,26 @@
 ## Identity
 
 - Package: `@playform/client-dsh-panel-family` (Classic/packages/client-dsh-panel-family), version
-  0.2.0 (package.json; the only family package above 0.1.0). The package tree currently carries
-  uncommitted changes - this plan describes the on-disk contract (SCHEME.md v4.1, README.md) without
-  asserting build/verification status.
+  0.2.0 (package.json; the only family package above 0.1.0), with uncommitted changes in the tree
+  today, so this plan describes the on-disk contract (SCHEME.md v4.1, README.md) without asserting
+  build/verification status.
 - Profile row id: `client-dsh-panel-family` (bundled in the desktop profile).
-- Exposes: the slot-aware registry service `playformFamilyPanel` with the methods
+- Exposes the slot-aware registry service `playformFamilyPanel` with the methods
   `register(section)`, `unregister(id)`, `entries(slot?)`, `subscribe(listener)`, `getVersion()`
   (bumps on every accepted mutation) and `open(target)` (launches an overlay view, wired by the
-  shell's overlay host). Two mounts, each declaring its child slot: the `conversation.view` tab
-  `playform-family` (order 20) declaring `playform.panel.section` (list, session) and the
-  `shell.overlay` panel `playform-family-overlay` declaring `playform.panel.overlay` (list, root).
-  Components render their slot through the `renderSlot` prop.
-- Adapters: no longer zero adapter logic. The package ships three reference adapters
-  (`Source/Variable/Reference/`) - normalize (`@playform/hook-dsh-normalize-dash`, namespace
-  `hook-dsh-normalize-dash`, order 10), tool-coach (`@playform/hook-dsh-tool-coach`, order 30),
-  suggester (`@playform/hook-dsh-convention-suggester`, order 40) - each wired via
+  overlay host of the shell). It also exposes two mounts, each declaring its child slot: the
+  `conversation.view` tab `playform-family` (order 20) declaring `playform.panel.section` (list,
+  session) and the `shell.overlay` panel `playform-family-overlay` declaring
+  `playform.panel.overlay` (list, root). Components render their slot through the `renderSlot` prop.
+- Adapters: no longer zero adapter logic, because the package ships three reference adapters
+  (`Source/Variable/Reference/`): normalize (`@playform/hook-dsh-normalize-dash`, namespace
+  `hook-dsh-normalize-dash`, order 10), tool-coach (`@playform/hook-dsh-tool-coach`, order 30), and
+  suggester (`@playform/hook-dsh-convention-suggester`, order 40), each wired via
   `Source/Function/Adapter.ts`. The ten residual adapters (the remaining normalize flavors,
   `plugin-dsh-normalize-file`, the three governors, `hook-dsh-ccr`) are documented but not shipped
   here.
 - Ledger: no ledger file (pure browser module; the host half of the Loader entry is an empty
-  `apply()`). Its lines go through the client logger (`Source/Variable/Lines.ts`), byte-exact:
+  `apply()`), and its lines go through the client logger (`Source/Variable/Lines.ts`), byte-exact:
 
 ```text
 client-dsh-panel-family: duplicate adapter refused for <bundle> in <slot>
@@ -35,19 +35,19 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/client-dsh-panel-family"}` → one entry, status schema (defaults: enabled
-    true, tabOrder 20, overlayMaxWidth 720, locale "en"; all knobs volatile).
+    Inspect Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-panel-family"}` for one entry with status schema (defaults:
+    enabled true, tabOrder 20, overlayMaxWidth 720, locale "en"; all knobs volatile).
 
 2. **The service check.**
 
-    Service check: the `playformFamilyPanel` registry service resolves; `getVersion()` bumps on
-    every accepted mutation.
+    The `playformFamilyPanel` registry service resolves, and `getVersion()` bumps on every accepted
+    mutation.
 
 3. **The ledger line.**
 
-    Ledger line: none from activation itself - verify activation through checks 1-2, the T5 tab and,
-    once an adapter duplicate is forced, the refusal line above.
+    Activation itself writes no ledger line, so verify activation through checks 1-2, the T5 tab,
+    and the refusal line above once an adapter duplicate is forced.
 
 ## Test cases
 
@@ -62,11 +62,11 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 
 ## Known live gaps
 
-- The package tree has uncommitted changes; the documented smokes (`Contract-And-Wiring` 13,
+- The package tree has uncommitted changes, so the documented smokes (`Contract-And-Wiring` 13,
   `Registry-And-Sections` 7, `Child-Slot-Model` 10, `Reference-Adapter` 14 per SCHEME §10) are the
   on-disk documentation, not a fresh verification claim from this plan.
 - The plain-field bridge resolves, in order, the `panelFamilyHost` package's `panelFamilyBridge`
-  client service then `remote.playformFamilyPanel.editFull`; per that package's docs the browser
+  client service then `remote.playformFamilyPanel.editFull`, and per that package's docs the browser
   half is inert until the generated Remote contribution lands, so in a live run plain fields may
   stay read-only with the bridge-unavailable refusal line.
 
@@ -78,8 +78,8 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/client-dsh-panel-family run prepublishOnly`
 - Smokes: `node Classic/packages/client-dsh-panel-family/Target/Test/<Folder>/Test.js` for each
-  folder under `Source/Test/`. Then the app restart; the client half reloads with the client module
-  system.
+  folder under `Source/Test/`, then restart the app, and the client half reloads with the client
+  module system.
 
 ## Report stub
 

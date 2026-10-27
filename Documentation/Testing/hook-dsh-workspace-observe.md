@@ -4,18 +4,19 @@
 
 - Package: `@playform/hook-dsh-workspace-observe` (Classic/packages/hook-dsh-workspace-observe).
 - Profile row id: `hook-dsh-workspace-observe` (bundled in the desktop profile).
-- Exposes: the `workspaceObserve` service concept, but functionally a listener: on every fs/observed
-  event (heard on the ROOT context through the factory's `Wire` registration) it writes one
-  observation stamp (path, observed version, origin, the plugin's own monotonic sequence) into its
-  KV domain `workspace_observe`. The conversation never sees the stamps; a later wave's events
+- Exposes the `workspaceObserve` service concept, but functions as a listener: on every fs/observed
+  event (heard on the ROOT context through the `Wire` registration of the factory) it writes one
+  observation stamp (path, observed version, origin, the monotonic sequence of the plugin) into its
+  KV domain `workspace_observe`. The conversation never sees the stamps, and a later wave's events
   surface them. The listener is a SYNCHRONOUS recorder: no awaits, no throws, no I/O, no file
   content ever read, no wall clock (WAVE-1-BRIEF.md section 5).
-- Trace bus (SCHEME "The listener"): each RECORDED stamp is then emitted on the family's trace bus
-  as `observe/stamp` (the indexer's first source, D5) via `Source/Trace/Adapter.ts`, payload
-  `{ path, version, origin }` (the hook's own sequence stays private). The bus (`ctx.trace`) is
-  provided by `@playform/plugin-dsh-factory`, which the hook already injects; the adapter resolves
-  it through the factory's probe-once `Seam` accessor, so a context without the bus records stamps
-  exactly as before and emits nothing. The emission never throws into the recorder.
+- Trace bus (SCHEME "The listener"): each RECORDED stamp is then emitted on the trace bus of the
+  family as `observe/stamp` (the first source of the indexer, D5) via `Source/Trace/Adapter.ts`,
+  with payload `{ path, version, origin }` (the sequence of the hook stays private). The bus
+  (`ctx.trace`) is provided by `@playform/plugin-dsh-factory`, which the hook already injects, and
+  the adapter resolves it through the probe-once `Seam` accessor of the factory, so a context
+  without the bus records stamps exactly as before and emits nothing. The emission never throws into
+  the recorder.
 - Service surface (SCHEME section 1): `ctx.workspaceObserve.stamp(path)`, `.stamps(limit?)` (the
   ring, newest first), `await .manual(path)` (origin `manual`, ledger
   `manual <path> version <version>`, absent target records version `absent`), `.statistics()` →
@@ -23,27 +24,27 @@
 - Config fields (SCHEME section 3, all volatile): `logFile`, `log` (default true), `enabled`
   (default false - the IDLE-forever posture), `domain` (default `workspace_observe`, non-empty,
   fail-loud), `maxStamps` (1000, integer ≥ 1, fail-loud), `include` ([]), `exclude` (the glob
-  triple), `policy` (the D6 allowlist block; RECORD action, automatic, no gated action).
-- Ledger: logFile `~/.dsh/playform/hook-dsh-workspace-observe.log`; the module identity for the
+  triple), and `policy` (the D6 allowlist block; RECORD action, automatic, no gated action).
+- Ledger: logFile `~/.dsh/playform/hook-dsh-workspace-observe.log`, and the module identity for the
   State build is `observe`, so the frozen lines carry the `observe: ` prefix.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-workspace-observe"}` → one entry, status schema (defaults: log
-    true, domain workspace_observe, maxStamps 1000, include [], exclude triple, policy block).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-observe"}` for one entry with status schema (defaults:
+    log true, domain workspace_observe, maxStamps 1000, include [], exclude triple, policy block).
 
 2. **The service check.**
 
-    Service check: none expected beyond the apply-registered `workspaceObserve` service (the
-    recorder registers no tools).
+    Nothing beyond the apply-registered `workspaceObserve` service is expected, because the recorder
+    registers no tools.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-observe.log`; a cold
-    mount logs `observe: disabled (enabled=false)` and no listener is wired.
+    The activated line appears in `~/.dsh/playform/hook-dsh-workspace-observe.log`, a cold mount
+    logs `observe: disabled (enabled=false)`, and no listener is wired.
 
 ## Test cases
 
@@ -61,7 +62,7 @@
 
 - Built and smoked (SCHEME: 45 checks across 3 folders - `Wiring-And-Stamps` 16, `Guards-And-Ring`
   15, `Storage-And-Service` 14). Live watch items: stamps evicted at maxStamps with the byte-exact
-  capped line, malformed-event containment, and any await/throw in the listener (must be
+  capped line, malformed-event containment, and any await/throw in the listener (which must stay
   synchronous).
 
 ## Fix loop
@@ -71,7 +72,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-workspace-observe run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-workspace-observe/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/`. Then the app restart.
+  under `Source/Test/`, then restart the app.
 
 ## Report stub
 

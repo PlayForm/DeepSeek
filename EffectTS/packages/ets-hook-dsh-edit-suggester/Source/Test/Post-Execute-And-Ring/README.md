@@ -1,9 +1,8 @@
 Post-Execute-And-Ring - the listener behavior tests
 
-The tools/post-execute and agent/pre-step listeners against the fake ctx:
-the emit path, the pass-through paths, the abstention and suppress paths,
-the block-decision shape, the per-agent ring isolation, and the per-turn
-reset.
+The tools/post-execute and agent/pre-step listeners against the fake ctx: the emit path, the
+pass-through paths, the abstention and suppress paths, the block-decision shape, the per-agent ring
+isolation, and the per-turn reset.
 
 ## Scenarios
 
@@ -33,11 +32,13 @@ reset.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target). No fake clock: every timing assertion is on the
-ring's counters and the cooldown window. The judged relative paths resolve
-against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the harness's
-`workingDirectory` service), so the pack's package-relative companions exist.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+
+No fake clock is needed, because every timing assertion is on the counters of the ring and the
+cooldown window.
+
+The judged relative paths resolve against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the
+`workingDirectory` service of the harness), so the package-relative companions of the pack exist.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-edit-suggester: ` prefix)
 

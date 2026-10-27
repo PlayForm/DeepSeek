@@ -1,11 +1,11 @@
 # Monitors-Engine - the wave-3 M-series engine tests
 
-The live file monitor engine: the enrollment through the fs/observed
-observer (L11, watchlist-gated), the classification, the debounce
-coalescing, the admission coalesce (coalesce-not-queue), the retirement,
-the overflow collapse and the per-glob opt-out. Every timing transition is
-a clock advance plus a checkpoint (an assemble pass or an observed event) -
-never a sleep.
+The live file monitor engine: the enrollment through the fs/observed observer (L11, watchlist-gated),
+the classification, the debounce coalescing, the admission coalesce (coalesce-not-queue), the
+retirement, the overflow collapse and the per-glob opt-out.
+
+Every timing transition is a clock advance plus a checkpoint (an assemble pass or an observed
+event), never a sleep.
 
 ## Scenarios
 
@@ -38,10 +38,9 @@ never a sleep.
 
 ## Fixtures
 
-The shared Harness plus the wave-3 fixtures: `FireObserved` (the fs/observed
-trigger through the L11 observer), `FlipLive` (the volatile commit plus the
-loader event), `MonitorConfig` (the wave-3 config shape), `FakeJobsHub` and
-`FakeShell` (the registry and the governed path), and the wave-2 assemble
+The shared Harness plus the wave-3 fixtures: `FireObserved` (the fs/observed trigger through the L11
+observer), `FlipLive` (the volatile commit plus the loader event), `MonitorConfig` (the wave-3 config
+shape), `FakeJobsHub` and `FakeShell` (the registry and the governed path), and the wave-2 assemble
 checkpoint (`WaveAssemble`).
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)

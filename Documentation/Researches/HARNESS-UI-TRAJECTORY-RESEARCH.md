@@ -28,8 +28,8 @@ HARNESS-UI-TRAJECTORY-RESEARCH
 ==============================
 
 Agent: R-UI-3 Date: 2026-10-20 Question: can the harness TRAJECTORY screen
-(dsh-client-ui-trajectory) be modified/extended through the plugin system? How should the family's
-per-plugin panel adapters + central panel plugin be architected?
+(dsh-client-ui-trajectory) be modified or extended through the plugin system? How should the
+per-plugin panel adapters and the central panel plugin of the family be architected?
 
 Sources read in place (never extracted):
 

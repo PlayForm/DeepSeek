@@ -4,47 +4,47 @@
 
 - Package: `@playform/plugin-dsh-workspace-context` (Classic/packages/plugin-dsh-workspace-context).
 - Profile row id: `plugin-dsh-workspace-context` (bundled in the desktop profile).
-- Exposes: the `workspaceContext` service (`ctx.workspaceContext` - `packet(query)`, `lenses()`,
-  `focusOf(caller)`, `statistics()`) and the read-only `workspace_context` tool. The orientation
-  packet assembly under the token budget, built from `ctx.workspaceGraph` (an absent sibling
-  degrades to the honest `workspace graph unavailable` OPEN line).
+- Exposes the `workspaceContext` service (`ctx.workspaceContext` - `packet(query)`, `lenses()`,
+  `focusOf(caller)`, `statistics()`) and the read-only `workspace_context` tool. It assembles the
+  orientation packet under the token budget, built from `ctx.workspaceGraph`, where an absent sibling
+  degrades to the honest `workspace graph unavailable` OPEN line.
 - Config (all volatile; hot edits commit without remounting): `logFile`
   `~/.dsh/playform/plugin-dsh-workspace-context.log`, `enabled` false, `budgetTokens` 2000 (the
   target), `budgetMaximum` 4000 (the hard cap, >= target), `lenses` `["code", "docs", "tests"]`,
   `lensDefault` `code`, `neighborLimit` 20, `evidenceLimit` 12, `mapLimit` 12, `workspaceName`
-  `workspace`, `policy` (the D6 allowlist defaults).
+  `workspace`, and `policy` (the D6 allowlist defaults).
 - Ledger lines (module-owned, byte-stable, prefixed `context: `):
   `` `context: disabled (enabled=false)` ``,
   `` `context: activated (budget=<target>/<max>, lenses=<n>)` ``,
   `` `context: packet <focus> (<tokens> tok, lens <lens>)` ``,
   `` `context: clamped (<from> -> <to> tok, budget <max>)` ``,
   `` `context: stale <id> (caller held <version>)` ``, `` `context: focus <caller> -> <id>` ``.
-- The packet memo: `packet(query)` is served through a bounded memo (256 entries) keyed by the
-  query's five fields plus the service's own knobs; a hit returns the SAME packet object and writes
-  no second `packet` line. The graph's `indexRevision` is deliberately NOT part of the key. The
-  invalidation is the trace's: the graph's `graph/invalidated` event (consumed through
-  `Source/Trace/Adapter.ts` and `Source/Trace/Invalidate.ts`) clears the memo wholesale; the bus
-  (`ctx.trace`, provided by the factory) is optional - without it the memo lives until the process
-  ends. The invalidation is silent: no new ledger line, the trace ring is the evidence.
+- The packet memo: `packet(query)` is served through a bounded memo (256 entries) keyed by the five
+  fields of the query plus the own knobs of the service, and a hit returns the SAME packet object and
+  writes no second `packet` line. The `indexRevision` of the graph is deliberately NOT part of the
+  key. The invalidation belongs to the trace: the `graph/invalidated` event of the graph (consumed
+  through `Source/Trace/Adapter.ts` and `Source/Trace/Invalidate.ts`) clears the memo wholesale, and
+  the bus (`ctx.trace`, provided by the factory) is optional, so without it the memo lives until the
+  process ends. The invalidation is silent: no new ledger line, and the trace ring is the evidence.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-workspace-context"}` → one entry, status schema (defaults:
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-context"}` for one entry with status schema (defaults:
     budgetTokens 2000 / budgetMaximum 4000, 3 lenses, lensDefault code, neighborLimit 20,
     evidenceLimit 12, mapLimit 12, workspaceName workspace, the D6 policy block).
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService `workspaceContext` → resolves;
-    the `workspace_context` tool is registered (read-only).
+    `cordis_inspect_query` host/Service/listService `workspaceContext` resolves, and the
+    `workspace_context` tool is registered (read-only).
 
 3. **The ledger line.**
 
-    Ledger line: `context: activated (budget=2000/4000, lenses=3)` in
-    `~/.dsh/playform/plugin-dsh-workspace-context.log`; a cold mount logs
+    The line `context: activated (budget=2000/4000, lenses=3)` appears in
+    `~/.dsh/playform/plugin-dsh-workspace-context.log`, and a cold mount logs
     `context: disabled (enabled=false)`.
 
 ## Test cases
@@ -60,9 +60,10 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: packets silently exceeding the cap and the lenses not all
-  contributing when the graph is empty (the known gap upstream); also the resolved pack's `policy`
-  override (the wiring is the next refinement - the block currently documents the posture only).
+- Not dogfooded yet, so watch for packets silently exceeding the cap and the lenses not all
+  contributing when the graph is empty (the known gap upstream), plus the `policy` override of the
+  resolved pack (the wiring is the next refinement, because the block currently documents the posture
+  only).
 
 ## Fix loop
 
@@ -71,7 +72,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-workspace-context run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-workspace-context/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/`. Then the app restart.
+  folder under `Source/Test/`, then restart the app.
 
 ## Report stub
 

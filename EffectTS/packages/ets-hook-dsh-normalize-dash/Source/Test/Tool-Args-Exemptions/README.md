@@ -4,14 +4,17 @@ What this test verifies.
 
 ## Intent
 
-The tool-args gate and its exemption family: the stream-level surfaces where
-tool arguments can and cannot be rewritten. This is its own folder because
-the exemption rules are the safety story - `edit`'s old_string must match
-real file bytes, and the per-call `__normalize` marker is the user's escape
-hatch - while the plain gate rewrites the deltas AND the assembled block so
-consumers never see inconsistent arguments. The source suite's Runs 7, 7b,
-7c and 7d (minus the journal-count leaves, which live in Journal-And-Custom),
-moved verbatim.
+The tool-args gate and its exemption family: the stream-level surfaces where tool arguments can and
+cannot be rewritten.
+
+This is its own folder because the exemption rules are the safety story.
+
+The `old_string` of `edit` must match real file bytes, and the per-call `__normalize` marker is the
+escape hatch of the user, while the plain gate rewrites the deltas AND the assembled block so that
+consumers never see inconsistent arguments.
+
+The source suite's Runs 7, 7b, 7c and 7d (minus the journal-count leaves, which live in
+Journal-And-Custom), moved verbatim.
 
 ## Scenario
 
@@ -57,13 +60,14 @@ moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. Each run
-builds `Validate({ normalizeToolArguments: true, logFile })` and drives its
-stream through the registered `llm/stream` listener: Run 7 feeds a
-tool-call-delta + block-end pair for `write`; 7b feeds the same pair for
-`edit`; 7c feeds the marker-carrying first delta, a second delta and the
-assembled block; 7d feeds two calls with different ids. The ledger file is
-cleared before every run (the source suite's rm points) and read after the
+The harness fake ctx + the REAL factory + the REAL dash apply.
+
+Each run builds `Validate({ normalizeToolArguments: true, logFile })` and drives its stream through
+the registered `llm/stream` listener: Run 7 feeds a tool-call-delta + block-end pair for `write`, 7b
+feeds the same pair for `edit`, 7c feeds the marker-carrying first delta, a second delta and the
+assembled block, and 7d feeds two calls with different ids.
+
+The ledger file is cleared before every run (the rm points of the source suite) and read after the
 10ms settle.
 
 ## Expected ledger strings (byte-exact)
@@ -77,11 +81,9 @@ cleared before every run (the source suite's rm points) and read after the
 
 ## Edge cases
 
-- The edit exemption holds at BOTH levels (delta and assembled block) and
-  with the flag on - a rewrite would corrupt old_string matching.
-- The raw marker is stripped but never counted as a normalization (no count
-  line, no journal record).
-- The marker state is per call id - the next id resumes normalization (7d).
+- The edit exemption holds at BOTH levels (delta and assembled block) and with the flag on, because a rewrite would corrupt old_string matching.
+- The raw marker is stripped but never counted as a normalization (no count line, no journal record).
+- The marker state is per call id, so the next id resumes normalization (7d).
 - The rewritten tool-call-delta keeps id/index/name (the new-object check).
 
 ## Expected count

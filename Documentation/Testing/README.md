@@ -3,8 +3,8 @@
 Every plugin test in this folder follows this methodology.
 
 Each per-plugin file (`Documentation/Testing/<package>.md`) is an instance of this template and uses
-that package's `README.md`, `SCHEME.md`, `Source/Variable/Config.ts`, `cordis.patch.yml`, and
-profile row as its base.
+the `README.md`, `SCHEME.md`, `Source/Variable/Config.ts`, `cordis.patch.yml`, and profile row of
+that package as its base.
 
 ## The state
 
@@ -12,7 +12,7 @@ The 35 new packages are enabled in the desktop profile (`~/.dsh/profiles/desktop
 
 Each package name appears in the profile `package.json` under `dsh.profile.bundles`, its row exists
 in the profile `cordis.yml` (resolved from the `insert:` block of each bundle's `cordis.patch.yml`),
-and the app was **restarted** so the bundle layers composed at host boot.
+and the app was **restarted** so that the bundle layers composed at host boot.
 
 The live app runs them.
 
@@ -33,14 +33,14 @@ Before any behavior test, prove that the plugin activated:
     For tool plugins, the Tool inspect provider lists the tool under its tool surface
     (`cordis_inspect_list` first, then the list method of the tool provider).
 
-    A missing tool means the tool registration did not run or the plugin is disabled.
+    A missing tool means that the tool registration did not run or the plugin is disabled.
 
 3. **Ledger line.**
 
     The `activated (...)` string of the package (quoted byte-exact in each per-plugin file) appears
     in its logFile (the `logFile` Config default, usually `~/.dsh/<name>.log`) or in the logger.
 
-    A cold mount instead logs the byte-exact `disabled (enabled=false)` line. If you see that line,
+    A cold mount instead logs the byte-exact `disabled (enabled=false)` line, and that line means
     the row is present but the plugin is disabled.
 
 4. **Services.**
@@ -92,7 +92,7 @@ Before any behavior test, prove that the plugin activated:
 
 7. **Restart.**
 
-    **Restart** the app; a code fix does not hot-reload, so re-run the live test.
+    **Restart** the app, because a code fix does not hot-reload, and then re-run the live test.
 
 ## The report format (per plugin)
 
@@ -116,7 +116,7 @@ Before any behavior test, prove that the plugin activated:
 - **`plugin-dsh-batch-edit` inject defect - FIXED.** The first dogfood failed every call with
   `cannot get property "fs" without inject`; `"fs"` is now in the inject list, and the batch engine
   runs.
-- **Workspace graph indexing - FIXED.** The graph no longer relies on a missing trigger;
+- **Workspace graph indexing - FIXED.** The graph no longer relies on a missing trigger, because
   `plugin-dsh-workspace` exposes the `workspace_index` tool (path?, maxFiles?) that drives
   `indexWorkspace` of the graph service, so `workspace_map`/`workspace_find` return real data after
   an index.

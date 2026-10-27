@@ -9,26 +9,28 @@
 
 ## The role
 
-The **dash normalizer for model output** - a DeepSeek Harness plugin that hooks the
+The **dash normalizer for model output**: a DeepSeek Harness plugin that hooks the
 [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
-normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript: em dashes, en
-dashes and seventeen exotic relatives → `-`.
+normalizes the unicode dash family to ASCII hyphen-minus, live in the transcript.
 
-A **CLASS flavor** of the normalize family: the core's `Dashes` class plus a configurable
+Em dashes, en dashes and seventeen exotic relatives become `-`.
+
+It is a **CLASS flavor** of the normalize family: the `Dashes` class of the core plus a configurable
 `replacement` (default `-`).
 
-It also registers the family's **`raw-write` tool** - a write wrapper with an explicit `normalize`
-parameter (default **false = verbatim**), exempt from the stream normalization by name like `edit`.
+The plugin also registers the family's **`raw-write` tool**: a write wrapper with an explicit
+`normalize` parameter (default **false = verbatim**), exempt from the stream normalization by name
+like `edit`.
 
 The @-sentence identity: **Hook @ DSH @ Normalize @ Dash**.
 
-Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
-the normalization is deliberately **VISIBLE; it IS the feature**, which is why the injection point
-was chosen.
+Unlike the governance family, the rewrite flows into both the live UI and the durable transcript,
+because the normalization is deliberately **VISIBLE; it IS the feature**, which is why the injection
+point was chosen.
 
-The shared Effect-TS plumbing - the runtime wiring, the stream machinery, the `Activate`/`Append`
-ledger composer and the generic `normalize-overpass` handler - comes from the base
+The shared Effect-TS plumbing (the runtime wiring, the stream machinery, the `Activate`/`Append`
+ledger composer and the generic `normalize-overpass` handler) comes from the base
 [ets-base-dsh](../ets-base-dsh) package.
 
 ## The surfaces
@@ -60,12 +62,13 @@ ledger composer and the generic `normalize-overpass` handler - comes from the ba
 | `toolResultsExempt`      | string[] | `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question` | a tool result whose exec name is listed passes the tool-results arm by identity (volatile)                                                     |
 
 The module composes the factory helper with `shared: false`, so the shared block is only `log` and
-`logFile`; the module's own fields follow in schema order.
+`logFile`, and the own fields of the module follow in schema order.
 
-`raw-write`'s `normalize` parameter (absent/false = verbatim, `true`/`"all"` = all six transforms in
-the family's fixed order, or an array of flavor names = only the selected flavors) and its `govern`
-parameter (absent/false = no governance chain, `true`/`"all"` = all registered steps for the
-target's basename, or named steps only) are per-call tool parameters, not config fields.
+The `normalize` parameter of `raw-write` (absent or false = verbatim, `true`/`"all"` = all six
+transforms in the fixed order of the family, or an array of flavor names = only the selected
+flavors) and its `govern` parameter (absent or false = no governance chain, `true`/`"all"` = all
+registered steps for the basename of the target, or named steps only) are per-call tool parameters
+and not config fields.
 
 ## The ledger
 
@@ -76,12 +79,13 @@ hook-dsh-normalize-dash: overpass: normalized N char(s) in tool result <toolName
 hook-dsh-normalize-dash: overpass: normalized N char(s) in step batch (turn T step S)
 ```
 
-The activation line is written by `apply()`; the count line and the overpass lines only appear on a
-normal completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream
-writes no line).
+The activation line is written by `apply()`.
 
-The `hook-dsh-normalize-dash: ` prefix is the `<State.Module>:` identity the factory's `Append`
-composes - the Classic identity, kept byte-identical across the two variants.
+The count line and the overpass lines only appear on a normal completion or an N > 0 pass, because N
+= 0 is a true no-op with no ledger line, and a thrown-away stream writes no line.
+
+The `hook-dsh-normalize-dash: ` prefix is the `<State.Module>:` identity that `Append` of the
+factory composes: the Classic identity, kept byte-identical across the two variants.
 
 ## The build and the tests
 
@@ -99,9 +103,12 @@ composes - the Classic identity, kept byte-identical across the two variants.
 
 ## The plan
 
-The plan lives in the package's own [SCHEME.md](./SCHEME.md); the family position and the factory
-contract are documented in the [ets-plugin-dsh-factory](../ets-plugin-dsh-factory) and
-[ets-lib-dsh-core](../ets-lib-dsh-core) READMEs, and the hook point is the
+The plan lives in the own [SCHEME.md](./SCHEME.md) of the package.
+
+The family position and the factory contract are documented in the
+[ets-plugin-dsh-factory](../ets-plugin-dsh-factory) and [ets-lib-dsh-core](../ets-lib-dsh-core)
+READMEs, and the hook point is the
 [llm/stream](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
-waterfall of the LlmRuntime; the shared Effect-TS plumbing is the base
-[ets-base-dsh](../ets-base-dsh) package.
+waterfall of the LlmRuntime.
+
+The shared Effect-TS plumbing is the base [ets-base-dsh](../ets-base-dsh) package.

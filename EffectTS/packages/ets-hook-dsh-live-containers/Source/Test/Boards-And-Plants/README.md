@@ -1,15 +1,15 @@
 # Boards-And-Plants - the B-series smoke tests
 
-The planted blocks (CAN-2) and the I5 lease: the byte-exact board frames, the
-report channels, the lease windows and the close/withdraw lifecycle.
+The planted blocks (CAN-2) and the I5 lease: the byte-exact board frames, the report channels, the
+lease windows and the close/withdraw lifecycle.
 
 ## Scenarios
 
 - The board opens with the exact frame bytes (running/none rows, the total
   line, the expect count) and the byte-exact `plant opened` / `member
   enrolled` ledger lines.
-- The `[live-report]` splice pickup (G5) folds a child's report into the row
-  at the next assembly without any parent tool call.
+- The `[live-report]` splice pickup (G5) folds the report of a child into the
+  row at the next assembly without any parent tool call.
 - The lease: three silent parent turns render the byte-exact `[stale]` row
   exactly once with `lease expired <plantId> <agentId> (after 3 turns)`; a
   report folded in any turn resets the window; a member reporting every turn

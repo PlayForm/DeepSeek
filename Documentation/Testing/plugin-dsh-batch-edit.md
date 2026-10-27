@@ -4,11 +4,11 @@
 
 - Package: `@playform/plugin-dsh-batch-edit` (Classic/packages/plugin-dsh-batch-edit).
 - Profile row id: `plugin-dsh-batch-edit` (bundled in the desktop profile).
-- Exposes: the `batch_edit` tool - opens a machine, inserts files as PROCESSES, runs the transition
-  table (replace / insert-after / insert-before / remove-line / append / prepend) across every held
-  file in one go. Every write goes through Factory.Write; governed basenames run the factory's
-  direct path exactly once per write (the govern actor marker, Gate.ts route 2). The atomic gate is
-  all-or-nothing.
+- Exposes the `batch_edit` tool, which opens a machine, inserts files as PROCESSES, and runs the
+  transition table (replace / insert-after / insert-before / remove-line / append / prepend) across
+  every held file in one go. Every write goes through Factory.Write, and governed basenames run the
+  direct path of the factory exactly once per write (the govern actor marker, Gate.ts route 2). The
+  atomic gate is all-or-nothing.
 - Ledger lines (SCHEME §6, byte-stable): the activation proof
   `` `activated bundle <version> (...)` `` (with the config summary), the machine/transition
   contract lines (`machine opened <id> (<n> files, scope=<glob>)`,
@@ -18,29 +18,30 @@
 - The policy block (D6, SCHEME §5 step 0 / README "The policy block"): the config carries the shared
   per-action allowlist (`policy: Policy()`, mapped to `State.Allow`; write/commit/spawn = `approve`,
   read/index/record/suggest/message = `auto`). The `commit` action consults
-  `Decide(State.Allow, "write")` BEFORE any plan or write; the shipped default refuses the apply
+  `Decide(State.Allow, "write")` BEFORE any plan or write, so the shipped default refuses the apply
   until the user approves (flip `policy.write` to `auto`, or approve the batch through the
-  batch-decision hook). One volatile object - hot-editable; a resolved pack's `policy` section
-  overrides per action.
+  batch-decision hook). One volatile object stays hot-editable, and a resolved pack's `policy`
+  section overrides per action.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-batch-edit"}` → one entry, status schema (defaults:
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-batch-edit"}` for one entry with status schema (defaults:
     machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false,
     monitorChecksets [], policy.* D6 defaults).
 
-    Ships disabled (`enabled: false`; enables only by an explicit ACTIVATE in the profile).
+    The package ships disabled (`enabled: false`) and enables only by an explicit ACTIVATE in the
+    profile.
 
 2. **The tool check.**
 
-    Tool check: the Tool provider lists `batch_edit`.
+    The Tool provider lists `batch_edit`.
 
 3. **The ledger line.**
 
-    Ledger line: the `activated bundle ...` line in `~/.dsh/playform/plugin-dsh-batch-edit.log`.
+    The `activated bundle ...` line appears in `~/.dsh/playform/plugin-dsh-batch-edit.log`.
 
 ## Test cases
 
@@ -61,9 +62,9 @@ open | resume with `action=commit` on the same machine |
 - None known: the former `cannot get property "fs" without inject` defect is FIXED (the inject list
   is `["pluginFactory", "tools", "jobs"]` and the tool runs). The current operational posture to
   test: with the shipped `write: approve` policy a commit is refused (the apply gate, by design)
-  until the user approves - not a defect. Still open per SCHEME §9 (FUTURE): the bash-intercept
-  enforcement layer (v1 `interceptBash` is advisory only), the undo journal, the interactive
-  confirmation checkpoints.
+  until the user approves, which is not a defect. Still open per SCHEME §9 (FUTURE): the
+  bash-intercept enforcement layer (v1 `interceptBash` is advisory only), the undo journal, and the
+  interactive confirmation checkpoints.
 
 ## Fix loop
 
@@ -72,8 +73,8 @@ open | resume with `action=commit` on the same machine |
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-batch-edit run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-batch-edit/Target/Test/<Folder>/Test.js`
-  (Machine-And-Contract, Commit-And-Ops, Observers-And-Waterfalls) must stay green. Then the app
-  restart.
+  (Machine-And-Contract, Commit-And-Ops, Observers-And-Waterfalls) must stay green, then restart the
+  app.
 
 ## Report stub
 

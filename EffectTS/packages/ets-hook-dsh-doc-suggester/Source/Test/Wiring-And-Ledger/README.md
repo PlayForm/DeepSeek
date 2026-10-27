@@ -1,9 +1,8 @@
 Wiring-And-Ledger - the wiring and the ledger tests
 
-The doc suggester's loader wiring and its durable proof: the loader contract,
-the context-only listener registration, the byte-exact activation and
-disabled lines (logger and durable forms), the config fail-loud, the schema
-defaults on the built State, and the fs purity.
+The loader wiring of the doc suggester and its durable proof: the loader contract, the context-only
+listener registration, the byte-exact activation and disabled lines (logger and durable forms), the
+config fail-loud, the schema defaults on the built State, and the fs purity.
 
 ## Scenarios
 
@@ -29,10 +28,10 @@ defaults on the built State, and the fs purity.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target). No fake clock: the ring and the cooldown are counters
-driven by judged calls; the durable ledger's ISO stamps are matched with an
-anchored regex.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+
+No fake clock is needed, because the ring and the cooldown are counters driven by judged calls, and
+the ISO stamps of the durable ledger are matched with an anchored regex.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-doc-suggester: ` prefix)
 

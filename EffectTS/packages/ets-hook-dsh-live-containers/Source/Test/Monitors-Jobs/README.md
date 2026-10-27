@@ -1,8 +1,7 @@
 # Monitors-Jobs - the wave-3 M-series runner tests
 
-The D-series for the check runner: the dispatch through the SHIPPED G2
-wrapper (one wrapper, two callers), the settle mapping, the honesty
-cluster, the deadline kill and the fail-open paths.
+The D-series for the check runner: the dispatch through the SHIPPED G2 wrapper (one wrapper, two
+callers), the settle mapping, the honesty cluster, the deadline kill and the fail-open paths.
 
 ## Scenarios
 
@@ -44,9 +43,9 @@ cluster, the deadline kill and the fail-open paths.
 
 ## Fixtures
 
-The shared Harness plus the wave-3 fixtures: `FireObserved`, `FlipLive`,
-`MonitorConfig`, `FakeJobsHub` (whose settled events carry the started
-spec's kind), `FakeShell`, and the wave-2 assemble checkpoint.
+The shared Harness plus the wave-3 fixtures: `FireObserved`, `FlipLive`, `MonitorConfig`,
+`FakeJobsHub` (whose settled events carry the kind of the started spec), `FakeShell`, and the wave-2
+assemble checkpoint.
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

@@ -30,14 +30,18 @@ The complete scheme: every config field, every surface, every ledger string.
 
 `@playform/plugin-dsh-workspace-graph` now SERVES the declared query: `ctx.workspaceGraph` exposes
 `neighborhood(path, limit)` (and `indexWorkspace` to populate the graph in the first place), derived
-from the W1 `contains`/`imports` edges. The `Real-Graph-Neighborhood` folder proves the chain
-against the real service - the note lists the anchor (definition), the importing test file (tests)
-and the other importer, and an anchor the graph does not know honestly falls back to the static set.
-The anchor is the first quoted `.ts` path in the tool's arguments; the graph matches it by exact
-display path, else by path suffix (a repo-relative anchor works).
+from the W1 `contains`/`imports` edges.
+
+The `Real-Graph-Neighborhood` folder proves the chain against the real service: the note lists the
+anchor (definition), the importing test file (tests) and the other importer, and an anchor that the
+graph does not know honestly falls back to the static set.
+
+The anchor is the first quoted `.ts` path in the arguments of the tool, and the graph matches it by
+exact display path, else by path suffix (a repo-relative anchor works).
 
 W1 still has no `calls`/`references` edges, so the component carries importers rather than callers:
-the pack's note text still says "callers", and the graph's own SCHEME documents the deferral.
+the note text of the pack still says "callers", and the own SCHEME of the graph documents the
+deferral.
 
 ## Surfaces
 
@@ -53,11 +57,13 @@ the pack's note text still says "callers", and the graph's own SCHEME documents 
 | `Neighborhood` | 1        | 0.6       | path-shape (0.4), symbol-shape (0.5), glob-shape (0.3) | `workspaceGraph.neighborhood(anchor)`; empty component → static fallback; absent/failed → abstain |
 | `Sibling`      | 2        | 0.5       | usage-shape (0.5), family-shape (0.3)                  | Static: `Documentation/Plugins/PLUGIN-FAMILY.md`, the inventory, `**/README.md`                   |
 
-Confidence: `k = sigmoid(Σ weights − 0.6)`; the note emits iff `k ≥ gate`, the candidate set
-survives the cap and the exclusion, and the cooldown/cap allow it. The pack's per-intent thresholds
-(0.6 / 0.5) are set so that only full-evidence probes cross them (Neighborhood needs all three
-signals: k 0.65; Sibling needs both: k 0.55) - the config `threshold` may raise the gate, never
-lower it below the pack floor.
+Confidence is `k = sigmoid(Σ weights − 0.6)`, and the note emits only if `k ≥ gate`, the candidate
+set survives the cap and the exclusion, and the cooldown and cap allow it.
+
+The per-intent thresholds of the pack (0.6 / 0.5) are set so that only full-evidence probes cross
+them: Neighborhood needs all three signals (k 0.65) and Sibling needs both (k 0.55).
+
+The config `threshold` may raise the gate, never lower it below the pack floor.
 
 ## Ledger strings (byte-exact, module-owned)
 
@@ -75,7 +81,18 @@ graph-suggester: suppressed cap <Intent>
 
 ## Identity (the four agreeing places)
 
-1. Package name: `@playform/hook-dsh-graph-suggester`.
-2. The `name` export: `graph-suggester`.
-3. The State build's `module:` option: `graph-suggester`.
-4. The ledger `logFile` default: `~/.dsh/playform/ets-hook-dsh-graph-suggester.log`.
+1. **Package name.**
+
+    `@playform/hook-dsh-graph-suggester`.
+
+2. **The `name` export.**
+
+    `graph-suggester`.
+
+3. **The `module:` option of the State build.**
+
+    `graph-suggester`.
+
+4. **The `logFile` default of the ledger.**
+
+    `~/.dsh/playform/ets-hook-dsh-graph-suggester.log`.

@@ -4,14 +4,16 @@ What this test verifies.
 
 ## Intent
 
-The journaling mechanics of the dash flavor plus the custom-replacement run
-and the transport-boom error path. This is its own folder because the P5
-journal record is a storage-domain contract (event/path/detail/at, routed to
-the factory-level pre-bind buffer) and because its arithmetic is CUMULATIVE
-across the whole source suite - isolating it lets the cumulative counts be
-reproduced deterministically. The source suite's Run 1 journal block, Run 2
-journal leaf, Run 3, Run 4, Run 5 journal leaf, and the journal leaves of
-Runs 7/7b/7c/7d, moved verbatim.
+The journaling mechanics of the dash flavor plus the custom-replacement run and the transport-boom
+error path.
+
+This is its own folder because the P5 journal record is a storage-domain contract
+(event/path/detail/at, routed to the factory-level pre-bind buffer) and because its arithmetic is
+CUMULATIVE across the whole source suite, so isolating it lets the cumulative counts be reproduced
+deterministically.
+
+The source suite's Run 1 journal block, Run 2 journal leaf, Run 3, Run 4, Run 5 journal leaf, and the
+journal leaves of Runs 7/7b/7c/7d, moved verbatim.
 
 ## Scenario
 
@@ -58,15 +60,19 @@ Runs 7/7b/7c/7d, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. The factory
-instance is the harness Furnace; `Furnace.PendingJournal` is the cumulative
-counter. The fixture streams replay, in suite order and byte-identically,
-the exact chunks of the source suite's Runs 1, 2, 3, 4, 5, 7, 7b, 7c and 7d
-so the cumulative journal arithmetic reproduces the source suite's values
-(1, 1, 2, 2, 2, 3, 3, 3, 4) in this folder standalone AND under the
-aggregate. The durable ledger is cleared at folder start and at the source
-suite's rm points; the 10ms settle waits before ledger reads are kept. The
-Run 3 config is `Validate({ replacement: "$&" })`.
+The harness fake ctx + the REAL factory + the REAL dash apply.
+
+The factory instance is the harness Furnace, and `Furnace.PendingJournal` is the cumulative counter.
+
+The fixture streams replay, in suite order and byte-identically, the exact chunks of the source
+suite's Runs 1, 2, 3, 4, 5, 7, 7b, 7c and 7d, so the cumulative journal arithmetic reproduces the
+values of the source suite (1, 1, 2, 2, 2, 3, 3, 3, 4) in this folder standalone AND under the
+aggregate.
+
+The durable ledger is cleared at folder start and at the rm points of the source suite, and the 10ms
+settle waits before ledger reads are kept.
+
+The Run 3 config is `Validate({ replacement: "$&" })`.
 
 ## Expected ledger strings (byte-exact)
 
@@ -75,19 +81,15 @@ Run 3 config is `Validate({ replacement: "$&" })`.
 - `normalized 1 dash char(s) in one stream` (the custom-replacement record
   and the 7d record; the ledger line read via `includes`).
 - `normalized 2 dash char(s) in one stream` (the tool-args record).
-(The full logger lines carry the `hook-dsh-normalize-dash: ` prefix; the
-journal detail is the message text alone.)
+
+The full logger lines carry the `hook-dsh-normalize-dash: ` prefix, and the journal detail is the
+message text alone.
 
 ## Edge cases
 
-- N=0, upstream throw, and count-0 identity streams add NO record - the
-  three negative controls pin the "journal only when something was actually
-  replaced" rule.
-- The record routes to the factory pre-bind buffer, not the per-State queue
-  (Queue stays empty).
-- The custom replacement is inserted by a function replacer - "$&" would be
-  a pattern under a string replacer; the literal insertion proves the
-  function path.
+- N=0, upstream throw, and count-0 identity streams add NO record, so the three negative controls pin the rule "journal only when something was actually replaced".
+- The record routes to the factory pre-bind buffer and not the per-State queue (Queue stays empty).
+- The custom replacement is inserted by a function replacer: "$&" would be a pattern under a string replacer, so the literal insertion proves the function path.
 
 ## Expected count
 

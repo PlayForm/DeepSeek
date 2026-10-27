@@ -4,41 +4,42 @@
 
 - Package: `@playform/plugin-dsh-gitguard` (Classic/packages/plugin-dsh-gitguard).
 - Profile row id: `plugin-dsh-gitguard` (bundled in the desktop profile).
-- Exposes: no tools or services - it hooks `tools/pre-execute` as the DENY-LIST on the terminal/exec
-  tool surface: it intercepts terminal commands before execution and denies ANY git mutation pattern
+- Exposes no tools or services: it hooks `tools/pre-execute` as the DENY-LIST on the terminal/exec
+  tool surface, intercepting terminal commands before execution and denying ANY git mutation pattern
   (the 23 mutation subcommands per README: git add, commit, reset, push, tag, rm, checkout, branch,
   merge, stash, clean, rebase, revert, cherry-pick, mv, apply, am, bisect, gc, prune, worktree,
   submodule, notes) while allowing the read-only checks (git status, log, diff, show, rev-parse,
   ls-files, fetch). Denials surface ONCE as the refusal line
-  (`gitguard: refused "git <sub>" (<reason>) - git is read-only in this session ...`), never punish;
-  every denied attempt is ledgered for the user's audit.
+  (`gitguard: refused "git <sub>" (<reason>) - git is read-only in this session ...`) and never
+  punish, while every denied attempt is ledgered for the audit of the user.
 - The classification chain (SCHEME §4, in order): disabled → allow; no git segment → allow;
   allow-listed subcommand → allow (the allow-list wins over the deny-list); strict mode → deny;
-  deny-listed → deny; otherwise → allow. A compound command is judged by its WORST segment. Fail
-  open: any error in the guard body passes the dispatch unchanged.
+  deny-listed → deny; otherwise → allow. A compound command is judged by its WORST segment, and the
+  guard fails open, because any error in the guard body passes the dispatch unchanged.
 - Ledger lines (SCHEME §5, byte-stable): `disabled (enabled=false)`,
   `activated (strict=<bool>, denyPatterns=<n>, allowPatterns=<n>)`, `denied <sub> (<reason>)`;
   logFile `~/.dsh/playform/plugin-dsh-gitguard.log`.
-- The policy block (D6, SCHEME §3.1): the config composes the factory's shared `policy: Policy()`
-  (read/index/record/suggest/message = `auto`; write/commit/spawn = `approve`, declared for
-  uniformity - the guard never writes, commits or spawns), mapped to `State.Verdicts`. One volatile
-  object; a resolved pack's `policy` section overrides per action.
+- The policy block (D6, SCHEME §3.1): the config composes the shared `policy: Policy()` of the
+  factory (read/index/record/suggest/message = `auto`; write/commit/spawn = `approve`, declared for
+  uniformity because the guard never writes, commits or spawns), mapped to `State.Verdicts`. One
+  volatile object stays hot-editable, and a resolved pack's `policy` section overrides per action.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-gitguard"}` → one entry, status schema (defaults: denyPatterns
-    DEFAULT_DENY, allowPatterns DEFAULT_ALLOW, strict false, exclude [], policy.* D6 defaults).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-gitguard"}` for one entry with status schema (defaults:
+    denyPatterns DEFAULT_DENY, allowPatterns DEFAULT_ALLOW, strict false, exclude [], policy.* D6
+    defaults).
 
 2. **The tool check.**
 
-    Tool check: none expected (it wraps the existing terminal surface).
+    No tool is expected, because the hook wraps the existing terminal surface.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-gitguard.log`; a cold mount logs
+    The activated line appears in `~/.dsh/playform/plugin-dsh-gitguard.log`, and a cold mount logs
     `disabled (enabled=false)` and wires NOTHING.
 
 ## Test cases
@@ -56,8 +57,8 @@ the guard is skipped entirely, silently | no denial, no line |
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: false positives on command strings merely containing "git" (e.g.
-  `echo git commit` — note the subcommand extractor skips leading env assignments and flags), and
+- Not dogfooded yet, so watch for false positives on command strings that merely contain "git" (e.g.
+  `echo git commit`, where the subcommand extractor skips leading env assignments and flags), and
   fetch being denied (it must be allowed).
 
 ## Fix loop
@@ -67,7 +68,7 @@ the guard is skipped entirely, silently | no denial, no line |
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-gitguard run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-gitguard/Target/Test/<Folder>/Test.js` per folder under
-  `Source/Test/`. Then the app restart.
+  `Source/Test/`, then restart the app.
 
 ## Report stub
 

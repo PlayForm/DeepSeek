@@ -1,10 +1,9 @@
 # Jobs-And-Detach - the J-series smoke tests
 
-The live tool-call transform (CAN-1, I1 acceptance additions, I2
-AWAIT-MARKER): the pre-execute decision arm + the execute carrier arm, the
-exact re-dispatch spec, the fabricated result contract, the dedup, the
-live-timeout, the awaited skip, the capacity path, the history heuristics and
-the `{"__await":true` first-key marker.
+The live tool-call transform (CAN-1, I1 acceptance additions, I2 AWAIT-MARKER): the pre-execute
+decision arm + the execute carrier arm, the exact re-dispatch spec, the fabricated result contract,
+the dedup, the live-timeout, the awaited skip, the capacity path, the history heuristics and the
+`{"__await":true` first-key marker.
 
 ## Scenarios
 
@@ -48,11 +47,10 @@ the `{"__await":true` first-key marker.
 
 ## Fixtures
 
-The shared Harness (the fake ctx + the REAL factory + the REAL built Target +
-the fake clock) plus the wave-2 fixtures: `FakeJobsHub` (the registry with the
-captured specs and the settle trigger), `FakeShell` + `FakeProcess` (the
-observed streams), `FakePolicy`, `MakeWave` (the services attached), `Pending`
-(the completion provider read through the registered dynamic context).
+The shared Harness (the fake ctx + the REAL factory + the REAL built Target + the fake clock) plus
+the wave-2 fixtures: `FakeJobsHub` (the registry with the captured specs and the settle trigger),
+`FakeShell` + `FakeProcess` (the observed streams), `FakePolicy`, `MakeWave` (the services attached),
+and `Pending` (the completion provider read through the registered dynamic context).
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

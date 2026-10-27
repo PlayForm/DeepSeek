@@ -1,9 +1,8 @@
 Workspace-Gate - the workspace gate and the existence filter
 
-The `tools/post-execute` listener against the fake ctx and REAL temp
-workspaces: a foreign workspace abstains before detect/score, our workspace
-emits only the companions that exist, an emptied family abstains
-`no-companions`, and a foreign call never poisons the next in-workspace call.
+The `tools/post-execute` listener against the fake ctx and REAL temp workspaces: a foreign workspace
+abstains before detect and score, our workspace emits only the companions that exist, an emptied
+family abstains `no-companions`, and a foreign call never poisons the next in-workspace call.
 
 ## Scenarios
 
@@ -13,6 +12,7 @@ emits only the companions that exist, an emptied family abstains
   with no note, the logger and durable forms carry the byte-exact
   `abstained foreign-workspace  0.00` line, no `suggest` line appears, and the
   foreign call does not touch the ring (calls 0, no touched path, no note).
+
   A service getter that THROWS still abstains with no logger warning (the
   probe never throws).
 - G2: with NO `workingDirectory` service at all, the absolute foreign path
@@ -31,10 +31,11 @@ emits only the companions that exist, an emptied family abstains
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target) plus `node:fs` temp trees under the OS temp dir. The
-optional service is injected as `Run.Context.workingDirectory = { get }` -
-the same shape the real harness service exposes, never a hard inject.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target)
+plus `node:fs` temp trees under the OS temp dir.
+
+The optional service is injected as `Run.Context.workingDirectory = { get }`, the same shape that
+the real harness service exposes, never a hard inject.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-doc-suggester: ` prefix)
 

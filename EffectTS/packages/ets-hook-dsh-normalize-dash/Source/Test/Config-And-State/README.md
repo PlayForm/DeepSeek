@@ -4,13 +4,16 @@ What this test verifies.
 
 ## Intent
 
-The apply-time wiring of the dash flavor: what a single `apply(ctx, config)` builds
-before any stream flows. This is its own folder because the wiring is the
-contract every other behavior sits on - the volatile cells arrive as
-`{ get }` references, the schema defaults decide the dispatch posture, the
-four-listener set defines what the flavor reacts to, and the State unwraps
-decide what the transform actually uses. The source suite's Run 1 and Run 6,
-moved verbatim.
+The apply-time wiring of the dash flavor: what a single `apply(ctx, config)` builds before any stream
+flows.
+
+This is its own folder because the wiring is the contract that every other behavior sits on.
+
+The volatile cells arrive as `{ get }` references, the schema defaults decide the dispatch posture,
+the four-listener set defines what the flavor reacts to, and the State unwraps decide what the
+transform actually uses.
+
+The source suite's Run 1 and Run 6, moved verbatim.
 
 ## Scenario
 
@@ -40,13 +43,14 @@ moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx (listener/logger capture, the tool/fs seams with a bare
-backend, the waterfall delegate, the synchronous emit recorder, the self-root
-seam) + the REAL factory instance (the harness Furnace) + the REAL dash apply
-from this bundle's built Target. One `Validate({ logFile })` config built
-through the exported schema; two applies for the Run 6 comparison. The
-harness clears the ledger file at folder start; the folder reads no ledger
-content.
+The harness fake ctx (listener/logger capture, the tool/fs seams with a bare backend, the waterfall
+delegate, the synchronous emit recorder, the self-root seam) + the REAL factory instance (the harness
+Furnace) + the REAL dash apply from the built Target of this bundle.
+
+One `Validate({ logFile })` config built through the exported schema, and two applies for the Run 6
+comparison.
+
+The harness clears the ledger file at folder start, and the folder reads no ledger content.
 
 ## Expected ledger strings (byte-exact)
 
@@ -55,13 +59,9 @@ content.
 
 ## Edge cases
 
-- The volatile cells must be `{ get }` references at the config boundary, not
-  plain values - a plain value would fail the three "arrives as { get }"
-  checks.
-- Exactly four listeners: a missing P10 refresh or a missing overpass arm
-  fails the listener-set check.
-- Two applies must not share state (the HMR probe) - a module-level global
-  would fail the identity check.
+- The volatile cells must be `{ get }` references at the config boundary and not plain values, because a plain value would fail the three "arrives as { get }" checks.
+- Exactly four listeners: a missing P10 refresh or a missing overpass arm fails the listener-set check.
+- Two applies must not share state (the HMR probe), because a module-level global would fail the identity check.
 
 ## Expected count
 

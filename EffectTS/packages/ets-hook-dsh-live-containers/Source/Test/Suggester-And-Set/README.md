@@ -1,9 +1,8 @@
 # Suggester-And-Set - the S-series smoke tests
 
-The CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED) and the
-live_container_set tool surface: the zero-subagent guarantee, the gate
-conjunction, the privacy default, the clamping, the configured-block frame,
-the accept/dismiss verbs, and the autoPlant dormant block.
+The CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED) and the live_container_set tool
+surface: the zero-subagent guarantee, the gate conjunction, the privacy default, the clamping, the
+configured-block frame, the accept/dismiss verbs, and the autoPlant dormant block.
 
 ## Scenarios
 
@@ -35,8 +34,8 @@ the accept/dismiss verbs, and the autoPlant dormant block.
 
 ## Fixtures
 
-The shared Harness plus the wave-2 fixtures; FakeSubagent captures every
-spawn spec and lets the smoke resolve the result promise on demand.
+The shared Harness plus the wave-2 fixtures, where FakeSubagent captures every spawn spec and lets
+the smoke resolve the result promise on demand.
 
 ## Expected count
 

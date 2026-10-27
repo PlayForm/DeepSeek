@@ -4,13 +4,15 @@ What this test verifies.
 
 ## Intent
 
-The overpass layer: the tools/post-execute arm (normalizing tool results in
-the transcript), the agent/pre-step arm (normalizing incoming step batches),
-the human-facing `normalize-over` command that drives both, and the history-
-safety invariant. This is its own folder because the arms are a separate
-integration surface with their own registration contract, their own scope
-gates (both off by default), their own exemption list and their own ledger
-strings. The source suite's Run O (O0-O14), moved verbatim.
+The overpass layer: the tools/post-execute arm (normalizing tool results in the transcript), the
+agent/pre-step arm (normalizing incoming step batches), the human-facing `normalize-over` command
+that drives both, and the history-safety invariant.
+
+This is its own folder because the arms are a separate integration surface with their own
+registration contract, their own scope gates (both off by default), their own exemption list and
+their own ledger strings.
+
+The source suite's Run O (O0-O14), moved verbatim.
 
 ## Scenario
 
@@ -67,31 +69,31 @@ strings. The source suite's Run O (O0-O14), moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. One apply
-with a hand-built config whose `scopes` volatile cell returns a mutable
-object; the O2/O10/O12 flips mutate that object and dispatch through the
-registered `loader/volatile-update` listener. `PostO`/`PreO` are the
-registered listeners; `NextAcceptO` and the value/content-returning
-alternatives are the downstream decisions; `ExecO("bash")` builds the call
-identity. The durable ledger is cleared at folder start; no ledger reads.
+The harness fake ctx + the REAL factory + the REAL dash apply.
+
+One apply with a hand-built config whose `scopes` volatile cell returns a mutable object, and the
+O2/O10/O12 flips mutate that object and dispatch through the registered `loader/volatile-update`
+listener.
+
+`PostO`/`PreO` are the registered listeners, `NextAcceptO` and the value/content-returning
+alternatives are the downstream decisions, and `ExecO("bash")` builds the call identity.
+
+The durable ledger is cleared at folder start, and no ledger reads happen.
 
 ## Expected ledger strings (byte-exact)
 
 - `hook-dsh-normalize-dash: overpass: normalized 1 char(s) in tool result bash call_smoke`
 - `hook-dsh-normalize-dash: overpass: normalized 1 char(s) in step batch (turn 3 step 1)`
 - `hook-dsh-normalize-dash: overpass: normalized 1 char(s) in step batch (turn 4 step 0)`
-(The scopes report contains `conversation=on`, `toolResults=on`,
-`batch=off`, `exempt: read, edit`.)
+
+The scopes report contains `conversation=on`, `toolResults=on`, `batch=off`, `exempt: read, edit`.
 
 ## Edge cases
 
-- Both arms off by default; the O2/O10 flips are live (no remount).
-- Non-text blocks, value-carrying decisions, CCR marker text and rejected
-  steps all pass through untouched - the marker guard makes any load order
-  safe.
+- Both arms are off by default, and the O2/O10 flips are live (no remount).
+- Non-text blocks, value-carrying decisions, CCR marker text and rejected steps all pass through untouched, because the marker guard makes any load order safe.
 - The one-shot arm fires exactly once and is consumed.
-- Zero writes and zero fs/observed emissions from ANY overpass path - the
-  history-safety invariant.
+- Zero writes and zero fs/observed emissions from ANY overpass path (the history-safety invariant).
 
 ## Expected count
 

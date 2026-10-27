@@ -1,8 +1,7 @@
 # Loader-And-Activation - the loader contract and the activation tests
 
-The graph-suggester's loader wiring: the default object, the cold mount, the
-activation proof, the apply-time wiring, the pass-through discipline, the
-schema fail-loud, and the mount purity.
+The loader wiring of the graph-suggester: the default object, the cold mount, the activation proof,
+the apply-time wiring, the pass-through discipline, the schema fail-loud, and the mount purity.
 
 ## Scenarios
 
@@ -27,8 +26,9 @@ schema fail-loud, and the mount purity.
 
 ## Fixtures
 
-The shared Harness (fake ctx, real factory, real built Target). No fake
-clock: the plugin has no clock dependency.
+The shared Harness (fake ctx, real factory, real built Target).
+
+No fake clock is needed, because the plugin has no clock dependency.
 
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 

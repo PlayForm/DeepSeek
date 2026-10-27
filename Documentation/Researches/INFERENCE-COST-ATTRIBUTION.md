@@ -35,25 +35,30 @@ statuses:
 
 # Inference cost attribution - the per-file pricing model
 
-> Question: how does a telemetry-only plugin compute the inference cost of every file an agent
+> Question: how does a telemetry-only plugin compute the inference cost of every file that an agent
 > conversation touches, store it in a database, and later export or annotate it, without ever
-> changing the conversation? The research fixes the priced-event contract, the per-provider token
-> shapes, the price table, three attribution models, a ledger schema, export shapes, and annotation
-> rules. Every factual claim cites its source URL inline; where the sources disagree or are silent,
-> the disagreement or the gap is stated in place.
+> changing the conversation?
+>
+> The research fixes the priced-event contract, the per-provider token shapes, the price table,
+> three attribution models, a ledger schema, export shapes, and annotation rules.
+>
+> Every factual claim cites its source URL inline, and where the sources disagree or are silent, the
+> disagreement or the gap is stated in place.
 
 ---
 
 ## 1. The cost object - what a priced event is, and the difference between a token, a call, a step, a turn, and a file touch
 
 A priced event is one model invocation that carries a usage record and resolves to a dollar amount.
+
 The OpenTelemetry GenAI shape is the span `gen_ai.client.inference`, named "{gen_ai.operation.name}
 {gen_ai.request.model}", span kind CLIENT, with well-known operation names including `chat`,
 `embeddings`, `execute_tool`, `retrieval`, `invoke_agent`, `text_completion`, and provider names
 including `anthropic`, `deepseek`, `openai`
 (https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/client-inference.md).
-OTel supplies the usage record but no cost signal: the GenAI conventions define no USD-cost
-attribute or metric, and call token counters only "a proxy for cost approximation"
+
+OTel supplies the usage record but no cost signal, because the GenAI conventions define no USD-cost
+attribute or metric and call token counters only "a proxy for cost approximation"
 (https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-token-metrics.md).
 
 The five grains, smallest to largest:
@@ -81,18 +86,24 @@ The five grains, smallest to largest:
   session runtime at $0.08 per session-hour, metered only while status is `running`
   (https://docs.anthropic.com/en/docs/about-claude/pricing).
 
-A **file touch** is not a priced event at any grain. It is the event that a file's content entered,
-changed, or left the conversation context (a read tool result, an edit, a write, a context
-attachment). No fetched source meters cost per file; the finest native grains are Claude Code's
-component attribution (skills, subagents, plugins, MCP servers, each a percentage, with MCP share
-counting only requests that consumed one of its tool results) and Copilot's per-prompt accounting
+A **file touch** is not a priced event at any grain, because it is the event that a file's content
+entered, changed, or left the conversation context (a read tool result, an edit, a write, or a
+context attachment).
+
+No fetched source meters cost per file, and the finest native grains are Claude Code's component
+attribution (skills, subagents, plugins, MCP servers, each a percentage, with MCP share counting
+only requests that consumed one of its tool results) and Copilot's per-prompt accounting
 (https://docs.anthropic.com/en/docs/claude-code/costs;
 https://docs.cursor.com/en/account/plans-and-usage now serves a billing-free landing page; the Codex
 pricing page returned a 404 and then a Cloudflare anti-bot block, so no Codex unit exists -
-https://openai.com/codex/pricing/). FinOps places this layer on its third granularity rung: beyond
-owner lists and resource tags, allocation uses "observability, or utilization data"
-(https://www.finops.org/framework/capabilities/allocation/). The plugin's contract follows: observe
-priced events and file touches, join them into allocations, and never alter either.
+https://openai.com/codex/pricing/).
+
+FinOps places this layer on its third granularity rung, because beyond owner lists and resource
+tags, allocation uses "observability, or utilization data"
+(https://www.finops.org/framework/capabilities/allocation/).
+
+The contract of the plugin follows: observe priced events and file touches, join them into
+allocations, and never alter either.
 
 ## 2. Token accounting - the exact usage fields providers report (input, output, cache read, cache write, reasoning), which are additive and which overlap, and the trap in each provider's shape
 
@@ -179,30 +190,35 @@ The joinable source of rates is the LiteLLM price map
 per token (`*_cost_per_token` fields), rows keyed by model id, carrying `input_cost_per_token`,
 `output_cost_per_token`, `cache_read_input_token_cost`, per-tier variants `*_batches` and
 `*_priority`, `max_input_tokens`, `mode`, `litellm_provider`, a `source` URL, and `deprecation_date`
-(gpt-4o-2024-11-20: 2.5e-06 in, 1e-05 out, 1.25e-06 cache-read, deprecates 2027-01-14). The
-`sample_spec` entry does not list the cache-read or tier fields, so the schema must be discovered by
-enumerating rows, not trusted (https://docs.litellm.ai/docs/completion/token_usage -
+(gpt-4o-2024-11-20: 2.5e-06 in, 1e-05 out, 1.25e-06 cache-read, deprecates 2027-01-14).
+
+The `sample_spec` entry does not list the cache-read or tier fields, so the schema must be
+discovered by enumerating rows and not trusted
+(https://docs.litellm.ai/docs/completion/token_usage -
 `cost_per_token(model, prompt_tokens, completion_tokens)` returns two USD floats;
 `response._hidden_params["response_cost"]` carries a per-call cost; `register_model` accepts a dict
 or hosted JSON URL).
 
-Effective dating: the price dimension is SCD Type 2 - rows carry Start_Date/End_Date with NULL end
-marking the current row, and a ledger row joins "the rate in force at event time"; the Type 6
-variant joins on effective date between start and end and needs no fact-table reprocessing when the
-dimension changes (https://en.wikipedia.org/wiki/Slowly_changing_dimension).
+Effective dating: the price dimension is SCD Type 2, where rows carry Start_Date/End_Date with a
+NULL end marking the current row, and a ledger row joins "the rate in force at event time", while
+the Type 6 variant joins on effective date between start and end and needs no fact-table
+reprocessing when the dimension changes (https://en.wikipedia.org/wiki/Slowly_changing_dimension).
 
 Immutability rule: Type 2 binds each transaction to its time slice so aggregates keep historical
 state, and retroactive dimension changes force rewrites, which the source calls expensive
 (https://en.wikipedia.org/wiki/Slowly_changing_dimension); an event-sourced ledger stays immutable
 and every aggregate is a rebuildable view (https://martinfowler.com/eaaDev/EventSourcing.html);
 Langfuse applies model-definition changes only to generations logged afterward
-(https://langfuse.com/docs/model-usage-and-cost). Therefore a price correction is a new row with a
-new effective window, never an UPDATE: the historical bill must stay reproducible against the rates
-that were in force.
+(https://langfuse.com/docs/model-usage-and-cost).
 
-Freshness: `deprecation_date` is the only per-row expiry signal in the map; Gemini promos expire on
-stated dates; DeepSeek windows rotate daily; the Langfuse defaults are audited daily but apply only
-to new generations. All fetched prices are anchored to fetch date 2026-10-27 and go stale
+Therefore a price correction is a new row with a new effective window, never an UPDATE, because the
+historical bill must stay reproducible against the rates that were in force.
+
+Freshness: `deprecation_date` is the only per-row expiry signal in the map, Gemini promos expire on
+stated dates, DeepSeek windows rotate daily, and the Langfuse defaults are audited daily but apply
+only to new generations.
+
+All fetched prices are anchored to fetch date 2026-10-27 and go stale
 (https://ai.google.dev/gemini-api/docs/pricing; https://api-docs.deepseek.com/quick_start/pricing;
 https://docs.litellm.ai/docs/completion/token_usage).
 
@@ -247,14 +263,17 @@ boilerplate creates synergies, which is the phenomenon Shapley exists to price
 
 ## 5. Schema candidates - the entities, their keys, their cardinality, and the temporal columns
 
-Storage posture: WAL-mode SQLite, append-only, STRICT tables. STRICT allows only INT, INTEGER, REAL,
-TEXT, BLOB, ANY and raises SQLITE_CONSTRAINT_DATATYPE on a lossless conversion failure
-(https://www.sqlite.org/stricttables.html). WAL gives readers a pinned "end mark" for point-in-time
-reads and allows one writer at a time; auto-checkpoint at 1000 pages (~4 MB); synchronous=NORMAL
-makes the checkpoint the only fsync and drops power-loss durability
-(https://www.sqlite.org/wal.html). Per-row payload detail lives in TEXT JSON columns read through
-json_each/json_tree (columns key, value, type, atom, id, parent, fullkey, path)
-(https://www.sqlite.org/json1.html).
+Storage posture: WAL-mode SQLite, append-only, STRICT tables.
+
+STRICT allows only INT, INTEGER, REAL, TEXT, BLOB, ANY and raises SQLITE_CONSTRAINT_DATATYPE on a
+lossless conversion failure (https://www.sqlite.org/stricttables.html).
+
+WAL gives readers a pinned "end mark" for point-in-time reads and allows one writer at a time, with
+auto-checkpoint at 1000 pages (~4 MB), and synchronous=NORMAL makes the checkpoint the only fsync
+and drops power-loss durability (https://www.sqlite.org/wal.html).
+
+Per-row payload detail lives in TEXT JSON columns read through json_each/json_tree (columns key,
+value, type, atom, id, parent, fullkey, path) (https://www.sqlite.org/json1.html).
 
 | Table        | Key                                                                                                                          | Cardinality                             | Temporal columns                                                     |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------- |

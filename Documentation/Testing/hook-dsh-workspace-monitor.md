@@ -4,18 +4,19 @@
 
 - Package: `@playform/hook-dsh-workspace-monitor` (Classic/packages/hook-dsh-workspace-monitor).
 - Profile row id: `hook-dsh-workspace-monitor` (bundled in the desktop profile).
-- Exposes: no tools - the watch/sweep role with NO REAL TIMERS. The watch form records one entry per
-  fs/observed event (heard on the ROOT context, the factory's Wire registration) with a debounce
-  deadline from the module's Clock; the sweep form is a CLOCK-BASED SCHEDULE - a deadline scan
-  inside the event-driven checkpoints, re-armed from the Clock (never setTimeout or setInterval).
-  The shipped check-set catalog (tsc, format, cargo, governance) classifies watched paths and is
-  recorded for the accountability trail; the monitor NEVER executes a command (MONITOR.md).
+- Exposes no tools: it holds the watch/sweep role with NO REAL TIMERS. The watch form records one
+  entry per fs/observed event (heard on the ROOT context, the Wire registration of the factory) with
+  a debounce deadline from the Clock of the module, while the sweep form is a CLOCK-BASED SCHEDULE
+  (a deadline scan inside the event-driven checkpoints, re-armed from the Clock, never setTimeout or
+  setInterval). The shipped check-set catalog (tsc, format, cargo, governance) classifies watched
+  paths and is recorded for the accountability trail, and the monitor NEVER executes a command
+  (MONITOR.md).
 - Config (all volatile; hot edits commit without remounting): `logFile`
   `~/.dsh/playform/hook-dsh-workspace-monitor.log`, `enabled` false, `domain` `workspace_monitor`,
   `debounceMs` 250, `sweepIntervalMs` 60000 (0 = sweep at every checkpoint), `maxWatch` 500 (the
-  oldest entry is dropped, ledgered), `include` `[]` (empty = every path watches), `exclude`
+  oldest entry is dropped and ledgered), `include` `[]` (empty = every path watches), `exclude`
   `node_modules/**`, `**/Target/**`, `**/.git/**`, `checksets` (the shipped catalog; one spec is
-  `{ glob, command?, fast, intervalMs? }` - the classification only), `policy` (the D6 defaults).
+  `{ glob, command?, fast, intervalMs? }`, the classification only), and `policy` (the D6 defaults).
 - Ledger lines (module-owned, byte-stable, prefixed `monitor: `):
   `` `monitor: disabled (enabled=false)` ``,
   `` `monitor: activated (domain=<domain>, checksets=<n>)` ``,
@@ -30,19 +31,19 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-workspace-monitor"}` → one entry, status schema (defaults per
-    Variable/Config.ts: domain `workspace_monitor`, debounceMs 250, sweepIntervalMs 60000, maxWatch
-    500, the include/exclude globs, the check-set catalog, the D6 policy block).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-monitor"}` for one entry with status schema (defaults
+    per Variable/Config.ts: domain `workspace_monitor`, debounceMs 250, sweepIntervalMs 60000,
+    maxWatch 500, the include/exclude globs, the check-set catalog, the D6 policy block).
 
 2. **The service check.**
 
-    Service check: none expected (no service; a listener hook).
+    No service is expected, because this is a listener hook.
 
 3. **The ledger line.**
 
-    Ledger line: `monitor: activated (domain=workspace_monitor, checksets=<n>)` in
-    `~/.dsh/playform/hook-dsh-workspace-monitor.log`; a cold mount logs
+    The line `monitor: activated (domain=workspace_monitor, checksets=<n>)` appears in
+    `~/.dsh/playform/hook-dsh-workspace-monitor.log`, and a cold mount logs
     `monitor: disabled (enabled=false)`.
 
 ## Test cases
@@ -58,9 +59,9 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: real timers sneaking in (the module must use only the Clock) and the
-  monitor attempting to execute the classified command (it must only record); also the resolved
-  pack's `policy` override (the wiring is the next refinement).
+- Not dogfooded yet, so watch for real timers sneaking in (the module must use only the Clock) and
+  the monitor attempting to execute the classified command (it must only record), plus the `policy`
+  override of the resolved pack (the wiring is the next refinement).
 
 ## Fix loop
 
@@ -69,7 +70,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-workspace-monitor run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-workspace-monitor/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/`. Then the app restart.
+  under `Source/Test/`, then restart the app.
 
 ## Report stub
 

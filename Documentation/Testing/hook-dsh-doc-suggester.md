@@ -4,19 +4,20 @@
 
 - Package: `@playform/hook-dsh-doc-suggester` (Classic/packages/hook-dsh-doc-suggester).
 - Profile row id: `hook-dsh-doc-suggester` (bundled in the desktop profile).
-- Exposes: no tools or services - it hooks `tools/post-execute` for the doc-task tools (read, grep,
-  glob, write, edit, raw-write) and, when the call touches a documentation path matching one of the
-  seven families (plan, guide, skill, index, site content, ...), prepends ONE labeled
+- Exposes no tools or services: it hooks `tools/post-execute` for the doc-task tools (read, grep,
+  glob, write, edit, raw-write) and, when the call touches a documentation path that matches one of
+  the seven families (plan, guide, skill, index, site content, ...), prepends ONE labeled
   `additionalContexts` note naming the doc-graph companions: the INDEX row, the frontmatter
-  statuses/registry/index block, the archive style, the cross-references, the site mirror.
-  Deterministic path rules; no LLM; abstention is a ledger line for every silence.
+  statuses/registry/index block, the archive style, the cross-references, and the site mirror. The
+  path rules are deterministic, no LLM is involved, and abstention is a ledger line for every
+  silence.
 - PACK-DRIVEN: the pack is the repo's own doc graph - the BUILT-IN pack when the repo has no pack
-  file, or the resolved workspace pack otherwise, via `@playform/lib-dsh-pack`'s `Locate`. The
+  file, or the resolved workspace pack otherwise, via `Locate` of `@playform/lib-dsh-pack`. The
   workspace root is the nearest ancestor whose PACK SIGNATURE matches (the pack's `signature` list,
-  defaulting to `Documentation/ARCHIVE-STYLE.md`); a foreign workspace logs
+  defaulting to `Documentation/ARCHIVE-STYLE.md`), and a foreign workspace logs
   `doc-suggester: abstained foreign-workspace  0.00` and returns the downstream decision unchanged.
   The resolved pack's `doc/` families (`Families(pack, "doc")`) drive Detect, so a repo pack
-  (`.dsh/pack.yml` → the user layer → the built-in pack) overrides the built-in families without a
+  (`.dsh/pack.yml` -> the user layer -> the built-in pack) overrides the built-in families without a
   restart. The learning layer (D8) records decisions and logs the `decided` line like the edit
   suggester, storing through the `pattern` service or the bounded memory fallback.
 - Ledger prefix: `doc-suggester:`; logFile `~/.dsh/playform/hook-dsh-doc-suggester.log`.
@@ -25,22 +26,22 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-doc-suggester"}` → one entry, status schema (SCHEME §2 defaults:
-    threshold 0.75, tools read/grep/glob/write/edit/raw-write, maxCompanions 7, maxNoteChars 1200,
-    cooldownCalls 6, maxNotesPerTurn 3, exclude node_modules/Target/.git/dist, learn true,
-    learnWindow 3, heuristics the six names (`scope`,`graph`,`prior`,`literal`,`history`,`accept`),
-    weights `{scope:0.35, graph:0, prior:0.25, literal:0.25, history:0.15, accept:0}`, storeLimit
-    512).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-doc-suggester"}` for one entry with status schema (SCHEME §2
+    defaults: threshold 0.75, tools read/grep/glob/write/edit/raw-write, maxCompanions 7,
+    maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, exclude node_modules/Target/.git/dist,
+    learn true, learnWindow 3, heuristics the six names
+    (`scope`,`graph`,`prior`,`literal`,`history`,`accept`), weights
+    `{scope:0.35, graph:0, prior:0.25, literal:0.25, history:0.15, accept:0}`, storeLimit 512).
 
 2. **The tool check.**
 
-    Tool check: none expected (no tools).
+    No tool is expected, because the hook registers none.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-doc-suggester.log` -
-    `doc-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)`; a cold mount logs the
+    The activated line appears in `~/.dsh/playform/hook-dsh-doc-suggester.log` as
+    `doc-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)`, and a cold mount logs the
     byte-exact `doc-suggester: disabled (enabled=false)`.
 
 ## Test cases
@@ -57,7 +58,7 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: the note firing on `Site/Source/pages/*` without the site mirror
+- Not dogfooded yet, so watch for the note firing on `Site/Source/pages/*` without the site mirror
   companion, double notes when a call matches two families, and the base-aware existence filter
   (repo root, package root, package parent) dropping companions that live in a sibling package.
 - The ETS twin (`@playform/ets-hook-dsh-doc-suggester`) remains DEFERRED (the SCHEME's end-phase
@@ -71,7 +72,7 @@
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-doc-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-doc-suggester/Target/Test/<Folder>/Test.js` per folder
   under `Source/Test/` (`Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`,
-  `Pack-Driven`, `Learning-Loop`). Then the app restart.
+  `Pack-Driven`, `Learning-Loop`), then restart the app.
 
 ## Report stub
 

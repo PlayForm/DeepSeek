@@ -4,14 +4,17 @@ What this test verifies.
 
 ## Intent
 
-The llm/stream waterfall contract of the dash flavor: what the registered
-listener promises to every upstream consumer. This is its own folder because
-the contract is structural, not just behavioral - next() is called exactly
-once and synchronously before any iteration, the request options are never
-mutated, the chunk sequence is preserved one-for-one, the non-text chunks
-pass through BY IDENTITY, and every rewrite is a new object with an exact
-ledger string. The source suite's waterfall section plus Run 2 (reasoning
-off) and the Run 5 identity leaf, moved verbatim.
+The llm/stream waterfall contract of the dash flavor: what the registered listener promises to every
+upstream consumer.
+
+This is its own folder because the contract is structural and not just behavioral.
+
+`next()` is called exactly once and synchronously before any iteration, the request options are never
+mutated, the chunk sequence is preserved one-for-one, the non-text chunks pass through BY IDENTITY,
+and every rewrite is a new object with an exact ledger string.
+
+The waterfall section of the source suite plus Run 2 (reasoning off) and the Run 5 identity leaf,
+moved verbatim.
 
 ## Scenario
 
@@ -56,14 +59,16 @@ off) and the Run 5 identity leaf, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. The waterfall
-stream is the source suite's nine-chunk sequence (block-start, text-delta
-with the four dash codepoints, tool-call-delta, reasoning-delta, three
-block-ends, usage, finish) driven through a counting next(); the request
-options are double Object.freeze-ed. The durable ledger is the harness's
-fixed path; the folder clears it at start and after each stream read point
-(the source suite's rm points). The 10ms settle waits before every ledger
-read are kept.
+The harness fake ctx + the REAL factory + the REAL dash apply.
+
+The waterfall stream is the nine-chunk sequence of the source suite (block-start, text-delta with the
+four dash codepoints, tool-call-delta, reasoning-delta, three block-ends, usage, finish) driven
+through a counting next(), and the request options are double Object.freeze-ed.
+
+The durable ledger is the fixed path of the harness, and the folder clears it at start and after each
+stream read point (the rm points of the source suite).
+
+The 10ms settle waits before every ledger read are kept.
 
 ## Expected ledger strings (byte-exact)
 
@@ -73,10 +78,8 @@ read are kept.
 ## Edge cases
 
 - N=0 produces NO count line and NO rewrite (Run 2 and Run 5).
-- normalizeReasoning=off leaves reasoning-deltas at identity even though the
-  conversation scope is on.
-- A rewritten chunk is always a new object; passthrough chunks are the same
-  reference - the identity checks pin both halves.
+- normalizeReasoning=off leaves reasoning-deltas at identity even though the conversation scope is on.
+- A rewritten chunk is always a new object, and passthrough chunks are the same reference, so the identity checks pin both halves.
 
 ## Expected count
 

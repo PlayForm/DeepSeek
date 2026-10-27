@@ -4,13 +4,18 @@ What this test verifies.
 
 ## Intent
 
-The P10 volatile live-flip: a config change committed to a running plugin
-without remounting it. This is its own folder because the flip is the
-hazardous path - a rebuild would re-apply and duplicate the registration,
-so the test pins "no remount, no re-apply, identity preserved, next
-consumer picks up the new value". The other folders exercise the same
-dispatch for scope objects (Scopes, Overpass); this one covers the scalar
-`replacement` cell end to end. The source suite's Run V, moved verbatim.
+The P10 volatile live-flip: a config change committed to a running plugin without remounting it.
+
+This is its own folder because the flip is the hazardous path, since a rebuild would re-apply and
+duplicate the registration.
+
+The test therefore pins "no remount, no re-apply, identity preserved, next consumer picks up the new
+value".
+
+The other folders exercise the same dispatch for scope objects (Scopes, Overpass), and this one
+covers the scalar `replacement` cell end to end.
+
+The source suite's Run V, moved verbatim.
 
 ## Scenario
 
@@ -30,28 +35,30 @@ dispatch for scope objects (Scopes, Overpass); this one covers the scalar
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. The config
-is hand-built with `replacement` as a stable volatile cell whose getter
-reads a mutable outer binding (`FlipValue`), exactly the loader's
-"commit into the running reference" semantics. The flip is a mutation of
-that binding plus a `[["replacement"]]` dispatch through the registered
-`loader/volatile-update` listener. The post-flip stream feeds one
-text-delta chunk through the registered `llm/stream` listener. The durable
-ledger is cleared at folder start; no ledger reads.
+The harness fake ctx + the REAL factory + the REAL dash apply.
+
+The config is hand-built with `replacement` as a stable volatile cell whose getter reads a mutable
+outer binding (`FlipValue`), exactly the "commit into the running reference" semantics of the loader.
+
+The flip is a mutation of that binding plus a `[["replacement"]]` dispatch through the registered
+`loader/volatile-update` listener.
+
+The post-flip stream feeds one text-delta chunk through the registered `llm/stream` listener.
+
+The durable ledger is cleared at folder start, and no ledger reads happen.
 
 ## Expected ledger strings (byte-exact)
 
 - `normalized 1 dash char(s) in one stream` (the flipped stream's count
   line, read via `includes` from the captured logger lines).
-(Activation lines are counted, not compared: `activated (` must appear
-exactly once before and after the flip.)
+
+Activation lines are counted and not compared: `activated (` must appear exactly once before and
+after the flip.
 
 ## Edge cases
 
-- The State object identity must be preserved across the flip (a rebuild
-  would produce a second activation line and break the count checks).
-- The next stream uses the NEW value (`a -*- b`) while the count line keeps
-  its normal shape - the flip changes only the replacement.
+- The State object identity must be preserved across the flip, because a rebuild would produce a second activation line and break the count checks.
+- The next stream uses the NEW value (`a -*- b`) while the count line keeps its normal shape, so the flip changes only the replacement.
 
 ## Expected count
 

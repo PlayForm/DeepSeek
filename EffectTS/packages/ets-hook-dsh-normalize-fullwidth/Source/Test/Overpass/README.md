@@ -4,25 +4,25 @@ What this test verifies.
 
 ## Intent
 
-The overpass arms and the human command (Run O): the tool-results arm
-(tools/post-execute), the step-batch arm (agent/pre-step), the
-normalize-overpass command, the ordering guard and the history-safety
-invariant. The stream flavors do not only normalize live model output - they
-can also sweep already-produced content: tool results flowing back into the
-transcript and the message batch entering a step, each behind its own scope
-gate (both off by default) and driven live through the factory's
-volatile-update dispatch. The folder pins the whole contract: the
-registration facts (the post-execute arm PREPENDS, the pre-step arm uses
-default ordering, the command registers under "normalize-overpass" without a
-slash), the toolResults flip with its byte-exact ledger line, the `read`
-exemption, the untouched tool-call blocks, the N=0 no-op rule, the canonical
-value decision, the CCR marker guard (normalization never touches a ccr
-replacement), the downstream-decision content basis, the batch flip with its
-byte-exact ledger line, the one-shot batch grammar (armed once, consumed
-once, exactly one use), the reject passthrough, and the command's other
-grammars. The assertions are moved verbatim from
-`EffectTS/smokes/fullwidth-smoke.mjs` section "Run O (additive): the overpass
-arms + the command".
+The overpass arms and the human command (Run O): the tool-results arm (tools/post-execute), the
+step-batch arm (agent/pre-step), the normalize-overpass command, the ordering guard and the
+history-safety invariant.
+
+The stream flavors do not only normalize live model output, because they can also sweep
+already-produced content: tool results flowing back into the transcript and the message batch
+entering a step, each behind its own scope gate (both off by default) and driven live through the
+volatile-update dispatch of the factory.
+
+The folder pins the whole contract: the registration facts (the post-execute arm PREPENDS, the
+pre-step arm uses default ordering, the command registers under "normalize-overpass" without a
+slash), the toolResults flip with its byte-exact ledger line, the `read` exemption, the untouched
+tool-call blocks, the N=0 no-op rule, the canonical value decision, the CCR marker guard
+(normalization never touches a ccr replacement), the downstream-decision content basis, the batch
+flip with its byte-exact ledger line, the one-shot batch grammar (armed once, consumed once, exactly
+one use), the reject passthrough, and the other grammars of the command.
+
+The assertions are moved verbatim from `EffectTS/smokes/fullwidth-smoke.mjs` section "Run O
+(additive): the overpass arms + the command".
 
 ## Scenario
 
@@ -99,20 +99,23 @@ arms + the command".
 
 ## Fixtures
 
-The shared harness (`../Harness.js`): `Furnace` (the REAL factory - the
-O2 check proves the arm runs against it, no direct fs access), the fake ctx
-including the `commands` registry seam, the REAL `apply` and the ledger path
-`/tmp/fullwidth-smoke-ledger.log` (removed at the folder's start). The config
-is hand-built with a MUTABLE scopes object (the SCOPES_DEFAULT values are
-duplicated here because the original const lives in the Run S section of the
-source suite - a cross-section reference) so the O2/O10 flips go through the
-`loader/volatile-update` dispatch with the `[["scopes", ...]]` shape. The
-post-execute fixtures carry `{isError, value, content}` decisions and an
-Exec shape with `callId: "call_smoke"`; the pre-step fixtures carry
-`{agent, messages, turn, step, signal}` and downstream decisions; the
-command fixtures call `handler({ rawInput })` with the batch/scopes/files/
-results grammars. All text fixtures embed U+FF21 (fullwidth A) or U+FF1A
-(fullwidth colon) as this flavor's character class.
+The shared harness (`../Harness.js`): `Furnace` (the REAL factory, which the O2 check proves the arm
+runs against, with no direct fs access), the fake ctx including the `commands` registry seam, the
+REAL `apply` and the ledger path `/tmp/fullwidth-smoke-ledger.log` (removed at the start of the
+folder).
+
+The config is hand-built with a MUTABLE scopes object (the SCOPES_DEFAULT values are duplicated here
+because the original const lives in the Run S section of the source suite, a cross-section
+reference), so the O2/O10 flips go through the `loader/volatile-update` dispatch with the
+`[["scopes", ...]]` shape.
+
+The post-execute fixtures carry `{isError, value, content}` decisions and an Exec shape with
+`callId: "call_smoke"`, the pre-step fixtures carry `{agent, messages, turn, step, signal}` and
+downstream decisions, and the command fixtures call `handler({ rawInput })` with the
+batch/scopes/files/results grammars.
+
+All text fixtures embed U+FF21 (fullwidth A) or U+FF1A (fullwidth colon) as the character class of
+this flavor.
 
 ## Expected ledger strings (byte-exact)
 
@@ -120,18 +123,15 @@ results grammars. All text fixtures embed U+FF21 (fullwidth A) or U+FF1A
 - `hook-dsh-normalize-fullwidth: overpass: normalized 1 char(s) in step batch (turn 3 step 1)` (O10)
 - `hook-dsh-normalize-fullwidth: overpass: normalized 1 char(s) in step batch (turn 4 step 0)` (O12)
 
-(O5/O6/O7 and O11 assert the ABSENCE of lines - the ledger-line counter must
-not move. The command's success texts are asserted by content substrings,
-not byte-exactly.)
+O5/O6/O7 and O11 assert the ABSENCE of lines, so the ledger-line counter must not move.
+
+The success texts of the command are asserted by content substrings and not byte-exactly.
 
 ## Edge cases
 
-- The marker guard: a CCR replacement marker in the content passes the arm
-  unchanged - ordering safety between the flavors.
-- The one-shot grammar: arms with the scope off, normalizes exactly one
-  batch, clears the flag, and leaves the next batch untouched.
-- The mixed-content case: tool-call blocks are never rewritten even when a
-  text block in the same content is.
+- The marker guard: a CCR replacement marker in the content passes the arm unchanged, which gives ordering safety between the flavors.
+- The one-shot grammar arms with the scope off, normalizes exactly one batch, clears the flag, and leaves the next batch untouched.
+- The mixed-content case: tool-call blocks are never rewritten even when a text block in the same content is.
 - The usage-error grammars (bare "results", "nonsense") return errors.
 
 ## Expected count

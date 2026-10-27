@@ -1,8 +1,8 @@
 # Monitors-Boards - the wave-3 M-series board tests
 
-The plantType "monitors" board (the CAN-2 reuse - no new seam): the rows
-from the members' monitor settles, the `[live-report] monitored` fold, the
-SKIP GUARD, and the unchanged lifecycle for ordinary settles.
+The plantType "monitors" board (the CAN-2 reuse, with no new seam): the rows from the monitor settles
+of the members, the `[live-report] monitored` fold, the SKIP GUARD, and the unchanged lifecycle for
+ordinary settles.
 
 ## Scenarios
 
@@ -21,9 +21,10 @@ SKIP GUARD, and the unchanged lifecycle for ordinary settles.
 
 ## Fixtures
 
-The shared Harness plus the wave-3 fixtures; the member's monitor job is a
-real dispatch through the fake registry, so the settled event carries the
-`monitor` kind and the fold runs exactly as in production.
+The shared Harness plus the wave-3 fixtures.
+
+The monitor job of the member is a real dispatch through the fake registry, so the settled event
+carries the `monitor` kind and the fold runs exactly as in production.
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

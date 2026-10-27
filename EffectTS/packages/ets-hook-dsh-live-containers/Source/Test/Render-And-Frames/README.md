@@ -4,18 +4,23 @@ What this test verifies.
 
 ## Intent
 
-The R-series: the rendered section's shape and the substitution engine. The
-assembly gains exactly ONE appended section named `live-containers` carrying
-`interpolate: false` (so the harness's own prompt variables never resolve our
-tokens), every phase-1 block kind renders inside the byte-exact LIVE
-CONTAINER frame, the variable table (time/date/tz under the FAKE CLOCK,
-messageCount/turnCount/sinceLastTool from the observers, cwd/sessionId) is
-resolved per request, per-block `vars` override the built-ins, unknown
-{{tokens}} render LITERALLY with the `render unknown <id> <token>` ledger
-line (never a failure), and the budget failsafe collapses the OLDEST frames
-to one-line summaries with the `failsafe section-collapse <n>` ledger line.
-Every assertion lands on the rendered section text or a ledger line - never
-on "no throw" (the vacuously-green guard).
+The R-series: the rendered section's shape and the substitution engine.
+
+The assembly gains exactly ONE appended section named `live-containers` carrying
+`interpolate: false`, so the harness's own prompt variables never resolve our tokens.
+
+Every phase-1 block kind renders inside the byte-exact LIVE CONTAINER frame.
+
+The variable table (time/date/tz under the FAKE CLOCK, messageCount/turnCount/sinceLastTool from the
+observers, cwd/sessionId) is resolved per request, per-block `vars` override the built-ins, and
+unknown {{tokens}} render LITERALLY with the `render unknown <id> <token>` ledger line (never a
+failure).
+
+The budget failsafe collapses the OLDEST frames to one-line summaries with the `failsafe
+section-collapse <n>` ledger line.
+
+Every assertion lands on the rendered section text or a ledger line, never on "no throw" (the
+vacuously-green guard).
 
 ## Scenario
 
@@ -49,12 +54,11 @@ on "no throw" (the vacuously-green guard).
 
 ## Fixtures
 
-The harness world with the fake clock: `MakeClocked` sets `State.Now` to the
-harness clock through the `__hookDshLiveContainersState` probe; folders
-advance `ClockBox` and never sleep. The expected {{time}}/{{date}} bytes are
-computed with the same Intl shapes Counters.Table uses (en-GB time, en-CA
-date, the host zone), so the assertions stay deterministic under the fake
-clock.
+The harness world with the fake clock: `MakeClocked` sets `State.Now` to the harness clock through
+the `__hookDshLiveContainersState` probe, and folders advance `ClockBox` and never sleep.
+
+The expected {{time}}/{{date}} bytes are computed with the same Intl shapes that Counters.Table uses
+(en-GB time, en-CA date, the host zone), so the assertions stay deterministic under the fake clock.
 
 ## Expected ledger strings (byte-exact)
 
@@ -66,14 +70,9 @@ clock.
 
 ## Edge cases
 
-- The frame is the model-facing contract:
-  `--- LIVE CONTAINER <id> (recomputed each request; not harness state) ---`
-  body `--- END LIVE CONTAINER <id> ---` - asserted byte-exact, not by
-  substring presence alone where a full body is known.
-- The wave-2 kind proves the kind registry's phase boundary: accepted in
-  config, skipped at render until the wave-2 engine lands.
-- The budget pass never collapses the last frame and never silently drops a
-  block (the summary keeps the byte count).
+- The frame is the model-facing contract: `--- LIVE CONTAINER <id> (recomputed each request; not harness state) ---` body `--- END LIVE CONTAINER <id> ---`, asserted byte-exact and not by substring presence alone where a full body is known.
+- The wave-2 kind proves the phase boundary of the kind registry: accepted in config, skipped at render until the wave-2 engine lands.
+- The budget pass never collapses the last frame and never silently drops a block (the summary keeps the byte count).
 
 ## Expected count
 

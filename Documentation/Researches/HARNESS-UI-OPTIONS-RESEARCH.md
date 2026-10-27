@@ -24,10 +24,10 @@ Author: R-UI-2 (research subagent). Date: 2026-10-20. Read-only research; this i
 written.
 
 Scope: the per-plugin config options of the DeepSeek Harness Plugin Family (the policy and cooldown
-of the governors, the sections of the pinner, the normalize flavors, the thresholds of ccr, the tiers
-of the tool-coach, and the blocks of the live-containers). Are they UI-accessible today, and can they
-become UI-powered (editable and controllable through the harness UI, including the live volatile
-reloads)?
+of the governors, the sections of the pinner, the normalize flavors, the thresholds of ccr, the
+tiers of the tool-coach, and the blocks of the live-containers). Are they UI-accessible today, and
+can they become UI-powered (editable and controllable through the harness UI, including the live
+volatile reloads)?
 
 Sources: the running harness implementation read in place from /Applications/DeepSeek
 Harness.app/Contents/Resources/app.asar/dsh/ (never extracted), the harness documentation repo at
@@ -144,8 +144,8 @@ prescribe exactly this pattern.
 
 ## 2. THE GAP MAP - which family knobs are UI-editable today vs which need the surface
 
-Today NOTHING is UI-editable (NO browser half). The map below shows what the existing backend WOULD
-expose through a client half once one exists, split volatile (live-editable, NO remount - the
+Today NOTHING is UI-editable (NO browser half), and the map below shows what the existing backend
+WOULD expose through a client half once one exists, split volatile (live-editable, NO remount - the
 settings-service path) vs plain (structural: excluded from settings forms; a write requires a
 full-config edit through configEditor, which remounts the plugin on apply).
 
@@ -164,20 +164,20 @@ Per-module (Config.ts sources under <FAM>/<pkg>/Source/Variable/Config.ts):
 
 Key gaps to close, in order of impact:
 
-1. THE SURFACE GAP (blocking): NO browser half / NO slot registration for any family row -> NO
-   Configure control anywhere in the UI.
-2. THE PLAIN-FIELD GAP: the governors' policy knobs (strict, policyFile, exclude, sections,
-   ncuBin/cargoBin, updateMode) and ccr's structural knobs are NOT expressible through the settings
-   service (its writes hard-fail "Config field ... is not volatile"). UI-editing them requires
-   either (a) a small host-side remote wrapper around `configEditor.edit()` (configEditor has NO
-   @Remote methods today), or (b) reclassifying the knob as `.volatile()` in the family schema when
-   remounting is actually harmless, or (c) leaving them file-only.
+1. THE SURFACE GAP (blocking): NO browser half and NO slot registration for any family row, so NO
+   Configure control exists anywhere in the UI.
+2. THE PLAIN-FIELD GAP: the policy knobs of the governors (strict, policyFile, exclude, sections,
+   ncuBin/cargoBin, updateMode) and the structural knobs of ccr are NOT expressible through the
+   settings service, whose writes hard-fail "Config field ... is not volatile", so UI-editing them
+   requires either (a) a small host-side remote wrapper around `configEditor.edit()` (configEditor
+   has NO @Remote methods today), or (b) reclassifying the knob as `.volatile()` in the family
+   schema when remounting is actually harmless, or (c) leaving them file-only.
 3. THE AUTOGENERATE GAP: `autoGenerate: true` is advertised on the wire but NO client page consumes
-   it to auto-generate forms; until one does, EACH family row needs an explicit `plugins.row.config`
-   registration.
-4. THE BUILD GAP: the family's factory does NOT build client bundles (`clientBundle` tsdown preset
-   is harness-internal; the family must emit the lazy-CJS factory format `./client` itself, per
-   cookbook section 5).
+   it to auto-generate forms, so until one does, EACH family row needs an explicit
+   `plugins.row.config` registration.
+4. THE BUILD GAP: the factory of the family does NOT build client bundles (the `clientBundle` tsdown
+   preset is harness-internal), so the family must emit the lazy-CJS factory format `./client`
+   itself, per cookbook section 5.
 
 ## 3. THE DESIGN - the per-plugin options surface
 
@@ -243,69 +243,73 @@ companion-package pattern):
 
 ## 4. MINIMAL PROOF-OF-CONCEPT PATH
 
-The smallest change that makes the family's options UI-editable, NO harness edits:
+The smallest change that makes the options of the family UI-editable, with NO harness edits:
 
 1. Pick ONE fully-volatile module - `hook-dsh-tool-coach` or `hook-dsh-live-containers` (EVERY knob
-   is volatile; the settings service covers 100% of their fields).
-2. Add a client half to THAT package ONLY (cookbook section 5 shape): package.json gains `./client`
-   export + `dsh.client` (`inject: ["@deepseek-ai/dsh-client-ui-settings"]`); build `./client` as
-   the lazy-CJS factory format script (one file, `factory(require)`; hand-rolled or a small tsdown
-   config copied from the harness's `packages/client/tsdown.client.ts` pattern - the family's
-   plugin-dsh-factory gets a `client` build step added only if hand-rolling is unacceptable).
+   is volatile, so the settings service covers 100% of their fields).
+2. Add a client half to THAT package ONLY (cookbook section 5 shape): package.json gains a
+   `./client` export and `dsh.client` (`inject: ["@deepseek-ai/dsh-client-ui-settings"]`), and the
+   `./client` is built as the lazy-CJS factory format script (one file, `factory(require)`;
+   hand-rolled or a small tsdown config copied from the `packages/client/tsdown.client.ts` pattern
+   of the harness, with a `client` build step added to plugin-dsh-factory only if hand-rolling is
+   unacceptable).
 3. The client registers exactly one slot:
    `ctx.configForms.whileServed(['<entry id>'], () => ctx.slots.inject('plugins.row.config', () => ctx.slots.register({ name: 'plugins.row.config', key: '@playform/hook-dsh-tool-coach#<row id>', locale: '...' }, ({ form }) => <SchemaForm from form.state / form.mutate>)))`.
-4. Restart the harness ONCE (profile change: the client half is discovered by the client module
-   graph on composition; HMR then keeps it live).
+4. Restart the harness ONCE (a profile change, because the client half is discovered by the client
+   module graph on composition, after which HMR keeps it live).
 5. Verify per cookbook section 3: open Plugins -> the package -> the row -> Configure; edit
    `threshold`/`enforce`/a live-containers knob; Save; confirm (a) the profile's cordis.patch.yml
-   gained the id-keyed override, (b) the plugin's very next operation uses the new value with
-   unchanged instance identity (the family logs + `loader/volatile-update` prove it), (c) an invalid
-   value is refused with neither file nor live value changed, (d) restart restores the saved value.
+   gained the id-keyed override, (b) the very next operation of the plugin uses the new value with
+   unchanged instance identity (the family logs and `loader/volatile-update` prove it), (c) an
+   invalid value is refused with neither the file nor the live value changed, and (d) a restart
+   restores the saved value.
 
-That single row proves the entire chain end to end. Phase 2 clones the same half to the remaining
-family rows (or folds them into one panel package); phase 3 adds the plain-field bridge service for
-the governors' policy knobs.
+That single row proves the entire chain end to end, phase 2 clones the same half to the remaining
+family rows (or folds them into one panel package), and phase 3 adds the plain-field bridge service
+for the policy knobs of the governors.
 
 Residual constraints to know before building:
 
-- ONLY entries uniquely addressed by the root Include are editable - true for EVERY family row in
-  the desktop profile (each id appears once).
-- Edits target the active profile patch ONLY; home patches / CLI overlays are read-only precedence
-  (configEditor README sectionKnown limitations).
-- The desktop profile's family rows currently carry FULL explicit configs, so EVERY field shows as
-  user-overridden; values edited in the UI update those overrides IN PLACE.
+- ONLY entries uniquely addressed by the root Include are editable, which is true for EVERY family
+  row in the desktop profile (each id appears once).
+- Edits target the active profile patch ONLY, while home patches and CLI overlays are read-only
+  precedence (configEditor README sectionKnown limitations).
+- The family rows of the desktop profile currently carry FULL explicit configs, so EVERY field shows
+  as user-overridden and the values edited in the UI update those overrides IN PLACE.
 - The client page lives ONLY while the host row is enabled (`dsh-client-modules` attaches the half
-  to the row) - a switched-off family row loses its page, which is the desired behavior.
+  to the row), so a switched-off family row loses its page, which is the desired behavior.
 
 ## 5. ACCEPTANCE CRITERIA
 
-1. Plugins -> <family package> -> row shows a Configure control; its page renders a form generated
-   from the entry's projected schema (volatile fields only for phase 1), with current values,
-   base-vs-user provenance, and a revision.
+1. Plugins -> <family package> -> row shows a Configure control, and its page renders a form
+   generated from the projected schema of the entry (volatile fields only for phase 1), with current
+   values, base-vs-user provenance, and a revision.
 2. Saving a volatile knob:
     - writes the id-keyed `config:` override into ~/.dsh/profiles/<profile>/cordis.patch.yml
       (comments and `!!js` preserved);
-    - commits into the running plugin WITHOUT remounting (instance identity unchanged; the next
-      operation uses the new value - verified against the module's ledger log or
+    - commits into the running plugin WITHOUT a remount (instance identity unchanged; the next
+      operation uses the new value, verified against the ledger log of the module or
       `loader/volatile-update` observability);
-    - is revision-fenced: a concurrent change yields a conflict that preserves the draft; an invalid
-      value is refused with file AND live value unchanged.
-3. Switching the family row off removes the page; switching it on restores it (whileServed
-   semantics), with NO orphaned registration.
-4. Survives restart: values persist in the profile patch and reload correctly.
-5. Phase 2 (plain fields): the governors' policy knobs become editable through the bridge with an
-   explicit "applies on remount" marker, and the remount is observable in the UI's row status.
-6. NO harness source changes are required for phases 1-2; ANY harness-side gap found during the POC
-   is filed as a documented residual, NOT a local monkey-patch.
+    - is revision-fenced, so a concurrent change yields a conflict that preserves the draft and an
+      invalid value is refused with the file AND the live value unchanged.
+3. Switching the family row off removes the page, and switching it on restores it (whileServed
+   semantics) with NO orphaned registration.
+4. It survives a restart, because the values persist in the profile patch and reload correctly.
+5. Phase 2 (plain fields): the policy knobs of the governors become editable through the bridge with
+   an explicit "applies on remount" marker, and the remount is observable in the row status of the
+   UI.
+6. NO harness source change is required for phases 1-2, and ANY harness-side gap found during the
+   POC is filed as a documented residual, NOT a local monkey-patch.
 
 ## 6. RESIDUALS / OPEN QUESTS
 
-- NO client page currently consumes `autoGenerate`; a generic auto-form would remove the need for
-  per-row registrations but is harness work, NOT family work.
-- `configEditor` has NO @Remote surface; the plain-field bridge (section 3.2 step 5) is a new
-  family-host service and the ONLY place a family package must be trusted with full-config writes.
-- The family's factory currently has NO client build step; the POC hand-builds one `./client` file,
-  then the factory gains a reusable `clientBundle` step.
-- The live GUI page was NOT reachable from this session for a DOM-level confirmation (client inspect
-  queries timed out with the page closed); the Plugins-page behavior was verified from the shipped
-  client bundle source and package READMEs instead.
+- NO client page currently consumes `autoGenerate`, and a generic auto-form would remove the need
+  for per-row registrations but is harness work and NOT family work.
+- `configEditor` has NO @Remote surface, so the plain-field bridge (section 3.2 step 5) is a new
+  family-host service and the ONLY place where a family package must be trusted with full-config
+  writes.
+- The factory of the family currently has NO client build step, so the POC hand-builds one
+  `./client` file and the factory then gains a reusable `clientBundle` step.
+- The live GUI page was NOT reachable from this session for a DOM-level confirmation (the client
+  inspect queries timed out with the page closed), so the Plugins-page behavior was verified from
+  the shipped client bundle source and the package READMEs instead.

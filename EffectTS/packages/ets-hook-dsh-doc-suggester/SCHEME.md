@@ -1,16 +1,22 @@
 # SCHEME.md - @playform/hook-dsh-doc-suggester (v0.3.0, TypeScript, function plugin)
 
-Status: **IMPLEMENTED (PoC phase + the D8 learning layer)** - the Source is complete, the build and
-the five smoke folders pass, and the decision-record/follow-through/learned-rate layer of section
-3.2 has landed (the ETS twin is deferred, POC-BRIEF.md section 8).
+Status: **IMPLEMENTED (PoC phase + the D8 learning layer)**.
+
+The Source is complete, the build and the five smoke folders pass, and the decision-record,
+follow-through, and learned-rate layer of section 3.2 has landed (the ETS twin is deferred,
+POC-BRIEF.md section 8).
 
 ## 0. What this plugin is
 
-The doc-task **companion suggester**: when a judged call names a documentation path matching one of
-the seven families, the plugin prepends ONE labeled `additionalContexts` note on the
-`tools/post-execute` waterfall naming the doc-graph companions the task conventionally requires.
-Deterministic path rules, no LLM, gated hard, fail-open, and silent by default (ships
-`enabled: false`). It is the third consumer of the search-suggester's pattern algebra.
+The doc-task **companion suggester**: when a judged call names a documentation path that matches one
+of the seven families, the plugin prepends ONE labeled `additionalContexts` note on the
+`tools/post-execute` waterfall and names the doc-graph companions that the task conventionally
+requires.
+
+Deterministic path rules, no LLM, gated hard, fail-open, and silent by default (it ships with
+`enabled: false`).
+
+It is the third consumer of the pattern algebra of the search-suggester.
 
 Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md` (sections 3.6 Doc, 8, and the
 shared algebra of section 3).
@@ -63,41 +69,59 @@ doc-suggester: suppressed dedupe <Family>
 doc-suggester: suppressed cap <Family>
 ```
 
-The activation line uses the core's `Activate` composer and the module's own field list; every other
-string is composed in Function/Apply (the `decided` line in Function/Decided, the outcome lines in
-Function/Apply). `<values>` and `<weights>` are the canonical `name=value` tables of Function/Table
-(`scope=1.00,graph=0.50,prior=1.00,literal=0.50,history=0.33,accept=0.33`); the head is the
+The activation line uses the `Activate` composer of the core and the own field list of the module.
+
+Every other string is composed in Function/Apply (the `decided` line in Function/Decided, the
+outcome lines in Function/Apply).
+
+`<values>` and `<weights>` are the canonical `name=value` tables of Function/Table
+(`scope=1.00,graph=0.50,prior=1.00,literal=0.50,history=0.33,accept=0.33`), and the head is the
 top-ranked companion, whose row the values describe.
 
 ### 3.1 The workspace gate and the existence filter
 
-The pack is the repo's own doc graph: the BUILT-IN pack when the repo has no pack file, or the
-resolved workspace pack otherwise. The `tools/post-execute` listener resolves the workspace root
-BEFORE detect/score through `@playform/ets-lib-dsh-pack`'s `Locate`: it walks up from the call path
-(resolved against the session cwd, when the optional `workingDirectory` service exposes one) to the
-first ancestor whose PACK SIGNATURE matches - the signature is the pack's `signature` list,
-defaulting to `Documentation/ARCHIVE-STYLE.md`. No root means a foreign workspace: the listener
-appends `abstained foreign-workspace  0.00` (the gate runs before the family is known, so the family
-segment is empty and the kappa is the no-signal 0.00) and returns the downstream decision unchanged.
-The resolved pack's `doc/` families (`Families(pack, "doc")`) drive Detect, so a repo pack overrides
-the built-in families without a restart.
+The pack is the own doc graph of the repo: the BUILT-IN pack when the repo has no pack file, or the
+resolved workspace pack otherwise.
 
-With the root known, `Function/Filter` drops every companion that exists under NONE of the call's
-three bases: the repo root, the package root (the nearest ancestor of the resolved call path
-carrying `package.json`, at or below the repo root) and the package parent. A literal path uses
-`existsSync`; a `*/<rest>` glob needs an immediate subdirectory of the package parent or the repo
-root to contain `<rest>`; any other glob needs its literal prefix directory under a base. A target
-carrying a `<...>` placeholder is illustrative and always kept. A winning family whose whole
-companion set is gone abstains `no-companions <Family> <k>`. The note text, the relative companion
-paths, and the cooldown/dedupe/cap behavior are unchanged - the filter only drops a target, never
-rewrites one.
+The `tools/post-execute` listener resolves the workspace root BEFORE detect and score through
+`Locate` of `@playform/ets-lib-dsh-pack`.
+
+It walks up from the call path (resolved against the session cwd, when the optional
+`workingDirectory` service exposes one) to the first ancestor whose PACK SIGNATURE matches.
+
+The signature is the `signature` list of the pack, defaulting to `Documentation/ARCHIVE-STYLE.md`.
+
+No root means a foreign workspace: the listener appends `abstained foreign-workspace  0.00` (the
+gate runs before the family is known, so the family segment is empty and the kappa is the no-signal
+0.00) and returns the downstream decision unchanged.
+
+The `doc/` families of the resolved pack (`Families(pack, "doc")`) drive Detect, so a repo pack
+overrides the built-in families without a restart.
+
+With the root known, `Function/Filter` drops every companion that exists under NONE of the three
+bases of the call: the repo root, the package root (the nearest ancestor of the resolved call path
+carrying `package.json`, at or below the repo root) and the package parent.
+
+A literal path uses `existsSync`.
+
+A `*/<rest>` glob needs an immediate subdirectory of the package parent or the repo root to contain
+`<rest>`.
+
+Any other glob needs its literal prefix directory under a base.
+
+A target carrying a `<...>` placeholder is illustrative and always kept.
+
+A winning family whose whole companion set is gone abstains `no-companions <Family> <k>`.
+
+The note text, the relative companion paths, and the cooldown/dedupe/cap behavior are unchanged,
+because the filter only drops a target and never rewrites one.
 
 ## 3.2 The learning layer (D8)
 
 ### The decision record (Interface/Decision)
 
-Every emitted note - and every gated silence worth learning from (`low-confidence`,
-`already-touched`) - records ONE decision:
+Every emitted note, and every gated silence worth learning from (`low-confidence`,
+`already-touched`), records ONE decision:
 
 ```ts
 {
@@ -113,36 +137,45 @@ Every emitted note - and every gated silence worth learning from (`low-confidenc
 }
 ```
 
-The record is built by `Function/Decide` from the rows `Function/Measure` already scored (a gated
-silence measures the family's would-be companions through `Function/Would`, the same leaf), logged
-as the `decided` line, and stored through `Function/Store`: the optional `pattern` service
-(`ctx.get("pattern")`, probed per use, never injected) when present, the bounded memory ring
-otherwise. The service projection: `intent` = the family, `targets` = the companion paths, `arbiter`
-= the outcome, `confidence` = the kappa, and the `transform` lines carry `weights <table>`,
-`enabled <names>`, `outcome <verdict>` and one `<path> <table>` line per companion. The store keeps
-the record ring in memory too, so `Learning.Resolve` can fill the outcome placeholder when the
-follow-through closes.
+The record is built by `Function/Decide` from the rows that `Function/Measure` already scored, and a
+gated silence measures the would-be companions of the family through `Function/Would`, the same
+leaf.
+
+It is logged as the `decided` line and stored through `Function/Store`: the optional `pattern`
+service (`ctx.get("pattern")`, probed per use, never injected) when present, the bounded memory ring
+otherwise.
+
+The service projection: `intent` = the family, `targets` = the companion paths, `arbiter` = the
+outcome, `confidence` = the kappa, and the `transform` lines carry `weights <table>`,
+`enabled <names>`, `outcome <verdict>` and one `<path> <table>` line per companion.
+
+The store keeps the record ring in memory too, so `Learning.Resolve` can fill the outcome
+placeholder when the follow-through closes.
 
 ### The follow-through (the outcome signal)
 
-An emitted note opens a window (`Ring.Open`) holding the family and the companion paths. Every
-judged IN-WORKSPACE call (`Ring.Follow`/`Ring.Age`):
+An emitted note opens a window (`Ring.Open`) that holds the family and the companion paths.
 
-- if the call path names a companion (`Function/Match`, glob-aware), it is an **accept**: the
-  companion and its family move by the service's accept bonus (`accepted <Family> <path>`), the
-  window closes, and the decision record's outcome becomes `accepted`;
-- otherwise the window ages by one call; the call that reaches `learnWindow` closes it untouched as
-  a **soft reject**: every named companion and the family move by the reject penalty
+Every judged IN-WORKSPACE call (`Ring.Follow`/`Ring.Age`) does one of two things.
+
+- If the call path names a companion (`Function/Match`, glob-aware), it is an **accept**: the
+  companion and its family move by the accept bonus of the service (`accepted <Family> <path>`), the
+  window closes, and the outcome of the decision record becomes `accepted`.
+- Otherwise the window ages by one call, and the call that reaches `learnWindow` closes it untouched
+  as a **soft reject**: every named companion and the family move by the reject penalty
   (`rejected <Family> <n> companions`), and the outcome becomes `rejected`.
 
-No timers and no clock: the window is a counter of judged calls. The per-turn reset forgets an open
-note without a verdict (a turn boundary is not a judged call).
+No timers and no clock, because the window is a counter of judged calls.
+
+The per-turn reset forgets an open note without a verdict (a turn boundary is not a judged call).
 
 ### The learned rate and the score
 
-`Function/Store` answers the rates: a record's `confidence` (the service) or the fallback's row
-(memory), both starting at the neutral 1/3 and moving by +0.1 (accept) / -0.2 (reject), clamped to
-0..1. The score is
+`Function/Store` answers the rates: the `confidence` of a record (the service) or the row of the
+fallback (memory), both starting at the neutral 1/3 and moving by +0.1 (accept) / -0.2 (reject),
+clamped to 0..1.
+
+The score is
 
 ```
 score(c) = sum over the ENABLED heuristics of weight(h) * value(h)
@@ -157,11 +190,14 @@ score(c) = sum over the ENABLED heuristics of weight(h) * value(h)
 | `history` | the learned per-companion accept rate (neutral 1/3) | 0.15           |
 | `accept`  | the learned per-family accept rate (neutral 1/3)    | 0.00           |
 
-The default row reproduces the PoC formula exactly (`0.35*1 + 0.25*prior + 0.25*0.5 + 0.15*(1/3)`);
-a missing store answers the neutral 1/3, so the default behavior is unchanged byte-for-byte. The
-config's `heuristics` (the enabled names) and `weights` (the table) make every term pickable: a
-disabled name is dropped from the sum (its effective weight is 0) and the decision record keeps the
-enabled list, so the choice is auditable.
+The default row reproduces the PoC formula exactly (`0.35*1 + 0.25*prior + 0.25*0.5 + 0.15*(1/3)`).
+
+A missing store answers the neutral 1/3, so the default behavior is unchanged byte-for-byte.
+
+The config's `heuristics` (the enabled names) and `weights` (the table) make every term pickable.
+
+A disabled name is dropped from the sum (its effective weight is 0), and the decision record keeps
+the enabled list, so the choice is auditable.
 
 ## 4. The architecture
 
@@ -204,6 +240,9 @@ Source/
 
 The smoke folders are `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`, `Pack-Driven`
 and `Learning-Loop` (the decision records, the follow-through, the learned rate, the pickable
-heuristics and the storage fallback - 12 checks). The learned layer of the plan's end-phase list is
-now landed (this section's 3.2); the ETS twin (`@playform/ets-hook-dsh-doc-suggester`) is DEFERRED
-for this wave (the user's ETS deferral) - POC-BRIEF.md section 8.
+heuristics and the storage fallback, 12 checks).
+
+The learned layer of the end-phase list of the plan is now landed (section 3.2 of this document).
+
+The ETS twin (`@playform/ets-hook-dsh-doc-suggester`) is DEFERRED for this wave (the ETS deferral of
+the user), POC-BRIEF.md section 8.

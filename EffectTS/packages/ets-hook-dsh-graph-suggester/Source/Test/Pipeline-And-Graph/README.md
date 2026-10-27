@@ -1,8 +1,8 @@
 # Pipeline-And-Graph - the pipeline and the graph resolution tests
 
-The tools/post-execute pipeline against the fake `workspaceGraph` service:
-the Neighborhood resolution, the fallbacks, the abstention paths, the gate,
-the exclusion, the volatile flip, and the purity.
+The tools/post-execute pipeline against the fake `workspaceGraph` service: the Neighborhood
+resolution, the fallbacks, the abstention paths, the gate, the exclusion, the volatile flip, and the
+purity.
 
 ## Scenarios
 
@@ -36,8 +36,8 @@ the exclusion, the volatile flip, and the purity.
 
 ## Fixtures
 
-The shared Harness plus `FakeGraph` (the service shape declared in
-Interface/Graph.ts) and `Flip` (the cosmokit volatile-cell write symbol).
+The shared Harness plus `FakeGraph` (the service shape declared in Interface/Graph.ts) and `Flip`
+(the cosmokit volatile-cell write symbol).
 
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 

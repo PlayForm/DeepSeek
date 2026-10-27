@@ -4,18 +4,22 @@ What this test verifies.
 
 ## Intent
 
-The volatile-flip and fail-open discipline tests. Every knob flips through
-its volatile cell (the cosmokit hot-edit write + the captured
-loader/volatile-update listener - the same mechanism the live loader uses)
-and the NEXT assembly respects the flip WITHOUT a remount (the built State
-object identity is preserved); the skip-reason ledger lines are byte-exact
-and stay quiet on steady state; the fail-open negatives hold (a render
-failure skips the block and logs `render failed <id> -> skipped` while the
-assembly still resolves; a throwing clock degrades to the real clock; a
-malformed pre-step payload never throws); and the cold-mount IDLE-forever
-posture is proven behaviorally (full passthrough, the byte-exact
-`disabled (enabled=false)` line, zero warnings). The per-scope labels
-({{sessionId}}) are stable per scope object and distinct across scopes.
+The volatile-flip and fail-open discipline tests.
+
+Every knob flips through its volatile cell (the cosmokit hot-edit write + the captured
+loader/volatile-update listener, the same mechanism that the live loader uses), and the NEXT assembly
+respects the flip WITHOUT a remount (the identity of the built State object is preserved).
+
+The skip-reason ledger lines are byte-exact and stay quiet on steady state.
+
+The fail-open negatives hold: a render failure skips the block and logs `render failed <id> ->
+skipped` while the assembly still resolves, a throwing clock degrades to the real clock, and a
+malformed pre-step payload never throws.
+
+The cold-mount IDLE-forever posture is proven behaviorally (full passthrough, the byte-exact
+`disabled (enabled=false)` line, zero warnings).
+
+The per-scope labels ({{sessionId}}) are stable per scope object and distinct across scopes.
 
 ## Scenario
 
@@ -56,13 +60,15 @@ posture is proven behaviorally (full passthrough, the byte-exact
 
 ## Fixtures
 
-The harness world with the fake clock. The flips commit through the
-`Flip` helper (the registered `Symbol.for("cosmokit.volatile.write")` write
-on the schema-produced cell) and then fire the captured
-`loader/volatile-update` listener with the changed path - mirroring the
-live sequence (commit, then the event). The poisoned vars block is built by
-swapping the block's vars for a throwing Proxy AFTER the mount, so the
-fail-loud validation never sees it (mirroring a hot-edited bad table).
+The harness world with the fake clock.
+
+The flips commit through the `Flip` helper (the registered
+`Symbol.for("cosmokit.volatile.write")` write on the schema-produced cell) and then fire the captured
+`loader/volatile-update` listener with the changed path, mirroring the live sequence (commit, then
+the event).
+
+The poisoned vars block is built by swapping the vars of the block for a throwing Proxy AFTER the
+mount, so the fail-loud validation never sees it (mirroring a hot-edited bad table).
 
 ## Expected ledger strings (byte-exact)
 
@@ -74,13 +80,9 @@ fail-loud validation never sees it (mirroring a hot-edited bad table).
 
 ## Edge cases
 
-- The flip assertions never remount: the same State object keeps serving,
-  which is the P10 volatile-refresh contract.
-- The fail-open catch is asserted through OBSERVABLE outcomes (the section
-  contents, the ledger lines, the warnings count) - never through "it did
-  not throw".
-- The disabled mount's post-execute passthrough returns the downstream
-  decision unchanged (the counters are skipped while Off).
+- The flip assertions never remount, because the same State object keeps serving, which is the P10 volatile-refresh contract.
+- The fail-open catch is asserted through OBSERVABLE outcomes (the section contents, the ledger lines, the warnings count), never through "it did not throw".
+- The disabled mount's post-execute passthrough returns the downstream decision unchanged (the counters are skipped while Off).
 
 ## Expected count
 

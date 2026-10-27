@@ -5,42 +5,42 @@
 - Package: `@playform/plugin-dsh-feedback` (Classic/packages/plugin-dsh-feedback).
 - Profile row id: `plugin-dsh-feedback` (bundled in the desktop profile; this is the one member that
   ships `enabled: true` - a SERVICE-PROVIDER bundle).
-- Exposes: the `feedback` service (`ctx.feedback`), declared as
+- Exposes the `feedback` service (`ctx.feedback`), declared as
   `export default class Feedback extends Service` with a static Config (validated before
-  construction) registered via `super(Context, "feedback")`. The honest-signal collector: the
-  transfer hop, the optional read and the council summary. Service surface (SCHEME §2):
+  construction) registered via `super(Context, "feedback")`. It is the honest-signal collector: the
+  transfer hop, the optional read, and the council summary. Service surface (SCHEME §2):
   `Record(block)`, `Push(block, parentSession)`, `Delta(session, agentId, text)`,
   `Read(session, agentId, reader)`, `Summary(session)`,
-  `Outcome(session, agentId, proposal, outcome, detail)`. All knobs are read at construction (no hot
-  refresh; a config edit reloads the plugin).
-- The batch outcome (SCHEME §2 `Outcome`): the ingester calls it after every apply — the outcome is
-  appended to the session's outcome ring, bounded by `maxOutcomes` (16 per README), journal line
-  `{ at, event: "batch", session, agentId, proposal, outcome, detail }`, and carried in the summary
-  beside the blocks. A disabled service or an empty proposal id records nothing.
-- Ledger: the journal (one JSON line per event — block events and the batch outcome), logFile
-  `~/.dsh/playform/plugin-dsh-feedback.log` (no separate activation string observed — the service
-  registration is the proof).
-- The policy block (D6, SCHEME §4.1): the schema composes the factory's shared `policy: Policy()`;
-  record/suggest = `auto`; write/commit/spawn = `approve` (declared for uniformity — the member
-  never writes, commits or spawns). One volatile object; a resolved pack's `policy` section
-  overrides per action.
+  `Outcome(session, agentId, proposal, outcome, detail)`. All knobs are read at construction, with
+  no hot refresh, so a config edit reloads the plugin.
+- The batch outcome (SCHEME §2 `Outcome`): the ingester calls it after every apply, and the outcome
+  is appended to the outcome ring of the session, bounded by `maxOutcomes` (16 per README), with the
+  journal line `{ at, event: "batch", session, agentId, proposal, outcome, detail }` carried in the
+  summary beside the blocks. A disabled service or an empty proposal id records nothing.
+- Ledger: the journal (one JSON line per event, block events and the batch outcome), logFile
+  `~/.dsh/playform/plugin-dsh-feedback.log`, and no separate activation string is observed, because
+  the service registration is the proof.
+- The policy block (D6, SCHEME §4.1): the schema composes the shared `policy: Policy()` of the
+  factory, with record/suggest = `auto` and write/commit/spawn = `approve` (declared for uniformity,
+  because the member never writes, commits or spawns). One volatile object stays hot-editable, and a
+  resolved pack's `policy` section overrides per action.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-feedback"}` → one entry, status schema (defaults: maxBlockBytes
-    4096, maxChain 8, maxSessions 128, summaryTerms 10, maxOutcomes 16, policy.* D6 defaults).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-feedback"}` for one entry with status schema (defaults:
+    maxBlockBytes 4096, maxChain 8, maxSessions 128, summaryTerms 10, maxOutcomes 16, policy.* D6
+    defaults).
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService `feedback` → resolves immediately
-    on construction.
+    `cordis_inspect_query` host/Service/listService `feedback` resolves immediately on construction.
 
 3. **The ledger line.**
 
-    Ledger line: entries in `~/.dsh/playform/plugin-dsh-feedback.log`.
+    Entries appear in `~/.dsh/playform/plugin-dsh-feedback.log`.
 
 ## Test cases
 
@@ -55,9 +55,9 @@ capped | no unbounded growth; the cap ledgered | | T1 | The council summary requ
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: maxSessions 128 eviction dropping active session blocks, the read
-  path returning stale summaries, and no hot config refresh (all knobs are read at construction — a
-  config edit reloads the plugin).
+- Not dogfooded yet, so watch for maxSessions 128 eviction dropping active session blocks, the read
+  path returning stale summaries, and no hot config refresh (all knobs are read at construction, so
+  a config edit reloads the plugin).
 
 ## Fix loop
 
@@ -66,7 +66,7 @@ capped | no unbounded growth; the cap ledgered | | T1 | The council summary requ
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-feedback run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-feedback/Target/Test/<Folder>/Test.js` per folder under
-  `Source/Test/`. Then the app restart.
+  `Source/Test/`, then restart the app.
 
 ## Report stub
 

@@ -4,16 +4,19 @@ The Neighborhood intent against a REAL populated graph.
 
 ## Intent
 
-Prove the graph-suggester's consumer chain over the real service: the real
-`@playform/plugin-dsh-workspace-graph` (from its built Target) is populated through its own indexing
-trigger, and the hook's declared `neighborhood(path, limit)` query answers from the real
-`contains`/`imports` edges - the note lists the real component. Every other folder in this package
-drives `FakeGraph`; this one closes the POC gap "the live graph is empty; only FakeGraph-proven".
+Prove the consumer chain of the graph-suggester over the real service.
+
+The real `@playform/plugin-dsh-workspace-graph` (from its built Target) is populated through its own
+indexing trigger, and the declared `neighborhood(path, limit)` query of the hook answers from the
+real `contains`/`imports` edges, so the note lists the real component.
+
+Every other folder in this package drives `FakeGraph`, and this one closes the POC gap "the live
+graph is empty; only FakeGraph-proven".
 
 ## Scenario
 
-The fixture is a four-file map under `/ws` (the `Source/` segment keeps the pack's path-shape signal
-honest): `Source/Core.ts` (the anchor, no imports), `Source/Use.ts` (imports `./Core.ts`),
+The fixture is a four-file map under `/ws` (the `Source/` segment keeps the path-shape signal of the
+pack honest): `Source/Core.ts` (the anchor, no imports), `Source/Use.ts` (imports `./Core.ts`),
 `Source/Core.test.ts` (a test path importing `./Core.ts`) and `README.md`.
 
 - Group G1: the real neighborhood.
@@ -38,16 +41,12 @@ honest): `Source/Core.ts` (the anchor, no imports), `Source/Use.ts` (imports `./
 
 ## Fixtures
 
-- `RealGraph` from the Harness: the real graph class over an in-memory file map whose
-  `resolve`/`stat`/`readText`/`listDir`/`contains` drive the real walk and parser, attached to the
-  hook's ctx before `apply` (the service is probed at use time).
+- `RealGraph` from the Harness: the real graph class over an in-memory file map whose `resolve`/`stat`/`readText`/`listDir`/`contains` drive the real walk and parser, attached to the ctx of the hook before `apply` (the service is probed at use time).
 
 ## Edge cases
 
-- The anchor arrives as the tool probe's first quoted `.ts` path (the absolute `/ws/Source/Core.ts`),
-  which the graph matches by exact display path.
-- An empty component is NOT an unavailable graph: the static fallback answers, and the hook logs no
-  `graph unavailable` line - the real service answered, honestly, with nothing.
+- The anchor arrives as the first quoted `.ts` path of the tool probe (the absolute `/ws/Source/Core.ts`), which the graph matches by exact display path.
+- An empty component is NOT an unavailable graph: the static fallback answers and the hook logs no `graph unavailable` line, because the real service answered honestly with nothing.
 
 ## Expected count
 

@@ -1,8 +1,8 @@
 # Monitors-Tools - the wave-3 M-series tool tests
 
-The two monitor tool surfaces (the escape hatch, R3 point 6): live_monitor
-and live_monitor_check. Read-only semantics - the tools enroll, list, opt
-out and dispatch; they never gate an edit.
+The two monitor tool surfaces (the escape hatch, R3 point 6): live_monitor and live_monitor_check.
+
+Read-only semantics: the tools enroll, list, opt out and dispatch, and they never gate an edit.
 
 ## Scenarios
 
@@ -28,9 +28,8 @@ out and dispatch; they never gate an edit.
 
 ## Fixtures
 
-The shared Harness (the registering tools service captures the
-definitions, so the tests invoke the tools exactly as the registry would)
-plus the wave-3 fixtures.
+The shared Harness (the registering tools service captures the definitions, so the tests invoke the
+tools exactly as the registry would) plus the wave-3 fixtures.
 
 ## Expected ledger strings (byte-exact, `live-containers: ` prefix)
 

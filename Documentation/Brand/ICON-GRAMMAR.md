@@ -347,7 +347,11 @@ That is the whole update loop.
 - `<title>` carries the package name and the grammar, and `role="img"` and `aria-label` are set.
 - The marketplace index carries the colour render as a relative reference, `Icons/Color/<dir>.svg`,
   which resolves against the index URL to the same origin that the site serves.
-- The site renders the mono file inlined, so it inherits the page ink and flips with the dark theme.
+- The site inlines both renders. The colour file identifies a package on the plugin index and on the
+  detail hero, because a package's palette is the most distinctive thing it owns. The mono file
+  stays for the chrome that must inherit the page ink - the file-type sprite, the brand glyphs, and
+  any icon drawn inside a coloured plate. The colour file's fills are the asset's own, so it does
+  not flip with the dark theme; its palette is designed against the light paper.
 
 ## 10. Code contract
 
@@ -420,10 +424,11 @@ on the same paper as the reference sheet.
 The result is 16 distinct inks, 19 accents, and 28 fills across the 102 packages, which is the 29/29
 spread of the reference sheet reached from one source palette.
 
-The mono render carries no hue at all, and the colour render is the marketplace asset.
+The mono render carries no hue at all and inherits the page ink. The colour render carries the
+palette's own tones, and it is the asset the marketplace index and the plugin pages show.
 
-The site stays blue and white because it inlines the mono file, whose `currentColor` is the page
-ink.
+The site's chrome stays blue and white. Colour enters only through the package icons, which are the
+one place a package's identity is allowed to outrank the page's ink.
 
 ---
 

@@ -4,34 +4,36 @@
 
 - Package: `@playform/hook-dsh-replay-suggester` (Classic/packages/hook-dsh-replay-suggester).
 - Profile row id: `replay-suggester` (bundled in the desktop profile).
-- Exposes: no tools or services - it hooks `tools/post-execute` for `emitOn`: bash, edit, glob,
-  grep, read, write. When the model searches with an intent it has pursued before, it recalls the
+- Exposes no tools or services: it hooks `tools/post-execute` for `emitOn`: bash, edit, glob, grep,
+  read, write. When the model searches with an intent it has pursued before, the hook recalls the
   matching record from its history store and prepends ONE labeled `additionalContexts` notice: the
-  files touched last time and the command that verified. The store is loaded once at apply; a
+  files touched last time and the command that verified. The store is loaded once at apply, and a
   missing or corrupt store degrades to silence, never to a guess.
-- PRODUCER (wave 2c): the hook is the recall store's producer. On every judged call that names a
-  path, the call is appended to the recall history BEFORE the recall runs (the sequence fence keeps
-  the call out of its own recall); an entry carries `seq`, `path`, `intent` (the `replay` family
-  until the classifier matches), `outcome`, `at` and `probe` (the tool name plus the arguments
-  JSON). Repo-relative paths only, no file contents, no user text. Two tiers: the in-memory ring
-  (per agent + the durable mirror, newest first, bounded by `historyDepth`) and the durable tier -
-  the storage-domain KV domain `replay_history` (probed via `ctx.get('storage').domain` or
-  `ctx.get('storageDomain')`, never injected) with the JSON fallback (`recordPath`) otherwise.
-- PACK-DRIVEN: the intent is the BUILT-IN pack's `replay/` projection (`@playform/lib-dsh-pack`;
-  `Source/Variable/Defaults.ts` selects it with `Families(Builtin, "replay")`): `Repeat` (threshold
-  0.75, the recalled record's `files` as candidates, `verify` as the note's caveat line). A
-  workspace pack (`.dsh/pack.yml` → the user layer → the built-in pack) overrides it per repo.
-  Without a record the sum stays at 1.2 (k 0.62) and the hook abstains `no-memory`. The seeded
-  history store (`historyPath`, read-only fixtures) keeps precedence when it matches; recalled files
-  are history records and stay exempt from the existence filter.
+- PRODUCER (wave 2c): the hook is the producer of the recall store. On every judged call that names
+  a path, the call is appended to the recall history BEFORE the recall runs (the sequence fence
+  keeps the call out of its own recall), and an entry carries `seq`, `path`, `intent` (the `replay`
+  family until the classifier matches), `outcome`, `at` and `probe` (the tool name plus the
+  arguments JSON). It stores repo-relative paths only, with no file contents and no user text. Two
+  tiers exist: the in-memory ring (per agent + the durable mirror, newest first, bounded by
+  `historyDepth`) and the durable tier - the storage-domain KV domain `replay_history` (probed via
+  `ctx.get('storage').domain` or `ctx.get('storageDomain')`, never injected) with the JSON fallback
+  (`recordPath`) otherwise.
+- PACK-DRIVEN: the intent is the `replay/` projection of the BUILT-IN pack
+  (`@playform/lib-dsh-pack`; `Source/Variable/Defaults.ts` selects it with
+  `Families(Builtin, "replay")`): `Repeat` (threshold 0.75, the recalled record's `files` as
+  candidates, `verify` as the caveat line of the note). A workspace pack (`.dsh/pack.yml` -> the
+  user layer -> the built-in pack) overrides it per repo. Without a record the sum stays at 1.2 (k
+  0.62) and the hook abstains `no-memory`. The seeded history store (`historyPath`, read-only
+  fixtures) keeps precedence when it matches, and recalled files are history records that stay
+  exempt from the existence filter.
 - Ledger prefix: `replay-suggester:`; logFile `~/.dsh/playform/hook-dsh-replay-suggester.log`.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-replay-suggester"}` → one entry, status schema (defaults:
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-replay-suggester"}` for one entry with status schema (defaults:
     threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents
     `[]` (all pack intents enabled), emitOn bash/edit/glob/grep/read/write, exclude
     node_modules/Target/.git/dist, historyPath ~/.dsh/replay-suggester/history.json, learnWindow 2,
@@ -39,13 +41,13 @@
 
 2. **The tool check.**
 
-    Tool check: none expected (no tools).
+    No tool is expected, because the hook registers none.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-replay-suggester.log` -
-    `replay-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>, history <h>)`; a cold
-    mount logs the byte-exact `replay-suggester: disabled (enabled=false)`.
+    The activated line appears in `~/.dsh/playform/hook-dsh-replay-suggester.log` as
+    `replay-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>, history <h>)`, and a
+    cold mount logs the byte-exact `replay-suggester: disabled (enabled=false)`.
 
 ## Test cases
 
@@ -62,8 +64,8 @@
 ## Known live gaps
 
 - The producer is live (wave 2c): without a manual seed the hook now records as it goes, so the
-  first pass through an area may still abstain `no-memory` - that is correct behavior, not a bug.
-  Watch for: the storage facility probing (the `replay_history` domain is primary, the JSON fallback
+  first pass through an area may still abstain `no-memory`, which is correct behavior and not a bug.
+  Watch for the storage facility probing (the `replay_history` domain is primary, the JSON fallback
   secondary), the seeded-store lines staying distinct from the producer's (`history ...` vs
   `store ...`/`recorded ...`), and `State.Flush()` awaiting every scheduled write.
 
@@ -75,7 +77,7 @@
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-replay-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-replay-suggester/Target/Test/<Folder>/Test.js` per folder
   under `Source/Test/` (`Loader-And-History`, `Pipeline-And-Recall`, `History-Producer`,
-  `Workspace-Gate`, `Pack-Driven`). Then the app restart.
+  `Workspace-Gate`, `Pack-Driven`), then restart the app.
 
 ## Report stub
 

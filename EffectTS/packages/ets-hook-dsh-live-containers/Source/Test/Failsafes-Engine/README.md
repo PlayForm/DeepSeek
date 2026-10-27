@@ -1,10 +1,11 @@
 # Failsafes-Engine - the F-series smoke tests
 
-The CAN-4 failsafe engine: the eight scenarios per the channel table, the
-"not even notifying" posture, and the meta-budget. The hang and the
-live-timeout live in the deadline scan; the delegation stall in the I5 lease
-(covered in Boards-And-Plants); the admission guard and the meta-budget in
-Policy; the retry loop in Detach.
+The CAN-4 failsafe engine: the eight scenarios per the channel table, the "not even notifying"
+posture, and the meta-budget.
+
+The hang and the live-timeout live in the deadline scan, the delegation stall lives in the I5 lease
+(covered in Boards-And-Plants), the admission guard and the meta-budget live in Policy, and the retry
+loop lives in Detach.
 
 ## Scenarios
 
@@ -27,8 +28,8 @@ Policy; the retry loop in Detach.
 
 ## Fixtures
 
-The shared Harness plus the wave-2 fixtures; the deadline scan is driven by
-firing a jobs output event or by an assemble pass (the checkpoint design).
+The shared Harness plus the wave-2 fixtures, and the deadline scan is driven by firing a jobs output
+event or by an assemble pass (the checkpoint design).
 
 ## Expected count
 

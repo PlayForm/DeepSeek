@@ -4,18 +4,18 @@
 
 - Package: `@playform/hook-dsh-edit-suggester` (Classic/packages/hook-dsh-edit-suggester).
 - Profile row id: `hook-dsh-edit-suggester` (bundled in the desktop profile).
-- Exposes: no tools or services - it hooks `tools/post-execute` for the modification family and,
-  when a write/edit/raw-write lands on a file matching one of the seven convention families,
-  prepends ONE labeled `additionalContexts` note naming the standard companions the model has not
+- Exposes no tools or services: it hooks `tools/post-execute` for the modification family and, when
+  a write/edit/raw-write lands on a file that matches one of the seven convention families, prepends
+  ONE labeled `additionalContexts` note naming the standard companions that the model has not
   touched yet (e.g. the built-in Version family: the version lives in the manifests and the
-  CHANGELOG; a Config.ts edit must also land in the README's Config section, SCHEME.md, the
-  cordis.patch.yml row and the byte-exact test). The second consumer of the search-suggester's
-  pattern algebra; deterministic path rules; no LLM.
-- PACK-DRIVEN: the resolved workspace pack's `edit/` families (`Families(pack, "edit")` from
-  `@playform/lib-dsh-pack`) drive Detect, so a repo pack (`.dsh/pack.yml` → the user layer
-  `~/.dsh/playform/workspaces/<slug>.yml` → the built-in pack) overrides the built-in families
+  CHANGELOG; a Config.ts edit must also land in the Config section of the README, SCHEME.md, the
+  cordis.patch.yml row and the byte-exact test). It is the second consumer of the pattern algebra of
+  the search-suggester, with deterministic path rules and no LLM.
+- PACK-DRIVEN: the `edit/` families of the resolved workspace pack (`Families(pack, "edit")` from
+  `@playform/lib-dsh-pack`) drive Detect, so a repo pack (`.dsh/pack.yml` -> the user layer
+  `~/.dsh/playform/workspaces/<slug>.yml` -> the built-in pack) overrides the built-in families
   without a restart. The workspace root is the nearest ancestor whose PACK SIGNATURE matches
-  (defaulting to `Documentation/ARCHIVE-STYLE.md`); a foreign workspace has no pack and logs
+  (defaulting to `Documentation/ARCHIVE-STYLE.md`), and a foreign workspace has no pack and logs
   `edit-suggester: abstained foreign-workspace  0.00`. The learning layer (D8) records every emitted
   note and every gated silence worth learning from as a decision, logs the `decided` line, stores it
   through the `pattern` service when present (probed per use, never injected) or the bounded memory
@@ -26,22 +26,23 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-edit-suggester"}` → one entry, status schema (SCHEME §2 defaults:
-    threshold 0.75, tools write/edit/raw-write, maxCompanions 7, maxNoteChars 1200, cooldownCalls 6,
-    maxNotesPerTurn 3, exclude node_modules/Target/.git/dist, learn true, learnWindow 3, heuristics
-    the six names (`scope`,`graph`,`prior`,`literal`,`history`,`accept`), weights
-    `{scope:0.35, graph:0, prior:0.25, literal:0.25, history:0.15, accept:0}`, storeLimit 512).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-edit-suggester"}` for one entry with status schema (SCHEME §2
+    defaults: threshold 0.75, tools write/edit/raw-write, maxCompanions 7, maxNoteChars 1200,
+    cooldownCalls 6, maxNotesPerTurn 3, exclude node_modules/Target/.git/dist, learn true,
+    learnWindow 3, heuristics the six names (`scope`,`graph`,`prior`,`literal`,`history`,`accept`),
+    weights `{scope:0.35, graph:0, prior:0.25, literal:0.25, history:0.15, accept:0}`, storeLimit
+    512).
 
 2. **The tool check.**
 
-    Tool check: none expected (no tools).
+    No tool is expected, because the hook registers none.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-edit-suggester.log` -
-    `edit-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)`; a cold mount logs the
-    byte-exact `edit-suggester: disabled (enabled=false)`.
+    The activated line appears in `~/.dsh/playform/hook-dsh-edit-suggester.log` as
+    `edit-suggester: activated (bundle 0.1.0, families 7, threshold 0.75)`, and a cold mount logs
+    the byte-exact `edit-suggester: disabled (enabled=false)`.
 
 ## Test cases
 
@@ -57,9 +58,9 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: companion sets computed from a stale pack layer, notes firing on
+- Not dogfooded yet, so watch for companion sets computed from a stale pack layer, notes firing on
   excluded paths, and the learned rates moving unexpectedly when the `pattern` service is absent
-  (the memory fallback answers the neutral 1/3, so the default behaviour stays unchanged
+  (the memory fallback answers the neutral 1/3, so the default behavior stays unchanged
   byte-for-byte).
 - The replay benchmark on the recorded lanes and the ETS twin
   (`@playform/ets-hook-dsh-edit-suggester`) remain DEFERRED (the SCHEME's end-phase list).
@@ -72,7 +73,7 @@
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-edit-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-edit-suggester/Target/Test/<Folder>/Test.js` per folder
   under `Source/Test/` (`Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`,
-  `Pack-Driven`, `Learning-Loop`). Then the app restart.
+  `Pack-Driven`, `Learning-Loop`), then restart the app.
 
 ## Report stub
 

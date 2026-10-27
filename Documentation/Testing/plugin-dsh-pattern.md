@@ -4,24 +4,25 @@
 
 - Package: `@playform/plugin-dsh-pattern` (Classic/packages/plugin-dsh-pattern).
 - Profile row id: `plugin-dsh-pattern` (bundled in the desktop profile).
-- Exposes: the pattern registry service - the pattern pack storage the suggester family's packs are
-  seeded from. Function: Confidence.ts, Learner.ts (the online learner), Matcher.ts, Registry.ts,
-  Snapshot.ts. Service `pattern` (`super(Context, "pattern")`, the class form, registered at
-  construction): `Configure` / `Put` / `Get` / `List` / `Match` / `Record(id, outcome)` /
-  `Decay(now?)` / `Save()` / `Flush()` (the smoke seam).
+- Exposes the pattern registry service, the pattern pack storage that the packs of the suggester
+  family are seeded from. Function: Confidence.ts, Learner.ts (the online learner), Matcher.ts,
+  Registry.ts, Snapshot.ts. Service `pattern` (`super(Context, "pattern")`, the class form,
+  registered at construction): `Configure` / `Put` / `Get` / `List` / `Match` /
+  `Record(id, outcome)` / `Decay(now?)` / `Save()` / `Flush()` (the smoke seam).
 - The scoring weights (SCHEME "The scoring weights"):
   `score = 0.6 * keywordOverlap + 0.2 * toolMatch + 0.2 * confidence`, thresholded at
-  `matchThreshold`; the ambiguity rule empties the result when the top two scores sit within
+  `matchThreshold`, where the ambiguity rule empties the result when the top two scores sit within
   `ambiguityEpsilon` (the empty result is the abstention).
 - The learning config (README "Configuration"): `matchThreshold` 0.35, `maxMatches` 3,
   `ambiguityEpsilon` 0.02, `decayHalfLifeDays` 14, and the Record deltas `acceptBonus` 0.1 /
-  `rejectPenalty` 0.2 / `appliedBonus` 0.15 / `failedPenalty` 0.25. Every field a volatile cell.
-- The stores (SCHEME "Storage"): the PRIMARY store is the harness's `ctx.storage` KV domain (config
-  `domain`, default `pattern`, version 1, per-record tables `patterns` + `meta`), loaded on open as
-  a per-record overlay on the cold-start catalog and written on every mutation (`Record`, `Decay`);
-  the FALLBACK is the JSON snapshot (`storagePath`, default `~/.dsh/pattern/registry.json`), used
-  only when no storage facility is provided or the domain's open fails (the loud
-  `storage open failed: <reason>` line).
+  `rejectPenalty` 0.2 / `appliedBonus` 0.15 / `failedPenalty` 0.25, with every field a volatile
+  cell.
+- The stores (SCHEME "Storage"): the PRIMARY store is the `ctx.storage` KV domain of the harness
+  (config `domain`, default `pattern`, version 1, per-record tables `patterns` + `meta`), loaded on
+  open as a per-record overlay on the cold-start catalog and written on every mutation (`Record`,
+  `Decay`); the FALLBACK is the JSON snapshot (`storagePath`, default
+  `~/.dsh/pattern/registry.json`), used only when no storage facility is provided or the open of the
+  domain fails (the loud `storage open failed: <reason>` line).
 - Ledger lines (SCHEME "Ledger strings", byte-stable, module-prefixed):
   `pattern: activated (seeded <n> patterns) (logFile <logFile>)`,
   `pattern: disabled (enabled=false) (logFile <logFile>)`,
@@ -30,28 +31,29 @@
   `pattern: saved <n> patterns to <destination> (logFile <logFile>)`,
   `pattern: storage open failed: <reason> (logFile <logFile>)`; logFile
   `~/.dsh/playform/plugin-dsh-pattern.log`.
-- The policy block (D6, SCHEME "The policy block"): the schema composes the factory's shared
-  `policy: Policy()`; read/record/suggest = `auto`; write/commit/spawn = `approve` (declared for
-  uniformity — the service never writes files, commits or spawns). One volatile object; a resolved
-  pack's `policy` section overrides per action.
+- The policy block (D6, SCHEME "The policy block"): the schema composes the shared
+  `policy: Policy()` of the factory, with read/record/suggest = `auto` and write/commit/spawn =
+  `approve` (declared for uniformity, because the service never writes files, commits or spawns).
+  One volatile object stays hot-editable, and a resolved pack's `policy` section overrides per
+  action.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-pattern"}` → one entry, status schema (defaults: domain
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-pattern"}` for one entry with status schema (defaults: domain
     `pattern`, storagePath ~/.dsh/pattern/registry.json, matchThreshold 0.35, maxMatches 3,
     ambiguityEpsilon 0.02, decayHalfLifeDays 14, policy.* D6 defaults).
 
 2. **The service check.**
 
-    Service check: the `pattern` service resolves on the context.
+    The `pattern` service resolves on the context.
 
 3. **The ledger line.**
 
-    Ledger line: `pattern: activated (seeded <n> patterns) (logFile <logFile>)` in
-    `~/.dsh/playform/plugin-dsh-pattern.log` - N must be > 0 when the pack ships data.
+    The line `pattern: activated (seeded <n> patterns) (logFile <logFile>)` appears in
+    `~/.dsh/playform/plugin-dsh-pattern.log`, and N must be > 0 when the pack ships data.
 
 ## Test cases
 
@@ -67,9 +69,9 @@ mutation written to the active store |
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: zero seeded patterns (a broken pack), the KV domain's open failing
-  (the loud `storage open failed: <reason>` line, then the JSON fallback), and the fallback JSON
-  snapshot REPLACING the catalog while the KV domain only overlays per record.
+- Not dogfooded yet, so watch for zero seeded patterns (a broken pack), the open of the KV domain
+  failing (the loud `storage open failed: <reason>` line, then the JSON fallback), and the fallback
+  JSON snapshot REPLACING the catalog while the KV domain only overlays per record.
 
 ## Fix loop
 
@@ -78,7 +80,7 @@ mutation written to the active store |
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-pattern run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-pattern/Target/Test/<Folder>/Test.js` per folder under
-  `Source/Test/`. Then the app restart.
+  `Source/Test/`, then restart the app.
 
 ## Report stub
 

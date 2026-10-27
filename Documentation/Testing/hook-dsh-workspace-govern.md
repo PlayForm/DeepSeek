@@ -4,22 +4,23 @@
 
 - Package: `@playform/hook-dsh-workspace-govern` (Classic/packages/hook-dsh-workspace-govern).
 - Profile row id: `hook-dsh-workspace-govern` (bundled in the desktop profile).
-- Exposes: the `workspaceGovern` service plus the `tools/pre-execute` gate on the gated tools
+- Exposes the `workspaceGovern` service plus the `tools/pre-execute` gate on the gated tools
   (`write`, `edit`, `bash`, `applyPatch`). The governance gate of the invisible flow: operate
   proposes → the GOVERN GATES → the authority licenses → approve binds. Four INDEPENDENT
-  MEANS-CHECKS on the ProposedChange (contributes, authorized scope, policy, preconditions) before
-  any AuthorizationDecision - an intent must not authorize its own means. Fail-open recovery for
-  contributes/policy/preconditions, fail-closed for scope (the SCHEME's recovery table; per-row
-  overrides via the `recovery` config field). Recursion prevention: an operation id gated beyond
-  `loopBound` (4) is dropped with a ledger line. The gate carries no intent of its own and reads no
-  authority record - the licensing is `plugin-dsh-workspace-authority`, not this hook; this hook
-  holds no weights or priorities (pass / deny / escalate only).
+  MEANS-CHECKS run on the ProposedChange (contributes, authorized scope, policy, preconditions)
+  before any AuthorizationDecision, because an intent must not authorize its own means. Recovery is
+  fail-open for contributes/policy/preconditions and fail-closed for scope (the recovery table of
+  the SCHEME; per-row overrides via the `recovery` config field). Recursion prevention: an operation
+  id gated beyond `loopBound` (4) is dropped with a ledger line. The gate carries no intent of its
+  own and reads no authority record, because the licensing belongs to
+  `plugin-dsh-workspace-authority`, not to this hook, and this hook holds no weights or priorities
+  (pass / deny / escalate only).
 - Service surface (README): `ctx.workspaceGovern.gate(proposal)`, `decisions(limit?)` (the decision
   ring, newest first), `statistics()` → `{ decisions, sequence }`.
 - Config fields (README): `enabled`, `log`/`logFile`, `tools` (`write, edit, bash, applyPatch`),
   `scope` (`[]`, unrestricted globs), `exclude` (the triple - never gated, in silence), `policy`
   (`[]` - this hook's own DECISION RULE table `{kind, decision, operation?}`, a different contract),
-  `recovery` (`[]`, `{obligation, behavior}` overrides), `loopBound` (4), `maxDecisions` (500),
+  `recovery` (`[]`, `{obligation, behavior}` overrides), `loopBound` (4), `maxDecisions` (500), and
   `automation` (the D6 allowlist block - keyed `automation`, NOT `policy`, because `policy` is the
   decision rule table; RECORD action, automatic, no gated action).
 - Ledger lines (byte-stable, README): `` `govern: activated (tools=<n>, policy=<n>)` ``,
@@ -35,19 +36,19 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/hook-dsh-workspace-govern"}` → one entry, status schema (defaults: tools
-    write/edit/bash/applyPatch, scope [] (unrestricted), exclude triple, policy [] (the decision
-    rule table), recovery [], loopBound 4, maxDecisions 500, automation D6 defaults).
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-govern"}` for one entry with status schema (defaults:
+    tools write/edit/bash/applyPatch, scope [] (unrestricted), exclude triple, policy [] (the
+    decision rule table), recovery [], loopBound 4, maxDecisions 500, automation D6 defaults).
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService `workspaceGovern` → resolves.
+    `cordis_inspect_query` host/Service/listService `workspaceGovern` resolves.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-govern.log`; a cold mount
-    logs `govern: disabled (enabled=false)` and the gate is a pass-through.
+    The activated line appears in `~/.dsh/playform/hook-dsh-workspace-govern.log`, a cold mount logs
+    `govern: disabled (enabled=false)`, and the gate is a pass-through.
 
 ## Test cases
 
@@ -63,10 +64,10 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: the recovery table overrides not landing on hot-edit (volatile cells
-  must refresh State in place; a dropped row should ledger
-  `govern: recovery <obligation> (fail-open)`), the policy table's first-match-wins ordering, and
-  the escalate path surfacing an `ask` the conversation must answer.
+- Not dogfooded yet, so watch for the recovery table overrides not landing on hot-edit (volatile
+  cells must refresh State in place; a dropped row should ledger
+  `govern: recovery <obligation> (fail-open)`), the first-match-wins ordering of the policy table,
+  and the escalate path surfacing an `ask` that the conversation must answer.
 
 ## Fix loop
 
@@ -75,7 +76,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-workspace-govern run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-workspace-govern/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/`. Then the app restart.
+  under `Source/Test/`, then restart the app.
 
 ## Report stub
 

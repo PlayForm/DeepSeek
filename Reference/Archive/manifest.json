@@ -1283,6 +1283,86 @@
 			"disposition": "retryable",
 			"exit": 5,
 			"message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions."
+		},
+		{
+			"source": "https://designsystem.digital.gov/components/header/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/designsystem-digital-gov-components-header.md",
+			"status": "converted",
+			"title": "designsystem-digital-gov-components-header",
+			"quality": {
+				"heading-duplicate": 6,
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 1
+			}
+		},
+		{
+			"source": "https://designsystem.digital.gov/components/footer/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/designsystem-digital-gov-components-footer.md",
+			"status": "converted",
+			"title": "designsystem-digital-gov-components-footer",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 1
+			}
+		},
+		{
+			"source": "https://designsystem.digital.gov/components/card/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/designsystem-digital-gov-components-card.md",
+			"status": "converted",
+			"title": "designsystem-digital-gov-components-card",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 1
+			}
+		},
+		{
+			"source": "https://diataxis.fr/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/diataxis-fr.md",
+			"status": "converted",
+			"title": "Di\u00e1taxis[\u00b6](https://diataxis.fr/#diataxis \"Link to this heading\")"
+		},
+		{
+			"source": "https://carbondesignsystem.com/components/UI-shell-header/usage/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/carbondesignsystem-com-components-UI-shell-header-usage.md",
+			"status": "converted",
+			"title": "carbondesignsystem-com-components-UI-shell-header-usage",
+			"quality": {
+				"heading-no-h1": 1,
+				"table-row-mismatch": 3
+			}
+		},
+		{
+			"source": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "",
+			"status": "unavailable",
+			"title": "wai-aria-apg-patterns-disclosure",
+			"disposition": "retryable",
+			"exit": 5,
+			"message": "Blocked by anti-bot protection: Cloudflare JS challenge on both the default pass and the one --filter raw retry. No file written; the disclosure-pattern claims stay unverified and are cited nowhere."
 		}
 	]
 }

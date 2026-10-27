@@ -141,26 +141,26 @@ sink).
 **Path 1 - pick ONE of (a) or (b), plus (c) always:**
 
 - **(a) One-time rotation of the v1 file.** Rename (don't delete)
-  `~/.dsh/storages/package_governance.json` -> e.g. `...json.v1.bak`, so the next boot's v2 open sees
-  NO file, creates it fresh, and stamps `version: 2` on the FIRST publish, which fits the family
-  doctrine (Open.ts:14-18: the journal is "the structured, disposable one"; the ledgers are the
-  complete record) and has the precedent of `f4aaf6b`, which already removed the file from `~/.dsh`
-  git tracking once, but **`~/.dsh` is the user's home, so this is the user's call and the parent
-  should ask before touching it.**
+  `~/.dsh/storages/package_governance.json` -> e.g. `...json.v1.bak`, so the next boot's v2 open
+  sees NO file, creates it fresh, and stamps `version: 2` on the FIRST publish, which fits the
+  family doctrine (Open.ts:14-18: the journal is "the structured, disposable one"; the ledgers are
+  the complete record) and has the precedent of `f4aaf6b`, which already removed the file from
+  `~/.dsh` git tracking once, but **`~/.dsh` is the user's home, so this is the user's call and the
+  parent should ask before touching it.**
 - **(b) Structural self-migration (NO user action needed):** declare `layout: "per-record"` +
   `compatibleVersions: [1]` in the v2 spec, because the legacy bootstrap of the per-record backend
   (`bootstrapLegacyUnit`, storage-json lib 370-404) copies EVERY record of a v1-stamped single file
-  into per-record documents when the version of the file is in `acceptedStamps` (`[2, 1]`), so the 76
-  records migrate automatically on the next open, the legacy file is left untouched, and ALL of them
-  validate against the widened enum, with the bonus of ONE small atomic write per record instead of
-  whole-file rewrites; note that `compatibleVersions` alone (WITHOUT the layout switch) does **NOT**
-  help, because the single-layout `parse()` checks exact equality ONLY.
+  into per-record documents when the version of the file is in `acceptedStamps` (`[2, 1]`), so the
+  76 records migrate automatically on the next open, the legacy file is left untouched, and ALL of
+  them validate against the widened enum, with the bonus of ONE small atomic write per record
+  instead of whole-file rewrites; note that `compatibleVersions` alone (WITHOUT the layout switch)
+  does **NOT** help, because the single-layout `parse()` checks exact equality ONLY.
 - **(c) ALWAYS: make the Open failure loud.** Replace the bare `catch` at `Open.ts:135-137` with a
   single ledger line (e.g. through the same `Factory.Append` or append path that the modules use):
   `[ts] storage journal open failed (<code>): <message>`, because the silence is what made this
   undiagnosable and the ledger stays the complete record either way, and also add
-  `invalidRecords: "backup-and-skip"` to the spec so that ONE corrupt record can NEVER brick the open
-  again (currently the whole open fails on a single invalid stored record).
+  `invalidRecords: "backup-and-skip"` to the spec so that ONE corrupt record can NEVER brick the
+  open again (currently the whole open fails on a single invalid stored record).
 
 **Path 2 - keep `aa53c91` as-is; fix the failure path, not the retirement:**
 
@@ -172,9 +172,9 @@ sink).
 - The real gap is the _failed_ open: (i) the loud log from (c) above, and (ii) optionally ONE lazy
   re-open retry, where the `Journal.ts` stage-2 branch triggers a single re-attempt of the Open when
   the buffer crosses a threshold (e.g. 64) and a boolean flag prevents hammering, which covers BOTH
-  the current permanent failure and the transient ones (storage service NOT yet ready at apply time),
-  while stage 2 silently dropping at the 256 cap (`Journal.ts:46-55`) should also emit ONE ledger line
-  per boot at most.
+  the current permanent failure and the transient ones (storage service NOT yet ready at apply
+  time), while stage 2 silently dropping at the 256 cap (`Journal.ts:46-55`) should also emit ONE
+  ledger line per boot at most.
 
 ## Key citations
 
