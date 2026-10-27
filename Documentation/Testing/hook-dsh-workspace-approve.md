@@ -16,16 +16,25 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-approve"}` → one entry, status schema. Defaults per
-   SCHEME section 7: `logFile=~/.dsh/playform/hook-dsh-workspace-approve.log`, `log=true`,
-   `enabled=false`, `domain=workspace_approve`, `maxBindings=1000`, `requireConstraints=true`, and
-   the `policy` D6 block (record-only posture, no gated action).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceApprove` → resolves (it
-   reads honestly from the empty state even when disabled).
-3. Ledger line: `approve: activated (domain=workspace_approve)` in
-   `~/.dsh/playform/hook-dsh-workspace-approve.log`; a cold mount logs
-   `approve: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-approve"}` → one entry, status schema.
+
+    Defaults per SCHEME section 7: `logFile=~/.dsh/playform/hook-dsh-workspace-approve.log`,
+    `log=true`, `enabled=false`, `domain=workspace_approve`, `maxBindings=1000`,
+    `requireConstraints=true`, and the `policy` D6 block (record-only posture, no gated action).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceApprove` → resolves (it
+    reads honestly from the empty state even when disabled).
+
+3. **The ledger line.**
+
+    Ledger line: `approve: activated (domain=workspace_approve)` in
+    `~/.dsh/playform/hook-dsh-workspace-approve.log`; a cold mount logs
+    `approve: disabled (enabled=false)`.
 
 ## Test cases
 

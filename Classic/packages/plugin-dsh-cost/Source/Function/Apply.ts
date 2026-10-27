@@ -44,7 +44,7 @@ export default (Context: Context, Options: Config): void => {
 	// reloaded plugin never leaves a WAL behind a dead fiber.
 	let Ledger: ReturnType<typeof Open> | undefined;
 	Context.effect(() => {
-		Ledger = Open(State.Path);
+		Ledger = Open(Options);
 		return () => {
 			Ledger?.Close();
 		};

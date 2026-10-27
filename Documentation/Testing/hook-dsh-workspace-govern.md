@@ -33,13 +33,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-govern"}` → one entry, status schema (defaults: tools
-   write/edit/bash/applyPatch, scope [] (unrestricted), exclude triple, policy [] (the decision rule
-   table), recovery [], loopBound 4, maxDecisions 500, automation D6 defaults).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceGovern` → resolves.
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-govern.log`; a cold mount
-   logs `govern: disabled (enabled=false)` and the gate is a pass-through.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-govern"}` → one entry, status schema (defaults: tools
+    write/edit/bash/applyPatch, scope [] (unrestricted), exclude triple, policy [] (the decision
+    rule table), recovery [], loopBound 4, maxDecisions 500, automation D6 defaults).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceGovern` → resolves.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-govern.log`; a cold mount
+    logs `govern: disabled (enabled=false)` and the gate is a pass-through.
 
 ## Test cases
 

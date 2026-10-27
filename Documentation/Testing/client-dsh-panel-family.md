@@ -33,13 +33,21 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/client-dsh-panel-family"}` → one entry, status schema (defaults: enabled
-   true, tabOrder 20, overlayMaxWidth 720, locale "en"; all knobs volatile).
-2. Service check: the `playformFamilyPanel` registry service resolves; `getVersion()` bumps on every
-   accepted mutation.
-3. Ledger line: none from activation itself - verify activation through checks 1-2, the T5 tab and,
-   once an adapter duplicate is forced, the refusal line above.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-panel-family"}` → one entry, status schema (defaults: enabled
+    true, tabOrder 20, overlayMaxWidth 720, locale "en"; all knobs volatile).
+
+2. **The service check.**
+
+    Service check: the `playformFamilyPanel` registry service resolves; `getVersion()` bumps on
+    every accepted mutation.
+
+3. **The ledger line.**
+
+    Ledger line: none from activation itself - verify activation through checks 1-2, the T5 tab and,
+    once an adapter duplicate is forced, the refusal line above.
 
 ## Test cases
 

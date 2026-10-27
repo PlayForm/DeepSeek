@@ -33,13 +33,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-queue"}` → one entry, status schema (defaults: capacity.main 10,
-   capacity.child 2, autoDispatch true, routedDispatch true, autoSpawn false, spawnProvider "spawn",
-   policy.* D6 defaults).
-2. Tool check: the Tool provider lists `queue_enqueue` and `queue_status`.
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-queue.log`; a cold mount logs
-   `disabled (enabled=false)` and the tools/service no-op.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-queue"}` → one entry, status schema (defaults: capacity.main 10,
+    capacity.child 2, autoDispatch true, routedDispatch true, autoSpawn false, spawnProvider
+    "spawn", policy.* D6 defaults).
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists `queue_enqueue` and `queue_status`.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-queue.log`; a cold mount logs
+    `disabled (enabled=false)` and the tools/service no-op.
 
 ## Test cases
 

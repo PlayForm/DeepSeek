@@ -25,17 +25,25 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-search-suggester"}` → one entry, status schema (SCHEME §2 defaults:
-   threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the ten
-   intents in priority order, emitOn grep/glob/read/bash, learn true, learnWindow 2, persistPath
-   ~/.dsh/search-suggester/knowledge.json, refreshOnBoot true, dismissTtl 86400, seed true,
-   sectionMode off, sectionTtl 20; `indexPath` is RETIRED by the P2 re-spec - the graph projection
-   supersedes it and it is never read).
-2. Tool check: `suggestion_dismiss` expected (the SCHEME's surfaces table, the loader's tool API).
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-search-suggester.log` -
-   `search-suggester: activated (bundle 0.1.0, intents 10, threshold 0.75)`; a cold mount logs the
-   byte-exact `search-suggester: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-search-suggester"}` → one entry, status schema (SCHEME §2
+    defaults: threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn
+    3, the ten intents in priority order, emitOn grep/glob/read/bash, learn true, learnWindow 2,
+    persistPath ~/.dsh/search-suggester/knowledge.json, refreshOnBoot true, dismissTtl 86400, seed
+    true, sectionMode off, sectionTtl 20; `indexPath` is RETIRED by the P2 re-spec - the graph
+    projection supersedes it and it is never read).
+
+2. **The tool check.**
+
+    Tool check: `suggestion_dismiss` expected (the SCHEME's surfaces table, the loader's tool API).
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-search-suggester.log` -
+    `search-suggester: activated (bundle 0.1.0, intents 10, threshold 0.75)`; a cold mount logs the
+    byte-exact `search-suggester: disabled (enabled=false)`.
 
 ## Test cases
 

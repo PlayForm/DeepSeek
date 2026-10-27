@@ -26,12 +26,20 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-gitguard"}` → one entry, status schema (defaults: denyPatterns
-   DEFAULT_DENY, allowPatterns DEFAULT_ALLOW, strict false, exclude [], policy.* D6 defaults).
-2. Tool check: none expected (it wraps the existing terminal surface).
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-gitguard.log`; a cold mount logs
-   `disabled (enabled=false)` and wires NOTHING.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-gitguard"}` → one entry, status schema (defaults: denyPatterns
+    DEFAULT_DENY, allowPatterns DEFAULT_ALLOW, strict false, exclude [], policy.* D6 defaults).
+
+2. **The tool check.**
+
+    Tool check: none expected (it wraps the existing terminal surface).
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-gitguard.log`; a cold mount logs
+    `disabled (enabled=false)` and wires NOTHING.
 
 ## Test cases
 

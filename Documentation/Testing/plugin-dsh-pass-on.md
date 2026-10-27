@@ -28,13 +28,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-pass-on"}` → one entry, status schema (defaults: root
-   `process.cwd()`, maxTargets 20, maxPreviewBytes 2048, expiresSeconds 3600, kinds — the 3 shipped
-   kinds `version-bump`/`set-field`/`replace`, policy.* D6 defaults).
-2. Service check: `cordis_inspect_query` host/Service/listService `passOn` → resolves immediately on
-   construction.
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-pass-on.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-pass-on"}` → one entry, status schema (defaults: root
+    `process.cwd()`, maxTargets 20, maxPreviewBytes 2048, expiresSeconds 3600, kinds — the 3 shipped
+    kinds `version-bump`/`set-field`/`replace`, policy.* D6 defaults).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `passOn` → resolves immediately
+    on construction.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-pass-on.log`.
 
 ## Test cases
 

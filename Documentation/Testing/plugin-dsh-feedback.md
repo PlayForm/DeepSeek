@@ -27,12 +27,20 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-feedback"}` → one entry, status schema (defaults: maxBlockBytes
-   4096, maxChain 8, maxSessions 128, summaryTerms 10, maxOutcomes 16, policy.* D6 defaults).
-2. Service check: `cordis_inspect_query` host/Service/listService `feedback` → resolves immediately
-   on construction.
-3. Ledger line: entries in `~/.dsh/playform/plugin-dsh-feedback.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-feedback"}` → one entry, status schema (defaults: maxBlockBytes
+    4096, maxChain 8, maxSessions 128, summaryTerms 10, maxOutcomes 16, policy.* D6 defaults).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `feedback` → resolves immediately
+    on construction.
+
+3. **The ledger line.**
+
+    Ledger line: entries in `~/.dsh/playform/plugin-dsh-feedback.log`.
 
 ## Test cases
 

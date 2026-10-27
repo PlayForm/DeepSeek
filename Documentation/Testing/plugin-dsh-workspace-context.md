@@ -29,15 +29,23 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-context"}` → one entry, status schema (defaults:
-   budgetTokens 2000 / budgetMaximum 4000, 3 lenses, lensDefault code, neighborLimit 20,
-   evidenceLimit 12, mapLimit 12, workspaceName workspace, the D6 policy block).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceContext` → resolves; the
-   `workspace_context` tool is registered (read-only).
-3. Ledger line: `context: activated (budget=2000/4000, lenses=3)` in
-   `~/.dsh/playform/plugin-dsh-workspace-context.log`; a cold mount logs
-   `context: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-context"}` → one entry, status schema (defaults:
+    budgetTokens 2000 / budgetMaximum 4000, 3 lenses, lensDefault code, neighborLimit 20,
+    evidenceLimit 12, mapLimit 12, workspaceName workspace, the D6 policy block).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceContext` → resolves;
+    the `workspace_context` tool is registered (read-only).
+
+3. **The ledger line.**
+
+    Ledger line: `context: activated (budget=2000/4000, lenses=3)` in
+    `~/.dsh/playform/plugin-dsh-workspace-context.log`; a cold mount logs
+    `context: disabled (enabled=false)`.
 
 ## Test cases
 

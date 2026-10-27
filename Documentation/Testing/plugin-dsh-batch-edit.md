@@ -25,13 +25,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-batch-edit"}` → one entry, status schema (defaults:
-   machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false,
-   monitorChecksets [], policy.* D6 defaults). Ships disabled (`enabled: false`; enables only by an
-   explicit ACTIVATE in the profile).
-2. Tool check: the Tool provider lists `batch_edit`.
-3. Ledger line: the `activated bundle ...` line in `~/.dsh/playform/plugin-dsh-batch-edit.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-batch-edit"}` → one entry, status schema (defaults:
+    machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false,
+    monitorChecksets [], policy.* D6 defaults).
+
+    Ships disabled (`enabled: false`; enables only by an explicit ACTIVATE in the profile).
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists `batch_edit`.
+
+3. **The ledger line.**
+
+    Ledger line: the `activated bundle ...` line in `~/.dsh/playform/plugin-dsh-batch-edit.log`.
 
 ## Test cases
 

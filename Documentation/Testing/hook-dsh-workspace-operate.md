@@ -29,12 +29,20 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-operate"}` → one entry, status schema (defaults: domain
-   workspace_operate, maxProposals 500, limitDefault 50, limitMaximum 500, policy block).
-2. Tool check: the Tool provider lists `workspace_propose` and `workspace_proposals`.
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-operate.log`; a cold mount
-   logs `operate: disabled (enabled=false)` and nothing is wired.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-operate"}` → one entry, status schema (defaults: domain
+    workspace_operate, maxProposals 500, limitDefault 50, limitMaximum 500, policy block).
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists `workspace_propose` and `workspace_proposals`.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-operate.log`; a cold
+    mount logs `operate: disabled (enabled=false)` and nothing is wired.
 
 ## Test cases
 

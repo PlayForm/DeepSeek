@@ -28,14 +28,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-monitor"}` → one entry, status schema (defaults per
-   Variable/Config.ts: domain `workspace_monitor`, debounceMs 250, sweepIntervalMs 60000, maxWatch
-   500, the include/exclude globs, the check-set catalog, the D6 policy block).
-2. Service check: none expected (no service; a listener hook).
-3. Ledger line: `monitor: activated (domain=workspace_monitor, checksets=<n>)` in
-   `~/.dsh/playform/hook-dsh-workspace-monitor.log`; a cold mount logs
-   `monitor: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-monitor"}` → one entry, status schema (defaults per
+    Variable/Config.ts: domain `workspace_monitor`, debounceMs 250, sweepIntervalMs 60000, maxWatch
+    500, the include/exclude globs, the check-set catalog, the D6 policy block).
+
+2. **The service check.**
+
+    Service check: none expected (no service; a listener hook).
+
+3. **The ledger line.**
+
+    Ledger line: `monitor: activated (domain=workspace_monitor, checksets=<n>)` in
+    `~/.dsh/playform/hook-dsh-workspace-monitor.log`; a cold mount logs
+    `monitor: disabled (enabled=false)`.
 
 ## Test cases
 

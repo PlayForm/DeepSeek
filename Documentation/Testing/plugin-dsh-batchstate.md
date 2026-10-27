@@ -32,14 +32,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-batchstate"}` → one entry, status schema (defaults: batch
-   "default", domain `batch_state`, stateFile ~/.dsh/batch-state.json, maxRecent 8, maxProposals 16,
-   policy.* D6 defaults).
-2. Service check: `cordis_inspect_query` host/Service/listService `batchstate` → resolves (it reads
-   honestly from the empty state even when disabled).
-3. Ledger line: `batchstate: activated (batch=default, stateFile=...)` in
-   `~/.dsh/playform/plugin-dsh-batchstate.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-batchstate"}` → one entry, status schema (defaults: batch
+    "default", domain `batch_state`, stateFile ~/.dsh/batch-state.json, maxRecent 8, maxProposals
+    16, policy.* D6 defaults).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `batchstate` → resolves (it reads
+    honestly from the empty state even when disabled).
+
+3. **The ledger line.**
+
+    Ledger line: `batchstate: activated (batch=default, stateFile=...)` in
+    `~/.dsh/playform/plugin-dsh-batchstate.log`.
 
 ## Test cases
 

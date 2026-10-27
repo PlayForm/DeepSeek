@@ -17,18 +17,28 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-semantics"}` → one entry, status schema. Verify the
-   schema defaults match SCHEME.md: `log=true`, `logFile`, `enabled=false`,
-   `domain=workspace_semantics`, `maxEntries=256`,
-   `exclude=["node_modules/**", "**/Target/**", "**/.git/**"]`, `root=""`, `lsp=true`,
-   `adapters=[]`, and the `policy` block (the D6 allowlist; all this package's actions
-   read-only/`auto`, no gated action).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceSemantics` → resolves.
-3. Ledger line: `semantics: activated (domain=workspace_semantics)` in
-   `~/.dsh/playform/plugin-dsh-workspace-semantics.log`; a cold mount logs
-   `semantics: disabled (enabled=false)`. On a warm activation also expect
-   `semantics: adapters registered (7 extensions)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-semantics"}` → one entry, status schema.
+
+    Verify the schema defaults match SCHEME.md: `log=true`, `logFile`, `enabled=false`,
+    `domain=workspace_semantics`, `maxEntries=256`,
+    `exclude=["node_modules/**", "**/Target/**", "**/.git/**"]`, `root=""`, `lsp=true`,
+    `adapters=[]`, and the `policy` block (the D6 allowlist; all this package's actions
+    read-only/`auto`, no gated action).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceSemantics` → resolves.
+
+3. **The ledger line.**
+
+    Ledger line: `semantics: activated (domain=workspace_semantics)` in
+    `~/.dsh/playform/plugin-dsh-workspace-semantics.log`; a cold mount logs
+    `semantics: disabled (enabled=false)`.
+
+    On a warm activation also expect `semantics: adapters registered (7 extensions)`.
 
 ## Test cases
 

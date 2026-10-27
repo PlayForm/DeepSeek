@@ -20,14 +20,23 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-graph-suggester"}` → one entry, status schema (defaults: threshold
-   0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents `[]` (all
-   pack intents enabled), emitOn glob/grep/read, exclude node_modules/Target/.git/dist, graph true).
-2. Tool check: none expected (no tools).
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-graph-suggester.log` -
-   `graph-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>)`; a cold mount logs the
-   byte-exact `graph-suggester: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-graph-suggester"}` → one entry, status schema (defaults: threshold
+    0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents `[]` (all
+    pack intents enabled), emitOn glob/grep/read, exclude node_modules/Target/.git/dist, graph
+    true).
+
+2. **The tool check.**
+
+    Tool check: none expected (no tools).
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-graph-suggester.log` -
+    `graph-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>)`; a cold mount logs the
+    byte-exact `graph-suggester: disabled (enabled=false)`.
 
 ## Test cases
 

@@ -32,13 +32,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-graph"}` → one entry, status schema (defaults: domain
-   workspace_graph, languages - all three, exclude triple, maxFileBytes 1000000, maxNodesPerFile
-   5000, maxFiles 2000, limitDefault 50, limitMaximum 500).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceGraph` → resolves
-   immediately on construction.
-3. Ledger line: `graph: activated (domain=workspace_graph, languages=3)` in the logger.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-graph"}` → one entry, status schema (defaults: domain
+    workspace_graph, languages - all three, exclude triple, maxFileBytes 1000000, maxNodesPerFile
+    5000, maxFiles 2000, limitDefault 50, limitMaximum 500).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceGraph` → resolves
+    immediately on construction.
+
+3. **The ledger line.**
+
+    Ledger line: `graph: activated (domain=workspace_graph, languages=3)` in the logger.
 
 ## Test cases
 

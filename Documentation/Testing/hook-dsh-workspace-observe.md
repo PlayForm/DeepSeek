@@ -29,13 +29,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-observe"}` → one entry, status schema (defaults: log
-   true, domain workspace_observe, maxStamps 1000, include [], exclude triple, policy block).
-2. Service check: none expected beyond the apply-registered `workspaceObserve` service (the recorder
-   registers no tools).
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-observe.log`; a cold mount
-   logs `observe: disabled (enabled=false)` and no listener is wired.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-observe"}` → one entry, status schema (defaults: log
+    true, domain workspace_observe, maxStamps 1000, include [], exclude triple, policy block).
+
+2. **The service check.**
+
+    Service check: none expected beyond the apply-registered `workspaceObserve` service (the
+    recorder registers no tools).
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-workspace-observe.log`; a cold
+    mount logs `observe: disabled (enabled=false)` and no listener is wired.
 
 ## Test cases
 

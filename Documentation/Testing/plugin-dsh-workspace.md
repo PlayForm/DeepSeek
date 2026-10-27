@@ -21,13 +21,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace"}` → one entry, status schema.
-2. Tool check: the Tool provider lists FIVE tools - `workspace_map`, `workspace_find`,
-   `workspace_expand`, `workspace_context`, `workspace_index`.
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-workspace.log`; a cold mount logs
-   the byte-exact `plugin-dsh-workspace: disabled (enabled=false)`. On activation the line reads
-   `workspace: activated (bundle 0.1.0, tools=5)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace"}` → one entry, status schema.
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists FIVE tools - `workspace_map`, `workspace_find`,
+    `workspace_expand`, `workspace_context`, `workspace_index`.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-workspace.log`; a cold mount logs
+    the byte-exact `plugin-dsh-workspace: disabled (enabled=false)`.
+
+    On activation the line reads `workspace: activated (bundle 0.1.0, tools=5)`.
 
 ## Test cases
 

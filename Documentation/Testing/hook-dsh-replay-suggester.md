@@ -28,16 +28,24 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-replay-suggester"}` → one entry, status schema (defaults: threshold
-   0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents `[]` (all
-   pack intents enabled), emitOn bash/edit/glob/grep/read/write, exclude
-   node_modules/Target/.git/dist, historyPath ~/.dsh/replay-suggester/history.json, learnWindow 2,
-   recordPath ~/.dsh/replay-suggester/replay_history.json, historyDepth 32).
-2. Tool check: none expected (no tools).
-3. Ledger line: the activated line in `~/.dsh/playform/hook-dsh-replay-suggester.log` -
-   `replay-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>, history <h>)`; a cold
-   mount logs the byte-exact `replay-suggester: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-replay-suggester"}` → one entry, status schema (defaults:
+    threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, intents
+    `[]` (all pack intents enabled), emitOn bash/edit/glob/grep/read/write, exclude
+    node_modules/Target/.git/dist, historyPath ~/.dsh/replay-suggester/history.json, learnWindow 2,
+    recordPath ~/.dsh/replay-suggester/replay_history.json, historyDepth 32).
+
+2. **The tool check.**
+
+    Tool check: none expected (no tools).
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/hook-dsh-replay-suggester.log` -
+    `replay-suggester: activated (bundle 0.1.0, intents <n>, threshold <t>, history <h>)`; a cold
+    mount logs the byte-exact `replay-suggester: disabled (enabled=false)`.
 
 ## Test cases
 

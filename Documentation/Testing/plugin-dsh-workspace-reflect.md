@@ -35,15 +35,23 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-reflect"}` → one entry, status schema (defaults:
-   `enabled` false, `propagate` block, `maxFileBytes` 1000000, `maxBlockLines` 5000, the D6 policy
-   block with `write: approve`).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceReflect` → resolves with
-   `rename` / `connect` / `replace` / `act`.
-3. Ledger line: `reflect: disabled (enabled=false)` on a cold mount (a disabled plugin answers
-   `denied (enabled=false)`); after activation `reflect: activated (propagate=block)` in
-   `~/.dsh/playform/plugin-dsh-workspace-reflect.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-reflect"}` → one entry, status schema (defaults:
+    `enabled` false, `propagate` block, `maxFileBytes` 1000000, `maxBlockLines` 5000, the D6 policy
+    block with `write: approve`).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceReflect` → resolves
+    with `rename` / `connect` / `replace` / `act`.
+
+3. **The ledger line.**
+
+    Ledger line: `reflect: disabled (enabled=false)` on a cold mount (a disabled plugin answers
+    `denied (enabled=false)`); after activation `reflect: activated (propagate=block)` in
+    `~/.dsh/playform/plugin-dsh-workspace-reflect.log`.
 
 ## Test cases
 

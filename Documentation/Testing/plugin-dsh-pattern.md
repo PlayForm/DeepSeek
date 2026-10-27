@@ -37,13 +37,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-pattern"}` → one entry, status schema (defaults: domain
-   `pattern`, storagePath ~/.dsh/pattern/registry.json, matchThreshold 0.35, maxMatches 3,
-   ambiguityEpsilon 0.02, decayHalfLifeDays 14, policy.* D6 defaults).
-2. Service check: the `pattern` service resolves on the context.
-3. Ledger line: `pattern: activated (seeded <n> patterns) (logFile <logFile>)` in
-   `~/.dsh/playform/plugin-dsh-pattern.log` - N must be > 0 when the pack ships data.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-pattern"}` → one entry, status schema (defaults: domain
+    `pattern`, storagePath ~/.dsh/pattern/registry.json, matchThreshold 0.35, maxMatches 3,
+    ambiguityEpsilon 0.02, decayHalfLifeDays 14, policy.* D6 defaults).
+
+2. **The service check.**
+
+    Service check: the `pattern` service resolves on the context.
+
+3. **The ledger line.**
+
+    Ledger line: `pattern: activated (seeded <n> patterns) (logFile <logFile>)` in
+    `~/.dsh/playform/plugin-dsh-pattern.log` - N must be > 0 when the pack ships data.
 
 ## Test cases
 

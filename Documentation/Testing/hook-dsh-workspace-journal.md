@@ -20,14 +20,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-journal"}` → one entry, status schema (defaults: domain
-   workspace_journal, maxBatches 200, maxEntryBytes 65536, exclude triple, and the `policy` D6
-   block).
-2. Service check: none expected (no service; a listener hook).
-3. Ledger line: `journal: activated (domain=workspace_journal, maxBatches=200)` in
-   `~/.dsh/playform/hook-dsh-workspace-journal.log`; a cold mount logs
-   `journal: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-journal"}` → one entry, status schema (defaults: domain
+    workspace_journal, maxBatches 200, maxEntryBytes 65536, exclude triple, and the `policy` D6
+    block).
+
+2. **The service check.**
+
+    Service check: none expected (no service; a listener hook).
+
+3. **The ledger line.**
+
+    Ledger line: `journal: activated (domain=workspace_journal, maxBatches=200)` in
+    `~/.dsh/playform/hook-dsh-workspace-journal.log`; a cold mount logs
+    `journal: disabled (enabled=false)`.
 
 ## Test cases
 

@@ -32,13 +32,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-ingester"}` → one entry, status schema (defaults: maxTargets 20,
-   stopOnConflict true, maxProposals 16, policy.* D6 defaults). Ships `enabled: true` (the patch
-   entry).
-2. Service check: `cordis_inspect_query` host/Service/listService `ingester` → resolves immediately
-   on construction.
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-ingester.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-ingester"}` → one entry, status schema (defaults: maxTargets 20,
+    stopOnConflict true, maxProposals 16, policy.* D6 defaults).
+
+    Ships `enabled: true` (the patch entry).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `ingester` → resolves immediately
+    on construction.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-ingester.log`.
 
 ## Test cases
 

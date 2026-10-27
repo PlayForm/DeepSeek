@@ -35,14 +35,24 @@ bridge: write failed for <namespace>
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/client-dsh-panel-family-host"}` → one entry, status schema (defaults:
-   enabled false, logRoot ~/.dsh, maxLines 200 (1..2000), ccrLog ~/.dsh/playform/hook-dsh-ccr.log;
-   all knobs volatile). Note the default is DISABLED - a disabled package refuses every method.
-2. Service check: `cordis_inspect_query` host/Service/listService → `panelFamilyHost` (`tail`,
-   `stats`), plus `panelFamilyBridge` and `panelFamilyTrace` when the bus and config editor exist.
-3. Ledger line: `host: activated (enabled=<enabled>)` in the logger - with the stock config,
-   `host: activated (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-panel-family-host"}` → one entry, status schema (defaults:
+    enabled false, logRoot ~/.dsh, maxLines 200 (1..2000), ccrLog ~/.dsh/playform/hook-dsh-ccr.log;
+    all knobs volatile).
+
+    Note the default is DISABLED - a disabled package refuses every method.
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService → `panelFamilyHost` (`tail`,
+    `stats`), plus `panelFamilyBridge` and `panelFamilyTrace` when the bus and config editor exist.
+
+3. **The ledger line.**
+
+    Ledger line: `host: activated (enabled=<enabled>)` in the logger - with the stock config,
+    `host: activated (enabled=false)`.
 
 ## Test cases
 

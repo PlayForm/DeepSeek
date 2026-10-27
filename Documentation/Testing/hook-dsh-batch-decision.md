@@ -32,13 +32,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-batch-decision"}` → one entry, status schema (defaults: autoApprove
-   "off", allowlist [], maxAutoTargets 5, minConfidence 0.8, pendingTtlMs 3600000, policy.* D6
-   defaults).
-2. Tool check: the Tool provider lists `batch_decision`.
-3. Ledger line: `bundle 0.1.0 autoApprove <off|on> allowlist <n>` (the Activate line) in
-   `~/.dsh/playform/hook-dsh-batch-decision.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-batch-decision"}` → one entry, status schema (defaults:
+    autoApprove "off", allowlist [], maxAutoTargets 5, minConfidence 0.8, pendingTtlMs 3600000,
+    policy.* D6 defaults).
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists `batch_decision`.
+
+3. **The ledger line.**
+
+    Ledger line: `bundle 0.1.0 autoApprove <off|on> allowlist <n>` (the Activate line) in
+    `~/.dsh/playform/hook-dsh-batch-decision.log`.
 
 ## Test cases
 

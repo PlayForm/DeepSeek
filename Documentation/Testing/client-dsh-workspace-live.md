@@ -32,12 +32,20 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/client-dsh-workspace-live"}` → one entry, status schema (defaults: tabOrder
-   25, maxEvents 50, maxRepresentations 100, enabled false).
-2. Service check: the `workspaceLive` service resolves with `getSnapshot`, `subscribe`, `ingest`,
-   `refresh`.
-3. Ledger line: none - activation is proven by checks 1-2 and the T5 tab.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/client-dsh-workspace-live"}` → one entry, status schema (defaults: tabOrder
+    25, maxEvents 50, maxRepresentations 100, enabled false).
+
+2. **The service check.**
+
+    Service check: the `workspaceLive` service resolves with `getSnapshot`, `subscribe`, `ingest`,
+    `refresh`.
+
+3. **The ledger line.**
+
+    Ledger line: none - activation is proven by checks 1-2 and the T5 tab.
 
 ## Test cases
 

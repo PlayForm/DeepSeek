@@ -28,14 +28,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-evidence"}` → one entry, status schema (defaults:
-   domain `workspace_evidence`, maxValidations 512, the exclude globs, the D6 policy block).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceEvidence` → resolves
-   with `validate` / `check` / `invalidate` / `list` / `statistics`.
-3. Ledger line: `evidence: disabled (enabled=false)` on a cold mount and
-   `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` on the
-   first record, in `~/.dsh/playform/plugin-dsh-workspace-evidence.log`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-evidence"}` → one entry, status schema (defaults:
+    domain `workspace_evidence`, maxValidations 512, the exclude globs, the D6 policy block).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceEvidence` → resolves
+    with `validate` / `check` / `invalidate` / `list` / `statistics`.
+
+3. **The ledger line.**
+
+    Ledger line: `evidence: disabled (enabled=false)` on a cold mount and
+    `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` on the
+    first record, in `~/.dsh/playform/plugin-dsh-workspace-evidence.log`.
 
 ## Test cases
 

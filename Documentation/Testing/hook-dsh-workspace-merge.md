@@ -16,15 +16,25 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-merge"}` → one entry, status schema. Defaults per the
-   SCHEME config table: `enabled=false`, `domain=workspace_merge`, `mode=all-or-nothing`
-   (`"all-or-nothing" | "survivors"`), `maxFiles=50`, `maxTotalBytes=1000000`, the `policy` D6 block
-   (see below), `logFile=~/.dsh/playform/hook-dsh-workspace-merge.log`.
-2. Tool check: the Tool provider lists `workspace_merge`.
-3. Ledger line: `merge: activated (domain=workspace_merge, mode=all-or-nothing)` in
-   `~/.dsh/playform/hook-dsh-workspace-merge.log`; a cold mount logs
-   `merge: disabled (enabled=false)` and nothing is wired.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-merge"}` → one entry, status schema.
+
+    Defaults per the SCHEME config table: `enabled=false`, `domain=workspace_merge`,
+    `mode=all-or-nothing` (`"all-or-nothing" | "survivors"`), `maxFiles=50`,
+    `maxTotalBytes=1000000`, the `policy` D6 block (see below),
+    `logFile=~/.dsh/playform/hook-dsh-workspace-merge.log`.
+
+2. **The tool check.**
+
+    Tool check: the Tool provider lists `workspace_merge`.
+
+3. **The ledger line.**
+
+    Ledger line: `merge: activated (domain=workspace_merge, mode=all-or-nothing)` in
+    `~/.dsh/playform/hook-dsh-workspace-merge.log`; a cold mount logs
+    `merge: disabled (enabled=false)` and nothing is wired.
 
 ## Test cases
 

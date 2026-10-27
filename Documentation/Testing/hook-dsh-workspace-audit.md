@@ -20,14 +20,22 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/hook-dsh-workspace-audit"}` → one entry, status schema (defaults: domain
-   workspace_audit, maxLines 2000, exclude node_modules/**, **/Target/**, **/.git/**, and the
-   `policy` D6 block).
-2. Service check: none expected (no service; a listener hook).
-3. Ledger line: `audit: activated (domain=workspace_audit, maxLines=2000)` in
-   `~/.dsh/playform/hook-dsh-workspace-audit.log`; a cold mount logs
-   `audit: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/hook-dsh-workspace-audit"}` → one entry, status schema (defaults: domain
+    workspace_audit, maxLines 2000, exclude node_modules/**, **/Target/**, **/.git/**, and the
+    `policy` D6 block).
+
+2. **The service check.**
+
+    Service check: none expected (no service; a listener hook).
+
+3. **The ledger line.**
+
+    Ledger line: `audit: activated (domain=workspace_audit, maxLines=2000)` in
+    `~/.dsh/playform/hook-dsh-workspace-audit.log`; a cold mount logs
+    `audit: disabled (enabled=false)`.
 
 ## Test cases
 

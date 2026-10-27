@@ -37,13 +37,21 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-route"}` → one entry, status schema (defaults: enabled false,
-   defaultRole `explorer`, `policy` the task-routing table, `keywords` the shipped table,
-   `automation.*` D6 defaults).
-2. Service check: `cordis_inspect_query` host/Service/listService `dshRoute` → resolves.
-3. Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-route.log`; a cold mount logs
-   `disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-route"}` → one entry, status schema (defaults: enabled false,
+    defaultRole `explorer`, `policy` the task-routing table, `keywords` the shipped table,
+    `automation.*` D6 defaults).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `dshRoute` → resolves.
+
+3. **The ledger line.**
+
+    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-route.log`; a cold mount logs
+    `disabled (enabled=false)`.
 
 ## Test cases
 

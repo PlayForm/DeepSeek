@@ -23,17 +23,26 @@
 
 ## Activation checks
 
-1. Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-   `{"name": "@playform/plugin-dsh-workspace-authority"}` → one entry, status schema. Defaults per
-   the README config table: `enabled=false`, `defaultTtlMs=300000`, `maxLeasesPerHolder=8`,
-   `maxCapabilitiesPerHolder=16`, `revocationGraceMs=0`, `policy=[]` (the residency rule table
-   `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}`), and the D6 allowlist keyed
-   `automation.*` (NOT `policy` - this package's `policy` is the rule table, the plugin-dsh-route
-   precedent).
-2. Service check: `cordis_inspect_query` host/Service/listService `workspaceAuthority` → resolves.
-3. Ledger line: `authority: activated (ttl=300000, policy=N)` in
-   `~/.dsh/playform/plugin-dsh-workspace-authority.log`; a cold mount logs
-   `authority: disabled (enabled=false)`.
+1. **The Config.**
+
+    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-authority"}` → one entry, status schema.
+
+    Defaults per the README config table: `enabled=false`, `defaultTtlMs=300000`,
+    `maxLeasesPerHolder=8`, `maxCapabilitiesPerHolder=16`, `revocationGraceMs=0`, `policy=[]` (the
+    residency rule table `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}`), and
+    the D6 allowlist keyed `automation.*` (NOT `policy` - this package's `policy` is the rule table,
+    the plugin-dsh-route precedent).
+
+2. **The service check.**
+
+    Service check: `cordis_inspect_query` host/Service/listService `workspaceAuthority` → resolves.
+
+3. **The ledger line.**
+
+    Ledger line: `authority: activated (ttl=300000, policy=N)` in
+    `~/.dsh/playform/plugin-dsh-workspace-authority.log`; a cold mount logs
+    `authority: disabled (enabled=false)`.
 
 ## Test cases
 
