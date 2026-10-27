@@ -1,6 +1,6 @@
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Validation from "./Validation.js";
+import type DomainHandle from "@Interface/Domain.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type Validation from "@Interface/Validation.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Master switch (config `enabled`, volatile) - false = full no-op. */

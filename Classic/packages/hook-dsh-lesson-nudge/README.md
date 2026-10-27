@@ -56,8 +56,8 @@ so the listener returns immediately, and a rejected review cannot become an unha
 
 The schema default and the patch row set `enabled: false`, the idle-forever posture of the family.
 
-A cold mount logs `disabled (enabled=false)` and the listener stays inert. The next status transition
-makes a change to the cell active.
+A cold mount logs `disabled (enabled=false)` and the listener stays inert. The next status
+transition makes a change to the cell active.
 
 ## Wiring
 

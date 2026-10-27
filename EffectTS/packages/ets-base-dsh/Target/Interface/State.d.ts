@@ -1,7 +1,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type { FsTargetKey, FsVersion } from "@deepseek-ai/dsh-fs";
 import type SubprocessService from "@deepseek-ai/dsh-subprocess";
-import type Record from "./Journal.js";
+import type Record from "@Interface/Journal.js";
 export default interface State {
     /** The loading context — carries fs, logger, emit and the event bus. */
     Context: Context;

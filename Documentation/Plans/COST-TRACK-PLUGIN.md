@@ -58,6 +58,24 @@ statuses:
     - name: the inside, outside, and cross metric catalogue
       state: resolved
       evidence: sections 16.2-16.4
+    - name: the three classes of factor (pricing, attribution, classification)
+      state: resolved
+      evidence: section 17.1
+    - name: the modifier product and the marginal tier interpolation
+      state: resolved
+      evidence: section 17.2
+    - name: the edit grain (hunk rows)
+      state: resolved
+      evidence: section 17.3
+    - name: the telemetry the session log already carries
+      state: resolved
+      evidence: section 17.4
+    - name: the forecast view for the on-demand invoice
+      state: resolved
+      evidence: section 17.5
+    - name: the v3 factor pass and the v4 edit and telemetry pass
+      state: open
+      evidence: section 17.7
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -663,3 +681,160 @@ this file make the later edit cheaper".
 Every one of them is a view over `Call`, `Touch`, `ContextMass`, `Allocation` and `FileVersion`.
 None of them requires a new event, which is the test of whether the ledger was designed at the right
 grain.
+
+## 17. The factor model - everything the price depends on
+
+A file's cost is not one number computed from one rate. It is a product of dimensions, and a model
+that stores only `(model, tokens)` will misprice every call that ran in a batch, near a context-tier
+boundary, inside a peak window, under a residency flag, or after a retry. The factor model makes
+each dimension explicit, typed, and effective-dated, so the arithmetic is auditable and a new
+dimension is a row rather than a migration.
+
+### 17.1 Three classes of factor
+
+- **Pricing factors** change the rate, so they are typed columns and participate in the arithmetic:
+  `Provider`, `Model`, `PriceId`, `Mode` (`standard | batch | flex | priority`), `Region`, `Window`
+  (`any | peak | offpeak`), `Tier`, and the four token buckets.
+- **Attribution factors** change which file pays, so they are typed columns on `Touch`: `Tool`,
+  `Kind`, `Stage`, `Branch`, `ReadBeforeEdit`.
+- **Classification factors** only slice the reports, so they live in a generic dimension: `origin`
+  (user or subagent), `delegationDepth`, `agentPreset`, `language`, `retry`, `compaction`,
+  `tokenizer`, `purpose`. They are stored as `Factor` + `CallFactor` rows, which means a new
+  classifier never needs a migration.
+
+### 17.2 Modifiers, tiers, and the interpolation rule
+
+A base rate is multiplied by every modifier that applies at the call's own time:
+
+    cost(call) = SUM over buckets of ( bucketTokens / 1e6 * baseRate(bucket, tier) )
+                 * PRODUCT over applicable modifiers
+
+Modifiers are rows, not code: `batch 0.5`, `flex 0.5`, `priority 2.0`, `ultrafast 6.0`,
+`residency-us 1.1`, `regional-uplift 1.1`. Each is effective-dated like a price, so a historical
+invoice is reproducible.
+
+Tiers are the part that needs real interpolation, because the providers do not charge one rate for a
+whole prompt that crosses a threshold. Gemini prices input at $2.00 up to 200k prompt tokens and
+$4.00 above it; Anthropic tiers by prompt length on several models. The rule is **marginal**: the
+tokens below the threshold are priced at the lower tier and only the excess at the higher one, which
+is the only reading that does not produce a cliff where one extra token doubles a bill. `Price`
+gains `TierFrom` and `TierTo`, and `Price.Cost` walks the tiers in order:
+
+    for each tier in ascending TierFrom:
+        portion = clamp(promptTokens - tier.TierFrom, 0, tier.TierTo - tier.TierFrom)
+        cost += portion / 1e6 * tier.InputRate
+
+Cache reads and writes are interpolated the same way, against their own rates, because a cached
+prefix that crosses a tier boundary is priced per portion rather than per call.
+
+### 17.3 The edit grain
+
+A touch is too coarse to answer "what did this hunk cost". Every edit tool call produces one or more
+hunks, and the ledger records each one:
+
+```sql
+CREATE TABLE Edit (
+    EditId INTEGER PRIMARY KEY,
+    TouchId INTEGER NOT NULL REFERENCES Touch (TouchId),
+    Ordinal INTEGER NOT NULL, LinesAdded INTEGER NOT NULL DEFAULT 0,
+    LinesRemoved INTEGER NOT NULL DEFAULT 0, BytesAdded INTEGER NOT NULL DEFAULT 0,
+    BytesRemoved INTEGER NOT NULL DEFAULT 0, BeforeHash TEXT, AfterHash TEXT,
+    At INTEGER NOT NULL, UNIQUE (TouchId, Ordinal)
+) STRICT;
+```
+
+With `Edit` rows the direct half of the allocation can be weighted by hunk size instead of by whole
+file delta, and three new numbers become answerable: cost per added line, cost per hunk, and the
+distribution of spend across the hunks of one file (which is how a 40-line refactor that cost $4
+becomes visible next to the one-line fix that cost $0.30).
+
+### 17.4 Telemetry the log already carries
+
+None of this needs new instrumentation; the session log records it and the plugin only has to read
+it.
+
+| Signal              | Source in the log                                                         | Use                      |
+| ------------------- | ------------------------------------------------------------------------- | ------------------------ |
+| first-token latency | `assistant/message.stream[].time0` minus the step start                   | perceived speed          |
+| total latency       | the last `dt` accumulation in the stream record                           | throughput               |
+| tokens per second   | output tokens over total latency                                          | model comparison         |
+| attempts            | count of `assistant/attempt` between `step/start` and `assistant/message` | retry cost               |
+| failure code        | `tool/result.error.code`, `turn/end` reason                               | wasted spend             |
+| context window      | `request/context.contextWindow`                                           | utilization              |
+| utilization         | `surfaceTokens / contextWindow`                                           | near-limit behavior      |
+| tool duration       | `tool/call.time` to `tool/result.time`                                    | tool cost without tokens |
+| result size         | the tool result's rendered bytes                                          | context mass per touch   |
+| compaction          | the `purpose: 'compaction'` call                                          | overhead bucket          |
+
+The `Call` table gains `LatencyMs`, `FirstTokenMs`, `TokensPerSecond`, `Attempts`, `ErrorCode`,
+`ContextWindow`, and `Utilization`; `Touch` gains `DurationMs` and `ResultBytes`. A call that
+retried three times is one `Call` with `Attempts = 3` and the wasted tokens still in its buckets, so
+the rework ratio is a division rather than a join.
+
+### 17.5 Forecast and the on-demand invoice
+
+The invoice is produced on demand or monthly, so the ledger needs a projection that is a query, not
+a stored guess: for each project and client, the daily rate over a chosen window (mean, median, and
+the last seven days), projected to the period end with the observed weekday shape. The forecast is a
+view over `Rollup`, labelled as an estimate in every export, and it never writes a row. A month that
+is half over produces a projection with a stated confidence band (min and max daily rate), because a
+single-number forecast is the thing clients distrust.
+
+### 17.6 The DDL for the factor layer
+
+Additive again, `user_version` 2 to 3.
+
+```sql
+ALTER TABLE Price ADD COLUMN TierFrom INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE Price ADD COLUMN TierTo INTEGER;
+ALTER TABLE Price ADD COLUMN Mode TEXT NOT NULL DEFAULT 'standard';
+ALTER TABLE Price ADD COLUMN Region TEXT;
+
+CREATE TABLE Modifier (
+    ModifierId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT,
+    Kind TEXT NOT NULL, Value TEXT NOT NULL, Multiplier REAL NOT NULL,
+    EffectiveFrom INTEGER NOT NULL, EffectiveTo INTEGER, Source TEXT NOT NULL
+) STRICT;
+
+CREATE TABLE Factor (
+    FactorId INTEGER PRIMARY KEY, Scope TEXT NOT NULL, Key TEXT NOT NULL, Value TEXT NOT NULL,
+    UNIQUE (Scope, Key, Value)
+) STRICT;
+
+CREATE TABLE CallFactor (
+    CallId INTEGER NOT NULL REFERENCES Call (CallId),
+    FactorId INTEGER NOT NULL REFERENCES Factor (FactorId), Weight REAL NOT NULL DEFAULT 1,
+    PRIMARY KEY (CallId, FactorId)
+) STRICT;
+
+ALTER TABLE Call ADD COLUMN Mode TEXT NOT NULL DEFAULT 'standard';
+ALTER TABLE Call ADD COLUMN Region TEXT;
+ALTER TABLE Call ADD COLUMN Tier INTEGER;
+ALTER TABLE Call ADD COLUMN LatencyMs INTEGER;
+ALTER TABLE Call ADD COLUMN FirstTokenMs INTEGER;
+ALTER TABLE Call ADD COLUMN TokensPerSecond REAL;
+ALTER TABLE Call ADD COLUMN Attempts INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE Call ADD COLUMN ErrorCode TEXT;
+ALTER TABLE Call ADD COLUMN ContextWindow INTEGER;
+ALTER TABLE Call ADD COLUMN Utilization REAL;
+
+ALTER TABLE Touch ADD COLUMN Stage TEXT;
+ALTER TABLE Touch ADD COLUMN DurationMs INTEGER;
+ALTER TABLE Touch ADD COLUMN ResultBytes INTEGER;
+```
+
+### 17.7 Build order
+
+Three additive passes, each one green before the next starts, because a ledger that half-knows a
+dimension is worse than one that does not know it at all:
+
+1. **v2 - the analytics grain**: `Alias`, `Verdict`, `Touch.Stage`, `Touch.Branch`,
+   `Touch.ReadBeforeEdit`, `Call.CacheSaving`, `Price.Window`, the stage classifier, the report
+   queries, `/cost assess`.
+2. **v3 - the factor layer**: `Modifier`, `Factor`/`CallFactor`, tiers, modes, regions, and the
+   marginal interpolation in `Price.Cost`.
+3. **v4 - the edit and telemetry grain**: `Edit`, the latency and retry columns, the stream-record
+   parser, and the forecast view.
+
+Each pass ships with its own smokes, and the conservation smoke from section 9 runs after every one
+of them, because the one thing that must never drift is that the allocations still sum to the bill.

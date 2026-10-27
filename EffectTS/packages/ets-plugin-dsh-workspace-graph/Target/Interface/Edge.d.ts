@@ -1,4 +1,4 @@
-import type { Span } from "@Interface/Node.js";
+import type { Span } from "./Node.js";
 export type EdgeKind = "contains" | "imports" | "references";
 export default interface Edge {
     kind: EdgeKind;

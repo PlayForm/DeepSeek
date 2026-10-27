@@ -1,4 +1,4 @@
-import type { NodeKind } from "@Interface/Node.js";
+import type { NodeKind } from "./Node.js";
 export default interface Query {
     name?: string;
     pattern?: string;

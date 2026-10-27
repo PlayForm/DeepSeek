@@ -30,7 +30,29 @@ The views `FileCost`, `ModelCost`, `SessionCost`, `ClientCost` pre-aggregate the
 
 ## The commands
 
-- `/cost report [scope] [range]`, `/cost export <csv|json> [path]`, `/cost annotate [path]`.
+The three human commands run through the `commands` service - none of them is a tool and none enters
+the model context. One registered command owns the grammar and the verb is its first word:
+
+| Invocation                                  | What it does                                                                                |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `/cost report [scope] [range]`              | the rollup for `file`, `project`, `client`, `model` or `session`; `range` is one UTC day    |
+| `/cost export <csv\|json\|markdown> [path]` | the client-facing bundle: RFC 4180 CSV, the re-derivable JSON, or the markdown invoice      |
+| `/cost annotate [path]`                     | write the cost comment into the named files, or every file the ledger knows for the project |
+
+The annotation is a marker-delimited block that speaks the file's own comment language; writing it
+twice is a no-op, and a hand edit afterwards only replaces the block:
+
+```text
+// dsh-cost:begin
+// Inference cost: 12.4183 USD (direct 3.1022 + amortized 9.3161)
+// Models: deepseek-v4.1-flash-1017 9.8821 | glm-5.3-flash 2.5362
+// Calls: 41 | First: 2026-10-21 | Last: 2026-10-27
+// dsh-cost:end
+```
+
+It ships off by default (`annotate.enabled: false`) - the one toggle the user asked for - and the
+write goes through the factory's write executor, so a file that changed under the plugin refuses the
+annotation and retries, never forces it.
 
 ## The configuration
 
