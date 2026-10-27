@@ -1,9 +1,8 @@
 # Launch-And-Hint - the launch seam and the routing hint
 
-The completion wave's arbiter for `plugin-dsh-route`: the routing hint reaches
-a spawned child's prompt through the harness's own `agent/pre-step` waterfall,
-the tool path appends the same hint at launch, the `ESCALATION:` marker picks
-the ladder, and the live model catalog decides the rung's model.
+This is the completion wave's arbiter for `plugin-dsh-route`.
+
+The routing hint reaches a spawned child's prompt through the harness's own `agent/pre-step` waterfall, the tool path appends the same hint at launch, the `ESCALATION:` marker picks the ladder, and the live model catalog decides the rung's model.
 
 ## Scenarios
 
@@ -32,10 +31,7 @@ the ladder, and the live model catalog decides the rung's model.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, `FireStep` (the `agent/pre-step` waterfall),
-`Child` (the depth accounting), `Prompt` (an offered step message), and the
-`llm` catalog seam attached through `Make`'s pre-apply hook.
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, `FireStep` (the `agent/pre-step` waterfall), `Child` (the depth accounting), `Prompt` (an offered step message), and the `llm` catalog seam attached through `Make`'s pre-apply hook.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-route: ` prefix)
 

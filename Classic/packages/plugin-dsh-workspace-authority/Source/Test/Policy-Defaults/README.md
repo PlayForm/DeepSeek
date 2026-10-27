@@ -1,23 +1,20 @@
 # Policy-Defaults
 
-The policy block (D6) on the authority service: the defaults, the State
-mapping on `Allow`, the override, and the service's read-only/record posture.
+This folder covers the policy block (D6) on the authority service: the defaults, the State mapping on `Allow`, the override, and the service's read-only/record posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The authority service grants,
-leases, evicts and reads and never writes a file, commits a batch or spawns
-an agent, so its own action classes are `read` and `record`, both automatic.
-This folder proves the block is real config, not dead text: the schema fills
-the D6 defaults, the apply maps them to `State.Allow`, an explicit override
-replaces exactly one key, and the package has NO gated action - no verdict
-can refuse a call, and a representative record still proceeds and touches no
-file content.
+D6 makes automation a per-plugin allowlist.
 
-The D6 key is `automation`, NOT `policy`: this package's `policy` is already
-the residency RULE TABLE (`{kind, disposition, ...}`), a different contract
-(the `plugin-dsh-route` precedent). The test therefore reads
-`Config.automation.get()` and overrides with `automation: { ... }`.
+The authority service grants, leases, evicts, and reads, and it never writes a file, commits a batch, or spawns an agent, so its own action classes are `read` and `record`, both automatic.
+
+This folder proves the block is real config, not dead text: the schema fills the D6 defaults, the apply maps them to `State.Allow`, an explicit override replaces exactly one key, and the package has NO gated action.
+
+No verdict can refuse a call, and a representative record still proceeds and touches no file content.
+
+The D6 key is `automation`, NOT `policy`, because this package's `policy` is already the residency RULE TABLE (`{kind, disposition, ...}`), a different contract (the `plugin-dsh-route` precedent).
+
+The test therefore reads `Config.automation.get()` and overrides with `automation: { ... }`.
 
 ## Scenario
 
@@ -46,18 +43,17 @@ the residency RULE TABLE (`{kind, disposition, ...}`), a different contract
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, the fake fs (a write records and throws), and the
-schema's own validation (`Validate`). The factory's own `Decide` verdict
-lookup is imported from the factory's built `Target/Library.js` - the same
-helper a consumer's gate would call.
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, the fake fs (a write records and throws), and the schema's own validation (`Validate`).
+
+The factory's own `Decide` verdict lookup is imported from the factory's built `Target/Library.js`, which is the same helper a consumer's gate would call.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the mount's only lines are
-the unchanged `authority: activated (ttl=300000, policy=0)` (enabled) and
-`authority: disabled (enabled=false)` (cold). The defaults are the contract
-and are asserted as an object.
+This folder adds none, because the block and its mapping log nothing.
+
+The mount's only lines are the unchanged `authority: activated (ttl=300000, policy=0)` (enabled) and `authority: disabled (enabled=false)` (cold).
+
+The defaults are the contract and are asserted as an object.
 
 ## Expected count
 

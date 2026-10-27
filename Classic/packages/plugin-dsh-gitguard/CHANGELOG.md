@@ -1,10 +1,10 @@
 # Changelog
 
-All notable changes to this package will be documented in this file.
+This file records all notable changes to this package.
 
 ## 0.3.0
 
 ### Changed
 
-- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
-  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
+  devDependencies together, with the host line at `0.2.1-rc.4` and zod at 4.6.7.

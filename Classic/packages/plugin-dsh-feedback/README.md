@@ -5,12 +5,12 @@
 
 ## The role
 
-The FEEDBACK member (ctx.feedback) - the fourth orchestration member
+The FEEDBACK member (`ctx.feedback`) is the fourth orchestration member
 (Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md).
 
-A DeepSeek Harness service that collects the honest signals.
+It is a DeepSeek Harness service that collects the honest signals.
 
-Every agent's completion carries an HONEST feedback block:
+Every completion of an agent carries an HONEST feedback block:
 
 ```
 [HONEST FEEDBACK - <agent id> - <task> - <session>]
@@ -21,17 +21,20 @@ TRANSFERRED: <the path: child -> parent -> ... - the mechanical chain>
 READ-STATUS: unread / read-at <session>
 ```
 
-The block is transferred through the parentage MECHANICALLY - the block flows up the tree as text
-(the inbox splice machinery), one hop per session boundary, and it is ALWAYS modified in the parent
-sessions: the parents APPEND their deltas, they never edit or sanitize the honest content.
+The block transfers through the parentage MECHANICALLY, because it flows up the tree as text through
+the inbox splice machinery, one hop per session boundary.
 
-The reading is the recipient's CHOICE - the transfer never forces the reading.
+The parent sessions ALWAYS modify it, because the parents APPEND their deltas and never edit or
+sanitize the honest content.
+
+The reading is the CHOICE of the recipient, because the transfer never forces the reading.
 
 ## The surfaces
 
-One service: `ctx.feedback` (the table below).
+The plugin provides one service, `ctx.feedback`, which the table below describes.
 
-No tool, no event listener; the journal is the in-memory record plus the JSONL ledger.
+It provides no tool and no event listener, and the journal is the in-memory record plus the JSONL
+ledger.
 
 ## The service surface (`ctx.feedback`)
 
@@ -47,11 +50,12 @@ No tool, no event listener; the journal is the in-memory record plus the JSONL l
 
 ## The batch outcome
 
-The orchestration layer reports the batch's outcome to the council: the ingester (the apply's owner)
-calls `Outcome` after every apply, so a batch's `applied` / `rejected` result lands in the feedback
-journal (`event: "batch"`) and in the session's summary (`outcomes`), beside the honest blocks.
+The orchestration layer reports the outcome of the batch to the council, because the ingester, which
+owns the apply, calls `Outcome` after every apply, so an `applied` or `rejected` result lands in the
+feedback journal as `event: "batch"` and in the summary of the session under `outcomes`, beside the
+honest blocks.
 
-The session and the agent are the proposal's `origin`.
+The session and the agent come from the `origin` of the proposal.
 
 ## The configuration
 
@@ -68,8 +72,8 @@ The session and the agent are the proposal's `origin`.
 
 ### The policy block (D6)
 
-The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
-`Schema.object` call; the validated shape is `State.Config.policy`:
+The schema composes the shared block of the factory, `policy: Policy()`, into the `Schema.object`
+call of the plugin, and the validated shape is `State.Config.policy`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -78,18 +82,19 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The member is a passive collector - `record` and `suggest` are automatic; the write/commit/spawn
-verdicts are declared for uniformity and stay the shipped `approve` (the member never writes,
-commits or spawns).
+The member is a passive collector, so `record` and `suggest` are automatic, while the write, commit,
+and spawn verdicts are declared for uniformity and stay the shipped `approve`, because the member
+never writes, commits, or spawns.
 
-A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement).
+The `policy` section of a resolved pack overrides the defaults per action, and that wiring is the
+next refinement.
 
-The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+`Source/Test/Policy-Defaults` arbitrates the defaults in the smoke suite.
 
 ## The ledger
 
-One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-feedback.log`): each line is
+The plugin writes one JSONL log at `logFile`, by default `~/.dsh/playform/plugin-dsh-feedback.log`,
+and each line is
 
 ```text
 {"at":<epoch ms>,"event":<event>,"session":<id>,"agentId":<id>,"block":<the stored block>}
@@ -97,8 +102,9 @@ One JSONL log (`logFile`, default `~/.dsh/playform/plugin-dsh-feedback.log`): ea
 
 ## The build and the tests
 
-The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+The build is `pnpm prepublishOnly` from Source/prepublishOnly.sh, which runs the plugin build with
+the ESM `Target/` and the Test tree excluded, the Test build, the harness selfcheck, and the Test
+type-check.
 
 | Folder                  | What it proves                                                        | Count |
 | ----------------------- | --------------------------------------------------------------------- | ----- |
@@ -109,17 +115,17 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 ## The honesty policy
 
-The honest content is NEVER sanitized or filtered.
+Nothing sanitizes or filters the honest content.
 
-The parents append deltas, NEVER rewrite the agents' signals.
+The parents append deltas and NEVER rewrite the signals of the agents.
 
-The read is ALWAYS the recipient's choice.
+The read is ALWAYS the choice of the recipient.
 
-The user's override wins.
+The override of the user wins.
 
 ## The plan
 
-- [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md) - the honest
+- [HONEST-FEEDBACK-PLUGIN](../../Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md) covers the honest
   feedback member.
 
 ## License

@@ -1,7 +1,6 @@
 # Residency-And-Eviction - the residency record and the disposition pass
 
-The WHAT STAYS record and the five dispositions: the weight-only-ranks
-rule, the policy table, the shields, and the purity.
+This folder covers the WHAT STAYS record and the five dispositions: the weight-only-ranks rule, the policy table, the shields, and the purity.
 
 ## Scenarios
 
@@ -22,8 +21,7 @@ rule, the policy table, the shields, and the purity.
 
 ## Fixtures
 
-The shared Harness (real built Target; the grace boundary tested by
-mutating `State.RevocationGraceMs` - no wall clock waits).
+The harness is the shared Harness with the real built Target, and it tests the grace boundary by mutating `State.RevocationGraceMs`, with no wall clock waits.
 
 ## Expected ledger strings (byte-exact, `authority: ` prefix)
 

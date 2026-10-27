@@ -1,9 +1,6 @@
 # Resolve-And-Inject - the policy resolution, the correction and the escalation
 
-The deterministic Resolve (kept / corrected / resolved / escalated), the
-keyword classification order, the attempts ladder, the silent injection on
-the launch path with its byte-exact ledger line, the volatile policy flip,
-and the purity of the resolver.
+This folder covers the deterministic Resolve (kept / corrected / resolved / escalated), the keyword classification order, the attempts ladder, the silent injection on the launch path with its byte-exact ledger line, the volatile policy flip, and the purity of the resolver.
 
 ## Scenarios
 

@@ -16,9 +16,9 @@
 | Archive                | `~/.dsh/skills/.archive/<name>/`                   |
 | Agreement              | `~/.dsh/AGENTS.md` (proposals only, never written) |
 
-The loader contract is the class form (the pattern service precedent): the default export is
-`class LessonService extends Service`, `static inject = []`, and the named `Config` schema export
-(also attached as `static Config`).
+The loader contract is the class form that the pattern service sets as precedent, so the default
+export is `class LessonService extends Service` with `static inject = []`, and the named `Config`
+schema export is also attached as `static Config`.
 
 ## 2. The service surface (`ctx.lesson`)
 
@@ -65,9 +65,11 @@ Review(input)
   └─ Save()                             → the usage store
 ```
 
-The model call is ONE hand-built request. It carries no agent-loop marker (`markAgentLoopRequest`),
-so the harness cannot mistake it for a loop request, and it is not part of the session log: the
-review never mutates the transcript it is reviewing.
+The model call is ONE hand-built request.
+
+It carries no agent-loop marker from `markAgentLoopRequest`, so the harness cannot mistake it for a
+loop request, and it is not part of the session log, because the review never mutates the transcript
+that it is reviewing.
 
 ## 4. Config
 
@@ -96,9 +98,9 @@ review never mutates the transcript it is reviewing.
 | `maxTokens`          | `4000`                                         | the reply ceiling                         |
 | `policy`             | D6 block                                       | the per-action allowlist                  |
 
-The knobs are fail-loud at load: a reversed `archiveAfterDays < staleAfterDays`, a non-unit
-`domain`, a `digestTail < 2`, a `maxProposals < 1` and a `maxInputChars < 1000` all throw with a
-message naming the knob.
+The knobs are fail-loud at load, so a reversed `archiveAfterDays < staleAfterDays`, a non-unit
+`domain`, a `digestTail < 2`, a `maxProposals < 1`, and a `maxInputChars < 1000` all throw with a
+message that names the knob.
 
 ## 5. The judge's rules (deterministic, one id each)
 
@@ -118,40 +120,43 @@ message naming the knob.
 | `agreement-long`   | an agreement rule longer than 400 characters                     |
 | `duplicate`        | the same operation twice in one reply                            |
 
-The write fence is the second half: `create` refuses an existing `SKILL.md`, `patch` refuses a
+The write fence is the second half, so `create` refuses an existing `SKILL.md`, `patch` refuses a
 missing one, `support` refuses a missing skill directory, and `archive` refuses an existing archive
-target. A refusal is returned, never thrown, so one bad operation cannot discard the run.
+target.
+
+A refusal is returned and never thrown, so one bad operation cannot discard the run.
 
 ## 6. The seams and the known unknowns
 
 1. **The session projection (`Function/Snapshot`).**
 
-    The harness's surface accessors (`agent.session.surface.messages` and friends) have NOT been
-    verified against a live host in this checkout.
+    The surface accessors of the harness, such as `agent.session.surface.messages` and its peers,
+    have NOT been verified against a live host in this checkout.
 
-    The module probes four candidate shapes, guards every read, and returns `[]` when none answers -
-    the review then reports `unavailable (empty snapshot)`.
+    The module probes four candidate shapes, guards every read, and returns `[]` when none answers,
+    and the review then reports `unavailable (empty snapshot)`.
 
-    This is the ONE place a harness upgrade can change behavior, and it is confined to one file.
+    This is the ONE place where a harness upgrade can change behavior, and it is confined to one
+    file.
 
 2. **The auxiliary-call classification.**
 
-    `GenerateOptions.purpose` accepts only `'compaction' | 'session-title'`; a lesson review has no
-    slot, so the request leaves `purpose` unset.
+    `GenerateOptions.purpose` accepts only `'compaction' | 'session-title'`, and a lesson review has
+    no slot, so the request leaves `purpose` unset.
 
-    Giving the review its own purpose is an upstream harness change, not a plugin one.
+    Giving the review its own purpose is an upstream harness change and not a plugin one.
 
 3. **The storage domain.**
 
     `~/.dsh/lesson/usage.json` is what this cut wires.
 
-    The family's PoC posture is a KV domain (`domain: "lesson"`) as the PRIMARY with the JSON as the
-    fallback (the pattern service's shape); that wiring is the next refinement, and the knob is
-    already declared.
+    The PoC posture of the family is a KV domain with `domain: "lesson"` as the PRIMARY and the JSON
+    as the fallback, which is the shape of the pattern service; that wiring is the next refinement,
+    and the knob is already declared.
 
 4. **Consolidation.**
 
-    `consolidate` is declared and unwired: the deterministic `Curate` pass is the shipped
+    `consolidate` is declared and unwired, because the deterministic `Curate` pass is the shipped
     maintenance.
 
     An LLM umbrella pass would reuse `Review` with a different prompt and a corpus-only judge.
@@ -180,5 +185,6 @@ Every line is `lesson: <message> (logFile <logFile>)`:
 
 ## 8. What this package does NOT own
 
-The trigger. It never listens to an event and never claims the idle phase - that is
-`@playform/hook-dsh-lesson-nudge`, so a different trigger can drive the same service.
+The trigger is outside this package, because the service never listens to an event and never claims
+the idle phase, and that work belongs to `@playform/hook-dsh-lesson-nudge`, so a different trigger
+can drive the same service.

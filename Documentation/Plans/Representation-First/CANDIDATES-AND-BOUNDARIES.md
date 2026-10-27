@@ -20,38 +20,40 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH - THE PRIVATE CANDIDATES, THE KNOWLEDGE BOUNDARIES, AND THE ATTENTION PROJECTION (ROUND 3)
 
-> Granular section of the representation-first workspace research (the workspace as the runtime for
-> accountable change, round 3). The parent hub:
+> A granular section of the representation-first workspace research, which treats the workspace as
+> the runtime for accountable change in round 3. The parent hub:
 > Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
 
 ---
 
 ## 1. The private candidates (the multi-agent integration)
 
-- **THE ALTERNATIVE**: separate CANDIDATE BRANCHES over the agents freely mutating one shared state:
-  observed snapshot -> candidate A/B/C (each a branch) -> the integration: select the candidates ->
-  resolve the interactions -> validate the combined result -> authorize the publication.
-- **THE UNIT OF INTEGRATION**: a proposal WITH provenance (which candidate introduced which change +
-  which assumptions justified it).
-- **THE TEXTUAL vs SEMANTIC COMPATIBILITY**: two candidates modifying different files can jointly
-  violate an invariant - passing the non-overlapping-diff check never proves the compatibility.
+- **THE ALTERNATIVE**: separate CANDIDATE BRANCHES instead of the agents freely mutating one shared
+  state, which runs from the observed snapshot through the candidates A, B, and C as branches to the
+  integration that selects the candidates, resolves the interactions, validates the combined result,
+  and authorizes the publication.
+- **THE UNIT OF INTEGRATION**: a proposal WITH provenance, which records which candidate introduced
+  which change and which assumptions justified it.
+- **THE TEXTUAL vs SEMANTIC COMPATIBILITY**: two candidates that modify different files can jointly
+  violate an invariant, so passing the non-overlapping-diff check never proves the compatibility.
 
 ## 2. The knowledge boundaries (the coverage metadata - CORE)
 
-- **THE COVERAGE SHAPE**: a reference query returns the coverage: sourceFiles (complete),
-  generatedFiles (excluded), dynamicPropertyAccess (unresolved), externalConsumers (notInspected).
-- **THE AGENT'S CHOICE**: proceed within the restricted scope / gather more evidence / escalate the
-  unsupported case.
-- **THE CONTRACT STATUS**: the coverage metadata is part of the representation contract, not an
+- **THE COVERAGE SHAPE**: a reference query returns the coverage with sourceFiles complete,
+  generatedFiles excluded, dynamicPropertyAccess unresolved, and externalConsumers notInspected.
+- **THE CHOICE OF THE AGENT**: proceed within the restricted scope, gather more evidence, or
+  escalate the unsupported case.
+- **THE CONTRACT STATUS**: the coverage metadata is part of the representation contract and not an
   optional diagnostic.
 
 ## 3. The attention projection (the facts vs the attention)
 
-- **THE DISTINCTION**: the durable workspace state vs what is currently shown to the model: REQUIRED
-  context (needed to interpret the current operation safely), RELEVANT context (evidence likely to
-  help), DEFERRED context (addressable material omitted from the view).
+- **THE DISTINCTION**: the durable workspace state against what is currently shown to the model,
+  which is REQUIRED context that is needed to interpret the current operation safely, RELEVANT
+  context as evidence likely to help, and DEFERRED context as addressable material omitted from the
+  view.
 - **THE EVICTION SAFEGUARD**: the eviction never erases the authority records, the pending
   proposals, or the recovery checkpoints.
-- **THE MEMORY RULE**: retaining a representation in memory never means the model has seen it.
-- **THE QUESTION**: which information must be DISPLAYED vs which merely needs to remain RELIABLY
+- **THE MEMORY RULE**: retaining a representation in memory never means that the model has seen it.
+- **THE QUESTION**: which information must be DISPLAYED, and which merely needs to remain RELIABLY
   ADDRESSABLE?

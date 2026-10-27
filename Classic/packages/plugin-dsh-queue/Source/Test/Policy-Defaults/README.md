@@ -1,16 +1,16 @@
 # Policy-Defaults
 
-The policy block (D6) on the queue: the defaults, the State mapping, and the
-spawn gate's two ways plus its precedence over `autoSpawn`.
+This folder covers the policy block (D6) on the queue: the defaults, the State mapping, and the spawn gate's two ways plus its precedence over `autoSpawn`.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The queue's gated action is the
-spawn: the shared block's `spawn` verdict is the OUTER gate in front of
-`autoSpawn` (the INNER one). This folder proves the block is real config, not
-dead text - an `approve` verdict holds the launch with the documented line and
-an `auto` verdict proceeds - and it pins the precedence: policy approve beats
-an enabled knob, while a knob that is off still refuses on its own.
+D6 makes automation a per-plugin allowlist.
+
+The queue's gated action is the spawn: the shared block's `spawn` verdict is the OUTER gate in front of `autoSpawn` (the INNER one).
+
+This folder proves the block is real config, not dead text, because an `approve` verdict holds the launch with the documented line and an `auto` verdict proceeds.
+
+It also pins the precedence: policy approve beats an enabled knob, while a knob that is off still refuses on its own.
 
 ## Scenario
 
@@ -41,12 +41,11 @@ an enabled knob, while a knob that is off still refuses on its own.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real
-factory instance, the fake ctx, the `Automation` mount (the enabled plugin +
-`autoSpawn: true` + `policy.spawn: "auto"` + the fake `ctx.subagents` recorder
-+ the fake `ctx.agents` registry), and the `Flush()` join point (no sleeps,
-no timers). A scenario overrides `policy`/`autoSpawn` through the mount's
-config.
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, the `Automation` mount, and the `Flush()` join point (no sleeps, no timers).
+
+The `Automation` mount is the enabled plugin plus `autoSpawn: true`, `policy.spawn: "auto"`, the fake `ctx.subagents` recorder, and the fake `ctx.agents` registry.
+
+A scenario overrides `policy` or `autoSpawn` through the mount's config.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-queue: ` prefix)
 

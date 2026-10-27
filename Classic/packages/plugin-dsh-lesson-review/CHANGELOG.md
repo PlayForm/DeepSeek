@@ -4,27 +4,28 @@
 
 ### Changed
 
-- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
-  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
+  devDependencies together, with the host line at `0.2.1-rc.4` and zod at 4.6.7.
 
 - The activation version constant moves to 0.3.0.
 
 ## 0.2.0
 
-The first cut of the post-turn self-improvement review, in the family's 0.2.0 wave.
+This release holds the first cut of the post-turn self-improvement review, in the 0.2.0 wave of the
+family.
 
-- The `lesson` service: `Tick`/`Reset` (the nudge counter), `Digest`, `Prompt`, `Parse`, `Judge`,
-  `Snapshot`, `Review`, `Curate`, `Status`, `Pin`/`Unpin`, `Restore`/`Archive`, `Pending`/`Accept`,
-  `Save`/`Flush`.
-- The review pipeline: one bounded digest, one hand-built `ctx.llm.stream` request, a strict reply
-  parse, deterministic acceptance rules, the guarded write, and a per-run report.
-- The shipped posture is PROPOSE (`policy.write: approve`); agreement operations are always queued;
-  the exact-file fence holds under `write: auto`.
-- The deterministic lifecycle with the four protections (pin, policy flag, zero-use grace,
-  archive-as-rename).
-- The D6 policy block, the fail-loud knob checks, and the idle-forever default.
-- `Source/Test`: 6 folders, 65 checks (`Nudge-Cadence`, `Digest-And-Prompt`, `Parse-And-Judge`,
-  `Apply-And-Pending`, `Curate-Lifecycle`, `Policy-Defaults`).
-- Known seams (SCHEME §6): the live-session surface read is probed, not verified;
-  `GenerateOptions.purpose` has no review slot; the KV storage domain and the LLM consolidation pass
-  are declared but unwired.
+- The `lesson` service offers `Tick`/`Reset` for the nudge counter, `Digest`, `Prompt`, `Parse`,
+  `Judge`, `Snapshot`, `Review`, `Curate`, `Status`, `Pin`/`Unpin`, `Restore`/`Archive`,
+  `Pending`/`Accept`, and `Save`/`Flush`.
+- The review pipeline runs one bounded digest, one hand-built `ctx.llm.stream` request, a strict
+  reply parse, deterministic acceptance rules, the guarded write, and a per-run report.
+- The shipped posture is PROPOSE (`policy.write: approve`), agreement operations are always queued,
+  and the exact-file fence holds under `write: auto`.
+- The lifecycle is deterministic and carries the four protections: pin, policy flag, zero-use grace,
+  and archive-as-rename.
+- The release adds the D6 policy block, the fail-loud knob checks, and the idle-forever default.
+- `Source/Test` holds 6 folders and 65 checks across `Nudge-Cadence`, `Digest-And-Prompt`,
+  `Parse-And-Judge`, `Apply-And-Pending`, `Curate-Lifecycle`, and `Policy-Defaults`.
+- Known seams in SCHEME §6 are the live-session surface read, which is probed and not verified, the
+  absent review slot in `GenerateOptions.purpose`, and the KV storage domain and the LLM
+  consolidation pass, which are declared but unwired.

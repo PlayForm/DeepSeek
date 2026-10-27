@@ -63,44 +63,46 @@ statuses:
 # SEARCH-SUGGESTER PLUGIN - the intent-indexed target plan
 
 > The problem: an agent runs search after search because it does not know where the standard
-> behavior lives. It greps for a version literal, then reads the files the grep found, then greps
-> again for a different literal in the same intent, and only the edit reveals the files it never
-> thought to open. The plugin infers the intent from the call and the recent context and names the
-> likely targets BEFORE the model finishes searching. The user's formalism: `Searchable<X>`, where
-> `X` is the task or intent. The general model is the pattern graph
-> ([PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md)): patternize-able behavior over graphs of
-> files. The search suggester is its FIRST consumer and the evidence base; this document is the
-> concrete, buildable instance, not a second general design. This document is a plan. Nothing is
-> implemented; no package exists. The tree is at 0.1.0 (the release lane is complete).
+> behavior lives. It greps for a version literal, then reads the files that the grep found, then
+> greps again for a different literal in the same intent, and only the edit reveals the files that
+> it never thought to open. The plugin infers the intent from the call and the recent context and
+> names the likely targets BEFORE the model finishes searching. The formalism of the user is
+> `Searchable<X>`, where `X` is the task or the intent. The general model is the pattern graph
+> ([PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md)), which holds the patternize-able behavior
+> over graphs of files. The search suggester is its FIRST consumer and the evidence base, so this
+> document is the concrete and buildable instance and not a second general design. This document is
+> a plan: nothing is implemented, no package exists, and the tree is at 0.1.0 with the release lane
+> complete.
 
 ## 0. The verdict
 
 The premise is right, but the naive version of it is wrong.
 
-- The searches are expensive: 46% of every tool call in this task's sessions is a search-class call
-  (`grep`, `glob`, `read`, or a bash search), and the nine measured lanes produced about 1.0M tokens
-  of tool results.
-- The repetition is NOT mostly literal. Only 41 of the 394 recorded workspace sessions contain the
-  same grep pattern twice. The real pattern is SEMANTIC: the same intent reached through a dozen
-  different literals (`0.0.1`, `version|Version|release`, `0.1.0|semver`, `const Version`) and a
-  hundred different paths.
-- The model's discovery is late: in the release lane, 9 of the 143 files it eventually edited (6%)
-  had been read before its first edit; in the overpass lane, 5 of 54 (9%). It did not read its way
-  to the target set; it edited its way through it.
-- Therefore the deliverable is not a better search. It is a TARGET SET: a compact, ordered,
-  intent-keyed list of the standard locations, delivered at the first call of an intent, before the
-  model has burned the searches.
-- The target set is one instance of a general object: the behavior graph (Intent, Trigger, Target,
-  Transform, Arbiter, Evidence). The search suggester carries the Trigger, the Target, and the
-  Evidence, and its transform is the READ SET ("open these files") - deterministic and bounded. The
-  EDIT transform belongs to the edit consumer; the Arbiter is exposed as a hint, never run. The
-  pattern graph document states the general model, and section 2 states the boundary where this
-  plugin must abstain instead of guessing.
+- The searches are expensive, because 46% of every tool call in the sessions of this task is a
+  search-class call (`grep`, `glob`, `read`, or a bash search) and the nine measured lanes produced
+  about 1.0M tokens of tool results.
+- The repetition is NOT mostly literal, because only 41 of the 394 recorded workspace sessions
+  contain the same grep pattern twice. The real pattern is SEMANTIC: the same intent reached through
+  a dozen different literals (`0.0.1`, `version|Version|release`, `0.1.0|semver`, `const Version`)
+  and a hundred different paths.
+- The discovery of the model is late: in the release lane, 9 of the 143 files that it eventually
+  edited (6%) had been read before its first edit, and in the overpass lane the number was 5 of 54
+  (9%). It did not read its way to the target set; it edited its way through it.
+- Therefore the deliverable is not a better search but a TARGET SET: a compact, ordered, and
+  intent-keyed list of the standard locations, delivered at the first call of an intent and before
+  the model has burned the searches.
+- The target set is one instance of a general object, which is the behavior graph of Intent,
+  Trigger, Target, Transform, Arbiter, and Evidence. The search suggester carries the Trigger, the
+  Target, and the Evidence, and its transform is the READ SET of "open these files", which is
+  deterministic and bounded. The EDIT transform belongs to the edit consumer, and the Arbiter is
+  exposed as a hint and never run. The pattern graph document states the general model, and section
+  2 states the boundary where this plugin must abstain instead of guessing.
 
-The plugin is worth building, at one condition: it must be near-silent. A wrong target set costs
-more than a missing one, because the model will follow it. The design below is built around that
-asymmetry: high threshold, few candidates, a stated reason per candidate, a cooldown, an explicit
-abstention path, and a kill criterion measured in section 10.
+The plugin is worth building at one condition: it must be near-silent, because a wrong target set
+costs more than a missing one when the model will follow it.
+
+The design below is built around that asymmetry: a high threshold, few candidates, a stated reason
+per candidate, a cooldown, an explicit abstention path, and a kill criterion measured in section 10.
 
 ## 1. The evidence
 
@@ -112,15 +114,18 @@ Every session record is a zstd-compressed JSONL event log:
 ~/.dsh/sessions/<workspace>/<session-id>/session.v4.jsonl.zstd
 ```
 
-`zstd -dc` then parse the lines; `tool/call` carries `data.name` and `data.arguments` (a JSON
-string), `tool/result` carries `data.message.toolCallId` and `data.message.content[].text`. A
-search-class call is `grep`, `glob`, `read`, or a `bash` whose command contains `grep`, `rg `,
-`find `, `ls `, `sed -n`, or `awk`. A repeat read is a second read of the same `file_path`; a repeat
-grep is a second grep with the same `pattern`.
+`zstd -dc` then parse the lines, where `tool/call` carries `data.name` and `data.arguments` as a JSON
+string, and `tool/result` carries `data.message.toolCallId` and `data.message.content[].text`.
 
-Scanned: all 394 sessions of this workspace (33,834 tool calls, 6,418 reads, 1,147 greps, 130
-globs), then this session and its 16 subagents in detail (2,658 calls). The parent session was still
-live at measurement time (2026-10-21T01:1x local), so its count is a floor.
+A search-class call is `grep`, `glob`, `read`, or a `bash` whose command contains `grep`, `rg `,
+`find `, `ls `, `sed -n`, or `awk`. A repeat read is a second read of the same `file_path`, and a
+repeat grep is a second grep with the same `pattern`.
+
+Scanned: all 394 sessions of this workspace with 33,834 tool calls, 6,418 reads, 1,147 greps, and 130
+globs, then this session and its 16 subagents in detail with 2,658 calls.
+
+The parent session was still live at measurement time (2026-10-21T01:1x local), so its count is a
+floor.
 
 ### 1.2 The volume
 

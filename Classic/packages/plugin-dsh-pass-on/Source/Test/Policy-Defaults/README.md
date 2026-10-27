@@ -1,16 +1,16 @@
 # Policy-Defaults
 
-The policy block (D6) on the pass-on: the defaults, the built State's carried
-block, the override, and the read-only posture.
+This folder covers the policy block (D6) on the pass-on: the defaults, the built State's carried block, the override, and the read-only posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The pass-on is read-only: it
-reads the targets and suggests a proposal, and it never writes, commits or
-spawns. This folder pins the shared block's defaults in the schema and on the
-built State (`State.Config.policy` - the class form has no factory State to
-map) and the documented family posture for the actions the pass-on never
-takes.
+D6 makes automation a per-plugin allowlist.
+
+The pass-on is read-only: it reads the targets and suggests a proposal, and it never writes, commits, or spawns.
+
+This folder pins the shared block's defaults in the schema and on the built State (`State.Config.policy` - the class form has no factory State to map).
+
+It also pins the documented family posture for the actions the pass-on never takes.
 
 ## Scenario
 
@@ -27,13 +27,11 @@ takes.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the fake ctx,
-the schema's own validation (`Validate`), and the `Make` constructor mount.
+The harness is the shared Harness: the real built `Target/Library.js` class, the fake ctx, the schema's own validation (`Validate`), and the `Make` constructor mount.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+This folder adds none, because the block and its mapping log nothing and the defaults are the contract, asserted as an object.
 
 ## Expected count
 

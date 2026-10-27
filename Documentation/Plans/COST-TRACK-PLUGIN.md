@@ -91,6 +91,10 @@ statuses:
       evidence:
           section 19 - two sessions, 80 calls, $0.243893, conservation delta 0, three files
           aggregated across both
+    - name: the live aggregate refresh on every flush
+      state: implemented
+      evidence:
+          section 17.5 and the Refresh smoke (3 PASS) - the batch's own UTC days, not the wall clock
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -102,16 +106,19 @@ statuses:
 
 ## 0. The one law
 
-The plugin is a **reader** of the session log. It observes; it does not participate. The moment it
-needs a tool, a prompt section, or a system-prompt context to do its job, it has changed the
-conversation it is measuring, and the measurement becomes a lie. Everything below follows from that.
+The plugin is a **reader** of the session log, so it observes and does not participate.
 
-Corollary: the plugin registers **no tool**. Its human surface is the `commands` service (slash
+The moment it needs a tool, a prompt section, or a system-prompt context to do its job, it has
+changed the conversation that it is measuring, and the measurement becomes a lie.
+
+Everything below follows from that.
+
+Corollary: the plugin registers **no tool**, and its human surface is the `commands` service (slash
 commands), which is not part of the model-visible tool list.
 
 ## 1. The measurement seam
 
-Three durable facts exist already; the plugin computes from them rather than re-deriving them.
+Three durable facts already exist, and the plugin computes from them rather than re-deriving them.
 
 | Fact                               | Source                                                                                                | Why it is the right source                                                                                 |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -119,123 +126,139 @@ Three durable facts exist already; the plugin computes from them rather than re-
 | Which files a step touched         | `tool/call` event's `name` + `arguments`                                                              | Durable, ordered, and carries the same `turn`/`step`.                                                      |
 | What the request surface contained | surface events (`system/message`, `user/message`, `assistant/message`, `tool/result`) before the call | The context that produced the call, recoverable by replay.                                                 |
 
-The listener set is exactly two, both on the session log:
+The listener set is exactly two, and both sit on the session log:
 
-- `session/event` (`emit`, post-commit): a synchronous recorder. It pushes the event into an
-  in-memory queue keyed by session. No awaits, no I/O, no throws, no logging per event.
-- `session/flush` (`parallel`): the durability checkpoint. It drains the queue into SQLite.
+- `session/event` (`emit`, post-commit): a synchronous recorder that pushes the event into an
+  in-memory queue keyed by session, with no awaits, no I/O, no throws, and no logging per event.
+- `session/flush` (`parallel`): the durability checkpoint that drains the queue into SQLite.
 
 A debounced timer and `session/disposed` are the two safety drains, so a session that ends without a
 flush still lands.
 
 `TokenUsage` is
 `{ inputTokens, outputTokens, totalTokens?, cacheReadTokens?, cacheWriteTokens?, reasoningTokens? }`.
-Live verification on 2026-10-27: `totalTokens = inputTokens + cacheReadTokens + outputTokens`, so
-`inputTokens` is the **uncached** remainder and `cacheReadTokens` is a separate, discounted bucket.
+
+Live verification on 2026-10-27 showed that
+`totalTokens = inputTokens + cacheReadTokens + outputTokens`, so `inputTokens` is the **uncached**
+remainder and `cacheReadTokens` is a separate, discounted bucket.
+
 Pricing must never treat `inputTokens` as the whole input.
 
 The surface weights come from `tokenMeter`:
 
 - `ctx.tokenMeter.estimateMessage(message)` prices one model-visible message under the fixed
-  heuristic. It is pure and cheap, so it is the estimator for replay and for history.
-- `ctx.tokenMeter.measure(session)` prices the live surface with the provider's anchor when it
-  applies. It is O(surface) and is used once per drain for the newest step only.
+  heuristic, and it is pure and cheap, so it is the estimator for replay and for history.
+- `ctx.tokenMeter.measure(session)` prices the live surface with the anchor of the provider when
+  that anchor applies, and it is O(surface) and used once per drain for the newest step only.
 
-Weights are ratios, so the estimator's absolute error cancels; the **cost** always uses the
-provider's `usage`, never the estimator.
+Weights are ratios, so the absolute error of the estimator cancels, and the **cost** always uses the
+`usage` of the provider and never the estimator.
 
 ## 2. The attribution model
 
-Two halves, stored separately, so an export can show either and an invoice can defend both.
+Two halves, stored separately, so an export can show either one and an invoice can defend both.
 
-A step `S` in session `X` has one `Call` row. Its cost is split into an input side and an output
+A step `S` in session `X` has one `Call` row, and its cost splits into an input side and an output
 side:
 
     inputCost(S)  = inputTokens*inputRate + cacheReadTokens*cacheReadRate
                   + cacheWriteTokens*cacheWriteRate
     outputCost(S) = outputTokens*outputRate + reasoningTokens*reasoningRate
 
-The split is a statement about causality, not a preference:
+The split is a statement about causality and not a preference:
 
-- The **output** is the model's decision to act. It belongs to the files the step then touched.
-- The **input** is the context that made the decision possible. It belongs to whatever occupied the
-  context, in proportion to how much of the context each file occupied.
+- The **output** is the decision of the model to act, so it belongs to the files that the step then
+  touched.
+- The **input** is the context that made the decision possible, so it belongs to whatever occupied
+  the context, in proportion to how much of the context each file occupied.
 
 ### 2.1 Direct
 
     direct(F, S) = outputCost(S) * weight(F, S)
 
-`weight(F, S)` is the share of changed bytes, over the files the step **wrote**:
+`weight(F, S)` is the share of changed bytes over the files that the step **wrote**:
 
     weight(F, S) = |bytesDelta(F, S)| / sum over written files of |bytesDelta|
 
-When the step wrote nothing, the touched files share equally. When the step touched nothing, the
+When the step wrote nothing, the touched files share equally, and when the step touched nothing, the
 whole output cost goes to the unattributed bucket (`FileId IS NULL`).
 
-Byte deltas come from the touch itself: `bytesAfter - bytesBefore` when both are known, `1` per
+Byte deltas come from the touch itself: `bytesAfter - bytesBefore` when both are known, and `1` per
 written file when neither is.
 
 ### 2.2 Amortized
 
     amortized(F, S) = inputCost(S) * (contextTokens(F, S) / surfaceTokens(S))
 
-`contextTokens(F, S)` is the token mass of the surface nodes before `S` that carry `F`'s content: a
-`tool/result` message whose originating `tool/call` targeted `F`, plus any `user/message` that
-attached `F`. `surfaceTokens(S)` is the sum over every surface node before `S`.
+`contextTokens(F, S)` is the token mass of the surface nodes before `S` that carry the content of
+`F`: a `tool/result` message whose originating `tool/call` targeted `F`, plus any `user/message`
+that attached `F`.
+
+`surfaceTokens(S)` is the sum over every surface node before `S`.
 
 A file that was read early and never again still carries its mass into every later step, which is
 the honest answer to "a single line change can cost a whole conversation".
 
-Refined per bucket, because a single ratio misprices a file whose tokens are cached against one
-whose tokens are not: prompt caching is prefix-based, so the surface is walked in order and the
-first `cacheReadTokens` worth of nodes are the cached ones. Each file then carries an uncached mass
-and a cached mass, and the input cost splits as `inputRate` on the uncached mass plus
-`cacheReadRate` on the cached mass. The same walk produces `Call.CacheSaving`.
+The refinement is per bucket, because a single ratio misprices a file whose tokens are cached
+against one whose tokens are not: prompt caching is prefix-based, so the surface is walked in order
+and the first `cacheReadTokens` worth of nodes are the cached ones.
+
+Each file then carries an uncached mass and a cached mass, and the input cost splits as `inputRate`
+on the uncached mass plus `cacheReadRate` on the cached mass.
+
+The same walk produces `Call.CacheSaving`.
 
 ### 2.3 Conservation
 
     sum over F of (direct(F, S) + amortized(F, S)) + unattributed(S) = costTotal(S)
 
-within a cent per call. The drain asserts this in a smoke; a violation is a bug in the allocator,
-not a rounding artifact to be waved through.
+within a cent per call.
+
+The drain asserts this in a smoke, and a violation is a bug in the allocator and not a rounding
+artifact to be waved through.
 
 ### 2.4 Recalculation
 
-Every number that a formula consumes is stored: `Call` holds the raw usage and the `PriceId` it was
-priced with; `Touch` holds the byte deltas; `ContextMass` holds `contextTokens(F, S)` and `Call`
-holds `surfaceTokens`. So `cost.recompute` can drop `Allocation` and `Rollup`, rebuild them from
-those three tables alone, and land byte-identical totals. No session log is read during a recompute.
+Every number that a formula consumes is stored: `Call` holds the raw usage and the `PriceId` that
+priced it, `Touch` holds the byte deltas, `ContextMass` holds `contextTokens(F, S)`, and `Call`
+holds `surfaceTokens`.
+
+So `cost.recompute` can drop `Allocation` and `Rollup`, rebuild them from those three tables alone,
+and land byte-identical totals, and no session log is read during a recompute.
 
 ## 3. The ledger schema
 
-One file, `~/.dsh/cost/ledger.db`, opened with `journal_mode=WAL`, `foreign_keys=ON`,
-`synchronous=NORMAL`. Every table is `STRICT`. Money is `REAL` in one currency per row (the
-`Currency` column), with rates stored per million tokens so the arithmetic is exact in the units the
-providers publish.
+One file, `~/.dsh/cost/ledger.db`, opened with `journal_mode=WAL`, `foreign_keys=ON`, and
+`synchronous=NORMAL`.
+
+Every table is `STRICT`, money is `REAL` in one currency per row (the `Currency` column), and the
+rates are stored per million tokens so the arithmetic is exact in the units that the providers
+publish.
 
 The dimensions exist so one ledger serves many projects and many clients:
 
 - `Client` - the paying party.
-- `Project` - one workspace root, with a `ClientId`. The plugin resolves the project from the
-  session's `cwd` and creates it on first sight.
-- `Session` - the conversation, with `ParentSessionId` so a subagent's cost rolls into its parent.
+- `Project` - one workspace root, with a `ClientId`. The plugin resolves the project from the `cwd`
+  of the session and creates it on first sight.
+- `Session` - the conversation, with `ParentSessionId` so the cost of a subagent rolls into its
+  parent.
 - `File` - the path within the project; `FileVersion` - the content hash and size at a touch.
 - `Price` - append-only and effective-dated: `(Provider, Model, EffectiveFrom, Window)` unique,
   `EffectiveTo` open until a later row closes it, and `Window` a label such as `any`, `peak`, or
-  `offpeak` resolved from the call's own timestamp against the config's `priceWindows` (DeepSeek
-  charges double inside its peak window, so the date alone is not enough). A price row is never
-  updated; a change inserts a new row. That is what makes a historical invoice reproducible after a
-  provider raises its rates.
+  `offpeak` resolved from the timestamp of the call against the `priceWindows` of the config
+  (DeepSeek charges double inside its peak window, so the date alone is not enough). A price row is
+  never updated, and a change inserts a new row, which is what makes a historical invoice
+  reproducible after a provider raises its rates.
 - `Call` - one model request, with the usage, the resolved `PriceId`, and the computed cost columns.
 - `Touch` - one file interaction from one `tool/call`.
-- `ContextMass` - the per-file token mass of one call's surface.
+- `ContextMass` - the per-file token mass of the surface of one call.
 - `Allocation` - the money, one row per `(Call, File)` plus one unattributed row per call.
 - `Rollup` - the materialized `(Scope, Key, Day)` aggregate, rebuildable.
 - `Annotation` - what was written into which file version, and when.
 - `Cursor` - how far each session has been folded in, so a drain is idempotent.
 
 The DDL lives in `Source/Function/Schema.ts` as one string constant per table, executed in order
-inside one transaction on open, guarded by `PRAGMA user_version` for migrations.
+inside one transaction on open and guarded by `PRAGMA user_version` for migrations.
 
 ```sql
 CREATE TABLE Price (
@@ -331,14 +354,14 @@ CREATE TABLE Cursor (
 ) STRICT;
 ```
 
-Views: `FileCost` (file, direct, amortized, total, calls), `ModelCost`, `SessionCost`,
-`ClientCost` - each a `GROUP BY` over `Allocation` joined to `Call`, so an export never re-derives
+Views: `FileCost` (file, direct, amortized, total, calls), `ModelCost`, `SessionCost`, and
+`ClientCost`, each a `GROUP BY` over `Allocation` joined to `Call`, so an export never re-derives
 money in TypeScript.
 
 ## 4. The package anatomy
 
-`Classic/packages/plugin-dsh-cost/`, following the family bundle anatomy exactly. One definition per
-file, nameless default exports, PascalCase names.
+`Classic/packages/plugin-dsh-cost/`, following the bundle anatomy of the family exactly, with one
+definition per file, nameless default exports, and PascalCase names.
 
 ```text
 Source/
@@ -367,38 +390,46 @@ Source/
   Function/Annotate.ts       the comment writer
   Function/Language.ts       extension -> comment syntax
   Test/<Case>/Test.ts        the smokes
-Configuration/               ESBuild.ts, ESBuild.js, TypeScript.noemit.json
+  Configuration/               ESBuild.ts, ESBuild.js, TypeScript.noemit.json
 cordis.patch.yml
 README.md, CHANGELOG.md, package.json
 ```
 
 Dependencies: `@playform/lib-dsh-core` and `@playform/plugin-dsh-factory` for the ledger and the
-write executor, exactly like the rest of the family. The SQLite driver is `node:sqlite`
-(`DatabaseSync`), which is Node core and therefore needs no native build; the import is dynamic and
-guarded so a runtime without it fails loud at apply with one actionable line instead of a crash.
+write executor, exactly like the rest of the family.
+
+The SQLite driver is `node:sqlite` (`DatabaseSync`), which is Node core and therefore needs no
+native build, and the import is dynamic and guarded so that a runtime without it fails loud at apply
+with one actionable line instead of a crash.
 
 ## 5. The human surface
 
-No tool. Three slash commands, registered through `ctx.commands`:
+No tool, and instead three slash commands registered through `ctx.commands`:
 
 - `/cost report [scope] [range]` - the rollup for `file`, `project`, `client`, `model`, or
   `session`.
 - `/cost export <csv|json> [path]` - the client-facing bundle.
-- `/cost annotate [path]` - write the cost comment into the named files, or into every file the
+- `/cost annotate [path]` - write the cost comment into the named files, or into every file that the
   ledger knows for the current project when no path is given.
 
-`annotate` is off by default (`annotate.enabled: false`); it is the one toggle the user asked for.
+`annotate` is off by default (`annotate.enabled: false`), and it is the one toggle that the user
+asked for.
 
 ## 6. Backfill
 
-On first run the ledger is empty and every past conversation is unpriced. `Backfill.ts` walks
-`ctx.sessionQuery.listSessions()`, replays each session's events through the same `Capture`/`Drain`
-path, and writes the same rows. The `Cursor` table makes it resumable and idempotent. Backfill runs
-as a job (`ctx.jobs.start`), never on the boot path, and its progress is a ledger line.
+On first run the ledger is empty and every past conversation is unpriced.
 
-Open: whether a backfilled call should be priced with the price that was effective at the call's
-`time` (correct for history) or with the current price (wrong for history, right for a live
-invoice). The plan is the call's own time, with a config switch.
+`Backfill.ts` walks `ctx.sessionQuery.listSessions()`, replays the events of each session through
+the same `Capture`/`Drain` path, and writes the same rows.
+
+The `Cursor` table makes it resumable and idempotent, and backfill runs as a job (`ctx.jobs.start`)
+and never on the boot path, with its progress as a ledger line.
+
+Open: whether a backfilled call should be priced with the price that was effective at the `time` of
+the call (correct for history) or with the current price (wrong for history and right for a live
+invoice).
+
+The plan is the own time of the call, with a config switch.
 
 ## 7. Annotation
 
@@ -413,103 +444,109 @@ edit replaces only the block:
 // dsh-cost:end
 ```
 
-The syntax follows the file: `//` for Rust, TypeScript, JavaScript, Go, C, C++, Java, Kotlin, Swift;
-`#` for Python, Ruby, Shell, TOML, YAML; `--` for SQL, Lua, Haskell; `<!-- -->` for Markdown, HTML,
-XML, SVG. An unknown extension is skipped, never guessed.
+The syntax follows the file: `//` for Rust, TypeScript, JavaScript, Go, C, C++, Java, Kotlin, and
+Swift; `#` for Python, Ruby, Shell, TOML, and YAML; `--` for SQL, Lua, and Haskell; and `<!-- -->`
+for Markdown, HTML, XML, and SVG.
 
-The write goes through the factory's write executor so the fresh-stat version guard applies: if the
-file changed under the plugin, the annotation is refused and retried, never forced. The block is
-appended after one blank line at end of file when absent; when present it is replaced in place, and
-its line count is allowed to change.
+An unknown extension is skipped and never guessed.
 
-Open: whether the block belongs at the end of the file (the user's words) or under the frontmatter
-for Markdown, where an end-of-file block is invisible to a reader.
+The write goes through the write executor of the factory so the fresh-stat version guard applies: if
+the file changed under the plugin, the annotation is refused and retried and never forced.
+
+The block is appended after one blank line at end of file when it is absent, and when it is present
+it is replaced in place and its line count is allowed to change.
+
+Open: whether the block belongs at the end of the file (the words of the user) or under the
+frontmatter for Markdown, where an end-of-file block is invisible to a reader.
 
 ## 8. Export
 
-- `csv` - one row per `(Day, Project, File, Model)` with direct, amortized, total, calls, tokens.
-  RFC 4180 quoting.
+- `csv` - one row per `(Day, Project, File, Model)` with direct, amortized, total, calls, and
+  tokens, using RFC 4180 quoting.
 - `json` - one bundle: `{meta, priceBook, projects, files, calls, allocations, rollups}` with
   ISO-8601 UTC timestamps (RFC 3339), so a client can re-derive every number.
-- `markdown` - a one-page invoice per client: totals, per-project, per-file top-N, and the model
-  mix.
+- `markdown` - a one-page invoice per client with the totals, the per-project figures, the per-file
+  top-N, and the model mix.
 
-Open: whether the export should carry the raw call rows (large, auditable) or only the rollups
-(small, unverifiable). Plan: both, behind a flag.
+Open: whether the export should carry the raw call rows (large and auditable) or only the rollups
+(small and unverifiable).
+
+Plan: both, behind a flag.
 
 ## 9. Verification
 
-The arbiter is the package's own smoke suite, run by
+The arbiter is the own smoke suite of the package, run by
 `pnpm --filter @playform/plugin-dsh-cost run prepublishOnly` and the harness selfcheck.
 
 The cases that must exist:
 
 1. **Conservation** - a synthetic session with two files and three calls allocates to the cent.
 2. **Price resolution** - an effective-dated price table prices a call at the row in force at the
-   call's time, not the newest row.
+   time of the call and not at the newest row.
 3. **Idempotence** - draining the same events twice writes the same rows and no duplicates.
-4. **Recompute** - drop and rebuild produces byte-identical `Allocation` and `Rollup` totals.
+4. **Recompute** - the drop and rebuild produces byte-identical `Allocation` and `Rollup` totals.
 5. **Annotation** - the block is appended once, replaced on a second run, and a file with an
    unrelated trailing comment is untouched outside the markers.
 6. **Silence** - the plugin registers no tool, adds no prompt section, and its listeners never
-   throw; a throw in `session/event` is the one failure mode that could damage a tool call.
+   throw, because a throw in `session/event` is the one failure mode that could damage a tool call.
 
 ## 10. Across conversations, projects, and renames
 
-The ledger is **global** (`~/.dsh/cost/ledger.db`), not per session and not per project. A file's
-cost is therefore an aggregate over every conversation that ever touched it, and the question "what
-did this file cost me" has one answer no matter how many sessions, subagents, or restarts were
-involved.
+The ledger is **global** (`~/.dsh/cost/ledger.db`) and neither per session nor per project.
+
+The cost of a file is therefore an aggregate over every conversation that ever touched it, and the
+question "what did this file cost me" has one answer no matter how many sessions, subagents, or
+restarts were involved.
 
 Three identity rules make that hold:
 
-- **The file is keyed by `(ProjectId, Path)`, not by session.** `Allocation` hangs off `Call`,
-  `Call` hangs off `Session`, and `File` is independent of both. A new conversation is one more
-  `Session` row and more `Call` rows against the same `FileId`; nothing needs to be merged
+- **The file is keyed by `(ProjectId, Path)` and not by session.** `Allocation` hangs off `Call`,
+  `Call` hangs off `Session`, and `File` is independent of both, so a new conversation is one more
+  `Session` row and more `Call` rows against the same `FileId` and nothing needs to be merged
   afterwards.
 - **A rename does not split the cost.** When a move or rename is observed, an `Alias` row records
-  `(FileId, FromPath, ToPath, At)` and the `FileId` survives. `File.Path` is the current path; the
-  lifetime query joins through `Alias` so history follows the file, not the string.
-- **The project is resolved from the session `cwd`, not from a config field.** Two projects that
+  `(FileId, FromPath, ToPath, At)` and the `FileId` survives. `File.Path` is the current path, and
+  the lifetime query joins through `Alias` so history follows the file and not the string.
+- **The project is resolved from the session `cwd` and not from a config field.** Two projects that
   contain a `src/index.ts` are two files, because a client is billed per project. The optional
-  `Touch.Branch` column records the branch at the touch, so a file's cost can be split per branch or
-  merged across them, and a worktree does not create a phantom second file.
+  `Touch.Branch` column records the branch at the touch, so the cost of a file can be split per
+  branch or merged across them, and a worktree does not create a phantom second file.
 
-Subagent sessions are ordinary sessions with a `ParentSessionId`; their cost is recorded against the
-files they touched and rolls up to the parent through the session tree, so a delegated lane's spend
-is never lost and never double-counted.
+Subagent sessions are ordinary sessions with a `ParentSessionId`, and their cost is recorded against
+the files that they touched and rolls up to the parent through the session tree, so the spend of a
+delegated lane is never lost and never double-counted.
 
 ## 11. What can be factored into the cost of one file
 
-Three rings, from the certain to the estimable. Every ring is stored; the export decides which rings
-a client sees.
+Three rings, from the certain to the estimable, and every ring is stored while the export decides
+which rings a client sees.
 
 **Ring A - direct, the step that touched the file.**
 
-1. The output tokens of the step: the model's decision to change this file and the payload of the
-   change itself, which for an edit tool is the JSON of the patch.
+1. The output tokens of the step: the decision of the model to change this file and the payload of
+   the change itself, which for an edit tool is the JSON of the patch.
 2. Reasoning tokens, where the provider bills them (DeepSeek and GLM bill them as output).
 3. The retry cost of a failed attempt: a step that errored and was re-issued burned tokens that
-   delivered nothing, and they belong to the file the failed attempt was aimed at.
-4. The echo of the write: the diff the tool returns enters the _next_ step's input, so a large edit
-   pays again in context. It is Ring A in origin and Ring B in billing.
+   delivered nothing, and they belong to the file that the failed attempt was aimed at.
+4. The echo of the write: the diff that the tool returns enters the input of the _next_ step, so a
+   large edit pays again in context. It is Ring A in origin and Ring B in billing.
 
 **Ring B - context, the input side, amortized.**
 
-5. The file's content in the request: the first read, every later read, and the diffs of its own
-   earlier edits.
-6. The file's content carried forward into every subsequent step. This is the dominant term and the
-   reason a one-line change can cost a whole conversation.
+5. The content of the file in the request: the first read, every later read, and the diffs of its
+   own earlier edits.
+6. The content of the file carried forward into every subsequent step, which is the dominant term
+   and the reason that a one-line change can cost a whole conversation.
 7. Cache economics: `cacheReadTokens` are billed at 2-20% of the input rate depending on the
    provider, and `cacheWriteTokens` carry a premium on some providers and none on others.
 8. Shared context that belongs to no file: the system prompt, the tool schemas, the conversation
-   history, the working agreement. It is either allocated proportionally or informed-ignored, and
-   the choice is recorded rather than implied.
-9. Other files' content in the same request: the cross-subsidy that makes a single-file invoice
-   wrong if it ignores it.
-10. Compaction summaries: a real model call, billed in full, whose content is derived from the files
-    it summarized, so it is allocable to them.
-11. Subagent calls: the delegated conversation's own calls, priced identically and rolled up.
+   history, and the working agreement. It is either allocated proportionally or informed-ignored,
+   and the choice is recorded rather than implied.
+9. The content of other files in the same request, which is the cross-subsidy that makes a
+   single-file invoice wrong if it ignores it.
+10. Compaction summaries: a real model call billed in full, whose content is derived from the files
+    that it summarized, so it is allocable to them.
+11. Subagent calls: the own calls of the delegated conversation, priced identically and rolled up.
 
 **Ring C - credit and second order, the contribution side.**
 
@@ -517,19 +554,19 @@ a client sees.
     the cache-read rate instead of the full input rate. The saving is exact and computable from the
     same rows: `cacheReadTokens * (inputRate - cacheReadRate) / 1e6`, minus any cache-write premium.
     It is a _negative_ cost contribution attributable to the file that was read.
-13. **Avoided rework.** A file read before it was edited tends to be edited once instead of three
-    times. The counterfactual is not in the ledger, but the two facts that make it estimable are:
-    whether the file was read before its first edit (`Touch.ReadBeforeEdit`), and what the retries
-    cost. The estimate belongs to the analysis plugin, not to the ledger.
-14. **Survivorship.** A file touched whose change was later reverted, or never committed, delivered
-    nothing to the client. That is the discount the export applies, and it is a verdict on the
-    session, not a rewrite of the history.
+13. **Avoided rework.** A file that is read before it is edited tends to be edited once instead of
+    three times. The counterfactual is not in the ledger, but the two facts that make it estimable
+    are whether the file was read before its first edit (`Touch.ReadBeforeEdit`) and what the
+    retries cost. The estimate belongs to the analysis plugin and not to the ledger.
+14. **Survivorship.** A file that was touched whose change was later reverted, or never committed,
+    delivered nothing to the client. That is the discount that the export applies, and it is a
+    verdict on the session and not a rewrite of the history.
 
 ## 12. Assessment and discount are different objects
 
-The user's instinct is right and the two must not be fused.
+The instinct of the user is right, and the two must not be fused.
 
-**Assessment** is descriptive and always stored. For one session it buckets the spend:
+**Assessment** is descriptive and always stored, and for one session it buckets the spend:
 
 | Bucket      | Meaning                                                              |
 | ----------- | -------------------------------------------------------------------- |
@@ -539,43 +576,45 @@ The user's instinct is right and the two must not be fused.
 | `overhead`  | retries, compaction, title generation, tooling                       |
 | `carry`     | the amortized input mass, which is the part a client always disputes |
 
-From those buckets the ledger derives the numbers a client actually argues about: cost per surviving
-line, cost per delivered file, exploration ratio, rework ratio, and cache hit ratio.
+From those buckets the ledger derives the numbers that a client actually argues about: cost per
+surviving line, cost per delivered file, exploration ratio, rework ratio, and cache hit ratio.
 
-**Discount** is a policy applied at export, never at capture. Three policies:
+**Discount** is a policy applied at export and never at capture, and there are three policies:
 
-- `all-touched` - every touched file pays its share; nothing is discounted. The honest default for
-  internal analysis.
-- `surviving-only` - only `delivered` files are billable per file; `explored`, `reverted`, and
+- `all-touched` - every touched file pays its share and nothing is discounted, which is the honest
+  default for internal analysis.
+- `surviving-only` - only `delivered` files are billable per file, and `explored`, `reverted`, and
   `overhead` move to a single named overhead line that the client sees but does not pay per file.
-  The recommended default for a client invoice.
-- `capped` - a file's amortized share is capped at `k` times its direct share and the excess is
-  redistributed across the other delivered files. For clients who object to context carry in
+  This is the recommended default for a client invoice.
+- `capped` - the amortized share of a file is capped at `k` times its direct share and the excess is
+  redistributed across the other delivered files, for clients who object to context carry in
   principle but accept it in moderation.
 
-The ledger always stores the undiscounted truth. A discount is a view over it, so an invoice can be
-re-derived, disputed, and reversed without losing a row.
+The ledger always stores the undiscounted truth, and a discount is a view over it, so an invoice can
+be re-derived, disputed, and reversed without losing a row.
 
 ## 13. The contribution plugin is a second package
 
-The ledger records facts; it should not acquire opinions. The analysis that turns facts into
-judgements - read credit, read-before-edit effectiveness, cost per surviving line, cache efficiency
-per file, exploration overhead, the counterfactual "did reading this file make the later edit
-cheaper" - belongs in `plugin-dsh-cost-analysis`, a second package that reads the same database and
-writes nothing to it.
+The ledger records facts and should not acquire opinions.
+
+The analysis that turns facts into judgements (read credit, read-before-edit effectiveness, cost per
+surviving line, cache efficiency per file, exploration overhead, and the counterfactual "did reading
+this file make the later edit cheaper") belongs in `plugin-dsh-cost-analysis`, a second package that
+reads the same database and writes nothing to it.
 
 That split is deliberate: the ledger must stay cheap enough to run on every session, and an analysis
-pass is allowed to be expensive, occasional, and wrong in interesting ways. It also means the
-analysis can be re-run against history whenever its model improves, without re-instrumenting
-anything.
+pass is allowed to be expensive, occasional, and wrong in interesting ways.
 
-The three columns the ledger must store **now** for that plugin to exist later are
-`Call.CacheSaving`, `Touch.ReadBeforeEdit`, and `Touch.Branch`. Everything else it needs is already
-in the schema.
+It also means that the analysis can be re-run against history whenever its model improves, without
+re-instrumenting anything.
+
+The three columns that the ledger must store **now** for that plugin to exist later are
+`Call.CacheSaving`, `Touch.ReadBeforeEdit`, and `Touch.Branch`, and everything else that it needs is
+already in the schema.
 
 ## 14. The schema additions (migration v2)
 
-Additive only; `PRAGMA user_version` goes from 1 to 2 on first open of the new build.
+Additive only, and `PRAGMA user_version` goes from 1 to 2 on the first open of the new build.
 
 ```sql
 ALTER TABLE Call ADD COLUMN CacheSaving REAL NOT NULL DEFAULT 0;
@@ -606,62 +645,74 @@ GROUP BY f.FileId;
 ```
 
 `Verdict` is written at session end (`turn/end` with a terminal reason, or `session/disposed`) from
-the touch log: a file with a write-kind touch and no later revert is `changed`; a file with only
-read-kind touches is `read`; a file written and then restored to its earlier hash is `reverted`. The
-verdict is the input to the `surviving-only` discount, and it is recomputable from `Touch` and
+the touch log: a file with a write-kind touch and no later revert is `changed`, a file with only
+read-kind touches is `read`, and a file that was written and then restored to its earlier hash is
+`reverted`.
+
+The verdict is the input to the `surviving-only` discount, and it is recomputable from `Touch` and
 `FileVersion` alone.
 
 **v2 limitation, recorded honestly.** The session log carries no restore signal, so the drain feeds
-`Restored = false` and a `reverted` verdict cannot be reached in v2 - the rule is exercised in the
-stage smoke, but nothing in production produces it yet. Reaching it needs the content hash at each
-write, which is the `FileVersion` comparison planned for v4. Until then the verdict is `changed` or
-`read`, which is correct for every session that did not undo its own work.
+`Restored = false` and a `reverted` verdict cannot be reached in v2: the rule is exercised in the
+stage smoke, but nothing in production produces it yet.
+
+Reaching it needs the content hash at each write, which is the `FileVersion` comparison planned for
+v4.
+
+Until then the verdict is `changed` or `read`, which is correct for every session that did not undo
+its own work.
 
 ## 15. What the research changed
 
 The digest at [INFERENCE-COST-ATTRIBUTION.md](../Researches/INFERENCE-COST-ATTRIBUTION.md) was
-written from 35 cited sources after the schema was drafted. Four of its findings amend this plan,
-and three of them are already folded into the sections above.
+written from 35 cited sources after the schema was drafted.
+
+Four of its findings amend this plan, and three of them are already folded into the sections above.
 
 1. **The bucket convention is exclusive, and it is converted once.** OpenTelemetry's
-   `gen_ai.usage.input_tokens` is inclusive - it "SHOULD include all types of input tokens,
-   including cached tokens" - while Langfuse stores exclusive buckets and converts at ingest. This
-   ledger stores the exclusive form, which is also what the harness's own `TokenUsage` already
+   `gen_ai.usage.input_tokens` is inclusive, because it "SHOULD include all types of input tokens,
+   including cached tokens", while Langfuse stores exclusive buckets and converts at ingest. This
+   ledger stores the exclusive form, which is also what the own `TokenUsage` of the harness already
    reports (`inputTokens` is the uncached remainder, verified live on 2026-10-27). Any inclusive
-   source is converted at the boundary, in one function, and the conversion is asserted by a smoke.
-   Storing an inclusive total into an exclusive schema double-counts every cached call.
-2. **Time of day is a price dimension, not just a date.** DeepSeek bills cache-hit input at
+   source is converted at the boundary in one function, and the conversion is asserted by a smoke,
+   because storing an inclusive total into an exclusive schema double-counts every cached call.
+2. **Time of day is a price dimension and not just a date.** DeepSeek bills cache-hit input at
    $0.003/$0.006 and output at $0.60/$1.20 inside and outside its peak window, so the same tokens
-   cost double depending on wall clock. `Price.Window` and `config.priceWindows` exist for that
-   reason, and `Price.Resolve` takes the call's timestamp rather than the current time.
-3. **Cache storage is a duration, not a token count.** Gemini prices context-cache storage per
-   million tokens per hour. A pure per-call model cannot express it, so the ledger books storage as
-   a separate `Call`-adjacent row when a provider charges it, and leaves the field null otherwise
+   cost double depending on the wall clock. `Price.Window` and `config.priceWindows` exist for that
+   reason, and `Price.Resolve` takes the timestamp of the call rather than the current time.
+3. **Cache storage is a duration and not a token count.** Gemini prices context-cache storage per
+   million tokens per hour, and a pure per-call model cannot express it, so the ledger books storage
+   as a separate `Call`-adjacent row when a provider charges it and leaves the field null otherwise
    rather than inventing an hourly rate.
-4. **A file touch is not a priced event in any provider's vocabulary.** No fetched source meters
-   cost per file; the finest native grains are Claude Code's component percentages and Copilot's
-   per-prompt premium requests. That is the justification for the whole plugin, and it is why the
-   allocation is this repository's own synthesis rather than a reimplementation of a vendor metric.
+4. **A file touch is not a priced event in any vocabulary of a provider.** No fetched source meters
+   cost per file, and the finest native grains are the component percentages of Claude Code and the
+   per-prompt premium requests of Copilot. That is the justification for the whole plugin, and it is
+   why the allocation is the own synthesis of this repository rather than a reimplementation of a
+   vendor metric.
 
-Two smaller consequences: CSV export uses CRLF line endings per RFC 4180 (readers accept LF, the RFC
-does not promise it), and the price book can optionally be seeded from the LiteLLM
+Two smaller consequences: the CSV export uses CRLF line endings per RFC 4180 (readers accept LF and
+the RFC does not promise it), and the price book can optionally be seeded from the LiteLLM
 `model_prices_and_context_window.json` map, whose rows are already USD per token with a `source` URL
-and a `deprecation_date` - the shipped defaults stay the three Cloudflare rows so the plugin works
-offline.
+and a `deprecation_date`, while the shipped defaults stay the three Cloudflare rows so the plugin
+works offline.
 
 ## 16. Analytics first, invoice later
 
-The invoice is an on-demand or monthly artifact, not the product. What has to exist now is the
-measurement: the fullest set of metrics for every file, from inside its own history and from outside
-it, so that any later invoice, comparison, or client conversation is a query rather than a rebuild.
-The discount policies in section 12 stay designed but unbuilt; the export stays but is not the
+The invoice is an on-demand or monthly artifact and not the product.
+
+What has to exist now is the measurement: the fullest set of metrics for every file, from inside its
+own history and from outside it, so that any later invoice, comparison, or client conversation is a
+query rather than a rebuild.
+
+The discount policies in section 12 stay designed but unbuilt, and the export stays but is not the
 deliverable of this pass.
 
 ### 16.1 The semantic pipeline, per file
 
-A file does not "get touched"; it moves through stages, and each stage has a different cost shape.
-The stage is derivable from the tool and the file's own history in the session, so `Touch.Stage` is
-recorded rather than inferred at report time:
+A file does not "get touched" but moves through stages, and each stage has a different cost shape.
+
+The stage is derivable from the tool and the own history of the file in the session, so
+`Touch.Stage` is recorded rather than inferred at report time:
 
 | Stage      | Detected from                                         | What it means                       |
 | ---------- | ----------------------------------------------------- | ----------------------------------- |
@@ -677,39 +728,40 @@ which is why it is a stored column and not a report-time join.
 
 ### 16.2 Inside metrics - the file's own history
 
-Versions (count, first and last hash, bytes and lines over time); stage counts and the tokens spent
-in each stage; direct cost and amortized cost per stage; cached versus uncached mass and the cache
-saving the file's reads produced; churn (lines added and removed, edits per session, the number of
-sessions that edited it); lifespan (first seen, last touched, active days); and the per-version
-cost, so the question "what did version 7 of this file cost" has an answer.
+Versions (count, first and last hash, and bytes and lines over time); stage counts and the tokens
+spent in each stage; direct cost and amortized cost per stage; cached against uncached mass and the
+cache saving that the reads of the file produced; churn (lines added and removed, edits per session,
+and the number of sessions that edited it); lifespan (first seen, last touched, and active days);
+and the per-version cost, so the question "what did version 7 of this file cost" has an answer.
 
 ### 16.3 Outside metrics - the file in its context
 
-The sessions, turns, models, tools, projects and clients that touched it; per-model cost for this
-file specifically; whether the touch came from a user session or a delegated subagent; and the
-file's rank within each session, which separates the file the conversation was about from the file
-that happened to be in the way.
+The sessions, turns, models, tools, projects, and clients that touched it; the per-model cost for
+this file specifically; whether the touch came from a user session or a delegated subagent; and the
+rank of the file within each session, which separates the file that the conversation was about from
+the file that happened to be in the way.
 
 ### 16.4 Cross metrics - the ones that answer the user's question
 
 Cost per surviving line; the read-before-edit delta (what an edit costs in sessions where the file
-was read first versus sessions where it was not); the exploration ratio (read-only spend over total
+was read first against sessions where it was not); the exploration ratio (read-only spend over total
 spend for this file); the rework ratio (edits followed by a revert or a second edit of the same
-lines); the carry ratio (amortized over direct, the number that says how much of this file's cost is
-context rather than change); and the cache hit ratio, which is the measurable half of "did reading
-this file make the later edit cheaper".
+lines); the carry ratio (amortized over direct, the number that says how much of the cost of this
+file is context rather than change); and the cache hit ratio, which is the measurable half of "did
+reading this file make the later edit cheaper".
 
-Every one of them is a view over `Call`, `Touch`, `ContextMass`, `Allocation` and `FileVersion`.
-None of them requires a new event, which is the test of whether the ledger was designed at the right
-grain.
+Every one of them is a view over `Call`, `Touch`, `ContextMass`, `Allocation`, and `FileVersion`,
+and none of them requires a new event, which is the test of whether the ledger was designed at the
+right grain.
 
 ## 17. The factor model - everything the price depends on
 
-A file's cost is not one number computed from one rate. It is a product of dimensions, and a model
+The cost of a file is not one number computed from one rate but a product of dimensions, and a model
 that stores only `(model, tokens)` will misprice every call that ran in a batch, near a context-tier
-boundary, inside a peak window, under a residency flag, or after a retry. The factor model makes
-each dimension explicit, typed, and effective-dated, so the arithmetic is auditable and a new
-dimension is a row rather than a migration.
+boundary, inside a peak window, under a residency flag, or after a retry.
+
+The factor model makes each dimension explicit, typed, and effective-dated, so the arithmetic is
+auditable and a new dimension is a row rather than a migration.
 
 ### 17.1 Three classes of factor
 
@@ -717,41 +769,46 @@ dimension is a row rather than a migration.
   `Provider`, `Model`, `PriceId`, `Mode` (`standard | batch | flex | priority`), `Region`, `Window`
   (`any | peak | offpeak`), `Tier`, and the four token buckets.
 - **Attribution factors** change which file pays, so they are typed columns on `Touch`: `Tool`,
-  `Kind`, `Stage`, `Branch`, `ReadBeforeEdit`.
+  `Kind`, `Stage`, `Branch`, and `ReadBeforeEdit`.
 - **Classification factors** only slice the reports, so they live in a generic dimension: `origin`
   (user or subagent), `delegationDepth`, `agentPreset`, `language`, `retry`, `compaction`,
-  `tokenizer`, `purpose`. They are stored as `Factor` + `CallFactor` rows, which means a new
-  classifier never needs a migration.
+  `tokenizer`, and `purpose`. They are stored as `Factor` + `CallFactor` rows, which means that a
+  new classifier never needs a migration.
 
 ### 17.2 Modifiers, tiers, and the interpolation rule
 
-A base rate is multiplied by every modifier that applies at the call's own time:
+A base rate is multiplied by every modifier that applies at the own time of the call:
 
     cost(call) = SUM over buckets of ( bucketTokens / 1e6 * baseRate(bucket, tier) )
                  * PRODUCT over applicable modifiers
 
-Modifiers are rows, not code: `batch 0.5`, `flex 0.5`, `priority 2.0`, `ultrafast 6.0`,
-`residency-us 1.1`, `regional-uplift 1.1`. Each is effective-dated like a price, so a historical
-invoice is reproducible.
+Modifiers are rows and not code: `batch 0.5`, `flex 0.5`, `priority 2.0`, `ultrafast 6.0`,
+`residency-us 1.1`, and `regional-uplift 1.1`.
+
+Each one is effective-dated like a price, so a historical invoice is reproducible.
 
 Tiers are the part that needs real interpolation, because the providers do not charge one rate for a
-whole prompt that crosses a threshold. Gemini prices input at $2.00 up to 200k prompt tokens and
-$4.00 above it; Anthropic tiers by prompt length on several models. The rule is **marginal**: the
-tokens below the threshold are priced at the lower tier and only the excess at the higher one, which
-is the only reading that does not produce a cliff where one extra token doubles a bill. `Price`
-gains `TierFrom` and `TierTo`, and `Price.Cost` walks the tiers in order:
+whole prompt that crosses a threshold: Gemini prices input at $2.00 up to 200k prompt tokens and
+$4.00 above it, and Anthropic tiers by prompt length on several models.
+
+The rule is **marginal**: the tokens below the threshold are priced at the lower tier and only the
+excess at the higher one, which is the only reading that does not produce a cliff where one extra
+token doubles a bill.
+
+`Price` gains `TierFrom` and `TierTo`, and `Price.Cost` walks the tiers in order:
 
     for each tier in ascending TierFrom:
         portion = clamp(promptTokens - tier.TierFrom, 0, tier.TierTo - tier.TierFrom)
         cost += portion / 1e6 * tier.InputRate
 
-Cache reads and writes are interpolated the same way, against their own rates, because a cached
+Cache reads and writes are interpolated the same way against their own rates, because a cached
 prefix that crosses a tier boundary is priced per portion rather than per call.
 
 ### 17.3 The edit grain
 
-A touch is too coarse to answer "what did this hunk cost". Every edit tool call produces one or more
-hunks, and the ledger records each one:
+A touch is too coarse to answer "what did this hunk cost".
+
+Every edit tool call produces one or more hunks, and the ledger records each one:
 
 ```sql
 CREATE TABLE Edit (
@@ -766,13 +823,13 @@ CREATE TABLE Edit (
 
 With `Edit` rows the direct half of the allocation can be weighted by hunk size instead of by whole
 file delta, and three new numbers become answerable: cost per added line, cost per hunk, and the
-distribution of spend across the hunks of one file (which is how a 40-line refactor that cost $4
-becomes visible next to the one-line fix that cost $0.30).
+distribution of spend across the hunks of one file, which is how a 40-line refactor that cost $4
+becomes visible next to the one-line fix that cost $0.30.
 
 ### 17.4 Telemetry the log already carries
 
-None of this needs new instrumentation; the session log records it and the plugin only has to read
-it.
+None of this needs new instrumentation, because the session log records it and the plugin only has
+to read it.
 
 | Signal              | Source in the log                                                         | Use                      |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------ |
@@ -788,22 +845,33 @@ it.
 | compaction          | the `purpose: 'compaction'` call                                          | overhead bucket          |
 
 The `Call` table gains `LatencyMs`, `FirstTokenMs`, `TokensPerSecond`, `Attempts`, `ErrorCode`,
-`ContextWindow`, and `Utilization`; `Touch` gains `DurationMs` and `ResultBytes`. A call that
-retried three times is one `Call` with `Attempts = 3` and the wasted tokens still in its buckets, so
-the rework ratio is a division rather than a join.
+`ContextWindow`, and `Utilization`, and `Touch` gains `DurationMs` and `ResultBytes`.
+
+A call that retried three times is one `Call` with `Attempts = 3` and the wasted tokens still in its
+buckets, so the rework ratio is a division rather than a join.
 
 ### 17.5 Forecast and the on-demand invoice
 
-The invoice is produced on demand or monthly, so the ledger needs a projection that is a query, not
-a stored guess: for each project and client, the daily rate over a chosen window (mean, median, and
-the last seven days), projected to the period end with the observed weekday shape. The forecast is a
-view over `Rollup`, labelled as an estimate in every export, and it never writes a row. A month that
-is half over produces a projection with a stated confidence band (min and max daily rate), because a
-single-number forecast is the thing clients distrust.
+The invoice is produced on demand or monthly, so the ledger needs a projection that is a query and
+not a stored guess: for each project and client, the daily rate over a chosen window (mean, median,
+and the last seven days), projected to the period end with the observed weekday shape.
+
+The forecast is a view over `Rollup`, labelled as an estimate in every export, and it never writes a
+row.
+
+A month that is half over produces a projection with a stated confidence band (the minimum and
+maximum daily rate), because a single-number forecast is the thing that clients distrust.
+
+The aggregate that the forecast reads is refreshed on the live path: every flush rebuilds exactly
+the UTC days its own events landed in, taken from the batch's timestamps rather than the wall clock,
+so a backfilled session lands on the day it happened and a range report is current the moment the
+fold commits. The rebuild path (every day in `Call`) stays as the repair, and the `Refresh` smoke
+proves both halves: the drain alone leaves the aggregate empty, the batch-day refresh fills exactly
+one day, and a day with no calls writes nothing.
 
 ### 17.6 The DDL for the factor layer
 
-Additive again, `user_version` 2 to 3.
+Additive again, from `user_version` 2 to 3.
 
 ```sql
 ALTER TABLE Price ADD COLUMN TierFrom INTEGER NOT NULL DEFAULT 0;
@@ -851,7 +919,7 @@ dimension is worse than one that does not know it at all:
 
 1. **v2 - the analytics grain**: `Alias`, `Verdict`, `Touch.Stage`, `Touch.Branch`,
    `Touch.ReadBeforeEdit`, `Call.CacheSaving`, `Price.Window`, the stage classifier, the report
-   queries, `/cost assess`.
+   queries, and `/cost assess`.
 2. **v3 - the factor layer**: `Modifier`, `Factor`/`CallFactor`, tiers, modes, regions, and the
    marginal interpolation in `Price.Cost`.
 3. **v4 - the edit and telemetry grain**: `Edit`, the latency and retry columns, the stream-record
@@ -862,47 +930,52 @@ of them, because the one thing that must never drift is that the allocations sti
 
 ## 18. The twelve open decisions, answered
 
-The digest closes with twelve questions it could not settle. Each one now has an answer, and the
-answer is a design clause rather than a preference, so a later reader can see why the code looks the
-way it does.
+The digest closes with twelve questions that it could not settle.
 
-1. **Canonical token shape** - exclusive, matching the harness's own `TokenUsage`; an inclusive
+Each one now has an answer, and the answer is a design clause rather than a preference, so a later
+reader can see why the code looks the way it does.
+
+1. **Canonical token shape** - exclusive, matching the own `TokenUsage` of the harness; an inclusive
    source is converted once at the boundary and a smoke asserts the conversion.
-2. **Default attribution model** - the hybrid (direct for output, amortized for input). Shapley is
-   documented but not built: it needs a counterfactual the ledger cannot observe.
-3. **Shared-context policy** - informed-ignore for the system prompt and tool schemas (funded
-   centrally, allocated to no file), proportional for file content. The choice is recorded on the
-   call, not left implicit.
+2. **Default attribution model** - the hybrid (direct for output and amortized for input). Shapley
+   is documented but not built, because it needs a counterfactual that the ledger cannot observe.
+3. **Shared-context policy** - informed-ignore for the system prompt and the tool schemas (funded
+   centrally and allocated to no file), and proportional for file content. The choice is recorded on
+   the call and not left implicit.
 4. **Price join key** - the request model, because that is what the caller chose and what the rate
    card keys on; a differing response model is stored on the call for audit but does not select the
    rate.
 5. **Rate source** - a self-maintained rate card in config plus the `Price` table, optionally seeded
    from the LiteLLM map. The map is community-maintained and its only expiry signal is
-   `deprecation_date`, so it is a convenience, not the authority.
-6. **Token provenance for per-file shares** - the estimator for the weights, the provider's usage
-   for the money. Weights are ratios, so estimator error cancels; cost is never estimated.
+   `deprecation_date`, so it is a convenience and not the authority.
+6. **Token provenance for per-file shares** - the estimator for the weights and the usage of the
+   provider for the money. Weights are ratios, so estimator error cancels, and the cost is never
+   estimated.
 7. **Cache-write allocation** - spread over the cached set rather than charged to the first toucher,
    because the set that benefits from the later reads is the set that should pay for the write. v2
-   folds the write into the uncached side; v3 moves it.
+   folds the write into the uncached side, and v3 moves it.
 8. **Time-of-day pricing** - store the tokens, the resolved `PriceId`, and the computed dollars. The
-   dollars make the report cheap, the tokens and the effective-dated price row make a retroactive
-   correction possible without re-reading a session.
-9. **Write topology** - one connection per host process, WAL, one writer. Subagents run in the same
-   host, so there is no second writer to contend with.
-10. **Payload detail** - TEXT JSON when a raw payload is kept, never JSONB: the ledger's queries are
-    over typed columns, and an opaque blob would only be parsed in a debugging session.
+   dollars make the report cheap, and the tokens and the effective-dated price row make a
+   retroactive correction possible without re-reading a session.
+9. **Write topology** - one connection per host process, WAL, and one writer. Subagents run in the
+   same host, so there is no second writer to contend with.
+10. **Payload detail** - TEXT JSON when a raw payload is kept and never JSONB, because the queries
+    of the ledger are over typed columns and an opaque blob would only be parsed in a debugging
+    session.
 11. **Rollup engine** - SQLite views over `Allocation`, rebuilt on demand. DuckDB is a fine second
     engine for an analysis pass, and the export can hand it a Parquet file without the ledger
     depending on it.
 12. **Annotation surface** - in-file comments, off by default, marker-delimited, and always paired
-    with the CSV sidecar. The comment is for the reader of the file; the sidecar is for the
+    with the CSV sidecar. The comment is for the reader of the file and the sidecar is for the
     accountant.
 
 ## 19. The end-to-end proof
 
-The 56 unit checks run on fixtures. On 2026-10-27 the ledger was also replayed against two real
-session transcripts from this repository, through `Open`, `Drain`, `Price`, `Allocate` and `Rollup`
-into a scratch database, and read back through `Report`.
+The 56 unit checks run on fixtures.
+
+On 2026-10-27 the ledger was also replayed against two real session transcripts from this
+repository, through `Open`, `Drain`, `Price`, `Allocate`, and `Rollup` into a scratch database, and
+read back through `Report`.
 
 | Session    | Events | Calls |     Total |    Direct | Amortized |
 | ---------- | -----: | ----: | --------: | --------: | --------: |
@@ -910,23 +983,25 @@ into a scratch database, and read back through `Report`.
 | `31324528` |    206 |    22 | $0.048605 | $0.008591 | $0.040014 |
 | combined   |   2172 |    80 | $0.243893 | $0.041284 | $0.202609 |
 
-The combined ledger held 101 files, 594 touches and 436 edit hunks, drained in under 150 ms per
-session, and `sum(Allocation) - sum(Call.CostTotal)` was exactly 0. Three files appeared in both
-sessions with their cost correctly summed across conversations, which is the property section 10
-claims.
+The combined ledger held 101 files, 594 touches, and 436 edit hunks, drained in under 150 ms per
+session, and `sum(Allocation) - sum(Call.CostTotal)` was exactly 0.
 
-The replay found two defects the fixtures could not:
+Three files appeared in both sessions with their cost correctly summed across conversations, which
+is the property that section 10 claims.
+
+The replay found two defects that the fixtures could not:
 
 1. **A directory ranked as the top file.** A `glob` or `grep` carries a directory path, and the
    touch mapper recorded it as a file, so the highest-cost "file" in the first run was
    `Site/Source/Content/Mermaid`. Search touches now survive only when the basename contains a dot.
-2. **Every edit read `+0/-0`.** The hunk parser counted newlines, so a one-line replacement - which
-   has no newline - reported no lines at all. A non-empty side now counts as its newline count plus
-   one, and the edit test's expectations moved with it.
+2. **Every edit read `+0/-0`.** The hunk parser counted newlines, so a one-line replacement, which
+   has no newline, reported no lines at all. A non-empty side now counts as its newline count plus
+   one, and the expectations of the edit test moved with it.
 
-Both fixes are in, the suite is still 56 green, and the replay was re-run to confirm the directory
-left the ranking and the hunks read `+26/-26` rather than `+0/-0`.
+Both fixes are in, the suite is still 56 green, and the replay was re-run to confirm that the
+directory left the ranking and that the hunks read `+26/-26` rather than `+0/-0`.
 
-The proportions are the point: 83% of the bill is context carry, not change. The direct half - the
-actual edits - is $0.041 of $0.244. That is the number the plugin exists to make visible, and it is
-the number a per-token invoice cannot show.
+The proportions are the point: 83% of the bill is context carry and not change.
+
+The direct half, the actual edits, is $0.041 of $0.244, which is the number that the plugin exists
+to make visible and the number that a per-token invoice cannot show.

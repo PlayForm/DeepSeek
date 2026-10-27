@@ -20,29 +20,29 @@ statuses:
 
 # RELEASE 0.1.0 - the first feature release
 
-> The family moves from 0.0.1 to **0.1.0** across the Classic and Effect-TS trees. 31 packages: 15
-> Classic, 15 Effect-TS, and the shared Effect-TS base. The publish, the commit, the tag, and the
-> push are the USER'S calls. This document is the runbook and the evidence record; it changes
-> nothing in the registry.
+> The family moves from 0.0.1 to **0.1.0** across the Classic and Effect-TS trees: 31 packages, with
+> 15 Classic, 15 Effect-TS, and the shared Effect-TS base. The publish, the commit, the tag, and the
+> push are the calls of the USER. This document is the runbook and the evidence record, and it
+> changes nothing in the registry.
 
 ## 0. The version and the rationale
 
-**0.1.0** - the first feature release.
+**0.1.0** is the first feature release.
 
-- The family has shipped 0.0.1. A published version is immutable, so the next release cannot reuse
-  it.
-- The changes since 0.0.1 are additive features and corrections, not a breaking rewrite: the
+- The family has shipped 0.0.1, and a published version is immutable, so the next release cannot
+  reuse it.
+- The changes since 0.0.1 are additive features and corrections and not a breaking rewrite: the
   overpass scaffolding moved into the core, the ledger defaults aligned with the documented paths,
-  the Effect-TS direct `effect` dependencies were removed, and the site figures were corrected.
-- Pre-1.0 SemVer puts a feature release at the minor position: 0.0.1 -> 0.1.0.
-- The documented rule the release must not break is the placeholder rule: the empty placeholder is
-  0.0.0 and every real release is above it. 0.1.0 satisfies that rule; the old 0.0.1 stays on the
-  registry as an immutable historical release.
+  the direct `effect` dependencies of Effect-TS were removed, and the site figures were corrected.
+- Pre-1.0 SemVer puts a feature release at the minor position, so 0.0.1 becomes 0.1.0.
+- The documented rule that the release must not break is the placeholder rule: the empty placeholder
+  is 0.0.0 and every real release is above it. 0.1.0 satisfies that rule, and the old 0.0.1 stays on
+  the registry as an immutable historical release.
 
 ## 1. The 31 packages in publish order
 
-The order is the dependency graph: the base, then the four foundations, then the consumers. Within a
-layer the order is arbitrary.
+The order is the dependency graph: the base, then the four foundations, then the consumers, and
+within a layer the order is arbitrary.
 
 ### L0 - the base (1)
 
@@ -98,14 +98,26 @@ layer the order is arbitrary.
 `npm publish --provenance --access public --ignore-scripts`, the `Release` environment, and
 `id-token: write`.
 
-1. Confirm the workflow is on the default branch and the `Release` environment exists.
-2. Run it: GitHub -> Actions -> NPM -> Run workflow (or create the release, which also triggers it).
-3. Each of the 31 package pages must have the trusted publisher bound to `PlayForm/DeepSeek`,
-   `NPM.yml`, environment `Release`.
+1. **The workflow and the environment.**
 
-The workflow currently carries NO `if: false` guard: it is armed. The release brief expected an
-`if: false` guard; the committed workflow has none, so there is nothing to flip. This lane did not
-add or remove the guard. Running the workflow is the user's step.
+    Confirm that the workflow is on the default branch and that the `Release` environment exists.
+
+2. **The run.**
+
+    Run it from GitHub through Actions, NPM, and Run workflow, or create the release, which also
+    triggers it.
+
+3. **The trusted publisher.**
+
+    Each of the 31 package pages must have the trusted publisher bound to `PlayForm/DeepSeek`,
+    `NPM.yml`, and the environment `Release`.
+
+The workflow currently carries NO `if: false` guard, so it is armed.
+
+The release brief expected an `if: false` guard and the committed workflow has none, so there is
+nothing to flip, and this lane did not add or remove the guard.
+
+Running the workflow is the step of the user.
 
 ### The local route (one tree at a time, with the user's token)
 
@@ -142,15 +154,18 @@ for d in ets-hook-dsh-cargo-governor ets-hook-dsh-ccr ets-hook-dsh-live-containe
 done
 ```
 
-The local route has no OIDC provenance unless the user runs it from a CI context; the NPM.yml route
-is the provenance route.
+The local route has no OIDC provenance unless the user runs it from a CI context, and the NPM.yml
+route is the provenance route.
 
 ### The six new names
 
 `@playform/hook-dsh-ccr`, `@playform/hook-dsh-live-containers`, `@playform/hook-dsh-tool-coach`, and
-their three `ets-` twins have never been published. A trusted publisher can only bind to an existing
-package, so these six names need the empty-first-publish bootstrap in
-`Documentation/Plans/TRUSTED-PUBLISHER.md` section 1 (placeholder 0.0.0) before the 0.1.0 publish.
+their three `ets-` twins have never been published.
+
+A trusted publisher can only bind to an existing package, so these six names need the
+empty-first-publish bootstrap of `Documentation/Plans/TRUSTED-PUBLISHER.md` section 1 with the
+placeholder 0.0.0 before the 0.1.0 publish.
+
 The other 25 names already exist at 0.0.1.
 
 ## 3. The registry checks
@@ -164,7 +179,9 @@ for n in $(node -e 'const fs=require("fs"),path=require("path");for(const t of [
 done
 ```
 
-Every line must print `0.1.0`. Then check:
+Every line must print `0.1.0`.
+
+Then check:
 
 ```bash
 npm view @playform/hook-dsh-ccr@0.1.0 dist.attestations.provenance.predicateType
@@ -172,9 +189,11 @@ npm view @playform/hook-dsh-ccr dist-tags
 npm view @playform/lib-dsh-core@0.0.1 version # expected 404 - 0.0.1 shipped under the pre-rename name (git history)
 ```
 
-The registry facts recorded at release preparation: 25 of the 31 names resolve at `0.0.1`;
-`@playform/hook-dsh-ccr`, `@playform/hook-dsh-live-containers`, `@playform/hook-dsh-tool-coach`, and
-their three `ets-` twins return `MISSING`. The old `0.0.1` release stays immutable.
+The registry facts recorded at release preparation are these: 25 of the 31 names resolve at `0.0.1`,
+and `@playform/hook-dsh-ccr`, `@playform/hook-dsh-live-containers`, `@playform/hook-dsh-tool-coach`,
+and their three `ets-` twins return `MISSING`.
+
+The old `0.0.1` release stays immutable.
 
 ## 3a. The verification evidence
 
@@ -191,11 +210,15 @@ their three `ets-` twins return `MISSING`. The old `0.0.1` release stays immutab
 | Workflow coverage     | the L0 + L1 + L2 lists vs the 31 directories                                                     | 1 + 4 + 26 = 31, zero missing                                    |
 | Registry snapshot     | `npm view <pkg> version` for all 31                                                              | 25 at 0.0.1; 6 `MISSING` (the new names)                         |
 
-The one build-log caveat: the Classic cargo-governor's `tsc` step prints duplicate
-`@deepseek-ai/dsh-fs` type errors (the package-local 0.2.1-rc.2 copy against the root 0.2.0-rc.2
-copy). The build exits 0, the package's smoke suite is green, and the package source is untouched by
-this release. This is an environment install mismatch, not a release regression; a clean
-`pnpm install` aligns the copies.
+The one build-log caveat is the duplicate `@deepseek-ai/dsh-fs` type errors that the `tsc` step of
+the Classic cargo-governor prints, where the package-local 0.2.1-rc.2 copy stands against the root
+0.2.0-rc.2 copy.
+
+The build exits 0, the smoke suite of the package is green, and the source of the package is
+untouched by this release.
+
+This is an environment install mismatch and not a release regression, and a clean `pnpm install`
+aligns the copies.
 
 ## 4. The READY-TO-RELEASE checklist
 
@@ -231,19 +254,19 @@ git push origin HEAD
 
 ## 6. The residuals
 
-- The nested per-package `pnpm-lock.yaml` files (six Classic, six Effect-TS) still record the 0.0.1
-  sibling tarballs. They are registry-resolved install artifacts, not the workspace graph, and
-  cannot resolve 0.1.0 until it is published. Regenerate them after the publish:
+- The nested per-package `pnpm-lock.yaml` files (six Classic and six Effect-TS) still record the
+  0.0.1 sibling tarballs. They are registry-resolved install artifacts and not the workspace graph,
+  and they cannot resolve 0.1.0 until it is published. Regenerate them after the publish with
   `(cd <package> && pnpm install --lockfile-only)`.
-- The root `pnpm-lock.yaml` is gitignored; it was regenerated locally at 0.1.0.
+- The root `pnpm-lock.yaml` is gitignored, and it was regenerated locally at 0.1.0.
 - `@playform/hook-dsh-ccr`, `@playform/hook-dsh-live-containers`, and
   `@playform/hook-dsh-tool-coach` (and the three `ets-` twins) need the empty-first-publish
   bootstrap before a trusted publisher can bind.
 
 ## 7. The files changed
 
-`git status` is the exact manifest (160 paths at preparation); the groups below are the complete
-set.
+`git status` is the exact manifest with 160 paths at preparation, and the groups below are the
+complete set.
 
 - **Manifests (32):** all 15 `Classic/packages/*/package.json`, all 16
   `EffectTS/packages/*/package.json`, and `Site/package.json`. The root manifest was already at
@@ -252,7 +275,7 @@ set.
   tool-coach, live-containers, both trees); the ccr, tool-coach, and live-containers test
   `Test.ts`/`README.md` pairs in both trees; and the six `smokes/Test/Introspection/Live-Assertions`
   files (`Test.ts`, `Test.mjs`, `README.md` per tree).
-- **Package docs (56):** 26 README badges/examples, 24 CONTRIBUTING version lines, and 6 SCHEME
+- **Package docs (56):** 26 README badges and examples, 24 CONTRIBUTING version lines, and 6 SCHEME
   headers.
 - **Site source (15):** `Source/Library/Content.ts`; the versions, setup, index, and case-study
   pages; the ccr and live-containers detail pages; the Configurator, FlavorBadge, StatsBand, and
@@ -271,12 +294,12 @@ set.
 
 Two working-tree notes:
 
-- The Site's active package governor updated `puppeteer` from 25.14.0 to 25.15.0 when the manifest
-  was written. The site build and Drift passed with 25.15.0. Revert the one line if the release
-  should not carry the dependency refresh.
+- The active package governor of the Site updated `puppeteer` from 25.14.0 to 25.15.0 when the
+  manifest was written, and the site build and Drift passed with 25.15.0. Revert the one line if the
+  release should not carry the dependency refresh.
 - The working tree already carried unrelated uncommitted plan docs and EffectTS `Target/*.d.ts`
-  edits before this lane. `git add -A` would include them; review the full diff or stage the release
-  paths explicitly.
+  edits before this lane, and `git add -A` would include them, so review the full diff or stage the
+  release paths explicitly.
 
 ## 8. The commit suggestion
 

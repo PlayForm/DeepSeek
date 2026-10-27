@@ -34,10 +34,10 @@ statuses:
    carrier) and the system-prompt/assemble waterfall (the D3 section pattern), both documented in
    Documentation/Archive/Live-Containers/Design/IMPLEMENTATION-DESIGN.md section 3.2 and
    FILE-MONITORS-DESIGN.md section 5.
-3. The pre-image storage size of the journal is UNDECIDED, which is the tradeoff between the per-file
-   full pre-image and the reverse patch (the rollback improvement). Suggestion: the full pre-image
-   for the v1 (the simpler revert and the bounded ring cap like the outputLimitBytes of the live
-   containers), and the reverse patch as the wave-2 compression.
+3. The pre-image storage size of the journal is UNDECIDED, which is the tradeoff between the
+   per-file full pre-image and the reverse patch (the rollback improvement). Suggestion: the full
+   pre-image for the v1 (the simpler revert and the bounded ring cap like the outputLimitBytes of
+   the live containers), and the reverse patch as the wave-2 compression.
 4. The batch lifecycle event names: NEW event names may require a new storage domain version (the
    D3/M5 open contract). The implementation agent must decide between the batch events in the OWN
    domain of the plugin (the journal's) and the shared governance chain. The suggestion: the batch

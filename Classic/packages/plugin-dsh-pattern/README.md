@@ -5,20 +5,20 @@
 
 ## The role
 
-The pattern-graph service plugin: the registry, the matcher, the confidence store and the learner
-behind the suggester family.
+The pattern-graph service plugin supplies the registry, the matcher, the confidence store, and the
+learner behind the suggester family.
 
 Plan: `Documentation/Plans/PATTERN-GRAPH-PLUGIN.md`.
 
 ## The surfaces
 
-One service: `pattern` (class form, `ctx.pattern` - the method table below).
+The plugin exposes one service: `pattern` (class form, `ctx.pattern` - the method table below).
 
-No tool, no event listener.
+It has no tool and no event listener.
 
 ## What it provides
 
-`ctx.pattern` (service name `pattern`, class form):
+`ctx.pattern` is the service name `pattern`, in class form:
 
 | Method                | Behavior                                                      |
 | --------------------- | ------------------------------------------------------------- |
@@ -34,33 +34,37 @@ No tool, no event listener.
 A pattern is one behavior graph: intent, trigger signals, target globs, ordered transform steps,
 arbiter, confidence, and the decision hook's `allowlist` hint.
 
-The match is a lookup plus arithmetic - never an LLM call.
+The match is a lookup plus arithmetic, never an LLM call.
 
-The cold start is the shipped static catalog (`Source/Variable/ DefaultPatterns.ts`), never an empty
-registry.
+The cold start uses the shipped static catalog (`Source/Variable/ DefaultPatterns.ts`), never an
+empty registry.
 
 ## The store (primary and fallback)
 
 The **PRIMARY** store is the harness's `ctx.storage` KV domain (config `domain`, default `pattern`,
-version 1, per-record, tables `patterns` + `meta`), probed once at construction
-(`ctx.storage.domain`, else `ctx.storageDomain`), loaded on open and written on every mutation
-(`Record`/`Decay`); `Save` writes the whole registry plus the `__savedAt` meta record.
+version 1, per-record, tables `patterns` + `meta`).
 
-The domain declares NO `compatibleVersions` - the library rejects an entry that is not strictly
-below the declared version, so `[1]` against version 1 throws at load.
+It is probed once at construction (`ctx.storage.domain`, else `ctx.storageDomain`), loaded on open,
+and written on every mutation (`Record`/`Decay`), and `Save` writes the whole registry plus the
+`__savedAt` meta record.
 
-The **FALLBACK** store is the JSON snapshot (`storagePath`, default `~/.dsh/pattern/registry.json`):
-written and read ONLY when no storage facility is provided or the domain's open fails (the loud
-`storage open failed: <reason>` line, then the JSON snapshot loads).
+The domain declares NO `compatibleVersions`, because the library rejects an entry that is not
+strictly below the declared version, so `[1]` against version 1 throws at load.
 
-The KV domain restores as a PER-RECORD overlay on the cold-start catalog (a stored record replaces
-the catalog entry with the same id; a catalog entry the domain never received stays); the JSON
-snapshot is a full snapshot and replaces the catalog, exactly as before.
+The **FALLBACK** store is the JSON snapshot (`storagePath`, default `~/.dsh/pattern/registry.json`).
+
+It is written and read ONLY when no storage facility is provided or the domain's open fails, which
+logs the loud `storage open failed: <reason>` line and then loads the JSON snapshot.
+
+The KV domain restores as a PER-RECORD overlay on the cold-start catalog: a stored record replaces
+the catalog entry with the same id, and a catalog entry the domain never received stays.
+
+The JSON snapshot is a full snapshot and replaces the catalog, exactly as before.
 
 ## Abstention (the boundary)
 
 Match returns `[]` when the top score is below `matchThreshold` or when the top two scores sit
-within `ambiguityEpsilon` (two patterns matching equally is not a decision).
+within `ambiguityEpsilon`, because two patterns matching equally is not a decision.
 
 The ledger records every Record call so precision can be measured, not assumed.
 
@@ -92,16 +96,17 @@ pattern: storage open failed: <reason> (logFile ...)
 | `acceptBonus` / `rejectPenalty` / `appliedBonus` / `failedPenalty` | `0.1 / 0.2 / 0.15 / 0.25`                | the Record deltas                                      |
 | `policy.*`                                                         | D6 defaults                              | the per-action allowlist (the shared factory block)    |
 
-Every field is a volatile cell: a hot edit lands on the next service call.
+Every field is a volatile cell, so a hot edit lands on the next service call.
 
-The constructor also accepts the loader's validated config (the second constructor argument - the
-graph service's precedent), so a loaded plugin gets the schema's posture; `Configure` remains the
-hot path.
+The constructor also accepts the loader's validated config (the second constructor argument,
+following the graph service's precedent), so a loaded plugin gets the schema's posture.
+
+`Configure` remains the hot path.
 
 ### The policy block (D6)
 
-The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own schema;
-the service reads it as `Knobs.policy` (a bare construction falls back to the same D6 table):
+The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own schema,
+and the service reads it as `Knobs.policy` (a bare construction falls back to the same D6 table):
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -110,12 +115,13 @@ the service reads it as `Knobs.policy` (a bare construction falls back to the sa
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The service matches, records and decays - `read`, `record` and `suggest` are automatic; the
-write/commit/spawn verdicts are declared for uniformity and stay the shipped `approve` (the service
-never writes files, commits or spawns).
+The service matches, records, and decays, so `read`, `record`, and `suggest` are automatic.
 
-A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement).
+The write/commit/spawn verdicts are declared for uniformity and stay the shipped `approve`, because
+the service never writes files, commits, or spawns.
+
+A resolved pack's `policy` section overrides the defaults per action, and that wiring is the next
+refinement.
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 

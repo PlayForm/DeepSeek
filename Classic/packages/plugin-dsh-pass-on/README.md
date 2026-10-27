@@ -5,17 +5,19 @@
 
 ## The role
 
-The PASS-ON (ctx.passOn) - the prepare direction of the batch flow
+The PASS-ON (ctx.passOn) is the prepare direction of the batch flow
 (Documentation/Plans/PASS-ON-AND-INGESTER.md section 3).
 
-A DeepSeek Harness service that turns an intent into a batch proposal.
+It is a DeepSeek Harness service that turns an intent into a batch proposal.
 
 **READ-ONLY.**
 
 The pass-on never writes a file.
 
 It resolves the targets, computes the operations, renders the bounded preview, and computes the
-digest; the decision decides; the ingester (plugin-dsh-ingester) applies.
+digest.
+
+The decision decides, and the ingester (plugin-dsh-ingester) applies.
 
 ```
 Suggester / user intent -> PASS-ON (prepare) -> decision -> INGESTER (apply)
@@ -40,7 +42,7 @@ Suggester / user intent -> PASS-ON (prepare) -> decision -> INGESTER (apply)
 A prepared proposal is converted to the canonical batch contract (Function/Batch) and published two
 ways, so it actually reaches the consumers:
 
-1. `batch/proposed` on the bus - the decision hook records it, the ingester holds it;
+1. `batch/proposed` on the bus - the decision hook logs it, and the ingester holds it;
 2. the harness agent-team inbox - `agent.inject(message)` on the origin agent, carrying
 
     ```
@@ -50,18 +52,22 @@ ways, so it actually reaches the consumers:
 
     which commits the durable `agent/inbox/spliced` event plugin-dsh-batchstate splices from.
 
-The origin is the caller's explicit argument, else the harness initiator, else `""` (the delivery
-then journals `inbox none` honestly - the bus emission still carries the proposal).
+The origin is the caller's explicit argument, else the harness initiator, else `""`.
+
+The delivery then journals `inbox none` honestly, and the bus emission still carries the proposal.
 
 ## The batch contract (plan section 2)
 
-The internal `Proposal` (Interface/Proposal.ts):
-`{ id, intent: { kind, params }, targets, operations, preview, digest, revision, expiresAt, createdAt }`;
-the canonical wire `Batch` (Interface/Batch.ts):
+The internal `Proposal` (Interface/Proposal.ts) is:
+`{ id, intent: { kind, params }, targets, operations, preview, digest, revision, expiresAt, createdAt }`.
+
+The canonical wire `Batch` (Interface/Batch.ts) is:
 `{ id, intent: <label>, targets, operations, preview: { entries, changes, skipped }, digest, revision, expiresAt, origin? }`.
 
 The digest is the fence: sha256 over the targets (path + version) and the operations (find +
-replace); the ingester applies only the proposal whose digest and versions still match.
+replace).
+
+The ingester applies only the proposal whose digest and versions still match.
 
 ## The configuration
 
@@ -79,7 +85,7 @@ replace); the ingester applies only the proposal whose digest and versions still
 ### The policy block (D6)
 
 The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
-`Schema.object` call; the validated shape is `State.Config.policy`:
+`Schema.object` call, and the validated shape is `State.Config.policy`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -88,19 +94,20 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The pass-on is read-only - `read` and `suggest` are automatic; the write/commit/spawn verdicts are
-declared for uniformity and stay the shipped `approve` (the pass-on never writes, commits or
-spawns).
+The pass-on is read-only, so `read` and `suggest` are automatic.
 
-A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-refinement).
+The write/commit/spawn verdicts are declared for uniformity and stay the shipped `approve`, because
+the pass-on never writes, commits, or spawns.
+
+A resolved pack's `policy` section overrides the defaults per action, and that wiring is the next
+refinement.
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## The abstention rule
 
-If the proposal is empty or ambiguous - an unknown kind, no resolved targets, no effective
-operations - the pass-on returns no batch, not an empty one.
+If the proposal is empty or ambiguous, because of an unknown kind, no resolved targets, or no
+effective operations, the pass-on returns no batch, not an empty one.
 
 ## The ledger
 

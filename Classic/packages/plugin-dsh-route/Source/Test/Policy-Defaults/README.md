@@ -1,17 +1,16 @@
 # Policy-Defaults
 
-The policy block (D6) on the routing enforcer: the defaults under the
-`automation` key, the State mapping on `Allow`, the override, and the
-router's read/suggest posture.
+This folder covers the policy block (D6) on the routing enforcer: the defaults under the `automation` key, the State mapping on `Allow`, the override, and the router's read/suggest posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The router reads and suggests -
-it classifies the task type and resolves the route - and never writes,
-commits or spawns. This folder pins the shared block's defaults in the schema
-and on the built State, and it pins the KEY: `automation`, because this
-plugin's `policy` is already the routing policy (roles, allowed models,
-escalation) - a different contract that must stay untouched.
+D6 makes automation a per-plugin allowlist.
+
+The router reads and suggests, because it classifies the task type and resolves the route, and it never writes, commits, or spawns.
+
+This folder pins the shared block's defaults in the schema and on the built State.
+
+It also pins the KEY: `automation`, because this plugin's `policy` is already the routing policy (roles, allowed models, escalation), a different contract that must stay untouched.
 
 ## Scenario
 
@@ -30,15 +29,11 @@ escalation) - a different contract that must stay untouched.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, the schema's own validation (`Validate`), and the
-`dshRoute` service's own State (the enforcer holds it; the test reads it
-through a cast).
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, the schema's own validation (`Validate`), and the `dshRoute` service's own State, which the enforcer holds and the test reads through a cast.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+This folder adds none, because the block and its mapping log nothing and the defaults are the contract, asserted as an object.
 
 ## Expected count
 

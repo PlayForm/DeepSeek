@@ -20,16 +20,21 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH (EXTERNAL DISTILLATION) - THE HUB
 
-> Distilled 2026-10-20 from the user's external research (a third-party analysis of the
-> batch-edit-tool / representation proposal). Persisted as the design's frame of reference. The
-> framing (binding): this research describes the DEEPSEEK HARNESS'S OWN REFACTORING - the evolution
-> from the tool-dispatch shell to the WORKSPACE-CENTRIC RUNTIME powered by the @playform plugin
-> family - not a single plugin's feature. The user's own paradigms (the file-as- process, the
-> representation management, the licenses + eviction rule, the code-block graphs) remain the binding
-> vision; this research's architecture + tightened claims refine the path. This document is the HUB:
-> the research was distilled into granular topic-subdocuments under
-> Documentation/Plans/Representation-First/ - every claim, suggestion, idea, number, and residual
-> survives in them; this hub holds the map by round.
+> Distilled 2026-10-20 from the external research of the user, which is a third-party analysis of
+> the batch-edit-tool and representation proposal, and persisted as the frame of reference of the
+> design.
+>
+> The framing is binding: this research describes the OWN REFACTORING OF THE DEEPSEEK HARNESS, the
+> evolution from the tool-dispatch shell to the WORKSPACE-CENTRIC RUNTIME that the @playform plugin
+> family powers, and not a feature of a single plugin.
+>
+> The own paradigms of the user (the file-as-process, the representation management, the licenses
+> and eviction rule, and the code-block graphs) remain the binding vision, and the architecture and
+> tightened claims of this research refine the path.
+>
+> This document is the HUB: the research was distilled into granular topic sub-documents under
+> Documentation/Plans/Representation-First/, where every claim, suggestion, idea, number, and
+> residual survives, and this hub holds the map by round.
 
 ---
 

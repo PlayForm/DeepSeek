@@ -21,67 +21,74 @@ statuses:
 
 # THE COMPLETION SPEC - THE OVERVIEW AND THE ARCHITECTURE
 
-> The binding spec for the program that takes the family beyond the 2026-10-22 PoC. The user's
-> interview (2026-10-23) is the authority for the decisions below; the per-plugin specs are the
-> deltas against each plugin's own plan (the plans stay the intent owners - this document specifies
-> what "complete" means and in which order). The live matrix: Documentation/Plans/POC-LEDGER.md.
+> The binding spec for the program that takes the family beyond the 2026-10-22 PoC. The interview of
+> the user (2026-10-23) is the authority for the decisions below, and the per-plugin specs are the
+> deltas against the own plan of each plugin (the plans stay the intent owners, and this document
+> specifies what "complete" means and in which order). The live matrix:
+> Documentation/Plans/POC-LEDGER.md.
 
 ## 1. The intent
 
 The family is the workspace runtime of the harness: it observes the workspace, indexes it, and
-suggests the companions a change conventionally requires - across every repository the user works
-in, adapting per workspace, without spending LLM tokens on the index. The user's framing:
+suggests the companions that a change conventionally requires, across every repository that the user
+works in, adapting per workspace and without spending LLM tokens on the index.
 
-- Every workspace, adapted: the conventions are learned or configured per repo, never hardcoded to
-  this monorepo.
-- The index is infrastructure, not a token cost: a background, event-driven indexer with no separate
-  process.
+The framing of the user:
+
+- Every workspace, adapted: the conventions are learned or configured per repo and never hardcoded
+  to this monorepo.
+- The index is infrastructure and not a token cost: a background, event-driven indexer with no
+  separate process.
 - Suggestions are relevance-ranked from the graph, with a quick local decision layer that learns.
-- Automation is fully automatic inside a per-plugin policy the user configures.
+- Automation is fully automatic inside a per-plugin policy that the user configures.
 - Completion is proven live, one plugin at a time.
 
 ## 2. The decisions (the interview, 2026-10-23)
 
-D1 SCOPE - every workspace, adapted. This repo is the primary; other repos get their own packs.
+D1 SCOPE - every workspace, adapted. This repo is the primary, and other repos get their own packs.
 
 D2 PACKS - layered, like a worktree extension. The user-level pack
-`~/.dsh/playform/workspaces/<repo-slug>.yml` is read first; an in-repo `.dsh/pack.yml` overrides it;
-a pack may `extends:` another pack (a deep link override, e.g. a client repo inheriting a base
-workspace pack). A missing pack means silence - the honest default.
+`~/.dsh/playform/workspaces/<repo-slug>.yml` is read first, an in-repo `.dsh/pack.yml` overrides it,
+and a pack may `extends:` another pack (a deep link override, e.g. a client repo that inherits a
+base workspace pack). A missing pack means silence, which is the honest default.
 
-D3 PACK CONTENTS - the families, the companion paths, the thresholds, the repo signature. The
-indexer scope/excludes and the automation policy live beside the pack (same file, separate sections)
-so one file describes one repo.
+D3 PACK CONTENTS - the families, the companion paths, the thresholds, and the repo signature. The
+indexer scope and excludes and the automation policy live beside the pack (same file and separate
+sections), so one file describes one repo.
 
-D4 LEARNING - both: an opt-in bootstrap that reads the repo's own index (Documentation/INDEX.md, the
-package layout) and PROPOSES a pack for approval, then continuous refinement from the observed edits
-(which companions were actually touched after a suggestion). Learning never writes a pack silently.
+D4 LEARNING - both halves: an opt-in bootstrap that reads the own index of the repo
+(Documentation/INDEX.md and the package layout) and PROPOSES a pack for approval, and then
+continuous refinement from the observed edits (which companions were actually touched after a
+suggestion). Learning never writes a pack silently.
 
-D5 INDEXER - no separate process and no separate plugin: the indexer is INFERRED from the event bus.
-A small library defines the trace contract; every plugin carries its own adapter module (in its own
-source) that hooks its events to and from the bus; adapters may read the global scope. The graph
-plugin is the first consumer (the index), the observe hook is the first source (the observation
-stamps). A detached loop (the "daemon trace") coalesces and schedules the work.
+D5 INDEXER - no separate process and no separate plugin, because the indexer is INFERRED from the
+event bus. A small library defines the trace contract, every plugin carries its own adapter module
+(in its own source) that hooks its events to and from the bus, and the adapters may read the global
+scope. The graph plugin is the first consumer (the index) and the observe hook is the first source
+(the observation stamps), while a detached loop (the "daemon trace") coalesces and schedules the
+work.
 
-D6 POLICY - per-plugin allowlists: every plugin declares its actions and, for each, whether it runs
-automatically or waits for approval. The default for writes/spawns/batch commits is approval;
-read-only, indexing, recording and suggestions are automatic.
+D6 POLICY - per-plugin allowlists, where every plugin declares its actions and, for each one,
+whether it runs automatically or waits for approval. The default for writes, spawns, and batch
+commits is approval, and read-only work, indexing, recording, and suggestions are automatic.
 
 D7 RELEVANCE - dual-mode and optional. Programmatic inception (deterministic graph scoring) is the
-default; an AI-assisted inception is an add-on behind the same interface. The AI path is a
-CONFIGURABLE PROVIDER CHAIN, exactly like the task-routing plugin: the harness's own LLM call is the
-first rung, an external provider the next, then the profile-level override, and a local-first-model
-option; the chain is extendable and may hook back into routing. Both orders are supported: pre-warm
-with a small machine call then decide what to graph, or graph first then rank.
+default, and an AI-assisted inception is an add-on behind the same interface. The AI path is a
+CONFIGURABLE PROVIDER CHAIN exactly like the task-routing plugin: the own LLM call of the harness is
+the first rung, an external provider the next, then the profile-level override, and a
+local-first-model option, and the chain is extendable and may hook back into routing. Both orders
+are supported: pre-warm with a small machine call and then decide what to graph, or graph first and
+then rank.
 
 D8 DECISION MODEL - a heuristic scorer first, with every heuristic and every decision pickable and
-logged so the family can learn from them; the model adapts continuously. A local small model may
-replace the scorer later behind the same interface.
+logged so that the family can learn from them, and the model adapts continuously. A local small
+model may replace the scorer later behind the same interface.
 
-D9 DELIVERY - one note per family, at most three notes per turn per agent, every knob configurable.
+D9 DELIVERY - one note per family, at most three notes per turn per agent, and every knob
+configurable.
 
-D10 SPEC APPROACH - complete the plans as written; the plugins that need a re-spec are listed in
-section 6 and the user decides each.
+D10 SPEC APPROACH - complete the plans as written, and the plugins that need a re-spec are listed in
+section 6 for the user to decide each one.
 
 ## 3. The architecture
 
@@ -89,18 +96,20 @@ section 6 and the user decides each.
 
     source plugin --adapter--> trace bus --adapter--> consumer plugin
 
-- `lib-dsh-trace` (new, Classic + ETS): the trace vocabulary - the event names, the envelope
-  (`{ trace, kind, at, actor, payload }`), the adapter registration, the coalescing key, the
-  detached-loop contract. Pure, no harness dependency.
-- Every plugin's `Source/Trace/` folder: `Contract.ts` (the events it emits/consumes), `Adapter.ts`
-  (the hook-up), and optionally `Detach.ts` (the deferred work). The adapter lives in the adapting
-  plugin's source, per the user's "Plugin B's adapter functions live as an extension inside Plugin
-  A".
-- The graph plugin's `Source/Trace/` consumes `fs/observed`, `tool/executed`, `session/started` and
-  emits `graph/indexed`, `graph/invalidated`; the observe hook emits the observation stamps; the
-  journal emits the pre-image events; the suggesters consume `graph/neighborhood`.
-- The "daemon" is the detached loop the trace contract standardises: a coalescing queue (no timers
-  in the hot path), one in-flight task per key, fail-open, flushable for smokes.
+- `lib-dsh-trace` (new, Classic + ETS): the trace vocabulary, which holds the event names, the
+  envelope (`{ trace, kind, at, actor, payload }`), the adapter registration, the coalescing key,
+  and the detached-loop contract. It is pure and has no harness dependency.
+- The `Source/Trace/` folder of every plugin: `Contract.ts` (the events it emits and consumes),
+  `Adapter.ts` (the hook-up), and optionally `Detach.ts` (the deferred work). The adapter lives in
+  the source of the adapting plugin, per the "Plugin B's adapter functions live as an extension
+  inside Plugin A" of the user.
+- The `Source/Trace/` of the graph plugin consumes `fs/observed`, `tool/executed`, and
+  `session/started` and emits `graph/indexed` and `graph/invalidated`, the observe hook emits the
+  observation stamps, the journal emits the pre-image events, and the suggesters consume
+  `graph/neighborhood`.
+- The "daemon" is the detached loop that the trace contract standardises: a coalescing queue with no
+  timers in the hot path, one in-flight task per key, fail-open behavior, and a flushable form for
+  the smokes.
 
 ### 3.2 The packs (D2, D3, D4)
 
@@ -108,33 +117,36 @@ section 6 and the user decides each.
     <repo>/.dsh/pack.yml                           (repo layer, overrides)
     pack.extends: <slug>                           (inheritance, deep link overrides)
 
-Resolution: load the user layer, then the repo layer, then `extends` chains (cycle-guarded), then
-merge per section (families by id, companions by path, thresholds scalar). A pack declares:
-`signature` (the marker files that identify the repo), `families` (the companion sets), `indexer`
-(scope, excludes, languages, maxFiles), `policy` (the allowlists), `learning` (the proposal
-settings). The built-in packs for this monorepo ship as data; a repo without a pack gets silence and
-the learner may propose one.
+Resolution: load the user layer, then the repo layer, then the `extends` chains (cycle-guarded), and
+then merge per section (families by id, companions by path, and thresholds as a scalar).
+
+A pack declares `signature` (the marker files that identify the repo), `families` (the companion
+sets), `indexer` (scope, excludes, languages, and maxFiles), `policy` (the allowlists), and
+`learning` (the proposal settings).
+
+The built-in packs for this monorepo ship as data, a repo without a pack gets silence, and the
+learner may propose one.
 
 ### 3.3 The relevance and decision layer (D7, D8)
 
     candidate companions -> graph distance score -> heuristic decision -> note
                                             \-> optional AI inception (one small call)
 
-- The scorer ranks a family's companions by graph distance from the call path (definition, importer,
-  dependency, doc section), by prior, by recency, and by the learned accept rate.
-- The decision is a table of pickable heuristics (`scope`, `graph`, `literal`, `history`,
-  `accept-rate`), each with a weight and a logged decision record; the learned weights persist in
-  the pattern service (a later wave moves them to `ctx.storage`).
-- The AI inception is off by default; when on, it asks a small local model for the missing
-  companions and records the answer as a candidate (never as an emission without the gate).
+- The scorer ranks the companions of a family by graph distance from the call path (definition,
+  importer, dependency, and doc section), by prior, by recency, and by the learned accept rate.
+- The decision is a table of pickable heuristics (`scope`, `graph`, `literal`, `history`, and
+  `accept-rate`), each with a weight and a logged decision record, and the learned weights persist
+  in the pattern service (a later wave moves them to `ctx.storage`).
+- The AI inception is off by default, and when it is on it asks a small local model for the missing
+  companions and records the answer as a candidate and never as an emission without the gate.
 
 ### 3.4 The policy and the activation loop (D6, D10)
 
-- Each plugin's `Config` gains a `policy` block (per action: `auto` | `approve`), defaulted from the
-  pack's `policy` section. The tools and listeners consult it before acting.
+- The `Config` of each plugin gains a `policy` block (per action: `auto` | `approve`) defaulted from
+  the `policy` section of the pack, and the tools and listeners consult it before they act.
 - Activation is one plugin at a time: flip its profile row, restart, dispatch a subagent that runs
-  the plugin's live test plan (Documentation/Testing/<package>.md) plus its smoke folders, collect
-  the report, then the next plugin. The 35 disabled rows are the queue.
+  the live test plan of the plugin (Documentation/Testing/<package>.md) plus its smoke folders,
+  collect the report, and then go to the next plugin. The 35 disabled rows are the queue.
 
 ## 4. The waves
 
@@ -151,20 +163,20 @@ the learner may propose one.
 
 ## 5. The acceptance bar
 
-A plugin is COMPLETE when all four hold:
+A plugin is COMPLETE when all four conditions hold:
 
-1. Every non-later-stage item of its own plan is implemented (the plan's "later stage" items are
-   listed, not silently dropped).
+1. Every non-later-stage item of its own plan is implemented, and the "later stage" items of the
+   plan are listed and not silently dropped.
 2. Its smoke folders pass with byte-exact ledger strings, and every new capability has a folder (the
    counts in the README match the printed counts).
-3. It builds in both trees (Classic and its ETS twin) with the repo's full chain.
+3. It builds in both trees (Classic and its ETS twin) with the full chain of the repo.
 4. Its live test plan (Documentation/Testing/<package>.md) has been run against the running app and
-   the report is in the ledger; the user has not rejected the behaviour.
+   the report is in the ledger, and the user has not rejected the behavior.
 
 ## 6. The re-specs (D10 - approved 2026-10-23)
 
-All eleven are approved: the plan's original mechanism is replaced by the one named below, and the
-plugin's own plan document carries a one-line pointer to this table.
+All eleven are approved: the original mechanism of the plan is replaced by the one named below, and
+the own plan document of the plugin carries a one-line pointer to this table.
 
 | Package                        | Why the plan's mechanism no longer fits                                                                       | Proposed re-spec                                                                                                         |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -183,22 +195,25 @@ plugin's own plan document carries a one-line pointer to this table.
 
 ## 7. The invariants (never violated by a wave)
 
-1. Ledger strings are byte-exact contracts; a new line is documented in SCHEME and the README.
-2. Content changes only through the write/raw-write/edit tools; the terminal is for commands.
-3. The two trees never share a dependency graph; the ETS twins mirror every behaviour change.
-4. A plugin ships silence-first unless its wave's activation says otherwise.
-5. The user commits; the lanes report READY-TO-COMMIT.
+1. The ledger strings are byte-exact contracts, and a new line is documented in SCHEME and the
+   README.
+2. Content changes only through the write, raw-write, and edit tools, and the terminal is for
+   commands.
+3. The two trees never share a dependency graph, and the ETS twins mirror every behavior change.
+4. A plugin ships silence-first unless the activation of its wave says otherwise.
+5. The user commits, and the lanes report READY-TO-COMMIT.
 
 ## 8. Open decisions (the next interview round)
 
-Resolved 2026-10-23: all eleven re-specs approved; the AI inception is a configurable provider chain
-(the harness's own LLM call first, then an external provider, then the profile override, a
-local-first option, extendable and hooking back into routing); the default allowlist is auto =
-read/index/record/suggest, approve = writes/spawns/commits; the user restarts the app.
+Resolved 2026-10-23: all eleven re-specs are approved; the AI inception is a configurable provider
+chain (the own LLM call of the harness first, then an external provider, then the profile override,
+and a local-first option, extendable and hooking back into routing); the default allowlist is auto =
+read/index/record/suggest and approve = writes/spawns/commits; and the user restarts the app.
 
 Still open:
 
-1. The trace envelope's exact shape and the adapter registration API (a service, a plain module, or
-   both).
-2. The pack schema's exact keys and the `extends` semantics (deep merge vs section replace).
-3. The learner's proposal UX (a note, a tool, a panel) and its approval gate.
+1. The exact shape of the trace envelope and the adapter registration API (a service, a plain
+   module, or both).
+2. The exact keys of the pack schema and the `extends` semantics (deep merge against section
+   replace).
+3. The proposal UX of the learner (a note, a tool, or a panel) and its approval gate.

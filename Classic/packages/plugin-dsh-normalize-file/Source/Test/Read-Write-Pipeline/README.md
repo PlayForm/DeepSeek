@@ -1,16 +1,14 @@
 # Read-Write-Pipeline
 
-What this test verifies.
+This page records what the test verifies.
 
 ## Intent
 
-The read -> count -> write pipeline through Factory.Write (the shared
-executor): what one tool call actually does to a file. This is its own
-folder because the pipeline is the whole product of this flavor - resolve,
-read, the six-fold transform, the write-intent waterfall, the fs/observed
-emit, the outcome metadata, the count ledger line and the P5 journal record
-- plus the config knob that flows into it (the volatile replacement). The
-source suite's Run 1b, Run 1c and Run 6, moved verbatim.
+The read -> count -> write pipeline runs through Factory.Write, the shared executor, and it defines what one tool call actually does to a file.
+
+This folder stands alone because the pipeline is the whole product of this flavor: resolve, read, the six-fold transform, the write-intent waterfall, the fs/observed emit, the outcome metadata, the count ledger line, and the P5 journal record, plus the config knob that flows into it (the volatile replacement).
+
+The folder holds the source suite's Run 1b, Run 1c, and Run 6, moved verbatim.
 
 ## Scenario
 
@@ -56,16 +54,17 @@ source suite's Run 1b, Run 1c and Run 6, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx (read/write fs seams serving an in-memory Files map) +
-the REAL factory + the REAL normalize-file apply. Run 1b writes the
-source suite's All6 fixture (em dash, curly quotes, ellipsis, NBSP,
-zero-width space, fullwidth A) to `/tmp/normalize-file-smoke-fixture.txt`
-via the in-memory map; the `Exec` helper builds the call identity. Run 1c
-reads `Furnace.PendingJournal` - the cumulative counter, at 1 after Run 1b's
-write (the only journal-producing call made in this folder before Run 6, so
-Run 6's record is #2 exactly as in the source suite). The durable ledger is
-cleared at folder start and before Run 6; the 10ms settle waits before every
-ledger read are kept.
+The harness uses a fake ctx whose read/write fs seams serve an in-memory Files map, the REAL factory, and the REAL normalize-file apply.
+
+Run 1b writes the source suite's All6 fixture (em dash, curly quotes, ellipsis, NBSP, zero-width space, fullwidth A) to `/tmp/normalize-file-smoke-fixture.txt` through the in-memory map.
+
+The `Exec` helper builds the call identity.
+
+Run 1c reads `Furnace.PendingJournal`, the cumulative counter, which stands at 1 after Run 1b's write.
+
+That write is the only journal-producing call made in this folder before Run 6, so Run 6's record is #2 exactly as in the source suite.
+
+The harness clears the durable ledger at folder start and before Run 6, and it keeps the 10ms settle waits before every ledger read.
 
 ## Expected ledger strings (byte-exact)
 
@@ -76,10 +75,8 @@ ledger read are kept.
 
 ## Edge cases
 
-- N>0 is the only journaling and counting path; the folder's no-op siblings
-  (count 0) live in No-Op-Rule.
-- The six transforms apply in the family order in one pass (the single
-  write's content is the combined proof).
+- N>0 is the only journaling and counting path, and the folder's no-op siblings with count 0 live in No-Op-Rule.
+- The six transforms apply in the family order in one pass, so the single write's content is the combined proof.
 - The signal must flow from the exec into writeText unchanged.
 
 ## Expected count

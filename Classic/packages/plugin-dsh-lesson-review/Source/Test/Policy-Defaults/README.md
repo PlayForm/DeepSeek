@@ -1,15 +1,16 @@
 # Policy-Defaults
 
-The policy block (D6) and the knob contract: the defaults, the merge, the
+This folder covers the policy block (D6) and the knob contract: the defaults, the merge, the
 proposer posture, and the fail-loud checks.
 
 ## Intent
 
-`write: approve` is the single most important default in this package - it is
-what makes the review a PROPOSER rather than an autonomous editor, and it is the
-one default a future refactor must not quietly flip. The knob checks are the
-other half: a reversed stale/archive pair or a `NaN` cadence must fail AT LOAD,
-where the message names the knob, not at the first review where the symptom is a
+`write: approve` is the single most important default in this package, because it makes the review
+a PROPOSER instead of an autonomous editor, and it is the one default that a future refactor must
+not quietly flip.
+
+The knob checks are the other half, because a reversed stale/archive pair or a `NaN` cadence must
+fail AT LOAD, where the message names the knob, and not at the first review, where the symptom is a
 silent no-op.
 
 ## Scenario
@@ -28,13 +29,14 @@ silent no-op.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the schema's own
-validation (`LessonService.Config`), and the `Make` constructor mount. No
-filesystem is touched by this folder.
+The fixtures are the shared Harness with the real built `Target/Library.js` class, the own
+validation of the schema (`LessonService.Config`), and the `Make` constructor mount.
+
+This folder touches no filesystem.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the defaults are the contract and are asserted as objects.
+None are new, because the defaults are the contract that the checks assert as objects.
 
 ## Expected count
 

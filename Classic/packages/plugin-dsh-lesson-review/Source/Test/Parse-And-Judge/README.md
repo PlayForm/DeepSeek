@@ -1,22 +1,23 @@
 # Parse-And-Judge
 
-The gate between a model's reply and the corpus: the strict parse, then the
+This folder covers the gate between a reply of the model and the corpus: the strict parse, then the
 deterministic acceptance rules.
 
 ## Intent
 
-A lenient parse makes a broken reply look like a quiet session; a missing rule
-makes a plausible artifact land in the corpus. This folder pins the closed
-operation set, the three parse tolerances (a fence, surrounding prose, a missing
-`ops`), and every judge rule with its own id - because a rule with no test is a
-rule the next refactor deletes.
+A lenient parse makes a broken reply look like a quiet session, and a missing rule makes a plausible
+artifact land in the corpus.
+
+This folder pins the closed operation set, the three parse tolerances for a fence, surrounding
+prose, and a missing `ops`, and every judge rule with its own id, because a rule with no test is a
+rule that the next refactor deletes.
 
 ## Scenario
 
 Parse:
 
 - "R1: a fenced reply parses to its operations" - a ```` ```json ```` block is
-  tolerated, the note survives.
+  tolerated, and the note survives.
 - "R2: `Nothing to save.` is an empty proposal, not an error".
 - "R3: an unknown operation kind is a parse FAILURE" - `rewrite` is not in the
   closed set.
@@ -45,15 +46,17 @@ Judge:
 
 ## Fixtures
 
-The shared Harness plus the built `Target/Function/Parse.js` and
-`Target/Function/Judge.js` imported directly, with a literal two-predicate
-corpus (`exists`, `pinned`) for the rule assertions. J12/J13 go through the real
-service so the store-plus-directory corpus wiring is exercised, not assumed.
+The fixtures are the shared Harness plus the built `Target/Function/Parse.js` and
+`Target/Function/Judge.js` imported directly, with a literal two-predicate corpus of `exists` and
+`pinned` for the rule assertions.
+
+J12 and J13 go through the real service, so the store-plus-directory corpus wiring is exercised and
+not assumed.
 
 ## Expected ledger strings (byte-exact)
 
-`Pin` logs `lesson: pinned pinned-skill` (message-only form). The folder asserts
-the verdict, not the line.
+`Pin` logs `lesson: pinned pinned-skill` in the message-only form, and the folder asserts the
+verdict and not the line.
 
 ## Expected count
 

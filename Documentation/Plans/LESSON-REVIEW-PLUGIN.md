@@ -52,31 +52,38 @@ Hermes runs **two loops**, and they are different mechanisms with different cost
 | the **post-turn review fork** | every N turns, after the turn ends        | one bounded model round trip (~30K tokens)                     | memory (`USER.md`/`MEMORY.md`) and the skill corpus                     |
 | the **curator**               | every `interval_hours` (7 days) when idle | deterministic pass = 0 tokens; the consolidation pass = opt-in | transitions, archives, consolidations, an audit ledger, per-run reports |
 
-This repo already has the _substrate_ both loops need - `~/.dsh/skills/` with a `STANDARD.md`,
-`~/.dsh/AGENTS.md`, the `agent/status` + `agent.runMaintenance` idle phase, a hand-buildable
-`ctx.llm.stream`, the D6 policy block, and the `~/.dsh/<identity>.log` ledger convention - but no
-loop that USES it. The proposal is therefore two packages, split the way the family splits
-everything:
+This repo already has the _substrate_ that both loops need: `~/.dsh/skills/` with a `STANDARD.md`,
+`~/.dsh/AGENTS.md`, the `agent/status` and `agent.runMaintenance` idle phase, a hand-buildable
+`ctx.llm.stream`, the D6 policy block, and the `~/.dsh/<identity>.log` ledger convention.
 
-- **`@playform/plugin-dsh-lesson-review`** (service `ctx.lesson`) - the review: counter, digest,
-  prompt, strict parse, deterministic judge, guarded write, usage store, lifecycle, reports.
-- **`@playform/hook-dsh-lesson-nudge`** - the trigger: `agent/status` → `idle` →
+What it does not have is a loop that USES that substrate.
+
+The proposal is therefore two packages, split the way the family splits everything:
+
+- **`@playform/plugin-dsh-lesson-review`** (service `ctx.lesson`) holds the review: the counter, the
+  digest, the prompt, the strict parse, the deterministic judge, the guarded write, the usage store,
+  the lifecycle, and the reports.
+- **`@playform/hook-dsh-lesson-nudge`** holds the trigger: `agent/status` → `idle` →
   `agent.runMaintenance`.
 
-Both ship **disabled**, both are Classic-tree only for now, and the review **proposes** by default:
-`policy.write: approve` means an accepted lesson is queued in `~/.dsh/lesson/pending.jsonl`, never
-published. That single default is what makes an unattended reviewer trustworthy.
+Both ship **disabled**, both are Classic-tree only for now, and the review **proposes** by default,
+because `policy.write: approve` means an accepted lesson is queued in `~/.dsh/lesson/pending.jsonl`
+and never published.
+
+That single default is what makes an unattended reviewer trustworthy.
 
 ## 1. How Hermes does the post-turn review
 
 ### 1.1 The trigger is a counter, not a timer
 
 `agent/turn_context.py:758` (`_tick_memory_nudge`) advances a per-agent counter and returns true
-when `_turns_since_memory >= _memory_nudge_interval`. The defaults are `memory.nudge_interval: 10`
-(`hermes_cli/config_defaults.py:1321`) and `skills.creation_nudge_interval: 15`
-(`cli-config.yaml.example:1169`). The skill nudge is measured in ITERATIONS, the memory nudge in
-USER TURNS - two counters, because a tool-heavy turn deserves a skill review and a chat-only turn
-does not.
+when `_turns_since_memory >= _memory_nudge_interval`.
+
+The defaults are `memory.nudge_interval: 10` (`hermes_cli/config_defaults.py:1321`) and
+`skills.creation_nudge_interval: 15` (`cli-config.yaml.example:1169`).
+
+The skill nudge is measured in ITERATIONS and the memory nudge in USER TURNS, which is two counters
+because a tool-heavy turn deserves a skill review and a chat-only turn does not.
 
 At the end of the turn, `agent/turn_finalizer.py:795-799` checks
 `if (_should_review_memory or _should_review_skills)` and calls
@@ -84,56 +91,72 @@ At the end of the turn, `agent/turn_finalizer.py:795-799` checks
 
 ### 1.2 The review is a FORK of the live agent
 
-`agent/background_review.py:1328` (`spawn_background_review_thread`) returns `(target, prompt)`;
-`run_agent.py:757-820` builds the thread. The fork is a real `AIAgent` (`build_cache_parity_fork`,
-`background_review.py:969`) that inherits the parent's provider, model, credentials and cached
-system prompt, so on the SAME model it replays the transcript as warm cache reads. When
-`auxiliary.background_review.{provider,model}` names a different model the cache is cold anyway, so
-`_digest_history` (`:332`) replays a compact digest instead.
+`agent/background_review.py:1328` (`spawn_background_review_thread`) returns `(target, prompt)`, and
+`run_agent.py:757-820` builds the thread.
+
+The fork is a real `AIAgent` (`build_cache_parity_fork`, `background_review.py:969`) that inherits
+the provider, model, credentials, and cached system prompt of the parent, so on the SAME model it
+replays the transcript as warm cache reads.
+
+When `auxiliary.background_review.{provider,model}` names a different model the cache is cold
+anyway, so `_digest_history` (`:332`) replays a compact digest instead.
 
 Three properties make the fork safe, and all three are worth copying:
 
-1. **The transcript is a SNAPSHOT, not a read.** The fork is handed `messages_snapshot`; it never
-   re-reads the session. The live conversation and its prompt cache are never touched.
-2. **The tool surface is a DISPATCH-side whitelist** (`_review_tool_whitelist`, `:1092`): the memory
-   and skills toolsets plus `read_file`/`search_files`; write tools (`write_file`, `patch`,
-   `terminal`) stay denied, so autonomous maintenance can only go through `skill_manage`'s
-   validation. The advertised `tools[]` stays byte-identical to the parent's for cache parity.
-3. **It is bounded and cancellable.** `_REVIEW_MAX_ITERATIONS = 16` (`:173`), an aggregate input
-   budget of 75% of the review model's window capped at 600K tokens (`:180-182`), a cancellation
-   handshake (`_BackgroundReviewRun`, `:28`) that preempts the fork when a live turn arrives, and -
-   on a managed local endpoint - a deferred queue that dispatches the review when the machine is
-   quiet (`agent/review_idle_queue.py`).
+1. **The transcript is a SNAPSHOT, not a read.**
+
+    The fork is handed `messages_snapshot` and it never re-reads the session, so the live
+    conversation and its prompt cache are never touched.
+
+2. **The tool surface is a DISPATCH-side whitelist.**
+
+    `_review_tool_whitelist` (`:1092`) holds the memory and skills toolsets plus `read_file` and
+    `search_files`, while the write tools (`write_file`, `patch`, `terminal`) stay denied so that
+    autonomous maintenance can only go through the validation of `skill_manage`, and the advertised
+    `tools[]` stays byte-identical to the parent's for cache parity.
+
+3. **It is bounded and cancellable.**
+
+    `_REVIEW_MAX_ITERATIONS = 16` (`:173`), an aggregate input budget of 75% of the review model's
+    window capped at 600K tokens (`:180-182`), a cancellation handshake (`_BackgroundReviewRun`,
+    `:28`) that preempts the fork when a live turn arrives, and, on a managed local endpoint, a
+    deferred queue that dispatches the review when the machine is quiet
+    (`agent/review_idle_queue.py`).
 
 ### 1.3 What the prompt actually says
 
-The prompt is the product. `agent/background_review.py` carries five blocks: `_MEMORY_ROUTING_BLOCK`
-(`:370`), `_LESSON_LAYER_BLOCK` (`:393`), `_DO_NOT_CAPTURE_BLOCK` (`:423`), `_SKILL_REVIEW_PROMPT`
-(`:448`), `_COMBINED_REVIEW_PROMPT` (`:519`). The rules that matter:
+The prompt is the product.
+
+`agent/background_review.py` carries five blocks: `_MEMORY_ROUTING_BLOCK` (`:370`),
+`_LESSON_LAYER_BLOCK` (`:393`), `_DO_NOT_CAPTURE_BLOCK` (`:423`), `_SKILL_REVIEW_PROMPT` (`:448`),
+and `_COMBINED_REVIEW_PROMPT` (`:519`).
+
+The rules that matter:
 
 - **Be active**: "most sessions produce at least one skill update... A pass that does nothing is a
   missed learning opportunity, not a neutral outcome."
-- **Target shape**: class-level skills, a SKILL.md of always-on rules, a small `references/` set of
-  topical depth - "not a flat list of narrow one-session skills, and not an umbrella hoarding a
-  references/ file per session."
-- **Procedure first; a pitfall is a rule + one clause of WHY**; no PR/issue numbers, dates or quoted
-  user text as content; the same lesson twice is ONE rule; fix the sentence that misled rather than
-  appending `UPDATE: actually...`.
-- **A preference order**: patch a loaded skill → patch an existing umbrella → add a support file →
-  create a class-level umbrella. The name must not be a PR number, error string, codename, or a
-  `fix-X`/`debug-Y` artifact.
-- **Read-before-write, ENFORCED** by `skill_manage`: a patch must be based on a `skill_view` taken
-  DURING the review; content quoted earlier in the transcript does not count.
+- **Target shape**: class-level skills, a SKILL.md of always-on rules, and a small `references/` set
+  of topical depth, which is "not a flat list of narrow one-session skills, and not an umbrella
+  hoarding a references/ file per session."
+- **Procedure first; a pitfall is a rule plus one clause of WHY**; no PR or issue numbers, dates, or
+  quoted user text as content; the same lesson twice is ONE rule; fix the sentence that misled
+  rather than appending `UPDATE: actually...`.
+- **A preference order**: patch a loaded skill, then patch an existing umbrella, then add a support
+  file, and then create a class-level umbrella. The name must not be a PR number, an error string, a
+  codename, or a `fix-X` or `debug-Y` artifact.
+- **Read-before-write, ENFORCED** by `skill_manage`, because a patch must be based on a `skill_view`
+  taken DURING the review and content quoted earlier in the transcript does not count.
 - **Never capture**: environment-dependent failures, negative claims about tools, transient errors
   that resolved, one-off task narratives, and unresolved failures written up as a "reliable
   workflow".
 
 ### 1.4 The two stores
 
-`_MEMORY_ROUTING_BLOCK` is explicit: `USER.md` (who the user is) vs `MEMORY.md` (facts about the
-environment), and "one fact goes to ONE store, never both". The failure it prevents is documented in
-the block itself: the reviewer wrote profile data into `MEMORY.md` and the same lesson into both
-stores until both hit their size limits.
+`_MEMORY_ROUTING_BLOCK` is explicit about `USER.md` (who the user is) against `MEMORY.md` (facts
+about the environment), and it says "one fact goes to ONE store, never both".
+
+The failure it prevents is documented in the block itself, where the reviewer wrote profile data
+into `MEMORY.md` and the same lesson into both stores until both hit their size limits.
 
 ## 2. How Hermes does the curator
 
@@ -154,14 +177,17 @@ things that are easy to get wrong:
 | reports                 | `~/.hermes/logs/curator/<ts>/{run.json,REPORT.md}` per run                                                                                                                                                                                       |
 | the ledger is telemetry | "if writing an entry fails, the mutation still goes through"                                                                                                                                                                                     |
 
-The single most transferable idea is the last row: **the audit trail must never be a gate**. A
-maintenance pass that refuses to run because it could not write its own log is a pass that stops
+The single most transferable idea is the last row: **the audit trail must never be a gate**.
+
+A maintenance pass that refuses to run because it could not write its own log is a pass that stops
 running.
 
 ## 3. The translation: three rules change owner
 
-A literal port would be wrong, because this harness is not that one. Three Hermes rules have a
-different owner here, and the ported prompt says so instead of restating them:
+A literal port would be wrong, because this harness is not that one.
+
+Three Hermes rules have a different owner here, and the ported prompt says so instead of restating
+them:
 
 | Hermes rule                                        | This repo's owner                                                                                     | Consequence for the plugin                                             |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -171,13 +197,13 @@ different owner here, and the ported prompt says so instead of restating them:
 
 Two more differences are structural rather than semantic:
 
-- **No tool loop.** The Hermes fork is an agent with 16 iterations of `skill_view`/`skill_manage`.
-  Here the review is ONE `ctx.llm.stream` request whose reply is a strict JSON proposal, judged in
-  process. That trades flexibility for auditability: the model cannot wander, and every write is an
-  operation the judge has already seen.
+- **No tool loop.** The Hermes fork is an agent with 16 iterations of `skill_view` and
+  `skill_manage`, while here the review is ONE `ctx.llm.stream` request whose reply is a strict JSON
+  proposal that is judged in process. That trades flexibility for auditability, because the model
+  cannot wander and every write is an operation that the judge has already seen.
 - **No write path at all by default.** Hermes writes through `skill_manage` under
-  `skills.write_approval` (off by default). Here the D6 `policy.write: approve` queues instead, and
-  `Accept` is the only path into the corpus.
+  `skills.write_approval`, which is off by default, while here the D6 `policy.write: approve` queues
+  instead and `Accept` is the only path into the corpus.
 
 ## 4. The proposal
 
@@ -188,10 +214,11 @@ Two more differences are structural rather than semantic:
 | `@playform/plugin-dsh-lesson-review` | Plugin (service) | `ctx.lesson`   | counter, digest, prompt, parse, judge, write fence, usage store, queue, lifecycle, reports |
 | `@playform/hook-dsh-lesson-nudge`    | Hook             | `agent/status` | the idle edge, the service probe, the per-session cap                                      |
 
-Names read as the family's `@`-sentences: **Plugin @ DSH @ Review @ Lesson** and **Hook @ DSH @
-Nudge @ Lesson**. The domain word is "lesson" (a rule + its why), not "skill", because the artifact
-lands in either store - the corpus OR the agreement - and the plugin should not claim to own the
-corpus.
+The names read as the family's `@`-sentences: **Plugin @ DSH @ Review @ Lesson** and **Hook @ DSH @
+Nudge @ Lesson**.
+
+The domain word is "lesson" (a rule plus its why) and not "skill", because the artifact lands in
+either store, the corpus OR the agreement, and the plugin should not claim to own the corpus.
 
 ### 4.2 The surface mapping
 
@@ -218,25 +245,31 @@ idle edge → Tick(due?) → runMaintenance(signal) → Review(snapshot)
 ```
 
 Every arrow has a degradation: no `llm` service, no route, a provider throw, an unparseable reply,
-an empty snapshot - each is an outcome class (`unavailable` / `failed` / `nothing` / `proposed` /
-`applied`) and one ledger line. None of them throws into the caller's maintenance task.
+and an empty snapshot.
+
+Each one is an outcome class (`unavailable` / `failed` / `nothing` / `proposed` / `applied`) and one
+ledger line, and none of them throws into the maintenance task of the caller.
 
 ### 4.4 The judge: the part that makes it trustworthy
 
-Thirteen deterministic rules, one id each (`SCHEME.md` §5): `name-shape`, `name-artifact`, `exists`,
-`missing`, `pinned`, `frontmatter`, `narrative`, `negative-claim`, `support-path`,
-`absorbed-missing`, `absorbed-self`, `agreement-long`, `duplicate`. The rule that earns its keep is
-`negative-claim`: "the formatter is broken" is refused, "the formatter is broken until `npm install`
-runs in the root" is accepted. That is the difference between a constraint the agent will cite
-against itself for months and a lesson.
+Thirteen deterministic rules carry one id each (`SCHEME.md` §5): `name-shape`, `name-artifact`,
+`exists`, `missing`, `pinned`, `frontmatter`, `narrative`, `negative-claim`, `support-path`,
+`absorbed-missing`, `absorbed-self`, `agreement-long`, and `duplicate`.
+
+The rule that earns its keep is `negative-claim`: "the formatter is broken" is refused, while "the
+formatter is broken until `npm install` runs in the root" is accepted.
+
+That is the difference between a constraint that the agent will cite against itself for months and a
+lesson.
 
 ### 4.5 The lifecycle
 
-`Curate` keeps Hermes' four protections and drops the snapshot machinery for now: pinned entries
-never move; only `createdBy: agent` entries are in jurisdiction; a zero-use entry keeps
-`neverUsedGraceDays`; and an archive is a rename into `.archive/`, which `Restore` undoes. The
-`created_by` field is documented as a POLICY FLAG, not a provenance claim - the same reading Hermes
-settled on.
+`Curate` keeps the four protections of Hermes and drops the snapshot machinery for now: pinned
+entries never move, only `createdBy: agent` entries are in jurisdiction, a zero-use entry keeps
+`neverUsedGraceDays`, and an archive is a rename into `.archive/` that `Restore` undoes.
+
+The `created_by` field is documented as a POLICY FLAG and not as a provenance claim, which is the
+same reading that Hermes settled on.
 
 ## 5. The mockup that exists on disk
 
@@ -255,7 +288,7 @@ Classic/packages/hook-dsh-lesson-nudge/
   Source/Test/{Harness.ts, Listen-And-Nudge}
 ```
 
-Verified in this checkout (the commands and their real results):
+Verified in this checkout with the commands and their real results:
 
 | Command                                                               | Result                                                              |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
@@ -265,42 +298,58 @@ Verified in this checkout (the commands and their real results):
 | the hook folder                                                       | **10 PASS**                                                         |
 | `pnpm test` (the aggregate runner)                                    | picks all 7 folders up by directory; every count matches its README |
 
-The smokes are the contract, in the family's shape: each folder's `README.md` declares its
+The smokes are the contract in the family's shape: the `README.md` of each folder declares its
 `## Expected count`, and `Maintain/Run/Smokes/Function/Run.mjs` fails the run when the printed
-`N PASS - <Name>` disagrees - the vacuously-green guard.
+`N PASS - <Name>` disagrees, which is the vacuously-green guard.
 
 ## 6. The open seams (honest list)
 
-1. **The live-session projection** (`Function/Snapshot`). `agent.session.surface` accessors were NOT
-   verified against a live host in this checkout. The module probes four candidate shapes, guards
-   every read, and returns `[]` - the review then reports `unavailable (empty snapshot)`. This is
-   the one place a harness upgrade can change behaviour, and it is one file.
-2. **The auxiliary-call classification.** `GenerateOptions.purpose` accepts only
-   `'compaction' | 'session-title'`; a lesson review has no slot, so the request leaves `purpose`
-   unset. Giving it one is an upstream harness change.
-3. **The KV storage domain.** `domain: "lesson"` is declared; the JSON sidecar is what is wired. The
-   family's PoC posture is KV-primary with the JSON fallback (the pattern service's shape).
-4. **Consolidation.** `consolidate` is declared and unwired; the deterministic pass is the shipped
-   maintenance.
-5. **The report root is not the ledger.** Two artifacts, two purposes: the ledger answers "did it
-   activate / what happened", the report answers "why was this refused". Neither gates a mutation.
+1. **The live-session projection.**
+
+    The `agent.session.surface` accessors of `Function/Snapshot` were NOT verified against a live
+    host in this checkout, so the module probes four candidate shapes, guards every read, and
+    returns `[]`, and the review then reports `unavailable (empty snapshot)`.
+
+    This is the one place where a harness upgrade can change behaviour, and it is one file.
+
+2. **The auxiliary-call classification.**
+
+    `GenerateOptions.purpose` accepts only `'compaction' | 'session-title'`, and a lesson review has
+    no slot, so the request leaves `purpose` unset and giving it one is an upstream harness change.
+
+3. **The KV storage domain.**
+
+    `domain: "lesson"` is declared and the JSON sidecar is what is wired, while the family's PoC
+    posture is KV-primary with the JSON fallback in the shape of the pattern service.
+
+4. **Consolidation.**
+
+    `consolidate` is declared and unwired, and the deterministic pass is the shipped maintenance.
+
+5. **The report root is not the ledger.**
+
+    Two artifacts serve two purposes: the ledger answers "did it activate / what happened" and the
+    report answers "why was this refused", and neither gates a mutation.
 
 ## 7. The ETS twins (planned)
 
-The family's rule is one contract, two trees; 47 of the 101 packages have `ets-*` twins. These two
-do not yet, and the parity work is not a transliteration:
+The rule of the family is one contract and two trees, and 47 of the 101 packages have `ets-*` twins.
 
-- the service's class + `Service` base maps to an Effect `Layer` + service tag, and its `Promise`
-  returns become `Effect` envelopes;
-- the judge is pure and ports unchanged (it is a function of `(proposal, corpus)`);
-- the hook's listener maps to an Effect-wrapped handler registered through the same
+These two do not have a twin yet, and the parity work is not a transliteration:
+
+- the class and `Service` base of the service map to an Effect `Layer` and a service tag, and its
+  `Promise` returns become `Effect` envelopes;
+- the judge is pure and ports unchanged, because it is a function of `(proposal, corpus)`;
+- the listener of the hook maps to an Effect-wrapped handler that registers through the same
   `ctx.on("agent/status")` seam, with the failure channel carrying the warn instead of a `catch`;
-- the byte-stable ledger strings and the smoke README counts must match the Classic tree EXACTLY -
-  that is what the family's smokes assert across both trees.
+- the byte-stable ledger strings and the smoke README counts must match the Classic tree EXACTLY,
+  which is what the smokes of the family assert across both trees.
 
 ## 8. What a delivery still owes (the census)
 
-Adding packages to this repo is a CENSUS change, not just a directory. Before merge:
+Adding packages to this repo is a CENSUS change and not just a directory.
+
+Before merge:
 
 | Gate                                                | What it needs                                                                                                                                                                                                                                       |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -312,13 +361,15 @@ Adding packages to this repo is a CENSUS change, not just a directory. Before me
 | `Documentation/INDEX.md`                            | this plan's entry                                                                                                                                                                                                                                   |
 | the ETS twins                                       | section 7, if the delivery includes them                                                                                                                                                                                                            |
 
-`node Site/Scripts/Drift-Guard.mjs` is the arbiter. Measured in this checkout:
+`node Site/Scripts/Drift-Guard.mjs` is the arbiter.
+
+Measured in this checkout:
 
 - **baseline before the mockup: 5 failures, all in the smoke figures** - `Counts.Coach` (Classic 139
   expected, 129 counted), `Totals.Classic` (3509/3500), `Totals.EffectTS` (3172/3173),
-  `Counts.SuitesClassic` (272/271), `Counts.Suites` (514/513). The tree was already red here.
-- **after the mockup: 20 failures** - the same 5, plus 15 that are exactly the census the two
-  packages move. The new ones, with the figures a delivery must write:
+  `Counts.SuitesClassic` (272/271), and `Counts.Suites` (514/513). The tree was already red here.
+- **after the mockup: 20 failures** - the same 5, plus 15 that are exactly the census that the two
+  packages move. The new ones follow, with the figures a delivery must write:
 
 | Check                               | Now (repo)   | Content library      |
 | ----------------------------------- | ------------ | -------------------- |
@@ -338,20 +389,23 @@ Adding packages to this repo is a CENSUS change, not just a directory. Before me
 | the sitemap: every page listed      | 2 missing    | -                    |
 
 Two of those are worth calling out because they are not obvious from "add a package": the new
-service declares a KV `domain` (`lesson`), which moves `Storage.Domains`; and it carries a
-`Policy-Defaults` smoke folder, which moves `Policy.Packages`. Both are derived from the packages
-themselves, which is the point of the guard.
+service declares a KV `domain` (`lesson`), which moves `Storage.Domains`, and it carries a
+`Policy-Defaults` smoke folder, which moves `Policy.Packages`.
 
-None of this is a code defect: the two packages build, typecheck and pass their own smokes. It is
-the price of a package existing in a repo whose site is a re-derivation of the tree.
+Both are derived from the packages themselves, which is the point of the guard.
+
+None of this is a code defect, because the two packages build, typecheck, and pass their own smokes.
+
+It is the price of a package existing in a repo whose site is a re-derivation of the tree.
 
 ## 9. Non-goals
 
-- **Not a memory system.** `AGENTS.md` proposals are queued and never written by this plugin; the
-  user's working agreement is theirs.
-- **Not a subagent.** The review is one bounded model call, not a spawned agent with tools. The D6
-  `spawn` verdict stays `approve` for that reason.
-- **Not a cron.** The trigger is the agent's own idle edge, so the review never runs when nothing
-  happened.
+- **Not a memory system.** `AGENTS.md` proposals are queued and never written by this plugin,
+  because the working agreement of the user is theirs.
+- **Not a subagent.** The review is one bounded model call and not a spawned agent with tools, and
+  the D6 `spawn` verdict stays `approve` for that reason.
+- **Not a cron.** The trigger is the own idle edge of the agent, so the review never runs when
+  nothing happened.
 - **Not a replacement for the suggesters.** `hook-dsh-*-suggester` names companions in the hot path
-  (deterministic, no LLM). This loop is the cold path: after the turn, about the session.
+  deterministically and with no LLM, while this loop is the cold path that runs after the turn and
+  about the session.

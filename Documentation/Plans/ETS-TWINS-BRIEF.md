@@ -21,11 +21,11 @@ statuses:
 
 # THE PLANNED PLUGIN SUITE - THE ETS TWINS BRIEF
 
-> The end-phase companion to Documentation/Plans/POC-BRIEF.md. The Classic PoC set lands first; the
-> EffectTS twins follow. The brief scoped 29 mirrors; the delivery produced 30 new twins
-> (ets-client-dsh-workspace-live joined the set), for 46 EffectTS packages total. The family
-> contract: Documentation/Skill/plugin-system/SKILL.md (the ETS variant and the byte-identical
-> ledger law). The POC brief still governs the mode (source first, verification after).
+> The end-phase companion to Documentation/Plans/POC-BRIEF.md. The Classic PoC set lands first, and
+> the EffectTS twins follow. The brief scoped 29 mirrors, and the delivery produced 30 new twins
+> because ets-client-dsh-workspace-live joined the set, for 46 EffectTS packages total. The family
+> contract is Documentation/Skill/plugin-system/SKILL.md with the ETS variant and the byte-identical
+> ledger law, and the POC brief still governs the mode of source first and verification after.
 
 ## 1. The verified shape of a twin
 
@@ -34,9 +34,10 @@ Read the existing pair before porting:
 - Classic/packages/hook-dsh-live-containers/Source/Library.ts
 - EffectTS/packages/ets-hook-dsh-live-containers/Source/Library.ts
 
-The entries are near-mirrors: the same object form, the same service names (`pluginFactory`,
-`tools`, ...), the same ledger strings. What differs is the package identity and the ETS dependency
-names:
+The entries are near-mirrors with the same object form, the same service names (`pluginFactory`,
+`tools`, and the rest), and the same ledger strings.
+
+What differs is the package identity and the ETS dependency names:
 
 | Classic                        | EffectTS                           |
 | ------------------------------ | ---------------------------------- |
@@ -47,13 +48,14 @@ names:
 | `Classic/packages/<pkg>`       | `EffectTS/packages/ets-<pkg>`      |
 | the version 0.1.0              | the same version                   |
 
-The Effect machinery lives in `ets-base-dsh` and `ets-plugin-dsh-factory`; the hooks and tools
-consume the same service names. The ledger strings stay byte-identical - the ETS tree is the same
-contract expressed twice.
+The Effect machinery lives in `ets-base-dsh` and `ets-plugin-dsh-factory`, and the hooks and tools
+consume the same service names.
+
+The ledger strings stay byte-identical, because the ETS tree is the same contract expressed twice.
 
 ## 2. The scope (29 packages)
 
-The 26 planned ETS twins plus the three candidate twins:
+The scope holds the 26 planned ETS twins plus the three candidate twins:
 
 ets-hook-dsh-convention-suggester, ets-hook-dsh-doc-suggester, ets-hook-dsh-edit-suggester,
 ets-hook-dsh-graph-suggester, ets-hook-dsh-replay-suggester, ets-hook-dsh-search-suggester,
@@ -68,25 +70,36 @@ ets-plugin-dsh-workspace-semantics, ets-lib-dsh-workspace-live.
 
 ## 3. The mirror pass (the fast path)
 
-The precedent: Maintain/generate-ets-live-containers.mjs - the additive-file mirror under the
-identity substitutions only, "the output is diff-verified afterwards". The same pattern applies here
-at package granularity:
+The precedent is Maintain/generate-ets-live-containers.mjs, which is the additive-file mirror under
+the identity substitutions only, with the output diff-verified afterwards.
 
-1. A generator `Maintain/generate-ets-planned.mjs` walks the Classic package roots of the 29 twins
-   and writes the ETS tree under the substitutions in section 1 (package.json name + dependencies,
-   the imports, the comment mentions of the factory package, the directory). The generator is
-   written with the write tool, run once from the monorepo root, and the output is diff-verified per
-   package.
-2. The per-package diff check: every ETS twin's Source must differ from its Classic source only in
-   the substitution tokens (a `diff` of the two trees with the substitutions applied must be empty).
-   Any other difference is either an intentional ETS fix (recorded) or a defect.
-3. The intentional ETS fixes are limited to what the ETS conventions demand: the `ets-base-dsh`
-   imports for the shared machinery, the ETS factory dependency, and the client-half conventions for
-   `ets-lib-dsh-workspace-live` and the client twins.
+The same pattern applies here at package granularity:
+
+1. **The generator.**
+
+    A generator `Maintain/generate-ets-planned.mjs` walks the Classic package roots of the 29 twins
+    and writes the ETS tree under the substitutions of section 1: the package.json name and
+    dependencies, the imports, the comment mentions of the factory package, and the directory.
+
+    The generator is written with the write tool, run once from the monorepo root, and the output is
+    diff-verified per package.
+
+2. **The per-package diff check.**
+
+    Every Source of an ETS twin must differ from its Classic source only in the substitution tokens,
+    so a `diff` of the two trees with the substitutions applied must be empty.
+
+    Any other difference is either an intentional ETS fix that is recorded or a defect.
+
+3. **The intentional ETS fixes.**
+
+    The intentional ETS fixes are limited to what the ETS conventions demand: the `ets-base-dsh`
+    imports for the shared machinery, the ETS factory dependency, and the client-half conventions
+    for `ets-lib-dsh-workspace-live` and the client twins.
 
 ## 4. The lane groups (the verification pass)
 
-Eight port lanes, each owning a group, each diff-verifying its packages and recording the
+Eight port lanes each own a group, and each lane diff-verifies its packages and records the
 intentional fixes:
 
 | Group | Packages                                                                                                                  |
@@ -103,21 +116,35 @@ intentional fixes:
 ## 5. The twin checks
 
 - T1 the ETS package directory exists with the full anatomy and the ETS package identity.
-- T2 the dependency names are the ETS names (no `plugin-dsh-factory` or `lib-dsh-core` left in the
-  ETS tree).
-- T3 the ledger strings are byte-identical to the Classic twin's.
-- T4 the diff-with-substitutions is empty or every remaining difference is recorded as an
+- T2 the dependency names are the ETS names, with no `plugin-dsh-factory` or `lib-dsh-core` left in
+  the ETS tree.
+- T3 the ledger strings are byte-identical to the strings of the Classic twin.
+- T4 the diff-with-substitutions is empty, or every remaining difference is recorded as an
   intentional ETS fix.
 - T5 the ETS build (`pnpm --dir EffectTS/packages/<pkg> run prepublishOnly`) exits 0 once the ETS
-  factory is built first (the family rule: rebuild the factory before any consumer, serialized
-  builds).
-- T6 the parity smokes: the same assertion sets, the ETS additions recorded (the smoke-writing
-  parity rule).
+  factory is built first, under the family rule that rebuilds the factory before any consumer with
+  serialized builds.
+- T6 the parity smokes hold the same assertion sets, and the ETS additions are recorded under the
+  smoke-writing parity rule.
 
 ## 6. The order
 
-1. The Classic PoC set lands and the Classic build pass is green.
-2. The mirror pass: the generator + the per-package diff.
-3. The eight port lanes: the intentional fixes, the twin checks T1-T4.
-4. The ETS build pass (the factory first, serialized) and the parity smokes.
-5. The record: POC-LEDGER.md finalized with the 29 twin rows.
+1. **The Classic set.**
+
+    The Classic PoC set lands and the Classic build pass is green.
+
+2. **The mirror pass.**
+
+    The mirror pass runs the generator and the per-package diff.
+
+3. **The eight port lanes.**
+
+    The eight port lanes apply the intentional fixes and run the twin checks T1 to T4.
+
+4. **The ETS build pass.**
+
+    The ETS build pass runs the factory first and serialized, then the parity smokes.
+
+5. **The record.**
+
+    POC-LEDGER.md is finalized with the 29 twin rows.

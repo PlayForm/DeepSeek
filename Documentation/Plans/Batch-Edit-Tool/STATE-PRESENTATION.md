@@ -20,8 +20,8 @@ statuses:
 
 ---
 
-The state presentation is the machine's third face (besides the batch and the process states) - the
-assemble section the model reads instead of running `ls`/`cat`/`grep`:
+The state presentation is the third face of the machine (besides the batch and the process states),
+which is the assemble section that the model reads instead of running `ls`/`cat`/`grep`:
 
 ```
 --- FILE MACHINE <id> (held processes; recomputed on events) ---
@@ -35,8 +35,10 @@ SEARCHES: 2   PENDING OPS: 5
 --- END FILE MACHINE <id> ---
 ```
 
-The reads of held files flow through the harness's freshness path (a read emits a present
-fs/observed - filesystem.md:224), so the presentation's versions are the truth the guarded writes
-will accept. The LLM sees the file system's held state first; the bash/tool calls become the escape
-hatch, then (the layered-government roadmap) the controlled exception, per control layer, one plugin
-each.
+The reads of held files flow through the freshness path of the harness (a read emits a present
+fs/observed, filesystem.md:224), so the versions of the presentation are the truth that the guarded
+writes will accept.
+
+The LLM sees the held state of the file system first, and the bash and tool calls become the escape
+hatch and then, per the layered-government roadmap, the controlled exception with one plugin for
+each control layer.

@@ -1,17 +1,24 @@
 # Overpass
 
-What this test verifies.
+This page records what the test verifies.
 
 ## Intent
 
-The overpass layer for the file flavor: the tools/post-execute arm (the
-SIX-FOLD rewrite of tool results in the transcript), the agent/pre-step arm
-(the same chain on incoming batches), the human-facing `normalize-overpass`
-command as the FILES SWEEP owner, and the history-safety invariant. This is
-its own folder because the arms are a separate integration surface with
-their own scope gates (both off by default), the sweep as the command's
-unique grammar on this flavor, and its own ledger strings. The source
-suite's Run O (O1-O12), moved verbatim.
+The overpass layer for the file flavor has four parts.
+
+The first part is the tools/post-execute arm, which applies the SIX-FOLD rewrite to tool results in the transcript.
+
+The second part is the agent/pre-step arm, which applies the same chain to incoming batches.
+
+The third part is the human-facing `normalize-overpass` command as the FILES SWEEP owner.
+
+The fourth part is the history-safety invariant.
+
+This folder stands alone because the arms form a separate integration surface with their own scope gates, and both gates stay off by default.
+
+The sweep is the command's unique grammar on this flavor, and it carries its own ledger strings.
+
+The folder holds the source suite's Run O (O1-O12), moved verbatim.
 
 ## Scenario
 
@@ -24,9 +31,9 @@ suite's Run O (O1-O12), moved verbatim.
       needs to precede it)".
     - Check: "overpass: the normalize-overpass command is registered (the
       files sweep owner)".
-- O1: default-off passthrough. Check: "overpass: toolResults off (default)
+- O1: passthrough while the gate stays off. Check: "overpass: toolResults off (default)
   -> the decision passes untouched".
-- O2: the volatile flip (toolResults on) -> "the six-fold chain rewrites
+- O2: the volatile flip with toolResults on -> "the six-fold chain rewrites
   the text block"; "the tool-result ledger line is byte-exact".
 - O3: exemption. Check: "overpass: exempt tool (read) passes through by
   identity".
@@ -59,17 +66,19 @@ suite's Run O (O1-O12), moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL normalize-file apply.
-One apply with a hand-built config whose `scopes` volatile cell returns a
-mutable object; the O2/O9 flips mutate that object and dispatch through the
-registered `loader/volatile-update` listener. The sweep seeds
-`/tmp/normalize-file-smoke-sweep-a.txt` with All6 and
-`/tmp/normalize-file-smoke-sweep-b.txt` with clean text in the in-memory
-Files map; the sweep handler receives `rawInput: "files <a> <b>"` and the
-error cases receive the source suite's exact inputs. `PostO`/`PreO` are the
-registered listeners; `ExecO` builds the call identity. The durable ledger
-is cleared at folder start; no direct ledger reads (ledger lines are checked
-via the captured logger lines and their `includes` matches).
+The harness uses a fake ctx, the REAL factory, and the REAL normalize-file apply.
+
+One apply runs with a hand-built config whose `scopes` volatile cell returns a mutable object.
+
+The O2/O9 flips mutate that object and dispatch through the registered `loader/volatile-update` listener.
+
+The sweep seeds `/tmp/normalize-file-smoke-sweep-a.txt` with All6 and `/tmp/normalize-file-smoke-sweep-b.txt` with clean text in the in-memory Files map.
+
+The sweep handler receives `rawInput: "files <a> <b>"`, and the error cases receive the source suite's exact inputs.
+
+`PostO` and `PreO` are the registered listeners, and `ExecO` builds the call identity.
+
+The harness clears the durable ledger at folder start and reads no ledger directly, because it checks ledger lines through the captured logger lines and their `includes` matches.
 
 ## Expected ledger strings (byte-exact)
 
@@ -81,11 +90,9 @@ via the captured logger lines and their `includes` matches).
 
 ## Edge cases
 
-- Both arms off by default; the flips are live (no remount).
-- Non-text blocks, value-carrying decisions and CCR marker text pass
-  through untouched.
-- The sweep is the only overpass path allowed to write (exactly one write
-  and one emit for the changed file; the clean file untouched).
+- Both arms stay off by default, and the flips take effect live without a remount.
+- Non-text blocks, value-carrying decisions, and CCR marker text pass through untouched.
+- The sweep is the only overpass path allowed to write, with exactly one write and one emit for the changed file and no touch on the clean file.
 
 ## Expected count
 

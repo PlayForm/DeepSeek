@@ -6,23 +6,26 @@
 
 ## The role
 
-The **file-content normalizer** - a DeepSeek Harness plugin that registers the normalize family's
-`normalize-file` TOOL: the read → count → write pipeline over files ALREADY on disk, beyond the tool
-layer.
+The **file-content normalizer** is a DeepSeek Harness plugin that registers the `normalize-file`
+TOOL of the normalize family: the read → count → write pipeline over files ALREADY on disk, beyond
+the tool layer.
 
-One agent-chosen file per call: the target's content is read, the family's SIX transforms (the
-core's Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth tables through the shared
-Replace/ReplaceMap replacers, the same chain the raw-write `normalize: true` applies) are applied
-with a per-character count, and only when N > 0 is the rewritten content written back through the
-factory's ONE shared write executor (resolve-side read, `fs/write-intent` waterfall, standing
-sandbox policy, `writeText`, the root-context `fs/observed` present emit).
+One agent-chosen file per call: the plugin reads the content of the target, applies the family's SIX
+transforms with a per-character count, and writes the rewritten content back only when N > 0,
+through the ONE shared write executor of the factory, which covers the resolve-side read, the
+`fs/write-intent` waterfall, the standing sandbox policy, `writeText`, and the root-context
+`fs/observed` present emit.
 
-N = 0 writes NOTHING - the no-op no-write rule.
+The six transforms are the Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth tables of the core
+through the shared Replace/ReplaceMap replacers, which is the same chain that raw-write applies
+under `normalize: true`.
 
-The rewrite is explicit, visible (a diff card showing the before/after) and opt-in by construction:
-the family's first LISTENER-LESS flavor (no `llm/stream`, no `fs/observed` - the background-rewrite
-posture of the design report is deliberately deferred, because it would break the edit tool's
-`old_string` contract).
+N = 0 writes NOTHING, which is the no-op no-write rule.
+
+The rewrite is explicit, visible in a diff card that shows the before and the after, and opt-in by
+construction, because this is the first LISTENER-LESS flavor of the family: it has no `llm/stream`
+and no `fs/observed`, and the background-rewrite posture of the design report is deliberately
+deferred, because that posture would break the `old_string` contract of the edit tool.
 
 ## The surfaces
 
@@ -51,9 +54,9 @@ posture of the design report is deliberately deferred, because it would break th
 | `scopes.batch`        | boolean  | `false`                                                                                            | The agent/pre-step arm.                                                                                                                                                        |
 | `toolResultsExempt`   | string[] | `["read", "edit", "raw-write", "normalize-file", "ccr_retrieve", "subagent", "ask_user_question"]` | Tool-results exemption list (volatile): a tool result whose exec name is listed passes through by identity.                                                                    |
 
-All fields are volatile (hot edits commit WITHOUT remounting the plugin).
+All fields are volatile, so hot edits commit WITHOUT remounting the plugin.
 
-The other five scopes are inert in this flavor but present in the schema so one patch override
+The other five scopes are inert in this flavor but stay present in the schema, so one patch override
 drives the whole family.
 
 ## The ledger
@@ -64,10 +67,10 @@ plugin-dsh-normalize-file: normalized N char(s) in <path>
 plugin-dsh-normalize-file: command "normalize-overpass" registration skipped (the mount continues): <cause>
 ```
 
-Written through the factory's `Append` (the durable file line is `[<ISO>] <message>`).
+The factory's `Append` writes these lines, and the durable file line is `[<ISO>] <message>`.
 
-The activation line is written by `apply()`; the count line follows only a successful N > 0 write -
-a no-op writes no line, and a failed read or an aborted call writes none either.
+`apply()` writes the activation line, and the count line follows only a successful N > 0 write, so a
+no-op writes no line and a failed read or an aborted call writes none either.
 
 Each N > 0 write also journals one `normalized` record into the shared `package_governance` v2
 domain.

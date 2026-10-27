@@ -1,14 +1,13 @@
 # Dispatch-And-Board - the dispatcher tests
 
-The deterministic order, the seat bookkeeping, the state machine, the board
-line, the routed dispatch, the volatile flips, and the tools.
+This folder covers the deterministic order, the seat bookkeeping, the state machine, the board line, the routed dispatch, the volatile flips, and the tools.
 
 ## Scenarios
 
 - D1: the deterministic order - priority descending first (`queue-2` with
-  p5 before `queue-1` with p0), FIFO on ties, seats accumulating on `main`.
-- D2: the child cap - a named agent gets exactly two dispatches; the third
-  returns undefined and the seat count stays 2 (the two-active regime).
+  p5 before `queue-1` with p0), FIFO on ties, and seats accumulating on `main`.
+- D2: the child cap - a named agent gets exactly two dispatches, the third
+  returns undefined, and the seat count stays 2 (the two-active regime).
 - D3: the state machine - `dispatched -> running` (Start), the terminal
   arms Complete/Fail/Interrupt with the byte-exact `<state> <id> (<agent>)`
   lines, the result hash recorded on completion, seats released, and a
@@ -31,8 +30,7 @@ line, the routed dispatch, the volatile flips, and the tools.
 
 ## Fixtures
 
-The shared Harness with the `dshRoute` seam attach and the `Flip` volatile
-writer (the cosmokit write symbol).
+The harness is the shared Harness with the `dshRoute` seam attach and the `Flip` volatile writer (the cosmokit write symbol).
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-queue: ` prefix)
 

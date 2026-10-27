@@ -39,45 +39,52 @@ statuses:
 > cites live in `../Brand/BRANDING.md`. See also `TOMORROW-REVIEW.md` (the descriptive state of the
 > monorepo as built) and `CASE-STUDY-PLAN.md` (the Site's case-study dimension).
 
-The plan for `~/Developer/Application/PlayForm/DeepSeek/` as the family monorepo: the boilerplate
-reference, the two official releases (Classic + Effect-TS), the static Site, and the Test archive.
-The `~/.dsh` originals STAY LIVE (the functionality survives every restart). The monorepo hosts the
-copies + the new implementations. The outer `~/Developer/Application/PlayForm/` remains the broader
-monorepo (the DeepSeek dir is ONE of its projects, like Aphrodite).
+The plan for `~/Developer/Application/PlayForm/DeepSeek/` as the family monorepo covers the
+boilerplate reference, the two official releases (Classic and Effect-TS), the static Site, and the
+Test archive.
+
+The `~/.dsh` originals STAY LIVE, and the functionality survives every restart.
+
+The monorepo hosts the copies and the new implementations.
+
+The outer `~/Developer/Application/PlayForm/` remains the broader monorepo, where the DeepSeek dir
+is ONE of its projects, like Aphrodite.
 
 ---
 
 ## 1. THE STRATEGY
 
-- **The `~/.dsh` profile stays untouched and LIVE.** The twelve bundles + the smokes + the profile
-  wiring keep running on EVERY restart. Nothing in the monorepo development ever changes `~/.dsh`.
+- **The `~/.dsh` profile stays untouched and LIVE.** The twelve bundles, the smokes, and the profile
+  wiring keep running on EVERY restart, and nothing in the monorepo development ever changes
+  `~/.dsh`.
 - **`DeepSeek/Boilerplate` = the reference copy** of the twelve bundles (the Sources, the configs,
-  the built Targets, the smokes) - the frozen baseline the releases derive from. The copy EXCLUDES
-  the per-bundle `node_modules` (reproducible via the per-bundle `pnpm install`). The copy EXCLUDES
-  the profile-specific wiring (`cordis.patch.yml` values stay as the shipped examples; the personal
-  paths are the #12 anonymization's job on the release side, NOT the reference side).
-- **`DeepSeek/Classic` = the Classic release** (ONE package per repository at publish time;
-  developed inside the monorepo first): the cleaned, de-personalized, restructured implementations -
-  register #12 (anonymization + the Aphrodite README borrow), #15 (the reversed hierarchical names:
-  `hook-dsh-cargo-governor` etc.). [ANNOTATED 2026-10-09: SPLICE-ETS.md resolved #15 - the trees now
-  carry unique names. The Classic carries the plain @playform/dsh-* forms (with the three
-  token-reordered names). The EffectTS carries the @playform/ets-* forms + the base
-  @playform/ets-base-dsh.]
-- **`DeepSeek/EffectTS` = the Effect-TS v4 release** (register #13): the same package identities as
-  the Classic. The internals are re-implemented on Effect-TS (the tracing, the ecosystem interop,
-  the parallel-govern toggle from #14 designed in from the start). Its smokes prove parity against
-  the Classic's behavior (the ledger strings stay the contract).
-- **`DeepSeek/Site` = the static hosting site**: adopts the
-  `~/Downloads/stitch_playform_dsh_plugin_branding_system` design (DESIGN.md - the "Technical
-  Minimalist Harness" blue/white tokens, Inter + JetBrains Mono, the Material-style spacing;
-  code.html - the family landing page; screen.png - the visual reference). The Site is blue + white
-  ONLY, with clean headers (the `Documentation/Brand/BRANDING.md` constraints).
-- **`DeepSeek/Test` = the archive**: everything currently in
-  `~/Developer/Application/PlayForm/DeepSeek/` moves here. The archive takes the live fixtures: the
-  governed-chain, cargo-fixture, the locktree/prun/coder trees, the fixture .md files, the probes.
-  The content is organized, so the monorepo root is clean.
-- **The monorepo tooling**: a pnpm workspace (the packages globs for the three package sets), the
-  root scripts (build/test per set), the shared docs.
+  the built Targets, the smokes), which is the frozen baseline that the releases derive from. The
+  copy EXCLUDES the per-bundle `node_modules`, which the per-bundle `pnpm install` reproduces, and
+  it EXCLUDES the profile-specific wiring, where the `cordis.patch.yml` values stay as the shipped
+  examples and the personal paths are the job of the #12 anonymization on the release side and NOT
+  on the reference side.
+- **`DeepSeek/Classic` = the Classic release** (ONE package per repository at publish time,
+  developed inside the monorepo first), which holds the cleaned, de-personalized, restructured
+  implementations through register #12 (anonymization plus the Aphrodite README borrow) and #15 (the
+  reversed hierarchical names such as `hook-dsh-cargo-governor`). [ANNOTATED 2026-10-09:
+  SPLICE-ETS.md resolved #15 - the trees now carry unique names. The Classic carries the plain
+  @playform/dsh-* forms with the three token-reordered names, and the EffectTS carries the
+  @playform/ets-* forms plus the base @playform/ets-base-dsh.]
+- **`DeepSeek/EffectTS` = the Effect-TS v4 release** (register #13), with the same package
+  identities as the Classic and internals that are re-implemented on Effect-TS (the tracing, the
+  ecosystem interop, and the parallel-govern toggle from #14 designed in from the start). Its smokes
+  prove parity against the behavior of the Classic, where the ledger strings stay the contract.
+- **`DeepSeek/Site` = the static hosting site**, which adopts the
+  `~/Downloads/stitch_playform_dsh_plugin_branding_system` design (DESIGN.md with the "Technical
+  Minimalist Harness" blue and white tokens, Inter and JetBrains Mono, and the Material-style
+  spacing; code.html with the family landing page; screen.png as the visual reference). The Site is
+  blue and white ONLY, with clean headers under the `Documentation/Brand/BRANDING.md` constraints.
+- **`DeepSeek/Test` = the archive**, where everything currently in
+  `~/Developer/Application/PlayForm/DeepSeek/` moves. The archive takes the live fixtures: the
+  governed-chain, cargo-fixture, the locktree, prun, and coder trees, the fixture .md files, and the
+  probes. The content is organized, so the monorepo root is clean.
+- **The monorepo tooling** is a pnpm workspace with the packages globs for the three package sets,
+  the root scripts that build and test per set, and the shared docs.
 
 ## 2. THE LAYOUT (the full tree)
 
@@ -148,56 +155,76 @@ monorepo (the DeepSeek dir is ONE of its projects, like Aphrodite).
 
 ## 3. THE MONOREPO TOOLING
 
-- **The pnpm workspace**:
+- **The pnpm workspace** holds
   `packages: [Boilerplate/packages/*, Classic/packages/*, EffectTS/packages/*]` with the Aphrodite
-  conventions (the hoisted linker, the min release age). The per-bundle `pnpm-workspace.yaml` files
-  (`packages: [.]`) keep the bundles self-contained for the standalone builds/publishes.
-- **The root scripts**: `build:boilerplate`, `build:classic`, `build:effect-ts`, `test` (the
-  twelve-suite runner per set), `smoke` (the archive-runner).
-- **The naming**: the Boilerplate keeps the current names. The Classic + the EffectTS use the #15
-  reversed names (the @-sentences). The packages are separate repositories at publish time - the
-  monorepo is the development home.
+  conventions (the hoisted linker and the min release age). The per-bundle `pnpm-workspace.yaml`
+  files (`packages: [.]`) keep the bundles self-contained for the standalone builds and publishes.
+- **The root scripts** are `build:boilerplate`, `build:classic`, `build:effect-ts`, `test` (the
+  twelve-suite runner per set), and `smoke` (the archive runner).
+- **The naming**: the Boilerplate keeps the current names, the Classic and the EffectTS use the #15
+  reversed names (the @-sentences), and the packages are separate repositories at publish time while
+  the monorepo stays the development home.
 
 ## 4. THE SITE DESIGN (the stitch adoption)
 
 - The `~/Downloads/stitch_playform_dsh_plugin_branding_system/` package is the source: DESIGN.md
-  (the tokens: primary #003ec7 / primary- container #0052ff / the white surfaces / Inter + JetBrains
-  Mono / headline-lg-md-xl / the spacing scale) + code.html (the working page: the fixed header
-  "@playform / DSH Family", the eyebrow badges (ECOSYSTEM: @PLAYFORM / CLASSIC / EFFECT-TS), the
-  hero sentence, the terminal install box, the products/flavors sections) + screen.png.
-- The Site adapts it: the landing (index.html), the sub-pages (products, versions, flavors, models),
-  the tokens as CSS custom properties, blue/white ONLY, the clean headers - the exact
-  `Documentation/Brand/BRANDING.md` constraints.
+  with the tokens (primary #003ec7, primary-container #0052ff, the white surfaces, Inter and
+  JetBrains Mono, headline-lg-md-xl, and the spacing scale), code.html with the working page (the
+  fixed header "@playform / DSH Family", the eyebrow badges (ECOSYSTEM: @PLAYFORM / CLASSIC /
+  EFFECT-TS), the hero sentence, the terminal install box, and the products and flavors sections),
+  and screen.png.
+- The Site adapts it into the landing (index.html), the sub-pages (products, versions, flavors,
+  models), the tokens as CSS custom properties, blue and white ONLY, and the clean headers under the
+  exact `Documentation/Brand/BRANDING.md` constraints.
 
 ## 5. THE EXECUTION ORDER
 
-1. **Phase 0 - the archive**: move the current `DeepSeek/` contents (the fixtures) into
-   `DeepSeek/Test/` (organized). Create the monorepo skeleton (the root package.json,
-   pnpm-workspace.yaml, Documentation/, README).
-2. **Phase 1 - the boilerplate**: copy the twelve bundles + the smokes into `DeepSeek/Boilerplate/`
-   (NO node_modules). Adapt the smokes' paths to the monorepo. Verify: the boilerplate smokes pass
-   standalone (the Targets copied) - the `~/.dsh` originals untouched + the live family verified
-   still green.
-3. **Phase 2 - the Classic**: scaffold the twelve release packages under `Classic/packages/` from
-   the boilerplate copies. Then execute #12 (anonymize + the Aphrodite READMEs) + #15 (the names)
-   per package.
-4. **Phase 3 - the EffectTS**: scaffold the twelve packages under `EffectTS/packages/` (same
-   identities). Re-implement the internals on Effect v4 (the #13 mapping: the core helpers as Effect
-   pipelines, the factory as layers, the chain as typed effects + the tracing spans, the #14
-   parallel toggle). The parity smokes are the arbiter.
-5. **Phase 4 - the Site**: adopt the stitch design into `Site/` (the tokens, the landing, the
-   sub-pages, the assets).
-6. **Phase 5 - the docs + the handoff**: the monorepo docs + the handoff update (the new layout, the
-   paths, the live-test references).
+1. **Phase 0 - the archive.**
+
+    Move the current `DeepSeek/` contents (the fixtures) into `DeepSeek/Test/` in an organized form,
+    and create the monorepo skeleton with the root package.json, pnpm-workspace.yaml,
+    Documentation/, and README.
+
+2. **Phase 1 - the boilerplate.**
+
+    Copy the twelve bundles and the smokes into `DeepSeek/Boilerplate/` with NO node_modules, and
+    adapt the paths of the smokes to the monorepo.
+
+    Verify that the boilerplate smokes pass standalone with the Targets copied, that the `~/.dsh`
+    originals stay untouched, and that the live family is still green.
+
+3. **Phase 2 - the Classic.**
+
+    Scaffold the twelve release packages under `Classic/packages/` from the boilerplate copies, and
+    then execute #12 (anonymize plus the Aphrodite READMEs) and #15 (the names) per package.
+
+4. **Phase 3 - the EffectTS.**
+
+    Scaffold the twelve packages under `EffectTS/packages/` with the same identities, and
+    re-implement the internals on Effect v4 through the #13 mapping: the core helpers as Effect
+    pipelines, the factory as layers, the chain as typed effects plus the tracing spans, and the #14
+    parallel toggle.
+
+    The parity smokes are the arbiter.
+
+5. **Phase 4 - the Site.**
+
+    Adopt the stitch design into `Site/` with the tokens, the landing, the sub-pages, and the
+    assets.
+
+6. **Phase 5 - the docs and the handoff.**
+
+    Update the monorepo docs and the handoff with the new layout, the paths, and the live-test
+    references.
 
 ## 6. THE CONSTRAINTS
 
-- The `~/.dsh` originals NEVER change during this work. The live family is verified green after
-  EVERY phase (the smokes + the ledgers).
+- The `~/.dsh` originals NEVER change during this work, and the live family is verified green after
+  EVERY phase through the smokes and the ledgers.
 - The ledger strings stay the byte-identical smoke contract in ALL three implementations (the
-  Boilerplate, the Classic, the EffectTS).
-- The Site is blue/white ONLY + the clean headers (the `Documentation/Brand/BRANDING.md`).
-- The development through coder subagents. The smokes are the arbiter. The USER commits; nothing
-  committed by agents.
-- The live fixtures' new home (`DeepSeek/Test/`) becomes the sandbox fixtures root for the future
-  live batteries. The handoff's fixture references update.
+  Boilerplate, the Classic, and the EffectTS).
+- The Site is blue and white ONLY, with the clean headers of the `Documentation/Brand/BRANDING.md`.
+- The development runs through coder subagents, the smokes are the arbiter, and the USER commits,
+  while agents commit nothing.
+- The new home of the live fixtures (`DeepSeek/Test/`) becomes the sandbox fixtures root for the
+  future live batteries, and the fixture references of the handoff update.

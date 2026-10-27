@@ -1,16 +1,18 @@
 # Policy-Defaults
 
-The policy block (D6) on the feedback member: the defaults, the built State's
-carried block, the override, and the passive-collector posture.
+This folder covers the policy block (D6) on the feedback member: the defaults, the carried block of
+the built State, the override, and the passive-collector posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The feedback member is a passive
-collector: it records outcomes and suggests summaries, and it never writes,
-commits or spawns. This folder pins the shared block's defaults in the
-schema and on the built State (`State.Config.policy` - the class form has no
-factory State to map) and the documented family posture for the actions the
-member never takes.
+D6 makes automation a per-plugin allowlist.
+
+The feedback member is a passive collector that records outcomes and suggests summaries, and it
+never writes, commits, or spawns.
+
+This folder pins the defaults of the shared block in the schema and on the built State, at
+`State.Config.policy`, because the class form has no factory State to map, and it pins the
+documented posture of the family for the actions that the member never takes.
 
 ## Scenario
 
@@ -22,18 +24,18 @@ member never takes.
 - Check: "P1: a policy override lands on the built State" - an explicit
   `policy: { suggest: "approve" }` replaces suggest and keeps the other seven.
 - Check: "P1: the member's own action classes are automatic" - `record` and
-  `suggest` are `auto`; `write` stays the shipped `approve` (the member never
-  writes).
+  `suggest` are `auto`, while `write` stays the shipped `approve` because the
+  member never writes.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the fake ctx,
-the schema's own validation (`Validate`), and the `Make` constructor mount.
+The fixtures are the shared Harness with the real built `Target/Library.js` class, the fake ctx, the
+own validation of the schema (`Validate`), and the `Make` constructor mount.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+None are new, because the block and its mapping log nothing, and the defaults are the contract that
+the checks assert as an object.
 
 ## Expected count
 

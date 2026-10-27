@@ -35,27 +35,42 @@ statuses:
 
 # The Pattern Graph
 
-The search suggester is not one plugin. It is one **consumer** of a general capability:
-**patternize-able behavior over graphs of files**. This document states the general model, the
-plural plugin family, the boundary where a suggestion must abstain, and the measurement that decides
-whether the family is worth its tokens.
+The search suggester is not one plugin, because it is one **consumer** of a general capability:
+**patternize-able behavior over graphs of files**.
+
+This document states the general model, the plural plugin family, the boundary where a suggestion
+must abstain, and the measurement that decides whether the family is worth its tokens.
 
 ## 1. The definition: what is patternize-able
 
 A behavior is patternize-able when all four hold:
 
-1. **An observable trigger.** Something in the live context - a tool call, a file state, the user's
-   words - signals the behavior.
-2. **A target subgraph.** The behavior touches a repeatable set of files, code blocks, symbols, or
-   documents, connected by the file graph.
-3. **A deterministic transform.** The edits are mechanical given the target: a version bump, a
-   rename, a config field, a doc update.
-4. **An arbiter.** The behavior has a verification: the build, a smoke, the site build, the Drift.
+1. **An observable trigger.**
+
+    Something in the live context (a tool call, a file state, or the words of the user) signals the
+    behavior.
+
+2. **A target subgraph.**
+
+    The behavior touches a repeatable set of files, code blocks, symbols, or documents that the file
+    graph connects.
+
+3. **A deterministic transform.**
+
+    The edits are mechanical given the target: a version bump, a rename, a config field, or a doc
+    update.
+
+4. **An arbiter.**
+
+    The behavior has a verification: the build, a smoke, the site build, or the Drift.
 
 If any of the four is missing, the behavior is **not** patternize-able and the plugin must
-**abstain**. The novel design decision, the ambiguous investigation, the one-off debugging, and the
-open-ended research are explicitly outside the model. A wrong suggestion costs more than a missed
-one; abstention is a feature.
+**abstain**.
+
+The novel design decision, the ambiguous investigation, the one-off debugging, and the open-ended
+research are explicitly outside the model.
+
+A wrong suggestion costs more than a missed one, so abstention is a feature.
 
 ## 2. The behavior graph
 
@@ -82,46 +97,63 @@ one; abstention is a feature.
 ### 2.3 The pattern
 
 A **pattern type** is a parameterized subgraph:
-`Pattern<X> = Trigger<X> x TargetGraph<X> x Transform<X>* x Arbiter<X>`. A **pattern instance** is
-the type bound to the current parameters. The match is `context -> Pattern<X>`; the suggestion is
-the instantiated target subgraph plus the next steps.
+`Pattern<X> = Trigger<X> x TargetGraph<X> x Transform<X>* x Arbiter<X>`.
+
+A **pattern instance** is the type bound to the current parameters, the match is
+`context -> Pattern<X>`, and the suggestion is the instantiated target subgraph plus the next steps.
 
 The algebra:
 
-- **Composition**: a release is `VersionBump` then `Changelog` then `SiteFigures` then `Publish`;
-  the composition is the ordered product.
-- **Sequence**: a rename is `SymbolRewrite` then `TestUpdates` then `DocUpdates`; the `precedes`
-  edges carry the order.
-- **Parameterization**: the same `VersionBump` pattern applies to any package; the parameters are
-  the package set and the version.
-- **Abstention**: if the match's confidence is below the threshold, the result is the empty
-  suggestion, not a guess.
+- **Composition**: a release is `VersionBump`, then `Changelog`, then `SiteFigures`, then `Publish`,
+  and the composition is the ordered product.
+- **Sequence**: a rename is `SymbolRewrite`, then `TestUpdates`, then `DocUpdates`, and the
+  `precedes` edges carry the order.
+- **Parameterization**: the same `VersionBump` pattern applies to any package, and the parameters
+  are the package set and the version.
+- **Abstention**: when the confidence of the match is below the threshold, the result is the empty
+  suggestion and not a guess.
 
 ### 2.4 The `Searchable<X>` instance
 
-The search suggester is the `Searchable<X>` pattern: `X` is the intent (Version, Symbol, Config,
-Test, Doc, Dependency, Path, Usage, Owner, Ledger); the trigger is the search tool call (the
-pattern, the scope, the recent context); the target is the subgraph of files where `X` usually
-lives; the transform is "open these, then edit"; the arbiter is the eventual build/test. The
-suggestion is the target subgraph, ranked.
+The search suggester is the `Searchable<X>` pattern, where `X` is the intent (Version, Symbol,
+Config, Test, Doc, Dependency, Path, Usage, Owner, Ledger), the trigger is the search tool call with
+the pattern, the scope, and the recent context, the target is the subgraph of files where `X`
+usually lives, the transform is "open these, then edit", and the arbiter is the eventual build or
+test.
+
+The suggestion is the target subgraph, ranked.
 
 ## 3. The learner
 
 The sessions are the corpus:
 
-1. **The trace**: the tool calls, the edits, the outcomes, the timings from the session records
-   (`~/.dsh/sessions/.../session.v4.jsonl.zstd`).
-2. **The subgraph mining**: the frequent (search -> read -> edit -> verify) subgraphs become
-   candidate patterns.
-3. **The binding**: the intent label from the user's request or the eventual edit; the target
-   subgraph from the files touched; the arbiter from the verification that ran.
-4. **The confidence**: the frequency, the outcome (did the edit succeed and verify?), the recency,
-   the acceptance (did the model use the suggestion?).
-5. **The refresh**: offline from the sessions; online from the live accept/reject and the model's
-   next reads. The memory is local, never the repo; the schema is versioned; a stale pattern decays.
+1. **The trace.**
 
-The cold start is the static repo map plus the family's conventions (the standard files per intent),
-not an empty registry.
+    The tool calls, the edits, the outcomes, and the timings from the session records
+    (`~/.dsh/sessions/.../session.v4.jsonl.zstd`).
+
+2. **The subgraph mining.**
+
+    The frequent (search -> read -> edit -> verify) subgraphs become candidate patterns.
+
+3. **The binding.**
+
+    The intent label from the request of the user or from the eventual edit, the target subgraph
+    from the files touched, and the arbiter from the verification that ran.
+
+4. **The confidence.**
+
+    The frequency, the outcome of whether the edit succeeded and verified, the recency, and the
+    acceptance of whether the model used the suggestion.
+
+5. **The refresh.**
+
+    Offline from the sessions and online from the live accept or reject and the next reads of the
+    model, where the memory is local and never in the repo, the schema is versioned, and a stale
+    pattern decays.
+
+The cold start is the static repo map plus the conventions of the family (the standard files per
+intent) and not an empty registry.
 
 ## 4. The plural family
 
@@ -138,50 +170,55 @@ One core service, several consumers, and the patterns as data:
 | `hook-dsh-replay-suggester`     | the session history -> the last time this was done                             |
 | `hook-dsh-convention-suggester` | the repo conventions -> the naming, layout, docs                               |
 
-The **core** owns the service and the storage; the **consumers** own their pattern packs and their
-delivery surface. A pack is data (the patterns, the signals, the targets), so a new domain is a
-pack, not a package, until it proves two consumers. The family's extraction rule applies: extract
-the shared core only after two consumers exist.
+The **core** owns the service and the storage, and the **consumers** own their pattern packs and
+their delivery surface.
 
-The delivery surfaces are the ones the family already has: a note on the tool result (the tool-coach
-pattern), a system-prompt block (the live-containers pattern), a tool (the ccr pattern). The
-suggestion is a short note: the intent, the confidence, the top targets, and the one next step. No
-prose.
+A pack is data (the patterns, the signals, and the targets), so a new domain is a pack and not a
+package until it proves two consumers, and the extraction rule of the family applies: extract the
+shared core only after two consumers exist.
+
+The delivery surfaces are the ones that the family already has: a note on the tool result (the
+tool-coach pattern), a system-prompt block (the live-containers pattern), and a tool (the ccr
+pattern).
+
+The suggestion is a short note with the intent, the confidence, the top targets, and the one next
+step, and no prose.
 
 ## 5. The in-depth variants
 
 - **The intent oracle**: the core answers "what is the model trying to do?" as a ranked set of
-  intents with the evidence. The suggester is one consumer; the tool-coach, the routing, and the
-  workspace could be others.
-- **The graph query**: the workspace graph (the v4.1 epic) is the substrate; the pattern's target
-  subgraph is a graph query, and the suggestion is the instantiated neighborhood.
-- **The session replay**: the transcripts are the training corpus; a replay harness measures the
-  suggestion's effect on the search count and the time to the first correct edit.
-- **The convention compiler**: the repo's conventions (the naming, the layout, the docs) become
-  patterns; the suggester enforces them before the model violates them.
-- **The next-step planner**: the `precedes` edges turn the pattern graph into a planner: after the
-  version bump, the release, then the docs.
+  intents with the evidence, where the suggester is one consumer and the tool-coach, the routing,
+  and the workspace could be others.
+- **The graph query**: the workspace graph of the v4.1 epic is the substrate, the target subgraph of
+  the pattern is a graph query, and the suggestion is the instantiated neighborhood.
+- **The session replay**: the transcripts are the training corpus, and a replay harness measures the
+  effect of the suggestion on the search count and the time to the first correct edit.
+- **The convention compiler**: the conventions of the repo (the naming, the layout, and the docs)
+  become patterns, and the suggester enforces them before the model violates them.
+- **The next-step planner**: the `precedes` edges turn the pattern graph into a planner, so after
+  the version bump come the release and then the docs.
 
 ## 6. The boundary: when to abstain
 
-- The intent's confidence is below the threshold.
-- The target subgraph is empty or ambiguous (two patterns match equally).
-- The behavior is novel (no evidence, no static pattern).
-- The user's request is exploratory ("figure out why").
-- The suggestion would repeat one already given and ignored.
+- The confidence of the intent is below the threshold.
+- The target subgraph is empty or ambiguous, because two patterns match equally.
+- The behavior is novel, with no evidence and no static pattern.
+- The request of the user is exploratory ("figure out why").
+- The suggestion would repeat one that was already given and ignored.
 
-The plugin's ledger records the abstentions, so the precision can be measured, not assumed.
+The ledger of the plugin records the abstentions, so the precision can be measured and not assumed.
 
 ## 7. The measurement
 
 - **The search reduction**: the search tool calls per task, before and after.
 - **The first-hit accuracy**: the suggested target that the model actually used, at rank 1 and in
   the top 3.
-- **The acceptance rate**: the suggestions the model acted on.
+- **The acceptance rate**: the suggestions that the model acted on.
 - **The time to the first correct edit**.
-- **The token cost**: the suggestion notes' tokens versus the saved searches.
+- **The token cost**: the tokens of the suggestion notes against the saved searches.
 - **The replay benchmark**: the recorded sessions replayed with and without the suggester.
-- **The precision/recall**: the wrong suggestions are the expensive error; the abstention is cheap.
+- **The precision and recall**: the wrong suggestions are the expensive error, and the abstention is
+  cheap.
 
 ## 8. The phases
 
@@ -198,39 +235,80 @@ The plugin's ledger records the abstentions, so the precision can be measured, n
 
 ## 9. The risks
 
-1. **The wrong suggestion is worse than none.** Mitigate: the confidence threshold, the abstention,
-   the top-3 with the evidence.
-2. **The noise.** Mitigate: the cooldown, the dedupe, the dismiss, the short note.
-3. **The overfitting to this repo.** Mitigate: the patterns are parameterized; the packs are data;
-   the cold start is the static map.
-4. **The privacy.** The sessions and the memory stay local; no network.
-5. **The performance.** The match is a lookup plus a graph query, not an LLM call; the listeners are
-   synchronous recorders; the heavy mining is offline.
-6. **The model ignores it.** Measure the acceptance; if it is low, the suggestion is noise, not
-   help.
-7. **The crutch.** The suggester must not replace the model's own orientation; it accelerates the
-   standard behavior, it does not decide the novel one.
-8. **The stale pattern.** The confidence decays; the arbiter's outcome updates it.
+1. **The wrong suggestion is worse than none.**
+
+    Mitigate with the confidence threshold, the abstention, and the top 3 with the evidence.
+
+2. **The noise.**
+
+    Mitigate with the cooldown, the dedupe, the dismiss, and the short note.
+
+3. **The overfitting to this repo.**
+
+    Mitigate because the patterns are parameterized, the packs are data, and the cold start is the
+    static map.
+
+4. **The privacy.**
+
+    The sessions and the memory stay local, and nothing goes to the network.
+
+5. **The performance.**
+
+    The match is a lookup plus a graph query and not an LLM call, the listeners are synchronous
+    recorders, and the heavy mining is offline.
+
+6. **The model ignores it.**
+
+    Measure the acceptance, because a low acceptance means that the suggestion is noise and not
+    help.
+
+7. **The crutch.**
+
+    The suggester must not replace the own orientation of the model, because it accelerates the
+    standard behavior and does not decide the novel one.
+
+8. **The stale pattern.**
+
+    The confidence decays, and the outcome of the arbiter updates it.
 
 ## 10. The open decisions
 
-1. The core's name and archetype: the service plugin `plugin-dsh-pattern` (settled - the `hook-`
-   alternative is superseded by the role contract: a registry + matcher + store is a service).
-2. The storage: the KV domain (the family's storage) or a local JSON under `~/.dsh`.
-3. The pattern language: a JSON schema, or a TypeScript DSL compiled to the registry.
-4. The pack boundary: one package with packs, or one package per domain after two consumers.
-5. The delivery surface: the tool-result note, the system-prompt block, or both.
-6. The session-mining privacy: which transcripts, how long, what is redacted.
-7. The relation to the workspace graph: does the pattern graph depend on the workspace graph, or is
-   the file graph enough for v1?
+1. **The name and archetype of the core.**
+
+    The service plugin `plugin-dsh-pattern` is settled, because the `hook-` alternative is
+    superseded by the role contract: a registry, a matcher, and a store are a service.
+
+2. **The storage.**
+
+    The KV domain of the family storage, or a local JSON under `~/.dsh`.
+
+3. **The pattern language.**
+
+    A JSON schema, or a TypeScript DSL compiled to the registry.
+
+4. **The pack boundary.**
+
+    One package with packs, or one package per domain after two consumers.
+
+5. **The delivery surface.**
+
+    The tool-result note, the system-prompt block, or both.
+
+6. **The session-mining privacy.**
+
+    Which transcripts, how long, and what is redacted.
+
+7. **The relation to the workspace graph.**
+
+    Does the pattern graph depend on the workspace graph, or is the file graph enough for v1?
 
 ## 11. The relation to the other plans
 
 - The **search suggester** (`SEARCH-SUGGESTER-PLUGIN.md`) is the first consumer and the evidence
   base.
-- The **workspace v4.1** supplies the file graph and the code-block neighborhood; the pattern graph
-  is the behavior layer over it.
-- The **tool-coach** is the delivery precedent and a potential consumer (the coaching notes and the
-  suggestions share the tool surface).
-- The **orchestration family** (the routing, the queue, the feedback) could consume the intent
+- The **workspace v4.1** supplies the file graph and the code-block neighborhood, and the pattern
+  graph is the behavior layer over it.
+- The **tool-coach** is the delivery precedent and a potential consumer, because the coaching notes
+  and the suggestions share the tool surface.
+- The **orchestration family** (the routing, the queue, and the feedback) could consume the intent
   oracle, but only after the core proves itself.

@@ -1,8 +1,6 @@
 # Wiring-And-Queue - the wiring and the enqueue tests
 
-The loader contract, the cold mount, the activation proof, the service and
-tool registration, the enqueue ledger, the fail-loud validation, and the
-purity guarantee.
+This folder covers the loader contract, the cold mount, the activation proof, the service and tool registration, the enqueue ledger, the fail-loud validation, and the purity guarantee.
 
 ## Scenarios
 
@@ -31,8 +29,7 @@ purity guarantee.
 
 ## Fixtures
 
-The shared Harness: the fake ctx with the tools.register capture and the
-real factory instance.
+The harness is the shared Harness: the fake ctx with the tools.register capture and the real factory instance.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-queue: ` prefix)
 

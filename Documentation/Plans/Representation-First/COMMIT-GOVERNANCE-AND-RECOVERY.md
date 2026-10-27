@@ -17,8 +17,9 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH - THE COMMIT GOVERNANCE AND THE PARTIAL FAILURE HONESTY (ROUND 4)
 
-> Granular section of the representation-first workspace research (the reconciliation mandate, round
-> 4). The parent hub: Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
+> A granular section of the representation-first workspace research, which covers the reconciliation
+> mandate in round 4. The parent hub:
+> Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
 
 ---
 
@@ -31,26 +32,27 @@ statuses:
     4. validate the resulting candidate + obtain the approval for that EXACT changeset;
     5. recheck the authority + the base revisions before the persistence;
     6. verify the persisted result + record the final revisions.
-- **THE CHANGESET DIGEST**: if a governor changes the candidate afterward, the approval
-  INVALIDATES - the approval never silently expands.
+- **THE CHANGESET DIGEST**: if a governor changes the candidate afterward, the approval INVALIDATES,
+  because the approval never silently expands.
 - **THE INTENT-MODEL REFINEMENT** (the critique round 5, binding): the "semantic intent" of step 1
-  is the IntentSpecification (the GOAL vs the SCOPE vs the CONSTRAINTS vs the PREFERENCES -
-  "preserve behavior" is a valid intent even when unprovable - the assessment exposes the
-  limitation); the approval in step 4 = the Commitment + the AuthorizationDecision on the
-  traceability graph; the intent constrains the histories (Acceptable_I(tau) = G(last(tau)) ^ C(tau)
-  ^ D(tau)) - a governor's change invalidating the approval IS the intent's constraint firing. AN
-  INTENT MUST NOT AUTHORIZE ITS OWN MEANS - the independent checks (contributes + authorized scope +
-  policy + preconditions) run before the authorization decision.
+  is the IntentSpecification with the GOAL, the SCOPE, the CONSTRAINTS, and the PREFERENCES, where
+  "preserve behavior" is a valid intent even when it is unprovable and the assessment exposes the
+  limitation. The approval in step 4 is the Commitment plus the AuthorizationDecision on the
+  traceability graph, and the intent constrains the histories as Acceptable_I(tau) = G(last(tau)) ^
+  C(tau) ^ D(tau), so a change of a governor that invalidates the approval IS the constraint of the
+  intent firing. AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS, so the independent checks of the
+  contribution, the authorized scope, the policy, and the preconditions run before the authorization
+  decision.
 - **THE PIPELINE PROPERTY**: "The preview matches the applied bytes" becomes a property of the
-  ENTIRE pipeline, not just the text-edit engine.
+  ENTIRE pipeline and not just of the text-edit engine.
 
 ## 2. The partial failure honesty (the recovery states)
 
-- **THE STATE MACHINE**: prepared -> approved -> commit-decided -> applying -> verified; applying ->
-  recovery-required -> verified | compensation-required | conflict.
-- **THE DURABILITY QUESTION**: for each transition: what is DURABLE + what a restarted process must
-  INSPECT.
-- **THE HARD CASE**: include the case where the file write succeeded but the success-record failed.
+- **THE STATE MACHINE**: prepared -> approved -> commit-decided -> applying -> verified, and
+  applying -> recovery-required -> verified | compensation-required | conflict.
+- **THE DURABILITY QUESTION**: for each transition, what is DURABLE and what a restarted process
+  must INSPECT.
+- **THE HARD CASE**: include the case where the file write succeeded but the success record failed.
 - **THE RECOVERY vs THE UNDO**: completing an interrupted approved operation is DIFFERENT from
-  proposing a new operation that reverses a completed one - the revision-checked undo carries the
+  proposing a new operation that reverses a completed one, and the revision-checked undo carries the
   distinction into the engine API.

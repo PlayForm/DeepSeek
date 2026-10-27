@@ -1,15 +1,16 @@
 # Volatile-Live-Flip
 
-What this test verifies.
+This page records what the test verifies.
 
 ## Intent
 
-The P10 volatile live-flip and the files scope gate: config changes committed
-to a running tool without remounting it. This is its own folder because the
-flip is the hazardous path (a rebuild would re-apply and duplicate the
-registration) and because the `files` gate is this flavor's own scope - the
-one switch that turns the whole tool off and back on live. The source
-suite's Run V and Run F, moved verbatim.
+This folder covers the P10 volatile live-flip and the files scope gate, which commit config changes to a running tool without remounting it.
+
+It stands alone because the flip is the hazardous path, since a rebuild would re-apply and duplicate the registration.
+
+It also stands alone because the `files` gate is this flavor's own scope, the one switch that turns the whole tool off and back on live.
+
+The folder holds the source suite's Run V and Run F, moved verbatim.
 
 ## Scenario
 
@@ -36,17 +37,17 @@ suite's Run V and Run F, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL normalize-file apply.
-Run V builds the replacement as a stable volatile cell whose getter reads a
-mutable outer binding (`FlipValue`), seeds
-`/tmp/normalize-file-smoke-flip-fixture.txt` with the All6 content, flips to
-`-*-` and dispatches `[["replacement"]]`. Run F builds a hand-config with a
-`scopes` volatile cell whose getter reads `FilesOn`, seeds
-`/tmp/normalize-file-smoke-gate-fixture.txt` (declared alongside the flip
-fixture, as in the source suite), turns the gate off and back on via
-`[["scopes", "files"]]` dispatches. The durable ledger is cleared before
-each run; no direct ledger reads (count lines are checked via the captured
-logger lines).
+The harness uses a fake ctx, the REAL factory, and the REAL normalize-file apply.
+
+Run V builds the replacement as a stable volatile cell whose getter reads a mutable outer binding (`FlipValue`).
+
+It seeds `/tmp/normalize-file-smoke-flip-fixture.txt` with the All6 content, flips to `-*-`, and dispatches `[["replacement"]]`.
+
+Run F builds a hand-config with a `scopes` volatile cell whose getter reads `FilesOn`.
+
+It seeds `/tmp/normalize-file-smoke-gate-fixture.txt` (declared alongside the flip fixture, as in the source suite), then turns the gate off and back on through `[["scopes", "files"]]` dispatches.
+
+The harness clears the durable ledger before each run and reads no ledger directly, because it checks count lines through the captured logger lines.
 
 ## Expected ledger strings (byte-exact)
 
@@ -57,11 +58,9 @@ exactly once before and after each flip.)
 
 ## Edge cases
 
-- State object identity must survive both flips.
-- The gate-off call must do nothing at all - no resolve, no read, no write,
-  no ledger line - and still report a well-formed unchanged result.
-- The gate flips back on live: the next call normalizes again with no
-  remount.
+- The State object identity must survive both flips.
+- The gate-off call must do nothing at all, with no resolve, no read, no write, and no ledger line, and it must still report a well-formed unchanged result.
+- The gate flips back on live, so the next call normalizes again with no remount.
 
 ## Expected count
 

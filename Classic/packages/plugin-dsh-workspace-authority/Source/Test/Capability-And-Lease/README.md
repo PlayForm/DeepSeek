@@ -1,8 +1,6 @@
 # Capability-And-Lease - the capability and the lease records
 
-The WHAT and the HOW LONG records: the grant, the revoke, the authorize,
-the acquire with the TTL ladder, the lazy expiry sweep, the release, and
-the statistics.
+This folder covers the WHAT and the HOW LONG records: the grant, the revoke, the authorize, the acquire with the TTL ladder, the lazy expiry sweep, the release, and the statistics.
 
 ## Scenarios
 
@@ -31,8 +29,7 @@ the statistics.
 
 ## Fixtures
 
-The shared Harness (real built Target; expiry tested by mutating the
-stored record's `expiresAt` - no wall clock waits).
+The harness is the shared Harness with the real built Target, and it tests expiry by mutating the stored record's `expiresAt`, with no wall clock waits.
 
 ## Expected ledger strings (byte-exact, `authority: ` prefix)
 

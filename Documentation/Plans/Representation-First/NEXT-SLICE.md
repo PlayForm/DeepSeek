@@ -14,20 +14,35 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH - WHAT TO BUILD NEXT (ROUND 4)
 
-> Granular section of the representation-first workspace research (the reconciliation mandate, round
-> 4). The parent hub: Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
+> A granular section of the representation-first workspace research, which covers the reconciliation
+> mandate in round 4. The parent hub:
+> Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
 
 ---
 
 ## 1. The ONE narrow vertical slice
 
-1. Reconcile the normative contract (WORKSPACE-CONTRACT.md).
-2. Implement the TypeScript symbol rename with the preview, the scoped authority, the revision
-   checks, the durable recovery, the verified results.
-3. Inject the interruptions + the conflicting external edits at EVERY persistence boundary.
-4. Compare the conventional editing, the semantic adapter alone, the governed workspace on the
-   IDENTICAL tasks.
-5. Extract the shared infrastructure ONLY after the slice exposes the real commonality.
+1. **The contract.**
 
-- **THE STRONGEST NEXT STEP**: the three-way experiment - it tests whether the persistent governance
-  adds value beyond merely offering a better semantic editing interface.
+    Reconcile the normative contract (WORKSPACE-CONTRACT.md).
+
+2. **The rename.**
+
+    Implement the TypeScript symbol rename with the preview, the scoped authority, the revision
+    checks, the durable recovery, and the verified results.
+
+3. **The interruptions.**
+
+    Inject the interruptions and the conflicting external edits at EVERY persistence boundary.
+
+4. **The comparison.**
+
+    Compare the conventional editing, the semantic adapter alone, and the governed workspace on the
+    IDENTICAL tasks.
+
+5. **The extraction.**
+
+    Extract the shared infrastructure ONLY after the slice exposes the real commonality.
+
+- **THE STRONGEST NEXT STEP**: the three-way experiment, because it tests whether the persistent
+  governance adds value beyond merely offering a better semantic editing interface.

@@ -1,10 +1,10 @@
 # Storage-Domain - the KV domain (primary) and the JSON fallback
 
-The completion spec's wave 3 storage migration for the pattern service: the
-snapshot store moves from the plain JSON file onto the harness's
-`ctx.storage` KV domain, and the JSON file becomes the documented DEGRADED
-FALLBACK - written and read only when no storage facility is provided (or
-its open fails).
+This folder covers the completion spec's wave 3 storage migration for the pattern service.
+
+The snapshot store moves from the plain JSON file onto the harness's `ctx.storage` KV domain, and the JSON file becomes the documented DEGRADED FALLBACK.
+
+The fallback is written and read only when no storage facility is provided, or when its open fails.
 
 ## The store split
 
@@ -13,9 +13,7 @@ its open fails).
 | the KV domain (config `domain`, default `pattern`) | PRIMARY - version 1, per-record, tables `patterns` + `meta`        |
 | `~/.dsh/pattern/registry.json` (config `storagePath`) | FALLBACK - only when `ctx.storage`/`storageDomain` is absent or the open fails |
 
-The domain declares NO `compatibleVersions`: the library rejects an entry
-that is not strictly below the declared version, so `[1]` against version 1
-throws at load (the family's learned rule).
+The domain declares NO `compatibleVersions`, because the library rejects an entry that is not strictly below the declared version, so `[1]` against version 1 throws at load (the family's learned rule).
 
 ## Scenarios
 
@@ -43,10 +41,9 @@ throws at load (the family's learned rule).
 
 ## Fixtures
 
-The shared Harness: the fake ctx (the effect runner, the probe-once `get`),
-the REAL built service, and `FakeStorage` - the authority/evidence
-fake-storage pattern (the open capture, the map-backed tables, the `seed`
-hook, the write log, and the version fence).
+The harness is the shared Harness: the fake ctx (the effect runner, the probe-once `get`), the REAL built service, and `FakeStorage`.
+
+`FakeStorage` follows the authority/evidence fake-storage pattern: the open capture, the map-backed tables, the `seed` hook, the write log, and the version fence.
 
 ## Expected count
 

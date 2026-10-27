@@ -1,55 +1,55 @@
 # @playform/plugin-dsh-gitguard
 
-The git guard: a DeepSeek Harness plugin that is the tools/pre-execute DENY-LIST on the
+The git guard is a DeepSeek Harness plugin that acts as the tools/pre-execute DENY-LIST on the
 terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md section 3).
 
 ## The surfaces
 
-- The `tools/pre-execute` DENY-LIST intercept on the terminal/exec tool surface - the only
-  registration; a denial is the pre-execute refusal, never a punish.
-- No tool of its own, no service.
+- The `tools/pre-execute` DENY-LIST intercept on the terminal/exec tool surface is the only
+  registration, and a denial is the pre-execute refusal, never a punish.
+- The plugin provides no tool of its own and no service.
 
 ## The role
 
-- **The dirty-tree discipline, enforced**: the git checks-only law lives in the skills (the WHY) -
+- **The dirty-tree discipline, enforced**: the git checks-only law lives in the skills as the WHY,
   but skills are behavioral and CAN slip.
 
     The plugin carries the CANNOT.
 
-- **The guarded operations**: it intercepts terminal commands before execution and denies ANY git
-  mutation pattern - `git add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`,
-  `merge`, `stash`, `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`, `am`, `bisect`, `gc`,
-  `prune`, `worktree`, `submodule`, `notes`.
-- **The allowed operations**: the read-only checks - `git status`, `log`, `diff`, `show`,
-  `rev-parse`, `ls-files`, `fetch`.
+- **The guarded operations**: the plugin intercepts terminal commands before execution and denies
+  ANY git mutation pattern, which covers `git add`, `commit`, `reset`, `push`, `tag`, `rm`,
+  `checkout`, `branch`, `merge`, `stash`, `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`,
+  `am`, `bisect`, `gc`, `prune`, `worktree`, `submodule`, and `notes`.
+- **The allowed operations**: the read-only checks `git status`, `log`, `diff`, `show`, `rev-parse`,
+  `ls-files`, and `fetch`.
 
-- **The refusal lines**: denials surface ONCE as the pre-execute refusal (the tool result), never
-  punish - the agent's correct path is simply the only executable one.
+- **The refusal lines**: denials surface ONCE as the pre-execute refusal in the tool result and
+  never punish, because the correct path of the agent is simply the only executable one.
 
-    Every denied attempt is ledgered for the user's audit.
+    Every denied attempt is ledgered for the audit of the user.
 
 ## The anatomy
 
-- `Source/Library.ts` - the loader contract (`name`, `apply`, `Config`, `inject`; `apply` returns
-  nothing).
-- `Source/Function/` - one definition per file: the entry (`Apply`), the intercept (`Guard`), the
-  classifier (`Decide`), the subcommand extractor (`Subcommand`), the compound splitter
+- `Source/Library.ts` holds the loader contract (`name`, `apply`, `Config`, `inject`), and `apply`
+  returns nothing.
+- `Source/Function/` holds one definition per file: the entry (`Apply`), the intercept (`Guard`),
+  the classifier (`Decide`), the subcommand extractor (`Subcommand`), and the compound splitter
   (`Segments`).
-- `Source/Interface/` - the types (`State`, `Config`, `Decision`, `Factory`).
-- `Source/Variable/Config.ts` - the Schemastery schema (every knob a volatile cell).
-- `Configuration/` - the ESBuild configuration.
-- `cordis.patch.yml` - the bundle patch row (`enabled: false`).
+- `Source/Interface/` holds the types (`State`, `Config`, `Decision`, `Factory`).
+- `Source/Variable/Config.ts` holds the Schemastery schema, where every knob is a volatile cell.
+- `Configuration/` holds the ESBuild configuration.
+- `cordis.patch.yml` holds the bundle patch row (`enabled: false`).
 
 ## The posture
 
-The plugin ships DISABLED (the IDLE-forever posture): it never appears in the profile's bundles and
-enables only by an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and wires
-nothing.
+The plugin ships DISABLED in the IDLE-forever posture, so it never appears in the bundles of the
+profile and enables only through an explicit ACTIVATE, and a cold mount logs
+`disabled (enabled=false)` and wires nothing.
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Verdicts` (`Allow` is already the git allow-list):
+The config carries the shared per-action allowlist, composed from the block of the factory as
+`policy: Policy()`, and maps it to `State.Verdicts`, because `Allow` is already the git allow-list:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -58,14 +58,14 @@ block), mapped to `State.Verdicts` (`Allow` is already the git allow-list):
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The guard is read-only - it classifies and ledgers, never writes, commits or spawns - so its own
-action classes are `read` and `record` (automatic); the write/commit/spawn verdicts are declared for
-uniformity and stay the shipped `approve`.
+The guard is read-only, because it classifies and ledgers and never writes, commits, or spawns, so
+its own action classes are `read` and `record`, both automatic, while the write, commit, and spawn
+verdicts are declared for uniformity and stay the shipped `approve`.
 
-The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable, and the `policy` section of a
+resolved pack overrides the defaults per action, which is the next refinement.
 
-The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+`Source/Test/Policy-Defaults` arbitrates the defaults in the smoke suite.
 
 ## The configuration
 
@@ -86,12 +86,12 @@ sh Source/prepublishOnly.sh   # the full chain (Build + tsc + tsc-alias)
 sh Source/Run.sh              # the dev twin (Build only)
 ```
 
-The smoke folders: `Guard-And-Ledger`, `Policy-Defaults`, `Wiring-And-Classification`.
+The smoke folders are `Guard-And-Ledger`, `Policy-Defaults`, and `Wiring-And-Classification`.
 
 ## The ledger
 
-The lines are prefixed `gitguard: ` (byte-exact, see also the smoke folders' expected-string
-sections):
+The lines carry the prefix `gitguard: `, byte-exact, and the expected-string sections of the smoke
+folders repeat them:
 
 ```text
 gitguard: activated (...)
@@ -101,10 +101,10 @@ gitguard: denied <subcommand|bare> (<reason>)
 
 ## The plan
 
-- [ORCHESTRATION-PLUGINS](../../Documentation/Plugins/ORCHESTRATION-PLUGINS.md) - section 3, the
-  deny-list member.
-- The PoC mode: the fake-context harness and the byte-identical ledger assertions land with the
-  aggregate runner (the end phase).
+- [ORCHESTRATION-PLUGINS](../../Documentation/Plugins/ORCHESTRATION-PLUGINS.md) covers section 3,
+  the deny-list member.
+- The PoC mode brings the fake-context harness and the byte-identical ledger assertions with the
+  aggregate runner in the end phase.
 
 ## License
 

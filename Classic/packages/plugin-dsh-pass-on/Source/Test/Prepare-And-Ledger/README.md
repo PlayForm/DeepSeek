@@ -1,9 +1,6 @@
 # Prepare-And-Ledger - the prepare paths and the journal
 
-The prepare direction: the explicit-target version bump with the byte-exact
-target/operation/digest shapes, the Get read and the expiry, the null paths,
-the glob walk with its exclusions and cap, the bounded preview, the replace
-kind, the determinism, and the read-only law.
+This folder covers the prepare direction: the explicit-target version bump with the byte-exact target/operation/digest shapes, the Get read and the expiry, the null paths, the glob walk with its exclusions and cap, the bounded preview, the replace kind, the determinism, and the read-only law.
 
 ## Scenarios
 
@@ -32,13 +29,13 @@ kind, the determinism, and the read-only law.
 
 ## Fixtures
 
-The shared Harness (fresh temporary directory per folder process; fixture
-files seeded into it; the real built Target, including the Digest module
-recomputed for the byte-exact digest assertions).
+The harness is the shared Harness, with a fresh temporary directory per folder process and fixture files seeded into it.
+
+It uses the real built Target, including the Digest module recomputed for the byte-exact digest assertions.
 
 ## Expected journal strings (byte-exact, JSON lines)
 
-Same shapes as Service-And-Contract.
+The shapes match Service-And-Contract.
 
 ## Expected count
 

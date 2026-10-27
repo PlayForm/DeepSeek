@@ -110,6 +110,7 @@ statuses:
 | [SEARCH-SUGGESTER-PLUGIN.md](Plans/SEARCH-SUGGESTER-PLUGIN.md)                                 | implemented (PoC) | queued-plan (the pattern graph's first consumer)       |
 | [PASS-ON-AND-INGESTER.md](Plans/PASS-ON-AND-INGESTER.md)                                       | implemented (PoC) | queued-plan (the batch decision flow)                  |
 | [COST-TRACK-PLUGIN.md](Plans/COST-TRACK-PLUGIN.md)                                             | active            | living-plan                                            |
+| [SQL-FILES-RFC.md](Plans/SQL-FILES-RFC.md)                                                     | planned           | queued-plan (the SQL-files refactor)                   |
 | [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md)                                     | planned           | queued-plan (site content and wording)                 |
 | [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md)                       | planned           | queued-plan (duplication, functionality, placement)    |
 | [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md)                                     | active            | living-plan (the decision record and workstreams)      |

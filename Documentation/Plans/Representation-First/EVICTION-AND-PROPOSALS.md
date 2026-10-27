@@ -20,16 +20,16 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH - THE NON-DESTRUCTIVE EVICTION AND THE TYPED PROPOSALS (ROUND 2)
 
-> Granular section of the representation-first workspace research (the external research's
-> extension, round 2). The parent hub:
+> A granular section of the representation-first workspace research, which covers the extension of
+> the external research in round 2. The parent hub:
 > Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
 
 ---
 
 ## 1. The non-destructive eviction (the user's eviction rule refined)
 
-- **THE DEFINITION**: eviction = releasing a representation's ACTIVE RESOURCES, never deleting the
-  represented file or discarding unfinished work.
+- **THE DEFINITION**: eviction releases the ACTIVE RESOURCES of a representation and never deletes
+  the represented file or discards unfinished work.
 - **THE FIVE DISPOSITIONS**:
 
 | Disposition | Meaning                                                         |
@@ -40,27 +40,27 @@ statuses:
 | DISCARD     | explicitly abandon a proposal under an authorized decision      |
 | REVOKE      | withdraw an operation right without removing the representation |
 
-- **THE REVOCATION TIMING**: the revocation blocks NEW commits; a commit already past its durable
-  commit decision follows the recovery protocol
-    - "stop" gets a precise meaning without pretending every side effect cancels instantaneously.
+- **THE REVOCATION TIMING**: the revocation blocks NEW commits, and a commit that is already past
+  its durable commit decision follows the recovery protocol, so "stop" gets a precise meaning
+  without pretending that every side effect cancels instantaneously.
 
 ## 2. The typed proposals (the State -> Operational example's distinction)
 
 - **THE VOCABULARY**: the operation vocabulary distinguishes the symbol identity from the matching
-  text: replaceText, renameSymbol, renameResource, changeSerializedKey, updateDocumentation,
-  connectDependency - each declares its resolution rules + uncertainty.
+  text through replaceText, renameSymbol, renameResource, changeSerializedKey, updateDocumentation,
+  and connectDependency, and each operation declares its resolution rules and its uncertainty.
 - **THE CONNECT RULE**: connectDependency is not accepted until the language adapter defines what
-  connection means: the import? the invocation? the service registration?
-- **THE LSP SEAM**: the LSP's WorkspaceEdit (the versioned document changes + the resource
-  operations) is the adapter seam to investigate - not evidence that the governance + recovery are
-  solved.
+  connection means: the import, the invocation, or the service registration?
+- **THE LSP SEAM**: the WorkspaceEdit of the LSP with the versioned document changes and the
+  resource operations is the adapter seam to investigate, and it is not evidence that the governance
+  and recovery are solved.
 
 ## 3. The meaning-preserving execution
 
-- **THE INTENT ATTACHED**: the original intent stays attached to the changes (the proposal yaml: the
-  operation, the target, the expectedWorkspaceRevision, the newName + the constraints:
-  preserveSerializedKeys, preservePublicExports + the result: the resolution, the changes, the
-  validation).
-- **THE REVIEW QUESTION**: did the concrete change set satisfy the declared operation +
-  constraints? - the different policies for the local-variable rename vs the public-API change vs
-  the persisted data-format change, even when all three look like text replacements.
+- **THE INTENT ATTACHED**: the original intent stays attached to the changes in the proposal yaml
+  with the operation, the target, the expectedWorkspaceRevision, the newName, the constraints of
+  `preserveSerializedKeys` and `preservePublicExports`, and the result of the resolution, the
+  changes, and the validation.
+- **THE REVIEW QUESTION**: did the concrete change set satisfy the declared operation and its
+  constraints? This requires different policies for the local-variable rename, the public-API
+  change, and the persisted data-format change, even when all three look like text replacements.

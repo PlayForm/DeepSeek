@@ -1,10 +1,6 @@
 # Wiring-And-Policy - the wiring and the policy
 
-The loader contract (apply returns nothing, the default object carries
-name/apply/Config/inject), the IDLE-forever cold mount, the durable
-activation proof, the `dshRoute` service registered on construction, the
-single launch-path listener, the fail-loud policy validation, the shipped
-default policy, and the no-fs / no-timer posture.
+This folder covers the loader contract (apply returns nothing, the default object carries name/apply/Config/inject), the IDLE-forever cold mount, the durable activation proof, the `dshRoute` service registered on construction, the single launch-path listener, the fail-loud policy validation, the shipped default policy, and the no-fs / no-timer posture.
 
 ## Scenarios
 

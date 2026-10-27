@@ -1,15 +1,14 @@
 # Policy-Defaults
 
-The policy block (D6) on the pattern service: the defaults in the schema and
-in the service's knobs, the override, and the registry's read/record posture.
+This folder covers the policy block (D6) on the pattern service: the defaults in the schema and in the service's knobs, the override, and the registry's read/record posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The pattern service matches,
-records and decays - it never writes files, commits or spawns. This folder
-pins the shared block's defaults in the schema and in the service's knobs
-(`Knobs.policy`, including the bare-construction fallback that a
-`new PatternService(ctx)` mount uses) and the documented family posture.
+D6 makes automation a per-plugin allowlist.
+
+The pattern service matches, records, and decays, and it never writes files, commits, or spawns.
+
+This folder pins the shared block's defaults in the schema and in the service's knobs (`Knobs.policy`, including the bare-construction fallback that a `new PatternService(ctx)` mount uses), plus the documented family posture.
 
 ## Scenario
 
@@ -26,14 +25,11 @@ pins the shared block's defaults in the schema and in the service's knobs
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the fake ctx,
-the schema's own validation (`PatternService.Config`), and the `Make`
-constructor mount.
+The harness is the shared Harness: the real built `Target/Library.js` class, the fake ctx, the schema's own validation (`PatternService.Config`), and the `Make` constructor mount.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+This folder adds none, because the block and its mapping log nothing and the defaults are the contract, asserted as an object.
 
 ## Expected count
 

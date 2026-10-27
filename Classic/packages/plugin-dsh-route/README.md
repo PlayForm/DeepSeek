@@ -5,10 +5,11 @@
 
 ## The role
 
-The routing-enforcer plugin: the **silent model-route policy enforcement** for the DeepSeek Harness.
+The routing-enforcer plugin provides **silent model-route policy enforcement** for the DeepSeek
+Harness.
 
-The user owns the model configuration (his policy files); the plugin enforces it on every subagent
-launch, model-independently - and the orchestrator is **not even bothered**.
+The user owns the model configuration (the policy files), and the plugin enforces it on every
+subagent launch, model-independently, so the orchestrator is **not even bothered**.
 
 Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
 
@@ -24,17 +25,17 @@ Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
 
 - **Silent resolution.**
 
-    A launch that omits `provider`/`model`/ `reasoningEffort` is resolved per the user's policy and
+    A launch that omits `provider`/`model`/ `reasoningEffort` is resolved per the user's policy, and
     the resolved triple is injected into the launch (`subagent` tool, `tools/pre-execute`
     waterfall).
 
-    No warning, no error, no reminder: the orchestrator's call succeeds exactly as if it had passed
-    the right values.
+    There is no warning, no error, and no reminder, because the orchestrator's call succeeds exactly
+    as if it had passed the right values.
 
 - **Silent correction.**
 
     An explicit-but-wrong route (a model outside the allowed set, a route contradicting the
-    task-type rules) is silently corrected per the policy and logged - never surfaced.
+    task-type rules) is silently corrected per the policy and logged, never surfaced.
 
 - **Task-type inference.**
 
@@ -55,7 +56,7 @@ Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
       the only seam that reaches a child started straight through `ctx.subagents.startActivation`
       (the queue's spawn never passes through a tool).
 
-        The seam is idempotent - a prompt that already carries a hint gets no second one.
+        The seam is idempotent, so a prompt that already carries a hint gets no second one.
 
 - **Automatic escalation.**
 
@@ -63,7 +64,7 @@ Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
     selected when the launch spec carries the delegation spec's `ESCALATION: <reason>` marker, at
     most once per chain, when the policy enables it.
 
-    The rung's model is verified against the **live model catalog** - the same data
+    The rung's model is verified against the **live model catalog**, which is the same data
     `list_subagent_models` reads (`ctx.llm.listModels`): the planner row's model when advertised,
     else the first advertised model inside `allowedModels`, else the policy's rung.
 
@@ -71,8 +72,8 @@ Plan: `Documentation/Plans/ROUTING-ENFORCER-PLUGIN.md`.
 
     Every resolved route is recorded as one line
     `route <taskType> <source> <provider> <model> <effort>` where `source` is
-    `resolved | kept | corrected | escalated` - the audit log the user reads when he reviews his
-    configuration.
+    `resolved | kept | corrected | escalated`, which is the audit log the user reads when reviewing
+    the configuration.
 
     Every delivered hint is recorded as `hint <taskType> <provider> <model> <effort>`.
 
@@ -116,10 +117,12 @@ The key is `automation`, **not** `policy`, because `policy` is already this plug
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The router reads and suggests - `read` and `suggest` are automatic; the write/commit/spawn verdicts
-are declared for uniformity and stay the shipped `approve` (the router never takes them).
+The router reads and suggests, so `read` and `suggest` are automatic.
 
-The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
+The write/commit/spawn verdicts are declared for uniformity and stay the shipped `approve`, because
+the router never takes them.
+
+The block is one volatile object, so a policy flip is hot-editable, and a resolved pack's `policy`
 section overrides the defaults per action (the wiring is the next refinement).
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
@@ -149,8 +152,8 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
     The plugin ships disabled.
 
-    The remaining option (not this wave) is enforcing the route at `agent/request` so a raw service
-    spawn is CORRECTED, not only hinted - the queue already resolves `dshRoute` before its spawn, so
+    The remaining option (not this wave) is enforcing the route at `agent/request`, so a raw service
+    spawn is CORRECTED, not only hinted; the queue already resolves `dshRoute` before its spawn, so
     the routed dispatch is corrected at the source.
 
 ## License

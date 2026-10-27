@@ -20,15 +20,15 @@ statuses:
 
 # REPRESENTATION-FIRST WORKSPACE RESEARCH - THE CONNECTED VIEWS, THE LENSES, AND THE AUTHORITY (ROUND 2)
 
-> Granular section of the representation-first workspace research (the external research's
-> extension, round 2). The parent hub:
+> A granular section of the representation-first workspace research, which covers the extension of
+> the external research in round 2. The parent hub:
 > Documentation/Plans/REPRESENTATION-FIRST-WORKSPACE-RESEARCH.md.
 
 ---
 
 ## 1. The connected views (adopted - the multiple graphs!)
 
-- **THE PRINCIPLE**: NOT one graph - distinct views connected by stable identifiers.
+- **THE PRINCIPLE**: NOT one graph, but distinct views that stable identifiers connect.
 - **THE FIVE VIEWS**:
 
 | View      | Carries                                                 |
@@ -40,26 +40,27 @@ statuses:
 | HISTORY   | which observations/decisions/effects produced the state |
 
 - **THE WEIGHTED-LICENSE IMPLICATION**: priority, retention value, and permission are NOT
-  interchangeable - a heavily weighted resource may deserve more context or longer retention WITHOUT
-  any additional write authority.
+  interchangeable, because a heavily weighted resource may deserve more context or a longer
+  retention WITHOUT any additional write authority.
 
 ## 2. The bidirectional transformations (the lenses - Pierce/Foster)
 
-- **THE LENSES**: observe(resource, revision) -> representation; propose(representation, operation)
-  -> candidate change; reconcile(resource, candidate) -> applied | conflict | rejection.
-- **THE AMBIGUITY RULE**: every abstract edit may have multiple concrete interpretations (a
-  displayed name = the symbol rename? the docs? the serialized key? the combination?) - the system
-  must EXPOSE the ambiguity.
+- **THE LENSES**: observe(resource, revision) -> representation, propose(representation, operation)
+  -> candidate change, and reconcile(resource, candidate) -> applied | conflict | rejection.
+- **THE AMBIGUITY RULE**: every abstract edit may have multiple concrete interpretations, such as the
+  symbol rename, the docs, the serialized key, or the combination for a displayed name, and the
+  system must EXPOSE the ambiguity.
 - **THE REFUSAL TO GUESS** is a first-class result.
 
 ## 3. Authority vs residency (three independent concepts)
 
-- **CAPABILITY**: the permission to perform a specific operation (the object-capabilities model -
-  the unforgeable references; the revocation via the revocable intermediaries); the prototype
-  validates the capability references INSIDE the harness - an agent-created identifier or
+- **CAPABILITY**: the permission to perform a specific operation under the object-capabilities model
+  with the unforgeable references and the revocation through the revocable intermediaries, where the
+  prototype validates the capability references INSIDE the harness and an agent-created identifier or
   self-declared permission is never proof of authority.
-- **OWNERSHIP LEASE**: the temporary coordination claim over the work (another worker may acquire
-  the claim on expiry).
-- **RESIDENCY POLICY**: whether a representation stays loaded (its in-memory state may be evicted).
+- **OWNERSHIP LEASE**: the temporary coordination claim over the work, which another worker may
+  acquire on expiry.
+- **RESIDENCY POLICY**: whether a representation stays loaded, because its in-memory state may be
+  evicted.
 - **THE PREDICTABILITY RULE**: the expiration consequences stay predictable because the three
   concepts are separate.

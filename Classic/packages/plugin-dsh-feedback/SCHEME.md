@@ -1,11 +1,12 @@
 # SCHEME - @playform/plugin-dsh-feedback
 
-The FEEDBACK member: the honest-signal collector, the transfer hop, the optional read and the
-council summary. Service `feedback` on the context.
+The FEEDBACK member collects the honest signals, moves the transfer hop, performs the optional read,
+and builds the council summary, and it provides the service `feedback` on the context.
 
 ## 1. The block contract
 
-`FeedbackBlock` (Interface/Block.ts) - the plan's section 1 format, one field per line:
+`FeedbackBlock` (Interface/Block.ts) follows the section 1 format of the plan, with one field per
+line:
 
 | Field         | Meaning                                                   |
 | ------------- | --------------------------------------------------------- |
@@ -20,41 +21,45 @@ council summary. Service `feedback` on the context.
 
 ## 2. The service surface
 
-- `Record(block)` - store + journal. Oversized fields are capped with a visible `[capped]` marker; a
-  newer block from the same agent replaces the older one in place.
-- `Push(block, parentSession)` - one mechanical hop. The destination session id comes from the
-  caller (the queue integration knows the parentage). The chain cap (`maxChain`) bounds the upward
-  flow; a capped block is dropped with a journal line, never silently.
-- `Delta(session, agentId, text)` - the parent's append.
-- `Read(session, agentId, reader)` - the recipient's optional read.
-- `Summary(session)` - the council view.
-- `Outcome(session, agentId, proposal, outcome, detail)` - the batch outcome's record (the
-  caller-side orchestration integration the plan defers; the ingester is the caller that owns the
-  apply's result). Appended to the session's outcome ring (bounded by `maxOutcomes`) and journaled;
-  the summary carries it beside the blocks. A disabled service or an empty proposal id records
-  nothing.
+- `Record(block)` stores and journals the block; oversized fields are capped with a visible
+  `[capped]` marker, and a newer block from the same agent replaces the older one in place.
+- `Push(block, parentSession)` moves the block one mechanical hop, takes the destination session id
+  from the caller because the queue integration knows the parentage, and bounds the upward flow with
+  the chain cap `maxChain`, so a capped block is dropped with a journal line and never silently.
+- `Delta(session, agentId, text)` appends the delta of the parent.
+- `Read(session, agentId, reader)` performs the optional read of the recipient.
+- `Summary(session)` builds the council view.
+- `Outcome(session, agentId, proposal, outcome, detail)` records the batch outcome for the
+  caller-side orchestration integration that the plan defers, where the ingester is the caller that
+  owns the result of the apply, appends it to the outcome ring of the session bounded by
+  `maxOutcomes`, journals it, and carries it in the summary beside the blocks, while a disabled
+  service or an empty proposal id records nothing.
 
 ## 3. The journal
 
-`logFile` - one JSON line per event, in two shapes:
+`logFile` holds one JSON line per event, in two shapes:
 
 - the block events: `{ at, event, session, agentId, block }`;
 - the batch outcome: `{ at, event: "batch", session, agentId, proposal, outcome, detail }`.
 
-Append-only, best-effort (a ledger failure never breaks the service). The journal is the plugin's
-own diagnostic log, appended with a plain `appendFileSync` (the factory's documented exemption - the
-governed-write path does not apply to a plugin's own log).
+The journal is append-only and best-effort, because a ledger failure never breaks the service.
+
+It is the diagnostic log of the plugin itself, appended with a plain `appendFileSync`, which is the
+documented exemption of the factory: the governed-write path does not apply to the own log of a
+plugin.
 
 ## 4. Config
 
-See README.md's table. All knobs are read at construction (the class form has no factory State to
-hot-refresh); a config edit reloads the plugin.
+The table in README.md lists the knobs.
+
+All knobs are read at construction, because the class form has no factory State to hot-refresh, and
+a config edit reloads the plugin.
 
 ### 4.1 The policy block (D6)
 
-The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
-`Schema.object` call; the validated shape is `State.Config.policy` (the class form has no factory
-State mapping):
+The schema composes the shared block of the factory, `policy: Policy()`, into the `Schema.object`
+call of the plugin, and the validated shape is `State.Config.policy`, because the class form has no
+factory State mapping:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -63,25 +68,28 @@ State mapping):
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The feedback member is a PASSIVE collector: it records outcomes and suggests summaries (`record` and
-`suggest`, both automatic) and never writes, commits or spawns - those verdicts are declared for
-uniformity with the family's block and stay the shipped `approve`. A resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement; the type already
-exists in `@playform/lib-dsh-pack`). The defaults are smoke-arbitrated in
-`Source/Test/Policy-Defaults`.
+The feedback member is a PASSIVE collector: it records outcomes and suggests summaries through
+`record` and `suggest`, both automatic, and it never writes, commits, or spawns, so those verdicts
+are declared for uniformity with the block of the family and stay the shipped `approve`.
+
+The `policy` section of a resolved pack overrides the defaults per action, that wiring is the next
+refinement, and the type already exists in `@playform/lib-dsh-pack`.
+
+`Source/Test/Policy-Defaults` arbitrates the defaults in the smoke suite.
 
 ## 5. The transfer semantics
 
-- The block travels as TEXT; the passive pickup listener records any `[HONEST FEEDBACK` block found
-  in an `agent/inbox/spliced` event into the receiving session's record.
-- The transfer NEVER forces the reading: nothing in the pipeline surfaces a block into the
+- The block travels as TEXT, and the passive pickup listener records any `[HONEST FEEDBACK` block
+  that it finds in an `agent/inbox/spliced` event into the record of the receiving session.
+- The transfer NEVER forces the reading, because nothing in the pipeline surfaces a block into the
   conversation.
-- The honesty invariant: the parents append deltas, never edit; the block's `liked`/`disliked` text
-  is immutable once recorded (the cap marker is the only allowed mutation, and it is visible).
+- The honesty invariant holds: the parents append deltas and never edit, the `liked`/`disliked` text
+  of the block is immutable once recorded, and the cap marker is the only allowed mutation, which is
+  visible.
 
 ## 6. The integration points (end-phase)
 
 - The batch-state plugin surfaces the summary in the compiled context when the recipient opts in.
-- The subagent-queue plugin attaches the rendered block to completion reports and calls `Push` with
-  the parent session id.
-- The routing-enforcer consumes the DISLIKED routing signals as review material.
+- The subagent-queue plugin attaches the rendered block to the completion reports and calls `Push`
+  with the id of the parent session.
+- The routing-enforcer uses the DISLIKED routing signals as review material.

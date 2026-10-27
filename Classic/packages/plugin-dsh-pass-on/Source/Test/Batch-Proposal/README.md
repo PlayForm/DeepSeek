@@ -1,8 +1,6 @@
 # Batch-Proposal - the real batch-contract wiring
 
-The prepared proposal becomes the canonical batch proposal, is emitted on
-`batch/proposed`, and is delivered into the harness agent-team inbox - the
-channel plugin-dsh-batchstate splices from.
+The prepared proposal becomes the canonical batch proposal, is emitted on `batch/proposed`, and is delivered into the harness agent-team inbox, which is the channel plugin-dsh-batchstate splices from.
 
 ## Scenarios
 
@@ -27,10 +25,9 @@ channel plugin-dsh-batchstate splices from.
 
 ## Fixtures
 
-The shared Harness (the fake ctx with the `batch/proposed` emission capture
-and the optional-service `get` probe) plus a fake agent registry whose
-`inject` is captured. The preview region is recomputed in the test with the
-plugin's own pure formula; the digest with the plugin's own Digest module.
+The harness is the shared Harness: a fake ctx with the `batch/proposed` emission capture and the optional-service `get` probe, plus a fake agent registry whose `inject` is captured.
+
+The test recomputes the preview region with the plugin's own pure formula and computes the digest with the plugin's own Digest module.
 
 ## Expected journal strings (byte-exact, JSON lines)
 

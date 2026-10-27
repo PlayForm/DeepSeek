@@ -6,20 +6,35 @@
 // so a recompute lands byte-identical totals. Returns the row count written.
 import type { DatabaseSync } from "node:sqlite";
 
+// The UTC day keys one refresh covers: the explicit day, the days of a batch's
+// own timestamps (the live path - a flush refreshes exactly the days it just
+// folded), or every day that has priced calls (the rebuild path).
+const Days = (Database: DatabaseSync, Day?: string | readonly number[]): string[] => {
+	switch (true) {
+		case Array.isArray(Day):
+			return [
+				...new Set(
+					(Day as readonly number[])
+						.filter((At) => Number.isFinite(At))
+						.map((At) => new Date(At).toISOString().slice(0, 10)),
+				),
+			];
+		case typeof Day === "string" && Day.length > 0:
+			return [Day as string];
+		default:
+			return (
+				Database.prepare(
+					"SELECT DISTINCT strftime('%Y-%m-%d', Call.At / 1000, 'unixepoch') AS Day FROM Call",
+				).all() as { Day: unknown }[]
+			)
+				.map((Row) => Row.Day)
+				.filter((One): One is string => typeof One === "string" && One.length === 10);
+	}
+};
+
 export default (Database: DatabaseSync) =>
-	(Day?: string): number => {
-		const Days =
-			typeof Day === "string" && Day.length > 0
-				? [Day]
-				: (
-						Database.prepare(
-							"SELECT DISTINCT strftime('%Y-%m-%d', Call.At / 1000, 'unixepoch') AS Day FROM Call",
-						).all() as { Day: unknown }[]
-					)
-						.map((Row) => Row.Day)
-						.filter(
-							(One): One is string => typeof One === "string" && One.length === 10,
-						);
+	(Day?: string | readonly number[]): number => {
+		const Covered = Days(Database, Day);
 		const Changed = Database.prepare("SELECT changes() AS Changed");
 		const Now = Date.now();
 		let Written = 0;
@@ -116,7 +131,7 @@ export default (Database: DatabaseSync) =>
 			},
 		];
 
-		for (const One of Days) {
+		for (const One of Covered) {
 			const Start = Date.parse(`${One}T00:00:00Z`);
 			if (!Number.isFinite(Start)) {
 				continue;

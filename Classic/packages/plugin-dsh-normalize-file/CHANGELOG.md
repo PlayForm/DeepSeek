@@ -1,35 +1,36 @@
 # Changelog
 
-All notable changes to this package will be documented in this file.
+This file records all notable changes to this package.
 
 ## 0.3.0
 
 ### Changed
 
-- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
-  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
+  devDependencies together, with the host line at `0.2.1-rc.4` and zod at 4.6.7.
 
 ## 0.2.0
 
 ### Changed
 
-- The role-prefix rename: the package reads `@playform/plugin-dsh-normalize-file` (the previous name
-  stays in git history), and its manifest, README and source identifiers follow.
-- The D4-D8 release pass (the pack and trace libraries ship across both trees): the tool's source,
-  its scheme and its bundle patch move with it.
-- The repository-wide markdown clean-up and the README role / surfaces / ledger pass.
+- The role-prefix rename makes the package read `@playform/plugin-dsh-normalize-file`, while the
+  previous name stays in git history, and the manifest, the README, and the source identifiers
+  follow.
+- The D4-D8 release pass ships the pack and trace libraries across both trees, and the source of the
+  tool, its scheme, and its bundle patch move with it.
+- The repository-wide markdown clean-up lands with the README role, surfaces, and ledger pass.
 
 ## 0.1.0
 
 ### Changed
 
-- The 0.1.0 family release: the package ships at 0.1.0 with the 31-package family and every
+- The 0.1.0 family release ships the package at 0.1.0 with the 31-package family and every
   `@playform/` sibling pin at 0.1.0, under the role-prefix contract.
 
 ## 0.0.1
 
 ### Added
 
-- The initial release of @playform/plugin-dsh-normalize-file: the file-content normalizer: the
-  normalize family's normalize-file tool over files already on disk (the Classic release of the
-  DeepSeek Harness Plugin Family).
+- The initial release of @playform/plugin-dsh-normalize-file ships the file-content normalizer,
+  which is the normalize-file tool of the normalize family over files already on disk, in the
+  Classic release of the DeepSeek Harness Plugin Family.

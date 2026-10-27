@@ -37,32 +37,36 @@ statuses:
 
 # RELEASE 0.2.0 - the whole-family release
 
-> The family moves from **0.1.0** to **0.2.0** across the Classic and Effect-TS trees. 102 packages:
-> 54 Classic and 48 Effect-TS. The publish, the commit, the tag, and the push are the USER'S calls.
-> This document is the runbook and the evidence record; it changes nothing in the registry.
+> The family moves from **0.1.0** to **0.2.0** across the Classic and Effect-TS trees: 102 packages,
+> with 54 Classic and 48 Effect-TS. The publish, the commit, the tag, and the push are the calls of
+> the USER. This document is the runbook and the evidence record, and it changes nothing in the
+> registry.
 
 ## 0. The version and the rationale
 
-**0.2.0** - the second feature release, and the first one that ships the whole family.
+**0.2.0** is the second feature release and the first one that ships the whole family.
 
 - 0.1.0 is published and a published version is immutable, so the next release cannot reuse it.
-- The family grew from 31 packages at 0.1.0 to 102 at this release: 71 new packages, all created
-  after the 0.1.0 commit `d9f3585a` (the 2026-10-22 PoC delivery and its follow-ups).
+- The family grew from 31 packages at 0.1.0 to 102 at this release, which is 71 new packages created
+  after the 0.1.0 commit `d9f3585a` in the 2026-10-22 PoC delivery and its follow-ups.
 - The changes since 0.1.0 are additive features (the workspace family, the seven suggesters, the
-  client family, the orchestration set, the `pack` and `trace` libraries) and corrections (the
-  workspace index root and find contract, the batch-edit `fs` inject), not a breaking rewrite.
-- Pre-1.0 SemVer puts a feature release at the minor position: 0.1.0 -> 0.2.0.
-- One exception: `@playform/client-dsh-panel-family` is already PUBLISHED at 0.2.0. A published
-  version cannot be republished, so the package keeps 0.2.0 and the family aligns on that number
-  instead of bumping the family to 0.3.0. Its sibling pins move to 0.2.0 like every other manifest.
-- The documented placeholder rule still holds: the empty placeholder is 0.0.0 and every real release
-  is above it. 0.2.0 satisfies that rule; 0.0.0 and 0.1.0 stay on the registry as immutable
-  historical releases.
+  client family, the orchestration set, and the `pack` and `trace` libraries) and corrections (the
+  workspace index root and find contract and the batch-edit `fs` inject), and not a breaking
+  rewrite.
+- Pre-1.0 SemVer puts a feature release at the minor position, so 0.1.0 becomes 0.2.0.
+- One exception applies: `@playform/client-dsh-panel-family` is already PUBLISHED at 0.2.0, and a
+  published version cannot be republished, so the package keeps 0.2.0 and the family aligns on that
+  number instead of bumping to 0.3.0. Its sibling pins move to 0.2.0 like every other manifest.
+- The documented placeholder rule still holds, because the empty placeholder is 0.0.0 and every real
+  release is above it. 0.2.0 satisfies that rule, and 0.0.0 and 0.1.0 stay on the registry as
+  immutable historical releases.
 
 ## 1. The 102 packages
 
 All 102 manifests carry `"version": "0.2.0"`, and every dependency entry whose key starts with
-`@playform/` carries `"0.2.0"`. The publish order is derived, not listed (section 2).
+`@playform/` carries `"0.2.0"`.
+
+The publish order is derived and not listed (section 2).
 
 ### Classic - 54 packages
 
@@ -180,8 +184,8 @@ All 102 manifests carry `"version": "0.2.0"`, and every dependency entry whose k
 
 ### NPM.yml runs the dynamic publisher
 
-`.github/workflows/NPM.yml` carries no hard-coded package list. It checks out, installs, runs
-`pnpm run build`, and then runs:
+`.github/workflows/NPM.yml` carries no hard-coded package list, because it checks out, installs,
+runs `pnpm run build`, and then runs:
 
 ```bash
 node Maintain/Publish-Packages.mjs
@@ -191,30 +195,35 @@ node Maintain/Publish-Packages.mjs
 
 - it reads every `Classic/packages/*/package.json` and `EffectTS/packages/*/package.json`;
 - it builds the dependency depth from each manifest's `@playform/` dependencies and refuses a cycle;
-- it publishes layer by layer (L0 first), so a package is never published before its siblings;
+- it publishes layer by layer with L0 first, so a package is never published before its siblings;
 - it probes the registry per package and **skips** a version that is already published, **blocks** a
   package whose dependency failed, and publishes the rest with
   `npm publish --provenance --access public --ignore-scripts`.
 
-The observed layer sizes at preparation (dry run): L0 = 12, L1 = 3, L2 = 87, total 102.
+The observed layer sizes at preparation in the dry run are L0 = 12, L1 = 3, and L2 = 87, for a total
+of 102.
 
-The workflow keeps `id-token: write`, the `Release` environment, and the `workflow_dispatch` /
-`release` / `workflow_call` triggers. It is armed; running it is the user's step.
+The workflow keeps `id-token: write`, the `Release` environment, and the `workflow_dispatch`,
+`release`, and `workflow_call` triggers, and it is armed while running it is the step of the user.
 
 ### The placeholder scaffold is derived
 
 `Maintain/Generate-NPM-Placeholders.mjs` classifies the 102 names against the registry into
-`1-missing` (absent - needs the 0.0.0 empty-first-publish), `2-placeholder` (a placeholder only) and
-`3-published` (the repo version is on the registry), and writes the scaffold (the placeholder
-manifests, `MANIFEST.json`, the `README.md`, `Publish.sh`) under `Temporary/npm-bootstrap/`. The
-trusted-publisher binding needs the name to exist first, so the scaffold is the bootstrap step and
-the publish order above is the real release step.
+`1-missing` (absent, which needs the 0.0.0 empty-first-publish), `2-placeholder` (a placeholder
+only), and `3-published` (the repo version is on the registry), and it writes the scaffold under
+`Temporary/npm-bootstrap/` with the placeholder manifests, `MANIFEST.json`, the `README.md`, and
+`Publish.sh`.
+
+The trusted-publisher binding needs the name to exist first, so the scaffold is the bootstrap step
+and the publish order above is the real release step.
 
 ### The trusted-publisher state
 
-Every package page binds the trusted publisher to `PlayForm/DeepSeek`, workflow `NPM.yml`,
-environment `Release` (`Documentation/Plans/TRUSTED-PUBLISHER.md`). The `Release` environment must
-exist in the repository settings and `NPM.yml` must be on the default branch.
+Every package page binds the trusted publisher to `PlayForm/DeepSeek`, workflow `NPM.yml`, and
+environment `Release` under `Documentation/Plans/TRUSTED-PUBLISHER.md`.
+
+The `Release` environment must exist in the repository settings and `NPM.yml` must be on the default
+branch.
 
 ## 3. The registry checks
 
@@ -227,7 +236,9 @@ for n in $(node -e 'const fs=require("fs"),path=require("path");for(const t of [
 done
 ```
 
-Every line must print `0.2.0`. Then check one provenance chain and the tags:
+Every line must print `0.2.0`.
+
+Then check one provenance chain and the tags:
 
 ```bash
 npm view @playform/hook-dsh-ccr@0.2.0 dist.attestations.provenance.predicateType
@@ -235,9 +246,11 @@ npm view @playform/hook-dsh-ccr dist-tags
 npm view @playform/client-dsh-panel-family@0.2.0 version # already published before this release
 ```
 
-The registry facts recorded at release preparation: `@playform/client-dsh-panel-family` is the one
-name whose 0.2.0 is already on the registry; the other 101 names have no 0.2.0 yet (the dry run
-prints 101 `DRY` lines and 1 `SKIP`). The 0.0.0 placeholders and the 0.1.0 release stay immutable.
+The registry facts recorded at release preparation are these: `@playform/client-dsh-panel-family` is
+the one name whose 0.2.0 is already on the registry, and the other 101 names have no 0.2.0 yet,
+which the dry run shows as 101 `DRY` lines and 1 `SKIP`.
+
+The 0.0.0 placeholders and the 0.1.0 release stay immutable.
 
 ## 3a. The verification evidence
 
@@ -253,8 +266,8 @@ prints 101 `DRY` lines and 1 `SKIP`). The 0.0.0 placeholders and the 0.1.0 relea
 | Activation constants   | the six `Source/Function/Apply.ts`                                                                | `const Version = "0.2.0"`; the rebuilt `Target` carries `bundle 0.2.0`                                                                                                        |
 | Activation assertions  | the six suites                                                                                    | ccr 25 PASS, live-containers 42 PASS, tool-coach 36 PASS, both trees                                                                                                          |
 
-The build regenerates every `Target/` tree, so the compiled bundles carry the 0.2.0 activation line
-(`const m="0.2.0"` in `Classic/packages/hook-dsh-ccr/Target/Function/Apply.js`).
+The build regenerates every `Target/` tree, so the compiled bundles carry the 0.2.0 activation line,
+which is `const m="0.2.0"` in `Classic/packages/hook-dsh-ccr/Target/Function/Apply.js`.
 
 ## 4. The READY-TO-RELEASE checklist
 
@@ -292,33 +305,33 @@ git push origin HEAD
 
 ## 6. The residuals
 
-- The active package governor refreshed a devDependency on every manifest it wrote during the
-  version bump: `tsc-alias` 1.9.8 -> 1.9.9 in 67 manifests, `effect` 4.0.5 -> 4.0.6 in 12 Effect-TS
+- The active package governor refreshed a devDependency on every manifest that it wrote during the
+  version bump: `tsc-alias` 1.9.8 to 1.9.9 in 67 manifests, `effect` 4.0.5 to 4.0.6 in 12 Effect-TS
   manifests, `@effect/opentelemetry` in one, and `@deepseek-ai/dsh-plugin-market-index` plus
-  `prettier-plugin-packagejson` in the root manifest. The Site manifest got the same treatment:
-  `astro` 7.4.1 -> 7.4.2, `dotenv` 18.0.8 -> 18.0.9, `firebase` 13.0.0 -> 13.1.0 and `puppeteer`
-  25.15.0 -> 25.16.0. The updates are the governor's designed update policy, not a manual edit;
-  revert the lines if the release should not carry the dependency refresh.
-- The nested per-package `pnpm-lock.yaml` files (six Classic, six Effect-TS) still record the 0.1.0
-  sibling tarballs. They are registry-resolved install artifacts, not the workspace graph, and
-  cannot resolve 0.2.0 until it is published. Regenerate them after the publish:
+  `prettier-plugin-packagejson` in the root manifest. The Site manifest got the same treatment with
+  `astro` 7.4.1 to 7.4.2, `dotenv` 18.0.8 to 18.0.9, `firebase` 13.0.0 to 13.1.0, and `puppeteer`
+  25.15.0 to 25.16.0. These updates are the designed update policy of the governor and not a manual
+  edit, so revert the lines if the release should not carry the dependency refresh.
+- The nested per-package `pnpm-lock.yaml` files (six Classic and six Effect-TS) still record the
+  0.1.0 sibling tarballs. They are registry-resolved install artifacts and not the workspace graph,
+  and they cannot resolve 0.2.0 until it is published. Regenerate them after the publish with
   `(cd <package> && pnpm install --lockfile-only)`.
-- 23 further packages carry `const Version = "0.1.0"` in their `Source/Function/Apply.ts` (the
-  suggester set, the batch/orchestration set, and the workspace plugins). This release moves the six
-  activation constants the 0.1.0 runbook covers; the other 23 announce 0.1.0 in their own ledger
-  lines until a later sweep.
-- The 77 packages that had no `CHANGELOG.md` before this release get their first one; their 0.1.0
-  section records that they did not exist in that release.
+- 23 further packages carry `const Version = "0.1.0"` in their `Source/Function/Apply.ts`, which
+  covers the suggester set, the batch and orchestration set, and the workspace plugins. This release
+  moves the six activation constants that the 0.1.0 runbook covers, and the other 23 announce 0.1.0
+  in their own ledger lines until a later sweep.
+- The 77 packages that had no `CHANGELOG.md` before this release get their first one, and their
+  0.1.0 section records that they did not exist in that release.
 
 ## 7. The files changed
 
 - **Manifests (102 changed, 103 in scope):** 101 of the 102 package manifests (all but
-  `client-dsh-panel-family`, already at 0.2.0 with 0.2.0 pins) plus the root `package.json`;
-  `Site/package.json` (a separate repository) at 0.2.0.
+  `client-dsh-panel-family`, already at 0.2.0 with 0.2.0 pins) plus the root `package.json`, and
+  `Site/package.json` in its separate repository at 0.2.0.
 - **Activation code and assertions (32 files):** the six `Source/Function/Apply.ts` version
-  constants; the ccr `Config-And-Activation` and the live-containers/tool-coach
-  `Wiring-And-Defaults` suites (plus the tool-coach `Passthrough-And-Guards` README); the six
-  package `README.md` and `SCHEME.md` files.
+  constants; the ccr `Config-And-Activation` and the live-containers and tool-coach
+  `Wiring-And-Defaults` suites plus the tool-coach `Passthrough-And-Guards` README; the six package
+  `README.md` and `SCHEME.md` files.
 - **Changelogs (103):** 77 new `Classic|EffectTS/packages/*/CHANGELOG.md`, 25 updated, and the root
   `CHANGELOG.md`.
 - **Market index (2):** `marketplace.json` and `Site/Public/marketplace.json`.

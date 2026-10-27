@@ -1,15 +1,18 @@
 # Policy-Defaults
 
-The policy block (D6) on the ingester: the defaults, the built State's
-carried block, the override, and the writer's `approve` posture.
+This folder covers the policy block (D6) on the ingester: the defaults, the carried block of the
+built State, the override, and the `approve` posture of the writer.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The ingester is the batch flow's
-only writer, so `write` is its own action class - and it stays the shipped
-`approve`: the decision's approval IS the gate. This folder pins the shared
-block's defaults in the schema and on the built State (`State.Config.policy` -
-the class form has no factory State to map) and the documented family posture.
+D6 makes automation a per-plugin allowlist.
+
+The ingester is the only writer of the batch flow, so `write` is its own action class, and that
+class stays the shipped `approve` because the approval of the decision IS the gate.
+
+This folder pins the defaults of the shared block in the schema and on the built State, at
+`State.Config.policy`, because the class form has no factory State to map, and it pins the
+documented posture of the family.
 
 ## Scenario
 
@@ -21,19 +24,18 @@ the class form has no factory State to map) and the documented family posture.
 - Check: "P1: a policy override lands on the built State" - an explicit
   `policy: { write: "auto" }` replaces write and keeps the other seven.
 - Check: "P1: the writer's own action class keeps the approve posture" -
-  `write` stays `approve` (the decision's approval is the gate); `record`
-  stays automatic.
+  `write` stays `approve`, because the approval of the decision is the gate,
+  and `record` stays automatic.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the fake ctx,
-the schema's own validation (`Ingester.Config`), and the `Build` constructor
-mount.
+The fixtures are the shared Harness with the real built `Target/Library.js` class, the fake ctx, the
+own validation of the schema (`Ingester.Config`), and the `Build` constructor mount.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+None are new, because the block and its mapping log nothing, and the defaults are the contract that
+the checks assert as an object.
 
 ## Expected count
 

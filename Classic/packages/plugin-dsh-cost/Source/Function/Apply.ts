@@ -45,6 +45,7 @@ import Export from "./Export.js";
 import Forecast from "./Forecast.js";
 import Open from "./Open.js";
 import Report from "./Report.js";
+import Rollup from "./Rollup.js";
 
 // The factory vocabulary, the command registry and the session-log seam,
 // published on this module's augmentation (the hook-dsh-ccr and the factory's
@@ -108,6 +109,10 @@ export default (Context: Context, Options: Config): void => {
 		if (Ledger !== undefined) {
 			const Queue = Capture(Options);
 			const Fold = Drain(Context, Ledger.Database, Options);
+			// The aggregate refresh: a flush rebuilds exactly the UTC days its
+			// own events landed in, so a range report or a forecast reads a
+			// current Rollup instead of waiting for a rebuild (section 17.5).
+			const Refresh = Rollup(Ledger.Database);
 			OffEvent = Context.on("session/event", (Subject, Event): void => {
 				Queue.Push(Subject, Event);
 			});
@@ -122,6 +127,11 @@ export default (Context: Context, Options: Config): void => {
 						return;
 					}
 					Fold(Subject, Events);
+					Refresh(
+						Events.map((One) => (One as { time?: unknown }).time).filter(
+							(At): At is number => typeof At === "number",
+						),
+					);
 				} catch {
 					/* the flush never throws into the parallel dispatch */
 				}

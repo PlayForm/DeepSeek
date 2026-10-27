@@ -28,7 +28,8 @@ statuses:
 
 ## 6.1 The anatomy
 
-`@playform/plugin-dsh-batch-edit` is a tool-primary plugin, and it carries the `plugin-` prefix because a tool is the primary surface, like plugin-dsh-factory:
+`@playform/plugin-dsh-batch-edit` is a tool-primary plugin, and it carries the `plugin-` prefix
+because a tool is the primary surface, like plugin-dsh-factory:
 
 - **Source/Library.ts** - the loader contract: `name`, `apply`, `Config`,
   `inject = ['pluginFactory', 'tools', 'fs', 'jobs', 'systemPrompt', 'shell', 'shellEnv', 'workingDirectory']`
@@ -45,8 +46,8 @@ statuses:
 - **No client half in v1**, because the Web UI gets the diff card through `presentationMeta` alone
   (the cookbook path), and a client plugin is later work and not a dependency.
 - The smokes: the fake-ctx + real-factory harness pattern (smoke-writing), every timing transition
-  driven by the fake clock, the vacuously-green trap guarded, and the Classic/EffectTS parity per the
-  family discipline.
+  driven by the fake clock, the vacuously-green trap guarded, and the Classic/EffectTS parity per
+  the family discipline.
 
 ## 6.2 The risks and the mitigations
 

@@ -1,9 +1,6 @@
 # Service-And-Contract - the loader contract and the service surface
 
-The class-form loader contract and the disabled posture: the static shape,
-the immediate registration, the identity, the Get read, the disabled
-refusal, the config-derived state, the tilde-expanded ledger default, and
-the silence invariant.
+This folder covers the class-form loader contract and the disabled posture: the static shape, the immediate registration, the identity, the Get read, the disabled refusal, the config-derived state, the tilde-expanded ledger default, and the silence invariant.
 
 ## Scenarios
 
@@ -24,10 +21,9 @@ the silence invariant.
 
 ## Fixtures
 
-The shared Harness (fake ctx with the reflect.provide capture, the real
-built Target, a fresh temporary directory per folder process; fixture files
-seeded into it). No fake clock: the expiry is tested by mutating the stored
-proposal's `expiresAt`.
+The harness is the shared Harness: a fake ctx with the reflect.provide capture, the real built Target, and a fresh temporary directory per folder process with fixture files seeded into it.
+
+It uses no fake clock, because the expiry is tested by mutating the stored proposal's `expiresAt`.
 
 ## Expected journal strings (byte-exact, JSON lines)
 

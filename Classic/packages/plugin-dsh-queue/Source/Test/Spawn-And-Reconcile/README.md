@@ -1,9 +1,6 @@
 # Spawn-And-Reconcile - the spawn, the idle-slot automation and the restart reconcile
 
-The completion wave's arbiter for `plugin-dsh-queue`: a queued task actually
-starts a subagent through the harness's own subagent service, the approval
-posture refuses, a released seat pulls the next task, the child's result
-settles the task, and the restart reconcile settles orphans honestly.
+This is the completion wave's arbiter for `plugin-dsh-queue`: a queued task actually starts a subagent through the harness's own subagent service, the approval posture refuses, a released seat pulls the next task, the child's result settles the task, and the restart reconcile settles orphans honestly.
 
 ## Scenarios
 
@@ -43,16 +40,15 @@ settles the task, and the restart reconcile settles orphans honestly.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real
-factory instance, the fake ctx, the `Automation` mount (the enabled plugin +
-the fake `ctx.subagents` recorder + the fake `ctx.agents` registry), and the
-`Flush()` join point (no sleeps, no timers: a scenario settles a child by
-resolving its recorded result).
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, the `Automation` mount, and the `Flush()` join point.
 
-THE POLICY FIXTURE (D6): the `Automation` mount also opens the OUTER policy
-gate (`policy.spawn: "auto"`), so these scenarios keep exercising the launch
-itself; the gate's `approve` posture and its precedence over `autoSpawn` are
-the `Policy-Defaults` folder's scenarios.
+The `Automation` mount holds the enabled plugin, the fake `ctx.subagents` recorder, and the fake `ctx.agents` registry.
+
+The join point uses no sleeps and no timers, because a scenario settles a child by resolving its recorded result.
+
+THE POLICY FIXTURE (D6): the `Automation` mount also opens the OUTER policy gate (`policy.spawn: "auto"`), so these scenarios keep exercising the launch itself.
+
+The gate's `approve` posture and its precedence over `autoSpawn` are the `Policy-Defaults` folder's scenarios.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-queue: ` prefix)
 
