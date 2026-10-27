@@ -4,10 +4,10 @@
 // listeners while the ledger is open and closes it on dispose), the project
 // resolution from the session cwd, the durable activation proof, and THE
 // HUMAN SURFACE (Documentation/Plans/COST-TRACK-PLUGIN.md section 5): the
-// three /cost verbs - report, export, annotate - plus the backfill job when
-// the capture gate asks for it (section 6). The function returns NOTHING (the
-// loader treats apply returns specially - a returned value silently kills
-// event delivery).
+// four /cost verbs - report, export, annotate, assess - plus the backfill job
+// when the capture gate asks for it (section 6). The function returns NOTHING
+// (the loader treats apply returns specially - a returned value silently
+// kills event delivery).
 //
 // The session-log seam (section 1) is exactly two listeners. `session/event`
 // (emit, post-commit) is the synchronous recorder: it pushes the event into
@@ -22,7 +22,7 @@
 // THE HUMAN SURFACE: the registry's name law allows no spaces in a command
 // name, so ONE command owns the grammar and the verb is its first word -
 // "report [scope] [range]", "export <csv|json|markdown> [path]",
-// "annotate [path]" - the three /cost invocations of the design document. The
+// "annotate [path]", "assess [session]" - the four /cost invocations. The
 // registration is fail-open (the normalize-file precedent): a missing or
 // already-registered commands service skips the surface and the mount
 // continues with the silent listeners. The backfill is a JOB (section 6,
@@ -36,6 +36,7 @@ import type Factory from "@playform/plugin-dsh-factory";
 
 import type Config from "../Interface/Config.js";
 import Annotate from "./Annotate.js";
+import Assess from "./Assess.js";
 import Backfill from "./Backfill.js";
 import Capture from "./Capture.js";
 import Drain from "./Drain.js";
@@ -163,10 +164,12 @@ export default (Context: Context, Options: Config): void => {
 	if (Ledger !== undefined) {
 		const Store = Ledger;
 		const Views = Report(Store.Database);
+		const Assessor = Assess(Store.Database);
 		const Exporter = Export(Store.Database, Options);
 		const AnnotateFile = Annotate(Context, Store.Database, Options);
 		const Usage =
-			"plugin-dsh-cost: usage - report [scope] [range] | export <csv|json|markdown> [path] | annotate [path]";
+			"plugin-dsh-cost: usage - report [scope] [range] | export <csv|json|markdown> [path] | " +
+			"annotate [path] | assess [session]";
 
 		// One report rendering: the title, up to twenty rows in the reading
 		// shape, and the remainder counted.
@@ -308,14 +311,37 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 
+		// The assess verb (section 12): one session's spend bucketed the way a
+		// client argues about it - delivered, explored, reverted, overhead,
+		// carry - plus the derived cost per surviving line. The named session
+		// when given, every session when not.
+		const AssessVerb = (Rest: string[]): CommandResult => {
+			const Session = Rest[0];
+			const Rows = Assessor(Session === undefined || Session.length === 0 ? undefined : Session);
+			const Shown = Rows.slice(0, 20);
+			const Lines = [
+				`cost assess${Session === undefined || Session.length === 0 ? "" : ` ${Session}`} - ${Rows.length} session(s)`,
+				...Shown.map(
+					(One) =>
+						`${One.SessionId}  delivered ${Money(One.Delivered)}  explored ${Money(One.Explored)}  ` +
+						`reverted ${Money(One.Reverted)}  overhead ${Money(One.Overhead)}  carry ${Money(One.Carry)}  ` +
+						`per-line ${Money(One.CostPerLine)}`,
+				),
+			];
+			if (Rows.length > Shown.length) {
+				Lines.push(`... ${Rows.length - Shown.length} more session(s)`);
+			}
+			return { kind: "success", text: Lines.join("\n") };
+		};
+
 		const Commands = Context.commands;
 		if (typeof Commands?.register === "function") {
 			try {
 				Commands.register({
 					name: "cost",
 					description:
-						"Cost report | export | annotate: 'report [scope] [range]' | " +
-						"'export <csv|json|markdown> [path]' | 'annotate [path]'",
+						"Cost report | export | annotate | assess: 'report [scope] [range]' | " +
+						"'export <csv|json|markdown> [path]' | 'annotate [path]' | 'assess [session]'",
 					handler: async (Invocation): Promise<CommandResult> => {
 						const Raw =
 							typeof Invocation?.rawInput === "string"
@@ -331,6 +357,8 @@ export default (Context: Context, Options: Config): void => {
 								return await ExportVerb(Rest);
 							case Verb === "annotate":
 								return await AnnotateVerb(Rest);
+							case Verb === "assess":
+								return AssessVerb(Rest);
 							default:
 								return { kind: "error", text: Usage };
 						}

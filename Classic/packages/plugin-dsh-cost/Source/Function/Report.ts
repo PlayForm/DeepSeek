@@ -1,11 +1,19 @@
 // Report - the read queries (Documentation/Plans/COST-TRACK-PLUGIN.md
-// section 3): one SELECT per report scope over the ledger's pre-aggregated
-// views - FileCost for the file rows, ClientCost for the client rows,
-// ModelCost for the model rows, and SessionCost joined through the Session
-// and Project dimensions for the project rows - each returning plain rows
-// whose cost columns are rounded to six decimals, so a report, an export and
-// a re-derivation land the same numbers at the same precision. The FileCost
-// view carries no token column, so file rows report Tokens zero.
+// sections 3 and 16): one SELECT per report scope over the ledger's
+// pre-aggregated views - FileCost for the file rows, ClientCost for the
+// client rows, SessionCost joined through the Session and Project dimensions
+// for the project rows, and the model rows grouped from Allocation and Call
+// per provider, model, mode and region (section 17.1, the pricing
+// dimensions on the Call row) - plus the v2 analytics reads: Lifetime over
+// the FileLifetime view (the cost of one file across every session that
+// ever touched it, section 10) and Stages grouped from Touch (the semantic
+// pipeline's stage spend, section 16.1). The factor read (section 17.1)
+// groups CallFactor joined to Factor: one row per (Key, Value) with the
+// call count and the summed call cost, so a classification factor is a
+// slice, not a schema change. Each returns plain rows whose cost columns
+// are rounded to six decimals, so a report, an export and a re-derivation
+// land the same numbers at the same precision. The FileCost view carries no
+// token column, so file rows report Tokens zero.
 import type { DatabaseSync } from "node:sqlite";
 
 type Row = {
@@ -16,6 +24,28 @@ type Row = {
 	Total: number;
 	Calls: number;
 	Tokens: number;
+};
+
+type LifetimeRow = {
+	Path: string;
+	Sessions: number;
+	Direct: number;
+	Amortized: number;
+	Cost: number;
+};
+
+type StageRow = {
+	Stage: string;
+	Touches: number;
+	Tokens: number;
+	Cost: number;
+};
+
+type FactorRow = {
+	Key: string;
+	Value: string;
+	Calls: number;
+	Cost: number;
 };
 
 // One money column: a non-finite or absent sum is zero, never guessed, and
@@ -85,11 +115,19 @@ export default (Database: DatabaseSync) => ({
 			Argument,
 		);
 	},
+	// The model read (section 17.1): one row per provider, model, mode and
+	// region the calls ran in, with the mode and the region (a NULL region
+	// reads "any") folded into the key, so a batch call no longer shares a
+	// row with a standard one.
 	Model: (): readonly Row[] =>
 		(
 			Database.prepare(
-				"SELECT 'model' AS Scope, Provider || '/' || Model AS Key, Direct, Amortized, Total, Calls, Tokens " +
-					"FROM ModelCost ORDER BY Total DESC",
+				"SELECT 'model' AS Scope, Call.Provider || '/' || Call.Model || '/' || Call.Mode || '/' || COALESCE(Call.Region, 'any') AS Key, " +
+					"SUM(Allocation.DirectCost) AS Direct, SUM(Allocation.AmortizedCost) AS Amortized, " +
+					"SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Total, " +
+					"COUNT(DISTINCT Allocation.CallId) AS Calls, SUM(Call.TotalTokens) AS Tokens " +
+					"FROM Allocation JOIN Call ON Call.CallId = Allocation.CallId " +
+					"GROUP BY Call.Provider, Call.Model, Call.Mode, Call.Region ORDER BY Total DESC",
 			).all() as Record<string, unknown>[]
 		).map((One) => Row("model", One)),
 	Session: (Id?: string): readonly Row[] => {
@@ -101,5 +139,71 @@ export default (Database: DatabaseSync) => ({
 				"WHERE (? IS NULL OR SessionId = ?) ORDER BY Total DESC",
 			Argument,
 		);
+	},
+	// The lifetime read (section 10): one file's cost across every session
+	// that ever touched it, straight from the FileLifetime view.
+	Lifetime: (Path?: string): readonly LifetimeRow[] => {
+		const Argument = Path === undefined || Path.length === 0 ? undefined : Path;
+		const Statement = Database.prepare(
+			"SELECT Path AS Path, Sessions AS Sessions, Direct AS Direct, Amortized AS Amortized, Cost AS Cost " +
+				"FROM FileLifetime WHERE (? IS NULL OR Path = ?) ORDER BY Cost DESC",
+		);
+		const Found = (
+			Argument === undefined ? Statement.all(null, null) : Statement.all(Argument, Argument)
+		) as Record<string, unknown>[];
+		return Found.map((One) => ({
+			Path: typeof One["Path"] === "string" ? One["Path"] : "",
+			Sessions: typeof One["Sessions"] === "number" ? One["Sessions"] : 0,
+			Direct: Round(One["Direct"]),
+			Amortized: Round(One["Amortized"]),
+			Cost: Round(One["Cost"]),
+		}));
+	},
+	// The stage read (section 16.1): Touch grouped by Stage for one file, or
+	// every file, with the token and cost totals joined through the calls
+	// that carried the touches; an unclassified stage is its own row, never
+	// silently dropped.
+	Stages: (Path?: string): readonly StageRow[] => {
+		const Argument = Path === undefined || Path.length === 0 ? undefined : Path;
+		const Statement = Database.prepare(
+			"SELECT COALESCE(Touch.Stage, 'unclassified') AS Stage, COUNT(*) AS Touches, " +
+				"SUM(Call.TotalTokens) AS Tokens, " +
+				"SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Cost " +
+				"FROM Touch " +
+				"JOIN Call ON Call.CallId = Touch.CallId " +
+				"JOIN File ON File.FileId = Touch.FileId " +
+				"LEFT JOIN Allocation ON Allocation.CallId = Touch.CallId AND Allocation.FileId = Touch.FileId " +
+				"WHERE (? IS NULL OR File.Path = ?) GROUP BY Stage ORDER BY Cost DESC",
+		);
+		const Found = (
+			Argument === undefined ? Statement.all(null, null) : Statement.all(Argument, Argument)
+		) as Record<string, unknown>[];
+		return Found.map((One) => ({
+			Stage: typeof One["Stage"] === "string" ? One["Stage"] : "unclassified",
+			Touches: typeof One["Touches"] === "number" ? One["Touches"] : 0,
+			Tokens: typeof One["Tokens"] === "number" ? One["Tokens"] : 0,
+			Cost: Round(One["Cost"]),
+		}));
+	},
+	// The factor read (section 17.1): CallFactor joined to Factor, one row
+	// per (Key, Value) with the call count and the summed call cost - the
+	// classification slice the reports ask for once a classifier writes
+	// rows. A factor nothing links to produces no row, never a zero row.
+	Factors: (): readonly FactorRow[] => {
+		const Found = Database.prepare(
+			"SELECT Key, Value, COUNT(*) AS Calls, SUM(Cost) AS Cost FROM (" +
+				"SELECT DISTINCT Factor.Key AS Key, Factor.Value AS Value, " +
+				"CallFactor.CallId AS CallId, Call.CostTotal AS Cost " +
+				"FROM CallFactor " +
+				"JOIN Factor ON Factor.FactorId = CallFactor.FactorId " +
+				"JOIN Call ON Call.CallId = CallFactor.CallId" +
+			") GROUP BY Key, Value ORDER BY Cost DESC",
+		).all() as Record<string, unknown>[];
+		return Found.map((One) => ({
+			Key: typeof One["Key"] === "string" ? One["Key"] : "",
+			Value: typeof One["Value"] === "string" ? One["Value"] : "",
+			Calls: typeof One["Calls"] === "number" ? One["Calls"] : 0,
+			Cost: Round(One["Cost"]),
+		}));
 	},
 });

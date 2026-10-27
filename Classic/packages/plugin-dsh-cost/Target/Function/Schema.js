@@ -1,28 +1,29 @@
-const E=`CREATE TABLE Price (
+const o=`CREATE TABLE Price (
     PriceId INTEGER PRIMARY KEY,
     Provider TEXT NOT NULL, Model TEXT NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD',
     InputRate REAL NOT NULL, OutputRate REAL NOT NULL,
     CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL,
     EffectiveFrom INTEGER NOT NULL, EffectiveTo INTEGER,
     Source TEXT NOT NULL, Note TEXT,
+    Window TEXT NOT NULL DEFAULT 'any',
     UNIQUE (Provider, Model, EffectiveFrom)
-) STRICT;`,T=`CREATE TABLE Client (
+) STRICT;`,N=`CREATE TABLE Client (
     ClientId INTEGER PRIMARY KEY, Name TEXT NOT NULL UNIQUE
-) STRICT;`,o=`CREATE TABLE Project (
+) STRICT;`,t=`CREATE TABLE Project (
     ProjectId INTEGER PRIMARY KEY, ClientId INTEGER REFERENCES Client (ClientId),
     Name TEXT NOT NULL, Root TEXT NOT NULL UNIQUE
-) STRICT;`,e=`CREATE TABLE Session (
+) STRICT;`,l=`CREATE TABLE Session (
     SessionId TEXT PRIMARY KEY, ProjectId INTEGER REFERENCES Project (ProjectId),
     ParentSessionId TEXT, Origin TEXT, DelegationDepth INTEGER, AgentPreset TEXT,
     Cwd TEXT, Title TEXT, CreatedAt INTEGER NOT NULL, EndedAt INTEGER
-) STRICT;`,N=`CREATE TABLE File (
+) STRICT;`,L=`CREATE TABLE File (
     FileId INTEGER PRIMARY KEY, ProjectId INTEGER NOT NULL REFERENCES Project (ProjectId),
     Path TEXT NOT NULL, Language TEXT, FirstSeenAt INTEGER NOT NULL,
     UNIQUE (ProjectId, Path)
-) STRICT;`,l=`CREATE TABLE FileVersion (
+) STRICT;`,i=`CREATE TABLE FileVersion (
     VersionId INTEGER PRIMARY KEY, FileId INTEGER NOT NULL REFERENCES File (FileId),
     Hash TEXT, Bytes INTEGER, Lines INTEGER, ObservedAt INTEGER NOT NULL
-) STRICT;`,t=`CREATE TABLE Call (
+) STRICT;`,I=`CREATE TABLE Call (
     CallId INTEGER PRIMARY KEY, SessionId TEXT NOT NULL REFERENCES Session (SessionId),
     Turn INTEGER NOT NULL, Step INTEGER NOT NULL, Seq INTEGER NOT NULL,
     Provider TEXT NOT NULL, Model TEXT NOT NULL, PriceId INTEGER REFERENCES Price (PriceId),
@@ -32,39 +33,41 @@ const E=`CREATE TABLE Price (
     CostInput REAL NOT NULL, CostOutput REAL NOT NULL, CostCacheRead REAL NOT NULL DEFAULT 0,
     CostCacheWrite REAL NOT NULL DEFAULT 0, CostReasoning REAL NOT NULL DEFAULT 0,
     CostTotal REAL NOT NULL, Currency TEXT NOT NULL,
-    SurfaceTokens INTEGER NOT NULL DEFAULT 0, Purpose TEXT, At INTEGER NOT NULL,
+    SurfaceTokens INTEGER NOT NULL DEFAULT 0, Purpose TEXT,
+    CacheSaving REAL NOT NULL DEFAULT 0, At INTEGER NOT NULL,
     UNIQUE (SessionId, Turn, Step)
-) STRICT;`,I=`CREATE TABLE Touch (
+) STRICT;`,R=`CREATE TABLE Touch (
     TouchId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId),
     SessionId TEXT NOT NULL, Turn INTEGER NOT NULL, Step INTEGER NOT NULL,
     CallKey TEXT NOT NULL, Tool TEXT NOT NULL, FileId INTEGER NOT NULL REFERENCES File (FileId),
     VersionId INTEGER REFERENCES FileVersion (VersionId), Kind TEXT NOT NULL,
+    Stage TEXT, Branch TEXT, ReadBeforeEdit INTEGER NOT NULL DEFAULT 0,
     BytesBefore INTEGER, BytesAfter INTEGER, BytesDelta INTEGER, LinesDelta INTEGER,
     Seq INTEGER NOT NULL, At INTEGER NOT NULL,
     UNIQUE (SessionId, CallKey, FileId)
-) STRICT;`,L=`CREATE TABLE ContextMass (
+) STRICT;`,A=`CREATE TABLE ContextMass (
     CallId INTEGER NOT NULL REFERENCES Call (CallId),
     FileId INTEGER REFERENCES File (FileId), Tokens INTEGER NOT NULL,
     PRIMARY KEY (CallId, FileId)
-) STRICT;`,R=`CREATE TABLE Allocation (
+) STRICT;`,C=`CREATE TABLE Allocation (
     AllocationId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId),
     FileId INTEGER REFERENCES File (FileId),
     DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL,
     ContextTokens INTEGER NOT NULL, SurfaceTokens INTEGER NOT NULL, Weight REAL NOT NULL,
     Method TEXT NOT NULL, At INTEGER NOT NULL,
     UNIQUE (CallId, FileId)
-) STRICT;`,i=`CREATE TABLE Rollup (
+) STRICT;`,n=`CREATE TABLE Rollup (
     Scope TEXT NOT NULL, Key TEXT NOT NULL, Day TEXT NOT NULL,
     DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL, Cost REAL NOT NULL,
     Calls INTEGER NOT NULL, Tokens INTEGER NOT NULL, UpdatedAt INTEGER NOT NULL,
     PRIMARY KEY (Scope, Key, Day)
-) STRICT;`,C=`CREATE TABLE Annotation (
+) STRICT;`,s=`CREATE TABLE Annotation (
     AnnotationId INTEGER PRIMARY KEY, FileId INTEGER NOT NULL REFERENCES File (FileId),
     VersionId INTEGER REFERENCES FileVersion (VersionId), Marker TEXT NOT NULL,
     Body TEXT NOT NULL, Cost REAL NOT NULL, At INTEGER NOT NULL
-) STRICT;`,A=`CREATE TABLE Cursor (
+) STRICT;`,a=`CREATE TABLE Cursor (
     SessionId TEXT PRIMARY KEY, LastSeq INTEGER NOT NULL, UpdatedAt INTEGER NOT NULL
-) STRICT;`,n=`CREATE VIEW FileCost AS
+) STRICT;`,d=`CREATE VIEW FileCost AS
 SELECT Allocation.FileId AS FileId,
     File.Path AS Path,
     SUM(Allocation.DirectCost) AS Direct,
@@ -74,7 +77,7 @@ SELECT Allocation.FileId AS FileId,
 FROM Allocation
 JOIN Call ON Call.CallId = Allocation.CallId
 JOIN File ON File.FileId = Allocation.FileId
-GROUP BY Allocation.FileId, File.Path;`,s=`CREATE VIEW ModelCost AS
+GROUP BY Allocation.FileId, File.Path;`,r=`CREATE VIEW ModelCost AS
 SELECT Call.Provider AS Provider,
     Call.Model AS Model,
     SUM(Allocation.DirectCost) AS Direct,
@@ -84,7 +87,7 @@ SELECT Call.Provider AS Provider,
     SUM(Call.TotalTokens) AS Tokens
 FROM Allocation
 JOIN Call ON Call.CallId = Allocation.CallId
-GROUP BY Call.Provider, Call.Model;`,a=`CREATE VIEW SessionCost AS
+GROUP BY Call.Provider, Call.Model;`,U=`CREATE VIEW SessionCost AS
 SELECT Call.SessionId AS SessionId,
     SUM(Allocation.DirectCost) AS Direct,
     SUM(Allocation.AmortizedCost) AS Amortized,
@@ -93,7 +96,7 @@ SELECT Call.SessionId AS SessionId,
     SUM(Call.TotalTokens) AS Tokens
 FROM Allocation
 JOIN Call ON Call.CallId = Allocation.CallId
-GROUP BY Call.SessionId;`,d=`CREATE VIEW ClientCost AS
+GROUP BY Call.SessionId;`,S=`CREATE VIEW ClientCost AS
 SELECT Project.ClientId AS ClientId,
     Client.Name AS Name,
     SUM(Allocation.DirectCost) AS Direct,
@@ -106,4 +109,20 @@ JOIN Call ON Call.CallId = Allocation.CallId
 JOIN Session ON Session.SessionId = Call.SessionId
 JOIN Project ON Project.ProjectId = Session.ProjectId
 JOIN Client ON Client.ClientId = Project.ClientId
-GROUP BY Project.ClientId, Client.Name;`,r=[E,T,o,e,N,l,t,I,L,R,i,C,A,n,s,a,d];var U=r;export{R as Allocation,C as Annotation,t as Call,T as Client,d as ClientCost,L as ContextMass,A as Cursor,r as Ddl,N as File,n as FileCost,l as FileVersion,s as ModelCost,E as Price,o as Project,i as Rollup,e as Session,a as SessionCost,I as Touch,U as default};
+GROUP BY Project.ClientId, Client.Name;`,c="ALTER TABLE Price ADD COLUMN Window TEXT NOT NULL DEFAULT 'any';",O="ALTER TABLE Call ADD COLUMN CacheSaving REAL NOT NULL DEFAULT 0;",F="ALTER TABLE Touch ADD COLUMN Stage TEXT;",G="ALTER TABLE Touch ADD COLUMN Branch TEXT;",P="ALTER TABLE Touch ADD COLUMN ReadBeforeEdit INTEGER NOT NULL DEFAULT 0;",E=`CREATE TABLE Alias (
+    AliasId INTEGER PRIMARY KEY, FileId INTEGER NOT NULL REFERENCES File (FileId),
+    FromPath TEXT NOT NULL, ToPath TEXT NOT NULL, At INTEGER NOT NULL
+) STRICT;`,T=`CREATE TABLE Verdict (
+    SessionId TEXT NOT NULL REFERENCES Session (SessionId),
+    FileId INTEGER NOT NULL REFERENCES File (FileId),
+    State TEXT NOT NULL, LinesAdded INTEGER NOT NULL DEFAULT 0,
+    LinesRemoved INTEGER NOT NULL DEFAULT 0, At INTEGER NOT NULL,
+    PRIMARY KEY (SessionId, FileId)
+) STRICT;`,e=`CREATE VIEW FileLifetime AS
+SELECT f.FileId, f.Path, count(DISTINCT c.SessionId) AS Sessions,
+       sum(a.DirectCost) AS Direct, sum(a.AmortizedCost) AS Amortized,
+       sum(a.DirectCost + a.AmortizedCost) AS Cost
+FROM File AS f
+JOIN Allocation AS a ON a.FileId = f.FileId
+JOIN Call AS c ON c.CallId = a.CallId
+GROUP BY f.FileId;`,M=[c,O,F,G,P,E,T,e,"PRAGMA user_version = 2;"],D=[o,N,t,l,L,i,I,R,A,C,n,s,a,d,r,U,S,E,T,e];var p=D;export{E as Alias,C as Allocation,s as Annotation,I as Call,O as CallSaving,N as Client,S as ClientCost,A as ContextMass,a as Cursor,D as Ddl,L as File,d as FileCost,e as FileLifetime,i as FileVersion,M as Migration,r as ModelCost,o as Price,c as PriceWindow,t as Project,n as Rollup,l as Session,U as SessionCost,R as Touch,G as TouchBranch,P as TouchRead,F as TouchStage,T as Verdict,p as default};

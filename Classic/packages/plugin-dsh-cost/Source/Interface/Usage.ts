@@ -5,7 +5,10 @@
 // exactly, and the live verification showed totalTokens = inputTokens +
 // cacheReadTokens + outputTokens, so InputTokens is the UNCACHED remainder
 // and pricing must never treat it as the whole input. A null bucket is an
-// unreported bucket, charged at zero, never guessed.
+// unreported bucket, charged at zero, never guessed. The factor layer's
+// optional dimensions (section 17.1): Mode is the pricing mode the call ran
+// in (standard when the log carries no signal) and Region the residency
+// region (null when the log carries no signal); both default at the drain.
 export default interface Usage {
 	readonly SessionId: string;
 	readonly Turn: number;
@@ -20,4 +23,6 @@ export default interface Usage {
 	readonly ReasoningTokens: number | null;
 	readonly TotalTokens: number | null;
 	readonly At: number;
+	readonly Mode?: string;
+	readonly Region?: string | null;
 }

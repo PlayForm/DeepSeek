@@ -8,6 +8,19 @@ type Row = {
     Calls: number;
     Tokens: number;
 };
+type LifetimeRow = {
+    Path: string;
+    Sessions: number;
+    Direct: number;
+    Amortized: number;
+    Cost: number;
+};
+type StageRow = {
+    Stage: string;
+    Touches: number;
+    Tokens: number;
+    Cost: number;
+};
 declare const Row: (Scope: Row["Scope"], Raw: Record<string, unknown>) => Row;
 export default _default;
 declare function _default(Database: DatabaseSync): {
@@ -16,4 +29,6 @@ declare function _default(Database: DatabaseSync): {
     Client: (Name?: string) => readonly Row[];
     Model: () => readonly Row[];
     Session: (Id?: string) => readonly Row[];
+    Lifetime: (Path?: string) => readonly LifetimeRow[];
+    Stages: (Path?: string) => readonly StageRow[];
 };

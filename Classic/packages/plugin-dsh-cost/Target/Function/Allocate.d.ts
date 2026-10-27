@@ -14,6 +14,8 @@ type Costed = {
 type Massed = {
     Surface: number;
     PerPath: Map<string, number>;
+    Cached?: Map<string, number>;
+    CachedSurface?: number;
 };
 export default _default;
 declare function _default(Usage: Usage, Cost: Costed, Touches: readonly Touch[], Mass: Massed, Config: Config): readonly Allocation[];

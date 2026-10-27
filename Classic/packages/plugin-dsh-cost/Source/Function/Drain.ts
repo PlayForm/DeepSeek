@@ -1,15 +1,22 @@
 // Drain - the queue -> SQLite transaction (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 1): the session/flush listener's engine. One
-// flush folds one session's queued events into the ledger inside ONE
-// transaction: the session and project dimensions adopted from the session
-// header, the Call row per assistant/message that carries usage (priced at
-// the price row in force at the call's own time), the Touch rows per
-// tool/call (written the moment their Call row exists, pending until then),
-// the ContextMass rows from the surface replay, the Allocation rows from the
-// attribution model (allocated when the step ends, or at the end of the
-// batch as the safety net), and the session Cursor advanced to the highest
-// sequence folded. Every insert is INSERT OR IGNORE against the DDL's unique
-// keys, so draining the same events twice writes the same rows and no
+// COST-TRACK-PLUGIN.md sections 1, 14 and 16.1): the session/flush listener's
+// engine. One flush folds one session's queued events into the ledger inside
+// ONE transaction: the session and project dimensions adopted from the session
+// header, the Call row per assistant/message that carries usage (priced at the
+// price row in force at the call's own time, with the cache split's
+// CacheSaving), the Touch rows per tool/call (written the moment their Call
+// row exists, pending until then, each with its Stage and ReadBeforeEdit
+// derived from the file's own prior touches in the session), the ContextMass
+// rows from the surface replay (which now splits the cached prefix from the
+// uncached remainder), the Allocation rows from the attribution model
+// (allocated when the step ends, or at the end of the batch as the safety
+// net), the Verdict row per (session, file) when the session ends, and the
+// session Cursor advanced to the highest sequence folded. The call's own
+// pricing dimensions (section 17.1) - Mode, Region and the resolved tier -
+// are written on the Call row, and the cache split's CacheSaving is
+// measured against the modifier-adjusted rates (section 17.2). Every insert
+// is INSERT OR IGNORE against the DDL's unique keys (the Verdict is
+// REPLACE), so draining the same events twice writes the same rows and no
 // duplicates. The drain never throws into the parallel dispatch: one failed
 // batch rolls back whole and logs one line.
 import { basename } from "node:path";
@@ -23,6 +30,7 @@ import type Usage from "../Interface/Usage.js";
 import Allocate from "./Allocate.js";
 import Mass from "./Mass.js";
 import Price from "./Price.js";
+import StageOf from "./Stage.js";
 import Touch from "./Touch.js";
 
 type EventRecord = {
@@ -65,6 +73,46 @@ type AwaitedCall = {
 	Costed: Costed;
 	Surface: number;
 	PerPath: Map<string, number>;
+	Cached: Map<string, number>;
+	CachedSurface: number;
+};
+
+// The mutating kinds: the touches whose stage the classifier reads as an
+// edit (section 16.1) and whose presence makes a file's verdict "changed".
+const WriteKind = (Kind: string): boolean =>
+	Kind === "write" || Kind === "edit" || Kind === "delete" || Kind === "move";
+
+// The cache split's saving (section 2.2 and section 11's ring C): the reads
+// the cache made cheaper, minus the cache-write premium when the provider
+// charges one - zero when the price row carries no cache rates.
+const Saving = (
+	CacheRead: number,
+	CacheWrite: number,
+	Rate: { InputRate: number; CacheReadRate: number | null; CacheWriteRate: number | null },
+): number => {
+	const Read =
+		Rate.CacheReadRate === null ? 0 : (CacheRead * (Rate.InputRate - Rate.CacheReadRate)) / 1e6;
+	const Write =
+		Rate.CacheWriteRate === null || Rate.CacheWriteRate <= Rate.InputRate
+			? 0
+			: (CacheWrite * (Rate.CacheWriteRate - Rate.InputRate)) / 1e6;
+	return Read - Write;
+};
+
+// One file's verdict at session end (section 14): a file whose last
+// write-kind touch is a revert is "reverted", a file with any write-kind
+// touch is "changed", a file with only read-kind touches is "read".
+const VerdictOf = (Kinds: readonly string[]): string => {
+	const Last = Kinds.reduce((Found, Kind, Index) => (WriteKind(Kind) ? Index : Found), -1);
+	switch (true) {
+		case Last < 0:
+			return "read";
+		default: {
+			const Current = Kinds[Last] ?? "";
+			const Staged = StageOf(Kinds.slice(0, Last), Current, false);
+			return Staged === "revert" ? "reverted" : "changed";
+		}
+	}
 };
 
 // The session identity: the subject's own id first, then the session header
@@ -134,8 +182,8 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const InsertCall = Database.prepare(
 		"INSERT OR IGNORE INTO Call (SessionId, Turn, Step, Seq, Provider, Model, PriceId, InputTokens, OutputTokens, " +
 			"CacheReadTokens, CacheWriteTokens, ReasoningTokens, TotalTokens, CostInput, CostOutput, CostCacheRead, " +
-			"CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, At) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			"CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, CacheSaving, At, Mode, Region, Tier) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 	);
 	const SelectPriceId = Database.prepare(
 		"SELECT PriceId FROM Price WHERE Provider = ? AND Model = ? AND EffectiveFrom = ? " +
@@ -146,8 +194,12 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		"INSERT OR IGNORE INTO File (ProjectId, Path, FirstSeenAt) VALUES (?, ?, ?)",
 	);
 	const InsertTouch = Database.prepare(
-		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Seq, At) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Stage, ReadBeforeEdit, Seq, At) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	);
+	const InsertVerdict = Database.prepare(
+		"INSERT OR REPLACE INTO Verdict (SessionId, FileId, State, LinesAdded, LinesRemoved, At) " +
+			"VALUES (?, ?, ?, ?, ?, ?)",
 	);
 	const InsertMass = Database.prepare(
 		"INSERT OR IGNORE INTO ContextMass (CallId, FileId, Tokens) VALUES (?, ?, ?)",
@@ -164,10 +216,13 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 
 	// The per-session replay state, held across flushes: the surface buffer
 	// every later call's mass is replayed over (bounded by the session's own
-	// length), the pending touch sets, and the awaiting calls.
+	// length), the pending touch sets, the awaiting calls, and the per-file
+	// ordered touch kinds every later touch's stage and the session's
+	// verdicts read (section 16.1).
 	const Surfaces = new Map<string, unknown[]>();
 	const Pending = new Map<string, Map<string, PendingCall[]>>();
 	const Awaiting = new Map<string, Map<string, AwaitedCall>>();
+	const Histories = new Map<string, Map<string, string[]>>();
 	const Folded = new Set<number>();
 
 	// One assistant/message's usage record, read from the event's own fields:
@@ -198,6 +253,11 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		const Named = Source as { provider?: unknown; model?: unknown } | undefined;
 		const Provider = Named?.provider;
 		const Model = Named?.model;
+		// The factor layer's dimensions (section 17.1): the log's own mode
+		// and region signals when it carries them - Mode defaults to
+		// "standard", Region stays NULL when the log has no signal.
+		const ModeRaw = Data["mode"];
+		const RegionRaw = Data["region"];
 		return {
 			SessionId: "",
 			Turn: Math.round(Turn),
@@ -212,6 +272,8 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			ReasoningTokens: Bucket("reasoningTokens"),
 			TotalTokens: Bucket("totalTokens"),
 			At: Math.round(At),
+			Mode: typeof ModeRaw === "string" && ModeRaw.length > 0 ? ModeRaw : "standard",
+			Region: typeof RegionRaw === "string" && RegionRaw.length > 0 ? RegionRaw : null,
 		};
 	};
 
@@ -323,11 +385,22 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				Step: number,
 				Entry: PendingCall,
 			): void => {
+				const History = Histories.get(SessionId) ?? new Map<string, string[]>();
+				Histories.set(SessionId, History);
 				for (const Row of Entry.Touched) {
 					const FileId = Filed(Row.Path, Entry.At);
 					if (FileId === null) {
 						continue;
 					}
+					// the stage and the read-before-edit flag (section 16.1):
+					// derived from the file's own prior touch kinds in this
+					// session. The restore signal is not carried by the current
+					// log shape, so the classifier's revert rule is fed false
+					// until a hash-aware touch arrives - the Verdict's reverted
+					// state recomputes when one does.
+					const Prior = History.get(Row.Path) ?? [];
+					const Staged = StageOf(Prior, Row.Kind, false);
+					const Read = WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
 					InsertTouch.run(
 						CallId,
 						SessionId,
@@ -337,9 +410,14 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 						Entry.Tool,
 						FileId,
 						Row.Kind,
+						Staged,
+						Read,
 						Entry.Seq,
 						Entry.At,
 					);
+					const Seen = History.get(Row.Path) ?? [];
+					Seen.push(Row.Kind);
+					History.set(Row.Path, Seen);
 				}
 			};
 
@@ -416,7 +494,12 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					Entry.Usage,
 					Entry.Costed,
 					Touched,
-					{ Surface: Entry.Surface, PerPath: Entry.PerPath },
+					{
+						Surface: Entry.Surface,
+						PerPath: Entry.PerPath,
+						Cached: Entry.Cached,
+						CachedSurface: Entry.CachedSurface,
+					},
 					Config,
 				);
 				for (const Row of Rows) {
@@ -517,16 +600,53 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								break;
 							}
 							// the surface BEFORE this call: the replay covers every
-							// surface event folded so far, this one not yet
-							const Massed = Replay(Surfaces.get(SessionId) ?? []);
+							// surface event folded so far, this one not yet - and
+							// the call's cacheReadTokens is the budget the replay
+							// splits the cached prefix by (section 2.2)
+							const Massed = Replay(Surfaces.get(SessionId) ?? [], Usage.CacheReadTokens ?? 0);
 							const Surface = Math.max(0, Math.round(Massed.Surface));
 							const PerPath = new Map<string, number>();
 							for (const [Path, Tokens] of Massed.PerPath) {
 								PerPath.set(Path, Math.max(0, Math.round(Tokens)));
 							}
+							const Cached = new Map<string, number>();
+							for (const [Path, Tokens] of Massed.Cached) {
+								Cached.set(Path, Math.max(0, Math.round(Tokens)));
+							}
+							const CachedSurface = Math.max(0, Math.round(Massed.CachedSurface));
 							Adopt(Record, {}, At);
-							const Rate = Book.Resolve(Usage.Provider, Usage.Model, Usage.At);
+							// The price row in force at the call's own time, mode
+							// and region (section 17.1): the call's own signals,
+							// defaulting to standard and any region.
+							const Rate = Book.Resolve(
+								Usage.Provider,
+								Usage.Model,
+								Usage.At,
+								Usage.Mode ?? "standard",
+								Usage.Region ?? null,
+							);
 							const Costed = Cost(Usage, Rate);
+							// The cache split's saving is measured against the
+							// modifier-adjusted rates (section 17.2), not the
+							// raw ones, so the book's discounts and uplifts
+							// move the saving the same way they move the bill.
+							const Lift = Book.Applied(
+								Usage.Provider,
+								Usage.Mode ?? "standard",
+								Usage.Model,
+								Usage.At,
+							);
+							const Saved = Saving(
+								Usage.CacheReadTokens ?? 0,
+								Usage.CacheWriteTokens ?? 0,
+								{
+									InputRate: Rate.InputRate * Lift,
+									CacheReadRate:
+										Rate.CacheReadRate === null ? null : Rate.CacheReadRate * Lift,
+									CacheWriteRate:
+										Rate.CacheWriteRate === null ? null : Rate.CacheWriteRate * Lift,
+								},
+							);
 							InsertCall.run(
 								SessionId,
 								Usage.Turn,
@@ -549,7 +669,11 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								Costed.Total,
 								Costed.Currency,
 								Surface,
+								Saved,
 								Usage.At,
+								Usage.Mode ?? "standard",
+								Usage.Region ?? null,
+								Rate.EffectiveFrom === 0 ? null : Rate.TierFrom,
 							);
 							const CallId = Called(Usage.Turn, Usage.Step);
 							if (CallId === undefined) {
@@ -572,6 +696,8 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								Costed,
 								Surface,
 								PerPath,
+								Cached,
+								CachedSurface,
 							});
 							break;
 						}
@@ -585,6 +711,32 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							if (Entry !== undefined) {
 								Fold(Entry);
 								BySession?.delete(Key);
+							}
+							break;
+						}
+						case Type === "session/disposed" || Type === "turn/end": {
+							// the session boundary (section 14): the Verdict row
+							// per (session, file) from the touch kinds seen so
+							// far - REPLACE keeps the latest end's state, so a
+							// mid-session turn's premature row is corrected by
+							// the final one and the verdict stays recomputable
+							// from Touch alone
+							const Over = Histories.get(SessionId);
+							if (Over !== undefined) {
+								for (const [Path, Kinds] of Over) {
+									const FileId = Filed(Path, At);
+									if (FileId === null) {
+										continue;
+									}
+									InsertVerdict.run(
+										SessionId,
+										FileId,
+										VerdictOf(Kinds),
+										0,
+										0,
+										Math.round(At),
+									);
+								}
 							}
 							break;
 						}

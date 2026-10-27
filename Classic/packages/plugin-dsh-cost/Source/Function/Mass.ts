@@ -11,17 +11,33 @@
 // against); unknown shapes are skipped and the walk never throws. A
 // user/message that attached a file is not detectable in the current log
 // shape and contributes to no path.
+//
+// THE CACHE SPLIT: prompt caching is prefix-based, so the walk also carries
+// the CacheBudget (the call's cacheReadTokens) and splits every node's
+// tokens into the cached prefix portion - `min(nodeTokens, remaining
+// budget)` - and the uncached remainder, reported per path and in total as
+// Cached and CachedSurface. PerPath stays the TOTAL mass (cached plus
+// uncached), so the allocator and every existing caller keep their meaning.
 import Touch from "./Touch.js";
 
 export default (Estimate: (Message: unknown) => number) =>
 	(
 		Events: readonly unknown[],
+		CacheBudget: number,
 	): {
 		Surface: number;
 		PerPath: Map<string, number>;
+		Cached: Map<string, number>;
+		CachedSurface: number;
 	} => {
 		let Surface = 0;
+		let CachedSurface = 0;
+		// the tokens already walked: the cached budget covers the surface in
+		// order, so a node's cached portion is what the remaining budget fits
+		let Seen = 0;
+		const Budget = Number.isFinite(CacheBudget) && CacheBudget > 0 ? CacheBudget : 0;
 		const PerPath = new Map<string, number>();
+		const Cached = new Map<string, number>();
 		const CallPaths = new Map<string, string[]>();
 		let Cwd = process.cwd();
 		for (const Event of Events) {
@@ -69,6 +85,11 @@ export default (Estimate: (Message: unknown) => number) =>
 						const Message = Data["message"] ?? Data;
 						const Tokens = Priced(Estimate, Message);
 						Surface += Tokens;
+						// the cached portion: the first Budget tokens of the walk
+						// are the cached ones, the rest is priced uncached
+						const Portion = Math.max(0, Math.min(Tokens, Budget - Seen));
+						Seen += Tokens;
+						CachedSurface += Portion;
 						if (Record.type !== "tool/result") {
 							break;
 						}
@@ -84,7 +105,12 @@ export default (Estimate: (Message: unknown) => number) =>
 									: "";
 						const Paths = CallId.length === 0 ? [] : (CallPaths.get(CallId) ?? []);
 						for (const Path of Paths) {
+							// PerPath keeps the TOTAL mass; the cached portion adds
+							// only to the Cached map
 							PerPath.set(Path, (PerPath.get(Path) ?? 0) + Tokens);
+							if (Portion > 0) {
+								Cached.set(Path, (Cached.get(Path) ?? 0) + Portion);
+							}
 						}
 						break;
 					}
@@ -94,7 +120,7 @@ export default (Estimate: (Message: unknown) => number) =>
 				/* one malformed event never breaks the walk */
 			}
 		}
-		return { Surface, PerPath };
+		return { Surface, PerPath, Cached, CachedSurface };
 	};
 
 // One message priced by the estimator: a failed, non-finite or non-positive

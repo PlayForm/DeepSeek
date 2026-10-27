@@ -9,7 +9,9 @@
 // at load (schemastery's "missing required value"); the three optional rates
 // stay optional - an absent rate is an unpriced bucket (charged at zero), not
 // an error. The shipped `prices` default is the three-row price book; each
-// row's own `effectiveFrom`/`currency` defaults fill in at validation.
+// row's own `effectiveFrom`/`currency` defaults fill in at validation. The
+// factor layer's arrays (section 17): `modifiers` ships the four mode
+// multipliers and `priceWindows` the time-of-day windows (empty by default).
 //
 // This is one of the modules in the tree with a runtime import of
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
@@ -41,6 +43,50 @@ const Rate = () =>
 			.default("2026-01-01")
 			.description("First date the row is in force; the newest row in force prices a call."),
 		currency: Schema.string().default("USD").description("Currency of this row's rates."),
+	});
+
+// One modifier row's schema (section 17.2): an effective-dated multiplier
+// for one pricing mode, optionally scoped to one model. The multiplier
+// scales the priced total; a model-specific row beats a provider-wide one
+// of the same kind.
+const Modifier = () =>
+	Schema.object({
+		provider: Schema.string()
+			.required()
+			.description("Provider id the modifier discounts or uplifts."),
+		model: Schema.string().description(
+			"Model id the modifier is scoped to; absent means every model of the provider.",
+		),
+		kind: Schema.string()
+			.required()
+			.description("Pricing mode the modifier applies to, for example batch or flex."),
+		value: Schema.string()
+			.required()
+			.description("Short label naming the modifier row, kept in the ledger for the audit."),
+		multiplier: Schema.number()
+			.required()
+			.description("Factor the priced total is multiplied by whenever the modifier applies."),
+		effectiveFrom: Schema.string()
+			.required()
+			.description("First date the modifier is in force."),
+		effectiveTo: Schema.string().description(
+			"Last date the modifier is in force; absent means it never ends.",
+		),
+	});
+
+// One time-of-day window's schema: the label a price row's Window column
+// resolves against and the UTC hours it covers.
+const PriceWindow = () =>
+	Schema.object({
+		label: Schema.string()
+			.required()
+			.description("Window name a price row's Window column is matched against, for example peak."),
+		startUtcHour: Schema.number()
+			.required()
+			.description("First whole UTC hour the window covers."),
+		endUtcHour: Schema.number()
+			.required()
+			.description("UTC hour the window ends at; a value past 24 wraps into the next day."),
 	});
 
 export default Schema.object({
@@ -127,6 +173,45 @@ export default Schema.object({
 			},
 		])
 		.description("The effective-dated price book, per million tokens; a change appends a row."),
+	modifiers: Schema.array(Modifier())
+		.default([
+			{
+				provider: "cloudflare-workers-ai",
+				kind: "batch",
+				value: "shipped-batch",
+				multiplier: 0.5,
+				effectiveFrom: "2026-01-01",
+			},
+			{
+				provider: "cloudflare-workers-ai",
+				kind: "flex",
+				value: "shipped-flex",
+				multiplier: 0.5,
+				effectiveFrom: "2026-01-01",
+			},
+			{
+				provider: "cloudflare-workers-ai",
+				kind: "priority",
+				value: "shipped-priority",
+				multiplier: 2,
+				effectiveFrom: "2026-01-01",
+			},
+			{
+				provider: "cloudflare-workers-ai",
+				kind: "ultrafast",
+				value: "shipped-ultrafast",
+				multiplier: 6,
+				effectiveFrom: "2026-01-01",
+			},
+		])
+		.description(
+			"The effective-dated modifier rows (section 17.2); a row multiplies the priced total of a call in its pricing mode.",
+		),
+	priceWindows: Schema.array(PriceWindow())
+		.default([])
+		.description(
+			"The time-of-day windows a price row's Window column resolves against; empty means every call is any-window.",
+		),
 	log: Schema.boolean().default(true).description("Write the plugin's own diagnostic log file."),
 	logFile: Schema.string()
 		.default("~/.dsh/cost/cost.log")
