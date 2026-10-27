@@ -14,22 +14,22 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE PLACES TO RESEARCH (ALWAYS REFER THE SUBSEQUENT AGENTS)
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> Detailed document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
-> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, and the
+> @playform plugin family powers it - it is never one plugin.
 
 ---
 
 - **THE PRIMARY SOURCE**: `~/Developer/Documentation/Module/deepseek-harness`
-    - the subsequent agents ALWAYS read it: to NEVER discard any single functionality + to search
-      for more integration ways + to totally modify the harness per the new nomenclature.
-- **THE FAMILY'S OWN DOCS**: the Archive + the Skills' references.
+    - the subsequent agents ALWAYS read it, so that they NEVER discard one functionality, search for
+      more ways to integrate, and modify the harness fully per the new nomenclature.
+- **THE FAMILY'S OWN DOCS**: the Archive and the references of the Skills.
 - **THE SEAMS** (each maps to one workspace member):
-    - **The LSP** - the language adapters' seam (the WorkspaceEdit) - the typed proposals'
-      vocabulary.
-    - **The OOXML spec** - the docx adapter.
-    - **The object capabilities** - the authority model.
+    - **The LSP** - the seam of the language adapters (the WorkspaceEdit) and the vocabulary of the
+      typed proposals.
+    - **The OOXML spec** - the adapter of the docx.
+    - **The object capabilities** - the model of the authority.
     - **The bidirectional transformations (Pierce/Foster)** - the lenses.
-    - **The incremental computation (Acar)** - the evidence dependencies.
-    - **The optimistic concurrency control** - the read/write sets.
+    - **The incremental computation (Acar)** - the dependencies of the evidence.
+    - **The optimistic concurrency control** - the read and write sets.

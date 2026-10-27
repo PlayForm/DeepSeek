@@ -32,45 +32,51 @@ statuses:
 
 # PLUGIN-FAMILY - the authoritative registry of the 101 packages
 
-> This document is the "plugins saved as documents" registry. The registry covers the full family -
+> This document is the "plugins saved as documents" registry, and it covers the full family, where
 > all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-planned or
-> 3-candidates). Every package is version **0.1.0** except `client-dsh-panel-family` at **0.2.0**.
-> EVERY name is byte-accurate and EVERY repo link is absolute. It is a DOCUMENT, NOT an
-> implementation. The one-line suite summary lives in
-> [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md); the per-plugin live test plans in
-> [../Testing/](../Testing/README.md); the PoC-vs-plan grades in
-> [../Reports/POC-GAP-ANALYSIS.md](../Reports/POC-GAP-ANALYSIS.md). Source of truth: the packages'
-> own READMEs/SCHEMs/Sources under `Classic/packages/` and `EffectTS/packages/`, plus the root
-> README.
+> 3-candidates).
+>
+> Every package is version **0.1.0** except `client-dsh-panel-family` at **0.2.0**.
+>
+> EVERY name is byte-accurate, EVERY repo link is absolute, and the document is a DOCUMENT, NOT an
+> implementation.
+>
+> The one-line suite summary lives in [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md), the
+> per-plugin live test plans live in [../Testing/](../Testing/README.md), and the PoC-vs-plan grades
+> live in [../Reports/POC-GAP-ANALYSIS.md](../Reports/POC-GAP-ANALYSIS.md).
+>
+> The source of truth is the packages' own READMEs, SCHEMs, and Sources under `Classic/packages/`
+> and `EffectTS/packages/`, plus the root README.
 
 ## 0. The family at a glance
 
 - **Version: 0.1.0 for ALL 101 packages except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED.**
-  Names are byte-accurate as below. The legacy `ets-dsh-hook-*` naming is gone (the namespace split,
-  SPLICE-ETS.md).
+  The names are byte-accurate as below, and the legacy `ets-dsh-hook-*` naming is gone (the
+  namespace split, SPLICE-ETS.md).
 - **Two trees, 53 + 48 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
-  `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript, zero
-  runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same contracts on
-  Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing base). NEVER mix
-  the two splits in ONE dependency graph. The EffectTS `Update` returns Effect envelopes, NOT the
-  classic dispatch envelope. 30 of the 36 packages added 2026-10-22 have ETS twins (all but the two
-  client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`,
-  `hook-dsh-batch-decision`). The two libraries of the completion program - `lib-dsh-trace` and
-  `lib-dsh-pack` - now have ETS twins too (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`, added with the
-  ETS parity wave). Across the whole family the count is **47 ETS twins**: the EffectTS tree holds
-  48 packages and one of them is the `ets-base-dsh` plumbing base, not a twin.
+  `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript with
+  zero runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same
+  contracts on Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing
+  base), where you NEVER mix the two splits in ONE dependency graph, the EffectTS `Update` returns
+  Effect envelopes (NOT the classic dispatch envelope), 30 of the 36 packages added 2026-10-22 have
+  ETS twins (all but the two client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
+  `plugin-dsh-pattern`, `hook-dsh-batch-decision`), and the two libraries of the completion program
+  (`lib-dsh-trace` and `lib-dsh-pack`) now have ETS twins too (`ets-lib-dsh-trace`,
+  `ets-lib-dsh-pack`, added with the ETS parity wave).
+- **The family count is 47 ETS twins:** the EffectTS tree holds 48 packages, and one of them is the
+  `ets-base-dsh` plumbing base, not a twin.
 - **Verification: the aggregate `node Maintain/Run/Smokes/Index.mjs` = 511 smoke suites / 6,612
-  checks across both trees, all green; the live desktop profile has 54 bundles enabled.**
-- **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line and journal
-  record is asserted byte-identically by the smokes, in ALL implementations. ONE ledger per plugin:
-  `~/.dsh/<identity>.log`.
+  checks across both trees, all green, and the live desktop profile has 54 bundles enabled.**
+- **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line, and journal
+  record is asserted byte-identically by the smokes in ALL implementations, with ONE ledger per
+  plugin at `~/.dsh/<identity>.log`.
 - **EVERY name reads as an @-sentence:** `<kind> @ <platform> @ <role> @ <domain>` (e.g. Hook @ DSH
   @ Normalize @ Dash).
-- **The event surfaces used by the family:** `llm/stream` (the streaming waterfall - the normalize
-  flavors' rewrite point). `fs/observed` (the observed-file event - the governance trio's trigger).
-  The tool execution surface (the mutation tools - write/edit/str_replace_editor/raw-write) via the
-  factory's pre/post-execute gating and the direct-govern registry. Plus the loader surface (cordis
-  patch inserts at profile startup).
+- **The event surfaces used by the family:** `llm/stream` (the streaming waterfall, which is the
+  rewrite point of the normalize flavors), `fs/observed` (the observed-file event, which is the
+  trigger of the governance trio), the tool execution surface (the mutation tools -
+  write/edit/str_replace_editor/raw-write) through the pre/post-execute gating of the factory and
+  the direct-govern registry, and the loader surface (cordis patch inserts at profile startup).
 
 ## 1. The names (the registry list)
 
@@ -120,7 +126,7 @@ statuses:
 | 30  | `@playform/ets-hook-dsh-tool-coach`          | Hook (guardian)   | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
 | 31  | `@playform/ets-hook-dsh-live-containers`     | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute`              |
 
-**The 2026-10-22 delivery — Classic (36), roles only (full detail in
+**The 2026-10-22 delivery - Classic (36), roles only (full detail in
 [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md)):**
 
 | #   | Package                                    | Role                                                      | ETS twin |
@@ -162,14 +168,14 @@ statuses:
 | 66  | `@playform/plugin-dsh-pattern`             | match/record/decay the learned patterns                   | no       |
 | 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | no       |
 
-**EffectTS twins for the delivery (30):** `@playform/ets-*` counterparts of the 30 packages above
-marked "yes", under `EffectTS/packages/`.
+**EffectTS twins for the delivery (30):** the `@playform/ets-*` counterparts of the 30 packages
+above that are marked "yes", under `EffectTS/packages/`.
 
 The current full count of ETS twins is **47** (the 48 EffectTS packages minus the `ets-base-dsh`
-base), including the two libraries' twins (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`) listed below and
-the 15 pre-existing packages' twins listed above.
+base), which includes the twins of the two libraries (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`)
+listed below and the twins of the 15 pre-existing packages listed above.
 
-**The completion program's libraries — Classic (2) + their ETS twins (2, `ets-lib-dsh-trace` /
+**The libraries of the completion program - Classic (2) + their ETS twins (2, `ets-lib-dsh-trace` /
 `ets-lib-dsh-pack`):**
 
 | #   | Package                   | Archetype | Event surface                                                                                        | ETS twin            |
@@ -177,7 +183,7 @@ the 15 pre-existing packages' twins listed above.
 | 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) | `ets-lib-dsh-trace` |
 | 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          | `ets-lib-dsh-pack`  |
 
-Absolute-link rule for any repo target in docs/prompts/skills:
+The absolute-link rule for any repo target in docs, prompts, and skills is
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
 `https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/<pkg>`.
 
@@ -185,73 +191,76 @@ Absolute-link rule for any repo target in docs/prompts/skills:
 
 ### The base and the machinery
 
-- **`@playform/ets-base-dsh`** (Base) - the EffectTS plumbing package. It provides the shared Effect
-  types, service tags, layer helpers and runtime conveniences EVERY `ets-*` package builds on. The
-  EffectTS tree's twelve contracts share ONE base instead of duplicating the plumbing per package.
-  Effect v4.0.5 is the single shared runtime dependency.
-- **`@playform/lib-dsh-core`** (Lib @ DSH @ Core) - the pure machinery layer, zero runtime
-  dependencies, NOT itself a plugin. It provides the dependency-section lists, the exclusion
-  segments, the suppression-line composer, the update-policy loader, the refusal guard, the update
-  envelope, the activation-line composer, and the normalize/stream machinery. The normalize/stream
-  machinery is the six character tables plus `Replace`/`ReplaceMap` and the `Chunk`/`Block` dispatch
-  (per-chunk application, the assembled reasoning block, the tool-arguments gate). EACH normalize
-  flavor contributes ONE table and ONE replacement on top of this.
+- **`@playform/ets-base-dsh`** (Base) - the EffectTS plumbing package, which provides the shared
+  Effect types, service tags, layer helpers, and runtime conveniences that EVERY `ets-*` package
+  builds on, so the twelve contracts of the EffectTS tree share ONE base instead of duplicating the
+  plumbing per package, with Effect v4.0.5 as the single shared runtime dependency.
+- **`@playform/lib-dsh-core`** (Lib @ DSH @ Core) - the pure machinery layer with zero runtime
+  dependencies, which is NOT itself a plugin, and it provides the dependency-section lists, the
+  exclusion segments, the suppression-line composer, the update-policy loader, the refusal guard,
+  the update envelope, the activation-line composer, and the normalize/stream machinery, where the
+  normalize/stream machinery is the six character tables plus `Replace`/`ReplaceMap` and the
+  `Chunk`/`Block` dispatch (per-chunk application, the assembled reasoning block, and the
+  tool-arguments gate) and EACH normalize flavor contributes ONE table and ONE replacement on top of
+  this.
 
 ### The service
 
-- **`@playform/plugin-dsh-factory`** (Plugin @ DSH @ Factory) - the family's FIRST service. Loading
-  it registers ONE class plugin (`static inject = ["fs"]`) exposing `ctx.pluginFactory`, nineteen
-  callable methods covering everything the hooks used to duplicate. The methods are: the ledger
-  (`Append`), the exclusion match (`Match`), registry discovery (`Discover`/`Parse`), the union
-  keep-list (`ResolvePolicy`), the gate set (`Gate`), the shared write executor
+- **`@playform/plugin-dsh-factory`** (Plugin @ DSH @ Factory) - the family's FIRST service, where
+  loading it registers ONE class plugin (`static inject = ["fs"]`) that exposes `ctx.pluginFactory`
+  with nineteen callable methods covering everything that the hooks used to duplicate, namely the
+  ledger (`Append`), the exclusion match (`Match`), registry discovery (`Discover`/`Parse`), the
+  union keep-list (`ResolvePolicy`), the gate set (`Gate`), the shared write executor
   (`Write`/`GuardedWrite`, version-guarded fenced writes), the `fs/observed` re-emit (`Refresh`),
   the detached contained continuation (`Continue`), the State builder, fiber-owned wiring (`Wire`),
   effect registrations (`Attach`), the P5 journal (`Journal`), the schema factory (`Schema`), the
   probe-once seam (`Seam`), the inflight key (`UpdateKey`), and the direct-govern registry and entry
-  (`RegisterGovern`/`Govern`). `RegisterGovern`/`Govern` is the sequential fold: ONE step's chain
-  completes before the next step reads the file. The loader contract is
+  (`RegisterGovern`/`Govern`); `RegisterGovern`/`Govern` is the sequential fold where ONE step's
+  chain completes before the next step reads the file, and the loader contract is
   `name`/`apply`/`Config`/`inject` on the default export.
 
 ### The governance trio
 
 - **`@playform/hook-dsh-package-governor`** (Hook @ DSH @ Governor @ Package) - the silent
-  package.json governor. It hooks `fs/observed`. A governed write by a mutation tool passes the gate
-  set, then the pass runs as a detached, contained continuation. The continuation chain-governs pins
-  (`^x`, `~x`, `workspace:*`) rewritten to the effective registry's resolved versions, then the
-  update stage (`ncu`, programmatic library or external binary through the subprocess seam) on a
-  cooldown with a circuit breaker (`maxUpdateFailures` - 3 consecutive failures pause a directory).
-  `strict` strips unknown dependencies - explicit ONLY, NEVER a default-delete.
+  package.json governor, which hooks `fs/observed`, so a governed write by a mutation tool passes
+  the gate set and then the pass runs as a detached, contained continuation that chain-governs pins
+  (`^x`, `~x`, `workspace:*`) rewritten to the resolved versions of the effective registry and then
+  runs the update stage (`ncu`, programmatic library or external binary through the subprocess seam)
+  on a cooldown with a circuit breaker (`maxUpdateFailures` - 3 consecutive failures pause a
+  directory), where `strict` strips unknown dependencies as explicit ONLY and NEVER as a
+  default-delete.
 - **`@playform/hook-dsh-package-pinner`** (Hook @ DSH @ Pinner @ Package) - the silent version
-  pinner. It deterministically rewrites EVERY ranged dependency version to its static version
-  (`^0.3.4` -> `0.3.4`), protected by the pin-policy.json keep-list. Discovery order: configured
-  `policyFile` -> repo walk-up -> built-in default; the union of keep-lists. The keep-list wins over
-  pinning, NEVER over the chain. Sections covered: dependencies, devDependencies, peerDependencies,
-  optionalDependencies.
-- **`@playform/hook-dsh-cargo-governor`** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor.
-  It does surgical chain-pin rewrites on the raw TOML lines (comments survive), full-version
-  normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through the subprocess seam.
-  `cargo upgrade` is the ONLY update path, because Rust does NOT co-opt into the TypeScript
-  ecosystem. `strict` removes the whole `name = "..."` entry, NEVER inherited or path/git entries.
+  pinner, which deterministically rewrites EVERY ranged dependency version to its static version
+  (`^0.3.4` -> `0.3.4`), protected by the keep-list of pin-policy.json, with the discovery order of
+  configured `policyFile` -> repo walk-up -> built-in default and the union of keep-lists, where the
+  keep-list wins over pinning and NEVER over the chain and the sections covered are dependencies,
+  devDependencies, peerDependencies, and optionalDependencies.
+- **`@playform/hook-dsh-cargo-governor`** (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor,
+  which does surgical chain-pin rewrites on the raw TOML lines (comments survive), full-version
+  normalization (`1.0` -> `1.0.0`), and `cargo upgrade` (cargo-edit) through the subprocess seam,
+  where `cargo upgrade` is the ONLY update path because Rust does NOT co-opt into the TypeScript
+  ecosystem and `strict` removes the whole `name = "..."` entry, NEVER inherited or path/git
+  entries.
 
 ### The seven normalize flavors
 
 ALL flavors hook `llm/stream` (the interceptable wrapper around EVERY streaming model call).
 
-They rewrite their character family LIVE in the transcript - BOTH the live UI and the durable
-transcript.
+They rewrite their character family LIVE in the transcript, which covers BOTH the live UI and the
+durable transcript.
 
 The normalization is deliberately visible.
 
-The replacement is per-chunk, single-character (chunk-boundary-safe by construction): NO
-lookahead/lookbehind, NO multi-character sequences.
+The replacement is per-chunk and single-character (chunk-boundary-safe by construction): NO
+lookahead/lookbehind and NO multi-character sequences.
 
-Two register tools: `raw-write` (per-call `normalize` selection, default false = verbatim) and
-`normalize-file` (the whole-file pass, write ONLY when something changed).
+Two tools register: `raw-write` (per-call `normalize` selection, default false = verbatim) and
+`normalize-file` (the whole-file pass, which writes ONLY when something changed).
 
-- **`@playform/hook-dsh-normalize-dash`** - the dash flavor. It maps em and en dashes and their
+- **`@playform/hook-dsh-normalize-dash`** - the dash flavor, which maps em and en dashes and their
   exotic relatives (U+058A, U+05BE, U+1400, U+1806, U+2010-2015, U+2E17, U+2E1A, U+2E3A-2E3B,
   U+2E40, U+2E5D, U+301C, U+3030, U+30A0, U+FE31-FE32, U+FE58, U+FE63, U+FF0D) to ASCII hyphen-minus
-  via the config `replacement` (default `-`).
+  through the config `replacement` (default `-`).
 - **`@playform/hook-dsh-normalize-quotes`** - the eight curly quote code points to their ASCII
   straight counterparts.
 - **`@playform/hook-dsh-normalize-ellipsis`** - the horizontal ellipsis (U+2026) to the plain
@@ -262,46 +271,47 @@ Two register tools: `raw-write` (per-call `normalize` selection, default false =
   hyphen, zero-width spaces and joiners, bidi controls, BOM) removed.
 - **`@playform/hook-dsh-normalize-fullwidth`** - the entire FULLWIDTH FORMS range (U+FF01-FF5E) to
   its ASCII half-width counterparts.
-- **`@playform/plugin-dsh-normalize-file`** - the file-content normalizer. It is the read, count,
-  write pipeline applying ALL six transforms to a file already on disk. It writes ONLY when
+- **`@playform/plugin-dsh-normalize-file`** - the file-content normalizer, which is the read, count,
+  and write pipeline that applies ALL six transforms to a file already on disk and writes ONLY when
   something changed (the `normalize-file` tool).
 
 ### The guardians and the live block
 
-- **`@playform/hook-dsh-ccr`** - the compress-cache-retrieve guardian. It hooks
+- **`@playform/hook-dsh-ccr`** - the compress-cache-retrieve guardian, which hooks
   `tools/post-execute`, replaces oversized allow-listed results with a one-line type-aware preview
   plus a `<<<CCR:<24hex>|<type>|<size>>>` marker, stores the original under a sha256-24 hash in the
   LRU, and registers `ccr_retrieve` for the byte-exact restore.
-- **`@playform/hook-dsh-tool-coach`** - the terminal-content coaching guardian. It runs the
+- **`@playform/hook-dsh-tool-coach`** - the terminal-content coaching guardian, which runs the
   four-tier ladder (ledger, notice, persistent system-prompt section, opt-in deny) over terminal
   calls and names the correct dedicated tool with its live registry description.
-- **`@playform/hook-dsh-live-containers`** - the dynamic system-prompt blocks. It appends one
-  `live-containers` section whose labeled stanzas are recomputed at request time; it ships DISABLED
+- **`@playform/hook-dsh-live-containers`** - the dynamic system-prompt blocks, which append one
+  `live-containers` section whose labeled stanzas are recomputed at request time, ships DISABLED,
   and enables only by an explicit activate.
 
 ### The completion program's libraries
 
 - **`@playform/lib-dsh-trace`** (the trace bus's library half) - the pure, harness-free half of the
-  D5 trace bus: the event envelope (`trace`/`kind`/`at`/`actor`/`payload`), the event names
-  (`observe/stamp`, `graph/indexed`, `graph/invalidated`), the type guards, the coalescing key and
-  the detached microtask loop (`Loop` - one in-flight task per key, coalesced schedules dropped, no
-  timers, fail-open). NOT a plugin: no patch, no loader contract. The `ctx.trace` service itself is
-  provided by the factory; the 256-entry ring is the service's fixed bound, not a config knob.
+  D5 trace bus, which holds the event envelope (`trace`/`kind`/`at`/`actor`/`payload`), the event
+  names (`observe/stamp`, `graph/indexed`, `graph/invalidated`), the type guards, the coalescing
+  key, and the detached microtask loop (`Loop` - one in-flight task per key, coalesced schedules
+  dropped, no timers, fail-open), is NOT a plugin (no patch, no loader contract), and leaves the
+  `ctx.trace` service to the factory, where the 256-entry ring is the fixed bound of the service,
+  not a config knob.
 - **`@playform/lib-dsh-pack`** (the pack layer's library) - the workspace-pack library of the
-  suggester family: the pack schema (the `families` keyed `<domain>/<id>`, plus the optional
-  `indexer`/`policy`/`learning` sections), the strict YAML-subset parser, the layered resolution
-  (repo layer `.dsh/pack.yml` → user layer → the built-in pack for this monorepo, with `extends`
-  chains and merge rules), the workspace gate (`Locate` - the signature check behind the suggesters'
-  `abstained foreign-workspace` silence). NOT a plugin: no config schema, no ledger strings - the
-  consumers own their lines.
+  suggester family, which holds the pack schema (the `families` keyed `<domain>/<id>`, plus the
+  optional `indexer`/`policy`/`learning` sections), the strict YAML-subset parser, the layered
+  resolution (repo layer `.dsh/pack.yml` → user layer → the built-in pack for this monorepo, with
+  `extends` chains and merge rules), and the workspace gate (`Locate` - the signature check behind
+  the `abstained foreign-workspace` silence of the suggesters), is NOT a plugin (no config schema,
+  no ledger strings), and leaves the lines to the consumers.
 
 ## 3. The config keys (from the packages' SCHEMs/READMEs)
 
-EVERY plugin's config schema is built through the factory's `Schema` factory.
+EVERY plugin builds its config schema through the `Schema` factory of the factory.
 
-The schema is ONE shared volatile block plus the module's own fields.
+The schema is ONE shared volatile block plus the fields of the module.
 
-Invalid configuration fails at load.
+An invalid configuration fails at load.
 
 EVERY default is validated and filled.
 
@@ -328,54 +338,49 @@ The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write
 
 The family changes nothing until it is told to.
 
-The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker
-(`__normalize: false`), the `govern: false` selection.
+The escape hatches are the `exclude` fence, the keep-list sidecars, the raw marker
+(`__normalize: false`), and the `govern: false` selection.
 
 ## 4. The ledger / logFile conventions
 
-- ONE ledger per plugin, `~/.dsh/<identity>.log`. The plugin's Module name is the logger/ledger
-  prefix. The identity strings are byte-identical across BOTH release trees - Classic and EffectTS -
-  and asserted by the smokes.
-- The activation line at boot is the "did it activate" answer. It is readable from the ledger ALONE,
-  e.g.:
+- ONE ledger per plugin lives at `~/.dsh/<identity>.log`, where the Module name of the plugin is the
+  logger and ledger prefix and the identity strings are byte-identical across BOTH release trees
+  (Classic and EffectTS) and asserted by the smokes.
+- The activation line at boot is the "did it activate" answer, which is readable from the ledger
+  ALONE, e.g.
   `hook-dsh-package-governor: activated (anywhere mode, logFile=..., updateMode=programmatic, ...)`.
-- Refusal lines, chain-pass lines and update-stage lines are also ledger strings. They are part of
+- Refusal lines, chain-pass lines, and update-stage lines are also ledger strings, which are part of
   the contract and must NOT change.
 - The journals flow to the shared `package_governance` storage domain (the P5 journal, pre-open
-  queue capped 256). Timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
+  queue capped 256), where timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
   storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral
-  contract on top of the strings. 511 smoke suites / 6,612 checks across both trees are the release
-  contract (the original 14 mechanics suites: 1333 Classic / 1324 EffectTS; the rest is the
-  2026-10-22 delivery's suites).
+  contract on top of the strings, and 511 smoke suites / 6,612 checks across both trees are the
+  release contract (the original 14 mechanics suites: 1333 Classic / 1324 EffectTS; the rest is the
+  suites of the 2026-10-22 delivery).
 
 ## 5. The wiring (the four steps)
 
 1. **The bundles.**
 
     Add the bundles to the profile (`~/.dsh/profiles/<name>/package.json`) as `link:` dependencies
-    and in `dsh.profile.bundles`.
-
-    The list is what activates them.
+    and in `dsh.profile.bundles`, because the list is what activates them.
 
 2. **The patch entries.**
 
-    Add the patch entries (the profile's `cordis.patch.yml`) - ONE insert row per bundle
-    (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`).
-
-    The config fields come straight from the bundle's schema.
+    Add the patch entries (the profile's `cordis.patch.yml`) as ONE insert row per bundle
+    (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`), where the config fields
+    come straight from the schema of the bundle.
 
 3. **The restart.**
 
-    Restart the host.
-
-    The loader activates the entry from `Target/Library.js` and inserts the patch rows at startup.
+    Restart the host, so the loader activates the entry from `Target/Library.js` and inserts the
+    patch rows at startup.
 
 4. **The ledgers.**
 
-    Verify the ledgers.
-
-    Look for EACH plugin's activation line in its own `~/.dsh/<identity>.log`.
+    Verify the ledgers by looking for the activation line of EACH plugin in its own
+    `~/.dsh/<identity>.log`.
 
 Note: load order is NOT list order (the pinner can activate before the governor).
 

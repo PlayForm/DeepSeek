@@ -7,32 +7,39 @@
 
 ## The role
 
-A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** - the interceptable
-wrapper around every normalized dispatch result, before it becomes model content - and replaces
-oversized tool output with a one-line type-aware preview plus a retrieval marker:
+A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall**, the interceptable
+wrapper around every normalized dispatch result, before that result becomes model content.
+
+It replaces large tool output with a one-line preview that knows the type, plus a retrieval marker:
 
 ```
 [terminal:exit 0 | 142 lines | make: *** Error 1]
 <<<CCR:9d3c1f0a7b2e4d5c6a8b9c0d|terminal|5231>>>
 ```
 
-... while keeping the original retrievable through the registered **`ccr_retrieve`** tool.
+It keeps the original retrievable through the registered **`ccr_retrieve`** tool.
 
-Ported from Aphrodite's CCR pipeline - compress, cache, retrieve - at the injection point a proxy
-cannot reach, the tool result itself.
+A port of the CCR pipeline of Aphrodite (compress, cache, retrieve) at the injection point that a
+proxy cannot reach: the tool result itself.
 
-`tools/post-execute` sees the normalized result of EVERY tool with name + parsed arguments + caller
-agent, and is the only point that can legally replace model-visible output for all tools.
+`tools/post-execute` sees the normalized result of EVERY tool, with name, parsed arguments, and
+caller agent.
 
-This is the Effect-TS variant: the identical ccr contract behind the
-[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) shell (Effect v4), with the ledger strings
-byte-identical; the shared Effect-TS plumbing (the `Activate` composer the ledger's durable
-activation line is built with) comes from the [`ets-base-dsh`](../ets-base-dsh) package.
+It is the only point that can legally replace model-visible output for all tools.
 
-The gate compresses only results of tools in `targets` (default: `bash`, `glob`, `grep`, `read`,
+This package is the Effect-TS variant: the same ccr contract behind the
+[`ets-plugin-dsh-factory`](../ets-plugin-dsh-factory) shell (Effect v4), with ledger strings that
+stay byte-identical.
+
+The shared Effect-TS plumbing (the `Activate` composer that builds the durable activation line of
+the ledger) comes from the [`ets-base-dsh`](../ets-base-dsh) package.
+
+The gate compresses only results from tools in `targets` (default: `bash`, `glob`, `grep`, `read`,
 `web_fetch`, `web_search`, `list`, `search`) whose serialized content exceeds `thresholdBytes`
-(1024) × the classified type's multiplier - errors ×8 (high-signal, compress late), `grep`/`paths`/
-`web` ×2, the rest ×1.
+(1024) times the multiplier of the classified type.
+
+Errors take x8 (high signal, compress late), `grep`, `paths`, and `web` take x2, and the rest take
+x1.
 
 Never compress the `exempt` tools: `write`, `edit`, `raw-write`, `subagent`, `ask_user_question`,
 and `ccr_retrieve` itself.
@@ -40,30 +47,40 @@ and `ccr_retrieve` itself.
 Failures pass through unless `compressFailures` is on.
 
 With `autoExpand` on (the default), a result at or under `autoExpandLimitBytes` (102400) is stored
-but returned FULL - no marker reaches the model while the content is cheap enough to keep inline.
+but returned FULL, so no marker reaches the model while the content is cheap enough to keep inline.
 
 The store is an in-memory LRU keyed by a sha256-24 hash of the full serialized content bytes
-(`node:crypto`, no native deps), with a `storeBudgetBytes` budget (default 256 MiB,
-least-recently-accessed eviction), a `ttlSeconds` TTL (default 3600), and an optional JSONL disk
-journal (`journalPath`, default `""` = memory-only): one `{hash, type, size, ttlAt, payload}` record
-per store, loaded and TTL-compacted on boot, payload base64.
+(`node:crypto`, no native deps).
 
-SQLite (Aphrodite's `ccr.db`) was deliberately adapted to JSONL - a native dep the family does not
-carry.
+It has a `storeBudgetBytes` budget (default 256 MiB, least-recently-accessed eviction), a
+`ttlSeconds` TTL (default 3600), and an optional JSONL disk journal (`journalPath`, default `""` =
+memory-only).
 
-`ccr_retrieve(hash, range?)` matches the hash exactly - no prefix or fuzzy matching.
+The journal holds one `{hash, type, size, ttlAt, payload}` record per store, loaded and
+TTL-compacted on boot, with the payload in base64.
 
-`range { start, count }` slices lines granularly.
+SQLite (Aphrodite's `ccr.db`) was deliberately adapted to JSONL, a native dep that the family does
+not carry.
 
-Unknown/expired hashes return a self-describing error telling the model to re-run the original tool.
+`ccr_retrieve(hash, range?)` matches the hash exactly, with no prefix or fuzzy matching.
 
-Waterfall discipline: `next()` is always awaited first; pass-through returns the downstream decision
-unchanged; only an accepted, non-value-carrying decision is replaced; the whole transform is
-fail-open (an internal error logs a warning and keeps the inline content - never throws into the
-waterfall); the listener prepends so the gate sees the pristine result.
+A `range { start, count }` slices lines granularly.
 
-The ccr hook and the normalize flavors' tool-results arm share the `tools/post-execute` waterfall;
-the `<<<CCR:` marker guard makes any load order safe.
+Unknown or expired hashes return a self-describing error that tells the model to re-run the original
+tool.
+
+Waterfall discipline: `next()` is always awaited first, and pass-through returns the downstream
+decision unchanged.
+
+Only an accepted, non-value-carrying decision is replaced.
+
+The whole transform is fail-open: an internal error logs a warning and keeps the inline content, and
+it never throws into the waterfall.
+
+The listener prepends so that the gate sees the pristine result.
+
+The ccr hook and the tool-results arm of the normalize flavors share the `tools/post-execute`
+waterfall, and the `<<<CCR:` marker guard makes any load order safe.
 
 ## The surfaces
 

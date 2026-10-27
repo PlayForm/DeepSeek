@@ -1,7 +1,7 @@
 # Learn-Note
 
-The D4 learning bootstrap's note gate: one note per workspace per process, on
-the first judged call.
+The note gate of the D4 learning bootstrap: one note per workspace per process, on the first judged
+call.
 
 ## Scenarios
 
@@ -20,11 +20,11 @@ the first judged call.
 
 ## Fixtures
 
-The shared Harness (fake ctx, the real factory, the real built Target) plus
-`node:fs` temporary trees under the OS temp dir and a temporary `HOME`
-(`process.env.HOME`). Each repo is a packless tree with
-`Documentation/INDEX.md`, the package layout and its prose (four derived
-families).
+The shared Harness (fake ctx, the real factory, the real built Target) plus `node:fs` temporary
+trees under the OS temp dir and a temporary `HOME` (`process.env.HOME`).
+
+Each repo is a packless tree with `Documentation/INDEX.md`, the package layout and its prose (four
+derived families).
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 

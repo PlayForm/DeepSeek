@@ -1,18 +1,21 @@
 # DSH Family - Effect-TS v4 Re-Implementation Plan (register #13)
 
-Status: **RESEARCH COMPLETE, PLAN (read-only at the time; nothing edited, nothing committed) —
+Status: **RESEARCH COMPLETE, PLAN (read-only at the time; nothing edited, nothing committed) -
 IMPLEMENTED SINCE: all twelve packages now live in `EffectTS/packages/` with 746 checks green (the
-per-suite counts in §2 are the real ones).** Scope: the twelve Classic packages
-(`Classic/packages/`, behavior contract), the local Effect-TS v4.0.1 checkout, the DSH seam docs
-(the deepseek-harness docs checkout), the family docs (`DeepSeek/Documentation/Handoff/Register.md`
-#13/#14, `Documentation/Guides/Governor-SCHEME.md`,
-`Documentation/Reports/Commonalization-AUDIT.md`). Deliverable dir: `DeepSeek/EffectTS/` (already in
-the root `pnpm-workspace.yaml` as `EffectTS/packages/*`).
+per-suite counts in §2 are the real ones).**
 
-Goal restated: re-implement all twelve packages on **Effect-TS 4.0.2** so the family gains (a)
-composition with other Effect transformers, (b) external trace-ability via Effect spans, (c)
-ecosystem interop - while the **ledger strings stay byte-identical** (Classic smokes are the
-arbiter; the EffectTS smokes add coverage - 746 checks vs Classic's 733) and **#14 (the
+Scope: the twelve Classic packages (`Classic/packages/`, the behavior contract), the local Effect-TS
+v4.0.1 checkout, the DSH seam docs (the deepseek-harness docs checkout), and the family docs
+(`DeepSeek/Documentation/Handoff/Register.md` #13/#14, `Documentation/Guides/Governor-SCHEME.md`,
+`Documentation/Reports/Commonalization-AUDIT.md`).
+
+The deliverable dir is `DeepSeek/EffectTS/`, which is already in the root `pnpm-workspace.yaml` as
+`EffectTS/packages/*`.
+
+Goal restated: re-implement all twelve packages on **Effect-TS 4.0.2**, so the family gains (a)
+composition with other Effect transformers, (b) external trace-ability via Effect spans, and (c)
+ecosystem interop, while the **ledger strings stay byte-identical** (the Classic smokes are the
+arbiter, the EffectTS smokes add coverage at 746 checks against Classic's 733) and **#14 (the
 parallel-govern toggle)** is designed in.
 
 ---
@@ -26,14 +29,14 @@ Exact v4.0.1 API names verified in the checkout (`packages/effect/src/*.ts`):
 `withSpanScoped` (Effect.ts:8388/:8429), `Effect.annotateCurrentSpan` (Effect.ts:8106),
 `Effect.timed` (Effect.ts:4732), `Effect.runPromise(effect, options?: RunOptions)` with
 `RunOptions { signal }` (Effect.ts:9051/:8833), `Effect.runFork` (Effect.ts:8869),
-`Effect.forkChild/forkIn/forkScoped/forkDetach` (Effect.ts:8595/:8638/:8681/:8721 — v4 has NO
+`Effect.forkChild/forkIn/forkScoped/forkDetach` (Effect.ts:8595/:8638/:8681/:8721 - v4 has NO
 `fork`/`forkDaemon`; `forkChild` auto-supervises, `forkIn(scope)` ties the fiber to a given Scope),
 containment via `Effect.ignore` (Effect.ts:4251), `Effect.catchIf`/ `catchCause`/`onError`
-(Effect.ts:3418/:3258/:6851 — NO `catchAll` in v4), `Fiber.join/interrupt/interruptAll`
+(Effect.ts:3418/:3258/:6851 - NO `catchAll` in v4), `Fiber.join/interrupt/interruptAll`
 (Fiber.ts:304/:379/:472),
 `Stream.fromAsyncIterable/map/mapEffect/flatMap/concat/suspend/toAsyncIterable`
-(Stream.ts:1284/:1696/:1861/:2268/:2860/…/:11612 — NO `mapConcat` in v4; multi-emission per element
-is `Stream.flatMap` + `Stream.fromIterable`), `Queue.unbounded/bounded/offer/take`
+(Stream.ts:1284/:1696/:1861/:2268/:2860/.../:11612 - NO `mapConcat` in v4; multi-emission per
+element is `Stream.flatMap` + `Stream.fromIterable`), `Queue.unbounded/bounded/offer/take`
 (Queue.ts:630/:519/:664/:1453), `Tracer` interface (Tracer.ts:29) - plus `@effect/opentelemetry`
 `NodeSdk.layer` (packages/opentelemetry/src/NodeSdk.ts:113) and `@effect/platform-node`
 `NodeFileSystem.layer` (packages/platform/node/src/NodeFileSystem.ts:21), `@effect/vitest`
@@ -49,17 +52,19 @@ is `Stream.flatMap` + `Stream.fromIterable`), `Queue.unbounded/bounded/offer/tak
 | `Function/Activate` (the activation-line composer)                                                      | Pure function unchanged                                                                                                                                                                                                                                                                                                                                                          | It only formats the byte-identical string                                                                |
 | `Suppress`, `Policy`, `Refusal`                                                                         | Pure functions unchanged (used inside effects)                                                                                                                                                                                                                                                                                                                                   | No I/O, no need for effect wrappers                                                                      |
 
-The core keeps **zero harness dependencies** but gains exactly one runtime dependency: `effect`
-(this is the register's stated goal - the core becomes a composable Effect library).
+The core keeps **zero harness dependencies** but gains exactly one runtime dependency, `effect`,
+which is the stated goal of the register: the core becomes a composable Effect library.
 
 ### 1.2 plugin-dsh-factory - the service machinery
 
-The factory's **harness shell stays a cordis `Service` class** (`extends Service`, the
-default-export object with `inject: ["fs"]`, the instance state SharedJournal/
-PendingJournal/RegisterGovern) - that shell is the loader contract and is not an Effect concept.
+The **harness shell of the factory stays a cordis `Service` class** (`extends Service`, the
+default-export object with `inject: ["fs"]`, the instance state
+SharedJournal/PendingJournal/RegisterGovern), because that shell is the loader contract and is not
+an Effect concept.
+
 Behind it, every piece of machinery becomes an **`Context.Service`** (`Context.Service("...")`)
-provided by `Layer.effect`/`Layer.succeed` layers, composed with `Layer.merge`/`Layer.provide`; the
-shell delegates into the runtime:
+provided by `Layer.effect`/`Layer.succeed` layers and composed with `Layer.merge`/`Layer.provide`,
+while the shell delegates into the runtime:
 
 | Classic                                                                                                                      | Effect service / layer                                                                                                                                                                                                                                                                                                                                                                                                            |
 | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -71,7 +76,7 @@ shell delegates into the runtime:
 | `Continue`/`Refresh`/`Attach`/`Wire`/`Seam`/`Schema`/`Gate`/`Match`/`Discover`/`Parse`/`Unwrap`/`UpdateKey`/`Resolve`/`Open` | Each a service method on the same `FactoryService` interface; `Gate`/`Match` stay pure inside                                                                                                                                                                                                                                                                                                                                     |
 
 The factory owns **the runtime**: `apply()` builds one `Layer` graph, `Effect.runtime` materializes
-it, and the plain-async seams call back into it through `Effect.runPromise(effect, { signal })` /
+it, and the plain-async seams call back into it through `Effect.runPromise(effect, { signal })` or
 `Effect.runFork` (see 1.4).
 
 ### 1.3 The governance chain + tracing spans + the #14 toggle
@@ -89,25 +94,27 @@ and the direct `Govern` fold) becomes typed effects, each wrapped in a span:
   same flag shape, e.g. a `Selection` object `{ steps, parallel }` alongside the legacy
   boolean/string/array form). Implementation is a single switch: sequential =
   `Effect.forEach(steps, run, { concurrency: 1, discard: true })`; parallel =
-  `Effect.all(steps.map(run), { concurrency: "unbounded", mode: "default", discard: true })` -
-  Effect's `Fiber` scheduling replaces `Promise.all`. Documented safety condition (unchanged from
-  #14): disjoint targets only; same-file steps race. Default stays sequential (the live-verified
-  race fix; confirmed: no parallel hooks exist in the Classic code). Every step keeps its own
-  contained error (`Effect.ignore`/`Effect.catchIf`/`Effect.onError`) for the silence invariant.
-- The event path's ordering guarantee: one consumer **fiber** per module draining a
-  `Queue.unbounded` in FIFO order (see 1.4), so the idempotence (`Stash.get(targetKey)`) and
+  `Effect.all(steps.map(run), { concurrency: "unbounded", mode: "default", discard: true })`, so the
+  `Fiber` scheduling of Effect replaces `Promise.all`. The documented safety condition is unchanged
+  from #14: disjoint targets only, because same-file steps race. The default stays sequential (the
+  live-verified race fix, confirmed by the absence of parallel hooks in the Classic code). Every
+  step keeps its own contained error (`Effect.ignore`/`Effect.catchIf`/`Effect.onError`) for the
+  silence invariant.
+- The event path keeps its ordering guarantee through one consumer **fiber** per module that drains
+  a `Queue.unbounded` in FIFO order (see 1.4), so the idempotence (`Stash.get(targetKey)`) and
   version-guard (`replaceIfVersion`) semantics are unchanged.
-- Verified invariants to preserve exactly (from the Classic sources): the write version is a **fresh
-  stat after the transform** (never the observed version - the fold-convergence fix); the Stash
-  pre-registration happens before the same-actor re-emit; the update stage's in-flight key is
-  namespaced `update:<targetKey>` so the chain pass's plain-key cleanup cannot clobber it; the Gate
-  order is `target → govern → actor → kind → idempotent → basename → excluded`.
+- The verified invariants to preserve exactly (from the Classic sources): the write version is a
+  **fresh stat after the transform** (never the observed version, the fold-convergence fix); the
+  Stash pre-registration happens before the same-actor re-emit; the in-flight key of the update
+  stage is namespaced `update:<targetKey>`, so the plain-key cleanup of the chain pass cannot
+  clobber it; and the Gate order is
+  `target → govern → actor → kind → idempotent → basename → excluded`.
 
 ### 1.4 The DSH seams - the boundary design
 
 The harness seams are plain async (verified in `docs/subsystems/filesystem.md:185-526`,
 `docs/subsystems/llm-streaming.md:1125`, `docs/cookbook/adding-a-tool.md:12-47`,
-`docs/subsystems/storage.md`); the Effect side wraps them at exactly four boundary types:
+`docs/subsystems/storage.md`), and the Effect side wraps them at exactly four boundary types:
 
 1. **The `llm/stream` waterfall.**
 
@@ -127,7 +134,7 @@ The harness seams are plain async (verified in `docs/subsystems/filesystem.md:18
 
     A dedicated consumer fiber (`Effect.runFork`, started in `apply` from a `Layer.scoped` whose
     release closes the fiber) drains `Queue.take` into the govern effect (`Effect.runPromise` +
-    swallowed `Exit`) - the Classic "sync listener + detached continuation" shape, typed.
+    swallowed `Exit`), which is the Classic "sync listener + detached continuation" shape, typed.
 
 3. **The `Promise` seams.**
 
@@ -135,8 +142,8 @@ The harness seams are plain async (verified in `docs/subsystems/filesystem.md:18
     Effect implementation runs through `Effect.runPromise(effect, { signal: exec.signal })`
     (`RunOptions.signal` maps the harness abort to fiber interruption - adding-a-tool.md:44-47).
 
-    `ctx.storageDomain` stays plain; it is acquired once in a service layer (`Effect.acquireRelease`
-    around `open(spec)`/`close()`).
+    `ctx.storageDomain` stays plain, and it is acquired once in a service layer
+    (`Effect.acquireRelease` around `open(spec)`/`close()`).
 
 4. **The plugin lifecycle.**
 
@@ -144,8 +151,8 @@ The harness seams are plain async (verified in `docs/subsystems/filesystem.md:18
     returns nothing - Governor-SCHEME.md section 7 (now `Documentation/Guides/Governor-SCHEME.md`),
     HANDOFF fixes 1-2).
 
-    `apply` starts the runtime (layers + fibers); the plugin's dispose effect (registered via the
-    harness's effect-disposal seam) closes the scope, interrupting all forked fibers
+    `apply` starts the runtime (layers + fibers), and the dispose effect of the plugin (registered
+    via the effect-disposal seam of the harness) closes the scope, interrupting all forked fibers
     (`Fiber.interruptAll` semantics via the Scope).
 
 ### 1.5 The module leaves (what the factory never absorbs - unchanged in kind)
@@ -179,22 +186,23 @@ committed by agents - the user commits):
 | 12   | `plugin-dsh-normalize-file`                                     | core + factory | 71        |
 
 **Source layout** mirrors Classic (`Source/Function|Interface|Variable`, `Library.ts`,
-`Configuration/ESBuild.ts`, `cordis.patch.yml`) so diffs between the two releases are mechanical:
-pure helpers keep their file names; each factory API gains a sibling `Service/*.ts` (the
-`Context.Service` + `Layer` definitions) while the `Function/*` files become the effect bodies. New
-files only where the runtime lives: `Source/Runtime.ts` (the layer graph + the run helpers) per
-package that starts fibers.
+`Configuration/ESBuild.ts`, `cordis.patch.yml`), so diffs between the two releases are mechanical:
+pure helpers keep their file names, each factory API gains a sibling `Service/*.ts` with the
+`Context.Service` + `Layer` definitions while the `Function/*` files become the effect bodies, and
+new files appear only where the runtime lives, as `Source/Runtime.ts` (the layer graph + the run
+helpers) per package that starts fibers.
 
-**Smoke parity approach.** The Classic smokes stay the behavioral reference, untouched. The EffectTS
-smokes reuse the _same harness pattern_ (fake-ctx + real built factory) with two small adaptations
-and zero assertion changes:
+**Smoke parity approach.** The Classic smokes stay the behavioral reference, untouched, and the
+EffectTS smokes reuse the _same harness pattern_ (fake-ctx + real built factory) with two small
+adaptations and zero assertion changes:
 
-- The fake ctx stays plain; all Effect execution stays _inside_ the plugin code, behind the four
-  boundaries of 1.4 - so the smokes observe the same plain seams and the same ledger files. Each
+- The fake ctx stays plain, and all Effect execution stays _inside_ the plugin code behind the four
+  boundaries of 1.4, so the smokes observe the same plain seams and the same ledger files. Each
   smoke file is the Classic file with the import path pointed at
   `EffectTS/packages/<bundle>/Target/Library.js`.
-- Where a smoke needs a value an Effect API produces (e.g. draining a queue in tests), the smoke
-  calls `Effect.runPromise` on the exported effect directly - additive, not replacing the arbiter.
+- Where a smoke needs a value that an Effect API produces (e.g. draining a queue in tests), the
+  smoke calls `Effect.runPromise` on the exported effect directly, which is additive and does not
+  replace the arbiter.
 - Optional additive second suite (not the arbiter): `@effect/vitest` (`it.effect`, the `layer`
   helper) for the service layers, enabling typed-error and interruption tests.
 
@@ -204,21 +212,22 @@ and zero assertion changes:
 
 What gets traced (span names, per 1.3) and how it leaves the process:
 
-- **Default**: Effect's no-op `Tracer` - zero cost, no behavior change (silence invariant).
+- **Default**: the no-op `Tracer` of Effect, with zero cost and no behavior change (the silence
+  invariant).
 - **External surface, option A (recommended default)**: `@effect/opentelemetry`
-  `NodeSdk.layer({ spanProcessor })` provided at the runtime root (factory's `Source/Runtime.ts`),
-  with an OTLP `SpanProcessor`/exporter when configured - spans land in any OTel collector
-  (Tempo/Jaeger; the pattern is the v4 docs' `NodeSdk.layer` example,
-  `effect-ts-website/.../v4/observability/tracing.mdx:225-171`).
-- **Option B (harness-native)**: a custom `Tracer` service implementing Effect's `Tracer`/`Span`
-  interface (Tracer.ts:29/:372) that forwards spans onto the harness's own otel subsystem
-  (`docs/subsystems/otel.md`) - spans then appear in DSH's existing telemetry pipeline. Design the
-  `Tracer.make`-shaped adapter behind a config knob; implement only if the harness otel seam is
-  reachable from a root plugin.
-- Span hygiene: spans never alter ledger strings, ordering, or timing-sensitive gates; attributes
-  are read-only facts (path, basename, step, mode, exit code, counts). The trace can be
-  added/removed without smoke changes (a smoke run with tracing on must produce byte-identical
-  ledgers - add that as an extra smoke mode).
+  `NodeSdk.layer({ spanProcessor })` provided at the runtime root (the factory's
+  `Source/Runtime.ts`), with an OTLP `SpanProcessor`/exporter when configured, so spans land in any
+  OTel collector (Tempo/Jaeger), following the `NodeSdk.layer` example of the v4 docs at
+  `effect-ts-website/.../v4/observability/tracing.mdx:225-171`.
+- **Option B (harness-native)**: a custom `Tracer` service implementing the `Tracer`/`Span`
+  interface of Effect (Tracer.ts:29/:372) that forwards spans onto the own otel subsystem of the
+  harness (`docs/subsystems/otel.md`), so the spans then appear in the existing telemetry pipeline
+  of DSH. Design the `Tracer.make`-shaped adapter behind a config knob, and implement it only if the
+  harness otel seam is reachable from a root plugin.
+- Span hygiene: spans never alter ledger strings, ordering, or timing-sensitive gates, and
+  attributes are read-only facts (path, basename, step, mode, exit code, counts). The trace can be
+  added or removed without smoke changes, and a smoke run with tracing on must produce
+  byte-identical ledgers, which belongs in the suite as an extra smoke mode.
 
 ---
 
@@ -228,40 +237,40 @@ What gets traced (span names, per 1.3) and how it leaves the process:
 
 1. **The sync listener.**
 
-    `fs/observed` listeners must be sync and side-effect-only (filesystem.md:185) - the queue +
+    `fs/observed` listeners must be sync and side-effect-only (filesystem.md:185), so the queue +
     consumer-fiber bridge (1.4) is mandatory; a violation breaks the tool call.
 
 2. **The generator early return.**
 
-    The harness may abandon the `llm/stream` iterable on a generator early return;
-    `Stream.toAsyncIterable` must propagate the abort (verify with a cancellation smoke before the
-    flavors land).
+    The harness may abandon the `llm/stream` iterable on a generator early return, so
+    `Stream.toAsyncIterable` must propagate the abort; verify with a cancellation smoke before the
+    flavors land.
 
 3. **The promise boundaries.**
 
-    `runPromise` boundaries are everywhere: never let a rejected promise escape a listener
-    (`Effect.runPromiseExit` + swallow) - the silence invariant is a _containment_ property.
+    `runPromise` boundaries are everywhere, so never let a rejected promise escape a listener
+    (`Effect.runPromiseExit` + swallow), because the silence invariant is a _containment_ property.
 
 4. **The dispose.**
 
-    Dispose/lifecycle: plugin effects and forked fibers must close on unload; map the harness
-    effect-disposal to Scope close; interrupted writes must not half-journal.
+    Dispose/lifecycle: plugin effects and forked fibers must close on unload, the harness
+    effect-disposal must map to a Scope close, and interrupted writes must not half-journal.
 
 5. **The dual-implementation coexistence.**
 
     Dual-implementation coexistence: the EffectTS bundles ride the same desktop profile alongside
-    Classic while onboard - distinct bundle entry ids and ledger file names (`~/.dsh/hook-dsh-*.log`
-    collision risk) are required; decide the id suffix at the release step (#15 naming), the smoke
-    parity is name-agnostic.
+    Classic while onboard, so distinct bundle entry ids and ledger file names are required
+    (`~/.dsh/hook-dsh-*.log` collision risk); decide the id suffix at the release step (#15 naming),
+    because the smoke parity is name-agnostic.
 
 **Parity risks**
 
-6. Ledger strings byte-identical: keep every string module-owned; the smoke diff (Classic vs
-   EffectTS outputs on identical fixtures) is the release gate.
+6. Ledger strings byte-identical: keep every string module-owned, and treat the smoke diff (Classic
+   vs EffectTS outputs on identical fixtures) as the release gate.
 7. Ordering/timing: the single-consumer-fiber FIFO (1.3) preserves the sequential-fold and
-   idempotence semantics; the parallel toggle is opt-in only.
+   idempotence semantics, and the parallel toggle is opt-in only.
 8. The cordis patch config replaces wholesale (FSOBSERVED-DELIVERY.md, now
-   `Documentation/Reports/FSOBSERVED-DELIVERY.md`) - the EffectTS `cordis.patch.yml` files must
+   `Documentation/Reports/FSOBSERVED-DELIVERY.md`), so the EffectTS `cordis.patch.yml` files must
    repeat the full config object, including `raw-write` in `mutationTools`.
 
 **Rollout (per `Documentation/Handoff/Register.md` #13: research first, then a coder package per
@@ -273,6 +282,6 @@ bundle)**
 - R4-R6: pinner → cargo → normalize-file; R7: the six flavors (pilot spaces first).
 - R8: tracing wiring (`NodeSdk.layer`) + the parallel-mode smoke scenarios (sequential order
   assertions + parallel race-verified scenarios, per #14).
-- Each stage: coder subagent → smoke green → user commits; Classic stays live throughout; the
+- Each stage: coder subagent → smoke green → user commits; Classic stays live throughout, and the
   EffectTS ships smoke-covered before any switchover (the swap happens only after its smokes prove
   parity).

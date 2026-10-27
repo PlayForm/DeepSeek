@@ -1,13 +1,12 @@
 # Learn-Proposal
 
-The D4 learning bootstrap's derivation and its proposal file.
+The derivation of the D4 learning bootstrap and its proposal file.
 
-The `tools/post-execute` listener, with `learning: true`, derives a repo's pack
-from the repo itself and writes it under
-`<home>/.dsh/playform/proposals/<slug>.yml` - never the live pack. The
-proposal is a full pack object; it parses back through
-`@playform/ets-lib-dsh-pack`'s `Parse` and every companion it names exists under
-the repo root.
+The `tools/post-execute` listener, with `learning: true`, derives the pack of a repo from the repo
+itself and writes it under `<home>/.dsh/playform/proposals/<slug>.yml`, never the live pack.
+
+The proposal is a full pack object, it parses back through `Parse` of `@playform/ets-lib-dsh-pack`,
+and every companion it names exists under the repo root.
 
 ## Scenarios
 
@@ -40,10 +39,11 @@ the repo root.
 
 ## Fixtures
 
-The shared Harness (fake ctx, the real factory, the real built Target) plus
-`node:fs` temporary trees under the OS temp dir and a temporary `HOME`
-(`process.env.HOME`) so the real `~/.dsh` is never read or written. The
-proposal is parsed with the REAL `@playform/ets-lib-dsh-pack` Target.
+The shared Harness (fake ctx, the real factory, the real built Target) plus `node:fs` temporary
+trees under the OS temp dir and a temporary `HOME` (`process.env.HOME`), so the real `~/.dsh` is
+never read or written.
+
+The proposal is parsed with the REAL `@playform/ets-lib-dsh-pack` Target.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 

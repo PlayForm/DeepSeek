@@ -4,20 +4,24 @@ What this test verifies.
 
 ## Intent
 
-The ccr config surface and the activation posture. Every volatile field
-arrives as a `{ get }` cell (log, logFile, thresholdBytes, previewMaxChars,
-multipliers), every config default is pinned (thresholdBytes 1024,
-inlineThresholdBytes 1024, autoExpand true, autoExpandLimitBytes 102400,
-compressFailures false, previewMaxChars 240, ttlSeconds 3600,
-storeBudgetBytes 268435456, journalPath empty, contextEngine false,
-contextEngineThresholdPct 30, protectFirstTurns 2, protectLastTurns 4, the
-multipliers map, the 8-tool targets, the exempt list), and the activation
-writes its byte-exact ledger line in BOTH forms - the logger form with the
-`ccr: ` module prefix and the durable `[ISO]` file form without it - plus the
-identical detail journaled to the shared storage domain. It is its own folder
-because these are the identity-driven strings of the module: they change only
-when the module's identity changes. This is the source suite's Run 1 (config
-and activation parts) plus Run 8's activated-file-form check, moved verbatim.
+The ccr config surface and the activation posture.
+
+Every volatile field arrives as a `{ get }` cell (log, logFile, thresholdBytes, previewMaxChars,
+multipliers), and every config default is pinned (thresholdBytes 1024, inlineThresholdBytes 1024,
+autoExpand true, autoExpandLimitBytes 102400, compressFailures false, previewMaxChars 240,
+ttlSeconds 3600, storeBudgetBytes 268435456, journalPath empty, contextEngine false,
+contextEngineThresholdPct 30, protectFirstTurns 2, protectLastTurns 4, the multipliers map, the
+8-tool targets, the exempt list).
+
+The activation writes its byte-exact ledger line in BOTH forms, the logger form with the `ccr: `
+module prefix and the durable `[ISO]` file form without it, plus the identical detail journaled to
+the shared storage domain.
+
+It is its own folder because these are the identity-driven strings of the module, which change only
+when the identity of the module changes.
+
+This is the source suite's Run 1 (config and activation parts) plus Run 8's activated-file-form
+check, moved verbatim.
 
 ## Scenario
 
@@ -58,12 +62,8 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory (`Furnace`) + the REAL ccr apply;
-  `Raw1 = Validate({ logFile: Ledger })` for the config checks, `Run1 =
-  Make(Raw1)` for the activation posture.
-- Run 8's fixture: a fresh default-config run (`autoExpand: false`) with one
-  oversized bash terminal result pushed through the post-execute listener, a
-  10 ms settle, and a read of the durable ledger file.
+- The Harness fake ctx + the REAL factory (`Furnace`) + the REAL ccr apply, with `Raw1 = Validate({ logFile: Ledger })` for the config checks and `Run1 = Make(Raw1)` for the activation posture.
+- Run 8's fixture: a fresh default-config run (`autoExpand: false`) with one oversized bash terminal result pushed through the post-execute listener, a 10 ms settle, and a read of the durable ledger file.
 
 ## Expected ledger strings (byte-exact)
 
@@ -76,10 +76,9 @@ and activation parts) plus Run 8's activated-file-form check, moved verbatim.
 
 ## Edge cases
 
-- journalPath defaults to the empty string - the store is memory-only.
-- contextEngine defaults to false - the engine phase stays inert.
-- The activation record's detail is identical to the ledger line's message
-  body.
+- journalPath defaults to the empty string, so the store is memory-only.
+- contextEngine defaults to false, so the engine phase stays inert.
+- The detail of the activation record is identical to the message body of the ledger line.
 
 ## Expected count
 

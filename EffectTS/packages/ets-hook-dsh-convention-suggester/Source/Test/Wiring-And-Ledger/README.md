@@ -1,9 +1,9 @@
 Wiring-And-Ledger - the wiring and the ledger tests
 
-The convention suggester's loader wiring and its durable proof: the loader
-contract, the context-only listener registration, the byte-exact activation
-and disabled lines (logger and durable forms), the config fail-loud, the
-schema defaults and the compiled pack on the built State, and the fs purity.
+The loader wiring of the convention suggester and its durable proof: the loader contract, the
+context-only listener registration, the byte-exact activation and disabled lines (logger and durable
+forms), the config fail-loud, the schema defaults and the compiled pack on the built State, and the
+fs purity.
 
 ## Scenarios
 
@@ -33,10 +33,10 @@ schema defaults and the compiled pack on the built State, and the fs purity.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target). No fake clock: the per-agent memory is a call
-counter and a map; the durable ledger's ISO stamps are matched with an
-anchored regex.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+
+No fake clock is needed, because the per-agent memory is a call counter and a map, and the ISO
+stamps of the durable ledger are matched with an anchored regex.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 

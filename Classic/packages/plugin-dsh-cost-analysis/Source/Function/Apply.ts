@@ -98,27 +98,28 @@ export default (Context: Context, Options: Config): void => {
 	// open, and the command then says so.
 	const Views = Ledger === undefined ? undefined : Analysis(Ledger.Database, Options);
 
-	// THE HUMAN SURFACE: one command. The verb grammar is "analysis
-	// [scope]"; the scope is one of the ledger's five and defaults to
-	// "file"; any other verb answers the usage line. The handler renders
-	// the metric rows of the enabled families and reports "the ledger is
-	// empty" when a scope has no rows.
-	const Usage = "plugin-dsh-cost-analysis: usage - analysis [scope]";
+	// THE HUMAN SURFACE: one command, and it owns its own name. The ledger
+	// plugin already registers "cost", so this one registers "analysis" - two
+	// plugins cannot share a command name, and the second registration is
+	// skipped silently by the registry. The scope is one of the ledger's five
+	// and defaults to "file"; the handler renders the metric rows of the
+	// enabled families and reports "the ledger is empty" when a scope has no
+	// rows.
+	const Usage = "plugin-dsh-cost-analysis: usage - /analysis [file|project|client|model|session]";
 
 	const Commands = Context.commands;
 	if (typeof Commands?.register === "function") {
 		try {
 			Commands.register({
-				name: "cost",
+				name: "analysis",
 				description:
-					"Cost analysis (read-only): 'analysis [scope]' - the contribution and efficiency metrics over the ledger the cost plugin wrote",
+					"Cost analysis (read-only): the contribution and efficiency metrics over the ledger the cost plugin wrote",
 				handler: (Invocation): CommandResult => {
 					const Raw =
 						typeof Invocation?.rawInput === "string" ? Invocation.rawInput.trim() : "";
 					const Words = Raw.length === 0 ? [] : Raw.split(/\s+/);
-					const Verb = Words[0] ?? "";
-					const Scope = Words[1] ?? "file";
-					if (Verb !== "analysis") {
+					const Scope = Words[0] ?? "file";
+					if (!["file", "project", "client", "model", "session"].includes(Scope)) {
 						return { kind: "error", text: Usage };
 					}
 					if (Views === undefined) {

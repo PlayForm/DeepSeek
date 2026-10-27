@@ -1,6 +1,6 @@
 # SCHEME - @playform/client-dsh-workspace-live
 
-The package's contract scheme (Documentation/Plans/Workspace-Family/ LIVE.md).
+The contract scheme of the package (Documentation/Plans/Workspace-Family/ LIVE.md).
 
 ## 1. Identity
 
@@ -16,40 +16,45 @@ The package's contract scheme (Documentation/Plans/Workspace-Family/ LIVE.md).
 
 ## 2. The loader contract
 
-Object form: `name`, `apply` (empty - the pure client posture), `Config` (the Schemastery schema),
-`inject` (`[]`). The default object carries all four. The client half's `inject` is
-`["slots", "locale"]`.
+Object form: `name`, `apply` (empty, the pure client posture), `Config` (the Schemastery schema),
+and `inject` (`[]`), and the default object carries all four.
+
+The `inject` of the client half is `["slots", "locale"]`.
 
 ## 3. The presentation contract (`Source/Interface/Presentation.ts`)
 
-- `Representation` = `{ id, kind, label, version, lastSequence }` - a managed workspace entity's
-  latest observed state, never a process.
-- `LiveView` = `{ sequence, representations, events }` - everything the store presents, and nothing
-  else (the trace tail is a separate, bounded source; the snapshot shape is unchanged).
+- `Representation` = `{ id, kind, label, version, lastSequence }` - the latest observed state of a
+  managed workspace entity, never a process.
+- `LiveView` = `{ sequence, representations, events }` - everything the store presents and nothing
+  else, because the trace tail is a separate bounded source and the snapshot shape is unchanged.
 
 ## 4. The sibling mirror (`Source/Interface/Siblings.ts`)
 
-Type-only declarations from the W1 frozen contract: `GraphSnapshot`, `Stamp`, `WorkspaceEvent`
-(every event carries the operation identifier, the parent identifier, the event category). The
-end-phase replaces these with the real type-only imports once the sibling packages land.
+Type-only declarations from the W1 frozen contract: `GraphSnapshot`, `Stamp`, `WorkspaceEvent`,
+where every event carries the operation identifier, the parent identifier, and the event category.
+
+The end-phase replaces these with the real type-only imports once the sibling packages land.
 
 ## 5. The stable-until-event rule
 
-The store emits a new snapshot ONLY on `ingest()` or `refresh()`. The trace source emits ONLY on a
-new bus envelope (and once at seed time from the bus's recent ring). No polling, no timer, no wall
-clock. The tab and the section re-render only on a new snapshot object or a new trace tail.
+The store emits a new snapshot ONLY on `ingest()` or `refresh()`, and the trace source emits ONLY on
+a new bus envelope (and once at seed time from the recent ring of the bus).
+
+There is no polling, no timer, and no wall clock, and the tab and the section re-render only on a
+new snapshot object or a new trace tail.
 
 ## 6. The D5 trace ingest (`Source/Function/Trace.ts`, `Source/Variable/Trace.ts`)
 
-- The source resolves `ctx.get("trace")` structurally: `on(kind, listener)` is required,
-  `ring(limit)` is used when present. No import of `@playform/ets-lib-dsh-trace` or the factory.
+- The source resolves `ctx.get("trace")` structurally: `on(kind, listener)` is required, and
+  `ring(limit)` is used when present, with no import of `@playform/ets-lib-dsh-trace` or the
+  factory.
 - Kinds: `observe/stamp`, `graph/indexed`, `graph/invalidated`, `batch/proposed`, `batch/decision`,
-  `batch/state-change` (the batch transitions surface when a batch plugin mirrors them onto the
-  bus).
-- The tail is NEWEST FIRST and bounded by `Config.maxEvents` (the same bound as the event tail).
-- A tail line is `<kind> <path>`: the payload's `path` when it is a non-empty string, else the
-  envelope's `trace` id.
-- A missing trace is the STATIC state: `live: false`, empty tail, a no-op `subscribe`/`dispose` -
+  `batch/state-change`, where the batch transitions surface when a batch plugin mirrors them onto
+  the bus.
+- The tail is NEWEST FIRST and bounded by `Config.maxEvents`, the same bound as the event tail.
+- A tail line is `<kind> <path>`: the `path` of the payload when it is a non-empty string, else the
+  `trace` id of the envelope.
+- A missing trace is the STATIC state: `live: false`, empty tail, a no-op `subscribe`/`dispose`, and
   never an error.
 
 ## 7. The child-slot model (`Source/Function/Client.ts`)
@@ -59,22 +64,24 @@ When the panel family is composed (`ctx.get("playformFamilyPanel")` is a registr
 - the tab registration declares
   `children: { "workspace.live.section": { kind: "list", scope: "session" } }` and its component
   hands the declared slot to the renderer through `renderSlot("workspace.live.section", {})`;
-- the section registers into that declared child slot with the registration's `inject` face
-  `{ section, ports }` - `section` is the live section manifest (`workspace-live-section`,
-  `@playform/client-dsh-workspace-live`, the locale namespace, order = `Config.tabOrder`), `ports`
-  carries the presentation store and the trace source. The section reads its data through the ports,
-  never through the context.
+- the section registers into that declared child slot with the `inject` face of the registration
+  `{ section, ports }`, where `section` is the live section manifest (`workspace-live-section`,
+  `@playform/client-dsh-workspace-live`, the locale namespace, order = `Config.tabOrder`) and
+  `ports` carries the presentation store and the trace source, and the section reads its data
+  through the ports and never through the context.
 
 Without the panel family the tab keeps its legacy registration shape (no `children`, no section
-registration, one slot point) - the compatibility rule, asserted by the existing
+registration, one slot point), which is the compatibility rule asserted by the existing
 `Contract-And-Wiring` folder.
 
 ## 8. The tab render
 
-The pure `Source/Function/View.ts` builds: the representations list, the empty note (the existing
+The pure `Source/Function/View.ts` builds the representations list, the empty note (the existing
 locale string), the trace tail list (one `<li>` per envelope, `<kind> <path>`), and the child-slot
-element. The wrappers (`LiveTab`, `Section`) own the subscriptions. The container carries
-`data-live="true" | "false"` - the static-state marker with no new locale string.
+element.
+
+The wrappers (`LiveTab`, `Section`) own the subscriptions, and the container carries
+`data-live="true" | "false"`, the static-state marker with no new locale string.
 
 ## 9. Verification
 
@@ -86,5 +93,5 @@ element. The wrappers (`LiveTab`, `Section`) own the subscriptions. The containe
 
 ## 10. The EffectTS twin
 
-Deferred to the ETS parity wave (wave 5 of the completion spec); the Classic tree is the contract
-source for it.
+Deferred to the ETS parity wave (wave 5 of the completion spec), with the Classic tree as its
+contract source.

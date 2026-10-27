@@ -102,29 +102,30 @@ statuses:
 
 # AGENT-TUNER-RESEARCH.md - runtime cross-agent parameter control
 
-> The user's question: "Can we, through a plugin, create / modify and update conversation
+> The question of the user: "Can we, through a plugin, create / modify and update conversation
 > parameters, such as the model's effort name and others, on the fly?" The question has two
 > extensions.
 >
 > The first is the cross-agent requirement: a parent that launched a child on `low` must be able to
-> raise that running child to `max` and lower it again, and a child must be able to tune its
-> parent's conversation. The second is the subtree requirement: the root must be able to tune its
-> direct child and that child's own subagents (the grandchildren), live or settled, without knowing
-> their ids in advance.
+> raise that running child to `max` and lower it again, and a child must be able to tune the
+> conversation of its parent.
+>
+> The second is the subtree requirement: the root must be able to tune its direct child and the
+> subagents of that child (the grandchildren), live or settled, without knowing their ids in advance.
 >
 > The verdict, stated before the evidence:
 >
 > - **Yes for model and reasoning effort in one session.** The harness already does it without a new
 >   plugin (the `/model` command, the composer seat, and `session.selectModel`).
 > - **No for cross-agent control through the built-in selection path.** `selectModel` refuses every
->   subagent session, live or cold, because `liveAgent` applies the same ownership test as the
->   resume path. `packages/api/session-controller/src/agent.ts:402-408` refutes the hypothesis that
->   a live child might slip through.
+>   subagent session, live or cold, because `liveAgent` applies the same ownership test as the resume
+>   path, and `packages/api/session-controller/src/agent.ts:402-408` refutes the hypothesis that a
+>   live child might slip through.
 > - **Yes for cross-agent tuning through the request waterfall.** A host plugin can hold a
 >   per-session tuning store and apply it in `agent/request` for any live agent: parent, child, or
 >   grandchild. That is the only seam that works for every direction, and the only one that does not
 >   move the deployment default.
-> - **Yes for the subtree.** The root can tune its direct child and the child's subagents. The
+> - **Yes for the subtree.** The root can tune its direct child and the subagents of the child. The
 >   authority is the durable `parentSession` chain rooted at the caller, and
 >   `ctx.subagents.listDescendants(rootSessionId)` already enumerates the whole reachable subtree
 >   with parent and depth without resuming anything (`docs/subsystems/subagent.md:523-539`, `:381`).
@@ -160,49 +161,50 @@ The question decomposes into five questions that are easy to conflate:
    real gap.
 
 This document answers those five questions per parameter, with the seam, the owner, the durability,
-the authority, the discovery path, and the failure mode. The implementer of the next plugin is the
-reader, not a survey audience for the LLM subsystem.
+the authority, the discovery path, and the failure mode, and the implementer of the next plugin is
+the reader, not a survey audience for the LLM subsystem.
 
 ## 2. What a "conversation parameter" actually is
 
 The harness reconstructs a conversation request from logged state, and the log has three distinct
 carriers.
 
-The distinction is load-bearing: a plugin mutates one carrier, not "the conversation".
+The distinction is load-bearing, because a plugin mutates one carrier and not "the conversation".
 
 1. **The request envelope.** `EpochHeader` = call config (provider, model, reasoning effort, and the
    sampling scalars) plus adapter-default markers plus the assembled tool schemas
-   (`docs/subsystems/session.md:181-206`). Every field maps 1:1 onto the same-named
-   `GenerateOptions` field (`packages/llm/llm/src/call-config.ts:31-34`). The loop builds each
+   (`docs/subsystems/session.md:181-206`), where every field maps 1:1 onto the same-named
+   `GenerateOptions` field (`packages/llm/llm/src/call-config.ts:31-34`) and the loop builds each
    request from the logged header rather than accepting these per call
    (`docs/subsystems/llm-streaming.md:761`).
 2. **Derived history.** The rendered system prompt is not part of the header; it is the
    `system/message` at surface node 0 plus any later in-history system node
-   (`docs/subsystems/session.md:181`). A prompt change replaces or appends a system node and leaves
-   the header unchanged (`packages/core/agent-loop/src/agent.ts:406-424`).
+   (`docs/subsystems/session.md:181`), so a prompt change replaces or appends a system node and
+   leaves the header unchanged (`packages/core/agent-loop/src/agent.ts:406-424`).
 3. **The mounted composition.** The agent preset's plugins and services, the tool registry, the
-   permission knobs, and the working directory. These are not scalars in the envelope; each has its
-   own durable event and its own service.
+   permission knobs, and the working directory, which are not scalars in the envelope, because each
+   has its own durable event and its own service.
 
 A fourth carrier matters for the UI only: **projections** (`modelSelection`, `agentPreset`,
 `permissions`, `title`) fold the durable events into client state
 (`packages/api/session-controller/src/model-selection-projection.ts:58-68`).
 
 So "a conversation parameter" in this harness means **a value carried by the next request envelope,
-or a registry value that the next request assembly reads, with a durable record of the intent**. A
-value with no seam into either is not a parameter; it is a wish.
+or a registry value that the next request assembly reads, with a durable record of the intent**, and
+a value with no seam into either is not a parameter but a wish.
 
 Two consequences follow immediately:
 
-- **The loop is the only writer of the envelope.** Plugins replace the config at the `agent/request`
-  waterfall, and the loop logs the result (`packages/core/agent-loop/src/agent.ts:593-596`,
-  `:626-651`). A plugin that writes a `request/header` event itself would desync the loop.
-- **A parameter change and a composition change are different operations.**
-  Model/effort/sampling/prompt/tools are re-read per request; the agent preset is mounted once.
-  Treating them as one config object is the design error this document exists to prevent.
+- **The loop is the only writer of the envelope**, because plugins replace the config at the
+  `agent/request` waterfall and the loop logs the result
+  (`packages/core/agent-loop/src/agent.ts:593-596`, `:626-651`), so a plugin that writes a
+  `request/header` event itself would desync the loop.
+- **A parameter change and a composition change are different operations**, because
+  model/effort/sampling/prompt/tools are re-read per request while the agent preset is mounted once,
+  and treating them as one config object is the design error that this document exists to prevent.
 
 A third distinction matters for cross-agent work: **a parameter change is not an agent lifecycle
-change**. Tuning a child does not resume it, does not re-parent it, and does not change its
+change**, because tuning a child does not resume it, does not re-parent it, and does not change its
 composition; it only changes the config that its next request carries.
 
 ## 3. The parameter matrix

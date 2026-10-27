@@ -14,31 +14,34 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE GOVERN HOOK
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> This is a granular document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
 > family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> the @playform plugin family, and never a single plugin.
 
 ---
 
-- **THE PACKAGE**: `@playform/hook-dsh-workspace-govern` - the EVENT HOOK.
-- **THE ROLE** (the family map): the scope/permissions/constraints + the approvals + the conflicts +
-  the recursion prevention - the tools/pre+post-execute waterfalls.
-- **THE ORCHESTRATION POSITION**: "the govern gates" - the gate step of the invisible flow: the
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-govern`, the EVENT HOOK.
+- **THE ROLE** (the family map): the scope, permissions, and constraints, plus the approvals, the
+  conflicts, and the recursion prevention, through the tools and pre-execute and post-execute
+  waterfalls.
+- **THE ORCHESTRATION POSITION**: "the govern gates" is the gate step of the invisible flow: the
   observe stamps -> the semantics resolve -> the operate proposes -> the govern gates -> the
   authority licenses -> ...
-- **THE GATE SEMANTICS**: the proposals become the effects ONLY through the gates - the harness as
-  the enforcement boundary (the governed- workspace framing).
+- **THE GATE SEMANTICS**: the proposals become the effects ONLY through the gates, which makes the
+  harness the enforcement boundary of the governed-workspace framing.
 - **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): AN INTENT MUST NOT AUTHORIZE ITS
-  OWN MEANS - the govern gates run the INDEPENDENT CHECKS (contributes + authorized scope + policy +
-  preconditions) on the ProposedChange BEFORE the AuthorizationDecision on the traceability graph;
-  the gates are the means-check, the intent is never the permission.
-- **THE REGIME**: the workspace regime (the third axis) - the gates constrain the workspace's
-  INTERACTIONS (the permits of the Interface type); the OS execution axis stays orthogonal (the OS's
-  own sandbox/licensing stack governs the physical + execution regimes). The typing home:
-  INVERSE-REPRESENTATION.md (the situated interaction protocols authoritative).
-- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the recursion prevention: every
-  event carries the operation identifier, the parent identifier, the event category.
-- **THE VISIBILITY RULE**: the gates are the INVISIBLE plugin flow - the conversation never sees
+  OWN MEANS, so the govern gates run the INDEPENDENT CHECKS (contributes, authorized scope, policy,
+  and preconditions) on the ProposedChange BEFORE the AuthorizationDecision on the traceability
+  graph. The gates are the means-check, and the intent is never the permission.
+- **THE REGIME**: the gates work in the workspace regime (the third axis) and constrain the
+  workspace's INTERACTIONS, which are the permits of the Interface type. The OS execution axis stays
+  orthogonal, because the OS's own sandbox and licensing stack governs the physical and execution
+  regimes, and the typing home is INVERSE-REPRESENTATION.md, where the situated interaction
+  protocols are authoritative.
+- **THE DISTRIBUTION LAW**: the package keeps its own Config, ledger strings, and tools, and the
+  recursion prevention makes every event carry the operation identifier, the parent identifier, and
+  the event category.
+- **THE VISIBILITY RULE**: the gates are the INVISIBLE plugin flow, and the conversation never sees
   them until an event surfaces them.
-- **THE TWINS**: the Classic + ETS twins per the family contract.
+- **THE TWINS**: the Classic and ETS twins follow the family contract.

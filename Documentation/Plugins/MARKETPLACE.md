@@ -10,10 +10,12 @@ index: Documentation/INDEX.md
 
 # THE PLUGIN MARKETPLACE - THE STATIC INDEX
 
-> The family's own plugin market: one static JSON in format 1 of the official DSH plugin market
+> The family's own plugin market is one static JSON in format 1 of the official DSH plugin market
 > index, generated from both release trees and the npm registry, served by the site, and read by the
 > official `@deepseek-ai/dsh-plugin-market` service (the Web **Discover** tab and the
-> `plugin_market` tool). The URL to hand DSH: `https://deepseek.playform.cloud/marketplace.json`.
+> `plugin_market` tool).
+>
+> The URL to hand DSH: `https://deepseek.playform.cloud/marketplace.json`.
 
 ## 1. The URL
 
@@ -22,10 +24,10 @@ index: Documentation/INDEX.md
 | DSH (Discover, `plugin_market`)             | `https://deepseek.playform.cloud/marketplace.json`                             |
 | The same file, straight from the repository | `https://raw.githubusercontent.com/PlayForm/DeepSeek/Current/marketplace.json` |
 
-The host refuses redirects, so configure the final URL, not a short link.
+The host refuses a redirect, so set the final URL, not a short link.
 
-The site URL needs the `Site` repository pushed and the Pages deployment finished; the raw URL needs
-only the root repository pushed to `Current`.
+The site URL needs the `Site` repository pushed and the Pages deployment finished, while the raw URL
+needs only the root repository pushed to `Current`.
 
 ## 2. Add it to a profile
 
@@ -43,7 +45,7 @@ Or in the profile's `cordis.patch.yml`:
 
 The `plugin-market` row ships in `@deepseek-ai/dsh-experimental-plugin-market-bundle`.
 
-Without that bundle there is no Discover tab and no `plugin_market` tool.
+Without that bundle, neither the Discover tab nor the `plugin_market` tool exists.
 
 ## 3. The two files
 
@@ -52,12 +54,12 @@ Without that bundle there is no Discover tab and no `plugin_market` tool.
 | `marketplace.json` (repository root) | the source of truth, committed with the tree |
 | `Site/Public/marketplace.json`       | the byte-identical copy the site builds from |
 
-`Site/` is its own repository, so its CI checkout cannot read the root copy.
+`Site/` is its own repository, so the CI checkout of the site cannot read the root copy.
 
 The served copy is committed beside it, and the generator writes both in one run.
 
-The site's build minifies the JSON it serves; the document is unchanged and the host parses it as
-JSON.
+The build of the site minifies the JSON that it serves, while the document stays unchanged and the
+host parses it as JSON.
 
 ## 4. Regenerate
 
@@ -71,24 +73,24 @@ pnpm marketplace:check # exit 1 when either file is stale; run it on release
 - both trees' `Classic/packages/*/package.json` and `EffectTS/packages/*/package.json`: name,
   version, description, `dsh.bundle`, `engines.dsh`;
 - the npm registry: every published version and its publish time, per package;
-- each package directory's last commit and its time, for the `git` source pin. A commit that only
-  touches the index, the docs or the site leaves every pin valid, so `--check` stays meaningful
-  between releases.
+- each package directory's last commit and its time, for the `git` source pin, where a commit that
+  only touches the index, the docs, or the site leaves every pin valid, so `--check` stays
+  meaningful between releases.
 
 It builds format 1 and validates the document with `@deepseek-ai/dsh-plugin-market-index` before it
 writes.
 
 ## 5. What an entry carries
 
-- One entry per package (102 today). The category comes from the directory prefix (`plugin`, `hook`,
-  `client`, `library`); the labels are `classic` or `effectts`, plus `npm` or `source`; the keywords
-  come from the directory name.
-- One version per real npm publish (`source: npm`), with the publish time the registry records.
+- One entry per package (102 today), where the category comes from the directory prefix (`plugin`,
+  `hook`, `client`, `library`), the labels are `classic` or `effectts` plus `npm` or `source`, and
+  the keywords come from the directory name.
+- One version per real npm publish (`source: npm`), with the publish time that the registry records.
 - A `git` version pinned to the HEAD commit and the package directory (`source: git`,
   `path: <Tree>/packages/<dir>`) when the repository version is not published.
 - Placeholders `0.0.0` and `0.0.0-stage` are never listed.
-- When a version is published, the npm entry is the only entry for that version: the registry is
-  immutable, and the market cannot express two different contents under one version.
+- When a version is published, the npm entry is the only entry for that version, because the
+  registry is immutable and the market cannot express two different contents under one version.
 
 ## 6. The install truth (2026-10-25, after the 0.2.0 release)
 
@@ -107,7 +109,7 @@ writes.
 
 ## 7. The site page
 
-`https://deepseek.playform.cloud/marketplace/` renders the same JSON. The page reads
+`https://deepseek.playform.cloud/marketplace/` renders the same JSON, and the page reads
 `Site/Public/marketplace.json` at build time and prints the URL, the profile snippet, the counts,
 one card per entry with its recommended version and labels, and the install channels.
 

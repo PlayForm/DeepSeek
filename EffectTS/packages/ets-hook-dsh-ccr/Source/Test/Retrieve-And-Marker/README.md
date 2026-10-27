@@ -4,16 +4,19 @@ What this test verifies.
 
 ## Intent
 
-The compression and retrieval contract: the marker replacement bytes, the
-strict marker parsing, the granular retrieval, the auto-expand store path,
-the retention outcomes (TTL expiry, LRU budget eviction), the
-compressFailures error tier, the full classifier/multiplier matrix, and the
-compressed line's durable form. It is its own folder because the marker
-literal `<<<CCR:<24-hex>|<type>|<size>>>` and the retrieved bytes are the
-module's core contract with the model: the preview is the only thing the
-model sees, and ccr_retrieve must restore the ORIGINAL bytes exactly. This is
-the source suite's Runs 1b, 2, 3, 5, 5b, 6b, 7 and Run 8's compressed-file
-check, moved verbatim.
+The compression and retrieval contract.
+
+The folder covers the marker replacement bytes, the strict marker parsing, the granular retrieval,
+the auto-expand store path, the retention outcomes (TTL expiry, LRU budget eviction), the
+compressFailures error tier, the full classifier/multiplier matrix, and the durable form of the
+compressed line.
+
+It is its own folder because the marker literal `<<<CCR:<24-hex>|<type>|<size>>>` and the retrieved
+bytes are the core contract of the module with the model: the preview is the only thing the model
+sees, and ccr_retrieve must restore the ORIGINAL bytes exactly.
+
+This is the source suite's Runs 1b, 2, 3, 5, 5b, 6b, 7 and Run 8's compressed-file check, moved
+verbatim.
 
 ## Scenario
 
@@ -92,14 +95,8 @@ check, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory + the REAL ccr apply; each Run gets
-  a fresh `Rm()` and its own `Make(Validate(...))` with the source suite's
-  exact config (autoExpand false for the marker paths, default for
-  auto-expand, ttlSeconds 0, storeBudgetBytes 5000, compressFailures true,
-  the extended `targets` list with "probe").
-- The content helpers from the Harness (`HashOf` - the sha256-24 of the
-  serialized bytes, `SizeOf`, `TextBlock`, `TerminalText`, `PlainText`,
-  `Exec`, `NextAccept`).
+- The Harness fake ctx + the REAL factory + the REAL ccr apply, where each Run gets a fresh `Rm()` and its own `Make(Validate(...))` with the exact config of the source suite (autoExpand false for the marker paths, default for auto-expand, ttlSeconds 0, storeBudgetBytes 5000, compressFailures true, the extended `targets` list with "probe").
+- The content helpers from the Harness (`HashOf` - the sha256-24 of the serialized bytes, `SizeOf`, `TextBlock`, `TerminalText`, `PlainText`, `Exec`, `NextAccept`).
 - The strict marker regex `/^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/`.
 
 ## Expected ledger strings (byte-exact)
@@ -114,13 +111,11 @@ check, moved verbatim.
 
 ## Edge cases
 
-- The out-of-range range start clamps to an EMPTY slice (never an error).
-- A 12-char hash prefix does NOT retrieve; unknown hashes get the
-  self-describing error.
-- The auto-expand preview is hard-cut at exactly 240 chars (19-char prefix +
-  221 fill).
+- The out-of-range range start clamps to an EMPTY slice and never gives an error.
+- A 12-char hash prefix does NOT retrieve, and unknown hashes get the self-describing error.
+- The auto-expand preview is hard-cut at exactly 240 chars (19-char prefix + 221 fill).
 - The x2 boundary: 1500 bytes passes through for grep/glob/web_fetch.
-- The x8 error gate: 5000 bytes does not compress failures; 17000 does.
+- The x8 error gate: 5000 bytes does not compress failures, and 17000 does.
 
 ## Expected count
 

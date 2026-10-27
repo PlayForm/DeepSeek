@@ -1,9 +1,8 @@
 # Pack-Driven
 
-The convention suggester as a PACK CONSUMER: a temporary repo's own pack
-overrides the built-in intent, a workspace without a pack stays silent, the
-pack's signature gates the workspace, and the built-in pack still drives this
-monorepo.
+The convention suggester as a PACK CONSUMER: the own pack of a temporary repo overrides the built-in
+intent, a workspace without a pack stays silent, the signature of the pack gates the workspace, and
+the built-in pack still drives this monorepo.
 
 ## Scenarios
 
@@ -17,11 +16,13 @@ monorepo.
   abstains `foreign-workspace`.
 - P4: the built-in pack still drives the monorepo path: a source write emits
   `Layout 0.80` naming the built-in `Source/Library.ts` target.
+
 ## Fixtures
 
-The shared Harness (fake ctx, the real factory, the real built Target) plus
-`node:fs` temporary trees under the OS temp dir. The pack is a real
-`.dsh/pack.yml` read by the strict YAML-subset parser in
+The shared Harness (fake ctx, the real factory, the real built Target) plus `node:fs` temporary
+trees under the OS temp dir.
+
+The pack is a real `.dsh/pack.yml` read by the strict YAML-subset parser in
 `@playform/ets-lib-dsh-pack`.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)

@@ -14,26 +14,28 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE MONITOR HOOK
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> This is a granular document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
 > family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> the @playform plugin family, and never a single plugin.
 
 ---
 
-- **THE PACKAGE**: `@playform/hook-dsh-workspace-monitor` - the EVENT HOOK.
-- **THE ROLE** (the family map): the watch + the sweep forms - the wave-3 machinery, no real timers.
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-monitor`, the EVENT HOOK.
+- **THE ROLE** (the family map): the watch and the sweep forms, which are the wave-3 machinery with
+  no real timers.
 - **THE WAVE-3 HERITAGE**: the machinery follows the live-containers wave-3 (the LIVE FILE MONITORS)
-  precedent - "files are halted processes", the watch/sweep forms without real timers (the
-  event-driven deadlines, the checkpoint debounce).
-- **THE REGIME**: the workspace regime (the third axis) - the monitor watches the managed entities'
-  interactions (the interference assumptions of the situated model); the OS execution axis stays
-  orthogonal. The typing home: INVERSE-REPRESENTATION.md (the situated interaction protocols
-  authoritative).
-- **THE PHASED DELIVERY**: the monitor is part of phase 5 - with the live
-    - the audit (the watch/sweep + the live view + the accountability).
-- **THE ORCHESTRATION POSITION**: the monitor's events feed the flow - the watch surfaces the
-  changes the observe stamps record.
-- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the recursion prevention: every
-  event carries the operation identifier, the parent identifier, the event category.
-- **THE TWINS**: the Classic + ETS twins per the family contract.
+  precedent, where "files are halted processes", and it uses the watch and sweep forms without real
+  timers, which means the event-driven deadlines and the checkpoint debounce.
+- **THE REGIME**: the monitor works in the workspace regime (the third axis) and watches the managed
+  entities' interactions, which are the interference assumptions of the situated model. The OS
+  execution axis stays orthogonal, and the typing home is INVERSE-REPRESENTATION.md, where the
+  situated interaction protocols are authoritative.
+- **THE PHASED DELIVERY**: the monitor is part of phase 5, with the live view and the audit (the
+  watch and sweep, the live view, and the accountability).
+- **THE ORCHESTRATION POSITION**: the monitor's events feed the flow, because the watch surfaces the
+  changes that the observe stamps record.
+- **THE DISTRIBUTION LAW**: the package keeps its own Config, ledger strings, and tools, and the
+  recursion prevention makes every event carry the operation identifier, the parent identifier, and
+  the event category.
+- **THE TWINS**: the Classic and ETS twins follow the family contract.

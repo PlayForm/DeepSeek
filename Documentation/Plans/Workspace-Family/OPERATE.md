@@ -14,26 +14,27 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE OPERATE HOOK (THE OPERATION ENGINE)
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> This is a granular document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
 > family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> the @playform plugin family, and never a single plugin.
 
 ---
 
-- **THE PACKAGE**: `@playform/hook-dsh-workspace-operate` - the operation engine.
-- **THE ROLE** (the family map): the typed proposals - rename/connect/ replace + the resolution
-  rules + the refusal-to-guess.
-- **THE TOOLS' HOME**: the TOOLS live inside their owning hooks - the operate registers the
-  workspace tools (per the family's pattern: the ccr registers `ccr_retrieve`).
-- **THE ORCHESTRATION POSITION**: "the operate proposes" - the third step of the invisible flow: the
-  observe stamps -> the semantics resolve -> the operate proposes -> the govern gates -> ...
-- **THE REFUSAL-TO-GUESS**: a first-class rule - the typed proposals never guess; the resolution
-  rules decide what CAN be proposed, the refusal declares what CANNOT.
-- **THE REGIME**: the workspace regime (the third axis) - the typed proposals are the workspace's
-  INTERACTION commands (the legal operations: prepare / approve / commit); the OS execution axis
-  stays orthogonal. The typing home: INVERSE-REPRESENTATION.md (the situated interaction protocols
-  authoritative).
-- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the recursion prevention: every
-  event carries the operation identifier, the parent identifier, the event category.
-- **THE TWINS**: the Classic + ETS twins per the family contract.
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-operate`, the operation engine.
+- **THE ROLE** (the family map): the typed proposals (rename, connect, and replace), the resolution
+  rules, and the refusal-to-guess.
+- **THE TOOLS' HOME**: the TOOLS live inside their owning hooks, so the operate registers the
+  workspace tools, per the family's pattern where the ccr registers `ccr_retrieve`.
+- **THE ORCHESTRATION POSITION**: "the operate proposes" is the third step of the invisible flow:
+  the observe stamps -> the semantics resolve -> the operate proposes -> the govern gates -> ...
+- **THE REFUSAL-TO-GUESS**: the rule is first-class, because the typed proposals never guess, the
+  resolution rules decide what CAN be proposed, and the refusal declares what CANNOT.
+- **THE REGIME**: the typed proposals work in the workspace regime (the third axis) as the
+  workspace's INTERACTION commands, which are the legal operations prepare, approve, and commit. The
+  OS execution axis stays orthogonal, and the typing home is INVERSE-REPRESENTATION.md, where the
+  situated interaction protocols are authoritative.
+- **THE DISTRIBUTION LAW**: the package keeps its own Config, ledger strings, and tools, and the
+  recursion prevention makes every event carry the operation identifier, the parent identifier, and
+  the event category.
+- **THE TWINS**: the Classic and ETS twins follow the family contract.

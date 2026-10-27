@@ -1,9 +1,8 @@
 Post-Execute-And-Gate - the listener behavior tests
 
-The tools/post-execute and agent/pre-step listeners against the fake ctx:
-the emit path, the silence path, the abstention path, the gate paths, the
-block-decision shape, the per-agent memory isolation, and the per-turn
-reset.
+The tools/post-execute and agent/pre-step listeners against the fake ctx: the emit path, the silence
+path, the abstention path, the gate paths, the block-decision shape, the per-agent memory isolation,
+and the per-turn reset.
 
 ## Scenarios
 
@@ -35,12 +34,13 @@ reset.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target). No fake clock: every timing assertion is on the
-per-agent call counter and the cooldown window. The judged relative paths
-resolve against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the
-harness's `workingDirectory` service), so the pack's package-relative
-targets exist.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+
+No fake clock is needed, because every timing assertion is on the per-agent call counter and the
+cooldown window.
+
+The judged relative paths resolve against the REAL `Classic/packages/hook-dsh-ccr` package cwd (the
+`workingDirectory` service of the harness), so the package-relative targets of the pack exist.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 

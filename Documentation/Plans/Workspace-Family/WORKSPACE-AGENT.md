@@ -14,65 +14,66 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE WORKSPACE AGENT (THE OPERATIONAL VIEW)
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> Detailed document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
-> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, and the
+> @playform plugin family powers it - it is never one plugin.
 
 ---
 
 ## 1. The package
 
-- `@playform/plugin-dsh-workspace` (THE WORKSPACE AGENT) - the OPERATIONAL VIEW - what the
-  conversation sees: the graph-like projection, the agent's actions, the systematic self-correction.
+- `@playform/plugin-dsh-workspace` (THE WORKSPACE AGENT) is the OPERATIONAL VIEW, which is what the
+  conversation sees: the graph-like projection, the actions of the agent, and the systematic
+  self-correction.
 - It orchestrates EVERY hook.
-- Its own Config = the family's surface knobs.
-- The INVISIBLE internals = the plugin flow, governed by the plugin harness (the `plugin-dsh-*`
-  service-provider role - the factory precedent).
+- Its own Config is the surface knobs of the family.
+- The INVISIBLE internals are the plugin flow, governed by the plugin harness (the `plugin-dsh-*`
+  service-provider role with the factory precedent).
 
 ## 2. The orchestration contract
 
 - **THE ONLY CONVERSATIONAL SURFACE**: the agent addresses the workspace
-  (open/insert/commit/pause/resume/close/state + the graph-like projection). Every hook answers
+  (open/insert/commit/pause/resume/close/state + the graph-like projection), and every hook answers
   through it.
 - **THE INVISIBLE FLOW**: the observe stamps -> the semantics resolve -> the operate proposes -> the
   govern gates -> the authority licenses -> the approve binds -> the merge commits (through
-  Factory.Write) -> the journal records -> the audit lines -> the live view presents - all evented
-  by the plugin system (fs/observed, the tools' waterfalls, the lifecycle), all governed by the
-  plugin harness.
-- **THE DISTRIBUTION LAW**: each commonality a separate package (never one batch-edit monolith);
-  each package's Config + ledger strings + tools its own; the recursion prevention: every event
-  carries the operation identifier, the parent identifier, the event category.
+  Factory.Write) -> the journal records -> the audit lines -> the live view presents, all evented by
+  the plugin system (fs/observed, the waterfalls of the tools, and the lifecycle) and all governed
+  by the plugin harness.
+- **THE DISTRIBUTION LAW**: each commonality is a separate package (never one batch-edit monolith),
+  each package's Config, ledger strings, and tools are its own, and the recursion prevention makes
+  every event carry the operation identifier, the parent identifier, and the event category.
 
 ## 3. The visibility rule
 
-- **THE VISIBLE**: the workspace's operational view (the graph-like, systematically
-  self-correcting).
+- **THE VISIBLE**: the operational view of the workspace (the graph-like and systematically
+  self-correcting view).
 - **THE INVISIBLE**: everything else (the stamps, the indexes, the validations, the licenses, the
-  journals, the gates) is the invisible plugin flow - the harness-governed machinery - until an
-  event surfaces it.
-- **THE LIVING SYSTEM**: the graph interacts with itself through the agent's actions - the
-  corrections propagate, the dependencies invalidate, the evictions settle - all evented, all
+  journals, and the gates) is the invisible plugin flow, which is the harness-governed machinery,
+  until an event surfaces it.
+- **THE LIVING SYSTEM**: the graph interacts with itself through the actions of the agent, so the
+  corrections propagate, the dependencies invalidate, and the evictions settle, all evented and all
   governed.
 
 ## 4. The three regimes + the controller (the agent's place)
 
-- **THE PHYSICAL REGIME (the OS)**: the filesystem + the OS process machinery - already true
-  everywhere; the OS's inodes already carry the metadata (the file-as-halted-process stays the
-  DESIGN METAPHOR, never the foundational assertion).
+- **THE PHYSICAL REGIME (the OS)**: the filesystem and the OS process machinery are already true
+  everywhere, and the inodes of the OS already carry the metadata (the file-as-halted-process stays
+  the DESIGN METAPHOR, never the foundational assertion).
 - **THE EXECUTION REGIME (the language runtimes)**: a resource becomes a RUNNING process when a
-  runtime executes it - exec constructs a process image from an executable resource - the OS's own
-  process notion - the EXECUTION axis.
-- **THE WORKSPACE REGIME (our plugin family - NEW)**: the plugin ADDS A MANAGEMENT SYSTEM - the
-  representations + the activities + the bindings + the authorities (the
+  runtime executes it, because exec constructs a process image from an executable resource, which is
+  the process notion of the OS itself and the EXECUTION axis.
+- **THE WORKSPACE REGIME (our plugin family - NEW)**: the plugin ADDS A MANAGEMENT SYSTEM, which is
+  the representations, the activities, the bindings, and the authorities (the
   resource-representation-activity model).
-- **THE AGENT'S ROLE**: THE WORKSPACE AGENT is the workspace regime's conversational surface - the
-  CONTROLLER the conversation addresses. OPERABILITY IS A RELATION (Binding<Resource, Controller>:
-  canAttempt -> Allowed / Denied / Undetermined) - the plugin creates the management, not a new
-  process-ness.
-- **THE ORTHOGONALITY**: the axes are different - never exclusive: a .rs file sits in the
-  filesystem + runs under rustc + is managed by the workspace SIMULTANEOUSLY. The operational mode
-  determines the regime.
+- **THE AGENT'S ROLE**: THE WORKSPACE AGENT is the conversational surface of the workspace regime,
+  which is the CONTROLLER that the conversation addresses, where OPERABILITY IS A RELATION
+  (Binding<Resource, Controller>: canAttempt -> Allowed / Denied / Undetermined) and the plugin
+  creates the management, not a new process-ness.
+- **THE ORTHOGONALITY**: the axes are different and never exclusive, because a .rs file sits in the
+  filesystem, runs under rustc, and is managed by the workspace SIMULTANEOUSLY, and the operational
+  mode determines the regime.
 - **THE ADOPTED DESCRIPTION**: "A computer is an open environment of resources, representations,
   authorities, and activities. The workspace adds a controller that maintains evidence-backed
   representations and coordinates authorized changes across them."

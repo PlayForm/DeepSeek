@@ -39,23 +39,23 @@ governance listeners, while the built-in `write`/`edit` tools' events do.
 
 **Delivery was NEVER broken.**
 
-The `raw-write` emit dispatches on the shared root event bus and reaches EVERY listener, including
-the family's.
+The emit of `raw-write` dispatches on the shared root event bus and reaches EVERY listener, the
+listeners of the family included.
 
-What NEVER happens is a **ledger outcome**, because the family's own g1 gate rejects the raw-write's
-_actor_ at step 2 and that outcome is silent:
+What NEVER happens is a **ledger outcome**, because the g1 gate of the family rejects the _actor_ of
+raw-write at step 2 and that outcome is silent:
 
 - The **LIVE** `mutationTools` value of ALL three governance modules is
   `[write, edit, str_replace_editor]` - NO `"raw-write"`.
 - The bundle **patch layers** (`cordis.patch.yml` inside each governance bundle) set `mutationTools`
-  explicitly. A patch layer's `config` **replaces the entry config wholesale**, so the schema
+  explicitly, and a patch layer's `config` **replaces the entry config wholesale**, so the schema
   default (which _does_ include `raw-write`, added in commit `3687d11`, 2026-10-05 17:20) is
   shadowed.
 - `Gate` step 2 (`plugin-dsh-factory/Source/Function/Gate.ts:47`) returns
-  `{ pass: false, reason: "actor" }`. `Observe` logs **NOTHING** for that outcome
-  (`hook-dsh-package-governor/Source/Function/Observe.ts:47-48` - ONLY `excluded` logs, at :42-44).
-  Hence "no gate outcome of ANY kind appears".
-- The root-registration fix in `Wire.ts:39` was aimed at a misdiagnosis (scope isolation); it is
+  `{ pass: false, reason: "actor" }`, and `Observe` logs **NOTHING** for that outcome
+  (`hook-dsh-package-governor/Source/Function/Observe.ts:47-48` - ONLY `excluded` logs, at :42-44),
+  hence "no gate outcome of ANY kind appears".
+- The root-registration fix in `Wire.ts:39` was aimed at a misdiagnosis (scope isolation), and it is
   harmless and arguably the better posture, but it could NOT fix this.
 
 **Recommendation (ONE fix):** add `"raw-write"` to `mutationTools` in the three bundle patch
@@ -66,8 +66,8 @@ restart.
 One-line config-manifest edits; zero architecture cost; the existing root-bus wiring then delivers
 everything (the `excluded` line, the chain pass, the update stage, `governed`/`pinned` lines).
 
-`mutationTools` is marked volatile (`x-cordis.volatile`), so it can also be hot-edited; for a
-durable fix edit the bundle patch files.
+`mutationTools` is marked volatile (`x-cordis.volatile`), so it can also be hot-edited, while a
+durable fix edits the bundle patch files.
 
 If the user patch layer (`~/.dsh/profiles/desktop/cordis.patch.yml`) is used instead, the row must
 repeat the **full** config object (patch config replaces wholesale,
@@ -108,53 +108,54 @@ repeat the **full** config object (patch config replaces wholesale,
 
 Single realm, ONE event bus, NO scope filter on plain emits:
 
-- The host boots **ONE** cordis realm: `dsh-app-boot/lib/index.js:4053`
-  (`const ctx = new Context()`; the second context at :4055 is a throwaway startup diagnostics
-  context). NO other `new Context` exists in the host; NO `isolate` usage anywhere in the harness
-  (grep over the whole asar). Profile bundles mount into the same tree via the Loader
-  (`cordis-plugin-loader/lib/index.js:471`, `Entry._init` at :460-462 -> `registry.plugin`). Plugin
-  contexts prototypally inherit services (`cordis/lib/index.js:1054`, `extend` at :1698): ONE
-  `EventsService` instance for the whole tree.
+- The host boots **ONE** cordis realm (`dsh-app-boot/lib/index.js:4053`, where
+  `const ctx = new Context()` and the second context at :4055 is a throwaway startup diagnostics
+  context), NO other `new Context` exists in the host, NO `isolate` usage exists anywhere in the
+  harness (grep over the whole asar), and the profile bundles mount into the same tree through the
+  Loader (`cordis-plugin-loader/lib/index.js:471`, `Entry._init` at :460-462 -> `registry.plugin`),
+  where plugin contexts prototypally inherit services (`cordis/lib/index.js:1054`, `extend` at
+  :1698) with ONE `EventsService` instance for the whole tree.
 - `EventsService.dispatch` (`cordis/lib/index.js:258-264`) applies the `Context.filter` **ONLY**
-  when the first dispatch argument is an object/function (a `thisArg` carrier, e.g. `scopeTarget`
-  for `tools/*`). A plain `emit("fs/observed", target, ...)` has a string first argument ->
-  `thisArg = null` -> **ALL** hooks on the bus fire, regardless of which context registered them
-  (`register`, :334-343).
-- BOTH emitters use the identical plain form: built-in tools
+  when the first dispatch argument is an object or a function (a `thisArg` carrier, e.g.
+  `scopeTarget` for `tools/*`), so a plain `emit("fs/observed", target, ...)` with a string first
+  argument makes `thisArg = null` and **ALL** hooks on the bus fire, regardless of which context
+  registered them (`register`, :334-343).
+- BOTH emitters use the identical plain form: the built-in tools
   `ctx.emit("fs/observed", target, {kind:"present",version}, exec)`
-  (`dsh-tool-fs/lib/index.js:360,590,743,1031`); the factory's shared executor
+  (`dsh-tool-fs/lib/index.js:360,590,743,1031`) and the shared executor of the factory
   `State.Context.root.emit("fs/observed", Target, {kind:"present",version}, Over.actor)`
-  (`plugin-dsh-factory/Source/Function/Write.ts:165-169`; compiled `Target/Function/Write.js` is
-  byte-equivalent, built Oct 6 01:00). `dsh-tools` passes the same exec object to EVERY tool
-  (`lib/index.js:3136`, `:3310`); the exec carries `.name` = the called name.
-- Simulation with the family's own bundled cordis 4.0.4 copy (byte-identical to the asar copy,
-  `diff` clean) confirmed: a module-ctx listener hears `root.emit`, a sibling plugin's `ctx.emit`,
-  and its own re-emits alike - there is NO scope isolation on the bus. The rationale in
-  `Wire.ts:4-10` ("a listener registered on one plugin's context hears only that plugin's
-  emissions") is **NOT** a real cordis mechanism; the pre-fix "module-scope registration" also
-  delivered fine.
+  (`plugin-dsh-factory/Source/Function/Write.ts:165-169`, where the compiled
+  `Target/Function/Write.js` is byte-equivalent and built Oct 6 01:00), while `dsh-tools` passes the
+  same exec object to EVERY tool (`lib/index.js:3136`, `:3310`) and the exec carries `.name` = the
+  called name.
+- A simulation with the bundled cordis 4.0.4 copy of the family (byte-identical to the asar copy,
+  `diff` clean) confirmed that a module-ctx listener hears `root.emit`, a sibling plugin's
+  `ctx.emit`, and its own re-emits alike, so there is NO scope isolation on the bus, and the
+  rationale in `Wire.ts:4-10` ("a listener registered on one plugin's context hears only that
+  plugin's emissions") is **NOT** a real cordis mechanism, because the pre-fix "module-scope
+  registration" also delivered fine.
 
-With delivery excluded by code + simulation + the LIVE policy evidence, the ONLY remaining
-discriminator between the working control and the silent raw-write is the **gate input**:
-`Actor.name` vs the module's LIVE tool list. That is the bug.
+With delivery excluded by code, simulation, and the LIVE policy evidence, the ONLY remaining
+discriminator between the working control and the silent raw-write is the **gate input**
+(`Actor.name` vs the LIVE tool list of the module), which is the bug.
 
 ## The live `mutationTools` (why fact 6's verification missed it)
 
-- Deployed schema default **includes** `raw-write`:
+- The deployed schema default **includes** `raw-write`:
   `hook-dsh-package-governor/Target/Variable/Config.js` -
   `mutationTools:["write","edit","str_replace_editor","raw-write"]`.
-- But the bundle patch layer overrides it: `hook-dsh-package-governor/cordis.patch.yml:21` ->
-  `mutationTools: [write, edit, str_replace_editor]`. Same in the pinner (:20) and the cargo
-  governor (:29).
-- Bundle layers compose at boot in `dsh.profile.bundles` order over an empty root, then the user
-  patch, then `--patch` overlays (`dsh-app-boot/lib/index.js:460-478`, `bundlePatchFiles` :495,
-  `composeEntries` :989-996). Patch `config` replaces the entry's config **wholesale**
+- But the bundle patch layer overrides it at `hook-dsh-package-governor/cordis.patch.yml:21` with
+  `mutationTools: [write, edit, str_replace_editor]`, and the pinner (:20) and the cargo governor
+  (:29) do the same.
+- Bundle layers compose at boot in the `dsh.profile.bundles` order over an empty root, then the user
+  patch, then the `--patch` overlays (`dsh-app-boot/lib/index.js:460-478`, `bundlePatchFiles` :495,
+  `composeEntries` :989-996), and a patch `config` replaces the config of the entry **wholesale**
   (`dsh-app-boot/lib/index.js:2760`), so the schema default NEVER applies.
-- The inspect Config provider projects the plugin's **schema** (defaults), NOT the resolved entry
-  config - that is how the projected list "verified" as `[..., raw-write]` while the LIVE value
-  lacks it. The composed `profiles/desktop/cordis.yml` is an empty `[]` (the tree is composed as
-  patch layers in memory), and the user `cordis.patch.yml` has NO governor rows - the bundle layers
-  were the missed place.
+- The inspect Config provider projects the **schema** of the plugin (the defaults) and NOT the
+  resolved entry config, which is how the projected list "verified" as `[..., raw-write]` while the
+  LIVE value lacks it, and the composed `profiles/desktop/cordis.yml` is an empty `[]` (the tree is
+  composed as patch layers in memory) while the user `cordis.patch.yml` has NO governor rows, so the
+  bundle layers were the missed place.
 
 ## Historical consistency (the ledger, all timestamps UTC)
 
@@ -168,9 +169,9 @@ discriminator between the working control and the silent raw-write is the **gate
 
 ## Expected behavior after the one-line fix
 
-- `raw-write` of a `package.json` outside excluded segments -> full chain: the
-  `no registry.json found ...` / `governed` lines, the update stage, `pinned` lines.
-- `raw-write` into a `node_modules` segment -> `skipped (excluded) <path>` - the probe that failed
-  LIVE now logs, exactly like the built-in control did.
-- NO other changes needed: `Wire.ts:39` root registration, the shared executor's root emit, and the
-  Stash idempotence gate ALL stay as they are.
+- A `raw-write` of a `package.json` outside the excluded segments runs the full chain: the
+  `no registry.json found ...` / `governed` lines, the update stage, and the `pinned` lines.
+- A `raw-write` into a `node_modules` segment logs `skipped (excluded) <path>`, so the probe that
+  failed LIVE now logs, exactly like the built-in control did.
+- NO other change is needed, because `Wire.ts:39` root registration, the root emit of the shared
+  executor, and the Stash idempotence gate ALL stay as they are.

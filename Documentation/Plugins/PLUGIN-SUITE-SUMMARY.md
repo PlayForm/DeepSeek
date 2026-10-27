@@ -10,12 +10,15 @@ index: Documentation/INDEX.md
 
 # THE PLUGIN SUITE - THE ONE-FILE SUMMARY
 
-> Every plugin of the @playform DSH family: one line each, the NEW ones marked, the release state,
-> and the plan/role each relates to in parentheses. The live matrix with the evidence:
-> Documentation/Plans/POC-LEDGER.md. The per-plugin live test plans: Documentation/Testing/. Release
-> state: every package is version 0.1.0 except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED
-> (the npm bootstrap tiers: 2-planned or 3-candidates); the 15 pre-existing packages were never
-> published either.
+> Every plugin of the @playform DSH family appears here with one line each, the NEW ones marked, the
+> release state, and the plan or role that each one relates to in parentheses.
+>
+> The live matrix with the evidence is Documentation/Plans/POC-LEDGER.md, and the per-plugin live
+> test plans are in Documentation/Testing/.
+>
+> The release state is 0.1.0 for every package except `client-dsh-panel-family` (0.2.0), all
+> UNPUBLISHED (the npm bootstrap tiers: 2-planned or 3-candidates), and the 15 pre-existing packages
+> were never published either.
 
 ## 1. The 36 NEW plugins (built 2026-10-22)
 
@@ -119,13 +122,13 @@ index: Documentation/INDEX.md
 | Verified                       | 102 packages; 511 smoke suites / 6,612 checks; the aggregate green                                                                                                                                                                                                                                                                                                                                                               |
 | Live                           | fully activated in the desktop profile (50 @playform rows: 49 enabled + the factory); the batch-edit inject defect is fixed and the empty-graph gap is CLOSED (the graph trigger + the live index: `map @ 220: 220 files, 20 modules`); the activation sweep verified the suggesters, the foundation and the orchestration live; hook-dsh-comment-filter is wired (link + bundle + full-default row) and awaits the next restart |
 
-The new packages WITHOUT an ETS twin: the two client panels (client-dsh-panel-family,
+The new packages WITHOUT an ETS twin are the two client panels (client-dsh-panel-family,
 client-dsh-panel-family-host) and four orchestration candidates (plugin-dsh-pass-on,
-plugin-dsh-ingester, plugin-dsh-pattern, hook-dsh-batch-decision) - the MANIFEST declares no `ets-*`
-entries for them.
+plugin-dsh-ingester, plugin-dsh-pattern, hook-dsh-batch-decision), because the MANIFEST declares no
+`ets-*` entries for them.
 
-The two completion program's libraries now HAVE ETS twins (ets-lib-dsh-trace, ets-lib-dsh-pack), so
-they are no longer in that set.
+The two libraries of the completion program now HAVE ETS twins (ets-lib-dsh-trace,
+ets-lib-dsh-pack), so they are no longer in that set.
 
-The option-B Learning-Loop exclusion remains the only Classic-only test surface, plus the
-pattern/batch-decision Classic-only candidates.
+The option-B Learning-Loop exclusion remains the only Classic-only test surface, together with the
+pattern and batch-decision Classic-only candidates.

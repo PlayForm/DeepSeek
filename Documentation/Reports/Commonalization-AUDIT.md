@@ -26,9 +26,10 @@ Status:
 - The follow-on candidates (Dispatch/Settle pair, the activation template, the shared fake-ctx):
   open (listed in the audit; not executed)
 
-> One of the four research reports migrated from the pre-restructure flat documentation folder. See
-> also `../Handoff/Register.md` (item #6) and `../Handoff/Packages/Package-13.md` (the pass
-> executed). Companion reports live alongside this file in `Documentation/Reports/`.
+> This is one of the four research reports migrated from the flat documentation folder of the
+> pre-restructure era. The related records are `../Handoff/Register.md` (item #6) and
+> `../Handoff/Packages/Package-13.md` (the pass that was executed). The companion reports live
+> alongside this file in `Documentation/Reports/`.
 
 Status: **AUDIT COMPLETE, DESIGN PROPOSED (read-only; nothing edited, nothing committed).**
 
@@ -49,12 +50,12 @@ for maintainability cost optimization."_
 
 ## 1. The write-path audit - three executors, one shared pipeline
 
-All three executors implement the same five-step pipeline the harness's `write` tool owns.
+All three executors carry the same five-step pipeline that the `write` tool of the harness owns.
 
-The pipeline is filesystem.md:278 - resolve -> `fs/write-intent` waterfall -> sandbox policy ->
+The pipeline is filesystem.md:278: resolve -> `fs/write-intent` waterfall -> sandbox policy ->
 `writeText` -> `fs/observed`.
 
-The per-step inventory:
+The per-step inventory is:
 
 | Shared step                    | Built-in `write` (tool-fs/index.js)                                                                                                               | Family `raw-write` (normalize-dash)                                                                            | Factory `GuardedWrite`                                                                             |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
@@ -67,18 +68,18 @@ The per-step inventory:
 | error path                     | denial-marker mapping + `FsError` retention                                                                                                       | plain `Error` (Write.ts:127-131)                                                                               | fully contained in `Continue` (Continue.ts:117-126, logger-only)                                   |
 | version/Stash                  | none (policy plugin owns records)                                                                                                                 | none                                                                                                           | Write.ts:53 `Stash.set` pre-registration (the idempotence gate)                                    |
 
-Duplication quantification (lines implementing the shared pipeline):
+Duplication count (lines that implement the shared pipeline):
 
 - **Built-in**: execute body :575-600 ~= 26 lines (+ the ~120-line controller, shared with `edit`).
-- **raw-write**: execute body Write.ts:110-147 = 38 lines, of which ~35 mirror the built-in's steps
-  1-5 verbatim (the file's own header admits it: Write.ts:16-31). Plus presenters ~30 lines.
-- **GuardedWrite**: 55 lines, of which ~17 overlap (policy resolution + `writeText`). Its Stash and
-  P4-fence behavior is unique but the _resolution mechanics_ (sandboxMode ternary -> policy shape)
-  are the third hand-rolled copy of the same decision.
+- **raw-write**: execute body Write.ts:110-147 = 38 lines, of which ~35 mirror steps 1-5 of the
+  built-in verbatim (the header of the file admits it: Write.ts:16-31), plus presenters ~30 lines.
+- **GuardedWrite**: 55 lines, of which ~17 overlap (policy resolution + `writeText`), and its Stash
+  and P4-fence behavior is unique, but the _resolution mechanics_ (sandboxMode ternary -> policy
+  shape) are the third hand-rolled copy of the same decision.
 
 Bottom line: **three implementations of the sandbox-posture decision, three of the `writeText` call
 shape, two of the `fs/observed` present emit, plus a third variant (`Refresh`)** - the exact
-repetition the user flagged.
+repetition that the user flagged.
 
 ## 2. The broader audit (inventory only)
 
@@ -120,16 +121,16 @@ This pair is the next-highest-value commonalization after the write path.
 
 ## 3. The design - ONE shared write executor, owned by the factory
 
-The factory is the family's service and the ONLY package BOTH tool-style (`raw-write`) and
+The factory is the service of the family and the ONLY package that BOTH tool-style (`raw-write`) and
 continuation-style (`GuardedWrite`/`Continue`) writes already depend on.
 
-The harness's built-in `write` tool is **OUT of scope** (harness-owned `dsh-tool-fs`).
+The built-in `write` tool of the harness is **OUT of scope** (harness-owned `dsh-tool-fs`).
 
-The abstraction is family-side and mirrors the built-in's mechanics so `fs/observed` chains stay
-identical.
+The abstraction is family-side and mirrors the mechanics of the built-in, so the `fs/observed`
+chains stay identical.
 
 Proposed signature - `plugin-dsh-factory/Source/Function/Write.ts` becomes the shared executor
-(`GuardedWrite` folds into it; SCHEME.md section 2.7 keeps the name as the guarded alias):
+(`GuardedWrite` folds into it, and SCHEME.md section 2.7 keeps the name as the guarded alias):
 
 ```ts
 export default async (
@@ -197,15 +198,15 @@ export default async (
 **One coder, two stages** (not one big-bang package, not separate coders):
 
 - **Stage 1 - factory absorbs the executor**: `GuardedWrite` folds into the shared `Write` with the
-  `Over` options; `Continue`/`Refresh`/`Settle` call sites adapt in the same change. Gates: factory,
-  governor, cargo smokes green unmodified. This proves the union (intent, P4 vs standing policy,
-  Stash, observe, actor) against the strictest suites first.
-- **Stage 2 - raw-write delegates**: normalize-dash's exec collapses onto `Factory.Write(...)`;
-  gates: normalize-dash Run 8 + core's name-exemption cases green unmodified. Mechanical, low-risk,
-  independently revertable.
+  `Over` options, and the `Continue`/`Refresh`/`Settle` call sites adapt in the same change, with
+  the gates of the factory, governor, and cargo smokes green and unmodified, which proves the union
+  (intent, P4 vs standing policy, Stash, observe, and actor) against the strictest suites first.
+- **Stage 2 - raw-write delegates**: the exec of normalize-dash collapses onto `Factory.Write(...)`,
+  with the gates of normalize-dash Run 8 and the name-exemption cases of core green and unmodified,
+  which is mechanical, low-risk, and independently revertable.
 
-Stage 1 first is deliberate: the executor's home is the factory, so migrating the factory's own
-write proves the union before the tool depends on it.
+Stage 1 first is deliberate, because the home of the executor is the factory, so migrating the write
+of the factory itself proves the union before the tool depends on it.
 
 If the maintainer prefers a single change, it is safe only with all eleven smokes run between the
 two commits.

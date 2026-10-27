@@ -14,27 +14,29 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE CONTEXT SERVICE (THE ATTENTION PROJECTION)
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> This is a granular document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
 > family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> the @playform plugin family, and never a single plugin.
 
 ---
 
-- **THE PACKAGE**: `@playform/plugin-dsh-workspace-context` - the SERVICE (the service-provider
-  role - the factory precedent: the shared services the others consume).
-- **THE ROLE** (the family map): the attention projection - the required/relevant/deferred - the
-  context economy.
-- **THE ATTENTION PROJECTION**: the agent-facing projection - the relevant state within a bounded
-  context budget; the store holds the authoritative workspace state, the context is a selective,
-  versioned VIEW of it (the Representation-First framing's key distinction).
-- **THE REGIME**: the workspace regime (the third axis) - the attention projection is the
-  SituatedView's economy (the participant's local knowledge: {participant, endpoint, history, model,
-  authority, assumptions} - every claim distinguishes the OBSERVED / DERIVED / MERELY ASSUMED); the
-  OS execution axis stays orthogonal. The typing home: INVERSE-REPRESENTATION.md (the situated
-  interaction protocols authoritative).
-- **THE PHASED DELIVERY**: the context serves phase 3 - the workspace agent's operational view (the
-  graph-like projection + the attention projection via the context).
-- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the recursion prevention: every
-  event carries the operation identifier, the parent identifier, the event category.
-- **THE TWINS**: the Classic + ETS twins per the family contract.
+- **THE PACKAGE**: `@playform/plugin-dsh-workspace-context`, the SERVICE, which takes the
+  service-provider role per the factory precedent, where the shared services are the ones the others
+  consume.
+- **THE ROLE** (the family map): the attention projection with the required, relevant, and deferred
+  tiers, which gives the context economy.
+- **THE ATTENTION PROJECTION**: the projection is the agent-facing view of the relevant state within
+  a bounded context budget. The store holds the authoritative workspace state, and the context is a
+  selective, versioned VIEW of it, which is the key distinction of the Representation-First framing.
+- **THE REGIME**: the attention projection works in the workspace regime (the third axis) as the
+  SituatedView's economy, which is the participant's local knowledge of {participant, endpoint,
+  history, model, authority, assumptions}, and every claim distinguishes the OBSERVED, DERIVED, and
+  MERELY ASSUMED cases. The OS execution axis stays orthogonal, and the typing home is
+  INVERSE-REPRESENTATION.md, where the situated interaction protocols are authoritative.
+- **THE PHASED DELIVERY**: the context serves phase 3, the workspace agent's operational view, which
+  is the graph-like projection plus the attention projection via the context.
+- **THE DISTRIBUTION LAW**: the package keeps its own Config, ledger strings, and tools, and the
+  recursion prevention makes every event carry the operation identifier, the parent identifier, and
+  the event category.
+- **THE TWINS**: the Classic and ETS twins follow the family contract.

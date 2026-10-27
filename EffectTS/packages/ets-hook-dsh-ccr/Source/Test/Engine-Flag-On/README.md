@@ -4,20 +4,22 @@ What this test verifies.
 
 ## Intent
 
-The context engine with the flag ON: first the pure decision math
-(`ThresholdBytes` - 30% of the budget; `Eligible` - the first-2 head and
-last-4 tail protect windows; `Decide` - the middle-only archive plan with its
-byte sum), then the end-to-end lifecycle at `storeBudgetBytes: 10000`
-(threshold 3000): the three-listener posture (tools/post-execute +
-agent/pre-step + the State builder's P10 refresh), the built runtime, the
-observation records tagged with the engine's turn cursor (content for
-pass-throughs, hash for already-stored results), the threshold crossing at
-pre-step turn 8 that archives the two middle records through the REAL
-compress path, the deliberate no-op crossing with an empty middle, the second
-archive at turn 14, and the byte-exact engine ledger lines in both the logger
-form (`ccr: engine archived 2 results`, `ccr: engine archived 1 results`) and
-the durable `[ISO]` form. This is the source suite's Run 11 and Run 12, moved
-verbatim.
+The context engine with the flag ON.
+
+The folder first covers the pure decision math (`ThresholdBytes` - 30% of the budget; `Eligible` - the
+first-2 head and last-4 tail protect windows; `Decide` - the middle-only archive plan with its byte
+sum), then the end-to-end lifecycle at `storeBudgetBytes: 10000` (threshold 3000).
+
+The lifecycle covers the three-listener posture (tools/post-execute + agent/pre-step + the P10
+refresh of the State builder), the built runtime, and the observation records tagged with the turn
+cursor of the engine (content for pass-throughs, hash for already-stored results).
+
+It also covers the threshold crossing at pre-step turn 8 that archives the two middle records
+through the REAL compress path, the deliberate no-op crossing with an empty middle, the second
+archive at turn 14, and the byte-exact engine ledger lines in both the logger form (`ccr: engine
+archived 2 results`, `ccr: engine archived 1 results`) and the durable `[ISO]` form.
+
+This is the source suite's Run 11 and Run 12, moved verbatim.
 
 ## Scenario
 
@@ -82,15 +84,9 @@ verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory + the REAL ccr apply; Run 12's
-  config is `Validate({ contextEngine: true, logFile: Ledger,
-  storeBudgetBytes: 10000 })`.
-- The engine script: pre-step 1, a ~925-byte pass-through, pre-step 3, a
-  ~3534-byte auto-expanded store and a ~925-byte pass-through, pre-step 8
-  (the archive), a ~2425-byte tail store, pre-step 9 (the no-op), and
-  pre-step 14 (the second archive), then pre-step 15.
-- The Engine functions are imported from the REAL built Target
-  (`Target/Function/Engine.js`).
+- The Harness fake ctx + the REAL factory + the REAL ccr apply, with Run 12's config as `Validate({ contextEngine: true, logFile: Ledger, storeBudgetBytes: 10000 })`.
+- The engine script: pre-step 1, a ~925-byte pass-through, pre-step 3, a ~3534-byte auto-expanded store and a ~925-byte pass-through, pre-step 8 (the archive), a ~2425-byte tail store, pre-step 9 (the no-op), and pre-step 14 (the second archive), then pre-step 15.
+- The Engine functions come from the REAL built Target (`Target/Function/Engine.js`).
 
 ## Expected ledger strings (byte-exact)
 

@@ -1,9 +1,8 @@
 Workspace-Gate - the workspace gate and the existence filter
 
-The `tools/post-execute` listener against the fake ctx and REAL temp
-workspaces: a foreign workspace abstains before detect, our workspace emits
-only the target that exists, an emptied intent abstains `no-companions`, and
-a foreign call never poisons the next in-workspace call.
+The `tools/post-execute` listener against the fake ctx and REAL temp workspaces: a foreign workspace
+abstains before detect, our workspace emits only the target that exists, an emptied intent abstains
+`no-companions`, and a foreign call never poisons the next in-workspace call.
 
 ## Scenarios
 
@@ -12,8 +11,9 @@ a foreign call never poisons the next in-workspace call.
   `workingDirectory` service - the downstream decision comes back UNCHANGED
   with no note, the logger and durable forms carry the byte-exact
   `abstained foreign-workspace  0.00` line, no `suggest` line appears, and the
-  foreign call never creates per-agent memory. A service getter that THROWS
-  still abstains with no logger warning.
+  foreign call never creates per-agent memory.
+
+  A service getter that THROWS still abstains with no logger warning.
 - G2: with NO `workingDirectory` service at all, the absolute foreign path
   still resolves to no root and abstains with the same line.
 - G3: OUR workspace (a temp tree WITH `Documentation/ARCHIVE-STYLE.md`, a
@@ -29,9 +29,10 @@ a foreign call never poisons the next in-workspace call.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory,
-the real built Target) plus `node:fs` temp trees under the OS temp dir. The
-optional service is injected as `Run.Context.workingDirectory = { get }`.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target)
+plus `node:fs` temp trees under the OS temp dir.
+
+The optional service is injected as `Run.Context.workingDirectory = { get }`.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 

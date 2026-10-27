@@ -6,31 +6,35 @@
 
 ## The role
 
-The **Cargo.toml flavor of the silent package.json governor** - the same architecture, the same
-API-awareness discipline, the same silence toward the author, but for RUST manifests.
+The package is the **Cargo.toml flavor of the silent package.json governor**: the same architecture,
+the same API-awareness discipline, and the same silence toward the author, but for RUST manifests.
 
-Hooks `fs/observed` - the cordis event every tool-layer file write dispatches - for basename
-`Cargo.toml`, parses with smol-toml ONLY to identify dependency entries (`[dependencies]`,
-`[dev-dependencies]`, `[build-dependencies]`, `[target.'cfg(...)'.dependencies]`,
-`[workspace.dependencies]`) and rewrites chain-governed pins SURGICALLY on the raw text lines
-(comments and formatting survive; an internal calculation, not a TOML stringify), then runs the
-update stage as a detached, contained continuation that drives the RUST-SIDE CLI - `cargo upgrade`
-(cargo-edit) - through the `ctx.subprocess` seam with the exclusion list enforced AT THE CLI LEVEL
-(`--exclude`, one flag per crate; chain deps merged in so `cargo upgrade` can never bump a
+It hooks `fs/observed`, the cordis event that every tool-layer file write dispatches, for the
+basename `Cargo.toml`, and it parses with smol-toml ONLY to identify dependency entries
+(`[dependencies]`, `[dev-dependencies]`, `[build-dependencies]`, `[target.'cfg(...)'.dependencies]`,
+`[workspace.dependencies]`).
+
+It then rewrites chain-governed pins SURGICALLY on the raw text lines (comments and formatting
+survive, because the change is an internal calculation and not a TOML stringify), and it runs the
+update stage as a detached, contained continuation that drives the RUST-SIDE CLI, `cargo upgrade`
+(cargo-edit), through the `ctx.subprocess` seam with the exclusion list enforced AT THE CLI LEVEL
+(`--exclude`, one flag per crate, with chain deps merged in so `cargo upgrade` can never bump a
 chain-governed pin).
 
-The Rust/TS boundary is exclusionary: Rust does not co-opt into the TypeScript ecosystem, and there
-is no npm-library equivalent for cargo manifest updates - the cargo CLI is the only update path.
+The Rust/TS boundary is exclusionary: Rust does not co-opt into the TypeScript ecosystem, and no
+npm-library equivalent exists for cargo manifest updates, so the cargo CLI is the only update path.
 
-Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a version-guarded
-`replaceIfVersion` write, configuration is a validated Schemastery Config schema with defaults, and
-the authoring agent is never notified (the observation-policy's version record is refreshed by
-re-emitting `fs/observed` with the service-issued fresh version).
+The package is fully API-aware: the governed manifest is read and rewritten through `ctx.fs` with a
+version-guarded `replaceIfVersion` write, the configuration is a validated Schemastery Config schema
+with defaults, and the authoring agent is never notified, because the version record of the
+observation policy is refreshed by re-emitting `fs/observed` with the service-issued fresh version.
 
-A factory flavor: the family's furnace does the plumbing; this package is the model logic.
+The package is a factory flavor: the furnace of the family does the plumbing, and this package is
+the model logic.
 
-The lowest plumbing layer - the ledger `Append`, the shared journal and the activation-line
-composer - lives in the family's base package `ets-base-dsh`, reached through the factory.
+The lowest plumbing layer (the ledger `Append`, the shared journal, and the activation-line
+composer) lives in the base package of the family, `ets-base-dsh`, which the package reaches through
+the factory.
 
 ## The surfaces
 
@@ -90,11 +94,11 @@ update: DONE - pins bumped per policy
 update: FAILED - see lines above
 ```
 
-Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
-module identity is `hook-dsh-governor-cargo`).
+Each line is `[<ISO>] <message>` in the file, where the logger prefix is the `Append` of the factory
+and the module identity is `hook-dsh-governor-cargo`.
 
-The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
-alone.
+The activation line is written by `apply()`, because the question "did it activate" must be
+answerable from the ledger alone.
 
 ## The build and the tests
 

@@ -1,16 +1,17 @@
 # EffectTS - the DeepSeek Harness Plugin Family for PlayForm
 
 The EFFECT-TS release of the PlayForm plugin family for DeepSeek Harness: the same twelve TypeScript
-contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers - same behavior, same smokes
-(the EffectTS suites add coverage: 746 checks vs Classic's 733), different runtime plumbing.
+contracts as CLASSIC, re-expressed on Effect-TS v4 services and layers, with the same behavior and
+the same smokes (the EffectTS suites add coverage at 746 checks against Classic's 733) and with
+different runtime plumbing.
 
-The packages live under `packages/`, each one a verified, smoke-arbitrated package - the core
+The packages live under `packages/`, each one a verified, smoke-arbitrated package: the core
 library, the factory service, the governance trio (package governor, version pinner, Cargo.toml
 governor) and the seven-member normalize family (six stream flavors plus the file tool).
 
 The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
 identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the
-family/type marker leads - `hook-dsh-*`, `lib-dsh-*` and `plugin-dsh-*` - so a package name reads as
+family/type marker leads (`hook-dsh-*`, `lib-dsh-*` and `plugin-dsh-*`), so a package name reads as
 a sentence about what it is: a DeepSeek Harness hook, a library, or the DeepSeek Harness plugin
 factory.
 
@@ -31,9 +32,9 @@ below.
 
 ## The variant toggle (CLASSIC vs EFFECT-TS)
 
-One name, two builds: every package in this tree ships BOTH implementations in the same tarball -
-`Target/` (this tree's EFFECT-TS build, the in-tree default) and `Target-Classic/` (the CLASSIC
-build, assembled byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
+One name, two builds: every package in this tree ships BOTH implementations in the same tarball,
+with `Target/` (the EFFECT-TS build of this tree, the in-tree default) and `Target-Classic/` (the
+CLASSIC build, assembled byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
 
 **Install once, toggle at the loader.**
 
@@ -41,9 +42,9 @@ build, assembled byte-exactly from the sibling tree by `Maintain/DualSource.sh`)
 pnpm add @playform/ets-lib-dsh-core @playform/ets-plugin-dsh-factory @playform/ets-hook-dsh-package-governor
 ```
 
-One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and the
-EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall builds, no
-user-side compilation - the toggle is pure resolution:
+One install, because every package ships BOTH the CLASSIC build (plain TypeScript, the default) and
+the EFFECT-TS build (effect-backed, the same contract) in the same tarball, with no postinstall
+builds and no user-side compilation, so the toggle is pure resolution:
 
 - **CLASSIC (default):** just import - `import { Govern } from "@playform/ets-plugin-dsh-factory"`.
 - **EFFECT-TS (whole family, one flag):**
@@ -55,14 +56,16 @@ user-side compilation - the toggle is pure resolution:
   `import { ... } from "@playform/ets-lib-dsh-core/effect-ts"` (or `/classic`) - deterministic in
   every toolchain.
 
-The whole family toggles together - never mix variants in one graph (the effect-ts `Update` returns
-Effect envelopes, not the classic dispatch envelope). `effect` v4.0.2 comes as a dependency with the
-same single install.
+The whole family toggles together, and never mix variants in one graph, because the effect-ts
+`Update` returns Effect envelopes and not the classic dispatch envelope.
 
-The published default is the CLASSIC build: the npm agent publishes from the Classic tree (the
-canonical home - its tarball ships `Target/` + `Target-EffectTS/`). This tree's tarball would be the
-mirror (`Target/` + `Target-Classic/`); in-tree, each tree's `default` condition routes to its own
-build.
+`effect` v4.0.2 comes as a dependency with the same single install.
+
+The published default is the CLASSIC build, because the npm agent publishes from the Classic tree
+(the canonical home, whose tarball ships `Target/` + `Target-EffectTS/`).
+
+This tree's tarball would be the mirror (`Target/` + `Target-Classic/`), and in-tree each tree's
+`default` condition routes to its own build.
 
 ## The twelve packages
 
@@ -89,14 +92,14 @@ EffectTS/
   smokes/            the twelve smoke suites, one per bundle
 ```
 
-Each package is self-contained: its own `package.json`, its own deterministic build (`Source/` ->
-`Target/` via ESBuild + `tsc` + `tsc-alias`), and its own
+Each package is self-contained, with its own `package.json`, its own deterministic build (`Source/`
+-> `Target/` via ESBuild + `tsc` + `tsc-alias`), and its own
 [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/ets-plugin-dsh-factory/cordis.patch.yml)
 where the bundle ships one.
 
 ## Build (per bundle, deterministic)
 
-The base library and the factory first, then the consumers:
+The base library and the factory come first, then the consumers:
 
 ```
 cd packages/ets-lib-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
@@ -147,7 +150,7 @@ bundle consumes it) and asserts the full behavioral contract: the loader contrac
 ledger strings, the identity assertions (`name`, `State.Module`, the `<module>: ` logger prefixes,
 the `~/.dsh/<identity>.log` ledger defaults) and the effect wiring.
 
-The counts above are the release contract: they must not change.
+The counts above are the release contract, and they must not change.
 
 ## Known limits
 

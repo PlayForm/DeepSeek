@@ -14,23 +14,23 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE FUTURE RFC QUEUE
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> Detailed document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
-> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, and the
+> @playform plugin family powers it - it is never one plugin.
 
 ---
 
-- **THE ADAPTER INTERFACE RFC**: the any-file adapter's contract (observe/propose/reconcile + the
-  per-type operation vocabulary + the uncertainty declaration).
-- **THE KNOWLEDGE-GRAPH SCHEMA RFC**: the block-based graph's canonical schema (the blocks, the
-  references, the semantics, the evidence).
+- **THE ADAPTER INTERFACE RFC**: the contract of the any-file adapter (observe, propose, and
+  reconcile, the operation vocabulary per type, and the declaration of uncertainty).
+- **THE KNOWLEDGE-GRAPH SCHEMA RFC**: the canonical schema of the block-based graph (the blocks, the
+  references, the semantics, and the evidence).
 - **THE INVERSE-REPRESENTATION NOMENCLATURE RFC**: the new vocabulary (the halted process, the
-  representation, the license, the eviction, the block, the knowledge graph) - the "standard for
-  working inside a workspace for files".
-- **THE REMOTE-BLOCK PROTOCOL RFC**: the cloud/remote block-based data feeds' protocol (the events,
-  the blocks, the authentication, the fallback).
-- **THE STORAGE-ADAPTER RFC**: the different databases powering the representation (the
-  local/remote, the SQLite/Postgres/object stores).
-- **THE HARNESS-INTEGRATION RFCs**: the total modification of the harness according to the new
-  nomenclature - each discovered integration seam (from the harness's docs) becomes an RFC.
+  representation, the license, the eviction, the block, and the knowledge graph), which is the
+  "standard for working inside a workspace for files".
+- **THE REMOTE-BLOCK PROTOCOL RFC**: the protocol of the cloud and remote block-based data feeds
+  (the events, the blocks, the authentication, and the fallback).
+- **THE STORAGE-ADAPTER RFC**: the different databases that power the representation (the local and
+  remote stores, and the SQLite, Postgres, and object stores).
+- **THE HARNESS-INTEGRATION RFCs**: the total modification of the harness per the new nomenclature,
+  where each integration seam that the harness docs reveal becomes an RFC.

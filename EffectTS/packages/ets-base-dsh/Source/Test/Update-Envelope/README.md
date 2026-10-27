@@ -1,21 +1,14 @@
 # Update-Envelope
 
-What this test verifies.
+This page records what the test verifies.
 
 ## Intent
 
-`Update` is the typed-effect update envelope (the shared `@playform/ets-base-dsh`
-base's R1 addition): a module-agnostic Effect builder whose `Settle` owns the
-circuit breaker + the U2 refresh and whose `Dispatch` owns the three gates
-(circuit breaker, in-flight, cooldown), the P2 registration, the jobs envelope
-(journal record FIRST, then the ledger line), the never-rejecting done outcome,
-the containment of bug-level rejections, the detached fallback and the
-forkIn interruption at dispose. It is its own folder because this is the ETS
-tree's additive effect-boundary coverage - the same mechanics the Classic
-`Update` exposes as plain functions, observed through Effect's typed envelope.
-There is NO Classic twin for this folder: it is re-homed from the ETS core
-smoke's sections 9 + 11 (R1 additive), which the L6 lane (ets-base-dsh)
-completes later by giving the base its own test tree.
+`Update` is the typed-effect update envelope (the R1 addition of the shared `@playform/ets-base-dsh` base): a module-agnostic Effect builder whose `Settle` owns the circuit breaker and the U2 refresh, while its `Dispatch` owns the three gates (circuit breaker, in-flight, cooldown), the P2 registration, the jobs envelope (journal record FIRST, then the ledger line), the never-rejecting done outcome, the containment of bug-level rejections, the detached fallback, and the forkIn interruption at dispose.
+
+It has its own folder because this is the additive effect-boundary coverage of the ETS tree: the same mechanics that the Classic `Update` exposes as plain functions, observed through the typed envelope of Effect.
+
+There is NO Classic twin for this folder, because it is re-homed from sections 9 + 11 of the ETS core smoke (R1 additive), which the L6 lane (ets-base-dsh) completes later by giving the base its own test tree.
 
 ## Scenario
 
@@ -59,18 +52,10 @@ completes later by giving the base its own test tree.
 
 ## Fixtures
 
-- `SmokeState` / `UpdateState()`: the injected State maps (Count, Stamp, Set,
-  Inflight, Journal, Ledger, Refreshed, Spec, Detached).
-- `UpdateDeps(Over)`: the full factory-delegate bundle (Limit 2, Wait 0,
-  UpdateKey "update:<target>", Append/Journal/Refresh into the State maps, Stat
-  version 7, the job Start hook, the module-owned Lines, the event names and
-  the Stage stub) typed against the envelope's exported `Dependencies`
-  contract; each branch overrides what it needs (Stat boom, Wait 60s, BoomStage,
-  HangStage, detached Start).
-- `UpdateLines`: the module's OWN ledger strings (the smoke's strings, not the
-  core's).
-- `RunScoped`: `Effect.runPromise(Effect.scoped(...))` - every Dispatch runs
-  under a scope so the forkIn semantics are exercised.
+- `SmokeState` / `UpdateState()`: the injected State maps (Count, Stamp, Set, Inflight, Journal, Ledger, Refreshed, Spec, Detached).
+- `UpdateDeps(Over)`: the full factory-delegate bundle (Limit 2, Wait 0, UpdateKey "update:<target>", Append/Journal/Refresh into the State maps, Stat version 7, the job Start hook, the module-owned Lines, the event names and the Stage stub) typed against the exported `Dependencies` contract of the envelope, where each branch overrides what it needs (Stat boom, Wait 60s, BoomStage, HangStage, detached Start).
+- `UpdateLines`: the own ledger strings of the module (the strings of the smoke, not those of the core).
+- `RunScoped`: `Effect.runPromise(Effect.scoped(...))`, so every Dispatch runs under a scope and the forkIn semantics are exercised.
 
 ## Expected ledger strings (byte-exact)
 
@@ -88,14 +73,10 @@ completes later by giving the base its own test tree.
 
 ## Edge cases
 
-- Never rejects: a bug-level Stage rejection resolves `failed` with the module's
-  detail instead of throwing.
-- The dispatched order is journal FIRST, ledger line second (the
-  governor-family order).
-- The U2 refresh runs on success, after a failure, and is contained when the
-  stat itself rejects.
-- The scope's dispose interrupts the in-flight fiber (forkIn) and aborts its
-  controller; the P2 registration is never settled.
+- The envelope never rejects, because a bug-level Stage rejection resolves `failed` with the detail of the module instead of throwing.
+- The dispatched order is journal FIRST and ledger line second (the governor-family order).
+- The U2 refresh runs on success, runs after a failure, and is contained when the stat itself rejects.
+- The dispose of the scope interrupts the in-flight fiber (forkIn) and aborts its controller, so the P2 registration is never settled.
 
 ## Expected count
 

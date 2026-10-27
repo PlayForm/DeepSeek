@@ -47,35 +47,36 @@ Status:
 
 ## 1. THE VERDICT
 
-The case study explains most of the family's structural why, but NOT all of it.
+The case study explains most of the structural why of the family, but NOT all of it.
 
-It is strongest exactly where the structure lives in a seam - the factory consolidation, the
-three-stage journal routing, the gate inversion, the sequential fold, the per-record v2 domain.
+It is strongest exactly where the structure lives in a seam: the factory consolidation, the
+three-stage journal routing, the gate inversion, the sequential fold, and the per-record v2 domain.
 
 It is weakest where the structure lives in a naming or packaging decision.
 
 The reversed hierarchical naming, the three-implementation split, and the tracing opt-in are EACH
-asserted as facts of the era WITHOUT their structural reason.
+presented as facts of the era WITHOUT their structural reason.
 
-The smoke-ledger contract - the family's central structural device - is stated but NOT elevated.
+The smoke-ledger contract, which is the central structural device of the family, is stated but NOT
+elevated.
 
-Byte-identical ledger strings are the family's public interface, the ONLY observable that survives a
-framework port.
+Byte-identical ledger strings are the public interface of the family, the ONLY observable that
+survives a framework port.
 
 That is WHY renames are safe, the Effect-TS port is provable, and the smokes are
 implementation-agnostic.
 
-The page treats this as decision 1 of 13 rather than the spine of the whole family.
+The page treats this as decision 1 of 13 rather than as the spine of the whole family.
 
-The port's purpose NEVER appears.
+The purpose of the port NEVER appears.
 
-Register #13's three goals (external traceability, ecosystem interop, hooking other transformers)
-are absent.
+The three goals of Register #13 (external traceability, ecosystem interop, and hooking other
+transformers) are absent.
 
-So the Effect-TS mapping reads as a release event, NOT as the structural claim it is.
+So the Effect-TS mapping reads as a release event, NOT as the structural claim that it is.
 
-Where the page lapses, it lapses into process ("executed in one session", the subagent quirks - fine
-in the lessons, wrong in the phases).
+Where the page lapses, it lapses into process ("executed in one session" and the subagent quirks are
+fine in the lessons and wrong in the phases).
 
 It also lapses into unverified arithmetic.
 
@@ -86,163 +87,172 @@ The "~800" total is unattributed.
 
 The submodule structure is presented as achieved when register #16 is explicitly NOT STARTED.
 
-Claim verification against the code: nearly every structural claim checks out.
+Claim verification against the code shows that nearly every structural claim checks out.
 
 And EVERY commit hash on the page checks out (including ONE place where the page is right and the
 plan is wrong: `49e5b3d`, NOT the plan's `49e5b3b`).
 
 The remaining failures are concentrated in ONE habit.
 
-Counting things that were NEVER counted canonically (methods, checks, totals).
+The page counts things that were NEVER counted canonically (methods, checks, and totals).
 
-Quoting things that were NEVER quoted verbatim.
+It quotes things that were NEVER quoted verbatim.
 
 That is a structural finding in itself.
 
-The case study's own numbers and excerpts are the least-structural artifacts on the page.
+The numbers and excerpts of the case study are the least-structural artifacts on the page.
 
 ## 2. PER-SECTION STRUCTURAL-WHY ASSESSMENT
 
 ### The overview (Section 0)
 
-- **Structural why exposed**: the smoke/live asymmetry is named as the story's spine ("what the
-  suites caught, what only a restart could catch"). It is a structural claim about the verification
-  regime, and honest ("which two theories died on the way to the truth").
-- **How lapse**: NONE of consequence. The overview is mostly structural.
-- **Unsupported/stale**: "~800 checks across twelve suites as the final count" is unattributed. The
-  Effect-TS total is 808, the Classic is 795. BOTH round to "~800", but the third-pass summary
-  (TOMORROW-REVIEW section 2.3) pins the intent to the Effect-TS total, which the page NEVER says.
-  "Zero assertion changes across refactors, renames and a framework port" needs the
-  additive-coverage nuance. The Effect-TS suites add 13 checks (core +3, factory +7, governor +3).
-  So "zero changes" means zero rewrites, NOT zero growth. The overview NEVER announces the
+- **Structural why exposed**: the smoke/live asymmetry is named as the spine of the story ("what the
+  suites caught, what only a restart could catch"), which is a structural claim about the
+  verification regime and an honest one ("which two theories died on the way to the truth").
+- **How lapse**: NONE of consequence, because the overview is mostly structural.
+- **Unsupported/stale**: the "~800 checks across twelve suites as the final count" is unattributed,
+  the Effect-TS total is 808, the Classic is 795, BOTH round to "~800", but the third-pass summary
+  (TOMORROW-REVIEW section 2.3) pins the intent to the Effect-TS total, which the page NEVER says;
+  "zero assertion changes across refactors, renames and a framework port" needs the
+  additive-coverage nuance, the Effect-TS suites add 13 checks (core +3, factory +7, governor +3),
+  so "zero changes" means zero rewrites and NOT zero growth; and the overview NEVER announces the
   three-implementation structure (Boilerplate / Classic / EffectTS) even though the "framework port"
-  sentence implies it. The triad's roles are the family's most visible structural fact.
+  sentence implies it, although the roles of the triad are the most visible structural fact of the
+  family.
 
 ### Phase I - the boilerplate era
 
 - **Structural why exposed**: the duplication -> consolidation rationale (three hooks carrying six
   copies of the same machinery -> one factory service) and the transform-leaf contract ("the factory
   drives but never absorbs - each hook's transforms stay its identity") are the right structural
-  beats. They are the page's best statement of why the factory exists. The harness plugin seam is
-  the ONLY stable extension point. So everything shared lives behind ONE service and the hooks stay
-  thin leaves.
+  beats, and they are the best statement on the page of why the factory exists, because the harness
+  plugin seam is the ONLY stable extension point, so everything shared lives behind ONE service and
+  the hooks stay thin leaves.
 - **How lapse**: the two live-verified fixes (inject/Config on the default export; apply must return
-  nothing) are loader-contract facts stated as anecdotes. They ARE structural (the loader contract
-  is a seam property), but the paragraph reads as folklore. The why (a returned value silently kills
-  event delivery; named-only exports are shadowed) is present in ONE clause EACH, which is enough.
-- **Unsupported/stale**: "it has since grown 15 -> 16 -> 17 methods". The actual current surface is
-  19 callable methods (Library.ts lists
-  Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/Govern).
-  The SCHEME numbers 17 sections with Write+GuardedWrite sharing section 2.7 and UpdateKey absent.
-  The factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139). See Correction
-  C1. The 15-method era figure itself is correct (Handoff Overview Package 3).
+  nothing) are loader-contract facts stated as anecdotes, and they ARE structural (the loader
+  contract is a seam property), but the paragraph reads as folklore, while the why (a returned value
+  silently kills event delivery; named-only exports are shadowed) is present in ONE clause EACH,
+  which is enough.
+- **Unsupported/stale**: "it has since grown 15 -> 16 -> 17 methods" is wrong, because the actual
+  current surface is 19 callable methods (Library.ts lists
+  Append/Match/Discover/Parse/ResolvePolicy/Gate/Write/GuardedWrite/Refresh/Continue/State/Wire/Attach/Journal/Schema/UpdateKey/Seam/RegisterGovern/Govern),
+  the SCHEME numbers 17 sections with Write+GuardedWrite sharing section 2.7 and UpdateKey absent,
+  and the factory plugin page says "Nineteen methods" (plugin-dsh-factory.astro:13,139), which is
+  Correction C1; the 15-method era figure itself is correct (Handoff Overview Package 3).
 
 ### Phase II - the audit and the fixes
 
-- **Structural why exposed**: the three criticals are structural findings with structural fixes. The
-  type-import flip carries the best structural why on the page ("type-only imports are erased, so
-  the consumers' only-Config-imports-the-factory posture survives the flip untouched"). The
-  erased-at-build property is what makes the import topology durable.
-- **How lapse**: "The rest of the queue executed in one session" is pure process. The module
-  terminology rename's why (spec vocabulary vs code vocabulary; the `cargo flavor` literal survives
-  because ledger strings are module-owned) is present but compressed. The smoke-archival beat ("the
-  arbiter must not be disposable") is process-as-lesson and correctly placed.
-- **Unsupported/stale**: Critical card 3 calls UpdateKey "the 16th method". Decision 8 calls Write
-  "the 16th method". It is the same ordinal, two different methods (C1). Everything else in the
-  section verifies (commits 28ebc30, c6a72ce, 1ed3564, 3c29108, 060e3b6, 1fef4ca, 711d5b2 ALL in
-  `git -C ~/.dsh log`).
+- **Structural why exposed**: the three criticals are structural findings with structural fixes, and
+  the type-import flip carries the best structural why on the page ("type-only imports are erased,
+  so the consumers' only-Config-imports-the-factory posture survives the flip untouched"), because
+  the erased-at-build property is what makes the import topology durable.
+- **How lapse**: "The rest of the queue executed in one session" is pure process, the why of the
+  module terminology rename (spec vocabulary vs code vocabulary, with the `cargo flavor` literal
+  surviving because the ledger strings are module-owned) is present but compressed, and the
+  smoke-archival beat ("the arbiter must not be disposable") is process-as-lesson and correctly
+  placed.
+- **Unsupported/stale**: Critical card 3 calls UpdateKey "the 16th method" and Decision 8 calls
+  Write "the 16th method", which is the same ordinal for two different methods (C1), while
+  everything else in the section verifies (commits 28ebc30, c6a72ce, 1ed3564, 3c29108, 060e3b6,
+  1fef4ca, 711d5b2 ALL in `git -C ~/.dsh log`).
 
 ### Phase III - going live
 
-- **Structural why exposed**: the strongest structural section. The harness's one-open-per-name
-  domain constraint -> the SharedJournal sink -> the boot-window PendingJournal buffer -> the
-  per-state fallback ("three-stage routing") is a genuine architecture story. The observation that
-  the human ledgers were the ONLY reason the loss was noticed is the honest structural counterpart
-  (the journal is a convenience mirror, the ledger files are the record).
-- **How lapse**: NONE material. The "await at dispatch, never await the job" beat is the jobs seam's
-  semantics, structural.
-- **Unsupported/stale**: the excerpt is NOT verbatim (see C3). The page's JournalExcerpt uses `...`
-  and `<-` where Package-10.md:86-90 has the ellipsis character and `<-`. The plan's rule (ALL
-  quoted ledger lines are the smoke-asserted contract) is violated by the page's own
-  normalize-affected writing pipeline.
+- **Structural why exposed**: this is the strongest structural section, because the
+  one-open-per-name domain constraint of the harness -> the SharedJournal sink -> the boot-window
+  PendingJournal buffer -> the per-state fallback ("three-stage routing") is a genuine architecture
+  story, and the observation that the human ledgers were the ONLY reason the loss was noticed is the
+  honest structural counterpart (the journal is a convenience mirror, and the ledger files are the
+  record).
+- **How lapse**: NONE material, because the "await at dispatch, never await the job" beat is the
+  semantics of the jobs seam, which is structural.
+- **Unsupported/stale**: the excerpt is NOT verbatim (see C3), because the JournalExcerpt of the
+  page uses `...` and `<-` where Package-10.md:86-90 has the ellipsis character and `<-`, and the
+  plan's rule (ALL quoted ledger lines are the smoke-asserted contract) is violated by the writing
+  pipeline of the page that the normalize family affects.
 
 ### Phase IV - the stream family
 
-- **Structural why exposed**: the generalization's why (a fragile cross-bundle symlink workaround
-  replaced by generic structural shapes with NO dsh-llm dependency) is stated with commits and
-  verified in the code. The core has zero dsh-llm imports; the flavors' StreamChunk/ContentBlock
-  imports are type-only, erased at build. The three-way gate's structure (edit/raw-write pass by
-  identity; the per-call raw marker) is described and honestly flagged as smoke-verified but
-  unreachable from the structured tool interface at the time. That is exactly the plan's
-  honest-voice rule.
-- **How lapse**: minor. "The system normalizes itself" is the family's self-awareness beat and is
-  well placed. But the page misses that its OWN ledger excerpt (C3) is a LIVE instance of that beat.
+- **Structural why exposed**: the why of the generalization (a fragile cross-bundle symlink
+  workaround replaced by generic structural shapes with NO dsh-llm dependency) is stated with
+  commits and verified in the code, where the core has zero dsh-llm imports and the
+  StreamChunk/ContentBlock imports of the flavors are type-only and erased at build, and the
+  structure of the three-way gate (edit/raw-write pass by identity; the per-call raw marker) is
+  described and honestly flagged as smoke-verified but unreachable from the structured tool
+  interface at the time, which is exactly the honest-voice rule of the plan.
+- **How lapse**: minor, because "The system normalizes itself" is the self-awareness beat of the
+  family and is well placed, but the page misses that its OWN ledger excerpt (C3) is a LIVE instance
+  of that beat.
 - **Unsupported/stale**: the matrix page is named ("the workbench and the matrix pages run exactly
-  these flavors live") but ONLY workbench is linked. The plan's section 4 asked for BOTH (C12).
+  these flavors live") but ONLY workbench is linked, while section 4 of the plan asked for BOTH
+  (C12).
 
 ### Phase V - the raw-write saga
 
-- **Structural why exposed**: the densest section and mostly structural. The misdiagnoses are named
-  before the fix (emit-context, listener-scope) and refuted structurally ("the event IS delivered;
-  the gate rejects the actor"). The patch-layer shadowing's why is the config-composition inversion
-  (a patch layer replaces the entry config wholesale; the schema projection is the blind spot). The
-  v2 migration's why is exact-equality version check + swallowed catch + never-drained buffer ->
-  silence made it undiagnosable -> the loud line. The commonalization is three executors -> ONE
-  shared five-step pipeline, with the per-step divergence table. The fold race, then the deeper
-  same-version bug and the stat-before-write guard, are ALL verified against Commonalization-AUDIT
-  section 1, Function/Write.ts, Function/Govern.ts, Function/Open.ts.
-- **How lapse**: the two-wrong-theories narrative is process by nature, but it is the plan's
-  required honest voice and it terminates in the structural discovery. Acceptable.
+- **Structural why exposed**: this is the densest section and mostly structural, because the
+  misdiagnoses are named before the fix (emit-context and listener-scope) and refuted structurally
+  ("the event IS delivered; the gate rejects the actor"), the why of the patch-layer shadowing is
+  the config-composition inversion (a patch layer replaces the entry config wholesale, and the
+  schema projection is the blind spot), the why of the v2 migration is the exact-equality version
+  check, the swallowed catch, and the never-drained buffer -> silence made it undiagnosable -> the
+  loud line, and the commonalization is three executors -> ONE shared five-step pipeline with the
+  per-step divergence table, where the fold race, the deeper same-version bug, and the
+  stat-before-write guard are ALL verified against Commonalization-AUDIT section 1,
+  Function/Write.ts, Function/Govern.ts, and Function/Open.ts.
+- **How lapse**: the two-wrong-theories narrative is process by nature, but it is the required
+  honest voice of the plan and it terminates in the structural discovery, so it is acceptable.
 - **Unsupported/stale**: the abort-signal fix (the 13th decision row) is verified
-  (Library.ts:230-236 + the dash suite's pre-aborted scenario,
-  EffectTS/smokes/normalize-dash-smoke.mjs:787-807). But two Effect-TS comments still describe the
-  pre-fix design (Library.ts:25-27, Function/Write.ts:49-50). The code contradicts its own header
-  (C10).
+  (Library.ts:230-236
+    - the pre-aborted scenario of the dash suite, EffectTS/smokes/normalize-dash-smoke.mjs:787-807),
+      but two Effect-TS comments still describe the pre-fix design (Library.ts:25-27,
+      Function/Write.ts:49-50), so the code contradicts its own header (C10).
 
 ### Phase VI - the releases, the monorepo and the Site
 
 - **Structural why exposed**: the dual-release rationale ("keep the working implementation onboard;
-  the ledger strings stay the contract in both") is stated. The parallel-govern toggle
-  designed-in-from-the-start is stated and verified in EffectTS (Govern.ts:23-30, 89-95).
-- **How lapse**: this section is the structural weak point of the page. The Effect-TS port's PURPOSE
-  (Register #13's goals: external traceability, ecosystem interop, hooking other transformers) NEVER
-  appears. The mapping is described as shipping mechanics, NOT as the reason the port exists (C5).
-  The tracing opt-in (no-op default, best-effort, NodeSdk.layer + OTLP - Runtime.ts:26-49) appears
-  nowhere except ONE table cell (C6). The naming inversion is stated as a property ("read as
-  @-sentences, group alphabetically"), NOT a why (C8).
-- **Unsupported/stale**: "one repository per package under submodule structure" reads as achieved.
-  Register #16 is NOT STARTED (NO commits, everything on disk) and TOMORROW-REVIEW section 3.1 lists
-  it as open (C4). "Anonymized and de-personalized every bundle" glosses the known ncuBin residual
-  (TOMORROW-REVIEW section 3.3, a smoke-asserted code constant) (C14).
+  the ledger strings stay the contract in both") is stated, and the parallel-govern toggle that was
+  designed in from the start is stated and verified in EffectTS (Govern.ts:23-30, 89-95).
+- **How lapse**: this section is the structural weak point of the page, because the PURPOSE of the
+  Effect-TS port (the goals of Register #13: external traceability, ecosystem interop, and hooking
+  other transformers) NEVER appears, the mapping is described as shipping mechanics and NOT as the
+  reason the port exists (C5), the tracing opt-in (no-op default, best-effort, NodeSdk.layer +
+  OTLP - Runtime.ts:26-49) appears nowhere except ONE table cell (C6), and the naming inversion is
+  stated as a property ("read as @-sentences, group alphabetically") and NOT as a why (C8).
+- **Unsupported/stale**: "one repository per package under submodule structure" reads as achieved,
+  but Register #16 is NOT STARTED (NO commits, everything on disk) and TOMORROW-REVIEW section 3.1
+  lists it as open (C4), and "Anonymized and de-personalized every bundle" glosses the known ncuBin
+  residual (TOMORROW-REVIEW section 3.3, a smoke-asserted code constant) (C14).
 
 ### The decision index (Section 7)
 
-- **Structural why exposed**: the table's shape (Decision | Rationale | Technique/seam | Evidence)
-  is the plan's payoff design. The 13th row (the signal-mapping beat) is the most precisely
-  structural content on the page. It covers the seam-only signal forwarding vs the fiber
-  interruption, byte parity preserved, verified in code. Rows 1-9 and 11 name real seams.
+- **Structural why exposed**: the shape of the table (Decision | Rationale | Technique/seam |
+  Evidence) is the payoff design of the plan, and the 13th row (the signal-mapping beat) is the most
+  precisely structural content on the page, because it covers the seam-only signal forwarding vs the
+  fiber interruption with the byte parity preserved and verified in code, while rows 1-9 and 11 name
+  real seams.
 - **How lapse**: rows 10 and 12 name NO seam ("The dependency-pin discipline"; "Package naming; the
-  monorepo layout"). The plan's section 4 rule ("the case study never describes a decision in the
-  abstract") is violated exactly where the naming/packaging structure lives (C9). The evidence
-  column mixes commit hashes with doc refs. It could carry file refs so the proof is locatable in
-  the tree (E7).
+  monorepo layout"), so the section 4 rule of the plan ("the case study never describes a decision
+  in the abstract") is violated exactly where the naming and packaging structure lives (C9), and the
+  evidence column mixes commit hashes with doc refs when it could carry file refs so the proof is
+  locatable in the tree (E7).
 - **Unsupported/stale**: "12 DECISIONS + 1 FIX" (the eyebrow) vs "13 DECISIONS" (the section
-  Metadata) is a label mismatch, harmless but noisy. The verdict row count is right (13 rows).
+  Metadata) is a label mismatch, which is harmless but noisy, and the verdict row count is right (13
+  rows).
 
 ### The working lessons (Section 8)
 
 - **Structural why exposed**: the smoke/live fidelity gap is stated in ONE structural line ("the
-  smokes prove the mechanics; the live battery proves the wiring"). The two-layer verification
-  regime is the family's architecture, NOT its process. The patch-layer shadowing as the meta-lesson
-  (verify the LIVE effective config, NEVER the schema projection) closes the saga structurally. The
-  load-order lesson connects to the fold ("the fold plus the fresh-version writes make the order
-  irrelevant").
-- **How lapse**: the subagent quirks and the timestamp lessons are process by design. The plan's
-  section 8 explicitly lists them. They belong here, NOT in the phases.
-- **Unsupported/stale**: the known-gaps register's items (the verifyCommand trap, the raw-marker
-  unreachability beyond the ONE honest sentence, the #14 Classic parallel coverage) are NOT surfaced
-  in the close's "backlog of decisions already designed". A named backlog would be more structural
-  than a vague ONE (E4).
+  smokes prove the mechanics; the live battery proves the wiring"), the two-layer verification
+  regime is the architecture of the family and NOT its process, the patch-layer shadowing as the
+  meta-lesson (verify the LIVE effective config and NEVER the schema projection) closes the saga
+  structurally, and the load-order lesson connects to the fold ("the fold plus the fresh-version
+  writes make the order irrelevant").
+- **How lapse**: the subagent quirks and the timestamp lessons are process by design, and section 8
+  of the plan explicitly lists them, so they belong here and NOT in the phases.
+- **Unsupported/stale**: the items of the known-gaps register (the verifyCommand trap, the
+  raw-marker unreachability beyond the ONE honest sentence, and the #14 Classic parallel coverage)
+  are NOT surfaced in the close's "backlog of decisions already designed", while a named backlog
+  would be more structural than a vague ONE (E4).
 
 ## 3. CLAIM VERIFICATION
 
@@ -360,10 +370,15 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 
 ## 4. CORRECTIONS BATCH
 
-> Landing form per the user's corrections process ("the review's findings land as new packages -
-> agents + the smokes/site-build as the arbiter"). Items that touch code land as NEW PACKAGES (a
-> dedicated agent EACH, the smokes as the arbiter). Items that touch ONLY the site/docs land as
-> site-build-arbitrated packages. Priority: P0 first.
+> The landing form follows the corrections process of the user ("the review's findings land as new
+> packages - agents + the smokes/site-build as the arbiter").
+>
+> Items that touch code land as NEW PACKAGES (a dedicated agent EACH, with the smokes as the
+> arbiter).
+>
+> Items that touch ONLY the site or the docs land as site-build-arbitrated packages.
+>
+> The priority is P0 first.
 
 - **C1 (P0) - THE METHOD-COUNT LEDGER - NEW PACKAGE.** Title: settle the factory surface's canonical
   count and numbering. Structural why it fixes: the "15 -> 16 -> 17" arc is narrative arithmetic,
@@ -475,33 +490,33 @@ The case study's own numbers and excerpts are the least-structural artifacts on 
 
 ## 5. ENHANCEMENTS (discovered during verification; the site stays untouched)
 
-- **E1 - The page as the family's self-demonstration**: C3's normalized excerpt is the LIVE instance
-  of Phase IV's "the system normalizes itself" beat. A before/after pair (the verbatim bytes vs what
-  the writing pipeline produced) inside Phase III or IV would make the family's behavior land on the
-  page's own body. It is the strongest possible demonstration of the normalize family's structural
-  reach.
-- **E2 - The gate's reason taxonomy as the decision language**: Gate.ts's seven reasons (target /
-  govern / actor / kind / idempotent / basename / excluded - Gate.ts:44-71) are the family's
-  structured vocabulary for "why did governance not run". Phase V uses "the gate rejects the actor"
-  ONCE. Naming the reason set (and that the pre-fix rejection was the actor reason, the post-marker
-  rejection the govern reason) makes the misdiagnosis story structurally checkable instead of
-  anecdotal.
+- **E1 - The page as the family's self-demonstration**: the normalized excerpt of C3 is the LIVE
+  instance of the "the system normalizes itself" beat of Phase IV, so a before/after pair (the
+  verbatim bytes vs what the writing pipeline produced) inside Phase III or IV would make the
+  behavior of the family land on the body of the page itself, which is the strongest possible
+  demonstration of the structural reach of the normalize family.
+- **E2 - The gate's reason taxonomy as the decision language**: the seven reasons of Gate.ts (target
+  / govern / actor / kind / idempotent / basename / excluded - Gate.ts:44-71) are the structured
+  vocabulary of the family for "why did governance not run", and Phase V uses "the gate rejects the
+  actor" ONCE, so naming the reason set (and that the pre-fix rejection was the actor reason and the
+  post-marker rejection the govern reason) makes the misdiagnosis story structurally checkable
+  instead of anecdotal.
 - **E3 - The +13 additive coverage as parity proof**: the Effect-TS totals being HIGHER than the
-  Classic's, with EVERY shared assertion intact, is the port's strongest structural evidence. The
-  page could state it as such (it currently implies the totals are equal).
-- **E4 - A named backlog for the close**: the lessons section's "a backlog of decisions already
-  designed" could name the register's open items (#14's Classic parallel smoke coverage, the ncuBin
-  re-pin, the verifyCommand trap, #16's submodule structure). Then the "next era" is concrete and
-  the case study hands off to the register structurally.
-- **E5 - The ordering-constraint removal**: the load-order lesson already connects to the fold.
-  Extending it to decision 2 ("the fold converges in ANY step order - the structure removes the
-  ordering constraint instead of controlling it") would make the stat-before-write guard's why
+  Classic totals with EVERY shared assertion intact is the strongest structural evidence of the
+  port, and the page could state it as such, because it currently implies that the totals are equal.
+- **E4 - A named backlog for the close**: the "a backlog of decisions already designed" line of the
+  lessons section could name the open items of the register (#14's Classic parallel smoke coverage,
+  the ncuBin re-pin, the verifyCommand trap, and #16's submodule structure), so the "next era" is
+  concrete and the case study hands off to the register structurally.
+- **E5 - The ordering-constraint removal**: the load-order lesson already connects to the fold, and
+  extending it to decision 2 ("the fold converges in ANY step order - the structure removes the
+  ordering constraint instead of controlling it") would make the why of the stat-before-write guard
   explicit.
-- **E6 - Cross-referencing the versions-page cards**: versions.astro's per-package check counts
-  (14/34/78/32/62...) match the scripts and are the page's ONLY per-suite numbers. After C2 the case
-  study's "~800" can point at them, making the totals verifiable from two pages.
-- **E7 - File refs in the evidence column**: the decision table's evidence column is ALL commit
-  hashes and doc names. Adding tree paths (e.g. Function/Open.ts:93-100 for decision 5,
-  Gate.ts:51-57 for decision 3, EffectTS/smokes/normalize-dash-smoke.mjs:787-807 for the
-  abort-signal row) would make "where the proof lives in the tree" part of the page's structure,
-  matching the mandate's seams emphasis.
+- **E6 - Cross-referencing the versions-page cards**: the per-package check counts of versions.astro
+  (14/34/78/32/62...) match the scripts and are the ONLY per-suite numbers on the page, so after C2
+  the "~800" of the case study can point at them, which makes the totals verifiable from two pages.
+- **E7 - File refs in the evidence column**: the evidence column of the decision table is ALL commit
+  hashes and doc names, so adding tree paths (e.g. Function/Open.ts:93-100 for decision 5,
+  Gate.ts:51-57 for decision 3, and EffectTS/smokes/normalize-dash-smoke.mjs:787-807 for the
+  abort-signal row) would make "where the proof lives in the tree" part of the structure of the
+  page, matching the seams emphasis of the mandate.

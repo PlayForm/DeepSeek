@@ -14,28 +14,30 @@ statuses:
 
 # THE WORKSPACE FAMILY - THE AUDIT HOOK
 
-> Granular document of the Workspace Plugin Family Decomposition. The parent hub:
+> This is a granular document of the Workspace Plugin Family Decomposition. The parent hub is
 > Documentation/Plans/WORKSPACE-PLUGIN-FAMILY-DECOMPOSITION.md. THE FRAMING (binding): the workspace
 > family is the DEEPSEEK HARNESS'S OWN REFACTORING into the WORKSPACE-CENTRIC RUNTIME, powered by
-> the @playform plugin family - never a single plugin.
+> the @playform plugin family, and never a single plugin.
 
 ---
 
-- **THE PACKAGE**: `@playform/hook-dsh-workspace-audit` - the EVENT HOOK.
-- **THE ROLE** (the family map): the event records + the ledger lines - the ACCOUNTABILITY.
-- **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): the audit lines = the
+- **THE PACKAGE**: `@playform/hook-dsh-workspace-audit`, the EVENT HOOK.
+- **THE ROLE** (the family map): the event records plus the ledger lines, which give the
+  ACCOUNTABILITY.
+- **THE INTENT-MODEL SEMANTICS** (the critique round 5, binding): the audit lines are the
   OutcomeEvidence on the traceability graph (Announcement -> Interpretation -> IntentRevision ->
   Commitment -> PlanRevision -> ProposedChange -> AuthorizationDecision -> ExecutionAttempt ->
-  OutcomeEvidence -> IntentAssessment) - the accountability is the graph's record; the
+  OutcomeEvidence -> IntentAssessment), so the accountability is the graph's record. The
   IntentAssessment closes the loop against the IntentSpecification's satisfaction contract.
-- **THE REGIME**: the workspace regime (the third axis) - the audit lines record the workspace's
-  interactions; the OS execution axis stays orthogonal.
-- **THE ORCHESTRATION POSITION**: "the audit lines" - the step after the journal records in the
-  invisible flow: ... -> the journal records -> the audit lines -> the live view presents - all
-  evented by the plugin system (fs/observed, the tools' waterfalls, the lifecycle), all governed by
-  the plugin harness.
-- **THE PHASED DELIVERY**: the audit is part of phase 5 - with the monitor + the live (the
-  watch/sweep + the live view + the accountability).
-- **THE DISTRIBUTION LAW**: its own Config + ledger strings + tools; the recursion prevention: every
-  event carries the operation identifier, the parent identifier, the event category.
-- **THE TWINS**: the Classic + ETS twins per the family contract.
+- **THE REGIME**: the audit lines work in the workspace regime (the third axis) and record the
+  workspace's interactions, while the OS execution axis stays orthogonal.
+- **THE ORCHESTRATION POSITION**: "the audit lines" is the step after the journal records in the
+  invisible flow: ... -> the journal records -> the audit lines -> the live view presents, all
+  evented by the plugin system (fs/observed, the tools' waterfalls, the lifecycle) and all governed
+  by the plugin harness.
+- **THE PHASED DELIVERY**: the audit is part of phase 5, with the monitor and the live view (the
+  watch and sweep, the live view, and the accountability).
+- **THE DISTRIBUTION LAW**: the package keeps its own Config, ledger strings, and tools, and the
+  recursion prevention makes every event carry the operation identifier, the parent identifier, and
+  the event category.
+- **THE TWINS**: the Classic and ETS twins follow the family contract.

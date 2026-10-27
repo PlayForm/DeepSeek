@@ -13,18 +13,26 @@ index: Documentation/INDEX.md
 > SUPERSEDED AS THE LIVE STATE (2026-10-24): the completion program closed the graded gaps - the
 > workspace-scoped suggesters, the working ledgers, the graph indexing trigger, the
 > batch/queue/route wiring, the trace bus, the pack layer + learner, the storage migration, the
-> D4-D8 layers, the client adapters, and the ETS twin parity (0 stale). The current state, the
-> evidence and the documented residuals are in `Documentation/Plans/POC-LEDGER.md` (sections 7+) and
-> `Documentation/Plans/Completion-Spec/`; the grades below remain the 2026-10-22 baseline.
+> D4-D8 layers, the client adapters, and the ETS twin parity (0 stale).
+>
+> The current state, the evidence, and the documented residuals are in
+> `Documentation/Plans/POC-LEDGER.md` (sections 7+) and `Documentation/Plans/Completion-Spec/`, while
+> the grades below remain the 2026-10-22 baseline.
 
-> Three read-only lanes compared every plugin's plan document against its Source (not the README
-> claims): the workspace family (16), the orchestration/batch set (10), the suggesters + client
-> family (10). The evidence blocks: `/tmp/gap-analysis/<package>.md`. The live matrix:
-> Documentation/Plans/POC-LEDGER.md. Grade scale - A = the plan's core is genuinely implemented (the
-> surfaces behave, the ledger contracts exist, the smokes prove it); B = the shape + the core paths
-> exist, several plan-promised capabilities deferred; C = essentially the contract skeleton.
-> Baseline: the grade compares the PoC against the plugin's OWN plan; the plan's
-> explicitly-later-stage items are listed under "missing" but do not lower the grade.
+> Three read-only lanes compared the plan document of every plugin against its Source (not the
+> claims of the README): the workspace family (16), the orchestration and batch set (10), and the
+> suggesters + client family (10).
+>
+> The evidence blocks are in `/tmp/gap-analysis/<package>.md`, and the live matrix is
+> Documentation/Plans/POC-LEDGER.md.
+>
+> The grade scale is A = the core of the plan is genuinely implemented (the surfaces behave, the
+> ledger contracts exist, and the smokes prove it), B = the shape and the core paths exist with
+> several plan-promised capabilities deferred, and C = essentially the contract skeleton.
+>
+> The baseline is that the grade compares the PoC against the OWN plan of the plugin, so the items
+> that the plan marks as explicitly later-stage are listed under "missing" but do not lower the
+> grade.
 
 ## 1. The distribution
 
@@ -91,46 +99,45 @@ index: Documentation/INDEX.md
 
 1. **The pipeline.**
 
-    The family does not run as a pipeline.
-
-    The packages stand alone behind their own service/tool surfaces: nothing emits `batch/proposed`,
-    the queue assigns but never spawns, the client trio are three unwired islands, the suggesters
-    duplicate the algebra instead of consuming `plugin-dsh-pattern`, and the graph has no indexing
-    trigger - so the workspace tools return empty live.
+    The family does not run as a pipeline, because the packages stand alone behind their own
+    service/tool surfaces: nothing emits `batch/proposed`, the queue assigns but never spawns, the
+    client trio are three unwired islands, the suggesters duplicate the algebra instead of consuming
+    `plugin-dsh-pattern`, and the graph has no indexing trigger, so the workspace tools return empty
+    live.
 
 2. **The empty graph.**
 
-    The live graph is empty (`map @ 0: 0 files`) - the epic's core orientation loop cannot run until
-    an indexing trigger exists (an index tool or the fs/observed wiring).
+    The live graph is empty (`map @ 0: 0 files`), so the core orientation loop of the epic cannot run
+    until an indexing trigger exists (an index tool or the fs/observed wiring).
 
 3. **The client family.**
 
-    The client family is a contract without adapters: the panel renders whatever registers, and
-    nothing registers - the 13 per-bundle adapters are absent; the host half has no Typert endpoint;
-    the live tab is fed by nothing.
+    The client family is a contract without adapters, because the panel renders whatever registers
+    and nothing registers, the 13 per-bundle adapters are absent, the host half has no Typert
+    endpoint, and the live tab is fed by nothing.
 
 4. **The ETS twins.**
 
-    The ETS twins are verified mirrors, not hand-ported Effect idioms.
+    The ETS twins are verified mirrors and not hand-ported Effect idioms.
 
 5. **The later stages.**
 
-    The deferred-later-stage layers are exactly the plans' own later stages: the batch tool's ranks
-    4-14, the suggester index/seed/benchmark, the offline mining, the AST reflect, the three-way
-    merge, the government stack's permission/rollback/observation layers.
+    The deferred-later-stage layers are exactly the later stages of the plans themselves: the batch
+    tool's ranks 4-14, the suggester index/seed/benchmark, the offline mining, the AST reflect, the
+    three-way merge, and the permission, rollback, and observation layers of the government stack.
 
 6. **The PoC stores.**
 
-    The PoC-posture stores: `plugin-dsh-pattern` and `plugin-dsh-batchstate` use plain JSON files
-    instead of `ctx.storage`.
+    The PoC-posture stores are plain JSON files instead of `ctx.storage` in `plugin-dsh-pattern` and
+    `plugin-dsh-batchstate`.
 
 ## 4. The honest headline
 
-Nothing is a stub: 22 of 36 plugins are substantively implemented against their own plan, 9 are
-partial, 5 are contract-level.
+Nothing is a stub, because 22 of 36 plugins are substantively implemented against their own plan, 9
+are partial, and 5 are contract-level.
 
-The real distance from the ORIGINAL idea is not inside the plugins - it is in the WIRING BETWEEN
-them: the pipeline that makes the family a workspace runtime (the index, the inbox splice, the
-spawn, the adapters, the event chain) is the next build, and the single highest-leverage fix is the
-graph's indexing trigger because three plugins (the workspace tools, the graph suggester, the live
-view) depend on it.
+The real distance from the ORIGINAL idea is not inside the plugins but in the WIRING BETWEEN them,
+where the pipeline that makes the family a workspace runtime (the index, the inbox splice, the spawn,
+the adapters, and the event chain) is the next build and the single highest-leverage fix is the
+indexing trigger of the graph, because three plugins (the workspace tools, the graph suggester, and
+the live view) depend on it.

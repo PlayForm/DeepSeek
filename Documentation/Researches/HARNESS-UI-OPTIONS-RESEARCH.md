@@ -23,17 +23,18 @@ statuses:
 Author: R-UI-2 (research subagent). Date: 2026-10-20. Read-only research; this is the ONLY file
 written.
 
-Scope: the DeepSeek Harness Plugin Family's per-plugin config options (the governors'
-policy/cooldown, the pinner's sections, the normalize flavors, the ccr thresholds, the tool-coach
-tiers, the live-containers blocks). Are they UI-accessible today, and can they become UI-powered
-(editable + controllable through the harness UI, including the live volatile reloads)?
+Scope: the per-plugin config options of the DeepSeek Harness Plugin Family (the policy and cooldown
+of the governors, the sections of the pinner, the normalize flavors, the thresholds of ccr, the tiers
+of the tool-coach, and the blocks of the live-containers). Are they UI-accessible today, and can they
+become UI-powered (editable and controllable through the harness UI, including the live volatile
+reloads)?
 
 Sources: the running harness implementation read in place from /Applications/DeepSeek
 Harness.app/Contents/Resources/app.asar/dsh/ (never extracted), the harness documentation repo at
 ~/Developer/Documentation/Module/deepseek-harness/ (docs/user, docs/cordis-tutorial,
 docs/subsystems, docs/cookbook), the family's Classic/packages/*/Source/Variable/Config.ts, the
-desktop profile's cordis.patch.yml, and the live Host inspected through the harness's own inspect
-providers.
+desktop profile's cordis.patch.yml, and the live Host inspected through the inspect providers of the
+harness itself.
 
 Legend: `<DSH>` = /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh `<DOCS>` =
 ~/Developer/Documentation/Module/deepseek-harness `<FAM>` =
@@ -102,22 +103,23 @@ slot rendering at :2818). There is NO generic fallback form: when NO entry exist
 row's config section renders empty and the row gets NO Configure control. `autoGenerate` is plumbed
 through the wire but NO client page currently consumes it to auto-generate a form.
 
-The family packages are hook plugins with NO browser half (NO `dsh.client` declaration, NO
-`./client` export), so on the running desktop/web profile:
+The family packages are hook plugins with NO browser half (NO `dsh.client` declaration and NO
+`./client` export), so on the running desktop and web profile:
 
 - Plugins sidebar -> the family bundles appear as "Installed plugins" bundles with enable/disable
-  switches per row - but NO Configure control, NO options form.
+  switches per row, but NO Configure control and NO options form.
 - Settings -> Built-in plugins is the read-only inventory ONLY
   (`<DSH>/node_modules/@deepseek-ai/dsh-client-ui-settings-plugins/README.md`).
 - Net: today the ONLY ways to change a family knob are (a) editing the profile's cordis.patch.yml by
-  hand (which the loader HMRs live, including volatile-only hot commits), or (b) restart.
+  hand (which the loader HMRs live, including volatile-only hot commits), or (b) a restart.
 
-VERDICT: the family's options are UI-VISIBLE-ADJACENT but NOT UI-EDITABLE today (the editable
-backend + wire exist and already describe the family's live values; the missing piece is a browser
-half that renders them). Making them UI-powered is FEASIBLE WITH A SMALL, WELL-SUPPORTED ADDITION:
-one family client half registering a `plugins.row.config` entry per family row (or one
-`plugins.item`/`plugins.tab` "family control panel") over `ctx.configForms.whileServed`. NO harness
-code changes are required; the harness's own docs prescribe exactly this pattern.
+VERDICT: the options of the family are UI-VISIBLE-ADJACENT but NOT UI-EDITABLE today, because the
+editable backend and the wire exist and already describe the live values of the family while the
+missing piece is a browser half that renders them, so making them UI-powered is FEASIBLE WITH A
+SMALL, WELL-SUPPORTED ADDITION: one family client half registering a `plugins.row.config` entry per
+family row (or one `plugins.item`/`plugins.tab` "family control panel") over
+`ctx.configForms.whileServed`. NO harness code change is required, because the docs of the harness
+prescribe exactly this pattern.
 
 ### 1.4 Doc anchors for the pattern (primary material)
 
