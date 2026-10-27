@@ -47,28 +47,59 @@ Status:
 
 ## 1. THE VERDICT
 
-The case study explains most of the family's structural why, but NOT all of it. It is strongest
-exactly where the structure lives in a seam - the factory consolidation, the three-stage journal
-routing, the gate inversion, the sequential fold, the per-record v2 domain. It is weakest where the
-structure lives in a naming or packaging decision. The reversed hierarchical naming, the
-three-implementation split, and the tracing opt-in are EACH asserted as facts of the era WITHOUT
-their structural reason. The smoke-ledger contract - the family's central structural device - is
-stated but NOT elevated. Byte-identical ledger strings are the family's public interface, the ONLY
-observable that survives a framework port. That is WHY renames are safe, the Effect-TS port is
-provable, and the smokes are implementation-agnostic. The page treats this as decision 1 of 13
-rather than the spine of the whole family. The port's purpose NEVER appears. Register #13's three
-goals (external traceability, ecosystem interop, hooking other transformers) are absent. So the
-Effect-TS mapping reads as a release event, NOT as the structural claim it is. Where the page
-lapses, it lapses into process ("executed in one session", the subagent quirks - fine in the
-lessons, wrong in the phases). It also lapses into unverified arithmetic. The 15 -> 16 -> 17 method
-arc does NOT match the actual 19-method surface and contradicts itself about which method is "the
-16th". The "~800" total is unattributed. The submodule structure is presented as achieved when
-register #16 is explicitly NOT STARTED. Claim verification against the code: nearly every structural
-claim checks out. And EVERY commit hash on the page checks out (including ONE place where the page
-is right and the plan is wrong: `49e5b3d`, NOT the plan's `49e5b3b`). The remaining failures are
-concentrated in ONE habit. Counting things that were NEVER counted canonically (methods, checks,
-totals). Quoting things that were NEVER quoted verbatim. That is a structural finding in itself. The
-case study's own numbers and excerpts are the least-structural artifacts on the page.
+The case study explains most of the family's structural why, but NOT all of it.
+
+It is strongest exactly where the structure lives in a seam - the factory consolidation, the
+three-stage journal routing, the gate inversion, the sequential fold, the per-record v2 domain.
+
+It is weakest where the structure lives in a naming or packaging decision.
+
+The reversed hierarchical naming, the three-implementation split, and the tracing opt-in are EACH
+asserted as facts of the era WITHOUT their structural reason.
+
+The smoke-ledger contract - the family's central structural device - is stated but NOT elevated.
+
+Byte-identical ledger strings are the family's public interface, the ONLY observable that survives a
+framework port.
+
+That is WHY renames are safe, the Effect-TS port is provable, and the smokes are
+implementation-agnostic.
+
+The page treats this as decision 1 of 13 rather than the spine of the whole family.
+
+The port's purpose NEVER appears.
+
+Register #13's three goals (external traceability, ecosystem interop, hooking other transformers)
+are absent.
+
+So the Effect-TS mapping reads as a release event, NOT as the structural claim it is.
+
+Where the page lapses, it lapses into process ("executed in one session", the subagent quirks - fine
+in the lessons, wrong in the phases).
+
+It also lapses into unverified arithmetic.
+
+The 15 -> 16 -> 17 method arc does NOT match the actual 19-method surface and contradicts itself
+about which method is "the 16th".
+
+The "~800" total is unattributed.
+
+The submodule structure is presented as achieved when register #16 is explicitly NOT STARTED.
+
+Claim verification against the code: nearly every structural claim checks out.
+
+And EVERY commit hash on the page checks out (including ONE place where the page is right and the
+plan is wrong: `49e5b3d`, NOT the plan's `49e5b3b`).
+
+The remaining failures are concentrated in ONE habit.
+
+Counting things that were NEVER counted canonically (methods, checks, totals).
+
+Quoting things that were NEVER quoted verbatim.
+
+That is a structural finding in itself.
+
+The case study's own numbers and excerpts are the least-structural artifacts on the page.
 
 ## 2. PER-SECTION STRUCTURAL-WHY ASSESSMENT
 

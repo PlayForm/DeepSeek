@@ -1,11 +1,14 @@
 # The Batch Loop
 
-The batch runs incrementally and synchronously in wall-clock time. The parent does not queue a dozen
-tasks and wait; it dispatches, observes, verifies, and reports.
+The batch runs incrementally and synchronously in wall-clock time.
+
+The parent does not queue a dozen tasks and wait; it dispatches, observes, verifies, and reports.
 
 ## Stage 1: Receive
 
-Accept the request as it arrives, however fragmentary. Structuring it is the parent's job.
+Accept the request as it arrives, however fragmentary.
+
+Structuring it is the parent's job.
 
 ## Stage 2: Formalize
 
@@ -20,13 +23,15 @@ Six items, all in the brief:
 | Arbiter       | The command that decides each lane's success             |
 | Report format | The shape: per item, before, after, `file:line`, arbiter |
 
-Attach the shared facts the lanes cannot look up. Resolve ambiguity to the most faithful reading and
-state it as an assumption in the brief.
+Attach the shared facts the lanes cannot look up.
+
+Resolve ambiguity to the most faithful reading and state it as an assumption in the brief.
 
 ## Stage 3: Pick the strain and the route
 
-`worker-strains` decides the kind of worker; `task-routing` decides the model and effort. Pass the
-route explicitly.
+`worker-strains` decides the kind of worker; `task-routing` decides the model and effort.
+
+Pass the route explicitly.
 
 ## Stage 4: Delegate
 
@@ -43,8 +48,11 @@ route explicitly.
 
 ## Stage 6: Verify
 
-Read the printed arbiter results. Run read-only spot checks on surprising claims. Do not run the
-lane's build or measurement.
+Read the printed arbiter results.
+
+Run read-only spot checks on surprising claims.
+
+Do not run the lane's build or measurement.
 
 ## Stage 7: Report
 
@@ -57,9 +65,11 @@ The report contains:
 
 ## The record
 
-The durable record is `Documentation/Plans/`: the active plan and the process record. Handoff
-documents are temporary; they may be erased at the session's close. Anything that must survive a
-session goes in the plan or the report, not in a handoff.
+The durable record is `Documentation/Plans/`: the active plan and the process record.
+
+Handoff documents are temporary; they may be erased at the session's close.
+
+Anything that must survive a session goes in the plan or the report, not in a handoff.
 
 ## Failure modes
 

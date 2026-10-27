@@ -328,19 +328,43 @@ rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `ets-hook-dsh-package-governor.log` shows the activation line.
-2. Write a stale-pins `package.json` with the write tool:
+1. **The restart.**
+
+    Restart with the bundle active; `ets-hook-dsh-package-governor.log` shows the activation line.
+
+2. **The stale pins.**
+
+    Write a stale-pins `package.json` with the write tool:
+
     - chain pass corrects chain pins; file lands governed; tool result shows the author's content
       only; transcript contains no governor traces.
-3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
-4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
-5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `ets-hook-dsh-package-governor.log` shows no runaway
-   recursion.
-7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
-8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
-   cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
-   inject/Config, no apply return).
+
+3. **The repeat write.**
+
+    Write the same file again immediately: no FS_STALE_VERSION (P3 hygiene).
+
+4. **The public-dep bump.**
+
+    Public-dep bump: ncu ran (ledger lines), version record fresh (U2).
+
+5. **The line edit.**
+
+    Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
+
+6. **The loop check.**
+
+    Loop check: after all of the above, `ets-hook-dsh-package-governor.log` shows no runaway
+    recursion.
+
+7. **The excluded path.**
+
+    Excluded-path write (`node_modules/...`): `skipped (excluded)`, file untouched.
+
+8. **The smoke suite.**
+
+    Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
+    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
+    inject/Config, no apply return).
 
 ## 10. Interplay — the governor family
 

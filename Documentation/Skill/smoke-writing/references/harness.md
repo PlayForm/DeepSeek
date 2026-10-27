@@ -8,14 +8,18 @@
   README.md      the purpose and "## Expected count" -> "<N> PASS."
 ```
 
-The build compiles `Test.ts` into `<bundle>/Target/Test/<Name>/Test.js`. The README stays in
-`Source/Test`; the aggregate reads it from there.
+The build compiles `Test.ts` into `<bundle>/Target/Test/<Name>/Test.js`.
+
+The README stays in `Source/Test`; the aggregate reads it from there.
 
 ## The real library
 
-Every test loads the bundle's REAL built `Target/Library.js`. The factory's own tests and the
-consumers' tests instantiate the REAL factory against a fake context. A test that imports the
-`Source` or a mock proves the mock, not the bundle.
+Every test loads the bundle's REAL built `Target/Library.js`.
+
+The factory's own tests and the consumers' tests instantiate the REAL factory against a fake
+context.
+
+A test that imports the `Source` or a mock proves the mock, not the bundle.
 
 ## The fake context
 
@@ -40,8 +44,9 @@ consumers' tests instantiate the REAL factory against a fake context. A test tha
 
 ## Imports and symlinks
 
-The tests run from their smokes directory with `../packages/<bundle>/Target/...` imports. The
-bundles' sibling `node_modules` symlinks are not pnpm-managed; recreate them after an install.
+The tests run from their smokes directory with `../packages/<bundle>/Target/...` imports.
+
+The bundles' sibling `node_modules` symlinks are not pnpm-managed; recreate them after an install.
 
 ## Running
 
@@ -62,8 +67,9 @@ the printed `N PASS - <Name>` line does not match the folder's README count.
 
 ## The build prerequisite
 
-`Target/Test/` exists only after the bundle's `prepublishOnly` build. A test run without the build
-runs a stale Target or nothing at all.
+`Target/Test/` exists only after the bundle's `prepublishOnly` build.
+
+A test run without the build runs a stale Target or nothing at all.
 
 ## Failure modes
 

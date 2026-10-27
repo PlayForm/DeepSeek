@@ -14,10 +14,14 @@ updated: 2026-10-20
 # Instructional Writing
 
 The normalize hooks rewrite streamed text: dashes become hyphens, curly quotes become straight, the
-ellipsis becomes three dots, unicode spaces become ASCII. That is the product for ordinary prose.
+ellipsis becomes three dots, unicode spaces become ASCII.
+
+That is the product for ordinary prose.
+
 Some files exist because the glyph itself is the subject - a fixture proving the transform, a demo
-showing before and after. Those files are written with `raw-write`, and their characters are never
-replaced with stand-ins.
+showing before and after.
+
+Those files are written with `raw-write`, and their characters are never replaced with stand-ins.
 
 ## When to use
 
@@ -30,23 +34,50 @@ replaced with stand-ins.
 
 ## The rules
 
-1. **`raw-write` is the only writer.** It is exempt from normalization by name. A plain `write`
-   would destroy the deliberate characters.
-2. **Read before overwrite.** `raw-write` refuses to overwrite a file it has not seen in the
-   session.
-3. **Pass absolute paths.** `raw-write` resolves relative paths against the profile root, not the
-   current directory.
-4. **The flags:** `normalize` absent or false writes verbatim; `true` applies all six transforms; an
-   array applies the named flavors. `govern` routes a manifest write through the direct-govern
-   chain.
-5. **Never replace a deliberate character with an ASCII stand-in.** The file's value is the byte. A
-   "safe" substitution turns the fixture into a lie.
-6. **Keep the notes truthful.** A claim about a character must match the bytes; the `write` tool
-   would normalize the claim's own glyph.
-7. **Verify after writing.** A byte check proves the characters arrived; the suite that consumes the
-   fixture is the final arbiter.
-8. **Fixtures are exclusive.** Do not copy a fixture into a second location; the archive is the
-   single source.
+1. **The writer.**
+
+    `raw-write` is the only writer.
+
+    It is exempt from normalization by name.
+
+    A plain `write` would destroy the deliberate characters.
+
+2. **The read.**
+
+    `raw-write` refuses to overwrite a file it has not seen in the session.
+
+3. **The paths.**
+
+    `raw-write` resolves relative paths against the profile root, not the current directory.
+
+4. **The flags.**
+
+    `normalize` absent or false writes verbatim; `true` applies all six transforms; an array applies
+    the named flavors.
+
+    `govern` routes a manifest write through the direct-govern chain.
+
+5. **The stand-in.**
+
+    A deliberate character is never replaced with an ASCII stand-in.
+
+    The file's value is the byte.
+
+    A "safe" substitution turns the fixture into a lie.
+
+6. **The notes.**
+
+    A claim about a character must match the bytes; the `write` tool would normalize the claim's own
+    glyph.
+
+7. **The verification.**
+
+    A byte check proves the characters arrived; the suite that consumes the fixture is the final
+    arbiter.
+
+8. **The exclusivity.**
+
+    Do not copy a fixture into a second location; the archive is the single source.
 
 ## The character inventory
 

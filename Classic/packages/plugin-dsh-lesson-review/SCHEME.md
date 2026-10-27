@@ -124,20 +124,37 @@ target. A refusal is returned, never thrown, so one bad operation cannot discard
 
 ## 6. The seams and the known unknowns
 
-1. **The session projection** (`Function/Snapshot`). The harness's surface accessors
-   (`agent.session.surface.messages` and friends) have NOT been verified against a live host in this
-   checkout. The module probes four candidate shapes, guards every read, and returns `[]` when none
-   answers - the review then reports `unavailable (empty snapshot)`. This is the ONE place a harness
-   upgrade can change behaviour, and it is confined to one file.
-2. **The auxiliary-call classification.** `GenerateOptions.purpose` accepts only
-   `'compaction' | 'session-title'`; a lesson review has no slot, so the request leaves `purpose`
-   unset. Giving the review its own purpose is an upstream harness change, not a plugin one.
-3. **The storage domain.** `~/.dsh/lesson/usage.json` is what this cut wires. The family's PoC
-   posture is a KV domain (`domain: "lesson"`) as the PRIMARY with the JSON as the fallback (the
-   pattern service's shape); that wiring is the next refinement, and the knob is already declared.
-4. **Consolidation.** `consolidate` is declared and unwired: the deterministic `Curate` pass is the
-   shipped maintenance. An LLM umbrella pass would reuse `Review` with a different prompt and a
-   corpus-only judge.
+1. **The session projection (`Function/Snapshot`).**
+
+    The harness's surface accessors (`agent.session.surface.messages` and friends) have NOT been
+    verified against a live host in this checkout.
+
+    The module probes four candidate shapes, guards every read, and returns `[]` when none answers -
+    the review then reports `unavailable (empty snapshot)`.
+
+    This is the ONE place a harness upgrade can change behavior, and it is confined to one file.
+
+2. **The auxiliary-call classification.**
+
+    `GenerateOptions.purpose` accepts only `'compaction' | 'session-title'`; a lesson review has no
+    slot, so the request leaves `purpose` unset.
+
+    Giving the review its own purpose is an upstream harness change, not a plugin one.
+
+3. **The storage domain.**
+
+    `~/.dsh/lesson/usage.json` is what this cut wires.
+
+    The family's PoC posture is a KV domain (`domain: "lesson"`) as the PRIMARY with the JSON as the
+    fallback (the pattern service's shape); that wiring is the next refinement, and the knob is
+    already declared.
+
+4. **Consolidation.**
+
+    `consolidate` is declared and unwired: the deterministic `Curate` pass is the shipped
+    maintenance.
+
+    An LLM umbrella pass would reuse `Review` with a different prompt and a corpus-only judge.
 
 ## 7. Ledger strings (module-owned, byte-stable)
 

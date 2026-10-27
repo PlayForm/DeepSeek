@@ -31,9 +31,10 @@ Status:
 > also `../Handoff/Packages/Package-13.md` (the fix it informed) and
 > `../Handoff/Packages/Package-10.md` (the P5 finding's origin).
 
-Date: 2026-10-06 - Read-only research, NO family files touched, NO commits. Scope: why
-`~/.dsh/storages/package_governance.json` stopped landing records after the v2 domain bump; BOTH
-suspected loss paths examined against the code and the empirical record.
+Date: 2026-10-06 - Read-only research, NO family files touched, NO commits.
+
+Scope: why `~/.dsh/storages/package_governance.json` stopped landing records after the v2 domain
+bump; BOTH suspected loss paths examined against the code and the empirical record.
 
 ## Verdict (one paragraph)
 
@@ -41,17 +42,22 @@ The **v2 open fails at EVERY boot since commit `4c0e83b`** (Oct 5 17:21:22 UTC):
 single-layout unit parser hard-rejects a `version: 2` open against an on-disk `unit.version: 1` file
 (`version-mismatch`), the Open's catch swallows it silently, NO sink is ever bound, and EVERY
 subsequent record from EVERY module drains into the never-retired `PendingJournal` buffer and dies
-with the process. The suspected residual boot-window drain race (`aa53c91` gap) **did NOT fire and
-is structurally closed** in the current code: the ledger<->journal `activated` record match is 1:1
-across the entire v1 era. The "20:34/20:50-boot exclusions without activations" were NOT boots -
-they are `excluded` events from fs-observation scans inside the still-running process activated at
-15:46:52 UTC.
+with the process.
+
+The suspected residual boot-window drain race (`aa53c91` gap) **did NOT fire and is structurally
+closed** in the current code: the ledger<->journal `activated` record match is 1:1 across the entire
+v1 era.
+
+The "20:34/20:50-boot exclusions without activations" were NOT boots - they are `excluded` events
+from fs-observation scans inside the still-running process activated at 15:46:52 UTC.
 
 ## Path 1 - the v2 open (CONFIRMED, the live failure)
 
 **Family side.** `plugin-dsh-factory/Source/Function/Open.ts:68-90` declares the domain with
 `version: 2` (line 71) and the six-value enum (75-82); ANY failure hits the final `catch` and is
-dropped with NO log line (135-137). Installed Target identical (`Target/Function/Open.js`).
+dropped with NO log line (135-137).
+
+Installed Target identical (`Target/Function/Open.js`).
 
 **Harness side.**
 
@@ -73,12 +79,15 @@ dropped with NO log line (135-137). Installed Target identical (`Target/Function
   `~/.dsh/storages/package_governance.json` is the single-layout unit.
 
 **Why nothing persists.** The version is NEVER "persisted on open": the file is rewritten ONLY by
-`publish()` on a successful put, stamping `state.version` (serializer lines 72-84). A failed open
-writes nothing, so the file stays `unit.version: 1` forever. The zod schema is enforced **ONLY at
-open time** (`loadAll` -> `parseRecord`, storage-domain lib 364-375); `KvTableImpl.put` does **NO**
-schema validation. ALL 76 stored v1 records use events that are a subset of the v2 enum, so the
-schema would accept them - the version check is the _ONLY_ blocker between the file and a successful
-v2 open.
+`publish()` on a successful put, stamping `state.version` (serializer lines 72-84).
+
+A failed open writes nothing, so the file stays `unit.version: 1` forever.
+
+The zod schema is enforced **ONLY at open time** (`loadAll` -> `parseRecord`, storage-domain lib
+364-375); `KvTableImpl.put` does **NO** schema validation.
+
+ALL 76 stored v1 records use events that are a subset of the v2 enum, so the schema would accept
+them - the version check is the _ONLY_ blocker between the file and a successful v2 open.
 
 **Empirical confirmation.**
 
@@ -93,10 +102,12 @@ v2 open.
 
 **Post-v2 boot mechanics (why EVERYTHING is lost, NOT just activations).** With the open failing,
 `SharedJournal` is NEVER bound and `PendingJournal` is NEVER drained/retired (`Open.ts:108-134` ALL
-sit after the failing `await`). `Journal.ts` stage 2 (45-56) then buffers _EVERY_ record from
-_EVERY_ module (ALL twelve hold the same factory instance) into the capped-256 buffer, which is
-dropped at process exit - total loss, replacing the v1-era pattern (activations buffered, later scan
-records landing through the bound sink).
+sit after the failing `await`).
+
+`Journal.ts` stage 2 (45-56) then buffers _EVERY_ record from _EVERY_ module (ALL twelve hold the
+same factory instance) into the capped-256 buffer, which is dropped at process exit - total loss,
+replacing the v1-era pattern (activations buffered, later scan records landing through the bound
+sink).
 
 ## Path 2 - the boot-window drain race (NOT the live failure; closed)
 

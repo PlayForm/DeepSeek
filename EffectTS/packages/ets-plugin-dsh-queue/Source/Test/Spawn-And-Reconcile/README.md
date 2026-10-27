@@ -36,7 +36,7 @@ settles the task, and the restart reconcile settles orphans honestly.
 - S7: THE CONTAINED REFUSALS - no live parent and no `subagents` service each
   refuse with the byte-exact `spawn skipped queue-1 (<reason>)` line and
   start nothing.
-- S8: INTERRUPT - the task's abort signal fires (the child is cancelled
+- S8: INTERRUPT - the task's abort signal fires (the child is canceled
   through the harness's own cancellation channel) and the seat is released.
 - S9: A REJECTED START - `spawn failed queue-1 (provider down)` plus the
   honest `failed queue-1 (main)`; the task is not left dispatched.

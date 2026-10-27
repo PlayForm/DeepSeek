@@ -15,9 +15,12 @@ updated: 2026-10-20
 # DSH Plugin Development
 
 A DSH plugin is a Cordis plugin: it receives `ctx` and `config`, declares what it needs, and
-integrates only through the API. The harness is a microkernel with no privileged core to patch, so
-free-floating Node.js inside a plugin is the anti-pattern. This skill is the API manual; the
-family's conventions are `plugin-system`.
+integrates only through the API.
+
+The harness is a microkernel with no privileged core to patch, so free-floating Node.js inside a
+plugin is the anti-pattern.
+
+This skill is the API manual; the family's conventions are `plugin-system`.
 
 ## When to use
 
@@ -50,7 +53,9 @@ family's conventions are `plugin-system`.
 | `serial`    | Yes          | registration    | Yes    |
 | `bail`      | No           | until one bails | Yes    |
 
-The mode is the event's public contract. A listener cannot opt out of it.
+The mode is the event's public contract.
+
+A listener cannot opt out of it.
 
 - `emit` is fire-and-forget: returned promises are dropped. Listeners must be synchronous recorders.
 - `waterfall` observers must call `next()`. Omitting it silently swallows the default behavior

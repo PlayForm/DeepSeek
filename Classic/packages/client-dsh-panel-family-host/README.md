@@ -41,14 +41,31 @@ the editor** (this package logs no success line).
 
 The host refuses, in order (each line byte-exact, see "Ledger lines"):
 
-1. a namespace that is not a non-empty string;
-2. a patch that is not a plain object;
-3. a composition without `ctx.configEditor`;
-4. a namespace that names no profile entry;
-5. a namespace declaring a `role("secret")` field at ANY depth - the patch would restate a redacted
-   value over the stored secret (the client refuses the same write independently; the host never
-   trusts the client's refusal);
-6. an editor rejection (never thrown into the panel).
+1. **The namespace.**
+
+    The host refuses a namespace that is not a non-empty string.
+
+2. **The patch.**
+
+    The host refuses a patch that is not a plain object.
+
+3. **The composition.**
+
+    The host refuses a composition without `ctx.configEditor`.
+
+4. **The profile entry.**
+
+    The host refuses a namespace that names no profile entry.
+
+5. **The secret field.**
+
+    The host refuses a namespace that declares a `role("secret")` field at ANY depth - the patch
+    would restate a redacted value over the stored secret (the client refuses the same write
+    independently; the host never trusts the client's refusal).
+
+6. **The editor rejection.**
+
+    The host refuses the edit when the editor rejects it (never thrown into the panel).
 
 The `enabled` gate covers the bridge too: a disabled package refuses every method, so it never
 writes while idle.

@@ -15,8 +15,9 @@ updated: 2026-10-20
 # Harness Observability
 
 This skill maps the observable surface of the running harness: what the agent can inspect, what it
-can control, where the durable state lives, and what it cannot see. Inspect before guessing; the
-runtime is the authority.
+can control, where the durable state lives, and what it cannot see.
+
+Inspect before guessing; the runtime is the authority.
 
 ## When to use
 
@@ -41,7 +42,9 @@ runtime is the authority.
 | client   | Theme    | tokens         |
 
 Call `cordis_inspect_list` first, then `cordis_inspect_query` with the provider and method from the
-list. The methods are read-only; they are not business services and cannot change the runtime.
+list.
+
+The methods are read-only; they are not business services and cannot change the runtime.
 
 ## The agent-control surface
 

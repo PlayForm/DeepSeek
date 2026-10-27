@@ -30,8 +30,9 @@ statuses:
 file records HOW the generated icon is built: the motif families, the primitives, the slab model,
 and the matrix that turns a package's functional profile into design decisions.
 
-The old method pool (`Method.mjs`) and the layer cube (`Matrix.mjs`, `Compose.mjs`) are retired. The
-generator no longer samples a method per layer; it infers a FUNCTIONAL PROFILE from the package
+The old method pool (`Method.mjs`) and the layer cube (`Matrix.mjs`, `Compose.mjs`) are retired.
+
+The generator no longer samples a method per layer; it infers a FUNCTIONAL PROFILE from the package
 source, passes the profile through a COMPOSITION MATRIX, and draws the resulting motif as a stack of
 slabs.
 
@@ -51,8 +52,9 @@ package source
 
 ## 2. The 14 motif families
 
-A family is a construction grammar. `Order` is the symmetry the family receives; a family that does
-not use it is marked "fixed".
+A family is a construction grammar.
+
+`Order` is the symmetry the family receives; a family that does not use it is marked "fixed".
 
 | Family           | Form    | Construction                                                        | Order |
 | ---------------- | ------- | ------------------------------------------------------------------- | ----- |
@@ -95,22 +97,39 @@ not use it is marked "fixed".
 
 An icon is a stack of solid planes, not a pile of strokes and not an outline drawing.
 
-1. Every component is a FILLED path: a closed component fills its polygon (a solid face), an open
-   component fills its stroke envelope (a ribbon).
-2. Each component carries a depth; the scene paints in depth order, so an icon can have as many
-   layers as it has components (20-60 in the current set).
-3. An upper plane covers the lower one. There is no contour pass: the drawing is carried by the
-   planes, their tones, and their occlusion.
-4. The SVG is the TOP VIEW of that stack.
+1. **The filled path.**
+
+    Every component is a FILLED path: a closed component fills its polygon (a solid face), an open
+    component fills its stroke envelope (a ribbon).
+
+2. **The depth.**
+
+    Each component carries a depth; the scene paints in depth order, so an icon can have as many
+    layers as it has components (20-60 in the current set).
+
+3. **The occlusion.**
+
+    An upper plane covers the lower one.
+
+    There is no contour pass: the drawing is carried by the planes, their tones, and their
+    occlusion.
+
+4. **The top view.**
+
+    The SVG is the TOP VIEW of that stack.
 
 A frame or body plane is projected as a 3D solid seen from above: its silhouette, the ribs from the
-silhouette to the top face, and the top face itself, at a shrinking scale and an optional twist. The
-projection parameters come from the composition (`solid: { shrink, twist, ribs }`), and a released
-changelog version adds one further nested face (the "age" face), so history deepens the solid.
+silhouette to the top face, and the top face itself, at a shrinking scale and an optional twist.
 
-Tones are per layer: frame `accent2`, body `ink`, detail `tint`, core `accent`. Mono uses one ink
-with per-layer opacity (frame 0.55, body 0.85, detail 0.3, core 0.7) plus per-feature opacity for
-the top face (0.55) and ribs (0.4); overlaps darken, so the stack reads as an embossed solid.
+The projection parameters come from the composition (`solid: { shrink, twist, ribs }`), and a
+released changelog version adds one further nested face (the "age" face), so history deepens the
+solid.
+
+Tones are per layer: frame `accent2`, body `ink`, detail `tint`, core `accent`.
+
+Mono uses one ink with per-layer opacity (frame 0.55, body 0.85, detail 0.3, core 0.7) plus
+per-feature opacity for the top face (0.55) and ribs (0.4); overlaps darken, so the stack reads as
+an embossed solid.
 
 ## 5. The composition matrix
 
@@ -191,7 +210,9 @@ Current result: 14/14, 1/1, 17/17, 11/11, 4/4, 19/19; 102 unique icons; 14 famil
 The relationship graph between components, explicit void regions with `keep-clear`/`subtract`, the
 boundary-driven stroke class, the raster analysis pipeline that proposes constructions from the
 reference sheet, candidate generation with constraint selection, small-size render profiles, and the
-local repair loop. They are recorded in `Reference/Curated/COMPOSITION-MODEL.md` and
+local repair loop.
+
+They are recorded in `Reference/Curated/COMPOSITION-MODEL.md` and
 `Reference/Curated/REVERSE-ENGINEERING.md`.
 
 ---

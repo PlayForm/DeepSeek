@@ -11,7 +11,7 @@ All notable changes to this package will be documented in this file.
 - The role-prefix contract applied to the factory's ledger strings and manifest.
 - The `@deepseek-ai/dsh-fs`, `@deepseek-ai/dsh-sandbox` and `@deepseek-ai/dsh-subprocess`
   devDependencies bumped to the 0.2.1-rc.2 line (Dependabot).
-- Line endings normalised and the LICENSE text wrapped.
+- Line endings normalized and the LICENSE text wrapped.
 - The repository-wide markdown clean-up, the prettier reflow, and the README role / surfaces /
   ledger pass with the static market index committed alongside.
 

@@ -1,8 +1,9 @@
 # Review Passes and Behavior-Identical Refactors
 
-A refactor is a change of structure with no change of behavior. The discipline exists because the
-family's contract is byte-exact strings and smoke counts; a refactor that "improves" either one has
-broken the contract, not the code.
+A refactor is a change of structure with no change of behavior.
+
+The discipline exists because the family's contract is byte-exact strings and smoke counts; a
+refactor that "improves" either one has broken the contract, not the code.
 
 ## The behavior-identical law
 
@@ -14,18 +15,37 @@ A refactor keeps all of the following byte-identical:
 4. The smoke counts: the same assertions pass in the same numbers.
 
 The one permitted change is identity-driven: when a module's identity changes by design (a package
-rename), its own `<module>: ` prefixes and its default `logFile` change with it. That is a rename,
-not a refactor, and it is recorded as such.
+rename), its own `<module>: ` prefixes and its default `logFile` change with it.
+
+That is a rename, not a refactor, and it is recorded as such.
 
 ## The protocol
 
-1. Record the baseline: run the bundle's smoke suite and note the printed total. For the site, note
-   the page count from the built output.
-2. Make the structural change, one definition at a time.
-3. Re-run the arbiter after each logical step, not only at the end.
-4. Compare: the printed total equals the baseline; the ledger strings diff empty.
-5. If the total changed, stop. A changed count means behavior changed or an assertion was weakened.
-   Read the failure's intent before touching either side.
+1. **The baseline.**
+
+    The bundle's smoke suite is run and the printed total is noted.
+
+    For the site, the page count from the built output is noted.
+
+2. **The change.**
+
+    The structural change is made, one definition at a time.
+
+3. **The arbiter.**
+
+    The arbiter is re-run after each logical step, not only at the end.
+
+4. **The comparison.**
+
+    The printed total equals the baseline; the ledger strings diff empty.
+
+5. **The stop.**
+
+    If the total changed, stop.
+
+    A changed count means behavior changed or an assertion was weakened.
+
+    The failure's intent is read before either side is touched.
 
 ## The review checklist
 
@@ -61,13 +81,27 @@ not a refactor, and it is recorded as such.
 
 ## When the refactor cannot stay identical
 
-Some changes are behavioral by design: a new feature, a new config field, a fixed bug. They are not
-refactors. They follow the feature path:
+Some changes are behavioral by design: a new feature, a new config field, a fixed bug.
 
-1. Add the assertions first (additive coverage).
-2. Make the change.
-3. The new count is the new baseline, recorded in the suite's README.
-4. The ledger strings for the new behavior are written once and then treated as contract.
+They are not refactors.
+
+They follow the feature path:
+
+1. **The assertions.**
+
+    The assertions are added first (additive coverage).
+
+2. **The change.**
+
+    The change is made.
+
+3. **The baseline.**
+
+    The new count is the new baseline, recorded in the suite's README.
+
+4. **The contract.**
+
+    The ledger strings for the new behavior are written once and then treated as contract.
 
 A behavior change that silently rides inside a "refactor" is the most expensive kind of change: it
 invalidates the baseline and hides in a diff that claimed to be structural.

@@ -47,14 +47,21 @@ statuses:
 
 ## 2. THE ROSTER - the OPERATING NAMES (the original groups + the base)
 
-The splice has executed (SPLICE-ETS section 8 S2/S4): the trees carry UNIQUE names. The Classic tree
-carries the plain `@playform/{lib,hook,plugin}-dsh-*` names. The EffectTS tree carries the
-`@playform/ets-*` names plus the base `@playform/ets-base-dsh` (verified in the manifests). The
-registry listing uses exactly these.
+The splice has executed (SPLICE-ETS section 8 S2/S4): the trees carry UNIQUE names.
 
-**This roster covers the ORIGINAL 31 packages.** The 2026-10-22 delivery adds 36 Classic packages
-and 30 EffectTS twins (the workspace family, the suggesters, the orchestration set, the client
-family) - the full inventory and one-line roles: Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md.
+The Classic tree carries the plain `@playform/{lib,hook,plugin}-dsh-*` names.
+
+The EffectTS tree carries the `@playform/ets-*` names plus the base `@playform/ets-base-dsh`
+(verified in the manifests).
+
+The registry listing uses exactly these.
+
+**This roster covers the ORIGINAL 31 packages.**
+
+The 2026-10-22 delivery adds 36 Classic packages and 30 EffectTS twins (the workspace family, the
+suggesters, the orchestration set, the client family) - the full inventory and one-line roles:
+Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md.
+
 Every new package follows the same install form (`pnpm add @playform/<pkg>`) and the same bootstrap
 tier (2-planned / 3-candidates).
 
@@ -99,8 +106,11 @@ tier (2-planned / 3-candidates).
 | 15  | `@playform/ets-hook-dsh-tool-coach`          | `pnpm add @playform/ets-hook-dsh-tool-coach`          | the terminal-content coaching guardian            |
 | 16  | `@playform/ets-hook-dsh-live-containers`     | `pnpm add @playform/ets-hook-dsh-live-containers`     | the dynamic system-prompt blocks (ships disabled) |
 
-The duplicate-name collision (#15) is resolved. Every `@playform/*` dependency resolves to exactly
-ONE workspace package. So the publish order is the layer order (section 5).
+The duplicate-name collision (#15) is resolved.
+
+Every `@playform/*` dependency resolves to exactly ONE workspace package.
+
+So the publish order is the layer order (section 5).
 
 ## 4. THE BYTE-EXACT RULE
 
@@ -119,14 +129,25 @@ contract:
 
 ## 5. THE PUBLISH GATES (the residual checklist)
 
-1. The splice lands first (the unique names) - a pre-splice publish would ship the collision into
-   the registry.
-2. `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four foundations -> L2 the
-   twenty-six consumers (SPLICE-ETS section 5.1).
-3. Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 97/97 packages, 359
-   suites / 5,337 checks, zero failures.
-4. The site's `Install:` rows + the `/setup/` flow copy already match the `pnpm add` form - verified
-   byte-exact against this roster at publish time.
+1. **The splice.**
+
+    The splice lands first (the unique names) - a pre-splice publish would ship the collision into
+    the registry.
+
+2. **The workflow arming.**
+
+    `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four foundations -> L2 the
+    twenty-six consumers (SPLICE-ETS section 5.1).
+
+3. **The fresh-install gate.**
+
+    Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 97/97 packages,
+    359 suites / 5,337 checks, zero failures.
+
+4. **The site rows.**
+
+    The site's `Install:` rows + the `/setup/` flow copy already match the `pnpm add` form -
+    verified byte-exact against this roster at publish time.
 
 ## 6. THE RESIDUALS
 

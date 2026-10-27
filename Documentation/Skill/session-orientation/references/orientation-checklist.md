@@ -1,7 +1,8 @@
 # The Orientation Checklist
 
-Run this checklist once per fresh session. It takes minutes and prevents the most expensive class of
-error: acting on a stale map.
+Run this checklist once per fresh session.
+
+It takes minutes and prevents the most expensive class of error: acting on a stale map.
 
 ## A. Fresh session
 
@@ -19,7 +20,9 @@ error: acting on a stale map.
 
 ## B. Resume or fork
 
-A resumed session inherits files, not memory. Add these steps:
+A resumed session inherits files, not memory.
+
+Add these steps:
 
 1. Read the latest handoff document in `Documentation/Handoff/`, if any.
 2. Read the queue record in `Documentation/Plans/TOMORROW-REVIEW.md` or the active plan that carries
@@ -63,7 +66,8 @@ You are oriented when you can state, without opening another file:
 6. The active plans.
 
 The expected package answer as of 2026-10-22: 51 Classic + 46 EffectTS packages, all 0.1.0,
-unpublished; the verify command is `ls Classic/packages EffectTS/packages`. The expected smoke
-answer: 359 suites / 5,337 checks via `node Maintain/Run/Smokes/Index.mjs`.
+unpublished; the verify command is `ls Classic/packages EffectTS/packages`.
+
+The expected smoke answer: 359 suites / 5,337 checks via `node Maintain/Run/Smokes/Index.mjs`.
 
 If any answer is a guess, return to the step that owns it.

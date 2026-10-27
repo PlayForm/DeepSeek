@@ -4,9 +4,10 @@ The effort follows the task's reasoning demand, and most tasks demand very littl
 
 ## The rule
 
-**Start at `low`. Raise only on a named signal.** The default is not a compromise; it is the correct
-tier for the majority of delegated work, because the catalog model at `low` is capable and the
-effort token controls deliberation, not competence.
+**Start at `low`. Raise only on a named signal.**
+
+The default is not a compromise; it is the correct tier for the majority of delegated work, because
+the catalog model at `low` is capable and the effort token controls deliberation, not competence.
 
 Three demand tiers, not two:
 
@@ -16,12 +17,17 @@ Three demand tiers, not two:
 | Judgment     | must decide something under a constraint, or reconcile a conflict | `high` |
 | Constitutive | decides what later work assumes (law, architecture, adjudication) | `max`  |
 
-"Constitutive" is the main agent's lane. It is not a delegation target.
+"Constitutive" is the main agent's lane.
+
+It is not a delegation target.
 
 The boundary that matters most: **the design belongs to the parent; the implementation of a
-specified design is coding.** A lane handed the interfaces, the file layout and the contracts is
-doing semantic coding even when the change is large or novel. Only the act of deciding those
-contracts is constitutive.
+specified design is coding.**
+
+A lane handed the interfaces, the file layout and the contracts is doing semantic coding even when
+the change is large or novel.
+
+Only the act of deciding those contracts is constitutive.
 
 ## The closed table
 
@@ -35,13 +41,20 @@ contracts is constitutive.
 | The delegated red-tree diagnosis or advanced debugging     | `deepseek-v4.1-flash-1017` | `max`           |
 | The fallback, only when the cheap route is NOT permitted   | `deepseek-v4.1-flash-1017` | the SAME effort |
 
-The table is total: every task maps to one row. If a task seems to fit none, apply the tie-breaker:
-exploration to `low`; anything producing code to the ladder; anything deciding architecture or plans
-to the main agent. There is no fourth model, no other effort token, and **no DeepSeek `high` row**.
+The table is total: every task maps to one row.
+
+If a task seems to fit none, apply the tie-breaker: exploration to `low`; anything producing code to
+the ladder; anything deciding architecture or plans to the main agent.
+
+There is no fourth model, no other effort token, and **no DeepSeek `high` row**.
 
 ## The preset catalog
 
-Find the shape. Take its tier. Do not reason from the label.
+Find the shape.
+
+Take its tier.
+
+Do not reason from the label.
 
 ### `low` - the default
 
@@ -50,7 +63,7 @@ Find the shape. Take its tier. Do not reason from the label.
 | Retrieve from a known corpus, cite file:line     | reading and quoting, no judgment        |
 | Mechanical sweep with a complete spec            | rename, path replace, frontmatter block |
 | Small code change with an obvious diff           | a constant, a guard, an off-by-one      |
-| Add a test from an explicit expected behaviour   | the spec is the work, not the model     |
+| Add a test from an explicit expected behavior    | the spec is the work, not the model     |
 | Doc edits: typos, links, cross-references        | local, verifiable, reversible           |
 | Formatting, ASCII, lint, prettier pass           | deterministic                           |
 | Transcribe or extract into a table               | fidelity, not invention                 |
@@ -69,7 +82,7 @@ Find the shape. Take its tier. Do not reason from the label.
 | -------------------------------------------------- | -------------------------------------------------- |
 | Diagnose a bug from a failure with no stated cause | form a hypothesis, then disprove it                |
 | Root-cause a defect in a tool or script            | the cause is not where the symptom is              |
-| Refactor across files, behaviour must not change   | every move has a correctness condition             |
+| Refactor across files, behavior must not change    | every move has a correctness condition             |
 | Author a spec another agent will execute           | an incomplete spec fails silently                  |
 | Review another lane's artifact adversarially       | the job is to find what the producer cannot        |
 | Reconcile two sources that disagree                | decide which is right and say why                  |
@@ -111,25 +124,33 @@ Move up one tier only when one of these is true, and name which one:
 4. The output was rejected on judgment, not on format.
 5. A wrong answer produces a wrong decision rather than a wrong character.
 
-If none applies, the task stays where it is. "It feels important" is not a signal; it is the
-anti-pattern this table exists to prevent.
+If none applies, the task stays where it is.
+
+"It feels important" is not a signal; it is the anti-pattern this table exists to prevent.
 
 ## When the cheap route is unavailable
 
-A session may restrict the allowed models. If the GLM tier is not permitted, route to
-`deepseek-v4.1-flash-1017` at the **same effort tier** - not higher.
+A session may restrict the allowed models.
 
-The effort token measures reasoning demand. Raising it because the model changed confuses two
-independent variables and buys nothing. And the reverse error is the one that has actually been
-measured: routing the semantic coding to the DeepSeek lane while the cheap route WAS permitted.
+If the GLM tier is not permitted, route to `deepseek-v4.1-flash-1017` at the **same effort tier** -
+not higher.
+
+The effort token measures reasoning demand.
+
+Raising it because the model changed confuses two independent variables and buys nothing.
+
+And the reverse error is the one that has actually been measured: routing the semantic coding to the
+DeepSeek lane while the cheap route WAS permitted.
 
 ## The Agent Teams caveat
 
-`spawn_teammate` has no `provider`/`model`/`reasoning_effort` fields. A durable teammate runs on the
-profile's subagent default - the expensive lane. Route the mechanical and semantic coding lanes via
-`subagent`/`subagent_fork` with the explicit triple; when the durable, messageable room is genuinely
-needed, spawn the teammate, state in its spec that it runs on the default, and record that in the
-report.
+`spawn_teammate` has no `provider`/`model`/`reasoning_effort` fields.
+
+A durable teammate runs on the profile's subagent default - the expensive lane.
+
+Route the mechanical and semantic coding lanes via `subagent`/`subagent_fork` with the explicit
+triple; when the durable, messageable room is genuinely needed, spawn the teammate, state in its
+spec that it runs on the default, and record that in the report.
 
 ## Calibration evidence
 
@@ -144,7 +165,9 @@ Measured on 21-22 October 2026, on this harness, across a 24-lane batch:
 | Site crawl, four sources                       | `high`  | found two crashed captures and a title misalignment  |
 
 The pattern: **retrieval and sweeps succeed at the bottom; audits and root-causing need the
-middle.** No lane in that batch needed `max` except the ones the main agent kept.
+middle.**
+
+No lane in that batch needed `max` except the ones the main agent kept.
 
 Measured again on 24 October 2026, the first full program run under this policy:
 
@@ -156,9 +179,11 @@ Measured again on 24 October 2026, the first full program run under this policy:
 - 4 durable teammates on the `spawn_teammate` default, because the tool has no route field.
 
 The cause: the fallback clause read as a license plus the semantic judgment tier mapped to the
-DeepSeek model - a row invention. The binding correction: the cheap route is permitted unless the
-profile forbids it, the semantic judgment tier is the GLM at `high`, and the DeepSeek appears only
-at `max` or as the same-effort fallback.
+DeepSeek model - a row invention.
+
+The binding correction: the cheap route is permitted unless the profile forbids it, the semantic
+judgment tier is the GLM at `high`, and the DeepSeek appears only at `max` or as the same-effort
+fallback.
 
 ## Pinned roles
 

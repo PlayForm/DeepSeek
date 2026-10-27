@@ -2,14 +2,31 @@
 
 ## The ladder
 
-1. **Attempt 1** at the task's tier: `low` for mechanical, `high` for semantic.
-2. **Attempt 2** at `high`, only if attempt 1 failed.
-3. **Escalation**: the parent re-delegates to the DeepSeek lane at `max`
-   (`deepseek-v4.1-flash-1017`, fallback `deepseek-v4-flash-0731`), carrying the failed run's
-   workspace files, build logs, and a failure summary. At most once per task.
-4. **Stop**: if the escalation fails, report both summaries to the user. No fourth attempt.
+1. **The first attempt.**
 
-The parent owns the ladder. A child may signal failure; it may not re-delegate itself.
+    Attempt 1 runs at the task's tier: `low` for mechanical, `high` for semantic.
+
+2. **The second attempt.**
+
+    Attempt 2 runs at `high`, only if attempt 1 failed.
+
+3. **The escalation.**
+
+    The parent re-delegates to the DeepSeek lane at `max` (`deepseek-v4.1-flash-1017`, fallback
+    `deepseek-v4-flash-0731`), carrying the failed run's workspace files, build logs, and a failure
+    summary.
+
+    At most once per task.
+
+4. **The stop.**
+
+    If the escalation fails, report both summaries to the user.
+
+    No fourth attempt.
+
+The parent owns the ladder.
+
+A child may signal failure; it may not re-delegate itself.
 
 ## The failure signals
 
@@ -54,13 +71,19 @@ ESCALATION: <concrete reason>
 ## Why the edge cases are mandatory
 
 The v1 high-effort replica passed its own test suite while carrying a lock flaw: false timeouts on
-non-repo directories. Only an edge case beyond the spec's list found it. The adversarial classes are
-the cheapest bug catchers in the pipeline because they run deterministically and cost no LLM tokens.
+non-repo directories.
+
+Only an edge case beyond the spec's list found it.
+
+The adversarial classes are the cheapest bug catchers in the pipeline because they run
+deterministically and cost no LLM tokens.
 
 ## Why the marker is verbatim
 
-`ESCALATION:` is a protocol string the parent greps for. A paraphrased instruction ("tell me if you
-get stuck") produces a silent give-up that is harder to detect than a failure.
+`ESCALATION:` is a protocol string the parent greps for.
+
+A paraphrased instruction ("tell me if you get stuck") produces a silent give-up that is harder to
+detect than a failure.
 
 ## Failure modes
 

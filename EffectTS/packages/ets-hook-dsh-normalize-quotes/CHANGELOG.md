@@ -10,7 +10,7 @@ All notable changes to this package will be documented in this file.
   its scheme and its bundle patch move with it.
 - The internal imports migrated to the `@Interface` alias.
 - The role-prefix contract applied to the hook's ledger strings and manifest.
-- Line endings normalised and the LICENSE text wrapped.
+- Line endings normalized and the LICENSE text wrapped.
 - The repository-wide markdown clean-up, the prettier reflow, and the README role / surfaces /
   ledger pass.
 

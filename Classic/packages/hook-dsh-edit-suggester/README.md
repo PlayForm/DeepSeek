@@ -92,7 +92,7 @@ The score is `sum over the enabled heuristics of weight * value`:
 | `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
 
 The default row is exactly the PoC formula, and a missing store answers the neutral 1/3, so the
-default behaviour is unchanged byte-for-byte. A user can disable any heuristic (`heuristics`) or
+default behavior is unchanged byte-for-byte. A user can disable any heuristic (`heuristics`) or
 re-weight any of them (`weights`), and the decision record plus the `decided` line show the choice.
 
 ## The delivery

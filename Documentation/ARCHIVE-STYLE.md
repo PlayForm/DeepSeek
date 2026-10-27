@@ -53,15 +53,26 @@ statuses:
 
 EVERY document is built from two parts, in this order:
 
-1. **The YAML frontmatter block** - the very first thing in the file, delimited by `---` lines. The
-   frontmatter block: the document fields (section 2) plus the `statuses:` list (section 3), ONE
-   entry per functionality described.
-2. **The body** - the original content starting with its own title heading, untouched. The prose,
-   the sections, the quoted ledger strings stay byte-exact.
+1. **The frontmatter block.**
 
-Nothing from the original content is removed or rewritten when a document is converted. The
-conversion is the frontmatter block + updated cross-references. The `statuses:` entries are the
-document's face toward the archive. The body is the one-shot record of what was attempted.
+    The very first thing in the file, delimited by `---` lines.
+
+    The frontmatter block: the document fields (section 2) plus the `statuses:` list (section 3),
+    ONE entry per functionality described.
+
+2. **The body.**
+
+    The original content starting with its own title heading, untouched.
+
+    The prose, the sections, the quoted ledger strings stay byte-exact.
+
+Nothing from the original content is removed or rewritten when a document is converted.
+
+The conversion is the frontmatter block + updated cross-references.
+
+The `statuses:` entries are the document's face toward the archive.
+
+The body is the one-shot record of what was attempted.
 
 ## 2. The document fields (the frontmatter, part one)
 
@@ -83,8 +94,9 @@ superseded (a later document replaced it), planned (NOTHING started yet).
 ## 3. The statuses list (the frontmatter, part two)
 
 After the fields, the `statuses:` key with ONE list entry PER FUNCTIONALITY, FEATURE, DECISION, OR
-PROBLEM the document describes - the things a reader would want to check against reality. EACH entry
-is a nested mapping (the YAML object-in-list style of the user's example):
+PROBLEM the document describes - the things a reader would want to check against reality.
+
+EACH entry is a nested mapping (the YAML object-in-list style of the user's example):
 
     statuses:
       - name: smoke-suite restructure
@@ -127,8 +139,9 @@ is a nested mapping (the YAML object-in-list style of the user's example):
 
 ## 6. The section structure (the body)
 
-The body keeps the original content. Where a document is written new, it follows this four-part arc
-(the HPC plans' shape):
+The body keeps the original content.
+
+Where a document is written new, it follows this four-part arc (the HPC plans' shape):
 
 1. The intent - what was attempted and why.
 2. The attempt - the design, the plan, the research.
@@ -137,36 +150,81 @@ The body keeps the original content. Where a document is written new, it follows
 
 ## 7. The formatting rules
 
-1. ASCII only in new content. The existing unicode in the original bodies stays byte-exact (the
-   quoted ledger strings are part of the smoke contract and are NEVER rewritten).
-2. The frontmatter block is the FIRST thing in the file. It sits before the title heading, delimited
-   by `---` lines.
-3. One fixed schema across the whole tree - a key's meaning is the same in EVERY document (the HPC
-   convention).
-4. NO markdown tables for status anywhere in the archive and NO prose key-value headers - the
-   metadata is real YAML frontmatter only (the user's amendments, 2026-10-20). Ordinary tables
-   inside the original bodies are untouched.
-5. Cross-references use paths from the Documentation root, e.g.
-   Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md - so a moved file is found by
-   grep.
-6. New documents register themselves: add the registry path to Documentation/INDEX.md when a
-   document is added.
-7. The prose paragraphs: one idea per paragraph. A long paragraph (over ~400 characters, or one that
-   runs several ideas together) is split at the topic-sentence boundary - each new paragraph starts
-   with its own lead sentence (`It also registers...`, `The @-sentence identity:`) and is separated
-   from the previous one by ONE blank line. Long enumerations of methods or features become bullet
-   lists; the inline markdown (bold, links, code spans) is preserved verbatim. Prettier re-wraps
-   each paragraph at the configured printWidth. The worked example (2026-10-25): the dash-normalizer
-   README's single block becomes three paragraphs - the role, the raw-write tool, the identity and
-   the visibility - with the same words.
+1. **The ASCII rule.**
+
+    ASCII only in new content.
+
+    The existing unicode in the original bodies stays byte-exact (the quoted ledger strings are part
+    of the smoke contract and are NEVER rewritten).
+
+2. **The position.**
+
+    The frontmatter block is the FIRST thing in the file.
+
+    It sits before the title heading, delimited by `---` lines.
+
+3. **The schema.**
+
+    One fixed schema across the whole tree - a key's meaning is the same in EVERY document (the HPC
+    convention).
+
+4. **The metadata form.**
+
+    NO markdown tables for status anywhere in the archive and NO prose key-value headers - the
+    metadata is real YAML frontmatter only (the user's amendments, 2026-10-20).
+
+    Ordinary tables inside the original bodies are untouched.
+
+5. **The cross-references.**
+
+    Cross-references use paths from the Documentation root, e.g.
+    Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md - so a moved file is found by
+    grep.
+
+6. **The registration.**
+
+    New documents register themselves: add the registry path to Documentation/INDEX.md when a
+    document is added.
+
+7. **The paragraphs.**
+
+    The prose paragraphs: one idea per paragraph.
+
+    A long paragraph (over ~400 characters, or one that runs several ideas together) is split at the
+    topic-sentence boundary - each new paragraph starts with its own lead sentence
+    (`It also registers...`, `The @-sentence identity:`) and is separated from the previous one by
+    ONE blank line.
+
+    Long enumerations of methods or features become bullet lists; the inline markdown (bold, links,
+    code spans) is preserved verbatim.
+
+    Prettier re-wraps each paragraph at the configured printWidth.
+
+    The worked example (2026-10-25): the dash-normalizer README's single block becomes three
+    paragraphs - the role, the raw-write tool, the identity and the visibility - with the same
+    words.
 
 ## 8. The conversion procedure
 
-1. Move the file to its category folder (mv - byte fidelity, NO content change on the move).
-2. Prepend the YAML frontmatter block above the title.
-3. Write the statuses list, ONE entry per functionality, states from the actual state.
-4. Update EVERY cross-reference in the tree that pointed at the old path.
-5. Add the document to Documentation/INDEX.md.
+1. **The move.**
+
+    The file moves to its category folder (mv - byte fidelity, NO content change on the move).
+
+2. **The frontmatter.**
+
+    The YAML frontmatter block is prepended above the title.
+
+3. **The statuses.**
+
+    The statuses list is written, ONE entry per functionality, states from the actual state.
+
+4. **The references.**
+
+    EVERY cross-reference in the tree that pointed at the old path is updated.
+
+5. **The index.**
+
+    The document is added to Documentation/INDEX.md.
 
 ## 9. The folder tree (the categories)
 
@@ -191,6 +249,7 @@ The body keeps the original content. Where a document is written new, it follows
       Handoff/              (untouched) the original handoff tree
       Skill/                (untouched) the loadable skills
 
-The untouched trees (Handoff/, Skill/) keep their own internal structure. Handoff/ is the original
-delivery record, Skill/ is the loadable skills home - BOTH are referenced by path from the harness
-and from this document.
+The untouched trees (Handoff/, Skill/) keep their own internal structure.
+
+Handoff/ is the original delivery record, Skill/ is the loadable skills home - BOTH are referenced
+by path from the harness and from this document.

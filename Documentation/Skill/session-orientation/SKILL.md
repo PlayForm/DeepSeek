@@ -8,10 +8,13 @@ updated: 2026-10-20
 
 # Session Orientation
 
-A fresh session knows nothing except what it loads. This skill fixes the loading order so two
-sessions in the same tree reach the same working model, and it gives the map and the laws that every
-later action assumes. Skipping it does not save time; it produces work against a stale or invented
-picture of the repository.
+A fresh session knows nothing except what it loads.
+
+This skill fixes the loading order so two sessions in the same tree reach the same working model,
+and it gives the map and the laws that every later action assumes.
+
+Skipping it does not save time; it produces work against a stale or invented picture of the
+repository.
 
 ## When to use
 
@@ -24,22 +27,44 @@ picture of the repository.
 
 ## The loading order
 
-1. **The repo's own skills first.** `Documentation/Skill/` is the specialized truth for this
-   monorepo; `~/.dsh/skills/` is the fallback for sessions outside it. Where the two disagree, the
-   repo copy wins, and the fix is synced to both. Read `Documentation/Skill/STANDARD.md` once per
-   session.
-2. **The current state.** In this order: `README.md` (the family's public state),
-   `Documentation/INDEX.md` (the documentation map), the active documents in `Documentation/Plans/`,
-   then the relevant manual in `Documentation/Guides/`. Plans are the state of the work; Guides are
-   the deep manuals. Do not read the whole tree.
-3. **The laws.** Load the owner skill for each law you are about to touch: `code-authoring` (file
-   writes, byte integrity, git), `task-routing` (models and effort). Plugin work adds
-   `plugin-system` and `plugin-development`; suite work adds `smoke-writing`; site work adds
-   `site-authoring`.
-4. **The tree state.** Run read-only git checks in the root and in `Site/` (which is its own
-   repository): `git status --short`, `git log --oneline -5`. Note uncommitted work and recent
-   commits; the user commits mid-session, so HEAD can move under you.
-5. **Then act.** No write, build, or delegation before steps 1-4.
+1. **The repo's own skills.**
+
+    `Documentation/Skill/` is the specialized truth for this monorepo; `~/.dsh/skills/` is the
+    fallback for sessions outside it.
+
+    Where the two disagree, the repo copy wins, and the fix is synced to both.
+
+    `Documentation/Skill/STANDARD.md` is read once per session.
+
+2. **The current state.**
+
+    The order is `README.md` (the family's public state), `Documentation/INDEX.md` (the
+    documentation map), the active documents in `Documentation/Plans/`, then the relevant manual in
+    `Documentation/Guides/`.
+
+    Plans are the state of the work; Guides are the deep manuals.
+
+    The whole tree is not read.
+
+3. **The laws.**
+
+    The owner skill is loaded for each law about to be touched: `code-authoring` (file writes, byte
+    integrity, git), `task-routing` (models and effort).
+
+    Plugin work adds `plugin-system` and `plugin-development`; suite work adds `smoke-writing`; site
+    work adds `site-authoring`.
+
+4. **The tree state.**
+
+    Read-only git checks run in the root and in `Site/` (which is its own repository):
+    `git status --short`, `git log --oneline -5`.
+
+    Uncommitted work and recent commits are noted; the user commits mid-session, so HEAD can move
+    under you.
+
+5. **The act.**
+
+    No write, build, or delegation happens before steps 1-4.
 
 ## The repository map
 
@@ -53,13 +78,16 @@ picture of the repository.
 | `Maintain/`      | The formatting, smoke, wiring, and link-check entry points                   |
 | `diagrams/`      | Source diagrams                                                              |
 
-`Boilerplate/` no longer exists. Documentation that still calls it a third implementation is stale;
-the two release trees are the code.
+`Boilerplate/` no longer exists.
+
+Documentation that still calls it a third implementation is stale; the two release trees are the
+code.
 
 ## Facts and their owners
 
-Every drifting fact has exactly one owner. Do not copy a fact into a second skill; read the owner or
-run the verify command.
+Every drifting fact has exactly one owner.
+
+Do not copy a fact into a second skill; read the owner or run the verify command.
 
 | Fact                           | Owner                                | Verify                                               |
 | ------------------------------ | ------------------------------------ | ---------------------------------------------------- |
@@ -70,8 +98,9 @@ run the verify command.
 | Model catalog and routes       | `task-routing`, the catalog          | `list_subagent_models`                               |
 | Active plans                   | `Documentation/Plans/` frontmatter   | `grep -H '^status: active' Documentation/Plans/*.md` |
 
-The README, the registry documents, and the guides lag the tree in places. The package directories,
-the manifests, the smoke READMEs, and the built site are the arbiters.
+The README, the registry documents, and the guides lag the tree in places.
+
+The package directories, the manifests, the smoke READMEs, and the built site are the arbiters.
 
 ## Decision table
 
@@ -98,7 +127,9 @@ You are oriented when you can answer, without opening another file:
 - What is the file-write law, and what is the git law?
 - Which plans are active right now?
 
-A wrong answer means re-run the step that owns the fact. Do not proceed on a guess.
+A wrong answer means re-run the step that owns the fact.
+
+Do not proceed on a guess.
 
 ## Anti-patterns
 

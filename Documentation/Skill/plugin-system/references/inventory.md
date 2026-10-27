@@ -1,7 +1,8 @@
 # The Family Inventory
 
-Two release groups, one contract, one version. The package directories are the source of truth; the
-prose counts in older documents lag.
+Two release groups, one contract, one version.
+
+The package directories are the source of truth; the prose counts in older documents lag.
 
 ## The two groups
 
@@ -10,11 +11,14 @@ prose counts in older documents lag.
 | Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript                 | 0.1.0   |
 | EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers | 0.1.0   |
 
-Counts: 51 Classic packages, 46 EffectTS packages. The original 14 plugins (plus `lib-dsh-core`)
-were joined on 2026-10-22 by 36 new Classic packages (the workspace family, the suggesters, the
-orchestration set, the client family) and 30 of their ETS twins (all but the two client panels and
-`plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision`). All
-packages are 0.1.0 and UNPUBLISHED.
+Counts: 51 Classic packages, 46 EffectTS packages.
+
+The original 14 plugins (plus `lib-dsh-core`) were joined on 2026-10-22 by 36 new Classic packages
+(the workspace family, the suggesters, the orchestration set, the client family) and 30 of their ETS
+twins (all but the two client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
+`plugin-dsh-pattern`, `hook-dsh-batch-decision`).
+
+All packages are 0.1.0 and UNPUBLISHED.
 
 Verify:
 
@@ -38,7 +42,7 @@ grep -h '"effect"' EffectTS/packages/*/package.json
 | Compression    | `ccr`                                                   | Tool-result compression, retrieval, the marker contract                                                                                                                                      |
 | Coach          | `tool-coach`                                            | Behavioral coaching through the tool surface, tiered                                                                                                                                         |
 | Live blocks    | `live-containers`                                       | System-prompt blocks recomputed per request; ships disabled                                                                                                                                  |
-| Workspace      | 15 workspace-family packages + `lib-dsh-workspace-live` | The observe→operate→approve→merge flow: stamps, semantics, proposals, gates, authority, merge, journal, audit, context, monitor, evidence, graph, reflect                                    |
+| Workspace      | 15 workspace-family packages + `lib-dsh-workspace-live` | The observe->operate->approve->merge flow: stamps, semantics, proposals, gates, authority, merge, journal, audit, context, monitor, evidence, graph, reflect                                 |
 | Suggesters     | seven `*-suggester` hooks                               | Companion suggestions from post-execute signals (search, edit, doc, convention, graph, replay, test)                                                                                         |
 | Orchestration  | 10 packages                                             | batch-edit, batchstate, gitguard, route, queue, feedback, pass-on, ingester, pattern, batch-decision                                                                                         |
 | Client         | three `client-dsh-*` packages                           | The panel contract, its host half, the workspace live tab                                                                                                                                    |
@@ -58,8 +62,10 @@ The full one-line roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 The aggregate runner is `node Maintain/Run/Smokes/Index.mjs` (`pnpm test`): **359 smoke suites /
 5,337 checks across both trees** (184 Classic + 175 EffectTS test folders), all green at the
-2026-10-22 delivery. The per-folder READMEs are the arbiter; the manifest must be regenerated or
-derived, never quoted as-is.
+2026-10-22 delivery.
+
+The per-folder READMEs are the arbiter; the manifest must be regenerated or derived, never quoted
+as-is.
 
 Verify:
 
@@ -70,10 +76,14 @@ find Classic/packages/*/Target/Test EffectTS/packages/*/Target/Test -mindepth 1 
 
 ## What is planned, not shipped
 
-The orchestration, UI, and workspace family packages now EXIST as PoCs (the 2026-10-22 delivery) —
-do not describe them as "planned, no packages". What remains plan-level is the PoC gap: the
-PoC-vs-plan grades live in `Documentation/Reports/POC-GAP-ANALYSIS.md`, and the Aphrodite and
-release-polish plans remain designs. Check the plan statuses before claiming either way.
+The orchestration, UI, and workspace family packages now EXIST as PoCs (the 2026-10-22 delivery) -
+do not describe them as "planned, no packages".
+
+What remains plan-level is the PoC gap: the PoC-vs-plan grades live in
+`Documentation/Reports/POC-GAP-ANALYSIS.md`, and the Aphrodite and release-polish plans remain
+designs.
+
+Check the plan statuses before claiming either way.
 
 ## Failure modes
 

@@ -1,6 +1,8 @@
 # The Model Catalog
 
-Three models. Every delegation uses one of them, with the exact id.
+Three models.
+
+Every delegation uses one of them, with the exact id.
 
 | Model id                                   | Input $/1M | Output $/1M | Cached $/1M | Context |
 | ------------------------------------------ | ---------: | ----------: | ----------: | ------: |
@@ -8,7 +10,9 @@ Three models. Every delegation uses one of them, with the exact id.
 | `@cf/deepseek-ai/deepseek-v4.1-flash-1017` |       0.30 |        1.20 |       0.006 |      1M |
 | `@cf/deepseek-ai/deepseek-v4-flash-0731`   |       0.44 |        1.32 |       0.044 |      1M |
 
-Provider: `cloudflare-workers-ai`. Context: 1M = 1,048,576 tokens.
+Provider: `cloudflare-workers-ai`.
+
+Context: 1M = 1,048,576 tokens.
 
 ## Roles
 
@@ -36,9 +40,10 @@ The main agent itself runs the DeepSeek lane at `max`; its current default is
 | `@cf/qwen/qwen3.8-27b`                 | Cost                                                                       |
 | `@cf/zai-org/glm-4.7-flash`            | Lost the 2026-09 exploration comparison (hallucinated structure, mojibake) |
 
-A model id not in the table above is not permitted, even if a provider catalog advertises it. The
-`allowedModels` entry in the profile's `subagent-model-selection-settings` patch is the enforcement
-point.
+A model id not in the table above is not permitted, even if a provider catalog advertises it.
+
+The `allowedModels` entry in the profile's `subagent-model-selection-settings` patch is the
+enforcement point.
 
 ## Verification and refresh
 
@@ -51,9 +56,12 @@ list_subagent_models()
 Verify the profile's allowlist: the `allowedModels` array in the profile patch must contain exactly
 the three ids above.
 
-Prices and model ids drift. When a price or a model changes, update this file and the profile patch
-in the same change set, and record the date in the change. Do not copy the table into another skill;
-point here.
+Prices and model ids drift.
+
+When a price or a model changes, update this file and the profile patch in the same change set, and
+record the date in the change.
+
+Do not copy the table into another skill; point here.
 
 ## Failure modes
 

@@ -2,17 +2,41 @@
 
 ## The laws
 
-1. No dev servers. The dev output is not the built output.
-2. No `tsc` runs. The build type-checks.
-3. No git mutations. The site is its own repository; report READY-TO-COMMIT for `Site/` files.
-4. The build is the verification: `cd Site && pnpm prepublishOnly`, then inspect `Site/Target/`.
-5. Documentation-first content: copy derives from the packages' real READMEs, schemes, and sources.
-6. Byte-faithful glyphs use `raw-write`; the normalize hooks are active.
+1. **The dev server.**
+
+    No dev servers.
+
+    The dev output is not the built output.
+
+2. **The type check.**
+
+    No `tsc` runs.
+
+    The build type-checks.
+
+3. **The git surface.**
+
+    No git mutations.
+
+    The site is its own repository; report READY-TO-COMMIT for `Site/` files.
+
+4. **The verification.**
+
+    The build is the verification: `cd Site && pnpm prepublishOnly`, then inspect `Site/Target/`.
+
+5. **The content.**
+
+    Documentation-first content: copy derives from the packages' real READMEs, schemes, and sources.
+
+6. **The glyphs.**
+
+    Byte-faithful glyphs use `raw-write`; the normalize hooks are active.
 
 ## The accuracy rules
 
-A site claim is a promise to a reader. The audit found four classes of broken promise; each rule
-below prevents one.
+A site claim is a promise to a reader.
+
+The audit found four classes of broken promise; each rule below prevents one.
 
 | Claim                   | Verify with                                         |
 | ----------------------- | --------------------------------------------------- |
@@ -23,9 +47,12 @@ below prevents one.
 | npm publication         | the registry, per package                           |
 | A planned feature ships | `Documentation/Plans/` status                       |
 
-The install snippet on a plugin page is the primary conversion path. If the package is not on the
-registry, the snippet must say "build from source" or the page must carry a "publish pending"
-marker. A 404 on an install command is worse than no install command.
+The install snippet on a plugin page is the primary conversion path.
+
+If the package is not on the registry, the snippet must say "build from source" or the page must
+carry a "publish pending" marker.
+
+A 404 on an install command is worse than no install command.
 
 ## The audit lessons
 

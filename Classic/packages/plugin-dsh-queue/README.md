@@ -53,7 +53,7 @@ The user's capacity model is the law:
 - **Routed dispatch:** when the routing enforcer (`dshRoute`) is present, the route is resolved per
   the user's policy, silently; absent, the dispatch proceeds unrouted (a contained skip).
 - **Settle** (`Complete` / `Fail` / `Interrupt`): the seat is released, the journal records the
-  flip; `Interrupt` also fires the spawn's own abort signal, cancelling the child.
+  flip; `Interrupt` also fires the spawn's own abort signal, canceling the child.
 - **Restart reconcile** (`dshQueue.Reconcile(persisted?)`): the caller hands back the previous
   process's `Snapshot().tasks`; every active task whose agent is not live is **requeued** once
   (`attempts` 0 -> 1) and **failed honestly** on the second detection - never silently dropped.

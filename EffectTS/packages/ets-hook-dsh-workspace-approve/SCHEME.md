@@ -61,11 +61,22 @@ pending/approved -> invalidated (the file's observed version moved)
 
 ## 3. The check guard chain (in order)
 
-1. no binding for path + fingerprint -> `unbound`;
-2. a binding that is not approved -> its own decision;
-3. an approved binding with a different version -> `stale` (the candidate changed after the
-   approval; the intent must not authorize its own means);
-4. otherwise -> `approved`.
+1. **The unbound path.**
+
+    No binding for the path + fingerprint gives `unbound`.
+
+2. **The unapproved binding.**
+
+    A binding that is not approved gives its own decision.
+
+3. **The stale version.**
+
+    An approved binding with a different version gives `stale` (the candidate changed after the
+    approval; the intent must not authorize its own means).
+
+4. **The fallback.**
+
+    Otherwise the result is `approved`.
 
 ## 4. The listeners and effects
 

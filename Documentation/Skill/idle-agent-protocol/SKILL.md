@@ -13,9 +13,12 @@ updated: 2026-10-20
 
 # Idle Agent Protocol
 
-An idle lane is a held spec, not a paused worker. It costs nothing until it is activated, and it
-starts from the exact spec it retained. This contract is what makes a queue of idle lanes safe: no
-lane acts on a stale reading of the conversation, and every activation is explicit.
+An idle lane is a held spec, not a paused worker.
+
+It costs nothing until it is activated, and it starts from the exact spec it retained.
+
+This contract is what makes a queue of idle lanes safe: no lane acts on a stale reading of the
+conversation, and every activation is explicit.
 
 ## When to use
 
@@ -27,11 +30,27 @@ lane acts on a stale reading of the conversation, and every activation is explic
 
 ## The contract while idle
 
-1. **Retain the full spec verbatim.** It is your only authority. Do not summarize it, reinterpret
-   it, or start preparing for it.
-2. **Do no work.** No reads, no writes, no builds, no git commands, no investigation. The only
-   output is the confirmation line.
-3. **Confirm exactly.** Reply:
+1. **The retained spec.**
+
+    Retain the full spec verbatim.
+
+    It is your only authority.
+
+    Do not summarize it, reinterpret it, or start preparing for it.
+
+2. **The no-work rule.**
+
+    Do no work.
+
+    No reads, no writes, no builds, no git commands, no investigation.
+
+    The only output is the confirmation line.
+
+3. **The confirmation.**
+
+    Confirm exactly.
+
+    Reply:
 
     ```text
     <NAME> SPEC RETAINED - IDLE
@@ -43,20 +62,44 @@ lane acts on a stale reading of the conversation, and every activation is explic
     <NAME> SPEC AMENDED - IDLE
     ```
 
-4. **An amendment replaces the conflicting part of the base spec.** The rest stands.
+4. **The amendment.**
+
+    An amendment replaces the conflicting part of the base spec.
+
+    The rest stands.
 
 ## The execution on activation
 
-1. Read the current-state block in the activation; it is part of the spec.
-2. Check the tree state before writing: `git status --short`, `git log --oneline -5`, and
-   `git -C Site status --short` when the site is in scope.
-3. Execute the spec exactly: the scope, the exclusions, the sequence, and the report format are
-   constraints.
-4. Where the spec says "if X exists, verify and adjust", verify first, then adjust minimally.
-5. Run the arbiter named in the spec; report its printed result.
-6. Flag, do not silently fix, any conflict: a contradiction with the shared facts, a stale claim, a
-   file another lane owns.
-7. End with the report format the spec names, plus READY-TO-COMMIT.
+1. **The current state.**
+
+    Read the current-state block in the activation; it is part of the spec.
+
+2. **The tree.**
+
+    Check the tree state before writing: `git status --short`, `git log --oneline -5`, and
+    `git -C Site status --short` when the site is in scope.
+
+3. **The execution.**
+
+    Execute the spec exactly: the scope, the exclusions, the sequence, and the report format are
+    constraints.
+
+4. **The conditional.**
+
+    Where the spec says "if X exists, verify and adjust", verify first, then adjust minimally.
+
+5. **The arbiter.**
+
+    Run the arbiter named in the spec; report its printed result.
+
+6. **The conflict.**
+
+    Flag, do not silently fix, any conflict: a contradiction with the shared facts, a stale claim, a
+    file another lane owns.
+
+7. **The report.**
+
+    End with the report format the spec names, plus READY-TO-COMMIT.
 
 ## The laws that still apply
 

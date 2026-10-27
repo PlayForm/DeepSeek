@@ -13,8 +13,9 @@ the explicit escape hatch.
 
 ## The path rule
 
-`raw-write` resolves a relative path against the profile root, not the current directory. A
-repository target needs an absolute path:
+`raw-write` resolves a relative path against the profile root, not the current directory.
+
+A repository target needs an absolute path:
 
 ```text
 raw-write(
@@ -27,8 +28,9 @@ A relative path writes somewhere unexpected, usually inside the profile.
 
 ## Read before overwrite
 
-`raw-write` refuses to overwrite a file it has not seen in the session. Read the file first; the
-read also confirms the bytes you are about to preserve.
+`raw-write` refuses to overwrite a file it has not seen in the session.
+
+Read the file first; the read also confirms the bytes you are about to preserve.
 
 ## When to use it
 

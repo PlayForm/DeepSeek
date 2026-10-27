@@ -158,7 +158,7 @@ score(c) = sum over the ENABLED heuristics of weight(h) * value(h)
 | `accept`  | the learned per-family accept rate (neutral 1/3)    | 0.00           |
 
 The default row reproduces the PoC formula exactly (`0.35*1 + 0.25*prior + 0.25*0.5 + 0.15*(1/3)`);
-a missing store answers the neutral 1/3, so the default behaviour is unchanged byte-for-byte. The
+a missing store answers the neutral 1/3, so the default behavior is unchanged byte-for-byte. The
 config's `heuristics` (the enabled names) and `weights` (the table) make every term pickable: a
 disabled name is dropped from the sum (its effective weight is 0) and the decision record keeps the
 enabled list, so the choice is auditable.

@@ -17,7 +17,7 @@ listener.
 
 `ctx.pattern` (service name `pattern`, class form):
 
-| Method                | Behaviour                                                     |
+| Method                | Behavior                                                      |
 | --------------------- | ------------------------------------------------------------- |
 | `Configure(options)`  | apply validated config knobs (every knob volatile)            |
 | `Put(pattern)`        | idempotent upsert by id                                       |

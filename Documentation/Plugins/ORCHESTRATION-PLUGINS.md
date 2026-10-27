@@ -36,14 +36,20 @@ statuses:
 
 ## 0. The user's mandate (why this family)
 
-Think of the plugin family as an INTEGRATED MESSAGE BUS. Disperse the information with the blocks +
-the active communication/programming paradigms already in place - FIFO/LIFO queues + parentage
-combined in different ways + maximal utilization into dynamic "workflows" (a conversation is ONE
-such workflow). Keep the members' functionality SEPARATE. Combine their effectuallity in the
-eventuallity of the system. When a conversation runs, the members activate invisibly (the user + the
-orchestrator don't see them) - the COUNCIL HUB is activated, ALWAYS pertaining knowledge per
-session. The TRIBE system (conversation + n members + a leader) comes later, on the council's
-foundation.
+Think of the plugin family as an INTEGRATED MESSAGE BUS.
+
+Disperse the information with the blocks + the active communication/programming paradigms already in
+place - FIFO/LIFO queues + parentage combined in different ways + maximal utilization into dynamic
+"workflows" (a conversation is ONE such workflow).
+
+Keep the members' functionality SEPARATE.
+
+Combine their effectuallity in the eventuallity of the system.
+
+When a conversation runs, the members activate invisibly (the user + the orchestrator don't see
+them) - the COUNCIL HUB is activated, ALWAYS pertaining knowledge per session.
+
+The TRIBE system (conversation + n members + a leader) comes later, on the council's foundation.
 
 ## 1. The four members (built 2026-10-22, plus the four supporting candidates)
 
@@ -144,11 +150,19 @@ Documentation/Reports/POC-GAP-ANALYSIS.md.
 
 ALL three implementation investigations share the same probe phase. Do it ONCE:
 
-1. The harness's inbox/session mechanics (`agent/inbox/spliced` - BATCH-STATE's splice +
-   HONEST-FEEDBACK's transfer).
-2. The pool/reservation surface (the per-root-lineage pool, `maxActiveSubagents`
-    - SUBAGENT-QUEUE's capacity + ROUTING-ENFORCER's launch path).
-3. The config application (the patch-load at startup + the volatile settings).
+1. **The inbox.**
+
+    The harness's inbox/session mechanics (`agent/inbox/spliced` - BATCH-STATE's splice +
+    HONEST-FEEDBACK's transfer).
+
+2. **The pool.**
+
+    The pool/reservation surface (the per-root-lineage pool, `maxActiveSubagents` - SUBAGENT-QUEUE's
+    capacity + ROUTING-ENFORCER's launch path).
+
+3. **The config.**
+
+    The config application (the patch-load at startup + the volatile settings).
 
 ## 3. The git-mutation guard (built as `@playform/plugin-dsh-gitguard`)
 

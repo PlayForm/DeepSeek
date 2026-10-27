@@ -48,8 +48,11 @@
 5. The notation.
 6. The footer.
 
-One `<h1>` per page. Headings descend. Meaningful icons carry labels; decorative ones are
-`aria-hidden`.
+One `<h1>` per page.
+
+Headings descend.
+
+Meaningful icons carry labels; decorative ones are `aria-hidden`.
 
 ## The design tokens
 

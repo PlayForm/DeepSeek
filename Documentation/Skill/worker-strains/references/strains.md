@@ -1,7 +1,8 @@
 # The Three Strains
 
-Each strain is a cultivation site: a surface, a protocol, and a failure path. The route comes from
-`task-routing`; this file describes the work.
+Each strain is a cultivation site: a surface, a protocol, and a failure path.
+
+The route comes from `task-routing`; this file describes the work.
 
 ## EXPLORER
 
@@ -84,4 +85,6 @@ their verification. Do not edit files.
 | "Design", "decide", "plan", "why"     | PLANNER  |
 
 If a request spans two strains, split it: the plan first, then the implementation, then the
-verification. One spec that tries to do all three produces a report that cannot be adjudicated.
+verification.
+
+One spec that tries to do all three produces a report that cannot be adjudicated.

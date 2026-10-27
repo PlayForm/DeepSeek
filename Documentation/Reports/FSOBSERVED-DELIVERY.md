@@ -28,16 +28,22 @@ Status:
 > also `../Handoff/Packages/Package-13.md` (the saga it resolved) and
 > `../Handoff/Packages/Package-12.md` (the raw-write tool it concerns).
 
-Date: 2026-10-06 - Read-only research; NO family files edited, NO commits. Scope: why the
-plugin-registered `raw-write` tool's `fs/observed` event NEVER reaches the family's governance
-listeners, while the built-in `write`/`edit` tools' events do.
+Date: 2026-10-06 - Read-only research; NO family files edited, NO commits.
+
+Scope: why the plugin-registered `raw-write` tool's `fs/observed` event NEVER reaches the family's
+governance listeners, while the built-in `write`/`edit` tools' events do.
 
 ## Verdict
 
-**The event IS delivered. Delivery was NEVER broken.** The `raw-write` emit dispatches on the shared
-root event bus and reaches EVERY listener, including the family's. What NEVER happens is a **ledger
-outcome**, because the family's own g1 gate rejects the raw-write's _actor_ at step 2 and that
-outcome is silent:
+**The event IS delivered.**
+
+**Delivery was NEVER broken.**
+
+The `raw-write` emit dispatches on the shared root event bus and reaches EVERY listener, including
+the family's.
+
+What NEVER happens is a **ledger outcome**, because the family's own g1 gate rejects the raw-write's
+_actor_ at step 2 and that outcome is silent:
 
 - The **LIVE** `mutationTools` value of ALL three governance modules is
   `[write, edit, str_replace_editor]` - NO `"raw-write"`.
@@ -55,27 +61,48 @@ outcome is silent:
 **Recommendation (ONE fix):** add `"raw-write"` to `mutationTools` in the three bundle patch
 layers - `hook-dsh-package-governor/cordis.patch.yml:21`,
 `hook-dsh-package-pinner/cordis.patch.yml:20`, `hook-dsh-cargo-governor/cordis.patch.yml:29` - and
-restart. One-line config-manifest edits; zero architecture cost; the existing root-bus wiring then
-delivers everything (the `excluded` line, the chain pass, the update stage, `governed`/`pinned`
-lines). `mutationTools` is marked volatile (`x-cordis.volatile`), so it can also be hot-edited; for
-a durable fix edit the bundle patch files. If the user patch layer
-(`~/.dsh/profiles/desktop/cordis.patch.yml`) is used instead, the row must repeat the **full**
-config object (patch config replaces wholesale, `dsh-app-boot/lib/index.js:2760`).
+restart.
+
+One-line config-manifest edits; zero architecture cost; the existing root-bus wiring then delivers
+everything (the `excluded` line, the chain pass, the update stage, `governed`/`pinned` lines).
+
+`mutationTools` is marked volatile (`x-cordis.volatile`), so it can also be hot-edited; for a
+durable fix edit the bundle patch files.
+
+If the user patch layer (`~/.dsh/profiles/desktop/cordis.patch.yml`) is used instead, the row must
+repeat the **full** config object (patch config replaces wholesale,
+`dsh-app-boot/lib/index.js:2760`).
 
 ## Live proof (this session, current boot = 01:17 local Oct 6, running the post-fix build)
 
-1. Built-in `write` -> `/tmp/fso-probe/node_modules/ctrl/package.json`: ledger line
-   `skipped (excluded) /tmp/fso-probe/node_modules/ctrl/package.json` at `2026-10-05T22:46:00.328Z`
-   in `~/.dsh/governor.log`. Delivery + gate + exclusion logging ALL work.
-2. `raw-write` -> `/tmp/fso-probe/node_modules/probe/package.json`: file created successfully,
-   **NO** ledger line. Reproduces fact 4 exactly.
-3. A **second** `raw-write` to the same path succeeded ("Updated file") WITHOUT a fresh read.
-   `dsh-fs-local/lib/index.js:871` throws `FS_NOT_OBSERVED` on `createIfAbsent` + existing file, so
-   the intent must have been `replaceIfVersion` with the fresh version - i.e.
-   `dsh-fs-observation-policy` (`lib/index.js:90-94`) **received and recorded THE FIRST raw-write's
-   `fs/observed`**. The emit demonstrably dispatches on the shared bus. Resolves fact 5: the
-   "write-grace" comes from the observation policy's per-owner record, fed by the raw-write's
-   events.
+1. **The built-in control.**
+
+    Built-in `write` -> `/tmp/fso-probe/node_modules/ctrl/package.json`: ledger line
+    `skipped (excluded) /tmp/fso-probe/node_modules/ctrl/package.json` at `2026-10-05T22:46:00.328Z`
+    in `~/.dsh/governor.log`.
+
+    Delivery + gate + exclusion logging ALL work.
+
+2. **The raw-write.**
+
+    `raw-write` -> `/tmp/fso-probe/node_modules/probe/package.json`: file created successfully,
+    **NO** ledger line.
+
+    Reproduces fact 4 exactly.
+
+3. **The second raw-write.**
+
+    A **second** `raw-write` to the same path succeeded ("Updated file") WITHOUT a fresh read.
+
+    `dsh-fs-local/lib/index.js:871` throws `FS_NOT_OBSERVED` on `createIfAbsent` + existing file, so
+    the intent must have been `replaceIfVersion` with the fresh version - i.e.
+    `dsh-fs-observation-policy` (`lib/index.js:90-94`) **received and recorded THE FIRST raw-write's
+    `fs/observed`**.
+
+    The emit demonstrably dispatches on the shared bus.
+
+    Resolves fact 5: the "write-grace" comes from the observation policy's per-owner record, fed by
+    the raw-write's events.
 
 ## Why the dispatch model cannot produce the asymmetry (and doesn't have to)
 

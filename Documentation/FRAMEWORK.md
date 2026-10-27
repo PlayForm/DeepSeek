@@ -125,7 +125,9 @@ statuses:
 
 ## 2. THE SKILL FRAMEWORK (the meta-structure for Documentation/Skill)
 
-The skills are the project's operating manuals. The framework:
+The skills are the project's operating manuals.
+
+The framework:
 
 ### 2.1 The format
 
@@ -153,25 +155,52 @@ The skills are the project's operating manuals. The framework:
 
 ## 3. THE TODOS (the referential documents for tomorrow)
 
-1. **The review** (per `Documentation/Plans/TOMORROW-REVIEW.md`): the user reviews the preserved
-   state. The corrections land as new packages.
-2. **The case-review agent** (the WHY mandate): the case study's spine = the structural rationale,
-   NOT the writing process.
-3. **THE SITE FIXES**: the `/workbench/` page does NOT work (reproduce + repair or rebuild). The
-   site's remaining feedback per the directions.
-4. **The submodule structure (#16)**: the per-package repositories as submodules + the per-repo
-   gitignores. The Boilerplate's gitignore decision.
-5. **The release polish**: the naming refinements (the `lib-` kind decided 2026-10-21; the
-   `manifest` domain wording still open). The release polish: the per-package publish configs +
-   CHANGELOGs. The release polish: the EffectTS core README's "zero runtime dependencies" line (the
-   effect-backed rewrite, landed).
-6. **The live battery**: the whole family re-verified LIVE after ANY source change (the ledgers, the
-   interlock, the escape hatch, the direct-govern, the
-   [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).
-7. **The loadability check**: the Documentation/Skill bundles verified discovered by the filesystem
-   provider.
-8. **The docs restructure verification**: the Documentation/ tree's integrity (the facts preserved,
-   the cross-references updated) after the restructure agent lands.
+1. **The review.**
+
+    Per `Documentation/Plans/TOMORROW-REVIEW.md`: the user reviews the preserved state.
+
+    The corrections land as new packages.
+
+2. **The case-review agent.**
+
+    The WHY mandate: the case study's spine = the structural rationale, NOT the writing process.
+
+3. **THE SITE FIXES.**
+
+    The `/workbench/` page does NOT work (reproduce + repair or rebuild).
+
+    The site's remaining feedback per the directions.
+
+4. **The submodule structure (#16).**
+
+    The per-package repositories as submodules + the per-repo gitignores.
+
+    The Boilerplate's gitignore decision.
+
+5. **The release polish.**
+
+    The naming refinements (the `lib-` kind decided 2026-10-21; the `manifest` domain wording still
+    open).
+
+    The release polish: the per-package publish configs + CHANGELOGs.
+
+    The release polish: the EffectTS core README's "zero runtime dependencies" line (the
+    effect-backed rewrite, landed).
+
+6. **The live battery.**
+
+    The whole family re-verified LIVE after ANY source change (the ledgers, the interlock, the
+    escape hatch, the direct-govern, the
+    [v2 domain](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Journal.ts)).
+
+7. **The loadability check.**
+
+    The Documentation/Skill bundles verified discovered by the filesystem provider.
+
+8. **The docs restructure verification.**
+
+    The Documentation/ tree's integrity (the facts preserved, the cross-references updated) after
+    the restructure agent lands.
 
 ---
 

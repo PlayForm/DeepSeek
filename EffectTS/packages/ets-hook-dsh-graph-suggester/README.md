@@ -32,10 +32,19 @@ hook against the real populated graph (the real graph's own `indexWorkspace` fil
 
 ## How it works
 
-1. `tools/post-execute` (waterfall, plain registration - after the ccr's `{prepend: true}`
-   listener): `next()` first; detect → gate → resolve (graph query for Neighborhood) → prepend ONE
-   notice. Content is never replaced.
-2. `agent/pre-step`: the per-turn reset of the note counter when a user message enters.
+1. **The post-execute listener.**
+
+    The `tools/post-execute` listener (waterfall, plain registration - after the ccr's
+    `{prepend: true}` listener) calls `next()` first.
+
+    Then the hook runs detect -> gate -> resolve (graph query for Neighborhood) -> prepend ONE
+    notice.
+
+    Content is never replaced.
+
+2. **The pre-step listener.**
+
+    The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 
 ## The plan
 

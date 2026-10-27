@@ -141,9 +141,11 @@ CARGO (Cargo.toml — chain + normalize + cargo upgrade):
   parse/transform math, the child_process fallback (ONLY when the seam is absent).
 
 The research agent (running) is comparing this surface against the full API to propose better
-injection points. The candidates under evaluation: settings/UI forms, a shared governance service,
-editText for surgical rewrites, ctx.timer/schedule-based deferral, HMR effects, and the newer
-0.2.1-alpha.1 surface.
+injection points.
+
+The candidates under evaluation: settings/UI forms, a shared governance service, editText for
+surgical rewrites, ctx.timer/schedule-based deferral, HMR effects, and the newer 0.2.1-alpha.1
+surface.
 
 ---
 

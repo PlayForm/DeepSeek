@@ -17,11 +17,19 @@ shared core service until the family proves two consumers), and one delivery sur
 
 ## How it works
 
-1. `tools/post-execute` (waterfall, plain registration, runs **after** the CCR's `{ prepend: true }`
-   listener): `next()` first, then the deterministic classifier runs over the call probe (tool
-   name + arguments JSON), the gate applies, and **one** `additionalContexts` notice is prepended to
-   the downstream decision. Content is never replaced - a ccr-compressed result is unaffected.
-2. `agent/pre-step`: the per-turn reset of the note counter when a user message enters.
+1. **The post-execute listener.**
+
+    The `tools/post-execute` listener (waterfall, plain registration, runs **after** the CCR's
+    `{ prepend: true }` listener) calls `next()` first.
+
+    Then the deterministic classifier runs over the call probe (tool name + arguments JSON), the
+    gate applies, and **one** `additionalContexts` notice is prepended to the downstream decision.
+
+    Content is never replaced - a ccr-compressed result is unaffected.
+
+2. **The pre-step listener.**
+
+    The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 
 Every listener is fail-open: on any error a warning is logged and the downstream decision is
 returned unchanged. A note never fails a tool call.

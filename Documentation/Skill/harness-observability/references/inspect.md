@@ -2,12 +2,25 @@
 
 ## The workflow
 
-1. Call `cordis_inspect_list` to see the providers the host and the client currently offer, with
-   their methods and schemas.
-2. Pick the platform, provider, and method from that list.
-3. Call `cordis_inspect_query` with an input that satisfies the method's schema.
-4. Use the result. If a client query times out, reconnect the page and retry; a client failure is
-   not a host failure.
+1. **The list.**
+
+    `cordis_inspect_list` shows the providers the host and the client currently offer, with their
+    methods and schemas.
+
+2. **The pick.**
+
+    The platform, provider, and method are picked from that list.
+
+3. **The query.**
+
+    `cordis_inspect_query` is called with an input that satisfies the method's schema.
+
+4. **The result.**
+
+    The result is used.
+
+    If a client query times out, reconnect the page and retry; a client failure is not a host
+    failure.
 
 ## The providers
 
@@ -25,8 +38,11 @@
 
 ## What Inspect is not
 
-Inspect is read-only. It cannot invoke a business service, mutate a config, or change a slot. It
-reports what the runtime has.
+Inspect is read-only.
+
+It cannot invoke a business service, mutate a config, or change a slot.
+
+It reports what the runtime has.
 
 ## When to inspect
 
@@ -37,8 +53,9 @@ reports what the runtime has.
 
 ## The rule
 
-A runtime fact comes from Inspect, not from memory and not from a document. Documents describe; the
-runtime is.
+A runtime fact comes from Inspect, not from memory and not from a document.
+
+Documents describe; the runtime is.
 
 ## Failure modes
 

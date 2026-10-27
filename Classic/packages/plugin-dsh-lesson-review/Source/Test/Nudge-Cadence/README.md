@@ -34,7 +34,7 @@ counter is keyed by the agent, so an object is all it needs.
 ## Expected ledger strings (byte-exact)
 
 The firing tick logs `lesson: due after 3 turns` (the message-only form; the
-service appends ` (logFile <logFile>)`). The folder asserts the behaviour, not
+service appends ` (logFile <logFile>)`). The folder asserts the behavior, not
 the line - the line is pinned in `Apply-And-Pending`.
 
 ## Expected count

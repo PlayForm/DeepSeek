@@ -60,13 +60,31 @@ already exists in `@playform/lib-dsh-pack`).
 
 The guard chain, in order:
 
-1. The guard is disabled -> allow (the cold mount passes everything).
-2. NO segment of the command is a git command -> allow (the guard only ever judges git).
-3. A segment's subcommand is allow-listed -> allow (the allow-list wins over the deny-list, so a
-   user can re-allow a denied subcommand explicitly).
-4. Strict mode -> deny (EVERY git command - the plan's stricter posture).
-5. A segment's subcommand is deny-listed -> deny.
-6. Otherwise -> allow (not deny-listed).
+1. **The disabled guard.**
+
+    The guard is disabled, so the verdict is allow (the cold mount passes everything).
+
+2. **The non-git command.**
+
+    NO segment of the command is a git command, so the verdict is allow (the guard only ever judges
+    git).
+
+3. **The allow-listed subcommand.**
+
+    A segment's subcommand is allow-listed, so the verdict is allow (the allow-list wins over the
+    deny-list, so a user can re-allow a denied subcommand explicitly).
+
+4. **The strict mode.**
+
+    Strict mode is on, so the verdict is deny (EVERY git command - the plan's stricter posture).
+
+5. **The deny-listed subcommand.**
+
+    A segment's subcommand is deny-listed, so the verdict is deny.
+
+6. **The fallback.**
+
+    Otherwise the verdict is allow (not deny-listed).
 
 A compound command (`cd repo && git add -A`) is judged by its WORST segment: any denied segment
 denies the whole command (Function/Segments splits on `&&`, `||`, `;`, `|`, newline). The subcommand

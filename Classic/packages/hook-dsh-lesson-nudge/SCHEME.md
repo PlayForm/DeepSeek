@@ -32,11 +32,22 @@ non-turn work. Reviewing on any other edge puts a second model call beside the l
 
 ## The four gates (in order, cheapest first)
 
-1. `enabled` - the volatile switch, checked inside the body so a hot flip lands without a remount;
-2. `status === "idle"` - the edge;
-3. `ctx.get("lesson")` - probed per transition (the service may load after this hook); absent means
-   ONE warn per process and no work;
-4. `Lesson.Tick(agent).due` and the hook's own `maxReviewsPerSession` cap.
+1. **The switch.**
+
+    `enabled` is the volatile switch, checked inside the body so a hot flip lands without a remount.
+
+2. **The edge.**
+
+    `status === "idle"` is the edge.
+
+3. **The service.**
+
+    `ctx.get("lesson")` is probed per transition (the service may load after this hook); absent
+    means ONE warn per process and no work.
+
+4. **The cadence.**
+
+    `Lesson.Tick(agent).due` and the hook's own `maxReviewsPerSession` cap are the cadence.
 
 The cap is the runaway guard, not the cadence: the cadence belongs to the service (`intervalTurns`).
 A profile that mis-sets the service's interval to 1 still gets at most `maxReviewsPerSession`

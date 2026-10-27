@@ -14,9 +14,12 @@ updated: 2026-10-20
 
 # Site Authoring
 
-The site is a static Astro build that documents the plugin family. It is its own git repository, and
-its built output in `Site/Target/` is what users receive. This skill states the lane's laws, the
-source map, the content model, and the accuracy rules the site has been burned by.
+The site is a static Astro build that documents the plugin family.
+
+It is its own git repository, and its built output in `Site/Target/` is what users receive.
+
+This skill states the lane's laws, the source map, the content model, and the accuracy rules the
+site has been burned by.
 
 ## When to use
 
@@ -28,17 +31,38 @@ source map, the content model, and the accuracy rules the site has been burned b
 
 ## The lane laws
 
-1. **No dev servers.** Never start `astro dev`. The dev output differs from the built output, and
-   "it works in dev" is not evidence.
-2. **No `tsc` runs.** The build type-checks through Astro's pipeline; a separate `tsc` is not the
-   arbiter.
-3. **No git mutations.** The site is its own repository; report READY-TO-COMMIT for `Site/` files.
-4. **The build is the verification.** Run `cd Site && pnpm prepublishOnly`, then inspect the built
-   HTML and CSS in `Site/Target/`.
-5. **Documentation-first content.** Page copy derives from the packages' real READMEs, schemes, and
-   sources, not from invention.
-6. **Byte-faithful glyphs need `raw-write`.** The normalize hooks are active while authoring; a
-   deliberate glyph goes through `raw-write` (`instructional-writing`).
+1. **The dev server.**
+
+    Never start `astro dev`.
+
+    The dev output differs from the built output, and "it works in dev" is not evidence.
+
+2. **The type check.**
+
+    No `tsc` runs.
+
+    The build type-checks through Astro's pipeline; a separate `tsc` is not the arbiter.
+
+3. **The git surface.**
+
+    No git mutations.
+
+    The site is its own repository; report READY-TO-COMMIT for `Site/` files.
+
+4. **The verification.**
+
+    Run `cd Site && pnpm prepublishOnly`, then inspect the built HTML and CSS in `Site/Target/`.
+
+5. **The content.**
+
+    Page copy derives from the packages' real READMEs, schemes, and sources, not from invention.
+
+6. **The glyphs.**
+
+    Byte-faithful glyphs need `raw-write`.
+
+    The normalize hooks are active while authoring; a deliberate glyph goes through `raw-write`
+    (`instructional-writing`).
 
 ## The source map
 
@@ -69,6 +93,7 @@ Site/
 ## The content model
 
 `Source/Library/Content.ts` is the single source of truth for every dynamic figure the site renders.
+
 `Live.ts` reads the monorepo at build time (package versions, smoke manifests, package directories,
 the factory's method sections); when a live source is missing, the documented fallback is served and
 the build never fails.
@@ -92,12 +117,17 @@ A page is `Base` plus a sequence of sections:
 5. The notation - the closing statement.
 6. The footer - navigation and the copyright.
 
-One `<h1>` per page (the hero). Headings descend in order. Every image has alt text; every icon that
-conveys meaning has an accessible label.
+One `<h1>` per page (the hero).
+
+Headings descend in order.
+
+Every image has alt text; every icon that conveys meaning has an accessible label.
 
 ## Voice and vocabulary
 
-The site speaks in the family's own terms. One word per concept, everywhere:
+The site speaks in the family's own terms.
+
+One word per concept, everywhere:
 
 | Term       | Means                                                | Not                |
 | ---------- | ---------------------------------------------------- | ------------------ |
@@ -111,14 +141,37 @@ The site speaks in the family's own terms. One word per concept, everywhere:
 
 Voice rules:
 
-1. One claim per sentence; the claim is checkable.
-2. Active voice, named actor.
-3. Concrete verbs; no "leverage", "seamless", "robust", "by construction".
-4. No absolutes unless true: every, always, zero, never.
-5. Short declaratives; one longer sentence per paragraph at most.
-6. Headings as claims, not labels.
-7. Second person for instructions, third for descriptions.
-8. Cut the page about itself; no internal notes.
+1. **The claim.**
+
+    One claim per sentence; the claim is checkable.
+
+2. **The voice.**
+
+    Active voice, named actor.
+
+3. **The verbs.**
+
+    Concrete verbs; no "leverage", "seamless", "robust", "by construction".
+
+4. **The absolutes.**
+
+    No absolutes unless true: every, always, zero, never.
+
+5. **The length.**
+
+    Short declaratives; one longer sentence per paragraph at most.
+
+6. **The headings.**
+
+    Headings as claims, not labels.
+
+7. **The person.**
+
+    Second person for instructions, third for descriptions.
+
+8. **The self-reference.**
+
+    Cut the page about itself; no internal notes.
 
 ## The design system
 
@@ -131,8 +184,11 @@ Voice rules:
 
 ## The Mermaid pipeline
 
-Diagrams are `.mmd` sources rendered by `Source/Content/Mermaid/Render.mjs` into inline SVG. Run
-`pnpm Diagrams` after a source change. The renderer's limits:
+Diagrams are `.mmd` sources rendered by `Source/Content/Mermaid/Render.mjs` into inline SVG.
+
+Run `pnpm Diagrams` after a source change.
+
+The renderer's limits:
 
 - **The wrap budget**: labels wrap per word; a label must survive wrapping with its spaces.
 - **List markers**: a label that opens with syntax-shaped characters is parsed as flowchart syntax;
@@ -145,8 +201,9 @@ Diagrams are `.mmd` sources rendered by `Source/Content/Mermaid/Render.mjs` into
 
 ## The accuracy rules
 
-The site has been burned by claims that were true in a document and false in the tree. Before
-shipping a claim:
+The site has been burned by claims that were true in a document and false in the tree.
+
+Before shipping a claim:
 
 | Claim                        | Verify with                                         |
 | ---------------------------- | --------------------------------------------------- |
@@ -157,17 +214,36 @@ shipping a claim:
 | npm publication              | the registry itself, per package                    |
 | A planned feature is shipped | `Documentation/Plans/` status, not the plan text    |
 
-Never say a package is on npm unless the registry confirms that package at that version. The install
-snippets on a detail page are a promise; a 404 breaks the primary conversion path.
+Never say a package is on npm unless the registry confirms that package at that version.
+
+The install snippets on a detail page are a promise; a 404 breaks the primary conversion path.
 
 ## The workflow
 
-1. Read the page and the components it uses.
-2. Change the source (and `Content.ts` for a figure).
-3. If a diagram changed, `pnpm Diagrams`.
-4. Build: `cd Site && pnpm prepublishOnly`.
-5. Verify the built output: the page count, the changed strings in `Site/Target/`, and `pnpm Drift`.
-6. Report READY-TO-COMMIT with the `Site/` file list.
+1. **The read.**
+
+    The page and the components it uses are read.
+
+2. **The change.**
+
+    The source is changed (and `Content.ts` for a figure).
+
+3. **The diagrams.**
+
+    If a diagram changed, `pnpm Diagrams`.
+
+4. **The build.**
+
+    `cd Site && pnpm prepublishOnly`.
+
+5. **The output.**
+
+    The built output is verified: the page count, the changed strings in `Site/Target/`, and
+    `pnpm Drift`.
+
+6. **The report.**
+
+    READY-TO-COMMIT is reported with the `Site/` file list.
 
 ## Verification
 

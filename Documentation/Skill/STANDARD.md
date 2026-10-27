@@ -1,21 +1,24 @@
 # The Skill Corpus Standard (v2, 2026-10-20)
 
-This document is the specification every skill in this repository follows. It replaces the v1
-template (SKILL.md as a pointer index) with a rule: the SKILL.md is the operating manual, and the
-references are the depth.
+This document is the specification every skill in this repository follows.
+
+It replaces the v1 template (SKILL.md as a pointer index) with a rule: the SKILL.md is the operating
+manual, and the references are the depth.
 
 ## 1. What a skill is for
 
-A skill is loaded so the agent can ACT correctly without re-deriving the rules. It answers four
-questions, in this order:
+A skill is loaded so the agent can ACT correctly without re-deriving the rules.
+
+It answers four questions, in this order:
 
 1. Should I use this skill at all? (the trigger)
 2. What must I do, in what order? (the workflow)
 3. What must I never do? (the prohibitions)
 4. How do I know I am done? (the verification)
 
-A skill that only says "read these references" fails question 2. A skill that restates another
-skill's rules fails the single-owner rule (section 6).
+A skill that only says "read these references" fails question 2.
+
+A skill that restates another skill's rules fails the single-owner rule (section 6).
 
 ## 2. The corpus map (one owner per domain)
 
@@ -63,12 +66,16 @@ task nouns and verbs), not a slogan.
 7. **Anti-patterns** - a table: the mistake, the cost, the correct move.
 8. **References** - a table: file, what it covers, when to read it.
 
-A SKILL.md longer than ~160 lines is hiding a reference. Move the depth, keep the decision.
+A SKILL.md longer than ~160 lines is hiding a reference.
+
+Move the depth, keep the decision.
 
 ### 3.3 Self-sufficiency test
 
 Before shipping a SKILL.md, answer: could an agent with no other context complete the common case
-from this file alone? If no, the missing rule belongs in the body, not in a reference.
+from this file alone?
+
+If no, the missing rule belongs in the body, not in a reference.
 
 ## 4. The reference specification
 
@@ -96,37 +103,62 @@ from this file alone? If no, the missing rule belongs in the body, not in a refe
 
 ## 6. The single-owner rule
 
-A rule is stated in exactly one skill - its owner (section 2). Every other skill that needs the rule
-names the owner and the action, and stops. If two skills disagree, the owner wins and the other is
-corrected in the same change set.
+A rule is stated in exactly one skill - its owner (section 2).
+
+Every other skill that needs the rule names the owner and the action, and stops.
+
+If two skills disagree, the owner wins and the other is corrected in the same change set.
 
 Cross-references use the skill name and the file, never a relative path across skill directories:
 `see the task-routing skill, routing table`.
 
 ## 7. The fact policy
 
-Facts drift. State a drifting fact with its verification command and the date it was last verified:
+Facts drift.
+
+State a drifting fact with its verification command and the date it was last verified:
 
 ```text
 The family ships 15 Classic packages and 16 EffectTS packages (incl. the
 base). Verify: `ls Classic/packages EffectTS/packages`.
 ```
 
-Never copy a drifting fact into a second skill. Point to the owner or the source file (a manifest, a
-smoke README, `Site/Source/Library/Content.ts`).
+Never copy a drifting fact into a second skill.
+
+Point to the owner or the source file (a manifest, a smoke README,
+`Site/Source/Library/Content.ts`).
 
 ## 8. The authoring workflow
 
-1. Read the skill's current SKILL.md and every reference it points to.
-2. Decide what the skill owns (section 2) and what moves out.
-3. Draft the SKILL.md to section 3; draft the references to section 4.
-4. Write every file with the `write`/`edit` tool API. Never use terminal content operations (see
-   `code-authoring`).
-5. Verify: frontmatter parses, every pointer resolves, every reference is pointed to, no rule is
-   duplicated across skills, ASCII is clean.
-6. Install: write the same content to the repo copy (`Documentation/Skill/<name>/`) and the global
-   copy (`~/.dsh/skills/<name>/`). The two are byte-identical; the repo copy wins by policy, not by
-   a marker.
+1. **The read.**
+
+    The skill's current SKILL.md and every reference it points to are read.
+
+2. **The ownership.**
+
+    What the skill owns (section 2) and what moves out is decided.
+
+3. **The draft.**
+
+    The SKILL.md is drafted to section 3, and the references to section 4.
+
+4. **The write.**
+
+    Every file is written with the `write`/`edit` tool API.
+
+    A terminal content operation is never used (see `code-authoring`).
+
+5. **The verification.**
+
+    The frontmatter parses, every pointer resolves, every reference is pointed to, no rule is
+    duplicated across skills, and the ASCII is clean.
+
+6. **The install.**
+
+    The same content is written to the repo copy (`Documentation/Skill/<name>/`) and the global copy
+    (`~/.dsh/skills/<name>/`).
+
+    The two are byte-identical, and the repo copy wins by policy, not by a marker.
 
 ## 9. The verification checklist (run before reporting done)
 
@@ -142,6 +174,9 @@ smoke README, `Site/Source/Library/Content.ts`).
 
 ## 10. Provenance
 
-v1 (the pointer-index template) was written 2026-10-20 and is preserved in git history. v2 replaces
-it because a pointer index forces a reference read for every decision, and because the same rules
-had drifted into three or four skills. The recreation is dated 2026-10-20.
+v1 (the pointer-index template) was written 2026-10-20 and is preserved in git history.
+
+v2 replaces it because a pointer index forces a reference read for every decision, and because the
+same rules had drifted into three or four skills.
+
+The recreation is dated 2026-10-20.

@@ -109,26 +109,44 @@ The harness seams are plain async (verified in `docs/subsystems/filesystem.md:18
 `docs/subsystems/llm-streaming.md:1125`, `docs/cookbook/adding-a-tool.md:12-47`,
 `docs/subsystems/storage.md`); the Effect side wraps them at exactly four boundary types:
 
-1. **`llm/stream` waterfall** - plain signature `(options, next) => AsyncIterable<StreamChunk>`. The
-   listener builds `Stream.fromAsyncIterable(next(), onError)` → pipes the gate stream (1.1) →
-   returns `Stream.toAsyncIterable(stream)`. Pure-adapter boundary; no fibers leak.
-2. **`fs/observed`** - a _synchronous, side-effect-only_ broadcast (filesystem.md:185): the
-   registered listener is a plain sync function that does exactly one thing:
-   `Effect.runSync(Queue.offer(queue, event))`. A dedicated consumer fiber (`Effect.runFork`,
-   started in `apply` from a `Layer.scoped` whose release closes the fiber) drains `Queue.take` →
-   the govern effect (`Effect.runPromise` + swallowed `Exit`) - the Classic "sync listener +
-   detached continuation" shape, typed.
-3. **`fs/write-intent` / tool exec / storage domain** - plain `Promise` seams: each Effect
-   implementation runs through `Effect.runPromise(effect, { signal: exec.signal })`
-   (`RunOptions.signal` maps the harness abort to fiber interruption - adding-a-tool.md:44-47).
-   `ctx.storageDomain` stays plain; it is acquired once in a service layer (`Effect.acquireRelease`
-   around `open(spec)`/`close()`).
-4. **Plugin lifecycle** - the loader contract is unchanged (default-export object with
-   `name/apply/Config/inject`; `apply` returns nothing - Governor-SCHEME.md §7 (now
-   `Documentation/Guides/Governor-SCHEME.md`), HANDOFF fixes 1-2). `apply` starts the runtime
-   (layers + fibers); the plugin's dispose effect (registered via the harness's effect-disposal
-   seam) closes the scope, interrupting all forked fibers (`Fiber.interruptAll` semantics via the
-   Scope).
+1. **The `llm/stream` waterfall.**
+
+    The `llm/stream` waterfall has the plain signature
+    `(options, next) => AsyncIterable<StreamChunk>`.
+
+    The listener builds `Stream.fromAsyncIterable(next(), onError)`, pipes the gate stream (1.1),
+    and returns `Stream.toAsyncIterable(stream)`.
+
+    The boundary is a pure adapter; no fibers leak.
+
+2. **The `fs/observed` broadcast.**
+
+    The `fs/observed` broadcast is synchronous and side-effect-only (filesystem.md:185): the
+    registered listener is a plain sync function that does exactly one thing,
+    `Effect.runSync(Queue.offer(queue, event))`.
+
+    A dedicated consumer fiber (`Effect.runFork`, started in `apply` from a `Layer.scoped` whose
+    release closes the fiber) drains `Queue.take` into the govern effect (`Effect.runPromise` +
+    swallowed `Exit`) - the Classic "sync listener + detached continuation" shape, typed.
+
+3. **The `Promise` seams.**
+
+    The `fs/write-intent`, tool-exec, and storage-domain seams are plain `Promise` seams: each
+    Effect implementation runs through `Effect.runPromise(effect, { signal: exec.signal })`
+    (`RunOptions.signal` maps the harness abort to fiber interruption - adding-a-tool.md:44-47).
+
+    `ctx.storageDomain` stays plain; it is acquired once in a service layer (`Effect.acquireRelease`
+    around `open(spec)`/`close()`).
+
+4. **The plugin lifecycle.**
+
+    The loader contract is unchanged (default-export object with `name/apply/Config/inject`; `apply`
+    returns nothing - Governor-SCHEME.md section 7 (now `Documentation/Guides/Governor-SCHEME.md`),
+    HANDOFF fixes 1-2).
+
+    `apply` starts the runtime (layers + fibers); the plugin's dispose effect (registered via the
+    harness's effect-disposal seam) closes the scope, interrupting all forked fibers
+    (`Fiber.interruptAll` semantics via the Scope).
 
 ### 1.5 The module leaves (what the factory never absorbs - unchanged in kind)
 
@@ -208,19 +226,33 @@ What gets traced (span names, per 1.3) and how it leaves the process:
 
 **Harness-integration risks**
 
-1. `fs/observed` listeners must be sync and side-effect-only (filesystem.md:185) - the queue +
-   consumer-fiber bridge (1.4) is mandatory; a violation breaks the tool call.
-2. Generator early-return: the harness may abandon the `llm/stream` iterable;
-   `Stream.toAsyncIterable` must propagate the abort (verify with a cancellation smoke before the
-   flavors land).
-3. `runPromise` boundaries everywhere: never let a rejected promise escape a listener
-   (`Effect.runPromiseExit` + swallow) - the silence invariant is a _containment_ property.
-4. Dispose/lifecycle: plugin effects and forked fibers must close on unload; map the harness
-   effect-disposal to Scope close; interrupted writes must not half-journal.
-5. Dual-implementation coexistence: the EffectTS bundles ride the same desktop profile alongside
-   Classic while onboard - distinct bundle entry ids and ledger file names (`~/.dsh/hook-dsh-*.log`
-   collision risk) are required; decide the id suffix at the release step (#15 naming), the smoke
-   parity is name-agnostic.
+1. **The sync listener.**
+
+    `fs/observed` listeners must be sync and side-effect-only (filesystem.md:185) - the queue +
+    consumer-fiber bridge (1.4) is mandatory; a violation breaks the tool call.
+
+2. **The generator early return.**
+
+    The harness may abandon the `llm/stream` iterable on a generator early return;
+    `Stream.toAsyncIterable` must propagate the abort (verify with a cancellation smoke before the
+    flavors land).
+
+3. **The promise boundaries.**
+
+    `runPromise` boundaries are everywhere: never let a rejected promise escape a listener
+    (`Effect.runPromiseExit` + swallow) - the silence invariant is a _containment_ property.
+
+4. **The dispose.**
+
+    Dispose/lifecycle: plugin effects and forked fibers must close on unload; map the harness
+    effect-disposal to Scope close; interrupted writes must not half-journal.
+
+5. **The dual-implementation coexistence.**
+
+    Dual-implementation coexistence: the EffectTS bundles ride the same desktop profile alongside
+    Classic while onboard - distinct bundle entry ids and ledger file names (`~/.dsh/hook-dsh-*.log`
+    collision risk) are required; decide the id suffix at the release step (#15 naming), the smoke
+    parity is name-agnostic.
 
 **Parity risks**
 

@@ -13,9 +13,12 @@ updated: 2026-10-20
 
 # Worker Strains
 
-The harness cultivates three worker strains. A strain is a cultivation site, not a label: choosing
-it chooses the surfaces the agent may touch, the protocol it follows, and how its failures are
-handled. The model and effort are a separate decision owned by `task-routing`.
+The harness cultivates three worker strains.
+
+A strain is a cultivation site, not a label: choosing it chooses the surfaces the agent may touch,
+the protocol it follows, and how its failures are handled.
+
+The model and effort are a separate decision owned by `task-routing`.
 
 ## When to use
 
@@ -39,32 +42,91 @@ to the GLM tier.
 
 ## The rules
 
-1. **Pick the strain before the model.** The question is "what kind of work is this?", then "which
-   route?". Choosing the model first routes by habit.
-2. **The user's override wins for the task it names.** It does not become a new default.
-3. **Every spec is self-contained.** The child does not see this conversation. It gets the scope,
-   the surface, the exclusions, the arbiter, the report format, and the laws it must follow.
-4. **Every spec carries its verification.** The build command, the test cases with expected outputs,
-   and the exact `ESCALATION:` instruction (the template is in `task-routing`).
-5. **Concurrency is earned by disjointness.** Two lanes run together only when their file sets are
-   provably disjoint. Every shared file is a potential lost update.
-6. **The orchestrator verifies by arbiters, not by prose.** Read the printed totals; run only free,
-   read-only checks yourself. Do not execute the lane's work on feedback.
-7. **The user commits.** Agents never commit; the report is READY-TO-COMMIT.
+1. **The strain first.**
+
+    The strain is picked before the model, because the question is "what kind of work is this?",
+    then "which route?".
+
+    Choosing the model first routes by habit.
+
+2. **The override.**
+
+    The user's override wins for the task it names.
+
+    It does not become a new default.
+
+3. **The self-contained spec.**
+
+    Every spec is self-contained, because the child does not see this conversation.
+
+    It gets the scope, the surface, the exclusions, the arbiter, the report format, and the laws it
+    must follow.
+
+4. **The verification.**
+
+    Every spec carries its verification: the build command, the test cases with expected outputs,
+    and the exact `ESCALATION:` instruction (the template is in `task-routing`).
+
+5. **The disjointness.**
+
+    Concurrency is earned by disjointness, because two lanes run together only when their file sets
+    are provably disjoint.
+
+    Every shared file is a potential lost update.
+
+6. **The arbiter.**
+
+    The orchestrator verifies by arbiters, not by prose.
+
+    It reads the printed totals and runs only free, read-only checks itself.
+
+    It does not execute the lane's work on feedback.
+
+7. **The commit.**
+
+    The user commits, so agents never commit and the report is READY-TO-COMMIT.
 
 ## The delegation loop
 
-1. **Receive** the request, however fragmentary.
-2. **Formalize** it: scope, surface, exclusions, sequence, arbiter, report format, shared facts.
-   Ambiguity resolves to the most faithful reading, stated in the spec.
-3. **Pick the strain**, then the route per `task-routing`.
-4. **Delegate**: an active lane, or an idle lane holding a retained spec (`idle-agent-protocol`).
-5. **Continue your own work**: the lane is NOT monitored. Its report arrives as a message; a stall
-   is handled when a report says so or when the user asks, never by waiting or by inspecting the
-   lane's output. Failures are verified from the tree ONCE, before a re-dispatch. The full law is
-   `orchestrator-batch` (no-blocking-wait).
-6. **Verify**: the lane's printed arbiter results, plus your own read-only spot checks.
-7. **Report**: results, residuals, decisions for the user, and the READY-TO-COMMIT list.
+1. **The request.**
+
+    The parent receives the request, however fragmentary.
+
+2. **The formalization.**
+
+    The parent formalizes the scope, the surface, the exclusions, the sequence, the arbiter, the
+    report format, and the shared facts.
+
+    Ambiguity resolves to the most faithful reading, stated in the spec.
+
+3. **The strain.**
+
+    The parent picks the strain, then the route per `task-routing`.
+
+4. **The delegation.**
+
+    The parent delegates to an active lane, or to an idle lane holding a retained spec
+    (`idle-agent-protocol`).
+
+5. **The own work.**
+
+    The parent continues its own work, because the lane is NOT monitored.
+
+    Its report arrives as a message, and a stall is handled when a report says so or when the user
+    asks, never by waiting or by inspecting the lane's output.
+
+    Failures are verified from the tree ONCE, before a re-dispatch.
+
+    The full law is `orchestrator-batch` (no-blocking-wait).
+
+6. **The verification.**
+
+    The parent verifies the lane's printed arbiter results, plus its own read-only spot checks.
+
+7. **The report.**
+
+    The parent reports the results, the residuals, the decisions for the user, and the
+    READY-TO-COMMIT list.
 
 ## The environment
 

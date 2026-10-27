@@ -14,9 +14,12 @@ updated: 2026-10-20
 
 # Smoke Writing
 
-The smokes are the arbiter: after every change, the suites pass. They load the real built library
-and assert its behavior, including the ledger strings, byte for byte. This skill states how to write
-them and how to read a failure without weakening the contract.
+The smokes are the arbiter: after every change, the suites pass.
+
+They load the real built library and assert its behavior, including the ledger strings, byte for
+byte.
+
+This skill states how to write them and how to read a failure without weakening the contract.
 
 ## When to use
 
@@ -30,9 +33,17 @@ them and how to read a failure without weakening the contract.
 
 Every mechanics test:
 
-1. Loads the REAL built `Target/Library.js` of its bundle.
-2. Runs it against a FAKE context that captures what the plugin does.
-3. Asserts the captured behavior, the ledger lines, and the state probes.
+1. **The load.**
+
+    The REAL built `Target/Library.js` of its bundle is loaded.
+
+2. **The fake context.**
+
+    It runs against a FAKE context that captures what the plugin does.
+
+3. **The assertion.**
+
+    The captured behavior, the ledger lines, and the state probes are asserted.
 
 The fake context provides the seams the plugin uses:
 
@@ -50,26 +61,48 @@ The fake context provides the seams the plugin uses:
 
 ## The assertion contract
 
-1. **Ledger strings are byte-identical.** The logger-prefixed `<module>: ...` forms and the ledger
-   file's `[ISO] message` forms are asserted exactly. They are the contract.
-2. **Identity-driven strings are the only exception.** A module rename changes its own prefixes and
-   logFile default by design; every other assertion stays byte-identical through every refactor.
-3. **Additive coverage.** A new feature grows the suite; existing assertions never weaken. Record
-   the new count in the folder's README.
-4. **A failing smoke means the change is wrong.** Read the failure's intent and fix the change, not
-   the assertion.
+1. **The byte-identical strings.**
+
+    The logger-prefixed `<module>: ...` forms and the ledger file's `[ISO] message` forms are
+    asserted exactly.
+
+    They are the contract.
+
+2. **The identity exception.**
+
+    A module rename changes its own prefixes and logFile default by design; every other assertion
+    stays byte-identical through every refactor.
+
+3. **The additive coverage.**
+
+    A new feature grows the suite; existing assertions never weaken.
+
+    The new count is recorded in the folder's README.
+
+4. **The failing smoke.**
+
+    A failing smoke means the change is wrong.
+
+    The failure's intent is read and the change is fixed, not the assertion.
 
 ## The count guard
 
 Each test folder's `README.md` declares its expected count under `## Expected count` as `<N> PASS.`
-The aggregate (`Maintain/Run/Smokes/Index.mjs`) compares the printed `N PASS - <Name>` line with
-that number. A folder without a parseable count fails.
 
-The per-folder READMEs are the arbiter; the aggregate compares each printed count with them. The
-manifest line in `<tree>/smokes/README.md` is a summary, not the truth: it can lag the folders.
+The aggregate (`Maintain/Run/Smokes/Index.mjs`) compares the printed `N PASS - <Name>` line with
+that number.
+
+A folder without a parseable count fails.
+
+The per-folder READMEs are the arbiter; the aggregate compares each printed count with them.
+
+The manifest line in `<tree>/smokes/README.md` is a summary, not the truth: it can lag the folders.
+
 Verify it before quoting a total (2026-10-20: dash 184 vs 132, each small flavor 104 vs 62,
 normalize-file 112 vs 71, factory 35 vs 34; core, governor, pinner, cargo, ccr, and tool-coach
-match). The `live-containers` folders are run by the aggregate but are not in that line.
+match).
+
+The `live-containers` folders are run by the aggregate but are not in that line.
 
 ## The traps
 
@@ -90,13 +123,33 @@ When a smoke "passes but the world is weird", verify the harness wiring before t
 
 ## The workflow
 
-1. Read the bundle's existing tests and its `Source/Test/<Name>/README.md`.
-2. Add or change the test through the write/edit tools.
-3. Build the bundle (`prepublishOnly`) so `Target/Test/` exists.
-4. Run the folder: `node <tree>/packages/<bundle>/Target/Test/<Name>/Test.js`.
-5. Compare the printed count with the README's expected count.
-6. Run the aggregate when the change is cross-cutting.
-7. A live finding becomes a regression test where the harness can represent it.
+1. **The read.**
+
+    The bundle's existing tests and its `Source/Test/<Name>/README.md` are read.
+
+2. **The change.**
+
+    The test is added or changed through the write/edit tools.
+
+3. **The build.**
+
+    The bundle is built (`prepublishOnly`) so `Target/Test/` exists.
+
+4. **The run.**
+
+    The folder is run: `node <tree>/packages/<bundle>/Target/Test/<Name>/Test.js`.
+
+5. **The count.**
+
+    The printed count is compared with the README's expected count.
+
+6. **The aggregate.**
+
+    The aggregate runs when the change is cross-cutting.
+
+7. **The regression.**
+
+    A live finding becomes a regression test where the harness can represent it.
 
 ## Verification
 

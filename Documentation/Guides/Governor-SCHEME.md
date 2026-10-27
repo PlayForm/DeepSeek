@@ -1,5 +1,5 @@
 ---
-title: Package-Governor — Commutative Scheme & Diagram (v1.3)
+title: Package-Governor - Commutative Scheme & Diagram (v1.3)
 category: Guides
 kind: guide
 date: 2026-10-03
@@ -18,7 +18,7 @@ statuses:
       evidence: the probe showed the governed write with no user notification
 ---
 
-# Package-Governor — Commutative Scheme & Diagram (v1.3, TypeScript, anywhere mode)
+# Package-Governor - Commutative Scheme & Diagram (v1.3, TypeScript, anywhere mode)
 
 > One of the four Governor guides migrated to `Documentation/Guides/`. The companion docs are
 > `Governor-README.md`, `Governor-CASCADES.md`, and `Governor-TRIO-GRAPH.md` in this folder. The
@@ -28,31 +28,49 @@ Status: **IMPLEMENTED and LIVE-VERIFIED.**
 
 This document ships inside the bundle as `SCHEME.md` (alongside the usage README).
 
-**v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR. The family's shared
-machinery is consumed from the injected [@playform/plugin-dsh-factory][ours-plugin-dsh-factory]
-service (v0.1.0), `inject: ["fs", "pluginFactory"]`. The absorbed modules (Append, Journal, Open,
-Match, Discover, Parse, Continue, Govern, Refresh) are deleted from this tree. The ledger strings,
-the silence invariant, the chain semantics, the exemptions and the loader contract are
-byte-identical (see §2 for the module/factory split).
+**v1.3 changes (2026-10-04):** the bundle is REFACTORED into a FACTORY FLAVOR.
+
+The family's shared machinery is consumed from the injected
+[@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service (v0.1.0),
+`inject: ["fs", "pluginFactory"]`.
+
+The absorbed modules (Append, Journal, Open, Match, Discover, Parse, Continue, Govern, Refresh) are
+deleted from this tree.
+
+The ledger strings, the silence invariant, the chain semantics, the exemptions and the loader
+contract are byte-identical (see §2 for the module/factory split).
 
 **v1.2 changes (2026-10-03):** the plugin is now TypeScript-first, built with `@playform/build`
-(`Source/` → `Target/`, `prepublishOnly` build hook). It uses kind-folder categorization
-(`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` — no folder/file name duplication).
+(`Source/` → `Target/`, `prepublishOnly` build hook).
+
+It uses kind-folder categorization (`Source/Function/*`, `Source/Interface/*`, `Source/Variable/*` -
+no folder/file name duplication).
+
 It uses the publish identity
 [@playform/hook-dsh-package-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-governor/Source).
+
 It uses granularized install paths (npm dependency auto-activation / git clone + build / native
-`dsh plugin add`). It has devDependencies typed from the published seam packages at the HOST's exact
-versions: [`@deepseek-ai/dsh-fs`][dsh-fs]/`dsh-subprocess`/`dsh-sandbox` at 0.2.0-rc.2,
+`dsh plugin add`).
+
+It has devDependencies typed from the published seam packages at the HOST's exact versions:
+[`@deepseek-ai/dsh-fs`][dsh-fs]/`dsh-subprocess`/`dsh-sandbox` at 0.2.0-rc.2,
 [`@deepseek-ai/cordis`][dsh-cordis] ^4.0.4,
 [`@deepseek-ai/schemastery`](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/schemastery)
-^3.18.4. The `@deepseek-ai/dsh` npm package is the CLI APPLICATION, not a types package. Its
-vocabulary lives in the seam packages. Installing the CLI as a devDependency would drag the whole
-app into the bundle.
+^3.18.4.
+
+The `@deepseek-ai/dsh` npm package is the CLI APPLICATION, not a types package.
+
+Its vocabulary lives in the seam packages.
+
+Installing the CLI as a devDependency would drag the whole app into the bundle.
 
 These types now cover the event payloads (`FsTarget`/`FsObservation` with the
-[`fs/observed`][dsh-fs-2] `Context`/`Events` augmentation). They cover the Config schema. They cover
-the service calls (`ctx.fs.readText/writeText/stat` signatures including the sandbox policy arg, the
-probed `ctx.subprocess` spawn seam).
+[`fs/observed`][dsh-fs-2] `Context`/`Events` augmentation).
+
+They cover the Config schema.
+
+They cover the service calls (`ctx.fs.readText/writeText/stat` signatures including the sandbox
+policy arg, the probed `ctx.subprocess` spawn seam).
 
 The runtime behavior, the ledger strings, and the silence invariant are byte-identical to the
 verified v0.4.x line.
@@ -63,15 +81,16 @@ verified v0.4.x line.
   → `cannot get property "fs" without inject`.
 - `apply` MUST return nothing. A return value silently kills event delivery.
 - The update stage is a **detached contained continuation**, NOT a `ctx.jobs` job. `ctx.jobs` is
-  agent-scoped — a root plugin has no job controller.
+  agent-scoped - a root plugin has no job controller.
 - `ctx.fs.writeText` from a root plugin REQUIRES an explicit sandbox policy
-  (`{ mode: "danger-full-access" }` — the governor's exclude list is its fence). The deployment
+  (`{ mode: "danger-full-access" }` - the governor's exclude list is its fence). The deployment
   default `workspace-write` denies paths outside the canonical workspace.
 - Peers are dropped. The `@deepseek-ai/*` runtime resolution comes from the installation scope.
   DevDependencies are kept for the type checker.
 
-All mechanism claims below were verified against the **live runtime**. Host [cordis][dsh-cordis]
-Event catalog;
+All mechanism claims below were verified against the **live runtime**.
+
+Host [cordis][dsh-cordis] Event catalog;
 [`dsh-tool-fs`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/tool-fs),
 [`dsh-fs-local`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs-local),
 [`dsh-fs`][dsh-fs],
@@ -85,7 +104,7 @@ sources (asar-extracted); `docs/subsystems/filesystem.md`, `docs/subsystems/jobs
 ## 0. Why [`fs/observed`][dsh-fs-2], not the [`fs/write-intent`][dsh-fs-2] waterfall
 
 The intent waterfall carries only a version guard (`{kind:"createIfAbsent"}` |
-`{kind:"replaceIfVersion", version}`) — **NEVER content** (`docs/subsystems/filesystem.md:515-526`).
+`{kind:"replaceIfVersion", version}`) - **NEVER content** (`docs/subsystems/filesystem.md:515-526`).
 
 The write content travels only in the tool's own arguments → `ctx.fs.writeText`.
 
@@ -94,36 +113,47 @@ The only hook that runs _after_ content is on disk is the synchronous broadcast
 
 Hence the post-hoc rewrite design.
 
-(`FsTarget` has only `targetKey` + `displayPath` — the `target.path` assumption was the fatal bug of
+(`FsTarget` has only `targetKey` + `displayPath` - the `target.path` assumption was the fatal bug of
 the previous attempt.)
 
-## 1. The domain — every harness write path
+## 1. The domain - every harness write path
 
 [`fs/observed`][dsh-fs-2] is dispatched **ONLY by the tool layer** (`dsh-tool-fs`,
-`dsh-tool-str-replace-editor`). It covers **EVERY** write/edit/read issued through the harness fs
-tools, by **ANY** thread: main agent, subagent, workflow child.
+`dsh-tool-str-replace-editor`).
+
+It covers **EVERY** write/edit/read issued through the harness fs tools, by **ANY** thread: main
+agent, subagent, workflow child.
 
 The fs _service_ and EVERY other writer (bash, git, ncu, plain `node:fs`) dispatch **nothing**.
 
 Write paths `𝒲 = { write tool, edit tool, str-replace-editor, any tool issuing ctx.fs.writeText }`.
 
 EVERY `w ∈ 𝒲` emits exactly one [`fs/observed`][dsh-fs-2] with
-`(target, {kind:"present", version}, actor)`. Full writes AND single-line edits dispatch the
-identical payload (live-verified: a one-line `edit` triggered the complete pass).
+`(target, {kind:"present", version}, actor)`.
+
+Full writes AND single-line edits dispatch the identical payload (live-verified: a one-line `edit`
+triggered the complete pass).
 
 ## 2. The governor pipeline G = U ∘ P
 
-This module is a FACTORY MODULE. The family's shared machinery lives in the injected
-[@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service. Its SCHEME.md is the machinery
-contract; this section is the MODULE contract.
+This module is a FACTORY MODULE.
 
-`inject: ["fs", "pluginFactory"]`. The built Target never imports the factory. The service resolves
-from the profile through the injector. The module's compilation declares the contract structurally
-(Source/Interface/Factory.ts).
+The family's shared machinery lives in the injected
+[@playform/plugin-dsh-factory][ours-plugin-dsh-factory] service.
+
+Its SCHEME.md is the machinery contract; this section is the MODULE contract.
+
+`inject: ["fs", "pluginFactory"]`.
+
+The built Target never imports the factory.
+
+The service resolves from the profile through the injector.
+
+The module's compilation declares the contract structurally (Source/Interface/Factory.ts).
 
 What the factory absorbed from v0.4 of this bundle: the ledger (Append), the P5 journal, the
 exclusion match, the registry walk-up + sidecar parse, the union keep-list (ResolvePolicy), the g1
-gate set, the guarded write (GuardedWrite — the P4 fence + Stash pre-registration), the P₃/U₂
+gate set, the guarded write (GuardedWrite - the P4 fence + Stash pre-registration), the P₃/U₂
 refresh, the detached contained continuation scaffolding (Continue: Inflight, readText,
 ResolvePolicy, write, message, refresh), the State builder, the wiring and the lifecycle effects
 (P1/P2/P5).
@@ -131,54 +161,55 @@ ResolvePolicy, write, message, refresh), the State builder, the wiring and the l
 What stayed module-owned: the transform (the chain pass: decode → Satisfy →
 [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts),
 Function/Transform), the update engine (Function/Follow → Dispatch → Execute → Update/* → Settle),
-the FIRST-WINS update-policy path pick (Function/Resolve — engine input, NOT the factory's union
+the FIRST-WINS update-policy path pick (Function/Resolve - engine input, NOT the factory's union
 keep-list discovery), and every ledger string.
 
-- **Context discovery (no roots)** — `Factory.Discover`/`Factory.Parse`: the nearest `registry.json`
+- **Context discovery (no roots)** - `Factory.Discover`/`Factory.Parse`: the nearest `registry.json`
   is found by walking UP from the written file's directory (stopping at `node_modules` boundaries
   and the filesystem root). Its `update-policy.json` (co-located, or the file's own directory, or
   the configured global `policyFile`) drives U. Without any policy, U uses a built-in default
   (reject the learned tailwindcss exception, all dep groups, target latest, no verifyCommand).
-- **P — chain pass** (pure, deterministic, idempotent — the FLAVOR'S transform, run inside
+- **P - chain pass** (pure, deterministic, idempotent - the FLAVOR'S transform, run inside
   `Factory.Continue`): when a registry was found, rewrite chain-governed pins
   (`dep ∈ registry.effectiveLatest`) to `^<resolved>` when out of chain. Unknown deps: leave for U
   unless `strict` is explicit (NEVER default-delete). Without a registry, P is skipped (everything
   is public). `P(P(c)) = P(c)`. The rewrite is the factory's `GuardedWrite` (replaceIfVersion + the
   P4 sandbox fence + Stash pre-registration). The `governed <path> → <version>` line is the
   transform's `message`. The update stage is chained off the settled continuation (Function/Follow)
-  — skipped on refusal, decode failure or a failed guarded write (the message callback runs only
-  post-write).
-- **U — update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a harness JOB when the P1
+    - skipped on refusal, decode failure or a failed guarded write (the message callback runs only
+      post-write).
+- **U - update stage** (policy-gated, cooldown-guarded, async, DUAL-MODE): a harness JOB when the P1
   controller (attached by `Factory.Attach` from the root context) serves this composition:
   `ctx.jobs.start({kind: "governor-update", owner: undefined, run})`. The historical **detached
   contained continuation** is the probed fallback (`Dispatch` → `Execute`) for deployments without a
-  jobs registry or on a `start` preflight rejection. Mode `updateMode` — **`"programmatic"`
+  jobs registry or on a `start` preflight rejection. Mode `updateMode` - **`"programmatic"`
   (default)**: the `npm-check-updates` library (a declared dependency in the bundle's own
   `node_modules`) imported ONLY inside that continuation and driven through
   `ncu.run({packageFile, upgrade: true, silent: true, dep, concurrency, target, reject, allow, filter})`
-  — no external binary. **`"bin"`**: the `ncu` binary from `ncuBin`, resolved via
-  `ctx.subprocess.resolveExecutable` and spawned through `ctx.subprocess` with the same
-  policy-derived CLI arguments (reject/allow/dep/concurrency/ target/filter). A minimal
-  child-process fallback runs inside the continuation when the deployment has no
-  [subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess).
-  Both modes preserve EVERY policy option (`reject`/`allow`/`depGroups`/`concurrency`/
-  `targets`/`verifyCommand`). Both merge the **chain-governed dep names into the reject list**. That
-  is the cordis-trap guard: ncu must NEVER bump a chain pin to public npm latest. `-x`/`--reject` is
-  ONE comma-delimited argument (ncu 23.x). Then comes the policy's `verifyCommand` if any (exit 127
-  = runner unavailable, non-fatal), ONLY when cooldown elapsed and no update is already in flight
-  for that directory. External-process writes (ncu, pnpm) dispatch no events. **U₂ (required for the
-  silence invariant)**: the continuation's settlement (`Settle`) must re-emit
-  [`fs/observed`][dsh-fs-2] with the fresh version from `ctx.fs.stat(target)` handed to
-  `Factory.Refresh` (same actor, captured in the listener closure). ncu mutates package.json after
-  P₃. Without U₂ the policy record stays at the pre-ncu version. Then the author's next guarded
-  write/edit would fail `FS_STALE_VERSION` — a notification leak.
+    - no external binary. **`"bin"`**: the `ncu` binary from `ncuBin`, resolved via
+      `ctx.subprocess.resolveExecutable` and spawned through `ctx.subprocess` with the same
+      policy-derived CLI arguments (reject/allow/dep/concurrency/ target/filter). A minimal
+      child-process fallback runs inside the continuation when the deployment has no
+      [subprocess seam](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/subprocess/subprocess).
+      Both modes preserve EVERY policy option (`reject`/`allow`/`depGroups`/`concurrency`/
+      `targets`/`verifyCommand`). Both merge the **chain-governed dep names into the reject list**.
+      That is the cordis-trap guard: ncu must NEVER bump a chain pin to public npm latest.
+      `-x`/`--reject` is ONE comma-delimited argument (ncu 23.x). Then comes the policy's
+      `verifyCommand` if any (exit 127 = runner unavailable, non-fatal), ONLY when cooldown elapsed
+      and no update is already in flight for that directory. External-process writes (ncu, pnpm)
+      dispatch no events. **U₂ (required for the silence invariant)**: the continuation's settlement
+      (`Settle`) must re-emit [`fs/observed`][dsh-fs-2] with the fresh version from
+      `ctx.fs.stat(target)` handed to `Factory.Refresh` (same actor, captured in the listener
+      closure). ncu mutates package.json after P₃. Without U₂ the policy record stays at the pre-ncu
+      version. Then the author's next guarded write/edit would fail `FS_STALE_VERSION` - a
+      notification leak.
 
 ## 3. Trigger law and non-trigger law
 
 - **Trigger law**: G fires ⟺ [`fs/observed`][dsh-fs-2] carries `observation.kind === "present"`,
-  **`actor.name ∈ mutationTools`** (`write`, `edit`, `str_replace_editor` — reads also emit
+  **`actor.name ∈ mutationTools`** (`write`, `edit`, `str_replace_editor` - reads also emit
   `kind:"present"` with a stat version, so the actor gate is required), and
-  `basename(target.displayPath) === "package.json"`. **No root check — anywhere.** Precedent:
+  `basename(target.displayPath) === "package.json"`. **No root check - anywhere.** Precedent:
   `dsh-skill-filesystem/lib/index.js:57-60`.
 - **Exclusion law (first)**: if any path segment of `displayPath` matches the config `exclude` list
   (defaults: `node_modules`, `.git`, `.dsh`, `.pnpm`, `.store`, `DeepSeek Harness.app`), G records
@@ -186,8 +217,8 @@ keep-list discovery), and every ledger string.
 - **Idempotence gate**: `Stash.get(targetKey) === observation.version` → skip. This covers G's own
   refresh re-emit (re-enters the listener as a no-op) and any re-read of a governed file.
 - **Non-trigger law (no recursion)**: G's own writes go through the `ctx.fs` service (the fs service
-  dispatches no [`fs/observed`][dsh-fs-2] — ONLY the tool layer does) and the update stage is a
-  continuation — neither is an author tool call. **G ∉ 𝒲.**
+  dispatches no [`fs/observed`][dsh-fs-2] - ONLY the tool layer does) and the update stage is a
+  continuation - neither is an author tool call. **G ∉ 𝒲.**
 - **Re-entrancy is still handled**: G's deliberate refresh re-emit (below) reaches G's own listener
   again. The version-token gate makes it a no-op.
 
@@ -212,16 +243,17 @@ For any write path `w ∈ 𝒲`, author content `c`, registry/policy snapshot `R
 
 ## 5. Silence invariant (the "no notification" property)
 
-The parent thread's observable state — tool result envelope, transcript, session events — is
+The parent thread's observable state - tool result envelope, transcript, session events - is
 **identical with and without G**, except:
 
 1. the governed file's on-disk content (discoverable ONLY by a later `read`), and
 2. the observation-policy's recorded version, which G **refreshes** (see below).
 
 Proof from the write tool (`dsh-tool-fs/lib/index.js:583-597`): the result
-`{path, operation, before, after}` is built from the `writeText` **outcome**. There
-`after = normalizeLineEndings(author content)` — the tool's own content, **not a disk re-read**
-(`dsh-fs-local/lib/index.js:872-880`).
+`{path, operation, before, after}` is built from the `writeText` **outcome**.
+
+There `after = normalizeLineEndings(author content)` - the tool's own content, **not a disk
+re-read** (`dsh-fs-local/lib/index.js:872-880`).
 
 No checksum.
 
@@ -231,64 +263,73 @@ A post-emit rewrite is invisible to the envelope.
 `{kind:"present", version}` per `owner = actor.agent.session`.
 
 If G mutates the file without refreshing the record, the author's next guarded write/edit fails
-**FS_STALE_VERSION**. That is an error the model _sees_ → notification leak.
+**FS_STALE_VERSION**.
+
+That is an error the model _sees_ → notification leak.
 
 Therefore G must, after EVERY mutation:
 
 - **P**: re-emit
   `ctx.emit("[`fs/observed`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts)", target, {kind:"present", version: v'}, <same actor>)`
-  with `v'` taken from the `ctx.fs.writeText` outcome (`FsWriteOutcome.version` — the service owns
+  with `v'` taken from the `ctx.fs.writeText` outcome (`FsWriteOutcome.version` - the service owns
   the version token; it is never computed or parsed locally). Same actor ⇒ same owner bucket ⇒
   record refreshed.
 - **U**: in the continuation's settlement, re-stat via `ctx.fs.stat(target)` and re-emit with the
   fresh version (same actor), covering ncu/verifyCommand mutations.
 
-G NEVER: participates in [`fs/write-intent`][dsh-fs-2]/[`fs/edit-intent`][dsh-fs-2] waterfalls. G
-NEVER touches `tools/*` waterfalls (`tools/post-execute` is the ONLY sanctioned result amendment —
-it is _louder_, so forbidden). G NEVER spawns LLM calls. G NEVER adds messages. G NEVER throws (a
-listener throw fails the tool call; wrap everything, and the ledger is best-effort).
+G NEVER: participates in [`fs/write-intent`][dsh-fs-2]/[`fs/edit-intent`][dsh-fs-2] waterfalls.
+
+G NEVER touches `tools/*` waterfalls (`tools/post-execute` is the ONLY sanctioned result amendment -
+it is _louder_, so forbidden).
+
+G NEVER spawns LLM calls.
+
+G NEVER adds messages.
+
+G NEVER throws (a listener throw fails the tool call; wrap everything, and the ledger is
+best-effort).
 
 ## 6. Diagram
 
 ```
-              AUTHOR THREAD(S) — main agent, subagents, workflow children
+              AUTHOR THREAD(S) - main agent, subagents, workflow children
                  │  write / edit / str_replace_editor: package.json ANYWHERE
-                 │  (excluded segments: node_modules, .git, .dsh, …)
+                 │  (excluded segments: node_modules, .git, .dsh, ...)
                  ▼
         ┌────────────────────────── HOST EVENT BUS ──────────────────────────┐
-        │ ① fs/write-intent (waterfall, single-slot): version guard only —   │
+        │ ① fs/write-intent (waterfall, single-slot): version guard only -   │
         │     no content ever travels the intent; G passes through           │
         │            ▼                                                       │
-        │ ② ctx.fs.writeText: atomic, guarded write — author content lands,  │
+        │ ② ctx.fs.writeText: atomic, guarded write - author content lands,  │
         │     version v                                                      │
         │            ▼                                                       │
         │ ③ fs/observed (emit, SYNCHRONOUS, not awaited):                    │
         │     (target{targetKey, displayPath}, {kind:"present", version v},  │
-        │      actor) — broadcast to:                                        │
+        │      actor) - broadcast to:                                        │
         │      ├─▶ observation-policy: records (owner=actor.agent.session, v)│
-        │      └─▶ GOVERNOR G (this bundle) — the only subscriber that acts  │
+        │      └─▶ GOVERNOR G (this bundle) - the only subscriber that acts  │
         │            E₀ exclusion check (segment match) → skip if excluded   │
         │            P₀ context discovery: registry.json walk-up (∄ → skip P)│
         │            P₁ ctx.fs.readText; chain pass (pure, idempotent)       │
         │            P₂ ctx.fs.writeText(governed, replaceIfVersion(v),      │
-        │               {mode:"danger-full-access"}) — service write, no     │
+        │               {mode:"danger-full-access"}) - service write, no     │
         │               fs/observed from the service                         │
         │            P₃ re-emit fs/observed(outcome.version) ── refreshes    │
         │               policy; re-enters G as a no-op                       │
-        │            U₁ DETACHED CONTAINED CONTINUATION (not ctx.jobs —      │
-        │               agent-scoped): mode from updateMode — programmatic   │
+        │            U₁ DETACHED CONTAINED CONTINUATION (not ctx.jobs -      │
+        │               agent-scoped): mode from updateMode - programmatic   │
         │               library, or bin via ctx.subprocess + ncuBin; policy  │
         │               discovery or built-in default; reject ∪ chainDeps;   │
         │               cooldown + in-flight + breaker                       │
         │            U₂ settlement: ctx.fs.stat → re-emit fs/observed        │
-        │               (fresh version — required — see §2)                  │
+        │               (fresh version - required - see §2)                  │
         │            L  ledger: <logFile> (global) + ctx.logger +            │
         │               activation line in apply()                           │
         └─────────────────────────────────────────────────────────────────────┘
                  │
                  ▼
         ④ tool result {path, operation, before, after} built from the
-           AUTHOR'S OWN content (writeText outcome — no disk re-read)
+           AUTHOR'S OWN content (writeText outcome - no disk re-read)
                  │
                  ▼
         PARENT THREAD SEES: exactly what it wrote.  ∄ G→parent edge.
@@ -308,36 +349,53 @@ Non-edges (proven absent, marked ∄):
 
 ## 7. Registration
 
-1. Source: `Source/Library.ts` (loader contract: `name`, `apply`, `Config`,
-   `inject: ["fs", "pluginFactory"]`, default `{ name, apply, Config, inject }` — all four on the
-   default object; `apply` returns nothing) + `Source/Function/*` + `Source/Interface/*` +
-   `Source/Variable/*`. Built by `@playform/build` (`Configuration/ESBuild.ts`) into `Target/`
-   (.js + .d.ts). The `pluginFactory` inject makes the loader hold this bundle PENDING until the
-   factory service exists (load order NEVER matters). No config row beyond the existing one is
-   needed — the factory provides no Config.
-2. Package: `package.json` — `main`/`exports` → `Target/Library.js`,
-   `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source — the published
-   artifact ships ONLY the built output), `prepublishOnly` = the build,
-   [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)
-   (row `id: hook-dsh-package-governor`, `name: "@playform/hook-dsh-package-governor"`, config),
-   `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
-3. Install (granularized):
+1. **The source.**
+
+    Source: `Source/Library.ts` (loader contract: `name`, `apply`, `Config`,
+    `inject: ["fs", "pluginFactory"]`, default `{ name, apply, Config, inject }` - all four on the
+    default object; `apply` returns nothing) + `Source/Function/*` + `Source/Interface/*` +
+    `Source/Variable/*`.
+
+    Built by `@playform/build` (`Configuration/ESBuild.ts`) into `Target/` (.js + .d.ts).
+
+    The `pluginFactory` inject makes the loader hold this bundle PENDING until the factory service
+    exists (load order NEVER matters).
+
+    No config row beyond the existing one is needed - the factory provides no Config.
+
+2. **The package.**
+
+    Package: `package.json` - `main`/`exports` → `Target/Library.js`,
+    `files: "Target", "[cordis.patch.yml", "README.md", "SCHEME.md"]` (no Source - the published
+    artifact ships ONLY the built output), `prepublishOnly` = the build,
+    [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)
+    (row `id: hook-dsh-package-governor`, `name: "@playform/hook-dsh-package-governor"`, config),
+    `"dsh": {"bundle": {"patch": "./cordis.patch.yml"}}`.
+
+3. **The install.**
+
+    Install (granularized):
+
     - **Remote/dependency**: `pnpm add @playform/hook-dsh-package-governor` in a profile →
       auto-activates at the next host start (the `dsh.bundle` manifest makes a plain dependency a
       harness bundle).
     - **Git clone**: clone → `pnpm install --ignore-workspace` → `pnpm build` →
       `dsh plugin --profile <name> add <dir>`.
     - **Native dsh**: `dsh plugin --profile <name> add <tarball|dir|npm-spec>`.
-4. Verify activation via `plugin_manager` / Inspect `Config.listConfigs` + the durable
-   `activated (anywhere mode, …)` ledger line in `apply()`. NEVER assume; the previous disable was
-   an uncommitted staged edit, discovered ONLY by forensics.
 
-## 8. Config (validated schema — every tunable is a field)
+4. **The activation.**
+
+    Verify activation via `plugin_manager` / Inspect `Config.listConfigs` + the durable
+    `activated (anywhere mode, ...)` ledger line in `apply()`.
+
+    NEVER assume; the previous disable was an uncommitted staged edit, discovered ONLY by forensics.
+
+## 8. Config (validated schema - every tunable is a field)
 
 The exported `Config` schema validates and fills EVERY default at load (invalid configuration fails
 loudly).
 
-New entries are declared with `insert:` — a bare `id:` row patches an existing entry and the loader
+New entries are declared with `insert:` - a bare `id:` row patches an existing entry and the loader
 rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
 
 ```yaml
@@ -349,9 +407,9 @@ rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
             logFile: ~/.dsh/playform/hook-dsh-package-governor.log # global ledger (default: ~/.dsh/playform/hook-dsh-package-governor.log)
             updateCooldownMs: 3000
             strict: false # explicit; never default-delete unknown deps
-            mutationTools: [write, edit, str_replace_editor] # reads emit too — gate required
+            mutationTools: [write, edit, str_replace_editor] # reads emit too - gate required
             maxUpdateFailures: 3 # circuit breaker: pause a dir after N consecutive failures
-            ncuBin: /usr/local/bin/ncu # absolute — host PATH is not the shell PATH
+            ncuBin: /usr/local/bin/ncu # absolute - host PATH is not the shell PATH
             updateMode: programmatic # "programmatic" (default) | "bin" (ncu binary via ncuBin)
             policyFile: "" # optional global update-policy.json; else discovery; else built-in default
             exclude: [node_modules, .git, .dsh, .pnpm, .store, DeepSeek Harness.app]
@@ -359,32 +417,64 @@ rejects unknown ids with `entry "…" not found` (verified 2026-10-02).
 
 ## 9. Test plan (verified live 2026-10-03 against the built bundle)
 
-1. Restart with the bundle active; `hook-dsh-package-governor.log` shows the activation line.
-2. Write a stale-pins `package.json` with the write tool:
+1. **The activation line.**
+
+    Restart with the bundle active; `hook-dsh-package-governor.log` shows the activation line.
+
+2. **The stale pins.**
+
+    Write a stale-pins `package.json` with the write tool:
+
     - chain pass corrects chain pins. The file lands governed. The tool result shows the author's
       content ONLY. The transcript contains no governor traces.
-3. Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
-4. Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
-5. Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
-6. Loop check: after all of the above, `hook-dsh-package-governor.log` shows no runaway recursion.
-7. Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
-8. Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
-   cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
-   inject/Config, no apply return).
 
-## 10. Interplay — the governor family
+3. **The second write.**
 
-The three plugins coexist on [`fs/observed`][dsh-fs-2]. EACH gates on its own basename
-(`package.json` / `package.json` / `Cargo.toml`). EACH writes its own ledger
-(`hook-dsh-package-governor.log` / `hook-dsh-package-pinner.log` / `hook-dsh-cargo-governor.log`).
+    Write the same file again immediately: no FS_STALE_VERSION (P₃ hygiene).
+
+4. **The public bump.**
+
+    Public-dep bump: ncu ran (ledger lines), version record fresh (U₂).
+
+5. **The single-line edit.**
+
+    Edit ONE line with the edit tool: the full pass runs (line-patch activation, live-verified).
+
+6. **The loop check.**
+
+    Loop check: after all of the above, `hook-dsh-package-governor.log` shows no runaway recursion.
+
+7. **The exclusion.**
+
+    Excluded-path write (`node_modules/…`): `skipped (excluded)`, file untouched.
+
+8. **The smoke suite.**
+
+    Smoke suite (49 checks against the BUILT output): byte-identical ledger strings, gates, breaker,
+    cooldown, in-flight, both update modes, refusal guard, loader contract (default-object
+    inject/Config, no apply return).
+
+## 10. Interplay - the governor family
+
+The three plugins coexist on [`fs/observed`][dsh-fs-2].
+
+EACH gates on its own basename (`package.json` / `package.json` / `Cargo.toml`).
+
+EACH writes its own ledger (`hook-dsh-package-governor.log` / `hook-dsh-package-pinner.log` /
+`hook-dsh-cargo-governor.log`).
+
 The [fs/observed][dsh-fs-2] trigger law and the exclusion-first rule are shared.
 
 Composition semantics: **pin → bump-exact** (a fully pinned manifest leaves the npm governor's
 update stage NOTHING to do; its chain pass may still re-canonicalize chain pins to `^resolved`).
-**chain > strip > normalize** is the cargo module's precedence. **keep-list wins** (the pinner's
+
+**chain > strip > normalize** is the cargo module's precedence.
+
+**keep-list wins** (the pinner's
 [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts)
-protects ranges as authored). The cargo module's keep-list — the same sidecar — wins over
-normalization, NEVER over the chain.
+protects ranges as authored).
+
+The cargo module's keep-list - the same sidecar - wins over normalization, NEVER over the chain.
 
 Activation of one NEVER implies another; the user decides.
 

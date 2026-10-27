@@ -10,18 +10,34 @@ configured kind table; the params carry the kind's arguments.
 
 ## 2. The pipeline (Function/Prepare)
 
-1. **Resolve** (Function/Resolve) - the intent's explicit targets (validated to exist under the
-   root), else the kind's default globs walked from the root (bounded: `maxTargets`, depth cap 8,
-   `node_modules`/`.git`/`Target`/ `dist` pruned).
-2. **Operate** (Function/Operate) - the deterministic transform per target, per kind: `version-bump`
-   rewrites the `"version"` field, `set-field` rewrites a named string field, `replace` applies a
-   literal find/replace. Declarative: find/replace strings, never executed here. A target with no
-   effective change is skipped (recorded in the journal, not silently).
-3. **Preview** (Function/Preview) - the matched region ±80 chars, before and after, capped at
-   `maxPreviewBytes` per entry. The diff, not the files.
-4. **Digest** (Function/Digest) - sha256 over `{ targets, operations }`; the proposal id is its
-   first 12 hex chars. The version token per target is the sha256 of the file's content at prepare
-   time (the fence).
+1. **The resolution (`Function/Resolve`).**
+
+    The resolution selects the intent's explicit targets (validated to exist under the root), else
+    the kind's default globs walked from the root (bounded: `maxTargets`, depth cap 8,
+    `node_modules`/`.git`/`Target`/ `dist` pruned).
+
+2. **The operation (`Function/Operate`).**
+
+    The operation applies the deterministic transform per target, per kind: `version-bump` rewrites
+    the `"version"` field, `set-field` rewrites a named string field, `replace` applies a literal
+    find/replace.
+
+    It is declarative: find/replace strings, never executed here.
+
+    A target with no effective change is skipped (recorded in the journal, not silently).
+
+3. **The preview (`Function/Preview`).**
+
+    The preview is the matched region, 80 chars either side, before and after, capped at
+    `maxPreviewBytes` per entry.
+
+    The diff, not the files.
+
+4. **The digest (`Function/Digest`).**
+
+    The digest is sha256 over `{ targets, operations }`; the proposal id is its first 12 hex chars.
+
+    The version token per target is the sha256 of the file's content at prepare time (the fence).
 
 ## 3. The output
 

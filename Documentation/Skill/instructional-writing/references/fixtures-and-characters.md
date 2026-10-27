@@ -14,8 +14,9 @@ Verify the tree:
 find Test -maxdepth 2 -type d
 ```
 
-A fixture lives in exactly one place. Do not copy one archive into another; the suite that consumes
-it reads the canonical path.
+A fixture lives in exactly one place.
+
+Do not copy one archive into another; the suite that consumes it reads the canonical path.
 
 ## The codepoint table
 
@@ -37,8 +38,9 @@ This file contains an em dash (U+2014) on line 3.
 ```
 
 The note is written with `raw-write` too: the `write` tool would normalize the note's own glyph, and
-the note would then be false. The verification is the byte check: the character the note names is
-present at the line it names.
+the note would then be false.
+
+The verification is the byte check: the character the note names is present at the line it names.
 
 ## The verification
 
@@ -50,14 +52,17 @@ print({hex(ord(c)) for c in text if ord(c) > 127})
 ' path/to/fixture
 ```
 
-The set must contain the deliberate code points and nothing stray. The consuming suite's fixture
-assertions are the final arbiter.
+The set must contain the deliberate code points and nothing stray.
+
+The consuming suite's fixture assertions are the final arbiter.
 
 ## The demo pairs
 
-A before/after demo shows the raw input and the normalized output. The raw side is byte-faithful
-(`raw-write`); the normalized side is ordinary ASCII (`write`). The pair is the proof; an ASCII
-stand-in on the raw side destroys it.
+A before/after demo shows the raw input and the normalized output.
+
+The raw side is byte-faithful (`raw-write`); the normalized side is ordinary ASCII (`write`).
+
+The pair is the proof; an ASCII stand-in on the raw side destroys it.
 
 ## Failure modes
 

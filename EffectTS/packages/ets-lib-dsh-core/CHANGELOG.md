@@ -8,7 +8,7 @@ All notable changes to this package will be documented in this file.
 
 - The role-prefix rename: the package reads `@playform/ets-lib-dsh-core` (the previous name stays in
   git history), and its manifest, README and source identifiers follow.
-- The repository-wide markdown clean-up standardised the README, CONTRIBUTING, CODE_OF_CONDUCT and
+- The repository-wide markdown clean-up standardized the README, CONTRIBUTING, CODE_OF_CONDUCT and
   CHANGELOG.
 - The README restructured onto the role / surfaces / ledger template.
 

@@ -2,7 +2,7 @@
 
 The P4 REPLAY BENCHMARK (the plan's section 10.5): a fixed fifty-call
 sequence replayed through the REAL built listener, scored against the
-hand-labelled lane targets, with the numbers printed in the run.
+hand-labeled lane targets, with the numbers printed in the run.
 
 ## The sequence
 
@@ -11,7 +11,7 @@ Config, Symbol), one agent per lane. The first call of each non-Version
 lane carries its user message (the R12 context word); the third same-intent
 call adds the R13 loop credit, which is what lifts the lane over the pack's
 0.75 gate (the plan's section 3.9 arithmetic). The expected block is the
-hand-labelled eventual target set per lane: the plan's canonical sets plus
+hand-labeled eventual target set per lane: the plan's canonical sets plus
 the long-tail files the lane touched and the pack does NOT name
 (`Site/Source/pages/setup.astro`, `Documentation/FRAMEWORK.md`,
 `EffectTS/smokes/README.md`, `Source/Test/Config-And-Activation`, `Target`),

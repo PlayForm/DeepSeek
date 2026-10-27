@@ -15,10 +15,12 @@ updated: 2026-10-20
 
 # Code Authoring
 
-Two halves, both hard rules: how files are modified, and how code is structured. The first half is
-the tool discipline; it exists because terminal content operations are invisible to the model's own
-record and bypass the governance hooks. The second half is the writing style; it exists so any
-definition can be borrowed in isolation.
+Two halves, both hard rules: how files are modified, and how code is structured.
+
+The first half is the tool discipline; it exists because terminal content operations are invisible
+to the model's own record and bypass the governance hooks.
+
+The second half is the writing style; it exists so any definition can be borrowed in isolation.
 
 ## When to use
 
@@ -33,15 +35,33 @@ definition can be borrowed in isolation.
 
 ### Tool discipline
 
-1. **Modify content only through `write`, `raw-write`, or `edit`.** Never `sed -i`, `awk`,
-   `perl -pi`, Python in-place rewrites, or heredoc surgery. The tools validate, record, and fire
-   the governance hooks; the shell does none of those.
-2. **Read content only through `read`, `grep`, and `glob`.** Never `cat`, `head`, `tail`, or content
-   `grep` in the terminal. The terminal runs commands: builds, tests, package managers, git checks,
-   listings.
-3. **Read before edit.** The `edit` tool matches literal text; if the match fails, re-read the exact
-   bytes and retry. Never fall back to a shell rewrite.
-4. **Choose the writer by the content, not by habit.**
+1. **The writers.**
+
+    Content is modified only through `write`, `raw-write`, or `edit`.
+
+    `sed -i`, `awk`, `perl -pi`, Python in-place rewrites, and heredoc surgery are never used.
+
+    The tools validate, record, and fire the governance hooks; the shell does none of those.
+
+2. **The readers.**
+
+    Content is read only through `read`, `grep`, and `glob`.
+
+    `cat`, `head`, `tail`, and a content `grep` in the terminal are never used.
+
+    The terminal runs commands: builds, tests, package managers, git checks, listings.
+
+3. **Read before edit.**
+
+    The `edit` tool matches literal text; if the match fails, the exact bytes are re-read and the
+    call is retried.
+
+    A shell rewrite is never a fallback.
+
+4. **The writer choice.**
+
+    The writer is chosen by the content, not by habit.
+
     - `write`: ordinary content. Streamed text is normalized (dashes, quotes, ellipsis, spaces,
       invisibles, fullwidth), so write ASCII.
     - `raw-write`: content whose bytes must survive exactly (typographic fixtures, exact copies,
@@ -49,61 +69,138 @@ definition can be borrowed in isolation.
       absolute paths: relative paths resolve against the profile root, not the cwd.
     - `edit`: a literal replacement inside an existing file; identity-exempt, so it preserves any
       glyph outside the replaced span.
-5. **`rm` is allowed for deletion.** It is a command operation, not a content edit. Verify the
-   resolved absolute path first; never delete a path built from an unverified variable.
-6. **The same rules bind every subagent.** A coder prompt states both prohibitions (no terminal
-   content edits, no terminal content reads), the allowed `rm`, and the read-before-edit rule.
+
+5. **The deletion.**
+
+    `rm` is allowed for deletion, because it is a command operation, not a content edit.
+
+    The resolved absolute path is verified first; a path built from an unverified variable is never
+    deleted.
+
+6. **The subagents.**
+
+    The same rules bind every subagent.
+
+    A coder prompt states both prohibitions (no terminal content edits, no terminal content reads),
+    the allowed `rm`, and the read-before-edit rule.
 
 ### Byte integrity
 
-7. **Never write NUL bytes or control characters** outside `\n`, `\r`, `\t`.
-8. **Never build content through NUL-terminated or NUL-separated conventions** (`printf '%s\0'`,
-   `-print0` into a file, buffer padding).
-9. **Never generate the escape representation of NUL** (`\0`, `\x00`, `\u0000`) in content that
-   could materialize it.
-10. **After any bulk transformation, scan the touched files** for zero NUL bytes and valid UTF-8,
-    and spot-read one file, before reporting done.
+7. **The NUL ban.**
+
+    NUL bytes and control characters are never written outside `\n`, `\r`, `\t`.
+
+8. **The NUL conventions.**
+
+    Content is never built through NUL-terminated or NUL-separated conventions (`printf '%s\0'`,
+    `-print0` into a file, buffer padding).
+
+9. **The escape form.**
+
+    The escape representation of NUL (`\0`, `\x00`, `\u0000`) is never generated in content that
+    could materialize it.
+
+10. **The bulk scan.**
+
+    After any bulk transformation, the touched files are scanned for zero NUL bytes and valid UTF-8,
+    and one file is spot-read, before done is reported.
 
 ### Git
 
-11. **Git is read-only checks.** Allowed: `status`, `log`, `diff`, `show`, `rev-parse`, `ls-files`,
-    `fetch`, `log --diff-filter=D`. Forbidden: `add`, `commit`, `reset`, `push`, `tag`, `rm`,
-    `checkout`, `branch`, `merge`, `stash`, `clean`.
-12. **Report READY-TO-COMMIT.** A finished deliverable lists the exact files and a suggested commit
-    message; the user commits.
+11. **The allowed list.**
+
+    Git is read-only checks.
+
+    Allowed: `status`, `log`, `diff`, `show`, `rev-parse`, `ls-files`, `fetch`,
+    `log --diff-filter=D`.
+
+    Forbidden: `add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`, `merge`,
+    `stash`, `clean`.
+
+12. **The commit.**
+
+    The report is READY-TO-COMMIT.
+
+    A finished deliverable lists the exact files and a suggested commit message; the user commits.
 
 ### Writing style
 
-13. **One definition per file.** One exported function or type per leaf, in its own folder; small
-    private helpers used only by that definition may share the leaf. The assembly surface (the
-    entry) is wiring only.
-14. **Nameless default exports.** `export default async () => {}` everywhere. Only the plugin entry
-    carries the loader-contract names: `name`, `apply`, `Config`, `inject`, and the assembled
-    default object.
-15. **Names: PascalCase, one word, action-oriented, present tense, singular, full words.**
-    `Configuration`, not `Config`; `Environment`, not `Env`. Genuine acronyms stay (DSH, ETS, CCR,
-    JSON, URL). Documented exceptions: the loader's `Config` export, machine-read contract names,
-    and the `State`/`Set`/`Count` domain vocabulary.
-16. **Inline single-use bindings.** A binding survives only if used more than once, or if it names a
-    setup-time invariant the rest of the code must not recompute.
-17. **`switch (true)` for guard chains.** Three or more `if (x) return y;` lines become a
-    `switch (true)` with a returning arm per case and a `default` that returns or throws. Do not
-    force it on a single `if`, loops, or arms with side effects.
-18. **Depth is earned by specificity; barrels group siblings; the most-used modules sit
-    shallowest.**
+13. **One definition per file.**
+
+    One exported function or type sits per leaf, in its own folder; small private helpers used only
+    by that definition may share the leaf.
+
+    The assembly surface (the entry) is wiring only.
+
+14. **Nameless default exports.**
+
+    `export default async () => {}` everywhere.
+
+    Only the plugin entry carries the loader-contract names: `name`, `apply`, `Config`, `inject`,
+    and the assembled default object.
+
+15. **The names.**
+
+    Names are PascalCase, one word, action-oriented, present tense, singular, full words.
+
+    `Configuration`, not `Config`; `Environment`, not `Env`.
+
+    Genuine acronyms stay (DSH, ETS, CCR, JSON, URL).
+
+    Documented exceptions: the loader's `Config` export, machine-read contract names, and the
+    `State`/`Set`/`Count` domain vocabulary.
+
+16. **The inlining.**
+
+    A binding survives only if used more than once, or if it names a setup-time invariant the rest
+    of the code must not recompute.
+
+17. **The guard chains.**
+
+    Three or more `if (x) return y;` lines become a `switch (true)` with a returning arm per case
+    and a `default` that returns or throws.
+
+    It is not forced on a single `if`, loops, or arms with side effects.
+
+18. **The depth.**
+
+    Depth is earned by specificity; barrels group siblings; the most-used modules sit shallowest.
 
 ## The workflow
 
-1. Read the target file (and its neighbours) with the `read` tool.
-2. Decide the writer: `write` for ordinary content, `raw-write` for byte-faithful content, `edit`
-   for a literal replacement.
-3. Make one logical change per call. For a refactor, keep the change behavior-identical (section:
-   refactors).
-4. Verify: the relevant arbiter. Package code: the bundle's smoke suite (`smoke-writing`). Site:
-   `cd Site && pnpm prepublishOnly`, then inspect `Site/Target/`. Docs: re-read the changed span.
-5. If a bulk transformation was involved, run the byte scan (rule 10).
-6. Report: files touched, the arbiter's printed result, and READY-TO-COMMIT with the suggested
-   message.
+1. **The read.**
+
+    The target file (and its neighbours) is read with the `read` tool.
+
+2. **The writer.**
+
+    The writer is decided: `write` for ordinary content, `raw-write` for byte-faithful content,
+    `edit` for a literal replacement.
+
+3. **The change.**
+
+    One logical change is made per call.
+
+    For a refactor, the change stays behavior-identical (section: refactors).
+
+4. **The verification.**
+
+    The relevant arbiter runs.
+
+    Package code: the bundle's smoke suite (`smoke-writing`).
+
+    Site: `cd Site && pnpm prepublishOnly`, then inspect `Site/Target/`.
+
+    Docs: re-read the changed span.
+
+5. **The byte scan.**
+
+    If a bulk transformation was involved, the byte scan runs (rule 10).
+
+6. **The report.**
+
+    The report lists the files touched, the arbiter's printed result, and READY-TO-COMMIT with the
+    suggested message.
 
 ## Decision table
 

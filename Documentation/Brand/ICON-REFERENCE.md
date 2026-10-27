@@ -21,7 +21,9 @@ statuses:
 # ICON-REFERENCE.md - the 29 motifs, cut out and read
 
 The sheet (`Temporary/Icon-Reference/Reference.jpg`, 730 x 975, cream paper) is a 6 x 5 lattice of
-29 motifs. This file is the per-motif reading behind `ICON-GRAMMAR.md`: each motif was cut out at 4x
+29 motifs.
+
+This file is the per-motif reading behind `ICON-GRAMMAR.md`: each motif was cut out at 4x
 (`Motifs/<id>.png`), the row sheets (`Rows/Row-<n>.png`) were read at 3x, and the measurements come
 from `Temporary/Icon-Reference/Analyze.py` (which writes `Analysis.json`).
 
@@ -42,7 +44,9 @@ from `Temporary/Icon-Reference/Analyze.py` (which writes `Analysis.json`).
 ## The motifs
 
 Columns: the class (the body type), the order, the centre, the frame, the satellites, the accent and
-the stroke width. "None" means the zone is empty.
+the stroke width.
+
+"None" means the zone is empty.
 
 | Id   | Class              | Order               | Body                                             | Core                        | Rim                            | Orbit                         | Accent                  | Stroke |
 | ---- | ------------------ | ------------------- | ------------------------------------------------ | --------------------------- | ------------------------------ | ----------------------------- | ----------------------- | ------ |
@@ -78,18 +82,38 @@ the stroke width. "None" means the zone is empty.
 
 ## The five classes, read together
 
-1. **Spike stars** (R1C2, R2C2, R3C4, R4C3, R4C4, R5C1, R5C2, R6C4): a point is a concave-sided
-   triangle; the body is n of them; the centre is small; the orbit is dots or nothing. This is the
-   hook grammar: an arm intercepts the flow.
-2. **Scroll and petal bodies** (R1C1, R1C3, R1C4, R1C5, R2C1, R2C3, R3C1, R4C1, R4C2, R5C4): curved
-   hooks, leaves, teardrops and crescents; the detail lives in the curvature, not the count. This is
-   the client and library grammar.
-3. **Tiles** (R2C4, R2C5, R3C2, R3C3, R6C2, R6C3, R6C1): a square or diamond frame with a repeat
-   inside; the frame is the contract and the repeat is the machinery. This is the plugin grammar.
-4. **Interlace** (R4C5, R5C3, R5C5): bands crossing over and under; the under-band is broken at the
-   crossing. This is the plugin grammar's seam reading.
-5. **Webs** (R6C4): spokes plus concentric arcs; the only motif with a 12-fold repetition. This is
-   the library's tracing reading.
+1. **Spike stars.**
+
+    (R1C2, R2C2, R3C4, R4C3, R4C4, R5C1, R5C2, R6C4): a point is a concave-sided triangle; the body
+    is n of them; the centre is small; the orbit is dots or nothing.
+
+    This is the hook grammar: an arm intercepts the flow.
+
+2. **Scroll and petal bodies.**
+
+    (R1C1, R1C3, R1C4, R1C5, R2C1, R2C3, R3C1, R4C1, R4C2, R5C4): curved hooks, leaves, teardrops
+    and crescents; the detail lives in the curvature, not the count.
+
+    This is the client and library grammar.
+
+3. **Tiles.**
+
+    (R2C4, R2C5, R3C2, R3C3, R6C2, R6C3, R6C1): a square or diamond frame with a repeat inside; the
+    frame is the contract and the repeat is the machinery.
+
+    This is the plugin grammar.
+
+4. **Interlace.**
+
+    (R4C5, R5C3, R5C5): bands crossing over and under; the under-band is broken at the crossing.
+
+    This is the plugin grammar's seam reading.
+
+5. **Webs.**
+
+    (R6C4): spokes plus concentric arcs; the only motif with a 12-fold repetition.
+
+    This is the library's tracing reading.
 
 ## What the generator took from the sheet
 

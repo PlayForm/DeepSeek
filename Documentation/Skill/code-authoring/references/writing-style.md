@@ -1,8 +1,9 @@
 # The Writing Style: Seven Rules
 
 The style exists for one property: any definition can be borrowed in isolation, and every file reads
-the same way. The rules are not aesthetic preferences; each one removes a class of coupling or
-ambiguity.
+the same way.
+
+The rules are not aesthetic preferences; each one removes a class of coupling or ambiguity.
 
 ## 1. One definition per file
 
@@ -21,14 +22,18 @@ Source/
       index.ts                one type
 ```
 
-A small private helper used only by that definition may share the leaf. A helper used by two leaves
-is itself a definition and gets its own.
+A small private helper used only by that definition may share the leaf.
 
-The assembly surface is the one file allowed to be wiring only. When it grows a body, the monolith
-is returning.
+A helper used by two leaves is itself a definition and gets its own.
+
+The assembly surface is the one file allowed to be wiring only.
+
+When it grows a body, the monolith is returning.
 
 Bad shape: `utils.ts` with fourteen unrelated functions, `types.ts` with every interface, `index.ts`
-with wiring plus leaked logic. Borrowing from that shape means borrowing everything.
+with wiring plus leaked logic.
+
+Borrowing from that shape means borrowing everything.
 
 ## 2. Nameless default exports
 
@@ -38,7 +43,9 @@ export default interface LedgerEntry { ... };
 ```
 
 The folder already names the definition; a named export repeats it and creates a second place to
-keep in sync. The exception is the plugin entry, which carries exactly the loader-contract names:
+keep in sync.
+
+The exception is the plugin entry, which carries exactly the loader-contract names:
 
 ```typescript
 export const name = "hook-dsh-example";
@@ -48,7 +55,9 @@ export const inject = ...;
 export default { name, apply, Config, inject };
 ```
 
-Named exports anywhere else are a finding. So is a non-contract named export at the entry.
+Named exports anywhere else are a finding.
+
+So is a non-contract named export at the entry.
 
 ## 3. Names: PascalCase, one word, action-oriented, present tense, singular, full words
 
@@ -79,8 +88,10 @@ Gov -> Governor           Id -> Identifier             Spec -> Specification
 Util -> Utility
 ```
 
-Genuine acronyms stay: DSH, ETS, CCR, JSON, HTML, URL, HTTP, UI, TTL, NPM, SVG, FS. The distinction:
-an acronym names a thing (a protocol, a format, a product); a word-abbreviation shortens a word.
+Genuine acronyms stay: DSH, ETS, CCR, JSON, HTML, URL, HTTP, UI, TTL, NPM, SVG, FS.
+
+The distinction: an acronym names a thing (a protocol, a format, a product); a word-abbreviation
+shortens a word.
 
 Documented exceptions:
 
@@ -106,8 +117,9 @@ await Write(File, await Read(File));
 ```
 
 The judgment call: if inlining makes a line unreadable, or the name explains a subtle condition the
-expression does not show, the binding may survive. The test is whether the name adds information,
-not whether the expression is short.
+expression does not show, the binding may survive.
+
+The test is whether the name adds information, not whether the expression is short.
 
 ## 5. switch (true) for guard chains
 
@@ -124,8 +136,10 @@ switch (true) {
 }
 ```
 
-Every arm returns or throws; the `default` closes the set. Do not force the form on a single `if`,
-on loops, or on arms that need side effects beyond returning.
+Every arm returns or throws; the `default` closes the set.
+
+Do not force the form on a single `if`, on loops, or on arms that need side effects beyond
+returning.
 
 ## 6. Hierarchy: barrels, depth with specificity, utility floats up
 
@@ -135,8 +149,11 @@ on loops, or on arms that need side effects beyond returning.
 
 ## 7. Behavior-identical refactors
 
-A refactor changes structure, not behavior. The ledger strings, the observable outputs, and the
-silence invariant stay byte-identical. The smoke suite is the arbiter, and its counts do not change.
+A refactor changes structure, not behavior.
+
+The ledger strings, the observable outputs, and the silence invariant stay byte-identical.
+
+The smoke suite is the arbiter, and its counts do not change.
 
 See `review-and-refactors.md` for the protocol.
 

@@ -129,14 +129,14 @@ and closed by the plugin's own effect disposer. The domain declares NO `compatib
 library rejects an entry that is not strictly below the declared version, so `[1]` against version 1
 throws at load. Every state change writes the FULL state into the four tables and RECONCILES each
 table first (a record the live state no longer holds is deleted, so a `clear` cannot resurrect a
-member on the next restart); the writes are serialised on the plugin's own chain, so the
+member on the next restart); the writes are serialized on the plugin's own chain, so the
 open/recovery always lands before the first write and the smokes await the chain without a sleep.
 
 The **FALLBACK** store is the well-known JSON file (default `~/.dsh/batch-state.json`), holding
 `{ members: Member[], queue: string[], proposals: Entry[], gates: Gate[] }`. It is written and read
 only when no storage facility is provided or the domain's open fails (the loud
 `storage open failed: <reason>` line, then the fallback recovers). Its write is SYNCHRONOUS - the
-file-only lane's behaviour, unchanged.
+file-only lane's behavior, unchanged.
 
 On mount the recovery restores the members, the queue, the spliced proposals and the gates from
 whichever store is active (the shared `Function/Restore`); a member that recovered as `active` is

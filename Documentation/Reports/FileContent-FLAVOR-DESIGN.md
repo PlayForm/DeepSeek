@@ -80,8 +80,9 @@ visible, opt-in tool call.
 | Edit exemption                     | `bundles/lib-dsh-core/Source/Stream/Chunk.ts` (name-exempt `edit`/`raw-write`) | protects the old_string contract                                              | _defines_ the conflict surface below                        |
 
 **Not covered**: any file already on disk that the agent did not just write - pre-existing files,
-git-cloned material, script-created files (the execute-code gap). No mechanism rewrites those today,
-by design.
+git-cloned material, script-created files (the execute-code gap).
+
+No mechanism rewrites those today, by design.
 
 ## 3. The design space
 
@@ -136,9 +137,13 @@ by design.
 ## 5. Recommendation
 
 **Ship (a): a `normalize-file` tool as a new bundle `plugin-dsh-normalize-file`, an eighth sibling
-in the normalize family. Defer (b)/(c)'s watch arm - the edit-contract conflict is unsolved and the
-family has no mechanism for it.** The tool layer (raw-write) covers writes; this covers "already on
-disk"; the background rewrite stays out.
+in the normalize family.**
+
+**Defer (b)/(c)'s watch arm - the edit-contract conflict is unsolved and the family has no mechanism
+for it.**
+
+The tool layer (raw-write) covers writes; this covers "already on disk"; the background rewrite
+stays out.
 
 ### Coder spec shape (the family's exact pattern)
 

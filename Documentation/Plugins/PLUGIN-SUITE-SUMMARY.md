@@ -122,6 +122,10 @@ index: Documentation/INDEX.md
 The new packages WITHOUT an ETS twin: the two client panels (client-dsh-panel-family,
 client-dsh-panel-family-host) and four orchestration candidates (plugin-dsh-pass-on,
 plugin-dsh-ingester, plugin-dsh-pattern, hook-dsh-batch-decision) - the MANIFEST declares no `ets-*`
-entries for them. The two completion program's libraries now HAVE ETS twins (ets-lib-dsh-trace,
-ets-lib-dsh-pack), so they are no longer in that set. The option-B Learning-Loop exclusion remains
-the only Classic-only test surface, plus the pattern/batch-decision Classic-only candidates.
+entries for them.
+
+The two completion program's libraries now HAVE ETS twins (ets-lib-dsh-trace, ets-lib-dsh-pack), so
+they are no longer in that set.
+
+The option-B Learning-Loop exclusion remains the only Classic-only test surface, plus the
+pattern/batch-decision Classic-only candidates.

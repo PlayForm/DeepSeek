@@ -1,7 +1,8 @@
 # The Environment: Concurrency, Scope, and Edit Discipline
 
-A delegated lane works inside a tree that other lanes and the user are also changing. This file
-states the assumptions that keep that safe.
+A delegated lane works inside a tree that other lanes and the user are also changing.
+
+This file states the assumptions that keep that safe.
 
 ## You are never alone
 
@@ -20,8 +21,9 @@ git log --oneline -5
 git -C Site status --short # when the site is in scope
 ```
 
-Uncommitted changes may be yours, another lane's, or the user's. Do not "clean up" what you did not
-create.
+Uncommitted changes may be yours, another lane's, or the user's.
+
+Do not "clean up" what you did not create.
 
 ## Stay in scope
 
@@ -33,28 +35,48 @@ create.
 
 ## Concurrency is earned
 
-Two lanes may run at once only when their file sets are provably disjoint. The proof is a list: the
-files lane A will touch, the files lane B will touch, and no intersection. "They touch different
-things" is not a proof; "they touch different files" with the list is.
+Two lanes may run at once only when their file sets are provably disjoint.
 
-When in doubt, serialize. A lost update is more expensive than a queue.
+The proof is a list: the files lane A will touch, the files lane B will touch, and no intersection.
+
+"They touch different things" is not a proof; "they touch different files" with the list is.
+
+When in doubt, serialize.
+
+A lost update is more expensive than a queue.
 
 ## The edit discipline
 
-1. Read the file (and its neighbours) first.
-2. Make one logical change per call through the write/raw-write/edit tools. Never a terminal content
-   operation (`code-authoring`).
-3. Run the relevant arbiter after each touched file:
+1. **The read.**
+
+    The file and its neighbours are read first.
+
+2. **The change.**
+
+    One logical change is made per call through the write/raw-write/edit tools.
+
+    A terminal content operation is never used (`code-authoring`).
+
+3. **The arbiter.**
+
+    The relevant arbiter runs after each touched file:
+
     - package code: the bundle's smoke suite (`smoke-writing`);
     - site: `cd Site && pnpm prepublishOnly`, then grep the built HTML;
     - docs: re-read the changed span.
-4. If the arbiter fails, fix it before the next file. Never leave the tree broken and continue.
+
+4. **The failure.**
+
+    If the arbiter fails, it is fixed before the next file.
+
+    The tree is never left broken and continued.
 
 ## The build-verified rule
 
 "Build-verified" means the arbiter for the touched surface has passed after the last change, not
-that a build was run at some point. A lane that reports success without the printed result has not
-verified anything.
+that a build was run at some point.
+
+A lane that reports success without the printed result has not verified anything.
 
 ## Failure modes
 

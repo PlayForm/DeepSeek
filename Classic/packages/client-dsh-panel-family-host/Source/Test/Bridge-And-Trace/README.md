@@ -29,7 +29,7 @@ built closure-factory bundle executed through a fake `window.__ModuleLoader__`.
   `ring`.
 - T2: `on` forwards a bus event to its listener with the bus-completed
   envelope (the trace id, the kind, the payload).
-- T3: `ring` reads the bus newest first and honours the limit.
+- T3: `ring` reads the bus newest first and honors the limit.
 - T4: without the bus no forwarder is provided (the panel's documented static
   fallback).
 - C1: the `./client` half requires the `remote` gateway and waits for the

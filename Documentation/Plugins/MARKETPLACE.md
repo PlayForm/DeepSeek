@@ -22,9 +22,10 @@ index: Documentation/INDEX.md
 | DSH (Discover, `plugin_market`)             | `https://deepseek.playform.cloud/marketplace.json`                             |
 | The same file, straight from the repository | `https://raw.githubusercontent.com/PlayForm/DeepSeek/Current/marketplace.json` |
 
-The host refuses redirects, so configure the final URL, not a short link. The site URL needs the
-`Site` repository pushed and the Pages deployment finished; the raw URL needs only the root
-repository pushed to `Current`.
+The host refuses redirects, so configure the final URL, not a short link.
+
+The site URL needs the `Site` repository pushed and the Pages deployment finished; the raw URL needs
+only the root repository pushed to `Current`.
 
 ## 2. Add it to a profile
 
@@ -40,8 +41,9 @@ Or in the profile's `cordis.patch.yml`:
           - https://deepseek.playform.cloud/marketplace.json
 ```
 
-The `plugin-market` row ships in `@deepseek-ai/dsh-experimental-plugin-market-bundle`. Without that
-bundle there is no Discover tab and no `plugin_market` tool.
+The `plugin-market` row ships in `@deepseek-ai/dsh-experimental-plugin-market-bundle`.
+
+Without that bundle there is no Discover tab and no `plugin_market` tool.
 
 ## 3. The two files
 
@@ -50,9 +52,12 @@ bundle there is no Discover tab and no `plugin_market` tool.
 | `marketplace.json` (repository root) | the source of truth, committed with the tree |
 | `Site/Public/marketplace.json`       | the byte-identical copy the site builds from |
 
-`Site/` is its own repository, so its CI checkout cannot read the root copy. The served copy is
-committed beside it, and the generator writes both in one run. The site's build minifies the JSON it
-serves; the document is unchanged and the host parses it as JSON.
+`Site/` is its own repository, so its CI checkout cannot read the root copy.
+
+The served copy is committed beside it, and the generator writes both in one run.
+
+The site's build minifies the JSON it serves; the document is unchanged and the host parses it as
+JSON.
 
 ## 4. Regenerate
 

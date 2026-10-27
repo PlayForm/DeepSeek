@@ -1,16 +1,21 @@
 # The Delegation Loop
 
-The loop is the parent's discipline. It turns a request into a spec, a spec into a verified result,
-and a result into a report the user can act on.
+The loop is the parent's discipline.
+
+It turns a request into a spec, a spec into a verified result, and a result into a report the user
+can act on.
 
 ## Stage 1: Receive
 
-Accept the request as it arrives. Structuring it is the parent's job, not the user's. Do not
-delegate the raw sentence: the child would inherit the ambiguity.
+The parent accepts the request as it arrives.
+
+Structuring it is the parent's job, not the user's.
+
+The raw sentence is not delegated, because the child would inherit the ambiguity.
 
 ## Stage 2: Formalize
 
-Write the spec with six items:
+The spec is written with six items:
 
 | Item          | The question it answers                                   |
 | ------------- | --------------------------------------------------------- |
@@ -21,14 +26,16 @@ Write the spec with six items:
 | Arbiter       | The command that decides success, and its expected output |
 | Report format | The shape of the answer, with `file:line` anchors         |
 
-Attach the shared facts the child cannot look up: the current counts, the ledger strings, the laws
-it must follow. Ambiguity resolves to the most faithful reading, stated in the spec as an
-assumption.
+The shared facts the child cannot look up are attached: the current counts, the ledger strings, the
+laws it must follow.
+
+Ambiguity resolves to the most faithful reading, stated in the spec as an assumption.
 
 ## Stage 3: Pick the strain and the route
 
-Pick the strain (`strains.md`), then the model and effort (`task-routing`). Pass the route
-explicitly: provider, model, effort.
+The strain is picked (`strains.md`), then the model and effort (`task-routing`).
+
+The route is passed explicitly: provider, model, effort.
 
 ## Stage 4: Delegate
 
@@ -48,9 +55,13 @@ The spec is self-contained in both cases.
 
 ## Stage 6: Verify
 
-Read the lane's printed arbiter results. Run your own free, read-only checks on surprising claims
-(`task-routing`'s adjudication protocol). Trust printed totals over prose: a report that says "all
-tests pass" without the printed count is not evidence.
+The lane's printed arbiter results are read.
+
+The parent runs its own free, read-only checks on surprising claims (`task-routing`'s adjudication
+protocol).
+
+Printed totals are trusted over prose: a report that says "all tests pass" without the printed count
+is not evidence.
 
 ## Stage 7: Report
 
@@ -61,13 +72,18 @@ The report contains:
 - the residuals and the decisions the user must make;
 - the READY-TO-COMMIT list with a suggested message.
 
-The user commits. Agents never do.
+The user commits.
+
+Agents never do.
 
 ## The non-execution boundary
 
 The parent does not execute the lane's work while processing feedback: no builds, no edits, no
-measurement runs. It relays the feedback verbatim, keeps the record, and spot-checks read-only. The
-lane investigates, executes, and reports its own numbers.
+measurement runs.
+
+It relays the feedback verbatim, keeps the record, and spot-checks read-only.
+
+The lane investigates, executes, and reports its own numbers.
 
 This boundary is what keeps the roles distinct: a parent that starts editing becomes a second,
 uncoordinated coder.

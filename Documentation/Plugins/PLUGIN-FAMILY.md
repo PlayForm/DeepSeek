@@ -163,10 +163,11 @@ statuses:
 | 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | no       |
 
 **EffectTS twins for the delivery (30):** `@playform/ets-*` counterparts of the 30 packages above
-marked "yes", under `EffectTS/packages/`. The current full count of ETS twins is **47** (the 48
-EffectTS packages minus the `ets-base-dsh` base), including the two libraries' twins
-(`ets-lib-dsh-trace`, `ets-lib-dsh-pack`) listed below and the 15 pre-existing packages' twins
-listed above.
+marked "yes", under `EffectTS/packages/`.
+
+The current full count of ETS twins is **47** (the 48 EffectTS packages minus the `ets-base-dsh`
+base), including the two libraries' twins (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`) listed below and
+the 15 pre-existing packages' twins listed above.
 
 **The completion program's libraries — Classic (2) + their ETS twins (2, `ets-lib-dsh-trace` /
 `ets-lib-dsh-pack`):**
@@ -234,11 +235,17 @@ Absolute-link rule for any repo target in docs/prompts/skills:
 
 ### The seven normalize flavors
 
-ALL flavors hook `llm/stream` (the interceptable wrapper around EVERY streaming model call). They
-rewrite their character family LIVE in the transcript - BOTH the live UI and the durable transcript.
-The normalization is deliberately visible. The replacement is per-chunk, single-character
-(chunk-boundary-safe by construction): NO lookahead/lookbehind, NO multi-character sequences. Two
-register tools: `raw-write` (per-call `normalize` selection, default false = verbatim) and
+ALL flavors hook `llm/stream` (the interceptable wrapper around EVERY streaming model call).
+
+They rewrite their character family LIVE in the transcript - BOTH the live UI and the durable
+transcript.
+
+The normalization is deliberately visible.
+
+The replacement is per-chunk, single-character (chunk-boundary-safe by construction): NO
+lookahead/lookbehind, NO multi-character sequences.
+
+Two register tools: `raw-write` (per-call `normalize` selection, default false = verbatim) and
 `normalize-file` (the whole-file pass, write ONLY when something changed).
 
 - **`@playform/hook-dsh-normalize-dash`** - the dash flavor. It maps em and en dashes and their
@@ -290,9 +297,13 @@ register tools: `raw-write` (per-call `normalize` selection, default false = ver
 
 ## 3. The config keys (from the packages' SCHEMs/READMEs)
 
-EVERY plugin's config schema is built through the factory's `Schema` factory. The schema is ONE
-shared volatile block plus the module's own fields. Invalid configuration fails at load. EVERY
-default is validated and filled.
+EVERY plugin's config schema is built through the factory's `Schema` factory.
+
+The schema is ONE shared volatile block plus the module's own fields.
+
+Invalid configuration fails at load.
+
+EVERY default is validated and filled.
 
 | Key                      | Owner                | Effect                                                                                                      | Default                  |
 | ------------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------ |
@@ -314,8 +325,11 @@ default is validated and filled.
 | `govern` (per call)      | `raw-write`          | the direct-govern selection: true / "all" / a step-name array / false = the escape hatch                    | absent                   |
 
 The defaults-off posture: `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off.
-The family changes nothing until it is told to. The escape hatches: the `exclude` fence, the
-keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` selection.
+
+The family changes nothing until it is told to.
+
+The escape hatches: the `exclude` fence, the keep-list sidecars, the raw marker
+(`__normalize: false`), the `govern: false` selection.
 
 ## 4. The ledger / logFile conventions
 
@@ -337,14 +351,34 @@ keep-list sidecars, the raw marker (`__normalize: false`), the `govern: false` s
 
 ## 5. The wiring (the four steps)
 
-1. Add the bundles to the profile (`~/.dsh/profiles/<name>/package.json`) as `link:` dependencies
-   and in `dsh.profile.bundles`. The list is what activates them.
-2. Add the patch entries (the profile's `cordis.patch.yml`) - ONE insert row per bundle
-   (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`). The config fields come
-   straight from the bundle's schema.
-3. Restart the host. The loader activates the entry from `Target/Library.js` and inserts the patch
-   rows at startup.
-4. Verify the ledgers. Look for EACH plugin's activation line in its own `~/.dsh/<identity>.log`.
+1. **The bundles.**
 
-Note: load order is NOT list order (the pinner can activate before the governor). NEVER rely on the
-bundle-list order for step ordering. EACH plugin's ledger answers for its own activation.
+    Add the bundles to the profile (`~/.dsh/profiles/<name>/package.json`) as `link:` dependencies
+    and in `dsh.profile.bundles`.
+
+    The list is what activates them.
+
+2. **The patch entries.**
+
+    Add the patch entries (the profile's `cordis.patch.yml`) - ONE insert row per bundle
+    (`- insert: [- id: <pkg>, name: "@playform/<pkg>", config: {...}]`).
+
+    The config fields come straight from the bundle's schema.
+
+3. **The restart.**
+
+    Restart the host.
+
+    The loader activates the entry from `Target/Library.js` and inserts the patch rows at startup.
+
+4. **The ledgers.**
+
+    Verify the ledgers.
+
+    Look for EACH plugin's activation line in its own `~/.dsh/<identity>.log`.
+
+Note: load order is NOT list order (the pinner can activate before the governor).
+
+NEVER rely on the bundle-list order for step ordering.
+
+EACH plugin's ledger answers for its own activation.

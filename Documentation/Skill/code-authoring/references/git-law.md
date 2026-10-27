@@ -1,6 +1,8 @@
 # The Git Law: Checks Only, Never Mutate
 
-The rule: git is a read-only inspection surface for agents. The user owns every mutation.
+The rule: git is a read-only inspection surface for agents.
+
+The user owns every mutation.
 
 ## Allowed
 
@@ -20,8 +22,10 @@ git tag           git rm            git checkout      git branch
 git merge         git stash         git clean
 ```
 
-The list is exhaustive, not illustrative. A command that mutates the index, the working tree, refs,
-or history is forbidden even when it looks harmless or reversible.
+The list is exhaustive, not illustrative.
+
+A command that mutates the index, the working tree, refs, or history is forbidden even when it looks
+harmless or reversible.
 
 ## The deliverable: READY-TO-COMMIT
 
@@ -41,21 +45,33 @@ hands.
 
 ## Why
 
-1. A commit, reset, or clean can destroy uncommitted work the user has not seen.
-2. History rewrites are not reliably reversible from the agent's side.
-3. The user's repository state is the user's decision, not a side effect of a task.
+1. **The lost work.**
+
+    A commit, reset, or clean can destroy uncommitted work the user has not seen.
+
+2. **The rewrite.**
+
+    History rewrites are not reliably reversible from the agent's side.
+
+3. **The ownership.**
+
+    The user's repository state is the user's decision, not a side effect of a task.
 
 ## Two repositories
 
-The monorepo root and `Site/` are separate git repositories. Check both when the work spans them:
+The monorepo root and `Site/` are separate git repositories.
+
+Check both when the work spans them:
 
 ```sh
 git status --short
 git -C Site status --short
 ```
 
-A site change is not visible in the root status. A READY-TO-COMMIT report for site work names the
-`Site/` files and says which repository they belong to.
+A site change is not visible in the root status.
+
+A READY-TO-COMMIT report for site work names the `Site/` files and says which repository they belong
+to.
 
 ## Edge cases
 

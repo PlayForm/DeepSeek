@@ -1,7 +1,8 @@
 # The Repository Map
 
-The monorepo has seven working trees. Know which one you are in before you edit; most early mistakes
-are wrong-tree mistakes.
+The monorepo has seven working trees.
+
+Know which one you are in before you edit; most early mistakes are wrong-tree mistakes.
 
 ## The trees
 
@@ -15,9 +16,13 @@ are wrong-tree mistakes.
 | `Maintain/`      | `Run/Smokes/Index.mjs`, `Run/Wiring/Index.mjs`, `Format/Index.sh`, `Check/Lychee/Index.sh` | Root repo          |
 | `diagrams/`      | Source diagrams                                                                            | Root repo          |
 
-`Site/` is listed in the root `.gitignore`. Commit site work in `Site/`, never from the root.
+`Site/` is listed in the root `.gitignore`.
 
-`Boilerplate/` no longer exists. Any document that still calls it a third implementation is stale.
+Commit site work in `Site/`, never from the root.
+
+`Boilerplate/` no longer exists.
+
+Any document that still calls it a third implementation is stale.
 
 ## The two release groups
 
@@ -26,10 +31,13 @@ are wrong-tree mistakes.
 | Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript, no framework   |
 | EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
 
-All packages sit at `0.1.0` (unpublished). The original 14 plugins were joined on 2026-10-22 by 36
-new Classic packages (the workspace family, the suggesters, the orchestration set, the client
-family) and 30 of their ETS twins. Never mix the groups in one dependency graph: the EffectTS
-`Update` returns Effect envelopes, not the Classic dispatch envelope.
+All packages sit at `0.1.0` (unpublished).
+
+The original 14 plugins were joined on 2026-10-22 by 36 new Classic packages (the workspace family,
+the suggesters, the orchestration set, the client family) and 30 of their ETS twins.
+
+Never mix the groups in one dependency graph: the EffectTS `Update` returns Effect envelopes, not
+the Classic dispatch envelope.
 
 Verify the inventory:
 
@@ -71,9 +79,12 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
 
 ## The site
 
-The site is an Astro static build: `Source/` in, `Target/` out. Its own `package.json`,
-`astro.config.ts`, and `README.md`. 24 built HTML pages: the landing page, the plugins registry, 15
-plugin detail pages, setup, versions, flavors, models, workbench, matrix, case study, and the 404.
+The site is an Astro static build: `Source/` in, `Target/` out.
+
+Its own `package.json`, `astro.config.ts`, and `README.md`.
+
+24 built HTML pages: the landing page, the plugins registry, 15 plugin detail pages, setup,
+versions, flavors, models, workbench, matrix, case study, and the 404.
 
 Verify:
 

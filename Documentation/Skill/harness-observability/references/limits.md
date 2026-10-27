@@ -26,13 +26,16 @@
 
 ## The DSH checkout
 
-The harness implementation checkout is named in the runtime context. Use it only to inspect or
-extend DSH itself, not as a source for this repository's facts.
+The harness implementation checkout is named in the runtime context.
+
+Use it only to inspect or extend DSH itself, not as a source for this repository's facts.
 
 ## The refresh rule
 
-This skill describes a live runtime. Before repeating a snapshot fact (a provider list, a tool
-schema, a path), re-check it with the tool that produced it:
+This skill describes a live runtime.
+
+Before repeating a snapshot fact (a provider list, a tool schema, a path), re-check it with the tool
+that produced it:
 
 - providers: `cordis_inspect_list`;
 - routes: `list_subagent_models`;

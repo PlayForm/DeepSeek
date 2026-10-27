@@ -37,13 +37,23 @@ find Target -name "*.html" | wc -l
 grep -r "the changed string" Target/
 ```
 
-The build is the only verification surface. A source edit without a build is an unverified claim.
+The build is the only verification surface.
+
+A source edit without a build is an unverified claim.
 
 ## The diagrams
 
-1. Edit the `.mmd` source.
-2. `pnpm Diagrams`.
-3. Check the rendered SVG: the label text, the containment, the wrapping.
+1. **The source.**
+
+    The `.mmd` source is edited.
+
+2. **The render.**
+
+    `pnpm Diagrams`.
+
+3. **The check.**
+
+    The rendered SVG is checked: the label text, the containment, the wrapping.
 
 The renderer's limits are in the SKILL.md: the wrap budget, the list markers, the entity escapes,
 the no-break space law, and the containment law.
@@ -51,7 +61,9 @@ the no-break space law, and the containment law.
 ## The drift guard
 
 `pnpm Drift` re-derives the figures from the repo and compares them with the fallbacks in
-`Content.ts` and the built pages. Run it after any figure, version, or count changes.
+`Content.ts` and the built pages.
+
+Run it after any figure, version, or count changes.
 
 ## Deployment: Cloudflare Pages
 
@@ -59,8 +71,11 @@ the no-break space law, and the containment law.
 - **Output directory:** `Target/`
 - **Framework preset:** none (static).
 
-`Public/_headers` carries the cache rules for the content-hashed `_astro/` assets. `Public/404.html`
-is served automatically. Routes are directory-style (`plugins/index.html`).
+`Public/_headers` carries the cache rules for the content-hashed `_astro/` assets.
+
+`Public/404.html` is served automatically.
+
+Routes are directory-style (`plugins/index.html`).
 
 ## The deploy checklist
 

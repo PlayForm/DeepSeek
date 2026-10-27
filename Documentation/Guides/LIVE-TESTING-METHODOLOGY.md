@@ -53,21 +53,42 @@ statuses:
 
 For EACH plugin under test, run this loop:
 
-1. **Baseline**: `tail` the plugin's ledger (`~/.dsh/<plugin>.log` - the family's "one log per
-   module"; the durable `[ISO]` lines) + note the activation line.
-2. **Toggle/knob**: change a volatile knob via the in-app settings/config editor (the live
-   `ctx.configEditor` path - writes the patch under lock) OR directly in
-   `~/.dsh/profiles/desktop/cordis.patch.yml` (the control-panel rows own the whole config).
-   Volatile = next use picks it up.
-3. **Probe**: launch a QUICK LOW-EFFORT SUBAGENT (`glm-5.3-flash` low) with a plugin-specific MOCK
-   EXECUTION TASK (the library below). The subagent performs the task exactly (the mock task must
-   trigger the plugin's behavior deterministically) and reports what it did + what it observed.
-4. **Observe**: check the plugin's ledger (new lines), the transcript (the subagent's turn), and
-   `plugin_manager` state where relevant.
-5. **Tune**: adjust the knob per the feedback. Repeat 2-4 until the behavior matches the
-   smoke-proven semantics.
-6. **Verify**: re-run the plugin's smoke suite (`node <tree>/smokes/ <plugin>-smoke.mjs`) to confirm
-   the live behavior matches the arbiter.
+1. **The baseline.**
+
+    `tail` the plugin's ledger (`~/.dsh/<plugin>.log` - the family's "one log per module"; the
+    durable `[ISO]` lines) + note the activation line.
+
+2. **The toggle.**
+
+    Change a volatile knob via the in-app settings/config editor (the live `ctx.configEditor` path -
+    writes the patch under lock) OR directly in `~/.dsh/profiles/desktop/cordis.patch.yml` (the
+    control-panel rows own the whole config).
+
+    Volatile = next use picks it up.
+
+3. **The probe.**
+
+    Launch a QUICK LOW-EFFORT SUBAGENT (`glm-5.3-flash` low) with a plugin-specific MOCK EXECUTION
+    TASK (the library below).
+
+    The subagent performs the task exactly (the mock task must trigger the plugin's behavior
+    deterministically) and reports what it did + what it observed.
+
+4. **The observation.**
+
+    Check the plugin's ledger (new lines), the transcript (the subagent's turn), and
+    `plugin_manager` state where relevant.
+
+5. **The tune.**
+
+    Adjust the knob per the feedback.
+
+    Repeat 2-4 until the behavior matches the smoke-proven semantics.
+
+6. **The verification.**
+
+    Re-run the plugin's smoke suite (`node <tree>/smokes/ <plugin>-smoke.mjs`) to confirm the live
+    behavior matches the arbiter.
 
 ## 3. THE MOCK-TASK LIBRARY (one per plugin)
 

@@ -63,35 +63,56 @@ The family is organized hierarchically - read EVERY name as a sentence of segmen
 | `hook-dsh-normalize-fullwidth` | Hook @ DSH @ Normalize @ Fullwidth | Full-width -> half-width                                                                            |
 | `plugin-dsh-normalize-file`    | Plugin @ DSH @ Normalize @ File    | Normalize files already on disk (the explicit tool)                                                 |
 
-The alphabetical order groups the family naturally: the kind first (hook/plugin/lib). Then the roles
-(core, governor-cargo, governor-package, normalize-*, pinner-package, plugin-factory). Then the
-domains.
+The alphabetical order groups the family naturally: the kind first (hook/plugin/lib).
+
+Then the roles (core, governor-cargo, governor-package, normalize-*, pinner-package,
+plugin-factory).
+
+Then the domains.
 
 ## 3. THE VERSIONS (three)
 
-1. **The Boilerplate** - the current, complete development codebase. The reference implementation;
-   NOT released.
-2. **The Classic Release** - the official release derived from the boilerplate: cleaned,
-   de-personalized, restructured (fewer comments, improved code), ONE repository per package.
-3. **The Effect-TS Release** - the official release re-implemented on Effect-TS v4: external
-   trace-ability (tracing spans over the chains), ecosystem interaction (Effect's
-   transformers/processors), the same behavior, the same ledger strings.
+1. **The Boilerplate.**
 
-Both official releases ship side by side. The family is versioned with a dual badge (CLASSIC /
-EFFECT-TS).
+    The current, complete development codebase.
+
+    The reference implementation; NOT released.
+
+2. **The Classic Release.**
+
+    The official release derived from the boilerplate: cleaned, de-personalized, restructured (fewer
+    comments, improved code), ONE repository per package.
+
+3. **The Effect-TS Release.**
+
+    The official release re-implemented on Effect-TS v4: external trace-ability (tracing spans over
+    the chains), ecosystem interaction (Effect's transformers/processors), the same behavior, the
+    same ledger strings.
+
+Both official releases ship side by side.
+
+The family is versioned with a dual badge (CLASSIC / EFFECT-TS).
 
 ## 4. THE MODELS
 
-The family serves AI models, NOT the reverse. The normalize family rewrites what a model emits - so
-the branding speaks of "model output", "streams", "transcripts" - clean, consistent characters in
-everything the model writes. The governance family acts on the files the author (human or model)
-touches. The voice: "the model's output, governed and clean".
+The family serves AI models, NOT the reverse.
+
+The normalize family rewrites what a model emits - so the branding speaks of "model output",
+"streams", "transcripts" - clean, consistent characters in everything the model writes.
+
+The governance family acts on the files the author (human or model) touches.
+
+The voice: "the model's output, governed and clean".
 
 ## 5. THE FLAVORS
 
 A **flavor** is ONE member of the normalize family (dash, quotes, ellipsis, spaces, invisible,
-fullwidth, file). A **role** is ONE member of the governance family (governor, pinner). The branding
-must give EACH flavor/role a distinct visual treatment (a badge) while keeping ONE family look.
+fullwidth, file).
+
+A **role** is ONE member of the governance family (governor, pinner).
+
+The branding must give EACH flavor/role a distinct visual treatment (a badge) while keeping ONE
+family look.
 
 ## 6. THE DESIGN CONSTRAINTS (NON-NEGOTIABLE)
 
@@ -105,35 +126,59 @@ must give EACH flavor/role a distinct visual treatment (a badge) while keeping O
 
 A complete identity system, ONE document, covering:
 
-1. **Identity** - the family name treatment, a proposed tagline (ONE line, blue/white mindset), the
-   mission statement (from section 1).
-2. **Logo** - a wordmark concept (the family name + the @-sentence hierarchy as a visual motif), a
-   proposed abstract mark (clean, geometric, blue/white), the usage rules (clear space, minimum
-   sizes, the wrong uses).
-3. **Color** - the exact brand blue (name + hex + usage ratios: e.g. 80% white/20% blue), the blue
-   tints, the neutral greys, the accessibility contrast notes.
-4. **Typography** - a clean header typeface + a clean body typeface (propose specific families), the
-   size scale, the header hierarchy (H1/H2/H3 rules - "clean headers").
-5. **Components** - cards, buttons, badges (the flavor/role/version badges - ONE per flavor/role:
-   dash, quotes, ellipsis, spaces, invisible, fullwidth, file, governor, pinner; and the version
-   badges: CLASSIC / EFFECT-TS), tables (the package inventory), code blocks, the header/nav
-   component.
-6. **Voice** - the tone (clean, technical, confident), the vocabulary (the @-sentences, "flavor",
-   "role", "the family"), short do/don't examples of copy.
-7. **Package-level branding** - EACH of the twelve packages: a one-line identity + its badge/icon
-   treatment.
-8. **Applications** - the README header layout, the website header, the docs, the package badges on
-   a registry page.
+1. **Identity.**
+
+    The family name treatment, a proposed tagline (ONE line, blue/white mindset), the mission
+    statement (from section 1).
+
+2. **Logo.**
+
+    A wordmark concept (the family name + the @-sentence hierarchy as a visual motif), a proposed
+    abstract mark (clean, geometric, blue/white), the usage rules (clear space, minimum sizes, the
+    wrong uses).
+
+3. **Color.**
+
+    The exact brand blue (name + hex + usage ratios: e.g. 80% white/20% blue), the blue tints, the
+    neutral greys, the accessibility contrast notes.
+
+4. **Typography.**
+
+    A clean header typeface + a clean body typeface (propose specific families), the size scale, the
+    header hierarchy (H1/H2/H3 rules - "clean headers").
+
+5. **Components.**
+
+    Cards, buttons, badges (the flavor/role/version badges - ONE per flavor/role: dash, quotes,
+    ellipsis, spaces, invisible, fullwidth, file, governor, pinner; and the version badges: CLASSIC
+    / EFFECT-TS), tables (the package inventory), code blocks, the header/nav component.
+
+6. **Voice.**
+
+    The tone (clean, technical, confident), the vocabulary (the @-sentences, "flavor", "role", "the
+    family"), short do/don't examples of copy.
+
+7. **Package-level branding.**
+
+    EACH of the twelve packages: a one-line identity + its badge/icon treatment.
+
+8. **Applications.**
+
+    The README header layout, the website header, the docs, the package badges on a registry page.
 
 ## 8. THE SAMPLE WEBPAGE - WHAT TO PRODUCE (deliverable B)
 
 A simple single-page design for the family website, blue/white, clean headers. Produce BOTH:
 
-1. **The instruction set** (a written design spec): the page sections in order, the layout grid, the
-   spacing scale, the blue/white usage per section, the clean-header treatment for EACH heading
-   level, the component usage, the responsive notes.
-2. **A static mockup** (ONE self-contained HTML file with embedded CSS, blue/white only): the page
-   with:
+1. **The instruction set.**
+
+    A written design spec: the page sections in order, the layout grid, the spacing scale, the
+    blue/white usage per section, the clean-header treatment for EACH heading level, the component
+    usage, the responsive notes.
+
+2. **The static mockup.**
+
+    ONE self-contained HTML file with embedded CSS, blue/white only: the page with:
 
     - **The clean header**: the family name + the tagline, minimal nav (Products / Versions /
       Flavors / Models).

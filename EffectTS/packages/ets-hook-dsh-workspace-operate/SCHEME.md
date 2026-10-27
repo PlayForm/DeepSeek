@@ -24,15 +24,35 @@
 
 ## The resolution rules (in evaluation order)
 
-1. `bad-request` - the request shape per kind.
-2. `graph-unavailable` - rename/connect need the `workspaceGraph` service.
-3. `unknown-symbol` / `name-collision` / `duplicate-edge` / `incompatible-edge` - the graph
-   resolution.
-4. `missing-version` - the fence: the caller's version, else the hook's own observed version for the
-   path; a version is never invented.
-5. `stale-version` - the fence vs the hook's observed version and the file's stat.
-6. `span-beyond-file` - the replace span vs the file's real line count.
-7. `full` - the live table at `maxProposals`.
+1. **The bad request.**
+
+    `bad-request` is the request shape per kind.
+
+2. **The missing graph.**
+
+    `graph-unavailable` means rename/connect need the `workspaceGraph` service.
+
+3. **The graph resolution.**
+
+    `unknown-symbol` / `name-collision` / `duplicate-edge` / `incompatible-edge` is the graph
+    resolution.
+
+4. **The missing version.**
+
+    `missing-version` is the fence: the caller's version, else the hook's own observed version for
+    the path; a version is never invented.
+
+5. **The stale version.**
+
+    `stale-version` is the fence against the hook's observed version and the file's stat.
+
+6. **The span beyond the file.**
+
+    `span-beyond-file` is the replace span against the file's real line count.
+
+7. **The full table.**
+
+    `full` is the live table at `maxProposals`.
 
 ## Config
 

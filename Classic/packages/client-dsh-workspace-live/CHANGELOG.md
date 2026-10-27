@@ -11,7 +11,7 @@ All notable changes to this package will be documented in this file.
 ### Changed
 
 - The client bundle generated and the package exports updated.
-- The client tab rendering adjusted and the TypeScript imports normalised (the workflow/client/types
+- The client tab rendering adjusted and the TypeScript imports normalized (the workflow/client/types
   pass).
 - The D4-D8 release pass (the pack and trace libraries ship across both trees) refines the package's
   source, its scheme and its bundle patch.

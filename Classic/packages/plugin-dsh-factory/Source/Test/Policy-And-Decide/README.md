@@ -34,7 +34,7 @@ before it acts.
     - Check: "Decide: the action names ARE the keys - every D6 verdict
       resolves" - the eight action names answer their defaults.
     - Check: "Decide: an override flips exactly its action" - one overridden
-      action changes, its neighbours keep the default.
+      action changes, its neighbors keep the default.
     - Check: "Decide: a missing or malformed key takes that action's D6
       default" - a partial block decides honestly (missing commit -> approve,
       missing read -> auto); a malformed write never widens to auto and a

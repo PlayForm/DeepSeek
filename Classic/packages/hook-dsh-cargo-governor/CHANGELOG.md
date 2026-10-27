@@ -9,7 +9,7 @@ All notable changes to this package will be documented in this file.
 - The D4-D8 release pass (the pack and trace libraries ship across both trees): the governor's
   source, its scheme and its bundle patch move with it.
 - The role-prefix contract applied to the governor's ledger strings and manifest.
-- Line endings normalised and the LICENSE text wrapped.
+- Line endings normalized and the LICENSE text wrapped.
 - The repository-wide markdown clean-up, and the README restructured onto the role / surfaces /
   ledger template with the static market index committed alongside.
 

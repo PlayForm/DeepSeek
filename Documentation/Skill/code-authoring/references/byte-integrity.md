@@ -1,24 +1,42 @@
 # Byte Integrity: No NUL Bytes, No Stray Controls
 
-The rule: content never carries NUL bytes or control characters outside `\n`, `\r`, and `\t`. The
-write tool writes verbatim, so the risk lives in the content generated before the write, not in the
-tool.
+The rule: content never carries NUL bytes or control characters outside `\n`, `\r`, and `\t`.
+
+The write tool writes verbatim, so the risk lives in the content generated before the write, not in
+the tool.
 
 ## The incident
 
-On 2026-10-07 a bulk markdown conversion wrote NUL bytes into 25 files. The files looked correct in
-prose and failed as soon as a parser read them. The conversion had used a NUL-separated record
-convention because it was convenient for the script, and the bytes survived into the output.
+On 2026-10-07 a bulk markdown conversion wrote NUL bytes into 25 files.
+
+The files looked correct in prose and failed as soon as a parser read them.
+
+The conversion had used a NUL-separated record convention because it was convenient for the script,
+and the bytes survived into the output.
 
 ## The rules
 
-1. Never write a NUL byte (`0x00`) into file content.
-2. Never write control characters other than `\n`, `\r`, `\t`.
-3. Never build content through NUL-terminated or NUL-separated conventions: `printf '%s\0'`,
-   `find -print0` into a file, C-string truncation, buffer padding.
-4. Never generate the escape representation of NUL (`\0`, `\x00`, `\u0000`) in content that could
-   materialize it.
-5. After any bulk transformation, scan every touched file before reporting done.
+1. **The NUL byte.**
+
+    A NUL byte (`0x00`) is never written into file content.
+
+2. **The controls.**
+
+    Control characters other than `\n`, `\r`, `\t` are never written.
+
+3. **The conventions.**
+
+    Content is never built through NUL-terminated or NUL-separated conventions: `printf '%s\0'`,
+    `find -print0` into a file, C-string truncation, buffer padding.
+
+4. **The escape form.**
+
+    The escape representation of NUL (`\0`, `\x00`, `\u0000`) is never generated in content that
+    could materialize it.
+
+5. **The scan.**
+
+    After any bulk transformation, every touched file is scanned before done is reported.
 
 ## The scan
 
@@ -43,18 +61,24 @@ sys.exit(1 if bad else 0)
 ' file1 file2 ...
 ```
 
-A clean run prints nothing and exits zero. Any output is a failure to fix before the next step.
+A clean run prints nothing and exits zero.
+
+Any output is a failure to fix before the next step.
 
 ## Spot-check
 
-After the scan, read one touched file and compare the changed span with the intent. The scan proves
-the bytes are structurally valid; the spot check proves they are the right bytes.
+After the scan, read one touched file and compare the changed span with the intent.
+
+The scan proves the bytes are structurally valid; the spot check proves they are the right bytes.
 
 ## Why NUL is the signature
 
-A NUL byte is not a formatting choice. It is the marker of content assembled by a pipeline that used
-a C-string convention somewhere. When it appears, the correct response is to regenerate the content
-through the tool API, not to strip the bytes afterwards.
+A NUL byte is not a formatting choice.
+
+It is the marker of content assembled by a pipeline that used a C-string convention somewhere.
+
+When it appears, the correct response is to regenerate the content through the tool API, not to
+strip the bytes afterwards.
 
 ## The verification gate in prompts
 

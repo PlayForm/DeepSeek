@@ -2,7 +2,9 @@
 
 ## Fibers
 
-A fiber owns the registrations a plugin creates. Its lifecycle:
+A fiber owns the registrations a plugin creates.
+
+Its lifecycle:
 
 - created on load;
 - disposed in reverse registration order;

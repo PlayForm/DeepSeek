@@ -80,16 +80,35 @@ suggester selects it.
 
 `Resolve(Root, { home })`:
 
-1. read the repo layer (`<root>/.dsh/pack.yml`, then `.yaml`, then `.json`) to discover a declared
-   `slug`; the user layer is keyed by it;
-2. read the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`, then `.yaml`, then `.json`);
-3. **no layer at all -> `Builtin`** (this monorepo's default);
-4. resolve the union of both layers' `extends:` chains as the BASE: a named base is looked up in the
-   user layer, a missing name is skipped, a name already visited is skipped (the cycle guard), and
-   the deepest base comes first;
-5. merge the base packs first, then the user layer, then the repo layer - so the repo overrides the
-   user, and both override their bases;
-6. normalize the merged result once (section 2's defaults; a structurally invalid pack throws).
+1. **The repo layer.**
+
+    The resolution reads the repo layer (`<root>/.dsh/pack.yml`, then `.yaml`, then `.json`) to
+    discover a declared `slug`; the user layer is keyed by it.
+
+2. **The user layer.**
+
+    The resolution reads the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`, then `.yaml`,
+    then `.json`).
+
+3. **The built-in layer.**
+
+    The resolution falls back to `Builtin` when no layer exists (this monorepo's default).
+
+4. **The base chains.**
+
+    The resolution resolves the union of both layers' `extends:` chains as the BASE: a named base is
+    looked up in the user layer, a missing name is skipped, a name already visited is skipped (the
+    cycle guard), and the deepest base comes first.
+
+5. **The merge order.**
+
+    The resolution merges the base packs first, then the user layer, then the repo layer - so the
+    repo overrides the user, and both override their bases.
+
+6. **The normalization.**
+
+    The resolution normalizes the merged result once (section 2's defaults; a structurally invalid
+    pack throws).
 
 `Load(Root, { home })` memoizes `Resolve` per `(home, root)` for the process: a pack edit lands on
 the next process by contract (a boot-time memo, not a watcher).

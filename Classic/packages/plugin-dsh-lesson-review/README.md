@@ -11,16 +11,33 @@ usage store and the staleness/archive pass. It does not own the trigger -
 
 One review is one bounded round trip:
 
-1. **digest** the conversation snapshot (a verbatim tail, older turns collapsed, a hard character
-   cap applied from the front);
-2. **ask** the review model once, with a constant prompt that states what a skill is, which of the
-   two stores a lesson belongs in, which operations exist, and what must never be captured;
-3. **parse** the reply strictly (one JSON object, five operation kinds);
-4. **judge** every operation against deterministic rules (class-level name, no incident narration,
-   no bare negative claim, read-before-write, pins);
-5. **apply or queue** - the shipped `policy.write: approve` means QUEUE: nothing reaches the corpus
-   until it is accepted;
-6. **report** the run (`run.json` + `REPORT.md`) and write one ledger line.
+1. **The digest.**
+
+    The review digests the conversation snapshot (a verbatim tail, older turns collapsed, a hard
+    character cap applied from the front).
+
+2. **The ask.**
+
+    The review asks the review model once, with a constant prompt that states what a skill is, which
+    of the two stores a lesson belongs in, which operations exist, and what must never be captured.
+
+3. **The parse.**
+
+    The review parses the reply strictly (one JSON object, five operation kinds).
+
+4. **The judge.**
+
+    The review judges every operation against deterministic rules (class-level name, no incident
+    narration, no bare negative claim, read-before-write, pins).
+
+5. **The apply or queue.**
+
+    The review applies or queues the operation - the shipped `policy.write: approve` means QUEUE:
+    nothing reaches the corpus until it is accepted.
+
+6. **The report.**
+
+    The review reports the run (`run.json` + `REPORT.md`) and writes one ledger line.
 
 ## The posture: propose, never publish
 
@@ -47,13 +64,27 @@ service stays resolvable while disabled, so the nudge hook never hard-fails on i
 
 ## Wiring
 
-1. add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the profile's
-   `dsh.profile.bundles` (and its `link:` dependencies);
-2. add both patch rows to the profile's `cordis.patch.yml`;
-3. restart the host;
-4. read the ledgers: `~/.dsh/playform/plugin-dsh-lesson-review.log` and
-   `~/.dsh/playform/hook-dsh-lesson-nudge.log`;
-5. read a run: `~/.dsh/lesson/reports/<stamp>/REPORT.md`.
+1. **The bundle rows.**
+
+    Add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the profile's
+    `dsh.profile.bundles` (and its `link:` dependencies).
+
+2. **The patch rows.**
+
+    Add both patch rows to the profile's `cordis.patch.yml`.
+
+3. **The restart.**
+
+    Restart the host.
+
+4. **The ledgers.**
+
+    Read the ledgers: `~/.dsh/playform/plugin-dsh-lesson-review.log` and
+    `~/.dsh/playform/hook-dsh-lesson-nudge.log`.
+
+5. **The run.**
+
+    Read a run: `~/.dsh/lesson/reports/<stamp>/REPORT.md`.
 
 ## Contract
 

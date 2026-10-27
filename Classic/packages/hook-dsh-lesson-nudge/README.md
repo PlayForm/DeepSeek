@@ -17,13 +17,23 @@ service, and a different review implementation can be driven by the same trigger
 
 ## The four gates
 
-1. **the switch** - `enabled`, checked inside the listener body so a hot flip lands without a
-   remount;
-2. **the edge** - `status === "idle"`;
-3. **the service** - `ctx.get("lesson")`, probed per transition; absent is ONE warning per process,
-   never a throw;
-4. **the cadence** - `Lesson.Tick(agent).due`, then this hook's own `maxReviewsPerSession` cap (the
-   runaway guard for a mis-set service interval).
+1. **The switch.**
+
+    The switch checks `enabled` inside the listener body, so a hot flip lands without a remount.
+
+2. **The edge.**
+
+    The edge is `status === "idle"`.
+
+3. **The service.**
+
+    The service is `ctx.get("lesson")`, probed per transition; absent is ONE warning per process,
+    never a throw.
+
+4. **The cadence.**
+
+    The cadence is `Lesson.Tick(agent).due`, then this hook's own `maxReviewsPerSession` cap (the
+    runaway guard for a mis-set service interval).
 
 ## Fail-open, always
 
@@ -39,12 +49,23 @@ the next status transition.
 
 ## Wiring
 
-1. add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the profile's
-   `dsh.profile.bundles` (and its `link:` dependencies);
-2. add both patch rows to the profile's `cordis.patch.yml`;
-3. restart the host;
-4. read each ledger: `~/.dsh/playform/hook-dsh-lesson-nudge.log` and
-   `~/.dsh/playform/plugin-dsh-lesson-review.log`.
+1. **The bundle rows.**
+
+    Add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the profile's
+    `dsh.profile.bundles` (and its `link:` dependencies).
+
+2. **The patch rows.**
+
+    Add both patch rows to the profile's `cordis.patch.yml`.
+
+3. **The restart.**
+
+    Restart the host.
+
+4. **The ledgers.**
+
+    Read each ledger: `~/.dsh/playform/hook-dsh-lesson-nudge.log` and
+    `~/.dsh/playform/plugin-dsh-lesson-review.log`.
 
 Enabling the hook without the service is safe: one warning, no reviews.
 

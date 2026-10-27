@@ -15,8 +15,11 @@ updated: 2026-10-20
 # The Plugin System
 
 The family is one contract expressed twice: plain TypeScript in `Classic/` and Effect services in
-`EffectTS/`. This skill states the contract both trees implement. The generic Cordis API is
-`plugin-development`; the smoke discipline is `smoke-writing`.
+`EffectTS/`.
+
+This skill states the contract both trees implement.
+
+The generic Cordis API is `plugin-development`; the smoke discipline is `smoke-writing`.
 
 ## When to use
 
@@ -37,10 +40,13 @@ Two release groups, one contract:
 | Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript                 |
 | EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
 
-51 Classic packages, 46 EffectTS packages — the original 14 plugins (plus `lib-dsh-core`) plus the
+51 Classic packages, 46 EffectTS packages - the original 14 plugins (plus `lib-dsh-core`) plus the
 36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration set,
-the client family) and 30 ETS twins. All at 0.1.0, all UNPUBLISHED. The full roster:
-`Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
+the client family) and 30 ETS twins.
+
+All at 0.1.0, all UNPUBLISHED.
+
+The full roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 The package roles:
 
@@ -109,9 +115,11 @@ Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts \
 && tsc-alias -f -p tsconfig.json
 ```
 
-A red `tsc` fails the build; there is no waiver. Rebuild the factory before any consumer: consumers
-type-check against its built `Target/`. Workspace builds run serialized
-(`--workspace-concurrency=1`) because the packages share Targets.
+A red `tsc` fails the build; there is no waiver.
+
+Rebuild the factory before any consumer: consumers type-check against its built `Target/`.
+
+Workspace builds run serialized (`--workspace-concurrency=1`) because the packages share Targets.
 
 ## The ownership split
 
@@ -124,27 +132,43 @@ type-check against its built `Target/`. Workspace builds run serialized
 
 ## Governance and the direct path
 
-Governance modules register their steps at apply. The steps run through the direct fold,
-sequentially by default; a parallel marker is allowed only with proven disjointness.
+Governance modules register their steps at apply.
+
+The steps run through the direct fold, sequentially by default; a parallel marker is allowed only
+with proven disjointness.
 
 The direct path is the `raw-write` tool's only governance channel:
 
-1. The actor carries the `govern` marker.
-2. The gate's `govern` reason skips the marked events.
-3. An absent or false marker is the escape hatch: no chain.
+1. **The marker.**
+
+    The actor carries the `govern` marker.
+
+2. **The gate.**
+
+    The gate's `govern` reason skips the marked events.
+
+3. **The escape hatch.**
+
+    An absent or false marker is the escape hatch: no chain.
 
 There is no second channel.
 
 ## The EffectTS variant
 
 The same contract behind Effect v4.0.5: a Cordis shell, Effect services and layers, and tracing that
-defaults to no-op. The ledger strings are byte-identical to the Classic tree.
+defaults to no-op.
+
+The ledger strings are byte-identical to the Classic tree.
 
 ## The ledger-string law
 
 Every activation line, refusal line, chain-pass line, and journal record is asserted
-byte-identically. Rename mechanics, never strings. The one exception is an identity change by design
-(a package rename), which changes that module's own strings and is recorded as a rename.
+byte-identically.
+
+Rename mechanics, never strings.
+
+The one exception is an identity change by design (a package rename), which changes that module's
+own strings and is recorded as a rename.
 
 ## Decision table
 

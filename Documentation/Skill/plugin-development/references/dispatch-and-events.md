@@ -10,8 +10,9 @@
 | `serial`    | Yes              | registration    | Yes    |
 | `bail`      | No               | until one bails | Yes    |
 
-The mode is part of the event's public contract. A listener cannot opt out of the mode the producer
-chose.
+The mode is part of the event's public contract.
+
+A listener cannot opt out of the mode the producer chose.
 
 ## Per-mode semantics
 
@@ -34,8 +35,11 @@ ctx.on("llm/stream", (event, next) => {
 });
 ```
 
-Omitting `next()` silently swallows the default behavior downstream. The failure has no error and no
-log; it looks like the default stopped working. `prepend: true` only when ordering matters.
+Omitting `next()` silently swallows the default behavior downstream.
+
+The failure has no error and no log; it looks like the default stopped working.
+
+`prepend: true` only when ordering matters.
 
 ## Listeners and scoping
 
@@ -52,9 +56,11 @@ An `emit` listener is a synchronous recorder:
 - no `throw`;
 - no I/O.
 
-A throw in an `emit` listener fails the tool call after the mutation already happened. The catch-all
-pattern logs to the logger and the ledger only; it never rethrows. Heavy work goes to
-`ctx.jobs.start`; throttles live in config.
+A throw in an `emit` listener fails the tool call after the mutation already happened.
+
+The catch-all pattern logs to the logger and the ledger only; it never rethrows.
+
+Heavy work goes to `ctx.jobs.start`; throttles live in config.
 
 ## Failure modes
 

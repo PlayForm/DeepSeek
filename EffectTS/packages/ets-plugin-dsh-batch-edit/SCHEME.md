@@ -72,29 +72,53 @@ path ingests prepared op lines from a file (`#` comments and blank lines skipped
 
 ## 5. The commit (Ops.Commit)
 
-0. **The policy gate (D6)**: the tool's `commit` action consults `Decide(State.Allow, "write")`
-   BEFORE any plan or write. The shipped default is `write: approve`, so the apply is refused with
-   the byte-exact `apply refused <id> (policy write=approve)` line (the ledger line AND the thrown
-   error), nothing is read or written, and the machine stays open with its cells `observed` - the
-   batch waits for the user's approval (the existing approve binding: flip `policy.write` to `auto`,
-   or approve the batch through the batch-decision hook). `auto` proceeds to step 1. The block is
-   the shared factory policy (`policy: Policy()` composed into the schema, mapped to `State.Allow`);
-   a resolved pack's `policy` section overrides the defaults per action (the wiring is the next
-   refinement).
-1. **Plan** every selected cell (`observed`, `halted`, `errored` - the resume paths): stat (the
-   fresh-version guard - a mismatch halts the file with `stale`, the machine stays open), read,
-   apply the ops, diff. Errors mark the file `errored`; neither aborts the batch. Zero-changed files
-   are the designed no-op (back to `observed`, nothing logged).
-2. **Apply** through `Factory.Write` with the explicit `replaceIfVersion` intent, the
-   `govern`-wrapped actor, Stash pre-registration, and the root `fs/observed` emit; then, for the
-   governed basenames (`package.json`, `Cargo.toml`), `Factory.Govern(target, true)`
-    - the direct path, exactly once per write. A write failure stops the loop and returns the
-      unwritten remainder to `observed` (the atomic gate).
-3. **Deadline**: scanned between files with a clock read (capped at 120000). Overflow continues as
-   one `batch-edit-continue` job via the jobs hub (`jobId` in the output); without a hub the
-   remainder halts with `deadline`.
-4. One-shot machines (`persistent: false`) close after commit (`machine closed <id>`), then
-   `machine committed <id> (...)` is logged.
+0. **The policy gate (D6).**
+
+    The tool's `commit` action consults `Decide(State.Allow, "write")` BEFORE any plan or write.
+
+    The shipped default is `write: approve`, so the apply is refused with the byte-exact
+    `apply refused <id> (policy write=approve)` line (the ledger line AND the thrown error), nothing
+    is read or written, and the machine stays open with its cells `observed` - the batch waits for
+    the user's approval (the existing approve binding: flip `policy.write` to `auto`, or approve the
+    batch through the batch-decision hook).
+
+    `auto` proceeds to step 1.
+
+    The block is the shared factory policy (`policy: Policy()` composed into the schema, mapped to
+    `State.Allow`); a resolved pack's `policy` section overrides the defaults per action (the wiring
+    is the next refinement).
+
+1. **The plan.**
+
+    Plan every selected cell (`observed`, `halted`, `errored` - the resume paths): stat (the
+    fresh-version guard - a mismatch halts the file with `stale`, the machine stays open), read,
+    apply the ops, diff.
+
+    Errors mark the file `errored`; neither aborts the batch.
+
+    Zero-changed files are the designed no-op (back to `observed`, nothing logged).
+
+2. **The apply.**
+
+    Apply through `Factory.Write` with the explicit `replaceIfVersion` intent, the `govern`-wrapped
+    actor, Stash pre-registration, and the root `fs/observed` emit; then, for the governed basenames
+    (`package.json`, `Cargo.toml`), `Factory.Govern(target, true)` - the direct path, exactly once
+    per write.
+
+    A write failure stops the loop and returns the unwritten remainder to `observed` (the atomic
+    gate).
+
+3. **The deadline.**
+
+    The deadline is scanned between files with a clock read (capped at 120000).
+
+    Overflow continues as one `batch-edit-continue` job via the jobs hub (`jobId` in the output);
+    without a hub the remainder halts with `deadline`.
+
+4. **The one-shot close.**
+
+    One-shot machines (`persistent: false`) close after commit (`machine closed <id>`), then
+    `machine committed <id> (...)` is logged.
 
 Preview parity: the returned diffs are computed from the same content that is written
 (byte-for-byte; `preview: false` omits the diff payloads but applies identically).

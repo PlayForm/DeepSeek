@@ -14,9 +14,10 @@ updated: 2026-10-25
 
 # Orchestrator Batch
 
-The parent's discipline for running several lanes without losing control of the tree. The core
-split: the lanes execute and verify their own work; the parent formalizes, dispatches, relays, and
-spot-checks read-only.
+The parent's discipline for running several lanes without losing control of the tree.
+
+The core split: the lanes execute and verify their own work; the parent formalizes, dispatches,
+relays, and spot-checks read-only.
 
 ## When to use
 
@@ -28,18 +29,42 @@ spot-checks read-only.
 
 ## The loop
 
-1. **Receive** the request as it arrives.
-2. **Formalize** the brief: scope, surface, exclusions, sequence, arbiter, report format, shared
-   facts.
-3. **Pick the strain and the route** (`worker-strains`, `task-routing`).
-4. **Delegate**: an active lane, or an idle lane with a retained spec.
-5. **Continue** the parent's own next unit of work. The lanes are NOT monitored: each report arrives
-   as a message, and the queue is read only when the parent has a reason to act (the
-   no-blocking-wait law).
-6. **Verify** the lanes' printed arbiter results, grep the artifact for every remediation the report
-   claims, and run only read-only spot checks yourself.
-7. **Report** results, residuals, decisions, and READY-TO-COMMIT.
-8. **Pair the record** (`worker-strains`, rule 8) in the slot the lane vacated.
+1. **The receive.**
+
+    The request is received as it arrives.
+
+2. **The formalization.**
+
+    The brief is formalized: scope, surface, exclusions, sequence, arbiter, report format, shared
+    facts.
+
+3. **The strain and the route.**
+
+    The strain and the route are picked (`worker-strains`, `task-routing`).
+
+4. **The delegation.**
+
+    The parent delegates to an active lane, or to an idle lane with a retained spec.
+
+5. **The own work.**
+
+    The parent continues its own next unit of work.
+
+    The lanes are NOT monitored: each report arrives as a message, and the queue is read only when
+    the parent has a reason to act (the no-blocking-wait law).
+
+6. **The verification.**
+
+    The parent verifies the lanes' printed arbiter results, greps the artifact for every remediation
+    the report claims, and runs only read-only spot checks itself.
+
+7. **The report.**
+
+    The parent reports results, residuals, decisions, and READY-TO-COMMIT.
+
+8. **The record.**
+
+    The record is paired (`worker-strains`, rule 8) in the slot the lane vacated.
 
 ## The two-active regime
 
@@ -53,8 +78,11 @@ spot-checks read-only.
 
 ## The no-blocking-wait law
 
-A delegated lane is never waited on. It runs, finishes, and reports; the report arrives as a
-message. The parent does not call `wait_agent`, sleep, or poll the task board.
+A delegated lane is never waited on.
+
+It runs, finishes, and reports; the report arrives as a message.
+
+The parent does not call `wait_agent`, sleep, or poll the task board.
 
 - Inactivity is not a result: it says nothing about success, failure, or progress.
 - The parent's next action after a dispatch is its own next unit of work. If none is left, it
@@ -75,8 +103,9 @@ message. The parent does not call `wait_agent`, sleep, or poll the task board.
 ## The information broker
 
 A lane cannot ask the parent a question mid-flight: a subagent has no addressable mailbox in this
-harness (`send_message` rejects it), and it does not wait. Recorded history reaches a lane only
-through the parent, in two forms:
+harness (`send_message` rejects it), and it does not wait.
+
+Recorded history reaches a lane only through the parent, in two forms:
 
 - **Pre-supply** in the brief: the facts the lane will need from prior sessions, the ledgers, or
   earlier agent attempts, with their coordinates.
@@ -86,31 +115,43 @@ through the parent, in two forms:
 
 Shape the slice with a reformatter lane when the requester needs a specific form (a table, a
 timeline, a diff of what changed), verify the shaped output against the slice, then re-dispatch the
-requester with the shaped data as a continuation lane. A NEED report is not a failure and not a
-stall: it is a request the parent answers with a new dispatch.
+requester with the shaped data as a continuation lane.
+
+A NEED report is not a failure and not a stall: it is a request the parent answers with a new
+dispatch.
 
 The broker never edits the requester's files and never paraphrases a record: the shaped data keeps
 its coordinates.
 
 When a lane is expected to need mid-flight steering or a decision, spawn it as a durable teammate
 (`spawn_teammate`), which has an addressable mailbox; reserve `subagent` lanes for work that cannot
-be interrupted. A subagent lane that asks a question has already lost: it waits for an answer that
-cannot arrive, and the parent must re-dispatch a continuation that redoes part of its work.
+be interrupted.
+
+A subagent lane that asks a question has already lost: it waits for an answer that cannot arrive,
+and the parent must re-dispatch a continuation that redoes part of its work.
 
 ## Spec reconfiguration
 
 The parent may amend an idle lane's spec ("SPEC AMENDED - IDLE"), amend a working lane mid-flight
 only when the change is compatible, re-apply changed requirements to lanes that have not started,
-and re-dispatch a failed lane. Amendments override the base spec where they conflict.
+and re-dispatch a failed lane.
+
+Amendments override the base spec where they conflict.
 
 **The idle-amendment law:** a new idea, suggestion, or improvement never amends a working lane
-mid-flight. It becomes a new idle lane, and the improvement folds into a later dispatch. Working
-lanes finish against the spec they started with.
+mid-flight.
+
+It becomes a new idle lane, and the improvement folds into a later dispatch.
+
+Working lanes finish against the spec they started with.
 
 **The moving-law case:** when the parent edits a law file that a working lane is reading, the lane
-must re-read it and may align its own output. On 21 October 2026 a lane detected that the standard
-changed under it, did not claim the parent's edit as its own, re-read the law, and aligned two of
-its files. That is correct behaviour, not drift.
+must re-read it and may align its own output.
+
+On 21 October 2026 a lane detected that the standard changed under it, did not claim the parent's
+edit as its own, re-read the law, and aligned two of its files.
+
+That is correct behavior, not drift.
 
 ## Verification and the non-execution law
 
@@ -132,7 +173,11 @@ its files. That is correct behaviour, not drift.
 ## Resume
 
 The durable record is `Documentation/Plans/` (the active plan and the process record), not a handoff
-file. Handoff documents are temporary and may be erased at the session's close. On resume:
+file.
+
+Handoff documents are temporary and may be erased at the session's close.
+
+On resume:
 
 1. Read the active plan and the queue record.
 2. Check the tree state in the root and in `Site/`.

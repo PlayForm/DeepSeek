@@ -11,7 +11,7 @@ All notable changes to this package will be documented in this file.
 
 ### Changed
 
-- The repository-wide markdown clean-up standardised the README, CONTRIBUTING, CODE_OF_CONDUCT and
+- The repository-wide markdown clean-up standardized the README, CONTRIBUTING, CODE_OF_CONDUCT and
   CHANGELOG.
 - The README restructured onto the role / surfaces / ledger template.
 

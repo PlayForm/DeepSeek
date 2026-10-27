@@ -32,10 +32,12 @@ statuses:
 ### 1.1 The mechanics suites (the arbiter, post-delivery)
 
 The original 12 mechanics suites per tree (the table below) have been restructured into per-test
-folders, and the 2026-10-22 delivery added suites for every new package. The current totals: **359
-smoke suites / 5,337 checks across both trees** via the aggregate
-`node Maintain/Run/Smokes/Index.mjs` (`pnpm test`). The original per-suite checks (pre-restructure)
-were:
+folders, and the 2026-10-22 delivery added suites for every new package.
+
+The current totals: **359 smoke suites / 5,337 checks across both trees** via the aggregate
+`node Maintain/Run/Smokes/Index.mjs` (`pnpm test`).
+
+The original per-suite checks (pre-restructure) were:
 
 | Suite (both trees)                                          | Classic | EffectTS | Proves                                             |
 | ----------------------------------------------------------- | ------- | -------- | -------------------------------------------------- |
@@ -48,33 +50,70 @@ were:
 | quotes / ellipsis / spaces / invisible / fullwidth (5 × 62) | 310     | 310      | flavor tables + stream capture                     |
 | normalize-file-smoke                                        | 71      | 71       | the six-transform family normalize, ledger lines   |
 
-The harness pattern: the REAL built `Target/Library.js` + the REAL factory against a FAKE ctx. The
-FAKE ctx has capture seams: on/emit/effect/get/reflect/fs/waterfall/logger, the `root` seam, the
-`__<name>State` probes. The ledger strings are the byte-identical contract.
+The harness pattern: the REAL built `Target/Library.js` + the REAL factory against a FAKE ctx.
+
+The FAKE ctx has capture seams: on/emit/effect/get/reflect/fs/waterfall/logger, the `root` seam, the
+`__<name>State` probes.
+
+The ledger strings are the byte-identical contract.
 
 ### 1.2 The gaps vs the LIVE harness runtime (the smoke/live fidelity gap, itemized)
 
-The smokes prove the **mechanics**. They do NOT prove the **wiring**. Untested today, and precisely
-what dogfooding must cover:
+The smokes prove the **mechanics**.
 
-1. **Profile assembly** - the `dsh.profile.bundles` list. The load ORDER is live: the pinner
-   activates before the governor at boot. It also covers the `node_modules` resolution inside a
-   profile.
-2. **The patch layers** - `cordis.yml` (empty root). Plus `cordis.patch.yml`: the effective config
-   replaces the entry config wholesale. Plus the `$DSH_HOME/cordis.patch.yml` home-level patch.
-3. **The real fs/observed chain** - the fake-ctx seams approximate the harness's `fs/observed`
-   events. The live event loop is ONLY exercised live. The interception layer of module paths inside
-   the profiles tree is ONLY exercised live. The multi-step version-guard interplay across a real
-   fold is ONLY exercised live.
-4. **The stream events** - the normalize flavors fire on REAL tool-stream writes. The writes go
-   through the harness's governed write path: `write`/`edit`/`raw-write`/`normalize-file`. They do
-   NOT fire on synthetic stream captures.
-5. **The storage domain** - open failures in the silent-catch era. Plus real ledger files under
-   `~/.dsh/*.log` with append semantics.
-6. **The observability surface** - `cordis_inspect_list/query`, `plugin_manager` list/enable/disable
-   against the loaded bundles.
-7. **The introspection contract** - Config schemas, Tool schemas, Event modes registered by the
-   family's plugins as the harness projects them.
+They do NOT prove the **wiring**.
+
+Untested today, and precisely what dogfooding must cover:
+
+1. **The profile assembly.**
+
+    The `dsh.profile.bundles` list.
+
+    The load ORDER is live: the pinner activates before the governor at boot.
+
+    It also covers the `node_modules` resolution inside a profile.
+
+2. **The patch layers.**
+
+    `cordis.yml` (empty root).
+
+    Plus `cordis.patch.yml`: the effective config replaces the entry config wholesale.
+
+    Plus the `$DSH_HOME/cordis.patch.yml` home-level patch.
+
+3. **The real fs/observed chain.**
+
+    The fake-ctx seams approximate the harness's `fs/observed` events.
+
+    The live event loop is ONLY exercised live.
+
+    The interception layer of module paths inside the profiles tree is ONLY exercised live.
+
+    The multi-step version-guard interplay across a real fold is ONLY exercised live.
+
+4. **The stream events.**
+
+    The normalize flavors fire on REAL tool-stream writes.
+
+    The writes go through the harness's governed write path:
+    `write`/`edit`/`raw-write`/`normalize-file`.
+
+    They do NOT fire on synthetic stream captures.
+
+5. **The storage domain.**
+
+    Open failures in the silent-catch era.
+
+    Plus real ledger files under `~/.dsh/*.log` with append semantics.
+
+6. **The observability surface.**
+
+    `cordis_inspect_list/query`, `plugin_manager` list/enable/disable against the loaded bundles.
+
+7. **The introspection contract.**
+
+    Config schemas, Tool schemas, Event modes registered by the family's plugins as the harness
+    projects them.
 
 ---
 
@@ -82,7 +121,9 @@ what dogfooding must cover:
 
 ### 2.1 Isolation strategy (the real profiles untouched)
 
-Two equivalent isolation levels. **B is the default** (fully isolated, CI-safe):
+Two equivalent isolation levels.
+
+**B is the default** (fully isolated, CI-safe):
 
 - **A. Scratch profile inside the real `~/.dsh`:** create `~/.dsh/profiles/dsh-test/`. The harness
   enumerates `$HOME/.dsh/profiles/*`. A new profile directory is inert until a session is launched
@@ -96,9 +137,12 @@ Two equivalent isolation levels. **B is the default** (fully isolated, CI-safe):
 ### 2.2 The no-symlink constraint - install mechanics
 
 The LIVE `desktop` profile installs EVERY family package with
-`link:~/.dsh/profiles/desktop/bundles/<name>` - symlinks. The scratch profile must NOT: `link:` and
-workspace deps create symlinks. The goal is **copied artifacts** so the test exercises exactly what
-`npm install <tarball>` consumes after publishing.
+`link:~/.dsh/profiles/desktop/bundles/<name>` - symlinks.
+
+The scratch profile must NOT: `link:` and workspace deps create symlinks.
+
+The goal is **copied artifacts** so the test exercises exactly what `npm install <tarball>` consumes
+after publishing.
 
 **Method 1 - `pnpm pack` tarballs (canonical, publish-identical):**
 
@@ -125,8 +169,11 @@ find "$SCRATCH" -type l | grep -v node_modules/.pnpm || echo "no symlinks"
 ```
 
 Post-install invariant (assert in the test): EVERY `$SCRATCH/**/node_modules/@playform/*` entry is a
-real directory. `find -type l` returns nothing outside pnpm's internal store layout. The installed
-`Target/Library.js` bytes match the monorepo build (checksum compare vs
+real directory.
+
+`find -type l` returns nothing outside pnpm's internal store layout.
+
+The installed `Target/Library.js` bytes match the monorepo build (checksum compare vs
 `Classic/packages/<name>/Target/Library.js`).
 
 ### 2.3 The scratch profile skeleton
@@ -174,16 +221,37 @@ $SCRATCH/                          # DSH_HOME (method B) or ~/.dsh (method A)
 
 ### 2.4 The real flows (create → install → activate → exercise → verify → destroy)
 
-1. **Create** - scaffold the skeleton above. Export `DSH_HOME` (method B).
-2. **Install** - `pnpm install` in the profile dir with the tarball `file:` deps. Assert the
-   no-symlink invariant (§2.2).
-3. **Activate** - launch the harness against the scratch home. The profile's bundles load through
-   the REAL loader. Verify via the runtime introspection surface INSIDE the scratch session.
-   `cordis_inspect_list` -> the nine Inspect Providers resolve. `cordis_inspect_query` (host
-   `Config.listConfigs`) -> EVERY family plugin's Config entry appears. `plugin_manager` list -> the
-   12 bundles listed.
-4. **Exercise the real flows** - perform writes through the governed write path of the scratch
-   session.
+1. **The creation.**
+
+    Scaffold the skeleton above.
+
+    Export `DSH_HOME` (method B).
+
+2. **The install.**
+
+    `pnpm install` in the profile dir with the tarball `file:` deps.
+
+    Assert the no-symlink invariant (§2.2).
+
+3. **The activation.**
+
+    Launch the harness against the scratch home.
+
+    The profile's bundles load through the REAL loader.
+
+    Verify via the runtime introspection surface INSIDE the scratch session.
+
+    `cordis_inspect_list` -> the nine Inspect Providers resolve.
+
+    `cordis_inspect_query` (host `Config.listConfigs`) -> EVERY family plugin's Config entry
+    appears.
+
+    `plugin_manager` list -> the 12 bundles listed.
+
+4. **The exercise.**
+
+    Perform writes through the governed write path of the scratch session.
+
     - **normalize flavors**: `write`/`raw-write` a file containing mdashes, curly quotes, ellipses,
       unicode spaces, invisibles, fullwidth chars. The stream events normalize them. The ledger logs
       the activation line and the `normalized N ... char(s) in one stream` line.
@@ -193,16 +261,28 @@ $SCRATCH/                          # DSH_HOME (method B) or ~/.dsh (method A)
       chain-pass lines, `pinner.log` version-guard lines, `cargo-governor.log` cargo-flavor lines.
       Attempt a governed-path violation to capture a REFUSAL line (the negative case, safely, in the
       scratch tree ONLY).
-5. **Verify** - the ledger assertions (below). Plus byte-compare the written files against the
-   expected normalized output. The fixtures are the same ones the smokes use, promoted to on-disk
-   fixtures.
-6. **Destroy** - `rm -rf $SCRATCH` (method A: `rm -rf ~/.dsh/profiles/dsh-test` plus the tarballs
-   dir). NO residue. The real ledgers NEVER gain a line.
+
+5. **The verification.**
+
+    The ledger assertions (below).
+
+    Plus byte-compare the written files against the expected normalized output.
+
+    The fixtures are the same ones the smokes use, promoted to on-disk fixtures.
+
+6. **The destruction.**
+
+    `rm -rf $SCRATCH` (method A: `rm -rf ~/.dsh/profiles/dsh-test` plus the tarballs dir).
+
+    NO residue.
+
+    The real ledgers NEVER gain a line.
 
 ### 2.5 The verification assertions (the live ledger contract)
 
-The live battery asserts the SAME byte-identical ledger strings the smokes assert. They are now read
-from the scratch home's real log files:
+The live battery asserts the SAME byte-identical ledger strings the smokes assert.
+
+They are now read from the scratch home's real log files:
 
 - `activated (replacement=-, reasoning=on, toolArgs=off, logFile=...)` per flavor.
 - `normalized N dash char(s) in one stream` (and the flavor equivalents).
@@ -212,8 +292,9 @@ from the scratch home's real log files:
 
 ### 2.6 The CONFIGURED persistent profile + the dsh headless mode (implemented)
 
-The throwaway scratch (§2.4) is the isolation variant. The persistent variant is the same scaffold,
-created ONCE and left in place:
+The throwaway scratch (§2.4) is the isolation variant.
+
+The persistent variant is the same scaffold, created ONCE and left in place:
 
 - **Location:** `~/.dsh-dogfood` (a dedicated `DSH_HOME` - the user's real `~/.dsh` is NEVER
   written). It has **ONE subhome per tree**: `classic/` and `ets/`. The profile name is `dsh-test`
@@ -259,9 +340,13 @@ DSH_HOME="$HOME/.dsh-dogfood" dsh headless "run the tests"
 
 ## 3. The test-case suite structure to ADD
 
-Convention compliance: additive coverage (NEVER weaken existing assertions). The ledger strings stay
-byte-identical. The suites live with the family's smokes and print `N checks - ALL PASS`. The new
-suites are the **wiring** suites - a third axis beside Classic/EffectTS mechanics:
+Convention compliance: additive coverage (NEVER weaken existing assertions).
+
+The ledger strings stay byte-identical.
+
+The suites live with the family's smokes and print `N checks - ALL PASS`.
+
+The new suites are the **wiring** suites - a third axis beside Classic/EffectTS mechanics:
 
 | #   | New suite (per tree, under `Classic/smokes/`, `EffectTS/smokes/`) | Checks | Covers                                                                                                                                                                                                |
 | --- | ----------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -273,13 +358,18 @@ suites are the **wiring** suites - a third axis beside Classic/EffectTS mechanic
 | 6   | `refusal-path-smoke.mjs`                                          | ~8     | the governed-path violation inside the scratch tree produces the refusal ledger line and leaves the file untouched                                                                                    |
 | 7   | `introspection-smoke.mjs`                                         | ~10    | `cordis_inspect_list`/`query` project the family's Services/Events/Configs/Tools with the exact registered names                                                                                      |
 
-**Runner:** extend `pnpm test` to `30 smokes` (24 mechanics + 6 wiring). The wiring suites are
-SKIPPED cleanly (exit 0, `SKIPPED (no scratch home)`) when `DSH_TEST_SCRATCH` is unset. CI runs them
-in the dedicated job (§4).
+**Runner:** extend `pnpm test` to `30 smokes` (24 mechanics + 6 wiring).
+
+The wiring suites are SKIPPED cleanly (exit 0, `SKIPPED (no scratch home)`) when `DSH_TEST_SCRATCH`
+is unset.
+
+CI runs them in the dedicated job (§4).
 
 **Harness-observability angle:** EACH wiring suite is also a probe of the nine Inspect Providers.
-The suites document, by asserting, what a scratch-profile session CAN see. The skill's observable
-surface becomes a tested contract, NOT prose.
+
+The suites document, by asserting, what a scratch-profile session CAN see.
+
+The skill's observable surface becomes a tested contract, NOT prose.
 
 **Every live finding becomes a mechanics regression** (the fidelity-gap rule): a wiring suite
 failure first spawns a new fake-ctx check in the corresponding mechanics suite before the wiring
@@ -303,10 +393,14 @@ suite is re-run.
 - always: the 24 mechanics suites (unchanged, no harness needed)
 ```
 
-Runtime cost: ONE profile install (~seconds, tarball deps, no registry) + ONE harness boot. Secrets:
-NONE needed if the LLM provider config is omitted from the scratch patch. The governed write path
-does NOT require a model round-trip. Where a session LLM is needed, the cheapest provider route from
-the live patch is copied with a test key from CI secrets.
+Runtime cost: ONE profile install (~seconds, tarball deps, no registry) + ONE harness boot.
+
+Secrets: NONE needed if the LLM provider config is omitted from the scratch patch.
+
+The governed write path does NOT require a model round-trip.
+
+Where a session LLM is needed, the cheapest provider route from the live patch is copied with a test
+key from CI secrets.
 
 ---
 

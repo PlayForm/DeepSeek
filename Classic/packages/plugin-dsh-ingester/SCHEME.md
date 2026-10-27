@@ -32,26 +32,55 @@ new decision on the same proposal still runs.
 
 ## 2. The validation (Function/Validate, before any write)
 
-1. The decision references this proposal.
-2. The outcome is `approved` (a `denied`/`expired` decision rejects).
-3. The proposal is not expired.
-4. The proposal carries operations.
+1. **The decision.**
+
+    The decision references this proposal.
+
+2. **The outcome.**
+
+    The outcome is `approved` (a `denied`/`expired` decision rejects).
+
+3. **The expiry.**
+
+    The proposal is not expired.
+
+4. **The operations.**
+
+    The proposal carries operations.
 
 A failed validation rejects the WHOLE run: every target reported `skipped`, one journal line with
 the reason, zero writes.
 
 ## 3. The apply loop (Function/Apply, per target in proposal order)
 
-1. **Resolve** through `ctx.fs.resolve` (the governed path resolution).
-2. **Stat** - an absent target is a `conflict`.
-3. **Fence** - `readText`, sha256, compare to `target.version`; a mismatch is a `conflict` (the
-   stale-proposal rule, plan section 9 risk 4).
-4. **Match** - every operation's `find` must still be present; a missing match is a `conflict`.
-5. **Apply** - one version-fenced literal edit per operation (`ctx.fs.editText` with the version
-   guard, in order). A racing write between edits fails `FS_STALE_VERSION` and lands as
-   `recovery-required`.
-6. **Journal** - one line per event: `{ at, event, proposal, path, detail }` with events `applied` /
-   `conflict` / `recovery-required` / `rejected`.
+1. **The resolution.**
+
+    The resolution goes through `ctx.fs.resolve` (the governed path resolution).
+
+2. **The stat.**
+
+    An absent target is a `conflict`.
+
+3. **The fence.**
+
+    The fence calls `readText`, hashes with sha256, and compares to `target.version`; a mismatch is
+    a `conflict` (the stale-proposal rule, plan section 9 risk 4).
+
+4. **The match.**
+
+    Every operation's `find` must still be present; a missing match is a `conflict`.
+
+5. **The apply.**
+
+    The apply runs one version-fenced literal edit per operation (`ctx.fs.editText` with the version
+    guard, in order).
+
+    A racing write between edits fails `FS_STALE_VERSION` and lands as `recovery-required`.
+
+6. **The journal.**
+
+    The journal writes one line per event: `{ at, event, proposal, path, detail }` with events
+    `applied` / `conflict` / `recovery-required` / `rejected`.
 
 `stopOnConflict` (default true) stops the loop at the first failed target; otherwise the loop
 continues and each remaining target gets its own honest outcome.
