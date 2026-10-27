@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const n="plugin-dsh-cost-analysis",p=t,i=["pluginFactory","commands"],r=o;var c={name:n,apply:r,Config:p,inject:i};export{p as Config,r as apply,c as default,i as inject,n as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const n="plugin-dsh-cost-analysis",r=t,i=["pluginFactory","commands"],e=o;var a={name:n,apply:e,Config:r,inject:i};export{r as Config,p as Version,e as apply,a as default,i as inject,n as name};

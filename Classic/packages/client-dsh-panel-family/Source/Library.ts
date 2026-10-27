@@ -18,10 +18,17 @@
 // package's own tunables; the client half reads them through the validated
 // config object that the Loader row carries.
 import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
 
 export const name = "client-dsh-panel-family";
 
 export const Config = Definition;
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's four names (name, apply,
+// Config, inject) are unchanged, and the default object below stays exactly
+// { name, apply, Config, inject }.
+export { Version };
 
 // No host services are required: the empty host half touches nothing.
 export const inject: string[] = [];

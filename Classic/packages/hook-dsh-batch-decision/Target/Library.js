@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-batch-decision",n=t,e=["pluginFactory","tools"],i=o;var s={name:p,apply:i,Config:n,inject:e};export{n as Config,i as apply,s as default,e as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="hook-dsh-batch-decision",e=t,i=["pluginFactory","tools"],n=o;var f={name:r,apply:n,Config:e,inject:i};export{e as Config,p as Version,n as apply,f as default,i as inject,r as name};

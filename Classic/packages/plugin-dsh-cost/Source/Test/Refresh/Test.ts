@@ -26,10 +26,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		const Ledger = Open(Config);
 		const At = (Hours: number): number => Date.parse("2026-10-27T00:00:00Z") + Hours * 3600000;
-		try {
-			const Run = Make(Config);
-			const Fold = Drain(Run.Context, Ledger.Database, Config);
-			const Events = [
+		const Events = [
 				{ seq: 0, type: "session", time: At(0), cwd: Home },
 				{
 					seq: 1,
@@ -57,6 +54,9 @@ export const runTest = async (): Promise<number> => {
 				{ seq: 3, type: "tool/result", time: At(3), data: { turn: 1, step: 1, message: { source: { callId: "c1" } } } },
 				{ seq: 4, type: "step/end", time: At(4), data: { turn: 1, step: 1 } },
 			];
+		try {
+			const Run = Make(Config);
+			const Fold = Drain(Run.Context, Ledger.Database, Config);
 			Fold({ id: "refresh", cwd: Home }, Events);
 
 			const Days = Ledger.Database.prepare("SELECT DISTINCT Day FROM Rollup").all() as { Day: string }[];

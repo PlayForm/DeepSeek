@@ -20,10 +20,17 @@
 // come from the existing remote.pluginManager - no new endpoint.
 import Apply from "@Function/Apply.js";
 import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
 
 export const name = "client-dsh-panel-family-host";
 
 export const Config = Definition;
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's four names (name, apply,
+// Config, inject) are unchanged, and the default object below stays exactly
+// { name, apply, Config, inject }.
+export { Version };
 
 // The webServer is required: the SSE trace bridge registers its route during
 // apply, so the loader must order this row after the harness webServer (the

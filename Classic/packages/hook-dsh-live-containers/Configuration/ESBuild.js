@@ -11,6 +11,17 @@
 // the frame and token grammar are runtime-evaluated template literals (never
 // regexes built from source text), and the loader contract is name/export
 // based - none of it is affected by minified internals.
+//
+// The define block makes the build-time constants explicit: the package's own
+// name and version (read at config-load time) compile into
+// `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE` rather than
+// relying on the build tool's default define.
+import { readFileSync } from "node:fs";
+
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+
+const Version = Package.version ?? "0.0.0";
+const Name = Package.name ?? "";
 const Remove = {
 	name: "Target",
 	setup({ onStart, initialOptions: { outdir } }) {
@@ -40,5 +51,9 @@ export default {
 	target: "esnext",
 	tsconfig: "tsconfig.json",
 	write: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+		"process.env.NAME_PACKAGE": JSON.stringify(Name),
+	},
 	plugins: [Remove],
 };

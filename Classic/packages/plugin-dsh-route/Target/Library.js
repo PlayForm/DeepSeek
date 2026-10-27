@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-route",n=t,r=["pluginFactory"],e=o;var f={name:p,apply:e,Config:n,inject:r};export{n as Config,e as apply,f as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="plugin-dsh-route",e=t,n=["pluginFactory"],i=o;var s={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,s as default,n as inject,r as name};

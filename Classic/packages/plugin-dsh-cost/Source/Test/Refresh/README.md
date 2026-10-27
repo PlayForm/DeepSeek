@@ -26,4 +26,4 @@ the wall clock, because a backfilled session must land on the day it happened.
 
 ## Expected count
 
-3 PASS.
+4 PASS.

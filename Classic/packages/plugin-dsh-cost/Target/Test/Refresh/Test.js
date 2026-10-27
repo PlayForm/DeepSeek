@@ -17,43 +17,43 @@ const runTest = async () => {
     });
     const Ledger = Open(Config);
     const At = (Hours) => Date.parse("2026-10-27T00:00:00Z") + Hours * 36e5;
+    const Events = [
+      { seq: 0, type: "session", time: At(0), cwd: Home },
+      {
+        seq: 1,
+        type: "assistant/message",
+        time: At(1),
+        data: {
+          turn: 1,
+          step: 1,
+          usage: { inputTokens: 100, outputTokens: 50 },
+          message: { source: { provider: "p", model: "m" } }
+        }
+      },
+      {
+        seq: 2,
+        type: "tool/call",
+        time: At(2),
+        data: {
+          turn: 1,
+          step: 1,
+          name: "write",
+          callId: "c1",
+          arguments: JSON.stringify({ file_path: join(Home, "a.ts"), content: "x\ny" })
+        }
+      },
+      { seq: 3, type: "tool/result", time: At(3), data: { turn: 1, step: 1, message: { source: { callId: "c1" } } } },
+      { seq: 4, type: "step/end", time: At(4), data: { turn: 1, step: 1 } }
+    ];
     try {
       const Run2 = Make(Config);
       const Fold = Drain(Run2.Context, Ledger.Database, Config);
-      const Events2 = [
-        { seq: 0, type: "session", time: At(0), cwd: Home },
-        {
-          seq: 1,
-          type: "assistant/message",
-          time: At(1),
-          data: {
-            turn: 1,
-            step: 1,
-            usage: { inputTokens: 100, outputTokens: 50 },
-            message: { source: { provider: "p", model: "m" } }
-          }
-        },
-        {
-          seq: 2,
-          type: "tool/call",
-          time: At(2),
-          data: {
-            turn: 1,
-            step: 1,
-            name: "write",
-            callId: "c1",
-            arguments: JSON.stringify({ file_path: join(Home, "a.ts"), content: "x\ny" })
-          }
-        },
-        { seq: 3, type: "tool/result", time: At(3), data: { turn: 1, step: 1, message: { source: { callId: "c1" } } } },
-        { seq: 4, type: "step/end", time: At(4), data: { turn: 1, step: 1 } }
-      ];
-      Fold({ id: "refresh", cwd: Home }, Events2);
+      Fold({ id: "refresh", cwd: Home }, Events);
       const Days = Ledger.Database.prepare("SELECT DISTINCT Day FROM Rollup").all();
       Check(Count, "T5: the flush writes no aggregate before the refresh runs", () => {
         assert.equal(Days.length, 0, "the drain alone leaves the rollup empty");
       });
-      const Batch = Events2.map((One) => One.time);
+      const Batch = Events.map((One) => One.time);
       const Written = Rollup(Ledger.Database)(Batch);
       Check(Count, "T5: the refresh covers the batch's own UTC day", () => {
         assert.ok(Written > 0, `the refresh wrote ${Written} rows`);

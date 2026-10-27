@@ -43,6 +43,16 @@ dist
 # build output and assets out of formatting; the root's ignore no longer
 # hides Site so editors can resolve the site config directly.
 
+# The captured reference shelf - every file under Archive/ and Raw/ is a
+# byte-identical copy of an external source, and formatting it would both
+# break that guarantee and fail on the archived HTML (inline CSS that
+# prettier cannot parse). Curated/ is the project's own prose and IS
+# formatted.
+Reference/Archive
+Reference/Archive/**
+Reference/Raw
+Reference/Raw/**
+
 # The generated static market index - written byte-for-byte by
 # Maintain/Generate/Marketplace/Index.mjs; prettier would break its --check.
 marketplace.json

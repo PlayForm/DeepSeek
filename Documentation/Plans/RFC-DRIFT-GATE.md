@@ -9,25 +9,28 @@ index: Documentation/INDEX.md
 statuses:
     - name: the problem (fallback constants maintained by hand while the tree moves)
       state: resolved
-      evidence: section 1
+      evidence: sections 1-2
+    - name: the authority map (when a fallback is the rendered truth)
+      state: resolved
+      evidence: section 3
     - name: why this beat the shortlist (the smoke aggregate, publication, cost consumers)
       state: resolved
-      evidence: section 2
+      evidence: section 4
     - name: the three mechanisms and the absent-root consequence
       state: resolved
-      evidence: section 3 - deletion is rejected by the Site repository's own build
+      evidence: section 5 - deletion is rejected by the Site repository's own build
     - name: the recommendation (a generator at the root, strict when the root is present)
       state: resolved
-      evidence: section 4
+      evidence: section 6
     - name: the migration sequence
       state: resolved
-      evidence: section 5
+      evidence: section 7
     - name: the acceptance checks
       state: resolved
-      evidence: section 6
+      evidence: section 8
     - name: the implementation
       state: open
-      evidence: section 7 - this RFC proposes; it does not build
+      evidence: section 9 - this RFC proposes; it does not build
 ---
 
 # The drift gate - generate the site's fallback constants instead of hand-syncing them
@@ -71,10 +74,47 @@ fallback block for every figure. The Site directory is its own repository (MARKE
 the release runbook commits it separately, RELEASE-0.2.0.md lines 299-303), so in the site's own CI
 the root is always absent and the fallback block is always the rendered truth.
 
-## 2. Why this beat the shortlist
+## 2. The check structure, so the 139 have names
+
+The guard's 745 checks group as the file's own sections do, and the failure mass concentrates in the
+two per-package loops and the catalog:
+
+- The per-package loops (section 7 of the script): one npm-name check and one version check per
+  package (Drift-Guard.mjs lines 976-989) - 212 checks at 106 packages, of which the 106 version
+  checks fail against the fallback's 0.2.0 while the tree is at 0.3.0.
+- The freshness loop (section 10): two checks per package with a `Source` tree, counterpart and
+  mtime (lines 1394-1460) - environmental, not content drift.
+- The catalog block (section 9c): the fallback's 87 tuples versus the tree's 106 (lines 949-959),
+  and, when a built Target exists, per-entry checks for the four names with no page and no registry
+  row (lines 1271-1391).
+- The census and roster checks: `PackagesClassic` 54 versus 58, the twin arithmetic, and the
+  "documented seven" twin-less list versus the tree's eleven (lines 384-442).
+- The single-figure checks: `Storage.Domains` 14 versus 15 (line 625), the totals and the per-suite
+  pairs (lines 330-357), and the Live.ts layer's mirror checks (lines 1049-1141).
+
+The remaining failure mass is the same story in the Live layer: every value the site build reads
+from the tree while the tree says 0.3.0/106 is compared against a constant that says 0.2.0/102.
+
+## 3. The authority map: when a fallback is the rendered truth
+
+The block is authoritative in exactly one environment and a freshness liability in the other:
+
+- **Root present (development, the root repo's CI).** Live.ts reads the tree and wins; the fallback
+  serves only for a reader whose source moved or failed to parse (Live.ts lines 74-76). A stale
+  fallback is invisible here, which is why the drift can accumulate unnoticed between hand-syncs -
+  the rendered pages are correct while the constants rot beneath them.
+- **Root absent (the Site repository's own CI, the deployed build).** `FindRoot()` returns `""`
+  (Live.ts lines 99-103), every reader returns null, and the fallback block is the only source of
+  every figure. A stale constant is a false claim on the public site, and nothing in this
+  environment can detect it, because there is no tree to compare against.
+
+That asymmetry is the design constraint for every mechanism below: the fix must make the constants
+fresh in the environment that can measure them, and harmless in the one that cannot.
+
+## 4. Why this beat the shortlist
 
 The brief offered four candidates: the drift gate, the smoke aggregate, publication, and the cost
-family's next step. The ranking, and the reason each RFC below states it again:
+family's next step. The ranking, and the reason each sibling RFC repeats it:
 
 1. **The drift gate (this RFC).** 139 failing checks today, every one of them a claim a public site
    renders, and the fix is currently manual work whose next instance is already scheduled by the
@@ -89,7 +129,7 @@ family's next step. The ranking, and the reason each RFC below states it again:
    dashboard or an alert to consume, and the privacy profile of a committed export makes the
    dashboard candidate the riskiest of the four.
 
-## 3. The three mechanisms, and what the absent root does to them
+## 5. The three mechanisms, and what the absent root does to them
 
 ### A. Hand-sync the fallbacks once - insufficient
 
@@ -128,7 +168,7 @@ option is its strict half, and it belongs in the recommendation: when the root I
 read must be a failure, because a moved or renamed source silently serving a stale fallback is
 precisely the drift the guard exists to catch, and the fallback constants hide it.
 
-## 4. The recommendation
+## 6. The recommendation
 
 **Mechanism B, plus the strict mode from C.** One generator, `Maintain/Generate/Content-Fallbacks/`
 following the marketplace generator's shape, with two commands in the root `package.json`:
@@ -142,7 +182,12 @@ not against the generator. The strict mode is a guard change, not a build change
 returns a real root, any null live read for a figure the guard derives is a failure; when the root
 is absent, the fallbacks serve and the guard's own run is what validates them.
 
-## 5. The migration sequence
+The guard keeps the final word in both environments. In the root repo it verifies the constants
+against the live tree; in the Site repo it verifies the constants against the corpus checks that
+need no tree (the ledger-line byte checks, the component claims), which is all it can honestly do
+without one.
+
+## 7. The migration sequence
 
 | Step | Change                                                                                          | Note                                                                                    |
 | ---- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -152,7 +197,7 @@ is absent, the fallbacks serve and the guard's own run is what validates them.
 | 4    | Add `fallbacks:check` to CI and the strict mode to the guard                                    | the drift becomes a CI failure at PR time instead of a 139-check pile at release time   |
 | 5    | Record the generator in the release runbook beside `pnpm marketplace`                           | the release step writes both derived artifacts in one pass                              |
 
-## 6. The acceptance checks
+## 8. The acceptance checks
 
 1. With the tree present, `pnpm run Drift` (in Site/) exits 0 after a regeneration.
 2. `pnpm fallbacks:check` exits 0 on a clean tree and exits 1 after a planted change (a new package
@@ -165,8 +210,10 @@ is absent, the fallbacks serve and the guard's own run is what validates them.
    source (lines 58-77) are byte-identical after every run.
 6. The four new packages appear in the generated catalog, and the guard's twin-less roster check
    sees eleven names, matching the tree.
+7. The generated `Release` field equals the mode of the 106 manifest versions, whatever it is at run
+   time, and the per-package version loop is green against it without a hand edit.
 
-## 7. What this RFC does not do
+## 9. What this RFC does not do
 
 It does not implement the generator, move any derivation, or change a single rendered figure; the
 hand-sync of step 1 is described, not performed. It does not merge the Site repository into the root

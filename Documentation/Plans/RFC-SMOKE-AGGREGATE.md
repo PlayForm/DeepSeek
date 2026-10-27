@@ -9,25 +9,25 @@ index: Documentation/INDEX.md
 statuses:
     - name: the problem (discovery is Target-side only, so an uncompiled suite is never run)
       state: resolved
-      evidence: section 1
+      evidence: sections 1-2
     - name: why this beat the shortlist (the drift gate, publication, cost consumers)
       state: resolved
-      evidence: section 2
+      evidence: section 3
     - name: the three mechanisms and the silent-never-run failure mode
       state: resolved
-      evidence: section 3
+      evidence: section 4
     - name: the recommendation (keep convention discovery, add the Source-versus-Target audit)
       state: resolved
-      evidence: section 4
+      evidence: section 5 - including the audit's rule table
     - name: the migration sequence
       state: resolved
-      evidence: section 5
+      evidence: section 6
     - name: the acceptance checks
       state: resolved
-      evidence: section 6
+      evidence: section 7
     - name: the implementation
       state: open
-      evidence: section 7 - this RFC proposes; it does not build
+      evidence: section 8 - this RFC proposes; it does not build
 ---
 
 # The smoke aggregate - the built tree is the roster, and the runner audits it
@@ -43,12 +43,14 @@ statuses:
 
 The aggregate runner is `Maintain/Run/Smokes/Index.mjs` (29 lines): `Folders.mjs` enumerates every
 directory under `Classic/packages` and `EffectTS/packages`, keeps those with a `Target/Test` tree,
-and returns every subdirectory holding a `Test.js` (Folders.mjs lines 4-32); `Run.mjs` spawns each
-`Test.js`, reads the expected PASS count from the folder's SOURCE README
-(`Source/Test/<Name>/README.md`, section `## Expected count`), and fails on a non-zero exit, a
-missing `N PASS - <Name>` line, or a printed count that disagrees with the README (Run.mjs lines
-6-10 and 25-38). The 0.2.0 release gate ran it and printed "All 513 smoke suites passed"
-(RELEASE-0.2.0.md line 263), over 271 Classic and 242 EffectTS folders.
+and returns every subdirectory holding a `Test.js`, sorted by file path (Folders.mjs lines 4-32);
+`Run.mjs` spawns each `Test.js` with stdio inherit, reads the expected PASS count from the folder's
+SOURCE README (`Source/Test/<Name>/README.md`, section `## Expected count`), and fails on a non-zero
+exit, a missing `N PASS - <Name>` line, or a printed count that disagrees with the README (Run.mjs
+lines 6-10 and 25-38). The README stays in `Source/Test` because the build compiles only the
+`Test.ts` files into `Target/Test` (Run.mjs lines 6-10). The 0.2.0 release gate ran the aggregate
+and printed "All 513 smoke suites passed" (RELEASE-0.2.0.md line 263), over 271 Classic and 242
+EffectTS folders.
 
 The failure mode lives in the discovery half. `Folders.mjs` walks `Target/Test` only. A suite
 declared in `Source/Test/<Name>/` whose `Test.ts` exists and whose README declares a count, but
@@ -73,9 +75,39 @@ the roster from the built tree, not from a hand-maintained list.
 The consequence is scoped but real: the release gate can pass at N suites while a package's newest
 suite sits unrun in Source, and the per-suite arithmetic the drift guard checks against (the
 fallback totals, the per-suite pairs) silently excludes work that exists. The guard's manifest-lag
-NOTE (Drift-Guard.mjs lines 367-380) is the same class seen from the other side.
+NOTE (Drift-Guard.mjs lines 367-380, "the smoke README manifest lags the per-folder arbiter") is the
+same class seen from the other side: a second listing that drifts from the folder truth.
 
-## 2. Why this beat the shortlist
+A third listing exists and stays out of scope: each tree's `smokes/README.md` carries the fourteen
+mechanics suites' manifest line ("**core** 15 - **factory** 54 - ..." in the per-test form), which
+the guard parses as the secondary source and reports lagging the folder sums as a NOTE
+(Drift-Guard.mjs lines 296-313 and 359-366, and the Content.ts comment at lines 15-18 naming the
+factory example: the manifest says 53/42, the folders say 54/43). That manifest is a printed
+summary, not a runner input; the audit below reconciles the runner's own input (the Target tree)
+with the declared suites (the Source tree) and leaves the manifest's NOTE where it is.
+
+## 2. The audit's rule table
+
+The pre-pass evaluates, per package and per Source/Test folder, the same four rules the suggester
+already names, in the same phrasing, so the runner's failures and the suggester's notes are one
+vocabulary:
+
+| Rule                                   | File the drift names                      | Expected  | Actual |
+| -------------------------------------- | ----------------------------------------- | --------- | ------ |
+| `no "## Expected count"`               | `Source/Test/<Folder>/README.md`          | the count | 0      |
+| `the README count has no Test.ts`      | `Source/Test/<Folder>/Test.ts`            | the count | 0      |
+| `not in the aggregate runner's roster` | `Target/Test/<Folder>/Test.js`            | the count | 0      |
+| the graph's stale Test node            | the node's path (when a graph is present) | 1         | 0      |
+
+(The columns copy the suggester's SCHEME.md table at line 55. The fourth rule is graph-dependent and
+the runner has no graph, so the runner's table is the first three; the suggester keeps the fourth.)
+
+Two further rules belong to the runner and not to the suggester, because only the runner holds the
+full census: the per-tree folder sums it prints must equal the sums the drift guard re-derives from
+the Source READMEs (271 Classic and 242 EffectTS at this writing), and the aggregate must fail when
+they differ, because a disagreement between the two censuses is the drift this RFC is about.
+
+## 3. Why this beat the shortlist
 
 1. **Above the cost family.** The cost plan's frontmatter still records the live install as open, so
    a scheduled report or alert has no production ledger to consume (COST-TRACK-PLUGIN.md, the "live
@@ -85,7 +117,7 @@ NOTE (Drift-Guard.mjs lines 367-380) is the same class seen from the other side.
 3. **Below the drift gate.** The drift gate is 139 failing checks on a public site; this is a
    missing check on a tool that is otherwise green. Both rank above the other two candidates.
 
-## 3. The three mechanisms
+## 4. The three mechanisms
 
 ### A. A per-package roster file - rejected
 
@@ -108,28 +140,35 @@ new tool but an audit inside the existing one.
 
 What runs today. Correct for everything compiled, silent for everything that did not compile, and
 the only cross-check lives in a different tool with a different trigger. The family grew from 231
-checks across five bundles (Content.ts line 262) to 513 suites; the discovery step has scaled with
-the tree precisely because it is derived, which is the property worth keeping and the reason the fix
-adds an audit rather than a list.
+checks across five bundles (Content.ts line 262) to 513 suites over 106 packages; the discovery step
+has scaled with the tree precisely because it is derived, which is the property worth keeping and
+the reason the fix adds an audit rather than a list.
 
-## 4. The recommendation
+## 5. The recommendation
 
 Keep convention discovery as the single roster - the built tree is the roster, as the
 test-suggester's Roster module already states - and add a reconciliation pre-pass to
 `Maintain/Run/Smokes/Index.mjs` that runs before the first suite and fails the aggregate on any
-drift. The audit walks each package's `Source/Test` tree and asserts, per folder: the README carries
-a parseable `## Expected count`; the folder's `Test.ts` exists; the folder's
-`Target/Test/<Name>/Test.js` exists (the "not in the aggregate runner's roster" case); and the
-folder counts summed per tree are printed and compared with the counts the drift guard re-derives
-(271 Classic + 242 EffectTS at this writing). The four reasons and their phrasing come from the
-test-suggester's reconciliation table (SCHEME.md line 55), which makes the runner's failure lines
-and the suggester's notes the same vocabulary instead of two dialects.
+drift. The audit walks each package's `Source/Test` tree and asserts, per folder, the first three
+rules of section 2; it then prints the per-tree census (folders and check sums) and compares it with
+the Target-side census the walker just produced, failing when the two disagree. The reasons and
+their phrasing come from the test-suggester's reconciliation table (SCHEME.md line 55), which makes
+the runner's failure lines and the suggester's notes the same vocabulary instead of two dialects.
 
 The wiring battery is untouched: `Classic/smokes` and `EffectTS/smokes` run under
 `Maintain/Run/Wiring/Index.mjs` and self-skip without `DSH_TEST_SCRATCH` (the runner's header, lines
-17-20), and the aggregate's closing line already says so.
+17-20), and the aggregate's closing line already says so. The per-package standalone invocation
+(`node Target/Test/<Name>/Test.js`) is unchanged, and the package-level arbiter some plans already
+cite - the cost plan runs its own suite through `prepublishOnly` (COST-TRACK-PLUGIN.md line 479) -
+continues to work, because the audit only adds a gate before the first spawn, never between suites.
 
-## 5. The migration sequence
+The audit's cost is one directory walk per package over trees the runner already touches, in the
+same process that spawns the suites; it adds no dependency, no build step, and no second pass over
+the compiled files. The arithmetic it maintains is the one the family already publishes: the
+per-folder README sums the site carries (Content.ts lines 14-18, "a tree's checks are the sum of
+those counts") become, by construction, the same numbers the aggregate prints at its end.
+
+## 6. The migration sequence
 
 | Step | Change                                                                                                           | Note                                                                              |
 | ---- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
@@ -138,7 +177,7 @@ The wiring battery is untouched: `Classic/smokes` and `EffectTS/smokes` run unde
 | 3    | Run the aggregate; fix whatever the audit names in the current tree                                              | any existing uncompiled suite surfaces here, as a named file list                 |
 | 4    | Record the aggregate as the release gate's smoke step in the next runbook, with the audit's line in the evidence | the 0.2.0 runbook's gate table (RELEASE-0.2.0.md section 3a) is the shape to copy |
 
-## 6. The acceptance checks
+## 7. The acceptance checks
 
 1. A planted `Source/Test/Ghost/README.md` (with an expected count) and `Test.ts`, with no
    `Target/Test/Ghost/Test.js`, fails the aggregate with the roster line naming the missing file.
@@ -152,8 +191,10 @@ The wiring battery is untouched: `Classic/smokes` and `EffectTS/smokes` run unde
    manifest, no generated list.
 6. The wiring battery still self-skips without `DSH_TEST_SCRATCH` and the aggregate's closing line
    still names that behavior.
+7. The printed check sums equal the drift guard's per-tree sums (the section 1 figures), so the two
+   tools cannot again report different totals for the same tree.
 
-## 7. What this RFC does not do
+## 8. What this RFC does not do
 
 It does not implement the pre-pass or fix any suite it might name. It does not create a per-package
 roster file, a per-package aggregate runner, or a second monorepo runner; the existing walker stays

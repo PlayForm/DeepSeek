@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-workspace-observe",e=t,r=["pluginFactory","fs"],n=o;var c={name:p,apply:n,Config:e,inject:r};export{e as Config,n as apply,c as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="hook-dsh-workspace-observe",e=t,n=["pluginFactory","fs"],i=o;var m={name:p,apply:i,Config:e,inject:n};export{e as Config,r as Version,i as apply,m as default,n as inject,p as name};

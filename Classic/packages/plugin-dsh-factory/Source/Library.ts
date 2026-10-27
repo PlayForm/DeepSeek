@@ -94,6 +94,7 @@ import type Setup from "./Interface/Options.js";
 import type Shape from "./Interface/State.js";
 import type Trace from "./Interface/Trace.js";
 import type Transform from "./Interface/Transform.js";
+import Version from "./Variable/Version.js";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,
@@ -114,6 +115,12 @@ export type { default as Trace } from "./Interface/Trace.js";
 // `Decide` - the type cannot share the builder's name (TS2323), so the shape
 // ships as `Allowlist`.
 export type { default as Allowlist } from "./Interface/Allowlist.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the class-form loader contract
+// (`export default class PluginFactory`, `static inject`) is unchanged, and
+// no ledger or identity surface reads this export.
+export { Version };
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields — `Schema(shared?, module?)`,

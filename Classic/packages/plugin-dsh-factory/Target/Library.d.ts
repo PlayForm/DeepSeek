@@ -4,6 +4,7 @@ import { type Registry as GovernRegistry, type Selection as GovernSelection } fr
 import PolicyFn from "./Function/Policy.js";
 import SchemaFn from "./Function/Schema.js";
 import { type Over as WriteOver } from "./Function/Write.js";
+import Version from "./Variable/Version.js";
 import type Allowlist from "./Interface/Allowlist.js";
 import type Decision from "./Interface/Gate.js";
 import type Setup from "./Interface/Options.js";
@@ -18,6 +19,7 @@ export type { default as Output } from "./Interface/Output.js";
 export type { default as Journal } from "./Interface/Journal.js";
 export type { default as Trace } from "./Interface/Trace.js";
 export type { default as Allowlist } from "./Interface/Allowlist.js";
+export { Version };
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;

@@ -42,5 +42,9 @@ export default {
 	target: "esnext",
 	tsconfig: "tsconfig.json",
 	write: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+		"process.env.NAME_PACKAGE": JSON.stringify(Name),
+	},
 	plugins: [Remove],
 };

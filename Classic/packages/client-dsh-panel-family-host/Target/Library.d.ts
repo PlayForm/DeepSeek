@@ -1,4 +1,5 @@
 import Apply from "./Function/Apply.js";
+import Version from "./Variable/Version.js";
 export declare const name = "client-dsh-panel-family-host";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
@@ -11,6 +12,7 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
     maxLines: import("@deepseek-ai/schemastery").default<number, number, "volatile-defined">;
     ccrLog: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
 }>>, "plain">;
+export { Version };
 export declare const inject: string[];
 /**
  * Apply: provide the three services and log the activation.
