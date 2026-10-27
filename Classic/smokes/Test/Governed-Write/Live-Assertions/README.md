@@ -1,17 +1,14 @@
 # Governed-Write / Live-Assertions
 
-Real writes through the harness's event loop, checked by their on-disk bytes.
+Real writes through the event loop of the harness, checked by their bytes on disk.
 
 ## Intent
 
-A real `raw-write` with `normalize: true` must leave the six-transform
-byte-normalized fixture on disk; the governed event path must rewrite the
-governed manifest through the guarded write (the canonical pin); the
-`govern: false` escape hatch must keep the event path silent; the cargo
-direct fold must rewrite the chain pin surgically; the normalization-only
-cargo path must pad the simple version forms; and the `normalize-file` tool
-(through the observation-policy-disabled boot) must leave the normalized
-bytes and its ledger line, without being a governance event.
+A real `raw-write` with `normalize: true` must leave the six-transform byte-normalized fixture on disk, and the governed event path must rewrite the governed manifest through the guarded write (the canonical pin).
+
+The `govern: false` escape hatch must keep the event path silent, the cargo direct fold must rewrite the chain pin surgically, and the normalization-only cargo path must pad the simple version forms.
+
+The `normalize-file` tool (through the observation-policy-disabled boot) must leave the normalized bytes and its ledger line without being a governance event.
 
 ## Scenario
 
@@ -37,44 +34,30 @@ bytes and its ledger line, without being a governance event.
 
 ## Fixtures
 
-- The exercise boot (via `Exercise()`): performs the probe event write, the
-  raw-write manifest, the raw-write normalize, the root `llm/stream`
-  waterfall, and the cargo writes; the on-disk results are this folder's
-  fixtures.
-- The normalize-file boot (via `NormalizeFileBoot()`): the
-  observation-policy-disabled boot that seeds through the tool path and runs
-  the normalize-file tool.
+- The exercise boot (via `Exercise()`) performs the probe event write, the raw-write manifest, the raw-write normalize, the root `llm/stream` waterfall, and the cargo writes, and the on-disk results are the fixtures of this folder.
+- The normalize-file boot (via `NormalizeFileBoot()`) is the observation-policy-disabled boot that seeds through the tool path and runs the normalize-file tool.
 - `$DSH_TEST_SCRATCH/ledgers/governor.log` and `.../normalize-file.log`.
 
 ## Expected ledger strings (byte-exact)
 
-- `normalized 8 char(s) in <nf-work>/normalize-file-target.md` (the
-  normalize-file ledger; 8 = the six-flavor fixture's total transform count).
-- ABSENT (the negative controls): any governor line containing the
-  `govern:false` manifest path, or the normalize-file target path.
+- `normalized 8 char(s) in <nf-work>/normalize-file-target.md` (the normalize-file ledger, where 8 is the total transform count of the six-flavor fixture).
+- ABSENT (the negative controls): any governor line containing the `govern:false` manifest path, or the normalize-file target path.
 
 ## Edge cases
 
-- The escape-hatch check is the negative control: the event path must stay
-  silent for the ungoverned manifest.
-- The normalize-file seed is created THROUGH the tool path (a plain-fs write
-  is unobserved and the fs guard would refuse the overwrite).
+- The escape-hatch check is the negative control, because the event path must stay silent for the ungoverned manifest.
+- The normalize-file seed is created THROUGH the tool path, because a plain-fs write is unobserved and the fs guard would refuse the overwrite.
 
 ## Env gate
 
-`DSH_TEST_SCRATCH` must be set. Unset means `SKIPPED (no scratch home)` with
-exit 0 - identical to the `.mjs` suite this folder was split from. The folder
-is never forced green in `Maintain/Run-Smokes.mjs`; it runs under
-`Maintain/Run-Wiring.mjs`, which always sets the gate.
+`DSH_TEST_SCRATCH` must be set, and unset means `SKIPPED (no scratch home)` with exit 0, identical to the `.mjs` suite that this folder was split from.
+
+The folder is never forced green in `Maintain/Run-Smokes.mjs`, and it runs under `Maintain/Run-Wiring.mjs`, which always sets the gate.
 
 ## Expected count
 
 8 PASS.
 
-Note (recorded 2026-10-20, the lane's fresh baseline): with the CURRENT built
-targets the normalize-file tool does not register (the boot log shows
-`command "normalize-overpass" is already registered` - the later flavors fail
-to finish mounting), so the folder currently prints `6 PASS - ...` with the
-two normalize-file checks failing. The expected count above is the healthy
-battery's count; the failures are pre-existing live state, not a property of
-this folder.
+Note (recorded 2026-10-20, the lane's fresh baseline): with the CURRENT built targets the normalize-file tool does not register (the boot log shows `command "normalize-overpass" is already registered`, and the later flavors fail to finish mounting), so the folder currently prints `6 PASS - ...` with the two normalize-file checks failing.
+
+The expected count above is the count of the healthy battery, and the failures are pre-existing live state rather than a property of this folder.

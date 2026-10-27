@@ -14,8 +14,9 @@ statuses:
 
 # THE PLAN STATUS LEDGER (UPDATED AS PHASES COMPLETE)
 
-> Granular document of the UI Family Implementation Plan. The parent hub:
-> Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md.
+> This is a granular document of the UI Family Implementation Plan. The parent hub is
+> Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md. The table below stays the ledger, and the
+> team updates it as each phase completes.
 
 ---
 
