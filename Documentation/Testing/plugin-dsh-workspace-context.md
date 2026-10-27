@@ -6,8 +6,8 @@
 - Profile row id: `plugin-dsh-workspace-context` (bundled in the desktop profile).
 - Exposes the `workspaceContext` service (`ctx.workspaceContext` - `packet(query)`, `lenses()`,
   `focusOf(caller)`, `statistics()`) and the read-only `workspace_context` tool. It assembles the
-  orientation packet under the token budget, built from `ctx.workspaceGraph`, where an absent sibling
-  degrades to the honest `workspace graph unavailable` OPEN line.
+  orientation packet under the token budget, built from `ctx.workspaceGraph`, where an absent
+  sibling degrades to the honest `workspace graph unavailable` OPEN line.
 - Config (all volatile; hot edits commit without remounting): `logFile`
   `~/.dsh/playform/plugin-dsh-workspace-context.log`, `enabled` false, `budgetTokens` 2000 (the
   target), `budgetMaximum` 4000 (the hard cap, >= target), `lenses` `["code", "docs", "tests"]`,
@@ -20,12 +20,13 @@
   `` `context: clamped (<from> -> <to> tok, budget <max>)` ``,
   `` `context: stale <id> (caller held <version>)` ``, `` `context: focus <caller> -> <id>` ``.
 - The packet memo: `packet(query)` is served through a bounded memo (256 entries) keyed by the five
-  fields of the query plus the own knobs of the service, and a hit returns the SAME packet object and
-  writes no second `packet` line. The `indexRevision` of the graph is deliberately NOT part of the
-  key. The invalidation belongs to the trace: the `graph/invalidated` event of the graph (consumed
-  through `Source/Trace/Adapter.ts` and `Source/Trace/Invalidate.ts`) clears the memo wholesale, and
-  the bus (`ctx.trace`, provided by the factory) is optional, so without it the memo lives until the
-  process ends. The invalidation is silent: no new ledger line, and the trace ring is the evidence.
+  fields of the query plus the own knobs of the service, and a hit returns the SAME packet object
+  and writes no second `packet` line. The `indexRevision` of the graph is deliberately NOT part of
+  the key. The invalidation belongs to the trace: the `graph/invalidated` event of the graph
+  (consumed through `Source/Trace/Adapter.ts` and `Source/Trace/Invalidate.ts`) clears the memo
+  wholesale, and the bus (`ctx.trace`, provided by the factory) is optional, so without it the memo
+  lives until the process ends. The invalidation is silent: no new ledger line, and the trace ring
+  is the evidence.
 
 ## Activation checks
 
@@ -62,8 +63,8 @@
 
 - Not dogfooded yet, so watch for packets silently exceeding the cap and the lenses not all
   contributing when the graph is empty (the known gap upstream), plus the `policy` override of the
-  resolved pack (the wiring is the next refinement, because the block currently documents the posture
-  only).
+  resolved pack (the wiring is the next refinement, because the block currently documents the
+  posture only).
 
 ## Fix loop
 

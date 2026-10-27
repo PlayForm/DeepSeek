@@ -2,7 +2,7 @@
 
 The DeepSeek plugin family's fixture archive.
 
-This folder holds ONLY the fixtures used to develop and prove the family's functionality: the
+This folder holds ONLY the fixtures that develop and prove the functionality of the family: the
 governance/normalize family, the raw-write/normalize-file tools, the P5 journaling, and the live
 batteries.
 
@@ -47,10 +47,9 @@ Test/
 
 ## model-comparison-v4-v41
 
-The v4-vs-v4.1 model comparison archive (started 2026-10-20): the four-run
-cross experiment deepseek-v4-flash-0731 vs deepseek-v4.1-flash-1017, each
-model as orchestrator and as worker on ONE shared coding task (the Markdown
-Table Normalizer CLI).
+The v4-vs-v4.1 model comparison archive (started 2026-10-20): the four-run cross experiment
+deepseek-v4-flash-0731 vs deepseek-v4.1-flash-1017, with each model as orchestrator and as worker on
+ONE shared coding task (the Markdown Table Normalizer CLI).
 
 | Entry | What it proves |
 |---|---|
@@ -59,26 +58,26 @@ Table Normalizer CLI).
 | `round-1-v4-orchestrator/` | Round 1: main agent = deepseek-v4-flash-0731 launching worker-v4 + worker-v4-1 (RUN.md + results/) |
 | `round-2-v4-1-orchestrator/` | Round 2: main agent = deepseek-v4.1-flash-1017 (default flipped + restart) launching worker-v4 + worker-v4-1 (RUN.md + results/) |
 
-It also proves the routing-policy change of 2026-10-20: the model catalog
-grew from two to three models (deepseek-v4.1-flash-1017, $0.30/$1.20/$0.006)
-and the deepseek lane's primary/fallback order is settled by this archive's
-adjudicated outcome (see Documentation/Skill/task-routing and
+It also proves the routing-policy change of 2026-10-20: the model catalog grew from two to three models
+(deepseek-v4.1-flash-1017, $0.30/$1.20/$0.006), and the adjudicated outcome of this archive settles
+the primary/fallback order of the deepseek lane (see Documentation/Skill/task-routing and
 ~/.dsh/skills/task-routing).
 
 ## Pitfalls
 
-The documented gaps of this archive, stated as they are:
+The documented gaps of this archive stay stated as they are:
 
 - **The verifyCommand trap.** The `governed-chain/` fixture's `update-policy.json` carries
-  `"verifyCommand": "pnpm install"` - on a vendored-fork workspace the forks are not on the
-  public registry, so the verify fails and the fixture's `governor.log` records
-  `update: verifyCommand failed (status 1)` (and the earlier `update stage FAILED (1);
-  consecutive=2`). The failure is the documented cordis registry trap - the expected outcome of
-  the live battery, not a bug. The `registry.json` note pins the same lesson: effectiveLatest
-  pins the vendored fork versions; naive npm-latest would break the chain.
+  `"verifyCommand": "pnpm install"`, and on a vendored-fork workspace the forks are not on the public
+  registry, so the verify fails and the fixture's `governor.log` records
+  `update: verifyCommand failed (status 1)` (and the earlier
+  `update stage FAILED (1); consecutive=2`). The failure is the documented cordis registry trap, the
+  expected outcome of the live battery and not a bug, and the `registry.json` note pins the same
+  lesson: effectiveLatest pins the vendored fork versions, while naive npm-latest would break the
+  chain.
 - **The fixture paths.** The fixture ledgers carry the neutralized display forms
-  (`<repo-root>/governed-chain/package.json`, `$DSH_HOME/...`) - the factory renders the
-  workspace root that way. The personal absolute paths exist only in the internal Boilerplate
-  copies; never copy a live battery into this archive as-is.
-- **The timestamp confusion.** The ledger lines are ISO UTC; the storage records are epoch
-  milliseconds; the local display adds +03 - reconcile before hunting for "missing" records.
+  (`<repo-root>/governed-chain/package.json`, `$DSH_HOME/...`), which is how the factory renders the
+  workspace root. The personal absolute paths exist only in the internal Boilerplate copies, so never
+  copy a live battery into this archive as-is.
+- **The timestamp confusion.** The ledger lines are ISO UTC, the storage records are epoch
+  milliseconds, and the local display adds +03, so reconcile before hunting for "missing" records.

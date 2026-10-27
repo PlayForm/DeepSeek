@@ -6,7 +6,7 @@
 
 ## The role
 
-The **silent version pinner** of the DeepSeek Harness - a plugin on the `fs/observed` event that
+The **silent version pinner** of the DeepSeek Harness is a plugin on the `fs/observed` event that
 pins every dependency version in a written `package.json` to its STATIC version
 (`"@playform/build": "^0.3.4"` becomes `"0.3.4"`).
 
@@ -14,22 +14,27 @@ One leading range prefix (`^`, `~`, or `=`) is stripped, in every dependency sec
 declares (dependencies, devDependencies, peerDependencies, optionalDependencies).
 
 Already-static versions, compound/space ranges, wildcards without a prefix, and protocol
-dependencies (`workspace:*`, `file:`, `link:`, `git+`, `npm:` aliases) are left as-is; a
-`pin-policy.json` keep-list protects packages whose ranges must stay as authored (discovery: global
-`policyFile` -> the file's own directory -> co-located with the nearest `registry.json` -> built-in
-empty default; the effective keep-list is the union).
+dependencies (`workspace:*`, `file:`, `link:`, `git+`, `npm:` aliases) are left as-is.
 
-Fully API-aware: the manifest is read/rewritten through `ctx.fs` with a version-guarded
-`replaceIfVersion` write (the service owns version tokens) and an explicit sandbox policy, the
-authoring agent is never notified (the tool result is built from the author's own content and the
-observation-policy's version record is refreshed by re-emitting `fs/observed` with the
-service-issued fresh version), and there is NO update stage - no ncu, no jobs, no subprocess: a pure
-deterministic P-only rewrite running as a detached contained continuation.
+A `pin-policy.json` keep-list protects packages whose ranges must stay as authored, with discovery
+through the global `policyFile`, then the own directory of the file, then co-location with the
+nearest `registry.json`, then a built-in empty default, and the effective keep-list is the union.
+
+The pinner is fully API-aware: the manifest is read and rewritten through `ctx.fs` with a
+version-guarded `replaceIfVersion` write (the service owns version tokens) and an explicit sandbox
+policy.
+
+The authoring agent is never notified: the tool result is built from the author's own content, and
+the version record of the observation policy is refreshed by re-emitting `fs/observed` with the
+service-issued fresh version.
+
+There is NO update stage (no ncu, no jobs, no subprocess), so the pinner is a pure deterministic
+P-only rewrite that runs as a detached contained continuation.
 
 A factory flavor; a sibling of the package governor on the same `fs/observed` seam.
 
-The lowest plumbing layer - the ledger `Append`, the shared journal and the activation-line
-composer - lives in the family's base package `ets-base-dsh`, reached through the factory.
+The lowest plumbing layer lives in the base package `ets-base-dsh` of the family, reached through
+the factory: the ledger `Append`, the shared journal, and the activation-line composer.
 
 ## The surfaces
 
@@ -65,11 +70,11 @@ no changes to pin for <path>
 REFUSED rewrite of <path>: non-dependency section "<name>" would change
 ```
 
-Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
-module identity is `hook-dsh-pinner-package`).
+Each line is `[<ISO>] <message>` in the file, where the logger prefix is the `Append` of the factory
+and the module identity is `hook-dsh-pinner-package`.
 
-The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
-alone.
+The activation line is written by `apply()`, because "did it activate" must be answerable from the
+ledger alone.
 
 ## The build and the tests
 

@@ -39,9 +39,9 @@ dist
 # the legacy family prose will re-render once formatted.
 
 # The Site tree - a separate repository with its own prettier config
-# (Site/prettier.config.js); the root config does not govern it.
-Site
-Site/**
+# (Site/prettier.config.js) and its own .prettierignore, which keeps its
+# build output and assets out of formatting; the root's ignore no longer
+# hides Site so editors can resolve the site config directly.
 
 # The generated static market index - written byte-for-byte by
 # Maintain/Generate/Marketplace/Index.mjs; prettier would break its --check.

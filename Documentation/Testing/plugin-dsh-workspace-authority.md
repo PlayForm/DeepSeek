@@ -6,8 +6,8 @@
   (Classic/packages/plugin-dsh-workspace-authority).
 - Profile row id: `plugin-dsh-workspace-authority` (bundled in the desktop profile).
 - Exposes the `workspaceAuthority` service (`ctx.workspaceAuthority`, registered from apply):
-  `grant`/`revoke`/`authorize`, `acquire`/`release`, `residence`, `evict`, `statistics`. It holds the
-  licensing step of the invisible flow, the THREE separate authority records (v4.1 section 3.9):
+  `grant`/`revoke`/`authorize`, `acquire`/`release`, `residence`, `evict`, `statistics`. It holds
+  the licensing step of the invisible flow, the THREE separate authority records (v4.1 section 3.9):
   Capability (what the actor may do, ids `cap:<sequence>`), Lease (for how long, ids
   `lease:<sequence>`, lazy expiry sweep), and Residency (what stays in the store, with the
   representation-only `weight`).
@@ -30,9 +30,9 @@
 
     The defaults per the README config table: `enabled=false`, `defaultTtlMs=300000`,
     `maxLeasesPerHolder=8`, `maxCapabilitiesPerHolder=16`, `revocationGraceMs=0`, `policy=[]` (the
-    residency rule table `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}`), and the
-    D6 allowlist keyed `automation.*` (NOT `policy`, because the `policy` of this package is the rule
-    table, following the plugin-dsh-route precedent).
+    residency rule table `{kind, disposition, ttlMs?, maxResidencyMs?, revocationGraceMs?}`), and
+    the D6 allowlist keyed `automation.*` (NOT `policy`, because the `policy` of this package is the
+    rule table, following the plugin-dsh-route precedent).
 
 2. **The service check.**
 
@@ -54,27 +54,27 @@
 - T2 Grant then authorize - the authorization succeeds - the log shows
   `authority: granted <id> (...)` then `authority: authorized <holder> <resource> (<operation>)`.
 - T2 Authorize an operation whose grant expired - the authorization fails - the log shows
-  `authority: denied <holder> <resource> (<operation>)`, expiry denies, and weights and residency are
-  never consulted (authority is NOT knowledge).
+  `authority: denied <holder> <resource> (<operation>)`, expiry denies, and weights and residency
+  are never consulted (authority is NOT knowledge).
 - T2 Authorize an unlisted operation - denied - the `operations` list of the capability is the only
   permission source.
 - T2 Release/revoke then re-authorize - the revoked grant no longer authorizes - the log shows
-  `authority: released <id>` / `authority: revoked <id>` then `authority: denied ...`, and revocation
-  denies immediately (shielded only within `revocationGraceMs`, default 0).
+  `authority: released <id>` / `authority: revoked <id>` then `authority: denied ...`, and
+  revocation denies immediately (shielded only within `revocationGraceMs`, default 0).
 - T3 Residence then `evict` - the disposition pass - the log shows
   `authority: residency <resource> (weight <w>)` then
-  `authority: evicted <resource> (<disposition>)` with the disposition from the first matching rule of
-  the policy table (`keep` when no rule matches); candidates walk in weight-descending order, `evict`
-  keeps the record in the graveyard, `discard` removes it permanently, and an open non-expired lease
-  and an active capability force `keep`.
+  `authority: evicted <resource> (<disposition>)` with the disposition from the first matching rule
+  of the policy table (`keep` when no rule matches); candidates walk in weight-descending order,
+  `evict` keeps the record in the graveyard, `discard` removes it permanently, and an open
+  non-expired lease and an active capability force `keep`.
 
 ## Known live gaps
 
 - Not dogfooded yet, so watch for grants surviving past TTL without the lazy expiry sweep ledgering
-  `authority: expired <id>`, and for the policy table count N in the activation line disagreeing with
-  the config.
-- The `automation` D6 block documents the posture and refuses nothing (no gated action, no new ledger
-  line), and a resolved pack's `policy` section override is the next refinement.
+  `authority: expired <id>`, and for the policy table count N in the activation line disagreeing
+  with the config.
+- The `automation` D6 block documents the posture and refuses nothing (no gated action, no new
+  ledger line), and a resolved pack's `policy` section override is the next refinement.
 
 ## Fix loop
 

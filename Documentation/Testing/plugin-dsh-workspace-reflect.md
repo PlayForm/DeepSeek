@@ -4,20 +4,21 @@
 
 - Package: `@playform/plugin-dsh-workspace-reflect` (Classic/packages/plugin-dsh-workspace-reflect).
 - Profile row id: `plugin-dsh-workspace-reflect` (bundled in the desktop profile).
-- Exposes: the `workspaceReflect` service (`ctx.workspaceReflect`) - the AST-aware reflective
+- Exposes the `workspaceReflect` service (`ctx.workspaceReflect`): the AST-aware reflective
   operations, one call each: `rename(op)`, `connect(op)`, `replace(op)`, `act(op)` (the dispatch by
-  kind); all async, all returning the reply union
+  kind). All of them are async and all return the reply union
   `{ status: "applied" | "conflict" | "denied" | "rejected" | "recovery-required" | "outcome-unknown", detail, version }`.
 - The semantics: the `rename` asks `ctx.workspaceSemantics` (probed through `ctx.get`, never
-  injected) for the per-adapter plan and applies its edits inside the line scope; the textual
+  injected) for the per-adapter plan and applies its edits inside the line scope, while the textual
   fallback runs whole-word matches only (zero occurrences is rejected). The `replace` may target a
   graph node (`node` + `fingerprint`, the graph's formula
   `sha256(normalized text + "\n" + kind + "\n" + name)` verified against the current span before any
-  write); with the graph absent the caller's explicit span is the fallback. The `connect` inserts an
-  import (with `symbol`) or a reference comment; already-connected is rejected.
+  write), and with the graph absent the explicit span of the caller is the fallback. The `connect`
+  inserts an import (with `symbol`) or a reference comment, and an already-connected target is
+  rejected.
 - Config (all volatile): `logFile` `~/.dsh/playform/plugin-dsh-workspace-reflect.log`, `log` true,
   `enabled` false, `propagate` `"block" | "file"` (default `block`), `maxFileBytes` 1000000,
-  `maxBlockLines` 5000, `policy` (the D6 defaults - the write gate).
+  `maxBlockLines` 5000, and `policy` (the D6 defaults, the write gate).
 - Ledger lines (module-owned, byte-stable, prefixed `reflect: `):
   `` `reflect: activated (propagate=<propagate>)` ``, `` `reflect: disabled (enabled=false)` ``,
   `` `reflect: denied (enabled=false)` ``, `` `reflect: rename <path> <old> -> <new> (<status>)` ``,
@@ -37,21 +38,21 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-workspace-reflect"}` → one entry, status schema (defaults:
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-reflect"}` for one entry with status schema (defaults:
     `enabled` false, `propagate` block, `maxFileBytes` 1000000, `maxBlockLines` 5000, the D6 policy
     block with `write: approve`).
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService `workspaceReflect` → resolves
-    with `rename` / `connect` / `replace` / `act`.
+    `cordis_inspect_query` host/Service/listService `workspaceReflect` resolves with `rename` /
+    `connect` / `replace` / `act`.
 
 3. **The ledger line.**
 
-    Ledger line: `reflect: disabled (enabled=false)` on a cold mount (a disabled plugin answers
-    `denied (enabled=false)`); after activation `reflect: activated (propagate=block)` in
-    `~/.dsh/playform/plugin-dsh-workspace-reflect.log`.
+    The line `reflect: disabled (enabled=false)` appears on a cold mount (a disabled plugin answers
+    `denied (enabled=false)`), and after activation `reflect: activated (propagate=block)` appears
+    in `~/.dsh/playform/plugin-dsh-workspace-reflect.log`.
 
 ## Test cases
 
@@ -69,11 +70,11 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: the policy-flip hot edit (the block is one volatile object), the
-  carry probing the absent graph (an honest skip, never an error), and the semantics service's plan
-  having no edit inside the scope (the textual fallback must run, not fail). The "AST" is the
-  graph's v0 line/regex node model - the targeting is exact, the parse behind the spans is not a
-  compiler AST.
+- Not dogfooded yet, so watch for the policy-flip hot edit (the block is one volatile object), the
+  carry probing the absent graph (an honest skip, never an error), and the plan of the semantics
+  service having no edit inside the scope (the textual fallback must run, not fail). The "AST" is
+  the v0 line/regex node model of the graph: the targeting is exact, and the parse behind the spans
+  is not a compiler AST.
 
 ## Fix loop
 
@@ -82,7 +83,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-workspace-reflect run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-workspace-reflect/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/`. Then the app restart.
+  folder under `Source/Test/`, then restart the app.
 
 ## Report stub
 

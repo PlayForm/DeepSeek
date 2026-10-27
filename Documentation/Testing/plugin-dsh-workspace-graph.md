@@ -12,16 +12,16 @@
   breadth-first with sorted listings, rejects an entry whose canonical identity is outside the root,
   and calls `indexFile` for every candidate without duplicating the per-file gates (SCHEME §6).
 - Config fields (all volatile, SCHEME §2): `enabled`, `domain` (default `workspace_graph`),
-  `languages` (all three of typescript/javascript/markdown), `include`, `exclude` (`node_modules/**`,
-  `**/Target/**`, `**/.git/**`), `maxFileBytes`, `maxNodesPerFile`, `maxFiles` (default 2000, the one
-  field that the INDEXING TRIGGER added to the frozen W1 table), `limitDefault`, `limitMaximum`, and
-  `policy` (the D6 allowlist block; the only action of the graph is index, all AUTOMATIC, no gated
-  action).
+  `languages` (all three of typescript/javascript/markdown), `include`, `exclude`
+  (`node_modules/**`, `**/Target/**`, `**/.git/**`), `maxFileBytes`, `maxNodesPerFile`, `maxFiles`
+  (default 2000, the one field that the INDEXING TRIGGER added to the frozen W1 table),
+  `limitDefault`, `limitMaximum`, and `policy` (the D6 allowlist block; the only action of the graph
+  is index, all AUTOMATIC, no gated action).
 - Trace: the trace adapter (SCHEME §6.1) consumes `observe/stamp` from the trace bus of the family
   (`ctx.trace`, PROBED via `ctx.get("trace")`, never injected) and schedules one detached re-index
   through `indexFile`; the graph emits `graph/indexed` (`{ path, version, revision }`) and
-  `graph/invalidated` (`{ path, reason, version? }`, reason `replaced`/`removed`/`absent`) with no new
-  ledger line (SCHEME §6.2). References edges come from the probed workspace-semantics service
+  `graph/invalidated` (`{ path, reason, version? }`, reason `replaced`/`removed`/`absent`) with no
+  new ledger line (SCHEME §6.2). References edges come from the probed workspace-semantics service
   (SCHEME §6.3), and no service means no references edges, never faked.
 - Ledger lines (byte-stable, SCHEME §8): `` `graph: disabled (enabled=false)` `` (cold mount),
   `` `graph: activated (domain=<domain>, languages=<n>)` `` with the observed default
@@ -65,11 +65,11 @@
 
 - FIXED. The old "graph is EMPTY / no index trigger" gap is closed, because `indexWorkspace` exists,
   is bounded by `maxFiles`, persists through the storage domain named `Config.domain` (version 1,
-  per-record, `invalidRecords: "backup-and-skip"`, the `records` table plus the `__meta` record), and
-  the trace adapter re-indexes on `observe/stamp`. Honest limits remain (SCHEME §5, by design, not
-  gaps): line/regex parsing without the compiler API, only relative import specifiers produce edges,
-  `calls`/`tests` edges are deferred, and `references` edges exist only when the workspace-semantics
-  service is mounted.
+  per-record, `invalidRecords: "backup-and-skip"`, the `records` table plus the `__meta` record),
+  and the trace adapter re-indexes on `observe/stamp`. Honest limits remain (SCHEME §5, by design,
+  not gaps): line/regex parsing without the compiler API, only relative import specifiers produce
+  edges, `calls`/`tests` edges are deferred, and `references` edges exist only when the
+  workspace-semantics service is mounted.
 
 ## Fix loop
 

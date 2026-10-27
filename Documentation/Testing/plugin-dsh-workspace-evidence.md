@@ -7,16 +7,16 @@
 - Profile row id: `plugin-dsh-workspace-evidence` (bundled in the desktop profile).
 - Exposes the `workspaceEvidence` service (`ctx.workspaceEvidence`): the validation objects, the
   evidence dependencies, the four kinds of truth, and the stale-validation invalidation (the Acar
-  seam). Service surface: `validate(id, kind, subject, dependencies, verdict?)` records one validation
-  object (throws on an invalid kind/id/subject, fail loud, and a revalidation supersedes), `check(id)`
-  returns `"fresh" | "stale" | "superseded" | undefined`, `invalidate(key)` returns the number of
-  objects gone stale, `list(status?)` returns the objects oldest sequence first, and `statistics()`
-  returns `{ validations, fresh, stale, superseded, sequence }`.
+  seam). Service surface: `validate(id, kind, subject, dependencies, verdict?)` records one
+  validation object (throws on an invalid kind/id/subject, fail loud, and a revalidation
+  supersedes), `check(id)` returns `"fresh" | "stale" | "superseded" | undefined`, `invalidate(key)`
+  returns the number of objects gone stale, `list(status?)` returns the objects oldest sequence
+  first, and `statistics()` returns `{ validations, fresh, stale, superseded, sequence }`.
 - The four truth kinds (`TruthKind`): `reality`, `observation`, `representation`, `intent`.
-- Config (all volatile): `log` true, `logFile`
-  `~/.dsh/playform/plugin-dsh-workspace-evidence.log`, `enabled` false, `domain` `workspace_evidence`,
-  `maxValidations` 512 (superseded evict first, then oldest), `exclude`
-  `["node_modules/**", "**/Target/**", "**/.git/**"]`, and `policy` (the D6 allowlist defaults).
+- Config (all volatile): `log` true, `logFile` `~/.dsh/playform/plugin-dsh-workspace-evidence.log`,
+  `enabled` false, `domain` `workspace_evidence`, `maxValidations` 512 (superseded evict first, then
+  oldest), `exclude` `["node_modules/**", "**/Target/**", "**/.git/**"]`, and `policy` (the D6
+  allowlist defaults).
 - Ledger lines (module-owned, byte-stable, prefixed `evidence: `; from the package README):
   `` `evidence: disabled (enabled=false)` ``,
   `` `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` ``,
@@ -31,8 +31,9 @@
 1. **The Config.**
 
     Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-workspace-evidence"}` for one entry with status schema (defaults:
-    domain `workspace_evidence`, maxValidations 512, the exclude globs, the D6 policy block).
+    `{"name": "@playform/plugin-dsh-workspace-evidence"}` for one entry with status schema
+    (defaults: domain `workspace_evidence`, maxValidations 512, the exclude globs, the D6 policy
+    block).
 
 2. **The service check.**
 
@@ -42,8 +43,8 @@
 3. **The ledger line.**
 
     The line `evidence: disabled (enabled=false)` appears on a cold mount and
-    `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` on the first
-    record, in `~/.dsh/playform/plugin-dsh-workspace-evidence.log`.
+    `evidence: validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)` on the
+    first record, in `~/.dsh/playform/plugin-dsh-workspace-evidence.log`.
 
 ## Test cases
 

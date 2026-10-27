@@ -5,40 +5,40 @@
 - Package: `@playform/plugin-dsh-workspace-semantics`
   (Classic/packages/plugin-dsh-workspace-semantics).
 - Profile row id: `plugin-dsh-workspace-semantics` (bundled in the desktop profile).
-- Exposes: the `workspaceSemantics` service (`ctx.workspaceSemantics`) with `resolve` / `symbol` /
-  `references` / `rename` / `adapt` / `statistics`. The semantics layer: the adapter registry (the
-  default TypeScript/JavaScript adapter on seven extensions plus the opt-in any-file adapters
-  `json`, `yaml`, `markdown`, `package`) running a LIGHT LEXICAL SCAN, deliberately no full parser
-  in v0. The LSP deepener (`ctx.lsp`, probed) is the PRIMARY reference answer for the
-  TypeScript/JavaScript extensions while symbols stay lexical. The recovery (once, on mount): the
-  loaded `models` records rebuild the semantic state.
-- Ledger: logFile `~/.dsh/playform/plugin-dsh-workspace-semantics.log`; a cold mount logs
+- Exposes the `workspaceSemantics` service (`ctx.workspaceSemantics`) with `resolve` / `symbol` /
+  `references` / `rename` / `adapt` / `statistics`. It is the semantics layer: the adapter registry
+  (the default TypeScript/JavaScript adapter on seven extensions plus the opt-in any-file adapters
+  `json`, `yaml`, `markdown`, `package`) running a LIGHT LEXICAL SCAN, deliberately without a full
+  parser in v0. The LSP deepener (`ctx.lsp`, probed) is the PRIMARY reference answer for the
+  TypeScript/JavaScript extensions while symbols stay lexical. The recovery (once, on mount)
+  rebuilds the semantic state from the loaded `models` records.
+- Ledger: logFile `~/.dsh/playform/plugin-dsh-workspace-semantics.log`, and a cold mount logs
   `semantics: disabled (enabled=false)`.
 
 ## Activation checks
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-workspace-semantics"}` → one entry, status schema.
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace-semantics"}` for one entry with status schema.
 
-    Verify the schema defaults match SCHEME.md: `log=true`, `logFile`, `enabled=false`,
+    Verify that the schema defaults match SCHEME.md: `log=true`, `logFile`, `enabled=false`,
     `domain=workspace_semantics`, `maxEntries=256`,
     `exclude=["node_modules/**", "**/Target/**", "**/.git/**"]`, `root=""`, `lsp=true`,
-    `adapters=[]`, and the `policy` block (the D6 allowlist; all this package's actions
-    read-only/`auto`, no gated action).
+    `adapters=[]`, and the `policy` block (the D6 allowlist, where all actions of this package are
+    read-only/`auto` with no gated action).
 
 2. **The service check.**
 
-    Service check: `cordis_inspect_query` host/Service/listService `workspaceSemantics` → resolves.
+    `cordis_inspect_query` host/Service/listService `workspaceSemantics` resolves.
 
 3. **The ledger line.**
 
-    Ledger line: `semantics: activated (domain=workspace_semantics)` in
-    `~/.dsh/playform/plugin-dsh-workspace-semantics.log`; a cold mount logs
+    The line `semantics: activated (domain=workspace_semantics)` appears in
+    `~/.dsh/playform/plugin-dsh-workspace-semantics.log`, and a cold mount logs
     `semantics: disabled (enabled=false)`.
 
-    On a warm activation also expect `semantics: adapters registered (7 extensions)`.
+    On a warm activation, also expect `semantics: adapters registered (7 extensions)`.
 
 ## Test cases
 
@@ -70,10 +70,10 @@
 
 ## Known live gaps
 
-- Not dogfooded yet. Watch for: the lexical scan being slow on large files (it must stay light) and
-  the mount-time recovery replaying stale `models` records.
-- The `policy` block documents the posture and refuses nothing (this package has no gated action, no
-  new ledger line); a resolved pack's `policy` section override is the next refinement.
+- Not dogfooded yet, so watch for the lexical scan being slow on large files (it must stay light)
+  and the mount-time recovery replaying stale `models` records.
+- The `policy` block documents the posture and refuses nothing (this package has no gated action and
+  no new ledger line), and a resolved pack's `policy` section override is the next refinement.
 
 ## Fix loop
 
@@ -82,7 +82,7 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-workspace-semantics run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-workspace-semantics/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/`. Then the app restart.
+  folder under `Source/Test/`, then restart the app.
 
 ## Report stub
 

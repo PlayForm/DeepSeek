@@ -1,42 +1,26 @@
 # Loader-And-History - the loader contract and the history store tests
 
-The replay-suggester's loader wiring and the history store reader: the
-missing, loaded, and corrupt store outcomes, all byte-exact.
+The loader wiring of the replay-suggester and the reader of the history store: the missing, loaded, and corrupt store outcomes, all byte-exact.
 
 ## Scenarios
 
-- L1: the loader contract - the default object carries
-  name/apply/Config/inject; `inject` is `["pluginFactory"]`.
-- L2: the cold disabled mount - apply returns NOTHING, the byte-exact
-  `disabled (enabled=false)` line (logger and durable ledger), and both
-  listeners still wired on the plugin ctx.
-- L3: the enabled mount with a MISSING store - the byte-exact activation
-  line `activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)` and
-  the byte-exact `history missing (starting empty)` degradation; the records
-  stay empty.
-- L4: the loaded store - `history loaded 2 records` byte-exact with
-  invalid records (an empty probe, a missing probe) filtered; a record with
-  an empty verification still fires the note.
-- L5: the corrupt store - unparseable JSON, a wrong schema version, and a
-  `null` store all degrade with the byte-exact
-  `history corrupt (starting empty)` line, never a throw.
-- L6: the fail-loud validation - a non-numeric `threshold` and a
-  non-boolean `enabled` throw at load through the schema.
-- L7: the listener registration order on the plugin ctx and a distinct root
-  object.
+- L1: the loader contract, where the default object carries name/apply/Config/inject and `inject` is `["pluginFactory"]`.
+- L2: the cold disabled mount, where apply returns NOTHING, the byte-exact `disabled (enabled=false)` line appears (logger and durable ledger), and both listeners stay wired on the plugin ctx.
+- L3: the enabled mount with a MISSING store, where the byte-exact activation line `activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)` and the byte-exact `history missing (starting empty)` degradation appear, and the records stay empty.
+- L4: the loaded store, where `history loaded 2 records` is byte-exact with invalid records (an empty probe, a missing probe) filtered, and a record with an empty verification still fires the note.
+- L5: the corrupt store, where unparseable JSON, a wrong schema version, and a `null` store all degrade with the byte-exact `history corrupt (starting empty)` line, never a throw.
+- L6: the fail-loud validation, where a non-numeric `threshold` and a non-boolean `enabled` throw at load through the schema.
+- L7: the listener registration order on the plugin ctx and a distinct root object.
 
 ## Fixtures
 
 The shared Harness plus `WriteStore` (the history JSON writer) and `rmStore`.
-No fake clock: the plugin has no clock dependency.
+
+There is no fake clock, because the plugin has no clock dependency.
 
 ## Expected ledger strings (byte-exact, `replay-suggester: ` prefix)
 
-`disabled (enabled=false)`,
-`activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)`,
-`history missing (starting empty)`,
-`history loaded 2 records`,
-`history corrupt (starting empty)` (+ the `<reason>` variant).
+`disabled (enabled=false)`, `activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)`, `history missing (starting empty)`, `history loaded 2 records`, `history corrupt (starting empty)` (+ the `<reason>` variant).
 
 ## Expected count
 

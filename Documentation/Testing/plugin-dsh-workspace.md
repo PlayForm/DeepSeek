@@ -5,15 +5,15 @@
 - Package: `@playform/plugin-dsh-workspace` (Classic/packages/plugin-dsh-workspace).
 - Profile row id: `plugin-dsh-workspace` (bundled in the desktop profile; ships disabled in the
   bundle patch per the SCHEME's Status).
-- Exposes: FIVE tools - `workspace_map`, `workspace_find`, `workspace_expand`, `workspace_context`
+- Exposes FIVE tools - `workspace_map`, `workspace_find`, `workspace_expand`, `workspace_context`
   plus the NEW indexing trigger `workspace_index` (SCHEME "The five tools (V4-1 §3.4 plus the
-  indexing trigger)"). The workspace agent's tool surface over the `workspaceGraph` service;
-  `workspace_index` delegates to the graph service's `indexWorkspace(path, { maxFiles })` and never
-  touches `ctx.fs` itself (SCHEME: "the agent stays a pure consumer").
+  indexing trigger)"). They form the tool surface of the workspace agent over the `workspaceGraph`
+  service, and `workspace_index` delegates to `indexWorkspace(path, { maxFiles })` of the graph
+  service and never touches `ctx.fs` itself (SCHEME: "the agent stays a pure consumer").
 - Config fields (all volatile, SCHEME "Config"): `enabled`, `logFile`, `mapDepth`, `mapMaxModules`,
   `findLimit`, `findLimitMax`, `expandDepth` (1..3), `expandMaxNeighbors`, `packetTokenBudget`,
-  `packetTokenMax`, `tokenCharsPerToken`, `kinds`, `policy` (the D6 allowlist block; the agent is
-  read-only, all AUTOMATIC, no gated action).
+  `packetTokenMax`, `tokenCharsPerToken`, `kinds`, and `policy` (the D6 allowlist block; the agent
+  is read-only, all AUTOMATIC, no gated action).
 - Ledger lines (byte-stable, SCHEME "Module-owned ledger strings"):
   `` `plugin-dsh-workspace: disabled (enabled=false)` `` (cold mount) and
   `` `workspace: activated (bundle 0.1.0, tools=5)` `` - the `tools` count moved from 4 to 5 with
@@ -23,17 +23,17 @@
 
 1. **The Config.**
 
-    Inspect Config: `cordis_inspect_query` host/Config/listConfigs
-    `{"name": "@playform/plugin-dsh-workspace"}` → one entry, status schema.
+    Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
+    `{"name": "@playform/plugin-dsh-workspace"}` for one entry with status schema.
 
 2. **The tool check.**
 
-    Tool check: the Tool provider lists FIVE tools - `workspace_map`, `workspace_find`,
-    `workspace_expand`, `workspace_context`, `workspace_index`.
+    The Tool provider lists FIVE tools - `workspace_map`, `workspace_find`, `workspace_expand`,
+    `workspace_context`, `workspace_index`.
 
 3. **The ledger line.**
 
-    Ledger line: the activated line in `~/.dsh/playform/plugin-dsh-workspace.log`; a cold mount logs
+    The activated line appears in `~/.dsh/playform/plugin-dsh-workspace.log`, and a cold mount logs
     the byte-exact `plugin-dsh-workspace: disabled (enabled=false)`.
 
     On activation the line reads `workspace: activated (bundle 0.1.0, tools=5)`.
@@ -52,10 +52,11 @@
 
 ## Known live gaps
 
-- FIXED. The old "graph is EMPTY / no index trigger" gap is closed: `workspace_index` exists and
-  delegates to the graph service's `indexWorkspace`, and the real-graph coverage is built and smoked
-    - per the SCHEME's Status: `Wiring-And-Contract` (17), `Tools-And-Packet` (19, FakeGraph),
-      `Real-Graph-And-Tools` (10, the real populated graph). No outstanding known gap in this plan.
+- FIXED. The old "graph is EMPTY / no index trigger" gap is closed, because `workspace_index` exists
+  and delegates to `indexWorkspace` of the graph service, and the real-graph coverage is built and
+  smoked, per the Status of the SCHEME: `Wiring-And-Contract` (17), `Tools-And-Packet` (19,
+  FakeGraph), and `Real-Graph-And-Tools` (10, the real populated graph). No outstanding known gap
+  remains in this plan.
 
 ## Fix loop
 
@@ -64,8 +65,8 @@
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/plugin-dsh-workspace run prepublishOnly`
 - Smokes: `node Classic/packages/plugin-dsh-workspace/Target/Test/<Folder>/Test.js` per folder under
-  `Source/Test/` (`Wiring-And-Contract`, `Tools-And-Packet`, `Real-Graph-And-Tools`). Then the app
-  restart.
+  `Source/Test/` (`Wiring-And-Contract`, `Tools-And-Packet`, `Real-Graph-And-Tools`), then restart
+  the app.
 
 ## Report stub
 
